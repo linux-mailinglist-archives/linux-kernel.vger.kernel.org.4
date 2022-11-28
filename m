@@ -2,68 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C677563AE25
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 262EB63AE27
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:56:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbiK1Qzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 11:55:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
+        id S231351AbiK1Q4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 11:56:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbiK1Qzj (ORCPT
+        with ESMTP id S230419AbiK1Q4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 11:55:39 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF69F1D672;
-        Mon, 28 Nov 2022 08:55:38 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso12146840wme.5;
-        Mon, 28 Nov 2022 08:55:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fs5eZY+hTOKSufklO+JsY6NTtjyubxLuJefhM9VnFWc=;
-        b=eOSBQjkmpJ+pIIMvquzkibC6nEPY0y45EBs5XUUXMVMSJOaGjjMG2el/uFq4Zet2+U
-         lxdjEXjckchaktzPuAt+3r1aPZAa05mok/H1Jxg74bJ6C8aMSBKgIq5rM2ugVLWwnAd5
-         vnZLGeTak4Ta3RrBFarFFMyQGQV2wl2FgT6bR0mpSUhnWMOTgwGoOXyWM26lJCL/GlUs
-         jvfH8xdYqQlc2CUfkvR99hd1a/ZfPGaTPB66/2Qb58OWth6ltjPc8ziaDC1mrz4P0KIH
-         +ksahvtOXQSYxvv8IZRUyXLvWG7aM4sOZnRaRXt8yx4VLvsOmuBGm/ZWj7PxxnrDEqFc
-         7f8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Fs5eZY+hTOKSufklO+JsY6NTtjyubxLuJefhM9VnFWc=;
-        b=t33US07WAYvGxsNKSv4zxskco9M2yIlu+rloB43JsfSN5VfFf/0OY0LUrVLQBTjz4Z
-         0h74C6Tt+J62PP+UOjxyM6Q1sT9ozRFqbrGJ3iWAZJ/oeolizHyUL0hJK3LRc6TFUlD6
-         ioB9mV9QZ7PV0WL7v8AnMziOZ40S6rPScXxT4kLidsHugPwq1sTdlp4LIDcWY/H6xYJL
-         Byk+FXfmp6d6EpGqhdcFLLPAAbPILQa0M5jr19sGI03/TENGMB+vBs6uDh3eq4P2GM7/
-         veH0NPHFvAhyaLNq0IASM9cWhCANl1QPZ6Yt8uUEVX9QfItlO3En38rMRkWKVCc2c2F7
-         4Png==
-X-Gm-Message-State: ANoB5pnYjHwg2D/Z4JA95dC+p/DXOBWRpMjn8CacpyKbXals3kZWQ6wt
-        d8wY7ZTupUgpk6ITggmAKb0=
-X-Google-Smtp-Source: AA0mqf5uHXOne02Q9XQdUhv5VwXOCKpuhygIvg4EkwmJRGSYhdUhsLEc9MCG1ftPkcswS7e8nkw9tA==
-X-Received: by 2002:a05:600c:4f45:b0:3cf:9be3:8d26 with SMTP id m5-20020a05600c4f4500b003cf9be38d26mr30750319wmq.185.1669654537212;
-        Mon, 28 Nov 2022 08:55:37 -0800 (PST)
-Received: from localhost.localdomain ([94.73.35.229])
-        by smtp.gmail.com with ESMTPSA id g3-20020adffc83000000b0024207ed4ce0sm8495069wrr.58.2022.11.28.08.55.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 08:55:36 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, rydberg@bitmath.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH] HID: sony: Fix unused function warning
-Date:   Mon, 28 Nov 2022 17:55:24 +0100
-Message-Id: <20221128165524.6387-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Mon, 28 Nov 2022 11:56:49 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 26ACD1D0D9;
+        Mon, 28 Nov 2022 08:56:47 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 12FCAD6E;
+        Mon, 28 Nov 2022 08:56:54 -0800 (PST)
+Received: from [10.57.71.118] (unknown [10.57.71.118])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B77073F73B;
+        Mon, 28 Nov 2022 08:56:44 -0800 (PST)
+Message-ID: <815278cc-7fad-1657-c07a-e9825f137e5c@arm.com>
+Date:   Mon, 28 Nov 2022 16:56:39 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 4/7] iommu: Let iommu.strict override
+ ops->def_domain_type
+Content-Language: en-GB
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
+        Julian Ruess <julianr@linux.ibm.com>
+References: <20221116171656.4128212-1-schnelle@linux.ibm.com>
+ <20221116171656.4128212-5-schnelle@linux.ibm.com>
+ <33eea9bd-e101-4836-19e8-d4b191b78b00@linux.intel.com>
+ <9163440eb6a47fe02730638bbdf72fda5ee5ad2c.camel@linux.ibm.com>
+ <Y4S3z6IpeDHmdUs/@nvidia.com>
+ <52fe7769ca5b66523c2c93c7d46ebc17dc144aca.camel@linux.ibm.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <52fe7769ca5b66523c2c93c7d46ebc17dc144aca.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,40 +61,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compiling this driver without setting "CONFIG_SONY_FF" generates the
-following warning:
+On 2022-11-28 15:54, Niklas Schnelle wrote:
+> On Mon, 2022-11-28 at 09:29 -0400, Jason Gunthorpe wrote:
+>> On Mon, Nov 28, 2022 at 12:10:39PM +0100, Niklas Schnelle wrote:
+>>> On Thu, 2022-11-17 at 09:55 +0800, Baolu Lu wrote:
+>>>> On 2022/11/17 1:16, Niklas Schnelle wrote:
+>>>>> When iommu.strict=1 is set or iommu_set_dma_strict() was called we
+>>>>> should use IOMMU_DOMAIN_DMA irrespective of ops->def_domain_type.
+>>>>>
+>>>>> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+>>>>> ---
+>>>>>    drivers/iommu/iommu.c | 3 +++
+>>>>>    1 file changed, 3 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+>>>>> index 65a3b3d886dc..d9bf94d198df 100644
+>>>>> --- a/drivers/iommu/iommu.c
+>>>>> +++ b/drivers/iommu/iommu.c
+>>>>> @@ -1562,6 +1562,9 @@ static int iommu_get_def_domain_type(struct device *dev)
+>>>>>    {
+>>>>>    	const struct iommu_ops *ops = dev_iommu_ops(dev);
+>>>>>    
+>>>>> +	if (iommu_dma_strict)
+>>>>> +		return IOMMU_DOMAIN_DMA;
+>>>>
+>>>> If any quirky device must work in IOMMU identity mapping mode, this
+>>>> might introduce functional regression. At least for VT-d platforms, some
+>>>> devices do require IOMMU identity mapping mode for functionality.
+>>>
+>>> That's a good point. How about instead of unconditionally returning
+>>> IOMMU_DOMAIN_DMA we just do so if the domain type returned by ops-
+>>>> def_domain_type uses a flush queue (i.e. the __IOMMU_DOMAIN_DMA_FQ bit
+>>> is set). That way a device that only supports identity mapping gets to
+>>> set that but iommu_dma_strict at least always prevents use of an IOVA
+>>> flush queue.
+>>
+>> I would prefer we create some formal caps in iommu_ops to describe
+>> whatever it is you are trying to do.
+>>
+>> Jason
+> 
+> I agree that there is currently a lack of distinction between what
+> domain types can be used (capability) and which should be used as
+> default (iommu.strict=<x>, iommu_set_...(), CONFIG_IOMMU_DEFAULT_DMA,
+> ops->def_domain_type.).
 
-	drivers/hid/hid-sony.c:2358:20: warning: unused function
-	'sony_send_output_report' [-Wunused-function]
-	static inline void sony_send_output_report(struct sony_sc *sc)
-	                   ^
-	1 warning generated.
+As far as I'm concerned, the purpose of .def_domain_type is really just 
+for quirks where the device needs an identity mapping, based on 
+knowledge that tends to be sufficiently platform-specific that we prefer 
+to delegate it to drivers. What apple-dart is doing is really just a 
+workaround for not being to indicate per-instance domain type support at 
+the point of the .domain_alloc call, and IIRC what mtk_iommu_v1 is doing 
+is a horrible giant hack around the arch/arm DMA ops that don't 
+understand IOMMU groups. Both of those situations are on the cards to be 
+cleaned up, so don't take too much from them.
 
-Add the missing preprocessor check to fix it.
+> My case though is about the latter which I think has some undocumented
+> and surprising precedences built in at the moment. With this series we
+> can use all of IOMMU_DOMAIN_DMA(_FQ, _SQ) on any PCI device but we want
+> to default to either IOMMU_DOMAIN_DMA_FQ or IOMMU_DOMAIN_SQ based on
+> whether we're running in a paging hypervisor (z/VM or KVM) to get the
+> best performance. From a semantic point of view I felt that this is a
+> good match for ops->def_domain_type in that we pick a default but it's
+> still possible to change the domain type e.g. via sysfs. Now this had
+> the problem that ops->def_domain_type would cause IOMMU_DOMAIN_DMA_FQ
+> to be used even if iommu_set_dma_strict() was called (via
+> iommu.strict=1) because there is a undocumented override of ops-
+>> def_domain_type over iommu_def_domain_type which I believe comes from
+> the mixing of capability and default you also point at.
+> 
+> I think ideally we need two separate mechanism to determine which
+> domain types can be used for a particular device (capability) and for
+> which one to default to with the latter part having a clear precedence
+> between the options. Put together I think iommu.strict=1 should
+> override a device's preference (ops->def_domain_type) and
+> CONFIG_IOMMU_DEFAULT_DMA to use IOMMU_DOMAIN_DMA but of course only if
+> the device is capable of that. Does that sound reasonable?
 
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/hid/hid-sony.c | 2 ++
- 1 file changed, 2 insertions(+)
+That sounds like essentially what we already have, though. The current 
+logic should be thus:
 
-diff --git a/drivers/hid/hid-sony.c b/drivers/hid/hid-sony.c
-index 03691cdcfb8e..13125997ab5e 100644
---- a/drivers/hid/hid-sony.c
-+++ b/drivers/hid/hid-sony.c
-@@ -2355,11 +2355,13 @@ static void motion_send_output_report(struct sony_sc *sc)
- 	hid_hw_output_report(hdev, (u8 *)report, MOTION_REPORT_0x02_SIZE);
- }
- 
-+#ifdef CONFIG_SONY_FF
- static inline void sony_send_output_report(struct sony_sc *sc)
- {
- 	if (sc->send_output_report)
- 		sc->send_output_report(sc);
- }
-+#endif
- 
- static void sony_state_worker(struct work_struct *work)
- {
--- 
-2.38.1
+1: If the device is untrusted, it gets strict translation, nothing else. 
+If that won't actually work, tough.
+2: If .def_domain_type returns a specific type, it is because any other 
+type will not work correctly at all, so we must use that.
+3: Otherwise, we compute the user's preferred default type based on 
+kernel config and command line options.
+4: Then we determine whether the IOMMU driver actually supports that 
+type, by trying to allocate it. If allocation fails and the preferred 
+type was more relaxed than IOMMU_DOMAIN_DMA, fall back to the stricter 
+type and try one last time.
 
+AFAICS the distinction and priority of those steps is pretty clear:
+
+1: Core requirements
+2: Driver-specific requirements
+3: Core preference
+4: Driver-specific support
+
+Now, for step 4 we *could* potentially use static capability flags in 
+place of the "try allocating different things until one succeeds", but 
+that doesn't change anything other than saving the repetitive 
+boilerplate in everyone's .domain_alloc implementations. The real moral 
+of the story here is not to express a soft preference where it will be 
+interpreted as a hard requirement.
+
+Thanks,
+Robin.
