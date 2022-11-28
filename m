@@ -2,132 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B379163B29E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BAEF63B2A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233653AbiK1T4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 14:56:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
+        id S233900AbiK1T6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 14:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232847AbiK1T4g (ORCPT
+        with ESMTP id S233872AbiK1T6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 14:56:36 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DC5205E1;
-        Mon, 28 Nov 2022 11:56:33 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Mon, 28 Nov 2022 14:58:00 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15D0B27;
+        Mon, 28 Nov 2022 11:57:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 495071EC04AD;
-        Mon, 28 Nov 2022 20:56:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1669665392;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5BF85CE1054;
+        Mon, 28 Nov 2022 19:57:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D639DC433D7;
+        Mon, 28 Nov 2022 19:57:53 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="o7HB8omO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669665472;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=BLpY38TW6Yt4fLZvLKrYAXJTm4+nIuDp4DdS3ewgJM4=;
-        b=SzUkoQD02Ul+NHN9XkR7Cor4g96wZB7Ea9lf4RS2CsKCE4GMsSCz5ahCbcqmSJf4+b88NF
-        VQgylDCkHGC6pztQnrvKZnQiVwSvrY/14xKcJCA50gzj4xAhzOphJwff2zYvoeA/LMOwks
-        fD+B+VVUkjSHEf+m9XQHbIaSctj9T78=
-Date:   Mon, 28 Nov 2022 20:56:31 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: Re: [Patch v3 07/14] x86/hyperv: Change vTOM handling to use
- standard coco mechanisms
-Message-ID: <Y4USb2niHHicZLCY@zn.tnic>
-References: <1668624097-14884-8-git-send-email-mikelley@microsoft.com>
- <Y3uTK3rBV6eXSJnC@zn.tnic>
- <BYAPR21MB16886AF404739449CA467B1AD70D9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y31Kqacbp9R5A1PF@zn.tnic>
- <BYAPR21MB16886FF8B35F51964A515CD5D70C9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <BYAPR21MB1688AF2F106CDC14E4F97DB4D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y4Ti4UTBRGmbi0hD@zn.tnic>
- <BYAPR21MB1688466C7766148C6B3B4684D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y4Tu1tx6E1CfnrJi@zn.tnic>
- <BYAPR21MB1688BCC5DF4636DBF4DEA525D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=m+iodXvVaGO3w4QAQvXUTnn8uFbQvqV8cvcIq17x8pk=;
+        b=o7HB8omOA47EFDy7hMWwqFoQfP8SzKI7Hiwr2zSXBF18xLG1dXIrU794PbLD82ro2flwU3
+        GjkuPKeUnKW52xqpxZdEmBK/RYtXZ+1o51MRD+t7AVl+vfpg28dep1gm5ya7cM+WDyTWza
+        SzfxbOW6IE9DGbhExXaD2cjPRnuYB3I=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id adff6e4d (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 28 Nov 2022 19:57:52 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Vlastimil Babka <vbabka@suse.cz>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        =?UTF-8?q?Jan=20D=C4=85bro=C5=9B?= <jsd@semihalf.com>,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        gregkh@linuxfoundation.org, arnd@arndb.de, rrangel@chromium.org,
+        timvp@google.com, apronin@google.com, mw@semihalf.com,
+        upstream@semihalf.com, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org
+Cc:     "Jason A . Donenfeld" <Jason@zx2c4.com>, stable@vger.kernel.org
+Subject: [PATCH v3] char: tpm: Protect tpm_pm_suspend with locks
+Date:   Mon, 28 Nov 2022 20:56:51 +0100
+Message-Id: <20221128195651.322822-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB1688BCC5DF4636DBF4DEA525D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 05:55:11PM +0000, Michael Kelley (LINUX) wrote:
-> But vendor AMD effectively offers two different encryption schemes that
-> could be seen by the guest VM.  The hypervisor chooses which scheme a
-> particular guest will see.  Hyper-V has chosen to present the vTOM scheme
-> to guest VMs, including normal Linux and Windows guests, that have been
-> modestly updated to understand vTOM.
+From: Jan Dabros <jsd@semihalf.com>
 
-If this is a standard SNP guest then you can detect vTOM support using
-SEV_FEATURES. See this thread here:
+Currently tpm transactions are executed unconditionally in
+tpm_pm_suspend() function, which may lead to races with other tpm
+accessors in the system. Specifically, the hw_random tpm driver makes
+use of tpm_get_random(), and this function is called in a loop from a
+kthread, which means it's not frozen alongside userspace, and so can
+race with the work done during system suspend:
 
-https://lore.kernel.org/r/20221117044433.244656-1-nikunj@amd.com
+[    3.277834] tpm tpm0: tpm_transmit: tpm_recv: error -52
+[    3.278437] tpm tpm0: invalid TPM_STS.x 0xff, dumping stack for forensics
+[    3.278445] CPU: 0 PID: 1 Comm: init Not tainted 6.1.0-rc5+ #135
+[    3.278450] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-20220807_005459-localhost 04/01/2014
+[    3.278453] Call Trace:
+[    3.278458]  <TASK>
+[    3.278460]  dump_stack_lvl+0x34/0x44
+[    3.278471]  tpm_tis_status.cold+0x19/0x20
+[    3.278479]  tpm_transmit+0x13b/0x390
+[    3.278489]  tpm_transmit_cmd+0x20/0x80
+[    3.278496]  tpm1_pm_suspend+0xa6/0x110
+[    3.278503]  tpm_pm_suspend+0x53/0x80
+[    3.278510]  __pnp_bus_suspend+0x35/0xe0
+[    3.278515]  ? pnp_bus_freeze+0x10/0x10
+[    3.278519]  __device_suspend+0x10f/0x350
 
-Which then means, you don't need any special gunk except extending this
-patch above to check SNP has vTOM support.
+Fix this by calling tpm_try_get_ops(), which itself is a wrapper around
+tpm_chip_start(), but takes the appropriate mutex.
 
-> In the future, Hyper-V may also choose to present original AMD C-bit scheme
-> in some guest VMs, depending on the use case.  And it will present the Intel
-> TDX scheme when running on that hardware.
+Signed-off-by: Jan Dabros <jsd@semihalf.com>
+Reported-by: Vlastimil Babka <vbabka@suse.cz>
+Tested-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Tested-by: Vlastimil Babka <vbabka@suse.cz>
+Link: https://lore.kernel.org/all/c5ba47ef-393f-1fba-30bd-1230d1b4b592@suse.cz/
+Cc: stable@vger.kernel.org
+Fixes: e891db1a18bf ("tpm: turn on TPM on suspend for TPM 1.x")
+[Jason: reworked commit message, added metadata]
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/tpm/tpm-interface.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-And all those should JustWork(tm) because we already support such guests.
-
-> To my knowledge, KVM does not support the AMD vTOM scheme.
-> Someone from AMD may have a better sense whether adding that
-> support is likely in the future.
-
-Yah, see above.
-
-Thx.
-
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index 1621ce818705..d69905233aff 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -401,13 +401,14 @@ int tpm_pm_suspend(struct device *dev)
+ 	    !pm_suspend_via_firmware())
+ 		goto suspended;
+ 
+-	if (!tpm_chip_start(chip)) {
++	rc = tpm_try_get_ops(chip);
++	if (!rc) {
+ 		if (chip->flags & TPM_CHIP_FLAG_TPM2)
+ 			tpm2_shutdown(chip, TPM2_SU_STATE);
+ 		else
+ 			rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
+ 
+-		tpm_chip_stop(chip);
++		tpm_put_ops(chip);
+ 	}
+ 
+ suspended:
 -- 
-Regards/Gruss,
-    Boris.
+2.38.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
