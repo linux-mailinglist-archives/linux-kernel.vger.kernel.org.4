@@ -2,120 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA39863ACC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 16:39:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4905563ACCE
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 16:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbiK1Pj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 10:39:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
+        id S231912AbiK1Pnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 10:43:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiK1Pjy (ORCPT
+        with ESMTP id S231775AbiK1Pnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 10:39:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC291F628
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:38:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669649932;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4r34gL/zLUGsXD6KoTRJJSoISJJekVdoxgz5n6tlG2k=;
-        b=G5/t9+EYBksbzkLhMS3wm2ua+N9vqJbzfZaggpHpYdnTGfnFrCoVppwUa2epNfxEYqd4e4
-        +4tazdLmk9SpK873rTPAnxKPfLeeYYl+ZAXgOEX3EA1MMjz4KrQG9j3jTRBc+amAxtFQdK
-        JMA7lWJqHumZO25WcVzc0LlPwK8VLT4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-159-VCRQlnyDOiGbQ_EdikapSQ-1; Mon, 28 Nov 2022 10:38:48 -0500
-X-MC-Unique: VCRQlnyDOiGbQ_EdikapSQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7368F802C17;
-        Mon, 28 Nov 2022 15:38:47 +0000 (UTC)
-Received: from [10.22.10.34] (unknown [10.22.10.34])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B1EB6492B05;
-        Mon, 28 Nov 2022 15:38:46 +0000 (UTC)
-Message-ID: <b9018641-d39f-ff74-8cfb-ba597f5ee0c2@redhat.com>
-Date:   Mon, 28 Nov 2022 10:38:44 -0500
+        Mon, 28 Nov 2022 10:43:32 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774E31D67B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:43:31 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id s5so15930804edc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:43:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WTPlnqI4X1EQdZ427Qdxpqetj4xUaQDyeIVc2yaysg4=;
+        b=RhTkZA17FTqr2QzKPiZHWXGJczsNB/1GP8mICWLllgQsNhtmLwdjlrYxvYT03rqtEF
+         yuWQZvdiS6kwbBW6aiVKLb9W9vABka+YXKeubtqM6W8fCMwj6D0jFeo+/9t74TBZKstw
+         rZ+JRnkd4TOtF5N+kQdRikkVckYDqJerXD2duF6bA3WuQqw0mHnl1i54hm0kUYJCk2t1
+         pR4LJezSZ3SiDoMH/KytmQPzTFum88wHKeYr+oFo5aodP/V8PaoSMuGl0PkZGpP8all6
+         qoWjXmLoSByn/V/C2brHn7XK78debbp8MBkv7hXc3clqvQJrcujZBDNWw2k+wDa7qmEI
+         1ygg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WTPlnqI4X1EQdZ427Qdxpqetj4xUaQDyeIVc2yaysg4=;
+        b=1xUuCEIbCK5hubmWhtKbcn+FC41iKe7eP6g7kmDXgNn4wqI0ywGzd8JJR2ZWlHcXhG
+         7dvN333Mepyj9qAczceUFVx/nspfl/fEhl3hzkzns+InRUB7yx4pimBbRYaGAnwvSGqb
+         BoDmHCm+cCNLYEm3KiqSTaZ4naaCIz6O8KUa8q+lwAd/ZnKpZCK9OACbWN3kqEgTBcs1
+         8OOAp/ypYychG4T+GWaUn2YRm1Mlp5ITXeeXJnMGhWBAfFzshzr85yc9etzj6lMG4T4Y
+         7LNl6ictBB9WkvpOkuEF+Qb1cHxr9i9sNX2ppzmQzyc3te90DsDZO2mYkIOQMvtyB5mb
+         r7eA==
+X-Gm-Message-State: ANoB5pnpvPXCk4yjIGEPjNFAuCnXr38udtb/xzHysM13MNgFZ7/lvN2M
+        1LTrtNtGkZU09y4eQqMhY2GKrA==
+X-Google-Smtp-Source: AA0mqf45iY6v5EnIgMFTeG3IxSMd6Qb9QNRFIz+rygd/FfAWFDxn0Z0xnwe1ifgK7VTI/+PiJ1NLvA==
+X-Received: by 2002:aa7:da4d:0:b0:46b:4156:bf29 with SMTP id w13-20020aa7da4d000000b0046b4156bf29mr3948998eds.246.1669650209963;
+        Mon, 28 Nov 2022 07:43:29 -0800 (PST)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id n6-20020aa7db46000000b0046aa2a36954sm4854179edt.97.2022.11.28.07.43.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 07:43:29 -0800 (PST)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+To:     Davide Caratti <dcaratti@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mengen Sun <mengensun@tencent.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Jiang Biao <benbjiang@tencent.com>, linux-kernel@vger.kernel.org,
+        mptcp@lists.linux.dev, netdev@vger.kernel.org
+Subject: [PATCH net 0/2] mptcp: More fixes for 6.1
+Date:   Mon, 28 Nov 2022 16:42:36 +0100
+Message-Id: <20221128154239.1999234-1-matthieu.baerts@tessares.net>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH-block] blk-cgroup: Use css_tryget() in
- blkcg_destroy_blkgs()
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Hillf Danton <hdanton@sina.com>, Yi Zhang <yi.zhang@redhat.com>
-References: <20221128033057.1279383-1-longman@redhat.com>
- <427068db-6695-a1e2-4aa2-033220680eb9@kernel.dk>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <427068db-6695-a1e2-4aa2-033220680eb9@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-Developer-Signature: v=1; a=openpgp-sha256; l=724; i=matthieu.baerts@tessares.net;
+ h=from:subject; bh=TuOle9aMVAdwejSJaELmoVnupS13kiLmy7nhhiprnbc=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjhNbo5o3pdZU+fR+Elezm+jlhfnafeu6/PtaMwcmQ
+ JZyu/rSJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY4TW6AAKCRD2t4JPQmmgcwrKEA
+ CToHobqfqMJpJioemGJHF3KJQoJAFomQ3ObzW8b/37e6bh6sRywV/mktnVpQHxOc36B9BH7hr8NJgv
+ +o3HM5J8YA1XZQPBi4t+e0AKA4D2SGc4o+CZ47Otty1PnzROsHFsNn/RewP2kn/NnzAkc3zhD6Q4Cz
+ 5ynOcdZjs9McQ9R88dXjXEh32RPtSBy8HB73yNeEnMsUEB/xQZvasOOla+0PbbQ605DUCu0FEsSZ6I
+ taMajUT4r4YwiVWiMFV64NyRNWoD7iMOOeHux8QETAE6Z+F+nEpYYK6KPjJXkC4CytmRoz0pg7VAMM
+ gUlXUdvBRnCGckT/6EANsAcKdx5Z+GNMlH3uGij3H1o6fqp0pqlfzcwFXvuPLQ5Yk2s38OE6/VKQEt
+ Fd1jZBuEsTayL3Ah0K9RHtSM7G/+bKVedohjhslbAiJW8YR93ppsl7VM733pVI31eOysHuWZEhONwp
+ Ub4Gff1FpSPd7Y4uhwf/xYWAllPA4Acv67ai6rHOQZvryAeJAQCyfha5XtkTx7Pj0fWZRu8Ix/nVj0
+ TVhAAOVEohrcCAh0eKmy+Ei+wwHd5LctrhNbZI14QiR126O2NCDOicx34+TVVRSMPOhxcZFYPgufiU
+ om9cUcxQ1qhqiC/f+iqgx6BhgKyN0wdIT7gwEZZuSKCgYMM1exSaRW9WtvUg==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp; fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/28/22 09:14, Jens Axboe wrote:
-> On 11/27/22 8:30 PM, Waiman Long wrote:
->> Commit 951d1e94801f ("blk-cgroup: Flush stats at blkgs destruction
->> path") incorrectly assumes that css_get() will always succeed. That may
->> not be true if there is no blkg associated with the blkcg. If css_get()
->> fails, the subsequent css_put() call may lead to data corruption as
->> was illustrated in a test system that it crashed on bootup when that
->> commit was included. Also blkcg may be freed at any time leading to
->> use-after-free. Fix it by using css_tryget() instead and bail out if
->> the tryget fails.
->>
->> Fixes: 951d1e94801f ("blk-cgroup: Flush stats at blkgs destruction path")
->> Reported-by: Yi Zhang <yi.zhang@redhat.com>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   block/blk-cgroup.c | 7 ++++++-
->>   1 file changed, 6 insertions(+), 1 deletion(-)
->>
->> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
->> index 57941d2a8ba3..74fefc8cbcdf 100644
->> --- a/block/blk-cgroup.c
->> +++ b/block/blk-cgroup.c
->> @@ -1088,7 +1088,12 @@ static void blkcg_destroy_blkgs(struct blkcg *blkcg)
->>   
->>   	might_sleep();
->>   
->> -	css_get(&blkcg->css);
->> +	/*
->> +	 * If css_tryget() fails, there is no blkg to destroy.
->> +	 */
->> +	if (!css_tryget(&blkcg->css))
->> +		return;
->> +
->>   	spin_lock_irq(&blkcg->lock);
->>   	while (!hlist_empty(&blkcg->blkg_list)) {
->>   		struct blkcg_gq *blkg = hlist_entry(blkcg->blkg_list.first,
-> This doesn't seem safe to me, but maybe I'm missing something. A tryget
-> operation can be fine if we're under RCU lock and the entity is freed
-> appropriately, but what makes it safe here? Could blkcg already be gone
-> at this point?
+Patch 1 makes sure data received after a close will still be processed and acked
+as exepected. This is a regression for a commit introduced in v5.11.
 
-The actual freeing of the blkcg structure is under RCU protection. So 
-the structure won't be freed immediately even if css_tryget() fails. I 
-suspect what Michal found may be the root cause of this problem. If so, 
-this is an existing bug which gets exposed by my patch.
+Patch 2 fixes a kernel deadlock found when working on validating TFO with a
+listener MPTCP socket. This is not directly linked to TFO but it is easier to
+reproduce the issue with it. This fixes a bug introduced by a commit from v6.0.
 
-Cheers,
-Longman
+Menglong Dong (1):
+  mptcp: don't orphan ssk in mptcp_close()
+
+Paolo Abeni (1):
+  mptcp: fix sleep in atomic at close time
+
+ net/mptcp/protocol.c | 13 ++++++-------
+ net/mptcp/subflow.c  |  6 +++---
+ 2 files changed, 9 insertions(+), 10 deletions(-)
+
+
+base-commit: f2fc2280faabafc8df83ee007699d21f7a6301fe
+-- 
+2.37.2
 
