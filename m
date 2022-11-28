@@ -2,191 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1111A63AEB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7490D63AEE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232910AbiK1RSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 12:18:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
+        id S232458AbiK1R2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 12:28:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbiK1RR7 (ORCPT
+        with ESMTP id S232478AbiK1R2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:17:59 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B872BF5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:17:58 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id k5so10144679pjo.5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:17:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XLdUnL0wA67xH3uPfTJaGkkNCljEYOw6YgU8NoVz4bg=;
-        b=yJVIxDvXFka2qUujlZIJjlFfYATp29B6BBaF51bGgaQtJOnIsctkLpSuKR9gJzYCKf
-         XsS/tgpE0FSRp58KJJVhAE726p7Rl6llXMnLLLKmG7VjNMh+9AFVzhFLDOX8Di9M2206
-         37MiQ5gDOax4f7/ycb7xQdzG2joLzzvaIL+obi1isRbfCEwtS78VpKXE0aOxFZcod0zH
-         Cc0hH6SR7moTwDTTsn2Na5u8cJ9xxWUoZitxOmRtZT3orC1xP9z2mUsxGrEAg7A6g3o8
-         olbvWS+DTLu8omaoXqrLojYGzCDJhMCIb4KWQb26k/48zQyQ3m3Cx4t1r8x3VuhWXZ68
-         ghzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XLdUnL0wA67xH3uPfTJaGkkNCljEYOw6YgU8NoVz4bg=;
-        b=7nG/P2a5+5AbN/CHvs4c/zx/unRACrZy71NiM2SG0RPbUgVH9iddY2UrBuN4b9AGRz
-         PSzNK+zxdKFfSvf09JVU/oTdR9yNXXmLieTs5Lzhab0Wa09nzUfsJxMgBS9+jXo3LNae
-         1j/uQjqxtjA7iXAlH2wUmWSsZJSvGgu2sV6obSMdStfyO8mWBA2sl4LnFBnAk9v1zNWR
-         DJjJHkEjx3z2UPZKzZIr5Bgnw3YSb5620xW7Y9DSrR+5bo7v+3OfcnroknmJraXiywNn
-         c8ZRnuoqAJTx16R5KY/GCbpOtclvFUEtB34D5OYk+mSg2CvEWAqQhwoJTjmQtuL3LQwK
-         m/RA==
-X-Gm-Message-State: ANoB5pnROcc8Cfma4aDYoYtPZkovES++WOPsPH9nmFb8KU1PjuXG3Ymz
-        xPr5w2CHFkEFtqnxXBioxVn8Vw==
-X-Google-Smtp-Source: AA0mqf5ejOtQtgRIZgjHCUazH7TdmWH1m715Vqc1xOD8UkaYHogNY5gK2AnYz4vNyxAglE6lHTkrpw==
-X-Received: by 2002:a17:903:1314:b0:189:86b4:c4a with SMTP id iy20-20020a170903131400b0018986b40c4amr7008067plb.30.1669655877981;
-        Mon, 28 Nov 2022 09:17:57 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:908e:93f3:e339:ae71])
-        by smtp.gmail.com with ESMTPSA id l2-20020a170903244200b00176b3c9693esm9106112pls.299.2022.11.28.09.17.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 09:17:57 -0800 (PST)
-Date:   Mon, 28 Nov 2022 10:17:54 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Devarsh Thakkar <devarsht@ti.com>
-Cc:     andersson@kernel.org, p.zabel@pengutronix.de,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        s-anna@ti.com, hnagalla@ti.com, praneeth@ti.com, nm@ti.com,
-        vigneshr@ti.com, a-bhatia1@ti.com, j-luthra@ti.com
-Subject: Re: [PATCH 1/2] Documentation: dt-bindings: k3-r5f-rproc: Add new
- compatible for AM62 SoC family
-Message-ID: <20221128171754.GB1010946@p14s>
-References: <20221115060934.13279-1-devarsht@ti.com>
- <20221115060934.13279-2-devarsht@ti.com>
+        Mon, 28 Nov 2022 12:28:01 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76CA6444
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:28:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669656480; x=1701192480;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=wlocxIzZa2YAPiuBniHtUeU72dW8mhGyG945Z9QPseQ=;
+  b=OA7aea87P+9Rd6sPCyg/7fPbpaSCPmmggCJq8R1gyPXY0lEG5TiEEoMx
+   v2ThxvtcQ4qIZyOKFLT7ym+oUy+jF8BDoQJlNKlWIkEAFC5heEk6uvuQz
+   Wj08p6xDqy0SVNzguDiMReJ4gr0D0RZYT4wHaVMWihKfN8PTjtWEk8w7Y
+   +9IB/JWQwDQkLaHfWsxz3vX55MzQ8ELg2Q2hsruJfN4EZdf4cvtne9hZp
+   vEhJl+NUD+00hrT+J1nAdrl449IqHEV7mH/giukNS+uvKtZpxFilB9vRy
+   K+fiSnhBv0ZzKzE9Qn2ZzPL6GbNouH8RgaMNkFmPk/QPA/40zrRPKJspV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="295281628"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="295281628"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 09:27:49 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="888509534"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="888509534"
+Received: from kschjaer-mobl.amr.corp.intel.com (HELO [10.212.114.246]) ([10.212.114.246])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 09:27:48 -0800
+Message-ID: <2d207a51-d415-726b-3bc1-8788df2f06fd@linux.intel.com>
+Date:   Mon, 28 Nov 2022 11:18:02 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221115060934.13279-2-devarsht@ti.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH] soundwire: bus_type: Avoid lockdep assert in
+ sdw_drv_probe()
+Content-Language: en-US
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>, vkoul@kernel.org,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com
+Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20221121162453.1834170-1-rf@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20221121162453.1834170-1-rf@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DT people need to ack this patch, and for that to happen they need to be
-CC'ed on the patch, as checkpatch is explicitly instructing to do.
 
-On Tue, Nov 15, 2022 at 11:39:33AM +0530, Devarsh Thakkar wrote:
-> AM62 family of devices don't have a R5F cluster, instead
-> they have single core DM R5F.
-> Add new compatible string ti,am62-r5fss to support this scenario.
+
+On 11/21/22 10:24, Richard Fitzgerald wrote:
+> Don't hold sdw_dev_lock while calling the peripheral driver
+> probe() and remove() callbacks.
 > 
-> When this new compatible is used don't allow cluster-mode
-> property usage in device-tree as this implies that there
-> is no R5F cluster available and only single R5F core
-> is present.
+> Holding sdw_dev_lock around the probe() and remove() calls
+> causes a theoretical mutex inversion which lockdep will
+> assert on. The peripheral driver probe will probably register
+> a soundcard, which will take ALSA and ASoC locks. During
+
+It's extremely unlikely that a peripheral driver would register a sound
+card, this is what machine drivers do.
+
+Which leads me to the question: is this a real problem?
+
+Or did you mean 'register components', and if yes what would the problem
+with lockdep be?
+
+> normal operation a runtime resume suspend can be triggered
+> while these locks are held and will then take sdw_dev_lock.
 > 
-> Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
+> It's not necessary to hold sdw_dev_lock when calling the
+> probe() and remove(), it is only used to prevent the bus core
+> calling the driver callbacks if there isn't a driver or the
+> driver is removing.
+
+
+> If sdw_dev_lock is held while setting and clearing the
+> 'probed' flag this is sufficient to guarantee the safety of
+> callback functions.
+
+not really, the 'probed' flag was kept for convenience. what this lock
+really protects is the dereferencing of ops after the driver .remove
+happens.
+
+> The potential race of a bus event happening while probe() is
+> executing is the same as the existing race of the bus event
+> handler taking the mutex first and processing the event
+> before probe() can run. In both cases the event has already
+> happened before the driver is probed and ready to accept
+> callbacks.
+
+Sorry, I wasn't able to parse the first sentence in this paragraph. what
+'existing race' are you referring to?
+
+> 
+> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 > ---
->  .../bindings/remoteproc/ti,k3-r5f-rproc.yaml  | 48 +++++++++++++------
->  1 file changed, 34 insertions(+), 14 deletions(-)
+>  drivers/soundwire/bus_type.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
-> index fb9605f0655b..1f5eae806c2f 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
-> @@ -21,6 +21,9 @@ description: |
->    called "Single-CPU" mode, where only Core0 is used, but with ability to use
->    Core1's TCMs as well.
+> diff --git a/drivers/soundwire/bus_type.c b/drivers/soundwire/bus_type.c
+> index 04b3529f8929..963498db0fd2 100644
+> --- a/drivers/soundwire/bus_type.c
+> +++ b/drivers/soundwire/bus_type.c
+> @@ -105,20 +105,19 @@ static int sdw_drv_probe(struct device *dev)
+>  	if (ret)
+>  		return ret;
 >  
-> +  AM62 SoC family support a single R5F core only which is used for DM firmware
-> +  and can also be used as a remote processor with IPC communication.
+> -	mutex_lock(&slave->sdw_dev_lock);
+> -
+>  	ret = drv->probe(slave, id);
+>  	if (ret) {
+>  		name = drv->name;
+>  		if (!name)
+>  			name = drv->driver.name;
+> -		mutex_unlock(&slave->sdw_dev_lock);
+>  
+>  		dev_err(dev, "Probe of %s failed: %d\n", name, ret);
+>  		dev_pm_domain_detach(dev, false);
+>  		return ret;
+>  	}
+>  
+> +	mutex_lock(&slave->sdw_dev_lock);
 > +
->    Each Dual-Core R5F sub-system is represented as a single DTS node
->    representing the cluster, with a pair of child DT nodes representing
->    the individual R5F cores. Each node has a number of required or optional
-> @@ -28,6 +31,9 @@ description: |
->    the device management of the remote processor and to communicate with the
->    remote processor.
+>  	/* device is probed so let's read the properties now */
+>  	if (drv->ops && drv->ops->read_prop)
+>  		drv->ops->read_prop(slave);
+> @@ -167,14 +166,12 @@ static int sdw_drv_remove(struct device *dev)
+>  	int ret = 0;
 >  
-> +  Since AM62 SoC family only support a single core, there is no cluster-mode
-> +  property setting required for it.
-> +
->  properties:
->    $nodename:
->      pattern: "^r5fss(@.*)?"
-> @@ -38,6 +44,7 @@ properties:
->        - ti,j721e-r5fss
->        - ti,j7200-r5fss
->        - ti,am64-r5fss
-> +      - ti,am62-r5fss
->        - ti,j721s2-r5fss
+>  	mutex_lock(&slave->sdw_dev_lock);
+> -
+>  	slave->probed = false;
+> +	mutex_unlock(&slave->sdw_dev_lock);
 >  
->    power-domains:
-> @@ -80,7 +87,8 @@ patternProperties:
->        node representing a TI instantiation of the Arm Cortex R5F core. There
->        are some specific integration differences for the IP like the usage of
->        a Region Address Translator (RAT) for translating the larger SoC bus
-> -      addresses into a 32-bit address space for the processor.
-> +      addresses into a 32-bit address space for the processor. For AM62x,
-> +      should only define one R5F child node as it has only one core available.
+>  	if (drv->remove)
+>  		ret = drv->remove(slave);
 >  
->        Each R5F core has an associated 64 KB of Tightly-Coupled Memory (TCM)
->        internal memories split between two banks - TCMA and TCMB (further
-> @@ -104,6 +112,7 @@ patternProperties:
->            - ti,j721e-r5f
->            - ti,j7200-r5f
->            - ti,am64-r5f
-> +          - ti,am62-r5f
->            - ti,j721s2-r5f
+> -	mutex_unlock(&slave->sdw_dev_lock);
+> -
+>  	dev_pm_domain_detach(dev, false);
 >  
->        reg:
-> @@ -207,20 +216,31 @@ patternProperties:
->        - firmware-name
->  
->      unevaluatedProperties: false
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - ti,am64-r5fss
-> +    then:
-> +      properties:
-> +        ti,cluster-mode:
-> +          enum: [0, 2]
-> +
-> +    else:
-> +      properties:
-> +        ti,cluster-mode:
-> +          enum: [0, 1]
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - ti,am62-r5fss
-> +    then:
-> +      properties:
-> +        ti,cluster-mode: false
->  
-> -if:
-> -  properties:
-> -    compatible:
-> -      enum:
-> -        - ti,am64-r5fss
-> -then:
-> -  properties:
-> -    ti,cluster-mode:
-> -      enum: [0, 2]
-> -else:
-> -  properties:
-> -    ti,cluster-mode:
-> -      enum: [0, 1]
->  
->  required:
->    - compatible
-> -- 
-> 2.17.1
-> 
+>  	return ret;
