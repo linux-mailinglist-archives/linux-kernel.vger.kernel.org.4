@@ -2,125 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B178B63AA9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C237E63AAA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232383AbiK1OOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 09:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42104 "EHLO
+        id S232377AbiK1OPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 09:15:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232362AbiK1OOl (ORCPT
+        with ESMTP id S232427AbiK1OPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:14:41 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643AF5596
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:14:40 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id d3so5277056plr.10
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:14:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YSAoMPL7GoXdvi2uqHoiRe+EA22FtKTEJJ1PVxlye2M=;
-        b=jgvFSL7jpl9MqLgAG6fh4zKofcwxR+/eoEoZWF/ym/LrF4fLxXEQxRLZAstmlCbqpG
-         nMpiwsjL1fRDSlJmD0MHKW9gTfTjZVdQBno5hAZlMaWaeACszvKP/wx8QZpvbzNUIV3H
-         bcPYyTTrny+NDOoszf8U8N1sJwKg3ibV+Q6O7XF0xWAuNAl9ZFCDKPWBC53W22952bfD
-         hx2wOQyXm8IkSwtBlDs8f08Chogp6iM40tAmOO3+l9bWfELea6Z1M3qeLPjSeGMLfDoP
-         Ky+sdx4pCdqhXZRA0RVg9YQQds2CJJlEDyP6tTSqeqIS6Ut4fM3+w9JSx0/apa4WJJFI
-         XjoQ==
+        Mon, 28 Nov 2022 09:15:06 -0500
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A6C220F8;
+        Mon, 28 Nov 2022 06:15:02 -0800 (PST)
+Received: by mail-oi1-f171.google.com with SMTP id m204so11670416oib.6;
+        Mon, 28 Nov 2022 06:15:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YSAoMPL7GoXdvi2uqHoiRe+EA22FtKTEJJ1PVxlye2M=;
-        b=k40HFsMEgBwJSkAdRgf2hno7jGblZxgRst0GJSHbR5/vVzxCmCTOXWFn9H5yNYmLsT
-         Uu6D3nhRc2ep1gsdEARoAZfbI85IyAxSETlbBiv4Is7Xt+v0CMToJbraiBrYeztcKeNU
-         A7A75TPs7En1qmpu7WnBD5KBGs7jIxUFXkKkgjZtfQZCkSJVohH1ms3mgD27CvEyWzpD
-         Twm4luemyAyJH4uiU08fXFHFyvTYiZmVbtBqSgJ7Z2Y5QRSD8sLAPjGv0dnAjlYi57ks
-         eNYg1B2IWFeKU8rZZG2BUPl1glaaLRUosnGS2JDiEhNDdi3MHbDP41gqddJVEbVv0ejY
-         1a9A==
-X-Gm-Message-State: ANoB5pmCpqM7WuBIoyp901td4c2tdmFz+eBskhk3ED1JPL/ZkG5Q2Vhz
-        KBelt3e1pz2NzZlpS0gW6RrWZA==
-X-Google-Smtp-Source: AA0mqf42bAFjdasxPY2lCmOFI93Ik9+Kku4PHtRgmzeR0hIj/0zBODaqQ3rA85YnXs6vWnHM22hVpw==
-X-Received: by 2002:a17:902:8217:b0:186:a5a7:cc3d with SMTP id x23-20020a170902821700b00186a5a7cc3dmr31543252pln.42.1669644879656;
-        Mon, 28 Nov 2022 06:14:39 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id n14-20020a17090ac68e00b00213c7cf21c0sm7679415pjt.5.2022.11.28.06.14.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 06:14:39 -0800 (PST)
-Message-ID: <427068db-6695-a1e2-4aa2-033220680eb9@kernel.dk>
-Date:   Mon, 28 Nov 2022 07:14:37 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH-block] blk-cgroup: Use css_tryget() in
- blkcg_destroy_blkgs()
-To:     Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Hillf Danton <hdanton@sina.com>, Yi Zhang <yi.zhang@redhat.com>
-References: <20221128033057.1279383-1-longman@redhat.com>
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20221128033057.1279383-1-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=rMDrKJM1JYq9frHiDAV6QjHrjgaT+Wd+P/w7Ou0pGrc=;
+        b=FJMqrqaggu+xu84dmIACxHlCmKBZBO92yLaeIT6fVNe2woR7EQQurkeEYbMUhV2S6X
+         aFJD79J9DgeOOiRrp5eEwEeYEsF8cMwquzOsgvyOdOIHvjiWGHijVqUv6jSDBQyZhGxy
+         +pEDKxkmasI9nuwJf4K/9bVmB5/9aZr/XaceWnPr/A34kiaZz7S36P/oyI73tflIvf+I
+         ZMD0HJvwfjbMTrM9zjmDbIbWK6zzZSZvGm5CT4TZa4zYlLMlAAo3fZP6RLn8OOaNgESi
+         wz2UsetPI0ijOiBwKu0xyl3BRSUDy/y7km1z9f87h3evIIbiFeqlud7niACuk6FOMRpZ
+         m2rg==
+X-Gm-Message-State: ANoB5plBF2UjrxR8FIUdyCHi4Xh+L1u9wssNJQ5wj6GBvBoR/8T3EXI9
+        98sxd1w+Z4HX2AegQ595Kw==
+X-Google-Smtp-Source: AA0mqf7GaLmT+j6KXYSEaDabzZGvwPVlEA86w3Pu8lzi8pqWtO//a4CTd3PVxjYaNKvONEotUcwvLA==
+X-Received: by 2002:a05:6808:22a1:b0:35b:8a39:ab76 with SMTP id bo33-20020a05680822a100b0035b8a39ab76mr8955735oib.196.1669644902054;
+        Mon, 28 Nov 2022 06:15:02 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t12-20020a056870e74c00b001375188dae9sm5946085oak.16.2022.11.28.06.15.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 06:15:01 -0800 (PST)
+Received: (nullmailer pid 722965 invoked by uid 1000);
+        Mon, 28 Nov 2022 14:15:00 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, Sven Peter <sven@svenpeter.dev>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        linux-pm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        asahi@lists.linux.dev
+In-Reply-To: <20221128124216.13477-3-marcan@marcan.st>
+References: <20221128124216.13477-1-marcan@marcan.st>
+ <20221128124216.13477-3-marcan@marcan.st>
+Message-Id: <166964486801.717655.2608444925832576232.robh@kernel.org>
+Subject: Re: [PATCH v4 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
+ binding for Apple SoC cpufreq
+Date:   Mon, 28 Nov 2022 08:15:00 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/27/22 8:30 PM, Waiman Long wrote:
-> Commit 951d1e94801f ("blk-cgroup: Flush stats at blkgs destruction
-> path") incorrectly assumes that css_get() will always succeed. That may
-> not be true if there is no blkg associated with the blkcg. If css_get()
-> fails, the subsequent css_put() call may lead to data corruption as
-> was illustrated in a test system that it crashed on bootup when that
-> commit was included. Also blkcg may be freed at any time leading to
-> use-after-free. Fix it by using css_tryget() instead and bail out if
-> the tryget fails.
+
+On Mon, 28 Nov 2022 21:42:14 +0900, Hector Martin wrote:
+> This binding represents the cpufreq/DVFS hardware present in Apple SoCs.
+> The hardware has an independent controller per CPU cluster, and we
+> represent them as unique nodes in order to accurately describe the
+> hardware. The driver is responsible for binding them as a single cpufreq
+> device (in the Linux cpufreq model).
 > 
-> Fixes: 951d1e94801f ("blk-cgroup: Flush stats at blkgs destruction path")
-> Reported-by: Yi Zhang <yi.zhang@redhat.com>
-> Signed-off-by: Waiman Long <longman@redhat.com>
+> Acked-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
->  block/blk-cgroup.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+>  .../cpufreq/apple,cluster-cpufreq.yaml        | 117 ++++++++++++++++++
+>  1 file changed, 117 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
 > 
-> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-> index 57941d2a8ba3..74fefc8cbcdf 100644
-> --- a/block/blk-cgroup.c
-> +++ b/block/blk-cgroup.c
-> @@ -1088,7 +1088,12 @@ static void blkcg_destroy_blkgs(struct blkcg *blkcg)
->  
->  	might_sleep();
->  
-> -	css_get(&blkcg->css);
-> +	/*
-> +	 * If css_tryget() fails, there is no blkg to destroy.
-> +	 */
-> +	if (!css_tryget(&blkcg->css))
-> +		return;
-> +
->  	spin_lock_irq(&blkcg->lock);
->  	while (!hlist_empty(&blkcg->blkg_list)) {
->  		struct blkcg_gq *blkg = hlist_entry(blkcg->blkg_list.first,
 
-This doesn't seem safe to me, but maybe I'm missing something. A tryget
-operation can be fine if we're under RCU lock and the entity is freed
-appropriately, but what makes it safe here? Could blkcg already be gone
-at this point?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
--- 
-Jens Axboe
+yamllint warnings/errors:
 
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml: properties:compatible:oneOf:0:items: 'anyOf' conditional failed, one must be fixed:
+	[{'oneOf': ['apple,t8103-cluster-cpufreq', 'apple,t8112-cluster-cpufreq']}, {'const': 'apple,cluster-cpufreq'}] is not of type 'object', 'boolean'
+	'apple,t8103-cluster-cpufreq' is not of type 'object', 'boolean'
+	'apple,t8112-cluster-cpufreq' is not of type 'object', 'boolean'
+	from schema $id: http://json-schema.org/draft-07/schema#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml: properties:compatible:oneOf:0:items: 'oneOf' conditional failed, one must be fixed:
+	[{'oneOf': ['apple,t8103-cluster-cpufreq', 'apple,t8112-cluster-cpufreq']}, {'const': 'apple,cluster-cpufreq'}] is not of type 'object'
+	['apple,t8103-cluster-cpufreq', 'apple,t8112-cluster-cpufreq'] should not be valid under {'items': {'propertyNames': {'const': 'const'}, 'required': ['const']}}
+		hint: Use 'enum' rather than 'oneOf' + 'const' entries
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml: properties:compatible:oneOf:0:items: 'oneOf' conditional failed, one must be fixed:
+	[{'oneOf': ['apple,t8103-cluster-cpufreq', 'apple,t8112-cluster-cpufreq']}, {'const': 'apple,cluster-cpufreq'}] is not of type 'object'
+	Additional properties are not allowed ('oneOf' was unexpected)
+	from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml: ignoring, error in schema: properties: compatible: oneOf: 0: items
+Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.example.dtb:0:0: /example-0/soc/performance-controller@210e20000: failed to match any schema with compatible: ['apple,t8103-cluster-cpufreq', 'apple,cluster-cpufreq']
+Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.example.dtb:0:0: /example-0/soc/performance-controller@210e20000: failed to match any schema with compatible: ['apple,t8103-cluster-cpufreq', 'apple,cluster-cpufreq']
+Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.example.dtb:0:0: /example-0/soc/performance-controller@211e20000: failed to match any schema with compatible: ['apple,t8103-cluster-cpufreq', 'apple,cluster-cpufreq']
+Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.example.dtb:0:0: /example-0/soc/performance-controller@211e20000: failed to match any schema with compatible: ['apple,t8103-cluster-cpufreq', 'apple,cluster-cpufreq']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221128124216.13477-3-marcan@marcan.st
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command.
 
