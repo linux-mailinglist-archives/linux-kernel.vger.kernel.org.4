@@ -2,95 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B0163AA61
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D9263AA71
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:06:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbiK1OEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 09:04:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60232 "EHLO
+        id S232330AbiK1OG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 09:06:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbiK1OEW (ORCPT
+        with ESMTP id S232322AbiK1OGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:04:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA6FD12C;
-        Mon, 28 Nov 2022 06:04:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A917B80DDA;
-        Mon, 28 Nov 2022 14:04:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D49DDC433D7;
-        Mon, 28 Nov 2022 14:04:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669644259;
-        bh=hJGjJg60sjMbrCzlwGn3rya6L16V299vyXbEqb4YAR8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bGlQHwLR8hxljgzrgVHHC9LZOQfx9gKF+fQ1o5nVnR3iIyt98G1ob49nUHqdwuWKL
-         sbqABdmC0J29f+uqMO09G/htURJnWsQevMZqn5ctWeH/DS0VIqmDf4O4H0ABDSwKqI
-         tt2h3ljwB5yOAra2d6NUD4Pk+s0QuO0q9Qx/oqvChA3FAOMULv30J3GR4VFvN3fHXP
-         NXxMAzl5symBF+2sGLx848HwjtoldJG1Hjr2ymuYPrWJ+Prwu8pDCA3j2a4cRbAK7z
-         UyA7+gEfkG1dLHsYKVioRBfxcrlP3J8hY6sggXIFfI4v7rc8C+cPYbNP43zEWNVyFY
-         NKq+DzkKzC/ww==
-Date:   Mon, 28 Nov 2022 14:04:13 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     John Keeping <john@metanate.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Fabien Chouteau <fabien.chouteau@barco.com>,
-        Peter Korsgaard <peter.korsgaard@barco.com>,
-        Felipe Balbi <balbi@ti.com>,
-        Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH 0/3] usb: gadget: f_hid: fix f_hidg lifetime vs cdev
-Message-ID: <Y4S/3T7jzXzTHNSc@google.com>
-References: <20221122123523.3068034-1-john@metanate.com>
- <Y30SWm+bhv8srJC2@google.com>
+        Mon, 28 Nov 2022 09:06:17 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B406C2124F;
+        Mon, 28 Nov 2022 06:06:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669644369; x=1701180369;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kK1XSdb8aoZkJ8xeQsAIDo4KCW0OUls0hSDk9JxDYEU=;
+  b=gO1dsKvX0Xc/OEnGUxrN8sB5/1HDwKzgj/2JF3OCdd0Ys5fkb8hAS0Fw
+   uQc2Edl1y8p+YAp+69tAjzI+nJkn7FcRsXWe//UzxJqvxGu2wPQnjtsNQ
+   /e+jqBvvIdEU++oBoqh8BlxjE2/72RgW8El4gA6dLZaP7ATpI2s7Crtd9
+   h3mr4FDC/8IN+i6oRUjXd1oKrfRCFBOlvMhq6LWBfJq3JU2GQkt8Y4vqv
+   /eTZNtdFr2esZNuYIZqgsVv02TivlWhLcAGseajOQ3Eq8ayGTrxF8VchA
+   rB7imVtmZhtYK2cIyJf96uyMfBYZCmlpjDtrmIuRFUpWja0GXzGUP3DqV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="379096714"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="379096714"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 06:05:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="785640121"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="785640121"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 28 Nov 2022 06:05:13 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ozekx-001AIf-1z;
+        Mon, 28 Nov 2022 16:05:11 +0200
+Date:   Mon, 28 Nov 2022 16:05:11 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     Gerald Loacker <gerald.loacker@wolfvision.net>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jakob Hauser <jahau@rocketmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Subject: Re: [PATCH v3 1/3] iio: add struct declarations for iio types
+Message-ID: <Y4TAF1hn0l1CziUh@smile.fi.intel.com>
+References: <20221125083526.2422900-1-gerald.loacker@wolfvision.net>
+ <20221125083526.2422900-2-gerald.loacker@wolfvision.net>
+ <Y4CcspD1xkmhmWbh@smile.fi.intel.com>
+ <Y4CgiMd4XQMV4KFV@smile.fi.intel.com>
+ <a55e73f7-4daf-6892-34dc-61c6f6581d8e@wolfvision.net>
+ <Y4S3WnYWVnmiVFc+@smile.fi.intel.com>
+ <4d1b0054-efd4-e10e-17a6-d236052afa49@wolfvision.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y30SWm+bhv8srJC2@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4d1b0054-efd4-e10e-17a6-d236052afa49@wolfvision.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Nov 2022, Lee Jones wrote:
+On Mon, Nov 28, 2022 at 02:48:48PM +0100, Michael Riesch wrote:
+> On 11/28/22 14:27, Andy Shevchenko wrote:
+> > On Mon, Nov 28, 2022 at 01:18:04PM +0100, Gerald Loacker wrote:
+> >> Am 25.11.2022 um 12:01 schrieb Andy Shevchenko:
 
-> On Tue, 22 Nov 2022, John Keeping wrote:
-> 
-> > This series arises from the recent thread [1] on lifetime issues.
-> > 
-> > The main point is the first patch, with the second being an unrelated
-> > fix for an issue spotted while working on this.  Both of these have
-> > Fixes: tags for backporting to stable.
-> > 
-> > The final patch tidies up some error handling to hopefully avoid patch 2
-> > issues in the future.
-> > 
-> > [1] https://lore.kernel.org/r/20221117120813.1257583-1-lee@kernel.org
-> > 
-> > John Keeping (3):
-> >   usb: gadget: f_hid: fix f_hidg lifetime vs cdev
-> >   usb: gadget: f_hid: fix refcount leak on error path
-> >   usb: gadget: f_hid: tidy error handling in hidg_alloc
-> > 
-> >  drivers/usb/gadget/function/f_hid.c | 60 ++++++++++++++++-------------
-> >  1 file changed, 33 insertions(+), 27 deletions(-)
-> 
-> For the set:
-> 
-> Reviewed-by: Lee Jones <lee@kernel.org>
-> Tested-by: Lee Jones <lee@kernel.org>
+...
 
-Greg, is this still on your radar?
+> > It's a rule to use _t for typedef:s in the kernel. That's why
+> > I suggested to leave struct definition and only typedef the same structures
+> > (existing) to new names (if needed).
+> 
+> Andy, excuse our ignorance but we are not sure how this typedef approach
+> is supposed to look like...
+> 
+> >> or
+> > 
+> >> 	typedef iio_val_int_plus_micro iio_val_int_plus_micro_db;
+> 
+> ... because
+> 
+> #include <stdio.h>
+> 
+> struct iio_val_int_plus_micro {
+> 	int integer;
+> 	int micro;
+> };
+> 
+> typedef iio_val_int_plus_micro iio_val_int_plus_micro_db;
+> 
+> int main()
+> {
+>   struct iio_val_int_plus_micro a = { .integer = 100, .micro = 10, };
+>   struct iio_val_int_plus_micro_db b = { .integer = 20, .micro = 10, };
+>   return 0;
+> }
+> 
+> won't compile.
+
+I see. Thanks for pointing this out.
+
+Then the question is why do we need the two same structures with different
+names?
 
 -- 
-Lee Jones [李琼斯]
+With Best Regards,
+Andy Shevchenko
+
+
