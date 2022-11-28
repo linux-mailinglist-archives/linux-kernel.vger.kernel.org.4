@@ -2,177 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E8B63B19C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4B063B1A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232725AbiK1SsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 13:48:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
+        id S232893AbiK1SuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 13:50:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbiK1Sr7 (ORCPT
+        with ESMTP id S233023AbiK1Stj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 13:47:59 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4B711179;
-        Mon, 28 Nov 2022 10:47:58 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id ho10so28219470ejc.1;
-        Mon, 28 Nov 2022 10:47:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SFZ8YOO/uIBYO8TLUtu4aCzGnQUOMfflMlsmwWHSXZg=;
-        b=FUvBEHtfQi+6gzH8dSZCCe8YRtcmwDDc+FSvcOfkOBgIzGWp1gfRKFgXqM8Kk5DSJr
-         oWFKYH4Ze27tUv3dNb6K3X6F7bYte9QUutWovBnvXY/ulneCQgdYXWXrjBCuOlZU4qqz
-         IDUlr7FmeQZgJu+UE81axsaV6ffbSQQRMrH22EO4NRYuLDwabwYWNTxF/8eLyMDpwFxM
-         9I/nm2e1Ob+yoyJRSjAYpuxF0zBI85fuXTILqzOeLrfYUSztpa81l6/ZTKMRAC0Uu0No
-         aR8FjaKVuI8vf/zrpjx6NUe9iiqwS0MRZ9CKGJuFehlJvkHqM45uZzsqJrF+Oqb+iz4+
-         /k+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SFZ8YOO/uIBYO8TLUtu4aCzGnQUOMfflMlsmwWHSXZg=;
-        b=NCTpsptbPivr0fu+EaSMXx61QRRoDfWcW44T+yqQ09kiOJGnzxGWf4IJm5oMB/jdxH
-         Z0KjSQfdzCgkFylb07eNCCTg7+jRdCMrRtzk6GWv02UZ7xj2BmCN/menXb/4fDsmT1KW
-         eWSL5iYjOc76a0NMi+ZE9d/jkvm1VbvC+x5cCSXQq0BHwJ7I0R2fV2jjsA/2VF8/MXds
-         Zah4RdjC97qLQpxpzSuTzAVS7CKsonyeX96rZvilJ8pfsyrjI0oAf1Uh/XMFkLaXMoWI
-         dQiddpYHViMt4aRX+/AZrf8nrbZ5WrxdCUbnLfdHpizCAwwZ3QweZkKDw8gfiD7UQm9m
-         TV/w==
-X-Gm-Message-State: ANoB5pls7c54/kwdJeCsMiuE5Rn9Ytx2s17nm5ClzX0kzjdWt103lJAW
-        a1t8E+1DAkEYlyNZiJjJ3BEgxSy9k9sLPoqH8cJYBnOapDk=
-X-Google-Smtp-Source: AA0mqf6SXIDsl+LM5XloVbmgdLPOwHCFBrWHCOg/Se1pwmJIbeUO0FutJC0213+SXdNRfjubTeNx48zaK5bAiULq9qA=
-X-Received: by 2002:a17:906:f896:b0:7bb:cdd8:94e7 with SMTP id
- lg22-20020a170906f89600b007bbcdd894e7mr17449701ejb.369.1669661276179; Mon, 28
- Nov 2022 10:47:56 -0800 (PST)
+        Mon, 28 Nov 2022 13:49:39 -0500
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A895121E2F;
+        Mon, 28 Nov 2022 10:49:07 -0800 (PST)
+Received: from pps.filterd (m0150245.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASHHb4R028043;
+        Mon, 28 Nov 2022 18:48:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pps0720;
+ bh=5T8G2Oa4+MbGVdBq/+qTbfsHUsc2skPJ3iIb5a6Nm1g=;
+ b=fB8/J3NesjRpUOa9ovdvepvEFywXcTHwMqnmZMY3Zt0ZLQYmqht7Y9/ONHRewrDiNIFU
+ gV8m2INPptj977j5QOjGe+Bs7/htNoKSh4OOnaGqtXJGH57taGmP8UwrmqErTs7ilaer
+ hXpDlemChPUC0Bw1CnMB5gGWQcqHptmUj9ok79eau70oDZGVn+YtKPkxNmWCjv6W/Vqs
+ LBIbxiJVy2l5FclxmLYVFfUFOUhZqt6PjVHIqWSqA1TTOpxpWfS2OyaF3+brZiXUzt5G
+ 1AZhi+d6J0gYIX3b6XpW3ABK3xK0DkNC2AcREAeluW7jaiHR6Z6l18NZw0otOAX2Uqle Yw== 
+Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3m518pgnnd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 18:48:55 +0000
+Received: from p1wg14925.americas.hpqcorp.net (unknown [10.119.18.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id B631B2EEE6;
+        Mon, 28 Nov 2022 18:48:52 +0000 (UTC)
+Received: from p1wg14925.americas.hpqcorp.net (10.119.18.114) by
+ p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 28 Nov 2022 06:48:52 -1200
+Received: from p1wg14920.americas.hpqcorp.net (16.230.19.123) by
+ p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
+ via Frontend Transport; Mon, 28 Nov 2022 06:48:52 -1200
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.123) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 28 Nov 2022 06:48:51 -1200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZEnyoKe+2MU/2M5CMEyImHT/YYnJvr3rboXR9JsNswiibdU3xWBI2Cu0X0vyLYLunWd18x5aIowJte7cBV5rOfo2rBs98QXj55y0TYWffYyYm3wU3FLQ/HAZNQlQVIeA8n7VvOynaO5JIFBP07I3X+yI3FMBXXXonbnMAANlZ5Q8f8EiYt1/rRqISf14PbakJZhepM7m2I1CP71fKK1SVv5vGMyR7YesA1eww1qwiNNUIYOmygeZC626RYwYKwIvskF3qA2HohlfBLjY6NZMlqrqpEM2lMQgwySlXG1dpRQfeit7rKUT+FywzsoBYJpmFhoac3rs9M75+HxsNkNSCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5T8G2Oa4+MbGVdBq/+qTbfsHUsc2skPJ3iIb5a6Nm1g=;
+ b=JXR92JfuHjTg9YfTC7i1Ncm7QEQ7Jg5kDjb3F79GpQw8Y1XM2UGghJY5hux1L4c5rg7lIqjlUqqq1USNc1KGaSGLCgF4djmegwwuJGSVy0kB8KrCSOXAPYMsaPIzBSSS3uYLop14pduX3UqW9Z3xtFWTCNELSrpztiCYscUiAx91pwlKH/1NqPHv34I2pkdGBuuVPPibmD6hlridGMdOe7AurQGEvKiqMahi6Q7Vy2sPm84BtoUp1xEdtwdSM0BnEuD+CNGyVvbSFyJXrXx95+s6T+/F4xr4Qckou54+mjiTCZ7/DCb0MvO2x/3AYwQ9pyO7BnwDPIlj/oyLox6BUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1c4::18)
+ by SJ0PR84MB1578.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:430::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Mon, 28 Nov
+ 2022 18:48:50 +0000
+Received: from MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::5511:bd85:6961:816]) by MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::5511:bd85:6961:816%9]) with mapi id 15.20.5857.023; Mon, 28 Nov 2022
+ 18:48:50 +0000
+From:   "Elliott, Robert (Servers)" <elliott@hpe.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Ard Biesheuvel <ardb@kernel.org>
+CC:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
+        "ap420073@gmail.com" <ap420073@gmail.com>,
+        "David.Laight@aculab.com" <David.Laight@aculab.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4 10/24] crypto: x86/poly - limit FPU preemption
+Thread-Topic: [PATCH v4 10/24] crypto: x86/poly - limit FPU preemption
+Thread-Index: AQHY+XHqfLLvXNGxcESumjNg7U4Mn65BZh+AgA36OwCAAAUngIAAAQwAgADfYdmABHgXgA==
+Date:   Mon, 28 Nov 2022 18:48:50 +0000
+Message-ID: <MW5PR84MB1842A5CB8CFECFC90FDA1B65AB139@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20221103042740.6556-1-elliott@hpe.com>
+ <20221116041342.3841-1-elliott@hpe.com>
+ <20221116041342.3841-11-elliott@hpe.com> <Y3TF7/+DejcnN0eV@zx2c4.com>
+ <Y4B/kjS0lgzdUJHG@gondor.apana.org.au>
+ <CAMj1kXHHm+L=qE5opDXhjoWZt+1eKXFeGVS=OdvyF0VNFZivCA@mail.gmail.com>
+ <Y4CExnFX46mk4/1+@gondor.apana.org.au>
+ <MW5PR84MB1842E182C47F77FE8C8E755BAB139@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+In-Reply-To: <MW5PR84MB1842E182C47F77FE8C8E755BAB139@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW5PR84MB1842:EE_|SJ0PR84MB1578:EE_
+x-ms-office365-filtering-correlation-id: 4f11b449-a4f0-4070-2249-08dad1713077
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5Bzgnlkvq3PU40ZPzc9GzFM9Rp36KCe4cEgPSNW0OZe/lWqFVNHMmJYw7yNIhExmmBygWf0j9aafAu/Rl1+T78EGSkJkgc6hBMweMPYs3kiW6ZoqIE8x3pA3kikjTYpMmKhZk0Gwf8DhyWsEL7WGL0WlwjCRtloJsDXAE//BaSEaVH4NIXpKGGyGogyhwFW3M/HrG7TnBQ623iEkkkWATd5VAbbtMYz8c0J6yUUElChImVUZFJpPNyntuMNU3QNiMm019Zbr5CJ+6RwczGIpU+sfFNqEFQl0AUlicZFDrpSYwpo4FuoBHtqA/vQW5O82+xCS7Ofx0YYl9+8sbRv1R3gAmuQnxj0/dFJQoPg16Cvrvwjbq1LG3MfM7CBCbJeV+cbT/dHr+55ftbCXIqZ5WwBK0FIwbqnlxDwl+FcIj/oY4rbhSjSRCimGshBqfLpCAtpw+MLl4yQZMGsfm3eT8P/2kMv6ITtWwXL+BbrwGvTDICPw0zLWw76YxQif5oxK27/SqBsGlp6aSGxId70OE9OEPzE4pCnQtQZ/OlUgAFuZzAcJCGMcnL3NSwMgj3GQ6Zqw0ADMebR5+lGn70qCPy+8pO8JdwMTrxNUvZUJ6SkEEDdx//vLfyZ+Ky5GtTArXGS8KwjkSD786FavKN2sTpG7PcBd9B+A/qHoW5Jbhg99JtgASbfjTHwu1idHVLORFa72D51HUaw3HQofVqZX9g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(366004)(396003)(136003)(376002)(346002)(39860400002)(451199015)(6506007)(7696005)(86362001)(2940100002)(38070700005)(478600001)(26005)(2906002)(9686003)(71200400001)(82960400001)(55016003)(186003)(122000001)(38100700002)(33656002)(8936002)(5660300002)(76116006)(52536014)(316002)(7416002)(66946007)(54906003)(110136005)(66446008)(4326008)(8676002)(64756008)(66476007)(66556008)(41300700001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?MAw2lUsQ7DnPl+2rf9VFDtZivo0j3vC5ec6itKf53vpggAviYNdTkYm/WqTq?=
+ =?us-ascii?Q?7Pn74LKVoRMMHj3QDQ7YXEy8khCmcWuVulnssWUHhNhsfC+0sufRFRgkd/cG?=
+ =?us-ascii?Q?RLvug3/dCTJNKBlhbq/GbfauH45VqaVGgjP77CxrrbIcswFlE/Fa+jKJi0VL?=
+ =?us-ascii?Q?bUgMpAM7bJiCr/QTx3QZj1nz1O8WvCkTBy7pS9uvtX5CpuvYY3YPO8HckzCJ?=
+ =?us-ascii?Q?Imb+s9jAgIq376aDb+BAHyTJuq2VKFgHgR9hJ9n5iuXgJt1+r8SGE/8cv1y5?=
+ =?us-ascii?Q?5/CHi4qlG066f/H98knEufpi6rvQNPDeBd3B+szG43gQzUOiMRhS4i6hf05t?=
+ =?us-ascii?Q?6ur9f+5AUpdkPKRH14R4BURavBSoIa4IUPg7A1SDsZ1ZlOegSk+PJv/1ehI7?=
+ =?us-ascii?Q?caJfUCuX7IxvUUSluLEs/03Q3P80jSntUigmy9ILZW2UkCdlfVDBuibUK46J?=
+ =?us-ascii?Q?VnFzdPYI4sCbnGEMj2kKf7HeuBkLT09ieOQEJ+X+6sS1A7Odhqr33NxE6Key?=
+ =?us-ascii?Q?coblhBfXevbltecqUk/57wsMlWHC2JCuPCU1KO/8cRkanx9vQEuUzer2kcfO?=
+ =?us-ascii?Q?pTir4Xnv7UmAn64Vx4RdOXIeMs2VdWrQIm8ovLOLZjyjXyWGFDejXQr6iITT?=
+ =?us-ascii?Q?zQduc+kiUfgUDsDIqMN/aYSvGsMbyuRlh9ZEsJSKso6uduAS68sxI8RHoaTY?=
+ =?us-ascii?Q?FhCkD66odHC0GHMaKE7/4ByXcIA74SbKB7kBWHACEZKYpjKA5cVB7m9+vn30?=
+ =?us-ascii?Q?jjQkG2opstpjAFtDvsadOFjUGysftl6eFFM98BQJJ8lVHwXHIoHOSoPuKXwe?=
+ =?us-ascii?Q?bevIruel0t16zKyWmepR76vVYWj2QI7o02r1cngfiidAE0Hwa+AhNIiMQVfs?=
+ =?us-ascii?Q?+11twl1mt5r0K8Fe5cwQWn7sGNgmb8zvy35IRy7Sue/qt5eNHU3vFBlP6KQ8?=
+ =?us-ascii?Q?3TLI6LzMxMAOV7PcJy7BUXyrCbl5k5qa6GLSfCXD7bCPYMDoGU/bnRTY9ZZU?=
+ =?us-ascii?Q?dNdTQ7z3JEdWpp0+gcbQs4QUdXiM9OhQPA8XV9WzZuOYC+XR3ICeKhafwIoN?=
+ =?us-ascii?Q?uAeX3V+X8KL3IZweqLPBOz0NqeyoatX4YSmANPPXCH3twJ4XVM5iti8PjeMK?=
+ =?us-ascii?Q?XTm7agaxoRyDNucWIOptuqAOjIl3GrS14fosfQAakohCpFRAmX9bcDAdnPSD?=
+ =?us-ascii?Q?/1TnPvXmwxCIPhvFYY6kfmp8SOxceGxy6E1ttr3kEoZO/wyzerQBeWpfCbA1?=
+ =?us-ascii?Q?dXQObbvrwG8wgMxbJOAAH2J5cBmVUCENdf4OpPwzjyLq8HtxMFk/O7k+33Ni?=
+ =?us-ascii?Q?4CCha8SqXKNd5J/ibtbb1UhASO76PHhqbezxWWtbuJq9x5fjE9e6MuxZEX2N?=
+ =?us-ascii?Q?vdyPvWACHLx88NgfrYw/z+5QWT9AcQ7YF0UOHfzRYEyrs7PxuIjjGPNruBDx?=
+ =?us-ascii?Q?1f1275ntsD8Jdls08BVNU9hwkUXaKJ8wPjykpaQslP5GDs8j7AENrsjKIoI6?=
+ =?us-ascii?Q?oTMhDf4zi4Mzyqw6OtZHiihrrEqKKF8ScoFufRuNIMwiZJcswhWJx1L8IcHS?=
+ =?us-ascii?Q?xRVrgLxE2vd/HIDAvVI=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20221127190244.888414-1-christoph.fritz@hexdev.de>
- <202211281549.47092.pisa@cmp.felk.cvut.cz> <CAEVdEgBWVgVFF2utm4w5W0_trYYJQVeKrcGN+T0yJ1Qa615bcQ@mail.gmail.com>
- <202211281852.30067.pisa@cmp.felk.cvut.cz>
-In-Reply-To: <202211281852.30067.pisa@cmp.felk.cvut.cz>
-From:   Ryan Edwards <ryan.edwards@gmail.com>
-Date:   Mon, 28 Nov 2022 13:47:45 -0500
-Message-ID: <CAEVdEgBtikDjQ-cVOq-MkoS_0q_hGJRVSS=9L=htHhh7YvSUgA@mail.gmail.com>
-Subject: Re: [RFC][PATCH 0/2] LIN support for Linux
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc:     Christoph Fritz <christoph.fritz@hexdev.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Richard Weinberger <richard@nod.at>,
-        Andreas Lauser <andreas.lauser@mbition.io>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4f11b449-a4f0-4070-2249-08dad1713077
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Nov 2022 18:48:50.0501
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7oWB20hEikuhPnce8hLANLmKz6efhOsBokqtvnpj7xcp7qm2hpveosKyLN2l51mN
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1578
+X-OriginatorOrg: hpe.com
+X-Proofpoint-ORIG-GUID: Yqxb2IqZsYjv72NVa-EjXMaS0IFEBYcq
+X-Proofpoint-GUID: Yqxb2IqZsYjv72NVa-EjXMaS0IFEBYcq
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-28_16,2022-11-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=999 priorityscore=1501 suspectscore=0 bulkscore=0
+ clxscore=1015 adultscore=0 impostorscore=0 malwarescore=0 spamscore=0
+ mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211280137
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Pavel,
 
-On Mon, Nov 28, 2022 at 12:52 PM Pavel Pisa <pisa@cmp.felk.cvut.cz> wrote:
->
-> Hello Ryan,
->
-> On Monday 28 of November 2022 18:02:04 Ryan Edwards wrote:
-> > On Mon, Nov 28, 2022 at 10:09 AM Pavel Pisa <pisa@cmp.felk.cvut.cz> wrote:
-> > Marc gave me a heads on on this discussion and I have some insight.
-> >
-> > I've spent quite a bit of time trying to craft a solution for the LIN
-> > problem.  Even with a TTY solution the best I was able to achieve was
-> > 40ms turnaround between the header and response which exceeded the
-> > timeout of the master.
->
-> This is indication of some serious problem. We have been able to
-> achieve right timing even from userspace on PC 10 years ago
-> when RT task priorities are used and mlock all even on standard kernel...
-> Yes under load that could be a problem but on RT kernel and in kernel
-> slLIN driver it was reliable even on relatively slow MPC5200.
->
-> See FIGURE 3: Master: MPC5200 with slLIN; Slave: MPC5200 with slLIN
-> of our comprehensive RTLWS 20212 UART-based LIN-bus Support for Linux
-> with SocketCAN Interface article. For the complete protocol designed
-> on basis of Oliver's proposal and then our finalization see complete
-> report for VolkWagen. The timing is shown there as well
-> Figure 5.2: Master: MPC5200 with sllin; Slave: MPC5200 with sllin
->
-> https://github.com/lin-bus/linux-lin/wiki
->
-> The problem with typical UARTs is then when they have enabled FIFO
-> then drivers select trigger level higher than one and sometimes
-> even minimal level is 1/4 of Rx FIFO depth. Then when trigger
-> level is not reached the Rx interrupt waits for eventual
-> more characters to come for (typically) 3 character times.
-> So this is a problem. Because of 1/4 FIFO minimal threshold
-> for 16C450+ UARTs, it is only solution to achieve right slave/response
-> function to switch off the FIFO, there some internal API for that
-> but not exposed o drivers. For 16V450, there is option
->
->   echo 1 >/sys/class/tty/ttyS0/rx_trig_bytes
->
-> See https://github.com/lin-bus/linux-lin/issues/13
 
-This test was done 2-3 years ago on a RaspberryPi.  I was testing as a
-slave and had a hard time responding to the master any faster than
-40ms.  I assume based on the work that you've done that I must have
-not been accessing the TTY correctly.  Wish I would have found the
-work already done on linux-lin.  Would have saved me some time and
-headaches.
+> On Fri, Nov 25, 2022 at 09:59:17AM +0100, Ard Biesheuvel wrote:
+> > Note that it is only used in shash implementations, given that they
+> > are the only ones that may receive unbounded inputs.
+>=20
+> Although typical usage probably doesn't stress this, the length of the
+> additional associated data presented to aead implementations is
+> unconstrained as well. At least in x86, they can end up processing
+> multiple megabytes in one chunk like the hash functions (if the
+> associated data is a big buffer described by a sg list created
+> with sg_init_one()).
+>=20
 
-> > The README contains the HOWTO on usage of the driver.  Right now it's
-> > a hack but could be better designed using message flags or a seperate
-> > CAN channel.
-> >
-> > In my design the device contains a slave response table which is
-> > configured via CAN frames via socketcan.  Currently up to 10 master
-> > frames can be responded to.
->
-> I think that even on embedded HW it is not problem to keep
-> data for all 64 LIN IDs. So I would not complicate thing with some mapping
-> etc. We have reused already present BCM (SocketCAN Broadcast Manager)
-> to periodically send LIN headers.
->
-> > It also allows the LIN node to be put
-> > into monitor mode and gate those messages to the host via a CAN
-> > message.
-> >
-> > https://github.com/ryedwards/budgetcan_fw
->
-> Great, version connected over USB with local response table
-> is more reliable with timing than software solution on big(err)
-> complex system like Linux kernel is. So if the well defined
-> open protocol is designed or some CAN USB devices one is reused
-> for LIN than it is advantage.
->
-> I would be happy if the project moves forward. The critical is
-> some settlement on unified API. Please, compare and map functionality
-> between our solution and your proposal and we can discuss what
-> worth to keep or change. slLIN solution seems to be used in more
-> project not only that two for Volkswagen and Digiteq Automotive,
-> I have directly participated.
->
+Reviewing the two arm64 aead drivers, aes-ce-ccm-glue.c solves that by
+including this in the do/while loop in ccm_calculate_auth_mac():
+                n =3D min_t(u32, n, SZ_4K); /* yield NEON at least every 4k=
+ */
 
-I think that what I have built is a high level embedded solution.  The
-fundamental code is the same as it was developed from the state
-diagram in the LIN specification.
+That was added by 36a916af641 ("crypto: arm64/aes-ccm - yield NEON
+when processing auth-only data") in 2021, also relying on
+41691c44606b ("crypto: arm64/aes-ccm - reduce NEON begin/end calls
+for common case").
 
-I understand now that this project is to build on and implement the
-work already done on slLIN.  I'll review the slLIN driver and see if
-there is any input I can provide based on the work I've done in my
-code.  I'd be very interested if the driver could be implemented in a
-way that easily allows for dynamic slave repsonses.
+ghash-ce-glue.c seems to be missing that in its similar function named
+gcm_calculate_auth_mac().
 
-Thanks,
-
---Ryan
