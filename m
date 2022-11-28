@@ -2,191 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5D863A731
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5216163A738
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbiK1L02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 06:26:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
+        id S230080AbiK1Lac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 06:30:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbiK1LZs (ORCPT
+        with ESMTP id S229769AbiK1Laa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 06:25:48 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319D7CE39;
-        Mon, 28 Nov 2022 03:25:46 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 28 Nov 2022 06:30:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E10DEA3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:30:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 19B6C6600012;
-        Mon, 28 Nov 2022 11:25:44 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669634744;
-        bh=8Cm4VhPg8SKswy2s3/jV+9mFidnrlrr9zoP/ffITeQ0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GHQlxwXc5qu+1SLI0jHTdtMONMXw9UDBkP3u3OrH8BtRQGLEXqBL5A6oH+JW2p8s+
-         K6DdW4RWgShaQZYfYxtlKaXwGKPhJWbcMnWyHoFZkam95AWGL4CZRYDKmhMuuDcVPf
-         ku8/nz1wA0gSJlT6v6hah2fFeufGiLTbZK3REVZOZKAoqjhGffMy4EVvrqfDTuc9Nz
-         jOf6zpwkRPRS6lJfE4mo0zm2RAkxkqVt0UOZ4/tMjYIi3B879TECbwp8YfjvMvkUsr
-         XxG8QH5NyujRKZpZL3CgL8xAkgAQ4RGRETg4GkHUdq6Klk/6Dij6nPA9yVdc4evUKV
-         jvdmuUuGw33lA==
-Message-ID: <18401729-5c01-5fba-ce57-b530c5db53f0@collabora.com>
-Date:   Mon, 28 Nov 2022 12:25:40 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH RESEND v2] dt-bindings: pwm: mediatek: Add compatible for
- MT7986
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.or,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Zhi Mao <zhi.mao@mediatek.com>,
-        Sam Shih <sam.shih@mediatek.com>
-References: <Y39PjU1BqBB8tZ98@makrotopia.org>
- <375d45fa-fdfc-37a5-9d32-b0412cad7bc0@collabora.com>
- <Y4CoX1sfJd2Q8lHj@makrotopia.org>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <Y4CoX1sfJd2Q8lHj@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id C160DB80AFA
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:30:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B87C433D6;
+        Mon, 28 Nov 2022 11:30:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669635026;
+        bh=FlN6mZAjHFIwHMgmb20rPc7r9b/s3sZD9D4NcnTdWtk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JwyLYpDvJrFyIj527Rqgk28NIFL1kwR8Qks+4zyjIpO7gFR8e3TsV6/JLLjAyLioU
+         JWpREYT+FenPSAxZ/Is5Q5EuBsZDntf0iJiwh5dRPZkHwTdGCtX6COAzP5tE+oIdPt
+         AJLBWkROaQLUchsvM8dpRM3K0q8vvYFPPE+1LPT+gqh81c7jd8Y6N4RukxLmkXggp+
+         qgwGjTNRDLADYkXfofbss6tCjluuDRfh35fD65IqakTC28pwy6ebQ5fQcboMWYyQFx
+         e/DwH6e9h7XY07RAzZla4MVzF64OXeQ/OgJfbdne+oA9eA+1HBu9Wd3VSbDfG/it6c
+         kKO/sQNkdPR8g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ozcL9-008zqv-Uu;
+        Mon, 28 Nov 2022 11:30:24 +0000
+Date:   Mon, 28 Nov 2022 11:30:23 +0000
+Message-ID: <86ilizmi40.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 3/7] genirq: Add mechanism to multiplex a single HW IPI
+In-Reply-To: <CAK9=C2Un8vH-OM8PRGgU-OijnNjmEOXya_gC=2BUMBDuhpjWPQ@mail.gmail.com>
+References: <20221126173453.306088-1-apatel@ventanamicro.com>
+        <20221126173453.306088-4-apatel@ventanamicro.com>
+        <86k03fmkox.wl-maz@kernel.org>
+        <CAK9=C2Un8vH-OM8PRGgU-OijnNjmEOXya_gC=2BUMBDuhpjWPQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 25/11/22 12:34, Daniel Golle ha scritto:
-> On Fri, Nov 25, 2022 at 12:12:17PM +0100, AngeloGioacchino Del Regno wrote:
->> Il 24/11/22 12:03, Daniel Golle ha scritto:
->>> Add new compatible string for MT7986 PWM and list compatible units for
->>> existing entries. Also make sure the number of pwm1-X clocks is listed
->>> for all supported units.
->>>
->>> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
->>> ---
->>> Changes since v1: list compatibles, fix pwm1-n clocks for all SoCs
->>>
->>> Rebased on linux-next and re-run scripts/get_maintainers.pl on patch to
->>> makes sure dt maintainers are included. This has been requested by
->>> Krzysztof Kozlowski.
->>>
->>>    .../devicetree/bindings/pwm/pwm-mediatek.txt  | 20 +++++++++++--------
->>>    1 file changed, 12 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt b/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
->>> index 554c96b6d0c3..952a338e06e7 100644
->>> --- a/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
->>> +++ b/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
->>> @@ -2,14 +2,15 @@ MediaTek PWM controller
->>>    Required properties:
->>>     - compatible: should be "mediatek,<name>-pwm":
->>> -   - "mediatek,mt2712-pwm": found on mt2712 SoC.
->>> +   - "mediatek,mt2712-pwm", "mediatek,mt6795-pwm": found on mt2712 SoC.
->>>       - "mediatek,mt6795-pwm": found on mt6795 SoC.
->>> -   - "mediatek,mt7622-pwm": found on mt7622 SoC.
->>> -   - "mediatek,mt7623-pwm": found on mt7623 SoC.
->>> +   - "mediatek,mt7622-pwm", "mediatek,mt8195-pwm", "mediatek,mt8183-pwm", "mediatek,mt7986-pwm": found on mt7622 SoC.
->>> +   - "mediatek,mt7623-pwm", "mediatek,mt7628-pwm": found on mt7623 SoC.
->>>       - "mediatek,mt7628-pwm": found on mt7628 SoC.
->>>       - "mediatek,mt7629-pwm": found on mt7629 SoC.
->>> -   - "mediatek,mt8183-pwm": found on mt8183 SoC.
->>> -   - "mediatek,mt8195-pwm", "mediatek,mt8183-pwm": found on mt8195 SoC.
->>> +   - "mediatek,mt7986-pwm": found on mt7986 SoC.
->>> +   - "mediatek,mt8183-pwm", "mediatek,mt7986-pwm": found on mt8183 SoC.
->>> +   - "mediatek,mt8195-pwm", "mediatek,mt8183-pwm", "mediatek,mt7986-pwm": found on mt8195 SoC.
->>
->> I'm sorry, but all these compatibles make little sense at best.
->> Each of these PWM controllers have different properties as they may *by hardware*
->> be featuring more or less channels, they may be a different IP revision and/or
->> sub-revision requiring even ever-so-slightly different handling (check pwm45_fixup
->> and has_ck_26m_sel).
+On Mon, 28 Nov 2022 11:13:30 +0000,
+Anup Patel <apatel@ventanamicro.com> wrote:
 > 
-> I did check the two pwm45_fixup and has_ck_26m_sel for each supported
-> compatible and listed them accordingly.
-> Ie. the ones listed as compatible in this submission really only differ
-> by the number of channels offered from the driver's point of view and
-> share the same boolean values for pwm45_fixup and has_ck_26m_sel.
+> On Mon, Nov 28, 2022 at 4:04 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Sat, 26 Nov 2022 17:34:49 +0000,
+> > Anup Patel <apatel@ventanamicro.com> wrote:
+> > >
+> > > +static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
+> > > +{
+> > > +     u32 ibit = BIT(irqd_to_hwirq(d));
+> > > +     struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
+> > > +     struct cpumask *send_mask = &icpu->send_mask;
+> > > +     unsigned long flags;
+> > > +     int cpu;
+> > > +
+> > > +     /*
+> > > +      * We use send_mask as a per-CPU variable so disable local
+> > > +      * interrupts to avoid being preempted.
+> > > +      */
+> > > +     local_irq_save(flags);
+> >
+> > The correct way to avoid preemption is to use preempt_disable(), which
+> > is a lot cheaper than disabling interrupt on most architectures.
 > 
->>
->> If you want to add MT7986, the best thing that you can do is to simply add
->>
->> +   - "mediatek,mt7986-pwm": found on mt7986 SoC.
->>
->> this line ^
->>
->> ...and then please don't touch the others.
->>
->>>       - "mediatek,mt8365-pwm": found on mt8365 SoC.
->>>       - "mediatek,mt8516-pwm": found on mt8516 SoC.
->>>     - reg: physical base address and length of the controller's registers.
->>> @@ -20,11 +21,14 @@ Required properties:
->>>                    has no clocks
->>>       - "top": the top clock generator
->>>       - "main": clock used by the PWM core
->>> +   - "pwm1"  : the PWM1 clock for mt7629
->>> +   - "pwm1-2": the two per PWM clocks for mt7986
->>
->> That's not your fault, but the binding is already wrong (yes it must be fixed!) and
->> unless my brain is failing somewhere, there's only one clock per pwm (as if there's
->> any children, it must be parented to .. well, its parent, in the clock driver), and
->> note that the driver is actually parsing "pwmX" clocks, never "pwmX-Y" clocks.
->>
->> Relevant snippet:
->>
->> 		char name[8];
->>
->> 		snprintf(name, sizeof(name), "pwm%d", i + 1);
->>
->> 		pc->clk_pwms[i] = devm_clk_get(&pdev->dev, name);
->>
->> Just... please don't keep doing the same mistake that is already inside of here...
+> Okay, I will update.
 > 
-> Maybe better to write "pwm1"..."pwm2" or something like that...
-> But I just won't bother with it if you are planning to convert this to
-> YAML schema anyway.
+> >
+> > > +
+> > > +     cpumask_clear(send_mask);
+> >
+> > This thing is likely to be unnecessarily expensive on very large
+> > systems, as it is proportional to the number of CPUs.
+> >
+> > > +
+> > > +     for_each_cpu(cpu, mask) {
+> > > +             icpu = per_cpu_ptr(ipi_mux_pcpu, cpu);
+> > > +             atomic_or(ibit, &icpu->bits);
+> >
+> > The original code had an atomic_fetch_or_release() to allow eliding
+> > the IPI if the target interrupt was already pending. Why is that code
+> > gone? This is a pretty cheap and efficient optimisation.
 > 
->>
->> So, coming to an end: I think that this commit should be a one-liner that documents
->> your "mediatek,mt7986-pwm" compatible and that's it.
->>
-> 
-> This is exactly what I did in the first submission of this patch:
-> https://www.spinics.net/lists/devicetree/msg542568.html
-> 
-> Should I just re-submit this then?
-> 
-> 
->> A schema conversion would be welcome: in that regard, I can make a conversion
->> and send it next week, along with that clock-names fix.
-> 
-> Should I wait for you doing that and then re-submit or just re-submit
-> immediately?
-> 
+> That optimization is causing RCU stalls on QEMU RISC-V virt
+> machine with large number of CPUs.
 
-I'm sorry but I forgot to Cc you on the schema conversion that I've just sent...
+Then there is a bug somewhere, either in the implementation of the
+atomic operations or in QEMU. Or maybe even in the original code
+(though this looks unlikely given how heavily this is used on actual
+HW - I'm typing this email from one of these machines, and I'd be
+pretty annoyed if I was missing IPIs).
 
-Find it here:
+In any case, please don't paper over this.
 
-https://lore.kernel.org/linux-mediatek/20221128112028.58021-1-angelogioacchino.delregno@collabora.com/
+> 
+> >
+> > > +
+> > > +             /*
+> > > +              * The atomic_or() above must complete before
+> > > +              * the atomic_read() below to avoid racing with
+> > > +              * ipi_mux_unmask().
+> > > +              */
+> > > +             smp_mb__after_atomic();
+> > > +
+> > > +             if (atomic_read(&icpu->enable) & ibit)
+> > > +                     cpumask_set_cpu(cpu, send_mask);
+> > > +     }
+> > > +
+> > > +     /* Trigger the parent IPI */
+> > > +     ipi_mux_send(send_mask);
+> >
+> > IPIs are very rarely made pending on more than a single CPU at a
+> > time. The overwhelming majority of them are targeting a single CPU. So
+> > accumulating bits to avoid doing two or more "send" actions only
+> > penalises the generic case.
+> >
+> > My conclusion is that this "send_mask" can probably be removed,
+> > together with the preemption fiddling.
+> 
+> So, we should call ipi_mux_send() for one target CPU at a time ?
 
-...and yes at this point you should document mt7986 on the new yaml, but
-please wait for some feedback on that series before doing anything so that
-you won't find yourself rebasing over and over.
+I think so, as it matches my measurements from a few years ago. It
+also simplifies things significantly, leading to better performance
+for the common case. Add some instrumentation and see whether this is
+still the case though.
 
-Cheers,
-Angelo
+> 
+> >
+> > > +
+> > > +     local_irq_restore(flags);
+> > > +}
+> > > +
+> > > +static const struct irq_chip ipi_mux_chip = {
+> > > +     .name           = "IPI Mux",
+> > > +     .irq_mask       = ipi_mux_mask,
+> > > +     .irq_unmask     = ipi_mux_unmask,
+> > > +     .ipi_send_mask  = ipi_mux_send_mask,
+> > > +};
+> >
+> > OK, you have now dropped the superfluous pre/post handlers. But the
+> > need still exists. Case in point, the aic_handle_ipi() prologue and
+> > epilogue to the interrupt handling. I have suggested last time that
+> > the driver could provide the actual struct irq_chip in order to
+> > provide the callbacks it requires.
+> 
+> The aic_handle_ipi() can simply call ipi_mux_process() between
+> the prologue and epilogue.
 
+Hmm. OK. That's not what I had in mind, but fair enough.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
