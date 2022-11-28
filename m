@@ -2,196 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A06639F1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF73639F25
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:59:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiK1B6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 20:58:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
+        id S229786AbiK1B7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 20:59:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiK1B6D (ORCPT
+        with ESMTP id S229504AbiK1B7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 20:58:03 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E535588;
-        Sun, 27 Nov 2022 17:58:02 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id a16so8668390pfg.4;
-        Sun, 27 Nov 2022 17:58:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qe5hs8FVwx45grj4bepS5YGWgIaIZzpvoky/dPKEgAk=;
-        b=TpscOfhnmXx5pu5TdPhBFc7zRC07xeXebnx+Y9ppmhZYFRHkldn7qCe6ojvHTNGJU5
-         yfZ7a6rAKyzM8l7JTHp78PAiMDBaKEImvd0GA8o6MpXL0KeLnoofdor7TKoUGqrDeja3
-         r49Fy2JPrJgz7U/hjsabD6BCnoo2AQPT2GZ1NAZhu3jxsM5endb1hglbbJ0qGhYYM7bX
-         e5803Ljb5Bc5BfiXqGccsVhBt8Y4VCS0mguJkq/odVAnUtzgI98Ie1YfixHOEUPgINjB
-         1T8qW/hDnDEdIhI5Lw1KMSl39i8klSdYMYCBmpZ1zX6pFJ0DaP0hGP+VUFFYrSdt0Z94
-         5VgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qe5hs8FVwx45grj4bepS5YGWgIaIZzpvoky/dPKEgAk=;
-        b=eN5b64gW4TKo3rfoTUTClnwxFTX14p/55DWS616YQILse13lgjtmF3Gs76/DuGxOSr
-         7PocdpsyQT2hle+g6IGwV9fBKviNANs6k15vn71/tnTPPi7S1SSecNSq5yfeIKULrsfs
-         3MOtNGqiHQ9Qr6jaeiT9Ei3Nmyf66AHw6QwLSsw/WNReE/sRITN+1GQHpJ1bhbBy8r4f
-         W+H5jP46ufO1dX7Y/B/GGG24B2l/cJZfxnM5urkkfb1kHlpT/M7s7FdAOytY/ZoxVG8/
-         i7Ej+KSzvhKX6MA8Wj+6UDKKRAmZ4B8sNt2ea0y4hxz844YvWYYAzA9ducBivfNpJhy7
-         3QJg==
-X-Gm-Message-State: ANoB5pmA4gA4LydD2QNN6kxbFQgV6wmanh5IkUTt53jLqygVOGovIKR/
-        QqVU/0W+uMPeQCLPzboSZwA=
-X-Google-Smtp-Source: AA0mqf6LnCWalB/CHpLF1Wy9qOn4snB2bh4yLi18Y4L4ZAcXtWAV8uvGpIw9WL/CvXIIWkiMytzgmw==
-X-Received: by 2002:a63:902:0:b0:46e:9bb2:f0f7 with SMTP id 2-20020a630902000000b0046e9bb2f0f7mr26810278pgj.203.1669600681853;
-        Sun, 27 Nov 2022 17:58:01 -0800 (PST)
-Received: from MacBook-Pro-5.local ([2620:10d:c090:500::7:8561])
-        by smtp.gmail.com with ESMTPSA id w9-20020a170902904900b00187033cac81sm7452217plz.145.2022.11.27.17.57.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Nov 2022 17:58:01 -0800 (PST)
-Date:   Sun, 27 Nov 2022 17:57:58 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, illusionist.neo@gmail.com,
-        linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mykolal@fb.com,
-        shuah@kernel.org, benjamin.tissoires@redhat.com, memxor@gmail.com,
-        colin.i.king@gmail.com, asavkov@redhat.com, delyank@fb.com,
-        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 1/4] bpf: Adapt 32-bit return value kfunc for
- 32-bit ARM when zext extension
-Message-ID: <20221128015758.aekybr3qlahfopwq@MacBook-Pro-5.local>
-References: <20221126094530.226629-1-yangjihong1@huawei.com>
- <20221126094530.226629-2-yangjihong1@huawei.com>
+        Sun, 27 Nov 2022 20:59:30 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625E6DFFF;
+        Sun, 27 Nov 2022 17:59:29 -0800 (PST)
+Date:   Mon, 28 Nov 2022 02:59:20 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1669600767;
+        bh=6bLjo6zSUiel5ocq0aZAs181VjD/dTQcfURr0PI89DI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oEgFqC5bZJylcOj3OUuUE57So9eNi4aGm4JR+yTVOjMtCr1+EimA4Lm4X5bGV3hkg
+         Bqf/KYPqlrYvrwi3JOOk3LBckYrlVnbn+gNrNrAbJoDIbwf0DAM3Jnc45a38n9yDKo
+         jOgUz3mxYrj41XnBxeAwr7su/LlFa2baKlQbmJtM=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] certs: log hash value on blacklist error
+Message-ID: <8b9e9bf8-ae44-485a-9b30-85a71a236f06@t-8ch.de>
+References: <20221118040343.2958-1-linux@weissschuh.net>
+ <20221118040343.2958-2-linux@weissschuh.net>
+ <Y4QK2cmptp4vpRj/@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221126094530.226629-2-yangjihong1@huawei.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y4QK2cmptp4vpRj/@kernel.org>
+Jabber-ID: thomas@t-8ch.de
+X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
+X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 26, 2022 at 05:45:27PM +0800, Yang Jihong wrote:
-> For ARM32 architecture, if data width of kfunc return value is 32 bits,
-> need to do explicit zero extension for high 32-bit, insn_def_regno should
-> return dst_reg for BPF_JMP type of BPF_PSEUDO_KFUNC_CALL. Otherwise,
-> opt_subreg_zext_lo32_rnd_hi32 returns -EFAULT, resulting in BPF failure.
+On 2022-11-28 03:11+0200, Jarkko Sakkinen wrote:
+> "Make blacklisted hash available in klog"
 > 
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-> ---
->  kernel/bpf/verifier.c | 44 ++++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 41 insertions(+), 3 deletions(-)
+> On Fri, Nov 18, 2022 at 05:03:41AM +0100, Thomas Weißschuh wrote:
+> > Without this information these logs are not actionable.
 > 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 264b3dc714cc..193ea927aa69 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -1927,6 +1927,21 @@ find_kfunc_desc(const struct bpf_prog *prog, u32 func_id, u16 offset)
->  		       sizeof(tab->descs[0]), kfunc_desc_cmp_by_id_off);
->  }
->  
-> +static int kfunc_desc_cmp_by_imm(const void *a, const void *b);
-> +
-> +static const struct bpf_kfunc_desc *
-> +find_kfunc_desc_by_imm(const struct bpf_prog *prog, s32 imm)
-> +{
-> +	struct bpf_kfunc_desc desc = {
-> +		.imm = imm,
-> +	};
-> +	struct bpf_kfunc_desc_tab *tab;
-> +
-> +	tab = prog->aux->kfunc_tab;
-> +	return bsearch(&desc, tab->descs, tab->nr_descs,
-> +		       sizeof(tab->descs[0]), kfunc_desc_cmp_by_imm);
-> +}
-> +
->  static struct btf *__find_kfunc_desc_btf(struct bpf_verifier_env *env,
->  					 s16 offset)
->  {
-> @@ -2342,6 +2357,13 @@ static bool is_reg64(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  			 */
->  			if (insn->src_reg == BPF_PSEUDO_CALL)
->  				return false;
-> +
-> +			/* Kfunc call will reach here because of insn_has_def32,
-> +			 * conservatively return TRUE.
-> +			 */
-> +			if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL)
-> +				return true;
-> +
->  			/* Helper call will reach here because of arg type
->  			 * check, conservatively return TRUE.
->  			 */
-> @@ -2405,10 +2427,26 @@ static bool is_reg64(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  }
->  
->  /* Return the regno defined by the insn, or -1. */
-> -static int insn_def_regno(const struct bpf_insn *insn)
-> +static int insn_def_regno(struct bpf_verifier_env *env, const struct bpf_insn *insn)
->  {
->  	switch (BPF_CLASS(insn->code)) {
->  	case BPF_JMP:
-> +		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
-> +			const struct bpf_kfunc_desc *desc;
-> +
-> +			/* The value of desc cannot be NULL */
-> +			desc = find_kfunc_desc_by_imm(env->prog, insn->imm);
-> +
-> +			/* A kfunc can return void.
-> +			 * The btf type of the kfunc's return value needs
-> +			 * to be checked against "void" first
-> +			 */
-> +			if (desc->func_model.ret_size == 0)
-> +				return -1;
-> +			else
-> +				return insn->dst_reg;
-> +		}
-> +		fallthrough;
+> Without blacklisted hash?
+> 
+> > For example on duplicate blacklisted hashes reported by the system
+> > firmware users should be able to report the erroneous hashes to their
+> > system vendors.
+> > 
+> > While we are at it use the dedicated format string for ERR_PTR.
+> 
+> Lacks the beef so saying "while we are at it" makes no sense.
 
-I cannot make any sense of this patch.
-insn->dst_reg above is 0.
-The kfunc call doesn't define a register from insn_def_regno() pov.
+What about this:
 
-Are you hacking insn_def_regno() to return 0 so that
-if (WARN_ON(load_reg == -1)) {
-  verbose(env, "verifier bug. zext_dst is set, but no reg is defined\n");
-  return -EFAULT;
-}
-in opt_subreg_zext_lo32_rnd_hi32() doesn't trigger ?
+  [PATCH] certs: make blacklisted hash available in klog
 
-But this verifier message should have been a hint that you need
-to analyze why zext_dst is set on this kfunc call.
-Maybe it shouldn't ?
-Did you analyze the logic of mark_btf_func_reg_size() ?
+  One common situation triggering this log statement are duplicate hashes
+  reported by the system firmware.
 
-Before producing any patches please understand the logic fully.
-Your commit log
-"insn_def_regno should
- return dst_reg for BPF_JMP type of BPF_PSEUDO_KFUNC_CALL."
+  These duplicates should be removed from the firmware.
 
-Makes no sense to me, since dst_reg is unused in JMP insn.
-There is no concept of a src or dst register in a JMP insn.
+  Without logging the blacklisted hash triggering the issue however the users
+  can not report it properly to the firmware vendors and the firmware vendors
+  can not easily see which specific hash is duplicated.
 
-32-bit x86 supports calling kfuncs. See emit_kfunc_call().
-And we don't have this "verifier bug. zext_dst is set" issue there, right?
-But what you're saying in the commit log:
-"if data width of kfunc return value is 32 bits"
-should have been applicable to x86-32 as well.
-So please start with a test that demonstrates the issue on x86-32 and
-then we can discuss the way to fix it.
+  While changing the log message also use the dedicated ERR_PTR format
+  placeholder for the returned error value.
 
-The patch 2 sort-of makes sense.
+> > Fixes: 6364d106e041 ("certs: Allow root user to append signed hashes to the blacklist keyring")
+> 
+> Why does this count as a bug?
 
-For patch 3 pls add new test funcs to bpf_testmod.
-We will move all of them from net/bpf/test_run.c to bpf_testmod eventually.
+These error logs are confusing to users, prompting them to waste time
+investigating them and even mess with their firmware settings.
+(As indicated in the threads linked from the cover letter)
+
+The most correct fix would be patches 2 and 3 from this series.
+
+I was not sure if patch 2 would be acceptable for stable as it introduces new
+infrastructure code.
+So patch 1 enables users to report the issue to their firmware vendors and get
+the spurious logs resolved that way.
+
+If these assumptions are incorrect I can fold patch 1 into patch 3.
+
+But are patch 2 and 3 material for stable?
+
+> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > ---
+> >  certs/blacklist.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/certs/blacklist.c b/certs/blacklist.c
+> > index 41f10601cc72..6e260c4b6a19 100644
+> > --- a/certs/blacklist.c
+> > +++ b/certs/blacklist.c
+> > @@ -192,7 +192,7 @@ static int mark_raw_hash_blacklisted(const char *hash)
+> >  				   KEY_ALLOC_NOT_IN_QUOTA |
+> >  				   KEY_ALLOC_BUILT_IN);
+> >  	if (IS_ERR(key)) {
+> > -		pr_err("Problem blacklisting hash (%ld)\n", PTR_ERR(key));
+> > +		pr_err("Problem blacklisting hash %s: %pe\n", hash, key);
+> >  		return PTR_ERR(key);
+> >  	}
+> >  	return 0;
+> > -- 
+> > 2.38.1
+> > 
+> 
+> BR, Jarkko
