@@ -2,59 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1E363A8A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6989063A8AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbiK1MnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 07:43:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49556 "EHLO
+        id S230405AbiK1MpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 07:45:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbiK1MnM (ORCPT
+        with ESMTP id S230094AbiK1Moh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 07:43:12 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CE212610;
-        Mon, 28 Nov 2022 04:43:10 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
+        Mon, 28 Nov 2022 07:44:37 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED22B65A1;
+        Mon, 28 Nov 2022 04:44:33 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: sendonly@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 9F0FD41EF0;
-        Mon, 28 Nov 2022 12:43:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1669639389; bh=59CSFOX97npsoJgTAQusPWIZ1PoRhHaim0uMHhjm+K0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=eiMgEvH9Gq8Evo/7/2aD1YTMc//vmh2UlB75CxJZe8yPAhlqeMOX65BtRHA7RS3gR
-         RF6SmulVZ7379M01zIYQK+we7QY4+32QW5azjIvmH654SCqgE3aFquhaiKPuIoqi3q
-         glGPkEHk2QEb8NGNM9zD8zx24Zp0Amqdz2M4MWdD1KEBf90CtBdCnKHMNG2lWPBZke
-         0QbGu96ynP7gpB3blDErbjBQHWhE3t7HW9S7RjbH82CxTaRl6X01uZ5qLDeow9lzhB
-         eBQqY0XMuwjmITWRqd27iCuBMUuA6MjmO4hvf5JrdJSiSSF9wqEEKOHX9kZ1sUaClk
-         /7F+LfvdfABsQ==
-From:   Hector Martin <marcan@marcan.st>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 4/4] arm64: dts: apple: Add CPU topology & cpufreq nodes for t8103
-Date:   Mon, 28 Nov 2022 21:42:16 +0900
-Message-Id: <20221128124216.13477-5-marcan@marcan.st>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221128124216.13477-1-marcan@marcan.st>
-References: <20221128124216.13477-1-marcan@marcan.st>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NLQCJ6VLxz4x1H;
+        Mon, 28 Nov 2022 23:44:28 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669639469;
+        bh=k0uUVCZ1nUoWE2jqd424nzIZGKnRyZrs5TKCPdfAisI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tSry0xu8csQVM+mDrj9FSRleAE7NgTGgf6tWxCMSF8wXP7+yNOJ3ccUNcXDGgZlGl
+         OGgpmsNupnYBDsHa4sz8cuQFzDifnEikzLQZB7CrgbqXY+whDHXW6bl0GCvtGTgnIj
+         PMEH+vUcNRMhRbsi7/KvOHuLzXEUqUvjq5uRDtvPY/TkSucIzn+f3uqgbNOtf57o7e
+         egUW3I0IALJibEja+Wj/h3YmD/dKfxFUl+yhmyC2sRHMDa8/UQm+TMlop6oWlNQErf
+         LmKMiOOywe8+2M67FTgBM1BqAlyV1g94+vBbQbghNoOrLTk1veFjqW2PXuiEsoDjkx
+         X0T8qN4Ki6o0w==
+Date:   Mon, 28 Nov 2022 23:44:08 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+Message-ID: <20221128234408.7a4dec34@canb.auug.org.au>
+In-Reply-To: <Y4Sga+ONeDe9Q7yz@kroah.com>
+References: <20221128133600.14ce44bf@canb.auug.org.au>
+        <Y4Sga+ONeDe9Q7yz@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: multipart/signed; boundary="Sig_/iDLLG2gcqxANPr9VJLmkav/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,312 +53,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missing CPU topology/capacity information and the cpufreq nodes,
-so we can have CPU frequency scaling and the scheduler has the
-information it needs to make the correct decisions.
+--Sig_/iDLLG2gcqxANPr9VJLmkav/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Boost states are commented out, as they are not yet available (that
-requires CPU deep sleep support, to be eventually done via PSCI).
-The driver supports them fine; the hardware will just refuse to ever
-go into them at this time, so don't expose them to users until that's
-done.
+Hi Greg,
 
-Acked-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Hector Martin <marcan@marcan.st>
----
- arch/arm64/boot/dts/apple/t8103.dtsi | 204 +++++++++++++++++++++++++--
- 1 file changed, 194 insertions(+), 10 deletions(-)
+On Mon, 28 Nov 2022 12:50:03 +0100 Greg KH <greg@kroah.com> wrote:
+>
+> On Mon, Nov 28, 2022 at 01:36:00PM +1100, Stephen Rothwell wrote:
+> >=20
+> > After merging the driver-core tree, today's linux-next build (powerpc
+> > ppc64_defconfig) failed like this:
+> >=20
+> > arch/powerpc/platforms/book3s/vas-api.c: In function 'vas_register_copr=
+oc_api':
+> > arch/powerpc/platforms/book3s/vas-api.c:590:38: error: assignment to 'c=
+har * (*)(const struct device *, umode_t *)' {aka 'char * (*)(const struct =
+device *, short unsigned int *)'} from incompatible pointer type 'char * (*=
+)(struct device *, umode_t *)' {aka 'char * (*)(struct device *, short unsi=
+gned int *)'} [-Werror=3Dincompatible-pointer-types]
+> >   590 |         coproc_device.class->devnode =3D coproc_devnode;
+> >       |                                      ^
+> > drivers/misc/cxl/file.c: In function 'cxl_file_init':
+> > drivers/misc/cxl/file.c:687:28: error: assignment to 'char * (*)(const =
+struct device *, umode_t *)' {aka 'char * (*)(const struct device *, short =
+unsigned int *)'} from incompatible pointer type 'char * (*)(struct device =
+*, umode_t *)' {aka 'char * (*)(struct device *, short unsigned int *)'} [-=
+Werror=3Dincompatible-pointer-types]
+> >   687 |         cxl_class->devnode =3D cxl_devnode;
+> >       |                            ^
+> >=20
+> > Caused by commit
+> >=20
+> >   ff62b8e6588f ("driver core: make struct class.devnode() take a const =
+*")
+> >=20
+> > I have used the driver-core tree from next-20221125 for today. =20
+>=20
+> Hm, how do we resolve problems like this where an api changes in my
+> branch but needs to be updated in another branch that is not in Linus's
+> tree yet?
 
-diff --git a/arch/arm64/boot/dts/apple/t8103.dtsi b/arch/arm64/boot/dts/apple/t8103.dtsi
-index 51a63b29d404..d56708038d05 100644
---- a/arch/arm64/boot/dts/apple/t8103.dtsi
-+++ b/arch/arm64/boot/dts/apple/t8103.dtsi
-@@ -22,71 +22,243 @@ cpus {
- 		#address-cells = <2>;
- 		#size-cells = <0>;
- 
--		cpu0: cpu@0 {
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpu_e0>;
-+				};
-+				core1 {
-+					cpu = <&cpu_e1>;
-+				};
-+				core2 {
-+					cpu = <&cpu_e2>;
-+				};
-+				core3 {
-+					cpu = <&cpu_e3>;
-+				};
-+			};
-+
-+			cluster1 {
-+				core0 {
-+					cpu = <&cpu_p0>;
-+				};
-+				core1 {
-+					cpu = <&cpu_p1>;
-+				};
-+				core2 {
-+					cpu = <&cpu_p2>;
-+				};
-+				core3 {
-+					cpu = <&cpu_p3>;
-+				};
-+			};
-+		};
-+
-+		cpu_e0: cpu@0 {
- 			compatible = "apple,icestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x0>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&ecluster_opp>;
-+			capacity-dmips-mhz = <714>;
-+			performance-domains = <&cpufreq_e>;
- 		};
- 
--		cpu1: cpu@1 {
-+		cpu_e1: cpu@1 {
- 			compatible = "apple,icestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x1>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&ecluster_opp>;
-+			capacity-dmips-mhz = <714>;
-+			performance-domains = <&cpufreq_e>;
- 		};
- 
--		cpu2: cpu@2 {
-+		cpu_e2: cpu@2 {
- 			compatible = "apple,icestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x2>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&ecluster_opp>;
-+			capacity-dmips-mhz = <714>;
-+			performance-domains = <&cpufreq_e>;
- 		};
- 
--		cpu3: cpu@3 {
-+		cpu_e3: cpu@3 {
- 			compatible = "apple,icestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x3>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&ecluster_opp>;
-+			capacity-dmips-mhz = <714>;
-+			performance-domains = <&cpufreq_e>;
- 		};
- 
--		cpu4: cpu@10100 {
-+		cpu_p0: cpu@10100 {
- 			compatible = "apple,firestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x10100>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&pcluster_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p>;
- 		};
- 
--		cpu5: cpu@10101 {
-+		cpu_p1: cpu@10101 {
- 			compatible = "apple,firestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x10101>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&pcluster_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p>;
- 		};
- 
--		cpu6: cpu@10102 {
-+		cpu_p2: cpu@10102 {
- 			compatible = "apple,firestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x10102>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&pcluster_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p>;
- 		};
- 
--		cpu7: cpu@10103 {
-+		cpu_p3: cpu@10103 {
- 			compatible = "apple,firestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x10103>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&pcluster_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p>;
- 		};
- 	};
- 
-+	ecluster_opp: opp-table-0 {
-+		compatible = "operating-points-v2";
-+
-+		opp01 {
-+			opp-hz = /bits/ 64 <600000000>;
-+			opp-level = <1>;
-+			clock-latency-ns = <7500>;
-+		};
-+		opp02 {
-+			opp-hz = /bits/ 64 <972000000>;
-+			opp-level = <2>;
-+			clock-latency-ns = <22000>;
-+		};
-+		opp03 {
-+			opp-hz = /bits/ 64 <1332000000>;
-+			opp-level = <3>;
-+			clock-latency-ns = <27000>;
-+		};
-+		opp04 {
-+			opp-hz = /bits/ 64 <1704000000>;
-+			opp-level = <4>;
-+			clock-latency-ns = <33000>;
-+		};
-+		opp05 {
-+			opp-hz = /bits/ 64 <2064000000>;
-+			opp-level = <5>;
-+			clock-latency-ns = <50000>;
-+		};
-+	};
-+
-+	pcluster_opp: opp-table-1 {
-+		compatible = "operating-points-v2";
-+
-+		opp01 {
-+			opp-hz = /bits/ 64 <600000000>;
-+			opp-level = <1>;
-+			clock-latency-ns = <8000>;
-+		};
-+		opp02 {
-+			opp-hz = /bits/ 64 <828000000>;
-+			opp-level = <2>;
-+			clock-latency-ns = <19000>;
-+		};
-+		opp03 {
-+			opp-hz = /bits/ 64 <1056000000>;
-+			opp-level = <3>;
-+			clock-latency-ns = <21000>;
-+		};
-+		opp04 {
-+			opp-hz = /bits/ 64 <1284000000>;
-+			opp-level = <4>;
-+			clock-latency-ns = <23000>;
-+		};
-+		opp05 {
-+			opp-hz = /bits/ 64 <1500000000>;
-+			opp-level = <5>;
-+			clock-latency-ns = <24000>;
-+		};
-+		opp06 {
-+			opp-hz = /bits/ 64 <1728000000>;
-+			opp-level = <6>;
-+			clock-latency-ns = <29000>;
-+		};
-+		opp07 {
-+			opp-hz = /bits/ 64 <1956000000>;
-+			opp-level = <7>;
-+			clock-latency-ns = <31000>;
-+		};
-+		opp08 {
-+			opp-hz = /bits/ 64 <2184000000>;
-+			opp-level = <8>;
-+			clock-latency-ns = <34000>;
-+		};
-+		opp09 {
-+			opp-hz = /bits/ 64 <2388000000>;
-+			opp-level = <9>;
-+			clock-latency-ns = <36000>;
-+		};
-+		opp10 {
-+			opp-hz = /bits/ 64 <2592000000>;
-+			opp-level = <10>;
-+			clock-latency-ns = <51000>;
-+		};
-+		opp11 {
-+			opp-hz = /bits/ 64 <2772000000>;
-+			opp-level = <11>;
-+			clock-latency-ns = <54000>;
-+		};
-+		opp12 {
-+			opp-hz = /bits/ 64 <2988000000>;
-+			opp-level = <12>;
-+			clock-latency-ns = <55000>;
-+		};
-+#if 0
-+		/* Not available until CPU deep sleep is implemented */
-+		opp13 {
-+			opp-hz = /bits/ 64 <3096000000>;
-+			opp-level = <13>;
-+			clock-latency-ns = <55000>;
-+			turbo-mode;
-+		};
-+		opp14 {
-+			opp-hz = /bits/ 64 <3144000000>;
-+			opp-level = <14>;
-+			clock-latency-ns = <56000>;
-+			turbo-mode;
-+		};
-+		opp15 {
-+			opp-hz = /bits/ 64 <3204000000>;
-+			opp-level = <15>;
-+			clock-latency-ns = <56000>;
-+			turbo-mode;
-+		};
-+#endif
-+	};
-+
- 	timer {
- 		compatible = "arm,armv8-timer";
- 		interrupt-parent = <&aic>;
-@@ -124,6 +296,18 @@ soc {
- 		ranges;
- 		nonposted-mmio;
- 
-+		cpufreq_e: performance-controller@210e20000 {
-+			compatible = "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
-+			reg = <0x2 0x10e20000 0 0x1000>;
-+			#performance-domain-cells = <0>;
-+		};
-+
-+		cpufreq_p: performance-controller@211e20000 {
-+			compatible = "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
-+			reg = <0x2 0x11e20000 0 0x1000>;
-+			#performance-domain-cells = <0>;
-+		};
-+
- 		i2c0: i2c@235010000 {
- 			compatible = "apple,t8103-i2c", "apple,i2c";
- 			reg = <0x2 0x35010000 0x0 0x4000>;
-@@ -229,12 +413,12 @@ aic: interrupt-controller@23b100000 {
- 			affinities {
- 				e-core-pmu-affinity {
- 					apple,fiq-index = <AIC_CPU_PMU_E>;
--					cpus = <&cpu0 &cpu1 &cpu2 &cpu3>;
-+					cpus = <&cpu_e0 &cpu_e1 &cpu_e2 &cpu_e3>;
- 				};
- 
- 				p-core-pmu-affinity {
- 					apple,fiq-index = <AIC_CPU_PMU_P>;
--					cpus = <&cpu4 &cpu5 &cpu6 &cpu7>;
-+					cpus = <&cpu_p0 &cpu_p1 &cpu_p2 &cpu_p3>;
- 				};
- 			};
- 		};
--- 
-2.35.1
+That is not the case here:
 
+$ git show ff62b8e6588f:arch/powerpc/platforms/book3s/vas-api.c | grep copr=
+oc_devnode
+static char *coproc_devnode(struct device *dev, umode_t *mode)
+	coproc_device.class->devnode =3D coproc_devnode;
+$ git show ff62b8e6588f:drivers/misc/cxl/file.c | grep cxl_devnode
+static char *cxl_devnode(struct device *dev, umode_t *mode)
+	cxl_class->devnode =3D cxl_devnode;
+
+You just need to add a commit to your tree that updates the missed cases.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/iDLLG2gcqxANPr9VJLmkav/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOErRgACgkQAVBC80lX
+0GyQqQf/UVldQV9PIdQWiqi842assrp39aI1qOW0OwrZuA1lYtaoFD3Deku1+eUJ
+h+hFaK3NRuHYN8G+eDAXvfB1qbM/h1oiMNYsJtxGdSrdPurWFyHuFu/TLRUVUzu1
+7FeBIwJMAlbb68P0lH5g0OWnjtS+fNEhz0uEsdhDUASrCtp6qiNw5Nar77skrrOb
+XsFSOPeAxO/wuFu+wyA3csezISoQ/F8XCBiehumJq1Myb0JyZX720f0vHXiNOucR
+/DyPrfjL44BClIz63kH0y/2s2wSqhVjSg/+psndp80ILjWxZB5R8Uc+1O+v95DOH
+Qlnhd8oY7D0yUtGiXuXwnS4g0BJbtQ==
+=Iwte
+-----END PGP SIGNATURE-----
+
+--Sig_/iDLLG2gcqxANPr9VJLmkav/--
