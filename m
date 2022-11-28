@@ -2,143 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2341C639EEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4006639EE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiK1B3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 20:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
+        id S229702AbiK1B3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 20:29:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiK1B3U (ORCPT
+        with ESMTP id S229612AbiK1B3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 20:29:20 -0500
-Received: from na01-obe.outbound.protection.outlook.com (mail-westcentralusazon11021021.outbound.protection.outlook.com [40.93.199.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE14A45A;
-        Sun, 27 Nov 2022 17:29:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WPmNYy/ZuAHHCsfSIY49RyHKLTs1zr5I8wbmVTiAfc6SikWd7aWHdV2+M2Oll4U4V8nsoI4dBnRMvW/QxIrvSwTuzBwKYfJ5PyGkKRM4i9Ap1uHI8P94TUoadyUVJVT5+QW72QySSpZN/gI+zmL2MKutwR4yr0o9hSWXagmAmVbA3zOuHjTJXsIh8fx90sME1P0VHHb2Ahtctr4FazOXYJpCUjnrto1iL5ahdE558nfwcYj8+UNmV7007IwBE3w8kBKffp0X9vH8OBpXfPFU/2Rwnu3xNcALnkbqJtd8GlAv8jgC1jHHcPmrsWDrQ1r8NN1O9m+kYVxCwzmMRzsDyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vMqDaxVGURKlurcIfHpj64XL7RxGRS5P6xfgjYIvG1s=;
- b=GFCFiv70tHyvzdLT7VXe+SsENJn87kayS1aPowZFWMo6ofjN+Tf04hg4OHrHaE1WDnIB3n/wTly70kzfMpaYqJHsaC6gVHY+SSFs5DB/PZyClnMW6AiZUl0X7dm2oBpDfoBgmYqNnW48AXWyvu9LM/WDFqnIS2ZMI/jjp6Btqt/sPKx5frUArRu8e3F+8dYF1U1l5A6zFU/CG1KYlKnk8GEWVSwCmRr7p6oKzwMmQ5HN3amS75AgEq8u+2dU4U+wkO4mRc0dE8aPHALkddCp7kYCfNj48zRgJJ07+ih1pjsJv9Y949e4YSRLx1nnZp5WCUPvf0TC0PV1Iu4oc8DxbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vMqDaxVGURKlurcIfHpj64XL7RxGRS5P6xfgjYIvG1s=;
- b=dXbuMMunY3dh/eTUj7Ahdjac81G3yJb34xH0auCLJW3C4Wj2dKFmoynr1rRkFHwkzvsroOXejYE5FwGuvyS9PmricW28x2YDEHKW9My2ofvuPTioPoxiy9+nK+LZHIHc+tcgVtioBFbzrdnRbIhiuYW8PZ/jka2CK0gz+UUwiMA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-Received: from BL0PR2101MB1092.namprd21.prod.outlook.com
- (2603:10b6:207:30::23) by DM4PR21MB3153.namprd21.prod.outlook.com
- (2603:10b6:8:65::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Mon, 28 Nov
- 2022 01:29:17 +0000
-Received: from BL0PR2101MB1092.namprd21.prod.outlook.com
- ([fe80::ae03:5b1e:755c:a020]) by BL0PR2101MB1092.namprd21.prod.outlook.com
- ([fe80::ae03:5b1e:755c:a020%6]) with mapi id 15.20.5880.008; Mon, 28 Nov 2022
- 01:29:16 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, brijesh.singh@amd.com
-Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        Dexuan Cui <decui@microsoft.com>
-Subject: [PATCH] x86/sev: mem_encrypt_free_decrypted_mem(): encrypt the pages for AMD SME only
-Date:   Sun, 27 Nov 2022 17:28:52 -0800
-Message-Id: <20221128012852.8561-1-decui@microsoft.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR03CA0177.namprd03.prod.outlook.com
- (2603:10b6:303:8d::32) To BL0PR2101MB1092.namprd21.prod.outlook.com
- (2603:10b6:207:30::23)
+        Sun, 27 Nov 2022 20:29:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E76AA461;
+        Sun, 27 Nov 2022 17:29:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D8EE60F53;
+        Mon, 28 Nov 2022 01:29:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FF52C433D7;
+        Mon, 28 Nov 2022 01:28:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669598939;
+        bh=2J3xNZDQoeEripp4SMFhNJ+YDa5yHhIfCSU4QcV7Mj4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aRtNVL+krhH2+mFtQU52seUZVwlWjFQk4Wsyv7VRf2WFCVm+2eXo9Wm+pi046wMY/
+         0jiSOyyyNxOhv6cBknBHN1CiH20DcsOO8ULuePmyyk+ds0Kt6YYQTq4qWVnEqMAHnj
+         3B34cJN2PInF7Uw90mUiq08HoFMpZf63J3uMVscTmDIer/9S22kjp4V74wM2+BP33H
+         hB/FnULz8tcB+SfTbSjavP0MFQknxva2joApj9D8WShROu48wXpvWolXUzIW0eAAMK
+         c0lNF2Uj+lNp9gnehmfZAcqaPseMMDYA2mhX+NbNh1btAQD5aEcah8Gkutj5NMjGQ1
+         bNb4IKEKzemsg==
+Date:   Mon, 28 Nov 2022 03:28:55 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jandryuk@gmail.com,
+        pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com, lukas@wunner.de,
+        p.rosenberger@kunbus.com
+Subject: Re: [PATCH v11 09/14] tpm, tpm: Implement usage counter for locality
+Message-ID: <Y4QO14Otk+u5Nxl4@kernel.org>
+References: <20221124135538.31020-1-LinoSanfilippo@gmx.de>
+ <20221124135538.31020-10-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR2101MB1092:EE_|DM4PR21MB3153:EE_
-X-MS-Office365-Filtering-Correlation-Id: 04a3e645-e7d6-4b37-0885-08dad0dff652
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FQ5MI5mn3/pFcTlYy1EWHp957DQdaQ9KLcpHzSL77XOt9v/CfpXQ0DKM1SMEcMja3AB+EdWPfUGVP1VeUfRGJbyuIcRebNlisWr4/qQ+GIKpc/0SVb+zvJZtnUzN7dxnTwXN+4wwAp+YFeDF/LZw4gCU+fw/7M/vyG5eTDQq5WqeRaknge3mI8JiOiQkOyE5eVklxZL0jwbipBWn6ov3W9tF1lS9QI+OYpCxIjEAGq+BYQ8PHVmWsCrieBvcWD2WmfXyCOtSCCFrtWV6mh/MSyNHdtdYFSIdWT8CcZIehnBfIES+Gs2prZA54KtTp6hDyjXgeScrX+k+au7C674Wl0fGv9zXlfwFRFlrCxYsp8NyLFGEvWMoq0oiUEEksvepAquRRqRbE9dNZe8OSCrQ3SKFe2Kx9wmliL0c3cTWHb2iBBZCo94EoerulzNOc3fXwuJ233UQJTdK+hoGgH+eHPlq6HlCkrFMnC8ZR2w7wv+csDHaNrjEegSbJ8JAJ/9dzyxW1yYYcyaAqkx2qCymMUUnEQtbXCtmmwsfmErxTCIUonQMAA/nKcRyb5gHwtSUJ+kkLv+85zTSBC4+aNZG1tVav6tlchHdoOa6NoY7PLok+c/oWLgWfwMGqDCvL6kgsjOc6lv8l0H2UuTTjHC4RQwIRK450c6sbdctWJecHJnr7DhsDK1p5Fw6LZETyJU8
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR2101MB1092.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(366004)(396003)(136003)(376002)(451199015)(5660300002)(7416002)(316002)(6512007)(66946007)(36756003)(1076003)(2616005)(66556008)(8936002)(41300700001)(66476007)(186003)(8676002)(4326008)(38100700002)(82950400001)(82960400001)(2906002)(83380400001)(86362001)(6506007)(6486002)(6666004)(107886003)(52116002)(10290500003)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iqo6ZFVO5lq4H4quRGG2IZg69YXClHw/761HZ2YYWgl5Gk7ihrqkE4XBJ6/E?=
- =?us-ascii?Q?qfrzUZVWV1oKh3j/yeQ3j3wfy1F68XNGFAnjg9eWulobPnlhvnzNK+LU3Q2w?=
- =?us-ascii?Q?s4njIuLnHv0Kp/IWIBJ6jbBrYeFPvjyhjqirCFyyDvOtL7r4cqUs3+pqjCbb?=
- =?us-ascii?Q?ccgdEKoWHlXU5tldC73Lg71W4XOnK4u6yjhhoKb5CNZSKCEn0m+OGJjIN3WN?=
- =?us-ascii?Q?L4rE1Ee2cUpJg3haGNsTlpNOTIb666KkHNXlh50TUAKpIAfm9autyZ2A6wdY?=
- =?us-ascii?Q?By01cPqA0KxdYgHvEo7ageXUJ6E5ezPZ+dJYaNzCs4zrvpZ0tCOGTsiDMgSr?=
- =?us-ascii?Q?Tj9icowgvRNhPvX7gARd3iAAkmGx3Durk+QM96Ovl5fBWYCoaQiwGwDszpNK?=
- =?us-ascii?Q?D3NM86CUrabacIqiCbjsa5g6AakEJyNpiWoMlzlG/XtnKCTxSgS898OG4R21?=
- =?us-ascii?Q?tjbHS5PkHDOKSl5xoLXIunNTSgexn9o94GbeVlR2yC8ehgsMp3lsOV+72d3X?=
- =?us-ascii?Q?AiLOWFIMLDuG8RdFWoMhyddJldxRlONHM9UpxRCfJakMzZ4kenIr0w8WE+9B?=
- =?us-ascii?Q?K4RhhzYfr2Yp9q/YETejhyC74mJ2WdHUGhXbYAX907L1oMdYzQdufoK9y4k7?=
- =?us-ascii?Q?3T38Q2cp+Ug/Rqcue4vJwNJsFfcSjoE4QOfsIbahXVPCgWQSI/waAApV9sFk?=
- =?us-ascii?Q?t+zBrQvZOGmEi2ogwuHL7lqY+FpqhRrUipbQKTZ1V+RnOa5eoM2S//00QPYc?=
- =?us-ascii?Q?uMKjZ2Da+hBEOyuJYZqIiTKtu+EcKmkKbI7MhjPMxPKJEDBe06c9yioA9CUr?=
- =?us-ascii?Q?iLdnoq++vEMIsb2gnhoJlD56QpK5iTD5gcY829lqnM5AEm1TKaO1T+yOxwWY?=
- =?us-ascii?Q?zjm6EgXA5yYOzuxziZW8AIBcqgrKWbz0PXEudfEMtta6BLZafVcfapPMcAK0?=
- =?us-ascii?Q?JtcVcsQQIiUi79vzuy3qAZW4Sd7qE5CZvLPO4NWcnnpvqz/ekBrOvqDvA1di?=
- =?us-ascii?Q?BYpwkjzHe2pkX6HBHCkmfPcLWgops2zT5a9vYK6MBY+7a27dGvwQeke04KyW?=
- =?us-ascii?Q?q1uuuWv6lCr9ITcLdpq+NN6vNI/uoG6RZMrm0zRQtm5wgAjPld+FbRarbEJ5?=
- =?us-ascii?Q?FWhA8az3S797T3TjGAs1iPDgDbEtNXl5J/OdWcsmE2fu3EGRQqTh6Najgdiq?=
- =?us-ascii?Q?b38TvIN+/4WEmWwe2Uuj/QDH0/g5uZp3mQqsv75e57SrUWxt6Xgr2DSn+vSz?=
- =?us-ascii?Q?KWhLAlGlws2TSfxUmHVxFlNypYdGP+wZSedeH6AaX8aYnVCV3nJVMRC+viyc?=
- =?us-ascii?Q?SK3co/EFi81Un34umaKcZCSpvWj2DPTDYJwYXpjiujSEc3SxfjSycJR5P2nK?=
- =?us-ascii?Q?WJc619KKjiBFZKn5JBCfnvWIZEPKl4fVn7DBxpmhb4uFIiXn9bOvEjn4HYRf?=
- =?us-ascii?Q?0JZQIsAim8TXFDYhkK7zcmCpiif3E8klpezI3yrVztzynu0BhNsTVk9MwR4l?=
- =?us-ascii?Q?/fqtLpVKk6OV8OZqVU42C198v1gfIgqam7r+5jCqoCVV/bmsiIX696Aat9J2?=
- =?us-ascii?Q?2Be5lDPser6Lx14GjYQ45U1Q+mrkz9CAmRjG4L7sfkaV7sv57KM62ldw/yxO?=
- =?us-ascii?Q?rPev2UBYEnYLmop9+kB7cnf6Ue0SX+tL/maaaFpbNe/U?=
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04a3e645-e7d6-4b37-0885-08dad0dff652
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR2101MB1092.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 01:29:16.2389
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YlRyUQsqNrnUwjIpL3vo5CZRgN/IvadvItpZAFH+cfCZTDEGKmkj5SGkUQtapV/DN/BPfMo4FW09P6qZe/AU3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR21MB3153
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221124135538.31020-10-LinoSanfilippo@gmx.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sme_postprocess_startup() marks the __start_bss_decrypted pages shared
-for AMD SME only, so here set_memory_encrypted() should be called for AMD
-SME only, i.e. don't call the set_memory_encrypted() for TDX, otherwise the
-error "failed to free unused decrypted pages" appears in 'dmesg'.
+On Thu, Nov 24, 2022 at 02:55:33PM +0100, Lino Sanfilippo wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> 
+> Implement a usage counter for the (default) locality used by the TPM TIS
+> driver:
+> Request the locality from the TPM if it has not been claimed yet, otherwise
+> only increment the counter. Also release the locality if the counter is 0
+> otherwise only decrement the counter. Since in case of SPI the register
+> accesses are locked by means of the SPI bus mutex use a sleepable lock
+> (i.e. also a mutex) to ensure thread-safety of the counter which may be
+> accessed by both a userspace thread and the interrupt handler.
+> 
+> By doing this refactor the names of the amended functions to use a more
+> appropriate prefix.
+> 
+> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> Tested-by: Michael Niewöhner <linux@mniewoehner.de>
+> ---
+>  drivers/char/tpm/tpm_tis_core.c | 63 +++++++++++++++++++++++----------
+>  drivers/char/tpm/tpm_tis_core.h |  2 ++
+>  2 files changed, 47 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index d705dfb64cf9..f00f1057fd27 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -165,16 +165,27 @@ static bool check_locality(struct tpm_chip *chip, int l)
+>  	return false;
+>  }
+>  
+> -static int release_locality(struct tpm_chip *chip, int l)
+> +static int __tpm_tis_relinquish_locality(struct tpm_tis_data *priv, int l)
+> +{
+> +	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
+> +
+> +	return 0;
+> +}
+> +
+> +static int tpm_tis_relinquish_locality(struct tpm_chip *chip, int l)
+>  {
+>  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+>  
+> -	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
+> +	mutex_lock(&priv->locality_count_mutex);
+> +	priv->locality_count--;
+> +	if (priv->locality_count == 0)
+> +		__tpm_tis_relinquish_locality(priv, l);
+> +	mutex_unlock(&priv->locality_count_mutex);
+>  
+>  	return 0;
+>  }
+>  
+> -static int request_locality(struct tpm_chip *chip, int l)
+> +static int __tpm_tis_request_locality(struct tpm_chip *chip, int l)
+>  {
+>  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+>  	unsigned long stop, timeout;
+> @@ -215,6 +226,20 @@ static int request_locality(struct tpm_chip *chip, int l)
+>  	return -1;
+>  }
+>  
+> +static int tpm_tis_request_locality(struct tpm_chip *chip, int l)
+> +{
+> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> +	int ret = 0;
+> +
+> +	mutex_lock(&priv->locality_count_mutex);
+> +	if (priv->locality_count == 0)
+> +		ret = __tpm_tis_request_locality(chip, l);
+> +	if (!ret)
+> +		priv->locality_count++;
+> +	mutex_unlock(&priv->locality_count_mutex);
+> +	return ret;
+> +}
+> +
+>  static u8 tpm_tis_status(struct tpm_chip *chip)
+>  {
+>  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> @@ -682,7 +707,7 @@ static int probe_itpm(struct tpm_chip *chip)
+>  	if (vendor != TPM_VID_INTEL)
+>  		return 0;
+>  
+> -	if (request_locality(chip, 0) != 0)
+> +	if (tpm_tis_request_locality(chip, 0) != 0)
+>  		return -EBUSY;
+>  
+>  	rc = tpm_tis_send_data(chip, cmd_getticks, len);
+> @@ -703,7 +728,7 @@ static int probe_itpm(struct tpm_chip *chip)
+>  
+>  out:
+>  	tpm_tis_ready(chip);
+> -	release_locality(chip, priv->locality);
+> +	tpm_tis_relinquish_locality(chip, priv->locality);
+>  
+>  	return rc;
+>  }
+> @@ -788,14 +813,14 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
+>  	}
+>  	priv->irq = irq;
+>  
+> -	rc = request_locality(chip, 0);
+> +	rc = tpm_tis_request_locality(chip, 0);
+>  	if (rc < 0)
+>  		return rc;
+>  
+>  	rc = tpm_tis_read8(priv, TPM_INT_VECTOR(priv->locality),
+>  			   &original_int_vec);
+>  	if (rc < 0) {
+> -		release_locality(chip, priv->locality);
+> +		tpm_tis_relinquish_locality(chip, priv->locality);
+>  		return rc;
+>  	}
+>  
+> @@ -834,7 +859,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
+>  		rc = -1;
+>  	}
+>  
+> -	release_locality(chip, priv->locality);
+> +	tpm_tis_relinquish_locality(chip, priv->locality);
+>  
+>  	return rc;
+>  }
+> @@ -950,8 +975,8 @@ static const struct tpm_class_ops tpm_tis = {
+>  	.req_complete_mask = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
+>  	.req_complete_val = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
+>  	.req_canceled = tpm_tis_req_canceled,
+> -	.request_locality = request_locality,
+> -	.relinquish_locality = release_locality,
+> +	.request_locality = tpm_tis_request_locality,
+> +	.relinquish_locality = tpm_tis_relinquish_locality,
+>  	.clk_enable = tpm_tis_clkrun_enable,
+>  };
+>  
+> @@ -985,6 +1010,8 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  	priv->timeout_min = TPM_TIMEOUT_USECS_MIN;
+>  	priv->timeout_max = TPM_TIMEOUT_USECS_MAX;
+>  	priv->phy_ops = phy_ops;
+> +	priv->locality_count = 0;
+> +	mutex_init(&priv->locality_count_mutex);
+>  
+>  	dev_set_drvdata(&chip->dev, priv);
+>  
+> @@ -1063,14 +1090,14 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  
+>  	intmask &= ~TPM_GLOBAL_INT_ENABLE;
+>  
+> -	rc = request_locality(chip, 0);
+> +	rc = tpm_tis_request_locality(chip, 0);
+>  	if (rc < 0) {
+>  		rc = -ENODEV;
+>  		goto out_err;
+>  	}
+>  
+>  	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+> -	release_locality(chip, 0);
+> +	tpm_tis_relinquish_locality(chip, 0);
+>  
+>  	rc = tpm_chip_start(chip);
+>  	if (rc)
+> @@ -1104,13 +1131,13 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  		 * proper timeouts for the driver.
+>  		 */
+>  
+> -		rc = request_locality(chip, 0);
+> +		rc = tpm_tis_request_locality(chip, 0);
+>  		if (rc < 0)
+>  			goto out_err;
+>  
+>  		rc = tpm_get_timeouts(chip);
+>  
+> -		release_locality(chip, 0);
+> +		tpm_tis_relinquish_locality(chip, 0);
+>  
+>  		if (rc) {
+>  			dev_err(dev, "Could not get TPM timeouts and durations\n");
+> @@ -1130,11 +1157,11 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  			dev_err(&chip->dev, FW_BUG
+>  					"TPM interrupt not working, polling instead\n");
+>  
+> -			rc = request_locality(chip, 0);
+> +			rc = tpm_tis_request_locality(chip, 0);
+>  			if (rc < 0)
+>  				goto out_err;
+>  			disable_interrupts(chip);
+> -			release_locality(chip, 0);
+> +			tpm_tis_relinquish_locality(chip, 0);
+>  		}
+>  	}
+>  
+> @@ -1201,13 +1228,13 @@ int tpm_tis_resume(struct device *dev)
+>  	 * an error code but for unknown reason it isn't handled.
+>  	 */
+>  	if (!(chip->flags & TPM_CHIP_FLAG_TPM2)) {
+> -		ret = request_locality(chip, 0);
+> +		ret = tpm_tis_request_locality(chip, 0);
+>  		if (ret < 0)
+>  			return ret;
+>  
+>  		tpm1_do_selftest(chip);
+>  
+> -		release_locality(chip, 0);
+> +		tpm_tis_relinquish_locality(chip, 0);
+>  	}
+>  
+>  	return 0;
+> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+> index 2deef11c88db..13bdcf38e56f 100644
+> --- a/drivers/char/tpm/tpm_tis_core.h
+> +++ b/drivers/char/tpm/tpm_tis_core.h
+> @@ -91,6 +91,8 @@ enum tpm_tis_flags {
+>  
+>  struct tpm_tis_data {
+>  	u16 manufacturer_id;
+> +	struct mutex locality_count_mutex;
+> +	unsigned int locality_count;
+>  	int locality;
+>  	int irq;
+>  	unsigned int int_mask;
+> -- 
+> 2.36.1
+> 
 
-Fixes: b3f0907c71e0 ("x86/mm: Add .bss..decrypted section to hold shared variables")
-Signed-off-by: Dexuan Cui <decui@microsoft.com>
----
- arch/x86/mm/mem_encrypt_amd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
-index 9c4d8dbcb129..fd9b58402a22 100644
---- a/arch/x86/mm/mem_encrypt_amd.c
-+++ b/arch/x86/mm/mem_encrypt_amd.c
-@@ -516,7 +516,7 @@ void __init mem_encrypt_free_decrypted_mem(void)
- 	 * The unused memory range was mapped decrypted, change the encryption
- 	 * attribute from decrypted to encrypted before freeing it.
- 	 */
--	if (cc_platform_has(CC_ATTR_MEM_ENCRYPT)) {
-+	if (sme_me_mask && cc_platform_has(CC_ATTR_MEM_ENCRYPT)) {
- 		r = set_memory_encrypted(vaddr, npages);
- 		if (r) {
- 			pr_warn("failed to free unused decrypted pages\n");
--- 
-2.25.1
-
+BR, Jarkko
