@@ -2,101 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6B163A024
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 04:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8D563A02A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 04:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiK1Dck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 22:32:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39324 "EHLO
+        id S229922AbiK1Df3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 22:35:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiK1Dch (ORCPT
+        with ESMTP id S229675AbiK1DfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 22:32:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FD01180E
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 19:31:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669606292;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Mh8+HZNMN2F6HzSwmWPr16ecpqC3Mw7WO0DSOHuRXuQ=;
-        b=JD1i+j+QXnc1HbipMzQVoy70Q7r2FqnP54sOXtsrQmDNrJYY8FhPMvAPYDDPkRkEkBnvGN
-        kdW0JcwqJFKbAynjcX2aZ8pdq0uyjfV+qt/sQ/TrZ7msaY2wB419SA3L+0Po3ODOqsTDVy
-        O0NlNcKEyNaQMH4wBTuSK854fI/wc2g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-664-HrKrfLHKPnuPTFPzc0qKUA-1; Sun, 27 Nov 2022 22:31:28 -0500
-X-MC-Unique: HrKrfLHKPnuPTFPzc0qKUA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E4C43811E67;
-        Mon, 28 Nov 2022 03:31:27 +0000 (UTC)
-Received: from llong.com (unknown [10.22.32.57])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E5A17492B08;
-        Mon, 28 Nov 2022 03:31:26 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Waiman Long <longman@redhat.com>,
-        Yi Zhang <yi.zhang@redhat.com>
-Subject: [PATCH-block] blk-cgroup: Use css_tryget() in blkcg_destroy_blkgs()
-Date:   Sun, 27 Nov 2022 22:30:57 -0500
-Message-Id: <20221128033057.1279383-1-longman@redhat.com>
+        Sun, 27 Nov 2022 22:35:24 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CAD2715
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 19:35:23 -0800 (PST)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2AS3YgFa2228734
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Sun, 27 Nov 2022 19:34:43 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2AS3YgFa2228734
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022110601; t=1669606485;
+        bh=pyo7Px7PpQM2HufyWL1vMcwAPfvOwNDGVJHyx4pR0Eo=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=cU7V1Hgw40yLX8VxRwQFYAeaAkAtFA9OKt0fQ+q5LZ3VAitRxt5Rqk+OK1Zo0YUYN
+         sIW/WfDBgyRt/GCwJAozxfDXpHEYtLxHvq65lJMLHPyTd+6/GgsKP8Sjo7zBtXvfhj
+         0cs8ZGKS8WIpZsbQUr6nS5c4x1tXQbE27ZyBLpcMq43aO7jmrBAwJMH0mQjEDyP7T9
+         kyp+u70AKyLhCztSMIeH4BL3AmDdy/a463T4vIpIZlJ5cQ4V6W3s+a+w1AhilTzusn
+         1pDRgvNbmDKHyzpS6xS8rD8535TyXZhizQDweXYaZ3Sl9OmAHVS9FjXkrP3DUx3+PV
+         trhAjHytoqEqw==
+Date:   Sun, 27 Nov 2022 19:34:39 -0800
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
+CC:     linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>, Song Liu <song@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        virtualization@lists.linux-foundation.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2=5D_x86/paravirt=3A_Use_relat?= =?US-ASCII?Q?ive_reference_for_original_instruction?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20221128030320.GA101008@k08j02272.eu95sqa>
+References: <73c9ffac157087da78af9fca59cf7d8db7f17226.1669290510.git.houwenlong.hwl@antgroup.com> <DD7871BE-B969-4E2E-BDF0-C5D730F0B0AE@zytor.com> <20221128030320.GA101008@k08j02272.eu95sqa>
+Message-ID: <169A82BE-E5A9-4DB6-9CBE-055699F00213@zytor.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 951d1e94801f ("blk-cgroup: Flush stats at blkgs destruction
-path") incorrectly assumes that css_get() will always succeed. That may
-not be true if there is no blkg associated with the blkcg. If css_get()
-fails, the subsequent css_put() call may lead to data corruption as
-was illustrated in a test system that it crashed on bootup when that
-commit was included. Also blkcg may be freed at any time leading to
-use-after-free. Fix it by using css_tryget() instead and bail out if
-the tryget fails.
+On November 27, 2022 7:03:20 PM PST, Hou Wenlong <houwenlong=2Ehwl@antgroup=
+=2Ecom> wrote:
+>On Sun, Nov 27, 2022 at 09:24:34AM -0800, H=2E Peter Anvin wrote:
+>> On November 24, 2022 3:51:53 AM PST, Hou Wenlong <houwenlong=2Ehwl@antg=
+roup=2Ecom> wrote:
+>> >Similar to the alternative patching, use relative reference for origin=
+al
+>> >instruction rather than absolute one, which saves 8 bytes for one entr=
+y
+>> >on x86_64=2E  And it could generate R_X86_64_PC32 relocation instead o=
+f
+>> >R_X86_64_64 relocation, which also reduces relocation metadata on
+>> >relocatable builds=2E And the alignment could be hard coded to be 4 no=
+w=2E
+>> >
+>> >Signed-off-by: Hou Wenlong <houwenlong=2Ehwl@antgroup=2Ecom>
+>> >---
+>> > arch/x86/include/asm/paravirt=2Eh       | 10 +++++-----
+>> > arch/x86/include/asm/paravirt_types=2Eh |  8 ++++----
+>> > arch/x86/kernel/alternative=2Ec         |  8 +++++---
+>> > 3 files changed, 14 insertions(+), 12 deletions(-)
+>> >
+>> >diff --git a/arch/x86/include/asm/paravirt=2Eh b/arch/x86/include/asm/=
+paravirt=2Eh
+>> >index 2851bc2339d5=2E=2Ee56065ea73f2 100644
+>> >--- a/arch/x86/include/asm/paravirt=2Eh
+>> >+++ b/arch/x86/include/asm/paravirt=2Eh
+>> >@@ -735,16 +735,16 @@ extern void default_banner(void);
+>> >=20
+>> > #else  /* __ASSEMBLY__ */
+>> >=20
+>> >-#define _PVSITE(ptype, ops, word, algn)		\
+>> >+#define _PVSITE(ptype, ops)			\
+>> > 771:;						\
+>> > 	ops;					\
+>> > 772:;						\
+>> > 	=2Epushsection =2Eparainstructions,"a";	\
+>> >-	 =2Ealign	algn;				\
+>> >-	 word 771b;				\
+>> >+	 =2Ealign	4;				\
+>> >+	 =2Elong 771b-=2E;				\
+>> > 	 =2Ebyte ptype;				\
+>> > 	 =2Ebyte 772b-771b;			\
+>> >-	 _ASM_ALIGN;				\
+>> >+	 =2Ealign 4;				\
+>> > 	=2Epopsection
+>> >=20
+>> >=20
+>> >@@ -752,7 +752,7 @@ extern void default_banner(void);
+>> > #ifdef CONFIG_PARAVIRT_XXL
+>> >=20
+>> > #define PARA_PATCH(off)		((off) / 8)
+>> >-#define PARA_SITE(ptype, ops)	_PVSITE(ptype, ops, =2Equad, 8)
+>> >+#define PARA_SITE(ptype, ops)	_PVSITE(ptype, ops)
+>> > #define PARA_INDIRECT(addr)	*addr(%rip)
+>> >=20
+>> > #ifdef CONFIG_DEBUG_ENTRY
+>> >diff --git a/arch/x86/include/asm/paravirt_types=2Eh b/arch/x86/includ=
+e/asm/paravirt_types=2Eh
+>> >index 8c1da419260f=2E=2E68952ae07a3f 100644
+>> >--- a/arch/x86/include/asm/paravirt_types=2Eh
+>> >+++ b/arch/x86/include/asm/paravirt_types=2Eh
+>> >@@ -5,7 +5,7 @@
+>> > #ifndef __ASSEMBLY__
+>> > /* These all sit in the =2Eparainstructions section to tell us what t=
+o patch=2E */
+>> > struct paravirt_patch_site {
+>> >-	u8 *instr;		/* original instructions */
+>> >+	s32 instr_offset;	/* original instructions */
+>> > 	u8 type;		/* type of this instruction */
+>> > 	u8 len;			/* length of original instruction */
+>> > };
+>> >@@ -273,11 +273,11 @@ extern struct paravirt_patch_template pv_ops;
+>> > #define _paravirt_alt(insn_string, type)		\
+>> > 	"771:\n\t" insn_string "\n" "772:\n"		\
+>> > 	"=2Epushsection =2Eparainstructions,\"a\"\n"	\
+>> >-	_ASM_ALIGN "\n"					\
+>> >-	_ASM_PTR " 771b\n"				\
+>> >+	"  =2Ealign 4\n"					\
+>> >+	"  =2Elong 771b-=2E\n"				\
+>> > 	"  =2Ebyte " type "\n"				\
+>> > 	"  =2Ebyte 772b-771b\n"				\
+>> >-	_ASM_ALIGN "\n"					\
+>> >+	"  =2Ealign 4\n"					\
+>> > 	"=2Epopsection\n"
+>> >=20
+>> > /* Generate patchable code, with the default asm parameters=2E */
+>> >diff --git a/arch/x86/kernel/alternative=2Ec b/arch/x86/kernel/alterna=
+tive=2Ec
+>> >index 111b809f0ac2=2E=2E6eea563a098d 100644
+>> >--- a/arch/x86/kernel/alternative=2Ec
+>> >+++ b/arch/x86/kernel/alternative=2Ec
+>> >@@ -1232,20 +1232,22 @@ void __init_or_module apply_paravirt(struct pa=
+ravirt_patch_site *start,
+>> > {
+>> > 	struct paravirt_patch_site *p;
+>> > 	char insn_buff[MAX_PATCH_LEN];
+>> >+	u8 *instr;
+>> >=20
+>> > 	for (p =3D start; p < end; p++) {
+>> > 		unsigned int used;
+>> >=20
+>> >+		instr =3D (u8 *)&p->instr_offset + p->instr_offset;
+>> > 		BUG_ON(p->len > MAX_PATCH_LEN);
+>> > 		/* prep the buffer with the original instructions */
+>> >-		memcpy(insn_buff, p->instr, p->len);
+>> >-		used =3D paravirt_patch(p->type, insn_buff, (unsigned long)p->instr=
+, p->len);
+>> >+		memcpy(insn_buff, instr, p->len);
+>> >+		used =3D paravirt_patch(p->type, insn_buff, (unsigned long)instr, p=
+->len);
+>> >=20
+>> > 		BUG_ON(used > p->len);
+>> >=20
+>> > 		/* Pad the rest with nops */
+>> > 		add_nops(insn_buff + used, p->len - used);
+>> >-		text_poke_early(p->instr, insn_buff, p->len);
+>> >+		text_poke_early(instr, insn_buff, p->len);
+>> > 	}
+>> > }
+>> > extern struct paravirt_patch_site __start_parainstructions[],
+>>=20
+>> Any reason that you couldn't use the same patching code?
+>
+>Sorry, what do you mean using the same patching code? Do you
+>mean that share some code between apply_alternatives() and
+>apply_paravirt()?
 
-Fixes: 951d1e94801f ("blk-cgroup: Flush stats at blkgs destruction path")
-Reported-by: Yi Zhang <yi.zhang@redhat.com>
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- block/blk-cgroup.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index 57941d2a8ba3..74fefc8cbcdf 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -1088,7 +1088,12 @@ static void blkcg_destroy_blkgs(struct blkcg *blkcg)
- 
- 	might_sleep();
- 
--	css_get(&blkcg->css);
-+	/*
-+	 * If css_tryget() fails, there is no blkg to destroy.
-+	 */
-+	if (!css_tryget(&blkcg->css))
-+		return;
-+
- 	spin_lock_irq(&blkcg->lock);
- 	while (!hlist_empty(&blkcg->blkg_list)) {
- 		struct blkcg_gq *blkg = hlist_entry(blkcg->blkg_list.first,
--- 
-2.31.1
-
+Yes=2E Abstract the facility rather than duplicate=2E
