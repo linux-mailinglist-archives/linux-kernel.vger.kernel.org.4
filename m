@@ -2,129 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5471C63AE4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 706DF63AE48
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232414AbiK1RB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 12:01:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
+        id S232148AbiK1RBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 12:01:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbiK1RBv (ORCPT
+        with ESMTP id S232196AbiK1RBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:01:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B18E29
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:00:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669654858;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=niIYnEoa6K6pf1uBHi1CqtcM+got95SLckIarkh2eow=;
-        b=azTa8T0s397lMOkFN/PloN+s3kGLrgHnsc2vepdLeZSahorVcz8BmQwPcAHi4NQ0S8yWbQ
-        F5/mkYTxbB7TvorRrK3Rzun6L2jHh3+LQw5BQ8CNVK7mEj/FS5bLK0uiLddf+kE1BH1w34
-        r4tJdq6JHsdXcFkU2h6dyDLhvnqy9Gg=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-240-ABe_a7S2P8y5b6lMCzSipg-1; Mon, 28 Nov 2022 12:00:57 -0500
-X-MC-Unique: ABe_a7S2P8y5b6lMCzSipg-1
-Received: by mail-wm1-f71.google.com with SMTP id b47-20020a05600c4aaf00b003d031aeb1b6so8799419wmp.9
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:00:56 -0800 (PST)
+        Mon, 28 Nov 2022 12:01:14 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080032DFB;
+        Mon, 28 Nov 2022 09:01:13 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id be13so18392551lfb.4;
+        Mon, 28 Nov 2022 09:01:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/GpRyDK/46++YKz2EFwIeDbSAjaRlIbxnLXBLKlVstM=;
+        b=b3QD0v4al1qJqnBl/vris9v0AeyQVbu1VFPxBZbgKIDBiPGb4cMW9uDvmhTiTwrfaI
+         MzKU3/U7DnUtrNfrzqLC93sda7bjb4PDp45kdGZQ7twTHb5BZndmjYl3BO1M4BafSxgW
+         RFraXOc/UuT8LhvGaxwCGzT9KLOovxKydh4RbMSOyckWTs4EuFuAwxKKFVIXnrZ8H6+e
+         OgkP45zamkKRGV/sWuGc5aitnfDLS9Uco2oLqwvIbHy85vAWxq8Uw1ZaZBtU20TTaT7R
+         I6R3p2CemGo1zAMxNL4An5P1OCPL4KvnjM24rf9u/Fvh/oFIa4ekJGDcRXDSqXNQR2Xw
+         vTMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=niIYnEoa6K6pf1uBHi1CqtcM+got95SLckIarkh2eow=;
-        b=kDfgUeKRx5Un+43y00R/kEwzO0Xw2kSNnIvyZDGGbxjR/dbkDmgU6SWpyiyerbrtdB
-         99E3FBMwLfz03yvZF4FTGY7Sg7GQtDaNvdAJg0PSTGsvVFf4PzqiuO4QFESQdwoW/j5c
-         1fwggo9I4hNR6yv+mOoTovCY1X5KfgLHVlQsmuX3QRSLrGCbTFbEt+dkyimXmuN31fGE
-         YtSjeprxm8UAtQIA4B2ReimXeA5fvRgwpIlob+BuYlRXXWDAiCNgYD0ZXZewKaTAWtMa
-         9IM8047Wy29Y4/XXYt8TWp9ck8G5z48qgUSQ94AHD5CwsDZ+BI+ISaLFrRldGeSH/T8N
-         nhgA==
-X-Gm-Message-State: ANoB5pnFzOXnlbmChqL+odRYWjf0J+BazBbv894KtcZcPsH7EhxPEJlK
-        0iY8AjSK0VLHNY9ETENLHDmMqQQPKzMaTwV7zXG+DsZ4BQO63U33lFryFNhtf2Tzb1rpEQt09Tt
-        5vjNrJBCE4jR9O+Bcnrskvj97
-X-Received: by 2002:a5d:55c9:0:b0:242:1057:40b8 with SMTP id i9-20020a5d55c9000000b00242105740b8mr6057972wrw.182.1669654851582;
-        Mon, 28 Nov 2022 09:00:51 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5P6EXV8vknZ/VB0z9CvB+AAHtH91yCE36sEEDpxvAlBEOmBeNr9B+bXhdcWZP3VqcmuW4adQ==
-X-Received: by 2002:a5d:55c9:0:b0:242:1057:40b8 with SMTP id i9-20020a5d55c9000000b00242105740b8mr6057946wrw.182.1669654851304;
-        Mon, 28 Nov 2022 09:00:51 -0800 (PST)
-Received: from ?IPV6:2003:cb:c702:9000:3d6:e434:f8b4:80cf? (p200300cbc702900003d6e434f8b480cf.dip0.t-ipconnect.de. [2003:cb:c702:9000:3d6:e434:f8b4:80cf])
-        by smtp.gmail.com with ESMTPSA id az26-20020a05600c601a00b003d01b84e9b2sm15850167wmb.27.2022.11.28.09.00.49
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/GpRyDK/46++YKz2EFwIeDbSAjaRlIbxnLXBLKlVstM=;
+        b=N8KPeTymRsuEdRCP2DJQLwp0LtKhL8M/76o0LfsdKbAC2UEirzfHW6/cuDvFrQ9tti
+         sZteGsG83FQI+MoMM7W/O4HdWiYrSOytzrnuHX5yIcarAaUpYvFYcAJxy4aJwVP2bME9
+         hgG7wPXtm5sQ9MB+v8l+sfpKzD2mVdIIC4nqUy0HiuUNlG78+TrIWpDO0vpmeYwPMO5w
+         vf7guR6gLof/5KWHwQlcLMeX26/8pYrdOppnpsQ3q/CjSS94A5+CiSwZB4G39Q++xwm2
+         Ice4ETEswaEZqkSKYWkLiDoHy28bcAwkJr4Z/eo19msusV/W+GZTOpKK6SURUleYdGr4
+         igoA==
+X-Gm-Message-State: ANoB5plEoCHWedcohyxSr0SRhbN85l32mthT1vACWubbbow9Nmo8WjUD
+        2fFvtaRDCEY+9BXVAgDSU0P82AKczpffDw==
+X-Google-Smtp-Source: AA0mqf7GjM56yI7ibfyIeX/9Yjd43Ezpc7UZ0t1luF9D869H/74eJ853fXC+TpaBY7Aij7yDCKDIAA==
+X-Received: by 2002:a05:6512:3e2a:b0:4ab:534b:1b2c with SMTP id i42-20020a0565123e2a00b004ab534b1b2cmr12791293lfv.426.1669654871020;
+        Mon, 28 Nov 2022 09:01:11 -0800 (PST)
+Received: from [192.168.0.251] (dsl-hkibng42-56733b-36.dhcp.inet.fi. [86.115.59.36])
+        by smtp.gmail.com with ESMTPSA id j12-20020a056512028c00b004b40c1f1c70sm1801315lfp.212.2022.11.28.09.01.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 09:00:50 -0800 (PST)
-Message-ID: <9ae67ddb-d2b0-57bb-a181-d35a7af51c67@redhat.com>
-Date:   Mon, 28 Nov 2022 18:00:49 +0100
+        Mon, 28 Nov 2022 09:01:10 -0800 (PST)
+Message-ID: <90d231c6-1f16-74ea-ddf7-5e09a51a93ea@gmail.com>
+Date:   Mon, 28 Nov 2022 19:01:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v3 2/3] mm/khugepaged: Fix GUP-fast interaction by sending
- IPI
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] ARM: dts: qcom: apq8026-samsung-matisse-wifi: Enable ADSP
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221125223400.94515-1-matti.lehtimaki@gmail.com>
+ <a64d31a5-5e55-35b9-57e3-bb4214fe3e28@linaro.org>
 Content-Language: en-US
-To:     Jann Horn <jannh@google.com>
-Cc:     security@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>, Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20221125213714.4115729-1-jannh@google.com>
- <20221125213714.4115729-2-jannh@google.com>
- <ea2a2311-0a7e-cc81-0b82-5de45acba8f5@redhat.com>
- <CAG48ez02g3ind9p9op-t_k3eruANE4idhjT044rK5+qK8_-EFA@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <CAG48ez02g3ind9p9op-t_k3eruANE4idhjT044rK5+qK8_-EFA@mail.gmail.com>
+From:   =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>
+In-Reply-To: <a64d31a5-5e55-35b9-57e3-bb4214fe3e28@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.11.22 17:58, Jann Horn wrote:
-> On Mon, Nov 28, 2022 at 2:46 PM David Hildenbrand <david@redhat.com> wrote:
->> On 25.11.22 22:37, Jann Horn wrote:
->>> Since commit 70cbc3cc78a99 ("mm: gup: fix the fast GUP race against THP
->>> collapse"), the lockless_pages_from_mm() fastpath rechecks the pmd_t to
->>> ensure that the page table was not removed by khugepaged in between.
->>>
->>> However, lockless_pages_from_mm() still requires that the page table is not
->>> concurrently freed.
->>
->> That's an interesting point. For anon THPs, the page table won't get
->> immediately freed, but instead will be deposited in the "pgtable list"
->> stored alongside the THP.
->>
->>   From there, it might get withdrawn (pgtable_trans_huge_withdraw()) and
->>
->> a) Reused as a page table when splitting the THP. That should be fine,
->> no garbage in it, simply a page table again.
+On 28.11.2022 16.41, Konrad Dybcio wrote:
 > 
-> Depends on the definition of "fine" - it will be a page table again,
-> but deposited page tables are not associated with a specific address,
-> so it might be reused at a different address. If GUP-fast on address A
-> races with a page table from address A being deposited and reused at
-> address B, and then GUP-fast returns something from address B, that's
-> not exactly great either.
+> On 25.11.2022 23:34, Matti Lehtimäki wrote:
+>> diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+>> index 1c52337af560..859e91c16c61 100644
+>> --- a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+>> +++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+>> @@ -133,7 +133,8 @@ wcnss@d200000 {
+>>   			no-map;
+>>   		};
+>>   
+>> -		adsp@d900000 {
+>> +		/delete-node/ adsp@dc00000;
+> Please delete nodes by referencing the label like so:
+> 
+> /delete-node/ &adsp_region;
 
-The "PMD changed" check should catch that. We only care about not 
-dereferencing something that's garbage and not a page/folio if I 
-remember the previous discussions on that correctly.
+When I created the devicetree I was asked to do the opposite for the
+smem_region [1] which I had originally deleted using the label near top 
+of the
+file but then moved next to the relevant node, where I cannot use label
+when deleting it. Should the smem_region also be moved to the top of the
+file if I move this delete-node there so the file would be consistent?
 
-Anyhow, feel free to add my
-
-Acked-by: David Hildenbrand <david@redhat.com>
-
+[1] 
+https://lore.kernel.org/linux-arm-msm/CAA8EJpqUH_v1GXEYF62Z3DBtFu_305_h4D36aCnBr38bo5HoJw@mail.gmail.com/
 -- 
-Thanks,
-
-David / dhildenb
-
+Matti
