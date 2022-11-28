@@ -2,111 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2849D63A32C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC1963A332
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbiK1IfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 03:35:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
+        id S230060AbiK1Igq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 03:36:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbiK1Ie6 (ORCPT
+        with ESMTP id S229670AbiK1Igo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 03:34:58 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA0A62FC
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:34:55 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id p8so16185508lfu.11
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:34:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bkk5qJOE/VryR0ieeP2IB27nwP5PcGUzPajxP73VPy4=;
-        b=RyNUCF7DIdcBaeiOO+4l1RdqwPSkuTV/DKV2RCcU2ByM4W+Jlk+lCSxHwz3u3Yx97p
-         QE9AgoC9w9yXM/dcSpHjbD5h99jxKKOqMsCt70v20BlvrJ+OT0OuhZQspO2g/CuqmG8f
-         Gt63wSMiSKPpGn+JUnHPzqpy6qRiOKbwNvz5xwWCjhQVrK7AT4phhuiy+4xr5FzdrL4g
-         jMK0fqJH3E+DJIPeYtsU5oXFhFJDwPvcNLeGl9n0MgvK9RHpG81CUS/sa2XPEnxpcqyM
-         nzEqzZKg12KGHhHz30ZyiezkcyQezGqNMubHqOrPI6F6bPlaKqkicTLQ/Aq7M1aGkgdL
-         tBLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bkk5qJOE/VryR0ieeP2IB27nwP5PcGUzPajxP73VPy4=;
-        b=z7cVp7wZZxYknqL6Mlh+JTXgxgpEX1KlY+N4lJnXQOaGszzL+W49NtucDu7EsvAByr
-         aWJZROXoxIRqpaDJoMXqDpbA4jEXcibqqGZCjqLpWWqAZQFkYOEyu4U1xlH0nVRcaPuL
-         kA2kESr7zjOJH05MU8oO1zvLPTluV7/M+QAvsHjqvmvKGmyUlHoUVeNq0L6WWQCJJJzv
-         8WteYpfxhRIs+bnqoXlKPwmmIzndD7bmVCrYi74yCOXJiRZIY449jw3sxd7324elIsdT
-         IuYCQz5h2pdv7p87b2gvqyZ+TrcfYNqvXqIr2q9GFBC1Vqb95l3wrl8qbXnSyHTk4pRZ
-         7sxQ==
-X-Gm-Message-State: ANoB5plPwF7o+J1eKMyUmLgS9pd/8f+WI4PRSdKRyxAQ8DmIIjxPjvIq
-        gP+2OA/YicfUE09gSAZKVms+VA==
-X-Google-Smtp-Source: AA0mqf5aVBlZGW/MVwnVh0IXkD7kUGTSF7mWoGHUIYNw0Z6CKWdYuycbqyE//gvbfon36dwMH98lxQ==
-X-Received: by 2002:ac2:5ddb:0:b0:4a2:500d:f031 with SMTP id x27-20020ac25ddb000000b004a2500df031mr10606791lfq.266.1669624493519;
-        Mon, 28 Nov 2022 00:34:53 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a3-20020a2eb543000000b002770f0a742bsm1159037ljn.41.2022.11.28.00.34.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 00:34:53 -0800 (PST)
-Message-ID: <f6bb5759-453b-fa05-c6e1-f1d57abeaffa@linaro.org>
-Date:   Mon, 28 Nov 2022 09:34:52 +0100
+        Mon, 28 Nov 2022 03:36:44 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185796257
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:36:42 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AS6aSXD005159;
+        Mon, 28 Nov 2022 08:36:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=BlyfctjrhD2WjrvyRQMuxTcpb5Ak/tstUQ1VYEeBsUI=;
+ b=McNpOTcUIs/413GVUQI6h+pjzHHVX8G+HPfZUCAiVC/jzyzHVIi9FNT+a+Pc5TJ+5C+A
+ t3wlKYIl/VE+LF0+W2lxKSYYzu0X35GiCnf0EhbiLM9W+Dtk19Gt64Yv3cP6O1JfmITq
+ B73KgMgKeD/vpvbefv1G6XTVYJXnvjYCoj+WldLG6iSMR42SAyu76xxgJVOOzo01FOxv
+ 6p2j7zVem3c4A0ed9zoJQKS3REbe/AfPsEku/V52MjAZIkpQnwgFf9pUscBoRbJczohO
+ hGd//kEgow5yC7/96+BZUwjTau+mRoDDrhROhxlFzPb6AlNYuLDzl+dRhDaKJ7oCxaxz Eg== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m3adt2mx1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Nov 2022 08:36:36 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2AS82haq022363;
+        Mon, 28 Nov 2022 08:36:36 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3m3c1swbup-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Nov 2022 08:36:36 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AS8Y33l040816;
+        Mon, 28 Nov 2022 08:36:35 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3m3c1swbtt-1;
+        Mon, 28 Nov 2022 08:36:35 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@oracle.com, error27@gmail.com,
+        harshit.m.mogalapalli@gmail.com,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        Parav Pandit <parav@nvidia.com>, Eli Cohen <elic@nvidia.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] vduse: Validate vq_num in vduse_validate_config()
+Date:   Mon, 28 Nov 2022 00:36:26 -0800
+Message-Id: <20221128083627.1199512-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: Document oneplus,bacon device
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221127181835.806410-1-luca@z3ntu.xyz>
- <CAA8EJpoe09FZcfVXuknmFWO5qg-iYDOBVN3=qr=DeJjvHw56Mw@mail.gmail.com>
- <f0a15b01-81b6-5c73-6c35-ce3a8c71b4ad@linaro.org>
- <CAA8EJppEXpv-wVAAXhZ6NiPzDGzP+evnKrT=an5esOx610D+dw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAA8EJppEXpv-wVAAXhZ6NiPzDGzP+evnKrT=an5esOx610D+dw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-28_07,2022-11-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 suspectscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211280066
+X-Proofpoint-ORIG-GUID: zvnDFjPhaAWWyzLgPXFYjnWjiTSpB54y
+X-Proofpoint-GUID: zvnDFjPhaAWWyzLgPXFYjnWjiTSpB54y
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/11/2022 22:43, Dmitry Baryshkov wrote:
-> On Sun, 27 Nov 2022 at 23:30, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 27/11/2022 22:25, Dmitry Baryshkov wrote:
->>> On Sun, 27 Nov 2022 at 20:19, Luca Weiss <luca@z3ntu.xyz> wrote:
->>>>
->>>> Document the OnePlus One ("bacon") which is a smartphone based on the
->>>> Snapdragon 801 SoC.
->>>>
->>>> Also allow msm8974 devices to use qcom,msm-id and qcom,board-id.
->>>
->>> The patch itself is good. However it raised a broader question for me.
->>> Up to now all msm8974pro devices use qcom,msm8974 as a top-level
->>> compatibility string. Should it be changed to use pro-specific one
->>> (e.g. qcom,msm8974pro)?
->>
->> Yes, makes sense.
-> 
-> Would you make the patch?
+Add a limit to 'config->vq_num' which is user controlled data which
+comes from an vduse_ioctl to prevent large memory allocations.
 
-I do not plan to. I don't know which ones are Pro which aren't.
+This is found using static analysis with smatch.
 
-Best regards,
-Krzysztof
+Suggested-by: Michael S. Tsirkin <mst@redhat.com>
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+v1->v2: Change title of the commit and description, add a limit to
+	vq_num.
+
+Note: I think here 0xffff is the max size of vring =  no: of vqueues.
+Only compile and boot tested.
+---
+ drivers/vdpa/vdpa_user/vduse_dev.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+index 35dceee3ed56..31017ebc4d7c 100644
+--- a/drivers/vdpa/vdpa_user/vduse_dev.c
++++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+@@ -1440,6 +1440,9 @@ static bool vduse_validate_config(struct vduse_dev_config *config)
+ 	if (config->config_size > PAGE_SIZE)
+ 		return false;
+ 
++	if (config->vq_num > 0xffff)
++		return false;
++
+ 	if (!device_is_allowed(config->device_id))
+ 		return false;
+ 
+-- 
+2.38.1
 
