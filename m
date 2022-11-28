@@ -2,151 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC7B63A662
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0153163A667
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbiK1KvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 05:51:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46428 "EHLO
+        id S230106AbiK1Kw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 05:52:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbiK1KvD (ORCPT
+        with ESMTP id S229603AbiK1Kw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 05:51:03 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BF165C5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:50:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:To:From:Date:Reply-To:Cc:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=rkH4EDzFj5GJH/oZZwg9Xi75afujMR0gQt8dEe9YYLI=; b=StGmS
-        K0ahOhPDsedu2XVpS4qA7mxW25pQt+Bj/H+sLEbWNdphHaKe28AHetDF8ZJ1iKnLFbRCGhbunG/1P
-        nEtII5K2CEyCD4mlLcjO9W0KbwjDg5rHmwQ52KHUGN9tc1N/6fngh/sm44wzWBQpj+R5IPjLTFS3W
-        tmri3aBeI+dUvg7ziKOE5MCMXSigSWLPFt/5l3716ZnbyWq5L+hHAU0gVhfkP7luhv3P3OJhST/Xb
-        TkpK4km2FmmcrE45m6LYSLlKKgYHm1rgehEZS+FQltP0zHJyxnPCk6mjrFeEdD8tLNzGqmuUePnMO
-        9XrKFSURFeau9RZOKs2/pkXc080ow==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <john@metanate.com>)
-        id 1ozbiv-0004Ry-79;
-        Mon, 28 Nov 2022 10:50:53 +0000
-Date:   Mon, 28 Nov 2022 10:50:52 +0000
-From:   John Keeping <john@metanate.com>
-To:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.com>
-Subject: Re: [PATCH] ALSA: pcm: fix tracing reason in hw_ptr_error
-Message-ID: <Y4SSjO8gnIz22vt3@donbot>
-References: <20221125162327.297440-1-john@metanate.com>
- <Y4GNWYcQBUKn3KSa@workstation>
+        Mon, 28 Nov 2022 05:52:26 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 544C1BF9;
+        Mon, 28 Nov 2022 02:52:26 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE694D6E;
+        Mon, 28 Nov 2022 02:52:32 -0800 (PST)
+Received: from e126387.arm.com (unknown [10.57.87.52])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 400DE3F73B;
+        Mon, 28 Nov 2022 02:52:25 -0800 (PST)
+From:   carsten.haitzler@foss.arm.com
+To:     michal.simek@xilinx.com, shubhrajyoti.datta@xilinx.com,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] i2c: cadence: Fix regression with bus recovery
+Date:   Mon, 28 Nov 2022 10:51:58 +0000
+Message-Id: <20221128105158.1536551-1-carsten.haitzler@foss.arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4GNWYcQBUKn3KSa@workstation>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 26, 2022 at 12:51:53PM +0900, Takashi Sakamoto wrote:
-> Hi,
-> 
-> On Fri, Nov 25, 2022 at 04:23:26PM +0000, John Keeping wrote:
-> > Strings need to be specially marked in trace events to ensure the
-> > content is captured, othewise the trace just shows the value of the
-> > pointer.
-> > 
-> > Signed-off-by: John Keeping <john@metanate.com>
-> > ---
-> >  sound/core/pcm_trace.h | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
->  
-> Thanks for the patch, while I have a slight concern about the intension
-> of change.
-> 
-> Let's see message in below commit to add 'trace_safe_str()' in
-> 'kernel/trace/trace.c':
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9a6944fee68
-> 
-> "The proper way to handle displaying any string that is not guaranteed to be
-> in the kernel core rodata section, is to copy it into the ring buffer via
-> the __string(), __assign_str() and __get_str() helper macros."
-> 
-> Additionally, the macros looks to be alias to __dynamic_array() or so.
-> 
-> In our case, the pointer of 'why' argument should points to two
-> hardcoded strings; "hw_ptr skipping" and "Unexpected hw_ptr". As long as
-> I know, they are put into any of .rodata section.
-> 
-> ```
-> $ objdump -s sound/core/snd-pcm.ko -j .rodata.str1.1
-> ```
->  0830 74757265 20436861 6e6e656c 204d6170  ture Channel Map
->  0840 00585255 4e3a2025 730a0055 6e657870  .XRUN: %s..Unexp
->  0850 65637465 64206877 5f707472 0068775f  ected hw_ptr.hw_
->  0860 70747220 736b6970 70696e67 004c6f73  ptr skipping.Los
->  0870 7420696e 74657272 75707473 3f00756e  t interrupts?.un
-> ```
-> 
-> I think current implementation is enough safe.
+From: Carsten Haitzler <carsten.haitzler@arm.com>
 
-Thanks for this analysis - I hadn't looked into the history of this.
+Commit "i2c: cadence: Add standard bus recovery support" breaks for i2c
+devices that have no pinctrl defined. There is no requirement for this
+to exist in the DT. This has worked perfectly well without this before in
+at least 1 real usage case on hardware (Mali Komeda DPU, Cadence i2c to
+talk to a tda99xx phy). Adding the requirement to have pinctrl set up in
+the device tree (or otherwise be found) is a regression where the whole
+i2c device is lost entirely (in this case dropping entire devices which
+then leads to the drm display stack unable to find the phy for display
+output, thus having no drm display device and so on down the chain).
 
-It seems that trace-cmd's record/report functionality does not support
-rodata strings in this way though.  Without this patch, the trace log is
-not very informative:
+This converts the above commit to an enhancement if pinctrl can be found
+for the i2c device, providing a timeout on read with recovery, but if not,
+do what used to be done rather than a fatal loss of a device.
 
-	$ trace-cmd record -e snd_pcm:hw_ptr_error
-	^C
-	$ trace-cmd report
-	 irq/49-ehci_hcd-111   [002]    65.785147: hw_ptr_error:         pcmC1D0p/sub0: ERROR: c0b1b3c7
+This restores the mentioned display devices to their working state again.
 
-With this patch applied this becomes:
+Fixes: 58b924241d0a ("i2c: cadence: Add standard bus recovery support")
+Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+---
+Note: This issue was discovered during the porting of the linux kernel
+on Morello [1].
 
-	 irq/49-ehci_hcd-111   [002]   435.758754: hw_ptr_error:         pcmC2D0p/sub0: ERROR: Lost interrupts?
+[1] https://git.morello-project.org/morello/kernel/linux
+---
+ drivers/i2c/busses/i2c-cadence.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-> Nevertheless, explicit usage of the macros are developer friendly in my
-> opinion since string buffer in C language tends to bring problems and
-> the usage of macro would reduce careless future mistakes. In the case,
-> when probing the event, the string is copied to memory for event
-> structure, thus it adds slight overhead than current implementation. I
-> leave the decision to maintainer.
-> 
-> To maintainer, if you apply the patch to your tree, feel free to add my
-> review tag.
-> 
-> Reviewed-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-> 
-> > diff --git a/sound/core/pcm_trace.h b/sound/core/pcm_trace.h
-> > index f18da2050772..350b40b906ca 100644
-> > --- a/sound/core/pcm_trace.h
-> > +++ b/sound/core/pcm_trace.h
-> > @@ -88,19 +88,19 @@ TRACE_EVENT(hw_ptr_error,
-> >  		__field( unsigned int, device )
-> >  		__field( unsigned int, number )
-> >  		__field( unsigned int, stream )
-> > -		__field( const char *, reason )
-> > +		__string( reason, why )
-> >  	),
-> >  	TP_fast_assign(
-> >  		__entry->card = (substream)->pcm->card->number;
-> >  		__entry->device = (substream)->pcm->device;
-> >  		__entry->number = (substream)->number;
-> >  		__entry->stream = (substream)->stream;
-> > -		__entry->reason = (why);
-> > +		__assign_str(reason, why);
-> >  	),
-> >  	TP_printk("pcmC%dD%d%s/sub%d: ERROR: %s",
-> >  		  __entry->card, __entry->device,
-> >  		  __entry->stream == SNDRV_PCM_STREAM_PLAYBACK ? "p" : "c",
-> > -		  __entry->number, __entry->reason)
-> > +		  __entry->number, __get_str(reason))
-> >  );
-> >  
-> >  TRACE_EVENT(applptr,
-> > -- 
-> > 2.38.1
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+index fe0cd205502d..09acd2d399d5 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -852,7 +852,8 @@ static int cdns_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+ 					 CDNS_I2C_POLL_US, CDNS_I2C_TIMEOUT_US);
+ 	if (ret) {
+ 		ret = -EAGAIN;
+-		i2c_recover_bus(adap);
++		if (id->adap.bus_recovery_info)
++			i2c_recover_bus(adap);
+ 		goto out;
+ 	}
+ 
+@@ -1263,9 +1264,13 @@ static int cdns_i2c_probe(struct platform_device *pdev)
+ 
+ 	id->rinfo.pinctrl = devm_pinctrl_get(&pdev->dev);
+ 	if (IS_ERR(id->rinfo.pinctrl)) {
++		int err = PTR_ERR(id->rinfo.pinctrl);
++
+ 		dev_info(&pdev->dev, "can't get pinctrl, bus recovery not supported\n");
+-		return PTR_ERR(id->rinfo.pinctrl);
+-	}
++		if (err != -ENODEV)
++			return err;
++	} else
++		id->adap.bus_recovery_info = &id->rinfo;
+ 
+ 	id->membase = devm_platform_get_and_ioremap_resource(pdev, 0, &r_mem);
+ 	if (IS_ERR(id->membase))
+@@ -1283,7 +1288,6 @@ static int cdns_i2c_probe(struct platform_device *pdev)
+ 	id->adap.retries = 3;		/* Default retry value. */
+ 	id->adap.algo_data = id;
+ 	id->adap.dev.parent = &pdev->dev;
+-	id->adap.bus_recovery_info = &id->rinfo;
+ 	init_completion(&id->xfer_done);
+ 	snprintf(id->adap.name, sizeof(id->adap.name),
+ 		 "Cadence I2C at %08lx", (unsigned long)r_mem->start);
+-- 
+2.32.0
+
