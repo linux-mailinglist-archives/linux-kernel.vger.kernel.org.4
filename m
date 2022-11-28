@@ -2,92 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583B463A13F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 07:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4785963A145
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 07:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiK1GcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 01:32:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
+        id S229866AbiK1Gdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 01:33:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiK1GcW (ORCPT
+        with ESMTP id S229621AbiK1Gdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 01:32:22 -0500
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DBA8512D35;
-        Sun, 27 Nov 2022 22:32:20 -0800 (PST)
-Received: from ubuntu.localdomain (unknown [10.162.98.155])
-        by mail-app4 (Coremail) with SMTP id cS_KCgDHPk7oVYRjHpqaCA--.63765S2;
-        Mon, 28 Nov 2022 14:32:15 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-kernel@vger.kernel.org
-Cc:     chunfeng.yun@mediatek.com, gregkh@linuxfoundation.org,
-        matthias.bgg@gmail.com, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH] usb: mtu3: fix sleep-in-atomic-context bug caused by usleep_range()
-Date:   Mon, 28 Nov 2022 14:32:07 +0800
-Message-Id: <20221128063207.100596-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cS_KCgDHPk7oVYRjHpqaCA--.63765S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1ftF4rWF48KrW3JF43Wrg_yoW8Jw1rpa
-        1UArW8Ar4jgrZIyFsrAF1vgw45CanrXay8KFW2q3yDuas5twn09F1kAFWYkF4UXF18Ar4Y
-        gF1UGw1Fka1DuFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r10
-        6r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
-        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUZa9-UUUUU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgYIAVZdtcnh2gAasb
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Nov 2022 01:33:51 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39A0D9C;
+        Sun, 27 Nov 2022 22:33:46 -0800 (PST)
+X-UUID: 4d4f0d7031b345cdb3ff584ad6f7c779-20221128
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=HM64ebxS9Wnl5rRIqdr1LwL24gtRhtaAIdzbnz80UU4=;
+        b=qlyAYi6ulJ1sDNrjNMNzFW1/Gu4DQUOmxMqSPWaVXJGbBrhzaCcP5hjulZ5Kgzc6tbdh97zJ8rxCpa13s5e3wfD/2cOFfdRRNJ3gHNpUISArlG0DDaENFMTMXQy9XUOoS5cae5z8+Bd1h/m2P4riZoco5ydRlOjhsyOefPdwfa0=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:7fe00400-56d4-42d5-8f8a-edb1f9635844,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:90
+X-CID-INFO: VERSION:1.1.14,REQID:7fe00400-56d4-42d5-8f8a-edb1f9635844,IP:0,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:90
+X-CID-META: VersionHash:dcaaed0,CLOUDID:8d1aff2f-2938-482e-aafd-98d66723b8a9,B
+        ulkID:221128143343XPGACWI0,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 4d4f0d7031b345cdb3ff584ad6f7c779-20221128
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 176659154; Mon, 28 Nov 2022 14:33:40 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 28 Nov 2022 14:33:39 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 28 Nov 2022 14:33:38 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>, <stable@vger.kernel.org>
+Subject: [PATCH] usb: xhci-mtk: fix leakage of shared hcd when fail to set wakeup irq
+Date:   Mon, 28 Nov 2022 14:33:37 +0800
+Message-ID: <20221128063337.18124-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function zero_autoresume() is a timer handler that runs in
-atomic context. It is used to wake up the host connected to the
-gadget. when used by usb mtu3, the zero_autoresume() calls
-usleep_range() that can sleep. As a result, the sleep-in-atomic-
-context bug will happen. The process is shown below.
+Can not set the @shared_hcd to NULL before decrease the usage count
+by usb_put_hcd(), this will cause the shared hcd not released.
 
-    (atomic context)
-zero_autoresume()
-  usb_gadget_wakeup()
-    mtu3_gadget_wakeup()
-      usleep_range() //sleep
-
-This patch changes usleep_range(10000, 11000) to mdelay(10)
-in order to mitigate the bug.
-
-Fixes: df2069acb005 ("usb: Add MediaTek USB3 DRD driver")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Fixes: 04284eb74e0c ("usb: xhci-mtk: add support runtime PM")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
- drivers/usb/mtu3/mtu3_gadget.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/host/xhci-mtk.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/usb/mtu3/mtu3_gadget.c b/drivers/usb/mtu3/mtu3_gadget.c
-index 80236e7b089..e366c4a97d7 100644
---- a/drivers/usb/mtu3/mtu3_gadget.c
-+++ b/drivers/usb/mtu3/mtu3_gadget.c
-@@ -468,7 +468,7 @@ static int mtu3_gadget_wakeup(struct usb_gadget *gadget)
- 	} else {
- 		mtu3_setbits(mtu->mac_base, U3D_POWER_MANAGEMENT, RESUME);
- 		spin_unlock_irqrestore(&mtu->lock, flags);
--		usleep_range(10000, 11000);
-+		mdelay(10);
- 		spin_lock_irqsave(&mtu->lock, flags);
- 		mtu3_clrbits(mtu->mac_base, U3D_POWER_MANAGEMENT, RESUME);
- 	}
+diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+index cff3c4aea036..f7cbb08fc506 100644
+--- a/drivers/usb/host/xhci-mtk.c
++++ b/drivers/usb/host/xhci-mtk.c
+@@ -646,7 +646,6 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+ 
+ dealloc_usb3_hcd:
+ 	usb_remove_hcd(xhci->shared_hcd);
+-	xhci->shared_hcd = NULL;
+ 
+ put_usb3_hcd:
+ 	usb_put_hcd(xhci->shared_hcd);
 -- 
-2.17.1
+2.18.0
 
