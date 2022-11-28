@@ -2,208 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA60639E9B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDA0639E9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiK1BJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 20:09:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
+        id S229640AbiK1BKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 20:10:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiK1BJs (ORCPT
+        with ESMTP id S229526AbiK1BKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 20:09:48 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD449DE8E
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 17:09:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669597787; x=1701133787;
-  h=from:to:cc:subject:references:date:message-id:
-   mime-version:content-transfer-encoding;
-  bh=uuTaaO7JryQZC0tYOmM4PTcCbaR1Dwdh/nRHJOJusiw=;
-  b=Ed9RzN/S1CUNVNMIjJ4NmbbD/r9Jn+XOmLMZSkGSR1LMXVVVc1YQDuZC
-   GsY5adQ5zmDCqCuwtdwffGGGK9vfWKgha1ZXidx1NZlEpEvLxdZfMqL49
-   nVtqeCVR3irOh5zUkmU+S586PWvcpYdbxBMlp4e3GsiRo6cd4L1ky5+G3
-   EFFNLYNDyOrKK2MVZiGbR5LRFe+tDaGbXr+vsuXMzkW2JtueZTYYl24dl
-   kuENzO/b6REkNXlQDV4bpxW0KlhwGnyXveQH6aw4HkvqNNcexhY1EEOjp
-   7C4zJEeP/qrzO6llxGNVuzpG67YzY3rzI16l+EqvrUd63PZ/Pq1/bQA/f
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="316550551"
-X-IronPort-AV: E=Sophos;i="5.96,199,1665471600"; 
-   d="scan'208";a="316550551"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2022 17:09:47 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="731954173"
-X-IronPort-AV: E=Sophos;i="5.96,199,1665471600"; 
-   d="scan'208";a="731954173"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2022 17:09:13 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     xialonglong <xialonglong1@huawei.com>
-Cc:     <linux-kernel@vger.kernel.org>, <hannes@cmpxchg.org>,
-        <linux-mm@kvack.org>, <mhocko@kernel.org>,
-        <roman.gushchin@linux.dev>, <shakeelb@google.com>,
-        "Wangkefeng (OS Kernel Lab)" <wangkefeng.wang@huawei.com>,
-        chenwandun <chenwandun@huawei.com>, <songmuchun@bytedance.com>
-Subject: Re: =?utf-8?B?44CQQlVH44CRTlVMTA==?= pointer dereference at
- __lookup_swap_cgroup
-References: <25f28e73-5fc6-6e7f-3d41-a5970537fb8b@huawei.com>
-Date:   Mon, 28 Nov 2022 09:08:20 +0800
-Message-ID: <87fse3homz.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Sun, 27 Nov 2022 20:10:33 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6FCDE8E
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 17:10:31 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id s12so13490980edd.5
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 17:10:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4rtPx/wHRBmLXkavVYA1NDTQhY5kq6GDYlUhH/xUxZE=;
+        b=UzR8DcMQoFb5PzukzVAW8QM40EE80GdkFkg90endjIMDfCTyc7qzl5ISMWKRw/kQHN
+         GC+JvePNfeK7QWSwGMHD3kh0n4L8NbR8nXSnf3eTJtW1igI1nf7GamgA1V1hzEQ+b487
+         gQ/jzHz5pbKl1vhMF5FEZdSfdMfjgDKV3DrEs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4rtPx/wHRBmLXkavVYA1NDTQhY5kq6GDYlUhH/xUxZE=;
+        b=nxNbMfxDfAQ9Um6pieggz4YXWNP0Su6VM2rrwgoGceG0N6y9V8NwJ5WDLrHd1xG42Q
+         GinrxaxMMhdojmbpWaa/hLWdg1f49Buw4crGT29bWZw0VqhsK3CkScSfdrPDONLogUvD
+         oyw0dWJU1gzDVZJiDUM4dX436Ws2myYiBkQKm7vicIWDDbG9k6qsoiNg6KFV8Ugr844L
+         jHn3kG3OfBjfznHiSzxO3N4xrN93C3VX5N3tKpINRCHkMEdvhDJwoooxcFoGspaAecsp
+         5GNM5+5/PVyciA0rPivmPSAcvueblWyYSXsa9/U0ugxCdPIVi9vglUmMmFuupqOteoAF
+         f8Pg==
+X-Gm-Message-State: ANoB5pmEXNRwf6Qt2U2qNfh2FB1cKxXjpylmvNPWbE4RkxpBwatsHzWK
+        Z0UplO3LABDPYEw03znFBRii3w==
+X-Google-Smtp-Source: AA0mqf7vS5N9OhHs7DIepOllox7bl/JKHWyYuEoPKq1KHkrQhkmTIaI5jvdwYa7cTtunenn67/QVGw==
+X-Received: by 2002:a05:6402:541a:b0:463:be84:5283 with SMTP id ev26-20020a056402541a00b00463be845283mr4173024edb.7.1669597830462;
+        Sun, 27 Nov 2022 17:10:30 -0800 (PST)
+Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id r9-20020a50aac9000000b00461c6e8453dsm4618920edc.23.2022.11.27.17.10.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Nov 2022 17:10:30 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Mon, 28 Nov 2022 02:10:22 +0100
+Subject: [PATCH v2] ALSA: core: Fix deadlock when shutdown a frozen userspace
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221127-snd-freeze-v2-0-d8a425ea9663@chromium.org>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        alsa-devel@alsa-project.org, Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2836; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=bThzG3aRgB/sOrGMJQB5LC1dlBBXr23rW/xD9I0gXNQ=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjhAqAgz6GX+nVta5dYboWjnLx1ooIVZ4GxuPVK4GE
+ sUiAjxqJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4QKgAAKCRDRN9E+zzrEiKSnD/
+ 9AIHnQ5OfDU4aPlfzZKbTEIv1bKBvOi4LYh4P5qKmBroX6tBRqNdNmBWPOEzfKTzvOynP98c95o5kF
+ 0KNIFK4lLja8CWhPvaSxrtY2DA3kRSoQ4utnYTZ0mumkpDQnIY9FWiyCbgjFi5csOq66gKfNR8gnWl
+ qYm68hnhTUc5L4ZlLwYO4U/yR05NY68CMaQWqTztlwBiizmP/5hhKpz0+Z1aFOVd0iW2QAGAMH56u6
+ IAZx9UrWJIOpqsL2QphwPABwkTHP7GiFezPWEDZCbojXnD0Plhnupm52KPN5JTTBEWuLFewyIvkMl3
+ NMdFI+5kBgmuTPRsuw9/0Oq4rJHTvKcCD/tPr0ZDGiM9HXzyq2rKgjaYYkNu/qLqHpPoSbQJf+wVlm
+ liRLhc+6ajmFpjwE4hHmPtC2r36HMbY93awNIgDanHxOS+W1wImoQtnydqZOVVQdy1bs17lnTGsz5v
+ XcoA/HkMl/vjHeX1+6eJrig+0YsuF1o1IELyRa7xLGxIYmuN6CNvafbRoCNUVysps02u7QZrbbSmQE
+ gBZMcCM8mGpOuo2AQknJXQACmh+/jBU+IUjuWpUbOjlhzPdMQrfHhl83IloPSd+ToqlemWd01WnBfc
+ jE8lWgP4Ut6Atz0aHs7iLHV0ypJUoGyCvuag1WgoPgUNH6YNBZpz+fKffrsQ==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+If the user space is frozen, we cannot wait for it to complete.
 
-xialonglong <xialonglong1@huawei.com> writes:
+This fixes:
 
-> A panic occur in the linux 5.10we meet it only onceit seems that
-> there is no special changes between 5.10 and upsteam about swap_cgroup.
->
-> The test is based on QEMU with 64GB memory, one 2GB zram device as
-> swap area.
-> The test steps:
-> 1.swapoff -a
-> 2.add some memory pressure by stress-ng
-> 3.while (2 minutes) {
->  swapoff /dev/zram0
->  swapon /dev/zram0
->  sleep 3
-> }
-> 4. swapon -a
->
-> Preliminary analysis showed that the swap entry point to a swap area
-> which have already been swapoff, and no other obvious clues, still
-> trying to reproduce it.
+[   84.943749] Freezing user space processes ... (elapsed 0.111 seconds) done.
+[  246.784446] INFO: task kexec-lite:5123 blocked for more than 122 seconds.
+[  246.819035] Call Trace:
+[  246.821782]  <TASK>
+[  246.824186]  __schedule+0x5f9/0x1263
+[  246.828231]  schedule+0x87/0xc5
+[  246.831779]  snd_card_disconnect_sync+0xb5/0x127
+...
+[  246.889249]  snd_sof_device_shutdown+0xb4/0x150
+[  246.899317]  pci_device_shutdown+0x37/0x61
+[  246.903990]  device_shutdown+0x14c/0x1d6
+[  246.908391]  kernel_kexec+0x45/0xb9
 
-We have a patch as follows to fix a similar issue,
+And
 
-2799e77529c2a25492a4395db93996e3dacd762d
-Author:     Miaohe Lin <linmiaohe@huawei.com>
-AuthorDate: Mon Jun 28 19:36:50 2021 -0700
-Commit:     Linus Torvalds <torvalds@linux-foundation.org>
-CommitDate: Tue Jun 29 10:53:49 2021 -0700
+[  246.893222] INFO: task kexec-lite:4891 blocked for more than 122 seconds.
+[  246.927709] Call Trace:
+[  246.930461]  <TASK>
+[  246.932819]  __schedule+0x5f9/0x1263
+[  246.936855]  ? fsnotify_grab_connector+0x5c/0x70
+[  246.942045]  schedule+0x87/0xc5
+[  246.945567]  schedule_timeout+0x49/0xf3
+[  246.949877]  wait_for_completion+0x86/0xe8
+[  246.954463]  snd_card_free+0x68/0x89
+...
+[  247.001080]  platform_device_unregister+0x12/0x35
 
-swap: fix do_swap_page() race with swapoff
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+To: Jaroslav Kysela <perex@perex.cz>
+To: Takashi Iwai <tiwai@suse.com>
+Cc: alsa-devel@alsa-project.org
+Cc: linux-kernel@vger.kernel.org
+Cc: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+---
+Changes in v2:
+- Only use pm_freezing if CONFIG_FREEZER 
+- Link to v1: https://lore.kernel.org/r/20221127-snd-freeze-v1-0-57461a366ec2@chromium.org
+---
+ sound/core/init.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-When I was investigating the swap code, I found the below possible race
-window:
+diff --git a/sound/core/init.c b/sound/core/init.c
+index 5377f94eb211..35fb71177fea 100644
+--- a/sound/core/init.c
++++ b/sound/core/init.c
+@@ -9,6 +9,7 @@
+ #include <linux/module.h>
+ #include <linux/device.h>
+ #include <linux/file.h>
++#include <linux/freezer.h>
+ #include <linux/slab.h>
+ #include <linux/time.h>
+ #include <linux/ctype.h>
+@@ -573,6 +574,13 @@ void snd_card_disconnect_sync(struct snd_card *card)
+ 		return;
+ 	}
+ 
++#ifdef CONFIG_FREEZER
++	if (pm_freezing) {
++		dev_err(card->dev, "Userspace is frozen, skipping sync\n");
++		return;
++	}
++#endif
++
+ 	spin_lock_irq(&card->files_lock);
+ 	wait_event_lock_irq(card->remove_sleep,
+ 			    list_empty(&card->files_list),
+@@ -658,6 +666,15 @@ int snd_card_free(struct snd_card *card)
+ 	ret = snd_card_free_when_closed(card);
+ 	if (ret)
+ 		return ret;
++
++#ifdef CONFIG_FREEZER
++	/*
++	 * If userspace is frozen the wait from completion will never end.
++	 */
++	if (pm_freezing)
++		return 0;
++#endif
++
+ 	/* wait, until all devices are ready for the free operation */
+ 	wait_for_completion(&released);
+ 
 
-CPU 1                                   	CPU 2
------                                   	-----
-do_swap_page
-  if (data_race(si->flags & SWP_SYNCHRONOUS_IO)
-  swap_readpage
-    if (data_race(sis->flags & SWP_FS_OPS)) {
-                                        	swapoff
-					  	  ..
-					  	  p->swap_file = NULL;
-					  	  ..
-    struct file *swap_file = sis->swap_file;
-    struct address_space *mapping = swap_file->f_mapping;[oops!]
+---
+base-commit: 4312098baf37ee17a8350725e6e0d0e8590252d4
+change-id: 20221127-snd-freeze-1ee143228326
 
-Note that for the pages that are swapped in through swap cache, this isn't
-an issue. Because the page is locked, and the swap entry will be marked
-with SWAP_HAS_CACHE, so swapoff() can not proceed until the page has been
-unlocked.
-
-Fix this race by using get/put_swap_device() to guard against concurrent
-swapoff.
-
-Can you check whether that can fix your issue?
-
-Best Regards,
-Huang, Ying
-
-> Any known issue about this feature, or any advise will be appreciated.
->
-> Here are the panic log,
->
-> Unable to handle kernel NULL pointer dereference at virtual address
-> 0000000000000740
-> Mem abort info:
-> ESR = 0x96000004
-> EC = 0x25: DABT (current EL), IL = 32 bits SET = 0, FnV = 0 EA = 0,
-> S1PTW = 0 Data abort info:
-> ISV = 0, ISS = 0x00000004
-> CM = 0, WnR = 0
-> user pgtable: 4k pages, 48-bit VAs, pgdp=000000010ae6e000
-> pgd=0000000000000000, p4d=0000000000000000 Internal error: Oops:
-> 96000004 [#1] SMP Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0
-> 02/06/2015
-> pstate: 00000005 (nzcv daif -PAN -UAO -TCO BTYPE=--)
-> pc : lookup_swap_cgroup_id+0x38/0x50
-> lr : mem_cgroup_charge+0x9c/0x424
-> sp : ffff800102f63bc0
-> x29: ffff800102f63bc0 x28: ffff0000d0d64d00
-> x27: 0000000000000000 x26: 0000000000000007
-> x25: ffff0000018c86a8 x24: ffff0000018c8640
-> x23: 0000000000000cc0 x22: 0000000000000001
-> x21: 0000000000000001 x20: ffff800102f63d28
-> x19: fffffe000373cb40 x18: 0000000000000000
-> x17: 0000000000000000 x16: ffff8001004715a4
-> x15: 00000000ffffffff x14: 0000000000003000
-> x13: 00000000ffffffff x12: 0000000000000040
-> x11: ffff0000c0403478 x10: ffff0000c040347a
-> x9 : ffff8001003e957c x8 : 000000000009dddd
-> x7 : 0000000000000600 x6 : 00000000000000e8
-> x5 : 0000020000200000 x4 : ffff000000000000
-> x3 : ffff800101f4c030 x2 : 0000000000000000
-> x1 : 00000000000001e4 x0 : 0000000000000000
->
-> Call trace:
-> lookup_swap_cgroup_id+0x38/0x50
-> do_swap_page+0xa64/0xc04
-> handle_pte_fault+0x1c8/0x214
-> __handle_mm_fault+0x1b0/0x380
-> handle_mm_fault+0xf4/0x284
-> do_page_fault+0x188/0x474
-> do_translation_fault+0xb8/0xe4
-> do_mem_abort+0x48/0xb0
-> el0_da+0x44/0x80
-> el0_sync_handler+0x88/0xb4
-> el0_sync+0x160/0x180
->
-> <lookup_swap_cgroup_id>:       mov   x9, x30
-> <lookup_swap_cgroup_id+0x4>:     nop
-> <lookup_swap_cgroup_id+0x8>:    
-> lsr   x2, x0, #58 SWP_TYPE_SHIFT == 58  x2 =
-> swp_type
-> <lookup_swap_cgroup_id+0xc>:    
-> adrp  x1, 0xffff800101f4c000
-> <memcg_sockets_enabled_key+0x8>
-> <lookup_swap_cgroup_id+0x10>:   
-> add   x3, x1, #0x30    
-> x3 == swap_cgroup_ctrl
-> <lookup_swap_cgroup_id+0x14>:    ubfx  x6, x0, #11, #47
-> <lookup_swap_cgroup_id+0x18>:    add   x2, x2, x2, lsl #1
-> <lookup_swap_cgroup_id+0x1c>:    ubfiz  x1, x0, #1, #11
-> <lookup_swap_cgroup_id+0x20>:   
-> mov   x5,
-> #0x200000         
-> // #2097152
-> <lookup_swap_cgroup_id+0x24>:   
-> mov   x4,
-> #0xffff000000000000     //
-> #-281474976710656
-> <lookup_swap_cgroup_id+0x28>:    movk  x5, #0x200, lsl #32
-> <lookup_swap_cgroup_id+0x2c>:    hint  #0x19
-> <lookup_swap_cgroup_id+0x30>:   
-> ldr   x0, [x3,x2,lsl #3] x3=ffff800101f4c030, x0 = 0
-> <lookup_swap_cgroup_id+0x34>:    hint  #0x1d
-> <lookup_swap_cgroup_id+0x38>:   
-> ldr   x0, [x0,x6,lsl #3] x0 = 0 + 0xe8 * 8 == 0x740
-> <lookup_swap_cgroup_id+0x3c>:    add   x0, x0, x5
-> <lookup_swap_cgroup_id+0x40>:    lsr   x0, x0, #6
-> <lookup_swap_cgroup_id+0x44>:    add   x0, x1, x0, lsl #12
-> <lookup_swap_cgroup_id+0x48>:    ldrh  w0, [x0,x4]
-> <lookup_swap_cgroup_id+0x4c>:    ret
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
