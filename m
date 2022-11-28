@@ -2,163 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A5E63A0F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 06:52:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE72563A0FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 06:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbiK1FwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 00:52:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
+        id S229720AbiK1FwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 00:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbiK1Fv4 (ORCPT
+        with ESMTP id S229919AbiK1Fv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Nov 2022 00:51:56 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB0F13F45;
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6772D13EBB;
         Sun, 27 Nov 2022 21:51:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669614699; x=1701150699;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=fqFHf62w9A47B5Yllb4h2Ws5xS5lXU+g5JWHdE+Z7dg=;
-  b=WeM6/8i5M4gT/0BgSSHs9HMBbUwFSSNXTCFIZar8X7aQUFXO/e/M6U7m
-   iKNJteNhDj8/W5WZ3l+aC/TLavGngDWBW1QcbnLDTJI7ZE1rZW99DwQB4
-   OkcZRBToUBr+QPjniIclhrZ1KzSnpCmwot0pGXLT71ZPwduMB79pNXfkp
-   QDdkwJG4P7H4OPZhUTwF5jI0xk8i4GOlvQfPupBOau9esJh2DQkR223PI
-   5RRhStasJLkCXcKAg+GDdep0xbl7t7F0vP8jTSicA20gIKrNL//bk10m/
-   tZ3lnmB0fgTI1tuyHkUgHB2FWBtKxGZErFKtSbA/80OsVpNeiOFiX1rVP
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="314786533"
-X-IronPort-AV: E=Sophos;i="5.96,199,1665471600"; 
-   d="scan'208";a="314786533"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2022 21:51:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="817696663"
-X-IronPort-AV: E=Sophos;i="5.96,199,1665471600"; 
-   d="scan'208";a="817696663"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga005.jf.intel.com with ESMTP; 27 Nov 2022 21:51:39 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Sun, 27 Nov 2022 21:51:39 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Sun, 27 Nov 2022 21:51:39 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sun, 27 Nov 2022 21:51:38 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WDc/Tbkyw3h/kNjJ2UMjjnUCRKcyrN6NGjSTvPP5diC5PFhQNAvjxtjxMBaaa7IwHLZsVD4vWF/FRZOaag7ewavoUQSqw1synzCdWSRK0KrfarsXtaeay8iRPnYTl+i9t2uSeXqcsLdP+7uYtdcwBLKlMx+4dVWLkW2T7l6BOSzjQduBFZ1FdRY4OgqdeThxzx9o8WhIHjvtv+FbGWor+NUEDFn7/KmynusZs7iNERTu/sAUeHr8Y+bxJ0Ao/CUGKSFP53XBO7djoZHI6mIsMWe45sdYxuM+C0PxJM9M5eyFTCueKaNuX4+24Kbh+bp9BwKylECHKKZM2+iGoTjCAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zDRoIHU6Cw2WDt/Eg1I77ozWma3meS6guSMvAeyHKkc=;
- b=LIRnILbY7nBO2xwL5bwXxbcPk/QOTSfqZKrsgNhiGOyDKESC6KE3wR0tvPEXSK5HMIt2Id8V4czxZDgFRRWAssKJPcQWQjVwx2zY05OhT1Pk7Qh7Xb1v0A58DKX7fgA8TEcnvQY9SphxbT4QqPhAGO0XjK2/mpXoZuIlxvNKEgM+037rw3hjsqPJoI8uBmflv3grz/m1+JtvsS0EU1gPavEsEh06K05iEKbTom5hEwjWqBnVE871sntqrSRorXzlXJF721jSctOFDu95KzCTIx7MPz6v4mVJuo+fCAElkr05ZOZg5VIaJI0NhlI1t02rqXT8TlVCJZsnJB8OGeTxsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BN6PR11MB3956.namprd11.prod.outlook.com (2603:10b6:405:77::10)
- by CO1PR11MB4787.namprd11.prod.outlook.com (2603:10b6:303:95::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Mon, 28 Nov
- 2022 05:51:36 +0000
-Received: from BN6PR11MB3956.namprd11.prod.outlook.com
- ([fe80::7ac:fe96:566:65e]) by BN6PR11MB3956.namprd11.prod.outlook.com
- ([fe80::7ac:fe96:566:65e%3]) with mapi id 15.20.5857.023; Mon, 28 Nov 2022
- 05:51:36 +0000
-Message-ID: <f6e7bd7a-c901-a38c-e427-e9671dfb6d6c@intel.com>
-Date:   Mon, 28 Nov 2022 13:51:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH V3 1/2] PCI/DOE: Remove the pci_doe_flush_mb() call
-To:     <ira.weiny@intel.com>
-CC:     Lukas Wunner <lukas@wunner.de>,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Gregory Price <gregory.price@memverge.com>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-cxl@vger.kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20221128040338.1936529-1-ira.weiny@intel.com>
- <20221128040338.1936529-2-ira.weiny@intel.com>
-Content-Language: en-US
-From:   "Li, Ming" <ming4.li@intel.com>
-Organization: Intel
-In-Reply-To: <20221128040338.1936529-2-ira.weiny@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR02CA0040.apcprd02.prod.outlook.com
- (2603:1096:3:18::28) To BN6PR11MB3956.namprd11.prod.outlook.com
- (2603:10b6:405:77::10)
+Received: by mail-pj1-x1031.google.com with SMTP id k2-20020a17090a4c8200b002187cce2f92so12913010pjh.2;
+        Sun, 27 Nov 2022 21:51:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7QQEq3RRCmD+WRW4QSwoirpwBHFTkPX7G7ZRHJATYnA=;
+        b=MshPV8ND1o+LQAWckzG24DHtPeaVLB4h8eRzFdhiSqeCIb2vqVtlvkhpL1yuWfurFa
+         XDzGiD2jl64X6zOhS0WHOnEL0Y2o5mw1Ztw/Om/SitiPF8Gv/b86ltunUSP5nrQq6TKa
+         yQdXmDByUxP1rpP/orqsXTmWpv2gXafOJC4jhcsz0uEOFUSdYcfMnjJ7uL5/r1Q8orVV
+         RxaVLWECEX39jHzY20r8s4W5jcPohmLTF56pTPElkeKdrUs3XYydR4divsdUqYR4r+zu
+         FaAwvEARC2t4fUV3IA2g+iwUSxfWTJ/d15Ls5i1YNy2ulhFIrgqImM64LRbSXUQd63g+
+         XpCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7QQEq3RRCmD+WRW4QSwoirpwBHFTkPX7G7ZRHJATYnA=;
+        b=WUxXqD8RmFHITrIHzNHn1Qp2ZJl6MXtYv9Qjqbypf01ql2wBeLrODFQ+9cpe14BkiG
+         p0SkgyaV08iYe0Qi2kCxLbCC3b3wjbxXb9iSwN34F7yICB5w0yhyFjItyK3Q1EOPU1mu
+         SGTS5DT2UczStQNHo49CyhQgLivjs4VEuHTHoqjIOFz90B/63gGwzJGIx+DcQkqejcKH
+         1iXXTKu77c1Goa1+FEje/smvzsV6ArU0GFmEOk4lc1Pp7iAl4UQH7N1jqIfwRWJlUYaC
+         VJluGvzIRSPxuBiucNhL/fDelNrjFRJuytTKTF8VA42BmvK/UFyhqLn/0woi7BN1QaZY
+         cI+g==
+X-Gm-Message-State: ANoB5pm82r+eUJJ9uPFGEmuWL8+dUTXF6CAyGIpaOtvtJXPvEUAmFa+d
+        HV2DTWiscrutS9T+BD4CzVnSGVdWrzcksGVm9YTEW6xDknf2JQ==
+X-Google-Smtp-Source: AA0mqf7nXARmYRH0l6QRdMzRimUX+IFnbqejLvEeGi8HJIxnSGaOuJS35IzDaYeGAkm0wzDsmtTiyQ5yEnWQ7oql1m0=
+X-Received: by 2002:a17:90a:d918:b0:219:3e68:1d03 with SMTP id
+ c24-20020a17090ad91800b002193e681d03mr1712968pjv.77.1669614698803; Sun, 27
+ Nov 2022 21:51:38 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN6PR11MB3956:EE_|CO1PR11MB4787:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0b721db1-d4ad-4821-c570-08dad1049c60
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TpfM0jad8+WrqIWXkB8TD3PTl3yFMzDcwQwBpWeGsCsUpch+gaxPJJz0QPPcCv/AyJk0wQcuRRPgiu0Mv1WD1+0mDVeZtdPD1WWvrPbdzvSNyKbYHu/vrYtkQKNedp9QM4wLOo1KxS4JCrlq/BQkjynnoIcTCnS3i4CqhNDgkxhzCTi8nidIhDeqywqXG3yJBjIyW2iS7e1zhgDd8IQqx4bLErpUzNAxgDdOrXp3YB0s5tJAMzXFfyORGfSutrKpvq0qlO5lW85ehJBNYuPNgS7U0Wtz+tW5+Jfy6xk1uMLJMYrqhkEHxMNNVZ24r75SsxsjYehBWMOCwi9bEu88OzNkkPsOyet7yJuX3t1uwLwGF7qOEisrikXvtRUNq3ymAc/zUmPQmve3l9gO/QyhvljK0vexfgmM1XNVJEAzX3j6iRXK46cywcp6iKAY/94RNj98/u8CzVdRSd2v8MaZgSyvamE+uylF5P6NNIFCzynoWAlocMCBFj9A6VZWg3JewM+ZY5IuQEXPNkapGMw/bc94w4mhh1zDj0wF5ERsLLZpm3Hh1gwfetzKZDUqGWGl539pmlRjTpjGqxfDXRLeQRjSVB2MGJ12vISw7nQlmxq3rm3nCww+LzqzbckSr1JxEyygb5Gv9YE5AnAF9g280wvXNrW0VrDUNWYoEk3d1b5iDLFnU0Dn3QZOUqG7mv94lSKiOrYdJtBvbKWiWHULjWEuGxdL0FhLYiDc7PB5Sqc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB3956.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(396003)(376002)(39860400002)(366004)(136003)(451199015)(5660300002)(37006003)(6636002)(54906003)(316002)(26005)(6512007)(34206002)(2616005)(41300700001)(82960400001)(186003)(8936002)(36756003)(66946007)(66556008)(66476007)(8676002)(4326008)(38100700002)(2906002)(83380400001)(6666004)(31696002)(86362001)(6506007)(36916002)(6486002)(478600001)(53546011)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ejVMdjVoWHVvVjJ0R1dSNlNzTTRBV0dtZ05SdkJFeDhTcitIVHpDSXI4M2pu?=
- =?utf-8?B?Sk53aGkwM3M2QkhaZlB2TkE4VG9ORTd1MDhDUWZsWkY5cGpmK202bTdOVEND?=
- =?utf-8?B?VDZCbWRFaFd5WlRQY3pJTTJ2Ly9rYjB6OEcrdng0Vmt2WXIzRmhpTGkwY1Yv?=
- =?utf-8?B?VGFtNk5DbDE3ZnM3VWIzSXY1SE1yVVprS2c3TGtucEFsbUN4SnBZZFhKWVVv?=
- =?utf-8?B?VUN6WG4rdHFKNjlZUURwM29SR3F5eUZ3VHBzSjJOQmVtZ2JreE9neDlOQXZ6?=
- =?utf-8?B?Rlk3bDdBMzBsOGRIWTltaHFaK0dwODFxSWwySUtqUytXWWtJYmVjMGZEZ251?=
- =?utf-8?B?YnFzK3NzQTZzUjhmcHdPcDNaQjdzdUI0aSs0V093UmtlZ2t1OFZyRlAwQVhm?=
- =?utf-8?B?Mlo2OS9maG14Vm1NM21ScmdjR0xDS3lncC9YVlhIZEt2Sk1JUVZrU2paK3V3?=
- =?utf-8?B?ZXdDdWRaaitpU1FlTzlNSzZzdkI0SUNpMVNCRisrVFk0RkpKVjZpY1MrbVlr?=
- =?utf-8?B?NFNHYnhwL0wxdFdhdkI2d1BqcFVuVitGakM5SUJGdVF3K29ITEp0V1c5d3Zy?=
- =?utf-8?B?VjlRcnUvZ0dnVjVCUWZJWTRxT1Nub3IzQTdVeHR4WmJaSmwxZklLOW0yV2hP?=
- =?utf-8?B?RkFma2VaYWtvaW4ydmhHSUpLalEwNlRsa2FFMU1wWlJueEMwa013ZldneWNE?=
- =?utf-8?B?Q2orU1ZSaHZJZzdmVi9PVWtFTjdpR3B3ZjJnQVd1OXBaVGxNSnlGazNicFFB?=
- =?utf-8?B?WHJpck51Z0pKZlBFb0o5RUt0MjVlQVk3QVlwMWRLeldMdmNXdklNQWx4NjBW?=
- =?utf-8?B?dmZFdkFFVDZWS1JjMnF3Uk1vbWhNRUZZaTRUSEhNRzZ6YTVRQVBqbmRHeFNz?=
- =?utf-8?B?Wm94SSt4ZHVjY3B5UnV1WURZOGNLMVhKcVlYT1BRSnZSaE1rSjBoeGViazFI?=
- =?utf-8?B?MEpSWStoUXN1RHArSWFGNDdLV2ZuTjQwbmx1RGFZdXpHMGNNb05UNUhJeGhK?=
- =?utf-8?B?K1lpUzIxNFlZWkwyNmtxZEtJUEQzSEhlY3J5YWJPd2krUmJNVmZJeEo4cDhQ?=
- =?utf-8?B?azVyMCs0QVIvZlo4ZDk4NysvL0lzTDZhL0pBNFozV3NTbSthWW9XYkxaSUZS?=
- =?utf-8?B?SkNSaGpOd0JnNzV4eEFrbUM2RFJieUViUTFPejg3eE5TZTltNVU0bklzOGVS?=
- =?utf-8?B?aEY1OUJJa3QwdStFQ3NycDJZTUtFalA2SVRFaUhlQUxoMElaZ3F5Y1dpQ1Fi?=
- =?utf-8?B?cEFUTW8vMzlyTi96R3BOWmdyZDlFbjRCd0VnRzdtSmRTa0pEKzlQM01xL2pm?=
- =?utf-8?B?UU9iZlBWbnA2YTV3R3ArcHZOUExLZElzUkcyWkVmUi9JWVVCdVMzSnh3ekQv?=
- =?utf-8?B?TitvWG42U2EyQTlNUkpUbmFJMHIveVg4cWhFelNJZzBha3B1UnlmVURzcDNB?=
- =?utf-8?B?R3o2UEZrYm9DZ1lEbU1od0lYdk05S2g0OVoxdUtlMllpd0pXay9SNUhvOGFy?=
- =?utf-8?B?RXJCY0RucXFpU2UrZ1IxSGJPYWwxNThlNjd1YTh6MHJ6cUdXTjgwUmxrVHJY?=
- =?utf-8?B?TUthQjlJTCt2ZVJrZkNxbFlBVmV3b0xvQjd4TWZJNEY5dmZZRjhBSmxSNm9V?=
- =?utf-8?B?dzRPcmtWMVNFTzJkbktCU2Yrenhoa3hlZEhaVnFFN2FxaStiQng0T2NUMlFu?=
- =?utf-8?B?cDlsVXI1UjFLcTMxZ1NRL3ZaT3A5QUpicFRPTHVscmt4aFU5NGxTVUdMdGQ5?=
- =?utf-8?B?SGRUWlJyc055NDBtY0pDckYzK3A4UFl0WEdHOUxjVFBpUVN3akZBbHlRT0pX?=
- =?utf-8?B?VkZQSkFWWlZXTEgzNzVJR0VFWlpEU0h5WXdSWm9vektMbnN5Y2xIQ3lPV2c2?=
- =?utf-8?B?Q1Q1cFVsR3pKQ2xOdzNMeFplcSt4OE9Ob3ZlV2hCYkJYRTJPK0p3SFpUMGJC?=
- =?utf-8?B?MDFqQnFFelkrWk5tN2p4eHViV2NYUm9zdFZaS2tBQXBicWNkd1Via3BIYnJl?=
- =?utf-8?B?ejdxOVR3UzAyUXpzYlo4WXR3dkRtUjVPUWwzRGwwN2FOZUplQWgzTWE2Rnl2?=
- =?utf-8?B?b2R3QitLUFJCM0VVZzd5dHEveU8ra2ZUWUdsZzRTRlQ3ZjJaTGtVc2s1RTlp?=
- =?utf-8?Q?2/QpUb3bagC/TKDNK+55LaCS8?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b721db1-d4ad-4821-c570-08dad1049c60
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB3956.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 05:51:36.3602
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rnKkFsj3hKJT+mHr+isjeP4ZqAY0dlGABVdkKvc98iI5ODQon1KT/2HhSoN1mJRAxmbxPnfu8r3TNkbFysS1NQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4787
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221118054725.80414-1-michael@allwinnertech.com>
+ <CA+Da2qxP2gvUc2=n5xW7_YEcgevGpDhqbcVFWVbF0c6DqXDXHA@mail.gmail.com>
+ <23c0a4ae-d714-cfb1-aeb5-68b66b5bf0ee@allwinnertech.com> <CA+Da2qwXLapwUDX+GrFkNQE9so2Tj=ymY1YS396J_N_c+9EHYw@mail.gmail.com>
+ <d4ecd7cf-0dd0-570f-0560-a5886f464429@allwinnertech.com>
+In-Reply-To: <d4ecd7cf-0dd0-570f-0560-a5886f464429@allwinnertech.com>
+From:   Wenchao Chen <wenchao.chen666@gmail.com>
+Date:   Mon, 28 Nov 2022 13:51:27 +0800
+Message-ID: <CA+Da2qx_sfu0Vn5XW5MUkFXVBe09=YerPjHrdETWJOAYCKOimQ@mail.gmail.com>
+Subject: Re: [PATCH] mmc:mmc-hsq:use fifo to dispatch mmc_request
+To:     Michael Wu <michael@allwinnertech.com>
+Cc:     ulf.hansson@linaro.org, wenchao.chen@unisoc.com,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        baolin.wang@linux.alibaba.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -166,129 +73,288 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 11/28/2022 12:03 PM, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> pci_doe_flush_mb() does not work and is currently unused.
-> 
-> It does not work because each struct doe_mb is managed as part of the
-> PCI device.  They can't go away as long as the PCI device exists.
-> pci_doe_flush_mb() was set up to flush the workqueue and prevent any
-> further submissions to the mailboxes when the PCI device goes away.
-> Unfortunately, this was fundamentally flawed.  There was no guarantee
-> that a struct doe_mb remained after pci_doe_flush_mb() returned.
-> Therefore, the doe_mb state could be invalid when those threads waiting
-> on the workqueue were flushed.
-> 
-> Fortunately the current code is safe because all callers make a
-> synchronous call to pci_doe_submit_task() and maintain a reference on
-> the PCI device.  Therefore pci_doe_flush_mb() is effectively unused.
-> 
-> Rather than attempt to fix pci_doe_flush_mb() just remove the dead code
-> around pci_doe_flush_mb().
-> 
-> Cc: Lukas Wunner <lukas@wunner.de>
-> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-
-Some comments inline.
-
-> 
-> ---
-> Changes from V2:
-> 	Lukas
-> 		Clarify commit message.
-> 	Jonathan
-> 		Add comment for changed poll interval.
-
-...
-
->  
-> -static int pci_doe_wait(struct pci_doe_mb *doe_mb, unsigned long timeout)
-> -{
-> -	if (wait_event_timeout(doe_mb->wq,
-> -			       test_bit(PCI_DOE_FLAG_CANCEL, &doe_mb->flags),
-> -			       timeout))
-> -		return -EIO;
-> -	return 0;
-> -}
+On Mon, Nov 28, 2022 at 11:55 AM Michael Wu <michael@allwinnertech.com> wro=
+te:
+>
+> On 11/24/2022 10:56 AM, Wenchao Chen wrote:
+> > On Mon, Nov 21, 2022 at 2:19 PM Michael Wu <michael@allwinnertech.com> =
+wrote:
+> >>
+> >> On 11/18/2022 7:43 PM, Wenchao Chen wrote:
+> >>> On Fri, Nov 18, 2022 at 1:52 PM Michael Wu <michael@allwinnertech.com=
+> wrote:
+> >>>>
+> >>>> Current next_tag selection will cause a large delay in some requests=
+ and
+> >>>> destroy the scheduling results of the block scheduling layer. Becaus=
+e the
+> >>>> issued mrq tags cannot ensure that each time is sequential, especial=
+ly when
+> >>>> the IO load is heavy. In the fio performance test, we found that 4k =
+random
+> >>>> read data was sent to mmc_hsq to start calling request_atomic It tak=
+es
+> >>>> nearly 200ms to process the request, while mmc_hsq has processed tho=
+usands
+> >>>> of other requests. So we use fifo here to ensure the first in, first=
+ out
+> >>>> feature of the request and avoid adding additional delay to the requ=
+est.
+> >>>>
+> >>>
+> >>> Hi Michael
+> >>> Is the test device an eMMC?
+> >>> Could you share the fio test command if you want?
+> >>> Can you provide more logs?
+> >>>
+> >> Hi Wenchao,
+> >> Yes, the tested device is emmc.
+> >> The test command we used is `./fio -name=3DRand_Read_IOPS_Test
+> >> -group_reporting -rw=3Drandom -bs=3D4K -numjobs=3D8 -directory=3D/data=
+/data
+> >> -size=3D1G -io_size=3D64M -nrfiles=3D1 -direct=3D1 -thread && rm
+> >> /data/Rand_Read_IOPS_Test *`,  which replaces the io performance rando=
+m
+> >> read performance test of androidbench, and the file size is set to 1G,=
+ 8
+> >> thread test configuration. Where /data uses f2fs and /data/data is a
+> >> file encrypted path.
+> >>
+> >> After enabling the hsq configuration, we can clearly see from below fi=
+o
+> >> test log that the minimum value of random reading is 3175 iops and the
+> >> maximum value is 8554iops, and the maximum delay of io completion is
+> >> about 200ms.
+> >> ```
+> >>       clat percentiles (usec):
+> >>        |  1.00th=3D[   498],  5.00th=3D[   865], 10.00th=3D[   963], 2=
+0.00th=3D[
+> >>    1045],
+> >>        | 30.00th=3D[  1090], 40.00th=3D[  1139], 50.00th=3D[  1172], 6=
+0.00th=3D[
+> >>    1221],
+> >>        | 70.00th=3D[  1254], 80.00th=3D[  1319], 90.00th=3D[  1401], 9=
+5.00th=3D[
+> >>    1614],
+> >>        | 99.00th=3D[  2769], 99.50th=3D[  3589], 99.90th=3D[ 31589], 9=
+9.95th=3D[
+> >> 66323],
+> >>        | 99.99th=3D[200279]
+> >>      bw (  KiB/s): min=3D12705, max=3D34225, per=3D100.00%, avg=3D2393=
+1.79,
+> >> stdev=3D497.40, samples=3D345
+> >>      iops        : min=3D 3175, max=3D 8554, avg=3D5981.67, stdev=3D12=
+4.38,
+> >> samples=3D345
+> >> ```
+> >>
+> >>
+> >> ```
+> >>       clat percentiles (usec):
+> >>        |  1.00th=3D[  799],  5.00th=3D[  938], 10.00th=3D[  963], 20.0=
+0th=3D[  979],
+> >>        | 30.00th=3D[  996], 40.00th=3D[ 1004], 50.00th=3D[ 1020], 60.0=
+0th=3D[ 1045],
+> >>        | 70.00th=3D[ 1074], 80.00th=3D[ 1106], 90.00th=3D[ 1172], 95.0=
+0th=3D[ 1237],
+> >>        | 99.00th=3D[ 1450], 99.50th=3D[ 1516], 99.90th=3D[ 1762], 99.9=
+5th=3D[ 2180],
+> >>        | 99.99th=3D[ 9503]
+> >>      bw (  KiB/s): min=3D29200, max=3D30944, per=3D100.00%, avg=3D3017=
+8.91,
+> >> stdev=3D53.45, samples=3D272
+> >>      iops        : min=3D 7300, max=3D 7736, avg=3D7544.62, stdev=3D13=
+.38,
+> >> samples=3D272
+> >> ```
+> >> When NOT enabling hsq, the minimum value of random reading is 7300 iop=
+s
+> >> and the maximum value is 7736 iops, and the maximum delay of io is onl=
+y
+> >> 9 ms. Finally, we added debug to the mmc driver. The reason for locati=
+ng
+> >> the 200ms delay of hsq is due to the next tag selection of hsq.
+> >>
+> >
+> > Thank you very much for your Log. This patch can reduce latency, but I
+> > have some questions:
+> > 1. FIO -rw does not have random, but it does have randread. Do you use
+> > randread? In addition, "IO_SIZE=3D64M" means only 64M data is tested?
+> > Refer to FIO:
+> > https://fio.readthedocs.io/en/latest/fio_doc.html?highlight=3Dio_size#c=
+mdoption-arg-io-size
+> Hi Wenchao,
+>
+> Yes, I used "randread". (Sorry, I wrote the parameter "random"
+> incorrectly.) The reason why I used "io_size=3D64M" is that I found the
+> performance of hsq was degraded when using the AndroBench for testing on
+> android13. Therefore, fio is used to simulate the AndroBench for
+> debugging. The AndroBench is configured with 8 threads while 1G files
+> per thread, and only 64M data for random read testing=EF=BC=88This item i=
+s not
+> configurable=EF=BC=89.
+>
+> > 2. The style of "tag_tail" should remain the same as that of
+> > "next_tag". Would "tail_tag" be better?
+> Thank you for your suggestion. I'll modify 'tag_tail' as 'tail_tag'.
+>
+> > 3. It is better to provide a comparison of sequential read, sequential
+> > write and random writeHere is the performance data tested by AndroBench=
+:
+>
+> -------------------------------------------------------------------------
+>        io performance data from AndroBench (filesize=3D1G, 8 threads)
+> -------------------------------------------------------------------------
+> mmc configure     | original hsq  |  without hsq  |  hsq with this patch
+> -------------------------------------------------------------------------
+> Sequential write      58.23 MB/s       51.35 MB/s        56.15 MB/s
+> Sequential read      138.24 MB/s      143.65 MB/s        146.4 MB/s
+> random write        2900.11 iops     1887.13 iops      2982.02 iops
+> random read         4764.45 iops     5485.19 iops      6786.42 iops
+>
+> Here's a preview of patch-v2. If it's OK, I'll submit it soon. Thank you.
+>
+> --
+> mmc:mmc-hsq:use fifo to dispatch mmc_request
+>
+> Current next_tag selection will cause a large delay in some requests and
+> destroy the scheduling results of the block scheduling layer. Because
+> the issued mrq tags cannot ensure that each time is sequential,
+> especially when the IO load is heavy. In the fio performance test, we
+> found that 4k random read data was sent to mmc_hsq to start calling
+> request_atomic It takes nearly 200ms to process the request, while
+> mmc_hsq has processed thousands of other requests. So we use fifo here
+> to ensure the first in, first out feature of the request and avoid
+> adding additional delay to the request.
+>
+> diff --git a/drivers/mmc/host/mmc_hsq.c b/drivers/mmc/host/mmc_hsq.c
+> index 9d35453e7371..424dc7b07858 100644
+> --- a/drivers/mmc/host/mmc_hsq.c
+> +++ b/drivers/mmc/host/mmc_hsq.c
+> @@ -13,9 +13,6 @@
+>
+>   #include "mmc_hsq.h"
+>
+> -#define HSQ_NUM_SLOTS  64
+> -#define HSQ_INVALID_TAG        HSQ_NUM_SLOTS
 > -
->  static void pci_doe_write_ctrl(struct pci_doe_mb *doe_mb, u32 val)
->  {
->  	struct pci_dev *pdev = doe_mb->pdev;
-> @@ -82,12 +73,9 @@ static int pci_doe_abort(struct pci_doe_mb *doe_mb)
->  	pci_doe_write_ctrl(doe_mb, PCI_DOE_CTRL_ABORT);
->  
->  	do {
-> -		int rc;
->  		u32 val;
->  
-> -		rc = pci_doe_wait(doe_mb, PCI_DOE_POLL_INTERVAL);
-> -		if (rc)
-> -			return rc;
-> +		msleep_interruptible(PCI_DOE_POLL_INTERVAL_MSECS);
->  		pci_read_config_dword(pdev, offset + PCI_DOE_STATUS, &val);
-
-Looks like we don't have to use msleep_interruptible() here, can use msleep() directly?
-
->  
->  		/* Abort success! */
-> @@ -278,11 +266,7 @@ static void doe_statemachine_work(struct work_struct *work)
->  			signal_task_abort(task, -EIO);
->  			return;
->  		}
-> -		rc = pci_doe_wait(doe_mb, PCI_DOE_POLL_INTERVAL);
-> -		if (rc) {
-> -			signal_task_abort(task, rc);
-> -			return;
-> -		}
-> +		msleep_interruptible(PCI_DOE_POLL_INTERVAL_MSECS);
->  		goto retry_resp;
->  	}
-
-I guess that you use msleep_interruptible() here for aborting current task when signals come.
-So there should be signal_task_abort() and return when msleep_interruptible() receives a signal.
-
-Thanks
-Ming
-
->  
-> @@ -383,21 +367,6 @@ static void pci_doe_destroy_workqueue(void *mb)
->  	destroy_workqueue(doe_mb->work_queue);
->  }
->  
-> -static void pci_doe_flush_mb(void *mb)
-> -{
-> -	struct pci_doe_mb *doe_mb = mb;
+>   static void mmc_hsq_retry_handler(struct work_struct *work)
+>   {
+>         struct mmc_hsq *hsq =3D container_of(work, struct mmc_hsq, retry_=
+work);
+> @@ -73,7 +70,6 @@ static void mmc_hsq_pump_requests(struct mmc_hsq *hsq)
+>
+>   static void mmc_hsq_update_next_tag(struct mmc_hsq *hsq, int remains)
+>   {
+> -       struct hsq_slot *slot;
+>         int tag;
+>
+>         /*
+> @@ -82,29 +78,12 @@ static void mmc_hsq_update_next_tag(struct mmc_hsq
+> *hsq, int remains)
+>          */
+>         if (!remains) {
+>                 hsq->next_tag =3D HSQ_INVALID_TAG;
+> +               hsq->tail_tag =3D HSQ_INVALID_TAG;
+>                 return;
+>         }
+>
+> -       /*
+> -        * Increasing the next tag and check if the corresponding request=
+ is
+> -        * available, if yes, then we found a candidate request.
+> -        */
+> -       if (++hsq->next_tag !=3D HSQ_INVALID_TAG) {
+> -               slot =3D &hsq->slot[hsq->next_tag];
+> -               if (slot->mrq)
+> -                       return;
+> -       }
 > -
-> -	/* Stop all pending work items from starting */
-> -	set_bit(PCI_DOE_FLAG_DEAD, &doe_mb->flags);
+> -       /* Othersie we should iterate all slots to find a available tag. =
+*/
+> -       for (tag =3D 0; tag < HSQ_NUM_SLOTS; tag++) {
+> -               slot =3D &hsq->slot[tag];
+> -               if (slot->mrq)
+> -                       break;
+> -       }
 > -
-> -	/* Cancel an in progress work item, if necessary */
-> -	set_bit(PCI_DOE_FLAG_CANCEL, &doe_mb->flags);
-> -	wake_up(&doe_mb->wq);
+> -       if (tag =3D=3D HSQ_NUM_SLOTS)
+> -               tag =3D HSQ_INVALID_TAG;
 > -
-> -	/* Flush all work items */
-> -	flush_workqueue(doe_mb->work_queue);
-> -}
-> -
->  /**
->   * pcim_doe_create_mb() - Create a DOE mailbox object
->   *
-> @@ -450,14 +419,6 @@ struct pci_doe_mb *pcim_doe_create_mb(struct pci_dev *pdev, u16 cap_offset)
->  		return ERR_PTR(rc);
->  	}
->  
-> -	/*
-> -	 * The state machine and the mailbox should be in sync now;
-> -	 * Set up mailbox flush prior to using the mailbox to query protocols.
-> -	 */
-> -	rc = devm_add_action_or_reset(dev, pci_doe_flush_mb, doe_mb);
-> -	if (rc)
-> -		return ERR_PTR(rc);
-> -
->  	rc = pci_doe_cache_protocols(doe_mb);
->  	if (rc) {
->  		pci_err(pdev, "[%x] failed to cache protocols : %d\n",
+> +       tag =3D hsq->tag_slot[hsq->next_tag];
+> +       hsq->tag_slot[hsq->next_tag] =3D HSQ_INVALID_TAG;
+>         hsq->next_tag =3D tag;
+>   }
+>
+> @@ -233,8 +212,14 @@ static int mmc_hsq_request(struct mmc_host *mmc,
+> struct mmc_request *mrq)
+>          * Set the next tag as current request tag if no available
+>          * next tag.
+>          */
+> -       if (hsq->next_tag =3D=3D HSQ_INVALID_TAG)
+> +       if (hsq->next_tag =3D=3D HSQ_INVALID_TAG) {
+>                 hsq->next_tag =3D tag;
+> +               hsq->tail_tag =3D tag;
+> +               hsq->tag_slot[hsq->tail_tag] =3D HSQ_INVALID_TAG;
+> +       } else {
+> +               hsq->tag_slot[hsq->tail_tag] =3D tag;
+> +               hsq->tail_tag =3D tag;
+> +       }
+>
+>         hsq->qcnt++;
+>
+> @@ -339,8 +324,10 @@ static const struct mmc_cqe_ops mmc_hsq_ops =3D {
+>
+>   int mmc_hsq_init(struct mmc_hsq *hsq, struct mmc_host *mmc)
+>   {
+> +       int i;
+>         hsq->num_slots =3D HSQ_NUM_SLOTS;
+>         hsq->next_tag =3D HSQ_INVALID_TAG;
+> +       hsq->tail_tag =3D HSQ_INVALID_TAG;
+>
+>         hsq->slot =3D devm_kcalloc(mmc_dev(mmc), hsq->num_slots,
+>                                  sizeof(struct hsq_slot), GFP_KERNEL);
+> @@ -351,6 +338,9 @@ int mmc_hsq_init(struct mmc_hsq *hsq, struct
+> mmc_host *mmc)
+>         hsq->mmc->cqe_private =3D hsq;
+>         mmc->cqe_ops =3D &mmc_hsq_ops;
+>
+> +       for (i =3D 0; i < HSQ_NUM_SLOTS; i++)
+> +               hsq->tag_slot[i] =3D HSQ_INVALID_TAG;
+> +
+>         INIT_WORK(&hsq->retry_work, mmc_hsq_retry_handler);
+>         spin_lock_init(&hsq->lock);
+>         init_waitqueue_head(&hsq->wait_queue);
+> diff --git a/drivers/mmc/host/mmc_hsq.h b/drivers/mmc/host/mmc_hsq.h
+> index ffdd9cd172c3..1808024fc6c5 100644
+> --- a/drivers/mmc/host/mmc_hsq.h
+> +++ b/drivers/mmc/host/mmc_hsq.h
+> @@ -2,6 +2,9 @@
+>   #ifndef LINUX_MMC_HSQ_H
+>   #define LINUX_MMC_HSQ_H
+>
+> +#define HSQ_NUM_SLOTS  64
+> +#define HSQ_INVALID_TAG        HSQ_NUM_SLOTS
+> +
+>   struct hsq_slot {
+>         struct mmc_request *mrq;
+>   };
+> @@ -17,6 +20,8 @@ struct mmc_hsq {
+>         int next_tag;
+>         int num_slots;
+>         int qcnt;
+> +       int tail_tag;
+> +       int tag_slot[HSQ_NUM_SLOTS];
+>
+>         bool enabled;
+>         bool waiting_for_idle;
+>
+> --
+> Regards,
+> Michael Wu
 
+That's very good, thanks.
+
+Cc: baolin.wang@linux.alibaba.com
+
+Reviewed-by: Wenchao Chen <wenchao.chen@unisoc.com>
