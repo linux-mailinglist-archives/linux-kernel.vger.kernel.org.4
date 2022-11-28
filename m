@@ -2,59 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9795063A8C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A5A63A8C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbiK1MyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 07:54:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
+        id S231288AbiK1Myq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 07:54:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiK1MyA (ORCPT
+        with ESMTP id S231343AbiK1Myf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 07:54:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD5315A2C;
-        Mon, 28 Nov 2022 04:53:59 -0800 (PST)
+        Mon, 28 Nov 2022 07:54:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BE6165BB
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:54:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D02086116A;
-        Mon, 28 Nov 2022 12:53:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C3EFC433C1;
-        Mon, 28 Nov 2022 12:53:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A72BB80DB5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 12:54:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58816C43142
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 12:54:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669640038;
-        bh=5YMBgBHbiI5ucnZji8ODGK5VNaLR2nVSSk6RpRVsnoo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sLukV95y/MQTlIeDozB/IqPe5U+RcumxuUoLvGRJ4Ao/Gt5Di9mFB/3CsksOQP9P7
-         tv8T8r+xaJ8FGD35Y+D8bkiD8+pt5T5eytBmxFQ7qtiVOcd+nu47hOKmMf2dlOybm1
-         sC2OKF6uww9aS5pu+f37nDdL+bpYW1guo4YL9QrydShC/0hKMFuufwSnU6DUPrFJ1A
-         MXTOcR8GN9rdL6uZgsR/8eGDA62KFLdNcdkY3aBd6A1P8fx2+b79PhexQw8DyWoNYR
-         M11ybe/0kDzNSfBLrUMEMDgoJQRRP1rtC4U7enUKIxYff8E4IvdmhRqDCAzQjL97xJ
-         ky8VS/UvHfVfg==
-Date:   Mon, 28 Nov 2022 18:23:41 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Asutosh Das <quic_asutoshd@quicinc.com>
-Cc:     quic_cang@quicinc.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, quic_nguyenb@quicinc.com,
-        quic_xiaosenh@quicinc.com, stanley.chu@mediatek.com,
-        eddie.huang@mediatek.com, daejun7.park@samsung.com,
-        bvanassche@acm.org, avri.altman@wdc.com, beanhuo@micron.com,
-        linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 02/16] ufs: core: Probe for ext_iid support
-Message-ID: <20221128125341.GB62721@thinkpad>
-References: <cover.1669176158.git.quic_asutoshd@quicinc.com>
- <7cb284c2ba6f4065f9c84a91f4bf100a26c73383.1669176158.git.quic_asutoshd@quicinc.com>
+        s=k20201202; t=1669640071;
+        bh=V6SKlau33f2827N1VHjE9+387nuGxw7h2PiWpzU2Sdg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KbFV3FyA3UkO6S2blhu7jUPAz4j0Oser7PtK/d1iNFBpoZRqnfEkEK3Zf3jwKBfQW
+         GvCp8tnVjzzWRkTTz1AEOWARyXFefsaTjec75HuSCezPPNsUnXme6QcGC4axtCfZ9X
+         Flyw7zrUshX1SfaQKdKrwEKEJmo7wf8pbdMunth/SUpQw4lRvM6PsBE79gWqCpOuHf
+         D3xGdA21Xd0ML/oPz3nMp9y+dKiUzBSdvwctfME3jNEXBfKG6/vUjeTJhb5AxbYoe+
+         L2rp8nT2mgLEpw8VjH09oJfD8+YnhanaiWo3lyJJ/C4SFjn/muAZPqe1A1xdtYBj7J
+         V94U8PSEVB9eQ==
+Received: by mail-ej1-f48.google.com with SMTP id vv4so25546467ejc.2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:54:31 -0800 (PST)
+X-Gm-Message-State: ANoB5plFMF0oY9JYjCvfODIowgJIywwMNrawBOPbuw+Q9lHkovfXgGua
+        oBDDH7yrOXL2AHyoSsCFXM5+1A62cXARPnv678w=
+X-Google-Smtp-Source: AA0mqf7cwpAH15awVZrE/mlkar3GNWHNLuuKK1zMs7xI/kBhPRqjTH59VivFtIP2SPcKC6ZlWGsWjupiVXwEw7SWnnw=
+X-Received: by 2002:a17:906:99d3:b0:78d:c7fd:f755 with SMTP id
+ s19-20020a17090699d300b0078dc7fdf755mr28023509ejn.702.1669640069444; Mon, 28
+ Nov 2022 04:54:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7cb284c2ba6f4065f9c84a91f4bf100a26c73383.1669176158.git.quic_asutoshd@quicinc.com>
+References: <20221123142025.1504030-1-suagrfillet@gmail.com>
+ <20221123142025.1504030-2-suagrfillet@gmail.com> <CAJF2gTTwvApRaGhZJxOrdcjWUC9DN-WF_7EKcHXx5HZ9Jkd5EA@mail.gmail.com>
+ <CAAYs2=ghhMmmrM4Bktvw9iGiajS5PLd1=Z61j2ZfhbhGUi4ekg@mail.gmail.com>
+ <CAJF2gTTWSr0qYTnRORSexEHMqUt-Lj6xZd0O-fUgC+f74FfCZA@mail.gmail.com>
+ <CAAYs2=ifvfY3QW07LXL+B6KH6b3EELMcXuz6ja_rYNE=G4+=qQ@mail.gmail.com>
+ <CAJF2gTQ6hEyfpo1wTUp1UwAGP1kMpEYjLqR-fz6UrCMjHN1VuQ@mail.gmail.com>
+ <CAAYs2=hNAwDk7=F077ityNykZJCCvGVyXsxRzZO3s7rKwOPpUg@mail.gmail.com> <CAJF2gTTLuXKKRw7UOmZB4qkVhcLFkQUiFAcKouX7DLAy-SsWNg@mail.gmail.com>
+In-Reply-To: <CAJF2gTTLuXKKRw7UOmZB4qkVhcLFkQUiFAcKouX7DLAy-SsWNg@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 28 Nov 2022 20:54:17 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTT9vAgk5O456LrSc8VwwDybguoQdh_ruVzknASqks6ZhQ@mail.gmail.com>
+Message-ID: <CAJF2gTT9vAgk5O456LrSc8VwwDybguoQdh_ruVzknASqks6ZhQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] riscv/ftrace: add DYNAMIC_FTRACE_WITH_DIRECT_CALLS support
+To:     Song Shuai <suagrfillet@gmail.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, rostedt@goodmis.org, mhiramat@kernel.org,
+        mark.rutland@arm.com, peterz@infradead.org, jolsa@redhat.com,
+        bp@suse.de, jpoimboe@kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,189 +71,322 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 08:10:15PM -0800, Asutosh Das wrote:
-> Task Tag is limited to 8 bits and this restricts the number
-> of active IOs to 255.
-> In Multi-circular queue mode, this may not be enough.
-> The specification provides EXT_IID which can be used to increase
-> the number of IOs if the UFS device and UFSHC support it.
-> This patch adds support to probe for ext_iid support in
-> ufs device and UFSHC.
-> 
-> Co-developed-by: Can Guo <quic_cang@quicinc.com>
-> Signed-off-by: Can Guo <quic_cang@quicinc.com>
-> Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
+On Mon, Nov 28, 2022 at 6:17 PM Guo Ren <guoren@kernel.org> wrote:
+>
+> On Fri, Nov 25, 2022 at 2:33 PM Song Shuai <suagrfillet@gmail.com> wrote:
+> >
+> > Guo Ren <guoren@kernel.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=8825=E6=97=
+=A5=E5=91=A8=E4=BA=94 03:10=E5=86=99=E9=81=93=EF=BC=9A
+> > >
+> > > On Fri, Nov 25, 2022 at 9:53 AM Song Shuai <suagrfillet@gmail.com> wr=
+ote:
+> > > >
+> > > > Guo Ren <guoren@kernel.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=8824=E6=
+=97=A5=E5=91=A8=E5=9B=9B 15:31=E5=86=99=E9=81=93=EF=BC=9A
+> > > > >
+> > > > > On Thu, Nov 24, 2022 at 1:27 AM Song Shuai <suagrfillet@gmail.com=
+> wrote:
+> > > > > >
+> > > > > > Guo Ren <guoren@kernel.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=8823=
+=E6=97=A5=E5=91=A8=E4=B8=89 23:02=E5=86=99=E9=81=93=EF=BC=9A
+> > > > > > >
+> > > > > > > Cool job, thx.
+> > > > > > >
+> > > > > > > On Wed, Nov 23, 2022 at 10:20 PM Song Shuai <suagrfillet@gmai=
+l.com> wrote:
+> > > > > > >>
+> > > > > > >> This patch adds DYNAMIC_FTRACE_WITH_DIRECT_CALLS support for=
+ RISC-V.
+> > > > > > >>
+> > > > > > >> select the DYNAMIC_FTRACE_WITH_DIRECT_CALLS to provide the
+> > > > > > >> register_ftrace_direct[_multi] interfaces allowing users to =
+register
+> > > > > > >> the customed trampoline (direct_caller) as the mcount for on=
+e or
+> > > > > > >> more target functions. And modify_ftrace_direct[_multi] are =
+also
+> > > > > > >> provided for modifying direct_caller.
+> > > > > > >>
+> > > > > > >> To make the direct_caller and the other ftrace hooks (eg. fu=
+nction/fgraph
+> > > > > > >> tracer, k[ret]probes) co-exist, a temporary register is nomi=
+nated to
+> > > > > > >> store the address of direct_caller in ftrace_regs_caller. Af=
+ter the
+> > > > > > >> setting of the address direct_caller by direct_ops->func and=
+ the
+> > > > > > >> RESTORE_REGS in ftrace_regs_caller, direct_caller will be ju=
+mped to
+> > > > > > >> by the `jr` inst.
+> > > > > > >>
+> > > > > > >> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+> > > > > > >> ---
+> > > > > > >>  arch/riscv/Kconfig              | 1 +
+> > > > > > >>  arch/riscv/include/asm/ftrace.h | 6 ++++++
+> > > > > > >>  arch/riscv/kernel/mcount-dyn.S  | 4 ++++
+> > > > > > >>  3 files changed, 11 insertions(+)
+> > > > > > >>
+> > > > > > >> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > > > > >> index 39ec8d628cf6..d083ec08d0b6 100644
+> > > > > > >> --- a/arch/riscv/Kconfig
+> > > > > > >> +++ b/arch/riscv/Kconfig
+> > > > > > >> @@ -278,6 +278,7 @@ config ARCH_RV64I
+> > > > > > >>         select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+> > > > > > >>         select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && =
+$(cc-option,-fpatchable-function-entry=3D8)
+> > > > > > >>         select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC=
+_FTRACE
+> > > > > > >> +       select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+> > > > > > >>         select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
+> > > > > > >>         select HAVE_FUNCTION_GRAPH_TRACER
+> > > > > > >>         select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEM=
+PTION
+> > > > > > >> diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/in=
+clude/asm/ftrace.h
+> > > > > > >> index 01bebb28eabe..be4d57566139 100644
+> > > > > > >> --- a/arch/riscv/include/asm/ftrace.h
+> > > > > > >> +++ b/arch/riscv/include/asm/ftrace.h
+> > > > > > >> @@ -114,6 +114,12 @@ struct ftrace_regs;
+> > > > > > >>  void ftrace_graph_func(unsigned long ip, unsigned long pare=
+nt_ip,
+> > > > > > >>                        struct ftrace_ops *op, struct ftrace_=
+regs *fregs);
+> > > > > > >>  #define ftrace_graph_func ftrace_graph_func
+> > > > > > >> +
+> > > > > > >> +static inline void arch_ftrace_set_direct_caller(struct pt_=
+regs *regs, unsigned long addr)
+> > > > > > >> +{
+> > > > > > >> +               regs->t1 =3D addr;
+> > > > > > >
+> > > > > > > How about regs->t0 =3D addr; ?
+> > > > > > > And delete all mcount-dyn.S modification.
+> > > > > > >
+> > > > > > The direct_caller has the same program layout as the ftrace_cal=
+ler, which means
+> > > > > > the reg t0 will never be changed when direct_caller returns.
+> > > > > >
+> > > > > > If regs->t0 changes here and ftrace_regs_caller executes `jr t0=
+`,
+> > > > > > direct_caller will enter the dead loop.
+> > > > > >
+> > > > > > Actually the reg t0 always saves the address of function entry =
+with 8B
+> > > > > > offset, it should only
+> > > > > > changed by the IPMODIFY ops instead of the direct_ops.
+> > > > > How about:
+> > > > > static inline void arch_ftrace_set_direct_caller(struct pt_regs *=
+regs,
+> > > > > unsigned long addr)
+> > > > > {
+> > > > >                regs->t1 =3D regs->t0;
+> > > > >                regs->t0 =3D addr;
+> > > > >
+> > > > > direct_caller:
+> > > > > add sp,sp,-?
+> > > > > sd t1,?(sp)
+> > > > direct_caller also serves as the first trampoline as ftrace_caller,=
+ like this:
+> > > > ```
+> > > > func -- direct_caller
+> > > >         -- ftrace_[regs]_caller
+> > > > ```
+> > > > So the t1 in this line has to be t0 to save the PC.
+> > >
+> > > direct_caller:
+> > > add sp,sp,-?
+> > > sd t1,?(sp)
+> > > sd t0, ?(so)
+> > > sd ra,?(sp)
+> > > mov t0, t1
+> > This foo is the tracing function along with the direct_caller,
+> > and it has the same parameters as the target function.
+> > So the t0 or t1 here means nothing for this foo function.
+> >
+> > No offense, but what's the purpose of this mv inst?
+> Here is my modification: [1]
+> [1]: https://lore.kernel.org/linux-riscv/20221128101201.4144527-1-guoren@=
+kernel.org/
+>
+> I've tested like this:
+> mount -t debugfs none /sys/kernel/debug/
+> cd /sys/kernel/debug/tracing/
+> echo handle_mm_fault > set_ftrace_filter
+> echo 'r:myr handle_mm_fault' > kprobe_events
+> echo function > current_tracer
+> echo 1 > events/kprobes/myr/enable
+> insmod /root/ftrace/ftrace-direct-too.ko
+> cat trace
+>
+>              cat-137     [000] .....  3132.231948: handle_mm_fault
+> <-do_page_fault
+>              cat-137     [000] .....  3132.231973: my_direct_func:
+> handle mm fault vma=3D000000001ba58b17 address=3Daaaaaaaab689c8 flags=3D2=
+54
+>              cat-137     [000] .....  3132.232622: myr:
+> (do_page_fault+0x176/0x424 <- handle_mm_fault)
+>              cat-137     [000] .....  3132.232724: handle_mm_fault
+> <-do_page_fault
+>              cat-137     [000] .....  3132.232750: my_direct_func:
+> handle mm fault vma=3D000000001ba58b17 address=3Daaaaaaaab7df9c flags=3D2=
+54
+>              cat-137     [000] .....  3132.233385: myr:
+> (do_page_fault+0x176/0x424 <- handle_mm_fault)
+>              cat-137     [000] .....  3132.233744: handle_mm_fault
+> <-do_page_fault
+>              cat-137     [000] .....  3132.233772: my_direct_func:
+> handle mm fault vma=3D000000001ba58b17 address=3Daaaaaaaab2b2c8 flags=3D3=
+54
+>              cat-137     [000] .....  3132.234392: myr:
+> (do_page_fault+0x176/0x424 <- handle_mm_fault)
+>              cat-137     [000] .....  3132.234480: handle_mm_fault
+> <-do_page_fault
+>              cat-137     [000] .....  3132.234505: my_direct_func:
+> handle mm fault vma=3D000000001ba58b17 address=3Daaaaaaaab5afc0 flags=3D3=
+54
+>              cat-137     [000] .....  3132.235149: myr:
+> (do_page_fault+0x176/0x424 <- handle_mm_fault)
+>              cat-137     [000] .....  3132.235263: handle_mm_fault
+> <-do_page_fault
+>              cat-137     [000] .....  3132.235289: my_direct_func:
+> handle mm fault vma=3D0000000071a096de address=3Dfffffff7fac530 flags=3D2=
+54
+>              cat-137     [000] .....  3132.235893: myr:
+> (do_page_fault+0x176/0x424 <- handle_mm_fault)
+I got a fail with no ftrace enabled. Yes, your patch is correct.
+# insmod /root/ftrace/ftrace-direct-too.ko
+[   13.586821]
+[   13.586970] **********************************************************
+[   13.587186] **   NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE   **
+[   13.587396] **                                                      **
+[   13.587594] ** trace_printk() being used. Allocating extra memory.  **
+[   13.587804] **                                                      **
+[   13.588240] ** This means that this is a DEBUG kernel and it is     **
+[   13.588488] ** unsafe for production use.                           **
+[   13.588735] **                                                      **
+[   13.588966] ** If you see this message and you are not debugging    **
+[   13.589200] ** the kernel, report this immediately to your vendor!  **
+[   13.589435] **                                                      **
+[   13.589682] **   NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE   **
+[   13.589922] **********************************************************
+[   13.632876] Unable to handle kernel access to user memory without
+uaccess routines at virtual address 0000000000000000
+[   13.633717] Oops [#1]
+[   13.633858] Modules linked in: ftrace_direct_too
+[   13.634294] CPU: 0 PID: 121 Comm: sh Not tainted
+6.1.0-rc1-00016-g459bb40f7d97 #388
+[   13.634652] Hardware name: riscv-virtio,qemu (DT)
+[   13.634962] epc : 0x0
+[   13.635313]  ra : do_page_fault+0x176/0x424
+[   13.635548] epc : 0000000000000000 ra : ffffffff8000c8d0 sp :
+ff2000000083be80
+[   13.635819]  gp : ffffffff815dc778 tp : ff600000033a9680 t0 :
+0000000000000000
+[   13.636144]  t1 : 0000000000000000 t2 : 0000000000000000 s0 :
+ff2000000083bee0
+[   13.636427]  s1 : ff2000000083bee0 a0 : ff600000038cb660 a1 :
+00fffffff7e74790
+[   13.636725]  a2 : 0000000000000255 a3 : 0000000000000000 a4 :
+0000000000000000
+[   13.637022]  a5 : 0000000000000000 a6 : 0000000000000000 a7 :
+0000000000000000
+[   13.637308]  s2 : 00fffffff7e74790 s3 : 000000000000000f s4 :
+ff6000000319b400
+[   13.637600]  s5 : ff600000033a9680 s6 : ff600000038cb660 s7 :
+ff6000000319b460
+[   13.637889]  s8 : 0000000000000255 s9 : 0000000000000001 s10:
+00fffffffffff4dc
+[   13.638172]  s11: 0000000000000004 t3 : 0000000000000000 t4 :
+0000000000000000
+[   13.638453]  t5 : 0000000000000000 t6 : 0000000000000000
+[   13.638679] status: 0000000200000120 badaddr: 0000000000000000
+cause: 000000000000000c
+[   13.640035] ---[ end trace 0000000000000000 ]---
 
-One nitpick below. But even without addressing that, this patch looks good to
-me.
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+>
+>
+> > > call foo
+> > > ld t0,?(sp)
+> > > ld t1,?(sp)
+> > > ld ra,?(sp)
+> > > add sp,sp,?
+> > > jr t1 // <- back to function entry
+> > When direct_caller works as the first trampoline
+> > the content of t1 here means nothing for the target function, neither
+> > PC nor PIP.
+> > >
+> > >
+> > > > > sd ra,?(sp)
+> > > > > call foo
+> > > > > ld t1,?(sp)
+> > > > And this line.
+> > > > > ld ra,?(sp)
+> > > > > add sp,sp,?
+> > > > > jr t1 // <- back to function entry
+> > > > >
+> > > > > And delete all mcount-dyn.S modification.
+> > > > >
+> > > > > > >>
+> > > > > > >> +}
+> > > > > > >> +
+> > > > > > >>  #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+> > > > > > >>
+> > > > > > >>  #endif /* __ASSEMBLY__ */
+> > > > > > >> diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/ker=
+nel/mcount-dyn.S
+> > > > > > >> index 466c6ef217b1..b89c85a58569 100644
+> > > > > > >> --- a/arch/riscv/kernel/mcount-dyn.S
+> > > > > > >> +++ b/arch/riscv/kernel/mcount-dyn.S
+> > > > > > >> @@ -233,6 +233,7 @@ ENDPROC(ftrace_caller)
+> > > > > > >>  #else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+> > > > > > >>  ENTRY(ftrace_regs_caller)
+> > > > > > >>         SAVE_ABI_REGS 1
+> > > > > > >> +       REG_S   x0, PT_T1(sp)
+> > > > > > >>         PREPARE_ARGS
+> > > > > > >>
+> > > > > > >>  ftrace_regs_call:
+> > > > > > >> @@ -241,7 +242,10 @@ ftrace_regs_call:
+> > > > > > >>
+> > > > > > >>
+> > > > > > >>         RESTORE_ABI_REGS 1
+> > > > > > >> +       bnez    t1,.Ldirect
+> > > > > > >>         jr t0
+> > > > > > >> +.Ldirect:
+> > > > > > >> +       jr t1
+> > > > > > >>  ENDPROC(ftrace_regs_caller)
+> > > > > > >>
+> > > > > > >>  ENTRY(ftrace_caller)
+> > > > > > >> --
+> > > > > > >> 2.20.1
+> > > > > > >>
+> > > > > > >
+> > > > > > >
+> > > > > > > --
+> > > > > > > Best Regards
+> > > > > > >  Guo Ren
+> > > > >
+> > > > >
+> > > > >
+> > > > > --
+> > > > > Best Regards
+> > > > >  Guo Ren
+> > > > Thanks,
+> > > > Song
+> > >
+> > >
+> > >
+> > > --
+> > > Best Regards
+> > >  Guo Ren
+>
+>
+>
+> --
+> Best Regards
+>  Guo Ren
 
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-> Reviewed-by: Avri Altman <avri.altman@wdc.com>
-> ---
->  drivers/ufs/core/ufshcd.c | 31 +++++++++++++++++++++++++++++++
->  include/ufs/ufs.h         |  4 ++++
->  include/ufs/ufshcd.h      |  4 ++++
->  include/ufs/ufshci.h      |  7 +++++++
->  4 files changed, 46 insertions(+)
-> 
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index c9d7b78..66b797f 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -2258,6 +2258,10 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
->  	if (err)
->  		dev_err(hba->dev, "crypto setup failed\n");
->  
-> +	hba->mcq_capabilities = ufshcd_readl(hba, REG_MCQCAP);
-> +	hba->ext_iid_sup = FIELD_GET(MASK_EXT_IID_SUPPORT,
-> +				     hba->mcq_capabilities);
-> +
->  	return err;
->  }
->  
-> @@ -7663,6 +7667,30 @@ static void ufshcd_temp_notif_probe(struct ufs_hba *hba, const u8 *desc_buf)
->  	}
->  }
->  
-> +static void ufshcd_ext_iid_probe(struct ufs_hba *hba, u8 *desc_buf)
-> +{
-> +	struct ufs_dev_info *dev_info = &hba->dev_info;
-> +	u32 ext_ufs_feature;
-> +	u32 ext_iid_en = 0;
 
-Given that scsi_host_alloc() uses kzalloc(), there is no need to explicitly set
-the b_ext_iid_en to 0 in case of failure.
 
-Thanks,
-Mani
-
-> +	int err;
-> +
-> +	/* Only UFS-4.0 and above may support EXT_IID */
-> +	if (dev_info->wspecversion < 0x400)
-> +		goto out;
-> +
-> +	ext_ufs_feature = ufs_get_ext_ufs_feature(hba, desc_buf);
-> +	if (!(ext_ufs_feature & UFS_DEV_EXT_IID_SUP))
-> +		goto out;
-> +
-> +	err = ufshcd_query_attr_retry(hba, UPIU_QUERY_OPCODE_READ_ATTR,
-> +				      QUERY_ATTR_IDN_EXT_IID_EN, 0, 0, &ext_iid_en);
-> +	if (err)
-> +		dev_err(hba->dev, "failed reading bEXTIIDEn. err = %d\n", err);
-> +
-> +out:
-> +	dev_info->b_ext_iid_en = ext_iid_en;
-> +}
-> +
->  void ufshcd_fixup_dev_quirks(struct ufs_hba *hba,
->  			     const struct ufs_dev_quirk *fixups)
->  {
-> @@ -7761,6 +7789,9 @@ static int ufs_get_device_desc(struct ufs_hba *hba)
->  
->  	ufshcd_temp_notif_probe(hba, desc_buf);
->  
-> +	if (hba->ext_iid_sup)
-> +		ufshcd_ext_iid_probe(hba, desc_buf);
-> +
->  	/*
->  	 * ufshcd_read_string_desc returns size of the string
->  	 * reset the error value
-> diff --git a/include/ufs/ufs.h b/include/ufs/ufs.h
-> index 1bba3fe..ba2a1d8 100644
-> --- a/include/ufs/ufs.h
-> +++ b/include/ufs/ufs.h
-> @@ -165,6 +165,7 @@ enum attr_idn {
->  	QUERY_ATTR_IDN_AVAIL_WB_BUFF_SIZE       = 0x1D,
->  	QUERY_ATTR_IDN_WB_BUFF_LIFE_TIME_EST    = 0x1E,
->  	QUERY_ATTR_IDN_CURR_WB_BUFF_SIZE        = 0x1F,
-> +	QUERY_ATTR_IDN_EXT_IID_EN		= 0x2A,
->  };
->  
->  /* Descriptor idn for Query requests */
-> @@ -352,6 +353,7 @@ enum {
->  	UFS_DEV_EXT_TEMP_NOTIF		= BIT(6),
->  	UFS_DEV_HPB_SUPPORT		= BIT(7),
->  	UFS_DEV_WRITE_BOOSTER_SUP	= BIT(8),
-> +	UFS_DEV_EXT_IID_SUP		= BIT(16),
->  };
->  #define UFS_DEV_HPB_SUPPORT_VERSION		0x310
->  
-> @@ -601,6 +603,8 @@ struct ufs_dev_info {
->  
->  	bool	b_rpm_dev_flush_capable;
->  	u8	b_presrv_uspc_en;
-> +	/* UFS EXT_IID Enable */
-> +	bool	b_ext_iid_en;
->  };
->  
->  /*
-> diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-> index 5cf81df..aec37cb9 100644
-> --- a/include/ufs/ufshcd.h
-> +++ b/include/ufs/ufshcd.h
-> @@ -747,6 +747,7 @@ struct ufs_hba_monitor {
->   * @outstanding_lock: Protects @outstanding_reqs.
->   * @outstanding_reqs: Bits representing outstanding transfer requests
->   * @capabilities: UFS Controller Capabilities
-> + * @mcq_capabilities: UFS Multi Circular Queue capabilities
->   * @nutrs: Transfer Request Queue depth supported by controller
->   * @nutmrs: Task Management Queue depth supported by controller
->   * @reserved_slot: Used to submit device commands. Protected by @dev_cmd.lock.
-> @@ -830,6 +831,7 @@ struct ufs_hba_monitor {
->   *	device
->   * @complete_put: whether or not to call ufshcd_rpm_put() from inside
->   *	ufshcd_resume_complete()
-> + * @ext_iid_sup: is EXT_IID is supported by UFSHC
->   */
->  struct ufs_hba {
->  	void __iomem *mmio_base;
-> @@ -871,6 +873,7 @@ struct ufs_hba {
->  
->  	u32 capabilities;
->  	int nutrs;
-> +	u32 mcq_capabilities;
->  	int nutmrs;
->  	u32 reserved_slot;
->  	u32 ufs_version;
-> @@ -978,6 +981,7 @@ struct ufs_hba {
->  #endif
->  	u32 luns_avail;
->  	bool complete_put;
-> +	bool ext_iid_sup;
->  };
->  
->  /* Returns true if clocks can be gated. Otherwise false */
-> diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
-> index f525566..4d4da06 100644
-> --- a/include/ufs/ufshci.h
-> +++ b/include/ufs/ufshci.h
-> @@ -22,6 +22,7 @@ enum {
->  /* UFSHCI Registers */
->  enum {
->  	REG_CONTROLLER_CAPABILITIES		= 0x00,
-> +	REG_MCQCAP				= 0x04,
->  	REG_UFS_VERSION				= 0x08,
->  	REG_CONTROLLER_DEV_ID			= 0x10,
->  	REG_CONTROLLER_PROD_ID			= 0x14,
-> @@ -68,6 +69,12 @@ enum {
->  	MASK_OUT_OF_ORDER_DATA_DELIVERY_SUPPORT	= 0x02000000,
->  	MASK_UIC_DME_TEST_MODE_SUPPORT		= 0x04000000,
->  	MASK_CRYPTO_SUPPORT			= 0x10000000,
-> +	MASK_MCQ_SUPPORT			= 0x40000000,
-> +};
-> +
-> +/* MCQ capability mask */
-> +enum {
-> +	MASK_EXT_IID_SUPPORT = 0x00000400,
->  };
->  
->  #define UFS_MASK(mask, offset)		((mask) << (offset))
-> -- 
-> 2.7.4
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+--=20
+Best Regards
+ Guo Ren
