@@ -2,91 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC1563A57A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C0563A57C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiK1JzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 04:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
+        id S230013AbiK1J4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 04:56:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiK1Jy4 (ORCPT
+        with ESMTP id S229612AbiK1J4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 04:54:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BCA193F9;
-        Mon, 28 Nov 2022 01:54:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 28 Nov 2022 04:56:11 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F9619297;
+        Mon, 28 Nov 2022 01:56:08 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90CCA61086;
-        Mon, 28 Nov 2022 09:54:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AE6AC433D6;
-        Mon, 28 Nov 2022 09:54:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669629295;
-        bh=AkgsU+jWeb+x+zRd8foXVBWbd6UpV4fzz2CIoI7J5jU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O6g3FJTSTpgl43Hy6wfLiqbzmO2Z5Gj9HUXhx6969Qa0fyt04ulnVuAALsLhtVErn
-         PbINisb2kBSkbEQ8NVVXvKGcOqWA49FtJ+u3UmjWTrn6mQI7bV2F5FgVvKB9OhZGQG
-         exxddOE4No31bEHeH1x5VSCcmkJH/9PdncW0jFuz15ihMI2CRgJOpZL3Y36HAs5FlT
-         flXjW5obKOa0RtyFGPXd2POJKldDGqbCtnYt3lFClp8MuTFM76mX1ma8RN1ytJTNIl
-         +YZXWCveU/Y3UtCfoZ6OOWsXOJbkUhOU6kUMuQsbSyoBnzh/6m+assv6QyW6rRKBli
-         K7qJqQghOA5Vw==
-Date:   Mon, 28 Nov 2022 11:54:50 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Coco Li <lixiaoyan@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 2/2] bnxt: Use generic HBH removal helper in tx
- path
-Message-ID: <Y4SFaovDiiKp1Bw/@unreal>
-References: <20221123164159.485728-1-alexandr.lobakin@intel.com>
+        by mail.3ffe.de (Postfix) with ESMTPSA id DFB422006;
+        Mon, 28 Nov 2022 10:56:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1669629366;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q6/UvepOOYPsvbSImDw9v/sYqkOjQsUVqAxKEdeyGck=;
+        b=1n+dwQGnfZDPS4xivA1Tzub14oqg5WEWQdx1vUfOZfjamggMGF1WEBquaHdwYGEGBxJRFi
+        gMlAmgVHZGgEfaVZy4/0T1CXd99Ozd0QmwKNeag8VKQUK3BFWLSNjtI6EPbSa+pJtxwZU3
+        2QXpDFv9sMaxotsi6591RrsJfCa2OobwYU/HiOJ4FbAZ6TpiFq483BVhsTzKJwpyLhWf5E
+        1WZ0XUNkRP2x6cXjn5xSxxGD90vri68JsxcjgBYQoLbykeuSLDJoA8RSvd/FtOG15OipT5
+        6xMRb5TdonSwjwVXjoZyZPYdNOfnRfa6N5Ylko3atYyrPHccMkH3+qmBYyrr+w==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123164159.485728-1-alexandr.lobakin@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 28 Nov 2022 10:56:06 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     William Breathitt Gray <william.gray@linaro.org>,
+        linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        broonie@kernel.org
+Subject: Re: [PATCH v3 3/9] gpio: 104-dio-48e: Migrate to the regmap-irq API
+In-Reply-To: <Y4SCZKr3uEXTQmHZ@smile.fi.intel.com>
+References: <cover.1669100542.git.william.gray@linaro.org>
+ <80fc819bcafe9697b6e02c0750d3cf0ea4ec9e1b.1669100542.git.william.gray@linaro.org>
+ <Y3414YhVjqKakddV@smile.fi.intel.com> <Y3ykg1Vc96Px6ovg@fedora>
+ <3a23df35a35cdba19eeb10c75b5bca97@walle.cc>
+ <Y4SCZKr3uEXTQmHZ@smile.fi.intel.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <74fb9467d82cc55e74468459984e9090@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 05:41:59PM +0100, Alexander Lobakin wrote:
-> From: Coco Li <lixiaoyan@google.com>
-> Date: Tue, 22 Nov 2022 15:27:40 -0800
-> 
-> > Eric Dumazet implemented Big TCP that allowed bigger TSO/GRO packet sizes
-> > for IPv6 traffic. See patch series:
-> > 'commit 89527be8d8d6 ("net: add IFLA_TSO_{MAX_SIZE|SEGS} attributes")'
-> > 
-> > This reduces the number of packets traversing the networking stack and
-> > should usually improves performance. However, it also inserts a
-> > temporary Hop-by-hop IPv6 extension header.
-> > 
-> > Using the HBH header removal method in the previous path, the extra header
-> > be removed in bnxt drivers to allow it to send big TCP packets (bigger
-> > TSO packets) as well.
-> > 
-> > If bnxt folks could help with testing this patch on the driver (as I
-> > don't have access to one) that would be wonderful. Thank you!
-> > 
-> > Tested:
-> > Compiled locally
-> 
-> Please mark "potential" patches with 'RFC'. Then, if/when you get a
-> 'Tested-by:', you can spin a "true" v1.
+Am 2022-11-28 10:41, schrieb Andy Shevchenko:
+> Of course there are drivers that are using it and it's not in
+> their ->probe():s
 
-We are getting ton of patches which are "compiled-only".
-I won't be such strict with them as long as they stated clearly about it.
+I was speaking of gpio drivers which use the regmap-irq stuff. I
+couldn't find any which are using {devm_,}regmap_add_irq_chip*()
+and gpiochip.init_hw().
 
-Thanks
+-michael
