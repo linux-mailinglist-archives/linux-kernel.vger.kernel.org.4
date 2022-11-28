@@ -2,104 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD7163B628
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 00:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58FC563B629
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 00:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234814AbiK1XwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 18:52:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
+        id S234645AbiK1XwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 18:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234770AbiK1Xv6 (ORCPT
+        with ESMTP id S234805AbiK1Xv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 18:51:58 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6993121A;
+        Mon, 28 Nov 2022 18:51:59 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16EE431F97;
         Mon, 28 Nov 2022 15:51:57 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id q7so18644602wrr.8;
-        Mon, 28 Nov 2022 15:51:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=T9PeG33kXwVJumNyWLvqPW0QBrgUXmRNtC0tTxLZOs0=;
-        b=LHCZGbP1WcodVWuYoawEeW65BtZaS/xkusakUDkQW5KXTzlq9d8fBlHzZpvEVZQlP5
-         asZVF3PR/9cVjhJDQtm4ppEJImlW+wisCS11ave5+NhXtqqJczswHfI+grnV1KZPDW3R
-         OMhYkH/pzJjiDySTdkvYxihCjMYm2hcaYFN92H5iMfUlhi3K0Ihkd4KooWAsGHHA4vZw
-         82FVfw/ZJ14Ecgb77dfPmnVzQB1LnaY6dL81f8kQEzpjLPavZlRTdQGT//d80vWHZPcu
-         ZjT3AxEbOXUgeUydEjOvxywHIHRTNS4Xb7Dd5zBjZ7+5zKWV+tYR5rqxuD+87WjszgLA
-         jcFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T9PeG33kXwVJumNyWLvqPW0QBrgUXmRNtC0tTxLZOs0=;
-        b=n9o5/7z0gN92O1L9wpzURE2x9iTDAhmjcnzdvJeJIUobu8K3qgJCM9n3S5rFiUrRdu
-         qbWeVdUNyp5Q5dJXJ+Q3wcTjXmS4AtpoY1Bs2RJf1KFVklne0VHRk/2TYxLxC+9ETRJN
-         kc3hlkZFPAf524M7svFA+OOahE3wClh0e9MlVay0FiMFBrNPt+W/bo0Y5tkSQ3FsUgF0
-         i61ZTnWb/m9pCECuDvnXKBwUzvXV7HaV+FRibr5qx29Cv5gX/zkSqjSAaJmvvc4Ln7ue
-         ekAcNxlNZB+nR0bdRtMg7YFY+VvAEZKQKtabv8sui0dEFiBnOAfvBbtOUkU4yYimoqrb
-         XOJg==
-X-Gm-Message-State: ANoB5pmMMYwxcwbYb34LzCT5tbyJordCHtH6tXYWJ/tDBi4uaWGHKL5K
-        yPCL0v0ip8E3v+XSwzxAvfs=
-X-Google-Smtp-Source: AA0mqf7ONpFyFxUZ+KuDI6MIEzqUgf/Jtmlq7v9vIWVmI+qoqhv9zTBgEuZLlj3HE4RJc8TrRZooSQ==
-X-Received: by 2002:adf:b30f:0:b0:241:bfbe:81bc with SMTP id j15-20020adfb30f000000b00241bfbe81bcmr23228748wrd.603.1669679516210;
-        Mon, 28 Nov 2022 15:51:56 -0800 (PST)
-Received: from prasmi.home ([2a00:23c8:2501:c701:a876:e68e:5e5f:704e])
-        by smtp.gmail.com with ESMTPSA id w13-20020adfec4d000000b00241dd5de644sm12035140wrn.97.2022.11.28.15.51.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 15:51:55 -0800 (PST)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] media: platform: renesas: rzg2l-cru: Add missing documentation for image_conv_irq
-Date:   Mon, 28 Nov 2022 23:51:42 +0000
-Message-Id: <20221128235150.27267-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
+Received: from loongson.cn (unknown [117.133.84.114])
+        by gateway (Coremail) with SMTP id _____8DxM_CcSYVj+tkBAA--.4421S3;
+        Tue, 29 Nov 2022 07:51:56 +0800 (CST)
+Received: from [192.168.1.7] (unknown [117.133.84.114])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxb+KZSYVj8sodAA--.10214S3;
+        Tue, 29 Nov 2022 07:51:53 +0800 (CST)
+Message-ID: <4920a652-cc08-6602-7886-80b86a619d0a@loongson.cn>
+Date:   Tue, 29 Nov 2022 07:51:53 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 2/2] dt-bindings: i2c: add loongson i2c
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        William Zhang <william.zhang@broadcom.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh@kernel.org>
+References: <20221128130025.23184-1-zhuyinbo@loongson.cn>
+ <20221128130025.23184-2-zhuyinbo@loongson.cn>
+ <9cc53272-6828-91b5-30a9-384168a9f94f@linaro.org>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+In-Reply-To: <9cc53272-6828-91b5-30a9-384168a9f94f@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Cxb+KZSYVj8sodAA--.10214S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7AFWDKr4fKw4UZr18Kw43trb_yoW8CFyUp3
+        W7CFsIyFW0qF12g393Wa48Cr15Zrn7A3W7Wr42gw1UCas8u3Z8XFWakrn8ua95ur1rWFW7
+        XFWIga1j9a1kAaDanT9S1TB71UUUUbDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jw0_GFyle2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r1q6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jsWrXUUUUU=
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Add missing documentation for image_conv_irq element in
-struct rzg2l_cru_dev.
+在 2022/11/28 22:11, Krzysztof Kozlowski 写道:
+> On 28/11/2022 14:00, Yinbo Zhu wrote:
+>> Add the Loongson platform i2c binding with DT schema format using
+>> json-schema.
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> ---
+>> Change in v2:
+>> 		1. Removed the "#address-cells" and "#size-cells" in requied.
+>> 		2. Add the reviewed-by information.
+>>
+>>   .../bindings/i2c/loongson,ls-i2c.yaml         | 47 +++++++++++++++++++
+>>   MAINTAINERS                                   |  1 +
+>>   2 files changed, 48 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml b/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
+>> new file mode 100644
+>> index 000000000000..0e4aee9146f3
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
+>> @@ -0,0 +1,47 @@
+>> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/i2c/loongson,ls-i2c.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Loongson I2C controller
+>> +
+>> +maintainers:
+>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - loongson,ls2k-i2c
+>> +      - loongson,ls7a-i2c
+> Why do we have the same bindings twice, with different people and file
+> names?
+>
+> https://lore.kernel.org/all/57339e73b6c0bfe446e19a7f55a48b7ca640b9ec.1669359515.git.zhoubinbin@loongson.cn/
+>
+> Best regards,
+> Krzysztof
 
-Documentation needed to avoid build warning with W=1 builds. It doesn't
-really add any non obvious information but good to have it anyway.
+Inthe previous internal discussion, I was assigned to go to upstream for 
+i2c, but I
 
-Reported-by: Hans Verkuil <hverkuil@xs4all.nl>
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h | 2 ++
- 1 file changed, 2 insertions(+)
+don't know why other people are also working on the patch. I will go to
 
-diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h
-index 5cb4fad6d6e0..0b682cbae3eb 100644
---- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h
-+++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h
-@@ -68,6 +68,8 @@ struct rzg2l_cru_ip {
-  *
-  * @vclk:		CRU Main clock
-  *
-+ * @image_conv_irq:	Holds image conversion interrupt number
-+ *
-  * @vdev:		V4L2 video device associated with CRU
-  * @v4l2_dev:		V4L2 device
-  * @num_buf:		Holds the current number of buffers enabled
--- 
-2.25.1
+internal communication.
 
