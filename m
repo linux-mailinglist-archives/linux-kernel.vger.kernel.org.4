@@ -2,101 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0976D63B39B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 21:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FC063B39D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 21:44:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbiK1Uoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 15:44:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
+        id S232405AbiK1Uow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 15:44:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234220AbiK1Uo3 (ORCPT
+        with ESMTP id S232635AbiK1Uou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 15:44:29 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D59C2C670;
-        Mon, 28 Nov 2022 12:44:29 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id g10so11350361plo.11;
-        Mon, 28 Nov 2022 12:44:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nBb+P0/n49Id7n7ZlG8fSGtAH3uSOCjmcnFinIp66gs=;
-        b=fU8qukFdsMAw9M3IR/Uz+aCBg+OcMJv/R1U1B7fnrh1//qeaceCwWyi+wwn8n+b40C
-         UvFWgbeALna8ygBhyV2QnUs2CK8C4zeqFevfHGggvBwAtwok3G5ym5TuhvtlZSxPEidj
-         mCu78GsYp1MVJYemhrWgsnnS3u9LTlGWraMi1a6FLzTAUX37cEizr1JUxB2WWuMa4IOH
-         AAnMB9+pHJiF5iiJa6I3SUmvoOevK5GC276VR+BAj927mGJHbGeX77mAWvSxKPKG0LP7
-         qz7gjgE92DWvLbCi18WUNWS4TjfukB6yMOu9d4P1OwrSF/dcn/r2c7azW2G1ikt+rRu3
-         Bbmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nBb+P0/n49Id7n7ZlG8fSGtAH3uSOCjmcnFinIp66gs=;
-        b=m7GvfNQ3LYkofrudwiU3a9LxBqULd6qNhdEzB50FmaH3Eg+PDwoxfg7eCYYk4uUCQo
-         8edrnBfa8SvzRn5f5VJmFZxi/C7wuJn7DkULFkZcjQypIJa+sdiXP6OdEmYpeJGKbnkS
-         rMCtr+MxedQg4gpINEtVUcNwMDEHxoQ6MFUPGAd5a2sZJK6fuwYonvALd9eZdhHlpXvN
-         2kDzun2vflpHSP9tHNVlN8HKeHMJO00x6xWd977Ijn39zjJD7aWh1wf0seX6GrC3YfC8
-         2UOR4IpFmSzM2Kq/YE1SfiK2C/nTsqOtCGu7Y7SN5LU752C+POJM+UFczZgA2WNdrXKm
-         MF3Q==
-X-Gm-Message-State: ANoB5pmMzFXMpPejeTBnQkcKkS/B7pxGJSzBL9aEgnCrzcCcJ72PU8mQ
-        OAkkGQ5p9W7E2fSBge1kczQ=
-X-Google-Smtp-Source: AA0mqf6vQCiSvx/+6VWhAHkNMd1v1xkv3c2ocMTBBfl1gCa5YPuS3GX/NyDzDEA3kZ6nnq4P03GRuA==
-X-Received: by 2002:a17:902:ecca:b0:189:ee1:23f with SMTP id a10-20020a170902ecca00b001890ee1023fmr35017558plh.75.1669668268572;
-        Mon, 28 Nov 2022 12:44:28 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id c17-20020a6566d1000000b0046f469a2661sm7257597pgw.27.2022.11.28.12.44.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 12:44:28 -0800 (PST)
-Message-ID: <c07e6089-5d87-2a4a-df1f-fbbd0c94136d@gmail.com>
-Date:   Mon, 28 Nov 2022 12:44:16 -0800
+        Mon, 28 Nov 2022 15:44:50 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A69D2E9F3;
+        Mon, 28 Nov 2022 12:44:49 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2ASKiJjA009979
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 15:44:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1669668263; bh=pnIQNOAY5vhuqXAYNX8YQgNudtCkLfVvMCmZuAp9r0E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Rf19edPnUJx8dTG0/rI9l6bTyJ9U7Mp3PrpNwemXd8yEpzei3qiepButayG8JhYqU
+         AU8WjRGHZ8FIO8ISAtR2g0ZtmHCrN9aQih43O16mDvEGaEvtPStm3x/1kfco4JWhyT
+         K8jGKg2sZ6cntVMV2V87lTon4xuzYR2UZNaXiMtcFGMTkbbkoQ+IW7jDEhNiIEfjjE
+         iCTf4ulX59Hg7CbPP5xV3YRjmmGQOPAnNfSPPVvKcoFON71f6X4oMEv7I3shjW+KE4
+         dYd+5KxxZJfC3PoJ8fBNx/+N3QIWkokZkqLqppGPHSbBqyrLh+Rizdv061V9U0NfWX
+         AYCD60IHa1jCA==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 1C4DF15C3AA6; Mon, 28 Nov 2022 15:44:19 -0500 (EST)
+Date:   Mon, 28 Nov 2022 15:44:19 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
+Cc:     Jan Kara <jack@suse.cz>, Baokun Li <libaokun1@huawei.com>,
+        linux-ext4@vger.kernel.org, adilger.kernel@dilger.ca,
+        lczerner@redhat.com, enwlinux@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yebin10@huawei.com, yukuai3@huawei.com
+Subject: Re: [PATCH 2/2] ext4: add inode table check in __ext4_get_inode_loc
+ to aovid possible infinite loop
+Message-ID: <Y4UdoyF6+oDI6w5P@mit.edu>
+References: <20220817132701.3015912-1-libaokun1@huawei.com>
+ <20220817132701.3015912-3-libaokun1@huawei.com>
+ <20220817143138.7krkxzoa3skruiyx@quack3>
+ <20220818144353.q6cq3b7huwkopk5b@riteshh-domain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 net-next 08/10] dt-bindings: net: add generic
- ethernet-switch
-Content-Language: en-US
-To:     Colin Foster <colin.foster@in-advantage.com>,
-        linux-renesas-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org
-Cc:     John Crispin <john@phrozen.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Marek Vasut <marex@denx.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        =?UTF-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        George McCollister <george.mccollister@gmail.com>
-References: <20221127224734.885526-1-colin.foster@in-advantage.com>
- <20221127224734.885526-9-colin.foster@in-advantage.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221127224734.885526-9-colin.foster@in-advantage.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220818144353.q6cq3b7huwkopk5b@riteshh-domain>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,16 +60,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/27/22 14:47, Colin Foster wrote:
-> The dsa.yaml bindings had references that can apply to non-dsa switches. To
-> prevent duplication of this information, keep the dsa-specific information
-> inside dsa.yaml and move the remaining generic information to the newly
-> created ethernet-switch.yaml.
+On Thu, Aug 18, 2022 at 08:13:53PM +0530, Ritesh Harjani (IBM) wrote:
+> Folding a small patch to implement the simple bound check. Is this the right
+> approach?
 > 
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> Suggested-by: Vladimir Oltean <olteanv@gmail.com>
+> From: "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
+> Date: Thu, 18 Aug 2022 07:53:58 -0500
+> Subject: [RFC] ext4: Add ext4_sb_getblk() wrapper for block bounds checking
+> 
+> We might need more bounds checking on the block before calling sb_getblk().
+> This helper does that and if it is not valid then returns ERR_PTR(-EFSCORRUPTED)
+> Later we will need to carefully convert the callers to use ext4_sb_getblk()
+> instead of sb_getblk().
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Hey Ritesh,
 
+I was going through some old patches and came across this RFC patch.
+Have you had a chance to polish this up?  I don't think I've seen a
+newer version of this patch, but maybe I missed it.
+
+Thanks,
+
+					- Ted
