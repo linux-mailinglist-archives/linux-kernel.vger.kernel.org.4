@@ -2,132 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7817263B15E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2347C63B179
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbiK1ScQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 13:32:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
+        id S232892AbiK1Sgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 13:36:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233142AbiK1Sbb (ORCPT
+        with ESMTP id S232767AbiK1SgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 13:31:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8BBCE8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:27:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF5FCB80F63
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:27:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4665BC433C1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:27:34 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="A90iwniA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1669660050;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TzjZE8gY8Du7tCToHcJnSQcEJMv8gNxwz9WPsqhbMe4=;
-        b=A90iwniAyxiqtNvxJQeSceQrO8Gq8KQJOMMZU6SJUhDg3nGy2jcMHnJRe/uuJXNl2+dDFE
-        oOpzPJxyLnbnmfCvQkT/PMG8g5yOLPxYHF0WW8zwldJj06ZiwI41Z5rZ6PDrnMcnPoBqqq
-        os8I+1liqszZmVem5VhPl54ERDKUf8g=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 78925e2d (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Mon, 28 Nov 2022 18:27:30 +0000 (UTC)
-Received: by mail-vk1-f176.google.com with SMTP id j19so5591357vke.12
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:27:30 -0800 (PST)
-X-Gm-Message-State: ANoB5pkozJdwvGMzPyGtRi43AenDm/fCenDoXpIgE4Awp0V8iRbja439
-        91iBYgaFbNedj/C8iTHEFSUAzrIu+6uhGcufckE=
-X-Google-Smtp-Source: AA0mqf6kIHCvrzR4/L2/KiPXnUqRVfTb4Pw5BCUQyhKv7qoH1y232+wfcGDaLXDvj9QysHq9FoJ1I+/4Bhvwl8vF+2A=
-X-Received: by 2002:ac5:cdc7:0:b0:3bb:ddbe:899d with SMTP id
- u7-20020ac5cdc7000000b003bbddbe899dmr21997278vkn.41.1669660049888; Mon, 28
- Nov 2022 10:27:29 -0800 (PST)
+        Mon, 28 Nov 2022 13:36:22 -0500
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF3FF08;
+        Mon, 28 Nov 2022 10:36:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1669660218;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=GKZLgAKbgAJsBsUL/AQjiQQ9KI6oNqWjLldVq5sSTCo=;
+    b=bnuUZZti3OLRZwh+fgHiXl9FHmurJEVCn+3NNH8xZBdWfB93XmCKJQWotwR71yyV3r
+    JFuxcC4VnT0s1btD1CDlnd90obC+xMwNzTP1fMghluBrF3rAh/pWrltgjriOqT4FgW3I
+    Ac5dKaMgLLqGBwCo8qSo6X1ccDNhPCz59VfJX8M7iUMKvPNi/PUEjshwH6Mm8T+E1/TB
+    MFx9Hp+vAnCX2k+/tIKsoZ3o6Jzt1Mf210PNdSw1+IIgty06jkBzG1zOZfNXxIFCp9DT
+    b5cuKbwR//ndjKsC53kc3ZEqva4GJowo3mJdViSOFDXzL+IV96LHhO2yiFk07skLM9Ha
+    +XDg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJAhdlWxfrI"
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 48.2.1 DYNA|AUTH)
+    with ESMTPSA id Yce349yASIUHtUH
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 28 Nov 2022 19:30:17 +0100 (CET)
+Date:   Mon, 28 Nov 2022 19:30:10 +0100
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nikita Travkin <nikita@trvn.ru>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        =?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
+        Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH] arm64: dts: qcom: msm8916-wingtech-wt88047: Add flash LED
+Message-ID: <Y4T+Mv+uIx7jQwky@gerhold.net>
+References: <20221128051512.125148-1-linmengbo0689@protonmail.com>
+ <43c24e7e-49b6-ff46-2f40-9413af7ac252@linaro.org>
 MIME-Version: 1.0
-References: <0029af41-bf24-9972-10ac-f52e1bdcbf08@linux.intel.com>
- <CAHmME9o25v0kZUV-7qEY=6XXAyOA7q0sG8gpQfxHgr3sSVdsWw@mail.gmail.com>
- <41455798-1dcb-135f-516d-25ab9a8082f5@linux.intel.com> <Y1A+9kN6bwfXeqVt@zx2c4.com>
- <8acc3e4a-abbc-32bc-626e-7a216f6755c3@linux.intel.com> <Y1Bby6FEEWiFIjjD@zx2c4.com>
- <d47b30e9-5619-c631-aa92-f5d89e88a909@linux.intel.com> <87a64brlao.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87a64brlao.fsf@email.froward.int.ebiederm.org>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 28 Nov 2022 19:27:18 +0100
-X-Gmail-Original-Message-ID: <CAHmME9pShsMrXwMhA+4FJKkc-nqCE74UQMXYy9fuEsoiDS2G=A@mail.gmail.com>
-Message-ID: <CAHmME9pShsMrXwMhA+4FJKkc-nqCE74UQMXYy9fuEsoiDS2G=A@mail.gmail.com>
-Subject: Re: [Intel-gfx] signal: break out of wait loops on kthread_stop()
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        "Intel-gfx@lists.freedesktop.org" <Intel-gfx@lists.freedesktop.org>,
-        linux-kernel@vger.kernel.org, sultan@kerneltoast.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <43c24e7e-49b6-ff46-2f40-9413af7ac252@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+Hi Krzysztof,
 
-On Mon, Nov 28, 2022 at 7:22 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->
-> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> writes:
->
-> > On 19/10/2022 21:19, Jason A. Donenfeld wrote:
-> >> On Wed, Oct 19, 2022 at 09:09:28PM +0100, Tvrtko Ursulin wrote:
-> >>> Hm why is kthread_stop() after kthread_run() abuse? I don't see it in
-> >>> kerneldoc that it must not be used for stopping threads.
-> >> Because you don't want it to stop. You want to wait until it's done. If
-> >> you call stop right after run, it will even stop it before it even
-> >> begins to run. That's why you wind up sprinkling your msleeps
-> >> everywhere, indicating that clearly this is not meant to work that way.
-> > Not after kthread_run which wakes it up already. If the kerneldoc for
-> > kthread_stop() is correct at least... In which case I really do think
-> > that the yields are pointless/red herring. Perhaps they predate kthread_run and
-> > then they were even wrong.
-> >
-> >>> Yep the yields and sleeps are horrible and will go. But they are also
-> >>> not relevant for the topic at hand.
-> >> Except they very much are. The reason you need these is because you're
-> >> using kthread_stop() for something it's not meant to do.
-> >
-> > It is supposed to assert kthread_should_stop() which thread can look at as when
-> > to exit. Except that now it can fail to get to that controlled exit
-> > point. Granted that argument is moot since it implies incomplete error handling
-> > in the thread anyway.
-> >
-> > Btw there are actually two use cases in our code base. One is thread controls
-> > the exit, second is caller controls the exit. Anyway...
-> >
-> >>> Never mind, I was not looking for anything more than a suggestion on how
-> >>> to maybe work around it in piece as someone is dealing with the affected
-> >>> call sites.
-> >> Sultan's kthread_work idea is probably the right direction. This would
-> >> seem to have what you need.
-> >
-> > ... yes, it can be converted. Even though for one of the two use cases we need
-> > explicit signalling. There now isn't anything which would assert
-> > kthread_should_stop() without also asserting the signal, right?. Neither
-> > I found that the thread work API can do it.
-> >
-> > Fingers crossed we were the only "abusers" of the API. There's a quite a number
-> > of kthread_stop callers and it would be a large job to audit them all.
->
->
-> I have been out and am coming to this late.   Did this get resolved?
->
->
-> I really don't expect this affected much of anything else as the code
-> sat in linux-next for an entire development cycle before being merged.
->
-> But I would like to make certain problems with this change were resolved.
+On Mon, Nov 28, 2022 at 09:56:47AM +0100, Krzysztof Kozlowski wrote:
+> On 28/11/2022 06:16, Lin, Meng-Bo wrote:
+> > WT88047 uses OCP 8110 Flash LED driver. Add it to the device tree.
+> > 
+> > Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+> > ---
+> >  .../dts/qcom/msm8916-wingtech-wt88047.dts     | 22 +++++++++++++++++++
+> >  1 file changed, 22 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts b/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts
+> > index 166bed05996f..a87be1d95b14 100644
+> > --- a/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts
+> > +++ b/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts
+> > @@ -23,6 +23,20 @@ chosen {
+> >  		stdout-path = "serial0";
+> >  	};
+> >  
+> > +	flash-led-controller {
+> > +		compatible = "ocs,ocp8110";
+> 
+> The compatible is not documented. Checkpatch warns about it. You need to
+> document devices before using them.
+> 
 
-I just checked drm-next, and it looks like the i915 people resolved
-their issue, and also got rid of those pesky yield()s in the process:
-https://cgit.freedesktop.org/drm/drm/commit/?id=6407cf533217e09dfd895e64984c3f1ee3802373
+Unfortunately Pavel never applied the dt-bindings patch for this - only
+the driver patch was applied. André already sent a kind reminder [1] and
+two resends [2, 3] without success. Since it's a documentation-only
+patch, maybe you could take it through the dt-bindings tree?
 
-Jason
+Even the original version [1] still applies cleanly to linux-next. :)
+
+Thanks,
+Stephan
+
+[1]: https://lore.kernel.org/linux-leds/20220212180942.8241-2-git@apitzsch.eu/
+[2]: https://lore.kernel.org/linux-leds/20220404161428.17175-1-git@apitzsch.eu/
+[3]: https://lore.kernel.org/linux-leds/20220505185344.10067-1-git@apitzsch.eu/
