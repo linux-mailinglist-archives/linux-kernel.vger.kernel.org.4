@@ -2,123 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4610F63AE11
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:44:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4033563AE05
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:42:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiK1Qo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 11:44:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38484 "EHLO
+        id S230295AbiK1QmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 11:42:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiK1QoT (ORCPT
+        with ESMTP id S231126AbiK1QmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 11:44:19 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27C41B1CC
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 08:44:14 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id h24so7039867qta.9
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 08:44:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XXSSzXQqwpqTp8kvMCywn3wDULboBrcJlaRyokBQ21k=;
-        b=fejHIyNfaphEgkYKnCMhaL2S9tzT4NlOpJKoyQ/v4qpJLWqHeLSj8Q/Bt8hkvQgiNW
-         kf190UpnS4b3+SMrlzWDpyElTt4EXZp6IxFfn6XkfhiwmSmG3dzw0+kBSjHu6elG+sBH
-         76tF+npGB5JvlV3CaGWJ+G39ZWHYT+hbM37sQOLlOzLG5Uxtt87VXn+BS9DH3YYNPH0P
-         yCzDWDNfhT6rLYKJVvz8pc1exJUAbkb0fmDJO8CDCXipAI+F8UtVaA//tWLZw+FAY62w
-         wsVbyuA4jzpTNb2zMM6z0KtyvzP/DPYa0lmYAzF3y+okU7yq3liWGN9ajF3L8AUB8EqB
-         WoIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XXSSzXQqwpqTp8kvMCywn3wDULboBrcJlaRyokBQ21k=;
-        b=z65M21gtWtlVeZNvO/Y1qZEUb+Lwi6d0MpjsQ01UPrQ6Gd1TGp3iT4MJgPzQL6otj7
-         62sJt5HJ13Z+8Q1Gunc+cJLKt+h/EXU0GsaZTn+EIPRTt1lxX6ddrxrico1t1WFNGKJK
-         meRXKyUwvVFbxyiwLfqJw5fgKgpnnV6MqwXr5B8xLafz7xm2MaV8oUUmgzoOBSElrfwd
-         1KBKrTb8WUwCvTTxOkJ+Wv/qkp8aII2V8P0KPj1wc3HM9g/WDSmpNw7X1KP5GhTQu2lO
-         2v8iCF06oluFomSOJ5fYVSOfZNFYLw8VNnvnJExkUSWLvqxrz3/ate0yKG5c3qp+vuKu
-         2Kyw==
-X-Gm-Message-State: ANoB5plrRT8ctk/wyzlvlqvrHWdyqiBKKRy4d1nilKlGBma/NSWvFT8P
-        gtW9u9owGmeSsuhkS2WV/DPsfw==
-X-Google-Smtp-Source: AA0mqf7AtxhiM423WOE+xFxDY3JxLwBVPHLaeViLYBR9XRHLigeZ8k+EOCSYlJRNcx4+zIoCpf6HbA==
-X-Received: by 2002:ac8:604e:0:b0:3a2:9fcd:59c8 with SMTP id k14-20020ac8604e000000b003a29fcd59c8mr34598175qtm.273.1669653853577;
-        Mon, 28 Nov 2022 08:44:13 -0800 (PST)
-Received: from nathan-ideapad.. (d-75-76-18-234.oh.cpe.breezeline.net. [75.76.18.234])
-        by smtp.gmail.com with ESMTPSA id bn31-20020a05620a2adf00b006b95b0a714esm8724614qkb.17.2022.11.28.08.44.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 08:44:13 -0800 (PST)
-From:   Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-Cc:     nathan.morrison@timesys.com, greg.malysa@timesys.com,
-        Mark Brown <broonie@kernel.org>,
-        linux-spi@vger.kernel.org (open list:SPI SUBSYSTEM),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] spi: cadence-quadspi: Add minimum operable clock rate warning to baudrate divisor calculation
-Date:   Mon, 28 Nov 2022 11:41:47 -0500
-Message-Id: <20221128164147.158441-1-nathan.morrison@timesys.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 28 Nov 2022 11:42:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF0F24F3F;
+        Mon, 28 Nov 2022 08:42:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 495616126E;
+        Mon, 28 Nov 2022 16:42:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A00CCC433D7;
+        Mon, 28 Nov 2022 16:42:01 +0000 (UTC)
+Date:   Mon, 28 Nov 2022 11:42:00 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Philipp Rudo <prudo@redhat.com>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        Ross Zwisler <zwisler@kernel.org>, linux-doc@vger.kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Subject: Re: [PATCH v1 2/2] kexec: Introduce kexec_reboot_disabled
+Message-ID: <20221128114200.72b3e2fe@gandalf.local.home>
+In-Reply-To: <20221124160115.23ae7928@rotkaeppchen>
+References: <20221114-disable-kexec-reset-v1-0-fb51d20cf871@chromium.org>
+        <20221114-disable-kexec-reset-v1-2-fb51d20cf871@chromium.org>
+        <20221117160650.16e06b37@rotkaeppchen>
+        <CANiDSCvyQ66mXbhEgj_qnE_zR4frsxtu1bXaukDrEG0FjrE4yw@mail.gmail.com>
+        <20221121150948.6f7c1f1f@rotkaeppchen>
+        <CANiDSCtqYykAjRinx9r4O+DxdTBA=OQSjF8URmM6X54nN7pDUA@mail.gmail.com>
+        <20221124124000.5af23cad@rotkaeppchen>
+        <CANiDSCvO+6TrM900Z_Jr4QL=c1uHS21deto7cU9W4mr7KimhJQ@mail.gmail.com>
+        <20221124160115.23ae7928@rotkaeppchen>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This Cadence QSPI IP has a 4-bit clock divisor field
-for baud rate division.  For example:
+On Thu, 24 Nov 2022 16:01:15 +0100
+Philipp Rudo <prudo@redhat.com> wrote:
 
-0b0000 = /2
-0b0001 = /4
-0b0010 = /6
-...
-0b1111 = /32
+> No, I think the implementation is fine. I'm currently only struggling
+> to understand what problem kexec_reboot_disabled solves that cannot be
+> solved by kexec_load_disabled.
 
-The maximum divisor is 32
-(when div = CQSPI_REG_CONFIG_BAUD_MASK).
+Hi Philipp,
 
-If we assume a reference clock of 500MHz and we set
-our spi-max-frequency to something low, such as 10 MHz.
-The calculated bit field for the divisor ends up being:
+Thanks for working with us on this.
 
-DIV_ROUND_UP(500000000/(2*10000000))-1 = 25
+Let me try to explain our use case. We want kexec/kdump enabled, but we
+really do not want kexec used for any other purpose. We must have the kexec
+kernel loaded at boot up and not afterward.
 
-25 is 0b11001... which truncates to a divisor field of 0b1001 (or /20).
+Your recommendation of:
 
-This is higher than our anticipated max-frequency of 10MHz
-(500MHz/20 = 25 MHz).  Instead, let's make sure we're always using
-the maximum divisor (/32) in this case and give the user a warning about
-the rate adjustment.
+  kexec -p dump_kernel
+  echo 1 > /proc/sys/kernel/kexec_load_disabled
 
-Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
----
- drivers/spi/spi-cadence-quadspi.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+can work, and we will probably add it. But we are taking the paranoid
+approach, and what I learned in security 101 ;-) and that is, only open up
+the minimal attack surface as possible.
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 447230547945..21b60b354404 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1119,6 +1119,14 @@ static void cqspi_config_baudrate_div(struct cqspi_st *cqspi)
- 	/* Recalculate the baudrate divisor based on QSPI specification. */
- 	div = DIV_ROUND_UP(ref_clk_hz, 2 * cqspi->sclk) - 1;
- 
-+	/* Maximum baud divisor */
-+	if (div > CQSPI_REG_CONFIG_BAUD_MASK) {
-+		div = CQSPI_REG_CONFIG_BAUD_MASK;
-+		dev_warn(&cqspi->pdev->dev,
-+			"Unable to adjust clock <= %d hz. Reduced to %d hz\n",
-+			cqspi->sclk, ref_clk_hz/((div+1)*2));
-+	}
-+
- 	reg = readl(reg_base + CQSPI_REG_CONFIG);
- 	reg &= ~(CQSPI_REG_CONFIG_BAUD_MASK << CQSPI_REG_CONFIG_BAUD_LSB);
- 	reg |= (div & CQSPI_REG_CONFIG_BAUD_MASK) << CQSPI_REG_CONFIG_BAUD_LSB;
--- 
-2.30.2
+Yes, it's highly unlikely that the above would crash. But as with most
+security vulnerabilities, it's not going to be an attacker that creates a
+new gadget here, but probably another script in the future that causes this
+to be delayed or something, and a new window of opportunity will arise for
+an attacker. Maybe, that new window only works for non panic kernels. Yes,
+this is a contrived scenario, but the work vs risk is very low in adding
+this feature.
 
+Perhaps the attack surface that a reboot kexec could be, is that the
+attacker gets the ability at boot up to load the kexec for reboot and not panic.
+Then the attack must wait for the victim to reboot their machine before
+they have access to the new kernel. Again, I admit this is contrived, but
+just because I can't think of a real situation that this could be a problem
+doesn't mean that one doesn't exist.
+
+In other words, if we never want to allow a kexec reboot, why allow it at
+all from the beginning? The above allows it, until we don't. That alone
+makes us nervous. Whereas this patch is rather trivial and doesn't add
+complexity.
+
+Thanks for your time, we appreciate it.
+
+-- Steve
