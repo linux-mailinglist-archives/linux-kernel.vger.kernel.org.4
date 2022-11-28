@@ -2,116 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B886C63ACAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 16:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 142C863ACAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 16:32:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbiK1Pcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 10:32:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
+        id S230076AbiK1Pc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 10:32:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232358AbiK1Pbv (ORCPT
+        with ESMTP id S232768AbiK1Pc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 10:31:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFE127DE1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:28:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669649293;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=omHAWSGVOrqdistvF1mI4veeF3fLfIz9T/z0L/hp1Dw=;
-        b=ZpMymtbhRxJzN3BoIMnOMoBWDVz3Vk/r9xryTovbGgTf0HuWLIxlvRftuzE0IetdE346Ab
-        YLzB7lLJcPi4WWLsfAdVdG5JcSVSVc5tV3F6ey/h0gX3yx5bNI8UdELLcxd/F8xU9vWrIM
-        D5TmlTor0Kir2Ik/uYfxceo3bu/fAsg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-649-EMi1OtOLOu-dlg5-KW-N1g-1; Mon, 28 Nov 2022 10:28:10 -0500
-X-MC-Unique: EMi1OtOLOu-dlg5-KW-N1g-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 818F0882826;
-        Mon, 28 Nov 2022 15:28:09 +0000 (UTC)
-Received: from [10.22.10.34] (unknown [10.22.10.34])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A642F4B3FC8;
-        Mon, 28 Nov 2022 15:28:08 +0000 (UTC)
-Message-ID: <60c59bed-d9aa-5e49-7a1b-d3463ff267ad@redhat.com>
-Date:   Mon, 28 Nov 2022 10:28:06 -0500
+        Mon, 28 Nov 2022 10:32:29 -0500
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A6CD108
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:31:59 -0800 (PST)
+Received: by mail-ed1-f45.google.com with SMTP id m19so14693509edj.8
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:31:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pOSg/B4UTmp4btrP74NZ2/GqvQw24Sg6iyetxuaSaXI=;
+        b=o4vzGZa3gADNsViK9LouO6GPOPq52ZFT90BhOjQkCWfGxS4JnG7xm7+hwgBAnlcdK4
+         kLesKeeLoU4FWOrGmS+6Z2fdFo3ps8E3hkbd6iikd2wMcHfrV0yAB47LENogJiL50mt6
+         YIiNVP8KEOUaSWOj/n6YXVqfIfjRNioWZuhywB7hXSBgx0I7e7BhP1frR2wJBMaLW4aj
+         IMVrKURVC3h/+07jQSfwofQcPyJxNtsWIST0PeVHzZc5z8sXjdIRjigBsFUzkY7SMrjU
+         jsvQIdkfSm5g6c6kfgAFn+kwwTREluCin76s7HQdoUBb0yhOz5qL9bG/I3UDgC6OGS7e
+         aJpg==
+X-Gm-Message-State: ANoB5pmZN1knCwZ+wz+vgfqW7hqOHcs14Z1iNLF2cWLeERn9oNqjwXlJ
+        tZwZ8t9//JImcWjCjccBjDw=
+X-Google-Smtp-Source: AA0mqf41mPmyAcB6kVIXc9HRpogBe3v8wlDWWI+1QVvhDCgq2IB1HitMlL1Xfd+FXtv/hHKgAIyskA==
+X-Received: by 2002:a05:6402:5406:b0:467:4b3d:f2ed with SMTP id ev6-20020a056402540600b004674b3df2edmr30871045edb.101.1669649518027;
+        Mon, 28 Nov 2022 07:31:58 -0800 (PST)
+Received: from localhost (fwdproxy-cln-120.fbsv.net. [2a03:2880:31ff:78::face:b00c])
+        by smtp.gmail.com with ESMTPSA id g9-20020a170906538900b0073de0506745sm4429682ejo.197.2022.11.28.07.31.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 07:31:57 -0800 (PST)
+From:   Breno Leitao <leitao@debian.org>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, jpoimboe@kernel.org,
+        peterz@infradead.org
+Cc:     x86@kernel.org, cascardo@canonical.com, leit@meta.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Subject: [PATCH v3] x86/bugs: Explicitly clear speculative MSR bits
+Date:   Mon, 28 Nov 2022 07:31:48 -0800
+Message-Id: <20221128153148.1129350-1-leitao@debian.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH-block] blk-cgroup: Use css_tryget() in
- blkcg_destroy_blkgs()
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hillf Danton <hdanton@sina.com>, Yi Zhang <yi.zhang@redhat.com>
-References: <20221128033057.1279383-1-longman@redhat.com>
- <20221128140631.GI25160@blackbody.suse.cz>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221128140631.GI25160@blackbody.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/28/22 09:06, Michal Koutný wrote:
-> Hello.
->
-> On Sun, Nov 27, 2022 at 10:30:57PM -0500, Waiman Long <longman@redhat.com> wrote:
->> That may not be true if there is no blkg associated with the blkcg. If
->> css_get() fails, the subsequent css_put() call may lead to data
->> corruption as was illustrated in a test system that it crashed on
->> bootup when that commit was included.
-> Do you have a stacktrace of the underflowing css_put() in
-> blkcg_destroy_blkgs()?
->
-> It looks to me slightly as a mistake of the caller site that it passes
-> struct blkcg * without any references.
->
-> By a cursory look, could it be cgwb_release_workfn?
->
-> --- a/mm/backing-dev.c
-> +++ b/mm/backing-dev.c
-> @@ -390,11 +390,11 @@ static void cgwb_release_workfn(struct work_struct *work)
->          wb_shutdown(wb);
->
->          css_put(wb->memcg_css);
-> -       css_put(wb->blkcg_css);
->          mutex_unlock(&wb->bdi->cgwb_release_mutex);
->
->          /* triggers blkg destruction if no online users left */
->          blkcg_unpin_online(wb->blkcg_css);
-> +       css_put(wb->blkcg_css);
->
->          fprop_local_destroy_percpu(&wb->memcg_completions);
->
-> Does your crash involve this stack?
+Currently x86_spec_ctrl_base is read at boot time, and speculative bits
+are set if configs are enable, such as MSR[SPEC_CTRL_IBRS] is enabled if
+CONFIG_CPU_IBRS_ENTRY is configured. These MSR bits are not cleared if
+the mitigations are disabled.
 
-That looks like a possible cause for the system crash that we are 
-seeing. In my testing, I do see one case out of more than a dozen calls 
-to blkcg_destroy_blkgs() where css_tryget() fail in the reproducing 
-system during bootup. However, I didn't force a stack dump at that point 
-and so I am not sure if that is the place, though it looks likely. One 
-of the crashes that was reported does involve blkcg_unpin_online(). So 
-maybe that is it.
+This is a problem when kexec-ing a kernel that has the mitigation
+disabled, from a kernel that has the mitigation enabled. In this case,
+the MSR bits are carried forward and not cleared at the boot of the new
+kernel. This might have some performance degradation that is hard to
+find.
 
-Cheers,
-Longman
+This problem does not happen if the machine is (hard) rebooted, because
+the bit will be cleared by default.
 
+Suggested-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ arch/x86/include/asm/msr-index.h |  4 ++++
+ arch/x86/kernel/cpu/bugs.c       | 10 +++++++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 4a2af82553e4..22986a8f18bc 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -54,6 +54,10 @@
+ #define SPEC_CTRL_RRSBA_DIS_S_SHIFT	6	   /* Disable RRSBA behavior */
+ #define SPEC_CTRL_RRSBA_DIS_S		BIT(SPEC_CTRL_RRSBA_DIS_S_SHIFT)
+ 
++/* A mask for bits which the kernel toggles when controlling mitigations */
++#define SPEC_CTRL_MITIGATIONS_MASK	(SPEC_CTRL_IBRS | SPEC_CTRL_STIBP | SPEC_CTRL_SSBD \
++							| SPEC_CTRL_RRSBA_DIS_S)
++
+ #define MSR_IA32_PRED_CMD		0x00000049 /* Prediction Command */
+ #define PRED_CMD_IBPB			BIT(0)	   /* Indirect Branch Prediction Barrier */
+ 
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 3e3230cccaa7..4030358216c8 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -137,8 +137,16 @@ void __init check_bugs(void)
+ 	 * have unknown values. AMD64_LS_CFG MSR is cached in the early AMD
+ 	 * init code as it is not enumerated and depends on the family.
+ 	 */
+-	if (boot_cpu_has(X86_FEATURE_MSR_SPEC_CTRL))
++	if (boot_cpu_has(X86_FEATURE_MSR_SPEC_CTRL)) {
+ 		rdmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
++		/*
++		 * Previously running software, like kexec for example, may
++		 * have some controls turned ON.
++		 * Clear them and let the mitigations setup below set them
++		 * based on configuration.
++		 */
++		x86_spec_ctrl_base &= ~SPEC_CTRL_MITIGATIONS_MASK;
++	}
+ 
+ 	/* Select the proper CPU mitigations before patching alternatives: */
+ 	spectre_v1_select_mitigation();
+-- 
+2.30.2
 
