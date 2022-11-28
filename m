@@ -2,197 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B884263ABAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD9863ABB3
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbiK1O4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 09:56:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46244 "EHLO
+        id S231639AbiK1O5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 09:57:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbiK1O4h (ORCPT
+        with ESMTP id S231382AbiK1O5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:56:37 -0500
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2127.outbound.protection.outlook.com [40.107.104.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491401F9DA;
-        Mon, 28 Nov 2022 06:56:34 -0800 (PST)
+        Mon, 28 Nov 2022 09:57:12 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2050.outbound.protection.outlook.com [40.107.93.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0FF23156
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:57:10 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kIjGhtCYBF0ZOQKUUA3FmKUDXrlyXC8EL8Mz8Zq05qy583MvrnOl5xVugQkMGoZRjHDYLSHtG7ATMidfVpmh5pwJhJAIWcwdR0qnntAmsCYA3ofEgnT9QtDMUJ0mvm9h+2Yekk4FlqNkfrjxYHugcEjD1F0bEvH5F/ivENyuTtWOcTst4L08Cpwh7gta8kPLXj3yVz09NoqgFxpixKWSMo4dy6SUNI0KhInzy/19EAoQLfkRppWo2KxA8mF8PPa/hqmkKrgSshxqgoemayq5sPuXkpj2NjBfWeVyUi9ibAqAvLRmru+a4J6BH3u122KlCMq0Hnn7upM4+cuaTs4EYg==
+ b=mp2p9lhyYtUShKg2Fhb77khpY6ptaGDgQlJhgNDIu8XoC/7xhp5vkTkcEbRozf2Ueqi3g6mjoM2O94hzgG6WLBVxNp53ZAihzW1iHF4S219AWQRff30TRuYj1ijeEhefuwf3PZom5FXy4LawepxPWdKO3USbD6E0cofJK3VwuKFnfiLjUZ59azWRY7UgBZbBKOxw0ZwYWpRXVgQMkJL23mooH8cS7LcuSm2csAfGDSGF39+jQnmoC8J7h1o5EcVzZXDFLTlcvfPEx7PlW0rwk4Mf/iJAgI3bwn9+W5z607I05dCHTabU8VR/VvEy6z3P9RPWzFts4K/dUCAShm2mkg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fLZ6DNP1ktx/hPYmzo5z4YhkL6IZRM49lF+iYUWdR7s=;
- b=NjcUOxRfwKH+lANPn2/f42VqTDLThy2rT09UJj2DA/kkOd8VYt3OXcw74N/l2HmEMprzByG0+84uJNSpproUrpwVnxpxZ1nbYvK/55D02KpIvlt8g45SXAAifYAOp9bpfA/zwgRJovb6r9ypugrJuikqXgetxYYk6/pD0owOJde9PFekqi/4pGt5ncY1wLrP3MLSoFz+s4VZn7OALoiARRFby69Uxcfvm0+OUKexeG2mYzPeQcoDE6Z5aqaA3lIUK3GAE/fxm0qiwFlyM7Th1x5io3PnDTVpKAR10jhWaoUVb5j0sDt15WOMAs/6EBuHG0+bC1JpkI2X03i+JaQ8Cg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 217.111.95.7) smtp.rcpttodomain=microchip.com smtp.mailfrom=arri.de;
- dmarc=none action=none header.from=arri.de; dkim=none (message not signed);
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=arrigroup.onmicrosoft.com; s=selector1-arrigroup-onmicrosoft-com;
+ bh=B95teZYQz0vQcTIXA5Al57FleOummYQGUGDFVcsW9bI=;
+ b=nhpEzAnSWxGRIw2zl8GlEuhZw3f4WVJoO+hSFGZxfljS6rdXUM8VhaNy92Nh2x0ouNHYNMGjOkduLzoETd/LCYCEs8pUJGW7oJkJhqxmJp9Oa++a5cpjHJ141lDY0hfFrFSMw7tdBwDueP9xQEWrGRxaMsXsGYF5XG11pggRXjFVyZEN6Pj7oylb8cBYCazMYsRkyoHJ54SUBIZc4eZvVQUcknD44A8fKEUJD//U2poFt1SgVNQ7TvSzlkgev65Ozq6uvYTYksagY1F0EiXct4/6J235kF9PbOYhvLUbdr51hsf9mRE9uVlXg7OqO+VE2e8iFzMcA/0Q5kuaw4zWAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fLZ6DNP1ktx/hPYmzo5z4YhkL6IZRM49lF+iYUWdR7s=;
- b=j443V07Iz4wN2fxEL+TCFtY4MJS9o81Fz83MhqGU1n341Fp7iqjBRzMD5vNt9rFbek4f743SqnTjIamLBtGC1ipZlIAHoGH7lZN0dXSjhZJODcThCLkdL29IgTy8to6w1uGHrZI+EzeGewmTE1j0Y0FyyIXg+BhRj51sYJdyprY=
-Received: from AS9P250CA0013.EURP250.PROD.OUTLOOK.COM (2603:10a6:20b:532::24)
- by DB5PR07MB9454.eurprd07.prod.outlook.com (2603:10a6:10:48e::11) with
+ bh=B95teZYQz0vQcTIXA5Al57FleOummYQGUGDFVcsW9bI=;
+ b=L9cKgTRQONtXMMEoqyycQNsh5y5xJTHPMEx7AJ967gm2yqOsHYLA6a2FFIAmGzQqZb7dH+skilwiqVGO265dvk0ej8x+g1ADRGSe+w6lSYOVJ6MFOgV+qb82QVadV5RkzkLaYPiTmfM6NtXiT2lbJQcpIqLuq9RzEIwWqPqLYlJA9vXV7x2pc+TlnQNgQZOvVJqlUIXPrP7Yx71K5iTyiq2oL51JEttbREKbGkaT6FpW4RLeUldJGSLYMXruUHQBAGj+lu5zzxJIEKXZvSKxtoPu69z1uhJ6xfkW0JzpeQa9h1h53OYB7NsTzW/Wd8hkwXLVodXHpVYXxQM15qCknA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BL1PR12MB5851.namprd12.prod.outlook.com (2603:10b6:208:396::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Mon, 28 Nov
- 2022 14:56:32 +0000
-Received: from AM0EUR02FT027.eop-EUR02.prod.protection.outlook.com
- (2603:10a6:20b:532:cafe::23) by AS9P250CA0013.outlook.office365.com
- (2603:10a6:20b:532::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19 via Frontend
- Transport; Mon, 28 Nov 2022 14:56:32 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.7)
- smtp.mailfrom=arri.de; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arri.de;
-Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
- designate 217.111.95.7 as permitted sender) receiver=protection.outlook.com;
- client-ip=217.111.95.7; helo=mta.arri.de;
-Received: from mta.arri.de (217.111.95.7) by
- AM0EUR02FT027.mail.protection.outlook.com (10.13.54.153) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5834.15 via Frontend Transport; Mon, 28 Nov 2022 14:56:31 +0000
-Received: from n95hx1g2.localnet (192.168.54.110) by mta.arri.de (10.10.18.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 28 Nov
- 2022 15:56:30 +0100
-From:   Christian Eggers <ceggers@arri.de>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>,
-        Pavan Chebbi <pavan.chebbi@broadcom.com>
-CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
-        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
-        <richardcochran@gmail.com>
-Subject: Re: [Patch net-next v1 01/12] net: dsa: microchip: ptp: add the posix clock support
-Date:   Mon, 28 Nov 2022 15:56:30 +0100
-Message-ID: <5639053.DvuYhMxLoT@n95hx1g2>
-Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
-In-Reply-To: <CALs4sv19Efi0oKVqRqRFtF2SCr6Phejh4RFvuRN1UCkdvcKJeg@mail.gmail.com>
-References: <20221128103227.23171-1-arun.ramadoss@microchip.com> <20221128103227.23171-2-arun.ramadoss@microchip.com> <CALs4sv19Efi0oKVqRqRFtF2SCr6Phejh4RFvuRN1UCkdvcKJeg@mail.gmail.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Mon, 28 Nov
+ 2022 14:57:08 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%9]) with mapi id 15.20.5857.021; Mon, 28 Nov 2022
+ 14:57:08 +0000
+Date:   Mon, 28 Nov 2022 10:57:07 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Rob Clark <robdclark@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 18/20] iommu: Call set_platform_dma if default domain
+ is unavailable
+Message-ID: <Y4TMQ7HazPWMdsNj@nvidia.com>
+References: <20221128064648.1934720-1-baolu.lu@linux.intel.com>
+ <20221128064648.1934720-19-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221128064648.1934720-19-baolu.lu@linux.intel.com>
+X-ClientProxiedBy: BLAPR03CA0023.namprd03.prod.outlook.com
+ (2603:10b6:208:32b::28) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Originating-IP: [192.168.54.110]
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0EUR02FT027:EE_|DB5PR07MB9454:EE_
-X-MS-Office365-Filtering-Correlation-Id: 63361fa4-f5f3-45f9-f8b6-08dad150bca2
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5851:EE_
+X-MS-Office365-Filtering-Correlation-Id: ea05bcb1-081c-4dfe-fba2-08dad150d228
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TwTVnFj4KE2dDNB5EWjjEa6fLNyw2quX5RZ5FdW/NRERWf/uPY2pogWWm1/kkJ7pnweom4YJukVAWpT3ggdHaMOfenJYBEAZYEXbIYquBbNlyd+2DSJFsqG87TnbbDCCgGwObFgW8Fi4JThyj00y+yRIOe1qTtL/cDQyHVTtWN8ksArbV8B7liBgCOGNKsvCw7pdajFlOKHMdoGWrfjaMaUQHoPFCaH59EHvF/j/c/6u4GJ3aBSdq5ciXSaGTdOrY3SOulshEJnh40AzosBYuk8khfJYg8QrXMZcZMe5EKgp+yyCrngYWPZkPBqPMaPpBLNTtIAMFymnAtMil6vZ+g1/0ViVWOMnFJGUPWiXm4xXx8Zee7xBQXDNCGi5SbCkkwRU5uJRF925MswLMLhUKmxauxxwKOYyPzEFtnFupV0bDFWHU4vUPo8ndbiHRRVVH2x3NBRJZ5wYBr3NO1brTaWDt7kRYPIEsgG8+P3cV4+f9BdWv3mHioEULAEuMsV8Yz3OvusFhMt9gD29FUb/YanQMpNwUYsDAgm8JyF880NINCoIwrexwGpLEBaukfZ8u4mZ2xn2pIlYBrV5Mppno4NYKgxIf9YV2CG9jy40E2yE4n4yIlkS85eCY9/5XZWXLZG+IU9xVZfbE8angaql1jZbvr4ybcvmmeqfhBS017gevItpx5cHvwD9hpFsSlOqF9iNwFvdg2CJcCHK/8aOkDO+9FmU2YTEYAX3VLIG6wCgqQQ7tEhvP2PC7NIoaku1
-X-Forefront-Antispam-Report: CIP:217.111.95.7;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(396003)(39850400004)(136003)(451199015)(36840700001)(46966006)(110136005)(26005)(8936002)(2906002)(70206006)(336012)(426003)(82740400003)(47076005)(5660300002)(7416002)(186003)(36860700001)(54906003)(41300700001)(8676002)(16526019)(53546011)(478600001)(33716001)(4326008)(83380400001)(40480700001)(9576002)(316002)(70586007)(82310400005)(9686003)(36916002)(81166007)(356005)(86362001)(36900700001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: arri.de
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 14:56:31.8419
+X-Microsoft-Antispam-Message-Info: 486m/QwQZzEc5lM1zhBon6QXUghhS0sg3MHJp/hrr5o4lRX7db2Bx2W7o53LxGhOMsR7Vn2fZUOyfYDVeIYZjHiNWRx+B6KdV4RH5DvBdf9AFaJ07yRkSY2AHwW7NqQ2xJBRFVg7+B6vEzWZ4chDNPNvccUyKOmXXAGxaphJHby57nENdItT2VhZrIcc/EkbDHYK4sMkMOTKx7tp7ZcrHlW85utQMYZDwci4Pi4jwMkGEVTrjc46gdgRUKnFtTfr1/Y9NrOyM1QrokbAJGQLy7Xk87eL5qqWSd/aCcy4/qRdvZ3cZDX2wwD19hu/d72fxj7pxDXfNDks/P9HphQbBfxR+zyLZcI37hSSRQpnh00DG7qkpSItuHSv1iXmRnTuP3RG2N4OC1eIC5fbDklq34gSMQLbmYgy/6xLw3sEfP+LH5TBgCDmMfT1vLI+5NR5VFsw7gN9WSx5fEkqiraYO5Es7iJUwR1MMaAJXdBgpmXM7nZ7YLxzN1lj3Y6b1gAijFPWdRfcSpdnS6+/Iw7btXg7T+zdjmyCNoZOnbwGQLkQcSksibjb2ogiHVIlWU/hVluvG14vsj9V74yY0Wq1pv1lTU2tgxCSZ7M9xSwE02WOhtOcKAAyt4TcfSp6q6eq
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(136003)(346002)(376002)(396003)(451199015)(316002)(478600001)(66946007)(2906002)(36756003)(54906003)(6486002)(6916009)(83380400001)(38100700002)(6506007)(26005)(86362001)(6512007)(2616005)(186003)(5660300002)(7416002)(8936002)(41300700001)(8676002)(66556008)(66476007)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ScUx67gT6p2vkj2lt4u5+EzfZiZdghbXOfOWBidN/HcisdMNxiYJbAFEUbS2?=
+ =?us-ascii?Q?j0egxoN4wFOmzCK/NzuTotYCR+1jffxpMuE3BNgTyXR9mQ/qp9T/d4fUCkOo?=
+ =?us-ascii?Q?NG7k7u/rEWolUMt9oePG+Cx9EkqFbEqXsbIcS/qAfazokaEzYSr8EoWexoP8?=
+ =?us-ascii?Q?q4h6gYF824CSoB1+hTEIX8c40ZzCNDKvWfgYSU8xInGoaSKF0R4tlJW+DeBh?=
+ =?us-ascii?Q?/AJ9EhYhD9YOTAx2oelBSXCrLaO++sbc2Cvi/e5/UzdvespIFnOpmqeALNsT?=
+ =?us-ascii?Q?qR++0OiHOl+Qzo6rU26DKR5uU49UtcQxBGCU0wjJBMsvNk8nn2do6yjcxgST?=
+ =?us-ascii?Q?5p8v9zFmwHXybVB2GpcTMPjqsnIAfO6EQ/JnDX6w/5y68D99PnrIbfaLGIZa?=
+ =?us-ascii?Q?Mejksm/2G6zUFD3OK3BCT9oqxZYhzRE09ZWeHp1bXmtl9RB76Rb586udtdQJ?=
+ =?us-ascii?Q?lLafAAi9CtOa2mhffCK3hUyin7+U8UsMpatohYuFrhqqdhpmoulJJLjtmIe+?=
+ =?us-ascii?Q?D8h+0HScM06ZYknnxd07QIdZ5QT9l6qpv1+SU2YVbtLojpkcqyEA9SKbGfHm?=
+ =?us-ascii?Q?gGCiGQjIarZGFPfKaKVyT7j40qCHzgu219jtMzj/jpXIERv6fCe9FcFg4l84?=
+ =?us-ascii?Q?Y1lnK/NWi8pzdu3EYHjgMC/INlqIJTNSpOB2LdM17bXTpGllNagGd49jjFt5?=
+ =?us-ascii?Q?KoPLMaiy6+1n09y3EBkZpixyNbeyDHIkfC/zJAYejYVoOmcwMev02QxdDkX4?=
+ =?us-ascii?Q?h02t9A8ieVvVZa1Vd8mkSIOlBUYwunzfqNxt5VqwflRZe0lKFCyQk6lkcjUb?=
+ =?us-ascii?Q?r8mTJb2LQh0ytr/1kRzgY0uPa79Ggz1AeqnPPRmw2IBPUQkBKwh+Ib593xuk?=
+ =?us-ascii?Q?bPN0XjL2XmJwAy1gAs+yYeyShzSBsGiI3OW19anyAgxTgAuSwaWmEL1mvRre?=
+ =?us-ascii?Q?WRsTEhMcfLiCLhGcfVQZVc4jgYpBQTEVhTiAJsLKmxxAvvQ5jrX50RXehQ65?=
+ =?us-ascii?Q?Qq88BjenvnL3g/MsxMJciiv1Vyu3Q54D0+H1PGkNHrqsqp16kXFTK1ktB0tx?=
+ =?us-ascii?Q?K2s4Nt7ztlU/bLzgdFBQyF5QASWQoLV1j0bQ064WuPWKYuGJbTnN6s5R8+Zx?=
+ =?us-ascii?Q?SadVesTsBskqvazsh7cjGODnKycxFE2eiJYjZAATNOE/jKhJQalnCaxnpnXI?=
+ =?us-ascii?Q?QyG137/H6CeF9Qr4Lh0AN2AECKlHybcft+HJyx5m3QxN3Tw18Fwh4Rkiqk4E?=
+ =?us-ascii?Q?KWAcjZ5VXDIopcDRAWmFYfu0WXPlTmAPP3s1j7sEazup6kNOkwTgnDIJJtrK?=
+ =?us-ascii?Q?gRDIv5ogKfYuTPveyvLwOCegdN0Kj1/tNXYMMmFvkDAZ2si+L9GrNYOl9RR7?=
+ =?us-ascii?Q?5zkwszuwF/9ZMD2ewr8Lk2XKP/imuZ1wm5rgQs/5aRCAMmgn2LNf8o4qiWT/?=
+ =?us-ascii?Q?aO4K7Ka1MzFbPSJHCXUgkLwjNfVuBfWXBvacghIUzLwRqAP47dkvsTv7L1RU?=
+ =?us-ascii?Q?UeG0uUIVVLU+dHbnxEeWYNU8a5t5Hi6MY49pv7kpXxJMzrOfQAJs8+/SJCjx?=
+ =?us-ascii?Q?kyM3Dx5WWbf10arv1jk=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea05bcb1-081c-4dfe-fba2-08dad150d228
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 14:57:08.1086
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63361fa4-f5f3-45f9-f8b6-08dad150bca2
-X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.7];Helo=[mta.arri.de]
-X-MS-Exchange-CrossTenant-AuthSource: AM0EUR02FT027.eop-EUR02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB5PR07MB9454
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DcL9AN1jRFthSGKYZwpRMmhpVZgq9djYudqJstjhdtuKEXdsN0Bzfqkn9x2/MqRP
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5851
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday, 28 November 2022, 15:49:33 CET, Pavan Chebbi wrote:
-> On Mon, Nov 28, 2022 at 4:03 PM Arun Ramadoss
-> <arun.ramadoss@microchip.com> wrote:
+On Mon, Nov 28, 2022 at 02:46:46PM +0800, Lu Baolu wrote:
+> If the IOMMU driver has no default domain support, call set_platform_dma
+> explicitly to return the kernel DMA control back to the platform DMA ops.
 > 
-> > diff --git a/drivers/net/dsa/microchip/ksz_ptp_reg.h b/drivers/net/dsa/microchip/ksz_ptp_reg.h
-> > new file mode 100644
-> > index 000000000000..e578a0006ecf
-> > --- /dev/null
-> > +++ b/drivers/net/dsa/microchip/ksz_ptp_reg.h
-> > @@ -0,0 +1,57 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/* Microchip KSZ PTP register definitions
-> > + * Copyright (C) 2022 Microchip Technology Inc.
-> > + */
-> > +
-> > +#ifndef __KSZ_PTP_REGS_H
-> > +#define __KSZ_PTP_REGS_H
-> > +
-> > +/* 5 - PTP Clock */
-> > +#define REG_PTP_CLK_CTRL               0x0500
-> > +
-> > +#define PTP_STEP_ADJ                   BIT(6)
-> > +#define PTP_STEP_DIR                   BIT(5)
-> > +#define PTP_READ_TIME                  BIT(4)
-> > +#define PTP_LOAD_TIME                  BIT(3)
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>  drivers/iommu/iommu.c | 28 ++++++++--------------------
+>  1 file changed, 8 insertions(+), 20 deletions(-)
 > 
-> PTP_WRITE_TIME sounds more intuitive than PTP_LOAD_TIME?
-PTP_LOAD_TIME has been derived from the data sheet:
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 7c99d8eb3182..e4966f088184 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -2040,16 +2040,6 @@ int iommu_deferred_attach(struct device *dev, struct iommu_domain *domain)
+>  	return 0;
+>  }
+>  
+> -static void __iommu_detach_device(struct iommu_domain *domain,
+> -				  struct device *dev)
+> -{
+> -	if (iommu_is_attach_deferred(dev))
+> -		return;
 
--------------8<--------------
-PTP Clock Load
---------------
-Setting this bit will cause the PTP clock to be loaded with the time value in
-registers 0x0502 to 0x050B.
-------------->8--------------
+This removal might want to be its own patch with an explanation.
 
-I would also prefer PTP_WRITE_TIME. But is it ok to deviate from data sheet?
+It looks like at the current moment __iommu_detach_device() is only
+called via call chains that are after the device driver is attached -
+eg via explicit attach APIs called by the device driver.
 
-> Also I see that all the #defines are introduced in this patch, some of
-> which are used later. It is a good idea to introduce the #defines in
-> the same patches where they are being used for the first time.
-> I will be looking at the entire series but am responding to this now.
-> 
-> > +#define PTP_CLK_ADJ_ENABLE             BIT(2)
-> > +#define PTP_CLK_ENABLE                 BIT(1)
-> > +#define PTP_CLK_RESET                  BIT(0)
-> > +
-> > +#define REG_PTP_RTC_SUB_NANOSEC__2     0x0502
-> > +
-> > +#define PTP_RTC_SUB_NANOSEC_M          0x0007
-> > +#define PTP_RTC_0NS                    0x00
-> > +
-> > +#define REG_PTP_RTC_NANOSEC            0x0504
-> > +#define REG_PTP_RTC_NANOSEC_H          0x0504
-> > +#define REG_PTP_RTC_NANOSEC_L          0x0506
-> > +
-> > +#define REG_PTP_RTC_SEC                        0x0508
-> > +#define REG_PTP_RTC_SEC_H              0x0508
-> > +#define REG_PTP_RTC_SEC_L              0x050A
-> > +
-> > +#define REG_PTP_SUBNANOSEC_RATE                0x050C
-> > +#define REG_PTP_SUBNANOSEC_RATE_H      0x050C
-> > +#define PTP_SUBNANOSEC_M               0x3FFFFFFF
-> > +
-> > +#define PTP_RATE_DIR                   BIT(31)
-> > +#define PTP_TMP_RATE_ENABLE            BIT(30)
-> > +
-> > +#define REG_PTP_SUBNANOSEC_RATE_L      0x050E
-> > +
-> > +#define REG_PTP_RATE_DURATION          0x0510
-> > +#define REG_PTP_RATE_DURATION_H                0x0510
-> > +#define REG_PTP_RATE_DURATION_L                0x0512
-> > +
-> > +#define REG_PTP_MSG_CONF1              0x0514
-> > +
-> > +#define PTP_802_1AS                    BIT(7)
-> > +#define PTP_ENABLE                     BIT(6)
-> > +#define PTP_ETH_ENABLE                 BIT(5)
-> > +#define PTP_IPV4_UDP_ENABLE            BIT(4)
-> > +#define PTP_IPV6_UDP_ENABLE            BIT(3)
-> > +#define PTP_TC_P2P                     BIT(2)
-> > +#define PTP_MASTER                     BIT(1)
-> > +#define PTP_1STEP                      BIT(0)
-> > +
-> > +#endif
-> > --
-> > 2.36.1
-> >
-> 
+So it should just unconditionally work. It is actually looks like a
+bug that we were blocking detach on these paths since the attach was
+unconditional and the caller is going to free the (probably) UNAMANGED
+domain once this returns.
 
+The only place we should be testing for deferred attach is during the
+initial point the dma device is linked to the group, and then again
+during the dma api calls to check if the device
 
+This maybe the patch that is needed to explain this:
+
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index d69ebba81bebd8..06f1fe6563bb30 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -993,8 +993,8 @@ int iommu_group_add_device(struct iommu_group *group, struct device *dev)
+ 
+ 	mutex_lock(&group->mutex);
+ 	list_add_tail(&device->list, &group->devices);
+-	if (group->domain  && !iommu_is_attach_deferred(dev))
+-		ret = __iommu_attach_device(group->domain, dev);
++	if (group->domain)
++		ret = iommu_group_do_dma_first_attach(dev, group->domain);
+ 	mutex_unlock(&group->mutex);
+ 	if (ret)
+ 		goto err_put_group;
+@@ -1760,21 +1760,24 @@ static void probe_alloc_default_domain(struct bus_type *bus,
+ 
+ }
+ 
+-static int iommu_group_do_dma_attach(struct device *dev, void *data)
++static int iommu_group_do_dma_first_attach(struct device *dev, void *data)
+ {
+ 	struct iommu_domain *domain = data;
+-	int ret = 0;
+ 
+-	if (!iommu_is_attach_deferred(dev))
+-		ret = __iommu_attach_device(domain, dev);
++	lockdep_assert_held(&dev->iommu_group->mutex);
+ 
+-	return ret;
++	if (iommu_is_attach_deferred(dev)) {
++		dev->iommu->attach_deferred = 1;
++		return 0;
++	}
++
++	return __iommu_attach_device(domain, dev);
+ }
+ 
+-static int __iommu_group_dma_attach(struct iommu_group *group)
++static int __iommu_group_dma_first_attach(struct iommu_group *group)
+ {
+ 	return __iommu_group_for_each_dev(group, group->default_domain,
+-					  iommu_group_do_dma_attach);
++					  iommu_group_do_dma_first_attach);
+ }
+ 
+ static int iommu_group_do_probe_finalize(struct device *dev, void *data)
+@@ -1839,7 +1842,7 @@ int bus_iommu_probe(struct bus_type *bus)
+ 
+ 		iommu_group_create_direct_mappings(group);
+ 
+-		ret = __iommu_group_dma_attach(group);
++		ret = __iommu_group_dma_first_attach(group);
+ 
+ 		mutex_unlock(&group->mutex);
+ 
+@@ -1971,9 +1974,11 @@ static int __iommu_attach_device(struct iommu_domain *domain,
+ 		return -ENODEV;
+ 
+ 	ret = domain->ops->attach_dev(domain, dev);
+-	if (!ret)
+-		trace_attach_device_to_domain(dev);
+-	return ret;
++	if (ret)
++		return ret;
++	dev->iommu->attach_deferred = 0;
++	trace_attach_device_to_domain(dev);
++	return 0;
+ }
+ 
+ /**
+@@ -2018,7 +2023,7 @@ EXPORT_SYMBOL_GPL(iommu_attach_device);
+ 
+ int iommu_deferred_attach(struct device *dev, struct iommu_domain *domain)
+ {
+-	if (iommu_is_attach_deferred(dev))
++	if (dev->iommu && dev->iommu->attach_deferred)
+ 		return __iommu_attach_device(domain, dev);
+ 
+ 	return 0;
+@@ -2027,9 +2032,6 @@ int iommu_deferred_attach(struct device *dev, struct iommu_domain *domain)
+ static void __iommu_detach_device(struct iommu_domain *domain,
+ 				  struct device *dev)
+ {
+-	if (iommu_is_attach_deferred(dev))
+-		return;
+-
+ 	domain->ops->detach_dev(domain, dev);
+ 	trace_detach_device_from_domain(dev);
+ }
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 1690c334e51631..ebac04a13fff68 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -413,6 +413,7 @@ struct dev_iommu {
+ 	struct iommu_device		*iommu_dev;
+ 	void				*priv;
+ 	u32				max_pasids;
++	u8				attach_deferred;
+ };
+ 
+ int iommu_device_register(struct iommu_device *iommu,
 
 
