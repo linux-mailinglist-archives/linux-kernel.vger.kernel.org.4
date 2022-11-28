@@ -2,136 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E6F63AD8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 942F763AD97
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232573AbiK1QVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 11:21:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S232776AbiK1QXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 11:23:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbiK1QVj (ORCPT
+        with ESMTP id S232725AbiK1QWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 11:21:39 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A75AE0C9
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 08:21:38 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 62so10331652pgb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 08:21:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3SPTNDjDD7p4251KmVbwYpNYSw/fK88RKLG3Fou2M/8=;
-        b=NuoweXsJXULm6RYVG3ZIGJHN55oghx6QaI8q8AURyEnv34ek4WgY41IOyDfkZPpnZC
-         nBaJGSJ8qmZrEuNTB0W7C4Vq80YpPPYPwpqdW5ttDkr4v7ZVRbxkQMBleEsCl2nQpwOo
-         pR8KvmuWKBQCj3jRzTpXxPhCAOuIL3kxXShpCU33UaUEtFzjNAMyF4C+aQsn9m/EAybu
-         HLgFFYN7ui+qzaSQuzUP4hPCrET6t+pAUSG4R3GW+jBVFlif8y5KOzQl4DGFr328/Jxw
-         RdAwPXhBA2ECEq+0G9mzSv/DFbhio03EXsEwvDnyY4JqNVUqTtnEWuHuQKf81Is8GcDd
-         A31Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3SPTNDjDD7p4251KmVbwYpNYSw/fK88RKLG3Fou2M/8=;
-        b=Rb7+biNzZNDOGFpxcQVb4G27dUwK/rzCp8ba6T7Oj944AwYKHaL60hIH6wgE3t7uJe
-         sm3SQryb+sUWtZgMJMEC/79ts9wuD4qS57hJbb1isPLDNJpYkW1svZT4KbhXdokPL82p
-         GOEDmqlW6C84cL6S21VlJhRctVUUb+WPZ22bQHYjZV4wZeoZfN3frwtkX6zLm3fAIyaX
-         ZHsjSSjBlwtV2oHQ8XgW31cSuRPkzil5eUNwMIhIqbEQ6ptReRw0v9bJWZ2xKK45FCk9
-         GFzyZkT1r8aBxxHF9Hwpvqliof2uBAuNuTsILDzUXLEh2Ye7TM1BHo4cDj3F0i2Ah6Cq
-         6Sgg==
-X-Gm-Message-State: ANoB5pkmBw1ETGpxI0BCQuqpsge7bD9ccNGtVDEOBbS2gnox6jcD0oIz
-        BBDU6g2DztIuxu2U4BI3TDX2yQ==
-X-Google-Smtp-Source: AA0mqf5zzbD9A5lmapC2GGKQC+5jCoq1JklIaLBaA9YEUu7UbREHdvJi565q51PnekGCOUfMQIwUFw==
-X-Received: by 2002:a62:ab11:0:b0:574:cea8:4480 with SMTP id p17-20020a62ab11000000b00574cea84480mr15301526pff.72.1669652497815;
-        Mon, 28 Nov 2022 08:21:37 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id w8-20020a17090a1b8800b001f94d25bfabsm9799780pjc.28.2022.11.28.08.21.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 08:21:37 -0800 (PST)
-Date:   Mon, 28 Nov 2022 16:21:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Marc Orr <marcorr@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, yu.c.zhang@linux.intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com,
-        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
-        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
-        vbabka@suse.cz, erdemaktas@google.com, pgonda@google.com,
-        nikunj@amd.com, diviness@google.com, maz@kernel.org,
-        dmatlack@google.com, axelrasmussen@google.com,
-        maciej.szmigiero@oracle.com, mizhang@google.com,
-        bgardon@google.com, ackerleytng@google.com
-Subject: Re: [V1 PATCH 1/6] KVM: x86: Add support for testing private memory
-Message-ID: <Y4TgDZPTXnnoTitB@google.com>
-References: <20221111014244.1714148-1-vannapurve@google.com>
- <20221111014244.1714148-2-vannapurve@google.com>
- <20221122100705.GA619277@chaop.bj.intel.com>
- <Y30rqWwDRbH7nQaQ@google.com>
- <CAA03e5EXU-TpZP2tyjEjfAAr9aNNcgmgOX6Rqv7ng+4Xc9H5AQ@mail.gmail.com>
+        Mon, 28 Nov 2022 11:22:49 -0500
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C3ED2098B;
+        Mon, 28 Nov 2022 08:22:35 -0800 (PST)
+Received: from zju.edu.cn (unknown [10.12.77.33])
+        by mail-app2 (Coremail) with SMTP id by_KCgB3J2go4IRjlapJCA--.26077S4;
+        Tue, 29 Nov 2022 00:22:00 +0800 (CST)
+From:   Lin Ma <linma@zju.edu.cn>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Lin Ma <linma@zju.edu.cn>,
+        syzbot+fce48a3dd3368645bd6c@syzkaller.appspotmail.com
+Subject: [PATCH v0] media: dvbdev: fix refcnt bug
+Date:   Tue, 29 Nov 2022 00:21:59 +0800
+Message-Id: <20221128162159.16901-1-linma@zju.edu.cn>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA03e5EXU-TpZP2tyjEjfAAr9aNNcgmgOX6Rqv7ng+4Xc9H5AQ@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: by_KCgB3J2go4IRjlapJCA--.26077S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxJr45KFyrCw4rKFyfuF43trb_yoW5JFy8pa
+        yUGFyYkrW8Kr1xJr4UAw1UJr15Jw4vyFy8Jry7Xr1DtF17Gw1UJr1jyrWUAryDJrs7Zr17
+        tr1UWwn2vr4DWaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0x
+        vYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AK
+        xVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48Icx
+        kI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCF04k20xvE
+        74AGY7Cv6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022, Marc Orr wrote:
-> On Tue, Nov 22, 2022 at 12:06 PM Sean Christopherson <seanjc@google.com> wrote:
-> > > > @@ -221,6 +220,9 @@ struct kvm_page_fault {
-> > > >     /* The memslot containing gfn. May be NULL. */
-> > > >     struct kvm_memory_slot *slot;
-> > > >
-> > > > +   /* Derived from encryption bits of the faulting GPA for CVMs. */
-> > > > +   bool is_private;
-> > >
-> > > Either we can wrap it with the CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING or if
-> > > it looks ugly I can remove the "const" in my code.
-> >
-> > Hmm, I think we can keep the const.  Similar to the bug in kvm_faultin_pfn()[*],
-> > the kvm_slot_can_be_private() is bogus.  A fault should be considered private if
-> > it's marked as private, whether or not userspace has configured the slot to be
-> > private is irrelevant.  I.e. the xarray is the single source of truth, memslots
-> > are just plumbing.
-> 
-> If we incorporate Sean's suggestion and use xarray as the single
-> source of truth, then can we get rid of the
-> HAVE_KVM_PRIVATE_MEM_TESTING config?
+Previous commit initialize the dvbdev->ref before the template copy,
+which will overwrite the reference and cause refcnt bug.
 
-No, we still want the opt-in config.  
+refcount_t: addition on 0; use-after-free.
+WARNING: CPU: 0 PID: 1 at lib/refcount.c:25 refcount_warn_saturate+0x17c/0x1f0 lib/refcount.c:25
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc6-next-20221128-syzkaller #0
+...
+RIP: 0010:refcount_warn_saturate+0x17c/0x1f0 lib/refcount.c:25
+RSP: 0000:ffffc900000678d0 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88813ff58000 RSI: ffffffff81660e7c RDI: fffff5200000cf0c
+RBP: ffff888022a45010 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: 0000000000000001
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000001
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000c48e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __refcount_add include/linux/refcount.h:199 [inline]
+ __refcount_inc include/linux/refcount.h:250 [inline]
+ refcount_inc include/linux/refcount.h:267 [inline]
+ kref_get include/linux/kref.h:45 [inline]
+ dvb_device_get drivers/media/dvb-core/dvbdev.c:585 [inline]
+ dvb_register_device+0xe83/0x16e0 drivers/media/dvb-core/dvbdev.c:517
+...
 
-> Specifically, the self test can call the KVM_MEMORY_ENCRYPT_REG_REGION
-> ioctl which will set the bits for the private FD within KVM's xarray.
+Just place the kref_init at correct position.
 
-Yes, but that should be disallowed for regular VMs without HAVE_KVM_PRIVATE_MEM_TESTING=y.
+Reported-by: syzbot+fce48a3dd3368645bd6c@syzkaller.appspotmail.com
+Fixes: 0fc044b2b5e2 ("media: dvbdev: adopts refcnt to avoid UAF")
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+---
+ drivers/media/dvb-core/dvbdev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> (Maybe this was part of the point that Sean was making; but his
-> feedback seemed focused on the discussion about keeping `is_private`
-> const, whereas I've been staring at this trying to figure out if we
-> can run the UPM selftests on a non-TDX/SNP VM WITHOUT a special
-> test-only config. And Sean's idea seems to eliminate the need for the
-> awkward CONFIG.)
+diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
+index d45673cb3..2a857cf70 100644
+--- a/drivers/media/dvb-core/dvbdev.c
++++ b/drivers/media/dvb-core/dvbdev.c
+@@ -482,8 +482,8 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
+ 		return -ENOMEM;
+ 	}
+ 
+-	kref_init(&dvbdev->ref);
+ 	memcpy(dvbdev, template, sizeof(struct dvb_device));
++	kref_init(&dvbdev->ref);
+ 	dvbdev->type = type;
+ 	dvbdev->id = id;
+ 	dvbdev->adapter = adap;
+-- 
+2.38.1
 
-"need" was always relative.  It's obviously possible to enable any code without a
-Kconfig, the question is whether or not it's a good idea to do so.  In this case,
-the answer is "no", because allowing private memory opens up a number a of code
-paths and thus potential bugs.  And we need something for kvm_arch_has_private_mem()
-because returning "true" unconditionally is not correct for regular VMs.
