@@ -2,203 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6475A63B0BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:09:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E075263B0D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234173AbiK1SJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 13:09:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
+        id S234142AbiK1SMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 13:12:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234050AbiK1SIx (ORCPT
+        with ESMTP id S232976AbiK1SMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 13:08:53 -0500
-Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739E02B248;
-        Mon, 28 Nov 2022 09:52:41 -0800 (PST)
-Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id 6FEC130B2958;
-        Mon, 28 Nov 2022 18:52:39 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
-        :content-type:date:from:from:in-reply-to:message-id:mime-version
-        :references:reply-to:subject:subject:to:to; s=felkmail; bh=RSV1N
-        jCeUvW8maK2FjLAmRmGIs7ggAy5Dtyq2eTt6xY=; b=rcZLJWRsqfGgqJoU5azNi
-        OHmLK7OH38mfOxeFYO3aBjj7M+v/KJw/YMSRXoGvLZTMNz2BdiryMWOnm1JxGwGK
-        +NzZU6truRUrEdT8VECLRfEtS9QaPxlTWrcnlmJWQVMsguA7v7k4R8xg2syxnxzk
-        N0Ig1I4W+RLzFLCXagFfb6gU2JZoH7emQI7BZKiLtogOEtiTRy46iOZWOLdMkGeX
-        HIMefNCtQjpvQgRKdia0NY6Z3zpD84tCp5TtfytLWgkE36kK0Cd9LN3NNT3jaDS8
-        LpfnDehix8doi7i1QkTg2obyvKZDbeP9BU9N89ioNf1X9xdcuQgA9OFaBLoSQFHC
-        Q==
-Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 1216930ADE53;
-        Mon, 28 Nov 2022 18:52:38 +0100 (CET)
-Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
-        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 2ASHqbJD003854;
-        Mon, 28 Nov 2022 18:52:37 +0100
-Received: (from pisa@localhost)
-        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 2ASHqaS0003853;
-        Mon, 28 Nov 2022 18:52:36 +0100
-X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     Ryan Edwards <ryan.edwards@gmail.com>
-Subject: Re: [RFC][PATCH 0/2] LIN support for Linux
-Date:   Mon, 28 Nov 2022 18:52:30 +0100
-User-Agent: KMail/1.9.10
-Cc:     Christoph Fritz <christoph.fritz@hexdev.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Richard Weinberger <richard@nod.at>,
-        Andreas Lauser <andreas.lauser@mbition.io>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "Marc Kleine-Budde" <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221127190244.888414-1-christoph.fritz@hexdev.de> <202211281549.47092.pisa@cmp.felk.cvut.cz> <CAEVdEgBWVgVFF2utm4w5W0_trYYJQVeKrcGN+T0yJ1Qa615bcQ@mail.gmail.com>
-In-Reply-To: <CAEVdEgBWVgVFF2utm4w5W0_trYYJQVeKrcGN+T0yJ1Qa615bcQ@mail.gmail.com>
-X-KMail-QuotePrefix: > 
+        Mon, 28 Nov 2022 13:12:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6932FC30
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:55:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0BC3B80D1A
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 17:54:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E810C433C1;
+        Mon, 28 Nov 2022 17:54:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669658043;
+        bh=PNyyGskXEL6J2fr0axt60kXMvnypsmn7KyeoTEQji0M=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=A8Se4BYjG+/aU9nCM1LkdL9QcghZZiVXfO0laO+j5HnxZx3D+I7Kfc/knAfzsuL5b
+         F5LRk5RgnItSJscgHgo8jlK6eJxql0guKE0kazvVcOuktAP5AjbwkbM8BNl5z/Jm7E
+         Qel8OnxNx7ry8DjUhuHrmBK60exrHDYfvTatRZPa3iE7LirnsF07Svu4YFqZh2Nr1D
+         wylafqKmOIQBUzoIwzRrWjEJBA16baopqnE4+dbyvPndRG5Wh3yDGnRmZEVUiZ/vlb
+         kxjU4I/XnNwjvhR2IfFemKqAAi5maQcHIHcsjSTfr5a6QwseYlJbtxdoewxg6Z1Tnz
+         ZnKeVXN9OF3nQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     SeongJae Park <sj@kernel.org>, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [sj:damon/next 27/34] mm/damon/sysfs-schemes.c:1409:19: error: incomplete definition of type 'struct mem_cgroup'
+Date:   Mon, 28 Nov 2022 17:54:01 +0000
+Message-Id: <20221128175401.17332-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <202211281158.AsAWEmu1-lkp@intel.com>
+References: 
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-Message-Id: <202211281852.30067.pisa@cmp.felk.cvut.cz>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Ryan, 
+Hello Robot,
 
-On Monday 28 of November 2022 18:02:04 Ryan Edwards wrote:
-> On Mon, Nov 28, 2022 at 10:09 AM Pavel Pisa <pisa@cmp.felk.cvut.cz> wrote:
-...
-> > > I already did some tests letting hexLIN and PCAN talk to each other in
-> > > a real time manner. Please see my preliminary PDF docu at
-> > > https://hexdev.de/hexlin/
->
-> Marc gave me a heads on on this discussion and I have some insight.
->
-> I've spent quite a bit of time trying to craft a solution for the LIN
-> problem.  Even with a TTY solution the best I was able to achieve was
-> 40ms turnaround between the header and response which exceeded the
-> timeout of the master. 
+On Mon, 28 Nov 2022 12:00:58 +0800 kernel test robot <lkp@intel.com> wrote:
 
-This is indication of some serious problem. We have been able to
-achieve right timing even from userspace on PC 10 years ago
-when RT task priorities are used and mlock all even on standard kernel...
-Yes under load that could be a problem but on RT kernel and in kernel
-slLIN driver it was reliable even on relatively slow MPC5200.
+> [-- Attachment #1: Type: text/plain, Size: 1995 bytes --]
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
+> head:   c68bc40dc2022ce015ee828d0fccb34f864934f8
+> commit: 80bd927ee54ff864d9a6ceb1c6ce4803b22e7220 [27/34] mm/damon/sysfs-schemes: implement scheme filters
+> config: x86_64-randconfig-r015-20221128
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git/commit/?id=80bd927ee54ff864d9a6ceb1c6ce4803b22e7220
+>         git remote add sj https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git
+>         git fetch --no-tags sj damon/next
+>         git checkout 80bd927ee54ff864d9a6ceb1c6ce4803b22e7220
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> mm/damon/sysfs-schemes.c:1409:19: error: incomplete definition of type 'struct mem_cgroup'
+>            cgroup_path(memcg->css.cgroup, memcg_path_buf, PATH_MAX);
+>                        ~~~~~^
+>    include/linux/mm_types.h:33:8: note: forward declaration of 'struct mem_cgroup'
+>    struct mem_cgroup;
+>           ^
+>    1 error generated.
+> 
+> 
+> vim +1409 mm/damon/sysfs-schemes.c
+> 
+>   1404	
+>   1405	static bool damon_sysfs_memcg_path_eq(struct mem_cgroup *memcg,
+>   1406			char *memcg_path_buf, char *path)
+>   1407	{
+>   1408	#ifdef CONFIG_CGROUPS
+> > 1409		cgroup_path(memcg->css.cgroup, memcg_path_buf, PATH_MAX);
+>   1410		if (sysfs_streq(memcg_path_buf, path))
+>   1411			return true;
+>   1412	#endif
 
-See FIGURE 3: Master: MPC5200 with slLIN; Slave: MPC5200 with slLIN
-of our comprehensive RTLWS 20212 UART-based LIN-bus Support for Linux
-with SocketCAN Interface article. For the complete protocol designed
-on basis of Oliver's proposal and then our finalization see complete
-report for VolkWagen. The timing is shown there as well
-Figure 5.2: Master: MPC5200 with sllin; Slave: MPC5200 with sllin
+'struct mem_cgroup' is defined under '#ifdef CONFIG_MEMCG', so this should be
+guarded with it.  Fixed it[1].  Thank you again!
 
-https://github.com/lin-bus/linux-lin/wiki
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git/commit/?h=damon/next&id=dc31f4ababd073e1686de0e51f45c5bbd42e66ac
 
-The problem with typical UARTs is then when they have enabled FIFO
-then drivers select trigger level higher than one and sometimes
-even minimal level is 1/4 of Rx FIFO depth. Then when trigger
-level is not reached the Rx interrupt waits for eventual
-more characters to come for (typically) 3 character times.
-So this is a problem. Because of 1/4 FIFO minimal threshold
-for 16C450+ UARTs, it is only solution to achieve right slave/response
-function to switch off the FIFO, there some internal API for that
-but not exposed o drivers. For 16V450, there is option
 
-  echo 1 >/sys/class/tty/ttyS0/rx_trig_bytes
+Thanks,
+SJ
 
-See https://github.com/lin-bus/linux-lin/issues/13
-
-> This was in userspace and I assume that a 
-> kernel solution would better be able to meet the timing but this
-> solution would only work for devices with embedded UART.
-
-Yes, and on fully preemptive it is not problem. We run control
-loops in userpace at 5 kHz on Xilinx Zynq systems and used
-up to 30 kHz on PC for mainboard without MSI issues.
-So this seems that problems are in programing area.
-
-We have achieved correct slLIN functionality on more embedded systems,
-AM335x, MPC5200 etc. But it required to check UART driver
-and found how to set Rx trigger level to 1 or disable FIFO.
-Often by nasty parch. But most hardware could provide
-knob to tune required parameters. Some RFC for the proposed API
-there
-
-   https://marc.info/?l=linux-serial&m=164259988122122&w=2
-
-int (*rx_trigger)(struct uart_port *, int mode, int *rx_trigger_bytes,
-                  int *rx_trigger_iddle_time)
-
-I think that all/the most of the UART HW I have seen can
-adjust what necessary, in the worst case by switching FIFO
-off in UART_RX_TRIGGER_MODE_CHECK_ROUND_DOWN mode.
-
-> I did create a solution that uses the gs_usb driver using "pseduo" CAN
-> frames that currently supports slave and monitor mode.  I had no use
-> cases for master mode up to this point so it has not yet been
-> implemented.  The framework is there if it needs to be added.
-
-The set of frames has been defined in slLIN 10 years ago and
-there is even defined control for LIN 1.0 and 2.0 check sum
-selection for individual IDs. I do not insist that our design
-is the best mapping but try to compare it to yours and describe
-advantages that the best decision can be made for futire.
-
-> The README contains the HOWTO on usage of the driver.  Right now it's
-> a hack but could be better designed using message flags or a seperate
-> CAN channel.
->
-> In my design the device contains a slave response table which is
-> configured via CAN frames via socketcan.  Currently up to 10 master
-> frames can be responded to. 
-
-I think that even on embedded HW it is not problem to keep
-data for all 64 LIN IDs. So I would not complicate thing with some mapping
-etc. We have reused already present BCM (SocketCAN Broadcast Manager)
-to periodically send LIN headers.
-
-> It also allows the LIN node to be put 
-> into monitor mode and gate those messages to the host via a CAN
-> message.
->
-> https://github.com/ryedwards/budgetcan_fw
-
-Great, version connected over USB with local response table
-is more reliable with timing than software solution on big(err)
-complex system like Linux kernel is. So if the well defined
-open protocol is designed or some CAN USB devices one is reused
-for LIN than it is advantage.
-
-I would be happy if the project moves forward. The critical is
-some settlement on unified API. Please, compare and map functionality
-between our solution and your proposal and we can discuss what
-worth to keep or change. slLIN solution seems to be used in more
-project not only that two for Volkswagen and Digiteq Automotive,
-I have directly participated.
-
-Best wishes,
-
-                Pavel Pisa
-    phone:      +420 603531357
-    e-mail:     pisa@cmp.felk.cvut.cz
-    Department of Control Engineering FEE CVUT
-    Karlovo namesti 13, 121 35, Prague 2
-    university: http://control.fel.cvut.cz/
-    personal:   http://cmp.felk.cvut.cz/~pisa
-    projects:   https://www.openhub.net/accounts/ppisa
-    CAN related:http://canbus.pages.fel.cvut.cz/
-    RISC-V education: https://comparch.edu.cvut.cz/
-    Open Technologies Research Education and Exchange Services
-    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
-
+>   1413		return false;
+>   1414	}
+>   1415	
