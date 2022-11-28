@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E1263A93C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C34A63A93E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbiK1NOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:14:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
+        id S231707AbiK1NO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:14:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiK1NNl (ORCPT
+        with ESMTP id S231607AbiK1NNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Nov 2022 08:13:41 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF74122D;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07FE1CFC2;
         Mon, 28 Nov 2022 05:13:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1669641220; x=1701177220;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=p7BCBvy/ijiGArW5gb4LxSYPxM/Arci+QhS/bMOw9bo=;
-  b=gSFrBgEqXr5rBXnI3IFSYy+cx+9uhnT4QhrkD3L0uF9xdrzRceWmNDjh
-   ZKMKJJarF4v+ACLXe8Sh03JqoLVY8TjXdK2yU0sQZONt8nuVXGDSe4apo
-   rMCVuxYe9m8XJw9xn4W49uNfPB2J2Sk9DZ0V6QfNNjlR37RAMisrOlJST
-   iWwWrHksfFikdxNVa8UqgYtvEXKkVh2EaXDlzCMrFVJ3eLAYqq6KZqXws
-   c5xI2L11dv4buBjsJwsTvn0AyDd0VoIaq6Vz4is3dg1nQBE+rKPV+VXBV
-   2h9YaQnS9bR5/oDopZ3nPh2pflANk57kPXVFFnnMCKzINW1Zl8GrG2FFQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="401117226"
+  bh=KWVB7nlsf20aLmkJw9PMc9fnASyxtCkpqLu/IPZ9sIY=;
+  b=gNCDRFydNHxGrZ32vgvgI8pBRG7LjpNHtdZzMzyuZ8fXB50Uwp9lS3kA
+   zRoRQPUFn5de46HRr7ZQ0XtAZjS5JTFIKMxG6YaJQ8yhdeAb692U3a5lz
+   ddTIozmiUIT/bUIamOMSsrzn2+clHiq2Bbf27x66B0kySRWFuc+HrSSI3
+   AUQXSVS4riThDleOtdzqdRFCp1EU8JYHP/JptWOUl42lRUMyceLqsS+cS
+   WlehERQ4rOdZkTyepAbsEHN1ulF3wM+Q7NBexfVzod03maujcwqaCd/fT
+   MQl2rA2qzsFcYqON4Vzc9K56Rj4InE42wLT0QjnYCqvOH+kp1+kp0uZ6x
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="401117238"
 X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="401117226"
+   d="scan'208";a="401117238"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 05:13:35 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 05:13:36 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="749381387"
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="749381390"
 X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="749381387"
+   d="scan'208";a="749381390"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by fmsmga002.fm.intel.com with ESMTP; 28 Nov 2022 05:13:35 -0800
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -58,9 +58,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [PATCH v2 17/22] sched/task_struct: Add helpers for IPC classification
-Date:   Mon, 28 Nov 2022 05:20:55 -0800
-Message-Id: <20221128132100.30253-18-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v2 18/22] sched/core: Initialize helpers of task classification
+Date:   Mon, 28 Nov 2022 05:20:56 -0800
+Message-Id: <20221128132100.30253-19-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
 References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
@@ -73,14 +73,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The unprocessed classification that hardware provides for a task may not
-be usable by the scheduler: the classification may change too frequently or
-architectures may want to consider extra factors. For instance, some
-processors with Intel Thread Director need to consider the state of the SMT
-siblings of a core.
-
-Provide per-task helper variables that architectures can use to post-
-process the classification that hardware provides.
+Just as tasks start life unclassified, initialize the classification
+auxiliar variables.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -99,37 +93,24 @@ Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v1:
- * Used bit-fields to fit all the IPC class data in 4 bytes. (PeterZ)
- * Shortened names of the helpers.
- * Renamed helpers with the ipcc_ prefix.
- * Reworded commit message for clarity
+ * None
 ---
- include/linux/sched.h | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ kernel/sched/core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index ddabc7449edd..8a99aa316c37 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1532,7 +1532,17 @@ struct task_struct {
- 	 * A hardware-defined classification of task based on the number
- 	 * of instructions per cycle.
- 	 */
--	unsigned int			ipcc;
-+	unsigned int			ipcc : 9;
-+	/*
-+	 * A candidate classification that arch-specific implementations
-+	 * qualify for correctness.
-+	 */
-+	unsigned int			ipcc_tmp : 9;
-+	/*
-+	 * Counter to filter out transient the candidate classification
-+	 * of a task
-+	 */
-+	unsigned int			ipcc_cntr : 14;
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 2cd409536b72..0406b07c51a0 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -4374,6 +4374,8 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
+ 	p->se.vruntime			= 0;
+ #ifdef CONFIG_IPC_CLASSES
+ 	p->ipcc				= IPC_CLASS_UNCLASSIFIED;
++	p->ipcc_tmp			= IPC_CLASS_UNCLASSIFIED;
++	p->ipcc_cntr			= 0;
  #endif
+ 	INIT_LIST_HEAD(&p->se.group_node);
  
- 	/*
 -- 
 2.25.1
 
