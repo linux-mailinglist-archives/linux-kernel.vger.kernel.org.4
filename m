@@ -2,79 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2620E639FD1
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 03:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26DFC639FD3
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 03:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiK1CzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 21:55:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
+        id S229743AbiK1C4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 21:56:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiK1CzB (ORCPT
+        with ESMTP id S229529AbiK1C4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 21:55:01 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B01B2DFE;
-        Sun, 27 Nov 2022 18:55:00 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 93449D6E;
-        Sun, 27 Nov 2022 18:55:06 -0800 (PST)
-Received: from a077893.blr.arm.com (unknown [10.162.40.16])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 096A63F73D;
-        Sun, 27 Nov 2022 18:54:56 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, will@kernel.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64/perf: Replace PMU version number '0' with ID_AA64DFR0_EL1_PMUVer_NI
-Date:   Mon, 28 Nov 2022 08:24:49 +0530
-Message-Id: <20221128025449.39085-1-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 27 Nov 2022 21:56:05 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D532DFE
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 18:56:04 -0800 (PST)
+Received: from kwepemi100025.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NL97d1sKxz15Msq;
+        Mon, 28 Nov 2022 10:55:25 +0800 (CST)
+Received: from DESKTOP-27KDQMV.china.huawei.com (10.174.148.223) by
+ kwepemi100025.china.huawei.com (7.221.188.158) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 28 Nov 2022 10:56:01 +0800
+From:   "Longpeng(Mike)" <longpeng2@huawei.com>
+To:     <stefanha@redhat.com>, <mst@redhat.com>, <jasowang@redhat.com>,
+        <sgarzare@redhat.com>, <eperezma@redhat.com>
+CC:     <cohuck@redhat.com>, <arei.gonglei@huawei.com>,
+        <yechuan@huawei.com>, <huangzhichao@huawei.com>,
+        <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>, Longpeng <longpeng2@huawei.com>
+Subject: [PATCH] vdpasim: support doorbell mapping
+Date:   Mon, 28 Nov 2022 10:55:58 +0800
+Message-ID: <20221128025558.2152-1-longpeng2@huawei.com>
+X-Mailer: git-send-email 2.25.0.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.148.223]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi100025.china.huawei.com (7.221.188.158)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__armv8pmu_probe_pmu() returns if detected PMU is either not implemented or
-implementation defined. Extracted ID_AA64DFR0_EL1_PMUVer value, when PMU is
-not implemented is '0' which can be replaced with ID_AA64DFR0_EL1_PMUVer_NI
-defined as '0b0000'.
+From: Longpeng <longpeng2@huawei.com>
 
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: linux-perf-users@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Support doorbell mapping for vdpasim devices, then we can test the notify
+passthrough feature even if there's no real hardware on hand.
+
+Allocates a dummy page which used to emulate the notify page of the device.
+All values written to this page would be ignored,  a periodic work will
+check whether there're requests that need to process.
+
+This cap is disabled as default, users can enable it as follow:
+  modprobe vdpa_sim notify_passthrough=true
+
+Signed-off-by: Longpeng <longpeng2@huawei.com>
 ---
-This applies on v6.1-rc6
+ drivers/vdpa/vdpa_sim/vdpa_sim.c     | 71 ++++++++++++++++++++++++++--
+ drivers/vdpa/vdpa_sim/vdpa_sim.h     |  5 +-
+ drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  5 +-
+ drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  4 +-
+ 4 files changed, 76 insertions(+), 9 deletions(-)
 
- arch/arm64/kernel/perf_event.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
-index 85a3aaefc0fb..b638f584b4dd 100644
---- a/arch/arm64/kernel/perf_event.c
-+++ b/arch/arm64/kernel/perf_event.c
-@@ -1188,7 +1188,8 @@ static void __armv8pmu_probe_pmu(void *info)
- 	dfr0 = read_sysreg(id_aa64dfr0_el1);
- 	pmuver = cpuid_feature_extract_unsigned_field(dfr0,
- 			ID_AA64DFR0_EL1_PMUVer_SHIFT);
--	if (pmuver == ID_AA64DFR0_EL1_PMUVer_IMP_DEF || pmuver == 0)
-+	if (pmuver == ID_AA64DFR0_EL1_PMUVer_IMP_DEF ||
-+	    pmuver == ID_AA64DFR0_EL1_PMUVer_NI)
- 		return;
+diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+index 7438a89ce939..5c215b56b78b 100644
+--- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
++++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+@@ -14,6 +14,7 @@
+ #include <linux/slab.h>
+ #include <linux/sched.h>
+ #include <linux/dma-map-ops.h>
++#include <asm/set_memory.h>
+ #include <linux/vringh.h>
+ #include <linux/vdpa.h>
+ #include <linux/vhost_iotlb.h>
+@@ -36,9 +37,15 @@ module_param(max_iotlb_entries, int, 0444);
+ MODULE_PARM_DESC(max_iotlb_entries,
+ 		 "Maximum number of iotlb entries for each address space. 0 means unlimited. (default: 2048)");
  
- 	cpu_pmu->pmuver = pmuver;
++static bool notify_passthrough;
++module_param(notify_passthrough, bool, 0444);
++MODULE_PARM_DESC(notify_passthrough,
++		 "Enable vq notify(doorbell) area mapping. (default: false)");
++
+ #define VDPASIM_QUEUE_ALIGN PAGE_SIZE
+ #define VDPASIM_QUEUE_MAX 256
+ #define VDPASIM_VENDOR_ID 0
++#define VDPASIM_VRING_POLL_PERIOD 100 /* ms */
+ 
+ static struct vdpasim *vdpa_to_sim(struct vdpa_device *vdpa)
+ {
+@@ -276,7 +283,7 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
+ 	}
+ 
+ 	vdpasim->dev_attr = *dev_attr;
+-	INIT_WORK(&vdpasim->work, dev_attr->work_fn);
++	INIT_DELAYED_WORK(&vdpasim->vring_work, dev_attr->work_fn);
+ 	spin_lock_init(&vdpasim->lock);
+ 	spin_lock_init(&vdpasim->iommu_lock);
+ 
+@@ -287,6 +294,15 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
+ 	set_dma_ops(dev, &vdpasim_dma_ops);
+ 	vdpasim->vdpa.mdev = dev_attr->mgmt_dev;
+ 
++	if (notify_passthrough) {
++		vdpasim->notify = __get_free_page(GFP_KERNEL | __GFP_ZERO);
++		if (!vdpasim->notify)
++			goto err_iommu;
++#ifdef CONFIG_X86
++		set_memory_uc(vdpasim->notify, 1);
++#endif
++	}
++
+ 	vdpasim->config = kzalloc(dev_attr->config_size, GFP_KERNEL);
+ 	if (!vdpasim->config)
+ 		goto err_iommu;
+@@ -357,8 +373,11 @@ static void vdpasim_kick_vq(struct vdpa_device *vdpa, u16 idx)
+ 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+ 	struct vdpasim_virtqueue *vq = &vdpasim->vqs[idx];
+ 
++	if (notify_passthrough)
++		return;
++
+ 	if (vq->ready)
+-		schedule_work(&vdpasim->work);
++		schedule_work(&vdpasim->vring_work.work);
+ }
+ 
+ static void vdpasim_set_vq_cb(struct vdpa_device *vdpa, u16 idx,
+@@ -495,6 +514,18 @@ static u8 vdpasim_get_status(struct vdpa_device *vdpa)
+ 	return status;
+ }
+ 
++static void vdpasim_set_vring_work(struct vdpasim *vdpasim, bool start)
++{
++	if (!notify_passthrough)
++		return;
++
++	if (start)
++		schedule_delayed_work(&vdpasim->vring_work,
++				msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
++	else
++		cancel_delayed_work_sync(&vdpasim->vring_work);
++}
++
+ static void vdpasim_set_status(struct vdpa_device *vdpa, u8 status)
+ {
+ 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+@@ -502,12 +533,16 @@ static void vdpasim_set_status(struct vdpa_device *vdpa, u8 status)
+ 	spin_lock(&vdpasim->lock);
+ 	vdpasim->status = status;
+ 	spin_unlock(&vdpasim->lock);
++
++	vdpasim_set_vring_work(vdpasim, status & VIRTIO_CONFIG_S_DRIVER_OK);
+ }
+ 
+ static int vdpasim_reset(struct vdpa_device *vdpa, bool clear)
+ {
+ 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+ 
++	vdpasim_set_vring_work(vdpasim, false);
++
+ 	spin_lock(&vdpasim->lock);
+ 	vdpasim->status = 0;
+ 	vdpasim_do_reset(vdpasim);
+@@ -672,12 +707,24 @@ static int vdpasim_dma_unmap(struct vdpa_device *vdpa, unsigned int asid,
+ 	return 0;
+ }
+ 
++static struct vdpa_notification_area
++vdpasim_get_vq_notification(struct vdpa_device *vdpa, u16 qid)
++{
++	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
++	struct vdpa_notification_area notify;
++
++	notify.addr = virt_to_phys((void *)vdpasim->notify);
++	notify.size = PAGE_SIZE;
++
++	return notify;
++}
++
+ static void vdpasim_free(struct vdpa_device *vdpa)
+ {
+ 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+ 	int i;
+ 
+-	cancel_work_sync(&vdpasim->work);
++	cancel_delayed_work_sync(&vdpasim->vring_work);
+ 
+ 	for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
+ 		vringh_kiov_cleanup(&vdpasim->vqs[i].out_iov);
+@@ -693,7 +740,23 @@ static void vdpasim_free(struct vdpa_device *vdpa)
+ 	vhost_iotlb_free(vdpasim->iommu);
+ 	kfree(vdpasim->vqs);
+ 	kfree(vdpasim->config);
++	if (vdpasim->notify) {
++#ifdef CONFIG_X86
++		set_memory_wb(vdpasim->notify, 1);
++#endif
++		free_page(vdpasim->notify);
++	}
++}
++
++void vdpasim_schedule_work(struct vdpasim *vdpasim, bool sched_now)
++{
++	if (sched_now)
++		schedule_work(&vdpasim->vring_work.work);
++	else if (notify_passthrough)
++		schedule_delayed_work(&vdpasim->vring_work,
++				      msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
+ }
++EXPORT_SYMBOL_GPL(vdpasim_schedule_work);
+ 
+ static const struct vdpa_config_ops vdpasim_config_ops = {
+ 	.set_vq_address         = vdpasim_set_vq_address,
+@@ -704,6 +767,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
+ 	.get_vq_ready           = vdpasim_get_vq_ready,
+ 	.set_vq_state           = vdpasim_set_vq_state,
+ 	.get_vq_state           = vdpasim_get_vq_state,
++	.get_vq_notification    = vdpasim_get_vq_notification,
+ 	.get_vq_align           = vdpasim_get_vq_align,
+ 	.get_vq_group           = vdpasim_get_vq_group,
+ 	.get_device_features    = vdpasim_get_device_features,
+@@ -737,6 +801,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
+ 	.get_vq_ready           = vdpasim_get_vq_ready,
+ 	.set_vq_state           = vdpasim_set_vq_state,
+ 	.get_vq_state           = vdpasim_get_vq_state,
++	.get_vq_notification    = vdpasim_get_vq_notification,
+ 	.get_vq_align           = vdpasim_get_vq_align,
+ 	.get_vq_group           = vdpasim_get_vq_group,
+ 	.get_device_features    = vdpasim_get_device_features,
+diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+index 0e78737dcc16..da0866834918 100644
+--- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
++++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+@@ -53,7 +53,7 @@ struct vdpasim_dev_attr {
+ struct vdpasim {
+ 	struct vdpa_device vdpa;
+ 	struct vdpasim_virtqueue *vqs;
+-	struct work_struct work;
++	struct delayed_work vring_work;
+ 	struct vdpasim_dev_attr dev_attr;
+ 	/* spinlock to synchronize virtqueue state */
+ 	spinlock_t lock;
+@@ -69,10 +69,13 @@ struct vdpasim {
+ 	bool running;
+ 	/* spinlock to synchronize iommu table */
+ 	spinlock_t iommu_lock;
++	/* dummy notify page */
++	unsigned long notify;
+ };
+ 
+ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *attr,
+ 			       const struct vdpa_dev_set_config *config);
++void vdpasim_schedule_work(struct vdpasim *vdpasim, bool sched_now);
+ 
+ /* TODO: cross-endian support */
+ static inline bool vdpasim_is_little_endian(struct vdpasim *vdpasim)
+diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+index c6db1a1baf76..8a640ea82284 100644
+--- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
++++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+@@ -288,7 +288,7 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
+ 
+ static void vdpasim_blk_work(struct work_struct *work)
+ {
+-	struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
++	struct vdpasim *vdpasim = container_of(work, struct vdpasim, vring_work.work);
+ 	bool reschedule = false;
+ 	int i;
+ 
+@@ -325,8 +325,7 @@ static void vdpasim_blk_work(struct work_struct *work)
+ out:
+ 	spin_unlock(&vdpasim->lock);
+ 
+-	if (reschedule)
+-		schedule_work(&vdpasim->work);
++	vdpasim_schedule_work(vdpasim, reschedule);
+ }
+ 
+ static void vdpasim_blk_get_config(struct vdpasim *vdpasim, void *config)
+diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+index c3cb225ea469..8b998952384b 100644
+--- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
++++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+@@ -145,7 +145,7 @@ static void vdpasim_handle_cvq(struct vdpasim *vdpasim)
+ 
+ static void vdpasim_net_work(struct work_struct *work)
+ {
+-	struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
++	struct vdpasim *vdpasim = container_of(work, struct vdpasim, vring_work.work);
+ 	struct vdpasim_virtqueue *txq = &vdpasim->vqs[1];
+ 	struct vdpasim_virtqueue *rxq = &vdpasim->vqs[0];
+ 	ssize_t read, write;
+@@ -196,7 +196,7 @@ static void vdpasim_net_work(struct work_struct *work)
+ 		vdpasim_net_complete(rxq, write);
+ 
+ 		if (++pkts > 4) {
+-			schedule_work(&vdpasim->work);
++			vdpasim_schedule_work(vdpasim, true);
+ 			goto out;
+ 		}
+ 	}
 -- 
-2.25.1
+2.23.0
 
