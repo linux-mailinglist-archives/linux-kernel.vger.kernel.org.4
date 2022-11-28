@@ -2,98 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946F663A368
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9D463A36B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiK1Is2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 03:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
+        id S229811AbiK1ItJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 03:49:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbiK1IsZ (ORCPT
+        with ESMTP id S230245AbiK1ItC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 03:48:25 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82393E1C
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:48:24 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id a7so12290435ljq.12
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:48:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DyUL1Og+jo/ZDOoPr1xJAw3+yzTWwfhyA3J40qaa04Q=;
-        b=dr+YzF1C/E9DNwFAV4PvvIjJxwtxMPOZ6crnVboKYsr67l1ag6YTekN1wmi5vfztZd
-         SfAt7DZLkzNlycNIzmURTmrED9EUMQ7BHBDOJT3ToK5KRJJyitHn8e/dqEizbz1JYgk5
-         wDHmyCOIqGC5xPYaG/H5oBbns2FWIat46Xp0IQSLDQwAkecQ47Wh11gTfhCP+KJTs54n
-         HatiPP6UXkG0Vekho88t3Sm+YogWgFkwVvgLvYVvx7QVJohTv4KsMGM0XTzYPKC8P9lh
-         6F8zCM77yxVV4lRlljET+W80ArkhgPNhXKSlx0fiGzP39zxvD9bnycHiSyw1JmPEnZbN
-         6lXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DyUL1Og+jo/ZDOoPr1xJAw3+yzTWwfhyA3J40qaa04Q=;
-        b=D4/IlNgCb9Pbzx4LV2UYGOgX7Zjeg943PX0RNnimHLqzpKbveqxCnRRzDfXkuTgnpk
-         2Va6bVR7k4fQAiDOunQZ3VIfR6SI1hbIhJVHnJfmUgX/W+C3yxq3PARLB6DhYSqAVy4+
-         Xx4l9mhvRHtTtCc8ABDInk4G3q61E1PRI55I4fwic5pcyauaJXUgs0IKW9bKdVuZsuy9
-         KfquN68e5en+3R1tMhpJo2VuLbnYhpNkRkwz+FFFfCy88/+qTmdmc503so0IomxokMzw
-         Iy0oKSWkjltPyP96MwRrS2BpoojAV7Zo8sA/BcYLwGQQ/hyXpElLuLAAZeIH7ysJORo4
-         vYaw==
-X-Gm-Message-State: ANoB5pkk4GInEKv4jR3fbNGhZTOYKJSVKovgaS1OMMQBnMhiM/UBRPWn
-        UmBbMRdJBgz1GWmqcCGFdi28Ow==
-X-Google-Smtp-Source: AA0mqf6Emtt2xBvkwqUH0D6tAfeP1i9Zs/1xVxKY56Q42DNsjCvlHvNu8pLcBLZD7SKHBjNDZ9j+bQ==
-X-Received: by 2002:a2e:8619:0:b0:279:88ce:468f with SMTP id a25-20020a2e8619000000b0027988ce468fmr6244869lji.312.1669625302909;
-        Mon, 28 Nov 2022 00:48:22 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v3-20020a2e9243000000b002770eafaafbsm1161654ljg.99.2022.11.28.00.48.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 00:48:22 -0800 (PST)
-Message-ID: <0e07745c-7bf8-ef1b-5ac9-6fc40031d7b6@linaro.org>
-Date:   Mon, 28 Nov 2022 09:48:21 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 5/6] dt-bindings: arm: sunxi: add Rongpin RP-H6B board
-Content-Language: en-US
-To:     Icenowy Zheng <uwu@icenowy.me>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andre Przywara <andre.przywara@arm.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20221127073140.2093897-1-uwu@icenowy.me>
- <20221127073140.2093897-6-uwu@icenowy.me>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221127073140.2093897-6-uwu@icenowy.me>
-Content-Type: text/plain; charset=UTF-8
+        Mon, 28 Nov 2022 03:49:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB60417E1E
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:48:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0365B80C81
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 08:48:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3257C433D6;
+        Mon, 28 Nov 2022 08:48:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669625326;
+        bh=XRb735qlEpxeM/vWLXgV++AEzVzzKTenZnbr4YQUY4Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qGEiYayTE42pOd+GlHtIiWhKh12yYBkmanbwLXYPKKLr/6JnJbJk3XN6tdM4aztrH
+         Gvt95lu8Tli3yHPyQWSoRGRXM8iLH3p1UigCQFzw/jD1a0uq0uUEEX1E8wAwtca+fv
+         tu8sJOLlwqF341C4jgmso+V5k0KOekJcBWcDHxef7t8efZ9s1IwPVGMroswKQhninM
+         mgWlGp7s9VY+fA/BOpgAVElR6LbK1MZa7E0VecsHggXXhjuauvZe4HwrhuXCfmls7B
+         NdsxWm7lRPnfE50AmyuIoRHtsN5fuxyoKtqZrzD1iZutWn8VhOEi0ma7htgXcepbYk
+         eyw/IOHD/4ZLg==
+Date:   Mon, 28 Nov 2022 17:48:43 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Li Huafei <lihuafei1@huawei.com>
+Cc:     <naveen.n.rao@linux.ibm.com>, <anil.s.keshavamurthy@intel.com>,
+        <rostedt@goodmis.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] kprobes: Fix check for probe enabled in kill_kprobe()
+Message-Id: <20221128174843.244d5485156daf53b6406482@kernel.org>
+In-Reply-To: <20221126114316.201857-1-lihuafei1@huawei.com>
+References: <20221126114316.201857-1-lihuafei1@huawei.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/11/2022 08:31, Icenowy Zheng wrote:
-> Rongpin RP-H6B is a development board with RP-H6C SoM, which uses an
-> Allwinner H6 SoC.
+On Sat, 26 Nov 2022 19:43:16 +0800
+Li Huafei <lihuafei1@huawei.com> wrote:
+
+> In kill_kprobe(), the check whether disarm_kprobe_ftrace() needs to be
+> called always fails. This is because before that we set the
+> KPROBE_FLAG_GONE flag for kprobe so that "!kprobe_disabled(p)" is always
+> false.
+
+Good catch!
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thank you!
+
 > 
-> Add compatible strings for it, including the board-specific compatible
-> and the SoM compatible.
+> The disarm_kprobe_ftrace() call introduced by commit:
+> 
+>   0cb2f1372baa ("kprobes: Fix NULL pointer dereference at kprobe_ftrace_handler")
+> 
+> to fix the NULL pointer reference problem. When the probe is enabled, if
+> we do not disarm it, this problem still exists.
+> 
+> Fix it by putting the probe enabled check before setting the
+> KPROBE_FLAG_GONE flag.
+> 
+> Fixes: 3031313eb3d54 ("kprobes: Fix to check probe enabled before disarm_kprobe_ftrace()")
+> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+> ---
+>  kernel/kprobes.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index 3050631e528d..a35074f0daa1 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -2364,6 +2364,14 @@ static void kill_kprobe(struct kprobe *p)
+>  
+>  	lockdep_assert_held(&kprobe_mutex);
+>  
+> +	/*
+> +	 * The module is going away. We should disarm the kprobe which
+> +	 * is using ftrace, because ftrace framework is still available at
+> +	 * 'MODULE_STATE_GOING' notification.
+> +	 */
+> +	if (kprobe_ftrace(p) && !kprobe_disabled(p) && !kprobes_all_disarmed)
+> +		disarm_kprobe_ftrace(p);
+> +
+>  	p->flags |= KPROBE_FLAG_GONE;
+>  	if (kprobe_aggrprobe(p)) {
+>  		/*
+> @@ -2380,14 +2388,6 @@ static void kill_kprobe(struct kprobe *p)
+>  	 * the original probed function (which will be freed soon) any more.
+>  	 */
+>  	arch_remove_kprobe(p);
+> -
+> -	/*
+> -	 * The module is going away. We should disarm the kprobe which
+> -	 * is using ftrace, because ftrace framework is still available at
+> -	 * 'MODULE_STATE_GOING' notification.
+> -	 */
+> -	if (kprobe_ftrace(p) && !kprobe_disabled(p) && !kprobes_all_disarmed)
+> -		disarm_kprobe_ftrace(p);
+>  }
+>  
+>  /* Disable one kprobe */
+> -- 
+> 2.17.1
 > 
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
