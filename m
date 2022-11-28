@@ -2,63 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A0863A7C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E1A163A7D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:02:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbiK1MCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 07:02:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
+        id S231593AbiK1MCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 07:02:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiK1MAU (ORCPT
+        with ESMTP id S231477AbiK1MAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 07:00:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD8C18B27
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:00:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDF8AB80D88
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 12:00:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8A11C4315C;
-        Mon, 28 Nov 2022 12:00:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669636816;
-        bh=s8HTQY8UHN5dZej09qiZkVk+0Pf068ApxSd4spgbW8I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rAoJRYGiK+WR4soWiM4j+Tjgu3098aU+PNHTqh+UuFslYHjkymkBUlCd0Rck6uTu7
-         kh/1Vt9xJMvoJ0XygbUBxXDLo60kzRTfB29c+ALWBe1d05Hb276Hsi6zesun6jm/KO
-         rV/ldVtrp8FoqRGP0IGUguF6mTj8kGfvgXWlQegSjUa/VdA00TzQ5Ugss2/9hddAba
-         RtXUcU3yewbt5Z0ADdwJrg6vA87yra/jHBuOULXzxxnf2p6YE5MnUmSRt1ajM6RlId
-         Np7x2qp2jthQ0aB0iUfrn3h9PdYBVlmF9urfrIwmcgVY7V83JJ5k/aECGpL9y63QO9
-         Q3+7nQyrgnOVw==
-Date:   Mon, 28 Nov 2022 12:00:10 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Wenjie Li <wenjieli@qti.qualcomm.com>,
-        David Wang =?utf-8?B?546L5qCH?= <wangbiao3@xiaomi.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH-tip v4] sched: Fix NULL user_cpus_ptr check in
- dup_user_cpus_ptr()
-Message-ID: <20221128120008.GA25090@willie-the-truck>
-References: <20221125023943.1118603-1-longman@redhat.com>
- <92b99a5e-1588-4e08-a652-72e9c51421cf@redhat.com>
+        Mon, 28 Nov 2022 07:00:43 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7FA18E1E
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:00:42 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1ozcoO-0005FY-Js; Mon, 28 Nov 2022 13:00:36 +0100
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1ozcoN-000oAQ-4c; Mon, 28 Nov 2022 13:00:35 +0100
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1ozcoN-00H6Lt-2S; Mon, 28 Nov 2022 13:00:35 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Arun.Ramadoss@microchip.com
+Subject: [PATCH v1 02/26] net: dsa: microchip: ksz8: ksz8_fdb_dump: fix port validation and VID information
+Date:   Mon, 28 Nov 2022 13:00:10 +0100
+Message-Id: <20221128120034.4075562-3-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221128120034.4075562-1-o.rempel@pengutronix.de>
+References: <20221128120034.4075562-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <92b99a5e-1588-4e08-a652-72e9c51421cf@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,81 +60,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 27, 2022 at 08:43:27PM -0500, Waiman Long wrote:
-> On 11/24/22 21:39, Waiman Long wrote:
-> > In general, a non-null user_cpus_ptr will remain set until the task dies.
-> > A possible exception to this is the fact that do_set_cpus_allowed()
-> > will clear a non-null user_cpus_ptr. To allow this possible racing
-> > condition, we need to check for NULL user_cpus_ptr under the pi_lock
-> > before duping the user mask.
-> > 
-> > Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
-> > Signed-off-by: Waiman Long <longman@redhat.com>
-> 
-> This is actually a pre-existing use-after-free bug since commit 07ec77a1d4e8
-> ("sched: Allow task CPU affinity to be restricted on asymmetric systems").
-> So it needs to be fixed in the stable release as well. Will resend the patch
-> with an additional fixes tag and updated commit log.
+The ksz8_fdb_dump() has multiple issues:
+- struct alu_struct was used only to store MAC address.
+- port value was misinterpreted as a bit mask
+- Filter ID was attempted to use as VID. FID can be used to get VID, but
+  currently it is not supported.
+- by the attempt to use FID, was used not initialized alu.fid...
 
-Please can you elaborate on the use-after-free here? Looking at
-07ec77a1d4e8, the mask is only freed in free_task() when the usage refcount
-has dropped to zero and I can't see how that can race with fork().
+Before this patch, "bridge fdb" command was providing random results,
+which are fixed by this patch:
+- random vid information
+- assignment to wrong port
 
-What am I missing?
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ drivers/net/dsa/microchip/ksz8795.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-Will
+diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
+index 003b0ac2854c..e0530bc3bec0 100644
+--- a/drivers/net/dsa/microchip/ksz8795.c
++++ b/drivers/net/dsa/microchip/ksz8795.c
+@@ -958,15 +958,14 @@ int ksz8_fdb_dump(struct ksz_device *dev, int port,
+ 	u16 entries = 0;
+ 	u8 timestamp = 0;
+ 	u8 fid;
+-	u8 member;
+-	struct alu_struct alu;
++	u8 src_port;
++	u8 mac[ETH_ALEN];
+ 
+ 	do {
+-		alu.is_static = false;
+-		ret = ksz8_r_dyn_mac_table(dev, i, alu.mac, &fid, &member,
++		ret = ksz8_r_dyn_mac_table(dev, i, mac, &fid, &src_port,
+ 					   &timestamp, &entries);
+-		if (!ret && (member & BIT(port))) {
+-			ret = cb(alu.mac, alu.fid, alu.is_static, data);
++		if (!ret && port == src_port) {
++			ret = cb(mac, 0, false, data);
+ 			if (ret)
+ 				break;
+ 		}
+-- 
+2.30.2
 
-> >   kernel/sched/core.c | 32 ++++++++++++++++++++++++++++----
-> >   1 file changed, 28 insertions(+), 4 deletions(-)
-> > 
-> >   [v4] Minor comment update
-> > 
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index 8df51b08bb38..f2b75faaf71a 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -2624,19 +2624,43 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
-> >   int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
-> >   		      int node)
-> >   {
-> > +	cpumask_t *user_mask;
-> >   	unsigned long flags;
-> > +	/*
-> > +	 * Always clear dst->user_cpus_ptr first as their user_cpus_ptr's
-> > +	 * may differ by now due to racing.
-> > +	 */
-> > +	dst->user_cpus_ptr = NULL;
-> > +
-> > +	/*
-> > +	 * This check is racy and losing the race is a valid situation.
-> > +	 * It is not worth the extra overhead of taking the pi_lock on
-> > +	 * every fork/clone.
-> > +	 */
-> >   	if (!src->user_cpus_ptr)
-> >   		return 0;
-> > -	dst->user_cpus_ptr = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
-> > -	if (!dst->user_cpus_ptr)
-> > +	user_mask = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
-> > +	if (!user_mask)
-> >   		return -ENOMEM;
-> > -	/* Use pi_lock to protect content of user_cpus_ptr */
-> > +	/*
-> > +	 * Use pi_lock to protect content of user_cpus_ptr
-> > +	 *
-> > +	 * Though unlikely, user_cpus_ptr can be reset to NULL by a concurrent
-> > +	 * do_set_cpus_allowed().
-> > +	 */
-> >   	raw_spin_lock_irqsave(&src->pi_lock, flags);
-> > -	cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
-> > +	if (src->user_cpus_ptr) {
-> > +		swap(dst->user_cpus_ptr, user_mask);
-> > +		cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
-> > +	}
-> >   	raw_spin_unlock_irqrestore(&src->pi_lock, flags);
-> > +
-> > +	if (unlikely(user_mask))
-> > +		kfree(user_mask);
-> > +
-> >   	return 0;
-> >   }
-> 
