@@ -2,177 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C90B463A565
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F4B63A56A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:51:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiK1Juy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 04:50:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
+        id S229773AbiK1Jvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 04:51:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiK1Juv (ORCPT
+        with ESMTP id S229822AbiK1Jvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 04:50:51 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBF619282
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:50:49 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id k3-20020a92c243000000b0030201475a6bso8402236ilo.9
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:50:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kRrF59NcMBwZCwWNay/Mk38e4kI0Bs68NiHJ09COGdA=;
-        b=DBUeownGDZ+sxTJbvM3C8+gsmRAyhWscdxcoYexMh9vb27MODpfIeskz1ENLHqI6At
-         LLsFjSMhaupJ1AV2I3GCL241q1fX8P59C+cwr1jo7WNeXI0vfZlWWTrbZjy1/kkvPJF9
-         48C/aSeeJvCBYpjqwe1us3+cfQ7wpg4lVDQpsOdorTncgy+WKi11CaVI8aS022C0hRhq
-         fe/zH2+sqsPPZs0f1njEg32DQVqTvCCJbTUQ9qNWWO0fPuu/NIIbyXmFz2Wzk+hUYo0N
-         WbCe+XCazDrhSjkjmHDWiDgZyUmZtTDSMYE1k76xbWqA1Ln39Ng+wcqqtYzNoIWwl3ih
-         uwQg==
-X-Gm-Message-State: ANoB5plNEXYzcH864NiUUNEPRrjWFhUBYihPg0H9pO1MLQPcXLGIAlxD
-        sQWm8P4FHWEYq6R3zCQqRCfLW/z+1ELsjXkmqRMmeoiJFtki
-X-Google-Smtp-Source: AA0mqf7ud3UOo+/WaQQ+1ddhBTElmiVenXRvko3ubQLIhH0PCLFyGXcF8f4yzBEu5v4rPxbtnHPHWx+Xn+pp+R+5Qw4Bx4vWRbzp
+        Mon, 28 Nov 2022 04:51:32 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A76193D1;
+        Mon, 28 Nov 2022 01:51:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669629091; x=1701165091;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kg8gSoBWfRNuX9Ds7mhHZmSGNm7a8mdcL2RtLflzVgQ=;
+  b=LwcARyLHfEBhkQFez7FyQI258sbMq/G2c3CUv+CoXqc0VdafUbQZK2X9
+   bEdy+KpBftl1f6zCpz86NIpkXxcMv3S+16toehKw0e09ZF5iJoPDmifQP
+   CnAs4I/BVuxSB1flKMh36C/hMzE9yLJRxqv+WEU4IKecs9Hxw+8/kIyRw
+   pzbgCiWte9vOgBFtjgApb0i3nxQzEQTJGHjSwbs79gkJ/bdEHUCD+nEVP
+   w78zieRLFdzdzCkOif//k4AzkS9/NYSb/jnozbiR6ds9K+nTrArMALXeh
+   fYSx6OjC/FP2q91Zejz0u7+PjDzJJDZKlVgKANXryPaXZrJBjuf0JOAI1
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="379048950"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="379048950"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 01:51:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="620988277"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="620988277"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 28 Nov 2022 01:51:11 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ozan8-0013vS-0p;
+        Mon, 28 Nov 2022 11:51:10 +0200
+Date:   Mon, 28 Nov 2022 11:51:09 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Michael Walle <michael@walle.cc>, linus.walleij@linaro.org,
+        brgl@bgdev.pl, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, broonie@kernel.org
+Subject: Re: [PATCH v3 3/9] gpio: 104-dio-48e: Migrate to the regmap-irq API
+Message-ID: <Y4SEjVpLUd1wA8nd@smile.fi.intel.com>
+References: <cover.1669100542.git.william.gray@linaro.org>
+ <80fc819bcafe9697b6e02c0750d3cf0ea4ec9e1b.1669100542.git.william.gray@linaro.org>
+ <Y3414YhVjqKakddV@smile.fi.intel.com>
+ <Y3ykg1Vc96Px6ovg@fedora>
+ <3a23df35a35cdba19eeb10c75b5bca97@walle.cc>
+ <Y4PeCBy/8slpMp2R@fedora>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1189:b0:302:fa94:c735 with SMTP id
- y9-20020a056e02118900b00302fa94c735mr6617014ili.57.1669629049094; Mon, 28 Nov
- 2022 01:50:49 -0800 (PST)
-Date:   Mon, 28 Nov 2022 01:50:49 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000060cb5005ee84ce27@google.com>
-Subject: [syzbot] general protection fault in btrfs_ioctl_send
-From:   syzbot <syzbot+c423003741c992ccf56b@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, fdmanana@suse.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4PeCBy/8slpMp2R@fedora>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, Nov 27, 2022 at 05:00:40PM -0500, William Breathitt Gray wrote:
+> On Sun, Nov 27, 2022 at 07:31:48PM +0100, Michael Walle wrote:
+> > Am 2022-11-22 11:29, schrieb William Breathitt Gray:
 
-syzbot found the following issue on:
+...
 
-HEAD commit:    9e46a7996732 Add linux-next specific files for 20221125
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1518a973880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=11e19c740a0b2926
-dashboard link: https://syzkaller.appspot.com/bug?extid=c423003741c992ccf56b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1024ec05880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12bc0973880000
+> > gpiochip doesn't seem to be the correct place, gpiochip_add_irqchip()
+> > is a noop for gpio-regmap, right? So using gpiochip_irqchip_init_hw()
+> > seems wrong.
+> > 
+> > Maybe make gpio-regmap call it on its own? But really we just connect
+> > the regmap-irq to the gpiochip irqdomain.
+> 
+> I think you're right, it feels strange to handle IRQ initialization via
+> the GPIO framework. Maybe somewhere in regmap_irq might be more
+> appropriate?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/758d818cf966/disk-9e46a799.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f7c8696b40a5/vmlinux-9e46a799.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/810f9750b87f/bzImage-9e46a799.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/9b34ff4df466/mount_0.gz
+The problem that that callback solves is possible interrupt storm, spurious
+interrupts, and Use Before Initialized.
 
-The issue was bisected to:
+If you can guarantee that in your case it never happens, add a comment
+and go on.
 
-commit d14cd51f13589142902687cfacd09e373251ac6e
-Author: Filipe Manana <fdmanana@suse.com>
-Date:   Tue Nov 1 16:15:50 2022 +0000
+(It might be useful to tweak code a bit and try CONFIG_DEBUG_SHIRQ=y)
 
-    btrfs: send: cache leaf to roots mapping during backref walking
+> > What is the purpose of the
+> > .init_hw callback? I've looked at other drivers which use regmap-irq
+> > and they all seem to just initialize the hardware in their _probe().
+> > 
+> > -michael
+> 
+> I'm not opposed to initializing the hardware in _probe(), although I can
+> see merit in pushing that operation instead closer to the framework
+> where the initialization is actually relevant.
+> 
+> Andy, maybe you can shed some light about .init_hw; I think you
+> introduced it to gpiolib in commit 9411e3aaa6342.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17d92353880000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=14392353880000
-console output: https://syzkaller.appspot.com/x/log.txt?x=10392353880000
+It seems that commit message doesn't fully  explain the situation behind
+that change. But it was observed in real life, see above.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c423003741c992ccf56b@syzkaller.appspotmail.com
-Fixes: d14cd51f1358 ("btrfs: send: cache leaf to roots mapping during backref walking")
-
-BTRFS info (device loop0): enabling ssd optimizations
-BTRFS info (device loop0): auto enabling async discard
-BTRFS info (device loop0): checking UUID tree
-general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 0 PID: 5294 Comm: syz-executor236 Not tainted 6.1.0-rc6-next-20221125-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:empty_backref_cache fs/btrfs/send.c:1396 [inline]
-RIP: 0010:btrfs_ioctl_send+0x13ab/0x65a0 fs/btrfs/send.c:8365
-Code: 00 fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 49 1c 00 00 4d 8b ae c0 01 00 00 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <80> 3c 02 00 0f 85 34 1c 00 00 4c 39 ed 49 8b 5d 00 49 bc 00 00 00
-RSP: 0018:ffffc90003bbf8c8 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: ffff88807735f140 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff8380b588 RDI: ffff88807735f000
-RBP: ffff88807735f1c0 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffffed100ee6be28
-R13: 0000000000000000 R14: ffff88807735f000 R15: 0000000000000000
-FS:  00005555556b3300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fff4af8bff8 CR3: 000000007dbc9000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- _btrfs_ioctl_send+0x231/0x2e0 fs/btrfs/ioctl.c:4343
- btrfs_ioctl+0x4058/0x5870 fs/btrfs/ioctl.c:4634
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f5d8166ab09
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff55cc13f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f5d8166ab09
-RDX: 0000000020000040 RSI: 0000000040489426 RDI: 0000000000000003
-RBP: 00007f5d8162a3d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f5d8162a460
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:empty_backref_cache fs/btrfs/send.c:1396 [inline]
-RIP: 0010:btrfs_ioctl_send+0x13ab/0x65a0 fs/btrfs/send.c:8365
-Code: 00 fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 49 1c 00 00 4d 8b ae c0 01 00 00 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <80> 3c 02 00 0f 85 34 1c 00 00 4c 39 ed 49 8b 5d 00 49 bc 00 00 00
-RSP: 0018:ffffc90003bbf8c8 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: ffff88807735f140 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff8380b588 RDI: ffff88807735f000
-RBP: ffff88807735f1c0 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffffed100ee6be28
-R13: 0000000000000000 R14: ffff88807735f000 R15: 0000000000000000
-FS:  00005555556b3300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fff4af8bff8 CR3: 000000007dbc9000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 4 bytes skipped:
-   0:	48 c1 ea 03          	shr    $0x3,%rdx
-   4:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
-   8:	0f 85 49 1c 00 00    	jne    0x1c57
-   e:	4d 8b ae c0 01 00 00 	mov    0x1c0(%r14),%r13
-  15:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  1c:	fc ff df
-  1f:	4c 89 ea             	mov    %r13,%rdx
-  22:	48 c1 ea 03          	shr    $0x3,%rdx
-* 26:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2a:	0f 85 34 1c 00 00    	jne    0x1c64
-  30:	4c 39 ed             	cmp    %r13,%rbp
-  33:	49 8b 5d 00          	mov    0x0(%r13),%rbx
-  37:	49                   	rex.WB
-  38:	bc                   	.byte 0xbc
-  39:	00 00                	add    %al,(%rax)
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
