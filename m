@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4B3639EB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8238C639EB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiK1BPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 20:15:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36830 "EHLO
+        id S229724AbiK1BPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 20:15:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiK1BPa (ORCPT
+        with ESMTP id S229706AbiK1BPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 20:15:30 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6D4BC30
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 17:15:26 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NL6rM5HmWzJnx4;
-        Mon, 28 Nov 2022 09:12:03 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 09:15:24 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 09:15:24 +0800
-Subject: Re: [PATCH] kernfs: fix potential null-ptr-deref in
- kernfs_path_from_node_locked()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Tejun Heo <tj@kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221123020419.1867-1-thunder.leizhen@huawei.com>
- <Y35Qgw4Q8XYD5Did@slm.duckdns.org>
- <ba083b44-93d5-37c4-380c-8e0249b2333c@huawei.com>
- <ba46adff-3604-9ccf-b1c5-83411f6652d9@huawei.com>
- <55041efe-7443-d576-287b-49d1221fced2@huawei.com>
- <164f759d-23b8-0a68-e68e-2f0a46318e94@huawei.com>
- <Y4HpqJUINYTDLTrr@kroah.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <1902f7d9-2dcf-acf4-44d6-8c26ff48ea6d@huawei.com>
-Date:   Mon, 28 Nov 2022 09:15:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Sun, 27 Nov 2022 20:15:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE317677;
+        Sun, 27 Nov 2022 17:15:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CC7260F2D;
+        Mon, 28 Nov 2022 01:15:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DBF0C433C1;
+        Mon, 28 Nov 2022 01:15:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669598140;
+        bh=CalTvPg8wCdgEbLF3hG0Q+1+uznyY15QtTUtXniSO/o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rVfXUSh/F6w3G4uadWMlBKnIMUy+H8TPSbkzGeC1pHV9+ZneKwdRiE4Zqih2lx5M/
+         M5wozer4D0TJZlKiLPlruaDSbgQZyt0nElLPQZUGlSZwP9ywrIK5lHj36amMK/w0Wf
+         gLsaTHYYmUN0iJxzcQhX+Pw7Gwi/diWQN7/mKamtkHHiHVQk9JLMIZ5Zqr+rMNyLHP
+         c0kxXolTTpbukxYEld/W205PTRo5ruq1vPM0pLLX3r0Y8rvPcZ6/r4rAjApr9gJrhN
+         2WNKZAvUHl6qUsLhlJchQgeUCplOZQDxHfHt41rh7chCNhvuZ/2s94X8oKhO8rmoSx
+         MtOoye/9jFW6w==
+Date:   Mon, 28 Nov 2022 03:15:36 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Huewe <peterhuewe@gmx.de>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 003/606] tpm: tpm_i2c_infineon: Convert to i2c's
+ .probe_new()
+Message-ID: <Y4QLuBB+HLF4DkWI@kernel.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-4-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-In-Reply-To: <Y4HpqJUINYTDLTrr@kroah.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221118224540.619276-4-uwe@kleine-koenig.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/11/26 18:25, Greg Kroah-Hartman wrote:
-> On Sat, Nov 26, 2022 at 05:49:50PM +0800, Leizhen (ThunderTown) wrote:
->>
->>
->> On 2022/11/24 10:52, Leizhen (ThunderTown) wrote:
->>>
->>>
->>> On 2022/11/24 10:28, Leizhen (ThunderTown) wrote:
->>>>
->>>>
->>>> On 2022/11/24 10:24, Leizhen (ThunderTown) wrote:
->>>>>
->>>>>
->>>>> On 2022/11/24 0:55, Tejun Heo wrote:
->>>>>> On Wed, Nov 23, 2022 at 10:04:19AM +0800, Zhen Lei wrote:
->>>>>>> Ensure that the 'buf' is not empty before strlcpy() uses it.
->>>>>>>
->>>>>>> Commit bbe70e4e4211 ("fs: kernfs: Fix possible null-pointer dereferences
->>>>>>> in kernfs_path_from_node_locked()") first noticed this, but it didn't
->>>>>>> fix it completely.
->>>>>>>
->>>>>>> Fixes: 9f6df573a404 ("kernfs: Add API to generate relative kernfs path")
->>>>>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->>>>>>
->>>>>> I think the right thing to do is removing that if. It makes no sense to call
->>>>>> that function with NULL buf and the fact that nobody reported crashes on
->>>>>> NULL buf indicates that we in fact never do.
->>
->> kernfs_path_from_node
->>     -->kernfs_path_from_node_locked
->>
->> EXPORT_SYMBOL_GPL(kernfs_path_from_node)
->>
->> I've rethought it. The export APIs need to do null pointer check, right?
+On Fri, Nov 18, 2022 at 11:35:37PM +0100, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > 
-> No, callers should get this right.  Are there any in-tree ones that do
-> not?
-
-Thanks. I got it.
-
+> The probe function doesn't make use of the i2c_device_id * parameter so it
+> can be trivially converted.
 > 
-> thanks,
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/char/tpm/tpm_i2c_infineon.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> greg k-h
-> .
+> diff --git a/drivers/char/tpm/tpm_i2c_infineon.c b/drivers/char/tpm/tpm_i2c_infineon.c
+> index fd3c3661e646..7cdaff52a96d 100644
+> --- a/drivers/char/tpm/tpm_i2c_infineon.c
+> +++ b/drivers/char/tpm/tpm_i2c_infineon.c
+> @@ -681,8 +681,7 @@ MODULE_DEVICE_TABLE(of, tpm_tis_i2c_of_match);
+>  
+>  static SIMPLE_DEV_PM_OPS(tpm_tis_i2c_ops, tpm_pm_suspend, tpm_pm_resume);
+>  
+> -static int tpm_tis_i2c_probe(struct i2c_client *client,
+> -			     const struct i2c_device_id *id)
+> +static int tpm_tis_i2c_probe(struct i2c_client *client)
+>  {
+>  	int rc;
+>  	struct device *dev = &(client->dev);
+> @@ -717,7 +716,7 @@ static void tpm_tis_i2c_remove(struct i2c_client *client)
+>  
+>  static struct i2c_driver tpm_tis_i2c_driver = {
+>  	.id_table = tpm_tis_i2c_table,
+> -	.probe = tpm_tis_i2c_probe,
+> +	.probe_new = tpm_tis_i2c_probe,
+>  	.remove = tpm_tis_i2c_remove,
+>  	.driver = {
+>  		   .name = "tpm_i2c_infineon",
+> -- 
+> 2.38.1
 > 
 
--- 
-Regards,
-  Zhen Lei
+Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+BR, Jarkko
