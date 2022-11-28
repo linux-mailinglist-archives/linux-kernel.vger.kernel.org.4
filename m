@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C0F63B3E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:06:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E43563B3E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234458AbiK1VF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 16:05:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
+        id S234485AbiK1VGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 16:06:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234417AbiK1VF1 (ORCPT
+        with ESMTP id S234441AbiK1VF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 16:05:27 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB372F646;
-        Mon, 28 Nov 2022 13:05:19 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id s5so17111288edc.12;
-        Mon, 28 Nov 2022 13:05:19 -0800 (PST)
+        Mon, 28 Nov 2022 16:05:28 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADDE2F3B5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 13:05:20 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so11390854pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 13:05:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=T6jpEgonLuVy9eXPUff4zgyLKC9OGDqSxvg6IPy0vmg=;
-        b=BqRENArL2HvQ2tP2uCgRu4PTtkMRQ7/JQmbXMRe0Ph8A9ex2ObTE+xr++pixIf1NVb
-         iFAij/0OVTDONlsE+m0CDyoFt3QOinm5UMaiF8dH/HL5TelPi3Uq6FNZqLGjTsCNfvb0
-         1nhightmGLorW9uSsg31bzVuCcxtmO/Tq+B8zMvt6zPANfuQy4KlldRXUtXbl3uic0ZV
-         ZPfSLGGpSe/un1oZOUg5nV3X+eAggQKBVZh9MwP8LW5uZKYBhYFkWQf1rI3xEu1tMtg/
-         4orrIkQ7ahVl+WMp6h86LpRtwTQdXOIcsx06BJiMDt6wt2KVY6F00R5sDl5TPAZVghPL
-         p6mg==
+        d=google.com; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BGX7hfaY8PrwSdh6wRnZ749ZbmsO0yV8MOm6wQ03sc4=;
+        b=TilKPp5CJEIfWhZ9LVAUQiZSC+ziSOJTgYVKuAQKjuMVcpgMbmLURQUkMGMb4Hl6L0
+         OQqilnXk++vwtHa+u8/WT3BRWFYZEgjSQp1hlZsfNXCQ5in/XaHz12gf+0CWYJ5vPiWq
+         rbiCj9AjJnZWV3t6emouLRWVweVWWdXMxRYvR9IlA5DsMhKPRXyBFMPXoeoNxE0czNU8
+         MT4a5qrqviEd4i0O3ONiKt6xCRU6edOfN/Q6wQOsonLWBOoAVOWiY/aHRJE0Fn1G/MDq
+         Cuqs01FeSMZkj7tiqoXSrHiQwHO4IXOcxyKQYagxd77LAe0Eg+3zmmkuQrJNKkSrP/0N
+         45qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=T6jpEgonLuVy9eXPUff4zgyLKC9OGDqSxvg6IPy0vmg=;
-        b=b4rAGRzrp2FXBl0ha4lKdIwdg6Y+TD0DXf+6UEDBOp5v/T3QjSPNsdZw/UXc1ItkFq
-         GWFeh6T89CUl/vzrswxdU9Hbo+0hP8Y0m3xCWlm8POjRUIYXDgjdMx/Yag54N3I2s7Ue
-         j3tWdOFAKDE/TITP1f5pIMd0+V0Ap78D4aGz9G4EDY0hF5ZR9sjxbOVumALS9WkjUmt3
-         wSt+aCqO3hKUU24k/GF1kTqdC7jGcKV8jOW8B3SJgxXQiAUGUIlX6YOs0n7H9jtolSk5
-         u7R58XUw+kHZpADajGQCVOIoNCVfkeoG+38JXiNxcWip8UBhBRzjjZq+BPCatb2qVIAH
-         5oOA==
-X-Gm-Message-State: ANoB5pnsVy3FBhgMQW9a8QWrSgddGPNL+yoZJc1BGmcgPDoXwtCexVhU
-        BERL+bo+EDVguSyAPf3WDqc=
-X-Google-Smtp-Source: AA0mqf4Zkp4AQgIdgWmtvucjc8ZnQQEDx4kOJEfIiiU0eIj17rT5D+9if6m/tpzMse0bNWAL45I0Tw==
-X-Received: by 2002:a05:6402:1857:b0:46b:19aa:cfaa with SMTP id v23-20020a056402185700b0046b19aacfaamr7968618edy.229.1669669517644;
-        Mon, 28 Nov 2022 13:05:17 -0800 (PST)
-Received: from skbuf ([188.27.185.168])
-        by smtp.gmail.com with ESMTPSA id e16-20020a170906315000b0078d793e7927sm5366600eje.4.2022.11.28.13.05.16
+        bh=BGX7hfaY8PrwSdh6wRnZ749ZbmsO0yV8MOm6wQ03sc4=;
+        b=P87RxKRfFfQrOR8x26vZt83wS4B80vByiQJkHjAnrAamX4MZ9TcOdaqez4q+6vERFA
+         RsaTSu+QPwhL4sECyc6L02IUFd72ZF2b6mTl7fWN8/fPKDk8ebCZ3fgs5xoGyq6v8GtO
+         joEHoQ1XlCRSzIvk1CSu9F9ZLk47a/qbqZXgfMyrfXG2eHSSyssogjW8i3mb4lsGDQsJ
+         gBxYyJmvzu3JYDQMadTK0aN9EbeDfD8o19YseGTy48erj3ldcks5pyXmruZ0nRhb1/WB
+         egCxERCbkQ5DUqJWJF+uu4+qIft1udRDs4q4sgGHLk92VGuJhShr/bBqGOqordGuSxuG
+         pjqQ==
+X-Gm-Message-State: ANoB5pn7Ik5X0l1pD++u7U+LwI2I9JVKdktqOEqCJu8UPO/Ndu2qJ9Af
+        XqiPRNT3Tc2jkA/EGPbwESdLqA==
+X-Google-Smtp-Source: AA0mqf5PNM45SojwuPflvbtOOZ+EvyYJY3fzv4+yS5C5DMJ4DIaYlwzPCQ1/qBL9GhUxyLX7LoBE6Q==
+X-Received: by 2002:a17:90a:5b09:b0:218:a0cd:5a99 with SMTP id o9-20020a17090a5b0900b00218a0cd5a99mr45221414pji.76.1669669519908;
+        Mon, 28 Nov 2022 13:05:19 -0800 (PST)
+Received: from bsegall-glaptop.localhost (c-67-188-112-16.hsd1.ca.comcast.net. [67.188.112.16])
+        by smtp.gmail.com with ESMTPSA id 22-20020a621616000000b005624e2e0508sm8391748pfw.207.2022.11.28.13.05.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 13:05:17 -0800 (PST)
-Date:   Mon, 28 Nov 2022 23:05:15 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Jerry Ray <jerry.ray@microchip.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v3] dsa: lan9303: Add 3 ethtool stats
-Message-ID: <20221128210515.kqvdshlh3phmdpxx@skbuf>
-References: <20221128205521.32116-1-jerry.ray@microchip.com>
+        Mon, 28 Nov 2022 13:05:18 -0800 (PST)
+From:   Benjamin Segall <bsegall@google.com>
+To:     Rishabh Bhatnagar <risbhat@amazon.com>
+Cc:     <gregkh@linuxfoundation.org>, <shakeelb@google.com>,
+        <viro@zeniv.linux.org.uk>, <mdecandia@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH 5.4 0/2] Fix epoll issue in 5.4 kernels
+References: <20221124001123.3248571-1-risbhat@amazon.com>
+Date:   Mon, 28 Nov 2022 13:05:17 -0800
+In-Reply-To: <20221124001123.3248571-1-risbhat@amazon.com> (Rishabh
+        Bhatnagar's message of "Thu, 24 Nov 2022 00:11:21 +0000")
+Message-ID: <xm26wn7en62a.fsf@google.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221128205521.32116-1-jerry.ray@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,65 +74,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 02:55:21PM -0600, Jerry Ray wrote:
->  static void lan9303_get_ethtool_stats(struct dsa_switch *ds, int port,
->  				      uint64_t *data)
->  {
->  	struct lan9303 *chip = ds->priv;
-> -	unsigned int u;
-> +	unsigned int i, u;
->  
->  	for (u = 0; u < ARRAY_SIZE(lan9303_mib); u++) {
->  		u32 reg;
->  		int ret;
->  
-> -		ret = lan9303_read_switch_port(
-> -			chip, port, lan9303_mib[u].offset, &reg);
-> -
-> +		/* Read Port-based MIB stats. */
-> +		ret = lan9303_read_switch_port(chip, port,
-> +					       lan9303_mib[u].offset,
-> +					       &reg);
+Rishabh Bhatnagar <risbhat@amazon.com> writes:
 
-Speaking of unrelated changes...
+> Hi Greg
+> After upgrading to 5.4.211 we were started seeing some nodes getting
+> stuck in our Kubernetes cluster. All nodes are running this kernel
+> version. After taking a closer look it seems that runc was command getting
+> stuck. Looking at the stack it appears the thread is stuck in epoll wait for
+> sometime. 
+> [<0>] do_syscall_64+0x48/0xf0
+> [<0>] entry_SYSCALL_64_after_hwframe+0x5c/0xc1
+> [<0>] ep_poll+0x48d/0x4e0
+> [<0>] do_epoll_wait+0xab/0xc0
+> [<0>] __x64_sys_epoll_pwait+0x4d/0xa0
+> [<0>] do_syscall_64+0x48/0xf0
+> [<0>] entry_SYSCALL_64_after_hwframe+0x5c/0xc1
+> [<0>] futex_wait_queue_me+0xb6/0x110
+> [<0>] futex_wait+0xe2/0x260
+> [<0>] do_futex+0x372/0x4f0
+> [<0>] __x64_sys_futex+0x134/0x180
+> [<0>] do_syscall_64+0x48/0xf0
+> [<0>] entry_SYSCALL_64_after_hwframe+0x5c/0xc1
+>
+> I noticed there are other discussions going on as well
+> regarding this.
+> https://lore.kernel.org/all/Y1pY2n6E1Xa58MXv@kroah.com/
+> Reverting the below patch does fix the issue:
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-5.4.y&id=cf2db24ec4b8e9d399005ececd6f6336916ab6fc
+> We don't see this issue in latest upstream kernel or even latest 5.10
+> stable tree. Looking at the patches that went in for 5.10 stable there's
+> one that stands out that seems to be missing in 5.4.
+> 289caf5d8f6c61c6d2b7fd752a7f483cd153f182 (epoll: check for events when removing
+> a timed out thread from the wait queue)
+>
+> Backporting this patch to 5.4 we don't see the hangups anymore. Looks like
+> this patch fixes time out scenarios which might cause missed wake ups.
+> The other patch in the patch series also fixes a race and is needed for
+> the second patch to apply.
 
->  		if (ret)
->  			dev_warn(chip->dev, "Reading status port %d reg %u failed\n",
->  				 port, lan9303_mib[u].offset);
-
-...If lan9303_read_switch_port() fails, should we copy kernel stack
-uninitialized memory (reg) to user space?
-
->  		data[u] = reg;
->  	}
-> +	for (i = 0; i < ARRAY_SIZE(lan9303_switch_mib); i++) {
-> +		u32 reg;
-> +		int ret;
-> +
-> +		/* Read Switch stats indexed by port. */
-> +		ret = lan9303_read_switch_reg(chip,
-> +					      (lan9303_switch_mib[i].offset +
-> +					       port), &reg);
-> +		if (ret)
-> +			dev_warn(chip->dev, "Reading status port %d reg %u failed\n",
-> +				 port, lan9303_switch_mib[i].offset);
-
-Because the same, existing pattern is also used for new code here.
-
-> +		data[i + u] = reg;
-> +	}
->  }
->  
->  static int lan9303_get_sset_count(struct dsa_switch *ds, int port, int sset)
-> @@ -1017,7 +1061,7 @@ static int lan9303_get_sset_count(struct dsa_switch *ds, int port, int sset)
->  	if (sset != ETH_SS_STATS)
->  		return 0;
->  
-> -	return ARRAY_SIZE(lan9303_mib);
-> +	return ARRAY_SIZE(lan9303_mib) + ARRAY_SIZE(lan9303_switch_mib);
->  }
->  
->  static int lan9303_phy_read(struct dsa_switch *ds, int phy, int regnum)
-> -- 
-> 2.17.1
-> 
+Yes, this definitely makes sense to me; the aggressive removal was only
+valid because the rest of the epoll machinery did plenty of extra
+checking. And I didn't as carefully check the backports when I saw the
+-stable emails.
