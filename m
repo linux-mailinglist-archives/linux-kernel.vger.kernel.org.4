@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83EDC63AFDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF09A63AF92
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:43:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233488AbiK1RqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 12:46:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
+        id S233386AbiK1Rnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 12:43:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233540AbiK1Rpo (ORCPT
+        with ESMTP id S233208AbiK1RnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:45:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D1E2CE17;
-        Mon, 28 Nov 2022 09:41:21 -0800 (PST)
+        Mon, 28 Nov 2022 12:43:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652CE29347
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:40:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3D0AB80E9F;
-        Mon, 28 Nov 2022 17:41:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7113FC43148;
-        Mon, 28 Nov 2022 17:41:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02F23612F3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 17:40:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C351C433D6;
+        Mon, 28 Nov 2022 17:40:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669657278;
-        bh=xcTAaAZ8vGEWaRJppBzJCoGpeZG0IL4L9Rdnd8i+H3g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GhwEv22KN23VVA/Qi0HViNyg8NAhZWO2rkGfgzIaRtEWNlU2Vnu5sZqNvbYu/BBDy
-         OB/pwfhKnw9PVJleu9LLz9WVA61RYBvi0bL51HUdEQgxYiZAWiKbH8kzenZMouNAdc
-         UiISgceEPvFv6G94R0K4w1ckh+uhBAiPyklK/t/KWh3fRpeYMK5zqEfWXBTjb7z1qO
-         XWbVgsIVLaXJRzR+5qAoUwk6/HIYRWugOpMJI+qHnaQRSI6VZ7f/TOIoXkSgyCoZAw
-         k6d2fgWBEJPsT2Pb0jZfxZnzUp+njxaxT3uXKkoq3oCKbJx0PinO8Nzh5zNf4eztF8
-         e50i5Sg41x5Uw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Davide Tronchin <davide.tronchin.94@gmail.com>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 24/24] net: usb: qmi_wwan: add u-blox 0x1342 composition
-Date:   Mon, 28 Nov 2022 12:40:24 -0500
-Message-Id: <20221128174027.1441921-24-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221128174027.1441921-1-sashal@kernel.org>
-References: <20221128174027.1441921-1-sashal@kernel.org>
+        s=k20201202; t=1669657226;
+        bh=ksNf/YddouAnHYSNO35e1eWHI7ypXSlIfibrJFdWEf4=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Osc1H1Y2dd/1zAyoQv+CJvEfOBepdr9KnkC0Zq43CfxEmyEQzwk67A9puNnYw1UAG
+         O7eYNatbOG5Z14pGD8hrppnia2Ca1TJvKAzr96aG88MMS/18dMhTP38B9tjfH3zMta
+         YqQR6azn+QEVmFrzUXaVXRPwFej2H01vc+BY0ce5spLiGefmYlCDipt0DhT9Q/yvmS
+         hc7EKRFdHf93+NgdMwL47eGE10e3kiqHQqqsBa/sHM/+o+IenCpufIpc78A+zKNHDF
+         gZ3Sq/2abivOb7aykWQsyg+5mbBuDoihw6NCLvLqoHlYm07PhN7incrFBJbmaAy2Ym
+         3o1u0nuxP+WUw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Ricardo Ribalda <ribalda@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+In-Reply-To: <20221128-mt8173-afe-v1-0-70728221628f@chromium.org>
+References: <20221128-mt8173-afe-v1-0-70728221628f@chromium.org>
+Subject: Re: [PATCH] ASoC: mediatek: mt8173: Enable IRQ when pdata is ready
+Message-Id: <166965722420.688163.18006301242962769416.b4-ty@kernel.org>
+Date:   Mon, 28 Nov 2022 17:40:24 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,48 +59,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Davide Tronchin <davide.tronchin.94@gmail.com>
+On Mon, 28 Nov 2022 11:49:16 +0100, Ricardo Ribalda wrote:
+> If the device does not come straight from reset, we might receive an IRQ
+> before we are ready to handle it.
+> 
+> Fixes:
+> 
+> [    2.334737] Unable to handle kernel read from unreadable memory at virtual address 00000000000001e4
+> [    2.522601] Call trace:
+> [    2.525040]  regmap_read+0x1c/0x80
+> [    2.528434]  mt8173_afe_irq_handler+0x40/0xf0
+> ...
+> [    2.598921]  start_kernel+0x338/0x42c
+> 
+> [...]
 
-[ Upstream commit a487069e11b6527373f7c6f435d8998051d0b5d9 ]
+Applied to
 
-Add RmNet support for LARA-L6.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-LARA-L6 module can be configured (by AT interface) in three different
-USB modes:
-* Default mode (Vendor ID: 0x1546 Product ID: 0x1341) with 4 serial
-interfaces
-* RmNet mode (Vendor ID: 0x1546 Product ID: 0x1342) with 4 serial
-interfaces and 1 RmNet virtual network interface
-* CDC-ECM mode (Vendor ID: 0x1546 Product ID: 0x1343) with 4 serial
-interface and 1 CDC-ECM virtual network interface
+Thanks!
 
-In RmNet mode LARA-L6 exposes the following interfaces:
-If 0: Diagnostic
-If 1: AT parser
-If 2: AT parser
-If 3: AT parset/alternative functions
-If 4: RMNET interface
+[1/1] ASoC: mediatek: mt8173: Enable IRQ when pdata is ready
+      commit: 4cbb264d4e9136acab2c8fd39e39ab1b1402b84b
 
-Signed-off-by: Davide Tronchin <davide.tronchin.94@gmail.com>
-Acked-by: Bjørn Mork <bjorn@mork.no>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 6bf5c75f519d..bb31eca28d6c 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1412,6 +1412,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x0489, 0xe0b4, 0)},	/* Foxconn T77W968 LTE */
- 	{QMI_FIXED_INTF(0x0489, 0xe0b5, 0)},	/* Foxconn T77W968 LTE with eSIM support*/
- 	{QMI_FIXED_INTF(0x2692, 0x9025, 4)},    /* Cellient MPL200 (rebranded Qualcomm 05c6:9025) */
-+	{QMI_QUIRK_SET_DTR(0x1546, 0x1342, 4)},	/* u-blox LARA-L6 */
- 
- 	/* 4. Gobi 1000 devices */
- 	{QMI_GOBI1K_DEVICE(0x05c6, 0x9212)},	/* Acer Gobi Modem Device */
--- 
-2.35.1
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
