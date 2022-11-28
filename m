@@ -2,90 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C09F463B517
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 23:59:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5F963B524
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 23:59:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234320AbiK1W7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 17:59:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51078 "EHLO
+        id S234492AbiK1W7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 17:59:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234454AbiK1W7F (ORCPT
+        with ESMTP id S229667AbiK1W7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 17:59:05 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9941D2F01D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 14:58:53 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id z17so7168885pff.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 14:58:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K+By6HFUUEwUgnjL5kXpV1830a0YqTs0ZVljGp7cOJQ=;
-        b=el41oB3BXH/tgxJVskjVyKSNwBLVjF1y0fQdlKBRchmPG6fnHN4amDJwqWG1B9uFnP
-         FHlv/IF/BS8HURNI6rK5h3k47an88/5JO1rM80rBFPTbvif23N4sjK9WOPgSq8x6hSfm
-         YmwcOwbbfhszFcttK4pGpWcPwftwS8AWihv9cGokzXSJkRPb65lzuOwDQ2jyqy8GVTd0
-         65evjFx5i3NKAtQiFe+gWjJ4sPx4s6zEpU72O6SC0CiQfBDQ8ZFiV1enK10Eg7tD/6PK
-         8wC4/thSBKwORmQD2k9J+8BUKxIVsePuFf6/Q447D5TaJe91eEHei/kxXeF/AnTJ5fmq
-         CIXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K+By6HFUUEwUgnjL5kXpV1830a0YqTs0ZVljGp7cOJQ=;
-        b=4BAsBkmcynJFqhmcfHwEXgWCjLe9q2OqM13zhtJXMObNp42albnVsmnGtnZ4Q1qFzq
-         S+Hb8fv3EYYOsBu3cKjJxeXwt0BcJJ5LLkv9BerRS7BaIHKLJDa3x6MLi/yqvwDOiH+q
-         nbAkMLNHofcaB0XdM876dXvCYo5tmdfDrAmpJjOZ/wjnIVTdXct5ONhc950x2w65x3yG
-         iQFdR25h1LGMBaPLR+dzi+yHcntFhclEaLB1DhXTKiy8zM0l6Iu2ZdD5Bv/duMRSduXH
-         7a/PadAWxvKvAOPdSvAkGgGCggNO3yaMNNrllXK/cb/4G/bTE69w1SvE1AVMefg04Rv6
-         6qew==
-X-Gm-Message-State: ANoB5pkcfIeeqxblToGbzF7MKnoz7s+A+1R8URK7Eynb80Idikxw+KIk
-        hsEKdMmRWJpUG271YHYCZcljoQ==
-X-Google-Smtp-Source: AA0mqf6OzYufTB/nmTdNbu7FYDOjkXrxqlRZBZ5kt/SmtnHWph37DNttW81hBX1L/qjneFif8XIMXw==
-X-Received: by 2002:aa7:91c9:0:b0:56d:8e07:4626 with SMTP id z9-20020aa791c9000000b0056d8e074626mr55464096pfa.70.1669676333026;
-        Mon, 28 Nov 2022 14:58:53 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id l13-20020a170902d34d00b00189217ba6ffsm9380220plk.38.2022.11.28.14.58.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 14:58:52 -0800 (PST)
-Date:   Mon, 28 Nov 2022 22:58:49 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] KVM: x86/mmu: fix an incorrect comment in
- kvm_mmu_new_pgd()
-Message-ID: <Y4U9KaI9zv6bsbPQ@google.com>
-References: <20221128214709.224710-1-wei.liu@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221128214709.224710-1-wei.liu@kernel.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 28 Nov 2022 17:59:34 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741FA2AE15;
+        Mon, 28 Nov 2022 14:59:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A62DBCE10AC;
+        Mon, 28 Nov 2022 22:59:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A99DC433D6;
+        Mon, 28 Nov 2022 22:59:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1669676369;
+        bh=8eUsQnXrojDc3xf/FA0TCQqqadaNCz4PLnjHT4xDE/M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=p/c6sfRX9un7PSA9WHRKHQPKKlq0P4NHxZWk+3LaBZS7DQenvFmjKk0jQBgH6o535
+         rwsyByROkiEJmDN58P/Z53hmZWo4xmybXT0VaPtvGqyQZyuQQjThzncIMjLPHHFdpc
+         3v4hl13h6A47jhJOM5850oDp2I/9vqahh0Q1uqps=
+Date:   Mon, 28 Nov 2022 14:59:27 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH mm-unstable v1 16/20] mm/frame-vector: remove FOLL_FORCE
+ usage
+Message-Id: <20221128145927.df895bf1966cfa125cae9668@linux-foundation.org>
+In-Reply-To: <9d0bf98a-3d6a-1082-e992-1338e1525935@redhat.com>
+References: <20221116102659.70287-1-david@redhat.com>
+        <20221116102659.70287-17-david@redhat.com>
+        <81fb0fa3-2e06-b765-56ac-a7d981194e59@redhat.com>
+        <08b65ac6-6786-1080-18f8-d2be109c85fc@xs4all.nl>
+        <9d0bf98a-3d6a-1082-e992-1338e1525935@redhat.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022, Wei Liu wrote:
-> There is no function named kvm_mmu_ensure_valid_pgd().
-> 
-> Fix the comment and remove the pair of braces to conform to Linux kernel
-> coding style.
-> 
-> Signed-off-by: Wei Liu <wei.liu@kernel.org>
-> ---
+On Mon, 28 Nov 2022 09:18:47 +0100 David Hildenbrand <david@redhat.com> wrote:
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+> > Less chances of things going wrong that way.
+> > 
+> > Just mention in the v2 cover letter that the first patch was added to
+> > make it easy to backport that fix without being hampered by merge
+> > conflicts if it was added after your frame_vector.c patch.
+> 
+> Yes, that's the way I would naturally do, it, however, Andrew prefers 
+> delta updates for minor changes.
+> 
+> @Andrew, whatever you prefer!
+
+I'm inclined to let things sit as they are.  Cross-tree conflicts
+happen, and Linus handles them.  I'll flag this (very simple) conflict
+in the pull request, if MM merges second.  If v4l merges second then
+hopefully they will do the same.  But this one is so simple that Linus
+hardly needs our help.
+
+But Linus won't be editing changelogs so that the changelog makes more
+sense after both trees are joined.  I'm inclined to let the changelog
+sit as it is as well.
