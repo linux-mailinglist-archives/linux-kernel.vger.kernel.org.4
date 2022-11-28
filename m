@@ -2,130 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562A863B60D
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 00:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C03263B610
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 00:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234771AbiK1Xjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 18:39:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
+        id S234751AbiK1XkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 18:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234751AbiK1Xj3 (ORCPT
+        with ESMTP id S234574AbiK1XkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 18:39:29 -0500
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8C113DC0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 15:39:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1669678768; x=1701214768;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=CKWGkAJZOpqvsRiv6iiFtDdJkkDaLWB71/7EyG0/hlw=;
-  b=mvmsVDrbypFod3LMANxs/hJPkaSs77YrR6/EsDLwsw5U8LbjBT+/lcnl
-   CI+3g2QKKmqx+QNf4a7sVqy/VIENFd6LwEWShZp4BygT3TZyaWE/Qa79W
-   JvqY/JI/81+iSQshsHTUa46j/Dq87N5dFZ412Js11K2ChQdvBF5A87h6C
-   hIS4qdqjNqh8JxbN3U/nLyb6Rgli7H/RQ3BTD6y3nq1WV+U5SBS+IfSg3
-   SoOTz/18kygBbNdvdcf9u8mhsvk3aBSoqhkauIzIfc8PqPJ+tcSi02JFf
-   pxp4egh8m3ONv4qTmWmvzbrw7F+ib4RFFC60fXPYGvjjoL0DaARjALvJ5
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,201,1665417600"; 
-   d="scan'208";a="329497041"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 29 Nov 2022 07:39:26 +0800
-IronPort-SDR: sDnm8MVGk+MVGfoFAb+QKgUjEijx0DFfg7jLVHDmV6UkcrYtZqcWSVOJwdoMvEljyFb4RZoo4s
- xwbDMIACieAO//GS6j0YzVnqrAOR+Flk+/ByqWbxLuxpf9noKkOj/GwVMxt87IZXgxXmIF9439
- xTM2DEhl1MZp5jT4GZirE3iY4ax1s8djzxGfVIxUYo2Hp0a4K57UcXuTfEKpcTmZCLn8xpbhOE
- ubhGvPGvZ3mGHvnrYuiAhtYIY98ztZ1C8NSGdF4BoQSgj7xPKBhWYrEwH6V2D747vT3qtE3o2W
- Ano=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Nov 2022 14:58:07 -0800
-IronPort-SDR: RFsDICRwxxTL5woQ5ki1LyKL70rcNl+O+d+QTFx7FiVQaqQt/qv7Oe7QZ4ZH9bYYdsOSCDU+Kk
- PGlvj1VXDC6l3oFic+ge8iRlcn21nRAZGRaWNv+4Yown4FPJlHJapUffI7Z6lwqNYXdSffGzv7
- Jx6/QMgfcQBC5ta+XGG55pt0LI1jNOZqzkmFMNyKbKIbj36dyKFd/1L8/JQWUJtUvPRZm6F5Md
- INJZiH37lpl0D7aor+B01HYnEF8xCUip1k/96klTczngi5laXcCnktEYq23GMWC/YOLDlzFy1m
- 9a0=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Nov 2022 15:39:27 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NLhl23bL1z1RwqL
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 15:39:26 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1669678766; x=1672270767; bh=CKWGkAJZOpqvsRiv6iiFtDdJkkDaLWB71/7
-        EyG0/hlw=; b=TH33QpIju2od0JJjgMhJh51ZiGLvuI5P1zoI0B7QZProO1P11d1
-        fS251GW9UF6gA4O8Rw3w/0YkRK1PQpR7tGOC0DGWyPNlDGJwH+IzVWlo0HLQu0sR
-        a0lTqCrz6ZUd4rsGcuQzPvS/r+0hIJXbbDZ8iCOEsZnpcKWjnMngGxaYJXXh2UVW
-        VbvIXe8MTGwHt08eN9a3OvXhpUS8HYFkabXQDh1wl8XDWxjjeRA+BLjbDabxiCl5
-        PRyPBeK2Dy+gU4H8FDa3L8AZjSr8E1wFPvRtvi8iiVAo4Z+egLwA5XWqKsdxcJWG
-        22oIJxjj603T/rTv0WTSHlS94dqU4ZWe5jA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id tFAtNbzJWx83 for <linux-kernel@vger.kernel.org>;
-        Mon, 28 Nov 2022 15:39:26 -0800 (PST)
-Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NLhl13M9hz1RvLy;
-        Mon, 28 Nov 2022 15:39:25 -0800 (PST)
-Message-ID: <ab5368d2-5f65-68cb-9703-23d6e451b775@opensource.wdc.com>
-Date:   Tue, 29 Nov 2022 08:39:24 +0900
+        Mon, 28 Nov 2022 18:40:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566261DF08
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 15:40:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E5F02B81025
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 23:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A9514C433D7;
+        Mon, 28 Nov 2022 23:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669678815;
+        bh=6mPlbaUReAz5hkyqzULKNUBalSvtA+axzTczmuk1Snk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=WMALrFjvnJ425z8bodXqzHP5ZOCjr9cmW3ca3LKTaCRqXvYMAMBUC4QODhGKGY77C
+         HPAwyXlqZj0izpNUjh7wKI4BnKuk74KcWjWGXNR3IiBkpUi/8eMZD80awcjH56XvGi
+         EdM9WmRCWKHzcLcyBo3Yd5btygOgfPS2nuz02iA57xCzR8sOjA0NT/VwXovOTK6NbA
+         mpdVeiQ629ubF0oos7LD07R7v47Bg41UT6ZqJazt7TSkcQBCrD9T9/CKKDbII+mxxB
+         Eumpm+knDh7q0BCFGqEB/ynyVNKW3L970EOcfd19ZOqSbuAVr9+flH2rBwefZ3Y1s0
+         H4E1XUAeUEwpA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 81601E21EF7;
+        Mon, 28 Nov 2022 23:40:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: linux-next: Fixes tag needs some work in the block tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20221129082715.78e44566@canb.auug.org.au>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20221129082715.78e44566@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] riscv: Fix NR_CPUS range conditions
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <166967881552.1570.15037145347501399600.git-patchwork-notify@kernel.org>
+Date:   Mon, 28 Nov 2022 23:40:15 +0000
+References: <20221126061557.3541-1-samuel@sholland.org>
+In-Reply-To: <20221126061557.3541-1-samuel@sholland.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, apatel@ventanamicro.com,
+        heinrich.schuchardt@canonical.com, paul.walmsley@sifive.com,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/22 06:27, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   4b49197f9fbd ("block: mq-deadline: Rename deadline_is_seq_writes()")
-> 
-> Fixes tag
-> 
->   Fixes: 015d02f4853 ("block: mq-deadline: Do not break sequential write streams to zoned HDDs")
-> 
-> has these problem(s):
-> 
->   - SHA1 should be at least 12 digits long
->     This can be fixed for the future by setting core.abbrev to 12 (or
->     more) or (for git v2.11 or later) just making sure it is not set
->     (or set to "auto").
+Hello:
 
-Oops. Sorry about that. It seems I cannot count up to 12 anymore :)
-It should be:
+This patch was applied to riscv/linux.git (fixes)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-Fixes: 015d02f48537 ("block: mq-deadline: Do not break sequential write
-streams to zoned HDDs")
+On Sat, 26 Nov 2022 00:15:56 -0600 you wrote:
+> The conditions reference the symbol SBI_V01, which does not exist. The
+> correct symbol is RISCV_SBI_V01.
+> 
+> Fixes: e623715f3d67 ("RISC-V: Increase range and default value of NR_CPUS")
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> 
+> [...]
 
-Jens, can you fix this ?
+Here is the summary with links:
+  - riscv: Fix NR_CPUS range conditions
+    https://git.kernel.org/riscv/c/1d6b5ed41f8c
 
+You are awesome, thank you!
 -- 
-Damien Le Moal
-Western Digital Research
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
