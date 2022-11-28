@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71FFB63B224
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8CF463B219
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233550AbiK1TWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 14:22:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50102 "EHLO
+        id S232545AbiK1TUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 14:20:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233526AbiK1TWG (ORCPT
+        with ESMTP id S233413AbiK1TUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 14:22:06 -0500
-Received: from EX-PRD-EDGE02.vmware.com (ex-prd-edge02.vmware.com [208.91.3.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77ED61176;
-        Mon, 28 Nov 2022 11:22:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-    s=s1024; d=vmware.com;
-    h=from:to:cc:subject:date:message-id:in-reply-to:mime-version:
-      content-type;
-    bh=wp8/nNd1KCYV47vh224V7eCXyswQGh2OzpzX/wMhe5g=;
-    b=GPUqV44dTF+An3121nAIrtEKq6NBrKGivDNT2xgAby7Vi6uUjBV3HT2EW7ko/z
-      9bEogYWN5u6RfofolMCj5H6iSYZMgf+wuUYezB47UNkRu2RLqlPGxPLbYaXpeP
-      Ux9Uzs+LjBMm0GnlY31Wi0/5JoTwtlZIXXmMoVqMbVd91Pk=
-Received: from sc9-mailhost1.vmware.com (10.113.161.71) by
- EX-PRD-EDGE02.vmware.com (10.188.245.7) with Microsoft SMTP Server id
- 15.1.2308.14; Mon, 28 Nov 2022 11:19:46 -0800
-Received: from htb-1n-eng-dhcp122.eng.vmware.com (unknown [10.20.114.216])
-        by sc9-mailhost1.vmware.com (Postfix) with ESMTP id 49F382026B;
-        Mon, 28 Nov 2022 11:20:00 -0800 (PST)
-Received: by htb-1n-eng-dhcp122.eng.vmware.com (Postfix, from userid 0)
-        id 457C5AE1A6; Mon, 28 Nov 2022 11:20:00 -0800 (PST)
-From:   Ronak Doshi <doshir@vmware.com>
-To:     <netdev@vger.kernel.org>
-CC:     Ronak Doshi <doshir@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Guolin Yang <gyang@vmware.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH net 2/2] vmxnet3: use correct intrConf reference when using extended queues
-Date:   Mon, 28 Nov 2022 11:19:55 -0800
-Message-ID: <20221128191955.2556-3-doshir@vmware.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20221128191955.2556-1-doshir@vmware.com>
-References: <20221128191955.2556-1-doshir@vmware.com>
+        Mon, 28 Nov 2022 14:20:09 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD3B2BC7;
+        Mon, 28 Nov 2022 11:20:08 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2ASJJvvC006571
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 14:19:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1669663200; bh=7iGuKVNfYY+dAeexMioZbuIssoUNjOCv35LnADeX+BA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=HH6W4ulUkWzdY5Q3eBBHT+01I0wvrocYLx8lIsM7id9GwtfpUboSnCne0LRjXzKRm
+         4H4H9nLTcCsfTPek6+x2L2THYCcotZ42+2yVhrabGS/xYYo2qqGAEYXtvu9MbCVFUU
+         nqUMorWdkhrDVxzGk1gmtjO9tJ8cZVbAVQ20qDQqMwx8vQjNvy8V6KX2YQjxs2agB+
+         nXroKS2wGop2xqsTmaW7r6AI/IhQ3jx55eq072IuEeyUs8e2ihnWeFPMgMZnzi5LQE
+         LceQMeD+qMesuYogTrpluXGNuZLpiq1SUkdVqwxkEgH0iv4oKAlPNAfy/RH/eIh2nY
+         thxzhvBaFtv4Q==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 3085115C3A9A; Mon, 28 Nov 2022 14:19:57 -0500 (EST)
+Date:   Mon, 28 Nov 2022 14:19:57 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Lukas Czerner <lczerner@redhat.com>,
+        Svyatoslav Feldsherov <feldsherov@google.com>,
+        syzbot+6ba92bd00d5093f7e371@syzkaller.appspotmail.com,
+        oferz@google.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] fs: do not update freeing inode i_io_list
+Message-ID: <Y4UJ3f7FcCTTq7q3@mit.edu>
+References: <20221115202001.324188-1-feldsherov@google.com>
+ <20221116111539.i7xi7is7rn62prf5@quack3>
 MIME-Version: 1.0
-Content-Type: text/plain
-Received-SPF: None (EX-PRD-EDGE02.vmware.com: doshir@vmware.com does not
- designate permitted sender hosts)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116111539.i7xi7is7rn62prf5@quack3>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,55 +58,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'Commit 39f9895a00f4 ("vmxnet3: add support for 32 Tx/Rx queues")'
-added support for 32Tx/Rx queues. As a part of this patch, intrConf
-structure was extended to incorporate increased queues.
+On Wed, Nov 16, 2022 at 12:15:39PM +0100, Jan Kara wrote:
+> On Tue 15-11-22 20:20:01, Svyatoslav Feldsherov wrote:
+> > After commit cbfecb927f42 ("fs: record I_DIRTY_TIME even if inode
+> > already has I_DIRTY_INODE") writeback_single_inode can push inode with
+> > I_DIRTY_TIME set to b_dirty_time list. In case of freeing inode with
+> > I_DIRTY_TIME set this can happen after deletion of inode from i_io_list
+> > at evict. Stack trace is following.
+> > 
+> > evict
+> > fat_evict_inode
+> > fat_truncate_blocks
+> > fat_flush_inodes
+> > writeback_inode
+> > sync_inode_metadata(inode, sync=0)
+> > writeback_single_inode(inode, wbc) <- wbc->sync_mode == WB_SYNC_NONE
+> > 
+> > This will lead to use after free in flusher thread.
+> > 
+> > Similar issue can be triggered if writeback_single_inode in the
+> > stack trace update inode->i_io_list. Add explicit check to avoid it.
+> > 
+> > Fixes: cbfecb927f42 ("fs: record I_DIRTY_TIME even if inode already has I_DIRTY_INODE")
+> > Reported-by: syzbot+6ba92bd00d5093f7e371@syzkaller.appspotmail.com
+> > Reviewed-by: Jan Kara <jack@suse.cz>
+> > Signed-off-by: Svyatoslav Feldsherov <feldsherov@google.com>
+> 
+> Ted, I guess you will merge this patch since you've merged the one from
+> Lukas this patch is fixing?
 
-This patch fixes the issue where incorrect reference is being used.
+Sorry, I forgot to ack this earlier, but this was pushed to Linus and
+it's in 6.1-rc7.
 
-Fixes: 39f9895a00f4 ("vmxnet3: add support for 32 Tx/Rx queues")
-Signed-off-by: Ronak Doshi <doshir@vmware.com>
-Acked-by: Guolin Yang <gyang@vmware.com>
----
- drivers/net/vmxnet3/vmxnet3_drv.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/vmxnet3/vmxnet3_drv.c b/drivers/net/vmxnet3/vmxnet3_drv.c
-index 8da6e06f1f06..89af114d5ae4 100644
---- a/drivers/net/vmxnet3/vmxnet3_drv.c
-+++ b/drivers/net/vmxnet3/vmxnet3_drv.c
-@@ -75,8 +75,14 @@ vmxnet3_enable_all_intrs(struct vmxnet3_adapter *adapter)
- 
- 	for (i = 0; i < adapter->intr.num_intrs; i++)
- 		vmxnet3_enable_intr(adapter, i);
--	adapter->shared->devRead.intrConf.intrCtrl &=
-+	if (!VMXNET3_VERSION_GE_6(adapter) ||
-+	    !adapter->queuesExtEnabled) {
-+		adapter->shared->devRead.intrConf.intrCtrl &=
- 					cpu_to_le32(~VMXNET3_IC_DISABLE_ALL);
-+	} else {
-+		adapter->shared->devReadExt.intrConfExt.intrCtrl &=
-+					cpu_to_le32(~VMXNET3_IC_DISABLE_ALL);
-+	}
- }
- 
- 
-@@ -85,8 +91,14 @@ vmxnet3_disable_all_intrs(struct vmxnet3_adapter *adapter)
- {
- 	int i;
- 
--	adapter->shared->devRead.intrConf.intrCtrl |=
-+	if (!VMXNET3_VERSION_GE_6(adapter) ||
-+	    !adapter->queuesExtEnabled) {
-+		adapter->shared->devRead.intrConf.intrCtrl |=
- 					cpu_to_le32(VMXNET3_IC_DISABLE_ALL);
-+	} else {
-+		adapter->shared->devReadExt.intrConfExt.intrCtrl |=
-+					cpu_to_le32(VMXNET3_IC_DISABLE_ALL);
-+	}
- 	for (i = 0; i < adapter->intr.num_intrs; i++)
- 		vmxnet3_disable_intr(adapter, i);
- }
--- 
-2.11.0
-
+					- Ted
