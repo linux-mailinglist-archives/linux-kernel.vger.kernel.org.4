@@ -2,139 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980A0639F07
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE10639F09
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:44:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiK1Bmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 20:42:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
+        id S229722AbiK1Boc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 20:44:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiK1Bmg (ORCPT
+        with ESMTP id S229548AbiK1Bob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 20:42:36 -0500
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3303DE02;
-        Sun, 27 Nov 2022 17:42:35 -0800 (PST)
-Received: by mail-pj1-f47.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so7673570pjo.3;
-        Sun, 27 Nov 2022 17:42:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vugqIFRxCyknBbu9V+wKU89OOIphCVzqPgtGWbeU2e0=;
-        b=3TT8s7sdFoeIYzo3znoz3PAZN7oTBTJbe1Pzw287AalQyi3//jd0miT3JTuvTfhk+1
-         zwESm+LfCKndgueY38VzdG/BXxCpCTlrfdSa1i4JVWEd3VoY0K5pDmNxgyJOv3DWhSiv
-         pjlCD/JdgdhF0lONyp4sK/ZZMxGmUi5irvXNYbN1VRNrhNZJP0aLSjBVextE+dPvwai3
-         ARDCnKYX1j5rzG4G8KJhZ3OanhB5rihieMTHYA/Dl5XDfPrmKfwPEOYOXOJQsBfgY/r1
-         SyKlemaojdwERPw/V35+Gy8Xbh1DnRC29RJLc1/k/3Mu5pU64EXgIYi4S45fCkgcGEXB
-         NR5Q==
-X-Gm-Message-State: ANoB5pliEMC+FMs1dFvW6CnM+WfqNAD5U+TQo1rKnk7mnT2TP51lteyn
-        eKk4qoYySY2rCee0wYXzniWTMfH6t3TqR4bc+aY=
-X-Google-Smtp-Source: AA0mqf5fJFd4OI/wqCAiSyik0VLVFVoFMfzJ9mryfA/1K6FyI90QwUxChWz0UdSQwVRwuYvQMcWJhOKG5dmt/m6SpnU=
-X-Received: by 2002:a17:90a:77cc:b0:219:1747:f19c with SMTP id
- e12-20020a17090a77cc00b002191747f19cmr11037058pjs.222.1669599754664; Sun, 27
- Nov 2022 17:42:34 -0800 (PST)
+        Sun, 27 Nov 2022 20:44:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DED63AE
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 17:43:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669599814;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tE8kAFeoA7biKR8q9fjAYev92yn5jNTMW1oUFKBFLTE=;
+        b=JZ8vOWLwinzhkaRasyfHpNQImEh/CC2b1UjupdovWPPD5B/0EGO/vrz8gNB1u2pBSjoHOK
+        VtsuPRtiRNoJ+KUfWCs7GPQqewNCjRv42EbSvNKepLpqPjHkUOCWi0bz/XKBG+Xd4bW7hJ
+        UxjXqLZ1zwMiWknewpngUhDZPa+pQ3c=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-561-pEJ7eoB5MmmxCsCn4SN_og-1; Sun, 27 Nov 2022 20:43:31 -0500
+X-MC-Unique: pEJ7eoB5MmmxCsCn4SN_og-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7881B29AA3B6;
+        Mon, 28 Nov 2022 01:43:30 +0000 (UTC)
+Received: from [10.22.32.57] (unknown [10.22.32.57])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BD6E3492B05;
+        Mon, 28 Nov 2022 01:43:29 +0000 (UTC)
+Message-ID: <92b99a5e-1588-4e08-a652-72e9c51421cf@redhat.com>
+Date:   Sun, 27 Nov 2022 20:43:27 -0500
 MIME-Version: 1.0
-References: <20221122154934.13937-1-mailhol.vincent@wanadoo.fr>
- <20221127130919.638324-1-mailhol.vincent@wanadoo.fr> <20221127130919.638324-3-mailhol.vincent@wanadoo.fr>
- <Y4ONgD4dAj8yU2/+@shredder>
-In-Reply-To: <Y4ONgD4dAj8yU2/+@shredder>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 28 Nov 2022 10:42:23 +0900
-Message-ID: <CAMZ6RqKfED-ABYPboF09FUZjcKQSb0ALYjY2hiffP7fXZRb2mQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 2/5] mlxsw: core: fix mlxsw_devlink_info_get()
- to correctly report driver name
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Jiri Pirko <jiri@nvidia.com>, netdev@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Arnaud Ebalard <arno@natisbad.org>,
-        Srujana Challa <schalla@marvell.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Dimitris Michailidis <dmichail@fungible.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Linu Cherian <lcherian@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Jerin Jacob <jerinj@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Petr Machata <petrm@nvidia.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Shannon Nelson <snelson@pensando.io>, drivers@pensando.io,
-        Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Vadim Fedorenko <vadfed@fb.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Vadim Pasternak <vadimp@mellanox.com>,
-        Shalom Toledo <shalomt@mellanox.com>,
-        linux-crypto@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-rdma@vger.kernel.org, oss-drivers@corigine.com,
-        Jiri Pirko <jiri@mellanox.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hao Chen <chenhao288@hisilicon.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Ido Schimmel <idosch@mellanox.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH-tip v4] sched: Fix NULL user_cpus_ptr check in
+ dup_user_cpus_ptr()
+Content-Language: en-US
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc:     Phil Auld <pauld@redhat.com>,
+        Wenjie Li <wenjieli@qti.qualcomm.com>,
+        =?UTF-8?B?RGF2aWQgV2FuZyDnjovmoIc=?= <wangbiao3@xiaomi.com>,
+        linux-kernel@vger.kernel.org
+References: <20221125023943.1118603-1-longman@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20221125023943.1118603-1-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon. 28 Nov. 2022 at 01:17, Ido Schimmel <idosch@nvidia.com> wrote:
-> On Sun, Nov 27, 2022 at 10:09:16PM +0900, Vincent Mailhol wrote:
-> > Currently, mlxsw_devlink_info_get() reports the device_kind. The
-> > device_kind is not necessarily the same as the device_name. For
-> > example, the mlxsw_i2c implementation sets up the device_kind as
-> > ic2_client::name in [1] which indicates the type of the device
+On 11/24/22 21:39, Waiman Long wrote:
+> In general, a non-null user_cpus_ptr will remain set until the task dies.
+> A possible exception to this is the fact that do_set_cpus_allowed()
+> will clear a non-null user_cpus_ptr. To allow this possible racing
+> condition, we need to check for NULL user_cpus_ptr under the pi_lock
+> before duping the user mask.
 >
-> s/ic2/i2c/
->
-> > (e.g. chip name).
-> >
-> > Fix it so that it correctly reports the driver name.
-> >
-> > [1] mlxsw_i2c_probe() from drivers/net/ethernet/mellanox/mlxsw/i2c.c
-> > Link: https://elixir.bootlin.com/linux/v6.1-rc1/source/drivers/net/ethernet/mellanox/mlxsw/i2c.c#L714
->
-> Same comment as before.
->
-> Before the series:
->
-> # devlink dev info i2c/2-0048 | grep driver
->   driver mlxsw_minimal
->
-> After the series:
->
-> # devlink dev info i2c/2-0048 | grep driver
->   driver mlxsw_minimal
+> Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-ACK. I was overall confused by the device_kind. Thank you for your
-confirmation. I will drop the first two patches from this series.
+This is actually a pre-existing use-after-free bug since commit 
+07ec77a1d4e8 ("sched: Allow task CPU affinity to be restricted on 
+asymmetric systems"). So it needs to be fixed in the stable release as 
+well. Will resend the patch with an additional fixes tag and updated 
+commit log.
 
+Cheers,
+Longman
 
-Yours sincerely,
-Vincent Mailhol
+> ---
+>   kernel/sched/core.c | 32 ++++++++++++++++++++++++++++----
+>   1 file changed, 28 insertions(+), 4 deletions(-)
+>
+>   [v4] Minor comment update
+>
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 8df51b08bb38..f2b75faaf71a 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -2624,19 +2624,43 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
+>   int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
+>   		      int node)
+>   {
+> +	cpumask_t *user_mask;
+>   	unsigned long flags;
+>   
+> +	/*
+> +	 * Always clear dst->user_cpus_ptr first as their user_cpus_ptr's
+> +	 * may differ by now due to racing.
+> +	 */
+> +	dst->user_cpus_ptr = NULL;
+> +
+> +	/*
+> +	 * This check is racy and losing the race is a valid situation.
+> +	 * It is not worth the extra overhead of taking the pi_lock on
+> +	 * every fork/clone.
+> +	 */
+>   	if (!src->user_cpus_ptr)
+>   		return 0;
+>   
+> -	dst->user_cpus_ptr = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
+> -	if (!dst->user_cpus_ptr)
+> +	user_mask = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
+> +	if (!user_mask)
+>   		return -ENOMEM;
+>   
+> -	/* Use pi_lock to protect content of user_cpus_ptr */
+> +	/*
+> +	 * Use pi_lock to protect content of user_cpus_ptr
+> +	 *
+> +	 * Though unlikely, user_cpus_ptr can be reset to NULL by a concurrent
+> +	 * do_set_cpus_allowed().
+> +	 */
+>   	raw_spin_lock_irqsave(&src->pi_lock, flags);
+> -	cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
+> +	if (src->user_cpus_ptr) {
+> +		swap(dst->user_cpus_ptr, user_mask);
+> +		cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
+> +	}
+>   	raw_spin_unlock_irqrestore(&src->pi_lock, flags);
+> +
+> +	if (unlikely(user_mask))
+> +		kfree(user_mask);
+> +
+>   	return 0;
+>   }
+>   
+
