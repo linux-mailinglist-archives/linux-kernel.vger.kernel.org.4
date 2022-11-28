@@ -2,103 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 529CE63AE12
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF26E63AE17
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbiK1QqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 11:46:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
+        id S230489AbiK1Qt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 11:49:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiK1QqR (ORCPT
+        with ESMTP id S229670AbiK1QtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 11:46:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36BA1AD94
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 08:46:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A8876126D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 16:46:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42F42C433C1;
-        Mon, 28 Nov 2022 16:46:15 +0000 (UTC)
-Date:   Mon, 28 Nov 2022 11:46:13 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     <mhiramat@kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] tracing: Fix infinite loop in tracing_read_pipe on
- overflowed print_trace_line
-Message-ID: <20221128114613.1c664e81@gandalf.local.home>
-In-Reply-To: <20221124125850.155449-1-yangjihong1@huawei.com>
-References: <20221124125850.155449-1-yangjihong1@huawei.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 28 Nov 2022 11:49:24 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51756167F4;
+        Mon, 28 Nov 2022 08:49:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669654163; x=1701190163;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CgPF6MKTnegmRDmcI5KCYgm3Dojtw3BD/LAsoXreVzA=;
+  b=HtF/KqwLsL6qxOspoQuu4/2ZGgGHtzJdzUMY3XrCXkMN3R+bCvU89Xa9
+   6ttqO6pnFF5OE67aC2r1Z65KxhLxeOUUpTyAxxFDUwdCkWsz2oOog/CBg
+   dy1TDQnJV9zbZ/cmO6M2vHaO0aoDdHRJLxAYYK+HmiLvywq3rGIM/TQtD
+   VkUNwNjQQYDDi6vZ74q7nk/FbXlItTTY+GsXwegiaOtoB15q18TDkxVIJ
+   qd4lldcZD24VI4h3kLLZEdAEQWh43YgyWL+ASxDhjFdORTQbigZl9E6wT
+   fBEYMBoDluwC+A1fTnD/o1GaZdfGVWrCQBPAKiEjmpeSUeHC76QtwsOYg
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="379144205"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="379144205"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 08:49:22 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="768104564"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="768104564"
+Received: from kschjaer-mobl.amr.corp.intel.com (HELO [10.212.114.246]) ([10.212.114.246])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 08:49:21 -0800
+Message-ID: <5171929e-b750-d2f1-fec9-b34d76c18dcb@linux.intel.com>
+Date:   Mon, 28 Nov 2022 10:49:20 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v4] ALSA: core: Fix deadlock when shutdown a frozen
+ userspace
+Content-Language: en-US
+To:     Ricardo Ribalda <ribalda@chromium.org>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     alsa-devel@alsa-project.org, sound-open-firmware@alsa-project.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20221127-snd-freeze-v4-0-51ca64b7f2ab@chromium.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20221127-snd-freeze-v4-0-51ca64b7f2ab@chromium.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Nov 2022 20:58:50 +0800
-Yang Jihong <yangjihong1@huawei.com> wrote:
 
-> print_trace_line may overflow seq_file buffer. If the event is not
-> consumed, the while loop keeps peeking this event, causing a infinite loop.
+
+On 11/28/22 07:42, Ricardo Ribalda wrote:
+> During kexec(), the userspace is frozen. Therefore we cannot wait for it
+> to complete.
 > 
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> Avoid running snd_sof_machine_unregister during shutdown.
+> 
+> This fixes:
+> 
+> [   84.943749] Freezing user space processes ... (elapsed 0.111 seconds) done.
+> [  246.784446] INFO: task kexec-lite:5123 blocked for more than 122 seconds.
+> [  246.819035] Call Trace:
+> [  246.821782]  <TASK>
+> [  246.824186]  __schedule+0x5f9/0x1263
+> [  246.828231]  schedule+0x87/0xc5
+> [  246.831779]  snd_card_disconnect_sync+0xb5/0x127
+> ...
+> [  246.889249]  snd_sof_device_shutdown+0xb4/0x150
+> [  246.899317]  pci_device_shutdown+0x37/0x61
+> [  246.903990]  device_shutdown+0x14c/0x1d6
+> [  246.908391]  kernel_kexec+0x45/0xb9
+> 
+> And:
+> 
+> [  246.893222] INFO: task kexec-lite:4891 blocked for more than 122 seconds.
+> [  246.927709] Call Trace:
+> [  246.930461]  <TASK>
+> [  246.932819]  __schedule+0x5f9/0x1263
+> [  246.936855]  ? fsnotify_grab_connector+0x5c/0x70
+> [  246.942045]  schedule+0x87/0xc5
+> [  246.945567]  schedule_timeout+0x49/0xf3
+> [  246.949877]  wait_for_completion+0x86/0xe8
+> [  246.954463]  snd_card_free+0x68/0x89
+> ...
+> [  247.001080]  platform_device_unregister+0x12/0x35
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 > ---
->  kernel/trace/trace.c | 22 +++++++++++++++++++++-
->  1 file changed, 21 insertions(+), 1 deletion(-)
+> To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> To: Liam Girdwood <lgirdwood@gmail.com>
+> To: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+> To: Bard Liao <yung-chuan.liao@linux.intel.com>
+> To: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+> To: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+> To: Daniel Baluta <daniel.baluta@nxp.com>
+> To: Mark Brown <broonie@kernel.org>
+> To: Jaroslav Kysela <perex@perex.cz>
+> To: Takashi Iwai <tiwai@suse.com>
+> Cc: sound-open-firmware@alsa-project.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+> Changes in v4:
+> - Do not call snd_sof_machine_unregister from shutdown.
+> - Link to v3: https://lore.kernel.org/r/20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org
 > 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index a7fe0e115272..55733224fa88 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -6787,7 +6787,27 @@ tracing_read_pipe(struct file *filp, char __user *ubuf,
+> Changes in v3:
+> - Wrap pm_freezing in a function
+> - Link to v2: https://lore.kernel.org/r/20221127-snd-freeze-v2-0-d8a425ea9663@chromium.org
+> 
+> Changes in v2:
+> - Only use pm_freezing if CONFIG_FREEZER 
+> - Link to v1: https://lore.kernel.org/r/20221127-snd-freeze-v1-0-57461a366ec2@chromium.org
+> ---
+>  sound/soc/sof/core.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/sound/soc/sof/core.c b/sound/soc/sof/core.c
+> index 3e6141d03770..9616ba607ded 100644
+> --- a/sound/soc/sof/core.c
+> +++ b/sound/soc/sof/core.c
+> @@ -475,19 +475,16 @@ EXPORT_SYMBOL(snd_sof_device_remove);
+>  int snd_sof_device_shutdown(struct device *dev)
+>  {
+>  	struct snd_sof_dev *sdev = dev_get_drvdata(dev);
+> -	struct snd_sof_pdata *pdata = sdev->pdata;
 >  
->  		ret = print_trace_line(iter);
->  		if (ret == TRACE_TYPE_PARTIAL_LINE) {
-> -			/* don't print partial lines */
-> +			/*
-> +			 * If one trace_line of the tracer overflows seq_file
-> +			 * buffer, trace_seq_to_user returns -EBUSY.
-> +			 * In this case, we need to consume it, otherwise,
-> +			 * while loop will peek this event next time,
-> +			 * resulting in an infinite loop.
-> +			 */
-> +			if (trace_seq_has_overflowed(&iter->seq)) {
+>  	if (IS_ENABLED(CONFIG_SND_SOC_SOF_PROBE_WORK_QUEUE))
+>  		cancel_work_sync(&sdev->probe_work);
+>  
+>  	/*
+> -	 * make sure clients and machine driver(s) are unregistered to force
+> -	 * all userspace devices to be closed prior to the DSP shutdown sequence
+> +	 * make sure clients are unregistered prior to the DSP shutdown
+> +	 * sequence.
+>  	 */
+>  	sof_unregister_clients(sdev);
+>  
+> -	snd_sof_machine_unregister(sdev, pdata);
+> -
 
-The only way to get here is if the above is true, and that is not going to
-cause the infinite loop. What does is if save_len == 0. In fact, that's
-all you need to check for:
+The comment clearly says that we do want all userspace devices to be
+closed. This was added in 83bfc7e793b5 ("ASoC: SOF: core: unregister
+clients and machine drivers in .shutdown") precisely to avoid a platform
+hang if the devices are used after the shutdown completes.
 
-			if (save_len == 0) {
-
-Should do the trick.
-
--- Steve
-
-
-
-> +				/*
-> +				 * Here we only consider the case that one
-> +				 * print_trace_line() fills the entire trace_seq
-> +				 * in one shot, in that case, iter->seq.seq.len is zero,
-> +				 * we simply output a log of too long line to inform the user.
-> +				 */
-> +				iter->seq.full = 0;
-> +				trace_seq_puts(&iter->seq, "[LINE TOO BIG]\n");
-> +				trace_consume(iter);
-> +				break;
-> +			}
-> +
-> +			/* In other cases, don't print partial lines */
->  			iter->seq.seq.len = save_len;
->  			break;
->  		}
-
+So you are not fixing 83bfc7e793b5, just re-adding a problem to fix
+another one...
