@@ -2,123 +2,348 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C875863ACEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 16:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C847963ACF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 16:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbiK1PsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 10:48:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54818 "EHLO
+        id S232282AbiK1Ps7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 10:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232424AbiK1PsH (ORCPT
+        with ESMTP id S232151AbiK1Psq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 10:48:07 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EA7A198
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:48:06 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id EEABC21B20;
-        Mon, 28 Nov 2022 15:48:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669650484; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VRG51kohfD387vXDAcVs+Eyr77C58RyR3DMFs8PVI4A=;
-        b=e/yyG3rrXwEYTSvYmM+E7f0MEBAib6h35woMeQccMbv/thoByid5rYbE9BECzm36r3Yjg/
-        z172bP3IpjSuhitnCyUsduUCWzwhRBbkvvjGWb1zrg369pIS2aQ/qtH1yu8pibIhDc6Yvg
-        kiV5WqLId8+6TJJzlb/DD+fKej9RpVc=
-Received: from suse.cz (unknown [10.100.201.202])
+        Mon, 28 Nov 2022 10:48:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6A16242;
+        Mon, 28 Nov 2022 07:48:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D46D02C143;
-        Mon, 28 Nov 2022 15:48:04 +0000 (UTC)
-Date:   Mon, 28 Nov 2022 16:48:04 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     akpm@linux-foundation.org, peterz@infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kernel/hung_task: print real_parent->comm, pid in
- check_hung_task
-Message-ID: <Y4TYNF8jRSkGii/U@alley>
-References: <20221124112526.GA21832@didi-ThinkCentre-M930t-N000>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17EE361214;
+        Mon, 28 Nov 2022 15:48:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DD57C433D6;
+        Mon, 28 Nov 2022 15:48:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669650524;
+        bh=8s1xocsJoOsK4HXAjeRa4nP/W1XvJIgVrtzVlhSAdwQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=C+QJiHqRfzKxe8K04cnPN6h76C2uxslYHpnGIP0NJzNWbt4UbSj8z0SSgYm/tvJDZ
+         p6ySauQYOLTkTwhrZSaSZh+ghsZyTAWSVbTFPlCBHGO+0LmQ72sIp1fIZ06D9DiICP
+         ejTuTFziAas4gCKXpP08C0QlEJGvizziIqSBoquQbdkKpuAib2Ep0FbA/EmxAYiQnW
+         pYexanqfAH+ZxyCtY3LbRlBDcpU/1+uoYn0oRNrWH05t5/r0kCg7iSRQ2FKKdzUQma
+         kYFSjAJi3juX35fKljgCeS9QwfjW8Qwcu5IUnlIoLKCTxNPm97YifR5WdNziziNm2u
+         oSTJZq09BjZgQ==
+Date:   Mon, 28 Nov 2022 21:18:29 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Asutosh Das <quic_asutoshd@quicinc.com>
+Cc:     quic_cang@quicinc.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, quic_nguyenb@quicinc.com,
+        quic_xiaosenh@quicinc.com, stanley.chu@mediatek.com,
+        eddie.huang@mediatek.com, daejun7.park@samsung.com,
+        bvanassche@acm.org, avri.altman@wdc.com, beanhuo@micron.com,
+        linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 08/16] ufs: core: mcq: Allocate memory for mcq mode
+Message-ID: <20221128154829.GG62721@thinkpad>
+References: <cover.1669176158.git.quic_asutoshd@quicinc.com>
+ <ba753579ac3a349ee4ab61d3b0a8f705db2a9670.1669176158.git.quic_asutoshd@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221124112526.GA21832@didi-ThinkCentre-M930t-N000>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ba753579ac3a349ee4ab61d3b0a8f705db2a9670.1669176158.git.quic_asutoshd@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-11-24 19:25:26, Tio Zhang wrote:
-> We can avoid a hung task by fixing the process who causes it.
-> But sometimes it is difficult to find out which service 
-> the bad process belongs to by only knowing its pid and comm.
-> Since userspace tools to learn who launches the bad process
-> do not always work when we get a hung task, 
-> it is helpful printing the parent by kernel.
-
-Could you please be more specific how the information about
-the parent helped to debug the problem?
-
-Was it really important who started the process?
-Was it related to some cgroup limits or permissions?
-
-> Signed-off-by: Tio Zhang <tiozhang@didiglobal.com>
-> ---
->  kernel/hung_task.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+On Tue, Nov 22, 2022 at 08:10:21PM -0800, Asutosh Das wrote:
+> To read the bqueuedepth, the device descriptor is fetched
+> in Single Doorbell Mode. This allocated memory may not be
+> enough for MCQ mode because the number of tags supported
+> in MCQ mode may be larger than in SDB mode.
+> Hence, release the memory allocated in SDB mode and allocate
+> memory for MCQ mode operation.
+> Define the ufs hardware queue and Completion Queue Entry.
 > 
-> diff --git a/kernel/hung_task.c b/kernel/hung_task.c
-> index c71889f3f3fc..33543d27bd5c 100644
-> --- a/kernel/hung_task.c
-> +++ b/kernel/hung_task.c
-> @@ -89,6 +89,7 @@ static struct notifier_block panic_block = {
+> Co-developed-by: Can Guo <quic_cang@quicinc.com>
+> Signed-off-by: Can Guo <quic_cang@quicinc.com>
+> Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
+> ---
+>  drivers/ufs/core/ufs-mcq.c     | 58 ++++++++++++++++++++++++++++++++++++++++--
+>  drivers/ufs/core/ufshcd-priv.h |  1 +
+>  drivers/ufs/core/ufshcd.c      | 42 +++++++++++++++++++++++++++---
+>  include/ufs/ufshcd.h           | 19 ++++++++++++++
+>  include/ufs/ufshci.h           | 22 ++++++++++++++++
+>  5 files changed, 137 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
+> index e95f748..51f0e40 100644
+> --- a/drivers/ufs/core/ufs-mcq.c
+> +++ b/drivers/ufs/core/ufs-mcq.c
+> @@ -247,15 +247,69 @@ static int ufshcd_mcq_config_nr_queues(struct ufs_hba *hba)
+>  	return 0;
+>  }
 >  
->  static void check_hung_task(struct task_struct *t, unsigned long timeout)
+> +int ufshcd_mcq_memory_alloc(struct ufs_hba *hba)
+> +{
+> +	struct ufs_hw_queue *hwq;
+> +	size_t utrdl_size, cqe_size;
+> +	int i;
+> +
+> +	for (i = 0; i < hba->nr_hw_queues; i++) {
+> +		hwq = &hba->uhq[i];
+> +
+> +		utrdl_size = sizeof(struct utp_transfer_req_desc) *
+> +			     hwq->max_entries;
+> +		hwq->sqe_base_addr = dmam_alloc_coherent(hba->dev, utrdl_size,
+> +							 &hwq->sqe_dma_addr,
+> +							 GFP_KERNEL);
+> +		if (!hwq->sqe_dma_addr) {
+> +			dev_err(hba->dev, "SQE allocation failed\n");
+> +			return -ENOMEM;
+> +		}
+> +
+> +		cqe_size = sizeof(struct cq_entry) * hwq->max_entries;
+> +		hwq->cqe_base_addr = dmam_alloc_coherent(hba->dev, cqe_size,
+> +							 &hwq->cqe_dma_addr,
+> +							 GFP_KERNEL);
+> +		if (!hwq->cqe_dma_addr) {
+> +			dev_err(hba->dev, "CQE allocation failed\n");
+> +			return -ENOMEM;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  int ufshcd_mcq_init(struct ufs_hba *hba)
 >  {
-> +	struct task_struct *p = t->real_parent;
-
-IMHO, this should be read using rcu_dereference(t->real_parent).
-
-Note that check_hung_task() is already called under
-rcu_read_lock() from check_hung_uninterruptible_tasks().
-
->  	unsigned long switch_count = t->nvcsw + t->nivcsw;
+> -	int ret;
+> +	struct ufs_hw_queue *hwq;
+> +	int ret, i;
+>  
+>  	ret = ufshcd_mcq_config_nr_queues(hba);
+>  	if (ret)
+>  		return ret;
+>  
+>  	ret = ufshcd_mcq_config_resource(hba);
+> -	return ret;
+> +	if (ret)
+> +		return ret;
+> +
+> +	hba->uhq = devm_kzalloc(hba->dev,
+> +				hba->nr_hw_queues * sizeof(struct ufs_hw_queue),
+> +				GFP_KERNEL);
+> +	if (!hba->uhq) {
+> +		dev_err(hba->dev, "ufs hw queue memory allocation failed\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	for (i = 0; i < hba->nr_hw_queues; i++) {
+> +		hwq = &hba->uhq[i];
+> +		hwq->max_entries = hba->nutrs;
+> +	}
+> +
+> +	/* The very first HW queue serves device commands */
+> +	hba->dev_cmd_queue = &hba->uhq[0];
+> +	/* Give dev_cmd_queue the minimal number of entries */
+> +	hba->dev_cmd_queue->max_entries = MAX_DEV_CMD_ENTRIES;
+> +
+> +	return 0;
+>  }
+>  
+> diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-priv.h
+> index 9f40fa5..4d2bde2 100644
+> --- a/drivers/ufs/core/ufshcd-priv.h
+> +++ b/drivers/ufs/core/ufshcd-priv.h
+> @@ -63,6 +63,7 @@ int ufshcd_query_flag(struct ufs_hba *hba, enum query_opcode opcode,
+>  void ufshcd_auto_hibern8_update(struct ufs_hba *hba, u32 ahit);
+>  int ufshcd_mcq_init(struct ufs_hba *hba);
+>  int ufshcd_mcq_decide_queue_depth(struct ufs_hba *hba);
+> +int ufshcd_mcq_memory_alloc(struct ufs_hba *hba);
+>  
+>  #define SD_ASCII_STD true
+>  #define SD_RAW false
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index ae065da..45686e8 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -3740,6 +3740,12 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
+>  	}
 >  
 >  	/*
-> @@ -129,8 +130,8 @@ static void check_hung_task(struct task_struct *t, unsigned long timeout)
->  	if (sysctl_hung_task_warnings) {
->  		if (sysctl_hung_task_warnings > 0)
->  			sysctl_hung_task_warnings--;
-> -		pr_err("INFO: task %s:%d blocked for more than %ld seconds.\n",
-> -		       t->comm, t->pid, (jiffies - t->last_switch_time) / HZ);
-> +		pr_err("INFO: task %s:%d, parent %s:%d blocked for more than %ld seconds.\n",
-> +		       t->comm, t->pid, p->comm, p->pid, (jiffies - t->last_switch_time) / HZ);
+> +	 * Not freed if MCQ is configured see ufshcd_release_sdb_queue() and
+> +	 * ufshcd_config_mcq()
 
-IMHO, this is a wrong place. The formulation creates more harm than
-good. It might confuse people that both processes are blocked. Or it
-makes the feeling that the parent somehow created the deadlock.
+The comment is vague. Use something like,
 
-But if I get it correctly, the information about the parent is
-needed only in special situations where only a particular parent
-triggers the lockup.
+"Skip allocating memory for utmrdl if it has been allocated during the first
+pass (i.e., prior to MCQ enablement)"
 
->  		pr_err("      %s %s %.*s\n",
->  			print_tainted(), init_utsname()->release,
->  			(int)strcspn(init_utsname()->version, " "),
+> +	 */
+> +	if (hba->utmrdl_base_addr)
+> +		goto skip_utmrdl;
+> +	/*
+>  	 * Allocate memory for UTP Task Management descriptors
+>  	 * UFSHCI requires 1024 byte alignment of UTMRD
+>  	 */
+> @@ -3755,6 +3761,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
+>  		goto out;
+>  	}
+>  
+> +skip_utmrdl:
+>  	/* Allocate memory for local reference block */
+>  	hba->lrb = devm_kcalloc(hba->dev,
+>  				hba->nutrs, sizeof(struct ufshcd_lrb),
+> @@ -8197,6 +8204,22 @@ static int ufshcd_add_lus(struct ufs_hba *hba)
+>  	return ret;
+>  }
+>  
+> +/* SDB - Single Doorbell */
+> +static void ufshcd_release_sdb_queue(struct ufs_hba *hba, int nutrs)
+> +{
+> +	size_t ucdl_size, utrdl_size;
+> +
+> +	ucdl_size = sizeof(struct utp_transfer_cmd_desc) * nutrs;
+> +	dmam_free_coherent(hba->dev, ucdl_size, hba->ucdl_base_addr,
+> +			   hba->ucdl_dma_addr);
+> +
+> +	utrdl_size = sizeof(struct utp_transfer_req_desc) * nutrs;
+> +	dmam_free_coherent(hba->dev, utrdl_size, hba->utrdl_base_addr,
+> +			   hba->utrdl_dma_addr);
+> +
+> +	devm_kfree(hba->dev, hba->lrb);
+> +}
+> +
+>  static int ufshcd_alloc_mcq(struct ufs_hba *hba)
+>  {
+>  	int ret;
+> @@ -8208,12 +8231,25 @@ static int ufshcd_alloc_mcq(struct ufs_hba *hba)
+>  
+>  	hba->nutrs = ret;
+>  	ret = ufshcd_mcq_init(hba);
+> -	if (ret) {
+> -		hba->nutrs = old_nutrs;
+> -		return ret;
+> +	if (ret)
+> +		goto err;
+> +
 
-Alternative solution would be to print the parent in
-sched_show_task() that is called here as well.
+A comment should be added here on why the allocation happens again even though
+it is part of the commit description. This helps while going through the code
+later.
 
-sched_show_task() prints many useful information that might
-be useful for debugging. And the parent is just yet another
-information that might bu useful.
+> +	if (hba->nutrs != old_nutrs) {
+> +		ufshcd_release_sdb_queue(hba, old_nutrs);
+> +		ret = ufshcd_memory_alloc(hba);
+> +		if (ret)
+> +			goto err;
+> +		ufshcd_host_memory_configure(hba);
+>  	}
+>  
+> +	ret = ufshcd_mcq_memory_alloc(hba);
+> +	if (ret)
+> +		goto err;
+> +
+>  	return 0;
+> +err:
+> +	hba->nutrs = old_nutrs;
+> +	return ret;
+>  }
+>  
+>  /**
+> diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+> index e03b310..e478bab 100644
+> --- a/include/ufs/ufshcd.h
+> +++ b/include/ufs/ufshcd.h
+> @@ -863,6 +863,8 @@ enum ufshcd_res {
+>   * @nr_queues: number of Queues of different queue types
+>   * @res: array of resource info of MCQ registers
+>   * @mcq_base: Multi circular queue registers base address
+> + * @uhq: array of supported hardware queues
+> + * @dev_cmd_queue: Queue for issuing device management commands
+>   */
+>  struct ufs_hba {
+>  	void __iomem *mmio_base;
+> @@ -1018,6 +1020,23 @@ struct ufs_hba {
+>  	unsigned int nr_queues[HCTX_MAX_TYPES];
+>  	struct ufshcd_res_info res[RES_MAX];
+>  	void __iomem *mcq_base;
+> +	struct ufs_hw_queue *uhq;
+> +	struct ufs_hw_queue *dev_cmd_queue;
+> +};
+> +
+> +/**
 
-Also sched_show_task() is called in more situations where
-this information might be useful as well.
+Kernel doc requires the description of the struct itself.
 
-Best Regards,
-Petr
+> + * @sqe_base_addr: submission queue entry base address
+> + * @sqe_dma_addr: submission queue dma address
+> + * @cqe_base_addr: completion queue base address
+> + * @cqe_dma_addr: completion queue dma address
+> + * @max_entries: max number of slots in this hardware queue
+> + */
+> +struct ufs_hw_queue {
+> +	void *sqe_base_addr;
+> +	dma_addr_t sqe_dma_addr;
+> +	struct cq_entry *cqe_base_addr;
+> +	dma_addr_t cqe_dma_addr;
+> +	u32 max_entries;
+>  };
+>  
+>  /* Returns true if clocks can be gated. Otherwise false */
+> diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
+> index 67fcebd..1aae5b2 100644
+> --- a/include/ufs/ufshci.h
+> +++ b/include/ufs/ufshci.h
+> @@ -486,6 +486,28 @@ struct utp_transfer_req_desc {
+>  	__le16  prd_table_offset;
+>  };
+>  
+> +/* MCQ Completion Queue Entry */
+> +struct cq_entry {
+> +	/* DW 0-1 */
+> +	__le64 command_desc_base_addr;
+> +
+> +	/* DW 2 */
+> +	__le16  response_upiu_length;
+> +	__le16  response_upiu_offset;
+> +
+> +	/* DW 3 */
+> +	__le16  prd_table_length;
+> +	__le16  prd_table_offset;
+> +
+> +	/* DW 4 */
+> +	__le32 status;
+> +
+> +	/* DW 5-7 */
+> +	u32 reserved[3];
+
+It'd be good to use __le32 for the sake of uniformity even though these 3
+DWORDS are reserved.
+
+Thanks,
+Mani
+
+> +};
+> +
+> +static_assert(sizeof(struct cq_entry) == 32);
+> +
+>  /*
+>   * UTMRD structure.
+>   */
+> -- 
+> 2.7.4
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
