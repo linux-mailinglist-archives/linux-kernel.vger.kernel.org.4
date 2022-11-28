@@ -2,70 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BFED63A253
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:54:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF0563A258
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiK1Hyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 02:54:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
+        id S229894AbiK1H42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 02:56:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiK1Hyo (ORCPT
+        with ESMTP id S229912AbiK1H4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 02:54:44 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1451CC37;
-        Sun, 27 Nov 2022 23:54:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1669622065; bh=l+U0T/Rd2eXdAseoL2kbnPGmga6pXph0NSJHHSCRLDo=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=SHYo88/n9BZIoXqljs9nOqiwIyPxaY/XM6FfuViUP6uqe9NtVCh4t8+StTOJ3n6ka
-         dqLXaXLMkvTNegGoTzoQpt5+ZnK4kV5/b/ihdGbRp5vR/kpmNdQCxgk430Z34AxhKv
-         9zWWnU53rFvdYzhELXX1ZaXw1MuTAohRDf3CLFmmiqTdlqrejQWuB3umGDjQZjI6kl
-         Ap+jtI3sQt3N/6FWxjpUvXIOhsVupNm64J8e32+TA9NIvTch8oN4wAoR8GikmIMsuB
-         7un8Y5A3mRw1MvHGNQrkcMFiCJjpb8w41oPLzgFmYxMNZ/kMr3kmRU4dUGItE3wsGj
-         D9iajZ/plB8/g==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [91.65.146.82] ([91.65.146.82]) by web-mail.gmx.net
- (3c-app-gmx-bs10.server.lan [172.19.170.61]) (via HTTP); Mon, 28 Nov 2022
- 08:54:25 +0100
+        Mon, 28 Nov 2022 02:56:24 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1DEA46B
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 23:56:19 -0800 (PST)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1ozYzl-0001p1-Dv; Mon, 28 Nov 2022 08:56:05 +0100
+Message-ID: <489b24e6-fe75-caa7-1a97-2f1921b0c242@pengutronix.de>
+Date:   Mon, 28 Nov 2022 08:56:01 +0100
 MIME-Version: 1.0
-Message-ID: <trinity-50896a7d-eff4-424e-98d7-ab33ac2587db-1669622065632@3c-app-gmx-bs10>
-From:   Robert Schlabbach <robert_s@gmx.net>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH -next] media: dvb/frontend.h: fix kernel-doc warnings
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] soc: imx8m: Fix return value check in
+ imx8mq_soc_revision()
+Content-Language: en-US
+To:     Zheng Yongjun <zhengyongjun3@huawei.com>, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     festevam@gmail.com, linux-imx@nxp.com, kernel@pengutronix.de
+References: <20221126092433.91150-1-zhengyongjun3@huawei.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20221126092433.91150-1-zhengyongjun3@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 28 Nov 2022 08:54:25 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20221128054303.3124-1-rdunlap@infradead.org>
-References: <20221128054303.3124-1-rdunlap@infradead.org>
-Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:L3Z6jtlzUGImJGN99vpeUabCOjuQukxXS1/jGMDWbfPGn6Go5qCqTZSUMh2xXednlD2BT
- r8oR0nSuBiBrw+r386GeLaDCk27c27to+7LNiL38F9JuErNk8v9JZjcQLGEUX/fNGcc8IDWXKDp0
- m5qVStMCC28VWQnKhDGZXIVAmoQ/9BW8GKJoIDAOtFkILMuVJlKhrd6zP4jHobbUFiBTiNCsHC6C
- Gr9a6+NzD9Q5CUnpG4NNJnzTUOpMGOrpDdJf5+rr+JM/MZRlckPLbh0N+Zg9kqFKVmshVQ3S9xec
- vs=
-UI-OutboundReport: notjunk:1;M01:P0:pf6JK/LzQAU=;E5iXPqUe6USmVcUjIfwQv/8xRvt
- +P/qZrA7yWhl+4FD41OpdVZA7yf0VE4SQY8P9sqJhMMIR7og4zhxV3BPqhaj0EtA2Pq/LoX9f
- PTeyBBJjL5NCoZxqA9kdRL/Ry4ybawJIe8jJORTennLKIUtzYw7ROIHhFdHwYMMvuLA7OaqfQ
- kR9KhtGI8QZiRIK2LuMziqqi736KBm0JCqKtdzeBjFQz18dtVXIzJkUtJQ4ZucYtohUKbgSWg
- G35udbcZMQx+7T6qiqIR7NrP0aEjrNGiGADdc8i4cYgEo7TLzlpPonPuuad10fbagaz4YsEAx
- HUrgOf2v5KJ3TG+N5vpSWuX2u97GVBksWQpYwUcTTDpAE0H+bB+tGX9bihMY1bOpWjWAKJVQL
- fyFgXjUB1sDmm2yCtF0kcyRNHwaYvrM+F2rwTQaNYGFhCeAS+8QGTsF5ukXturWRQvIFnOq/d
- Rd/pYs3He8MpxMECkR5dbeYFVBg7acH++dwnNnN9MpgBFgkwA8C2X/t9IXWr41rgMkOdE1yl/
- 0HlFq7CWv6P1kOByvivS9cP2DqDW0XgfEooUlhWOVOKa/IlWSqPzTVxJUkA8NijGmziLIv+WM
- 0sA/H3bxlrGj6lSG5pU0Y8Umgw/YfDqQOJrFveoRcHF80eBeaQBXPre7uuOtF5CU1h0tSY0bh
- 7g0L6KmpBkqGQD4MYDNzoNwJ6W/YEpdlMZSQVLXYXcmPherMAKnJdsGWt1vb5J+ojvPZiikLu
- OtXnuctPy9Lfn9AnAFCQqW/zuG+D2p2gpv3T5nYyIdi26b9ANdLvi5xWrz+KIWyDoAmE7RpHp
- RtkvEOB8EkkyDw8dJA5Ppzh9dmy6fCgTjcI9ASY3WxwM4=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,16 +49,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From:=C2=A0"Randy Dunlap" <rdunlap@infradead=2Eorg>
-> Subject:=C2=A0[PATCH -next] media: dvb/frontend=2Eh: fix kernel-doc warn=
-ings
->=20
-> scripts/kernel-doc spouts multiple warnings, so fix them:
+Hi Zheng,
 
-Wow, sorry for introducing those, and thanks for promptly providing a fix!
+On 26.11.22 10:24, Zheng Yongjun wrote:
+> In case of error, the function of_clk_get_by_name()
+> returns ERR_PTR() and never returns NULL. The NULL test in the
+> return value check should be replaced with IS_ERR().
+> 
+> Fixes: 836fb30949d9 ("soc: imx8m: Enable OCOTP clock before reading the register")
+> Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+> ---
+>  drivers/soc/imx/soc-imx8m.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/soc/imx/soc-imx8m.c b/drivers/soc/imx/soc-imx8m.c
+> index 28144c699b0c..32ed9dc88e45 100644
+> --- a/drivers/soc/imx/soc-imx8m.c
+> +++ b/drivers/soc/imx/soc-imx8m.c
+> @@ -66,8 +66,8 @@ static u32 __init imx8mq_soc_revision(void)
+>  	ocotp_base = of_iomap(np, 0);
+>  	WARN_ON(!ocotp_base);
+>  	clk = of_clk_get_by_name(np, NULL);
+> -	if (!clk) {
+> -		WARN_ON(!clk);
+> +	if (IS_ERR(clk)) {
+> +		WARN_ON(IS_ERR(clk));
+>  		return 0;
 
-Reviewed-by: Robert Schlabbach <robert_s@gmx=2Enet>
+You could also rewrite as
 
-Best Regards,
---=20
-Robert Schlabbach
+if (WARN_ON(IS_ERR(clk))
+	return 0;
+
+To make it more concise. Change looks good though:
+
+Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+
+Cheers,
+Ahmad
+
+>  	}
+> 
+> --
+> 2.17.1
+> 
+> 
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
