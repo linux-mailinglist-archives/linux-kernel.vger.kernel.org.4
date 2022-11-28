@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF09A63AF92
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:43:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD1063AFDA
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:46:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233386AbiK1Rnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 12:43:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
+        id S233555AbiK1RqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 12:46:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233208AbiK1RnE (ORCPT
+        with ESMTP id S233525AbiK1RqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:43:04 -0500
+        Mon, 28 Nov 2022 12:46:00 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652CE29347
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:40:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2A127B0E;
+        Mon, 28 Nov 2022 09:41:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02F23612F3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 17:40:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C351C433D6;
-        Mon, 28 Nov 2022 17:40:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BCEC612E9;
+        Mon, 28 Nov 2022 17:41:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F34C433D6;
+        Mon, 28 Nov 2022 17:41:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669657226;
-        bh=ksNf/YddouAnHYSNO35e1eWHI7ypXSlIfibrJFdWEf4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Osc1H1Y2dd/1zAyoQv+CJvEfOBepdr9KnkC0Zq43CfxEmyEQzwk67A9puNnYw1UAG
-         O7eYNatbOG5Z14pGD8hrppnia2Ca1TJvKAzr96aG88MMS/18dMhTP38B9tjfH3zMta
-         YqQR6azn+QEVmFrzUXaVXRPwFej2H01vc+BY0ce5spLiGefmYlCDipt0DhT9Q/yvmS
-         hc7EKRFdHf93+NgdMwL47eGE10e3kiqHQqqsBa/sHM/+o+IenCpufIpc78A+zKNHDF
-         gZ3Sq/2abivOb7aykWQsyg+5mbBuDoihw6NCLvLqoHlYm07PhN7incrFBJbmaAy2Ym
-         3o1u0nuxP+WUw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Ricardo Ribalda <ribalda@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        s=k20201202; t=1669657283;
+        bh=Hk/OvMoDD//KKQxtJVrd3EP9uTZttIgO519l/iryzjY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JJ1Y/AgpU56coBjWpL4OX825/nta+OPZLhrI6+68xqaapCc0g3Zm/n/+dfV9mYpKW
+         8t+1GL3tB0Zt4AINuMcn/DuKtoUGCELhj7ShqPorQdwu3qUBTmm4fYOgGNOcoKRhaf
+         bsEd8oTnEQSHl6awwzYDYqaW6UGcOJVF1fv3dwm3ADPXFRfMXPFAMXucdJ2cGWAUFN
+         lYlVV+oZxGrWxuQ85a4Z7zhVzFnvTvUC3Aeu6a0JRsnNulLo8W3VbB7azuY7bXF7M0
+         pIfUkUtpw4Kw8X+yVrUWFZr9iwxF9ONBWlSMq2kxv8LuzstYTy1g+JMRNf8LnKhslt
+         v1AUtWvFZzCMw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     FUKAUMI Naoki <naoki@radxa.com>, Heiko Stuebner <heiko@sntech.de>,
+        Sasha Levin <sashal@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-In-Reply-To: <20221128-mt8173-afe-v1-0-70728221628f@chromium.org>
-References: <20221128-mt8173-afe-v1-0-70728221628f@chromium.org>
-Subject: Re: [PATCH] ASoC: mediatek: mt8173: Enable IRQ when pdata is ready
-Message-Id: <166965722420.688163.18006301242962769416.b4-ty@kernel.org>
-Date:   Mon, 28 Nov 2022 17:40:24 +0000
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.10 01/19] arm64: dts: rockchip: keep I2S1 disabled for GPIO function on ROCK Pi 4 series
+Date:   Mon, 28 Nov 2022 12:41:01 -0500
+Message-Id: <20221128174120.1442235-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,45 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Nov 2022 11:49:16 +0100, Ricardo Ribalda wrote:
-> If the device does not come straight from reset, we might receive an IRQ
-> before we are ready to handle it.
-> 
-> Fixes:
-> 
-> [    2.334737] Unable to handle kernel read from unreadable memory at virtual address 00000000000001e4
-> [    2.522601] Call trace:
-> [    2.525040]  regmap_read+0x1c/0x80
-> [    2.528434]  mt8173_afe_irq_handler+0x40/0xf0
-> ...
-> [    2.598921]  start_kernel+0x338/0x42c
-> 
-> [...]
+From: FUKAUMI Naoki <naoki@radxa.com>
 
-Applied to
+[ Upstream commit 849c19d14940b87332d5d59c7fc581d73f2099fd ]
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+I2S1 pins are exposed on 40-pin header on Radxa ROCK Pi 4 series.
+their default function is GPIO, so I2S1 need to be disabled.
 
-Thanks!
+Signed-off-by: FUKAUMI Naoki <naoki@radxa.com>
+Link: https://lore.kernel.org/r/20220924112812.1219-1-naoki@radxa.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
-[1/1] ASoC: mediatek: mt8173: Enable IRQ when pdata is ready
-      commit: 4cbb264d4e9136acab2c8fd39e39ab1b1402b84b
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi
+index f121203081b9..64df64339119 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi
+@@ -448,7 +448,6 @@ &i2s0 {
+ &i2s1 {
+ 	rockchip,playback-channels = <2>;
+ 	rockchip,capture-channels = <2>;
+-	status = "okay";
+ };
+ 
+ &i2s2 {
+-- 
+2.35.1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
