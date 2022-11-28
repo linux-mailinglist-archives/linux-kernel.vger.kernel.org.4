@@ -2,94 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1693A63A23C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1049963A240
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiK1Hnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 02:43:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
+        id S229831AbiK1Hn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 02:43:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiK1Hnk (ORCPT
+        with ESMTP id S229868AbiK1Hny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 02:43:40 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475232BF
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 23:43:38 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1ECCA501;
-        Mon, 28 Nov 2022 08:43:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669621416;
-        bh=JKQPHHZZhD4m5jviZGkXGPGW3MyixyKT0ajEkDv2CwA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bFl87EvA7iIADwK67gz+MgxF7h/Wsng0UHQJnieoVmQlIcvuTAiuxDGgIjyfWR/JX
-         +lNBQlwGuKt+fRrmXkWbGj+0jSQnKx9q4By9NIXlct1+9sXBuEFDMa7o4NWwGj3BLb
-         INq51KxtmbbnQPtbh0Dukz1LFhCfEo/mb1XDY6hw=
-Date:   Mon, 28 Nov 2022 09:43:21 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Qiqi Zhang <eddy.zhang@rock-chips.com>
-Cc:     dianders@chromium.org, andrzej.hajda@intel.com,
-        neil.armstrong@linaro.org, robert.foss@linaro.org, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: Fix output polarity setting bug
-Message-ID: <Y4RmmXHDCxH09eJ+@pendragon.ideasonboard.com>
-References: <20221125104558.84616-1-eddy.zhang@rock-chips.com>
+        Mon, 28 Nov 2022 02:43:54 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA6B313D2B;
+        Sun, 27 Nov 2022 23:43:51 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF3D2D6E;
+        Sun, 27 Nov 2022 23:43:57 -0800 (PST)
+Received: from [10.162.40.16] (unknown [10.162.40.16])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 547753F73B;
+        Sun, 27 Nov 2022 23:43:48 -0800 (PST)
+Message-ID: <28b976dd-3d12-3f2c-9b70-a5423255943e@arm.com>
+Date:   Mon, 28 Nov 2022 13:13:45 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221125104558.84616-1-eddy.zhang@rock-chips.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] s390/mm: Use pmd_pgtable_page() helper in
+ __gmap_segment_gaddr()
+Content-Language: en-US
+To:     Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     linux-mm@kvack.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221125034502.1559986-1-anshuman.khandual@arm.com>
+ <Y4IvaRNLmASfRJiZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <d3bcb8e1-cbf0-e820-47cf-f455128c597a@arm.com>
+ <Y4Rflp1Z48hp/OAb@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <Y4Rflp1Z48hp/OAb@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding Tomi to the CC list. Tomi, would you be able to test this ?
 
-On Fri, Nov 25, 2022 at 06:45:58PM +0800, Qiqi Zhang wrote:
-> According to the description in ti-sn65dsi86's datasheet:
-> 
-> CHA_HSYNC_POLARITY:
-> 0 = Active High Pulse. Synchronization signal is high for the sync
-> pulse width. (default)
-> 1 = Active Low Pulse. Synchronization signal is low for the sync
-> pulse width.
-> 
-> CHA_VSYNC_POLARITY:
-> 0 = Active High Pulse. Synchronization signal is high for the sync
-> pulse width. (Default)
-> 1 = Active Low Pulse. Synchronization signal is low for the sync
-> pulse width.
-> 
-> We should only set these bits when the polarity is negative.
-> Signed-off-by: Qiqi Zhang <eddy.zhang@rock-chips.com>
-> ---
->  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> index 3c3561942eb6..eb24322df721 100644
-> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> @@ -931,9 +931,9 @@ static void ti_sn_bridge_set_video_timings(struct ti_sn65dsi86 *pdata)
->  		&pdata->bridge.encoder->crtc->state->adjusted_mode;
->  	u8 hsync_polarity = 0, vsync_polarity = 0;
->  
-> -	if (mode->flags & DRM_MODE_FLAG_PHSYNC)
-> +	if (mode->flags & DRM_MODE_FLAG_NHSYNC)
->  		hsync_polarity = CHA_HSYNC_POLARITY;
-> -	if (mode->flags & DRM_MODE_FLAG_PVSYNC)
-> +	if (mode->flags & DRM_MODE_FLAG_NVSYNC)
->  		vsync_polarity = CHA_VSYNC_POLARITY;
->  
->  	ti_sn65dsi86_write_u16(pdata, SN_CHA_ACTIVE_LINE_LENGTH_LOW_REG,
 
--- 
-Regards,
+On 11/28/22 12:43, Alexander Gordeev wrote:
+> On Mon, Nov 28, 2022 at 12:01:06PM +0530, Anshuman Khandual wrote:
+>>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+>>>> index e9e387caffac..5ead9e997510 100644
+>>>> --- a/include/linux/mm.h
+>>>> +++ b/include/linux/mm.h
+>>>> @@ -2403,7 +2403,7 @@ static inline void pgtable_pte_page_dtor(struct page *page)
+>>>>  
+>>>>  #if USE_SPLIT_PMD_PTLOCKS
+>>>>  
+>>>> -static struct page *pmd_pgtable_page(pmd_t *pmd)
+>>>> +static inline struct page *pmd_pgtable_page(pmd_t *pmd)
+>>>>  {
+>>>>  	unsigned long mask = ~(PTRS_PER_PMD * sizeof(pmd_t) - 1);
+>>>>  	return virt_to_page((void *)((unsigned long) pmd & mask));
+>>>
+>>> This chunk does not appear to belong to this patch.
+>>
+>> Should not this helper be made a 'static inline' before using it else where ?
+> 
+> Probably yes, but it is not kvm s390-specific change.
 
-Laurent Pinchart
+Right, just that the s390 change here is the first instance where this helper
+is being used outside the header, hence kept them together.
+
+> 
+> I guess, you wanted to make it together or as a follow-up to this one?
+> https://lore.kernel.org/all/20221124131641.1523772-1-anshuman.khandual@arm.com/
+> 
+Unless too much trouble, could we just keep it here as proposed.
