@@ -2,255 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CAA763B4E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 23:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E33963B4E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 23:39:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234215AbiK1Wj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 17:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
+        id S232503AbiK1Wjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 17:39:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232580AbiK1WjY (ORCPT
+        with ESMTP id S234247AbiK1Wjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 17:39:24 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B37827B0D;
-        Mon, 28 Nov 2022 14:39:23 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669675161;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v+UGv7VC5HMGlrxxyoqmeanzHAHeNeTk4zGAjjF1eag=;
-        b=QQdbDaUs4b/mblLU59gl1oxkKxGJ7BQGdOGRFGol7xy9OT40cc78djrAImuk70Yxf2QK+x
-        HC24Pt1/5H1tiMuKSEmw580fSBnBHMMCliSWDbufvQeMySpDssf+Q2RBNkALk1wsOpdW8h
-        SBFD7jC/PWnDMaaZOejsp96PDCtr5YOubbIGIzQ1xaZhxR3jXBlwvj0sdwnwcrFE4jKRmT
-        GGfr+LQADVI7pFmEeCFGpSLlt3Dc60rkrJEe2S3dLGpy9fZbGrjyXmakJXPoguOmfgsK0G
-        mijksubxgH07ygg6IXCvJwGqSEjbwpeZpOSHt1W3rDwHEkJcK5wvMu/F0yjE/g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669675161;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v+UGv7VC5HMGlrxxyoqmeanzHAHeNeTk4zGAjjF1eag=;
-        b=C3Q8q8XKZ9rSjpMwBKIGxAOcrST4QkuE4JYyB6ZVmjIOWr+rHEM/lpcTG7G3wYUrCiHBwU
-        kSyNfBFKwK7LvJCQ==
-To:     Frank Li <frank.li@nxp.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>
-Cc:     Aisheng Dong <aisheng.dong@nxp.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        "jdmason@kudzu.us" <jdmason@kudzu.us>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>, "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "lznuaa@gmail.com" <lznuaa@gmail.com>,
-        "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "ntb@lists.linux.dev" <ntb@lists.linux.dev>,
-        Peng Fan <peng.fan@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>
-Subject: RE: [EXT] Re: [PATCH v13 2/2] PCI: endpoint: pci-epf-vntb: using
- platform MSI as doorbell
-In-Reply-To: <HE1PR0401MB2331DA6C4A52272B08E1661D88139@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-References: <20221124055036.1630573-1-Frank.Li@nxp.com>
- <20221124055036.1630573-3-Frank.Li@nxp.com> <87wn7evql7.ffs@tglx>
- <HE1PR0401MB2331DA6C4A52272B08E1661D88139@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-Date:   Mon, 28 Nov 2022 23:39:20 +0100
-Message-ID: <87r0xmvh47.ffs@tglx>
+        Mon, 28 Nov 2022 17:39:35 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DD92F641
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 14:39:33 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id be26-20020a056602379a00b006dd80a0ba1cso7028270iob.11
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 14:39:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VQRhnY5DyJNKgfP4EurS6ydyJfw4Wv2+nhVrLzqvsjE=;
+        b=Xms6U+xynYxH84bViTeeckFX4Sq5I9tw8bynCJxIqOECr9xW9l5mdmDA+vsiM3Kn3W
+         Qt9fy4pRgp/j2pe22vLqKkD5UFBoGEAYgFwGnC0V9JFGj+AOVAOJ4JXaGt48kY7htrd5
+         7nyw76g9wFZRb1elHuu+3+l+vC4s45t0H2EzhqJpTKJYWvolvwk7JTmIFLe4TD4xbZFw
+         NG32yAvgM2YYbo4vxucUZaCpYLfka6aB9fQX8HT09M3S4JpTzAT5bUjft/eN0Sfz0SRM
+         0NvDQpNlx0VqD3ZNkHzcUS1eE3Qxj7z/GJoa96p7PtGiJcbzCI5G77ipj6E/4wJY4PPz
+         80Lg==
+X-Gm-Message-State: ANoB5pm2J/2YOJ6zmnDFl72ppxDBdLQR4EK8syKbam83XoLkxMbYbwBH
+        /RhRQnjJPBewL0PXTrX6vP6ExIQE8TFGnGYYb0DwjGs6ckg1
+X-Google-Smtp-Source: AA0mqf6PB9+bUiGxzE5uLhMVDQheaEbKgDevqV5HFf9GaZdYjb11yHdVJGfsoZZhq832dioqa9OG3/T88A1a2Glj4lpDxsFdafxY
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:db05:0:b0:302:d373:2917 with SMTP id
+ b5-20020a92db05000000b00302d3732917mr15096849iln.318.1669675172861; Mon, 28
+ Nov 2022 14:39:32 -0800 (PST)
+Date:   Mon, 28 Nov 2022 14:39:32 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000919f7b05ee8f8bc5@google.com>
+Subject: [syzbot] BUG: unable to handle kernel paging request in tomoyo_encode
+From:   syzbot <syzbot+2f0d91a12931a37dd85e@syzkaller.appspotmail.com>
+To:     jmorris@namei.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, paul@paul-moore.com,
+        penguin-kernel@I-love.SAKURA.ne.jp, serge@hallyn.com,
+        syzkaller-bugs@googlegroups.com, takedakn@nttdata.co.jp
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Frank!
+Hello,
 
-On Mon, Nov 28 2022 at 21:25, Frank Li wrote:
+syzbot found the following issue on:
 
-Can you please fix your mail client to not copy the whole CC list into
-the reply? It's just pointless noise. A simple:
+HEAD commit:    65762d97e6fa Merge branch 'for-next/perf' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=1152d68d880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=56d0c7c3a2304e8f
+dashboard link: https://syzkaller.appspot.com/bug?extid=2f0d91a12931a37dd85e
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12f9e8a1880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13125fe5880000
 
-On Mon, Nov 28 200 at 1:15 PM Thomas Gleixner wrote:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/52f702197b30/disk-65762d97.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/72189c2789ce/vmlinux-65762d97.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ec0349196c98/Image-65762d97.gz.xz
 
-instead of:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2f0d91a12931a37dd85e@syzkaller.appspotmail.com
 
->> -----Original Message-----
->> From: Thomas Gleixner <tglx@linutronix.de>
->> Sent: Monday, November 28, 2022 1:15 PM
->> To: Frank Li <frank.li@nxp.com>; lpieralisi@kernel.org
->> Cc: Frank Li <frank.li@nxp.com>; Aisheng Dong <aisheng.dong@nxp.com>;
->> bhelgaas@google.com; devicetree@vger.kernel.org; festevam@gmail.com;
->> imx@lists.linux.dev; jdmason@kudzu.us; kernel@pengutronix.de;
->> kishon@ti.com; krzysztof.kozlowski+dt@linaro.org; kw@linux.com; linux-
->> arm-kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>; linux-
->> kernel@vger.kernel.org; linux-pci@vger.kernel.org;
->> lorenzo.pieralisi@arm.com; lznuaa@gmail.com;
->> manivannan.sadhasivam@linaro.org; maz@kernel.org; ntb@lists.linux.dev;
->> Peng Fan <peng.fan@nxp.com>; robh+dt@kernel.org;
->> s.hauer@pengutronix.de; shawnguo@kernel.org
->> Subject: [EXT] Re: [PATCH v13 2/2] PCI: endpoint: pci-epf-vntb: using platform
->> MSI as doorbell
+Unable to handle kernel paging request at virtual address 00480000001a0040
+Mem abort info:
+  ESR = 0x0000000096000004
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x04: level 0 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000004
+  CM = 0, WnR = 0
+[00480000001a0040] address between user and kernel address ranges
+Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 3263 Comm: syz-executor425 Not tainted 6.1.0-rc6-syzkaller-32653-g65762d97e6fa #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __kmem_cache_alloc_node+0x17c/0x350 mm/slub.c:3437
+lr : slab_pre_alloc_hook mm/slab.h:712 [inline]
+lr : slab_alloc_node mm/slub.c:3318 [inline]
+lr : __kmem_cache_alloc_node+0x80/0x350 mm/slub.c:3437
+sp : ffff80000ff3b990
+x29: ffff80000ff3b9a0 x28: ffff0000c681b480 x27: 0000000000000006
+x26: 000000000000001d x25: 00000000ffffffff x24: ffff800009443294
+x23: 0000000000000011 x22: 00480000001a0000 x21: 0000000000000000
+x20: 0000000000000d40 x19: ffff0000c0001200 x18: 0000000000000000
+x17: 0000000000000000 x16: ffff80000dbe6158 x15: ffff0000c681b480
+x14: 0000000000000010 x13: 0000000000000000 x12: ffff0000c681b480
+x11: 0000000000000001 x10: 0000000000000000 x9 : 0000000000000040
+x8 : 00000000000a8cb9 x7 : ffff8000084bf248 x6 : 0000000000000000
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 00000000000a8cc1
+x2 : 0000000000000000 x1 : 0000000000000d40 x0 : fffffc00031ee180
+Call trace:
+ next_tid mm/slub.c:2349 [inline]
+ slab_alloc_node mm/slub.c:3382 [inline]
+ __kmem_cache_alloc_node+0x17c/0x350 mm/slub.c:3437
+ __do_kmalloc_node mm/slab_common.c:954 [inline]
+ __kmalloc+0xb4/0x140 mm/slab_common.c:968
+ kmalloc include/linux/slab.h:558 [inline]
+ kzalloc include/linux/slab.h:689 [inline]
+ tomoyo_encode2 security/tomoyo/realpath.c:45 [inline]
+ tomoyo_encode+0x1d8/0x2d0 security/tomoyo/realpath.c:80
+ tomoyo_mount_acl security/tomoyo/mount.c:150 [inline]
+ tomoyo_mount_permission+0x2c8/0x5ac security/tomoyo/mount.c:237
+ tomoyo_sb_mount+0x48/0x60 security/tomoyo/tomoyo.c:401
+ security_sb_mount+0x5c/0xb8 security/security.c:979
+ path_mount+0xa0/0x890 fs/namespace.c:3312
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+Code: 54000ee1 34000eeb b9402a69 91002103 (f8696ada) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	54000ee1 	b.ne	0x1dc  // b.any
+   4:	34000eeb 	cbz	w11, 0x1e0
+   8:	b9402a69 	ldr	w9, [x19, #40]
+   c:	91002103 	add	x3, x8, #0x8
+* 10:	f8696ada 	ldr	x26, [x22, x9] <-- trapping instruction
 
-is completely sufficient.
 
->> Caution: EXT Email
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-We are neither interested in the oddities of NXP's mail categorization system.
-
->> On Thu, Nov 24 2022 at 00:50, Frank Li wrote:
->> >
->> > Using platform MSI interrupt controller as endpoint(EP)'s doorbell.
->> 
->> Can you please explain what the MSI controller is in this picture? MSI
->> controller is not a term which is common in the interrupt handling
->> landscape despite the fact that it's pretty wide spread in device tree
->> bindings presumably through intensive copy & pasta cargo cult.
->
-> I use irq-imx-mu-msi to do test. I supposed it should work for all kinds
-> general msi controller.
-
-Sure it works by some definition of "works" because obviously that
-implementation does not care about where a particular message originates
-from.
-
-But that's still wrong at the conceptual level because it very much
-matters where a message originates from. PCIe devices and general
-platform devices have very distinct mechanisms to transport that
-information.
-
-Just because it "works" does not prove that it is correct.
-
-How are you going to do proper shielding with that approach?
-
-> Our test platform have not GIC ITS supported yet.
-
-And therefore the originating device is irrelevant, right? Get to the
-point where you have ITS and it all falls apart.
-
->> You're explaining what the code does, but fail to explain the underlying
->> mechanisms.
->> 
->> Platform MSI is definitely the wrong mechanism here. Why?
->
-> This patch use Platform MSI.  I never said " Platform MSI is
-> definitely the wrong mechanism here".
-
-I did not claim that _you_ said that. _I_ said that this is wrong. See
-above.
-
-> Base logic is that, get msi controller's message address by irq API. 
-> Map this physical address to DB BAR,  so PCI host write this DB bar, then
-> EP generate irq.
-
-Again, you are explaining what your implementation is doing, but you are
-not describing the conceptual level.
-
->> This is about a PCIe endpoint, which is usually handled by a PCI/MSI
->> interrupt domain. Obviously this usage does not fit into the way how the
->> "global" PCI/MSI domains work.
->
-> PCI endpoint have not standard PCI configure space to enable/disable MSI irq and
-> MSI address (CAP 05).
-
-I'm very well aware of the fact that a PCI endpoint does not have the
-standard MSI configuration space mechanism.
-
->  That's reason why need "platform msi", or you called "global"
-
-Again: platform MSI does not convey the PCIe device originator. It might
-be irrelevant for your actual platform, but that does not make it more
-correct. Once you have the need to track the origin of a MSI message
-then the distinction between platform and MSI matters.
-
-Sure you can argue that you don't care, but that does neither make it
-correct nor future proof and there is no point to rework this whole
-thing 6 month down the road when you actually have to support GIC-ITS.
-
->> There is upcoming work and at least the generic parts should show up in
->> 6.2 which addresses exactly the problem you are trying to solve:
->> 
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.k
->> ernel.org%2Fall%2F20221124225331.464480443%40linutronix.de&amp;data
->> =05%7C01%7CFrank.Li%40nxp.com%7C6a07e33e56af45ffc1ff08dad174d02d
->> %7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6380525969049530
->> 06%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMz
->> IiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=Q8jr
->> eVGGLa2M4yhjGO7Njqwdm59XDC0GyLEwkr0k6B0%3D&amp;reserved=0
->> 
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.k
->> ernel.org%2Fall%2F20221124230505.073418677%40linutronix.de&amp;data
->> =05%7C01%7CFrank.Li%40nxp.com%7C6a07e33e56af45ffc1ff08dad174d02d
->> %7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6380525969049530
->> 06%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMz
->> IiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=Tc9p
->> XNJ499ETFgNWQBNLViFk8D5GbvrrwYDlBW%2Bf2qg%3D&amp;reserved=0
->> 
->> plus the prove that the platform MSI mess can be replaced by this:
->> 
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.k
->> ernel.org%2Fall%2F20221121135653.208611233%40linutronix.de&amp;data
->> =05%7C01%7CFrank.Li%40nxp.com%7C6a07e33e56af45ffc1ff08dad174d02d
->> %7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6380525969049530
->> 06%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMz
->> IiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=R5K
->> NVfcGqxoCam%2FYhY57ihsloWGhGLM3Kh9IkyME4lk%3D&amp;reserved=0
-
-Those outlook artifacts are helpful to our conversation in which way?
- 
->> NTB in it's current form should never have happened, but that's water
->> down the bridge.
->> 
->> What you really want is:
->> 
->>   1) Convert your platform to the new MSI parent model
->> 
->>   2) Utilize PCI/IMS which is giving you exactly what you need with
->>      proper PCI semantics
->
-> Sorry, I still don't understand yet. This patch is just user of msi
-> controller.
-
-As I explained to you before: The concept of MSI controller does not
-exist in the kernel. It might exist in your NXP nomenclature, but that's
-irrelevant here.
-
-> Your patches focus on the msi controller itself. 
-
-No. They focus on changing the hierarchy model from "global" MSI domains
-to per device MSI domains so that the weird constructs of platform MSI
-can be replaced by something which actually matches the hardware and
-provides a proper abstraction for PCIe/NTB at the right level.
-
-> Interface platform_msi_domain_alloc_irqs still exist at your devmsi-v2-part3. 
-
-Sure, but at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git devmsi-v2-arm
-
-platform_msi_domain_alloc_irqs() does not exist anymore.
-
-You replied to exactly that series which builds on top of devmsi-v2-part3, no?
-
-So what are you trying to tell me?
-
-Thanks,
-
-        tglx
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
