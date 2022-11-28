@@ -2,467 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469EC63AEB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:17:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6513C63AEB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbiK1RRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 12:17:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34696 "EHLO
+        id S232925AbiK1RRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 12:17:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232972AbiK1RRB (ORCPT
+        with ESMTP id S232901AbiK1RR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:17:01 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6183E25E87;
-        Mon, 28 Nov 2022 09:16:59 -0800 (PST)
-Received: from g550jk.arnhem.chello.nl (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 80792D066B;
-        Mon, 28 Nov 2022 17:16:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1669655787; bh=HnZTBAis9/V2pQaRAhM1SxpfMceGAhfR3jTgJsiJW6E=;
-        h=From:To:Cc:Subject:Date;
-        b=a+rUR+StDmkX/XDkBBg6NH9zn9j1H3wu9io1GkKuDceZ66RExX2w+7vKAtgD51zFo
-         n9PjpY0LHujYcT1163lhXP02dLD5iQ3nZvdn8RYBs8oa+H6yo/eshFsS87UL+rMZ/T
-         6BzkT0ag6DdkU9AoDjyHDNXnvx8Wx24PoQu6mCVM=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: qcom: msm8974: clean up USB nodes
-Date:   Mon, 28 Nov 2022 18:16:23 +0100
-Message-Id: <20221128171623.825572-1-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.38.1
+        Mon, 28 Nov 2022 12:17:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F8C26AEC;
+        Mon, 28 Nov 2022 09:17:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B6F7B80E74;
+        Mon, 28 Nov 2022 17:17:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4B3AC433D6;
+        Mon, 28 Nov 2022 17:17:24 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lgJAHmRg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669655843;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zx+xERd2IzI+idUZ4FTTj35GNfBVVHdMcem2M32A5rM=;
+        b=lgJAHmRg2fviMIGsKiHeOq7t5Opiaxy9sLeRGvooCfpC14Ba2i2UirnTWC1TWN9LNqTWhG
+        rAqareEvPn8JYyokXvOEY0/F4scn16gSLgMItFYXjfu7to/dCLFcmNEoBxomLwHdsMIs5t
+        I+UW36utDQAg5MqAIbJi5i7GOwFrFig=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b9d4e8ea (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 28 Nov 2022 17:17:22 +0000 (UTC)
+Date:   Mon, 28 Nov 2022 18:17:16 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, linux-crypto@vger.kernel.org,
+        linux-api@vger.kernel.org, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v7 1/3] random: add vgetrandom_alloc() syscall
+Message-ID: <Y4TtHMvCjTVc1do9@zx2c4.com>
+References: <20221124165536.1631325-1-Jason@zx2c4.com>
+ <20221124165536.1631325-2-Jason@zx2c4.com>
+ <87bkouyd90.ffs@tglx>
+ <Y4PF+pBlNZGfZ0sr@zx2c4.com>
+ <8f25aa1e-cb42-4ef0-a1ff-93dcf8651213@app.fastmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8f25aa1e-cb42-4ef0-a1ff-93dcf8651213@app.fastmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename "otg" label to "usb" to group it with other usb nodes and also
-because "usb" makes more sense for a USB controller.
+Hi Arnd,
 
-And now we can also better use the usb_hsX_phy labels instead of having
-the ulpi -> phy@X structure in every dts.
+On Mon, Nov 28, 2022 at 02:54:39PM +0100, Arnd Bergmann wrote:
+> On Sun, Nov 27, 2022, at 21:18, Jason A. Donenfeld wrote:
+> >> 
+> >> config GENERIC_VDSO_RANDOM_WHATEVER
+> >>        bool
+> >>        select VGETRANDOM_ALLOC
+> >> 
+> >> This gives a clear Kconfig dependency instead of the random
+> >> ADVISE_SYSCALLS select.
+> >
+> > That's much better indeed. I was trying to straddle the two conventions
+> > of `#define __ARCH_...` for syscalls and a Kconfig for vDSO functions,
+> > but doing it all together as you've suggested is nicer.
+> >
+> > I'll try to figure this out, though so far futzing around suggests there
+> > might have to be both, because of unistd.h being a userspace header.
+> > That is, include/uapi/asm-generic/unistd.h typically needs a `#if
+> > __ARCH_WANT..., #define ...` in it. I'll give it a spin and you'll see
+> > for v8. At the very least it should get rid of the more awkward
+> > `select ADVISE_SYSCALLS if X86_64` part, and will better separate the
+> > arch code from non-arch code.
+> 
+> I think you should not need an __ARCH_WANT_SYS_* symbol for this,
+> the only place we actually need them for is the asm-generic/unistd.h
+> header which is still used on a couple of architectures (I have
+> an experimental series for replacing it with a generic syscall.tbl
+> file, but it's not ready for 6.2). In most cases, the __ARCH_WANT_SYS_*
+> symbols are only used for syscalls that are part of the table for
+> old architectures but get skipped on newer targets that always had
+> a replacement syscalls (e.g. getrlimit getting replaced by prlimit64)
+> 
+> I think we should just reserve the syscall number for all architectures
+> right away and #define the __NR_* macro. libc will generally need
+> a runtime check anyway, and defining it now avoids the problem of
+> the tables getting out of sync.
+> 
+> The Kconfig symbol is fine in this case.
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
- .../arm/boot/dts/qcom-apq8074-dragonboard.dts | 42 ++++++++--------
- .../qcom-msm8974-lge-nexus5-hammerhead.dts    | 48 +++++++++----------
- .../dts/qcom-msm8974-sony-xperia-rhine.dtsi   | 48 +++++++++----------
- arch/arm/boot/dts/qcom-msm8974.dtsi           |  6 +--
- .../dts/qcom-msm8974pro-fairphone-fp2.dts     | 48 +++++++++----------
- .../boot/dts/qcom-msm8974pro-samsung-klte.dts | 42 ++++++++--------
- ...-msm8974pro-sony-xperia-shinano-castor.dts | 48 +++++++++----------
- 7 files changed, 135 insertions(+), 147 deletions(-)
+Oh, great, okay. I'll get rid of the __ARCH stuff entirely then. I
+jumped the gun and posted v8 earlier today, but I'll include this in a
+v9, whenever it makes sense to send that. So when reading v8, just
+assume all he __ARCH_WANT_SYS_* business has been removed.
 
-diff --git a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
-index 438fe86b3d4d..1345df7cbd00 100644
---- a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
-+++ b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
-@@ -35,28 +35,6 @@ eeprom: eeprom@52 {
- 	};
- };
- 
--&otg {
--	status = "okay";
--
--	phys = <&usb_hs2_phy>;
--	phy-select = <&tcsr 0xb000 1>;
--	extcon = <&smbb>, <&usb_id>;
--	vbus-supply = <&chg_otg>;
--	hnp-disable;
--	srp-disable;
--	adp-disable;
--
--	ulpi {
--		phy@b {
--			status = "okay";
--			v3p3-supply = <&pm8941_l24>;
--			v1p8-supply = <&pm8941_l6>;
--			extcon = <&smbb>;
--			qcom,init-seq = /bits/ 8 <0x1 0x63>;
--		};
--	};
--};
--
- &rpm_requests {
- 	regulators-0 {
- 		compatible = "qcom,rpm-pm8841-regulators";
-@@ -307,3 +285,23 @@ cd-pins {
- 		};
- 	};
- };
-+
-+&usb {
-+	status = "okay";
-+
-+	phys = <&usb_hs2_phy>;
-+	phy-select = <&tcsr 0xb000 1>;
-+	extcon = <&smbb>, <&usb_id>;
-+	vbus-supply = <&chg_otg>;
-+	hnp-disable;
-+	srp-disable;
-+	adp-disable;
-+};
-+
-+&usb_hs2_phy {
-+	status = "okay";
-+	v3p3-supply = <&pm8941_l24>;
-+	v1p8-supply = <&pm8941_l6>;
-+	extcon = <&smbb>;
-+	qcom,init-seq = /bits/ 8 <0x1 0x63>;
-+};
-diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-index 9cc453987d0e..280e63e3ebf2 100644
---- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-@@ -248,31 +248,6 @@ &mdss {
- 	status = "okay";
- };
- 
--&otg {
--	status = "okay";
--
--	phys = <&usb_hs1_phy>;
--	phy-select = <&tcsr 0xb000 0>;
--
--	extcon = <&charger>, <&usb_id>;
--	vbus-supply = <&usb_otg_vbus>;
--
--	hnp-disable;
--	srp-disable;
--	adp-disable;
--
--	ulpi {
--		phy@a {
--			status = "okay";
--
--			v1p8-supply = <&pm8941_l6>;
--			v3p3-supply = <&pm8941_l24>;
--
--			qcom,init-seq = /bits/ 8 <0x1 0x64>;
--		};
--	};
--};
--
- &pm8941_gpios {
- 	gpio_keys_pin_a: gpio-keys-active-state {
- 		pins = "gpio2", "gpio3";
-@@ -652,3 +627,26 @@ shutdown-pins {
- 		};
- 	};
- };
-+
-+&usb {
-+	status = "okay";
-+
-+	phys = <&usb_hs1_phy>;
-+	phy-select = <&tcsr 0xb000 0>;
-+
-+	extcon = <&charger>, <&usb_id>;
-+	vbus-supply = <&usb_otg_vbus>;
-+
-+	hnp-disable;
-+	srp-disable;
-+	adp-disable;
-+};
-+
-+&usb_hs1_phy {
-+	status = "okay";
-+
-+	v1p8-supply = <&pm8941_l6>;
-+	v3p3-supply = <&pm8941_l24>;
-+
-+	qcom,init-seq = /bits/ 8 <0x1 0x64>;
-+};
-diff --git a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-index 00542bd555e8..1b683690a1ad 100644
---- a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-@@ -132,31 +132,6 @@ &blsp2_i2c5 {
- 	/* sii8334 MHL HDMI bridge */
- };
- 
--&otg {
--	status = "okay";
--
--	phys = <&usb_hs1_phy>;
--	phy-select = <&tcsr 0xb000 0>;
--	extcon = <&smbb>, <&usb_id>;
--	vbus-supply = <&chg_otg>;
--
--	hnp-disable;
--	srp-disable;
--	adp-disable;
--
--	ulpi {
--		phy@a {
--			status = "okay";
--
--			v1p8-supply = <&pm8941_l6>;
--			v3p3-supply = <&pm8941_l24>;
--
--			extcon = <&smbb>;
--			qcom,init-seq = /bits/ 8 <0x1 0x64>;
--		};
--	};
--};
--
- &pm8941_coincell {
- 	status = "okay";
- 	qcom,rset-ohms = <2100>;
-@@ -485,3 +460,26 @@ cd-pins {
- 		};
- 	};
- };
-+
-+&usb {
-+	status = "okay";
-+
-+	phys = <&usb_hs1_phy>;
-+	phy-select = <&tcsr 0xb000 0>;
-+	extcon = <&smbb>, <&usb_id>;
-+	vbus-supply = <&chg_otg>;
-+
-+	hnp-disable;
-+	srp-disable;
-+	adp-disable;
-+};
-+
-+&usb_hs1_phy {
-+	status = "okay";
-+
-+	v1p8-supply = <&pm8941_l6>;
-+	v3p3-supply = <&pm8941_l24>;
-+
-+	extcon = <&smbb>;
-+	qcom,init-seq = /bits/ 8 <0x1 0x64>;
-+};
-diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
-index bdf1a4cca1c1..8d216a3c0851 100644
---- a/arch/arm/boot/dts/qcom-msm8974.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
-@@ -653,7 +653,7 @@ blsp2_i2c6: i2c@f9968000 {
- 			#size-cells = <0>;
- 		};
- 
--		otg: usb@f9a55000 {
-+		usb: usb@f9a55000 {
- 			compatible = "qcom,ci-hdrc";
- 			reg = <0xf9a55000 0x200>,
- 			      <0xf9a55200 0x200>;
-@@ -679,7 +679,7 @@ usb_hs1_phy: phy@a {
- 					#phy-cells = <0>;
- 					clocks = <&xo_board>, <&gcc GCC_USB2A_PHY_SLEEP_CLK>;
- 					clock-names = "ref", "sleep";
--					resets = <&gcc GCC_USB2A_PHY_BCR>, <&otg 0>;
-+					resets = <&gcc GCC_USB2A_PHY_BCR>, <&usb 0>;
- 					reset-names = "phy", "por";
- 					status = "disabled";
- 				};
-@@ -690,7 +690,7 @@ usb_hs2_phy: phy@b {
- 					#phy-cells = <0>;
- 					clocks = <&xo_board>, <&gcc GCC_USB2B_PHY_SLEEP_CLK>;
- 					clock-names = "ref", "sleep";
--					resets = <&gcc GCC_USB2B_PHY_BCR>, <&otg 1>;
-+					resets = <&gcc GCC_USB2B_PHY_BCR>, <&usb 1>;
- 					reset-names = "phy", "por";
- 					status = "disabled";
- 				};
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-index 6523257815a0..f531d2679f6c 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-@@ -86,31 +86,6 @@ reboot-mode {
- 	};
- };
- 
--&otg {
--	status = "okay";
--
--	phys = <&usb_hs1_phy>;
--	phy-select = <&tcsr 0xb000 0>;
--	extcon = <&smbb>, <&usb_id>;
--	vbus-supply = <&chg_otg>;
--
--	hnp-disable;
--	srp-disable;
--	adp-disable;
--
--	ulpi {
--		phy@a {
--			status = "okay";
--
--			v1p8-supply = <&pm8941_l6>;
--			v3p3-supply = <&pm8941_l24>;
--
--			extcon = <&smbb>;
--			qcom,init-seq = /bits/ 8 <0x1 0x64>;
--		};
--	};
--};
--
- &pm8941_gpios {
- 	gpio_keys_pin_a: gpio-keys-active-state {
- 		pins = "gpio1", "gpio2", "gpio5";
-@@ -463,3 +438,26 @@ fm-pins {
- 		};
- 	};
- };
-+
-+&usb {
-+	status = "okay";
-+
-+	phys = <&usb_hs1_phy>;
-+	phy-select = <&tcsr 0xb000 0>;
-+	extcon = <&smbb>, <&usb_id>;
-+	vbus-supply = <&chg_otg>;
-+
-+	hnp-disable;
-+	srp-disable;
-+	adp-disable;
-+};
-+
-+&usb_hs1_phy {
-+	status = "okay";
-+
-+	v1p8-supply = <&pm8941_l6>;
-+	v3p3-supply = <&pm8941_l24>;
-+
-+	extcon = <&smbb>;
-+	qcom,init-seq = /bits/ 8 <0x1 0x64>;
-+};
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts b/arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts
-index 52ece17986e4..b9698ffb66ca 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts
-@@ -376,28 +376,6 @@ &mdss {
- 	status = "okay";
- };
- 
--&otg {
--	status = "okay";
--
--	phys = <&usb_hs1_phy>;
--	phy-select = <&tcsr 0xb000 0>;
--
--	hnp-disable;
--	srp-disable;
--	adp-disable;
--
--	ulpi {
--		phy@a {
--			status = "okay";
--
--			v1p8-supply = <&pma8084_l6>;
--			v3p3-supply = <&pma8084_l24>;
--
--			qcom,init-seq = /bits/ 8 <0x1 0x64>;
--		};
--	};
--};
--
- &pma8084_gpios {
- 	gpio_keys_pin_a: gpio-keys-active-state {
- 		pins = "gpio2", "gpio3", "gpio5";
-@@ -814,3 +792,23 @@ panel_te_pin: panel-state {
- 		bias-disable;
- 	};
- };
-+
-+&usb {
-+	status = "okay";
-+
-+	phys = <&usb_hs1_phy>;
-+	phy-select = <&tcsr 0xb000 0>;
-+
-+	hnp-disable;
-+	srp-disable;
-+	adp-disable;
-+};
-+
-+&usb_hs1_phy {
-+	status = "okay";
-+
-+	v1p8-supply = <&pma8084_l6>;
-+	v3p3-supply = <&pma8084_l24>;
-+
-+	qcom,init-seq = /bits/ 8 <0x1 0x64>;
-+};
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-index 07131db2e35d..3b1cc39f2269 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-@@ -213,31 +213,6 @@ bluetooth {
- 	};
- };
- 
--&otg {
--	status = "okay";
--
--	phys = <&usb_hs1_phy>;
--	phy-select = <&tcsr 0xb000 0>;
--	extcon = <&smbb>, <&usb_id>;
--	vbus-supply = <&chg_otg>;
--
--	hnp-disable;
--	srp-disable;
--	adp-disable;
--
--	ulpi {
--		phy@a {
--			status = "okay";
--
--			v1p8-supply = <&pm8941_l6>;
--			v3p3-supply = <&pm8941_l24>;
--
--			extcon = <&smbb>;
--			qcom,init-seq = /bits/ 8 <0x1 0x64>;
--		};
--	};
--};
--
- &pm8941_coincell {
- 	status = "okay";
- 
-@@ -638,3 +613,26 @@ bt_dev_wake_pin: bt-dev-wake-state {
- 		bias-disable;
- 	};
- };
-+
-+&usb {
-+	status = "okay";
-+
-+	phys = <&usb_hs1_phy>;
-+	phy-select = <&tcsr 0xb000 0>;
-+	extcon = <&smbb>, <&usb_id>;
-+	vbus-supply = <&chg_otg>;
-+
-+	hnp-disable;
-+	srp-disable;
-+	adp-disable;
-+};
-+
-+&usb_hs1_phy {
-+	status = "okay";
-+
-+	v1p8-supply = <&pm8941_l6>;
-+	v3p3-supply = <&pm8941_l24>;
-+
-+	extcon = <&smbb>;
-+	qcom,init-seq = /bits/ 8 <0x1 0x64>;
-+};
--- 
-2.38.1
-
+Jason
