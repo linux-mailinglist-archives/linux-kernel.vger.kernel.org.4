@@ -2,164 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE9C63ABA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A61C763ABA3
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232147AbiK1Oy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 09:54:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45246 "EHLO
+        id S231776AbiK1O4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 09:56:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbiK1Oy5 (ORCPT
+        with ESMTP id S229775AbiK1O4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:54:57 -0500
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A691F9D5;
-        Mon, 28 Nov 2022 06:54:56 -0800 (PST)
-Received: by mail-qv1-f42.google.com with SMTP id u10so1917246qvp.4;
-        Mon, 28 Nov 2022 06:54:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h8qjZ4omGnU5DnQH4BCfbC89EUQkek2vUjISomuBZQg=;
-        b=vPGOYCyI7KzjrNx2nXGa9UZ6CviGdaLEmWhFfCzkWOePnj/2gW0mbRkbsODNMUit9C
-         ss3udjKQeIe9G7x1iDQSFL9CYUdJzZoxUyeJmmI9zgqgDjiaNiDBpHup5bluFULimGrH
-         VKPqEgLSdMvzYngNTqDxLODoQMUiH3y7N2fXGcX81/QzbDMFHdqYhobNr3ays7ovU810
-         Hg9rtGA7vMnPu4Y2HHYtzQMYEOjX43ukiF3rpPblDyTmrj7gb/HHWN18SzwLzhRc5BF6
-         dGKJHrQotOJpiMWCMSPzyAZ6wXTtFgiMLTC7UrZ9B+fKciBsU404tufB51vi/jgjw2jk
-         AtZQ==
-X-Gm-Message-State: ANoB5pmCAWBQ+bnpHPEOvV0NpwIrv3yIEoEjO0xlHrVKBbi2ekFqdECL
-        /y4/Odfsy8K0I2EQ3C+l5My27HMoeLLvc3VHQ5Y=
-X-Google-Smtp-Source: AA0mqf6ZQvmOxdAviiU0IzzdPXCRx3Ywx6XUyHrEQ+1tFKgUa5uXCyna99yIXy7uLof+eMX99XEFnqKGVIMqeKaE1Fo=
-X-Received: by 2002:a0c:c582:0:b0:4af:b750:b569 with SMTP id
- a2-20020a0cc582000000b004afb750b569mr31255377qvj.83.1669647295522; Mon, 28
- Nov 2022 06:54:55 -0800 (PST)
+        Mon, 28 Nov 2022 09:56:12 -0500
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2091.outbound.protection.outlook.com [40.92.98.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C851F9D5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:56:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bjWpoVrX3DnNVVyzN6uMDbL86uOYci5zcMud+sREkjDvb8XdFTvlWfmYj3C4BojXxFHg9kfFcnwgBhFNLou6sIKa2f2cNB2zXs/LOHcvKkiAFS3+GEQEvT9Q62TCQjrCm8hkNccmdyFQaQoByh77L6hdoZJ4ef3VZ4UXkAps4sqCdiBHrreNmEZvorBFdKGYwe4RVF7Vb2yzZ9yDnoB7r50ZKZRy9XsnipuTsQRz5HpgW9sNN0UWkYiYMGWnkIYQoB7YWEqrzkGF9PHt3JBYCks03D4jN4cKhdzpu9nTxUF25fGH6wrbHgwdY4ZPZtF2Lfgg3wOHATuOkz8DfZha7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ahRblvc7GEmuWQI1TkTP5Tz6QhUpzcRXLIA70dCHvec=;
+ b=ntsoyCQYB+OhY5nhURZtkEFlh1TwsLDCNcqB+yvjPSQJoBB/CLYklQixdrIEn2OpNn8e1SFuKhToWFT34e8VC5h/CXOtlW8c5OoXdmRsH5dhsHktMqcknsMRyyeJskf9Ma20GyB/Y6ZUO5Wmkd7WwLM8MmngP/dqB6b1Tx3C4J6i9CUqYmVxFUeXWOk38BgKJhuh8e8OLzcMy3R/NoGWeyh8NIw6Lq/53cQADoVoDjBgk3kSuRpOuodflqWcM2gXIYBSXGd+PfajOBvys6MsYX8zJHr6eqji/mxHKKRVPyr6qssQWv9oiegQN45cFsgCjfkdr0DvdzQn69wlOdlY9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ahRblvc7GEmuWQI1TkTP5Tz6QhUpzcRXLIA70dCHvec=;
+ b=lP7sy66erfAOPOyYawvRk91eK/5etQi27NWgHhWt7okR7OoapibG7E/H3ioAqbDZnliA5u2m16jOEN7LMAwZq1bfT0nqGpCFLzeAdLvI1ThvlsCLpN/YYM5KprjHfkfvFZvlBcC2Z9URV3zjDh+aMdUmvjIg9+jSP2VKAETu3adj9jsgwWlGfVLefzp+EzV59jJ+3nJ9W+kK2ZQHwokmf1uHysgcl5X5BX1OY9pPJsTjkB8alBQIOI+MbArZufZuun4qXEhbMXNUm148fafy8IZ1yYZxa6G+C+YnysTeyOQdO1oZkcQyV5KgJhDvnoVpEtCBkh4uc2mUaEvJEoRrmQ==
+Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
+ by TYCP286MB2534.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:208::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.22; Mon, 28 Nov
+ 2022 14:56:05 +0000
+Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::ff96:9cb6:e047:c605]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::ff96:9cb6:e047:c605%4]) with mapi id 15.20.5857.023; Mon, 28 Nov 2022
+ 14:56:05 +0000
+Date:   Mon, 28 Nov 2022 22:56:01 +0800
+From:   Dawei Li <set_pte_at@outlook.com>
+To:     zackr@vmware.com, airlied@gmail.com, daniel@ffwll.ch
+Cc:     krastevm@vmware.com, linux-graphics-maintainer@vmware.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] drm/vmwgfx: Fix race issue calling pin_user_pages
+Message-ID: <TYCP286MB23230F5BA9B42D637F302B2DCA139@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+References: <TYWP286MB23193621CB443E1E1959A00BCA3E9@TYWP286MB2319.JPNP286.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TYWP286MB23193621CB443E1E1959A00BCA3E9@TYWP286MB2319.JPNP286.PROD.OUTLOOK.COM>
+X-TMN:  [6NipouSTAdqL1MVRuUY/oYlV5SRNLi+e]
+X-ClientProxiedBy: TYWP286CA0030.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:262::20) To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:152::9)
+X-Microsoft-Original-Message-ID: <20221128145601.GA6622@wendao-VirtualBox>
 MIME-Version: 1.0
-References: <20221031121314.1381472-1-kajetan.puchalski@arm.com>
- <20221031121314.1381472-3-kajetan.puchalski@arm.com> <CAJZ5v0hHvf-033Oa-nW7UEZq=9cTFzn6e_znccPXBUeNa=YY+Q@mail.gmail.com>
- <Y4TGbK+AhzRdiPA6@e126311.manchester.arm.com>
-In-Reply-To: <Y4TGbK+AhzRdiPA6@e126311.manchester.arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 28 Nov 2022 15:54:44 +0100
-Message-ID: <CAJZ5v0idJTYR4+gooLnEV=kX_dDCgEdP1mgp81AEcFCcjeNoDw@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 2/2] cpuidle: teo: Introduce util-awareness
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org,
-        lukasz.luba@arm.com, Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|TYCP286MB2534:EE_
+X-MS-Office365-Filtering-Correlation-Id: f9de5b28-5b40-4c3d-8f38-08dad150ab9f
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NsaIVuNBpaO5JFwj6fmFWhPhakLp9q48GHjoAz8X6/+hltsDJgxR1g6+qeLmwDFUTSTgqKVhPnV1XorJtk4HCsZJ4cx6UB645dVKLSVyxbnjPO7ZXDNeFWwZJ+M98cR6oveoAvMvXxiMB0PItF/MPOdbY+1J4VKUNs3KakQZvpKzkeg+MX7S+ELdqHqbRVIGqvsF16Q+PU0pHrLO3oZOicqJm085dRDbXtXZ4JvpZnaWYS9rN1eckkE7i2DpnAA83WmB9JSiTBCajYzmcnKDHITaDsZQ+IkmoT68KBuB3D1VlemOkcP6iKCABdSqF6MXNIwP3Uka5mE888JTDulb6QUWKTrpnwK39gKfohlbH+cvQVM0bp0KuBsBPzbHOnz+drhukQVIfpDEUBhMW4In6CUzRM92gJiNHadTnL0x1NBcP4OAEERe8v/MgC5c9EkamiFJazFeUAgloZcip1qmkHHdm8GSCCtNGZgnlDRcWG4orxLyhy8j6GW1U5uFeieXZx64TvDYEEjDCRQlqBlmBn8CgTtUl16dz9ekuv0+uhgKFkSTPBtbwL4OfFqe5/V3Myyo87PlURl37vKte13xbr6QydWFP42FD4ezvCECdrNY+QihELCGhsflTbdNMQupxJwJHpUBz5gfD5cgFBpOkw==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HsM1fX5KzdtECerHg10UJc/jotGfnGr41OeeN1qgkWc0jxRyAnykeZQkaSts?=
+ =?us-ascii?Q?Sbwi6een5sSFItW1n2i75jUlvToQmcnIiSfFkd+Ht76v7WIIRi7FPG/tAqVx?=
+ =?us-ascii?Q?+oc/cdH5etQrS5jY9utJQdlFewfj73IcgVm645U3smL9LEFqGiit31v4wA5C?=
+ =?us-ascii?Q?k2A2ZvzDGTcJJuqX8Owyr4DMBU0tT3hfCtVhvLpKvv/c4hEhCqcyU6kvyWFm?=
+ =?us-ascii?Q?XaZHU1i4Ax4FknOBC9pc5CANS2fBCgUrKWOaz2q9LPeGUSc7NDxntp2OFnx2?=
+ =?us-ascii?Q?qUTAZ4IwScGAXUVVFaKw3Cxv4ECTIgLjWeb2LQU2fD+HEDbZuRBSECFTfU6P?=
+ =?us-ascii?Q?ivetWpt4m534DC0zK+HXvQip3RPg3vyWvbRKpND2gEKJHS6bZkWaCweRLTql?=
+ =?us-ascii?Q?F8GalQtuXR8opOpDJPUkme5GafQzSCyaiTb0+83JePLk1VaHliz12DQym90w?=
+ =?us-ascii?Q?zzfhg4TlgAkUB2aGFCG+AXoMJ4NnPzrMwdcfXiiJ8jnLnsA4qKm0cStEI7As?=
+ =?us-ascii?Q?vdDw7hSn/r3dAnmH6H60WhHZdioZx/J9i7jlA1iQNyGhfgb6aomg1h1R8HP+?=
+ =?us-ascii?Q?El4xNx0GcvrW7PUqWNZgIw2ZXJhKLAEN3eSOxAc5qblhUWJW/RX/ORL6AMPS?=
+ =?us-ascii?Q?ZkcVsnwEu7sddGBtjuwgi02KfU1Mv2dtegvp9indOS/lTuumoueozp7Mg6+L?=
+ =?us-ascii?Q?HSuv5EEI+RyhcMoVF1bLRumHnnJNPWb+pRYZgWLBCEK6Z8hlvlIWEiEBLQr3?=
+ =?us-ascii?Q?4x0TWF9a+x2jVYpLAGmt8OimAQOqTovJPybRL82KJ3hCcjPIZRWXp2uIdLR/?=
+ =?us-ascii?Q?uUB1QQ0uITkqTKhHexjI1lsmzcSMWOilvKI1V/RVPibq7P/BvTqPJ54GEs7H?=
+ =?us-ascii?Q?kfh+U/AdoMT+knkQqXJ98CTFU23o/P4IhfeRlA38jCTeIjlVzmDfVV6GbPO8?=
+ =?us-ascii?Q?zAe+lh3NeC6XNNS03QFf9w+DgPAlLVRbQqR5/Y2yJkNRdXeWzWrVPLdsYjBa?=
+ =?us-ascii?Q?LkubZ0wlVfkOwb20iG/mF6znpbuhATfGT5UCvMRvIkbdk8mpXuhISRPUt4fE?=
+ =?us-ascii?Q?ZkvdZia8An4gwBmMrjJFOQXWXNsLhdi1Qpo8HHTSacKiQVFRu4YjSU2tS+EC?=
+ =?us-ascii?Q?fsJKyffM6ZZ/I+ikp6nLj0miZrJZF6tzyyK+z8Q1CAxq7f9Zi3dQhNjyMYtZ?=
+ =?us-ascii?Q?1D8ywr/pup7EK60xY8lOmuNml/HqnVx2stp+BoTujSPQQLj8ZaXUdRZ+5OBO?=
+ =?us-ascii?Q?/DCJ/IsRIR0DG+ZNE4/mkZdGKw4AtyiMOz7uNEZWrA=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9de5b28-5b40-4c3d-8f38-08dad150ab9f
+X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 14:56:05.4867
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCP286MB2534
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 3:33 PM Kajetan Puchalski
-<kajetan.puchalski@arm.com> wrote:
->
-> On Fri, Nov 25, 2022 at 07:27:13PM +0100, Rafael J. Wysocki wrote:
-> > > +/*
-> > > + * The number of bits to shift the cpu's capacity by in order to determine
-> > > + * the utilized threshold
-> > > + */
-> > > +#define UTIL_THRESHOLD_SHIFT 6
-> >
-> > Why is this particular number regarded as the best one?
->
-> Based on my testing this number achieved the best balance of power and
-> performance on average. It also makes sense from looking at the util
-> plots. The resulting threshold is high enough to not be triggered by
-> background noise and low enough to react quickly when activity starts
-> ramping up.
+On Wed, Nov 09, 2022 at 11:37:34PM +0800, Dawei Li wrote:
+> pin_user_pages() is unsafe without protection of mmap_lock,
+> fix it by calling pin_user_pages_fast().
+> 
+> Fixes: 7a7a933edd6c ("drm/vmwgfx: Introduce VMware mks-guest-stats")
+> Signed-off-by: Dawei Li <set_pte_at@outlook.com>
+> ---
+> v1:
+> https://lore.kernel.org/all/TYCP286MB23235C9A9FCF85C045F95EA7CA4F9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM/
+> 
+> v1->v2:
+> Rebased to latest vmwgfx/drm-misc-fixes.
+> 
+> v2->v3
+> Replace pin_user_pages() with pin_user_pages_fast().
 
-It would be good to put some of this information (or maybe even all of
-it) into the comment above the symbol definition.
+Gentle ping
 
-> > > +static void teo_get_util(struct cpuidle_device *dev, struct teo_cpu *cpu_data)
-> > > +{
-> > > +       unsigned long util = sched_cpu_util(dev->cpu);
-> > > +
-> > > +       cpu_data->utilized = util > cpu_data->util_threshold;
-> >
-> > Why exactly do you need the local variable here?
->
-> It's not necessarily needed, I can replace it with comparing the result
-> of the call directly.
->
-> > Then, if there's only one caller, maybe this could be folded into it?
->
-> I do think it's nicer to have it separated in its own helper function, that
-> way if anything more has to be done with the util it'll all be
-> self-contained. Having only one caller shouldn't be a big issue, it's
-> also the case for teo_middle_of_bin and teo_find_shallower_state in the
-> current TEO implementation.
-
-OK
-
-> > > +               /* don't update metrics if the cpu was utilized during the last sleep */
-> >
-> > Why?
-> >
-> > The metrics are related to idle duration and cpu_data->utilized
-> > indicates whether or not latency should be reduced.  These are
-> > different things.
-> >
-> > Moreover, this is just one data point and there may not be any direct
-> > connection between it and the decision made in this particular cycle.
->
-> Agreed, v4 already has this part removed.
->
-> > > +               if (!cpu_data->utilized)
-> > > +                       teo_update(drv, dev);
-> > >                 dev->last_state_idx = -1;
-> > >         }
-> > >
-> > > @@ -323,6 +381,21 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-> > >                         goto end;
-> > >         }
-> > >
-> > > +       teo_get_util(dev, cpu_data);
-> > > +       /* the cpu is being utilized and there's only 2 states to choose from */
-> > > +       /* no need to consider metrics, choose the shallowest non-polling state and exit */
-> >
-> > A proper kernel-coding-style 2-line comment, please!
-> >
-> > Also I would say "utilized beyond the threshold" instead of just
-> > "utilized" and "there are only 2 states" (plural).
->
-> Both good points, I'll fix that.
->
-> > > +       if (drv->state_count < 3 && cpu_data->utilized) {
-> > > +               for (i = 0; i < drv->state_count; ++i) {
-> > > +                       if (dev->states_usage[i].disable ||
-> > > +                                       drv->states[i].flags & CPUIDLE_FLAG_POLLING)
-> > > +                               continue;
-> > > +                       break;
-> >
-> > This looks odd.  It would be more straightforward to do
-> >
-> > if (!dev->states_usage[i].disable && !(drv->states[i].flags &
-> > CPUIDLE_FLAG_POLLING)) {
-> >         idx = i;
-> >         goto end;
-> > }
-> >
-> > without the "break" and "continue".
->
-> Fair enough, this works as well.
->
-> > I've changed my mind with respect to adding the idx == 1 check to
-> > this.  If the goal is to reduce latency for the "loaded" CPUs, this
-> > applies to deeper idle states too.
->
-> I see, this has no effect on arm devices one way or the other so I don't
-> mind, it's completely up to you. In light of Doug's test results
-> regarding this change, should I remove the check in v5?
-
-Yes, please.
+> ---
+>  drivers/gpu/drm/vmwgfx/vmwgfx_msg.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c b/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
+> index 089046fa21be..50fa3df0bc0c 100644
+> --- a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
+> +++ b/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
+> @@ -1085,21 +1085,21 @@ int vmw_mksstat_add_ioctl(struct drm_device *dev, void *data,
+>  	reset_ppn_array(pdesc->strsPPNs, ARRAY_SIZE(pdesc->strsPPNs));
+>  
+>  	/* Pin mksGuestStat user pages and store those in the instance descriptor */
+> -	nr_pinned_stat = pin_user_pages(arg->stat, num_pages_stat, FOLL_LONGTERM, pages_stat, NULL);
+> +	nr_pinned_stat = pin_user_pages_fast(arg->stat, num_pages_stat, FOLL_LONGTERM, pages_stat);
+>  	if (num_pages_stat != nr_pinned_stat)
+>  		goto err_pin_stat;
+>  
+>  	for (i = 0; i < num_pages_stat; ++i)
+>  		pdesc->statPPNs[i] = page_to_pfn(pages_stat[i]);
+>  
+> -	nr_pinned_info = pin_user_pages(arg->info, num_pages_info, FOLL_LONGTERM, pages_info, NULL);
+> +	nr_pinned_info = pin_user_pages_fast(arg->info, num_pages_info, FOLL_LONGTERM, pages_info);
+>  	if (num_pages_info != nr_pinned_info)
+>  		goto err_pin_info;
+>  
+>  	for (i = 0; i < num_pages_info; ++i)
+>  		pdesc->infoPPNs[i] = page_to_pfn(pages_info[i]);
+>  
+> -	nr_pinned_strs = pin_user_pages(arg->strs, num_pages_strs, FOLL_LONGTERM, pages_strs, NULL);
+> +	nr_pinned_strs = pin_user_pages_fast(arg->strs, num_pages_strs, FOLL_LONGTERM, pages_strs);
+>  	if (num_pages_strs != nr_pinned_strs)
+>  		goto err_pin_strs;
+>  
+> -- 
+> 2.25.1
+> 
