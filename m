@@ -2,94 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1656663A6D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:11:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5B863A6DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:14:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbiK1LLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 06:11:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        id S230302AbiK1LOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 06:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbiK1LLT (ORCPT
+        with ESMTP id S229896AbiK1LOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 06:11:19 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1651193DC
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:11:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669633878; x=1701169878;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O5qtyqw9+bir61hktTWiI7hNhwTVzyCALdEqd4k6WlQ=;
-  b=bdC5LFj0sbFqOheLci7VBZZU3YvztCvLSbTUTEoBTuC+qX3AtPKjq4hJ
-   Uus/xiExxPGFhBPzk5FSu+VFlga01QdgZ6HMromIpc4LNxPJ1NpBwUS/3
-   /IEOxBT4fQUwcPf0YaU+cKO20s1wEMFwGGxRap3+3yxXbSSmblou1J6JR
-   FE43czupWN8I1Q9L+7PbGLZBVhWpE0K7RoUGbZt2fBU51X4q7gI4qIIFG
-   2lgJsAJQ1/Tm+pB67w+b9DEW38MhZx1QBnl1gYmubeKYCK3wBO8PVfZGc
-   icOnx/iNrCVYFlhIsaAWolJjjuUh6Pmz/XplcCBYpJnHuejD+f8LGmxq5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="376948191"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="376948191"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 03:11:18 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="768004994"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="768004994"
-Received: from gluber-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.50.190])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 03:11:14 -0800
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 126B0109836; Mon, 28 Nov 2022 14:11:12 +0300 (+03)
-Date:   Mon, 28 Nov 2022 14:11:12 +0300
-From:   kirill.shutemov@linux.intel.com
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        jpoimboe@kernel.org, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com, rostedt@goodmis.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        tglx@linutronix.de, viro@zeniv.linux.org.uk, x86@kernel.org
-Subject: Re: [PATCH] x86/asm: Remove unused COMPILE_OFFSETS macro from
- asm-offsets.c
-Message-ID: <20221128111112.dzavip4eqqgpyrai@box.shutemov.name>
-References: <20221128091506.gp4l6klznqhigjxv@box.shutemov.name>
- <20221128101117.3614401-1-mailhol.vincent@wanadoo.fr>
+        Mon, 28 Nov 2022 06:14:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAE52B9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:13:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669633999;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n885n92m/I4LkalAJyIaZBFKS7m7GqbH7HaZ/6MYOpI=;
+        b=i6JENAT8Gg8ho4Lp0ggAML+IyQscPHNSxrpOwX4COtkoaGql3vpJu1yWEV3Y3eZQRZ62xt
+        LHLpEEYn5Cmln3nkUwWN7dNaeyhrOsyk2MEM4WtlXSHXrl/K0fvcFk++Hctq63ee5BqEb+
+        9ifzyFNFMRNJ2pJQH0ot3Eu3FbilO7E=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-381-OX9EsGfTN3iE_7P2TXUbjA-1; Mon, 28 Nov 2022 06:13:17 -0500
+X-MC-Unique: OX9EsGfTN3iE_7P2TXUbjA-1
+Received: by mail-wr1-f69.google.com with SMTP id l9-20020adfa389000000b00241f907e102so1768457wrb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:13:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n885n92m/I4LkalAJyIaZBFKS7m7GqbH7HaZ/6MYOpI=;
+        b=xU6n/LSQv+DwxxhKITsQevLGkdI3vjRJrQM4RvjTYvoGsjhY1ppG0GKEyODyIzym/H
+         iqPQkm8FBcKQ1Rp6Llr7qe10DCB2jt3pc0efeD4qGM0VLEIP3KvUVVYpAlNigSwskPqu
+         T1bdGSZUwXbgg0Za7L/1aYHamFqeYwSacn6whV1aCfrGLeucGekH+oWMIBJViwTxalXy
+         /kT4fWgko5JzLdrF98ZBPtdW8TSWZ30Mb3SUfALv6kQKpaFmdfxehAL2tM6u7EWniY/Y
+         UmDD8iVTzQcveEMjS/opS2cjOogG0EjjgudZ7WNNrJ4z8fcFb1VaKT04gd06n9FKy7TO
+         bFgQ==
+X-Gm-Message-State: ANoB5pmRf8pd8gH5ZuUlltZclWJsyLOThx/3EKpp+58dqiHh4wWWyrem
+        Vh9jT9sFgPQ/oibQT11e3SCJF3wrcXMegJ3oL4Woqf05wovlNxM0bTAHhBQyAL4aTJqpO2dRZQV
+        kVLYrnTsHc42vVJrYew69A4op
+X-Received: by 2002:adf:dd07:0:b0:23a:2311:b72 with SMTP id a7-20020adfdd07000000b0023a23110b72mr23924290wrm.147.1669633996685;
+        Mon, 28 Nov 2022 03:13:16 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5J2/sBKnl+vG7mrgkt/RBZFkd1JITHauZT0SPEGgQXNwoqP2YELKNPLOM2ZlRYFq0xcWA2kA==
+X-Received: by 2002:adf:dd07:0:b0:23a:2311:b72 with SMTP id a7-20020adfdd07000000b0023a23110b72mr23924274wrm.147.1669633996453;
+        Mon, 28 Nov 2022 03:13:16 -0800 (PST)
+Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
+        by smtp.gmail.com with ESMTPSA id e5-20020a05600c4e4500b003b492753826sm14305668wmq.43.2022.11.28.03.13.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 03:13:15 -0800 (PST)
+Date:   Mon, 28 Nov 2022 12:13:10 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Dan Carpenter <error27@gmail.com>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@gmail.com,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        Parav Pandit <parav@nvidia.com>, Eli Cohen <elic@nvidia.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] vduse: Validate vq_num in vduse_validate_config()
+Message-ID: <20221128111310.6exrqi26grwspqcz@sgarzare-redhat>
+References: <20221128083627.1199512-1-harshit.m.mogalapalli@oracle.com>
+ <20221128105312.3ajursuudvmysiie@sgarzare-redhat>
+ <Y4SUOPX2WRFiuB7n@kadam>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20221128101117.3614401-1-mailhol.vincent@wanadoo.fr>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y4SUOPX2WRFiuB7n@kadam>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 07:11:17PM +0900, Vincent Mailhol wrote:
-> On Mon, 28 Nov 2022 12:15:06 +0300, Kirill A. Shutemov wrote:
-> > On Sun, Nov 27, 2022 at 03:23:35PM +0900, Vincent Mailhol wrote:
-> > > Following [1], the macro COMPILE_OFFSETS becomes unused:
-> > 
-> > Really? I see #ifdef COMPILE_OFFSETS in ftrace.h. Hm?
-> > 
-> > Have you tested your patch with CONFIG_FTRACE_SYSCALLS=y and
-> > CONFIG_IA32_EMULATION=y?
-> 
-> Even if I activate those two configurations, the compiler still
-> tells me it is unused:
-> 
->   $ grep -E "CONFIG_FTRACE_SYSCALLS|CONFIG_IA32_EMULATION" .config
->   CONFIG_IA32_EMULATION=y
->   CONFIG_FTRACE_SYSCALLS=y
-> 
->   $ make W=2 arch/x86/kernel/asm-offsets.o
->   <...>
->   arch/x86/kernel/asm-offsets.c:7: warning: macro "COMPILE_OFFSETS" is not used [-Wunused-macros]
->   <...>
+On Mon, Nov 28, 2022 at 01:58:00PM +0300, Dan Carpenter wrote:
+>On Mon, Nov 28, 2022 at 11:53:12AM +0100, Stefano Garzarella wrote:
+>> On Mon, Nov 28, 2022 at 12:36:26AM -0800, Harshit Mogalapalli wrote:
+>> > Add a limit to 'config->vq_num' which is user controlled data which
+>> > comes from an vduse_ioctl to prevent large memory allocations.
+>> >
+>> > This is found using static analysis with smatch.
+>> >
+>> > Suggested-by: Michael S. Tsirkin <mst@redhat.com>
+>> > Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+>> > ---
+>> > v1->v2: Change title of the commit and description, add a limit to
+>> > 	vq_num.
+>> >
+>> > Note: I think here 0xffff is the max size of vring =  no: of vqueues.
+>> > Only compile and boot tested.
+>> > ---
+>> > drivers/vdpa/vdpa_user/vduse_dev.c | 3 +++
+>> > 1 file changed, 3 insertions(+)
+>> >
+>> > diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+>> > index 35dceee3ed56..31017ebc4d7c 100644
+>> > --- a/drivers/vdpa/vdpa_user/vduse_dev.c
+>> > +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+>> > @@ -1440,6 +1440,9 @@ static bool vduse_validate_config(struct vduse_dev_config *config)
+>> > 	if (config->config_size > PAGE_SIZE)
+>> > 		return false;
+>> >
+>> > +	if (config->vq_num > 0xffff)
+>>
+>> What about using U16_MAX here?
+>
+>Where is the ->vq_num stored in a u16?  I looked for this but didn't
+>see it.
 
-If you are sure <asm/ftrace.h> is never included from asm-offsets.c,
-remove #ifndef COMPILE_OFFSETS too.
+I thought vq_num referred to the number of elements in the vq (like 
+.get_vq_num_max), since this patch wants to limit to 0xffff.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+But it actually refers to the number of virtqueue, so @Harshit why do we 
+limit it to 0xffff?
+
+Maybe we should explain it in the commit message or in a comment.
+
+Thanks,
+Stefano
+
