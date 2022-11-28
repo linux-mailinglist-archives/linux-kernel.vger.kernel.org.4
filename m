@@ -2,248 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D87D63A33B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3CD63A33E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiK1Ijg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 03:39:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
+        id S229841AbiK1IkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 03:40:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiK1Ij2 (ORCPT
+        with ESMTP id S229831AbiK1IkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 03:39:28 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4426E17A98
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:39:24 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NLJlm6l54zRpxD;
-        Mon, 28 Nov 2022 16:38:44 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 16:39:22 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 16:39:21 +0800
-Subject: Re: [PATCH v2 1/2] ARM: Fix some check warnings of tool sparse
+        Mon, 28 Nov 2022 03:40:02 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D1317052;
+        Mon, 28 Nov 2022 00:40:00 -0800 (PST)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A8E04240015;
+        Mon, 28 Nov 2022 08:39:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1669624799;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=s1BQQ9G+xK7IXAGECc06dmEoJcmIhpgzMPmtbolzDto=;
+        b=eNQbHacYgXkAjec52BZTg4E67IqRzzpnEGpGZ6N57ZgtjOGb4jKrcn1bFkqMroUAyouT13
+        mjG+z325B0qRVkQMkwyP2ZfpJwXj7vHVZF0tCB527pT6I8x3FRjsrFTqG9q1aIQ0Sb74KP
+        6hGTf5r368Cd8TJSKD1rfVDGHJJno+8f7NNiV/E8ojAWXzLX5UhkETw6AbvOona328IESj
+        bj9XWeJDI5BIO1qKBZyzNanr9jSOVXcKwg6XM84GS0Qg2M7ujiHupcp9Mucvz9yHcLd3Gu
+        ru0VVP0sLNdEdLFBsyXtKzwc3hx5QGHJwE4Vl/2YYbmqj/0DAkX7oLXXrDCmaQ==
+Date:   Mon, 28 Nov 2022 09:39:56 +0100
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
 To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC:     Ard Biesheuvel <ardb@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221010095346.1957-1-thunder.leizhen@huawei.com>
- <20221010095346.1957-2-thunder.leizhen@huawei.com>
- <CAMj1kXHOv23JY35fZ45k=Pzi=ROd6BOCxqPkfXLh2520qhoFzQ@mail.gmail.com>
- <1ab4c651-f0ab-1107-1784-ad255dabc33a@huawei.com>
- <CAMj1kXHn70rRaB=BgCrMoqQxRcq=HzZ0NWFYL+FqV_037PaY3w@mail.gmail.com>
- <c262c991-ad1e-81e6-4909-b8c4a1c036ff@huawei.com>
- <Y0ftvEl3JAkYqkQ1@shell.armlinux.org.uk>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <086ef553-f5e2-da13-e50c-c40415b4cff7@huawei.com>
-Date:   Mon, 28 Nov 2022 16:39:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+Cc:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next 0/3] net: pcs: altera-tse: simplify and
+ clean-up the driver
+Message-ID: <20221128093956.19067242@pc-8.home>
+In-Reply-To: <Y4Ofvemx5AnWJHrp@shell.armlinux.org.uk>
+References: <20221125131801.64234-1-maxime.chevallier@bootlin.com>
+        <Y4Ofvemx5AnWJHrp@shell.armlinux.org.uk>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <Y0ftvEl3JAkYqkQ1@shell.armlinux.org.uk>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Russell,
 
+On Sun, 27 Nov 2022 17:34:53 +0000
+"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
 
-On 2022/10/13 18:51, Russell King (Oracle) wrote:
-> On Tue, Oct 11, 2022 at 10:29:58AM +0800, Leizhen (ThunderTown) wrote:
->> On 2022/10/10 19:06, Ard Biesheuvel wrote:
->>> On Mon, 10 Oct 2022 at 12:58, Leizhen (ThunderTown)
->>> <thunder.leizhen@huawei.com> wrote:
->>>> On 2022/10/10 18:20, Ard Biesheuvel wrote:
->>>>> On Mon, 10 Oct 2022 at 11:56, Zhen Lei <thunder.leizhen@huawei.com> wrote:
->>>>>>
->>>>>> Fix the following warnings:
->>>>>>  warning: incorrect type in initializer (different address spaces)
->>>>>>     expected unsigned short [noderef] __user *register __p
->>>>>>     got unsigned short [usertype] *
->>>>>>  warning: cast removes address space '__user' of expression
->>>>>>
->>>>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->>>>>> ---
->>>>>>  arch/arm/kernel/traps.c | 10 +++++-----
->>>>>>  1 file changed, 5 insertions(+), 5 deletions(-)
->>>>>>
->>>>>> diff --git a/arch/arm/kernel/traps.c b/arch/arm/kernel/traps.c
->>>>>> index 20b2db6dcd1ced7..34aa80c09c508c1 100644
->>>>>> --- a/arch/arm/kernel/traps.c
->>>>>> +++ b/arch/arm/kernel/traps.c
->>>>>> @@ -188,9 +188,9 @@ static void dump_instr(const char *lvl, struct pt_regs *regs)
->>>>>>                         }
->>>>>>                 } else {
->>>>>>                         if (thumb)
->>>>>> -                               bad = get_user(val, &((u16 *)addr)[i]);
->>>>>> +                               bad = get_user(val, &((u16 __user *)addr)[i]);
->>>>>>                         else
->>>>>> -                               bad = get_user(val, &((u32 *)addr)[i]);
->>>>>> +                               bad = get_user(val, &((u32 __user *)addr)[i]);
->>>>>>                 }
->>>>>>
->>>>>>                 if (!bad)
->>>>>> @@ -455,15 +455,15 @@ asmlinkage void do_undefinstr(struct pt_regs *regs)
->>>>>>         if (processor_mode(regs) == SVC_MODE) {
->>>>>>  #ifdef CONFIG_THUMB2_KERNEL
->>>>>>                 if (thumb_mode(regs)) {
->>>>>> -                       instr = __mem_to_opcode_thumb16(((u16 *)pc)[0]);
->>>>>> +                       instr = __mem_to_opcode_thumb16(((__force u16 *)pc)[0]);
->>>>>
->>>>> Shouldn't this be __user as well? (and below)
->>>>
->>>> unsigned int instr;
->>>> void __user *pc;
->>>>
->>>> The __user can clear the warning, but a new warning will be generated.
->>>>
->>>> instr = __mem_to_opcode_thumb16(((u16 *)pc)[0]);
->>>>       ^new                           ^old
->>>>
->>>> arch/arm/kernel/traps.c:473:33: warning: dereference of noderef expression
->>>>
->>>
->>> This is because dereferencing a __user pointer is not permitted.
->>>
->>> So this code should be using get_kernel_nofault() here not a plain
->>> dereference of PC. So better to fix that properly instead of papering
->>> over it with a __force cast just to make sparse happy.
->>
->> How about:
->> @@ -451,9 +451,9 @@ int call_undef_hook(struct pt_regs *regs, unsigned int instr)
->>  asmlinkage void do_undefinstr(struct pt_regs *regs)
->>  {
->>         unsigned int instr;
->> -       void __user *pc;
->> +       void *pc;
->>
->> -       pc = (void __user *)instruction_pointer(regs);
->> +       pc = (void *)instruction_pointer(regs);
->>
->>         if (processor_mode(regs) == SVC_MODE) {
->>  #ifdef CONFIG_THUMB2_KERNEL
->> @@ -497,7 +497,7 @@ asmlinkage void do_undefinstr(struct pt_regs *regs)
->>         }
->>  #endif
->>         arm_notify_die("Oops - undefined instruction", regs,
->> -                      SIGILL, ILL_ILLOPC, pc, 0, 6);
->> +                      SIGILL, ILL_ILLOPC, (void __user *)pc, 0, 6);
->>  }
->>  NOKPROBE_SYMBOL(do_undefinstr)
->>
->>
->> The 'pc' may come from kernel or user. And I found that all the get_user()
->> calls have already done type casts to the pc, except arm_notify_die().
->> I think the above changes are reasonable.
+> On Fri, Nov 25, 2022 at 02:17:58PM +0100, Maxime Chevallier wrote:
+> > Hello everyone,
+> > 
+> > This small series does a bit of code cleanup in the altera TSE pcs
+> > driver, removong unused register definitions, handling 1000BaseX
+> > speed configuration correctly according to the datasheet, and
+> > making use of proper poll_timeout helpers.
+> > 
+> > No functional change is introduced.
+> > 
+> > Best regards,
+> > 
+> > Maxime
+> > 
+> > Maxime Chevallier (3):
+> >   net: pcs: altera-tse: use read_poll_timeout to wait for reset
+> >   net: pcs: altera-tse: don't set the speed for 1000BaseX
+> >   net: pcs: altera-tse: remove unnecessary register definitions  
 > 
-> If we're going to do that, lets do it properly - I think the above would
-> need some __force usage to stop sparse complaining, whereas I don't
-> think this will (untested):
-
-The following changes are a little too big, and the above changes have solved
-the problem completely. In order to focus on the main target, I removed this
-part of the modification in v4. I hope you'll take the time to review v4.
-
+> Hi Maxime,
 > 
-> diff --git a/arch/arm/kernel/traps.c b/arch/arm/kernel/traps.c
-> index 3f468ac98592..827cbc022900 100644
-> --- a/arch/arm/kernel/traps.c
-> +++ b/arch/arm/kernel/traps.c
-> @@ -449,36 +449,45 @@ int call_undef_hook(struct pt_regs *regs, unsigned int instr)
->  asmlinkage void do_undefinstr(struct pt_regs *regs)
->  {
->  	unsigned int instr;
-> -	void __user *pc;
-> +	unsigned long pc;
-
-The following changes need to be added:
-@@ -487,7 +497,7 @@ asmlinkage void do_undefinstr(struct pt_regs *regs)
- die_sig:
- #ifdef CONFIG_DEBUG_USER
-        if (user_debug & UDBG_UNDEFINED) {
--               pr_info("%s (%d): undefined instruction: pc=%px\n",
-+               pr_info("%s (%d): undefined instruction: pc=%lx\n",
-                        current->comm, task_pid_nr(current), pc);
-                __show_regs(regs);
-                dump_instr(KERN_INFO, regs);
->  
-> -	pc = (void __user *)instruction_pointer(regs);
-> +	pc = instruction_pointer(regs);
->  
->  	if (processor_mode(regs) == SVC_MODE) {
-> -#ifdef CONFIG_THUMB2_KERNEL
-> -		if (thumb_mode(regs)) {
-> -			instr = __mem_to_opcode_thumb16(((u16 *)pc)[0]);
-> +		if (IS_ENABLED(CONFIG_THUMB2_KERNEL) && thumb_mode(regs)) {
-> +			u16 *tpc = (u16 *)pc;
-> +
-> +			instr = __mem_to_opcode_thumb16(tpc[0]);
->  			if (is_wide_instruction(instr)) {
->  				u16 inst2;
-> -				inst2 = __mem_to_opcode_thumb16(((u16 *)pc)[1]);
-> +
-> +				inst2 = __mem_to_opcode_thumb16(tpc[1]);
->  				instr = __opcode_thumb32_compose(instr, inst2);
->  			}
-> -		} else
-> -#endif
-> -			instr = __mem_to_opcode_arm(*(u32 *) pc);
-> +		} else {
-> +			u32 *apc = (u32 *)pc;
-> +
-> +			instr = __mem_to_opcode_arm(*apc);
-> +		}
->  	} else if (thumb_mode(regs)) {
-> -		if (get_user(instr, (u16 __user *)pc))
-> +		u16 __user *tpc = (u16 __user *)pc;
-> +
-> +		if (get_user(instr, tpc))
->  			goto die_sig;
->  		instr = __mem_to_opcode_thumb16(instr);
->  		if (is_wide_instruction(instr)) {
->  			unsigned int instr2;
-> -			if (get_user(instr2, (u16 __user *)pc+1))
-> +			if (get_user(instr2, tpc + 1))
->  				goto die_sig;
->  			instr2 = __mem_to_opcode_thumb16(instr2);
->  			instr = __opcode_thumb32_compose(instr, instr2);
->  		}
->  	} else {
-> -		if (get_user(instr, (u32 __user *)pc))
-> +		u32 __user *apc = (u32 __user *)pc;
-> +
-> +		if (get_user(instr, apc))
->  			goto die_sig;
-> +
->  		instr = __mem_to_opcode_arm(instr);
->  	}
->  
-> @@ -495,7 +504,7 @@ asmlinkage void do_undefinstr(struct pt_regs *regs)
->  	}
->  #endif
->  	arm_notify_die("Oops - undefined instruction", regs,
-> -		       SIGILL, ILL_ILLOPC, pc, 0, 6);
-> +		       SIGILL, ILL_ILLOPC, (void __user *)pc, 0, 6);
->  }
->  NOKPROBE_SYMBOL(do_undefinstr)
->  
+> Please can you check the link timer settings:
 > 
+>         /* Set link timer to 1.6ms, as per the MegaCore Function User
+> Guide */ tse_pcs_write(tse_pcs, SGMII_PCS_LINK_TIMER_0, 0x0D40);
+>         tse_pcs_write(tse_pcs, SGMII_PCS_LINK_TIMER_1, 0x03);
+> 
+> This is true for Cisco SGMII mode - which is specified to use a 1.6ms
+> link timer, but 1000baseX is specified by 802.3 to use a 10ms link
+> timer interval, so this is technically incorrect for 1000base-X. So,
+> if the MegaCore Function User Guide specifies 1.6ms for everything, it
+> would appear to contradict 802.3.
+> 
+> From what I gather from the above, the link timer uses a value of
+> 200000 for 1.6ms, which means it is using a 8ns clock period or
+> 125MHz.
+> 
+> If you wish to correct the link timer, you can use this:
+> 
+> 	int link_timer;
+> 
+> 	link_timer = phylink_get_link_timer_ns(interface) / 8;
+> 	if (link_timer > 0) {
+> 		tse_pcs_write(tse_pcs, SGMII_PCS_LINK_TIMER_0,
+> link_timer); tse_pcs_write(tse_pcs, SGMII_PCS_LINK_TIMER_1,
+> link_timer >> 16); }
+> 
+> so that it gets set correctly depending on 'interface'.
+> phylink_get_link_timer_ns() is an inline static function, so you
+> should end up with the above fairly optimised, not that it really
+> matters. Also worth documenting that the "8" there is 125MHz in
+> nanoseconds - maybe in a similar way to pcs-lynx does.
 
--- 
-Regards,
-  Zhen Lei
+Ouh that's perfect, thanks !
+
+> It does look like this Altera TSE PCS is very similar to pcs-lynx,
+> maybe there's a possibility of refactoring both drivers to share
+> code?
+
+Indeed, I've some patches I'm testing to port pcs-lynx to regmap then
+do the merge. The one thing that would differ is the reset
+handling in the TSE driver, since we need to perform it at every
+configuration change basically. But that's not worth having duplicate
+drivers just for that, I agree.
+
+I'll post that merge when I'll have the chance to give it a more
+thourough test.
+
+Thanks,
+
+Maxime
+
