@@ -2,135 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1BA63B123
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3959A63B131
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:24:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233994AbiK1SVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 13:21:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S234029AbiK1SYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 13:24:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234171AbiK1SVL (ORCPT
+        with ESMTP id S233407AbiK1SXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 13:21:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91D424BF5;
-        Mon, 28 Nov 2022 10:08:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8DFE2B80D57;
-        Mon, 28 Nov 2022 18:08:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE9F9C433C1;
-        Mon, 28 Nov 2022 18:08:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669658890;
-        bh=eyWmZfcSt1FxFqiqqUiJo8PogQtmS8k2hdJ7SpBKAIQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N/PEUa13PmOa/Q19PLkNRiYd/FiABQgqFaeNTfKS+m7wwsYugfQlOQ1Sh8eyA0xjP
-         LL02AiR3iZTF4uSMN1yUizvGRzqO2YwQ3nsLAgLXDIYZygYCIk1OV1FfdPFQD/t1Vq
-         YGOUPdDeNZ43bkGu9+qysMV1twiBGS1qG2KBnrnnS6flBQvwirQsgg9Lpxd9Ix7Zzs
-         imGbmCsEOG/orPEA/RhzV0iXGVBkwq36PdgKcTEx3ogjQTfd65A81+FOhiKySedTvG
-         BLjo3F+T0a3Vna6Xecc/hFfEFe17ZoF1z44c4x5WdZN+DnACNG8MZqkTmXVEa1V7U5
-         iPfoVcbiYrw9g==
-Date:   Mon, 28 Nov 2022 18:08:05 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     heiko@sntech.de, linux-riscv@lists.infradead.org,
-        Conor Dooley <conor.dooley@microchip.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, ajones@ventanamicro.com, guoren@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: riscv: fix single letter canonical order
-Message-ID: <Y4T5BZTRZWqXpV2A@spud>
-References: <7034611.lOV4Wx5bFT@diego>
- <mhng-fee0e650-fb2d-4e36-8f75-ef90d5028f41@palmer-ri-x1c9a>
+        Mon, 28 Nov 2022 13:23:39 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0062F67E;
+        Mon, 28 Nov 2022 10:12:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669659171; x=1701195171;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xaWF9C0/0D+j8i7P82sI3ZUSgtkWKl8JwJRUvbYeeK8=;
+  b=VN4efkW/4/rPV8edTo/WptaEG7cVmMPzBzpn1p62mEye8J2DA3BSBHR+
+   715LdMFDfPPtfpfMhsQoKnTLHV+eojFRpwWBPVrd64sBuT62V37DFw+TH
+   SjAYhEAo0XA1AXoSZ9fvk/fT1uORC33kyelUc6QEQ23MVWFAHcxfGPADf
+   RedXCbfEUnmegxRipudZxkiqNh6ES/uAi8HlGGWcCCxsDhCUZXYmEt7hF
+   Hf1XblvbzvOE5kMBXovP8Ey7KIczNPOj1PeYkFOOOSPdxwiVR7QH/WOUD
+   vjpjiBi6DuXO38vgFuC16edPOA9c+70a3dey3tKLbqkJWJ/zgp2qiMdBW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="316748383"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="316748383"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 10:11:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="643486605"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="643486605"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 28 Nov 2022 10:11:37 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ozibQ-001Kan-0S;
+        Mon, 28 Nov 2022 20:11:36 +0200
+Date:   Mon, 28 Nov 2022 20:11:35 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Brian Masney <bmasney@redhat.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Subject: Re: [PATCH v1 1/1] gpiolib: Unify access to the device properties
+Message-ID: <Y4T513bRjE0dptt+@smile.fi.intel.com>
+References: <20221116141728.72491-1-andriy.shevchenko@linux.intel.com>
+ <Y4EJv2gCR8nj3hHj@smile.fi.intel.com>
+ <CAMRc=MdBDsN36CEvmFB_1pH9o5kzMMuSfGQmWKgDA6iaOqURYw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <mhng-fee0e650-fb2d-4e36-8f75-ef90d5028f41@palmer-ri-x1c9a>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMRc=MdBDsN36CEvmFB_1pH9o5kzMMuSfGQmWKgDA6iaOqURYw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 09:41:03AM -0800, Palmer Dabbelt wrote:
-> On Thu, 24 Nov 2022 05:42:20 PST (-0800), heiko@sntech.de wrote:
-> > Am Donnerstag, 24. November 2022, 14:04:41 CET schrieb Conor Dooley:
-> > > I used the wikipedia table for ordering extensions when updating the
-> > > pattern here in foo.
-> > 
-> > 	    ^ foo? :-)
-> > 
-> > > Unfortunately that table did not match canonical order, as defined by
-> > > the RISC-V ISA Manual, which defines extension ordering in (what is
-> > > currently) Table 41, "Standard ISA extension names". Fix things up by
-> > > re-sorting v (vector) and adding p (packed-simd) & j (dynamic
-> > > languages). The e (reduced integer) and g (general) extensions are still
-> > > intentionally left out.
-> > > 
-> > > Link: https://github.com/riscv/riscv-isa-manual/releases/tag/riscv-unpriv-pdf-from-asciidoc-15112022 # Chapter 29.5
-> > > Fixes: 299824e68bd0 ("dt-bindings: riscv: add new riscv,isa strings for emulators")
-> > > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > 
-> > So I have compared the new pattern to the isa manual,
-> > and it looks like the order checks out, so
+On Mon, Nov 28, 2022 at 07:01:42PM +0100, Bartosz Golaszewski wrote:
+> On Fri, Nov 25, 2022 at 7:30 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Wed, Nov 16, 2022 at 04:17:28PM +0200, Andy Shevchenko wrote:
+
+...
+
+> > Bart, can this be applied?
 > 
-> Which ISA manual?
+> Sure, now applied. Got carried away with this use-after-free from
+> userspace problem.
 
-For me, isa manual is the above github repo.
+Thank you!
 
-> There have been many mutually incompatible ISA string
-> encoding rules, at least one of them was a change to the extension ordering.
-> It's not entirely clear what the right answer is here, as we can't really
-> parse ISA strings without also knowing the version of the ISA manual we're
-> meant to parse them against.  Maybe we just accept everything?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-I don't think accepting everything is the right thing to do. A minimal
-amount of validation is still needed here, but I think we can deprecate
-the DT property entirely & make it optional if a new-and-improved way of
-encoding the in DT is used.
 
-> IMO it's time to just stop using the ISA string.  It's not a stable
-> interface, trying to treat it as such just leads to headaches.  We should
-> just come up with some DT-specific way of encoding whatever HW features are
-> in question.  Sure it'll be a bit of work to write that all down in the DT
-> bindings, but it's going to be way less work than trying to keep around all
-> this ISA string parsing code.
-
-I'm a glutton for punishment, I'll try and come up with some sort of
-other way to encode this information in DT that requires less parsing
-and validation. As I said on IRC, something that more resembles:
-if (of_property_wahtever("riscv,isa-foo")) { do_enable_foo() }
-
-> I know I've said the opposite before, but there's just been way too many
-> breakages here to assume they're going to stop.
-
-:upside_down_face:
-
-Either way, I think these two patches are worth taking in the mean time.
-
-> > Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> > 
-> > > ---
-> > >  Documentation/devicetree/bindings/riscv/cpus.yaml | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > > index e80c967a4fa4..b7462ea2dbe4 100644
-> > > --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > > +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > > @@ -80,7 +80,7 @@ properties:
-> > >        insensitive, letters in the riscv,isa string must be all
-> > >        lowercase to simplify parsing.
-> > >      $ref: "/schemas/types.yaml#/definitions/string"
-> > > -    pattern: ^rv(?:64|32)imaf?d?q?c?b?v?k?h?(?:z(?:[a-z])+)?(?:_[hsxz](?:[a-z])+)*$
-> > > +    pattern: ^rv(?:64|32)imaf?d?q?c?b?k?j?p?v?h?(?:z(?:[a-z])+)?(?:_[hsxz](?:[a-z])+)*$
-> > > 
-> > >    # RISC-V requires 'timebase-frequency' in /cpus, so disallow it here
-> > >    timebase-frequency: false
-> > > 
