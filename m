@@ -2,136 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B672663AA95
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:12:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5A763AA98
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbiK1OMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 09:12:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
+        id S232399AbiK1ONH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 09:13:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232344AbiK1OMO (ORCPT
+        with ESMTP id S232409AbiK1ONB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:12:14 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF7E20BE8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:12:13 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so14111307pjc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:12:13 -0800 (PST)
+        Mon, 28 Nov 2022 09:13:01 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B94B20BC3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:13:00 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id l8so13246876ljh.13
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:13:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DKw90zUbpAV+b/3rfP6iieLhvlviIys04BFE2GHKsio=;
-        b=ihn7p87Ee2lLG81x5tyWrVDKub8QRgPcGbWOFaqKg/2+9VvI6IFNqpNejJ5Gc8Z+5Q
-         RssyprNwjCyDnT1/5idaIO/w0Bp050LXwgtvmwY6rzdpO87VtejVe+O4j1fQRFHpIegh
-         IFLgDR/0nDvqM4lG2pbZvkGvi1D0uPgf72jZIicny0HjMRwfUxS9iEH3zD7tPiIgL/e3
-         8hbFDAF6h2CCkaTMOhCYUsZ7bd9mY9SoH46159euoQVqZByiKwvnds8+pAqZJU5JhABi
-         GYNfc6ytFqOXgpGA7eDGj9vQPbs+2VU8dNZpO6gyChRr5LDgfwRKJhIupepCOuEya2oq
-         GSrA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xTh1nEEe1sZRF8M0HBvSAqoj/WogzsicuLZxTaiVtEk=;
+        b=cnGclIVTIKCjEAuQSzJYnC7wk8mdlCiLluFSrAmgb0ybDl4nhlr9Gd6tNHSrPiflp3
+         lnbpE+R1iEXEC+yLedMHs0Z6SkiDoVBj+nMrZ90QuQGiLmHBTp7HVlqM8AIxddxP2KAT
+         sbIzJFvNJxy+LP0qB7aZE1xNlmQIvtlruGRIyYNP6OVSeSI7GaG/D2FhVUKQW01qWWIs
+         SRxx8WGbcISDj7VNirmDOQizwfl9+7Z5AUpkDLchFrNSVAgDF2FAG2+BcH+WSMh3CXH3
+         /VX/u3om6/wPKoK0W4U7VSXZf62Pf1dn9EdnPRQBhwK2gULy06Ya1uVZNQAus7l+uhHz
+         f+sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DKw90zUbpAV+b/3rfP6iieLhvlviIys04BFE2GHKsio=;
-        b=qICptPqdRUM7AvcnHtqb+TphLLNYnn2N9YpvLgKYRsgWpwpqK2ncNLOk4Oh9uev8TV
-         OKEGqiO2yDKY1YBnJMqZ0DdZ2k6sE6YV6+BWCZKj7RjX0NoN00fEaEUgY/krrnHFu5L1
-         DuVDLchVBIgZSQ+xIuscjK/k5Y0RKHy67QnXZazNemHCEjbz77qu3pRfW3H74dr8RUhZ
-         uH2Qa1aBe+sBwoakx+ApdZeOv/vRNCdRjJHwrcyUrh+fZT3DYaPR/KIQmjW9GmPRijbZ
-         OTHwL8ZEkjpmpbcCaDTG2O1I+DP5CWOpWiXst9M4wpS0LGthP7/RjRruGb+Y8+qsyFlF
-         cnnQ==
-X-Gm-Message-State: ANoB5pmHgUQPGiMOz0S04KoeSijE2udNGB9ByKbSQCHSjI5jQBJ0lEnF
-        y09/aZKIr4//f4Xeu8A++/SVxSTJzCkWSxk5Psk=
-X-Google-Smtp-Source: AA0mqf5wMe8pRArVdzem5WEsZj7bzHjphjpvEdaNt6jZUlgWBfLVI4j9yuPVJaQe3PX0XZHmXMFx/CiNC1N/t3Pzboc=
-X-Received: by 2002:a17:90a:dc06:b0:218:9196:1cd1 with SMTP id
- i6-20020a17090adc0600b0021891961cd1mr47707800pjv.230.1669644732976; Mon, 28
- Nov 2022 06:12:12 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xTh1nEEe1sZRF8M0HBvSAqoj/WogzsicuLZxTaiVtEk=;
+        b=yhhHnE2oPJ8k206Y8Oga9b/prwoT1vPL3HHvcsTZYSLs+q66y0ND4DB2/sURGxwRNq
+         epC1xBiISkZ/2Xh+a+UIUfm/L/fEBOEJY2sRABW5PRP4Msc2R9Cy4GWQT4ki1WvZihAH
+         AiqBXRBFsC5i98sxygQMhB/woSJD93uOQVGRBl8ifPWQVC57hgburu5WBE+kBrQVMTBo
+         uRe+5OfnU8oHvViJJvMeuY29VTXZCD1cm/30wB49blfhXlQyTrOMoY9GHzgnJyGwa2rV
+         PB68iIvTitx9VD87TB3T4N83oQCTnG7MfhvBBgHInlicLpdce/GdsnEQixTMtY+WhoXa
+         /eiA==
+X-Gm-Message-State: ANoB5pnoyXQsUgnJYW7lF01Zbvn1AYIKMsKwaOiCucBbfDxsc11CuT2m
+        wZnSfEjcw/GVLU+UrcbfLOmMwQ==
+X-Google-Smtp-Source: AA0mqf4RTqCSdVc2fh4P/K+7P/sOstE+KCYSuuoGYLYuBYboJ4/i1E5DomK6dGz+ooHuSLU2nOY2XQ==
+X-Received: by 2002:a05:651c:12c7:b0:26f:c03d:f99b with SMTP id 7-20020a05651c12c700b0026fc03df99bmr17132650lje.190.1669644776127;
+        Mon, 28 Nov 2022 06:12:56 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id m1-20020a056512114100b004972b0bb426sm1759227lfg.257.2022.11.28.06.12.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 06:12:55 -0800 (PST)
+Message-ID: <ee52f463-f54c-70cb-5a31-5748f26f40bc@linaro.org>
+Date:   Mon, 28 Nov 2022 15:12:54 +0100
 MIME-Version: 1.0
-References: <20220923100149.2647325-1-suagrfillet@gmail.com>
- <CAAYs2=hx49ahtY3pe1z241Vd1mRNZjc-oigubmKy0aGqg6T8ag@mail.gmail.com> <CAJF2gTRfWXZEbAjWQ0vPA8HWihkibPQ2Mb9hvYgQg+DdEFrZTA@mail.gmail.com>
-In-Reply-To: <CAJF2gTRfWXZEbAjWQ0vPA8HWihkibPQ2Mb9hvYgQg+DdEFrZTA@mail.gmail.com>
-From:   Song Shuai <suagrfillet@gmail.com>
-Date:   Mon, 28 Nov 2022 22:12:02 +0800
-Message-ID: <CAAYs2=j3Eak9vU6xbAw0zPuoh00rh8v5C2U3fePkokZFibWs2g@mail.gmail.com>
-Subject: Re: [PATCH RESEND] riscv : select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
-To:     Guo Ren <guoren@kernel.org>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, guoren@linux.alibaba.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 1/2] i2c: loongson: add bus driver for the loongson i2c
+ controller
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        William Zhang <william.zhang@broadcom.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221128130025.23184-1-zhuyinbo@loongson.cn>
+ <Y4S/dh9lztpOHxkD@smile.fi.intel.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y4S/dh9lztpOHxkD@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Guo Ren <guoren@kernel.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=8828=E6=97=A5=E5=
-=91=A8=E4=B8=80 21:47=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Tue, Nov 22, 2022 at 6:11 PM Song Shuai <suagrfillet@gmail.com> wrote:
-> >
-> > Song Shuai <suagrfillet@gmail.com> =E4=BA=8E2022=E5=B9=B49=E6=9C=8823=
-=E6=97=A5=E5=91=A8=E4=BA=94 10:03=E5=86=99=E9=81=93=EF=BC=9A
-> > >
-> > > riscv now uses -fpatchable-function-entry with dynamic ftrace after
-> > > the `afc76b8b8` commit, which means recordmcount shouldn't be called
-> The ref commit format needs to be corrected. Others:
-> Tested-by: Guo Ren <guoren@kernel.org>
->
-Thanks for your test.
-I'll correct this ref in the next version.
-> > > to create the __mcount_loc section before the vmlinux linking.
-> > >
-> > > We should select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY to tell
-> > > Makefile not to run recordmcount.
-> > >
-> > Hi,Guo:
-> >
-> > Can this patch squeeze into your v3 series ?
-> They don't have a dependency, and it's unnecessary. A single patch is
-> easy for the maintainer to pick up.
->
-Got it.
-> >
-> > Thanks,
-> > Song
-> > > Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> > > ---
-> > >  arch/riscv/Kconfig | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > index c22f58155948..25db8cea876a 100644
-> > > --- a/arch/riscv/Kconfig
-> > > +++ b/arch/riscv/Kconfig
-> > > @@ -246,6 +246,7 @@ config ARCH_RV64I
-> > >         select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && $(cc-opti=
-on,-fpatchable-function-entry=3D8)
-> > >         select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
-> > >         select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
-> > > +       select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY if DYNAMIC_=
-FTRACE
-> > >         select HAVE_FUNCTION_GRAPH_TRACER
-> > >         select HAVE_FUNCTION_TRACER if !XIP_KERNEL
-> > >         select SWIOTLB if MMU
-> > > --
-> > > 2.20.1
-> > >
->
->
->
-> --
-> Best Regards
->  Guo Ren
+On 28/11/2022 15:02, Andy Shevchenko wrote:
+> On Mon, Nov 28, 2022 at 09:00:24PM +0800, Yinbo Zhu wrote:
+>> This bus driver supports the Loongson i2c hardware controller in the
+>> Loongson platforms and supports to use DTS and ACPI framework to
+>> register i2c adapter device resources.
+>>
+>> The Loongson i2c controller supports operating frequencty is 50MHZ
+>> and supports the maximum transmission rate is 400kbps.
+> 
+> ...
 
 
+> Why not using the usual pattern, i.e.
+> 
+> 	if (!(...))
+> 		return IRQ_NONE;
+> 
+> ?
+> 
+> It seems you ignored some of my comments...
+> I stopped here, please check what was given against v1 and try again.
 
---=20
-Thanks,
-Song
+I propose to wait with wasting more time on reviews because you might do
+the same work twice:
+
+https://lore.kernel.org/all/822356908305580d601e5b3e424371ed7f220b85.1669359515.git.zhoubinbin@loongson.cn/
+
+
+Best regards,
+Krzysztof
+
