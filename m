@@ -2,146 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0298563B614
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 00:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB83C63B5F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 00:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234774AbiK1Xm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 18:42:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
+        id S234717AbiK1XfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 18:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiK1XmY (ORCPT
+        with ESMTP id S234721AbiK1Xe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 18:42:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E6225C;
-        Mon, 28 Nov 2022 15:42:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 28 Nov 2022 18:34:57 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DD2326EE
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 15:34:55 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5AD79B80FE9;
-        Mon, 28 Nov 2022 23:42:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07353C433D7;
-        Mon, 28 Nov 2022 23:42:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669678940;
-        bh=yKpU+kv6QFrmTXdVvxt3iUQATsh8YTBkD/9P1+GJlMU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=V82mG/53V9AIcSMGKP7eGAs8NHsK9xRejCZjV0PK9WG1IF/Oyvg3TuQ3p+ykjEjzm
-         plP90VkSzNBsAdM32GfTtOVp1+JejfMjSVMpnwol7Qv1F/34O4RsT2dHcYEkYVYMSS
-         oml1PPbNYJ/+LuDHt0CjYXtZbhxe42rLEt3Ay8tQChiNS9/DJo/+1ctBgGq+BfgnF4
-         uysjQHxtR6WPcphVXYSXwkSEiNxCNNTRkuS/qjSmOj3d/LnFUJ7RJu+Aeq+SYCwBiT
-         BB+m8wLVyY7Mo7oetBpqN9SKHnXVnRsEUcUQtmK9d44HKLCq8wN+CrRHj6ypSoQqL4
-         DP+RLn38DRqPQ==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] coredump: fix compile warning when ELF_CORE=n while COREDUMP=y
-Date:   Tue, 29 Nov 2022 07:32:29 +0800
-Message-Id: <20221128233229.3880-1-jszhang@kernel.org>
-X-Mailer: git-send-email 2.37.2
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 59F8D1EC04AD;
+        Tue, 29 Nov 2022 00:34:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1669678494;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=12Jz0asduvf1c6TL+3azPftaorUR/sBfylrXZrFp+zY=;
+        b=MkrUrgs6bTJSLgq9LoicH5MyKYfcYBiZtS7m4+h0sNDQ1/yP28lsjyxXnhpvQmfGSKN5yh
+        9kUDGzpHDZPfFGTuMOVvMHtMll457wM4Fl7nTiWHqAk7WBODok8xwEesRusAlyQ8HK5U1E
+        XMTvIRlabnWvg8xFfmsKlrlnODDfq+w=
+Date:   Tue, 29 Nov 2022 00:34:50 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc:     Breno Leitao <leitao@debian.org>, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
+        jpoimboe@kernel.org, peterz@infradead.org, x86@kernel.org,
+        cascardo@canonical.com, leit@meta.com, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] x86/bugs: Explicitly clear speculative MSR bits
+Message-ID: <Y4VFmvTOkRgVmxtc@zn.tnic>
+References: <20221124104650.533427-1-leitao@debian.org>
+ <Y4QD8o8kWb1V4osq@zn.tnic>
+ <20221128220358.n5vk6youcdl2er35@desk>
+ <Y4U40wKoSF/ze1Ud@zn.tnic>
+ <20221128230219.urqiol42rikdhy2u@desk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221128230219.urqiol42rikdhy2u@desk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fix below build warning when ELF_CORE=n while COREDUMP=y:
+On Mon, Nov 28, 2022 at 03:02:19PM -0800, Pawan Gupta wrote:
+> Yes thats a cleaner approach, except that the late microcode load will
+> ruin the MSR:
+> 
+> microcode_reload_late()
+>   microcode_check()
+>     get_cpu_cap()
+>       init_speculation_control()
 
-fs/coredump.c:834:12: warning: ‘dump_emit_page’ defined but not used [-Wunused-function]
-  834 | static int dump_emit_page(struct coredump_params *cprm, struct
-      page *page)
-      |            ^~~~~~~~~~~~~~
+Microcode late loading ruins a lot of crap already anyway.
 
-Fixes the warning by moving the definition of dump_emit_page() in the
-same #ifdef as of dump_user_range(), since dump_user_range() is the only
-caller of dump_emit_page().
+Then I guess we'll have to look for a better place for this on the init
+path - I don't want any more hackery in the hw vuln nightmare code.
 
-Fixes: 06bbaa6dc53c ("[coredump] don't use __kernel_write() on kmap_local_page()")
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
----
- fs/coredump.c | 48 ++++++++++++++++++++++++------------------------
- 1 file changed, 24 insertions(+), 24 deletions(-)
-
-Since v1:
- - add Fixes tag
- - collect Reviewed-by
- - fix the warning by moving the definition of dump_emit_page() in
-   the same #ifdef as of dump_user_range().
-
-diff --git a/fs/coredump.c b/fs/coredump.c
-index 7bad7785e8e6..1fc8ecc0e8f6 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -831,6 +831,30 @@ static int __dump_skip(struct coredump_params *cprm, size_t nr)
- 	}
- }
- 
-+int dump_emit(struct coredump_params *cprm, const void *addr, int nr)
-+{
-+	if (cprm->to_skip) {
-+		if (!__dump_skip(cprm, cprm->to_skip))
-+			return 0;
-+		cprm->to_skip = 0;
-+	}
-+	return __dump_emit(cprm, addr, nr);
-+}
-+EXPORT_SYMBOL(dump_emit);
-+
-+void dump_skip_to(struct coredump_params *cprm, unsigned long pos)
-+{
-+	cprm->to_skip = pos - cprm->pos;
-+}
-+EXPORT_SYMBOL(dump_skip_to);
-+
-+void dump_skip(struct coredump_params *cprm, size_t nr)
-+{
-+	cprm->to_skip += nr;
-+}
-+EXPORT_SYMBOL(dump_skip);
-+
-+#ifdef CONFIG_ELF_CORE
- static int dump_emit_page(struct coredump_params *cprm, struct page *page)
- {
- 	struct bio_vec bvec = {
-@@ -864,30 +888,6 @@ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
- 	return 1;
- }
- 
--int dump_emit(struct coredump_params *cprm, const void *addr, int nr)
--{
--	if (cprm->to_skip) {
--		if (!__dump_skip(cprm, cprm->to_skip))
--			return 0;
--		cprm->to_skip = 0;
--	}
--	return __dump_emit(cprm, addr, nr);
--}
--EXPORT_SYMBOL(dump_emit);
--
--void dump_skip_to(struct coredump_params *cprm, unsigned long pos)
--{
--	cprm->to_skip = pos - cprm->pos;
--}
--EXPORT_SYMBOL(dump_skip_to);
--
--void dump_skip(struct coredump_params *cprm, size_t nr)
--{
--	cprm->to_skip += nr;
--}
--EXPORT_SYMBOL(dump_skip);
--
--#ifdef CONFIG_ELF_CORE
- int dump_user_range(struct coredump_params *cprm, unsigned long start,
- 		    unsigned long len)
- {
 -- 
-2.37.2
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
