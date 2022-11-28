@@ -2,149 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4D263A44C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4610163A465
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiK1JK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 04:10:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
+        id S230206AbiK1JMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 04:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiK1JKX (ORCPT
+        with ESMTP id S229787AbiK1JMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 04:10:23 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1314311
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:10:21 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-11-0rZ4q5Y5NLalLtMxmkqIDA-1; Mon, 28 Nov 2022 09:10:18 +0000
-X-MC-Unique: 0rZ4q5Y5NLalLtMxmkqIDA-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 28 Nov
- 2022 09:10:16 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Mon, 28 Nov 2022 09:10:16 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Joe Perches" <joe@perches.com>
-Subject: RE: [PATCH 1/1] minmax.h: Slightly relax the type checking done by
- min() and max().
-Thread-Topic: [PATCH 1/1] minmax.h: Slightly relax the type checking done by
- min() and max().
-Thread-Index: AdkA3jB+9p3HVKOjROWboToCz6X2bgBwb9KAAAEizAAAAZNzAAAAy3LwAAlIsIAADIi9YA==
-Date:   Mon, 28 Nov 2022 09:10:16 +0000
-Message-ID: <a74be3ec15294206a13cd5b3a4b35858@AcuMS.aculab.com>
-References: <58cac72242e54380971cfa842f824470@AcuMS.aculab.com>
- <CAHk-=wgZCBedi_xrysY2EAsN8tQjb3K4-qYtF-FaEE+GFuuE4Q@mail.gmail.com>
- <433b8b44fe6e43b2b576c311bb55cc8a@AcuMS.aculab.com>
- <CAHk-=wjgqs7Uev9=X8qP0mR0C+KoRze6d+1SoMib5x6o3yZSQg@mail.gmail.com>
- <b96a46eb24c2482bb6081418bd2ace02@AcuMS.aculab.com>
- <CAHk-=wgxzGTsqcNv7B5Cr_BshyRkhrvsPMratxhNb0LA1EnwdA@mail.gmail.com>
-In-Reply-To: <CAHk-=wgxzGTsqcNv7B5Cr_BshyRkhrvsPMratxhNb0LA1EnwdA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 28 Nov 2022 04:12:22 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B661515A19;
+        Mon, 28 Nov 2022 01:12:21 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669626740;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=egAkd5jcnw3WXfXnsitc16aTXvDigRVo0FyASpJ7HzA=;
+        b=fEZ52b6P2xXsYJ3imbGOViX9gJKxW0ix7VlMSP7XF0qWegibSTlzUTiEb3cwq6AHrI7n2Y
+        dWhWkhoO/kX0wruHyNMkW5PizFHxUgZd0VGBK1aK153YV7BmYjo/knRn+uO3NAeDDPMyf6
+        nRLuzBaIXF14pk/m3Ra8rHUzlvPGdjekw7v3QSyafHQ1cTMBKVoRRBcHWLSU+K3IZwMxJk
+        csJi0uUpd4LNq7J5XgqQ8oA+DXSZT7M93Spgwyw5cF1QCY/rxNB+ZCWWSD7qD2Rn8ip/Kn
+        u4u2JvCHS5LXVvuelc9Prh8WOA2HF0R+0RycSSUYtKrQC85xBaqVA2W8ErxSMQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669626740;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=egAkd5jcnw3WXfXnsitc16aTXvDigRVo0FyASpJ7HzA=;
+        b=lGr49rOP7i+ovveWAhw2+02bhSFEHYgBkYWFAbYnd4I7CciOjIVzRxpzbj44G5+pUVzxnr
+        V5MNZXtUnRXPsWDg==
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
+        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v7 1/3] random: add vgetrandom_alloc() syscall
+In-Reply-To: <Y4PF+pBlNZGfZ0sr@zx2c4.com>
+References: <20221124165536.1631325-1-Jason@zx2c4.com>
+ <20221124165536.1631325-2-Jason@zx2c4.com> <87bkouyd90.ffs@tglx>
+ <Y4PF+pBlNZGfZ0sr@zx2c4.com>
+Date:   Mon, 28 Nov 2022 10:12:19 +0100
+Message-ID: <87pmd7wih8.ffs@tglx>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjggTm92ZW1iZXIgMjAyMiAwMjo0Mw0KLi4N
-Cj4gU28geW91ciBwYXRjaCB0aGF0IG1ha2VzICJvbmUgc2lkZSBpcyBzaWduZWQsIG90aGVyIHNp
-ZGUgaXMgdW5zaWduZWQsDQo+IHNvIG5vcm1hbGx5IHdlJ2QgZG8gaXQgYXMgYW4gdW5zaWduZWQg
-Y29tcGFyZS4gQnV0IGJlY2F1c2UgdGhlDQo+IHVuc2lnbmVkIHNpZGUgd2FzIGEgY29uc3RhbnQs
-IHdlIG1hZGUgaXQgc2lnbmVkIGFmdGVyIGFsbCwgYW5kIGRvIHRoZQ0KPiBjb21wYXJpc29uIGFz
-IHNpZ25lZCB3aXRoIG5vIHdhcm5pbmciLg0KPiANCj4gVGhhdCdzIGp1c3QgKmhvcnJpYmxlKi4g
-SXQncyBldmVuIGNyYXppZXIgdGhhbiB0aGUgcmVndWxhciBDIHR5cGUNCj4gY29udmVyc2lvbnMg
-dGhhdCAoc29tZSkgcGVvcGxlIGhhdmUgYXQgbGVhc3QgaGFkIGRlY2FkZXMgb2YgZ2V0dGluZw0K
-PiB1c2VkIHRvLg0KDQpBaCwgeW91IG1pZ2h0IGJlIG1pc3NpbmcgdGhlIHBvaW50IHRoYXQgdGhl
-IGNvbXBpbGVyDQpjb252ZXJ0cyBpdCBiYWNrIHRvIGFuIHVuc2lnbmVkIGNvbXBhcmUuDQoNClNv
-IHlvdSBzdGFydCB3aXRoOg0KCXVuc2lnbmVkIGludCBhOw0KCW1pbihhLCA1dSkNClRoaXMgZ2V0
-cyBjaGFuZ2VkIHRvOg0KCW1pbihhLCAoaW50KTV1KQ0KVGhlIGNvbXBpbGVyIHNlZXM6DQoJaWYg
-KGEgPCAoaW50KTV1KQ0KYW5kIGNoYW5nZXMgdGhlIFJIUyBiYWNrIHRvIHVuc2lnbmVkLCBzbyB5
-b3UgYWN0dWFsbHkgZ2V0Og0KCWlmIChhIDwgKHVuc2lnbmVkIGludCkoaW50KTV1KQ0Kd2hpY2gg
-aXMgZXhhY3RseSB3aGVyZSB5b3Ugc3RhcnRlZC4NCg0KPiANCj4gRG9uJ3QgeW91IHNlZSBob3cg
-bmFzdHkgdGhhdCBraW5kIG9mIGNvbXBsZXRlbHkgcmFuZG9tIHRoaW5nIGlzPw0KPiANCj4gTm93
-LCBJIGFncmVlIHRoYXQgc29tZXRpbWVzIHdlIHdhcm4gKnRvbyogbXVjaCwgYnV0IG5vLCBpdCdz
-IG5vdA0KPiBhY2NlcHRhYmxlIHRvIGNoYW5nZSB0aGF0IHRvICJsZXQncyBub3Qgd2FybiBhcyBt
-dWNoLCBhbmQgaW4gdGhlDQo+IHByb2Nlc3MgYWxzbyBjaGFuZ2UgdGhlIHNpZ24gb2YgdGhlIGNv
-bXBhcmlzb24gaW4gc3RyYW5nZSB3YXlzIi4NCj4gDQo+IElmIGl0IHdhcyB0aGUgKm90aGVyKiB3
-YXkgYXJvdW5kLCB3aGVyZSB3ZSB3YXJuZWQgdG9vIG11Y2gsIGJ1dCBhdA0KPiBsZWFzdCBkaWRu
-J3QgY2hhbmdlIHRoZSBhY3R1YWwgc2VtYW50aWNzLCB0aGF0IHdvdWxkIGJlIG9uZSB0aGluZy4g
-U28sDQo+IGZvciBleGFtcGxlLCBJIHRoaW5rIHRoYXQgaWYgeW91IGhhdmUNCj4gDQo+ICAgICB1
-bnNpZ25lZCBsb25nIGE7DQo+IA0KPiB0aGVuOg0KPiANCj4gIC0gbWluKGEsNSkNCj4gDQo+ICAt
-IG1pbihhLDV1KQ0KPiANCj4gYm90aCBjdXJyZW50bHkgd2FybiAiYW5ub3lpbmdseSIsIGV2ZW4g
-dGhvdWdoIHRoZSByZXN1bHQgaXMgb2J2aW91cy4NCj4gDQo+IE9uZSBiZWNhdXNlICI1IiBpcyBh
-biAiaW50IiBhbmQgdGh1cyBzaWduZWQsIGJ1dCBoZXksIGNvbXBhcmluZyBhDQo+IHNpZ25lZCAq
-cG9zaXRpdmUqIGNvbnN0YW50IHRvIGEgdW5zaWduZWQgdmFyaWFibGUgaXMgcHJldHR5IGRhcm4g
-c2FmZS4NCj4gDQo+IFNvIGdldHRpbmcgcmlkIG9mIHRoZSB3YXJuaW5nIGluIHRoYXQgY2FzZSAt
-IGFuZCBqdXN0IGRvaW5nIGl0IGFzIGFuDQo+IHVuc2lnbmVkIGNvbXBhcmlzb24gd2hpY2ggdGhl
-biBhbHNvIGdpdmVzIHRoZSBzbWFsbGVzdCBwb3NzaWJsZSByZXN1bHQNCj4gcmFuZ2UgYW5kIGFz
-IHN1Y2ggY2Fubm90IHBvc3NpYmx5IGNvbmZ1c2UgYW55dGhpbmcgLSB3b3VsZCBsaWtlbHkgYmUg
-YQ0KPiBnb29kIHRoaW5nLg0KPiANCj4gQW5kIHRoZSBmYWN0IHRoYXQgJzV1JyBfYWxzb18gd2Fy
-bnMgaXMganVzdCBhbm5veWluZy4gVGhlcmUncyB6ZXJvDQo+IGFtYmlndWl0eSBhYm91dCB0aGUg
-cmVzdWx0ICh3aGljaCB3aWxsIGFsd2F5cyBmaXQgaW4gJ3Vuc2lnbmVkIGludCcpLA0KPiBidXQg
-dGhlIGNvbXBhcmlzb24gc2hvdWxkIGFsd2F5cyBiZSBkb25lIGluICd1bnNpZ25lZCBsb25nJy4N
-Cg0KSWYgdGhlIDV1IGlzIGNhc3QgdG8gKGludCkgdGhlbiwgaW4gdGhpcyBjYXNlLCB0aGUgY29t
-cGFyaXNvbg0KaXMgc3RpbGwgZG9uZSBhcyAndW5zaWduZWQgbG9uZycuDQoNClRoZXJlIGlzIGFs
-c28gdGhpcyBvbmU6DQoJdW5zaWduZWQgY2hhciBjOw0KCW1pbihjLDV1KQ0KQWdhaW4gcHJldHR5
-IHVuYW1iaWd1b3VzIGJ1dCB0aGUgdHlwZXMgZG9uJ3QgbWF0Y2guDQpJbnRlZ2VyIHByb21vdGlv
-bnMgc3RhcnQgcGxheWluZyBoYXZvYyBoZXJlLg0KCShjIDwgNXUpID0+ICgoaW50KWMgPCA1dSkg
-PT4gKHVuc2lnbmVkIGludCkoaW50KWMgPCA1dSkNCndoaWNoIGlzIGFjdHVhbGx5IHdoYXQgeW91
-IGV4cGVjdC4NCkJ1dCByZXBlYXQgd2l0aCAnc2lnbmVkIGNoYXInIGFuZCBuZWdhdGl2ZXMgZ2V0
-IGFuIHVuZXhwZWN0ZWQNCnJlc3VsdC4NCg0KPiBBbmQgZm9yIHRoYXQgJzV1JyBjYXNlIHRoZXJl
-IGlzIGV2ZW4gX2xlc3NfIG9mIGEgY2hhbmNlIHRoYXQgdGhlcmUNCj4gY291bGQgYmUgYW55IHNp
-Z24gY29uZnVzaW9uLg0KPiANCj4gQnV0IG5vdGUgdGhhdCAic2lnbmVkIDUiIHRoaW5nOiBpdCdz
-IHJlYWxseSByZWFsbHkgaW1wb3J0YW50IHRvDQo+IHVuZGVyc3RhbmQgdGhhdCBkb2luZyB0aGF0
-IGNvbnN0YW50IGNvbXBhcmlzb24gYXMgYW4gKnVuc2lnbmVkKg0KPiBjb21wYXJpc29uIGlzIG11
-Y2ggc2FmZXIgZm9yICdtaW4oKScsIGJlY2F1c2UgaXQgbWluaW1pemVzIHRoZSByZXN1bHQNCj4g
-cmFuZ2UuIFJldHVybmluZyBhIG5lZ2F0aXZlIG51bWJlciBiZWNhdXNlIHlvdSBjb252ZXJ0ZWQg
-aXQgdG8gYQ0KPiBzaWduZWQgY29tcGFyaXNvbiB3b3VsZCBiZSBwb3RlbnRpYWxseSBkYW5nZXJv
-dXMsIGJlY2F1c2UgcGVvcGxlIG9mdGVuDQo+IGZvcmdldCB0byB0aGluIGthYm91dCB0aGUgbmVn
-YXRpdmUgY2FzZS4gUmV0dXJuaW5nIHRoZSByYW5nZSAwLi41IGlzDQo+IF9jbGVhcmx5XyBzYWZl
-Lg0KPiANCj4gQW5kIHRoYXQgZGFuZ2VyIGlzIHZlcnkgbXVjaCB3aGVuIHRoZSAnNScgaXMgYSAn
-c2l6ZW9mKHh5eiknLiBXZSdyZQ0KPiBjbGVhcmx5IHRhbGtpbmcgYWJvdXQgb2JqZWN0IHNpemVz
-IHRoYXQgY2Fubm90IGJlIG5lZ2F0aXZlLCBzbw0KPiBuZWdhdGl2ZSBudW1iZXJzIGFyZSBhbG1v
-c3QgY2VydGFpbmx5IHdyb25nLiBNYWtpbmcgdGhlICdtaW4oKScgcmV0dXJuDQo+IGEgbmVnYXRp
-dmUgbnVtYmVyIHRoZXJlIGlzIGhvcnJlbmRvdXMuDQo+IA0KPiBOb3csIGZvciAnbWF4KCknLCB0
-aGF0ICdtaW5pbWl6ZSB0aGUgcmFuZ2UnIGFyZ3VtZW50IGRvZXNuJ3Qgd29yay4NCj4gDQo+IFJp
-Z2h0IG5vdyB3ZSBqdXN0IGhhdmUgImJvdGggbXVzdCBiZSB0aGUgc2FtZSB0eXBlIi4gQXQgbGVh
-c3QgdGhhdCBpcw0KPiBhbHdheXMgdW5hbWJpZ3VvdXMuIEl0IGNhbiBiZSBhbm5veWluZywgeWVz
-LiBCdXQgdGhlbiB0aGUgZXhwZWN0YXRpb24NCj4gaXMgdGhhdCB3aGVuIHNvbWVib2R5IGNoYW5n
-ZXMgaXQgdG8gYSAibWluX3QoKSIsIHRoZXkgYWN0aXZlbDt5DQo+ICpUSElOSyogYWJvdXQgaXQu
-DQoNCk5vdCBmcm9tIGxvb2tpbmcgYXQgc29tZSBvZiB0aGUgdHlwZXMgdXNlZC4NClNvbWUgY29k
-ZSBzZWVtcyB0byB3cml0dGVuIHRoaW5raW5nIHRoYXQgdGhlIHR5cGUgZm9yIG1pbl90IGlzIHRo
-YXQNCm9mIHRoZSByZXN1bHQgdHlwZSBuZWVkZWQgKGxpa2UgYSBwb2ludGxlc3MgY2FzdCBmb3Ig
-dGhlIGFzc2lnbm1lbnQNCnJhdGhlciB0aGFuIGEgY2FzdCB0aGF0IGlzIGFwcGxpZWQgdG8gYm90
-aCBpbnB1dHMuDQoNCkknbSB0ZXN0aW5nIHNvbWUgY2hhbmdlcyB0aGF0IGFsbG93Og0KCW1pbihh
-bnlfdW5zaWduZWRfZXhwciwgYW55X3Vuc2lnbmVkX2V4cHIpDQoJbWluKGFueV9zaWduZWRfZXhw
-ciwgYW55X3NpZ25lZF9leHByKQ0KYW5kIGFsc28gYWxsb3cgc2lnbmVkIHYgdW5zaWduZWQgaWYg
-ZWl0aGVyOg0KCXRoZSB1bnNpZ25lZCB0eXBlIGlzIHNtYWxsZXIgdGhhbiB0aGUgc2lnbmVkIG9u
-ZQ0KCSh0aGUgdW5zaWduZWQgdmFsdWUgaXMgcHJvbW90ZWQgdG8gdGhlIGxhcmdlciBzaWduZWQg
-dHlwZSkNCm9yDQoJdGhlIHNpZ25lZCB2YWx1ZSBpcyBjb25zdGFudCBhbmQgbm9uLW5lZ2F0aXZl
-DQppbiBhbGwgdGhvc2UgY2FzZXMgdGhlIG5vcm1hbCBDIHJ1bGVzIGFyZSBzZW5zaWJsZS4NCg0K
-VGhlIG9uZSB5b3Ugc2VlbSB0byBvYmplY3QgdG8gaXMgdGhlIHNpZ24gdiB1bnNpZ25lZA0Kd2hl
-biB0aGUgdW5zaWduZWQgdmFsdWUgaXMgYSBjb25zdGFudC4NCg0KSSBoYXMgdG8gYmUgc2FpZCB0
-aGF0IHRoZXJlIGFyZSBsaWtlbHkgdG8gYmUgdmVyeSBmZXcgY2FzZXMNCm9mIG1pbiAob3IgbWF4
-KSB3aGVyZSB0aGUgZG9tYWluIG9mIGVpdGhlciB2YWx1ZXMgY2FuIGJlDQpuZWdhdGl2ZS4NClRo
-aXMgaXMgYXNzdW1pbmcgbm8gb25lIGhhcyBjb21taXR0ZWQgcmV0dXJuIG1pbihyZXN1bHQsIDAp
-Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJv
-YWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24g
-Tm86IDEzOTczODYgKFdhbGVzKQ0K
+On Sun, Nov 27 2022 at 21:18, Jason A. Donenfeld wrote:
+> On Fri, Nov 25, 2022 at 09:45:31PM +0100, Thomas Gleixner wrote:
+>> > --- a/arch/x86/include/asm/unistd.h
+>> > +++ b/arch/x86/include/asm/unistd.h
+>> > @@ -27,6 +27,7 @@
+>> >  #  define __ARCH_WANT_COMPAT_SYS_PWRITEV64
+>> >  #  define __ARCH_WANT_COMPAT_SYS_PREADV64V2
+>> >  #  define __ARCH_WANT_COMPAT_SYS_PWRITEV64V2
+>> > +#  define __ARCH_WANT_VGETRANDOM_ALLOC
+>> 
+>> So instead of this define, why can't you do:
+>> 
+>> config VGETRADOM_ALLOC
+>>        bool
+>>        select ADVISE_SYSCALLS
+>> 
+>> and then have
+>> 
+>> config GENERIC_VDSO_RANDOM_WHATEVER
+>>        bool
+>>        select VGETRANDOM_ALLOC
+>> 
+>> This gives a clear Kconfig dependency instead of the random
+>> ADVISE_SYSCALLS select.
+>
+> That's much better indeed. I was trying to straddle the two conventions
+> of `#define __ARCH_...` for syscalls and a Kconfig for vDSO functions,
+> but doing it all together as you've suggested is nicer.
+>
+> I'll try to figure this out, though so far futzing around suggests there
+> might have to be both, because of unistd.h being a userspace header.
+> That is, include/uapi/asm-generic/unistd.h typically needs a `#if
+> __ARCH_WANT..., #define ...` in it. I'll give it a spin and you'll see
 
+Bah. Did not think about that user space part...
+
+Thanks,
+
+        tglx
