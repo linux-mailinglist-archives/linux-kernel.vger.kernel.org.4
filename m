@@ -2,140 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0262639E7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 01:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3631A639E84
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 01:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiK1Amj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 19:42:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
+        id S229590AbiK1AwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 19:52:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiK1Amh (ORCPT
+        with ESMTP id S229515AbiK1AwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 19:42:37 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7CBE8A
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 16:42:34 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e719329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e719:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E35E41EC053B;
-        Mon, 28 Nov 2022 01:42:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1669596152;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=bMLYVDRFQu0xZlrSISkRGflSMD7PVN2QZhUpSDHouPk=;
-        b=FZKB1KxuIZfv4kYD/beb2eUzuk3Al9dTZCB0d9UD5VyHPi/VPZnLfuTW66mN6xYW5P/sSl
-        sq8oRSmdGLzJU4Wnu8P34D/d18Aan4et5SoXKhHClY4XuVqhu6Ba38DWA8i7tRXBDoPFhc
-        KqAcMlzgOXFfpDV6QhqgQskpCzvOVaU=
-Date:   Mon, 28 Nov 2022 01:42:26 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        hpa@zytor.com, jpoimboe@kernel.org, peterz@infradead.org,
-        pawan.kumar.gupta@linux.intel.com, x86@kernel.org,
-        cascardo@canonical.com, leit@meta.com, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] x86/bugs: Explicitly clear speculative MSR bits
-Message-ID: <Y4QD8o8kWb1V4osq@zn.tnic>
-References: <20221124104650.533427-1-leitao@debian.org>
+        Sun, 27 Nov 2022 19:52:11 -0500
+X-Greylist: delayed 177 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Nov 2022 16:52:05 PST
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7535BC2C;
+        Sun, 27 Nov 2022 16:52:05 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 7CDB324DE73;
+        Mon, 28 Nov 2022 08:49:05 +0800 (CST)
+Received: from EXMBX065.cuchost.com (172.16.6.65) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 28 Nov
+ 2022 08:49:06 +0800
+Received: from [192.168.125.66] (183.27.97.81) by EXMBX065.cuchost.com
+ (172.16.6.65) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 28 Nov
+ 2022 08:49:04 +0800
+Message-ID: <0ceba170-f844-e733-a49e-e67746f9f836@starfivetech.com>
+Date:   Mon, 28 Nov 2022 08:48:54 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221124104650.533427-1-leitao@debian.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 1/5] dt-bindings: pinctrl: Add StarFive JH7110 pinctrl
+ definitions
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>
+CC:     Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20221118011108.70715-1-hal.feng@starfivetech.com>
+ <20221118011108.70715-2-hal.feng@starfivetech.com>
+ <eb3974a3-f715-f5b0-cac7-551af26bd17b@linaro.org>
+ <08db0f3b-5222-9460-26ba-0e6380d16583@linaro.org>
+Content-Language: en-US
+From:   Jianlong Huang <jianlong.huang@starfivetech.com>
+In-Reply-To: <08db0f3b-5222-9460-26ba-0e6380d16583@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.81]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX065.cuchost.com
+ (172.16.6.65)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 02:46:50AM -0800, Breno Leitao wrote:
-> Currently x86_spec_ctrl_base is read at boot time, and speculative bits
-> are set if configs are enable, such as MSR[SPEC_CTRL_IBRS] is enabled if
-> CONFIG_CPU_IBRS_ENTRY is configured. These MSR bits are not cleared if
-> the mitigations are disabled.
+On Mon, 21 Nov 2022 09:39:46 +0100, Krzysztof Kozlowski wrote:
+> On 21/11/2022 09:38, Krzysztof Kozlowski wrote:
+>> On 18/11/2022 02:11, Hal Feng wrote:
+>>> From: Jianlong Huang <jianlong.huang@starfivetech.com>
+>>>
+>>> Add pinctrl definitions for StarFive JH7110 SoC.
+>>>
+>>> Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
+>>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+>>> Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
+>>> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+>>> ---
+>>>  .../pinctrl/pinctrl-starfive-jh7110.h         | 427 ++++++++++++++++++
+>>>  1 file changed, 427 insertions(+)
+>>>  create mode 100644 include/dt-bindings/pinctrl/pinctrl-starfive-jh7110.h
+>>>
+>>> diff --git a/include/dt-bindings/pinctrl/pinctrl-starfive-jh7110.h b/include/dt-bindings/pinctrl/pinctrl-starfive-jh7110.h
+>>> new file mode 100644
+>>> index 000000000000..fb02345caa27
+>>> --- /dev/null
+>>> +++ b/include/dt-bindings/pinctrl/pinctrl-starfive-jh7110.h
+>>> @@ -0,0 +1,427 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0 OR MIT */
+>>> +/*
+>>> + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
+>>> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+>>> + */
+>>> +
+>>> +#ifndef __DT_BINDINGS_PINCTRL_STARFIVE_JH7110_H__
+>>> +#define __DT_BINDINGS_PINCTRL_STARFIVE_JH7110_H__
+>>> +
+>>> +/*
+>>> + * mux bits:
+>>> + *  | 31 - 24 | 23 - 16 | 15 - 10 |  9 - 8   |  7 - 0  |
+>>> + *  |  din    |  dout   |  doen   | function | gpio nr |
+>>> + *
+>>> + * dout:     output signal
+>>> + * doen:     output enable signal
+>>> + * din:      optional input signal, 0xff = none
+>>> + * function:
+>>> + * gpio nr:  gpio number, 0 - 63
+>>> + */
+>>> +#define GPIOMUX(n, dout, doen, din) ( \
+>>> +		(((din)  & 0xff) << 24) | \
+>>> +		(((dout) & 0xff) << 16) | \
+>>> +		(((doen) & 0x3f) << 10) | \
+>>> +		((n) & 0x3f))
+>>> +
+>> 
+>> 
+>> (...)
+>> 
+>>> +/* sys_iomux doen */
+>>> +#define GPOEN_ENABLE				 0
+>>> +#define GPOEN_DISABLE				 1
+>>> +#define GPOEN_SYS_HDMI_CEC_SDA			 2
+>>> +#define GPOEN_SYS_HDMI_DDC_SCL			 3
+>>> +#define GPOEN_SYS_HDMI_DDC_SDA			 4
+>>> +#define GPOEN_SYS_I2C0_CLK			 5
+>>> +#define GPOEN_SYS_I2C0_DATA			 6
+>>> +#define GPOEN_SYS_HIFI4_JTAG_TDO		 7
+>>> +#define GPOEN_SYS_JTAG_TDO			 8
+>>> +#define GPOEN_SYS_PWM0_CHANNEL0			 9
+>>> +#define GPOEN_SYS_PWM0_CHANNEL1			10
+>>> +#define GPOEN_SYS_PWM0_CHANNEL2			11
+>>> +#define GPOEN_SYS_PWM0_CHANNEL3			12
+>>> +#define GPOEN_SYS_SPI0_NSSPCTL			13
+>>> +#define GPOEN_SYS_SPI0_NSSP			14
+>>> +#define GPOEN_SYS_TDM_SYNC			15
+>>> +#define GPOEN_SYS_TDM_TXD			16
+>>> +#define GPOEN_SYS_I2C1_CLK			17
+>>> +#define GPOEN_SYS_I2C1_DATA			18
+>>> +#define GPOEN_SYS_SDIO1_CMD			19
+>>> +#define GPOEN_SYS_SDIO1_DATA0			20
+>>> +#define GPOEN_SYS_SDIO1_DATA1			21
+>>> +#define GPOEN_SYS_SDIO1_DATA2			22
+>>> +#define GPOEN_SYS_SDIO1_DATA3			23
+>>> +#define GPOEN_SYS_SDIO1_DATA4			24
+>>> +#define GPOEN_SYS_SDIO1_DATA5			25
+>>> +#define GPOEN_SYS_SDIO1_DATA6			26
+>>> +#define GPOEN_SYS_SDIO1_DATA7			27
+>>> +#define GPOEN_SYS_SPI1_NSSPCTL			28
+>>> +#define GPOEN_SYS_SPI1_NSSP			29
+>>> +#define GPOEN_SYS_I2C2_CLK			30
+>>> +#define GPOEN_SYS_I2C2_DATA			31
+>>> +#define GPOEN_SYS_SPI2_NSSPCTL			32
+>>> +#define GPOEN_SYS_SPI2_NSSP			33
+>>> +#define GPOEN_SYS_I2C3_CLK			34
+>>> +#define GPOEN_SYS_I2C3_DATA			35
+>>> +#define GPOEN_SYS_SPI3_NSSPCTL			36
+>>> +#define GPOEN_SYS_SPI3_NSSP			37
+>>> +#define GPOEN_SYS_I2C4_CLK			38
+>>> +#define GPOEN_SYS_I2C4_DATA			39
+>>> +#define GPOEN_SYS_SPI4_NSSPCTL			40
+>>> +#define GPOEN_SYS_SPI4_NSSP			41
+>>> +#define GPOEN_SYS_I2C5_CLK			42
+>>> +#define GPOEN_SYS_I2C5_DATA			43
+>>> +#define GPOEN_SYS_SPI5_NSSPCTL			44
+>>> +#define GPOEN_SYS_SPI5_NSSP			45
+>>> +#define GPOEN_SYS_I2C6_CLK			46
+>>> +#define GPOEN_SYS_I2C6_DATA			47
+>>> +#define GPOEN_SYS_SPI6_NSSPCTL			48
+>>> +#define GPOEN_SYS_SPI6_NSSP			49
+>>> +
+>>> +/* aon_iomux doen */
+>>> +#define GPOEN_AON_PTC0_OE_N_4			2
+>>> +#define GPOEN_AON_PTC0_OE_N_5			3
+>>> +#define GPOEN_AON_PTC0_OE_N_6			4
+>>> +#define GPOEN_AON_PTC0_OE_N_7			5
+>>> +
+>> 
+>> It looks like you add register constants to the bindings. Why? The
+>> bindings are not the place to represent hardware programming model. Not
+>> mentioning that there is no benefit in this.
 > 
-> This is a problem when kexec-ing a kernel that has the mitigation
-> disabled, from a kernel that has the mitigation enabled. In this case,
-> the MSR bits are carried forward and not cleared at the boot of the new
-> kernel. This might have some performance degradation that is hard to
-> find.
-> 
-> This problem does not happen if the machine is (hard) rebooted, because
-> the bit will be cleared by default.
-> 
-> This patch also defines a SPEC_CTRL_MASK macro, so, we can easily track
-> and clear if eventually some new mitigation shows up.
+> Also: this entire file should be dropped, but if it stays, you have to
+> name it matching bindings or compatible (vendor,device.h).
 
-Just remove that sentence - the macro's function is kinda obvious from
-the diff itself.
+Thanks your comments.
+These macros are used to configure pinctrl in dts, so the file should stay,
+and will change the name as "starfive,jh7110-pinctrl.h" to match bindings or compatible.
 
-> Suggested-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
->  arch/x86/include/asm/msr-index.h | 3 +++
->  arch/x86/kernel/cpu/bugs.c       | 9 ++++++++-
->  2 files changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index 4a2af82553e4..704f49580ee1 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -54,6 +54,9 @@
->  #define SPEC_CTRL_RRSBA_DIS_S_SHIFT	6	   /* Disable RRSBA behavior */
->  #define SPEC_CTRL_RRSBA_DIS_S		BIT(SPEC_CTRL_RRSBA_DIS_S_SHIFT)
->  
-> +#define SPEC_CTRL_MASK			(SPEC_CTRL_IBRS | SPEC_CTRL_STIBP | SPEC_CTRL_SSBD \
-> +							| SPEC_CTRL_RRSBA_DIS_S)
+Best regards,
+Jianlong Huang
 
-Call that SPEC_CTRL_MITIGATIONS_MASK or so to denote what it is - a
-mask of the SPEC_CTRL bits which the kernel toggles when controlling
-mitigations.
 
-A comment above it wouldn't hurt either.
-
-> +
->  #define MSR_IA32_PRED_CMD		0x00000049 /* Prediction Command */
->  #define PRED_CMD_IBPB			BIT(0)	   /* Indirect Branch Prediction Barrier */
->  
-> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-> index 3e3230cccaa7..88957da1029b 100644
-> --- a/arch/x86/kernel/cpu/bugs.c
-> +++ b/arch/x86/kernel/cpu/bugs.c
-> @@ -137,8 +137,15 @@ void __init check_bugs(void)
->  	 * have unknown values. AMD64_LS_CFG MSR is cached in the early AMD
->  	 * init code as it is not enumerated and depends on the family.
->  	 */
-> -	if (boot_cpu_has(X86_FEATURE_MSR_SPEC_CTRL))
-> +	if (boot_cpu_has(X86_FEATURE_MSR_SPEC_CTRL)) {
->  		rdmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
-> +		/*
-> +		 * Previously running software may have some controls turned ON.
-
-"Previously running software, like kexec for example, ..."
-
-> +		 * Clear them and let kernel decide which controls to use.
-
-"Clear them and let the mitigations setup below set them based on configuration."
-
-> +		 */
-> +		x86_spec_ctrl_base &= ~SPEC_CTRL_MASK;
-> +		wrmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
-
-So this WRMSR will happen on the BSP only but the SPEC_CTRL MSR is
-per-CPU. As is x86_spec_ctrl_current which tracks it.
-
-So I'd say you don't need that WRMSR here - the proper value will get
-replicated eventually everywhere...
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
