@@ -2,136 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860D663AC0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 16:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA94263AC05
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 16:16:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbiK1PSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 10:18:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
+        id S231590AbiK1PQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 10:16:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiK1PSQ (ORCPT
+        with ESMTP id S230152AbiK1PQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 10:18:16 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFF2A45C
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:18:14 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NLTbt6PdBzHw7m;
-        Mon, 28 Nov 2022 23:17:30 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 23:18:11 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 28 Nov
- 2022 23:18:11 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <tglx@linutronix.de>, <kraig@google.com>,
-        <linux-kernel@vger.kernel.org>, <gregkh@linuxfoundation.org>
-Subject: [PATCH v2] genirq/irqdesc: fix WARNING in irq_sysfs_del()
-Date:   Mon, 28 Nov 2022 23:16:12 +0800
-Message-ID: <20221128151612.1786122-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 28 Nov 2022 10:16:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C47A15A28
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:16:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29FBEB80DF5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 15:16:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC551C433C1;
+        Mon, 28 Nov 2022 15:16:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669648583;
+        bh=CftQAWJINFkcBXFRaam8ztLdzPBn/UXPQX4/Gi/9C8s=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=LWdLqZwioKj4CDnukK8FxxVYevFWUtGTt7rEqdQazh4LYBX0V01z05EInRZvSPX7h
+         8D+M6HVAzmYUflEGglRW2VFV2XUzCeqSh47GyjdDojHj62/Qgepv33ZukwlR1hkFuu
+         Pv5KYxXHX4mjmoGVFem+529NOQWe4CeaRMEgHJHwxnJ1IZgFzaq1wngwaNOw2tV0ZJ
+         ZfYWMXyXJynrVlTf6nb6v1+mOsG0ATOtB9gZQUg5Mi+Mep2hxWdqBBzHEdUuUpU1TR
+         RW8GBPFKEv7k9o8iod6XMb8rbLCBnm18aYZL0TlVssdIwrLsPlqpBjHPcrA+z1T+YD
+         otf4fb5/2jsSg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 5D3A95C0BA0; Mon, 28 Nov 2022 07:16:23 -0800 (PST)
+Date:   Mon, 28 Nov 2022 07:16:23 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>, fweisbec@gmail.com,
+        mingo@kernel.org, dave@stgolabs.net, josh@joshtriplett.org,
+        mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH linux-next][RFC]torture: avoid offline tick_do_timer_cpu
+Message-ID: <20221128151623.GI4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221121035140.118651-1-zhouzhouyi@gmail.com>
+ <87y1rxwsse.ffs@tglx>
+ <CAABZP2xNTbrx9iV+KH3VZx1c9Yi97+izNA=XSJQBuOJ4WENFZg@mail.gmail.com>
+ <87v8n0woxv.ffs@tglx>
+ <20221127175317.GF4001@paulmck-ThinkPad-P17-Gen-1>
+ <87sfi3wl8z.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87sfi3wl8z.ffs@tglx>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I got the lots of WARNING report when doing fault injection test:
+On Mon, Nov 28, 2022 at 09:12:28AM +0100, Thomas Gleixner wrote:
+> On Sun, Nov 27 2022 at 09:53, Paul E. McKenney wrote:
+> > On Sun, Nov 27, 2022 at 01:40:28PM +0100, Thomas Gleixner wrote:
+> >> There are quite some reasons why a CPU-hotplug or a hot-unplug operation
+> >> can fail, which is not a fatal problem, really.
+> >> 
+> >> So if a CPU hotplug operation fails, then why can't the torture test
+> >> just move on and validate that the system still behaves correctly?
+> >> 
+> >> That gives us more coverage than just testing the good case and giving
+> >> up when something unexpected happens.
+> >
+> > Agreed, with access to a function like the tick_nohz_full_timekeeper()
+> > suggested earlier in this email thread, then yes, it would make sense to
+> > try to offline the CPU anyway, then forgive the failure in cases where
+> > the CPU matches that indicated by tick_nohz_full_timekeeper().
+> 
+> Why special casing this? There are other valid reasons why offlining can
+> fail. So we special case timekeeper today and then next week we special
+> case something else just because. That does not make sense. If it fails
+> there is a reason and you can log it. The important part is that the
+> system is functional and stable after the fail and the rollback.
 
-kernfs: can not remove 'chip_name', no directory
-WARNING: CPU: 0 PID: 253 at fs/kernfs/dir.c:1616 kernfs_remove_by_name_ns+0xce/0xe0
-RIP: 0010:kernfs_remove_by_name_ns+0xce/0xe0
-Call Trace:
- <TASK>
- remove_files.isra.1+0x3f/0xb0
- sysfs_remove_group+0x68/0xe0
- sysfs_remove_groups+0x41/0x70
- __kobject_del+0x45/0xc0
- kobject_del+0x29/0x40
- free_desc+0x42/0x70
- irq_free_descs+0x5e/0x90
+Perhaps there are other valid reasons, but they have not been showing up
+in my torture-test runs for well over a decade.  Not saying that they
+don't happen, of course.  But if they involved (say) cgroups, then my
+test setup would not exercise them.
 
-kernfs: can not remove 'hwirq', no directory
-WARNING: CPU: 0 PID: 253 at fs/kernfs/dir.c:1616 kernfs_remove_by_name_ns+0xce/0xe0
-RIP: 0010:kernfs_remove_by_name_ns+0xce/0xe0
-Call Trace:
- <TASK>
- remove_files.isra.1+0x3f/0xb0
- sysfs_remove_group+0x68/0xe0
- sysfs_remove_groups+0x41/0x70
- __kobject_del+0x45/0xc0
- kobject_del+0x29/0x40
- free_desc+0x42/0x70
- irq_free_descs+0x5e/0x90
+So are you looking to introduce spurious CPU-hotplug failures?  If so,
+these will also affect things like suspend/resume.  Plus it will make
+it much more difficult to detect real but intermittent CPU-hotplug bugs,
+which is the motivation for special-casing the tick_nohz_full_timekeeper()
+failures.
 
-If irq_sysfs_add() fails in alloc_descs(), the directory of interrupt
-informations is not added to sysfs, it causes the WARNINGs when removing
-the information files. Add 'sysfs_added' field in struct irq_desc to
-indicate if it is added, and check it before calling kobject_del() to
-avoid these WARNINGs.
+So we should discuss introduciton of any spurious failures that might
+be under consideration.
 
-Fixes: ecb3f394c5db ("genirq: Expose interrupt information through sysfs")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
-v1 -> v2:
-  Don't use state_in_sysfs, introduce 'sysfs_added' to indicate if it is added.
----
- include/linux/irqdesc.h | 1 +
- kernel/irq/irqdesc.c    | 7 +++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+Independently of that, the torture_onoff() functions can of course keep
+some sort of histogram of the failure return codes.  Or are there other
+failure indications that should be captured?
 
-diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
-index 844a8e30e6de..fec0f3946a34 100644
---- a/include/linux/irqdesc.h
-+++ b/include/linux/irqdesc.h
-@@ -97,6 +97,7 @@ struct irq_desc {
- #ifdef CONFIG_SPARSE_IRQ
- 	struct rcu_head		rcu;
- 	struct kobject		kobj;
-+	bool			sysfs_added;
- #endif
- 	struct mutex		request_mutex;
- 	int			parent_irq;
-diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
-index a91f9001103c..9bf74d11bad5 100644
---- a/kernel/irq/irqdesc.c
-+++ b/kernel/irq/irqdesc.c
-@@ -292,6 +292,8 @@ static void irq_sysfs_add(int irq, struct irq_desc *desc)
- 		 */
- 		if (kobject_add(&desc->kobj, irq_kobj_base, "%d", irq))
- 			pr_warn("Failed to add kobject for irq %d\n", irq);
-+		else
-+			desc->sysfs_added = true;
- 	}
- }
- 
-@@ -299,11 +301,12 @@ static void irq_sysfs_del(struct irq_desc *desc)
- {
- 	/*
- 	 * If irq_sysfs_init() has not yet been invoked (early boot), then
--	 * irq_kobj_base is NULL and the descriptor was never added.
-+	 * irq_kobj_base is NULL or kobject_add() fails, the descriptor was
-+	 * never added.
- 	 * kobject_del() complains about a object with no parent, so make
- 	 * it conditional.
- 	 */
--	if (irq_kobj_base)
-+	if (desc->sysfs_added)
- 		kobject_del(&desc->kobj);
- }
- 
--- 
-2.25.1
+> >> I even argue that the torture test should inject random failures into
+> >> the hotplug state machine to achieve extended code coverage.
+> >
+> > I could imagine torture_onoff() telling various CPU-hotplug notifiers
+> > to refuse the transition using some TBD interface.
+> 
+> There is already an interface which is exposed to sysfs which allows you
+> to enforce a "fail" at a defined hotplug state.
 
+If you would like me to be testing this as part of my normal testing
+regimen, I will need an in-kernel interface.  Such an interface is of
+course not needed for modprobe-style testing, in which case the script
+doing the modprobe and rmmod can of course manipulate the sysfs files.
+But I don't do that sort of testing very often.  And when I do, it is
+almost always with kernels configured for Meta's fleet, which almost
+never do CPU-offline operations.
+
+							Thanx, Paul
+
+> > That would better test the CPU-hotplug common code's ability to deal
+> > with failures.
+> 
+> Correct.
+> 
+> > Or did you have something else/additional in mind?
+> 
+> No.
+> 
+> Thanks,
+> 
+>         tglx
