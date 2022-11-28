@@ -2,135 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B4963A2B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539D463A2BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiK1IUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 03:20:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34216 "EHLO
+        id S229702AbiK1IVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 03:21:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbiK1ITy (ORCPT
+        with ESMTP id S230186AbiK1IUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 03:19:54 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C267F13F80;
-        Mon, 28 Nov 2022 00:18:59 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AS6KALw016693;
-        Mon, 28 Nov 2022 08:18:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=3ZlcKzcq2aPY79XtwvYIcoDL334lDVsqNBpgbBmrhfk=;
- b=pzMxUbfcMiSvMv1RCRBoJ2pW463WWIhpBDGYZsCSQ0hFPNv28/czW9qK1jnTqWOhudaJ
- 4SSzRlQUuXMmZKFnZgjfS/oEjRD+9WfEqu3YK8g8X4pKvfgtz8bF0dLqJkMR1voYXAmh
- Qj2R3E2g8Aqxxa1QttnSP29fDoXRkRP2H+onvBN6uOyNBGOesdLznXCOSwqgIDHDQU7/
- aKENWEWNO7KXwVCaXcuX3HpTq8Qg+MgkfvdPiF1oIaMmKSr0NHFSv8xfyfYEjv0JhZTZ
- gLQUinl301STIgMUloWWe+WNF662pyJRw4/MXSESy2tObH4AeHSxzRo4nysy6bkNzw36 7A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m3vmr9nmw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 08:18:52 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AS89Edf014435;
-        Mon, 28 Nov 2022 08:18:52 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m3vmr9nm6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 08:18:52 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AS85BfP017431;
-        Mon, 28 Nov 2022 08:18:49 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 3m3ae9a5w0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 08:18:49 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AS8IkHR37290388
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Nov 2022 08:18:46 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C54E42042;
-        Mon, 28 Nov 2022 08:18:46 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 098484203F;
-        Mon, 28 Nov 2022 08:18:46 +0000 (GMT)
-Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.84.206])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 28 Nov 2022 08:18:45 +0000 (GMT)
-Date:   Mon, 28 Nov 2022 09:18:44 +0100
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-mm@kvack.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Subject: Re: [PATCH] s390/mm: Use pmd_pgtable_page() helper in
- __gmap_segment_gaddr()
-Message-ID: <Y4Ru5Cnz+yps7RST@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-References: <20221125034502.1559986-1-anshuman.khandual@arm.com>
- <Y4IvaRNLmASfRJiZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <d3bcb8e1-cbf0-e820-47cf-f455128c597a@arm.com>
- <Y4Rflp1Z48hp/OAb@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <28b976dd-3d12-3f2c-9b70-a5423255943e@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <28b976dd-3d12-3f2c-9b70-a5423255943e@arm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: i9QB9KPSkBca30NmWvQWdzvnptN-URJ3
-X-Proofpoint-ORIG-GUID: UqlFqcRABGtMyGTgkQ6MDDEWT0tayKnL
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 28 Nov 2022 03:20:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7148D10564
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:18:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669623533;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ueiNL/RrPlD3vRod9MDAxJpgFwmJj0Jyg8USWk7yPz8=;
+        b=S+oFkjKVP3mckzd7VBbvH1QuZTZol0q9wTWffdsPiXu+2nmhjaLmPhu8ziCyV0KCioRPJI
+        5JQ7Ka6QTT7w/TcDd4C3+oasgr3fATIDGVWRdSU8qp6A71RrRGJewLWoV59J4JHfMOQ3z1
+        2VHUt/gcI6faTsrG8illEYtRpXcU/30=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-417-QWRqpE0oM7qcSzdC9aiy7w-1; Mon, 28 Nov 2022 03:18:51 -0500
+X-MC-Unique: QWRqpE0oM7qcSzdC9aiy7w-1
+Received: by mail-wm1-f71.google.com with SMTP id u9-20020a05600c00c900b003cfb12839d6so3471908wmm.5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:18:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ueiNL/RrPlD3vRod9MDAxJpgFwmJj0Jyg8USWk7yPz8=;
+        b=wKOosKNgXgUbY/H+3bcvHqT3UOy54c+6AWRsSeGYgYsVcl8qU4hh8T7W+b5bxp9RB2
+         2ms+xx+d3DkDlBtm845Qwz/VpQ/Jnm3RjTIsH6kVyvknHa+IkHMjhsrnELw7pNXO9p+m
+         pxCZXatQk/TYdS3u7iiFzqbmdTxEbiM43ITG00cO8Wwo908dXAOMY9UfubcqaJNfFtdM
+         M3WspQoXsS33h9OQfv92W/1suvNO+ji35dVWNYoEkygxNuV/bIln70y/1KIGCKsFdkqp
+         ooENg3YtyJ8kfhr9tzjY92XCnojRt55d7n8KIl4HM8P7Yz+Z1c0up5b93lUKc7u94OYk
+         aJ9w==
+X-Gm-Message-State: ANoB5pm4YStKeA3JW0Yg/oyzAalTwxwdbnUV3Rs/BfmcrJert9Dj+3tw
+        1dYG8k+14bRGV26s6PG3BzGmLh4eYMeu930eQz7E0wLN5enYZRcwveeSBQtfYC867jNeU1gxwn9
+        6hvXhwr7QRXwJCoG6n6mC9MR8
+X-Received: by 2002:a05:600c:3587:b0:3cf:a9c2:2b04 with SMTP id p7-20020a05600c358700b003cfa9c22b04mr36262260wmq.152.1669623530559;
+        Mon, 28 Nov 2022 00:18:50 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5KFgnMS9OgeX6iNUgB1p0xskb3yOxviUW4FnLaUffslFm3du7Shktyf0rRUHCATZ7f+3nFJA==
+X-Received: by 2002:a05:600c:3587:b0:3cf:a9c2:2b04 with SMTP id p7-20020a05600c358700b003cfa9c22b04mr36262220wmq.152.1669623530122;
+        Mon, 28 Nov 2022 00:18:50 -0800 (PST)
+Received: from ?IPV6:2003:cb:c702:9000:3d6:e434:f8b4:80cf? (p200300cbc702900003d6e434f8b480cf.dip0.t-ipconnect.de. [2003:cb:c702:9000:3d6:e434:f8b4:80cf])
+        by smtp.gmail.com with ESMTPSA id g14-20020a05600c310e00b003a2f2bb72d5sm22518102wmo.45.2022.11.28.00.18.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 00:18:49 -0800 (PST)
+Message-ID: <9d0bf98a-3d6a-1082-e992-1338e1525935@redhat.com>
+Date:   Mon, 28 Nov 2022 09:18:47 +0100
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-28_06,2022-11-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- priorityscore=1501 mlxlogscore=586 impostorscore=0 mlxscore=0 bulkscore=0
- phishscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211280063
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH mm-unstable v1 16/20] mm/frame-vector: remove FOLL_FORCE
+ usage
+Content-Language: en-US
+To:     Hans Verkuil <hverkuil@xs4all.nl>, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-17-david@redhat.com>
+ <81fb0fa3-2e06-b765-56ac-a7d981194e59@redhat.com>
+ <08b65ac6-6786-1080-18f8-d2be109c85fc@xs4all.nl>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <08b65ac6-6786-1080-18f8-d2be109c85fc@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 01:13:45PM +0530, Anshuman Khandual wrote:
-> >>>> index e9e387caffac..5ead9e997510 100644
-> >>>> --- a/include/linux/mm.h
-> >>>> +++ b/include/linux/mm.h
-> >>>> @@ -2403,7 +2403,7 @@ static inline void pgtable_pte_page_dtor(struct page *page)
-> >>>>  
-> >>>>  #if USE_SPLIT_PMD_PTLOCKS
-> >>>>  
-> >>>> -static struct page *pmd_pgtable_page(pmd_t *pmd)
-> >>>> +static inline struct page *pmd_pgtable_page(pmd_t *pmd)
-> >>>>  {
-> >>>>  	unsigned long mask = ~(PTRS_PER_PMD * sizeof(pmd_t) - 1);
-> >>>>  	return virt_to_page((void *)((unsigned long) pmd & mask));
-> >>>
-> >>> This chunk does not appear to belong to this patch.
-> >>
-> >> Should not this helper be made a 'static inline' before using it else where ?
-> > 
-> > Probably yes, but it is not kvm s390-specific change.
+On 28.11.22 09:17, Hans Verkuil wrote:
+> Hi David,
 > 
-> Right, just that the s390 change here is the first instance where this helper
-> is being used outside the header, hence kept them together.
+> On 27/11/2022 11:35, David Hildenbrand wrote:
+>> On 16.11.22 11:26, David Hildenbrand wrote:
+>>> FOLL_FORCE is really only for ptrace access. According to commit
+>>> 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
+>>> writable"), get_vaddr_frames() currently pins all pages writable as a
+>>> workaround for issues with read-only buffers.
+>>>
+>>> FOLL_FORCE, however, seems to be a legacy leftover as it predates
+>>> commit 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are
+>>> always writable"). Let's just remove it.
+>>>
+>>> Once the read-only buffer issue has been resolved, FOLL_WRITE could
+>>> again be set depending on the DMA direction.
+>>>
+>>> Cc: Hans Verkuil <hverkuil@xs4all.nl>
+>>> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+>>> Cc: Tomasz Figa <tfiga@chromium.org>
+>>> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+>>> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+>>> Signed-off-by: David Hildenbrand <david@redhat.com>
+>>> ---
+>>>    drivers/media/common/videobuf2/frame_vector.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
+>>> index 542dde9d2609..062e98148c53 100644
+>>> --- a/drivers/media/common/videobuf2/frame_vector.c
+>>> +++ b/drivers/media/common/videobuf2/frame_vector.c
+>>> @@ -50,7 +50,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+>>>        start = untagged_addr(start);
+>>>          ret = pin_user_pages_fast(start, nr_frames,
+>>> -                  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
+>>> +                  FOLL_WRITE | FOLL_LONGTERM,
+>>>                      (struct page **)(vec->ptrs));
+>>>        if (ret > 0) {
+>>>            vec->got_ref = true;
+>>
+>>
+>> Hi Andrew,
+>>
+>> see the discussion at [1] regarding a conflict and how to proceed with
+>> upstreaming. The conflict would be easy to resolve, however, also
+>> the patch description doesn't make sense anymore with [1].
 > 
-> > 
-> > I guess, you wanted to make it together or as a follow-up to this one?
-> > https://lore.kernel.org/all/20221124131641.1523772-1-anshuman.khandual@arm.com/
-> > 
-> Unless too much trouble, could we just keep it here as proposed.
+> Might it be easier and less confusing if you post a v2 of this series
+> with my patch first? That way it is clear that 1) my patch has to come
+> first, and 2) that it is part of a single series and should be merged
+> by the mm subsystem.
+> 
+> Less chances of things going wrong that way.
+> 
+> Just mention in the v2 cover letter that the first patch was added to
+> make it easy to backport that fix without being hampered by merge
+> conflicts if it was added after your frame_vector.c patch.
 
-For s390 part:
+Yes, that's the way I would naturally do, it, however, Andrew prefers 
+delta updates for minor changes.
 
-Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
+@Andrew, whatever you prefer!
 
 Thanks!
+
+-- 
+Thanks,
+
+David / dhildenb
+
