@@ -2,106 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13DAB63B4A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 23:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 462A463B4AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 23:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234386AbiK1WME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 17:12:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
+        id S234499AbiK1WM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 17:12:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234455AbiK1WMA (ORCPT
+        with ESMTP id S234462AbiK1WMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 17:12:00 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586B930F60
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 14:11:59 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id b2so8719068iof.12
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 14:11:59 -0800 (PST)
+        Mon, 28 Nov 2022 17:12:53 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1A111A2B;
+        Mon, 28 Nov 2022 14:12:52 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id 82so3748236pgc.0;
+        Mon, 28 Nov 2022 14:12:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Sqj31xD4hPaFJyMRspnZtLV/GdibyQshhKJftkXPTVY=;
-        b=LX1I5X2Tqi3H4osOssCuWhQxDxiOSlkZYdf+xSNNQ5ROewNwQQhCSV6qRABxIV2Bks
-         oYRqoJPX71/O7LWeXlCZXMdXOJYPsyjuD4LOYDUmiqHaJXS34kSPYV3r0aSd22RTBcvD
-         HpGsQZUSAGnCIdx7iCLmqGl1ZVN/RS78RxSwQ=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7VnIiqkaLT/AOA+Uh3vYc89XGyhScngUhSEYmii9N7E=;
+        b=hf/Rd5cgspTnUYicP8bfp0SxkTZo9YWJxzNwarpU4xJULh5zWcfQXnuff3SuYQYzO2
+         1hUYiP8DJRkQP23pUYDWiUHSaT5pUDVGXcxNg/2asHYrasdRz1d5QLYVO2LBAdx1Dkqe
+         21Pf7WCRasOTddkVfVSFxdmDTpvc4zJMmNXI8SXYDGscpx0iwe0VCv1xLFwx9cPvqmoa
+         EavQ+dTGheMEqFf+eMklvPIy4rYjnvaoWdMRthxzrcPt9K+Vi6YANBMPD9vZy3k+bNlJ
+         sI/3o9p9RLgbGwGf0WvrhN3gY6iqLS01sIDVaV8bxJAMuqxx+w74yVtF/pC5Ymj7509+
+         ZeoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Sqj31xD4hPaFJyMRspnZtLV/GdibyQshhKJftkXPTVY=;
-        b=7j/h6fHsfEzXVOG9MHEk47tW3PlkBGMnZaXcpwk/lCXogWDjGmGkiyx8W5Z/u1IE+P
-         0qbihT4eErESE/r6dQSARPlpqeuhk8WRIo5Gl4wqN6g1gULDqo89j13GNUo4Q2kxsIPg
-         Y36MAxX9rU3x5rTuSYtUyCHspkVjlxC5KcsNHYLe5TUVDPW6q9MiUjm5ABvVy0nEmW5I
-         VDWHuDvPz/fJRGnsf/ATFugKSZFHbSiz9HNUm5eGYHMyox745NacBB4zkQwYwmj3AdO1
-         sSEC8xk/TME71iqutRx60FLAddBPpfDKH02r0wPgKjAFyVKdl1aCk9Cl2AtcKWb1POoS
-         10sw==
-X-Gm-Message-State: ANoB5pnXOGPs4WJHXwCQgu0naoG8wteEGqWvQEAFFuFBC3EB/oGj4Y3T
-        IBlGAUU3mdb06IMTu6AODASS6w==
-X-Google-Smtp-Source: AA0mqf77dcDF5VbAESm+8p/Wms6Z+hD0jVYwI2+aCwtztLs7FD6Hhnbu5FCGv+vyB+kuFVJq+DEo4A==
-X-Received: by 2002:a05:6602:21c2:b0:6c3:168a:a25e with SMTP id c2-20020a05660221c200b006c3168aa25emr17433231ioc.174.1669673518761;
-        Mon, 28 Nov 2022 14:11:58 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id a15-20020a92ce4f000000b00302bcbad239sm3827937ilr.77.2022.11.28.14.11.58
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7VnIiqkaLT/AOA+Uh3vYc89XGyhScngUhSEYmii9N7E=;
+        b=RZRWgwLaVqU3UHbEFxeVYWAUZPvUHvM01367cvBqlWd83ygO0zRWpBsGsVssPE8jnH
+         9VKyJE/JZLTo3DfXuSPg6EVFtoplOmUNcC28YE0IS8omUyQTHrA84OWkqmA4qqkeDtHH
+         S5+Wwi64et3wQ3dFZJeDKzbS+HqbrnSTGd3NOZTVVOng/8bEwPEfGNDuhGlvJs21AF0r
+         wdDbrWO8cKZGWI4i8wsumMgq6pa+eu00KuvP/czoNEAlIPbyxUQrZr2JGB41Mnsh8uvW
+         brV9M+rFUB7rfbnbAkVhWrr9GaneEzx+QKK3G29jltHgd5J0MJuC3XWHplvqky1X1lSm
+         eRxg==
+X-Gm-Message-State: ANoB5pkBZ/nULrRqZLSAsJXvbGHE0M58W7pcATgHSUA0lESMOoFJvWcT
+        qCwUa+e0UJDB+1W8FyMjQX0=
+X-Google-Smtp-Source: AA0mqf7gi2938a6aMIhx7F3eopAf9BP6LPatYMG6aV5lHkMTn+qjJcYL7NMxg0OZsK+ou+Q0IcsCzQ==
+X-Received: by 2002:a62:84c5:0:b0:574:32ac:a47a with SMTP id k188-20020a6284c5000000b0057432aca47amr30644859pfd.7.1669673571506;
+        Mon, 28 Nov 2022 14:12:51 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id pc16-20020a17090b3b9000b00212cf2fe8c3sm40644pjb.1.2022.11.28.14.12.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 14:11:58 -0800 (PST)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        linux-kernel@vger.kernel.org, Judy Hsiao <judyhsiao@google.com>,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: [PATCH 2/2] ASoC: qcom: lpass-sc7180: Return 0 instead of 'ret' at the end of _resume()
-Date:   Mon, 28 Nov 2022 22:11:55 +0000
-Message-Id: <20221128221152.2.I8d1993f41f0da1eac0ecba321678ac489f9c0b9b@changeid>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-In-Reply-To: <20221128221152.1.Ia805c688ee968fbbec7b93dc10742876fdef8024@changeid>
-References: <20221128221152.1.Ia805c688ee968fbbec7b93dc10742876fdef8024@changeid>
+        Mon, 28 Nov 2022 14:12:51 -0800 (PST)
+Message-ID: <e6d08779-6e40-ef74-fdde-25335bcb9cc0@gmail.com>
+Date:   Mon, 28 Nov 2022 14:12:44 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5.4 000/156] 5.4.225-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221123084557.816085212@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221123084557.816085212@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sc7180_lpass_dev_resume() returns 'ret' at the end of the function,
-where 'ret' is always 0. Just return 0 to make it plain obvious that
-this is always the success path.
+On 11/23/22 00:49, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.225 release.
+> There are 156 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.225-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Also add an empty line between the error handling path and the
-return.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
----
-
- sound/soc/qcom/lpass-sc7180.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/sound/soc/qcom/lpass-sc7180.c b/sound/soc/qcom/lpass-sc7180.c
-index 7a81e609727c..30a28e3152cb 100644
---- a/sound/soc/qcom/lpass-sc7180.c
-+++ b/sound/soc/qcom/lpass-sc7180.c
-@@ -173,7 +173,8 @@ static int sc7180_lpass_dev_resume(struct device *dev)
- 		dev_err(dev, "sc7180 clk prepare and enable failed\n");
- 		return ret;
- 	}
--	return ret;
-+
-+	return 0;
- }
- 
- static int sc7180_lpass_dev_suspend(struct device *dev)
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.38.1.584.g0f3c55d4c2-goog
+Florian
 
