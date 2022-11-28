@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE33563A865
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 067C663A861
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbiK1M2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 07:28:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
+        id S231282AbiK1M2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 07:28:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiK1M2j (ORCPT
+        with ESMTP id S230250AbiK1M2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 07:28:39 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE617A194
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:28:38 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id bx10so4446775wrb.0
+        Mon, 28 Nov 2022 07:28:40 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07AA1D103
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:28:39 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id x5so16551091wrt.7
         for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:28:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CnRmpeX7Za1sWr1VkDlo2FHkUAThnM0g5s11O2viS1c=;
-        b=TbdM8b/0XHPm58+CEjQmrHHfsyBGr3vgFMKGqS6Kute/Vf7tpsO2+TCxDGrkqgj3ig
-         vxr1jRnbkCGqFMang5w1zaRokdxAFZE05zxPnvsoy0bZoSJy2cBVOM7G4J/3jrfms6V/
-         BQCfJTwMYwTxoHaZt6g7xvcIRwRs9iaL0VVxfavJkdOFU3EvloK5XzinRz6+VQpOp1dW
-         njTd06i7rbe07mu7j+0wIJsuDGCT4d9dTl9MxoLWNaIvAdvAW+oqw8pW2U4UgrAaPUTC
-         AKtCzUDkQ3y48BIBaEfvdS0yAIHcfk9XfHEK6uvCdmb0CWEqsRoX5XeWxV24WzpFOD/E
-         OsIA==
+        bh=hehlayLfD+VpoMaqp50JltEW9ZOkwoZi8i1XpqkJ+jY=;
+        b=BzPhIqc/BTGGhpONND2yBKDMSfQluG1Xwx+iM/D1FrsrEbITOBKG6SEmO4ICwQRqUD
+         D8aNBxfggp19UmXMeigTfLEvVgEMkfJvTditF1F4IPAZVZ0dQF/RbHomju8o6JiQdwt8
+         ZKUj22KfMaipFplfD929PnusCr2PkRT9VcVkEOpy2aOUfvD4b+czBPWdkbUnMZ83ms/T
+         uBrRfHj4XPQ2ceF7Nk1jSqg272a3pUq9IA1jr8MMkRqepYTpwfTCMYi5WK2DpDfMRr2a
+         SnUH4ZUq0EkhhtzCmvHNEJq0+aciMfNS4ISbUCI4GAp68qahC03XkkH0+mwk/mfgC8zY
+         LxqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CnRmpeX7Za1sWr1VkDlo2FHkUAThnM0g5s11O2viS1c=;
-        b=HSjVVO4Nqlf1VIhkxBzzRg8rJCbRxxgp/lfiqLS2Ti+QX+Ji0Cp2NWLIXAtSfaRvCm
-         uDVaxYrhLrHZb91ZDrmKFhcbmBj4l4QsRtYfy1uj6cqJKslVBnwlX+ebyM1gw/1hAHW9
-         u90pGXzhLWeBZ+co/t3T12J8pS88QqJo07OXTglG5N4Wg7lNkTCvKXOP2UIC0iIvvA04
-         Jzy5p7cLYEmPWyPUvIWo7HRkR/1oN0iUwg3p8pUIuoE1nQbpwEkDDYijaa7B33YiKQJq
-         IcoM01/juGxyTf23Flhp6mOoW0TYoQGNSOe3lB0Nh8yaKu2ELyC5JM0+eCAyqHyliTZU
-         DlDA==
-X-Gm-Message-State: ANoB5pnbcwGRxNDeBKXqm1JEObGF1Oe05T34ixar7Y5AftpgboGiVAmX
-        yhl0NdZrMPRDEVQd31wFjIJEsg==
-X-Google-Smtp-Source: AA0mqf5pJJTYZAe4stWQmRpW/FM7fUXXKxK7Eo3twx456P3wlcGr7r4KyXETdbl4fBbfKd3dhi/Jfw==
-X-Received: by 2002:a5d:6dd1:0:b0:236:75a8:58d with SMTP id d17-20020a5d6dd1000000b0023675a8058dmr31861897wrz.295.1669638517341;
-        Mon, 28 Nov 2022 04:28:37 -0800 (PST)
+        bh=hehlayLfD+VpoMaqp50JltEW9ZOkwoZi8i1XpqkJ+jY=;
+        b=BS4Pht0USOPaHqvjPM2/j66vXK4GI+qXEXzMCN02MzOZ6mnO/Z2YiBrL4rBcjz2frj
+         rPfwDzKVsokYYlqnx7pGXm3+EA2neJHao2xRDaMqof93xzfbIW1n+UR/ucVD/4Hh7Fty
+         R28Spb1zdPO0JJ5S2eDu5trGvNlgxogxbggQ8QGWA5d4x0TsM9yrtoBL1sND4qSRT29R
+         F81PZyBV56NBmTEFPBQNsAkezrq6sd0g3+4C3j48Vn8JjQonVofh+s/L51Xn89CSEvnu
+         Jxhm5BHZCrti2KC9xhpdIQn+TRPoET8m7awY/TIRkYZn+oEaDXQi8LLSt7hDqwu+TNby
+         HJng==
+X-Gm-Message-State: ANoB5pkyvnkFRk2Qm5Bb/Bw61DJiUZ8oiMvPG83Qe5lDfhib3/8gbOm+
+        yHnXMJT4NkAqzHfGBn/1dPz50Q==
+X-Google-Smtp-Source: AA0mqf6sMW1+jLzEM3Ft32N1rW0Q0NaUv7OJWoa14USXbzg+1voWzb1fg8lBNgB67iVc8nzw+3txjg==
+X-Received: by 2002:a5d:4281:0:b0:22e:3c69:f587 with SMTP id k1-20020a5d4281000000b0022e3c69f587mr24480414wrq.670.1669638518547;
+        Mon, 28 Nov 2022 04:28:38 -0800 (PST)
 Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id u18-20020adfdd52000000b002421db5f279sm598405wrm.78.2022.11.28.04.28.36
+        by smtp.gmail.com with ESMTPSA id u18-20020adfdd52000000b002421db5f279sm598405wrm.78.2022.11.28.04.28.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 04:28:36 -0800 (PST)
+        Mon, 28 Nov 2022 04:28:38 -0800 (PST)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -61,9 +61,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH v3 3/9] clk: qcom: gdsc: Add configurable poll timeout
-Date:   Mon, 28 Nov 2022 14:28:14 +0200
-Message-Id: <20221128122820.798610-4-abel.vesa@linaro.org>
+Subject: [PATCH v3 4/9] clk: qcom: Add LUCID_OLE PLL type for SM8550
+Date:   Mon, 28 Nov 2022 14:28:15 +0200
+Message-Id: <20221128122820.798610-5-abel.vesa@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221128122820.798610-1-abel.vesa@linaro.org>
 References: <20221128122820.798610-1-abel.vesa@linaro.org>
@@ -71,59 +71,80 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Depending on the platform, the poll timeout delay might be different,
-so allow the platform specific drivers to specify their own values.
+Add a LUCID_OLE PLL type for SM8550 SoC from Qualcomm.
 
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/clk/qcom/gdsc.c | 5 ++++-
- drivers/clk/qcom/gdsc.h | 1 +
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ drivers/clk/qcom/clk-alpha-pll.c | 16 ++++++++++++++++
+ drivers/clk/qcom/clk-alpha-pll.h |  5 +++++
+ 2 files changed, 21 insertions(+)
 
-diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-index 0f21a8a767ac..3753f3ef7241 100644
---- a/drivers/clk/qcom/gdsc.c
-+++ b/drivers/clk/qcom/gdsc.c
-@@ -107,7 +107,7 @@ static int gdsc_poll_status(struct gdsc *sc, enum gdsc_status status)
- 	do {
- 		if (gdsc_check_status(sc, status))
- 			return 0;
--	} while (ktime_us_delta(ktime_get(), start) < TIMEOUT_US);
-+	} while (ktime_us_delta(ktime_get(), start) < sc->poll_timeout);
+diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
+index 1973d79c9465..f9e4cfd7261c 100644
+--- a/drivers/clk/qcom/clk-alpha-pll.c
++++ b/drivers/clk/qcom/clk-alpha-pll.c
+@@ -155,6 +155,22 @@ const u8 clk_alpha_pll_regs[][PLL_OFF_MAX_REGS] = {
+ 		[PLL_OFF_TEST_CTL_U] = 0x30,
+ 		[PLL_OFF_TEST_CTL_U1] = 0x34,
+ 	},
++	[CLK_ALPHA_PLL_TYPE_LUCID_OLE] = {
++		[PLL_OFF_OPMODE] = 0x04,
++		[PLL_OFF_STATE] = 0x08,
++		[PLL_OFF_STATUS] = 0x0c,
++		[PLL_OFF_L_VAL] = 0x10,
++		[PLL_OFF_ALPHA_VAL] = 0x14,
++		[PLL_OFF_USER_CTL] = 0x18,
++		[PLL_OFF_USER_CTL_U] = 0x1c,
++		[PLL_OFF_CONFIG_CTL] = 0x20,
++		[PLL_OFF_CONFIG_CTL_U] = 0x24,
++		[PLL_OFF_CONFIG_CTL_U1] = 0x28,
++		[PLL_OFF_TEST_CTL] = 0x2c,
++		[PLL_OFF_TEST_CTL_U] = 0x30,
++		[PLL_OFF_TEST_CTL_U1] = 0x34,
++		[PLL_OFF_TEST_CTL_U2] = 0x38,
++	},
+ 	[CLK_ALPHA_PLL_TYPE_RIVIAN_EVO] = {
+ 		[PLL_OFF_OPMODE] = 0x04,
+ 		[PLL_OFF_STATUS] = 0x0c,
+diff --git a/drivers/clk/qcom/clk-alpha-pll.h b/drivers/clk/qcom/clk-alpha-pll.h
+index f9524b3fce6b..2bdae362c827 100644
+--- a/drivers/clk/qcom/clk-alpha-pll.h
++++ b/drivers/clk/qcom/clk-alpha-pll.h
+@@ -18,6 +18,7 @@ enum {
+ 	CLK_ALPHA_PLL_TYPE_AGERA,
+ 	CLK_ALPHA_PLL_TYPE_ZONDA,
+ 	CLK_ALPHA_PLL_TYPE_LUCID_EVO,
++	CLK_ALPHA_PLL_TYPE_LUCID_OLE,
+ 	CLK_ALPHA_PLL_TYPE_RIVIAN_EVO,
+ 	CLK_ALPHA_PLL_TYPE_DEFAULT_EVO,
+ 	CLK_ALPHA_PLL_TYPE_BRAMMO_EVO,
+@@ -38,6 +39,8 @@ enum {
+ 	PLL_OFF_TEST_CTL,
+ 	PLL_OFF_TEST_CTL_U,
+ 	PLL_OFF_TEST_CTL_U1,
++	PLL_OFF_TEST_CTL_U2,
++	PLL_OFF_STATE,
+ 	PLL_OFF_STATUS,
+ 	PLL_OFF_OPMODE,
+ 	PLL_OFF_FRAC,
+@@ -160,7 +163,9 @@ extern const struct clk_ops clk_alpha_pll_zonda_ops;
+ extern const struct clk_ops clk_alpha_pll_lucid_evo_ops;
+ extern const struct clk_ops clk_alpha_pll_reset_lucid_evo_ops;
+ extern const struct clk_ops clk_alpha_pll_fixed_lucid_evo_ops;
++#define clk_alpha_pll_fixed_lucid_ole_ops clk_alpha_pll_fixed_lucid_evo_ops
+ extern const struct clk_ops clk_alpha_pll_postdiv_lucid_evo_ops;
++#define clk_alpha_pll_postdiv_lucid_ole_ops clk_alpha_pll_postdiv_lucid_evo_ops
  
- 	if (gdsc_check_status(sc, status))
- 		return 0;
-@@ -454,6 +454,9 @@ static int gdsc_init(struct gdsc *sc)
- 	if (ret)
- 		goto err_disable_supply;
- 
-+	if (!sc->poll_timeout)
-+		sc->poll_timeout = 500;
-+
- 	return 0;
- 
- err_disable_supply:
-diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
-index 803512688336..9a1e1fb3d12f 100644
---- a/drivers/clk/qcom/gdsc.h
-+++ b/drivers/clk/qcom/gdsc.h
-@@ -36,6 +36,7 @@ struct gdsc {
- 	struct generic_pm_domain	*parent;
- 	struct regmap			*regmap;
- 	unsigned int			gdscr;
-+	unsigned int			poll_timeout;
- 	unsigned int			collapse_ctrl;
- 	unsigned int			collapse_mask;
- 	unsigned int			gds_hw_ctrl;
+ extern const struct clk_ops clk_alpha_pll_rivian_evo_ops;
+ #define clk_alpha_pll_postdiv_rivian_evo_ops clk_alpha_pll_postdiv_fabia_ops
 -- 
 2.34.1
 
