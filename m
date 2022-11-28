@@ -2,128 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D92C639FE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 04:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D99BD639FCD
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 03:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiK1DA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 22:00:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
+        id S229641AbiK1Cx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 21:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiK1DAy (ORCPT
+        with ESMTP id S229509AbiK1Cx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 22:00:54 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126AB7651
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 19:00:54 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id a22-20020a17090a6d9600b0021896eb5554so12641209pjk.1
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 19:00:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uy6YGRvritBEn7bclT/hIoz2EnIirTxb7QGEsJahbiA=;
-        b=gjKhbvfXQdlhbcWLdiqNKEw5y/kyA4/xTNlZENReDq9eIko0//yhBrdyjer64FZ4aB
-         iedxGXaMsFDVarBgUflbjCuH4wB/DmofGZn5HETmQwuMlm44zG9BrXxwHdW8CQqDfD0N
-         VHij7FAiJAnbRgQ6hSBc7n3X+1poQCjQEk35ZEx1F3A4Xix0nb/uJCLMpqYxKaN/YBS9
-         A8/7q5zEwMRBMLv4ysZgIc0gFU4vo2wJbAG9T3TJuDnh4C30n5Xp6pc+KN9t9E0yRB21
-         M5OrLd3zX91Y5RfwSOqRShPoldEPnTqNAf8BLrDSDrAkAzFDBknPgpK8BxYa+K4ROMxa
-         wNnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Uy6YGRvritBEn7bclT/hIoz2EnIirTxb7QGEsJahbiA=;
-        b=yh6R+5NDinEZw1U89PGtynlk3PV2ctl/1HBWC5jMl9TMhnf6iGX5o4hAcZcCgdH9bb
-         oWYknkcRYWrbnOv66nUqb2EMtpygVhv3QRFuTBVoKqJOe4yfWqT4P/KOIfCcRIH2/rUS
-         feQGmU29NgsrgcoEpF5RXvm7Za1DoId0NC1cuUku6C+CymvTlrE4mmnIOG9ivma2pmoF
-         KAVqOvUQR6v/FSGWqQQtc+KVUP88cIZtpCV/C/f5pvCsIK4VZc5wIhVX8DxDuvT6hkmT
-         NX9ZT1bOwuZ0ZxHS8aWHDC22q3WW2/iPtzetOkvQUTW/iQz6xefgP1cMEEce8TNmnHX2
-         jPXg==
-X-Gm-Message-State: ANoB5plSyT8y19wS6h70aE4kkbgJw9ipOvWC4QsNeFqatXRErOcBfjqN
-        IZHM2iL4E23FgXKV+qhF1cem5biiYpt2xuXw99I=
-X-Google-Smtp-Source: AA0mqf5UceNhbskqkrInTTeM7JNyAeJ4fd1bbUXMgGB0F4x0sTmk0lrYfEl5b+pqU0vPJePueSwPdJjV36pzrHU/lIY=
-X-Received: by 2002:a17:902:70c9:b0:176:a0cc:5eff with SMTP id
- l9-20020a17090270c900b00176a0cc5effmr38862278plt.128.1669604453468; Sun, 27
- Nov 2022 19:00:53 -0800 (PST)
+        Sun, 27 Nov 2022 21:53:56 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D32539F
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 18:53:55 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NL95n2mDvz4f3p17
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:53:49 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP4 (Coremail) with SMTP id gCh0CgCXu9i+IoRjnd0cBQ--.33892S4;
+        Mon, 28 Nov 2022 10:53:52 +0800 (CST)
+From:   Hou Tao <houtao@huaweicloud.com>
+To:     linux-cachefs@redhat.com
+Cc:     David Howells <dhowells@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, houtao1@huawei.com
+Subject: [PATCH] fscache: Use wake_up_var() to wake up pending volume acquisition
+Date:   Mon, 28 Nov 2022 11:19:29 +0800
+Message-Id: <20221128031929.3918348-1-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20221121035140.118651-1-zhouzhouyi@gmail.com> <87y1rxwsse.ffs@tglx>
- <CAABZP2xNTbrx9iV+KH3VZx1c9Yi97+izNA=XSJQBuOJ4WENFZg@mail.gmail.com>
- <87v8n0woxv.ffs@tglx> <20221127175317.GF4001@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20221127175317.GF4001@paulmck-ThinkPad-P17-Gen-1>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Mon, 28 Nov 2022 11:00:42 +0800
-Message-ID: <CAABZP2zj4B4P4D+3g7M8jdKSaj5qBVHuGtGJcdmLAfzBZiva7g@mail.gmail.com>
-Subject: Re: [PATCH linux-next][RFC]torture: avoid offline tick_do_timer_cpu
-To:     paulmck@kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>, fweisbec@gmail.com,
-        mingo@kernel.org, dave@stgolabs.net, josh@joshtriplett.org,
-        mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCXu9i+IoRjnd0cBQ--.33892S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxCF45KrWftrWxXrWxury7trb_yoW5Xr1xp3
+        9I9FWft3ykX342yw4rXw47Z34S9FykGFs7Cr4vkryUAF47Jr1ktF1Ika95uFW7C39rJrWa
+        q3WYk345Ww4UA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
+        c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
+        CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
+        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJV
+        Cq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
+        daVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you all for your guidance and encouragement!
+From: Hou Tao <houtao1@huawei.com>
 
-I learn how to construct commit message properly and learn how
-important the role
-that the torture test framework plays for the Linux kernel. Hope I can
-be of benefit to the community by my work.
+The freeing of relinquished volume will wake up the pending volume
+acquisition by using wake_up_bit(), however it is mismatched with
+wait_var_event() used in fscache_wait_on_volume_collision() and it will
+never wake up the waiter in the wait-queue because these two functions
+operate on different wait-queues.
 
-I am going to continue to study this topic and study the torture test
-framework, and wait for your further instructions.
+According to the implementation in fscache_wait_on_volume_collision(),
+if the wake-up of pending acquisition is delayed longer than 20 seconds
+(e.g., due to the delay of on-demand fd closing), the first
+wait_var_event_timeout() will timeout and the following wait_var_event()
+will hang forever as shown below:
 
-Best Regards
-Zhouyi
-On Mon, Nov 28, 2022 at 1:53 AM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Sun, Nov 27, 2022 at 01:40:28PM +0100, Thomas Gleixner wrote:
->
-> [ . . . ]
->
-> > >> No. We are not exporting this just to make a bogus test case happy.
-> > >>
-> > >> Fix the torture code to handle -EBUSY correctly.
-> > > I am going to do a study on this, for now, I do a grep in the kernel tree:
-> > > find . -name "*.c"|xargs grep cpuhp_setup_state|wc -l
-> > > The result of the grep command shows that there are 268
-> > > cpuhp_setup_state* cases.
-> > > which may make our task more complicated.
-> >
-> > Why? The whole point of this torture thing is to stress the
-> > infrastructure.
->
-> Indeed.
->
-> > There are quite some reasons why a CPU-hotplug or a hot-unplug operation
-> > can fail, which is not a fatal problem, really.
-> >
-> > So if a CPU hotplug operation fails, then why can't the torture test
-> > just move on and validate that the system still behaves correctly?
-> >
-> > That gives us more coverage than just testing the good case and giving
-> > up when something unexpected happens.
->
-> Agreed, with access to a function like the tick_nohz_full_timekeeper()
-> suggested earlier in this email thread, then yes, it would make sense to
-> try to offline the CPU anyway, then forgive the failure in cases where
-> the CPU matches that indicated by tick_nohz_full_timekeeper().
->
-> > I even argue that the torture test should inject random failures into
-> > the hotplug state machine to achieve extended code coverage.
->
-> I could imagine torture_onoff() telling various CPU-hotplug notifiers
-> to refuse the transition using some TBD interface.  That would better
-> test the CPU-hotplug common code's ability to deal with failures.
->
-> Or did you have something else/additional in mind?
->
->                                                         Thanx, Paul
+ FS-Cache: Potential volume collision new=00000024 old=00000022
+ ......
+ INFO: task mount:1148 blocked for more than 122 seconds.
+       Not tainted 6.1.0-rc6+ #1
+ task:mount           state:D stack:0     pid:1148  ppid:1
+ Call Trace:
+  <TASK>
+  __schedule+0x2f6/0xb80
+  schedule+0x67/0xe0
+  fscache_wait_on_volume_collision.cold+0x80/0x82
+  __fscache_acquire_volume+0x40d/0x4e0
+  erofs_fscache_register_volume+0x51/0xe0 [erofs]
+  erofs_fscache_register_fs+0x19c/0x240 [erofs]
+  erofs_fc_fill_super+0x746/0xaf0 [erofs]
+  vfs_get_super+0x7d/0x100
+  get_tree_nodev+0x16/0x20
+  erofs_fc_get_tree+0x20/0x30 [erofs]
+  vfs_get_tree+0x24/0xb0
+  path_mount+0x2fa/0xa90
+  do_mount+0x7c/0xa0
+  __x64_sys_mount+0x8b/0xe0
+  do_syscall_64+0x30/0x60
+  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+Fixing it by using wake_up_var() instead of wake_up_bit(). In addition
+because waitqueue_active() is used in wake_up_var() and clear_bit()
+doesn't imply any memory barrier, so do smp_mb__after_atomic() before
+invoking wake_up_var().
+
+Fixes: 62ab63352350 ("fscache: Implement volume registration")
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ fs/fscache/volume.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/fs/fscache/volume.c b/fs/fscache/volume.c
+index ab8ceddf9efa..cf8293bb1aca 100644
+--- a/fs/fscache/volume.c
++++ b/fs/fscache/volume.c
+@@ -348,7 +348,12 @@ static void fscache_wake_pending_volume(struct fscache_volume *volume,
+ 		if (fscache_volume_same(cursor, volume)) {
+ 			fscache_see_volume(cursor, fscache_volume_see_hash_wake);
+ 			clear_bit(FSCACHE_VOLUME_ACQUIRE_PENDING, &cursor->flags);
+-			wake_up_bit(&cursor->flags, FSCACHE_VOLUME_ACQUIRE_PENDING);
++			/*
++			 * Paired with barrier in wait_var_event(). Check
++			 * waitqueue_active() and wake_up_var() for details.
++			 */
++			smp_mb__after_atomic();
++			wake_up_var(&cursor->flags);
+ 			return;
+ 		}
+ 	}
+-- 
+2.29.2
+
