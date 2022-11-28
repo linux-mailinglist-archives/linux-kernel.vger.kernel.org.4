@@ -2,90 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB65D63AE71
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:07:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6FC63AE7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232508AbiK1RHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 12:07:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
+        id S231921AbiK1RIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 12:08:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232043AbiK1RHN (ORCPT
+        with ESMTP id S232637AbiK1RHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:07:13 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52FE23389;
-        Mon, 28 Nov 2022 09:07:12 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id s196so10491415pgs.3;
-        Mon, 28 Nov 2022 09:07:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t/jS1zRSpC+P8xp144xwnS5feegCHv0w8ewtLrv0nf8=;
-        b=kaWfxhV6xf7mJFYhLrtFv1cSXD99yiQq0KYir1cgs5srtEL5R5EtlBW4JHsDgXOPVF
-         uxOAQ5sIrXTK7K9lkqSt/uwFo3SL9OnzltOhtizenHqUIottvCisHR3+tV+1neXnj2bp
-         OuWqD5GjQWfsUGuYn1LlZJZ6wzMTIhsF/xJkpP+uIuEF15E8jnoTlFtby0SCGqPiYJo4
-         JPMCjV9UKJwC8PsvwzfZVOJmhLdX0Li7oU4xVPQ3jMcizLjiMy5YPiE1JGZWl8D//bwS
-         rjHVPWYCxC2I3HgTOW1TA8ntXVwsZm9IG+b47NRZ5u9t4f2joIgPZpkDRFN+Iqa6peyh
-         3YxA==
+        Mon, 28 Nov 2022 12:07:54 -0500
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564C412AF5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:07:52 -0800 (PST)
+Received: by mail-io1-f53.google.com with SMTP id r81so8083458iod.2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:07:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t/jS1zRSpC+P8xp144xwnS5feegCHv0w8ewtLrv0nf8=;
-        b=h98bKdo6n6/IqLDX1KttywW6j6IvE99SOqOVcPqK/J5dEEkcX8IPbGlQvjaNoy7tZ/
-         ++s5/dkOPpg3Ul86a+RbWxP8eeu8UT51OplyVXGFLnR3R7uRwhCJjVtYyPONRV5JaOwu
-         r3YfvCoUoECW9BN/ZuFxsoAlmkl4LC91S5yV1sLcHRvEfnr8RvuVS79EsFENg+DcXnjB
-         Nq17BGYH5jYH03iKgaeyA0/g/XrL2Z1dxwUHhCtS1z0SOTEJpu3XhyhaNzaek7eQkIMM
-         +W6bEWsAuISa9tP5rpF8ujL0MEDjOSCF+B1hcPLdayUpSSDuYgl7rpYn7xlS2UfLWdlM
-         S0LA==
-X-Gm-Message-State: ANoB5pkvGjtwv6qa4eS0yLutGcuJhULh1BH1fQgMIj2vJcbQYSsKSzu3
-        uUQTQd2ldy/Cac8IQhMvqKO+wXhmtIw=
-X-Google-Smtp-Source: AA0mqf5/vhXxoR1I9znY5JVY5l7IcYK1a1Lri4yThXiWTRaWT6zTz3p2EWd21Qq4tAaYnh8VpDqK/g==
-X-Received: by 2002:a63:5153:0:b0:41a:4bd4:f43f with SMTP id r19-20020a635153000000b0041a4bd4f43fmr29147466pgl.460.1669655232208;
-        Mon, 28 Nov 2022 09:07:12 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id x22-20020a170902821600b0016be834d54asm8976177pln.306.2022.11.28.09.07.11
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=igPdFyjO35ZpKO+vYdPwkIUVgK4YYNs5Tn93PDEG5qo=;
+        b=1M2P+b4BMXJaxTmRrXbMvqzCjCeBUyvLo8Ds2uHYcBeA7Z7ggsLKQ2tB1B1iM+X+nC
+         r8xX1bCx36WMj0tLu21wbwjNHlzjy/a+fJAzE5Q5fRgNnun39S8jddPZCjD0nJnkRR+i
+         VaTqpWONAWWzOVnoLIFSSk3WdBDYKlR4YKRzYqM8I6RrubUZCD9amqYZ6EACa1Z4dBWc
+         SrfkothyzMKjIiVaPVd8Rxm4mnjJGzCLGUhgu+NinXhlLP5ToWpAZEvsskJaDgkLjwZS
+         42fxlb41031RkqPZmKCVIDy7YSAUR0yY+2Q8xpfz20D8JX0wS9Z+Rw4crem2mKhl1Lxm
+         n3dw==
+X-Gm-Message-State: ANoB5pktn12dceSFLTnAm/2gH+/3nUcFayMFEEx+RzA7yq7xagLGp74b
+        MHln76DFdkra1X7oZRYXEaWDyw==
+X-Google-Smtp-Source: AA0mqf6dZyZDdW7YMXoUdCdKsv4wcvFxNrCZ9SnWjpdxJctmmOaXVtUYw9WlNujpMLLqsz8mrCy7XA==
+X-Received: by 2002:a6b:f616:0:b0:6df:2c14:f642 with SMTP id n22-20020a6bf616000000b006df2c14f642mr10368857ioh.43.1669655271371;
+        Mon, 28 Nov 2022 09:07:51 -0800 (PST)
+Received: from google.com (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with ESMTPSA id p7-20020a02b007000000b0037fbfe86e77sm4540557jah.3.2022.11.28.09.07.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 09:07:11 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 28 Nov 2022 07:07:10 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "haifeng.xu" <haifeng.xu@shopee.com>
-Cc:     longman@redhat.com, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cgroup/cpuset: Clean up cpuset_task_status_allowed
-Message-ID: <Y4TqvlOmXqY/CBEc@slm.duckdns.org>
-References: <20221125075133.12718-1-haifeng.xu@shopee.com>
+        Mon, 28 Nov 2022 09:07:51 -0800 (PST)
+Date:   Mon, 28 Nov 2022 17:07:48 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     =?utf-8?B?5qWK5a6X57+w?= <ecs.taipeikernel@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bob Moragues <moragues@chromium.org>,
+        Harvey <hunge@google.com>, Stephen Boyd <swboyd@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Abner.Yen@ecs.com.tw,
+        Gavin.Lee@ecs.com.tw, Vicy.Lee@ecs.com.tw, Jason.Huang@ecs.com.tw,
+        Darren.Chen@ecs.com.tw
+Subject: Re: [PATCH v2 1/2] dt-bindings: arm: qcom: Adding DT binding for
+ zombie
+Message-ID: <Y4Tq5DFoc0kWIjTb@google.com>
+References: <20221122203635.v2.1.Ie05fd439d0b271b927acb25c2a6e41af7a927e90@changeid>
+ <Y3zck7tPA5WFd0p1@google.com>
+ <CAPao8GKpXcRm3PmWnv+rsr2z53r6J-ScXAq+fOi4ydQg_Gy31A@mail.gmail.com>
+ <Y343IWgkli+y8HMn@google.com>
+ <CAD=FV=X4GzCnmgnAQMzCNpCxzxkZXWONt4gNVCHniRYE_uFVyg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221125075133.12718-1-haifeng.xu@shopee.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAD=FV=X4GzCnmgnAQMzCNpCxzxkZXWONt4gNVCHniRYE_uFVyg@mail.gmail.com>
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 07:51:33AM +0000, haifeng.xu wrote:
-> cpuset_task_status_allowed just shows mems_allowed status, so
-> rename it to task_mems_allowed. Moreover, it's only used in
-> proc_pid_status, so move it to fs/proc/array.c. There is no
-> intentional function change.
+On Mon, Nov 28, 2022 at 08:20:36AM -0800, Doug Anderson wrote:
+> Hi,
 > 
-> Signed-off-by: haifeng.xu <haifeng.xu@shopee.com>
+> On Wed, Nov 23, 2022 at 7:07 AM Matthias Kaehlcke <mka@chromium.org> wrote:
+> >
+> > > My checkout steps as below:
+> > > $ git remote add linux_qcomÂ git://git.kernel.org/pub/scm/linux/kernel/git/
+> > > qcom/linux.git
+> > > $ git fetch --no-tags linux_qcom
+> > > $ git checkout -b <MyLocalBranchName> linux_qcom/for-next
+> > >
+> > > Is myÂ code base branch still worng?Â  Am IÂ missing something?Â
+> >
+> > My understanding is that it is best to base you changes on a branch like
+> > 'arm64-for-6.2' as the 'for-next' branch is re-created every time changes
+> > land in one of the '${area}-for-${version}' branches.
+> >
+> > No big issue in this case, just use the corresponding '${area}-for-${version}'
+> > branch for future patches/versions :)
+> 
+> FWIW, I usually just use Bjron's for-next branch for stuff like this.
+> While the merge commits in the the Qualcomm "for-next" branch are
+> re-created every time, because of the way "git" works the git hashes
+> of the actual patches are the same as the git hashes of the patches in
+> the separate branches. All the patches in "for-next" should be ones
+> that are fine to base your patches on.
 
-mems_allowed being a very much cpuset feature, I don't see how this is an
-improvement. The new code is different and can be another way of doing it,
-sure, but there's no inherent benefit to it. What's the point of the churn?
-
-Thanks.
-
--- 
-tejun
+I had minor concerns that occasionally tools might get confused it they
+try to find the parent tree of a patch based on the unstable hash of
+the merge commit in "for-next". Not sure if it is much of an issue in
+practice.
