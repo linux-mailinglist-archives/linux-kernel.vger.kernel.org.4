@@ -2,118 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F4B63A56A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5AE63A56B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiK1Jvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 04:51:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35506 "EHLO
+        id S229961AbiK1Jw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 04:52:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiK1Jvc (ORCPT
+        with ESMTP id S229799AbiK1Jw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 04:51:32 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A76193D1;
-        Mon, 28 Nov 2022 01:51:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669629091; x=1701165091;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kg8gSoBWfRNuX9Ds7mhHZmSGNm7a8mdcL2RtLflzVgQ=;
-  b=LwcARyLHfEBhkQFez7FyQI258sbMq/G2c3CUv+CoXqc0VdafUbQZK2X9
-   bEdy+KpBftl1f6zCpz86NIpkXxcMv3S+16toehKw0e09ZF5iJoPDmifQP
-   CnAs4I/BVuxSB1flKMh36C/hMzE9yLJRxqv+WEU4IKecs9Hxw+8/kIyRw
-   pzbgCiWte9vOgBFtjgApb0i3nxQzEQTJGHjSwbs79gkJ/bdEHUCD+nEVP
-   w78zieRLFdzdzCkOif//k4AzkS9/NYSb/jnozbiR6ds9K+nTrArMALXeh
-   fYSx6OjC/FP2q91Zejz0u7+PjDzJJDZKlVgKANXryPaXZrJBjuf0JOAI1
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="379048950"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="379048950"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 01:51:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="620988277"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="620988277"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 28 Nov 2022 01:51:11 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ozan8-0013vS-0p;
-        Mon, 28 Nov 2022 11:51:10 +0200
-Date:   Mon, 28 Nov 2022 11:51:09 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Michael Walle <michael@walle.cc>, linus.walleij@linaro.org,
-        brgl@bgdev.pl, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, broonie@kernel.org
-Subject: Re: [PATCH v3 3/9] gpio: 104-dio-48e: Migrate to the regmap-irq API
-Message-ID: <Y4SEjVpLUd1wA8nd@smile.fi.intel.com>
-References: <cover.1669100542.git.william.gray@linaro.org>
- <80fc819bcafe9697b6e02c0750d3cf0ea4ec9e1b.1669100542.git.william.gray@linaro.org>
- <Y3414YhVjqKakddV@smile.fi.intel.com>
- <Y3ykg1Vc96Px6ovg@fedora>
- <3a23df35a35cdba19eeb10c75b5bca97@walle.cc>
- <Y4PeCBy/8slpMp2R@fedora>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4PeCBy/8slpMp2R@fedora>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Nov 2022 04:52:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0840E192AD
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:52:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ABD2EB80CB4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:52:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 765CBC433D6;
+        Mon, 28 Nov 2022 09:52:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669629141;
+        bh=qd6xOdsXyMIm7VieH+jeOpMysoYfiXB1UKsSPIoaNMI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RoqS52RlZ2QAzWj+P+jGtB5i6Ee98B/IIHgsxWLvYrFWeNwyOZ1HIISOLdI5oA9Ij
+         gKXc/5dpqcheCMiEDnMCz3nZ3u17/aUe2GHBe65KS2XDekuuIIY70JRvKFZRfZ7uLb
+         X6j5svafVjHwFB5PEP4oJjpNuDEhGNEeQpvCFowhLAhuDHuVzbvBQHywLvtpQvuHuB
+         pzOG+lK6BM338pNMpmRDDdvz8wm0a/8gUWSZWDbC05SRZdD8TNiOztimS1VIxgF1ju
+         LqgMnkAOR05h5CN/tGGHHmlBZ+Nu01XKkyf6CNJiGLyuo5L7pl2gAolxSMxp2HrEwE
+         NT9BB/DRZA6+g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ozaoF-008yff-5a;
+        Mon, 28 Nov 2022 09:52:19 +0000
+Date:   Mon, 28 Nov 2022 09:52:18 +0000
+Message-ID: <86lenvmmnh.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] irqchip: LoongArch: Select GENERIC_IRQ_EFFECTIVE_AFF_MASK if SMP
+In-Reply-To: <cf953917-efe4-8254-f468-3baf7e596483@sholland.org>
+References: <1666841949-5244-1-git-send-email-yangtiezhu@loongson.cn>
+        <87v8n1ubbj.wl-maz@kernel.org>
+        <cf953917-efe4-8254-f468-3baf7e596483@sholland.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: samuel@sholland.org, yangtiezhu@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 27, 2022 at 05:00:40PM -0500, William Breathitt Gray wrote:
-> On Sun, Nov 27, 2022 at 07:31:48PM +0100, Michael Walle wrote:
-> > Am 2022-11-22 11:29, schrieb William Breathitt Gray:
-
-...
-
-> > gpiochip doesn't seem to be the correct place, gpiochip_add_irqchip()
-> > is a noop for gpio-regmap, right? So using gpiochip_irqchip_init_hw()
-> > seems wrong.
+On Sat, 26 Nov 2022 23:49:10 +0000,
+Samuel Holland <samuel@sholland.org> wrote:
+> 
+> On 11/26/22 06:53, Marc Zyngier wrote:
+> > On Thu, 27 Oct 2022 04:39:09 +0100,
+> > Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+> >>
+> >> An IRQ's effective affinity can only be different from its configured
+> >> affinity if there are multiple CPUs. Make it clear that this option is
+> >> only meaningful when SMP is enabled.
+> >>
+> >> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> >> ---
+> >>
+> >> v2: rebased on 6.1-rc2
+> >>
+> >>  drivers/irqchip/Kconfig | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> >> index 7ef9f5e..8461915 100644
+> >> --- a/drivers/irqchip/Kconfig
+> >> +++ b/drivers/irqchip/Kconfig
+> >> @@ -575,7 +575,7 @@ config IRQ_LOONGARCH_CPU
+> >>  	bool
+> >>  	select GENERIC_IRQ_CHIP
+> >>  	select IRQ_DOMAIN
+> >> -	select GENERIC_IRQ_EFFECTIVE_AFF_MASK
+> >> +	select GENERIC_IRQ_EFFECTIVE_AFF_MASK if SMP
+> >>  	select LOONGSON_LIOINTC
+> >>  	select LOONGSON_EIOINTC
+> >>  	select LOONGSON_PCH_PIC
 > > 
-> > Maybe make gpio-regmap call it on its own? But really we just connect
-> > the regmap-irq to the gpiochip irqdomain.
-> 
-> I think you're right, it feels strange to handle IRQ initialization via
-> the GPIO framework. Maybe somewhere in regmap_irq might be more
-> appropriate?
-
-The problem that that callback solves is possible interrupt storm, spurious
-interrupts, and Use Before Initialized.
-
-If you can guarantee that in your case it never happens, add a comment
-and go on.
-
-(It might be useful to tweak code a bit and try CONFIG_DEBUG_SHIRQ=y)
-
-> > What is the purpose of the
-> > .init_hw callback? I've looked at other drivers which use regmap-irq
-> > and they all seem to just initialize the hardware in their _probe().
+> > We already have this:
 > > 
-> > -michael
+> > # Supports effective affinity mask
+> > config GENERIC_IRQ_EFFECTIVE_AFF_MASK
+> >        depends on SMP
+> >        bool
+> > 
+> > Do we really need to express this for every interrupt controller?
 > 
-> I'm not opposed to initializing the hardware in _probe(), although I can
-> see merit in pushing that operation instead closer to the framework
-> where the initialization is actually relevant.
-> 
-> Andy, maybe you can shed some light about .init_hw; I think you
-> introduced it to gpiolib in commit 9411e3aaa6342.
+> Unfortunately yes, because "select" does not respect dependencies. So
+> the "depends on SMP" line does not enforce anything; it only serves to
+> provide a warning at configure time that the build will break.
 
-It seems that commit message doesn't fully  explain the situation behind
-that change. But it was observed in real life, see above.
+I understand that. My question was more "how can we avoid doing that
+for each and every irqchip".
+
+So far, the only things I can think of are either an intermediate
+config symbol that performs the "if SMP" by itself, or spraying checks
+for CONFIG_SMP all over the shop. None of which are appealing.
+
+	M.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Without deviation from the norm, progress is not possible.
