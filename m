@@ -2,83 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AA463A71A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:22:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2EC63A722
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:22:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbiK1LWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 06:22:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38202 "EHLO
+        id S230369AbiK1LWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 06:22:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231301AbiK1LVs (ORCPT
+        with ESMTP id S231361AbiK1LV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 06:21:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01AE5FE0;
-        Mon, 28 Nov 2022 03:20:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 28 Nov 2022 06:21:57 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE71E1C910;
+        Mon, 28 Nov 2022 03:20:35 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2653B80D50;
-        Mon, 28 Nov 2022 11:20:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 55A11C433D6;
-        Mon, 28 Nov 2022 11:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669634415;
-        bh=capgdYdlv8ImmaY/P/XJPNMe5ihxiGl9pspCb2NR7Ms=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=hjWkUBknQuY85YbvoLRK+C3kMeqlNk8kfIYVmZwZg1Bdksi9SNVzwND2Ts88JG3bL
-         CVXZQ/TYXcce3Jx+tHZrRpl6GdbItwfUfCWliibpS1HGb0C4DmAZ9JMrqmG6u8+Yuw
-         vlUP9WvuIdA+n6/A/fe8dY4bDnuf8K2PruPoRmzJuPxTxQAbETZsU/Hdi47MzGrCEk
-         RurMAHKK3BmoGWIrJLPUEv/2M3s5x39FH4PlRU6ryqOnBL3vFxArXLAtZzCILG5ul6
-         SBnl6/tYAyTT+hnDw9tKwXFo5Soci/cWVuMZCJjRArA2F9DlnrdpIFB+6W/HXrEjn4
-         0gv/Wdy+GnpOQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 38E23E270C8;
-        Mon, 28 Nov 2022 11:20:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 770D46600012;
+        Mon, 28 Nov 2022 11:20:33 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669634434;
+        bh=dE20A2/OTzcHoFZjonpiFTdjhVa0lqqfrLGgjF3xe2I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RPdzqVktr1JSiTCwjxg5t2lBvjIZVJu8cFhNojXxoE1yABV6riAbAgdmQ+XRbf/nW
+         XeedMk8iCjPyspka3o+GP7OSVq26m4IOMiNAAEPYuMu+3oYD5B+Ofk2ftlQ6gRXd3D
+         tZT3T9GHpRqzA7fneYJ78q6eL5uZ0htJm32mscIouWjEAFwNzsb9LBbNu44hBOkJN8
+         VO/EljAOUlrbGjOLJEu/qWjNVBqS1TQmyuTicEoZ1xoRT8A2zVq3dLgpHccpWwzPjh
+         5jcOWVV0+R61xODESb57J6nXijp+4DSXrJ0xdhVbY6GZjrYBOQDMWHp+g2HIufSU40
+         yvyyXPiptvQNA==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     krzysztof.kozlowski+dt@linaro.org
+Cc:     thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        robh+dt@kernel.org, matthias.bgg@gmail.com, john@phrozen.org,
+        sean.wang@mediatek.com, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v1 0/2] pwm-mediatek: Convert to schema and fixes
+Date:   Mon, 28 Nov 2022 12:20:26 +0100
+Message-Id: <20221128112028.58021-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: ethernet: nixge: fix NULL dereference
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166963441522.28920.10870298587227160274.git-patchwork-notify@kernel.org>
-Date:   Mon, 28 Nov 2022 11:20:15 +0000
-References: <20221124084303.2075092-1-YKarpov@ispras.ru>
-In-Reply-To: <20221124084303.2075092-1-YKarpov@ispras.ru>
-To:     Yuri Karpov <YKarpov@ispras.ru>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+This series converts pwm-mediatek.txt to schema and fixes
+mt7622.dtsi to declare the needed #pwm-cells on the pwm node,
+required to not trigger a dtbs_check warning... and to make
+that node actually usable.
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+AngeloGioacchino Del Regno (2):
+  arm64: dts: mediatek: mt7622: Add missing pwm-cells to pwm node
+  dt-bindings: pwm: mediatek: Convert pwm-mediatek to dt schema
 
-On Thu, 24 Nov 2022 11:43:03 +0300 you wrote:
-> In function nixge_hw_dma_bd_release() dereference of NULL pointer
-> priv->rx_bd_v is possible for the case of its allocation failure in
-> nixge_hw_dma_bd_init().
-> 
-> Move for() loop with priv->rx_bd_v dereference under the check for
-> its validity.
-> 
-> [...]
+ .../bindings/pwm/mediatek,mt2712-pwm.yaml     | 93 +++++++++++++++++++
+ .../devicetree/bindings/pwm/pwm-mediatek.txt  | 52 -----------
+ arch/arm64/boot/dts/mediatek/mt7622.dtsi      |  1 +
+ 3 files changed, 94 insertions(+), 52 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
 
-Here is the summary with links:
-  - net: ethernet: nixge: fix NULL dereference
-    https://git.kernel.org/netdev/net/c/9256db4e45e8
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.38.1
 
