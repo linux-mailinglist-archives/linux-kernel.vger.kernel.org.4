@@ -2,85 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A849E63A204
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:35:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F4C63A20B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:38:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbiK1Hfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 02:35:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
+        id S229846AbiK1Hh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 02:37:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiK1Hfp (ORCPT
+        with ESMTP id S229696AbiK1Hhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 02:35:45 -0500
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC4B12AAF;
-        Sun, 27 Nov 2022 23:35:43 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VVpnSmS_1669620938;
-Received: from 30.27.90.133(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VVpnSmS_1669620938)
-          by smtp.aliyun-inc.com;
-          Mon, 28 Nov 2022 15:35:39 +0800
-Message-ID: <e0461754-39c4-a9e1-6ca1-381659e4a2d7@linux.alibaba.com>
-Date:   Mon, 28 Nov 2022 15:35:37 +0800
+        Mon, 28 Nov 2022 02:37:55 -0500
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2072.outbound.protection.outlook.com [40.107.241.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC1D13D00;
+        Sun, 27 Nov 2022 23:37:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z/nKWtNAUmlLoo0SLyYInJsX9864hQd99YEVdrdIvO7nA8dNiQKubuLlYp6CPDN94xmYxnoErtlSQpZxLz3KehS/89/fxTU1JZtJLRr5fpGvIrXgmRcFw6T+B2MwH+4MZAmhM8p4X1uBMlIKMPpskmvfEjwhnAXE1MuhsH6vkDqI07q7AEIlHnM6SdO92hU7vT1ACLkWIw4xlJD0DI9OHQ8zs5TJ3AmZrWnU5WpMgQ9slI0UvwjpI8paizPY6kTEYRaAMtk8tleff6YQNWtRM+hM1YwyPvvgBTFJvxxI7PhSzT+wandTAOHXpPjClabZWyPdsnOwH9renrflBAFBsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1008IJqErbcV+/6nXoR6rj4i3y1t47bgmtMMOV8BU08=;
+ b=RmzURGiNp+7qCLqiCDzzPwhs8tjY1bOCTio13PdswowTmyOne7tPId/SnDPOsNLWs2vnYPFIIxXxZM1Fgs5RmVImfiGxkqdprlNJC7KcC6eEsdx3SU33VyA0cBkuKv/+VDg4ut+dbWZF3VF4BnjLX58qYcJ2bEGG4H0r4PA90E5gC+yMZ0RyACaeVVaiznC6vUhO7H/XcThYXRTG4JadwJqDMOXX7y/SX+JY6sOx6mPuatyOgF2pH1orJO42/CoNfm3e8nDYUfpt8UhmMMS/dcO0yPmXVniNJUz5U4p+jsi23jJb3BLcD43oXNYOCwGi7gB0nWtVHn2d4wxuZoq7gQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1008IJqErbcV+/6nXoR6rj4i3y1t47bgmtMMOV8BU08=;
+ b=EM2ot1qXhBiV9lipqFyxEhlBm61jqP6v8WQC4pTEpryNAEmu6ABIx69pzfPmgCLJftwRwoNv/dOGrrPMIJCtH53Y+6cg6G2CumzRNf6ZKz7Q1s1VOS8BkCd9dET6mFNidFo9nJQWVnr23gCUt9GGIBmRfW6+PduqW+HIKVlSrdw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9448.eurprd04.prod.outlook.com (2603:10a6:102:2b1::21)
+ by DU0PR04MB9249.eurprd04.prod.outlook.com (2603:10a6:10:350::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Mon, 28 Nov
+ 2022 07:37:50 +0000
+Received: from PAXPR04MB9448.eurprd04.prod.outlook.com
+ ([fe80::d0c6:7b1d:6982:d400]) by PAXPR04MB9448.eurprd04.prod.outlook.com
+ ([fe80::d0c6:7b1d:6982:d400%6]) with mapi id 15.20.5857.022; Mon, 28 Nov 2022
+ 07:37:50 +0000
+From:   Sandor Yu <Sandor.yu@nxp.com>
+To:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, vkoul@kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Cc:     kernel@pengutronix.de, linux-imx@nxp.com, Sandor.yu@nxp.com,
+        oliver.brown@nxp.com
+Subject: [PATCH v5 00/10] Initial support for Cadence MHDP(HDMI/DP) for i.MX8MQ
+Date:   Mon, 28 Nov 2022 15:36:08 +0800
+Message-Id: <cover.1669620155.git.Sandor.yu@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0051.apcprd02.prod.outlook.com
+ (2603:1096:4:1f5::6) To PAXPR04MB9448.eurprd04.prod.outlook.com
+ (2603:10a6:102:2b1::21)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [PATCH v3 2/2] fscrypt: Add SM4 XTS/CTS symmetric algorithm
- support
-Content-Language: en-US
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     "Theodore Y. Ts o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-fscrypt@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-References: <20221125121630.87793-1-tianjia.zhang@linux.alibaba.com>
- <20221125121630.87793-3-tianjia.zhang@linux.alibaba.com>
- <Y4EIR+n8aKutuLo0@sol.localdomain>
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-In-Reply-To: <Y4EIR+n8aKutuLo0@sol.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9448:EE_|DU0PR04MB9249:EE_
+X-MS-Office365-Filtering-Correlation-Id: 58ef060a-3d15-421a-14d2-08dad11373f4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GkeW34yG05GNFOwWkxVHuY9XbuhTxrFV5JJOuxtv6wuc3yMJiNjTPRWWVM04LD7NeaEMyy9FzCj4ki4lpkh8tyJ71tJpdws7CtlkPg6jSZr522AzgEgEWSJQQ3gkefBFxNId6EmZkF5XfuedNXuJm09iUzl3O3HJUmtEIl9RtDuELr7XEliQ/FMiV4ULv5EXLuhWi+qTTWGs+F4mfu1tIjKAt6xTsj8Xjl8R6sGp7hM0QDPxWnEEzTn+l/4BYIICSGhN+d8B8WBXaRSBZJYCjSk6EsV0P/j8OduLIcREgUz/sg5ZnMmQShMZfuZ/DdkYRuZsRFOd8N0fO+IMcS6bYZ8uHO9nek6eKDM0MpLRnP1vpi1SvrRdIvrSLv3FNxFMWG88q909z3tVQSQXZmXSh+qXMT0Jm3CfT4R+iISPR0XJXnOwwG4lD2B1S1hraMN00Le659biG+Eou+b7JSUrIXP0rs3tUZ4CZK9YFudQiMsUjL8V+Z4rH2+ib8q6VZ0Nvw6JahCuelVpGFfPt+LZXVKZCXi+OEQC++8mcQMjBDoynDIOk+7OwwTSeVzJACjgvhipPurpOPGicPttP6NYK+ceIQBeuXr2zEHUg5SG/KQzz1cXAto8EDUIHVtiw9u3KtqadfUBoLixxoSSvoH3gv2kTdWReOxMd73S8beG+kUrt8fR43vyIJLNNP6LBaeeHEXk5hCFkcsNknJN544knvnE0L/h1OFP+HnB9Ej6VK2U6AW7UbhiKZYmN95xQkTu
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9448.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(366004)(39860400002)(376002)(396003)(451199015)(5660300002)(7416002)(66556008)(66476007)(8676002)(4326008)(8936002)(41300700001)(966005)(66946007)(6486002)(2906002)(316002)(478600001)(36756003)(86362001)(6512007)(6506007)(26005)(52116002)(186003)(2616005)(921005)(83380400001)(38100700002)(6666004)(38350700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?h15GXtve65rFROFfLPYJnIvk01G5np4dllqx0mgmjBj3wUrROwzjW8ZlzzP0?=
+ =?us-ascii?Q?CQrxlSyxMD3E6aVMgdKeKiQcSt+lOIK/FmGqCQCvk1KdGmj3oMRDfmj9jizW?=
+ =?us-ascii?Q?rOFG9zjszDIZAzF1XwB3C5P4FNoXGISr4qClciXhuH/lgse5PUo+QArWXQw9?=
+ =?us-ascii?Q?/9wxz0qKMb58M4apdz+CyTy9FSN0VjD7AxGxfP6qjl9TqBiql26vLhtTChnk?=
+ =?us-ascii?Q?Ohu5xvMcDswgJJE+zdxhmkUA3sXMJ7T/0wVWWa8/HSfJbVLhpvGm3F4OEpKT?=
+ =?us-ascii?Q?SjCwWEitk+hVUNvHurBaz/n1wRqTLCmvgShjibkmPs/nCXMqssu1XLM+qHWm?=
+ =?us-ascii?Q?1HedSw48hRmVYmNOy+lzRtPYvC16wIUtpRYyLKkp4ZVbisu9dQSkG+FIYrB0?=
+ =?us-ascii?Q?zFZVJVDgz9rHlSvmdLjdhngpxjlUXEeLWeBE0Cepv+UmQJgUQSM0qwRcwGA3?=
+ =?us-ascii?Q?ucG9eVC58Y/z66mjv7ihFJhgeB+dilX9vmHr/jMuf0DcbjEkCrwq15oN8hdP?=
+ =?us-ascii?Q?ReFb/TngudMsdCrAioHMRNdN3y4ru/NyP+gERazBcBpG7ri8Ssgx6ozd/seY?=
+ =?us-ascii?Q?NUiLZTexFk5bf9/jkIxtx679ptJunCC5xUzhGm2stLWh5jHarf8K3hrcefUN?=
+ =?us-ascii?Q?zRwm+YnHk09g3t1i/W/0WtaZ4vdEIlCvFDbVvDOchGiZVgdoyUQivbO5OFjW?=
+ =?us-ascii?Q?aPz2McbyDojsYA4u1NIhdZVOAyakBESxGIYTmnCxylVqkF7E1VKrxNisdqtX?=
+ =?us-ascii?Q?5DFKBtxi+PfenqBl+hxeAjKeEivxAwyBTwqz3tZRvMrntB//wESNCmJBYAig?=
+ =?us-ascii?Q?e33nz7c/3bLNnM8C+bl89VDhvq3H7V/1xHwEzOErGyzEXsW6O2VkQlS76Jk/?=
+ =?us-ascii?Q?PMr1UOd2dwmj0ftBmurQSDTq8XVrCiM8Qbyfr0IX2SAEJnPYi0QI6+RgokG8?=
+ =?us-ascii?Q?T7xsmSNpG7kGtne+eS2wVvWKzaSzcQU9luvPHBMD57MEnOa0fBj1H1U/O42T?=
+ =?us-ascii?Q?JmXL5me1gqdAWIUYcGHvVGx2aWCHVmeNBaicejd+p2peUh+vYCAT3yPCzqeZ?=
+ =?us-ascii?Q?wrRf58ry9oSoRt+REzK4z03rW17i1nl04NsQmRrtZrXOrWzMgfvaSqR4SuDV?=
+ =?us-ascii?Q?d8FiqXUvXvrfrQV7oZIhKfXyBkb8QJeZrLjh77JpXPdUrXQOYNE93FjisvST?=
+ =?us-ascii?Q?TbkaRABNp8Bd0ONfYGhdFRo4weJFkLhZjF6NOHTX4GWVqCmhPgggBIh73Bez?=
+ =?us-ascii?Q?Rxu7uJtjIlxvNt+XKbAfWMlFv2nZIOvOyL3a+aZo/Q99e5MccPQIEjtPXOxw?=
+ =?us-ascii?Q?+O6mDYi+sA5z3Z2NpRC+9nUmbgEYsJ+inEZ/OrH+HAMRqcYgUZcrzWRnAU0H?=
+ =?us-ascii?Q?sxniYeYauarB98H/n5+kEr/K0Z0M56rJl9okedkUDaVlnBtv7hekKJbQj41O?=
+ =?us-ascii?Q?eqm1o4+gu9eyClLZqN15z40h45/OADC0I1hLpQwfdbYrTTLLY6YpAZTGktbY?=
+ =?us-ascii?Q?z7MuvMiPEoRd8eLRkVOEAKZB68cSS1eAab5nJlRwoZ/OirFP0/2H9YiiMCsm?=
+ =?us-ascii?Q?FzFW+BiJGqzA8J5axJXHQtXILPoc5HqV5hcndRGf?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 58ef060a-3d15-421a-14d2-08dad11373f4
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9448.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 07:37:50.8180
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: d+yFzF66iapWfvFYpIze0wH/vk49+An0SU8RkYXYmOYo+eSGjCuD7JllHJQtMQ6NovTSVgY6kYhEA36laj8y7A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9249
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+The patch set initial support for Cadence MHDP(HDMI/DP) DRM bridge
+drivers and Cadence HDP-TX PHY(HDMI/DP) drivers for iMX8MQ.
 
-On 11/26/22 2:24 AM, Eric Biggers wrote:
-> On Fri, Nov 25, 2022 at 08:16:30PM +0800, Tianjia Zhang wrote:
->> diff --git a/fs/crypto/policy.c b/fs/crypto/policy.c
->> index 46757c3052ef..8e69bc0c35cd 100644
->> --- a/fs/crypto/policy.c
->> +++ b/fs/crypto/policy.c
->> @@ -71,6 +71,10 @@ static bool fscrypt_valid_enc_modes_v1(u32 contents_mode, u32 filenames_mode)
->>   	    filenames_mode == FSCRYPT_MODE_AES_128_CTS)
->>   		return true;
->>   
->> +	if (contents_mode == FSCRYPT_MODE_SM4_XTS &&
->> +	    filenames_mode == FSCRYPT_MODE_SM4_CTS)
->> +		return true;
->> +
->>   	if (contents_mode == FSCRYPT_MODE_ADIANTUM &&
->>   	    filenames_mode == FSCRYPT_MODE_ADIANTUM)
->>   		return true;
-> 
-> Sorry, one more thing I didn't notice before.  Since this is a new feature,
-> please only allow it in fscrypt_valid_enc_modes_v2(), not in
-> fscrypt_valid_enc_modes_v1().  That's what we did for AES-256-XTS +
-> AES-256-HCTR2 recently.  There should be no need to add new features to
-> v1 encryption policies, which have been deprecated for several years.
-> 
-> - Eric
+The patch set compose of DRM bridge drivers and PHY drivers.
+Both of them need the followed two patches to pass build.
+  drm: bridge: cadence: convert mailbox functions to macro functions
+  phy: Add HDMI configuration options
 
-Thanks for reminder, it makes sense to only support the new algorithm in
-v2 policy, which I will do this.
+DRM bridges driver patches:
+  dts-bingings: display: bridge: Add MHDP HDMI bindings for i.MX8MQ
+  drm: bridge: cadence: Add MHDP DP driver for i.MX8MQ
+  dts-bindings: display: bridge: Add MHDP DP bindings for i.MX8MQ
+  drm: bridge: cadence: Add MHDP HDMI driver for i.MX8MQ
 
-BR,
-Tianjia
+PHY driver patches:
+  dts-bindings: phy: Add Cadence HDP-TX DP PHY bindings
+  phy: cadence: Add driver for HDP-TX DisplyPort PHY
+  dts-bindings: phy: Add Cadence HDP-TX HDMI PHY bindings
+  phy: cadence: Add driver for HDP-TX HDMI PHY
+
+v4->v5:
+- Drop "clk" suffix in clock name.
+- Add output port property in the example of hdmi/dp.
+
+v3->v4:
+dt-bindings:
+- Correct dt-bindings coding style and address review comments.
+- Add apb_clk description.
+- Add output port for HDMI/DP connector
+PHY:
+- Alphabetically sorted in Kconfig and Makefile for DP and HDMI PHY
+- Remove unused registers define from HDMI and DP PHY drivers.
+- More description in phy_hdmi.h.
+- Add apb_clk to HDMI and DP phy driver.
+HDMI/DP:
+- Use get_unaligned_le32() to replace hardcode type conversion
+  in HDMI AVI infoframe data fill function.
+- Add mailbox mutex lock in HDMI/DP driver for phy functions
+  to reslove race conditions between HDMI/DP and PHY drivers.
+- Add apb_clk to both HDMI and DP driver.
+- Rename some function names and add prefix with "cdns_hdmi/cdns_dp".
+- Remove bpc 12 and 16 optional that not supported.
+
+v2->v3:
+Address comments for dt-bindings files.
+- Correct dts-bindings file names 
+  Rename phy-cadence-hdptx-dp.yaml to cdns,mhdp-imx8mq-dp.yaml
+  Rename phy-cadence-hdptx-hdmi.yaml to cdns,mhdp-imx8mq-hdmi.yaml
+- Drop redundant words and descriptions.
+- Correct hdmi/dp node name.
+
+v2 is a completely different version compared to v1.
+Previous v1 can be available here [1].
+
+v1->v2:
+- Reuse Cadence mailbox access functions from mhdp8546 instead of
+  rockchip DP.
+- Mailbox access functions be convert to marco functions
+  that will be referenced by HDP-TX PHY(HDMI/DP) driver too.
+- Plain bridge instead of component driver.
+- Standalone Cadence HDP-TX PHY(HDMI/DP) driver.
+- Audio driver are removed from the patch set, it will be add in another
+  patch set later.
+
+[1] https://patchwork.kernel.org/project/linux-rockchip/cover/cover.1590982881.git.Sandor.yu@nxp.com/
+
+Sandor Yu (10):
+  drm: bridge: cadence: convert mailbox functions to macro functions
+  dt-bindings: display: bridge: Add MHDP DP for i.MX8MQ
+  drm: bridge: cadence: Add MHDP DP driver for i.MX8MQ
+  phy: Add HDMI configuration options
+  dt-bindings: display: bridge: Add MHDP HDMI for i.MX8MQ
+  drm: bridge: cadence: Add MHDP HDMI driver for i.MX8MQ
+  dt-bindings: phy: Add Cadence HDP-TX DP PHY
+  phy: cadence: Add driver for HDP-TX DisplyPort PHY
+  dt-bindings: phy: Add Cadence HDP-TX HDMI PHY
+  phy: cadence: Add driver for HDP-TX HDMI PHY
+
+ .../display/bridge/cdns,mhdp-imx8mq-dp.yaml   |  102 ++
+ .../display/bridge/cdns,mhdp-imx8mq-hdmi.yaml |  102 ++
+ .../bindings/phy/cdns,hdptx-dp-phy.yaml       |   68 ++
+ .../bindings/phy/cdns,hdptx-hdmi-phy.yaml     |   52 +
+ drivers/gpu/drm/bridge/cadence/Kconfig        |   25 +
+ drivers/gpu/drm/bridge/cadence/Makefile       |    3 +
+ drivers/gpu/drm/bridge/cadence/cdns-dp-core.c | 1071 +++++++++++++++++
+ .../gpu/drm/bridge/cadence/cdns-hdmi-core.c   | 1018 ++++++++++++++++
+ .../gpu/drm/bridge/cadence/cdns-mhdp-common.h |  400 ++++++
+ .../drm/bridge/cadence/cdns-mhdp8546-core.c   |  197 +--
+ .../drm/bridge/cadence/cdns-mhdp8546-core.h   |    1 -
+ drivers/phy/cadence/Kconfig                   |   16 +
+ drivers/phy/cadence/Makefile                  |    2 +
+ drivers/phy/cadence/phy-cadence-hdptx-dp.c    |  737 ++++++++++++
+ drivers/phy/cadence/phy-cadence-hdptx-hdmi.c  |  891 ++++++++++++++
+ include/drm/bridge/cdns-mhdp-mailbox.h        |  240 ++++
+ include/linux/phy/phy-hdmi.h                  |   38 +
+ include/linux/phy/phy.h                       |    7 +-
+ 18 files changed, 4773 insertions(+), 197 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-dp.yaml
+ create mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/cdns,hdptx-dp-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/cdns,hdptx-hdmi-phy.yaml
+ create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dp-core.c
+ create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-hdmi-core.c
+ create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-mhdp-common.h
+ create mode 100644 drivers/phy/cadence/phy-cadence-hdptx-dp.c
+ create mode 100644 drivers/phy/cadence/phy-cadence-hdptx-hdmi.c
+ create mode 100644 include/drm/bridge/cdns-mhdp-mailbox.h
+ create mode 100644 include/linux/phy/phy-hdmi.h
+
+-- 
+2.34.1
+
