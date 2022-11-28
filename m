@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658CE63B0E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE9563B0E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234186AbiK1SPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 13:15:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
+        id S232948AbiK1SQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 13:16:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbiK1SPJ (ORCPT
+        with ESMTP id S234086AbiK1SPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 13:15:09 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA09D27FE8;
-        Mon, 28 Nov 2022 09:57:55 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id a16so10829665pfg.4;
-        Mon, 28 Nov 2022 09:57:55 -0800 (PST)
+        Mon, 28 Nov 2022 13:15:38 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D662431EDE
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:58:35 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id g7so5417758ile.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:58:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mGYHL/uLgxqY/hmbsLGPFlswmvjTtEjEvO53BHY2clM=;
-        b=Zy4YtCCsFe4vW1pmTteWWz0sKbQYRshwXXTwcDbsVKAHVpn5xH3D2+coKtOYIK8/hg
-         1GMzs7P9QEQg0T50pJCy4qDYPVvUJhro+ZELoBeIx+LNGnhik8ADdnHeFzal94rFrvyF
-         dWPfheYlBdXGxcnpBXFDeSNc1LfpVtqSRrjtTeDlC3LalrEbMxRZvAXkE3zAKmnzhZyR
-         mLj0Yu9n6lB5ahGqa3HSr5Mg7U9dxEzDQYkhnKCpWpdz/McqM/z5DhMfH53rXf0+HoHe
-         lGv+LVrTqyAp106UMnsAmZxndha3W/gy+4r9rOJjvpqhiiMp4BIlwMjqRhgnIbbZzpmd
-         9XRA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uD2w3R4o515pC/pkYBEngc4fNNJTLw467snghkylLDg=;
+        b=YGcVF035901iCot04PiZsjp+j/CJGXvLVBbsEb6sAA4tFxJZLOY213BfGhXf/9H41Z
+         o3uFV4CFicd3Nt9oWN+i84+9mVCl5rS6QZwM526D4cAHrdZprwMZzMdoLXXAhGsV4cQu
+         h42Lo793gEjy4GY4NorQrgd1lkj1m4HjuV+rg8pTCd8UkL8tx5YtBoOrikBO+Jegqbks
+         xvFyBYrCaq8fvaKKIQXDJ1YbftPKQ0kAvTLRXd5oMKQVAw+okr1PE9TGPvSWL9Z8jUkb
+         5HnLpJTirT30+XzdWD4V7F7cPE4yjaJttalyNZFwKRDpbxa8wnxVquRFhpMkmjEnbwq8
+         4Tcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mGYHL/uLgxqY/hmbsLGPFlswmvjTtEjEvO53BHY2clM=;
-        b=K7InDGCnuoGX8ejefDNknhQTNu9+GyWeJmN9+RFydR8RFuruUzFkPWayX8lmLfDMk/
-         2zTGYzYaYNZ7WM3bU/iZzcY5Dpyt3VINdmLJOLgNKBaypacM7XvGERdwBpY93YPhrStM
-         eLfqAmZb1HsHbhUOnuT4bbbW6sU9I5t8PMHeqwoUpc3gElER6iAi6U/HOu2maRH8oTTT
-         DwmLtAiZ1g61/mkFR3A65X3FRTPz3szMngPxYQagsCJsqlVCXrTsnLN4PF4wsx+X7CDQ
-         H/rjb2jgiZurH7LngLtqteUCkutA4921lf/RHftefcnMEMhnLke1oTgjM1msS/8JV40Y
-         LOqg==
-X-Gm-Message-State: ANoB5pnLWW5Iq0DbokimcT+MzIPmcmsqEqQGwQNrxpZBvZoN64V4Bqh3
-        TD/0kNMlNMCtOkU48p8KSHLhBkJbFEM=
-X-Google-Smtp-Source: AA0mqf5cx+Ejhggzq5N2LBS9KPJdQVVaseeYe904vd+bwBKZ1ACXB9hXyj5x4Xyn6rP4viJos42Q7g==
-X-Received: by 2002:a05:6a00:198d:b0:569:92fa:cbbc with SMTP id d13-20020a056a00198d00b0056992facbbcmr33654896pfl.77.1669658275045;
-        Mon, 28 Nov 2022 09:57:55 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:fd7c:c075:f9ff:46c4])
-        by smtp.gmail.com with ESMTPSA id b4-20020a62cf04000000b0057255b7c8easm8385819pfg.33.2022.11.28.09.57.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 09:57:54 -0800 (PST)
-Date:   Mon, 28 Nov 2022 09:57:51 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Eirin Nya <nyanpasu256@gmail.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 3/3] Input: elantech - Fix incorrectly halved touchpad
- range on ELAN v3 touchpads
-Message-ID: <Y4T2nygbxkhAQRvM@google.com>
-References: <20221014111533.908-1-nyanpasu256@gmail.com>
- <20221014111533.908-4-nyanpasu256@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uD2w3R4o515pC/pkYBEngc4fNNJTLw467snghkylLDg=;
+        b=y61skM0p7rQif8z8hV5chv59kc1sxc7buBsMNfH4InOJCpRq3a9zV3+99H5cIN6Z/l
+         0i0tJIn2OO3W7nwBEIvnjDLXp00tIFgWfMa7QMM3TlABpiPlhbk1CV9Mmf3FfdKWCdnb
+         MpD+nFKFpWPwekFE+XaTYpcX7n0V3Eq6RdEyJJPUBJ6qdVZ7afg4c5dQhGqxY1Lt+oha
+         jo5GGHbKoYO1I0KpdO4UP4cYBL1wCcwiaZ/YaYgdSL5Ty3Yd2EvBdw2JXMRLP4o7ZNmI
+         /4v3TRZM2s1pcVTzExhZQ2P7O7eCeApyd/+h4v9DFVSwbJogddIfndpbWg0lsmj/7xjC
+         DbvQ==
+X-Gm-Message-State: ANoB5pl0595B3twYZubCsdqNwZfmZLJf9fg1k0Vury9KfDFYGekenA6f
+        MseC9+snaJVOJQIlZgn/u4txxpHb9Kh3ZBeH+DGciA==
+X-Google-Smtp-Source: AA0mqf6d8H769WKotjlx89RVrJ2Q6gqYe2VptBWTK4C8VyNlzUcQ9pHKin6+3TRkLvvF/pNON5zTilb85bSeFLGl48Y=
+X-Received: by 2002:a92:c8cd:0:b0:2ff:b56a:3984 with SMTP id
+ c13-20020a92c8cd000000b002ffb56a3984mr17822786ilq.187.1669658315186; Mon, 28
+ Nov 2022 09:58:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221014111533.908-4-nyanpasu256@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221125213714.4115729-1-jannh@google.com> <20221125213714.4115729-3-jannh@google.com>
+ <66cfc9ba-868c-9620-fbfc-38931c76ff50@redhat.com>
+In-Reply-To: <66cfc9ba-868c-9620-fbfc-38931c76ff50@redhat.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Mon, 28 Nov 2022 18:57:58 +0100
+Message-ID: <CAG48ez23WvRRX6LKgCe+sJMYWBKVa+U1fg7G1o0nOobHCEQBGg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] mm/khugepaged: Invoke MMU notifiers in shmem/file
+ collapse paths
+To:     David Hildenbrand <david@redhat.com>
+Cc:     security@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Yang Shi <shy828301@gmail.com>, Peter Xu <peterx@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,123 +72,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 04:15:33AM -0700, Eirin Nya wrote:
-> On Linux 5.19.10, on my laptop (Dell Inspiron 15R SE 7520) with an Elan
-> v3 touchpad (dmesg says "with firmware version 0x450f02"), the reported
-> size of my touchpad (in userspace by calling mtdev_configure() and
-> libevdev_get_abs_maximum(), in kernel space
-> elantech_device_info::x_max/y_max, either way 1470 by 700) is half that
-> of the actual touch range (2940 by 1400), and the upper half of my
-> touchpad reports negative values. As a result, with the Synaptics or
-> libinput X11 driver set to edge scrolling mode, the entire right half of
-> my touchpad has x-values past evdev's reported maximum size, and acts as
-> a giant scrollbar!
-> 
-> The problem is that elantech_setup_ps2() -> elantech_set_absolute_mode()
-> sets up absolute mode and doubles the hardware resolution (doubling the
-> hardware's maximum reported x/y coordinates and its response to
-> ETP_FW_ID_QUERY), *after* elantech_query_info() fetches the touchpad
-> coordinate system size using ETP_FW_ID_QUERY, which gets cached and
-> reported to userspace through ioctl(fd, EVIOCGABS(ABS_X/Y), ...). So the
-> touchpad size reported to userspace (and used to subtract vertical
-> coordinates from) is half the maximum position of actual touches.
-> 
-> This patch splits out a function elantech_query_range_v3() which fetches
-> *only* ETP_FW_ID_QUERY (touchpad size), and calls it a second time if
-> elantech_set_absolute_mode() enables double-size mode. This means the
-> first call is redundant and wasted if a second call occurs, but this
-> minimizes the need to restructure the driver.
+On Mon, Nov 28, 2022 at 6:37 PM David Hildenbrand <david@redhat.com> wrote:
+>
+> On 25.11.22 22:37, Jann Horn wrote:
+> > Any codepath that zaps page table entries must invoke MMU notifiers to
+> > ensure that secondary MMUs (like KVM) don't keep accessing pages which
+> > aren't mapped anymore. Secondary MMUs don't hold their own references to
+> > pages that are mirrored over, so failing to notify them can lead to page
+> > use-after-free.
+> >
+> > I'm marking this as addressing an issue introduced in commit f3f0e1d2150b
+> > ("khugepaged: add support of collapse for tmpfs/shmem pages"), but most of
+> > the security impact of this only came in commit 27e1f8273113 ("khugepaged:
+> > enable collapse pmd for pte-mapped THP"), which actually omitted flushes
+> > for the removal of present PTEs, not just for the removal of empty page
+> > tables.
+> >
+> > Cc: stable@kernel.org
+> > Fixes: f3f0e1d2150b ("khugepaged: add support of collapse for tmpfs/shmem pages")
+>
+> I'm curious, do you have a working reproducer for this?
 
-If the setting is indeed double resolution, can we simply multiply x_max
-and y_max by 2 instead of re-querying it?
-
-Also let's try adding one of Elan engineers for their take in this.
-Phoenix, do you have any suggestions please?
-
-> 
-> Link: https://lore.kernel.org/linux-input/CAL57YxZNutUVxBtvbVWKMw-V2kqeVB5kTQ5BFdJmN=mdPq8Q8Q@mail.gmail.com/
-> Link: https://lore.kernel.org/linux-input/20221008093437.72d0f6b0@dell-void.nyanpasu256.gmail.com.beta.tailscale.net/
-> Fixes: 37548659bb22 ("Input: elantech - query the min/max information beforehand too")
-> Signed-off-by: Eirin Nya <nyanpasu256@gmail.com>
-> ---
-> 
-> Notes:
->     Should we move (elantech_set_absolute_mode ->
->     elantech_write_reg(...0x0b or 0x01)) *earlier* into elantech_query_info()
->     before "query range information"? See discussion at
->     https://lore.kernel.org/linux-input/20221008093437.72d0f6b0@dell-void.nyanpasu256.gmail.com.beta.tailscale.net/
-> 
->  drivers/input/mouse/elantech.c | 30 ++++++++++++++++++++++++++----
->  1 file changed, 26 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/input/mouse/elantech.c b/drivers/input/mouse/elantech.c
-> index 263779c031..a2176f0fd3 100644
-> --- a/drivers/input/mouse/elantech.c
-> +++ b/drivers/input/mouse/elantech.c
-> @@ -1006,6 +1006,9 @@ static void elantech_set_rate_restore_reg_07(struct psmouse *psmouse,
->  		psmouse_err(psmouse, "restoring reg_07 failed\n");
->  }
->  
-> +static int elantech_query_range_v3(struct psmouse *psmouse,
-> +				   struct elantech_device_info *info);
-> +
->  /*
->   * Put the touchpad into absolute mode
->   */
-> @@ -1047,6 +1050,14 @@ static int elantech_set_absolute_mode(struct psmouse *psmouse)
->  		if (elantech_write_reg(psmouse, 0x10, etd->reg_10))
->  			rc = -1;
->  
-> +		/*
-> +		 * If we boost hardware resolution, we have to re-query
-> +		 * info->x_max and y_max.
-> +		 */
-> +		if (etd->info.set_hw_resolution)
-> +			if (elantech_query_range_v3(psmouse, &etd->info))
-> +				rc = -1;
-> +
->  		break;
->  
->  	case 4:
-> @@ -1671,6 +1682,20 @@ static int elantech_set_properties(struct elantech_device_info *info)
->  	return 0;
->  }
->  
-> +static int elantech_query_range_v3(struct psmouse *psmouse,
-> +				   struct elantech_device_info *info)
-> +{
-> +	unsigned char param[3];
-> +
-> +	if (info->send_cmd(psmouse, ETP_FW_ID_QUERY, param))
-> +		return -EINVAL;
-> +
-> +	info->x_max = (0x0f & param[0]) << 8 | param[1];
-> +	info->y_max = (0xf0 & param[0]) << 4 | param[2];
-> +
-> +	return 0;
-> +}
-> +
->  static int elantech_query_info(struct psmouse *psmouse,
->  			       struct elantech_device_info *info)
->  {
-> @@ -1826,11 +1851,8 @@ static int elantech_query_info(struct psmouse *psmouse,
->  		break;
->  
->  	case 3:
-> -		if (info->send_cmd(psmouse, ETP_FW_ID_QUERY, param))
-> +		if (elantech_query_range_v3(psmouse, info))
->  			return -EINVAL;
-> -
-> -		info->x_max = (0x0f & param[0]) << 8 | param[1];
-> -		info->y_max = (0xf0 & param[0]) << 4 | param[2];
->  		break;
->  
->  	case 4:
-> -- 
-> 2.38.0
-> 
-
-Thanks.
-
--- 
-Dmitry
+You're on the CC list of my bug report to security@kernel.org
+with title "khugepaged races with rmap-based zap, races with GUP-fast,
+and fails to call MMU notifiers". That has an attached reproducer
+thp_ro_no_notify_kvm.c that is able to read PAGE_POISON out of freed
+file THP pages through KVM.
