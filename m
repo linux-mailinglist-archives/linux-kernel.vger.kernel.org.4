@@ -2,133 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D498263AA44
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679BE63AA46
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbiK1N7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:59:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
+        id S232222AbiK1N7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:59:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbiK1N7N (ORCPT
+        with ESMTP id S231814AbiK1N7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 08:59:13 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E850610BA;
-        Mon, 28 Nov 2022 05:59:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1669643943; bh=fNLBITOrzGNURlqG24wTjvnHcc19rTJ6Nep3M1Y2cME=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=HdbpTayxuzNk2XxYuXkY575V2md9LGvaVJ9FqzpOptTWpFQ7+T1FHwoOhslZ6CPRD
-         frjZ4JLLxu+X6rBhfqoLpjkTb76wx8cvTV8u/5EWf/3sriewZRRG4fuXycdbqdNswh
-         dPXM8sqaWPhNGPVzQdjmGXyjoQV9SOroNovjboZsNv7RFg+P6TJGBAQhlEG2npy5IS
-         0P5FBNFLZWAe+n5gtyMYvzlU44C/+aH0H66kHzr9x61JQ5+it2yqPXjDeG/7UMp6sR
-         auMSKkX4GIxjI+NgmAmIlAU8N8x3odBh2asIlczXcyAYfZe+EWgekzuSU0l5YM1Wle
-         LH+5Kx+fv4odA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.31]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MIMfW-1pBhLP1Gzs-00EIyB; Mon, 28
- Nov 2022 14:59:03 +0100
-Date:   Mon, 28 Nov 2022 14:58:57 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: spi: Add Nuvoton WPCM450 Flash
- Interface Unit (FIU)
-Message-ID: <Y4S+oWz8fNsQj5Gj@probook>
-References: <20221124191400.287918-1-j.neuschaefer@gmx.net>
- <20221124191400.287918-2-j.neuschaefer@gmx.net>
- <166950112932.8087.6546134123286782729.robh@kernel.org>
- <Y4SV+5/3Y0dw5QeU@wendy>
+        Mon, 28 Nov 2022 08:59:17 -0500
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C80DA4;
+        Mon, 28 Nov 2022 05:59:17 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id x18so7222787qki.4;
+        Mon, 28 Nov 2022 05:59:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p0zTEKDX0VhiLo8/RmLm+g9EPehQ6o7qAmHvISgsBhk=;
+        b=3g9tIFns9Xal9zSYy0Hwqq9MNhkVOLMVSBHRfsQnZgvcG6ZrqTINNzCxguMw9hQCbV
+         jF9Xx1H4Y4SdESsGwURRVj8Y2FZEDX2S9ly3K1+mfB2GNy/+gC7KJC6K1/yU9QN7kJcV
+         xbCSSGIphOkyDXjCm2fFECno+3Bh1u3UoKBiyZi1hmJLHCx6F8Nsp8HMdSWKM1rNGoN3
+         VWH01R9CV0JhiGlo8fqxsnMfkED9JYyARacqR9KHatDE8FrUZyQjGK/5+OKK56cFmgIE
+         YFFgwTumzqX7GPEa6O4uvycFX/kGeCCG2ohO96bMWOt8cfeKB3eaReQhYRCORyMO/qdi
+         MsJA==
+X-Gm-Message-State: ANoB5pnbjsmMpX7n67Kl/ifzEhqoelzUUZcK4JEYSXmFqhpjhAWIo+c0
+        ITsCKNd3eaTP9lHLyWQuPpCW6VK909+Epg==
+X-Google-Smtp-Source: AA0mqf6dAsA9jUzYnaab/Kda7py9bNU4Ib+8VCRZ5gesrrDLbn3NuGoq1JVFWReIW0XJG47ao7+Wqg==
+X-Received: by 2002:a05:620a:51d0:b0:6ee:909e:ed6c with SMTP id cx16-20020a05620a51d000b006ee909eed6cmr30379259qkb.264.1669643955986;
+        Mon, 28 Nov 2022 05:59:15 -0800 (PST)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id t8-20020ac865c8000000b003a5d7b54894sm6939579qto.31.2022.11.28.05.59.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 05:59:15 -0800 (PST)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-3bfd998fa53so53406317b3.5;
+        Mon, 28 Nov 2022 05:59:15 -0800 (PST)
+X-Received: by 2002:a81:f80f:0:b0:38e:e541:d8ca with SMTP id
+ z15-20020a81f80f000000b0038ee541d8camr46504823ywm.283.1669643955136; Mon, 28
+ Nov 2022 05:59:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wYhQfr4TaDMG5L5b"
-Content-Disposition: inline
-In-Reply-To: <Y4SV+5/3Y0dw5QeU@wendy>
-X-Provags-ID: V03:K1:UawUwTljaFZmjHPp2WDWznD+ZA5rr9lNR8hGceNy7bXH8HDhghq
- HiHSibk1k7KbSN4q7661mwuf2SlaH/3g009UcuHwI+v2OdIY9ezahSXNPCyu1qsxtrQ4ahV
- 1biS9yI6fd2kRP9ehQ6t23oJzkVe2fVkaSqAmH6bptyCGkkZDjf4bdz29/Y0L2Lc1nvN4UT
- eRLD1DWqA9lWGmUfQSYwQ==
-UI-OutboundReport: notjunk:1;M01:P0:d5FSRnk8sg8=;1dfz6LqfVWOJA+qmsrchA9aS1xk
- ZM1AjqtOeb9gV2tO9qVWStnbkL+e22yneih7+aUpfXjpZFtdFzHYPznTMl52s3kE0A0LP8eNA
- MHofqaK/Q3IQhJgWnWt87lIaFAFk4Y4MSDyBSbp59xS9R4rceUzku/KnzVP97UJzaFFjRkFlr
- GeaSoaSWOC6H4jePSmEmaC7Q1mFw5GDreXXw8na7XZEvJKnPXcAaQBTeBbIgi7+I3oF15MaJn
- 2h2yEaZdiFxuDiYjIgwMCCmQN8gRAQqYTzBJWcFBP0J9zkNASo6Oru5gTg7R5zG/iyItGryJG
- dye40ZHjHbbpyx+NgUkymIq4J95LwaPnv6LZqCiE+yQOxwVpxCkTGxUFbPGv8ltC/LKPjNnzT
- 535QemRd7ckj3jLWmeBWX/MIyOiYxkIwYrxOBiKdptYQzwCLN1Usc3AKCRijPl4R327ePlkKf
- vCsHLKkx61bez0D3vJKcXOZERZrFz6qDh0b/yFkvsucA0dqKpcWVrXzoyx17SCeMynmJhVK/C
- Om7I5PduESVnpqiSTaOB4kSPgOe1t1CnLh5vJDTcDYskg5D9BKzWcSiQwQe+8okWMWEZUagDh
- U86jxkXJzu5GoK+GlMoN2zDrnNDTEIkJce1CMWx0HHty2RhguwK1McunFSUsqitH2HfCkAiJk
- aPukkVUbsqDoiORBIdPESDzjBiVL1yTNt/9w0x+4jPUZVUKNQvlhWenPv00KDjxPMRphyII2o
- AuCyRtEM5NDWE/nSckJAMcuyPeyTd2X09yL9xbN+gmSuA+SsDD3rJjuqftUuYosFasGkaA6Q5
- QrnCUtZe4YK8qS4Ac4KjsbjGTFR+V21cm8P49BFiHz7KgaQRdtJwLyiD4b/D1OZGI2yanolfZ
- X0SMtH6R0CxI7Mh0mPj+g0gGDGxIe0f8G6TbxHm1IHc7bbiaHVbnTP+qFSr28sLzAM4OeFbgp
- 0R34I5L+8ptvJRzPl+J1tT33NH8=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CACRpkdaJy5hhrMfdZWtpoBUxBEc1QnxaX4pRzQVUBoEoKqrwzA@mail.gmail.com>
+In-Reply-To: <CACRpkdaJy5hhrMfdZWtpoBUxBEc1QnxaX4pRzQVUBoEoKqrwzA@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 28 Nov 2022 14:59:04 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUbSdJWqgd6+=FbWRyB+YcgCtbfLk-zgrozwecOGn9JNg@mail.gmail.com>
+Message-ID: <CAMuHMdUbSdJWqgd6+=FbWRyB+YcgCtbfLk-zgrozwecOGn9JNg@mail.gmail.com>
+Subject: Re: [GIT PULL] pin control fixes for v6.1
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
---wYhQfr4TaDMG5L5b
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, Nov 16, 2022 at 3:59 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> What took time for me was to figure out how to get the
+> GPG password entry for signing the tag come up in
+> curses on a remote machine instead of giving up when
+> trying to open the secure little signing widget that locks
+> the desktop UI which it doesn't have. Comes down to
+> export PINENTRY_USER_DATA=USE_TTY=1
+> then creating .gnupg/gpg-agent.conf setting up
+> pinentry-program /usr/bin/pinentry-curses.
+> Well that was not intuitive, especially not an
+> environment variable containing an environment
+> variable. GPG might need some UX polish (or maybe
+> it's the distros that do this to us). Anyway here it is!
 
-On Mon, Nov 28, 2022 at 11:05:31AM +0000, Conor Dooley wrote:
-> On Sat, Nov 26, 2022 at 04:25:36PM -0600, Rob Herring wrote:
-[...]
-> > dtschema/dtc warnings/errors:
-> > Documentation/devicetree/bindings/spi/nuvoton,wpcm450-fiu.example.dts:1=
-8:18: fatal error: dt-bindings/clock/nuvoton,wpcm450-clk.h: No such file or=
- directory
-> >    18 |         #include <dt-bindings/clock/nuvoton,wpcm450-clk.h>
-> >       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > compilation terminated.
-> > make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindin=
-gs/spi/nuvoton,wpcm450-fiu.example.dtb] Error 1
-> > make[1]: *** Waiting for unfinished jobs....
-> > make: *** [Makefile:1492: dt_binding_check] Error 2
->=20
-> FWIW this seems to now be in linux-next as dd71cd4dd6c9 ("spi: Add Nuvoton
-> WPCM450 Flash Interface Unit (FIU) bindings") & is breaking
-> dt_binding_check.
+I don't remember the exact commands I used when preparing for last
+ELC-E, but some Googling suggests:
 
-Ah, sorry about that. It should resolve itself once nuvoton,wpcm450-clk
-binding gets merged, but I don't see a definite timeframe for that, yet.
+    sudo apt install pinentry-tty
+    sudo update-alternatives --config pinentry
 
-Alternatively, I can send a patch to simplify the example in the FIU
-binding.
+At least I do have
+/etc/alternatives/pinentry -> /usr/bin/pinentry-curses
 
-Jonathan
+Gr{oetje,eeting}s,
 
---wYhQfr4TaDMG5L5b
-Content-Type: application/pgp-signature; name="signature.asc"
+                        Geert
 
------BEGIN PGP SIGNATURE-----
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmOEvkYACgkQCDBEmo7z
-X9s7JA//b0x5Wz3oWxpKspCo0vQX9Pc0tbPMfyZfEmViSkIhrXBGDLxKDfgfBLc1
-NkyS9KBRngGQmn7mk1fR40Vc0iZ9wpEfvqmKY47PPqEP+dC4bJmxwXbKLC5Npl/F
-Nv8VuBy0CAHrdH3KvVG4KZRHMEPhKPmwAEuXeDuiqdLrB4UiKx+gjtreHuFrBujN
-1VYronrrBG3vMsYlJha2zud4nQZw0Iz7fCJMXXEIV9OPrDoFHYP9kiPxowrbanHt
-suK8RpvCBJcOkZZnpQmUEeSluIoe5y8VSORdMswttxYU+ft3Lg67W0Gl4A6Snrfp
-h3bFxdkFqyxuKfk7fcr4IjG1DDhw3wXhxb5iJev4DzjGq545XwScdKDhkBR1jTRZ
-BQYV4fjF6iSDo+HbhhF6hYAt+XO+THeTvkNJUt4A6X8McPnj724eOg9ngRPgGHEy
-yGge/tPHa4GDa5EEJxd5QYdDP4oGV3/UdZFcn5Amox6dovIt2s/WJVn2DY1vP8mM
-B0m1LO/WOk5JkGsWhH4amNN0+o1vboDvptAf0BgVkmXMuBFQA7R1qGn9M87VFLVu
-BunTjZd1q5ELSVYWwBHDhoEPgoOd5AzLaZCAsYR2l5iZOIdvnzBtVok1wDgfQNaz
-A4uo6W0O6mVxXYaM68TihdgKVjnSJFjImuY/rreq4RNYTty8KNs=
-=uIeB
------END PGP SIGNATURE-----
-
---wYhQfr4TaDMG5L5b--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
