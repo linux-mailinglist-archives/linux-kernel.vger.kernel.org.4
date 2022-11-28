@@ -2,189 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A4863AB47
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B12CC63AB51
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbiK1Okk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 09:40:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
+        id S231667AbiK1OmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 09:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232591AbiK1Okf (ORCPT
+        with ESMTP id S232409AbiK1Ola (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:40:35 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD23222AB
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:40:32 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id b9so13378260ljr.5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:40:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rxl7YrMvA0F9XMtLgK6+hpZFxRBfqgt+eTWoNu6iRo8=;
-        b=NF3MUsLO+B6UNx8ExIv7IuRKSaM0xTVI3KgPrPUJQrbRqxLFD/3YZjeE6FP35wcoCP
-         YHsCeFThsTdhZLMIOY8ClukFneGUA70nkSiNjcICbs9vVrXf0o6apXuVxh3AVE2wA55h
-         57XgK4oF1DosZhWCtO12W0hd3mWrhY+jDRm2uvzJSa3FHPF95eB/JkKZ6iOVUIhBpvVM
-         RFsMt4uenAXgLsm72nL8xuWoa9A91tJuHUJ4ioOTGcNZrcLD1YieyWMeWy7Isg+sbjPs
-         /d4VB5tSa6mfjZfOzTeWIV85dBsGVY7Cmd8cZWckqQFZjW2gofi2ESsrLMFt6LKmZU8m
-         tAew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rxl7YrMvA0F9XMtLgK6+hpZFxRBfqgt+eTWoNu6iRo8=;
-        b=2+xH7t9I/nySKy591ggpFvkmfqlJzOozQU1msc7xcrINz3tKjt78/Eih/88RbsFGCY
-         rdrew+OXZfrlWPoo1JhJ0lOkS1B27DKsg5aj+2H1Bo/Cd/JPU8ItsPtO7BJ5nuva51q0
-         IXIPygHA9V/tOH5ba56vx1JOIyaBkE5WUu8ZJ8Y/4FZv6Q5/I6Aua+NQmoml0wGtYJC5
-         fAQKRlksYrbIW1x/hn7BOzlf3Zm8Qt0TnLEMj5rU6N7pI75v5K5pHsf8XYkfpTtpF8yd
-         /WlxBJHbh33uLXLIzbnw4IvKJ+PGghxuC9c6YWsSr3VwbSCTwX00ftB3lO4tMnbTU0+2
-         7SAQ==
-X-Gm-Message-State: ANoB5pmL74Ue4DtLQ1lf+gaHFqfit/QirJvXeXoRdVaDNTmAnQ1jqsYE
-        7zV8UFrtx3zZTaXphois8ArtTA==
-X-Google-Smtp-Source: AA0mqf48AqNNUd1yKamAjh8q6tpCyrE7XgdMx5TWOco6SlMkf2Yjc+7xVsRjJ9kEtkN47K+bUqOc+A==
-X-Received: by 2002:a2e:9611:0:b0:276:b134:b04c with SMTP id v17-20020a2e9611000000b00276b134b04cmr11149799ljh.492.1669646431213;
-        Mon, 28 Nov 2022 06:40:31 -0800 (PST)
-Received: from [192.168.1.101] (95.49.125.236.neoplus.adsl.tpnet.pl. [95.49.125.236])
-        by smtp.gmail.com with ESMTPSA id q21-20020a05651232b500b004ac980a1ba1sm1754473lfe.24.2022.11.28.06.40.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 06:40:30 -0800 (PST)
-Message-ID: <28991d2d-d917-af47-4f5f-4e8183569bb1@linaro.org>
-Date:   Mon, 28 Nov 2022 15:40:27 +0100
+        Mon, 28 Nov 2022 09:41:30 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1369E1D315;
+        Mon, 28 Nov 2022 06:41:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669646490; x=1701182490;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=MSh9uVp2zwjD3iNzMDF4CLgvmRLyaxXitI4MRNVQLcs=;
+  b=cQAIenddmwOgdR9zR3Fg4R5Xoc7sfxmFsFFhja+JoqO/3EpUkJbeLns4
+   3bb09KjihnWx5oHAHcpGJV9aeem2yvmbFJMbFfwDbN7Cw7Wa+zn6Dt4Uf
+   eoxzwK6eZIryPueprC0vqHoYHjPJBSrJGDZxJawvlTIHVp5PeKFGY58FR
+   E393OmLTluOLVlpd1EilQ5CNDIPx7suuqfPhJLH0S3ngDAKXO9lR+L7/5
+   mEqKF+f++c75+YAqYlH+tcikghD/Cc03RJAKN91N2P+oDnB6emFccpxIe
+   SzOKMCH8R6G5wyKMy0CfAvtN/akP78MaraUAVt8AiFZ9OfnMiMnwz1jZL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="376988503"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="376988503"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 06:41:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="749411853"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="749411853"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga002.fm.intel.com with ESMTP; 28 Nov 2022 06:41:26 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2ASEfPu2018253;
+        Mon, 28 Nov 2022 14:41:25 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        lars.povlsen@microchip.com, Steen.Hegelund@microchip.com,
+        daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
+        casper.casan@gmail.com
+Subject: Re: [PATCH net-next] net: microchip: vcap: Change how the rule id is generated
+Date:   Mon, 28 Nov 2022 15:40:42 +0100
+Message-Id: <20221128144042.2097491-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221128142959.8325-1-horatiu.vultur@microchip.com>
+References: <20221128142959.8325-1-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2] brcmfmac: Add support for BCM43596 PCIe Wi-Fi
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Kalle Valo <kvalo@kernel.org>
-Cc:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>,
-        Hector Martin <marcan@marcan.st>,
-        "~postmarketos/upstreaming@lists.sr.ht" 
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        "martin.botka@somainline.org" <martin.botka@somainline.org>,
-        "angelogioacchino.delregno@somainline.org" 
-        <angelogioacchino.delregno@somainline.org>,
-        "marijn.suijten@somainline.org" <marijn.suijten@somainline.org>,
-        "jamipkettunen@somainline.org" <jamipkettunen@somainline.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
-        "Zhao, Jiaqing" <jiaqing.zhao@intel.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Soon Tak Lee <soontak.lee@cypress.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
- <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st>
- <13b8c67c-399c-d1a6-4929-61aea27aa57d@somainline.org>
- <0e65a8b2-0827-af1e-602c-76d9450e3d11@marcan.st>
- <7fd077c5-83f8-02e2-03c1-900a47f05dc1@somainline.org>
- <CACRpkda3uryD6TOEaTi3pPX5No40LBWoyHR4VcEuKw4iYT0dqA@mail.gmail.com>
- <20220922133056.eo26da4npkg6bpf2@bang-olufsen.dk> <87sfke32pc.fsf@kernel.org>
- <4592f87a-bb61-1c28-13f0-d041a6e7d3bf@linaro.org>
- <CACRpkdax-3VVDd29iH51mfumakqM7jyEc8Pbb=AQwAgp2WsqFQ@mail.gmail.com>
- <d03bd4d4-e4ef-681b-b4a5-02822e1eee75@linaro.org> <87fse76yig.fsf@kernel.org>
- <fc2812b1-db96-caa6-2ecb-c5bb2c33246a@linaro.org> <87bkov6x1q.fsf@kernel.org>
- <CACRpkdbpJ8fw0UsuHXGX43JRyPy6j8P41_5gesXOmitHvyoRwQ@mail.gmail.com>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CACRpkdbpJ8fw0UsuHXGX43JRyPy6j8P41_5gesXOmitHvyoRwQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
+Date: Mon, 28 Nov 2022 15:29:59 +0100
+
+> Currently whenever a new rule id is generated, it picks up the next
+> number bigger than previous id. So it would always be 1, 2, 3, etc.
+> When the rule with id 1 will be deleted and a new rule will be added,
+> it will have the id 4 and not id 1.
+> In theory this can be a problem if at some point a rule will be added
+> and removed ~0 times. Then no more rules can be added because there
+> are no more ids.
+> 
+> Change this such that when a new rule is added, search for an empty
+> rule id starting with value of 1 as value 0 is reserved.
+> 
+> Fixes: c9da1ac1c212 ("net: microchip: sparx5: Adding initial tc flower support for VCAP API")
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> ---
+>  drivers/net/ethernet/microchip/vcap/vcap_api.c | 7 +------
+>  drivers/net/ethernet/microchip/vcap/vcap_api.h | 1 -
+>  2 files changed, 1 insertion(+), 7 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api.c b/drivers/net/ethernet/microchip/vcap/vcap_api.c
+> index b50d002b646dc..b65819f3a927f 100644
+> --- a/drivers/net/ethernet/microchip/vcap/vcap_api.c
+> +++ b/drivers/net/ethernet/microchip/vcap/vcap_api.c
+> @@ -974,17 +974,12 @@ static u32 vcap_next_rule_addr(u32 addr, struct vcap_rule_internal *ri)
+>  /* Assign a unique rule id and autogenerate one if id == 0 */
+>  static u32 vcap_set_rule_id(struct vcap_rule_internal *ri)
+>  {
+> -	u32 next_id;
+> -
+>  	if (ri->data.id != 0)
+>  		return ri->data.id;
+>  
+> -	next_id = ri->vctrl->rule_id + 1;
+> -
+> -	for (next_id = ri->vctrl->rule_id + 1; next_id < ~0; ++next_id) {
+> +	for (u32 next_id = 1; next_id < ~0; ++next_id) {
+>  		if (!vcap_lookup_rule(ri->vctrl, next_id)) {
+
+Or you can simply use IDA/IDR/XArray which takes care of all this :)
 
 
-On 26.11.2022 22:45, Linus Walleij wrote:
-> On Fri, Nov 25, 2022 at 1:25 PM Kalle Valo <kvalo@kernel.org> wrote:
->> Konrad Dybcio <konrad.dybcio@linaro.org> writes:
->>
->>> On 25.11.2022 12:53, Kalle Valo wrote:
->>>> Konrad Dybcio <konrad.dybcio@linaro.org> writes:
->>>>
->>>>> On 21.11.2022 14:56, Linus Walleij wrote:
->>>>>> On Fri, Nov 18, 2022 at 5:47 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>>>>>
->>>>>>> I can think of a couple of hacky ways to force use of 43596 fw, but I
->>>>>>> don't think any would be really upstreamable..
->>>>>>
->>>>>> If it is only known to affect the Sony Xperias mentioned then
->>>>>> a thing such as:
->>>>>>
->>>>>> if (of_machine_is_compatible("sony,xyz") ||
->>>>>>     of_machine_is_compatible("sony,zzz")... ) {
->>>>>>    // Enforce FW version
->>>>>> }
->>>>>>
->>>>>> would be completely acceptable in my book. It hammers the
->>>>>> problem from the top instead of trying to figure out itsy witsy
->>>>>> details about firmware revisions.
->>>>>>
->>>>>> Yours,
->>>>>> Linus Walleij
->>>>>
->>>>> Actually, I think I came up with a better approach by pulling a page
->>>>> out of Asahi folks' book - please take a look and tell me what you
->>>>> think about this:
->>>>>
->>>>> [1]
->>>>> https://github.com/SoMainline/linux/commit/4b6fccc995cd79109b0dae4e4ab2e48db97695e7
->>>>> [2]
->>>>> https://github.com/SoMainline/linux/commit/e3ea1dc739634f734104f37fdbed046873921af7
-> 
-> Something in this direction works too.
-> 
-> The upside is that it tells all operating systems how to deal
-> with the firmware for this hardware.
-> 
->>>> Instead of a directory path ("brcm/brcmfmac43596-pcie") why not provide
->>>> just the chipset name ("brcmfmac43596-pcie")? IMHO it's unnecessary to
->>>> have directory names in Device Tree.
->>>
->>> I think it's common practice to include a full $FIRMWARE_DIR-relative
->>> path when specifying firmware in DT, though here I left out the board
->>> name bit as that's assigned dynamically anyway. That said, if you don't
->>> like it, I can change it.
->>
->> It's just that I have understood that Device Tree is supposed to
->> describe hardware and to me a firmware directory "brcm/" is a software
->> property, not a hardware property. But this is really for the Device
->> Tree maintainers to decide, they know this best :)
-> 
-> I would personally just minimize the amount of information
-> put into the device tree to be exactly what is needed to find
-> the right firmware.
-> 
-> brcm,firmware-compatible = "43596";
-> 
-> since the code already knows how to conjure the rest of the string.
-> 
-> But check with Rob/Krzysztof.
-> 
-> Yours,
-> Linus Walleij
+>  			ri->data.id = next_id;
+> -			ri->vctrl->rule_id = next_id;
+>  			break;
+>  		}
+>  	}
+> diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api.h b/drivers/net/ethernet/microchip/vcap/vcap_api.h
+> index ca4499838306f..689c7270f2a89 100644
+> --- a/drivers/net/ethernet/microchip/vcap/vcap_api.h
+> +++ b/drivers/net/ethernet/microchip/vcap/vcap_api.h
+> @@ -268,7 +268,6 @@ struct vcap_operations {
+>  
+>  /* VCAP API Client control interface */
+>  struct vcap_control {
+> -	u32 rule_id; /* last used rule id (unique across VCAP instances) */
+>  	struct vcap_operations *ops;  /* client supplied operations */
+>  	const struct vcap_info *vcaps; /* client supplied vcap models */
+>  	const struct vcap_statistics *stats; /* client supplied vcap stats */
+> -- 
+> 2.38.0
 
-Krzysztof, Rob [added to CC] - can I have your opinions?
-
-Konrad
-
-
+Thanks,
+Olek
