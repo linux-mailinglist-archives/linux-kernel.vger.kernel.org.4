@@ -2,312 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DFC639FD3
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 03:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C76C639FD7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 03:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiK1C4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 21:56:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
+        id S229668AbiK1C6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 21:58:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiK1C4F (ORCPT
+        with ESMTP id S229509AbiK1C6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 21:56:05 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D532DFE
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 18:56:04 -0800 (PST)
-Received: from kwepemi100025.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NL97d1sKxz15Msq;
-        Mon, 28 Nov 2022 10:55:25 +0800 (CST)
-Received: from DESKTOP-27KDQMV.china.huawei.com (10.174.148.223) by
- kwepemi100025.china.huawei.com (7.221.188.158) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 10:56:01 +0800
-From:   "Longpeng(Mike)" <longpeng2@huawei.com>
-To:     <stefanha@redhat.com>, <mst@redhat.com>, <jasowang@redhat.com>,
-        <sgarzare@redhat.com>, <eperezma@redhat.com>
-CC:     <cohuck@redhat.com>, <arei.gonglei@huawei.com>,
-        <yechuan@huawei.com>, <huangzhichao@huawei.com>,
-        <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, Longpeng <longpeng2@huawei.com>
-Subject: [PATCH] vdpasim: support doorbell mapping
-Date:   Mon, 28 Nov 2022 10:55:58 +0800
-Message-ID: <20221128025558.2152-1-longpeng2@huawei.com>
-X-Mailer: git-send-email 2.25.0.windows.1
+        Sun, 27 Nov 2022 21:58:32 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3546278;
+        Sun, 27 Nov 2022 18:58:31 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id w79so9189447pfc.2;
+        Sun, 27 Nov 2022 18:58:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F3rQp1kF0dgXtLApz/AwEyR6PIFhkqJV5eD9Ad4OipQ=;
+        b=KvY6WhsHiyILCM+W4BxlTNvIzU0YUPAiiXzzA7JSUxrdq8eHx1CFPRui9L4rRwT0Yx
+         OyiCitdXOMegojZdtKZqJlnZx0tVteZd32zNyJuDXQqrl4zOfR7wbTfsnDnJHTlXNJ78
+         Ln5HMzmEpviyJUXLk687csUpTrbQKoFJxswOEJI77yFO0x+ExXjAU/1DWSDbTx88lZQ8
+         rwRYbgjI4IfDeLRh5O+zi1XFxXFVit7LdIEFPQa2krnSmr6sUwPsNHuhgqKZQ5N01SDl
+         y8oz6Efh7dDrbfWOuFgge4f0Bs6NAiSdvLrMlQAweRJGEIqHeVDvM+b1bw2sBpt7ulTX
+         ZgAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F3rQp1kF0dgXtLApz/AwEyR6PIFhkqJV5eD9Ad4OipQ=;
+        b=mQgrPsjiD2UwTj4Efg71ziDctwzpWnYc8/FFGsC2yT0u6QVkpmDOprp7c+8+20+nZC
+         GwvP12JnfHOPrA1LA27B4cQUKZNOjXkIREtivcaFtG7nGTuZaHORWCYxSi1iav9pw2QK
+         vVQUKBQ+6/CdRpI7vYltyl04iBiLBmmY9P7w/Uup4yuJiUuPKjk6C1u/ZqLeI1PtEgjs
+         OcSlTL7peR/MytI2MFz/q2k7AfFOF4gsWq4M6wY8/MlGOEWbN8L+q8Znbb8mUjAFGWSz
+         4Dzr6tbgu1xoy3UhrL+APCgzkLCpoxbMYo7CFiD1LnkmVV+23rdELhbb/UAurAUw6bcP
+         vjvw==
+X-Gm-Message-State: ANoB5pkdchExjIsOAJ9HnLHDsQHT8xmeWWWbLy/gIIthBLq/P3/XKSpy
+        MyX+ua4ilHkDBVM2aLzi1cPiUxhwzbbrh5K40g==
+X-Google-Smtp-Source: AA0mqf5mN01nGtfwW+2jMhmhEfarm5DtRSR6/oMdRJZvgVY0zelufhnzu/Z5yY+cqlDUMykmuS18S+vGhrzpg2nnDOk=
+X-Received: by 2002:a05:6a00:1a4c:b0:574:97d4:c10f with SMTP id
+ h12-20020a056a001a4c00b0057497d4c10fmr18058844pfv.81.1669604310796; Sun, 27
+ Nov 2022 18:58:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.148.223]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi100025.china.huawei.com (7.221.188.158)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221125122912.54709-1-sunhao.th@gmail.com> <20221128003800.h2bmqcv5dfqmfbcf@MacBook-Pro-5.local>
+ <CACkBjsY_Jy9seMfcMMPbYN-YMubcUzABpMm7VFe8wU+X6LKAUQ@mail.gmail.com> <CAADnVQ+G5AuJgo0iRmGOzzr2sS-Ddz6Dt-_99hS+q=VXPpHH7Q@mail.gmail.com>
+In-Reply-To: <CAADnVQ+G5AuJgo0iRmGOzzr2sS-Ddz6Dt-_99hS+q=VXPpHH7Q@mail.gmail.com>
+From:   Hao Sun <sunhao.th@gmail.com>
+Date:   Mon, 28 Nov 2022 10:58:19 +0800
+Message-ID: <CACkBjsadebY1RZ0guYeja4bAG-kKWhz30FmOhf5ARhC8Edf1yA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/3] bpf: Add LDX/STX/ST sanitize in jited BPF progs
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Longpeng <longpeng2@huawei.com>
+Alexei Starovoitov <alexei.starovoitov@gmail.com> =E4=BA=8E2022=E5=B9=B411=
+=E6=9C=8828=E6=97=A5=E5=91=A8=E4=B8=80 10:12=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Sun, Nov 27, 2022 at 5:41 PM Hao Sun <sunhao.th@gmail.com> wrote:
+> >
+> > Alexei Starovoitov <alexei.starovoitov@gmail.com> =E4=BA=8E2022=E5=B9=
+=B411=E6=9C=8828=E6=97=A5=E5=91=A8=E4=B8=80 08:38=E5=86=99=E9=81=93=EF=BC=
+=9A
+> > >
+> > > On Fri, Nov 25, 2022 at 08:29:09PM +0800, Hao Sun wrote:
+> > > > The verifier sometimes makes mistakes[1][2] that may be exploited t=
+o
+> > > > achieve arbitrary read/write. Currently, syzbot is continuously tes=
+ting
+> > > > bpf, and can find memory issues in bpf syscalls, but it can hardly =
+find
+> > > > mischecking/bugs in the verifier. We need runtime checks like KASAN=
+ in
+> > > > BPF programs for this. This patch series implements address sanitiz=
+e
+> > > > in jited BPF progs for testing purpose, so that tools like syzbot c=
+an
+> > > > find interesting bugs in the verifier automatically by, if possible=
+,
+> > > > generating and executing BPF programs that bypass the verifier but =
+have
+> > > > memory issues, then triggering this sanitizing.
+> > >
+> > > The above paragraph makes it sound that it's currently impossible to
+> > > use kasan with BPF. Which is confusing and incorrect statement.
+> > > kasan adds all the necessary instrumentation to BPF interpreter alrea=
+dy
+> > > and syzbot can perform bug discovery.
+> > > syzbot runner should just disable JIT and run all progs via interpret=
+er.
+> > > Adding all this logic to run JITed progs in kasan kernel is
+> > > just unnecessary complexity.
+> >
+> > Sorry for the confusion, I mean JITed BPF prog can't use KASAN currentl=
+y,
+> > maybe it should be called BPF_JITED_PROG_KASAN.
+> >
+> > It's actually useful because JIT is used in most real cases for testing=
+/fuzzing,
+> > syzbot uses WITH_JIT_ALWAYS_ON[1][2].
+>
+> Just turn it off in syzbot. jit_always_on is a security feature
+> because of speculative execution bugs that can exploit
+> any in-kernel interpreter (not only bpf interpreter).
+>
 
-Support doorbell mapping for vdpasim devices, then we can test the notify
-passthrough feature even if there's no real hardware on hand.
+Will do that, thanks for the information.
 
-Allocates a dummy page which used to emulate the notify page of the device.
-All values written to this page would be ignored,  a periodic work will
-check whether there're requests that need to process.
+> > For those tools, they may need
+> > to run hundred times for each generated BPF prog to find interesting bu=
+gs in
+> > the verifier, JIT makes it much faster.
+>
+> Unlikely. With all the overhead of saving a bunch of regs,
+> restoring them and calling functions instead of direct load/store
+> such JITed code is probably running at the same speed as
+> interpreter.
+> Also syzbot generated progs are tiny.
+> Your oob reproducer is tiny too.
+> The speed of execution doesn't matter in such cases.
+>
 
-This cap is disabled as default, users can enable it as follow:
-  modprobe vdpa_sim notify_passthrough=true
+Hard to tell which one is faster, since each execution of insn in the
+interpreter requires a jmp.
+But you're right, did not think about this, I guess randomly generated
+progs that can pass the verifier are normally tiny, so the speed indeed
+may not be an issue here.
 
-Signed-off-by: Longpeng <longpeng2@huawei.com>
----
- drivers/vdpa/vdpa_sim/vdpa_sim.c     | 71 ++++++++++++++++++++++++++--
- drivers/vdpa/vdpa_sim/vdpa_sim.h     |  5 +-
- drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  5 +-
- drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  4 +-
- 4 files changed, 76 insertions(+), 9 deletions(-)
+> > Also, bugs in JIT can be
+> > missed if they're
+> > disabled.
+>
+> Disagree. Replacing direct load/store with calls
+> doesn't improve JIT test coverage.
+>
+> Also think long term. Beyond kasan there are various *sans
+> that instrument code differently. load/store may not be
+> the only insns that should be instrumented.
+> So hacking JITs either directly or via verifier isn't going
+> to scale.
 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-index 7438a89ce939..5c215b56b78b 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-@@ -14,6 +14,7 @@
- #include <linux/slab.h>
- #include <linux/sched.h>
- #include <linux/dma-map-ops.h>
-+#include <asm/set_memory.h>
- #include <linux/vringh.h>
- #include <linux/vdpa.h>
- #include <linux/vhost_iotlb.h>
-@@ -36,9 +37,15 @@ module_param(max_iotlb_entries, int, 0444);
- MODULE_PARM_DESC(max_iotlb_entries,
- 		 "Maximum number of iotlb entries for each address space. 0 means unlimited. (default: 2048)");
- 
-+static bool notify_passthrough;
-+module_param(notify_passthrough, bool, 0444);
-+MODULE_PARM_DESC(notify_passthrough,
-+		 "Enable vq notify(doorbell) area mapping. (default: false)");
-+
- #define VDPASIM_QUEUE_ALIGN PAGE_SIZE
- #define VDPASIM_QUEUE_MAX 256
- #define VDPASIM_VENDOR_ID 0
-+#define VDPASIM_VRING_POLL_PERIOD 100 /* ms */
- 
- static struct vdpasim *vdpa_to_sim(struct vdpa_device *vdpa)
- {
-@@ -276,7 +283,7 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
- 	}
- 
- 	vdpasim->dev_attr = *dev_attr;
--	INIT_WORK(&vdpasim->work, dev_attr->work_fn);
-+	INIT_DELAYED_WORK(&vdpasim->vring_work, dev_attr->work_fn);
- 	spin_lock_init(&vdpasim->lock);
- 	spin_lock_init(&vdpasim->iommu_lock);
- 
-@@ -287,6 +294,15 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
- 	set_dma_ops(dev, &vdpasim_dma_ops);
- 	vdpasim->vdpa.mdev = dev_attr->mgmt_dev;
- 
-+	if (notify_passthrough) {
-+		vdpasim->notify = __get_free_page(GFP_KERNEL | __GFP_ZERO);
-+		if (!vdpasim->notify)
-+			goto err_iommu;
-+#ifdef CONFIG_X86
-+		set_memory_uc(vdpasim->notify, 1);
-+#endif
-+	}
-+
- 	vdpasim->config = kzalloc(dev_attr->config_size, GFP_KERNEL);
- 	if (!vdpasim->config)
- 		goto err_iommu;
-@@ -357,8 +373,11 @@ static void vdpasim_kick_vq(struct vdpa_device *vdpa, u16 idx)
- 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
- 	struct vdpasim_virtqueue *vq = &vdpasim->vqs[idx];
- 
-+	if (notify_passthrough)
-+		return;
-+
- 	if (vq->ready)
--		schedule_work(&vdpasim->work);
-+		schedule_work(&vdpasim->vring_work.work);
- }
- 
- static void vdpasim_set_vq_cb(struct vdpa_device *vdpa, u16 idx,
-@@ -495,6 +514,18 @@ static u8 vdpasim_get_status(struct vdpa_device *vdpa)
- 	return status;
- }
- 
-+static void vdpasim_set_vring_work(struct vdpasim *vdpasim, bool start)
-+{
-+	if (!notify_passthrough)
-+		return;
-+
-+	if (start)
-+		schedule_delayed_work(&vdpasim->vring_work,
-+				msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
-+	else
-+		cancel_delayed_work_sync(&vdpasim->vring_work);
-+}
-+
- static void vdpasim_set_status(struct vdpa_device *vdpa, u8 status)
- {
- 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-@@ -502,12 +533,16 @@ static void vdpasim_set_status(struct vdpa_device *vdpa, u8 status)
- 	spin_lock(&vdpasim->lock);
- 	vdpasim->status = status;
- 	spin_unlock(&vdpasim->lock);
-+
-+	vdpasim_set_vring_work(vdpasim, status & VIRTIO_CONFIG_S_DRIVER_OK);
- }
- 
- static int vdpasim_reset(struct vdpa_device *vdpa, bool clear)
- {
- 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
- 
-+	vdpasim_set_vring_work(vdpasim, false);
-+
- 	spin_lock(&vdpasim->lock);
- 	vdpasim->status = 0;
- 	vdpasim_do_reset(vdpasim);
-@@ -672,12 +707,24 @@ static int vdpasim_dma_unmap(struct vdpa_device *vdpa, unsigned int asid,
- 	return 0;
- }
- 
-+static struct vdpa_notification_area
-+vdpasim_get_vq_notification(struct vdpa_device *vdpa, u16 qid)
-+{
-+	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-+	struct vdpa_notification_area notify;
-+
-+	notify.addr = virt_to_phys((void *)vdpasim->notify);
-+	notify.size = PAGE_SIZE;
-+
-+	return notify;
-+}
-+
- static void vdpasim_free(struct vdpa_device *vdpa)
- {
- 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
- 	int i;
- 
--	cancel_work_sync(&vdpasim->work);
-+	cancel_delayed_work_sync(&vdpasim->vring_work);
- 
- 	for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
- 		vringh_kiov_cleanup(&vdpasim->vqs[i].out_iov);
-@@ -693,7 +740,23 @@ static void vdpasim_free(struct vdpa_device *vdpa)
- 	vhost_iotlb_free(vdpasim->iommu);
- 	kfree(vdpasim->vqs);
- 	kfree(vdpasim->config);
-+	if (vdpasim->notify) {
-+#ifdef CONFIG_X86
-+		set_memory_wb(vdpasim->notify, 1);
-+#endif
-+		free_page(vdpasim->notify);
-+	}
-+}
-+
-+void vdpasim_schedule_work(struct vdpasim *vdpasim, bool sched_now)
-+{
-+	if (sched_now)
-+		schedule_work(&vdpasim->vring_work.work);
-+	else if (notify_passthrough)
-+		schedule_delayed_work(&vdpasim->vring_work,
-+				      msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
- }
-+EXPORT_SYMBOL_GPL(vdpasim_schedule_work);
- 
- static const struct vdpa_config_ops vdpasim_config_ops = {
- 	.set_vq_address         = vdpasim_set_vq_address,
-@@ -704,6 +767,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
- 	.get_vq_ready           = vdpasim_get_vq_ready,
- 	.set_vq_state           = vdpasim_set_vq_state,
- 	.get_vq_state           = vdpasim_get_vq_state,
-+	.get_vq_notification    = vdpasim_get_vq_notification,
- 	.get_vq_align           = vdpasim_get_vq_align,
- 	.get_vq_group           = vdpasim_get_vq_group,
- 	.get_device_features    = vdpasim_get_device_features,
-@@ -737,6 +801,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
- 	.get_vq_ready           = vdpasim_get_vq_ready,
- 	.set_vq_state           = vdpasim_set_vq_state,
- 	.get_vq_state           = vdpasim_get_vq_state,
-+	.get_vq_notification    = vdpasim_get_vq_notification,
- 	.get_vq_align           = vdpasim_get_vq_align,
- 	.get_vq_group           = vdpasim_get_vq_group,
- 	.get_device_features    = vdpasim_get_device_features,
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-index 0e78737dcc16..da0866834918 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-@@ -53,7 +53,7 @@ struct vdpasim_dev_attr {
- struct vdpasim {
- 	struct vdpa_device vdpa;
- 	struct vdpasim_virtqueue *vqs;
--	struct work_struct work;
-+	struct delayed_work vring_work;
- 	struct vdpasim_dev_attr dev_attr;
- 	/* spinlock to synchronize virtqueue state */
- 	spinlock_t lock;
-@@ -69,10 +69,13 @@ struct vdpasim {
- 	bool running;
- 	/* spinlock to synchronize iommu table */
- 	spinlock_t iommu_lock;
-+	/* dummy notify page */
-+	unsigned long notify;
- };
- 
- struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *attr,
- 			       const struct vdpa_dev_set_config *config);
-+void vdpasim_schedule_work(struct vdpasim *vdpasim, bool sched_now);
- 
- /* TODO: cross-endian support */
- static inline bool vdpasim_is_little_endian(struct vdpasim *vdpasim)
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-index c6db1a1baf76..8a640ea82284 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-@@ -288,7 +288,7 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
- 
- static void vdpasim_blk_work(struct work_struct *work)
- {
--	struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
-+	struct vdpasim *vdpasim = container_of(work, struct vdpasim, vring_work.work);
- 	bool reschedule = false;
- 	int i;
- 
-@@ -325,8 +325,7 @@ static void vdpasim_blk_work(struct work_struct *work)
- out:
- 	spin_unlock(&vdpasim->lock);
- 
--	if (reschedule)
--		schedule_work(&vdpasim->work);
-+	vdpasim_schedule_work(vdpasim, reschedule);
- }
- 
- static void vdpasim_blk_get_config(struct vdpasim *vdpasim, void *config)
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-index c3cb225ea469..8b998952384b 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-@@ -145,7 +145,7 @@ static void vdpasim_handle_cvq(struct vdpasim *vdpasim)
- 
- static void vdpasim_net_work(struct work_struct *work)
- {
--	struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
-+	struct vdpasim *vdpasim = container_of(work, struct vdpasim, vring_work.work);
- 	struct vdpasim_virtqueue *txq = &vdpasim->vqs[1];
- 	struct vdpasim_virtqueue *rxq = &vdpasim->vqs[0];
- 	ssize_t read, write;
-@@ -196,7 +196,7 @@ static void vdpasim_net_work(struct work_struct *work)
- 		vdpasim_net_complete(rxq, write);
- 
- 		if (++pkts > 4) {
--			schedule_work(&vdpasim->work);
-+			vdpasim_schedule_work(vdpasim, true);
- 			goto out;
- 		}
- 	}
--- 
-2.23.0
+Right, just let those *sans instrument the interpreter is more scalable.
 
+Thanks
+Hao
