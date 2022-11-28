@@ -2,95 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B328363B258
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:36:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE3F63B260
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:37:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232828AbiK1TgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 14:36:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S233376AbiK1Tht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 14:37:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiK1TgH (ORCPT
+        with ESMTP id S230241AbiK1Thp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 14:36:07 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272C2289;
-        Mon, 28 Nov 2022 11:36:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669664162; x=1701200162;
-  h=from:to:subject:date:message-id:mime-version;
-  bh=wD2M8s3Cr8kF2HD+rXY4pLjxb8HYCtk76CEYAlmGrcg=;
-  b=AvlJNj/KzJi2qwKj/TAJ77qSbNBf0r0jH3OGi1oCE5lM92UodAx40Maz
-   tI7CI4RBbUpww8iZppPvaAV5PSMgS8Xq4xpz0y8iNi4s675YMhjOuC4vv
-   vjr3TOW7MlIvDsXRZkmCRTnD4vO4C5N5+EMva4xTs8UDkXZWTaQIse+m1
-   zbUjekx5ZzEis9pLGU/gP/ADTSm1gjf+9T7TGK3ppZFhRO2FXeBs9nKTm
-   ZZjznQ43anYrTShYIWYVhLD7GQkyaqM49uE81Oa/NH53ysIiJ8RqHSM8d
-   THDgtKhgceAigUUSX679ffdpUnrKTXJ5fgIOf5YudKTiHc7TR5uXwH6Cc
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="190878452"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Nov 2022 12:36:02 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 28 Nov 2022 12:36:02 -0700
-Received: from AUS-LT-C33025.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Mon, 28 Nov 2022 12:36:00 -0700
-From:   Jerry Ray <jerry.ray@microchip.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Jerry Ray <jerry.ray@microchip.com>
-Subject: [net PATCH] dsa: lan9303: Correct stat name
-Date:   Mon, 28 Nov 2022 13:35:59 -0600
-Message-ID: <20221128193559.6572-1-jerry.ray@microchip.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 28 Nov 2022 14:37:45 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE87766D;
+        Mon, 28 Nov 2022 11:37:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=maVyWFE1pq/Db9obmOzHYaZBWeSNTebHNF1VOxWlEsc=; b=Z7g2j3JvNb2zdLfH5RE2BhKU5p
+        HH65jHXx1lPGkDeKMHLZiffXkYIz6VDyqY1oDC/f54Vz6Dr4P18McjtqVM1VKdDwRjlYu/LJSLcN8
+        oliWAcBzrd/KXj7dkovQSWMfWoTu8vSrrm8id/2iqOvHqMJNA2mXLm56Z5grBqpKPzaGB+4ns1gUg
+        +ejIdvS2cpH2f3DJmDEAwDipps7FvfmHssvTLvJh48zoP9V1mNUSviDNudE4pp+mxR3aHdZ4ju4ln
+        V2l1p2xO2DgXHb1dOdj//Ab7qPqa5xntdNB48ao2qpqkp1zgFMjkoDkvWQOuqni0fP9HIjjhJcD9q
+        1RxLXujA==;
+Received: from [177.34.169.227] (helo=[192.168.0.8])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ozjwV-00AbJz-5s; Mon, 28 Nov 2022 20:37:27 +0100
+Message-ID: <2c51f4d9-330f-70a4-f428-ae7aa9d6785c@igalia.com>
+Date:   Mon, 28 Nov 2022 16:37:18 -0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 04/17] drm/tests: helpers: Remove the name parameter
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-media@vger.kernel.org
+References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
+ <20221123-rpi-kunit-tests-v2-4-efe5ed518b63@cerno.tech>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v2-4-efe5ed518b63@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes: a1292595e006 ("net: dsa: add new DSA switch driver for the SMSC-LAN9303")
+On 11/28/22 11:53, Maxime Ripard wrote:
+> The device name isn't really useful, we can just define it instead of
+> exposing it in the API.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-This patch changes the reported ethtool statistics for the lan9303
-family of parts covered by this driver.
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
 
-The TxUnderRun statistic label is renamed to RxShort to accurately
-reflect what stat the device is reporting.  I did not reorder the
-statistics as that might cause problems with existing user code that
-are expecting the stats at a certain offset.
+Best Regards
+- Maíra Canal
 
-Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
----
- drivers/net/dsa/lan9303-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/dsa/lan9303-core.c b/drivers/net/dsa/lan9303-core.c
-index 438e46af03e9..80f07bd20593 100644
---- a/drivers/net/dsa/lan9303-core.c
-+++ b/drivers/net/dsa/lan9303-core.c
-@@ -961,7 +961,7 @@ static const struct lan9303_mib_desc lan9303_mib[] = {
- 	{ .offset = LAN9303_MAC_TX_BRDCST_CNT_0, .name = "TxBroad", },
- 	{ .offset = LAN9303_MAC_TX_PAUSE_CNT_0, .name = "TxPause", },
- 	{ .offset = LAN9303_MAC_TX_MULCST_CNT_0, .name = "TxMulti", },
--	{ .offset = LAN9303_MAC_RX_UNDSZE_CNT_0, .name = "TxUnderRun", },
-+	{ .offset = LAN9303_MAC_RX_UNDSZE_CNT_0, .name = "RxShort", },
- 	{ .offset = LAN9303_MAC_TX_64_CNT_0, .name = "Tx64Byte", },
- 	{ .offset = LAN9303_MAC_TX_127_CNT_0, .name = "Tx128Byte", },
- 	{ .offset = LAN9303_MAC_TX_255_CNT_0, .name = "Tx256Byte", },
--- 
-2.17.1
-
+> ---
+>  drivers/gpu/drm/tests/drm_client_modeset_test.c | 3 +--
+>  drivers/gpu/drm/tests/drm_kunit_helpers.c       | 7 ++++---
+>  drivers/gpu/drm/tests/drm_modes_test.c          | 3 +--
+>  drivers/gpu/drm/tests/drm_probe_helper_test.c   | 3 +--
+>  include/drm/drm_kunit_helpers.h                 | 3 +--
+>  5 files changed, 8 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/tests/drm_client_modeset_test.c b/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> index 6cdf08f582ce..4d475ae6dbb6 100644
+> --- a/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> +++ b/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> @@ -59,8 +59,7 @@ static int drm_client_modeset_test_init(struct kunit *test)
+>  
+>  	test->priv = priv;
+>  
+> -	priv->drm = drm_kunit_helper_alloc_drm_device(test, DRIVER_MODESET,
+> -						      "drm-client-modeset-test");
+> +	priv->drm = drm_kunit_helper_alloc_drm_device(test, DRIVER_MODESET);
+>  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->drm);
+>  
+>  	ret = drmm_connector_init(priv->drm, &priv->connector,
+> diff --git a/drivers/gpu/drm/tests/drm_kunit_helpers.c b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> index 2f67f6cf78d0..16c7926d83c2 100644
+> --- a/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> +++ b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> @@ -8,6 +8,8 @@
+>  
+>  #include <linux/device.h>
+>  
+> +#define KUNIT_DEVICE_NAME	"drm-kunit-mock-device"
+> +
+>  struct kunit_dev {
+>  	struct drm_device base;
+>  };
+> @@ -39,7 +41,6 @@ static void dev_free(struct kunit_resource *res)
+>   * drm_kunit_helper_alloc_drm_device - Allocates a mock DRM device for Kunit tests
+>   * @test: The test context object
+>   * @features: Mocked DRM device driver features
+> - * @name: Name of the struct &device to allocate
+>   *
+>   * This function allocates a new struct &device, creates a struct
+>   * &drm_driver and will create a struct &drm_device using both.
+> @@ -54,7 +55,7 @@ static void dev_free(struct kunit_resource *res)
+>   */
+>  struct drm_device *
+>  drm_kunit_helper_alloc_drm_device(struct kunit *test,
+> -				  u32 features, char *name)
+> +				  u32 features)
+>  {
+>  	struct kunit_dev *kdev;
+>  	struct drm_device *drm;
+> @@ -62,7 +63,7 @@ drm_kunit_helper_alloc_drm_device(struct kunit *test,
+>  	struct device *dev;
+>  	int ret;
+>  
+> -	dev = kunit_alloc_resource(test, dev_init, dev_free, GFP_KERNEL, name);
+> +	dev = kunit_alloc_resource(test, dev_init, dev_free, GFP_KERNEL, KUNIT_DEVICE_NAME);
+>  	if (!dev)
+>  		return ERR_PTR(-ENOMEM);
+>  
+> diff --git a/drivers/gpu/drm/tests/drm_modes_test.c b/drivers/gpu/drm/tests/drm_modes_test.c
+> index 6723089dff9f..35965ad86188 100644
+> --- a/drivers/gpu/drm/tests/drm_modes_test.c
+> +++ b/drivers/gpu/drm/tests/drm_modes_test.c
+> @@ -22,8 +22,7 @@ static int drm_test_modes_init(struct kunit *test)
+>  	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
+>  	KUNIT_ASSERT_NOT_NULL(test, priv);
+>  
+> -	priv->drm = drm_kunit_helper_alloc_drm_device(test, DRIVER_MODESET,
+> -						      "drm-modes-test");
+> +	priv->drm = drm_kunit_helper_alloc_drm_device(test, DRIVER_MODESET);
+>  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->drm);
+>  
+>  	test->priv = priv;
+> diff --git a/drivers/gpu/drm/tests/drm_probe_helper_test.c b/drivers/gpu/drm/tests/drm_probe_helper_test.c
+> index 85236ff4744f..be61a92b79d2 100644
+> --- a/drivers/gpu/drm/tests/drm_probe_helper_test.c
+> +++ b/drivers/gpu/drm/tests/drm_probe_helper_test.c
+> @@ -40,8 +40,7 @@ static int drm_probe_helper_test_init(struct kunit *test)
+>  	test->priv = priv;
+>  
+>  	priv->drm = drm_kunit_helper_alloc_drm_device(test,
+> -						      DRIVER_MODESET | DRIVER_ATOMIC,
+> -						      "drm-probe-helper-test");
+> +						      DRIVER_MODESET | DRIVER_ATOMIC);
+>  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->drm);
+>  
+>  	connector = &priv->connector;
+> diff --git a/include/drm/drm_kunit_helpers.h b/include/drm/drm_kunit_helpers.h
+> index e9870c7911fe..6c12b1426ba0 100644
+> --- a/include/drm/drm_kunit_helpers.h
+> +++ b/include/drm/drm_kunit_helpers.h
+> @@ -8,7 +8,6 @@ struct kunit;
+>  
+>  struct drm_device *
+>  drm_kunit_helper_alloc_drm_device(struct kunit *test,
+> -				  u32 features,
+> -				  char *name);
+> +				  u32 features);
+>  
+>  #endif // DRM_KUNIT_HELPERS_H_
+> 
