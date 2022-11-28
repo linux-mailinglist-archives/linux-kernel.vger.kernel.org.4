@@ -2,140 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6D763AADC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:29:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A817563AB81
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:45:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232495AbiK1O27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 09:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51078 "EHLO
+        id S232671AbiK1Op3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 09:45:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232488AbiK1O25 (ORCPT
+        with ESMTP id S232673AbiK1OpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:28:57 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038B91F637;
-        Mon, 28 Nov 2022 06:28:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669645736; x=1701181736;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=MrI+cgsw8fa/uMy0ii8IS1azy4iiz+Bct6bPgqhgiOA=;
-  b=juV/h03SzrZ470dHRA/kXpYr1i6AhXJr/pH/5M8Xev556W4zlOkv242h
-   uHkb7cZ6RWHXEqqGDCcafZiq8l51x2Vmghxj6oivE7fllZvLD1tzbz8SO
-   NSIwxUpagA7HR1VWXENSPWnnPg7VRDIb2n2cr+896uWGGz9LfJxbHIG4a
-   nlP9uAvblDGSDKJ4shvMyz2DtW87WyerThKNq9++Y3iL5vkLNZ6AJ0gVv
-   0Tle9IreDRebLeH5PwAKL/yjxRAw4SB3sLkaHpJh9uhNtScR5Lkjh14i1
-   3AB5K+o8bnwgwVOA4oFovyINdZmVhoG4/rD/jYxIazowp00tfu9WH+dKf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="376985221"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="376985221"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 06:28:41 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="749408009"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="749408009"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 06:28:39 -0800
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] rcu-tasks: Make rude RCU-Tasks work well with CPU hotplug
-Date:   Mon, 28 Nov 2022 22:34:28 +0800
-Message-Id: <20221128143428.1703744-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 28 Nov 2022 09:45:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6807823BF6;
+        Mon, 28 Nov 2022 06:44:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB607611E1;
+        Mon, 28 Nov 2022 14:44:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A4A1C433C1;
+        Mon, 28 Nov 2022 14:44:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669646672;
+        bh=CbaAnBCuYu+p+UM9W360R4cey3oGnj8pLzKqxqy8XvU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RodtObudbG8bTHmKvie0yVRlfVrZptmw9XXByMIPO5LtqwEW/5b4M3XhWuX+ZSz40
+         9B6oL+NFt90t5KBYwWkerqJcOqX9S7OCT/ceDeQB0q0NR6tqStRlvdrJNkfqlcKOyA
+         k+vKWq0Yblo1L0WOFNVxm7gqFVNeFXXola86g9FJTuXrY1PZXA/szlQHMl+RpbGpWA
+         h8SG7ikczPJ+7su5TsPuRV0Yde1KLjs6vpkOT3/qlQl4qEoRUbXh+BT+wPXSGDSLpt
+         f1SQdZkiHVpqVTUe/MKmHTagtKXs/2uuTDU7CsSywrOAXrO7HtwJJoQoVe9M/Gv9xh
+         ixJgqkKQP8IVA==
+Date:   Mon, 28 Nov 2022 22:34:38 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 8/9] MAINTAINERS: riscv: add entry for Bouffalolab SoC
+Message-ID: <Y4TG/iM0ibf65Iua@xhacker>
+References: <20221127132448.4034-1-jszhang@kernel.org>
+ <20221127132448.4034-9-jszhang@kernel.org>
+ <Y4Of7s6UGpD0/Iga@spud>
+ <Y4OgNW6uOe60Pi09@spud>
+ <Y4TF8FzX19puws37@xhacker>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y4TF8FzX19puws37@xhacker>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, invoke rcu_tasks_rude_wait_gp() to wait one rude
-RCU-tasks grace period, if __num_online_cpus == 1, will return
-directly, indicates the end of the rude RCU-task grace period.
-suppose the system has two cpus, consider the following scenario:
+On Mon, Nov 28, 2022 at 10:30:15PM +0800, Jisheng Zhang wrote:
+> On Sun, Nov 27, 2022 at 05:36:53PM +0000, Conor Dooley wrote:
+> > On Sun, Nov 27, 2022 at 05:35:48PM +0000, Conor Dooley wrote:
+> > > Hey Jisheng,
+> > > 
+> > > On Sun, Nov 27, 2022 at 09:24:47PM +0800, Jisheng Zhang wrote:
+> > > > Add Jisheng Zhang as Bouffalolab SoC maintainer.
+> > > > 
+> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > > ---
+> > > >  MAINTAINERS | 9 +++++++++
+> > > >  1 file changed, 9 insertions(+)
+> > > > 
+> > > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > > index 00ff4a2949b8..a6b04249853c 100644
+> > > > --- a/MAINTAINERS
+> > > > +++ b/MAINTAINERS
+> > > > @@ -17729,6 +17729,15 @@ F:	arch/riscv/
+> > > >  N:	riscv
+> > > >  K:	riscv
+> > > >  
+> > > > +RISC-V BOUFFALOLAB SOC SUPPORT
+> > > > +M:	Jisheng Zhang <jszhang@kernel.org>
+> > > > +L:	linux-riscv@lists.infradead.org
+> > > > +S:	Maintained
+> > > > +F:	Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+> > > > +F:	Documentation/devicetree/bindings/serial/bouffalolab,uart.yaml
+> > > > +F:	arch/riscv/boot/dts/bouffalolab/
+> > > > +F:	drivers/tty/serial/bflb_uart.c
+> > > 
+> > > I think I asked last time but I didn't see an answer on lore or my
+> > > mailbox - if you intend sending Arnd PRs for this stuff, please add a
+> 
+> Per my past experience of synaptics/mrvl arm SoCs, I usually sent PRs to Arnd
+> if there are two or more commits/patches; If there's only one patch, I
+> asked Arnd for picking it up directly. So in bouffalolab SoC case, I
+> want to do similar, but with one difference -- if there's only one
+> patch, may I ask you for picking it up directly?
 
-	CPU0                                   CPU1 (going offline)
-				          migration/1 task:
-                                      cpu_stopper_thread
-                                       -> take_cpu_down
-                                          -> _cpu_disable
-			                   (dec __num_online_cpus)
-                                          ->cpuhp_invoke_callback
-                                                preempt_disable
-						access old_data0
-           task1
- del old_data0                                  .....
- synchronize_rcu_tasks_rude()
- task1 schedule out
- ....
- task2 schedule in
- rcu_tasks_rude_wait_gp()
-     ->__num_online_cpus == 1
-       ->return
- ....
- task1 schedule in
- ->free old_data0
-                                                preempt_enable
+That's to say: If there are two or more commits/patches, I will send
+Arnd PRs; If there's only one commit/patch, I will ask your help to
+picking it up directly.
 
-when CPU1 dec __num_online_cpus and __num_online_cpus is equal one,
-the CPU1 has not finished offline, stop_machine task(migration/1)
-still running on CPU1, maybe still accessing 'old_data0', but the
-'old_data0' has freed on CPU0.
-
-This commit add cpus_read_lock/unlock() protection before accessing
-__num_online_cpus variables, to ensure that the CPU in the offline
-process has been completed offline.
-
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/tasks.h | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index 4a991311be9b..08e72c6462d8 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -1033,14 +1033,30 @@ static void rcu_tasks_be_rude(struct work_struct *work)
- {
- }
- 
-+static DEFINE_PER_CPU(struct work_struct, rude_work);
-+
- // Wait for one rude RCU-tasks grace period.
- static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
- {
-+	int cpu;
-+	struct work_struct *work;
-+
-+	cpus_read_lock();
- 	if (num_online_cpus() <= 1)
--		return;	// Fastpath for only one CPU.
-+		goto end;// Fastpath for only one CPU.
- 
- 	rtp->n_ipis += cpumask_weight(cpu_online_mask);
--	schedule_on_each_cpu(rcu_tasks_be_rude);
-+	for_each_online_cpu(cpu) {
-+		work = per_cpu_ptr(&rude_work, cpu);
-+		INIT_WORK(work, rcu_tasks_be_rude);
-+		schedule_work_on(cpu, work);
-+	}
-+
-+	for_each_online_cpu(cpu)
-+		flush_work(per_cpu_ptr(&rude_work, cpu));
-+
-+end:
-+	cpus_read_unlock();
- }
- 
- void call_rcu_tasks_rude(struct rcu_head *rhp, rcu_callback_t func);
--- 
-2.25.1
-
+> 
+> > > git tree here. Otherwise, LMK and I'll bundle it with the other "misc
+> 
+> Hmm, is "git tree" necessary?
+> 
+> > > riscv devicetree" stuff.
+> > 
+> > I forgot:
+> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > 
+> > > >  RISC-V MICROCHIP FPGA SUPPORT
+> > > >  M:	Conor Dooley <conor.dooley@microchip.com>
+> > > >  M:	Daire McNamara <daire.mcnamara@microchip.com>
+> > > > -- 
+> > > > 2.38.1
+> > > > 
+> > > > 
+> > > > _______________________________________________
+> > > > linux-riscv mailing list
+> > > > linux-riscv@lists.infradead.org
+> > > > http://lists.infradead.org/mailman/listinfo/linux-riscv
