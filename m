@@ -2,90 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E1663A7F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94AB163A805
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:17:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231683AbiK1MLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 07:11:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
+        id S230221AbiK1MRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 07:17:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231682AbiK1MKr (ORCPT
+        with ESMTP id S230291AbiK1MRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 07:10:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F229D222B8;
-        Mon, 28 Nov 2022 04:04:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 28 Nov 2022 07:17:15 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661DF1D65D;
+        Mon, 28 Nov 2022 04:08:23 -0800 (PST)
+Received: from mxde.zte.com.cn (unknown [10.35.20.121])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NLPPd1lCrz1DxY;
+        Mon, 28 Nov 2022 20:08:21 +0800 (CST)
+Received: from mxus.zte.com.cn (unknown [10.207.168.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxde.zte.com.cn (FangMail) with ESMTPS id 4NLPPL6dmRz9vSnv;
+        Mon, 28 Nov 2022 20:08:06 +0800 (CST)
+Received: from mxhk.zte.com.cn (unknown [192.168.250.138])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxus.zte.com.cn (FangMail) with ESMTPS id 4NLPP52dXsz9tyD8;
+        Mon, 28 Nov 2022 20:07:53 +0800 (CST)
+Received: from mxct.zte.com.cn (unknown [192.168.251.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NLPLr3vXtz5BNS0;
+        Mon, 28 Nov 2022 20:05:56 +0800 (CST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 107B361149;
-        Mon, 28 Nov 2022 12:03:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ADEBC433C1;
-        Mon, 28 Nov 2022 12:03:37 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="YeseauXB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1669637015;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Deg2zp7dwT9o3e/HySvPJHslvn3AjSP4JHQTJYiaB/k=;
-        b=YeseauXBsvMz5Okw2aUPDHv/z2Z2pedguidoFR1Oak/sJdZ2xKe1BQ/5R53pACPZEgm8aY
-        LAa8kSyngl3hU5oe7fUF/NPr563SSZyqNOJ8eD2/l84YtG2Uc/RvzLLeHVeNdW6kOhkMsv
-        gB1GP5vjzDTNm2b0Jyv4v0dvADG9iT4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 64c5fbf5 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 28 Nov 2022 12:03:35 +0000 (UTC)
-Date:   Mon, 28 Nov 2022 13:03:31 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [REGRESSION] suspend to ram fails in 6.1 due to tpm errors
-Message-ID: <Y4Sjk+Fibcsihg4Y@zx2c4.com>
-References: <c5ba47ef-393f-1fba-30bd-1230d1b4b592@suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c5ba47ef-393f-1fba-30bd-1230d1b4b592@suse.cz>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NLPJs1MyVz4y0vQ;
+        Mon, 28 Nov 2022 20:04:13 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2ASC3aJB077098;
+        Mon, 28 Nov 2022 20:03:36 +0800 (+08)
+        (envelope-from zhang.songyi@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Mon, 28 Nov 2022 20:03:38 +0800 (CST)
+Date:   Mon, 28 Nov 2022 20:03:38 +0800 (CST)
+X-Zmail-TransId: 2afa6384a39affffffffe970c9cc
+X-Mailer: Zmail v1.0
+Message-ID: <202211282003389362484@zte.com.cn>
+Mime-Version: 1.0
+From:   <zhang.songyi@zte.com.cn>
+To:     <seanjc@google.com>
+Cc:     <pbonzini@redhat.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIEtWTTogU1ZNOiByZW1vdmUgcmVkdW5kYW50IHJldCB2YXJpYWJsZQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2ASC3aJB077098
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.14.novalocal with ID 6384A4B4.000 by FangMail milter!
+X-FangMail-Envelope: 1669637301/4NLPPd1lCrz1DxY/6384A4B4.000/10.35.20.121/[10.35.20.121]/mxde.zte.com.cn/<zhang.songyi@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6384A4B4.000/4NLPPd1lCrz1DxY
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vlastimil,
+From: zhang songyi <zhang.songyi@zte.com.cn>
 
-Thanks for CC'ing me.
+Return value from svm_nmi_blocked() directly instead of taking
+this in another redundant variable.
 
-On Mon, Nov 28, 2022 at 09:15:33AM +0100, Vlastimil Babka wrote:
-> Dominik on IRC pointed me to commit b006c439d58d ("hwrng: core - start hwrng
-> kthread also for untrusted sources"), which could make sense if the TPM was not
-> used at all before and now it's used for randomness. But then it probably "just"
-> uncovered a pre-existing issue? Maybe there's a race with getting the randomness
-> and suspend? Could it be exactly what this patch is attempting to fix?
-> https://lore.kernel.org/all/20221103145450.1409273-2-jsd@semihalf.com/
+Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
+---
+ arch/x86/kvm/svm/svm.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-The commit you referenced just turns on some functionality that most
-people previously didn't have (but maybe could have, manually). So this
-is a case of a new commit unearthing a bug in some old code. We had
-something similar happen with a raspi driver and fixed the bug there.
-From the looks of the lore link you provided, it sounds like the same
-thing has happened already there to tpm? That this is already fixed by
-that commit? I think if you have a system that's readily exhibiting the
-issue, the best thing to do would be to try that series, and report
-back, maybe even providing your `Tested-by:` line if it works.
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index ce362e88a567..416812f971f2 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -3572,7 +3572,6 @@ bool svm_nmi_blocked(struct kvm_vcpu *vcpu)
+ {
+        struct vcpu_svm *svm = to_svm(vcpu);
+        struct vmcb *vmcb = svm->vmcb;
+-       bool ret;
 
-I'll play around and see if I can repro too. Looks like you have a T460?
-I don't have exactly that but maybe something close enough.
+        if (!gif_set(svm))
+                return true;
+@@ -3580,10 +3579,8 @@ bool svm_nmi_blocked(struct kvm_vcpu *vcpu)
+        if (is_guest_mode(vcpu) && nested_exit_on_nmi(svm))
+                return false;
 
-Jason
+-       ret = (vmcb->control.int_state & SVM_INTERRUPT_SHADOW_MASK) ||
+-             (vcpu->arch.hflags & HF_NMI_MASK);
+-
+-       return ret;
++       return (vmcb->control.int_state & SVM_INTERRUPT_SHADOW_MASK) ||
++              (vcpu->arch.hflags & HF_NMI_MASK);
+ }
+
+ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+--
+2.15.2
