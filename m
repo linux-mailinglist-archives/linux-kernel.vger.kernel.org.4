@@ -2,90 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040DB63AA38
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3911D63AA35
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbiK1N5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:57:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53166 "EHLO
+        id S232279AbiK1N4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:56:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232252AbiK1N4v (ORCPT
+        with ESMTP id S232244AbiK1N4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 08:56:51 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEE84209B1;
-        Mon, 28 Nov 2022 05:56:42 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 50B84D6E;
-        Mon, 28 Nov 2022 05:56:49 -0800 (PST)
-Received: from a077893.arm.com (unknown [10.163.44.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8A4433F73D;
-        Mon, 28 Nov 2022 05:56:39 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, maz@kernel.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: arm64: Replace PMU version number '0' with ID_AA64DFR0_EL1_PMUVer_NI
-Date:   Mon, 28 Nov 2022 19:26:29 +0530
-Message-Id: <20221128135629.118346-1-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Nov 2022 08:56:48 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A6420350
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:56:38 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B69C921B8F;
+        Mon, 28 Nov 2022 13:56:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669643796; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9wTzr7P00ZqlaJ/8ucvmk0XYg82ZvQTOl/Mx499qBGM=;
+        b=LUNK0Z6ep1vGyfkcwo+1Y3oLpjricTjC/0xTb/sH3yGlN4PrC+0Bh09t26qGv3V3bt0iCB
+        w6PSm/RzUL0sli8igZgrct8KBw+JJh37PdT8hFerkiPXis22efFdBmFDNfvRNvhIe98cL5
+        +Bew8R3179GEKwodAezpBi1fviw89Zs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669643796;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9wTzr7P00ZqlaJ/8ucvmk0XYg82ZvQTOl/Mx499qBGM=;
+        b=hsXZVBOPtJ7R6njq3fUVS6kbBOAaFiCnplH2Q8/jHUAMVmlY6itirYTqbtBxPuRBsPsg5w
+        Uoe60mxVhtC8UWCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 938801326E;
+        Mon, 28 Nov 2022 13:56:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Ydw6IxS+hGOlFQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 28 Nov 2022 13:56:36 +0000
+Date:   Mon, 28 Nov 2022 14:56:36 +0100
+Message-ID: <87ilizyygb.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     John Keeping <john@metanate.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.com>
+Subject: Re: [PATCH] ALSA: pcm: fix tracing reason in hw_ptr_error
+In-Reply-To: <Y4SSjO8gnIz22vt3@donbot>
+References: <20221125162327.297440-1-john@metanate.com>
+        <Y4GNWYcQBUKn3KSa@workstation>
+        <Y4SSjO8gnIz22vt3@donbot>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kvm_host_pmu_init() returns when detected PMU is either not implemented, or
-implementation defined. kvm_pmu_probe_armpmu() also has a similar situation
-Extracted ID_AA64DFR0_EL1_PMUVer value, when PMU is not implemented is '0',
-which can be replaced with ID_AA64DFR0_EL1_PMUVer_NI defined as '0b0000'.
+On Mon, 28 Nov 2022 11:50:52 +0100,
+John Keeping wrote:
+> 
+> On Sat, Nov 26, 2022 at 12:51:53PM +0900, Takashi Sakamoto wrote:
+> > Hi,
+> > 
+> > On Fri, Nov 25, 2022 at 04:23:26PM +0000, John Keeping wrote:
+> > > Strings need to be specially marked in trace events to ensure the
+> > > content is captured, othewise the trace just shows the value of the
+> > > pointer.
+> > > 
+> > > Signed-off-by: John Keeping <john@metanate.com>
+> > > ---
+> > >  sound/core/pcm_trace.h | 6 +++---
+> > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >  
+> > Thanks for the patch, while I have a slight concern about the intension
+> > of change.
+> > 
+> > Let's see message in below commit to add 'trace_safe_str()' in
+> > 'kernel/trace/trace.c':
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9a6944fee68
+> > 
+> > "The proper way to handle displaying any string that is not guaranteed to be
+> > in the kernel core rodata section, is to copy it into the ring buffer via
+> > the __string(), __assign_str() and __get_str() helper macros."
+> > 
+> > Additionally, the macros looks to be alias to __dynamic_array() or so.
+> > 
+> > In our case, the pointer of 'why' argument should points to two
+> > hardcoded strings; "hw_ptr skipping" and "Unexpected hw_ptr". As long as
+> > I know, they are put into any of .rodata section.
+> > 
+> > ```
+> > $ objdump -s sound/core/snd-pcm.ko -j .rodata.str1.1
+> > ```
+> >  0830 74757265 20436861 6e6e656c 204d6170  ture Channel Map
+> >  0840 00585255 4e3a2025 730a0055 6e657870  .XRUN: %s..Unexp
+> >  0850 65637465 64206877 5f707472 0068775f  ected hw_ptr.hw_
+> >  0860 70747220 736b6970 70696e67 004c6f73  ptr skipping.Los
+> >  0870 7420696e 74657272 75707473 3f00756e  t interrupts?.un
+> > ```
+> > 
+> > I think current implementation is enough safe.
+> 
+> Thanks for this analysis - I hadn't looked into the history of this.
+> 
+> It seems that trace-cmd's record/report functionality does not support
+> rodata strings in this way though.  Without this patch, the trace log is
+> not very informative:
+> 
+> 	$ trace-cmd record -e snd_pcm:hw_ptr_error
+> 	^C
+> 	$ trace-cmd report
+> 	 irq/49-ehci_hcd-111   [002]    65.785147: hw_ptr_error:         pcmC1D0p/sub0: ERROR: c0b1b3c7
+> 
+> With this patch applied this becomes:
+> 
+> 	 irq/49-ehci_hcd-111   [002]   435.758754: hw_ptr_error:         pcmC2D0p/sub0: ERROR: Lost interrupts?
 
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: linux-perf-users@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
-This applies on v6.1-rc6
+Fair enough, I applied now as is.
+Thanks!
 
- arch/arm64/kvm/pmu-emul.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
-index 0003c7d37533..089a0b4c561b 100644
---- a/arch/arm64/kvm/pmu-emul.c
-+++ b/arch/arm64/kvm/pmu-emul.c
-@@ -774,7 +774,8 @@ void kvm_host_pmu_init(struct arm_pmu *pmu)
- {
- 	struct arm_pmu_entry *entry;
- 
--	if (pmu->pmuver == 0 || pmu->pmuver == ID_AA64DFR0_EL1_PMUVer_IMP_DEF)
-+	if (pmu->pmuver == ID_AA64DFR0_EL1_PMUVer_NI ||
-+	    pmu->pmuver == ID_AA64DFR0_EL1_PMUVer_IMP_DEF)
- 		return;
- 
- 	mutex_lock(&arm_pmus_lock);
-@@ -827,7 +828,7 @@ static struct arm_pmu *kvm_pmu_probe_armpmu(void)
- 
- 	if (event->pmu) {
- 		pmu = to_arm_pmu(event->pmu);
--		if (pmu->pmuver == 0 ||
-+		if (pmu->pmuver == ID_AA64DFR0_EL1_PMUVer_NI ||
- 		    pmu->pmuver == ID_AA64DFR0_EL1_PMUVer_IMP_DEF)
- 			pmu = NULL;
- 	}
--- 
-2.25.1
-
+Takashi
