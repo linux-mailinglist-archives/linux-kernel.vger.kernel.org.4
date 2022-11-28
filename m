@@ -2,70 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73DA963A827
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E0563A87C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:33:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbiK1MXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 07:23:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
+        id S230132AbiK1Mdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 07:33:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiK1MWn (ORCPT
+        with ESMTP id S229910AbiK1Mdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 07:22:43 -0500
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B621C416;
-        Mon, 28 Nov 2022 04:20:49 -0800 (PST)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1433ef3b61fso12695745fac.10;
-        Mon, 28 Nov 2022 04:20:49 -0800 (PST)
+        Mon, 28 Nov 2022 07:33:32 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C78C1A062
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:33:31 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so11527246wma.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:33:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=+gmo9nIirdbed4J/LDnU4BNvdJRcxPBpHK1YwQWHx3A=;
+        b=Ov/KaEuWs1Y8eHtYdGfDUCbL84zNHUFESCRmPJbwiL4b4IkVYPUs0G1f90nHsfQ/zv
+         ehKTVNWofEcOeyX9H++dsbFfqvqpLv4UI5SpMeltJX+7PhkxVUhqbOS5sWWAgao/afWy
+         Vmu2IYeujw1lNxavecWXZtBV2Xt7zVVCw10XpuwEZq0dkxd13hpGwtmlvIqyQeE/KNoX
+         rA3Xh3b7GEY59tYVfwF7IRQcBMpp4dMqeAK/0dBG+Bw03kgBT6s60v17KxK+pPdPro6G
+         FLxZbP+uH3QEA3DqFca6aUkawOebjlWwlLD1jmOpKkTr40d27MyLfvvmN0ta9OMOThQY
+         4WLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=CZfqieASnhH+cyHXFa4EKAUAtyWhOd13pMXBilnYNUI=;
-        b=SmI2yOsGUgH5FmNDNMX5EupeERqDhrgcuxb2Sxoz7s9uvZGQqyZn26xFekZgIY2PIt
-         nssYIw1NGeRo26HwaMq6IvN/cJnUHrFm6RhBJcJpw1JkV76/pykBaeOu04ppc0Im+Nmr
-         SDk/IrPXJ99OalAo7a3aQ985UJ/WcwZlWe8tw4Wh5QNXGL9PglXlS7uJ+oQz/O1TQc7d
-         ex5MVa7HpNg9E8eyBoHxV+exJw0fQK4xsBrTut4/fY76U+Y6M3gvHSUZWkZBVhVXQTpo
-         PUW5RpoF/gCYcZna7hwLkQmnf21YTTSJnEMzAGthFMP+H15x8oAcQxvhzpMM61ltJ2Lo
-         SPdw==
-X-Gm-Message-State: ANoB5plfxwuHlGKIMhOZUZEEveJcSZ9b4/33bNgmDJ3Ngm8tlWNIIhpV
-        8T7QwXsWFYt4WBt7QT16qw==
-X-Google-Smtp-Source: AA0mqf4RKqWQ3b691Fmb1KfiNQtiJj0CsVedJ+SQsQPxogZKCvZwUN6fcq8rYa/OZuGhmhfmOTgZLQ==
-X-Received: by 2002:a05:6870:d799:b0:143:8f03:f4a1 with SMTP id bd25-20020a056870d79900b001438f03f4a1mr4879849oab.66.1669638048598;
-        Mon, 28 Nov 2022 04:20:48 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j16-20020a056830271000b0066bb73cce68sm4620796otu.69.2022.11.28.04.20.47
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+gmo9nIirdbed4J/LDnU4BNvdJRcxPBpHK1YwQWHx3A=;
+        b=4gEeHJ+WBdCla5Oyd3oUDlLFNhxxaWqrFAVWPn9fN17S/lf4aFlSSXsl2pfcJzNf+t
+         rx0Fy5oMqOSdz45zWc/gi8D/wYjKv3h3yZbOAF8YbJAyobnueQEHYlsGCDr951fmOHQZ
+         gm2eIjZtRkhDw7VM2oEjml2d7Fl8j6s+0uH3Pu3fnAFQqjagZlSks9C5r1+W3RHW1JaB
+         vn9t8Tq2ak5MivLZp8nXTpRWlnBgJQ/SZdOEDBl+UQqW7D4iT+7VY472YyGSQlHFDCTz
+         V41Nv3uPGzz1m0UL1CgiFhRJTrcmkucNvHUL+luw+tyBA8sCQzlPlnVODuDxguCRMuWd
+         jzLw==
+X-Gm-Message-State: ANoB5pnvRT8LrjtnSv2MhsRm6WMRfbgF+FPK0sSEQ0i6k8H8X/lktXZ9
+        GerlvxCb/W9pJB6J+omz1dsqFw==
+X-Google-Smtp-Source: AA0mqf4jVHezM2bL21HVhzKH1EZ/A3CxuShkRmJj0N14THKAhU4L/c00faHr4CoC1CPZ4bH3MFrAHA==
+X-Received: by 2002:a05:600c:35cf:b0:3cf:aa11:93a8 with SMTP id r15-20020a05600c35cf00b003cfaa1193a8mr41173747wmq.31.1669638809617;
+        Mon, 28 Nov 2022 04:33:29 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id bs30-20020a056000071e00b002364c77bcacsm10489898wrb.38.2022.11.28.04.33.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 04:20:48 -0800 (PST)
-Received: (nullmailer pid 477521 invoked by uid 1000);
-        Mon, 28 Nov 2022 12:20:47 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        bin.zhang@mediatek.com, linux-arm-kernel@lists.infradead.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Mon, 28 Nov 2022 04:33:28 -0800 (PST)
+References: <20221123021346.18136-1-yu.tu@amlogic.com>
+ <20221123021346.18136-4-yu.tu@amlogic.com>
+ <1jbkov2vb9.fsf@starbuckisacylon.baylibre.com>
+ <81d9a794-2920-64f1-1d80-50653113624c@amlogic.com>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        benliang.zhao@mediatek.com, Richard Weinberger <richard@nod.at>,
+        Neil Armstrong <narmstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-mediatek@lists.infradead.org
-In-Reply-To: <20221128020613.14821-8-xiangsheng.hou@mediatek.com>
-References: <20221128020613.14821-1-xiangsheng.hou@mediatek.com>
- <20221128020613.14821-8-xiangsheng.hou@mediatek.com>
-Message-Id: <166963790250.472824.6710482280926376664.robh@kernel.org>
-Subject: Re: [PATCH 7/9] dt-bindings: spi: mtk-snfi: add two timing delay property
-Date:   Mon, 28 Nov 2022 06:20:47 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     kelvin.zhang@amlogic.com
+Subject: Re: [PATCH V5 3/4] clk: meson: s4: add s4 SoC peripheral clock
+ controller driver and bindings
+Date:   Mon, 28 Nov 2022 13:23:08 +0100
+In-reply-to: <81d9a794-2920-64f1-1d80-50653113624c@amlogic.com>
+Message-ID: <1jilizp8bs.fsf@starbuckisacylon.baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,42 +83,120 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Mon, 28 Nov 2022 10:06:11 +0800, Xiangsheng Hou wrote:
-> add rx-sample-delay and rx-latch-latency property.
-> 
-> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-> ---
->  .../bindings/spi/mediatek,spi-mtk-snfi.yaml      | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
+On Mon 28 Nov 2022 at 16:08, Yu Tu <yu.tu@amlogic.com> wrote:
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>> +
+>>> +/*
+>>> + * This RTC clock can be supplied by an external 32KHz crystal oscillator.
+>>> + * If it is used, it should be documented in using fw_name and documented in the
+>>> + * Bindings. Not currently in use on this board, so skip it.
+>>> + */
+>>> +static u32 rtc_clk_sel[] = { 0, 1 };
+>> No reason to do that
+>
+> I'm going to change it to static u32 rtc_clk_sel[] = { 0, 1, 2 };.
+> I don't know if that's okay with you?
 
-yamllint warnings/errors:
+... then there is no need to specify this table.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml: properties:rx-sample-delay:minItems: 0 is less than the minimum of 1
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml: properties:rx-sample-delay:maxItems: False schema does not allow 47
-	hint: Scalar properties should not have array keywords
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml: properties:rx-sample-delay:minItems: False schema does not allow 0
-	hint: Scalar properties should not have array keywords
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221128020613.14821-8-xiangsheng.hou@mediatek.com
+>
+>> 
+>>> +static const struct clk_parent_data rtc_clk_sel_parent_data[] = {
+>>> +	{ .hw = &s4_rtc_32k_by_oscin.hw },
+>>> +	{ .hw = &s4_rtc_32k_by_oscin_div.hw },
+>>> +	{ .fw_name = "ext_32k",  }
+>>> +};
+>>> +
+>>> +static struct clk_regmap s4_rtc_clk = {
+>>> +	.data = &(struct clk_regmap_mux_data) {
+>>> +		.offset = CLKCTRL_RTC_CTRL,
+>>> +		.mask = 0x3,
+>>> +		.shift = 0,
+>>> +		.table = rtc_clk_sel,
+>>> +		.flags = CLK_MUX_ROUND_CLOSEST,
+>>> +	},
+>>> +	.hw.init = &(struct clk_init_data){
+>>> +		.name = "rtc_clk_sel",
+>>> +		.ops = &clk_regmap_mux_ops,
+>>> +		.parent_data = rtc_clk_sel_parent_data,
+>>> +		.num_parents = 2,
+>>> +		.flags = CLK_SET_RATE_PARENT,
+>>> +	},
+>>> +};
+>>> +
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+[...]
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+>>> +
+>>> +/* Video Clocks */
+>>> +static struct clk_regmap s4_vid_pll_div = {
+>>> +	.data = &(struct meson_vid_pll_div_data){
+>>> +		.val = {
+>>> +			.reg_off = CLKCTRL_VID_PLL_CLK_DIV,
+>>> +			.shift   = 0,
+>>> +			.width   = 15,
+>>> +		},
+>>> +		.sel = {
+>>> +			.reg_off = CLKCTRL_VID_PLL_CLK_DIV,
+>>> +			.shift   = 16,
+>>> +			.width   = 2,
+>>> +		},
+>>> +	},
+>>> +	.hw.init = &(struct clk_init_data) {
+>>> +		.name = "vid_pll_div",
+>>> +		/* Same to g12a */
+>>> +		.ops = &meson_vid_pll_div_ro_ops,
+>> Please add an helpful explanation.
+>> 'Same to g12a' is not helpful.
+>> 
+>
+> "Because the vid_pll_div clock is a clock that does not need to change the
+> divisor, ops only provides meson_vid_pll_div_ro_ops."
+> I wonder if this description is ok for you?
 
-pip3 install dtschema --upgrade
+I understand this divider will not change with RO ops.
+I'm interrested why it does not change and how it is expected to be setup.
 
-Please check and re-submit after running the above command.
+>
+>>> +		.parent_data = (const struct clk_parent_data []) {
+>>> +			{ .fw_name = "hdmi_pll", }
+>>> +		},
+>>> +		.num_parents = 1,
+>>> +		.flags = CLK_SET_RATE_PARENT,
+>>> +	},
+>>> +};
 
+[...]
+
+>>> +
+>>> +static struct clk_regmap s4_vclk_sel = {
+>>> +	.data = &(struct clk_regmap_mux_data){
+>>> +		.offset = CLKCTRL_VID_CLK_CTRL,
+>>> +		.mask = 0x7,
+>>> +		.shift = 16,
+>>> +	},
+>>> +	.hw.init = &(struct clk_init_data){
+>>> +		.name = "vclk_sel",
+>>> +		.ops = &clk_regmap_mux_ops,
+>>> +		.parent_data = s4_vclk_parent_data,
+>>> +		.num_parents = ARRAY_SIZE(s4_vclk_parent_data),
+>>> +	},
+>> You are stopping rate propagation here.
+>> It deserves an explanation. Same goes below.
+>
+> "When the driver uses this clock, needs to specify the patent clock he
+> wants in the dts."
+> Is ok for you?
+
+Then you still don't understand the clock flag usage.
+
+Preserving the parent selection (CLK_SET_RATE_NO_REPARENT) and rate
+propagation (CLK_SET_RATE_PARENT) is not the same thing.
+
+As it stands, your comment is not aliged with what you do.
+
+>
+>> 
+>>> +};
