@@ -2,57 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E5463A7D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:02:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A0863A7C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbiK1MC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 07:02:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
+        id S231575AbiK1MCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 07:02:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231480AbiK1MAn (ORCPT
+        with ESMTP id S229890AbiK1MAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 07:00:43 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3502318E2B
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:00:43 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1ozcoO-0005Fw-RA; Mon, 28 Nov 2022 13:00:36 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1ozcoN-000oAW-CB; Mon, 28 Nov 2022 13:00:36 +0100
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1ozcoM-00H6Le-Vr; Mon, 28 Nov 2022 13:00:34 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com
-Subject: [PATCH v1 01/26] net: dsa: microchip: add stats64 support for ksz8 series of switches
-Date:   Mon, 28 Nov 2022 13:00:09 +0100
-Message-Id: <20221128120034.4075562-2-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221128120034.4075562-1-o.rempel@pengutronix.de>
-References: <20221128120034.4075562-1-o.rempel@pengutronix.de>
+        Mon, 28 Nov 2022 07:00:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD8C18B27
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:00:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BDF8AB80D88
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 12:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8A11C4315C;
+        Mon, 28 Nov 2022 12:00:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669636816;
+        bh=s8HTQY8UHN5dZej09qiZkVk+0Pf068ApxSd4spgbW8I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rAoJRYGiK+WR4soWiM4j+Tjgu3098aU+PNHTqh+UuFslYHjkymkBUlCd0Rck6uTu7
+         kh/1Vt9xJMvoJ0XygbUBxXDLo60kzRTfB29c+ALWBe1d05Hb276Hsi6zesun6jm/KO
+         rV/ldVtrp8FoqRGP0IGUguF6mTj8kGfvgXWlQegSjUa/VdA00TzQ5Ugss2/9hddAba
+         RtXUcU3yewbt5Z0ADdwJrg6vA87yra/jHBuOULXzxxnf2p6YE5MnUmSRt1ajM6RlId
+         Np7x2qp2jthQ0aB0iUfrn3h9PdYBVlmF9urfrIwmcgVY7V83JJ5k/aECGpL9y63QO9
+         Q3+7nQyrgnOVw==
+Date:   Mon, 28 Nov 2022 12:00:10 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Wenjie Li <wenjieli@qti.qualcomm.com>,
+        David Wang =?utf-8?B?546L5qCH?= <wangbiao3@xiaomi.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH-tip v4] sched: Fix NULL user_cpus_ptr check in
+ dup_user_cpus_ptr()
+Message-ID: <20221128120008.GA25090@willie-the-truck>
+References: <20221125023943.1118603-1-longman@redhat.com>
+ <92b99a5e-1588-4e08-a652-72e9c51421cf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <92b99a5e-1588-4e08-a652-72e9c51421cf@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,138 +66,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add stats64 support for ksz8xxx series of switches.
+On Sun, Nov 27, 2022 at 08:43:27PM -0500, Waiman Long wrote:
+> On 11/24/22 21:39, Waiman Long wrote:
+> > In general, a non-null user_cpus_ptr will remain set until the task dies.
+> > A possible exception to this is the fact that do_set_cpus_allowed()
+> > will clear a non-null user_cpus_ptr. To allow this possible racing
+> > condition, we need to check for NULL user_cpus_ptr under the pi_lock
+> > before duping the user mask.
+> > 
+> > Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
+> > Signed-off-by: Waiman Long <longman@redhat.com>
+> 
+> This is actually a pre-existing use-after-free bug since commit 07ec77a1d4e8
+> ("sched: Allow task CPU affinity to be restricted on asymmetric systems").
+> So it needs to be fixed in the stable release as well. Will resend the patch
+> with an additional fixes tag and updated commit log.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/dsa/microchip/ksz_common.c | 87 ++++++++++++++++++++++++++
- drivers/net/dsa/microchip/ksz_common.h |  1 +
- 2 files changed, 88 insertions(+)
+Please can you elaborate on the use-after-free here? Looking at
+07ec77a1d4e8, the mask is only freed in free_task() when the usage refcount
+has dropped to zero and I can't see how that can race with fork().
 
-diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-index f39b041765fb..423f944cc34c 100644
---- a/drivers/net/dsa/microchip/ksz_common.c
-+++ b/drivers/net/dsa/microchip/ksz_common.c
-@@ -70,6 +70,43 @@ struct ksz_stats_raw {
- 	u64 tx_discards;
- };
- 
-+struct ksz88xx_stats_raw {
-+	u64 rx;
-+	u64 rx_hi;
-+	u64 rx_undersize;
-+	u64 rx_fragments;
-+	u64 rx_oversize;
-+	u64 rx_jabbers;
-+	u64 rx_symbol_err;
-+	u64 rx_crc_err;
-+	u64 rx_align_err;
-+	u64 rx_mac_ctrl;
-+	u64 rx_pause;
-+	u64 rx_bcast;
-+	u64 rx_mcast;
-+	u64 rx_ucast;
-+	u64 rx_64_or_less;
-+	u64 rx_65_127;
-+	u64 rx_128_255;
-+	u64 rx_256_511;
-+	u64 rx_512_1023;
-+	u64 rx_1024_1522;
-+	u64 tx;
-+	u64 tx_hi;
-+	u64 tx_late_col;
-+	u64 tx_pause;
-+	u64 tx_bcast;
-+	u64 tx_mcast;
-+	u64 tx_ucast;
-+	u64 tx_deferred;
-+	u64 tx_total_col;
-+	u64 tx_exc_col;
-+	u64 tx_single_col;
-+	u64 tx_mult_col;
-+	u64 rx_discards;
-+	u64 tx_discards;
-+};
-+
- static const struct ksz_mib_names ksz88xx_mib_names[] = {
- 	{ 0x00, "rx" },
- 	{ 0x01, "rx_hi" },
-@@ -156,6 +193,7 @@ static const struct ksz_dev_ops ksz8_dev_ops = {
- 	.w_phy = ksz8_w_phy,
- 	.r_mib_cnt = ksz8_r_mib_cnt,
- 	.r_mib_pkt = ksz8_r_mib_pkt,
-+	.r_mib_stat64 = ksz88xx_r_mib_stats64,
- 	.freeze_mib = ksz8_freeze_mib,
- 	.port_init_cnt = ksz8_port_init_cnt,
- 	.fdb_dump = ksz8_fdb_dump,
-@@ -1583,6 +1621,55 @@ void ksz_r_mib_stats64(struct ksz_device *dev, int port)
- 	spin_unlock(&mib->stats64_lock);
- }
- 
-+void ksz88xx_r_mib_stats64(struct ksz_device *dev, int port)
-+{
-+	struct ethtool_pause_stats *pstats;
-+	struct rtnl_link_stats64 *stats;
-+	struct ksz88xx_stats_raw *raw;
-+	struct ksz_port_mib *mib;
-+
-+	mib = &dev->ports[port].mib;
-+	stats = &mib->stats64;
-+	pstats = &mib->pause_stats;
-+	raw = (struct ksz88xx_stats_raw *)mib->counters;
-+
-+	spin_lock(&mib->stats64_lock);
-+
-+	stats->rx_packets = raw->rx_bcast + raw->rx_mcast + raw->rx_ucast +
-+		raw->rx_pause;
-+	stats->tx_packets = raw->tx_bcast + raw->tx_mcast + raw->tx_ucast +
-+		raw->tx_pause;
-+
-+	/* HW counters are counting bytes + FCS which is not acceptable
-+	 * for rtnl_link_stats64 interface
-+	 */
-+	stats->rx_bytes = raw->rx + raw->rx_hi - stats->rx_packets * ETH_FCS_LEN;
-+	stats->tx_bytes = raw->tx + raw->tx_hi - stats->tx_packets * ETH_FCS_LEN;
-+
-+	stats->rx_length_errors = raw->rx_undersize + raw->rx_fragments +
-+		raw->rx_oversize;
-+
-+	stats->rx_crc_errors = raw->rx_crc_err;
-+	stats->rx_frame_errors = raw->rx_align_err;
-+	stats->rx_dropped = raw->rx_discards;
-+	stats->rx_errors = stats->rx_length_errors + stats->rx_crc_errors +
-+		stats->rx_frame_errors  + stats->rx_dropped;
-+
-+	stats->tx_window_errors = raw->tx_late_col;
-+	stats->tx_fifo_errors = raw->tx_discards;
-+	stats->tx_aborted_errors = raw->tx_exc_col;
-+	stats->tx_errors = stats->tx_window_errors + stats->tx_fifo_errors +
-+		stats->tx_aborted_errors;
-+
-+	stats->multicast = raw->rx_mcast;
-+	stats->collisions = raw->tx_total_col;
-+
-+	pstats->tx_pause_frames = raw->tx_pause;
-+	pstats->rx_pause_frames = raw->rx_pause;
-+
-+	spin_unlock(&mib->stats64_lock);
-+}
-+
- static void ksz_get_stats64(struct dsa_switch *ds, int port,
- 			    struct rtnl_link_stats64 *s)
- {
-diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-index cb27f5a180c7..055d61ff3fb8 100644
---- a/drivers/net/dsa/microchip/ksz_common.h
-+++ b/drivers/net/dsa/microchip/ksz_common.h
-@@ -345,6 +345,7 @@ void ksz_switch_remove(struct ksz_device *dev);
- 
- void ksz_init_mib_timer(struct ksz_device *dev);
- void ksz_r_mib_stats64(struct ksz_device *dev, int port);
-+void ksz88xx_r_mib_stats64(struct ksz_device *dev, int port);
- void ksz_port_stp_state_set(struct dsa_switch *ds, int port, u8 state);
- bool ksz_get_gbit(struct ksz_device *dev, int port);
- phy_interface_t ksz_get_xmii(struct ksz_device *dev, int port, bool gbit);
--- 
-2.30.2
+What am I missing?
 
+Will
+
+> >   kernel/sched/core.c | 32 ++++++++++++++++++++++++++++----
+> >   1 file changed, 28 insertions(+), 4 deletions(-)
+> > 
+> >   [v4] Minor comment update
+> > 
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index 8df51b08bb38..f2b75faaf71a 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -2624,19 +2624,43 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
+> >   int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
+> >   		      int node)
+> >   {
+> > +	cpumask_t *user_mask;
+> >   	unsigned long flags;
+> > +	/*
+> > +	 * Always clear dst->user_cpus_ptr first as their user_cpus_ptr's
+> > +	 * may differ by now due to racing.
+> > +	 */
+> > +	dst->user_cpus_ptr = NULL;
+> > +
+> > +	/*
+> > +	 * This check is racy and losing the race is a valid situation.
+> > +	 * It is not worth the extra overhead of taking the pi_lock on
+> > +	 * every fork/clone.
+> > +	 */
+> >   	if (!src->user_cpus_ptr)
+> >   		return 0;
+> > -	dst->user_cpus_ptr = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
+> > -	if (!dst->user_cpus_ptr)
+> > +	user_mask = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
+> > +	if (!user_mask)
+> >   		return -ENOMEM;
+> > -	/* Use pi_lock to protect content of user_cpus_ptr */
+> > +	/*
+> > +	 * Use pi_lock to protect content of user_cpus_ptr
+> > +	 *
+> > +	 * Though unlikely, user_cpus_ptr can be reset to NULL by a concurrent
+> > +	 * do_set_cpus_allowed().
+> > +	 */
+> >   	raw_spin_lock_irqsave(&src->pi_lock, flags);
+> > -	cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
+> > +	if (src->user_cpus_ptr) {
+> > +		swap(dst->user_cpus_ptr, user_mask);
+> > +		cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
+> > +	}
+> >   	raw_spin_unlock_irqrestore(&src->pi_lock, flags);
+> > +
+> > +	if (unlikely(user_mask))
+> > +		kfree(user_mask);
+> > +
+> >   	return 0;
+> >   }
+> 
