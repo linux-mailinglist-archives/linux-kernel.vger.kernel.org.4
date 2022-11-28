@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D1A63A598
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FAA63A596
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiK1KCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 05:02:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
+        id S230162AbiK1KCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 05:02:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbiK1KCi (ORCPT
+        with ESMTP id S230142AbiK1KCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 05:02:38 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2567132A
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:02:36 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id g4-20020a92cda4000000b00301ff06da14so8427439ild.11
+        Mon, 28 Nov 2022 05:02:37 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B7730B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:02:35 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id a14-20020a921a0e000000b00302a8ffa8e5so8334429ila.2
         for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:02:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QTTQ1zd8bG+E/AXaRhKnQmn9Auf5fnjfJF5NgvxTVAY=;
-        b=Jqyjk/AnNTJIz7aY6o+bWr5N4Mki4DxUuwEbDkti6uQneEnwB1mLkxXswGDEjzaUTc
-         synyGOhWicvn5vPPPP8Hw2qBMXgWDvenHcUWuckHQACRBiLfi8D2yiENWaNiW6LFGLEb
-         dwFsbXePW0DGVZ4oOBvKpimEjhcMiUaQ+Qi3jb+3pmK+7hyegYgNg4ar7RFXnvnhyO+7
-         lb0YitJe1SmpLvFgJLp2J4yu5CnzdFjulsPQ9xMZseddiDAq0po7O9G2rHYQ0EaWAbvr
-         g5PPMa16y1WCsgS4LED7rq3/14N3XZ84qtO1vp+zIxheTvHGnEJil5CylHNi1uY73YH/
-         vshA==
-X-Gm-Message-State: ANoB5plA6kT0ROBuQ0bCg/sDoM/folG7v99yy+XhnB+ZZxOg82a7MR8w
-        nOKp+vQh3+bzZ9ufhFsYyHOwsQe5qzrq4ngKTQ/wdp4lMiz8
-X-Google-Smtp-Source: AA0mqf5vzpTCEW4SWwL7JbbqzZUh+6X3T+qHItM2ye9YLuaNSnR4NxErIC3hT8ahvNZRDvMRzX8yScSY61h4tiZKZw6EadsCIf29
+        bh=gf4bPdmIKB8ohnUy2fgXAHp/zZUcQ9WjKxhNasqNEb8=;
+        b=eqXzL9o0GHa41aIcWJVzsJFtIPxrl3hlgFAvVSwHEzAAudf+GfK5Zu1kdjwsXRdIHD
+         MiGLTAMxRC4cggK+b2/huH9u61tIpvNHna6FB4Zo7DkBqCCZTVYRD4Gt4+4ICaHqMtgc
+         iLTd8iYGq8m4iZ9gLtBClJLNjWs1yx7Ao64554NMZtHSVUVUDyyHiVU7mb+ndG16dfa1
+         TXUoRXjlwhC+Ee6PsjU5wcXOGpvz45tuVXVs2n6oJ7AGrUVmUfEqpFBHG3bLYob01I4D
+         jfutYyKC3TRX+8YMNX7EGOnGty6i1Xiu2eiq0LjoHZDJ16XmZAiJe2sUPrIwC0KI3jUY
+         KrmA==
+X-Gm-Message-State: ANoB5pmXdTCfarNwcGoDRkIcZcm2h0f23doCpUCHNVHiWAxVkYXQPEjb
+        v9dEQ5xzUKom1JjSRSR54JCzWyIZHALWYrBNyqcA2hmJPEYL
+X-Google-Smtp-Source: AA0mqf4VmdC6HsM9vY/52f6VtCrGaS8ujQGpeZI6oJIo+lIjsCsnwVDd/HOkK3FNlInaoFn1ZAUEAFMRtvpiNXHz5WRmd6zcwS/C
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:216a:b0:303:129a:8157 with SMTP id
- s10-20020a056e02216a00b00303129a8157mr1513770ilv.38.1669629755302; Mon, 28
+X-Received: by 2002:a02:9666:0:b0:363:b82d:d51e with SMTP id
+ c93-20020a029666000000b00363b82dd51emr23485967jai.15.1669629755030; Mon, 28
  Nov 2022 02:02:35 -0800 (PST)
 Date:   Mon, 28 Nov 2022 02:02:35 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000078aba005ee84f8e2@google.com>
-Subject: [syzbot] possible deadlock in f2fs_handle_error
-From:   syzbot <syzbot+fbc90a26c932581cfe6b@syzkaller.appspotmail.com>
-To:     chao@kernel.org, jaegeuk@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        terrelln@fb.com
+Message-ID: <0000000000007482d505ee84f8dc@google.com>
+Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in dir_search_u
+From:   syzbot <syzbot+decdb33311f46369f416@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-kernel@vger.kernel.org, ntfs3@lists.linux.dev,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -61,243 +60,60 @@ syzbot found the following issue on:
 
 HEAD commit:    6d464646530f Merge branch 'for-next/core' into for-kernelci
 git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=177fa381880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17244a4b880000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=23eec5c79c22aaf8
-dashboard link: https://syzkaller.appspot.com/bug?extid=fbc90a26c932581cfe6b
+dashboard link: https://syzkaller.appspot.com/bug?extid=decdb33311f46369f416
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 userspace arch: arm64
-
-Unfortunately, I don't have any reproducer for this issue yet.
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1430138d880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=108c8fed880000
 
 Downloadable assets:
 disk image: https://storage.googleapis.com/syzbot-assets/f22d29413625/disk-6d464646.raw.xz
 vmlinux: https://storage.googleapis.com/syzbot-assets/389f0a5f1a4a/vmlinux-6d464646.xz
 kernel image: https://storage.googleapis.com/syzbot-assets/48ddb02d82da/Image-6d464646.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/3f65b6de0e07/mount_0.gz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fbc90a26c932581cfe6b@syzkaller.appspotmail.com
+Reported-by: syzbot+decdb33311f46369f416@syzkaller.appspotmail.com
 
-loop3: detected capacity change from 0 to 262144
-F2FS-fs (loop3): Mismatch valid blocks 0 vs. 1
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-rc6-syzkaller-32662-g6d464646530f #0 Not tainted
-------------------------------------------------------
-syz-executor.3/2078 is trying to acquire lock:
-ffff00010e914088 (&sbi->sb_lock){++++}-{3:3}, at: f2fs_down_write fs/f2fs/f2fs.h:2205 [inline]
-ffff00010e914088 (&sbi->sb_lock){++++}-{3:3}, at: f2fs_handle_error+0x9c/0x17c fs/f2fs/super.c:3898
-
-but task is already holding lock:
-ffff0000fd2733b8 (&array[i].journal_rwsem){++++}-{3:3}, at: build_sit_entries+0x568/0x9b8 fs/f2fs/segment.c:4412
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #6 (&array[i].journal_rwsem){++++}-{3:3}:
-       down_read+0x5c/0x78 kernel/locking/rwsem.c:1509
-       scan_curseg_cache fs/f2fs/node.c:2401 [inline]
-       __f2fs_build_free_nids fs/f2fs/node.c:2513 [inline]
-       f2fs_build_free_nids+0x798/0x8f4 fs/f2fs/node.c:2528
-       f2fs_build_node_manager+0x624/0x64c fs/f2fs/node.c:3313
-       f2fs_fill_super+0x1470/0x1e90 fs/f2fs/super.c:4306
-       mount_bdev+0x1b8/0x210 fs/super.c:1401
-       f2fs_mount+0x44/0x58 fs/f2fs/super.c:4580
-       legacy_get_tree+0x30/0x74 fs/fs_context.c:610
-       vfs_get_tree+0x40/0x140 fs/super.c:1531
-       do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
-       path_mount+0x358/0x890 fs/namespace.c:3370
-       do_mount fs/namespace.c:3383 [inline]
-       __do_sys_mount fs/namespace.c:3591 [inline]
-       __se_sys_mount fs/namespace.c:3568 [inline]
-       __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
--> #5 (&nm_i->nat_tree_lock){++++}-{3:3}:
-       down_read+0x5c/0x78 kernel/locking/rwsem.c:1509
-       f2fs_down_read fs/f2fs/f2fs.h:2180 [inline]
-       f2fs_get_node_info+0x74/0x458 fs/f2fs/node.c:560
-       f2fs_do_write_data_page+0x638/0x1094 fs/f2fs/data.c:2710
-       f2fs_write_single_data_page+0x750/0xb24 fs/f2fs/data.c:2845
-       f2fs_write_cache_pages+0x498/0xdd0 fs/f2fs/data.c:3097
-       __f2fs_write_data_pages+0x3f0/0x47c fs/f2fs/data.c:3247
-       f2fs_write_data_pages+0x44/0x54 fs/f2fs/data.c:3274
-       do_writepages+0x144/0x27c mm/page-writeback.c:2469
-       __writeback_single_inode+0x64/0x2e4 fs/fs-writeback.c:1587
-       writeback_sb_inodes+0x3e4/0x85c fs/fs-writeback.c:1870
-       wb_writeback+0x198/0x328 fs/fs-writeback.c:2044
-       wb_do_writeback+0xc8/0x384 fs/fs-writeback.c:2187
-       wb_workfn+0x70/0x15c fs/fs-writeback.c:2227
-       process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
-       worker_thread+0x340/0x610 kernel/workqueue.c:2436
-       kthread+0x12c/0x158 kernel/kthread.c:376
-       ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
-
--> #4 (&sbi->cp_rwsem){++++}-{3:3}:
-       down_read+0x5c/0x78 kernel/locking/rwsem.c:1509
-       f2fs_down_read fs/f2fs/f2fs.h:2180 [inline]
-       f2fs_lock_op fs/f2fs/f2fs.h:2223 [inline]
-       f2fs_do_truncate_blocks+0x98/0x384 fs/f2fs/file.c:687
-       f2fs_truncate_blocks+0x9c/0x1d8 fs/f2fs/file.c:750
-       f2fs_truncate+0x1b8/0x2a8 fs/f2fs/file.c:802
-       f2fs_setattr+0x5c8/0x788 fs/f2fs/file.c:1009
-       notify_change+0x758/0x7f0 fs/attr.c:420
-       do_truncate+0x108/0x150 fs/open.c:65
-       handle_truncate+0xf4/0x154 fs/namei.c:3216
-       do_open fs/namei.c:3561 [inline]
-       path_openat+0xee0/0x11c4 fs/namei.c:3713
-       do_filp_open+0xdc/0x1b8 fs/namei.c:3740
-       do_sys_openat2+0xb8/0x22c fs/open.c:1310
-       do_sys_open fs/open.c:1326 [inline]
-       __do_sys_openat fs/open.c:1342 [inline]
-       __se_sys_openat fs/open.c:1337 [inline]
-       __arm64_sys_openat+0xb0/0xe0 fs/open.c:1337
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
--> #3 (mapping.invalidate_lock#4){++++}-{3:3}:
-       down_read+0x5c/0x78 kernel/locking/rwsem.c:1509
-       filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
-       f2fs_vm_page_mkwrite+0x18c/0x9a4 fs/f2fs/file.c:104
-       do_page_mkwrite+0x74/0x288 mm/memory.c:2978
-       wp_page_shared+0x8c/0x364 mm/memory.c:3324
-       do_wp_page+0x794/0xd10 mm/memory.c:3474
-       handle_pte_fault mm/memory.c:4973 [inline]
-       __handle_mm_fault mm/memory.c:5097 [inline]
-       handle_mm_fault+0x880/0xa48 mm/memory.c:5218
-       __do_page_fault arch/arm64/mm/fault.c:512 [inline]
-       do_page_fault+0x428/0x79c arch/arm64/mm/fault.c:612
-       do_mem_abort+0x54/0x130 arch/arm64/mm/fault.c:831
-       el0_da+0x70/0x16c arch/arm64/kernel/entry-common.c:515
-       el0t_64_sync_handler+0xcc/0xf0 arch/arm64/kernel/entry-common.c:658
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
--> #2 (sb_pagefaults#2){.+.+}-{0:0}:
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write+0x84/0x1f4 include/linux/fs.h:1826
-       sb_start_pagefault include/linux/fs.h:1930 [inline]
-       f2fs_vm_page_mkwrite+0x160/0x9a4 fs/f2fs/file.c:99
-       do_page_mkwrite+0x74/0x288 mm/memory.c:2978
-       wp_page_shared+0x8c/0x364 mm/memory.c:3324
-       do_wp_page+0x794/0xd10 mm/memory.c:3474
-       handle_pte_fault mm/memory.c:4973 [inline]
-       __handle_mm_fault mm/memory.c:5097 [inline]
-       handle_mm_fault+0x880/0xa48 mm/memory.c:5218
-       __do_page_fault arch/arm64/mm/fault.c:512 [inline]
-       do_page_fault+0x428/0x79c arch/arm64/mm/fault.c:612
-       do_mem_abort+0x54/0x130 arch/arm64/mm/fault.c:831
-       el0_da+0x70/0x16c arch/arm64/kernel/entry-common.c:515
-       el0t_64_sync_handler+0xcc/0xf0 arch/arm64/kernel/entry-common.c:658
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
--> #1 (&mm->mmap_lock){++++}-{3:3}:
-       __might_fault+0x7c/0xb4 mm/memory.c:5646
-       _copy_to_user include/linux/uaccess.h:143 [inline]
-       copy_to_user include/linux/uaccess.h:169 [inline]
-       f2fs_ioc_get_encryption_pwsalt fs/f2fs/file.c:2349 [inline]
-       __f2fs_ioctl+0x3204/0x3318 fs/f2fs/file.c:4151
-       f2fs_ioctl+0x74/0xbc fs/f2fs/file.c:4224
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl fs/ioctl.c:856 [inline]
-       __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
--> #0 (&sbi->sb_lock){++++}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain kernel/locking/lockdep.c:3831 [inline]
-       __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
-       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
-       down_write+0x5c/0x88 kernel/locking/rwsem.c:1562
-       f2fs_down_write fs/f2fs/f2fs.h:2205 [inline]
-       f2fs_handle_error+0x9c/0x17c fs/f2fs/super.c:3898
-       check_block_count+0x210/0x268
-       build_sit_entries+0x638/0x9b8 fs/f2fs/segment.c:4432
-       f2fs_build_segment_manager+0x354/0x408 fs/f2fs/segment.c:5123
-       f2fs_fill_super+0x1438/0x1e90 fs/f2fs/super.c:4300
-       mount_bdev+0x1b8/0x210 fs/super.c:1401
-       f2fs_mount+0x44/0x58 fs/f2fs/super.c:4580
-       legacy_get_tree+0x30/0x74 fs/fs_context.c:610
-       vfs_get_tree+0x40/0x140 fs/super.c:1531
-       do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
-       path_mount+0x358/0x890 fs/namespace.c:3370
-       do_mount fs/namespace.c:3383 [inline]
-       __do_sys_mount fs/namespace.c:3591 [inline]
-       __se_sys_mount fs/namespace.c:3568 [inline]
-       __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
-other info that might help us debug this:
-
-Chain exists of:
-  &sbi->sb_lock --> &nm_i->nat_tree_lock --> &array[i].journal_rwsem
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&array[i].journal_rwsem);
-                               lock(&nm_i->nat_tree_lock);
-                               lock(&array[i].journal_rwsem);
-  lock(&sbi->sb_lock);
-
- *** DEADLOCK ***
-
-2 locks held by syz-executor.3/2078:
- #0: ffff000144b030e0 (&type->s_umount_key#53/1){+.+.}-{3:3}, at: alloc_super+0xf8/0x430 fs/super.c:228
- #1: ffff0000fd2733b8 (&array[i].journal_rwsem){++++}-{3:3}, at: build_sit_entries+0x568/0x9b8 fs/f2fs/segment.c:4412
-
-stack backtrace:
-CPU: 0 PID: 2078 Comm: syz-executor.3 Not tainted 6.1.0-rc6-syzkaller-32662-g6d464646530f #0
+loop0: detected capacity change from 0 to 8192
+ntfs3: loop0: Different NTFS' sector size (4096) and media sector size (512)
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+Mem abort info:
+  ESR = 0x0000000086000006
+  EC = 0x21: IABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+user pgtable: 4k pages, 48-bit VAs, pgdp=000000010d1aa000
+[0000000000000000] pgd=080000010d1ce003, p4d=080000010d1ce003, pud=080000010d251003, pmd=0000000000000000
+Internal error: Oops: 0000000086000006 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 3109 Comm: syz-executor169 Not tainted 6.1.0-rc6-syzkaller-32662-g6d464646530f #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : 0x0
+lr : hdr_find_e fs/ntfs3/index.c:708 [inline]
+lr : indx_find+0x3b0/0x954 fs/ntfs3/index.c:1068
+sp : ffff80000ff6b8c0
+x29: ffff80000ff6ba40 x28: 0000000000000000 x27: 0000000000000148
+x26: ffff0000c9257000 x25: ffff0000c93d8278 x24: 0000000000000000
+x23: 0000000000000000 x22: 0000000000000000 x21: 0000000000000003
+x20: 0000000000000138 x19: 0000000000000002 x18: 0000000000000098
+x17: ffff80000c0cd83c x16: ffff80000dbe6158 x15: ffff0000ce01cec0
+x14: 0000000000000010 x13: 0000000000000000 x12: ffff0000ce01cec0
+x11: ff80800008c11e14 x10: 0000000000000000 x9 : ffff800008c11e14
+x8 : ffff0000ce01cec0 x7 : 0000000000000000 x6 : 0000000000000000
+x5 : 2400490033003000 x4 : ffff0000c9257000 x3 : 0000000000000000
+x2 : ffff0000c93d8288 x1 : 0000000000000000 x0 : ffff80000c1f232e
 Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2055
- check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain kernel/locking/lockdep.c:3831 [inline]
- __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
- down_write+0x5c/0x88 kernel/locking/rwsem.c:1562
- f2fs_down_write fs/f2fs/f2fs.h:2205 [inline]
- f2fs_handle_error+0x9c/0x17c fs/f2fs/super.c:3898
- check_block_count+0x210/0x268
- build_sit_entries+0x638/0x9b8 fs/f2fs/segment.c:4432
- f2fs_build_segment_manager+0x354/0x408 fs/f2fs/segment.c:5123
- f2fs_fill_super+0x1438/0x1e90 fs/f2fs/super.c:4300
- mount_bdev+0x1b8/0x210 fs/super.c:1401
- f2fs_mount+0x44/0x58 fs/f2fs/super.c:4580
- legacy_get_tree+0x30/0x74 fs/fs_context.c:610
+ 0x0
+ dir_search_u+0xa4/0x1e0 fs/ntfs3/dir.c:254
+ ntfs_extend_init+0xe4/0x238 fs/ntfs3/fsntfs.c:214
+ ntfs_fill_super+0x143c/0x14a4 fs/ntfs3/super.c:1243
+ get_tree_bdev+0x1e8/0x2a0 fs/super.c:1324
+ ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
  vfs_get_tree+0x40/0x140 fs/super.c:1531
  do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
  path_mount+0x358/0x890 fs/namespace.c:3370
@@ -312,7 +128,8 @@ Call trace:
  el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
  el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-F2FS-fs (loop3): Failed to initialize F2FS segment manager (-117)
+Code: bad PC value
+---[ end trace 0000000000000000 ]---
 
 
 ---
@@ -322,3 +139,5 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
