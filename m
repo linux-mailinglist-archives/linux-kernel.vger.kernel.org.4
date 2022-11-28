@@ -2,80 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6C263AE23
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C677563AE25
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbiK1QzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 11:55:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
+        id S231281AbiK1Qzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 11:55:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbiK1QzP (ORCPT
+        with ESMTP id S231165AbiK1Qzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 11:55:15 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA251D0D9
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 08:55:14 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id d123so8032346iof.7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 08:55:14 -0800 (PST)
+        Mon, 28 Nov 2022 11:55:39 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF69F1D672;
+        Mon, 28 Nov 2022 08:55:38 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso12146840wme.5;
+        Mon, 28 Nov 2022 08:55:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I1d3sbSB153YFVx4HRjX3fuIz12BKVhol+9SQxjrH1A=;
-        b=RBb2b8Ro6/aBOzwMx/C9FgHppT9WGFbhf7fR6teBrsO9J662xBpUMgZB86z+5RWKvA
-         hVgWpdqNG4gx7nKpGeyAXSbQRMd2hTHx9SAW1thvcZ7el8Y+vW4OCbjMzVCCQu6FSdNc
-         52ykCgZdmKvCbcxUtOEd77++vboUPczDscY3yo0oaL8Eo0MfKfgT4ASNaYQzNTPbRRJ3
-         jsHer9WGkzn88B6Zk4QVD92AFQG4f9ZIshLSMjWtCPEAsY+ToAR0GwD/VmpMr/98Gb4V
-         X4KwhIviEitLTxnjTjR7it+M64V+6NyxywlxccgL7CDPN570hponZpq93/z0QR1NysK5
-         xNhQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fs5eZY+hTOKSufklO+JsY6NTtjyubxLuJefhM9VnFWc=;
+        b=eOSBQjkmpJ+pIIMvquzkibC6nEPY0y45EBs5XUUXMVMSJOaGjjMG2el/uFq4Zet2+U
+         lxdjEXjckchaktzPuAt+3r1aPZAa05mok/H1Jxg74bJ6C8aMSBKgIq5rM2ugVLWwnAd5
+         vnZLGeTak4Ta3RrBFarFFMyQGQV2wl2FgT6bR0mpSUhnWMOTgwGoOXyWM26lJCL/GlUs
+         jvfH8xdYqQlc2CUfkvR99hd1a/ZfPGaTPB66/2Qb58OWth6ltjPc8ziaDC1mrz4P0KIH
+         +ksahvtOXQSYxvv8IZRUyXLvWG7aM4sOZnRaRXt8yx4VLvsOmuBGm/ZWj7PxxnrDEqFc
+         7f8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I1d3sbSB153YFVx4HRjX3fuIz12BKVhol+9SQxjrH1A=;
-        b=K3Zgw9B8Uco0Uu0lxNiAl/sMUo0AopbhgNQAzTZHRKRfPKMBfNvkD6RPdOeN0neafq
-         LobyPPasXZFu6ow9BacWAyy6+jXcshgdlimSG+wtYg+ibzkuXGMx2zOXO++Y5tmEpmKi
-         68Vgx4SiNuyHyqhnXbOasMRdhmpYDM1jcNLvOKhOOvix40AIrVkZHMck/PQGmaON+107
-         Ym01RqYoVQ1P2gTT3yIx0xORQDkW+/CAeMCgSgoCqhh1V3oppzYQniS/XXG3QAPt8aTJ
-         abVj9f9F2x+l9FqtEk5pXFrwOSKBDE6Rp1oOEN4Yt5zNHv+py1paLfRLowgrxH4GCACO
-         NYHg==
-X-Gm-Message-State: ANoB5pmWnHD/knnwELdyziuZG/vnIp62srfl9LXQdNfGmoWikxv9PSZq
-        +/L3AY7fgzBE7nFDJSnA8oUgxUgbufrDVQ==
-X-Google-Smtp-Source: AA0mqf4ZCKVCscp3J6B+BpbGhbiFbw+Qjj3outsorwzAGzEs2ARb4sJEnrtlX/uWugqa2AlPvvAhgA==
-X-Received: by 2002:a02:a68b:0:b0:374:98f7:2ad2 with SMTP id j11-20020a02a68b000000b0037498f72ad2mr23732347jam.0.1669654513940;
-        Mon, 28 Nov 2022 08:55:13 -0800 (PST)
-Received: from google.com (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with ESMTPSA id k29-20020a02335d000000b003495b85a3b9sm4382646jak.178.2022.11.28.08.55.13
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Fs5eZY+hTOKSufklO+JsY6NTtjyubxLuJefhM9VnFWc=;
+        b=t33US07WAYvGxsNKSv4zxskco9M2yIlu+rloB43JsfSN5VfFf/0OY0LUrVLQBTjz4Z
+         0h74C6Tt+J62PP+UOjxyM6Q1sT9ozRFqbrGJ3iWAZJ/oeolizHyUL0hJK3LRc6TFUlD6
+         ioB9mV9QZ7PV0WL7v8AnMziOZ40S6rPScXxT4kLidsHugPwq1sTdlp4LIDcWY/H6xYJL
+         Byk+FXfmp6d6EpGqhdcFLLPAAbPILQa0M5jr19sGI03/TENGMB+vBs6uDh3eq4P2GM7/
+         veH0NPHFvAhyaLNq0IASM9cWhCANl1QPZ6Yt8uUEVX9QfItlO3En38rMRkWKVCc2c2F7
+         4Png==
+X-Gm-Message-State: ANoB5pnYjHwg2D/Z4JA95dC+p/DXOBWRpMjn8CacpyKbXals3kZWQ6wt
+        d8wY7ZTupUgpk6ITggmAKb0=
+X-Google-Smtp-Source: AA0mqf5uHXOne02Q9XQdUhv5VwXOCKpuhygIvg4EkwmJRGSYhdUhsLEc9MCG1ftPkcswS7e8nkw9tA==
+X-Received: by 2002:a05:600c:4f45:b0:3cf:9be3:8d26 with SMTP id m5-20020a05600c4f4500b003cf9be38d26mr30750319wmq.185.1669654537212;
+        Mon, 28 Nov 2022 08:55:37 -0800 (PST)
+Received: from localhost.localdomain ([94.73.35.229])
+        by smtp.gmail.com with ESMTPSA id g3-20020adffc83000000b0024207ed4ce0sm8495069wrr.58.2022.11.28.08.55.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 08:55:13 -0800 (PST)
-Date:   Mon, 28 Nov 2022 16:55:10 +0000
-From:   Matthias Kaehlcke <mka@google.com>
-To:     Owen Yang <ecs.taipeikernel@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Abner Yen <abner.yen@ecs.corp-partner.google.com>,
-        Gavin Lee <gavin.lee@ecs.corp-partner.google.com>,
-        Harvey <hunge@google.com>, Stephen Boyd <swboyd@chromium.org>,
-        Bob Moragues <moragues@google.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] arm64: dts: qcom: sc7280: Add DT for
- sc7280-herobrine-zombie
-Message-ID: <Y4Tn7jemqoR2u2TZ@google.com>
-References: <20221125174415.v5.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
- <20221125174415.v5.2.I5fa17e079100361ef6809efa0bba2bf32f829e15@changeid>
+        Mon, 28 Nov 2022 08:55:36 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, rydberg@bitmath.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH] HID: sony: Fix unused function warning
+Date:   Mon, 28 Nov 2022 17:55:24 +0100
+Message-Id: <20221128165524.6387-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221125174415.v5.2.I5fa17e079100361ef6809efa0bba2bf32f829e15@changeid>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,54 +71,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Owen,
+Compiling this driver without setting "CONFIG_SONY_FF" generates the
+following warning:
 
-On Fri, Nov 25, 2022 at 05:44:25PM +0800, Owen Yang wrote:
-> Add DT for sc7280-herobrine-zombie
-> 
-> Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
+	drivers/hid/hid-sony.c:2358:20: warning: unused function
+	'sony_send_output_report' [-Wunused-function]
+	static inline void sony_send_output_report(struct sony_sc *sc)
+	                   ^
+	1 warning generated.
 
-> Changes in v5:
-> - Overwrite pm8350c_pwm_backlight setting in sc7280-herobrine-zombie.dtsi for chrome zombie. v5.
-> - Dropping the redundant 'DT binding for' as requested by Krzysztof. v4.
-> - Adding an empty line here before "/dts-v1/;" in "sc7280-herobrine-zombie-lte.dts", "sc7280-herobrine-zombie.dts" as requested by Matthias. v4.
-> - Deleteing "/dts-v1/;" in "sc7280-herobrine-zombie.dtsi" as requested by Matthias. v4.
-> - Droping changing file path in description. v3. as requested by Matthias. v3.
-> - Changing Patch order, binding patch first and dt file second, as requested by Douglas. v2.
-> - Adding "arm64: dts: qcom: sc7280:" in dt patch ${SUBJECT}, as requested by Douglas. v2.
-> - Adding "dt-bindings: arm: qcom:" in bind patch ${SUBJECT}, as requested by Douglas. v2.
-> - Adding '#include "sc7280-herobrine-wifi-sku.dtsi"' in sc7280-herobrine-zombie.dts, as requested by Douglas. v2.
-> - Adding "(newest rev)" for zombie entry description in qcom.yaml, as requested by Douglas. v2.
-> - Adding "post-power-on-delay-ms = <100>;" for trackpad in "sc7280-herobrine-zombie.dtsi". v2
-> - Changing "vcc-supply" to "vdd-supply" for trackpad in "sc7280-herobrine-zombie.dtsi", as requested by Douglas. v2.
+Add the missing preprocessor check to fix it.
 
-For future patches please better organize the change log like this:
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+---
+ drivers/hid/hid-sony.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Changes in v5:
-- Overwrite pm8350c_pwm_backlight setting in sc7280-herobrine-zombie.dtsi for chrome zombie
+diff --git a/drivers/hid/hid-sony.c b/drivers/hid/hid-sony.c
+index 03691cdcfb8e..13125997ab5e 100644
+--- a/drivers/hid/hid-sony.c
++++ b/drivers/hid/hid-sony.c
+@@ -2355,11 +2355,13 @@ static void motion_send_output_report(struct sony_sc *sc)
+ 	hid_hw_output_report(hdev, (u8 *)report, MOTION_REPORT_0x02_SIZE);
+ }
+ 
++#ifdef CONFIG_SONY_FF
+ static inline void sony_send_output_report(struct sony_sc *sc)
+ {
+ 	if (sc->send_output_report)
+ 		sc->send_output_report(sc);
+ }
++#endif
+ 
+ static void sony_state_worker(struct work_struct *work)
+ {
+-- 
+2.38.1
 
-Changes in v4:
-- Dropping the redundant 'DT binding for' as requested by Krzysztof
-- Adding an empty line here before "/dts-v1/;" in "sc7280-herobrine-zombie-lte.dts", "sc7280-herobrine-zombie.dts" as requested by Matthias
-- Deleteing "/dts-v1/;" in "sc7280-herobrine-zombie.dtsi" as requested by Matthias
-
-...
-
-If you are using patman you can keep the existing 'Commit-changes: vN' entries
-from the previous versions and just add a new entry for the current version.
-
-No need to re-spin the patches just for change log.
-
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
-> new file mode 100644
-> index 000000000000..d10362ecdafb
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
->
-> ...
->
-> +&pm8350c_pwm_backlight{
-> +	pwms = <&pm8350c_pwm 3 200000>;
-> +};
-
-Why is this change needed?
