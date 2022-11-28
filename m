@@ -2,130 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43DCC63A2C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3004E63A2C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:22:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiK1IVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 03:21:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
+        id S229825AbiK1IWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 03:22:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiK1IVO (ORCPT
+        with ESMTP id S229568AbiK1IV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 03:21:14 -0500
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE6210564;
-        Mon, 28 Nov 2022 00:21:13 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 420775802F7;
-        Mon, 28 Nov 2022 03:21:10 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 28 Nov 2022 03:21:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1669623670; x=1669630870; bh=QrDmBmVcXX
-        6tVAPe5j+hdeIaostNrA78ZkYql/wyJkE=; b=gUkk4VUisc5QG0Im9OGlM+mwNJ
-        FEbGfjekPQeBVEKlttoI3IpYx6+EotEYHDFW2wch9ldM1gB1hMSKIKu5DEnJxtzJ
-        O+2C1I9BV2He0UxR/IlWUKBn7GcqLR2HFNNW40oyWfQzrY+qLuAkjTqN8xExQwMz
-        dr3UpH3znp7t1VKNRpOfeObs5fhB1osGIGRJJie1rpmxfx9VfrT+/SVvt21a7am6
-        deC2ZJMjaEpskb9liZGAraPPI0HdMWpJZzigA2+FWbrW+ESReNHvetAaK5jyWByb
-        2xfbZmZchAGbFqQRfpfBv2Z/WB6IM7DbcevX5N5IXKONmem+gaWBGidV9WNA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669623670; x=1669630870; bh=QrDmBmVcXX6tVAPe5j+hdeIaostN
-        rA78ZkYql/wyJkE=; b=KdY7OdawF7M0KnHmzKtvn+pmBsDEQBkjsr5a9ACWZU+l
-        dgC+rN9erCOJuMmF/V0y3OKhfw365HlMionqpXzgk6CHZX9la0sVxZmsUJnU0qKu
-        1YSTOSCXDNvJugG4H87lw2wNPIEvnhSPi4/M4b8WnTy+AACNDJ44dReuubBfwsG6
-        yX7WHg2H9bJgNycbrvABHZnNfegQ6MB4RKIyJOmOizfm305VlZpWodH2OsBD+o0v
-        RM8nCG3yvIlylSyYhWzI9zl/SL0KkBTrNsyB0oDfgj3VmzGctJMjrJITLyB2Y7nd
-        AWP2Uc3R+8+ev/nfcDXKy90TFkE6KqNI3Yerz15+ng==
-X-ME-Sender: <xms:dW-EY0JVYQ5R4oszEhIKAG0iyc_kXpqBDGKQ3Qwk8rgmScuIf9OJvA>
-    <xme:dW-EY0K12K4WKXZLh7orNEjsImMGsF0HSLFKdbJlppe3QHSG57UpYuv2B-b8PriBg
-    nVqEOaebZsZNYGNoqE>
-X-ME-Received: <xmr:dW-EY0vRVnHpqPi6v9Y8-xJCW8_gHPXOVdPXVv_LOYvyLx17WP-E6S1fFiRXyqMmnVvTOV8Jpst-DiU_cx4WWDjmMrL6e_7-G93SyZ8kkIvnfg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedugdduvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:dm-EYxbrB4J7vAjia3zbfe9RrA14_lpIKy1RkSFik1ggo0UNxTVtSg>
-    <xmx:dm-EY7agIINg9FqtOoozgH8Ao12N8BXFyUeNgYnypis6ngmUec0CXg>
-    <xmx:dm-EY9CN9qHNmP9qB8HjbYc8Z1rlbmCyryEcXErpUsRd5Go7Etezmw>
-    <xmx:dm-EY1aCCEUzsBJAvOXEH4n8qJUqPTnoxSftIzygJF4R0kS7lfAAlg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 28 Nov 2022 03:21:09 -0500 (EST)
-Date:   Mon, 28 Nov 2022 09:21:08 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH/RFC 2/3] drm/simple-kms-helper: Add mode_fixup() to
- simple display pipe
-Message-ID: <20221128082108.ntjhevb4ku6lnvib@houat>
-References: <cover.1669406380.git.geert@linux-m68k.org>
- <3b0862187f1c8910089cb0d06a8669caa985042e.1669406382.git.geert@linux-m68k.org>
+        Mon, 28 Nov 2022 03:21:57 -0500
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA007167F4;
+        Mon, 28 Nov 2022 00:21:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1669623711;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=r8DNEtzdUr23A31WbyF9m0tTQ4gvOo1TVcul6uPNYC4=;
+    b=APDHWcTRLcAPh/L9ddyE3tqfyZ+vvfPXmy2/10noa5JyGTY5IJmucicG5K9FUDqIHq
+    9VwN1XjHttm9f7BTXe6NwFsGLcsuYQLb5o1QjwiILaGhmtL2AN/RAUh5SR/gD5k1tIw0
+    eIynHhMVQfH0qTkdm4BJiTJyY+yujZ2W4cZHFgril/qeZMpW00kLDD22trZWB6tXL04c
+    gzQJtCPZtGkq/hyd6dZHxKfSWxoSlSBLQsn0TnjLwOLQoPQ9KOHv+nEARmrNIYsOSCwB
+    UBYDaxKxvVz5Y79RHcPCUs9o24TjPPyG/xnXGjl6U4uVdLHg2g9XMtAnbWXpiEjBvvI8
+    Sk6A==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytISr6hZqJAw=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d104::923]
+    by smtp.strato.de (RZmta 48.2.1 AUTH)
+    with ESMTPSA id Dde783yAS8LoOkk
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 28 Nov 2022 09:21:50 +0100 (CET)
+Message-ID: <58a773bd-0db4-bade-f8a2-46e850df9b0b@hartkopp.net>
+Date:   Mon, 28 Nov 2022 09:21:44 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zqy4xi2ywhixazqh"
-Content-Disposition: inline
-In-Reply-To: <3b0862187f1c8910089cb0d06a8669caa985042e.1669406382.git.geert@linux-m68k.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [RFC][PATCH 0/2] LIN support for Linux
+To:     Christoph Fritz <christoph.fritz@hexdev.de>,
+        Pavel Pisa <pisa@cmp.felk.cvut.cz>,
+        Richard Weinberger <richard@nod.at>,
+        Andreas Lauser <andreas.lauser@mbition.io>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221127190244.888414-1-christoph.fritz@hexdev.de>
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20221127190244.888414-1-christoph.fritz@hexdev.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Christoph,
 
---zqy4xi2ywhixazqh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+are you already aware of this LIN project that uses the Linux SocketCAN 
+infrastructure and implements the LIN protocol based on a serial tty 
+adaption (which the serial LIN protocol mainly is)?
 
-Hi,
+https://github.com/lin-bus
 
-On Fri, Nov 25, 2022 at 09:31:09PM +0100, Geert Uytterhoeven wrote:
-> From: Thomas Zimmermann <tzimmermann@suse.de>
->=20
-> The mode fix-up function for simple display helpers is equivalent to the
-> regular pipeline's CRTC mode fix-up function. It's called to adjust the
-> CRTC's display mode for the encoder. Add this function for DRM fbconv
-> helpers.
->=20
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+IIRC the implementation of the master/slave timings was the biggest 
+challenge and your approach seems to offload this problem to your 
+USB-attached hardware right?
 
-It's not clear to me why you'd need a mode_fixup in the first place.
-Like said in the documentation you added, atomic_check is usually the
-better option for the atomic modesetting drivers.
+Can I assume there will be a similar CAN-controlled programming 
+interface to create real time master/slave protocol frames like in a 
+usual CAN/LIN adapter (e.g. 
+https://www.peak-system.com/PCAN-LIN.213.0.html) ??
 
-So, why is it needed?
+Best regards,
+Oliver
 
-Maxime
 
---zqy4xi2ywhixazqh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY4RvdAAKCRDj7w1vZxhR
-xb4VAQDcYvGXzV71avNSXjnI5sHfzoooq+kEtEPF6PujiPIf0wD8CTGXFvB1JBls
-QCJDVxr23M3Ch2byEX26PLsS/N5+FwY=
-=K4PV
------END PGP SIGNATURE-----
-
---zqy4xi2ywhixazqh--
+On 27.11.22 20:02, Christoph Fritz wrote:
+> The intention of this series is to kick off a discussion about how to
+> support LIN (ISO 17987) [0] in Linux.
+> 
+> This series consist of two patches which are two individual proposals
+> for adding LIN abstraction into the kernel.
+> 
+> One approach is to add LIN ontop of CANFD:
+>    [RFC] can: introduce LIN abstraction
+> 
+> The other approach is adding a new type of CAN-socket:
+>    [RFC] can: Add LIN proto skeleton
+> 
+> These patches are abstracting LIN so that actual device drivers can
+> make use of it.
+> 
+> For reference, the LIN-ontop-of-CANFD variant already has a device
+> driver using it (not part of this series). It is a specially built USB
+> LIN-BUS adapter hardware called hexLIN [1].  Its purpose is mainly to
+> test, adapt and discuss different LIN APIs for mainline Linux kernel.
+> But it can already be used productively as a Linux LIN node in
+> controller (master) and responder (slave) mode. By sysfs, hexLIN
+> supports different checksum calculations and setting up a
+> responder-table.
+> 
+> For more info about hexLIN, see link below [1].
+> 
+> We are looking for partners with Linux based LIN projects for funding.
+> 
+> [0]: https://en.wikipedia.org/wiki/Local_Interconnect_Network
+> [1]: https://hexdev.de/hexlin/
+> 
+> Christoph Fritz (1):
+>    [RFC] can: Introduce LIN bus as CANFD abstraction
+> 
+> Richard Weinberger (1):
+>    [RFC] can: Add LIN proto skeleton
+> 
+>   drivers/net/can/Kconfig          |  10 ++
+>   drivers/net/can/Makefile         |   1 +
+>   drivers/net/can/lin.c            | 181 +++++++++++++++++++++++++++
+>   include/net/lin.h                |  30 +++++
+>   include/uapi/linux/can.h         |   8 +-
+>   include/uapi/linux/can/lin.h     |  15 +++
+>   include/uapi/linux/can/netlink.h |   1 +
+>   net/can/Kconfig                  |   5 +
+>   net/can/Makefile                 |   3 +
+>   net/can/lin.c                    | 207 +++++++++++++++++++++++++++++++
+>   10 files changed, 460 insertions(+), 1 deletion(-)
+>   create mode 100644 drivers/net/can/lin.c
+>   create mode 100644 include/net/lin.h
+>   create mode 100644 include/uapi/linux/can/lin.h
+>   create mode 100644 net/can/lin.c
+> 
