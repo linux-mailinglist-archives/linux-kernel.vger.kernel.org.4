@@ -2,109 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2347C63B179
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3265963B168
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232892AbiK1Sgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 13:36:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43348 "EHLO
+        id S233651AbiK1Sd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 13:33:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232767AbiK1SgW (ORCPT
+        with ESMTP id S233097AbiK1Sc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 13:36:22 -0500
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF3FF08;
-        Mon, 28 Nov 2022 10:36:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1669660218;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=GKZLgAKbgAJsBsUL/AQjiQQ9KI6oNqWjLldVq5sSTCo=;
-    b=bnuUZZti3OLRZwh+fgHiXl9FHmurJEVCn+3NNH8xZBdWfB93XmCKJQWotwR71yyV3r
-    JFuxcC4VnT0s1btD1CDlnd90obC+xMwNzTP1fMghluBrF3rAh/pWrltgjriOqT4FgW3I
-    Ac5dKaMgLLqGBwCo8qSo6X1ccDNhPCz59VfJX8M7iUMKvPNi/PUEjshwH6Mm8T+E1/TB
-    MFx9Hp+vAnCX2k+/tIKsoZ3o6Jzt1Mf210PNdSw1+IIgty06jkBzG1zOZfNXxIFCp9DT
-    b5cuKbwR//ndjKsC53kc3ZEqva4GJowo3mJdViSOFDXzL+IV96LHhO2yiFk07skLM9Ha
-    +XDg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJAhdlWxfrI"
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 48.2.1 DYNA|AUTH)
-    with ESMTPSA id Yce349yASIUHtUH
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 28 Nov 2022 19:30:17 +0100 (CET)
-Date:   Mon, 28 Nov 2022 19:30:10 +0100
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nikita Travkin <nikita@trvn.ru>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        =?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
-        Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH] arm64: dts: qcom: msm8916-wingtech-wt88047: Add flash LED
-Message-ID: <Y4T+Mv+uIx7jQwky@gerhold.net>
-References: <20221128051512.125148-1-linmengbo0689@protonmail.com>
- <43c24e7e-49b6-ff46-2f40-9413af7ac252@linaro.org>
+        Mon, 28 Nov 2022 13:32:58 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B0AE45
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:30:38 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id o1so6788975pfp.12
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:30:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aLEoNq9y1G78EFIkjhdD6/OWpioH5mP6NdxcCtNN9B8=;
+        b=iC2mBBh0WNKoAP1S9mjsUvuV6MtM8Cyeh6pG2LugoWOxV1HK0YcMLZX3Ep92TT3CAo
+         vRKJJhGdWiXEnuNbP0euaE1bDGbm8y0MgobHGAGAL0Xep736ScwE92gFpEZLTJKHHHUe
+         vXNAmF9lA8ZsZZ6Y1b4Zmc1hR7mEuU9cXZKa5T66x+xCGa46HBLtrpo/M/GLcjKFQRSZ
+         k5GFyjIotZZiESFruqXuaRUQj2lIj5j/OPXc6Fr3Ze/Fv+bU7NxCWg/6VTZSvN991x0t
+         N9/qM50/XLhKOvwoHTAvvXglxciyL+Eu2ouNPd35Wf32TsPoIdMxm1aMCSS7XM7HHQ11
+         gZ+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aLEoNq9y1G78EFIkjhdD6/OWpioH5mP6NdxcCtNN9B8=;
+        b=niDja9G/a/HYPIdmLh5d0Yxf9b8Zkd+13xgZV4aKsvV4Bf+g6RssTcYdESlmVkR0N8
+         O9qwBVKQITX/aI4QVWXEyz91Jx1PZc33NufmsVZGX2JpWUB0Ul/H6PWiPA5OfxVxME55
+         1sK+HeEeKadfLbcbm/2AZfgFz9k9iZjMJF+rg5tUi/mpfiAwsEJOyk9chIA7+xUlPogY
+         CUEcAj0aTprdzb7grrUiuU+X0GWPlPr3O8Rh8gDLmo+WavabIuRsryI7shk4XSHijcgt
+         Im2RdZ33FruNoHvJY5CtbLULP4ctz2YMIJPTuO5dzTsF/+SPw67WKeCyDC4ibRZiOVIs
+         xaWA==
+X-Gm-Message-State: ANoB5pnMCAGnMXkS8GsyeY7xFxZfhLMTsrCiLFXcZ9/24TzZQk0l8Yed
+        zf39NqNpeZHyDuQ7YPW8nStKSAwxXvi07w==
+X-Google-Smtp-Source: AA0mqf7YC8b5f8pWfjaUB1/Nf1xae8tCM9bv+SFl0lBIkJKN3hOD5T4yS7SZphMUEFZivDYGIpfcNg==
+X-Received: by 2002:a63:1a5a:0:b0:456:f79e:4e95 with SMTP id a26-20020a631a5a000000b00456f79e4e95mr27680039pgm.607.1669660237781;
+        Mon, 28 Nov 2022 10:30:37 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id d6-20020a170902654600b00182d25a1e4bsm9040924pln.259.2022.11.28.10.30.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 10:30:37 -0800 (PST)
+Date:   Mon, 28 Nov 2022 18:30:33 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Sergio Lopez Pascual <slp@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH 1/2] KVM: Mark KVM_SET_MEMORY_REGION and
+ KVM_SET_MEMORY_ALIAS as obsoleted
+Message-ID: <Y4T+SY9SZIRFBdBM@google.com>
+References: <20221119085632.1018994-1-javierm@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <43c24e7e-49b6-ff46-2f40-9413af7ac252@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221119085632.1018994-1-javierm@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On Mon, Nov 28, 2022 at 09:56:47AM +0100, Krzysztof Kozlowski wrote:
-> On 28/11/2022 06:16, Lin, Meng-Bo wrote:
-> > WT88047 uses OCP 8110 Flash LED driver. Add it to the device tree.
-> > 
-> > Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
-> > ---
-> >  .../dts/qcom/msm8916-wingtech-wt88047.dts     | 22 +++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts b/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts
-> > index 166bed05996f..a87be1d95b14 100644
-> > --- a/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts
-> > +++ b/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts
-> > @@ -23,6 +23,20 @@ chosen {
-> >  		stdout-path = "serial0";
-> >  	};
-> >  
-> > +	flash-led-controller {
-> > +		compatible = "ocs,ocp8110";
+On Sat, Nov 19, 2022, Javier Martinez Canillas wrote:
+> Other ioctl such as KVM_ARM_SET_DEVICE_ADDR have a (deprecated) next to it
+> which makes it easier to determine that is deprecated. Do the same for the
+> ioctls that have been obsoleted.
 > 
-> The compatible is not documented. Checkpatch warns about it. You need to
-> document devices before using them.
+> Suggested-by: Sergio Lopez Pascual <slp@redhat.com>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> ---
 > 
+>  Documentation/virt/kvm/api.rst | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index eee9f857a986..c17bac32d25c 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -272,7 +272,7 @@ the VCPU file descriptor can be mmap-ed, including:
+>    KVM_CAP_DIRTY_LOG_RING, see section 8.3.
+>  
+>  
+> -4.6 KVM_SET_MEMORY_REGION
+> +4.6 KVM_SET_MEMORY_REGION (obsoleted)
 
-Unfortunately Pavel never applied the dt-bindings patch for this - only
-the driver patch was applied. André already sent a kind reminder [1] and
-two resends [2, 3] without success. Since it's a documentation-only
-patch, maybe you could take it through the dt-bindings tree?
+I realize the existing doc entry and include/uapi/linux/kvm.h says these are
+"obsolete", but both of these are more than just obsolete since KVM no longer
+supports them.  There's even a different blurb that states they are deprecated.
 
-Even the original version [1] still applies cleanly to linux-next. :)
+E.g. KVM_{CREATE,GET,SET}_PIT are good examples of obsolete ioctls; they've been
+supplanted by newer variants, but KVM still supports the old ones too.
 
-Thanks,
-Stephan
+Alternatively (to marking them deprecated), can we completely remove all references
+to VM_SET_MEMORY_REGION and KVM_SET_MEMORY_ALIAS?  The cascading updates in api.rst
+will be painful, but it's one-time pain.
 
-[1]: https://lore.kernel.org/linux-leds/20220212180942.8241-2-git@apitzsch.eu/
-[2]: https://lore.kernel.org/linux-leds/20220404161428.17175-1-git@apitzsch.eu/
-[3]: https://lore.kernel.org/linux-leds/20220505185344.10067-1-git@apitzsch.eu/
+E.g. can we do something like this?
+
+---
+ Documentation/virt/kvm/api.rst  | 27 ---------------------------
+ arch/x86/include/uapi/asm/kvm.h |  8 --------
+ include/uapi/linux/kvm.h        | 12 ++----------
+ 3 files changed, 2 insertions(+), 45 deletions(-)
+
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index eee9f857a986..85a5b12eb017 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -272,18 +272,6 @@ the VCPU file descriptor can be mmap-ed, including:
+   KVM_CAP_DIRTY_LOG_RING, see section 8.3.
+ 
+ 
+-4.6 KVM_SET_MEMORY_REGION
+--------------------------
+-
+-:Capability: basic
+-:Architectures: all
+-:Type: vm ioctl
+-:Parameters: struct kvm_memory_region (in)
+-:Returns: 0 on success, -1 on error
+-
+-This ioctl is obsolete and has been removed.
+-
+-
+ 4.7 KVM_CREATE_VCPU
+ -------------------
+ 
+@@ -368,17 +356,6 @@ see the description of the capability.
+ Note that the Xen shared info page, if configured, shall always be assumed
+ to be dirty. KVM will not explicitly mark it such.
+ 
+-4.9 KVM_SET_MEMORY_ALIAS
+-------------------------
+-
+-:Capability: basic
+-:Architectures: x86
+-:Type: vm ioctl
+-:Parameters: struct kvm_memory_alias (in)
+-:Returns: 0 (success), -1 (error)
+-
+-This ioctl is obsolete and has been removed.
+-
+ 
+ 4.10 KVM_RUN
+ ------------
+@@ -1377,10 +1354,6 @@ the memory region are automatically reflected into the guest.  For example, an
+ mmap() that affects the region will be made visible immediately.  Another
+ example is madvise(MADV_DROP).
+ 
+-It is recommended to use this API instead of the KVM_SET_MEMORY_REGION ioctl.
+-The KVM_SET_MEMORY_REGION does not allow fine grained control over memory
+-allocation and is deprecated.
+-
+ 
+ 4.36 KVM_SET_TSS_ADDR
+ ---------------------
+diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
+index c6df6b16a088..e48deab8901d 100644
+--- a/arch/x86/include/uapi/asm/kvm.h
++++ b/arch/x86/include/uapi/asm/kvm.h
+@@ -53,14 +53,6 @@
+ /* Architectural interrupt line count. */
+ #define KVM_NR_INTERRUPTS 256
+ 
+-struct kvm_memory_alias {
+-	__u32 slot;  /* this has a different namespace than memory slots */
+-	__u32 flags;
+-	__u64 guest_phys_addr;
+-	__u64 memory_size;
+-	__u64 target_phys_addr;
+-};
+-
+ /* for KVM_GET_IRQCHIP and KVM_SET_IRQCHIP */
+ struct kvm_pic_state {
+ 	__u8 last_irr;	/* edge detection */
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index 7fea12369245..b8e905ac9d0d 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -86,13 +86,6 @@ struct kvm_debug_guest {
+ /* *** End of deprecated interfaces *** */
+ 
+ 
+-/* for KVM_CREATE_MEMORY_REGION */
+-struct kvm_memory_region {
+-	__u32 slot;
+-	__u32 flags;
+-	__u64 guest_phys_addr;
+-	__u64 memory_size; /* bytes */
+-};
+ 
+ /* for KVM_SET_USER_MEMORY_REGION */
+ struct kvm_userspace_memory_region {
+@@ -1443,15 +1436,14 @@ struct kvm_vfio_spapr_tce {
+ /*
+  * ioctls for VM fds
+  */
+-#define KVM_SET_MEMORY_REGION     _IOW(KVMIO,  0x40, struct kvm_memory_region)
++#define KVM_DEPRECATED_SET_MEMORY_REGION     _IOW(KVMIO,  0x40)
+ /*
+  * KVM_CREATE_VCPU receives as a parameter the vcpu slot, and returns
+  * a vcpu fd.
+  */
+ #define KVM_CREATE_VCPU           _IO(KVMIO,   0x41)
+ #define KVM_GET_DIRTY_LOG         _IOW(KVMIO,  0x42, struct kvm_dirty_log)
+-/* KVM_SET_MEMORY_ALIAS is obsolete: */
+-#define KVM_SET_MEMORY_ALIAS      _IOW(KVMIO,  0x43, struct kvm_memory_alias)
++#define KVM_DEPRECATED_SET_MEMORY_ALIAS      _IOW(KVMIO,  0x43)
+ #define KVM_SET_NR_MMU_PAGES      _IO(KVMIO,   0x44)
+ #define KVM_GET_NR_MMU_PAGES      _IO(KVMIO,   0x45)
+ #define KVM_SET_USER_MEMORY_REGION _IOW(KVMIO, 0x46, \
+
+base-commit: 7ca560b50ba9a13150ccf2768ae1f53cd6c735c1
+-- 
+
