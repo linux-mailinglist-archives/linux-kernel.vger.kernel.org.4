@@ -2,190 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9266F63B2FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 21:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB6E63B304
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 21:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233094AbiK1UYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 15:24:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
+        id S234038AbiK1UZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 15:25:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233992AbiK1UYE (ORCPT
+        with ESMTP id S233956AbiK1UY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 15:24:04 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586EA2A424;
-        Mon, 28 Nov 2022 12:24:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=QYXxZJSHFCQt3h/7y3A5kbbceUgmwfmV1IqjP3fxZUg=; b=LIik+9UMAQJCIDO+cZKWhn6+1H
-        EmYKSWMp0+GBdJqBPq2aLClaiBHFKKSjwdAK0s2gcSwt/quMlH0lTaNmW+X0U8fAZNydLQjyLaUAN
-        fRMltDkHl1RAaGoLhqFGbmguA0JpOni45hjzqYHJh1fn0XzVOrCOkpmSvCLFMFNoJk17Siz0VdNGX
-        DgeE1KMAF5pTpMpPs30bg/FbCkVsU7UwVW2bAP3WL0qT+fvZ9DWitOXUXmIU9w84op+gG0gSi27am
-        QG9sk1cSNXCNhcZ2KzJNRp7qi4YPemzGl/j+dQQ0A6zKgpdSGt50WTlabUCaEE8FrkOdwegCvCeKu
-        Awkg9jfg==;
-Received: from [177.34.169.227] (helo=[192.168.0.8])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1ozkfM-00AcTd-CO; Mon, 28 Nov 2022 21:23:48 +0100
-Message-ID: <2edc6568-fe43-5600-ef44-051026b4109f@igalia.com>
-Date:   Mon, 28 Nov 2022 17:23:40 -0300
+        Mon, 28 Nov 2022 15:24:58 -0500
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9941A385;
+        Mon, 28 Nov 2022 12:24:56 -0800 (PST)
+Received: by mail-oi1-f182.google.com with SMTP id v82so12910081oib.4;
+        Mon, 28 Nov 2022 12:24:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4pTJFoDZB1wvweEpaxwGsowfmcCurICeVU/vO+CpfSo=;
+        b=OhFC01nC9sICvP3N4wxLeshlZ4sFfi6NBX1uOIkI56Meid1vtyDyR3xHFOv8gZrzcW
+         GVa12MdHuWkJ8pGXQT5ojslMNdNJbQDBdFxK1JUwj3cmHCZ9hGPsBs1ayEh2z/lCt7hk
+         89VYcRgXNCz+d1CbARCdcfFpDZ3ZtEKc+vY9hM5OVLxtiiIADrAMWoIf6zu2STuHp/SA
+         VABmFNZgXBRaBbXWrU7WBzxJffglCjTAxM07diDVboBkKge8WpisGdBUeGi8G2NzW+94
+         rZxqiWlpF05F6DfYOfvAV4PqV5n8SA5GDIuzqr2qAWaY4Z40AqBOwWdFdZ8Wv7Xdo2V0
+         hd/Q==
+X-Gm-Message-State: ANoB5pmKax7iYSJlBawTujbzb0uN1T3FT5lghTOXQzpZruUcsPBVgga+
+        ZTYyLcPDy4fi0Z6IlMPQf9E5cY3USQ==
+X-Google-Smtp-Source: AA0mqf7RvZ1c16uUZ1Pip/PBJJw4yUY+Vb0UeqhO/9630UT5XDlH7IF+bCU95XKKDMRAX4hOXmapfQ==
+X-Received: by 2002:a54:4415:0:b0:35a:83c5:392e with SMTP id k21-20020a544415000000b0035a83c5392emr15573196oiw.146.1669667095760;
+        Mon, 28 Nov 2022 12:24:55 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i38-20020a056870892600b00142fa439ee5sm6345380oao.39.2022.11.28.12.24.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 12:24:55 -0800 (PST)
+Received: (nullmailer pid 1412312 invoked by uid 1000);
+        Mon, 28 Nov 2022 20:24:54 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Peter Maydell <peter.maydell@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] of/kexec: Fix reading 32-bit "linux,initrd-{start,end}" values
+Date:   Mon, 28 Nov 2022 14:24:39 -0600
+Message-Id: <20221128202440.1411895-1-robh@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 12/17] drm/vc4: crtc: Introduce a lower-level crtc init
- helper
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     David Gow <davidgow@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-media@vger.kernel.org
-References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
- <20221123-rpi-kunit-tests-v2-12-efe5ed518b63@cerno.tech>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
-In-Reply-To: <20221123-rpi-kunit-tests-v2-12-efe5ed518b63@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/28/22 11:53, Maxime Ripard wrote:
-> The current vc4_crtc_init() helper assumes that we will be using
-> hardware planes and calls vc4_plane_init().
-> 
-> While it's a reasonable assumption, we'll want to mock the plane and
-> thus provide our own. Let's create a helper that will take the plane as
-> an argument.
-> 
-> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+"linux,initrd-start" and "linux,initrd-end" can be 32-bit values even on
+a 64-bit platform. Ideally, the size should be based on
+'#address-cells', but that has never been enforced in the kernel's FDT
+boot parsing code (early_init_dt_check_for_initrd()). Bootloader
+behavior is known to vary. For example, kexec always writes these as
+64-bit.
 
-Although the commit message explains a bit about why __vc4_crtc_init is
-being created, it would be nice to add a comment in the code explaining
-that __vc4_crtc_init can be used for tests as it allows mocking the
-plane. This way the distinction between vc4_crtc_init and
-__vc4_crtc_init will be cleaner to the reader.
+Use of_read_number() to mirror the early_init_dt_check_for_initrd()
+code.
 
-Reviewed-by: Maíra Canal <mcanal@igalia.com>
+Reported-by: Peter Maydell <peter.maydell@linaro.org>
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ drivers/of/kexec.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Best Regards,
-- Maíra Canal
+diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
+index e6c01db393f9..f26d2ba8a371 100644
+--- a/drivers/of/kexec.c
++++ b/drivers/of/kexec.c
+@@ -281,7 +281,7 @@ void *of_kexec_alloc_and_setup_fdt(const struct kimage *image,
+ 				   const char *cmdline, size_t extra_fdt_size)
+ {
+ 	void *fdt;
+-	int ret, chosen_node;
++	int ret, chosen_node, len;
+ 	const void *prop;
+ 	size_t fdt_size;
+ 
+@@ -324,19 +324,19 @@ void *of_kexec_alloc_and_setup_fdt(const struct kimage *image,
+ 		goto out;
+ 
+ 	/* Did we boot using an initrd? */
+-	prop = fdt_getprop(fdt, chosen_node, "linux,initrd-start", NULL);
++	prop = fdt_getprop(fdt, chosen_node, "linux,initrd-start", &len);
+ 	if (prop) {
+ 		u64 tmp_start, tmp_end, tmp_size;
+ 
+-		tmp_start = fdt64_to_cpu(*((const fdt64_t *) prop));
++		tmp_start = of_read_number(prop, len / 4);
+ 
+-		prop = fdt_getprop(fdt, chosen_node, "linux,initrd-end", NULL);
++		prop = fdt_getprop(fdt, chosen_node, "linux,initrd-end", &len);
+ 		if (!prop) {
+ 			ret = -EINVAL;
+ 			goto out;
+ 		}
+ 
+-		tmp_end = fdt64_to_cpu(*((const fdt64_t *) prop));
++		tmp_end = of_read_number(prop, len / 4);
+ 
+ 		/*
+ 		 * kexec reserves exact initrd size, while firmware may
+-- 
+2.35.1
 
-> ---
->  drivers/gpu/drm/vc4/vc4_crtc.c | 52 +++++++++++++++++++++++++++---------------
->  drivers/gpu/drm/vc4/vc4_drv.h  |  6 +++++
->  2 files changed, 39 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/vc4/vc4_crtc.c b/drivers/gpu/drm/vc4/vc4_crtc.c
-> index 333529ed3a0d..7a2c54efecb0 100644
-> --- a/drivers/gpu/drm/vc4/vc4_crtc.c
-> +++ b/drivers/gpu/drm/vc4/vc4_crtc.c
-> @@ -1286,31 +1286,20 @@ static void vc4_set_crtc_possible_masks(struct drm_device *drm,
->  	}
->  }
->  
-> -int vc4_crtc_init(struct drm_device *drm, struct platform_device *pdev,
-> -		  struct vc4_crtc *vc4_crtc,
-> -		  const struct vc4_crtc_data *data,
-> -		  const struct drm_crtc_funcs *crtc_funcs,
-> -		  const struct drm_crtc_helper_funcs *crtc_helper_funcs,
-> -		  bool feeds_txp)
-> +int __vc4_crtc_init(struct drm_device *drm,
-> +		    struct platform_device *pdev,
-> +		    struct vc4_crtc *vc4_crtc,
-> +		    const struct vc4_crtc_data *data,
-> +		    struct drm_plane *primary_plane,
-> +		    const struct drm_crtc_funcs *crtc_funcs,
-> +		    const struct drm_crtc_helper_funcs *crtc_helper_funcs,
-> +		    bool feeds_txp)
->  {
->  	struct vc4_dev *vc4 = to_vc4_dev(drm);
->  	struct drm_crtc *crtc = &vc4_crtc->base;
-> -	struct drm_plane *primary_plane;
->  	unsigned int i;
->  	int ret;
->  
-> -	/* For now, we create just the primary and the legacy cursor
-> -	 * planes.  We should be able to stack more planes on easily,
-> -	 * but to do that we would need to compute the bandwidth
-> -	 * requirement of the plane configuration, and reject ones
-> -	 * that will take too much.
-> -	 */
-> -	primary_plane = vc4_plane_init(drm, DRM_PLANE_TYPE_PRIMARY, 0);
-> -	if (IS_ERR(primary_plane)) {
-> -		dev_err(drm->dev, "failed to construct primary plane\n");
-> -		return PTR_ERR(primary_plane);
-> -	}
-> -
->  	vc4_crtc->data = data;
->  	vc4_crtc->pdev = pdev;
->  	vc4_crtc->feeds_txp = feeds_txp;
-> @@ -1342,6 +1331,31 @@ int vc4_crtc_init(struct drm_device *drm, struct platform_device *pdev,
->  	return 0;
->  }
->  
-> +int vc4_crtc_init(struct drm_device *drm, struct platform_device *pdev,
-> +		  struct vc4_crtc *vc4_crtc,
-> +		  const struct vc4_crtc_data *data,
-> +		  const struct drm_crtc_funcs *crtc_funcs,
-> +		  const struct drm_crtc_helper_funcs *crtc_helper_funcs,
-> +		  bool feeds_txp)
-> +{
-> +	struct drm_plane *primary_plane;
-> +
-> +	/* For now, we create just the primary and the legacy cursor
-> +	 * planes.  We should be able to stack more planes on easily,
-> +	 * but to do that we would need to compute the bandwidth
-> +	 * requirement of the plane configuration, and reject ones
-> +	 * that will take too much.
-> +	 */
-> +	primary_plane = vc4_plane_init(drm, DRM_PLANE_TYPE_PRIMARY, 0);
-> +	if (IS_ERR(primary_plane)) {
-> +		dev_err(drm->dev, "failed to construct primary plane\n");
-> +		return PTR_ERR(primary_plane);
-> +	}
-> +
-> +	return __vc4_crtc_init(drm, pdev, vc4_crtc, data, primary_plane,
-> +			       crtc_funcs, crtc_helper_funcs, feeds_txp);
-> +}
-> +
->  static int vc4_crtc_bind(struct device *dev, struct device *master, void *data)
->  {
->  	struct platform_device *pdev = to_platform_device(dev);
-> diff --git a/drivers/gpu/drm/vc4/vc4_drv.h b/drivers/gpu/drm/vc4/vc4_drv.h
-> index 051c2e3b6d43..cd2002fff115 100644
-> --- a/drivers/gpu/drm/vc4/vc4_drv.h
-> +++ b/drivers/gpu/drm/vc4/vc4_drv.h
-> @@ -888,6 +888,12 @@ int vc4_bo_debugfs_init(struct drm_minor *minor);
->  /* vc4_crtc.c */
->  extern struct platform_driver vc4_crtc_driver;
->  int vc4_crtc_disable_at_boot(struct drm_crtc *crtc);
-> +int __vc4_crtc_init(struct drm_device *drm, struct platform_device *pdev,
-> +		    struct vc4_crtc *vc4_crtc, const struct vc4_crtc_data *data,
-> +		    struct drm_plane *primary_plane,
-> +		    const struct drm_crtc_funcs *crtc_funcs,
-> +		    const struct drm_crtc_helper_funcs *crtc_helper_funcs,
-> +		    bool feeds_txp);
->  int vc4_crtc_init(struct drm_device *drm, struct platform_device *pdev,
->  		  struct vc4_crtc *vc4_crtc, const struct vc4_crtc_data *data,
->  		  const struct drm_crtc_funcs *crtc_funcs,
-> 
