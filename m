@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262EB63AE27
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:56:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6C763AE2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbiK1Q4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 11:56:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
+        id S231506AbiK1Q5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 11:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiK1Q4t (ORCPT
+        with ESMTP id S230419AbiK1Q5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 11:56:49 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 26ACD1D0D9;
-        Mon, 28 Nov 2022 08:56:47 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 12FCAD6E;
-        Mon, 28 Nov 2022 08:56:54 -0800 (PST)
-Received: from [10.57.71.118] (unknown [10.57.71.118])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B77073F73B;
-        Mon, 28 Nov 2022 08:56:44 -0800 (PST)
-Message-ID: <815278cc-7fad-1657-c07a-e9825f137e5c@arm.com>
-Date:   Mon, 28 Nov 2022 16:56:39 +0000
+        Mon, 28 Nov 2022 11:57:21 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246CA1D323;
+        Mon, 28 Nov 2022 08:57:20 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so8843924wmi.3;
+        Mon, 28 Nov 2022 08:57:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vew6IID4ljm4heiw9CiVMz5FKmMEPqWRzVvaDisBb5I=;
+        b=UjXq7Ztj+MduzKhQZ8vmeyZv7ih71rSO6vxUrYmW9MkDT1sCOn7RJoDrSa52WVfeBA
+         Kbk0NvqLnOyZhtDjdaVoErpK/1+MHHr5bMduMJr4Gf+FDKrGcMOIMBlR2EHyRN7sVXTP
+         SCBsb+XKi7hlFJ4denlaw7F9pFZDTPLDDkglOAXq82a8GgEn9g/cxSNNRX0HrxX9nkRk
+         LINuZhf8esJdtbYRN8CgSb9lte/EW7cUCP+IJpr0XIDUydpVLBn8suhIoY65PR+uLzYf
+         It4FjjtG/K3n28SlgHqWmXMM1N51Wy1bhfUpFIaTpEep3J87BiQZiXmOBI5mr/deIYBg
+         oO9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vew6IID4ljm4heiw9CiVMz5FKmMEPqWRzVvaDisBb5I=;
+        b=s6isi1dpNbgY1gnsXwBM7iHZXuSGTGDp2pWCKl15tqm/wpMsbc9WX2w2tEY+EFc2TJ
+         QWT8JZmmhpKO1058Fa7yNKCz7DIgks3TQNajHOtbKQzHYuW2cufpYZt5GS6UsHrbbH9K
+         2w49MvPQRzhLT+d495YNI2HJlBSF7gipABAUhkLzoSrG6bc3JBJZNR0KV2kpZWOa709H
+         O7fYvhPXlXTb0Ibw/gqrS8uI0CYhYM0CVD3a57aNOEJEVyMgO5BwLChrHyAeV3fRDfwS
+         eRH1rwzbxsu4GxmjtR8weelQ+nZ+DIDkxMWtO61JRfStkMQQOJhMMLG2eQFrzgCQpSJe
+         vxUw==
+X-Gm-Message-State: ANoB5plOYMiXgQ1mjsA9bARKG/yClWQVeBlmNbTLJbMMVcvadVZzv6aV
+        KONzk47rFljgL5lQ3tJqcOg=
+X-Google-Smtp-Source: AA0mqf7z4UvRKndhNUHlnIZ1E1nA42RVLroivn5aMK1KdDrN6XfQphXgJTmiiU4C5EY3fjuJYLMP4w==
+X-Received: by 2002:a05:600c:1d92:b0:3cf:78fc:eda2 with SMTP id p18-20020a05600c1d9200b003cf78fceda2mr24981454wms.47.1669654638691;
+        Mon, 28 Nov 2022 08:57:18 -0800 (PST)
+Received: from localhost.localdomain ([94.73.35.229])
+        by smtp.gmail.com with ESMTPSA id p20-20020a05600c205400b003b476cabf1csm15316847wmg.26.2022.11.28.08.57.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 08:57:18 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, rydberg@bitmath.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Akito <the@akito.ooo>
+Subject: [PATCH] HID: multitouch: fix Asus ExpertBook P2 P2451FA trackpoint
+Date:   Mon, 28 Nov 2022 17:57:05 +0100
+Message-Id: <20221128165705.7008-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 4/7] iommu: Let iommu.strict override
- ops->def_domain_type
-Content-Language: en-GB
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-References: <20221116171656.4128212-1-schnelle@linux.ibm.com>
- <20221116171656.4128212-5-schnelle@linux.ibm.com>
- <33eea9bd-e101-4836-19e8-d4b191b78b00@linux.intel.com>
- <9163440eb6a47fe02730638bbdf72fda5ee5ad2c.camel@linux.ibm.com>
- <Y4S3z6IpeDHmdUs/@nvidia.com>
- <52fe7769ca5b66523c2c93c7d46ebc17dc144aca.camel@linux.ibm.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <52fe7769ca5b66523c2c93c7d46ebc17dc144aca.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,110 +72,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-28 15:54, Niklas Schnelle wrote:
-> On Mon, 2022-11-28 at 09:29 -0400, Jason Gunthorpe wrote:
->> On Mon, Nov 28, 2022 at 12:10:39PM +0100, Niklas Schnelle wrote:
->>> On Thu, 2022-11-17 at 09:55 +0800, Baolu Lu wrote:
->>>> On 2022/11/17 1:16, Niklas Schnelle wrote:
->>>>> When iommu.strict=1 is set or iommu_set_dma_strict() was called we
->>>>> should use IOMMU_DOMAIN_DMA irrespective of ops->def_domain_type.
->>>>>
->>>>> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
->>>>> ---
->>>>>    drivers/iommu/iommu.c | 3 +++
->>>>>    1 file changed, 3 insertions(+)
->>>>>
->>>>> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
->>>>> index 65a3b3d886dc..d9bf94d198df 100644
->>>>> --- a/drivers/iommu/iommu.c
->>>>> +++ b/drivers/iommu/iommu.c
->>>>> @@ -1562,6 +1562,9 @@ static int iommu_get_def_domain_type(struct device *dev)
->>>>>    {
->>>>>    	const struct iommu_ops *ops = dev_iommu_ops(dev);
->>>>>    
->>>>> +	if (iommu_dma_strict)
->>>>> +		return IOMMU_DOMAIN_DMA;
->>>>
->>>> If any quirky device must work in IOMMU identity mapping mode, this
->>>> might introduce functional regression. At least for VT-d platforms, some
->>>> devices do require IOMMU identity mapping mode for functionality.
->>>
->>> That's a good point. How about instead of unconditionally returning
->>> IOMMU_DOMAIN_DMA we just do so if the domain type returned by ops-
->>>> def_domain_type uses a flush queue (i.e. the __IOMMU_DOMAIN_DMA_FQ bit
->>> is set). That way a device that only supports identity mapping gets to
->>> set that but iommu_dma_strict at least always prevents use of an IOVA
->>> flush queue.
->>
->> I would prefer we create some formal caps in iommu_ops to describe
->> whatever it is you are trying to do.
->>
->> Jason
-> 
-> I agree that there is currently a lack of distinction between what
-> domain types can be used (capability) and which should be used as
-> default (iommu.strict=<x>, iommu_set_...(), CONFIG_IOMMU_DEFAULT_DMA,
-> ops->def_domain_type.).
+The HID descriptor of this device contains two mouse collections, one
+for mouse emulation and the other for the trackpoint.
 
-As far as I'm concerned, the purpose of .def_domain_type is really just 
-for quirks where the device needs an identity mapping, based on 
-knowledge that tends to be sufficiently platform-specific that we prefer 
-to delegate it to drivers. What apple-dart is doing is really just a 
-workaround for not being to indicate per-instance domain type support at 
-the point of the .domain_alloc call, and IIRC what mtk_iommu_v1 is doing 
-is a horrible giant hack around the arch/arm DMA ops that don't 
-understand IOMMU groups. Both of those situations are on the cards to be 
-cleaned up, so don't take too much from them.
+Both collections get merged and, because the first one defines X and Y,
+the movemenent events reported by the trackpoint collection are
+ignored.
 
-> My case though is about the latter which I think has some undocumented
-> and surprising precedences built in at the moment. With this series we
-> can use all of IOMMU_DOMAIN_DMA(_FQ, _SQ) on any PCI device but we want
-> to default to either IOMMU_DOMAIN_DMA_FQ or IOMMU_DOMAIN_SQ based on
-> whether we're running in a paging hypervisor (z/VM or KVM) to get the
-> best performance. From a semantic point of view I felt that this is a
-> good match for ops->def_domain_type in that we pick a default but it's
-> still possible to change the domain type e.g. via sysfs. Now this had
-> the problem that ops->def_domain_type would cause IOMMU_DOMAIN_DMA_FQ
-> to be used even if iommu_set_dma_strict() was called (via
-> iommu.strict=1) because there is a undocumented override of ops-
->> def_domain_type over iommu_def_domain_type which I believe comes from
-> the mixing of capability and default you also point at.
-> 
-> I think ideally we need two separate mechanism to determine which
-> domain types can be used for a particular device (capability) and for
-> which one to default to with the latter part having a clear precedence
-> between the options. Put together I think iommu.strict=1 should
-> override a device's preference (ops->def_domain_type) and
-> CONFIG_IOMMU_DEFAULT_DMA to use IOMMU_DOMAIN_DMA but of course only if
-> the device is capable of that. Does that sound reasonable?
+Set the MT_CLS_WIN_8_FORCE_MULTI_INPUT class for this device to be able
+to receive its reports.
 
-That sounds like essentially what we already have, though. The current 
-logic should be thus:
+This fix is similar to/based on commit 40d5bb87377a ("HID: multitouch:
+enable multi-input as a quirk for some devices").
 
-1: If the device is untrusted, it gets strict translation, nothing else. 
-If that won't actually work, tough.
-2: If .def_domain_type returns a specific type, it is because any other 
-type will not work correctly at all, so we must use that.
-3: Otherwise, we compute the user's preferred default type based on 
-kernel config and command line options.
-4: Then we determine whether the IOMMU driver actually supports that 
-type, by trying to allocate it. If allocation fails and the preferred 
-type was more relaxed than IOMMU_DOMAIN_DMA, fall back to the stricter 
-type and try one last time.
+Link: https://gitlab.freedesktop.org/libinput/libinput/-/issues/825
+Reported-by: Akito <the@akito.ooo>
+Tested-by: Akito <the@akito.ooo>
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+---
+ drivers/hid/hid-multitouch.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-AFAICS the distinction and priority of those steps is pretty clear:
+diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
+index 91a4d3fc30e0..372cbdd223e0 100644
+--- a/drivers/hid/hid-multitouch.c
++++ b/drivers/hid/hid-multitouch.c
+@@ -1967,6 +1967,10 @@ static const struct hid_device_id mt_devices[] = {
+ 		HID_DEVICE(BUS_I2C, HID_GROUP_MULTITOUCH_WIN_8,
+ 			USB_VENDOR_ID_ELAN, 0x313a) },
+ 
++	{ .driver_data = MT_CLS_WIN_8_FORCE_MULTI_INPUT,
++		HID_DEVICE(BUS_I2C, HID_GROUP_MULTITOUCH_WIN_8,
++			USB_VENDOR_ID_ELAN, 0x3148) },
++
+ 	/* Elitegroup panel */
+ 	{ .driver_data = MT_CLS_SERIAL,
+ 		MT_USB_DEVICE(USB_VENDOR_ID_ELITEGROUP,
+-- 
+2.38.1
 
-1: Core requirements
-2: Driver-specific requirements
-3: Core preference
-4: Driver-specific support
-
-Now, for step 4 we *could* potentially use static capability flags in 
-place of the "try allocating different things until one succeeds", but 
-that doesn't change anything other than saving the repetitive 
-boilerplate in everyone's .domain_alloc implementations. The real moral 
-of the story here is not to express a soft preference where it will be 
-interpreted as a hard requirement.
-
-Thanks,
-Robin.
