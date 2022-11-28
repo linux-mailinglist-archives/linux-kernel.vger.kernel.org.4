@@ -2,91 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A5A63B2AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:58:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2479063B2B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 21:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbiK1T6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 14:58:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48732 "EHLO
+        id S233921AbiK1UBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 15:01:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233957AbiK1T61 (ORCPT
+        with ESMTP id S233660AbiK1UBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 14:58:27 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63302DABA;
-        Mon, 28 Nov 2022 11:58:21 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id 6so10902435pgm.6;
-        Mon, 28 Nov 2022 11:58:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fW5pu/oGfiEsFMKGLZAHU+S02fDyBuhcJUqWHINL2qU=;
-        b=mx86HuOzrzmHVFcBmkCrHteGNzM0udqe/N2eUm6fMH2MBbX1t4PmdhNn+tBat/L0ad
-         cBZ+zD49RA1+ZK+Cc9Uph5opYzkQ0i4yGNCB/ET7oI9hRX3+qg2Zf7XLlemLJvGlt01z
-         FAjBLe2U/tvLvC4pYTUMQSJf577RdcisPSatY6/7pfOuoVkQDFlwGvZcQEYeI+3Ex+Lv
-         4qfGpvfTGHFCwuxsHQnbIm59Vq4YUuqQk/qWfk/C4OGA2oBCvAXFioZGj+sHUIHAOQRE
-         sjslj73JFVvORreDotKaFGVo1vdffNYJEChWtP+VpUyKv5z4aG0vVzeuUQMrY9qZHaVQ
-         lW9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fW5pu/oGfiEsFMKGLZAHU+S02fDyBuhcJUqWHINL2qU=;
-        b=l0OyAo2Liy58Ipl9LL+3vih9mM0AqME2fLZMd50NfB+RdBP4z1Hg53DRqSt0kmLHtR
-         8EJAe3LBMAiwIIEw47VFvFxvN2cZ7PS2y7RwZ6omIXn4i8aufPEcn+2fD7EK41jIJTYF
-         uGEKE1AihP5UTCY4VAUrEZfF7CtTxH8vHsWKo/TMVfTCG0W7DHd01iZ5g9G9qB5Ba7Ui
-         OT+TQj5z2TMCQivzlfIk8/14UwrZE7Wn7krQ+ot7uEOL25ZsF0tfBkNSNbGBlUl76yGC
-         gcg7rv1uzC5ct1sNFDzgmxOzI38iH23g11umJEjZ0nmBqiiCuxWgwNlOC4lpSU98K69N
-         OvIQ==
-X-Gm-Message-State: ANoB5pljcWSvyAs0nv8SS0eV2P3ww0HxGwbsCOPpWmFmkvhpfFZcHSU4
-        GinJl79YwyJeTMi8RXdGqZQ=
-X-Google-Smtp-Source: AA0mqf4+3eTeelHiOphx4mGFDAToBKPFZ+PiffRH9fKb3FklhereSaV0NjfaAn5L56A5Bxv4pP/Bjw==
-X-Received: by 2002:a05:6a00:410b:b0:56d:91d1:a903 with SMTP id bu11-20020a056a00410b00b0056d91d1a903mr34175954pfb.61.1669665500411;
-        Mon, 28 Nov 2022 11:58:20 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id u11-20020a170902bf4b00b0017f7c4e260fsm9278717pls.150.2022.11.28.11.58.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 11:58:20 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 28 Nov 2022 09:58:18 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Li Jinlin <lijinlin3@huawei.com>
-Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liuzhiqiang26@huawei.com
-Subject: Re: [PATCH v2] blk-iocost: fix shift-out-of-bounds in
- iocg_hick_delay()
-Message-ID: <Y4US2vFmR4pnw08Z@slm.duckdns.org>
-References: <20221128030413.882998-1-lijinlin3@huawei.com>
+        Mon, 28 Nov 2022 15:01:50 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE4114026;
+        Mon, 28 Nov 2022 12:01:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ISyLvvVbmkVMtysV5RC9fGrmHd3bXOuCgdRekBqVUuQ=; b=r5MQVKtbgyTmArJRqAObkt+Huo
+        1YLaklT6xQoWF0ibenjtpkC7v0/shWVftQ4U2j9KxQfx1ceIFcsD92/9qca5DgSzPz2tfXh/3D//N
+        9ybeK4Ho+l3GMPhmBdjiZchWvH4jDldxLYsrKVdG/QWnN9k4WXNBO1gvlQsl68CnRNuTTwXWcqdPY
+        3nCRN06alHSkHp21JSn+8/D87F4nIX5XTwkH8r4avvd2q5xyqARioU32lEGnTw1GJu8driWyTd3h8
+        9NsVQzszN422DMdRsEFlIHNRMuKmAJgvTrUaqp2tScNDAlGUruP6Cm5UySbQJq+kdDMoTH5rab6w8
+        d76yaa0w==;
+Received: from [177.34.169.227] (helo=[192.168.0.8])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ozkJl-00Aboh-5u; Mon, 28 Nov 2022 21:01:29 +0100
+Message-ID: <0ae37916-ecc1-d97c-6a98-c8008fdd05f6@igalia.com>
+Date:   Mon, 28 Nov 2022 17:01:20 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221128030413.882998-1-lijinlin3@huawei.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 06/17] drm/tests: helpers: Switch to a platform_device
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-media@vger.kernel.org
+References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
+ <20221123-rpi-kunit-tests-v2-6-efe5ed518b63@cerno.tech>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v2-6-efe5ed518b63@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 11:04:13AM +0800, Li Jinlin wrote:
->  	/* calculate the current delay in effect - 1/2 every second */
->  	tdelta = now->now - iocg->delay_at;
->  	if (iocg->delay)
-> -		delay = iocg->delay >> div64_u64(tdelta, USEC_PER_SEC);
-> +		delay = iocg->delay >>
-> +			min_t(u64, div64_u64(tdelta, USEC_PER_SEC), 63);
+On 11/28/22 11:53, Maxime Ripard wrote:
+> The device managed resources are ran if the device has bus, which is not
+> the case of a root_device.
+> 
+> Let's use a platform_device instead.
+> 
+> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-I replied earlier but the right thing to do here is setting delay to 0 if
-the shift is >= 64.
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
 
-Thanks.
+Best Regards,
+- Maíra Canal
 
--- 
-tejun
+> ---
+>  drivers/gpu/drm/tests/drm_kunit_helpers.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/tests/drm_kunit_helpers.c b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> index 9fb045fa685f..15678ab823b0 100644
+> --- a/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> +++ b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> @@ -7,6 +7,7 @@
+>  #include <kunit/resource.h>
+>  
+>  #include <linux/device.h>
+> +#include <linux/platform_device.h>
+>  
+>  #define KUNIT_DEVICE_NAME	"drm-kunit-mock-device"
+>  
+> @@ -32,7 +33,16 @@ static const struct drm_mode_config_funcs drm_mode_config_funcs = {
+>   */
+>  struct device *drm_kunit_helper_alloc_device(struct kunit *test)
+>  {
+> -	return root_device_register(KUNIT_DEVICE_NAME);
+> +	struct platform_device *pdev;
+> +	int ret;
+> +
+> +	pdev = platform_device_alloc(KUNIT_DEVICE_NAME, PLATFORM_DEVID_NONE);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
+> +
+> +	ret = platform_device_add(pdev);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	return &pdev->dev;
+>  }
+>  EXPORT_SYMBOL(drm_kunit_helper_alloc_device);
+>  
+> @@ -45,7 +55,9 @@ EXPORT_SYMBOL(drm_kunit_helper_alloc_device);
+>   */
+>  void drm_kunit_helper_free_device(struct kunit *test, struct device *dev)
+>  {
+> -	root_device_unregister(dev);
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +
+> +	platform_device_unregister(pdev);
+>  }
+>  EXPORT_SYMBOL(drm_kunit_helper_free_device);
+>  
+> 
