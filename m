@@ -2,194 +2,357 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B554263A63B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E14D63A63C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:36:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiK1KgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 05:36:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35536 "EHLO
+        id S230390AbiK1KgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 05:36:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbiK1Kff (ORCPT
+        with ESMTP id S230397AbiK1Kff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Nov 2022 05:35:35 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5C11ADA5;
-        Mon, 28 Nov 2022 02:34:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669631682; x=1701167682;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MDmZQEsgcRyI7TsiycO+2Jxh12HbRA1PQvHyL4JSUWE=;
-  b=vx0BZgsbfEbUPfW+Yofw2VrPX+dwn8zHqAInmr7lHQPLOvCZ8VWWZgj3
-   RvVhvkhnAlJ8tnbgu4OC6AVHbJH6htDhI2GYr2pfxJoA29jmYzWuPTQ/B
-   zBL6Hjzr19r9/24+1049hPs6DA5U2R901QMB3hM8SwDE1szBFuQtNOpB5
-   YLtPriFNXw2qCY/spsQatxey5QNZIut4rMN0aBq3S3YJ9AK/CD13TUqrS
-   mPduBAOhyVLoE3VuQbjFaNQMN8zaLb9dYGeB8t7oMyvbBiZqk24WthrcC
-   9hXl131YjjnIRCZ9cZs+TuURHjZ2H5AlmtDF+F5bH0iTUaDFKoFfRuFwJ
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="185454052"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Nov 2022 03:34:41 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 28 Nov 2022 03:34:39 -0700
-Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Mon, 28 Nov 2022 03:34:33 -0700
-From:   Arun Ramadoss <arun.ramadoss@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
-        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
-        <richardcochran@gmail.com>, <ceggers@arri.de>
-Subject: [Patch net-next v1 12/12] net: dsa: microchip: ptp: add support for perout programmable pins
-Date:   Mon, 28 Nov 2022 16:02:27 +0530
-Message-ID: <20221128103227.23171-13-arun.ramadoss@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221128103227.23171-1-arun.ramadoss@microchip.com>
-References: <20221128103227.23171-1-arun.ramadoss@microchip.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E191B9C0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:34:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E3E761088
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:34:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 444E2C433D6;
+        Mon, 28 Nov 2022 10:34:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669631681;
+        bh=UXTLtyTvZkhEJWg4SchoB5639cLPCG+wmWU24qxcMDI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Z+n91fvnHNl+bcYaK5MKfik3z7Pe0Q5Wrgms7GhAjgyie26eS47cT493O2NtQ9jYy
+         XUkHUntu6e32ZQ2TzTpRCAA+cDI0Mo0g40wyGCjal2exR+fxWIanE6xamC3fruv0cD
+         u11Zw3MGYWhw1MD8ilW6szVeMYAIr6/r5bWBsWCpzmyL7hhBYz9JPULZoX/03VymYy
+         IsOJ9oCHibFU9RFYyLuDN6N7z5jSN4oeNmR8/v4I4LhOcE5taQjK4shW+CQFKrvEOi
+         6x1qxUD5hcObDWydhWPVUApLGa3+Tq1FUBiTOeq6kRD0eVAdWbi5kNX2ImtBr7xM7n
+         2X7APpm6q1tqg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ozbTC-008zAJ-UD;
+        Mon, 28 Nov 2022 10:34:39 +0000
+Date:   Mon, 28 Nov 2022 10:34:38 +0000
+Message-ID: <86k03fmkox.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 3/7] genirq: Add mechanism to multiplex a single HW IPI
+In-Reply-To: <20221126173453.306088-4-apatel@ventanamicro.com>
+References: <20221126173453.306088-1-apatel@ventanamicro.com>
+        <20221126173453.306088-4-apatel@ventanamicro.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two programmable pins available for Trigger output unit to
-generate periodic pulses. This patch add verify_pin for the available 2
-pins and configure it with respect to GPIO index for the TOU unit.
+On Sat, 26 Nov 2022 17:34:49 +0000,
+Anup Patel <apatel@ventanamicro.com> wrote:
+> 
+> All RISC-V platforms have a single HW IPI provided by the INTC local
+> interrupt controller. The HW method to trigger INTC IPI can be through
+> external irqchip (e.g. RISC-V AIA), through platform specific device
+> (e.g. SiFive CLINT timer), or through firmware (e.g. SBI IPI call).
+> 
+> To support multiple IPIs on RISC-V, we add a generic IPI multiplexing
+> mechanism which help us create multiple virtual IPIs using a single
+> HW IPI. This generic IPI multiplexing is inspired from the Apple AIC
+> irqchip driver and it is shared by various RISC-V irqchip drivers.
+> 
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  include/linux/irq.h  |   4 +
+>  kernel/irq/Kconfig   |   5 ++
+>  kernel/irq/Makefile  |   1 +
+>  kernel/irq/ipi-mux.c | 210 +++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 220 insertions(+)
+>  create mode 100644 kernel/irq/ipi-mux.c
+> 
+> diff --git a/include/linux/irq.h b/include/linux/irq.h
+> index c3eb89606c2b..6024e1ee1257 100644
+> --- a/include/linux/irq.h
+> +++ b/include/linux/irq.h
+> @@ -1266,6 +1266,10 @@ int __ipi_send_mask(struct irq_desc *desc, const struct cpumask *dest);
+>  int ipi_send_single(unsigned int virq, unsigned int cpu);
+>  int ipi_send_mask(unsigned int virq, const struct cpumask *dest);
+>  
+> +void ipi_mux_process(void);
+> +int ipi_mux_create(unsigned int nr_ipi,
+> +		   void (*mux_send)(const struct cpumask *));
+> +
+>  #ifdef CONFIG_GENERIC_IRQ_MULTI_HANDLER
+>  /*
+>   * Registers a generic IRQ handling function as the top-level IRQ handler in
+> diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+> index db3d174c53d4..df17dbc54b02 100644
+> --- a/kernel/irq/Kconfig
+> +++ b/kernel/irq/Kconfig
+> @@ -86,6 +86,11 @@ config GENERIC_IRQ_IPI
+>  	depends on SMP
+>  	select IRQ_DOMAIN_HIERARCHY
+>  
+> +# Generic IRQ IPI Mux support
+> +config GENERIC_IRQ_IPI_MUX
+> +	bool
+> +	depends on SMP
+> +
+>  # Generic MSI interrupt support
+>  config GENERIC_MSI_IRQ
+>  	bool
+> diff --git a/kernel/irq/Makefile b/kernel/irq/Makefile
+> index b4f53717d143..f19d3080bf11 100644
+> --- a/kernel/irq/Makefile
+> +++ b/kernel/irq/Makefile
+> @@ -15,6 +15,7 @@ obj-$(CONFIG_GENERIC_IRQ_MIGRATION) += cpuhotplug.o
+>  obj-$(CONFIG_PM_SLEEP) += pm.o
+>  obj-$(CONFIG_GENERIC_MSI_IRQ) += msi.o
+>  obj-$(CONFIG_GENERIC_IRQ_IPI) += ipi.o
+> +obj-$(CONFIG_GENERIC_IRQ_IPI_MUX) += ipi-mux.o
+>  obj-$(CONFIG_SMP) += affinity.o
+>  obj-$(CONFIG_GENERIC_IRQ_DEBUGFS) += debugfs.o
+>  obj-$(CONFIG_GENERIC_IRQ_MATRIX_ALLOCATOR) += matrix.o
+> diff --git a/kernel/irq/ipi-mux.c b/kernel/irq/ipi-mux.c
+> new file mode 100644
+> index 000000000000..366d8cd5320b
+> --- /dev/null
+> +++ b/kernel/irq/ipi-mux.c
+> @@ -0,0 +1,210 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Multiplex several virtual IPIs over a single HW IPI.
+> + *
+> + * Copyright The Asahi Linux Contributors
+> + * Copyright (c) 2022 Ventana Micro Systems Inc.
+> + */
+> +
+> +#define pr_fmt(fmt) "ipi-mux: " fmt
+> +#include <linux/cpu.h>
+> +#include <linux/init.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqchip.h>
+> +#include <linux/irqchip/chained_irq.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/jump_label.h>
+> +#include <linux/percpu.h>
+> +#include <linux/smp.h>
+> +
+> +struct ipi_mux_cpu {
+> +	atomic_t			enable;
+> +	atomic_t			bits;
+> +	struct cpumask			send_mask;
+> +};
+> +
+> +static struct ipi_mux_cpu __percpu *ipi_mux_pcpu;
+> +static struct irq_domain *ipi_mux_domain;
+> +static void (*ipi_mux_send)(const struct cpumask *mask);
+> +
+> +static void ipi_mux_mask(struct irq_data *d)
+> +{
+> +	struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
+> +
+> +	atomic_andnot(BIT(irqd_to_hwirq(d)), &icpu->enable);
+> +}
+> +
+> +static void ipi_mux_unmask(struct irq_data *d)
+> +{
+> +	u32 ibit = BIT(irqd_to_hwirq(d));
+> +	struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
+> +
+> +	atomic_or(ibit, &icpu->enable);
+> +
+> +	/*
+> +	 * The atomic_or() above must complete before the atomic_read()
+> +	 * below to avoid racing ipi_mux_send_mask().
+> +	 */
+> +	smp_mb__after_atomic();
+> +
+> +	/* If a pending IPI was unmasked, raise a parent IPI immediately. */
+> +	if (atomic_read(&icpu->bits) & ibit)
+> +		ipi_mux_send(cpumask_of(smp_processor_id()));
+> +}
+> +
+> +static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
+> +{
+> +	u32 ibit = BIT(irqd_to_hwirq(d));
+> +	struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
+> +	struct cpumask *send_mask = &icpu->send_mask;
+> +	unsigned long flags;
+> +	int cpu;
+> +
+> +	/*
+> +	 * We use send_mask as a per-CPU variable so disable local
+> +	 * interrupts to avoid being preempted.
+> +	 */
+> +	local_irq_save(flags);
 
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
----
-Patch v1
-- patch is new
----
- drivers/net/dsa/microchip/ksz_ptp.c | 41 +++++++++++++++++++++++++++--
- drivers/net/dsa/microchip/ksz_ptp.h |  3 +++
- 2 files changed, 42 insertions(+), 2 deletions(-)
+The correct way to avoid preemption is to use preempt_disable(), which
+is a lot cheaper than disabling interrupt on most architectures.
 
-diff --git a/drivers/net/dsa/microchip/ksz_ptp.c b/drivers/net/dsa/microchip/ksz_ptp.c
-index 15b863c85cb1..445d220f1a1b 100644
---- a/drivers/net/dsa/microchip/ksz_ptp.c
-+++ b/drivers/net/dsa/microchip/ksz_ptp.c
-@@ -30,12 +30,14 @@ static int ksz_ptp_tou_gpio(struct ksz_device *dev)
- {
- 	int ret;
- 
--	ret = ksz_rmw32(dev, REG_SW_GLOBAL_LED_OVR__4, LED_OVR_1, LED_OVR_1);
-+	ret = ksz_rmw32(dev, REG_SW_GLOBAL_LED_OVR__4, LED_OVR_1 | LED_OVR_2,
-+			LED_OVR_1 | LED_OVR_2);
- 	if (ret)
- 		return ret;
- 
- 	return ksz_rmw32(dev, REG_SW_GLOBAL_LED_SRC__4,
--			 LED_SRC_PTP_GPIO_1, LED_SRC_PTP_GPIO_1);
-+			 LED_SRC_PTP_GPIO_1 | LED_SRC_PTP_GPIO_2,
-+			 LED_SRC_PTP_GPIO_1 | LED_SRC_PTP_GPIO_2);
- }
- 
- static int ksz_ptp_tou_reset(struct ksz_device *dev, u8 unit)
-@@ -181,6 +183,10 @@ static int ksz_ptp_enable_perout(struct ksz_device *dev,
- 	    ptp_data->tou_mode != KSZ_PTP_TOU_IDLE)
- 		return -EBUSY;
- 
-+	pin = ptp_find_pin(ptp_data->clock, PTP_PF_PEROUT, request->index);
-+	if (pin < 0)
-+		return -EINVAL;
-+
- 	data32 = FIELD_PREP(PTP_GPIO_INDEX, pin) |
- 		 FIELD_PREP(PTP_TOU_INDEX, request->index);
- 	ret = ksz_rmw32(dev, REG_PTP_UNIT_INDEX__4,
-@@ -708,6 +714,23 @@ static int ksz_ptp_enable(struct ptp_clock_info *ptp,
- 	return ret;
- }
- 
-+static int ksz_ptp_verify_pin(struct ptp_clock_info *ptp, unsigned int pin,
-+			      enum ptp_pin_function func, unsigned int chan)
-+{
-+	int ret = 0;
-+
-+	switch (func) {
-+	case PTP_PF_NONE:
-+	case PTP_PF_PEROUT:
-+		break;
-+	default:
-+		ret = -1;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
- /*  Function is pointer to the do_aux_work in the ptp_clock capability */
- static long ksz_ptp_do_aux_work(struct ptp_clock_info *ptp)
- {
-@@ -824,6 +847,8 @@ static const struct ptp_clock_info ksz_ptp_caps = {
- 	.adjtime	= ksz_ptp_adjtime,
- 	.do_aux_work	= ksz_ptp_do_aux_work,
- 	.enable		= ksz_ptp_enable,
-+	.verify		= ksz_ptp_verify_pin,
-+	.n_pins		= KSZ_PTP_N_GPIO,
- 	.n_per_out	= 3,
- };
- 
-@@ -832,6 +857,7 @@ int ksz_ptp_clock_register(struct dsa_switch *ds)
- 	struct ksz_device *dev = ds->priv;
- 	struct ksz_ptp_data *ptp_data;
- 	int ret;
-+	u8 i;
- 
- 	ptp_data = &dev->ptp_data;
- 	mutex_init(&ptp_data->lock);
-@@ -843,6 +869,17 @@ int ksz_ptp_clock_register(struct dsa_switch *ds)
- 	if (ret)
- 		return ret;
- 
-+	for (i = 0; i < KSZ_PTP_N_GPIO; i++) {
-+		struct ptp_pin_desc *ptp_pin = &ptp_data->pin_config[i];
-+
-+		snprintf(ptp_pin->name,
-+			 sizeof(ptp_pin->name), "ksz_ptp_pin_%02d", i);
-+		ptp_pin->index = i;
-+		ptp_pin->func = PTP_PF_NONE;
-+	}
-+
-+	ptp_data->caps.pin_config = ptp_data->pin_config;
-+
- 	ptp_data->clock = ptp_clock_register(&ptp_data->caps, dev->dev);
- 	if (IS_ERR_OR_NULL(ptp_data->clock))
- 		return PTR_ERR(ptp_data->clock);
-diff --git a/drivers/net/dsa/microchip/ksz_ptp.h b/drivers/net/dsa/microchip/ksz_ptp.h
-index 94ffd8bc0603..390364a177ea 100644
---- a/drivers/net/dsa/microchip/ksz_ptp.h
-+++ b/drivers/net/dsa/microchip/ksz_ptp.h
-@@ -10,6 +10,8 @@
- 
- #include <linux/ptp_clock_kernel.h>
- 
-+#define KSZ_PTP_N_GPIO		2
-+
- enum ksz_ptp_tou_mode {
- 	KSZ_PTP_TOU_IDLE,
- 	KSZ_PTP_TOU_PEROUT,
-@@ -18,6 +20,7 @@ enum ksz_ptp_tou_mode {
- struct ksz_ptp_data {
- 	struct ptp_clock_info caps;
- 	struct ptp_clock *clock;
-+	struct ptp_pin_desc pin_config[KSZ_PTP_N_GPIO];
- 	/* Serializes all operations on the PTP hardware clock */
- 	struct mutex lock;
- 	/* lock for accessing the clock_time */
+> +
+> +	cpumask_clear(send_mask);
+
+This thing is likely to be unnecessarily expensive on very large
+systems, as it is proportional to the number of CPUs.
+
+> +
+> +	for_each_cpu(cpu, mask) {
+> +		icpu = per_cpu_ptr(ipi_mux_pcpu, cpu);
+> +		atomic_or(ibit, &icpu->bits);
+
+The original code had an atomic_fetch_or_release() to allow eliding
+the IPI if the target interrupt was already pending. Why is that code
+gone? This is a pretty cheap and efficient optimisation.
+
+> +
+> +		/*
+> +		 * The atomic_or() above must complete before
+> +		 * the atomic_read() below to avoid racing with
+> +		 * ipi_mux_unmask().
+> +		 */
+> +		smp_mb__after_atomic();
+> +
+> +		if (atomic_read(&icpu->enable) & ibit)
+> +			cpumask_set_cpu(cpu, send_mask);
+> +	}
+> +
+> +	/* Trigger the parent IPI */
+> +	ipi_mux_send(send_mask);
+
+IPIs are very rarely made pending on more than a single CPU at a
+time. The overwhelming majority of them are targeting a single CPU. So
+accumulating bits to avoid doing two or more "send" actions only
+penalises the generic case.
+
+My conclusion is that this "send_mask" can probably be removed,
+together with the preemption fiddling.
+
+> +
+> +	local_irq_restore(flags);
+> +}
+> +
+> +static const struct irq_chip ipi_mux_chip = {
+> +	.name		= "IPI Mux",
+> +	.irq_mask	= ipi_mux_mask,
+> +	.irq_unmask	= ipi_mux_unmask,
+> +	.ipi_send_mask	= ipi_mux_send_mask,
+> +};
+
+OK, you have now dropped the superfluous pre/post handlers. But the
+need still exists. Case in point, the aic_handle_ipi() prologue and
+epilogue to the interrupt handling. I have suggested last time that
+the driver could provide the actual struct irq_chip in order to
+provide the callbacks it requires.
+
+Please realise that I will not take this patch if this cannot be made
+to work with the single existing in-tree instance of an IPI MUX. 90%
+of the code having been lifted from there, I think this is a pretty
+fair ask.
+
+> +
+> +static int ipi_mux_domain_alloc(struct irq_domain *d, unsigned int virq,
+> +				unsigned int nr_irqs, void *arg)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < nr_irqs; i++) {
+> +		irq_set_percpu_devid(virq + i);
+> +		irq_domain_set_info(d, virq + i, i,
+> +				    &ipi_mux_chip, d->host_data,
+
+What does d->host_data represent here?
+
+> +				    handle_percpu_devid_irq, NULL, NULL);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct irq_domain_ops ipi_mux_domain_ops = {
+> +	.alloc		= ipi_mux_domain_alloc,
+> +	.free		= irq_domain_free_irqs_top,
+> +};
+> +
+> +/**
+> + * ipi_mux_process - Process multiplexed virtual IPIs
+> + */
+> +void ipi_mux_process(void)
+> +{
+> +	struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
+> +	irq_hw_number_t hwirq;
+> +	unsigned long ipis;
+> +	unsigned int en;
+> +
+> +	/*
+> +	 * Reading enable mask does not need to be ordered as long as
+> +	 * this function called from interrupt handler because only
+> +	 * the CPU itself can change it's own enable mask.
+> +	 */
+> +	en = atomic_read(&icpu->enable);
+> +
+> +	/*
+> +	 * Clear the IPIs we are about to handle. This pairs with the
+> +	 * atomic_fetch_or_release() in ipi_mux_send_mask().
+> +	 */
+> +	ipis = atomic_fetch_andnot(en, &icpu->bits) & en;
+> +
+> +	for_each_set_bit(hwirq, &ipis, BITS_PER_LONG)
+
+BITS_PER_LONG...
+
+> +		generic_handle_domain_irq(ipi_mux_domain, hwirq);
+> +}
+> +
+> +/**
+> + * ipi_mux_create - Create virtual IPIs multiplexed on top of a single
+> + * parent IPI.
+> + * @nr_ipi:		number of virtual IPIs to create. This should
+> + *			be <= BITS_PER_TYPE(int)
+> + * @mux_send:		callback to trigger parent IPI
+> + *
+> + * Returns first virq of the newly created virtual IPIs upon success
+> + * or <=0 upon failure
+> + */
+> +int ipi_mux_create(unsigned int nr_ipi,
+> +		   void (*mux_send)(const struct cpumask *))
+> +{
+> +	struct fwnode_handle *fwnode;
+> +	struct irq_domain *domain;
+> +	int rc;
+> +
+> +	if (ipi_mux_domain)
+> +		return -EEXIST;
+> +
+> +	if (BITS_PER_TYPE(int) < nr_ipi || !mux_send)
+
+... vs BITS_PER_TYPE(int) ...
+
+	M.
+
 -- 
-2.36.1
-
+Without deviation from the norm, progress is not possible.
