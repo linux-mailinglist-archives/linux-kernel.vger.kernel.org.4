@@ -2,420 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F387863A052
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 05:04:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21FAA63A054
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 05:06:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbiK1EEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 23:04:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
+        id S229705AbiK1EF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 23:05:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiK1ED5 (ORCPT
+        with ESMTP id S229682AbiK1EFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 23:03:57 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78AFBE19;
-        Sun, 27 Nov 2022 20:03:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669608235; x=1701144235;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=M88jslICNSJoIgA4VVLQKnRCPB/UEXVK6yLm6/EyJGE=;
-  b=KzS4/6Ta2/3dZBUNQ2OZaYAMH7/ujxyMwyU1WW8E2fTj/OqAunCKL6p5
-   RgPVMNZwYVAHFkM9V2GpfsoHSKNE3tTKV8lAhii37xfM3T/THkxMcg97L
-   D1S7TtoE4LUuMJ/S/HTfpBVirh61LWL5ulF8vdW3RFkoxtevvzEHrWmHJ
-   CRdfXR2Ail6HkHbQYQQg3NufuBhDk/mom8vORMaU1UpYlYd/7IXvrOs09
-   tuvabU352Q82SYWEHZ90Qv31wHcwBA7y71+acKA9FcSypL7M+1wBExmqr
-   cuWDo5Co2TxGOmBTRQZnLkKS9NwwhlM1wTQf7ZcKzZCF6czaK1ZwCJZYT
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="295127120"
-X-IronPort-AV: E=Sophos;i="5.96,199,1665471600"; 
-   d="scan'208";a="295127120"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2022 20:03:43 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="593733596"
-X-IronPort-AV: E=Sophos;i="5.96,199,1665471600"; 
-   d="scan'208";a="593733596"
-Received: from iweiny-mobl.amr.corp.intel.com (HELO localhost) ([10.212.2.33])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2022 20:03:43 -0800
-From:   ira.weiny@intel.com
-To:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Gregory Price <gregory.price@memverge.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        "Li, Ming" <ming4.li@intel.com>, Lukas Wunner <lukas@wunner.de>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-cxl@vger.kernel.org
-Subject: [PATCH V3 2/2] PCI/DOE: Remove asynchronous task support
-Date:   Sun, 27 Nov 2022 20:03:38 -0800
-Message-Id: <20221128040338.1936529-3-ira.weiny@intel.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221128040338.1936529-1-ira.weiny@intel.com>
-References: <20221128040338.1936529-1-ira.weiny@intel.com>
+        Sun, 27 Nov 2022 23:05:20 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1E713D41;
+        Sun, 27 Nov 2022 20:05:17 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 01B6D5C00B2;
+        Sun, 27 Nov 2022 23:05:15 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sun, 27 Nov 2022 23:05:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=russell.cc; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669608314; x=
+        1669694714; bh=Y3tnyB2smEGJhveOUBIsKZHaDd+IwyR52h9uCaveTjU=; b=f
+        TVRXzUgXgrf0AhG7IY315R32aMiUMIm/XAqigSEPg37UF/A8C9p8U4iX4nDqZtVk
+        SbSEi45DBQhvhC7ddV+hc61i8fuyjB1ck4KB6U6wUD35EIYWwz99bSGaEEEIY8JJ
+        R0K5nBp4Q0RcDMzZKGDnKQoti46lMrMBPBmhzXfBC3H1nGsFFQow8d/I/JMbI+pb
+        41vUops6akMDGLvZIf5rhAvnDdsfgl6Lgy/VkBMjrMeuo7XFzYqi+/J8lAsbDXio
+        V6+DT1rSyu6i7ZSdiwYo0nNjrssfxz8LPRCa+82Qi+9IOhO/BANleK+zrwYPGUdU
+        8qf3kp/ZykwjZVX0vxrVg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669608314; x=
+        1669694714; bh=Y3tnyB2smEGJhveOUBIsKZHaDd+IwyR52h9uCaveTjU=; b=q
+        keidwh/911FsqIxLWituvptwqfFUgwvs1TS8OoP9w72V5fjTkVwd2XEkpKf9K7DC
+        s1oGdx0GDCx9BlI8nI2UJwqLa82LCVXNHyFrzjFKjw4xhAglC/CJ3jO/NhNoI+rT
+        gMgfmgDM/bCXUzGxV0DqWwplwLl/lti4/ionh282Munp8pIawEHwie3dT+XB9k5H
+        k8ooaZPdg1I/T93Bcz8GKK5ep1ldJ0ZiT1RDNMZ2djPKXMyKVoztK8HVV9I3HR8G
+        eFaSPo08WpaG/AwCRNiYupGqiYd6CtGLHoy43KO7kPZldCPZEHT4S594i3egS6l5
+        8zQKuph+bMK8cLpbx9F/Q==
+X-ME-Sender: <xms:ejOEY1AHZnKnXDPPq-sjURkqWT4jrYDCD6cq_WvFIxL5uaSvELRiOw>
+    <xme:ejOEYzgZucUDEBALzak2BpGkNfAAe_RM9gQb30Nw_DoBVHbOXIZcSz3G7siwBRs8g
+    Dr6sCInDYH1vcjOfQ>
+X-ME-Received: <xmr:ejOEYwlleEN2OvY82VndbIkLWHoa-ISG9Dy2UCMr2cNtuicW-Ye52dBcvXIq2xPNVORJxacFhU2o92qXiCkq2pf-dpkUJZxlWw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedugdeijecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
+    hrlhcuvffnffculdduhedmnecujfgurhepkffuhffvveffjghftgfgfgggsehtqhertddt
+    reejnecuhfhrohhmpeftuhhsshgvlhhlucevuhhrrhgvhicuoehruhhstghurhesrhhush
+    hsvghllhdrtggtqeenucggtffrrghtthgvrhhnpeduvdffgfffleetgfelledugfevjeef
+    leevveelhfeugfejuefffeejvdduveefffenucffohhmrghinhepohiilhgrsghsrdhorh
+    hgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprhhu
+    shgtuhhrsehruhhsshgvlhhlrdgttg
+X-ME-Proxy: <xmx:ejOEY_yGOBzfn2QT7F-X-8y1sxeuwFS_cONFBZomC5ubaT8_Tv1JuA>
+    <xmx:ejOEY6Sl6wFOqFiQXudhsnwhYkIogFUJ-HYORjHmF1Hx_455q1UEoA>
+    <xmx:ejOEYyZ7PfSqm_E2WGJ9F9COYHT1KwurR82JGd2QPPU8V9wYDQo3hw>
+    <xmx:ejOEYwMWHaYDaThJZzlgx-aj-j7cqTJN4bPsVyTjvRWvIxuK_NpVyQ>
+Feedback-ID: i4421424f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 27 Nov 2022 23:05:12 -0500 (EST)
+Message-ID: <5fc3102ef379d2a34d64cfea93ce7599e0fd640f.camel@russell.cc>
+Subject: Re: [RFC PATCH 00/13] Add DEXCR support
+From:   Russell Currey <ruscur@russell.cc>
+To:     Benjamin Gray <bgray@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org
+Cc:     ajd@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org, cmr@bluescreens.de
+Date:   Mon, 28 Nov 2022 15:05:08 +1100
+In-Reply-To: <20221128024458.46121-1-bgray@linux.ibm.com>
+References: <20221128024458.46121-1-bgray@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.1 (3.46.1-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ira Weiny <ira.weiny@intel.com>
+On Mon, 2022-11-28 at 13:44 +1100, Benjamin Gray wrote:
+> This series is based on initial work by Chris Riedl that was not sent
+> to the list.
+>=20
+> Adds a kernel interface for userspace to interact with the DEXCR.
+> The DEXCR is a SPR that allows control over various execution
+> 'aspects', such as indirect branch prediction and enabling the
+> hashst/hashchk instructions. Further details are in ISA 3.1B
+> Book 3 chapter 12.
+>=20
+> This RFC proposes an interface for users to interact with the DEXCR.
+> It aims to support
+>=20
+> * Querying supported aspects
+> * Getting/setting aspects on a per-process level
+> * Allowing global overrides across all processes
+>=20
+> There are some parts that I'm not sure on the best way to approach
+> (hence RFC):
+>=20
+> * The feature names in arch/powerpc/kernel/dt_cpu_ftrs.c appear to be
+> unimplemented
+> =C2=A0 in skiboot, so are being defined by this series. Is being so
+> verbose fine?
 
-Gregory Price and Jonathan Cameron reported a bug within
-pci_doe_submit_task().[1]  The issue was that work item initialization
-needs to be done with either INIT_WORK_ONSTACK() or INIT_WORK()
-depending on how the work item is allocated.
+These are going to need to be added to skiboot before they can be
+referenced in the kernel.  Inclusion in skiboot makes them ABI, the
+kernel is just a consumer.
 
-Initially, it was anticipated that DOE tasks were going to need to be
-submitted asynchronously and the code was designed thusly.  Many
-alternatives were discussed to fix the work initialization issue.[2]
+> * What aspects should be editable by a process? E.g., SBHE has
+> =C2=A0 effects that potentially bleed into other processes. Should
+> =C2=A0 it only be system wide configurable?
 
-However, all current users submit tasks synchronously and this has
-therefore become an unneeded maintenance burden.  Remove the extra
-maintenance burden by replacing asynchronous task submission with
-a synchronous wait function.[3]
+For context, ISA 3.1B p1358 says:=20
 
-[1] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m88a7f50dcce52f30c8bf5c3dcc06fa9843b54a2d
-[2] https://lore.kernel.org/linux-cxl/Y3kSDQDur+IUDs2O@iweiny-mobl/T/#m0f057773d9c75432fcfcc54a2604483fe82abe92
-[3] https://lore.kernel.org/linux-cxl/Y3kSDQDur+IUDs2O@iweiny-mobl/T/#m32d3f9b208ef7486bc148d94a326b26b2d3e69ff
+   In some micro-architectures, the execution behav-
+   ior controlled by aspect 0 is difficult to change with
+   any degree of timing precision. The change may
+   also bleed over into other threads on the same pro-
+   cessor. Any environment that has a dependence on
+   the more secure setting of aspect 0 should not
+   change the value, and ideally should share a pro-
+   cessor only with similar threads. For other environ-
+   ments, changes to the effective value of aspect 0
+   represent a relative risk tolerance for its aspect of
+   execution behavior, with the understanding that
+   there will be significant hysteresis in the execution
+   behavior.
+  =20
+If a process sets SBHE for itself and all it takes is context switching
+from a process with SBHE unset to cause exposure, then yeah I think it
+should just be global.  I doubt branch hints have enough impact for
+process granularity to be especially desirable anyway.
 
-Reported-by: Gregory Price <gregory.price@memverge.com>
-Reported-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Suggested-by: Dan Williams <dan.j.williams@intel.com>
-Suggested-by: "Li, Ming" <ming4.li@intel.com>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> * Should configuring certain aspects for the process be non-
+> privileged? E.g.,
+> =C2=A0 Is there harm in always allowing configuration of IBRTPD, SRAPD?
+> The *FORCE_SET*
+> =C2=A0 action prevents further process local changes regardless of
+> privilege.
 
----
-Changes from V2:
-	Jonathan
-		Fix comment on struct pci_doe_mb
-		Remove signal_task_complete()
+I'm not aware of a reason why it would be a problem to allow
+unprivileged configuration as long as there's a way to prevent further
+changes.  The concerning case is if a mitigation is set by a trusted
+process context, and then untrusted code is executed that manages to
+turn the mitigation off again.
 
-Changes from V1:
-	Dan Williams:
-		Use mutex_lock_interruptible()
-		Adjust comment to lock the doe_mb structure not the
-		code
-	Adjust the locking based on the new series which eliminated
-	PCI_DOE_FLAG_CANCEL.
+> * The tests fail Patchwork CI because of the new prctl macros, and
+> the CI
+> =C2=A0 doesn't run headers_install and add -isystem
+> <buildpath>/usr/include to
+> =C2=A0 the make command.
 
-Thanks to Dan for the bulk of the patch.
-Thanks to Ming for pointing out the need for a lock to prevent more
-than 1 task from being processed at a time.
----
- drivers/cxl/core/pci.c  | 16 ++------
- drivers/pci/doe.c       | 86 +++++++++++++----------------------------
- include/linux/pci-doe.h | 11 +-----
- 3 files changed, 31 insertions(+), 82 deletions(-)
+The CI runs on x86 and cross compiles the kernel and selftests, and
+boots are done in qemu tcg.  Maybe we can skip the build if the symbols
+are undefined or do something like
 
-diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
-index 9240df53ed87..58977e0712b6 100644
---- a/drivers/cxl/core/pci.c
-+++ b/drivers/cxl/core/pci.c
-@@ -490,21 +490,14 @@ static struct pci_doe_mb *find_cdat_doe(struct device *uport)
- 		    CXL_DOE_TABLE_ACCESS_TABLE_TYPE_CDATA) |		\
- 	 FIELD_PREP(CXL_DOE_TABLE_ACCESS_ENTRY_HANDLE, (entry_handle)))
- 
--static void cxl_doe_task_complete(struct pci_doe_task *task)
--{
--	complete(task->private);
--}
--
- struct cdat_doe_task {
- 	u32 request_pl;
- 	u32 response_pl[32];
--	struct completion c;
- 	struct pci_doe_task task;
- };
- 
- #define DECLARE_CDAT_DOE_TASK(req, cdt)                       \
- struct cdat_doe_task cdt = {                                  \
--	.c = COMPLETION_INITIALIZER_ONSTACK(cdt.c),           \
- 	.request_pl = req,				      \
- 	.task = {                                             \
- 		.prot.vid = PCI_DVSEC_VENDOR_ID_CXL,        \
-@@ -513,8 +506,6 @@ struct cdat_doe_task cdt = {                                  \
- 		.request_pl_sz = sizeof(cdt.request_pl),      \
- 		.response_pl = cdt.response_pl,               \
- 		.response_pl_sz = sizeof(cdt.response_pl),    \
--		.complete = cxl_doe_task_complete,            \
--		.private = &cdt.c,                            \
- 	}                                                     \
- }
- 
-@@ -525,12 +516,12 @@ static int cxl_cdat_get_length(struct device *dev,
- 	DECLARE_CDAT_DOE_TASK(CDAT_DOE_REQ(0), t);
- 	int rc;
- 
--	rc = pci_doe_submit_task(cdat_doe, &t.task);
-+	rc = pci_doe_submit_task_wait(cdat_doe, &t.task);
- 	if (rc < 0) {
- 		dev_err(dev, "DOE submit failed: %d", rc);
- 		return rc;
- 	}
--	wait_for_completion(&t.c);
+	#ifndef PR_PPC_DEXCR_...
+		return KSFT_SKIP;
+	#endif
+
+in the test itself?
+
+> * On handling an exception, I don't check if the NPHIE bit is enabled
+> in the DEXCR.
+> =C2=A0 To do so would require reading both the DEXCR and HDEXCR, for
+> little gain (it
+> =C2=A0 should only matter that the current instruction was a hashchk. If
+> so, the only
+> =C2=A0 reason it would cause an exception is the failed check. If the
+> instruction is
+> =C2=A0 rewritten between exception and check we'd be wrong anyway).
+
+For context, the hashst and hashchk instructions are implemented using
+previously reserved nops.  I'm not aware of any reason a nop could trap
+(i.e. we could check for a trap that came from hashchk even if NPHIE is
+not set), but afaik that'd be the only reason we would have to check.
+
+>=20
+> The series is based on the earlier selftest utils series[1], so the
+> tests won't build
+> at all without applying that first. The kernel side should build fine
+> on ppc/next
+> 247f34f7b80357943234f93f247a1ae6b6c3a740 though.
+>=20
+> [1]:
+> https://patchwork.ozlabs.org/project/linuxppc-dev/cover/20221122231103.15=
+829-1-bgray@linux.ibm.com/
+>=20
+> Benjamin Gray (13):
+> =C2=A0 powerpc/book3s: Add missing <linux/sched.h> include
+> =C2=A0 powerpc: Add initial Dynamic Execution Control Register (DEXCR)
+> =C2=A0=C2=A0=C2=A0 support
+> =C2=A0 powerpc/dexcr: Handle hashchk exception
+> =C2=A0 powerpc/dexcr: Support userspace ROP protection
+> =C2=A0 prctl: Define PowerPC DEXCR interface
+> =C2=A0 powerpc/dexcr: Add prctl implementation
+> =C2=A0 powerpc/dexcr: Add sysctl entry for SBHE system override
+> =C2=A0 powerpc/dexcr: Add enforced userspace ROP protection config
+> =C2=A0 selftests/powerpc: Add more utility macros
+> =C2=A0 selftests/powerpc: Add hashst/hashchk test
+> =C2=A0 selftests/powerpc: Add DEXCR prctl, sysctl interface test
+> =C2=A0 selftests/powerpc: Add DEXCR status utility lsdexcr
+> =C2=A0 Documentation: Document PowerPC kernel DEXCR interface
+>=20
+> =C2=A0Documentation/powerpc/dexcr.rst=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 183 +++++++++++
+> =C2=A0Documentation/powerpc/index.rst=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
+> =C2=A0arch/powerpc/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 5 +
+> =C2=A0arch/powerpc/include/asm/book3s/64/kexec.h=C2=A0=C2=A0=C2=A0 |=C2=
+=A0=C2=A0 6 +
+> =C2=A0arch/powerpc/include/asm/book3s/64/kup.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 |=C2=A0=C2=A0 1 +
+> =C2=A0arch/powerpc/include/asm/cputable.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 8 +-
+> =C2=A0arch/powerpc/include/asm/ppc-opcode.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
+> =C2=A0arch/powerpc/include/asm/processor.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 33 ++
+> =C2=A0arch/powerpc/include/asm/reg.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 7 +
+> =C2=A0arch/powerpc/kernel/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=
+=A0 1 +
+> =C2=A0arch/powerpc/kernel/dexcr.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 310
+> ++++++++++++++++++
+> =C2=A0arch/powerpc/kernel/dt_cpu_ftrs.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 4 +
+> =C2=A0arch/powerpc/kernel/process.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 31 +-
+> =C2=A0arch/powerpc/kernel/prom.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ |=C2=A0=C2=A0 4 +
+> =C2=A0arch/powerpc/kernel/traps.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=
+=A0=C2=A0 6 +
+> =C2=A0include/uapi/linux/prctl.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ |=C2=A0 14 +
+> =C2=A0kernel/sys.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=
+=A0 16 +
+> =C2=A0tools/testing/selftests/powerpc/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 |=C2=A0=C2=A0 1 +
+> =C2=A0.../selftests/powerpc/dexcr/.gitignore=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 3 +
+> =C2=A0.../testing/selftests/powerpc/dexcr/Makefile=C2=A0 |=C2=A0 11 +
+> =C2=A0tools/testing/selftests/powerpc/dexcr/cap.c=C2=A0=C2=A0 |=C2=A0 72 =
+++++
+> =C2=A0tools/testing/selftests/powerpc/dexcr/cap.h=C2=A0=C2=A0 |=C2=A0 18 =
 +
- 	if (t.task.rv < sizeof(u32))
- 		return -EIO;
- 
-@@ -554,12 +545,11 @@ static int cxl_cdat_read_table(struct device *dev,
- 		u32 *entry;
- 		int rc;
- 
--		rc = pci_doe_submit_task(cdat_doe, &t.task);
-+		rc = pci_doe_submit_task_wait(cdat_doe, &t.task);
- 		if (rc < 0) {
- 			dev_err(dev, "DOE submit failed: %d", rc);
- 			return rc;
- 		}
--		wait_for_completion(&t.c);
- 		/* 1 DW header + 1 DW data min */
- 		if (t.task.rv < (2 * sizeof(u32)))
- 			return -EIO;
-diff --git a/drivers/pci/doe.c b/drivers/pci/doe.c
-index 685e7d26c7eb..b399f0f4fb5d 100644
---- a/drivers/pci/doe.c
-+++ b/drivers/pci/doe.c
-@@ -18,7 +18,6 @@
- #include <linux/mutex.h>
- #include <linux/pci.h>
- #include <linux/pci-doe.h>
--#include <linux/workqueue.h>
- 
- #define PCI_DOE_PROTOCOL_DISCOVERY 0
- 
-@@ -40,7 +39,7 @@
-  * @cap_offset: Capability offset
-  * @prots: Array of protocols supported (encoded as long values)
-  * @wq: Wait queue for work item
-- * @work_queue: Queue of pci_doe_work items
-+ * @lock: Lock state of doe_mb during task processing
-  * @flags: Bit array of PCI_DOE_FLAG_* flags
-  */
- struct pci_doe_mb {
-@@ -49,7 +48,7 @@ struct pci_doe_mb {
- 	struct xarray prots;
- 
- 	wait_queue_head_t wq;
--	struct workqueue_struct *work_queue;
-+	struct mutex lock;
- 	unsigned long flags;
- };
- 
-@@ -196,12 +195,6 @@ static int pci_doe_recv_resp(struct pci_doe_mb *doe_mb, struct pci_doe_task *tas
- 	return min(length, task->response_pl_sz / sizeof(u32)) * sizeof(u32);
- }
- 
--static void signal_task_complete(struct pci_doe_task *task, int rv)
--{
--	task->rv = rv;
--	task->complete(task);
--}
--
- static void signal_task_abort(struct pci_doe_task *task, int rv)
- {
- 	struct pci_doe_mb *doe_mb = task->doe_mb;
-@@ -216,13 +209,11 @@ static void signal_task_abort(struct pci_doe_task *task, int rv)
- 			doe_mb->cap_offset);
- 		set_bit(PCI_DOE_FLAG_DEAD, &doe_mb->flags);
- 	}
--	signal_task_complete(task, rv);
-+	task->rv = rv;
- }
- 
--static void doe_statemachine_work(struct work_struct *work)
-+static void exec_task(struct pci_doe_task *task)
- {
--	struct pci_doe_task *task = container_of(work, struct pci_doe_task,
--						 work);
- 	struct pci_doe_mb *doe_mb = task->doe_mb;
- 	struct pci_dev *pdev = doe_mb->pdev;
- 	int offset = doe_mb->cap_offset;
-@@ -231,7 +222,7 @@ static void doe_statemachine_work(struct work_struct *work)
- 	int rc;
- 
- 	if (test_bit(PCI_DOE_FLAG_DEAD, &doe_mb->flags)) {
--		signal_task_complete(task, -EIO);
-+		task->rv = -EIO;
- 		return;
- 	}
- 
-@@ -276,12 +267,7 @@ static void doe_statemachine_work(struct work_struct *work)
- 		return;
- 	}
- 
--	signal_task_complete(task, rc);
--}
--
--static void pci_doe_task_complete(struct pci_doe_task *task)
--{
--	complete(task->private);
-+	task->rv = rc;
- }
- 
- static int pci_doe_discovery(struct pci_doe_mb *doe_mb, u8 *index, u16 *vid,
-@@ -290,7 +276,6 @@ static int pci_doe_discovery(struct pci_doe_mb *doe_mb, u8 *index, u16 *vid,
- 	u32 request_pl = FIELD_PREP(PCI_DOE_DATA_OBJECT_DISC_REQ_3_INDEX,
- 				    *index);
- 	u32 response_pl;
--	DECLARE_COMPLETION_ONSTACK(c);
- 	struct pci_doe_task task = {
- 		.prot.vid = PCI_VENDOR_ID_PCI_SIG,
- 		.prot.type = PCI_DOE_PROTOCOL_DISCOVERY,
-@@ -298,17 +283,13 @@ static int pci_doe_discovery(struct pci_doe_mb *doe_mb, u8 *index, u16 *vid,
- 		.request_pl_sz = sizeof(request_pl),
- 		.response_pl = &response_pl,
- 		.response_pl_sz = sizeof(response_pl),
--		.complete = pci_doe_task_complete,
--		.private = &c,
- 	};
- 	int rc;
- 
--	rc = pci_doe_submit_task(doe_mb, &task);
-+	rc = pci_doe_submit_task_wait(doe_mb, &task);
- 	if (rc < 0)
- 		return rc;
- 
--	wait_for_completion(&c);
--
- 	if (task.rv != sizeof(response_pl))
- 		return -EIO;
- 
-@@ -360,13 +341,6 @@ static void pci_doe_xa_destroy(void *mb)
- 	xa_destroy(&doe_mb->prots);
- }
- 
--static void pci_doe_destroy_workqueue(void *mb)
--{
--	struct pci_doe_mb *doe_mb = mb;
--
--	destroy_workqueue(doe_mb->work_queue);
--}
--
- /**
-  * pcim_doe_create_mb() - Create a DOE mailbox object
-  *
-@@ -392,25 +366,13 @@ struct pci_doe_mb *pcim_doe_create_mb(struct pci_dev *pdev, u16 cap_offset)
- 	doe_mb->pdev = pdev;
- 	doe_mb->cap_offset = cap_offset;
- 	init_waitqueue_head(&doe_mb->wq);
-+	mutex_init(&doe_mb->lock);
- 
- 	xa_init(&doe_mb->prots);
- 	rc = devm_add_action(dev, pci_doe_xa_destroy, doe_mb);
- 	if (rc)
- 		return ERR_PTR(rc);
- 
--	doe_mb->work_queue = alloc_ordered_workqueue("%s %s DOE [%x]", 0,
--						dev_driver_string(&pdev->dev),
--						pci_name(pdev),
--						doe_mb->cap_offset);
--	if (!doe_mb->work_queue) {
--		pci_err(pdev, "[%x] failed to allocate work queue\n",
--			doe_mb->cap_offset);
--		return ERR_PTR(-ENOMEM);
--	}
--	rc = devm_add_action_or_reset(dev, pci_doe_destroy_workqueue, doe_mb);
--	if (rc)
--		return ERR_PTR(rc);
--
- 	/* Reset the mailbox by issuing an abort */
- 	rc = pci_doe_abort(doe_mb);
- 	if (rc) {
-@@ -457,24 +419,25 @@ bool pci_doe_supports_prot(struct pci_doe_mb *doe_mb, u16 vid, u8 type)
- EXPORT_SYMBOL_GPL(pci_doe_supports_prot);
- 
- /**
-- * pci_doe_submit_task() - Submit a task to be processed by the state machine
-+ * pci_doe_submit_task_wait() - Submit and execute a task
-  *
-  * @doe_mb: DOE mailbox capability to submit to
-- * @task: task to be queued
-- *
-- * Submit a DOE task (request/response) to the DOE mailbox to be processed.
-- * Returns upon queueing the task object.  If the queue is full this function
-- * will sleep until there is room in the queue.
-+ * @task: task to be run
-  *
-- * task->complete will be called when the state machine is done processing this
-- * task.
-+ * Submit and run DOE task (request/response) to the DOE mailbox to be
-+ * processed.
-  *
-  * Excess data will be discarded.
-  *
-- * RETURNS: 0 when task has been successfully queued, -ERRNO on error
-+ * Context: non-interrupt
-+ *
-+ * RETURNS: 0 when task was executed, the @task->rv holds the status
-+ * result of the executed opertion, -ERRNO on failure to submit.
-  */
--int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
-+int pci_doe_submit_task_wait(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
- {
-+	int rc;
-+
- 	if (!pci_doe_supports_prot(doe_mb, task->prot.vid, task->prot.type))
- 		return -EINVAL;
- 
-@@ -490,8 +453,13 @@ int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
- 		return -EIO;
- 
- 	task->doe_mb = doe_mb;
--	INIT_WORK(&task->work, doe_statemachine_work);
--	queue_work(doe_mb->work_queue, &task->work);
-+
-+	rc = mutex_lock_interruptible(&doe_mb->lock);
-+	if (rc)
-+		return rc;
-+	exec_task(task);
-+	mutex_unlock(&doe_mb->lock);
-+
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(pci_doe_submit_task);
-+EXPORT_SYMBOL_GPL(pci_doe_submit_task_wait);
-diff --git a/include/linux/pci-doe.h b/include/linux/pci-doe.h
-index ed9b4df792b8..55e6e45b87f3 100644
---- a/include/linux/pci-doe.h
-+++ b/include/linux/pci-doe.h
-@@ -29,9 +29,6 @@ struct pci_doe_mb;
-  * @response_pl: The response payload
-  * @response_pl_sz: Size of the response payload (bytes)
-  * @rv: Return value.  Length of received response or error (bytes)
-- * @complete: Called when task is complete
-- * @private: Private data for the consumer
-- * @work: Used internally by the mailbox
-  * @doe_mb: Used internally by the mailbox
-  *
-  * The payload sizes and rv are specified in bytes with the following
-@@ -50,11 +47,6 @@ struct pci_doe_task {
- 	u32 *response_pl;
- 	size_t response_pl_sz;
- 	int rv;
--	void (*complete)(struct pci_doe_task *task);
--	void *private;
--
--	/* No need for the user to initialize these fields */
--	struct work_struct work;
- 	struct pci_doe_mb *doe_mb;
- };
- 
-@@ -72,6 +64,5 @@ struct pci_doe_task {
- 
- struct pci_doe_mb *pcim_doe_create_mb(struct pci_dev *pdev, u16 cap_offset);
- bool pci_doe_supports_prot(struct pci_doe_mb *doe_mb, u16 vid, u8 type);
--int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task);
--
-+int pci_doe_submit_task_wait(struct pci_doe_mb *doe_mb, struct pci_doe_task *task);
- #endif
--- 
-2.37.2
+> =C2=A0tools/testing/selftests/powerpc/dexcr/dexcr.c | 118 +++++++
+> =C2=A0tools/testing/selftests/powerpc/dexcr/dexcr.h |=C2=A0 54 +++
+> =C2=A0.../selftests/powerpc/dexcr/dexcr_test.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 | 241 ++++++++++++++
+> =C2=A0.../selftests/powerpc/dexcr/hashchk_test.c=C2=A0=C2=A0=C2=A0 | 229 =
++++++++++++++
+> =C2=A0.../testing/selftests/powerpc/dexcr/lsdexcr.c | 178 ++++++++++
+> =C2=A0tools/testing/selftests/powerpc/include/reg.h |=C2=A0=C2=A0 4 +
+> =C2=A0.../testing/selftests/powerpc/include/utils.h |=C2=A0 44 +++
+> =C2=A029 files changed, 1602 insertions(+), 2 deletions(-)
+> =C2=A0create mode 100644 Documentation/powerpc/dexcr.rst
+> =C2=A0create mode 100644 arch/powerpc/kernel/dexcr.c
+> =C2=A0create mode 100644 tools/testing/selftests/powerpc/dexcr/.gitignore
+> =C2=A0create mode 100644 tools/testing/selftests/powerpc/dexcr/Makefile
+> =C2=A0create mode 100644 tools/testing/selftests/powerpc/dexcr/cap.c
+> =C2=A0create mode 100644 tools/testing/selftests/powerpc/dexcr/cap.h
+> =C2=A0create mode 100644 tools/testing/selftests/powerpc/dexcr/dexcr.c
+> =C2=A0create mode 100644 tools/testing/selftests/powerpc/dexcr/dexcr.h
+> =C2=A0create mode 100644
+> tools/testing/selftests/powerpc/dexcr/dexcr_test.c
+> =C2=A0create mode 100644
+> tools/testing/selftests/powerpc/dexcr/hashchk_test.c
+> =C2=A0create mode 100644 tools/testing/selftests/powerpc/dexcr/lsdexcr.c
+>=20
+>=20
+> base-commit: 9dc58a6040662faaf24c8932861f485670fce7ff
+> --
+> 2.38.1
 
