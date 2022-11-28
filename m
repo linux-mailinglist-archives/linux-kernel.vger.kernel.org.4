@@ -2,106 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BBB63B0A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED1263B155
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234085AbiK1SBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 13:01:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
+        id S232328AbiK1Sbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 13:31:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232976AbiK1SAj (ORCPT
+        with ESMTP id S232583AbiK1SbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 13:00:39 -0500
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD3227DFE;
-        Mon, 28 Nov 2022 09:47:46 -0800 (PST)
-Received: by mail-pf1-f169.google.com with SMTP id b4so11207409pfb.9;
-        Mon, 28 Nov 2022 09:47:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mZKuvJhFRP5fDD1GxgFohQBtxaDdSsjAdzx3M27SwEE=;
-        b=yN4RJ/hOAMDCk0uORpcJusF+Sht+RaDxcesaQHwI1yVVMqupcYHCmOr7x5Du6s75p2
-         Nq4NSEYUMbcduw8AlF/2RXpP+J14qgbVqwe+6pisY9M0yc3+a5dkr8MXIoy3mjoBXMVH
-         6LupHLW8BdPrCzlpcve7fpFpM0hjMsIoQL+BSe3EXnTZTG/FEnHoZ+3W7YT7Gy8iFPvu
-         zyRZzt1YXu5ojYED7qGsqsDlBIgsMexHClZJduZmDWz1Ad5WG65HQ7QwdUp94pS4ttuX
-         BxgOLnT1MpwI4y8yiAVtrsXeH8UO+NBy+SR+13HLGYuPIcV11ALmcpIhGfkPVdRKby/l
-         ZLGA==
-X-Gm-Message-State: ANoB5plilEvB8qS7yQzVvAP+XTHDOGwCU13BgkgtBuViFIWSEHqycAT9
-        H6/G5R2Mlazl6r4K+meppPA=
-X-Google-Smtp-Source: AA0mqf5b56D5U7xlFZNXY9EV8a41oSDS7cAF4ID7GMgiHEd0+TF/j14hxb2MwuUJBqsLZOBxMzTEmQ==
-X-Received: by 2002:a63:1466:0:b0:476:cac7:16ad with SMTP id 38-20020a631466000000b00476cac716admr29993503pgu.128.1669657665374;
-        Mon, 28 Nov 2022 09:47:45 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:95f2:baa2:773c:2cfe? ([2620:15c:211:201:95f2:baa2:773c:2cfe])
-        by smtp.gmail.com with ESMTPSA id x189-20020a6231c6000000b0056cee8af3a6sm8304685pfx.54.2022.11.28.09.47.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 09:47:44 -0800 (PST)
-Message-ID: <de0c1d8a-42bb-4e29-4da0-7b0cfc9c2ffe@acm.org>
-Date:   Mon, 28 Nov 2022 09:47:41 -0800
+        Mon, 28 Nov 2022 13:31:22 -0500
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B536A1094;
+        Mon, 28 Nov 2022 10:27:05 -0800 (PST)
+Received: from in01.mta.xmission.com ([166.70.13.51]:35544)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oziGY-00778D-Ki; Mon, 28 Nov 2022 10:50:02 -0700
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:58100 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oziGW-006oqs-Bm; Mon, 28 Nov 2022 10:50:02 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     'Andy Lutomirski' <luto@kernel.org>, Jann Horn <jannh@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jorge Merlino <jorge.merlino@canonical.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "John Johansen" <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Richard Haines <richard_c_haines@btinternet.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Todd Kjos <tkjos@google.com>,
+        "Ondrej Mosnacek" <omosnace@redhat.com>,
+        Prashanth Prahlad <pprahlad@redhat.com>,
+        Micah Morton <mortonm@chromium.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "apparmor@lists.ubuntu.com" <apparmor@lists.ubuntu.com>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+References: <20221006082735.1321612-1-keescook@chromium.org>
+        <20221006082735.1321612-2-keescook@chromium.org>
+        <20221006090506.paqjf537cox7lqrq@wittgenstein>
+        <CAG48ez0sEkmaez9tYqgMXrkREmXZgxC9fdQD3mzF9cGo_=Tfyg@mail.gmail.com>
+        <2032f766-1704-486b-8f24-a670c0b3cb32@app.fastmail.com>
+        <d2a6ccdd8a734d36ae88866a4c16019b@AcuMS.aculab.com>
+Date:   Mon, 28 Nov 2022 11:49:07 -0600
+In-Reply-To: <d2a6ccdd8a734d36ae88866a4c16019b@AcuMS.aculab.com> (David
+        Laight's message of "Fri, 14 Oct 2022 22:03:18 +0000")
+Message-ID: <87sfi3rmuk.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v5 14/16] ufs: mcq: Add completion support of a cqe
-Content-Language: en-US
-To:     Manivannan Sadhasivam <mani@kernel.org>,
-        Asutosh Das <quic_asutoshd@quicinc.com>
-Cc:     quic_cang@quicinc.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, quic_nguyenb@quicinc.com,
-        quic_xiaosenh@quicinc.com, stanley.chu@mediatek.com,
-        eddie.huang@mediatek.com, daejun7.park@samsung.com,
-        avri.altman@wdc.com, beanhuo@micron.com,
-        linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <cover.1669176158.git.quic_asutoshd@quicinc.com>
- <32219cb9b058d7329ad8234a8a287701af1a0e34.1669176158.git.quic_asutoshd@quicinc.com>
- <20221128170015.GM62721@thinkpad>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20221128170015.GM62721@thinkpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1oziGW-006oqs-Bm;;;mid=<87sfi3rmuk.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX18hSeGIl+yv8nxANHdnXAlOdUtCNX9Vl/s=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;David Laight <David.Laight@ACULAB.COM>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1632 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 11 (0.7%), b_tie_ro: 10 (0.6%), parse: 1.09
+        (0.1%), extract_message_metadata: 13 (0.8%), get_uri_detail_list: 2.4
+        (0.1%), tests_pri_-1000: 8 (0.5%), tests_pri_-950: 1.25 (0.1%),
+        tests_pri_-900: 1.08 (0.1%), tests_pri_-200: 0.85 (0.1%),
+        tests_pri_-100: 9 (0.6%), tests_pri_-90: 77 (4.7%), check_bayes: 75
+        (4.6%), b_tokenize: 18 (1.1%), b_tok_get_all: 13 (0.8%), b_comp_prob:
+        4.0 (0.2%), b_tok_touch_all: 36 (2.2%), b_finish: 0.97 (0.1%),
+        tests_pri_0: 527 (32.3%), check_dkim_signature: 0.58 (0.0%),
+        check_dkim_adsp: 3.9 (0.2%), poll_dns_idle: 960 (58.9%), tests_pri_10:
+        2.1 (0.1%), tests_pri_500: 977 (59.9%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 1/2] fs/exec: Explicitly unshare fs_struct on exec
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/28/22 09:00, Manivannan Sadhasivam wrote:
-> On Tue, Nov 22, 2022 at 08:10:27PM -0800, Asutosh Das wrote:
->> Add support for completing requests from Completion Queue.
->> Some host controllers support vendor specific registers
->> that provide a bitmap of all CQ's which have at least one
->> completed CQE. Add this support.
->> The MCQ specification doesn't provide the Task Tag or its
->> equivalent in the Completion Queue Entry.
->> So use an indirect method to find the Task Tag from the
->> Completion Queue Entry.
->>
->> Co-developed-by: Can Guo <quic_cang@quicinc.com>
->> Signed-off-by: Can Guo <quic_cang@quicinc.com>
->> Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
->> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> What is this reported by for?
+David Laight <David.Laight@ACULAB.COM> writes:
 
-I think that tag should be left out. "Reported-by: kernel test robot" 
-should only be used for patches that fix bugs reported by the kernel 
-test robot. I assume that a fix has been folded in into this patch that 
-was reported by the kernel test robot. If that is the case, the 
-"Reported-by: kernel test robot" tag is inappropriate.
+> From: Andy Lutomirski
+>> Sent: 14 October 2022 04:18
+> ...
+>> But seriously, this makes no sense at all.  It should not be possible to exec a program and then,
+>> without ptrace, change its cwd out from under it.  Do we really need to preserve this behavior?
+>
+> it maybe ok if the exec'ed program also 'bought-in' to the
+> fact that its cwd and open files might get changed.
+> But imagine someone doing it to a login shell!
 
-Bart.
 
+I am slowly catching up on my email and I saw this conversation.
+
+When I initially saw this thread I was confused and thought this
+might run into an issue with fs/locks.c.  I was close but wrong.
+fs/locks.c uses current->files as a sort of process identifier
+and so is very sensitive to when it is unshared.  Making
+unsharing current->files unconditionally a bug.  Not relevant to
+this conversation.
+
+
+There are several clone options that were only relevant for the old
+LinuxThreads implementation including CLONE_FS and CLONE_SIGHAND.
+The LinuxThreads implementation has not been needed since
+the introduction of CLONE_THREAD in linux-2.6.0 in 17 Dec 2003.
+Almost 20 years ago.
+
+I suggest we introduce CONFIG_CLONE_FS and CONFIG_SIGHAND to allow
+disabling support of these clone options.  No known user space will
+care.  The are both getting in the way of kernel maintenance so there
+is a reason to start pushing them out.
+
+Further simply not worrying about UNSHARE_FS during exec fixes the
+race so it essentially a bug fix by code removal.
+
+I believe something like the patch below should get the job done.
+
+diff --git a/fs/exec.c b/fs/exec.c
+index a0b1f0337a62..7ff13c77ad04 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1186,7 +1186,8 @@ static int unshare_sighand(struct task_struct *me)
+ {
+ 	struct sighand_struct *oldsighand = me->sighand;
+ 
+-	if (refcount_read(&oldsighand->count) != 1) {
++	if (IS_ENABLED(CONFIG_CLONE_SIGHAND) &&
++	    refcount_read(&oldsighand->count) != 1) {
+ 		struct sighand_struct *newsighand;
+ 		/*
+ 		 * This ->sighand is shared with the CLONE_SIGHAND
+@@ -1568,6 +1569,9 @@ static void check_unsafe_exec(struct linux_binprm *bprm)
+ 	if (task_no_new_privs(current))
+ 		bprm->unsafe |= LSM_UNSAFE_NO_NEW_PRIVS;
+ 
++	if (!IS_ENABLED(CONFIG_CLONE_FS))
++		return;
++
+ 	t = p;
+ 	n_fs = 1;
+ 	spin_lock(&p->fs->lock);
+diff --git a/init/Kconfig b/init/Kconfig
+index 94125d3b6893..8660a6bcc1cf 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1764,6 +1764,23 @@ config KALLSYMS_BASE_RELATIVE
+ 	  time constants, and no relocation pass is required at runtime to fix
+ 	  up the entries based on the runtime load address of the kernel.
+ 
++config CLONE_FS
++	bool
++	default y
++	help
++	  Support CLONE_FS being passed to clone.  The only known user
++	  is the old LinuxThreads package so it should be safe to disable
++	  this option.
++
++config CLONE_SIGHAND
++	bool
++	default y
++	help
++	  Support CLONE_SIGHAND being passed to clone.  The only known user
++	  is the old LinuxThreads package so it should be safe to disable
++	  this option.
++
++
+ # end of the "standard kernel features (expert users)" menu
+ 
+ # syscall, maps, verifier
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 08969f5aa38d..da9017b51da4 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -2023,6 +2023,16 @@ static __latent_entropy struct task_struct *copy_process(
+ 	if ((clone_flags & CLONE_SIGHAND) && !(clone_flags & CLONE_VM))
+ 		return ERR_PTR(-EINVAL);
+ 
++	/* Don't allow CLONE_FS if not enabled */
++	if (!IS_ENABLED(CONFIG_CLONE_FS) &&
++	    ((clone_flags & (CLONE_THREAD | CLONE_FS)) == CLONE_FS))
++		return ERR_PTR(-EINVAL);
++
++	/* Don't allow CLONE_SIGHAND if not enabled */
++	if (!IS_ENABLED(CONFIG_CLONE_SIGHAND) &&
++	    ((clone_flags & (CLONE_THREAD | CLONE_SIGHAND)) == CLONE_SIGHAND))
++		return ERR_PTR(-EINVAL);
++
+ 	/*
+ 	 * Siblings of global init remain as zombies on exit since they are
+ 	 * not reaped by their parent (swapper). To solve this and to avoid
+@@ -3101,6 +3111,9 @@ static int unshare_fs(unsigned long unshare_flags, struct fs_struct **new_fsp)
+ 	if (fs->users == 1)
+ 		return 0;
+ 
++	if (!IS_ENABLED(CONFIG_CLONE_FS))
++		return -EINVAL;
++
+ 	*new_fsp = copy_fs_struct(fs);
+ 	if (!*new_fsp)
+ 		return -ENOMEM;
+
+Eric
