@@ -2,124 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDBD63AECF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6126C63AED9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:25:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232954AbiK1RZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 12:25:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
+        id S232974AbiK1RZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 12:25:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232429AbiK1RZE (ORCPT
+        with ESMTP id S232984AbiK1RZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:25:04 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A176D1EAEE
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:25:03 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id x18so7783095qki.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:25:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WISYZ1L8dfjkhr9HPz2HhCPMd5gq2zqE5S/0zz5aWa0=;
-        b=hcx970gPX8djEoRWtYW0NHM3NG3c5io9Z9ad1LPZUPufe2wTe0GoeT1ULY2q0sjog7
-         NncYkw5V+5VopZJInbOAWSlwue7xv6ssNaSdX5RMpm1CWKFEwvqeHvqNdotA32Ug6/Nj
-         SCcBemXPE/DvCahfHVNKFZFrtEMLnF1hGcWuMS0qjtL5qMTkRQabXULrNw40xHY6K0T/
-         hnooEZ1UjrCmv3U+mNOldEaKxF8/sDX5HYBFXeaKHCnSOzlmbTe+GNfXB5Jly9q66nfZ
-         OElGWiZxz02rWn3kQW5D0ru7zZEKl1aYBwyt3LAk17NUxUAW604R1mCCo9WnT4cwTO/G
-         xKPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WISYZ1L8dfjkhr9HPz2HhCPMd5gq2zqE5S/0zz5aWa0=;
-        b=srBDIKg1JJATVWW3qzNdqEqnb4goCYldoLO2lABQiaihM6L5cnRuTTDnqBn1tLnL2C
-         BD41oxPZL6z80Q0mHbgCO1pmTGLbASNUxv/csvTXblkMehNkBgMAYHL+i2Umwgmp44yU
-         dwCbBdHhdHh/uCd1pTYVlQSsUcicQh2Lb6oGyy13cBDzEYmSOnXPWBJlrzry0aW362fq
-         SMi/fBXPQFa6dAKKKZ6Y/x+PXfrOC2aAk41f3dN2T5pHe05+6Venbo2FmbDsJz4R9H7N
-         /+iKecgTjdB1UX5+xlLDsm8KU/cWDvB2cWM+7vDc3iOUleqLz425W6buAeeJjSxxRsDp
-         2fkQ==
-X-Gm-Message-State: ANoB5pkIEEThaOPCNQZUgRLl/Pogv3uOp7W4LpIcwCaHoKuVSMtzR9yS
-        R00hCdpm1KY6PpNtdE/jZ8N4eg==
-X-Google-Smtp-Source: AA0mqf7J2PGTa8s7U3vNZDbIq6NFc/rDbfTBe35D7AbD06oqD+c+yNMjAQxBaVljPT+i/M7mRn5ZcA==
-X-Received: by 2002:a05:620a:271f:b0:6fc:15c2:c4a8 with SMTP id b31-20020a05620a271f00b006fc15c2c4a8mr27490322qkp.174.1669656302813;
-        Mon, 28 Nov 2022 09:25:02 -0800 (PST)
-Received: from nathan-ideapad.. (d-75-76-18-234.oh.cpe.breezeline.net. [75.76.18.234])
-        by smtp.gmail.com with ESMTPSA id r9-20020a05622a034900b003a526675c07sm7322712qtw.52.2022.11.28.09.25.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 09:25:02 -0800 (PST)
-From:   Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-Cc:     nathan.morrison@timesys.com, greg.malysa@timesys.com,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org (open list:SPI NOR SUBSYSTEM),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] mtd: spi-nor: issi: Add in support for IS25LX256 chip, operating in 1S-1S-8S mode.
-Date:   Mon, 28 Nov 2022 12:24:54 -0500
-Message-Id: <20221128172455.159787-1-nathan.morrison@timesys.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 28 Nov 2022 12:25:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D61B20349;
+        Mon, 28 Nov 2022 09:25:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6D92B80E90;
+        Mon, 28 Nov 2022 17:25:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 002F2C433D6;
+        Mon, 28 Nov 2022 17:25:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669656311;
+        bh=wZlmYJl8LMxMeefdCbrE5viQuX+AZVgF+lHUSAzV8mA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jklUVBk1mHdNx5UwNOVAyoL9FcfwZD4B7KDGLSBvRl5IAv16CCb++ynZ+TPs/2xnW
+         Y09yfkYWX7Zusj8ufWXnQv3O5+iO2GnPgg5dqoMaQRFD7eFKipOag5+WZBxv2B/3hS
+         npOJ5H5324elD5m0VsViiZtApWHVqoGlQ7+jDW9I=
+Date:   Mon, 28 Nov 2022 18:25:09 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Johan Hovold <johan@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Raed Salem <raeds@nvidia.com>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Avihai Horon <avihaih@nvidia.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Wang Yufen <wangyufen@huawei.com>, linux-block@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 1/5] driver core: make struct class.dev_uevent() take a
+ const *
+Message-ID: <Y4Tu9UUGGiEdFcVw@kroah.com>
+References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
+ <d448b944-708a-32d4-37d7-0be16ee5f73c@acm.org>
+ <Y4NqAJW5V0tAP8ax@kroah.com>
+ <5b14cdea-1bbe-1900-0004-a218ba97bbcb@acm.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5b14cdea-1bbe-1900-0004-a218ba97bbcb@acm.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds the is25lx256 entry to the nor_parts table along with the additional
-fixup logic to operate in 1S-1S-8S mode while programming.
+On Sun, Nov 27, 2022 at 06:38:39PM -0800, Bart Van Assche wrote:
+> On 11/27/22 05:45, Greg Kroah-Hartman wrote:
+> > On Fri, Nov 25, 2022 at 03:51:11PM -0800, Bart Van Assche wrote:
+> > > On 11/23/22 04:25, Greg Kroah-Hartman wrote:
+> > > > diff --git a/include/linux/mISDNif.h b/include/linux/mISDNif.h
+> > > > index 7dd1f01ec4f9..7aab4a769736 100644
+> > > > --- a/include/linux/mISDNif.h
+> > > > +++ b/include/linux/mISDNif.h
+> > > > @@ -586,7 +586,7 @@ extern struct mISDNclock *mISDN_register_clock(char *, int, clockctl_func_t *,
+> > > >    						void *);
+> > > >    extern void	mISDN_unregister_clock(struct mISDNclock *);
+> > > > -static inline struct mISDNdevice *dev_to_mISDN(struct device *dev)
+> > > > +static inline struct mISDNdevice *dev_to_mISDN(const struct device *dev)
+> > > >    {
+> > > >    	if (dev)
+> > > >    		return dev_get_drvdata(dev);
+> > > 
+> > > Why does the dev_to_mISDN() function drop constness? I haven't found an
+> > > explanation for this in the cover letter.
+> > 
+> > I agree, this is going to be fixed up, see the thread starting here:
+> > 	https://lore.kernel.org/r/Y34+V2bCDdqujBDk@kroah.com
+> > 
+> > I'll work on making a const / non const version for these so that we
+> > don't loose the marking.
+> > 
+> > Oh wait, no, this function is fine, it's not modifying the device
+> > structure at all, and only returning the pointer in the private data
+> > stored in the device.  There is no loss of const-ness here.
+> 
+> Hi Greg,
+> 
+> This is what I found in include/linux/mISDNif.h:
+> 
+> struct mISDNdevice {
+> 	struct mISDNchannel	D;
+> 	u_int			id;
+> 	u_int			Dprotocols;
+> 	u_int			Bprotocols;
+> 	u_int			nrbchan;
+> 	u_char			channelmap[MISDN_CHMAP_SIZE];
+> 	struct list_head	bchannels;
+> 	struct mISDNchannel	*teimgr;
+> 	struct device		dev;
+> };
+> 
+> As one can see 'dev' is a member of struct mISDNdevice. I still think that
+> dev_to_mISDN() drops constness. Did I perhaps overlook something?
 
-Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
----
- drivers/mtd/spi-nor/issi.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+I think you are missing that dev_to_mISDN() is doing something different
+than most dev_to_FOO() functions do (i.e. there is no container_of()
+call here at all):
 
-diff --git a/drivers/mtd/spi-nor/issi.c b/drivers/mtd/spi-nor/issi.c
-index 89a66a19d754..e9b32b726bf3 100644
---- a/drivers/mtd/spi-nor/issi.c
-+++ b/drivers/mtd/spi-nor/issi.c
-@@ -29,6 +29,21 @@ static const struct spi_nor_fixups is25lp256_fixups = {
- 	.post_bfpt = is25lp256_post_bfpt_fixups,
- };
- 
-+static void is25lx256_post_sfdp_fixup(struct spi_nor *nor)
-+{
-+	/* Fixup page program command to 1S-1S-8S */
-+	nor->params->hwcaps.mask |= SNOR_HWCAPS_PP_1_1_8;
-+	spi_nor_set_pp_settings(&nor->params->page_programs[SNOR_CMD_PP_1_1_8],
-+				SPINOR_OP_PP_1_1_8, SNOR_PROTO_1_1_8);
-+
-+	/* Disable quad_enable */
-+	nor->params->quad_enable = NULL;
-+}
-+
-+static struct spi_nor_fixups is25lx256_fixups = {
-+	.post_sfdp = is25lx256_post_sfdp_fixup,
-+};
-+
- static void pm25lv_nor_late_init(struct spi_nor *nor)
- {
- 	struct spi_nor_erase_map *map = &nor->params->erase_map;
-@@ -74,6 +89,10 @@ static const struct flash_info issi_nor_parts[] = {
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
- 		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
- 		.fixups = &is25lp256_fixups },
-+	{ "is25lx256",  INFO(0x9d5a19, 0, 128 * 1024, 256)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_OCTAL_READ)
-+		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
-+		.fixups = &is25lx256_fixups },
- 
- 	/* PMC */
- 	{ "pm25lv512",   INFO(0,        0, 32 * 1024,    2)
--- 
-2.30.2
+static inline struct mISDNdevice *dev_to_mISDN(struct device *dev)
+{
+	if (dev)
+		return dev_get_drvdata(dev);
+	else
+		return NULL;
+}
 
+See, no pointer mess or anything else here, all that happens is the
+driver data pointer in struct device is returned.
+
+If this was a "normal" dev_to_FOO() function, then yes, the const-ness
+of the pointer would be called into question as the thread I linked to
+discusses.
+
+thanks,
+
+greg k-h
