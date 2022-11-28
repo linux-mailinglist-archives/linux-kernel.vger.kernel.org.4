@@ -2,140 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB14363A705
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 554FE63A70C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbiK1LS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 06:18:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
+        id S231292AbiK1LTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 06:19:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbiK1LSH (ORCPT
+        with ESMTP id S230123AbiK1LSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 06:18:07 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8028B1B9DF
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:18:06 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id r66-20020a1c4445000000b003d05a3775d4so1887290wma.3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:18:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j/wAlj9+lbLEBeIqsdF+yfeUS1s2V84+JTVk1VCdcTE=;
-        b=eLtpnITDJBZ4eC9WuN+NwFAZ7Z6Q9wtGvKkEguievQ+59Mk2Ve17OmAit8TaOcxvKM
-         9ZVS4Ku1Nbf2k5IO7W8uxcSf/xPiLO/HtBHmKUuAPB48FVoe7n0eO2FwZD5M1i94g2FS
-         afj8vKngWtKaGuxQQ59gHYv0zRK6ZGxdOVzWZA2sYo4g87HI3JnSqci+zlw/ZzoSyfWz
-         o79Ua3SmWjCeMIkSmoyJYckXE1qH8nQRbGgNFMmC+JQPfN91W26JPbkdF5+b1h+NyUCD
-         ovpRky4zA4/Tt+nO4cQ56RGCL94I9sx9n0gEHo/QXuuVIQCPX1VYYfcgkbuPt+FJFFHS
-         1J6Q==
+        Mon, 28 Nov 2022 06:18:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0F71A061
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:17:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669634271;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bfBW73LGL9+SMTcT0q3UKBY6n7ebNKGVYFSRGPrdczE=;
+        b=MvuMVSZNHXqapxtUIzdA8vfjBBX3aNG5S1ca/Pg+4uOLc4PwD8vtW+FIeMkDIfEZx6u6EN
+        P3rstCT5fK7U2PfPycla9Zy8VpmrxSYX7j8JsRS4Skvq5QjrYH2Eky18MTE/RGRaFwbTb8
+        DJVzWUUKLQbd7CSZpMHmMYYLDWkYN5A=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-245-NxOe1aT9Ncmafmcr2h4A-A-1; Mon, 28 Nov 2022 06:17:50 -0500
+X-MC-Unique: NxOe1aT9Ncmafmcr2h4A-A-1
+Received: by mail-lf1-f72.google.com with SMTP id q2-20020ac24a62000000b004b4ec7b83f3so3648781lfp.19
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:17:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=j/wAlj9+lbLEBeIqsdF+yfeUS1s2V84+JTVk1VCdcTE=;
-        b=w3LqprrBHY1d/M6/udf/XYjV6cVdnsRYWOcTMwyDg3uOaUvHyVE3Ny7wC14gs0fugt
-         YxclsiPw+e878j1t+6pBms5sLjMMRpshCRNtKSAdMU91IgHUBQjK0xZgnnBSBO1DA9nX
-         5iOQ/STZvb4hhHtzfkas/Vvs6XYRaHZsMVlFQIk5qizb7pwzRvRbkBi/vmS2EBhUe6mL
-         Gtc9JUHaqWonOsIyvcFVI0aNcUBr15TknrBZVCqPLYXuaacwSxnmVae2i2oalkZaPLOt
-         9idxmJ7qci6bQ3I4sssV7hgx4Jya2ECznV8331dat7/cSWhcXCK8KJWnW4b1PsZluKuE
-         7aow==
-X-Gm-Message-State: ANoB5pkoRdObGvDUASyjowUOuLCk/rAUIia+VCalyj0vBaVs4LBI1vfi
-        aoE/BZePWNKRwncvmmaM+4Y=
-X-Google-Smtp-Source: AA0mqf69eWYyZgMKdOGsUq0UPtisowcqx0w0ysK/Ur6civ9KWMfHY8SUYDhnxbdliyF6bhrfjnFrfQ==
-X-Received: by 2002:a05:600c:3d94:b0:3d0:552e:8d86 with SMTP id bi20-20020a05600c3d9400b003d0552e8d86mr4812413wmb.112.1669634284975;
-        Mon, 28 Nov 2022 03:18:04 -0800 (PST)
-Received: from cizrna.home (cst-prg-44-69.cust.vodafone.cz. [46.135.44.69])
-        by smtp.gmail.com with ESMTPSA id g3-20020adffc83000000b0024207ed4ce0sm7711817wrr.58.2022.11.28.03.18.04
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bfBW73LGL9+SMTcT0q3UKBY6n7ebNKGVYFSRGPrdczE=;
+        b=zEPgumCABQATUWc2QL4OBlfuaqLcIXYJjqIYkxgHVLK6hucCFp/5tEzX52yAqNsB8d
+         fM16dZWlT2e2Z6ELsaymHi8kUt73dRNIo5VFiOxsNb9fZSm17wyx1SHP2zSIpsih1U6X
+         5he9QvXK93Tcd8+OAW5NOePF2oUY2sf8410ox7UAUJvAJtfl51dOluJMFD0beMZgWo/4
+         EVCusK/PZ+LYHRo8C5y3IccriOfMHhwzG2CZjNu0KGuW83IHL1HdDuHwN0tI8eZiF9qw
+         PY8M6pLzYlfLVioLdpAfgB9H2JBCDEo33cYmwZXTCPI1zY5WC0aw9IYVXJxmD7pNlZf1
+         tdUQ==
+X-Gm-Message-State: ANoB5plx1OUaVd3ZAATuUhWg56kGZ+wHWAqE7OWI/iRdDCT4pxr8PjEq
+        6WTLobcXm5txbJs8Y21GdYkpghZZ5cKYb2QNssO+OMuNpWzOvRWc0DxbvXL/Oikwgck+C5yKLNl
+        O9COTDoNz+K84qvorc0WGlFd/
+X-Received: by 2002:a19:6917:0:b0:4b0:2da9:55d0 with SMTP id e23-20020a196917000000b004b02da955d0mr10495820lfc.187.1669634268568;
+        Mon, 28 Nov 2022 03:17:48 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4mc5mXsUXD1MdME9y94GOyO8gtF9VyPiX8dxqD782++BQhr3pi0l1rgNCaW19RrCU5CChosQ==
+X-Received: by 2002:a19:6917:0:b0:4b0:2da9:55d0 with SMTP id e23-20020a196917000000b004b02da955d0mr10495813lfc.187.1669634268372;
+        Mon, 28 Nov 2022 03:17:48 -0800 (PST)
+Received: from localhost.localdomain (c-e6a5e255.022-110-73746f36.bbcust.telenor.se. [85.226.165.230])
+        by smtp.googlemail.com with ESMTPSA id t1-20020ac25481000000b0048a982ad0a8sm1699609lfk.23.2022.11.28.03.17.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 03:18:04 -0800 (PST)
-Sender: Tomeu Vizoso <tomeu.vizoso@gmail.com>
-From:   Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Cc:     italonicola@collabora.com,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        etnaviv@lists.freedesktop.org (moderated list:DRM DRIVERS FOR VIVANTE
-        GPU IP),
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR VIVANTE GPU
-        IP), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 5/5] drm/etnaviv: add HWDB entry for VIPNano-QI.7120.0055
-Date:   Mon, 28 Nov 2022 12:17:38 +0100
-Message-Id: <20221128111740.39003-6-tomeu.vizoso@collabora.com>
+        Mon, 28 Nov 2022 03:17:47 -0800 (PST)
+From:   Alexander Larsson <alexl@redhat.com>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, gscrivan@redhat.com, alexl@redhat.com
+Subject: [PATCH 6/6] composefs: Add kconfig and build support
+Date:   Mon, 28 Nov 2022 12:17:39 +0100
+Message-Id: <a0524f492d2ac64b99f3de6ea2b27249a4bcadad.1669631086.git.alexl@redhat.com>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221128111740.39003-1-tomeu.vizoso@collabora.com>
-References: <20221128111740.39003-1-tomeu.vizoso@collabora.com>
+In-Reply-To: <cover.1669631086.git.alexl@redhat.com>
+References: <cover.1669631086.git.alexl@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a compute-only module marketed towards AI and vision
-acceleration. This particular version can be found on the Amlogic A311D
-SoC.
+This commit adds Makefile and Kconfig for composefs, and
+updates Makefile and Kconfig files in the fs directory
 
-The feature bits are taken from the Khadas downstream kernel driver
-6.4.4.3.310723AAA.
-
-Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Signed-off-by: Alexander Larsson <alexl@redhat.com>
 ---
- drivers/gpu/drm/etnaviv/etnaviv_hwdb.c | 31 ++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ fs/Kconfig            |  1 +
+ fs/Makefile           |  1 +
+ fs/composefs/Kconfig  | 18 ++++++++++++++++++
+ fs/composefs/Makefile |  5 +++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 fs/composefs/Kconfig
+ create mode 100644 fs/composefs/Makefile
 
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_hwdb.c b/drivers/gpu/drm/etnaviv/etnaviv_hwdb.c
-index f2fc645c7956..3f6fd9a3c088 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_hwdb.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_hwdb.c
-@@ -130,6 +130,37 @@ static const struct etnaviv_chip_identity etnaviv_chip_identities[] = {
- 		.minor_features10 = 0x90044250,
- 		.minor_features11 = 0x00000024,
- 	},
-+	{
-+		.model = 0x8000,
-+		.revision = 0x7120,
-+		.product_id = 0x45080009,
-+		.customer_id = 0x88,
-+		.eco_id = 0,
-+		.stream_count = 8,
-+		.register_max = 64,
-+		.thread_count = 256,
-+		.shader_core_count = 1,
-+		.vertex_cache_size = 16,
-+		.vertex_output_buffer_size = 1024,
-+		.pixel_pipes = 1,
-+		.instruction_count = 512,
-+		.num_constants = 320,
-+		.buffer_size = 0,
-+		.varyings_count = 16,
-+		.features = 0xe0287cac,
-+		.minor_features0 = 0xc1799eff,
-+		.minor_features1 = 0xfefbfadb,
-+		.minor_features2 = 0xeb9d6fbf,
-+		.minor_features3 = 0xedfffced,
-+		.minor_features4 = 0xd30dafc7,
-+		.minor_features5 = 0x7b5ac333,
-+		.minor_features6 = 0xfc8ee200,
-+		.minor_features7 = 0x03fffa6f,
-+		.minor_features8 = 0x00fe0ef0,
-+		.minor_features9 = 0x0088003c,
-+		.minor_features10 = 0x108048c0,
-+		.minor_features11 = 0x00000010,
-+	},
- };
+diff --git a/fs/Kconfig b/fs/Kconfig
+index 2685a4d0d353..de8493fc2b1e 100644
+--- a/fs/Kconfig
++++ b/fs/Kconfig
+@@ -127,6 +127,7 @@ source "fs/quota/Kconfig"
+ source "fs/autofs/Kconfig"
+ source "fs/fuse/Kconfig"
+ source "fs/overlayfs/Kconfig"
++source "fs/composefs/Kconfig"
  
- bool etnaviv_fill_identity_from_hwdb(struct etnaviv_gpu *gpu)
+ menu "Caches"
+ 
+diff --git a/fs/Makefile b/fs/Makefile
+index 4dea17840761..d16974e02468 100644
+--- a/fs/Makefile
++++ b/fs/Makefile
+@@ -137,3 +137,4 @@ obj-$(CONFIG_EFIVAR_FS)		+= efivarfs/
+ obj-$(CONFIG_EROFS_FS)		+= erofs/
+ obj-$(CONFIG_VBOXSF_FS)		+= vboxsf/
+ obj-$(CONFIG_ZONEFS_FS)		+= zonefs/
++obj-$(CONFIG_COMPOSEFS_FS)	+= composefs/
+diff --git a/fs/composefs/Kconfig b/fs/composefs/Kconfig
+new file mode 100644
+index 000000000000..88c5b55380e6
+--- /dev/null
++++ b/fs/composefs/Kconfig
+@@ -0,0 +1,18 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++config COMPOSEFS_FS
++	tristate "Composefs filesystem support"
++	select EXPORTFS
++	help
++	  Composefs is a filesystem that allows combining file content from
++	  existing regular files with a metadata directory structure from
++	  a separate binary file. This is useful to share file content between
++	  many different directory trees, such as in a local container image store.
++
++	  Composefs also allows using fs-verity to validate the content of the
++	  content-files as well as the metadata file which allows dm-verity
++	  like validation with the flexibility of regular files.
++
++	  For more information see Documentation/filesystems/composefs.rst
++
++	  If unsure, say N.
+diff --git a/fs/composefs/Makefile b/fs/composefs/Makefile
+new file mode 100644
+index 000000000000..eac8445e7d25
+--- /dev/null
++++ b/fs/composefs/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++obj-$(CONFIG_COMPOSEFS_FS) += composefs.o
++
++composefs-objs += cfs-reader.o cfs.o
 -- 
 2.38.1
 
