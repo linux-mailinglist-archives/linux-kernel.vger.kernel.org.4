@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5192063A93F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B98A63A941
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231906AbiK1NO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:14:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
+        id S231911AbiK1NPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:15:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbiK1NNm (ORCPT
+        with ESMTP id S231666AbiK1NNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Nov 2022 08:13:42 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3921DA5F;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907011B9C4;
         Mon, 28 Nov 2022 05:13:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1669641221; x=1701177221;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=U9TIyYUMDTGWF/am2zEWFCJshAZh6Eamp8JHDo02tn8=;
-  b=d1X0izXQsq8bimLuxoByKBtb50BbTS+NFW017jW42z9oH2Kx7+MdQCvw
-   DHnuol0lmQF9TtLyWyC9pnifMZ6+TH27FiVyCEb+1YQCl8zJxw0yR66sC
-   36dmkJm5y9XZnJlFOwIz2+5KvQjomBjdDvjFhNaRP5Ul8okM6MEXs4/ye
-   USKMXdv4UnRDepjeAdDyn0KDAjbFBjzsgF4vL0iZlVu74c8/SwZwBbjts
-   8xc/pV7265ZSHrW0afZzECNLxJfa5oCmRb/fIJ9UcTwdmC9nc9xopYDm4
-   /SsGNA2pbDDXf4C+sMg/TOVhQyuget34YhnmjDe9LaDLPeCBNYsa7699Z
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="401117261"
+  bh=PIe0SGbn3SQDW/BsVmI7VngYYmBv3E8AzHVNV7RbEPw=;
+  b=E/Bedru4SRJxz0kyZ8401LjnEyu0QpOhrf3kb9UrBjy1Xr5fxQb/8Y2k
+   znOEIgvlr+EQq7fnSoGKQ9HS+kbJuBc3cvjqN9/zDtWDt/gr5pySlWN5X
+   0rJycqYZZu+wdBpBKCT/M6ky265Kq+lHdjd1JxCz7D9mgoPRJqc7mTs2O
+   QflTBSm/RsqFXxttcvIUT6XTO5HcNjyung4F2iygT9MBaxN5JbpAzjRcz
+   fh+bGDm8l3q5wzjoHUwN4pdvQBa/cCIRA/i+TWr+AX4hieC6YdFoldlu2
+   6qTAEBSoiYgWZTibirPYMYVlJ/VVZ/7OgTjmlwodhbpsgTM+brpWv09gm
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="401117273"
 X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="401117261"
+   d="scan'208";a="401117273"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 05:13:36 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="749381398"
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="749381402"
 X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="749381398"
+   d="scan'208";a="749381402"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by fmsmga002.fm.intel.com with ESMTP; 28 Nov 2022 05:13:36 -0800
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -58,9 +58,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [PATCH v2 20/22] x86/cpufeatures: Add feature bit for HRESET
-Date:   Mon, 28 Nov 2022 05:20:58 -0800
-Message-Id: <20221128132100.30253-21-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v2 21/22] x86/hreset: Configure history reset
+Date:   Mon, 28 Nov 2022 05:20:59 -0800
+Message-Id: <20221128132100.30253-22-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
 References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
@@ -73,9 +73,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The HRESET instruction prevents the classification of the current task
-from influencing the classification of the next task when running serially
-on the same logical processor.
+Configure the MSR that controls the behavior of HRESET on each logical
+processor.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -94,57 +93,56 @@ Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v1:
- * None
+ * Marked hardware_history_features as __ro_after_init instead of
+   __read_mostly. (PeterZ)
 ---
- arch/x86/include/asm/cpufeatures.h | 1 +
- arch/x86/include/asm/msr-index.h   | 4 +++-
- arch/x86/kernel/cpu/scattered.c    | 1 +
- 3 files changed, 5 insertions(+), 1 deletion(-)
+ arch/x86/kernel/cpu/common.c | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 80b2beafc81e..281a7c861b8d 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -308,6 +308,7 @@
- #define X86_FEATURE_CALL_DEPTH		(11*32+19) /* "" Call depth tracking for RSB stuffing */
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 73cc546e024d..f8630da2a6dd 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -412,6 +412,26 @@ static __always_inline void setup_umip(struct cpuinfo_x86 *c)
+ 	cr4_clear_bits(X86_CR4_UMIP);
+ }
  
- #define X86_FEATURE_MSR_TSX_CTRL	(11*32+20) /* "" MSR IA32_TSX_CTRL (Intel) implemented */
-+#define X86_FEATURE_HRESET		(11*32+21) /* Hardware history reset instruction */
- 
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 96303330223b..7a3ff73164bd 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -1078,6 +1078,9 @@
- #define MSR_IA32_HW_FEEDBACK_THREAD_CONFIG 0x17d4
- #define MSR_IA32_HW_FEEDBACK_CHAR	0x17d2
- 
-+/* Hardware History Reset  */
-+#define MSR_IA32_HW_HRESET_ENABLE	0x17da
++static u32 hardware_history_features __ro_after_init;
 +
- /* x2APIC locked status */
- #define MSR_IA32_XAPIC_DISABLE_STATUS	0xBD
- #define LEGACY_XAPIC_DISABLED		BIT(0) /*
-@@ -1085,5 +1088,4 @@
- 						* disabling x2APIC will cause
- 						* a #GP
- 						*/
--
- #endif /* _ASM_X86_MSR_INDEX_H */
-diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
-index f53944fb8f7f..66bc5713644d 100644
---- a/arch/x86/kernel/cpu/scattered.c
-+++ b/arch/x86/kernel/cpu/scattered.c
-@@ -28,6 +28,7 @@ static const struct cpuid_bit cpuid_bits[] = {
- 	{ X86_FEATURE_EPB,		CPUID_ECX,  3, 0x00000006, 0 },
- 	{ X86_FEATURE_INTEL_PPIN,	CPUID_EBX,  0, 0x00000007, 1 },
- 	{ X86_FEATURE_RRSBA_CTRL,	CPUID_EDX,  2, 0x00000007, 2 },
-+	{ X86_FEATURE_HRESET,		CPUID_EAX, 22, 0x00000007, 1 },
- 	{ X86_FEATURE_CQM_LLC,		CPUID_EDX,  1, 0x0000000f, 0 },
- 	{ X86_FEATURE_CQM_OCCUP_LLC,	CPUID_EDX,  0, 0x0000000f, 1 },
- 	{ X86_FEATURE_CQM_MBM_TOTAL,	CPUID_EDX,  1, 0x0000000f, 1 },
++static __always_inline void setup_hreset(struct cpuinfo_x86 *c)
++{
++	if (!cpu_feature_enabled(X86_FEATURE_HRESET))
++		return;
++
++	/*
++	 * Use on all CPUs the hardware history features that the boot
++	 * CPU supports.
++	 */
++	if (c == &boot_cpu_data)
++		hardware_history_features = cpuid_ebx(0x20);
++
++	if (!hardware_history_features)
++		return;
++
++	wrmsrl(MSR_IA32_HW_HRESET_ENABLE, hardware_history_features);
++}
++
+ /* These bits should not change their value after CPU init is finished. */
+ static const unsigned long cr4_pinned_mask =
+ 	X86_CR4_SMEP | X86_CR4_SMAP | X86_CR4_UMIP |
+@@ -1844,10 +1864,11 @@ static void identify_cpu(struct cpuinfo_x86 *c)
+ 	/* Disable the PN if appropriate */
+ 	squash_the_stupid_serial_number(c);
+ 
+-	/* Set up SMEP/SMAP/UMIP */
++	/* Set up SMEP/SMAP/UMIP/HRESET */
+ 	setup_smep(c);
+ 	setup_smap(c);
+ 	setup_umip(c);
++	setup_hreset(c);
+ 
+ 	/* Enable FSGSBASE instructions if available. */
+ 	if (cpu_has(c, X86_FEATURE_FSGSBASE)) {
 -- 
 2.25.1
 
