@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CAF63A199
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 07:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 237A363A19C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 07:55:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiK1Gyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 01:54:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
+        id S229616AbiK1GzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 01:55:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbiK1Gyd (ORCPT
+        with ESMTP id S229921AbiK1Gym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 01:54:33 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF9F140F2
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 22:54:28 -0800 (PST)
+        Mon, 28 Nov 2022 01:54:42 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075141570D
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 22:54:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669618468; x=1701154468;
+  t=1669618475; x=1701154475;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=vVcsLAcU1x+PF9hn6JDVgVNAyf43Jf3te2XqSzSydEI=;
-  b=akk2e6Cn8+BmPi5qcvivMy9PpVVTSuEo0yg/MzMD+4rCao4yCPopkAEK
-   TQyxnkx+l7IU8rdPDe8rt3ihYkm0Z/5RsJB5ESC0fWT9az4W9mFuHtuP6
-   kPxa/evAYhGxlHWhOUgLh/m2Ffo7QT/9/jOpqxuQ+nHQmV2rUGtQARW/N
-   lMYrmpHhgQmoPhVkEHnHQFiKH+pT5WKnJCHeTKxp+3WnZjJiFGm78inQu
-   3VGC9MW9swFiINN8R0/KdXGxAjEa+zPtBHvlViGUa2rzSO/3csHFctF+v
-   dC3m9KGDCDJTzvVHOyApdfrb6KlAFcrv0PrBGRuJgso0fs9DILaOMGtpK
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="376901409"
+  bh=+lnyWGzP426cIHCkMlfBmYCgDIrk0H3K0Lf9o9XVkwk=;
+  b=kPyy88A47wH5jjIh9Fvodkq4vpADhq4qwlpRi/+XF2CrrIARj1ZRRcoc
+   BCUGDfUVf79ZcD6TbHmAEJdH5Zgfruuvh0DsFemMAwD+Q3SQ08/xmcx6a
+   gowL6tzmryDGp70slU2AJnCGc7KT7qcadNufUAl49xVkfRQcZLq0cUJsK
+   mL0FWRHTIEx3gWQhUHksbk7lDJxgYvwrvnRRXqlJkSakOex+KcVO1ciwj
+   FLQiJ8gT7n5DS32lq4g+qYgmN/5IVuztPhf3IDnZCF+96poVUcqi22dfq
+   C+Nvs8YZ6Y/Z/0VQMfRijzLQkAmNxY/CfOoUcwMda/bifiDUiE5cMbvEn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="295145602"
 X-IronPort-AV: E=Sophos;i="5.96,199,1665471600"; 
-   d="scan'208";a="376901409"
+   d="scan'208";a="295145602"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2022 22:54:27 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2022 22:54:34 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="674120767"
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="674120774"
 X-IronPort-AV: E=Sophos;i="5.96,199,1665471600"; 
-   d="scan'208";a="674120767"
+   d="scan'208";a="674120774"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga008.jf.intel.com with ESMTP; 27 Nov 2022 22:54:21 -0800
+  by orsmga008.jf.intel.com with ESMTP; 27 Nov 2022 22:54:27 -0800
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
         Christoph Hellwig <hch@infradead.org>,
@@ -65,9 +65,9 @@ Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v3 03/20] iommu/qcom: Remove detach_dev callback
-Date:   Mon, 28 Nov 2022 14:46:31 +0800
-Message-Id: <20221128064648.1934720-4-baolu.lu@linux.intel.com>
+Subject: [PATCH v3 04/20] iommu/exynos: Remove detach_dev callback
+Date:   Mon, 28 Nov 2022 14:46:32 +0800
+Message-Id: <20221128064648.1934720-5-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221128064648.1934720-1-baolu.lu@linux.intel.com>
 References: <20221128064648.1934720-1-baolu.lu@linux.intel.com>
@@ -87,50 +87,21 @@ be called. Remove it to avoid dead code.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- drivers/iommu/arm/arm-smmu/qcom_iommu.c | 23 -----------------------
- 1 file changed, 23 deletions(-)
+ drivers/iommu/exynos-iommu.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-index 270c3d9128ba..d7be3adee426 100644
---- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-+++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-@@ -387,28 +387,6 @@ static int qcom_iommu_attach_dev(struct iommu_domain *domain, struct device *dev
- 	return 0;
- }
- 
--static void qcom_iommu_detach_dev(struct iommu_domain *domain, struct device *dev)
--{
--	struct qcom_iommu_domain *qcom_domain = to_qcom_iommu_domain(domain);
--	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
--	struct qcom_iommu_dev *qcom_iommu = to_iommu(dev);
--	unsigned i;
--
--	if (WARN_ON(!qcom_domain->iommu))
--		return;
--
--	pm_runtime_get_sync(qcom_iommu->dev);
--	for (i = 0; i < fwspec->num_ids; i++) {
--		struct qcom_iommu_ctx *ctx = to_ctx(qcom_domain, fwspec->ids[i]);
--
--		/* Disable the context bank: */
--		iommu_writel(ctx, ARM_SMMU_CB_SCTLR, 0);
--
--		ctx->domain = NULL;
--	}
--	pm_runtime_put_sync(qcom_iommu->dev);
--}
--
- static int qcom_iommu_map(struct iommu_domain *domain, unsigned long iova,
- 			  phys_addr_t paddr, size_t pgsize, size_t pgcount,
- 			  int prot, gfp_t gfp, size_t *mapped)
-@@ -583,7 +561,6 @@ static const struct iommu_ops qcom_iommu_ops = {
- 	.pgsize_bitmap	= SZ_4K | SZ_64K | SZ_1M | SZ_16M,
+diff --git a/drivers/iommu/exynos-iommu.c b/drivers/iommu/exynos-iommu.c
+index b0cde2211987..29ec713e8a21 100644
+--- a/drivers/iommu/exynos-iommu.c
++++ b/drivers/iommu/exynos-iommu.c
+@@ -1404,7 +1404,6 @@ static const struct iommu_ops exynos_iommu_ops = {
+ 	.of_xlate = exynos_iommu_of_xlate,
  	.default_domain_ops = &(const struct iommu_domain_ops) {
- 		.attach_dev	= qcom_iommu_attach_dev,
--		.detach_dev	= qcom_iommu_detach_dev,
- 		.map_pages	= qcom_iommu_map,
- 		.unmap_pages	= qcom_iommu_unmap,
- 		.flush_iotlb_all = qcom_iommu_flush_iotlb_all,
+ 		.attach_dev	= exynos_iommu_attach_device,
+-		.detach_dev	= exynos_iommu_detach_device,
+ 		.map		= exynos_iommu_map,
+ 		.unmap		= exynos_iommu_unmap,
+ 		.iova_to_phys	= exynos_iommu_iova_to_phys,
 -- 
 2.34.1
 
