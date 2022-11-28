@@ -2,90 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9380863A59A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E72B63A595
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbiK1KC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 05:02:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43574 "EHLO
+        id S229988AbiK1KCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 05:02:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiK1KCm (ORCPT
+        with ESMTP id S230144AbiK1KCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 05:02:42 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865CB227;
-        Mon, 28 Nov 2022 02:02:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669629761; x=1701165761;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NhUa7axR7dY8Z8jFaQDCM653suLQTUT/HBlRpKPGoGU=;
-  b=oJTYzB6FbHTEd34lZZwnm0xFob+ZwDA/LOdvNIM/+wfcMAE3upwQ4O5E
-   /SQpJWfpuDge+PWi2UxiMsp0jtlaoZR+UKLrCQhSgpTWu8TvvrrLhW7v3
-   OUEEm1hR7hlFZ11nRWsunPjisusCYPMifKpLfCfYyv/mF3jvPCxC4Q3X3
-   eoV3FaBiPTFOpWUMvl40xhFmE+GYeRGvtJboxF1A/rjruMHUcc+u36xpK
-   5IdcuVMZj472Foh+8xsKfGqI/zxwwNi3Y/qjDmlKWkTrZI/aH9O6ksk5g
-   Oe4WqLM7YVZ3ZORzrR9VY0uB2d/WfrwR/1ydLzIsVNyJi1ghd90L0quf+
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="379051057"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="379051057"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 02:02:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="643332351"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="643332351"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 28 Nov 2022 02:02:32 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ozay6-0014By-1Z;
-        Mon, 28 Nov 2022 12:02:30 +0200
-Date:   Mon, 28 Nov 2022 12:02:30 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Michael Walle <michael@walle.cc>
-Cc:     William Breathitt Gray <william.gray@linaro.org>,
-        linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        broonie@kernel.org
-Subject: Re: [PATCH v3 3/9] gpio: 104-dio-48e: Migrate to the regmap-irq API
-Message-ID: <Y4SHNtoVnZw1ZjgA@smile.fi.intel.com>
-References: <cover.1669100542.git.william.gray@linaro.org>
- <80fc819bcafe9697b6e02c0750d3cf0ea4ec9e1b.1669100542.git.william.gray@linaro.org>
- <Y3414YhVjqKakddV@smile.fi.intel.com>
- <Y3ykg1Vc96Px6ovg@fedora>
- <3a23df35a35cdba19eeb10c75b5bca97@walle.cc>
- <Y4SCZKr3uEXTQmHZ@smile.fi.intel.com>
- <74fb9467d82cc55e74468459984e9090@walle.cc>
+        Mon, 28 Nov 2022 05:02:37 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AF32FB
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:02:35 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id k3-20020a92c243000000b0030201475a6bso8422774ilo.9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:02:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UuMDQXrQJI5bLgNlAUFHn9AbPdwrhvP4abr+9RSvNgI=;
+        b=GphRYmOZ+nTUJ+0Pv623khZa1wOwOGbeaswsPxcZHgKwiDanDaYJyTWu8anh4ru9kk
+         +ntzncfFC7bmFheaDJnVzgXFE5hjyXDjtze1925Vlb7TmT+hQ33I4+VmTpa4l5g8qXbZ
+         fx3EYW0Cc6IfppPROIPMbmgN8o5YgWY0Ct4jw6zCHIQgk28LpfF1kq8Fw75SH0igHObb
+         v/mjXIFiX5CILzA0917KEeLtqR7LAqoM+UH5J5r9cIL5tDWAlimfRUQ7f0YTS2ebmdJe
+         SKHZN0vW6BWgoMvHfTEVxB0oxdfAs0xaNGXJsvsCAkl4UyFIDhVbV6+gy9tpAWxoPn/q
+         O84A==
+X-Gm-Message-State: ANoB5pmAkzxduJOLvwTf/Ir62xmD++lQalHGRU2azORkmx5IxLuizJ4X
+        EJZ3hJv5S57a1OuTFZB12A1eXDKVkn529064mjBppkxyMmeX
+X-Google-Smtp-Source: AA0mqf5F/tQKQSiBuKboe8SFjrnGJ513EySs0veclV8Yogbsoe5JcSrUEfJd3sIeD8wIi1dU0w66xBCTg8WkwTRr13QPN7aRSwwT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <74fb9467d82cc55e74468459984e9090@walle.cc>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:11d4:b0:389:ce3c:4ca5 with SMTP id
+ g20-20020a05663811d400b00389ce3c4ca5mr4857781jas.308.1669629754780; Mon, 28
+ Nov 2022 02:02:34 -0800 (PST)
+Date:   Mon, 28 Nov 2022 02:02:34 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000070b0b205ee84f87f@google.com>
+Subject: [syzbot] KASAN: slab-out-of-bounds Read in hfsplus_uni2asc
+From:   syzbot <syzbot+076d963e115823c4b9be@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 10:56:06AM +0100, Michael Walle wrote:
-> Am 2022-11-28 10:41, schrieb Andy Shevchenko:
-> > Of course there are drivers that are using it and it's not in
-> > their ->probe():s
-> 
-> I was speaking of gpio drivers which use the regmap-irq stuff. I
-> couldn't find any which are using {devm_,}regmap_add_irq_chip*()
-> and gpiochip.init_hw().
+Hello,
 
-Ah, that's true.
+syzbot found the following issue on:
 
--- 
-With Best Regards,
-Andy Shevchenko
+HEAD commit:    faf68e3523c2 Merge tag 'kbuild-fixes-v6.1-4' of git://git...
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=14c2e5c3880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
+dashboard link: https://syzkaller.appspot.com/bug?extid=076d963e115823c4b9be
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10505e8d880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=137b71c3880000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/3bfa6577f378/disk-faf68e35.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7bf0af58cde3/vmlinux-faf68e35.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3e15d7d640b0/bzImage-faf68e35.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/ebef14156e65/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+076d963e115823c4b9be@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 1024
+==================================================================
+BUG: KASAN: slab-out-of-bounds in hfsplus_uni2asc+0x683/0x1290 fs/hfsplus/unicode.c:179
+Read of size 2 at addr ffff88801887a40c by task syz-executor412/3632
+
+CPU: 1 PID: 3632 Comm: syz-executor412 Not tainted 6.1.0-rc6-syzkaller-00315-gfaf68e3523c2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ print_address_description+0x74/0x340 mm/kasan/report.c:284
+ print_report+0x107/0x1f0 mm/kasan/report.c:395
+ kasan_report+0xcd/0x100 mm/kasan/report.c:495
+ hfsplus_uni2asc+0x683/0x1290 fs/hfsplus/unicode.c:179
+ hfsplus_readdir+0x8be/0x1230 fs/hfsplus/dir.c:207
+ iterate_dir+0x257/0x5f0
+ __do_sys_getdents64 fs/readdir.c:369 [inline]
+ __se_sys_getdents64+0x1db/0x4c0 fs/readdir.c:354
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc1946c8869
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff9a1bc768 EFLAGS: 00000246 ORIG_RAX: 00000000000000d9
+RAX: ffffffffffffffda RBX: 000000000000003f RCX: 00007fc1946c8869
+RDX: 0000000000000061 RSI: 0000000020000340 RDI: 0000000000000004
+RBP: 00007fc194688100 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fc194688190
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+Allocated by task 3632:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x3d/0x60 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:371 [inline]
+ __kasan_kmalloc+0x97/0xb0 mm/kasan/common.c:380
+ kasan_kmalloc include/linux/kasan.h:211 [inline]
+ __do_kmalloc_node mm/slab_common.c:955 [inline]
+ __kmalloc+0xaf/0x1a0 mm/slab_common.c:968
+ kmalloc include/linux/slab.h:558 [inline]
+ hfsplus_find_init+0x80/0x1b0 fs/hfsplus/bfind.c:21
+ hfsplus_readdir+0x1a5/0x1230 fs/hfsplus/dir.c:144
+ iterate_dir+0x257/0x5f0
+ __do_sys_getdents64 fs/readdir.c:369 [inline]
+ __se_sys_getdents64+0x1db/0x4c0 fs/readdir.c:354
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff88801887a000
+ which belongs to the cache kmalloc-2k of size 2048
+The buggy address is located 1036 bytes inside of
+ 2048-byte region [ffff88801887a000, ffff88801887a800)
+
+The buggy address belongs to the physical page:
+page:ffffea0000621e00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x18878
+head:ffffea0000621e00 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 0000000000000000 dead000000000001 ffff888012842000
+raw: 0000000000000000 0000000080080008 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (swapper/0), ts 2305445820, free_ts 0
+ prep_new_page mm/page_alloc.c:2539 [inline]
+ get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4291
+ __alloc_pages+0x259/0x560 mm/page_alloc.c:5558
+ alloc_page_interleave+0x22/0x1c0 mm/mempolicy.c:2118
+ alloc_slab_page+0x70/0xf0 mm/slub.c:1794
+ allocate_slab+0x5e/0x4b0 mm/slub.c:1939
+ new_slab mm/slub.c:1992 [inline]
+ ___slab_alloc+0x782/0xe20 mm/slub.c:3180
+ __slab_alloc mm/slub.c:3279 [inline]
+ slab_alloc_node mm/slub.c:3364 [inline]
+ __kmem_cache_alloc_node+0x252/0x310 mm/slub.c:3437
+ kmalloc_trace+0x26/0x60 mm/slab_common.c:1045
+ kmalloc include/linux/slab.h:553 [inline]
+ kzalloc include/linux/slab.h:689 [inline]
+ acpi_os_allocate_zeroed include/acpi/platform/aclinuxex.h:57 [inline]
+ acpi_ds_create_walk_state+0xe2/0x292 drivers/acpi/acpica/dswstate.c:518
+ acpi_ds_auto_serialize_method+0xe1/0x22c drivers/acpi/acpica/dsmethod.c:81
+ acpi_ds_init_one_object+0x1a8/0x34f drivers/acpi/acpica/dsinit.c:110
+ acpi_ns_walk_namespace+0x250/0x4bf
+ acpi_ds_initialize_objects+0x149/0x23d drivers/acpi/acpica/dsinit.c:189
+ acpi_ns_load_table+0xf4/0x118 drivers/acpi/acpica/nsload.c:106
+ acpi_tb_load_namespace+0x283/0x6cc drivers/acpi/acpica/tbxfload.c:158
+ acpi_load_tables+0x45/0xf5 drivers/acpi/acpica/tbxfload.c:59
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffff88801887a300: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff88801887a380: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff88801887a400: 00 04 fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+                      ^
+ ffff88801887a480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88801887a500: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
