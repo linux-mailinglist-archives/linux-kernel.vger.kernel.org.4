@@ -2,172 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 181B563A455
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:10:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D4D263A44C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbiK1JKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 04:10:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
+        id S229679AbiK1JK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 04:10:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiK1JKk (ORCPT
+        with ESMTP id S229603AbiK1JKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 04:10:40 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574AD1839E
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:10:39 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id td2so9992007ejc.5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:10:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9ubdN1bACjKh+qjO28e9C129nQGAl5iy3AArXYr64tA=;
-        b=CGIt3hTLCHNo7o4kNPYEi01hMNFq6HcqbpnhXDpYaolzFNCWPKZDVAiKB0j/C5S+O0
-         0XBTmjLWIAsGP7fP+zKvcfefLmGVkmOKMAulmY0h4aUBuLvXLckOD+81KwAaEuJjZUni
-         TtdfCWzaJp5TO9hlGKgX6DsLDa3FClxwPkUlo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9ubdN1bACjKh+qjO28e9C129nQGAl5iy3AArXYr64tA=;
-        b=eQvinV5kRqwYF/F9X0Gv32KyX+JDhQSqAo+xGZQ09vmulp9JPP6hCU+uRoxicykGIs
-         e4XFRdhjf9vdL969sZEk/J+BhAuSBCEHdUZo0ybDhr7df/w4u66SNe1VcfnIcppb2GMA
-         Vl2Y4/PhOfkWmqB6UE1CEcvER9kecEOZM3ybKP4QK70YKAricyvtj9QQRmT+3crbYD7H
-         Y7z90JG1Lvo5P53hBW9SD7M2CAhkJMuMYpJ5ldgfUwi7Ddqv7/UgiLs+TVY0cCI2MSHO
-         cPBVikGhYTWl5/zUktKOhn4IoW3Wf+HLbxDMW0KH2EgeQMzdmip2KnOjJQ1D5icEqthv
-         6u6Q==
-X-Gm-Message-State: ANoB5pmR2LHWAuRzYigKd1dgyw7HW1QmLt2LxbHqSj9syZ8AG8D6VwTF
-        JNLrrdHCmZ9hP6+BP9KLJ7IFqA==
-X-Google-Smtp-Source: AA0mqf7CDadNIIxLmDaGMGWeVngi50o9v9Dqym8FZqs9w0o8qAyuABJVXcuAWg331ZRRka79f2HTMg==
-X-Received: by 2002:a17:906:65c4:b0:7ad:d250:b907 with SMTP id z4-20020a17090665c400b007add250b907mr42053835ejn.737.1669626637954;
-        Mon, 28 Nov 2022 01:10:37 -0800 (PST)
-Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id p35-20020a056402502300b00463b9d47e1fsm4932346eda.71.2022.11.28.01.10.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 01:10:37 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Mon, 28 Nov 2022 10:10:14 +0100
-Subject: [PATCH v3 2/2] ALSA: core: Fix deadlock when shutdown a frozen userspace
+        Mon, 28 Nov 2022 04:10:23 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1314311
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:10:21 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-11-0rZ4q5Y5NLalLtMxmkqIDA-1; Mon, 28 Nov 2022 09:10:18 +0000
+X-MC-Unique: 0rZ4q5Y5NLalLtMxmkqIDA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 28 Nov
+ 2022 09:10:16 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Mon, 28 Nov 2022 09:10:16 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Linus Torvalds' <torvalds@linux-foundation.org>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Joe Perches" <joe@perches.com>
+Subject: RE: [PATCH 1/1] minmax.h: Slightly relax the type checking done by
+ min() and max().
+Thread-Topic: [PATCH 1/1] minmax.h: Slightly relax the type checking done by
+ min() and max().
+Thread-Index: AdkA3jB+9p3HVKOjROWboToCz6X2bgBwb9KAAAEizAAAAZNzAAAAy3LwAAlIsIAADIi9YA==
+Date:   Mon, 28 Nov 2022 09:10:16 +0000
+Message-ID: <a74be3ec15294206a13cd5b3a4b35858@AcuMS.aculab.com>
+References: <58cac72242e54380971cfa842f824470@AcuMS.aculab.com>
+ <CAHk-=wgZCBedi_xrysY2EAsN8tQjb3K4-qYtF-FaEE+GFuuE4Q@mail.gmail.com>
+ <433b8b44fe6e43b2b576c311bb55cc8a@AcuMS.aculab.com>
+ <CAHk-=wjgqs7Uev9=X8qP0mR0C+KoRze6d+1SoMib5x6o3yZSQg@mail.gmail.com>
+ <b96a46eb24c2482bb6081418bd2ace02@AcuMS.aculab.com>
+ <CAHk-=wgxzGTsqcNv7B5Cr_BshyRkhrvsPMratxhNb0LA1EnwdA@mail.gmail.com>
+In-Reply-To: <CAHk-=wgxzGTsqcNv7B5Cr_BshyRkhrvsPMratxhNb0LA1EnwdA@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221127-snd-freeze-v3-2-a2eda731ca14@chromium.org>
-References: <20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org>
-In-Reply-To: <20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org>
-To:     Takashi Iwai <tiwai@suse.com>, Len Brown <len.brown@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     alsa-devel@alsa-project.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2405; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=kX5q/LQa03Qii9iO9IQ/nJfIRw9n1NXI7ONu/Y5ZJ24=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjhHsK3xG667lVW6abqTwHNWMFth1Fvx2d+BxA++3v
- Kyqt7PGJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4R7CgAKCRDRN9E+zzrEiHESEA
- CH6yG+4PYU2KPtT5xs5JZ3tJVMf2A/fn6qpW4cAnsLipCsTlfOiePAN1wcBS5ofPRJp0YcP38QoFX/
- ru3NhJ4QwocI5S9bqFFkLYq2NgKN4/RAwtvl0ODLqIlqsZgS4+QqHUQFyu6x2i6iAAgpSAH7dRWHPQ
- gd1rFeUjycV+Eb7yEPekd2NhF9P8BYCVIvvtceM20Y2G0NFKZaS59NVs8xSssTz4wL39E3dFj08Zne
- AVkUr2z80tttz2l7BKr6LDTC4tJHN+Qm9oEd0uEumZQ/BY3arElxHfG6twOR3Sawt15eWV59bQLLsf
- eWwbgxtUwTjSD2QTGC4aAtd03VrZhUPohtn/sMkvasE86nMJJJvRQlnPldg+h+r2K93jQX8L8FRhZN
- PNoC9mxMuZCRq1falbvBOri3SWEterzZ+ZSg1KN38/e/m+ace1HOWEfIVcU8vB3Hz0CwdLmI38vbrn
- CSJlv31Lpjey1qOwNsnWSAY/Qzko/OqCvzrJkHSbSmYLUtAnvsis01HZJkcsoUTOuOpkSKTxDr4C6d
- 4TCVkwVMjud6BJynkM/qKgHEFJZAsEHG6AfWlHqUzmpEP6PmSe4LvP0UV+tmi4kA7dcHqLwZtxkuE6
- tBq2wZ3oRpgTh8whQ1+4Emlv31nvmWoo58hmWc2V/JKJM+IpxnBDPM/rxU2g==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the user space is frozen, we cannot wait for it to complete.
+RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjggTm92ZW1iZXIgMjAyMiAwMjo0Mw0KLi4N
+Cj4gU28geW91ciBwYXRjaCB0aGF0IG1ha2VzICJvbmUgc2lkZSBpcyBzaWduZWQsIG90aGVyIHNp
+ZGUgaXMgdW5zaWduZWQsDQo+IHNvIG5vcm1hbGx5IHdlJ2QgZG8gaXQgYXMgYW4gdW5zaWduZWQg
+Y29tcGFyZS4gQnV0IGJlY2F1c2UgdGhlDQo+IHVuc2lnbmVkIHNpZGUgd2FzIGEgY29uc3RhbnQs
+IHdlIG1hZGUgaXQgc2lnbmVkIGFmdGVyIGFsbCwgYW5kIGRvIHRoZQ0KPiBjb21wYXJpc29uIGFz
+IHNpZ25lZCB3aXRoIG5vIHdhcm5pbmciLg0KPiANCj4gVGhhdCdzIGp1c3QgKmhvcnJpYmxlKi4g
+SXQncyBldmVuIGNyYXppZXIgdGhhbiB0aGUgcmVndWxhciBDIHR5cGUNCj4gY29udmVyc2lvbnMg
+dGhhdCAoc29tZSkgcGVvcGxlIGhhdmUgYXQgbGVhc3QgaGFkIGRlY2FkZXMgb2YgZ2V0dGluZw0K
+PiB1c2VkIHRvLg0KDQpBaCwgeW91IG1pZ2h0IGJlIG1pc3NpbmcgdGhlIHBvaW50IHRoYXQgdGhl
+IGNvbXBpbGVyDQpjb252ZXJ0cyBpdCBiYWNrIHRvIGFuIHVuc2lnbmVkIGNvbXBhcmUuDQoNClNv
+IHlvdSBzdGFydCB3aXRoOg0KCXVuc2lnbmVkIGludCBhOw0KCW1pbihhLCA1dSkNClRoaXMgZ2V0
+cyBjaGFuZ2VkIHRvOg0KCW1pbihhLCAoaW50KTV1KQ0KVGhlIGNvbXBpbGVyIHNlZXM6DQoJaWYg
+KGEgPCAoaW50KTV1KQ0KYW5kIGNoYW5nZXMgdGhlIFJIUyBiYWNrIHRvIHVuc2lnbmVkLCBzbyB5
+b3UgYWN0dWFsbHkgZ2V0Og0KCWlmIChhIDwgKHVuc2lnbmVkIGludCkoaW50KTV1KQ0Kd2hpY2gg
+aXMgZXhhY3RseSB3aGVyZSB5b3Ugc3RhcnRlZC4NCg0KPiANCj4gRG9uJ3QgeW91IHNlZSBob3cg
+bmFzdHkgdGhhdCBraW5kIG9mIGNvbXBsZXRlbHkgcmFuZG9tIHRoaW5nIGlzPw0KPiANCj4gTm93
+LCBJIGFncmVlIHRoYXQgc29tZXRpbWVzIHdlIHdhcm4gKnRvbyogbXVjaCwgYnV0IG5vLCBpdCdz
+IG5vdA0KPiBhY2NlcHRhYmxlIHRvIGNoYW5nZSB0aGF0IHRvICJsZXQncyBub3Qgd2FybiBhcyBt
+dWNoLCBhbmQgaW4gdGhlDQo+IHByb2Nlc3MgYWxzbyBjaGFuZ2UgdGhlIHNpZ24gb2YgdGhlIGNv
+bXBhcmlzb24gaW4gc3RyYW5nZSB3YXlzIi4NCj4gDQo+IElmIGl0IHdhcyB0aGUgKm90aGVyKiB3
+YXkgYXJvdW5kLCB3aGVyZSB3ZSB3YXJuZWQgdG9vIG11Y2gsIGJ1dCBhdA0KPiBsZWFzdCBkaWRu
+J3QgY2hhbmdlIHRoZSBhY3R1YWwgc2VtYW50aWNzLCB0aGF0IHdvdWxkIGJlIG9uZSB0aGluZy4g
+U28sDQo+IGZvciBleGFtcGxlLCBJIHRoaW5rIHRoYXQgaWYgeW91IGhhdmUNCj4gDQo+ICAgICB1
+bnNpZ25lZCBsb25nIGE7DQo+IA0KPiB0aGVuOg0KPiANCj4gIC0gbWluKGEsNSkNCj4gDQo+ICAt
+IG1pbihhLDV1KQ0KPiANCj4gYm90aCBjdXJyZW50bHkgd2FybiAiYW5ub3lpbmdseSIsIGV2ZW4g
+dGhvdWdoIHRoZSByZXN1bHQgaXMgb2J2aW91cy4NCj4gDQo+IE9uZSBiZWNhdXNlICI1IiBpcyBh
+biAiaW50IiBhbmQgdGh1cyBzaWduZWQsIGJ1dCBoZXksIGNvbXBhcmluZyBhDQo+IHNpZ25lZCAq
+cG9zaXRpdmUqIGNvbnN0YW50IHRvIGEgdW5zaWduZWQgdmFyaWFibGUgaXMgcHJldHR5IGRhcm4g
+c2FmZS4NCj4gDQo+IFNvIGdldHRpbmcgcmlkIG9mIHRoZSB3YXJuaW5nIGluIHRoYXQgY2FzZSAt
+IGFuZCBqdXN0IGRvaW5nIGl0IGFzIGFuDQo+IHVuc2lnbmVkIGNvbXBhcmlzb24gd2hpY2ggdGhl
+biBhbHNvIGdpdmVzIHRoZSBzbWFsbGVzdCBwb3NzaWJsZSByZXN1bHQNCj4gcmFuZ2UgYW5kIGFz
+IHN1Y2ggY2Fubm90IHBvc3NpYmx5IGNvbmZ1c2UgYW55dGhpbmcgLSB3b3VsZCBsaWtlbHkgYmUg
+YQ0KPiBnb29kIHRoaW5nLg0KPiANCj4gQW5kIHRoZSBmYWN0IHRoYXQgJzV1JyBfYWxzb18gd2Fy
+bnMgaXMganVzdCBhbm5veWluZy4gVGhlcmUncyB6ZXJvDQo+IGFtYmlndWl0eSBhYm91dCB0aGUg
+cmVzdWx0ICh3aGljaCB3aWxsIGFsd2F5cyBmaXQgaW4gJ3Vuc2lnbmVkIGludCcpLA0KPiBidXQg
+dGhlIGNvbXBhcmlzb24gc2hvdWxkIGFsd2F5cyBiZSBkb25lIGluICd1bnNpZ25lZCBsb25nJy4N
+Cg0KSWYgdGhlIDV1IGlzIGNhc3QgdG8gKGludCkgdGhlbiwgaW4gdGhpcyBjYXNlLCB0aGUgY29t
+cGFyaXNvbg0KaXMgc3RpbGwgZG9uZSBhcyAndW5zaWduZWQgbG9uZycuDQoNClRoZXJlIGlzIGFs
+c28gdGhpcyBvbmU6DQoJdW5zaWduZWQgY2hhciBjOw0KCW1pbihjLDV1KQ0KQWdhaW4gcHJldHR5
+IHVuYW1iaWd1b3VzIGJ1dCB0aGUgdHlwZXMgZG9uJ3QgbWF0Y2guDQpJbnRlZ2VyIHByb21vdGlv
+bnMgc3RhcnQgcGxheWluZyBoYXZvYyBoZXJlLg0KCShjIDwgNXUpID0+ICgoaW50KWMgPCA1dSkg
+PT4gKHVuc2lnbmVkIGludCkoaW50KWMgPCA1dSkNCndoaWNoIGlzIGFjdHVhbGx5IHdoYXQgeW91
+IGV4cGVjdC4NCkJ1dCByZXBlYXQgd2l0aCAnc2lnbmVkIGNoYXInIGFuZCBuZWdhdGl2ZXMgZ2V0
+IGFuIHVuZXhwZWN0ZWQNCnJlc3VsdC4NCg0KPiBBbmQgZm9yIHRoYXQgJzV1JyBjYXNlIHRoZXJl
+IGlzIGV2ZW4gX2xlc3NfIG9mIGEgY2hhbmNlIHRoYXQgdGhlcmUNCj4gY291bGQgYmUgYW55IHNp
+Z24gY29uZnVzaW9uLg0KPiANCj4gQnV0IG5vdGUgdGhhdCAic2lnbmVkIDUiIHRoaW5nOiBpdCdz
+IHJlYWxseSByZWFsbHkgaW1wb3J0YW50IHRvDQo+IHVuZGVyc3RhbmQgdGhhdCBkb2luZyB0aGF0
+IGNvbnN0YW50IGNvbXBhcmlzb24gYXMgYW4gKnVuc2lnbmVkKg0KPiBjb21wYXJpc29uIGlzIG11
+Y2ggc2FmZXIgZm9yICdtaW4oKScsIGJlY2F1c2UgaXQgbWluaW1pemVzIHRoZSByZXN1bHQNCj4g
+cmFuZ2UuIFJldHVybmluZyBhIG5lZ2F0aXZlIG51bWJlciBiZWNhdXNlIHlvdSBjb252ZXJ0ZWQg
+aXQgdG8gYQ0KPiBzaWduZWQgY29tcGFyaXNvbiB3b3VsZCBiZSBwb3RlbnRpYWxseSBkYW5nZXJv
+dXMsIGJlY2F1c2UgcGVvcGxlIG9mdGVuDQo+IGZvcmdldCB0byB0aGluIGthYm91dCB0aGUgbmVn
+YXRpdmUgY2FzZS4gUmV0dXJuaW5nIHRoZSByYW5nZSAwLi41IGlzDQo+IF9jbGVhcmx5XyBzYWZl
+Lg0KPiANCj4gQW5kIHRoYXQgZGFuZ2VyIGlzIHZlcnkgbXVjaCB3aGVuIHRoZSAnNScgaXMgYSAn
+c2l6ZW9mKHh5eiknLiBXZSdyZQ0KPiBjbGVhcmx5IHRhbGtpbmcgYWJvdXQgb2JqZWN0IHNpemVz
+IHRoYXQgY2Fubm90IGJlIG5lZ2F0aXZlLCBzbw0KPiBuZWdhdGl2ZSBudW1iZXJzIGFyZSBhbG1v
+c3QgY2VydGFpbmx5IHdyb25nLiBNYWtpbmcgdGhlICdtaW4oKScgcmV0dXJuDQo+IGEgbmVnYXRp
+dmUgbnVtYmVyIHRoZXJlIGlzIGhvcnJlbmRvdXMuDQo+IA0KPiBOb3csIGZvciAnbWF4KCknLCB0
+aGF0ICdtaW5pbWl6ZSB0aGUgcmFuZ2UnIGFyZ3VtZW50IGRvZXNuJ3Qgd29yay4NCj4gDQo+IFJp
+Z2h0IG5vdyB3ZSBqdXN0IGhhdmUgImJvdGggbXVzdCBiZSB0aGUgc2FtZSB0eXBlIi4gQXQgbGVh
+c3QgdGhhdCBpcw0KPiBhbHdheXMgdW5hbWJpZ3VvdXMuIEl0IGNhbiBiZSBhbm5veWluZywgeWVz
+LiBCdXQgdGhlbiB0aGUgZXhwZWN0YXRpb24NCj4gaXMgdGhhdCB3aGVuIHNvbWVib2R5IGNoYW5n
+ZXMgaXQgdG8gYSAibWluX3QoKSIsIHRoZXkgYWN0aXZlbDt5DQo+ICpUSElOSyogYWJvdXQgaXQu
+DQoNCk5vdCBmcm9tIGxvb2tpbmcgYXQgc29tZSBvZiB0aGUgdHlwZXMgdXNlZC4NClNvbWUgY29k
+ZSBzZWVtcyB0byB3cml0dGVuIHRoaW5raW5nIHRoYXQgdGhlIHR5cGUgZm9yIG1pbl90IGlzIHRo
+YXQNCm9mIHRoZSByZXN1bHQgdHlwZSBuZWVkZWQgKGxpa2UgYSBwb2ludGxlc3MgY2FzdCBmb3Ig
+dGhlIGFzc2lnbm1lbnQNCnJhdGhlciB0aGFuIGEgY2FzdCB0aGF0IGlzIGFwcGxpZWQgdG8gYm90
+aCBpbnB1dHMuDQoNCkknbSB0ZXN0aW5nIHNvbWUgY2hhbmdlcyB0aGF0IGFsbG93Og0KCW1pbihh
+bnlfdW5zaWduZWRfZXhwciwgYW55X3Vuc2lnbmVkX2V4cHIpDQoJbWluKGFueV9zaWduZWRfZXhw
+ciwgYW55X3NpZ25lZF9leHByKQ0KYW5kIGFsc28gYWxsb3cgc2lnbmVkIHYgdW5zaWduZWQgaWYg
+ZWl0aGVyOg0KCXRoZSB1bnNpZ25lZCB0eXBlIGlzIHNtYWxsZXIgdGhhbiB0aGUgc2lnbmVkIG9u
+ZQ0KCSh0aGUgdW5zaWduZWQgdmFsdWUgaXMgcHJvbW90ZWQgdG8gdGhlIGxhcmdlciBzaWduZWQg
+dHlwZSkNCm9yDQoJdGhlIHNpZ25lZCB2YWx1ZSBpcyBjb25zdGFudCBhbmQgbm9uLW5lZ2F0aXZl
+DQppbiBhbGwgdGhvc2UgY2FzZXMgdGhlIG5vcm1hbCBDIHJ1bGVzIGFyZSBzZW5zaWJsZS4NCg0K
+VGhlIG9uZSB5b3Ugc2VlbSB0byBvYmplY3QgdG8gaXMgdGhlIHNpZ24gdiB1bnNpZ25lZA0Kd2hl
+biB0aGUgdW5zaWduZWQgdmFsdWUgaXMgYSBjb25zdGFudC4NCg0KSSBoYXMgdG8gYmUgc2FpZCB0
+aGF0IHRoZXJlIGFyZSBsaWtlbHkgdG8gYmUgdmVyeSBmZXcgY2FzZXMNCm9mIG1pbiAob3IgbWF4
+KSB3aGVyZSB0aGUgZG9tYWluIG9mIGVpdGhlciB2YWx1ZXMgY2FuIGJlDQpuZWdhdGl2ZS4NClRo
+aXMgaXMgYXNzdW1pbmcgbm8gb25lIGhhcyBjb21taXR0ZWQgcmV0dXJuIG1pbihyZXN1bHQsIDAp
+Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJv
+YWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24g
+Tm86IDEzOTczODYgKFdhbGVzKQ0K
 
-This fixes:
-
-[   84.943749] Freezing user space processes ... (elapsed 0.111 seconds) done.
-[  246.784446] INFO: task kexec-lite:5123 blocked for more than 122 seconds.
-[  246.819035] Call Trace:
-[  246.821782]  <TASK>
-[  246.824186]  __schedule+0x5f9/0x1263
-[  246.828231]  schedule+0x87/0xc5
-[  246.831779]  snd_card_disconnect_sync+0xb5/0x127
-...
-[  246.889249]  snd_sof_device_shutdown+0xb4/0x150
-[  246.899317]  pci_device_shutdown+0x37/0x61
-[  246.903990]  device_shutdown+0x14c/0x1d6
-[  246.908391]  kernel_kexec+0x45/0xb9
-
-And:
-
-[  246.893222] INFO: task kexec-lite:4891 blocked for more than 122 seconds.
-[  246.927709] Call Trace:
-[  246.930461]  <TASK>
-[  246.932819]  __schedule+0x5f9/0x1263
-[  246.936855]  ? fsnotify_grab_connector+0x5c/0x70
-[  246.942045]  schedule+0x87/0xc5
-[  246.945567]  schedule_timeout+0x49/0xf3
-[  246.949877]  wait_for_completion+0x86/0xe8
-[  246.954463]  snd_card_free+0x68/0x89
-...
-[  247.001080]  platform_device_unregister+0x12/0x35
-
-Fixes: 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- sound/core/init.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/sound/core/init.c b/sound/core/init.c
-index 5377f94eb211..bc038b49d4d3 100644
---- a/sound/core/init.c
-+++ b/sound/core/init.c
-@@ -9,6 +9,7 @@
- #include <linux/module.h>
- #include <linux/device.h>
- #include <linux/file.h>
-+#include <linux/freezer.h>
- #include <linux/slab.h>
- #include <linux/time.h>
- #include <linux/ctype.h>
-@@ -573,6 +574,11 @@ void snd_card_disconnect_sync(struct snd_card *card)
- 		return;
- 	}
- 
-+	if (processes_frozen()) {
-+		dev_err(card->dev, "Userspace is frozen, skipping sync\n");
-+		return;
-+	}
-+
- 	spin_lock_irq(&card->files_lock);
- 	wait_event_lock_irq(card->remove_sleep,
- 			    list_empty(&card->files_list),
-@@ -658,6 +664,13 @@ int snd_card_free(struct snd_card *card)
- 	ret = snd_card_free_when_closed(card);
- 	if (ret)
- 		return ret;
-+
-+	/*
-+	 * If userspace is frozen the wait from completion will never end.
-+	 */
-+	if (processes_frozen())
-+		return 0;
-+
- 	/* wait, until all devices are ready for the free operation */
- 	wait_for_completion(&released);
- 
-
--- 
-2.38.1.584.g0f3c55d4c2-goog-b4-0.11.0-dev-696ae
