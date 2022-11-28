@@ -2,224 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1153F63A1C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD9A63A1C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiK1HF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 02:05:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
+        id S229642AbiK1HIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 02:08:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiK1HFX (ORCPT
+        with ESMTP id S229723AbiK1HIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 02:05:23 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9509D55A2;
-        Sun, 27 Nov 2022 23:05:22 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NLGgH0f7nz15MX4;
-        Mon, 28 Nov 2022 15:04:43 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 15:05:20 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 15:05:19 +0800
-Subject: Re: [PATCH v3] doc: Fix htmldocs build warnings of stallwarn.rst
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-CC:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        "Josh Triplett" <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        <linux-next@vger.kernel.org>
-References: <20221124062204.1932-1-thunder.leizhen@huawei.com>
- <Y4Q0Q8QPg1jp3r6C@debian.me>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <4bc71aae-4ae6-7ea2-2f8a-6165cf6b5409@huawei.com>
-Date:   Mon, 28 Nov 2022 15:05:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Mon, 28 Nov 2022 02:08:09 -0500
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857EEBF6D;
+        Sun, 27 Nov 2022 23:08:06 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VVqYIHI_1669619281;
+Received: from 30.27.90.133(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VVqYIHI_1669619281)
+          by smtp.aliyun-inc.com;
+          Mon, 28 Nov 2022 15:08:03 +0800
+Message-ID: <b7c327e8-63a7-20a5-dc33-9ba7df1efe4f@linux.alibaba.com>
+Date:   Mon, 28 Nov 2022 15:08:01 +0800
 MIME-Version: 1.0
-In-Reply-To: <Y4Q0Q8QPg1jp3r6C@debian.me>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.1
+Subject: Re: [PATCH] selftests/tls: Fix tls selftests dependency to correct
+ algorithm
 Content-Language: en-US
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221125121905.88292-1-tianjia.zhang@linux.alibaba.com>
+ <Y4DAosu+ahAWpqrr@debian.me>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <Y4DAosu+ahAWpqrr@debian.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Bagas,
 
-
-On 2022/11/28 12:08, Bagas Sanjaya wrote:
-> On Thu, Nov 24, 2022 at 02:22:03PM +0800, Zhen Lei wrote:
->> Documentation/RCU/stallwarn.rst:
->> 401: WARNING: Literal block expected; none found.
->> 428: WARNING: Literal block expected; none found.
->> 445: WARNING: Literal block expected; none found.
->> 459: WARNING: Literal block expected; none found.
->> 468: WARNING: Literal block expected; none found.
->>
->> The literal block need to be indented, so add two spaces to each line.
+On 11/25/22 9:18 PM, Bagas Sanjaya wrote:
+> On Fri, Nov 25, 2022 at 08:19:05PM +0800, Tianjia Zhang wrote:
+>> Commit d2825fa9365d ("crypto: sm3,sm4 - move into crypto directory") moves
+>> the SM3 and SM4 stand-alone library and the algorithm implementation for
+>> the Crypto API into the same directory, and the corresponding relationship
+>> of Kconfig is modified, CONFIG_CRYPTO_SM3/4 corresponds to the stand-alone
+>> library of SM3/4, and CONFIG_CRYPTO_SM3/4_GENERIC corresponds to the
+>> algorithm implementation for the Crypto API. Therefore, it is necessary
+>> for this module to depend on the correct algorithm.
 >>
 > 
-> What about following patch description below instead?
+> I feel a rather confused. What about below?
 > 
 > ```
-> When merging rcu tree for linux-next, Stephen Rothwell reported htmldocs
-> warnings:
+> Commit <commit> moves SM3 and SM4 algorithm implementations from
+> stand-alone library to crypto API. The corresponding configuration
+> options for the API version (generic) are CONFIG_CRYPTO_SM3_GENERIC and
+> CONFIG_CRYPTO_SM4_GENERIC, respectively.
 > 
-> <warnings>...
-> 
-> These are due to unindented literal blocks. Indent them to fix these
-> warnings.
+> Replace option selected in selftests configuration from the library version
+> to the API version.
 > ```
-
-That's great. Thanks.
-
-> 
->> diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
->> index c1e92dfef40d501..ca7b7cd806a16c9 100644
->> --- a/Documentation/RCU/stallwarn.rst
->> +++ b/Documentation/RCU/stallwarn.rst
->> @@ -398,9 +398,9 @@ In kernels built with CONFIG_RCU_CPU_STALL_CPUTIME=y or booted with
->>  rcupdate.rcu_cpu_stall_cputime=1, the following additional information
->>  is supplied with each RCU CPU stall warning::
->>  
->> -rcu:          hardirqs   softirqs   csw/system
->> -rcu:  number:      624         45            0
->> -rcu: cputime:       69          1         2425   ==> 2500(ms)
->> +  rcu:          hardirqs   softirqs   csw/system
->> +  rcu:  number:      624         45            0
->> +  rcu: cputime:       69          1         2425   ==> 2500(ms)
->>  
-> 
-> OK.
->  
->> -The sampling period is shown as follows:
->> -:<------------first timeout---------->:<-----second timeout----->:
->> -:<--half timeout-->:<--half timeout-->:                          :
->> -:                  :<--first period-->:                          :
->> -:                  :<-----------second sampling period---------->:
->> -:                  :                  :                          :
->> -:          snapshot time point    1st-stall                  2nd-stall
->> +The sampling period is shown as follows::
->>  
->> +  |<------------first timeout---------->|<-----second timeout----->|
->> +  |<--half timeout-->|<--half timeout-->|                          |
->> +  |                  |<--first period-->|                          |
->> +  |                  |<-----------second sampling period---------->|
->> +  |                  |                  |                          |
->> +             snapshot time point    1st-stall                  2nd-stall
->>  
-> 
-> OK.
-> 
->>  The following describes four typical scenarios:
->>  
->> -1. A CPU looping with interrupts disabled.::
->> +1. A CPU looping with interrupts disabled.
->>  
->> -   rcu:          hardirqs   softirqs   csw/system
->> -   rcu:  number:        0          0            0
->> -   rcu: cputime:        0          0            0   ==> 2500(ms)
->> +   ::
->> +
->> +     rcu:          hardirqs   softirqs   csw/system
->> +     rcu:  number:        0          0            0
->> +     rcu: cputime:        0          0            0   ==> 2500(ms)
-> 
-> OK.
-> 
->>     This is similar to the previous example, but with non-zero number of
->>     and CPU time consumed by hard interrupts, along with non-zero CPU
->> -   time consumed by in-kernel execution.::
->> +   time consumed by in-kernel execution::
->>  
->> -   rcu:          hardirqs   softirqs   csw/system
->> -   rcu:  number:      624          0            0
->> -   rcu: cputime:       49          0         2446   ==> 2500(ms)
->> +     rcu:          hardirqs   softirqs   csw/system
->> +     rcu:  number:      624          0            0
->> +     rcu: cputime:       49          0         2446   ==> 2500(ms)
-> 
-> OK.
-> 
->>  
->>  3. A CPU looping with preemption disabled.
->>  
->> -   Here, only the number of context switches is zero.::
->> +   Here, only the number of context switches is zero::
->>  
->> -   rcu:          hardirqs   softirqs   csw/system
->> -   rcu:  number:      624         45            0
->> -   rcu: cputime:       69          1         2425   ==> 2500(ms)
->> +     rcu:          hardirqs   softirqs   csw/system
->> +     rcu:  number:      624         45            0
->> +     rcu: cputime:       69          1         2425   ==> 2500(ms)
-> 
-> OK.
-> 
->>  
->>     This situation hints that the stalled CPU was looping with preemption
->>     disabled.
->>  
->> -4. No looping, but massive hard and soft interrupts.::
->> +4. No looping, but massive hard and soft interrupts.
->> +
->> +   ::
-> 
-> No, no that way. For consistency, the item sentence should also be end with
-> double colon marker:
-
-If you open Documentation/output/RCU/stallwarn.html on a web page, you'll find
-that my current change is correct. Indented paragraphs are displayed in smaller
-fonts. I want the following four sentences to end with a dot. Subparagraphs that
-are subordinate to them are additionally indented. So there's no need to use
-colons to emphasize it.
-
-1. A CPU looping with interrupts disabled.
-2. A CPU looping with bottom halves disabled.
-3. A CPU looping with preemption disabled.
-4. No looping, but massive hard and soft interrupts.
-
-> 
-> ---- >8 ----
-> 
-> diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
-> index ca7b7cd806a16c..056127ef2b8e7e 100644
-> --- a/Documentation/RCU/stallwarn.rst
-> +++ b/Documentation/RCU/stallwarn.rst
-> @@ -465,9 +465,7 @@ The following describes four typical scenarios:
->     This situation hints that the stalled CPU was looping with preemption
->     disabled.
->  
-> -4. No looping, but massive hard and soft interrupts.
-> -
-> -   ::
-> +4. No looping, but massive hard and soft interrupts::
->  
->       rcu:          hardirqs   softirqs   csw/system
->       rcu:  number:       xx         xx            0
-> 
-> Thanks. 
 > 
 
--- 
-Regards,
-  Zhen Lei
+Thanks, this is great, I will pick it up.
+
+>> Fixes: d2825fa9365d ("crypto: sm3,sm4 - move into crypto directory")
+>> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
+>> Cc: stable@vger.kernel.org # v5.19+
+>> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+>> ---
+>>   tools/testing/selftests/net/config | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+>> index ead7963b9bf0..bd89198cd817 100644
+>> --- a/tools/testing/selftests/net/config
+>> +++ b/tools/testing/selftests/net/config
+>> @@ -43,5 +43,5 @@ CONFIG_NET_ACT_TUNNEL_KEY=m
+>>   CONFIG_NET_ACT_MIRRED=m
+>>   CONFIG_BAREUDP=m
+>>   CONFIG_IPV6_IOAM6_LWTUNNEL=y
+>> -CONFIG_CRYPTO_SM4=y
+>> +CONFIG_CRYPTO_SM4_GENERIC=y
+>>   CONFIG_AMT=m
+> 
+> You mean the correct algo option is CONFIG_CRYPTO_SM4_GENERIC, right?
+> 
+
+Yes, CONFIG_CRYPTO_SM4_GENERIC is the correct algo option.
+
+Best regards,
+Tianjia
