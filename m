@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3DC63A19D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 07:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1EE63A19E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 07:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbiK1GzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 01:55:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
+        id S229708AbiK1GzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 01:55:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiK1Gy5 (ORCPT
+        with ESMTP id S229968AbiK1Gy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 01:54:57 -0500
+        Mon, 28 Nov 2022 01:54:58 -0500
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3F615812
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 22:54:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD7F15834
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 22:54:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669618488; x=1701154488;
+  t=1669618495; x=1701154495;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=foe9CYLv4t/yayK/wv2PdURR8PHQrrf3ntMgKPrhGNg=;
-  b=gLeFmrBeTkpXk8YOmIFZC9MJxb8vI7zaZI48wUBR8C0OXgvXALY0ImoI
-   R9zSM7XPMjfld+AVYEuvHCI6z+kHlVvXa2+mRjlOTjUXa/7c7wiXskqhd
-   M6OzRYzL9WDZGr77PvfMWSb0oOez0lse8a7Q1gOHFgpx+LFPCotrKkWPu
-   +lHxwmvxvpA1zjjT4QMvYYmb46xYThuZxfMfXV5ESOKf0JV85a4Ex4fhv
-   fqrFezyGCBDs7ZLzG9qYQwEqMB5YhX/xmt2AZqWtfmVZNyzP/rb8cs/qV
-   7QBLbdBZZG+f4NlzKc92GFv1lclZGGP3Lrs+Bz4m/i/kDgWWM6VGKhyUc
+  bh=uC3pF7hOoVLbt48rw9NtRx8qdAPfr8OWtZGji1zKp8s=;
+  b=AoeB/m0r+ZVUyRfIhIOyfPqfBZtwLfnwLXUp25Y2Yk0Ge/Rc0D0BM9i4
+   oC4TPwtAzgdgRQtztaBQzcqcaoZtH4zdi9x29/HKmkkqRfR74lu9cKywv
+   U1++ahsRmKZ05I8SD4XqsqCWVK8Pz07R8w0aQ5C84ZGy9de50x2o506k1
+   QJnvGxu5T5roH6gE/26ms9aMBmwJmyETtMRsR7gTRXZiHhxo2SRR+ufJY
+   cCnsp25lc82E3YhABU7CEiCQjLlCshFKkXqMUYDxkqTikFWIsE2/f+/t4
+   9daOSWuG3cTS5NQ3mPOhA362E1Y6ZfBwTmUEdG6/2Hyf4Wz4oGUa2EpS5
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="312395009"
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="312395023"
 X-IronPort-AV: E=Sophos;i="5.96,199,1665471600"; 
-   d="scan'208";a="312395009"
+   d="scan'208";a="312395023"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2022 22:54:48 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2022 22:54:55 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="674120803"
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="674120824"
 X-IronPort-AV: E=Sophos;i="5.96,199,1665471600"; 
-   d="scan'208";a="674120803"
+   d="scan'208";a="674120824"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga008.jf.intel.com with ESMTP; 27 Nov 2022 22:54:41 -0800
+  by orsmga008.jf.intel.com with ESMTP; 27 Nov 2022 22:54:48 -0800
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
         Christoph Hellwig <hch@infradead.org>,
@@ -65,9 +65,9 @@ Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v3 06/20] iommu/mtk: Remove detach_dev callback
-Date:   Mon, 28 Nov 2022 14:46:34 +0800
-Message-Id: <20221128064648.1934720-7-baolu.lu@linux.intel.com>
+Subject: [PATCH v3 07/20] iommu/rockchip: Remove detach_dev callback
+Date:   Mon, 28 Nov 2022 14:46:35 +0800
+Message-Id: <20221128064648.1934720-8-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221128064648.1934720-1-baolu.lu@linux.intel.com>
 References: <20221128064648.1934720-1-baolu.lu@linux.intel.com>
@@ -87,36 +87,21 @@ be called. Remove it to avoid dead code.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- drivers/iommu/mtk_iommu.c | 9 ---------
- 1 file changed, 9 deletions(-)
+ drivers/iommu/rockchip-iommu.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 5dc1009a19ed..2022f47529c1 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -713,14 +713,6 @@ static int mtk_iommu_attach_device(struct iommu_domain *domain,
- 	return ret;
- }
- 
--static void mtk_iommu_detach_device(struct iommu_domain *domain,
--				    struct device *dev)
--{
--	struct mtk_iommu_data *data = dev_iommu_priv_get(dev);
--
--	mtk_iommu_config(data, dev, false, 0);
--}
--
- static int mtk_iommu_map(struct iommu_domain *domain, unsigned long iova,
- 			 phys_addr_t paddr, size_t pgsize, size_t pgcount,
- 			 int prot, gfp_t gfp, size_t *mapped)
-@@ -949,7 +941,6 @@ static const struct iommu_ops mtk_iommu_ops = {
- 	.owner		= THIS_MODULE,
+diff --git a/drivers/iommu/rockchip-iommu.c b/drivers/iommu/rockchip-iommu.c
+index a68eadd64f38..f30db22ea5d7 100644
+--- a/drivers/iommu/rockchip-iommu.c
++++ b/drivers/iommu/rockchip-iommu.c
+@@ -1192,7 +1192,6 @@ static const struct iommu_ops rk_iommu_ops = {
+ 	.of_xlate = rk_iommu_of_xlate,
  	.default_domain_ops = &(const struct iommu_domain_ops) {
- 		.attach_dev	= mtk_iommu_attach_device,
--		.detach_dev	= mtk_iommu_detach_device,
- 		.map_pages	= mtk_iommu_map,
- 		.unmap_pages	= mtk_iommu_unmap,
- 		.flush_iotlb_all = mtk_iommu_flush_iotlb_all,
+ 		.attach_dev	= rk_iommu_attach_device,
+-		.detach_dev	= rk_iommu_detach_device,
+ 		.map		= rk_iommu_map,
+ 		.unmap		= rk_iommu_unmap,
+ 		.iova_to_phys	= rk_iommu_iova_to_phys,
 -- 
 2.34.1
 
