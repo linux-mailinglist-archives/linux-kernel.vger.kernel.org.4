@@ -2,189 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4B163B5E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 00:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D19963B5F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 00:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234708AbiK1Xaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 18:30:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
+        id S234732AbiK1XcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 18:32:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234694AbiK1Xar (ORCPT
+        with ESMTP id S234702AbiK1Xb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 18:30:47 -0500
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4464032066;
-        Mon, 28 Nov 2022 15:30:46 -0800 (PST)
-Received: by mail-pj1-f50.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so10502869pjo.3;
-        Mon, 28 Nov 2022 15:30:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ChtFtrRuodDH/glhfn1Qnds7vhl+8UrGChHJeSIkbLE=;
-        b=XqhgI85HYhCpZv6bh5Ai74HV5VxWm/wcYtPEL+lcwggoXyH5kdskxSvdOb5fpIdU1s
-         0w5L19S2NxN8NXkDvxsriX3jf2AgjLpPgQQlhEqVXW7mCHvzAEt39DN3NN5MveeAqQ96
-         SFvGTHj4azIJO0vcV7bW1yyIaeIMrnXiXR41RIXszEDJFc5URdhrFh08G20bPxkLVTNO
-         onJmSbSJdGmd5Bw//RPK2+BbuBvc/aR27ytOm5xxArMqok1SSusQbC//psxClsa5eM32
-         j4QTrLC7gL1rVMHtFoILB/rzJldXi4wYhX6cUuvmfs6W5OrNhhqtb+XT+owrNOfTqhEO
-         JYrg==
-X-Gm-Message-State: ANoB5plgV3gyHsNhpwuWGcGbfw/9THP2UWmo2rZGjybVdBoIedUq9fon
-        W5n3gJDbAuIHQPXUywurcWegfsdac5HhZYTLiPL2meusklcRqA==
-X-Google-Smtp-Source: AA0mqf4KurkCGILVWnutf4o803oh/Sx3WYqvakG/gIg8+s+EdMu1Sq92uwpXuj0UzowKo1ZYt54x+/0uKiFNqRGu28E=
-X-Received: by 2002:a17:903:452:b0:189:6574:7ac2 with SMTP id
- iw18-20020a170903045200b0018965747ac2mr20120313plb.65.1669678245655; Mon, 28
- Nov 2022 15:30:45 -0800 (PST)
+        Mon, 28 Nov 2022 18:31:59 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5EDD930558;
+        Mon, 28 Nov 2022 15:31:56 -0800 (PST)
+Received: from loongson.cn (unknown [117.133.84.114])
+        by gateway (Coremail) with SMTP id _____8BxXevrRIVjw9gBAA--.4439S3;
+        Tue, 29 Nov 2022 07:31:55 +0800 (CST)
+Received: from [192.168.1.7] (unknown [117.133.84.114])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxj+DqRIVjIskdAA--.9504S3;
+        Tue, 29 Nov 2022 07:31:54 +0800 (CST)
+Message-ID: <c1f46cb8-dfbb-8b2a-5617-173bb62084ec@loongson.cn>
+Date:   Tue, 29 Nov 2022 07:31:53 +0800
 MIME-Version: 1.0
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-3-mailhol.vincent@wanadoo.fr>
- <Y4JEGYMtIWX9clxo@lunn.ch> <CAMZ6RqK6AQVsRufw5Jr5aKpPQcy+05jq3TjrKqbaqk7NVgK+_Q@mail.gmail.com>
- <Y4OD70GD4KnoRk0k@rowland.harvard.edu> <CAMZ6Rq+Gi+rcLqSj2-kug7c1G_nNuj6peh5nH1DNoo8B3aSxzw@mail.gmail.com>
- <CAMZ6RqKS0sUFZWQfmRU6q2ivWEUFD06uiQekDr=u94L3uij3yQ@mail.gmail.com> <Y4TYzgOczlegG7OK@rowland.harvard.edu>
-In-Reply-To: <Y4TYzgOczlegG7OK@rowland.harvard.edu>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 29 Nov 2022 08:30:34 +0900
-Message-ID: <CAMZ6RqKuGC8eyMb45x_oVBTQ0M707JhL-oUs34+8c267cKovAw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/6] can: etas_es58x: add devlink support
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andrew Lunn <andrew@lunn.ch>, linux-can@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Saeed Mahameed <saeed@kernel.org>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Lukas Magel <lukas.magel@posteo.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v8 1/2] gpio: loongson: add gpio driver support
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+References: <20221128064300.12021-1-zhuyinbo@loongson.cn>
+ <CACRpkdZoD8v6pPStaKLf14houZk5e89ZBz5wZJVQJxJ1Xq37Ug@mail.gmail.com>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+In-Reply-To: <CACRpkdZoD8v6pPStaKLf14houZk5e89ZBz5wZJVQJxJ1Xq37Ug@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Bxj+DqRIVjIskdAA--.9504S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7CFW5XF1Dtw1kKr17tFyxXwb_yoW8Jw4xpF
+        W7Cay7KFWUKr45CrWDKryrZFyfGFZ8Krsxtr4v9rWDK34DJ3Z2q3y3uF1j9F1xAFyrCr15
+        ZrZ3CrW09an8JFJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jbWrXUUUUU=
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue. 29 Nov. 2022 at 00:50, Alan Stern <stern@rowland.harvard.edu> wrote:
-> On Mon, Nov 28, 2022 at 02:32:23PM +0900, Vincent MAILHOL wrote:
-> > On Mon. 28 Nov. 2022 at 10:34, Vincent MAILHOL
-> > <mailhol.vincent@wanadoo.fr> wrote:
-> > > On Mon. 28 Nov. 2022 at 00:41, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > > On Sun, Nov 27, 2022 at 02:10:32PM +0900, Vincent MAILHOL wrote:
-> > > > > > Should devlink_free() be after usb_set_inftdata()?
-> > > > >
-> > > > > A look at
-> > > > >   $ git grep -W "usb_set_intfdata(.*NULL)"
-> > > > >
-> > > > > shows that the two patterns (freeing before or after
-> > > > > usb_set_intfdata()) coexist.
-> > > > >
-> > > > > You are raising an important question here. usb_set_intfdata() does
-> > > > > not have documentation that freeing before it is risky. And the
-> > > > > documentation of usb_driver::disconnect says that:
-> > > > >   "@disconnect: Called when the interface is no longer accessible,
-> > > > >    usually because its device has been (or is being) disconnected
-> > > > >    or the driver module is being unloaded."
-> > > > >   Ref: https://elixir.bootlin.com/linux/v6.1-rc6/source/include/linux/usb.h#L1130
-> > > > >
-> > > > > So the interface no longer being accessible makes me assume that the
-> > > > > order does not matter. If it indeed matters, then this is a foot gun
-> > > > > and there is some clean-up work waiting for us on many drivers.
-> > > > >
-> > > > > @Greg, any thoughts on whether or not the order of usb_set_intfdata()
-> > > > > and resource freeing matters or not?
-> > > >
-> > > > In fact, drivers don't have to call usb_set_intfdata(NULL) at all; the
-> > > > USB core does it for them after the ->disconnect() callback returns.
-> > >
-> > > Interesting. This fact is widely unknown, cf:
-> > >   $ git grep "usb_set_intfdata(.*NULL)" | wc -l
-> > >   215
-> > >
-> > > I will do some clean-up later on, at least for the CAN USB drivers.
-> > >
-> > > > But if a driver does make the call, it should be careful to ensure that
-> > > > the call happens _after_ the driver is finished using the interface-data
-> > > > pointer.  For example, after all outstanding URBs have completed, if the
-> > > > completion handlers will need to call usb_get_intfdata().
-> > >
-> > > ACK. I understand that it should be called *after* the completion of
-> > > any ongoing task.
-> > >
-> > > My question was more on:
-> > >
-> > >         devlink_free(priv_to_devlink(es58x_dev));
-> > >         usb_set_intfdata(intf, NULL);
-> > >
-> > > VS.
-> > >
-> > >         usb_set_intfdata(intf, NULL);
-> > >         devlink_free(priv_to_devlink(es58x_dev));
-> > >
-> > > From your comments, I understand that both are fine.
-> >
-> > Do we agree that the usb-skeleton is doing it wrong?
-> >   https://elixir.bootlin.com/linux/latest/source/drivers/usb/usb-skeleton.c#L567
-> > usb_set_intfdata(interface, NULL) is called before deregistering the
-> > interface and terminating the outstanding URBs!
->
-> Going through the usb-skeleton.c source code, you will find that
-> usb_get_intfdata() is called from only a few routines:
->
->         skel_open()
->         skel_disconnect()
->         skel_suspend()
->         skel_pre_reset()
->         skel_post_reset()
->
-> Of those, all but the first are called only by the USB core and they are
-> mutually exclusive with disconnect processing (except for
-> skel_disconnect() itself, of course).  So they don't matter.
->
-> The first, skel_open(), can be called as a result of actions by the
-> user, so the driver needs to ensure that this can't happen after it
-> clears the interface-data pointer.  The user can open the device file at
-> any time before the minor number is given back, so it is not proper to
-> call usb_set_intfdata(interface, NULL) before usb_deregister_dev() --
-> but the driver does exactly this!
->
-> (Well, it's not quite that bad.  skel_open() does check whether the
-> interface-data pointer value it gets from usb_get_intfdata() is NULL.
-> But it's still a race.)
->
-> So yes, the current code is wrong.  And in fact, it will still be wrong
-> even after the usb_set_intfdata(interface, NULL) line is removed,
-> because there is no synchronization between skel_open() and
-> skel_disconnect().
 
-ACK. I did not look outside of skel_disconnect(). Regardless, I think
-that removing the usb_set_intdata(interface, NULL) is still one step
-in the good direction despite the other synchronisation issues. I sent
-a patch for that which Greg already pick-up:
-  https://git.kernel.org/gregkh/usb/c/c568f8bb41a4
-
->It is possible for skel_disconnect() to run to
-> completion and the USB core to clear the interface-data pointer all
-> while skel_open() is running.  The driver needs a static private mutex
-> to synchronize opens with unregistrations.  (This is a general
-> phenomenon, true of all drivers that have a user interface such as a
-> device file.)
+在 2022/11/29 4:35, Linus Walleij 写道:
+> On Mon, Nov 28, 2022 at 7:43 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
 >
-> The driver _does_ have a per-instance mutex, dev->io_mutex, to
-> synchronize I/O with disconnects.  But that's separate from
-> synchronizing opens with unregistrations, because at open time the
-> driver doesn't yet know the address of the private data structure or
-> even if the structure is still allocated.  So obviously it can't use a
-> mutex that is embedded within the private data structure for this
-> purpose.
+>> The Loongson platforms GPIO controller contains 60 GPIO pins in total,
+>> 4 of which are dedicated GPIO pins, and the remaining 56 are reused
+>> with other functions. Each GPIO can set input/output and has the
+>> interrupt capability.
+>>
+>> This driver added support for Loongson GPIO controller and support to
+>> use DTS or ACPI to descibe GPIO device resources.
+>>
+>> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+>> Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+>> Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> v8 looks really nice.
+>
+>> +static int loongson_gpio_to_irq(
+>> +                       struct gpio_chip *chip, unsigned int offset)
+>> +{
+>> +       struct platform_device *pdev =
+>> +               container_of(chip->parent, struct platform_device, dev);
+>> +
+>> +       if (offset >= chip->ngpio)
+>> +               return -EINVAL;
+> You forgot to drop this.
 
-ACK. However, I have other priorities, I will not invest more time to
-dig in the usb-skeleton.c
+You mean to remove this if judgment?
 
-Thank you for the answer! That was a long but interesting diversion
-from the initial topic :)
+"if(offset >= chip->ngpio)"
 
+         return -EINVAL;
 
-Yours sincerely,
-Vincent Mailhol
+>
+> With this fixed (and Bartosz requested fix):
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>
+> Yours,
+> Linus Walleij
+
