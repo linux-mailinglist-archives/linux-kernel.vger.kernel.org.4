@@ -2,197 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A3763B35B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 21:36:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 037BD63B36C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 21:38:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234172AbiK1Ugp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 15:36:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
+        id S232907AbiK1Uh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 15:37:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbiK1Ugn (ORCPT
+        with ESMTP id S233938AbiK1Uhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 15:36:43 -0500
-Received: from na01-obe.outbound.protection.outlook.com (mail-westus2azon11021020.outbound.protection.outlook.com [52.101.47.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A427E2AC61;
-        Mon, 28 Nov 2022 12:36:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ymq/YjlLhDmH3wn0M4i09bOUCeZAxT4MD4P6lxXFxcu6PRMphf+4Zh3n7+fjC5vVw0nTC9KaJAtRmWO1n/mjRRLiopP/a88M6mUNLRnn0iLdBzPzXvFwRbQhIeXJddzh4o+0+0A2l5yW7pKdyoP8lPE0GtCs0/WXXNF35vFCP/I2NsFeREtk0bqJqBwXtMq3vXDjEPo1EPp2yqhdBr+dCEwrz+n8gzV4LRrM1iSrgdunG07Wg6pVH9Wqc9fV0ZVNdL5Xv6xzwCItHdNDsmubHXZEGicihx1RYxifbuELZZBY5+7yTMVq5gM/AYsw3u4xwkGFgjv0mw7E01W7foSxVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EmIhozhAAWi1Z65Gsn9Z867CRvTftx0iAEivD60niPs=;
- b=WED0F7FSc0Bv8kYh3wGtPrYAIEBsJyJxTrk97HAg1QhOHbllHn0/uj7YCcPCVQdF1dcVvULoEL1FUsf/zC2UOFUEf9QfNP3mXCLREZx9l+g7qnEvRZsDjHbgaePHVr0r7UTEq7kDJ0k8yBkms4k4Ruvlo/MB0BM+ihwSFR8s3V1VdBY8Ty30cQp6ZiMIdNFwdniRjszJ4FHibre0DCdnk3WxazQLNTWVtYORx9dz9TDRol9Q4ilrXV7HRdH/ElaBdqqNFfL9k777yJc67vxon8T9V8Nlp7tgf+RqrTu+YjT46wZSAXyApWBI/4kIiIrtURzsazawY4PysmN8sjMFPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EmIhozhAAWi1Z65Gsn9Z867CRvTftx0iAEivD60niPs=;
- b=NWmPbVWyvVtVQJrm0xT0WUdTBgYF3oIUvvL7bgguomrT8HbwALkLA4GhewTi7oK5m7/X1Pi4qfDxyqKRsGIwWa9EIJwojfZoP2CO7URM4NdP7HxSEC67UILWEKWn3LQDMb+X9qd1/0uOFAyTlE9qAHYsjF7b7v+GEXOPfOkdH+Q=
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
- by BY5PR21MB1458.namprd21.prod.outlook.com (2603:10b6:a03:23f::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5901.4; Mon, 28 Nov
- 2022 20:36:38 +0000
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::ac9b:6fe1:dca5:b817]) by SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::ac9b:6fe1:dca5:b817%6]) with mapi id 15.20.5880.008; Mon, 28 Nov 2022
- 20:36:38 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 5/6] x86/hyperv: Support hypercalls for TDX guests
-Thread-Topic: [PATCH 5/6] x86/hyperv: Support hypercalls for TDX guests
-Thread-Index: AQHY/0oyvJMCdibbbUqzNA0JVsxn0a5TiVBAgADyjYCAAC5pcIAAEXiAgAAD5oCAAAZzgIAABoTw
-Date:   Mon, 28 Nov 2022 20:36:37 +0000
-Message-ID: <SA1PR21MB1335BA75F51964636745E486BF139@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <20221121195151.21812-1-decui@microsoft.com>
- <20221121195151.21812-6-decui@microsoft.com>
- <BYAPR21MB16886270B7899F35E8A826A4D70C9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <SA1PR21MB133528B2B3637D61368FF5FFBF139@SA1PR21MB1335.namprd21.prod.outlook.com>
- <b692c4da-4365-196d-9d12-33e2679c01de@intel.com>
- <SA1PR21MB1335BA9D27891F6B1BA3A988BF139@SA1PR21MB1335.namprd21.prod.outlook.com>
- <54871aec-823b-1ff5-8362-688d10e97263@intel.com>
- <SA1PR21MB13357B3CC486514D2DF50A4DBF139@SA1PR21MB1335.namprd21.prod.outlook.com>
- <f6d27366-e083-b362-b44c-eaf4d3365b53@intel.com>
-In-Reply-To: <f6d27366-e083-b362-b44c-eaf4d3365b53@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=7c3eddb3-1b19-4bc3-9f28-639de49eb635;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-28T20:11:26Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|BY5PR21MB1458:EE_
-x-ms-office365-filtering-correlation-id: e848ce24-24e2-429f-5446-08dad1803f9f
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qR9aq00w7rcEc6yof/SX0LRZ/kX90N603QxPAnP2506KR74CErXn06agGtB032qmd9i4sY6F/DADonc3zxZMwuiRoOty6aNmDH6kK6YyzLJi50+Z200YTBpBVnm20vil64yDZAFl9kj8ftmAMnrgNz4jbhgPpsmbVYYoOZrIyIClG13upwYW79W/yl6MQsk9mZA7ofergrkaDcu7RAsVAXgTD9Axd3MgZerE9m+UHaKS6eRaDC3YhsUovUrsNZyIqFXWpxPn3G+/ySbPwTrtEE6ajwW9xGH7f32H7J4VrN39VhCWdq2G98SyO6HxtnOgY7W+Qys2acKxZzl5qQywc44ZysfLdOAXZP1XnHGz8noHyKhauxW6cOspsLdFuxxLvm+0DiWHKyF1PL/iG3i/VCfszGiTDQzQXYHANyVgsU7YJ6G9eIPC45erjEA5IUdw5zyke0CABXE0LywpzfecxMkseXnl+xVKnWgXmS2YWr0tADZK1tZoKc7n3wN7ovmAF7BkpA6UiLWflOxJfknYO5Ji0Lmue6wkEoxW5l1BSdLs2JsGYk+VO/HIglSFimBWhf1IwCV+/DumDppu7G7BA77t+01t+aPTz/6dPhjfI03rT1Z3iRz5/by+pIg7k28H9TQdnGyK50pjG7927WBbzXPSmA50RQG0Ax8BKVqBoaOILmpMSnqZc4dEre+oDZzYA6/1edJWZgYICR0FETWCIOyRh9usEDCUxwTMnJD+TO6jvmPJW6SpARiTdMfOV3vheoTvH3axLcNy5QDXUX8q+A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(136003)(346002)(396003)(376002)(451199015)(53546011)(110136005)(7696005)(6506007)(10290500003)(26005)(9686003)(71200400001)(66946007)(76116006)(66446008)(66476007)(66556008)(8676002)(64756008)(4326008)(478600001)(316002)(5660300002)(8936002)(52536014)(7416002)(2906002)(186003)(41300700001)(8990500004)(122000001)(38100700002)(921005)(82960400001)(82950400001)(38070700005)(86362001)(33656002)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Lal3PygNbmNnZhuMA5crK5JoMLtYUl3wyqfhA1DZlm7kKcCoSaYgHPg/FDiO?=
- =?us-ascii?Q?MecRuJMAXeumrW6zHY2UFfBUe/LU+tf+lUDZkA2IlJUyD3gOLi+vJnebxlIY?=
- =?us-ascii?Q?6eSisNVGCJb4BFxM1ccDsYvxYB86MV7xInMmpYd8LqPVq2SROZVrZsNyQFhe?=
- =?us-ascii?Q?sJd8luc3YVT9TpeVFRt+SlYZd4eZvlfXQ/DK1edpl9tb3zdui36/4jql567f?=
- =?us-ascii?Q?/823A5Blv7mzV33lru/jXkFGLvnbcpfkzpvm+bwfFOYBse1ypZIEmrgEKzN1?=
- =?us-ascii?Q?a0DI9ELokY2F0vbdlZPgNuBskmdmwDXl2lSM09/VA+RTATKnB+mMA7D0X4Ep?=
- =?us-ascii?Q?uOoXvX5bFqN981gFY9Tn2OChcPtxLFM/U19wwZFHMwBU4NA1rVNY943tQYB4?=
- =?us-ascii?Q?I/3B1FPu2n//NyqTkUAUOKSzQZVw0Pof4HFCOSEG13hEOLLwtKP3MpHGj5x5?=
- =?us-ascii?Q?CWWmFyBNVhbTlZVcF35HOi9EC53DgX1kZyGty9RRCQaLcWBoEc7zzLYPiFhk?=
- =?us-ascii?Q?ZUV32z5iveEVWWhohDy/BEvnMPB8Qj+y3fnlqaeH/e3wo2yZB/ncfAqdXe2U?=
- =?us-ascii?Q?ckzMDBdKNFHOpKsgKPaN3PUQTOADgA9KLWmxzKZ9ktTjLAYRsuDjkMtlC1B0?=
- =?us-ascii?Q?FTGQY+cVP4wwM4wCss2rDTxT20PQx6lxyqgLpw+iM9d9Cwe5ttxdTl2yS7Ie?=
- =?us-ascii?Q?CX4RdGLO41HoT4LAINI1FCk3m0clloIDn2a9RCqPwD+X3Ei1JJW1qQyPuOhh?=
- =?us-ascii?Q?3xW+LEKR3zExhnqILaGSimyHmg0weM/bpLLdNvTSwsQr6YfMF7BLdxL2K092?=
- =?us-ascii?Q?uBtliJ0niwxvLs75oPu64R6BYJBJozF7wzWbIrnvPWmefJCXmuSSMKJw+2v+?=
- =?us-ascii?Q?mdDp4MWvC/jxIFjJ1Lv02jRx+BBKoqex17LcB+0h8ONNvvMhvqkE1mPjuNF1?=
- =?us-ascii?Q?q4UYBp1wmpJOVjHTR+NKFsOcMTW+QPMx/5hFwqddXAtI0TzOKxJtsPLoMFmF?=
- =?us-ascii?Q?xpHQVWX1uKXHsp0BTdSUBAE+eS2Mh2FDQctX36pPiA0Ir/9XN2uG+FEaCO+D?=
- =?us-ascii?Q?o34gG6EoJlYk07A54obtPc1L7djSwbjpuXK1Zab/6Tcrh9c3WdhqBhko8EGy?=
- =?us-ascii?Q?nrNhc1YYTMdFO53xlORFDbOfyeTx6RPIqmINAlvXOnpvPui2dseWMvIhoOgr?=
- =?us-ascii?Q?+hwApWZC//zDenARSu8ray6iqAuw+cKcSL9WW5bJGwo3YIy+zzWAQ31gbBuX?=
- =?us-ascii?Q?H0T67LBwiZ/uTURbnzRmWi6QJYr6jBjdjvHmVMdlDsvwC9wiu/afTyFI7zbH?=
- =?us-ascii?Q?mOBlwFdZMO1EiM9TNwwx8LLiIkuW7TyyeLqb3be+T2hFDI7Y61xJ0VZ4FMUE?=
- =?us-ascii?Q?FscBWoB2wHzoVzm+MvFLUHl5mb5VFnAIgYeiRTAYkR4TAJ2HvIikQz7IOlfD?=
- =?us-ascii?Q?b03X8yQ06Vcg0XyPEcfRgdO4Rz//5i0dWJhCWMRjT7aOdnlEkB02+YauOQ0x?=
- =?us-ascii?Q?9hIgHzBr097tl1LBCUs6788l0vPIVvK+FdpzYCx2vQEr4i0LJO4NhPzm1bA/?=
- =?us-ascii?Q?OqGA1mrzStYuy07LWBFaG47WqqOHZ7m9z6Qn3QBd?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 28 Nov 2022 15:37:38 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103FC2ED5C;
+        Mon, 28 Nov 2022 12:37:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=xaI7kfEv+57J7JeLWjOKUpJS945rhDdD3ROyxxgB7fk=; b=pox/hC3JV0INcGpWW+6ZeZxNCE
+        s3xaal6dZMHkGcGrxpXd/i77u8PIRkDjmFMZw1l+PcifSziNy013rIf3JvDdJ/S42Fzxgk6rKXG+g
+        P50H67hIei5IjAGlfgEuxhbD44sxihk2iT6I6R1JQFh0LTF4ANU06d/npES3hXRQY4NNiQpv3uL36
+        ihk929EoTXS4Otyz4FxiyjyVe43aJfs64WrU16FR6RaswDDMmAwQ+pZZv7ylj5OkhG2xgj9H6hKQR
+        IdbeJsehYtcD6v9IisftOhNgLPVKQXd3N7Oowu7u74fHMDqg6bX85qomeqWUj1LdXgqmC7kp28lDw
+        QR4H6rkQ==;
+Received: from [177.34.169.227] (helo=[192.168.0.8])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ozksD-00Acgd-SH; Mon, 28 Nov 2022 21:37:06 +0100
+Message-ID: <d4a216a3-aa4f-70b2-6ff6-363b415d7fbc@igalia.com>
+Date:   Mon, 28 Nov 2022 17:36:58 -0300
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e848ce24-24e2-429f-5446-08dad1803f9f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Nov 2022 20:36:37.9304
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UaZRQZGOCvSxWCfm1nztNHqt4Jhh3jABM9UINdl/dLbNvBg+OQ/bC/ISc9amrOs9EDoqmwJg+UiWS/w8s+ZuVw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR21MB1458
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 03/17] drm/tests: helpers: Rename the device init
+ helper
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-media@vger.kernel.org
+References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
+ <20221123-rpi-kunit-tests-v2-3-efe5ed518b63@cerno.tech>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v2-3-efe5ed518b63@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Dave Hansen <dave.hansen@intel.com>
-> Sent: Monday, November 28, 2022 11:48 AM
->=20
-> On 11/28/22 11:37, Dexuan Cui wrote:
-> >> From: Dave Hansen <dave.hansen@intel.com>
-> ...
-> >> How do we know, for instance, that no hypercall using this interface
-> >> will *ever* take the 0x0 physical address as an argument?
-> >
-> > A 0x0 physical address as an argument still works: the 0 is passed
-> > to the hypervisor using GHCI. I believe Hyper-V interprets the 0 as
-> > an error (if the param is needed), and returns an "invalid parameter"
-> > error code to the guest.
->=20
-> I don't see any data in the public documentation to support the claim
-> that 0x0 is a special argument for either the input or output GPA
-> parameters.
+On 11/28/22 11:53, Maxime Ripard wrote:
+> The name doesn't really fit the conventions for the other helpers in
+> DRM/KMS, so let's rename it to make it obvious that we allocate a new
+> DRM device.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-Sorry, I didn't make it clear. I meant: for some hypercalls, Hyper-V
-doesn't really need an "input" param or an "output" param, so Linux
-passes 0 for such a "not needed" param. Maybe Linux can pass any
-value for such a "not needed" param, if Hyper-V just ignores the
-"not needed" param. Some examples:
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
 
-arch/x86/hyperv/hv_init.c: hv_get_partition_id():
-    status =3D hv_do_hypercall(HVCALL_GET_PARTITION_ID, NULL, output_page);
+Best Regards,
+- Maíra Canal
 
-drivers/pci/controller/pci-hyperv.c:
-    res =3D hv_do_hypercall(HVCALL_RETARGET_INTERRUPT | (var_size << 17),
-                      params, NULL);
-
-
-If a param is needed and is supposed to be a non-zero memory address,
-Linux running as a TDX guest must pass "cc_mkdec(address)" rather than
-"address", otherwise I suspect the result is undefined, e.g. Hyper-V might
-return an error to the guest, or Hyper-V might just terminate the guest,
-especially if Linux passes 0 or cc_mkdec(0).
-
-Currently all the users of hv_do_hypercall() pass valid arguments.
-=20
-> This is despite some actual discussion on things like their alignment
-> requirements[1] and interactions with overlay pages.
->=20
-> So, either you are mistaken about that behavior, or it looks like the
-> documentation needs updating.
-
-The above is just my conjecture. I don't know how exactly Hyper-V works.
+> ---
+>  drivers/gpu/drm/tests/drm_client_modeset_test.c | 3 ++-
+>  drivers/gpu/drm/tests/drm_kunit_helpers.c       | 8 +++++---
+>  drivers/gpu/drm/tests/drm_modes_test.c          | 3 ++-
+>  drivers/gpu/drm/tests/drm_probe_helper_test.c   | 5 +++--
+>  include/drm/drm_kunit_helpers.h                 | 5 ++++-
+>  5 files changed, 16 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/tests/drm_client_modeset_test.c b/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> index ed2f62e92fea..6cdf08f582ce 100644
+> --- a/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> +++ b/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> @@ -59,7 +59,8 @@ static int drm_client_modeset_test_init(struct kunit *test)
+>  
+>  	test->priv = priv;
+>  
+> -	priv->drm = drm_kunit_device_init(test, DRIVER_MODESET, "drm-client-modeset-test");
+> +	priv->drm = drm_kunit_helper_alloc_drm_device(test, DRIVER_MODESET,
+> +						      "drm-client-modeset-test");
+>  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->drm);
+>  
+>  	ret = drmm_connector_init(priv->drm, &priv->connector,
+> diff --git a/drivers/gpu/drm/tests/drm_kunit_helpers.c b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> index 46a68c2fd80c..2f67f6cf78d0 100644
+> --- a/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> +++ b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> @@ -36,7 +36,7 @@ static void dev_free(struct kunit_resource *res)
+>  }
+>  
+>  /**
+> - * drm_kunit_device_init - Allocates a mock DRM device for Kunit tests
+> + * drm_kunit_helper_alloc_drm_device - Allocates a mock DRM device for Kunit tests
+>   * @test: The test context object
+>   * @features: Mocked DRM device driver features
+>   * @name: Name of the struct &device to allocate
+> @@ -52,7 +52,9 @@ static void dev_free(struct kunit_resource *res)
+>   * Returns:
+>   * A pointer to the new drm_device, or an ERR_PTR() otherwise.
+>   */
+> -struct drm_device *drm_kunit_device_init(struct kunit *test, u32 features, char *name)
+> +struct drm_device *
+> +drm_kunit_helper_alloc_drm_device(struct kunit *test,
+> +				  u32 features, char *name)
+>  {
+>  	struct kunit_dev *kdev;
+>  	struct drm_device *drm;
+> @@ -82,7 +84,7 @@ struct drm_device *drm_kunit_device_init(struct kunit *test, u32 features, char
+>  
+>  	return drm;
+>  }
+> -EXPORT_SYMBOL(drm_kunit_device_init);
+> +EXPORT_SYMBOL(drm_kunit_helper_alloc_drm_device);
+>  
+>  MODULE_AUTHOR("Maxime Ripard <maxime@cerno.tech>");
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/gpu/drm/tests/drm_modes_test.c b/drivers/gpu/drm/tests/drm_modes_test.c
+> index 3953e478c4d0..6723089dff9f 100644
+> --- a/drivers/gpu/drm/tests/drm_modes_test.c
+> +++ b/drivers/gpu/drm/tests/drm_modes_test.c
+> @@ -22,7 +22,8 @@ static int drm_test_modes_init(struct kunit *test)
+>  	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
+>  	KUNIT_ASSERT_NOT_NULL(test, priv);
+>  
+> -	priv->drm = drm_kunit_device_init(test, DRIVER_MODESET, "drm-modes-test");
+> +	priv->drm = drm_kunit_helper_alloc_drm_device(test, DRIVER_MODESET,
+> +						      "drm-modes-test");
+>  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->drm);
+>  
+>  	test->priv = priv;
+> diff --git a/drivers/gpu/drm/tests/drm_probe_helper_test.c b/drivers/gpu/drm/tests/drm_probe_helper_test.c
+> index 1f3941c150ae..85236ff4744f 100644
+> --- a/drivers/gpu/drm/tests/drm_probe_helper_test.c
+> +++ b/drivers/gpu/drm/tests/drm_probe_helper_test.c
+> @@ -39,8 +39,9 @@ static int drm_probe_helper_test_init(struct kunit *test)
+>  	KUNIT_ASSERT_NOT_NULL(test, priv);
+>  	test->priv = priv;
+>  
+> -	priv->drm = drm_kunit_device_init(test, DRIVER_MODESET | DRIVER_ATOMIC,
+> -					  "drm-probe-helper-test");
+> +	priv->drm = drm_kunit_helper_alloc_drm_device(test,
+> +						      DRIVER_MODESET | DRIVER_ATOMIC,
+> +						      "drm-probe-helper-test");
+>  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->drm);
+>  
+>  	connector = &priv->connector;
+> diff --git a/include/drm/drm_kunit_helpers.h b/include/drm/drm_kunit_helpers.h
+> index 20ab6eec4c89..e9870c7911fe 100644
+> --- a/include/drm/drm_kunit_helpers.h
+> +++ b/include/drm/drm_kunit_helpers.h
+> @@ -6,6 +6,9 @@
+>  struct drm_device;
+>  struct kunit;
+>  
+> -struct drm_device *drm_kunit_device_init(struct kunit *test, u32 features, char *name);
+> +struct drm_device *
+> +drm_kunit_helper_alloc_drm_device(struct kunit *test,
+> +				  u32 features,
+> +				  char *name);
+>  
+>  #endif // DRM_KUNIT_HELPERS_H_
+> 
