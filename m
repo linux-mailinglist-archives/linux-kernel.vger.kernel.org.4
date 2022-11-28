@@ -2,167 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A855E63A03B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 04:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C651463A03F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 04:56:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiK1DxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 22:53:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
+        id S229727AbiK1D4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 22:56:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiK1DxE (ORCPT
+        with ESMTP id S229581AbiK1D4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 22:53:04 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB28738AD
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 19:53:03 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id hd14-20020a17090b458e00b0021909875bccso5464749pjb.1
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 19:53:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UF1ge54xIUAlHX2n++cnMUpCa6Myhy4vGKBhQP7XRwo=;
-        b=N51njAkDPRiOvWBJH4TPhl1rnQ6neieaIE+cew6kxfjHluLG7+EMzZzDDNtTGHGfcr
-         9Jh+WxwP+N6kB6VIS4R/KwFFzt27vDQqypOd82UiEGdu3TTVPNnwVnZT3IiVj+invY6y
-         GOceA9n6zIdpWzkbEnTXm042AyYYqbOcpmi0bdUm/9a/utH74s4zfLeHQ/6E6KLc1DPy
-         207LZrRBpbu8OgbNts8XwsW6qA/VDzRJzxujROxsnnrEijRJs1LLROke2qhcmzjv7VtZ
-         u9/5RbH9FYjOj0rt1ELKI5XOdV6/DtLhAJsGKN3qUfuHWkC5JEN3E/Y7OrIbilp0wjRn
-         cFAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UF1ge54xIUAlHX2n++cnMUpCa6Myhy4vGKBhQP7XRwo=;
-        b=ipkKTBZDxVCCPleafBjKxWvBX/Q4svkQxT6bljbnYblt1alOc6HvTFoMGKYquWoZ+s
-         Iu+NOZfglDl7Y77fhnK3YDnvUCpxbqlcAuaszEkESqSSQr0/6oWB8qf7/DW+uZ9zm/FY
-         +mdeOI8eBbd7LquZ3+/C7gTghjfkvKauEup3ipABnzDWijJtpDDivyTTxwaPW2uXpSRf
-         RR2ajCwTshUHTkt9LyPRoAPis1qgvc7hQaw03Knxwk2ilj8y+QxKDH1mFUafpH1vje4h
-         gloP53Pg4j6SNihuWhgDNr767imF1yP23binw8NP6qnrJ4JQyHBI/6BtLwXdfTtRWfT9
-         Hbww==
-X-Gm-Message-State: ANoB5pmcR1Ql4vFEv9QIMOE5LuYwbCtvuPvJV+cUKykplCBC2Us/02s6
-        pZP0x0PkCPxpQsT91AtfE6OiSTUEEHOH0gOdsxEv
-X-Google-Smtp-Source: AA0mqf7wQ2Uzn8UK+DPd4zA53So8KNWWgBEQFu8jmGln9wvg2shTpNANXvScuOP43LvWLdpGWPhbL0yBMvrh277NzsY=
-X-Received: by 2002:a17:902:9892:b0:186:c3b2:56d1 with SMTP id
- s18-20020a170902989200b00186c3b256d1mr30991891plp.15.1669607583130; Sun, 27
- Nov 2022 19:53:03 -0800 (PST)
+        Sun, 27 Nov 2022 22:56:01 -0500
+Received: from out28-169.mail.aliyun.com (out28-169.mail.aliyun.com [115.124.28.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EF75F83;
+        Sun, 27 Nov 2022 19:55:58 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436302|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.00377063-0.00017739-0.996052;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047213;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.QITOHN5_1669607722;
+Received: from 192.168.220.136(mailfrom:michael@allwinnertech.com fp:SMTPD_---.QITOHN5_1669607722)
+          by smtp.aliyun-inc.com;
+          Mon, 28 Nov 2022 11:55:25 +0800
+Message-ID: <d4ecd7cf-0dd0-570f-0560-a5886f464429@allwinnertech.com>
+Date:   Mon, 28 Nov 2022 11:55:22 +0800
 MIME-Version: 1.0
-References: <20221123201552.7865-1-casey@schaufler-ca.com> <20221123201552.7865-2-casey@schaufler-ca.com>
- <94ac3c49-550b-c517-680f-ba653d568f72@digikod.net>
-In-Reply-To: <94ac3c49-550b-c517-680f-ba653d568f72@digikod.net>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Sun, 27 Nov 2022 22:52:52 -0500
-Message-ID: <CAHC9VhSza-P0hG_iSdW8MCAKaykUW5eLBkpg=bb4-D_=7-j3+Q@mail.gmail.com>
-Subject: Re: [PATCH v3 1/9] LSM: Identify modules by more than name
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        casey.schaufler@intel.com, linux-security-module@vger.kernel.org,
-        jmorris@namei.org, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] mmc:mmc-hsq:use fifo to dispatch mmc_request
+Content-Language: en-US
+To:     Wenchao Chen <wenchao.chen666@gmail.com>
+Cc:     ulf.hansson@linaro.org, wenchao.chen@unisoc.com,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221118054725.80414-1-michael@allwinnertech.com>
+ <CA+Da2qxP2gvUc2=n5xW7_YEcgevGpDhqbcVFWVbF0c6DqXDXHA@mail.gmail.com>
+ <23c0a4ae-d714-cfb1-aeb5-68b66b5bf0ee@allwinnertech.com>
+ <CA+Da2qwXLapwUDX+GrFkNQE9so2Tj=ymY1YS396J_N_c+9EHYw@mail.gmail.com>
+From:   Michael Wu <michael@allwinnertech.com>
+In-Reply-To: <CA+Da2qwXLapwUDX+GrFkNQE9so2Tj=ymY1YS396J_N_c+9EHYw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 11:30 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>=
- wrote:
-> On 23/11/2022 21:15, Casey Schaufler wrote:
-> > Create a struct lsm_id to contain identifying information
-> > about Linux Security Modules (LSMs). At inception this contains
-> > the name of the module and an identifier associated with the
-> > security module. Change the security_add_hooks() interface to
-> > use this structure. Change the individual modules to maintain
-> > their own struct lsm_id and pass it to security_add_hooks().
-> >
-> > The values are for LSM identifiers are defined in a new UAPI
-> > header file linux/lsm.h. Each existing LSM has been updated to
-> > include it's LSMID in the lsm_id.
-> >
-> > The LSM ID values are sequential, with the oldest module
-> > LSM_ID_CAPABILITY being the lowest value and the existing modules
-> > numbered in the order they were included in the main line kernel.
-> > This is an arbitrary convention for assigning the values, but
-> > none better presents itself. The value 0 is defined as being invalid.
-> > The values 1-99 are reserved for any special case uses which may
-> > arise in the future.
-> >
-> > Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> > ---
-> >   include/linux/lsm_hooks.h    | 16 ++++++++++++++--
-> >   include/uapi/linux/lsm.h     | 32 ++++++++++++++++++++++++++++++++
-> >   security/apparmor/lsm.c      |  8 +++++++-
-> >   security/bpf/hooks.c         | 13 ++++++++++++-
-> >   security/commoncap.c         |  8 +++++++-
-> >   security/landlock/cred.c     |  2 +-
-> >   security/landlock/fs.c       |  2 +-
-> >   security/landlock/ptrace.c   |  2 +-
-> >   security/landlock/setup.c    |  6 ++++++
-> >   security/landlock/setup.h    |  1 +
-> >   security/loadpin/loadpin.c   |  9 ++++++++-
-> >   security/lockdown/lockdown.c |  8 +++++++-
-> >   security/safesetid/lsm.c     |  9 ++++++++-
-> >   security/security.c          | 12 ++++++------
-> >   security/selinux/hooks.c     |  9 ++++++++-
-> >   security/smack/smack_lsm.c   |  8 +++++++-
-> >   security/tomoyo/tomoyo.c     |  9 ++++++++-
-> >   security/yama/yama_lsm.c     |  8 +++++++-
-> >   18 files changed, 141 insertions(+), 21 deletions(-)
-> >   create mode 100644 include/uapi/linux/lsm.h
+On 11/24/2022 10:56 AM, Wenchao Chen wrote:
+> On Mon, Nov 21, 2022 at 2:19 PM Michael Wu <michael@allwinnertech.com> wrote:
+>>
+>> On 11/18/2022 7:43 PM, Wenchao Chen wrote:
+>>> On Fri, Nov 18, 2022 at 1:52 PM Michael Wu <michael@allwinnertech.com> wrote:
+>>>>
+>>>> Current next_tag selection will cause a large delay in some requests and
+>>>> destroy the scheduling results of the block scheduling layer. Because the
+>>>> issued mrq tags cannot ensure that each time is sequential, especially when
+>>>> the IO load is heavy. In the fio performance test, we found that 4k random
+>>>> read data was sent to mmc_hsq to start calling request_atomic It takes
+>>>> nearly 200ms to process the request, while mmc_hsq has processed thousands
+>>>> of other requests. So we use fifo here to ensure the first in, first out
+>>>> feature of the request and avoid adding additional delay to the request.
+>>>>
+>>>
+>>> Hi Michael
+>>> Is the test device an eMMC?
+>>> Could you share the fio test command if you want?
+>>> Can you provide more logs?
+>>>
+>> Hi Wenchao,
+>> Yes, the tested device is emmc.
+>> The test command we used is `./fio -name=Rand_Read_IOPS_Test
+>> -group_reporting -rw=random -bs=4K -numjobs=8 -directory=/data/data
+>> -size=1G -io_size=64M -nrfiles=1 -direct=1 -thread && rm
+>> /data/Rand_Read_IOPS_Test *`,  which replaces the io performance random
+>> read performance test of androidbench, and the file size is set to 1G, 8
+>> thread test configuration. Where /data uses f2fs and /data/data is a
+>> file encrypted path.
+>>
+>> After enabling the hsq configuration, we can clearly see from below fio
+>> test log that the minimum value of random reading is 3175 iops and the
+>> maximum value is 8554iops, and the maximum delay of io completion is
+>> about 200ms.
+>> ```
+>>       clat percentiles (usec):
+>>        |  1.00th=[   498],  5.00th=[   865], 10.00th=[   963], 20.00th=[
+>>    1045],
+>>        | 30.00th=[  1090], 40.00th=[  1139], 50.00th=[  1172], 60.00th=[
+>>    1221],
+>>        | 70.00th=[  1254], 80.00th=[  1319], 90.00th=[  1401], 95.00th=[
+>>    1614],
+>>        | 99.00th=[  2769], 99.50th=[  3589], 99.90th=[ 31589], 99.95th=[
+>> 66323],
+>>        | 99.99th=[200279]
+>>      bw (  KiB/s): min=12705, max=34225, per=100.00%, avg=23931.79,
+>> stdev=497.40, samples=345
+>>      iops        : min= 3175, max= 8554, avg=5981.67, stdev=124.38,
+>> samples=345
+>> ```
+>>
+>>
+>> ```
+>>       clat percentiles (usec):
+>>        |  1.00th=[  799],  5.00th=[  938], 10.00th=[  963], 20.00th=[  979],
+>>        | 30.00th=[  996], 40.00th=[ 1004], 50.00th=[ 1020], 60.00th=[ 1045],
+>>        | 70.00th=[ 1074], 80.00th=[ 1106], 90.00th=[ 1172], 95.00th=[ 1237],
+>>        | 99.00th=[ 1450], 99.50th=[ 1516], 99.90th=[ 1762], 99.95th=[ 2180],
+>>        | 99.99th=[ 9503]
+>>      bw (  KiB/s): min=29200, max=30944, per=100.00%, avg=30178.91,
+>> stdev=53.45, samples=272
+>>      iops        : min= 7300, max= 7736, avg=7544.62, stdev=13.38,
+>> samples=272
+>> ```
+>> When NOT enabling hsq, the minimum value of random reading is 7300 iops
+>> and the maximum value is 7736 iops, and the maximum delay of io is only
+>> 9 ms. Finally, we added debug to the mmc driver. The reason for locating
+>> the 200ms delay of hsq is due to the next tag selection of hsq.
+>>
+> 
+> Thank you very much for your Log. This patch can reduce latency, but I
+> have some questions:
+> 1. FIO -rw does not have random, but it does have randread. Do you use
+> randread? In addition, "IO_SIZE=64M" means only 64M data is tested?
+> Refer to FIO:
+> https://fio.readthedocs.io/en/latest/fio_doc.html?highlight=io_size#cmdoption-arg-io-size
+Hi Wenchao,
 
-...
+Yes, I used "randread". (Sorry, I wrote the parameter "random" 
+incorrectly.) The reason why I used "io_size=64M" is that I found the 
+performance of hsq was degraded when using the AndroBench for testing on 
+android13. Therefore, fio is used to simulate the AndroBench for 
+debugging. The AndroBench is configured with 8 threads while 1G files 
+per thread, and only 64M data for random read testing（This item is not 
+configurable）.
 
-> > diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
-> > new file mode 100644
-> > index 000000000000..47791c330cbf
-> > --- /dev/null
-> > +++ b/include/uapi/linux/lsm.h
-> > @@ -0,0 +1,32 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> > +/*
-> > + * Linux Security Modules (LSM) - User space API
-> > + *
-> > + * Copyright (C) 2022 Casey Schaufler <casey@schaufler-ca.com>
-> > + * Copyright (C) 2022 Intel Corporation
-> > + */
-> > +
-> > +#ifndef _UAPI_LINUX_LSM_H
-> > +#define _UAPI_LINUX_LSM_H
-> > +
-> > +/*
-> > + * ID values to identify security modules.
-> > + * A system may use more than one security module.
-> > + *
-> > + * Values 1-99 are reserved for future use in special cases.
->
-> This line should be removed unless justified. What could be special
-> about IDs? The syscalls already have a "flags" argument, which is enough.
->
-> > + */
-> > +#define LSM_ID_INVALID               0
->
-> Reserving 0 is good, but it doesn't deserve a dedicated declaration.
-> LSM_ID_INVALID should be removed.
->
->
-> > +#define LSM_ID_CAPABILITY    100
->
-> This should be 1=E2=80=A6
+> 2. The style of "tag_tail" should remain the same as that of
+> "next_tag". Would "tail_tag" be better?
+Thank you for your suggestion. I'll modify 'tag_tail' as 'tail_tag'.
 
-No.  Scratch that, make that an emphatic "No".
+> 3. It is better to provide a comparison of sequential read, sequential
+> write and random writeHere is the performance data tested by AndroBench:
 
-If you want to argue for a different reserved low-number range, e.g.
-something with a nice power-of-2 limit, I'm okay with that, but as I
-wrote earlier I feel strongly we need to have a low-number reserved
-range for potential future uses.
+-------------------------------------------------------------------------
+       io performance data from AndroBench (filesize=1G, 8 threads)
+-------------------------------------------------------------------------
+mmc configure     | original hsq  |  without hsq  |  hsq with this patch
+-------------------------------------------------------------------------
+Sequential write      58.23 MB/s       51.35 MB/s        56.15 MB/s
+Sequential read      138.24 MB/s      143.65 MB/s        146.4 MB/s
+random write        2900.11 iops     1887.13 iops      2982.02 iops
+random read         4764.45 iops     5485.19 iops      6786.42 iops
 
---=20
-paul-moore.com
+Here's a preview of patch-v2. If it's OK, I'll submit it soon. Thank you.
+
+--
+mmc:mmc-hsq:use fifo to dispatch mmc_request
+
+Current next_tag selection will cause a large delay in some requests and 
+destroy the scheduling results of the block scheduling layer. Because 
+the issued mrq tags cannot ensure that each time is sequential, 
+especially when the IO load is heavy. In the fio performance test, we 
+found that 4k random read data was sent to mmc_hsq to start calling 
+request_atomic It takes nearly 200ms to process the request, while 
+mmc_hsq has processed thousands of other requests. So we use fifo here 
+to ensure the first in, first out feature of the request and avoid 
+adding additional delay to the request.
+
+diff --git a/drivers/mmc/host/mmc_hsq.c b/drivers/mmc/host/mmc_hsq.c
+index 9d35453e7371..424dc7b07858 100644
+--- a/drivers/mmc/host/mmc_hsq.c
++++ b/drivers/mmc/host/mmc_hsq.c
+@@ -13,9 +13,6 @@
+
+  #include "mmc_hsq.h"
+
+-#define HSQ_NUM_SLOTS	64
+-#define HSQ_INVALID_TAG	HSQ_NUM_SLOTS
+-
+  static void mmc_hsq_retry_handler(struct work_struct *work)
+  {
+  	struct mmc_hsq *hsq = container_of(work, struct mmc_hsq, retry_work);
+@@ -73,7 +70,6 @@ static void mmc_hsq_pump_requests(struct mmc_hsq *hsq)
+
+  static void mmc_hsq_update_next_tag(struct mmc_hsq *hsq, int remains)
+  {
+-	struct hsq_slot *slot;
+  	int tag;
+
+  	/*
+@@ -82,29 +78,12 @@ static void mmc_hsq_update_next_tag(struct mmc_hsq 
+*hsq, int remains)
+  	 */
+  	if (!remains) {
+  		hsq->next_tag = HSQ_INVALID_TAG;
++		hsq->tail_tag = HSQ_INVALID_TAG;
+  		return;
+  	}
+
+-	/*
+-	 * Increasing the next tag and check if the corresponding request is
+-	 * available, if yes, then we found a candidate request.
+-	 */
+-	if (++hsq->next_tag != HSQ_INVALID_TAG) {
+-		slot = &hsq->slot[hsq->next_tag];
+-		if (slot->mrq)
+-			return;
+-	}
+-
+-	/* Othersie we should iterate all slots to find a available tag. */
+-	for (tag = 0; tag < HSQ_NUM_SLOTS; tag++) {
+-		slot = &hsq->slot[tag];
+-		if (slot->mrq)
+-			break;
+-	}
+-
+-	if (tag == HSQ_NUM_SLOTS)
+-		tag = HSQ_INVALID_TAG;
+-
++	tag = hsq->tag_slot[hsq->next_tag];
++	hsq->tag_slot[hsq->next_tag] = HSQ_INVALID_TAG;
+  	hsq->next_tag = tag;
+  }
+
+@@ -233,8 +212,14 @@ static int mmc_hsq_request(struct mmc_host *mmc, 
+struct mmc_request *mrq)
+  	 * Set the next tag as current request tag if no available
+  	 * next tag.
+  	 */
+-	if (hsq->next_tag == HSQ_INVALID_TAG)
++	if (hsq->next_tag == HSQ_INVALID_TAG) {
+  		hsq->next_tag = tag;
++		hsq->tail_tag = tag;
++		hsq->tag_slot[hsq->tail_tag] = HSQ_INVALID_TAG;
++	} else {
++		hsq->tag_slot[hsq->tail_tag] = tag;
++		hsq->tail_tag = tag;
++	}
+
+  	hsq->qcnt++;
+
+@@ -339,8 +324,10 @@ static const struct mmc_cqe_ops mmc_hsq_ops = {
+
+  int mmc_hsq_init(struct mmc_hsq *hsq, struct mmc_host *mmc)
+  {
++	int i;
+  	hsq->num_slots = HSQ_NUM_SLOTS;
+  	hsq->next_tag = HSQ_INVALID_TAG;
++	hsq->tail_tag = HSQ_INVALID_TAG;
+
+  	hsq->slot = devm_kcalloc(mmc_dev(mmc), hsq->num_slots,
+  				 sizeof(struct hsq_slot), GFP_KERNEL);
+@@ -351,6 +338,9 @@ int mmc_hsq_init(struct mmc_hsq *hsq, struct 
+mmc_host *mmc)
+  	hsq->mmc->cqe_private = hsq;
+  	mmc->cqe_ops = &mmc_hsq_ops;
+
++	for (i = 0; i < HSQ_NUM_SLOTS; i++)
++		hsq->tag_slot[i] = HSQ_INVALID_TAG;
++
+  	INIT_WORK(&hsq->retry_work, mmc_hsq_retry_handler);
+  	spin_lock_init(&hsq->lock);
+  	init_waitqueue_head(&hsq->wait_queue);
+diff --git a/drivers/mmc/host/mmc_hsq.h b/drivers/mmc/host/mmc_hsq.h
+index ffdd9cd172c3..1808024fc6c5 100644
+--- a/drivers/mmc/host/mmc_hsq.h
++++ b/drivers/mmc/host/mmc_hsq.h
+@@ -2,6 +2,9 @@
+  #ifndef LINUX_MMC_HSQ_H
+  #define LINUX_MMC_HSQ_H
+
++#define HSQ_NUM_SLOTS	64
++#define HSQ_INVALID_TAG	HSQ_NUM_SLOTS
++
+  struct hsq_slot {
+  	struct mmc_request *mrq;
+  };
+@@ -17,6 +20,8 @@ struct mmc_hsq {
+  	int next_tag;
+  	int num_slots;
+  	int qcnt;
++	int tail_tag;
++	int tag_slot[HSQ_NUM_SLOTS];
+
+  	bool enabled;
+  	bool waiting_for_idle;
+
+-- 
+Regards,
+Michael Wu
