@@ -2,44 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C64E639F57
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 03:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E37EA639F5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 03:14:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiK1CMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 21:12:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34934 "EHLO
+        id S229716AbiK1COH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 27 Nov 2022 21:14:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiK1CMm (ORCPT
+        with ESMTP id S229599AbiK1COF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 21:12:42 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B99B5591;
-        Sun, 27 Nov 2022 18:12:40 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VVnRYts_1669601556;
-Received: from 30.221.131.211(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VVnRYts_1669601556)
-          by smtp.aliyun-inc.com;
-          Mon, 28 Nov 2022 10:12:37 +0800
-Message-ID: <863d66e8-e6d3-d266-7660-a64e54330bdd@linux.alibaba.com>
-Date:   Mon, 28 Nov 2022 10:12:36 +0800
+        Sun, 27 Nov 2022 21:14:05 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D929CFA;
+        Sun, 27 Nov 2022 18:14:04 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2AS2CoT62031913, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2AS2CoT62031913
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Mon, 28 Nov 2022 10:12:50 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Mon, 28 Nov 2022 10:13:34 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Mon, 28 Nov 2022 10:13:34 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
+ RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
+ 15.01.2375.007; Mon, 28 Nov 2022 10:13:33 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     Neo Jou <neojou@gmail.com>, Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Alexander Hochbaum <alex@appudo.com>,
+        Da Xue <da@libre.computer>,
+        "Bernie Huang" <phhuang@realtek.com>,
+        Viktor Petrenko <g0000ga@gmail.com>
+Subject: RE: [PATCH v3 08/11] rtw88: Add rtw8821cu chipset support
+Thread-Topic: [PATCH v3 08/11] rtw88: Add rtw8821cu chipset support
+Thread-Index: AQHY/oJxlcE4AN1s7Ue+AOL9SzW7Xa5Tn5gw
+Date:   Mon, 28 Nov 2022 02:13:33 +0000
+Message-ID: <64d0d2c40be0404498cf09650d267320@realtek.com>
+References: <20221122145226.4065843-1-s.hauer@pengutronix.de>
+ <20221122145226.4065843-9-s.hauer@pengutronix.de>
+In-Reply-To: <20221122145226.4065843-9-s.hauer@pengutronix.de>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/11/27_=3F=3F_10:48:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.0
-Subject: Re: linux-next: manual merge of the vfs tree with the erofs tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>
-References: <20221128091323.246f8ce1@canb.auug.org.au>
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-In-Reply-To: <20221128091323.246f8ce1@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -48,34 +83,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 11/28/22 6:13 AM, Stephen Rothwell wrote:
-> Hi all,
+> -----Original Message-----
+> From: Sascha Hauer <s.hauer@pengutronix.de>
+> Sent: Tuesday, November 22, 2022 10:52 PM
+> To: linux-wireless@vger.kernel.org
+> Cc: Neo Jou <neojou@gmail.com>; Hans Ulli Kroll <linux@ulli-kroll.de>; Ping-Ke Shih <pkshih@realtek.com>;
+> Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; netdev@vger.kernel.org;
+> linux-kernel@vger.kernel.org; Martin Blumenstingl <martin.blumenstingl@googlemail.com>;
+> kernel@pengutronix.de; Johannes Berg <johannes@sipsolutions.net>; Alexander Hochbaum <alex@appudo.com>;
+> Da Xue <da@libre.computer>; Bernie Huang <phhuang@realtek.com>; Viktor Petrenko <g0000ga@gmail.com>;
+> Sascha Hauer <s.hauer@pengutronix.de>
+> Subject: [PATCH v3 08/11] rtw88: Add rtw8821cu chipset support
 > 
-> Today's linux-next merge of the vfs tree got a conflict in:
+> Add support for the rtw8821cu chipset based on
+> https://github.com/ulli-kroll/rtw88-usb.git
 > 
->   fs/erofs/fscache.c
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> ---
 > 
-> between commit:
+> Notes:
+>     Changes since v2:
+>     - Fix txdesc checksum calculation. The checksum must be calculated over
+>       a fixed number of words.
 > 
->   313e9413d512 ("erofs: switch to prepare_ondemand_read() in fscache mode")
-> 
-> from the erofs tree and commit:
-> 
->   de4eda9de2d9 ("use less confusing names for iov_iter direction initializers")
-> 
-> from the vfs tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+>  drivers/net/wireless/realtek/rtw88/Kconfig    | 11 ++++
+>  drivers/net/wireless/realtek/rtw88/Makefile   |  3 ++
+>  drivers/net/wireless/realtek/rtw88/rtw8821c.c | 18 +++++++
+>  drivers/net/wireless/realtek/rtw88/rtw8821c.h | 21 ++++++++
+>  .../net/wireless/realtek/rtw88/rtw8821cu.c    | 50 +++++++++++++++++++
+>  .../net/wireless/realtek/rtw88/rtw8821cu.h    | 10 ++++
+>  6 files changed, 113 insertions(+)
+>  create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8821cu.c
+>  create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8821cu.h
 > 
 
-It looks good to me.  Thanks.
+[...]
 
+> --- /dev/null
+> +++ b/drivers/net/wireless/realtek/rtw88/rtw8821cu.h
+> @@ -0,0 +1,10 @@
+> +/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
+> +/* Copyright(c) 2018-2019  Realtek Corporation
+> + */
+> +
+> +#ifndef __RTW_8821CU_H_
+> +#define __RTW_8821CU_H_
+> +
+> +extern struct rtw_chip_info rtw8821c_hw_spec;
 
--- 
-Thanks,
-Jingbo
+This has been moved to rtw8821c.h by
+89d8f53ff6e ("wifi: rtw88: Fix Sparse warning for rtw8821c_hw_spec")
+
+So, we don't need rtw8821cu.h anymore. 
+Please apply this rule to other chips.
+
+> +
+> +#endif
+> --
+> 2.30.2
+
