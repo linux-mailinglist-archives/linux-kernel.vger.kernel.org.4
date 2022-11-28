@@ -2,147 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A960163A081
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 05:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EF363A083
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 05:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiK1EVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 23:21:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56436 "EHLO
+        id S229640AbiK1EVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 23:21:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiK1EUe (ORCPT
+        with ESMTP id S229893AbiK1EUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 23:20:34 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9729D9FDE;
-        Sun, 27 Nov 2022 20:19:07 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NLC056gkfz4xG9;
-        Mon, 28 Nov 2022 15:19:01 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669609142;
-        bh=H0oBK7FCisXB7btwPM/HOT6CxyeXJHanPbSbd1866cs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qRLdWAhqOLx5JOKB7U0JC7CtoCpRYyZjJWRCAhFMGN8dWUipRwaA0IYfJU8ChPh48
-         EdUvfGauB175Ir1MjeM98KJefXC3NaQIFrDfdSi/sU+4krIvSECDfUFEybwhXzNu3e
-         8UeprO98/zm9CL4Nh/N4EsPWAyjOw5CEY6BsOy7ZzQUda4PGjQbL5uF5qTWhvncDNE
-         kdUuDunfJd9kI7AWwRuio+fIhcyDlbnMjAKbn2PVK4pDj2wCU8g16h8uxXme2Ev09w
-         g1QzA09SnECkCC7kkwhshkKP3jwlSS6G6k6x40lHWiNRFqYXcNgj/igJiP+UM5IiFf
-         GjRIVAdzWgqHQ==
-Date:   Mon, 28 Nov 2022 15:19:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Robert Schlabbach <robert_s@gmx.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the v4l-dvb-next tree
-Message-ID: <20221128151900.5eb94a01@canb.auug.org.au>
+        Sun, 27 Nov 2022 23:20:46 -0500
+Received: from out0-138.mail.aliyun.com (out0-138.mail.aliyun.com [140.205.0.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEDC384
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 20:19:42 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R781e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047192;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---.QITc3YH_1669609178;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.QITc3YH_1669609178)
+          by smtp.aliyun-inc.com;
+          Mon, 28 Nov 2022 12:19:38 +0800
+Date:   Mon, 28 Nov 2022 12:19:38 +0800
+From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>, Song Liu <song@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2] x86/paravirt: Use relative reference for original
+ instruction
+Message-ID: <20221128041938.GA42449@k08j02272.eu95sqa>
+References: <73c9ffac157087da78af9fca59cf7d8db7f17226.1669290510.git.houwenlong.hwl@antgroup.com>
+ <DD7871BE-B969-4E2E-BDF0-C5D730F0B0AE@zytor.com>
+ <20221128030320.GA101008@k08j02272.eu95sqa>
+ <169A82BE-E5A9-4DB6-9CBE-055699F00213@zytor.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bch6x3wADM9GUP3yHwWko7j";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <169A82BE-E5A9-4DB6-9CBE-055699F00213@zytor.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/bch6x3wADM9GUP3yHwWko7j
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, Nov 27, 2022 at 07:34:39PM -0800, H. Peter Anvin wrote:
+> On November 27, 2022 7:03:20 PM PST, Hou Wenlong <houwenlong.hwl@antgroup.com> wrote:
+> >On Sun, Nov 27, 2022 at 09:24:34AM -0800, H. Peter Anvin wrote:
+> >> On November 24, 2022 3:51:53 AM PST, Hou Wenlong <houwenlong.hwl@antgroup.com> wrote:
+> >> >Similar to the alternative patching, use relative reference for original
+> >> >instruction rather than absolute one, which saves 8 bytes for one entry
+> >> >on x86_64.  And it could generate R_X86_64_PC32 relocation instead of
+> >> >R_X86_64_64 relocation, which also reduces relocation metadata on
+> >> >relocatable builds. And the alignment could be hard coded to be 4 now.
+> >> >
+> >> >Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> >> >---
+> >> > arch/x86/include/asm/paravirt.h       | 10 +++++-----
+> >> > arch/x86/include/asm/paravirt_types.h |  8 ++++----
+> >> > arch/x86/kernel/alternative.c         |  8 +++++---
+> >> > 3 files changed, 14 insertions(+), 12 deletions(-)
+> >> >
+> >> >diff --git a/arch/x86/include/asm/paravirt.h b/arch/x86/include/asm/paravirt.h
+> >> >index 2851bc2339d5..e56065ea73f2 100644
+> >> >--- a/arch/x86/include/asm/paravirt.h
+> >> >+++ b/arch/x86/include/asm/paravirt.h
+> >> >@@ -735,16 +735,16 @@ extern void default_banner(void);
+> >> > 
+> >> > #else  /* __ASSEMBLY__ */
+> >> > 
+> >> >-#define _PVSITE(ptype, ops, word, algn)		\
+> >> >+#define _PVSITE(ptype, ops)			\
+> >> > 771:;						\
+> >> > 	ops;					\
+> >> > 772:;						\
+> >> > 	.pushsection .parainstructions,"a";	\
+> >> >-	 .align	algn;				\
+> >> >-	 word 771b;				\
+> >> >+	 .align	4;				\
+> >> >+	 .long 771b-.;				\
+> >> > 	 .byte ptype;				\
+> >> > 	 .byte 772b-771b;			\
+> >> >-	 _ASM_ALIGN;				\
+> >> >+	 .align 4;				\
+> >> > 	.popsection
+> >> > 
+> >> > 
+> >> >@@ -752,7 +752,7 @@ extern void default_banner(void);
+> >> > #ifdef CONFIG_PARAVIRT_XXL
+> >> > 
+> >> > #define PARA_PATCH(off)		((off) / 8)
+> >> >-#define PARA_SITE(ptype, ops)	_PVSITE(ptype, ops, .quad, 8)
+> >> >+#define PARA_SITE(ptype, ops)	_PVSITE(ptype, ops)
+> >> > #define PARA_INDIRECT(addr)	*addr(%rip)
+> >> > 
+> >> > #ifdef CONFIG_DEBUG_ENTRY
+> >> >diff --git a/arch/x86/include/asm/paravirt_types.h b/arch/x86/include/asm/paravirt_types.h
+> >> >index 8c1da419260f..68952ae07a3f 100644
+> >> >--- a/arch/x86/include/asm/paravirt_types.h
+> >> >+++ b/arch/x86/include/asm/paravirt_types.h
+> >> >@@ -5,7 +5,7 @@
+> >> > #ifndef __ASSEMBLY__
+> >> > /* These all sit in the .parainstructions section to tell us what to patch. */
+> >> > struct paravirt_patch_site {
+> >> >-	u8 *instr;		/* original instructions */
+> >> >+	s32 instr_offset;	/* original instructions */
+> >> > 	u8 type;		/* type of this instruction */
+> >> > 	u8 len;			/* length of original instruction */
+> >> > };
+> >> >@@ -273,11 +273,11 @@ extern struct paravirt_patch_template pv_ops;
+> >> > #define _paravirt_alt(insn_string, type)		\
+> >> > 	"771:\n\t" insn_string "\n" "772:\n"		\
+> >> > 	".pushsection .parainstructions,\"a\"\n"	\
+> >> >-	_ASM_ALIGN "\n"					\
+> >> >-	_ASM_PTR " 771b\n"				\
+> >> >+	"  .align 4\n"					\
+> >> >+	"  .long 771b-.\n"				\
+> >> > 	"  .byte " type "\n"				\
+> >> > 	"  .byte 772b-771b\n"				\
+> >> >-	_ASM_ALIGN "\n"					\
+> >> >+	"  .align 4\n"					\
+> >> > 	".popsection\n"
+> >> > 
+> >> > /* Generate patchable code, with the default asm parameters. */
+> >> >diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+> >> >index 111b809f0ac2..6eea563a098d 100644
+> >> >--- a/arch/x86/kernel/alternative.c
+> >> >+++ b/arch/x86/kernel/alternative.c
+> >> >@@ -1232,20 +1232,22 @@ void __init_or_module apply_paravirt(struct paravirt_patch_site *start,
+> >> > {
+> >> > 	struct paravirt_patch_site *p;
+> >> > 	char insn_buff[MAX_PATCH_LEN];
+> >> >+	u8 *instr;
+> >> > 
+> >> > 	for (p = start; p < end; p++) {
+> >> > 		unsigned int used;
+> >> > 
+> >> >+		instr = (u8 *)&p->instr_offset + p->instr_offset;
+> >> > 		BUG_ON(p->len > MAX_PATCH_LEN);
+> >> > 		/* prep the buffer with the original instructions */
+> >> >-		memcpy(insn_buff, p->instr, p->len);
+> >> >-		used = paravirt_patch(p->type, insn_buff, (unsigned long)p->instr, p->len);
+> >> >+		memcpy(insn_buff, instr, p->len);
+> >> >+		used = paravirt_patch(p->type, insn_buff, (unsigned long)instr, p->len);
+> >> > 
+> >> > 		BUG_ON(used > p->len);
+> >> > 
+> >> > 		/* Pad the rest with nops */
+> >> > 		add_nops(insn_buff + used, p->len - used);
+> >> >-		text_poke_early(p->instr, insn_buff, p->len);
+> >> >+		text_poke_early(instr, insn_buff, p->len);
+> >> > 	}
+> >> > }
+> >> > extern struct paravirt_patch_site __start_parainstructions[],
+> >> 
+> >> Any reason that you couldn't use the same patching code?
+> >
+> >Sorry, what do you mean using the same patching code? Do you
+> >mean that share some code between apply_alternatives() and
+> >apply_paravirt()?
+> 
+> Yes. Abstract the facility rather than duplicate.
 
-Hi all,
+The structure of patching entry is different between paravirt
+patching and alternative patching. The only same logic of those
+two patching functions is iteration in the section. The patching
+way is really diffferent. I can abstract the facility like this:
 
-After merging the v4l-dvb-next tree, today's linux-next build (htmldocs)
-produced these warnings:
+#define for_each_patch_entry(p, start, end, patch_func)    \
+	for (p = start; p < end; p++) {                    \
+		u8 *instr;                                 \
+		char insn_buff[MAX_PATCH_LEN];             \
+		instr = p->instr_offset + p->instr_offset; \
+                BUG_ON(p->len > MAX_PATCH_LEN);            \
+		used = patch_func(p, instr, insn_buff);    \
+		add_nops(insn_buff + used, p->len - used); \
+		text_poke_early(instr, insn_buff, p->len); \
+	}
 
-include/uapi/linux/dvb/frontend.h:399: warning: Enum value 'QAM_1024' not d=
-escribed in enum 'fe_modulation'
-include/uapi/linux/dvb/frontend.h:399: warning: Enum value 'QAM_4096' not d=
-escribed in enum 'fe_modulation'
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-1-3
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-1-4
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-5-9
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-7-9
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-8-15
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-11-15
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-13-18
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-9-20
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-11-20
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-23-36
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-25-36
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-13-45
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-26-45
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-28-45
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-32-45
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-77-90
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-1-3
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-1-4
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-5-9
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-7-9
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-8-15
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-11-15
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-13-18
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-9-20
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-11-20
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-23-36
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-25-36
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-13-45
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-26-45
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-28-45
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-32-45
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-77-90
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-8-l
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-16-l
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-32-l
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-64
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-64-l
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: qam-1024
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: qam-4096
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-8-l
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-16-l
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-32-l
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-64
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-64-l
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: guard-inte=
-rval-1-64
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: guard-inte=
-rval-1-64
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: rolloff-15
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: rolloff-10
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: rolloff-5
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: rolloff-15
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: rolloff-10
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: rolloff-5
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: sys-dvbc2
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: sys-dvbc2
-
-Introduced by commit
-
-  6508a50fe84f ("media: dvb: add DVB-C2 and DVB-S2X parameter values")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/bch6x3wADM9GUP3yHwWko7j
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOENrQACgkQAVBC80lX
-0GzRWAf/QKKv5C3S0BMm4aDqEDk0QjO64jFFETkbLJJTYDHw4Re+WsNGvYYy9fNJ
-3LFt+/deehrmphDkO/oJhM8Ba9WrDTny4ooQrEg2pF2jBgh2xdKdgSaAJhLSiSIK
-6l3YUBy2MnNIHaoCVidYBWRqdVyZw5FjsudFk/8bT6Z3myBSgNXtjRlA2NbGOtSV
-gGFimN5kFwxeXMYoSPJK9Z9fa1rh7vEv2ah05YbeOrTuqmarC3hJBzdeRl+TpPNR
-PHx0ObjdjX/GX9CuJ9dFoqE78Un+CNGx3k9+kIQSti4rZ2jUAMe04dWfemkVsD5o
-/F/fq2X57yE5G6W5PndYaV6UOO/ROg==
-=hP+H
------END PGP SIGNATURE-----
-
---Sig_/bch6x3wADM9GUP3yHwWko7j--
+But I think it is ugly :(. Do you have any better ideas?
