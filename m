@@ -2,383 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9E763A5FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB30963A601
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:21:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiK1KVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 05:21:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
+        id S229695AbiK1KVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 05:21:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiK1KVV (ORCPT
+        with ESMTP id S230076AbiK1KVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 05:21:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF721A386
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:21:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28D2161068
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:21:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 852E1C43149
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:21:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669630879;
-        bh=YCfS3w8TB91EvzTqEcHgJL7Y7tpu2nn3z+j7xTTEJA8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Z2KEtmQg5l5jRY5l/FnYawRyBtD3aOLIfkxJVICHKyutphRgqJzgdvopIcvEVs8Gh
-         VJ7zgir1lVshdzJcNWQPpH31kPCqbDLmenNmejNKWmbXdzSq9EyRTObr9c1jld2TRC
-         /3WXc/HssFBQjguWCPr3+I+ojjB5EctYEsb6UWasAzFgHN2Kw9Ucux18oHUE8gynCT
-         mu3zpi+c0H8z6PfgBjN43Aq/d+cqwgFOH0BjQa8WXngHxCNTyiUDRfb0gtBhEBpwdm
-         dG/uh3Ji/ZNUO0pwpZxG5aor4Ay9GEdt7u8VL3rR7bydhIzh8vwkX59+/LlleSyl/h
-         9Jenzlr0WhDeQ==
-Received: by mail-ed1-f54.google.com with SMTP id s5so14704978edc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:21:19 -0800 (PST)
-X-Gm-Message-State: ANoB5plISTQYPJe3v9c7YZ3j9X6pcH8ZI53cCIqzFuyTBAPaXtHhOCwt
-        33XjkVeoPP8HaczrRTMNcKdyOG2rxF+lQA5/T7o=
-X-Google-Smtp-Source: AA0mqf6jSIDEBDivT7wc+vz6hgTuUovGcwvT2z6KpLXWXjKLTVvbeG/uvWIZR1FeXKtq1ps5KG7tRhglrLnO2suJpQ4=
-X-Received: by 2002:aa7:d551:0:b0:468:fb2c:6c8c with SMTP id
- u17-20020aa7d551000000b00468fb2c6c8cmr44959423edr.340.1669630877545; Mon, 28
- Nov 2022 02:21:17 -0800 (PST)
+        Mon, 28 Nov 2022 05:21:39 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C70F1A3B2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:21:37 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id l4-20020a056e021aa400b00300ad9535c8so8465552ilv.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:21:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tMqDQsEzmaylonuYRqp1axSYbobnt52p4j0WRJfZDns=;
+        b=hdjs+V/WW1GVFh+9Af8dj5jwIDkVm017kg+i9/dYR841Nd4z8Ii7GMliLHLgD6P5dl
+         DpS8lwoigSpu+AvQUZ10VTlmx9pF1qfPCVcqnNG+aBemhLiLXb4YuI1EzrG70E4u+s/c
+         WTA/sXxUMl09r83YjrRcvDweRrxS2dmZ2UC7G2oUtlFhXo3euRnB0Z8YiM4anz7cFC8J
+         trpSXLozDZWRCR27iH4Tam0NE8qJrt4/IndOpqe2yvCE9EwYZqcIPeE3GMCod5WyFEOo
+         k7zbjRJBannUMrs4AxJxGJWTBm+LFTeDZyaE2HYZU4t8wHGqRLHKNihVzcau3ZT/TkjW
+         WXvw==
+X-Gm-Message-State: ANoB5pnRKXFHNOJe4w2Udc/MypmBMPNmgpkV48cqGDqQNdBsbhUAcZBg
+        69oGv5iwpRoaPT27+ripR4IK6OvqX18Lcz8CCLZMnYkrjbdh
+X-Google-Smtp-Source: AA0mqf6S7pp56wltRqO9M1GKqYCsW4lFvbm2livjgsib1m60AkHoMvTPPWhHtJmDZZ6ryfPdfB2zp92Zd+m3xQing5AaI6iP23Ey
 MIME-Version: 1.0
-References: <CAAYs2=hNAwDk7=F077ityNykZJCCvGVyXsxRzZO3s7rKwOPpUg@mail.gmail.com>
- <20221128101201.4144527-1-guoren@kernel.org> <20221128101201.4144527-2-guoren@kernel.org>
-In-Reply-To: <20221128101201.4144527-2-guoren@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 28 Nov 2022 18:21:05 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRc8RiP6b9zcinT-OvRon9_c7L0wm58-9KDoJGns9hiPQ@mail.gmail.com>
-Message-ID: <CAJF2gTRc8RiP6b9zcinT-OvRon9_c7L0wm58-9KDoJGns9hiPQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] samples: ftrace: Add riscv support for SAMPLE_FTRACE_DIRECT[_MULTI]
-To:     suagrfillet@gmail.com, guoren@kernel.org
-Cc:     aou@eecs.berkeley.edu, bp@suse.de, jolsa@redhat.com,
-        jpoimboe@kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, mark.rutland@arm.com,
-        mhiramat@kernel.org, palmer@dabbelt.com, paul.walmsley@sifive.com,
-        peterz@infradead.org, rostedt@goodmis.org
+X-Received: by 2002:a05:6e02:966:b0:302:fca8:5d45 with SMTP id
+ q6-20020a056e02096600b00302fca85d45mr6321889ilt.193.1669630896678; Mon, 28
+ Nov 2022 02:21:36 -0800 (PST)
+Date:   Mon, 28 Nov 2022 02:21:36 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000080afdc05ee853c31@google.com>
+Subject: [syzbot] kernel BUG in hfs_btree_open
+From:   syzbot <syzbot+e5896dff7bbe057e5fff@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, fmdefrancesco@gmail.com,
+        ira.weiny@intel.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, slava@dubeyko.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 6:12 PM <guoren@kernel.org> wrote:
->
-> From: Song Shuai <suagrfillet@gmail.com>
->
-> select HAVE_SAMPLE_FTRACE_DIRECT and HAVE_SAMPLE_FTRACE_DIRECT_MULTI
-> for ARCH_RV64I in arch/riscv/Kconfig. And add riscv asm code for
-> the ftrace-direct*.c files in samples/ftrace/.
->
-> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> Co-developed-by: Guo Ren <guoren@kernel.org>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> ---
-> Below is modified by Guo Ren:
->
-> diff --git a/samples/ftrace/ftrace-direct-modify.c
-> b/samples/ftrace/ftrace-direct-modify.c
-> index 5582d000d803..d970b46ecc4e 100644
-> --- a/samples/ftrace/ftrace-direct-modify.c
-> +++ b/samples/ftrace/ftrace-direct-modify.c
-> @@ -29,6 +29,7 @@ asm ("        .pushsection    .text, \"ax\",
-> @progbits\n"
->  "      .globl          my_tramp1\n"
->  "   my_tramp1:\n"
->  "      addi sp,sp,-16\n"
-> +"      move t0,t1\n"
->  "      sd   t0,0(sp)\n"
->  "      sd   ra,8(sp)\n"
->  "      call my_direct_func1\n"
-> diff --git a/samples/ftrace/ftrace-direct-multi-modify.c
-> b/samples/ftrace/ftrace-direct-multi-modify.c
-> index 43e02d39c652..9534e18fa6ed 100644
-> --- a/samples/ftrace/ftrace-direct-multi-modify.c
-> +++ b/samples/ftrace/ftrace-direct-multi-modify.c
-> @@ -28,6 +28,7 @@ asm ("        .pushsection    .text, \"ax\",
-> @progbits\n"
->  "   my_tramp1:\n"
->  "       addi sp,sp,-24\n"
->  "       sd   a0,0(sp)\n"
-> +"       move t0,t1\n"
->  "       sd   t0,8(sp)\n"
->  "       sd   ra,16(sp)\n"
->  "       call my_direct_func1\n"
-> diff --git a/samples/ftrace/ftrace-direct-multi.c
-> b/samples/ftrace/ftrace-direct-multi.c
-> index df91339d3095..2111478b0463 100644
-> --- a/samples/ftrace/ftrace-direct-multi.c
-> +++ b/samples/ftrace/ftrace-direct-multi.c
-> @@ -23,6 +23,7 @@ asm ("       .pushsection    .text, \"ax\",
-> @progbits\n"
->  "   my_tramp:\n"
->  "       addi sp,sp,-24\n"
->  "       sd   a0,0(sp)\n"
-> +"       move t0,t1\n"
->  "       sd   t0,8(sp)\n"
->  "       sd   ra,16(sp)\n"
->  "       call my_direct_func\n"
-> diff --git a/samples/ftrace/ftrace-direct-too.c
-> b/samples/ftrace/ftrace-direct-too.c
-> index fe3b8c4f3336..e80981d3dc0a 100644
-> --- a/samples/ftrace/ftrace-direct-too.c
-> +++ b/samples/ftrace/ftrace-direct-too.c
-> @@ -27,6 +27,7 @@ asm ("       .pushsection    .text, \"ax\",
-> @progbits\n"
->  "       sd   a0,0(sp)\n"
->  "       sd   a1,8(sp)\n"
->  "       sd   a2,16(sp)\n"
-> +"       move t0,t1\n"
->  "       sd   t0,24(sp)\n"
->  "       sd   ra,32(sp)\n"
->  "       call my_direct_func\n"
-> diff --git a/samples/ftrace/ftrace-direct.c
-> b/samples/ftrace/ftrace-direct.c
-> index 0784024b6653..b6cae1b5cb66 100644
-> --- a/samples/ftrace/ftrace-direct.c
-> +++ b/samples/ftrace/ftrace-direct.c
-> @@ -22,6 +22,7 @@ asm ("       .pushsection    .text, \"ax\",
-> @progbits\n"
->  "   my_tramp:\n"
->  "       addi sp,sp,-24\n"
->  "       sd   a0,0(sp)\n"
-> +"       move t0,t1\n"
->  "       sd   t0,8(sp)\n"
->  "       sd   ra,16(sp)\n"
->  "       call my_direct_func\n"
-> ---
->  arch/riscv/Kconfig                          |  2 ++
->  samples/ftrace/ftrace-direct-modify.c       | 34 ++++++++++++++++++
->  samples/ftrace/ftrace-direct-multi-modify.c | 38 +++++++++++++++++++++
->  samples/ftrace/ftrace-direct-multi.c        | 23 +++++++++++++
->  samples/ftrace/ftrace-direct-too.c          | 27 +++++++++++++++
->  samples/ftrace/ftrace-direct.c              | 23 +++++++++++++
->  6 files changed, 147 insertions(+)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 2828537abfcd..0a1da03e88c2 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -279,6 +279,8 @@ config ARCH_RV64I
->         select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && $(cc-option,-fpatchable-function-entry=8)
->         select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
->         select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> +       select HAVE_SAMPLE_FTRACE_DIRECT
-> +       select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
->         select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
->         select HAVE_FUNCTION_GRAPH_TRACER
->         select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
-> diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrace-direct-modify.c
-> index 39146fa83e20..6a633ff4cf6d 100644
-> --- a/samples/ftrace/ftrace-direct-modify.c
-> +++ b/samples/ftrace/ftrace-direct-modify.c
-> @@ -22,6 +22,40 @@ extern void my_tramp2(void *);
->
->  static unsigned long my_ip = (unsigned long)schedule;
->
-> +#ifdef CONFIG_RISCV
-> +
-> +asm (" .pushsection    .text, \"ax\", @progbits\n"
-> +"      .type           my_tramp1, @function\n"
-> +"      .globl          my_tramp1\n"
-> +"   my_tramp1:\n"
-> +"      addi sp,sp,-16\n"
-> +"      move t0,t1\n"
-> +"      sd   t0,0(sp)\n"
-> +"      sd   ra,8(sp)\n"
-> +"      call my_direct_func1\n"
-> +"      ld   t0,0(sp)\n"
-> +"      ld   ra,8(sp)\n"
-> +"      addi sp,sp,16\n"
-> +"      jr t0\n"
-> +"      .size           my_tramp1, .-my_tramp1\n"
-> +
-> +"      .type           my_tramp2, @function\n"
-> +"      .globl          my_tramp2\n"
-> +"   my_tramp2:\n"
-> +"      addi sp,sp,-16\n"
-> +"      sd   t0,0(sp)\n"
-> +"      sd   ra,8(sp)\n"
-> +"      call my_direct_func2\n"
-> +"      ld   t0,0(sp)\n"
-> +"      ld   ra,8(sp)\n"
-> +"      addi sp,sp,16\n"
-> +"      jr t0\n"
-> +"      .size           my_tramp2, .-my_tramp2\n"
-> +"      .popsection\n"
-> +);
-> +
-> +#endif /* CONFIG_RISCV */
-> +
->  #ifdef CONFIG_X86_64
->
->  #include <asm/ibt.h>
-> diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
-> index 65aa94d96f4e..9534e18fa6ed 100644
-> --- a/samples/ftrace/ftrace-direct-multi-modify.c
-> +++ b/samples/ftrace/ftrace-direct-multi-modify.c
-> @@ -20,6 +20,44 @@ void my_direct_func2(unsigned long ip)
->  extern void my_tramp1(void *);
->  extern void my_tramp2(void *);
->
-> +#ifdef CONFIG_RISCV
-> +
-> +asm (" .pushsection    .text, \"ax\", @progbits\n"
-> +"      .type           my_tramp1, @function\n"
-> +"      .globl          my_tramp1\n"
-> +"   my_tramp1:\n"
-> +"       addi sp,sp,-24\n"
-> +"       sd   a0,0(sp)\n"
-> +"       move t0,t1\n"
-> +"       sd   t0,8(sp)\n"
-> +"       sd   ra,16(sp)\n"
-> +"       call my_direct_func1\n"
-> +"       ld   a0,0(sp)\n"
-> +"       ld   t0,8(sp)\n"
-> +"       ld   ra,16(sp)\n"
-> +"       addi sp,sp,24\n"
-> +"      jr t0\n"
-> +"      .size           my_tramp1, .-my_tramp1\n"
-> +
-> +"      .type           my_tramp2, @function\n"
-> +"      .globl          my_tramp2\n"
-> +"   my_tramp2:\n"
-> +"       addi sp,sp,-24\n"
-> +"       sd   a0,0(sp)\n"
-Be care, and I missed one.
-+"       move t0,t1\n"
+Hello,
 
-> +"       sd   t0,8(sp)\n"
-> +"       sd   ra,16(sp)\n"
-> +"       call my_direct_func2\n"
-> +"       ld   a0,0(sp)\n"
-> +"       ld   t0,8(sp)\n"
-> +"       ld   ra,16(sp)\n"
-> +"       addi sp,sp,24\n"
-> +"      jr t0\n"
-> +"      .size           my_tramp2, .-my_tramp2\n"
-> +"      .popsection\n"
-> +);
-> +
-> +#endif /* CONFIG_RISCV */
-> +
->  #ifdef CONFIG_X86_64
->
->  #include <asm/ibt.h>
-> diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftrace-direct-multi.c
-> index 41ded7c615c7..2111478b0463 100644
-> --- a/samples/ftrace/ftrace-direct-multi.c
-> +++ b/samples/ftrace/ftrace-direct-multi.c
-> @@ -15,6 +15,29 @@ void my_direct_func(unsigned long ip)
->
->  extern void my_tramp(void *);
->
-> +#ifdef CONFIG_RISCV
-> +
-> +asm ("       .pushsection    .text, \"ax\", @progbits\n"
-> +"       .type           my_tramp, @function\n"
-> +"       .globl          my_tramp\n"
-> +"   my_tramp:\n"
-> +"       addi sp,sp,-24\n"
-> +"       sd   a0,0(sp)\n"
-> +"       move t0,t1\n"
-> +"       sd   t0,8(sp)\n"
-> +"       sd   ra,16(sp)\n"
-> +"       call my_direct_func\n"
-> +"       ld   a0,0(sp)\n"
-> +"       ld   t0,8(sp)\n"
-> +"       ld   ra,16(sp)\n"
-> +"       addi sp,sp,24\n"
-> +"       jr t0\n"
-> +"       .size           my_tramp, .-my_tramp\n"
-> +"       .popsection\n"
-> +);
-> +
-> +#endif /* CONFIG_RISCV */
-> +
->  #ifdef CONFIG_X86_64
->
->  #include <asm/ibt.h>
-> diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
-> index 6690468c5cc2..e80981d3dc0a 100644
-> --- a/samples/ftrace/ftrace-direct-too.c
-> +++ b/samples/ftrace/ftrace-direct-too.c
-> @@ -17,6 +17,33 @@ void my_direct_func(struct vm_area_struct *vma,
->
->  extern void my_tramp(void *);
->
-> +#ifdef CONFIG_RISCV
-> +
-> +asm ("       .pushsection    .text, \"ax\", @progbits\n"
-> +"       .type           my_tramp, @function\n"
-> +"       .globl          my_tramp\n"
-> +"   my_tramp:\n"
-> +"       addi sp,sp,-40\n"
-> +"       sd   a0,0(sp)\n"
-> +"       sd   a1,8(sp)\n"
-> +"       sd   a2,16(sp)\n"
-> +"       move t0,t1\n"
-> +"       sd   t0,24(sp)\n"
-> +"       sd   ra,32(sp)\n"
-> +"       call my_direct_func\n"
-> +"       ld   a0,0(sp)\n"
-> +"       ld   a1,8(sp)\n"
-> +"       ld   a2,16(sp)\n"
-> +"       ld   t0,24(sp)\n"
-> +"       ld   ra,32(sp)\n"
-> +"       addi sp,sp,40\n"
-> +"       jr t0\n"
-> +"       .size           my_tramp, .-my_tramp\n"
-> +"       .popsection\n"
-> +);
-> +
-> +#endif /* CONFIG_RISCV */
-> +
->  #ifdef CONFIG_X86_64
->
->  #include <asm/ibt.h>
-> diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direct.c
-> index e8f1e440b9b8..b6cae1b5cb66 100644
-> --- a/samples/ftrace/ftrace-direct.c
-> +++ b/samples/ftrace/ftrace-direct.c
-> @@ -14,6 +14,29 @@ void my_direct_func(struct task_struct *p)
->
->  extern void my_tramp(void *);
->
-> +#ifdef CONFIG_RISCV
-> +
-> +asm ("       .pushsection    .text, \"ax\", @progbits\n"
-> +"       .type           my_tramp, @function\n"
-> +"       .globl          my_tramp\n"
-> +"   my_tramp:\n"
-> +"       addi sp,sp,-24\n"
-> +"       sd   a0,0(sp)\n"
-> +"       move t0,t1\n"
-> +"       sd   t0,8(sp)\n"
-> +"       sd   ra,16(sp)\n"
-> +"       call my_direct_func\n"
-> +"       ld   a0,0(sp)\n"
-> +"       ld   t0,8(sp)\n"
-> +"       ld   ra,16(sp)\n"
-> +"       addi sp,sp,24\n"
-> +"       jr t0\n"
-> +"       .size           my_tramp, .-my_tramp\n"
-> +"       .popsection\n"
-> +);
-> +
-> +#endif /* CONFIG_RISCV */
-> +
->  #ifdef CONFIG_X86_64
->
->  #include <asm/ibt.h>
-> --
-> 2.36.1
->
+syzbot found the following issue on:
+
+HEAD commit:    faf68e3523c2 Merge tag 'kbuild-fixes-v6.1-4' of git://git...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1141006b880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ca997ea105bc6faa
+dashboard link: https://syzkaller.appspot.com/bug?extid=e5896dff7bbe057e5fff
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e7a5d146da01/disk-faf68e35.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7689402fe5ca/vmlinux-faf68e35.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6dd405048273/bzImage-faf68e35.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e5896dff7bbe057e5fff@syzkaller.appspotmail.com
+
+loop2: detected capacity change from 0 to 64
+------------[ cut here ]------------
+kernel BUG at fs/hfs/btree.c:41!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 13190 Comm: syz-executor.2 Not tainted 6.1.0-rc6-syzkaller-00315-gfaf68e3523c2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:hfs_btree_open+0xf04/0xf20 fs/hfs/btree.c:41
+Code: 7e ff e9 77 fa ff ff 44 89 f1 80 e1 07 80 c1 03 38 c1 0f 8c 93 fa ff ff 4c 89 f7 e8 d6 29 7e ff e9 86 fa ff ff e8 cc 2f 29 ff <0f> 0b e8 c5 2f 29 ff 0f 0b e8 be 2f 29 ff 0f 0b 66 2e 0f 1f 84 00
+RSP: 0018:ffffc9000b0d77b8 EFLAGS: 00010293
+RAX: ffffffff826363a4 RBX: ffff8880904aa380 RCX: ffff88807d51ba80
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff82635603 R09: ffffed101209548c
+R10: ffffed101209548c R11: 1ffff1101209548b R12: ffff888073fde000
+R13: ffff888095a5e008 R14: ffff888095a5e000 R15: dffffc0000000000
+FS:  00007f4863a6c700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f7e3e9a8000 CR3: 0000000079964000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ hfs_mdb_get+0x1466/0x21d0 fs/hfs/mdb.c:199
+ hfs_fill_super+0x10a2/0x1800 fs/hfs/super.c:406
+ mount_bdev+0x26c/0x3a0 fs/super.c:1401
+ legacy_get_tree+0xea/0x180 fs/fs_context.c:610
+ vfs_get_tree+0x88/0x270 fs/super.c:1531
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2e3/0x3d0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4862c8d60a
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f4863a6bf88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000240 RCX: 00007f4862c8d60a
+RDX: 0000000020000240 RSI: 0000000020000280 RDI: 00007f4863a6bfe0
+RBP: 00007f4863a6c020 R08: 00007f4863a6c020 R09: 0000000000004000
+R10: 0000000000004000 R11: 0000000000000202 R12: 0000000020000240
+R13: 0000000020000280 R14: 00007f4863a6bfe0 R15: 0000000020000400
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:hfs_btree_open+0xf04/0xf20 fs/hfs/btree.c:41
+Code: 7e ff e9 77 fa ff ff 44 89 f1 80 e1 07 80 c1 03 38 c1 0f 8c 93 fa ff ff 4c 89 f7 e8 d6 29 7e ff e9 86 fa ff ff e8 cc 2f 29 ff <0f> 0b e8 c5 2f 29 ff 0f 0b e8 be 2f 29 ff 0f 0b 66 2e 0f 1f 84 00
+RSP: 0018:ffffc9000b0d77b8 EFLAGS: 00010293
+RAX: ffffffff826363a4 RBX: ffff8880904aa380 RCX: ffff88807d51ba80
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff82635603 R09: ffffed101209548c
+R10: ffffed101209548c R11: 1ffff1101209548b R12: ffff888073fde000
+R13: ffff888095a5e008 R14: ffff888095a5e000 R15: dffffc0000000000
+FS:  00007f4863a6c700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f7e3e9a8000 CR3: 0000000079964000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
--- 
-Best Regards
- Guo Ren
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
