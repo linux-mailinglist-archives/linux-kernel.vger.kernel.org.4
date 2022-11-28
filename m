@@ -2,135 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0832C639E7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 01:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0262639E7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 01:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiK1Alw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 19:41:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
+        id S229633AbiK1Amj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 19:42:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiK1Alt (ORCPT
+        with ESMTP id S229534AbiK1Amh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 19:41:49 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1932BCB
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 16:41:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669596109; x=1701132109;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=JjEejyMn2VBqUpS7vNcqB4ZqV8pqnM1g+5BHkB5Xwks=;
-  b=Mm0y9GccQInslmdQQ4MrY0Cd+sBLN8N9/NF7/kF+QBb2S9mz5HJw0b1H
-   kdjWAXDbvA72V1jQgHNvXag0+0q97eeoxwzLKWVar6kumC+AaLWQYPXl6
-   k6/OY2CRGY1Af6IKny8wbkE+Wh5cdaK8nttPtthqavzqGmpGUh5GfyxbK
-   CK9W2WplumDyjf0cJ9PaRMvaSBeCem1sOwzie8Qz+y8xexChXGxKEAhKR
-   yRXPziwwq/2L6kkhiYND3Rv9Sv/ib1TtucxljQuf/RtWd9RGyOKYIoOvS
-   vcMGDb4RSw/jmhnzuTnxW/R0TMqqGpj1QyKN9wz+gmmbkMoREVxjGeba9
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="313418081"
-X-IronPort-AV: E=Sophos;i="5.96,199,1665471600"; 
-   d="scan'208";a="313418081"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2022 16:41:48 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="645298357"
-X-IronPort-AV: E=Sophos;i="5.96,199,1665471600"; 
-   d="scan'208";a="645298357"
-Received: from wanmeng-mobl.ccr.corp.intel.com (HELO [10.254.209.116]) ([10.254.209.116])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2022 16:41:47 -0800
-Subject: Re: [sj:damon/next 27/30] mm/damon/sysfs-schemes.c:1409:26: error:
- invalid use of undefined type 'struct mem_cgroup'
-To:     SeongJae Park <sj@kernel.org>, kernel test robot <lkp@intel.com>
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev
-References: <20221127185239.82898-1-sj@kernel.org>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <ac866014-d4fa-9efc-eb5e-cca1a599fdfa@intel.com>
-Date:   Mon, 28 Nov 2022 08:41:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        Sun, 27 Nov 2022 19:42:37 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7CBE8A
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 16:42:34 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e719329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e719:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E35E41EC053B;
+        Mon, 28 Nov 2022 01:42:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1669596152;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=bMLYVDRFQu0xZlrSISkRGflSMD7PVN2QZhUpSDHouPk=;
+        b=FZKB1KxuIZfv4kYD/beb2eUzuk3Al9dTZCB0d9UD5VyHPi/VPZnLfuTW66mN6xYW5P/sSl
+        sq8oRSmdGLzJU4Wnu8P34D/d18Aan4et5SoXKhHClY4XuVqhu6Ba38DWA8i7tRXBDoPFhc
+        KqAcMlzgOXFfpDV6QhqgQskpCzvOVaU=
+Date:   Mon, 28 Nov 2022 01:42:26 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Breno Leitao <leitao@debian.org>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        hpa@zytor.com, jpoimboe@kernel.org, peterz@infradead.org,
+        pawan.kumar.gupta@linux.intel.com, x86@kernel.org,
+        cascardo@canonical.com, leit@meta.com, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] x86/bugs: Explicitly clear speculative MSR bits
+Message-ID: <Y4QD8o8kWb1V4osq@zn.tnic>
+References: <20221124104650.533427-1-leitao@debian.org>
 MIME-Version: 1.0
-In-Reply-To: <20221127185239.82898-1-sj@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221124104650.533427-1-leitao@debian.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 24, 2022 at 02:46:50AM -0800, Breno Leitao wrote:
+> Currently x86_spec_ctrl_base is read at boot time, and speculative bits
+> are set if configs are enable, such as MSR[SPEC_CTRL_IBRS] is enabled if
+> CONFIG_CPU_IBRS_ENTRY is configured. These MSR bits are not cleared if
+> the mitigations are disabled.
+> 
+> This is a problem when kexec-ing a kernel that has the mitigation
+> disabled, from a kernel that has the mitigation enabled. In this case,
+> the MSR bits are carried forward and not cleared at the boot of the new
+> kernel. This might have some performance degradation that is hard to
+> find.
+> 
+> This problem does not happen if the machine is (hard) rebooted, because
+> the bit will be cleared by default.
+> 
+> This patch also defines a SPEC_CTRL_MASK macro, so, we can easily track
+> and clear if eventually some new mitigation shows up.
 
+Just remove that sentence - the macro's function is kinda obvious from
+the diff itself.
 
-On 11/28/2022 2:52 AM, SeongJae Park wrote:
-> Hi Robot,
+> Suggested-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  arch/x86/include/asm/msr-index.h | 3 +++
+>  arch/x86/kernel/cpu/bugs.c       | 9 ++++++++-
+>  2 files changed, 11 insertions(+), 1 deletion(-)
 > 
-> 
-> Thank you always for the report!
-> 
-> On Sat, 26 Nov 2022 18:26:31 +0800 kernel test robot <lkp@intel.com> wrote:
-> 
->> [-- Attachment #1: Type: text/plain, Size: 1887 bytes --]
->>
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
->> head:   61742c95d33e74cf64b7d5b8e51f12adef425b3e
->> commit: d768680bbe8153f2b79382bd2cd5d6734b6f5c42 [27/30] mm/damon/sysfs-schemes: implement scheme filters
->> config: xtensa-randconfig-r014-20221124
->> compiler: xtensa-linux-gcc (GCC) 12.1.0
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git/commit/?id=d768680bbe8153f2b79382bd2cd5d6734b6f5c42
->>          git remote add sj https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git
->>          git fetch --no-tags sj damon/next
->>          git checkout d768680bbe8153f2b79382bd2cd5d6734b6f5c42
->>          # save the config file
->>          mkdir build_dir && cp config build_dir/.config
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash mm/damon/
-> 
-> I couldn't reproduce this issue as the last command above gives me below error.
-> 
->      $ COMPILER_INSTALL_PATH=$HOME/0day make.cross W=1 O=../build_test ARCH=xtensa SHELL=/bin/bash mm/damon/
->      Compiler will be installed in /home/xxxx/0day
->      Please update: libc6
+> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+> index 4a2af82553e4..704f49580ee1 100644
+> --- a/arch/x86/include/asm/msr-index.h
+> +++ b/arch/x86/include/asm/msr-index.h
+> @@ -54,6 +54,9 @@
+>  #define SPEC_CTRL_RRSBA_DIS_S_SHIFT	6	   /* Disable RRSBA behavior */
+>  #define SPEC_CTRL_RRSBA_DIS_S		BIT(SPEC_CTRL_RRSBA_DIS_S_SHIFT)
+>  
+> +#define SPEC_CTRL_MASK			(SPEC_CTRL_IBRS | SPEC_CTRL_STIBP | SPEC_CTRL_SSBD \
+> +							| SPEC_CTRL_RRSBA_DIS_S)
 
-Hi SeongJae,
+Call that SPEC_CTRL_MITIGATIONS_MASK or so to denote what it is - a
+mask of the SPEC_CTRL bits which the kernel toggles when controlling
+mitigations.
 
-It may be due to the old version of libc6 in your environment,
-could you update it?
+A comment above it wouldn't hurt either.
 
-Best Regards,
-Rong Chen
+> +
+>  #define MSR_IA32_PRED_CMD		0x00000049 /* Prediction Command */
+>  #define PRED_CMD_IBPB			BIT(0)	   /* Indirect Branch Prediction Barrier */
+>  
+> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+> index 3e3230cccaa7..88957da1029b 100644
+> --- a/arch/x86/kernel/cpu/bugs.c
+> +++ b/arch/x86/kernel/cpu/bugs.c
+> @@ -137,8 +137,15 @@ void __init check_bugs(void)
+>  	 * have unknown values. AMD64_LS_CFG MSR is cached in the early AMD
+>  	 * init code as it is not enumerated and depends on the family.
+>  	 */
+> -	if (boot_cpu_has(X86_FEATURE_MSR_SPEC_CTRL))
+> +	if (boot_cpu_has(X86_FEATURE_MSR_SPEC_CTRL)) {
+>  		rdmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
+> +		/*
+> +		 * Previously running software may have some controls turned ON.
 
+"Previously running software, like kexec for example, ..."
 
->      ldd /home/xxxx/0day/gcc-12.1.0-nolibc/xtensa-linux/bin/xtensa-linux-gcc
->      /home/xxxx/0day/gcc-12.1.0-nolibc/xtensa-linux/bin/xtensa-linux-gcc: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.32' not found (required by /home/xxxx/0day/gcc-12.1.0-nolibc/xtensa-linux/bin/xtensa-linux-gcc)
->      /home/xxxx/0day/gcc-12.1.0-nolibc/xtensa-linux/bin/xtensa-linux-gcc: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/xxxx/0day/gcc-12.1.0-nolibc/xtensa-linux/bin/xtensa-linux-gcc)
->      setup_crosstool failed
-> 
->>
->> If you fix the issue, kindly add following tag where applicable
->> | Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
->>     mm/damon/sysfs-schemes.c: In function 'damon_sysfs_memcg_path_eq':
->>>> mm/damon/sysfs-schemes.c:1409:26: error: invalid use of undefined type 'struct mem_cgroup'
->>      1409 |         cgroup_path(memcg->css.cgroup, memcg_path_buf, PATH_MAX);
->>           |                          ^~
-> 
-> Nevertheless, seems the issue was due to missed inclusion of memcontrol.h,
-> which defines the 'struct mem_cgroup'.  Fixed and pushed[1].
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git/commit/?h=damon/next&id=7eaaa606788b0766ece3c105fdcf963aba8511ef
-> 
-> 
-> Thanks,
-> SJ
-> 
-> [...]
-> 
+> +		 * Clear them and let kernel decide which controls to use.
+
+"Clear them and let the mitigations setup below set them based on configuration."
+
+> +		 */
+> +		x86_spec_ctrl_base &= ~SPEC_CTRL_MASK;
+> +		wrmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
+
+So this WRMSR will happen on the BSP only but the SPEC_CTRL MSR is
+per-CPU. As is x86_spec_ctrl_current which tracks it.
+
+So I'd say you don't need that WRMSR here - the proper value will get
+replicated eventually everywhere...
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
