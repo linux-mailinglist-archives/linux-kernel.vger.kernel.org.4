@@ -2,34 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC2363A53C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7108363A540
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbiK1Ji7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 04:38:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
+        id S230377AbiK1Jj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 04:39:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiK1Ji5 (ORCPT
+        with ESMTP id S229771AbiK1Jj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 04:38:57 -0500
-Received: from out28-147.mail.aliyun.com (out28-147.mail.aliyun.com [115.124.28.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F17F60CB;
-        Mon, 28 Nov 2022 01:38:55 -0800 (PST)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1371035|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.00349216-0.000151657-0.996356;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047203;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=4;RT=4;SR=0;TI=SMTPD_---.QIl52nN_1669628331;
-Received: from SunxiBot.allwinnertech.com(mailfrom:michael@allwinnertech.com fp:SMTPD_---.QIl52nN_1669628331)
-          by smtp.aliyun-inc.com;
-          Mon, 28 Nov 2022 17:38:52 +0800
-From:   Michael Wu <michael@allwinnertech.com>
-To:     ulf.hansson@linaro.org, wenchao.chen@unisoc.com
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] mmc:mmc-hsq:use fifo to dispatch mmc_request
-Date:   Mon, 28 Nov 2022 17:38:47 +0800
-Message-Id: <20221128093847.22768-1-michael@allwinnertech.com>
-X-Mailer: git-send-email 2.29.0
-MIME-Version: 1.0
+        Mon, 28 Nov 2022 04:39:57 -0500
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2121.outbound.protection.outlook.com [40.107.6.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D60D5FB5;
+        Mon, 28 Nov 2022 01:39:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TkkveLrPcOIJdtWGNeJUJQfB1uZMKTH/S20MAFmzAQsbv51pgFM7ePp1CNNQX10DHvtZpDc654Dz+FxZ9IeeX31gYhyTQrYtpxpOM+999IZRJx1f0d+LaJteOh5EYnHusu4R8FIFLH0QLkEZNY3knVpfn4baAl3LFM2EPXkCD7WDN9skMZqdYnwJptCFbzvGq0Q0CfeXbQE6pdlHioMESnFfBei6OVDCOPJ0bKQ5w5dUVcTdxWddKaF1qvjUzsJP30IIE+DI17vdP58Q3vgRx3UclRkuDdvjDDGxyM1JgOBAG/83KP16KjDoobymatI0aip6b5CQh+Q3oZyD/ZHKzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GluQEbU/av3q4h2demcIKUkq0KP63uEi/8uX973dtbo=;
+ b=kZFmQaSblDn0z0icW+N5oZ2ZcsohyKfjaiiDyZaMx47bqlPICtpw3TByoMgqFPP/SHitRB1WK8hO3n6jZGNpriX6VOHiF0CKL/cOYT53RgMGua3GMd4dAVqcOl4xcE+Gt2Lyt2+Euwgww2FPf7cQkbKevNR2Ytic2l9vFarKsQaGgiSEZV8UY6xClfDCuquhmigVaELj20enHbdRXPiRGcWS7C1sQSf3uEpz9elKFIKZi5ZkbE1UWcGDwlbLA30zhgjuuoSkj6q8Nto9yKYTpG+/vR8D5yVnCKUI1r8FlZPdWoSOp6mlKSBPE1+//9C6ujkNOhpE0/Cml27gafkfAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
+ dkim=pass header.d=plvision.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GluQEbU/av3q4h2demcIKUkq0KP63uEi/8uX973dtbo=;
+ b=LNrEuf3HONpExvG+WvlmEld/liPgtBCeu8Xz2KBi0xoYd+Nq4p4BHjWfT8Yz/iH65Lu+mSEbvj1sDHsuvj5xGMRKjt+M9ckS+YtAng8irwKRjsJlTTMVC23gI9qk9VeEhr9ozzhru8eQRlxHS8f9yK+esy8PulEhIYTyJwabrfM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=plvision.eu;
+Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:38::26)
+ by DBAP190MB0854.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:1b0::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Mon, 28 Nov
+ 2022 09:39:54 +0000
+Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+ ([fe80::5912:e2b4:985e:265a]) by VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+ ([fe80::5912:e2b4:985e:265a%3]) with mapi id 15.20.5857.021; Mon, 28 Nov 2022
+ 09:39:54 +0000
+From:   Vadym Kochan <vadym.kochan@plvision.eu>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc:     Elad Nachman <enachman@marvell.com>,
+        Mickey Rachamim <mickeyr@marvell.com>,
+        Taras Chornyi <taras.chornyi@plvision.eu>,
+        linux-kernel@vger.kernel.org, Taras Chornyi <tchornyi@marvell.com>,
+        Vadym Kochan <vadym.kochan@plvision.eu>
+Subject: [PATCH v2] MAINTAINERS: Update maintainer for Marvell Prestera Ethernet Switch driver
+Date:   Mon, 28 Nov 2022 11:39:34 +0200
+Message-Id: <20221128093934.1631570-1-vadym.kochan@plvision.eu>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain
+X-ClientProxiedBy: FR2P281CA0185.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9f::18) To VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:802:38::26)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1P190MB0317:EE_|DBAP190MB0854:EE_
+X-MS-Office365-Filtering-Correlation-Id: 13aa830c-794d-4c99-fbc4-08dad12480eb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BR8gQkbfmeUsRpcna79OAxh3kyYJ6qhSTC30SrfvPzRnMLKbKAokG+HBqYtDClM67qOeHvCNZeZ/93SRyTpqV9+UZA+/LZQh72xyIHZVs8Vd0jSX6QXtYTiZOiCB/lXleBAT8tLuelQIAnBEubbzqu3vc+AF1HiaQhJ/EWGFMumE1iuyZF9HrVE7nYswWDOuVb4JP8oBmfAorsRMjXIWzAtkd1YetT5QC/a2YUzuTtlwgkaj7fXqic4nDG7hst1XWuew2H6B1RkHTo6AhnqdjnlhoRo9Bw/jMOe1NGKh7qoQgjWUx0guF1MfKprnvZ5qeSKNSeZs/6LlW/lsn8Af3qptpKj43i55WSqGH4kkTrcN7R8s6Gj+qLjz93J5vkdeMREeLukdtBZAJf3P3AUOtfiCmR1xdr8zVHZp669YOOS/nMNIv3u2DMiGbQ1W4n5QpTkZsMF/b//57fMQmuyU6mHZofbJ90iXVlC26EkiUuwH5AIROyFOlMal9fAQkaB7ZBrT9ahvBEk5oYfrRdte1W8OveZgmSY1dLb0TMpbkdjvEbsrHYUqZQxKk1jKOyIP3clqEG/Si6hS6v5OCiU1OZOBWTN6I/Lc3fY1oZZgINtqOQSTLsBzyORNqXJ7cT4U5kThBtt11NPMBZTcQv14uZvfRW1FDJL0zbHsq58W9DUUv0tGz9/RlfGOvs2aVJqocLSsqX2d9FYqCHILcM9J7XOn5tNfOf0181f5E60xkG0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P190MB0317.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(39830400003)(376002)(346002)(136003)(451199015)(966005)(107886003)(6506007)(6486002)(6666004)(83380400001)(86362001)(478600001)(52116002)(26005)(110136005)(6512007)(316002)(54906003)(2616005)(41300700001)(4744005)(5660300002)(44832011)(38350700002)(2906002)(38100700002)(4326008)(8676002)(15650500001)(186003)(1076003)(8936002)(66946007)(66556008)(66476007)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AMLZCRVyR918ZHJ1KoHOAtDIEPXXtLEE4sSq/JOn1DZemZfZ9jnrvMsZV4c7?=
+ =?us-ascii?Q?BTDt9Oc7PI4ixbMmbvfCcGx1cpWIW8ikS168QW/vpScM8g3wVZA1IHSHxCsF?=
+ =?us-ascii?Q?MIjR1nBgDZgd3HQoMIprCTpUa7cKOL9qtoQpFxqOWKa+BpvEtCYQUWL9bNAh?=
+ =?us-ascii?Q?i18x1SYYIxgHU/X6m3XwIFBDvOqx2wfzJDROtxKV+YTmbE8FGsRJ2kqGosHl?=
+ =?us-ascii?Q?Bt7oRt6DXajbq/T6i4UID37J7S0irP2CYJGQLxzLN4r6kYBUFnaAkRPQInrI?=
+ =?us-ascii?Q?qy3aZTdul3rnZV2EhJIXsUKd1kjmNxze22/ocbXdU2lDVzC827+KW+N4sQGe?=
+ =?us-ascii?Q?iAPqLM5BqjJAxncOTUw1yaYN4Y2oz/o4g6kLEQrUsvVXfUf9UHY79GP1dXiD?=
+ =?us-ascii?Q?STyLR031OHOp5INMdUqdNPfVGjzUXenP5fcXziCQrQR/SI2qqpUrUtpxkKx9?=
+ =?us-ascii?Q?YRPSLkh7GW0asXcdscm4g2iJri1rAau7ZIefp5rzdo425qo2ibIH1LNKghfk?=
+ =?us-ascii?Q?TE+ab50h7hJtlE8ky5dNv4WSJW6yyk3OuA2s0cT6c1GqncPMq/ug8R4LUrAj?=
+ =?us-ascii?Q?owqhcBsBNXQA5ByLn3iIULOOl+Ww8jmGKv7N8QpvRGDR/5hbp/yRjmX9xtg2?=
+ =?us-ascii?Q?lAIXKdsW6X3zd8xSVUfEFKg9EQSzxHHhT+yex1pDsVUpV8N0t5FAuOROze2z?=
+ =?us-ascii?Q?8BJ5ib6Mr6UZu5U7mfmmb+kD5tbNIpiXiBAd5wll5fY7tUFoCpakas782W5P?=
+ =?us-ascii?Q?vwdD9/+mSXjWCbhuVAruEWE0X7wOcOfZP6jZVcveN/ao+ArjrKQv/GJU1Iy+?=
+ =?us-ascii?Q?+ysTz0Iu2WZGOKVFH0fma3NQ0M3nXJp8Vaw31KBMuT29WaF1VaItZ09+S9rQ?=
+ =?us-ascii?Q?Nd0+lezo73htZQ1uao5+fb/WttnHdSvdUH2FU9rZz6tGVVcmB97oGRsm2chf?=
+ =?us-ascii?Q?fYbgn5bNPU+ok411JvG4du2zewN7gqIaUqqEPkZvIHPeC4ZhbuuWhkpNXoKY?=
+ =?us-ascii?Q?ghQtLpSq7eUwN5JdqMThgVcOmW82Em/QQFJjwk5sEm7U2UV+7ZjFuzGYpLEC?=
+ =?us-ascii?Q?tgI3SwLE4KGpRNJ9/idQawAlUQ+hR08eKOMS8q+Tpf3uxZWxV7RZkVmtK0QD?=
+ =?us-ascii?Q?YXGm3+EzHmhgDTc9Yyey9wt5klu63D0auwJ/Py27OCKVzRQ7/HgKQIKv7Yb3?=
+ =?us-ascii?Q?pz62cl5RO4JmlI8jwMKzqayhHfaWZnBcflF1ojqIAmQdNqlvgXFXXey2X/hz?=
+ =?us-ascii?Q?gOSs4iL04KA+7FaMPH0v1rI7shLEcMq9TV2XkAIAXkCNO1p9z8RQ3llCvFD2?=
+ =?us-ascii?Q?Jjx37VGkSrsvtFbskNDwIX7uha+ZVIf2mqSQb56nTTH3wekhWGCnRBGNu5Fj?=
+ =?us-ascii?Q?7iA4FnHeNRq502uw7AOWnX31YfM95CTGKYovbXZnfJdp6c8JawQHZFIE3LX8?=
+ =?us-ascii?Q?/AH2cK6ut3MtwOfThEm0NSxOb4PfP6cM/kE4Py4EvwoWiql2Ot+SledeH2P/?=
+ =?us-ascii?Q?M0AVGsTT2WYQGeXEglq+Xhk/hGuS0+mmYypZCDJjEjIE84xtTwFIl7knzGqV?=
+ =?us-ascii?Q?NkwP0zOOK6NQnk/usFtvygyFQqQ4f5Oyf81Q9f53XJ18WM6H+tOdIrBUTID8?=
+ =?us-ascii?Q?IA=3D=3D?=
+X-OriginatorOrg: plvision.eu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13aa830c-794d-4c99-fbc4-08dad12480eb
+X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 09:39:53.9885
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WAEVVzXzMCg5sZ6Uat80uplMEHTeY/1FmvPrbV+MibiyqxY0GrkMIBHVvl1TmU04XMC+0y1/QFM4ZpVodzRhC4FRbAko8LqkJZt0QABZ65w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAP190MB0854
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -37,137 +118,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current next_tag selection will cause a large delay in some requests and
-destroy the scheduling results of the block scheduling layer. Because the
-issued mrq tags cannot ensure that each time is sequential, especially when
-the IO load is heavy. In the fio performance test, we found that 4k random
-read data was sent to mmc_hsq to start calling request_atomic It takes
-nearly 200ms to process the request, while mmc_hsq has processed thousands
-of other requests. So we use fifo here to ensure the first in, first out
-feature of the request and avoid adding additional delay to the request.
+From: Taras Chornyi <tchornyi@marvell.com>
 
-Reviewed-by: Wenchao Chen <wenchao.chen@unisoc.com>
-Signed-off-by: Michael Wu <michael@allwinnertech.com>
+Add Elad Nachman as maintainer for Marvell Prestera Ethernet Switch driver.
+
+Change Taras Chornyi mailbox to plvision.
+
+Signed-off-by: Taras Chornyi <tchornyi@marvell.com>
+Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
 ---
- drivers/mmc/host/mmc_hsq.c | 40 ++++++++++++++------------------------
- drivers/mmc/host/mmc_hsq.h |  5 +++++
- 2 files changed, 20 insertions(+), 25 deletions(-)
+ MAINTAINERS | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mmc/host/mmc_hsq.c b/drivers/mmc/host/mmc_hsq.c
-index 9d35453e7371..424dc7b07858 100644
---- a/drivers/mmc/host/mmc_hsq.c
-+++ b/drivers/mmc/host/mmc_hsq.c
-@@ -13,9 +13,6 @@
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 61fe86968111..a2bae5fa66f2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12366,7 +12366,8 @@ F:	Documentation/networking/device_drivers/ethernet/marvell/octeontx2.rst
+ F:	drivers/net/ethernet/marvell/octeontx2/af/
  
- #include "mmc_hsq.h"
- 
--#define HSQ_NUM_SLOTS	64
--#define HSQ_INVALID_TAG	HSQ_NUM_SLOTS
--
- static void mmc_hsq_retry_handler(struct work_struct *work)
- {
- 	struct mmc_hsq *hsq = container_of(work, struct mmc_hsq, retry_work);
-@@ -73,7 +70,6 @@ static void mmc_hsq_pump_requests(struct mmc_hsq *hsq)
- 
- static void mmc_hsq_update_next_tag(struct mmc_hsq *hsq, int remains)
- {
--	struct hsq_slot *slot;
- 	int tag;
- 
- 	/*
-@@ -82,29 +78,12 @@ static void mmc_hsq_update_next_tag(struct mmc_hsq *hsq, int remains)
- 	 */
- 	if (!remains) {
- 		hsq->next_tag = HSQ_INVALID_TAG;
-+		hsq->tail_tag = HSQ_INVALID_TAG;
- 		return;
- 	}
- 
--	/*
--	 * Increasing the next tag and check if the corresponding request is
--	 * available, if yes, then we found a candidate request.
--	 */
--	if (++hsq->next_tag != HSQ_INVALID_TAG) {
--		slot = &hsq->slot[hsq->next_tag];
--		if (slot->mrq)
--			return;
--	}
--
--	/* Othersie we should iterate all slots to find a available tag. */
--	for (tag = 0; tag < HSQ_NUM_SLOTS; tag++) {
--		slot = &hsq->slot[tag];
--		if (slot->mrq)
--			break;
--	}
--
--	if (tag == HSQ_NUM_SLOTS)
--		tag = HSQ_INVALID_TAG;
--
-+	tag = hsq->tag_slot[hsq->next_tag];
-+	hsq->tag_slot[hsq->next_tag] = HSQ_INVALID_TAG;
- 	hsq->next_tag = tag;
- }
- 
-@@ -233,8 +212,14 @@ static int mmc_hsq_request(struct mmc_host *mmc, struct mmc_request *mrq)
- 	 * Set the next tag as current request tag if no available
- 	 * next tag.
- 	 */
--	if (hsq->next_tag == HSQ_INVALID_TAG)
-+	if (hsq->next_tag == HSQ_INVALID_TAG) {
- 		hsq->next_tag = tag;
-+		hsq->tail_tag = tag;
-+		hsq->tag_slot[hsq->tail_tag] = HSQ_INVALID_TAG;
-+	} else {
-+		hsq->tag_slot[hsq->tail_tag] = tag;
-+		hsq->tail_tag = tag;
-+	}
- 
- 	hsq->qcnt++;
- 
-@@ -339,8 +324,10 @@ static const struct mmc_cqe_ops mmc_hsq_ops = {
- 
- int mmc_hsq_init(struct mmc_hsq *hsq, struct mmc_host *mmc)
- {
-+	int i;
- 	hsq->num_slots = HSQ_NUM_SLOTS;
- 	hsq->next_tag = HSQ_INVALID_TAG;
-+	hsq->tail_tag = HSQ_INVALID_TAG;
- 
- 	hsq->slot = devm_kcalloc(mmc_dev(mmc), hsq->num_slots,
- 				 sizeof(struct hsq_slot), GFP_KERNEL);
-@@ -351,6 +338,9 @@ int mmc_hsq_init(struct mmc_hsq *hsq, struct mmc_host *mmc)
- 	hsq->mmc->cqe_private = hsq;
- 	mmc->cqe_ops = &mmc_hsq_ops;
- 
-+	for (i = 0; i < HSQ_NUM_SLOTS; i++)
-+		hsq->tag_slot[i] = HSQ_INVALID_TAG;
-+
- 	INIT_WORK(&hsq->retry_work, mmc_hsq_retry_handler);
- 	spin_lock_init(&hsq->lock);
- 	init_waitqueue_head(&hsq->wait_queue);
-diff --git a/drivers/mmc/host/mmc_hsq.h b/drivers/mmc/host/mmc_hsq.h
-index ffdd9cd172c3..1808024fc6c5 100644
---- a/drivers/mmc/host/mmc_hsq.h
-+++ b/drivers/mmc/host/mmc_hsq.h
-@@ -2,6 +2,9 @@
- #ifndef LINUX_MMC_HSQ_H
- #define LINUX_MMC_HSQ_H
- 
-+#define HSQ_NUM_SLOTS	64
-+#define HSQ_INVALID_TAG	HSQ_NUM_SLOTS
-+
- struct hsq_slot {
- 	struct mmc_request *mrq;
- };
-@@ -17,6 +20,8 @@ struct mmc_hsq {
- 	int next_tag;
- 	int num_slots;
- 	int qcnt;
-+	int tail_tag;
-+	int tag_slot[HSQ_NUM_SLOTS];
- 
- 	bool enabled;
- 	bool waiting_for_idle;
+ MARVELL PRESTERA ETHERNET SWITCH DRIVER
+-M:	Taras Chornyi <tchornyi@marvell.com>
++M:	Taras Chornyi <taras.chornyi@plvision.eu>
++M:	Elad Nachman <enachman@marvell.com>
+ S:	Supported
+ W:	https://github.com/Marvell-switching/switchdev-prestera
+ F:	drivers/net/ethernet/marvell/prestera/
 -- 
-2.29.0
+2.25.1
 
