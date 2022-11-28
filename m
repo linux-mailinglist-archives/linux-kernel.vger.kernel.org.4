@@ -2,53 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879E763B413
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD7863B416
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233230AbiK1VQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 16:16:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
+        id S234404AbiK1VRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 16:17:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiK1VQk (ORCPT
+        with ESMTP id S234098AbiK1VRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 16:16:40 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E22BC1B;
-        Mon, 28 Nov 2022 13:16:38 -0800 (PST)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2ASLGVLU009006
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 16:16:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1669670193; bh=WWkh15qtsd9kIlSQdW+y9klv9CR+AgVRUGpFO6HDaZM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=SZUSLUz5eCUygFHT8Sdy968xKVMfswLa999CwHr6kx3dROjFXxjfLaVxjcEBdowlx
-         VyHzfbbe9k1QhW5LNy3fQLT4lhAKs/op7ETnq5e+XBXv8vSkm57Uz6PrPCKGt19Phm
-         feKDIMw/URrVglp7Df0dT768zbF5GP9NVDdboOsYl6P5AS7Ig3unKQZ5aTihBy/eT7
-         vwYs4tATsTJwekhf8GtsBj6+m9hnV1kIO1eu7cfcttwu43FN6Nn4Op2Ze1HSB3V/Pm
-         Q7wSKnX6CAv6WJJVVqt5bPuEGBhfoxfZBUruXIO/JpG4Is6SimFhNoWR3GFEoYGVxA
-         6yyjF1x5GcRAA==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id BA29515C3AA6; Mon, 28 Nov 2022 16:16:31 -0500 (EST)
-Date:   Mon, 28 Nov 2022 16:16:31 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        syzbot+a22dc4b0744ac658ed9b@syzkaller.appspotmail.com
-Subject: Re: [PATCH] ext4: Add extend check to prevent BUG() in ext4_es_end
-Message-ID: <Y4UlL1UH1ks1iKOz@mit.edu>
-References: <20220930202536.697396-1-tadeusz.struk@linaro.org>
- <e1e227a4-4f71-3a01-2bd1-beaf6c52e02a@linaro.org>
+        Mon, 28 Nov 2022 16:17:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4861B495;
+        Mon, 28 Nov 2022 13:17:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 72389B80E9A;
+        Mon, 28 Nov 2022 21:17:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D31AC433D7;
+        Mon, 28 Nov 2022 21:17:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669670264;
+        bh=wR2vdYn7jxfskOVqXRDFR2xx2Bh5pit2zrFi6YtSvFA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=r+pIGF/O69EpN3z6euPpIMgazagQE7FEA6RWFRgsVQYtt8TLAaZ9FEWYFPTYD6+OC
+         FTJRX2CvpbxoGy8xZ2as10rOn6NE7W7S+UAl9O5Y5U1JWEKTHTeRYP0SyLPGVxlHSw
+         eOfTKqKtJ8BZ+PtDxt4h542vz13uyGbYVzvhfJoR3eJyFtNqeX18G+F8Z0WWz/sROq
+         UcL1HrjboQojqRU8uctCQbCUyg545fvt+jrRG2DOj5r/Xxir4mKaEPwmI+eiMlYppS
+         Dt5BgKPdOopYmwT8jha9ECjs4a6HTNsnKyfB8TFd9zd2qEHItHOhHyuE11WGfYh+Xe
+         D9CiPaGAa33WA==
+Message-ID: <6aad3b63-498e-b13a-af49-b5af0d4e721e@kernel.org>
+Date:   Mon, 28 Nov 2022 21:17:38 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e1e227a4-4f71-3a01-2bd1-beaf6c52e02a@linaro.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 12/12] riscv: defconfig: Enable the Allwinner D1
+ platform and drivers
+Content-Language: en-US
+To:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+        Samuel Holland <samuel@sholland.org>, palmer@dabbelt.com
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andre Przywara <andre.przywara@arm.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>
+References: <20221125234656.47306-1-samuel@sholland.org>
+ <20221125234656.47306-13-samuel@sholland.org> <Y4JBa52o4Yemv/uj@spud>
+ <11740765.nUPlyArG6x@diego>
+From:   Conor Dooley <conor@kernel.org>
+In-Reply-To: <11740765.nUPlyArG6x@diego>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,66 +78,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 11:38:37AM -0700, Tadeusz Struk wrote:
-> On 9/30/22 13:25, Tadeusz Struk wrote:
-> > Syzbot reported an issue with ext4 extents. The reproducer creates
-> > a corrupted ext4 fs image in memory, and mounts it as a loop device.
-> > It invokes the ext4_cache_extents() and ext4_find_extent(), which
-> > eventually triggers a BUG() in ext4_es_end() causing a kernel crash.
-> > It triggers on mainline, and every kernel version back to v4.14.
-> > Add a call ext4_ext_check_inode() in ext4_find_extent() to prevent
-> > the crash.
-> > 
-> > To: "Theodore Ts'o"<tytso@mit.edu>
-> > Cc: "Andreas Dilger"<adilger.kernel@dilger.ca>
-> > Cc:<linux-ext4@vger.kernel.org>
-> > Cc:<linux-kernel@vger.kernel.org>
-> > Cc:<stable@vger.kernel.org>
-> > 
-> > Link:https://syzkaller.appspot.com/bug?id=641e7a4b900015c5d7a729d6cc1fba7a928a88f9
-> > Reported-by:syzbot+a22dc4b0744ac658ed9b@syzkaller.appspotmail.com
-> > Signed-off-by: Tadeusz Struk<tadeusz.struk@linaro.org>
+On 28/11/2022 21:11, Heiko Stübner wrote:
+> Am Samstag, 26. November 2022, 17:40:11 CET schrieb Conor Dooley:
+>> On Fri, Nov 25, 2022 at 05:46:56PM -0600, Samuel Holland wrote:
+>>> Now that several D1-based boards are supported, enable the platform in
+>>> our defconfig. Build in the drivers which are necessary to boot, such as
+>>> the pinctrl, MMC, RTC (which provides critical clocks), SPI (for flash),
+>>> and watchdog (which may be left enabled by the bootloader).
+>>
+>> All of that looks good.
+>>
+>>> Other common
+>>> onboard peripherals are enabled as modules.
+>>
+>> This I am not sure about though. I'll leave that to Palmer since I'm
+>> pretty sure it was him that said it, but I thought the plan was only
+>> turning on stuff required to boot to a console & things that are
+>> generally useful rather than enabling modules for everyone's "random"
+>> drivers. Palmer?
 > 
-> Any comments/feedback on this one?
+> Isn't the defconfig meant as a starting point to get working systems
+> with minimal config effort? At least that was always the way to go on arm
+> so far :-) .
+> 
+> So having boot-required drivers built-in with the rest enabled as modules
+> for supported boards will allow people to boot theirs without headaches.
+> 
+> Disabling unneeded drivers if you're starved for storage space in a special
+> project is always easier than hunting down all the drivers to enable for a
+> specific board. 
 
-Hi, I can't replicate the problem using the syzkaller repro:
+I wouldn't mind being able to turn on all the PolarFire SoC stuff and
+yeah, that would be the way that arm64 does it. But I do recall hearing
+that I should not turn stuff on this way, when I initially tried to
+turn stuff on via selects, got a nack and asked if I could do this instead.
 
-root@kvm-xfstests:/vdc# /vtmp/repro 
-[   14.840406] loop0: detected capacity change from 0 to 1051
-[   14.840965] EXT4-fs (loop0): ext4_check_descriptors: Checksum for group 0 failed (60935!=0)
-[   14.841468] EXT4-fs error (device loop0): ext4_ext_check_inode:520: inode #2: comm repro: pblk 0 bad header/extent: invalid magic - magic 9fe4, entries 42, max 0(0), depth 0(0)
-[   14.842188] EXT4-fs (loop0): get root inode failed
-[   14.842401] EXT4-fs (loop0): mount failed
-
-And by inspection, if there is a corrupted inode, it should have been
-caught much sooner, in ext4_iget():
-
-	} else if (!ext4_has_inline_data(inode)) {
-		/* validate the block references in the inode */
-		if (!(EXT4_SB(sb)->s_mount_state & EXT4_FC_REPLAY) &&
-			(S_ISREG(inode->i_mode) || S_ISDIR(inode->i_mode) ||
-			(S_ISLNK(inode->i_mode) &&
-			!ext4_inode_is_fast_symlink(inode)))) {
-			if (ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS))
-				ret = ext4_ext_check_inode(inode);
-			else
-				ret = ext4_ind_check_inode(inode);
-		}
-	}
-	if (ret)
-		goto bad_inode;
-
-... and this check has been around for quite some time.
-
-It's much more efficient to check for a corrupted inode data structure
-at the time when the inode is read into memory, as opposed to every
-single time we try to lookup a logical->physical block map, in
-ext4_find_extent().
-
-If you can reproduce a failure on a modern kernel, please let me know,
-but it looks like syzkaller had only reported it on androd-54,
-android-5-10, linux-4.14, and linux-4.19 in any case.
-
-Cheers,
-
-						- Ted
+But it may be that I misremember, which is why I appealed to the Higher
+Powers for clarification :)
