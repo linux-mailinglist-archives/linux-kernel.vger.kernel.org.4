@@ -2,116 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E22D363A04C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 05:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 161BE63A04E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 05:04:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiK1EDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 23:03:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48724 "EHLO
+        id S229774AbiK1EDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 23:03:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiK1EDJ (ORCPT
+        with ESMTP id S229681AbiK1EDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 23:03:09 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAEC2704;
-        Sun, 27 Nov 2022 20:03:07 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id 6so8845691pgm.6;
-        Sun, 27 Nov 2022 20:03:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ilpG6GdC789HXmI5aw3aKOys6o4JUHsn6+C+0F+HJGE=;
-        b=JgNYRVqOjC3J6zzCHhezSQKcGICWvtRXcZZV/QfD9yLjI8PLTsPAz5j1+BpR1zZ7ud
-         C17JKc9CsWIWbLKCa6drSJskkfLcD8xb7K5I2hjcmSztUoI95mUvhTJF8QebbYXJp4Kn
-         LOmhgupsSbEXb2EmIDJ+vxVHhh6UjvXRHIsFGMQ5ZHpwDpOoI0duNxAbUZcXClEFZLFg
-         vycC1n4eB4jfDuNRSKU18HZBOWEd3mIIR4R/tS8Rd5bay6FuswTeWALmZyr6FvBbhEaz
-         kb+F09axlyNMUL609iGg5Tqtyh2K5unr/ZuPYf5AuPKyTC9GPq3UP7khnYpqra91/1oy
-         7+Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ilpG6GdC789HXmI5aw3aKOys6o4JUHsn6+C+0F+HJGE=;
-        b=gyljfFmpU2iNZ7fpeUZPDPsXwp/PAyavYzYd9VG56BBve9g9ARQLSwi/GPUD1oLFXC
-         56yW6n2dF1Soh03FykjRbqWtTneN8gDElgI6Oi27yBfHXPaVQWD6Nhl4AKs75ZqS+TXf
-         ScdXOrXxTICGgCcPdhT15HO8dmSgQH1mwBpg6totGNJA+TRZ1cpkJz+jqsNGcsdnvorI
-         xzn0TxTvfpHCE5wqrpJmqfhswe6e1FJzGedHbcTCnbnmUnrx/hpLUzYOKej/JZyOQXKQ
-         J8yUl9Bq+0JTT4LBSeij4/ppKiFHkn6VcRM06ri3zFaVLIMd2f1mSWRXp0/g2zqyTOVi
-         1iAA==
-X-Gm-Message-State: ANoB5pllxi38dNaqpljQNthdEIVVig7oAzXTD7Eu322la9ugm1max+Ab
-        cXmRUenQHt4sWggV4EPsRX0=
-X-Google-Smtp-Source: AA0mqf6bze+yXYcqx3xk+GoY6mVDVHQSnDl/b6xE9mbGXshZotue5b5tKREVbSYA8QN58Mg5L/GZPQ==
-X-Received: by 2002:a63:d556:0:b0:435:7957:559d with SMTP id v22-20020a63d556000000b004357957559dmr32676308pgi.122.1669608187418;
-        Sun, 27 Nov 2022 20:03:07 -0800 (PST)
-Received: from debian.me (subs03-180-214-233-83.three.co.id. [180.214.233.83])
-        by smtp.gmail.com with ESMTPSA id c80-20020a624e53000000b00561dcfa700asm6913307pfb.107.2022.11.27.20.03.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Nov 2022 20:03:06 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 7B3D51038E9; Mon, 28 Nov 2022 11:03:03 +0700 (WIB)
-Date:   Mon, 28 Nov 2022 11:03:02 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH v3] doc: Fix htmldocs build warnings of stallwarn.rst
-Message-ID: <Y4Qy9hpzyQMCDZwS@debian.me>
-References: <20221124062204.1932-1-thunder.leizhen@huawei.com>
- <1c472632-caf6-72d3-5de8-aaa3a1fdfd61@huawei.com>
+        Sun, 27 Nov 2022 23:03:43 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A59A13D2B;
+        Sun, 27 Nov 2022 20:03:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669608222; x=1701144222;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7a1NGqIRR9f6Jqr5n73oWfmtS1WBJi/dkBMFlHgFXps=;
+  b=Sk/PJ2oDiPsjBVlwZ9ucVnFM5JNO+v3bz95L4W6X2QYxfGf+bWA7z79R
+   4DmYK/7bQmb98Fn9oCfvFC7lq9qYyiioa7SZ7AEuRovK0xqMuJLn6mH4k
+   js1wsuKpn2kLxwkynQhA3J7c7zTlxIGYkP6ZqKGEo2625TAz0AUpbIO2s
+   mq0Nx/dSMiQ+4ohUyt22gclIMdW5J77ZLDhOFxyArAIe4+d1HhTC5+uLM
+   pYkvL2IyBaEu5mf+Zr+F/+3EXSSJF2lk6hRiUwz1516CTKzv0NH5IUqv/
+   fClOde6GtXus0JxJiqqoL+7rLUZLdiR5zZR0TLqMMTa0A7yBoEssj3KK6
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="295127112"
+X-IronPort-AV: E=Sophos;i="5.96,199,1665471600"; 
+   d="scan'208";a="295127112"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2022 20:03:41 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="593733577"
+X-IronPort-AV: E=Sophos;i="5.96,199,1665471600"; 
+   d="scan'208";a="593733577"
+Received: from iweiny-mobl.amr.corp.intel.com (HELO localhost) ([10.212.2.33])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2022 20:03:41 -0800
+From:   ira.weiny@intel.com
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>, Lukas Wunner <lukas@wunner.de>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Gregory Price <gregory.price@memverge.com>,
+        "Li, Ming" <ming4.li@intel.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org
+Subject: [PATCH V3 0/2] PCI/DOE: Remove asynchronous task support
+Date:   Sun, 27 Nov 2022 20:03:36 -0800
+Message-Id: <20221128040338.1936529-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qZu2EZ2+iL1NvBah"
-Content-Disposition: inline
-In-Reply-To: <1c472632-caf6-72d3-5de8-aaa3a1fdfd61@huawei.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Ira Weiny <ira.weiny@intel.com>
 
---qZu2EZ2+iL1NvBah
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changes from V2
+	From Jonathan
+		Add comment about change in PCI_DOE_POLL_INTERVAL value
+		Remove additional code
 
-On Sat, Nov 26, 2022 at 09:30:32AM +0800, Leizhen (ThunderTown) wrote:
->=20
-> Hi, Bagas Sanjaya:
->   Do you have time to review this patch again? Your review comments are i=
-mportant
-> because you made comments in the previous version.
->=20
+Changes from V1
+	Address comments around locking
+	Add patch to remove unneeded pci_doe_flush_mb() call
 
-OK, will review.
+The asynchronous task support in the PCI DOE mailboxes has become a
+maintenance burden.
 
---=20
-An old man doll... just what I always wanted! - Clara
+Remove the code associated with that support.
 
---qZu2EZ2+iL1NvBah
-Content-Type: application/pgp-signature; name="signature.asc"
+Ira Weiny (2):
+  PCI/DOE: Remove the pci_doe_flush_mb() call
+  PCI/DOE: Remove asynchronous task support
 
------BEGIN PGP SIGNATURE-----
+ drivers/cxl/core/pci.c  |  16 +----
+ drivers/pci/doe.c       | 135 ++++++++++------------------------------
+ include/linux/pci-doe.h |  11 +---
+ 3 files changed, 36 insertions(+), 126 deletions(-)
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY4Qy8QAKCRD2uYlJVVFO
-ow5zAP0d2VP67ycj21Srtq8AHtkWRGlstqm4yxtCgcQLigutlAEArz3jeMoqCN8V
-W2AkbsS/CvoDZduuNwYPDT/4Cj6cHQs=
-=bAyq
------END PGP SIGNATURE-----
 
---qZu2EZ2+iL1NvBah--
+base-commit: b6e7fdfd6f6a8bf88fcdb4a45da52c42ba238c25
+-- 
+2.37.2
+
