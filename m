@@ -2,132 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F0F63ABD3
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 16:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B3D63ABD7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 16:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbiK1PAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 10:00:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
+        id S231302AbiK1PBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 10:01:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiK1PAE (ORCPT
+        with ESMTP id S230239AbiK1PBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 10:00:04 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960B11FD;
-        Mon, 28 Nov 2022 07:00:03 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id jn7so10380763plb.13;
-        Mon, 28 Nov 2022 07:00:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=j/MaosVFQQsX/2ZeBD2PKV/fnro6FuwwDeFZbx0/DJE=;
-        b=AD3LarQoCcw0nSAUuMEy2jyzdf+DZNjS2mlDtY8K6Nwoxp3733ezm4m5RDwws9IxI4
-         UZJUS3GcupliuAcZPJZkf/5SEYPr6ONwgHXy9j12ZYvf37fEQe0hB1L1gD308ZF0/tR0
-         BTjvC2nD/lAPOsgUAtxC8wdHbgsk/9tQywY0TGXvtb7SXUmn6WrI1AjGEFQto4P8CzqR
-         duYZqpjfO3MsS6iGcP0Nw/BTgjFXINknn7C0Tk1JvHDozhhT5aqVDh947kBbWkQbO+aH
-         aS4Y9S6r21NTnPyN1ypaP8hSyQwPcLWr2g9WpBf/fNaHGZ8Ss27oCqAaxSEFx7rt7wsP
-         RKXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j/MaosVFQQsX/2ZeBD2PKV/fnro6FuwwDeFZbx0/DJE=;
-        b=TBYvnv3I7Y3Rc4bu+reyN+BmFG+smRguIrmA0MvScY6JZCtj/YcWYqfxiT1hwgkQbt
-         mPliqeJGH3nQ4+HGku+PKcTsQo+8MC9o8qTot6MiuJik8uxTG7dmIZ8RJ74FAklioaTQ
-         qv9lSD+PrqrwmsH6ABBWGKHmmvKpXjUyCpaFj+r6oImQnzes1Buk9Zvok1oljOU34d+R
-         fIqmt3hcxGcYCkpCDd7eUSOTQhQAJTCncSnzZLrG4Lu7wRwJFBk2p5iWuqFxzZcWCblG
-         8W4cx2/Qw4tMYXMdUc+7m6VAK4RT78+4zJk6Fh8n5kxKXIss3+TiMEmKcqnXe7XjDzhT
-         NPGA==
-X-Gm-Message-State: ANoB5plUockUx4egbI2VAyGPkg+N2i++0U8XZe42oelogmCUiTBs7GyJ
-        XOjHTWjywNj5Y0oRw9uqRAw=
-X-Google-Smtp-Source: AA0mqf6dh5FK6hgl6TiR2NaTWzu983s2UxU2418uDwccwki/iX7MqwluyRwqn4i2Nu7pCjhEe5U6+w==
-X-Received: by 2002:a17:90a:9a98:b0:219:2f90:4fb3 with SMTP id e24-20020a17090a9a9800b002192f904fb3mr7285337pjp.109.1669647603007;
-        Mon, 28 Nov 2022 07:00:03 -0800 (PST)
-Received: from localhost ([2406:7400:63:f20b:56ba:c531:2cb5:9601])
-        by smtp.gmail.com with ESMTPSA id gc8-20020a17090b310800b002192f87474fsm2722531pjb.37.2022.11.28.07.00.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 07:00:02 -0800 (PST)
-Date:   Mon, 28 Nov 2022 20:29:56 +0530
-From:   "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] coredump: fix compile warning when ELF_CORE=n while
- COREDUMP=y
-Message-ID: <20221128145956.6rgswicmtsuxxhdt@riteshh-domain>
-References: <20221128135056.325-1-jszhang@kernel.org>
+        Mon, 28 Nov 2022 10:01:00 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3F2222A2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:00:59 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 3146D3200035;
+        Mon, 28 Nov 2022 10:00:58 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Mon, 28 Nov 2022 10:00:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1669647657; x=1669734057; bh=Heo27byu/e
+        zrA9coHgXtmsVth+oZRdefAxp8/MnKvu4=; b=OLQT56/8EplxY4L2+FzHfVbi4O
+        RqW4YkiiNUd/s9ARdS0T3mMupX8Urj1NzSCLP1g+0wONVcJFNWHkd3E8tc2BY4d/
+        6hu5BlghKgDh+ON4yQu94/3fqcKpEntNJwe9DRDEkBtr0r6VKD9uWsjGDrmsSUzC
+        0+eecQAC1rWn5gE0IhZmD5eXrW4gyH+QZKy9MxPQmTIg9ToHHn7zPpGYz74fzJyJ
+        lm78HLa2Yp8tlYIzpDBk8loOLKbOuvkGLXjlZJ/QmSimgp0mh74aTUpcz2M7kiXx
+        9Ssmi8Bm7ptDDfVlodCFZQBrcEJvhQ62iiDpjgcxW1/MQFAGaqPFhZjyoKDQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669647657; x=1669734057; bh=Heo27byu/ezrA9coHgXtmsVth+oZ
+        RdefAxp8/MnKvu4=; b=KNxvlxsiTJ142v0Du3bc6lDq3xSqmB44AhWaGS3jQZhf
+        8Q1rN4gwoA3P1AjsK3Tcr6g6jfKh/AUBW04nzHMBUvojBtckYWfmmOrCUgiWmbI7
+        6bXMmFNW8F7WiiCPgfIJZQCNmVOzfu9PhYUyVHdIIZfQdnZTXvL7p9SVAgAS6RaD
+        Y+A2dr+L6q4pfWxsq5bKj1SgKqsfNJOHsxZTaMtzJUA2gw8NcL7+wwV+45BqbSz5
+        HswLE30fizecZZTuPPIvrgeJ4f0JnnWuCuWrKj+Y0aati9ApD8EVRMWF+N0DtrOJ
+        /u/VK6FXy0E73rN64xtz7FWua4adNjrnMEBBiKIbkw==
+X-ME-Sender: <xms:Kc2EY_ox2l4rpncuQnS3ZtEIUCNCP0Rpkk06UvybCFVtlWxVJPw3Ag>
+    <xme:Kc2EY5r_O5LNnls2UhqNCEM2Dum6EJeov1O8-0rwzhDgD1n6daxpiF3gMD0imQhaz
+    9-L1IcdZ2R6mhXcrVg>
+X-ME-Received: <xmr:Kc2EY8OIiFBpFqVLPMihkGbLU8Zai5PCOdZjRKGPWYVLJ6eVBcJjkmDEU_QasQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedvgdejfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvhigthhho
+    ucetnhguvghrshgvnhcuoehthigthhhosehthigthhhordhpihiiiigrqeenucggtffrrg
+    htthgvrhhnpeeutedttefgjeefffehffffkeejueevieefudelgeejuddtfeffteeklefh
+    leelteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hthigthhhosehthigthhhordhpihiiiigr
+X-ME-Proxy: <xmx:Kc2EYy7ZqGdQHfVRSOV-5spZiNBKYBzUhCF7l4jO444AfQGDrCJU3Q>
+    <xmx:Kc2EY-6QryxNapLMt4CbACiAljNZ_qs7R_gmd93Aj1mc2vxU6BkWCQ>
+    <xmx:Kc2EY6glRUOFnW4yNmwYVZ4eWeBXJy8NXHVI9GlyxBFQK8IeEjDHbQ>
+    <xmx:Kc2EY0mYPU3mifl2oTA8pf_xdMEoaWZveJSFXiAtN1UoAn7XdXl0AQ>
+Feedback-ID: i21f147d5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 28 Nov 2022 10:00:55 -0500 (EST)
+Date:   Mon, 28 Nov 2022 08:00:51 -0700
+From:   Tycho Andersen <tycho@tycho.pizza>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Subject: Re: [PATCH v3] fuse: In fuse_flush only wait if someone wants the
+ return code
+Message-ID: <Y4TNI8+QVHFuzeZC@tycho.pizza>
+References: <CAJfpegvrd2nsydG26stcmeEkdO1JLyeu69KrZs4dvVxXtoz42Q@mail.gmail.com>
+ <20221114160209.1229849-1-tycho@tycho.pizza>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221128135056.325-1-jszhang@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221114160209.1229849-1-tycho@tycho.pizza>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/11/28 09:50PM, Jisheng Zhang wrote:
-> fix below build warning when ELF_CORE=n while COREDUMP=y:
->
-> fs/coredump.c:834:12: warning: ‘dump_emit_page’ defined but not used [-Wunused-function]
->   834 | static int dump_emit_page(struct coredump_params *cprm, struct
->       page *page)
->       |            ^~~~~~~~~~~~~~
+Hi Milkos,
 
-Fixes: 06bbaa6dc53c: "[coredump] don't use __kernel_write() on kmap_local_page()"
+On Mon, Nov 14, 2022 at 09:02:09AM -0700, Tycho Andersen wrote:
+> v3: use schedule_work() to avoid other sleeps in inode_write_now() and
+>     fuse_sync_writes(). Fix a UAF of the stack-based inarg.
 
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  fs/coredump.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/fs/coredump.c b/fs/coredump.c
-> index 7bad7785e8e6..8663042ebe9c 100644
-> --- a/fs/coredump.c
-> +++ b/fs/coredump.c
-> @@ -831,6 +831,7 @@ static int __dump_skip(struct coredump_params *cprm, size_t nr)
->  	}
->  }
->
-> +#ifdef CONFIG_ELF_CORE
+Thoughts on this version?
 
-Instead of this ^^^, we could even move the definition of dump_emit_page() in
-the same #ifdef as of dump_user_range(). Since dump_user_range() is the only
-caller of dump_emit_page().
+Thanks,
 
-#ifdef CONFIG_ELF_CORE
-[here]
-int dump_user_range(struct coredump_params *cprm, unsigned long start,
-		    unsigned long len)
-{..}
-#endif
-
-But I guess that's just a nitpick. Feel free to add:
-
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-
--ritesh
-
->  static int dump_emit_page(struct coredump_params *cprm, struct page *page)
->  {
->  	struct bio_vec bvec = {
-> @@ -863,6 +864,7 @@ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
->
->  	return 1;
->  }
-> +#endif
->
->  int dump_emit(struct coredump_params *cprm, const void *addr, int nr)
->  {
-> --
-> 2.37.2
->
+Tycho
