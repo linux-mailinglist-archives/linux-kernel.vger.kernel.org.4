@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF6D63A712
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:20:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E9663A715
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:21:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiK1LUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 06:20:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
+        id S231341AbiK1LU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 06:20:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231307AbiK1LUJ (ORCPT
+        with ESMTP id S231271AbiK1LUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 06:20:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A0D1CB0B;
-        Mon, 28 Nov 2022 03:18:56 -0800 (PST)
+        Mon, 28 Nov 2022 06:20:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7391CFCD;
+        Mon, 28 Nov 2022 03:19:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E518D61118;
-        Mon, 28 Nov 2022 11:18:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ED6DC433C1;
-        Mon, 28 Nov 2022 11:18:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DE1E6108D;
+        Mon, 28 Nov 2022 11:19:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99DFFC43141;
+        Mon, 28 Nov 2022 11:18:59 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ckVqQGGQ"
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="fcZzR29h"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1669634333;
+        t=1669634338;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=C6bKCdbJI8caGV86jHwYqsJ4Ef3NCBwwd7g33zRLmuo=;
-        b=ckVqQGGQeuga74ChPjFfsMQUB4b1SV3DbIz3y7zKQls1AxbW45vAtZKY4GsrlwkQo7orHE
-        M1BCPnt7iiGc58J/ZnpgyOE0MVMout30lEX3znJOM3ALwiLlS4kHDuYXJn4+x/FdzmwOQO
-        5Y2WlvM1Sx868PXTMWOFuk5a1BfGaEc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id dc600f2e (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 28 Nov 2022 11:18:52 +0000 (UTC)
+        bh=RpsQmTYfqDB6iJajbsrUtqb091fdsxaSA7iIIr/rcdY=;
+        b=fcZzR29hmxR7fwO2ZySI3+B45o2I1PtxU8ZjecKJM0m59WZmfUENeV9Pc0bb3LdCM5Jey+
+        7i7hrE/w16/3g4vxkhcmeFYWA7XlswKWSI1RsO/4pqSCN1ZObu3BrOe1xltQHo2ygOXoid
+        3pDEFrMUU8erRN4wFONC7s15rZYCReo=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fe9105f7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 28 Nov 2022 11:18:57 +0000 (UTC)
 From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
 To:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
         tglx@linutronix.de
@@ -47,296 +47,490 @@ Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Florian Weimer <fweimer@redhat.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Christian Brauner <brauner@kernel.org>
-Subject: [PATCH v8 1/3] random: add vgetrandom_alloc() syscall
-Date:   Mon, 28 Nov 2022 12:18:27 +0100
-Message-Id: <20221128111829.2477505-2-Jason@zx2c4.com>
+Subject: [PATCH v8 2/3] random: introduce generic vDSO getrandom() implementation
+Date:   Mon, 28 Nov 2022 12:18:28 +0100
+Message-Id: <20221128111829.2477505-3-Jason@zx2c4.com>
 In-Reply-To: <20221128111829.2477505-1-Jason@zx2c4.com>
 References: <20221128111829.2477505-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The vDSO getrandom() works over an opaque per-thread state of an
-unexported size, which must be marked as MADV_WIPEONFORK and be
-mlock()'d for proper operation. Over time, the nuances of these
-allocations may change or grow or even differ based on architectural
-features.
+Provide a generic C vDSO getrandom() implementation, which operates on
+an opaque state returned by vgetrandom_alloc() and produces random bytes
+the same way as getrandom(). This has a the API signature:
 
-The syscall has the signature:
+  ssize_t vgetrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state);
 
-  void *vgetrandom_alloc([inout] unsigned int *num,
-                         [out] unsigned int *size_per_each,
-                         unsigned int flags);
+The return value and the first 3 arguments are the same as ordinary
+getrandom(), while the last argument is a pointer to the opaque
+allocated state. Were all four arguments passed to the getrandom()
+syscall, nothing different would happen, and the functions would have
+the exact same behavior.
 
-This takes the desired number of opaque states in `num`, and returns a
-pointer to an array of opaque states, the number actually allocated back
-in `num`, and the size in bytes of each one in `size_per_each`, enabling
-a libc to slice up the returned array into a state per each thread. (The
-`flags` argument is always zero for now.) Libc is expected to allocate a
-chunk of these on first use, and then dole them out to threads as
-they're created, allocating more when needed. The following commit shows
-an example of this, being used in conjunction with the getrandom() vDSO
-function.
+The actual vDSO RNG algorithm implemented is the same one implemented by
+drivers/char/random.c, using the same fast-erasure techniques as that.
+Should the in-kernel implementation change, so too will the vDSO one.
 
-We very intentionally do *not* leave state allocation for vDSO
-getrandom() up to userspace itself, but rather provide this new syscall
-for such allocations. vDSO getrandom() must not store its state in just
-any old memory address, but rather just ones that the kernel specially
-allocates for it, leaving the particularities of those allocations up to
-the kernel.
+It requires an implementation of ChaCha20 that does not use any stack,
+in order to maintain forward secrecy, so this is left as an
+architecture-specific fill-in. Stack-less ChaCha20 is an easy algorithm
+to implement on a variety of architectures, so this shouldn't be too
+onerous.
+
+Initially, the state is keyless, and so the first call makes a
+getrandom() syscall to generate that key, and then uses it for
+subsequent calls. By keeping track of a generation counter, it knows
+when its key is invalidated and it should fetch a new one using the
+syscall. Later, more than just a generation counter might be used.
+
+Since MADV_WIPEONFORK is set on the opaque state, the key and related
+state is wiped during a fork(), so secrets don't roll over into new
+processes, and the same state doesn't accidentally generate the same
+random stream. The generation counter, as well, is always >0, so that
+the 0 counter is a useful indication of a fork() or otherwise
+uninitialized state.
+
+If the kernel RNG is not yet initialized, then the vDSO always calls the
+syscall, because that behavior cannot be emulated in userspace, but
+fortunately that state is short lived and only during early boot. If it
+has been initialized, then there is no need to inspect the `flags`
+argument, because the behavior does not change post-initialization
+regardless of the `flags` value.
+
+Since the opaque state passed to it is mutated, vDSO getrandom() is not
+reentrant, when used with the same opaque state, which libc should be
+mindful of.
+
+vgetrandom_alloc() and vDSO getrandom() together provide the ability for
+userspace to generate random bytes quickly and safely, and is intended
+to be integrated into libc's thread management. As an illustrative
+example, the following code might be used to do the same outside of
+libc. All of the static functions are to be considered implementation
+private, including the vgetrandom_alloc() syscall wrapper, which
+generally shouldn't be exposed outside of libc, with the non-static
+vgetrandom() function at the end being the exported interface. The
+various pthread-isms are expected to be elided into libc internals. This
+per-thread allocation scheme is very naive and does not shrink; other
+implementations may choose to be more complex.
+
+  static void *vgetrandom_alloc(unsigned int *num, unsigned int *size_per_each, unsigned int flags)
+  {
+    long ret = syscall(__NR_vgetrandom_alloc, &num, &size_per_each, flags);
+    return ret == -1 ? NULL : (void *)ret;
+  }
+
+  static struct {
+    pthread_mutex_t lock;
+    void **states;
+    size_t len, cap;
+  } grnd_allocator = {
+    .lock = PTHREAD_MUTEX_INITIALIZER
+  };
+
+  static void *vgetrandom_get_state(void)
+  {
+    void *state = NULL;
+
+    pthread_mutex_lock(&grnd_allocator.lock);
+    if (!grnd_allocator.len) {
+      size_t new_cap;
+      unsigned int size_per_each, num = 16; /* Just a hint. Could also be nr_cpus. */
+      void *new_block = vgetrandom_alloc(&num, &size_per_each, 0), *new_states;
+
+      if (!new_block)
+        goto out;
+      new_cap = grnd_allocator.cap + num;
+      new_states = reallocarray(grnd_allocator.states, new_cap, sizeof(*grnd_allocator.states));
+      if (!new_states) {
+        munmap(new_block, num * size_per_each);
+        goto out;
+      }
+      grnd_allocator.cap = new_cap;
+      grnd_allocator.states = new_states;
+
+      for (size_t i = 0; i < num; ++i) {
+        grnd_allocator.states[i] = new_block;
+        new_block += size_per_each;
+      }
+      grnd_allocator.len = num;
+    }
+    state = grnd_allocator.states[--grnd_allocator.len];
+
+  out:
+    pthread_mutex_unlock(&grnd_allocator.lock);
+    return state;
+  }
+
+  static void vgetrandom_put_state(void *state)
+  {
+    if (!state)
+      return;
+    pthread_mutex_lock(&grnd_allocator.lock);
+    grnd_allocator.states[grnd_allocator.len++] = state;
+    pthread_mutex_unlock(&grnd_allocator.lock);
+  }
+
+  static struct {
+    ssize_t(*fn)(void *buf, size_t len, unsigned long flags, void *state);
+    pthread_key_t key;
+    pthread_once_t initialized;
+  } grnd_ctx = {
+    .initialized = PTHREAD_ONCE_INIT
+  };
+
+  static void vgetrandom_init(void)
+  {
+    if (pthread_key_create(&grnd_ctx.key, vgetrandom_put_state) != 0)
+      return;
+    grnd_ctx.fn = __vdsosym("LINUX_2.6", "__vdso_getrandom");
+  }
+
+  ssize_t vgetrandom(void *buf, size_t len, unsigned long flags)
+  {
+    void *state;
+
+    pthread_once(&grnd_ctx.initialized, vgetrandom_init);
+    if (!grnd_ctx.fn)
+      return getrandom(buf, len, flags);
+    state = pthread_getspecific(grnd_ctx.key);
+    if (!state) {
+      state = vgetrandom_get_state();
+      if (pthread_setspecific(grnd_ctx.key, state) != 0) {
+        vgetrandom_put_state(state);
+        state = NULL;
+      }
+      if (!state)
+        return getrandom(buf, len, flags);
+    }
+    return grnd_ctx.fn(buf, len, flags, state);
+  }
 
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- MAINTAINERS                             |  1 +
- drivers/char/random.c                   | 75 +++++++++++++++++++++++++
- include/uapi/asm-generic/unistd.h       |  7 ++-
- include/vdso/getrandom.h                | 24 ++++++++
- kernel/sys_ni.c                         |  3 +
- lib/vdso/Kconfig                        |  7 +++
- scripts/checksyscalls.sh                |  4 ++
- tools/include/uapi/asm-generic/unistd.h |  7 ++-
- 8 files changed, 126 insertions(+), 2 deletions(-)
- create mode 100644 include/vdso/getrandom.h
+ MAINTAINERS             |   1 +
+ drivers/char/random.c   |   9 ++
+ include/vdso/datapage.h |  11 +++
+ lib/vdso/Kconfig        |   7 +-
+ lib/vdso/getrandom.c    | 204 ++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 231 insertions(+), 1 deletion(-)
+ create mode 100644 lib/vdso/getrandom.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 256f03904987..3894f947a507 100644
+index 3894f947a507..70dff39fcff9 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -17287,6 +17287,7 @@ T:	git https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
- S:	Maintained
+@@ -17288,6 +17288,7 @@ S:	Maintained
  F:	drivers/char/random.c
  F:	drivers/virt/vmgenid.c
-+F:	include/vdso/getrandom.h
+ F:	include/vdso/getrandom.h
++F:	lib/vdso/getrandom.c
  
  RAPIDIO SUBSYSTEM
  M:	Matt Porter <mporter@kernel.crashing.org>
 diff --git a/drivers/char/random.c b/drivers/char/random.c
-index a2a18bd3d7d7..16e9edce771f 100644
+index 16e9edce771f..a2c530e10d6a 100644
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -8,6 +8,7 @@
-  * into roughly six sections, each with a section header:
-  *
-  *   - Initialization and readiness waiting.
-+ *   - vDSO support helpers.
-  *   - Fast key erasure RNG, the "crng".
-  *   - Entropy accumulation and extraction routines.
-  *   - Entropy collection routines.
-@@ -39,6 +40,7 @@
- #include <linux/blkdev.h>
- #include <linux/interrupt.h>
- #include <linux/mm.h>
-+#include <linux/mman.h>
- #include <linux/nodemask.h>
- #include <linux/spinlock.h>
- #include <linux/kthread.h>
-@@ -55,6 +57,9 @@
- #include <linux/siphash.h>
- #include <crypto/chacha.h>
- #include <crypto/blake2s.h>
-+#ifdef CONFIG_VGETRANDOM_ALLOC_SYSCALL
-+#include <vdso/getrandom.h>
+@@ -60,6 +60,9 @@
+ #ifdef CONFIG_VGETRANDOM_ALLOC_SYSCALL
+ #include <vdso/getrandom.h>
+ #endif
++#ifdef CONFIG_VDSO_GETRANDOM
++#include <vdso/datapage.h>
 +#endif
  #include <asm/processor.h>
  #include <asm/irq.h>
  #include <asm/irq_regs.h>
-@@ -167,6 +172,76 @@ int __cold execute_with_initialized_rng(struct notifier_block *nb)
- 				__func__, (void *)_RET_IP_, crng_init)
+@@ -344,6 +347,9 @@ static void crng_reseed(struct work_struct *work)
+ 	if (next_gen == ULONG_MAX)
+ 		++next_gen;
+ 	WRITE_ONCE(base_crng.generation, next_gen);
++#ifdef CONFIG_VDSO_GETRANDOM
++	smp_store_release(&_vdso_rng_data.generation, next_gen + 1);
++#endif
+ 	if (!static_branch_likely(&crng_is_ready))
+ 		crng_init = CRNG_READY;
+ 	spin_unlock_irqrestore(&base_crng.lock, flags);
+@@ -794,6 +800,9 @@ static void __cold _credit_init_bits(size_t bits)
+ 		if (static_key_initialized)
+ 			execute_in_process_context(crng_set_ready, &set_ready);
+ 		atomic_notifier_call_chain(&random_ready_notifier, 0, NULL);
++#ifdef CONFIG_VDSO_GETRANDOM
++		smp_store_release(&_vdso_rng_data.is_ready, true);
++#endif
+ 		wake_up_interruptible(&crng_init_wait);
+ 		kill_fasync(&fasync, SIGIO, POLL_IN);
+ 		pr_notice("crng init done\n");
+diff --git a/include/vdso/datapage.h b/include/vdso/datapage.h
+index 73eb622e7663..9ae4d76b36c7 100644
+--- a/include/vdso/datapage.h
++++ b/include/vdso/datapage.h
+@@ -109,6 +109,16 @@ struct vdso_data {
+ 	struct arch_vdso_data	arch_data;
+ };
  
- 
-+
-+/********************************************************************
-+ *
-+ * vDSO support helpers.
-+ *
-+ * The actual vDSO function is defined over in lib/vdso/getrandom.c,
-+ * but this section contains the kernel-mode helpers to support that.
-+ *
-+ ********************************************************************/
-+
-+#ifdef CONFIG_VGETRANDOM_ALLOC_SYSCALL
 +/**
-+ * vgetrandom_alloc - allocate opaque states for use with vDSO getrandom().
-+ *
-+ * @num: on input, a pointer to a suggested hint of how many states to
-+ * allocate, and on output the number of states actually allocated.
-+ *
-+ * @size_per_each: the size of each state allocated, so that the caller can
-+ * split up the returned allocation into individual states.
-+ *
-+ * @flags: currently always zero.
-+ *
-+ * The getrandom() vDSO function in userspace requires an opaque state, which
-+ * this function allocates by mapping a certain number of special pages into
-+ * the calling process. It takes a hint as to the number of opaque states
-+ * desired, and provides the caller with the number of opaque states actually
-+ * allocated, the size of each one in bytes, and the address of the first
-+ * state.
-+
-+ * Returns a pointer to the first state in the allocation.
-+ *
++ * struct vdso_rng_data - vdso RNG state information
++ * @generation:	a counter representing the number of RNG reseeds
++ * @is_ready:	whether the RNG is initialized
 + */
-+SYSCALL_DEFINE3(vgetrandom_alloc, unsigned int __user *, num,
-+		unsigned int __user *, size_per_each, unsigned int, flags)
-+{
-+	const size_t state_size = sizeof(struct vgetrandom_state);
-+	size_t alloc_size, num_states;
-+	unsigned long pages_addr;
-+	unsigned int num_hint;
-+	int ret;
++struct vdso_rng_data {
++	unsigned long	generation;
++	bool		is_ready;
++};
 +
-+	if (flags)
-+		return -EINVAL;
-+
-+	if (get_user(num_hint, num))
-+		return -EFAULT;
-+
-+	num_states = clamp_t(size_t, num_hint, 1, (SIZE_MAX & PAGE_MASK) / state_size);
-+	alloc_size = PAGE_ALIGN(num_states * state_size);
-+
-+	if (put_user(alloc_size / state_size, num) || put_user(state_size, size_per_each))
-+		return -EFAULT;
-+
-+	pages_addr = vm_mmap(NULL, 0, alloc_size, PROT_READ | PROT_WRITE,
-+			     MAP_PRIVATE | MAP_ANONYMOUS | MAP_LOCKED, 0);
-+	if (IS_ERR_VALUE(pages_addr))
-+		return pages_addr;
-+
-+	ret = do_madvise(current->mm, pages_addr, alloc_size, MADV_WIPEONFORK);
-+	if (ret < 0)
-+		goto err_unmap;
-+
-+	return pages_addr;
-+
-+err_unmap:
-+	vm_munmap(pages_addr, alloc_size);
-+	return ret;
-+}
-+#endif
-+
- /*********************************************************************
-  *
-  * Fast key erasure RNG, the "crng".
-diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-index 45fa180cc56a..77b6debe7e18 100644
---- a/include/uapi/asm-generic/unistd.h
-+++ b/include/uapi/asm-generic/unistd.h
-@@ -886,8 +886,13 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
- #define __NR_set_mempolicy_home_node 450
- __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
- 
-+#ifdef __ARCH_WANT_VGETRANDOM_ALLOC
-+#define __NR_vgetrandom_alloc 451
-+__SYSCALL(__NR_vgetrandom_alloc, sys_vgetrandom_alloc)
-+#endif
-+
- #undef __NR_syscalls
--#define __NR_syscalls 451
-+#define __NR_syscalls 452
+ /*
+  * We use the hidden visibility to prevent the compiler from generating a GOT
+  * relocation. Not only is going through a GOT useless (the entry couldn't and
+@@ -120,6 +130,7 @@ struct vdso_data {
+  */
+ extern struct vdso_data _vdso_data[CS_BASES] __attribute__((visibility("hidden")));
+ extern struct vdso_data _timens_data[CS_BASES] __attribute__((visibility("hidden")));
++extern struct vdso_rng_data _vdso_rng_data __attribute__((visibility("hidden")));
  
  /*
-  * 32 bit systems traditionally used different
-diff --git a/include/vdso/getrandom.h b/include/vdso/getrandom.h
+  * The generic vDSO implementation requires that gettimeofday.h
+diff --git a/lib/vdso/Kconfig b/lib/vdso/Kconfig
+index b22584f8da03..f12b76642921 100644
+--- a/lib/vdso/Kconfig
++++ b/lib/vdso/Kconfig
+@@ -29,7 +29,6 @@ config GENERIC_VDSO_TIME_NS
+ 	help
+ 	  Selected by architectures which support time namespaces in the
+ 	  VDSO
+-
+ endif
+ 
+ config VGETRANDOM_ALLOC_SYSCALL
+@@ -38,3 +37,9 @@ config VGETRANDOM_ALLOC_SYSCALL
+ 	help
+ 	  Selected by the getrandom() vDSO function, which requires this
+ 	  for state allocation.
++
++config VDSO_GETRANDOM
++	bool
++	select VGETRANDOM_ALLOC_SYSCALL
++	help
++	  Selected by architectures that support vDSO getrandom().
+diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
 new file mode 100644
-index 000000000000..5f04c8bf4bd4
+index 000000000000..1c51e24a7f24
 --- /dev/null
-+++ b/include/vdso/getrandom.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
++++ b/lib/vdso/getrandom.c
+@@ -0,0 +1,204 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
 + */
 +
-+#ifndef _VDSO_GETRANDOM_H
-+#define _VDSO_GETRANDOM_H
++#include <linux/cache.h>
++#include <linux/kernel.h>
++#include <linux/time64.h>
++#include <vdso/datapage.h>
++#include <vdso/getrandom.h>
++#include <asm/vdso/getrandom.h>
++#include <asm/vdso/vsyscall.h>
 +
-+#include <crypto/chacha.h>
++#define MEMCPY_AND_ZERO_SRC(type, dst, src, len) do { \
++	while (len >= sizeof(type)) { \
++		__put_unaligned_t(type, __get_unaligned_t(type, src), dst); \
++		__put_unaligned_t(type, 0, src); \
++		dst += sizeof(type); \
++		src += sizeof(type); \
++		len -= sizeof(type); \
++	} \
++} while (0)
 +
-+struct vgetrandom_state {
-+	union {
-+		struct {
-+			u8 batch[CHACHA_BLOCK_SIZE * 3 / 2];
-+			u32 key[CHACHA_KEY_SIZE / sizeof(u32)];
-+		};
-+		u8 batch_key[CHACHA_BLOCK_SIZE * 2];
-+	};
-+	unsigned long generation;
-+	u8 pos;
++static void memcpy_and_zero_src(void *dst, void *src, size_t len)
++{
++	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)) {
++		if (IS_ENABLED(CONFIG_64BIT))
++			MEMCPY_AND_ZERO_SRC(u64, dst, src, len);
++		MEMCPY_AND_ZERO_SRC(u32, dst, src, len);
++		MEMCPY_AND_ZERO_SRC(u16, dst, src, len);
++	}
++	MEMCPY_AND_ZERO_SRC(u8, dst, src, len);
++}
++
++/**
++ * __cvdso_getrandom_data - generic vDSO implementation of getrandom() syscall
++ * @rng_info:		describes state of kernel RNG, memory shared with kernel
++ * @buffer:		destination buffer to fill with random bytes
++ * @len:		size of @buffer in bytes
++ * @flags:		zero or more GRND_* flags
++ * @opaque_state:	a pointer to an opaque state area
++ *
++ * This implements a "fast key erasure" RNG using ChaCha20, in the same way that the kernel's
++ * getrandom() syscall does. It periodically reseeds its key from the kernel's RNG, at the same
++ * schedule that the kernel's RNG is reseeded. If the kernel's RNG is not ready, then this always
++ * calls into the syscall.
++ *
++ * @opaque_state *must* be allocated using the vgetrandom_alloc() syscall.  Unless external locking
++ * is used, one state must be allocated per thread, as it is not safe to call this function
++ * concurrently with the same @opaque_state. However, it is safe to call this using the same
++ * @opaque_state that is shared between main code and signal handling code, within the same thread.
++ *
++ * Returns the number of random bytes written to @buffer, or a negative value indicating an error.
++ */
++static __always_inline ssize_t
++__cvdso_getrandom_data(const struct vdso_rng_data *rng_info, void *buffer, size_t len,
++		       unsigned int flags, void *opaque_state)
++{
++	ssize_t ret = min_t(size_t, INT_MAX & PAGE_MASK /* = MAX_RW_COUNT */, len);
++	struct vgetrandom_state *state = opaque_state;
++	size_t batch_len, nblocks, orig_len = len;
++	unsigned long current_generation;
++	void *orig_buffer = buffer;
++	u32 counter[2] = { 0 };
 +	bool in_use;
-+};
 +
-+#endif /* _VDSO_GETRANDOM_H */
-diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
-index 860b2dcf3ac4..f28196cb919b 100644
---- a/kernel/sys_ni.c
-+++ b/kernel/sys_ni.c
-@@ -360,6 +360,9 @@ COND_SYSCALL(pkey_free);
- /* memfd_secret */
- COND_SYSCALL(memfd_secret);
- 
-+/* random */
-+COND_SYSCALL(vgetrandom_alloc);
++	/*
++	 * If the kernel's RNG is not yet ready, then it's not possible to provide random bytes from
++	 * userspace, because A) the various @flags require this to block, or not, depending on
++	 * various factors unavailable to userspace, and B) the kernel's behavior before the RNG is
++	 * ready is to reseed from the entropy pool at every invocation.
++	 */
++	if (unlikely(!READ_ONCE(rng_info->is_ready)))
++		goto fallback_syscall;
 +
- /*
-  * Architecture specific weak syscall entries.
-  */
-diff --git a/lib/vdso/Kconfig b/lib/vdso/Kconfig
-index d883ac299508..b22584f8da03 100644
---- a/lib/vdso/Kconfig
-+++ b/lib/vdso/Kconfig
-@@ -31,3 +31,10 @@ config GENERIC_VDSO_TIME_NS
- 	  VDSO
- 
- endif
++	/*
++	 * This condition is checked after @rng_info->is_ready, because before the kernel's RNG is
++	 * initialized, the @flags parameter may require this to block or return an error, even when
++	 * len is zero.
++	 */
++	if (unlikely(!len))
++		return 0;
 +
-+config VGETRANDOM_ALLOC_SYSCALL
-+	bool
-+	select ADVISE_SYSCALLS
-+	help
-+	  Selected by the getrandom() vDSO function, which requires this
-+	  for state allocation.
-diff --git a/scripts/checksyscalls.sh b/scripts/checksyscalls.sh
-index f33e61aca93d..7f7928c6487f 100755
---- a/scripts/checksyscalls.sh
-+++ b/scripts/checksyscalls.sh
-@@ -44,6 +44,10 @@ cat << EOF
- #define __IGNORE_memfd_secret
- #endif
- 
-+#ifndef __ARCH_WANT_VGETRANDOM_ALLOC
-+#define __IGNORE_vgetrandom_alloc
-+#endif
++	/*
++	 * @state->in_use is basic reentrancy protection against this running in a signal handler
++	 * with the same @opaque_state, but obviously not atomic wrt multiple CPUs or more than one
++	 * level of reentrancy. If a signal interrupts this after reading @state->in_use, but before
++	 * writing @state->in_use, there is still no race, because the signal handler will run to
++	 * its completion before returning execution.
++	 */
++	in_use = READ_ONCE(state->in_use);
++	if (unlikely(in_use))
++		goto fallback_syscall;
++	WRITE_ONCE(state->in_use, true);
 +
- /* Missing flags argument */
- #define __IGNORE_renameat	/* renameat2 */
- 
-diff --git a/tools/include/uapi/asm-generic/unistd.h b/tools/include/uapi/asm-generic/unistd.h
-index 45fa180cc56a..77b6debe7e18 100644
---- a/tools/include/uapi/asm-generic/unistd.h
-+++ b/tools/include/uapi/asm-generic/unistd.h
-@@ -886,8 +886,13 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
- #define __NR_set_mempolicy_home_node 450
- __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
- 
-+#ifdef __ARCH_WANT_VGETRANDOM_ALLOC
-+#define __NR_vgetrandom_alloc 451
-+__SYSCALL(__NR_vgetrandom_alloc, sys_vgetrandom_alloc)
-+#endif
++retry_generation:
++	/*
++	 * @rng_info->generation must always be read here, as it serializes @state->key with the
++	 * kernel's RNG reseeding schedule.
++	 */
++	current_generation = READ_ONCE(rng_info->generation);
 +
- #undef __NR_syscalls
--#define __NR_syscalls 451
-+#define __NR_syscalls 452
- 
- /*
-  * 32 bit systems traditionally used different
++	/*
++	 * If @state->generation doesn't match the kernel RNG's generation, then it means the
++	 * kernel's RNG has reseeded, and so @state->key is reseeded as well.
++	 */
++	if (unlikely(state->generation != current_generation)) {
++		/*
++		 * Write the generation before filling the key, in case of fork. If there is a fork
++		 * just after this line, the two forks will get different random bytes from the
++		 * syscall, which is good. However, were this line to occur after the getrandom
++		 * syscall, then both child and parent could have the same bytes and the same
++		 * generation counter, so the fork would not be detected. Therefore, write
++		 * @state->generation before the call to the getrandom syscall.
++		 */
++		WRITE_ONCE(state->generation, current_generation);
++
++		/* Reseed @state->key using fresh bytes from the kernel. */
++		if (getrandom_syscall(state->key, sizeof(state->key), 0) != sizeof(state->key)) {
++			/*
++			 * If the syscall failed to refresh the key, then @state->key is now
++			 * invalid, so invalidate the generation so that it is not used again, and
++			 * fallback to using the syscall entirely.
++			 */
++			WRITE_ONCE(state->generation, 0);
++
++			/*
++			 * Set @state->in_use to false only after the last write to @state in the
++			 * line above.
++			 */
++			WRITE_ONCE(state->in_use, false);
++
++			goto fallback_syscall;
++		}
++
++		/*
++		 * Set @state->pos to beyond the end of the batch, so that the batch is refilled
++		 * using the new key.
++		 */
++		state->pos = sizeof(state->batch);
++	}
++
++	len = ret;
++more_batch:
++	/*
++	 * First use bytes out of @state->batch, which may have been filled by the last call to this
++	 * function.
++	 */
++	batch_len = min_t(size_t, sizeof(state->batch) - state->pos, len);
++	if (batch_len) {
++		/* Zeroing at the same time as memcpying helps preserve forward secrecy. */
++		memcpy_and_zero_src(buffer, state->batch + state->pos, batch_len);
++		state->pos += batch_len;
++		buffer += batch_len;
++		len -= batch_len;
++	}
++
++	if (!len) {
++		/*
++		 * Since @rng_info->generation will never be 0, re-read @state->generation, rather
++		 * than using the local current_generation variable, to learn whether a fork
++		 * occurred. Primarily, though, this indicates whether the kernel's RNG has
++		 * reseeded, in which case generate a new key and start over.
++		 */
++		if (unlikely(READ_ONCE(state->generation) != READ_ONCE(rng_info->generation))) {
++			buffer = orig_buffer;
++			goto retry_generation;
++		}
++
++		/*
++		 * Set @state->in_use to false only when there will be no more reads or writes of
++		 * @state.
++		 */
++		WRITE_ONCE(state->in_use, false);
++		return ret;
++	}
++
++	/* Generate blocks of RNG output directly into @buffer while there's enough room left. */
++	nblocks = len / CHACHA_BLOCK_SIZE;
++	if (nblocks) {
++		__arch_chacha20_blocks_nostack(buffer, state->key, counter, nblocks);
++		buffer += nblocks * CHACHA_BLOCK_SIZE;
++		len -= nblocks * CHACHA_BLOCK_SIZE;
++	}
++
++	BUILD_BUG_ON(sizeof(state->batch_key) % CHACHA_BLOCK_SIZE != 0);
++
++	/* Refill the batch and then overwrite the key, in order to preserve forward secrecy. */
++	__arch_chacha20_blocks_nostack(state->batch_key, state->key, counter,
++				       sizeof(state->batch_key) / CHACHA_BLOCK_SIZE);
++
++	/* Since the batch was just refilled, set the position back to 0 to indicate a full batch. */
++	state->pos = 0;
++	goto more_batch;
++
++fallback_syscall:
++	return getrandom_syscall(orig_buffer, orig_len, flags);
++}
++
++static __always_inline ssize_t
++__cvdso_getrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state)
++{
++	return __cvdso_getrandom_data(__arch_get_vdso_rng_data(), buffer, len, flags, opaque_state);
++}
 -- 
 2.38.1
 
