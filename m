@@ -2,96 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B424D63B09A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:58:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E8B63B09C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233915AbiK1R6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 12:58:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34840 "EHLO
+        id S234048AbiK1R6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 12:58:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234485AbiK1R5q (ORCPT
+        with ESMTP id S234099AbiK1R6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:57:46 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F7F29832
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:46:16 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id f13so18568139lfa.6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:46:16 -0800 (PST)
+        Mon, 28 Nov 2022 12:58:19 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F093D926
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:46:28 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id v3-20020a17090ac90300b00218441ac0f6so12956213pjt.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:46:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sEOQc33dh/AvjD98uU08ScRRQgB0t4Sl60gjFCfdd8U=;
-        b=yhQe2+hZGfKl6Eo7WYzGcxfG3vjSEekJKA7nkO4rCuvo1+vY9HSx7lTw++LjKu/T/q
-         oGUXqhJeeq5zkrNXRdMIXEFvx25L9KApHsNm/KXgY0St375VrGNtLItCRFyN29hplOG6
-         9gc1TkStI7/j15OBs11Mxh9rYZyPpUVHBhF5knolHECXFL5+3duh5oHFGVTX0TJZqCY2
-         0BJY2g5+4peU0+TLiFM8tpUkUUinQ3YyvZAY2e5+mZWFJ+hkAWMBIXi4Dwl0uIXDo4R2
-         C9RP3oO6WQ6L7MTO7JCOcqg4KnvKi2GPBqUPL+ljPwNKtpXPJ7tbsnyXLpyeNVrQ1Nxu
-         pXgw==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yt+6ZsFhHbg9VXiMxe9kvr7coxEz5653nTiwyPOx528=;
+        b=M602G5EP/uN3K4grhCY6Shfqyo+fxipZ4KWTTuEwvKP/eqEFyLVW8NRu3X89MxlYzY
+         2YxMA/Xzs8zAJzyf6jPcLQ4GfFKkYV0x4ISr2XKqchK3Jx02Ax36vhA7NAHk+OlvcL9L
+         dhUWN6THrPOaW9jyniNJVqtSlrT1HM/5Rs38XmlzlfhbjFUlDH1WUN9NFhgs4Woi2QUy
+         dSaL+EXTRy9/9LYpnXYEof4+I3HUdFPAkdSlv4P+catGH0hbvukplczpguDKxoYPrmqE
+         tG2tILO4kQFHaOVGFjY3QTXfDjAVfsUp3fXL8P/5duSeu2XyVbr48YvIGFiWBkYFgEMf
+         SPQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sEOQc33dh/AvjD98uU08ScRRQgB0t4Sl60gjFCfdd8U=;
-        b=lmxwgjGJcyD/ROP3INyi4p7UYPce7X8mPvBy65+jfIRiqQyCVqAeT4qOjJ/W8X5BPc
-         97JmNPShrxWNIGxhs7yT1leToKiHwLwNdqUFHB/jQpMXxnQ5qSmc6Htitt2ye6uv+eaP
-         x7tw37EqWMmIlnv3SYAM0jtKVOl85Zrw/MQpUir5LtJIoNnLhbf0OlPx62Bc2et6Wlq4
-         /uKMoUJB+XiBuAaXjp4NevyHQbUg7sTPaGpEkJBYEhPQSiL9v9wx8R9lnoDHDYmDHQLb
-         XuyF8gWGs41eE3Q78FPSXCmwEOebOO8ZQo8bzCI3Km5Zwt9LEoIZ7ldSIAbaVrEoJd2k
-         gxXA==
-X-Gm-Message-State: ANoB5plM1u+T+cZyVsiTeLvGegaKC1VgymPC4aR8Q+QB2yDxw1tui0TR
-        HkCiE5P5sjG/VxCqFRdEEBg1ig==
-X-Google-Smtp-Source: AA0mqf7Y8q4j5Qp8K52/Qdd96mqJajrlcpd3UQv1lIPTFAuR7uwCLpQ1Ju2x51BwH5f5CeII2zXU/A==
-X-Received: by 2002:a19:4901:0:b0:4b4:e3b8:c6af with SMTP id w1-20020a194901000000b004b4e3b8c6afmr11777772lfa.291.1669657569898;
-        Mon, 28 Nov 2022 09:46:09 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id b12-20020a05651c032c00b0027741daec09sm1252772ljp.107.2022.11.28.09.46.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 09:46:09 -0800 (PST)
-Message-ID: <dbf8082b-679a-b2d5-6568-3f9a93e52501@linaro.org>
-Date:   Mon, 28 Nov 2022 18:46:08 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Yt+6ZsFhHbg9VXiMxe9kvr7coxEz5653nTiwyPOx528=;
+        b=FofJfLkmLEcVRLyhSuBWHnckodgeRxfWAkOxwAjTmGykQ1PUFcXz3LmiUKmoZvXLXY
+         JBUL6iCIkbTcgxAi7RObVebCEUeMmKRhrqvCgA/5nLNnxFTOfF7Qk+NVICrh53dQqpXh
+         YEKo4ES9gM1FO2Ka16tqtTyC7RzoecGVrW/ZzyuCc934I4MhP3keAaNo1j1ZjT08ELoR
+         6YaI9Rj3EEXiw7QW7JmE6sDV9TTfH3K31YWs4sgJk7bm2ciXP5kvz5z/6KHAwOnxHWUL
+         zhKsa6XtxhL6kMjkEQp2V0zeYTE0V0ShkGs+UPqdWJIPM/ngYhlCfPTfJ9xM5nL/vjKW
+         etUw==
+X-Gm-Message-State: ANoB5pkLmBX4OVgbRLbpLiSZInngXyUYXkDFl35zwyQftksQx1tFZUG4
+        0tH09GuemE7LyxonGb6SMJNUcgzY8utAeA==
+X-Google-Smtp-Source: AA0mqf6RR+CKCljliuYRRA/Xk2TOOtJ2SX5gEyk55ktJ9yFGoMm9S7KlVOyhhodEO8xdzKB+0DNV8w==
+X-Received: by 2002:a17:902:7087:b0:189:4de4:e71b with SMTP id z7-20020a170902708700b001894de4e71bmr25875312plk.159.1669657578962;
+        Mon, 28 Nov 2022 09:46:18 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u10-20020a170902e5ca00b00189371b5971sm9176020plf.220.2022.11.28.09.46.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 09:46:18 -0800 (PST)
+Date:   Mon, 28 Nov 2022 17:46:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nagareddy Reddy <nspreddy@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [RFC PATCH v3 2/2] KVM: x86/mmu: replace BUG() with KVM_BUG() in
+ shadow mmu
+Message-ID: <Y4Tz5zd9qXBiR0Pr@google.com>
+References: <20221128002043.1555543-1-mizhang@google.com>
+ <20221128002043.1555543-3-mizhang@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [RESEND PATCH 1/2] dt-bindings: nfc: nxp,nci: Document NQ310
- compatible
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221128173744.833018-1-luca@z3ntu.xyz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221128173744.833018-1-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221128002043.1555543-3-mizhang@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/11/2022 18:37, Luca Weiss wrote:
-> The NQ310 is another NFC chip from NXP, document the compatible in the
-> bindings.
+On Mon, Nov 28, 2022, Mingwei Zhang wrote:
+> Replace BUG() in pte_list_remove() with KVM_BUG() to avoid crashing the
+> host. MMU bug is difficult to discover due to various racing conditions and
+> corner cases and thus it extremely hard to debug. The situation gets much
+> worse when it triggers the shutdown of a host. Host machine crash
+> eliminates everything including the potential clues for debugging.
 > 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> From cloud computing service perspective, BUG() or BUG_ON() is probably no
+> longer appropriate as the host reliability is top priority.
+
+I don't think we need to bring "cloud computing" into this.  Linus has made it
+clear over and over and over that BUG() / BUG_ON() need to be avoided unless
+the alternative is worse.  E.g. the BUG() in __handle_changed_spte() is warranted
+because the alternative is silent corruption of guest data.
+
+> Crashing the physical machine is almost never a good option as it eliminates
+> innocent VMs and cause service outage in a larger scope. Even worse, if
+> attacker can reliably triggers this code by diverting the control flow or
+> corrupting the memory,
+
+Or if there's a KVM bug, which is waaaaay more likely.
+
+> then this becomes vm-of-death attack.
+
+This is true of any BUG(), and really of any unexpected fault while holding a
+spinlock, e.g. NULL pointer derefs in the MMU are almost always fatal as well.
+
+> This is a huge attack vector to cloud providers, as the death of one single
+> host machine is not the end of the story. Without manual interferences, a
+> failed cloud job may be dispatched to other hosts and continue host crashes
+> until all of them are dead.
+> 
+> Because of the above reasons, shrink the scope of crash to the target VM
+> only. KVM_BUG() and KVM_BUG_ON() requires a valid struct kvm which requires
+> extra plumbing. Avoid it in this version by just using
+> kvm_get_running_vcpu()->kvm instead.
+
+Stale comment.
+
+> Cc: Nagareddy Reddy <nspreddy@google.com>
+> Cc: Jim Mattson <jmattson@google.com>
+> Cc: David Matlack <dmatlack@google.com>
+> Signed-off-by: Mingwei Zhang <mizhang@google.com>
 > ---
-> RESEND to fix Cc
+>  arch/x86/kvm/mmu/mmu.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index b5a44b8f5f7b..e132d82ab4c0 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -956,12 +956,12 @@ static void pte_list_remove(struct kvm *kvm, u64 *spte,
+>  
+>  	if (!rmap_head->val) {
+>  		pr_err("%s: %p 0->BUG\n", __func__, spte);
 
+These probably need to be ratelimited (or "once").  Bugging the VM will prevent
+doing anything useful with the VM, but KVM still needs to destroy the VM, which
+means zapping SPTEs and purging the rmaps.  Theoretically, there could be thousands
+of broken rmaps.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> -		BUG();
+> +		KVM_BUG(true, kvm, "");
 
-Best regards,
-Krzysztof
+If you don't want to provide a message, use KVM_BUG_ON(), not an empty message.
+Though my vote would be to fold the existing pr_err() messages into KVM_BUG(),
+which would make the WARN much more helpful and would address the pr_err() issue
+above.  The __func__ printing can also go away in that case because the stack
+track will provide all the necessary info.  The only reason not to drop the
+pr_err() entirely is if a ratelimited message is helpful for debugging failures
+that occur in production, which I doubt it true.
+
+And rather than pass "true", wrap the actual check with the KVM_BUG().
+
+>  	} else if (!(rmap_head->val & 1)) {
+>  		rmap_printk("%p 1->0\n", spte);
+>  		if ((u64 *)rmap_head->val != spte) {
+>  			pr_err("%s:  %p 1->BUG\n", __func__, spte);
+> -			BUG();
+> +			KVM_BUG(true, kvm, "");
+
+KVM needs to return here, otherwise KVM is knowingly writing a garbage pointer,
+e.g. will corrupt memory or trigger a fault.
+
+>  		}
+>  		rmap_head->val = 0;
+>  	} else {
+
+Something like this?
+
+---
+ arch/x86/kvm/mmu/mmu.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index b5a44b8f5f7b..12790ccb8731 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -954,15 +954,16 @@ static void pte_list_remove(struct kvm *kvm, u64 *spte,
+ 	struct pte_list_desc *prev_desc;
+ 	int i;
+ 
+-	if (!rmap_head->val) {
+-		pr_err("%s: %p 0->BUG\n", __func__, spte);
+-		BUG();
+-	} else if (!(rmap_head->val & 1)) {
++	if (KVM_BUG(!rmap_head->val, kvm, "rmap for %p is empty", spte))
++		return;
++
++	if (!(rmap_head->val & 1)) {
+ 		rmap_printk("%p 1->0\n", spte);
+-		if ((u64 *)rmap_head->val != spte) {
+-			pr_err("%s:  %p 1->BUG\n", __func__, spte);
+-			BUG();
+-		}
++
++		if (KVM_BUG((u64 *)rmap_head->val != spte, kvm,
++			    "single rmap for %p doesn't match", spte))
++			return;
++
+ 		rmap_head->val = 0;
+ 	} else {
+ 		rmap_printk("%p many->many\n", spte);
+@@ -979,8 +980,7 @@ static void pte_list_remove(struct kvm *kvm, u64 *spte,
+ 			prev_desc = desc;
+ 			desc = desc->more;
+ 		}
+-		pr_err("%s: %p many->many\n", __func__, spte);
+-		BUG();
++		KVM_BUG(true, kvm, "no rmap for %p (many->many)", spte);
+ 	}
+ }
+ 
+
+base-commit: d74237e747db7f9f27e821e6683d58185e846378
+-- 
 
