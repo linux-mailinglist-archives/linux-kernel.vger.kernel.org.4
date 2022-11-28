@@ -2,101 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759D163A02C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 04:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4D2363A02E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 04:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbiK1DhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 22:37:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
+        id S229905AbiK1Dij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 22:38:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiK1DhK (ORCPT
+        with ESMTP id S229518AbiK1Dii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 22:37:10 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2AA10B8;
-        Sun, 27 Nov 2022 19:37:08 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NLB3k08Ksz4xG6;
-        Mon, 28 Nov 2022 14:37:05 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669606626;
-        bh=bvBlrXIDKBHttLmLBQIxftmd1zZk2fvFGmTRXpNxqnQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jHnwwmgp7FnzMRNiQJYiaYtbID6drPbxgffBQPZbVbQMa0F6R78XXp64m5JY5m0B1
-         /jPN2BCoBrz8CMQBBCRL/fgWC60M+SscdY+wB+KAuHTfq45dlMMvdAKM08l2W1JDEA
-         7lwwtOozPETq7kDoZJR8FyYtnmqUvTmzPj5bXx7vUd8eQjmzSO6Iaf0I9FCmJ/0kei
-         1hguoR7jvTQ8MMx5c/BIZYuIQqwsR5aUFu3A6mvxF71kYIqwH8YVHcGeNHvY2dTK4M
-         sAVt548hxxosy0O6Vkh8Oe1A8o8eYK/aBBz4cufq6GCCeV7YQQHI2VHmpzZdrF4R1f
-         SrhZYgr9HTmig==
-Date:   Mon, 28 Nov 2022 14:37:04 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the execve tree with the vfs tree
-Message-ID: <20221128143704.3fe8f7b1@canb.auug.org.au>
+        Sun, 27 Nov 2022 22:38:38 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A8F10DA;
+        Sun, 27 Nov 2022 19:38:36 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NLB5M0Qp5z4f3jZH;
+        Mon, 28 Nov 2022 11:38:31 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgCXu9g5LYRjQ6QeBQ--.37025S3;
+        Mon, 28 Nov 2022 11:38:34 +0800 (CST)
+Subject: Re: [PATCH RFC] scsi: core: remove unsed 'restarts' from scsi_device
+To:     Yu Kuai <yukuai1@huaweicloud.com>, Ming Lei <ming.lei@redhat.com>
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20221118113052.1324140-1-yukuai1@huaweicloud.com>
+ <cefdae2e-67e3-b4b4-f569-31db960e991f@huaweicloud.com>
+ <Y4QqtbXsuYmkOe88@T590>
+ <7a747bc3-b902-6f0c-21ef-0ef470ec326e@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <d8bd7bfd-7b19-cd8e-4f5b-928d5a721155@huaweicloud.com>
+Date:   Mon, 28 Nov 2022 11:38:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/S/x3kvRrkSP9t=t0VirgLpz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <7a747bc3-b902-6f0c-21ef-0ef470ec326e@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCXu9g5LYRjQ6QeBQ--.37025S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYF7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0
+        xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2
+        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VU1a9aPUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/S/x3kvRrkSP9t=t0VirgLpz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the execve tree got a conflict in:
+在 2022/11/28 11:35, Yu Kuai 写道:
 
-  fs/binfmt_elf.c
+> 
+> Why the hw queue need to run if get budget never failed in this hw
+> queue?
 
-between commit:
+And by the way, after Jan's patch "blk-mq: Improve performance of non-mq
+IO schedulers with multiple HW queues", scsi_run_queue_async() can only
+garantee to run hw queue for the current cpu, not all the hw queues.
 
-  9a938eba8d28 ("kill coredump_params->regs")
-
-from the vfs tree and commit:
-
-  8f6e3f9e5a0f ("binfmt: Fix whitespace issues")
-
-from the execve tree.
-
-I fixed it up (I just use the former where they conflicted, so may have
-lost some white space fixups) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/S/x3kvRrkSP9t=t0VirgLpz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOELOAACgkQAVBC80lX
-0GzKaAf/TucsqS0y9XoAxET3x8TJV+zAbXcmObQI+hZNVskQsZrUF2SaGPMUaJm1
-xBl1CuqB3yCQ2xzWagfWlo+PU+eokSb9Q6E1TnIurH106W9LbpFe0AXUfqIpfzWP
-pTUWdYztK26Evg4t9JlxX3cz7Qj8xvrkMGLl99zOfv8rY6YRLam9d62taDb643C/
-Bp5cBHVaOnx+0kTQYnOghcb2NmFxjVAGpWNnOncQuw/RN/YgcTu4LUZElMZuOl4K
-RTb45d2BM0HhOSAzc/t7uoYghWO6ZAKLKFpQfocbyg6Hq9JPjzyev9zRpppJFFqb
-051hIBAnDCjH+ZMI31aeSc92Y3a/Bw==
-=hyPR
------END PGP SIGNATURE-----
-
---Sig_/S/x3kvRrkSP9t=t0VirgLpz--
