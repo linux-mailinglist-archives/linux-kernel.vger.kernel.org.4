@@ -2,61 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA39863A2D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2336A63A2DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiK1IY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 03:24:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
+        id S230136AbiK1IZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 03:25:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiK1IYw (ORCPT
+        with ESMTP id S229937AbiK1IY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 03:24:52 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADBBD72
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:24:51 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ozZRS-0005PL-St; Mon, 28 Nov 2022 09:24:42 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ozZRR-000mOL-0D; Mon, 28 Nov 2022 09:24:41 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ozZRR-000sND-57; Mon, 28 Nov 2022 09:24:41 +0100
-Date:   Mon, 28 Nov 2022 09:24:41 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        "Wesley W. Terpstra" <wesley@sifive.com>,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] pwm: sifive: Always let the first pwm_apply_state
- succeed
-Message-ID: <20221128082441.wsqcpuxqk6cynako@pengutronix.de>
-References: <20221109113724.519021-1-emil.renner.berthing@canonical.com>
- <20221109120102.ylnseq2w33rvt7fz@pengutronix.de>
- <CAJM55Z-EVXB6FTWwh_vY_B3LoVv+b7TCQCE7asB8G8wkEwui_g@mail.gmail.com>
- <20221109153311.cszr7fgfmyelwra3@pengutronix.de>
- <CAJM55Z8vpJ0XtQqnsFMLE4rkyV11ePbNjtYx0u4pgM9-MT=Kvg@mail.gmail.com>
+        Mon, 28 Nov 2022 03:24:56 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4F102DCF;
+        Mon, 28 Nov 2022 00:24:53 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 245DFD6E;
+        Mon, 28 Nov 2022 00:25:00 -0800 (PST)
+Received: from [10.162.40.16] (unknown [10.162.40.16])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3CF773F73B;
+        Mon, 28 Nov 2022 00:24:48 -0800 (PST)
+Message-ID: <90f4abd0-2314-19e4-176c-00f15100ada0@arm.com>
+Date:   Mon, 28 Nov 2022 13:54:46 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kaygonhhwcbbtokq"
-Content-Disposition: inline
-In-Reply-To: <CAJM55Z8vpJ0XtQqnsFMLE4rkyV11ePbNjtYx0u4pgM9-MT=Kvg@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH V5 4/7] driver/perf/arm_pmu_platform: Add support for BRBE
+ attributes detection
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, will@kernel.org, catalin.marinas@arm.com,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Ingo Molnar <mingo@redhat.com>
+References: <20221107062514.2851047-1-anshuman.khandual@arm.com>
+ <20221107062514.2851047-5-anshuman.khandual@arm.com>
+ <Y3fIYjGtoXPSX9JQ@FVFF77S0Q05N.cambridge.arm.com>
+ <fa55fccc-455c-828a-b5fb-de5cb269e35b@arm.com>
+ <Y3tjfg/aPIixPTbs@FVFF77S0Q05N.cambridge.arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <Y3tjfg/aPIixPTbs@FVFF77S0Q05N.cambridge.arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,56 +57,125 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---kaygonhhwcbbtokq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On 11/21/22 17:09, Mark Rutland wrote:
+> On Mon, Nov 21, 2022 at 12:06:31PM +0530, Anshuman Khandual wrote:
+>>
+>>
+>> On 11/18/22 23:31, Mark Rutland wrote:
+>>> On Mon, Nov 07, 2022 at 11:55:11AM +0530, Anshuman Khandual wrote:
+>>>> This adds arm pmu infrastrure to probe BRBE implementation's attributes via
+>>>> driver exported callbacks later. The actual BRBE feature detection will be
+>>>> added by the driver itself.
+>>>>
+>>>> CPU specific BRBE entries, cycle count, format support gets detected during
+>>>> PMU init. This information gets saved in per-cpu struct pmu_hw_events which
+>>>> later helps in operating BRBE during a perf event context.
+>>>
+>>> Do we expect this to vary between CPUs handled by the same struct arm_pmu ?
+>>
+>> BRBE registers are per CPU, and the spec does not assert about BRBE properties
+>> being the same across the system, served via same the struct arm_pmu.
+> 
+> The same is true of the PMU, and struct arm_pmu does not cover the whole
+> system, it covers each *micro-architecture* within the system.
+> 
+> I think BRBE should be treated the same, i.e. uniform *within* a struct
+> arm_pmu.
 
-On Wed, Nov 16, 2022 at 06:41:06PM +0100, Emil Renner Berthing wrote:
-> On Wed, 9 Nov 2022 at 16:33, Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> > On Wed, Nov 09, 2022 at 01:45:43PM +0100, Emil Renner Berthing wrote:
-> > > How about we merge this bug fix that can easily be backported first
-> > > and then look at how it should be handled properly?
-> >
-> > I thought it wouldn't be that hard to do it right from the start,
-> > but I admit it's harder than I expected to get right. My prototype looks
-> > as follows:
->=20
-> This works for me (modulo the two extra {'s). I'd still prefer merging
+Understood, detected on one and verified on all ?
 
-Yeah, didn't even try to compile it.
+> 
+>> Hence it would be inaccurate to make that assumption, which might have just
+>> avoided all these IPI based probes during boot.
+> 
+> FWIW, I would be happy to IPI all CPUs during boot to verify uniformity of CPUs
+> within an arm_pmu; I just don't think that BRBE should be treated differently
+> from the rest of the PMU features.
 
-> the simpler version and then this on top for ease of backporting, but
-> as long as the race is fixed I'm fine. Will you send a cleaned up
-> version of this?
+Hence BRBE probing should be done inside an updated __armv8pmu_probe_pmu().
 
-I'd let Thierry decide what he want here. Depending on his choice I can
-clean up my suggestion (inclusive compile test) on the then relevant
-state of the driver.
+static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
+{
+        struct armv8pmu_probe_info probe = {
+                .pmu = cpu_pmu,
+                .present = false,
+        };
+        int ret;
 
-Best regards
-Uwe
+        ret = smp_call_function_any(&cpu_pmu->supported_cpus,
+                                    __armv8pmu_probe_pmu,
+                                    &probe, 1);
+        if (ret)
+                return ret;
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+        return probe.present ? 0 : -ENODEV;
+}
 
---kaygonhhwcbbtokq
-Content-Type: application/pgp-signature; name="signature.asc"
+But if BRBE is assumed (and verified) to be same across the micro-architecture,
+then following BRBE attributes when captured should be part of 'struct arm_pmu'
+instead of 'struct pmu_hw_events' as is the case currently.
 
------BEGIN PGP SIGNATURE-----
+        /* Detected BRBE attributes */
+        bool                            brbe_v1p1;
+        int                             brbe_cc;
+        int                             brbe_nr;
+        int                             brbe_format;
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOEcEUACgkQwfwUeK3K
-7AnD8gf/dT+Idh5F//NM08TsmrSjFwGL4iPC9RfTbR+drkH+TzqExwotU0ZXtyez
-PP7g1a7fBGQyKwwXxmk56rPjoxw4XQIHKdnodzgu8PajwgKKdjTNBhd3HZHUx8I+
-2vA+/X60pzU/HBAuXkHm8wLj0BoShsgQYEclABI92tJKbUiM+46D0bTQjAXgrFcf
-xT4HrrftNnRB1cdjyD2DJdBSgVZBkr62NJf1LVklhnxMtmwXPHtROWfJqOZsIJBc
-drH9DgITkhN6r5oIQtpQ+idbxKYdU137CNSbGbWIFDgwAeammcyPqxXjeVQnk9oT
-RcGUSJSsXZ7y5O2nm4FJtqsgl1qjMQ==
-=cKDE
------END PGP SIGNATURE-----
+> 
+> [...]
+> 
+>>>> +	hw_events = per_cpu_ptr(armpmu->hw_events, smp_processor_id());
+>>>> +	armpmu->brbe_probe(hw_events);
+>>>> +}
+>>>> +
+>>>> +static int armpmu_request_brbe(struct arm_pmu *armpmu)
+>>>> +{
+>>>> +	int cpu, err = 0;
+>>>> +
+>>>> +	for_each_cpu(cpu, &armpmu->supported_cpus) {
+>>>> +		err = smp_call_function_single(cpu, arm_brbe_probe_cpu, armpmu, 1);
+>>>
+>>> Why does this need to be called on each CPU in the supported_cpus mask?
+>>
+>> Is not supported_cpus derived after partitioning the IRQ in pmu_parse_percpu_irq().
+>> The idea is to fill up BRBE buffer attributes, on all such supported cpus which could
+>> trigger PMU interrupt. Is the concern, that not all cpus in supported_cpus mask might
+>> not be online during boot, hence IPIs could not be served, hence BRBE attributed for
+>> them could not be fetched ?
+> 
+> As above, I think this is solvable if we mandate that BRBE must be uniform
+> *within* an arm_pmu's supported CPUs; then we only need one CPU in the
+> supported_cpus mask to be present at boot time, as with the rest of the PMU
+> code.
+> 
+> We could *verify* that when onlining a CPU.
 
---kaygonhhwcbbtokq--
+Understood.
+
+> 
+>>> I don't see anything here to handle late hotplug, so this looks suspicious.
+>>
+>> Right, I should add cpu hotplug handling, otherwise risk loosing BRBE support on cpus
+>> which might have been offline during boot i.e when above IPI based probe happened ?
+>>
+>>> Either we're missing something, or it's redundant at boot time.
+>>
+>> Should we add cpu hotplug online-offline handlers like some other PMU drivers ? Let
+>> me know if there are some other concerns.
+>>
+>> cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN, DRVNAME,
+>> 			arm_brbe_cpu_startup,
+>> 		        arm_brbe_cpu_teardown)
+> 
+> We *could* add that, but that's going to require ordering against the existing
+> hooks for probing arm_pmu.
+
+Right.
+
+> 
+> Why can't this hang off the exising hooks for arm_pmu? We're treating this as
+> part of the PMU anyway, so I don't understand why we should probe it
+> separately.
+Okay, will try and see what all changes are required to move the probing into generic
+arm_pmu probe, and capture the BRBE attributes inside struct arm_pmu.
