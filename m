@@ -2,122 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A2AD63B1E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78ADB63B1EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233109AbiK1TIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 14:08:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
+        id S233125AbiK1TLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 14:11:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232932AbiK1TIw (ORCPT
+        with ESMTP id S231638AbiK1TLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 14:08:52 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFE329C8C
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:08:50 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so14975353pjc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:08:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vdiFLWGJlZNZEhU3chxdhx2hGdjjeSZKpnJnffDHCx4=;
-        b=Q5XoN2CjIrbe+48L5bUfjZfu0U8JKd099j/FY7bwNTUH3aWmw9cAnqT8EgROl9fO4C
-         qOJNJTIm54HvYo6ESRa+AGqTKFtczOfLgtde/tjYAQUNfe4U748t/psuR81Mo6eR6XDK
-         sXlXiUBIXotQbcclPXQsaJq4Z9p3B5Dj4QF7c2XCk+w+z7/wrBnMz2rI26+IzJPJmuGO
-         JKaYF8JhouN3XgWuhpIqqQ6dEd1oqnjkTbX4EWZ5r+qE4YJcamhZhJhQO252DrRpLJS/
-         +shfuyh0O9KPr6c/aUrEpA6d1zQ2Pt/J0pfypcEynvs9EKZn9rve8Xm4ZoTR7+fcJ4XX
-         7FTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vdiFLWGJlZNZEhU3chxdhx2hGdjjeSZKpnJnffDHCx4=;
-        b=QMkHv1RYInqPXfqiO7GWvGovX3Z6LcvsepiejkrhU+0LiLrkmXhiRyytl1QclCGw/c
-         8Ns4h4stwbTpek1zsZya+ISAeypLxzXkSQMJaGpfeMETj7+X2GAHhLNRgOmCAOPY1dF2
-         hXaZoXBnZ5b6SlbFArcK+lo2hVBVJXfuAR2Q9ELNFyfZySY82zF4IkIWdDcWwBK7gCqf
-         eEPLkhsu9rrKQafO0i7AHUB11pIXk4hMegEkC0d0bwi/ndptWGXnA8knUO7gk3TJ5cUv
-         RlKMAJTEjmvmFSNmnQOymMFZV1eAw+7YhPGa6prVDF2cZt0DrQ4tc3m9Tl+MBOZ21zy4
-         rH7w==
-X-Gm-Message-State: ANoB5pnN2zPifDUyttaXKBAy7sUEFS6JjcCC/10OQ9BB0UJzxAjR2CHS
-        oNz3K/h94cHsU9JTAQ86zPQf1Q==
-X-Google-Smtp-Source: AA0mqf58eO2rHe3Xr1xr78aQJvkKp/cyJMeBI5F2x7pd0MEGGkcfWTx6fI+wdxL/kuKyRwBa07WrdA==
-X-Received: by 2002:a17:902:f651:b0:187:190f:6aa7 with SMTP id m17-20020a170902f65100b00187190f6aa7mr35345914plg.131.1669662529792;
-        Mon, 28 Nov 2022 11:08:49 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902c14600b00187197c499asm9208642plj.164.2022.11.28.11.08.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 11:08:48 -0800 (PST)
-Message-ID: <0390c62d-11d9-5d89-ad88-db38526b74e6@kernel.dk>
-Date:   Mon, 28 Nov 2022 12:08:47 -0700
+        Mon, 28 Nov 2022 14:11:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3212E12D0C
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:11:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C26F16136F
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 19:10:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8D7EC433D6;
+        Mon, 28 Nov 2022 19:10:57 +0000 (UTC)
+Date:   Mon, 28 Nov 2022 14:10:56 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        kirill.shutemov@linux.intel.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, jpoimboe@kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, tglx@linutronix.de,
+        viro@zeniv.linux.org.uk, x86@kernel.org
+Subject: Re: [PATCH] x86/asm: Remove unused COMPILE_OFFSETS macro from
+ asm-offsets.c
+Message-ID: <20221128141056.29ccafd6@gandalf.local.home>
+In-Reply-To: <Y4T4msSXCNnfPCMG@google.com>
+References: <20221128091506.gp4l6klznqhigjxv@box.shutemov.name>
+        <20221128101117.3614401-1-mailhol.vincent@wanadoo.fr>
+        <20221128111112.dzavip4eqqgpyrai@box.shutemov.name>
+        <CAMZ6RqJ0EgbLcz97ujqEzF1MBsH045W0Cu8mMuR0WCx_cTemCQ@mail.gmail.com>
+        <20221128124513.76392c3d@gandalf.local.home>
+        <b98429d8-6d18-cf0b-6ca0-d9d6472d21f9@redhat.com>
+        <Y4T4msSXCNnfPCMG@google.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH-block] blk-cgroup: Use css_tryget() in
- blkcg_destroy_blkgs()
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Hillf Danton <hdanton@sina.com>, Yi Zhang <yi.zhang@redhat.com>
-References: <20221128033057.1279383-1-longman@redhat.com>
- <d08a0059-7c0b-d65f-d184-5b0cb75c08ed@acm.org>
- <f89e922c-16d5-0bcf-7e7e-096f42793a36@kernel.dk>
- <Y4UG9H9QsMnCvN+D@smile.fi.intel.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Y4UG9H9QsMnCvN+D@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/28/22 12:07 PM, Andy Shevchenko wrote:
-> On Mon, Nov 28, 2022 at 12:00:55PM -0700, Jens Axboe wrote:
->> On 11/28/22 11:56 AM, Bart Van Assche wrote:
->>> On 11/27/22 19:30, Waiman Long wrote:
->>>> Fixes: 951d1e94801f ("blk-cgroup: Flush stats at blkgs destruction path")
->>>
->>> Has Jens' for-next branch perhaps been rebased? I see the following commit ID for that patch:
->>>
->>> dae590a6c96c ("blk-cgroup: Flush stats at blkgs destruction path")
->>
->> I don't know that sha is from, not from me. for-6.2/block has not been
->> rebased, for-next gets rebased whenever I need to do so as linux-next is
->> continually rebased anyway. But the sha for that commit would not change
->> as a result.
->>
->> I don't even have that sha in my tree, so...
+On Mon, 28 Nov 2022 18:06:18 +0000
+Sean Christopherson <seanjc@google.com> wrote:
+
+> > > IIRC, the reason for adding that was because that logic was screwing up
+> > > asm-offsets.c. I'm not sure it screws up kvm-asm-offsets.c though.
+> > > 
+> > > This is one of those cases I wish I commented that code better :-/  
+> > 
+> > I don't think KVM includes linux/ftrace.h or asm/ftrace.h at all.  
 > 
-> $ git tag --contains dae590a6c96c
-> next-20221117
-> next-20221118
-> next-20221121
-> next-20221122
-> next-20221123
-> next-20221124
-> next-20221125
-> next-20221128
+> >From include/linux/kvm_host.h  
+> 
+>   #include <linux/ftrace.h>
+> 
+> Even if that didn't exist, saying that XYZ never includes a header is a dangerous
+> business, it's all too easy to indirectly include headers in the kernel, now or
+> in the future.
 
-That is the right sha, I'm talking about the fixes line in the
-patch you're replying to:
+But going back to the original intent of COMPILE_OFFSETS. I believe it was
+because some code that did not work with the auto generation of compiler
+offsets and was a way to hide them.
 
-Fixes: 951d1e94801f ("blk-cgroup: Flush stats at blkgs destruction path")
+I do not know if it is still an issue or not today.
 
-which is certainly not from my tree.
-
--- 
-Jens Axboe
-
-
+-- Steve
