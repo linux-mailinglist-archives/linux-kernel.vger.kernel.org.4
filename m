@@ -2,171 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA20963B11E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6553163B127
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234187AbiK1SVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 13:21:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
+        id S234270AbiK1SW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 13:22:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234265AbiK1SUn (ORCPT
+        with ESMTP id S234339AbiK1SWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 13:20:43 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0952C3D920
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:07:28 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id u10so2352277qvp.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:07:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qOn1PUQxMJCGp3yaVSqPelmstrqLulCIcemPhpNVzdU=;
-        b=4tQKhAmlgqJFeuomcyGn+GyBJTF3TXNZND3NJQrXoNmD8007Bxyc2BZx8oFt4hfIHz
-         DcHStdfL2bgNWjZTK0ib7Ohf9zqFJ+82s5fozbOWW3QWW289UEPRstHix3b0fcK1+fOF
-         ud9ZTqyADxWT2iqEUic/48O1fS33VMxPFrU3i1iO79Mwue4ofOjSA5Yhg7qSYgKtqIYq
-         c0XG+rJLlfayL++XpOTdm2AUjwy3zr8n5NSnhkwYqQPKPXDvpOjCuAvDzEVYTP13jtUi
-         c80FdjP5USS2wz5z/YixX3LluJBQGexKDWu0K9Qraubay+EYw+V5uZ1Iy3idEWE+bCZM
-         Fl8w==
+        Mon, 28 Nov 2022 13:22:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81A42494A
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:08:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669658888;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yI2lsl64MrMPLmal/4OD6FwI+XLJK3nNMXWiQLT1Jqw=;
+        b=HMa9n6nZw0qpNGTpZqZXnIgglYVt9zaIoLZJ491ueTXkCDBDwaCZ13l2XQUVJNXXcc5bue
+        K4LljMt3ErgDq+xkosfhm4q+2dItajteadgzJ3mnaUUthBUUGHOLgeya20RdRkjNnBugmb
+        xpI8vWEqgWLqkMCMzRKjK5Gu4M3Jt48=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-85-kqJduKCcNHqDGbOHcS1u9g-1; Mon, 28 Nov 2022 13:08:06 -0500
+X-MC-Unique: kqJduKCcNHqDGbOHcS1u9g-1
+Received: by mail-wr1-f71.google.com with SMTP id v2-20020adfa1c2000000b002420d780a32so1212746wrv.14
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:08:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qOn1PUQxMJCGp3yaVSqPelmstrqLulCIcemPhpNVzdU=;
-        b=0AO01Q9npZeTMli6qasDiyVBaux5ocqHJsz32LewZ/08SUWRJF0Zh0qE59r6mvn6YY
-         41Ksp4fC937Inwvc+IwLVexL7seYmi5sY30VOWGYaxCngITyWLbZ3ij1xUzRm/mOtGpw
-         eC+mFK5/xoGdjn3EaYZ+VcukA2Bh+0VFcB12/FNRlpXqcLrehDM1Uyt1mxQQWu7arlk6
-         pUAduTRUWigo3WkRSKPUDy0VFexMFZUYd2m0BquPa4Vjm/EaVjp1kv1DTwxOG0rn8cgx
-         OX6qVQ4e1xYN6KI0fGpEKiUCNd0LnDrR/1iDNieHT3uAozFFv7aagJoH7iw1gHwGJ6NG
-         uAyg==
-X-Gm-Message-State: ANoB5pmj/a3Z7aRXbpDPJdCpXxhiRLmy5Imwy0YwZ+yN08iAT/wBB17o
-        8WdKNtV3ELAnYdkLIy6HRaoi9A==
-X-Google-Smtp-Source: AA0mqf6DaYR4aiOKw2PMYmb+XewvGkHvB6VF27wWN2x2o6DHCI1w5vwLSnOS5O+2XZOdfSZK+r2GVg==
-X-Received: by 2002:a0c:ff28:0:b0:4b8:6953:aed6 with SMTP id x8-20020a0cff28000000b004b86953aed6mr34287361qvt.47.1669658847054;
-        Mon, 28 Nov 2022 10:07:27 -0800 (PST)
-Received: from localhost (2603-7000-0c01-2716-9175-2920-760a-79fa.res6.spectrum.com. [2603:7000:c01:2716:9175:2920:760a:79fa])
-        by smtp.gmail.com with ESMTPSA id u19-20020a37ab13000000b006e99290e83fsm8607554qke.107.2022.11.28.10.07.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 10:07:26 -0800 (PST)
-Date:   Mon, 28 Nov 2022 13:07:25 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Ivan Babrou <ivan@cloudflare.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, cgroups@vger.kernel.org,
-        kernel-team <kernel-team@cloudflare.com>
-Subject: Re: Low TCP throughput due to vmpressure with swap enabled
-Message-ID: <Y4T43Tc54vlKjTN0@cmpxchg.org>
-References: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
- <Y30rdnZ+lrfOxjTB@cmpxchg.org>
- <CABWYdi3PqipLxnqeepXeZ471pfeBg06-PV0Uw04fU-LHnx_A4g@mail.gmail.com>
- <CABWYdi0qhWs56WK=k+KoQBAMh+Tb6Rr0nY4kJN+E5YqfGhKTmQ@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yI2lsl64MrMPLmal/4OD6FwI+XLJK3nNMXWiQLT1Jqw=;
+        b=sknINeqUm4sOlflvjZvh9jVeWEDtRtqvzrsSzFoRzd5RD/5dZVRtZQ+zZnRVoGJ94e
+         hh+I03K1Lh2kxt2vB7jv9P/IixjbzhQhR2TeoA5Gu75EDp1QWeig0JmxTAjzxVqI50by
+         xOWSWkH1A1XM/TjaSyYeZ8+0V8Neyn9jsy0mmC7CNC4B4Sm34oT46faGJEGeqZMEOuwX
+         uC07/HCsSt3mU/uq7KaeEQLAW6xLnChfIq/GJPHqfe4GaEnC5mcc+JgrOYlo1a5Raeeg
+         yaMrH1KHRF49e8bvm0iem7H4GcnBNAuUfjpjLAVO+WLNpop9KKmIGUoiYV8RSft8eueF
+         EMlQ==
+X-Gm-Message-State: ANoB5plLy55AYccWS6M974r8cF3hpKUSuL9SsLg5bHHAx0b3fd8j8ZkU
+        oNb4fY/H7zzmqB3zO3hdGqDhvV0/M+ekoLDsrzY2f/BXHWFUMf8NGdLhXSyw6h2C1cozop4l2Yd
+        QiULNc/O0EGSKjuRSlsGI9npg
+X-Received: by 2002:a5d:4fc6:0:b0:236:84b5:b039 with SMTP id h6-20020a5d4fc6000000b0023684b5b039mr32459785wrw.411.1669658885495;
+        Mon, 28 Nov 2022 10:08:05 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5PfclJpDOqqhzg0sSU9jZLgacXx1x55ckr6K2eNBuU5r6lDcL8O09WxxAR6aI4jWSnvUS8RA==
+X-Received: by 2002:a5d:4fc6:0:b0:236:84b5:b039 with SMTP id h6-20020a5d4fc6000000b0023684b5b039mr32459749wrw.411.1669658885174;
+        Mon, 28 Nov 2022 10:08:05 -0800 (PST)
+Received: from ?IPV6:2003:cb:c702:9000:3d6:e434:f8b4:80cf? (p200300cbc702900003d6e434f8b480cf.dip0.t-ipconnect.de. [2003:cb:c702:9000:3d6:e434:f8b4:80cf])
+        by smtp.gmail.com with ESMTPSA id e5-20020a05600c4e4500b003b492753826sm15354156wmq.43.2022.11.28.10.08.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 10:08:04 -0800 (PST)
+Message-ID: <b07f70ee-fa2e-387d-fb69-64b2607c387f@redhat.com>
+Date:   Mon, 28 Nov 2022 19:08:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABWYdi0qhWs56WK=k+KoQBAMh+Tb6Rr0nY4kJN+E5YqfGhKTmQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v4 3/3] mm/khugepaged: Invoke MMU notifiers in shmem/file
+ collapse paths
+Content-Language: en-US
+To:     Jann Horn <jannh@google.com>, security@kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Yang Shi <shy828301@gmail.com>, Peter Xu <peterx@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20221128180252.1684965-1-jannh@google.com>
+ <20221128180252.1684965-3-jannh@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221128180252.1684965-3-jannh@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 05:28:24PM -0800, Ivan Babrou wrote:
-> On Tue, Nov 22, 2022 at 2:11 PM Ivan Babrou <ivan@cloudflare.com> wrote:
-> >
-> > On Tue, Nov 22, 2022 at 12:05 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> > >
-> > > On Mon, Nov 21, 2022 at 04:53:43PM -0800, Ivan Babrou wrote:
-> > > > Hello,
-> > > >
-> > > > We have observed a negative TCP throughput behavior from the following commit:
-> > > >
-> > > > * 8e8ae645249b mm: memcontrol: hook up vmpressure to socket pressure
-> > > >
-> > > > It landed back in 2016 in v4.5, so it's not exactly a new issue.
-> > > >
-> > > > The crux of the issue is that in some cases with swap present the
-> > > > workload can be unfairly throttled in terms of TCP throughput.
-> > >
-> > > Thanks for the detailed analysis, Ivan.
-> > >
-> > > Originally, we pushed back on sockets only when regular page reclaim
-> > > had completely failed and we were about to OOM. This patch was an
-> > > attempt to be smarter about it and equalize pressure more smoothly
-> > > between socket memory, file cache, anonymous pages.
-> > >
-> > > After a recent discussion with Shakeel, I'm no longer quite sure the
-> > > kernel is the right place to attempt this sort of balancing. It kind
-> > > of depends on the workload which type of memory is more imporant. And
-> > > your report shows that vmpressure is a flawed mechanism to implement
-> > > this, anyway.
-> > >
-> > > So I'm thinking we should delete the vmpressure thing, and go back to
-> > > socket throttling only if an OOM is imminent. This is in line with
-> > > what we do at the system level: sockets get throttled only after
-> > > reclaim fails and we hit hard limits. It's then up to the users and
-> > > sysadmin to allocate a reasonable amount of buffers given the overall
-> > > memory budget.
-> > >
-> > > Cgroup accounting, limiting and OOM enforcement is still there for the
-> > > socket buffers, so misbehaving groups will be contained either way.
-> > >
-> > > What do you think? Something like the below patch?
-> >
-> > The idea sounds very reasonable to me. I can't really speak for the
-> > patch contents with any sort of authority, but it looks ok to my
-> > non-expert eyes.
-> >
-> > There were some conflicts when cherry-picking this into v5.15. I think
-> > the only real one was for the "!sc->proactive" condition not being
-> > present there. For the rest I just accepted the incoming change.
-> >
-> > I'm going to be away from my work computer until December 5th, but
-> > I'll try to expedite my backported patch to a production machine today
-> > to confirm that it makes the difference. If I can get some approvals
-> > on my internal PRs, I should be able to provide the results by EOD
-> > tomorrow.
+On 28.11.22 19:02, Jann Horn wrote:
+> Any codepath that zaps page table entries must invoke MMU notifiers to
+> ensure that secondary MMUs (like KVM) don't keep accessing pages which
+> aren't mapped anymore. Secondary MMUs don't hold their own references to
+> pages that are mirrored over, so failing to notify them can lead to page
+> use-after-free.
 > 
-> I tried the patch and something isn't right here.
-
-Thanks for giving it a sping.
-
-> With the patch applied I'm capped at ~120MB/s, which is a symptom of a
-> clamped window.
+> I'm marking this as addressing an issue introduced in commit f3f0e1d2150b
+> ("khugepaged: add support of collapse for tmpfs/shmem pages"), but most of
+> the security impact of this only came in commit 27e1f8273113 ("khugepaged:
+> enable collapse pmd for pte-mapped THP"), which actually omitted flushes
+> for the removal of present PTEs, not just for the removal of empty page
+> tables.
 > 
-> I can't find any sockets with memcg->socket_pressure = 1, but at the
-> same time I only see the following rcv_ssthresh assigned to sockets:
+> Cc: stable@kernel.org
+> Fixes: f3f0e1d2150b ("khugepaged: add support of collapse for tmpfs/shmem pages")
+> Signed-off-by: Jann Horn <jannh@google.com>
 
-Hm, I don't see how socket accounting would alter the network behavior
-other than through socket_pressure=1.
+Acked-by: David Hildenbrand <david@redhat.com>
 
-How do you look for that flag? If you haven't yet done something
-comparable, can you try with tracing to rule out sampling errors?
+-- 
+Thanks,
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 066166aebbef..134b623bee6a 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -7211,6 +7211,7 @@ bool mem_cgroup_charge_skmem(struct mem_cgroup *memcg, unsigned int nr_pages,
- 		goto success;
- 	}
- 	memcg->socket_pressure = 1;
-+	trace_printk("skmem charge failed nr_pages=%u gfp=%pGg\n", nr_pages, &gfp_mask);
- 	if (gfp_mask & __GFP_NOFAIL) {
- 		try_charge(memcg, gfp_mask, nr_pages);
- 		goto success;
+David / dhildenb
+
