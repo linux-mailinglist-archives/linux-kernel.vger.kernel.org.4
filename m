@@ -2,70 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5347E639FFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 04:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB8763A000
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 04:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiK1DJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 22:09:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
+        id S229630AbiK1DNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 22:13:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiK1DJf (ORCPT
+        with ESMTP id S229513AbiK1DNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 22:09:35 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140A512621;
-        Sun, 27 Nov 2022 19:09:33 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NL9Rq2Hgbz4f3jHd;
-        Mon, 28 Nov 2022 11:09:27 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP2 (Coremail) with SMTP id Syh0CgBnybRoJoRjC3cNBQ--.46112S3;
-        Mon, 28 Nov 2022 11:09:30 +0800 (CST)
-Subject: Re: Why is MEGASAS_SAS_QD set to 256?
-To:     Ming Lei <ming.lei@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     John Garry <john.g.garry@oracle.com>, kashyap.desai@broadcom.com,
-        sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        "zhangyi (F)" <yi.zhang@huawei.com>,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <1c4d66ca-fe1a-3d1a-d7f9-4981d2fc9eb1@huaweicloud.com>
- <e11cdb17-053c-390c-9c48-36790eb70cc5@oracle.com>
- <2b89210a-222c-a919-ab5b-c76830308f92@huaweicloud.com>
- <Y4F3XG3lMCCKlLAr@T590>
- <aef69f3b-a8db-f34c-4a52-49ba9020f6cf@huaweicloud.com>
- <Y4MxEcF+DWCAgxGJ@T590>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <27aae921-d016-0416-17ff-a591cd2ae12d@huaweicloud.com>
-Date:   Mon, 28 Nov 2022 11:09:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 27 Nov 2022 22:13:05 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03FFCE0A
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 19:13:03 -0800 (PST)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NL9WF0GCFzRpX0;
+        Mon, 28 Nov 2022 11:12:25 +0800 (CST)
+Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 28 Nov 2022 11:13:01 +0800
+Received: from huawei.com (10.67.164.66) by kwepemm600005.china.huawei.com
+ (7.193.23.191) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 28 Nov
+ 2022 11:13:01 +0800
+From:   Longfang Liu <liulongfang@huawei.com>
+To:     <alex.williamson@redhat.com>, <jgg@nvidia.com>,
+        <shameerali.kolothum.thodi@huawei.com>, <john.garry@huawei.com>
+CC:     <cohuck@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>, <liulongfang@huawei.com>
+Subject: [PATCH v3 0/5] add debugfs to migration driver
+Date:   Mon, 28 Nov 2022 11:11:55 +0800
+Message-ID: <20221128031200.11017-1-liulongfang@huawei.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-In-Reply-To: <Y4MxEcF+DWCAgxGJ@T590>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgBnybRoJoRjC3cNBQ--.46112S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw4kXr47Zw43tFW5Jw45GFg_yoW8XF4xp3
-        yrJa12kr1kZr40k340yr17XF1Sgw13ur1agF1Dt3sFkF9Ykan7Xw4Fg3y5XFZ29r40kw1j
-        kws5X3srXwnYqaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
-        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3
-        Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.164.66]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,57 +50,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Add a debugfs function to the migration driver in VFIO to provide
+a step-by-step test function for the migration driver.
 
-在 2022/11/27 17:42, Ming Lei 写道:
-> On Sat, Nov 26, 2022 at 02:08:02PM +0800, Yu Kuai wrote:
->> Hi, Ming
->>
->> 在 2022/11/26 10:18, Ming Lei 写道:
->>>
->>> If you want aggressive merge on sequential IO workload, the queue depth need
->>> to be a bit less, then more requests can be staggered into scheduler queue,
->>> and merge chance is increased.
->>
->> But if nr_requests >= queue_depth, it seems to me elevator will have no
->> effect, no request can be merged or sorted by scheduler, right?
-> 
-> Yeah.
-> 
-> If nr_requests <= queue_depth, every request can be queued to
-> driver/device, so requests won't be merged by scheduler.
-> 
-> But plug merge still works if IOs are submitted as batch.
+When the execution of live migration fails, the user can view the
+status and data during the migration process separately from the
+source and the destination, which is convenient for users to analyze
+and locate problems.
 
-Yes, io can still be merged by plug. I just find it a little werid to
-set default elevator as deadline, and default queue_depth to 256. Which
-means deadline here is useless.
+Changes v2 -> v3
+	Extend the debugfs function from hisilicon device to vfio.
 
-> 
->>>
->>> If you want good perf on random IO perf, the queue depth needs to
->>> be deep enough to have enough parallelism for saturating SSD internal.
->>>
->>> But we don't recognize sequential/random IO pattern, and usually fixed
->>> queue depth is used.
->>
->> Is it possible to use none elevator and set large queue_depth if nvme is
->> used in this case?
-> 
-> Yeah, if the storage is SSD, usually none with bigger queue_depth should
-> help, and usually 256 should be enough to saturate one single SSD for
-> one well implemented driver.
+Changes v1 -> v2
+	Change the registration method of root_debugfs to register
+	with module initialization.
 
-Yes, I'm testing with multiple SSDs / NVMEs, and I can't get optimal
-performance by default.
+Longfang Liu (5):
+  vfio/migration: Add debugfs to live migration driver
+  hisi_acc_vfio_pci: extract public functions for container_of
+  hisi_acc_vfio_pci: register debugfs for hisilicon migration driver
+  Documentation: add debugfs description for hisi_acc_vfio_pci
+  vfio: update live migration device status
 
-Thanks,
-Kuai
-> 
-> 
-> Thanks
-> Ming
-> 
-> .
-> 
+ .../ABI/testing/debugfs-hisi-migration        |  32 +++
+ drivers/vfio/pci/Makefile                     |   4 +
+ .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    | 192 ++++++++++++++-
+ .../vfio/pci/hisilicon/hisi_acc_vfio_pci.h    |   6 +
+ drivers/vfio/pci/mlx5/main.c                  |   3 +
+ drivers/vfio/pci/vfio_pci_core.c              |   3 +
+ drivers/vfio/pci/vfio_pci_debugfs.c           | 230 ++++++++++++++++++
+ drivers/vfio/pci/vfio_pci_debugfs.h           |  30 +++
+ include/linux/vfio.h                          |  16 ++
+ 9 files changed, 506 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/ABI/testing/debugfs-hisi-migration
+ create mode 100644 drivers/vfio/pci/vfio_pci_debugfs.c
+ create mode 100644 drivers/vfio/pci/vfio_pci_debugfs.h
+
+-- 
+2.24.0
 
