@@ -2,186 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D3763A24B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 795BF63A250
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiK1Hur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 02:50:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
+        id S229750AbiK1Hv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 02:51:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbiK1Hup (ORCPT
+        with ESMTP id S229686AbiK1Hv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 02:50:45 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44ACB15818
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 23:50:44 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id x10-20020a056e021bca00b00302b6c0a683so8318811ilv.23
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 23:50:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ivh2xXELoiAfJgRZzdEP1NE6OlZmZZPsfCq/KWACjZk=;
-        b=l8zBl3Jo3rvPjYKWqXwmKpIJWd04hpxAXLjNEsZGE057GpM89RVtvNWxdN0uGCh2UM
-         HiHxTXyTdb717JGpkp49yd9khPb3kC5ImMwKgft7SZJRrYyHpDHTR0srH/FCcbuDLhyp
-         KFnpZ4qetLX+8+0yZbWQs7jgQ71ZfvPi4Me7f95xJYs6lYd2T8trRpgolSyalak2w0lX
-         +Cc0YU+viazXfHYYf84WYkAqSzg8xzAjGedNYk2Njka8Gsf5iiCP/CJcfV2FTLKwKZNx
-         A1AjwzX3wmQo6NIDPGQPpmz2DePi9FwJQDwPybEacyKA3vDDOhlm4q1dealPNP4YFKD6
-         TfuA==
-X-Gm-Message-State: ANoB5pkrfAaDtJq5Lt1FIcNFPNfh7HzG5k71htrMG4CIey/w1kW0UEym
-        Y+s3wGJzDjnNAHwFFnG59U/ESdVHzbi20g4Hf1fRac0pd9Ac
-X-Google-Smtp-Source: AA0mqf7XO1UhY7apncf+gy5RWPiK1zPHeMRgkZNshk66IA5+t7lUsHrHhJW0pnwUEdvYtm6GPOMotUdiXoR8rKagGCBThsx/FAle
+        Mon, 28 Nov 2022 02:51:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F031580E;
+        Sun, 27 Nov 2022 23:51:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0DF5BB80AF0;
+        Mon, 28 Nov 2022 07:51:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B70CC433C1;
+        Mon, 28 Nov 2022 07:51:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669621912;
+        bh=Riui/4cfiYYWVT5yX9lAFHFSkrIuz9b2i3KqgnDUjz8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=peZFYhjnDvffa0LPiVXJE6HRSCKpXj17GK9FUT2SIOKf6RKupBRZ6YxtTwpvPp6fr
+         RO2pT/MNnJ2+M1dEgSKqeD/MkMef1xmySNzybrVmZtOv4hL9REmwpItCIf6YBXvDEb
+         EdsBbQaLLjGEaR55S3symrh+ZdMQuC1YGOpjhn8E=
+Date:   Mon, 28 Nov 2022 08:51:47 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        casey.schaufler@intel.com, linux-security-module@vger.kernel.org,
+        jmorris@namei.org, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org
+Subject: Re: [PATCH v3 1/9] LSM: Identify modules by more than name
+Message-ID: <Y4Rok2iAOekw/tSJ@kroah.com>
+References: <20221123201552.7865-1-casey@schaufler-ca.com>
+ <20221123201552.7865-2-casey@schaufler-ca.com>
+ <Y38D1s3uQ6zNORei@kroah.com>
+ <463cb747-5bac-9e8e-b78e-1ff6a1b29142@digikod.net>
+ <CAHC9VhR9h1GF6VGovp1+UB-vt+QNofjmecPwLqE3OviKQHRMcg@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:3209:0:b0:303:814:f79c with SMTP id
- z9-20020a923209000000b003030814f79cmr3345750ile.50.1669621843598; Sun, 27 Nov
- 2022 23:50:43 -0800 (PST)
-Date:   Sun, 27 Nov 2022 23:50:43 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e5a65c05ee832054@google.com>
-Subject: [syzbot] memory leak in add_tree_block
-From:   syzbot <syzbot+be14ed7728594dc8bd42@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhR9h1GF6VGovp1+UB-vt+QNofjmecPwLqE3OviKQHRMcg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, Nov 27, 2022 at 10:48:53PM -0500, Paul Moore wrote:
+> On Fri, Nov 25, 2022 at 11:19 AM Mickaël Salaün <mic@digikod.net> wrote:
+> > On 24/11/2022 06:40, Greg KH wrote:
+> > > On Wed, Nov 23, 2022 at 12:15:44PM -0800, Casey Schaufler wrote:
+> > >> Create a struct lsm_id to contain identifying information
+> > >> about Linux Security Modules (LSMs). At inception this contains
+> > >> the name of the module and an identifier associated with the
+> > >> security module. Change the security_add_hooks() interface to
+> > >> use this structure. Change the individual modules to maintain
+> > >> their own struct lsm_id and pass it to security_add_hooks().
+> > >>
+> > >> The values are for LSM identifiers are defined in a new UAPI
+> > >> header file linux/lsm.h. Each existing LSM has been updated to
+> > >> include it's LSMID in the lsm_id.
+> > >>
+> > >> The LSM ID values are sequential, with the oldest module
+> > >> LSM_ID_CAPABILITY being the lowest value and the existing modules
+> > >> numbered in the order they were included in the main line kernel.
+> > >> This is an arbitrary convention for assigning the values, but
+> > >> none better presents itself. The value 0 is defined as being invalid.
+> > >> The values 1-99 are reserved for any special case uses which may
+> > >> arise in the future.
+> > >
+> > > What would be a "special case" that deserves a lower number?
+> >
+> > I don't see any meaningful use case for these reserved numbers either.
+> > If there are some, let's put them now, otherwise we should start with 1.
+> > Is it inspired by an existing UAPI?
+> > Reserving 0 as invalid is good though.
+> 
+> I haven't finished reviewing this latest patchset, but I wanted to
+> comment on this quickly while I had a moment in front of a keyboard
+> ... I did explain my desire and reasoning for this in a previous
+> revision of this patchset and I still believe the
+> reserved-for-potential-future-use to be a valid reason so I'm going to
+> ask for this to remain.
 
-syzbot found the following issue on:
+Then that reasoning and explaination needs to be here in the changelog
+so that we understand and have a chance to agree/disagree with that.
+Otherwise we, and everyone else, are left to just be confused.
 
-HEAD commit:    4312098baf37 Merge tag 'spi-fix-v6.1-rc6' of git://git.ker..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1642d68d880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=522dbc1ab43c9303
-dashboard link: https://syzkaller.appspot.com/bug?extid=be14ed7728594dc8bd42
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15bfbac3880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=120cff21880000
+thanks,
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/76a03ca3d4a9/disk-4312098b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/5de00a38b596/vmlinux-4312098b.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9499f7779db5/bzImage-4312098b.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/42f50e809c7e/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+be14ed7728594dc8bd42@syzkaller.appspotmail.com
-
-BUG: memory leak
-unreferenced object 0xffff88810f8ea480 (size 64):
-  comm "syz-executor193", pid 3787, jiffies 4294971495 (age 12.820s)
-  hex dump (first 32 bytes):
-    03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff814ed790>] kmalloc_trace+0x20/0x90 mm/slab_common.c:1045
-    [<ffffffff820869aa>] kmalloc include/linux/slab.h:553 [inline]
-    [<ffffffff820869aa>] add_tree_block+0x3a/0x210 fs/btrfs/ref-verify.c:316
-    [<ffffffff82087e7c>] btrfs_build_ref_tree+0x50c/0x750 fs/btrfs/ref-verify.c:471
-    [<ffffffff846b818d>] open_ctree+0x19af/0x1fcb fs/btrfs/disk-io.c:3767
-    [<ffffffff846b17d6>] btrfs_fill_super fs/btrfs/super.c:1461 [inline]
-    [<ffffffff846b17d6>] btrfs_mount_root.cold+0x13/0xf5 fs/btrfs/super.c:1829
-    [<ffffffff81662b0b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
-    [<ffffffff815fc948>] vfs_get_tree+0x28/0x100 fs/super.c:1531
-    [<ffffffff81638b61>] fc_mount fs/namespace.c:1043 [inline]
-    [<ffffffff81638b61>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1073
-    [<ffffffff81638bec>] vfs_kern_mount+0x3c/0x60 fs/namespace.c:1060
-    [<ffffffff81f54029>] btrfs_mount+0x199/0x590 fs/btrfs/super.c:1889
-    [<ffffffff81662b0b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
-    [<ffffffff815fc948>] vfs_get_tree+0x28/0x100 fs/super.c:1531
-    [<ffffffff81640487>] do_new_mount fs/namespace.c:3040 [inline]
-    [<ffffffff81640487>] path_mount+0xc37/0x10d0 fs/namespace.c:3370
-    [<ffffffff8164106e>] do_mount fs/namespace.c:3383 [inline]
-    [<ffffffff8164106e>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff8164106e>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff8164106e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
-    [<ffffffff8485b285>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff8485b285>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84a00087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff88810c91f040 (size 64):
-  comm "syz-executor193", pid 3787, jiffies 4294971495 (age 12.820s)
-  hex dump (first 32 bytes):
-    03 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00  ................
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff814ed790>] kmalloc_trace+0x20/0x90 mm/slab_common.c:1045
-    [<ffffffff82086355>] kmalloc include/linux/slab.h:553 [inline]
-    [<ffffffff82086355>] kzalloc include/linux/slab.h:689 [inline]
-    [<ffffffff82086355>] add_block_entry+0x35/0x320 fs/btrfs/ref-verify.c:267
-    [<ffffffff82086a0e>] add_tree_block+0x9e/0x210 fs/btrfs/ref-verify.c:329
-    [<ffffffff82087e7c>] btrfs_build_ref_tree+0x50c/0x750 fs/btrfs/ref-verify.c:471
-    [<ffffffff846b818d>] open_ctree+0x19af/0x1fcb fs/btrfs/disk-io.c:3767
-    [<ffffffff846b17d6>] btrfs_fill_super fs/btrfs/super.c:1461 [inline]
-    [<ffffffff846b17d6>] btrfs_mount_root.cold+0x13/0xf5 fs/btrfs/super.c:1829
-    [<ffffffff81662b0b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
-    [<ffffffff815fc948>] vfs_get_tree+0x28/0x100 fs/super.c:1531
-    [<ffffffff81638b61>] fc_mount fs/namespace.c:1043 [inline]
-    [<ffffffff81638b61>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1073
-    [<ffffffff81638bec>] vfs_kern_mount+0x3c/0x60 fs/namespace.c:1060
-    [<ffffffff81f54029>] btrfs_mount+0x199/0x590 fs/btrfs/super.c:1889
-    [<ffffffff81662b0b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
-    [<ffffffff815fc948>] vfs_get_tree+0x28/0x100 fs/super.c:1531
-    [<ffffffff81640487>] do_new_mount fs/namespace.c:3040 [inline]
-    [<ffffffff81640487>] path_mount+0xc37/0x10d0 fs/namespace.c:3370
-    [<ffffffff8164106e>] do_mount fs/namespace.c:3383 [inline]
-    [<ffffffff8164106e>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff8164106e>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff8164106e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
-    [<ffffffff8485b285>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff8485b285>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-
-BUG: memory leak
-unreferenced object 0xffff88810caab580 (size 96):
-  comm "syz-executor193", pid 3787, jiffies 4294971495 (age 12.820s)
-  hex dump (first 32 bytes):
-    00 10 10 00 00 00 00 00 00 10 00 00 00 00 00 00  ................
-    01 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00  ................
-  backtrace:
-    [<ffffffff814ed790>] kmalloc_trace+0x20/0x90 mm/slab_common.c:1045
-    [<ffffffff8208636e>] kmalloc include/linux/slab.h:553 [inline]
-    [<ffffffff8208636e>] kzalloc include/linux/slab.h:689 [inline]
-    [<ffffffff8208636e>] add_block_entry+0x4e/0x320 fs/btrfs/ref-verify.c:268
-    [<ffffffff82086a0e>] add_tree_block+0x9e/0x210 fs/btrfs/ref-verify.c:329
-    [<ffffffff82087e7c>] btrfs_build_ref_tree+0x50c/0x750 fs/btrfs/ref-verify.c:471
-    [<ffffffff846b818d>] open_ctree+0x19af/0x1fcb fs/btrfs/disk-io.c:3767
-    [<ffffffff846b17d6>] btrfs_fill_super fs/btrfs/super.c:1461 [inline]
-    [<ffffffff846b17d6>] btrfs_mount_root.cold+0x13/0xf5 fs/btrfs/super.c:1829
-    [<ffffffff81662b0b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
-    [<ffffffff815fc948>] vfs_get_tree+0x28/0x100 fs/super.c:1531
-    [<ffffffff81638b61>] fc_mount fs/namespace.c:1043 [inline]
-    [<ffffffff81638b61>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1073
-    [<ffffffff81638bec>] vfs_kern_mount+0x3c/0x60 fs/namespace.c:1060
-    [<ffffffff81f54029>] btrfs_mount+0x199/0x590 fs/btrfs/super.c:1889
-    [<ffffffff81662b0b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
-    [<ffffffff815fc948>] vfs_get_tree+0x28/0x100 fs/super.c:1531
-    [<ffffffff81640487>] do_new_mount fs/namespace.c:3040 [inline]
-    [<ffffffff81640487>] path_mount+0xc37/0x10d0 fs/namespace.c:3370
-    [<ffffffff8164106e>] do_mount fs/namespace.c:3383 [inline]
-    [<ffffffff8164106e>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff8164106e>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff8164106e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
-    [<ffffffff8485b285>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff8485b285>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+greg k-h
