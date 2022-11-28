@@ -2,93 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4769B63B5C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 00:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB3063B5DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 00:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234657AbiK1XSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 18:18:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
+        id S234688AbiK1XaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 18:30:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiK1XSH (ORCPT
+        with ESMTP id S234651AbiK1XaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 18:18:07 -0500
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8EC25296;
-        Mon, 28 Nov 2022 15:18:06 -0800 (PST)
-Received: by mail-pg1-f182.google.com with SMTP id v3so11362514pgh.4;
-        Mon, 28 Nov 2022 15:18:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BmoOTGFi6JltCrWxfK3yHl/CkpSEbsjve+TtReyPSMk=;
-        b=4ThU32Uw7dv6J4aiw90nwLGKd9OZ4BxiKD3/RYpEIWq4yAmdHCl9AxsRbDz6lgi0xy
-         VpvZWAEevKeq2x/6+WqmGVCrZkiZ2Ii8cQQG70Id+zjVWwPlTWyjQC6KjAljx7BXuxH2
-         r8Qf3J6iP6iDKXu0/TkaKHPpLMrlTPs0EHxnyLlcEuDnP+06mPY8jJZYGh4c6Bd99e9E
-         NCyap3qYE+8NUcCyq9UC7T03C+4dWgaXI0wKv05EXyLxTYLorNWxRcsPLH2dstJLv8Bl
-         INZkfAKHBvnB5WVuibyFwSXt3tQwOLeMG4hg4Pv/VZ+GQWZ9ZejSoIqKMFX0WPY5yBI/
-         Ov3g==
-X-Gm-Message-State: ANoB5pkf486jbww4EWvFQM+yxsNjsllCsiBc2eDUapsE7R8m/UcNhz5I
-        QLos+OEJqt/Oje4Py+y8VNSUylc40IrpxGOz18s=
-X-Google-Smtp-Source: AA0mqf5R7R1rrnT4jxiSzHues/lBn+HzCTojJ7W7ZrVNk/A64ek9pAF1lRKO+w4lzdBlnTI+Cg3h8mBhl8ug38ukLJE=
-X-Received: by 2002:a05:6a00:194a:b0:56b:a795:e99c with SMTP id
- s10-20020a056a00194a00b0056ba795e99cmr43585538pfk.14.1669677486025; Mon, 28
- Nov 2022 15:18:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-4-mailhol.vincent@wanadoo.fr>
- <Y4S73jX07uFAwVQv@lunn.ch> <CAMZ6RqKYyLCCxQKSnOxku2u9604Uxmxw3xG9d031-2=9iC_8tw@mail.gmail.com>
- <20221128142723.2f826d20@kernel.org>
-In-Reply-To: <20221128142723.2f826d20@kernel.org>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 29 Nov 2022 08:17:55 +0900
-Message-ID: <CAMZ6RqJS5X54WyKyPxt+nqMSbiKVWiwZ85o9q860_z_uGfaawQ@mail.gmail.com>
-Subject: Re: [PATCH v4 3/6] can: etas_es58x: export product information
- through devlink_ops::info_get()
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, linux-can@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org,
+        Mon, 28 Nov 2022 18:30:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5AE5317D0;
+        Mon, 28 Nov 2022 15:30:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72720614F0;
+        Mon, 28 Nov 2022 23:30:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DA60C433C1;
+        Mon, 28 Nov 2022 23:30:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669678203;
+        bh=oQ1NXyRzlFb173JCqIW8f1hvYKMUAyVNiwLTT7sk8vs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K4aplWhPIs7iqJ6AIaWGsS/0dP/m7uG+YwVnF6ol5zTqZJGcZ61WOk4Lbhse0+rUJ
+         Gcs7nZFG2URkBSY7k4TT0AiQCdsKU9Q+PIQSUvBLVNnw9RCJlg6tXpSPctOSf3qqN4
+         LDuASRQC7uXiqM6eRsR3yw6eFizPwXCl2GAYZT/SkRYAya3BKcnCV7co0wljbK+r1I
+         s6rzLM6xdc6wB/JllmnInmwYBJz5kVfzB2DYK5zqKRReTfy0g3k3t75UmDZjJZupxf
+         +NuTw3SKSvHwghFW8SyjnGlnFPAb6GzK+Dgp8h4qcj3zDULS1uCqNUaYVXucpNY++/
+         Pvz2hWUzApaQQ==
+Date:   Tue, 29 Nov 2022 07:20:09 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Saeed Mahameed <saeed@kernel.org>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Lukas Magel <lukas.magel@posteo.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>
+Subject: Re: [PATCH v2 2/9] serial: bflb_uart: add Bouffalolab UART Driver
+Message-ID: <Y4VCKeeTS2zV1xcZ@xhacker>
+References: <20221127132448.4034-1-jszhang@kernel.org>
+ <20221127132448.4034-3-jszhang@kernel.org>
+ <c0406076-04e1-6b81-1bba-ac684516d898@kernel.org>
+ <Y4TD48v84CJcMS+S@xhacker>
+ <e1f689d2-d337-5a42-e4c9-91c1d338b42b@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e1f689d2-d337-5a42-e4c9-91c1d338b42b@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue. 29 Nov. 2022 at 07:27, Jakub Kicinski <kuba@kernel.org> wrote:
-> On Mon, 28 Nov 2022 23:43:19 +0900 Vincent MAILHOL wrote:
-> > On Mon. 28 Nov. 2022 at 22:49, Andrew Lunn <andrew@lunn.ch> wrote:
-> > > > devlink does not yet have a name suited for the bootloader and so this
-> > > > last piece of information is exposed to the userland for through a
-> > > > custom name: "bl".
-> > >
-> > > Jiri, what do you think about 'bl'? Is it too short, not well known
-> > > enough? It could easily be 'bootloader'.
-> >
-> > For the record, I name it "bl" by analogy with the firmware which is
-> > named "fw". My personal preference would have been to name the fields
-> > without any abbreviations: "firmware", "bootloader" and
-> > "hardware.revision" (for reference ethtool -i uses
-> > "firmware-version"). But I tried to put my personal taste aside and
-> > try to fit with the devlink trends to abbreviate things. Thus the name
-> > "bl".
->
-> Agreed, I thought "fw" is sufficiently universally understood to be used
-> but "bl" is most definitely not :S  I'd suggest "fw.bootloader". Also
-> don't hesitate to add that to the "well known" list in devlink.h,
-> I reckon it will be used by others sooner or later.
+On Mon, Nov 28, 2022 at 06:01:28PM +0200, Ilpo Järvinen wrote:
+> On Mon, 28 Nov 2022, Jisheng Zhang wrote:
+> 
+> > On Mon, Nov 28, 2022 at 07:10:41AM +0100, Jiri Slaby wrote:
+> > > On 27. 11. 22, 14:24, Jisheng Zhang wrote:
+> > > > +static void bflb_uart_tx_chars(struct uart_port *port)
+> > > 
+> > > Again:
+> > > 
+> > > Are you unable to use the TX helper? If so:
+> > 
+> > You know serial subsystem better than me, may I ask for more
+> > details? For example,
+> > Besides uart_xmit_advance(), do you expect other TX helpers? If yes,
+> > can you please list them?
+> 
+> Please take on look on commit 8275b48b278096edc1e3ea5aa9cf946a10022f79.
+> The changes following that commit convert some drivers to use the tx 
+> helper so you can look into them to see examples.
 
-I like the "fw.bootloader" suggestion. A bootloader is technically
-still a firmware. I will send a separate patch to add the entry to
-devlink.h and only then send the v5.
+Thanks a lot for the hint. Will those tx helpers(uart_port_tx,
+uart_port_tx_limited etc.) be in v6.2-rc1? Or I need to patch
+based on Jiri's devel branch? Aha, Jiri says "at least uart_xmit_advance
+
+> 
+> > > * why?
+> > > * use uart_advance_xmit() at least.
+> > 
+> > Do you mean uart_xmit_advance()? in the do while loop below?
+> 
+> Yes, Jiri had the name wrong. But your code looked like it could use 
+> the tx helper instead.
