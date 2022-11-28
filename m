@@ -2,87 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E37E63A301
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B359A63A2F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:28:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiK1I3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 03:29:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42198 "EHLO
+        id S230183AbiK1I2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 03:28:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiK1I3p (ORCPT
+        with ESMTP id S229825AbiK1I2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 03:29:45 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD5813CC5;
-        Mon, 28 Nov 2022 00:29:44 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1669624122; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=SlruZNjijJZzyYkvFL6OElHpvJ5NcnjnDm7tGquBFAJmCmXXZ7xyEIdvDkQNKukAaVmlVi9Bc3+T1BoMHqR4WMPHWfitmKcMQV9Qj1Z0RpcsXmHFVX1okyuAaL25m94+FDZ1/45k0UH9DWRCBCIZN2m+OW5eV4U6+fKAV6njUKw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1669624122; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=AS/14WaE2LN43smbHuSpmejZfg+JalHV2YhgqWmQEAE=; 
-        b=bIFBF87ok3heWqT6Z4w322m6ip6W7S6qKVz4ihZKSzxbjoH2NheiWIRQf32n7ELZm2Vq4IubEexB1TCaDl8wy/4B5zClr8J6End6YIxYT0Y2H67doigDBMLbzLKl2UlubFKSOiQ62YMWZZZ0RB3eSViz+aWppC9gr/3t0rlMZAI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669624122;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=AS/14WaE2LN43smbHuSpmejZfg+JalHV2YhgqWmQEAE=;
-        b=JyGzTO7/cV3Df/8rep2Kwe+HTHBxB6ASQWVOwe3f4YCQRiaxNNvQEndBCMwcYe5k
-        1aua5HNDimYl5QcSpfwqtl1Hw4ilAqL50Uwa9FKyisQG2QyEKCeOG0XJ0pzEb3v/dgJ
-        +dE3f36wwKkyE/vzjVCX1quNzRai5Ua82TU22g74=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1669624120094627.872459276059; Mon, 28 Nov 2022 00:28:40 -0800 (PST)
-Message-ID: <08784493-7e85-9224-acfa-9a87cbd325e7@arinc9.com>
-Date:   Mon, 28 Nov 2022 11:28:31 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 net-next 06/10] dt-bindings: net: dsa: mediatek,mt7530:
- fix port description location
-To:     Colin Foster <colin.foster@in-advantage.com>,
-        linux-renesas-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org
-Cc:     John Crispin <john@phrozen.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Marek Vasut <marex@denx.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        George McCollister <george.mccollister@gmail.com>,
-        Rob Herring <robh@kernel.org>
-References: <20221127224734.885526-1-colin.foster@in-advantage.com>
- <20221127224734.885526-7-colin.foster@in-advantage.com>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20221127224734.885526-7-colin.foster@in-advantage.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Mon, 28 Nov 2022 03:28:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272DD10FF8;
+        Mon, 28 Nov 2022 00:28:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B65FC6102E;
+        Mon, 28 Nov 2022 08:28:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 184B7C433D6;
+        Mon, 28 Nov 2022 08:28:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669624126;
+        bh=3p79nJ+zB3/JmzYtOKp6XIkx9TsUKniU8Gj9TStdBew=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kqaJW06wCwHo6mqLe0HHQumrm2b3wbBN67vprpQTFmdA1SO4tex74dn1Uj9o/dVwH
+         HMxuYAhx03O8yN80GRl4die6c7ER5RHqWSMLcvLWQ7CAwOIbWAiHIK+lzCPsOfb+RP
+         2PDuyteNHR1I9IlIE5ga2PHItt6pNlsVMkPnkPi6W92xQhzRB8f43otxVfBtsGyoh6
+         wvBlBifR+yBN2HXywfB3F+ao3mK2NiQfXdkB9XpqryUMeZmlfiIFGGOkVila4GH86u
+         zwaQOOEQ5e1mOVpBGYM2p/DLvQ3hdZPM127rU5UJ7L+TLtXlD0o9ro6F4grvz9QqmM
+         080lbKCzSiEow==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ozZVL-008xbQ-NH;
+        Mon, 28 Nov 2022 08:28:43 +0000
+Date:   Mon, 28 Nov 2022 08:28:43 +0000
+Message-ID: <86pmd7mqis.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, will@kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64/perf: Replace PMU version number '0' with ID_AA64DFR0_EL1_PMUVer_NI
+In-Reply-To: <60767243-2f3e-a7aa-06e1-674e43f18e9c@arm.com>
+References: <20221128025449.39085-1-anshuman.khandual@arm.com>
+        <60767243-2f3e-a7aa-06e1-674e43f18e9c@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org, will@kernel.org, acme@kernel.org, mark.rutland@arm.com, catalin.marinas@arm.com, linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,64 +69,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.11.2022 01:47, Colin Foster wrote:
-> The description property was located where it applies to every port, not
-> just ports 5 or 6 (CPU ports). Fix this description.
-
-I'm not sure I understand. The description for reg does apply to every 
-port. Both CPU ports and user ports are described. This patch moves the 
-description to under CPU ports only.
-
+On Mon, 28 Nov 2022 03:06:15 +0000,
+Anshuman Khandual <anshuman.khandual@arm.com> wrote:
 > 
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> ---
 > 
-> v2 -> v3
->    * New patch.
 > 
-> ---
->   .../bindings/net/dsa/mediatek,mt7530.yaml          | 14 +++-----------
->   1 file changed, 3 insertions(+), 11 deletions(-)
+> On 11/28/22 08:24, Anshuman Khandual wrote:
+> > __armv8pmu_probe_pmu() returns if detected PMU is either not implemented or
+> > implementation defined. Extracted ID_AA64DFR0_EL1_PMUVer value, when PMU is
+> > not implemented is '0' which can be replaced with ID_AA64DFR0_EL1_PMUVer_NI
+> > defined as '0b0000'.
+> > 
+> > Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+> > Cc: Mark Rutland <mark.rutland@arm.com>
+> > Cc: Will Deacon <will@kernel.org>
+> > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: linux-perf-users@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> > ---
+> > This applies on v6.1-rc6
+> > 
+> >  arch/arm64/kernel/perf_event.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
+> > index 85a3aaefc0fb..b638f584b4dd 100644
+> > --- a/arch/arm64/kernel/perf_event.c
+> > +++ b/arch/arm64/kernel/perf_event.c
+> > @@ -1188,7 +1188,8 @@ static void __armv8pmu_probe_pmu(void *info)
+> >  	dfr0 = read_sysreg(id_aa64dfr0_el1);
+> >  	pmuver = cpuid_feature_extract_unsigned_field(dfr0,
+> >  			ID_AA64DFR0_EL1_PMUVer_SHIFT);
+> > -	if (pmuver == ID_AA64DFR0_EL1_PMUVer_IMP_DEF || pmuver == 0)
+> > +	if (pmuver == ID_AA64DFR0_EL1_PMUVer_IMP_DEF ||
+> > +	    pmuver == ID_AA64DFR0_EL1_PMUVer_NI)
+> >  		return;
+> >  
+> >  	cpu_pmu->pmuver = pmuver;
+> > --
 > 
-> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> index 7df4ea1901ce..415e6c40787e 100644
-> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> @@ -156,17 +156,6 @@ patternProperties:
->   
->       patternProperties:
->         "^(ethernet-)?port@[0-9]+$":
-> -        type: object
-> -        description: Ethernet switch ports
-> -
-> -        unevaluatedProperties: false
-> -
+> + Marc Zyngier <maz@kernel.org>
+> 
+> There are some KVM related pmuver not-implemented check as well, should they be
+> replaced in this patch or rather in a separate patch ?
+> 
+> arch/arm64/kvm/pmu-emul.c:      if (pmu->pmuver == 0 || pmu->pmuver == ID_AA64DFR0_EL1_PMUVer_IMP_DEF)
+> arch/arm64/kvm/pmu-emul.c:              if (pmu->pmuver == 0 ||
+> arch/arm64/kvm/pmu-emul.c:                  pmu->pmuver == ID_AA64DFR0_EL1_PMUVer_IMP_DEF)
 
-Would be nice to mention these being removed on the patch log. Or remove 
-them while doing ("dt-bindings: net: dsa: utilize base definitions for 
-standard dsa switches").
+Separate patch please, as I have a large KVM PMU rework already
+queued.
 
-> -        properties:
-> -          reg:
-> -            description:
-> -              Port address described must be 5 or 6 for CPU port and from 0 to 5
-> -              for user ports.
-> -
->           allOf:
->             - $ref: dsa-port.yaml#
->             - if:
-> @@ -174,6 +163,9 @@ patternProperties:
->               then:
->                 properties:
->                   reg:
-> +                  description:
-> +                    Port address described must be 5 or 6 for CPU port and from
-> +                    0 to 5 for user ports
->                     enum:
->                       - 5
->                       - 6
+Thanks,
 
-Thank you for your efforts.
+	M.
 
-Arınç
+-- 
+Without deviation from the norm, progress is not possible.
