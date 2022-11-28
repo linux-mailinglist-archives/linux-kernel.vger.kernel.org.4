@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 795BF63A250
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 215AF63A251
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiK1Hv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 02:51:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
+        id S229773AbiK1Hxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 02:53:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiK1Hv4 (ORCPT
+        with ESMTP id S229529AbiK1Hxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 02:51:56 -0500
+        Mon, 28 Nov 2022 02:53:36 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F031580E;
-        Sun, 27 Nov 2022 23:51:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFE6C37
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 23:53:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0DF5BB80AF0;
-        Mon, 28 Nov 2022 07:51:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B70CC433C1;
-        Mon, 28 Nov 2022 07:51:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC3C1B80AF0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:53:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCB8BC433C1;
+        Mon, 28 Nov 2022 07:53:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669621912;
-        bh=Riui/4cfiYYWVT5yX9lAFHFSkrIuz9b2i3KqgnDUjz8=;
+        s=korg; t=1669622013;
+        bh=um03zoPpxKsSPE+M2zpAJXsHvH/peut6tDHzA78ZNoM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=peZFYhjnDvffa0LPiVXJE6HRSCKpXj17GK9FUT2SIOKf6RKupBRZ6YxtTwpvPp6fr
-         RO2pT/MNnJ2+M1dEgSKqeD/MkMef1xmySNzybrVmZtOv4hL9REmwpItCIf6YBXvDEb
-         EdsBbQaLLjGEaR55S3symrh+ZdMQuC1YGOpjhn8E=
-Date:   Mon, 28 Nov 2022 08:51:47 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        casey.schaufler@intel.com, linux-security-module@vger.kernel.org,
-        jmorris@namei.org, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org
-Subject: Re: [PATCH v3 1/9] LSM: Identify modules by more than name
-Message-ID: <Y4Rok2iAOekw/tSJ@kroah.com>
-References: <20221123201552.7865-1-casey@schaufler-ca.com>
- <20221123201552.7865-2-casey@schaufler-ca.com>
- <Y38D1s3uQ6zNORei@kroah.com>
- <463cb747-5bac-9e8e-b78e-1ff6a1b29142@digikod.net>
- <CAHC9VhR9h1GF6VGovp1+UB-vt+QNofjmecPwLqE3OviKQHRMcg@mail.gmail.com>
+        b=Jkdq03L2qV0u5uszScn4GnxkJ4wH4lW1f++a+IEgzYsJg5muigr6IoZU5+L2o4XUU
+         EbPVIDsb1DEBMWPOGkAU/p4KGA0byXjOTXP8C/yFqHTVUblSV4zr1LgMi4lXsQ86eZ
+         CXSB8knab1krmTsd5FbaPDmuVIU2Y1kjY/NjfNTk=
+Date:   Mon, 28 Nov 2022 08:53:28 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        gustavoars@kernel.org
+Subject: Re: [PATCH] staging: wlan-ng: Replace zero-length arrays with
+ DECLARE_FLEX_ARRAY() helper
+Message-ID: <Y4Ro+Ex+E1WemSrs@kroah.com>
+References: <Y3YKhee8L+kAfHM4@qemulion>
+ <Y3YvGdkyGm7azGg4@kroah.com>
+ <Y3Y1N6AwWEXLpSrx@qemulion>
+ <Y3Z3aatcaISvqURJ@kroah.com>
+ <Y3jqUpNOygJ4+2jy@qemulion>
+ <Y4RnJyiCDYavLAJq@qemulion>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhR9h1GF6VGovp1+UB-vt+QNofjmecPwLqE3OviKQHRMcg@mail.gmail.com>
+In-Reply-To: <Y4RnJyiCDYavLAJq@qemulion>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,47 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 27, 2022 at 10:48:53PM -0500, Paul Moore wrote:
-> On Fri, Nov 25, 2022 at 11:19 AM Mickaël Salaün <mic@digikod.net> wrote:
-> > On 24/11/2022 06:40, Greg KH wrote:
-> > > On Wed, Nov 23, 2022 at 12:15:44PM -0800, Casey Schaufler wrote:
-> > >> Create a struct lsm_id to contain identifying information
-> > >> about Linux Security Modules (LSMs). At inception this contains
-> > >> the name of the module and an identifier associated with the
-> > >> security module. Change the security_add_hooks() interface to
-> > >> use this structure. Change the individual modules to maintain
-> > >> their own struct lsm_id and pass it to security_add_hooks().
-> > >>
-> > >> The values are for LSM identifiers are defined in a new UAPI
-> > >> header file linux/lsm.h. Each existing LSM has been updated to
-> > >> include it's LSMID in the lsm_id.
-> > >>
-> > >> The LSM ID values are sequential, with the oldest module
-> > >> LSM_ID_CAPABILITY being the lowest value and the existing modules
-> > >> numbered in the order they were included in the main line kernel.
-> > >> This is an arbitrary convention for assigning the values, but
-> > >> none better presents itself. The value 0 is defined as being invalid.
-> > >> The values 1-99 are reserved for any special case uses which may
-> > >> arise in the future.
+On Mon, Nov 28, 2022 at 01:15:43PM +0530, Deepak R Varma wrote:
+> On Sat, Nov 19, 2022 at 08:08:15PM +0530, Deepak R Varma wrote:
+> > On Thu, Nov 17, 2022 at 07:03:21PM +0100, Greg Kroah-Hartman wrote:
+> > > On Thu, Nov 17, 2022 at 06:50:55PM +0530, Deepak R Varma wrote:
+> > > > On Thu, Nov 17, 2022 at 01:54:49PM +0100, Greg Kroah-Hartman wrote:
+> > > > > On Thu, Nov 17, 2022 at 03:48:45PM +0530, Deepak R Varma wrote:
+> > > > > >
+> > > > > >  struct hfa384x_pdr_refdac_measurements {
+> > > > > > -	u16 value[0];
+> > > > > > +	DECLARE_FLEX_ARRAY(u16, value);
+> > > > > >  } __packed;
+> > > > >
+> > > > > Why?  This structure is never used anywhere, right?  So why is this
+> > > > > needed to be changed and not just removed entirely?  Same for the other
+> > > > > structures in this patch.
+> > > >
+> > > > Hello Greg,
+> > > > I am unable to confirm that these structures are truly not needed in the absence
+> > > > if a real device based testing. I could only validate that using the compile
+> > > > build and driver loading.
 > > >
-> > > What would be a "special case" that deserves a lower number?
+> > > Think this through, if no one is actually using this structure, and it
+> > > is of 0 size, then do you think it is being used?
 > >
-> > I don't see any meaningful use case for these reserved numbers either.
-> > If there are some, let's put them now, otherwise we should start with 1.
-> > Is it inspired by an existing UAPI?
-> > Reserving 0 as invalid is good though.
+> > Hello Greg,
+> > I did not find any memory allocation for these zero length array structures.
+> > Also, the union or its enclosing structure do not appear to access the members.
+> > Hence I am leaning towards concluding that these zero length array structures do
+> > not appear to be necessary.
+> >
+> > There are a few other structures that are part of the same union, however, they
+> > too do not appear to be used for accessing the memory assigned to the union [or
+> > its enclosing structure]. I think most of the members of these unions can be
+> > replaced by one max size structure of this union [e.g. struct
+> > hfa384x_pdr_mkk_measurements].
+> >
+> > Could you please comment if I am reading the code right?
+> >
+> > For your quick reference, the zero length structure declaration are online 963
+> > whereas the union is on line number 1080 of the file drivers/staging/wlan-ng/hfa384x.h
 > 
-> I haven't finished reviewing this latest patchset, but I wanted to
-> comment on this quickly while I had a moment in front of a keyboard
-> ... I did explain my desire and reasoning for this in a previous
-> revision of this patchset and I still believe the
-> reserved-for-potential-future-use to be a valid reason so I'm going to
-> ask for this to remain.
+> Hello Greg,
+> can you please suggest how should I approach this clean-up/correction?
 
-Then that reasoning and explaination needs to be here in the changelog
-so that we understand and have a chance to agree/disagree with that.
-Otherwise we, and everyone else, are left to just be confused.
-
-thanks,
+Sorry, but I do not have the bandwidth to help out with this.  I will
+gladly review changes submitted only.
 
 greg k-h
