@@ -2,82 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EACB163A7F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:08:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E1663A7F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbiK1MIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 07:08:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37806 "EHLO
+        id S231683AbiK1MLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 07:11:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231811AbiK1MGb (ORCPT
+        with ESMTP id S231682AbiK1MKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 07:06:31 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154551D641
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:02:21 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        Mon, 28 Nov 2022 07:10:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F229D222B8;
+        Mon, 28 Nov 2022 04:04:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NLPGh0lXrz4y0tv;
-        Mon, 28 Nov 2022 20:02:20 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2ASC2CIk076108;
-        Mon, 28 Nov 2022 20:02:13 +0800 (+08)
-        (envelope-from zhang.songyi@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Mon, 28 Nov 2022 20:02:15 +0800 (CST)
-Date:   Mon, 28 Nov 2022 20:02:15 +0800 (CST)
-X-Zmail-TransId: 2afa6384a347ffffffffc94097cc
-X-Mailer: Zmail v1.0
-Message-ID: <202211282002156712454@zte.com.cn>
-Mime-Version: 1.0
-From:   <zhang.songyi@zte.com.cn>
-To:     <rostedt@goodmis.org>
-Cc:     <mhiramat@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zhang.songyi@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHRyYWNpbmc6IG1vdmUgZnJvbSBzdHJsY3B5IHdpdGggdW51c2VkIHJldHZhbCB0byBzdHJzY3B5?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2ASC2CIk076108
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 6384A34C.001 by FangMail milter!
-X-FangMail-Envelope: 1669636940/4NLPGh0lXrz4y0tv/6384A34C.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<zhang.songyi@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6384A34C.001/4NLPGh0lXrz4y0tv
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 107B361149;
+        Mon, 28 Nov 2022 12:03:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ADEBC433C1;
+        Mon, 28 Nov 2022 12:03:37 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="YeseauXB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669637015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Deg2zp7dwT9o3e/HySvPJHslvn3AjSP4JHQTJYiaB/k=;
+        b=YeseauXBsvMz5Okw2aUPDHv/z2Z2pedguidoFR1Oak/sJdZ2xKe1BQ/5R53pACPZEgm8aY
+        LAa8kSyngl3hU5oe7fUF/NPr563SSZyqNOJ8eD2/l84YtG2Uc/RvzLLeHVeNdW6kOhkMsv
+        gB1GP5vjzDTNm2b0Jyv4v0dvADG9iT4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 64c5fbf5 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 28 Nov 2022 12:03:35 +0000 (UTC)
+Date:   Mon, 28 Nov 2022 13:03:31 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [REGRESSION] suspend to ram fails in 6.1 due to tpm errors
+Message-ID: <Y4Sjk+Fibcsihg4Y@zx2c4.com>
+References: <c5ba47ef-393f-1fba-30bd-1230d1b4b592@suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <c5ba47ef-393f-1fba-30bd-1230d1b4b592@suse.cz>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhang songyi <zhang.songyi@zte.com.cn>
+Hi Vlastimil,
 
-Follow the advice of the below link and prefer 'strscpy' in this
-subsystem. That's now the recommended way to copy NUL terminated
-strings. Conversion is 1:1 because the return value is not used.
+Thanks for CC'ing me.
 
-Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
----
- kernel/trace/trace_events.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, Nov 28, 2022 at 09:15:33AM +0100, Vlastimil Babka wrote:
+> Dominik on IRC pointed me to commit b006c439d58d ("hwrng: core - start hwrng
+> kthread also for untrusted sources"), which could make sense if the TPM was not
+> used at all before and now it's used for randomness. But then it probably "just"
+> uncovered a pre-existing issue? Maybe there's a race with getting the randomness
+> and suspend? Could it be exactly what this patch is attempting to fix?
+> https://lore.kernel.org/all/20221103145450.1409273-2-jsd@semihalf.com/
 
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 3bfaf560ecc4..a43be36c489e 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -2813,7 +2813,7 @@ static __init int setup_trace_triggers(char *str)
-        char *buf;
-        int i;
+The commit you referenced just turns on some functionality that most
+people previously didn't have (but maybe could have, manually). So this
+is a case of a new commit unearthing a bug in some old code. We had
+something similar happen with a raspi driver and fixed the bug there.
+From the looks of the lore link you provided, it sounds like the same
+thing has happened already there to tpm? That this is already fixed by
+that commit? I think if you have a system that's readily exhibiting the
+issue, the best thing to do would be to try that series, and report
+back, maybe even providing your `Tested-by:` line if it works.
 
--       strlcpy(bootup_trigger_buf, str, COMMAND_LINE_SIZE);
-+       strscpy(bootup_trigger_buf, str, COMMAND_LINE_SIZE);
-        ring_buffer_expanded = true;
-        disable_tracing_selftest("running event triggers");
+I'll play around and see if I can repro too. Looks like you have a T460?
+I don't have exactly that but maybe something close enough.
 
---
-2.15.2
+Jason
