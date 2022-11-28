@@ -2,216 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E8B63B09C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0759463B09F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234048AbiK1R6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 12:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
+        id S233857AbiK1SAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 13:00:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234099AbiK1R6T (ORCPT
+        with ESMTP id S233652AbiK1SAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:58:19 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F093D926
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:46:28 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id v3-20020a17090ac90300b00218441ac0f6so12956213pjt.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:46:28 -0800 (PST)
+        Mon, 28 Nov 2022 13:00:19 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B26C2C10D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:47:27 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id n3so18147307wrp.5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:47:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yt+6ZsFhHbg9VXiMxe9kvr7coxEz5653nTiwyPOx528=;
-        b=M602G5EP/uN3K4grhCY6Shfqyo+fxipZ4KWTTuEwvKP/eqEFyLVW8NRu3X89MxlYzY
-         2YxMA/Xzs8zAJzyf6jPcLQ4GfFKkYV0x4ISr2XKqchK3Jx02Ax36vhA7NAHk+OlvcL9L
-         dhUWN6THrPOaW9jyniNJVqtSlrT1HM/5Rs38XmlzlfhbjFUlDH1WUN9NFhgs4Woi2QUy
-         dSaL+EXTRy9/9LYpnXYEof4+I3HUdFPAkdSlv4P+catGH0hbvukplczpguDKxoYPrmqE
-         tG2tILO4kQFHaOVGFjY3QTXfDjAVfsUp3fXL8P/5duSeu2XyVbr48YvIGFiWBkYFgEMf
-         SPQA==
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+WyB3ufPbqxDphL9azoYblwx5btpnokUgFLuY6XL+Nc=;
+        b=dMbVg9JARbt2JJdz12kaQow7lhKPRkk09nFubCF5pe25fLvB8LlgIbkHu4xuQqKnVX
+         XpaFsah9nlbecFE+y1V7DyEdLGTP/9YpnXeKQP2fdVRFi9mX7KXDegAu6sVPQ67psgul
+         j9Wy0DNaJxH0H+IGfSbPsSOskdA4iGqeKqXqiHI8uisFKKXxYzjeHgU+eh/gSZrOyX+n
+         1UU8osBlSB7zIY11NZJK60KwBweXfKe6hhI6vyze8UuoOpmRKvb8V7yoXxnf0bXJjb8e
+         z5O4CGQ69R1avXysbS/k2A/ni+ULOOtA0o96bJ0s99xI+Nar9RzePaH89tAnlj7txSAQ
+         4OCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Yt+6ZsFhHbg9VXiMxe9kvr7coxEz5653nTiwyPOx528=;
-        b=FofJfLkmLEcVRLyhSuBWHnckodgeRxfWAkOxwAjTmGykQ1PUFcXz3LmiUKmoZvXLXY
-         JBUL6iCIkbTcgxAi7RObVebCEUeMmKRhrqvCgA/5nLNnxFTOfF7Qk+NVICrh53dQqpXh
-         YEKo4ES9gM1FO2Ka16tqtTyC7RzoecGVrW/ZzyuCc934I4MhP3keAaNo1j1ZjT08ELoR
-         6YaI9Rj3EEXiw7QW7JmE6sDV9TTfH3K31YWs4sgJk7bm2ciXP5kvz5z/6KHAwOnxHWUL
-         zhKsa6XtxhL6kMjkEQp2V0zeYTE0V0ShkGs+UPqdWJIPM/ngYhlCfPTfJ9xM5nL/vjKW
-         etUw==
-X-Gm-Message-State: ANoB5pkLmBX4OVgbRLbpLiSZInngXyUYXkDFl35zwyQftksQx1tFZUG4
-        0tH09GuemE7LyxonGb6SMJNUcgzY8utAeA==
-X-Google-Smtp-Source: AA0mqf6RR+CKCljliuYRRA/Xk2TOOtJ2SX5gEyk55ktJ9yFGoMm9S7KlVOyhhodEO8xdzKB+0DNV8w==
-X-Received: by 2002:a17:902:7087:b0:189:4de4:e71b with SMTP id z7-20020a170902708700b001894de4e71bmr25875312plk.159.1669657578962;
-        Mon, 28 Nov 2022 09:46:18 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u10-20020a170902e5ca00b00189371b5971sm9176020plf.220.2022.11.28.09.46.18
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+WyB3ufPbqxDphL9azoYblwx5btpnokUgFLuY6XL+Nc=;
+        b=GwxUI2oYJQwnXAjNSx4QBDX0cGBwNx6pAvvCKHQJbiZC/znB5H6qfqPphIK9T6dfag
+         y0Y8+u23N11KAAU+fhK+J8nOCBm0kN24C/ZO97cvd9nguYr6ZCEfPXgAofTox5aBO7Kv
+         xHlpjdjgrU6Uh8xnyd34rbp8G+q+bNy7dacnTb5aEJJs/jITWRBELxLQn/RTOMxyjTsX
+         01gAjpgSsXnkXpQgfvbx58za/3X2s432XfI1q6EMzFV77SJxY9L9qzH4olp3kxi5C99H
+         zt7YQki7ecbCWimAp4YOB9Bn7JBvIYyVE0qBDyBxtPbb7hRmmAvtr+H8+7kGcTY2vy1K
+         lgWw==
+X-Gm-Message-State: ANoB5pkVw7hsihLF63XtEGwZUiDN4IV6FJOm8/niFK5ty+CTCLaLedTk
+        7vxt6TJ41HHJNLlqvY6nc5hgahjIkT348rf5
+X-Google-Smtp-Source: AA0mqf4H7lK4Nah+YYgElGJ2Z+tCqcJOcvWq/YOR5+mI+LATCsTnZE6DbHZfwKlS7pQn9MJ/9h+aXg==
+X-Received: by 2002:adf:f843:0:b0:241:bcae:987f with SMTP id d3-20020adff843000000b00241bcae987fmr21883976wrq.619.1669657641824;
+        Mon, 28 Nov 2022 09:47:21 -0800 (PST)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id p13-20020a05600c358d00b003c6b9749505sm21090045wmq.30.2022.11.28.09.47.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 09:46:18 -0800 (PST)
-Date:   Mon, 28 Nov 2022 17:46:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nagareddy Reddy <nspreddy@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Matlack <dmatlack@google.com>
-Subject: Re: [RFC PATCH v3 2/2] KVM: x86/mmu: replace BUG() with KVM_BUG() in
- shadow mmu
-Message-ID: <Y4Tz5zd9qXBiR0Pr@google.com>
-References: <20221128002043.1555543-1-mizhang@google.com>
- <20221128002043.1555543-3-mizhang@google.com>
+        Mon, 28 Nov 2022 09:47:21 -0800 (PST)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/3] hwmon: (pmbus/core): Update regulator flag map
+Date:   Mon, 28 Nov 2022 18:47:12 +0100
+Message-Id: <20221128174715.1969957-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221128002043.1555543-3-mizhang@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022, Mingwei Zhang wrote:
-> Replace BUG() in pte_list_remove() with KVM_BUG() to avoid crashing the
-> host. MMU bug is difficult to discover due to various racing conditions and
-> corner cases and thus it extremely hard to debug. The situation gets much
-> worse when it triggers the shutdown of a host. Host machine crash
-> eliminates everything including the potential clues for debugging.
-> 
-> From cloud computing service perspective, BUG() or BUG_ON() is probably no
-> longer appropriate as the host reliability is top priority.
+Add regulator flag map for PMBUS status byte & status input.
 
-I don't think we need to bring "cloud computing" into this.  Linus has made it
-clear over and over and over that BUG() / BUG_ON() need to be avoided unless
-the alternative is worse.  E.g. the BUG() in __handle_changed_spte() is warranted
-because the alternative is silent corruption of guest data.
-
-> Crashing the physical machine is almost never a good option as it eliminates
-> innocent VMs and cause service outage in a larger scope. Even worse, if
-> attacker can reliably triggers this code by diverting the control flow or
-> corrupting the memory,
-
-Or if there's a KVM bug, which is waaaaay more likely.
-
-> then this becomes vm-of-death attack.
-
-This is true of any BUG(), and really of any unexpected fault while holding a
-spinlock, e.g. NULL pointer derefs in the MMU are almost always fatal as well.
-
-> This is a huge attack vector to cloud providers, as the death of one single
-> host machine is not the end of the story. Without manual interferences, a
-> failed cloud job may be dispatched to other hosts and continue host crashes
-> until all of them are dead.
-> 
-> Because of the above reasons, shrink the scope of crash to the target VM
-> only. KVM_BUG() and KVM_BUG_ON() requires a valid struct kvm which requires
-> extra plumbing. Avoid it in this version by just using
-> kvm_get_running_vcpu()->kvm instead.
-
-Stale comment.
-
-> Cc: Nagareddy Reddy <nspreddy@google.com>
-> Cc: Jim Mattson <jmattson@google.com>
-> Cc: David Matlack <dmatlack@google.com>
-> Signed-off-by: Mingwei Zhang <mizhang@google.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index b5a44b8f5f7b..e132d82ab4c0 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -956,12 +956,12 @@ static void pte_list_remove(struct kvm *kvm, u64 *spte,
->  
->  	if (!rmap_head->val) {
->  		pr_err("%s: %p 0->BUG\n", __func__, spte);
-
-These probably need to be ratelimited (or "once").  Bugging the VM will prevent
-doing anything useful with the VM, but KVM still needs to destroy the VM, which
-means zapping SPTEs and purging the rmaps.  Theoretically, there could be thousands
-of broken rmaps.
-
-> -		BUG();
-> +		KVM_BUG(true, kvm, "");
-
-If you don't want to provide a message, use KVM_BUG_ON(), not an empty message.
-Though my vote would be to fold the existing pr_err() messages into KVM_BUG(),
-which would make the WARN much more helpful and would address the pr_err() issue
-above.  The __func__ printing can also go away in that case because the stack
-track will provide all the necessary info.  The only reason not to drop the
-pr_err() entirely is if a ratelimited message is helpful for debugging failures
-that occur in production, which I doubt it true.
-
-And rather than pass "true", wrap the actual check with the KVM_BUG().
-
->  	} else if (!(rmap_head->val & 1)) {
->  		rmap_printk("%p 1->0\n", spte);
->  		if ((u64 *)rmap_head->val != spte) {
->  			pr_err("%s:  %p 1->BUG\n", __func__, spte);
-> -			BUG();
-> +			KVM_BUG(true, kvm, "");
-
-KVM needs to return here, otherwise KVM is knowingly writing a garbage pointer,
-e.g. will corrupt memory or trigger a fault.
-
->  		}
->  		rmap_head->val = 0;
->  	} else {
-
-Something like this?
-
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ drivers/hwmon/pmbus/pmbus_core.c | 30 ++++++++++++++++++++++--------
+ 1 file changed, 22 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index b5a44b8f5f7b..12790ccb8731 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -954,15 +954,16 @@ static void pte_list_remove(struct kvm *kvm, u64 *spte,
- 	struct pte_list_desc *prev_desc;
- 	int i;
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 95e95783972a..f5caceaaef2a 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2752,6 +2752,15 @@ struct pmbus_regulator_status_category {
  
--	if (!rmap_head->val) {
--		pr_err("%s: %p 0->BUG\n", __func__, spte);
--		BUG();
--	} else if (!(rmap_head->val & 1)) {
-+	if (KVM_BUG(!rmap_head->val, kvm, "rmap for %p is empty", spte))
-+		return;
-+
-+	if (!(rmap_head->val & 1)) {
- 		rmap_printk("%p 1->0\n", spte);
--		if ((u64 *)rmap_head->val != spte) {
--			pr_err("%s:  %p 1->BUG\n", __func__, spte);
--			BUG();
--		}
-+
-+		if (KVM_BUG((u64 *)rmap_head->val != spte, kvm,
-+			    "single rmap for %p doesn't match", spte))
-+			return;
-+
- 		rmap_head->val = 0;
- 	} else {
- 		rmap_printk("%p many->many\n", spte);
-@@ -979,8 +980,7 @@ static void pte_list_remove(struct kvm *kvm, u64 *spte,
- 			prev_desc = desc;
- 			desc = desc->more;
- 		}
--		pr_err("%s: %p many->many\n", __func__, spte);
--		BUG();
-+		KVM_BUG(true, kvm, "no rmap for %p (many->many)", spte);
+ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
+ 	{
++		.func = -1,
++		.reg = PMBUS_STATUS_BYTE,
++		.bits = (const struct pmbus_regulator_status_assoc[]) {
++			{ PB_STATUS_IOUT_OC,   REGULATOR_ERROR_OVER_CURRENT },
++			{ PB_STATUS_VOUT_OV,   REGULATOR_ERROR_REGULATION_OUT },
++			{ PB_STATUS_VIN_UV,    REGULATOR_ERROR_UNDER_VOLTAGE },
++			{ },
++		},
++	}, {
+ 		.func = PMBUS_HAVE_STATUS_VOUT,
+ 		.reg = PMBUS_STATUS_VOUT,
+ 		.bits = (const struct pmbus_regulator_status_assoc[]) {
+@@ -2768,6 +2777,7 @@ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] =
+ 			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
+ 			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
+ 			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
++			{ PB_POUT_OP_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
+ 			{ },
+ 		},
+ 	}, {
+@@ -2778,6 +2788,18 @@ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] =
+ 			{ PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
+ 			{ },
+ 		},
++	}, {
++		.func = PMBUS_HAVE_STATUS_INPUT,
++		.reg = PMBUS_STATUS_INPUT,
++		.bits = (const struct pmbus_regulator_status_assoc[]) {
++			{ PB_IIN_OC_FAULT,       REGULATOR_ERROR_OVER_CURRENT },
++			{ PB_IIN_OC_WARNING,     REGULATOR_ERROR_OVER_CURRENT_WARN },
++			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
++			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
++			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
++			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_OVER_VOLTAGE_WARN },
++			{ },
++		},
+ 	},
+ };
+ 
+@@ -2834,14 +2856,6 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+ 		if (status & PB_STATUS_POWER_GOOD_N)
+ 			*flags |= REGULATOR_ERROR_REGULATION_OUT;
  	}
- }
+-	/*
+-	 * Unlike most other status bits, PB_STATUS_{IOUT_OC,VOUT_OV} are
+-	 * defined strictly as fault indicators (not warnings).
+-	 */
+-	if (status & PB_STATUS_IOUT_OC)
+-		*flags |= REGULATOR_ERROR_OVER_CURRENT;
+-	if (status & PB_STATUS_VOUT_OV)
+-		*flags |= REGULATOR_ERROR_REGULATION_OUT;
  
+ 	/*
+ 	 * If we haven't discovered any thermal faults or warnings via
 
-base-commit: d74237e747db7f9f27e821e6683d58185e846378
+base-commit: 9494c53e1389b120ba461899207ac8a3aab2632c
 -- 
+2.37.3
 
