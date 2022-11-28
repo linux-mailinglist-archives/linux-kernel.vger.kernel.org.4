@@ -2,162 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8420563B410
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:15:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 879E763B413
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234471AbiK1VP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 16:15:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51002 "EHLO
+        id S233230AbiK1VQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 16:16:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiK1VPZ (ORCPT
+        with ESMTP id S229929AbiK1VQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 16:15:25 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9823BC1B;
-        Mon, 28 Nov 2022 13:15:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669670124; x=1701206124;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GDtvlFXVIz+MUUTkkt7MlCDbX+4pSMO3dFyH3uDkyPs=;
-  b=Rx7UKykRQIPMfALmnRqdAhf32nytzu2PlZ5TXof+luAw0EeXn8flMUhX
-   SNqHdN93n/ZgTJaCSiXuehrPJLcFpSwKrad54oSJB6G8jXchqneBdsISa
-   6TDwTATqX/pMaVnDXmP+qNYrpH3S9PFqz+/5H8CF9GL0FYNucPndEycLi
-   FdWNwsZBA/wCXFqj/2y/DByKzv+z7OXlqpUtH/xZ8RyrZ+JoQyq4DmMVl
-   GAzu4rGSZ9qIOzhx+Gz9TTxAUvCpfk1jh9EYRWsXQwplMUQrHJ1YBJjr6
-   iNhGAEqjAzBOfm7weULWr/T6pbXpzAc0pOQKUfHz1ysVF3oHSORVq0FmE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="341864502"
-X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
-   d="scan'208";a="341864502"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 13:15:24 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="972422588"
-X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
-   d="scan'208";a="972422588"
-Received: from nroy-mobl1.amr.corp.intel.com (HELO [10.212.209.4]) ([10.212.209.4])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 13:15:22 -0800
-Message-ID: <8547f6b1-8dd6-1319-5c44-1440f54026f8@intel.com>
-Date:   Mon, 28 Nov 2022 13:15:21 -0800
+        Mon, 28 Nov 2022 16:16:40 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E22BC1B;
+        Mon, 28 Nov 2022 13:16:38 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2ASLGVLU009006
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 16:16:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1669670193; bh=WWkh15qtsd9kIlSQdW+y9klv9CR+AgVRUGpFO6HDaZM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=SZUSLUz5eCUygFHT8Sdy968xKVMfswLa999CwHr6kx3dROjFXxjfLaVxjcEBdowlx
+         VyHzfbbe9k1QhW5LNy3fQLT4lhAKs/op7ETnq5e+XBXv8vSkm57Uz6PrPCKGt19Phm
+         feKDIMw/URrVglp7Df0dT768zbF5GP9NVDdboOsYl6P5AS7Ig3unKQZ5aTihBy/eT7
+         vwYs4tATsTJwekhf8GtsBj6+m9hnV1kIO1eu7cfcttwu43FN6Nn4Op2Ze1HSB3V/Pm
+         Q7wSKnX6CAv6WJJVVqt5bPuEGBhfoxfZBUruXIO/JpG4Is6SimFhNoWR3GFEoYGVxA
+         6yyjF1x5GcRAA==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id BA29515C3AA6; Mon, 28 Nov 2022 16:16:31 -0500 (EST)
+Date:   Mon, 28 Nov 2022 16:16:31 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Tadeusz Struk <tadeusz.struk@linaro.org>
+Cc:     Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        syzbot+a22dc4b0744ac658ed9b@syzkaller.appspotmail.com
+Subject: Re: [PATCH] ext4: Add extend check to prevent BUG() in ext4_es_end
+Message-ID: <Y4UlL1UH1ks1iKOz@mit.edu>
+References: <20220930202536.697396-1-tadeusz.struk@linaro.org>
+ <e1e227a4-4f71-3a01-2bd1-beaf6c52e02a@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 5/6] x86/hyperv: Support hypercalls for TDX guests
-Content-Language: en-US
-To:     Dexuan Cui <decui@microsoft.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221121195151.21812-1-decui@microsoft.com>
- <20221121195151.21812-6-decui@microsoft.com>
- <BYAPR21MB16886270B7899F35E8A826A4D70C9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <SA1PR21MB133528B2B3637D61368FF5FFBF139@SA1PR21MB1335.namprd21.prod.outlook.com>
- <b692c4da-4365-196d-9d12-33e2679c01de@intel.com>
- <SA1PR21MB1335BA9D27891F6B1BA3A988BF139@SA1PR21MB1335.namprd21.prod.outlook.com>
- <54871aec-823b-1ff5-8362-688d10e97263@intel.com>
- <SA1PR21MB13357B3CC486514D2DF50A4DBF139@SA1PR21MB1335.namprd21.prod.outlook.com>
- <f6d27366-e083-b362-b44c-eaf4d3365b53@intel.com>
- <SA1PR21MB1335BA75F51964636745E486BF139@SA1PR21MB1335.namprd21.prod.outlook.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <SA1PR21MB1335BA75F51964636745E486BF139@SA1PR21MB1335.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e1e227a4-4f71-3a01-2bd1-beaf6c52e02a@linaro.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/28/22 12:36, Dexuan Cui wrote:
->> From: Dave Hansen <dave.hansen@intel.com>
->> Sent: Monday, November 28, 2022 11:48 AM
->>
->> On 11/28/22 11:37, Dexuan Cui wrote:
->>>> From: Dave Hansen <dave.hansen@intel.com>
->> ...
->>>> How do we know, for instance, that no hypercall using this interface
->>>> will *ever* take the 0x0 physical address as an argument?
->>>
->>> A 0x0 physical address as an argument still works: the 0 is passed
->>> to the hypervisor using GHCI. I believe Hyper-V interprets the 0 as
->>> an error (if the param is needed), and returns an "invalid parameter"
->>> error code to the guest.
->>
->> I don't see any data in the public documentation to support the claim
->> that 0x0 is a special argument for either the input or output GPA
->> parameters.
+On Tue, Oct 11, 2022 at 11:38:37AM -0700, Tadeusz Struk wrote:
+> On 9/30/22 13:25, Tadeusz Struk wrote:
+> > Syzbot reported an issue with ext4 extents. The reproducer creates
+> > a corrupted ext4 fs image in memory, and mounts it as a loop device.
+> > It invokes the ext4_cache_extents() and ext4_find_extent(), which
+> > eventually triggers a BUG() in ext4_es_end() causing a kernel crash.
+> > It triggers on mainline, and every kernel version back to v4.14.
+> > Add a call ext4_ext_check_inode() in ext4_find_extent() to prevent
+> > the crash.
+> > 
+> > To: "Theodore Ts'o"<tytso@mit.edu>
+> > Cc: "Andreas Dilger"<adilger.kernel@dilger.ca>
+> > Cc:<linux-ext4@vger.kernel.org>
+> > Cc:<linux-kernel@vger.kernel.org>
+> > Cc:<stable@vger.kernel.org>
+> > 
+> > Link:https://syzkaller.appspot.com/bug?id=641e7a4b900015c5d7a729d6cc1fba7a928a88f9
+> > Reported-by:syzbot+a22dc4b0744ac658ed9b@syzkaller.appspotmail.com
+> > Signed-off-by: Tadeusz Struk<tadeusz.struk@linaro.org>
 > 
-> Sorry, I didn't make it clear. I meant: for some hypercalls, Hyper-V
-> doesn't really need an "input" param or an "output" param, so Linux
-> passes 0 for such a "not needed" param. Maybe Linux can pass any
-> value for such a "not needed" param, if Hyper-V just ignores the
-> "not needed" param. Some examples:
-> 
-> arch/x86/hyperv/hv_init.c: hv_get_partition_id():
->     status = hv_do_hypercall(HVCALL_GET_PARTITION_ID, NULL, output_page);
-> 
-> drivers/pci/controller/pci-hyperv.c:
->     res = hv_do_hypercall(HVCALL_RETARGET_INTERRUPT | (var_size << 17),
->                       params, NULL);
-> 
-> 
-> If a param is needed and is supposed to be a non-zero memory address,
-> Linux running as a TDX guest must pass "cc_mkdec(address)" rather than
-> "address", otherwise I suspect the result is undefined, e.g. Hyper-V might
-> return an error to the guest, or Hyper-V might just terminate the guest,
-> especially if Linux passes 0 or cc_mkdec(0).
+> Any comments/feedback on this one?
 
-This is the point where the maintainer gets a wee bit grumpy.  The page
-I just pointed you to (twice) has this nice quote:
+Hi, I can't replicate the problem using the syzkaller repro:
 
-	If the hypercall involves no input or output parameters, the
-	hypervisor ignores the corresponding GPA pointer.
+root@kvm-xfstests:/vdc# /vtmp/repro 
+[   14.840406] loop0: detected capacity change from 0 to 1051
+[   14.840965] EXT4-fs (loop0): ext4_check_descriptors: Checksum for group 0 failed (60935!=0)
+[   14.841468] EXT4-fs error (device loop0): ext4_ext_check_inode:520: inode #2: comm repro: pblk 0 bad header/extent: invalid magic - magic 9fe4, entries 42, max 0(0), depth 0(0)
+[   14.842188] EXT4-fs (loop0): get root inode failed
+[   14.842401] EXT4-fs (loop0): mount failed
 
-So, bravo to your colleagues who nicely documented this.  But,
-unfortunately, you didn't take advantage of their great documentation.
-Instead, you made me search for it to provide actual facts to combat the
-weak conjecture you offered above.
+And by inspection, if there is a corrupted inode, it should have been
+caught much sooner, in ext4_iget():
 
->> This is despite some actual discussion on things like their alignment
->> requirements[1] and interactions with overlay pages.
->>
->> So, either you are mistaken about that behavior, or it looks like the
->> documentation needs updating.
-> 
-> The above is just my conjecture. I don't know how exactly Hyper-V works.
+	} else if (!ext4_has_inline_data(inode)) {
+		/* validate the block references in the inode */
+		if (!(EXT4_SB(sb)->s_mount_state & EXT4_FC_REPLAY) &&
+			(S_ISREG(inode->i_mode) || S_ISDIR(inode->i_mode) ||
+			(S_ISLNK(inode->i_mode) &&
+			!ext4_inode_is_fast_symlink(inode)))) {
+			if (ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS))
+				ret = ext4_ext_check_inode(inode);
+			else
+				ret = ext4_ind_check_inode(inode);
+		}
+	}
+	if (ret)
+		goto bad_inode;
 
-I do!  I literally Googled "HV HYPERCALL FAST BIT" and the first page
-that came up told me all I needed to know.
+... and this check has been around for quite some time.
 
-I could be merrily merging your patches.  But, instead, I'm reading
-documentation that can be trivially found and repeatedly regurgitating it.
+It's much more efficient to check for a corrupted inode data structure
+at the time when the inode is read into memory, as opposed to every
+single time we try to lookup a logical->physical block map, in
+ext4_find_extent().
 
-Please, slow down.  Take some time to answer emails and do it more
-deliberately.  This isn't a race.
+If you can reproduce a failure on a modern kernel, please let me know,
+but it looks like syzkaller had only reported it on androd-54,
+android-5-10, linux-4.14, and linux-4.19 in any case.
+
+Cheers,
+
+						- Ted
