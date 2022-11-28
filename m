@@ -2,162 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8135763B3E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B95A63B3E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:05:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234466AbiK1VF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 16:05:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
+        id S234418AbiK1VFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 16:05:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234415AbiK1VFE (ORCPT
+        with ESMTP id S234415AbiK1VF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 16:05:04 -0500
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3862F644
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 13:04:53 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id g15-20020a4a894f000000b0047f8e899623so1848205ooi.5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 13:04:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vRGZCzUJ0ffhia8X2kGoAwEvcGD3EwbjnSNO0K2/wNw=;
-        b=EhD2l7i+4krHkkf9vXvO2XsUcD5IiujCezypdNr4fvjW3w70qr5E41O4r2ZyXRmXjX
-         p2HI+fJuTvI6Df3He52fE/lU7Dze89xJ1KoZPBtv/zmd2NwCZbj6MT+RAYsDKrxYWBfz
-         FiEBLvVukJYZpWpxIjqmBORfCsfBEET/jcuTs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vRGZCzUJ0ffhia8X2kGoAwEvcGD3EwbjnSNO0K2/wNw=;
-        b=U/r1m0yvFSgZw15r33NoCE8UAVuSsr3mVj1MAl7G4izeCryOOoF4rFD44dWj9ZQ7BB
-         W5fie2eU4HgQ9HK8GaII/Y4X90iVAPwHx0bLIc47Q5KSRK/FTNsYHCbEvooJSlfkkQbp
-         qmhfBXxE1h2C0SDWNkFLC+QPa792bHrZIzBoad17pudzbkmvbFkrgD3k91c6dUNMVtLE
-         VmVBzYc4kw8widxPKIYZaDUCUVDup7ECtT9YZ3u46PpOJtrVFs2Z/YpOaJPRZPde8kNL
-         7IWtGWmayAThNQVDeBVQit0+g+tE4LVh3avtV+5sikYXgqV/UOF417ozYLikNglENkd+
-         sJbA==
-X-Gm-Message-State: ANoB5pkUYtJah75YhqNGYyTXSoq9FT/9iQ8DWTQGQtgy2JDZC1EF29yn
-        7HAirw7AbKHid+QOBV94NKyKOCEVV8k3f6omLUXw
-X-Google-Smtp-Source: AA0mqf5+31JnISbgZecc7GnG0/XpncjmVgCp7OXM0CWoMRMxsX14BRJcn81qDRI9NepRLIRfMzvOi8k7RRpSLWuz2hI=
-X-Received: by 2002:a4a:c58a:0:b0:49f:4297:5612 with SMTP id
- x10-20020a4ac58a000000b0049f42975612mr15036822oop.13.1669669492686; Mon, 28
- Nov 2022 13:04:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20221128161424.608889-1-apatel@ventanamicro.com> <20221128161424.608889-5-apatel@ventanamicro.com>
-In-Reply-To: <20221128161424.608889-5-apatel@ventanamicro.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Mon, 28 Nov 2022 13:04:42 -0800
-Message-ID: <CAOnJCULajHen9us+AePGKarM1xSXp0wVBXyz7ySQyZz9YQvFaQ@mail.gmail.com>
-Subject: Re: [PATCH 4/9] RISC-V: KVM: Use switch-case in kvm_riscv_vcpu_set/get_reg()
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
+        Mon, 28 Nov 2022 16:05:28 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95CC2F39A;
+        Mon, 28 Nov 2022 13:05:18 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1ozlJN-00086j-Tx; Mon, 28 Nov 2022 22:05:09 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Conor Dooley <conor@kernel.org>, Guo Ren <guoren@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andre Przywara <andre.przywara@arm.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Stanislav Jakubek <stano.jakubek@gmail.com>
+Subject: Re: [PATCH v2 11/12] riscv: Add the Allwinner SoC family Kconfig option
+Date:   Mon, 28 Nov 2022 22:05:08 +0100
+Message-ID: <4413987.e9J7NaK4W3@diego>
+In-Reply-To: <CAJF2gTRpL7X+Td6cHhzJ5u2sRo15e4BGh+RKjKwB7fh8v8J2-g@mail.gmail.com>
+References: <20221125234656.47306-1-samuel@sholland.org> <Y4JAh72RUJFS/RtR@spud> <CAJF2gTRpL7X+Td6cHhzJ5u2sRo15e4BGh+RKjKwB7fh8v8J2-g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 8:14 AM Anup Patel <apatel@ventanamicro.com> wrote:
->
-> We should use switch-case in kvm_riscv_vcpu_set/get_reg() functions
-> because the else-if ladder is quite big now.
->
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> ---
->  arch/riscv/kvm/vcpu.c | 36 ++++++++++++++++++++++--------------
->  1 file changed, 22 insertions(+), 14 deletions(-)
->
-> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> index 982a3f5e7130..68c86f632d37 100644
-> --- a/arch/riscv/kvm/vcpu.c
-> +++ b/arch/riscv/kvm/vcpu.c
-> @@ -544,22 +544,26 @@ static int kvm_riscv_vcpu_set_reg_isa_ext(struct kvm_vcpu *vcpu,
->  static int kvm_riscv_vcpu_set_reg(struct kvm_vcpu *vcpu,
->                                   const struct kvm_one_reg *reg)
->  {
-> -       if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_CONFIG)
-> +       switch (reg->id & KVM_REG_RISCV_TYPE_MASK) {
-> +       case KVM_REG_RISCV_CONFIG:
->                 return kvm_riscv_vcpu_set_reg_config(vcpu, reg);
-> -       else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_CORE)
-> +       case KVM_REG_RISCV_CORE:
->                 return kvm_riscv_vcpu_set_reg_core(vcpu, reg);
-> -       else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_CSR)
-> +       case KVM_REG_RISCV_CSR:
->                 return kvm_riscv_vcpu_set_reg_csr(vcpu, reg);
-> -       else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_TIMER)
-> +       case KVM_REG_RISCV_TIMER:
->                 return kvm_riscv_vcpu_set_reg_timer(vcpu, reg);
-> -       else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_FP_F)
-> +       case KVM_REG_RISCV_FP_F:
->                 return kvm_riscv_vcpu_set_reg_fp(vcpu, reg,
->                                                  KVM_REG_RISCV_FP_F);
-> -       else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_FP_D)
-> +       case KVM_REG_RISCV_FP_D:
->                 return kvm_riscv_vcpu_set_reg_fp(vcpu, reg,
->                                                  KVM_REG_RISCV_FP_D);
-> -       else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_ISA_EXT)
-> +       case KVM_REG_RISCV_ISA_EXT:
->                 return kvm_riscv_vcpu_set_reg_isa_ext(vcpu, reg);
-> +       default:
-> +               break;
-> +       }
->
->         return -EINVAL;
->  }
-> @@ -567,22 +571,26 @@ static int kvm_riscv_vcpu_set_reg(struct kvm_vcpu *vcpu,
->  static int kvm_riscv_vcpu_get_reg(struct kvm_vcpu *vcpu,
->                                   const struct kvm_one_reg *reg)
->  {
-> -       if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_CONFIG)
-> +       switch (reg->id & KVM_REG_RISCV_TYPE_MASK) {
-> +       case KVM_REG_RISCV_CONFIG:
->                 return kvm_riscv_vcpu_get_reg_config(vcpu, reg);
-> -       else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_CORE)
-> +       case KVM_REG_RISCV_CORE:
->                 return kvm_riscv_vcpu_get_reg_core(vcpu, reg);
-> -       else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_CSR)
-> +       case KVM_REG_RISCV_CSR:
->                 return kvm_riscv_vcpu_get_reg_csr(vcpu, reg);
-> -       else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_TIMER)
-> +       case KVM_REG_RISCV_TIMER:
->                 return kvm_riscv_vcpu_get_reg_timer(vcpu, reg);
-> -       else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_FP_F)
-> +       case KVM_REG_RISCV_FP_F:
->                 return kvm_riscv_vcpu_get_reg_fp(vcpu, reg,
->                                                  KVM_REG_RISCV_FP_F);
-> -       else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_FP_D)
-> +       case KVM_REG_RISCV_FP_D:
->                 return kvm_riscv_vcpu_get_reg_fp(vcpu, reg,
->                                                  KVM_REG_RISCV_FP_D);
-> -       else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_ISA_EXT)
-> +       case KVM_REG_RISCV_ISA_EXT:
->                 return kvm_riscv_vcpu_get_reg_isa_ext(vcpu, reg);
-> +       default:
-> +               break;
-> +       }
->
->         return -EINVAL;
->  }
-> --
-> 2.34.1
->
+Am Sonntag, 27. November 2022, 12:31:15 CET schrieb Guo Ren:
+> On Sun, Nov 27, 2022 at 12:36 AM Conor Dooley <conor@kernel.org> wrote:
+> >
+> > On Fri, Nov 25, 2022 at 05:46:55PM -0600, Samuel Holland wrote:
+> > > Allwinner manufactures the sunxi family of application processors. This
+> > > includes the "sun8i" series of ARMv7 SoCs, the "sun50i" series of ARMv8
+> > > SoCs, and now the "sun20i" series of 64-bit RISC-V SoCs.
+> > >
+> > > The first SoC in the sun20i series is D1, containing a single T-HEAD
+> > > C906 core. D1s is a low-pin-count variant of D1 with co-packaged DRAM.
+> > >
+> > > Most peripherals are shared across the entire chip family. In fact, the
+> > > ARMv7 T113 SoC is pin-compatible and almost entirely register-compatible
+> > > with the D1s.
+> > >
+> > > This means many existing device drivers can be reused. To facilitate
+> > > this reuse, name the symbol ARCH_SUNXI, since that is what the existing
+> > > drivers have as their dependency.
+> > >
+> > > Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+> > > Tested-by: Heiko Stuebner <heiko@sntech.de>
+> > > Signed-off-by: Samuel Holland <samuel@sholland.org>
+> > > ---
+> > >
+> > > Changes in v2:
+> > >  - Sort Kconfig as if we had done s/SOC_/ARCH_/ for future-proofing
+> > >
+> > >  arch/riscv/Kconfig.socs | 9 +++++++++
+> > >  1 file changed, 9 insertions(+)
+> > >
+> > > diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+> > > index 69774bb362d6..4c1dc2ca11f9 100644
+> > > --- a/arch/riscv/Kconfig.socs
+> > > +++ b/arch/riscv/Kconfig.socs
+> > > @@ -26,6 +26,15 @@ config SOC_STARFIVE
+> > >       help
+> > >         This enables support for StarFive SoC platform hardware.
+> > >
+> > > +config ARCH_SUNXI
+> > > +     bool "Allwinner sun20i SoCs"
+> > > +     select ERRATA_THEAD if MMU && !XIP_KERNEL
+> 
+> depend on MMU
+> depend on !XIP_KERNEL
+> select ERRATA_THEAD
+
+That sounds like a better variant.
+
+The D1 / C906 _needs_ the errata for the memory handling
+and the other alternative constraints require the !XIP
+
+With the select, a xip-kernel would not boot at all on a D1
 
 
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
--- 
-Regards,
-Atish
+Heiko
+
+
