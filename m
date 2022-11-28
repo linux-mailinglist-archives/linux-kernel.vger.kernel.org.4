@@ -2,284 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4006639EE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:29:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F65639EEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiK1B3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 20:29:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44850 "EHLO
+        id S229670AbiK1BaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 20:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiK1B3D (ORCPT
+        with ESMTP id S229475AbiK1BaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 20:29:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E76AA461;
-        Sun, 27 Nov 2022 17:29:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 27 Nov 2022 20:30:04 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED70A45A;
+        Sun, 27 Nov 2022 17:30:02 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D8EE60F53;
-        Mon, 28 Nov 2022 01:29:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FF52C433D7;
-        Mon, 28 Nov 2022 01:28:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669598939;
-        bh=2J3xNZDQoeEripp4SMFhNJ+YDa5yHhIfCSU4QcV7Mj4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aRtNVL+krhH2+mFtQU52seUZVwlWjFQk4Wsyv7VRf2WFCVm+2eXo9Wm+pi046wMY/
-         0jiSOyyyNxOhv6cBknBHN1CiH20DcsOO8ULuePmyyk+ds0Kt6YYQTq4qWVnEqMAHnj
-         3B34cJN2PInF7Uw90mUiq08HoFMpZf63J3uMVscTmDIer/9S22kjp4V74wM2+BP33H
-         hB/FnULz8tcB+SfTbSjavP0MFQknxva2joApj9D8WShROu48wXpvWolXUzIW0eAAMK
-         c0lNF2Uj+lNp9gnehmfZAcqaPseMMDYA2mhX+NbNh1btAQD5aEcah8Gkutj5NMjGQ1
-         bNb4IKEKzemsg==
-Date:   Mon, 28 Nov 2022 03:28:55 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jandryuk@gmail.com,
-        pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com, lukas@wunner.de,
-        p.rosenberger@kunbus.com
-Subject: Re: [PATCH v11 09/14] tpm, tpm: Implement usage counter for locality
-Message-ID: <Y4QO14Otk+u5Nxl4@kernel.org>
-References: <20221124135538.31020-1-LinoSanfilippo@gmx.de>
- <20221124135538.31020-10-LinoSanfilippo@gmx.de>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NL7F03kRbz4x7X;
+        Mon, 28 Nov 2022 12:29:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669598997;
+        bh=ZRRd6Gk8NWLzfHY82OUx4YCkMM3vE3XCFIJ8nTVL9TY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cS+hEbvSamFGFXQYcxoSOG7KKcbDzq4/3Owjw72mEtzEzmf9AT9+VG7C86mfK01hn
+         hIAGAbDmlpuqFqmevr/rMrpfwAkPhiIg4oPhR4wlsze1CC/2pGjJIM07yzW0VYWJka
+         bk+3l3ragKov1J8uICwP5sqifWX8QQT/vgcsjUb+FvHI3rOD53VQSEHXDAzaoGfH0k
+         pVJoV9JQ1mRf0Iaz8l1n0fcWRk267Yh6f+j1g5v2+Ppzf1BI+zRuR5x1vE+DlaGGbs
+         51O5JNUVvnuWbX7i3WHwTgP/DjD7NoifNoqo94lr0QiAY7U38UHAX9uJWnJB/NrAtv
+         xEId8sqGQADuw==
+Date:   Mon, 28 Nov 2022 12:29:55 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the tip tree with the crypto tree
+Message-ID: <20221128122955.2f946b91@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221124135538.31020-10-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/xGg3BgsRxwqPA.oNe7gxZDF";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 02:55:33PM +0100, Lino Sanfilippo wrote:
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> 
-> Implement a usage counter for the (default) locality used by the TPM TIS
-> driver:
-> Request the locality from the TPM if it has not been claimed yet, otherwise
-> only increment the counter. Also release the locality if the counter is 0
-> otherwise only decrement the counter. Since in case of SPI the register
-> accesses are locked by means of the SPI bus mutex use a sleepable lock
-> (i.e. also a mutex) to ensure thread-safety of the counter which may be
-> accessed by both a userspace thread and the interrupt handler.
-> 
-> By doing this refactor the names of the amended functions to use a more
-> appropriate prefix.
-> 
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> Tested-by: Michael Niewöhner <linux@mniewoehner.de>
-> ---
->  drivers/char/tpm/tpm_tis_core.c | 63 +++++++++++++++++++++++----------
->  drivers/char/tpm/tpm_tis_core.h |  2 ++
->  2 files changed, 47 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index d705dfb64cf9..f00f1057fd27 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -165,16 +165,27 @@ static bool check_locality(struct tpm_chip *chip, int l)
->  	return false;
->  }
->  
-> -static int release_locality(struct tpm_chip *chip, int l)
-> +static int __tpm_tis_relinquish_locality(struct tpm_tis_data *priv, int l)
-> +{
-> +	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
-> +
-> +	return 0;
-> +}
-> +
-> +static int tpm_tis_relinquish_locality(struct tpm_chip *chip, int l)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
->  
-> -	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
-> +	mutex_lock(&priv->locality_count_mutex);
-> +	priv->locality_count--;
-> +	if (priv->locality_count == 0)
-> +		__tpm_tis_relinquish_locality(priv, l);
-> +	mutex_unlock(&priv->locality_count_mutex);
->  
->  	return 0;
->  }
->  
-> -static int request_locality(struct tpm_chip *chip, int l)
-> +static int __tpm_tis_request_locality(struct tpm_chip *chip, int l)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
->  	unsigned long stop, timeout;
-> @@ -215,6 +226,20 @@ static int request_locality(struct tpm_chip *chip, int l)
->  	return -1;
->  }
->  
-> +static int tpm_tis_request_locality(struct tpm_chip *chip, int l)
-> +{
-> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> +	int ret = 0;
-> +
-> +	mutex_lock(&priv->locality_count_mutex);
-> +	if (priv->locality_count == 0)
-> +		ret = __tpm_tis_request_locality(chip, l);
-> +	if (!ret)
-> +		priv->locality_count++;
-> +	mutex_unlock(&priv->locality_count_mutex);
-> +	return ret;
-> +}
-> +
->  static u8 tpm_tis_status(struct tpm_chip *chip)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> @@ -682,7 +707,7 @@ static int probe_itpm(struct tpm_chip *chip)
->  	if (vendor != TPM_VID_INTEL)
->  		return 0;
->  
-> -	if (request_locality(chip, 0) != 0)
-> +	if (tpm_tis_request_locality(chip, 0) != 0)
->  		return -EBUSY;
->  
->  	rc = tpm_tis_send_data(chip, cmd_getticks, len);
-> @@ -703,7 +728,7 @@ static int probe_itpm(struct tpm_chip *chip)
->  
->  out:
->  	tpm_tis_ready(chip);
-> -	release_locality(chip, priv->locality);
-> +	tpm_tis_relinquish_locality(chip, priv->locality);
->  
->  	return rc;
->  }
-> @@ -788,14 +813,14 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
->  	}
->  	priv->irq = irq;
->  
-> -	rc = request_locality(chip, 0);
-> +	rc = tpm_tis_request_locality(chip, 0);
->  	if (rc < 0)
->  		return rc;
->  
->  	rc = tpm_tis_read8(priv, TPM_INT_VECTOR(priv->locality),
->  			   &original_int_vec);
->  	if (rc < 0) {
-> -		release_locality(chip, priv->locality);
-> +		tpm_tis_relinquish_locality(chip, priv->locality);
->  		return rc;
->  	}
->  
-> @@ -834,7 +859,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
->  		rc = -1;
->  	}
->  
-> -	release_locality(chip, priv->locality);
-> +	tpm_tis_relinquish_locality(chip, priv->locality);
->  
->  	return rc;
->  }
-> @@ -950,8 +975,8 @@ static const struct tpm_class_ops tpm_tis = {
->  	.req_complete_mask = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
->  	.req_complete_val = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
->  	.req_canceled = tpm_tis_req_canceled,
-> -	.request_locality = request_locality,
-> -	.relinquish_locality = release_locality,
-> +	.request_locality = tpm_tis_request_locality,
-> +	.relinquish_locality = tpm_tis_relinquish_locality,
->  	.clk_enable = tpm_tis_clkrun_enable,
->  };
->  
-> @@ -985,6 +1010,8 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  	priv->timeout_min = TPM_TIMEOUT_USECS_MIN;
->  	priv->timeout_max = TPM_TIMEOUT_USECS_MAX;
->  	priv->phy_ops = phy_ops;
-> +	priv->locality_count = 0;
-> +	mutex_init(&priv->locality_count_mutex);
->  
->  	dev_set_drvdata(&chip->dev, priv);
->  
-> @@ -1063,14 +1090,14 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  
->  	intmask &= ~TPM_GLOBAL_INT_ENABLE;
->  
-> -	rc = request_locality(chip, 0);
-> +	rc = tpm_tis_request_locality(chip, 0);
->  	if (rc < 0) {
->  		rc = -ENODEV;
->  		goto out_err;
->  	}
->  
->  	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
-> -	release_locality(chip, 0);
-> +	tpm_tis_relinquish_locality(chip, 0);
->  
->  	rc = tpm_chip_start(chip);
->  	if (rc)
-> @@ -1104,13 +1131,13 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  		 * proper timeouts for the driver.
->  		 */
->  
-> -		rc = request_locality(chip, 0);
-> +		rc = tpm_tis_request_locality(chip, 0);
->  		if (rc < 0)
->  			goto out_err;
->  
->  		rc = tpm_get_timeouts(chip);
->  
-> -		release_locality(chip, 0);
-> +		tpm_tis_relinquish_locality(chip, 0);
->  
->  		if (rc) {
->  			dev_err(dev, "Could not get TPM timeouts and durations\n");
-> @@ -1130,11 +1157,11 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  			dev_err(&chip->dev, FW_BUG
->  					"TPM interrupt not working, polling instead\n");
->  
-> -			rc = request_locality(chip, 0);
-> +			rc = tpm_tis_request_locality(chip, 0);
->  			if (rc < 0)
->  				goto out_err;
->  			disable_interrupts(chip);
-> -			release_locality(chip, 0);
-> +			tpm_tis_relinquish_locality(chip, 0);
->  		}
->  	}
->  
-> @@ -1201,13 +1228,13 @@ int tpm_tis_resume(struct device *dev)
->  	 * an error code but for unknown reason it isn't handled.
->  	 */
->  	if (!(chip->flags & TPM_CHIP_FLAG_TPM2)) {
-> -		ret = request_locality(chip, 0);
-> +		ret = tpm_tis_request_locality(chip, 0);
->  		if (ret < 0)
->  			return ret;
->  
->  		tpm1_do_selftest(chip);
->  
-> -		release_locality(chip, 0);
-> +		tpm_tis_relinquish_locality(chip, 0);
->  	}
->  
->  	return 0;
-> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-> index 2deef11c88db..13bdcf38e56f 100644
-> --- a/drivers/char/tpm/tpm_tis_core.h
-> +++ b/drivers/char/tpm/tpm_tis_core.h
-> @@ -91,6 +91,8 @@ enum tpm_tis_flags {
->  
->  struct tpm_tis_data {
->  	u16 manufacturer_id;
-> +	struct mutex locality_count_mutex;
-> +	unsigned int locality_count;
->  	int locality;
->  	int irq;
->  	unsigned int int_mask;
-> -- 
-> 2.36.1
-> 
+--Sig_/xGg3BgsRxwqPA.oNe7gxZDF
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Hi all,
 
-BR, Jarkko
+Today's linux-next merge of the tip tree got conflicts in:
+
+  arch/x86/crypto/sha1_ni_asm.S
+  arch/x86/crypto/sha256-avx-asm.S
+  arch/x86/crypto/sha256-avx2-asm.S
+  arch/x86/crypto/sha256-ssse3-asm.S
+  arch/x86/crypto/sha256_ni_asm.S
+  arch/x86/crypto/sm3-avx-asm_64.S
+  arch/x86/crypto/sm4-aesni-avx-asm_64.S
+  arch/x86/crypto/sm4-aesni-avx2-asm_64.S
+
+between commits:
+
+  32f34bf7e44e ("crypto: x86/sha1 - fix possible crash with CFI enabled")
+  19940ebbb59c ("crypto: x86/sha256 - fix possible crash with CFI enabled")
+  8ba490d9f5a5 ("crypto: x86/sm3 - fix possible crash with CFI enabled")
+  2d203c46a0fa ("crypto: x86/sm4 - fix crash with CFI enabled")
+
+from the crypto tree and commits:
+
+  c2a3ce6fdb12 ("crypto: x86/sha1: Remove custom alignments")
+  3ba56d0b8711 ("crypto: x86/sha256: Remove custom alignments")
+  2f93238b87dd ("crypto: x86/sm[34]: Remove redundant alignments")
+
+from the tip tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/x86/crypto/sha1_ni_asm.S
+index 3cae5a1bb3d6,cd943b2af2c4..000000000000
+--- a/arch/x86/crypto/sha1_ni_asm.S
++++ b/arch/x86/crypto/sha1_ni_asm.S
+@@@ -93,8 -92,7 +93,7 @@@
+   * numBlocks: Number of blocks to process
+   */
+  .text
+- .align 32
+ -SYM_FUNC_START(sha1_ni_transform)
+ +SYM_TYPED_FUNC_START(sha1_ni_transform)
+  	push		%rbp
+  	mov		%rsp, %rbp
+  	sub		$FRAME_SIZE, %rsp
+diff --cc arch/x86/crypto/sha256-avx-asm.S
+index 06ea30c20828,3649370690c5..000000000000
+--- a/arch/x86/crypto/sha256-avx-asm.S
++++ b/arch/x86/crypto/sha256-avx-asm.S
+@@@ -347,8 -346,7 +347,7 @@@ a =3D TMP
+  ## arg 3 : Num blocks
+  ########################################################################
+  .text
+ -SYM_FUNC_START(sha256_transform_avx)
+ +SYM_TYPED_FUNC_START(sha256_transform_avx)
+- .align 32
+  	pushq   %rbx
+  	pushq   %r12
+  	pushq   %r13
+diff --cc arch/x86/crypto/sha256-avx2-asm.S
+index 2d2be531a11e,c4c1dc5ee078..000000000000
+--- a/arch/x86/crypto/sha256-avx2-asm.S
++++ b/arch/x86/crypto/sha256-avx2-asm.S
+@@@ -524,8 -523,7 +524,7 @@@ STACK_SIZE	=3D _CTX      + _CTX_SIZ
+  ## arg 3 : Num blocks
+  ########################################################################
+  .text
+ -SYM_FUNC_START(sha256_transform_rorx)
+ +SYM_TYPED_FUNC_START(sha256_transform_rorx)
+- .align 32
+  	pushq	%rbx
+  	pushq	%r12
+  	pushq	%r13
+diff --cc arch/x86/crypto/sha256-ssse3-asm.S
+index 7db28839108d,96b7dcdeaebe..000000000000
+--- a/arch/x86/crypto/sha256-ssse3-asm.S
++++ b/arch/x86/crypto/sha256-ssse3-asm.S
+@@@ -356,8 -355,7 +356,7 @@@ a =3D TMP
+  ## arg 3 : Num blocks
+  ########################################################################
+  .text
+ -SYM_FUNC_START(sha256_transform_ssse3)
+ +SYM_TYPED_FUNC_START(sha256_transform_ssse3)
+- .align 32
+  	pushq   %rbx
+  	pushq   %r12
+  	pushq   %r13
+diff --cc arch/x86/crypto/sha256_ni_asm.S
+index 47f93937f798,b3f1a1a12027..000000000000
+--- a/arch/x86/crypto/sha256_ni_asm.S
++++ b/arch/x86/crypto/sha256_ni_asm.S
+@@@ -97,8 -96,7 +97,7 @@@
+   */
+ =20
+  .text
+- .align 32
+ -SYM_FUNC_START(sha256_ni_transform)
+ +SYM_TYPED_FUNC_START(sha256_ni_transform)
+ =20
+  	shl		$6, NUM_BLKS		/*  convert to bytes */
+  	jz		.Ldone_hash
+diff --cc arch/x86/crypto/sm3-avx-asm_64.S
+index 8fc5ac681fd6,b28d804ee10d..000000000000
+--- a/arch/x86/crypto/sm3-avx-asm_64.S
++++ b/arch/x86/crypto/sm3-avx-asm_64.S
+@@@ -328,8 -327,7 +328,7 @@@
+   * void sm3_transform_avx(struct sm3_state *state,
+   *                        const u8 *data, int nblocks);
+   */
+- .align 16
+ -SYM_FUNC_START(sm3_transform_avx)
+ +SYM_TYPED_FUNC_START(sm3_transform_avx)
+  	/* input:
+  	 *	%rdi: ctx, CTX
+  	 *	%rsi: data (64*nblks bytes)
+diff --cc arch/x86/crypto/sm4-aesni-avx-asm_64.S
+index 22b6560eb9e1,e13c8537b2ec..000000000000
+--- a/arch/x86/crypto/sm4-aesni-avx-asm_64.S
++++ b/arch/x86/crypto/sm4-aesni-avx-asm_64.S
+@@@ -420,8 -415,7 +416,7 @@@ SYM_FUNC_END(sm4_aesni_avx_crypt8
+   * void sm4_aesni_avx_ctr_enc_blk8(const u32 *rk, u8 *dst,
+   *                                 const u8 *src, u8 *iv)
+   */
+- .align 8
+ -SYM_FUNC_START(sm4_aesni_avx_ctr_enc_blk8)
+ +SYM_TYPED_FUNC_START(sm4_aesni_avx_ctr_enc_blk8)
+  	/* input:
+  	 *	%rdi: round key array, CTX
+  	 *	%rsi: dst (8 blocks)
+@@@ -495,8 -489,7 +490,7 @@@ SYM_FUNC_END(sm4_aesni_avx_ctr_enc_blk8
+   * void sm4_aesni_avx_cbc_dec_blk8(const u32 *rk, u8 *dst,
+   *                                 const u8 *src, u8 *iv)
+   */
+- .align 8
+ -SYM_FUNC_START(sm4_aesni_avx_cbc_dec_blk8)
+ +SYM_TYPED_FUNC_START(sm4_aesni_avx_cbc_dec_blk8)
+  	/* input:
+  	 *	%rdi: round key array, CTX
+  	 *	%rsi: dst (8 blocks)
+@@@ -545,8 -538,7 +539,7 @@@ SYM_FUNC_END(sm4_aesni_avx_cbc_dec_blk8
+   * void sm4_aesni_avx_cfb_dec_blk8(const u32 *rk, u8 *dst,
+   *                                 const u8 *src, u8 *iv)
+   */
+- .align 8
+ -SYM_FUNC_START(sm4_aesni_avx_cfb_dec_blk8)
+ +SYM_TYPED_FUNC_START(sm4_aesni_avx_cfb_dec_blk8)
+  	/* input:
+  	 *	%rdi: round key array, CTX
+  	 *	%rsi: dst (8 blocks)
+diff --cc arch/x86/crypto/sm4-aesni-avx2-asm_64.S
+index 23ee39a8ada8,2212705f7da6..000000000000
+--- a/arch/x86/crypto/sm4-aesni-avx2-asm_64.S
++++ b/arch/x86/crypto/sm4-aesni-avx2-asm_64.S
+@@@ -282,8 -278,7 +279,7 @@@ SYM_FUNC_END(__sm4_crypt_blk16
+   * void sm4_aesni_avx2_ctr_enc_blk16(const u32 *rk, u8 *dst,
+   *                                   const u8 *src, u8 *iv)
+   */
+- .align 8
+ -SYM_FUNC_START(sm4_aesni_avx2_ctr_enc_blk16)
+ +SYM_TYPED_FUNC_START(sm4_aesni_avx2_ctr_enc_blk16)
+  	/* input:
+  	 *	%rdi: round key array, CTX
+  	 *	%rsi: dst (16 blocks)
+@@@ -395,8 -390,7 +391,7 @@@ SYM_FUNC_END(sm4_aesni_avx2_ctr_enc_blk
+   * void sm4_aesni_avx2_cbc_dec_blk16(const u32 *rk, u8 *dst,
+   *                                   const u8 *src, u8 *iv)
+   */
+- .align 8
+ -SYM_FUNC_START(sm4_aesni_avx2_cbc_dec_blk16)
+ +SYM_TYPED_FUNC_START(sm4_aesni_avx2_cbc_dec_blk16)
+  	/* input:
+  	 *	%rdi: round key array, CTX
+  	 *	%rsi: dst (16 blocks)
+@@@ -449,8 -443,7 +444,7 @@@ SYM_FUNC_END(sm4_aesni_avx2_cbc_dec_blk
+   * void sm4_aesni_avx2_cfb_dec_blk16(const u32 *rk, u8 *dst,
+   *                                   const u8 *src, u8 *iv)
+   */
+- .align 8
+ -SYM_FUNC_START(sm4_aesni_avx2_cfb_dec_blk16)
+ +SYM_TYPED_FUNC_START(sm4_aesni_avx2_cfb_dec_blk16)
+  	/* input:
+  	 *	%rdi: round key array, CTX
+  	 *	%rsi: dst (16 blocks)
+
+--Sig_/xGg3BgsRxwqPA.oNe7gxZDF
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOEDxMACgkQAVBC80lX
+0GwMGwgAge2NkOZEXniXUJgME6xyJk1Xt5TH0JZGjj0rrBKpZNK4egIeubx0do4s
+tb+wdjnkKepVDjMlj6yrK8LEuGKSQTCpjjl4lYccZWinmbAJI7zDw/JO87ZTkmCq
+JtJ2t31VH5Hw0mZbyO91+mMS2seR6/MGnLYUNF3+WFX7bQNPW9l3LMnMHSO61XkZ
+onhS6XWUHlegU1l2tbgT1SP177GU/D1L5LNzWWM64Kv6rpHabuzLpyieE83C46I3
+52oqzSjT8Q70Sq1Uns/uigzpqB7ylXNMpn44MatXE87vb1ea0vRxg/+a8ep1hqGB
+rPhvTHmzz7omg/I6Qvnp1pNA+J4cfA==
+=2waI
+-----END PGP SIGNATURE-----
+
+--Sig_/xGg3BgsRxwqPA.oNe7gxZDF--
