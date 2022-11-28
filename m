@@ -2,54 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C34763ADED
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:39:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EFB963ADEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbiK1QjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 11:39:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34676 "EHLO
+        id S232756AbiK1QjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 11:39:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232494AbiK1QjN (ORCPT
+        with ESMTP id S232759AbiK1QjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 11:39:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB59824F2B;
-        Mon, 28 Nov 2022 08:39:12 -0800 (PST)
+        Mon, 28 Nov 2022 11:39:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842B124F3E
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 08:39:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 955BCB80E1B;
-        Mon, 28 Nov 2022 16:39:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECD5DC433D6;
-        Mon, 28 Nov 2022 16:39:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21ABE6124B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 16:39:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA245C433C1;
+        Mon, 28 Nov 2022 16:39:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669653550;
-        bh=NAGBW7jVQtQ3XhXFNz8vKgIt9eWnUGvhfyXZ1qUgZnE=;
+        s=k20201202; t=1669653557;
+        bh=+RjjnLRA0PH8CYlIY/YFg0sUTEF2nzMQyaZ7sugZIYo=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ccc1tr191aYCv4ZgyhVSrKD1blmbGU6ZtK0HpoY++V/fovAJ3SIxnZtpIYvumwjeo
-         +dJPMxmL+6BNVvwMnwx+pLJbUTuPiRVGoTudnOXhHYfhfP2JJ/Rd3l6KJqIuy4ulgO
-         qq7ULwboAKe/MkUx47L0IcIo2/Ug+vjb5/RMQIutzlfoajZrsKtPEJEeBzpWq0hjwx
-         0gRJ/3N2jJwDKqyri3mmlIK0K/FSv5ectpmXZs1TgNBn40JbXn2ccf4LnRmX3Sds0W
-         e9XewrNdHEhJUFsbWgoUUAq8fhdBDT08Ld29I/0cwcR1xzFiOQCdjpZwW1H7Fz168P
-         I0wtHr3BabEng==
+        b=JhANnu9z5ZuAosDh25F5kpHEJXhjyuzHPJaWxhZo9rvSZdNYotJ4h2n+S/YkowGCR
+         RQez6rjW/CEAfvsWdtWwO1D8m71nTp9ir7lbwknHvYjChSciVNprWJzR9LN1nTGvPo
+         Y+e81bnqbDtH6NaNaPG0JUJQ1m7O796X6yddRn1asQctb3a97k0wwCVWDmoTDovFX6
+         wsQjqPpB/IYyTkCB8TrcEaUOhcBMbuNjrrvNbiDFmhmxMpV6vmvajQ4pO8/tRp98Hq
+         GQq5cjW/2wlHxjHs37xTWhzT/0PQNM1U4HgXmWPkJUJu7VDvd8XRufzOZ5XI1Yr6EU
+         CGi5PgF10k8wQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.de>
+Cc:     Daniel Baluta <daniel.baluta@nxp.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     quic_srivasam@quicinc.com, quic_plai@quicinc.com
-In-Reply-To: <20221115120235.167812-1-krzysztof.kozlowski@linaro.org>
-References: <20221115120235.167812-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 00/11] ASoC: dt-bindings: Rework Qualcomm APR/GPR Sound nodes for SM8450
-Message-Id: <166965354669.629583.1450673554092513884.b4-ty@kernel.org>
-Date:   Mon, 28 Nov 2022 16:39:06 +0000
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>
+In-Reply-To: <20221127193549.211bf8f7@endymion.delvare>
+References: <20221127193549.211bf8f7@endymion.delvare>
+Subject: Re: [PATCH] ASoC: SOF: Drop obsolete dependency on COMPILE_TEST
+Message-Id: <166965355561.629583.9704123228167531546.b4-ty@kernel.org>
+Date:   Mon, 28 Nov 2022 16:39:15 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -63,17 +59,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022 13:02:24 +0100, Krzysztof Kozlowski wrote:
-> Changes since v1
-> ================
-> 1. Patch 2: Keep compatibles in qcom,apr.yaml.
-> 2. Patch 3: New patch.
+On Sun, 27 Nov 2022 19:35:49 +0100, Jean Delvare wrote:
+> Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+> is possible to test-build any driver which depends on OF on any
+> architecture by explicitly selecting OF. Therefore depending on
+> COMPILE_TEST as an alternative is no longer needed.
 > 
-> Description
-> ===========
-> Adding sound support for Qualcomm SM8450 SoC (and later for SC8280XP) brought
-> some changes to APR/GPR services bindings.  These bindings are part of
-> qcom,apr.yaml:
+> It is actually better to always build such drivers with OF enabled,
+> so that the test builds are closer to how each driver will actually be
+> built on its intended target. Building them without OF may not test
+> much as the compiler will optimize out potentially large parts of the
+> code. In the worst case, this could even pop false positive warnings.
+> Dropping COMPILE_TEST here improves the quality of our testing and
+> avoids wasting time on non-existent issues.
 > 
 > [...]
 
@@ -83,28 +81,8 @@ Applied to
 
 Thanks!
 
-[01/11] ASoC: dt-bindings: qcom,apr: Add GLINK channel name for SM8450
-        commit: 0dd3618e06f86bbdacad3a40b25bf79b8917000c
-[02/11] ASoC: dt-bindings: qcom,apr: Split services to shared schema
-        commit: 41288c30583646e2b4158c75ccdbddc62597e1fa
-[03/11] ASoC: dt-bindings: qcom,apr: Correct and extend example
-        commit: cd9ba3d065bb94f3c20e36ed400269a285bfa46d
-[04/11] ASoC: dt-bindings: qcom,q6afe: Split to separate schema
-        commit: 3e9c0c86267377f1404bc55051f476a0456dcced
-[05/11] ASoC: dt-bindings: qcom,q6apm: Split to separate schema
-        commit: 6180b3252010f7cccdef896faf305456df4c45cf
-[06/11] ASoC: dt-bindings: qcom,q6adm: Split to separate schema
-        commit: f26a776ea5ea22b5a92b0619af54d202e4027524
-[07/11] ASoC: dt-bindings: qcom,q6asm: Split to separate schema
-        commit: 83c8fa5e85e556e6aa3e95e7070ef738964ebd17
-[08/11] ASoC: dt-bindings: qcom,q6prm: Split to separate schema
-        commit: 8009abe0f14052bbfadcdaba7887226b40dfdb51
-[09/11] ASoC: dt-bindings: qcom,q6core: Split to separate schema
-        commit: 7eea2bed3602a2b2e71146e0110d42f6edf917f5
-[10/11] ASoC: dt-bindings: qcom,q6apm-lpass-dais: Split to separate schema
-        commit: 8c7ac825481602e356d96db9424b4d4e23a6a1d3
-[11/11] ASoC: dt-bindings: qcom,q6apm: Add SM8450 bedais node
-        commit: b386acc043f44a730d5117b71b75e818cede21cc
+[1/1] ASoC: SOF: Drop obsolete dependency on COMPILE_TEST
+      commit: 11e87890dab52d14af2b2f3945835ec6db473e3b
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
