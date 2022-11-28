@@ -2,77 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F76163AB1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 134A863AB24
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbiK1OgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 09:36:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
+        id S231739AbiK1OhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 09:37:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbiK1OgA (ORCPT
+        with ESMTP id S232045AbiK1Og5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:36:00 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EA31DA7D;
-        Mon, 28 Nov 2022 06:35:59 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669646156;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lf6RK+eqIHb1J2ty81VlA4y2Vc4xkcP9Z5vqkCNM+LU=;
-        b=gFwnuOCpQZBSuLNYLW1cOmKa8cXKKJkubkXZf7S2CgjAm8HaykgXt52jEahhsttbEqC+d6
-        scSto+IoEBs9LTmxCM57PAaW5/G2uTOedvfJ2PRwgx6LTOg82K8KVkgViGbdjArCeQzdLh
-        g2dm7FJtiQwq1sfbfQYPrCHwlq8fqDib03amWRo+Fr73xCqieWconC1Wh2Vu+fn60GWZvC
-        VMPGX7Y1BX8LHLaWFobjUPEqPd+xWnPnbAvG/orZH23WZaoKBhBd9Nea0A7zORRtH3P9/B
-        Obn3eFlJfmyK6YAnH1dzMxqUzFGLBc3oax8Sql5fSbmcMvpOyrkHTDu5MlDcEQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669646156;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lf6RK+eqIHb1J2ty81VlA4y2Vc4xkcP9Z5vqkCNM+LU=;
-        b=rYaUqJdcCD1QSqwfyP8fyBJ9BJPNsbJe405w0GU+QqwQq6JxJEJYNqT20GdihHKgGwsSXG
-        eq12MHRJfhYt9eCA==
-To:     Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>,
-        "john.stultz@linaro.org" <john.stultz@linaro.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "syzkaller@googlegroups.com" <syzkaller@googlegroups.com>,
-        Paul Gazzillo <Paul.Gazzillo@ucf.edu>,
-        linux-ext4@vger.kernel.org, Theodore Tso <tytso@google.com>
-Subject: Re: Syzkaller found a bug: KASAN: slab-out-of-bounds Write in
- enqueue_timer
-In-Reply-To: <BN6PR07MB3185B8E16A4AA1EE384B2375AB0C9@BN6PR07MB3185.namprd07.prod.outlook.com>
-References: <BN6PR07MB3185B8E16A4AA1EE384B2375AB0C9@BN6PR07MB3185.namprd07.prod.outlook.com>
-Date:   Mon, 28 Nov 2022 15:35:56 +0100
-Message-ID: <875yezw3hv.ffs@tglx>
+        Mon, 28 Nov 2022 09:36:57 -0500
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5978A1E3C9;
+        Mon, 28 Nov 2022 06:36:57 -0800 (PST)
+Received: by mail-pl1-f174.google.com with SMTP id y17so2430988plp.3;
+        Mon, 28 Nov 2022 06:36:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2tfGJ688yw66/5+c/tC+iEpvYaVIiyqra5EJQGq6yW0=;
+        b=THpMDmRnWZdTY5f6irzQmpEPD4/tR78MeeDpj6DaraTF9WmnyroYnsN4AcWMnxfp/5
+         USigBlCRaoG9FmiL6IOXP8u88gUMl+lg8EmE5MAD4WN+VED72B7XOo1nDo2hPtsKZr0V
+         4Qdj9kSXKbXHeOrQKEINVSbX6mcnUIqrW1QLA2RWqh4d0gMDDOVx0AS3UZNG7r9GEVXB
+         RQ3qkFGq3vi9G1PZ2d5U3pBfqVvfjbTWyArW4RfzFPJtg1x8T6jMAqj9lZspyu4hWhou
+         kl656nLBoCeB+vyNOetbyI2Lm51sSPj65Xn0F6GkDEcBAzACH8LF+WUllN2vKK0TG5ou
+         h4Pw==
+X-Gm-Message-State: ANoB5pnUEaO30OYoLT7+vkHFJsMOdSWIx1QTLJ7iNmAz0KFDyNYvpjqD
+        Rp3cHX5crWUkBBT9lrltMlvfC96B12xuKETaR7TZ4ah01oLO7Q==
+X-Google-Smtp-Source: AA0mqf71NiCmueKGbVL7eIHIYR822P/A0exOdsRXjEcjJAEpb2yA2syOqwKfhDRGpYN4qf3CBZi4D5hSrudyEHiFHAg=
+X-Received: by 2002:a17:90a:77cc:b0:219:1747:f19c with SMTP id
+ e12-20020a17090a77cc00b002191747f19cmr13715759pjs.222.1669646216859; Mon, 28
+ Nov 2022 06:36:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-5-mailhol.vincent@wanadoo.fr>
+ <Y4S7LB0ThF4jZ0Bj@lunn.ch>
+In-Reply-To: <Y4S7LB0ThF4jZ0Bj@lunn.ch>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Mon, 28 Nov 2022 23:36:45 +0900
+Message-ID: <CAMZ6RqJjq795FyvSSuro1y+x2z+K6o6aasPTgajxKC1b4ECOLg@mail.gmail.com>
+Subject: Re: [PATCH v4 4/6] can: etas_es58x: remove es58x_get_product_info()
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Saeed Mahameed <saeed@kernel.org>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Lukas Magel <lukas.magel@posteo.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23 2022 at 18:48, Sanan Hasanov wrote:
-
-> Good day, dear maintainers,
+On Mon. 28 Nov. 2022 at 22:47, Andrew Lunn <andrew@lunn.ch> wrote:
+> On Sun, Nov 27, 2022 at 01:22:09AM +0900, Vincent Mailhol wrote:
+> > Now that the product information is available under devlink, no more
+> > need to print them in the kernel log. Remove es58x_get_product_info().
+> >
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 >
-> We found a bug using a modified kernel configuration file used by syzbot.
->
-> We enhanced the coverage of the configuration file using our tool, klocalizer.
->
-> Kernel branch: linux-next 5.11.0+ (HEAD detached at a68aa48d4ed8)
+> There is a slim chance this will break something paring the kernel
+> log, but you are not really supposed to do that.
 
-This is a random linux-next commit from Feb 26 2021.
+Greg made it clear that this should disappear:
+  https://lore.kernel.org/linux-can/Y2YdH4dd8u%2FeUEXg@kroah.com/
+and I agree.
 
-How is this useful and relevant?
+I do not recognize the kernel log as being a stable interface to the
+userland that we should not break.
 
-Thanks,
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-        tglx
+Thank you!
