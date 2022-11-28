@@ -2,141 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 462D863A2AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B4963A2B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:20:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbiK1IT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 03:19:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
+        id S229898AbiK1IUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 03:20:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiK1ITx (ORCPT
+        with ESMTP id S229972AbiK1ITy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 03:19:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71C31180E;
-        Mon, 28 Nov 2022 00:18:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8142460FE7;
-        Mon, 28 Nov 2022 08:18:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEA40C43470;
-        Mon, 28 Nov 2022 08:18:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669623533;
-        bh=8fvSqyC5O7kIfnW0Kyq33j5dit6Z5CFYOeb+1myKFss=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jylfX3gRUDIRl78mcgXqXQ3hPGGqN6r0iGnar94bW6COLNIN6I5XdxgDk8oM0qrAx
-         Lnj4SrwhzfbRP8ECsTg4ZihP4FG0a+32QTIQkutFWb28sv9POIo3dh0oBr1P/SLeP4
-         bHtXKOfipeUdemaf8YGKIS4BGWaavB79/qMzHuZFH7TUUeEauWUAzs630Ti/k7BIUN
-         xia+PHCdapvTeDHldeCe2YRouwErxoTAB8/KUSPJ1VL+HzoIlzgKF/xMocoNCDCcKR
-         4wET1oBSGtjids0dhr7OEVaj/vzerKnjmZJGYwmXezKDBd2ezLEm60iNjRlSW4DTLj
-         Fki0XgEHYWcQA==
-Received: by mail-ej1-f54.google.com with SMTP id b2so7509576eja.7;
-        Mon, 28 Nov 2022 00:18:53 -0800 (PST)
-X-Gm-Message-State: ANoB5plSl4h59le3ccIgzzM8Hw0/JiEQoZzGrNrg968nUC/QFNS6PjQ5
-        y9ae2CAtbo2yaRASQO+2WuKU2AWVEge2je4ygkc=
-X-Google-Smtp-Source: AA0mqf4+1cmRwSticidoMDLfF2SOB4WXxmURJljOM3sqd+ULavDUaLn5tkZ9YGNeduJcF2Uo7T2lIG95LDpRA7MUUBA=
-X-Received: by 2002:a17:907:9856:b0:780:8144:a41f with SMTP id
- jj22-20020a170907985600b007808144a41fmr43519094ejc.189.1669623532033; Mon, 28
- Nov 2022 00:18:52 -0800 (PST)
+        Mon, 28 Nov 2022 03:19:54 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C267F13F80;
+        Mon, 28 Nov 2022 00:18:59 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AS6KALw016693;
+        Mon, 28 Nov 2022 08:18:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=3ZlcKzcq2aPY79XtwvYIcoDL334lDVsqNBpgbBmrhfk=;
+ b=pzMxUbfcMiSvMv1RCRBoJ2pW463WWIhpBDGYZsCSQ0hFPNv28/czW9qK1jnTqWOhudaJ
+ 4SSzRlQUuXMmZKFnZgjfS/oEjRD+9WfEqu3YK8g8X4pKvfgtz8bF0dLqJkMR1voYXAmh
+ Qj2R3E2g8Aqxxa1QttnSP29fDoXRkRP2H+onvBN6uOyNBGOesdLznXCOSwqgIDHDQU7/
+ aKENWEWNO7KXwVCaXcuX3HpTq8Qg+MgkfvdPiF1oIaMmKSr0NHFSv8xfyfYEjv0JhZTZ
+ gLQUinl301STIgMUloWWe+WNF662pyJRw4/MXSESy2tObH4AeHSxzRo4nysy6bkNzw36 7A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m3vmr9nmw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 08:18:52 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AS89Edf014435;
+        Mon, 28 Nov 2022 08:18:52 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m3vmr9nm6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 08:18:52 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AS85BfP017431;
+        Mon, 28 Nov 2022 08:18:49 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 3m3ae9a5w0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 08:18:49 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AS8IkHR37290388
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Nov 2022 08:18:46 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8C54E42042;
+        Mon, 28 Nov 2022 08:18:46 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 098484203F;
+        Mon, 28 Nov 2022 08:18:46 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.84.206])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 28 Nov 2022 08:18:45 +0000 (GMT)
+Date:   Mon, 28 Nov 2022 09:18:44 +0100
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Subject: Re: [PATCH] s390/mm: Use pmd_pgtable_page() helper in
+ __gmap_segment_gaddr()
+Message-ID: <Y4Ru5Cnz+yps7RST@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <20221125034502.1559986-1-anshuman.khandual@arm.com>
+ <Y4IvaRNLmASfRJiZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <d3bcb8e1-cbf0-e820-47cf-f455128c597a@arm.com>
+ <Y4Rflp1Z48hp/OAb@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <28b976dd-3d12-3f2c-9b70-a5423255943e@arm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <28b976dd-3d12-3f2c-9b70-a5423255943e@arm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: i9QB9KPSkBca30NmWvQWdzvnptN-URJ3
+X-Proofpoint-ORIG-GUID: UqlFqcRABGtMyGTgkQ6MDDEWT0tayKnL
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20220714084136.570176-1-chenhuacai@loongson.cn>
- <20220714084136.570176-3-chenhuacai@loongson.cn> <CAAhV-H7uF85UHfbS+-sMcXbB=q3UO0Z8rO=poNQbEtaipi4PHQ@mail.gmail.com>
-In-Reply-To: <CAAhV-H7uF85UHfbS+-sMcXbB=q3UO0Z8rO=poNQbEtaipi4PHQ@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 28 Nov 2022 16:18:40 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTT82uNmjfDcMrSodssZWsMSrN_476s03QCv__kmQH-6GQ@mail.gmail.com>
-Message-ID: <CAJF2gTT82uNmjfDcMrSodssZWsMSrN_476s03QCv__kmQH-6GQ@mail.gmail.com>
-Subject: Re: [PATCH V2 3/3] SH: cpuinfo: Fix a warning for CONFIG_CPUMASK_OFFSTACK
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-28_06,2022-11-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ priorityscore=1501 mlxlogscore=586 impostorscore=0 mlxscore=0 bulkscore=0
+ phishscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211280063
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 2:25 PM Huacai Chen <chenhuacai@gmail.com> wrote:
->
-> ping?
-Who can test?
+On Mon, Nov 28, 2022 at 01:13:45PM +0530, Anshuman Khandual wrote:
+> >>>> index e9e387caffac..5ead9e997510 100644
+> >>>> --- a/include/linux/mm.h
+> >>>> +++ b/include/linux/mm.h
+> >>>> @@ -2403,7 +2403,7 @@ static inline void pgtable_pte_page_dtor(struct page *page)
+> >>>>  
+> >>>>  #if USE_SPLIT_PMD_PTLOCKS
+> >>>>  
+> >>>> -static struct page *pmd_pgtable_page(pmd_t *pmd)
+> >>>> +static inline struct page *pmd_pgtable_page(pmd_t *pmd)
+> >>>>  {
+> >>>>  	unsigned long mask = ~(PTRS_PER_PMD * sizeof(pmd_t) - 1);
+> >>>>  	return virt_to_page((void *)((unsigned long) pmd & mask));
+> >>>
+> >>> This chunk does not appear to belong to this patch.
+> >>
+> >> Should not this helper be made a 'static inline' before using it else where ?
+> > 
+> > Probably yes, but it is not kvm s390-specific change.
+> 
+> Right, just that the s390 change here is the first instance where this helper
+> is being used outside the header, hence kept them together.
+> 
+> > 
+> > I guess, you wanted to make it together or as a follow-up to this one?
+> > https://lore.kernel.org/all/20221124131641.1523772-1-anshuman.khandual@arm.com/
+> > 
+> Unless too much trouble, could we just keep it here as proposed.
 
->
-> On Thu, Jul 14, 2022 at 4:42 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> >
-> > When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
-> > cpu_max_bits_warn() generates a runtime warning similar as below while
-> > we show /proc/cpuinfo. Fix this by using nr_cpu_ids (the runtime limit)
-> > instead of NR_CPUS to iterate CPUs.
-> >
-> > [    3.052463] ------------[ cut here ]------------
-> > [    3.059679] WARNING: CPU: 3 PID: 1 at include/linux/cpumask.h:108 show_cpuinfo+0x5e8/0x5f0
-> > [    3.070072] Modules linked in: efivarfs autofs4
-> > [    3.076257] CPU: 0 PID: 1 Comm: systemd Not tainted 5.19-rc5+ #1052
-> > [    3.099465] Stack : 9000000100157b08 9000000000f18530 9000000000cf846c 9000000100154000
-> > [    3.109127]         9000000100157a50 0000000000000000 9000000100157a58 9000000000ef7430
-> > [    3.118774]         90000001001578e8 0000000000000040 0000000000000020 ffffffffffffffff
-> > [    3.128412]         0000000000aaaaaa 1ab25f00eec96a37 900000010021de80 900000000101c890
-> > [    3.138056]         0000000000000000 0000000000000000 0000000000000000 0000000000aaaaaa
-> > [    3.147711]         ffff8000339dc220 0000000000000001 0000000006ab4000 0000000000000000
-> > [    3.157364]         900000000101c998 0000000000000004 9000000000ef7430 0000000000000000
-> > [    3.167012]         0000000000000009 000000000000006c 0000000000000000 0000000000000000
-> > [    3.176641]         9000000000d3de08 9000000001639390 90000000002086d8 00007ffff0080286
-> > [    3.186260]         00000000000000b0 0000000000000004 0000000000000000 0000000000071c1c
-> > [    3.195868]         ...
-> > [    3.199917] Call Trace:
-> > [    3.203941] [<90000000002086d8>] show_stack+0x38/0x14c
-> > [    3.210666] [<9000000000cf846c>] dump_stack_lvl+0x60/0x88
-> > [    3.217625] [<900000000023d268>] __warn+0xd0/0x100
-> > [    3.223958] [<9000000000cf3c90>] warn_slowpath_fmt+0x7c/0xcc
-> > [    3.231150] [<9000000000210220>] show_cpuinfo+0x5e8/0x5f0
-> > [    3.238080] [<90000000004f578c>] seq_read_iter+0x354/0x4b4
-> > [    3.245098] [<90000000004c2e90>] new_sync_read+0x17c/0x1c4
-> > [    3.252114] [<90000000004c5174>] vfs_read+0x138/0x1d0
-> > [    3.258694] [<90000000004c55f8>] ksys_read+0x70/0x100
-> > [    3.265265] [<9000000000cfde9c>] do_syscall+0x7c/0x94
-> > [    3.271820] [<9000000000202fe4>] handle_syscall+0xc4/0x160
-> > [    3.281824] ---[ end trace 8b484262b4b8c24c ]---
-> >
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >  arch/sh/kernel/cpu/proc.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/sh/kernel/cpu/proc.c b/arch/sh/kernel/cpu/proc.c
-> > index a306bcd6b341..5f6d0e827bae 100644
-> > --- a/arch/sh/kernel/cpu/proc.c
-> > +++ b/arch/sh/kernel/cpu/proc.c
-> > @@ -132,7 +132,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
-> >
-> >  static void *c_start(struct seq_file *m, loff_t *pos)
-> >  {
-> > -       return *pos < NR_CPUS ? cpu_data + *pos : NULL;
-> > +       return *pos < nr_cpu_ids ? cpu_data + *pos : NULL;
-> >  }
-> >  static void *c_next(struct seq_file *m, void *v, loff_t *pos)
-> >  {
-> > --
-> > 2.31.1
-> >
+For s390 part:
 
+Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
 
-
--- 
-Best Regards
- Guo Ren
+Thanks!
