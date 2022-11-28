@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A1D63A925
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9CF963A91E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbiK1NOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:14:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40018 "EHLO
+        id S231565AbiK1NNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:13:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231510AbiK1NNh (ORCPT
+        with ESMTP id S231470AbiK1NNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 08:13:37 -0500
+        Mon, 28 Nov 2022 08:13:36 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DDB1CFCF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DEFE66;
         Mon, 28 Nov 2022 05:13:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1669641215; x=1701177215;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=C8o1EqWi47EMS3NLEboiqwaO6Cqj8PqboSa/beXp5NY=;
-  b=CIquFBhoaOO+JcnTLi7Rt1q5gZb9/AhDXDPV2ooUICbRVFq3AHQFlfSD
-   WoyyIfAMrneTWaWYNTpYjfhLsB+y/nk+cVRBnNqKoOp2lOgePfoZGw9Eo
-   9ysUk4bmTWUaPYoxRJ/QPmaY4QPZ7LCBei/RpGL09Wzzq62QTeGvXUQH0
-   VEWBACqkmUvgwONsKSMr/FNFreA2nu+2lwo2Gjv6GjtpINguY9QUm++bO
-   St+BlwWawy1G8AhdGmg491/qACjerpzgug7iF9Tz4rIk2fSJL0eQ1Y0zn
-   kU2NA5JTmZF5apbH9lPXpX6NvQiyrZHSNES3n2f1Rh8P7w0QwrjnBT+K9
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="401117084"
+  bh=IPfAz2o04h3wMx9MPOZMNtyWtq/ctVtFFpyHR+YbVE4=;
+  b=MFqN/Seue60Te17UU6g1FX7dvMqWh65ZFIrG2uEvFCXNdZg+iMovFME0
+   aoiqctpQnp2v+2eGPxRaiZVWzq3FsUh1kE2qwAw4DpOXYdCoPbnEEpKuu
+   K7iRKfzBJQnovxtDG9zZ560tt6wogH3U4R/kjTND/cWPopURCK4PFB1rC
+   GA3marC4rnpWf9pQODn8DBQHUNMdZboRjCj/wlKvAfRtDaIY1IWvgrDhC
+   iAqtbXGDZSzo0IIq3qcOvy+Ui+NeQadxix1PtZEk2Jf+yo4baPCIpwYSL
+   fxHOHSXSmOwfde7g6Ihtw8E4IQ4LGqPbTeRdBBabhKapvm7wzJbO5r1Kf
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="401117095"
 X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="401117084"
+   d="scan'208";a="401117095"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 05:13:32 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="749381335"
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="749381339"
 X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="749381335"
+   d="scan'208";a="749381339"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by fmsmga002.fm.intel.com with ESMTP; 28 Nov 2022 05:13:32 -0800
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -58,9 +58,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [PATCH v2 04/22] sched/core: Add user_tick as argument to scheduler_tick()
-Date:   Mon, 28 Nov 2022 05:20:42 -0800
-Message-Id: <20221128132100.30253-5-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v2 05/22] sched/core: Update the IPC class of the current task
+Date:   Mon, 28 Nov 2022 05:20:43 -0800
+Message-Id: <20221128132100.30253-6-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
 References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
@@ -73,8 +73,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Differentiate between user and kernel ticks so that the scheduler updates
-the IPC class of the current task during the latter.
+When supported, hardware monitors the instruction stream to classify the
+current task. Hence, at userspace tick, we are ready to read the most
+recent classification result for the current task.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -93,52 +94,26 @@ Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v1:
- * None
+ * Removed argument smt_siblings_idle from call to arch_ipcc_update().
+ * Used the new IPCC interfaces names.
 ---
- include/linux/sched.h | 2 +-
- kernel/sched/core.c   | 2 +-
- kernel/time/timer.c   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ kernel/sched/core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 47ae3557ba07..ddabc7449edd 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -293,7 +293,7 @@ enum {
- 	TASK_COMM_LEN = 16,
- };
- 
--extern void scheduler_tick(void);
-+extern void scheduler_tick(bool user_tick);
- 
- #define	MAX_SCHEDULE_TIMEOUT		LONG_MAX
- 
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 8dd43ee05534..8bb6f597c42b 100644
+index 8bb6f597c42b..2cd409536b72 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -5487,7 +5487,7 @@ static inline u64 cpu_resched_latency(struct rq *rq) { return 0; }
-  * This function gets called by the timer code, with HZ frequency.
-  * We call it with interrupts disabled.
-  */
--void scheduler_tick(void)
-+void scheduler_tick(bool user_tick)
- {
- 	int cpu = smp_processor_id();
- 	struct rq *rq = cpu_rq(cpu);
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 63a8ce7177dd..e15e24105891 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -2073,7 +2073,7 @@ void update_process_times(int user_tick)
- 	if (in_irq())
- 		irq_work_tick();
- #endif
--	scheduler_tick();
-+	scheduler_tick(user_tick);
- 	if (IS_ENABLED(CONFIG_POSIX_TIMERS))
- 		run_posix_cpu_timers();
- }
+@@ -5496,6 +5496,9 @@ void scheduler_tick(bool user_tick)
+ 	unsigned long thermal_pressure;
+ 	u64 resched_latency;
+ 
++	if (sched_ipcc_enabled() && user_tick)
++		arch_update_ipcc(curr);
++
+ 	arch_scale_freq_tick();
+ 	sched_clock_tick();
+ 
 -- 
 2.25.1
 
