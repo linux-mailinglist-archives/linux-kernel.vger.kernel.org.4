@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D94A463A010
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 04:24:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 754F163A016
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 04:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbiK1DYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 22:24:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
+        id S229820AbiK1D27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 22:28:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiK1DYw (ORCPT
+        with ESMTP id S229747AbiK1D26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 22:24:52 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5556BCA3
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 19:24:51 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id z4so14766703wrr.3
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 19:24:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6dzHFw1mGm+Rw4TXL5W8A90UrAs/0kqwGAh+X5UIO2I=;
-        b=G/ZjVJk7BAuUyY0Yyj72GVBMagw78ImStDh6+5Dw7RH6NGt/ZOUQKDOiPiBHj3k0C6
-         ViWH3IUlqo1QID2ZGqEiUSIbL5d/C6RAF2CqdQScwRIwM5jqPSAoYbWaISmyWtO1qQ7x
-         HGygHW+ue7FUH8LBVxFfLrwyfV9jyMZOVkQxCo7bRozyWwHlYTufPhseWGcoy17BmKxT
-         6q7wyfv25hYEqJxK3JAco37m0nn/5PpIMyEiAw4N97ZknPQwARdjIVa6jmN9J/7M365D
-         KzYegC5x5P27VzwIe1+RSzGI/vWs0f4Ocq5kUymPFobmJicoKi0D0MHwYal2errtQD7w
-         cJ5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6dzHFw1mGm+Rw4TXL5W8A90UrAs/0kqwGAh+X5UIO2I=;
-        b=WH7JzTE3bJ8kIAXSjL3HKsC82OdvoiUEwyUzLrN/U2b2O6ep12uUDOuF+SgGFHYpnQ
-         /m3DG3wXmo9jeV4EkIdehoKVeqDuAlTvbMV7no57lhfoUyC73kTn/d1cLsmlD/O99yKs
-         vHUwwj2K1SoCIXJWujZmcAMQS9jltHFBVmmTZVr/39cs+JhMe4ToeJiZ2pFDpJyiNTzp
-         qLaxsAZLjDg+n1O17F3zTbZquLDXj6lf+v8NPEtPrwhxkA7DABfv3n0xhk1s2cPgwlzB
-         PlcfccMU+EcrzO1ATsM61/lw6AoCtHi3hz+WF71E2aM1v8dZZ+P9dxSi+ZK3qhnkj3bF
-         DMFg==
-X-Gm-Message-State: ANoB5pmQwUE1jrPpB3WVmpQ44dOBZzfh6VrvTGWHasLGB2kMl60Shoo5
-        LVJesIfYtcaaAjheTqDIkH4D1LwVplCeDvKyd/0KP0zy13c=
-X-Google-Smtp-Source: AA0mqf7VfrRyhor5RlkOBAGx12y1p84qknysU2rv2uBtDA9N57/9zBHGAWsElaePHodR/UDYTC1TTdD2V+dIQpbroKU=
-X-Received: by 2002:a5d:6947:0:b0:242:17a5:ee80 with SMTP id
- r7-20020a5d6947000000b0024217a5ee80mr1309493wrw.628.1669605889758; Sun, 27
- Nov 2022 19:24:49 -0800 (PST)
+        Sun, 27 Nov 2022 22:28:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE550C740
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 19:28:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669606083;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9szJ/bHUVM/RqeT4MKHPahkxnQImAqd4WFTZsdRbYws=;
+        b=cQDkc8S3I5jh0vW82rvN4si9Q787TnFYm0d1AjVLHALj3T+a2kw36YH2SDDb2DKflPSzwg
+        a23QSHgKOBcIgEAUZGnNfhDbvlM07+R2blYBfPe4j19E6KuxD4hTtwfBpoblcE6BCmoIHR
+        CZ+e2OybQYR/PkkTLpv42LEpATDLpV4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-648-RI9nIoAHPwqdd8p2323KfA-1; Sun, 27 Nov 2022 22:28:00 -0500
+X-MC-Unique: RI9nIoAHPwqdd8p2323KfA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D0ED6811E67;
+        Mon, 28 Nov 2022 03:27:59 +0000 (UTC)
+Received: from T590 (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 42E12492B05;
+        Mon, 28 Nov 2022 03:27:54 +0000 (UTC)
+Date:   Mon, 28 Nov 2022 11:27:49 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH RFC] scsi: core: remove unsed 'restarts' from scsi_device
+Message-ID: <Y4QqtbXsuYmkOe88@T590>
+References: <20221118113052.1324140-1-yukuai1@huaweicloud.com>
+ <cefdae2e-67e3-b4b4-f569-31db960e991f@huaweicloud.com>
 MIME-Version: 1.0
-References: <20221123095058.669684-1-richard.xnu.clark@gmail.com> <CAJNi4rMbZZbCCKu-Mth3YF-YubHkcgi=VHsd=FyWc77a54pKYA@mail.gmail.com>
-In-Reply-To: <CAJNi4rMbZZbCCKu-Mth3YF-YubHkcgi=VHsd=FyWc77a54pKYA@mail.gmail.com>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Mon, 28 Nov 2022 11:24:38 +0800
-Message-ID: <CAJhGHyCPbmEY_Azx056ePxO0B-GzUY3KXs3_UT6Z9XUAfVqS0A@mail.gmail.com>
-Subject: Re: [PATCH] workqueue: Remove the unbound release work from the
- per-cpu type
-To:     richard clark <richard.xnu.clark@gmail.com>
-Cc:     tj@kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cefdae2e-67e3-b4b4-f569-31db960e991f@huaweicloud.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,59 +64,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 11:02 AM richard clark
-<richard.xnu.clark@gmail.com> wrote:
->
-> Hi Tejun,
->
-> Would you pls help take a look at this? Or point to someone who is
-> maintaining the workqueue subsystem, I can ping him/her...
->
-> Richard
+On Sat, Nov 26, 2022 at 04:54:46PM +0800, Yu Kuai wrote:
+> Hi,
+> 
+> 在 2022/11/18 19:30, Yu Kuai 写道:
+> > From: Yu Kuai <yukuai3@huawei.com>
+> > 
+> > During code review, I found that 'restarts' is not useful anymore after
+> > the following commits:
+> > 
+> > 1) commit ab3cee3762e5 ("blk-mq: In blk_mq_dispatch_rq_list() "no budget"
+> > is a reason to kick")
+> > 2) commit d3b38596875d ("blk-mq: run queue no matter whether the request
+> > is the last request")
+> > 3) commit 673235f91531 ("scsi: core: Fix race between handling STS_RESOURCE
+> > and completion")
+> > 
+> > Now that if get budget ever failed, block layer will make sure to
+> > trigger new run queue for the hctx. Hence there is no need to run queue
+> > from scsi layer in this case.
+> > 
 
-Hello, Richard
+But scsi_run_queue_async() needs to run all hw queue because budget is
+actually LUN/request queue wide.
 
-Thank you for reviewing the code of workqueue and trying to improve it.
+> 
+> Does anyone has suggestions about this patch?
+> 
+> More info why I tried to remove this:
+> 
+> while testing megaraid with 4 nvme with none elevator, the default
+> queue_depth is 128, while I test it with fio 128 jobs and 1 iodepth,
+> bw is about 4Gib/s, however, if I test with 128 jobs and 2 iodepth,
+> bw is decreased to about 0.8Gib/s, and with this patch applied,
+> bw can stay 4Gib/s in the later case.
 
-But INIT_WORK() has no unwanted effect and it is better to initialize
-the field even if it is unused.
+What is .can_queue and nr_hw_queues in your setting?
 
-The patch would not be accepted.
 
-Thanks.
-Lai
 
->
-> On Wed, Nov 23, 2022 at 5:51 PM Richard Clark
-> <richard.xnu.clark@gmail.com> wrote:
-> >
-> > Both the per-cpu and unbound workqueue will call init_pwq(...) currently,
-> > the latter will init an unbound release work for the pwq which is unnecessary
-> > for the per-cpu type workqueue.
-> > This commit will remove this work item from the per-cpu workqueue by checking the
-> > wq->flags in init_pwq(...), the work is still reserved for the unbound workqueue.
-> >
-> > Signed-off-by: Richard Clark <richard.xnu.clark@gmail.com>
-> > Cc: Tejun Heo <tj@kernel.org>
-> > Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-> > ---
-> >  kernel/workqueue.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-> > index 7cd5f5e7e0a1..01bdfb74081e 100644
-> > --- a/kernel/workqueue.c
-> > +++ b/kernel/workqueue.c
-> > @@ -3807,7 +3807,8 @@ static void init_pwq(struct pool_workqueue *pwq, struct workqueue_struct *wq,
-> >         INIT_LIST_HEAD(&pwq->inactive_works);
-> >         INIT_LIST_HEAD(&pwq->pwqs_node);
-> >         INIT_LIST_HEAD(&pwq->mayday_node);
-> > -       INIT_WORK(&pwq->unbound_release_work, pwq_unbound_release_workfn);
-> > +       if (wq->flags & WQ_UNBOUND)
-> > +               INIT_WORK(&pwq->unbound_release_work, pwq_unbound_release_workfn);
-> >  }
-> >
-> >  /* sync @pwq with the current state of its associated wq and link it */
-> > --
-> > 2.37.2
-> >
+thanks,
+Ming
+
