@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B03F63A486
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 995F263A4A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbiK1JP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 04:15:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
+        id S230281AbiK1JSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 04:18:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiK1JPV (ORCPT
+        with ESMTP id S229773AbiK1JSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 04:15:21 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23839A1AF
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:15:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669626918; x=1701162918;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GhVK2iv9vpjkCJP8+uH/K+u8TFdUdhWlY7FMTn9JVZo=;
-  b=i42+vAz9Zoz6tIqHEIf6VOQe/hEWZnwdFq+5VdNAUfKU1MjHXOePYj4q
-   qtzVnHxDuBzoS9X3AVDppzP9EUpy95hrWwaBv5eJ5jjCjL+r8Ac+diXQ9
-   dDWfplMwbqGhWa4UJf5Jq82JSbMIdJDJVcdUVQw/Z528w96RTpnSKpxzC
-   xmVB1gqSMleHHio3RLMSE+MCmXXRSzD0Fx1yA8H3ocgzL2uykyy7IRIio
-   ZZ+JRUYGtyPW77cuMAagGlf5Af5ZSirBznhMevsOSwJt1iS7rH7Silc6H
-   97gOZ5CJZydeUMuP3QoFglwkKGPqkBI73F8ad9J3uJK4icOCdWU19NUua
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="298141244"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="298141244"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 01:15:12 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="732067347"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="732067347"
-Received: from gluber-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.50.190])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 01:15:08 -0800
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 270C5109780; Mon, 28 Nov 2022 12:15:06 +0300 (+03)
-Date:   Mon, 28 Nov 2022 12:15:06 +0300
-From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/asm: Remove unused COMPILE_OFFSETS macro from
- asm-offsets.c
-Message-ID: <20221128091506.gp4l6klznqhigjxv@box.shutemov.name>
-References: <20221127062335.330758-1-mailhol.vincent@wanadoo.fr>
+        Mon, 28 Nov 2022 04:18:14 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A21316593;
+        Mon, 28 Nov 2022 01:18:13 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id r18so9365587pgr.12;
+        Mon, 28 Nov 2022 01:18:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/Feb+rDQ2TUHy7vsiIgZrVpoXJ3BwUHZoNKPvM18DRQ=;
+        b=DRjbyQQVkwMBzymn3xYCHfd7okxA2weWXWTxujMuJ49eejjp7xlgMLqRHeJvmiHKeD
+         1O/lnHFwDtfuVCctca8K28eJkLt/LQFcTNf+laHYDbnl7wAAJagPAJMJrjZEjg3E4qjh
+         yW9ZIVgzqQp83YOa+ov4mvBt/AQiJ5yxSpEMZa2eogGK5AjzVwxblfaYd04OPRukw7Dl
+         NRxXdaY1aah2mlmD3GISlkcLLnMrEYX6MaJvEqxw9H3efbM2RoQ9P6NHI8EBVhJqwmxA
+         Db3gLDQTMsWUbTzFK+rs7W5xqG3fT4umOZnk/opMTnCa3hMY9pOOvsknGOXfSlOFe5iz
+         HOFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/Feb+rDQ2TUHy7vsiIgZrVpoXJ3BwUHZoNKPvM18DRQ=;
+        b=MY01MMNu+ZaGQ5HEU1LKvQfrS1YTVSIKd2YIXRct/47td5U7BS1l1zT6/meszGwap2
+         QuLK0szTgIZAnt31FT6Idsi9uK3qtlXZJfDgV1/hz71uebSJCCaxafmUxOAcvPRsqvAQ
+         tgrIf6T8XGONKSaRUmvxb+HhfD/g9z6jRqVjbhALSXZ2vcgifGLotU783fnUwAsCxpG/
+         d1prAydSN+AxumLqxGC16tSdrnBUcE4sciC7j3pnNG+/D4YKIKdu67KgjAWgMhIESzWt
+         b4E09CF7JwwTCaBUIqX7oA2Ij3ja2TCtnGFmkVQg812qn2cxKTlnu/m84jQ9srVX+N4N
+         DDLg==
+X-Gm-Message-State: ANoB5pm4B9x9Lj69ARzvEmjgtCWpZoveErkm1muhAOiToamjmK2AhD7A
+        /pKHMjRiw1Touv0vGQt0sCTc5QgMOEDodQ==
+X-Google-Smtp-Source: AA0mqf4EK9DMCm3fb5V4Imq/zUb/N0OLeysWws6LBrnMA+VOMME0i903EdQvZMZPlu2ITu+TivXCTQ==
+X-Received: by 2002:a63:d43:0:b0:477:66b9:341b with SMTP id 3-20020a630d43000000b0047766b9341bmr27065316pgn.130.1669627092628;
+        Mon, 28 Nov 2022 01:18:12 -0800 (PST)
+Received: from [192.168.0.169] (c-71-202-83-242.hsd1.ca.comcast.net. [71.202.83.242])
+        by smtp.gmail.com with ESMTPSA id x127-20020a626385000000b0057409583c09sm7534224pfb.163.2022.11.28.01.18.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 01:18:12 -0800 (PST)
+Message-ID: <a40d32e5-f310-b485-d789-1d99a547e3e8@gmail.com>
+Date:   Mon, 28 Nov 2022 01:18:11 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221127062335.330758-1-mailhol.vincent@wanadoo.fr>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH V2 1/3] Input: elantech - Remove redundant field
+ elantech_data::y_max
+To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-input@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20221014111533.908-1-nyanpasu256@gmail.com>
+ <20221014111533.908-2-nyanpasu256@gmail.com> <87sfjqzh3f.fsf@baylibre.com>
+Content-Language: en-US
+From:   Eirin Nya <nyanpasu256@gmail.com>
+In-Reply-To: <87sfjqzh3f.fsf@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,45 +77,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 27, 2022 at 03:23:35PM +0900, Vincent Mailhol wrote:
-> Following [1], the macro COMPILE_OFFSETS becomes unused:
+Hi,
 
-Really? I see #ifdef COMPILE_OFFSETS in ftrace.h. Hm?
+Is there any progress on incorporating this patch into mainline Linux?
+Every time my rolling distro updates its kernel minor/patch version, I
+get a broken touchpad until I rebase and reapply my patch, then
+rebuild and install the psmouse kernel module. I've had to do this so
+many times I wrote a script to automate this process for new kernel
+patch versions (and have to fix the script for new minor/major
+versions since I didn't figure out string parsing in Bash, or if I
+switched Linux distros).
 
-Have you tested your patch with CONFIG_FTRACE_SYSCALLS=y and
-CONFIG_IA32_EMULATION=y?
+Thanks,
+Eirin
 
->   $ make W=2 arch/x86/kernel/asm-offsets.o
->   <...>
->   arch/x86/kernel/asm-offsets.c:7: warning: macro "COMPILE_OFFSETS" is not used [-Wunused-macros]
->   <...>
+On 10/14/22 6:10 AM, Mattijs Korpershoek wrote:
+> On Fri, Oct 14, 2022 at 04:15, Eirin Nya <nyanpasu256@gmail.com> wrote:
 > 
-> Remove COMPILE_OFFSETS macro.
+>> elantech_data::y_max is copied from elantech_device_info::y_max, and
+>> neither is mutated after initialization. So remove the redundant
+>> variable to prevent future bugs when updating y_max.
+>>
+>> Signed-off-by: Eirin Nya <nyanpasu256@gmail.com>
 > 
-> [1] commit debc5a1ec0d1 ("KVM: x86: use a separate asm-offsets.c file")
->     Link: https://git.kernel.org/torvalds/linux/c/debc5a1ec0d1
+> Hi Eirin,
 > 
-> Fixes: debc5a1ec0d1 ("KVM: x86: use a separate asm-offsets.c file")
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
->  arch/x86/kernel/asm-offsets.c | 1 -
->  1 file changed, 1 deletion(-)
+> Thank you for v2. I know you're new to kernel development so here is
+> some more "process feedback".
 > 
-> diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
-> index 437308004ef2..cf2e02bafbef 100644
-> --- a/arch/x86/kernel/asm-offsets.c
-> +++ b/arch/x86/kernel/asm-offsets.c
-> @@ -4,7 +4,6 @@
->   * This code generates raw asm output which is post-processed to extract
->   * and format the required data.
->   */
-> -#define COMPILE_OFFSETS
->  
->  #include <linux/crypto.h>
->  #include <linux/sched.h>
-> -- 
-> 2.37.4
+> I've already reviewed this in v1:
+> https://lore.kernel.org/all/87ilkv7ogc.fsf@mkorpershoek-xps-13-9370.home/
 > 
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+> After getting a "Reviewed-by" reply on one of the patches, it is
+> customary to add that in the commit message footer, if the patch is
+> unchanged. This encourages reviewers and gives them some credit for
+> their review :)
+> 
+> This is documented at:
+> https://www.kernel.org/doc/html/latest/process/submitting-patches.html#reviewer-s-statement-of-oversight
+> 
+> To quote the doc:
+>> Both Tested-by and Reviewed-by tags, once received on mailing list from
+>> tester or reviewer, should be added by author to the applicable patches
+>> when sending next versions.
+> 
+> So please, if you have to send a v3 at some point, please add:
+> 
+> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+> 
+> Note that it's not needed to send a v3 *JUST* to include the trailers.
+> The maintainer will pick them up if he decides to merge this.
+> 
+>> ---
+>>  drivers/input/mouse/elantech.c | 17 ++++++++---------
+>>  drivers/input/mouse/elantech.h |  1 -
+>>  2 files changed, 8 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/input/mouse/elantech.c b/drivers/input/mouse/elantech.c
+>> index ece97f8c6a..79e31611fc 100644
+>> --- a/drivers/input/mouse/elantech.c
+>> +++ b/drivers/input/mouse/elantech.c
+>> @@ -360,7 +360,7 @@ static void elantech_report_absolute_v1(struct psmouse *psmouse)
+>>  		input_report_abs(dev, ABS_X,
+>>  			((packet[1] & 0x0c) << 6) | packet[2]);
+>>  		input_report_abs(dev, ABS_Y,
+>> -			etd->y_max - (((packet[1] & 0x03) << 8) | packet[3]));
+>> +			etd->info.y_max - (((packet[1] & 0x03) << 8) | packet[3]));
+>>  	}
+>>  
+>>  	input_report_key(dev, BTN_TOOL_FINGER, fingers == 1);
+>> @@ -435,7 +435,7 @@ static void elantech_report_absolute_v2(struct psmouse *psmouse)
+>>  		 * byte 4:  .   .   .   .  y11 y10 y9  y8
+>>  		 * byte 5: y7  y6  y5  y4  y3  y2  y1  y0
+>>  		 */
+>> -		y1 = etd->y_max - (((packet[4] & 0x0f) << 8) | packet[5]);
+>> +		y1 = etd->info.y_max - (((packet[4] & 0x0f) << 8) | packet[5]);
+>>  
+>>  		pres = (packet[1] & 0xf0) | ((packet[4] & 0xf0) >> 4);
+>>  		width = ((packet[0] & 0x30) >> 2) | ((packet[3] & 0x30) >> 4);
+>> @@ -450,7 +450,7 @@ static void elantech_report_absolute_v2(struct psmouse *psmouse)
+>>  		 */
+>>  		x1 = (((packet[0] & 0x10) << 4) | packet[1]) << 2;
+>>  		/* byte 2: ay7 ay6 ay5 ay4 ay3 ay2 ay1 ay0 */
+>> -		y1 = etd->y_max -
+>> +		y1 = etd->info.y_max -
+>>  			((((packet[0] & 0x20) << 3) | packet[2]) << 2);
+>>  		/*
+>>  		 * byte 3:  .   .  by8 bx8  .   .   .   .
+>> @@ -458,7 +458,7 @@ static void elantech_report_absolute_v2(struct psmouse *psmouse)
+>>  		 */
+>>  		x2 = (((packet[3] & 0x10) << 4) | packet[4]) << 2;
+>>  		/* byte 5: by7 by8 by5 by4 by3 by2 by1 by0 */
+>> -		y2 = etd->y_max -
+>> +		y2 = etd->info.y_max -
+>>  			((((packet[3] & 0x20) << 3) | packet[5]) << 2);
+>>  
+>>  		/* Unknown so just report sensible values */
+>> @@ -579,7 +579,7 @@ static void elantech_report_absolute_v3(struct psmouse *psmouse,
+>>  		 * byte 4:  .   .   .   .  y11 y10 y9  y8
+>>  		 * byte 5: y7  y6  y5  y4  y3  y2  y1  y0
+>>  		 */
+>> -		y1 = etd->y_max - (((packet[4] & 0x0f) << 8) | packet[5]);
+>> +		y1 = etd->info.y_max - (((packet[4] & 0x0f) << 8) | packet[5]);
+>>  		break;
+>>  
+>>  	case 2:
+>> @@ -593,7 +593,7 @@ static void elantech_report_absolute_v3(struct psmouse *psmouse,
+>>  			 * byte 4:   .    .    .    .  ay11 ay10 ay9  ay8
+>>  			 * byte 5: ay7  ay6  ay5  ay4  ay3  ay2  ay1  ay0
+>>  			 */
+>> -			etd->mt[0].y = etd->y_max -
+>> +			etd->mt[0].y = etd->info.y_max -
+>>  				(((packet[4] & 0x0f) << 8) | packet[5]);
+>>  			/*
+>>  			 * wait for next packet
+>> @@ -605,7 +605,7 @@ static void elantech_report_absolute_v3(struct psmouse *psmouse,
+>>  		x1 = etd->mt[0].x;
+>>  		y1 = etd->mt[0].y;
+>>  		x2 = ((packet[1] & 0x0f) << 8) | packet[2];
+>> -		y2 = etd->y_max - (((packet[4] & 0x0f) << 8) | packet[5]);
+>> +		y2 = etd->info.y_max - (((packet[4] & 0x0f) << 8) | packet[5]);
+>>  		break;
+>>  	}
+>>  
+>> @@ -681,7 +681,7 @@ static void process_packet_head_v4(struct psmouse *psmouse)
+>>  		return;
+>>  
+>>  	etd->mt[id].x = ((packet[1] & 0x0f) << 8) | packet[2];
+>> -	etd->mt[id].y = etd->y_max - (((packet[4] & 0x0f) << 8) | packet[5]);
+>> +	etd->mt[id].y = etd->info.y_max - (((packet[4] & 0x0f) << 8) | packet[5]);
+>>  	pres = (packet[1] & 0xf0) | ((packet[4] & 0xf0) >> 4);
+>>  	traces = (packet[0] & 0xf0) >> 4;
+>>  
+>> @@ -1253,7 +1253,6 @@ static int elantech_set_input_params(struct psmouse *psmouse)
+>>  		input_abs_set_res(dev, ABS_MT_POSITION_Y, info->y_res);
+>>  	}
+>>  
+>> -	etd->y_max = y_max;
+>>  	etd->width = width;
+>>  
+>>  	return 0;
+>> diff --git a/drivers/input/mouse/elantech.h b/drivers/input/mouse/elantech.h
+>> index 571e6ca11d..1ec004f72d 100644
+>> --- a/drivers/input/mouse/elantech.h
+>> +++ b/drivers/input/mouse/elantech.h
+>> @@ -180,7 +180,6 @@ struct elantech_data {
+>>  	unsigned char reg_25;
+>>  	unsigned char reg_26;
+>>  	unsigned int single_finger_reports;
+>> -	unsigned int y_max;
+>>  	unsigned int width;
+>>  	struct finger_pos mt[ETP_MAX_FINGERS];
+>>  	unsigned char parity[256];
+>> -- 
+>> 2.38.0
