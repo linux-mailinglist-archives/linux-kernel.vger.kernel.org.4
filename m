@@ -2,115 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77CF639EDE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0883639F55
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 03:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiK1BWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 20:22:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
+        id S229627AbiK1CM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 21:12:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiK1BWN (ORCPT
+        with ESMTP id S229513AbiK1CM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 20:22:13 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CF31117B;
-        Sun, 27 Nov 2022 17:22:12 -0800 (PST)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NL73F3BWpzHw33;
-        Mon, 28 Nov 2022 09:21:29 +0800 (CST)
-Received: from huawei.com (10.67.175.21) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 28 Nov
- 2022 09:22:09 +0800
-From:   Li Zetao <lizetao1@huawei.com>
-To:     <mst@redhat.com>, <jasowang@redhat.com>, <pbonzini@redhat.com>,
-        <stefanha@redhat.com>, <axboe@kernel.dk>, <kraxel@redhat.com>,
-        <david@redhat.com>, <ericvh@gmail.com>, <lucho@ionkov.net>,
-        <asmadeus@codewreck.org>, <linux_oss@crudebyte.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <rusty@rustcorp.com.au>
-CC:     <lizetao1@huawei.com>, <virtualization@lists.linux-foundation.org>,
-        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <v9fs-developer@lists.sourceforge.net>, <netdev@vger.kernel.org>
-Subject: [PATCH 4/4] virtio-blk: Fix probe failed when modprobe virtio_blk
-Date:   Mon, 28 Nov 2022 10:10:05 +0800
-Message-ID: <20221128021005.232105-5-lizetao1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221128021005.232105-1-lizetao1@huawei.com>
-References: <20221128021005.232105-1-lizetao1@huawei.com>
+        Sun, 27 Nov 2022 21:12:27 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D031021;
+        Sun, 27 Nov 2022 18:12:25 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id e27so22398623ejc.12;
+        Sun, 27 Nov 2022 18:12:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z0k39kPcNRyQ4Gy/xMoQ2YRMMznIAqMyVYzhZYK1cHc=;
+        b=G2xLoZLw6j2wwV9HKqmKjYMBLtm6fEjRNLbEyvQ3bFYeKdhf3Vm5usPngW2c4ER9Pd
+         kaXpzzzjLKX1mRCFjaxOwM7uM398zii2Qc8KqiEWLfzmxAwxFbm1aBU58+RPPFi2ZVW2
+         Oy6oGDV+vmVYBN/K6TSWu6IbiGVw82Rp6SDRLwqWRrz2qrDO22CP7SYnibc05ax8jwsG
+         fjvBqjfcgahHuS2/sQ0E5q0xcwCXoa/Qk9xrzHsiIOeBRj0KQmsv0hXZtU8bt10aiIVr
+         DmfzGukCPHDyIMBPG2bBTfy+LwLBmHu9go3LA59d4zFMF6ScBCV8wr+UxIOwN3ETMAEq
+         rJdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z0k39kPcNRyQ4Gy/xMoQ2YRMMznIAqMyVYzhZYK1cHc=;
+        b=Oa79jBFiESHTjstdZWH7EbJ81HLJZQr3Kr1XfAlFjr5h/+tzEtTvx+/R7lwUidqjkm
+         v5C/i66XokYkIX4ZsWe/1ITobouWBAnbCQr7ugjLApOJb/Vh+1eIWe4h6jS7m3JrQgPl
+         HVNfDetJ1nNKCJRNdsIUmuPZskGfKA9rY0w9/tnHSwPzGfp1iWopVPb31iQa7g50dLAq
+         zEIxImw4O3b13O77nGy1a2PqwGTCwKdjUbUheoWx9te2aNqO3EKXU4NIIJoQSQ81TyID
+         3lEGEMgmNAa1h6yByB35F6oPRirMxkmo82MYcCOg6dG9hXIBebsgKLHBAUQ3WMAhbW4W
+         Tblw==
+X-Gm-Message-State: ANoB5pkyDt2Y4uEvlasvnvHlkiCTcEzkWXq9g8AYfPRoW4JKvDECVs06
+        VstvLXJDIvhZ0OWBBbmY0ZbnzSc8VVtyC9hG18E=
+X-Google-Smtp-Source: AA0mqf5/5db15AOLubBkFDwNub8sQSrogkPyLEd84ivmr8BuoOP/U8Te4ohx6DRs7KHKDIwUX2oHHKmeGM9DetdNI2Y=
+X-Received: by 2002:a17:906:4ed9:b0:7ae:664a:a7d2 with SMTP id
+ i25-20020a1709064ed900b007ae664aa7d2mr42157318ejv.676.1669601543551; Sun, 27
+ Nov 2022 18:12:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.21]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221125122912.54709-1-sunhao.th@gmail.com> <20221128003800.h2bmqcv5dfqmfbcf@MacBook-Pro-5.local>
+ <CACkBjsY_Jy9seMfcMMPbYN-YMubcUzABpMm7VFe8wU+X6LKAUQ@mail.gmail.com>
+In-Reply-To: <CACkBjsY_Jy9seMfcMMPbYN-YMubcUzABpMm7VFe8wU+X6LKAUQ@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sun, 27 Nov 2022 18:12:12 -0800
+Message-ID: <CAADnVQ+G5AuJgo0iRmGOzzr2sS-Ddz6Dt-_99hS+q=VXPpHH7Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/3] bpf: Add LDX/STX/ST sanitize in jited BPF progs
+To:     Hao Sun <sunhao.th@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When doing the following test steps, an error was found:
-  step 1: modprobe virtio_blk succeeded
-    # modprobe virtio_blk      <-- OK
+On Sun, Nov 27, 2022 at 5:41 PM Hao Sun <sunhao.th@gmail.com> wrote:
+>
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> =E4=BA=8E2022=E5=B9=B41=
+1=E6=9C=8828=E6=97=A5=E5=91=A8=E4=B8=80 08:38=E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > On Fri, Nov 25, 2022 at 08:29:09PM +0800, Hao Sun wrote:
+> > > The verifier sometimes makes mistakes[1][2] that may be exploited to
+> > > achieve arbitrary read/write. Currently, syzbot is continuously testi=
+ng
+> > > bpf, and can find memory issues in bpf syscalls, but it can hardly fi=
+nd
+> > > mischecking/bugs in the verifier. We need runtime checks like KASAN i=
+n
+> > > BPF programs for this. This patch series implements address sanitize
+> > > in jited BPF progs for testing purpose, so that tools like syzbot can
+> > > find interesting bugs in the verifier automatically by, if possible,
+> > > generating and executing BPF programs that bypass the verifier but ha=
+ve
+> > > memory issues, then triggering this sanitizing.
+> >
+> > The above paragraph makes it sound that it's currently impossible to
+> > use kasan with BPF. Which is confusing and incorrect statement.
+> > kasan adds all the necessary instrumentation to BPF interpreter already
+> > and syzbot can perform bug discovery.
+> > syzbot runner should just disable JIT and run all progs via interpreter=
+.
+> > Adding all this logic to run JITed progs in kasan kernel is
+> > just unnecessary complexity.
+>
+> Sorry for the confusion, I mean JITed BPF prog can't use KASAN currently,
+> maybe it should be called BPF_JITED_PROG_KASAN.
+>
+> It's actually useful because JIT is used in most real cases for testing/f=
+uzzing,
+> syzbot uses WITH_JIT_ALWAYS_ON[1][2].
 
-  step 2: fault injection in __blk_mq_alloc_disk()
-    # modprobe -r virtio_blk   <-- OK
-    # ...
-      CPU: 0 PID: 4578 Comm: modprobe Tainted: G        W
-      6.1.0-rc6-00308-g644e9524388a-dirty
-      Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-      Call Trace:
-       <TASK>
-       should_failslab+0xa/0x20
-       ...
-       blk_alloc_queue+0x3a4/0x780
-       __blk_mq_alloc_disk+0x91/0x1f0
-       virtblk_probe+0x6ff/0x1f20 [virtio_blk]
-       ...
-       </TASK>
-      virtio_blk: probe of virtio1 failed with error -12
+Just turn it off in syzbot. jit_always_on is a security feature
+because of speculative execution bugs that can exploit
+any in-kernel interpreter (not only bpf interpreter).
 
-  step 3: modprobe virtio_net failed
-    # modprobe virtio_blk       <-- failed
-      virtio_blk: probe of virtio1 failed with error -2
+> For those tools, they may need
+> to run hundred times for each generated BPF prog to find interesting bugs=
+ in
+> the verifier, JIT makes it much faster.
 
-The root cause of the problem is that the virtqueues are not
-stopped on the error handling path when __blk_mq_alloc_disk()
-fails in virtblk_probe(), resulting in an error "-ENOENT"
-returned in the next modprobe call in setup_vq().
+Unlikely. With all the overhead of saving a bunch of regs,
+restoring them and calling functions instead of direct load/store
+such JITed code is probably running at the same speed as
+interpreter.
+Also syzbot generated progs are tiny.
+Your oob reproducer is tiny too.
+The speed of execution doesn't matter in such cases.
 
-virtio_pci_modern_device uses virtqueues to send or
-receive message, and "queue_enable" records whether the
-queues are available. In vp_modern_find_vqs(), all queues
-will be selected and activated, but once queues are enabled
-there is no way to go back except reset.
+> Also, bugs in JIT can be
+> missed if they're
+> disabled.
 
-Fix it by reset virtio device on error handling path. After
-init_vq() succeeded, all virtqueues should be stopped on error
-handling path.
+Disagree. Replacing direct load/store with calls
+doesn't improve JIT test coverage.
 
-Fixes: 1fcf0512c9c8 ("virtio_pci: modern driver")
-Signed-off-by: Li Zetao <lizetao1@huawei.com>
----
- drivers/block/virtio_blk.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/block/virtio_blk.c b/drivers/block/virtio_blk.c
-index 19da5defd734..f401546d4e85 100644
---- a/drivers/block/virtio_blk.c
-+++ b/drivers/block/virtio_blk.c
-@@ -1157,6 +1157,7 @@ static int virtblk_probe(struct virtio_device *vdev)
- 	put_disk(vblk->disk);
- out_free_tags:
- 	blk_mq_free_tag_set(&vblk->tag_set);
-+	virtio_reset_device(vdev);
- out_free_vq:
- 	vdev->config->del_vqs(vdev);
- 	kfree(vblk->vqs);
--- 
-2.25.1
-
+Also think long term. Beyond kasan there are various *sans
+that instrument code differently. load/store may not be
+the only insns that should be instrumented.
+So hacking JITs either directly or via verifier isn't going
+to scale.
