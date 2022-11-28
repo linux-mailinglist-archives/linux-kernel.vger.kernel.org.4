@@ -2,101 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9BB63AE6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA19163AE63
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232685AbiK1RF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 12:05:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49366 "EHLO
+        id S232173AbiK1RFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 12:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232855AbiK1RFS (ORCPT
+        with ESMTP id S232550AbiK1REk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:05:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9690AD71
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:04:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669655045;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=SvA60jdErhXDl3kEW9qJtabgGVPEkbYeDoN+XXDo72Y=;
-        b=RlIfIdVG0LS3hdozi8xcFk/w292uIbyqsygqCFGkNrWNX8gfirQHb9fmBaGJax3gDFovYs
-        5fhYCo8v+2IQ2djwSChrmaNZpcWw72ZZ5FcF0T3L6/tGdBqYuDJMhDprgRfclaTiQOionJ
-        3EQ9EnehTZ7t7PivIIHrUP5/7VEXWNI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-93-Phzg0pRoOU65DlIsu7g6AA-1; Mon, 28 Nov 2022 12:04:03 -0500
-X-MC-Unique: Phzg0pRoOU65DlIsu7g6AA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 28 Nov 2022 12:04:40 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F275193DC;
+        Mon, 28 Nov 2022 09:04:39 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 55ADF1C07547;
-        Mon, 28 Nov 2022 17:04:03 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A9A3E1731B;
-        Mon, 28 Nov 2022 17:04:02 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] afs: Fix fileserver probe RTT handling
-From:   David Howells <dhowells@redhat.com>
-To:     marc.dionne@auristor.com
-Cc:     dhowells@redhat.com, linux-afs@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 28 Nov 2022 17:04:00 +0000
-Message-ID: <166965503999.3392585.13954054113218099395.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1E7591FDC1;
+        Mon, 28 Nov 2022 17:04:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669655078; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bHyNFoEUl0TFkTENNZ9c1IhmOVfqEGsTTbiQpl93k+I=;
+        b=DZZA5jObkTaeAZN7mMPirFneGcSprZknKRoQhR/Y/qCXncPJhhE4OB2gT8sXJ37xu0O796
+        o5aObYjiShF2U9HzlzpA8taj/NxeLNIEFKc8GO8zahKcysdkjPZnKSRr7NZZhQLUAI9Lxk
+        vBndXIAKZZZ6omKISQwrBYPWDjBhLlI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669655078;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bHyNFoEUl0TFkTENNZ9c1IhmOVfqEGsTTbiQpl93k+I=;
+        b=PrZyQljE6aPU4Pf59hjnBwPnNR32OKNJ100efSHqb2pHGF/vO0TGUUji1FhA6MBbYrXlcc
+        N1PJIHM81tDRrFBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D83101326E;
+        Mon, 28 Nov 2022 17:04:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id l2sVNCXqhGMUeQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 28 Nov 2022 17:04:37 +0000
+Date:   Mon, 28 Nov 2022 18:04:37 +0100
+Message-ID: <87mt8bqaca.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        alsa-devel@alsa-project.org, sound-open-firmware@alsa-project.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v4] ALSA: core: Fix deadlock when shutdown a frozen userspace
+In-Reply-To: <5171929e-b750-d2f1-fec9-b34d76c18dcb@linux.intel.com>
+References: <20221127-snd-freeze-v4-0-51ca64b7f2ab@chromium.org>
+        <5171929e-b750-d2f1-fec9-b34d76c18dcb@linux.intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The fileserver probing code attempts to work out the best fileserver to use
-for a volume by retrieving the RTT calculated by AF_RXRPC for the probe
-call sent to each server and comparing them.  Sometimes, however, no RTT
-estimate is available and rxrpc_kernel_get_srtt() returns false, leading
-good fileservers to be given an RTT of UINT_MAX and thus causing the
-rotation algorithm to ignore them.
+On Mon, 28 Nov 2022 17:49:20 +0100,
+Pierre-Louis Bossart wrote:
+> 
+> 
+> 
+> On 11/28/22 07:42, Ricardo Ribalda wrote:
+> > During kexec(), the userspace is frozen. Therefore we cannot wait for it
+> > to complete.
+> > 
+> > Avoid running snd_sof_machine_unregister during shutdown.
+> > 
+> > This fixes:
+> > 
+> > [   84.943749] Freezing user space processes ... (elapsed 0.111 seconds) done.
+> > [  246.784446] INFO: task kexec-lite:5123 blocked for more than 122 seconds.
+> > [  246.819035] Call Trace:
+> > [  246.821782]  <TASK>
+> > [  246.824186]  __schedule+0x5f9/0x1263
+> > [  246.828231]  schedule+0x87/0xc5
+> > [  246.831779]  snd_card_disconnect_sync+0xb5/0x127
+> > ...
+> > [  246.889249]  snd_sof_device_shutdown+0xb4/0x150
+> > [  246.899317]  pci_device_shutdown+0x37/0x61
+> > [  246.903990]  device_shutdown+0x14c/0x1d6
+> > [  246.908391]  kernel_kexec+0x45/0xb9
+> > 
+> > And:
+> > 
+> > [  246.893222] INFO: task kexec-lite:4891 blocked for more than 122 seconds.
+> > [  246.927709] Call Trace:
+> > [  246.930461]  <TASK>
+> > [  246.932819]  __schedule+0x5f9/0x1263
+> > [  246.936855]  ? fsnotify_grab_connector+0x5c/0x70
+> > [  246.942045]  schedule+0x87/0xc5
+> > [  246.945567]  schedule_timeout+0x49/0xf3
+> > [  246.949877]  wait_for_completion+0x86/0xe8
+> > [  246.954463]  snd_card_free+0x68/0x89
+> > ...
+> > [  247.001080]  platform_device_unregister+0x12/0x35
+> > 
+> > Cc: stable@vger.kernel.org
+> > Fixes: 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > ---
+> > To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> > To: Liam Girdwood <lgirdwood@gmail.com>
+> > To: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+> > To: Bard Liao <yung-chuan.liao@linux.intel.com>
+> > To: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+> > To: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+> > To: Daniel Baluta <daniel.baluta@nxp.com>
+> > To: Mark Brown <broonie@kernel.org>
+> > To: Jaroslav Kysela <perex@perex.cz>
+> > To: Takashi Iwai <tiwai@suse.com>
+> > Cc: sound-open-firmware@alsa-project.org
+> > Cc: alsa-devel@alsa-project.org
+> > Cc: linux-kernel@vger.kernel.org
+> > ---
+> > Changes in v4:
+> > - Do not call snd_sof_machine_unregister from shutdown.
+> > - Link to v3: https://lore.kernel.org/r/20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org
+> > 
+> > Changes in v3:
+> > - Wrap pm_freezing in a function
+> > - Link to v2: https://lore.kernel.org/r/20221127-snd-freeze-v2-0-d8a425ea9663@chromium.org
+> > 
+> > Changes in v2:
+> > - Only use pm_freezing if CONFIG_FREEZER 
+> > - Link to v1: https://lore.kernel.org/r/20221127-snd-freeze-v1-0-57461a366ec2@chromium.org
+> > ---
+> >  sound/soc/sof/core.c | 7 ++-----
+> >  1 file changed, 2 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/sound/soc/sof/core.c b/sound/soc/sof/core.c
+> > index 3e6141d03770..9616ba607ded 100644
+> > --- a/sound/soc/sof/core.c
+> > +++ b/sound/soc/sof/core.c
+> > @@ -475,19 +475,16 @@ EXPORT_SYMBOL(snd_sof_device_remove);
+> >  int snd_sof_device_shutdown(struct device *dev)
+> >  {
+> >  	struct snd_sof_dev *sdev = dev_get_drvdata(dev);
+> > -	struct snd_sof_pdata *pdata = sdev->pdata;
+> >  
+> >  	if (IS_ENABLED(CONFIG_SND_SOC_SOF_PROBE_WORK_QUEUE))
+> >  		cancel_work_sync(&sdev->probe_work);
+> >  
+> >  	/*
+> > -	 * make sure clients and machine driver(s) are unregistered to force
+> > -	 * all userspace devices to be closed prior to the DSP shutdown sequence
+> > +	 * make sure clients are unregistered prior to the DSP shutdown
+> > +	 * sequence.
+> >  	 */
+> >  	sof_unregister_clients(sdev);
+> >  
+> > -	snd_sof_machine_unregister(sdev, pdata);
+> > -
+> 
+> The comment clearly says that we do want all userspace devices to be
+> closed. This was added in 83bfc7e793b5 ("ASoC: SOF: core: unregister
+> clients and machine drivers in .shutdown") precisely to avoid a platform
+> hang if the devices are used after the shutdown completes.
 
-Fix afs_select_fileserver() to ignore rxrpc_kernel_get_srtt()'s return
-value and just take the estimated RTT it provides - which will be capped at
-1 second.
-
-Fixes: 1d4adfaf6574 ("rxrpc: Make rxrpc_kernel_get_srtt() indicate validity")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
----
-
- fs/afs/fs_probe.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/afs/fs_probe.c b/fs/afs/fs_probe.c
-index c0031a3ab42f..3ac5fcf98d0d 100644
---- a/fs/afs/fs_probe.c
-+++ b/fs/afs/fs_probe.c
-@@ -167,8 +167,8 @@ void afs_fileserver_probe_result(struct afs_call *call)
- 			clear_bit(AFS_SERVER_FL_HAS_FS64, &server->flags);
- 	}
- 
--	if (rxrpc_kernel_get_srtt(call->net->socket, call->rxcall, &rtt_us) &&
--	    rtt_us < server->probe.rtt) {
-+	rxrpc_kernel_get_srtt(call->net->socket, call->rxcall, &rtt_us);
-+	if (rtt_us < server->probe.rtt) {
- 		server->probe.rtt = rtt_us;
- 		server->rtt = rtt_us;
- 		alist->preferred = index;
+The problem is that it wants the *close* of the user-space programs
+unnecessarily.  Basically the shutdown can be seen as a sort of device
+hot unplug; i.e. the disconnection of the device files and the cleanup
+of device state are the main task.  The difference is that the hot
+unplug (unbind) usually follows the sync for the all processes being
+closed (so that you can release all resources gracefully), while this
+step is skipped for the shutdown (no need for resource-free).
 
 
+Takashi
