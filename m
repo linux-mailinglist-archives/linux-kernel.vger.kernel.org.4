@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6141863A555
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3AA963A567
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:51:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiK1Jp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 04:45:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32794 "EHLO
+        id S230039AbiK1JvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 04:51:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiK1Jpr (ORCPT
+        with ESMTP id S230035AbiK1JvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 04:45:47 -0500
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F8319296
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:45:47 -0800 (PST)
-Received: by mail-ed1-x54a.google.com with SMTP id z3-20020a056402274300b0046b14f99390so1925066edd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:45:46 -0800 (PST)
+        Mon, 28 Nov 2022 04:51:04 -0500
+Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657FE193C3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:51:02 -0800 (PST)
+Received: by mail-wm1-x349.google.com with SMTP id b47-20020a05600c4aaf00b003d031aeb1b6so8335761wmp.9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:51:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rXoOet1Rb1vO+RV0XEBtCtgaydxMI/engJANIwuECRQ=;
-        b=s6w1xbIf2vlYUmSknr7oRraUB85nf4lYbLpqHtE7R/uCCqK/YnX+XJ9uS2gmJ6EfSy
-         WC3rIcgYxlJav7Y0J/sxRNoZa4e7zOpW5Pab30yV6YSdxovSZhHEQa+NVRLP8hkETK4O
-         6xWCrhsjeg4dEgQ2Uyr/UbXf2G5Ql3Tvr+GtnFm8cARQJPnSKqhRpB68cZ0zzU6hYpMI
-         TDcudtbdB+cg27Z0lGhN4n88RSV9kqLIMMgDW5leYNMZG4GEDv1J/ZlQuk/hm3AAZjfE
-         UYGRAKSaGz2kKfqLvXtVQaNO+vPQS76GptQqpktijCNM6SDr2GTU81PuaYL3NZ69Igxe
-         O1iQ==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cct04cXs5K6Oma9vXfMm60p6i+CfzdxpxLX+V58OiqQ=;
+        b=F8rWO4eEUv81PuSKtmYCtH6WPMr3pJLLQVDBUG+mf3OIy/GgnIfAfRBTjQOuF0NZgI
+         rQCvXESuwjsM+T6ALxE15HiEcWvtzdF69PXuMMgl9Gp8SOqnwRANXg4WM8IESG8AGx+s
+         edceQgh2LwiydLOf165rabsPFjFB86SOAH4c/BT53evJVpZn4lRm6K5ImDhjrnhFx4Of
+         XIQSsEb6/zUJG5A4gX+KMJ0FUtrijmXIqWZFaH/WZmcDXYjJU491FhbK5snqi54h7p/V
+         37ylxNxeU1MNJLXAM5OGWTPcUV0xqWEL7LQAoqOZ4ol27gM4g+vEdJinXsOfbPbuXFPD
+         MJEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rXoOet1Rb1vO+RV0XEBtCtgaydxMI/engJANIwuECRQ=;
-        b=am05efrPv3mArzrHxVyGnRUIcvwhWDLMqGpAQiGcX+yYJBpCtWp0fdHGD80sgZy53F
-         65BLxQ3WiVM0BWjiSpg+MQCvaQzACBwzFuU+che/ewqDfBQoaBCNE0D1ZILlIQUcRrpO
-         HjLpFAQPabnZ7J2RJU/TARYPNyVXoqUZn3xQAKIiTelmXThWuM1+pvx93VHit4WxjU3E
-         ikeq68INdUrpU4PkaA6ZUdkfzboQ6DMrkiCVXPeUGIGrNowYhuM7VgHkbcMbK8Bq/q8c
-         U5jcw7YoV/57spVXoUP8vOs4C6mjgoJzYtnhYBhRbVA5fd06uvIuXaoZ4H8lHCPj4ya0
-         D3KQ==
-X-Gm-Message-State: ANoB5pmywXftS73WMC6d+ef1Zx8cqTlFXxjk5dgTcmlmxdEo1/XHIdom
-        +9JnGXTia2s3x4RiWKt4dhEgtF6itiQ=
-X-Google-Smtp-Source: AA0mqf5JjgMUAXNrjyuEcpH5yC8Dqz2bfrGhmUj8weFzLuPbv1iNyji1PfDPUp5njvuDbzAg0khDIxsb0Ro=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cct04cXs5K6Oma9vXfMm60p6i+CfzdxpxLX+V58OiqQ=;
+        b=mGDmE/ZIzLmbxq/WzHItTaSBBn/U36ekDff7uWyEG96Nr1ha1AUzmy/p46yiVpxkic
+         RtQDGqm3qYefO617r9Ge+TP6ltc2+Be81Kp2UINc3esTLFnisFfEUfLgla9YNGUqX4bE
+         JUzuua/De4CoKe2wUct8riYzNm8nLNknxDlQYC5Eh5FDvxQEjGecU/hI2xKX7lJJn2I7
+         0CfIPDTpHWP0YKzKnof1W1uBIu9uF4peJc4Op+HLvN8hYBzvQoLT4zLDOxdtKKoHpAv2
+         YTAH7LQ1Wo78+RVQpOB1KIWXv4tAzpm9d5RNfyYVfGCQqyxpcKZ6IJju3m1fXiGtLIDz
+         8frA==
+X-Gm-Message-State: ANoB5plbZ0qfPQIbqS/xP4QsUvvm0+Fjd7aQYwZcJJO5LjwBFBqh9zPJ
+        E4zLgbCUtq8fTimailr0RxkAJv+6b2M=
+X-Google-Smtp-Source: AA0mqf47reGLvqtfhUicf3SwZLCRiQSU8ElrY3uGc5tGFXHC/qU5NVNZWlAkGfegPCyHFwdpnlPxg1K7kmE=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:dc07:26e3:1eb7:b279])
- (user=glider job=sendgmr) by 2002:aa7:de08:0:b0:46a:e4e0:8407 with SMTP id
- h8-20020aa7de08000000b0046ae4e08407mr10060697edv.36.1669628745543; Mon, 28
- Nov 2022 01:45:45 -0800 (PST)
-Date:   Mon, 28 Nov 2022 10:45:40 +0100
+ (user=glider job=sendgmr) by 2002:a5d:6dcf:0:b0:236:78b7:87c9 with SMTP id
+ d15-20020a5d6dcf000000b0023678b787c9mr30120679wrz.556.1669629060947; Mon, 28
+ Nov 2022 01:51:00 -0800 (PST)
+Date:   Mon, 28 Nov 2022 10:45:41 +0100
+In-Reply-To: <20221128094541.2645890-1-glider@google.com>
 Mime-Version: 1.0
+References: <20221128094541.2645890-1-glider@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221128094541.2645890-1-glider@google.com>
-Subject: [PATCH 1/2] lockdep: allow instrumenting lockdep.c with KMSAN
+Message-ID: <20221128094541.2645890-2-glider@google.com>
+Subject: [PATCH 2/2] kmsan: allow using __msan_instrument_asm_store() inside runtime
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
         peterz@infradead.org, mingo@redhat.com, will@kernel.org,
         elver@google.com, dvyukov@google.com, linux-mm@kvack.org,
-        kasan-dev@googlegroups.com, Eric Biggers <ebiggers@kernel.org>
+        kasan-dev@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -68,34 +70,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lockdep and KMSAN used to play badly together, causing deadlocks when
-KMSAN instrumentation of lockdep.c called lockdep functions recursively.
+In certain cases (e.g. when handling a softirq)
+__msan_instrument_asm_store(&var, sizeof(var)) may be called with
+from within KMSAN runtime, but later the value of @var is used
+with !kmsan_in_runtime(), leading to false positives.
 
-Looks like this is no more the case, and a kernel can run (yet slower)
-with both KMSAN and lockdep enabled.
-This patch should fix false positives on wq_head->lock->dep_map, which
-KMSAN used to consider uninitialized because of lockdep.c not being
-instrumented.
+Because kmsan_internal_unpoison_memory() doesn't take locks, it should
+be fine to call it without kmsan_in_runtime() checks, which fixes the
+mentioned false positives.
 
-Link: https://lore.kernel.org/lkml/Y3b9AAEKp2Vr3e6O@sol.localdomain/
-Reported-by: Eric Biggers <ebiggers@kernel.org>
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
- kernel/locking/Makefile | 1 -
- 1 file changed, 1 deletion(-)
+ mm/kmsan/instrumentation.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/locking/Makefile b/kernel/locking/Makefile
-index ea925731fa40f..0db4093d17b8a 100644
---- a/kernel/locking/Makefile
-+++ b/kernel/locking/Makefile
-@@ -7,7 +7,6 @@ obj-y += mutex.o semaphore.o rwsem.o percpu-rwsem.o
+diff --git a/mm/kmsan/instrumentation.c b/mm/kmsan/instrumentation.c
+index 271f135f97a16..770fe02904f36 100644
+--- a/mm/kmsan/instrumentation.c
++++ b/mm/kmsan/instrumentation.c
+@@ -81,12 +81,16 @@ DECLARE_METADATA_PTR_GETTER(8);
+  * Handle a memory store performed by inline assembly. KMSAN conservatively
+  * attempts to unpoison the outputs of asm() directives to prevent false
+  * positives caused by missed stores.
++ *
++ * __msan_instrument_asm_store() may be called for inline assembly code when
++ * entering or leaving IRQ. We omit the check for kmsan_in_runtime() to ensure
++ * the memory written to in these cases is also marked as initialized.
+  */
+ void __msan_instrument_asm_store(void *addr, uintptr_t size)
+ {
+ 	unsigned long ua_flags;
  
- # Avoid recursion lockdep -> sanitizer -> ... -> lockdep.
- KCSAN_SANITIZE_lockdep.o := n
--KMSAN_SANITIZE_lockdep.o := n
+-	if (!kmsan_enabled || kmsan_in_runtime())
++	if (!kmsan_enabled)
+ 		return;
  
- ifdef CONFIG_FUNCTION_TRACER
- CFLAGS_REMOVE_lockdep.o = $(CC_FLAGS_FTRACE)
+ 	ua_flags = user_access_save();
+@@ -103,10 +107,8 @@ void __msan_instrument_asm_store(void *addr, uintptr_t size)
+ 		user_access_restore(ua_flags);
+ 		return;
+ 	}
+-	kmsan_enter_runtime();
+ 	/* Unpoisoning the memory on best effort. */
+ 	kmsan_internal_unpoison_memory(addr, size, /*checked*/ false);
+-	kmsan_leave_runtime();
+ 	user_access_restore(ua_flags);
+ }
+ EXPORT_SYMBOL(__msan_instrument_asm_store);
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
