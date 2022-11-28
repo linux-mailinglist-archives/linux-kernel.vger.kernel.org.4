@@ -2,119 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C773A63B2F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 21:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9266F63B2FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 21:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233891AbiK1UXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 15:23:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
+        id S233094AbiK1UYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 15:24:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234003AbiK1UXS (ORCPT
+        with ESMTP id S233992AbiK1UYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 15:23:18 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281A51CB37;
-        Mon, 28 Nov 2022 12:23:12 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 82so3501982pgc.0;
-        Mon, 28 Nov 2022 12:23:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=My8u4kRmGK+Yn8/6QhVO+EnqDs3urMiLBxUcHmmyiGk=;
-        b=UcFlC9OhsKqP3QUePtkbMS7mo/ibRjDzrbPHmpCZ8njlXrOFkM2hBoVx05wMHJqoq0
-         rMls6J6TkFWss4JvG614aHONu5Z5C/3ZqZZ4ylzMnbYmPkh+L0c9pp8FjcewgBY+qiAq
-         YPHdtSYtlZUAyWvCNkd/B1tBANSJrTuHuQbT0jKDaEeJStOXyBrGNyl7L63Zxv0Ix0YU
-         8HlAQI9uyd5hFst8Hpv3xxaOcq4Bq0hVXW+0AMB37o4IFQIvwEorhLQNE6C0g5REhGRV
-         PuCBHD5y2JqM156Lklpq5p8zM58NJsaihK5z10jRDNVcC/8rWTfiMx5NleoBG8/1Icei
-         W6pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=My8u4kRmGK+Yn8/6QhVO+EnqDs3urMiLBxUcHmmyiGk=;
-        b=mk5BBEho/dXcKJR6h5WLogYoweVXdbMiNNfnm+vGAJ4bUqiJ1p03Qe9V0b9aGw2juf
-         WpvVaONGxdYJSpjMNqPa3eDvd+ywAJHl4R9FFdGJfQZcrXCDu1Gm+zwsLjkkm2AiZQ1G
-         bKPPrRmlDATFGnCqj5Silw+2iT3YaMZj3TwY69jTuZ1CObDo8J2I2JHo2b17vTfj619X
-         pkfFoVsADZpdA3w1IqPK3Hi3jMJv0TU4uXp9t/mMEHuRZ/r7TfBCoz1YsFYF7etQrt2c
-         1IHc+nHA+0AUobXwbP52/daUPCtRtPQdxHk18MD+6QVKGgStcyxt7AhljOju937E+hdK
-         2n6w==
-X-Gm-Message-State: ANoB5plw6qKIrODmaypSL/qxFMnLFcpnVKRWL1f7i5vCjWXuW9mEs9XC
-        /e7RO4jqzi0Fr2DKV8a4CSA=
-X-Google-Smtp-Source: AA0mqf4oImiJC3pygvUY6NUG2A7aDmbpiDXe7PORw+aNCo2Foi05c3TORWEg7Yh4zqDkFEQEZkJB6Q==
-X-Received: by 2002:a05:6a00:1bcb:b0:574:ba25:1e43 with SMTP id o11-20020a056a001bcb00b00574ba251e43mr18146677pfw.63.1669666991536;
-        Mon, 28 Nov 2022 12:23:11 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id u4-20020a63ef04000000b00476b165ff8bsm7189694pgh.57.2022.11.28.12.23.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 12:23:10 -0800 (PST)
-Message-ID: <3249e731-e7bd-e9f5-1c76-3ac41def3565@gmail.com>
-Date:   Mon, 28 Nov 2022 12:23:03 -0800
+        Mon, 28 Nov 2022 15:24:04 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586EA2A424;
+        Mon, 28 Nov 2022 12:24:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=QYXxZJSHFCQt3h/7y3A5kbbceUgmwfmV1IqjP3fxZUg=; b=LIik+9UMAQJCIDO+cZKWhn6+1H
+        EmYKSWMp0+GBdJqBPq2aLClaiBHFKKSjwdAK0s2gcSwt/quMlH0lTaNmW+X0U8fAZNydLQjyLaUAN
+        fRMltDkHl1RAaGoLhqFGbmguA0JpOni45hjzqYHJh1fn0XzVOrCOkpmSvCLFMFNoJk17Siz0VdNGX
+        DgeE1KMAF5pTpMpPs30bg/FbCkVsU7UwVW2bAP3WL0qT+fvZ9DWitOXUXmIU9w84op+gG0gSi27am
+        QG9sk1cSNXCNhcZ2KzJNRp7qi4YPemzGl/j+dQQ0A6zKgpdSGt50WTlabUCaEE8FrkOdwegCvCeKu
+        Awkg9jfg==;
+Received: from [177.34.169.227] (helo=[192.168.0.8])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ozkfM-00AcTd-CO; Mon, 28 Nov 2022 21:23:48 +0100
+Message-ID: <2edc6568-fe43-5600-ef44-051026b4109f@igalia.com>
+Date:   Mon, 28 Nov 2022 17:23:40 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 net-next 01/10] dt-bindings: net: dsa: sf2: fix
- brcm,use-bcm-hdr documentation
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 12/17] drm/vc4: crtc: Introduce a lower-level crtc init
+ helper
 Content-Language: en-US
-To:     Colin Foster <colin.foster@in-advantage.com>,
-        linux-renesas-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org
-Cc:     John Crispin <john@phrozen.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Marek Vasut <marex@denx.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        =?UTF-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        George McCollister <george.mccollister@gmail.com>,
-        Rob Herring <robh@kernel.org>
-References: <20221127224734.885526-1-colin.foster@in-advantage.com>
- <20221127224734.885526-2-colin.foster@in-advantage.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221127224734.885526-2-colin.foster@in-advantage.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-media@vger.kernel.org
+References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
+ <20221123-rpi-kunit-tests-v2-12-efe5ed518b63@cerno.tech>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v2-12-efe5ed518b63@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/27/22 14:47, Colin Foster wrote:
-> The property use-bcm-hdr was documented as an entry under the ports node
-> for the bcm_sf2 DSA switch. This property is actually evaluated for each
-> port. Correct the documentation to match the actual behavior and properly
-> reference dsa-port.yaml for additional properties of the node.
+On 11/28/22 11:53, Maxime Ripard wrote:
+> The current vc4_crtc_init() helper assumes that we will be using
+> hardware planes and calls vc4_plane_init().
 > 
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> While it's a reasonable assumption, we'll want to mock the plane and
+> thus provide our own. Let's create a helper that will take the plane as
+> an argument.
+> 
+> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Although the commit message explains a bit about why __vc4_crtc_init is
+being created, it would be nice to add a comment in the code explaining
+that __vc4_crtc_init can be used for tests as it allows mocking the
+plane. This way the distinction between vc4_crtc_init and
+__vc4_crtc_init will be cleaner to the reader.
 
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
+
+Best Regards,
+- Maíra Canal
+
+> ---
+>  drivers/gpu/drm/vc4/vc4_crtc.c | 52 +++++++++++++++++++++++++++---------------
+>  drivers/gpu/drm/vc4/vc4_drv.h  |  6 +++++
+>  2 files changed, 39 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/vc4/vc4_crtc.c b/drivers/gpu/drm/vc4/vc4_crtc.c
+> index 333529ed3a0d..7a2c54efecb0 100644
+> --- a/drivers/gpu/drm/vc4/vc4_crtc.c
+> +++ b/drivers/gpu/drm/vc4/vc4_crtc.c
+> @@ -1286,31 +1286,20 @@ static void vc4_set_crtc_possible_masks(struct drm_device *drm,
+>  	}
+>  }
+>  
+> -int vc4_crtc_init(struct drm_device *drm, struct platform_device *pdev,
+> -		  struct vc4_crtc *vc4_crtc,
+> -		  const struct vc4_crtc_data *data,
+> -		  const struct drm_crtc_funcs *crtc_funcs,
+> -		  const struct drm_crtc_helper_funcs *crtc_helper_funcs,
+> -		  bool feeds_txp)
+> +int __vc4_crtc_init(struct drm_device *drm,
+> +		    struct platform_device *pdev,
+> +		    struct vc4_crtc *vc4_crtc,
+> +		    const struct vc4_crtc_data *data,
+> +		    struct drm_plane *primary_plane,
+> +		    const struct drm_crtc_funcs *crtc_funcs,
+> +		    const struct drm_crtc_helper_funcs *crtc_helper_funcs,
+> +		    bool feeds_txp)
+>  {
+>  	struct vc4_dev *vc4 = to_vc4_dev(drm);
+>  	struct drm_crtc *crtc = &vc4_crtc->base;
+> -	struct drm_plane *primary_plane;
+>  	unsigned int i;
+>  	int ret;
+>  
+> -	/* For now, we create just the primary and the legacy cursor
+> -	 * planes.  We should be able to stack more planes on easily,
+> -	 * but to do that we would need to compute the bandwidth
+> -	 * requirement of the plane configuration, and reject ones
+> -	 * that will take too much.
+> -	 */
+> -	primary_plane = vc4_plane_init(drm, DRM_PLANE_TYPE_PRIMARY, 0);
+> -	if (IS_ERR(primary_plane)) {
+> -		dev_err(drm->dev, "failed to construct primary plane\n");
+> -		return PTR_ERR(primary_plane);
+> -	}
+> -
+>  	vc4_crtc->data = data;
+>  	vc4_crtc->pdev = pdev;
+>  	vc4_crtc->feeds_txp = feeds_txp;
+> @@ -1342,6 +1331,31 @@ int vc4_crtc_init(struct drm_device *drm, struct platform_device *pdev,
+>  	return 0;
+>  }
+>  
+> +int vc4_crtc_init(struct drm_device *drm, struct platform_device *pdev,
+> +		  struct vc4_crtc *vc4_crtc,
+> +		  const struct vc4_crtc_data *data,
+> +		  const struct drm_crtc_funcs *crtc_funcs,
+> +		  const struct drm_crtc_helper_funcs *crtc_helper_funcs,
+> +		  bool feeds_txp)
+> +{
+> +	struct drm_plane *primary_plane;
+> +
+> +	/* For now, we create just the primary and the legacy cursor
+> +	 * planes.  We should be able to stack more planes on easily,
+> +	 * but to do that we would need to compute the bandwidth
+> +	 * requirement of the plane configuration, and reject ones
+> +	 * that will take too much.
+> +	 */
+> +	primary_plane = vc4_plane_init(drm, DRM_PLANE_TYPE_PRIMARY, 0);
+> +	if (IS_ERR(primary_plane)) {
+> +		dev_err(drm->dev, "failed to construct primary plane\n");
+> +		return PTR_ERR(primary_plane);
+> +	}
+> +
+> +	return __vc4_crtc_init(drm, pdev, vc4_crtc, data, primary_plane,
+> +			       crtc_funcs, crtc_helper_funcs, feeds_txp);
+> +}
+> +
+>  static int vc4_crtc_bind(struct device *dev, struct device *master, void *data)
+>  {
+>  	struct platform_device *pdev = to_platform_device(dev);
+> diff --git a/drivers/gpu/drm/vc4/vc4_drv.h b/drivers/gpu/drm/vc4/vc4_drv.h
+> index 051c2e3b6d43..cd2002fff115 100644
+> --- a/drivers/gpu/drm/vc4/vc4_drv.h
+> +++ b/drivers/gpu/drm/vc4/vc4_drv.h
+> @@ -888,6 +888,12 @@ int vc4_bo_debugfs_init(struct drm_minor *minor);
+>  /* vc4_crtc.c */
+>  extern struct platform_driver vc4_crtc_driver;
+>  int vc4_crtc_disable_at_boot(struct drm_crtc *crtc);
+> +int __vc4_crtc_init(struct drm_device *drm, struct platform_device *pdev,
+> +		    struct vc4_crtc *vc4_crtc, const struct vc4_crtc_data *data,
+> +		    struct drm_plane *primary_plane,
+> +		    const struct drm_crtc_funcs *crtc_funcs,
+> +		    const struct drm_crtc_helper_funcs *crtc_helper_funcs,
+> +		    bool feeds_txp);
+>  int vc4_crtc_init(struct drm_device *drm, struct platform_device *pdev,
+>  		  struct vc4_crtc *vc4_crtc, const struct vc4_crtc_data *data,
+>  		  const struct drm_crtc_funcs *crtc_funcs,
+> 
