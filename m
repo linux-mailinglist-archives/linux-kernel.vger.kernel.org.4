@@ -2,98 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B24D463B5CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 00:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 705BF63B585
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 00:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234684AbiK1XXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 18:23:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
+        id S234591AbiK1XE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 18:04:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234670AbiK1XXn (ORCPT
+        with ESMTP id S234279AbiK1XEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 18:23:43 -0500
-X-Greylist: delayed 73839 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Nov 2022 15:23:40 PST
-Received: from bd11.exonhost.com (bd11.exonhost.com [103.138.151.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2603C3134A
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 15:23:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=patrika71.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=J00LEJiSrB+qvIFPDPqzZd/6nMYVVkupqrOt9mSmvBQ=; b=BDeNwRinWOtnVOVk6t+xu7Qoet
-        Gb6PsBF/WI7myVDLcUZN/WXCBS8MLfNm0rzJnD8KfaQwuqokkmdxhGD6TCPiWGR5rO0QTD6tOIJKN
-        t1lYuIL8wqfjDklLXLZCay+TdcgMmXc6SMqeKYyEvqI2GWSLrwyQl7J4YKkU8JBaBdRCU7wNOs1Za
-        4O3sFPuzr1YZgfDNamBmLCU27HJrYb5WbOdguwmC7nFgMwRohMXdN0q2z0e01WoqMEZ56mkE2CF3k
-        LWis40Pl2a0+3MTOcPpj6ch9ml2qZ6zuQnogCymj8kj9YXRp3VxjsR/kyjBPyMJvzkmu2A90J9Fog
-        uL1tzoCQ==;
-Received: from ec2-3-142-12-183.us-east-2.compute.amazonaws.com ([3.142.12.183]:64756 helo=alicequiltingclub.org.au)
-        by bd11.exonhost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <supports@alicequiltingclub.org.au>)
-        id 1oxJD0-000UVL-EZ
-        for linux-kernel@vger.kernel.org;
-        Tue, 22 Nov 2022 08:40:28 +0600
-Reply-To: adnakhalid@alrashidprojects.co
-From:   Adana khalid <director@patrika71.com>
-To:     linux-kernel@vger.kernel.org
-Subject:  LOAN FUNDING [OMAN]
-Date:   22 Nov 2022 02:40:27 +0000
-Message-ID: <20221122024026.2C8E43266C8EE227@patrika71.com>
-MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bd11.exonhost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - alicequiltingclub.org.au
-X-Get-Message-Sender-Via: bd11.exonhost.com: authenticated_id: director@patrika71.com
-X-Authenticated-Sender: bd11.exonhost.com: director@patrika71.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: Yes, score=6.3 required=5.0 tests=BAYES_99,BAYES_999,
-        DEAR_SOMETHING,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,SUBJ_ALL_CAPS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
-        *      mail domains are different
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  2.0 DEAR_SOMETHING BODY: Contains 'Dear (something)'
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-X-Spam-Level: ******
+        Mon, 28 Nov 2022 18:04:25 -0500
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678612B249;
+        Mon, 28 Nov 2022 15:04:24 -0800 (PST)
+Received: from pps.filterd (m0150244.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASMCR1k017358;
+        Mon, 28 Nov 2022 23:03:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id; s=pps0720;
+ bh=KfcFH3MOy6fuzSNAw8UyiHiM41rjSKFf8+hOai5NNV4=;
+ b=Dq0Zb0m+zWg7bSkvXYk51y3nJNSWXjT9sEZz0jbxedgBK7HKFkxYb7P9HC1edvi7/kMm
+ cwwWmRvCtN6CIW9f4oHzpRMDjrRCbD9DIYOEuz1Ec77DTvxjUcKuH0O2BFx6NA7wMuaw
+ N9Z8Ku4el4seR7c2qgmY5GPT4HTxgKR6WslUt33bgHR++lYPBS1VBoN7z9oZlLKBvnvF
+ KNbaUayVQN2p+QQezQqQax5/m4RIsC09T9wHQyC0VNfwN0HOAjxvYqLYFLlUY7AEBJdI
+ M5jCNaGhHgKeW0Iofm9pDokJNdKfZPwuFjA1M7AdoqKAxDsDCkhi93NTJQHiiSEkZE5f +w== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3m4x6av7pa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 23:03:49 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id DD7B0806B7E;
+        Mon, 28 Nov 2022 23:03:47 +0000 (UTC)
+Received: from hpe.com (unknown [16.231.227.36])
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 9181D806133;
+        Mon, 28 Nov 2022 23:03:46 +0000 (UTC)
+From:   nick.hawkins@hpe.com
+To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com,
+        nick.hawkins@hpe.com, corbet@lwn.net, linux@armlinux.org.uk,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 0/6] ARM: Add GXP Fan and SPI controllers
+Date:   Mon, 28 Nov 2022 17:02:13 -0600
+Message-Id: <20221128230219.39537-1-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-GUID: 2rkTC8pkTepI9rsMCROewBBMLXnSj-Y5
+X-Proofpoint-ORIG-GUID: 2rkTC8pkTepI9rsMCROewBBMLXnSj-Y5
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-28_17,2022-11-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ adultscore=0 clxscore=1015 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211280166
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Sir/Madam,
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-I recommend credible Entrepreneur/viable projects to a Consortium=20
-of Private Investors who are looking for good business=20
-plan/Entrepreneurs to invest and manage funds on a short and long=20
-term at interest rate of 3% for duration of 10 years.
+The GXP SoC can support up to 16 fans through the interface provided by
+the CPLD. The fans speeds are controlled via a pwm value 0-255. The fans
+are also capable of reporting if they have failed to the CPLD which in
+turn reports the status to the GXP SoC. Based on previous feedback the
+registers required for fan control have been regmaped individualy to fan
+driver. Specifically these registers are the function 2 registers and the
+programmable logic registers from the CPLD. Additionally in this patchset
+there is support for the SPI driver which already exists as spi-gxp.c in
+the SPI driver.
 
-The investor is ready to fund any kind of project that requires=20
-funding, 
+---
 
-revert back if you are interested=20
-(adnakhalid@alrashidprojects.co)
+Changes since v1:
 
-Best Regards,
-Adana khalid.
+*Renamed fn2reg to fn2 in dtsi file and documentation
+*Renamed plreg to pl in dtsi file and documentation
+*Renamed fanctrl to fan-controller in dtsi file and documentation
+*Adjusted base register range for fan ctrl in dtsi
+*Changed commit description on fan-ctrl device-tree binding
+*Changed register description on fan-ctrl device-tree binding
+*Changed number of supported fans from 16 to 8 in driver code and
+ documentation
+*Modified commit description of fan code
+*Removed support for fan[0-15]_input
+*Removed PWM defines in driver code
+*Added gxp-fan-ctrl to hwmon's index.rst
+*Removed mutex in driver code
+*Added fan_enable support in fan code and documentation
+*Fixed comment in driver code presents -> present
+*Removed unecessary include files in fan code
+*Added comments to describe what power state is and
+ calculations for accessing plreg in fan code
+*Removed use of variable offsets in fan code
+*Fixed GPL header in fan code
+*Changed module description for fan controller
+*Added kfree in case of failure to initialize driver
+*Added missing yaml file to MAINTAINERS
+
+Nick Hawkins (6):
+  hwmon: (gxp-fan-ctrl) Add GXP fan controller
+  ABI: sysfs-class-hwmon: add a description for fanY_fault
+  dt-bindings: hwmon: Add hpe,gxp-fan-ctrl
+  ARM: dts: add GXP Support for fans and SPI
+  ARM: multi_v7_defconfig: Add GXP Fan and SPI support
+  MAINTAINERS: add gxp fan controller and documents
+
+ Documentation/ABI/testing/sysfs-class-hwmon   |   9 +
+ .../bindings/hwmon/hpe,gxp-fan-ctrl.yaml      |  41 +++
+ Documentation/hwmon/gxp-fan-ctrl.rst          |  28 ++
+ Documentation/hwmon/index.rst                 |   1 +
+ MAINTAINERS                                   |   3 +
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      |  58 ++++
+ arch/arm/boot/dts/hpe-gxp.dtsi                |  64 ++--
+ arch/arm/configs/multi_v7_defconfig           |   2 +
+ drivers/hwmon/Kconfig                         |   9 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/gxp-fan-ctrl.c                  | 305 ++++++++++++++++++
+ 11 files changed, 502 insertions(+), 19 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
+ create mode 100644 Documentation/hwmon/gxp-fan-ctrl.rst
+ create mode 100644 drivers/hwmon/gxp-fan-ctrl.c
+
+-- 
+2.17.1
 
