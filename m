@@ -2,77 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34DEC63A9FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F2D63AA03
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbiK1NtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
+        id S232135AbiK1Ntb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:49:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbiK1NtS (ORCPT
+        with ESMTP id S232119AbiK1Nt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 08:49:18 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5B61E5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:49:16 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id e189so7584524iof.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:49:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5WWumrqiTDYq5uOZBAPJFRzs6vcelTvSCtUZimwYyKk=;
-        b=JaLWK4hY8LgNiPiKh9CCSm+56V2c4Rm7Q59ef1OdxUY5vA0ZNzGYJh8zBSh2Cg6W64
-         eEKR+qLTv/MU1cSh80KUT8bP9gfduZ5u5xWY/RRkgkx433VnWoMLQFoAUQzLsnHsYWJW
-         YGsPYd+Hr+yIoAkDDGPvqs9pyqr1YJYebXF1g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5WWumrqiTDYq5uOZBAPJFRzs6vcelTvSCtUZimwYyKk=;
-        b=68mGE/r0APWvpTMFrhdNa8NK19+z2W3A+xMsEPcTC6g7ydwI3KKpcfiXAO2vlgGZHo
-         wIHxPRYxOiDs7W1VuKC4ipzmx3MntYl1zVqpLQpNorM1e5NeNoGZfJN/HRW2aUa+RtkX
-         g1EzuKYCVMLByRkUDdItMYX6y3x8oo7uXC7OE8ZviJrqJHJdYTf3epknyDXIHupgwH/l
-         Qh+ky+NX3qp9tpyqU+lNvMnRi7HajPzNFSy9fMRu1CyDeEme8fmllfnQeTUjofi/XJnn
-         6+fZoPYSkZOC1a/8RrrixLnN8Qy8sgSdtbBPKy21Nq5pwikkxNgkqtRPP4JoYLiPXSdv
-         p2LA==
-X-Gm-Message-State: ANoB5pk7Hite2cux1hJ3BEXgQQEK8D0ytTEk9OBKUvWoNYrrzszCqF6a
-        XBUWOw6gNfOCDlVXfg9tZ4PT071rUZgyfZr1
-X-Google-Smtp-Source: AA0mqf7hYXLiXkUQ/0/WosMgqvS1Pj1RHQdXb3IX/E7/tVcSfZUv/lX7pQ5EPOydZoTPHWTw09bmBw==
-X-Received: by 2002:a6b:6d0d:0:b0:6c4:ad4d:b23a with SMTP id a13-20020a6b6d0d000000b006c4ad4db23amr13315493iod.2.1669643355600;
-        Mon, 28 Nov 2022 05:49:15 -0800 (PST)
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com. [209.85.166.45])
-        by smtp.gmail.com with ESMTPSA id v4-20020a92ab04000000b00302a7165d9bsm3796626ilh.53.2022.11.28.05.49.13
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 05:49:14 -0800 (PST)
-Received: by mail-io1-f45.google.com with SMTP id g26so6916605iob.11
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:49:13 -0800 (PST)
-X-Received: by 2002:a02:ccfb:0:b0:373:9d0a:33a0 with SMTP id
- l27-20020a02ccfb000000b003739d0a33a0mr1950090jaq.286.1669643353517; Mon, 28
- Nov 2022 05:49:13 -0800 (PST)
+        Mon, 28 Nov 2022 08:49:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F961EECF;
+        Mon, 28 Nov 2022 05:49:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E15EE6118A;
+        Mon, 28 Nov 2022 13:49:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF178C433D7;
+        Mon, 28 Nov 2022 13:49:18 +0000 (UTC)
+Message-ID: <738a2461-7a6a-286b-89e8-d46a26ec6506@xs4all.nl>
+Date:   Mon, 28 Nov 2022 14:49:17 +0100
 MIME-Version: 1.0
-References: <20221128-mt8173-afe-v1-0-70728221628f@chromium.org>
- <a214fe55-fb5e-04b8-348b-895902470b18@collabora.com> <Y4S43XjRyrdm4Tha@sirena.org.uk>
-In-Reply-To: <Y4S43XjRyrdm4Tha@sirena.org.uk>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Mon, 28 Nov 2022 14:49:02 +0100
-X-Gmail-Original-Message-ID: <CANiDSCv8Ai2W10cOjBgthshi8XPCDoCvGxXfoL-47eFrRjrseg@mail.gmail.com>
-Message-ID: <CANiDSCv8Ai2W10cOjBgthshi8XPCDoCvGxXfoL-47eFrRjrseg@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: mediatek: mt8173: Enable IRQ when pdata is ready
-To:     Mark Brown <broonie@kernel.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, alsa-devel@alsa-project.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v4 6/9] media: i2c: ov5645: Use runtime PM
+Content-Language: en-US
+To:     Prabhakar <prabhakar.csengg@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>
+Cc:     Shawn Tu <shawnx.tu@intel.com>, Jacopo Mondi <jacopo@jmondi.org>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20221031232202.131945-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221031232202.131945-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20221031232202.131945-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,26 +63,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Hi Prabhakar,
 
-On Mon, 28 Nov 2022 at 14:34, Mark Brown <broonie@kernel.org> wrote:
->
-> On Mon, Nov 28, 2022 at 02:17:53PM +0100, AngeloGioacchino Del Regno wrote:
->
-> > This commit needs a Fixes tag, as this is indeed a fix.... kexec isn't anything
-> > new, so all kernel versions are affected by this bug.
->
-> Fixes tags are a nice to have, they're not 100% a requirement - they're
-> a lot more useful when they're fixing a bug that was introduced rather
-> than just something that never worked.
+On 11/1/22 00:21, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> Switch to using runtime PM for power management.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> ---
+> v3->v4
+> * Fixed comments pointed by Sakari
+> 
+> v2->v3
+> * Jumped to err_pm_runtime label in case of sd register failure
+> * Now calling pm_runtime_mark_last_busy() before pm_runtime_put_autosuspend()
+>   call
+> * Now calling pm_runtime_put_sync() in case s_stream(1) fails
+> * In s_stream(0) no calling pm_runtime_mark_last_busy() and
+>   pm_runtime_put_autosuspend()
+> * Included RB tag from Laurent.
+> 
+> v1->v2
+> * Moved pm_runtime_*_autosuspend() calls after registering the subdev.
+> ---
+>  drivers/media/i2c/ov5645.c | 133 +++++++++++++++++++------------------
+>  1 file changed, 68 insertions(+), 65 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
+> index 47451238ca05..2e6135d0a31a 100644
+> --- a/drivers/media/i2c/ov5645.c
+> +++ b/drivers/media/i2c/ov5645.c
+> @@ -27,6 +27,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_graph.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/slab.h>
+>  #include <linux/types.h>
+> @@ -108,7 +109,6 @@ struct ov5645 {
+>  	u8 timing_tc_reg21;
+>  
+>  	struct mutex power_lock; /* lock to protect power state */
+> -	int power_count;
+>  
+>  	struct gpio_desc *enable_gpio;
+>  	struct gpio_desc *rst_gpio;
+> @@ -635,8 +635,24 @@ static int ov5645_set_register_array(struct ov5645 *ov5645,
+>  	return 0;
+>  }
+>  
+> -static int ov5645_set_power_on(struct ov5645 *ov5645)
+> +static int ov5645_set_power_off(struct device *dev)
+>  {
+> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+> +	struct ov5645 *ov5645 = to_ov5645(sd);
+> +
+> +	ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x58);
+> +	gpiod_set_value_cansleep(ov5645->rst_gpio, 1);
+> +	gpiod_set_value_cansleep(ov5645->enable_gpio, 0);
+> +	clk_disable_unprepare(ov5645->xclk);
+> +	regulator_bulk_disable(OV5645_NUM_SUPPLIES, ov5645->supplies);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ov5645_set_power_on(struct device *dev)
+> +{
+> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+> +	struct ov5645 *ov5645 = to_ov5645(sd);
+>  	int ret;
+>  
+>  	ret = regulator_bulk_enable(OV5645_NUM_SUPPLIES, ov5645->supplies);
+> @@ -658,57 +674,19 @@ static int ov5645_set_power_on(struct ov5645 *ov5645)
+>  
+>  	msleep(20);
+>  
+> -	return 0;
+> -}
+> -
+> -static void ov5645_set_power_off(struct ov5645 *ov5645)
+> -{
+> -	gpiod_set_value_cansleep(ov5645->rst_gpio, 1);
+> -	gpiod_set_value_cansleep(ov5645->enable_gpio, 0);
+> -	clk_disable_unprepare(ov5645->xclk);
+> -	regulator_bulk_disable(OV5645_NUM_SUPPLIES, ov5645->supplies);
+> -}
+> -
+> -static int ov5645_s_power(struct v4l2_subdev *sd, int on)
+> -{
+> -	struct ov5645 *ov5645 = to_ov5645(sd);
+> -	int ret = 0;
+> -
+> -	mutex_lock(&ov5645->power_lock);
+> -
+> -	/* If the power count is modified from 0 to != 0 or from != 0 to 0,
+> -	 * update the power state.
+> -	 */
+> -	if (ov5645->power_count == !on) {
+> -		if (on) {
+> -			ret = ov5645_set_power_on(ov5645);
+> -			if (ret < 0)
+> -				goto exit;
+> -
+> -			ret = ov5645_set_register_array(ov5645,
+> -					ov5645_global_init_setting,
+> +	ret = ov5645_set_register_array(ov5645, ov5645_global_init_setting,
+>  					ARRAY_SIZE(ov5645_global_init_setting));
+> -			if (ret < 0) {
+> -				dev_err(ov5645->dev,
+> -					"could not set init registers\n");
+> -				ov5645_set_power_off(ov5645);
+> -				goto exit;
+> -			}
+> -
+> -			usleep_range(500, 1000);
+> -		} else {
+> -			ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x58);
+> -			ov5645_set_power_off(ov5645);
+> -		}
+> +	if (ret < 0) {
+> +		dev_err(ov5645->dev, "could not set init registers\n");
+> +		goto exit;
+>  	}
+>  
+> -	/* Update the power count. */
+> -	ov5645->power_count += on ? 1 : -1;
+> -	WARN_ON(ov5645->power_count < 0);
+> +	usleep_range(500, 1000);
+>  
+> -exit:
+> -	mutex_unlock(&ov5645->power_lock);
+> +	return 0;
+>  
+> +exit:
+> +	ov5645_set_power_off(dev);
+>  	return ret;
 
-I do not have any strong opinion here. If you want to add the tag. It should be:
+smatch gives this warning:
 
-Fixes: ee0bcaff109f ("ASoC: mediatek: Add AFE platform driver")
+drivers/media/i2c/ov5645.c:687 ov5645_set_power_on() warn: 'ov5645->xclk' from clk_prepare_enable() not released on lines: 687.
 
-Let me know if I shall resend.
+Can you take a look?
 
 Thanks!
 
--- 
-Ricardo Ribalda
+	Hans
+
+>  }
+
