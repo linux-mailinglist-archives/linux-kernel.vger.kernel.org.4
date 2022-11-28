@@ -2,116 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D4363A9F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 702CE63A9F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:48:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232094AbiK1NsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
+        id S232090AbiK1NsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:48:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbiK1Nr4 (ORCPT
+        with ESMTP id S232157AbiK1Nrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 08:47:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEC62B6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:47:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 28 Nov 2022 08:47:47 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213E31E7;
+        Mon, 28 Nov 2022 05:47:45 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1FA0EB80DBE
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 13:47:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C564AC433D6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 13:47:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669643272;
-        bh=NIiDTX0/IjK4dtjmZD7V/yynqbAg+//GHEozsLGxsH0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KshPOnfyCLWznAToN31NfIcDe5aiv9hZ4ImkGtkeeQTuS+h/uB67zD68drnt1rDE9
-         +jchvlEWofzWlvtT9W/HKiEiNN59JmG89kfzFn8kcRpgZ3MUH3Xz5Ho5ldDiZ1NzFJ
-         48sOHmcjf2kz4yglz1DQ+1JJfr13tEdPXq5TACjGkZ8L1zcgWytyDWrk1UKfTq5sG6
-         EVKmmnVBayHhCvdmACKlayxkuCoMw4QF9yoyAKRd4WfM1MH/aTvf4a5cAmQN7bAzZx
-         40XIGddkJISHdSQE6aQYftGBHSwmWXT37xD4lIWC3VpeGuTZ7sCHX/iDrLtvvIuzV5
-         eRCdPbeqqKybg==
-Received: by mail-ed1-f41.google.com with SMTP id f7so15479288edc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:47:52 -0800 (PST)
-X-Gm-Message-State: ANoB5pnaA5EkcaJOiBtMbIHN3LBHiHHVIQhjQz/LzB8JZUy1aVVSVNZO
-        Wm4BLXAZB/vylnb3yEk7efgJcCFbVdFYQG4fP9E=
-X-Google-Smtp-Source: AA0mqf6OstHFr9LXQIKXtrTh06ozPyE/vLgj4i6TNZweiP9SGhZTDlo9YNG10HsMJtPgy16G4zfXLz4CefuLXXk12zg=
-X-Received: by 2002:aa7:d551:0:b0:468:fb2c:6c8c with SMTP id
- u17-20020aa7d551000000b00468fb2c6c8cmr45770506edr.340.1669643270988; Mon, 28
- Nov 2022 05:47:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20220923100149.2647325-1-suagrfillet@gmail.com> <CAAYs2=hx49ahtY3pe1z241Vd1mRNZjc-oigubmKy0aGqg6T8ag@mail.gmail.com>
-In-Reply-To: <CAAYs2=hx49ahtY3pe1z241Vd1mRNZjc-oigubmKy0aGqg6T8ag@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 28 Nov 2022 21:47:38 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRfWXZEbAjWQ0vPA8HWihkibPQ2Mb9hvYgQg+DdEFrZTA@mail.gmail.com>
-Message-ID: <CAJF2gTRfWXZEbAjWQ0vPA8HWihkibPQ2Mb9hvYgQg+DdEFrZTA@mail.gmail.com>
-Subject: Re: [PATCH RESEND] riscv : select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
-To:     Song Shuai <suagrfillet@gmail.com>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, guoren@linux.alibaba.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C514A1F74A;
+        Mon, 28 Nov 2022 13:47:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669643263; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=piZL6+xU26YG6MuHIbVBXc6UeZ1HPcF7+Q/hr9wWY3c=;
+        b=kvr4zkdn0MZMjrXtMnvnFp2djNc1HeJslNef+gquz5zxgL0kb/0Icnyh+yUT5dI3LMqGvK
+        /rpG7xO/+8lUYCueZPxcl2l2RuV3yqZDwWpNNWXU335SeKGwg6uIM+4mrhKLROhm2wkZSX
+        Y+FKAO1jebw64i/c8f/pfGiz9IGzAmI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669643263;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=piZL6+xU26YG6MuHIbVBXc6UeZ1HPcF7+Q/hr9wWY3c=;
+        b=8UJyONlu4vmzo+U1C739NQOtO7MeTzEW+amB4ueQh3WQySf9AVRpQYSbmKpiLiWOjDdqLz
+        wLfN43U+C/p/lWBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8DAD613273;
+        Mon, 28 Nov 2022 13:47:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id B/f7If+7hGPuEAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 28 Nov 2022 13:47:43 +0000
+Date:   Mon, 28 Nov 2022 14:47:43 +0100
+Message-ID: <87mt8byyv4.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        stable@vger.kernel.org, sound-open-firmware@alsa-project.org
+Subject: Re: [PATCH v4] ALSA: core: Fix deadlock when shutdown a frozen userspace
+In-Reply-To: <20221127-snd-freeze-v4-0-51ca64b7f2ab@chromium.org>
+References: <20221127-snd-freeze-v4-0-51ca64b7f2ab@chromium.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 6:11 PM Song Shuai <suagrfillet@gmail.com> wrote:
->
-> Song Shuai <suagrfillet@gmail.com> =E4=BA=8E2022=E5=B9=B49=E6=9C=8823=E6=
-=97=A5=E5=91=A8=E4=BA=94 10:03=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > riscv now uses -fpatchable-function-entry with dynamic ftrace after
-> > the `afc76b8b8` commit, which means recordmcount shouldn't be called
-The ref commit format needs to be corrected. Others:
-Tested-by: Guo Ren <guoren@kernel.org>
+On Mon, 28 Nov 2022 14:42:49 +0100,
+Ricardo Ribalda wrote:
+> 
+> During kexec(), the userspace is frozen. Therefore we cannot wait for it
+> to complete.
+> 
+> Avoid running snd_sof_machine_unregister during shutdown.
+> 
+> This fixes:
+> 
+> [   84.943749] Freezing user space processes ... (elapsed 0.111 seconds) done.
+> [  246.784446] INFO: task kexec-lite:5123 blocked for more than 122 seconds.
+> [  246.819035] Call Trace:
+> [  246.821782]  <TASK>
+> [  246.824186]  __schedule+0x5f9/0x1263
+> [  246.828231]  schedule+0x87/0xc5
+> [  246.831779]  snd_card_disconnect_sync+0xb5/0x127
+> ...
+> [  246.889249]  snd_sof_device_shutdown+0xb4/0x150
+> [  246.899317]  pci_device_shutdown+0x37/0x61
+> [  246.903990]  device_shutdown+0x14c/0x1d6
+> [  246.908391]  kernel_kexec+0x45/0xb9
+> 
+> And:
+> 
+> [  246.893222] INFO: task kexec-lite:4891 blocked for more than 122 seconds.
+> [  246.927709] Call Trace:
+> [  246.930461]  <TASK>
+> [  246.932819]  __schedule+0x5f9/0x1263
+> [  246.936855]  ? fsnotify_grab_connector+0x5c/0x70
+> [  246.942045]  schedule+0x87/0xc5
+> [  246.945567]  schedule_timeout+0x49/0xf3
+> [  246.949877]  wait_for_completion+0x86/0xe8
+> [  246.954463]  snd_card_free+0x68/0x89
+> ...
+> [  247.001080]  platform_device_unregister+0x12/0x35
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+> To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> To: Liam Girdwood <lgirdwood@gmail.com>
+> To: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+> To: Bard Liao <yung-chuan.liao@linux.intel.com>
+> To: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+> To: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+> To: Daniel Baluta <daniel.baluta@nxp.com>
+> To: Mark Brown <broonie@kernel.org>
+> To: Jaroslav Kysela <perex@perex.cz>
+> To: Takashi Iwai <tiwai@suse.com>
+> Cc: sound-open-firmware@alsa-project.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+> Changes in v4:
+> - Do not call snd_sof_machine_unregister from shutdown.
+> - Link to v3: https://lore.kernel.org/r/20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org
 
-> > to create the __mcount_loc section before the vmlinux linking.
-> >
-> > We should select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY to tell
-> > Makefile not to run recordmcount.
-> >
-> Hi,Guo:
->
-> Can this patch squeeze into your v3 series ?
-They don't have a dependency, and it's unnecessary. A single patch is
-easy for the maintainer to pick up.
-
->
-> Thanks,
-> Song
-> > Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> > ---
-> >  arch/riscv/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index c22f58155948..25db8cea876a 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -246,6 +246,7 @@ config ARCH_RV64I
-> >         select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && $(cc-option=
-,-fpatchable-function-entry=3D8)
-> >         select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
-> >         select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
-> > +       select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY if DYNAMIC_FT=
-RACE
-> >         select HAVE_FUNCTION_GRAPH_TRACER
-> >         select HAVE_FUNCTION_TRACER if !XIP_KERNEL
-> >         select SWIOTLB if MMU
-> > --
-> > 2.20.1
-> >
+The subject prefix should be adjusted -- now it's no longer about ALSA
+core but specific to ASoC SOF.
 
 
+thanks,
 
---=20
-Best Regards
- Guo Ren
+Takashi
