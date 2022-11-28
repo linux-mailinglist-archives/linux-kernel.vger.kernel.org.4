@@ -2,149 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 162B763A249
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D3763A24B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:50:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbiK1Hu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 02:50:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50102 "EHLO
+        id S229996AbiK1Hur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 02:50:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiK1HuZ (ORCPT
+        with ESMTP id S229868AbiK1Hup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 02:50:25 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995F51580E
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 23:50:24 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id bx10so3271269wrb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 23:50:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=55Yoxcq3+d/tHhqKEtTkuDqeutda58+RH9+uCLxHdaU=;
-        b=KDr4QKS5v9Wzz/FasCrhsx3fWubdC8WFqhJci6NolcG7farx4GD8o4IryNQQxTGjW5
-         cviPRTyGbAHLEOKoPjjqHakjocoeVVXr6kYl4Ffu5CLLX8Oii8P5BDbpTo8oIzZYjc5D
-         UU6JmZVG+iPQ9jpuSyG61+qHIf6Ufh3abObfDscUdeez4lHEQhEs7ZDyupvz6i4mhK33
-         UhcOPQhGBo73eqX643k5j61qyPGa3eG+hP79VwcEjDHtYYkJ2Sy8jArdWDjZr+YOXN+w
-         ziSmZchc2jkSW/gSgme+O9eY0GJFuuJmaAZfSz06j9U5eNU9HyNmE5Hsy3pul/ytcZmx
-         vO7A==
+        Mon, 28 Nov 2022 02:50:45 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44ACB15818
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 23:50:44 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id x10-20020a056e021bca00b00302b6c0a683so8318811ilv.23
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 23:50:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=55Yoxcq3+d/tHhqKEtTkuDqeutda58+RH9+uCLxHdaU=;
-        b=y61cAn0SEOETI2/sNcyXpIUWncHP35WP7p1FfWzW8z7g1J7/DxGXCIloppqzler/V3
-         X2yUMRO7v0Q7uipWCeAbqRuWtPtGCX/jqFgTRoXnYNg9k0XxjNbkDg82dABa5udPwI3i
-         rQJSiiIRG8StYAeIm5VYUd4q9t5R1bcImTXF25NxmyNlB53TbQBLJVuV46EtkQk6T0TX
-         ka/iVZQDhMskvif+3Ho5NDPjXJO89mKp2474kdY8yVueph82q5uTO9R1DpExIKGdclTj
-         kYbbjvdARFDhTM2slqWn/HzxF+V6vqusJxf82O95BLX7XLGze19aGVIGrQebefxrodcT
-         94FQ==
-X-Gm-Message-State: ANoB5pkR4VoAZSQ+wPtnR07KGOfqFnyRqNUWQ5vmkCeYiivTwWR07Vjw
-        hft5Nw4z6xsRGv8oKM85gmoh8tsqMdTvyw==
-X-Google-Smtp-Source: AA0mqf4DtT9wZsjWyUAYN6zeatBId7DhcpzfU4wz52q06/sbxMcArt87PiE8gaEY66Xcay8E4ZcKkg==
-X-Received: by 2002:adf:ab1d:0:b0:242:e73:f642 with SMTP id q29-20020adfab1d000000b002420e73f642mr4712465wrc.184.1669621823018;
-        Sun, 27 Nov 2022 23:50:23 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id n2-20020a5d4002000000b00241727795c4sm11804792wrp.63.2022.11.27.23.50.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Nov 2022 23:50:22 -0800 (PST)
-Date:   Mon, 28 Nov 2022 10:50:19 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        gustavoars@kernel.org
-Subject: Re: [PATCH] staging: wlan-ng: Replace zero-length arrays with
- DECLARE_FLEX_ARRAY() helper
-Message-ID: <Y4RoOxgo76Hc5RRP@kadam>
-References: <Y3YKhee8L+kAfHM4@qemulion>
- <Y3YvGdkyGm7azGg4@kroah.com>
- <Y3Y1N6AwWEXLpSrx@qemulion>
- <Y3Z3aatcaISvqURJ@kroah.com>
- <Y3jqUpNOygJ4+2jy@qemulion>
- <Y4RnJyiCDYavLAJq@qemulion>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ivh2xXELoiAfJgRZzdEP1NE6OlZmZZPsfCq/KWACjZk=;
+        b=l8zBl3Jo3rvPjYKWqXwmKpIJWd04hpxAXLjNEsZGE057GpM89RVtvNWxdN0uGCh2UM
+         HiHxTXyTdb717JGpkp49yd9khPb3kC5ImMwKgft7SZJRrYyHpDHTR0srH/FCcbuDLhyp
+         KFnpZ4qetLX+8+0yZbWQs7jgQ71ZfvPi4Me7f95xJYs6lYd2T8trRpgolSyalak2w0lX
+         +Cc0YU+viazXfHYYf84WYkAqSzg8xzAjGedNYk2Njka8Gsf5iiCP/CJcfV2FTLKwKZNx
+         A1AjwzX3wmQo6NIDPGQPpmz2DePi9FwJQDwPybEacyKA3vDDOhlm4q1dealPNP4YFKD6
+         TfuA==
+X-Gm-Message-State: ANoB5pkrfAaDtJq5Lt1FIcNFPNfh7HzG5k71htrMG4CIey/w1kW0UEym
+        Y+s3wGJzDjnNAHwFFnG59U/ESdVHzbi20g4Hf1fRac0pd9Ac
+X-Google-Smtp-Source: AA0mqf7XO1UhY7apncf+gy5RWPiK1zPHeMRgkZNshk66IA5+t7lUsHrHhJW0pnwUEdvYtm6GPOMotUdiXoR8rKagGCBThsx/FAle
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4RnJyiCDYavLAJq@qemulion>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:3209:0:b0:303:814:f79c with SMTP id
+ z9-20020a923209000000b003030814f79cmr3345750ile.50.1669621843598; Sun, 27 Nov
+ 2022 23:50:43 -0800 (PST)
+Date:   Sun, 27 Nov 2022 23:50:43 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e5a65c05ee832054@google.com>
+Subject: [syzbot] memory leak in add_tree_block
+From:   syzbot <syzbot+be14ed7728594dc8bd42@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 01:15:43PM +0530, Deepak R Varma wrote:
-> On Sat, Nov 19, 2022 at 08:08:15PM +0530, Deepak R Varma wrote:
-> > On Thu, Nov 17, 2022 at 07:03:21PM +0100, Greg Kroah-Hartman wrote:
-> > > On Thu, Nov 17, 2022 at 06:50:55PM +0530, Deepak R Varma wrote:
-> > > > On Thu, Nov 17, 2022 at 01:54:49PM +0100, Greg Kroah-Hartman wrote:
-> > > > > On Thu, Nov 17, 2022 at 03:48:45PM +0530, Deepak R Varma wrote:
-> > > > > >
-> > > > > >  struct hfa384x_pdr_refdac_measurements {
-> > > > > > -	u16 value[0];
-> > > > > > +	DECLARE_FLEX_ARRAY(u16, value);
-> > > > > >  } __packed;
-> > > > >
-> > > > > Why?  This structure is never used anywhere, right?  So why is this
-> > > > > needed to be changed and not just removed entirely?  Same for the other
-> > > > > structures in this patch.
-> > > >
-> > > > Hello Greg,
-> > > > I am unable to confirm that these structures are truly not needed in the absence
-> > > > if a real device based testing. I could only validate that using the compile
-> > > > build and driver loading.
-> > >
-> > > Think this through, if no one is actually using this structure, and it
-> > > is of 0 size, then do you think it is being used?
-> >
-> > Hello Greg,
-> > I did not find any memory allocation for these zero length array structures.
-> > Also, the union or its enclosing structure do not appear to access the members.
-> > Hence I am leaning towards concluding that these zero length array structures do
-> > not appear to be necessary.
-> >
-> > There are a few other structures that are part of the same union, however, they
-> > too do not appear to be used for accessing the memory assigned to the union [or
-> > its enclosing structure]. I think most of the members of these unions can be
-> > replaced by one max size structure of this union [e.g. struct
-> > hfa384x_pdr_mkk_measurements].
-> >
-> > Could you please comment if I am reading the code right?
-> >
-> > For your quick reference, the zero length structure declaration are online 963
-> > whereas the union is on line number 1080 of the file drivers/staging/wlan-ng/hfa384x.h
-> 
-> Hello Greg,
-> can you please suggest how should I approach this clean-up/correction?
-> 
+Hello,
 
-Like this:
+syzbot found the following issue on:
 
-diff --git a/drivers/staging/wlan-ng/hfa384x.h b/drivers/staging/wlan-ng/hfa384x.h
-index 0611e37df6ac..6a3df58c9e9c 100644
---- a/drivers/staging/wlan-ng/hfa384x.h
-+++ b/drivers/staging/wlan-ng/hfa384x.h
-@@ -959,10 +959,6 @@ struct hfa384x_pdr_nicid {
- 	u16 minor;
- } __packed;
- 
--struct hfa384x_pdr_refdac_measurements {
--	u16 value[0];
--} __packed;
--
- struct hfa384x_pdr_vgdac_measurements {
- 	u16 value[0];
- } __packed;
-@@ -1077,7 +1073,6 @@ struct hfa384x_pdrec {
- 		struct hfa384x_pdr_mfisuprange mfisuprange;
- 		struct hfa384x_pdr_cfisuprange cfisuprange;
- 		struct hfa384x_pdr_nicid nicid;
--		struct hfa384x_pdr_refdac_measurements refdac_measurements;
- 		struct hfa384x_pdr_vgdac_measurements vgdac_measurements;
- 		struct hfa384x_pdr_level_comp_measurements level_compc_measurements;
- 		struct hfa384x_pdr_mac_address mac_address;
+HEAD commit:    4312098baf37 Merge tag 'spi-fix-v6.1-rc6' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1642d68d880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=522dbc1ab43c9303
+dashboard link: https://syzkaller.appspot.com/bug?extid=be14ed7728594dc8bd42
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15bfbac3880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=120cff21880000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/76a03ca3d4a9/disk-4312098b.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/5de00a38b596/vmlinux-4312098b.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/9499f7779db5/bzImage-4312098b.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/42f50e809c7e/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+be14ed7728594dc8bd42@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff88810f8ea480 (size 64):
+  comm "syz-executor193", pid 3787, jiffies 4294971495 (age 12.820s)
+  hex dump (first 32 bytes):
+    03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff814ed790>] kmalloc_trace+0x20/0x90 mm/slab_common.c:1045
+    [<ffffffff820869aa>] kmalloc include/linux/slab.h:553 [inline]
+    [<ffffffff820869aa>] add_tree_block+0x3a/0x210 fs/btrfs/ref-verify.c:316
+    [<ffffffff82087e7c>] btrfs_build_ref_tree+0x50c/0x750 fs/btrfs/ref-verify.c:471
+    [<ffffffff846b818d>] open_ctree+0x19af/0x1fcb fs/btrfs/disk-io.c:3767
+    [<ffffffff846b17d6>] btrfs_fill_super fs/btrfs/super.c:1461 [inline]
+    [<ffffffff846b17d6>] btrfs_mount_root.cold+0x13/0xf5 fs/btrfs/super.c:1829
+    [<ffffffff81662b0b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
+    [<ffffffff815fc948>] vfs_get_tree+0x28/0x100 fs/super.c:1531
+    [<ffffffff81638b61>] fc_mount fs/namespace.c:1043 [inline]
+    [<ffffffff81638b61>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1073
+    [<ffffffff81638bec>] vfs_kern_mount+0x3c/0x60 fs/namespace.c:1060
+    [<ffffffff81f54029>] btrfs_mount+0x199/0x590 fs/btrfs/super.c:1889
+    [<ffffffff81662b0b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
+    [<ffffffff815fc948>] vfs_get_tree+0x28/0x100 fs/super.c:1531
+    [<ffffffff81640487>] do_new_mount fs/namespace.c:3040 [inline]
+    [<ffffffff81640487>] path_mount+0xc37/0x10d0 fs/namespace.c:3370
+    [<ffffffff8164106e>] do_mount fs/namespace.c:3383 [inline]
+    [<ffffffff8164106e>] __do_sys_mount fs/namespace.c:3591 [inline]
+    [<ffffffff8164106e>] __se_sys_mount fs/namespace.c:3568 [inline]
+    [<ffffffff8164106e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
+    [<ffffffff8485b285>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff8485b285>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84a00087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+BUG: memory leak
+unreferenced object 0xffff88810c91f040 (size 64):
+  comm "syz-executor193", pid 3787, jiffies 4294971495 (age 12.820s)
+  hex dump (first 32 bytes):
+    03 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00  ................
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff814ed790>] kmalloc_trace+0x20/0x90 mm/slab_common.c:1045
+    [<ffffffff82086355>] kmalloc include/linux/slab.h:553 [inline]
+    [<ffffffff82086355>] kzalloc include/linux/slab.h:689 [inline]
+    [<ffffffff82086355>] add_block_entry+0x35/0x320 fs/btrfs/ref-verify.c:267
+    [<ffffffff82086a0e>] add_tree_block+0x9e/0x210 fs/btrfs/ref-verify.c:329
+    [<ffffffff82087e7c>] btrfs_build_ref_tree+0x50c/0x750 fs/btrfs/ref-verify.c:471
+    [<ffffffff846b818d>] open_ctree+0x19af/0x1fcb fs/btrfs/disk-io.c:3767
+    [<ffffffff846b17d6>] btrfs_fill_super fs/btrfs/super.c:1461 [inline]
+    [<ffffffff846b17d6>] btrfs_mount_root.cold+0x13/0xf5 fs/btrfs/super.c:1829
+    [<ffffffff81662b0b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
+    [<ffffffff815fc948>] vfs_get_tree+0x28/0x100 fs/super.c:1531
+    [<ffffffff81638b61>] fc_mount fs/namespace.c:1043 [inline]
+    [<ffffffff81638b61>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1073
+    [<ffffffff81638bec>] vfs_kern_mount+0x3c/0x60 fs/namespace.c:1060
+    [<ffffffff81f54029>] btrfs_mount+0x199/0x590 fs/btrfs/super.c:1889
+    [<ffffffff81662b0b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
+    [<ffffffff815fc948>] vfs_get_tree+0x28/0x100 fs/super.c:1531
+    [<ffffffff81640487>] do_new_mount fs/namespace.c:3040 [inline]
+    [<ffffffff81640487>] path_mount+0xc37/0x10d0 fs/namespace.c:3370
+    [<ffffffff8164106e>] do_mount fs/namespace.c:3383 [inline]
+    [<ffffffff8164106e>] __do_sys_mount fs/namespace.c:3591 [inline]
+    [<ffffffff8164106e>] __se_sys_mount fs/namespace.c:3568 [inline]
+    [<ffffffff8164106e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
+    [<ffffffff8485b285>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff8485b285>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+
+BUG: memory leak
+unreferenced object 0xffff88810caab580 (size 96):
+  comm "syz-executor193", pid 3787, jiffies 4294971495 (age 12.820s)
+  hex dump (first 32 bytes):
+    00 10 10 00 00 00 00 00 00 10 00 00 00 00 00 00  ................
+    01 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00  ................
+  backtrace:
+    [<ffffffff814ed790>] kmalloc_trace+0x20/0x90 mm/slab_common.c:1045
+    [<ffffffff8208636e>] kmalloc include/linux/slab.h:553 [inline]
+    [<ffffffff8208636e>] kzalloc include/linux/slab.h:689 [inline]
+    [<ffffffff8208636e>] add_block_entry+0x4e/0x320 fs/btrfs/ref-verify.c:268
+    [<ffffffff82086a0e>] add_tree_block+0x9e/0x210 fs/btrfs/ref-verify.c:329
+    [<ffffffff82087e7c>] btrfs_build_ref_tree+0x50c/0x750 fs/btrfs/ref-verify.c:471
+    [<ffffffff846b818d>] open_ctree+0x19af/0x1fcb fs/btrfs/disk-io.c:3767
+    [<ffffffff846b17d6>] btrfs_fill_super fs/btrfs/super.c:1461 [inline]
+    [<ffffffff846b17d6>] btrfs_mount_root.cold+0x13/0xf5 fs/btrfs/super.c:1829
+    [<ffffffff81662b0b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
+    [<ffffffff815fc948>] vfs_get_tree+0x28/0x100 fs/super.c:1531
+    [<ffffffff81638b61>] fc_mount fs/namespace.c:1043 [inline]
+    [<ffffffff81638b61>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1073
+    [<ffffffff81638bec>] vfs_kern_mount+0x3c/0x60 fs/namespace.c:1060
+    [<ffffffff81f54029>] btrfs_mount+0x199/0x590 fs/btrfs/super.c:1889
+    [<ffffffff81662b0b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
+    [<ffffffff815fc948>] vfs_get_tree+0x28/0x100 fs/super.c:1531
+    [<ffffffff81640487>] do_new_mount fs/namespace.c:3040 [inline]
+    [<ffffffff81640487>] path_mount+0xc37/0x10d0 fs/namespace.c:3370
+    [<ffffffff8164106e>] do_mount fs/namespace.c:3383 [inline]
+    [<ffffffff8164106e>] __do_sys_mount fs/namespace.c:3591 [inline]
+    [<ffffffff8164106e>] __se_sys_mount fs/namespace.c:3568 [inline]
+    [<ffffffff8164106e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
+    [<ffffffff8485b285>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff8485b285>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
