@@ -2,79 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AFE963A9A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5160D63A974
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:29:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiK1Nei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:34:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
+        id S231765AbiK1N3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiK1Ned (ORCPT
+        with ESMTP id S230241AbiK1N3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 08:34:33 -0500
-X-Greylist: delayed 385 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Nov 2022 05:34:31 PST
-Received: from njjs-sys-mailin04.njjs.baidu.com (mx316.baidu.com [180.101.52.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3A6225C9
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:34:31 -0800 (PST)
-Received: from bjhw-sys-rpm015653cc5.bjhw.baidu.com (bjhw-sys-rpm015653cc5.bjhw.baidu.com [10.227.53.39])
-        by njjs-sys-mailin04.njjs.baidu.com (Postfix) with ESMTP id 9268C11800045;
-        Mon, 28 Nov 2022 21:28:03 +0800 (CST)
-Received: from localhost (localhost [127.0.0.1])
-        by bjhw-sys-rpm015653cc5.bjhw.baidu.com (Postfix) with ESMTP id 7FCEED9932;
-        Mon, 28 Nov 2022 21:28:03 +0800 (CST)
-From:   Yuan ZhaoXiong <yuanzhx326@gmail.com>
-To:     tglx@linutronix.de, steven.price@arm.com, Jason@zx2c4.com,
-        juri.lelli@redhat.com, tony.luck@intel.com, frederic@kernel.org,
-        yuanzhx326@gmail.com, sathyanarayanan.kuppuswamy@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] cpu: printk error information when call cpu_up() failed.
-Date:   Mon, 28 Nov 2022 21:28:03 +0800
-Message-Id: <20221128132803.17599-1-yuanzhx326@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 28 Nov 2022 08:29:08 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486DA1144F;
+        Mon, 28 Nov 2022 05:29:04 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASCoqMP023753;
+        Mon, 28 Nov 2022 13:28:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=XtmrGDzjmt0PLSzkgQBGPrV/ZYJmSKdpU+3eaJ6TZ6A=;
+ b=HHWrY3Iucv5HwhQxPAjihIvV+qJoAQzThHQgyfaFeRVMxKGMeUF+BSjW6+NfUJ9mVC9+
+ rC1Pk6VJCZ8KNMlixXBxj7C9zeDr1OTZr95bA1NQiqb1w119R8flC+H6C02tHI1xSL+l
+ 00zkqWdR3mZAXQb6TcxDvCfL/sbzrY8uuhZAGSBQZ/YZnlI38yo/UwB7l42G2E9ZSzwf
+ SElRXo2AfsCSGhYHMIxL38pRzcHQ+0RZu3YBV6a/3ykO31oo2Rcqr5hbcYvLDmD0GwTx
+ RPWSmmn7fNWUv9wHGnH1hZBdSs67dIUkGRrTWb0RTP4aTsjTUCtfSV/6fZEHMJ0mdKi+ IQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m3bjrmg61-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 13:28:40 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ASDScM4013930
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 13:28:38 GMT
+Received: from sarannya-linux.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 28 Nov 2022 05:28:32 -0800
+From:   Sarannya S <quic_sarannya@quicinc.com>
+To:     <bjorn.andersson@linaro.org>, <arnaud.pouliquen@foss.st.com>,
+        <swboyd@chromium.org>, <quic_clew@quicinc.com>,
+        <mathieu.poirier@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Sarannya S <quic_sarannya@quicinc.com>,
+        Deepak Kumar Singh <quic_deesin@quicinc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Marcel Ziswiler" <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH V4 1/3] rpmsg: core: Add signal API support
+Date:   Mon, 28 Nov 2022 18:58:09 +0530
+Message-ID: <1669642093-20399-1-git-send-email-quic_sarannya@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_SOFTFAIL,
-        SPOOFED_FREEMAIL,SPOOF_GMAIL_MID autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: AXyBl4DhVZFgAz4LQPoro9w67wPXs_jV
+X-Proofpoint-GUID: AXyBl4DhVZFgAz4LQPoro9w67wPXs_jV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-28_11,2022-11-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 phishscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0
+ impostorscore=0 priorityscore=1501 adultscore=0 mlxscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211280102
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is better to printk error information out when calling cpu_up() failed.
-Users will observe cpu up error conveniently via the kernel log.
+Some transports like Glink support the state notifications between
+clients using flow control signals similar to serial protocol signals.
+Local glink client drivers can send and receive flow control status
+to glink clients running on remote processors.
 
-Signed-off-by: Yuan ZhaoXiong <yuanzhx326@gmail.com>
+Add APIs to support sending and receiving of flow control status by
+rpmsg clients.
+
+Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
 ---
- kernel/cpu.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ arch/arm64/configs/defconfig   |  2 ++
+ drivers/rpmsg/rpmsg_core.c     | 20 ++++++++++++++++++++
+ drivers/rpmsg/rpmsg_internal.h |  2 ++
+ include/linux/rpmsg.h          | 15 +++++++++++++++
+ 4 files changed, 39 insertions(+)
 
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index bbad5e375d3b..28b0202e7744 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -1481,12 +1481,16 @@ int bringup_hibernate_cpu(unsigned int sleep_cpu)
- void bringup_nonboot_cpus(unsigned int setup_max_cpus)
- {
- 	unsigned int cpu;
-+	int error;
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 0b6af33..2df3778 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -26,6 +26,8 @@ CONFIG_CGROUP_CPUACCT=y
+ CONFIG_CGROUP_PERF=y
+ CONFIG_CGROUP_BPF=y
+ CONFIG_USER_NS=y
++CONFIG_RPMSG=y
++CONFIG_RPMSG_CHAR=y
+ CONFIG_SCHED_AUTOGROUP=y
+ CONFIG_BLK_DEV_INITRD=y
+ CONFIG_KALLSYMS_ALL=y
+diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+index d6dde00e..0c5bf67 100644
+--- a/drivers/rpmsg/rpmsg_core.c
++++ b/drivers/rpmsg/rpmsg_core.c
+@@ -331,6 +331,24 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
+ EXPORT_SYMBOL(rpmsg_trysend_offchannel);
  
- 	for_each_present_cpu(cpu) {
- 		if (num_online_cpus() >= setup_max_cpus)
- 			break;
--		if (!cpu_online(cpu))
--			cpu_up(cpu, CPUHP_ONLINE);
-+		if (!cpu_online(cpu)) {
-+			error = cpu_up(cpu, CPUHP_ONLINE);
-+			if (error)
-+				pr_err("Error taking CPU%d up: %d\n", cpu, error);
-+		}
+ /**
++ * rpmsg_set_flow_control() - sets/clears serial flow control signals
++ * @ept:	the rpmsg endpoint
++ * @enable:	enable or disable serial flow control
++ *
++ * Return: 0 on success and an appropriate error value on failure.
++ */
++int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable)
++{
++	if (WARN_ON(!ept))
++		return -EINVAL;
++	if (!ept->ops->set_flow_control)
++		return -ENXIO;
++
++	return ept->ops->set_flow_control(ept, enable);
++}
++EXPORT_SYMBOL(rpmsg_set_flow_control);
++
++/**
+  * rpmsg_get_mtu() - get maximum transmission buffer size for sending message.
+  * @ept: the rpmsg endpoint
+  *
+@@ -539,6 +557,8 @@ static int rpmsg_dev_probe(struct device *dev)
+ 
+ 		rpdev->ept = ept;
+ 		rpdev->src = ept->addr;
++
++		ept->flow_cb = rpdrv->flowcontrol;
  	}
+ 
+ 	err = rpdrv->probe(rpdev);
+diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
+index 39b646d..4fea45a 100644
+--- a/drivers/rpmsg/rpmsg_internal.h
++++ b/drivers/rpmsg/rpmsg_internal.h
+@@ -55,6 +55,7 @@ struct rpmsg_device_ops {
+  * @trysendto:		see @rpmsg_trysendto(), optional
+  * @trysend_offchannel:	see @rpmsg_trysend_offchannel(), optional
+  * @poll:		see @rpmsg_poll(), optional
++ * @set_flow_control:	see @rpmsg_set_flow_control(), optional
+  * @get_mtu:		see @rpmsg_get_mtu(), optional
+  *
+  * Indirection table for the operations that a rpmsg backend should implement.
+@@ -75,6 +76,7 @@ struct rpmsg_endpoint_ops {
+ 			     void *data, int len);
+ 	__poll_t (*poll)(struct rpmsg_endpoint *ept, struct file *filp,
+ 			     poll_table *wait);
++	int (*set_flow_control)(struct rpmsg_endpoint *ept, bool enable);
+ 	ssize_t (*get_mtu)(struct rpmsg_endpoint *ept);
+ };
+ 
+diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
+index 523c98b..cc7a917 100644
+--- a/include/linux/rpmsg.h
++++ b/include/linux/rpmsg.h
+@@ -64,12 +64,14 @@ struct rpmsg_device {
+ };
+ 
+ typedef int (*rpmsg_rx_cb_t)(struct rpmsg_device *, void *, int, void *, u32);
++typedef int (*rpmsg_flowcontrol_cb_t)(struct rpmsg_device *, void *, bool);
+ 
+ /**
+  * struct rpmsg_endpoint - binds a local rpmsg address to its user
+  * @rpdev: rpmsg channel device
+  * @refcount: when this drops to zero, the ept is deallocated
+  * @cb: rx callback handler
++ * @flow_cb: remote flow control callback handler
+  * @cb_lock: must be taken before accessing/changing @cb
+  * @addr: local rpmsg address
+  * @priv: private data for the driver's use
+@@ -92,6 +94,7 @@ struct rpmsg_endpoint {
+ 	struct rpmsg_device *rpdev;
+ 	struct kref refcount;
+ 	rpmsg_rx_cb_t cb;
++	rpmsg_flowcontrol_cb_t flow_cb;
+ 	struct mutex cb_lock;
+ 	u32 addr;
+ 	void *priv;
+@@ -106,6 +109,7 @@ struct rpmsg_endpoint {
+  * @probe: invoked when a matching rpmsg channel (i.e. device) is found
+  * @remove: invoked when the rpmsg channel is removed
+  * @callback: invoked when an inbound message is received on the channel
++ * @flowcontrol: invoked when remote side flow control status is received
+  */
+ struct rpmsg_driver {
+ 	struct device_driver drv;
+@@ -113,6 +117,7 @@ struct rpmsg_driver {
+ 	int (*probe)(struct rpmsg_device *dev);
+ 	void (*remove)(struct rpmsg_device *dev);
+ 	int (*callback)(struct rpmsg_device *, void *, int, void *, u32);
++	int (*flowcontrol)(struct rpmsg_device *, void *, bool);
+ };
+ 
+ static inline u16 rpmsg16_to_cpu(struct rpmsg_device *rpdev, __rpmsg16 val)
+@@ -192,6 +197,8 @@ __poll_t rpmsg_poll(struct rpmsg_endpoint *ept, struct file *filp,
+ 
+ ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept);
+ 
++int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable);
++
+ #else
+ 
+ static inline int rpmsg_register_device_override(struct rpmsg_device *rpdev,
+@@ -316,6 +323,14 @@ static inline ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept)
+ 	return -ENXIO;
  }
  
++static inline int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable)
++{
++	/* This shouldn't be possible */
++	WARN_ON(1);
++
++	return -ENXIO;
++}
++
+ #endif /* IS_ENABLED(CONFIG_RPMSG) */
+ 
+ /* use a macro to avoid include chaining to get THIS_MODULE */
 -- 
-2.27.0
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
