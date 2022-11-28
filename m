@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B43E63B1FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:16:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1141A63B1FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:16:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233308AbiK1TQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 14:16:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
+        id S233345AbiK1TQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 14:16:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233202AbiK1TQS (ORCPT
+        with ESMTP id S233282AbiK1TQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 14:16:18 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67802A43D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:16:17 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id y17so3237106plp.3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:16:17 -0800 (PST)
+        Mon, 28 Nov 2022 14:16:20 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0B32A723
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:16:19 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id a9so8014237pfr.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:16:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7zVBwMXapBovi67IHJnxuLTYmJEmE4K0rauIUXooT+E=;
-        b=Rvo58LN0xH2uPgO2irRcjReHIQUyNCuQcTXEhD2CLtjFDVZ+Id4mJQaHnhNowfb32z
-         wHHKYx25qubJrnAw7MjU2xsLtNTN6trIJhv5Yf8+S9D48/Fdd1e0OdCMMCKWkaoKoRxM
-         VINGjoxkEWXpRwsZhuob6hynARbiYcGljRxFM0V0lBm1j0JRK7jWXTKbiEVPzleIxhZy
-         sKBfH4CPglQppn4K/awUOdjO0t3U6Oz3cJCx4vnYLHNzBxvAHj7mEGSxYn7W6lu2fbME
-         LLUNozF7nG74dotX0YW2LnoY9sGyJ+rCjGHmFJ5LQTZV+s3P2ti+eYkXWBW/xp8KTnef
-         QPfw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F/z8xBFicb3R2PeUO5QeKRD0fnuKCQ0SAaRvKkmAk3E=;
+        b=MoXOV1pWeYXh6PbisJX01BZJce1uz4bNi3N8VaqG8qKv7jhznnybAwHouVcezuswdR
+         3rwSPKUFecPuAqXKIoX9s/uUVgU68mSe/sp8MPwWcYHzOZeybPexk8iEXBciozwzH8NG
+         sa0DhlIdnpCghqfW9A+bG/zOqBnNUeb+tU4ahX2OTZ91qq4y9OFv6kqUavWrjuNyDrFC
+         Ntg+DiGiJghENQ0wYrDIrlOZlrdtQL9QW4WWsFVFhBPrytQznW3ck7MRBQ2PjxbPzXsN
+         5UL0J2LZF9HCtnimSrb8Av0tYmDx4N2egUI/lwL6hOtm9JRmADw9kL8vrmt2zF0F77Ke
+         Ha+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7zVBwMXapBovi67IHJnxuLTYmJEmE4K0rauIUXooT+E=;
-        b=ZllQpFLGTQpLlpnHchNALPKwufckpEFlgLND7X3/W1rgFlKLwJvvaRvO7JT3BvSk0G
-         UCg0EogS2wXflR3r3gZ/56D4CFErzzsnstGxigbptIjAphV1VhjplShjChgNWrDOYAmW
-         Be5CfJZOuoFzvvNF+bDFkjAhW8RxJvevtse9MOmOwx/dK8z786iFoYmOStXAD7ZPi/8P
-         xwwpY6dO9fH34xJJrly6eYxnMiKKOTCaUqCQkXJUHC26g10rrui24y7WaVG1laDRKnRC
-         Gmw8itKeye+xi+h6uDZr+H2CjwNVlsVyvb85uIM2BwB1arUCB85ziRkA+7A6uDeK5YA7
-         KZ/Q==
-X-Gm-Message-State: ANoB5pnZQJzTJ2vR4joqI1Som6bjc5iF/1y5dz+B0VCZVuR0XO/qlZ3M
-        KdAKzSfLuZIcTRqNspGKAmo=
-X-Google-Smtp-Source: AA0mqf43Y0DPx80NwgbjVzmT/qMwCEbLySlmxjEzru6wlIHYC06U6j4UXOX48d8v/xJgcYFsLQGwSQ==
-X-Received: by 2002:a17:90a:8592:b0:219:2e8c:a775 with SMTP id m18-20020a17090a859200b002192e8ca775mr8501180pjn.102.1669662977242;
-        Mon, 28 Nov 2022 11:16:17 -0800 (PST)
-Received: from localhost (fwdproxy-prn-010.fbsv.net. [2a03:2880:ff:a::face:b00c])
-        by smtp.gmail.com with ESMTPSA id gi12-20020a17090b110c00b00218fb3bec27sm7926149pjb.56.2022.11.28.11.16.16
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F/z8xBFicb3R2PeUO5QeKRD0fnuKCQ0SAaRvKkmAk3E=;
+        b=7BnNNKBHeBTcnjvSN2isnii0LkB4jMza6mZzNT0eu06JRto1Ct8vQEVwCl+sw0l1Q2
+         FemrwbyN/5yMY32jLNGtdDJ2lWnON37rlc6lYCYL/cYbOfWJCzm0FIVq9Lpsjfku27SK
+         TfZFXy7GTAbLWlILsr+XOdQwQxGJ6/tR9xQu0yb81fLLCSpa0XxDTrs/tvtH4/m20CnB
+         KchLjgIKZc9CxnXdAcdaRYNHwclPoaDEsPcPNSuUlQ+usc2u0R4XGVgoNilPv7lc6leU
+         CsSdiLgbGOeNolYW2C3nWfP0rxLOKN8Vw9EdUm5sacKSN9yzzVSB8gfW0MQ80pK7a0m/
+         lK9w==
+X-Gm-Message-State: ANoB5pnQCNe5IBVu+HrRyonQMjB1bOc6aoffHiD8rTfgPOPf68ZGHJWQ
+        dE1cCHIMuZjovz7T+jwpm3E=
+X-Google-Smtp-Source: AA0mqf523izJHxzI+4A7CQUZVosROEwsf3PehmYpsrWuusjaoiqMgcmIdQp5MoYFCbbxgrsbbKH3JQ==
+X-Received: by 2002:a63:5a56:0:b0:46e:9bac:17f with SMTP id k22-20020a635a56000000b0046e9bac017fmr31414467pgm.420.1669662978660;
+        Mon, 28 Nov 2022 11:16:18 -0800 (PST)
+Received: from localhost (fwdproxy-prn-013.fbsv.net. [2a03:2880:ff:d::face:b00c])
+        by smtp.gmail.com with ESMTPSA id 67-20020a630346000000b0046f1e8cb30dsm7187107pgd.26.2022.11.28.11.16.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 11:16:16 -0800 (PST)
+        Mon, 28 Nov 2022 11:16:18 -0800 (PST)
 From:   Nhat Pham <nphamcs@gmail.com>
 To:     akpm@linux-foundation.org
 Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, minchan@kernel.org,
         ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
         ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: [PATCH v7 0/6] Implement writeback for zsmalloc
-Date:   Mon, 28 Nov 2022 11:16:09 -0800
-Message-Id: <20221128191616.1261026-1-nphamcs@gmail.com>
+Subject: [PATCH v7 1/6] zswap: fix writeback lock ordering for zsmalloc
+Date:   Mon, 28 Nov 2022 11:16:10 -0800
+Message-Id: <20221128191616.1261026-2-nphamcs@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221128191616.1261026-1-nphamcs@gmail.com>
+References: <20221128191616.1261026-1-nphamcs@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,71 +74,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changelog:
-v7:
-  * Rebase this series of patch on top of mm-unstable
-    which removes some duplicate code (patch 1).
-v6-fix:
-  * Add a comment explaining LRU update logic in zs_map_object.
-    (patch 4)
-    (sugegested by Sergey Senozhatsky and Johannes Weiner).
-  * Use get_first_page() and add cond_resched() in retry-loop.
-    (patch 6) (sugegested by Sergey Senozhatsky).
-v6:
-  * Move the move-to-front logic into zs_map_object (patch 4)
-    (suggested by Minchan Kim).
-  * Small clean up for free_zspage at free_handles() call site
-    (patch 6) (suggested by Minchan Kim).
-v5:
-  * Add a new patch that eliminates unused code in zpool and simplify
-    the logic for storing evict handler in zbud/z3fold (patch 2)
-  * Remove redudant fields in zs_pool (previously required by zpool)
-    (patch 3)
-  * Wrap under_reclaim and deferred handle freeing logic in CONFIG_ZPOOL
-    (patch 6) (suggested by Minchan Kim)
-  * Move a small piece of refactoring from patch 6 to patch 4.
-v4:
-  * Wrap the new LRU logic in CONFIG_ZPOOL (patch 3).
-    (suggested by Minchan Kim)
-v3:
-  * Set pool->ops = NULL when pool->zpool_ops is null (patch 4).
-  * Stop holding pool's lock when calling lock_zspage() (patch 5).
-    (suggested by Sergey Senozhatsky)
-  * Stop holding pool's lock when checking pool->ops and retries.
-    (patch 5) (suggested by Sergey Senozhatsky)
-  * Fix formatting issues (.shrink, extra spaces in casting removed).
-    (patch 5) (suggested by Sergey Senozhatsky)
-v2:
-  * Add missing CONFIG_ZPOOL ifdefs (patch 5)
-    (detected by kernel test robot).
+From: Johannes Weiner <hannes@cmpxchg.org>
 
-Unlike other zswap's allocators such as zbud or z3fold, zsmalloc
-currently lacks the writeback mechanism. This means that when the zswap
-pool is full, it will simply reject further allocations, and the pages
-will be written directly to swap.
+zswap's customary lock order is tree->lock before pool->lock, because
+the tree->lock protects the entries' refcount, and the free callbacks in
+the backends acquire their respective pool locks to dispatch the backing
+object. zsmalloc's map callback takes the pool lock, so zswap must not
+grab the tree->lock while a handle is mapped. This currently only
+happens during writeback, which isn't implemented for zsmalloc. In
+preparation for it, move the tree->lock section out of the mapped entry
+section
 
-This series of patches implements writeback for zsmalloc. When the zswap
-pool becomes full, zsmalloc will attempt to evict all the compressed
-objects in the least-recently used zspages.
+Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+---
+ mm/zswap.c | 35 +++++++++++++++++++----------------
+ 1 file changed, 19 insertions(+), 16 deletions(-)
 
-There are 6 patches in this series:
+diff --git a/mm/zswap.c b/mm/zswap.c
+index 3019f0bde194..f6c89049cf70 100644
+--- a/mm/zswap.c
++++ b/mm/zswap.c
+@@ -968,6 +968,7 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
+ 	swpentry = zhdr->swpentry; /* here */
+ 	tree = zswap_trees[swp_type(swpentry)];
+ 	offset = swp_offset(swpentry);
++	zpool_unmap_handle(pool, handle);
 
-Johannes Weiner (2):
-  zswap: fix writeback lock ordering for zsmalloc
-  zpool: clean out dead code
+ 	/* find and ref zswap entry */
+ 	spin_lock(&tree->lock);
+@@ -975,20 +976,12 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
+ 	if (!entry) {
+ 		/* entry was invalidated */
+ 		spin_unlock(&tree->lock);
+-		zpool_unmap_handle(pool, handle);
+ 		kfree(tmp);
+ 		return 0;
+ 	}
+ 	spin_unlock(&tree->lock);
+ 	BUG_ON(offset != entry->offset);
 
-Nhat Pham (4):
-  zsmalloc: Consolidate zs_pool's migrate_lock and size_class's locks
-  zsmalloc: Add a LRU to zs_pool to keep track of zspages in LRU order
-  zsmalloc: Add zpool_ops field to zs_pool to store evict handlers
-  zsmalloc: Implement writeback mechanism for zsmalloc
+-	src = (u8 *)zhdr + sizeof(struct zswap_header);
+-	if (!zpool_can_sleep_mapped(pool)) {
+-		memcpy(tmp, src, entry->length);
+-		src = tmp;
+-		zpool_unmap_handle(pool, handle);
+-	}
+-
+ 	/* try to allocate swap cache page */
+ 	switch (zswap_get_swap_cache_page(swpentry, &page)) {
+ 	case ZSWAP_SWAPCACHE_FAIL: /* no memory or invalidate happened */
+@@ -1006,6 +999,14 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
+ 		acomp_ctx = raw_cpu_ptr(entry->pool->acomp_ctx);
+ 		dlen = PAGE_SIZE;
 
- mm/z3fold.c   |  36 +-----
- mm/zbud.c     |  32 +----
- mm/zpool.c    |  10 +-
- mm/zsmalloc.c | 342 +++++++++++++++++++++++++++++++++++++++++---------
- mm/zswap.c    |  35 +++---
- 5 files changed, 311 insertions(+), 144 deletions(-)
++		zhdr = zpool_map_handle(pool, handle, ZPOOL_MM_RO);
++		src = (u8 *)zhdr + sizeof(struct zswap_header);
++		if (!zpool_can_sleep_mapped(pool)) {
++			memcpy(tmp, src, entry->length);
++			src = tmp;
++			zpool_unmap_handle(pool, handle);
++		}
++
+ 		mutex_lock(acomp_ctx->mutex);
+ 		sg_init_one(&input, src, entry->length);
+ 		sg_init_table(&output, 1);
+@@ -1015,6 +1016,11 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
+ 		dlen = acomp_ctx->req->dlen;
+ 		mutex_unlock(acomp_ctx->mutex);
+
++		if (!zpool_can_sleep_mapped(pool))
++			kfree(tmp);
++		else
++			zpool_unmap_handle(pool, handle);
++
+ 		BUG_ON(ret);
+ 		BUG_ON(dlen != PAGE_SIZE);
+
+@@ -1045,7 +1051,11 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
+ 		zswap_entry_put(tree, entry);
+ 	spin_unlock(&tree->lock);
+
+-	goto end;
++	return ret;
++
++fail:
++	if (!zpool_can_sleep_mapped(pool))
++		kfree(tmp);
+
+ 	/*
+ 	* if we get here due to ZSWAP_SWAPCACHE_EXIST
+@@ -1054,17 +1064,10 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
+ 	* if we free the entry in the following put
+ 	* it is also okay to return !0
+ 	*/
+-fail:
+ 	spin_lock(&tree->lock);
+ 	zswap_entry_put(tree, entry);
+ 	spin_unlock(&tree->lock);
+
+-end:
+-	if (zpool_can_sleep_mapped(pool))
+-		zpool_unmap_handle(pool, handle);
+-	else
+-		kfree(tmp);
+-
+ 	return ret;
+ }
 
 --
 2.30.2
