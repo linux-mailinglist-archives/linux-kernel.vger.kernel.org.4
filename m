@@ -2,81 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F4663B624
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 00:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD7163B628
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 00:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234725AbiK1XvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 18:51:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
+        id S234814AbiK1XwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 18:52:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234790AbiK1XvP (ORCPT
+        with ESMTP id S234770AbiK1Xv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 18:51:15 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B5028E36
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 15:51:14 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id d18so967297pls.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 15:51:14 -0800 (PST)
+        Mon, 28 Nov 2022 18:51:58 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6993121A;
+        Mon, 28 Nov 2022 15:51:57 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id q7so18644602wrr.8;
+        Mon, 28 Nov 2022 15:51:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=oVgoeAVnfsk2iXYG0JTdu0THjStYeYpgj9cQZUW7cks=;
-        b=ZWgV6HJIMapNybCv4vR6zXDsW6Z7GIO+i/wZEeRsIK8vPOSFXAioyWuCwuOKWrl5yD
-         Nni6kSMkTP5RwO4ue+RjMY/l20JLoL+rB8a92x1ucdJjD+orCMDfUTWPyfhAJ9KfOmbK
-         BxW2kgEhqa+jUNkXQoPBqUjp4hjnhUjT6Pxq9J+3TAdFvSqxKnsnF83lek83CJTdfGoH
-         6+mljQF+SC5lQ+cNDQ13IXoDXg3ExOEVH/sUG2CIfrYPoi1cMTzbWraOOI0pbFb3fAVy
-         cFzEpEmy7dGhKyQhZRampL5tVSD+egmW/f9LgGTnIWfRKZzxas6kkiv6RMa77MYEZhKn
-         l/hQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T9PeG33kXwVJumNyWLvqPW0QBrgUXmRNtC0tTxLZOs0=;
+        b=LHCZGbP1WcodVWuYoawEeW65BtZaS/xkusakUDkQW5KXTzlq9d8fBlHzZpvEVZQlP5
+         asZVF3PR/9cVjhJDQtm4ppEJImlW+wisCS11ave5+NhXtqqJczswHfI+grnV1KZPDW3R
+         OMhYkH/pzJjiDySTdkvYxihCjMYm2hcaYFN92H5iMfUlhi3K0Ihkd4KooWAsGHHA4vZw
+         82FVfw/ZJ14Ecgb77dfPmnVzQB1LnaY6dL81f8kQEzpjLPavZlRTdQGT//d80vWHZPcu
+         ZjT3AxEbOXUgeUydEjOvxywHIHRTNS4Xb7Dd5zBjZ7+5zKWV+tYR5rqxuD+87WjszgLA
+         jcFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oVgoeAVnfsk2iXYG0JTdu0THjStYeYpgj9cQZUW7cks=;
-        b=nExUju5+ulvtdpxmcj0R2cE1kySdS8QumXArz8VuAXpVP9alyPpEAuDH4eRNJj2Buu
-         puhpe4ExYaofggwiet4uM0n7VGd8YGWFMkMe9kQKcYLubinl9wcvfF4FN18EBcYCn3rv
-         9wlN0Hio55XXTn2IbX2RXuKsYSpWtq76RPWhDrDBqRQmmrM3/v4IwP3xi1dLXs3fuwYz
-         WxzhJZRLx1bnCkCsAahjnJUbjUDaH1M+8vIETXG/PtaW/QJqbpNnrSh73eQYEtM8kAtm
-         XqBkaUr/p3D1UmdHwPsGaGnNRpMaHu91Jy7I6grSApJSF7STuBSxTgClI7atIpalPbaJ
-         Duow==
-X-Gm-Message-State: ANoB5pnIfMTGR3rmMuwQ6saJotYkTvVQTgUwKUNN0Vg0k7eFJCFiVm6E
-        Pc8ciqbuAolV/D90/RCNdEoXCw==
-X-Google-Smtp-Source: AA0mqf4NTXD1EHu2Cevt0auVcetSPnQ6e77T7FE4dlWd2ySwt8m5T4jr2ialJIYYV92GIt+aZwM2Gg==
-X-Received: by 2002:a17:902:7688:b0:186:971b:b7e5 with SMTP id m8-20020a170902768800b00186971bb7e5mr49187518pll.54.1669679473706;
-        Mon, 28 Nov 2022 15:51:13 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 123-20020a630781000000b00470275c8d6dsm7159081pgh.10.2022.11.28.15.51.13
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T9PeG33kXwVJumNyWLvqPW0QBrgUXmRNtC0tTxLZOs0=;
+        b=n9o5/7z0gN92O1L9wpzURE2x9iTDAhmjcnzdvJeJIUobu8K3qgJCM9n3S5rFiUrRdu
+         qbWeVdUNyp5Q5dJXJ+Q3wcTjXmS4AtpoY1Bs2RJf1KFVklne0VHRk/2TYxLxC+9ETRJN
+         kc3hlkZFPAf524M7svFA+OOahE3wClh0e9MlVay0FiMFBrNPt+W/bo0Y5tkSQ3FsUgF0
+         i61ZTnWb/m9pCECuDvnXKBwUzvXV7HaV+FRibr5qx29Cv5gX/zkSqjSAaJmvvc4Ln7ue
+         ekAcNxlNZB+nR0bdRtMg7YFY+VvAEZKQKtabv8sui0dEFiBnOAfvBbtOUkU4yYimoqrb
+         XOJg==
+X-Gm-Message-State: ANoB5pmMMYwxcwbYb34LzCT5tbyJordCHtH6tXYWJ/tDBi4uaWGHKL5K
+        yPCL0v0ip8E3v+XSwzxAvfs=
+X-Google-Smtp-Source: AA0mqf7ONpFyFxUZ+KuDI6MIEzqUgf/Jtmlq7v9vIWVmI+qoqhv9zTBgEuZLlj3HE4RJc8TrRZooSQ==
+X-Received: by 2002:adf:b30f:0:b0:241:bfbe:81bc with SMTP id j15-20020adfb30f000000b00241bfbe81bcmr23228748wrd.603.1669679516210;
+        Mon, 28 Nov 2022 15:51:56 -0800 (PST)
+Received: from prasmi.home ([2a00:23c8:2501:c701:a876:e68e:5e5f:704e])
+        by smtp.gmail.com with ESMTPSA id w13-20020adfec4d000000b00241dd5de644sm12035140wrn.97.2022.11.28.15.51.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 15:51:13 -0800 (PST)
-Date:   Mon, 28 Nov 2022 23:51:09 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "dmatlack@google.com" <dmatlack@google.com>
-Subject: Re: [PATCH v10 034/108] KVM: x86/mmu: Add Suppress VE bit to
- shadow_mmio_{value, mask}
-Message-ID: <Y4VJbfxwk2zQhkf5@google.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
- <1c480a48c2697054b1cfe068fa073f4035648f9a.1667110240.git.isaku.yamahata@intel.com>
- <a0d5878b7280372fa2de49156d58f69fa07659cc.camel@intel.com>
- <20221117180220.GJ2350331@ls.amr.corp.intel.com>
+        Mon, 28 Nov 2022 15:51:55 -0800 (PST)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] media: platform: renesas: rzg2l-cru: Add missing documentation for image_conv_irq
+Date:   Mon, 28 Nov 2022 23:51:42 +0000
+Message-Id: <20221128235150.27267-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221117180220.GJ2350331@ls.amr.corp.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,26 +73,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022, Isaku Yamahata wrote:
-> On Wed, Nov 09, 2022 at 11:48:30AM +0000,
-> "Huang, Kai" <kai.huang@intel.com> wrote:
-> 
-> > On Sat, 2022-10-29 at 23:22 -0700, isaku.yamahata@intel.com wrote:
-> > > From: Isaku Yamahata <isaku.yamahata@intel.com>
-> > > 
-> > > Because TDX will need shadow_mmio_mask to be VMX_SUPPRESS_VE | RWX	
-> > > shadow_mmio_value to be 0, make VMX EPT case use same value for TDX
-> > > shadow_mmio_mask.  
-> > > 
-> > 
-> > TDX need to use different mmio_mask/value doesn't mean they need to be changed
-> > for VMX guest.  I think the true purpose here is to still be able to use a
-> > global shadow_mmio_mask for both TDX and VMX guests.  So please explicitly call
-> > out.  
-> 
-> That's right. With this change, per-VM shadow_mmio_{value, mask} can be avoided.
-> The common value can be used for both VMX and TDX.
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-No, the mask can be global, but the value needs to be per-VM.  VMX needs to
-generate an EPT misconfig, but TDX needs to generate an EPT violation to get the
-automagic #VE reflection.
+Add missing documentation for image_conv_irq element in
+struct rzg2l_cru_dev.
+
+Documentation needed to avoid build warning with W=1 builds. It doesn't
+really add any non obvious information but good to have it anyway.
+
+Reported-by: Hans Verkuil <hverkuil@xs4all.nl>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h
+index 5cb4fad6d6e0..0b682cbae3eb 100644
+--- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h
++++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h
+@@ -68,6 +68,8 @@ struct rzg2l_cru_ip {
+  *
+  * @vclk:		CRU Main clock
+  *
++ * @image_conv_irq:	Holds image conversion interrupt number
++ *
+  * @vdev:		V4L2 video device associated with CRU
+  * @v4l2_dev:		V4L2 device
+  * @num_buf:		Holds the current number of buffers enabled
+-- 
+2.25.1
+
