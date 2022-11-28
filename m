@@ -2,87 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F2863AA70
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EA963AA7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232324AbiK1OGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 09:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
+        id S232332AbiK1OHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 09:07:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbiK1OGR (ORCPT
+        with ESMTP id S232380AbiK1OGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:06:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476E820F61;
-        Mon, 28 Nov 2022 06:06:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 28 Nov 2022 09:06:41 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB43421E0F;
+        Mon, 28 Nov 2022 06:06:33 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F168EB80DDF;
-        Mon, 28 Nov 2022 14:06:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFEEAC433C1;
-        Mon, 28 Nov 2022 14:06:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669644365;
-        bh=PvFU14Tw+GunusKbVMruIGE8w1KDKd8yILQPKFFCjsk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k7CZOHPWVqpuMVy0DiM+Qx7MRYjZ5zqcv7d3OUPVBd2DbjOweUDW47zyJhf6x6o5a
-         tXytMHCFMWgFGsM/mMOm3ovtcdPK/kNziDAjJ8jb+SXg5iIMqIRxlg0OLBV+J8Ebeb
-         7J7jzXiqVVTnQ9CfuuMFR9wnIWSSX48WcLUxH+NEdTEUQTg6n6FP6OizB8t5zi7LIT
-         hSosMchmeoBnSPwLuFgKCsmbn2k1e/KKrikiMzQfKu2QP9IlgWKj9JAipXc/lmJ24G
-         htl8Xc4mPxFm70D5V4+HsNOPaA7rjFlZeNjQFhXu1DGP6lq/UGap2bdVkT8sybUMT4
-         XCEjaNkYl9mlw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1ozeln-0097Mn-Hr;
-        Mon, 28 Nov 2022 14:06:03 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     linux-arm-kernel@lists.infradead.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: Re: [PATCH] KVM: arm64: Replace PMU version number '0' with ID_AA64DFR0_EL1_PMUVer_NI
-Date:   Mon, 28 Nov 2022 14:06:00 +0000
-Message-Id: <166964435234.1494517.16237640748625443897.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221128135629.118346-1-anshuman.khandual@arm.com>
-References: <20221128135629.118346-1-anshuman.khandual@arm.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9A4EC21B8A;
+        Mon, 28 Nov 2022 14:06:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669644392; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4yiwoI9xze/bvvYsQ6MdgjViodw7i3sVy+Mfdib+hi0=;
+        b=dM+RRQP85j6tCnpaeFC6IaoAklNnGvuffWFKJCeG/G+4EVXC4waWkZ6Qbbc3+ljra+mvqK
+        Y7jNhIgPc3fN/05T7T7h1Y1lvX4s+E98o9CtW3twrDcT0FELzQ5gpg4vlgnK+8CII3vvWr
+        4Cw2A8QF/ST9FcbYnmZGQCWjPfJoMrQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 623B81326E;
+        Mon, 28 Nov 2022 14:06:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mxgUF2jAhGMjGwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Mon, 28 Nov 2022 14:06:32 +0000
+Date:   Mon, 28 Nov 2022 15:06:31 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hillf Danton <hdanton@sina.com>, Yi Zhang <yi.zhang@redhat.com>
+Subject: Re: [PATCH-block] blk-cgroup: Use css_tryget() in
+ blkcg_destroy_blkgs()
+Message-ID: <20221128140631.GI25160@blackbody.suse.cz>
+References: <20221128033057.1279383-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: linux-arm-kernel@lists.infradead.org, anshuman.khandual@arm.com, linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com, will@kernel.org, acme@kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="tSiBuZsJmMXpnp7T"
+Content-Disposition: inline
+In-Reply-To: <20221128033057.1279383-1-longman@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Nov 2022 19:26:29 +0530, Anshuman Khandual wrote:
-> kvm_host_pmu_init() returns when detected PMU is either not implemented, or
-> implementation defined. kvm_pmu_probe_armpmu() also has a similar situation
-> Extracted ID_AA64DFR0_EL1_PMUVer value, when PMU is not implemented is '0',
-> which can be replaced with ID_AA64DFR0_EL1_PMUVer_NI defined as '0b0000'.
 
-Applied to next, thanks!
+--tSiBuZsJmMXpnp7T
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[1/1] KVM: arm64: Replace PMU version number '0' with ID_AA64DFR0_EL1_PMUVer_NI
-      commit: 86815735aa571d493cf5768cad5fa8e6fd9c7ba8
+Hello.
 
-Cheers,
+On Sun, Nov 27, 2022 at 10:30:57PM -0500, Waiman Long <longman@redhat.com> wrote:
+> That may not be true if there is no blkg associated with the blkcg. If
+> css_get() fails, the subsequent css_put() call may lead to data
+> corruption as was illustrated in a test system that it crashed on
+> bootup when that commit was included.
 
-	M.
--- 
-Without deviation from the norm, progress is not possible.
+Do you have a stacktrace of the underflowing css_put() in
+blkcg_destroy_blkgs()?
 
+It looks to me slightly as a mistake of the caller site that it passes
+struct blkcg * without any references.
 
+By a cursory look, could it be cgwb_release_workfn?
+
+--- a/mm/backing-dev.c
++++ b/mm/backing-dev.c
+@@ -390,11 +390,11 @@ static void cgwb_release_workfn(struct work_struct *work)
+        wb_shutdown(wb);
+
+        css_put(wb->memcg_css);
+-       css_put(wb->blkcg_css);
+        mutex_unlock(&wb->bdi->cgwb_release_mutex);
+
+        /* triggers blkg destruction if no online users left */
+        blkcg_unpin_online(wb->blkcg_css);
++       css_put(wb->blkcg_css);
+
+        fprop_local_destroy_percpu(&wb->memcg_completions);
+
+Does your crash involve this stack?
+
+Thanks,
+Michal
+
+--tSiBuZsJmMXpnp7T
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCY4TAZQAKCRAkDQmsBEOq
+uS+5AP97cFglT6cqH0lX6xHLHlFTnlz0R8/2eiUTZc7t+UMIAAEAx44DeExOpRjE
+QcJ6UH59lXEoD6kvkW4qmcP6+AWHTAA=
+=jz60
+-----END PGP SIGNATURE-----
+
+--tSiBuZsJmMXpnp7T--
