@@ -2,146 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD9D63A970
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFE963A9A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:34:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbiK1N2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:28:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54092 "EHLO
+        id S230079AbiK1Nei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:34:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbiK1N2B (ORCPT
+        with ESMTP id S230338AbiK1Ned (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 08:28:01 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC81B11C25;
-        Mon, 28 Nov 2022 05:28:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669642080; x=1701178080;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LVHrI4pHYy1NGHezAZoCXCIhn6PYcGb7Y9h61CR31MQ=;
-  b=Kcn4rj1FFM2Hj32tND/uFs8XDARrQ89jfwgC2fKy1dEFAwosd/4UvXrA
-   0dxBy78YRafCZMCfFyKwHrkCvDa78y5SPNjYqkaWXmpbapRNDN79o5BTF
-   b2cj9REs7iA50k4aiQNfeXr2Qr/CWDDD+eqtuiH9NOkR99CXMP9RlzPiC
-   hSZ8imIuTqG+BLAlcybR9Lha6dfWvQHCyKsUTUPluIbJ//66SlCZWDI/P
-   NTc9l6/jQ0C4qwHUK6BZMU/Z3NAnXOvY44x4s/MqxSpvkR8HQUDxz06pG
-   EzMvgNyfJdesfwv71/KGAf/n+kJr3Yc2noDLPG1z2wRsHCgn0nkbIu0BB
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="314866215"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="314866215"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 05:28:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="768040124"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="768040124"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 28 Nov 2022 05:27:56 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ozeAs-0019SR-1w;
-        Mon, 28 Nov 2022 15:27:54 +0200
-Date:   Mon, 28 Nov 2022 15:27:54 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Gerald Loacker <gerald.loacker@wolfvision.net>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jakob Hauser <jahau@rocketmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>
-Subject: Re: [PATCH v3 1/3] iio: add struct declarations for iio types
-Message-ID: <Y4S3WnYWVnmiVFc+@smile.fi.intel.com>
-References: <20221125083526.2422900-1-gerald.loacker@wolfvision.net>
- <20221125083526.2422900-2-gerald.loacker@wolfvision.net>
- <Y4CcspD1xkmhmWbh@smile.fi.intel.com>
- <Y4CgiMd4XQMV4KFV@smile.fi.intel.com>
- <a55e73f7-4daf-6892-34dc-61c6f6581d8e@wolfvision.net>
+        Mon, 28 Nov 2022 08:34:33 -0500
+X-Greylist: delayed 385 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Nov 2022 05:34:31 PST
+Received: from njjs-sys-mailin04.njjs.baidu.com (mx316.baidu.com [180.101.52.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3A6225C9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:34:31 -0800 (PST)
+Received: from bjhw-sys-rpm015653cc5.bjhw.baidu.com (bjhw-sys-rpm015653cc5.bjhw.baidu.com [10.227.53.39])
+        by njjs-sys-mailin04.njjs.baidu.com (Postfix) with ESMTP id 9268C11800045;
+        Mon, 28 Nov 2022 21:28:03 +0800 (CST)
+Received: from localhost (localhost [127.0.0.1])
+        by bjhw-sys-rpm015653cc5.bjhw.baidu.com (Postfix) with ESMTP id 7FCEED9932;
+        Mon, 28 Nov 2022 21:28:03 +0800 (CST)
+From:   Yuan ZhaoXiong <yuanzhx326@gmail.com>
+To:     tglx@linutronix.de, steven.price@arm.com, Jason@zx2c4.com,
+        juri.lelli@redhat.com, tony.luck@intel.com, frederic@kernel.org,
+        yuanzhx326@gmail.com, sathyanarayanan.kuppuswamy@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] cpu: printk error information when call cpu_up() failed.
+Date:   Mon, 28 Nov 2022 21:28:03 +0800
+Message-Id: <20221128132803.17599-1-yuanzhx326@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a55e73f7-4daf-6892-34dc-61c6f6581d8e@wolfvision.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_SOFTFAIL,
+        SPOOFED_FREEMAIL,SPOOF_GMAIL_MID autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 01:18:04PM +0100, Gerald Loacker wrote:
-> Am 25.11.2022 um 12:01 schrieb Andy Shevchenko:
-> > On Fri, Nov 25, 2022 at 12:45:06PM +0200, Andy Shevchenko wrote:
-> >> On Fri, Nov 25, 2022 at 09:35:24AM +0100, Gerald Loacker wrote:
+It is better to printk error information out when calling cpu_up() failed.
+Users will observe cpu up error conveniently via the kernel log.
 
-...
+Signed-off-by: Yuan ZhaoXiong <yuanzhx326@gmail.com>
+---
+ kernel/cpu.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-> >>> +struct iio_val_int_plus_micro {
-> >>> +	int val_int;
-> >>> +	int val_micro;
-> >>> +};
-> > 
-> > Thinking more about naming, why not drop val_ completely?
-> > 
-> > 	int integer;
-> > 	int micro;
-> > 
-> > ?
-> 
-> Yes, this sounds good to me. I think of adding only
-> 
-> 	typedef struct {
-> 		int integer;
-> 		int micro;
-> 	} iio_val_int_plus_micro;
-> 
-> for now, and one can add similar structures when needed, like
-> 
-> 	typedef struct {
-> 		int integer;
-> 		int nano;
-> 	} iio_val_int_plus_nano;
-
-It's a rule to use _t for typedef:s in the kernel. That's why
-I suggested to leave struct definition and only typedef the same structures
-(existing) to new names (if needed).
-
-> or
-
-> 	typedef iio_val_int_plus_micro iio_val_int_plus_micro_db;
-
-This is better as explained above.
-
-> If you think it's better to add them all, I can do that, of course.
-> 
-> >>> +struct iio_val_int_plus_nano {
-> >>> +	int val_int;
-> >>> +	int val_nano;
-> >>> +};
-> >>> +
-> >>> +struct iio_val_int_plus_micro_db {
-> >>> +	int val_int;
-> >>
-> >> 	int val_int_db; ?
-> >>
-> >>> +	int val_micro_db;
-> >>> +};
-> >>
-> >> Actually why can't we simply do
-> >>
-> >> typedef iio_val_int_plus_micro_db iio_val_int_plus_micro;
-> >>
-> >> ?
-
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index bbad5e375d3b..28b0202e7744 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -1481,12 +1481,16 @@ int bringup_hibernate_cpu(unsigned int sleep_cpu)
+ void bringup_nonboot_cpus(unsigned int setup_max_cpus)
+ {
+ 	unsigned int cpu;
++	int error;
+ 
+ 	for_each_present_cpu(cpu) {
+ 		if (num_online_cpus() >= setup_max_cpus)
+ 			break;
+-		if (!cpu_online(cpu))
+-			cpu_up(cpu, CPUHP_ONLINE);
++		if (!cpu_online(cpu)) {
++			error = cpu_up(cpu, CPUHP_ONLINE);
++			if (error)
++				pr_err("Error taking CPU%d up: %d\n", cpu, error);
++		}
+ 	}
+ }
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.27.0
 
