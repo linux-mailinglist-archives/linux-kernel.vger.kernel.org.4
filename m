@@ -2,139 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7B063A2DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3890A63A2E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbiK1IZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 03:25:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39088 "EHLO
+        id S230185AbiK1I0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 03:26:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiK1IZM (ORCPT
+        with ESMTP id S229939AbiK1I0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 03:25:12 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0E31704B
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:25:06 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id o5so6492817wrm.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:25:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ti0622YsFQhm/dbd0cduZsACRVh/OauLWgYAq/gPwf0=;
-        b=W7s2Cq5Y5SIi2jutOse7Dl6oqOFokI8iQqf3nLwy1otg4dg5BuBmOCrrGpPg2CGneH
-         clmbNu5KppjU+3+Ui9VimIsiEbAWKdXYYv6f7kfEDSPcd6E13mOol2cFgZCny262xaDL
-         8AHiAoi91+7yEnCIP8OrA1Qt7Hw1bFvcndhlqa9SNv89JsCi4qqzFKYYXf6Qv+ZKNLvf
-         3ot27i/y8IwOqQ8x5jGRmESVrWqo3/r+20FZxQzclTVBNAa+mwrSEEAiM1J8n8W7jAA4
-         yNB/kgtIaM0j9rXuXfIkm0TJp3wFEeHA7atpE3w8V2a6STIAqLs4aSdpup6kSTfXEhzm
-         y1kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ti0622YsFQhm/dbd0cduZsACRVh/OauLWgYAq/gPwf0=;
-        b=rcp4LgMn6oqQ6EyKhgK9Lc5bXiplsr0LGMb8qOcaHmTxxBhqVIDHzD/kO/ZL0GThNo
-         dgP/n6cfX0oJf/0mQqU2FMH5h5Rc1RsdyMnksviPZZ0zWKXQWkxzj+u52pxTi/pxMOiv
-         uqCY4WCYDcgH41WLYeDJ7+w/H+0qz7RDgfStmdfCx2v8om1XBqHoXTjA+6gStgVg2p8D
-         QcIGqhZ6bOb5qw81hbGQ8fH68bV/ipSarQJSFXF0lfB8Nos6BQWT7zNYdeIREooQWClx
-         /YaP78U8CQ4yun8iAYCWbR0/rk/DkB4tQBblgvZZSH6dA6cCphh/dwqwuvMjVYQb6t/0
-         GEjg==
-X-Gm-Message-State: ANoB5pkH4BBOZinlw6PfuZ+/FAKfgIBl57iSJ7OlDl8q1fp4+V2BGSyI
-        krFfNGvT3Ww5cz1mzeluJ2shMZ5y7oleEw==
-X-Google-Smtp-Source: AA0mqf5Y0rn09NYdgkcAHNWtto6F2qwTi43S6jENrKxDgP8z3esLWqFMyTOvRa/NVv3JHkJxGnxIpw==
-X-Received: by 2002:a5d:58d6:0:b0:242:8e8:12c1 with SMTP id o22-20020a5d58d6000000b0024208e812c1mr7609851wrf.315.1669623904831;
-        Mon, 28 Nov 2022 00:25:04 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id bk23-20020a0560001d9700b002420fe50322sm4734325wrb.91.2022.11.28.00.25.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 00:25:04 -0800 (PST)
-Date:   Mon, 28 Nov 2022 11:25:01 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        gustavoars@kernel.org
-Subject: Re: [PATCH] staging: wlan-ng: Replace zero-length arrays with
- DECLARE_FLEX_ARRAY() helper
-Message-ID: <Y4RwXSs9ha0zepxZ@kadam>
-References: <Y3YKhee8L+kAfHM4@qemulion>
- <Y3YvGdkyGm7azGg4@kroah.com>
- <Y3Y1N6AwWEXLpSrx@qemulion>
- <Y3Z3aatcaISvqURJ@kroah.com>
- <Y3jqUpNOygJ4+2jy@qemulion>
- <Y4RnJyiCDYavLAJq@qemulion>
- <Y4RoOxgo76Hc5RRP@kadam>
- <Y4RvpvpmFL8zNvfB@qemulion>
+        Mon, 28 Nov 2022 03:26:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EC2C07;
+        Mon, 28 Nov 2022 00:26:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31BB0B80B8E;
+        Mon, 28 Nov 2022 08:26:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75F8BC433D6;
+        Mon, 28 Nov 2022 08:26:05 +0000 (UTC)
+Message-ID: <0a52ed02-cf9d-eb67-8d68-e3d9dbe4e7b2@xs4all.nl>
+Date:   Mon, 28 Nov 2022 09:26:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4RvpvpmFL8zNvfB@qemulion>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH mm-unstable v1 16/20] mm/frame-vector: remove FOLL_FORCE
+ usage
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-17-david@redhat.com>
+ <81fb0fa3-2e06-b765-56ac-a7d981194e59@redhat.com>
+ <08b65ac6-6786-1080-18f8-d2be109c85fc@xs4all.nl>
+ <9d0bf98a-3d6a-1082-e992-1338e1525935@redhat.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <9d0bf98a-3d6a-1082-e992-1338e1525935@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 01:51:58PM +0530, Deepak R Varma wrote:
-> On Mon, Nov 28, 2022 at 10:50:19AM +0300, Dan Carpenter wrote:
-> > On Mon, Nov 28, 2022 at 01:15:43PM +0530, Deepak R Varma wrote:
-> > > On Sat, Nov 19, 2022 at 08:08:15PM +0530, Deepak R Varma wrote:
-> > > > On Thu, Nov 17, 2022 at 07:03:21PM +0100, Greg Kroah-Hartman wrote:
-> > > > > On Thu, Nov 17, 2022 at 06:50:55PM +0530, Deepak R Varma wrote:
-> > > > > > On Thu, Nov 17, 2022 at 01:54:49PM +0100, Greg Kroah-Hartman wrote:
-> > > > > > > On Thu, Nov 17, 2022 at 03:48:45PM +0530, Deepak R Varma wrote:
-> > > > > > > >
-> > > > > > > >  struct hfa384x_pdr_refdac_measurements {
-> > > > > > > > -	u16 value[0];
-> > > > > > > > +	DECLARE_FLEX_ARRAY(u16, value);
-> > > > > > > >  } __packed;
-> > > > > > >
-> > > > > > > Why?  This structure is never used anywhere, right?  So why is this
-> > > > > > > needed to be changed and not just removed entirely?  Same for the other
-> > > > > > > structures in this patch.
-> > > > > >
-> > > > > > Hello Greg,
-> > > > > > I am unable to confirm that these structures are truly not needed in the absence
-> > > > > > if a real device based testing. I could only validate that using the compile
-> > > > > > build and driver loading.
-> > > > >
-> > > > > Think this through, if no one is actually using this structure, and it
-> > > > > is of 0 size, then do you think it is being used?
-> > > >
-> > > > Hello Greg,
-> > > > I did not find any memory allocation for these zero length array structures.
-> > > > Also, the union or its enclosing structure do not appear to access the members.
-> > > > Hence I am leaning towards concluding that these zero length array structures do
-> > > > not appear to be necessary.
-> > > >
-> > > > There are a few other structures that are part of the same union, however, they
-> > > > too do not appear to be used for accessing the memory assigned to the union [or
-> > > > its enclosing structure]. I think most of the members of these unions can be
-> > > > replaced by one max size structure of this union [e.g. struct
-> > > > hfa384x_pdr_mkk_measurements].
-> > > >
-> > > > Could you please comment if I am reading the code right?
-> > > >
-> > > > For your quick reference, the zero length structure declaration are online 963
-> > > > whereas the union is on line number 1080 of the file drivers/staging/wlan-ng/hfa384x.h
-> > >
-> > > Hello Greg,
-> > > can you please suggest how should I approach this clean-up/correction?
-> > >
-> >
-> > Like this:
+On 28/11/2022 09:18, David Hildenbrand wrote:
+> On 28.11.22 09:17, Hans Verkuil wrote:
+>> Hi David,
+>>
+>> On 27/11/2022 11:35, David Hildenbrand wrote:
+>>> On 16.11.22 11:26, David Hildenbrand wrote:
+>>>> FOLL_FORCE is really only for ptrace access. According to commit
+>>>> 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
+>>>> writable"), get_vaddr_frames() currently pins all pages writable as a
+>>>> workaround for issues with read-only buffers.
+>>>>
+>>>> FOLL_FORCE, however, seems to be a legacy leftover as it predates
+>>>> commit 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are
+>>>> always writable"). Let's just remove it.
+>>>>
+>>>> Once the read-only buffer issue has been resolved, FOLL_WRITE could
+>>>> again be set depending on the DMA direction.
+>>>>
+>>>> Cc: Hans Verkuil <hverkuil@xs4all.nl>
+>>>> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+>>>> Cc: Tomasz Figa <tfiga@chromium.org>
+>>>> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+>>>> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+>>>> Signed-off-by: David Hildenbrand <david@redhat.com>
+>>>> ---
+>>>>    drivers/media/common/videobuf2/frame_vector.c | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
+>>>> index 542dde9d2609..062e98148c53 100644
+>>>> --- a/drivers/media/common/videobuf2/frame_vector.c
+>>>> +++ b/drivers/media/common/videobuf2/frame_vector.c
+>>>> @@ -50,7 +50,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+>>>>        start = untagged_addr(start);
+>>>>          ret = pin_user_pages_fast(start, nr_frames,
+>>>> -                  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
+>>>> +                  FOLL_WRITE | FOLL_LONGTERM,
+>>>>                      (struct page **)(vec->ptrs));
+>>>>        if (ret > 0) {
+>>>>            vec->got_ref = true;
+>>>
+>>>
+>>> Hi Andrew,
+>>>
+>>> see the discussion at [1] regarding a conflict and how to proceed with
+>>> upstreaming. The conflict would be easy to resolve, however, also
+>>> the patch description doesn't make sense anymore with [1].
+>>
+>> Might it be easier and less confusing if you post a v2 of this series
+>> with my patch first? That way it is clear that 1) my patch has to come
+>> first, and 2) that it is part of a single series and should be merged
+>> by the mm subsystem.
+>>
+>> Less chances of things going wrong that way.
+>>
+>> Just mention in the v2 cover letter that the first patch was added to
+>> make it easy to backport that fix without being hampered by merge
+>> conflicts if it was added after your frame_vector.c patch.
 > 
-> Thank you Dan. This takes me back to the very first version of this patch. I
-> will send in the clean up.
+> Yes, that's the way I would naturally do, it, however, Andrew prefers delta updates for minor changes.
+> 
+> @Andrew, whatever you prefer!
 
-Don't just send what I sent you, look around and try to see if there are
-other issues with the code.
+Andrew, I've resent my patch, this time with you CCed as well.
 
-regards,
-dan carpenter
+Regards,
+
+	Hans
+
+> 
+> Thanks!
+> 
 
