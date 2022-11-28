@@ -2,127 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3134763AD09
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 16:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F9463AD06
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 16:54:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiK1Pyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 10:54:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
+        id S231651AbiK1Py2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 10:54:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232418AbiK1Pyl (ORCPT
+        with ESMTP id S230241AbiK1Py0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 10:54:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384CA22B24
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:53:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669650819;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/AJ0l8IgalwuHi6aQkbaTJH6CSV9/VHsYq9E6VyGE4U=;
-        b=iTUCC3AvVb9+htMTXrYbVnOB/VKoBaIEi2QFHDEsFTgpQl0cld++MGQ9Xu2uvSXFCteAy8
-        z53+iL+/TJ6aKfPNUxQrzu2wzEjjBKUIhYdtPQO0ojJ4KQmpt4hVxZJvZxzsMkmLnqOmc7
-        w0zmQ0G9LtFiYVQ1s6+yYVI1fvxKQow=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-607-Uqa5zVnyMkuBLW5ut3eDSQ-1; Mon, 28 Nov 2022 10:53:36 -0500
-X-MC-Unique: Uqa5zVnyMkuBLW5ut3eDSQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 626638027F5;
-        Mon, 28 Nov 2022 15:53:35 +0000 (UTC)
-Received: from [10.22.10.34] (unknown [10.22.10.34])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8D3731415100;
-        Mon, 28 Nov 2022 15:53:34 +0000 (UTC)
-Message-ID: <e89e94b6-6bc8-8d1e-0f6f-ad1ea6c60e0f@redhat.com>
-Date:   Mon, 28 Nov 2022 10:53:32 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH-block] blk-cgroup: Use css_tryget() in
- blkcg_destroy_blkgs()
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Hillf Danton <hdanton@sina.com>, Yi Zhang <yi.zhang@redhat.com>
-References: <20221128033057.1279383-1-longman@redhat.com>
- <427068db-6695-a1e2-4aa2-033220680eb9@kernel.dk>
- <b9018641-d39f-ff74-8cfb-ba597f5ee0c2@redhat.com>
- <786aacda-b25d-67f6-bad3-0030b0e2637e@kernel.dk>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <786aacda-b25d-67f6-bad3-0030b0e2637e@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Mon, 28 Nov 2022 10:54:26 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E3B22B37;
+        Mon, 28 Nov 2022 07:54:25 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASFROEj011568;
+        Mon, 28 Nov 2022 15:54:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=V9RHMe5UmmTFPxpkSh2dvjoU3yp2xmtmpWOJKhFGpzo=;
+ b=SX9t14YmYl85bLbbLxM1S+hgurM+8Zr/sBP+gae88rQeAh6brph4Z7DKK1ldWvMA9yxC
+ NuGpxxDVPjosod/fmmXwJ6Co/UXH5UKe7O9HF2G90qPCB9xEQSbi9r7/TG/RodyD0QTP
+ EJVK6P6NiXJplpktwcBDFGIm9k548nVjfD56s6zSNdrCRAk94Blo7oiek42o9rfkzEav
+ gzYbQsn/V0nCmHfOeLUo/GWtO7MAvH2q0TcczHx9/ssWXIsynof3jrUHAWVHGd7kXI0m
+ x46RiIXW+83hqsKgs/YHlvd21wxFpikwIjCLNCHzQwwTz1XFKF+n5oqVGNYlZ6CafbhO oA== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m3vmrm5t4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 15:54:10 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ASFoG4A010579;
+        Mon, 28 Nov 2022 15:54:07 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3m3a2httgt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 15:54:07 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ASFs4xR7602938
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Nov 2022 15:54:04 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8B282A405B;
+        Mon, 28 Nov 2022 15:54:04 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A4A97A4054;
+        Mon, 28 Nov 2022 15:54:03 +0000 (GMT)
+Received: from sig-9-145-47-38.uk.ibm.com (unknown [9.145.47.38])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 28 Nov 2022 15:54:03 +0000 (GMT)
+Message-ID: <52fe7769ca5b66523c2c93c7d46ebc17dc144aca.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 4/7] iommu: Let iommu.strict override
+ ops->def_domain_type
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
+        Julian Ruess <julianr@linux.ibm.com>
+Date:   Mon, 28 Nov 2022 16:54:03 +0100
+In-Reply-To: <Y4S3z6IpeDHmdUs/@nvidia.com>
+References: <20221116171656.4128212-1-schnelle@linux.ibm.com>
+         <20221116171656.4128212-5-schnelle@linux.ibm.com>
+         <33eea9bd-e101-4836-19e8-d4b191b78b00@linux.intel.com>
+         <9163440eb6a47fe02730638bbdf72fda5ee5ad2c.camel@linux.ibm.com>
+         <Y4S3z6IpeDHmdUs/@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: jGe2FfV0R5QPPmdx1v5v7mwqDGHY7ucg
+X-Proofpoint-ORIG-GUID: jGe2FfV0R5QPPmdx1v5v7mwqDGHY7ucg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-28_13,2022-11-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ priorityscore=1501 mlxlogscore=999 impostorscore=0 mlxscore=0 bulkscore=0
+ phishscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211280115
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/28/22 10:42, Jens Axboe wrote:
-> On 11/28/22 8:38?AM, Waiman Long wrote:
->> On 11/28/22 09:14, Jens Axboe wrote:
->>> On 11/27/22 8:30?PM, Waiman Long wrote:
->>>> Commit 951d1e94801f ("blk-cgroup: Flush stats at blkgs destruction
->>>> path") incorrectly assumes that css_get() will always succeed. That may
->>>> not be true if there is no blkg associated with the blkcg. If css_get()
->>>> fails, the subsequent css_put() call may lead to data corruption as
->>>> was illustrated in a test system that it crashed on bootup when that
->>>> commit was included. Also blkcg may be freed at any time leading to
->>>> use-after-free. Fix it by using css_tryget() instead and bail out if
->>>> the tryget fails.
->>>>
->>>> Fixes: 951d1e94801f ("blk-cgroup: Flush stats at blkgs destruction path")
->>>> Reported-by: Yi Zhang <yi.zhang@redhat.com>
->>>> Signed-off-by: Waiman Long <longman@redhat.com>
->>>> ---
->>>> ? block/blk-cgroup.c | 7 ++++++-
->>>> ? 1 file changed, 6 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
->>>> index 57941d2a8ba3..74fefc8cbcdf 100644
->>>> --- a/block/blk-cgroup.c
->>>> +++ b/block/blk-cgroup.c
->>>> @@ -1088,7 +1088,12 @@ static void blkcg_destroy_blkgs(struct blkcg *blkcg)
->>>> ? ????? might_sleep();
->>>> ? -??? css_get(&blkcg->css);
->>>> +??? /*
->>>> +???? * If css_tryget() fails, there is no blkg to destroy.
->>>> +???? */
->>>> +??? if (!css_tryget(&blkcg->css))
->>>> +??????? return;
->>>> +
->>>> ????? spin_lock_irq(&blkcg->lock);
->>>> ????? while (!hlist_empty(&blkcg->blkg_list)) {
->>>> ????????? struct blkcg_gq *blkg = hlist_entry(blkcg->blkg_list.first,
->>> This doesn't seem safe to me, but maybe I'm missing something. A tryget
->>> operation can be fine if we're under RCU lock and the entity is freed
->>> appropriately, but what makes it safe here? Could blkcg already be gone
->>> at this point?
->> The actual freeing of the blkcg structure is under RCU protection. So
->> the structure won't be freed immediately even if css_tryget() fails. I
->> suspect what Michal found may be the root cause of this problem. If
->> so, this is an existing bug which gets exposed by my patch.
-> But what prevents it from going away here since you're not under RCU
-> lock for the tryget? Doesn't help that the freeing side is done in an
-> RCU safe manner, if the ref attempt is not.
+On Mon, 2022-11-28 at 09:29 -0400, Jason Gunthorpe wrote:
+> On Mon, Nov 28, 2022 at 12:10:39PM +0100, Niklas Schnelle wrote:
+> > On Thu, 2022-11-17 at 09:55 +0800, Baolu Lu wrote:
+> > > On 2022/11/17 1:16, Niklas Schnelle wrote:
+> > > > When iommu.strict=1 is set or iommu_set_dma_strict() was called we
+> > > > should use IOMMU_DOMAIN_DMA irrespective of ops->def_domain_type.
+> > > > 
+> > > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > > > ---
+> > > >   drivers/iommu/iommu.c | 3 +++
+> > > >   1 file changed, 3 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> > > > index 65a3b3d886dc..d9bf94d198df 100644
+> > > > --- a/drivers/iommu/iommu.c
+> > > > +++ b/drivers/iommu/iommu.c
+> > > > @@ -1562,6 +1562,9 @@ static int iommu_get_def_domain_type(struct device *dev)
+> > > >   {
+> > > >   	const struct iommu_ops *ops = dev_iommu_ops(dev);
+> > > >   
+> > > > +	if (iommu_dma_strict)
+> > > > +		return IOMMU_DOMAIN_DMA;
+> > > 
+> > > If any quirky device must work in IOMMU identity mapping mode, this
+> > > might introduce functional regression. At least for VT-d platforms, some
+> > > devices do require IOMMU identity mapping mode for functionality.
+> > 
+> > That's a good point. How about instead of unconditionally returning
+> > IOMMU_DOMAIN_DMA we just do so if the domain type returned by ops-
+> > > def_domain_type uses a flush queue (i.e. the __IOMMU_DOMAIN_DMA_FQ bit
+> > is set). That way a device that only supports identity mapping gets to
+> > set that but iommu_dma_strict at least always prevents use of an IOVA
+> > flush queue.
+> 
+> I would prefer we create some formal caps in iommu_ops to describe
+> whatever it is you are trying to do.
+> 
+> Jason
 
-You are right. blkcg_destroy_blkgs() shouldn't be called with all the 
-blkcg references gone. Will work on a revised patch.
+I agree that there is currently a lack of distinction between what
+domain types can be used (capability) and which should be used as
+default (iommu.strict=<x>, iommu_set_...(), CONFIG_IOMMU_DEFAULT_DMA,
+ops->def_domain_type.).
 
-Cheers,
-Longman
+My case though is about the latter which I think has some undocumented
+and surprising precedences built in at the moment. With this series we
+can use all of IOMMU_DOMAIN_DMA(_FQ, _SQ) on any PCI device but we want
+to default to either IOMMU_DOMAIN_DMA_FQ or IOMMU_DOMAIN_SQ based on
+whether we're running in a paging hypervisor (z/VM or KVM) to get the
+best performance. From a semantic point of view I felt that this is a
+good match for ops->def_domain_type in that we pick a default but it's
+still possible to change the domain type e.g. via sysfs. Now this had
+the problem that ops->def_domain_type would cause IOMMU_DOMAIN_DMA_FQ
+to be used even if iommu_set_dma_strict() was called (via
+iommu.strict=1) because there is a undocumented override of ops-
+>def_domain_type over iommu_def_domain_type which I believe comes from
+the mixing of capability and default you also point at.
+
+I think ideally we need two separate mechanism to determine which
+domain types can be used for a particular device (capability) and for
+which one to default to with the latter part having a clear precedence
+between the options. Put together I think iommu.strict=1 should
+override a device's preference (ops->def_domain_type) and
+CONFIG_IOMMU_DEFAULT_DMA to use IOMMU_DOMAIN_DMA but of course only if
+the device is capable of that. Does that sound reasonable?
+
 
