@@ -2,104 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D68163AB53
+	by mail.lfdr.de (Postfix) with ESMTP id A8B4163AB54
 	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232591AbiK1OmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 09:42:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
+        id S232604AbiK1OmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 09:42:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232636AbiK1Olx (ORCPT
+        with ESMTP id S232606AbiK1Olp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:41:53 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0541B7A0;
-        Mon, 28 Nov 2022 06:41:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669646512; x=1701182512;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=yns+R2HE+8EQwUjsmVT40C2yEbZABretYQlqqfAW/0c=;
-  b=Se/4FnUonha0Ujk70F8pZdiJLqT3UNDmFVQ1jBSaF9dKYeRk6Iz5Msy4
-   XcnMdvXphj1VjQVzP3bPd0g+rp0haDjUlA2EPvg74h5cW1e2jv1+zgruw
-   Q0zuEhYoiYPwhC3xR3WKRkPtSuDBFoIlt8x9sWyqt4rVYbp/b19MWQeKv
-   hkK8/yQJr0VNn6SZPe+0Q4c4Hna6xPdU5LxCJE2dylxC1JVMQ3tjPxnMw
-   bqZNvhdwCMt1SGuN6adRH0j8JoVcggUxwkZxSui/kk9/PHRhwbZ1yv/GE
-   cQUZ3J0pHPJzYPJ4IxpKQ/RpKy/hyKuKSEuNK7elnpA9XsG3UqRbhOUTU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="295232811"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="295232811"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 06:41:52 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="972284888"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="972284888"
-Received: from eliteleevi.tm.intel.com ([10.237.54.20])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 06:41:49 -0800
-Date:   Mon, 28 Nov 2022 16:41:33 +0200 (EET)
-From:   Kai Vehmanen <kai.vehmanen@linux.intel.com>
-X-X-Sender: kvehmane@eliteleevi.tm.intel.com
-To:     Ricardo Ribalda <ribalda@chromium.org>
-cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Alsa-devel <alsa-devel@alsa-project.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        sound-open-firmware@alsa-project.org
-Subject: Re: [PATCH v5] ASoC: SOF: Fix deadlock when shutdown a frozen
- userspace
-In-Reply-To: <20221127-snd-freeze-v5-0-4ededeb08ba0@chromium.org>
-Message-ID: <alpine.DEB.2.22.394.2211281629120.3532114@eliteleevi.tm.intel.com>
-References: <20221127-snd-freeze-v5-0-4ededeb08ba0@chromium.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7 02160 Espoo
+        Mon, 28 Nov 2022 09:41:45 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D741D321
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:41:43 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ozfKF-0006du-3k; Mon, 28 Nov 2022 15:41:39 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ozfKD-000qTJ-LY; Mon, 28 Nov 2022 15:41:38 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ozfKD-000xkl-Bb; Mon, 28 Nov 2022 15:41:37 +0100
+Date:   Mon, 28 Nov 2022 15:41:37 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH 3/5] pwm: jz4740: Force dependency on Device Tree
+Message-ID: <20221128144137.aavwwb3oxz5hw4ae@pengutronix.de>
+References: <20221024205213.327001-1-paul@crapouillou.net>
+ <20221024205213.327001-4-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mgihohoq2ffxir4a"
+Content-Disposition: inline
+In-Reply-To: <20221024205213.327001-4-paul@crapouillou.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Mon, 28 Nov 2022, Ricardo Ribalda wrote:
+--mgihohoq2ffxir4a
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> During kexec(), the userspace is frozen. Therefore we cannot wait for it
-> to complete.
-> 
-> Avoid running snd_sof_machine_unregister during shutdown.
-[...]
->  	/*
-> -	 * make sure clients and machine driver(s) are unregistered to force
-> -	 * all userspace devices to be closed prior to the DSP shutdown sequence
-> +	 * make sure clients are unregistered prior to the DSP shutdown
-> +	 * sequence.
->  	 */
->  	sof_unregister_clients(sdev);
->  
-> -	snd_sof_machine_unregister(sdev, pdata);
-> -
->  	if (sdev->fw_state == SOF_FW_BOOT_COMPLETE)
+On Mon, Oct 24, 2022 at 09:52:11PM +0100, Paul Cercueil wrote:
+> Ingenic SoCs all require CONFIG_OF, so there is no case where we want to
+> use this driver without CONFIG_OF.
+>=20
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
-this is problematic as removing that machine_unregister() call will (at 
-least) bring back an issue on Intel platforms (rare problem hitting S5 on 
-Chromebooks).
+> ---
+>  drivers/pwm/Kconfig      |  2 +-
+>  drivers/pwm/pwm-jz4740.c | 10 ++++------
+>  2 files changed, 5 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+> index 60d13a949bc5..1fe420a45f91 100644
+> --- a/drivers/pwm/Kconfig
+> +++ b/drivers/pwm/Kconfig
+> @@ -283,7 +283,7 @@ config PWM_IQS620A
+>  config PWM_JZ4740
+>  	tristate "Ingenic JZ47xx PWM support"
+>  	depends on MIPS || COMPILE_TEST
+> -	depends on COMMON_CLK
+> +	depends on COMMON_CLK && OF
 
-Not sure how to solve this, but if that call needs to be removed 
-(unsafe to call at shutdown), then we need to rework how SOF 
-does the cleanup.
+I think you don't even need to enforce OF here. For the compile-test
+case having OF=3Dn should work fine.
 
-Br, Kai
+Anyhow:
+
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--mgihohoq2ffxir4a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOEyJ4ACgkQwfwUeK3K
+7AlxPwf9Gz4JXf2XTZRSbBnXuGgyQt+OyfBEMbRTI/dWN6wERc/buzwXNno15Ue+
+wxpdN6FcKgZaAyxJHVm+lLQkzGiVoU79BgZKiwtUjl9k4iPNqzhnd55k3e65JEy9
+NMDRIzIEjmfJ1A9mTYRcnRMT5EnQvg/UCIAqBRENb6tskL5Bk8YdC2jQld1B7Se4
+DZ1hBSK5Jg5ij7vjDH2Z8mCuMfejS98pTfr9yfMwQKrezKx1JONK/D727v+wBNWW
+fdYFdHyOShfcVQNiBiDyGoYDP0aAZmTBlMMwDZEsgH8ELX39QIqdjNONBTJ6Sv+H
+lt/skHCvuJW8lZnqYW9wLtjkt1id8w==
+=j7d3
+-----END PGP SIGNATURE-----
+
+--mgihohoq2ffxir4a--
