@@ -2,293 +2,362 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FAA63A054
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 05:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FAD363A059
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 05:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiK1EF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 23:05:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
+        id S229593AbiK1EHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 23:07:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiK1EFU (ORCPT
+        with ESMTP id S229660AbiK1EGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 23:05:20 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1E713D41;
-        Sun, 27 Nov 2022 20:05:17 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 01B6D5C00B2;
-        Sun, 27 Nov 2022 23:05:15 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sun, 27 Nov 2022 23:05:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=russell.cc; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669608314; x=
-        1669694714; bh=Y3tnyB2smEGJhveOUBIsKZHaDd+IwyR52h9uCaveTjU=; b=f
-        TVRXzUgXgrf0AhG7IY315R32aMiUMIm/XAqigSEPg37UF/A8C9p8U4iX4nDqZtVk
-        SbSEi45DBQhvhC7ddV+hc61i8fuyjB1ck4KB6U6wUD35EIYWwz99bSGaEEEIY8JJ
-        R0K5nBp4Q0RcDMzZKGDnKQoti46lMrMBPBmhzXfBC3H1nGsFFQow8d/I/JMbI+pb
-        41vUops6akMDGLvZIf5rhAvnDdsfgl6Lgy/VkBMjrMeuo7XFzYqi+/J8lAsbDXio
-        V6+DT1rSyu6i7ZSdiwYo0nNjrssfxz8LPRCa+82Qi+9IOhO/BANleK+zrwYPGUdU
-        8qf3kp/ZykwjZVX0vxrVg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669608314; x=
-        1669694714; bh=Y3tnyB2smEGJhveOUBIsKZHaDd+IwyR52h9uCaveTjU=; b=q
-        keidwh/911FsqIxLWituvptwqfFUgwvs1TS8OoP9w72V5fjTkVwd2XEkpKf9K7DC
-        s1oGdx0GDCx9BlI8nI2UJwqLa82LCVXNHyFrzjFKjw4xhAglC/CJ3jO/NhNoI+rT
-        gMgfmgDM/bCXUzGxV0DqWwplwLl/lti4/ionh282Munp8pIawEHwie3dT+XB9k5H
-        k8ooaZPdg1I/T93Bcz8GKK5ep1ldJ0ZiT1RDNMZ2djPKXMyKVoztK8HVV9I3HR8G
-        eFaSPo08WpaG/AwCRNiYupGqiYd6CtGLHoy43KO7kPZldCPZEHT4S594i3egS6l5
-        8zQKuph+bMK8cLpbx9F/Q==
-X-ME-Sender: <xms:ejOEY1AHZnKnXDPPq-sjURkqWT4jrYDCD6cq_WvFIxL5uaSvELRiOw>
-    <xme:ejOEYzgZucUDEBALzak2BpGkNfAAe_RM9gQb30Nw_DoBVHbOXIZcSz3G7siwBRs8g
-    Dr6sCInDYH1vcjOfQ>
-X-ME-Received: <xmr:ejOEYwlleEN2OvY82VndbIkLWHoa-ISG9Dy2UCMr2cNtuicW-Ye52dBcvXIq2xPNVORJxacFhU2o92qXiCkq2pf-dpkUJZxlWw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedugdeijecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
-    hrlhcuvffnffculdduhedmnecujfgurhepkffuhffvveffjghftgfgfgggsehtqhertddt
-    reejnecuhfhrohhmpeftuhhsshgvlhhlucevuhhrrhgvhicuoehruhhstghurhesrhhush
-    hsvghllhdrtggtqeenucggtffrrghtthgvrhhnpeduvdffgfffleetgfelledugfevjeef
-    leevveelhfeugfejuefffeejvdduveefffenucffohhmrghinhepohiilhgrsghsrdhorh
-    hgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprhhu
-    shgtuhhrsehruhhsshgvlhhlrdgttg
-X-ME-Proxy: <xmx:ejOEY_yGOBzfn2QT7F-X-8y1sxeuwFS_cONFBZomC5ubaT8_Tv1JuA>
-    <xmx:ejOEY6Sl6wFOqFiQXudhsnwhYkIogFUJ-HYORjHmF1Hx_455q1UEoA>
-    <xmx:ejOEYyZ7PfSqm_E2WGJ9F9COYHT1KwurR82JGd2QPPU8V9wYDQo3hw>
-    <xmx:ejOEYwMWHaYDaThJZzlgx-aj-j7cqTJN4bPsVyTjvRWvIxuK_NpVyQ>
-Feedback-ID: i4421424f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 27 Nov 2022 23:05:12 -0500 (EST)
-Message-ID: <5fc3102ef379d2a34d64cfea93ce7599e0fd640f.camel@russell.cc>
-Subject: Re: [RFC PATCH 00/13] Add DEXCR support
-From:   Russell Currey <ruscur@russell.cc>
-To:     Benjamin Gray <bgray@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org
-Cc:     ajd@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, cmr@bluescreens.de
-Date:   Mon, 28 Nov 2022 15:05:08 +1100
-In-Reply-To: <20221128024458.46121-1-bgray@linux.ibm.com>
-References: <20221128024458.46121-1-bgray@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.1 (3.46.1-1.fc37) 
+        Sun, 27 Nov 2022 23:06:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93F52728
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 20:05:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669608351;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TW6u920HelKnlzU3FsbOm4kntLB0GHqwnJLuYrrI+/8=;
+        b=OenwKMN4OXuH9eKP3XtFrrqu8afgM5yCS/hdQI2LqFAxZCqe7NATcuyC4EIHtmmGWP5FdZ
+        YJ44wVPrAAU1F6zMnevZpmAOS8Bnhl4td0ONLgdZO7Z+U11rWlJpPiQatApDxzBO6ra+vF
+        xkx/joNRz4AYggKh0YYiK/LpbT08HPU=
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
+ [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-619-6vIH2pX9MIOpPcf12xM5oQ-1; Sun, 27 Nov 2022 23:05:50 -0500
+X-MC-Unique: 6vIH2pX9MIOpPcf12xM5oQ-1
+Received: by mail-ot1-f69.google.com with SMTP id o3-20020a9d6d03000000b0066c577eefc4so3873384otp.22
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 20:05:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TW6u920HelKnlzU3FsbOm4kntLB0GHqwnJLuYrrI+/8=;
+        b=wL2Whb/6OjG7wPQ4Uf5XniIKAGwSmsWU7x6XzBS67ot0rmgDNE96fJr/x+erthNcA/
+         rHUMPo7+N7k08tpJcX6uIlwgMyI7sFqLvqe3ZtfMBK/WoCR8n8l+acCZwLfA8xQhfxFp
+         c8BUpzLUgxgQ+5Pi/fso9vxVOMRvJvuCK7MxSrxHsr/ySViQMVL23aFAZBUJoSLMbBwo
+         7gKZ+5CnEFCseyHpjgz3X7ucA+XmpLZfqqOU6xLjWusvvdWJnSPuMnDkCUfDErT7vE9/
+         FxHxpb6iD/925d7jjQeQRol6gXmR3Lyu1Yv2Q68h/sjK/a9UtCxkBziidR6d6nFPo7uG
+         K3dA==
+X-Gm-Message-State: ANoB5pkLU/3Ta5cedMOfR8237hVl4WVK8V7FHodSvYP5B/AojxQu9y0v
+        bLVZO4niW1VX0mjnuGIDEcTcGA2gu+qzIIb2A65GSyzVFULVbAmQFz9kXvl4PChFMgfCPwtSLc7
+        NywzEWjWajEfQtOrn2xdygP/F+sA0Pg++6GbftfVQ
+X-Received: by 2002:aca:2103:0:b0:35b:9abf:5031 with SMTP id 3-20020aca2103000000b0035b9abf5031mr5383213oiz.280.1669608348382;
+        Sun, 27 Nov 2022 20:05:48 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5Amwfa3Ywi+8tdyygBOHJh0o3crwFoe1AjAwj76fJiS1Xng1WCeFaC6wSpfTtoNi3+YoYQtw8R+Hh21TuSFhI=
+X-Received: by 2002:aca:2103:0:b0:35b:9abf:5031 with SMTP id
+ 3-20020aca2103000000b0035b9abf5031mr5383209oiz.280.1669608348105; Sun, 27 Nov
+ 2022 20:05:48 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221128025558.2152-1-longpeng2@huawei.com>
+In-Reply-To: <20221128025558.2152-1-longpeng2@huawei.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 28 Nov 2022 12:05:37 +0800
+Message-ID: <CACGkMEsWoM1LKkPWPgDALssjkk4UXxfhYm3_aCFktNnpXtWVjQ@mail.gmail.com>
+Subject: Re: [PATCH] vdpasim: support doorbell mapping
+To:     "Longpeng(Mike)" <longpeng2@huawei.com>
+Cc:     stefanha@redhat.com, mst@redhat.com, sgarzare@redhat.com,
+        eperezma@redhat.com, cohuck@redhat.com, arei.gonglei@huawei.com,
+        yechuan@huawei.com, huangzhichao@huawei.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-11-28 at 13:44 +1100, Benjamin Gray wrote:
-> This series is based on initial work by Chris Riedl that was not sent
-> to the list.
->=20
-> Adds a kernel interface for userspace to interact with the DEXCR.
-> The DEXCR is a SPR that allows control over various execution
-> 'aspects', such as indirect branch prediction and enabling the
-> hashst/hashchk instructions. Further details are in ISA 3.1B
-> Book 3 chapter 12.
->=20
-> This RFC proposes an interface for users to interact with the DEXCR.
-> It aims to support
->=20
-> * Querying supported aspects
-> * Getting/setting aspects on a per-process level
-> * Allowing global overrides across all processes
->=20
-> There are some parts that I'm not sure on the best way to approach
-> (hence RFC):
->=20
-> * The feature names in arch/powerpc/kernel/dt_cpu_ftrs.c appear to be
-> unimplemented
-> =C2=A0 in skiboot, so are being defined by this series. Is being so
-> verbose fine?
+On Mon, Nov 28, 2022 at 10:56 AM Longpeng(Mike) <longpeng2@huawei.com> wrote:
+>
+> From: Longpeng <longpeng2@huawei.com>
+>
+> Support doorbell mapping for vdpasim devices, then we can test the notify
+> passthrough feature even if there's no real hardware on hand.
 
-These are going to need to be added to skiboot before they can be
-referenced in the kernel.  Inclusion in skiboot makes them ABI, the
-kernel is just a consumer.
+You can use vp_vdpa in L1 plus page_ver_vq in L0 to test it in L2.
+That is how I test it.
 
-> * What aspects should be editable by a process? E.g., SBHE has
-> =C2=A0 effects that potentially bleed into other processes. Should
-> =C2=A0 it only be system wide configurable?
+>
+> Allocates a dummy page which used to emulate the notify page of the device.
+> All values written to this page would be ignored,  a periodic work will
+> check whether there're requests that need to process.
 
-For context, ISA 3.1B p1358 says:=20
+This seems tricky, it means the device is working even if there's no
+kick. If we really want to do, we should try to use page fault handler
+(probably by extending the config ops), but I'm not sure it's worth to
+bother (or if we can find a use case for no simulator devices).
 
-   In some micro-architectures, the execution behav-
-   ior controlled by aspect 0 is difficult to change with
-   any degree of timing precision. The change may
-   also bleed over into other threads on the same pro-
-   cessor. Any environment that has a dependence on
-   the more secure setting of aspect 0 should not
-   change the value, and ideally should share a pro-
-   cessor only with similar threads. For other environ-
-   ments, changes to the effective value of aspect 0
-   represent a relative risk tolerance for its aspect of
-   execution behavior, with the understanding that
-   there will be significant hysteresis in the execution
-   behavior.
-  =20
-If a process sets SBHE for itself and all it takes is context switching
-from a process with SBHE unset to cause exposure, then yeah I think it
-should just be global.  I doubt branch hints have enough impact for
-process granularity to be especially desirable anyway.
+>
+> This cap is disabled as default, users can enable it as follow:
+>   modprobe vdpa_sim notify_passthrough=true
+>
+> Signed-off-by: Longpeng <longpeng2@huawei.com>
+> ---
+>  drivers/vdpa/vdpa_sim/vdpa_sim.c     | 71 ++++++++++++++++++++++++++--
+>  drivers/vdpa/vdpa_sim/vdpa_sim.h     |  5 +-
+>  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  5 +-
+>  drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  4 +-
+>  4 files changed, 76 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> index 7438a89ce939..5c215b56b78b 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/sched.h>
+>  #include <linux/dma-map-ops.h>
+> +#include <asm/set_memory.h>
+>  #include <linux/vringh.h>
+>  #include <linux/vdpa.h>
+>  #include <linux/vhost_iotlb.h>
+> @@ -36,9 +37,15 @@ module_param(max_iotlb_entries, int, 0444);
+>  MODULE_PARM_DESC(max_iotlb_entries,
+>                  "Maximum number of iotlb entries for each address space. 0 means unlimited. (default: 2048)");
+>
+> +static bool notify_passthrough;
+> +module_param(notify_passthrough, bool, 0444);
+> +MODULE_PARM_DESC(notify_passthrough,
+> +                "Enable vq notify(doorbell) area mapping. (default: false)");
+> +
+>  #define VDPASIM_QUEUE_ALIGN PAGE_SIZE
+>  #define VDPASIM_QUEUE_MAX 256
+>  #define VDPASIM_VENDOR_ID 0
+> +#define VDPASIM_VRING_POLL_PERIOD 100 /* ms */
+>
+>  static struct vdpasim *vdpa_to_sim(struct vdpa_device *vdpa)
+>  {
+> @@ -276,7 +283,7 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
+>         }
+>
+>         vdpasim->dev_attr = *dev_attr;
+> -       INIT_WORK(&vdpasim->work, dev_attr->work_fn);
+> +       INIT_DELAYED_WORK(&vdpasim->vring_work, dev_attr->work_fn);
+>         spin_lock_init(&vdpasim->lock);
+>         spin_lock_init(&vdpasim->iommu_lock);
+>
+> @@ -287,6 +294,15 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
+>         set_dma_ops(dev, &vdpasim_dma_ops);
+>         vdpasim->vdpa.mdev = dev_attr->mgmt_dev;
+>
+> +       if (notify_passthrough) {
+> +               vdpasim->notify = __get_free_page(GFP_KERNEL | __GFP_ZERO);
+> +               if (!vdpasim->notify)
+> +                       goto err_iommu;
+> +#ifdef CONFIG_X86
+> +               set_memory_uc(vdpasim->notify, 1);
+> +#endif
 
-> * Should configuring certain aspects for the process be non-
-> privileged? E.g.,
-> =C2=A0 Is there harm in always allowing configuration of IBRTPD, SRAPD?
-> The *FORCE_SET*
-> =C2=A0 action prevents further process local changes regardless of
-> privilege.
+What's the reason for using uc memory?
 
-I'm not aware of a reason why it would be a problem to allow
-unprivileged configuration as long as there's a way to prevent further
-changes.  The concerning case is if a mitigation is set by a trusted
-process context, and then untrusted code is executed that manages to
-turn the mitigation off again.
+> +       }
+> +
+>         vdpasim->config = kzalloc(dev_attr->config_size, GFP_KERNEL);
+>         if (!vdpasim->config)
+>                 goto err_iommu;
+> @@ -357,8 +373,11 @@ static void vdpasim_kick_vq(struct vdpa_device *vdpa, u16 idx)
+>         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+>         struct vdpasim_virtqueue *vq = &vdpasim->vqs[idx];
+>
+> +       if (notify_passthrough)
+> +               return;
 
-> * The tests fail Patchwork CI because of the new prctl macros, and
-> the CI
-> =C2=A0 doesn't run headers_install and add -isystem
-> <buildpath>/usr/include to
-> =C2=A0 the make command.
+So we should keep the two paths to be used at the same time. Userspace
+can choose to not map doorbells?
 
-The CI runs on x86 and cross compiles the kernel and selftests, and
-boots are done in qemu tcg.  Maybe we can skip the build if the symbols
-are undefined or do something like
+Thanks
 
-	#ifndef PR_PPC_DEXCR_...
-		return KSFT_SKIP;
-	#endif
-
-in the test itself?
-
-> * On handling an exception, I don't check if the NPHIE bit is enabled
-> in the DEXCR.
-> =C2=A0 To do so would require reading both the DEXCR and HDEXCR, for
-> little gain (it
-> =C2=A0 should only matter that the current instruction was a hashchk. If
-> so, the only
-> =C2=A0 reason it would cause an exception is the failed check. If the
-> instruction is
-> =C2=A0 rewritten between exception and check we'd be wrong anyway).
-
-For context, the hashst and hashchk instructions are implemented using
-previously reserved nops.  I'm not aware of any reason a nop could trap
-(i.e. we could check for a trap that came from hashchk even if NPHIE is
-not set), but afaik that'd be the only reason we would have to check.
-
->=20
-> The series is based on the earlier selftest utils series[1], so the
-> tests won't build
-> at all without applying that first. The kernel side should build fine
-> on ppc/next
-> 247f34f7b80357943234f93f247a1ae6b6c3a740 though.
->=20
-> [1]:
-> https://patchwork.ozlabs.org/project/linuxppc-dev/cover/20221122231103.15=
-829-1-bgray@linux.ibm.com/
->=20
-> Benjamin Gray (13):
-> =C2=A0 powerpc/book3s: Add missing <linux/sched.h> include
-> =C2=A0 powerpc: Add initial Dynamic Execution Control Register (DEXCR)
-> =C2=A0=C2=A0=C2=A0 support
-> =C2=A0 powerpc/dexcr: Handle hashchk exception
-> =C2=A0 powerpc/dexcr: Support userspace ROP protection
-> =C2=A0 prctl: Define PowerPC DEXCR interface
-> =C2=A0 powerpc/dexcr: Add prctl implementation
-> =C2=A0 powerpc/dexcr: Add sysctl entry for SBHE system override
-> =C2=A0 powerpc/dexcr: Add enforced userspace ROP protection config
-> =C2=A0 selftests/powerpc: Add more utility macros
-> =C2=A0 selftests/powerpc: Add hashst/hashchk test
-> =C2=A0 selftests/powerpc: Add DEXCR prctl, sysctl interface test
-> =C2=A0 selftests/powerpc: Add DEXCR status utility lsdexcr
-> =C2=A0 Documentation: Document PowerPC kernel DEXCR interface
->=20
-> =C2=A0Documentation/powerpc/dexcr.rst=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 183 +++++++++++
-> =C2=A0Documentation/powerpc/index.rst=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
-> =C2=A0arch/powerpc/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 5 +
-> =C2=A0arch/powerpc/include/asm/book3s/64/kexec.h=C2=A0=C2=A0=C2=A0 |=C2=
-=A0=C2=A0 6 +
-> =C2=A0arch/powerpc/include/asm/book3s/64/kup.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0=C2=A0 1 +
-> =C2=A0arch/powerpc/include/asm/cputable.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 8 +-
-> =C2=A0arch/powerpc/include/asm/ppc-opcode.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
-> =C2=A0arch/powerpc/include/asm/processor.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 33 ++
-> =C2=A0arch/powerpc/include/asm/reg.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 7 +
-> =C2=A0arch/powerpc/kernel/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=
-=A0 1 +
-> =C2=A0arch/powerpc/kernel/dexcr.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 310
-> ++++++++++++++++++
-> =C2=A0arch/powerpc/kernel/dt_cpu_ftrs.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 4 +
-> =C2=A0arch/powerpc/kernel/process.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 31 +-
-> =C2=A0arch/powerpc/kernel/prom.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- |=C2=A0=C2=A0 4 +
-> =C2=A0arch/powerpc/kernel/traps.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=
-=A0=C2=A0 6 +
-> =C2=A0include/uapi/linux/prctl.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- |=C2=A0 14 +
-> =C2=A0kernel/sys.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=
-=A0 16 +
-> =C2=A0tools/testing/selftests/powerpc/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0=C2=A0 1 +
-> =C2=A0.../selftests/powerpc/dexcr/.gitignore=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 3 +
-> =C2=A0.../testing/selftests/powerpc/dexcr/Makefile=C2=A0 |=C2=A0 11 +
-> =C2=A0tools/testing/selftests/powerpc/dexcr/cap.c=C2=A0=C2=A0 |=C2=A0 72 =
-++++
-> =C2=A0tools/testing/selftests/powerpc/dexcr/cap.h=C2=A0=C2=A0 |=C2=A0 18 =
-+
-> =C2=A0tools/testing/selftests/powerpc/dexcr/dexcr.c | 118 +++++++
-> =C2=A0tools/testing/selftests/powerpc/dexcr/dexcr.h |=C2=A0 54 +++
-> =C2=A0.../selftests/powerpc/dexcr/dexcr_test.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 | 241 ++++++++++++++
-> =C2=A0.../selftests/powerpc/dexcr/hashchk_test.c=C2=A0=C2=A0=C2=A0 | 229 =
-+++++++++++++
-> =C2=A0.../testing/selftests/powerpc/dexcr/lsdexcr.c | 178 ++++++++++
-> =C2=A0tools/testing/selftests/powerpc/include/reg.h |=C2=A0=C2=A0 4 +
-> =C2=A0.../testing/selftests/powerpc/include/utils.h |=C2=A0 44 +++
-> =C2=A029 files changed, 1602 insertions(+), 2 deletions(-)
-> =C2=A0create mode 100644 Documentation/powerpc/dexcr.rst
-> =C2=A0create mode 100644 arch/powerpc/kernel/dexcr.c
-> =C2=A0create mode 100644 tools/testing/selftests/powerpc/dexcr/.gitignore
-> =C2=A0create mode 100644 tools/testing/selftests/powerpc/dexcr/Makefile
-> =C2=A0create mode 100644 tools/testing/selftests/powerpc/dexcr/cap.c
-> =C2=A0create mode 100644 tools/testing/selftests/powerpc/dexcr/cap.h
-> =C2=A0create mode 100644 tools/testing/selftests/powerpc/dexcr/dexcr.c
-> =C2=A0create mode 100644 tools/testing/selftests/powerpc/dexcr/dexcr.h
-> =C2=A0create mode 100644
-> tools/testing/selftests/powerpc/dexcr/dexcr_test.c
-> =C2=A0create mode 100644
-> tools/testing/selftests/powerpc/dexcr/hashchk_test.c
-> =C2=A0create mode 100644 tools/testing/selftests/powerpc/dexcr/lsdexcr.c
->=20
->=20
-> base-commit: 9dc58a6040662faaf24c8932861f485670fce7ff
+> +
+>         if (vq->ready)
+> -               schedule_work(&vdpasim->work);
+> +               schedule_work(&vdpasim->vring_work.work);
+>  }
+>
+>  static void vdpasim_set_vq_cb(struct vdpa_device *vdpa, u16 idx,
+> @@ -495,6 +514,18 @@ static u8 vdpasim_get_status(struct vdpa_device *vdpa)
+>         return status;
+>  }
+>
+> +static void vdpasim_set_vring_work(struct vdpasim *vdpasim, bool start)
+> +{
+> +       if (!notify_passthrough)
+> +               return;
+> +
+> +       if (start)
+> +               schedule_delayed_work(&vdpasim->vring_work,
+> +                               msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
+> +       else
+> +               cancel_delayed_work_sync(&vdpasim->vring_work);
+> +}
+> +
+>  static void vdpasim_set_status(struct vdpa_device *vdpa, u8 status)
+>  {
+>         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> @@ -502,12 +533,16 @@ static void vdpasim_set_status(struct vdpa_device *vdpa, u8 status)
+>         spin_lock(&vdpasim->lock);
+>         vdpasim->status = status;
+>         spin_unlock(&vdpasim->lock);
+> +
+> +       vdpasim_set_vring_work(vdpasim, status & VIRTIO_CONFIG_S_DRIVER_OK);
+>  }
+>
+>  static int vdpasim_reset(struct vdpa_device *vdpa, bool clear)
+>  {
+>         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+>
+> +       vdpasim_set_vring_work(vdpasim, false);
+> +
+>         spin_lock(&vdpasim->lock);
+>         vdpasim->status = 0;
+>         vdpasim_do_reset(vdpasim);
+> @@ -672,12 +707,24 @@ static int vdpasim_dma_unmap(struct vdpa_device *vdpa, unsigned int asid,
+>         return 0;
+>  }
+>
+> +static struct vdpa_notification_area
+> +vdpasim_get_vq_notification(struct vdpa_device *vdpa, u16 qid)
+> +{
+> +       struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> +       struct vdpa_notification_area notify;
+> +
+> +       notify.addr = virt_to_phys((void *)vdpasim->notify);
+> +       notify.size = PAGE_SIZE;
+> +
+> +       return notify;
+> +}
+> +
+>  static void vdpasim_free(struct vdpa_device *vdpa)
+>  {
+>         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+>         int i;
+>
+> -       cancel_work_sync(&vdpasim->work);
+> +       cancel_delayed_work_sync(&vdpasim->vring_work);
+>
+>         for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
+>                 vringh_kiov_cleanup(&vdpasim->vqs[i].out_iov);
+> @@ -693,7 +740,23 @@ static void vdpasim_free(struct vdpa_device *vdpa)
+>         vhost_iotlb_free(vdpasim->iommu);
+>         kfree(vdpasim->vqs);
+>         kfree(vdpasim->config);
+> +       if (vdpasim->notify) {
+> +#ifdef CONFIG_X86
+> +               set_memory_wb(vdpasim->notify, 1);
+> +#endif
+> +               free_page(vdpasim->notify);
+> +       }
+> +}
+> +
+> +void vdpasim_schedule_work(struct vdpasim *vdpasim, bool sched_now)
+> +{
+> +       if (sched_now)
+> +               schedule_work(&vdpasim->vring_work.work);
+> +       else if (notify_passthrough)
+> +               schedule_delayed_work(&vdpasim->vring_work,
+> +                                     msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
+>  }
+> +EXPORT_SYMBOL_GPL(vdpasim_schedule_work);
+>
+>  static const struct vdpa_config_ops vdpasim_config_ops = {
+>         .set_vq_address         = vdpasim_set_vq_address,
+> @@ -704,6 +767,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
+>         .get_vq_ready           = vdpasim_get_vq_ready,
+>         .set_vq_state           = vdpasim_set_vq_state,
+>         .get_vq_state           = vdpasim_get_vq_state,
+> +       .get_vq_notification    = vdpasim_get_vq_notification,
+>         .get_vq_align           = vdpasim_get_vq_align,
+>         .get_vq_group           = vdpasim_get_vq_group,
+>         .get_device_features    = vdpasim_get_device_features,
+> @@ -737,6 +801,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
+>         .get_vq_ready           = vdpasim_get_vq_ready,
+>         .set_vq_state           = vdpasim_set_vq_state,
+>         .get_vq_state           = vdpasim_get_vq_state,
+> +       .get_vq_notification    = vdpasim_get_vq_notification,
+>         .get_vq_align           = vdpasim_get_vq_align,
+>         .get_vq_group           = vdpasim_get_vq_group,
+>         .get_device_features    = vdpasim_get_device_features,
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> index 0e78737dcc16..da0866834918 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> @@ -53,7 +53,7 @@ struct vdpasim_dev_attr {
+>  struct vdpasim {
+>         struct vdpa_device vdpa;
+>         struct vdpasim_virtqueue *vqs;
+> -       struct work_struct work;
+> +       struct delayed_work vring_work;
+>         struct vdpasim_dev_attr dev_attr;
+>         /* spinlock to synchronize virtqueue state */
+>         spinlock_t lock;
+> @@ -69,10 +69,13 @@ struct vdpasim {
+>         bool running;
+>         /* spinlock to synchronize iommu table */
+>         spinlock_t iommu_lock;
+> +       /* dummy notify page */
+> +       unsigned long notify;
+>  };
+>
+>  struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *attr,
+>                                const struct vdpa_dev_set_config *config);
+> +void vdpasim_schedule_work(struct vdpasim *vdpasim, bool sched_now);
+>
+>  /* TODO: cross-endian support */
+>  static inline bool vdpasim_is_little_endian(struct vdpasim *vdpasim)
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> index c6db1a1baf76..8a640ea82284 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> @@ -288,7 +288,7 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
+>
+>  static void vdpasim_blk_work(struct work_struct *work)
+>  {
+> -       struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
+> +       struct vdpasim *vdpasim = container_of(work, struct vdpasim, vring_work.work);
+>         bool reschedule = false;
+>         int i;
+>
+> @@ -325,8 +325,7 @@ static void vdpasim_blk_work(struct work_struct *work)
+>  out:
+>         spin_unlock(&vdpasim->lock);
+>
+> -       if (reschedule)
+> -               schedule_work(&vdpasim->work);
+> +       vdpasim_schedule_work(vdpasim, reschedule);
+>  }
+>
+>  static void vdpasim_blk_get_config(struct vdpasim *vdpasim, void *config)
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+> index c3cb225ea469..8b998952384b 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+> @@ -145,7 +145,7 @@ static void vdpasim_handle_cvq(struct vdpasim *vdpasim)
+>
+>  static void vdpasim_net_work(struct work_struct *work)
+>  {
+> -       struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
+> +       struct vdpasim *vdpasim = container_of(work, struct vdpasim, vring_work.work);
+>         struct vdpasim_virtqueue *txq = &vdpasim->vqs[1];
+>         struct vdpasim_virtqueue *rxq = &vdpasim->vqs[0];
+>         ssize_t read, write;
+> @@ -196,7 +196,7 @@ static void vdpasim_net_work(struct work_struct *work)
+>                 vdpasim_net_complete(rxq, write);
+>
+>                 if (++pkts > 4) {
+> -                       schedule_work(&vdpasim->work);
+> +                       vdpasim_schedule_work(vdpasim, true);
+>                         goto out;
+>                 }
+>         }
 > --
-> 2.38.1
+> 2.23.0
+>
 
