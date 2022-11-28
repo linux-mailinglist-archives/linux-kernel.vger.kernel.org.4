@@ -2,170 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 158CC63B3D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:02:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF3063B3D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234382AbiK1VCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 16:02:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
+        id S233899AbiK1VDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 16:03:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233965AbiK1VB4 (ORCPT
+        with ESMTP id S231970AbiK1VDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 16:01:56 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E49A32CDE7;
-        Mon, 28 Nov 2022 13:01:54 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 00C61D6E;
-        Mon, 28 Nov 2022 13:02:01 -0800 (PST)
-Received: from [10.57.71.118] (unknown [10.57.71.118])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 861FE3F67D;
-        Mon, 28 Nov 2022 13:01:51 -0800 (PST)
-Message-ID: <6c4c3a3e-1d8d-7994-3c03-388ef63dddb3@arm.com>
-Date:   Mon, 28 Nov 2022 21:01:43 +0000
+        Mon, 28 Nov 2022 16:03:24 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA20C12;
+        Mon, 28 Nov 2022 13:03:22 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669669400;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XhB7JGU0+3dUf/xb6vSXZN0hUM70VXiiaFn2KBna12A=;
+        b=zlvNwIwoHG+fU4gxnuatMPxfyVs5ZSLePNJu4/ocONdVKcLEZDqxHiVlXWATLTuFzvzVQH
+        wvylbGYhnIJkRBfI06fvH8zrEydybvoGyJU4k6idIaEb8132jwZUwabOGcYf5ls2TUSa81
+        SbeW0BZ0iRRMeh23zOgiaOb0YEuMrwElmiEaTS7Nepm/GHglMgTFNCurANP6kTLFcFlxT+
+        S6h+mst5tidq7iJ67Vk4o2lLC31GVx0EpMSI7Jy53xj9hjy0e+Xb2TiEVK7iM0+bf272Ze
+        2pAQf4pFBLaQtNW95y+qQXVA9uI271Sl7FODDOKRr/856Yr93LB6VMiYkim0lQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669669400;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XhB7JGU0+3dUf/xb6vSXZN0hUM70VXiiaFn2KBna12A=;
+        b=CWSwp1XKO4MBIhCx2CWco0lkUyqfbLhLh5RYHrL1h2GQY7cqKnAbOprHdP8gtA7ZMoKFpk
+        LeZC3c+3eRBaziBw==
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     agross@kernel.org, ammarfaizi2@gnuweeb.org, andersson@kernel.org,
+        andrew@lunn.ch, bhelgaas@google.com, festevam@gmail.com,
+        gregkh@linuxfoundation.org, gregory.clement@bootlin.com,
+        jgg@mellanox.com, kristo@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, lorenzo.pieralisi@arm.com,
+        lpieralisi@kernel.org, mark.rutland@arm.com, maz@kernel.org,
+        nm@ti.com, okaya@kernel.org, robin.murphy@arm.com,
+        s.hauer@pengutronix.de, sebastian.hesselbarth@gmail.com,
+        shameerali.kolothum.thodi@huawei.com, shawnguo@kernel.org,
+        ssantosh@kernel.org, vkoul@kernel.org, will@kernel.org,
+        yuzenghui@huawei.com, imx@lists.linux.dev
+Subject: Re: [patch V2 33/40] irqchip/imx-mu-msi: Switch to MSI parent
+In-Reply-To: <20221128204710.2084706-1-Frank.Li@nxp.com>
+References: <20221121140050.386216606@linutronix.de>
+ <20221128204710.2084706-1-Frank.Li@nxp.com>
+Date:   Mon, 28 Nov 2022 22:03:20 +0100
+Message-ID: <87tu2ivlk7.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 4/7] iommu: Let iommu.strict override
- ops->def_domain_type
-Content-Language: en-GB
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-References: <20221116171656.4128212-1-schnelle@linux.ibm.com>
- <20221116171656.4128212-5-schnelle@linux.ibm.com>
- <33eea9bd-e101-4836-19e8-d4b191b78b00@linux.intel.com>
- <9163440eb6a47fe02730638bbdf72fda5ee5ad2c.camel@linux.ibm.com>
- <Y4S3z6IpeDHmdUs/@nvidia.com>
- <52fe7769ca5b66523c2c93c7d46ebc17dc144aca.camel@linux.ibm.com>
- <Y4TjWOXYD+DK+d/B@nvidia.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <Y4TjWOXYD+DK+d/B@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-28 16:35, Jason Gunthorpe wrote:
-> On Mon, Nov 28, 2022 at 04:54:03PM +0100, Niklas Schnelle wrote:
-> 
->> I agree that there is currently a lack of distinction between what
->> domain types can be used (capability) and which should be used as
->> default (iommu.strict=<x>, iommu_set_...(), CONFIG_IOMMU_DEFAULT_DMA,
->> ops->def_domain_type.).
-> 
-> What I would like to get to is the drivers only expose UNMANAGED,
-> IDENTITY and BLOCKING domains. Everything that the DMA/FQ/etc domains
-> were doing should be handled as some kind of cap.
-> 
-> Eg, after Lu's series:
-> 
-> https://lore.kernel.org/linux-iommu/20221128064648.1934720-1-baolu.lu@linux.intel.com/
-> 
-> We should be able to remove IOMMU_DOMAIN_DMA and its related from the
-> drivers entirely. Instead drivers will provide UNMANAGED domains and
-> dma-iommu.c will operate the UNMANAGED domain to provide the dma
-> api. We can detect if the driver supports this by set_platform_dma()
-> being NULL.
-> 
-> A statement that a driver performs better using SQ/FQ/none should be
-> something that is queried from the UNMANAGED domain as a guidance to
-> dma-iommu.c what configuration to pick if not overriden.
+Frank!
 
-Ack, I'm sure it could be cleaner overall if the driver capabilities 
-didn't come in right at the end of the process with the .domain_alloc 
-dance. As I've said before, I would still like to keep the domain types 
-in the core code (since they already work as a set of capability flags), 
-but drivers not having to deal with them directly would be good. Maybe 
-we dedicate .domain_alloc to paging domains, and have separate device 
-ops for .get_{blocking,identity}_domain, given that optimised 
-implementations of those are likely to be static or at least per-instance.
+On Mon, Nov 28 2022 at 15:47, Frank Li wrote:
+> On Mon, Nov 21, 2022 at 03:40:09PM +0100, Thomas Gleixner wrote:
+>>  	 * The device MSI domain can never have a set affinity callback it
+>> --- a/drivers/irqchip/irq-imx-mu-msi.c
+>> +++ b/drivers/irqchip/irq-imx-mu-msi.c
+>> @@ -24,6 +24,8 @@
+>>  #include <linux/pm_domain.h>
+>>  #include <linux/spinlock.h>
+>>  
+>> +#include "irq-gic-msi-lib.h"
+>> +
+>
+> I think irq-gic-msi-lib.h is not good name. Actually mu-msi is not arm gic.
+> irq-gic-msi-lib do common work, which not related arm gic at all.
 
-> So, I would say what you want is some option flag, perhaps on the
-> domain ops: 'domain performs better with SQ or FQ'
+I realized that after a while too, but the main purpose of this series
+was to establish that the core design holds up to handle the gazillions
+of ARM variants out there and to solicit technical feedback from the
+involved parties.
 
-Although for something that's likely to be global based on whether 
-running virtualised or not, I'd be inclined to try pulling that as far 
-as reasonably possible towards core code.
+>>  static int imx_mu_msi_domains_init(struct imx_mu_msi *msi_data, struct device *dev)
+>>  {
+>>  	struct fwnode_handle *fwnodes = dev_fwnode(dev);
+>>  	struct irq_domain *parent;
+>>  
+>>  	/* Initialize MSI domain parent */
+>> -	parent = irq_domain_create_linear(fwnodes,
+>> -					    IMX_MU_CHANS,
+>> -					    &imx_mu_msi_domain_ops,
+>> -					    msi_data);
+>> +	parent = irq_domain_create_linear(fwnodes, IMX_MU_CHANS, &imx_mu_msi_domain_ops, msi_data);
+>
+> coding style change should be in sperated patch.
 
->> My case though is about the latter which I think has some undocumented
->> and surprising precedences built in at the moment. With this series we
->> can use all of IOMMU_DOMAIN_DMA(_FQ, _SQ) on any PCI device but we want
->> to default to either IOMMU_DOMAIN_DMA_FQ or IOMMU_DOMAIN_SQ based on
->> whether we're running in a paging hypervisor (z/VM or KVM) to get the
->> best performance. From a semantic point of view I felt that this is a
->> good match for ops->def_domain_type in that we pick a default but it's
->> still possible to change the domain type e.g. via sysfs. Now this had
->> the problem that ops->def_domain_type would cause IOMMU_DOMAIN_DMA_FQ
->> to be used even if iommu_set_dma_strict() was called (via
->> iommu.strict=1) because there is a undocumented override of ops-
->>> def_domain_type over iommu_def_domain_type which I believe comes from
->> the mixing of capability and default you also point at.
-> 
-> Yeah, this does sounds troubled.
+Thanks for the thorough technical feedback!
 
-The initial assumption about .def_domain_type is incorrect, though. From 
-there it's a straightforward path to the conclusion that introducing 
-inconsistency (by using the wrong mechanism) leads to the presence of 
-inconsistency.
-
->> I think ideally we need two separate mechanism to determine which
->> domain types can be used for a particular device (capability) and for
->> which one to default to with the latter part having a clear precedence
->> between the options. Put together I think iommu.strict=1 should
->> override a device's preference (ops->def_domain_type) and
->> CONFIG_IOMMU_DEFAULT_DMA to use IOMMU_DOMAIN_DMA but of course only if
->> the device is capable of that. Does that sound reasonable?
-> 
-> Using the language above, if someone asks for strict then the
-> infrastructure should try to allocate an UNMANAGED domain, not an
-> identity domain,
-
-Careful, "iommu.strict" refers specifically to the invalidation policy 
-for DMA API domains, and I've tried to be careful to document it as 
-such. It has never been defined to have any impact on anything other 
-than DMA API domains, so I don't think any should be assumed. Control of 
-the basic domain type (identity vs. translation) on the command line has 
-always been via separate parameters, which I think have always had 
-higher priority anyway. With sysfs you can ask for anything, but you'll 
-still only get it if it's safe and guaranteed to work.
-
-> and not use the lazy flush algorithms in dma-iommu.c
-> 
-> Similarly if sysfs asks for lazy flush or identity maps then it should
-> get it, always.
-
-I'm hardly an advocate for trying to save users from themselves, but I 
-honestly can't see any justifiable reason for not having sysfs respect 
-iommu_get_def_domain_type(). If a privileged user wants to screw up the 
-system they're hardly short of options already. Far worse, though, is 
-that someone nefarious would only need to popularise a "make external 
-dGPUs and/or other popular accelerators faster on laptops" udev rule 
-that forces identity domains via sysfs, and bye bye Thunderclap mitigations.
-
-> The driver should have no say in how dma-iommu.c works beyond if it
-> provides the required ops functionalities, and hint(s) as to what
-> gives best performance.
-
-That should already be the case today, as outlined in my other mail. 
-It's just somewhat more evolved than designed, so may not be so clear to 
-everyone.
-
-Thanks,
-Robin.
+       tglx
