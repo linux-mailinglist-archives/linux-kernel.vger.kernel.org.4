@@ -2,137 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DCBE63A616
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE0763A619
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiK1KaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 05:30:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
+        id S230242AbiK1KaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 05:30:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiK1KaG (ORCPT
+        with ESMTP id S230006AbiK1KaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 05:30:06 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A994C2652;
-        Mon, 28 Nov 2022 02:30:05 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id 9so9996957pfx.11;
-        Mon, 28 Nov 2022 02:30:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=5WzP7R2JeezWg+hdV7Tba+xSsA1ik5Dm+MRW5DkF9e0=;
-        b=oo6qzQAScY8kGVYAXKK32Is/cCaVa66uXHZDaSQmZr/Hhd/EJkvBIw+I6TTKnFPD4g
-         rpAxJ70A3QLcsQgRjI/Ae0OpewommAkpkFRRT0/wMTwUwQBJmBx9SgOJ5MqTnF05Bp1q
-         lF2t7G8KbJELoHEncLL0XRY1b0Noj9Q7tkpmes4QLi5Q/YJmJ9zSe0ML/CdlzeiYIFNS
-         M6DnCCBQMTxsDUwv2vNpX+3yDnWkIdE2C8jjVlps8giI1f621NbsIokmqgW4rflA2div
-         ++iI6URjCndHsPV6QwW68yxDtBJlk1lZkHW3zg7eiioJevvhlLjA8btnKeZAGSLYNgg+
-         BCKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5WzP7R2JeezWg+hdV7Tba+xSsA1ik5Dm+MRW5DkF9e0=;
-        b=RqJyOr694jN8zALa1JwMlmIuHENyKlZwwYiNrvBxj64L2emz/Wvd+Ny0YQ/lEPFqj/
-         HWm7oZ1CZJoLqjcc4eVGi6cGrPNG1Y1++LAsS26dQmbPQmmtGBAZ5hB4CiF8yKfaH1ir
-         OUCOQv3oLBdypSWIpLP0XW0Q0YgGS8HF9iE8IRKjVIRXfbP5QfBC4bJp+cRJ2NdrwLLN
-         xVnmqoUZaQEmd9BVmc7oJ9uNRHf5rsWWoF767/j3PojeW5MLTi7GF3vI8icNP30xT8MN
-         ukB8xuWtAp58x1C5w1Wfr9FHsBHaAYH6C2U7NkJ4VRpO6GVOQxz6cZw+gPzDqZxFHMJz
-         aaJw==
-X-Gm-Message-State: ANoB5pl+gx4lmRcASSEJml2UDD2m55gJTLqhB8ggh2uUuj89v+9nn40U
-        rjZjlJuHKIYHGLBgZQGS6kk=
-X-Google-Smtp-Source: AA0mqf7FESvloU60JlBI3tZKvkhKNAlGtFZmq/3ukpDw+KhHUdJBWFh/014hM6rAO7cBKe8PCTysuw==
-X-Received: by 2002:a05:6a00:a88:b0:574:2c5e:b18c with SMTP id b8-20020a056a000a8800b005742c5eb18cmr27847828pfl.10.1669631405115;
-        Mon, 28 Nov 2022 02:30:05 -0800 (PST)
-Received: from XH22050090-L.ad.ts.tri-ad.global ([103.175.111.222])
-        by smtp.gmail.com with ESMTPSA id iw14-20020a170903044e00b001869f2120a4sm8519954plb.94.2022.11.28.02.30.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 02:30:04 -0800 (PST)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH] usb: add usb_set_intfdata() documentation
-Date:   Mon, 28 Nov 2022 19:29:54 +0900
-Message-Id: <20221128102954.3615579-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.25.1
+        Mon, 28 Nov 2022 05:30:13 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D2D167DC
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:30:12 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1ozbOl-0006ch-65; Mon, 28 Nov 2022 11:30:03 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1ozbOi-0000Jf-Qm; Mon, 28 Nov 2022 11:30:00 +0100
+Date:   Mon, 28 Nov 2022 11:30:00 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Ping-Ke Shih <pkshih@realtek.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Neo Jou <neojou@gmail.com>,
+        Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Alexander Hochbaum <alex@appudo.com>,
+        Da Xue <da@libre.computer>, Bernie Huang <phhuang@realtek.com>,
+        Viktor Petrenko <g0000ga@gmail.com>,
+        neo_jou <neo_jou@realtek.com>
+Subject: Re: [PATCH v3 07/11] rtw88: Add common USB chip support
+Message-ID: <20221128103000.GC29728@pengutronix.de>
+References: <20221122145226.4065843-1-s.hauer@pengutronix.de>
+ <20221122145226.4065843-8-s.hauer@pengutronix.de>
+ <1f7aa964766c4f65b836f7e1d716a1e3@realtek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1f7aa964766c4f65b836f7e1d716a1e3@realtek.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-USB drivers do not need to call usb_set_intfdata(intf, NULL) in their
-usb_driver::disconnect callback because the core already does it in [1].
+On Mon, Nov 28, 2022 at 02:00:54AM +0000, Ping-Ke Shih wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Sascha Hauer <s.hauer@pengutronix.de>
+> > Sent: Tuesday, November 22, 2022 10:52 PM
+> > To: linux-wireless@vger.kernel.org
+> > Cc: Neo Jou <neojou@gmail.com>; Hans Ulli Kroll <linux@ulli-kroll.de>; Ping-Ke Shih <pkshih@realtek.com>;
+> > Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; netdev@vger.kernel.org;
+> > linux-kernel@vger.kernel.org; Martin Blumenstingl <martin.blumenstingl@googlemail.com>;
+> > kernel@pengutronix.de; Johannes Berg <johannes@sipsolutions.net>; Alexander Hochbaum <alex@appudo.com>;
+> > Da Xue <da@libre.computer>; Bernie Huang <phhuang@realtek.com>; Viktor Petrenko <g0000ga@gmail.com>;
+> > Sascha Hauer <s.hauer@pengutronix.de>; neo_jou <neo_jou@realtek.com>
+> > Subject: [PATCH v3 07/11] rtw88: Add common USB chip support
+> > 
+> > Add the common bits and pieces to add USB support to the RTW88 driver.
+> > This is based on https://github.com/ulli-kroll/rtw88-usb.git which
+> > itself is first written by Neo Jou.
+> > 
+> > Signed-off-by: neo_jou <neo_jou@realtek.com>
+> > Signed-off-by: Hans Ulli Kroll <linux@ulli-kroll.de>
+> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> > ---
+> > 
+> > Notes:
+> >     Changes since v2:
+> >     - Fix buffer length for aggregated tx packets
+> >     - Increase maximum transmit buffer size to 20KiB as found in downstream drivers
+> >     - Change register write functions to synchronous accesses instead of just firing
+> >       a URB without waiting for its completion
+> >     - requeue rx URBs directly in completion handler rather than having a workqueue
+> >       for it.
+> > 
+> >     Changes since v1:
+> >     - Make checkpatch.pl clean
+> >     - Drop WIPHY_FLAG_HAS_REMAIN_ON_CHANNEL flag
+> >     - Use 'ret' as variable name for return values
+> >     - Sort variable declarations in reverse Xmas tree order
+> >     - Change potentially endless loop to a limited loop
+> >     - Change locking to be more obviously correct
+> >     - drop unnecessary check for !rtwdev
+> >     - make sure the refill workqueue is not restarted again after we have
+> >       cancelled it
+> > 
+> >  drivers/net/wireless/realtek/rtw88/Kconfig  |   3 +
+> >  drivers/net/wireless/realtek/rtw88/Makefile |   2 +
+> >  drivers/net/wireless/realtek/rtw88/mac.c    |   3 +
+> >  drivers/net/wireless/realtek/rtw88/main.c   |   4 +
+> >  drivers/net/wireless/realtek/rtw88/main.h   |   4 +
+> >  drivers/net/wireless/realtek/rtw88/reg.h    |   1 +
+> >  drivers/net/wireless/realtek/rtw88/tx.h     |  31 +
+> >  drivers/net/wireless/realtek/rtw88/usb.c    | 918 ++++++++++++++++++++
+> >  drivers/net/wireless/realtek/rtw88/usb.h    | 107 +++
+> >  9 files changed, 1073 insertions(+)
+> >  create mode 100644 drivers/net/wireless/realtek/rtw88/usb.c
+> >  create mode 100644 drivers/net/wireless/realtek/rtw88/usb.h
+> > 
+> > diff --git a/drivers/net/wireless/realtek/rtw88/Kconfig b/drivers/net/wireless/realtek/rtw88/Kconfig
+> > index e3d7cb6c12902..1624c5db69bac 100644
+> > --- a/drivers/net/wireless/realtek/rtw88/Kconfig
+> > +++ b/drivers/net/wireless/realtek/rtw88/Kconfig
+> > @@ -16,6 +16,9 @@ config RTW88_CORE
+> >  config RTW88_PCI
+> >  	tristate
+> > 
+> > +config RTW88_USB
+> > +	tristate
+> > +
+> >  config RTW88_8822B
+> >  	tristate
+> > 
+> > diff --git a/drivers/net/wireless/realtek/rtw88/Makefile b/drivers/net/wireless/realtek/rtw88/Makefile
+> > index 834c66ec0af9e..9e095f8181483 100644
+> > --- a/drivers/net/wireless/realtek/rtw88/Makefile
+> > +++ b/drivers/net/wireless/realtek/rtw88/Makefile
+> > @@ -45,4 +45,6 @@ obj-$(CONFIG_RTW88_8821CE)	+= rtw88_8821ce.o
+> >  rtw88_8821ce-objs		:= rtw8821ce.o
+> > 
+> >  obj-$(CONFIG_RTW88_PCI)		+= rtw88_pci.o
+> > +obj-$(CONFIG_RTW88_USB)		+= rtw88_usb.o
+> >  rtw88_pci-objs			:= pci.o
+> > +rtw88_usb-objs			:= usb.o
+> 
+> nit: I prefer not interleaving with PCI.
 
-However, this fact is widely unknown, c.f.:
+Ok.
 
-  $ git grep "usb_set_intfdata(.*NULL)" | wc -l
-  215
+> > +static u32 rtw_usb_read(struct rtw_dev *rtwdev, u32 addr, u16 len)
+> > +{
+> > +	struct rtw_usb *rtwusb = rtw_get_usb_priv(rtwdev);
+> > +	struct usb_device *udev = rtwusb->udev;
+> > +	__le32 *data;
+> > +	unsigned long flags;
+> > +	int ret;
+> > +	static int count;
+> > +
+> > +	spin_lock_irqsave(&rtwusb->usb_lock, flags);
+> > +
+> > +	rtwusb->usb_data_index++;
+> > +	rtwusb->usb_data_index &= (RTW_USB_MAX_RXTX_COUNT - 1);
+> > +
+> > +	spin_unlock_irqrestore(&rtwusb->usb_lock, flags);
+> > +
+> > +	data = &rtwusb->usb_data[rtwusb->usb_data_index];
+> 
+> Don't you need to hold &rtwusb->usb_lock to access rtwusb->usb_data_index?
+> rtw_usb_write() has similar code.
 
-Especially, setting the interface to NULL before all action completed
-can result in a NULL pointer dereference. Not calling
-usb_set_intfdata() at all in disconnect() is the safest method.
+Right. Will rewrite to:
 
-Add documentation to usb_set_intfdata() to clarify this point.
+	spin_lock_irqsave(&rtwusb->usb_lock, flags);
 
-Also remove the call in usb-skeletion's disconnect() not to confuse
-the new comers.
+	idx = rtwusb->usb_data_index;
+	rtwusb->usb_data_index = (idx + 1) & (RTW_USB_MAX_RXTX_COUNT - 1);
 
-[1] function usb_unbind_interface() from drivers/usb/core/driver.c
-Link: https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/core/driver.c#L497
+	spin_unlock_irqrestore(&rtwusb->usb_lock, flags);
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- drivers/usb/usb-skeleton.c |  1 -
- include/linux/usb.h        | 12 ++++++++++++
- 2 files changed, 12 insertions(+), 1 deletion(-)
+	data = &rtwusb->usb_data[idx];
 
-diff --git a/drivers/usb/usb-skeleton.c b/drivers/usb/usb-skeleton.c
-index d87deee3e26e..900a64ad25e4 100644
---- a/drivers/usb/usb-skeleton.c
-+++ b/drivers/usb/usb-skeleton.c
-@@ -564,7 +564,6 @@ static void skel_disconnect(struct usb_interface *interface)
- 	int minor = interface->minor;
- 
- 	dev = usb_get_intfdata(interface);
--	usb_set_intfdata(interface, NULL);
- 
- 	/* give back our minor */
- 	usb_deregister_dev(interface, &skel_class);
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 9ff1ad4dfad1..d4afeeec1e1a 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -265,6 +265,18 @@ static inline void *usb_get_intfdata(struct usb_interface *intf)
- 	return dev_get_drvdata(&intf->dev);
- }
- 
-+/**
-+ * usb_set_intfdata() - associate driver-specific data with the interface
-+ * @intf: the usb interface
-+ * @data: pointer to the device priv structure or %NULL
-+ *
-+ * Drivers should use this function in their probe() to associate their
-+ * driver-specific data with the usb interface.
-+ *
-+ * When disconnecting, the core will take care of setting @intf back to %NULL,
-+ * so no actions are needed on the driver side. The interface should not be set
-+ * to %NULL before all actions completed (e.g. no outsanding URB remaining).
-+ */
- static inline void usb_set_intfdata(struct usb_interface *intf, void *data)
- {
- 	dev_set_drvdata(&intf->dev, data);
+> > +static void rtw_usb_write_port_tx_complete(struct urb *urb)
+> > +{
+> > +	struct rtw_usb_txcb *txcb = urb->context;
+> > +	struct rtw_dev *rtwdev = txcb->rtwdev;
+> > +	struct ieee80211_hw *hw = rtwdev->hw;
+> > +
+> > +	while (true) {
+> 
+> Is it possible to have a hard limit to prevent unexpected infinite loop?
+
+Yes, that would be possible, but do you think it's necessary?
+
+Each *txcb is used only once, It's allocated in rtw_usb_tx_agg_skb() and
+&txcb->tx_ack_queue is filled with a limited number of skbs there. These
+skbs is then iterated over in rtw_usb_write_port_tx_complete(), so I don't
+see a way how we could end up in an infinite loop here.
+
+It's not that &txcb->tx_ack_queue is filled in a concurrent thread while we
+try to catch up in rtw_usb_write_port_tx_complete().
+
+> > +	skb_head = dev_alloc_skb(RTW_USB_MAX_XMITBUF_SZ);
+> > +	if (!skb_head) {
+> > +		skb_head = skb_iter;
+> > +		goto queue;
+> > +	}
+> > +
+> > +	data_ptr = skb_head->data;
+> > +
+> > +	while (skb_iter) {
+> > +		unsigned long flags;
+> > +
+> > +		memcpy(data_ptr, skb_iter->data, skb_iter->len);
+> > +		skb_put(skb_head, skb_iter->len + align_next);
+> 
+> skb_put(skb_head, align_next);
+> skb_put_data(skb_head, skb_iter->data, skb_iter->len);
+> 
+> Then, don't need to maintain 'data_ptr'.
+
+Right. Looks much better this way.
+
+> > +	error = usb_submit_urb(rxcb->rx_urb, GFP_ATOMIC);
+> > +	if (error) {
+> > +		kfree_skb(rxcb->rx_skb);
+> > +		if (error != -ENODEV)
+> > +			rtw_err(rtwdev, "Err sending rx data urb %d\n",
+> > +				error);
+> 
+> nit: straighten rtw_err()
+
+Ok.
+
+Sascha
+
 -- 
-2.25.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
