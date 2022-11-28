@@ -2,127 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72D563B2A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC2863B2A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:58:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233871AbiK1T5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 14:57:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
+        id S233875AbiK1T6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 14:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232649AbiK1T5K (ORCPT
+        with ESMTP id S233920AbiK1T5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 14:57:10 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDB32D1EE
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:57:09 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id x66so11564245pfx.3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:57:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=q++N7mMr2bng1GoyuTRGH7t3fqpBykOOtM6lUt7GCbc=;
-        b=Pn7vV1/M4oM5qFJ3pcZbD0WrvdbiESeFbb0QMGvnyeF7CEZE40krxPB+Ctto/SqrU/
-         07pYUte5HyNzmVBJlOQp/qEDAU8ZRc/Nt7IJIWVVR60RWD8JupJvw6C77we/0u9t+0S4
-         NfwDVZNufFlucKugYMBxxyhViOGtXzkMIjT/+KV40HewUFMv6Ysk1RVTHkMWZYRCVbKY
-         DBJa3Q2LB8TkEOUltC63rGZS8XukkAyz+0PMpr2QtGrGBpKd8dIMStWzyYWwd70/robP
-         Dw2yPMSNTJdxd0HVxqtdFzkMkOqljhO0TpJ2+4M7L7B0Tp9E7EeqNUMK13v20ssvf+n2
-         vCCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q++N7mMr2bng1GoyuTRGH7t3fqpBykOOtM6lUt7GCbc=;
-        b=bxHsv2+M0CwDFdvskQDKkFB3KW7/rGJHGXQbg3osKYTzyG+7gbg0Sb7jxQMxjQyv02
-         TDOGKp/y3nfa9ZocHJuShHOODlkJQQNsYp9TFYSiiVL0ie5O6hV6RfOLe7ZZHgcwsncR
-         nJVxNPeZAW5LOAbq30SiplCH8Ttza1h6QsQV6r/gnJy3kfH+Zq7rayHlJQS2/ZR0gSZd
-         sXfLNj6RAasIm83c8O1O7sYUWJHaGnsxsQkEEtqHH7gZ4TWd+4PANXr3yqNgjLaxmWyj
-         rfIv9GAl5gd2GqMOsU7WLeSY2rV+hoolUzi/D2tAGqdOza2l+QXaOZvI7Knk7BlcvFwy
-         WVbA==
-X-Gm-Message-State: ANoB5pnuyWfzMEXrKZaJC13uu2b1z908y9WuqOJSl1uO0s6RRKvvsltJ
-        FHtBtbEqtWAcx2bJJdh8jslLKvAx3shiWXQx6Vg=
-X-Google-Smtp-Source: AA0mqf5pEXXu3ZZ0NNttSxTKItzjXS6JBsJmqLVUAAHbyjFseNpEy2X8y97Gmcu1eatgGg2U+m/jQiEVV3yMJhTFp44=
-X-Received: by 2002:a05:6a00:5:b0:574:f82c:9389 with SMTP id
- h5-20020a056a00000500b00574f82c9389mr11701508pfk.39.1669665428820; Mon, 28
- Nov 2022 11:57:08 -0800 (PST)
-MIME-Version: 1.0
-References: <20221128180252.1684965-1-jannh@google.com> <20221128180252.1684965-3-jannh@google.com>
-In-Reply-To: <20221128180252.1684965-3-jannh@google.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Mon, 28 Nov 2022 11:56:57 -0800
-Message-ID: <CAHbLzkoPdeMYOd591vS8XnWmwwn92kp30tac7_a8tWJE2+aN7w@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] mm/khugepaged: Invoke MMU notifiers in shmem/file
- collapse paths
-To:     Jann Horn <jannh@google.com>
-Cc:     security@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 28 Nov 2022 14:57:53 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C22B27;
+        Mon, 28 Nov 2022 11:57:50 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id ED8655C00E9;
+        Mon, 28 Nov 2022 14:57:49 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Mon, 28 Nov 2022 14:57:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1669665469; x=1669751869; bh=EhWJMM1p5W
+        +r1kg3giwYu9gUFHXT8JN007h39JPV/cY=; b=DDj2pdPXxurjonkJMVVVtu7CsL
+        MaZ0bXONSaf6WAeKSY8MwU77nU4uAP5lBiiMOd2G3hgSTjAiexZJei4gX70wSgBk
+        aaVGk0x5hAsZ8xtTHjppOqNQSzkg3lthKS1ZNkzzBIE3e+fawCeyncqUMpwhGKc9
+        jNYHBc5vl3vhdeEJw43kSe9OJif7g9UwqHLjY4ypv2oEV/cpKqdY3xvVrhCSrO08
+        2i5vKEcsKFbJUUD0hXDmkQptZe8bP8POfIKxh2u/sd/kZg3JylLSJkmNa2Mmn9mN
+        8PeE9e2rWjtyBGuaHMhMT0fz5pboLBqyl795RmYL+icDsQBWJTnZTi3kjoVg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669665469; x=1669751869; bh=EhWJMM1p5W+r1kg3giwYu9gUFHXT
+        8JN007h39JPV/cY=; b=wvoX67+tP4fH+Kggip5vgDZlRgQAH4Iz7lSN0Cd2IVw1
+        K8E+CCRy+dV4Z/0FUQ1gRXVfO+n27XWq9gjl4RT36n+2/4rLylI1l7644SgJGCwS
+        J203bc+f4YcmI6AxPToMYYOQgdBPLl2YiVMbrFH/voINQjyG5z+9NrW+9Fly9vO9
+        EVbcjm2ku6TWV4im3Bsf/p//6C1ESjC8PVyFus03/pKY1rxJ62rqEZ+X4vVWijyX
+        9nqvwM3CAir0MGC0wJyC1lMiRL6AvS232kAgiVifYXwgcMy8xaWzwbARy/MkdFGE
+        E9P5YJsjBisLiaIY5zfVrmZq3ODckLy15x0Rx0iNnQ==
+X-ME-Sender: <xms:vRKFY_Ef-Gsw86_671377XRmPqcMP5kAcozUeeyDc0DlVE41WrqBag>
+    <xme:vRKFY8U7ep2Y5guergsRMVW3KKvdnlKYdivjbyt7auh0PyJn9lLFIuvXcbMQPKbRh
+    by_dyuJXcrezsLvX8Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedvgddufeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:vRKFYxLJusVyl6kycHwUsCVZVBGFU2GUQ9J8WXmBNvvUGkg9ryPslw>
+    <xmx:vRKFY9E0qT4eNPmtFmnfKzscBmoBtFAWPbMw0c4ugva4eH0tsfShPw>
+    <xmx:vRKFY1UHb95TRxAHfuA40nU3Fe_R0i0eKWT-3LPFcwiNmWD8Z06_Gw>
+    <xmx:vRKFY-MYKhtn4_EW9qVFaf4ID69McpBXifc41tXSs4Gzybi0AHR8fQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 6E55AB60086; Mon, 28 Nov 2022 14:57:49 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <cd01e0b4-579f-48fc-995f-6e1acebd02af@app.fastmail.com>
+In-Reply-To: <Y4UKpP7/NOwPIkYe@zx2c4.com>
+References: <20221128111829.2477505-1-Jason@zx2c4.com>
+ <20221128111829.2477505-4-Jason@zx2c4.com>
+ <8f9326ba-f879-4b9e-9e5d-b65cad7cd726@app.fastmail.com>
+ <Y4UKpP7/NOwPIkYe@zx2c4.com>
+Date:   Mon, 28 Nov 2022 20:57:28 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jason A . Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
+        x86@kernel.org, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Adhemerval Zanella Netto" <adhemerval.zanella@linaro.org>,
+        "Carlos O'Donell" <carlos@redhat.com>,
+        "Florian Weimer" <fweimer@redhat.com>,
+        "Christian Brauner" <brauner@kernel.org>,
+        "Samuel Neves" <sneves@dei.uc.pt>
+Subject: Re: [PATCH v8 3/3] x86: vdso: Wire up getrandom() vDSO implementation
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 10:03 AM Jann Horn <jannh@google.com> wrote:
+On Mon, Nov 28, 2022, at 20:23, Jason A. Donenfeld wrote:
+> On Mon, Nov 28, 2022 at 08:18:12PM +0100, Arnd Bergmann wrote:
+>> On Mon, Nov 28, 2022, at 12:18, Jason A. Donenfeld wrote:
 >
-> Any codepath that zaps page table entries must invoke MMU notifiers to
-> ensure that secondary MMUs (like KVM) don't keep accessing pages which
-> aren't mapped anymore. Secondary MMUs don't hold their own references to
-> pages that are mirrored over, so failing to notify them can lead to page
-> use-after-free.
+> That's more or less how v7 was, but Thomas thought the x86 stuff should
+> be separate. So for v8, the organization is:
 >
-> I'm marking this as addressing an issue introduced in commit f3f0e1d2150b
-> ("khugepaged: add support of collapse for tmpfs/shmem pages"), but most of
-> the security impact of this only came in commit 27e1f8273113 ("khugepaged:
-> enable collapse pmd for pte-mapped THP"), which actually omitted flushes
-> for the removal of present PTEs, not just for the removal of empty page
-> tables.
+> 1) generic syscall
+> 2) generic vdso
+> 3) x86 wiring
 >
-> Cc: stable@kernel.org
-> Fixes: f3f0e1d2150b ("khugepaged: add support of collapse for tmpfs/shmem pages")
-> Signed-off-by: Jann Horn <jannh@google.com>
+> The primary advantage is that future archs wanting to add this now can
+> just look at commit (3) only, and make a similar commit for that new
+> arch.
+>
+> If you think a different organization outweighs that advantage, can you
+> spell out what division of patches you want, and I'll do that for v9?
+> Or maybe this v8 is okay?
 
-Reviewed-by: Yang Shi <shy828301@gmail.com>
+My interest is that at the end of the series, all architectures
+are hooked up with the same syscall number, which avoids confusion
+and merge conflicts when we add the next syscall to all tables.
 
-> ---
-> v4: no changes
->
->  mm/khugepaged.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index c3d3ce596bff7..49eb4b4981d88 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -1404,6 +1404,7 @@ static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *v
->                                   unsigned long addr, pmd_t *pmdp)
->  {
->         pmd_t pmd;
-> +       struct mmu_notifier_range range;
->
->         mmap_assert_write_locked(mm);
->         if (vma->vm_file)
-> @@ -1415,8 +1416,12 @@ static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *v
->         if (vma->anon_vma)
->                 lockdep_assert_held_write(&vma->anon_vma->root->rwsem);
->
-> +       mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, NULL, mm, addr,
-> +                               addr + HPAGE_PMD_SIZE);
-> +       mmu_notifier_invalidate_range_start(&range);
->         pmd = pmdp_collapse_flush(vma, addr, pmdp);
->         tlb_remove_table_sync_one();
-> +       mmu_notifier_invalidate_range_end(&range);
->         mm_dec_nr_ptes(mm);
->         page_table_check_pte_clear_range(mm, addr, pmd);
->         pte_free(mm, pmd_pgtable(pmd));
-> --
-> 2.38.1.584.g0f3c55d4c2-goog
->
+How about one patch to add all the syscall table entries, and then
+have the x86 specific change just turn on the Kconfig symbol that
+actually enables the syscall?
+
+     Arnd
