@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0AD263A602
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6061063A603
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbiK1KVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 05:21:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
+        id S230238AbiK1KVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 05:21:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiK1KVk (ORCPT
+        with ESMTP id S230040AbiK1KVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Nov 2022 05:21:40 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9641D1A80D
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA69F1A3B4
         for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:21:37 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id j20-20020a056e02219400b00300a22a7fe0so8446175ila.3
+Received: by mail-io1-f70.google.com with SMTP id c20-20020a5d9754000000b006dbd4e6a5abso5617938ioo.17
         for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:21:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xcHq16J87X/jtzgV+W1u1qxDDHtgTsIdNttbPajzsMU=;
-        b=Zm7e6lhzR02+HhZMwv87HzQ3EpJc47lnYuEsBuSxidaAxW32oTZ4AGHIR/SdUm0qhm
-         bPgJDi9Q1HXnrn9Jtp10JLqb53kwVJ1VLAN7FREEoPbuMQQwlYVYLIBWLhYgEk9uANLb
-         UtDef640+HsZEjRwymmmot4RStdCbZiWb3DGDVkZMYYwGvoQ0jC8i3daYKxShP4Dsvzu
-         RKorSnmbZgSobIZvtf8QEFRricBSKhV0I9dvShsTkzcsnmZ1YJLn1whYy370FOGvwSU+
-         iwijGbZzuKwa89DRn7flV7Uy49XibAMtnjQZBSgx1C69aBX/LXjYVxI1ntQY2UJWwLWn
-         1X4A==
-X-Gm-Message-State: ANoB5pmQp644kwXLIWHD1VEd5D44JKHdWYdT9kz02mKz8qimFzCr06B0
-        AbdvycXPJkBy9hW2AC4ZVPRpMXmP6wRx5g+rD/rAa4T+8hJJ
-X-Google-Smtp-Source: AA0mqf44+XfoHthx6BDXORDne95duUNyqjJzxo59BnyMWGWHXLq3guh+toYpdyyRJcmJ/4tArNMYhlAWO/Asc3AbcxV3nl5m5Vgp
+        bh=1csAodOOfFTg2xybZjeCII0lV5hjMsXkJZLvPjeyoy0=;
+        b=ymEMIh/qSqoV33abbR5VYXDRMs6o8pWEu7woRHlJi0iWuild+Cxe4DU2ocwAPSEWC3
+         IITxDmFVwUrOP5AynaQ+NskS7+F3XPdaHDbC3hTcS/CwpMuK3KM+fltzJhdWg67tWfNB
+         UiJSjBr0dMUMLMKDKL4oKHP6FfAsuQb7T6bp9fykKlqnHzm8wOD3yBUrw4iMIftUXa/l
+         uSADDlHIqSUL4yWzLSLmOz9lLg/SRM7UcptMrNGSOgTJNA/BJvyMQywftivvmTretFUZ
+         lXOxQ4glm/SsqZBH1V/pRtjVxacekcs6Deu/3ZySpeKSuMQVNKCtvZsprxLvO6RV93YZ
+         GE6A==
+X-Gm-Message-State: ANoB5pmxdMablhP0h6u2WdChbsREafEi2yvFxO3enNk5ebkmHZYg0p4s
+        og6gX/CQpgXiBV+/R9lH02H+W2Yh8dPxCo90uSYZvoyVQLlx
+X-Google-Smtp-Source: AA0mqf6gZGi0RD86hLnTJwpIDE2GuntyPJSbxUcgoIz8JgoDCM1GiVRXrhZviO6dLDkDJA1nD/RLc9afsOn6lJTCm9I/FZEffC3M
 MIME-Version: 1.0
-X-Received: by 2002:a92:680f:0:b0:300:e393:34c3 with SMTP id
- d15-20020a92680f000000b00300e39334c3mr21641035ilc.112.1669630896930; Mon, 28
- Nov 2022 02:21:36 -0800 (PST)
-Date:   Mon, 28 Nov 2022 02:21:36 -0800
+X-Received: by 2002:a02:9712:0:b0:363:a1bb:343e with SMTP id
+ x18-20020a029712000000b00363a1bb343emr23846504jai.175.1669630897186; Mon, 28
+ Nov 2022 02:21:37 -0800 (PST)
+Date:   Mon, 28 Nov 2022 02:21:37 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000084862805ee853c4c@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in reiserfs_find_actor
-From:   syzbot <syzbot+e80d43036932e96e90bd@syzkaller.appspotmail.com>
-To:     brauner@kernel.org, damien.lemoal@opensource.wdc.com,
-        edward.shishkin@gmail.com, jack@suse.cz, jlayton@kernel.org,
-        linuszeng@tencent.com, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        willy@infradead.org
+Message-ID: <000000000000886fde05ee853c18@google.com>
+Subject: [syzbot] general protection fault in gfs2_print_dbg
+From:   syzbot <syzbot+9f366abe80cb91810c84@syzkaller.appspotmail.com>
+To:     agruenba@redhat.com, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org, rpeterso@redhat.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,9 +60,9 @@ syzbot found the following issue on:
 
 HEAD commit:    faf68e3523c2 Merge tag 'kbuild-fixes-v6.1-4' of git://git...
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13a257c5880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16cf6cad880000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
-dashboard link: https://syzkaller.appspot.com/bug?extid=e80d43036932e96e90bd
+dashboard link: https://syzkaller.appspot.com/bug?extid=9f366abe80cb91810c84
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
 Unfortunately, I don't have any reproducer for this issue yet.
@@ -76,194 +73,104 @@ vmlinux: https://storage.googleapis.com/syzbot-assets/7bf0af58cde3/vmlinux-faf68
 kernel image: https://storage.googleapis.com/syzbot-assets/3e15d7d640b0/bzImage-faf68e35.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e80d43036932e96e90bd@syzkaller.appspotmail.com
+Reported-by: syzbot+9f366abe80cb91810c84@syzkaller.appspotmail.com
 
-==================================================================
-BUG: KASAN: use-after-free in reiserfs_find_actor+0xdf/0x100 fs/reiserfs/inode.c:1625
-Read of size 4 at addr ffff88803459e8f0 by task syz-executor.1/6406
-
-CPU: 0 PID: 6406 Comm: syz-executor.1 Not tainted 6.1.0-rc6-syzkaller-00315-gfaf68e3523c2 #0
+general protection fault, probably for non-canonical address 0xdffffc0000108420: 0000 [#1] PREEMPT SMP KASAN
+KASAN: probably user-memory-access in range [0x0000000000842100-0x0000000000842107]
+CPU: 0 PID: 16312 Comm: syz-executor.3 Not tainted 6.1.0-rc6-syzkaller-00315-gfaf68e3523c2 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:string_nocheck lib/vsprintf.c:643 [inline]
+RIP: 0010:string+0x1b5/0x2d0 lib/vsprintf.c:725
+Code: 89 de 49 ff ce 31 ed 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 49 8d 3c 2c 48 89 f8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <0f> b6 04 08 84 c0 75 6a 49 8d 5c 2d 00 45 0f b6 3c 2c 31 ff 44 89
+RSP: 0018:ffffc90005fc6990 EFLAGS: 00010003
+RAX: 0000000000108420 RBX: ffffffffffffffff RCX: dffffc0000000000
+RDX: ffff88807def3a80 RSI: 00000000ffffffff RDI: 0000000000842107
+RBP: 0000000000000000 R08: ffffffff8a8cb389 R09: ffffffff8a8c7c8f
+R10: 0000000000000012 R11: ffff88807def3a80 R12: 0000000000842107
+R13: ffffc90005fc6ee6 R14: fffffffffffffffe R15: 0000000000000000
+FS:  00007fa7a6873700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b33622000 CR3: 000000007ba24000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- print_address_description+0x74/0x340 mm/kasan/report.c:284
- print_report+0x107/0x1f0 mm/kasan/report.c:395
- kasan_report+0xcd/0x100 mm/kasan/report.c:495
- reiserfs_find_actor+0xdf/0x100 fs/reiserfs/inode.c:1625
- find_inode+0x1ac/0x4c0 fs/inode.c:915
- inode_insert5+0xf3/0x500 fs/inode.c:1170
- insert_inode_locked4+0x5a/0x90 fs/inode.c:1680
- reiserfs_new_inode+0x4e5/0x1cd0 fs/reiserfs/inode.c:1960
- reiserfs_create+0x39a/0x660 fs/reiserfs/namei.c:668
- lookup_open fs/namei.c:3413 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x12d0/0x2df0 fs/namei.c:3711
- do_filp_open+0x264/0x4f0 fs/namei.c:3741
- do_sys_openat2+0x124/0x4e0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_openat fs/open.c:1342 [inline]
- __se_sys_openat fs/open.c:1337 [inline]
- __x64_sys_openat+0x243/0x290 fs/open.c:1337
+ vsnprintf+0x1221/0x1ce0 lib/vsprintf.c:2800
+ va_format lib/vsprintf.c:1685 [inline]
+ pointer+0x845/0xfa0 lib/vsprintf.c:2431
+ vsnprintf+0xe73/0x1ce0 lib/vsprintf.c:2804
+ vprintk_store+0x3b0/0x1050 kernel/printk/printk.c:2152
+ vprintk_emit+0x9a/0x1e0 kernel/printk/printk.c:2249
+ _printk+0xc0/0x100 kernel/printk/printk.c:2289
+ gfs2_print_dbg+0x172/0x180 fs/gfs2/glock.c:1456
+ dump_holder fs/gfs2/glock.c:2342 [inline]
+ gfs2_dump_glock+0x149f/0x1b60 fs/gfs2/glock.c:2447
+ gfs2_consist_inode_i+0xf3/0x110 fs/gfs2/util.c:465
+ gfs2_dirent_scan+0x535/0x650 fs/gfs2/dir.c:602
+ gfs2_dirent_search+0x2ea/0xb10 fs/gfs2/dir.c:850
+ gfs2_dir_search+0x8c/0x2a0 fs/gfs2/dir.c:1650
+ gfs2_lookupi+0x465/0x650 fs/gfs2/inode.c:323
+ __gfs2_lookup+0x8c/0x260 fs/gfs2/inode.c:870
+ __lookup_slow+0x266/0x3a0 fs/namei.c:1685
+ lookup_slow+0x53/0x70 fs/namei.c:1702
+ walk_component+0x2e1/0x410 fs/namei.c:1993
+ lookup_last fs/namei.c:2450 [inline]
+ path_lookupat+0x17d/0x450 fs/namei.c:2474
+ filename_lookup+0x274/0x650 fs/namei.c:2503
+ user_path_at_empty+0x40/0x1a0 fs/namei.c:2876
+ do_readlinkat+0x10c/0x3d0 fs/stat.c:468
+ __do_sys_readlink fs/stat.c:501 [inline]
+ __se_sys_readlink fs/stat.c:498 [inline]
+ __x64_sys_readlink+0x7b/0x90 fs/stat.c:498
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f6c04c8c0d9
+RIP: 0033:0x7fa7a5a8c0d9
 Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f6c059de168 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 00007f6c04dac050 RCX: 00007f6c04c8c0d9
-RDX: 000000000000275a RSI: 0000000020000280 RDI: ffffffffffffff9c
-RBP: 00007f6c04ce7ae9 R08: 0000000000000000 R09: 0000000000000000
+RSP: 002b:00007fa7a6873168 EFLAGS: 00000246 ORIG_RAX: 0000000000000059
+RAX: ffffffffffffffda RBX: 00007fa7a5bac120 RCX: 00007fa7a5a8c0d9
+RDX: 0000000000000047 RSI: 0000000020000140 RDI: 0000000020000000
+RBP: 00007fa7a5ae7ae9 R08: 0000000000000000 R09: 0000000000000000
 R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd8cc8768f R14: 00007f6c059de300 R15: 0000000000022000
+R13: 00007ffde5ef481f R14: 00007fa7a6873300 R15: 0000000000022000
  </TASK>
-
-Allocated by task 30009:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x3d/0x60 mm/kasan/common.c:52
- __kasan_slab_alloc+0x65/0x70 mm/kasan/common.c:325
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook mm/slab.h:737 [inline]
- slab_alloc_node mm/slub.c:3398 [inline]
- slab_alloc mm/slub.c:3406 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
- kmem_cache_alloc_lru+0x180/0x2e0 mm/slub.c:3429
- alloc_inode_sb include/linux/fs.h:3117 [inline]
- f2fs_alloc_inode+0x14d/0x520 fs/f2fs/super.c:1366
- alloc_inode fs/inode.c:259 [inline]
- iget_locked+0x191/0x830 fs/inode.c:1286
- f2fs_iget+0x51/0x4bb0 fs/f2fs/inode.c:505
- f2fs_fill_super+0x52c4/0x6c40 fs/f2fs/super.c:4333
- mount_bdev+0x26c/0x3a0 fs/super.c:1401
- legacy_get_tree+0xea/0x180 fs/fs_context.c:610
- vfs_get_tree+0x88/0x270 fs/super.c:1531
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Last potentially related work creation:
- kasan_save_stack+0x2b/0x50 mm/kasan/common.c:45
- __kasan_record_aux_stack+0xb0/0xc0 mm/kasan/generic.c:481
- call_rcu+0x163/0x9c0 kernel/rcu/tree.c:2798
- f2fs_put_super+0x5c7/0xb60 fs/f2fs/super.c:1596
- generic_shutdown_super+0x130/0x310 fs/super.c:492
- kill_block_super+0x79/0xd0 fs/super.c:1428
- kill_f2fs_super+0x2f9/0x3c0 fs/f2fs/super.c:4612
- deactivate_locked_super+0xa7/0xf0 fs/super.c:332
- cleanup_mnt+0x494/0x520 fs/namespace.c:1186
- task_work_run+0x243/0x300 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:171
- exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:296
- do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Second to last potentially related work creation:
- kasan_save_stack+0x2b/0x50 mm/kasan/common.c:45
- __kasan_record_aux_stack+0xb0/0xc0 mm/kasan/generic.c:481
- call_rcu+0x163/0x9c0 kernel/rcu/tree.c:2798
- f2fs_put_super+0x606/0xb60 fs/f2fs/super.c:1599
- generic_shutdown_super+0x130/0x310 fs/super.c:492
- kill_block_super+0x79/0xd0 fs/super.c:1428
- kill_f2fs_super+0x2f9/0x3c0 fs/f2fs/super.c:4612
- deactivate_locked_super+0xa7/0xf0 fs/super.c:332
- cleanup_mnt+0x494/0x520 fs/namespace.c:1186
- task_work_run+0x243/0x300 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:171
- exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:296
- do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff88803459e1a0
- which belongs to the cache f2fs_inode_cache of size 2144
-The buggy address is located 1872 bytes inside of
- 2144-byte region [ffff88803459e1a0, ffff88803459ea00)
-
-The buggy address belongs to the physical page:
-page:ffffea0000d16600 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888034599aa0 pfn:0x34598
-head:ffffea0000d16600 order:3 compound_mapcount:0 compound_pincount:0
-memcg:ffff8880222cf501
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffffea0000d35a00 dead000000000002 ffff88801cb74c80
-raw: ffff888034599aa0 00000000800e0005 00000001ffffffff ffff8880222cf501
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Reclaimable, gfp_mask 0x1d2050(__GFP_IO|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL|__GFP_RECLAIMABLE), pid 27886, tgid 27885 (syz-executor.1), ts 1184915928737, free_ts 1175787154919
- prep_new_page mm/page_alloc.c:2539 [inline]
- get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4291
- __alloc_pages+0x259/0x560 mm/page_alloc.c:5558
- alloc_slab_page+0x70/0xf0 mm/slub.c:1794
- allocate_slab+0x5e/0x4b0 mm/slub.c:1939
- new_slab mm/slub.c:1992 [inline]
- ___slab_alloc+0x782/0xe20 mm/slub.c:3180
- __slab_alloc mm/slub.c:3279 [inline]
- slab_alloc_node mm/slub.c:3364 [inline]
- slab_alloc mm/slub.c:3406 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
- kmem_cache_alloc_lru+0x233/0x2e0 mm/slub.c:3429
- alloc_inode_sb include/linux/fs.h:3117 [inline]
- f2fs_alloc_inode+0x14d/0x520 fs/f2fs/super.c:1366
- alloc_inode fs/inode.c:259 [inline]
- iget_locked+0x191/0x830 fs/inode.c:1286
- f2fs_iget+0x51/0x4bb0 fs/f2fs/inode.c:505
- f2fs_fill_super+0x5382/0x6c40 fs/f2fs/super.c:4341
- mount_bdev+0x26c/0x3a0 fs/super.c:1401
- legacy_get_tree+0xea/0x180 fs/fs_context.c:610
- vfs_get_tree+0x88/0x270 fs/super.c:1531
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1459 [inline]
- free_pcp_prepare+0x80c/0x8f0 mm/page_alloc.c:1509
- free_unref_page_prepare mm/page_alloc.c:3387 [inline]
- free_unref_page+0x7d/0x5f0 mm/page_alloc.c:3483
- free_slab mm/slub.c:2031 [inline]
- discard_slab mm/slub.c:2037 [inline]
- __unfreeze_partials+0x1ab/0x200 mm/slub.c:2586
- put_cpu_partial+0x106/0x170 mm/slub.c:2662
- qlist_free_all+0x2b/0x70 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x169/0x180 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x1f/0x70 mm/kasan/common.c:302
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook mm/slab.h:737 [inline]
- slab_alloc_node mm/slub.c:3398 [inline]
- __kmem_cache_alloc_node+0x1d7/0x310 mm/slub.c:3437
- __do_kmalloc_node mm/slab_common.c:954 [inline]
- __kmalloc+0x9e/0x1a0 mm/slab_common.c:968
- kmalloc include/linux/slab.h:558 [inline]
- tomoyo_realpath_from_path+0xcd/0x5f0 security/tomoyo/realpath.c:251
- tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
- tomoyo_path_number_perm+0x1d3/0x760 security/tomoyo/file.c:723
- security_file_ioctl+0x55/0xb0 security/security.c:1554
- __do_sys_ioctl fs/ioctl.c:864 [inline]
- __se_sys_ioctl+0x48/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff88803459e780: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88803459e800: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88803459e880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                                             ^
- ffff88803459e900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88803459e980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:string_nocheck lib/vsprintf.c:643 [inline]
+RIP: 0010:string+0x1b5/0x2d0 lib/vsprintf.c:725
+Code: 89 de 49 ff ce 31 ed 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 49 8d 3c 2c 48 89 f8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <0f> b6 04 08 84 c0 75 6a 49 8d 5c 2d 00 45 0f b6 3c 2c 31 ff 44 89
+RSP: 0018:ffffc90005fc6990 EFLAGS: 00010003
+RAX: 0000000000108420 RBX: ffffffffffffffff RCX: dffffc0000000000
+RDX: ffff88807def3a80 RSI: 00000000ffffffff RDI: 0000000000842107
+RBP: 0000000000000000 R08: ffffffff8a8cb389 R09: ffffffff8a8c7c8f
+R10: 0000000000000012 R11: ffff88807def3a80 R12: 0000000000842107
+R13: ffffc90005fc6ee6 R14: fffffffffffffffe R15: 0000000000000000
+FS:  00007fa7a6873700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b33622000 CR3: 000000007ba24000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	89 de                	mov    %ebx,%esi
+   2:	49 ff ce             	dec    %r14
+   5:	31 ed                	xor    %ebp,%ebp
+   7:	66 2e 0f 1f 84 00 00 	nopw   %cs:0x0(%rax,%rax,1)
+   e:	00 00 00
+  11:	0f 1f 40 00          	nopl   0x0(%rax)
+  15:	49 8d 3c 2c          	lea    (%r12,%rbp,1),%rdi
+  19:	48 89 f8             	mov    %rdi,%rax
+  1c:	48 c1 e8 03          	shr    $0x3,%rax
+  20:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
+  27:	fc ff df
+* 2a:	0f b6 04 08          	movzbl (%rax,%rcx,1),%eax <-- trapping instruction
+  2e:	84 c0                	test   %al,%al
+  30:	75 6a                	jne    0x9c
+  32:	49 8d 5c 2d 00       	lea    0x0(%r13,%rbp,1),%rbx
+  37:	45 0f b6 3c 2c       	movzbl (%r12,%rbp,1),%r15d
+  3c:	31 ff                	xor    %edi,%edi
+  3e:	44                   	rex.R
+  3f:	89                   	.byte 0x89
 
 
 ---
