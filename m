@@ -2,299 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39DA63A98E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF00163A98B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:31:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbiK1NcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:32:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56832 "EHLO
+        id S231687AbiK1Nbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:31:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231723AbiK1NcC (ORCPT
+        with ESMTP id S231194AbiK1Nbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 08:32:02 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70031CFF0;
-        Mon, 28 Nov 2022 05:31:02 -0800 (PST)
-Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Mon, 28 Nov
- 2022 21:30:59 +0800
-Message-ID: <29f06ea8-3795-46a4-fcd2-3f0d4c313ae7@amlogic.com>
-Date:   Mon, 28 Nov 2022 21:30:58 +0800
+        Mon, 28 Nov 2022 08:31:32 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AAD1DF2E
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:31:31 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id i26-20020a056e021d1a00b003025434c04eso8795725ila.13
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:31:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q9W2Bs9PJih3LVGEirHKHS9VpPnQjGsM8BjB0h3fVtw=;
+        b=FPjJ1R5AoZRtX4emfcuWHAIS5YH4ccZY37AvfRyhoXzTMBHyr+XmxkEX9J9kN5EVlN
+         jjU3H3vSvYK/6hUxkIuAhjzKPEhTpjzfI8cL8TOberqLPXVL3m5WF7N7RARHTQB8Ev0K
+         +vTHC4u9rx2qgoEMwyuD0tk446oytWSle8ghX4suhfEygf7XppaBfrpJzWyn7wrxuK09
+         NXN0uEBFoQNujNloD7J8jIe06JNYXKn1rKSYu3tN6T8DfC+uLfIX10V7frdoE+/cvyMv
+         9YiT8Sc3DgXqTKp1vqmg9d/D0x86NjuWsTrkEMWlGLyF74uVuJoyGGt+6/nodkkAwTGd
+         1+Lw==
+X-Gm-Message-State: ANoB5pk+l4x4iWqCWjCLglVO1Ryjg7HSRmpCz7UwFTv41n+rDq0XcC2j
+        ox/22TqlAoN++jkLU+gT28NRyCIjYtnCGEwc386zGBU+TCec
+X-Google-Smtp-Source: AA0mqf4m3YRJnRoPAR/JcXlw41Zn2of0Un2wq9pLylemcPiscMER0hTBdn7fF2ikqEcp+tuHvqtEt8o5RwNh3dDyarMf6gld859C
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH V5 1/4] clk: meson: S4: add support for Amlogic S4 SoC PLL
- clock driver and bindings
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <neil.armstrong@linaro.org>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     <kelvin.zhang@amlogic.com>
-References: <20221123021346.18136-1-yu.tu@amlogic.com>
- <20221123021346.18136-2-yu.tu@amlogic.com>
- <f03f331a-5666-298e-a1a2-bdb9bab11a48@linaro.org>
- <92b570ea-3ddc-8e91-5a7a-ed601bb7c02c@amlogic.com>
- <eb56ed39-cfaa-3368-a2c0-0a4e89440e40@linaro.org>
- <5b7176b4-d7a2-c67f-31c6-e842e0870836@linaro.org>
- <1jfse72wqk.fsf@starbuckisacylon.baylibre.com>
- <a6cf1b3f-259d-44b7-8a9a-2a0cd29c714b@amlogic.com>
- <1jedtnp7db.fsf@starbuckisacylon.baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <1jedtnp7db.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.29.47]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:6d28:0:b0:375:c2a:1538 with SMTP id
+ m40-20020a026d28000000b003750c2a1538mr15506070jac.5.1669642291208; Mon, 28
+ Nov 2022 05:31:31 -0800 (PST)
+Date:   Mon, 28 Nov 2022 05:31:31 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ab724705ee87e321@google.com>
+Subject: [syzbot] KASAN: slab-out-of-bounds Write in copy_array
+From:   syzbot <syzbot+b1e1f7feb407b56d0355@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com,
+        hawk@kernel.org, john.fastabend@gmail.com, jolsa@kernel.org,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org,
+        ndesaulniers@google.com, netdev@vger.kernel.org, sdf@google.com,
+        song@kernel.org, syzkaller-bugs@googlegroups.com, trix@redhat.com,
+        yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jerome ,
+Hello,
 
-On 2022/11/28 20:33, Jerome Brunet wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> 
-> On Mon 28 Nov 2022 at 15:39, Yu Tu <yu.tu@amlogic.com> wrote:
-> 
->> Hi Jerome,
->> 	Thank you for your reply.
->>
->> On 2022/11/25 17:23, Jerome Brunet wrote:
->>> [ EXTERNAL EMAIL ]
->>> On Wed 23 Nov 2022 at 14:53, Krzysztof Kozlowski
->>> <krzysztof.kozlowski@linaro.org> wrote:
->>>
->>>> On 23/11/2022 14:23, Neil Armstrong wrote:
->>>>> Hi,
->>>>>
->>>>> On 23/11/2022 12:16, Yu Tu wrote:
->>>>>> Hi Krzysztof,
->>>>>>        Thank you for your reply.
->>>>>>
->>>>>> On 2022/11/23 18:08, Krzysztof Kozlowski wrote:
->>>>>>> [ EXTERNAL EMAIL ]
->>>>>>>
->>>>>>> On 23/11/2022 03:13, Yu Tu wrote:
->>>>>>>> Add the S4 PLL clock controller found and bindings in the s4 SoC family.
->>>>>>>>
->>>>>>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>>>>>>> ---
->>>>>>>>     .../bindings/clock/amlogic,s4-pll-clkc.yaml   |  51 +
->>>>>>>
->>>>>>> This is v5 and still bindings are here? Bindings are always separate
->>>>>>> patches. Use subject prefixes matching the subsystem (git log --oneline
->>>>>>> -- ...).
->>>>>>>
->>>>>>> And this was split, wasn't it? What happened here?!?
->>>>>>
->>>>>> Put bindings and clock driver patch together from Jerome. Maybe you can read this chat history.
->>>>>> https://lore.kernel.or/all/1jy1v6z14n.fsf@starbuckisacylon.baylibre.com/
->>>>>
->>>>> Jerome was asking you to send 2 patchsets, one with :
->>>>> - bindings in separate patches
->>>>> - drivers in separate patches
->>>>> and a second with DT changes.
->>> Indeed, this is what was asked. It is aligned with Krzysztof's request.
->>
->> According to your discussion, I still should send patches in the previous
->> way in series. But I'm going to change it like you suggested.
->> I don't know, am I getting it right?
-> 
-> 3 people tried to explain this already and we all told you the same thing.
-> 
-> * 1 patchset per maintainer: clk and dt
-> * bindings must be dedicated patches - never mixed with driver code.
-> 
-> I strongly suggest that you take some time to (re)read:
-> * https://docs.kernel.org/process/submitting-patches.html
-> * https://docs.kernel.org/devicetree/bindings/submitting-patches.html
-> 
-> If still unclear, please take some time to look at the kernel mailing
-> list archive and see how others have done the same things.
-> 
-> Thx.
+syzbot found the following issue on:
 
-I'll change it as you suggest.But I still don't understand what you 
-suggested in V3.
+HEAD commit:    c35bd4e42885 Add linux-next specific files for 20221124
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=13369dc5880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=11e19c740a0b2926
+dashboard link: https://syzkaller.appspot.com/bug?extid=b1e1f7feb407b56d0355
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1345a205880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124c644b880000
 
-I remember discussing it with you at V3.
-https://lore.kernel.or/all/1jy1v6z14n.fsf@starbuckisacylon.baylibre.com/
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/968fee464d14/disk-c35bd4e4.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4f46fe801b5b/vmlinux-c35bd4e4.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/c2cdf8fb264e/bzImage-c35bd4e4.xz
 
-">>>> Also it would be nice to split this in two series.
- >>>> Bindings and drivers in one, arm64 dt in the other. These changes goes
- >>>> in through different trees.
- >>> At present, Bindings, DTS and drivers are three series. Do you mean 
-to put
- >>> Bindings and drivers together? If so, checkpatch.pl will report a 
-warning.
- >> Yes because patches are not in yet so there is a good reason to ignore
- >> the warning. Warning will never show up on the actual tree if the
- >> patches are correctly ordered.
- >
- > I think Binding, DTS and drivers use three series and you said two series
- > is not a big problem. Three series are recommended for checkpatch.pl, I
- > think it should be easy for that to separate and merge。
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b1e1f7feb407b56d0355@syzkaller.appspotmail.com
 
-No - There is only 2 series. 1 for the bindings and clock drivers and
-one for the DT once things are in"
+==================================================================
+BUG: KASAN: slab-out-of-bounds in copy_array+0x96/0x100 kernel/bpf/verifier.c:1032
+Write of size 232 at addr ffff88801ed62600 by task syz-executor990/5290
 
-> 
->>
->>>
->>>>>
->>>>> Then when the bindings + clocks patches are merged, a pull request of the bindings
->>>>> can be done to me so I can merge it with DT.
->>>>>
->>>>>>
->>>>>>>
->>>>>>>
->>>>>>>>     MAINTAINERS                                   |   1 +
->>>>>>>>     drivers/clk/meson/Kconfig                     |  13 +
->>>>>>>>     drivers/clk/meson/Makefile                    |   1 +
->>>>>>>>     drivers/clk/meson/s4-pll.c                    | 875 ++++++++++++++++++
->>>>>>>>     drivers/clk/meson/s4-pll.h                    |  88 ++
->>>>>>>>     .../dt-bindings/clock/amlogic,s4-pll-clkc.h   |  30 +
->>>>>>>>     7 files changed, 1059 insertions(+)
->>>>>>>>     create mode 100644 Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
->>>>>>>>     create mode 100644 drivers/clk/meson/s4-pll.c
->>>>>>>>     create mode 100644 drivers/clk/meson/s4-pll.h
->>>>>>>>     create mode 100644 include/dt-bindings/clock/amlogic,s4-pll-clkc.h
->>>>>>>>
->>>>>>>> diff --git a/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
->>>>>>>> new file mode 100644
->>>>>>>> index 000000000000..fd517e8ef14f
->>>>>>>> --- /dev/null
->>>>>>>> +++ b/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
->>>>>>>> @@ -0,0 +1,51 @@
->>>>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>>>>>> +%YAML 1.2
->>>>>>>> +---
->>>>>>>> +$id: http://devicetree.org/schemas/clock/amlogic,s4-pll-clkc.yaml#
->>>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>>>> +
->>>>>>>> +title: Amlogic Meson S serials PLL Clock Controller
->>>>>>>> +
->>>>>>>> +maintainers:
->>>>>>>> +  - Neil Armstrong <narmstrong@baylibre.com>
->>>>>>>> +  - Jerome Brunet <jbrunet@baylibre.com>
->>>>>>>> +  - Yu Tu <yu.hu@amlogic.com>
->>>>>>>> +
->>>>>>> One blank line.
->>>>>>
->>>>>>     I will delete this, on next version patch.
->>>>>>
->>>>>>>
->>>>>>>> +
->>>>>>>> +properties:
->>>>>>>> +  compatible:
->>>>>>>> +    const: amlogic,s4-pll-clkc
->>>>>>>> +
->>>>>>>> +  reg:
->>>>>>>> +    maxItems: 1
->>>>>>>> +
->>>>>>>> +  clocks:
->>>>>>>> +    maxItems: 1
->>>>>>>> +
->>>>>>>> +  clock-names:
->>>>>>>> +    items:
->>>>>>>> +      - const: xtal
->>>>>>>> +
->>>>>>>> +  "#clock-cells":
->>>>>>>> +    const: 1
->>>>>>>> +
->>>>>>>> +required:
->>>>>>>> +  - compatible
->>>>>>>> +  - reg
->>>>>>>> +  - clocks
->>>>>>>> +  - clock-names
->>>>>>>> +  - "#clock-cells"
->>>>>>>> +
->>>>>>>> +additionalProperties: false
->>>>>>>> +
->>>>>>>> +examples:
->>>>>>>> +  - |
->>>>>>>> +    clkc_pll: clock-controller@fe008000 {
->>>>>>>> +      compatible = "amlogic,s4-pll-clkc";
->>>>>>>> +      reg = <0xfe008000 0x1e8>;
->>>>>>>> +      clocks = <&xtal>;
->>>>>>>> +      clock-names = "xtal";
->>>>>>>> +      #clock-cells = <1>;
->>>>>>>> +    };
->>>>>>>
->>>>>>>
->>>>>>>> +#endif /* __MESON_S4_PLL_H__ */
->>>>>>>> diff --git a/include/dt-bindings/clock/amlogic,s4-pll-clkc.h b/include/dt-bindings/clock/amlogic,s4-pll-clkc.h
->>>>>>>> new file mode 100644
->>>>>>>> index 000000000000..345f87023886
->>>>>>>> --- /dev/null
->>>>>>>> +++ b/include/dt-bindings/clock/amlogic,s4-pll-clkc.h
->>>>>>>
->>>>>>> This belongs to bindings patch, not driver.
->>>>>>>
->>>>>>>> @@ -0,0 +1,30 @@
->>>>>>>> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
->>>>>>>> +/*
->>>>>>>> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
->>>>>>>> + * Author: Yu Tu <yu.tu@amlogic.com>
->>>>>>>> + */
->>>>>>>> +
->>>>>>>> +#ifndef _DT_BINDINGS_CLOCK_AMLOGIC_S4_PLL_CLKC_H
->>>>>>>> +#define _DT_BINDINGS_CLOCK_AMLOGIC_S4_PLL_CLKC_H
->>>>>>>> +
->>>>>>>> +/*
->>>>>>>> + * CLKID index values
->>>>>>>> + */
->>>>>>>> +
->>>>>>>> +#define CLKID_FIXED_PLL            1
->>>>>>>> +#define CLKID_FCLK_DIV2            3
->>>>>>>
->>>>>>> Indexes start from 0 and are incremented by 1. Not by 2.
->>>>>>>
->>>>>>> NAK.
->>>>>>
->>>>>> I remember Jerome discussing this with you.You can look at this submission history.
->>>>>> https://lore.kernel.org/all/c088e01c-0714-82be-8347-6140daf56640@linaro.org/
->>>>>
->>>>> Historically we did that by only exposing part of the numbers, controlling which
->>>>> clocks were part of the bindings.
->>>>>
->>>>> But it seems this doesn't make sens anymore, maybe it would be time to put all the
->>>>> clock ids in the bindings for this new SoC and break with the previous strategy.
->>> Krzysztof and I agreed there is nothing wrong with the current
->>> approach, I believe.
->>> It does not prevent someone from using an un-exposed clock, sure, or
->>> exposing it in the future if necessary.
->>> However, I think it clearly shows that an un-exposed element is not
->>> expected to be used by an external consumers. It should be enough to
->>> trigger a discussion if this expectation is wrong.
->>>
->>>>
->>>> So the outcome of the previous discussion was somewhere later in that
->>>> thread:
->>>>
->>>>> It is just a choice to not expose some IDs.
->>>>> It is not tied to the implementation at all.
->>>>> I think we actually follow the rules and the idea behind it.
->>>>
->>>>
->>>> Best regards,
->>>> Krzysztof
->>> .
-> 
-> .
+CPU: 0 PID: 5290 Comm: syz-executor990 Not tainted 6.1.0-rc6-next-20221124-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:253 [inline]
+ print_report+0x15e/0x45d mm/kasan/report.c:364
+ kasan_report+0xbf/0x1f0 mm/kasan/report.c:464
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x141/0x190 mm/kasan/generic.c:189
+ memcpy+0x3d/0x60 mm/kasan/shadow.c:66
+ copy_array+0x96/0x100 kernel/bpf/verifier.c:1032
+ copy_verifier_state+0xa9/0xbe0 kernel/bpf/verifier.c:1210
+ pop_stack+0x8c/0x2f0 kernel/bpf/verifier.c:1273
+ do_check kernel/bpf/verifier.c:13733 [inline]
+ do_check_common+0x372b/0xc5e0 kernel/bpf/verifier.c:15991
+ do_check_main kernel/bpf/verifier.c:16054 [inline]
+ bpf_check+0x7371/0xad00 kernel/bpf/verifier.c:16624
+ bpf_prog_load+0x1543/0x2230 kernel/bpf/syscall.c:2619
+ __sys_bpf+0x1436/0x4ff0 kernel/bpf/syscall.c:4979
+ __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
+ __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5081
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc18e7bbc29
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd8f27a968 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc18e7bbc29
+RDX: 0000000000000048 RSI: 0000000020000200 RDI: 0000000000000005
+RBP: 00007fc18e77fdd0 R08: 0000000000000000 R09: 0000000000000000
+R10: 00000000ffffffff R11: 0000000000000246 R12: 00007fc18e77fe60
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+Allocated by task 5290:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:376 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:335 [inline]
+ __kasan_krealloc+0x145/0x180 mm/kasan/common.c:444
+ kasan_krealloc include/linux/kasan.h:232 [inline]
+ __do_krealloc mm/slab_common.c:1348 [inline]
+ krealloc+0xa8/0x100 mm/slab_common.c:1385
+ push_jmp_history+0x89/0x260 kernel/bpf/verifier.c:2528
+ is_state_visited kernel/bpf/verifier.c:13269 [inline]
+ do_check kernel/bpf/verifier.c:13466 [inline]
+ do_check_common+0x4b47/0xc5e0 kernel/bpf/verifier.c:15991
+ do_check_main kernel/bpf/verifier.c:16054 [inline]
+ bpf_check+0x7371/0xad00 kernel/bpf/verifier.c:16624
+ bpf_prog_load+0x1543/0x2230 kernel/bpf/syscall.c:2619
+ __sys_bpf+0x1436/0x4ff0 kernel/bpf/syscall.c:4979
+ __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
+ __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5081
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff88801ed62600
+ which belongs to the cache kmalloc-256 of size 256
+The buggy address is located 0 bytes inside of
+ 256-byte region [ffff88801ed62600, ffff88801ed62700)
+
+The buggy address belongs to the physical page:
+page:ffffea00007b5880 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1ed62
+head:ffffea00007b5880 order:1 compound_mapcount:0 subpages_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffff888012441b40 ffffea0000809f80 dead000000000002
+raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 56, tgid 56 (kworker/u4:4), ts 7761288109, free_ts 0
+ prep_new_page mm/page_alloc.c:2541 [inline]
+ get_page_from_freelist+0x119c/0x2cd0 mm/page_alloc.c:4293
+ __alloc_pages+0x1cb/0x5b0 mm/page_alloc.c:5551
+ alloc_pages+0x1aa/0x270 mm/mempolicy.c:2285
+ alloc_slab_page mm/slub.c:1833 [inline]
+ allocate_slab+0x25e/0x350 mm/slub.c:1980
+ new_slab mm/slub.c:2033 [inline]
+ ___slab_alloc+0xa91/0x1400 mm/slub.c:3211
+ __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3310
+ slab_alloc_node mm/slub.c:3395 [inline]
+ __kmem_cache_alloc_node+0x1a9/0x430 mm/slub.c:3472
+ kmalloc_trace+0x26/0x60 mm/slab_common.c:1049
+ kmalloc include/linux/slab.h:571 [inline]
+ scsi_probe_and_add_lun+0x3ae/0x34d0 drivers/scsi/scsi_scan.c:1186
+ __scsi_scan_target+0x21f/0xda0 drivers/scsi/scsi_scan.c:1664
+ scsi_scan_channel drivers/scsi/scsi_scan.c:1752 [inline]
+ scsi_scan_channel+0x148/0x1e0 drivers/scsi/scsi_scan.c:1728
+ scsi_scan_host_selected+0x2e3/0x3b0 drivers/scsi/scsi_scan.c:1781
+ do_scsi_scan_host+0x1e8/0x260 drivers/scsi/scsi_scan.c:1920
+ do_scan_async+0x42/0x500 drivers/scsi/scsi_scan.c:1930
+ async_run_entry_fn+0x9c/0x530 kernel/async.c:127
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffff88801ed62500: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88801ed62580: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff88801ed62600: 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc fc
+                               ^
+ ffff88801ed62680: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88801ed62700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
