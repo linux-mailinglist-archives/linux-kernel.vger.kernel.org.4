@@ -2,150 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBDA63B3F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 458A563B3FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:11:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234407AbiK1VJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 16:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46376 "EHLO
+        id S233965AbiK1VLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 16:11:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234496AbiK1VJ1 (ORCPT
+        with ESMTP id S233598AbiK1VLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 16:09:27 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAE914030
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 13:09:25 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id l127so13038782oia.8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 13:09:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ilVgGC8TOxHzgJU/67Xu5FjqKUjFndYhRBD1pSBbUXQ=;
-        b=lMZqt+KmgNbP1xC1+0PEw1zG7OaHp+6QccMIYADd+TiGioedQISw+Bf0QI6CqLDEqu
-         nh9IlSILqfeP5yROj2or137eOdwz0TtEf0hKQzW0cHr7UAlBi6eZE5jjT5Ht38Cb0K1s
-         MgDKQVhDFeRzba2/3FDM1BmzLnnYbQxqGs2f4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ilVgGC8TOxHzgJU/67Xu5FjqKUjFndYhRBD1pSBbUXQ=;
-        b=R75y7NcG4Nc/ggNUCVJYIk/RJgIkN6eII8nfIRz+kzd54UpMF2CEZs1L6SsIZ7aGz+
-         WInlJlcn5O3WVN08C+UsK8QgZhvb9eUWyG6RxLRRUYFMBcfcF+SmffvWwFtQ9SWt/pWf
-         wyqKIgxcFDNG7a6uepVA0mprWu1xhuekVTCvaETr0AdNnQW2hJvTgCU8d/GnUSN7Q7Hb
-         3TDobaORlDEspkC3YbWd4pq+vK1VkxjONxjtRx9CikBdzH++MHCksYmymghk6WZPUP6o
-         8CR6dEJ+wK5xyEn0wm2d6Uar9AnLIfjyyzrW8JbwHVzXgjDJfg12tbutpnzlzw8l4WPQ
-         sV8A==
-X-Gm-Message-State: ANoB5pks2LuJ2esoNNLkPGZ7N/Amn24JuXqH94l5IDEEASE2U4XmwYy0
-        SlPgxiUoOqmkhtBc4/PVLN5ijQY+kfiairqtMuaf
-X-Google-Smtp-Source: AA0mqf4VPR4z8hBPap7MOUP+bfI/yUr6Hc/zRJpKRmEImo2WSYflhgiYPEGYjq1l59c2HcOT2pepYwYUt4fDHY55jMk=
-X-Received: by 2002:a05:6808:51:b0:359:f091:104 with SMTP id
- v17-20020a056808005100b00359f0910104mr29358704oic.274.1669669764575; Mon, 28
- Nov 2022 13:09:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20221128161424.608889-1-apatel@ventanamicro.com> <20221128161424.608889-9-apatel@ventanamicro.com>
-In-Reply-To: <20221128161424.608889-9-apatel@ventanamicro.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Mon, 28 Nov 2022 13:09:13 -0800
-Message-ID: <CAOnJCULA77d+S37aPuC_kJAi769beasdgsK+WfkZe623SsYEow@mail.gmail.com>
-Subject: Re: [PATCH 8/9] RISC-V: KVM: Add ONE_REG interface for mvendorid,
- marchid, and mimpid
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Nov 2022 16:11:08 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487EDBA5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 13:11:04 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id A6D4F5C0101;
+        Mon, 28 Nov 2022 16:11:03 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Mon, 28 Nov 2022 16:11:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1669669863; x=1669756263; bh=6RBUw3E6ih
+        QFVucWv3bsdKi3UPanKCTBwtYJTDbK2/Y=; b=Duhc4hPxIwfbi+1YPSdimxFFcQ
+        L9Wvs4B7UKqGjF0GDO4hk07TI/CJPtktREqdY3ZtQu6c8cd0gejBLP0/m1nVLbEC
+        EhfcsA/tFmxxdSnIE1aksHLF7aDD6AsRyWojT+b5exmhhpXkbzN8rukKkco4Z0JY
+        CF+Wpi7oxDBDd3ubsdlHNGTJACeEwZ9N4Ui4Ma4z85Jfo9QVUq9A69RYiuYWjGbS
+        8ZJSnorUZFL+Rb2s8yDhD+48XBuWRyVgrAYLaptovDzAOhr8WsTZ1ujOSU0a8IY/
+        DcplYcnmzJ8LVPWml4FXkhXR9Bq1kctDATgo7vCqciwYUJhlaq8fvwl+I3GA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669669863; x=1669756263; bh=6RBUw3E6ihQFVucWv3bsdKi3UPan
+        KCTBwtYJTDbK2/Y=; b=R8Zixyvk5W0JJabSuNoK0keNNcoYw5D4KDf7oIMTbU2d
+        nc2O+9r/nZr2UUHs32QRl8Y6gQ4CJ1Q7mm/o7fjU599tCGJmmx0sBP/QJt+1Z5p8
+        9TvnrF/TEe4Q08ICuoIJ0hdqmRshtpsRqkhcNtmeFE19EGkpDmU9IFzig/Db+T9F
+        MNtxpQvIyVqsU92fP6npJt8lQHFHQgNtqllh97J0+3TVNZqRJxSOVouc4Zqf9Gmo
+        9CZPcmR4TxkMv2gll0elHCjv49Ce1N9X/LdvDaWElaCoLy0QaA8ip/gg/ntBytom
+        oqTLJYuV9Hq2q/Xv8c0233ENKmJwYHeRx9vD2mVU4w==
+X-ME-Sender: <xms:5yOFY5bryQy8JY-o_mnKli2oYMDNPRqeqSaohCrkgZrBkzei6jxlcg>
+    <xme:5yOFYwYv4GWg0CiJMZdw8yBylHTMaCD7yjxMgr96t-7tYj9fyZLpYUgu-WOu6JXyn
+    YeWa11iMXGQsk5Ygc8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedvgddugeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:5yOFY7_Bm0-QXwOCcFEayNXK-Q-Y0AxT0CRo806UJLUg_CbyrtM3Vw>
+    <xmx:5yOFY3qEWliUFtTSM6z4MQNJVxRJU4RvusoQUCKYeu4SevVGukkO6A>
+    <xmx:5yOFY0rISxoANaujVdobD2QiEeGLXtknwyS7StGDjbfLFXgwfWGKzg>
+    <xmx:5yOFY7S3Ucqurh9VDYD3qigz3ClE2MmkKeqVTP35uYTfb9t8mSk50A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 71ECFB60086; Mon, 28 Nov 2022 16:11:03 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <6358eb8f-a3ef-40ef-9d3a-842d9ff34709@app.fastmail.com>
+In-Reply-To: <CAHmME9oO=8hsc4zt_oBrRoGm3sMU03W7cP5PksfC-RFmZumGLQ@mail.gmail.com>
+References: <202211290400.IuVDsFIm-lkp@intel.com>
+ <CAHmME9oO=8hsc4zt_oBrRoGm3sMU03W7cP5PksfC-RFmZumGLQ@mail.gmail.com>
+Date:   Mon, 28 Nov 2022 22:10:43 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jason A . Donenfeld" <Jason@zx2c4.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "kernel test robot" <lkp@intel.com>
+Subject: Re: [ammarfaizi2-block:crng/random/vdso 20/22]
+ include/uapi/asm-generic/unistd.h:890:34: error: 'sys_vgetrandom_alloc'
+ undeclared here (not in a function); did you mean 'sys_getrandom'?
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 8:15 AM Anup Patel <apatel@ventanamicro.com> wrote:
+On Mon, Nov 28, 2022, at 22:03, Jason A. Donenfeld wrote:
+> Hi Arnd,
 >
-> We add ONE_REG interface for VCPU mvendorid, marchid, and mimpid
-> so that KVM user-space can change this details to support migration
-> across heterogeneous hosts.
->
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/include/uapi/asm/kvm.h |  3 +++
->  arch/riscv/kvm/vcpu.c             | 27 +++++++++++++++++++++++++++
->  2 files changed, 30 insertions(+)
->
-> diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-> index 8985ff234c01..92af6f3f057c 100644
-> --- a/arch/riscv/include/uapi/asm/kvm.h
-> +++ b/arch/riscv/include/uapi/asm/kvm.h
-> @@ -49,6 +49,9 @@ struct kvm_sregs {
->  struct kvm_riscv_config {
->         unsigned long isa;
->         unsigned long zicbom_block_size;
-> +       unsigned long mvendorid;
-> +       unsigned long marchid;
-> +       unsigned long mimpid;
->  };
->
->  /* CORE registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
-> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> index 312a8a926867..7c08567097f0 100644
-> --- a/arch/riscv/kvm/vcpu.c
-> +++ b/arch/riscv/kvm/vcpu.c
-> @@ -276,6 +276,15 @@ static int kvm_riscv_vcpu_get_reg_config(struct kvm_vcpu *vcpu,
->                         return -EINVAL;
->                 reg_val = riscv_cbom_block_size;
->                 break;
-> +       case KVM_REG_RISCV_CONFIG_REG(mvendorid):
-> +               reg_val = vcpu->arch.mvendorid;
-> +               break;
-> +       case KVM_REG_RISCV_CONFIG_REG(marchid):
-> +               reg_val = vcpu->arch.marchid;
-> +               break;
-> +       case KVM_REG_RISCV_CONFIG_REG(mimpid):
-> +               reg_val = vcpu->arch.mimpid;
-> +               break;
->         default:
->                 return -EINVAL;
->         }
-> @@ -338,6 +347,24 @@ static int kvm_riscv_vcpu_set_reg_config(struct kvm_vcpu *vcpu,
->                 break;
->         case KVM_REG_RISCV_CONFIG_REG(zicbom_block_size):
->                 return -EOPNOTSUPP;
-> +       case KVM_REG_RISCV_CONFIG_REG(mvendorid):
-> +               if (!vcpu->arch.ran_atleast_once)
-> +                       vcpu->arch.mvendorid = reg_val;
-> +               else
-> +                       return -EBUSY;
-> +               break;
-> +       case KVM_REG_RISCV_CONFIG_REG(marchid):
-> +               if (!vcpu->arch.ran_atleast_once)
-> +                       vcpu->arch.marchid = reg_val;
-> +               else
-> +                       return -EBUSY;
-> +               break;
-> +       case KVM_REG_RISCV_CONFIG_REG(mimpid):
-> +               if (!vcpu->arch.ran_atleast_once)
-> +                       vcpu->arch.mimpid = reg_val;
-> +               else
-> +                       return -EBUSY;
-> +               break;
->         default:
->                 return -EINVAL;
->         }
-> --
-> 2.34.1
->
+> Please see below. It would seem that I can't so easily get rid of that
+> #ifdef __ARCH_HAS afterall?
+...
+>>          | ^~~~~~~~~
+>> >> include/uapi/asm-generic/unistd.h:890:34: error: 'sys_vgetrandom_alloc' undeclared here (not in a function); did you mean 'sys_getrandom'?
 
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
+No, this just means that some architectures require you to have the correct
+prototype for the system call in include/linux/syscalls.h, without an #ifdef.
 
--- 
-Regards,
-Atish
+      Arnd
