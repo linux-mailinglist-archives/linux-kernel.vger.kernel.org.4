@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E789B63B46A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F75363B475
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234282AbiK1VrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 16:47:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
+        id S234294AbiK1Vs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 16:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234149AbiK1VrP (ORCPT
+        with ESMTP id S234149AbiK1Vsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 16:47:15 -0500
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12782FFF9;
-        Mon, 28 Nov 2022 13:47:14 -0800 (PST)
-Received: by mail-wm1-f47.google.com with SMTP id v7so9536014wmn.0;
-        Mon, 28 Nov 2022 13:47:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0q+pi2LlFPiueuPI6vQdyfzoD0KMzMDwbTWkzbbDN0o=;
-        b=V5ZPJdPKU+61pZgMR2H41oYInBCg0BJcNVRByEE47KxmMP8EsKYu6dyAJaGKWnuMPO
-         3Y1fNi0K/vuaLlyBgbBLJEdXboWH/dgEP51ruiN7Kx3AL419ixdM59klyXmMaQbdpmP5
-         mBdasHX2nQcBz1qnzdn7P9tMObOih4weMuWq7MZpTIcwCk4WDY8rRnXPXKQAFMdPv+wS
-         xCMF2Ma5DqHMWkB01Z9JOJ3EL/bYlFPLfdXZMLbUbZtEa+u0hZ/ZmURRfzxcgRWrtycD
-         gi2etHsQ9770+5vdNuHqecWgsny/iwyhm3Q9QwBOsBIyXcNwZGQb4UnIce4GNRrSdKA6
-         noYg==
-X-Gm-Message-State: ANoB5plLBouEd+lDRWM+9YeUKMo/UplqZYUEYsI/OTsihyccayGeUwVX
-        1V7REUDozZ7ul7G/qhx7sQcoiG5FTcU=
-X-Google-Smtp-Source: AA0mqf7cuRuJLr7B6m6c4Bc1U/AAS/AIhSruO1z1ujOEs/qc1NqAVigeka8XUhl3hxDNw2R2rtxtbw==
-X-Received: by 2002:a05:600c:3d8f:b0:3cf:6b14:1033 with SMTP id bi15-20020a05600c3d8f00b003cf6b141033mr39832096wmb.103.1669672032880;
-        Mon, 28 Nov 2022 13:47:12 -0800 (PST)
-Received: from liuwe-devbox-debian-v2.j3c5onc20sse1dnehy4noqpfcg.zx.internal.cloudapp.net ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id c15-20020adfe70f000000b00241e8d00b79sm13909433wrm.54.2022.11.28.13.47.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 13:47:12 -0800 (PST)
-From:   Wei Liu <wei.liu@kernel.org>
-To:     kvm@vger.kernel.org
-Cc:     Wei Liu <wei.liu@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        "H. Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
-        64-BIT))
-Subject: [PATCH v2] KVM: x86/mmu: fix an incorrect comment in kvm_mmu_new_pgd()
-Date:   Mon, 28 Nov 2022 21:47:09 +0000
-Message-Id: <20221128214709.224710-1-wei.liu@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Mon, 28 Nov 2022 16:48:38 -0500
+Received: from fritzc.com (mail.fritzc.com [IPv6:2a00:17d8:100::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8AF92F391;
+        Mon, 28 Nov 2022 13:48:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
+        s=dkim; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject
+        :Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=LYB25Fvn7CGwTHKU/acIvDCx4DwFl3MWCqKj8wShNt4=; b=pQdNiJ/spdN4Pd+sUAsg/yCloS
+        JrK1bF6nV4L6s3xSW7/B9R51576cN4zE/KAAGmJ7hPFGZetTJJwH+nvj9W2HoZd5RaNXy92TEEGBR
+        j+FQmjcZPuSDrz0NzRIlX/UhJIoZ2aFphVeXMiwV+LHTbqhqJZdlHNJs6lQhSh8jIryg=;
+Received: from 127.0.0.1
+        by fritzc.com with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim latest)
+        (envelope-from <christoph.fritz@hexdev.de>)
+        id 1ozlyz-000cJ6-JF; Mon, 28 Nov 2022 22:48:10 +0100
+Date:   Mon, 28 Nov 2022 22:48:07 +0100
+From:   Christoph Fritz <christoph.fritz@hexdev.de>
+To:     Ryan Edwards <ryan.edwards@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Pavel Pisa <pisa@cmp.felk.cvut.cz>,
+        Andreas Lauser <andreas.lauser@mbition.io>,
+        Richard Weinberger <richard@nod.at>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC][PATCH 0/2] LIN support for Linux
+Message-ID: <Y4UslxhfRPVGXzS/@mars>
+References: <20221127190244.888414-1-christoph.fritz@hexdev.de>
+ <202211281549.47092.pisa@cmp.felk.cvut.cz>
+ <CAEVdEgBWVgVFF2utm4w5W0_trYYJQVeKrcGN+T0yJ1Qa615bcQ@mail.gmail.com>
+ <202211281852.30067.pisa@cmp.felk.cvut.cz>
+ <CAEVdEgBtikDjQ-cVOq-MkoS_0q_hGJRVSS=9L=htHhh7YvSUgA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAEVdEgBtikDjQ-cVOq-MkoS_0q_hGJRVSS=9L=htHhh7YvSUgA@mail.gmail.com>
+X-Spam_score: -1.0
+X-Spam_bar: -
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no function named kvm_mmu_ensure_valid_pgd().
+Thanks for all the participation and feedback. Here is my attempt at a
+summary of what we have discussed so far:
 
-Fix the comment and remove the pair of braces to conform to Linux kernel
-coding style.
+- Common goal: A solid LIN UAPI and API
+  - LIN fits CAN well and could be embedded into Linux CAN infrastructure
+  - LIN support cannot be a tty-line-discipline driver for all devices
+    out there
 
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
----
-v2: incorporate Sean's suggestions
----
- arch/x86/kvm/mmu/mmu.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+  - slLIN should become a user of this API
+    - slLIN itself needs some more options in the line-discipline
+      configuraion (to tweak UART FIFO settings and e.g. enable
+      LIN-break-detection for supported UARTs) _or_ tty-LIN support
+      becomes something more like RS485 and get integrated into
+      tty-drivers directly.
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index b6f96d47e596..a1895fd9eaf4 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -4452,10 +4452,12 @@ void kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd)
- 	struct kvm_mmu *mmu = vcpu->arch.mmu;
- 	union kvm_mmu_page_role new_role = mmu->root_role;
- 
--	if (!fast_pgd_switch(vcpu->kvm, mmu, new_pgd, new_role)) {
--		/* kvm_mmu_ensure_valid_pgd will set up a new root.  */
-+	/*
-+	 * Return immediately if no usable root was found, kvm_mmu_reload()
-+	 * will establish a valid root prior to the next VM-Enter.
-+	 */
-+	if (!fast_pgd_switch(vcpu->kvm, mmu, new_pgd, new_role))
- 		return;
--	}
- 
- 	/*
- 	 * It's possible that the cached previous root page is obsolete because
--- 
-2.35.1
+  - LIN devices with off loading capabilities are a bit special.
+    - one approach is to have a kfifo for the slavetable (64 entries a 8
+      bytes + checksum and some extra flags for some LIN special cases)
+      while updating it from userland through CAN or a simple sysfs
+      interface
+    - when we agree that "dumb" UARTs have no need for an
+      in-kernel-off-load slavetable (because of RT-Linux), then there
+      are only devices left (e.g. some USB adapters) maintaining their
+      own table, so a simple e.g. sysfs update mechanism would be
+      enough (without the need for an in-kernel kfifo buffer).
 
+  - LIN slavetable might need another name
+
+  - LIN needs rx, tx, set bitrate, set checksum variant and maybe update
+    a slavetable (or whatever it is called then...)
+
+What do you think? Any objections, corrections, enhancements?
+
+My question is: Which approach of an API is favored: Patch 1 or 2 of
+this RFC series or something completely different?
+
+Thanks
+  -- Christoph
