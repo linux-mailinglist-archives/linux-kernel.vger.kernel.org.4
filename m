@@ -2,110 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60D4663AED1
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDBD63AECF
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232968AbiK1RZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 12:25:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        id S232954AbiK1RZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 12:25:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232955AbiK1RZF (ORCPT
+        with ESMTP id S232429AbiK1RZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:25:05 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9880233AB
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:25:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669656304; x=1701192304;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jM89lE6rjf88aw6NXlicZPVGvuaPiJwb6m41+v6zBRU=;
-  b=n8rgN38CCIjwtEQsa8XFXIwLd6DB1gQIS7J17kDhDMNdygb+6H1VtWpz
-   MUTjAXXqptgh9TlrVNSQ49NaahJDYPLIIkgebuw1G5T5mW6S4CLxINgLz
-   JFVnSM7AREKC6LAyUx2KIpDP1T85xhXkeyOr2ly+WLcP961NLUP4qPhvW
-   sHcIcIxeMgaIBzU2tRgtVJFXPKED5M5BDG63LYuijn9wOt9mUv1rmnaXP
-   DflYUXAU8TdhvD8qevNkpJ78EjBueQHbkmazoLCzJmF/dBM2+DQiNZJjh
-   n8m86qoXU/HHO7H00BoYy9rWsOKbcZK4VZKLq7vDMbBh5bP/Q9HSvhweN
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="316730738"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="316730738"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 09:25:04 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="817901830"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="817901830"
-Received: from araj-ucode.jf.intel.com ([10.23.0.19])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 09:25:03 -0800
-From:   Ashok Raj <ashok.raj@intel.com>
-To:     X86-kernel <x86@kernel.org>,
-        LKML Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Ashok Raj <ashok.raj@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Subject: [PATCH] x86/cpu: Remove redundant extern x86_read_arch_cap_msr()
-Date:   Mon, 28 Nov 2022 09:24:51 -0800
-Message-Id: <20221128172451.792595-1-ashok.raj@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 28 Nov 2022 12:25:04 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A176D1EAEE
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:25:03 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id x18so7783095qki.4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:25:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=timesys-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WISYZ1L8dfjkhr9HPz2HhCPMd5gq2zqE5S/0zz5aWa0=;
+        b=hcx970gPX8djEoRWtYW0NHM3NG3c5io9Z9ad1LPZUPufe2wTe0GoeT1ULY2q0sjog7
+         NncYkw5V+5VopZJInbOAWSlwue7xv6ssNaSdX5RMpm1CWKFEwvqeHvqNdotA32Ug6/Nj
+         SCcBemXPE/DvCahfHVNKFZFrtEMLnF1hGcWuMS0qjtL5qMTkRQabXULrNw40xHY6K0T/
+         hnooEZ1UjrCmv3U+mNOldEaKxF8/sDX5HYBFXeaKHCnSOzlmbTe+GNfXB5Jly9q66nfZ
+         OElGWiZxz02rWn3kQW5D0ru7zZEKl1aYBwyt3LAk17NUxUAW604R1mCCo9WnT4cwTO/G
+         xKPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WISYZ1L8dfjkhr9HPz2HhCPMd5gq2zqE5S/0zz5aWa0=;
+        b=srBDIKg1JJATVWW3qzNdqEqnb4goCYldoLO2lABQiaihM6L5cnRuTTDnqBn1tLnL2C
+         BD41oxPZL6z80Q0mHbgCO1pmTGLbASNUxv/csvTXblkMehNkBgMAYHL+i2Umwgmp44yU
+         dwCbBdHhdHh/uCd1pTYVlQSsUcicQh2Lb6oGyy13cBDzEYmSOnXPWBJlrzry0aW362fq
+         SMi/fBXPQFa6dAKKKZ6Y/x+PXfrOC2aAk41f3dN2T5pHe05+6Venbo2FmbDsJz4R9H7N
+         /+iKecgTjdB1UX5+xlLDsm8KU/cWDvB2cWM+7vDc3iOUleqLz425W6buAeeJjSxxRsDp
+         2fkQ==
+X-Gm-Message-State: ANoB5pkIEEThaOPCNQZUgRLl/Pogv3uOp7W4LpIcwCaHoKuVSMtzR9yS
+        R00hCdpm1KY6PpNtdE/jZ8N4eg==
+X-Google-Smtp-Source: AA0mqf7J2PGTa8s7U3vNZDbIq6NFc/rDbfTBe35D7AbD06oqD+c+yNMjAQxBaVljPT+i/M7mRn5ZcA==
+X-Received: by 2002:a05:620a:271f:b0:6fc:15c2:c4a8 with SMTP id b31-20020a05620a271f00b006fc15c2c4a8mr27490322qkp.174.1669656302813;
+        Mon, 28 Nov 2022 09:25:02 -0800 (PST)
+Received: from nathan-ideapad.. (d-75-76-18-234.oh.cpe.breezeline.net. [75.76.18.234])
+        by smtp.gmail.com with ESMTPSA id r9-20020a05622a034900b003a526675c07sm7322712qtw.52.2022.11.28.09.25.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 09:25:02 -0800 (PST)
+From:   Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+Cc:     nathan.morrison@timesys.com, greg.malysa@timesys.com,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org (open list:SPI NOR SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] mtd: spi-nor: issi: Add in support for IS25LX256 chip, operating in 1S-1S-8S mode.
+Date:   Mon, 28 Nov 2022 12:24:54 -0500
+Message-Id: <20221128172455.159787-1-nathan.morrison@timesys.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-x86_read_arch_cap_msr() has now moved to arch/x86/include/asm/cpu.h.
-Kill the redundant one in arch/x86/kernel/cpu.h
+Adds the is25lx256 entry to the nor_parts table along with the additional
+fixup logic to operate in 1S-1S-8S mode while programming.
 
-Signed-off-by: Ashok Raj <ashok.raj@intel.com>
+Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 ---
- arch/x86/kernel/cpu/cpu.h  | 2 --
- arch/x86/kernel/cpu/bugs.c | 1 +
- arch/x86/kernel/cpu/tsx.c  | 1 +
- 3 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/mtd/spi-nor/issi.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/arch/x86/kernel/cpu/cpu.h b/arch/x86/kernel/cpu/cpu.h
-index a142b8d543a3..727ef3268ffb 100644
---- a/arch/x86/kernel/cpu/cpu.h
-+++ b/arch/x86/kernel/cpu/cpu.h
-@@ -82,6 +82,4 @@ unsigned int aperfmperf_get_khz(int cpu);
- extern void x86_spec_ctrl_setup_ap(void);
- extern void update_srbds_msr(void);
+diff --git a/drivers/mtd/spi-nor/issi.c b/drivers/mtd/spi-nor/issi.c
+index 89a66a19d754..e9b32b726bf3 100644
+--- a/drivers/mtd/spi-nor/issi.c
++++ b/drivers/mtd/spi-nor/issi.c
+@@ -29,6 +29,21 @@ static const struct spi_nor_fixups is25lp256_fixups = {
+ 	.post_bfpt = is25lp256_post_bfpt_fixups,
+ };
  
--extern u64 x86_read_arch_cap_msr(void);
--
- #endif /* ARCH_X86_CPU_H */
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index 3e3230cccaa7..a632fa07e93a 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -33,6 +33,7 @@
- #include <asm/e820/api.h>
- #include <asm/hypervisor.h>
- #include <asm/tlbflush.h>
-+#include <asm/cpu.h>
++static void is25lx256_post_sfdp_fixup(struct spi_nor *nor)
++{
++	/* Fixup page program command to 1S-1S-8S */
++	nor->params->hwcaps.mask |= SNOR_HWCAPS_PP_1_1_8;
++	spi_nor_set_pp_settings(&nor->params->page_programs[SNOR_CMD_PP_1_1_8],
++				SPINOR_OP_PP_1_1_8, SNOR_PROTO_1_1_8);
++
++	/* Disable quad_enable */
++	nor->params->quad_enable = NULL;
++}
++
++static struct spi_nor_fixups is25lx256_fixups = {
++	.post_sfdp = is25lx256_post_sfdp_fixup,
++};
++
+ static void pm25lv_nor_late_init(struct spi_nor *nor)
+ {
+ 	struct spi_nor_erase_map *map = &nor->params->erase_map;
+@@ -74,6 +89,10 @@ static const struct flash_info issi_nor_parts[] = {
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
+ 		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
+ 		.fixups = &is25lp256_fixups },
++	{ "is25lx256",  INFO(0x9d5a19, 0, 128 * 1024, 256)
++		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_OCTAL_READ)
++		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
++		.fixups = &is25lx256_fixups },
  
- #include "cpu.h"
- 
-diff --git a/arch/x86/kernel/cpu/tsx.c b/arch/x86/kernel/cpu/tsx.c
-index ec7bbac3a9f2..667b25936818 100644
---- a/arch/x86/kernel/cpu/tsx.c
-+++ b/arch/x86/kernel/cpu/tsx.c
-@@ -11,6 +11,7 @@
- #include <linux/cpufeature.h>
- 
- #include <asm/cmdline.h>
-+#include <asm/cpu.h>
- 
- #include "cpu.h"
- 
+ 	/* PMC */
+ 	{ "pm25lv512",   INFO(0,        0, 32 * 1024,    2)
 -- 
-2.34.1
+2.30.2
 
