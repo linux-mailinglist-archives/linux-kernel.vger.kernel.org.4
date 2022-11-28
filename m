@@ -2,197 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E31B63A265
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F0163A269
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiK1H7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 02:59:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
+        id S229794AbiK1IAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 03:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiK1H7u (ORCPT
+        with ESMTP id S229744AbiK1IAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 02:59:50 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE012114E;
-        Sun, 27 Nov 2022 23:59:48 -0800 (PST)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NLHt54sZgzRpZ6;
-        Mon, 28 Nov 2022 15:59:09 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 15:59:46 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 15:59:46 +0800
-Subject: Re: [PATCH v3] mm: Make vmalloc_dump_obj() call in clean context
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>
-CC:     "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221118003441.3980437-1-qiang1.zhang@intel.com>
- <PH0PR11MB58802C9BF5683925DF983A4FDA0D9@PH0PR11MB5880.namprd11.prod.outlook.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <de550275-b8dd-e958-4f34-5ec545ed4f43@huawei.com>
-Date:   Mon, 28 Nov 2022 15:59:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Mon, 28 Nov 2022 03:00:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A0711A3E;
+        Mon, 28 Nov 2022 00:00:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B5EF61018;
+        Mon, 28 Nov 2022 08:00:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BFB0C433C1;
+        Mon, 28 Nov 2022 08:00:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669622402;
+        bh=sSP+y58dUYdr/Ye6OLHQOoGvusu/KoVqOieYdy6sw9A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dU8AM9dy2tYGxHKw1fk6Zik0APTZu5x6iKL3BDP2vPnO+Xm9Rcr15Dp7HStEgXKPM
+         4wKyn5Ghl+x4pCCmKt4BAT9RJmM2dszRnm8CkdtDf92CfPXjm5KtsSSKB2r1brXFGT
+         PAeqqoZRT0AQ2TZbqM8HhRLK3mpX6lfhFjbaPbs+O57O2gfHmAqJ+HUoaPi+DcAGQd
+         xBSnS0TABr23O549lTBGLHH4DabQkk9aFf5XX//X2D5Ze/Cj5RDlZxuD83Foitm0L7
+         xA+TvvkzMTfYycZzFJ5TNeoP5TI8BvMMekUQV55fNJsKC5dS8WWY3DuDeLoHwe243x
+         hRGKFhQ4fbxeg==
+Received: by pali.im (Postfix)
+        id 900AD87A; Mon, 28 Nov 2022 08:59:59 +0100 (CET)
+Date:   Mon, 28 Nov 2022 08:59:59 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linus.walleij@linaro.org, brgl@bgdev.pl, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        andrew@lunn.ch, thomas.petazzoni@free-electrons.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] dt-bindings: gpio: gpio-mvebu: deprecate
+ armadaxp-gpio
+Message-ID: <20221128075959.3a3io5nhaizm7uxj@pali>
+References: <20220526012946.3862776-1-chris.packham@alliedtelesis.co.nz>
+ <20220526012946.3862776-3-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-In-Reply-To: <PH0PR11MB58802C9BF5683925DF983A4FDA0D9@PH0PR11MB5880.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220526012946.3862776-3-chris.packham@alliedtelesis.co.nz>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thursday 26 May 2022 13:29:45 Chris Packham wrote:
+> Commit 5f79c651e81e ("arm: mvebu: use global interrupts for GPIOs on
+> Armada XP") the marvell,armadaxp-gpio compatible obsolete.
 
+No, marvell,armadaxp-gpio is required for per-cpu interrupt support. I fixed it recently:
+https://lore.kernel.org/linux-devicetree/20220714115515.5748-2-pali@kernel.org/
+https://lore.kernel.org/linux-devicetree/20220714183328.4137-3-pali@kernel.org/
 
-On 2022/11/23 7:05, Zhang, Qiang1 wrote:
+> The driver code still exists to handle the armadaxp behaviour but all
+> the in-tree boards use the marvell,armada-370-gpio.  Document the
+> marvell,armadaxp-gpio compatible as deprecated.
+
+For per-cpu interrupt support is marvell,armadaxp-gpio needed and
+therefore it cannot be deprecated.
+
+What can be deprecated is marvell,armada-370-gpio and it can be replaced
+by marvell,orion-gpio, which covers _all_ SoCs starting from the oldest
+one = Orion. See discussion for more details:
+https://lore.kernel.org/linux-devicetree/20220725200417.nwthxzvdv2bzd5ej@pengutronix.de/
+
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
 > 
-> Gently ping  😊
+> Notes:
+>     This could potentially be squashed into the first commit but it seemed
+>     more proper to do a straight 1:1 conversion of the old binding then
+>     clean things up to match reality.
+>     
+>     Changes in v4:
+>     - New
 > 
-> Thanks
-> Zqiang
+>  .../devicetree/bindings/gpio/gpio-mvebu.yaml  | 24 +++++++------------
+>  1 file changed, 8 insertions(+), 16 deletions(-)
 > 
->> Currently, the mem_dump_obj() is invoked in call_rcu(), the
->> call_rcu() is maybe invoked in non-preemptive code segment,
->> for object allocated from vmalloc(), the following scenarios
->> may occur:
->>
->>        CPU 0
->> tasks context
->>   spin_lock(&vmap_area_lock)
->>       Interrupt context
->>           call_rcu()
->>             mem_dump_obj
->>               vmalloc_dump_obj
->>                 spin_lock(&vmap_area_lock) <--deadlock
->>
->> and for PREEMPT-RT kernel, the spinlock will convert to sleepable
->> lock, so the vmap_area_lock spinlock not allowed to get in non-preemptive
->> code segment. therefore, this commit make the vmalloc_dump_obj() call in
->> a clean context.
->>
->> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
->> ---
->> v1->v2:
->> add IS_ENABLED(CONFIG_PREEMPT_RT) check.
->> v2->v3:
->> change commit message and add some comment.
->>
->> mm/util.c    |  4 +++-
->> mm/vmalloc.c | 25 +++++++++++++++++++++++++
->> 2 files changed, 28 insertions(+), 1 deletion(-)
->>
->> diff --git a/mm/util.c b/mm/util.c
->> index 12984e76767e..2b0222a728cc 100644
->> --- a/mm/util.c
->> +++ b/mm/util.c
->> @@ -1128,7 +1128,9 @@ void mem_dump_obj(void *object)
->> 		return;
->>
->> 	if (virt_addr_valid(object))
->> -		type = "non-slab/vmalloc memory";
->> +		type = "non-slab memory";
->> +	else if (is_vmalloc_addr(object))
->> +		type = "vmalloc memory";
->> 	else if (object == NULL)
->> 		type = "NULL pointer";
->> 	else if (object == ZERO_SIZE_PTR)
->> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
->> index ccaa461998f3..4351eafbe7ab 100644
->> --- a/mm/vmalloc.c
->> +++ b/mm/vmalloc.c
->> @@ -4034,6 +4034,31 @@ bool vmalloc_dump_obj(void *object)
->> 	struct vm_struct *vm;
->> 	void *objp = (void *)PAGE_ALIGN((unsigned long)object);
->>
->> +	/* for non-vmalloc addr, return directly */
->> +	if (!is_vmalloc_addr(objp))
->> +		return false;
->> +
->> +	/**
->> +	 * for non-Preempt-RT kernel, return directly. otherwise not
->> +	 * only needs to determine whether it is in the interrupt context
->> +	 * (in_interrupt())to avoid deadlock, but also to avoid acquire
->> +	 * vmap_area_lock spinlock in disables interrupts or preempts
->> +	 * critical sections, because the vmap_area_lock spinlock convert
->> +	 * to sleepable lock
->> +	 */
->> +	if (IS_ENABLED(CONFIG_PREEMPT_RT) && !preemptible())
->> +		return false;
->> +
->> +	/**
->> +	 * get here, for Preempt-RT kernel, it means that we are in
->> +	 * preemptible context(preemptible() is true), it also means
->> +	 * that the in_interrupt() will return false.
->> +	 * for non-Preempt-RT kernel, only needs to determine whether
->> +	 * it is in the interrupt context(in_interrupt()) to avoid deadlock
->> +	 */
->> +	if (in_interrupt())
->> +		return false;
-
-We want mem_dump_obj() to work properly in the interrupt context. But with
-this if statement, it's impossible to work properly.
-
-Here's my test case:
-void *tst_p;
-
-void my_irqwork_handler(struct irq_work *work)
-{
-        void *p = tst_p;
-
-        printk("enter my_irqwork_handler: CPU=%d, locked=%d\n", smp_processor_id(), tst_is_locked());
-        mem_dump_obj(p);
-        vfree(p);
-}
-
-static void test_mem_dump(void)
-{
-        struct irq_work work = IRQ_WORK_INIT_HARD(my_irqwork_handler);
-
-        tst_p = vmalloc(PAGE_SIZE);
-        if (!tst_p) {
-                printk("vmalloc failed\n");
-                return;
-        }
-        printk("enter test_mem_dump: CPU=%d\n", smp_processor_id());
-
-        //tst_lock();
-        irq_work_queue(&work);
-        //tst_unlock();
-
-        printk("leave test_mem_dump: CPU=%d\n", smp_processor_id());
-}
-
-Test result:
-[   45.212941] enter test_mem_dump: CPU=0
-[   45.213280] enter my_irqwork_handler: CPU=0, locked=0
-[   45.213546]  vmalloc memory
-[   45.213996] leave test_mem_dump: CPU=0
-
->> +
->> 	vm = find_vm_area(objp);
->> 	if (!vm)
->> 		return false;
->> -- 
->> 2.25.1
+> diff --git a/Documentation/devicetree/bindings/gpio/gpio-mvebu.yaml b/Documentation/devicetree/bindings/gpio/gpio-mvebu.yaml
+> index d1695e7bd825..459ec35864fe 100644
+> --- a/Documentation/devicetree/bindings/gpio/gpio-mvebu.yaml
+> +++ b/Documentation/devicetree/bindings/gpio/gpio-mvebu.yaml
+> @@ -21,17 +21,21 @@ properties:
+>            - enum:
+>                - marvell,mv78200-gpio
+>                - marvell,armada-370-gpio
+> -              - marvell,armadaxp-gpio
+>            - const: marvell,orion-gpio
+>  
+> +      - description: Deprecated binding
+> +        items:
+> +          - const: marvell,armadaxp-gpio
+> +          - const: marvell,orion-gpio
+> +        deprecated: true
+> +
+>    reg:
+>      description: |
+>        Address and length of the register set for the device. Not used for
+>        marvell,armada-8k-gpio.
+>  
+> -      For the "marvell,armadaxp-gpio" variant a second entry is expected for
+> -      the per-cpu registers. For other variants second entry can be provided,
+> -      for the PWM function using the GPIO Blink Counter on/off registers.
+> +      A second entry can be provided, for the PWM function using the GPIO Blink
+> +      Counter on/off registers.
+>      minItems: 1
+>      maxItems: 2
+>  
+> @@ -103,18 +107,6 @@ allOf:
+>        required:
+>          - reg
+>  
+> -  - if:
+> -      properties:
+> -        compatible:
+> -          contains:
+> -            const: marvell,armadaxp-gpio
+> -    then:
+> -      properties:
+> -        reg:
+> -          minItems: 2
+> -        reg-names:
+> -          minItems: 2
+> -
+>  unevaluatedProperties: true
+>  
+>  examples:
+> -- 
+> 2.36.1
 > 
-
--- 
-Regards,
-  Zhen Lei
