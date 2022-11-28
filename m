@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA6663B101
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:19:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C9B63B104
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234190AbiK1ST2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 13:19:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
+        id S232578AbiK1STd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 13:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234196AbiK1SSy (ORCPT
+        with ESMTP id S234199AbiK1SSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Nov 2022 13:18:54 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493FC2AC40
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:03:05 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id q7so17319153wrr.8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:03:05 -0800 (PST)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84212A70E
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:03:08 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id t1so9112431wmi.4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:03:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Fh+crFYr0bdZ0CEDCCytk9X8KD6hynMr1Yq9paj0G4=;
-        b=f8Ck9XrDcaB/E4hGC+FYMlnArzd3Sq82oo1yzaQNVZIBLt+2yTGRY7PB7dZdnKgaE/
-         /5XnlfYGvyoKSXRlzluNuKc31hOtz6cGxMjxUGm+kXC8IjtorJ39gGjCjfnn0uJaOxj0
-         V//Q4KL6qSyDcXprZMrHn52tOkCDJS3LAjPJdLsOK94Pbbf1INGO83C6HitBcDp0Tyxl
-         bADOVWR84N4yp17bCUCe7GkV5NBS79AZG4dr++FvDEAW4Iy4PTixlNmXLIS8jcqhjMRL
-         fKJ8YOCkV6miNWCDVcXbxGZdoESFHA1SQMVr0g/xuXhsCioyVU0uuTrx+OR2YBCvBSlO
-         EJ+w==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RUow5Vogs/7PnC9nrxFlLM/L16QCcApD5uJXFy4USuY=;
+        b=rU/5WuLN/iM6g1+U2lBomEDv/g6EreorKfHwKtqRkF8SblU0VsIoZV8lMj7la44xOo
+         RFhODdlKSvqR653yK+HRv3a22IBJ7tLBK5Z6ja7TLaM28AE7gzd8hZGHoFRg1XxIlqjJ
+         WzZLuZdJo6sJsyS+ZZSUvjrHnUPfa6Ac26czHLanj7NP3nju9ONX3HUkVJHKHv9yZ1BF
+         xmWKi8CRGLpW4bKOJghlq05QZvrVOUN3iDX+uFzjp2XCnvE1dkTCbY2bZ7loNCgKJ9US
+         4XoznfiWY3eu0D8pWYcvLjab/VADOYaVOhIRlWOyHDbaAxmQm1iUD8calDDGZ6mT7Dcv
+         kYVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/Fh+crFYr0bdZ0CEDCCytk9X8KD6hynMr1Yq9paj0G4=;
-        b=ZWqcday6svwN7VK0rmMv1TAROcyZGH7+zX18vsQQ9IEvFedLjLYrMyqdQzufJssbcv
-         NjT5kHxrf5Old6LCPYxbmWK7cSNoUkXJK33uCGtodjMP0kwjCkHDJgLFl2W1NacqTssf
-         eI0J9lbdjN8vDeeFdDP+crW05trpG4INDLOKGwuCgaecnyRlXFp9xi8GP9pcBQY7hMfU
-         WdpavAsYkuHZbkOnxzbHtUcu1z4eKqelnKqaHpKvs8zslhsFsx3/cA2vb6mYhNe3xZPg
-         WeoyQO2se8oe3S6pxh9/IHgmIEGWr36AH5pVZ7oSfkkdrQBwZjTYkPDMcjBxqdr5h0FG
-         L2Dw==
-X-Gm-Message-State: ANoB5pkrx7VbBm/MeOUzuqgJQmsLfkxe1jQ6PDOOxhYKmaLr27c5jd8U
-        p27ZA0Oivk5DWVztppTiqJyhXQ==
-X-Google-Smtp-Source: AA0mqf6IfaziHtYUVKo6OfKfp+73RV+bf+8qqF3qBlgEbj4zfCkiNf7nhF/x6uTq/h4ojy4XDpMvrA==
-X-Received: by 2002:adf:de0e:0:b0:241:6f01:ad47 with SMTP id b14-20020adfde0e000000b002416f01ad47mr24231647wrm.222.1669658583556;
-        Mon, 28 Nov 2022 10:03:03 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RUow5Vogs/7PnC9nrxFlLM/L16QCcApD5uJXFy4USuY=;
+        b=7pevsiCixJcaiiIkg6tv6sTqqPS+WiB1erRUEPNLltroUDhDRcC9dtcKwqMSlmyVmO
+         PYrzg3v1R+4x68B4FEARKrS73taHPkaFibMIhtjZHaEjTEmmn8C90SMruv3iQpDK2n88
+         O4ifi1CsOoO/o44jdMNaRtv65FqMq1wMe4tBigMegyDvQkRylBG7G5kz06Detr+Si28e
+         hzaAf9oUt6z4zWaLJj5YyGEH+ks4QXORBv2u+KdW9pJyhkbj8HNp5sNJZ9b6XPmilOQT
+         L3wL48+hpYRgiGPGNH5+lNJfkNDpGEX4SQ1/fvfwIFZmOz+k360twTZCfJECFIwLAWqc
+         Da9w==
+X-Gm-Message-State: ANoB5plUJ6uJkSjTJsN3y+BjSonYfOYQH23WMKnnPQaK6IEo5hbVIMvC
+        mnkwk0G9AXhDJwEnlXkdnD7FTA==
+X-Google-Smtp-Source: AA0mqf55TgU3FF0+HFze1Tgck+4ISKVwlxDQBSJiTP5rct0txTHiKl+xLdG68s5H54ewewN4ONkTvA==
+X-Received: by 2002:a7b:cd18:0:b0:3cf:a359:de90 with SMTP id f24-20020a7bcd18000000b003cfa359de90mr28732913wmj.122.1669658587158;
+        Mon, 28 Nov 2022 10:03:07 -0800 (PST)
 Received: from localhost ([2a00:79e0:9d:4:f4d1:b340:8675:e840])
-        by smtp.gmail.com with ESMTPSA id m18-20020adffa12000000b00241c6729c2bsm11350836wrr.26.2022.11.28.10.03.02
+        by smtp.gmail.com with ESMTPSA id l11-20020adff48b000000b002420dba6447sm6628727wro.59.2022.11.28.10.03.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 10:03:02 -0800 (PST)
+        Mon, 28 Nov 2022 10:03:05 -0800 (PST)
 From:   Jann Horn <jannh@google.com>
 To:     security@kernel.org, Andrew Morton <akpm@linux-foundation.org>
 Cc:     Yang Shi <shy828301@gmail.com>,
@@ -56,10 +57,12 @@ Cc:     Yang Shi <shy828301@gmail.com>,
         Peter Xu <peterx@redhat.com>,
         John Hubbard <jhubbard@nvidia.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v4 1/3] mm/khugepaged: Take the right locks for page table retraction
-Date:   Mon, 28 Nov 2022 19:02:50 +0100
-Message-Id: <20221128180252.1684965-1-jannh@google.com>
+Subject: [PATCH v4 2/3] mm/khugepaged: Fix GUP-fast interaction by sending IPI
+Date:   Mon, 28 Nov 2022 19:02:51 +0100
+Message-Id: <20221128180252.1684965-2-jannh@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+In-Reply-To: <20221128180252.1684965-1-jannh@google.com>
+References: <20221128180252.1684965-1-jannh@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -73,153 +76,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pagetable walks on address ranges mapped by VMAs can be done under the mmap
-lock, the lock of an anon_vma attached to the VMA, or the lock of the VMA's
-address_space. Only one of these needs to be held, and it does not need to
-be held in exclusive mode.
+Since commit 70cbc3cc78a99 ("mm: gup: fix the fast GUP race against THP
+collapse"), the lockless_pages_from_mm() fastpath rechecks the pmd_t to
+ensure that the page table was not removed by khugepaged in between.
 
-Under those circumstances, the rules for concurrent access to page table
-entries are:
+However, lockless_pages_from_mm() still requires that the page table is not
+concurrently freed or reused to store non-PTE data. Otherwise, problems
+can occur because:
 
- - Terminal page table entries (entries that don't point to another page
-   table) can be arbitrarily changed under the page table lock, with the
-   exception that they always need to be consistent for
-   hardware page table walks and lockless_pages_from_mm().
-   This includes that they can be changed into non-terminal entries.
- - Non-terminal page table entries (which point to another page table)
-   can not be modified; readers are allowed to READ_ONCE() an entry, verify
-   that it is non-terminal, and then assume that its value will stay as-is.
+ - deposited page tables can be freed when a THP page somewhere in the
+   mm is removed
+ - some architectures store non-PTE information inside deposited page
+   tables (see radix__pgtable_trans_huge_deposit())
 
-Retracting a page table involves modifying a non-terminal entry, so
-page-table-level locks are insufficient to protect against concurrent
-page table traversal; it requires taking all the higher-level locks under
-which it is possible to start a page walk in the relevant range in
-exclusive mode.
+Additionally, lockless_pages_from_mm() is also somewhat brittle with
+regards to page tables being repeatedly moved back and forth, but
+that shouldn't be an issue in practice.
 
-The collapse_huge_page() path for anonymous THP already follows this rule,
-but the shmem/file THP path was getting it wrong, making it possible for
-concurrent rmap-based operations to cause corruption.
+Fix it by sending IPIs (if the architecture uses
+semi-RCU-style page table freeing) before freeing/reusing page tables.
+
+As noted in mm/gup.c, on configs that define CONFIG_HAVE_FAST_GUP,
+there are two possible cases:
+
+ 1. CONFIG_MMU_GATHER_RCU_TABLE_FREE is set, causing
+    tlb_remove_table_sync_one() to send an IPI to synchronize with
+    lockless_pages_from_mm().
+ 2. CONFIG_MMU_GATHER_RCU_TABLE_FREE is unset, indicating that all
+    TLB flushes are already guaranteed to send IPIs.
+    tlb_remove_table_sync_one() will do nothing, but we've already
+    run pmdp_collapse_flush(), which did a TLB flush, which must have
+    involved IPIs.
 
 Cc: stable@kernel.org
-Fixes: 27e1f8273113 ("khugepaged: enable collapse pmd for pte-mapped THP")
+Fixes: ba76149f47d8 ("thp: khugepaged")
 Acked-by: David Hildenbrand <david@redhat.com>
 Signed-off-by: Jann Horn <jannh@google.com>
 ---
-v4: added ack by David Hildenbrand
+v4:
+ - added ack from David Hildenbrand
+ - made commit message more verbose
 
- mm/khugepaged.c | 55 +++++++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 51 insertions(+), 4 deletions(-)
+ include/asm-generic/tlb.h | 4 ++++
+ mm/khugepaged.c           | 2 ++
+ mm/mmu_gather.c           | 4 +---
+ 3 files changed, 7 insertions(+), 3 deletions(-)
 
+diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+index 492dce43236ea..cab7cfebf40bd 100644
+--- a/include/asm-generic/tlb.h
++++ b/include/asm-generic/tlb.h
+@@ -222,12 +222,16 @@ extern void tlb_remove_table(struct mmu_gather *tlb, void *table);
+ #define tlb_needs_table_invalidate() (true)
+ #endif
+ 
++void tlb_remove_table_sync_one(void);
++
+ #else
+ 
+ #ifdef tlb_needs_table_invalidate
+ #error tlb_needs_table_invalidate() requires MMU_GATHER_RCU_TABLE_FREE
+ #endif
+ 
++static inline void tlb_remove_table_sync_one(void) { }
++
+ #endif /* CONFIG_MMU_GATHER_RCU_TABLE_FREE */
+ 
+ 
 diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 4734315f79407..674b111a24fa7 100644
+index 674b111a24fa7..c3d3ce596bff7 100644
 --- a/mm/khugepaged.c
 +++ b/mm/khugepaged.c
-@@ -1384,16 +1384,37 @@ static int set_huge_pmd(struct vm_area_struct *vma, unsigned long addr,
- 	return SCAN_SUCCEED;
- }
+@@ -1057,6 +1057,7 @@ static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
+ 	_pmd = pmdp_collapse_flush(vma, address, pmd);
+ 	spin_unlock(pmd_ptl);
+ 	mmu_notifier_invalidate_range_end(&range);
++	tlb_remove_table_sync_one();
  
-+/*
-+ * A note about locking:
-+ * Trying to take the page table spinlocks would be useless here because those
-+ * are only used to synchronize:
-+ *
-+ *  - modifying terminal entries (ones that point to a data page, not to another
-+ *    page table)
-+ *  - installing *new* non-terminal entries
-+ *
-+ * Instead, we need roughly the same kind of protection as free_pgtables() or
-+ * mm_take_all_locks() (but only for a single VMA):
-+ * The mmap lock together with this VMA's rmap locks covers all paths towards
-+ * the page table entries we're messing with here, except for hardware page
-+ * table walks and lockless_pages_from_mm().
-+ */
- static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *vma,
- 				  unsigned long addr, pmd_t *pmdp)
- {
--	spinlock_t *ptl;
- 	pmd_t pmd;
+ 	spin_lock(pte_ptl);
+ 	result =  __collapse_huge_page_isolate(vma, address, pte, cc,
+@@ -1415,6 +1416,7 @@ static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *v
+ 		lockdep_assert_held_write(&vma->anon_vma->root->rwsem);
  
- 	mmap_assert_write_locked(mm);
--	ptl = pmd_lock(vma->vm_mm, pmdp);
-+	if (vma->vm_file)
-+		lockdep_assert_held_write(&vma->vm_file->f_mapping->i_mmap_rwsem);
-+	/*
-+	 * All anon_vmas attached to the VMA have the same root and are
-+	 * therefore locked by the same lock.
-+	 */
-+	if (vma->anon_vma)
-+		lockdep_assert_held_write(&vma->anon_vma->root->rwsem);
-+
  	pmd = pmdp_collapse_flush(vma, addr, pmdp);
--	spin_unlock(ptl);
++	tlb_remove_table_sync_one();
  	mm_dec_nr_ptes(mm);
  	page_table_check_pte_clear_range(mm, addr, pmd);
  	pte_free(mm, pmd_pgtable(pmd));
-@@ -1444,6 +1465,14 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
- 	if (!hugepage_vma_check(vma, vma->vm_flags, false, false, false))
- 		return SCAN_VMA_CHECK;
- 
-+	/*
-+	 * Symmetry with retract_page_tables(): Exclude MAP_PRIVATE mappings
-+	 * that got written to. Without this, we'd have to also lock the
-+	 * anon_vma if one exists.
-+	 */
-+	if (vma->anon_vma)
-+		return SCAN_VMA_CHECK;
-+
- 	/* Keep pmd pgtable for uffd-wp; see comment in retract_page_tables() */
- 	if (userfaultfd_wp(vma))
- 		return SCAN_PTE_UFFD_WP;
-@@ -1477,6 +1506,20 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
- 		goto drop_hpage;
- 	}
- 
-+	/*
-+	 * We need to lock the mapping so that from here on, only GUP-fast and
-+	 * hardware page walks can access the parts of the page tables that
-+	 * we're operating on.
-+	 * See collapse_and_free_pmd().
-+	 */
-+	i_mmap_lock_write(vma->vm_file->f_mapping);
-+
-+	/*
-+	 * This spinlock should be unnecessary: Nobody else should be accessing
-+	 * the page tables under spinlock protection here, only
-+	 * lockless_pages_from_mm() and the hardware page walker can access page
-+	 * tables while all the high-level locks are held in write mode.
-+	 */
- 	start_pte = pte_offset_map_lock(mm, pmd, haddr, &ptl);
- 	result = SCAN_FAIL;
- 
-@@ -1531,6 +1574,8 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
- 	/* step 4: remove pte entries */
- 	collapse_and_free_pmd(mm, vma, haddr, pmd);
- 
-+	i_mmap_unlock_write(vma->vm_file->f_mapping);
-+
- maybe_install_pmd:
- 	/* step 5: install pmd entry */
- 	result = install_pmd
-@@ -1544,6 +1589,7 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
- 
- abort:
- 	pte_unmap_unlock(start_pte, ptl);
-+	i_mmap_unlock_write(vma->vm_file->f_mapping);
- 	goto drop_hpage;
+diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+index add4244e5790d..3a2c3f8cad2fe 100644
+--- a/mm/mmu_gather.c
++++ b/mm/mmu_gather.c
+@@ -153,7 +153,7 @@ static void tlb_remove_table_smp_sync(void *arg)
+ 	/* Simply deliver the interrupt */
  }
  
-@@ -1600,7 +1646,8 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
- 		 * An alternative would be drop the check, but check that page
- 		 * table is clear before calling pmdp_collapse_flush() under
- 		 * ptl. It has higher chance to recover THP for the VMA, but
--		 * has higher cost too.
-+		 * has higher cost too. It would also probably require locking
-+		 * the anon_vma.
- 		 */
- 		if (vma->anon_vma) {
- 			result = SCAN_PAGE_ANON;
-
-base-commit: eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
+-static void tlb_remove_table_sync_one(void)
++void tlb_remove_table_sync_one(void)
+ {
+ 	/*
+ 	 * This isn't an RCU grace period and hence the page-tables cannot be
+@@ -177,8 +177,6 @@ static void tlb_remove_table_free(struct mmu_table_batch *batch)
+ 
+ #else /* !CONFIG_MMU_GATHER_RCU_TABLE_FREE */
+ 
+-static void tlb_remove_table_sync_one(void) { }
+-
+ static void tlb_remove_table_free(struct mmu_table_batch *batch)
+ {
+ 	__tlb_remove_table_free(batch);
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
