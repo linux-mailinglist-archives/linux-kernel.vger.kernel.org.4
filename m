@@ -2,409 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7F3163A95D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5D863A91C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbiK1NV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:21:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
+        id S231649AbiK1NNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:13:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbiK1NU7 (ORCPT
+        with ESMTP id S231623AbiK1NNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 08:20:59 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DBE1DDCA
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:20:29 -0800 (PST)
-Received: from kwepemi100025.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NLR052CBkzmW72;
-        Mon, 28 Nov 2022 21:19:49 +0800 (CST)
-Received: from [10.174.148.223] (10.174.148.223) by
- kwepemi100025.china.huawei.com (7.221.188.158) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 21:20:26 +0800
-Message-ID: <9e9545ab-312c-c9c1-c8ae-8bd6b9f8add6@huawei.com>
-Date:   Mon, 28 Nov 2022 21:20:21 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] vdpasim: support doorbell mapping
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-CC:     Jason Wang <jasowang@redhat.com>, <stefanha@redhat.com>,
-        <sgarzare@redhat.com>, <eperezma@redhat.com>, <cohuck@redhat.com>,
-        <arei.gonglei@huawei.com>, <yechuan@huawei.com>,
-        <huangzhichao@huawei.com>,
-        <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221128025558.2152-1-longpeng2@huawei.com>
- <CACGkMEsWoM1LKkPWPgDALssjkk4UXxfhYm3_aCFktNnpXtWVjQ@mail.gmail.com>
- <53edc14a-74bb-f9c7-06bd-7ea1047fe613@huawei.com>
- <20221128051555-mutt-send-email-mst@kernel.org>
- <28c1ae52-38ff-42ce-4331-11f7aa040296@huawei.com>
- <20221128071917-mutt-send-email-mst@kernel.org>
-From:   "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
-        <longpeng2@huawei.com>
-In-Reply-To: <20221128071917-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.148.223]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi100025.china.huawei.com (7.221.188.158)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 28 Nov 2022 08:13:35 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833951C434;
+        Mon, 28 Nov 2022 05:13:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669641213; x=1701177213;
+  h=from:to:cc:subject:date:message-id;
+  bh=N11m/EEYgplD58Na2HfYD26Pe7WWecYIErE7gp3zhwk=;
+  b=LYC5e2pJt/dp+h6wfFQQzppkvIim9SOjTo+tvxnGrjOPSrAwr6jiYiSI
+   iPFrYZOWVlqkYlCX1eHLBKuyd/7v4gVxQyQFaXvFapfIMEWEaQqMg3uvO
+   H/3NOHV4vSlxjkhgtgkF8IBUOgmtldyn4+WqMTxo9lSPd5hNGF/FLZzf0
+   M9MuHVxcvoBw+WGxBF77CpAbbRvpY2g9eAnkoe6XD1Z/pJjMYmSIHSC5H
+   1goGcXjzPt5wuyA/aYJEyL3m7o0iGHMxlP7xfJudupA60vLnqMBRHgsDC
+   zCd9+m+H+4q7IyqkqH5/5tGEUfH5fh45sfxDbVbJzhj9TTFmfvA2MUWYr
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="401117041"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="401117041"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 05:13:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="749381315"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="749381315"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga002.fm.intel.com with ESMTP; 28 Nov 2022 05:13:30 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v2 00/22] sched: Introduce IPC classes for load balance
+Date:   Mon, 28 Nov 2022 05:20:38 -0800
+Message-Id: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+This is the v2 of the patchset. Since it did not receive strong objections
+on the design, I took the liberty of promoting the series from RFC to
+PATCH :)
 
-在 2022/11/28 20:20, Michael S. Tsirkin 写道:
-> On Mon, Nov 28, 2022 at 07:59:33PM +0800, Longpeng (Mike, Cloud Infrastructure Service Product Dept.) wrote:
->>
->>
->> 在 2022/11/28 18:19, Michael S. Tsirkin 写道:
->>> On Mon, Nov 28, 2022 at 04:19:30PM +0800, Longpeng (Mike, Cloud Infrastructure Service Product Dept.) wrote:
->>>>
->>>>
->>>> 在 2022/11/28 12:05, Jason Wang 写道:
->>>>> On Mon, Nov 28, 2022 at 10:56 AM Longpeng(Mike) <longpeng2@huawei.com> wrote:
->>>>>>
->>>>>> From: Longpeng <longpeng2@huawei.com>
->>>>>>
->>>>>> Support doorbell mapping for vdpasim devices, then we can test the notify
->>>>>> passthrough feature even if there's no real hardware on hand.
->>>>>
->>>>> You can use vp_vdpa in L1 plus page_ver_vq in L0 to test it in L2.
->>>>> That is how I test it.
->>>>>
->>>> Yes, using nested virtualization can work, but it's hard to deploy in my
->>>> working environment for some reasons, so I decided to emulate this
->>>> capability in vdpasim, it's much easier.
->>>>
->>>>>>
->>>>>> Allocates a dummy page which used to emulate the notify page of the device.
->>>>>> All values written to this page would be ignored,  a periodic work will
->>>>>> check whether there're requests that need to process.
->>>>>
->>>>> This seems tricky, it means the device is working even if there's no
->>>>
->>>> Right. It just try to make the vdpasim device work properly, but the vdpasim
->>>> device is only used for testing, so maybe the tricky emulation is
->>>> acceptable?
->>>
->>> Maybe. You can try enabling VIRTIO_F_NOTIFICATION_DATA and then
->>> looking at the data written to figure out whether
->>> you need to poll the vq.
->>>
->> We can try after the kernel supports the VIRTIO_F_NOTIFICATION_DATA feature,
->> while there is still a long way to go.
-> 
-> That would be up to you to implement ;) It's probably 10-20 lines of
-> code all in all.
-> 
+The problem statement and design do not change in this version. Thus, I did
+not repeat the cover letter. It can be retrieved here [1].
 
-Um...The kick operation won't trigger VMEXIT if we support notify 
-mapping for the vdpasim device. So, does the vdpasim device has to poll 
-the notify address and then decide which VQ to poll?
-The pro of this approach is we can poll the notify address first instead 
-of the unconditional poll the VQ, right?
+This series depends on my other patches to use identical asym_packing CPU
+priorities on all the SMT siblings of a physical core on x86 [2].
 
->>>
->>>>> kick. If we really want to do, we should try to use page fault handler
->>>>> (probably by extending the config ops), but I'm not sure it's worth to
->>>>> bother (or if we can find a use case for no simulator devices).
->>>>>
->>>> This need to modify the framework, it seems unworthy.
->>>>
->>>>>>
->>>>>> This cap is disabled as default, users can enable it as follow:
->>>>>>      modprobe vdpa_sim notify_passthrough=true
->>>>>>
->>>>>> Signed-off-by: Longpeng <longpeng2@huawei.com>
->>>>>> ---
->>>>>>     drivers/vdpa/vdpa_sim/vdpa_sim.c     | 71 ++++++++++++++++++++++++++--
->>>>>>     drivers/vdpa/vdpa_sim/vdpa_sim.h     |  5 +-
->>>>>>     drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  5 +-
->>>>>>     drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  4 +-
->>>>>>     4 files changed, 76 insertions(+), 9 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
->>>>>> index 7438a89ce939..5c215b56b78b 100644
->>>>>> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
->>>>>> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
->>>>>> @@ -14,6 +14,7 @@
->>>>>>     #include <linux/slab.h>
->>>>>>     #include <linux/sched.h>
->>>>>>     #include <linux/dma-map-ops.h>
->>>>>> +#include <asm/set_memory.h>
->>>>>>     #include <linux/vringh.h>
->>>>>>     #include <linux/vdpa.h>
->>>>>>     #include <linux/vhost_iotlb.h>
->>>>>> @@ -36,9 +37,15 @@ module_param(max_iotlb_entries, int, 0444);
->>>>>>     MODULE_PARM_DESC(max_iotlb_entries,
->>>>>>                     "Maximum number of iotlb entries for each address space. 0 means unlimited. (default: 2048)");
->>>>>>
->>>>>> +static bool notify_passthrough;
->>>>>> +module_param(notify_passthrough, bool, 0444);
->>>>>> +MODULE_PARM_DESC(notify_passthrough,
->>>>>> +                "Enable vq notify(doorbell) area mapping. (default: false)");
->>>>>> +
->>>>>>     #define VDPASIM_QUEUE_ALIGN PAGE_SIZE
->>>>>>     #define VDPASIM_QUEUE_MAX 256
->>>>>>     #define VDPASIM_VENDOR_ID 0
->>>>>> +#define VDPASIM_VRING_POLL_PERIOD 100 /* ms */
->>>>>>
->>>>>>     static struct vdpasim *vdpa_to_sim(struct vdpa_device *vdpa)
->>>>>>     {
->>>>>> @@ -276,7 +283,7 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
->>>>>>            }
->>>>>>
->>>>>>            vdpasim->dev_attr = *dev_attr;
->>>>>> -       INIT_WORK(&vdpasim->work, dev_attr->work_fn);
->>>>>> +       INIT_DELAYED_WORK(&vdpasim->vring_work, dev_attr->work_fn);
->>>>>>            spin_lock_init(&vdpasim->lock);
->>>>>>            spin_lock_init(&vdpasim->iommu_lock);
->>>>>>
->>>>>> @@ -287,6 +294,15 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
->>>>>>            set_dma_ops(dev, &vdpasim_dma_ops);
->>>>>>            vdpasim->vdpa.mdev = dev_attr->mgmt_dev;
->>>>>>
->>>>>> +       if (notify_passthrough) {
->>>>>> +               vdpasim->notify = __get_free_page(GFP_KERNEL | __GFP_ZERO);
->>>>>> +               if (!vdpasim->notify)
->>>>>> +                       goto err_iommu;
->>>>>> +#ifdef CONFIG_X86
->>>>>> +               set_memory_uc(vdpasim->notify, 1);
->>>>>> +#endif
->>>>>
->>>>> What's the reason for using uc memory?
->>>>>
->>>> The vma->vm_page_prot of notify mapping is pgprot_noncached (see
->>>> vhost_vdpa_fault) but the vdpasim->notify is WB, so we should set its
->>>> memtype to UC here and set it back to WB when releasing the device.
->>>
->>> You never look at this memory though. Why does it matter whether
->>> it's UC or WB?
->>>
->>
->> The warning in trace_pfn_remap() would be triggered.
->>
->> For example:
->>
->> x86/PAT: CPU 16/KVM:17819 map pfn RAM range req uncached-minus for [mem
->> 0x5151f3000-0x5151f3fff], got write-back
->>
->>
->>>>>> +       }
->>>>>> +
->>>>>>            vdpasim->config = kzalloc(dev_attr->config_size, GFP_KERNEL);
->>>>>>            if (!vdpasim->config)
->>>>>>                    goto err_iommu;
->>>>>> @@ -357,8 +373,11 @@ static void vdpasim_kick_vq(struct vdpa_device *vdpa, u16 idx)
->>>>>>            struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
->>>>>>            struct vdpasim_virtqueue *vq = &vdpasim->vqs[idx];
->>>>>>
->>>>>> +       if (notify_passthrough)
->>>>>> +               return;
->>>>>
->>>>> So we should keep the two paths to be used at the same time. Userspace
->>>>> can choose to not map doorbells?
->>>>>
->>>> It can work even if the userspace does not to map doorbells (e.g start
->>>> without page-per-vq=on), because the device will periodic check its vqs.
->>>>
->>>>> Thanks
->>>>>
->>>>>> +
->>>>>>            if (vq->ready)
->>>>>> -               schedule_work(&vdpasim->work);
->>>>>> +               schedule_work(&vdpasim->vring_work.work);
->>>>>>     }
->>>>>>
->>>>>>     static void vdpasim_set_vq_cb(struct vdpa_device *vdpa, u16 idx,
->>>>>> @@ -495,6 +514,18 @@ static u8 vdpasim_get_status(struct vdpa_device *vdpa)
->>>>>>            return status;
->>>>>>     }
->>>>>>
->>>>>> +static void vdpasim_set_vring_work(struct vdpasim *vdpasim, bool start)
->>>>>> +{
->>>>>> +       if (!notify_passthrough)
->>>>>> +               return;
->>>>>> +
->>>>>> +       if (start)
->>>>>> +               schedule_delayed_work(&vdpasim->vring_work,
->>>>>> +                               msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
->>>>>> +       else
->>>>>> +               cancel_delayed_work_sync(&vdpasim->vring_work);
->>>>>> +}
->>>>>> +
->>>>>>     static void vdpasim_set_status(struct vdpa_device *vdpa, u8 status)
->>>>>>     {
->>>>>>            struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
->>>>>> @@ -502,12 +533,16 @@ static void vdpasim_set_status(struct vdpa_device *vdpa, u8 status)
->>>>>>            spin_lock(&vdpasim->lock);
->>>>>>            vdpasim->status = status;
->>>>>>            spin_unlock(&vdpasim->lock);
->>>>>> +
->>>>>> +       vdpasim_set_vring_work(vdpasim, status & VIRTIO_CONFIG_S_DRIVER_OK);
->>>>>>     }
->>>>>>
->>>>>>     static int vdpasim_reset(struct vdpa_device *vdpa, bool clear)
->>>>>>     {
->>>>>>            struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
->>>>>>
->>>>>> +       vdpasim_set_vring_work(vdpasim, false);
->>>>>> +
->>>>>>            spin_lock(&vdpasim->lock);
->>>>>>            vdpasim->status = 0;
->>>>>>            vdpasim_do_reset(vdpasim);
->>>>>> @@ -672,12 +707,24 @@ static int vdpasim_dma_unmap(struct vdpa_device *vdpa, unsigned int asid,
->>>>>>            return 0;
->>>>>>     }
->>>>>>
->>>>>> +static struct vdpa_notification_area
->>>>>> +vdpasim_get_vq_notification(struct vdpa_device *vdpa, u16 qid)
->>>>>> +{
->>>>>> +       struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
->>>>>> +       struct vdpa_notification_area notify;
->>>>>> +
->>>>>> +       notify.addr = virt_to_phys((void *)vdpasim->notify);
->>>>>> +       notify.size = PAGE_SIZE;
->>>>>> +
->>>>>> +       return notify;
->>>>>> +}
->>>>>> +
->>>>>>     static void vdpasim_free(struct vdpa_device *vdpa)
->>>>>>     {
->>>>>>            struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
->>>>>>            int i;
->>>>>>
->>>>>> -       cancel_work_sync(&vdpasim->work);
->>>>>> +       cancel_delayed_work_sync(&vdpasim->vring_work);
->>>>>>
->>>>>>            for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
->>>>>>                    vringh_kiov_cleanup(&vdpasim->vqs[i].out_iov);
->>>>>> @@ -693,7 +740,23 @@ static void vdpasim_free(struct vdpa_device *vdpa)
->>>>>>            vhost_iotlb_free(vdpasim->iommu);
->>>>>>            kfree(vdpasim->vqs);
->>>>>>            kfree(vdpasim->config);
->>>>>> +       if (vdpasim->notify) {
->>>>>> +#ifdef CONFIG_X86
->>>>>> +               set_memory_wb(vdpasim->notify, 1);
->>>>>> +#endif
->>>>>> +               free_page(vdpasim->notify);
->>>>>> +       }
->>>>>> +}
->>>>>> +
->>>>>> +void vdpasim_schedule_work(struct vdpasim *vdpasim, bool sched_now)
->>>>>> +{
->>>>>> +       if (sched_now)
->>>>>> +               schedule_work(&vdpasim->vring_work.work);
->>>>>> +       else if (notify_passthrough)
->>>>>> +               schedule_delayed_work(&vdpasim->vring_work,
->>>>>> +                                     msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
->>>>>>     }
->>>>>> +EXPORT_SYMBOL_GPL(vdpasim_schedule_work);
->>>>>>
->>>>>>     static const struct vdpa_config_ops vdpasim_config_ops = {
->>>>>>            .set_vq_address         = vdpasim_set_vq_address,
->>>>>> @@ -704,6 +767,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
->>>>>>            .get_vq_ready           = vdpasim_get_vq_ready,
->>>>>>            .set_vq_state           = vdpasim_set_vq_state,
->>>>>>            .get_vq_state           = vdpasim_get_vq_state,
->>>>>> +       .get_vq_notification    = vdpasim_get_vq_notification,
->>>>>>            .get_vq_align           = vdpasim_get_vq_align,
->>>>>>            .get_vq_group           = vdpasim_get_vq_group,
->>>>>>            .get_device_features    = vdpasim_get_device_features,
->>>>>> @@ -737,6 +801,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
->>>>>>            .get_vq_ready           = vdpasim_get_vq_ready,
->>>>>>            .set_vq_state           = vdpasim_set_vq_state,
->>>>>>            .get_vq_state           = vdpasim_get_vq_state,
->>>>>> +       .get_vq_notification    = vdpasim_get_vq_notification,
->>>>>>            .get_vq_align           = vdpasim_get_vq_align,
->>>>>>            .get_vq_group           = vdpasim_get_vq_group,
->>>>>>            .get_device_features    = vdpasim_get_device_features,
->>>>>> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
->>>>>> index 0e78737dcc16..da0866834918 100644
->>>>>> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
->>>>>> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
->>>>>> @@ -53,7 +53,7 @@ struct vdpasim_dev_attr {
->>>>>>     struct vdpasim {
->>>>>>            struct vdpa_device vdpa;
->>>>>>            struct vdpasim_virtqueue *vqs;
->>>>>> -       struct work_struct work;
->>>>>> +       struct delayed_work vring_work;
->>>>>>            struct vdpasim_dev_attr dev_attr;
->>>>>>            /* spinlock to synchronize virtqueue state */
->>>>>>            spinlock_t lock;
->>>>>> @@ -69,10 +69,13 @@ struct vdpasim {
->>>>>>            bool running;
->>>>>>            /* spinlock to synchronize iommu table */
->>>>>>            spinlock_t iommu_lock;
->>>>>> +       /* dummy notify page */
->>>>>> +       unsigned long notify;
->>>>>>     };
->>>>>>
->>>>>>     struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *attr,
->>>>>>                                   const struct vdpa_dev_set_config *config);
->>>>>> +void vdpasim_schedule_work(struct vdpasim *vdpasim, bool sched_now);
->>>>>>
->>>>>>     /* TODO: cross-endian support */
->>>>>>     static inline bool vdpasim_is_little_endian(struct vdpasim *vdpasim)
->>>>>> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
->>>>>> index c6db1a1baf76..8a640ea82284 100644
->>>>>> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
->>>>>> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
->>>>>> @@ -288,7 +288,7 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
->>>>>>
->>>>>>     static void vdpasim_blk_work(struct work_struct *work)
->>>>>>     {
->>>>>> -       struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
->>>>>> +       struct vdpasim *vdpasim = container_of(work, struct vdpasim, vring_work.work);
->>>>>>            bool reschedule = false;
->>>>>>            int i;
->>>>>>
->>>>>> @@ -325,8 +325,7 @@ static void vdpasim_blk_work(struct work_struct *work)
->>>>>>     out:
->>>>>>            spin_unlock(&vdpasim->lock);
->>>>>>
->>>>>> -       if (reschedule)
->>>>>> -               schedule_work(&vdpasim->work);
->>>>>> +       vdpasim_schedule_work(vdpasim, reschedule);
->>>>>>     }
->>>>>>
->>>>>>     static void vdpasim_blk_get_config(struct vdpasim *vdpasim, void *config)
->>>>>> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
->>>>>> index c3cb225ea469..8b998952384b 100644
->>>>>> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
->>>>>> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
->>>>>> @@ -145,7 +145,7 @@ static void vdpasim_handle_cvq(struct vdpasim *vdpasim)
->>>>>>
->>>>>>     static void vdpasim_net_work(struct work_struct *work)
->>>>>>     {
->>>>>> -       struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
->>>>>> +       struct vdpasim *vdpasim = container_of(work, struct vdpasim, vring_work.work);
->>>>>>            struct vdpasim_virtqueue *txq = &vdpasim->vqs[1];
->>>>>>            struct vdpasim_virtqueue *rxq = &vdpasim->vqs[0];
->>>>>>            ssize_t read, write;
->>>>>> @@ -196,7 +196,7 @@ static void vdpasim_net_work(struct work_struct *work)
->>>>>>                    vdpasim_net_complete(rxq, write);
->>>>>>
->>>>>>                    if (++pkts > 4) {
->>>>>> -                       schedule_work(&vdpasim->work);
->>>>>> +                       vdpasim_schedule_work(vdpasim, true);
->>>>>>                            goto out;
->>>>>>                    }
->>>>>>            }
->>>>>> --
->>>>>> 2.23.0
->>>>>>
->>>>>
->>>>> .
->>>
->>> .
-> 
-> .
+These patches apply cleanly on top of [2]. For convenience, these patches
+and [2] can be found here:
+
+	https://github.com/ricardon/tip.git rneri/ipc_classes_v2 
+
+Thanks and BR,
+Ricardo
+
+Changes since v1 (sorted by significance):
+ * Renamed task_struct::class as task::struct_ipcc. (Joel)
+ * Use task_struct::ipcc = 0 for unclassified tasks. (PeterZ)
+ * Renamed CONFIG_SCHED_TASK_CLASSES as CONFIG_IPC_CLASSES. (PeterZ, Joel)
+ * Dropped patch to take spin lock to read the HFI table from the
+ * scheduler and from the HFI enabling code.
+ * Implemented per-CPU variables to store the IPCC scores of each class.
+   These can be read without holding a lock. (PeterZ).
+ * Dropped patch to expose is_core_idle() outside the scheduler. It is
+   now exposed as part of [2].
+ * Implemented cleanups and reworks from PeterZ when collecting IPCC
+   statistics. I took all his suggestions, except the computation of the
+   total IPC score of two physical cores.
+ * Quantified the cost of HRESET.
+ * Use an ALTERNATIVE macro instead of static_cpu_has() to execute HRESET
+   when supported. (PeterZ)
+ * Fixed a bug when selecting a busiest runqueue: when comparing two
+   runqueues with equal nr_running, we must compute the IPCC score delta
+   of both runqueues.
+ * Fixed the bit number DISABLE_ITD to the correct DISABLE_MASK: 14 instead
+   of 13.
+ * Redefined union hfi_thread_feedback_char_msr to ensure all
+   bit-fields are packed. (PeterZ)
+ * Use bit-fields to fit all the ipcc members of task_struct in 4 bytes.
+   (PeterZ)
+ * Shortened the names of the IPCC interfaces (PeterZ):
+   sched_task_classes_enabled >> sched_ipcc_enabled
+   arch_has_task_classes >> arch_has_ipc_classes
+   arch_update_task_class >> arch_update_ipcc
+   arch_get_task_class_score >> arch_get_ipcc_score
+ * Removed smt_siblings_idle argument from arch_update_ipcc(). (PeterZ)
+ * Added a comment to clarify why sched_asym_prefer() needs a tie breaker
+   only in update_sd_pick_busiest(). (PeterZ)
+ * Renamed functions for accuracy:
+   sched_asym_class_prefer() >> sched_asym_ipcc_prefer()
+   sched_asym_class_pick() >> sched_asym_ipcc_pick()
+ * Renamed local variables to improve the layout of the code block I added
+   in find_busiest_queue(). (PeterZ)
+ * Removed proposed CONFIG_INTEL_THREAD_DIRECTOR Kconfig option.
+ * Mark hardware_history_features as __ro_after_init instead of
+   __read_mostly. (PeterZ)
+ 
+[1]. https://lore.kernel.org/lkml/20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com/
+[2]. https://lore.kernel.org/lkml/20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com/
+
+Ricardo Neri (22):
+  sched/task_struct: Introduce IPC classes of tasks
+  sched: Add interfaces for IPC classes
+  sched/core: Initialize the IPC class of a new task
+  sched/core: Add user_tick as argument to scheduler_tick()
+  sched/core: Update the IPC class of the current task
+  sched/fair: Collect load-balancing stats for IPC classes
+  sched/fair: Compute IPC class scores for load balancing
+  sched/fair: Use IPC class to pick the busiest group
+  sched/fair: Use IPC class score to select a busiest runqueue
+  thermal: intel: hfi: Introduce Intel Thread Director classes
+  thermal: intel: hfi: Store per-CPU IPCC scores
+  x86/cpufeatures: Add the Intel Thread Director feature definitions
+  thermal: intel: hfi: Update the IPC class of the current task
+  thermal: intel: hfi: Report the IPC class score of a CPU
+  thermal: intel: hfi: Define a default class for unclassified tasks
+  thermal: intel: hfi: Enable the Intel Thread Director
+  sched/task_struct: Add helpers for IPC classification
+  sched/core: Initialize helpers of task classification
+  thermal: intel: hfi: Implement model-specific checks for task
+    classification
+  x86/cpufeatures: Add feature bit for HRESET
+  x86/hreset: Configure history reset
+  x86/process: Reset hardware history in context switch
+
+ arch/x86/include/asm/cpufeatures.h       |   2 +
+ arch/x86/include/asm/disabled-features.h |   8 +-
+ arch/x86/include/asm/hreset.h            |  30 +++
+ arch/x86/include/asm/msr-index.h         |   6 +-
+ arch/x86/include/asm/topology.h          |  10 +
+ arch/x86/kernel/cpu/common.c             |  30 ++-
+ arch/x86/kernel/cpu/cpuid-deps.c         |   1 +
+ arch/x86/kernel/cpu/scattered.c          |   1 +
+ arch/x86/kernel/process_32.c             |   3 +
+ arch/x86/kernel/process_64.c             |   3 +
+ drivers/thermal/intel/intel_hfi.c        | 229 ++++++++++++++++++++++-
+ include/linux/sched.h                    |  22 ++-
+ init/Kconfig                             |  12 ++
+ kernel/sched/core.c                      |  10 +-
+ kernel/sched/fair.c                      | 229 ++++++++++++++++++++++-
+ kernel/sched/sched.h                     |  60 ++++++
+ kernel/sched/topology.c                  |   8 +
+ kernel/time/timer.c                      |   2 +-
+ 18 files changed, 653 insertions(+), 13 deletions(-)
+ create mode 100644 arch/x86/include/asm/hreset.h
+
+-- 
+2.25.1
+
