@@ -2,125 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5134863A4D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:25:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679D263A4E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:27:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiK1JZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 04:25:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
+        id S229908AbiK1J05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 04:26:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiK1JZf (ORCPT
+        with ESMTP id S230054AbiK1J0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 04:25:35 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9403CC59;
-        Mon, 28 Nov 2022 01:25:33 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669627531;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hzfUYrqVvJQIGgcRMIOY/c4k5K9QDq4xHL6fNLFlt4I=;
-        b=vFlaGgqTq4SSxWVW9zjseTZNcJEtNK9yLI0h/G4LglDwd2N7LUgKp1vKi4zjOtNPabn/zM
-        eKu7ntMUxfC7KuniqlX5bvzSe9atRWpOh+jzQSIFnS18ilXmBsCK37x4Hb0joDTcDkIRhw
-        VRJj8F5PdNFYvGpXdqmNlNl4Qs0ArIM/z+NAosC2y1X7hrBxf7NNAV6kpq6UBPic3M2SSJ
-        PepAVY/z+EZrUrHQsnG5FGQf3jCyiMzsXFNALme5lGOIYz5pFUfrw+7Wr8BRnzpeH0AXD+
-        tDMpjg0fyL0EsmMlWc4O1IlutVVDVVZAezq9nFrfDyPC9AsSD3kQCmdGN2XnSg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669627531;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hzfUYrqVvJQIGgcRMIOY/c4k5K9QDq4xHL6fNLFlt4I=;
-        b=RWiPwXFcsMegNyR14z4aHc9KTk+n4lRAcBTWyVvxOKEN4nJ5k0ru2sJBdWe73CW4gV8W15
-        t+Kl7rTGr0wWiUBQ==
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
-        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v7 2/3] random: introduce generic vDSO getrandom()
- implementation
-In-Reply-To: <Y4PcLi8c010MEfTA@zx2c4.com>
-References: <20221124165536.1631325-1-Jason@zx2c4.com>
- <20221124165536.1631325-3-Jason@zx2c4.com> <877cziy7zg.ffs@tglx>
- <Y4PcLi8c010MEfTA@zx2c4.com>
-Date:   Mon, 28 Nov 2022 10:25:31 +0100
-Message-ID: <87lenvwhv8.ffs@tglx>
+        Mon, 28 Nov 2022 04:26:55 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1993DE40
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:26:51 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id q21so7141895iod.4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:26:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rSjenL36nx6dkpFfPvUHmLRtB3WtAx9+34Fs2KvTI98=;
+        b=fHupL+kNUU1LXHaNAPqGC7s6qKRyRPCDbj2c4DTGlg6mKcXeZ8CxSpies/1a1MiyxC
+         9R37c6cxx+9Gj9y2jpUJ7JrfUg72+3QkWD0oOtVoYFn1NtQPrK435X11qQ0dITnz8Muj
+         naVVWUn+elbnLK9DPkHY6lwo+3xYSdr2hKNZE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rSjenL36nx6dkpFfPvUHmLRtB3WtAx9+34Fs2KvTI98=;
+        b=gwBXfU/M5Re6EkFKBkC0G0fnjnmlfyf1cYOWZGHI6RMh24aaxV9waubIY1rEgZiy3B
+         T3oaWDlJfSOaAdU71WdrKTFN1ITHFHjQur55WfMSnCimDRlbFmfB+U7fVu4FWxxiR72t
+         O8hy43nDG8PuPLVr43JMpvWT1+N2vgH2GJD1WeKO4XfeAh0Bc3xy2E0ZP+42HQmKqP9X
+         QEu9C+45pjFvEEEEvZtTUw4W1XJll5FdXgR5y8f35QuvJnKrFMAsw7+9Ms7V0egIwa4L
+         1E4FBRelsrzHu4wFbxkwg+5XaCt4652y3BtiIO9PxeJOnSHDn+0rVA2sSBpwa227j6/H
+         zVQA==
+X-Gm-Message-State: ANoB5pkKfPYVSGfHKHyTfF7Mz1v9ordzJg4kvqrQGcskhdPREKk8FxzU
+        uj3pUmNJ3nSvMboBBeB7b6Rd+MVcUqcmRA==
+X-Google-Smtp-Source: AA0mqf5yzWy6EWWYFMHDtCf8bdktlYWbcLaMbKoV3afzdwa3Jk/qb4ztQOoihVAgDt4B5cTvf6Jcpw==
+X-Received: by 2002:a05:6638:3446:b0:388:1c6f:f62 with SMTP id q6-20020a056638344600b003881c6f0f62mr10263392jav.123.1669627610362;
+        Mon, 28 Nov 2022 01:26:50 -0800 (PST)
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com. [209.85.166.52])
+        by smtp.gmail.com with ESMTPSA id n6-20020a02a186000000b00389be83f294sm2868165jah.133.2022.11.28.01.26.48
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 01:26:48 -0800 (PST)
+Received: by mail-io1-f52.google.com with SMTP id c7so7128064iof.13
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:26:48 -0800 (PST)
+X-Received: by 2002:a02:c897:0:b0:374:100a:b0c7 with SMTP id
+ m23-20020a02c897000000b00374100ab0c7mr14573933jao.185.1669627607759; Mon, 28
+ Nov 2022 01:26:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org> <87wn7fzb2g.wl-tiwai@suse.de>
+In-Reply-To: <87wn7fzb2g.wl-tiwai@suse.de>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Mon, 28 Nov 2022 10:26:36 +0100
+X-Gmail-Original-Message-ID: <CANiDSCtSAM3seszVWfjJPaYFO3v223P-tYEtdpW4+pQQ3bcf0g@mail.gmail.com>
+Message-ID: <CANiDSCtSAM3seszVWfjJPaYFO3v223P-tYEtdpW4+pQQ3bcf0g@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] ALSA: core: Fix deadlock when shutdown a frozen userspace
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Takashi Iwai <tiwai@suse.com>, Len Brown <len.brown@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        alsa-devel@alsa-project.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jason!
+Hi Takashi
 
-On Sun, Nov 27 2022 at 22:52, Jason A. Donenfeld wrote:
-> On Fri, Nov 25, 2022 at 11:39:15PM +0100, Thomas Gleixner wrote:
->> If you really need anything from fs.h then please isolate it out into a
->> separate header file which is included by fs.h and here.
+Thanks for your prompt reply
+
+On Mon, 28 Nov 2022 at 10:24, Takashi Iwai <tiwai@suse.de> wrote:
 >
-> Hm. I need MAX_RW_COUNT from linux/fs.h. I could just hardcode `(INT_MAX
-> & PAGE_MASK)`, though, if you'd prefer, and leave a comment. I'll do
-> that. Or I could move MAX_RW_COUNT into linux/kernel.h? But maybe that's
-> undesirable.
+> On Mon, 28 Nov 2022 10:10:12 +0100,
+> Ricardo Ribalda wrote:
+> >
+> > Since 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
+> > we wait for userspace to close its fds.
 >
-> So:
+> IMO, the fix above brought more problem.  If you'd need to want to
+> avoid later accesses during shutdown, the driver should rather just
+> disconnect devices without waiting for the user-space completion.
+> And, for that, a simple call of snd_card_disconnect() should suffice.
 >
->     ssize_t ret = min_t(size_t, INT_MAX & PAGE_MASK /* = MAX_RW_COUNT */, len);
+> > But that will never occur with a frozen userspace (like during kexec()).
+> >
+> > Lets detect the frozen userpace and act accordingly.
 >
-> I'll do that, if it's okay with you. Or tell me if you want me to
-> instead move MAX_RW_COUNT into linux/kernel.h.
+> ... and skipping the user-space sync at snd_card_disconnect_sync() as
+> of this patch set is a dangerous move, I'm afraid.  The user-space
+> gets frozen also at the normal suspend/resume, and it implies that the
+> sync will be lost even for the normal PM, too (although it must be a
+> very corner case).
 >
-> Also, if I remove linux/fs.h, I need to include linux/time.h in its
-> place, because vdso/datapage.h implicitly depends on it. Alternatively,
-> I could add linux/time.h to vdso/datapage.h, but I don't want to touch
-> too many files uninvited.
 
-Actually the minimal includes are those:
+And what about checking kexec_in_progress instead?
 
---- a/arch/x86/entry/vdso/vclock_gettime.c
-+++ b/arch/x86/entry/vdso/vclock_gettime.c
-@@ -8,8 +8,9 @@
-  * 32 Bit compat layer by Stefani Seibold <stefani@seibold.net>
-  *  sponsored by Rohde & Schwarz GmbH & Co. KG Munich/Germany
-  */
--#include <linux/time.h>
-+#include <linux/cache.h>
- #include <linux/kernel.h>
-+#include <linux/time64.h>
- #include <linux/types.h>
- 
- #include "../../../../lib/vdso/gettimeofday.c"
+Thanks!
 
->> > +	batch_len = min_t(size_t, sizeof(state->batch) - state->pos, len);
->> 
->> Where is the sanity check for state->pos <= sizeof(state->batch)?
 >
-> That condition cannot happen. "Does the compiler or some other checker
-> prove that as part of the development cycle?" No, unfortunately. So what
-> would you like to do here? Per Linus' email on an unrelated topic [1],
-> "We don't test for things that can't happen." And there's no
-> WARN_ON/BUG_ON primitive that'd be wise to use here -- nobody wants to
-> emit a ud2 into vDSO code I assume. So what would you like? For me to
-> add that check and bail out of the function if it's wrong, even if that
-> should normally never happen? Or adhere to the [1] more strictly and do
-> nothing, as is the case now? I'll do what you want here.
+> thanks,
+>
+> Takashi
+>
+> >
+> > To: Jaroslav Kysela <perex@perex.cz>
+> > To: Takashi Iwai <tiwai@suse.com>
+> > To: "Rafael J. Wysocki" <rafael@kernel.org>
+> > To: Pavel Machek <pavel@ucw.cz>
+> > To: Len Brown <len.brown@intel.com>
+> > To: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+> > To: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+> > To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> > To: Mark Brown <broonie@kernel.org>
+> > Cc: alsa-devel@alsa-project.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+> > Cc: linux-pm@vger.kernel.org
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > ---
+> > Changes in v3:
+> > - Wrap pm_freezing in a function
+> > - Link to v2: https://lore.kernel.org/r/20221127-snd-freeze-v2-0-d8a425ea9663@chromium.org
+> >
+> > Changes in v2:
+> > - Only use pm_freezing if CONFIG_FREEZER
+> > - Link to v1: https://lore.kernel.org/r/20221127-snd-freeze-v1-0-57461a366ec2@chromium.org
+> >
+> > ---
+> > Ricardo Ribalda (2):
+> >       freezer: Add processes_frozen()
+> >       ALSA: core: Fix deadlock when shutdown a frozen userspace
+> >
+> >  include/linux/freezer.h |  2 ++
+> >  kernel/freezer.c        | 11 +++++++++++
+> >  sound/core/init.c       | 13 +++++++++++++
+> >  3 files changed, 26 insertions(+)
+> > ---
+> > base-commit: 4312098baf37ee17a8350725e6e0d0e8590252d4
+> > change-id: 20221127-snd-freeze-1ee143228326
+> >
+> > Best regards,
+> > --
+> > Ricardo Ribalda <ribalda@chromium.org>
+> >
 
-I think we can do without any further checks. If the callsite fiddles
-with state then the resulting memcpy will go into lala land and the
-process can keep the pieces.
 
-Thanks,
 
-        tglx
+-- 
+Ricardo Ribalda
