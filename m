@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F4C63B23C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B960B63B23F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:30:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233220AbiK1T2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 14:28:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
+        id S233526AbiK1TaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 14:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232303AbiK1T2d (ORCPT
+        with ESMTP id S231645AbiK1TaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 14:28:33 -0500
+        Mon, 28 Nov 2022 14:30:03 -0500
 Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D4126482
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:28:32 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id c15so7422147qtw.8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:28:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3722CC85
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:30:02 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id c15so7425243qtw.8
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:30:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=E4K7CdrO1bVG1lma0UHiRT4m0Q8nKmohqqgtpJrE588=;
-        b=j4I86y6wdhKn8Hv3cB1Ggw3Y3oZkLus35E2C4t/nVedgQZYs6BmhQQjn5ZvqNwDkR4
-         DhN0G81WwvwckgmQ3WuYV88zFUTjiqMfRcvdytnxZ5SIzQqYSxhRRVnhi4yq+ovF2n9O
-         knl1EFAaO34BZsV7+cclB5D61z2P7xJ/BQBAVpy8d3NusKOmXtgzLVZIOt1/Hlbiygm9
-         IgVuVmTZMCkCi5nyG0vW5l38IUObFiWMsTGER4xwi04jJTi6v9UsFYgc5JgQQAzaEQ5J
-         xaG4uM+JKZthiyA/OAxJbv1Z0qAQiC7/vc542rVWOjn3zoKQWCgjVFLfeCbXvUHT09nQ
-         UEUQ==
+        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NjZkaDVMKTzaqiyH90BF4ExxRXxg/Ij7l2eo+wL7k7Y=;
+        b=4sZ9GwIPbixXbiOcbczJccyJKxuY4hJWzWuvxuGary9Gih0Yd47slt4PVVR+bL+8xU
+         EE8X/PNxZhmH0qtfoAFqCtbwz6MSXHB+mc2Lkp9scdzFAmoqiDuBZrZ7WZxUTncLLPQo
+         JVBdZiX0a4ApgjgZRM6xfCvNFAh9ogDntT9tFjoV9A9J3JoZq0pFZJzjowKH0SXCy2cn
+         YyvDiTO64Ac/pl2nhWQJHpjXXlkc8/Bx/ZgKoJHbemSgmFI521Tt+ViY40bpbtHMvmOt
+         vo231e2gYqhh39oq8axDCuFQvnFPrQHDK6B7DN++RlGH7QCDbadARLNJfDhHsbLYYEqm
+         U8Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E4K7CdrO1bVG1lma0UHiRT4m0Q8nKmohqqgtpJrE588=;
-        b=rIWRQfvipibfrD8I2UHZHTp8r5Gx+gs3bviVqqgBs2o1ZzLV26BFb7FA5z0di5J1qU
-         xPnYBGka8F+Xkeh59Lff+wYlorZniZEHiSog7dmVk09QI8qH7ODoCM5FmaXv38Iv+Iip
-         CnYVXTMzpg9aajgIrOYPhCSOvxeM2ttjJLY8dW8DpwaLD2WrERy4OL9zhJgIJicdfBEM
-         NeS5BeNIfu8Nn6b+PShL6ADhzIFIG0sjLGAN5/ZXZSN5sRvt/aEu6en1tareOOzPt8/8
-         2i2624+eYbVyZGVpp53rLuF8oYsh/l6CLjM+nEjf8r7yeBEEoo30OYEkmZhJG3PBMV5s
-         afEA==
-X-Gm-Message-State: ANoB5pn2MGfipZPgFRfc82HoMJ+EnnNalBzui8+RLOkX8Nr+m+lJK+GV
-        JrC0ay31kwNTMMHrPJEZ6G3aqA==
-X-Google-Smtp-Source: AA0mqf4Jlo9bPOKU+NFC/VMZWSkEpQ/6kmrsGl9mG2CaDd2xNKrIysNaLrErxchfEsx9azuFvOOaDQ==
-X-Received: by 2002:a05:622a:480e:b0:39c:e18e:758f with SMTP id fb14-20020a05622a480e00b0039ce18e758fmr31278458qtb.187.1669663712166;
-        Mon, 28 Nov 2022 11:28:32 -0800 (PST)
-Received: from localhost (2603-7000-0c01-2716-9175-2920-760a-79fa.res6.spectrum.com. [2603:7000:c01:2716:9175:2920:760a:79fa])
-        by smtp.gmail.com with ESMTPSA id w18-20020a05620a445200b006fafc111b12sm9166183qkp.83.2022.11.28.11.28.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 11:28:31 -0800 (PST)
-Date:   Mon, 28 Nov 2022 14:28:31 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: Re: [PATCH v7 6/6] zsmalloc: Implement writeback mechanism for
- zsmalloc
-Message-ID: <Y4UL3yF9erST4nEp@cmpxchg.org>
-References: <20221128191616.1261026-1-nphamcs@gmail.com>
- <20221128191616.1261026-7-nphamcs@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221128191616.1261026-7-nphamcs@gmail.com>
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NjZkaDVMKTzaqiyH90BF4ExxRXxg/Ij7l2eo+wL7k7Y=;
+        b=IIwqdh89w/h2bHuN0piFr2QEpr4HwB2B4ZUzqeYCB843wySl1ukG5Yzf/N9Zjc+jkI
+         5pyMEPIFsK3U2iXP1HxvDgVFRNoc0N8TpPqdZLAo+9jIvsiDf7iyOMquEfvAJWQgujRH
+         hoFBdm7k10ZnjLCEEZZJ19ndho56SD4Lm6LpkKJodM3gQLwwo93VSB8YAGaGM9df4oLY
+         iu8z4RtP4stLwO3KsHALEVb+PHNsp9ax1kksoqysWa7vugQgzJPdmBXaU0vpB7cfsNY0
+         FO3sTSIGJYmiQ7CGv3QxGQ0fkEXt2kn+A/X4TRHWJguj6P+O11mUu+DUEMHNoE/EDCEO
+         HnVw==
+X-Gm-Message-State: ANoB5pnURLYI3PR+fH+sG4xU73cs1iATLb5P782EH67m6iDc9dSJWai4
+        20IEZdZ+CkIS7HX1Fjw08Z/4Rg==
+X-Google-Smtp-Source: AA0mqf4KT9Uqgg3efFvZhSFMLETz2zg9NQtK+X+Wrve6HgJeaQdUhf5SaOkJY4LErxvJF5p+IlIn9w==
+X-Received: by 2002:ac8:4d4e:0:b0:3a6:5afc:9a20 with SMTP id x14-20020ac84d4e000000b003a65afc9a20mr26215221qtv.183.1669663801991;
+        Mon, 28 Nov 2022 11:30:01 -0800 (PST)
+Received: from smtpclient.apple (172-125-78-211.lightspeed.sntcca.sbcglobal.net. [172.125.78.211])
+        by smtp.gmail.com with ESMTPSA id a195-20020ae9e8cc000000b006fb3884e10bsm8822247qkg.24.2022.11.28.11.30.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 28 Nov 2022 11:30:00 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH] hfs: Fix OOB Write in hfs_asc2mac
+From:   Viacheslav Dubeyko <slava@dubeyko.com>
+In-Reply-To: <20221126043612.853428-1-zhangpeng362@huawei.com>
+Date:   Mon, 28 Nov 2022 11:29:57 -0800
+Cc:     zippel@linux-m68k.org, akpm@osdl.org,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, sunnanyong@huawei.com,
+        wangkefeng.wang@huawei.com,
+        syzbot+dc3b1cf9111ab5fe98e7@syzkaller.appspotmail.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <9F97B7A6-9E20-4D70-BA79-8301D80DF9DB@dubeyko.com>
+References: <20221126043612.853428-1-zhangpeng362@huawei.com>
+To:     Peng Zhang <zhangpeng362@huawei.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -74,15 +76,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 11:16:15AM -0800, Nhat Pham wrote:
-> This commit adds the writeback mechanism for zsmalloc, analogous to the
-> zbud allocator. Zsmalloc will attempt to determine the coldest zspage
-> (i.e least recently used) in the pool, and attempt to write back all the
-> stored compressed objects via the pool's evict handler.
-> 
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
 
-Ok, this now also has the get_first_page() and the cond_resched() that
-Sergey had asked for. Looks good to me.
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> On Nov 25, 2022, at 8:36 PM, Peng Zhang <zhangpeng362@huawei.com> =
+wrote:
+>=20
+> From: ZhangPeng <zhangpeng362@huawei.com>
+>=20
+> Syzbot reported a OOB Write bug:
+>=20
+> loop0: detected capacity change from 0 to 64
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> BUG: KASAN: slab-out-of-bounds in hfs_asc2mac+0x467/0x9a0
+> fs/hfs/trans.c:133
+> Write of size 1 at addr ffff88801848314e by task syz-executor391/3632
+>=20
+> Call Trace:
+> <TASK>
+> __dump_stack lib/dump_stack.c:88 [inline]
+> dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+> print_address_description+0x74/0x340 mm/kasan/report.c:284
+> print_report+0x107/0x1f0 mm/kasan/report.c:395
+> kasan_report+0xcd/0x100 mm/kasan/report.c:495
+> hfs_asc2mac+0x467/0x9a0 fs/hfs/trans.c:133
+> hfs_cat_build_key+0x92/0x170 fs/hfs/catalog.c:28
+> hfs_lookup+0x1ab/0x2c0 fs/hfs/dir.c:31
+> lookup_open fs/namei.c:3391 [inline]
+> open_last_lookups fs/namei.c:3481 [inline]
+> path_openat+0x10e6/0x2df0 fs/namei.c:3710
+> do_filp_open+0x264/0x4f0 fs/namei.c:3740
+>=20
+> If in->len is much larger than HFS_NAMELEN(31) which is the maximum
+> length of an HFS filename, a OOB Write could occur in hfs_asc2mac(). =
+In
+> that case, when the dst reaches the boundary, the srclen is still
+> greater than 0, which causes a OOB Write.
+> Fix this by adding a Check on dstlen before Writing to dst address.
+>=20
+> Fixes: 328b92278650 ("[PATCH] hfs: NLS support")
+> Reported-by: syzbot+dc3b1cf9111ab5fe98e7@syzkaller.appspotmail.com
+> Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+> ---
+> fs/hfs/trans.c | 2 ++
+> 1 file changed, 2 insertions(+)
+>=20
+> diff --git a/fs/hfs/trans.c b/fs/hfs/trans.c
+> index 39f5e343bf4d..886158db07b3 100644
+> --- a/fs/hfs/trans.c
+> +++ b/fs/hfs/trans.c
+> @@ -130,6 +130,8 @@ void hfs_asc2mac(struct super_block *sb, struct =
+hfs_name *out, const struct qstr
+> 				dst +=3D size;
+> 				dstlen -=3D size;
+> 			} else {
+> +				if (dstlen =3D=3D 0)
+> +					goto out;
+
+Maybe, it makes sense to use dstlen instead of srclen in while()?
+
+We have now:
+
+while (srclen > 0) {
+   <skipped>
+} else {
+   <skipped>
+}
+
+We can use instead:
+
+while (dstlen > 0) {
+   <skipped>
+} else {
+   <skipped>
+}
+
+Will it fix the issue?
+
+Thanks,
+Slava.
+
+
+> 				*dst++ =3D ch > 0xff ? '?' : ch;
+> 				dstlen--;
+> 			}
+> --=20
+> 2.25.1
+>=20
+
