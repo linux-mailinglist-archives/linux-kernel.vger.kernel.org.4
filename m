@@ -2,65 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C23A63A1FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:30:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6FC63A1FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiK1Hab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 02:30:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
+        id S229861AbiK1Hed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 02:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiK1Ha1 (ORCPT
+        with ESMTP id S229509AbiK1Heb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 02:30:27 -0500
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57BAF1147A;
-        Sun, 27 Nov 2022 23:30:24 -0800 (PST)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Mon, 28 Nov 2022 15:30:21
- +0800 (GMT+08:00)
-X-Originating-IP: [222.205.0.186]
-Date:   Mon, 28 Nov 2022 15:30:21 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "Lin Ma" <linma@zju.edu.cn>
-To:     "Stephen Rothwell" <sfr@canb.auug.org.au>
-Cc:     "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the v4l-dvb-next tree
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <20221128152645.245141b6@canb.auug.org.au>
-References: <20221128152645.245141b6@canb.auug.org.au>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Mon, 28 Nov 2022 02:34:31 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDF71262C
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 23:34:29 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id 62so9162759pgb.13
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 23:34:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shopee.com; s=shopee.com;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f5OQ0+HkEwysNm14BQXMxnO8hH5pCig2NftJNgO6du0=;
+        b=RReTjXzCQ0D7Ue2ywprGw6Ng9pgYkX1/w8H21qM0JrNDKDmPHD/EloVDmyiJt6SP3a
+         EVA5B/iRRoccrue5N8UFHZDtJ3H2+eeB7JLeIamvAY9p3vAKhJVRKyS50PLdYRf8sUW/
+         BIjCXBFmzrpnpULJ0RrFZSunPrp8lm1WIijgMROxJg8AlgbfCD1NXZAZ+2JrP+EHVDg+
+         7NvquqBEn6OzMPVOIvzTse/04WIlG0M5x2/gKXmkglO1hEZv2/EwhevlZl8F6RXoFrfd
+         f5XSkyPGXFgaSzI4tWJlafWkNo5BTaMOt/t1xroh/Cj58xW0z6fQPoi5Au6eGK9AJTEJ
+         IUfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=f5OQ0+HkEwysNm14BQXMxnO8hH5pCig2NftJNgO6du0=;
+        b=Ci91R3xsFIivfIMRV018/C6yO8GS6rqofALgh0vifmo+Zc1Lgl3sCpXpmdvLYUO6ku
+         8g2tqCpQXIgEas1LOrp3oje8yMPoMUv9f8SGFJ39uLYKkc21oDdmymTGG/dHObWeZdxz
+         NzCgEPV2oKIPwgfC2GwbJqENnqfBSA2eCZeXB77Y2dD+BEbvjvMIeISgAc3plRxpjT+n
+         QNjtzna2hjztFjpdGCIEN3CxNSiKBdLv9Yj9MWy6bjUd2iknW8vXTYy5Uc7gBdUFqTUY
+         bGhNugJdt3NRZdKclTqnTrGTf8N9xJn8R8UUoC4uvvuVJlg25uPMVj9MfhAVMjYd/gZM
+         FqJA==
+X-Gm-Message-State: ANoB5pku1DKbRVkq5ynE3jxElVJnjDQUrgPVmi6Dzx/FaRpa5HRb2iUR
+        0J0QrGwXSEBRn0JtpcFJq/NE+f+3Wm6yY8/1xbU=
+X-Google-Smtp-Source: AA0mqf4mMCiPth1vKdy9I3rsn6kFdwmyzKNOSdEy7d8GFsixX5CepX9q301xI9TnkXpQAWgT96YwYA==
+X-Received: by 2002:a65:5a4c:0:b0:477:ba9d:ef8 with SMTP id z12-20020a655a4c000000b00477ba9d0ef8mr21952298pgs.98.1669620869171;
+        Sun, 27 Nov 2022 23:34:29 -0800 (PST)
+Received: from [10.54.24.49] (static-ip-147-99-134-202.rev.dyxnet.com. [202.134.99.147])
+        by smtp.gmail.com with ESMTPSA id n5-20020a170902e54500b001837b19ebb8sm8030579plf.244.2022.11.27.23.34.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Nov 2022 23:34:28 -0800 (PST)
+Message-ID: <b1c6f583-5cb1-442a-ea64-4f999b939216@shopee.com>
+Date:   Mon, 28 Nov 2022 15:34:25 +0800
 MIME-Version: 1.0
-Message-ID: <28948ae.13ac1.184bd24def0.Coremail.linma@zju.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID: cS_KCgAnYvyNY4RjJzqbCA--.15708W
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/1tbiAwQRElNG3I7oMgApsw
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Subject: Re: [PATCH] cgroup/cpuset: Optimize update_tasks_nodemask()
+To:     Waiman Long <longman@redhat.com>
+Cc:     lizefan.x@bytedance.com, tj@kernel.org, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221123082157.71326-1-haifeng.xu@shopee.com>
+ <2ac6f207-e08a-2a7f-01ae-dfaf15eefaf6@redhat.com>
+ <4de8821b-e0c0-bf63-4d76-b0ce208cce3b@shopee.com>
+ <dfcbffb9-b58a-6d25-2174-39394eb0ccde@redhat.com>
+ <21e73dad-c6d0-21ea-dcdf-355b71c8537b@shopee.com>
+ <1a997ea7-bb63-1710-14d6-c3b88a22bdb3@redhat.com>
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+In-Reply-To: <1a997ea7-bb63-1710-14d6-c3b88a22bdb3@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgU3RlcGhlbiwKCj4gSGkgYWxsLAo+IAo+IEFmdGVyIG1lcmdpbmcgdGhlIHY0bC1kdmItbmV4
-dCB0cmVlLCB0b2RheSdzIGxpbnV4LW5leHQgYnVpbGQgKGh0bWxkb2NzKQo+IHByb2R1Y2VkIHRo
-ZXNlIHdhcm5pbmdzOgo+IAo+IGluY2x1ZGUvbWVkaWEvZHZiZGV2Lmg6MTkzOiB3YXJuaW5nOiBG
-dW5jdGlvbiBwYXJhbWV0ZXIgb3IgbWVtYmVyICdyZWYnIG5vdCBkZXNjcmliZWQgaW4gJ2R2Yl9k
-ZXZpY2UnCj4gaW5jbHVkZS9tZWRpYS9kdmJkZXYuaDoyMDc6IHdhcm5pbmc6IGV4cGVjdGluZyBw
-cm90b3R5cGUgZm9yIGR2Yl9kZXZpY2VfZ2V0KCkuIFByb3RvdHlwZSB3YXMgZm9yIGR2Yl9kZXZp
-Y2VfcHV0KCkgaW5zdGVhZAo+IAo+IEludHJvZHVjZWQgYnkgY29tbWl0Cj4gCj4gICAwZmMwNDRi
-MmI1ZTIgKCJtZWRpYTogZHZiZGV2OiBhZG9wdHMgcmVmY250IHRvIGF2b2lkIFVBRiIpCj4gCj4g
-LS0gCgpPaCBteSBiYWQsIGl0IHNlZW1zIHRoYXQgSSBsZWF2ZSBhIHR5cG8gdGhlcmUgYXMgZm9y
-Z2V0dGluZyBhYm91dCB0aGUgZnVuY3Rpb24gbmFtZSBpbiBjb21tZW50LgoKLyoqCiAqIGR2Yl9k
-ZXZpY2VfZ2V0IC0gRGVjcmVhc2UgZHZiX2RldmljZSByZWZlcmVuY2UKICoKICogQGR2YmRldjoJ
-cG9pbnRlciB0byBzdHJ1Y3QgZHZiX2RldmljZQogKi8Kdm9pZCBkdmJfZGV2aWNlX3B1dChzdHJ1
-Y3QgZHZiX2RldmljZSAqZHZiZGV2KTsKCkFsc28gdGhlICdyZWYnIGZpZWxkIGlzIG5vdCBkZXNj
-cmliZWQgd2l0aCBjb21tZW50LiBXaWxsIHNlbmQgdGhlIGZpeCB0byB0aGUgdjRsLWR2Yi1uZXh0
-IHNvb24uCgpUaGFua3MKTGluCg==
+
+
+On 2022/11/25 07:00, Waiman Long wrote:
+> On 11/24/22 02:49, Haifeng Xu wrote:
+>>
+>> On 2022/11/24 12:24, Waiman Long wrote:
+>>> On 11/23/22 22:33, Haifeng Xu wrote:
+>>>> On 2022/11/24 04:23, Waiman Long wrote:
+>>>>> On 11/23/22 03:21, haifeng.xu wrote:
+>>>>>> When change the 'cpuset.mems' under some cgroup, system will hung
+>>>>>> for a long time. From the dmesg, many processes or theads are
+>>>>>> stuck in fork/exit. The reason is show as follows.
+>>>>>>
+>>>>>> thread A:
+>>>>>> cpuset_write_resmask /* takes cpuset_rwsem */
+>>>>>>      ...
+>>>>>>        update_tasks_nodemask
+>>>>>>          mpol_rebind_mm /* waits mmap_lock */
+>>>>>>
+>>>>>> thread B:
+>>>>>> worker_thread
+>>>>>>      ...
+>>>>>>        cpuset_migrate_mm_workfn
+>>>>>>          do_migrate_pages /* takes mmap_lock */
+>>>>>>
+>>>>>> thread C:
+>>>>>> cgroup_procs_write /* takes cgroup_mutex and
+>>>>>> cgroup_threadgroup_rwsem */
+>>>>>>      ...
+>>>>>>        cpuset_can_attach
+>>>>>>          percpu_down_write /* waits cpuset_rwsem */
+>>>>>>
+>>>>>> Once update the nodemasks of cpuset, thread A wakes up thread B to
+>>>>>> migrate mm. But when thread A iterates through all tasks, including
+>>>>>> child threads and group leader, it has to wait the mmap_lock which
+>>>>>> has been take by thread B. Unfortunately, thread C wants to migrate
+>>>>>> tasks into cgroup at this moment, it must wait thread A to release
+>>>>>> cpuset_rwsem. If thread B spends much time to migrate mm, the
+>>>>>> fork/exit which acquire cgroup_threadgroup_rwsem also need to
+>>>>>> wait for a long time.
+>>>>>>
+>>>>>> There is no need to migrate the mm of child threads which is
+>>>>>> shared with group leader. Just iterate through the group
+>>>>>> leader only.
+>>>>>>
+>>>>>> Signed-off-by: haifeng.xu <haifeng.xu@shopee.com>
+>>>>>> ---
+>>>>>>     kernel/cgroup/cpuset.c | 3 +++
+>>>>>>     1 file changed, 3 insertions(+)
+>>>>>>
+>>>>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>>>>>> index 589827ccda8b..43cbd09546d0 100644
+>>>>>> --- a/kernel/cgroup/cpuset.c
+>>>>>> +++ b/kernel/cgroup/cpuset.c
+>>>>>> @@ -1968,6 +1968,9 @@ static void update_tasks_nodemask(struct cpuset
+>>>>>> *cs)
+>>>>>>               cpuset_change_task_nodemask(task, &newmems);
+>>>>>>     +        if (!thread_group_leader(task))
+>>>>>> +            continue;
+>>>>>> +
+>>>>>>             mm = get_task_mm(task);
+>>>>>>             if (!mm)
+>>>>>>                 continue;
+>>>>> Could you try the attached test patch to see if it can fix your problem?
+>>>>> Something along the line of this patch will be more acceptable.
+>>>>>
+>>>>> Thanks,
+>>>>> Longman
+>>>>>
+>>>> Hi, Longman.
+>>>> Thanks for your patch, but there are still some problems.
+>>>>
+>>>> 1）
+>>>>     (group leader, node: 0,1)
+>>>>            cgroup0
+>>>>            /     \
+>>>>           /       \
+>>>>       cgroup1   cgroup2
+>>>>      (threads)  (threads)
+>>>>
+>>>> If set node 0 in cgroup1 and node 1 in cgroup2, both of them will update
+>>>> the mm. And the nodemask of mm depends on who set the node last.
+>>> Yes, that is the existing behavior. It was not that well defined in the
+>>> past and so it is somewhat ambiguous as to what we need to do about it.
+>>>
+>> The test patch works if the child threads are in same cpuset with group
+>> leader which has same logic with my patch. But if they are in different
+>> cpusets, the test patch will fail because the contention of mmap_lock
+>> still exsits and seems similar to the original logic.
+> 
+> That is true. I am thinking about adding a nodemask to mm_struct so that we can figure out if we need to propagate the changes down to all the VMAs and do the migration. That will enable us to avoid doing wasteful work.
+> 
+> Current node mask handling isn't that efficient especially for distros that have a relatively large NODES_SHIFT value. Some work may also be need in this area.
+> 
+>>> BTW, cgroup1 has a memory_migrate flag which will force page migration
+>>> if set. I guess you may have it set in your case as it will introduce a
+>>> lot more delay as page migration takes time. That is probably the reason
+>>> why you are seeing a long delay. So one possible solution is to turn
+>>> this flag off. Cgroup v2 doesn't have this flag.
+>>>
+>> Dou you mean 'CS_MEMORY_MIGRATE'? This flag can be turn off in Cgroup
+>> v1, but it has been set in Cgroup v2 (cpuset_css_alloc) in default and
+>> couldn't be changed.
+> You are right. Cgroup v2 has CS_MEMORY_MIGRATE enabled by default and can't be turned off.
+
+Hi, Longman.
+'dfl_files' is just a minimal set. Shall we enable memory_migrate feature in Cgroup V2?
+So it can be turned off and help to solve the problem.
+>>
+>>>> 2）
+>>>>      (process, node: 0,1)
+>>>>            cgroup0
+>>>>            /     \
+>>>>           /       \
+>>>>       cgroup1   cgroup2
+>>>>      (node: 0)  (node: 1)
+>>>>
+>>>> If migrate thread from cgroup0 to cgroup1 or cgroup2, cpuset_attach
+>>>> won't update the mm. So the nodemask of thread, including mems_allowed
+>>>> and mempolicy（updated in cpuset_change_task_nodemask）, is different
+>>>> from
+>>>> the vm_policy in vma(updated in mpol_rebind_mm).
+>>> Yes, that can be the case.
+>>>
+>>>>
+>>>> In a word, if threads have different cpusets with different nodemask, it
+>>>> will cause inconsistent memory behavior.
+>>> So do you have suggestion of what we need to do going forward?
+>> Should we prevent thread from migrating to those cgroups which have
+>> different nodemask with the cgroup that contains the group leader?
+>>
+>> In addition, the group leader and child threads should be in same cgroup
+>> tree, also the level of cgroup containes group leader must be higher
+>> than these cgroups contain child threads, so update_nodemask will work.
+>>
+>> Or just disable thread migration in cpuset？It's easy to achieve but will
+>> affect cpu bind.
+> 
+> As said above, my current inclination is to add a nodemask to mm_struct and revise the way nodemask is being handled. That will take some time.
+> 
+> Cheers,
+> Longman
+> 
