@@ -2,174 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF26E63AE17
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6C263AE23
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbiK1Qt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 11:49:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
+        id S231221AbiK1QzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 11:55:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiK1QtY (ORCPT
+        with ESMTP id S231165AbiK1QzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 11:49:24 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51756167F4;
-        Mon, 28 Nov 2022 08:49:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669654163; x=1701190163;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=CgPF6MKTnegmRDmcI5KCYgm3Dojtw3BD/LAsoXreVzA=;
-  b=HtF/KqwLsL6qxOspoQuu4/2ZGgGHtzJdzUMY3XrCXkMN3R+bCvU89Xa9
-   6ttqO6pnFF5OE67aC2r1Z65KxhLxeOUUpTyAxxFDUwdCkWsz2oOog/CBg
-   dy1TDQnJV9zbZ/cmO6M2vHaO0aoDdHRJLxAYYK+HmiLvywq3rGIM/TQtD
-   VkUNwNjQQYDDi6vZ74q7nk/FbXlItTTY+GsXwegiaOtoB15q18TDkxVIJ
-   qd4lldcZD24VI4h3kLLZEdAEQWh43YgyWL+ASxDhjFdORTQbigZl9E6wT
-   fBEYMBoDluwC+A1fTnD/o1GaZdfGVWrCQBPAKiEjmpeSUeHC76QtwsOYg
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="379144205"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="379144205"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 08:49:22 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="768104564"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="768104564"
-Received: from kschjaer-mobl.amr.corp.intel.com (HELO [10.212.114.246]) ([10.212.114.246])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 08:49:21 -0800
-Message-ID: <5171929e-b750-d2f1-fec9-b34d76c18dcb@linux.intel.com>
-Date:   Mon, 28 Nov 2022 10:49:20 -0600
+        Mon, 28 Nov 2022 11:55:15 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA251D0D9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 08:55:14 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id d123so8032346iof.7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 08:55:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=I1d3sbSB153YFVx4HRjX3fuIz12BKVhol+9SQxjrH1A=;
+        b=RBb2b8Ro6/aBOzwMx/C9FgHppT9WGFbhf7fR6teBrsO9J662xBpUMgZB86z+5RWKvA
+         hVgWpdqNG4gx7nKpGeyAXSbQRMd2hTHx9SAW1thvcZ7el8Y+vW4OCbjMzVCCQu6FSdNc
+         52ykCgZdmKvCbcxUtOEd77++vboUPczDscY3yo0oaL8Eo0MfKfgT4ASNaYQzNTPbRRJ3
+         jsHer9WGkzn88B6Zk4QVD92AFQG4f9ZIshLSMjWtCPEAsY+ToAR0GwD/VmpMr/98Gb4V
+         X4KwhIviEitLTxnjTjR7it+M64V+6NyxywlxccgL7CDPN570hponZpq93/z0QR1NysK5
+         xNhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I1d3sbSB153YFVx4HRjX3fuIz12BKVhol+9SQxjrH1A=;
+        b=K3Zgw9B8Uco0Uu0lxNiAl/sMUo0AopbhgNQAzTZHRKRfPKMBfNvkD6RPdOeN0neafq
+         LobyPPasXZFu6ow9BacWAyy6+jXcshgdlimSG+wtYg+ibzkuXGMx2zOXO++Y5tmEpmKi
+         68Vgx4SiNuyHyqhnXbOasMRdhmpYDM1jcNLvOKhOOvix40AIrVkZHMck/PQGmaON+107
+         Ym01RqYoVQ1P2gTT3yIx0xORQDkW+/CAeMCgSgoCqhh1V3oppzYQniS/XXG3QAPt8aTJ
+         abVj9f9F2x+l9FqtEk5pXFrwOSKBDE6Rp1oOEN4Yt5zNHv+py1paLfRLowgrxH4GCACO
+         NYHg==
+X-Gm-Message-State: ANoB5pmWnHD/knnwELdyziuZG/vnIp62srfl9LXQdNfGmoWikxv9PSZq
+        +/L3AY7fgzBE7nFDJSnA8oUgxUgbufrDVQ==
+X-Google-Smtp-Source: AA0mqf4ZCKVCscp3J6B+BpbGhbiFbw+Qjj3outsorwzAGzEs2ARb4sJEnrtlX/uWugqa2AlPvvAhgA==
+X-Received: by 2002:a02:a68b:0:b0:374:98f7:2ad2 with SMTP id j11-20020a02a68b000000b0037498f72ad2mr23732347jam.0.1669654513940;
+        Mon, 28 Nov 2022 08:55:13 -0800 (PST)
+Received: from google.com (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with ESMTPSA id k29-20020a02335d000000b003495b85a3b9sm4382646jak.178.2022.11.28.08.55.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 08:55:13 -0800 (PST)
+Date:   Mon, 28 Nov 2022 16:55:10 +0000
+From:   Matthias Kaehlcke <mka@google.com>
+To:     Owen Yang <ecs.taipeikernel@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Abner Yen <abner.yen@ecs.corp-partner.google.com>,
+        Gavin Lee <gavin.lee@ecs.corp-partner.google.com>,
+        Harvey <hunge@google.com>, Stephen Boyd <swboyd@chromium.org>,
+        Bob Moragues <moragues@google.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] arm64: dts: qcom: sc7280: Add DT for
+ sc7280-herobrine-zombie
+Message-ID: <Y4Tn7jemqoR2u2TZ@google.com>
+References: <20221125174415.v5.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
+ <20221125174415.v5.2.I5fa17e079100361ef6809efa0bba2bf32f829e15@changeid>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH v4] ALSA: core: Fix deadlock when shutdown a frozen
- userspace
-Content-Language: en-US
-To:     Ricardo Ribalda <ribalda@chromium.org>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     alsa-devel@alsa-project.org, sound-open-firmware@alsa-project.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20221127-snd-freeze-v4-0-51ca64b7f2ab@chromium.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20221127-snd-freeze-v4-0-51ca64b7f2ab@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221125174415.v5.2.I5fa17e079100361ef6809efa0bba2bf32f829e15@changeid>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Owen,
 
+On Fri, Nov 25, 2022 at 05:44:25PM +0800, Owen Yang wrote:
+> Add DT for sc7280-herobrine-zombie
+> 
+> Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
 
-On 11/28/22 07:42, Ricardo Ribalda wrote:
-> During kexec(), the userspace is frozen. Therefore we cannot wait for it
-> to complete.
-> 
-> Avoid running snd_sof_machine_unregister during shutdown.
-> 
-> This fixes:
-> 
-> [   84.943749] Freezing user space processes ... (elapsed 0.111 seconds) done.
-> [  246.784446] INFO: task kexec-lite:5123 blocked for more than 122 seconds.
-> [  246.819035] Call Trace:
-> [  246.821782]  <TASK>
-> [  246.824186]  __schedule+0x5f9/0x1263
-> [  246.828231]  schedule+0x87/0xc5
-> [  246.831779]  snd_card_disconnect_sync+0xb5/0x127
+> Changes in v5:
+> - Overwrite pm8350c_pwm_backlight setting in sc7280-herobrine-zombie.dtsi for chrome zombie. v5.
+> - Dropping the redundant 'DT binding for' as requested by Krzysztof. v4.
+> - Adding an empty line here before "/dts-v1/;" in "sc7280-herobrine-zombie-lte.dts", "sc7280-herobrine-zombie.dts" as requested by Matthias. v4.
+> - Deleteing "/dts-v1/;" in "sc7280-herobrine-zombie.dtsi" as requested by Matthias. v4.
+> - Droping changing file path in description. v3. as requested by Matthias. v3.
+> - Changing Patch order, binding patch first and dt file second, as requested by Douglas. v2.
+> - Adding "arm64: dts: qcom: sc7280:" in dt patch ${SUBJECT}, as requested by Douglas. v2.
+> - Adding "dt-bindings: arm: qcom:" in bind patch ${SUBJECT}, as requested by Douglas. v2.
+> - Adding '#include "sc7280-herobrine-wifi-sku.dtsi"' in sc7280-herobrine-zombie.dts, as requested by Douglas. v2.
+> - Adding "(newest rev)" for zombie entry description in qcom.yaml, as requested by Douglas. v2.
+> - Adding "post-power-on-delay-ms = <100>;" for trackpad in "sc7280-herobrine-zombie.dtsi". v2
+> - Changing "vcc-supply" to "vdd-supply" for trackpad in "sc7280-herobrine-zombie.dtsi", as requested by Douglas. v2.
+
+For future patches please better organize the change log like this:
+
+Changes in v5:
+- Overwrite pm8350c_pwm_backlight setting in sc7280-herobrine-zombie.dtsi for chrome zombie
+
+Changes in v4:
+- Dropping the redundant 'DT binding for' as requested by Krzysztof
+- Adding an empty line here before "/dts-v1/;" in "sc7280-herobrine-zombie-lte.dts", "sc7280-herobrine-zombie.dts" as requested by Matthias
+- Deleteing "/dts-v1/;" in "sc7280-herobrine-zombie.dtsi" as requested by Matthias
+
+...
+
+If you are using patman you can keep the existing 'Commit-changes: vN' entries
+from the previous versions and just add a new entry for the current version.
+
+No need to re-spin the patches just for change log.
+
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
+> new file mode 100644
+> index 000000000000..d10362ecdafb
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
+>
 > ...
-> [  246.889249]  snd_sof_device_shutdown+0xb4/0x150
-> [  246.899317]  pci_device_shutdown+0x37/0x61
-> [  246.903990]  device_shutdown+0x14c/0x1d6
-> [  246.908391]  kernel_kexec+0x45/0xb9
-> 
-> And:
-> 
-> [  246.893222] INFO: task kexec-lite:4891 blocked for more than 122 seconds.
-> [  246.927709] Call Trace:
-> [  246.930461]  <TASK>
-> [  246.932819]  __schedule+0x5f9/0x1263
-> [  246.936855]  ? fsnotify_grab_connector+0x5c/0x70
-> [  246.942045]  schedule+0x87/0xc5
-> [  246.945567]  schedule_timeout+0x49/0xf3
-> [  246.949877]  wait_for_completion+0x86/0xe8
-> [  246.954463]  snd_card_free+0x68/0x89
-> ...
-> [  247.001080]  platform_device_unregister+0x12/0x35
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
-> To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> To: Liam Girdwood <lgirdwood@gmail.com>
-> To: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-> To: Bard Liao <yung-chuan.liao@linux.intel.com>
-> To: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-> To: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-> To: Daniel Baluta <daniel.baluta@nxp.com>
-> To: Mark Brown <broonie@kernel.org>
-> To: Jaroslav Kysela <perex@perex.cz>
-> To: Takashi Iwai <tiwai@suse.com>
-> Cc: sound-open-firmware@alsa-project.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-kernel@vger.kernel.org
-> ---
-> Changes in v4:
-> - Do not call snd_sof_machine_unregister from shutdown.
-> - Link to v3: https://lore.kernel.org/r/20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org
-> 
-> Changes in v3:
-> - Wrap pm_freezing in a function
-> - Link to v2: https://lore.kernel.org/r/20221127-snd-freeze-v2-0-d8a425ea9663@chromium.org
-> 
-> Changes in v2:
-> - Only use pm_freezing if CONFIG_FREEZER 
-> - Link to v1: https://lore.kernel.org/r/20221127-snd-freeze-v1-0-57461a366ec2@chromium.org
-> ---
->  sound/soc/sof/core.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/sound/soc/sof/core.c b/sound/soc/sof/core.c
-> index 3e6141d03770..9616ba607ded 100644
-> --- a/sound/soc/sof/core.c
-> +++ b/sound/soc/sof/core.c
-> @@ -475,19 +475,16 @@ EXPORT_SYMBOL(snd_sof_device_remove);
->  int snd_sof_device_shutdown(struct device *dev)
->  {
->  	struct snd_sof_dev *sdev = dev_get_drvdata(dev);
-> -	struct snd_sof_pdata *pdata = sdev->pdata;
->  
->  	if (IS_ENABLED(CONFIG_SND_SOC_SOF_PROBE_WORK_QUEUE))
->  		cancel_work_sync(&sdev->probe_work);
->  
->  	/*
-> -	 * make sure clients and machine driver(s) are unregistered to force
-> -	 * all userspace devices to be closed prior to the DSP shutdown sequence
-> +	 * make sure clients are unregistered prior to the DSP shutdown
-> +	 * sequence.
->  	 */
->  	sof_unregister_clients(sdev);
->  
-> -	snd_sof_machine_unregister(sdev, pdata);
-> -
+>
+> +&pm8350c_pwm_backlight{
+> +	pwms = <&pm8350c_pwm 3 200000>;
+> +};
 
-The comment clearly says that we do want all userspace devices to be
-closed. This was added in 83bfc7e793b5 ("ASoC: SOF: core: unregister
-clients and machine drivers in .shutdown") precisely to avoid a platform
-hang if the devices are used after the shutdown completes.
-
-So you are not fixing 83bfc7e793b5, just re-adding a problem to fix
-another one...
+Why is this change needed?
