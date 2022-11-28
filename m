@@ -2,277 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7164A63B3D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E25563B3DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234351AbiK1VED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 16:04:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39912 "EHLO
+        id S234362AbiK1VEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 16:04:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbiK1VD7 (ORCPT
+        with ESMTP id S233351AbiK1VEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 16:03:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FF6DD7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 13:03:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A0326145E
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 21:03:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35F4BC433B5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 21:03:56 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="h3dsGgch"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1669669433;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7Pmv55RPnCG4l2lHUbbHHEDBfETYKEM/AVomrDQabnc=;
-        b=h3dsGgch1F/rpHLWyHWx+8XvgOpy8JgRtpYd5s2jk4WGOhUsVTbV2Kx0J9sZ6gMg0RJQK4
-        graU2ZEC3/uNAMBuBn7LMPDptbifTcK+yl1Gz2qdIVME4I+JRb0hg2oS3EXFo8cWM7LOu9
-        XNDntxhP4YkusZPpSaZXCWHLTMbKPKU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5be894ab (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Mon, 28 Nov 2022 21:03:52 +0000 (UTC)
-Received: by mail-vs1-f49.google.com with SMTP id i11so10913781vsr.7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 13:03:52 -0800 (PST)
-X-Gm-Message-State: ANoB5pnF6jEA71rQ1oEeLJCfqrcf2yeYnmRMjep9za95exhmsP6maF6S
-        Td7oAcSRqo16isbcqtVRk0fopML7PUgAVyDz2UA=
-X-Google-Smtp-Source: AA0mqf67tlrT4gkqTiCo80mAyNwqKpHDnqCupuRwJO1sNUNbI0DFNdUR7sH48GdK4BQBFFWlBU8oe//NxMY6q8/hhKQ=
-X-Received: by 2002:a67:1d41:0:b0:3aa:3310:174 with SMTP id
- d62-20020a671d41000000b003aa33100174mr20087568vsd.70.1669669431958; Mon, 28
- Nov 2022 13:03:51 -0800 (PST)
+        Mon, 28 Nov 2022 16:04:00 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EE3F5D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 13:03:59 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so7803516otl.10
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 13:03:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ND1tOqB0oBTvRxF9O3G4bI9whp4Sthfh8GG8dmfGdQk=;
+        b=AcU82FtIdY53Q+r2FwFa06LoIYwX4kW/YFLPokX/T/Jgx8JyDOGBajrSH4qRbaEqY9
+         ekvjrt3h+35Vnj/bLz7TPZjEdspoLd+8lIRKp4bUn3qU7lOez/OJ62caDsa79DoQdqQt
+         JeW3/R5NkEcFg3FNheUJ7FEOXfxxWa+SwUQ/w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ND1tOqB0oBTvRxF9O3G4bI9whp4Sthfh8GG8dmfGdQk=;
+        b=o8UwOAIftp4oSrWUrZthkrfw2poVQfzihE6qTZryrAnxroNCuhn9BsathSl1n9TOyL
+         aW9X+vtMGUmkJxJnFsewjRQkSf+wBHfF93J1G2Qxe1N+vCqL2zbMKTLcPYL6mPxKJ4c7
+         k8walwzR8ZfkhU/niSi+HYuhHhR1hG2E+beyRAH0R6JdokfiS8EkjcznT0H4LDUqYvcB
+         Snsiz0kEXN6K0rKY0oUlXDNlwadv69nIncUinlRktbZHgG1ulVq4rpJx36HXzA9dOam0
+         NkxEof9/niMVulxdS4Wi8g2+DSzx5h5FDKVYfSDr3bLWPvVuVhlJxbqW4OADRFJzL1FZ
+         1aeA==
+X-Gm-Message-State: ANoB5pl3aUEAHpsAoZnCr3yXP7AmEstH/GhRTE8TF10iVXndMDHPfevA
+        pAL8wGA9Z8xP4k8IQu5inHLSxp/BhtrLJKSpIq7D
+X-Google-Smtp-Source: AA0mqf5gBKJg1tXLYyD7tEB8qdO8Vhv8Bt5iOOXz+gzCY+TAeVcPVtinX0bdDrwSvAsh+98qBlffz/W9tkMlevYpNss=
+X-Received: by 2002:a9d:4812:0:b0:66d:1e19:684b with SMTP id
+ c18-20020a9d4812000000b0066d1e19684bmr27369484otf.44.1669669437312; Mon, 28
+ Nov 2022 13:03:57 -0800 (PST)
 MIME-Version: 1.0
-References: <202211290400.IuVDsFIm-lkp@intel.com>
-In-Reply-To: <202211290400.IuVDsFIm-lkp@intel.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 28 Nov 2022 22:03:41 +0100
-X-Gmail-Original-Message-ID: <CAHmME9oO=8hsc4zt_oBrRoGm3sMU03W7cP5PksfC-RFmZumGLQ@mail.gmail.com>
-Message-ID: <CAHmME9oO=8hsc4zt_oBrRoGm3sMU03W7cP5PksfC-RFmZumGLQ@mail.gmail.com>
-Subject: Re: [ammarfaizi2-block:crng/random/vdso 20/22] include/uapi/asm-generic/unistd.h:890:34:
- error: 'sys_vgetrandom_alloc' undeclared here (not in a function); did you
- mean 'sys_getrandom'?
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
+References: <20221128161424.608889-1-apatel@ventanamicro.com> <20221128161424.608889-2-apatel@ventanamicro.com>
+In-Reply-To: <20221128161424.608889-2-apatel@ventanamicro.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Mon, 28 Nov 2022 13:03:46 -0800
+Message-ID: <CAOnJCUL4oNd8vN9s2zxvDGzUOmZDtDzSYHsBfGeyBv9BSxrtTw@mail.gmail.com>
+Subject: Re: [PATCH 1/9] RISC-V: KVM: Fix reg_val check in kvm_riscv_vcpu_set_reg_config()
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
-
-Please see below. It would seem that I can't so easily get rid of that
-#ifdef __ARCH_HAS afterall?
-
-Jason
-
-On Mon, Nov 28, 2022 at 10:02 PM kernel test robot <lkp@intel.com> wrote:
+On Mon, Nov 28, 2022 at 8:14 AM Anup Patel <apatel@ventanamicro.com> wrote:
 >
-> tree:   https://github.com/ammarfaizi2/linux-block crng/random/vdso
-> head:   8fef976bbd3ca01f0a15981443cc820505b293ba
-> commit: f4df2f0833b1fee3096da7fa8d060faeb9f8ba89 [20/22] random: add vgetrandom_alloc() syscall
-> config: arc-defconfig
-> compiler: arc-elf-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/ammarfaizi2/linux-block/commit/f4df2f0833b1fee3096da7fa8d060faeb9f8ba89
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block crng/random/vdso
->         git checkout f4df2f0833b1fee3096da7fa8d060faeb9f8ba89
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+> The reg_val check in kvm_riscv_vcpu_set_reg_config() should only
+> be done for isa config register.
 >
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: 9bfd900beeec ("RISC-V: KVM: Improve ISA extension by using a bitmap")
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> ---
+>  arch/riscv/kvm/vcpu.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
 >
-> All errors (new ones prefixed by >>):
+> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> index 17d5b3f8c2ee..982a3f5e7130 100644
+> --- a/arch/riscv/kvm/vcpu.c
+> +++ b/arch/riscv/kvm/vcpu.c
+> @@ -296,12 +296,15 @@ static int kvm_riscv_vcpu_set_reg_config(struct kvm_vcpu *vcpu,
+>         if (copy_from_user(&reg_val, uaddr, KVM_REG_SIZE(reg->id)))
+>                 return -EFAULT;
 >
->          |                                     ^~~~~~~~~
->    include/uapi/asm-generic/unistd.h:863:1: note: in expansion of macro '__SC_COMP'
->      863 | __SC_COMP(__NR_epoll_pwait2, sys_epoll_pwait2, compat_sys_epoll_pwait2)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: warning: initialized field overwritten [-Woverride-init]
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    include/uapi/asm-generic/unistd.h:865:1: note: in expansion of macro '__SYSCALL'
->      865 | __SYSCALL(__NR_mount_setattr, sys_mount_setattr)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: note: (near initialization for 'sys_call_table[442]')
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    include/uapi/asm-generic/unistd.h:865:1: note: in expansion of macro '__SYSCALL'
->      865 | __SYSCALL(__NR_mount_setattr, sys_mount_setattr)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: warning: initialized field overwritten [-Woverride-init]
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    include/uapi/asm-generic/unistd.h:867:1: note: in expansion of macro '__SYSCALL'
->      867 | __SYSCALL(__NR_quotactl_fd, sys_quotactl_fd)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: note: (near initialization for 'sys_call_table[443]')
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    include/uapi/asm-generic/unistd.h:867:1: note: in expansion of macro '__SYSCALL'
->      867 | __SYSCALL(__NR_quotactl_fd, sys_quotactl_fd)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: warning: initialized field overwritten [-Woverride-init]
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    include/uapi/asm-generic/unistd.h:870:1: note: in expansion of macro '__SYSCALL'
->      870 | __SYSCALL(__NR_landlock_create_ruleset, sys_landlock_create_ruleset)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: note: (near initialization for 'sys_call_table[444]')
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    include/uapi/asm-generic/unistd.h:870:1: note: in expansion of macro '__SYSCALL'
->      870 | __SYSCALL(__NR_landlock_create_ruleset, sys_landlock_create_ruleset)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: warning: initialized field overwritten [-Woverride-init]
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    include/uapi/asm-generic/unistd.h:872:1: note: in expansion of macro '__SYSCALL'
->      872 | __SYSCALL(__NR_landlock_add_rule, sys_landlock_add_rule)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: note: (near initialization for 'sys_call_table[445]')
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    include/uapi/asm-generic/unistd.h:872:1: note: in expansion of macro '__SYSCALL'
->      872 | __SYSCALL(__NR_landlock_add_rule, sys_landlock_add_rule)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: warning: initialized field overwritten [-Woverride-init]
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    include/uapi/asm-generic/unistd.h:874:1: note: in expansion of macro '__SYSCALL'
->      874 | __SYSCALL(__NR_landlock_restrict_self, sys_landlock_restrict_self)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: note: (near initialization for 'sys_call_table[446]')
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    include/uapi/asm-generic/unistd.h:874:1: note: in expansion of macro '__SYSCALL'
->      874 | __SYSCALL(__NR_landlock_restrict_self, sys_landlock_restrict_self)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: warning: initialized field overwritten [-Woverride-init]
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    include/uapi/asm-generic/unistd.h:881:1: note: in expansion of macro '__SYSCALL'
->      881 | __SYSCALL(__NR_process_mrelease, sys_process_mrelease)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: note: (near initialization for 'sys_call_table[448]')
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    include/uapi/asm-generic/unistd.h:881:1: note: in expansion of macro '__SYSCALL'
->      881 | __SYSCALL(__NR_process_mrelease, sys_process_mrelease)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: warning: initialized field overwritten [-Woverride-init]
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    include/uapi/asm-generic/unistd.h:884:1: note: in expansion of macro '__SYSCALL'
->      884 | __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: note: (near initialization for 'sys_call_table[449]')
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    include/uapi/asm-generic/unistd.h:884:1: note: in expansion of macro '__SYSCALL'
->      884 | __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: warning: initialized field overwritten [-Woverride-init]
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    include/uapi/asm-generic/unistd.h:887:1: note: in expansion of macro '__SYSCALL'
->      887 | __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: note: (near initialization for 'sys_call_table[450]')
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    include/uapi/asm-generic/unistd.h:887:1: note: in expansion of macro '__SYSCALL'
->      887 | __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
->          | ^~~~~~~~~
-> >> include/uapi/asm-generic/unistd.h:890:34: error: 'sys_vgetrandom_alloc' undeclared here (not in a function); did you mean 'sys_getrandom'?
->      890 | __SYSCALL(__NR_vgetrandom_alloc, sys_vgetrandom_alloc)
->          |                                  ^~~~~~~~~~~~~~~~~~~~
->    arch/arc/kernel/sys.c:13:37: note: in definition of macro '__SYSCALL'
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                     ^~~~
->    arch/arc/kernel/sys.c:13:36: warning: initialized field overwritten [-Woverride-init]
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    arch/arc/include/uapi/asm/unistd.h:44:1: note: in expansion of macro '__SYSCALL'
->       44 | __SYSCALL(__NR_cacheflush, sys_cacheflush)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: note: (near initialization for 'sys_call_table[244]')
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    arch/arc/include/uapi/asm/unistd.h:44:1: note: in expansion of macro '__SYSCALL'
->       44 | __SYSCALL(__NR_cacheflush, sys_cacheflush)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: warning: initialized field overwritten [-Woverride-init]
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    arch/arc/include/uapi/asm/unistd.h:45:1: note: in expansion of macro '__SYSCALL'
->       45 | __SYSCALL(__NR_arc_settls, sys_arc_settls)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: note: (near initialization for 'sys_call_table[245]')
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    arch/arc/include/uapi/asm/unistd.h:45:1: note: in expansion of macro '__SYSCALL'
->       45 | __SYSCALL(__NR_arc_settls, sys_arc_settls)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: warning: initialized field overwritten [-Woverride-init]
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    arch/arc/include/uapi/asm/unistd.h:46:1: note: in expansion of macro '__SYSCALL'
->       46 | __SYSCALL(__NR_arc_gettls, sys_arc_gettls)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: note: (near initialization for 'sys_call_table[246]')
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    arch/arc/include/uapi/asm/unistd.h:46:1: note: in expansion of macro '__SYSCALL'
->       46 | __SYSCALL(__NR_arc_gettls, sys_arc_gettls)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: warning: initialized field overwritten [-Woverride-init]
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    arch/arc/include/uapi/asm/unistd.h:47:1: note: in expansion of macro '__SYSCALL'
->       47 | __SYSCALL(__NR_arc_usr_cmpxchg, sys_arc_usr_cmpxchg)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: note: (near initialization for 'sys_call_table[248]')
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    arch/arc/include/uapi/asm/unistd.h:47:1: note: in expansion of macro '__SYSCALL'
->       47 | __SYSCALL(__NR_arc_usr_cmpxchg, sys_arc_usr_cmpxchg)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: warning: initialized field overwritten [-Woverride-init]
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    arch/arc/include/uapi/asm/unistd.h:48:1: note: in expansion of macro '__SYSCALL'
->       48 | __SYSCALL(__NR_sysfs, sys_sysfs)
->          | ^~~~~~~~~
->    arch/arc/kernel/sys.c:13:36: note: (near initialization for 'sys_call_table[247]')
->       13 | #define __SYSCALL(nr, call) [nr] = (call),
->          |                                    ^
->    arch/arc/include/uapi/asm/unistd.h:48:1: note: in expansion of macro '__SYSCALL'
->       48 | __SYSCALL(__NR_sysfs, sys_sysfs)
->          | ^~~~~~~~~
->
->
-> vim +890 include/uapi/asm-generic/unistd.h
->
->    888
->    889  #define __NR_vgetrandom_alloc 451
->  > 890  __SYSCALL(__NR_vgetrandom_alloc, sys_vgetrandom_alloc)
->    891
->
+> -       /* This ONE REG interface is only defined for single letter extensions */
+> -       if (fls(reg_val) >= RISCV_ISA_EXT_BASE)
+> -               return -EINVAL;
+> -
+>         switch (reg_num) {
+>         case KVM_REG_RISCV_CONFIG_REG(isa):
+> +               /*
+> +                * This ONE REG interface is only defined for
+> +                * single letter extensions.
+> +                */
+> +               if (fls(reg_val) >= RISCV_ISA_EXT_BASE)
+> +                       return -EINVAL;
+> +
+>                 if (!vcpu->arch.ran_atleast_once) {
+>                         /* Ignore the enable/disable request for certain extensions */
+>                         for (i = 0; i < RISCV_ISA_EXT_BASE; i++) {
 > --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+> 2.34.1
+>
+
+
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
+-- 
+Regards,
+Atish
