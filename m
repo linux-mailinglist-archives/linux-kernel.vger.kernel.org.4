@@ -2,114 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA8663A754
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941C363A74C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbiK1LqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 06:46:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
+        id S230446AbiK1LnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 06:43:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbiK1Lp7 (ORCPT
+        with ESMTP id S230515AbiK1Lmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 06:45:59 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CE81741C
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:45:57 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NLNq73nSwzqShk;
-        Mon, 28 Nov 2022 19:41:55 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 19:45:56 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 19:45:55 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <patches@armlinux.org.uk>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 2/2] ARM: Make the dumped instructions are consistent with the disassembled ones
-Date:   Mon, 28 Nov 2022 19:42:43 +0800
-Message-ID: <20221128114243.2042-3-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.37.3.windows.1
-In-Reply-To: <20221128114243.2042-1-thunder.leizhen@huawei.com>
-References: <20221128114243.2042-1-thunder.leizhen@huawei.com>
+        Mon, 28 Nov 2022 06:42:52 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1840DE62
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:42:49 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id g12so16913931lfh.3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:42:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JW3L3Bp1tixWEJFW9KkuTzunuGdrxdHxaArzuZlqgwg=;
+        b=uZMNnGTqFeYPmqTg00CGhxLquKegPgAX2zJBqPZfiUeepL3qhbOEodUwGiZVN23jld
+         BjB7flA9VQd7+kCSugUnXRnssi4xtrAw54Jk4llVaMtT5H9XGV2veC4QKcLSQ3YFFiiS
+         pjsakE+P/0dePdn7joy1xZpRIRu5EgbWf3Cj0SH/IFbB7RAF00IYpbL5pxXyHugPdMlS
+         g0eEcl6LiLSC1vTIeBdYkweH8ipDmUofCJUUq4Pdl8DPb03UruvsAi8IVqkstGIWdeXz
+         jUTvAfkLkt3wFor5QlpuDU106doC4kLAYg5utiVFc+x+iGfWefgGQHOFprW+s1Xqx//6
+         PMQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JW3L3Bp1tixWEJFW9KkuTzunuGdrxdHxaArzuZlqgwg=;
+        b=EW8pSSsTDRGPrtmYsMoGLt+ULqViEO7ekIU6KCe/eKx5ifF36amGonZjGZifFh9YT+
+         KAlqYAyD7e1yVdhGwUFPjhtPxGdMxsoPIbpsaaD3wo/zmtrv5Q+KyLxuzEvEz8Vy37+9
+         e/Xbxe9NPkuY6aNgdJpqBnsT9J2z+zFcIUK7zGq5uz9wUKQkZR1MUYFcTlam2nqODjVP
+         91/7rjvPZ8LViuy5bCBLfc97KASmI1x+Wo+sIEBBrtSJ22ep3o2AOOcuyQtPyUmfqrX+
+         cZ1lJig2ZPARQTtCIFA/3jEU/QTx11DYLdxwldgyrkekkbouiJwLHzlCwt9LffHu/3nx
+         VVbA==
+X-Gm-Message-State: ANoB5pm/CIjP/9+AUV7A0ORk/8A/ZG5+XK99Ap2tidtrk2p3Z9X51GxM
+        CijIArWAjk5mdHO/FER60Sjxow==
+X-Google-Smtp-Source: AA0mqf7olWvb5Zj1dxpRFdUBBN8BxguAWCuanq9QQAYqwve+t01cFZUYcM98HAzPlkT7uQSr6rkzxA==
+X-Received: by 2002:a05:6512:3603:b0:4b4:b5d8:880d with SMTP id f3-20020a056512360300b004b4b5d8880dmr15662151lfs.121.1669635767332;
+        Mon, 28 Nov 2022 03:42:47 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id f24-20020ac25cd8000000b004a44ffb1050sm1684825lfq.171.2022.11.28.03.42.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 03:42:46 -0800 (PST)
+Message-ID: <8f26bc40-10eb-fb0a-8a69-a303b42c9e60@linaro.org>
+Date:   Mon, 28 Nov 2022 12:42:45 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 1/5] dt-bindings: reset: meson-g12a: Add missing NNA
+ reset
+Content-Language: en-US
+To:     Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     italonicola@collabora.com,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Amlogic Meson SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson SoC support" 
+        <linux-amlogic@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221128111740.39003-1-tomeu.vizoso@collabora.com>
+ <20221128111740.39003-2-tomeu.vizoso@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221128111740.39003-2-tomeu.vizoso@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ARM, the mapping of instruction memory is always little-endian, except
-some BE-32 supported ARM architectures. Such as ARMv7-R, its instruction
-endianness may be BE-32. Of course, its data endianness will also be BE-32
-mode. Due to two negatives make a positive, the instruction stored in the
-register after reading is in little-endian format. But for the case of
-BE-8, the instruction endianness is LE, the instruction stored in the
-register after reading is in big-endian format, which is inconsistent
-with the disassembled one.
+On 28/11/2022 12:17, Tomeu Vizoso wrote:
+> Doesn't appear in the TRM I have, but it is used by the downstream
+> galcore driver.
+> 
+> Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
+> Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
 
-For example:
-The content of disassembly:
-c0429ee8:       e3500000        cmp     r0, #0
-c0429eec:       159f2044        ldrne   r2, [pc, #68]
-c0429ef0:       108f2002        addne   r2, pc, r2
-c0429ef4:       1882000a        stmne   r2, {r1, r3}
-c0429ef8:       e7f000f0        udf     #0
+This is a v2, what are the changes? Please include a changelog either in
+cover letter or in every patch.
 
-The output of undefined instruction exception:
-Internal error: Oops - undefined instruction: 0 [#1] SMP ARM
-... ...
-Code: 000050e3 44209f15 02208f10 0a008218 (f000f0e7)
-
-This inconveniences the checking of instructions. What's worse is that,
-for somebody who don't know about this, might think the instructions are
-all broken.
-
-So, when CONFIG_CPU_ENDIAN_BE8=y, let's convert the instructions to
-little-endian format before they are printed. The conversion result is
-as follows:
-Code: e3500000 159f2044 108f2002 1882000a (e7f000f0)
-
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
-KernelVersion: v6.1-rc7
- arch/arm/kernel/traps.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm/kernel/traps.c b/arch/arm/kernel/traps.c
-index a92e0763739584e..40c7c807d67f4ed 100644
---- a/arch/arm/kernel/traps.c
-+++ b/arch/arm/kernel/traps.c
-@@ -186,12 +186,14 @@ static void dump_instr(const char *lvl, struct pt_regs *regs)
- 			else
- 				bad = get_kernel_nofault(tmp, &((u16 *)addr)[i]);
- 
--			val = tmp;
-+			val = __mem_to_opcode_thumb16(tmp);
- 		} else {
- 			if (user_mode(regs))
- 				bad = get_user(val, &((u32 __user *)addr)[i]);
- 			else
- 				bad = get_kernel_nofault(val, &((u32 *)addr)[i]);
-+
-+			val = __mem_to_opcode_arm(val);
- 		}
- 
- 		if (!bad)
--- 
-2.25.1
+Best regards,
+Krzysztof
 
