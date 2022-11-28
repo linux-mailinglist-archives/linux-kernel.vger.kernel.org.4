@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9069863B0F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EDB263B0FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:19:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232001AbiK1SRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 13:17:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53672 "EHLO
+        id S232157AbiK1STH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 13:19:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231876AbiK1SRW (ORCPT
+        with ESMTP id S233043AbiK1SSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 13:17:22 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C7F24975;
-        Mon, 28 Nov 2022 10:01:07 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id o12so2441520pjo.4;
-        Mon, 28 Nov 2022 10:01:07 -0800 (PST)
+        Mon, 28 Nov 2022 13:18:15 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7E12A733
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:01:54 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id k17so3555269vsr.10
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 10:01:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TV3K+9XJQ4JSRthyl6WsVQpBMzAGFy6Ywhq9PNGcdkU=;
-        b=i/LLRGK9VbEmnLFhMuRm9KRExdxXbOdHIs7XbWCWZgWH9PvdXhNk0UEYPka0++rbcl
-         5991qwBuQmH3tOEB2TvMPj3Bygfv8hjBwhgBiC2wNrQ6TiLBxXdc/MCX+AiwEeRtuxS7
-         5SwOxsUrjdkGwsv/B5mk0kNtSdPNikf6phirk8VFFGpf20aFXVF2uxr40DcJdzFFAnrF
-         pd6D9gFKsg08aGzo2GEEVBw9MIn+CgtsP+KJNpQ+0oYsJjrrlS4y8iwh+gd5W4Ocs0Wd
-         hHa+7Sg1au6oMwY96vqLWgjN/YmipqO4u9uK9WJqbgXACplN+xuX8n1hB0kqb04c1O2T
-         z4WQ==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QexoqWdeokElcVRbvwTIwf4cQaQS5dsOdW0P+NAr/z8=;
+        b=JyMC/rotFxRFXfPF+3IbjnU9Epuw/MxwkPLEXbNO+fc0tC3rGj4wxW0xv/b+2bfjTD
+         qBurEsi5SxshCZ2Ddb4TgUE9c1ZxlBHqxXoqJMSv1mF2DmTV0BVXxwSGrMmSxcHmuWVN
+         JkZ82bxrPFfnjLPv/AxRpd7NnX9wU1Ywwx+1QQiCuXlxhQ4aQAEYNo6RSYELcKmeP8DR
+         d8xIZ8FHgCnKHIHbnzLiEuTpH6DmNhmoi5WJzgniMk5cCFB+fHypsHYC8Rq9iNUtEZlj
+         RH7uN+tWflR2DMtf+JrBJtVIVQbkYa2rIzQBv9b7xPCv2vBp2SikFhziSmyy2yZdu0ub
+         75nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TV3K+9XJQ4JSRthyl6WsVQpBMzAGFy6Ywhq9PNGcdkU=;
-        b=3CUIOPjrF0dacBMIaAW8bHUGo8JcHv0vaLiM2i4vMKIA3W5RGUmm/aN7kN/UzxY61i
-         /U6R53CwseYi8dud2VBMZjQPqirOw0SF8koDRcvt3vhWqeGAN2kVINqg5YebHnIiwXzU
-         6p0rUQ3NonaoEUZft8VB/wjw+qvW8PGZnW0vZEKBsAMr3fnpiEeTb0ewkWABcQ+qq5Yg
-         RKqX932wO3w9401VNlClBN3CNS6RYnW+01IRlZE/wmSmMIjFNKASGF2d0d9Vb0Ag9jBb
-         RNVNMeIVrCUiRx7J9YPPsXTk4zi6l2SZcNUlrzOgPw74FuJrRZcIL59xq4YsuB1MU5ii
-         ZxWQ==
-X-Gm-Message-State: ANoB5pnAfQm8liGmsiXbLKHLe5tyji6S7fcPY1Bv2deA4kHLuOTlNsOH
-        FGRr3aGXeJyCuvcJm7524CBy2DuUv2Q=
-X-Google-Smtp-Source: AA0mqf7Z6z2m5aAhVT/YuvYZJWL8ygkLXleFSaxEQCcgEu+VO6TvzUIj1wcRzeb+gffR/0gAOZU/4Q==
-X-Received: by 2002:a17:90a:2f05:b0:219:3f4c:3b37 with SMTP id s5-20020a17090a2f0500b002193f4c3b37mr4592340pjd.50.1669658466736;
-        Mon, 28 Nov 2022 10:01:06 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:fd7c:c075:f9ff:46c4])
-        by smtp.gmail.com with ESMTPSA id z1-20020aa79581000000b005755ff41c35sm639917pfj.161.2022.11.28.10.01.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 10:01:06 -0800 (PST)
-Date:   Mon, 28 Nov 2022 10:01:03 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Cc:     Eirin Nya <nyanpasu256@gmail.com>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 1/3] Input: elantech - Remove redundant field
- elantech_data::y_max
-Message-ID: <Y4T3X+qWtWdZF1QS@google.com>
-References: <20221014111533.908-1-nyanpasu256@gmail.com>
- <20221014111533.908-2-nyanpasu256@gmail.com>
- <87sfjqzh3f.fsf@baylibre.com>
- <a40d32e5-f310-b485-d789-1d99a547e3e8@gmail.com>
- <874jujtdgg.fsf@baylibre.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QexoqWdeokElcVRbvwTIwf4cQaQS5dsOdW0P+NAr/z8=;
+        b=WoaJdTLd8SHr0drEvZYiOmo/pQZMfvsIghkoqLDLzzOMl4DxMGwO4LIw2ZX1MqovQJ
+         pL9Y2M54leh5i1vfp/p36Lt34MpavVn1b0H1wUUQBmXP2DxvBxPo6rLke6te7fI9h4tN
+         3fEiurJ4d9xMmW8/b/DDzW2zfHDE8c1ryfku+wLzRJx88VPw0TGykaZyhtSpt6++GXEx
+         wGE2vJVaxqzP/AfaL9e4NJRbld5oS4uTjRx2L8ywzDQ0yMpFriFc0depuSCHpX6HGC1c
+         ojU4q7dsGKLo4L/Al5llqJ8THl6ZccY4SHYUuI+gKRqwd4M4BTrt6YofDtlU6Z7xVN9q
+         rIRw==
+X-Gm-Message-State: ANoB5pm06jAfKFWnHCskdxz+RLM3TlTMZ4oZSOTQvVAvp94O92kxakhF
+        bt8Ahm+d9CLpA7NWQP2odXevrR38p+Fo1sPKb45CHA==
+X-Google-Smtp-Source: AA0mqf4PMrKYKIo167WI1hOKlkTa957uLxB9epK6wjt+Opyh0hBPMBC2n8lZ9a/7/ZK5hw3TDxvRzFlvHXMsoaVhaJE=
+X-Received: by 2002:a67:f645:0:b0:3a7:769c:6dee with SMTP id
+ u5-20020a67f645000000b003a7769c6deemr20340311vso.13.1669658513251; Mon, 28
+ Nov 2022 10:01:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <874jujtdgg.fsf@baylibre.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221116141728.72491-1-andriy.shevchenko@linux.intel.com> <Y4EJv2gCR8nj3hHj@smile.fi.intel.com>
+In-Reply-To: <Y4EJv2gCR8nj3hHj@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 28 Nov 2022 19:01:42 +0100
+Message-ID: <CAMRc=MdBDsN36CEvmFB_1pH9o5kzMMuSfGQmWKgDA6iaOqURYw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpiolib: Unify access to the device properties
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Brian Masney <bmasney@redhat.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,28 +69,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 02:29:03PM +0100, Mattijs Korpershoek wrote:
-> Hi Eirin,
-> 
-> On Mon, Nov 28, 2022 at 01:18, Eirin Nya <nyanpasu256@gmail.com> wrote:
-> 
-> > Hi,
-> >
-> > Is there any progress on incorporating this patch into mainline Linux?
-> 
-> Dmitry (in To: now) is a very busy maintainer. It's possible that he
-> missed this series.
-> 
-> If in a week you haven't heard back from him, I suggest you do a RESEND
-> as documented in [1]
-> 
-> Don't get discouraged, and thank you for your patience!
+On Fri, Nov 25, 2022 at 7:30 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Wed, Nov 16, 2022 at 04:17:28PM +0200, Andy Shevchenko wrote:
+> > Some of the functions are using struct fwnode_handle, some struct device
+> > pointer. In the GPIO library the firmware node of the GPIO device is the
+> > same as GPIO node of the GPIO chip. Due to this fact we may use former
+> > to access properties everywhere in the code.
+>
+> Bart, can this be applied?
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
-Hi, yeah, sorry, I have most patches either sent to me or I am CCed on
-them so I rarely look into the mailing list itself. Please just copy me
-next time you send out a patch.
+Sure, now applied. Got carried away with this use-after-free from
+userspace problem.
 
-Thanks.
-
--- 
-Dmitry
+Bart
