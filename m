@@ -2,142 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 058D963AA92
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 971D663AA93
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:11:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232260AbiK1OLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 09:11:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38932 "EHLO
+        id S231910AbiK1OLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 09:11:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbiK1OLT (ORCPT
+        with ESMTP id S230433AbiK1OLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:11:19 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D7D3B8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:11:17 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id d6so17529231lfs.10
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:11:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f7WMk8JdnukYc8uZcl1PFgG4y0ztQpkC05f+mmdnbaM=;
-        b=a0xNI0KvjKVFPDMZ/k4JUSjljzMUST52etgZLEHZ5qeR06e0BippLuxPbQpLssxAFw
-         NhnIBi6vxow0mtdTpzluOgPhXyz7eFCA2Q3hRxyuybzkvWiFklR7SJ25zGLv0zathbfw
-         994PTySe4FmQmVcgqLvxwWdkM73vc7o81MbLvfghnbZAbPhTPGzb0Hg8+/pjSUCYESKT
-         8RA1hPlwdmosXbzfXSnCj3xEob+hZOb9+PBFlKhrEU9bMVl7CcQsuyKPaU1iGE0gTrUl
-         4x6+7+rd4LgUZ2Q5xHh+SQB0oyuWdlxcAFNkyJgvAmf2FiyTMNguwsgJc524hsSXzfra
-         r76w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f7WMk8JdnukYc8uZcl1PFgG4y0ztQpkC05f+mmdnbaM=;
-        b=MYc0v89XG48DQ4qVvt6OPrSdSsMl2wItrSmRqwpRD+tlpCIWBQ+mqXVrKOFTg5Z9fO
-         sKPU0Iyi0rqVdwknpNdbfDXXZjUfmqf+92ggSeKGPuWwynVAbuWaPPd3vm+TZL6OSY+c
-         PSW3ZfnWWCtTdqFuIeQrNAmNjadrd8GTX4tc0ZggI+2lVKJR56udwOD8KLlTwnimV074
-         ctHEd6Uv9ES+W8vPUWeOVtd8atiIuTg8TqnCpZZeEt9TUTmKvcpz6h+Q9dpX7ZQIgg29
-         JNkTQo2mJdOP2vFuzYR0hpv2EEEb7hz0KU2SMrV/ySM3kMjDwxqFKRoGxUjgA6BZWcf4
-         g5yA==
-X-Gm-Message-State: ANoB5pmnYNPqR9XeizqAqM35KkIdyxv1MrHjXmvFjId58XWSLb5IaYpR
-        /M7JJ29hFWObMQF04E+ycgN9cA==
-X-Google-Smtp-Source: AA0mqf5Ev00V0oh+yCBMf2uHkbcJepQVFr0ujgek8EZrJvA62M4r9mCMjdscgP5kHDDAudpsdD55/A==
-X-Received: by 2002:a05:6512:308f:b0:4b4:b8a8:69fe with SMTP id z15-20020a056512308f00b004b4b8a869femr16221464lfd.333.1669644675762;
-        Mon, 28 Nov 2022 06:11:15 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f20-20020a056512361400b0047f7722b73csm1735219lfs.142.2022.11.28.06.11.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 06:11:15 -0800 (PST)
-Message-ID: <9cc53272-6828-91b5-30a9-384168a9f94f@linaro.org>
-Date:   Mon, 28 Nov 2022 15:11:14 +0100
+        Mon, 28 Nov 2022 09:11:53 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2072.outbound.protection.outlook.com [40.107.92.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679E91084
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:11:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EWBj/k0D0vrkfyeWL18MmBXx/6wHKvBRlQVPUXbhdrdtzgjI+maDWtu9Z421Q66FacBlFpw7e69dIPHEx9AB5uaX8z1pvIeQuLNtcEs/NNxUSxMMr3EKZ1QKPFGVhwRSins6xmVnLKiyr8q072pBno3YrfXBcBlRUszARho1sow7B5fZr0yF639qW6vyzwfEqWhfP5c9GB148IRZ380NI9Nn+CcBJApcg8/d+pgzt+WHcZygn9tulOMTiTY4StKGf34zgG7rNWY9bR6TWQcJ2KWSbORRENmp7MfTYIHlTPy1NygCHVvri4pLx92licznBUL5ar+l9WN4qGOcal8GwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=W5ADMEX1NPd9HW7WUGI5mTqM/wGeFDk4r4Y+Y0n2V4g=;
+ b=QRWFlaW2Ojni4mT25qhT3g//HIMpmGW+k3fr0tbfc60WV2qT2bmJ4VWSPBx72lJu8/FqUmPNwCbcmn10j2emsR1qJvbhvA8QAvZbpQRR7ar0rz3DrmSDGFPFIQYFZfXur+yFtLY92Or2F/hm4wPouBunf15UF7/yoIHaIAd0DkFmo5k1TkbUAaXNyLpi+d8FQ+VsS0ePbVeXvBhVHjmr8TRFExypKIvBkScS53Td9I7MuXjihy8YMvWGk5trsK7hP6O6CuyiK0RnP1FsQl+Jz/mSD7zs1e89rFtfzqUbEgP1Uc43y+toDwAdJAK5I9puAVvQ4Q18q/r+qgcJr98Nfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W5ADMEX1NPd9HW7WUGI5mTqM/wGeFDk4r4Y+Y0n2V4g=;
+ b=i7BCifDp9299jAk9pwoB3hgs0axWPc7NOuFUKMJm07HqUXA2GUleed8gONtds93KPCTsea0t4kfmQj/ZM4CJkbQKWomQ8LdxbTe46UVWJxG9alczFa/KjoniGxkxeXlglmXVRttoiLw9yA8pjyJRYsGIRSoibTnsBITb8NDgvve9DM0EkUgbmM0zbjIcm3OW/7j3LfHMwKql/LqJwLRQ2M9KP5D88QWsP06MptqReLlhLfg33XpbGrucuIvmijnpGAIhSXd2kJrTO/z/1g9BkCmxAUQFWY39QT/z/2y+qK2xFuioo9drhix6BbCbCTzOsCsCBdsLKAA3YqGBGfjPVw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by MW3PR12MB4444.namprd12.prod.outlook.com (2603:10b6:303:5c::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Mon, 28 Nov
+ 2022 14:11:49 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%9]) with mapi id 15.20.5857.021; Mon, 28 Nov 2022
+ 14:11:49 +0000
+Date:   Mon, 28 Nov 2022 10:11:42 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Rob Clark <robdclark@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 10/20] iommu: Add set_platform_dma iommu ops
+Message-ID: <Y4TBng2SY0eGE7wx@nvidia.com>
+References: <20221128064648.1934720-1-baolu.lu@linux.intel.com>
+ <20221128064648.1934720-11-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221128064648.1934720-11-baolu.lu@linux.intel.com>
+X-ClientProxiedBy: RO2P152CA0016.LAMP152.PROD.OUTLOOK.COM
+ (2603:10d6:10:2c::21) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: i2c: add loongson i2c
-Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        William Zhang <william.zhang@broadcom.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>
-References: <20221128130025.23184-1-zhuyinbo@loongson.cn>
- <20221128130025.23184-2-zhuyinbo@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221128130025.23184-2-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW3PR12MB4444:EE_
+X-MS-Office365-Filtering-Correlation-Id: e2c10372-b29c-4a76-6627-08dad14a7dca
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: f3AlM4dwSVRpRhb4ia+H2QiCuy1V6k6Pam5HG1PxAmc9Jw09jOsIop1ZBxCQToPWTpL4WzcsaGlQAUz1DBz0+LfyNYWk6sP87Sd4Z2xyaWm9KMFgufOCs3xS2GeiOowPsfVSNJM4GHyU0tGzF6S27UrSpE+g+sCZyAA4cRIdZlSQqC9RfhBf3MJEB5yJ1mygY+Wiutdl6riH49jmiJZZADnSbBTVGbbfLnTQB/p/hEi2ZNxn6XoMZqAotgYvsPe2ui8RhUlFBRBPbJtcq6SWrwZvv5fSi45fneOU+b69C9dNZ0Y6a7svBiYNS33YzGR3eJqhQP7Q0bD6NJO1MflQ8PUS2n2dVO2ANTNKsJ1IXsle3IF0KCrnM0OijRK5TDjK91GbQ783omR1ELF/LXh1QM9Nioj/syGGCGaAtTZRdpwBPelqX9GcSM8/ztFoh7MZm2k21LgxaC5y7sOiLbNU0EUe3l6BM15bWdMP3/Sr2vz+GMHWwXU3ocFIRAJ+Ccld6rx1rbmhNVwge3zqhEOZHtdBbSAi5VlplyItns+yw+8MFJ2R2onulBevntfyOGwFZdFEtsffqO640n+nVt027MYF8tJinEG+2+gS1CQ49f62R5iNYWXA6PQWxwYb9fIub3ZuY5u7RAvdlpq9yi2QEQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(376002)(136003)(396003)(366004)(451199015)(2906002)(41300700001)(7416002)(86362001)(83380400001)(66946007)(66556008)(66476007)(6916009)(2616005)(6486002)(8676002)(54906003)(316002)(36756003)(478600001)(38100700002)(4326008)(8936002)(5660300002)(6512007)(186003)(26005)(6666004)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yPzMdBg2rrIlwRYCG74w/EtLzcU6gumHvF4Rtn6HvfzfZ0qGFAp0xT8RThrR?=
+ =?us-ascii?Q?mr92fQ+Og2ltom0yleLNUTygN709Lhtah8NG6DNmftzi4OfwfSxKJbQ3wgss?=
+ =?us-ascii?Q?1tFXZJbIanE3ExCzt4cMblrSDpAVY11PkIq3qZ+fVfJ9S9Rp4bzylxwIpIFQ?=
+ =?us-ascii?Q?JLlnD0FxMQT7/MRl4ZRmnLBhLSfpnYANXf8OvXvJ2kzJTTVVvFn3/ltQ47O6?=
+ =?us-ascii?Q?mwq+DHdAirLlQo04g6+tQnNkttn0M7JUA5O3u8hAQlY4XjPKaW4lX/bNPHXW?=
+ =?us-ascii?Q?Dx41k/62DwQrXkjWNSHWEfPkNi7jQmeInlCNzMAXo2ZIKzLjXs0TlIdsuA9H?=
+ =?us-ascii?Q?eoTFZ8zXNFb2QZfNPe4gRwKFJxkV+Ixc30IKYEZaB2lBrUCfej8yQeVmM1VT?=
+ =?us-ascii?Q?ko7lrXZfNhn9BnaflTA6Rw29bIiitZg5WkgJxCf3p02ngu48dvnc2j+IUuvG?=
+ =?us-ascii?Q?kZQGTvc05kuYEzx2TZL4GmG8c3NyxjOzLHjQusFenMWNreNCI86jHjToejWs?=
+ =?us-ascii?Q?VrH253bQTU4R667dw7T4sd/UR1C1YOw3OwNO6OikC/szElQmg4OKsDtdOfXq?=
+ =?us-ascii?Q?NB05w34CgD/g7Ex8MCxAn7K5AIuEXrUvfPeVF2sqyS56sMd02Ii41+yKb94O?=
+ =?us-ascii?Q?jX187QEmbkiqMD/gQTW0lwnNrJlBh9Wt7TENvyI3Ff/J4vnMnxh5F8YsB7z/?=
+ =?us-ascii?Q?TaxGYdw9Y0vfB7K78OhCgjkiDQg6Dvg+Hmqoo7lERmdHnzlybF25tLD3jCs3?=
+ =?us-ascii?Q?B16nFg96tl5kP0u5ARkMd43AFvikC2UtifRHCzjsBENtKwZAjiBFB49K0IKR?=
+ =?us-ascii?Q?QSuoOguV+RErwdfvqBAxya3qDQl3peAvR70SCswqdbhT7Sh9+5kYv4nhOqSx?=
+ =?us-ascii?Q?USK21kxDmurRfGv6MHn0puM8bEypvQtPpNJWeCOe6OzjiMx2GHlduwdu2rNF?=
+ =?us-ascii?Q?JYiisQlBQXzvZbJtGguIlPrIx+a6WQBfXqi5yYExQqqFGtNL8MQoOl93Q9p0?=
+ =?us-ascii?Q?JxTcCqQIdtWcngtHoyeGxzz7aNgdFMgLDKHiv1TFn11UvX1FTTFvY4LeRkDV?=
+ =?us-ascii?Q?0yt/Q1Fb54hUTyLkC35Hnk/bvrJKSpSuS8UNTN01TVBhuSbIJRCdtnXN6OBA?=
+ =?us-ascii?Q?cPhN1xIW/rjfpQ0ClZxblQAqf6phlf2JAk/RbcUlwjf+zWsuDgW09li+IIhx?=
+ =?us-ascii?Q?jF4I8WohvcUfi6zqG7w7OKTGfnldZyQpgJU4LIoy4czL6waH5QZarADEKodj?=
+ =?us-ascii?Q?kxwSanpytpyylKdsAELWw+Rtrbheq1qgr5XPj3u8o2IZdjMmdOvt6WWQlTAP?=
+ =?us-ascii?Q?SxW3ndxB1qBfuf1QZ8q8nrGzUT3G6f+9Iitxr+5BFdSdmIoM+uycTqjRp05L?=
+ =?us-ascii?Q?HjK3OEekV940S9zzGdWA+jhbohrLw2/M0XzqZCIZx69fooQKAwP+UFBM8odI?=
+ =?us-ascii?Q?cRiA/vo6hDw2KKgkZ87Bnmr1dkQmrYCvh2wQp2BFP84e5nXVwNhyatppcJTe?=
+ =?us-ascii?Q?ZWNBqr0JgDblSwH0UU0ZTrQrTs2Stmv/xDNdqTZnowQVxn8ny7X8LNVkVLK0?=
+ =?us-ascii?Q?VZDb+Z3eSpQvTKTUbxM=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e2c10372-b29c-4a76-6627-08dad14a7dca
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 14:11:49.6110
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IiKoWXKbjTaPlqS8/SZzqSDmeJEPsuHpnnMZ+ce0difNqkPk7QXgakSBQXbQhP6G
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4444
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/11/2022 14:00, Yinbo Zhu wrote:
-> Add the Loongson platform i2c binding with DT schema format using
-> json-schema.
+On Mon, Nov 28, 2022 at 02:46:38PM +0800, Lu Baolu wrote:
+> When VFIO finishes assigning a device to user space and calls
+> iommu_group_release_dma_owner() to return the device to kernel, the IOMMU
+> core will attach the default domain to the device. Unfortunately, some
+> IOMMU drivers don't support default domain, hence in the end, the core
+> calls .detach_dev instead.
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> This adds set_platform_dma iommu ops to make it clear that what it does
+> is returning control back to the platform DMA ops.
+> 
+> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 > ---
-> Change in v2:
-> 		1. Removed the "#address-cells" and "#size-cells" in requied.
-> 		2. Add the reviewed-by information.
-> 
->  .../bindings/i2c/loongson,ls-i2c.yaml         | 47 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 48 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml b/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
-> new file mode 100644
-> index 000000000000..0e4aee9146f3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/loongson,ls-i2c.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson I2C controller
-> +
-> +maintainers:
-> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - loongson,ls2k-i2c
-> +      - loongson,ls7a-i2c
+>  include/linux/iommu.h | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Why do we have the same bindings twice, with different people and file
-names?
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-https://lore.kernel.org/all/57339e73b6c0bfe446e19a7f55a48b7ca640b9ec.1669359515.git.zhoubinbin@loongson.cn/
+> + * @set_platform_dma: Returning control back to the platform DMA ops. Only
+> + *                    valid for IOMMU drivers which don't support default
+> + *                    domain.
 
-Best regards,
-Krzysztof
+I would add:
 
+  This op is to support old IOMMU drivers, new drivers should use
+  default domains, and the common IOMMU DMA ops.
+
+Jason
