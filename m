@@ -2,127 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEBC63A029
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 04:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 759D163A02C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 04:37:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiK1DfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 22:35:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
+        id S229827AbiK1DhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 22:37:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiK1DfY (ORCPT
+        with ESMTP id S229609AbiK1DhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 22:35:24 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70B910EB;
-        Sun, 27 Nov 2022 19:35:22 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NLB1d0Pv7z4f3tqc;
-        Mon, 28 Nov 2022 11:35:17 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP2 (Coremail) with SMTP id Syh0CgCHnrl2LIRjZnoOBQ--.6103S3;
-        Mon, 28 Nov 2022 11:35:20 +0800 (CST)
-Subject: Re: [PATCH RFC] scsi: core: remove unsed 'restarts' from scsi_device
-To:     Ming Lei <ming.lei@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20221118113052.1324140-1-yukuai1@huaweicloud.com>
- <cefdae2e-67e3-b4b4-f569-31db960e991f@huaweicloud.com>
- <Y4QqtbXsuYmkOe88@T590>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <7a747bc3-b902-6f0c-21ef-0ef470ec326e@huaweicloud.com>
-Date:   Mon, 28 Nov 2022 11:35:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 27 Nov 2022 22:37:10 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2AA10B8;
+        Sun, 27 Nov 2022 19:37:08 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NLB3k08Ksz4xG6;
+        Mon, 28 Nov 2022 14:37:05 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669606626;
+        bh=bvBlrXIDKBHttLmLBQIxftmd1zZk2fvFGmTRXpNxqnQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jHnwwmgp7FnzMRNiQJYiaYtbID6drPbxgffBQPZbVbQMa0F6R78XXp64m5JY5m0B1
+         /jPN2BCoBrz8CMQBBCRL/fgWC60M+SscdY+wB+KAuHTfq45dlMMvdAKM08l2W1JDEA
+         7lwwtOozPETq7kDoZJR8FyYtnmqUvTmzPj5bXx7vUd8eQjmzSO6Iaf0I9FCmJ/0kei
+         1hguoR7jvTQ8MMx5c/BIZYuIQqwsR5aUFu3A6mvxF71kYIqwH8YVHcGeNHvY2dTK4M
+         sAVt548hxxosy0O6Vkh8Oe1A8o8eYK/aBBz4cufq6GCCeV7YQQHI2VHmpzZdrF4R1f
+         SrhZYgr9HTmig==
+Date:   Mon, 28 Nov 2022 14:37:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the execve tree with the vfs tree
+Message-ID: <20221128143704.3fe8f7b1@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <Y4QqtbXsuYmkOe88@T590>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgCHnrl2LIRjZnoOBQ--.6103S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF1fGF18ur45JFWDGr1rJFb_yoW8Aw1Upa
-        y5ta1Yya1kJr4Yk34Syr4UWryftw4qqw43XFn7GryUtF909rs3WF4rtw45WF92vF92gFsF
-        y3WUX3s3Xr10y3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j
-        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
-        DUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/S/x3kvRrkSP9t=t0VirgLpz";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/S/x3kvRrkSP9t=t0VirgLpz
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-在 2022/11/28 11:27, Ming Lei 写道:
-> On Sat, Nov 26, 2022 at 04:54:46PM +0800, Yu Kuai wrote:
->> Hi,
->>
->> 在 2022/11/18 19:30, Yu Kuai 写道:
->>> From: Yu Kuai <yukuai3@huawei.com>
->>>
->>> During code review, I found that 'restarts' is not useful anymore after
->>> the following commits:
->>>
->>> 1) commit ab3cee3762e5 ("blk-mq: In blk_mq_dispatch_rq_list() "no budget"
->>> is a reason to kick")
->>> 2) commit d3b38596875d ("blk-mq: run queue no matter whether the request
->>> is the last request")
->>> 3) commit 673235f91531 ("scsi: core: Fix race between handling STS_RESOURCE
->>> and completion")
->>>
->>> Now that if get budget ever failed, block layer will make sure to
->>> trigger new run queue for the hctx. Hence there is no need to run queue
->>> from scsi layer in this case.
->>>
-> 
-> But scsi_run_queue_async() needs to run all hw queue because budget is
-> actually LUN/request queue wide.
+Today's linux-next merge of the execve tree got a conflict in:
 
-Why the hw queue need to run if get budget never failed in this hw
-queue?
+  fs/binfmt_elf.c
 
-> 
->>
->> Does anyone has suggestions about this patch?
->>
->> More info why I tried to remove this:
->>
->> while testing megaraid with 4 nvme with none elevator, the default
->> queue_depth is 128, while I test it with fio 128 jobs and 1 iodepth,
->> bw is about 4Gib/s, however, if I test with 128 jobs and 2 iodepth,
->> bw is decreased to about 0.8Gib/s, and with this patch applied,
->> bw can stay 4Gib/s in the later case.
-> 
-> What is .can_queue and nr_hw_queues in your setting?
-test cmd:
-fio -name=0 -ioengine=libaio -direct=1 -group_reporting=1 -randseed=2022 
--rwmixread=70 -refill_buffers -filename=/dev/sdg -numjobs=128 -size=1TB 
--runtime=60s -bs=4k -iodepth=2 -rw=randwrite
+between commit:
 
-test environment:
-arm64 Kunpeng-920, 128 cpu
-megaraid with 4 NVMEs, 128 hctx and queue_depth is 128
+  9a938eba8d28 ("kill coredump_params->regs")
 
-> 
-> 
-> 
-> thanks,
-> Ming
-> 
-> .
-> 
+from the vfs tree and commit:
 
+  8f6e3f9e5a0f ("binfmt: Fix whitespace issues")
+
+from the execve tree.
+
+I fixed it up (I just use the former where they conflicted, so may have
+lost some white space fixups) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/S/x3kvRrkSP9t=t0VirgLpz
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOELOAACgkQAVBC80lX
+0GzKaAf/TucsqS0y9XoAxET3x8TJV+zAbXcmObQI+hZNVskQsZrUF2SaGPMUaJm1
+xBl1CuqB3yCQ2xzWagfWlo+PU+eokSb9Q6E1TnIurH106W9LbpFe0AXUfqIpfzWP
+pTUWdYztK26Evg4t9JlxX3cz7Qj8xvrkMGLl99zOfv8rY6YRLam9d62taDb643C/
+Bp5cBHVaOnx+0kTQYnOghcb2NmFxjVAGpWNnOncQuw/RN/YgcTu4LUZElMZuOl4K
+RTb45d2BM0HhOSAzc/t7uoYghWO6ZAKLKFpQfocbyg6Hq9JPjzyev9zRpppJFFqb
+051hIBAnDCjH+ZMI31aeSc92Y3a/Bw==
+=hyPR
+-----END PGP SIGNATURE-----
+
+--Sig_/S/x3kvRrkSP9t=t0VirgLpz--
