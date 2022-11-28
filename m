@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53EA763A897
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8413863A89A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbiK1Mmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 07:42:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
+        id S231287AbiK1MnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 07:43:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbiK1Mmw (ORCPT
+        with ESMTP id S230120AbiK1Mm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 07:42:52 -0500
+        Mon, 28 Nov 2022 07:42:56 -0500
 Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA70640E;
-        Mon, 28 Nov 2022 04:42:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBC564E4;
+        Mon, 28 Nov 2022 04:42:55 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sendonly@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 6AEFE41E2F;
-        Mon, 28 Nov 2022 12:42:44 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 6D18041EF0;
+        Mon, 28 Nov 2022 12:42:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1669639368; bh=1dxnUSDEvKYeE43lav3OHIW+vuIWNs74+BJaO5X2HgQ=;
-        h=From:To:Cc:Subject:Date;
-        b=P4XVKazWMVlXvD9Tnwcyve+7orDds3+LiOth/HZyYvEjUwhHG4HruZbvpTjOddcZv
-         kT8+YDbhlibU6tOsK9rKanIrqhSsi6yhUDYtiJ6m9su7Vdd5Mte1VSehKFXNeuXf9x
-         gDVMrO9Nnky1jGWX0L8Ltjmcuol2EHIzTHqnFW6rXSUD04kaaDPeUGjmQJq5BYp5K/
-         nA79B1Tjsy9oVpPQm+9uGeK0daUbwkGtBZq5208n6R+zXKi/ROYdb7pZi2auQ7GHn/
-         DFsypPJW3yA7XXBFsrP6bjaiI9hv0CgDkYotzXyO5bfXYqbIxXhro7aY0ItPb/y2q2
-         OznqIDvV6IMPg==
+        t=1669639373; bh=SBgcElhpUc4MT68tmx19BwGELoM0ZF5BGvjBw82P0Lw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=LlSo0LLK/GsVEe6+DBiT8NcAytsR2UudjTgh9acnYnEyUabkhJ+mZ+svmXw7LgnEl
+         hp6vDjGU/6K6tY1huXuVXQnozw9yPLlpeX+uCOHCwnO3OI2dEx+PJtBrO/cxX5M1Zs
+         0ZxFM+pvN4NW+uWXDu+i02mtom7wZ19PiRvGjmUkKA1ic7eTfq1P2ZtdQ6B1pnIUo5
+         rYV3Z76CPMSBeZU3LTpC2iUEEKxM4JBjcujO3RAacq5VsAyN7aVR8gbNRLSYrZqHRC
+         GGah8sFk3F+B7K2Ip9QMLkPVrwABoaAPu1neD8KVflwEUYLQZ0Y29zdVbvL8RoJK2o
+         55P4JeG11UeDQ==
 From:   Hector Martin <marcan@marcan.st>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -45,10 +45,12 @@ Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
         Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 0/4] Apple SoC cpufreq driver
-Date:   Mon, 28 Nov 2022 21:42:12 +0900
-Message-Id: <20221128124216.13477-1-marcan@marcan.st>
+Subject: [PATCH v4 1/4] MAINTAINERS: Add entries for Apple SoC cpufreq driver
+Date:   Mon, 28 Nov 2022 21:42:13 +0900
+Message-Id: <20221128124216.13477-2-marcan@marcan.st>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221128124216.13477-1-marcan@marcan.st>
+References: <20221128124216.13477-1-marcan@marcan.st>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -60,65 +62,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi folks,
+This MAINTAINERS update is split, as usual, to facilitate merges via the
+SoC tree and avoid conflicts.
 
-Here's v4 of the cpufreq driver for Apple SoCs. v4 just incorporates
-minor review feedback changes from v3, and no functional changes.
+Acked-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Once reviewed, please merge #3 via the cpufreq tree, and we'll take
-care of #1,#2,#4 via the asahi-soc tree. This lets us merge the DT
-changes in the same cycle without blocking on the binding coming in
-via the cpufreq tree first.
-
-This version takes a page from both v1 and v2, keeping the dedicated
-cpufreq style (instead of pretending to be a clock controller) but using
-dedicated DT nodes for each cluster, which accurately represents the
-hardware. In particular, this makes supporting t6002 (M1 Ultra) a lot
-more reasonable on the DT side.
-
-This version also switches to the standard performance-domains binding,
-so we don't need any more vendor-specific properties. In order to
-support this, I had to make the performance-domains parsing code more
-generic. This required a minor change to the only consumer
-(mediatek-cpufreq-hw).
-
-The Linux driver probes based on platform compatible, and then attempts
-to locate the cluster nodes by following the performance-domains links
-from CPU nodes (this will then fail for any incompatible nodes, e.g. if
-a future SoC needs a new compatible and can't fall back). This approach
-was suggested by robh as the right way to handle the impedance mismatch
-between the hardware, which has separate controllers per cluster, and
-the Linux model where there can only be one CPUFreq driver instance.
-
-Functionality-wise, there are no significant changes from v2. The only
-notable difference is support for t8112 (M2). This works largely the
-same as the other SoCs, but they ran out of bits in the current PState
-register, so that needs a SoC-specific quirk. Since that register is
-not used by macOS (it was discovered experimentally) and is not critical
-for functionality (it just allows accurately reporting the current
-frequency to userspace, given boost clock limitations), I've decided to
-only use it when a SoC-specific compatible is present. The default
-fallback code will simply report the requested frequency as actual.
-I expect this will work for future SoCs.
-
-Hector Martin (4):
-  MAINTAINERS: Add entries for Apple SoC cpufreq driver
-  dt-bindings: cpufreq: apple,soc-cpufreq: Add binding for Apple SoC
-    cpufreq
-  cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states
-  arm64: dts: apple: Add CPU topology & cpufreq nodes for t8103
-
- .../cpufreq/apple,cluster-cpufreq.yaml        | 117 ++++++
- MAINTAINERS                                   |   2 +
- arch/arm64/boot/dts/apple/t8103.dtsi          | 204 +++++++++-
- drivers/cpufreq/Kconfig.arm                   |   9 +
- drivers/cpufreq/Makefile                      |   1 +
- drivers/cpufreq/apple-soc-cpufreq.c           | 352 ++++++++++++++++++
- drivers/cpufreq/cpufreq-dt-platdev.c          |   2 +
- 7 files changed, 677 insertions(+), 10 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
- create mode 100644 drivers/cpufreq/apple-soc-cpufreq.c
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 379945f82a64..52df511ad87c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1897,6 +1897,7 @@ T:	git https://github.com/AsahiLinux/linux.git
+ F:	Documentation/devicetree/bindings/arm/apple.yaml
+ F:	Documentation/devicetree/bindings/arm/apple/*
+ F:	Documentation/devicetree/bindings/clock/apple,nco.yaml
++F:	Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
+ F:	Documentation/devicetree/bindings/dma/apple,admac.yaml
+ F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
+ F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
+@@ -1911,6 +1912,7 @@ F:	Documentation/devicetree/bindings/power/apple*
+ F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+ F:	arch/arm64/boot/dts/apple/
+ F:	drivers/clk/clk-apple-nco.c
++F:	drivers/cpufreq/apple-soc-cpufreq.c
+ F:	drivers/dma/apple-admac.c
+ F:	drivers/i2c/busses/i2c-pasemi-core.c
+ F:	drivers/i2c/busses/i2c-pasemi-platform.c
 -- 
 2.35.1
 
