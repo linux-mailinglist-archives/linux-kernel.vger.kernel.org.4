@@ -2,260 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB4D63AE73
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:07:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB65D63AE71
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232718AbiK1RHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 12:07:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        id S232508AbiK1RHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 12:07:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232244AbiK1RHW (ORCPT
+        with ESMTP id S232043AbiK1RHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:07:22 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679AFFB
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:07:21 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id n188so8055245iof.8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:07:21 -0800 (PST)
+        Mon, 28 Nov 2022 12:07:13 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52FE23389;
+        Mon, 28 Nov 2022 09:07:12 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id s196so10491415pgs.3;
+        Mon, 28 Nov 2022 09:07:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GHJMh6Kwz/c8rDuMiqvdkoEztpfDMDpqxSBDvuVtmUw=;
-        b=f3IgZyUh04bd/HrLhhDVNhrHJSGitfIszkqHV7HEpPgw2VGZWdc2kMSmIk30yzxQJ7
-         di33kDapY4MdUgplczekFczkKFBlOVm1it32ldUPFgspl9eXMgV6Czr/IRlbZZylpVMg
-         MfQvv/FkObcAePfhYAbqWCwoSPd6Oiqtc8jec=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t/jS1zRSpC+P8xp144xwnS5feegCHv0w8ewtLrv0nf8=;
+        b=kaWfxhV6xf7mJFYhLrtFv1cSXD99yiQq0KYir1cgs5srtEL5R5EtlBW4JHsDgXOPVF
+         uxOAQ5sIrXTK7K9lkqSt/uwFo3SL9OnzltOhtizenHqUIottvCisHR3+tV+1neXnj2bp
+         OuWqD5GjQWfsUGuYn1LlZJZ6wzMTIhsF/xJkpP+uIuEF15E8jnoTlFtby0SCGqPiYJo4
+         JPMCjV9UKJwC8PsvwzfZVOJmhLdX0Li7oU4xVPQ3jMcizLjiMy5YPiE1JGZWl8D//bwS
+         rjHVPWYCxC2I3HgTOW1TA8ntXVwsZm9IG+b47NRZ5u9t4f2joIgPZpkDRFN+Iqa6peyh
+         3YxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GHJMh6Kwz/c8rDuMiqvdkoEztpfDMDpqxSBDvuVtmUw=;
-        b=nAYMuyn23tFHif1SXKpfYoPjDmRYeh84GTnLg+WL2YhnWLmIBohzZRbPrSxGlEk2Gv
-         v9rF489uII2yBp0kygUbze1MaFB+WEJKr55zUAQnreRyrScRS2RXAk4Sltx+QB8mA5sr
-         tiK4a3eLisMMGqgCP7yX1Ia8ZeNA2dYWoNa2IYlqaupt0K/mzY3xktv4BNHtm1lq5Xbe
-         mpyhWe7V9YtrWCtGXu8Ur4z6ExXKw9H73wpat2WCVEJRka17deAE5jvnUuRS4Rbk8qOm
-         q05Fj4sWrushizd7U49axy4Ws01a+8sFEpmRULgoNu+hhJ0r79lZ+/mcZmrck/yyBHFz
-         ft7A==
-X-Gm-Message-State: ANoB5pl8+MLYQRZ9YpAa5aDtzs9EOaT+2Ya4VfupxcI8q9JQQHpMLYKB
-        TtNcGv+NN7anGwstFRxntNAmtNuJxtnDxgNW
-X-Google-Smtp-Source: AA0mqf5tRiGp3fCPGM6KbOwS3HP1iLYDVXznCMCFhhPS1GyZiBg7pP2RQdZgV842gfcbNzmv8Vh8XQ==
-X-Received: by 2002:a05:6638:40a2:b0:363:79f1:74e0 with SMTP id m34-20020a05663840a200b0036379f174e0mr16018303jam.149.1669655240217;
-        Mon, 28 Nov 2022 09:07:20 -0800 (PST)
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com. [209.85.166.53])
-        by smtp.gmail.com with ESMTPSA id a23-20020a056638019700b00349c45fd3a8sm4479514jaq.29.2022.11.28.09.07.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 09:07:18 -0800 (PST)
-Received: by mail-io1-f53.google.com with SMTP id d123so8064861iof.7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:07:17 -0800 (PST)
-X-Received: by 2002:a02:c994:0:b0:375:7eda:8c7e with SMTP id
- b20-20020a02c994000000b003757eda8c7emr18987027jap.27.1669655237043; Mon, 28
- Nov 2022 09:07:17 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t/jS1zRSpC+P8xp144xwnS5feegCHv0w8ewtLrv0nf8=;
+        b=h98bKdo6n6/IqLDX1KttywW6j6IvE99SOqOVcPqK/J5dEEkcX8IPbGlQvjaNoy7tZ/
+         ++s5/dkOPpg3Ul86a+RbWxP8eeu8UT51OplyVXGFLnR3R7uRwhCJjVtYyPONRV5JaOwu
+         r3YfvCoUoECW9BN/ZuFxsoAlmkl4LC91S5yV1sLcHRvEfnr8RvuVS79EsFENg+DcXnjB
+         Nq17BGYH5jYH03iKgaeyA0/g/XrL2Z1dxwUHhCtS1z0SOTEJpu3XhyhaNzaek7eQkIMM
+         +W6bEWsAuISa9tP5rpF8ujL0MEDjOSCF+B1hcPLdayUpSSDuYgl7rpYn7xlS2UfLWdlM
+         S0LA==
+X-Gm-Message-State: ANoB5pkvGjtwv6qa4eS0yLutGcuJhULh1BH1fQgMIj2vJcbQYSsKSzu3
+        uUQTQd2ldy/Cac8IQhMvqKO+wXhmtIw=
+X-Google-Smtp-Source: AA0mqf5/vhXxoR1I9znY5JVY5l7IcYK1a1Lri4yThXiWTRaWT6zTz3p2EWd21Qq4tAaYnh8VpDqK/g==
+X-Received: by 2002:a63:5153:0:b0:41a:4bd4:f43f with SMTP id r19-20020a635153000000b0041a4bd4f43fmr29147466pgl.460.1669655232208;
+        Mon, 28 Nov 2022 09:07:12 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id x22-20020a170902821600b0016be834d54asm8976177pln.306.2022.11.28.09.07.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 09:07:11 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 28 Nov 2022 07:07:10 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     "haifeng.xu" <haifeng.xu@shopee.com>
+Cc:     longman@redhat.com, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup/cpuset: Clean up cpuset_task_status_allowed
+Message-ID: <Y4TqvlOmXqY/CBEc@slm.duckdns.org>
+References: <20221125075133.12718-1-haifeng.xu@shopee.com>
 MIME-Version: 1.0
-References: <20221124-kexec-noalloc-v1-0-d78361e99aec@chromium.org> <20221128180003.49747650@rotkaeppchen>
-In-Reply-To: <20221128180003.49747650@rotkaeppchen>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Mon, 28 Nov 2022 18:07:06 +0100
-X-Gmail-Original-Message-ID: <CANiDSCuwE8_bVErcKV0UcvaPjMx4vbgXzhw2dY69_x2GcB0VxQ@mail.gmail.com>
-Message-ID: <CANiDSCuwE8_bVErcKV0UcvaPjMx4vbgXzhw2dY69_x2GcB0VxQ@mail.gmail.com>
-Subject: Re: [PATCH] kexec: Enable runtime allocation of crash_image
-To:     Philipp Rudo <prudo@redhat.com>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Baoquan He <bhe@redhat.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Ross Zwisler <zwisler@kernel.org>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221125075133.12718-1-haifeng.xu@shopee.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Philipp
+On Fri, Nov 25, 2022 at 07:51:33AM +0000, haifeng.xu wrote:
+> cpuset_task_status_allowed just shows mems_allowed status, so
+> rename it to task_mems_allowed. Moreover, it's only used in
+> proc_pid_status, so move it to fs/proc/array.c. There is no
+> intentional function change.
+> 
+> Signed-off-by: haifeng.xu <haifeng.xu@shopee.com>
 
+mems_allowed being a very much cpuset feature, I don't see how this is an
+improvement. The new code is different and can be another way of doing it,
+sure, but there's no inherent benefit to it. What's the point of the churn?
 
-Thanks for your review.
-
-
-On Mon, 28 Nov 2022 at 18:00, Philipp Rudo <prudo@redhat.com> wrote:
->
-> Hi Ricardo,
->
-> On Thu, 24 Nov 2022 23:23:36 +0100
-> Ricardo Ribalda <ribalda@chromium.org> wrote:
->
-> > Usually crash_image is defined statically via the crashkernel parameter
-> > or DT.
-> >
-> > But if the crash kernel is not used, or is smaller than then
-> > area pre-allocated that memory is wasted.
-> >
-> > Also, if the crash kernel was not defined at bootime, there is no way to
-> > use the crash kernel.
-> >
-> > Enable runtime allocation of the crash_image if the crash_image is not
-> > defined statically. Following the same memory allocation/validation path
-> > that for the reboot kexec kernel.
-> >
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
->
-> I don't think this patch will work as intended. For one you omit
-> setting the image->type to KEXEC_TYPE_CRASH. But when you grep for that
-> type you will find that there is a lot of special handling done for it.
-> I don't believe that this can simply be skipped without causing
-> problems.
->
-> Furthermore I think you have missed one important detail. The memory
-> reserved for the crash kernel is not just a buffer for the image but
-> the memory it runs in! For that it has to be a continuous piece of
-> physical memory with usually some additional arch specific limitations.
-> When allocated dynamically all those limitations need to be considered.
-> But a standard kexec doesn't care about those limitations as it doesn't
-> care about the os running before itself. It can simply overwrite the
-> memory when booting. But if the crash kernel does the same it will
-> corrupt the dump it is supposed to generate.
-
-Right now, I do not intend to use it to fetch a kdump, I am using it
-as the image that will run when the system crashes.
-
-It seems to work fine on the two devices that I am using for tests.
-
->
-> Thanks
-> Philipp
->
-> > ---
-> > kexec: Enable runtime allocation of crash_image
-> >
-> > To: Eric Biederman <ebiederm@xmission.com>
-> > Cc: kexec@lists.infradead.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: Ross Zwisler <zwisler@kernel.org>
-> > Cc: Philipp Rudo <prudo@redhat.com>
-> > Cc: Baoquan He <bhe@redhat.com>
-> > ---
-> >  include/linux/kexec.h | 1 +
-> >  kernel/kexec.c        | 9 +++++----
-> >  kernel/kexec_core.c   | 5 +++++
-> >  kernel/kexec_file.c   | 7 ++++---
-> >  4 files changed, 15 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> > index 41a686996aaa..98ca9a32bc8e 100644
-> > --- a/include/linux/kexec.h
-> > +++ b/include/linux/kexec.h
-> > @@ -427,6 +427,7 @@ extern int kexec_load_disabled;
-> >  extern bool kexec_in_progress;
-> >
-> >  int crash_shrink_memory(unsigned long new_size);
-> > +bool __crash_memory_valid(void);
-> >  ssize_t crash_get_memory_size(void);
-> >
-> >  #ifndef arch_kexec_protect_crashkres
-> > diff --git a/kernel/kexec.c b/kernel/kexec.c
-> > index cb8e6e6f983c..b5c17db25e88 100644
-> > --- a/kernel/kexec.c
-> > +++ b/kernel/kexec.c
-> > @@ -28,7 +28,7 @@ static int kimage_alloc_init(struct kimage **rimage, unsigned long entry,
-> >       struct kimage *image;
-> >       bool kexec_on_panic = flags & KEXEC_ON_CRASH;
-> >
-> > -     if (kexec_on_panic) {
-> > +     if (kexec_on_panic && __crash_memory_valid()) {
-> >               /* Verify we have a valid entry point */
-> >               if ((entry < phys_to_boot_phys(crashk_res.start)) ||
-> >                   (entry > phys_to_boot_phys(crashk_res.end)))
-> > @@ -44,7 +44,7 @@ static int kimage_alloc_init(struct kimage **rimage, unsigned long entry,
-> >       image->nr_segments = nr_segments;
-> >       memcpy(image->segment, segments, nr_segments * sizeof(*segments));
-> >
-> > -     if (kexec_on_panic) {
-> > +     if (kexec_on_panic && __crash_memory_valid()) {
-> >               /* Enable special crash kernel control page alloc policy. */
-> >               image->control_page = crashk_res.start;
-> >               image->type = KEXEC_TYPE_CRASH;
-> > @@ -101,7 +101,7 @@ static int do_kexec_load(unsigned long entry, unsigned long nr_segments,
-> >
-> >       if (flags & KEXEC_ON_CRASH) {
-> >               dest_image = &kexec_crash_image;
-> > -             if (kexec_crash_image)
-> > +             if (kexec_crash_image && __crash_memory_valid())
-> >                       arch_kexec_unprotect_crashkres();
-> >       } else {
-> >               dest_image = &kexec_image;
-> > @@ -157,7 +157,8 @@ static int do_kexec_load(unsigned long entry, unsigned long nr_segments,
-> >       image = xchg(dest_image, image);
-> >
-> >  out:
-> > -     if ((flags & KEXEC_ON_CRASH) && kexec_crash_image)
-> > +     if ((flags & KEXEC_ON_CRASH) && kexec_crash_image &&
-> > +         __crash_memory_valid())
-> >               arch_kexec_protect_crashkres();
-> >
-> >       kimage_free(image);
-> > diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> > index ca2743f9c634..77083c9760fb 100644
-> > --- a/kernel/kexec_core.c
-> > +++ b/kernel/kexec_core.c
-> > @@ -1004,6 +1004,11 @@ void crash_kexec(struct pt_regs *regs)
-> >       }
-> >  }
-> >
-> > +bool __crash_memory_valid(void)
-> > +{
-> > +     return crashk_res.end != crashk_res.start;
-> > +}
-> > +
-> >  ssize_t crash_get_memory_size(void)
-> >  {
-> >       ssize_t size = 0;
-> > diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> > index 45637511e0de..0671f4f370ff 100644
-> > --- a/kernel/kexec_file.c
-> > +++ b/kernel/kexec_file.c
-> > @@ -280,7 +280,7 @@ kimage_file_alloc_init(struct kimage **rimage, int kernel_fd,
-> >
-> >       image->file_mode = 1;
-> >
-> > -     if (kexec_on_panic) {
-> > +     if (kexec_on_panic && __crash_memory_valid()) {
-> >               /* Enable special crash kernel control page alloc policy. */
-> >               image->control_page = crashk_res.start;
-> >               image->type = KEXEC_TYPE_CRASH;
-> > @@ -345,7 +345,7 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
-> >       dest_image = &kexec_image;
-> >       if (flags & KEXEC_FILE_ON_CRASH) {
-> >               dest_image = &kexec_crash_image;
-> > -             if (kexec_crash_image)
-> > +             if (kexec_crash_image && __crash_memory_valid())
-> >                       arch_kexec_unprotect_crashkres();
-> >       }
-> >
-> > @@ -408,7 +408,8 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
-> >  exchange:
-> >       image = xchg(dest_image, image);
-> >  out:
-> > -     if ((flags & KEXEC_FILE_ON_CRASH) && kexec_crash_image)
-> > +     if ((flags & KEXEC_FILE_ON_CRASH) && kexec_crash_image &&
-> > +         __crash_memory_valid())
-> >               arch_kexec_protect_crashkres();
-> >
-> >       kexec_unlock();
-> >
-> > ---
-> > base-commit: 4312098baf37ee17a8350725e6e0d0e8590252d4
-> > change-id: 20221124-kexec-noalloc-3cab3cbe000f
-> >
-> > Best regards,
->
-
+Thanks.
 
 -- 
-Ricardo Ribalda
+tejun
