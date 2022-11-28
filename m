@@ -2,187 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74CF163A685
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E189763A686
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:59:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbiK1K7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 05:59:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S230455AbiK1K7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 05:59:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiK1K7a (ORCPT
+        with ESMTP id S230450AbiK1K7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 05:59:30 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2052.outbound.protection.outlook.com [40.107.94.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DE3DF81;
-        Mon, 28 Nov 2022 02:59:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MB07fr9Hdw19dON9gPv5os5w3/isXGhLmRR1HMFUEzAmM/BNz1Q1sk1Tu8j3bZOYOOSFFrNmSZs8AURKiJzVQUZo5VNilqVYGJlvrIDA8gZlu6rJt8ei29U2kqE/u7kzDJ7brA8iqy+jF9Cjcuyu4NaYDeUP5ODJAkN0j7FHE6w/tiiqjc5is7dz8zr0tbuC84EEDQPY6ebszSiO1c1naJy9hI9jhXlWe0szvbZAd1pDDmzh6Sqrq19cYMfwky5i9tNSaO5rtFMMAEjDuPcn52faQRljzLUQdY9suIGF1kUcW+TPf6bvSwpnn+S4y2uBAPW9WKjiWsRzmkzytl0iBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AL3p0jBC1PTvUM8neMFN/j8zbiHZz6cBVYB5Zd+FU/Y=;
- b=C/8qOPDV47lEAQmD739HMJTd2CPjzmNFx2LCOl17SzekqvNYn6jOjdnqij8KVJX1GF0PbVb5/1d4jBj4G9dz4tmlJJfL3x+7pahUAlF2XE7I9wwFRbMjDlDiFWcfm9ccCc+Oq4Du8frKFYzK6iRVgngxeZsLsGLFTvPJS2Lo/+/uhPdR5UmubLAsW3D2CZ0KiRJ7RfOIAYmbmtxOYGUN0doaMB2I3K0SA6AvmbesWSIFWm/qRL7B6QqH5J2bYd+cdsXosUVGHPGmpgFl4tA45HAnCsDlDnMdv7BZUxad2Ol0iOCnitEp1agH0nh5Wj7rEsqO4NIbw0EFT27aAePLEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=foss.arm.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AL3p0jBC1PTvUM8neMFN/j8zbiHZz6cBVYB5Zd+FU/Y=;
- b=l5hYiJh7/08m3UmMKuG07q6uX4tr1qHiIqD3EUIwlRewDfHBhhtfKm3D8pqK6o5rxv/3DnXasCa46XXLim9qq0K3hpBfHj8oWxqHnk+IoPpl7/R8wYluw9fyqzYXkbfLI18EbBAXfTg1LErsa98LLNReA5uxJNg+YVVOXezeObc=
-Received: from DM6PR12CA0001.namprd12.prod.outlook.com (2603:10b6:5:1c0::14)
- by DS0PR12MB6557.namprd12.prod.outlook.com (2603:10b6:8:d3::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5857.22; Mon, 28 Nov 2022 10:59:27 +0000
-Received: from DS1PEPF0000B074.namprd05.prod.outlook.com
- (2603:10b6:5:1c0:cafe::49) by DM6PR12CA0001.outlook.office365.com
- (2603:10b6:5:1c0::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23 via Frontend
- Transport; Mon, 28 Nov 2022 10:59:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS1PEPF0000B074.mail.protection.outlook.com (10.167.17.5) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5857.17 via Frontend Transport; Mon, 28 Nov 2022 10:59:27 +0000
-Received: from [10.254.241.50] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 28 Nov
- 2022 04:59:17 -0600
-Message-ID: <a885977a-bfdf-fe1c-8f33-732b18f5abec@amd.com>
-Date:   Mon, 28 Nov 2022 11:59:14 +0100
+        Mon, 28 Nov 2022 05:59:33 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99A312AEC
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:59:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669633172; x=1701169172;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4Z1bM9Tmjz6Bvo0a/hUeA6G3B1Xmf4XawJ+D22qwJPk=;
+  b=hdLnH1NmjSc2uPjPNgw1NBVe0MwQPeOjjCeMUjCYNLHAMV6Aa9NuSF1s
+   KhuJ+if/DD7o5KU0fTlts09KIqSOr5olu6U/hIIUYBb8XGGcn+AVYbL+E
+   bUHthIFRCGArpMm+mnhp2bv+Q750jvSd+DkR//cwA/GXDM6UbYkJUvOgr
+   kShVsQ+6KmeHEmDIS87lmUWP5JLxZ2GqofW1BcA9wa+3LECVCh4Nm4OxS
+   viWsUapdzPgh4jRXbGZ7c4ibY5paa2Pd0TWr7wxyJ8kIo4YMFUD5EZhyZ
+   DFdINnNdS3ilgZnXm7uEJ0fOvGYkjDPNjF1Z678hxYLtGKZuVlpPInO7T
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="302382990"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="302382990"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 02:59:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="645451609"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="645451609"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 28 Nov 2022 02:59:30 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ozbrE-0015fW-2c;
+        Mon, 28 Nov 2022 12:59:28 +0200
+Date:   Mon, 28 Nov 2022 12:59:28 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     ojeda@kernel.org, geert+renesas@glider.be,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] auxdisplay: hd44780: Fix potential memory leak in
+ hd44780_remove()
+Message-ID: <Y4SUkGYK5Y6Uo3Bv@smile.fi.intel.com>
+References: <20221128084421.8626-1-niejianglei2021@163.com>
+ <Y4SRUwKFGJfwNZ2U@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2] i2c: cadence: Fix regression with bus recovery
-Content-Language: en-US
-To:     <carsten.haitzler@foss.arm.com>, <michal.simek@xilinx.com>,
-        <shubhrajyoti.datta@xilinx.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        'Wolfram Sang' <wsa@kernel.org>
-References: <20221128105158.1536551-1-carsten.haitzler@foss.arm.com>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <20221128105158.1536551-1-carsten.haitzler@foss.arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000B074:EE_|DS0PR12MB6557:EE_
-X-MS-Office365-Filtering-Correlation-Id: 03059821-effb-4c08-0371-08dad12f9e1d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4Im/sPZcmAna0+ljKr+gXXpX2dmwsERd35snwJiC/0e8sjIdO4RzS3bILPDn84E6Zk9NDQDLt70DOYsfSEs+6wPBaUQmIcUFge6UHlx5uvxrdbfiJsWz1qrkjbcC8iOAh4ZUX2xzKqlYQ9RvxCzd+dmDCu/KI4+7oq/qlrLpK/FMvqWxRSbiLpuGVCAYWDXzIBV3iHyc5XWt65Fx1aaqcTpv1SbFYwiljKz4qE5Nstq4GfqPuzN3n3bnKyrwSdR7iDgmp00qrxE1vAP913H7u9ShTTO3llB+Q5350/l0CUSClIPPTm69CzhcOLtfp67VafQ9SdKeNozOEtYYZJjhLrvX+f5Lml3vR7dpnmYPCf3hKNqClTVfq42XkqpkcXQ689MTY719oK6QzbwJIxoyTo6LYIf44iEawyZLAFdaKDh4BSqy22LESsslGhH2xxfi/moTvE5C11nI9mm+AWOdgDcScG+UTyWKe+MLYGA2mlpjtM80cp//Bdi9hPWNczQ1xRqpOlaN8/1cHwXkKwauoo5oiKwWjzpQUb8e2Urowg0vhM3CBRMSUkH2rSuYlIrd3RZGG5f1GKdXLXTkNqxFk7d/5ikP2C5FvkFBo7K40Zpti6N4QB3yVvYNgrhbBgNar7bkiyO6WxZg1ltXExQCrW8HQbVDEbO2UiIH8LD7P0gG5FDYYmWawrmmxT3TQ+shXMakwYga1wLa0eZVc3LpSrdJv8I3CKpm9q0l/UTyjXKCh5Fit5QpEFTSxmA0xEfkHZEXT4gbyKRgndtjLLH8gizeQfwvvvbpSq3YM9YCtXu4MFMOXymXGcnip2uopOcW
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(396003)(39860400002)(451199015)(40470700004)(46966006)(36840700001)(186003)(81166007)(16526019)(356005)(2616005)(41300700001)(2906002)(966005)(82740400003)(40480700001)(36756003)(8936002)(83380400001)(86362001)(6666004)(31696002)(44832011)(40460700003)(110136005)(426003)(82310400005)(47076005)(336012)(316002)(16576012)(53546011)(31686004)(26005)(8676002)(36860700001)(478600001)(70586007)(5660300002)(70206006)(36900700001)(2101003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 10:59:27.1934
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03059821-effb-4c08-0371-08dad12f9e1d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000B074.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6557
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4SRUwKFGJfwNZ2U@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Wolfram,
+On Mon, Nov 28, 2022 at 12:45:39PM +0200, Andy Shevchenko wrote:
+> On Mon, Nov 28, 2022 at 04:44:21PM +0800, Jianglei Nie wrote:
 
-On 11/28/22 11:51, carsten.haitzler@foss.arm.com wrote:
-> CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
-> 
-> 
-> From: Carsten Haitzler <carsten.haitzler@arm.com>
-> 
-> Commit "i2c: cadence: Add standard bus recovery support" breaks for i2c
-> devices that have no pinctrl defined. There is no requirement for this
-> to exist in the DT. This has worked perfectly well without this before in
-> at least 1 real usage case on hardware (Mali Komeda DPU, Cadence i2c to
-> talk to a tda99xx phy). Adding the requirement to have pinctrl set up in
-> the device tree (or otherwise be found) is a regression where the whole
-> i2c device is lost entirely (in this case dropping entire devices which
-> then leads to the drm display stack unable to find the phy for display
-> output, thus having no drm display device and so on down the chain).
-> 
-> This converts the above commit to an enhancement if pinctrl can be found
-> for the i2c device, providing a timeout on read with recovery, but if not,
-> do what used to be done rather than a fatal loss of a device.
-> 
-> This restores the mentioned display devices to their working state again.
-> 
-> Fixes: 58b924241d0a ("i2c: cadence: Add standard bus recovery support")
-> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
-> ---
-> Note: This issue was discovered during the porting of the linux kernel
-> on Morello [1].
-> 
-> [1] https://git.morello-project.org/morello/kernel/linux
-> ---
->   drivers/i2c/busses/i2c-cadence.c | 12 ++++++++----
->   1 file changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-> index fe0cd205502d..09acd2d399d5 100644
-> --- a/drivers/i2c/busses/i2c-cadence.c
-> +++ b/drivers/i2c/busses/i2c-cadence.c
-> @@ -852,7 +852,8 @@ static int cdns_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
->                                           CDNS_I2C_POLL_US, CDNS_I2C_TIMEOUT_US);
->          if (ret) {
->                  ret = -EAGAIN;
-> -               i2c_recover_bus(adap);
-> +               if (id->adap.bus_recovery_info)
-> +                       i2c_recover_bus(adap);
->                  goto out;
->          }
-> 
-> @@ -1263,9 +1264,13 @@ static int cdns_i2c_probe(struct platform_device *pdev)
-> 
->          id->rinfo.pinctrl = devm_pinctrl_get(&pdev->dev);
->          if (IS_ERR(id->rinfo.pinctrl)) {
-> +               int err = PTR_ERR(id->rinfo.pinctrl);
-> +
->                  dev_info(&pdev->dev, "can't get pinctrl, bus recovery not supported\n");
-> -               return PTR_ERR(id->rinfo.pinctrl);
-> -       }
-> +               if (err != -ENODEV)
-> +                       return err;
-> +       } else
-> +               id->adap.bus_recovery_info = &id->rinfo;
-> 
->          id->membase = devm_platform_get_and_ioremap_resource(pdev, 0, &r_mem);
->          if (IS_ERR(id->membase))
-> @@ -1283,7 +1288,6 @@ static int cdns_i2c_probe(struct platform_device *pdev)
->          id->adap.retries = 3;           /* Default retry value. */
->          id->adap.algo_data = id;
->          id->adap.dev.parent = &pdev->dev;
-> -       id->adap.bus_recovery_info = &id->rinfo;
->          init_completion(&id->xfer_done);
->          snprintf(id->adap.name, sizeof(id->adap.name),
->                   "Cadence I2C at %08lx", (unsigned long)r_mem->start);
-> --
-> 2.32.0
-> 
+...
 
-Acked-by: Michal Simek <michal.simek@amd.com>
+> Fixes: 718e05ed92ec ("auxdisplay: Introduce hd44780_common.[ch]")
+> 
+> What you found has nothing to do with the issue. Issue has been introduced
+> later on.
 
-Wolfram: up2you if you want to take it for 6.1. If it is too late I think it 
-should be labeled as stable material for 6.1.
+Side note (mostly for Miguel): That series by Lars was indeed problematic.
+And I see now that he didn't get the parameter to the charlcd_alloc(). Now
+we have problem that your patch solves and dangling parameter in the struct
+charlcd_priv. So, I will restore charlcd_alloc() before his series (after
+this patch has been applied, because of the backport needs) for a new
+kernel development cycle.
 
-Thanks,
-Michal
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
