@@ -2,132 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C7563A4E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E173063A4FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiK1J1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 04:27:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
+        id S230362AbiK1J2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 04:28:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiK1J07 (ORCPT
+        with ESMTP id S230064AbiK1J2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 04:26:59 -0500
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2074.outbound.protection.outlook.com [40.107.14.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7543C59;
-        Mon, 28 Nov 2022 01:26:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R18hMwoJ8c/6TQhqK1K7A3T16S6lgM1Nq/JPI0qo/dl9qer9A2fLBjYPQZp23GL4GTLY1DKb9lPZ36lJ6B3XDzruG9Lrt7d9xBRjFnS69yZA9/sboXUJZAa4sEFVJXOawMrr1cJZe1xPnBwQRae5CRK/eZtO3VwgwwABsQjW4EukcAM+oGjgI2vduJlp+sk4823NU4YCCG5XGIaNQbo81LMyxq5kPr8C2WLceg8YtF3s0SQJANzo0h9GmTf9hHkKtBtc/3sm1N6uqquCMEhjyAIEnQM7x8V5cO3mNedpAZmK/YVNavl57kdLb6VUgKH/XN17dXy80gc0FH45v+6p6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9NwK5xO7f/CqvfB03ZxG6gGE9d8+SgY5eIUqo5Pf1MQ=;
- b=KFkn/X6pfKhGkEKN87gdKxgDIjpVr40SV01XiFk1s0EHohS/62QEzLvdk+cIyxPpmCKHWgz/wev5CQpxkH73f9hx2Zd8HGUm06FE6Om9yi5WnXOQdohst2/CJHgwYXM4fKw6MbjdFc5HANJzS91G43HXjaKjofkSqET/7+ohhugDP4OSYbT0Un+0qpEAOX/oPqYRE99A6RdJX5Sd7yNC9DyR46bMYW8TyCCaDdgMVmB2AAizibjJrjLEbILB3Sm9DRf3oXVNyyYpEUYIDzXxErdv2uVVhvLAreEkSRoxQxuaYp0IEkjzQGxgNkZ6i5tq1US63iJZ+HNjzTd7DUrDqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9NwK5xO7f/CqvfB03ZxG6gGE9d8+SgY5eIUqo5Pf1MQ=;
- b=2/sSCCRPpIeTbhPyMDb7mESh8l9hAhauB/s/s5EtBXmQ9TVjBZvr7WMLB4wNfOvxCQ9+WKVCh2XwGyhZ3LKby77TPGBjvJN26dwsbIl99xHu7xgqT7dNJWorGWs1QnVe3NoPahqM/6mqlW5wDg3j2MuavWundzuttzTwqtKH2KO/MHbCg7avupYP1Nv4QQ/FpZ0p9YEqJsiO9mI5j9m/uyt5ScMJ6NXrWN8qKLhf3EzYBPhZkEp9rzCgh8bN0xBJyUhpbyxvg8oTlhwcc0on/hBv0TmanWnILIYKKzQ6wJ6yD5nG76d9K971OuR097qYkTr7nMyFzrg+51LwcT9YLQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by AS8PR04MB8914.eurprd04.prod.outlook.com (2603:10a6:20b:42d::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.17; Mon, 28 Nov
- 2022 09:26:54 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::ae59:a542:9cbc:5b3]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::ae59:a542:9cbc:5b3%7]) with mapi id 15.20.5857.023; Mon, 28 Nov 2022
- 09:26:53 +0000
-Message-ID: <a5504a76-d59f-7b5d-769b-8dd0539681c8@suse.com>
-Date:   Mon, 28 Nov 2022 10:26:50 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 0/2] ALSA: core: Fix deadlock when shutdown a frozen
- userspace
-To:     Ricardo Ribalda <ribalda@chromium.org>,
-        Takashi Iwai <tiwai@suse.com>, Len Brown <len.brown@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     alsa-devel@alsa-project.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org>
-Content-Language: en-US
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0063.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:93::19) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        Mon, 28 Nov 2022 04:28:03 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0CC13EB3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:28:00 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id g12so16413348lfh.3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:28:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=N+sBWVG81GD3481BhUaem1GToFImFejdTt3G+jJFbTA=;
+        b=hjUgUErDZ+19NMPpHO7f+9ODRzxn+XK2Ycdjza/1dE3OxfZYjyNx40iDMwU+Eisfm1
+         yNq8UDD8yh3er3beQUzsJovBe3rFyiYnNJUHz5PWRr7qFrIpPnbx9DVWgkb0jgu/uocT
+         NuJYpGCuBCbwGrvXDcC0MIz4NyvR6U6b0mHFLLQf9g8HTgsL1ErpKZs4I2t166HCJfIA
+         RSGo3DtnQz3CjwksURfJi5eYIh4Vy7yLh0opskGu8uMpQe8wBE8HX8TDSWYtC5RiL93m
+         s4k55xnmzP0oguaVDnWPRIJUYThTEcSZUebrdpyunRGuqyvaGLVxW4srIZlPw3dmt9eC
+         JfLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N+sBWVG81GD3481BhUaem1GToFImFejdTt3G+jJFbTA=;
+        b=p/68ewNMqE8x3XTAjwPrFO4ON50NxmezRJD3jHVZQl4UODE7TC4GiBxIBnCOZd1hJu
+         1noyTTZkr3YhSgmXzho4rojRmBXLP6xl2oZe5o3Ihhp8DH8d3Uekk30pUOBEmRJdNpAI
+         zpE5tBDkk03/sOu9Pn2J3YPlSjBTAgDvodfW9c6AuLCL+yqVrDWjUIxeZowhOcSS63Xf
+         5i2RUax8lufExiT4bzdWaA8RNVqflcA1kuliVfucjGkbDe503tlCgOExUKDpi805j/+M
+         NBblU+beVv6lLiKR6hEQ1xlbvmkFdOkjGomC+1Ug6wl51zDMxVz3hwZHMDXakfLItYUE
+         Waxw==
+X-Gm-Message-State: ANoB5pltmIpZNBdSGvKMjkOdn3uJfKH5c1ljnpv2hBBkyTCMIu5mTrBK
+        4yTUgmTC0CNvXncPuT3Px/w=
+X-Google-Smtp-Source: AA0mqf7a8VeQAiQIJsxYtepIL7oukeN1hN3rKYbKuileisL49UhMYwm5SWvB1I9zrrIJoJItVsLAXQ==
+X-Received: by 2002:a19:dc02:0:b0:4a8:b9c6:8741 with SMTP id t2-20020a19dc02000000b004a8b9c68741mr12423161lfg.178.1669627678695;
+        Mon, 28 Nov 2022 01:27:58 -0800 (PST)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id r5-20020ac25c05000000b004b4f3c0d9f8sm1657493lfp.283.2022.11.28.01.27.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 01:27:58 -0800 (PST)
+Date:   Mon, 28 Nov 2022 11:27:55 +0200
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     =?UTF-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
+        alexander.deucher@amd.com, contactshashanksharma@gmail.com,
+        amaranath.somalapuram@amd.com, christian.koenig@amd.com,
+        pierre-eric.pelloux-prayer@amd.com,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@gmail.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Stone <daniel@fooishbar.org>,
+        'Marek =?UTF-8?B?T2zFocOhayc=?= <maraeo@gmail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        "Pierre-Loup A . Griffais" <pgriffais@valvesoftware.com>,
+        Shashank Sharma <shashank.sharma@amd.com>
+Subject: Re: [PATCH v3 1/2] drm: Add GPU reset sysfs event
+Message-ID: <20221128112755.52df3f6b@eldfell>
+In-Reply-To: <20221125175203.52481-2-andrealmeid@igalia.com>
+References: <20221125175203.52481-1-andrealmeid@igalia.com>
+        <20221125175203.52481-2-andrealmeid@igalia.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|AS8PR04MB8914:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4dc849b5-03e2-49d4-d275-08dad122afbb
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AwDub4225NYjF8XHGqwGUN3MIfAzBOjSIvYV5myRVbT28t3TQr3cj0xz9GvmMOKanRXHgnMAyHWlaiXm5+HqEQZNt6e9cwIV+UtaoKB979c4iz1kvfZhuKniyOuxKWaJaPjctScuxbcxm0RIDMr7dQjXyLAWXsFeh63PYJTj3NDfJG5FJM5gWp266EA5xpAx01qu0CCzZY8J7oft/q2L31jsJpQtAdWhaNff1NJt15bfqQhB+QtGATV97BhnbX2C2qGovtERKOkcoHsuzrd9bBpFmisL96D3EDWyO+U7nQz0VU3q/WN4U3aNPj597BmBFJhqnN1vY+lewH3eaV/OyDkP2IGGppo1JI/+StSir4ULEz6ZtjHdsmScGBcBRJJs4bFDy51oxlv4SPAghI+/0RUnVFo7vISY3yLYoz52Ib5zG/hl4jsxhXAsjT55J9xnSm2316DTu556ucEjH3uDGBOWzxrDJRb1OdmuBNsJLVpkc4OXJJhKEGIpPY0AWxdxtncLrAy4mYsSH/PhRAz4X+8ZbAa3j/fdzv1MNkCvelnRfRc80P1s1Ggc6nAwl12MOkCSjwKg5JM9q2aLgiO3nptOJ+cRLdjzzZw8oi3+TV223aIrq2946L00+EcZ1vzWPSYK4/yMfVDp6v4fafZBUnsxZ5PunaZd4SZXdg6Y3PN7c0RVHoB80/3j4IisUhF+4jr1S/IfnmE2oWXTeKjfBVEGdOMZJDhescm5uy2B/HP+anUaX5Ynt+q0Y+InI3Wj
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(136003)(366004)(39860400002)(396003)(451199015)(36756003)(53546011)(921005)(6486002)(6512007)(6506007)(478600001)(38100700002)(66556008)(41300700001)(66476007)(8676002)(66946007)(86362001)(31696002)(4326008)(4744005)(7416002)(316002)(110136005)(5660300002)(8936002)(186003)(2616005)(31686004)(83380400001)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MS9nUWhMQ05XVmp4cXZkRUs3MXZLNWFhRUZjeUUvbUlnVDNLRFZaMGtyUjhG?=
- =?utf-8?B?Zkg0S3d2UWFzRk0rMnlEZ25SdFpaNHhTaHhqekwzdU5RVFh0NTZPbGl6QmFz?=
- =?utf-8?B?dFJwU1dqUHUwZjBQWnUwYndLSkNQOUdCTU50KzdZbGZQa3pDbXBDREduRExj?=
- =?utf-8?B?dHlEUHVVL3hRM0dSejZyZHlDbTZSS2lBRVZkYktyYVpJcXNwUkdZOXNJTG5H?=
- =?utf-8?B?THlDQ2JzUlNZV3laazZtcUJZS2N2REhoOUdSQ1NzbVJLeFhqZmxlUmNGdnVN?=
- =?utf-8?B?MzNCOHhwazA1cWMvcVYxZms3Q0tycjNyOGdWTXA3eitleEpaZkpkeTdVVFBS?=
- =?utf-8?B?dzB6UzJyeGx6T1U5Q2IweVJuV2Y5YW4zODJNa0d5ZHVBbU9xamI4eDZDVFhU?=
- =?utf-8?B?SnZkMDArTjdsQzRab2RaNFhQUStwRTVubmJDc0NVdzFicXVzMVlEK2F1L1hQ?=
- =?utf-8?B?YVFaVC9FSkpVRHY3aENSQXRjcnlMa2k3ci9aYTM5cEUvdEJSRDI1c1ZsV20r?=
- =?utf-8?B?U3lHL1haQUFrMGJGOWltTDhKS3A5YUZMS2NVYVpodU5JcUxiakhOUUk4TGJL?=
- =?utf-8?B?UHBMTkJIbzdIdk0zWEg1MSsyZXpCdTczdmpEQTQ5bDRwMjlOK2s2TlI2NjVj?=
- =?utf-8?B?enl3Wjh3R2wwckliRnJObUJXNlJXdWlQY3RrclFvVXlENmFnRWdQTnBRQ1RK?=
- =?utf-8?B?b3VlVDFURDN0b1JIakdIMXpYUEZEOHN3WjJCS3R2aHVTY2dKRU1UbmI2cFFw?=
- =?utf-8?B?UlArZldNdXR2Z0g5S2RTcXJFRlF1UW5xeW1BSUVIWVdHcGJpa3pYMEI5WFZp?=
- =?utf-8?B?ekdEZTFpVWc1MVlaS2ZQZEpySzF2Q2RKRU16R3NlQzh1K2Y3SWlRamJnY3NI?=
- =?utf-8?B?T21zaW1YNnJHdWtUOGN3andNNUp5UCtENzFPUzVqamwyblZnVllJQUtEbzda?=
- =?utf-8?B?bjZGa3F1NUFPcHFGNkovYzhOUkw2ZEVpYVFOK0dGN3VwQ1JXUkMvM2J6TENZ?=
- =?utf-8?B?Z1MvaENsVlkwc2Mwcy9sV3V0WjdvSStZd0U3UGVoUnY5b2FRM1NmZ3F4dGcr?=
- =?utf-8?B?K3VBNC9udkhPeHVxbWQzYWN4UGw2VDlEV0dmZWVIRU9JdVBqQ04rLzNXQW0v?=
- =?utf-8?B?YnlUakRUdUZ5WklWM0cxNENieTlONVVpZmZVZjI5OTJIYy9udStra1FZaTJZ?=
- =?utf-8?B?My9EUTlqUHRVTkdMdmN4bWFYT1BwdG53YjBQYlljYk9wUmtTd1liRVE3RDda?=
- =?utf-8?B?SDEwRDdlemxWcXMzc2tEUUJrM2JHYzU2Tklkc1NSZ2RhbUcrb3dwUCtZUk42?=
- =?utf-8?B?T0ZsY3RLOS9XT0dVVTEwTE1DaHljK0R2T04xVUp4WlpzRVJUU0RrYklMWS83?=
- =?utf-8?B?Um5ib3dFWkxwRzA0UGNreUZrU1JXb1NyZG1nZ0M1citmU09nUkR0NzByTFd6?=
- =?utf-8?B?M1MzRDVjT05BdEVBamRCcjZBaGMxOHlnNytnWUFFU2Yvc3k1NERZK2E3QUVj?=
- =?utf-8?B?NXNFbXVhckhRcmh0UmdBZC8wbTJCV3ZLSC83bHNTdzk4V3llV1lPdUxjOVJw?=
- =?utf-8?B?cDIzVUNxLzc3UkFXWXBTY1RFdzJGZkJEMUluZTlEb2ZaMy9FOFk3SEpnYkZl?=
- =?utf-8?B?bHBOeHltSkFBcnFTOVdya3hhbXhMTUJRTE10Ky9aMzdhNE1hYVVNQXVYQm0v?=
- =?utf-8?B?Zi93RUI3WDBRQXFHUnQxVDZXUjZ2ZHZWK2Q3b3RaN3RVeWw5b2VVWkdFQ0FH?=
- =?utf-8?B?ZWhxQ0ZqckJrK2swbUZnWklmRm44ZEpaQXIxcVRIa21WcEdiT29OODZveHoz?=
- =?utf-8?B?S2dIRk1UclBlZ2QrNXVRSXJ0eDdNOU5MVUtXUmF1Rm1HLzZoQWRtKzlnMFgy?=
- =?utf-8?B?OFlvb3FVL0hLVEhkNFBtZ0JWNFcrcldXVWFvYUtjdXRLdHc4R05LM0l6cnVp?=
- =?utf-8?B?c0ZwbHJ1dzdYODE4OUxsMllsK1B2ZnNUTHZKc2srbXBzSlpLV1Y2YVVwTlQ3?=
- =?utf-8?B?MWdUUnB2cHJVK1JXdk83ZzVLUGNUY1BvZzh3MnpqRVJMSzQ4UXpVSXdKZFhD?=
- =?utf-8?B?UjNoQzE5Qjg0dUhPT3J2SkU0YWtwRDErSEl0bUZmTDYxbjJOUzlIczhhU3Zu?=
- =?utf-8?B?SmhrZlk1YmpuRTQzZldrNFNRWEwrVXE4VVRldFhHb2VmKzAwZU9oUjhFa2U4?=
- =?utf-8?Q?9dqcMk7qK5EufEmeeDq+G9x1e+b9vVa27Or5ucV0BFEQ?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4dc849b5-03e2-49d4-d275-08dad122afbb
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 09:26:53.7042
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xp/jsWixJ0ovAYIlqWllAks0jZsiCI1s+7iAfKmcLMPaRcWVbcLih72HhRU8Dys4XYx9ltklp86f4KSoMII+iA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8914
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/aUlzZ38K0WssssJjVJMpEdE";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,20 +84,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/aUlzZ38K0WssssJjVJMpEdE
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, 25 Nov 2022 14:52:02 -0300
+Andr=C3=A9 Almeida <andrealmeid@igalia.com> wrote:
 
-On 28.11.22 10:10, Ricardo Ribalda wrote:
-> Since 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
-> we wait for userspace to close its fds.
-> 
-> But that will never occur with a frozen userspace (like during kexec()).
-
+> From: Shashank Sharma <shashank.sharma@amd.com>
+>=20
+> Add a sysfs event to notify userspace about GPU resets providing:
+> - PID that triggered the GPU reset, if any. Resets can happen from
+>   kernel threads as well, in that case no PID is provided
+> - Information about the reset (e.g. was VRAM lost?)
+>=20
+> Co-developed-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
+> Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
+> Signed-off-by: Shashank Sharma <shashank.sharma@amd.com>
+> ---
+>=20
+> V3:
+>    - Reduce information to just PID and flags
+>    - Use pid pointer instead of just pid number
+>    - BUG() if no reset info is provided
+>=20
+> V2:
+>    - Addressed review comments from Christian and Amar
+>    - move the reset information structure to DRM layer
+>    - drop _ctx from struct name
+>    - make pid 32 bit(than 64)
+>    - set flag when VRAM invalid (than valid)
+>    - add process name as well (Amar)
+> ---
+>  drivers/gpu/drm/drm_sysfs.c | 26 ++++++++++++++++++++++++++
+>  include/drm/drm_sysfs.h     | 13 +++++++++++++
+>  2 files changed, 39 insertions(+)
+>=20
+> diff --git a/drivers/gpu/drm/drm_sysfs.c b/drivers/gpu/drm/drm_sysfs.c
+> index 430e00b16eec..85777abf4194 100644
+> --- a/drivers/gpu/drm/drm_sysfs.c
+> +++ b/drivers/gpu/drm/drm_sysfs.c
+> @@ -409,6 +409,32 @@ void drm_sysfs_hotplug_event(struct drm_device *dev)
+>  }
+>  EXPORT_SYMBOL(drm_sysfs_hotplug_event);
+> =20
+> +/**
+> + * drm_sysfs_reset_event - generate a DRM uevent to indicate GPU reset
+> + * @dev: DRM device
+> + * @reset_info: The contextual information about the reset (like PID, fl=
+ags)
+> + *
+> + * Send a uevent for the DRM device specified by @dev. This informs
+> + * user that a GPU reset has occurred, so that an interested client
+> + * can take any recovery or profiling measure.
+> + */
+> +void drm_sysfs_reset_event(struct drm_device *dev, struct drm_reset_even=
+t_info *reset_info)
+> +{
+> +	unsigned char pid_str[13];
 
 Hi,
 
-that means that user space can delay an unplugging process for an
-indefinite time. And that is a problem. I am afraid there is a problem
-with the basic approach, even outside of times user space is frozen.
+"PID=3D4111222333\0"
 
-	Regards
-		Oliver
+I count 15 bytes instead of 13?
+
+> +	unsigned char flags_str[18];
+> +	unsigned char reset_str[] =3D "RESET=3D1";
+> +	char *envp[] =3D { reset_str, pid_str, flags_str, NULL };
+
+It seems you always send PID attribute, even if it's nonsense (I guess
+zero). Should sending nonsense be avoided?
+
+> +
+> +	DRM_DEBUG("generating reset event\n");
+> +
+> +	BUG_ON(!reset_info);
+> +
+> +	snprintf(pid_str, sizeof(pid_str), "PID=3D%u", pid_vnr(reset_info->pid)=
+);
+
+Passing PID by number is racy, but I suppose it has two rationales:
+- there is no way to pass a pidfd?
+- it's safe enough because the kernel avoids aggressive PID re-use?
+
+Maybe this would be good to note in the commit message to justify the
+design.
+
+What about pid namespaces, are they handled by pid_vnr() auto-magically
+somehow? Does it mean that the daemon handling these events *must not*
+be running under a (non-root?) pid namespace to work at all?
+
+E.g. if you have a container that is given a dedicated GPU device, I
+guess it might be reasonable to want to run the daemon inside that
+container as well. I have no idea how pid namespaces work, but I recall
+hearing they are a thing.
+
+> +	snprintf(flags_str, sizeof(flags_str), "FLAGS=3D0x%llx", reset_info->fl=
+ags);
+> +	kobject_uevent_env(&dev->primary->kdev->kobj, KOBJ_CHANGE, envp);
+> +}
+> +EXPORT_SYMBOL(drm_sysfs_reset_event);
+> +
+>  /**
+>   * drm_sysfs_connector_hotplug_event - generate a DRM uevent for any con=
+nector
+>   * change
+> diff --git a/include/drm/drm_sysfs.h b/include/drm/drm_sysfs.h
+> index 6273cac44e47..dbb0ac6230b8 100644
+> --- a/include/drm/drm_sysfs.h
+> +++ b/include/drm/drm_sysfs.h
+> @@ -2,15 +2,28 @@
+>  #ifndef _DRM_SYSFS_H_
+>  #define _DRM_SYSFS_H_
+> =20
+> +#define DRM_RESET_EVENT_VRAM_LOST (1 << 0)
+
+Since flags are UAPI, they should be documented somewhere in UAPI docs.
+
+Shouldn't this whole event be documented somewhere in UAPI docs to say
+what it means and what attributes it may have and what they mean?
+
+
+Thanks,
+pq
+
+> +
+>  struct drm_device;
+>  struct device;
+>  struct drm_connector;
+>  struct drm_property;
+> =20
+> +/**
+> + * struct drm_reset_event_info - Information about a GPU reset event
+> + * @pid: Process that triggered the reset, if any
+> + * @flags: Extra information around the reset event (e.g. is VRAM lost?)
+> + */
+> +struct drm_reset_event_info {
+> +	struct pid *pid;
+> +	uint64_t flags;
+> +};
+> +
+>  int drm_class_device_register(struct device *dev);
+>  void drm_class_device_unregister(struct device *dev);
+> =20
+>  void drm_sysfs_hotplug_event(struct drm_device *dev);
+> +void drm_sysfs_reset_event(struct drm_device *dev, struct drm_reset_even=
+t_info *reset_info);
+>  void drm_sysfs_connector_hotplug_event(struct drm_connector *connector);
+>  void drm_sysfs_connector_status_event(struct drm_connector *connector,
+>  				      struct drm_property *property);
+
+
+--Sig_/aUlzZ38K0WssssJjVJMpEdE
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmOEfxsACgkQI1/ltBGq
+qqffnhAAn/qNAIPJJSqP+3/6qTZQhkiLuZ+MvbCFtrLOTr1DAd6yeNcWF8biypY2
+J5CI42EyZfMiuwiVgsyEESGrf6/gGhF7G47NzsA1oal4iDkj9WZ8Wizzyw8M84gS
+1DqX0ACVl7dDu741GZo1H3fDrnAEqdrvmJ5vzHeVb3EQovg8ZdSVJutuaqXqqP2L
+6haRA6KGyTNV+pr5sEDiXPm6oj7sQgvaB4mJ4odnczUmIS9IJdaI+nZ1PFkIaD0E
+BepXG805OeZCylLW56ikirup6GnKjhAkNShgySlK9cfOmDlerv5n5wKjgjTixJC9
+tXbLUlXkbMDPuRFnaaWa0r7fYKbWBooBRtuaFimry0mStYbpqhYkdvWPa21ZzNsD
+nFo7eAWv6fkue9m5bdWVMeVh1B0Fy6Jyi9ZiO/kIZ6Fisd9Mx2eqIWq2+X2EIEIx
+C4GJ4v19EDNZ15FYisPUkUyTfnwOaY0ifK04PRJItYILm75VxV/64oclekA+APQ0
+sIBbwU9XUg2WobEi6pe7l4V9EfhW1+MzuvuB9z0mZ8krBoMVCnpDWv2Jcr4kq8U5
+l1Onx8sN/hFlB3JR4DoWjd2kHuUfqU2yAvdxAaA76DlK6blfEfjYgjD7rENJHdPl
+wPpV57+ercFPrdfKKmW1AZr6z5Wpvizn02tX0emPuK/wYF3zuFg=
+=lH7L
+-----END PGP SIGNATURE-----
+
+--Sig_/aUlzZ38K0WssssJjVJMpEdE--
