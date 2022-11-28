@@ -2,304 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBFE4639FA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 03:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 235A4639FB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 03:49:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiK1Cqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 21:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45728 "EHLO
+        id S229843AbiK1CtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 21:49:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiK1CqG (ORCPT
+        with ESMTP id S229986AbiK1Csz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 21:46:06 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CF111835;
-        Sun, 27 Nov 2022 18:46:04 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AS1nkEj029029;
-        Mon, 28 Nov 2022 02:45:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=wBLegpuMtb+lx7WzDFtoFBhbZz5Ftj7V700Zzn0VSw4=;
- b=KiNoGg/m8KMsP35nt+nGyW2mGTN9GrAlRW+SAmryViW8uxcqtUee0vdDsLv0cMFk+PQD
- lxBNjkp+A/Ec3bH7d4E50x7eeev8T6fzyntbcA5dcpNRD63ycC69RFB0jUzPQApkIY1p
- yWQzhkUXlfdUDV0nnaOm9AmDPdKvpEGtATCNBU3aOXd4U2pJRiQWoNxLFd0fp7a1SWFw
- 23wyh+2jcTemVSrLdfsEc8rYNCJfKj0fNRb2Qqs0BOPlkGiURUCGTsZRIzR6RdBpuNdc
- 9jHyRztIfoTJ89QNx+0JbQbOxTZHO18LmhhPkEKxnZ8PqQUlUPNFVkuFauBAZFUlc+ZK 5Q== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m3vn6ups8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 02:45:49 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AS2Zs8x003685;
-        Mon, 28 Nov 2022 02:45:47 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03fra.de.ibm.com with ESMTP id 3m3ae8sbe3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 02:45:47 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AS2jjBR918192
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Nov 2022 02:45:45 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5095911C04A;
-        Mon, 28 Nov 2022 02:45:45 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A5E3F11C04C;
-        Mon, 28 Nov 2022 02:45:44 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 28 Nov 2022 02:45:44 +0000 (GMT)
-Received: from li-0d7fa1cc-2c9d-11b2-a85c-aed20764436d.ibm.com (haven.au.ibm.com [9.192.254.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 27 Nov 2022 21:48:55 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C704B12082;
+        Sun, 27 Nov 2022 18:48:01 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 80C9F6096D;
-        Mon, 28 Nov 2022 13:45:39 +1100 (AEDT)
-From:   Benjamin Gray <bgray@linux.ibm.com>
-To:     linuxppc-dev@lists.ozlabs.org
-Cc:     ajd@linux.ibm.com, ruscur@russell.cc, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, cmr@bluescreens.de,
-        Benjamin Gray <bgray@linux.ibm.com>
-Subject: [RFC PATCH 13/13] Documentation: Document PowerPC kernel DEXCR interface
-Date:   Mon, 28 Nov 2022 13:44:58 +1100
-Message-Id: <20221128024458.46121-14-bgray@linux.ibm.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221128024458.46121-1-bgray@linux.ibm.com>
-References: <20221128024458.46121-1-bgray@linux.ibm.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NL8yl5XG3z4wgv;
+        Mon, 28 Nov 2022 13:47:42 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669603664;
+        bh=cygpdUJpbGd5CDPNELRdUlMkQYIt+vhJa3RkI+JJvcU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oNpmEdhL7wtVEEBZX4jjDlomIKkOfa7Lt+1vQjiibmL+zP0v3sSQXQgwVbOWhxGPT
+         NaTY5X5z/NzZdSCZz4m6znVFub6ZXLFyihOxD6Wg91lrAb2saLDbaop+v5w17V7hm9
+         fqVHZBusTtr+0riiAZwMIM1LDS3Y8ClvIlnVl6NOXK4+sA5LQB1Yx7wWNer4/nH7hr
+         iQ+EOZJLxe9TMLXB2our53hCzUb1xT+EO1N7I2NhCjOHUTtuXACdzgctcli5qrJ5iR
+         DR9Pe33VzypyWvi+pYeom8MJvqEX6zu2LOoL6w8hGYoaw3v/D+bKJFMeGjWavCw3GE
+         xgt3F24r6pq8Q==
+Date:   Mon, 28 Nov 2022 13:47:41 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Rob Herring <robherring2@gmail.com>, Greg KH <greg@kroah.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: linux-next: manual merge of the iio tree with the devicetree
+ tree
+Message-ID: <20221128134741.668fe1b7@canb.auug.org.au>
+In-Reply-To: <20221104124922.499bdece@canb.auug.org.au>
+References: <20221104124922.499bdece@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GfeC96U5pF5Oj3u0DLQTSbxYSW_nkHkN
-X-Proofpoint-ORIG-GUID: GfeC96U5pF5Oj3u0DLQTSbxYSW_nkHkN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-28_02,2022-11-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- suspectscore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0
- mlxlogscore=999 phishscore=0 clxscore=1015 bulkscore=0 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211280018
+Content-Type: multipart/signed; boundary="Sig_/0HV0lmNPHeUV0Dliy9rLb9D";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe the DEXCR and document how to interact with it via the
-prctl and sysctl interfaces.
+--Sig_/0HV0lmNPHeUV0Dliy9rLb9D
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
----
- Documentation/powerpc/dexcr.rst | 183 ++++++++++++++++++++++++++++++++
- Documentation/powerpc/index.rst |   1 +
- 2 files changed, 184 insertions(+)
- create mode 100644 Documentation/powerpc/dexcr.rst
+Hi all,
 
-diff --git a/Documentation/powerpc/dexcr.rst b/Documentation/powerpc/dexcr.rst
-new file mode 100644
-index 000000000000..3c995f4b9fe0
---- /dev/null
-+++ b/Documentation/powerpc/dexcr.rst
-@@ -0,0 +1,183 @@
-+==========================================
-+DEXCR (Dynamic Execution Control Register)
-+==========================================
-+
-+Overview
-+========
-+
-+The DEXCR is a privileged special purpose register (SPR) introduced in
-+PowerPC ISA 3.1B (Power10) that allows per-cpu control over several dynamic
-+execution behaviours. These behaviours include speculation (e.g., indirect
-+branch target prediction) and enabling return-oriented programming (ROP)
-+protection instructions.
-+
-+The execution control is exposed in hardware as up to 32 bits ('aspects') in
-+the DEXCR. Each aspect controls a certain behaviour, and can be set or cleared
-+to enable/disable the aspect. There are several variants of the DEXCR for
-+different purposes:
-+
-+DEXCR
-+    A priviliged SPR that can control aspects for userspace and kernel space
-+HDEXCR
-+    A hypervisor-privileged SPR that can control aspects for the hypervisor and
-+    enforce aspects for the kernel and userspace.
-+UDEXCR
-+    An optional ultravisor-privileged SPR that can control aspects for the ultravisor.
-+
-+Userspace can examine the current DEXCR state using a dedicated SPR that
-+provides a non-privileged read-only view of the userspace DEXCR aspects.
-+There is also an SPR that provides a read-only view of the hypervisor enforced
-+aspects, which ORed with the userspace DEXCR view gives the effective DEXCR
-+state for a process.
-+
-+
-+User API
-+========
-+
-+prctl()
-+-------
-+
-+A process can control its own userspace DEXCR value using the
-+``PR_PPC_GET_DEXCR`` and ``PR_PPC_SET_DEXCR`` pair of
-+:manpage:`prctl(2)` commands. These calls have the form::
-+
-+    prctl(PR_PPC_GET_DEXCR, unsigned long aspect, 0, 0, 0);
-+    prctl(PR_PPC_SET_DEXCR, unsigned long aspect, unsigned long flags, 0, 0);
-+
-+Where ``aspect`` (``arg1``) is a constant and ``flags`` (``arg2``) is a bifield.
-+The possible aspect and flag values are as follows. Note there is no relation
-+between aspect value and ``prctl()`` constant value.
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 2 7 1
-+
-+   * - ``prctl()`` constant
-+     - Aspect name
-+     - Aspect bit
-+
-+   * - ``PR_PPC_DEXCR_SBHE``
-+     - Speculative Branch Hint Enable (SBHE)
-+     - 0
-+
-+   * - ``PR_PPC_DEXCR_IBRTPD``
-+     - Indirect Branch Recurrent Target Prediction Disable (IBRTPD)
-+     - 3
-+
-+   * - ``PR_PPC_DEXCR_SRAPD``
-+     - Subroutine Return Address Prediction Disable (SRAPD)
-+     - 4
-+
-+   * - ``PR_PPC_DEXCR_NPHIE``
-+     - Non-Privileged Hash Instruction Enable (NPHIE)
-+     - 5
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 2 8
-+
-+   * - ``prctl()`` flag
-+     - Meaning
-+
-+   * - ``PR_PPC_DEXCR_PRCTL``
-+     - This aspect can be configured with ``prctl(PR_PPC_SET_DEXCR, ...)``
-+
-+   * - ``PR_PPC_DEXCR_SET_ASPECT``
-+     - This aspect is set
-+
-+   * - ``PR_PPC_DEXCR_FORCE_SET_ASPECT``
-+     - This aspect is set and cannot be undone. A subsequent
-+       ``prctl(..., PR_PPC_DEXCR_CLEAR_ASPECT)`` will fail.
-+
-+   * - ``PR_PPC_DEXCR_CLEAR_ASPECT``
-+     - This aspect is clear
-+
-+Note that
-+
-+* The ``*_SET_ASPECT`` / ``*_CLEAR_ASPECT`` refers to setting/clearing the bit in the DEXCR.
-+  For example::
-+
-+      prctl(PR_PPC_SET_DEXCR, PR_PPC_DEXCR_IBRTPD, PR_PPC_DEXCR_SET_ASPECT, 0, 0);
-+
-+  will set the IBRTPD aspect bit in the DEXCR, causing indirect branch prediction
-+  to be disabled.
-+
-+* The status returned by ``PR_PPC_GET_DEXCR`` does not include any alternative
-+  config overrides. To see the true DEXCR state software should read the appropriate
-+  SPRs directly.
-+
-+* A forced aspect will still report ``PR_PPC_DEXCR_PRCTL`` if it would
-+  otherwise be editable.
-+
-+* The aspect state when starting a process is copied from the parent's
-+  state on :manpage:`fork(2)` and :manpage:`execve(2)`. Aspects may also be set
-+  or cleared by the kernel on process creation.
-+
-+Use ``PR_PPC_SET_DEXCR`` with one of ``PR_PPC_DEXCR_SET_ASPECT``,
-+``PR_PPC_DEXCR_FORCE_SET_ASPECT``, or ``PR_PPC_DEXCR_CLEAR_ASPECT`` to edit a
-+ given aspect.
-+
-+Common error codes for both getting and setting the DEXCR are as follows:
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 2 8
-+
-+   * - Error
-+     - Meaning
-+
-+   * - ``EINVAL``
-+     - The DEXCR is not supported by the kernel.
-+
-+   * - ``ENODEV``
-+     - The aspect is not recognised by the kernel or not supported by the hardware.
-+
-+``PR_PPC_SET_DEXCR`` may also report the following error codes:
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 2 8
-+
-+   * - Error
-+     - Meaning
-+
-+   * - ``ERANGE``
-+     - ``arg2`` is incorrect. E.g., it does not select an action (set/clear),
-+       or the flags are not recognised by the kernel.
-+
-+   * - ``ENXIO``
-+     - The aspect is not editable via ``prctl()``.
-+
-+   * - ``EPERM``
-+     - The process does not have sufficient privilege to modify this aspect,
-+       or the aspect has been force set and cannot be modified.
-+
-+
-+sysctl
-+------
-+
-+Some aspects can be modified globally via :manpage:`sysctl(8)` entries. Such global
-+modifications are applied after any process modifications. Any ``prctl()`` call to
-+an overridden aspect this aspect may still report it as editable. The prctl setting
-+will take effect again if the global override is restored to its default state.
-+
-+A global SBHE config is exposed in ``/proc/sys/kernel/speculative_branch_hint_enable``.
-+Any process can read the current config value from it. Privileged processes can
-+write to it to change the config. The new config is applied to all current and future
-+processes (though note the kernel cannot override any hypervisor enforced aspects).
-+
-+.. flat-table::
-+   :header-rows: 1
-+   :widths: 2 8
-+
-+   * - Value
-+     - Meaning
-+
-+   * - ``-1``
-+     - Do not change from default or ``prctl()`` config.
-+
-+   * - ``0``
-+     - Force clear aspect.
-+
-+   * - ``1``
-+     - Force set aspect.
-diff --git a/Documentation/powerpc/index.rst b/Documentation/powerpc/index.rst
-index 85e80e30160b..d33b554ca7ba 100644
---- a/Documentation/powerpc/index.rst
-+++ b/Documentation/powerpc/index.rst
-@@ -15,6 +15,7 @@ powerpc
-     cxl
-     cxlflash
-     dawr-power9
-+    dexcr
-     dscr
-     eeh-pci-error-recovery
-     elf_hwcaps
--- 
-2.38.1
+On Fri, 4 Nov 2022 12:49:22 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>=20
+> Today's linux-next merge of the iio tree got a conflict in:
+>=20
+>   Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml
+>=20
+> between commit:
+>=20
+>   c9adc3bd1180 ("dt-bindings: Remove "status" from schema examples, again=
+")
+>=20
+> from the devicetree tree and commit:
+>=20
+>   a4728fe6b58b ("dt-bindings: iio: addac: adi,ad74413r: improve example")
+>=20
+> from the iio tree.
+>=20
+> I fixed it up (I just used the latter whic included the former change
+> to this file) and can carry the fix as necessary. This is now fixed as
+> far as linux-next is concerned, but any non trivial conflicts should be
+> mentioned to your upstream maintainer when your tree is submitted for
+> merging.  You may also want to consider cooperating with the maintainer
+> of the conflicting tree to minimise any particularly complex conflicts.
 
+This is now a conflict between the char-misc tree and the devicetree
+tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/0HV0lmNPHeUV0Dliy9rLb9D
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOEIU0ACgkQAVBC80lX
+0GwzLAf/QsZL5lJ+gC33XHcH4CF+/NxmzSanJaYjPMkwpFlJQPn2j9K9Pou4eRTT
+JiN5zyaNwDMSp576vBbDgGQcsnMt60EwqvmhLck3YEPHOXHgvweA8/3FqM50nA0E
+SiFDYAokkLMLIBPgmZJywUQNXTtneuoYe/LF7POfwdIT511arwPQn7XExiR5cbx0
+0em6/Z06LOzYQHw2VHDBoSqry1PAD3i7+QKwpk7zZP1MibK4Ga5vPe7EBNx8ly2b
+4NJssB0g1FxtzX5RWwKO8YBchjhjAoGsFi8tywUjJnWAO2QoQHwqNbACnPdN+zIp
+0mt6tXqiN4hWDczISguHhrE5xVM7+A==
+=D9tB
+-----END PGP SIGNATURE-----
+
+--Sig_/0HV0lmNPHeUV0Dliy9rLb9D--
