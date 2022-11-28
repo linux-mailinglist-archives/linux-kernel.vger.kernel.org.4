@@ -2,150 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2677163A571
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F2163A573
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiK1Jxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 04:53:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
+        id S229675AbiK1JyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 04:54:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiK1Jxj (ORCPT
+        with ESMTP id S229773AbiK1Jx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 04:53:39 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6B99FC0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:53:38 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id w9-20020a056e021c8900b0030247910269so8284632ill.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:53:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4YMW++R1On3P6dJ2gu4QPEe9Sm2nMnUkQkuzAEPBPQE=;
-        b=xMs9Q2qhwojjuFVbgGqkR46lvqzEJ3HkMKQWg/aK/17eQmPkvHlRyrMmO2nbfvrzqh
-         l0AHMIwQmejGFF/hY5kcFzKVIauUIaVXx07MHgsF6GwsDi0555Sctb/9dV4Qhsc7xP0d
-         ZyXWIOkcsksALR2kK64THc/nfrGYvZvmzyMMYgAHTuSPMK0dqG7KOp585Dhp0/ywMcbv
-         SQ6SbJW0y9DAzQfWjkmPLjPoPR7vEyJKdkXQv3rCPSCfccKinXm88unBD7XAdWTB9eEL
-         I26S0CFN3o7A1HrI6OaGx4Q9c4VlWvVoxaf+kVtV3w888+h7iExts9CTM8454RAp6lws
-         KMtA==
-X-Gm-Message-State: ANoB5pkcCRLbN0Rxw1BUN0cg4p3FforUCavU4shK/7LG/w5QgrSAXnhQ
-        LOcsHq7rgNCs431KbvjGX32nJEKz9Org1H4a/jhDvAVSzUm9
-X-Google-Smtp-Source: AA0mqf5BgmVfE/wPnZYHko/K0RlBaIXALiRSGXFfnLumQbDr25gLsY0SpsphOU49L5OvNqVCkg0ZQigJUv3eDzDidUKZsXjrBbge
-MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1b08:b0:358:1594:9eb6 with SMTP id
- cb8-20020a0566381b0800b0035815949eb6mr9269386jab.236.1669629217828; Mon, 28
- Nov 2022 01:53:37 -0800 (PST)
-Date:   Mon, 28 Nov 2022 01:53:37 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006f759505ee84d8d7@google.com>
-Subject: [syzbot] BUG: corrupted list in nfc_llcp_unregister_device
-From:   syzbot <syzbot+81232c4a81a886e2b580@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com,
-        krzysztof.kozlowski@linaro.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        Mon, 28 Nov 2022 04:53:59 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E674F95BB;
+        Mon, 28 Nov 2022 01:53:57 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 72F081FD99;
+        Mon, 28 Nov 2022 09:53:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669629236; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+hcAPsRKjwfGIqTFf3niuYUk+88SwB3jKyrNLAhms58=;
+        b=G75Y+Ue8ViCx0MK6I4JA+FLD47vZQg56H6snFSCOa96tyv9r2F7qJa9gyapr9Bsvjd9XTS
+        ZaWyejWENfaNzfx7yLm7O4Q8h8XD6nGbwJlZhZ+CtcN0e7diIG6XZzofVtsNVMM5zlSpCR
+        XIBgBbnWMYf6a5tl5Q2JVRpdT6nHl4Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669629236;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+hcAPsRKjwfGIqTFf3niuYUk+88SwB3jKyrNLAhms58=;
+        b=KmbZdHqORB7knhE2TbaV0MNkNg41I+2A8pG5sCxSUwX9QXm3egsN6j2uNufWbg0gqix9j2
+        jcN8uQ/gy4NLV5AQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 35A3C1326E;
+        Mon, 28 Nov 2022 09:53:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ZZtJDDSFhGM0DQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 28 Nov 2022 09:53:56 +0000
+Date:   Mon, 28 Nov 2022 10:53:55 +0100
+Message-ID: <87tu2jz9os.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Takashi Iwai <tiwai@suse.com>, Len Brown <len.brown@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        alsa-devel@alsa-project.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] ALSA: core: Fix deadlock when shutdown a frozen userspace
+In-Reply-To: <CANiDSCtSAM3seszVWfjJPaYFO3v223P-tYEtdpW4+pQQ3bcf0g@mail.gmail.com>
+References: <20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org>
+        <87wn7fzb2g.wl-tiwai@suse.de>
+        <CANiDSCtSAM3seszVWfjJPaYFO3v223P-tYEtdpW4+pQQ3bcf0g@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, 28 Nov 2022 10:26:36 +0100,
+Ricardo Ribalda wrote:
+> 
+> Hi Takashi
+> 
+> Thanks for your prompt reply
+> 
+> On Mon, 28 Nov 2022 at 10:24, Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > On Mon, 28 Nov 2022 10:10:12 +0100,
+> > Ricardo Ribalda wrote:
+> > >
+> > > Since 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
+> > > we wait for userspace to close its fds.
+> >
+> > IMO, the fix above brought more problem.  If you'd need to want to
+> > avoid later accesses during shutdown, the driver should rather just
+> > disconnect devices without waiting for the user-space completion.
+> > And, for that, a simple call of snd_card_disconnect() should suffice.
+> >
+> > > But that will never occur with a frozen userspace (like during kexec()).
+> > >
+> > > Lets detect the frozen userpace and act accordingly.
+> >
+> > ... and skipping the user-space sync at snd_card_disconnect_sync() as
+> > of this patch set is a dangerous move, I'm afraid.  The user-space
+> > gets frozen also at the normal suspend/resume, and it implies that the
+> > sync will be lost even for the normal PM, too (although it must be a
+> > very corner case).
+> >
+> 
+> And what about checking kexec_in_progress instead?
 
-syzbot found the following issue on:
+I still think that the call of snd_card_disconnect_sync() itself at
+shutdown is somehow wrong.  If this only comes from the SOF code path
+above, we should address in that code path instead.
 
-HEAD commit:    9e46a7996732 Add linux-next specific files for 20221125
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=149b558d880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=11e19c740a0b2926
-dashboard link: https://syzkaller.appspot.com/bug?extid=81232c4a81a886e2b580
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+OTOH, you showed two code paths: one is 
 
-Unfortunately, I don't have any reproducer for this issue yet.
+[   84.943749] Freezing user space processes ... (elapsed 0.111 seconds) done.
+[  246.784446] INFO: task kexec-lite:5123 blocked for more than 122 seconds.
+[  246.819035] Call Trace:
+[  246.821782]  <TASK>
+[  246.824186]  __schedule+0x5f9/0x1263
+[  246.828231]  schedule+0x87/0xc5
+[  246.831779]  snd_card_disconnect_sync+0xb5/0x127
+...
+[  246.889249]  snd_sof_device_shutdown+0xb4/0x150
+[  246.899317]  pci_device_shutdown+0x37/0x61
+[  246.903990]  device_shutdown+0x14c/0x1d6
+[  246.908391]  kernel_kexec+0x45/0xb9
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/758d818cf966/disk-9e46a799.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f7c8696b40a5/vmlinux-9e46a799.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/810f9750b87f/bzImage-9e46a799.xz
+and another is
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+81232c4a81a886e2b580@syzkaller.appspotmail.com
+[  246.893222] INFO: task kexec-lite:4891 blocked for more than 122 seconds.
+[  246.927709] Call Trace:
+[  246.930461]  <TASK>
+[  246.932819]  __schedule+0x5f9/0x1263
+[  246.936855]  ? fsnotify_grab_connector+0x5c/0x70
+[  246.942045]  schedule+0x87/0xc5
+[  246.945567]  schedule_timeout+0x49/0xf3
+[  246.949877]  wait_for_completion+0x86/0xe8
+[  246.954463]  snd_card_free+0x68/0x89
+...
+[  247.001080]  platform_device_unregister+0x12/0x35
 
-list_del corruption. prev->next should be ffff888060ce7000, but was ffff88802a0ad000. (prev=ffffffff8e536240)
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:59!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 16622 Comm: syz-executor.5 Not tainted 6.1.0-rc6-next-20221125-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:__list_del_entry_valid.cold+0x12/0x72 lib/list_debug.c:59
-Code: f0 ff 0f 0b 48 89 f1 48 c7 c7 60 96 a6 8a 4c 89 e6 e8 4b 29 f0 ff 0f 0b 4c 89 e1 48 89 ee 48 c7 c7 c0 98 a6 8a e8 37 29 f0 ff <0f> 0b 48 89 ee 48 c7 c7 a0 97 a6 8a e8 26 29 f0 ff 0f 0b 4c 89 e2
-RSP: 0018:ffffc900151afd58 EFLAGS: 00010282
-RAX: 000000000000006d RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff88801e7eba80 RSI: ffffffff8166001c RDI: fffff52002a35f9d
-RBP: ffff888060ce7000 R08: 000000000000006d R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff8e536240
-R13: ffff88801f3f3000 R14: ffff888060ce1000 R15: ffff888079d855f0
-FS:  0000555556f57400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f095d5ad988 CR3: 000000002155a000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __list_del_entry include/linux/list.h:134 [inline]
- list_del include/linux/list.h:148 [inline]
- local_release net/nfc/llcp_core.c:171 [inline]
- kref_put include/linux/kref.h:65 [inline]
- nfc_llcp_local_put net/nfc/llcp_core.c:181 [inline]
- nfc_llcp_local_put net/nfc/llcp_core.c:176 [inline]
- nfc_llcp_unregister_device+0xb8/0x260 net/nfc/llcp_core.c:1619
- nfc_unregister_device+0x196/0x330 net/nfc/core.c:1179
- virtual_ncidev_close+0x52/0xb0 drivers/nfc/virtual_ncidev.c:163
- __fput+0x27c/0xa90 fs/file_table.c:320
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f8e7103df8b
-Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
-RSP: 002b:00007fffb68ce4c0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 0000000000000004 RCX: 00007f8e7103df8b
-RDX: 00007f8e70c00e38 RSI: ffffffffffffffff RDI: 0000000000000003
-RBP: 00007f8e711ad980 R08: 0000000000000000 R09: 00007f8e70c00000
-R10: 00007f8e70c00e40 R11: 0000000000000293 R12: 000000000002bca8
-R13: 00007fffb68ce5c0 R14: 00007f8e711abf80 R15: 0000000000000032
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__list_del_entry_valid.cold+0x12/0x72 lib/list_debug.c:59
-Code: f0 ff 0f 0b 48 89 f1 48 c7 c7 60 96 a6 8a 4c 89 e6 e8 4b 29 f0 ff 0f 0b 4c 89 e1 48 89 ee 48 c7 c7 c0 98 a6 8a e8 37 29 f0 ff <0f> 0b 48 89 ee 48 c7 c7 a0 97 a6 8a e8 26 29 f0 ff 0f 0b 4c 89 e2
-RSP: 0018:ffffc900151afd58 EFLAGS: 00010282
-RAX: 000000000000006d RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff88801e7eba80 RSI: ffffffff8166001c RDI: fffff52002a35f9d
-RBP: ffff888060ce7000 R08: 000000000000006d R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff8e536240
-R13: ffff88801f3f3000 R14: ffff888060ce1000 R15: ffff888079d855f0
-FS:  0000555556f57400(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fa7f4ab1718 CR3: 000000002155a000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+The former is likely the SOF code path by the commit you mentioned
+(but it's not 100% clear because you trimmed the stack trace), and
+this should be reconsidered.
+
+But, the latter seems to be independent from that.  If that's the code
+path where the unbind is triggered before kexec, your fix might not
+work, either; it could be already at the wait_event*() when kexec
+starts.
+
+Maybe a simpler workaround would be to replace it with
+wait_event_killable*() stuff.  But whether we can discontinue the sync
+there is still another thing to consider...
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Takashi
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 
+> Thanks!
+> 
+> >
+> > thanks,
+> >
+> > Takashi
+> >
+> > >
+> > > To: Jaroslav Kysela <perex@perex.cz>
+> > > To: Takashi Iwai <tiwai@suse.com>
+> > > To: "Rafael J. Wysocki" <rafael@kernel.org>
+> > > To: Pavel Machek <pavel@ucw.cz>
+> > > To: Len Brown <len.brown@intel.com>
+> > > To: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+> > > To: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+> > > To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> > > To: Mark Brown <broonie@kernel.org>
+> > > Cc: alsa-devel@alsa-project.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > Cc: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+> > > Cc: linux-pm@vger.kernel.org
+> > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > ---
+> > > Changes in v3:
+> > > - Wrap pm_freezing in a function
+> > > - Link to v2: https://lore.kernel.org/r/20221127-snd-freeze-v2-0-d8a425ea9663@chromium.org
+> > >
+> > > Changes in v2:
+> > > - Only use pm_freezing if CONFIG_FREEZER
+> > > - Link to v1: https://lore.kernel.org/r/20221127-snd-freeze-v1-0-57461a366ec2@chromium.org
+> > >
+> > > ---
+> > > Ricardo Ribalda (2):
+> > >       freezer: Add processes_frozen()
+> > >       ALSA: core: Fix deadlock when shutdown a frozen userspace
+> > >
+> > >  include/linux/freezer.h |  2 ++
+> > >  kernel/freezer.c        | 11 +++++++++++
+> > >  sound/core/init.c       | 13 +++++++++++++
+> > >  3 files changed, 26 insertions(+)
+> > > ---
+> > > base-commit: 4312098baf37ee17a8350725e6e0d0e8590252d4
+> > > change-id: 20221127-snd-freeze-1ee143228326
+> > >
+> > > Best regards,
+> > > --
+> > > Ricardo Ribalda <ribalda@chromium.org>
+> > >
+> 
+> 
+> 
+> -- 
+> Ricardo Ribalda
+> 
