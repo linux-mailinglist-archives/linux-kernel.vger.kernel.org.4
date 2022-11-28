@@ -2,104 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3A263AEA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D6263AEAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232830AbiK1RQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 12:16:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
+        id S232834AbiK1RQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 12:16:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232834AbiK1RQN (ORCPT
+        with ESMTP id S232793AbiK1RQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:16:13 -0500
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E319E23EA3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:16:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1669655757;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=Message-Id:To:Cc:Subject:Date:From:Cc:Date:From:Subject:Sender;
-    bh=bOuOksZJoXbaL7IsTIZbAd8uRA2KdZcmEpIrDDtAX20=;
-    b=bq1+a0JKU+qCS698IbnrpsRZW2b+E+c0JRQ7KlLSbtZmeRmpXe/LjPhUk6EgGgg5du
-    aWePs6sRvEWbZGPSlTqvnD1pH2nY2LfUmlUBVYR4q5CQpTOt0PjGJYgXAIkAAQrkqTmd
-    hhh6dbP+aWhMFtQfiIPg2z5+BYNLt8Ytwl96pCLdxtJgv0HX+qARQ3uKuahVvcYHd0Pl
-    3Srok0pCeyQMIuYAhAD4HcBHtV1QBZZiC0QWk7wMaVmZJNynp40Lq/AjLPryAgI4YVHf
-    7T97wfCBCDXPxdgSAqyL2KGhIuXWOG9ZbF7poNAwTXu0F/PqYXRBs3cEuimSMsmv3/IX
-    HloQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGYk/8="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 48.2.1 DYNA|AUTH)
-    with ESMTPSA id v55d69yASHFuCUa
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Mon, 28 Nov 2022 18:15:56 +0100 (CET)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-Content-Type: text/plain;
-        charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Date:   Mon, 28 Nov 2022 18:15:55 +0100
-Subject: [BUG] Add missing <linux/string.h> include for strcmp.
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>
-To:     Sam James <sam@gentoo.org>
-Message-Id: <A222B1E6-69B8-4085-AD1B-27BDB72CA971@goldelico.com>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Nov 2022 12:16:30 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7187525E87;
+        Mon, 28 Nov 2022 09:16:29 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASFvbRZ032038;
+        Mon, 28 Nov 2022 17:16:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=RZJVGDX/6B5Oe0iNQFvKjIT62omfWmQKvG7j7+mkPXg=;
+ b=K3Iy9/sJ/sx1tmzXN7yRnRY+uDt7IvrHNw05L6MvmciQAs3HawKBYsgTo8427zAmPH+F
+ IMRqOtQayO6L/xm44knAHK2uDCaE4mFfkPcEKAxYNZfbtobPQ96ELI9xAQVIcelO/TBm
+ KEXMv1TjyK7DVSEhRctWywQEcijWuasrXB6IfqQIPCbK5WQx1CbN3HddcVaECwWi8yfA
+ xgmMSpvggCAK1wtz+yNryWivvRps9BRpbiKzd/QQSJA+JLNkwansm1crg0zn0X+GmOmO
+ YyVP5S0nNh7YUrpQNXnBHRWZvL/O4bAdeJr//XiPHC7XZy5XLFrMrh/fk1AngH0viBKt EA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m3vjdfpg3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 17:16:12 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ASGrMPK002723;
+        Mon, 28 Nov 2022 17:16:12 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m3vjdfpf7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 17:16:12 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ASH9NBV027840;
+        Mon, 28 Nov 2022 17:16:10 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma01dal.us.ibm.com with ESMTP id 3m3ae9tmf2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 17:16:10 +0000
+Received: from smtpav06.dal12v.mail.ibm.com ([9.208.128.130])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ASHG5Sv23724522
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Nov 2022 17:16:05 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 098E958055;
+        Mon, 28 Nov 2022 17:16:09 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5DC3058043;
+        Mon, 28 Nov 2022 17:16:08 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.26.105])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 28 Nov 2022 17:16:08 +0000 (GMT)
+Message-ID: <2204915d319ff9acf80f68ccba8600aaeb5578d7.camel@linux.ibm.com>
+Subject: Re: [PATCH] lockdown: kexec_file: prevent unsigned kernel image
+ when KEXEC_SIG not enabled
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Coiby Xu <coxu@redhat.com>
+Cc:     kexec@lists.infradead.org, Matthew Garrett <mjg59@srcf.ucam.org>,
+        Jiri Bohac <jbohac@suse.cz>,
+        David Howells <dhowells@redhat.com>,
+        linux-integrity@vger.kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        James Morris <jmorris@namei.org>,
+        Matthew Garrett <mjg59@google.com>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Mon, 28 Nov 2022 12:16:08 -0500
+In-Reply-To: <20221122023606.nrifkrng5nbfmkka@Rk>
+References: <20221121072947.836672-1-coxu@redhat.com>
+         <5d98172d77a8a0f1e3daab44ad51bf38978cc053.camel@linux.ibm.com>
+         <20221122023606.nrifkrng5nbfmkka@Rk>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: mqijHTnZy1VBf3pmbGa_r2tIH2ydgGu9
+X-Proofpoint-ORIG-GUID: irI5J7NUXvt-rvRcC-babNVDtv_cJtnT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-28_14,2022-11-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 mlxlogscore=709 bulkscore=0 spamscore=0 suspectscore=0
+ clxscore=1015 impostorscore=0 phishscore=0 lowpriorityscore=0 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211280126
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-starting with v6.1-rc7 I can't build my tree any more:
+On Tue, 2022-11-22 at 10:36 +0800, Coiby Xu wrote:
+> Hi Mimi,
+> 
+> On Mon, Nov 21, 2022 at 01:23:57PM -0500, Mimi Zohar wrote:
+> >Hi Coiby,
+> >
+> >On Mon, 2022-11-21 at 15:29 +0800, Coiby Xu wrote:
+> >> A kernel builder may not enable KEXEC_SIG and some architectures like
+> >> ppc64 simply don't have KEXEC_SIG. In these cases, unless both
+> >> IMA_ARCH_POLICY and secure boot also enabled, lockdown doesn't prevent
+> >> unsigned kernel image from being kexec'ed via the kexec_file_load
+> >> syscall whereas it could prevent one via the kexec_load syscall. Mandate
+> >> signature verification for those cases.
+> >>
+> >> Fixes: 155bdd30af17 ("kexec_file: Restrict at runtime if the kernel is locked down")
+> >> Cc: Matthew Garrett <mjg59@srcf.ucam.org>
+> >> Cc: Jiri Bohac <jbohac@suse.cz>
+> >> Cc: David Howells <dhowells@redhat.com>
+> >> Cc: kexec@lists.infradead.org
+> >> Cc: linux-integrity@vger.kernel.org
+> >> Signed-off-by: Coiby Xu <coxu@redhat.com>
+> >
+> >Other than correcting the function name to mandate_signature_verificati
+> >on(),
+> 
+> Applied to v2, thanks for correcting me! Btw, I realize I overwrote the
+> return code of kexec_image_verify_sig with
+> mandate_signature_verification's. v2 has fixed this issue as well.
+> 
+> >
+> >Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> 
+> And thanks for the review!
 
-  HOSTCC  scripts/mod/modpost.o - due to target missing
-In file included from include/linux/string.h:5,
-                 from scripts/mod/../../include/linux/license.h:5,
-                 from scripts/mod/modpost.c:24:
-include/linux/compiler.h:246:10: fatal error: asm/rwonce.h: No such file =
-or directory
-  246 | #include <asm/rwonce.h>
-      |          ^~~~~~~~~~~~~~
-compilation terminated.
+You're welcome.
 
-Bisect did show your patch as the first bad one:
+Without either IMA_ARCH or KEXEC_SIG enabled, the kexec selftest
+test_kexec_file_load.sh properly failed with "kexec_file_load failed
+[PASS]", but from the informational messages output, it isn't clear why
+it failed.  This should be corrected.
 
-commit 50c697215a8c "Add missing <linux/string.h> include for strcmp."
+-- 
+thanks,
 
-Reverting it makes compile succeed.
-
-The problem is that HOSTCC is not necessarily the same compiler or even
-architecture as CC and pulling in <linux/compiler.h> or <asm/rwonce.h>
-files indirectly isn't a good idea then.
-
-My toolchain is providing HOSTCC =3D gcc (MacPorts) and CC =3D =
-arm-linux-gnueabihf
-(built from gcc source) and all running on Darwin.
-
-If I change the include to <string.h> I can then "HOSTCC =
-scripts/mod/modpost.c"
-but then it fails for "CC kernel/module/main.c" not finding <string.h>:
-
-  CC      kernel/module/main.o - due to target missing
-In file included from kernel/module/main.c:43:0:
-./include/linux/license.h:5:20: fatal error: string.h: No such file or =
-directory
- #include <string.h>
-                    ^
-compilation terminated.
-
-So this should be a conditional include depending on CC vs. HOSTCC.
-Or moved elsewhere.
-
-BR and thanks,
-Nikolaus
+Mimi
 
