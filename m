@@ -2,117 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8C163A8D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:00:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B84C63A8E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbiK1NAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:00:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59412 "EHLO
+        id S231218AbiK1NEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:04:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiK1NAl (ORCPT
+        with ESMTP id S229935AbiK1NEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 08:00:41 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00E211156;
-        Mon, 28 Nov 2022 05:00:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669640440; x=1701176440;
-  h=message-id:date:mime-version:cc:to:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=CuUxM0z/3KSQu9y5awXbBEiVKQT5wLrzlc0qrTwSUdc=;
-  b=LFZxKupJ8DM44fqYIEVgGtuu+gFpT1hTj3ROdToKYDgoq4zc+uF1Uv4Z
-   3WSoBrrCTIdcmSS46Y+EdVqqm7447XTId+NNkwaRhh/siit0WmTeQF4m6
-   5YRT97WiYnqitA19IgzP0HXDDYohNwXv69Eg57LGG4LqSbSZakZKVS47L
-   I/2465eT/pqoPJyCIJyXIACZgBUk5DtmOB6Q2EwkdZ4b1R/lSKQxaz8SC
-   zCHD9W9IBf8gydhRjT2Y2tWIfe2cSiJkb2IId67Ax8fmrI8M3NvdNsQ51
-   RC2tlgrGCbIQEmqnAJaFkJA/u7ZzJccNOoniwSEmefIKTAyiCWm1WAViS
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="316652634"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="316652634"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 05:00:39 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="785620261"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="785620261"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.213.244]) ([10.254.213.244])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 05:00:35 -0800
-Message-ID: <2fde49a1-a1df-d78a-dd38-2322a760513b@linux.intel.com>
-Date:   Mon, 28 Nov 2022 21:00:32 +0800
+        Mon, 28 Nov 2022 08:04:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7323AE40
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:04:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AD4D6116F
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 13:04:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AF31C433C1;
+        Mon, 28 Nov 2022 13:04:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669640651;
+        bh=MAHEmDCiN0vbrOZKzNTziYXCfsP5QEh77/H5l6XhV4A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ih5j5qgbjrAldGfHjRrTtjSZU8R5xKjXKh9C8AZK4IppzHNjJu4bNSR8icuDJm7fd
+         hoL3fPX9rBBe94BmqlKqO+BbEvfXeyFJccTdnTq5iu+CwXh0LuRSc0pv0L/D6ddke7
+         3yNY9XGMWYXIgAKrHpQzNfVBjCSU48Eh3Nmp52m1VecxAcPzPhOtmohrCvHMVvYNnE
+         nY1UrX7dvrSEtzxjCUmWTKc9pnVq64bAEDQHFOy1kU6Zqi5c1mqEUi85EIvTEX0F15
+         54F1HrJHTO4PElbESfvSru0f+jl3Wd9V69/6C/OpXIJWC3nC59S753sA7f419FIMbA
+         IpPoGeHopPJcw==
+Date:   Mon, 28 Nov 2022 13:04:04 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     V sujith kumar Reddy 
+        <vsujithkumar.reddy@amd.corp-partner.google.com>
+Cc:     alsa-devel@alsa-project.org, Vijendar.Mukunda@amd.com,
+        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
+        venkataprasad.potturu@amd.com, ssabakar@amd.com,
+        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Chao Song <chao.song@linux.intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
+        <sound-open-firmware@alsa-project.org>
+Subject: Re: [PATCH v1 4/4] ASoC: SOF: Add DAI configuration support for AMD
+ platforms.
+Message-ID: <Y4SxxLVu+aSWiLHz@sirena.org.uk>
+References: <20221123121911.3446224-1-vsujithkumar.reddy@amd.corp-partner.google.com>
+ <20221123121911.3446224-5-vsujithkumar.reddy@amd.corp-partner.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Cc:     baolu.lu@linux.intel.com, Pierre Morel <pmorel@linux.ibm.com>,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>
-References: <20221116171656.4128212-1-schnelle@linux.ibm.com>
- <20221116171656.4128212-5-schnelle@linux.ibm.com>
- <33eea9bd-e101-4836-19e8-d4b191b78b00@linux.intel.com>
- <9163440eb6a47fe02730638bbdf72fda5ee5ad2c.camel@linux.ibm.com>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH v2 4/7] iommu: Let iommu.strict override
- ops->def_domain_type
-In-Reply-To: <9163440eb6a47fe02730638bbdf72fda5ee5ad2c.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jRcYyp1a21ZEBUQI"
+Content-Disposition: inline
+In-Reply-To: <20221123121911.3446224-5-vsujithkumar.reddy@amd.corp-partner.google.com>
+X-Cookie: The meek are contesting the will.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/28 19:10, Niklas Schnelle wrote:
-> On Thu, 2022-11-17 at 09:55 +0800, Baolu Lu wrote:
->> On 2022/11/17 1:16, Niklas Schnelle wrote:
->>> When iommu.strict=1 is set or iommu_set_dma_strict() was called we
->>> should use IOMMU_DOMAIN_DMA irrespective of ops->def_domain_type.
->>>
->>> Signed-off-by: Niklas Schnelle<schnelle@linux.ibm.com>
->>> ---
->>>    drivers/iommu/iommu.c | 3 +++
->>>    1 file changed, 3 insertions(+)
->>>
->>> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
->>> index 65a3b3d886dc..d9bf94d198df 100644
->>> --- a/drivers/iommu/iommu.c
->>> +++ b/drivers/iommu/iommu.c
->>> @@ -1562,6 +1562,9 @@ static int iommu_get_def_domain_type(struct device *dev)
->>>    {
->>>    	const struct iommu_ops *ops = dev_iommu_ops(dev);
->>>    
->>> +	if (iommu_dma_strict)
->>> +		return IOMMU_DOMAIN_DMA;
->> If any quirky device must work in IOMMU identity mapping mode, this
->> might introduce functional regression. At least for VT-d platforms, some
->> devices do require IOMMU identity mapping mode for functionality.
-> That's a good point. How about instead of unconditionally returning
-> IOMMU_DOMAIN_DMA we just do so if the domain type returned by ops-
->> def_domain_type uses a flush queue (i.e. the __IOMMU_DOMAIN_DMA_FQ bit
-> is set). That way a device that only supports identity mapping gets to
-> set that but iommu_dma_strict at least always prevents use of an IOVA
-> flush queue.
 
-def_domain_type returns IOMMU_DOMAIN_DMA, IOMMU_DOMAIN_IDENTIRY or 0
-(don't care). From a code perspective, you can force IOMMU_DOMAIN_DMA if
-def_domain_type() returns 0.
+--jRcYyp1a21ZEBUQI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-*But* you need to document the relationship between strict mode and
-default domain type somewhere and get that agreed with Robin.
+On Wed, Nov 23, 2022 at 05:49:11PM +0530, V sujith kumar Reddy wrote:
+> From: V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+>=20
+> Add support for configuring sp and hs DAI from topology.
 
-Best regards,
-baolu
+This doesn't apply against current code, please check and resend.
+
+--jRcYyp1a21ZEBUQI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOEscMACgkQJNaLcl1U
+h9DyDwf8CgLg3OCxJy2zctWsb8kB4EaKtieIb81yXKV04kOB7HuVezVhLNMH1DjY
+g5+sF3UOX5ojq43XmLQvUHluNdjehIvK5JCPIDUCuACR0oLSO7mmcAmIQvwFqCnF
+rQcAbdFOH2gk8kvyINyxv/jRTTBhsc9iSvoPfVaQOQzPeSVZ2OsSLrDvUEpxNGpl
+ma0ssie7dmnZNaOFtXxbK/bXMYix28tZp7J7mFEEg4zCATR3Pzhchg4/RBGd//p5
+kDcX+UsNQRz7ThSME+QU4WomoLnYx0OermyVDVbW7I1ScKTve6WrwM64LaXbS/2S
+lJnJloUwUfb5BLxjSh8zgKwobKpHzQ==
+=XLKQ
+-----END PGP SIGNATURE-----
+
+--jRcYyp1a21ZEBUQI--
