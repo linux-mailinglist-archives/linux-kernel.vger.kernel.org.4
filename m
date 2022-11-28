@@ -2,89 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E8C63AEE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4E363AEE7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232982AbiK1R00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 12:26:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
+        id S232088AbiK1R2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 12:28:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233002AbiK1R0G (ORCPT
+        with ESMTP id S232649AbiK1R2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:26:06 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADABC275EF;
-        Mon, 28 Nov 2022 09:26:03 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASFbTh7020069;
-        Mon, 28 Nov 2022 17:26:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=3lHzTVz9MyzHnucBP6Iwrk4ctcJSe2kJF4Ox1EKbZDY=;
- b=fmEI/uSVNvvglR55R1TwxYSRdWO90BH11VGw07cpZhyTYZGNupgP7TNvV4UjWCoRPY9C
- QV1JaEjA6p98+/PnrSahKXi0Z8Xt4g32+n+B8Huy4MVb18SEUtsOnmHJHeO10T30+xL4
- Wkir4twTacQWUhCmuwuT+czzUANNHFn3HDrMz4CXiLP/NyX6cOjeJgeij9O+s/0jI6DX
- BPt0b4IGvu5nqT9bm2sbKIqWfk2cUzvB7xL9EI8mik9GdABIWzfM6+2dEYo2xkjqz+3v
- UomWM/gYlIdzH8nWVD7snng+cWEDeDqxQNBzVyFMU0I6MGhUwGNtk1ahJ5rRWQwF+/YL xA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m39rxw7ps-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 17:26:00 +0000
-Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ASHPx3b026557
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 17:25:59 GMT
-Received: from [10.110.4.151] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 28 Nov
- 2022 09:25:58 -0800
-Message-ID: <e538affc-5c43-9b40-f6c7-2ceb2fa2fec8@quicinc.com>
-Date:   Mon, 28 Nov 2022 09:25:58 -0800
+        Mon, 28 Nov 2022 12:28:03 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA9A1126;
+        Mon, 28 Nov 2022 09:28:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669656482; x=1701192482;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=nrsDFP8BBP5mUInCmEHU9yFx53lFUUUO0H+uum4Vgp0=;
+  b=QQSHbN1qoGTRwTt5biicOpNovCU8Yxj4opN5GJTxvJ3TaxpXpPdEg1m5
+   79e6Z3N/s8nW4Kf5WB9t7PO9DAsssfSdTRIAGlAIvXiX2wrkrF33p0LmL
+   g7NTVm5WYBEsCtDl0u4nBKRJuCZuKAihyQr+BVflu1tLgzy58sahKLDUI
+   5SOaWagDbYnb9NkiOW/Rue6ze5G1H52jShqMQkdpCufDU4DJOFMEYk5oV
+   o4Y39nqaKmLvBd5mYcQTRDpKuin5yau/A3VGr7OQ7I1tt5CdoWu2ZaY7R
+   FL1iVWiZGYwK5vonlY62AAuNQnrojXIk3RnyTP/0thMW6YDPDtL3n+jTM
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="295281639"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="295281639"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 09:27:51 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="888509538"
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="888509538"
+Received: from kschjaer-mobl.amr.corp.intel.com (HELO [10.212.114.246]) ([10.212.114.246])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 09:27:49 -0800
+Message-ID: <16ddcbb9-8afa-ff18-05f9-2e9e01baf3ea@linux.intel.com>
+Date:   Mon, 28 Nov 2022 11:26:03 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4 1/3] dt-bindings: interconnect: Add rpmh virt devices
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Odelu Kukatla <quic_okukatla@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221118182245.31035-1-quic_molvera@quicinc.com>
- <20221118182245.31035-2-quic_molvera@quicinc.com>
- <536af0d9-aa00-ddf1-753d-670ec2adef91@linaro.org>
- <3ada611b-96e0-5cf0-d79d-b90ca4202ddb@quicinc.com>
- <b7cc4f5d-c1d6-919c-9604-7855ea802d17@linaro.org>
- <e6ae7c01-47ca-f1da-3b0b-1f17d9e862bf@quicinc.com>
- <333a240a-2c97-8b19-91d1-315d00e1f438@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v4] ALSA: core: Fix deadlock when shutdown a frozen
+ userspace
 Content-Language: en-US
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <333a240a-2c97-8b19-91d1-315d00e1f438@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     alsa-devel@alsa-project.org,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>, stable@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        linux-kernel@vger.kernel.org, sound-open-firmware@alsa-project.org
+References: <20221127-snd-freeze-v4-0-51ca64b7f2ab@chromium.org>
+ <5171929e-b750-d2f1-fec9-b34d76c18dcb@linux.intel.com>
+ <87mt8bqaca.wl-tiwai@suse.de>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <87mt8bqaca.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _VlFAqqNGMKUStcVcVKZrlEP3ZAEK5RE
-X-Proofpoint-ORIG-GUID: _VlFAqqNGMKUStcVcVKZrlEP3ZAEK5RE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-28_15,2022-11-28_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- malwarescore=0 adultscore=0 impostorscore=0 phishscore=0 clxscore=1015
- priorityscore=1501 spamscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211280128
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -93,59 +76,119 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 11/24/2022 2:30 AM, Krzysztof Kozlowski wrote:
-> On 22/11/2022 18:57, Melody Olvera wrote:
->>>>>> +
->>>>>> +maintainers:
->>>>>> +  - Georgi Djakov <georgi.djakov@linaro.org>
->>>>>> +  - Odelu Kukatla <quic_okukatla@quicinc.com>
->>>>>> +
->>>>>> +description: |
->>>>>> +   RPMh interconnect providers support system bandwidth requirements through
->>>>>> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
->>>>>> +   able to communicate with the BCM through the Resource State Coordinator (RSC)
->>>>>> +   associated with each execution environment. Provider nodes must point to at
->>>>>> +   least one RPMh device child node pertaining to their RSC and each provider
->>>>>> +   can map to multiple RPMh resources. Virtual interconnect providers are not
->>>>>> +   controlled by AP and do not support QoS; they should not have associated
->>>>>> +   register regions.
->>>>>> +
->>>>>> +allOf:
->>>>>> +  - $ref: qcom,rpmh-common.yaml#
->>>>>> +
->>>>>> +properties:
->>>>>> +  compatible:
->>>>>> +    enum:
->>>>>> +      - qcom,qdu1000-clk-virt
->>>>>> +      - qcom,qdu1000-mc-virt
->>>>>> +      - qcom,sm8450-clk-virt
->>>>>> +      - qcom,sm8450-mc-virt
->>>>> You should also move qcom,sdx65-mc-virt, qcom,sc8280xp-mc-virt,
->>>>> qcom,sc8280xp-clk-virt and more.
->>>> Ok. I wasn't sure since some of these entries don't seem to conform to
->>>> these bindings, even though it seems they should.
->>> I have impression that devices I listed conform to these bindings, this
->>> is why I listed them. But if you are sure that they do not, then they
->>> should not be moved.
->> You're correct; those you listed do conform to the new bindings and should be moved.
->> I also caught qcom,sc7280-clk-virt which needs to be moved. I'll add to the new bindings.
-> Actually let's wait a bit with this. For SM8550 we had an idea to move
-> interconnect to their own bindings file, because they will grow a bit
-> with allOf:if:then clauses.
->
-> Maybe SM8450 and QDU1000 should also go to their own files which will
-> describe all their interconnects (the virt and the ones requiring clocks)?
->
-> Apologies for bringing it late for your patches, but SM8550 is also
-> happening right now, so new things pop-up :)
+On 11/28/22 11:04, Takashi Iwai wrote:
+> On Mon, 28 Nov 2022 17:49:20 +0100,
+> Pierre-Louis Bossart wrote:
+>>
+>>
+>>
+>> On 11/28/22 07:42, Ricardo Ribalda wrote:
+>>> During kexec(), the userspace is frozen. Therefore we cannot wait for it
+>>> to complete.
+>>>
+>>> Avoid running snd_sof_machine_unregister during shutdown.
+>>>
+>>> This fixes:
+>>>
+>>> [   84.943749] Freezing user space processes ... (elapsed 0.111 seconds) done.
+>>> [  246.784446] INFO: task kexec-lite:5123 blocked for more than 122 seconds.
+>>> [  246.819035] Call Trace:
+>>> [  246.821782]  <TASK>
+>>> [  246.824186]  __schedule+0x5f9/0x1263
+>>> [  246.828231]  schedule+0x87/0xc5
+>>> [  246.831779]  snd_card_disconnect_sync+0xb5/0x127
+>>> ...
+>>> [  246.889249]  snd_sof_device_shutdown+0xb4/0x150
+>>> [  246.899317]  pci_device_shutdown+0x37/0x61
+>>> [  246.903990]  device_shutdown+0x14c/0x1d6
+>>> [  246.908391]  kernel_kexec+0x45/0xb9
+>>>
+>>> And:
+>>>
+>>> [  246.893222] INFO: task kexec-lite:4891 blocked for more than 122 seconds.
+>>> [  246.927709] Call Trace:
+>>> [  246.930461]  <TASK>
+>>> [  246.932819]  __schedule+0x5f9/0x1263
+>>> [  246.936855]  ? fsnotify_grab_connector+0x5c/0x70
+>>> [  246.942045]  schedule+0x87/0xc5
+>>> [  246.945567]  schedule_timeout+0x49/0xf3
+>>> [  246.949877]  wait_for_completion+0x86/0xe8
+>>> [  246.954463]  snd_card_free+0x68/0x89
+>>> ...
+>>> [  247.001080]  platform_device_unregister+0x12/0x35
+>>>
+>>> Cc: stable@vger.kernel.org
+>>> Fixes: 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
+>>> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+>>> ---
+>>> To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+>>> To: Liam Girdwood <lgirdwood@gmail.com>
+>>> To: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+>>> To: Bard Liao <yung-chuan.liao@linux.intel.com>
+>>> To: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+>>> To: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+>>> To: Daniel Baluta <daniel.baluta@nxp.com>
+>>> To: Mark Brown <broonie@kernel.org>
+>>> To: Jaroslav Kysela <perex@perex.cz>
+>>> To: Takashi Iwai <tiwai@suse.com>
+>>> Cc: sound-open-firmware@alsa-project.org
+>>> Cc: alsa-devel@alsa-project.org
+>>> Cc: linux-kernel@vger.kernel.org
+>>> ---
+>>> Changes in v4:
+>>> - Do not call snd_sof_machine_unregister from shutdown.
+>>> - Link to v3: https://lore.kernel.org/r/20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org
+>>>
+>>> Changes in v3:
+>>> - Wrap pm_freezing in a function
+>>> - Link to v2: https://lore.kernel.org/r/20221127-snd-freeze-v2-0-d8a425ea9663@chromium.org
+>>>
+>>> Changes in v2:
+>>> - Only use pm_freezing if CONFIG_FREEZER 
+>>> - Link to v1: https://lore.kernel.org/r/20221127-snd-freeze-v1-0-57461a366ec2@chromium.org
+>>> ---
+>>>  sound/soc/sof/core.c | 7 ++-----
+>>>  1 file changed, 2 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/sound/soc/sof/core.c b/sound/soc/sof/core.c
+>>> index 3e6141d03770..9616ba607ded 100644
+>>> --- a/sound/soc/sof/core.c
+>>> +++ b/sound/soc/sof/core.c
+>>> @@ -475,19 +475,16 @@ EXPORT_SYMBOL(snd_sof_device_remove);
+>>>  int snd_sof_device_shutdown(struct device *dev)
+>>>  {
+>>>  	struct snd_sof_dev *sdev = dev_get_drvdata(dev);
+>>> -	struct snd_sof_pdata *pdata = sdev->pdata;
+>>>  
+>>>  	if (IS_ENABLED(CONFIG_SND_SOC_SOF_PROBE_WORK_QUEUE))
+>>>  		cancel_work_sync(&sdev->probe_work);
+>>>  
+>>>  	/*
+>>> -	 * make sure clients and machine driver(s) are unregistered to force
+>>> -	 * all userspace devices to be closed prior to the DSP shutdown sequence
+>>> +	 * make sure clients are unregistered prior to the DSP shutdown
+>>> +	 * sequence.
+>>>  	 */
+>>>  	sof_unregister_clients(sdev);
+>>>  
+>>> -	snd_sof_machine_unregister(sdev, pdata);
+>>> -
+>>
+>> The comment clearly says that we do want all userspace devices to be
+>> closed. This was added in 83bfc7e793b5 ("ASoC: SOF: core: unregister
+>> clients and machine drivers in .shutdown") precisely to avoid a platform
+>> hang if the devices are used after the shutdown completes.
+> 
+> The problem is that it wants the *close* of the user-space programs
+> unnecessarily.  Basically the shutdown can be seen as a sort of device
+> hot unplug; i.e. the disconnection of the device files and the cleanup
+> of device state are the main task.  The difference is that the hot
+> unplug (unbind) usually follows the sync for the all processes being
+> closed (so that you can release all resources gracefully), while this
+> step is skipped for the shutdown (no need for resource-free).
 
-Yeah no worries. I can definitely make this change; if this is how we want to do
-things going forward I'm happy to oblige.
+Sorry Takashi, I don't have enough background to follow your explanations.
 
-Thanks,
-Melody
->
-> Best regards,
-> Krzysztof
->
-
+As Kai mentioned it, this step helped with a S5 issue earlier in 2022.
+Removing this will mechanically bring the issue back and break other
+Chromebooks.
