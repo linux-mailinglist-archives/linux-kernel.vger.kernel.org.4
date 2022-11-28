@@ -2,166 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679D263A4E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:27:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA0663A4F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:27:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiK1J05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 04:26:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
+        id S230016AbiK1J1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 04:27:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiK1J0z (ORCPT
+        with ESMTP id S229950AbiK1J1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 04:26:55 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1993DE40
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:26:51 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id q21so7141895iod.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:26:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rSjenL36nx6dkpFfPvUHmLRtB3WtAx9+34Fs2KvTI98=;
-        b=fHupL+kNUU1LXHaNAPqGC7s6qKRyRPCDbj2c4DTGlg6mKcXeZ8CxSpies/1a1MiyxC
-         9R37c6cxx+9Gj9y2jpUJ7JrfUg72+3QkWD0oOtVoYFn1NtQPrK435X11qQ0dITnz8Muj
-         naVVWUn+elbnLK9DPkHY6lwo+3xYSdr2hKNZE=
+        Mon, 28 Nov 2022 04:27:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79276C4D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:26:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669627607;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=klYlT0QKH+4SL9No1+i0WufA2DveKgjOeQpHH/zXAQc=;
+        b=iJR/3PPSappr7JhkqTuZVIWwHwm3Wv3wooLRNLs44UmPzcXhRUzIfOc/9c0R8ppS+qRPIB
+        xCtPngpTt5pxvF/OmOB2Ev3X/jXykw7qeGFgbMMzhICdqD+1EiBtHuoEGcDsH3kmm1P8BB
+        llc6JKEBoVAK95kfwMLq7+5K9XEJurw=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-589-BKP1vzD2M3eoR2VFDV5KVQ-1; Mon, 28 Nov 2022 04:26:41 -0500
+X-MC-Unique: BKP1vzD2M3eoR2VFDV5KVQ-1
+Received: by mail-wr1-f72.google.com with SMTP id s1-20020adfa281000000b00241f7467851so1681721wra.17
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:26:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rSjenL36nx6dkpFfPvUHmLRtB3WtAx9+34Fs2KvTI98=;
-        b=gwBXfU/M5Re6EkFKBkC0G0fnjnmlfyf1cYOWZGHI6RMh24aaxV9waubIY1rEgZiy3B
-         T3oaWDlJfSOaAdU71WdrKTFN1ITHFHjQur55WfMSnCimDRlbFmfB+U7fVu4FWxxiR72t
-         O8hy43nDG8PuPLVr43JMpvWT1+N2vgH2GJD1WeKO4XfeAh0Bc3xy2E0ZP+42HQmKqP9X
-         QEu9C+45pjFvEEEEvZtTUw4W1XJll5FdXgR5y8f35QuvJnKrFMAsw7+9Ms7V0egIwa4L
-         1E4FBRelsrzHu4wFbxkwg+5XaCt4652y3BtiIO9PxeJOnSHDn+0rVA2sSBpwa227j6/H
-         zVQA==
-X-Gm-Message-State: ANoB5pkKfPYVSGfHKHyTfF7Mz1v9ordzJg4kvqrQGcskhdPREKk8FxzU
-        uj3pUmNJ3nSvMboBBeB7b6Rd+MVcUqcmRA==
-X-Google-Smtp-Source: AA0mqf5yzWy6EWWYFMHDtCf8bdktlYWbcLaMbKoV3afzdwa3Jk/qb4ztQOoihVAgDt4B5cTvf6Jcpw==
-X-Received: by 2002:a05:6638:3446:b0:388:1c6f:f62 with SMTP id q6-20020a056638344600b003881c6f0f62mr10263392jav.123.1669627610362;
-        Mon, 28 Nov 2022 01:26:50 -0800 (PST)
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com. [209.85.166.52])
-        by smtp.gmail.com with ESMTPSA id n6-20020a02a186000000b00389be83f294sm2868165jah.133.2022.11.28.01.26.48
-        for <linux-kernel@vger.kernel.org>
+        bh=klYlT0QKH+4SL9No1+i0WufA2DveKgjOeQpHH/zXAQc=;
+        b=wfGbemA9ojyBiPKiMXDV179NG74sKMde2hyAgpQ/RuKLKxCnh6fsQO00d57Pv4ER+1
+         kahKYhFJQgPP4EGc+oLQJGlBRDnr3tQJKf0ECahvFIRkc3YvtXPPdWEi1B9shL5vK4a7
+         e8BodQ6R+5fix9rE5oWbkf9ccHsbWqpXVCI10ziTwAYfb9B+hLgXwAbl5FMk3SAVEUeZ
+         l0Aq8fnjBOJGw/5fwkdR5iD2h0w1WwuMz1FJ7WhyFQDDN/f0jNnai6hn0UAMloVNv2XX
+         s4ZFLkWlCFLFbBgCeAZp+QX9Gn996ojOpZNIHYIzXS25lZd5+0puDOcp3AyQQc9aiL3d
+         8png==
+X-Gm-Message-State: ANoB5pl3U47abNthQPd4d5+3tDcZLyBsdPvMGitJIPJ1Rc2gfRjcQ6rN
+        IhcM7VBnV8nJOAaywM1SOxEkdSRrDf7zPaoDpvJ6Rx2J/YiAW3Q7/eul2Yg9DwpMNQq+LwGrRDD
+        ET4hin5ArYmd3Dw4C4waxeywh
+X-Received: by 2002:a05:600c:3421:b0:3cf:ac8a:d43e with SMTP id y33-20020a05600c342100b003cfac8ad43emr25478666wmp.65.1669627600131;
+        Mon, 28 Nov 2022 01:26:40 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5YnAsVdDSPhUTuDTe1E4NOjJSUbaLCxukiYCM/P5NI3OP5blqbagembcddhMNSo3dpxegf3Q==
+X-Received: by 2002:a05:600c:3421:b0:3cf:ac8a:d43e with SMTP id y33-20020a05600c342100b003cfac8ad43emr25478652wmp.65.1669627599841;
+        Mon, 28 Nov 2022 01:26:39 -0800 (PST)
+Received: from ?IPV6:2003:cb:c702:9000:3d6:e434:f8b4:80cf? (p200300cbc702900003d6e434f8b480cf.dip0.t-ipconnect.de. [2003:cb:c702:9000:3d6:e434:f8b4:80cf])
+        by smtp.gmail.com with ESMTPSA id p1-20020a1c5441000000b003b4cba4ef71sm18157087wmi.41.2022.11.28.01.26.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 01:26:48 -0800 (PST)
-Received: by mail-io1-f52.google.com with SMTP id c7so7128064iof.13
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:26:48 -0800 (PST)
-X-Received: by 2002:a02:c897:0:b0:374:100a:b0c7 with SMTP id
- m23-20020a02c897000000b00374100ab0c7mr14573933jao.185.1669627607759; Mon, 28
- Nov 2022 01:26:47 -0800 (PST)
+        Mon, 28 Nov 2022 01:26:38 -0800 (PST)
+Message-ID: <ace4f538-77e4-964e-5c71-ff09f208689b@redhat.com>
+Date:   Mon, 28 Nov 2022 10:26:37 +0100
 MIME-Version: 1.0
-References: <20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org> <87wn7fzb2g.wl-tiwai@suse.de>
-In-Reply-To: <87wn7fzb2g.wl-tiwai@suse.de>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Mon, 28 Nov 2022 10:26:36 +0100
-X-Gmail-Original-Message-ID: <CANiDSCtSAM3seszVWfjJPaYFO3v223P-tYEtdpW4+pQQ3bcf0g@mail.gmail.com>
-Message-ID: <CANiDSCtSAM3seszVWfjJPaYFO3v223P-tYEtdpW4+pQQ3bcf0g@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] ALSA: core: Fix deadlock when shutdown a frozen userspace
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Takashi Iwai <tiwai@suse.com>, Len Brown <len.brown@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        alsa-devel@alsa-project.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v7 10/20] x86/virt/tdx: Use all system memory when
+ initializing TDX module as TDX memory
+Content-Language: en-US
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "Hansen, Dave" <dave.hansen@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>
+References: <cover.1668988357.git.kai.huang@intel.com>
+ <9b545148275b14a8c7edef1157f8ec44dc8116ee.1668988357.git.kai.huang@intel.com>
+ <637ecded7b0f9_160eb329418@dwillia2-xfh.jf.intel.com.notmuch>
+ <8e8f72ad5d7a3d09be32bee54e4ebb9c280610a2.camel@intel.com>
+ <361875cb-e4b3-a46f-b275-6d87a98ce966@redhat.com>
+ <397ebe70bf9cede731f2f8bbd05e0df518fd3a22.camel@intel.com>
+ <49ab9f26-9e23-25ab-71b4-e666c70ff77e@redhat.com>
+ <8300f1098aa8fbfae711313be41ee44cb1203d62.camel@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <8300f1098aa8fbfae711313be41ee44cb1203d62.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Takashi
+On 28.11.22 10:21, Huang, Kai wrote:
+> On Mon, 2022-11-28 at 09:43 +0100, David Hildenbrand wrote:
+>> On 28.11.22 09:38, Huang, Kai wrote:
+>>> On Fri, 2022-11-25 at 10:28 +0100, David Hildenbrand wrote:
+>>>> On 24.11.22 10:06, Huang, Kai wrote:
+>>>>> On Wed, 2022-11-23 at 17:50 -0800, Dan Williams wrote:
+>>>>>>>      
+>>>>>>> @@ -968,6 +969,15 @@ int arch_add_memory(int nid, u64 start, u64 size,
+>>>>>>>      	unsigned long start_pfn = start >> PAGE_SHIFT;
+>>>>>>>      	unsigned long nr_pages = size >> PAGE_SHIFT;
+>>>>>>>      
+>>>>>>> +	/*
+>>>>>>> +	 * For now if TDX is enabled, all pages in the page allocator
+>>>>>>> +	 * must be TDX memory, which is a fixed set of memory regions
+>>>>>>> +	 * that are passed to the TDX module.  Reject the new region
+>>>>>>> +	 * if it is not TDX memory to guarantee above is true.
+>>>>>>> +	 */
+>>>>>>> +	if (!tdx_cc_memory_compatible(start_pfn, start_pfn + nr_pages))
+>>>>>>> +		return -EINVAL;
+>>>>>>
+>>>>>> arch_add_memory() does not add memory to the page allocator.  For
+>>>>>> example, memremap_pages() uses arch_add_memory() and explicitly does not
+>>>>>> release the memory to the page allocator.
+>>>>>
+>>>>> Indeed.  Sorry I missed this.
+>>>>>
+>>>>>> This check belongs in
+>>>>>> add_memory_resource() to prevent new memory that violates TDX from being
+>>>>>> onlined.
+>>>>>
+>>>>> This would require adding another 'arch_cc_memory_compatible()' to the common
+>>>>> add_memory_resource() (I actually long time ago had such patch to work with the
+>>>>> memremap_pages() you mentioned above).
+>>>>>
+>>>>> How about adding a memory_notifier to the TDX code, and reject online of TDX
+>>>>> incompatible memory (something like below)?  The benefit is this is TDX code
+>>>>> self contained and won't pollute the common mm code:
+>>>>>
+>>>>> +static int tdx_memory_notifier(struct notifier_block *nb,
+>>>>> +                              unsigned long action, void *v)
+>>>>> +{
+>>>>> +       struct memory_notify *mn = v;
+>>>>> +
+>>>>> +       if (action != MEM_GOING_ONLINE)
+>>>>> +               return NOTIFY_OK;
+>>>>> +
+>>>>> +       /*
+>>>>> +        * Not all memory is compatible with TDX.  Reject
+>>>>> +        * online of any incompatible memory.
+>>>>> +        */
+>>>>> +       return tdx_cc_memory_compatible(mn->start_pfn,
+>>>>> +                       mn->start_pfn + mn->nr_pages) ? NOTIFY_OK : NOTIFY_BAD;
+>>>>> +}
+>>>>> +
+>>>>> +static struct notifier_block tdx_memory_nb = {
+>>>>> +       .notifier_call = tdx_memory_notifier,
+>>>>> +};
+>>>>
+>>>> With mhp_memmap_on_memory() some memory might already be touched during
+>>>> add_memory() (because part of the hotplug memory is used for holding the
+>>>> memmap), not when actually onlining memory. So in that case, this would
+>>>> be too late.
+>>>
+>>> Hi David,
+>>>
+>>> Thanks for the review!
+>>>
+>>> Right. The memmap pages are added to the zone before online_pages(), but IIUC
+>>> those memmap pages will never be free pages thus won't be allocated by the page
+>>> allocator, correct?  Therefore in practice there won't be problem even they are
+>>> not TDX compatible memory.
+>>
+>> But that memory will be read/written. Isn't that an issue, for example,
+>> if memory doesn't get accepted etc?
+>>
+> 
+> Sorry I don't quite understand "if memory doesn't get accepted" mean.  Do you
+> mean accepted by the TDX module?
+> 
+> Only the host kernel will read/write those memmap pages.  The TDX module won't
+> (as they won't be allocated to be used as TDX guest memory or TDX module
+> metadata).  So it's fine.
 
-Thanks for your prompt reply
+Oh, so we're not also considering hotplugging memory to a TDX VM that 
+might not be backed by TDX. Got it.
 
-On Mon, 28 Nov 2022 at 10:24, Takashi Iwai <tiwai@suse.de> wrote:
->
-> On Mon, 28 Nov 2022 10:10:12 +0100,
-> Ricardo Ribalda wrote:
-> >
-> > Since 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
-> > we wait for userspace to close its fds.
->
-> IMO, the fix above brought more problem.  If you'd need to want to
-> avoid later accesses during shutdown, the driver should rather just
-> disconnect devices without waiting for the user-space completion.
-> And, for that, a simple call of snd_card_disconnect() should suffice.
->
-> > But that will never occur with a frozen userspace (like during kexec()).
-> >
-> > Lets detect the frozen userpace and act accordingly.
->
-> ... and skipping the user-space sync at snd_card_disconnect_sync() as
-> of this patch set is a dangerous move, I'm afraid.  The user-space
-> gets frozen also at the normal suspend/resume, and it implies that the
-> sync will be lost even for the normal PM, too (although it must be a
-> very corner case).
->
+So what you want to prevent is getting !TDX memory exposed to the buddy 
+such that it won't accidentally get allocated for a TDX guest, correct?
 
-And what about checking kexec_in_progress instead?
+In that case, memory notifiers would indeed be fine.
 
 Thanks!
 
->
-> thanks,
->
-> Takashi
->
-> >
-> > To: Jaroslav Kysela <perex@perex.cz>
-> > To: Takashi Iwai <tiwai@suse.com>
-> > To: "Rafael J. Wysocki" <rafael@kernel.org>
-> > To: Pavel Machek <pavel@ucw.cz>
-> > To: Len Brown <len.brown@intel.com>
-> > To: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-> > To: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-> > To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> > To: Mark Brown <broonie@kernel.org>
-> > Cc: alsa-devel@alsa-project.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-> > Cc: linux-pm@vger.kernel.org
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > ---
-> > Changes in v3:
-> > - Wrap pm_freezing in a function
-> > - Link to v2: https://lore.kernel.org/r/20221127-snd-freeze-v2-0-d8a425ea9663@chromium.org
-> >
-> > Changes in v2:
-> > - Only use pm_freezing if CONFIG_FREEZER
-> > - Link to v1: https://lore.kernel.org/r/20221127-snd-freeze-v1-0-57461a366ec2@chromium.org
-> >
-> > ---
-> > Ricardo Ribalda (2):
-> >       freezer: Add processes_frozen()
-> >       ALSA: core: Fix deadlock when shutdown a frozen userspace
-> >
-> >  include/linux/freezer.h |  2 ++
-> >  kernel/freezer.c        | 11 +++++++++++
-> >  sound/core/init.c       | 13 +++++++++++++
-> >  3 files changed, 26 insertions(+)
-> > ---
-> > base-commit: 4312098baf37ee17a8350725e6e0d0e8590252d4
-> > change-id: 20221127-snd-freeze-1ee143228326
-> >
-> > Best regards,
-> > --
-> > Ricardo Ribalda <ribalda@chromium.org>
-> >
-
-
-
 -- 
-Ricardo Ribalda
+Thanks,
+
+David / dhildenb
+
