@@ -2,309 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B598639E6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 01:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E02639E70
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 01:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiK1AQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 19:16:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
+        id S229674AbiK1ATv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 19:19:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiK1AQK (ORCPT
+        with ESMTP id S229504AbiK1ATr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 19:16:10 -0500
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51366101DC;
-        Sun, 27 Nov 2022 16:16:08 -0800 (PST)
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9ED7EE0005;
-        Mon, 28 Nov 2022 00:16:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1669594566;
+        Sun, 27 Nov 2022 19:19:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391DC6141;
+        Sun, 27 Nov 2022 16:19:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D20A9B80B1A;
+        Mon, 28 Nov 2022 00:19:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F08C43470;
+        Mon, 28 Nov 2022 00:19:43 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GjPO03ju"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669594781;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=C4afrmCnsTFI1dYjoEJlWykktcfo6jeTgLdNCqzTc7I=;
-        b=HBgE3xveDP90YoSj69ZrgOK7AibdlGz8Rljko2tR4uKCUjeRc/DO4sgKGgwuOnT33eLx1w
-        rBpR2zrid1bJ+9g+qMPrO/hbfHG6HCIIbRPq1Wdp1+F6M3FesBJ3HY2LE3Nn3OezLeK5gU
-        7HuhSPqXUHRPoKiLqVnVkEIaIgHoQgZf5S4SeTiVJVyHODgJ2OBDusq9iUNyE73yEvUFqK
-        6aWax3+MNTduuXDwLAjjs27DUDxvvkPdvimVrvJtMrAvY7rYnw5vgem8ToZGn4/sbQ2DuH
-        N5h8fWxoO1G7MSAY3E81v9s+nrZhpKAlX/gVk2wcVjdBBoIau55Z1gLtP6HVFg==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] ARM: dts: armada: align LED node names with dtschema
-In-Reply-To: <20221125144133.477116-1-krzysztof.kozlowski@linaro.org>
-References: <20221125144133.477116-1-krzysztof.kozlowski@linaro.org>
-Date:   Mon, 28 Nov 2022 01:16:05 +0100
-Message-ID: <87ilj07x2y.fsf@BL-laptop>
+        bh=CGDNWDlrjoKkV18bX013f+9WmWZM0g+YAx70BBOO/2Q=;
+        b=GjPO03juWqjidb6zzZMkl2qkH2uWs0O0x5Pxs3nWv0KJ+2r8iTUvJVFIBhmnACPzUtSIp/
+        6/TTNYlJ0z7LKrrL7Jmhy1qQRy6fbyZPCOqySSAcAOn7g+G4XSRK689oPPz3kP++anYvyq
+        37HBzL4b4azCFC4Tdx9+TyNM4pjx6MM=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d135daf3 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 28 Nov 2022 00:19:40 +0000 (UTC)
+Date:   Mon, 28 Nov 2022 01:19:36 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Samuel Neves <sneves@dei.uc.pt>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, linux-crypto@vger.kernel.org,
+        linux-api@vger.kernel.org, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v7 3/3] x86: vdso: Wire up getrandom() vDSO implementation
+Message-ID: <Y4P+mOFu2A9tj5/y@zx2c4.com>
+References: <20221124165536.1631325-1-Jason@zx2c4.com>
+ <20221124165536.1631325-4-Jason@zx2c4.com>
+ <874jumy6me.ffs@tglx>
+ <Y4PfjcQRfezjH4f+@zx2c4.com>
+ <CAEX_ruEq8_W8i-+cfri2-BYBNDgZCinsfFKVeFjxNSfnGxW1xg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAEX_ruEq8_W8i-+cfri2-BYBNDgZCinsfFKVeFjxNSfnGxW1xg@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
+On Sun, Nov 27, 2022 at 10:39:27PM +0000, Samuel Neves wrote:
+> On Sun, Nov 27, 2022 at 10:13 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >
+> > Hi Thomas,
+> >
+> > On Sat, Nov 26, 2022 at 12:08:41AM +0100, Thomas Gleixner wrote:
+> > > Jason!
+> > >
+> > > On Thu, Nov 24 2022 at 17:55, Jason A. Donenfeld wrote:
+> > > > +++ b/arch/x86/entry/vdso/vgetrandom-chacha.S
+> > > > +/*
+> > > > + * Very basic SSE2 implementation of ChaCha20. Produces a given positive number
+> > > > + * of blocks of output with a nonce of 0, taking an input key and 8-byte
+> > > > + * counter. Importantly does not spill to the stack. Its arguments are:
+> > >
+> > > Basic or not.
+> >
+> > Heh, FYI I didn't mean "basic" here as in "doesn't need a review", but
+> > just that it's a straightforward technique and doesn't do any
+> > complicated multiblock pyrotechnics (which frankly aren't really
+> > needed).
+> >
+> > > This needs a Reviewed-by from someone who understands SSE2
+> > > and ChaCha20 before this can go anywhere near the x86 tree.
+> >
+> > No problem. I'll see to it that somebody qualified gives this a review.
+> >
+> 
+> I did look at this earlier. It looks fine. I would recommend changing
+> 
+> + /* copy1,copy2 = key */
+> + movdqu 0x00(key),copy1
+> + movdqu 0x10(key),copy2
+> 
+> to
+> 
+> + /* copy1,copy2 = key */
+> + movups 0x00(key),copy1
+> + movups 0x10(key),copy2
+> 
+> which has the same semantics, but saves a couple of code bytes. Likewise for
+> 
+> + movdqu state0,0x00(output)
+> + movdqu state1,0x10(output)
+> + movdqu state2,0x20(output)
+> + movdqu state3,0x30(output)
+> 
+> Otherwise,
+> 
+> Reviewed-by: Samuel Neves <sneves@dei.uc.pt> # for vgetrandom-chacha.S
 
-> The node names should be generic and DT schema expects certain pattern:
->
->   armada-370-seagate-personal-cloud.dtb: gpio-leds: 'red-sata0' does not match any of the regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks for the review and for the suggestion. Will do.
 
-Applied on mvebu/dt
-
-Thanks,
-
-Gregory
-> ---
->  arch/arm/boot/dts/armada-370-dlink-dns327l.dts           | 6 +++---
->  arch/arm/boot/dts/armada-370-seagate-nas-4bay.dts        | 4 ++--
->  arch/arm/boot/dts/armada-370-seagate-nas-xbay.dtsi       | 8 ++++----
->  arch/arm/boot/dts/armada-370-seagate-personal-cloud.dtsi | 2 +-
->  arch/arm/boot/dts/armada-385-linksys-caiman.dts          | 4 ++--
->  arch/arm/boot/dts/armada-385-linksys-cobra.dts           | 4 ++--
->  arch/arm/boot/dts/armada-385-linksys-rango.dts           | 8 ++++----
->  arch/arm/boot/dts/armada-385-linksys-shelby.dts          | 4 ++--
->  arch/arm/boot/dts/armada-385-linksys.dtsi                | 4 ++--
->  arch/arm/boot/dts/armada-385-synology-ds116.dts          | 2 +-
->  arch/arm/boot/dts/armada-xp-linksys-mamba.dts            | 2 +-
->  11 files changed, 24 insertions(+), 24 deletions(-)
->
-> diff --git a/arch/arm/boot/dts/armada-370-dlink-dns327l.dts b/arch/arm/boot/dts/armada-370-dlink-dns327l.dts
-> index 2008c6eaaa52..561195b749eb 100644
-> --- a/arch/arm/boot/dts/armada-370-dlink-dns327l.dts
-> +++ b/arch/arm/boot/dts/armada-370-dlink-dns327l.dts
-> @@ -86,19 +86,19 @@ &sata_l_white_pin
->  
->  		pinctrl-names = "default";
->  
-> -		sata-r-amber-pin {
-> +		led-sata-r-amber {
->  			label = "dns327l:amber:sata-r";
->  			gpios = <&gpio1 20 GPIO_ACTIVE_HIGH>;
->  			default-state = "keep";
->  		};
->  
-> -		sata-l-amber-pin {
-> +		led-sata-l-amber {
->  			label = "dns327l:amber:sata-l";
->  			gpios = <&gpio1 21 GPIO_ACTIVE_HIGH>;
->  			default-state = "keep";
->  		};
->  
-> -		backup-led-pin {
-> +		led-backup {
->  			label = "dns327l:white:usb";
->  			gpios = <&gpio1 29 GPIO_ACTIVE_HIGH>;
->  			default-state = "keep";
-> diff --git a/arch/arm/boot/dts/armada-370-seagate-nas-4bay.dts b/arch/arm/boot/dts/armada-370-seagate-nas-4bay.dts
-> index 3cf70c72c5ca..9cb69999b1db 100644
-> --- a/arch/arm/boot/dts/armada-370-seagate-nas-4bay.dts
-> +++ b/arch/arm/boot/dts/armada-370-seagate-nas-4bay.dts
-> @@ -72,11 +72,11 @@ regulator@4 {
->  	};
->  
->  	gpio-leds {
-> -		red-sata2 {
-> +		led-red-sata2 {
->  			label = "dart:red:sata2";
->  			gpios = <&pca9554 0 GPIO_ACTIVE_LOW>;
->  		};
-> -		red-sata3 {
-> +		led-red-sata3 {
->  			label = "dart:red:sata3";
->  			gpios = <&pca9554 3 GPIO_ACTIVE_LOW>;
->  		};
-> diff --git a/arch/arm/boot/dts/armada-370-seagate-nas-xbay.dtsi b/arch/arm/boot/dts/armada-370-seagate-nas-xbay.dtsi
-> index 866b8630d407..822f10734946 100644
-> --- a/arch/arm/boot/dts/armada-370-seagate-nas-xbay.dtsi
-> +++ b/arch/arm/boot/dts/armada-370-seagate-nas-xbay.dtsi
-> @@ -132,21 +132,21 @@ button-reset {
->  	gpio-leds {
->  		compatible = "gpio-leds";
->  
-> -		white-power {
-> +		led-white-power {
->  			label = "dart:white:power";
->  			gpios = <&gpio1 28 GPIO_ACTIVE_HIGH>;
->  			linux,default-trigger = "timer";
->  
->  		};
-> -		red-power {
-> +		led-red-power {
->  			label = "dart:red:power";
->  			gpios = <&gpio1 31 GPIO_ACTIVE_HIGH>;
->  		};
-> -		red-sata0 {
-> +		led-red-sata0 {
->  			label = "dart:red:sata0";
->  			gpios = <&gpio1 15 GPIO_ACTIVE_LOW>;
->  		};
-> -		red-sata1 {
-> +		led-red-sata1 {
->  			label = "dart:red:sata1";
->  			gpios = <&gpio1 21 GPIO_ACTIVE_LOW>;
->  		};
-> diff --git a/arch/arm/boot/dts/armada-370-seagate-personal-cloud.dtsi b/arch/arm/boot/dts/armada-370-seagate-personal-cloud.dtsi
-> index 702a85af2078..124a8ba279e3 100644
-> --- a/arch/arm/boot/dts/armada-370-seagate-personal-cloud.dtsi
-> +++ b/arch/arm/boot/dts/armada-370-seagate-personal-cloud.dtsi
-> @@ -107,7 +107,7 @@ button-usb {
->  	gpio-leds {
->  		compatible = "gpio-leds";
->  
-> -		red-sata0 {
-> +		led-red-sata0 {
->  			label = "cumulus:red:sata0";
->  			gpios = <&gpio1 26 GPIO_ACTIVE_HIGH>;
->  			default-state = "off";
-> diff --git a/arch/arm/boot/dts/armada-385-linksys-caiman.dts b/arch/arm/boot/dts/armada-385-linksys-caiman.dts
-> index a03050c97084..88b2921fed55 100644
-> --- a/arch/arm/boot/dts/armada-385-linksys-caiman.dts
-> +++ b/arch/arm/boot/dts/armada-385-linksys-caiman.dts
-> @@ -62,11 +62,11 @@ wps_amber@9 {
->  };
->  
->  &gpio_leds {
-> -	power {
-> +	led-power {
->  		label = "caiman:white:power";
->  	};
->  
-> -	sata {
-> +	led-sata {
->  		label = "caiman:white:sata";
->  	};
->  };
-> diff --git a/arch/arm/boot/dts/armada-385-linksys-cobra.dts b/arch/arm/boot/dts/armada-385-linksys-cobra.dts
-> index e3e4877a6f49..88200f930d0d 100644
-> --- a/arch/arm/boot/dts/armada-385-linksys-cobra.dts
-> +++ b/arch/arm/boot/dts/armada-385-linksys-cobra.dts
-> @@ -62,11 +62,11 @@ wps_amber@9 {
->  };
->  
->  &gpio_leds {
-> -	power {
-> +	led-power {
->  		label = "cobra:white:power";
->  	};
->  
-> -	sata {
-> +	led-sata {
->  		label = "cobra:white:sata";
->  	};
->  };
-> diff --git a/arch/arm/boot/dts/armada-385-linksys-rango.dts b/arch/arm/boot/dts/armada-385-linksys-rango.dts
-> index 3c4af57ec2b9..4ab45f294de2 100644
-> --- a/arch/arm/boot/dts/armada-385-linksys-rango.dts
-> +++ b/arch/arm/boot/dts/armada-385-linksys-rango.dts
-> @@ -54,22 +54,22 @@ wps_amber@9 {
->  };
->  
->  &gpio_leds {
-> -	power {
-> +	led-power {
->  		gpios = <&gpio1 24 GPIO_ACTIVE_HIGH>;
->  		label = "rango:white:power";
->  	};
->  
-> -	sata {
-> +	led-sata {
->  		gpios = <&gpio0 21 GPIO_ACTIVE_LOW>;
->  		label = "rango:white:sata";
->  	};
->  
-> -	wlan_2g {
-> +	led-wlan_2g {
->  		gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
->  		label = "rango:white:wlan_2g";
->  	};
->  
-> -	wlan_5g {
-> +	led-wlan_5g {
->  		gpios = <&gpio1 14 GPIO_ACTIVE_LOW>;
->  		label = "rango:white:wlan_5g";
->  	};
-> diff --git a/arch/arm/boot/dts/armada-385-linksys-shelby.dts b/arch/arm/boot/dts/armada-385-linksys-shelby.dts
-> index 3451cd3e5dff..f1b1f22413f1 100644
-> --- a/arch/arm/boot/dts/armada-385-linksys-shelby.dts
-> +++ b/arch/arm/boot/dts/armada-385-linksys-shelby.dts
-> @@ -62,11 +62,11 @@ wps_amber@9 {
->  };
->  
->  &gpio_leds {
-> -	power {
-> +	led-power {
->  		label = "shelby:white:power";
->  	};
->  
-> -	sata {
-> +	led-sata {
->  		label = "shelby:white:sata";
->  	};
->  };
-> diff --git a/arch/arm/boot/dts/armada-385-linksys.dtsi b/arch/arm/boot/dts/armada-385-linksys.dtsi
-> index 116aca5e688f..85e8d966f6c1 100644
-> --- a/arch/arm/boot/dts/armada-385-linksys.dtsi
-> +++ b/arch/arm/boot/dts/armada-385-linksys.dtsi
-> @@ -71,12 +71,12 @@ gpio_leds: gpio-leds {
->  		pinctrl-0 = <&gpio_leds_pins>;
->  		pinctrl-names = "default";
->  
-> -		power {
-> +		led-power {
->  			gpios = <&gpio1 23 GPIO_ACTIVE_HIGH>;
->  			default-state = "on";
->  		};
->  
-> -		sata {
-> +		led-sata {
->  			gpios = <&gpio1 22 GPIO_ACTIVE_LOW>;
->  			default-state = "off";
->  			linux,default-trigger = "disk-activity";
-> diff --git a/arch/arm/boot/dts/armada-385-synology-ds116.dts b/arch/arm/boot/dts/armada-385-synology-ds116.dts
-> index 2622af73c9da..ea91ff964d94 100644
-> --- a/arch/arm/boot/dts/armada-385-synology-ds116.dts
-> +++ b/arch/arm/boot/dts/armada-385-synology-ds116.dts
-> @@ -149,7 +149,7 @@ gpio-leds {
->  			 * sata0, and accesses to SATA disk 0 make it blink so it
->  			 * doesn't need to be declared here.
->  			 */
-> -			orange {
-> +			led-orange {
->  				gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
->  				label = "ds116:orange:disk";
->  				default-state = "off";
-> diff --git a/arch/arm/boot/dts/armada-xp-linksys-mamba.dts b/arch/arm/boot/dts/armada-xp-linksys-mamba.dts
-> index 622ac40dd164..dbe8dfe236fb 100644
-> --- a/arch/arm/boot/dts/armada-xp-linksys-mamba.dts
-> +++ b/arch/arm/boot/dts/armada-xp-linksys-mamba.dts
-> @@ -195,7 +195,7 @@ gpio-leds {
->  		pinctrl-0 = <&power_led_pin>;
->  		pinctrl-names = "default";
->  
-> -		power {
-> +		led-power {
->  			label = "mamba:white:power";
->  			gpios = <&gpio1 8 GPIO_ACTIVE_HIGH>;
->  			default-state = "on";
-> -- 
-> 2.34.1
->
-
--- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Jason
