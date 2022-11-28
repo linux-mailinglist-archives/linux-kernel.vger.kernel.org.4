@@ -2,141 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 358C163A34D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED9B63A352
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiK1InJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 03:43:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52964 "EHLO
+        id S229912AbiK1IoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 03:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbiK1InH (ORCPT
+        with ESMTP id S229795AbiK1IoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 03:43:07 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB151144F
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:43:06 -0800 (PST)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1ozZjB-0008M9-90; Mon, 28 Nov 2022 09:43:01 +0100
-Message-ID: <a13c2e92-cfa6-04fd-c32a-c4d444894660@pengutronix.de>
-Date:   Mon, 28 Nov 2022 09:42:59 +0100
+        Mon, 28 Nov 2022 03:44:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4068611C19
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:43:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669624992;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=u3Z+f4VZMDJxUPd/+Sf3TcgkW0sRdaW9hPXh2uZaLNU=;
+        b=cr12u0HNDOdpRqkHTVsLqPE0Mkz0vF4tZso+SsteyLW2jLYWM0FOYYpIatKWcMfNH97SrJ
+        6qNbtYY9gS0iSWvsNq1oR6ap7dbfjPDcuzfavQ+T/JC33TE0BY4KiaH7xB10U+fpBQDYnZ
+        1N4QKHxjQV8WT+PdlrV+/P79njzUIUg=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-115-yMfZOjXTMBu3GtovFbi4OA-1; Mon, 28 Nov 2022 03:43:08 -0500
+X-MC-Unique: yMfZOjXTMBu3GtovFbi4OA-1
+Received: by mail-wm1-f70.google.com with SMTP id j2-20020a05600c1c0200b003cf7397fc9bso6019474wms.5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:43:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u3Z+f4VZMDJxUPd/+Sf3TcgkW0sRdaW9hPXh2uZaLNU=;
+        b=8LV6CZCwzNbNAG2zEo84oCgmZl8gPNI9P7Zw4sAcA+4q3ljcWSj2DWqENTE8Wpk+MR
+         UPw/BomTVC6MXzfQLOuTVHkUdfUAM1Vcu8K1QERnOpOxWErl+atWMtc1T5B7K6XpHHmm
+         4mDVgk4LGQNg+27HLXz3Ig1f+g3k/mIzsH5j5ymb5wnvdMau19alVi2MQ9kOH+P1xdF5
+         hwL5pCeE7Vf/hm+lG33Ev0cIu6wNGcwgShuddDTk8AtiW9LxQi2RrofSyRgJASSztrhq
+         T2pgWLIdWPNPCp7MmskMaOK2I11dEf1Jh990XdV6K+Ir3P06GkTzkCfEMyXaqBzfz56N
+         mDkQ==
+X-Gm-Message-State: ANoB5pmamtED1plyADCAf5oiuI2eOFS3WvnRXfbHU9bldBkSePoL2Poh
+        VTNHPeVbPrzEpH41/yauBoNrI23tAGjCqn6oTKw5nqPmdQlzbaiXij3vCsc3OC2g7cYJKGLh2EJ
+        6YJEZfKCmVZ5NRfINSuDbMUQN
+X-Received: by 2002:adf:f650:0:b0:241:f0c6:11bb with SMTP id x16-20020adff650000000b00241f0c611bbmr14591283wrp.389.1669624987252;
+        Mon, 28 Nov 2022 00:43:07 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7tYyRPHGtVQ1+TZNLDaZiRIq2vii8ri7zjcAuldMIqwe9YPM1WwXwe8PDxctzR9eiFdQ8vew==
+X-Received: by 2002:adf:f650:0:b0:241:f0c6:11bb with SMTP id x16-20020adff650000000b00241f0c611bbmr14591257wrp.389.1669624986924;
+        Mon, 28 Nov 2022 00:43:06 -0800 (PST)
+Received: from ?IPV6:2003:cb:c702:9000:3d6:e434:f8b4:80cf? (p200300cbc702900003d6e434f8b480cf.dip0.t-ipconnect.de. [2003:cb:c702:9000:3d6:e434:f8b4:80cf])
+        by smtp.gmail.com with ESMTPSA id y8-20020adffa48000000b00241f029e672sm10037075wrr.107.2022.11.28.00.43.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 00:43:06 -0800 (PST)
+Message-ID: <49ab9f26-9e23-25ab-71b4-e666c70ff77e@redhat.com>
+Date:   Mon, 28 Nov 2022 09:43:04 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [PATCH] ARM: dts: imx6qdl-sabre: Add mmc aliases
-To:     Detlev Casanova <detlev.casanova@collabora.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20221028141811.101122-1-detlev.casanova@collabora.com>
- <20221111025232.GI125525@dragon> <2868543.tdWV9SEqCh@falcon9>
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v7 10/20] x86/virt/tdx: Use all system memory when
+ initializing TDX module as TDX memory
 Content-Language: en-US
-In-Reply-To: <2868543.tdWV9SEqCh@falcon9>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "Hansen, Dave" <dave.hansen@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>
+References: <cover.1668988357.git.kai.huang@intel.com>
+ <9b545148275b14a8c7edef1157f8ec44dc8116ee.1668988357.git.kai.huang@intel.com>
+ <637ecded7b0f9_160eb329418@dwillia2-xfh.jf.intel.com.notmuch>
+ <8e8f72ad5d7a3d09be32bee54e4ebb9c280610a2.camel@intel.com>
+ <361875cb-e4b3-a46f-b275-6d87a98ce966@redhat.com>
+ <397ebe70bf9cede731f2f8bbd05e0df518fd3a22.camel@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <397ebe70bf9cede731f2f8bbd05e0df518fd3a22.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Detlev,
-Hello Shawn,
-
-On 11.11.22 20:35, Detlev Casanova wrote:
-> On Thursday, November 10, 2022 9:52:32 P.M. EST Shawn Guo wrote:
->> On Fri, Oct 28, 2022 at 10:18:11AM -0400, Detlev Casanova wrote:
->>> If not specified, the mmc0 and mmc1 devices will be the devices
->>> mmc@2190000 and mmc@2194000, which are in disabled state on the iMX.6
->>> Sabrelite devices.
+On 28.11.22 09:38, Huang, Kai wrote:
+> On Fri, 2022-11-25 at 10:28 +0100, David Hildenbrand wrote:
+>> On 24.11.22 10:06, Huang, Kai wrote:
+>>> On Wed, 2022-11-23 at 17:50 -0800, Dan Williams wrote:
+>>>>>     
+>>>>> @@ -968,6 +969,15 @@ int arch_add_memory(int nid, u64 start, u64 size,
+>>>>>     	unsigned long start_pfn = start >> PAGE_SHIFT;
+>>>>>     	unsigned long nr_pages = size >> PAGE_SHIFT;
+>>>>>     
+>>>>> +	/*
+>>>>> +	 * For now if TDX is enabled, all pages in the page allocator
+>>>>> +	 * must be TDX memory, which is a fixed set of memory regions
+>>>>> +	 * that are passed to the TDX module.  Reject the new region
+>>>>> +	 * if it is not TDX memory to guarantee above is true.
+>>>>> +	 */
+>>>>> +	if (!tdx_cc_memory_compatible(start_pfn, start_pfn + nr_pages))
+>>>>> +		return -EINVAL;
+>>>>
+>>>> arch_add_memory() does not add memory to the page allocator.  For
+>>>> example, memremap_pages() uses arch_add_memory() and explicitly does not
+>>>> release the memory to the page allocator.
 >>>
->>> The actual SD card reader devices are the ones at mmc@2198000 and
->>> mmc@219c000.
+>>> Indeed.  Sorry I missed this.
 >>>
->>> Set aliases to use the correct mmc devices order.
->>
->> Is this something never worked or a regression?  For the latter, we may
->> need a Fixes tag?
-> 
-> These were apparently never set in the kernel device-tree and added manually 
-> in u-boot when dts are synced.
-> 
-> Because most distributions use UUIDs in fstab, it is not a big problem in 
-> Linux, just that the SD card is called /dev/mmcblk2. I would say that this has 
-> always been an issue in Linux.
-
-We already have aliases in imx6qdl.dtsi. Existing Installations that hardcode
-root=mmcblk2 _will_ be broken by this change. Installations that are fixed
-by this change have never worked properly, because prior to commit fa2d0aa96941
-("mmc: core: Allow setting slot index via device tree alias"), it depended
-on probe order and/or whether a card was present.
-
-Whether SD/eMMC comes first or if they start at 0 or 2 is just cosmetic.
-The alias order corresponds with the order in the data sheet and that's a
-good default and I see no reason to change this here and risk breakage.
-
-I thus don't think this patch should go mainline.
-
-Thanks,
-Ahmad
-
-> 
->> Shawn
->>
->>> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
->>> ---
+>>>> This check belongs in
+>>>> add_memory_resource() to prevent new memory that violates TDX from being
+>>>> onlined.
 >>>
->>>  arch/arm/boot/dts/imx6qdl-sabrelite.dtsi | 5 +++++
->>>  1 file changed, 5 insertions(+)
+>>> This would require adding another 'arch_cc_memory_compatible()' to the common
+>>> add_memory_resource() (I actually long time ago had such patch to work with the
+>>> memremap_pages() you mentioned above).
 >>>
->>> diff --git a/arch/arm/boot/dts/imx6qdl-sabrelite.dtsi
->>> b/arch/arm/boot/dts/imx6qdl-sabrelite.dtsi index
->>> 22f8e2783cdf..12573e1f917c 100644
->>> --- a/arch/arm/boot/dts/imx6qdl-sabrelite.dtsi
->>> +++ b/arch/arm/boot/dts/imx6qdl-sabrelite.dtsi
->>> @@ -14,6 +14,11 @@ chosen {
+>>> How about adding a memory_notifier to the TDX code, and reject online of TDX
+>>> incompatible memory (something like below)?  The benefit is this is TDX code
+>>> self contained and won't pollute the common mm code:
 >>>
->>>  		stdout-path = &uart2;
->>>  	
->>>  	};
->>>
->>> +	aliases {
->>> +		mmc0 = &usdhc3;
->>> +		mmc1 = &usdhc4;
->>> +	};
+>>> +static int tdx_memory_notifier(struct notifier_block *nb,
+>>> +                              unsigned long action, void *v)
+>>> +{
+>>> +       struct memory_notify *mn = v;
 >>> +
->>>
->>>  	memory@10000000 {
->>>  	
->>>  		device_type = "memory";
->>>  		reg = <0x10000000 0x40000000>;
+>>> +       if (action != MEM_GOING_ONLINE)
+>>> +               return NOTIFY_OK;
+>>> +
+>>> +       /*
+>>> +        * Not all memory is compatible with TDX.  Reject
+>>> +        * online of any incompatible memory.
+>>> +        */
+>>> +       return tdx_cc_memory_compatible(mn->start_pfn,
+>>> +                       mn->start_pfn + mn->nr_pages) ? NOTIFY_OK : NOTIFY_BAD;
+>>> +}
+>>> +
+>>> +static struct notifier_block tdx_memory_nb = {
+>>> +       .notifier_call = tdx_memory_notifier,
+>>> +};
+>>
+>> With mhp_memmap_on_memory() some memory might already be touched during
+>> add_memory() (because part of the hotplug memory is used for holding the
+>> memmap), not when actually onlining memory. So in that case, this would
+>> be too late.
 > 
+> Hi David,
 > 
+> Thanks for the review!
 > 
-> 
-> 
-> 
+> Right. The memmap pages are added to the zone before online_pages(), but IIUC
+> those memmap pages will never be free pages thus won't be allocated by the page
+> allocator, correct?  Therefore in practice there won't be problem even they are
+> not TDX compatible memory.
+
+But that memory will be read/written. Isn't that an issue, for example, 
+if memory doesn't get accepted etc?
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Thanks,
+
+David / dhildenb
 
