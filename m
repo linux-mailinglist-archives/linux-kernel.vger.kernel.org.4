@@ -2,76 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F26663A659
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1EC363A655
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:48:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiK1Ksk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 05:48:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
+        id S229739AbiK1KsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 05:48:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbiK1Ksh (ORCPT
+        with ESMTP id S229976AbiK1KsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 05:48:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A25EE92
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:47:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669632461;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cS8myjO3Qx4B0wnXMirQSBOMzDu+QNBoBdPAnQnrxLs=;
-        b=F0+j4ia4PO3XSK5jmxd9zS3F4SJDLfFv+XXH7tx85MRps7YoeTD/j6W93yIm/cQDo09aIG
-        NGEd7btKHimPfhl5E5L+04mLvNE+N/19O/cFrwHOf63KW1levYI0WQD6VVDRnJH3G7QvM9
-        cm192oPo5xJLBArRUOAdJ9rxzOS+nN4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-622-jILZKfDEMAWP1SWcpKUlFQ-1; Mon, 28 Nov 2022 05:47:39 -0500
-X-MC-Unique: jILZKfDEMAWP1SWcpKUlFQ-1
-Received: by mail-wm1-f69.google.com with SMTP id o5-20020a05600c510500b003cfca1a327fso6129306wms.8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:47:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cS8myjO3Qx4B0wnXMirQSBOMzDu+QNBoBdPAnQnrxLs=;
-        b=ojgGzvF6+30tcVIGLwjbsnZYDzgX78dYoHV2svWEuqmAB/WThK0e/HGEVpeAlpJkBn
-         0UtOFRK+tA01V+0+mCTN/T7iYFBGMWaNuKMTcfnS+1DrYztQ47erbwg59VXG5uPQVR4s
-         iOto3+a6JiexJB6Vz78lYQe6tcX7/28VAoQCZN6zDMpGhjQC0CC7KIFJVWtgGmD6nGmP
-         ieA41R9b3AkIDMlvOle2beS994b0s/Z4fgQatPXvZVy5wvKfM6ZNmSUfrwCQ+/JAvTAa
-         EkSLpvFJqpFcbmc+NYV6p4aXh0zx9ve1hNqomeNcYVTP2KDQEGzKfLZdYD0rjA9xjPqm
-         /idQ==
-X-Gm-Message-State: ANoB5pmTcqBw+74NKQpqkhHED14GDx9l49TFfc6ZETltsGagA6lvvW09
-        HhyEY073Qh5MIbsdJ5nI0Bf4GAM1ercMHbM8ynvWBj8jWLJcgIMEyHKwSV7HMxxCTuAd8+dNheS
-        gU3lGiUQysA7Heo8R61ddkZjW
-X-Received: by 2002:a5d:5f04:0:b0:241:e9a6:fb3 with SMTP id cl4-20020a5d5f04000000b00241e9a60fb3mr15849621wrb.462.1669632457562;
-        Mon, 28 Nov 2022 02:47:37 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6Uw75GgmZfAJrCZl1x3MbiuyHCdl4XOGtfUzuURjcUCzIxRCl9LYisU8M4TEltPVhmHNqRIw==
-X-Received: by 2002:a5d:5f04:0:b0:241:e9a6:fb3 with SMTP id cl4-20020a5d5f04000000b00241e9a60fb3mr15849610wrb.462.1669632457346;
-        Mon, 28 Nov 2022 02:47:37 -0800 (PST)
-Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
-        by smtp.gmail.com with ESMTPSA id h9-20020adffd49000000b002383fc96509sm10468040wrs.47.2022.11.28.02.47.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 02:47:36 -0800 (PST)
-Date:   Mon, 28 Nov 2022 11:47:30 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Cindy Lu <lulu@redhat.com>
-Cc:     jasowang@redhat.com, mst@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] vhost_vdpa: fix the crash in unmap a large memory
-Message-ID: <20221128104730.6igmyh6jz7voymdp@sgarzare-redhat>
-References: <20221125022317.2157263-1-lulu@redhat.com>
+        Mon, 28 Nov 2022 05:48:03 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31CD67645;
+        Mon, 28 Nov 2022 02:48:01 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D8DE6D6E;
+        Mon, 28 Nov 2022 02:48:07 -0800 (PST)
+Received: from [192.168.99.12] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EB7153F73B;
+        Mon, 28 Nov 2022 02:47:59 -0800 (PST)
+Message-ID: <15170a9f-c600-5700-95ba-4c424b1d2197@foss.arm.com>
+Date:   Mon, 28 Nov 2022 10:47:58 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20221125022317.2157263-1-lulu@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] i2c: cadence: Fix regression with bus recovery
+To:     "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "shubhrajyoti.datta@xilinx.com" <shubhrajyoti.datta@xilinx.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
+References: <20221125115103.674756-1-carsten.haitzler@foss.arm.com>
+ <BY5PR12MB49026A5C37C25915E6C8A86F81139@BY5PR12MB4902.namprd12.prod.outlook.com>
+Content-Language: en-US
+From:   Carsten Haitzler <carsten.haitzler@foss.arm.com>
+Organization: Arm Ltd.
+In-Reply-To: <BY5PR12MB49026A5C37C25915E6C8A86F81139@BY5PR12MB4902.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,140 +52,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 10:23:17AM +0800, Cindy Lu wrote:
->While testing in vIOMMU, sometimes guest will unmap very large memory,
->which will cause the crash. To fix this,Move the iommu_unmap to
->vhost_vdpa_pa_unmap/vhost_vdpa_va_unmap and only unmap the memory
->that saved in iotlb.
->
->Call Trace:
->[  647.820144] ------------[ cut here ]------------
->[  647.820848] kernel BUG at drivers/iommu/intel/iommu.c:1174!
->[  647.821486] invalid opcode: 0000 [#1] PREEMPT SMP PTI
->[  647.822082] CPU: 10 PID: 1181 Comm: qemu-system-x86 Not tainted 6.0.0-rc1home_lulu_2452_lulu7_vhost+ #62
->[  647.823139] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.15.0-29-g6a62e0cb0dfe-prebuilt.qem4
->[  647.824365] RIP: 0010:domain_unmap+0x48/0x110
->[  647.825424] Code: 48 89 fb 8d 4c f6 1e 39 c1 0f 4f c8 83 e9 0c 83 f9 3f 7f 18 48 89 e8 48 d3 e8 48 85 c0 75 59
->[  647.828064] RSP: 0018:ffffae5340c0bbf0 EFLAGS: 00010202
->[  647.828973] RAX: 0000000000000001 RBX: ffff921793d10540 RCX: 000000000000001b
->[  647.830083] RDX: 00000000080000ff RSI: 0000000000000001 RDI: ffff921793d10540
->[  647.831214] RBP: 0000000007fc0100 R08: ffffae5340c0bcd0 R09: 0000000000000003
->[  647.832388] R10: 0000007fc0100000 R11: 0000000000100000 R12: 00000000080000ff
->[  647.833668] R13: ffffae5340c0bcd0 R14: ffff921793d10590 R15: 0000008000100000
->[  647.834782] FS:  00007f772ec90640(0000) GS:ffff921ce7a80000(0000) knlGS:0000000000000000
->[  647.836004] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->[  647.836990] CR2: 00007f02c27a3a20 CR3: 0000000101b0c006 CR4: 0000000000372ee0
->[  647.838107] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->[  647.839283] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->[  647.840666] Call Trace:
->[  647.841437]  <TASK>
->[  647.842107]  intel_iommu_unmap_pages+0x93/0x140
->[  647.843112]  __iommu_unmap+0x91/0x1b0
->[  647.844003]  iommu_unmap+0x6a/0x95
->[  647.844885]  vhost_vdpa_unmap+0x1de/0x1f0 [vhost_vdpa]
->[  647.845985]  vhost_vdpa_process_iotlb_msg+0xf0/0x90b [vhost_vdpa]
->[  647.847235]  ? _raw_spin_unlock+0x15/0x30
->[  647.848181]  ? _copy_from_iter+0x8c/0x580
->[  647.849137]  vhost_chr_write_iter+0xb3/0x430 [vhost]
->[  647.850126]  vfs_write+0x1e4/0x3a0
->[  647.850897]  ksys_write+0x53/0xd0
->[  647.851688]  do_syscall_64+0x3a/0x90
->[  647.852508]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->[  647.853457] RIP: 0033:0x7f7734ef9f4f
->[  647.854408] Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 29 76 f8 ff 48 8b 54 24 18 48 8b 74 24 10 41 89 c8
->[  647.857217] RSP: 002b:00007f772ec8f040 EFLAGS: 00000293 ORIG_RAX: 0000000000000001
->[  647.858486] RAX: ffffffffffffffda RBX: 00000000fef00000 RCX: 00007f7734ef9f4f
->[  647.859713] RDX: 0000000000000048 RSI: 00007f772ec8f090 RDI: 0000000000000010
->[  647.860942] RBP: 00007f772ec8f1a0 R08: 0000000000000000 R09: 0000000000000000
->[  647.862206] R10: 0000000000000001 R11: 0000000000000293 R12: 0000000000000010
->[  647.863446] R13: 0000000000000002 R14: 0000000000000000 R15: ffffffff01100000
->[  647.864692]  </TASK>
->[  647.865458] Modules linked in: rpcsec_gss_krb5 auth_rpcgss nfsv4 dns_resolver nfs lockd grace fscache netfs v]
->[  647.874688] ---[ end trace 0000000000000000 ]---
 
-I think you can remove the part below this line.
 
- From here:
+On 11/28/22 06:24, Datta, Shubhrajyoti wrote:
+> [AMD Official Use Only - General]
+> 
+> 
+> Hi ,
+> Thanks for the patch
+> 
+>> -----Original Message-----
+>> From: carsten.haitzler@foss.arm.com <carsten.haitzler@foss.arm.com>
+>> Sent: Friday, November 25, 2022 5:21 PM
+>> To: michal.simek@xilinx.com; shubhrajyoti.datta@xilinx.com; linux-arm-
+>> kernel@lists.infradead.org; linux-i2c@vger.kernel.org; linux-
+>> kernel@vger.kernel.org
+>> Cc: torvalds@linux-foundation.org
+>> Subject: [PATCH] i2c: cadence: Fix regression with bus recovery
+>>
+>> CAUTION: This message has originated from an External Source. Please use
+>> proper judgment and caution when opening attachments, clicking links, or
+>> responding to this email.
+>>
+>>
+>> From: Carsten Haitzler <carsten.haitzler@arm.com>
+>>
+>> Commit "i2c: cadence: Add standard bus recovery support" breaks for i2c
+>> devices that have no pinctrl defined. There is no requirement for this to exist
+>> in the DT. This has worked perfectly well without this before in at least 1 real
+>> usage case on hardware (Mali Komeda DPU, Cadence i2c to talk to a tda99xx
+>> phy). Adding the requirement to have pinctrl set up in the device tree (or
+>> otherwise be found) is a regression where the whole i2c device is lost
+>> entirely (in this case dropping entire devices which then leads to the drm
+>> display stack unable to find the phy for display output, thus having no drm
+>> display device and so on down the chain).
+>>
+>> This converts the above commit to an enhancement if pinctrl can be found
+>> for the i2c device, providing a timeout on read with recovery, but if not, do
+>> what used to be done rather than a fatal loss of a device.
+>>
+>> This restores the mentioned display devices to their working state again.
+>>
+>> Fixes: 58b924241d0a ("i2c: cadence: Add standard bus recovery support")
+>> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+>> ---
+>> Note: This issue was discovered during the porting of the linux kernel on
+>> Morello [1].
+>>
+>> [1]
+>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.
+>> morello-
+>> project.org%2Fmorello%2Fkernel%2Flinux&amp;data=05%7C01%7Cshubhraj
+>> yoti.datta%40amd.com%7C651e141296fb497b6c2e08dacedb65ad%7C3dd896
+>> 1fe4884e608e11a82d994e183d%7C0%7C0%7C638049738949855658%7CUnkn
+>> own%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik
+>> 1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=ny08zTdgJKxXC
+>> dwYaCWFS3mwd65LDqFAIYfjao6gO8Y%3D&amp;reserved=0
+>> ---
+>>   drivers/i2c/busses/i2c-cadence.c | 10 +++++-----
+>>   1 file changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-
+>> cadence.c
+>> index fe0cd205502d..40d0cc6bb996 100644
+>> --- a/drivers/i2c/busses/i2c-cadence.c
+>> +++ b/drivers/i2c/busses/i2c-cadence.c
+>> @@ -852,7 +852,8 @@ static int cdns_i2c_master_xfer(struct i2c_adapter
+>> *adap, struct i2c_msg *msgs,
+>>                                           CDNS_I2C_POLL_US, CDNS_I2C_TIMEOUT_US);
+>>          if (ret) {
+>>                  ret = -EAGAIN;
+>> -               i2c_recover_bus(adap);
+>> +               if (id->adap.bus_recovery_info)
+>> +                       i2c_recover_bus(adap);
+>>                  goto out;
+>>          }
+>>
+>> @@ -1262,10 +1263,10 @@ static int cdns_i2c_probe(struct platform_device
+>> *pdev)
+>>          }
+>>
+>>          id->rinfo.pinctrl = devm_pinctrl_get(&pdev->dev);
+>> -       if (IS_ERR(id->rinfo.pinctrl)) {
+>> +       if (IS_ERR(id->rinfo.pinctrl))
+>>                  dev_info(&pdev->dev, "can't get pinctrl, bus recovery not
+>> supported\n");
+>> -               return PTR_ERR(id->rinfo.pinctrl);
+>> -       }
+>> +       else
+>> +               id->adap.bus_recovery_info = &id->rinfo;
+> 
+> May be we could differentiate between  ENODEV and  other errors.
+> As we want to do this for the case when it is not provided.
 
->[  647.876013] RIP: 0010:domain_unmap+0x48/0x110
->[  647.878306] Code: 48 89 fb 8d 4c f6 1e 39 c1 0f 4f c8 83 e9 0c 83 f9 3f 7f 18 48 89 e8 48 d3 e8 48 85 c0 75 59
->[  647.884581] RSP: 0018:ffffae5340c0bbf0 EFLAGS: 00010202
->[  647.886308] RAX: 0000000000000001 RBX: ffff921793d10540 RCX: 000000000000001b
->[  647.888775] RDX: 00000000080000ff RSI: 0000000000000001 RDI: ffff921793d10540
->[  647.890295] RBP: 0000000007fc0100 R08: ffffae5340c0bcd0 R09: 0000000000000003
->[  647.891660] R10: 0000007fc0100000 R11: 0000000000100000 R12: 00000000080000ff
->[  647.893019] R13: ffffae5340c0bcd0 R14: ffff921793d10590 R15: 0000008000100000
->[  647.894506] FS:  00007f772ec90640(0000) GS:ffff921ce7a80000(0000) knlGS:0000000000000000
->[  647.895963] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->[  647.897348] CR2: 00007f02c27a3a20 CR3: 0000000101b0c006 CR4: 0000000000372ee0
->[  647.898719] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+We could, but just keep in mind this patch is essentially restoring 
+behavior on any pinctrl error to previous behavior - so trying to undo 
+the regression as strictly as possible.
 
-To here.
+Certainly checking specifically for ENODEV does fix it for me which is 
+the case of no pinctrl. I'll send a v2.
 
-And maybe I would also remove the timestamps; in the end they are not 
-useful for this fix and they crowd this trace.
-
->
->Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
->Signed-off-by: Cindy Lu <lulu@redhat.com>
->---
-> drivers/vhost/vdpa.c | 10 ++++++++--
-> 1 file changed, 8 insertions(+), 2 deletions(-)
->
->diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
->index 166044642fd5..e5a07751bf45 100644
->--- a/drivers/vhost/vdpa.c
->+++ b/drivers/vhost/vdpa.c
->@@ -692,6 +692,8 @@ static void vhost_vdpa_pa_unmap(struct vhost_vdpa *v,
-> 	struct vhost_iotlb_map *map;
-> 	struct page *page;
-> 	unsigned long pfn, pinned;
->+	struct vdpa_device *vdpa = v->vdpa;
->+	const struct vdpa_config_ops *ops = vdpa->config;
->
-> 	while ((map = vhost_iotlb_itree_first(iotlb, start, last)) != NULL) {
-> 		pinned = PFN_DOWN(map->size);
->@@ -703,6 +705,8 @@ static void vhost_vdpa_pa_unmap(struct vhost_vdpa *v,
-> 			unpin_user_page(page);
-> 		}
-> 		atomic64_sub(PFN_DOWN(map->size), &dev->mm->pinned_vm);
->+		if ((ops->dma_map == NULL) && (ops->set_map == NULL))
->+			iommu_unmap(v->domain, map->start, map->size);
-> 		vhost_iotlb_map_free(iotlb, map);
-> 	}
-> }
->@@ -713,11 +717,15 @@ static void vhost_vdpa_va_unmap(struct vhost_vdpa *v,
-> {
-> 	struct vhost_iotlb_map *map;
-> 	struct vdpa_map_file *map_file;
->+	struct vdpa_device *vdpa = v->vdpa;
->+	const struct vdpa_config_ops *ops = vdpa->config;
->
-> 	while ((map = vhost_iotlb_itree_first(iotlb, start, last)) != NULL) {
-> 		map_file = (struct vdpa_map_file *)map->opaque;
-> 		fput(map_file->file);
-> 		kfree(map_file);
->+		if (ops->set_map == NULL)
-
-Should we check that `dma_map` is also NULL as in the previous hunk?
-
-Thanks,
-Stefano
-
->+			iommu_unmap(v->domain, map->start, map->size);
-> 		vhost_iotlb_map_free(iotlb, map);
-> 	}
-> }
->@@ -805,8 +813,6 @@ static void vhost_vdpa_unmap(struct vhost_vdpa *v,
-> 	} else if (ops->set_map) {
-> 		if (!v->in_batch)
-> 			ops->set_map(vdpa, asid, iotlb);
->-	} else {
->-		iommu_unmap(v->domain, iova, size);
-> 	}
->
-> 	/* If we are in the middle of batch processing, delay the free
->-- 
->2.34.3
->
-
+>>          id->membase = devm_platform_get_and_ioremap_resource(pdev, 0,
+>> &r_mem);
+>>          if (IS_ERR(id->membase))
+>> @@ -1283,7 +1284,6 @@ static int cdns_i2c_probe(struct platform_device
+>> *pdev)
+>>          id->adap.retries = 3;           /* Default retry value. */
+>>          id->adap.algo_data = id;
+>>          id->adap.dev.parent = &pdev->dev;
+>> -       id->adap.bus_recovery_info = &id->rinfo;
+>>          init_completion(&id->xfer_done);
+>>          snprintf(id->adap.name, sizeof(id->adap.name),
+>>                   "Cadence I2C at %08lx", (unsigned long)r_mem->start);
+>> --
+>> 2.32.0
