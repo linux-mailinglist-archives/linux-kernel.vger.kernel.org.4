@@ -2,123 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6880963A681
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD25263A683
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:59:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbiK1K6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 05:58:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
+        id S230448AbiK1K71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 05:59:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiK1K6p (ORCPT
+        with ESMTP id S230143AbiK1K7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 05:58:45 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915B5B84F;
-        Mon, 28 Nov 2022 02:58:43 -0800 (PST)
-Received: from mxct.zte.com.cn (unknown [192.168.251.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NLMsF620Zz8QrkZ;
-        Mon, 28 Nov 2022 18:58:41 +0800 (CST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NLMsC1fcRz4y0tv;
-        Mon, 28 Nov 2022 18:58:39 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2ASAwWDJ034165;
-        Mon, 28 Nov 2022 18:58:32 +0800 (+08)
-        (envelope-from zhang.songyi@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Mon, 28 Nov 2022 18:58:35 +0800 (CST)
-Date:   Mon, 28 Nov 2022 18:58:35 +0800 (CST)
-X-Zmail-TransId: 2afa6384945b07c86c35
-X-Mailer: Zmail v1.0
-Message-ID: <202211281858353531369@zte.com.cn>
-Mime-Version: 1.0
-From:   <zhang.songyi@zte.com.cn>
-To:     <leon@kernel.org>, <yishaih@nvidia.com>
-Cc:     <gg@ziepe.ca>, <leon@kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <zhang.songyi@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIFJETUEvbWx4NDogTlVMTCBjaGVjayBiZWZvcmUgZGV2X3twdXQsIGhvbGR9IGZ1bmN0aW9ucyBpcyBub3QKIG5lZWRlZA==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2ASAwWDJ034165
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63849461.000 by FangMail milter!
-X-FangMail-Envelope: 1669633121/4NLMsF620Zz8QrkZ/63849461.000/192.168.251.13/[192.168.251.13]/mxct.zte.com.cn/<zhang.songyi@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63849461.000/4NLMsF620Zz8QrkZ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 28 Nov 2022 05:59:24 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB2812AEC;
+        Mon, 28 Nov 2022 02:59:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669633163; x=1701169163;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=nG8vAVvrG6D6LC8ebeOkxEt0G/Epw+RgSwZ++d7qqoA=;
+  b=x0QOeJ3CLIX+OUnAiTAV7/3qs+PUshpIZPuDPLaSbNv98OAPu47Ogn/T
+   n/xoTCeL8kkdMQx2lM6f97J/zgNuE1KK/HwFxAzKfrdoZTuUOuHiXg6xg
+   nkokMOawHQDLEensa+v7bw80uo0KX516nVvsTuL+mLR2LUd1YIuIMDXC3
+   3aTi5TqhzSugA3wnHSzIZYmcX26Gt0PcRF8G8JK/RrcjYwGjM3dx6g9is
+   I8D8JY5m6yZiqCHWGjrE23h8ZrdLFpztoJwpvyBht3EjlEY1dVRJCWoYE
+   YzY5Hy6lM+9JYSohs5+MZdEZow3MuKyZKlCfNtCaLNnHb+sqPMpASJvIz
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
+   d="scan'208";a="201651230"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Nov 2022 03:59:23 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 28 Nov 2022 03:59:23 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Mon, 28 Nov 2022 03:59:21 -0700
+Message-ID: <717e921f-af8f-f235-e2f8-e2fae2b31e9a@microchip.com>
+Date:   Mon, 28 Nov 2022 11:59:14 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] usb: gadget: udc: drop obsolete dependencies on
+ COMPILE_TEST
+Content-Language: en-US
+To:     Jean Delvare <jdelvare@suse.de>, <linux-usb@vger.kernel.org>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michal Simek <michal.simek@xilinx.com>
+References: <20221125170444.36620123@endymion.delvare>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20221125170444.36620123@endymion.delvare>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhang songyi <zhang.songyi@zte.com.cn>
+On 25/11/2022 at 17:04, Jean Delvare wrote:
+> Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+> is possible to test-build any driver which depends on OF on any
+> architecture by explicitly selecting OF. Therefore depending on
+> COMPILE_TEST as an alternative is no longer needed.
+> 
+> It is actually better to always build such drivers with OF enabled,
+> so that the test builds are closer to how each driver will actually be
+> built on its intended target. Building them without OF may not test
+> much as the compiler will optimize out potentially large parts of the
+> code. In the worst case, this could even pop false positive warnings.
+> Dropping COMPILE_TEST here improves the quality of our testing and
+> avoids wasting time on non-existent issues.
+> 
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-The call netdev_{put, hold} of dev_{put, hold} will check NULL,
-so there is no need to check before using dev_{put, hold}.
+Fine with me:
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Fix the following coccicheck warnings:
-/drivers/infiniband/hw/mlx4/main.c:1311:2-10: WARNING:
-WARNING  NULL check before dev_{put, hold} functions is not needed.
+Thanks Jean. Best regards,
+   Nicolas
 
-/drivers/infiniband/hw/mlx4/main.c:148:2-10: WARNING:
-WARNING  NULL check before dev_{put, hold} functions is not needed.
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
+> Cc: Michal Simek <michal.simek@xilinx.com>
+> ---
+>   drivers/usb/gadget/udc/Kconfig |    4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> --- linux-6.0.orig/drivers/usb/gadget/udc/Kconfig
+> +++ linux-6.0/drivers/usb/gadget/udc/Kconfig
+> @@ -33,7 +33,7 @@ menu "USB Peripheral Controller"
+>   config USB_AT91
+>          tristate "Atmel AT91 USB Device Port"
+>          depends on ARCH_AT91
+> -       depends on OF || COMPILE_TEST
+> +       depends on OF
+>          help
+>             Many Atmel AT91 processors (such as the AT91RM2000) have a
+>             full speed USB Device Port with support for five configurable
+> @@ -430,7 +430,7 @@ config USB_EG20T
+>   config USB_GADGET_XILINX
+>          tristate "Xilinx USB Driver"
+>          depends on HAS_DMA
+> -       depends on OF || COMPILE_TEST
+> +       depends on OF
+>          help
+>            USB peripheral controller driver for Xilinx USB2 device.
+>            Xilinx USB2 device is a soft IP which supports both full
+> 
+> 
+> --
+> Jean Delvare
+> SUSE L3 Support
 
-/drivers/infiniband/hw/mlx4/main.c:1959:3-11: WARNING:
-WARNING  NULL check before dev_{put, hold} functions is not needed.
+-- 
+Nicolas Ferre
 
-/drivers/infiniband/hw/mlx4/main.c:1962:3-10: WARNING:
-WARNING  NULL check before dev_{put, hold} functions is not needed.
-
-Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
----
- drivers/infiniband/hw/mlx4/main.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/infiniband/hw/mlx4/main.c b/drivers/infiniband/hw/mlx4/main.c
-index ba47874f90d3..dceebcd885bb 100644
---- a/drivers/infiniband/hw/mlx4/main.c
-+++ b/drivers/infiniband/hw/mlx4/main.c
-@@ -144,8 +144,7 @@ static struct net_device *mlx4_ib_get_netdev(struct ib_device *device,
-                        }
-                }
-        }
--       if (dev)
--               dev_hold(dev);
-+       dev_hold(dev);
-
-        rcu_read_unlock();
-        return dev;
-@@ -1307,8 +1306,7 @@ int mlx4_ib_add_mc(struct mlx4_ib_dev *mdev, struct mlx4_ib_qp *mqp,
-
-        spin_lock_bh(&mdev->iboe.lock);
-        ndev = mdev->iboe.netdevs[mqp->port - 1];
--       if (ndev)
--               dev_hold(ndev);
-+       dev_hold(ndev);
-        spin_unlock_bh(&mdev->iboe.lock);
-
-        if (ndev) {
-@@ -1955,11 +1953,9 @@ static int mlx4_ib_mcg_detach(struct ib_qp *ibqp, union ib_gid *gid, u16 lid)
-        if (ge) {
-                spin_lock_bh(&mdev->iboe.lock);
-                ndev = ge->added ? mdev->iboe.netdevs[ge->port - 1] : NULL;
--               if (ndev)
--                       dev_hold(ndev);
-+               dev_hold(ndev);
-                spin_unlock_bh(&mdev->iboe.lock);
--               if (ndev)
--                       dev_put(ndev);
-+               dev_put(ndev);
-                list_del(&ge->list);
-                kfree(ge);
-        } else
---
-2.15.2
