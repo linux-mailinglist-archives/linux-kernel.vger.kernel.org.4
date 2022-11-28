@@ -2,144 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6744163A10D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 07:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6ECF63A10F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 07:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiK1GHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 01:07:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
+        id S229770AbiK1GI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 01:08:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiK1GHh (ORCPT
+        with ESMTP id S229616AbiK1GIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 01:07:37 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3A0307;
-        Sun, 27 Nov 2022 22:07:32 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AS2CQOa025596;
-        Mon, 28 Nov 2022 06:07:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=PjT+MfJJ3/eFkYXjY/kO+PmNcQCtw/hZMgnEnTpWVUE=;
- b=rVoKjTHNvMUd9wAIEHCBlfezLg4cZ+/3trV53cItcanTZvQtTOCg74DMaAn/QiwUGuTN
- FyeDH40Qn6gYFhn/rt2sydNwln95q4cq7Jkr2Ix8XIlcS91oFspQVivNMErBqtB+/X4n
- jAyXf43eXihjfu5H//104pImWPpXs33kAvKiNAG3yy+oFpQUe6VF8OlHYcBRc/OIAxL7
- 7DT0NahkY2MMG5mMA+uKy9Vo5dlvC7LzcUdhr7MqL+fMR2cvkeG4mLTX3XwAClXvDFuE
- pf2ilMn74miCalpP2HwfpQqG5jxeTr1jXBcnKmcT3O2oFnPyJXw3sZsIjDv9W9vO1bA9 VQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m3vnnxuv9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 06:07:27 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AS5jegh001876;
-        Mon, 28 Nov 2022 06:07:27 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m3vnnxuus-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 06:07:27 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AS67PGj024064;
-        Mon, 28 Nov 2022 06:07:25 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3m3ae9a0pf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 06:07:25 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AS60vDe3408466
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Nov 2022 06:00:57 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5B4BD4203F;
-        Mon, 28 Nov 2022 06:07:22 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DFB3142042;
-        Mon, 28 Nov 2022 06:07:21 +0000 (GMT)
-Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.84.206])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 28 Nov 2022 06:07:21 +0000 (GMT)
-Date:   Mon, 28 Nov 2022 07:07:20 +0100
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-mm@kvack.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] s390/mm: Use pmd_pgtable_page() helper in
- __gmap_segment_gaddr()
-Message-ID: <Y4IvaRNLmASfRJiZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-References: <20221125034502.1559986-1-anshuman.khandual@arm.com>
+        Mon, 28 Nov 2022 01:08:55 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C3D13F36;
+        Sun, 27 Nov 2022 22:08:53 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NLFQk6mqrz4f3jLV;
+        Mon, 28 Nov 2022 14:08:46 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP2 (Coremail) with SMTP id Syh0CgCnCrZwUIRjbJcUBQ--.52016S3;
+        Mon, 28 Nov 2022 14:08:50 +0800 (CST)
+Subject: Re: [PATCH RFC] scsi: core: remove unsed 'restarts' from scsi_device
+To:     Ming Lei <ming.lei@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20221118113052.1324140-1-yukuai1@huaweicloud.com>
+ <cefdae2e-67e3-b4b4-f569-31db960e991f@huaweicloud.com>
+ <Y4QqtbXsuYmkOe88@T590>
+ <7a747bc3-b902-6f0c-21ef-0ef470ec326e@huaweicloud.com>
+ <Y4Q1KPgBsDCZTyTW@T590>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <1caa7d49-0322-3eb9-7e99-6be96f77c80a@huaweicloud.com>
+Date:   Mon, 28 Nov 2022 14:08:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221125034502.1559986-1-anshuman.khandual@arm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: H_ZeDN8WWMpM6hhRfHv3uOHEfKUsSV0l
-X-Proofpoint-GUID: YLYRH3nZvkEDWY5MrgI78-BPk0TOQjqi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-28_04,2022-11-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 bulkscore=0 spamscore=0 phishscore=0 suspectscore=0
- adultscore=0 lowpriorityscore=0 mlxscore=0 impostorscore=0 clxscore=1011
- mlxlogscore=745 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211280043
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y4Q1KPgBsDCZTyTW@T590>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgCnCrZwUIRjbJcUBQ--.52016S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxZF1DAFyrWFyDCw1kAw13Jwb_yoW5Zry3pa
+        yrta1jyw4kXr4jk3yYqw4UWFySqr15Ww43Xrn7Jr9xJF90vFn3Xr4rtws8uF92qrn7GF4U
+        tFyDX393Xr40yaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
+        UUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 09:15:02AM +0530, Anshuman Khandual wrote:
+Hi,
 
-Hi Anshuman,
+在 2022/11/28 12:12, Ming Lei 写道:
+> On Mon, Nov 28, 2022 at 11:35:18AM +0800, Yu Kuai wrote:
+>>
+>>
+>> 在 2022/11/28 11:27, Ming Lei 写道:
+>>> On Sat, Nov 26, 2022 at 04:54:46PM +0800, Yu Kuai wrote:
+>>>> Hi,
+>>>>
+>>>> 在 2022/11/18 19:30, Yu Kuai 写道:
+>>>>> From: Yu Kuai <yukuai3@huawei.com>
+>>>>>
+>>>>> During code review, I found that 'restarts' is not useful anymore after
+>>>>> the following commits:
+>>>>>
+>>>>> 1) commit ab3cee3762e5 ("blk-mq: In blk_mq_dispatch_rq_list() "no budget"
+>>>>> is a reason to kick")
+>>>>> 2) commit d3b38596875d ("blk-mq: run queue no matter whether the request
+>>>>> is the last request")
+>>>>> 3) commit 673235f91531 ("scsi: core: Fix race between handling STS_RESOURCE
+>>>>> and completion")
+>>>>>
+>>>>> Now that if get budget ever failed, block layer will make sure to
+>>>>> trigger new run queue for the hctx. Hence there is no need to run queue
+>>>>> from scsi layer in this case.
+>>>>>
+>>>
+>>> But scsi_run_queue_async() needs to run all hw queue because budget is
+>>> actually LUN/request queue wide.
+>>
+>> Why the hw queue need to run if get budget never failed in this hw
+>> queue?
+> 
+> Because all hw queues share the queue wide budget, and once budget
+> is available, all hw queues are re-run, and the hw queue won't be
+> scheduled actually if there is nothing to run, see
+> blk_mq_run_hw_queue().
 
-> In __gmap_segment_gaddr() pmd level page table page is being extracted from
-> the pmd pointer, similar to pmd_pgtable_page() implementation. This reduces
-> some redundancy by directly using pmd_pgtable_page() instead,  though first
-> making it available.
+I still don't get it why all hw queues should be re-run, is this just
+for performance or fixing a bug? And I'm not sure this behavior is good
+for performance.
 
-[...]
+> 
+>>
+>>>
+>>>>
+>>>> Does anyone has suggestions about this patch?
+>>>>
+>>>> More info why I tried to remove this:
+>>>>
+>>>> while testing megaraid with 4 nvme with none elevator, the default
+>>>> queue_depth is 128, while I test it with fio 128 jobs and 1 iodepth,
+>>>> bw is about 4Gib/s, however, if I test with 128 jobs and 2 iodepth,
+>>>> bw is decreased to about 0.8Gib/s, and with this patch applied,
+>>>> bw can stay 4Gib/s in the later case.
+>>>
+>>> What is .can_queue and nr_hw_queues in your setting?
+>> test cmd:
+>> fio -name=0 -ioengine=libaio -direct=1 -group_reporting=1 -randseed=2022
+>> -rwmixread=70 -refill_buffers -filename=/dev/sdg -numjobs=128 -size=1TB
+>> -runtime=60s -bs=4k -iodepth=2 -rw=randwrite
+>>
+>> test environment:
+>> arm64 Kunpeng-920, 128 cpu
+>> megaraid with 4 NVMEs, 128 hctx and queue_depth is 128
+> 
+>>From your setting, megaraid should sets ->host_tagset, that said there
+> is only 128 tags for all 4 NVMEs(128 hw queue shares the all 128 tags
+> too).
+> 
+> That looks one really bad setting.
 
-> diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
-> index 02d15c8dc92e..8947451ae021 100644
-> --- a/arch/s390/mm/gmap.c
-> +++ b/arch/s390/mm/gmap.c
-> @@ -336,12 +336,11 @@ static int gmap_alloc_table(struct gmap *gmap, unsigned long *table,
->  static unsigned long __gmap_segment_gaddr(unsigned long *entry)
->  {
->  	struct page *page;
-> -	unsigned long offset, mask;
-> +	unsigned long offset;
->  
->  	offset = (unsigned long) entry / sizeof(unsigned long);
->  	offset = (offset & (PTRS_PER_PMD - 1)) * PMD_SIZE;
-> -	mask = ~(PTRS_PER_PMD * sizeof(pmd_t) - 1);
-> -	page = virt_to_page((void *)((unsigned long) entry & mask));
-> +	page = pmd_pgtable_page((pmd_t *) entry);
->  	return page->index + offset;
->  }
+It's right that is bad, but the point here is to triggered get budget
+failed frequently. If I set queue_depth to 2048, and I use 128 numjobs
+with 32 iodpeth, performance is still bad.
+> 
+> BTW, why do you drive nvme via megaraid instead nvme driver?
+> 
+>> And by the way, after Jan's patch "blk-mq: Improve performance of non-mq
+>> IO schedulers with multiple HW queues", scsi_run_queue_async() can only
+>> garantee to run hw queue for the current cpu, not all the hw queues.
+> 
+> That isn't true, each hctx is still run in case of none & kyber scheduler.
 
-Looks okay to me.
+Yes, but current default hctx shared elevator is deadline.
+> 
+> thanks,
+> Ming
+> 
+> .
+> 
 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index e9e387caffac..5ead9e997510 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2403,7 +2403,7 @@ static inline void pgtable_pte_page_dtor(struct page *page)
->  
->  #if USE_SPLIT_PMD_PTLOCKS
->  
-> -static struct page *pmd_pgtable_page(pmd_t *pmd)
-> +static inline struct page *pmd_pgtable_page(pmd_t *pmd)
->  {
->  	unsigned long mask = ~(PTRS_PER_PMD * sizeof(pmd_t) - 1);
->  	return virt_to_page((void *)((unsigned long) pmd & mask));
-
-This chunk does not appear to belong to this patch.
-
-Thanks!
