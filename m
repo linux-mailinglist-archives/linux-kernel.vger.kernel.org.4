@@ -2,68 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FAA63AB38
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE7F63AB3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbiK1OjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 09:39:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
+        id S232450AbiK1Oja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 09:39:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232146AbiK1Oi4 (ORCPT
+        with ESMTP id S232125AbiK1OjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:38:56 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319281ADAC;
-        Mon, 28 Nov 2022 06:38:47 -0800 (PST)
-X-UUID: f624dee2f57d483fba71e55eaa58a6ac-20221128
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=gz1uPBnoeOPXBBVk8DqZFdSk72POcdwsgdcC8tIsRVE=;
-        b=E06ye64FMyEsEcf6PhVJS9Zp+EJ5meVyh6mGjQqyagulF6s1xKafP5LaDOkixAHbTb4UDilosMeCLi5agvPZe9AeLP0BdrLdrF/zYu/TIKy2AMZBuVN0A4i9buHEHq0eGEaDiN93FPSFtgjAGrTqDtT1CekZzh4WKOkXQDMT3BI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:b969d06a-4a70-4373-ace7-2833a1ba70ae,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:90
-X-CID-INFO: VERSION:1.1.14,REQID:b969d06a-4a70-4373-ace7-2833a1ba70ae,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:90
-X-CID-META: VersionHash:dcaaed0,CLOUDID:54ca7117-81a9-4b5f-95c6-b6b92590fd73,B
-        ulkID:221128223842750CKH9S,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: f624dee2f57d483fba71e55eaa58a6ac-20221128
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1623862368; Mon, 28 Nov 2022 22:38:40 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 28 Nov 2022 22:38:39 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Mon, 28 Nov 2022 22:38:39 +0800
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <yunfei.dong@mediatek.com>,
-        "Allen-KH Cheng" <allen-kh.cheng@mediatek.com>
-Subject: [PATCH v5 3/3] arm64: dts: mt8192: Add video-codec nodes
-Date:   Mon, 28 Nov 2022 22:38:32 +0800
-Message-ID: <20221128143832.25584-4-allen-kh.cheng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20221128143832.25584-1-allen-kh.cheng@mediatek.com>
-References: <20221128143832.25584-1-allen-kh.cheng@mediatek.com>
+        Mon, 28 Nov 2022 09:39:22 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF9E1B7A0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:39:17 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ozfHt-0005y6-Mf; Mon, 28 Nov 2022 15:39:13 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ozfHr-000qRh-J8; Mon, 28 Nov 2022 15:39:12 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ozfHr-000xiB-Ez; Mon, 28 Nov 2022 15:39:11 +0100
+Date:   Mon, 28 Nov 2022 15:39:11 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 2/5] pwm: jz4740: Fix pin level of disabled TCU2
+ channels, part 2
+Message-ID: <20221128143911.n3woy6mjom5n4sad@pengutronix.de>
+References: <20221024205213.327001-1-paul@crapouillou.net>
+ <20221024205213.327001-3-paul@crapouillou.net>
+ <20221025064410.brrx5faa4jtwo67b@pengutronix.de>
+ <Y90BKR.1BA4VWKIBIKU@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mlivur37dd6gymdx"
+Content-Disposition: inline
+In-Reply-To: <Y90BKR.1BA4VWKIBIKU@crapouillou.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,83 +58,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add video-codec lat and core nodes for mt8192 SoC.
 
-Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
----
- arch/arm64/boot/dts/mediatek/mt8192.dtsi | 59 ++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+--mlivur37dd6gymdx
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-index 424fc89cc6f7..eb5606204f22 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-@@ -1452,6 +1452,65 @@
- 			power-domains = <&spm MT8192_POWER_DOMAIN_ISP2>;
- 		};
- 
-+		vcodec_dec: video-codec@16000000 {
-+			compatible = "mediatek,mt8192-vcodec-dec";
-+			reg = <0 0x16000000 0 0x1000>;
-+			mediatek,scp = <&scp>;
-+			iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges = <0 0 0 0x16000000 0 0x26000>;
-+
-+			video-codec@10000 {
-+				compatible = "mediatek,mtk-vcodec-lat";
-+				reg = <0x0 0x10000 0 0x800>;
-+				interrupts = <GIC_SPI 426 IRQ_TYPE_LEVEL_HIGH 0>;
-+				iommus = <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD2_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_AVC_MV_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_PRED_RD_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_TILE_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_WDMA_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_RG_CTRL_DMA_EXT>,
-+					 <&iommu0 M4U_PORT_L5_VDEC_UFO_ENC_EXT>;
-+				clocks = <&topckgen CLK_TOP_VDEC_SEL>,
-+					 <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
-+					 <&vdecsys_soc CLK_VDEC_SOC_LAT>,
-+					 <&vdecsys_soc CLK_VDEC_SOC_LARB1>,
-+					 <&topckgen CLK_TOP_MAINPLL_D4>;
-+				clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
-+				assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
-+				assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
-+				power-domains = <&spm MT8192_POWER_DOMAIN_VDEC>;
-+			};
-+
-+			video-codec@25000 {
-+				compatible = "mediatek,mtk-vcodec-core";
-+				reg = <0 0x25000 0 0x1000>;
-+				interrupts = <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH 0>;
-+				iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_UFO_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_PP_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_PRED_RD_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_PRED_WR_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_PPWRAP_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_TILE_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_VLD_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_VLD2_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_AVC_MV_EXT>,
-+					 <&iommu0 M4U_PORT_L4_VDEC_RG_CTRL_DMA_EXT>;
-+				clocks = <&topckgen CLK_TOP_VDEC_SEL>,
-+					 <&vdecsys CLK_VDEC_VDEC>,
-+					 <&vdecsys CLK_VDEC_LAT>,
-+					 <&vdecsys CLK_VDEC_LARB1>,
-+					 <&topckgen CLK_TOP_MAINPLL_D4>;
-+				clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
-+				assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
-+				assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
-+				power-domains = <&spm MT8192_POWER_DOMAIN_VDEC2>;
-+			};
-+		};
-+
- 		larb5: larb@1600d000 {
- 			compatible = "mediatek,mt8192-smi-larb";
- 			reg = <0 0x1600d000 0 0x1000>;
--- 
-2.18.0
+Hello,
 
+On Tue, Oct 25, 2022 at 11:10:46AM +0100, Paul Cercueil wrote:
+> Le mar. 25 oct. 2022 =E0 08:44:10 +0200, Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> a =E9crit :
+> > On Mon, Oct 24, 2022 at 09:52:10PM +0100, Paul Cercueil wrote:
+> > >  After commit a020f22a4ff5 ("pwm: jz4740: Make PWM start with the
+> > > active part"),
+> > >  the trick to set duty > period to properly shut down TCU2 channels
+> > > did
+> > >  not work anymore, because of the polarity inversion.
+> > >=20
+> > >  Address this issue by restoring the proper polarity before
+> > > disabling the
+> > >  channels.
+> > >=20
+> > >  Fixes: a020f22a4ff5 ("pwm: jz4740: Make PWM start with the active
+> > > part")
+> > >  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> > >  Cc: stable@vger.kernel.org
+> > >  ---
+> > >   drivers/pwm/pwm-jz4740.c | 62
+> > > ++++++++++++++++++++++++++--------------
+> > >   1 file changed, 40 insertions(+), 22 deletions(-)
+> > >=20
+> > >  diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
+> > >  index 228eb104bf1e..65462a0052af 100644
+> > >  --- a/drivers/pwm/pwm-jz4740.c
+> > >  +++ b/drivers/pwm/pwm-jz4740.c
+> > >  @@ -97,6 +97,19 @@ static int jz4740_pwm_enable(struct pwm_chip
+> > > *chip, struct pwm_device *pwm)
+> > >   	return 0;
+> > >   }
+> > >=20
+> > >  +static void jz4740_pwm_set_polarity(struct jz4740_pwm_chip *jz,
+> > >  +				    unsigned int hwpwm,
+> > >  +				    enum pwm_polarity polarity)
+> > >  +{
+> > >  +	unsigned int value =3D 0;
+> > >  +
+> > >  +	if (polarity =3D=3D PWM_POLARITY_INVERSED)
+> > >  +		value =3D TCU_TCSR_PWM_INITL_HIGH;
+> > >  +
+> > >  +	regmap_update_bits(jz->map, TCU_REG_TCSRc(hwpwm),
+> > >  +			   TCU_TCSR_PWM_INITL_HIGH, value);
+> > >  +}
+> > >  +
+> > >   static void jz4740_pwm_disable(struct pwm_chip *chip, struct
+> > > pwm_device *pwm)
+> > >   {
+> > >   	struct jz4740_pwm_chip *jz =3D to_jz4740(chip);
+> > >  @@ -130,6 +143,7 @@ static int jz4740_pwm_apply(struct pwm_chip
+> > > *chip, struct pwm_device *pwm,
+> > >   	unsigned long long tmp =3D 0xffffull * NSEC_PER_SEC;
+> > >   	struct clk *clk =3D pwm_get_chip_data(pwm);
+> > >   	unsigned long period, duty;
+> > >  +	enum pwm_polarity polarity;
+> > >   	long rate;
+> > >   	int err;
+> > >=20
+> > >  @@ -169,6 +183,9 @@ static int jz4740_pwm_apply(struct pwm_chip
+> > > *chip, struct pwm_device *pwm,
+> > >   	if (duty >=3D period)
+> > >   		duty =3D period - 1;
+> > >=20
+> > >  +	/* Restore regular polarity before disabling the channel. */
+> > >  +	jz4740_pwm_set_polarity(jz4740, pwm->hwpwm, state->polarity);
+> > >  +
+> >=20
+> > Does this introduce a glitch?
+>=20
+> Maybe. But the PWM is shut down before finishing its period anyway, so th=
+ere
+> was already a glitch.
+>=20
+> > >   	jz4740_pwm_disable(chip, pwm);
+> > >=20
+> > >   	err =3D clk_set_rate(clk, rate);
+> > >  @@ -190,29 +207,30 @@ static int jz4740_pwm_apply(struct pwm_chip
+> > > *chip, struct pwm_device *pwm,
+> > >   	regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
+> > >   			   TCU_TCSR_PWM_SD, TCU_TCSR_PWM_SD);
+> > >=20
+> > >  -	/*
+> > >  -	 * Set polarity.
+> > >  -	 *
+> > >  -	 * The PWM starts in inactive state until the internal timer
+> > > reaches the
+> > >  -	 * duty value, then becomes active until the timer reaches the
+> > > period
+> > >  -	 * value. In theory, we should then use (period - duty) as the
+> > > real duty
+> > >  -	 * value, as a high duty value would otherwise result in the PWM
+> > > pin
+> > >  -	 * being inactive most of the time.
+> > >  -	 *
+> > >  -	 * Here, we don't do that, and instead invert the polarity of the
+> > > PWM
+> > >  -	 * when it is active. This trick makes the PWM start with its
+> > > active
+> > >  -	 * state instead of its inactive state.
+> > >  -	 */
+> > >  -	if ((state->polarity =3D=3D PWM_POLARITY_NORMAL) ^ state->enabled)
+> > >  -		regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
+> > >  -				   TCU_TCSR_PWM_INITL_HIGH, 0);
+> > >  -	else
+> > >  -		regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
+> > >  -				   TCU_TCSR_PWM_INITL_HIGH,
+> > >  -				   TCU_TCSR_PWM_INITL_HIGH);
+> > >  -
+> > >  -	if (state->enabled)
+> > >  +	if (state->enabled) {
+> > >  +		/*
+> > >  +		 * Set polarity.
+> > >  +		 *
+> > >  +		 * The PWM starts in inactive state until the internal timer
+> > >  +		 * reaches the duty value, then becomes active until the timer
+> > >  +		 * reaches the period value. In theory, we should then use
+> > >  +		 * (period - duty) as the real duty value, as a high duty value
+> > >  +		 * would otherwise result in the PWM pin being inactive most of
+> > >  +		 * the time.
+> > >  +		 *
+> > >  +		 * Here, we don't do that, and instead invert the polarity of
+> > >  +		 * the PWM when it is active. This trick makes the PWM start
+> > >  +		 * with its active state instead of its inactive state.
+> > >  +		 */
+> > >  +		if (state->polarity =3D=3D PWM_POLARITY_NORMAL)
+> > >  +			polarity =3D PWM_POLARITY_INVERSED;
+> > >  +		else
+> > >  +			polarity =3D PWM_POLARITY_NORMAL;
+> > >  +
+> > >  +		jz4740_pwm_set_polarity(jz4740, pwm->hwpwm, polarity);
+> > >  +
+> > >   		jz4740_pwm_enable(chip, pwm);
+> > >  +	}
+> >=20
+> > Note that for disabled PWMs there is no official guaranty about the pin
+> > state. So it would be ok (but admittedly not great) to simplify the
+> > driver and accept that the pinstate is active while the PWM is off.
+> > IMHO this is also better than a glitch.
+> >=20
+> > If a consumer wants the PWM to be in its inactive state, they should
+> > not disable it.
+>=20
+> Completely disagree. I absolutely do not want the backlight to go full
+> bright mode when the PWM pin is disabled. And disabling the backlight is a
+> thing (for screen blanking and during mode changes).
+
+For some hardwares there is no pretty choice. So the gist is: If the
+backlight driver wants to ensure that the PWM pin is driven to its
+inactive level, it should use:
+
+	pwm_apply(pwm, { .period =3D ..., .duty_cycle =3D 0, .enabled =3D true });
+
+and better not
+
+	pwm_apply(pwm, { ..., .enabled =3D false });
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--mlivur37dd6gymdx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOEyAwACgkQwfwUeK3K
+7Aml5Qf/YDou9goYlX65v+kTZcSXdWj3R0MxXfmaqmhzKz8n5vRMNST5LTOquhIH
+D2kfpER3lHFpuVHuljV7tYlWTW1Eo0PcHqLnJzfdbR4+kSxuFDXonu7MHlIzQWlu
+DFWJLkQdvK1KkfRya9VtKM5hs4zgNAakkbwYsqoHOi1TTg0826gNFqtWS6quBmZ1
+e94Lo3W/+LDIlHAeZSb3ag/v4rGkiWe4T1HOMsLRnjvxxjSPJxp7z9tjdbAgwnxR
+3Hn65v+BycGy8rgPeafnX/S4a3Ud7YYaGgJc8NvlPMXpgQ/GaGYIZRSsFAn+nLpq
+1BW9yT0YdrE8khzB1RlGnSqiXbv8kQ==
+=VUR+
+-----END PGP SIGNATURE-----
+
+--mlivur37dd6gymdx--
