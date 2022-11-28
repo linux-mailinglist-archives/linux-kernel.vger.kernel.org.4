@@ -2,102 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D7063A75E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C760363A760
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231311AbiK1Lt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 06:49:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
+        id S230056AbiK1LuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 06:50:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231261AbiK1Ltr (ORCPT
+        with ESMTP id S231263AbiK1LuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 06:49:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8715A17E26;
-        Mon, 28 Nov 2022 03:49:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3385BB80D63;
-        Mon, 28 Nov 2022 11:49:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABD20C433C1;
-        Mon, 28 Nov 2022 11:49:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669636178;
-        bh=nUD6wWWFNxtPNb8m2y9VRRA9H42MmowlBVJDxx/RGsE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=E18jd0HflNEVZ2ajShDHJJIkNA7E1IMhsfwD6zt+nnk/NTjZ2PMgO045Q58aVDBG1
-         uALGlHvnNiBnfY2x6LcAwG8ge6e8nRo1MwLr5AVv9XbYuSyeylEiXRnfeb8nY60w5P
-         ONLqwxmOpb/ykHrj+Xv7KSbSrFkvNvLSNOC1oK/bqRF6I3iGE41jkrXS5L2Y6PWfEE
-         N1hVuh9fPwygFYJgT/RnquEf0vlW3MluQpzLXeSfrcGFwLitmKf+EYhti3I/xrrZ7Y
-         ZnVhWk9heRFqfpVir+FWvoRUcn7LaMxvx+DPgmBBzee8LLmvTeX1hE4kZtsjVGj+60
-         b5jwKV6k8w+kQ==
-Message-ID: <8ca382fa391a08313ba8dc5ce115e1832e32aebb.camel@kernel.org>
-Subject: Re: [PATCH 2/3] fs: namei: Allow follow_down() to uncover auto
- mounts
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Richard Weinberger <richard@nod.at>
-Cc:     linux-nfs <linux-nfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        chuck lever <chuck.lever@oracle.com>, anna <anna@kernel.org>,
-        trond myklebust <trond.myklebust@hammerspace.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, raven <raven@themaw.net>,
-        chris chilvers <chris.chilvers@appsbroker.com>,
-        david young <david.young@appsbroker.com>,
-        luis turcitu <luis.turcitu@appsbroker.com>,
-        david <david@sigma-star.at>
-Date:   Mon, 28 Nov 2022 06:49:36 -0500
-In-Reply-To: <1045320558.283423.1669584585412.JavaMail.zimbra@nod.at>
-References: <20221117191151.14262-1-richard@nod.at>
-         <20221117191151.14262-3-richard@nod.at>
-         <f31d4114f363ed9de0eba66ad6a730fe013896a6.camel@kernel.org>
-         <1805608101.252119.1668719538854.JavaMail.zimbra@nod.at>
-         <29d007755c6066552ac2a1b5bc498ce1ce28ab3b.camel@kernel.org>
-         <1045320558.283423.1669584585412.JavaMail.zimbra@nod.at>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.1 (3.46.1-1.fc37) 
+        Mon, 28 Nov 2022 06:50:12 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03AB13E8A;
+        Mon, 28 Nov 2022 03:50:11 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 037093200908;
+        Mon, 28 Nov 2022 06:50:08 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 28 Nov 2022 06:50:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1669636208; x=1669722608; bh=wtIBsaHA3J
+        ecaBQ+MxbdbPF8tvV/uo7IabJxbgjL8HE=; b=GD1zytP23/kdQ3fmF383F9qTNz
+        /MFsiT9Ul8jn681zGlzd4rrp565x3cilHuV3Za1aN0Qi9tlOvLd91+zS74YA95PG
+        8+GMIm0lIenjsvQsgwLiRsMkb3IkIv91xjOGMkmSHZFpJTg5f3d3KAa1c5dP0UU1
+        V29/8RyzGfOgH32ywxne/RBKg5Cm+BUXD+8YDCzTlENFi7ZgYvNlS3HVbjBd0f2s
+        cmln8T9bhW2tII0f7ncd0tiwMl7VQzUIVYejCquTNCrVMsuRYdGc09M98G8jiiKs
+        lrpOCmujOJPHC/yKnM3eaiYA+w0wqC+8Ze8pZ826j3WKQlFuvv7SzzyAmOeA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669636208; x=1669722608; bh=wtIBsaHA3JecaBQ+MxbdbPF8tvV/
+        uo7IabJxbgjL8HE=; b=R5iD66YkdV72T3S5qp28jgaE1fXvL+aklXoU8PXsa9Tq
+        5SaLwhdkyniwKJqE80DbLg4xfm3aKc5o/DjD7gL4UcB0znog2Ugh1uKLCGvVXYDR
+        B/5o6PsI/0AWsP1oFZzsRVFBKyyHRiJvLKmHvE7qR9Z76PRgioORGh/Mw7R9iF83
+        V/8acV8CXCXg/KkL6nndcWtSjTlqiMbI6jPjZNQHAHGnultYYYUUYwWZ6JwRGCdz
+        w0U81snpTTfAEv6Dgm5YrNhid3P5bbmMlbMVhQPsP21YZARGnnT0y19H3OpuKQ/t
+        sZr46GE35dLRserEPiDxz0zGPuHqwUkJXoj6cIXDTg==
+X-ME-Sender: <xms:cKCEY5od_1Pgllv3hSPxO33j1K-T3LdFdfbwKN22bt1TF228EUhBQQ>
+    <xme:cKCEY7oSJhat0c02h3ewiL6KN0DVHLjtV9zP6jVHVUaN_gAlB8A9m6SBTdK7su230
+    SiGN98rOtTmEA>
+X-ME-Received: <xmr:cKCEY2Nt4SnoL_skIjCJfr-neIOA45VYFUclCb9TWrBlgQgpRvgUEAnXbnW_fZne_5HKV3SxpAbUkBtybXscvQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedvgdeffecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
+    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:cKCEY07xaVNekpRWerJk72qWO0f1BN483i7H9wl_c2MpgTWp6HddGw>
+    <xmx:cKCEY46WEweKBiYDCLApcekYkm95uH5UzR30zIQPcnXyLNysl6iHPQ>
+    <xmx:cKCEY8hKaQz174EPb863U7FCIMG-W1KRYOgA1xK31cZqfBq5Xlf7gw>
+    <xmx:cKCEYz3PsJor8-hvCypkWG7MolTpKmV8Gl3MbBukhg_QPEtgFIH_cQ>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 28 Nov 2022 06:50:07 -0500 (EST)
+Date:   Mon, 28 Nov 2022 12:50:03 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+Message-ID: <Y4Sga+ONeDe9Q7yz@kroah.com>
+References: <20221128133600.14ce44bf@canb.auug.org.au>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221128133600.14ce44bf@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-11-27 at 22:29 +0100, Richard Weinberger wrote:
-> ----- Urspr=FCngliche Mail -----
-> > Von: "Jeff Layton" <jlayton@kernel.org>
-> > > So, in nfsd_cross_mnt() the follow_down() helper should use LOOKUP_AU=
-TOMOUNT
-> > > only
-> > > if exp->ex_flags & NFSEXP_CROSSMOUNT is true?
-> > > Sounds sane, thanks for the pointer.
-> > >=20
-> >=20
-> > Yeah, I think so. I do wonder if we ought to make any provision for
-> > "nohide" exports, but since you have to enumerate those explicitly, it
-> > shouldn't be a huge problem for someone to just ensure that they're
-> > mounted beforehand.
->=20
-> TBH, I didn't invest much into the nohide feature wrt. NFS re-exporting.
-> What problem do you have in mind?
->=20
+On Mon, Nov 28, 2022 at 01:36:00PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the driver-core tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> arch/powerpc/platforms/book3s/vas-api.c: In function 'vas_register_coproc_api':
+> arch/powerpc/platforms/book3s/vas-api.c:590:38: error: assignment to 'char * (*)(const struct device *, umode_t *)' {aka 'char * (*)(const struct device *, short unsigned int *)'} from incompatible pointer type 'char * (*)(struct device *, umode_t *)' {aka 'char * (*)(struct device *, short unsigned int *)'} [-Werror=incompatible-pointer-types]
+>   590 |         coproc_device.class->devnode = coproc_devnode;
+>       |                                      ^
+> drivers/misc/cxl/file.c: In function 'cxl_file_init':
+> drivers/misc/cxl/file.c:687:28: error: assignment to 'char * (*)(const struct device *, umode_t *)' {aka 'char * (*)(const struct device *, short unsigned int *)'} from incompatible pointer type 'char * (*)(struct device *, umode_t *)' {aka 'char * (*)(struct device *, short unsigned int *)'} [-Werror=incompatible-pointer-types]
+>   687 |         cxl_class->devnode = cxl_devnode;
+>       |                            ^
+> 
+> Caused by commit
+> 
+>   ff62b8e6588f ("driver core: make struct class.devnode() take a const *")
+> 
+> I have used the driver-core tree from next-20221125 for today.
 
-nohide is sort of complimentary to crossmnt. You can achieve the same
-effect as crossmnt by adding explicit exports for all the children and
-marking them "nohide".
+Hm, how do we resolve problems like this where an api changes in my
+branch but needs to be updated in another branch that is not in Linus's
+tree yet?
 
-The point here is that you have to explicitly create exports for the
-child mounts in that case, and if you're doing that then it's not a
-burden for the admin to make sure they're mounted before exporting.
+Want me to make a patch for this for you to apply after the driver-core
+merge?
 
-So, I don't think we need to worry about nohide here after all.
+thanks,
 
-> I wonder also what NFS client folks think about my changes before I send
-> the next revision (with Jeff's comments addressed).
---=20
-Jeff Layton <jlayton@kernel.org>
+greg k-h
