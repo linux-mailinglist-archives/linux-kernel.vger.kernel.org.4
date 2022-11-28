@@ -2,122 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C274E63AA30
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:56:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B4563AA31
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231616AbiK1N4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:56:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
+        id S232209AbiK1N42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:56:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232199AbiK1N4O (ORCPT
+        with ESMTP id S231877AbiK1N4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 08:56:14 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBCB2BF3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:56:13 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id z4so16967575wrr.3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:56:13 -0800 (PST)
+        Mon, 28 Nov 2022 08:56:17 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00B3FD9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:56:14 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id b21so10198960plc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:56:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F2rLacxUObBe+jKgqxP8HF2H2frn8aAUW2KYNeoqu0o=;
-        b=hqvpHZF2c9j+Ix/NAoQA7E3AYXA/CPshROvYliXYTwLIj4BCxP+hdJfKRnmVFRTTNL
-         kjGBp/ECsDODWCaEOdKyL9djCWno68YNfIgCE9BmeNk7l+F8xk0znTZehS0Hz0mXNRWt
-         6P/kLBXL17H/IrY6ZHNhzw7S+H7NOmIXbAZnyLlR4zjrWJbioavvvPKgJsOIOUKKnrPS
-         h+YTQm/uDo81cPF5NCwBx/suW3GZuAXzIKA+MarDmvkPH/ldEqyEJF3RmzR4xH88tz3W
-         +NVIpt2lO0eXOuCTLrkTNrDs/uf7DtPg9nAEeXXAjah49mwtaZVcrup6xV6PSwhe9+4y
-         GUOw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EN7rQQJkZzGKEVRkng3QEGcqHp0wQ4sozNyGRC6tD9w=;
+        b=lZ2i6PZY8eyhSsYyjh+6s0/zQ9/Vo5vtrWFoEW6ECVeZX4emyOz/m78YMnU67H6nky
+         jvR9VAX6So1YT6twa/x4ODb9WhBUPTubbTAn3594Ee6GrTcrH2730TOLcqbvRkGBhXVN
+         scbhIYD5DtEzyPF5/5zg1dU0vN4OYbImSS6Gc9yTO4e654DhB/3xywxoBsCRZuJVrbrS
+         a0hZONlpgUDOxz3VGCVh7Er7e2AYLYdaKH/q4H5vs/q9zaWcecAnO9BbgVjFx5XDbm3+
+         z3l9UEwylLYWMwrPsP26ctDFOc6GCvCxpGjLIU12Gclz9d8Ye6bKrQ0C9V9hLUO/dMeQ
+         +VWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F2rLacxUObBe+jKgqxP8HF2H2frn8aAUW2KYNeoqu0o=;
-        b=QMNwT8wmsun/Pox2OAX/IQe5saC6JdUPohNhJiTEw9qmUW2H0R4LRKdXxmCCTGRkBe
-         QGQo/qSD1yTL8eh1tmrlC3ZrmnQogpvzHgN200+fcylZz/ugaX7rrVvXEUDou2GARtxW
-         E9faNgMHDDE5GKErn36XVePVnOzwMZJlPKx0we28FJlklHJccSy2I2Lp3VEocJe6C8x4
-         jNOGVbOUpdQdrncCiz71BN5JiQZySk94tY1uKEjMjDf5rENCit1cHaFHB+NmNzpg0TsG
-         bxrKQb3Mwvv2KXK29/1gkjVufCy/3Id7JEeYBaAQwuGahWRKIMSiy3wrLOzAKrYRrksF
-         LhNg==
-X-Gm-Message-State: ANoB5plXSdvYkIs8NO4tVUMdBhDv+cMa1elf5j0tDALuUiSZjAGtB2dN
-        1rfQe2t9zFwbrEwGPXvs2ENdlg==
-X-Google-Smtp-Source: AA0mqf7jP1nll4R/qrgr1NBSFz8yRU+bGAmMwBkDuCsQRh8/v5yyw518D6w/AZXNUE++ynRJ8MHXBQ==
-X-Received: by 2002:a5d:5233:0:b0:241:cc24:b65c with SMTP id i19-20020a5d5233000000b00241cc24b65cmr24417118wra.545.1669643771872;
-        Mon, 28 Nov 2022 05:56:11 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id z6-20020adfe546000000b0023655e51c33sm11087810wrm.4.2022.11.28.05.56.10
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EN7rQQJkZzGKEVRkng3QEGcqHp0wQ4sozNyGRC6tD9w=;
+        b=uqw5wta01tF31uynEQYF06ffnGJreO5NE7xdlh9OCYckVaVkVOpMjPfVWkL0pRREio
+         6zZ9zHkoMEhTxBZkkFMFa2WSipwHqfvN54DEXLRvnvGc6gDyGW5zhjPQ4xRmr9ymfm4u
+         DuUor459NeSZ4o68eKtiIKipK2c7LJupPlXNRudHlWXRFmGkM0c9w+jnX5RkIFbUhkC5
+         v5qD3rWnNVuj/wJ2xezxbs+cQ5xkzObAMt2D9xea/FSdFton+PaNBXiMMVTgb2NG2m4H
+         gf4Nz1SXoLFk03RU/5D+FUzJizk4cb5NkKf32iJT9su89VG7rDhhhov5NFEWRHqHEWHr
+         +R1w==
+X-Gm-Message-State: ANoB5pl0r2X6HgQXZnOxC821hWschNaEuj8LsuJAWbyOzdxbU5XxPzIW
+        CIDYX24g8np+SodkAzIaHm6rjA==
+X-Google-Smtp-Source: AA0mqf4sjfA9knsCcA5y2f2dZ75SzSmtPB28mKVwtEXzFIdeq4+vIwlvPJsPzGmlyJEbi5cz5RpW1g==
+X-Received: by 2002:a17:90a:9904:b0:213:6442:232a with SMTP id b4-20020a17090a990400b002136442232amr61073250pjp.117.1669643774308;
+        Mon, 28 Nov 2022 05:56:14 -0800 (PST)
+Received: from [10.255.134.244] ([139.177.225.246])
+        by smtp.gmail.com with ESMTPSA id b4-20020a170902d50400b001869ba04c83sm8873745plg.245.2022.11.28.05.56.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 05:56:11 -0800 (PST)
-Message-ID: <70ee6a63-de17-100f-d4fd-8b23ab92bfee@linaro.org>
-Date:   Mon, 28 Nov 2022 14:56:10 +0100
+        Mon, 28 Nov 2022 05:56:14 -0800 (PST)
+Message-ID: <042ebc25-f9ab-b407-033b-86d6fe5fda98@bytedance.com>
+Date:   Mon, 28 Nov 2022 21:56:10 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: linux-next: manual merge of the thermal tree with the pm tree
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        rafael@kernel.org
-References: <20221117122904.6759427e@canb.auug.org.au>
- <20221128102212.39f90b0c@canb.auug.org.au>
- <1a60d0b2-c020-4fce-d7f2-3534c9e14c84@intel.com>
- <9ac3a182-fc30-0834-8555-a4ec334531ae@linaro.org>
- <Y4S8H/hn1EJzw8fL@debian.me>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <Y4S8H/hn1EJzw8fL@debian.me>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Subject: Re: [Phishing Risk] [External] [PATCH v2 2/2] erofs: enable large
+ folios for fscache mode
+To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20221128025011.36352-1-jefflexu@linux.alibaba.com>
+ <20221128025011.36352-3-jefflexu@linux.alibaba.com>
+From:   Jia Zhu <zhujia.zj@bytedance.com>
+In-Reply-To: <20221128025011.36352-3-jefflexu@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/11/2022 14:48, Bagas Sanjaya wrote:
-> On Mon, Nov 28, 2022 at 02:22:27PM +0100, Daniel Lezcano wrote:
->>
->> Hi,
->>
->> On 28/11/2022 13:51, Rafael J. Wysocki wrote:
->>> Sorry about this, but I cannot fix it myself and Daniel is on an
->>> extended leave.
->>>
->>> Can you just drop it permanently from linux-next and we'll sort this out
->>> when Daniel is back?
->>
->> Yes sorry for that, I'll go back in a couple of days and sort this out
->>
+
+
+在 2022/11/28 10:50, Jingbo Xu 写道:
+> Enable large folios for fscache mode.  Enable this feature for
+> non-compressed format for now, until the compression part supports large
+> folios later.
 > 
-> What about the upcoming merge window? At worst Linus has to figure
-> out how to solve this complex conflict when pulling either tree...
+> One thing worth noting is that, the feature is not enabled for the meta
+> data routine since meta inodes don't need large folios for now, nor do
+> they support readahead yet.
 > 
-> Linus has already said that there's likely -rc8 of current cycle [1],
-> so we have about two weeks to try sorting out the conflict and be ready
-> for PR to him.
+> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
 
-Thanks for the pointer.
+Reviewed-by: Jia Zhu <zhujia.zj@bytedance.com>
 
-I've been quickly through the changes for the thermal tree and I think I 
-should be able to sort out most of the patches before the end of this 
-week, hopefully. If there are any changes which sound too complex, I'll 
-post pone them to the next release
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Thanks.
+> ---
+>   fs/erofs/inode.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
+> index e457b8a59ee7..85932086d23f 100644
+> --- a/fs/erofs/inode.c
+> +++ b/fs/erofs/inode.c
+> @@ -295,8 +295,7 @@ static int erofs_fill_inode(struct inode *inode)
+>   		goto out_unlock;
+>   	}
+>   	inode->i_mapping->a_ops = &erofs_raw_access_aops;
+> -	if (!erofs_is_fscache_mode(inode->i_sb))
+> -		mapping_set_large_folios(inode->i_mapping);
+> +	mapping_set_large_folios(inode->i_mapping);
+>   #ifdef CONFIG_EROFS_FS_ONDEMAND
+>   	if (erofs_is_fscache_mode(inode->i_sb))
+>   		inode->i_mapping->a_ops = &erofs_fscache_access_aops;
