@@ -2,114 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 080C863A200
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A849E63A204
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 08:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiK1Hf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 02:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40538 "EHLO
+        id S229937AbiK1Hfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 02:35:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiK1Hf1 (ORCPT
+        with ESMTP id S229713AbiK1Hfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 02:35:27 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8770E11C39;
-        Sun, 27 Nov 2022 23:35:26 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 4B31AB8B;
-        Mon, 28 Nov 2022 08:35:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1669620924;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ocIpEc4oly3ThjoyxNnqhXwhEE8f24PzAQ3YyFZsq0E=;
-        b=GG/4fi2urRgj9huQRUua/FNJIWwhv3B1hDN4Ym4/Dg6HVd2bYkzqO/bV7gKuN3+PeT7bzD
-        r3alQ09y1EwPrSx+apphusNdMyd2h+dlr9wqj0NHi9Vkb/lJKkzvPbTKB78JSPAwhVF2UM
-        n/u3HAOZHS8en0x58QdmAxdrqkg0ZbB2vPyzyQ0SRucTbVB25pXWPJKTxYQliQCDpc5chQ
-        jvRMqnOgC7z2QHR+BNyrie2pSqjGPLMHvuAlIyg6rp9hbvmCcD/86K3HjBlaX+5b+Ns4ym
-        A6ObmnZVdq5BdB31knwrJypx8FsXg0FSeXVYgMIqNGrRoHfmN4kBYIDSohKEjQ==
+        Mon, 28 Nov 2022 02:35:45 -0500
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC4B12AAF;
+        Sun, 27 Nov 2022 23:35:43 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VVpnSmS_1669620938;
+Received: from 30.27.90.133(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VVpnSmS_1669620938)
+          by smtp.aliyun-inc.com;
+          Mon, 28 Nov 2022 15:35:39 +0800
+Message-ID: <e0461754-39c4-a9e1-6ca1-381659e4a2d7@linux.alibaba.com>
+Date:   Mon, 28 Nov 2022 15:35:37 +0800
 MIME-Version: 1.0
-Date:   Mon, 28 Nov 2022 08:35:24 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, u-boot@lists.denx.de,
-        =?UTF-8?Q?Rafa?= =?UTF-8?Q?=C5=82_Mi=C5=82ecki?= 
-        <rafal@milecki.pl>
-Subject: Re: [PATCH V2 1/2] nvmem: core: refactor .cell_post_process() CB
- arguments
-In-Reply-To: <20221128065923.1180-1-zajec5@gmail.com>
-References: <20221128065923.1180-1-zajec5@gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <f2bb569404903bc937fbe3840582f3c4@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.1
+Subject: Re: [PATCH v3 2/2] fscrypt: Add SM4 XTS/CTS symmetric algorithm
+ support
+Content-Language: en-US
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     "Theodore Y. Ts o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-fscrypt@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+References: <20221125121630.87793-1-tianjia.zhang@linux.alibaba.com>
+ <20221125121630.87793-3-tianjia.zhang@linux.alibaba.com>
+ <Y4EIR+n8aKutuLo0@sol.localdomain>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <Y4EIR+n8aKutuLo0@sol.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-11-28 07:59, schrieb Rafał Miłecki:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> Pass whole NVMEM cell struct and length pointer as arguments to 
-> callback
-> functions.
-> 
-> This allows:
-> 
-> 1. Cells content to be modified based on more info
->    Some cells (identified by their names) contain specific data that
->    needs further processing. This can be e.g. MAC address stored in an
->    ASCII format. NVMEM consumers expect MAC to be read in a binary 
-> form.
->    More complex cells may be additionally described in DT. This change
->    allows also accessing relevant DT nodes and reading extra info.
-> 
-> 2. Adjusting data length
->    If cell processing results in reformatting it, it's required to
->    adjust length. This again applies e.g. to the MAC format change from
->    ASCII to the byte-based.
-> 
-> Later on we may consider more cleanups & features like:
-> 1. Dropping "const char *id" and just using NVMEM cell name
-> 2. Adding extra argument for cells providing multiple values
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
-> This solution conflicts with 1 part of Michael's work:
-> [PATCH v2 00/20] nvmem: core: introduce NVMEM layouts
-> https://lore.kernel.org/linux-arm-kernel/20220901221857.2600340-1-michael@walle.cc/
-> 
-> Instead of:
-> 1. Adding NVMEM cell-level post_process callback
-> 2. Adding callback (.fixup_cell_info()) for setting callbacks
-> 3. Dropping NVMEM device-level post_process callback
-> I decided to refactor existing callback.
-> 
-> Michael's work on adding #nvmem-cell-cells should be possible to easily
-> rebase on top of those changes.
+Hi Eric,
 
-As yours should be easily added on top of my series. I've showed that
-providing a global post process hook is bad because that way you need
-to have *all* cells of your device read-only.
+On 11/26/22 2:24 AM, Eric Biggers wrote:
+> On Fri, Nov 25, 2022 at 08:16:30PM +0800, Tianjia Zhang wrote:
+>> diff --git a/fs/crypto/policy.c b/fs/crypto/policy.c
+>> index 46757c3052ef..8e69bc0c35cd 100644
+>> --- a/fs/crypto/policy.c
+>> +++ b/fs/crypto/policy.c
+>> @@ -71,6 +71,10 @@ static bool fscrypt_valid_enc_modes_v1(u32 contents_mode, u32 filenames_mode)
+>>   	    filenames_mode == FSCRYPT_MODE_AES_128_CTS)
+>>   		return true;
+>>   
+>> +	if (contents_mode == FSCRYPT_MODE_SM4_XTS &&
+>> +	    filenames_mode == FSCRYPT_MODE_SM4_CTS)
+>> +		return true;
+>> +
+>>   	if (contents_mode == FSCRYPT_MODE_ADIANTUM &&
+>>   	    filenames_mode == FSCRYPT_MODE_ADIANTUM)
+>>   		return true;
+> 
+> Sorry, one more thing I didn't notice before.  Since this is a new feature,
+> please only allow it in fscrypt_valid_enc_modes_v2(), not in
+> fscrypt_valid_enc_modes_v1().  That's what we did for AES-256-XTS +
+> AES-256-HCTR2 recently.  There should be no need to add new features to
+> v1 encryption policies, which have been deprecated for several years.
+> 
+> - Eric
 
--michael
+Thanks for reminder, it makes sense to only support the new algorithm in
+v2 policy, which I will do this.
+
+BR,
+Tianjia
