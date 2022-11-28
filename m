@@ -2,95 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 140AA63A14C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 07:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEEC163A15C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 07:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiK1Gfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 01:35:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
+        id S229841AbiK1Gjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 01:39:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiK1Gfc (ORCPT
+        with ESMTP id S229555AbiK1Gjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 01:35:32 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2066.outbound.protection.outlook.com [40.107.100.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EBBD9C
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 22:35:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B/vN2Vu0v0Jq2tjz6X4Ayy5hBuKi/y03OsScVDOTaZplaHx36OyDQbuZFp6dupTbvqjCsOgt521HT4ougSc+5MmkIarlS1VTdFDvURmpOkeYerNZ/iXR8Sdne5QoWUDsCYOesIpDhNCj6oUKvWRlIkGTan+B+EC4Pmb0QqdmlrRcNCvV1Aeu+XjNgmdS30X1HF3mmEr4tbzXdZlnqrywyYSkc6NP2W11AheZfrYaj/2UZjSaKa6nmjbDtwfFbnHGRSVLD5AYaN/EvA275Ml8qembDEZn1TFirUVSbWBkTVEmz0zXKE1qgTBYYtbp2F9dsIqSlMIn0lBifeL0Cs5TQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t6htDTJmXmTbnY89v63BveXxpg/Nm1TkQy44Rt9VrpU=;
- b=l2+3Q5YAkTdUCBRDTQCvyr1A1iOtmYbIthNhdP9ghCbgHJ9+1s4ar0rIuWi0A2lcST5BO8zCbEB2cG/8h6UK0RP6GP/lzQGZUYSj82rLm3hyKbYIQ4X2QiJPXh3epuDqMMjbXoBN7NDo0mL4FFSx+cKPExqc3zTOE5giEr5IsZnf3MXDdHaIzPxEdQYXNnPCW3eCUf17EtJRKv93VnnLjO1ELzrPs39MU7YVJkNHL8P8lEqe80ZONsejW+mKoaZ/Z92z0FcCkUCZys64/9RCH8XFZXdNxss546egfFIIPSl0LxdCXFiwMLO7iJO94fFMIAMtmmjtzEOyJrXu7fdeIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t6htDTJmXmTbnY89v63BveXxpg/Nm1TkQy44Rt9VrpU=;
- b=2ctYVMVv7TpyyoAGj0iUL+b9TQizjP2BNNI7oP0NWMD5CEd/cr/uTqYw/Z4IqgR5Y3kksTl3SdzQQZBRfNvo/qZNPBcoFHMcsEpiNmnz54phcStRMK3TtROwyAcaHcWqJCbpv5eZNIXxWTgj/laMywHRnVqp+cA/Ld7Nn7UZoYI=
-Received: from DS7PR03CA0086.namprd03.prod.outlook.com (2603:10b6:5:3bb::31)
- by CY5PR12MB6599.namprd12.prod.outlook.com (2603:10b6:930:41::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.21; Mon, 28 Nov
- 2022 06:35:29 +0000
-Received: from DM6NAM11FT085.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3bb:cafe::85) by DS7PR03CA0086.outlook.office365.com
- (2603:10b6:5:3bb::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.22 via Frontend
- Transport; Mon, 28 Nov 2022 06:35:29 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT085.mail.protection.outlook.com (10.13.172.236) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5834.8 via Frontend Transport; Mon, 28 Nov 2022 06:35:29 +0000
-Received: from pp-server-two.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 28 Nov
- 2022 00:34:58 -0600
-From:   xinhui pan <xinhui.pan@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     <daniel@ffwll.ch>, <matthew.auld@intel.com>,
-        <christian.koenig@amd.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, xinhui pan <xinhui.pan@amd.com>
-Subject: [PATCH v3] drm: Optimise for continuous memory allocation
-Date:   Mon, 28 Nov 2022 14:34:19 +0800
-Message-ID: <20221128063419.101586-1-xinhui.pan@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 28 Nov 2022 01:39:32 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C60765A;
+        Sun, 27 Nov 2022 22:39:31 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id v7so7740591wmn.0;
+        Sun, 27 Nov 2022 22:39:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6ZP1ylYuB931He9kk8GqfGKGVdTe0/xxKDzeNsx5WHg=;
+        b=Q/0zk6OrJTK2ohpu3j6XjbFlf56MyfSIa4Z1tm0DKAGmqkFWRvjqh/pogN33JUh6+d
+         KcbID+lSrRK4GNRottCJzP7EBO+sU6WddqLplEqaSHC4sjo8wSbcRtHW5USoXjTbFgJU
+         qYSsqLujMUh7qw/GKeoohEqFqcwtI90SZwICoIra9rDvQjhcn29W8IYJyd+CPbncPCVy
+         tNu0nactn1Oduszo2rLGpfUGXdaxgrkyXJmGPVOrOVRQkIGzL6FQfRxocNwvnTyJWcdK
+         fj+buJi5gqe+3XsiJGQNNgBzoOEhs2WEq5hzaUPKOcfhx26NG9EqzHQ8VbiO06LQmVMI
+         2yZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6ZP1ylYuB931He9kk8GqfGKGVdTe0/xxKDzeNsx5WHg=;
+        b=nT3py2LOvjfLkXWJZQMvnCapCS+3T1QnkdY7SHETNCHYHO5g2KvFtlMGqEI1B9NzeZ
+         vcq+OD42PwNyJqd8uEGgrmJaQ1iaARxmbniDCJJbWERSaMuQBq7nHiy1PnbD4pVZb2c8
+         H9uw7V9dd5cxWs+ctVyxkug+OuSU17VteRiLkYXRL6lsPAhL7fGr2OPregWTOeoStb3R
+         ikQrpnOdTJqBuWXxk6RR5vG99oYDR65jJsazC0iFn7V20Slv08B/KGdQTe4RuNTbuQIU
+         7GSwVuiDXa17zBOCDe64oh1oQ5pCGw/PV8kydzvDVrx8u/kxuKfEvZ17NpmYEuXtj6OE
+         s9gw==
+X-Gm-Message-State: ANoB5plApdCmdvvQRW5KQTCOnmrJmgX0kQG7LyBLNdJ4T9mTxK6i9Wr6
+        2mGntbPf4F/xTXJisYqscaE=
+X-Google-Smtp-Source: AA0mqf5XTQo0xaTTj5q8Jf6pcNIjrZpz56YG4bKZ069nB2tce5CRwaDJZSBu5wGRkmmSkR+aTuXGqQ==
+X-Received: by 2002:a05:600c:19d1:b0:3cf:cf89:90f with SMTP id u17-20020a05600c19d100b003cfcf89090fmr26492753wmq.186.1669617569525;
+        Sun, 27 Nov 2022 22:39:29 -0800 (PST)
+Received: from [192.168.0.105] ([77.126.19.155])
+        by smtp.gmail.com with ESMTPSA id u2-20020a056000038200b00241cfe6e286sm9757300wrf.98.2022.11.27.22.39.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Nov 2022 22:39:28 -0800 (PST)
+Message-ID: <665b6081-be55-de9a-1f7f-70a143df329d@gmail.com>
+Date:   Mon, 28 Nov 2022 08:39:24 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT085:EE_|CY5PR12MB6599:EE_
-X-MS-Office365-Filtering-Correlation-Id: b0abce57-5989-49a9-a663-08dad10abdd7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zxH457R4zfOi4MSxPizbjomTVC+r/BafxkIDSPQ4A1tYORVnJ64Cei43Rdc+199bp3FnLNdc4+mgDp1mWrMPxkwZt3erd8Z39q/hvMVBUacdYZw1e5rOGXsK9fWdFtkFDjxJZs+yQZ4mn3XDShfwGs4aACGtRgceUTgTPv4oa8gFzWj2juU3bGugH1B7WABAJCviEVQ9AVIFnUeoGT/ipVSx4PTWU7XgQzFu1jYNisuAzgGWtNpgzQAzIBuDhNDMxBwnof0mf5VYCIrq4t6pO1tlZv1BvkWQvGseZXE9Gkdk8t4gJ3GK8CLj+1/gClHIGRSgyhkAzXAayrHwB83+b2FBmhvWbUOFzv1zFkdTjZCSY2MSuJ6oondfZCgcqFRf7TLGkQbf+iJh9ukw0a5JQlX6zIFIxhV/5Gu6UcKh2e/wXh+c109JlIJsK5cU3LOu9NrLp552h5woatiyrwsYwFstV8oj2VLfOTqfyLnPf8qubLmAaTfd9KYC+Mj1lF7W9UVsSAh0Z2pbUiO8LUORwqDmOKpi/miZf5dGk2AUYgkhx9RnCpSmI36Y+UKHRgZoLQ0G87QOk5qR/nTZNYPIuiIpbCi0XpSsjGEHPszbEO27sUkDoSV9XVEy450H58LCszRkT8RdqGjfpKd+dUSgRehFoGH09dWW0mXfWfMZidbiekglcLswOgy7kKZt8E8qLj624Q+kpp1U8oY/zBGtIPOGah4c5bFxisjDFE+QNio=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(376002)(346002)(136003)(451199015)(40470700004)(46966006)(36840700001)(6916009)(316002)(54906003)(70206006)(70586007)(4326008)(41300700001)(8676002)(82310400005)(86362001)(83380400001)(26005)(47076005)(426003)(7696005)(1076003)(16526019)(2616005)(336012)(186003)(6666004)(36860700001)(478600001)(36756003)(40460700003)(66899015)(81166007)(5660300002)(2906002)(356005)(40480700001)(8936002)(82740400003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 06:35:29.0626
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0abce57-5989-49a9-a663-08dad10abdd7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT085.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6599
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 0/4] cpumask: improve on cpumask_local_spread()
+ locality
+Content-Language: en-US
+To:     Valentin Schneider <vschneid@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Barry Song <baohua@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        haniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+References: <20221112190946.728270-1-yury.norov@gmail.com>
+ <xhsmh7czwyvtj.mognet@vschneid.remote.csb> <Y3PXw8Hqn+RCMg2J@yury-laptop>
+ <xhsmho7t5ydke.mognet@vschneid.remote.csb>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <xhsmho7t5ydke.mognet@vschneid.remote.csb>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,135 +104,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently drm-buddy does not have full knowledge of continuous memory.
 
-Lets consider scenario below.
-order 1:    L		    R
-order 0: LL	LR	RL	RR
-for order 1 allocation, it can offer L or R or LR+RL.
 
-For now, we only implement L or R case for continuous memory allocation.
-So this patch aims to implement the LR+RL case.
+On 11/17/2022 2:23 PM, Valentin Schneider wrote:
+> On 15/11/22 10:32, Yury Norov wrote:
+>> On Tue, Nov 15, 2022 at 05:24:56PM +0000, Valentin Schneider wrote:
+>>>
+>>> Is this meant as a replacement for [1]?
+>>
+>> No. Your series adds an iterator, and in my experience the code that
+>> uses iterators of that sort is almost always better and easier to
+>> understand than cpumask_nth() or cpumask_next()-like users.
+>>
+>> My series has the only advantage that it allows keep existing codebase
+>> untouched.
+>>
+> 
+> Right
+> 
+>>> I like that this is changing an existing interface so that all current
+>>> users directly benefit from the change. Now, about half of the users of
+>>> cpumask_local_spread() use it in a loop with incremental @i parameter,
+>>> which makes the repeated bsearch a bit of a shame, but then I'm tempted to
+>>> say the first point makes it worth it.
+>>>
+>>> [1]: https://lore.kernel.org/all/20221028164959.1367250-1-vschneid@redhat.com/
+>>
+>> In terms of very common case of sequential invocation of local_spread()
+>> for cpus from 0 to nr_cpu_ids, the complexity of my approach is n * log n,
+>> and your approach is amortized O(n), which is better. Not a big deal _now_,
+>> as you mentioned in the other email. But we never know how things will
+>> evolve, right?
+>>
+>> So, I would take both and maybe in comment to cpumask_local_spread()
+>> mention that there's a better alternative for those who call the
+>> function for all CPUs incrementally.
+>>
+> 
+> Ack, sounds good.
+> 
 
-Signed-off-by: xinhui pan <xinhui.pan@amd.com>
----
-change from v2:
-search continuous block in nearby root if needed
-
-change from v1:
-implement top-down continuous allocation
----
- drivers/gpu/drm/drm_buddy.c | 78 +++++++++++++++++++++++++++++++++----
- 1 file changed, 71 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/gpu/drm/drm_buddy.c b/drivers/gpu/drm/drm_buddy.c
-index 11bb59399471..ff58eb3136d2 100644
---- a/drivers/gpu/drm/drm_buddy.c
-+++ b/drivers/gpu/drm/drm_buddy.c
-@@ -386,6 +386,58 @@ alloc_range_bias(struct drm_buddy *mm,
- 	return ERR_PTR(err);
- }
- 
-+static struct drm_buddy_block *
-+find_continuous_blocks(struct drm_buddy *mm,
-+		       int order,
-+		       unsigned long flags,
-+		       struct drm_buddy_block **rn)
-+{
-+	struct list_head *head = &mm->free_list[order];
-+	struct drm_buddy_block *node, *parent, *free_node, *max_node = NULL;
-+	int i;
-+
-+	list_for_each_entry(free_node, head, link) {
-+		if (max_node) {
-+			if (!(flags & DRM_BUDDY_TOPDOWN_ALLOCATION))
-+				break;
-+
-+			if (drm_buddy_block_offset(free_node) <
-+			    drm_buddy_block_offset(max_node))
-+				continue;
-+		}
-+
-+		parent = free_node;
-+		do {
-+			node = parent;
-+			parent = parent->parent;
-+		} while (parent && parent->right == node);
-+
-+		if (!parent) {
-+			for (i = 0; i < mm->n_roots - 1; i++)
-+				if (mm->roots[i] == node)
-+					break;
-+			if (i == mm->n_roots - 1)
-+				continue;
-+			node = mm->roots[i + 1];
-+		} else {
-+			node = parent->right;
-+		}
-+
-+		while (drm_buddy_block_is_split(node))
-+			node = node->left;
-+
-+		if (drm_buddy_block_is_free(node) &&
-+		    drm_buddy_block_order(node) == order) {
-+			*rn = node;
-+			max_node = free_node;
-+			BUG_ON(drm_buddy_block_offset(node) !=
-+				drm_buddy_block_offset(max_node) +
-+				drm_buddy_block_size(mm, max_node));
-+		}
-+	}
-+	return max_node;
-+}
-+
- static struct drm_buddy_block *
- get_maxblock(struct list_head *head)
- {
-@@ -637,7 +689,7 @@ int drm_buddy_alloc_blocks(struct drm_buddy *mm,
- 			   struct list_head *blocks,
- 			   unsigned long flags)
- {
--	struct drm_buddy_block *block = NULL;
-+	struct drm_buddy_block *block = NULL, *rblock = NULL;
- 	unsigned int min_order, order;
- 	unsigned long pages;
- 	LIST_HEAD(allocated);
-@@ -689,17 +741,29 @@ int drm_buddy_alloc_blocks(struct drm_buddy *mm,
- 				break;
- 
- 			if (order-- == min_order) {
-+				if (!(flags & DRM_BUDDY_RANGE_ALLOCATION) &&
-+				    min_order != 0 && pages == BIT(order + 1)) {
-+					block = find_continuous_blocks(mm,
-+								       order,
-+								       flags,
-+								       &rblock);
-+					if (block)
-+						break;
-+				}
- 				err = -ENOSPC;
- 				goto err_free;
- 			}
- 		} while (1);
- 
--		mark_allocated(block);
--		mm->avail -= drm_buddy_block_size(mm, block);
--		kmemleak_update_trace(block);
--		list_add_tail(&block->link, &allocated);
--
--		pages -= BIT(order);
-+		do {
-+			mark_allocated(block);
-+			mm->avail -= drm_buddy_block_size(mm, block);
-+			kmemleak_update_trace(block);
-+			list_add_tail(&block->link, &allocated);
-+			pages -= BIT(order);
-+			block = rblock;
-+			rblock = NULL;
-+		} while (block);
- 
- 		if (!pages)
- 			break;
--- 
-2.34.1
-
+Good.
+Is a respin needed, to add the comment mentioned above?
