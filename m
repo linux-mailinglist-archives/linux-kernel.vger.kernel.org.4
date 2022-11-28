@@ -2,140 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C023263A2FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2CC63A302
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiK1I24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 03:28:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
+        id S230213AbiK1I36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 03:29:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbiK1I2w (ORCPT
+        with ESMTP id S229696AbiK1I3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 03:28:52 -0500
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4DF13EB7;
-        Mon, 28 Nov 2022 00:28:51 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 511A0580359;
-        Mon, 28 Nov 2022 03:28:51 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 28 Nov 2022 03:28:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1669624131; x=1669631331; bh=eSw6zYZByW
-        ByEDrCysf/g+5Jcl5hSRg/8bMKEi7byJA=; b=RK2iFwcTILH+rxCpDiolq8IuMD
-        Se/mvVBHNiP9dtE38pmjN5VvqgAwUjcU7eCKpGJ1SC9zUHOLF39v5Nu+5gOnTy1F
-        I13Dmrr+03vwmmLh0rgFa3Nyln5FZkl+bZsg7MBkpyuF15hIecHazX2UhADzKJnx
-        1XCJvL/27J8tdBMzk9KxevPSBHZgG8upFmWkZP+a8DO2Dl1VrJxUOfApmrU+oFxk
-        jxEM+RMAwayqXtn8Djma7aiN2rU2rEdsa02GojTysuh1stw/AbMt04rZjRnjiS/k
-        gdzmyCPsg9XPzTkAs6DYIl1SbRlphIbpNGOcE1WBzhp65EiSoGJCrv+ER24w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669624131; x=1669631331; bh=eSw6zYZByWByEDrCysf/g+5Jcl5h
-        SRg/8bMKEi7byJA=; b=goMhNEZKCeiZiKNWKEYSto86uSLDQOZQ8C6vsJjoOrNc
-        4hTtlWPbV9ioZ7GZ/m78y8mnrHjXz9FMVPvmJuTS3ZQy6uWbfkbPlhzewiUID0ul
-        inqXeabvNva6YW4BBiNTPKpowPcZbQgUdmxTgfqHmqZULurR2XRohtC36kq5rkh6
-        ka80c1ShwTqav5e5Yc5fLeovT+febBf52Z6Et2NKvsfir2BC2D+wR3lXPQtzE44I
-        93BgX7cOMPQQ9ZcxbGjTuHs12gJNbU5sBEAFEZV2ikDAvNCELBQT0XAgrgzwtbWQ
-        EoE/yb3f8aKqmCegQrOCBB2PPwBlDIA85S/30bbS3Q==
-X-ME-Sender: <xms:QnGEY2AJPUgTwL-nWShZB4L-gSdEIDJ5UxgiQ7Vbb0yUBJTxovpNcg>
-    <xme:QnGEYwha38SyklzSJwycmreaZpaJiNAHl84BJK_csHLM0bJOWPBSRS-2BKYxa0qGq
-    wa2xraYwAQAbqXI8EE>
-X-ME-Received: <xmr:QnGEY5ndvGSvKlL3ei078S4p6VOzKM0bKxfOy8unWkLMpwl1pMJwHqNrn2Jfg0l68VOax0IXYpeBvNcdKkKWHdxEznWQ4Eh9hazoLoGKXh1o7A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedugdduvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:QnGEY0w8cc-fnQFD1xJkwpIya0fmt5MiJ1DiO---Yjf4tML_WbgI-Q>
-    <xmx:QnGEY7S4tsmG9Sl8oZfcDr5es45j7LDN9U7p3iqPVb4C4aJc2yUqWg>
-    <xmx:QnGEY_b4lOuqsTVGSjBVmzmMrsLVgLogjWfKvspbQkNh3YX4GHYZHA>
-    <xmx:Q3GEY8TU3A90DfPutu-y6NNrEAT1SpQloi6bj4QWcA6c3QhgkIHxZA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 28 Nov 2022 03:28:50 -0500 (EST)
-Date:   Mon, 28 Nov 2022 09:28:49 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH/RFC 3/3] drm: atari: Add a DRM driver for Atari graphics
- hardware
-Message-ID: <20221128082849.jixumay2q5r3f23r@houat>
-References: <cover.1669406380.git.geert@linux-m68k.org>
- <9ef3ed30a45a367db0231ea2e98f6f37ba860b4c.1669406382.git.geert@linux-m68k.org>
+        Mon, 28 Nov 2022 03:29:46 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8961181D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:29:44 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id o5so6510422wrm.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:29:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=IOpIkVTZ1HCSepxMCiPIVLc3Du6eeySPU1lvrDaAkA0=;
+        b=iP2YYiwl9QvU5Fj9JzDa1Ner+PSjuXkcCMEmS9tW23BnczYppbVvnJU9HQsJRJDFNS
+         HZGopcus13C3caspnBXrNSgkN7Ofp4VoMRbERqTmkFgkdmRtkTLT6WoY7RMoq/jRUGCv
+         vLXOswkWlJEKu1Hyy0pOgM4fW9NcyhRx/KCsxN9lehS7MgaxFxnjENjvvO1kv/WI2S9d
+         k+q36KaGkqU7wTycEHYnKklfdJNfqs5rXFwBvKF9R2aa+qcM7CxT+KZAjTHmr/sD9S25
+         tE6J9yWHEhkDhFeHXd5X3qJCiBLzVZW2PI/+Ma07Rz8x6BR/OgIeJ1Hp4kPTGRy0NY0p
+         0bJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IOpIkVTZ1HCSepxMCiPIVLc3Du6eeySPU1lvrDaAkA0=;
+        b=qmkJH0qZ4VFuEaUId29UoDlAKdtsOLI3L0sG/5TaCww7uGWRHSYLdbBt4/cZl+Xi6s
+         H8TYZSAkFmkXJgivUxrP6CHzJ/X113fQMhAUO9achm5i562LkMfmgR2ilWMUZN09myxB
+         ghnkfcnuhvce5Ou503D69PCtVLrq8Xjh6eG1Y6fTG+7DTx+D3Upp5O9yRus+o+ZxLyDD
+         CRRGqzog4U22olL/rLYOTUJL2Kyp1FBpnHM38bx9YNhyeg8jQzddMRt0eToCPpUYgsLu
+         Ul75V1T5/xjpZabm1+7lDHdnjt1eon4II5qAo0aKzXRefVdwwcdf/6lBwoEyd/sGNV/G
+         ID2Q==
+X-Gm-Message-State: ANoB5pkQLUfhii8OncQAexFx+c9jsFpYjV2SvDKR8yqh+lZ++io3GSBd
+        0B2G89a1sF1+pB9xJ9P+HfY=
+X-Google-Smtp-Source: AA0mqf5o3omyFNxLGgAAlS7h9m5pGaApcXCeWfag+9dMe/kyf/xcUF+n/HOzhL9shN+Mov9HNNGpdg==
+X-Received: by 2002:adf:d0c2:0:b0:242:a37:7abf with SMTP id z2-20020adfd0c2000000b002420a377abfmr7101743wrh.190.1669624182677;
+        Mon, 28 Nov 2022 00:29:42 -0800 (PST)
+Received: from ?IPV6:2a0e:41a:894f:0:78ad:176c:d7ef:5797? ([2a0e:41a:894f:0:78ad:176c:d7ef:5797])
+        by smtp.gmail.com with ESMTPSA id i17-20020adfe491000000b0022da3977ec5sm10020436wrm.113.2022.11.28.00.29.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 00:29:42 -0800 (PST)
+Sender: Carlo Caione <carlo.caione@gmail.com>
+From:   Carlo Caione <carlo@caione.org>
+X-Google-Original-From: Carlo Caione <ccaione@baylibre.com>
+Message-ID: <a896ab20-6a08-fc41-ff2b-250ef477d801@baylibre.com>
+Date:   Mon, 28 Nov 2022 09:29:41 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rsjyngjy5j33h3zh"
-Content-Disposition: inline
-In-Reply-To: <9ef3ed30a45a367db0231ea2e98f6f37ba860b4c.1669406382.git.geert@linux-m68k.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 0/2] Make ILI9486 driver working with 16-bits SPI
+ controllers
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221116-s905x_spi_ili9486-v2-0-084c6e3cd930@baylibre.com>
+In-Reply-To: <20221116-s905x_spi_ili9486-v2-0-084c6e3cd930@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 21/11/2022 10:42, Carlo Caione wrote:
+> This patchset is trying to fix problems seen on S905X boards when interfacing
+> with an ILI9486 equipped SPI panel.
 
---rsjyngjy5j33h3zh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Gentle ping on this 2-patch set.
 
-Hi,
+Cheers,
 
-On Fri, Nov 25, 2022 at 09:31:10PM +0100, Geert Uytterhoeven wrote:
-> +// FIXME create dynamically from atari_drm_modes[]?
+--
+Carlo Caione
 
-Not necessarily, but they should have proper descriptors at the very least.
-
-> +static const struct drm_named_mode atari_drm_named_modes[] =
-> +{
-> +	{ .name = "st-low" },
-> +	{ .name = "st-mid" },
-> +	{ .name = "st-high" },
-> +	{ .name = "tt-low" },
-> +	{ .name = "tt-mid" },
-> +	{ .name = "tt-high" },
-> +	{ .name = "vga" },
-> +	{ .name = "vga70" },
-> +	{ .name = "qvga" },
-> +	{ .name = "hvga" },
-> +	{ .name = "falh" },
-> +	{ /* sentinel */ }
-> +};
-
-I'm really not convinced about per-driver named modes. This will only
-lead to each driver having its own set of undocumented and obscure mode
-names that will just make everything work.
-
-And some of them in that list are completely generic: VGA, QVGA, HVGA at
-least should definitely be part of the generic named modes.
-
-Maxime
-
---rsjyngjy5j33h3zh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY4RxQQAKCRDj7w1vZxhR
-xfMnAP93kyXjMFffjjRpWN5fHp8WKE3Jg4utXdhfbIjQtUx51gEAln73V6oGNd7N
-/JYs3SvDr/bqiGUDKjqbA2eGjCNfuwY=
-=wePj
------END PGP SIGNATURE-----
-
---rsjyngjy5j33h3zh--
