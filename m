@@ -2,246 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B7863B1BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA7B63B1C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:01:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233069AbiK1TAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 14:00:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
+        id S233101AbiK1TBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 14:01:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbiK1TAt (ORCPT
+        with ESMTP id S233096AbiK1TBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 14:00:49 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C431B252AC;
-        Mon, 28 Nov 2022 11:00:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669662047; x=1701198047;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Z4oZmTYf6q1xtHMQPZlks9ZpsjlcYED/5kdCjfxnLVI=;
-  b=B+Y4SlZsFC7IkY3gQ8fjVl+HPqfxPoD5FPKhPoBtOySj1UgsffxndaaN
-   H+Um5ICk1npZR1y2fLi39tnySKFRSW4UBbZjAefs7gRzrhMUH8m4fW3z9
-   Jymorbl4+ZDNCOIePggO84r4x9XiulMhDcyG3wWCm+HYMSaikFe4AkR5o
-   jD9243dlUZBx2cyjA/Yb/IFJcXw09j3KZoKd1pFINu/p1Ni4tqO0FBEBs
-   C4LS/fxdhbMDzVaDKgN0ZQksHfogw2wwGEK/FtDLDc5Bjgd5ulCLlf2DM
-   ozfXtEbzex3mcCEutV4iVZymJo7UMnq7B38oJB2y8xJyRk28CJWouGI/m
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="313628918"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="313628918"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 11:00:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="712083613"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="712083613"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Nov 2022 11:00:31 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id C5913179; Mon, 28 Nov 2022 21:00:57 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v2 2/2] gpiolib: Introduce gpio_device_get() and gpio_device_put()
-Date:   Mon, 28 Nov 2022 21:00:55 +0200
-Message-Id: <20221128190055.6350-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221128190055.6350-1-andriy.shevchenko@linux.intel.com>
-References: <20221128190055.6350-1-andriy.shevchenko@linux.intel.com>
+        Mon, 28 Nov 2022 14:01:03 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECC727B2D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:00:58 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id mv18so10451755pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:00:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LvEJDQxAkm5Pcp5ay5EjtKj5MIU+4aSru9VkuAAqDpI=;
+        b=ZIxVcpTUMb/D5eaOHDEpksfQ3kJ7ZSLXnpj/xXuk9U3DX0xoA2fCl9AbKfhZwZhspV
+         fbCcGlev/4EIGojtU1A9K3yvnZdq0T/YLnigSVlZGNQ4cmCpsz54dTGsTSZnzhQQSh2F
+         Cfpm/jc+vFpNjyQ+IZMGe+5QzeVLYaYHfv1vY5263b/JPmEuMWLMhThQSjKqNuWjbaqr
+         st2WSkGe+KfyQYa85gs07HW4jJt3Qgj8hCQALJ5ZvFw66ttA8YfEsaKse0X+lJHhwT/n
+         JbSc9Xv4dAC1AUM24H/pg1KhjbiUnHTiPpNuNxguOTpswj0T3okv4RQZv7mFYqAHY8sd
+         vCwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LvEJDQxAkm5Pcp5ay5EjtKj5MIU+4aSru9VkuAAqDpI=;
+        b=6FcZLejABtDMsAUFK+9VL1PIbaGKigo2UC3SHqRXK9BtZ/yE3J6T1fzhWLMGa3hpjv
+         PmTjYAexzg1VmqDVk3rRZ1i4IkRdHaa36SmkVGnv3SU3XEg7+b2zeb7dkzKkzd9PCq4Y
+         yuiiCpcMJ/iRG3RTXs0+nrV1zkD5F4kzBidMksRJzceMH2ZAD7UXwAyDbi1wig8m6691
+         JHQtqAlPO2+riRd8xmboy+aVfPWA5uh+GPIVRHWFeXqWm8TFC7W4OXb9EvTmy6ysC6GB
+         HuWDKXoItRV98eGTaDSRKILM9ltAD+ltcgWD7VksGuzHcZAbJYqWqF4rHUC/decghPHj
+         s6yw==
+X-Gm-Message-State: ANoB5pl99r/C+oRuoOTcJPbSNw2s2E86ut2P5tV3uuVtHibr+NA9oGx6
+        BupU62dyMbD+MA+f2CtWVWiWRw==
+X-Google-Smtp-Source: AA0mqf5Tp1M+FX2RI4vi6K/Uf4ycXTS0LenkHg91EgRKhSqajbSJM3Ugd/1SDVwIRupnNt7JPvregQ==
+X-Received: by 2002:a17:902:7d97:b0:188:f87d:70d3 with SMTP id a23-20020a1709027d9700b00188f87d70d3mr32810098plm.43.1669662058117;
+        Mon, 28 Nov 2022 11:00:58 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id oa16-20020a17090b1bd000b001ef8ab65052sm7929766pjb.11.2022.11.28.11.00.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 11:00:56 -0800 (PST)
+Message-ID: <f89e922c-16d5-0bcf-7e7e-096f42793a36@kernel.dk>
+Date:   Mon, 28 Nov 2022 12:00:55 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH-block] blk-cgroup: Use css_tryget() in
+ blkcg_destroy_blkgs()
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Hillf Danton <hdanton@sina.com>, Yi Zhang <yi.zhang@redhat.com>
+References: <20221128033057.1279383-1-longman@redhat.com>
+ <d08a0059-7c0b-d65f-d184-5b0cb75c08ed@acm.org>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <d08a0059-7c0b-d65f-d184-5b0cb75c08ed@acm.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce gpio_device_get() and gpio_device_put() helpers
-and convert existing users.
+On 11/28/22 11:56 AM, Bart Van Assche wrote:
+> On 11/27/22 19:30, Waiman Long wrote:
+>> Fixes: 951d1e94801f ("blk-cgroup: Flush stats at blkgs destruction path")
+> 
+> Has Jens' for-next branch perhaps been rebased? I see the following commit ID for that patch:
+> 
+> dae590a6c96c ("blk-cgroup: Flush stats at blkgs destruction path")
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: no changes
- drivers/gpio/gpiolib-cdev.c | 21 +++++++++------------
- drivers/gpio/gpiolib.c      | 14 ++++++--------
- drivers/gpio/gpiolib.h      | 10 ++++++++++
- 3 files changed, 25 insertions(+), 20 deletions(-)
+I don't know that sha is from, not from me. for-6.2/block has not been
+rebased, for-next gets rebased whenever I need to do so as linux-next is
+continually rebased anyway. But the sha for that commit would not change
+as a result.
 
-diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-index 8ecec2f56321..a76f2e79a776 100644
---- a/drivers/gpio/gpiolib-cdev.c
-+++ b/drivers/gpio/gpiolib-cdev.c
-@@ -265,7 +265,7 @@ static void linehandle_free(struct linehandle_state *lh)
- 		if (lh->descs[i])
- 			gpiod_free(lh->descs[i]);
- 	kfree(lh->label);
--	put_device(&lh->gdev->dev);
-+	gpio_device_put(lh->gdev);
- 	kfree(lh);
- }
- 
-@@ -307,8 +307,7 @@ static int linehandle_create(struct gpio_device *gdev, void __user *ip)
- 	lh = kzalloc(sizeof(*lh), GFP_KERNEL);
- 	if (!lh)
- 		return -ENOMEM;
--	lh->gdev = gdev;
--	get_device(&gdev->dev);
-+	lh->gdev = gpio_device_get(gdev);
- 
- 	if (handlereq.consumer_label[0] != '\0') {
- 		/* label is only initialized if consumer_label is set */
-@@ -1487,7 +1486,7 @@ static void linereq_free(struct linereq *lr)
- 	}
- 	kfifo_free(&lr->events);
- 	kfree(lr->label);
--	put_device(&lr->gdev->dev);
-+	gpio_device_put(lr->gdev);
- 	kfree(lr);
- }
- 
-@@ -1557,8 +1556,7 @@ static int linereq_create(struct gpio_device *gdev, void __user *ip)
- 	if (!lr)
- 		return -ENOMEM;
- 
--	lr->gdev = gdev;
--	get_device(&gdev->dev);
-+	lr->gdev = gpio_device_get(gdev);
- 
- 	for (i = 0; i < ulr.num_lines; i++) {
- 		lr->lines[i].req = lr;
-@@ -1806,7 +1804,7 @@ static void lineevent_free(struct lineevent_state *le)
- 	if (le->desc)
- 		gpiod_free(le->desc);
- 	kfree(le->label);
--	put_device(&le->gdev->dev);
-+	gpio_device_put(le->gdev);
- 	kfree(le);
- }
- 
-@@ -1972,8 +1970,7 @@ static int lineevent_create(struct gpio_device *gdev, void __user *ip)
- 	le = kzalloc(sizeof(*le), GFP_KERNEL);
- 	if (!le)
- 		return -ENOMEM;
--	le->gdev = gdev;
--	get_device(&gdev->dev);
-+	le->gdev = gpio_device_get(gdev);
- 
- 	if (eventreq.consumer_label[0] != '\0') {
- 		/* label is only initialized if consumer_label is set */
-@@ -2521,7 +2518,7 @@ static int gpio_chrdev_open(struct inode *inode, struct file *file)
- 
- 	init_waitqueue_head(&cdev->wait);
- 	INIT_KFIFO(cdev->events);
--	cdev->gdev = gdev;
-+	cdev->gdev = gpio_device_get(gdev);
- 
- 	cdev->lineinfo_changed_nb.notifier_call = lineinfo_changed_notify;
- 	ret = blocking_notifier_chain_register(&gdev->notifier,
-@@ -2529,7 +2526,6 @@ static int gpio_chrdev_open(struct inode *inode, struct file *file)
- 	if (ret)
- 		goto out_free_bitmap;
- 
--	get_device(&gdev->dev);
- 	file->private_data = cdev;
- 
- 	ret = nonseekable_open(inode, file);
-@@ -2542,6 +2538,7 @@ static int gpio_chrdev_open(struct inode *inode, struct file *file)
- 	blocking_notifier_chain_unregister(&gdev->notifier,
- 					   &cdev->lineinfo_changed_nb);
- out_free_bitmap:
-+	gpio_device_put(gdev);
- 	bitmap_free(cdev->watched_lines);
- out_free_cdev:
- 	kfree(cdev);
-@@ -2562,7 +2559,7 @@ static int gpio_chrdev_release(struct inode *inode, struct file *file)
- 	bitmap_free(cdev->watched_lines);
- 	blocking_notifier_chain_unregister(&gdev->notifier,
- 					   &cdev->lineinfo_changed_nb);
--	put_device(&gdev->dev);
-+	gpio_device_put(gdev);
- 	kfree(cdev);
- 
- 	return 0;
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index ccd47da4ec66..a54bad1ea3e5 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -875,7 +875,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 	gpiochip_free_valid_mask(gc);
- 	if (gdev->dev.release) {
- 		/* release() has been registered by gpiochip_setup_dev() */
--		put_device(&gdev->dev);
-+		gpio_device_put(gdev);
- 		goto err_print_message;
- 	}
- err_remove_from_list:
-@@ -962,7 +962,7 @@ void gpiochip_remove(struct gpio_chip *gc)
- 	 * gone.
- 	 */
- 	gcdev_unregister(gdev);
--	put_device(&gdev->dev);
-+	gpio_device_put(gdev);
- }
- EXPORT_SYMBOL_GPL(gpiochip_remove);
- 
-@@ -2053,17 +2053,15 @@ static int validate_desc(const struct gpio_desc *desc, const char *func)
- int gpiod_request(struct gpio_desc *desc, const char *label)
- {
- 	int ret = -EPROBE_DEFER;
--	struct gpio_device *gdev;
- 
- 	VALIDATE_DESC(desc);
--	gdev = desc->gdev;
- 
--	if (try_module_get(gdev->owner)) {
-+	if (try_module_get(desc->gdev->owner)) {
- 		ret = gpiod_request_commit(desc, label);
- 		if (ret)
--			module_put(gdev->owner);
-+			module_put(desc->gdev->owner);
- 		else
--			get_device(&gdev->dev);
-+			gpio_device_get(desc->gdev);
- 	}
- 
- 	if (ret)
-@@ -2124,7 +2122,7 @@ void gpiod_free(struct gpio_desc *desc)
- {
- 	if (desc && desc->gdev && gpiod_free_commit(desc)) {
- 		module_put(desc->gdev->owner);
--		put_device(&desc->gdev->dev);
-+		gpio_device_put(desc->gdev);
- 	} else {
- 		WARN_ON(extra_checks);
- 	}
-diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
-index e443c1023a37..c342950ad200 100644
---- a/drivers/gpio/gpiolib.h
-+++ b/drivers/gpio/gpiolib.h
-@@ -77,6 +77,16 @@ static inline struct gpio_device *to_gpio_device(struct device *dev)
- 	return container_of(dev, struct gpio_device, dev);
- }
- 
-+static inline struct gpio_device *gpio_device_get(struct gpio_device *gdev)
-+{
-+	return to_gpio_device(get_device(&gdev->dev));
-+}
-+
-+static inline void gpio_device_put(struct gpio_device *gdev)
-+{
-+	put_device(&gdev->dev);
-+}
-+
- /* gpio suffixes used for ACPI and device tree lookup */
- static __maybe_unused const char * const gpio_suffixes[] = { "gpios", "gpio" };
- 
+I don't even have that sha in my tree, so...
+
 -- 
-2.35.1
+Jens Axboe
+
 
