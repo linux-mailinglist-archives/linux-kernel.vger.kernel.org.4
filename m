@@ -2,81 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7641163A2F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E37E63A301
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiK1I1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 03:27:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
+        id S230075AbiK1I3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 03:29:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbiK1I1G (ORCPT
+        with ESMTP id S229674AbiK1I3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 03:27:06 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C78C63E2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:27:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1669624019; bh=/NvhJG+rqUvTCbK0vNxiyNK+85hTvfLth9ocA0GhXQo=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=Jh9UXgXtey/aO6iW2SnkwMt2AqIvHvWSW/exFVhMPIHzH5mryO+xbG6DlgUrIyGP6
-         2JWaJQG8NkWQ1+Evoxn03frfIUEcIYurPgnYYezSaGHlCRC3WzdDNG+A8a2mXMyDpL
-         KPlYZkKsFHA26ReC4KxwAUcg998ikFZucy2lvAJ8=
-Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Mon, 28 Nov 2022 09:26:59 +0100 (CET)
-X-EA-Auth: uZKC0MjozQHYPB5F8zENZ73MSjUBB7FQ7PGAv5EJpMeRH8PX1WJwoP8kQkJKelMJEGp+EGK1S+bGxuUZf57Tvox8z43eMp15
-Date:   Mon, 28 Nov 2022 13:56:53 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        gustavoars@kernel.org
-Subject: Re: [PATCH] staging: wlan-ng: Replace zero-length arrays with
- DECLARE_FLEX_ARRAY() helper
-Message-ID: <Y4RwzX2Wzguw703W@qemulion>
-References: <Y3YKhee8L+kAfHM4@qemulion>
- <Y3YvGdkyGm7azGg4@kroah.com>
- <Y3Y1N6AwWEXLpSrx@qemulion>
- <Y3Z3aatcaISvqURJ@kroah.com>
- <Y3jqUpNOygJ4+2jy@qemulion>
- <Y4RnJyiCDYavLAJq@qemulion>
- <Y4RoOxgo76Hc5RRP@kadam>
- <Y4RvpvpmFL8zNvfB@qemulion>
- <Y4RwXSs9ha0zepxZ@kadam>
+        Mon, 28 Nov 2022 03:29:45 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD5813CC5;
+        Mon, 28 Nov 2022 00:29:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1669624122; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=SlruZNjijJZzyYkvFL6OElHpvJ5NcnjnDm7tGquBFAJmCmXXZ7xyEIdvDkQNKukAaVmlVi9Bc3+T1BoMHqR4WMPHWfitmKcMQV9Qj1Z0RpcsXmHFVX1okyuAaL25m94+FDZ1/45k0UH9DWRCBCIZN2m+OW5eV4U6+fKAV6njUKw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1669624122; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=AS/14WaE2LN43smbHuSpmejZfg+JalHV2YhgqWmQEAE=; 
+        b=bIFBF87ok3heWqT6Z4w322m6ip6W7S6qKVz4ihZKSzxbjoH2NheiWIRQf32n7ELZm2Vq4IubEexB1TCaDl8wy/4B5zClr8J6End6YIxYT0Y2H67doigDBMLbzLKl2UlubFKSOiQ62YMWZZZ0RB3eSViz+aWppC9gr/3t0rlMZAI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669624122;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=AS/14WaE2LN43smbHuSpmejZfg+JalHV2YhgqWmQEAE=;
+        b=JyGzTO7/cV3Df/8rep2Kwe+HTHBxB6ASQWVOwe3f4YCQRiaxNNvQEndBCMwcYe5k
+        1aua5HNDimYl5QcSpfwqtl1Hw4ilAqL50Uwa9FKyisQG2QyEKCeOG0XJ0pzEb3v/dgJ
+        +dE3f36wwKkyE/vzjVCX1quNzRai5Ua82TU22g74=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1669624120094627.872459276059; Mon, 28 Nov 2022 00:28:40 -0800 (PST)
+Message-ID: <08784493-7e85-9224-acfa-9a87cbd325e7@arinc9.com>
+Date:   Mon, 28 Nov 2022 11:28:31 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4RwXSs9ha0zepxZ@kadam>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 net-next 06/10] dt-bindings: net: dsa: mediatek,mt7530:
+ fix port description location
+To:     Colin Foster <colin.foster@in-advantage.com>,
+        linux-renesas-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org
+Cc:     John Crispin <john@phrozen.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Marek Vasut <marex@denx.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        George McCollister <george.mccollister@gmail.com>,
+        Rob Herring <robh@kernel.org>
+References: <20221127224734.885526-1-colin.foster@in-advantage.com>
+ <20221127224734.885526-7-colin.foster@in-advantage.com>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20221127224734.885526-7-colin.foster@in-advantage.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 11:25:01AM +0300, Dan Carpenter wrote:
-> On Mon, Nov 28, 2022 at 01:51:58PM +0530, Deepak R Varma wrote:
-> > On Mon, Nov 28, 2022 at 10:50:19AM +0300, Dan Carpenter wrote:
-> > > Like this:
-> >
-> > Thank you Dan. This takes me back to the very first version of this patch. I
-> > will send in the clean up.
->
-> Don't just send what I sent you, look around and try to see if there are
-> other issues with the code.
+On 28.11.2022 01:47, Colin Foster wrote:
+> The description property was located where it applies to every port, not
+> just ports 5 or 6 (CPU ports). Fix this description.
 
-Yes, I will follow your advise.
+I'm not sure I understand. The description for reg does apply to every 
+port. Both CPU ports and user ports are described. This patch moves the 
+description to under CPU ports only.
 
-Thanks,
-./drv
+> 
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> ---
+> 
+> v2 -> v3
+>    * New patch.
+> 
+> ---
+>   .../bindings/net/dsa/mediatek,mt7530.yaml          | 14 +++-----------
+>   1 file changed, 3 insertions(+), 11 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> index 7df4ea1901ce..415e6c40787e 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> @@ -156,17 +156,6 @@ patternProperties:
+>   
+>       patternProperties:
+>         "^(ethernet-)?port@[0-9]+$":
+> -        type: object
+> -        description: Ethernet switch ports
+> -
+> -        unevaluatedProperties: false
+> -
 
->
-> regards,
-> dan carpenter
->
->
+Would be nice to mention these being removed on the patch log. Or remove 
+them while doing ("dt-bindings: net: dsa: utilize base definitions for 
+standard dsa switches").
 
+> -        properties:
+> -          reg:
+> -            description:
+> -              Port address described must be 5 or 6 for CPU port and from 0 to 5
+> -              for user ports.
+> -
+>           allOf:
+>             - $ref: dsa-port.yaml#
+>             - if:
+> @@ -174,6 +163,9 @@ patternProperties:
+>               then:
+>                 properties:
+>                   reg:
+> +                  description:
+> +                    Port address described must be 5 or 6 for CPU port and from
+> +                    0 to 5 for user ports
+>                     enum:
+>                       - 5
+>                       - 6
 
+Thank you for your efforts.
+
+Arınç
