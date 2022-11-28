@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B9463A93A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E1263A93C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:14:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbiK1NOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:14:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
+        id S231892AbiK1NOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:14:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbiK1NNk (ORCPT
+        with ESMTP id S231599AbiK1NNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 08:13:40 -0500
+        Mon, 28 Nov 2022 08:13:41 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62372DCD;
-        Mon, 28 Nov 2022 05:13:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF74122D;
+        Mon, 28 Nov 2022 05:13:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669641219; x=1701177219;
+  t=1669641220; x=1701177220;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=6edsBDhndxufd+3EwJXKfsHyRlYl4SM2zX6wq8H/56U=;
-  b=OzSNHXalsHBm3jZdROfgz1/kUfd36h+u4RkznczD5jae31akEp2HLtoI
-   GU+8kO2KdFMWV/HLxBZHebThJKcj54O8vgTIp6AIv3RjhGDVpcWya+MQ8
-   YujLMP2fiO6j9iWyTx3yhzoG49/IJ85wd8/UgYwGCOmpMzHVID0HzgDCO
-   6o7mGpKPv3+u7ia2XzUBjywjqdp4RZbUJG6Ur0LyrhvbAH9eoPw+g5uus
-   gZcbH+OewhalZbqqqkwGIsd/OlZusxkcJDFvV8r0Qt/Yv1NQ7GIvDQGJQ
-   N4kZyvB1OpvwGWwM0hwA9zun0qqIl7cz6tgPTlL07cHkHyEFYOH6a86WR
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="401117214"
+  bh=p7BCBvy/ijiGArW5gb4LxSYPxM/Arci+QhS/bMOw9bo=;
+  b=gSFrBgEqXr5rBXnI3IFSYy+cx+9uhnT4QhrkD3L0uF9xdrzRceWmNDjh
+   ZKMKJJarF4v+ACLXe8Sh03JqoLVY8TjXdK2yU0sQZONt8nuVXGDSe4apo
+   rMCVuxYe9m8XJw9xn4W49uNfPB2J2Sk9DZ0V6QfNNjlR37RAMisrOlJST
+   iWwWrHksfFikdxNVa8UqgYtvEXKkVh2EaXDlzCMrFVJ3eLAYqq6KZqXws
+   c5xI2L11dv4buBjsJwsTvn0AyDd0VoIaq6Vz4is3dg1nQBE+rKPV+VXBV
+   2h9YaQnS9bR5/oDopZ3nPh2pflANk57kPXVFFnnMCKzINW1Zl8GrG2FFQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="401117226"
 X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="401117214"
+   d="scan'208";a="401117226"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 05:13:35 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="749381384"
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="749381387"
 X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="749381384"
+   d="scan'208";a="749381387"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by fmsmga002.fm.intel.com with ESMTP; 28 Nov 2022 05:13:35 -0800
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -58,9 +58,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [PATCH v2 16/22] thermal: intel: hfi: Enable the Intel Thread Director
-Date:   Mon, 28 Nov 2022 05:20:54 -0800
-Message-Id: <20221128132100.30253-17-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v2 17/22] sched/task_struct: Add helpers for IPC classification
+Date:   Mon, 28 Nov 2022 05:20:55 -0800
+Message-Id: <20221128132100.30253-18-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
 References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
@@ -73,11 +73,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable Intel Thread Director from the CPU hotplug callback: globally from
-CPU0 and then enable the thread-classification hardware in each logical
-processor individually.
+The unprocessed classification that hardware provides for a task may not
+be usable by the scheduler: the classification may change too frequently or
+architectures may want to consider extra factors. For instance, some
+processors with Intel Thread Director need to consider the state of the SMT
+siblings of a core.
 
-Also, initialize the number of classes supported.
+Provide per-task helper variables that architectures can use to post-
+process the classification that hardware provides.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -96,94 +99,37 @@ Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v1:
- * None
+ * Used bit-fields to fit all the IPC class data in 4 bytes. (PeterZ)
+ * Shortened names of the helpers.
+ * Renamed helpers with the ipcc_ prefix.
+ * Reworded commit message for clarity
 ---
- arch/x86/include/asm/msr-index.h  |  2 ++
- drivers/thermal/intel/intel_hfi.c | 30 ++++++++++++++++++++++++++++--
- 2 files changed, 30 insertions(+), 2 deletions(-)
+ include/linux/sched.h | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 37ff47552bcb..96303330223b 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -1075,6 +1075,8 @@
- /* Hardware Feedback Interface */
- #define MSR_IA32_HW_FEEDBACK_PTR        0x17d0
- #define MSR_IA32_HW_FEEDBACK_CONFIG     0x17d1
-+#define MSR_IA32_HW_FEEDBACK_THREAD_CONFIG 0x17d4
-+#define MSR_IA32_HW_FEEDBACK_CHAR	0x17d2
- 
- /* x2APIC locked status */
- #define MSR_IA32_XAPIC_DISABLE_STATUS	0xBD
-diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index 1b3fd704ae9a..8287bfd7d6b6 100644
---- a/drivers/thermal/intel/intel_hfi.c
-+++ b/drivers/thermal/intel/intel_hfi.c
-@@ -50,6 +50,8 @@
- /* Hardware Feedback Interface MSR configuration bits */
- #define HW_FEEDBACK_PTR_VALID_BIT		BIT(0)
- #define HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT	BIT(0)
-+#define HW_FEEDBACK_CONFIG_ITD_ENABLE_BIT	BIT(1)
-+#define HW_FEEDBACK_THREAD_CONFIG_ENABLE_BIT	BIT(0)
- 
- /* CPUID detection and enumeration definitions for HFI */
- 
-@@ -74,6 +76,15 @@ union cpuid6_edx {
- 	u32 full;
- };
- 
-+union cpuid6_ecx {
-+	struct {
-+		u32	dont_care0:8;
-+		u32	nr_classes:8;
-+		u32	dont_care1:16;
-+	} split;
-+	u32 full;
-+};
-+
- #ifdef CONFIG_IPC_CLASSES
- union hfi_thread_feedback_char_msr {
- 	struct {
-@@ -495,6 +506,11 @@ void intel_hfi_online(unsigned int cpu)
- 
- 	init_hfi_cpu_index(info);
- 
-+	if (cpu_feature_enabled(X86_FEATURE_ITD)) {
-+		msr_val = HW_FEEDBACK_THREAD_CONFIG_ENABLE_BIT;
-+		wrmsrl(MSR_IA32_HW_FEEDBACK_THREAD_CONFIG, msr_val);
-+	}
-+
- 	/*
- 	 * Now check if the HFI instance of the package/die of @cpu has been
- 	 * initialized (by checking its header). In such case, all we have to
-@@ -550,6 +566,10 @@ void intel_hfi_online(unsigned int cpu)
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index ddabc7449edd..8a99aa316c37 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1532,7 +1532,17 @@ struct task_struct {
+ 	 * A hardware-defined classification of task based on the number
+ 	 * of instructions per cycle.
  	 */
- 	rdmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
- 	msr_val |= HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT;
-+
-+	if (cpu_feature_enabled(X86_FEATURE_ITD))
-+		msr_val |= HW_FEEDBACK_CONFIG_ITD_ENABLE_BIT;
-+
- 	wrmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
- 
- unlock:
-@@ -629,8 +649,14 @@ static __init int hfi_parse_features(void)
- 	 */
- 	hfi_features.class_stride = nr_capabilities;
- 
--	/* For now, use only one class of the HFI table */
--	hfi_features.nr_classes = 1;
-+	if (cpu_feature_enabled(X86_FEATURE_ITD)) {
-+		union cpuid6_ecx ecx;
-+
-+		ecx.full = cpuid_ecx(CPUID_HFI_LEAF);
-+		hfi_features.nr_classes = ecx.split.nr_classes;
-+	} else {
-+		hfi_features.nr_classes = 1;
-+	}
+-	unsigned int			ipcc;
++	unsigned int			ipcc : 9;
++	/*
++	 * A candidate classification that arch-specific implementations
++	 * qualify for correctness.
++	 */
++	unsigned int			ipcc_tmp : 9;
++	/*
++	 * Counter to filter out transient the candidate classification
++	 * of a task
++	 */
++	unsigned int			ipcc_cntr : 14;
+ #endif
  
  	/*
- 	 * The header contains change indications for each supported feature.
 -- 
 2.25.1
 
