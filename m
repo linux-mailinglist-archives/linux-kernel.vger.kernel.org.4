@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3700463AE8F
+	by mail.lfdr.de (Postfix) with ESMTP id D353D63AE91
 	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232838AbiK1RJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 12:09:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
+        id S232894AbiK1RKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 12:10:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232929AbiK1RJQ (ORCPT
+        with ESMTP id S232935AbiK1RJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:09:16 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2079.outbound.protection.outlook.com [40.107.92.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB5C27935;
-        Mon, 28 Nov 2022 09:08:59 -0800 (PST)
+        Mon, 28 Nov 2022 12:09:17 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2059.outbound.protection.outlook.com [40.107.94.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67565275F3;
+        Mon, 28 Nov 2022 09:09:03 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X2iSM+9ZXf2hq/389Jaks51ihG9HQSySiGkP1BZlKr2ES566PeByqvprxVxpGYJ6Ha6TFyLeiWAytB7ToTD8yX0Thbjdk4e28SV0s8j33Atx6ySfUKMScF/CBb0OtnEcFnudzHhSv4CBDAfJm9NamHTZ3CIOZjzwjpyBUQCeENLemJWIWXx4zYITs+VjXhYz63q9VOyoP4F035SFv4XoFdcpoEYGBv9fdJQRnsh+ZTfpWMQoL2Lwe4UpDzs7aG8DrpUPVdqz+3LnW9vqgPX/RbCh4vSxICOr9jBm/XAMpeVVvJD+fCnLtSjagh13ngFyCcBAvYvzRrOxl+rsvieTTQ==
+ b=Ccyony7HM5Ah+LzyXX5y02bFdIOOwb7llw3VLMJ/iShX8wHXSBUUFsNJXParraYOGmqOlta6FBqmm9Oo2gnx/FTbjsZx0zFPKM7ilPnNWcwadhyvpopc4uO2rG1cuhK9bQOCXIiUe48X1m3qOF5BKR+/etEIw2j4syouHFte+MVWJfQebykYeRpLMle49WnSAv1PWpQGhLRU6uBUpL0r2qdu+giwzY6TMLMiCBx3MeONQxYeDzGEWscNyvCtrc/srtys5OPmObrv3F32R0vEZVOKRM7rxeNSOaCMe7lju4OxvLFW/H2v2+AtfCPDB48wydXezwyHiqUUW/I1OSheWA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7iLNwCDA2FPuXX0XbspH2ZQmIiCfHs2C+UB1BWc0KDM=;
- b=dVYzDYnWk/i0lUMNOvqzQ9ILDS7c4rXMB0Og2WYIUAfUOiTCYWrS8PC9pN4i5Gk50frZQ4W+mE+dqYgF2ICQjwdhFi/MhRYRpDdfoZA1MqqZhVoqjcl4x+Y6Jtun0eGKaBKKXVdccB1gpMAz/e8v+Er5Wuvc0I6jjY1FDnZJlYC17KsvCCNkJDbhznn6Vqbq3QHlj9lV6zYQy8hkqOP6nLQofHGQP+lcoJRcOrMvB9v2kHRZHo6slA1E4io1roB+jnJdj2uXtfXv7+qFtjBKOv/Q0GgrujsrhwQXL3/4n5imj5697E248Gyzji0PM/iH5sF3PDBBNvB6ug8AB1xfqA==
+ bh=gA3dFregtyaTgEB1efmTBrFcL17HMyrQI6vWmi+r8XE=;
+ b=AplemRkX+obgptr6/AKgowNVlgOsXeAAE8esORWY7/CpzuWUUQ21ckMlhSgNaxPBvy7kGIKkz35KgIMrZdlkpA1uHokMCNxQ3Gn/7quDJnyDKQdqQf/8CgmgktZ17DFb87w0qetUMVKZI94vjfkXmkXCaOfK93uWAFLbSIyILL7MjvnqBMWI3m576a+CNlAaomgFR6PyJa/qC7LEU5wWnOf5na7Z4ojh0e0TnEyt0Mc7kiDy9lVQcOO9Fl/1VEwpiUuUnoJ7bzlAPnIQZz31QHrqpcxeY3PIugeHNZJEOwcspRa2/HtBhswndDCHt2ENZpduT1WuTKr/agC4hUszvg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7iLNwCDA2FPuXX0XbspH2ZQmIiCfHs2C+UB1BWc0KDM=;
- b=jN66xxNJLjdPGhvEy0Wz0Hzw3rUP6ic2YcKknOMS6CCUVSZkXFPr51KDEyZSEIvq6Lv39Esgdu/WoK8UlLQ9LT2Z4+YPuXw9/gOQCjXPOZkEsllr0vDG9por7J5ZjWe8nkyFuXr4N3sdNqkQk0/delksIvpUrmiA5RdtHm/1TWc=
-Received: from BN9PR03CA0080.namprd03.prod.outlook.com (2603:10b6:408:fc::25)
- by PH0PR12MB5451.namprd12.prod.outlook.com (2603:10b6:510:ee::20) with
+ bh=gA3dFregtyaTgEB1efmTBrFcL17HMyrQI6vWmi+r8XE=;
+ b=aVuer0nnmsRUdmSFBkfD8jqAhtWxEVQC5zDeO0uXRTsVb5pdiICciqQsThcUr/Z6E2kIwbHZDYfiBQblrb/gI99Us/JqINyxoM6Ij0u8YJ4hfTs1LoBSYOZVwm/xjAGcNUitBz3389YPlZ2WKMyrScELZAtfapSWP+kLgo5rXFE=
+Received: from BN9PR03CA0071.namprd03.prod.outlook.com (2603:10b6:408:fc::16)
+ by IA1PR12MB8077.namprd12.prod.outlook.com (2603:10b6:208:3f4::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Mon, 28 Nov
- 2022 17:08:57 +0000
+ 2022 17:09:01 +0000
 Received: from BN8NAM11FT058.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:fc:cafe::ae) by BN9PR03CA0080.outlook.office365.com
- (2603:10b6:408:fc::25) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:408:fc:cafe::1f) by BN9PR03CA0071.outlook.office365.com
+ (2603:10b6:408:fc::16) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23 via Frontend
- Transport; Mon, 28 Nov 2022 17:08:57 +0000
+ Transport; Mon, 28 Nov 2022 17:09:01 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -49,11 +49,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  BN8NAM11FT058.mail.protection.outlook.com (10.13.177.58) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5857.18 via Frontend Transport; Mon, 28 Nov 2022 17:08:57 +0000
+ 15.20.5857.18 via Frontend Transport; Mon, 28 Nov 2022 17:09:01 +0000
 Received: from pyuan-Cloudripper.amd.com (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 28 Nov 2022 11:08:53 -0600
+ 15.1.2375.34; Mon, 28 Nov 2022 11:08:57 -0600
 From:   Perry Yuan <perry.yuan@amd.com>
 To:     <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
         <ray.huang@amd.com>, <viresh.kumar@linaro.org>
@@ -61,9 +61,9 @@ CC:     <Deepak.Sharma@amd.com>, <Nathan.Fontenot@amd.com>,
         <Alexander.Deucher@amd.com>, <Shimmer.Huang@amd.com>,
         <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <wyes.karny@amd.com>,
         <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 8/9] Documentation: amd-pstate: add amd pstate driver mode introduction
-Date:   Tue, 29 Nov 2022 01:03:13 +0800
-Message-ID: <20221128170314.2276636-9-perry.yuan@amd.com>
+Subject: [PATCH v5 9/9] Documentation: introduce amd pstate active mode kernel command line options
+Date:   Tue, 29 Nov 2022 01:03:14 +0800
+Message-ID: <20221128170314.2276636-10-perry.yuan@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221128170314.2276636-1-perry.yuan@amd.com>
 References: <20221128170314.2276636-1-perry.yuan@amd.com>
@@ -75,23 +75,23 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT058:EE_|PH0PR12MB5451:EE_
-X-MS-Office365-Filtering-Correlation-Id: f2f6ba08-b338-4ee3-9520-08dad1633c79
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT058:EE_|IA1PR12MB8077:EE_
+X-MS-Office365-Filtering-Correlation-Id: 90f4e328-3a41-44ce-1f02-08dad1633ed7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dLv8DB4Wdr07kYRLZFX2TbyR5Tq/5++ikbDMBvKEHdXKTzBhSsjzgHl0rzpDSKrQ+RioCXA0G0/nmh8O816GE1uAAKbwK7xwtpsrBQX7ywQ1hR1WH0MdWtUIWM0uIOPYrUK6IDXiEd39qA0mGH07Tx2G9q11TLi9+sWNfLxGQKTxNdVTe1I8iWDt9v8AI/bzlWgvpEdJQoIXbwFGFoKksYykwmkHlFdQWV1aKnc44WJ93H+j14ZTuertBODEL0riGR0VbFeyOxrfCo0F1P9FgGx1GxgGZjm4Mtexu2U9n7FKTRGqQqxl9+7ZFDAyRNNKustIAyKOG3XxhfB+nvn/UyAVB3ZDjZWnqkql5Jv0gr8cplzL9VgRXSYkIAqNci04MCkdLFkD/BfCn4MGkqaRb1QhfYqo//3INhNuy4/NoT4MqL4q607Sq6eyMF0H4EcZaRykfR5T2lfKl6AAQwL7IF/BdctEtPSgH8IC6QSY43g7vUkfw5z5t4Wh5ZM6x92nw8GSpXcN6g2EP3Qhpxq2EVjlo6l6oiB9rfBdAX/gckeMB+uP+2WUicVSQcWTmPGi2FYWpLVwF1DNOfQJpwAMweAHCXeatNwmaDizfWDUJVpVpWr/U3vlfeusaayVV5Lv6hvCDfKHjl7p0vDYHR8HCtQQ/5g6IaDnFewDSEe9wiNG2M9khyQIsqWmXiv9eqKpHiCfoTn4colEXSdk2cHhH78DCu++4+Qj3+VS9Hy7XKs=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(39860400002)(346002)(136003)(451199015)(46966006)(36840700001)(40470700004)(70586007)(70206006)(8936002)(36756003)(8676002)(44832011)(41300700001)(5660300002)(4326008)(86362001)(36860700001)(82310400005)(26005)(7696005)(6666004)(83380400001)(336012)(186003)(54906003)(47076005)(16526019)(1076003)(2616005)(426003)(110136005)(81166007)(316002)(40480700001)(40460700003)(478600001)(82740400003)(356005)(2906002)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: dj6A1mE5qrekcsJimKIAPTdb9guvfi7KLfZ/QbaJgmOHHBwjQ484uaGD/x6IzFwYK/tdu0UvkiL1GyCZWznlI9LCKK0bTC3AkkHVMDada5IfdM1so384iFYqvkboFyoqhuCs0fK9nANWex90/e6nXi+6P7rnz5bZwTwB0YhZx35odW6IDhbyOKcr8xZHkTmdh0OigAYkeCCsyXZcXIMbpKPwVOwGYKOCqszS7GfL7iXeA38tVNuWJfHv55ZCuscfDYWRrycEaRUiNUVaf0Wm3+bMYObEvaNpMAd25TgDf21JzmMwy7QEWQNEPKixC40zjBvRd/tFManuQ5U1ZDzNOMxsJjdNeIJcv/SUOohsjdyAL5TAziXDfOBnH7iJ+u3NmgQuzUhKDbdgBLckEmKmw0uKtYfy6PRdZrThaaZwUTwDq6ZPYkH2ARK0yDTzrYoTbrdFx2TVA1DpKG1uEwKHyfbd2EoL+OB8cW56ss1mPSnAN7/2vujxXZ/jnRSt3YC7pS2dItP4wL3DJ27K0qLIYGrw0X35v/ol2tIU9pgEQULNf+zZ0UafgL6OrLsZjzkF2N+kk96ibrOagQl/6KtHDjVSqVVPRFaJ0QzVLHHi7Zuqh+aRmNjD+awl1RA5M20wBgzVKiRkfuq1zWG7YrjTXsYn1lSKxY6bOH+6pRgs+8I2CFCFrKXmu1gip0+gHW4xuA1OUkn4jKWl46gTLqerP68dVPh4drpU53VG70zIu84=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(39860400002)(396003)(451199015)(36840700001)(46966006)(40470700004)(8676002)(36756003)(40460700003)(4326008)(2906002)(5660300002)(86362001)(41300700001)(36860700001)(8936002)(44832011)(7696005)(47076005)(6666004)(83380400001)(16526019)(26005)(426003)(2616005)(186003)(1076003)(336012)(54906003)(81166007)(110136005)(356005)(316002)(82310400005)(70206006)(70586007)(82740400003)(40480700001)(478600001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 17:08:57.2446
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 17:09:01.2130
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f2f6ba08-b338-4ee3-9520-08dad1633c79
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90f4e328-3a41-44ce-1f02-08dad1633ed7
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT058.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5451
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8077
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -102,55 +102,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Perry Yuan <Perry.Yuan@amd.com>
+AMD Pstate driver support another fimware based autonomous mode
+with "amd_pstate=active" added to the kernel command line.
+In autonomous mode SMU firmware decides frequencies at 1 ms timescale
+based on workload utilization, usage in other IPs, infrastructure
+limits such as power, thermals and so on.
 
-Introduce ``amd-pstate`` CPPC has two operation modes:
-* CPPC Autonomous (active) mode
-* CPPC non-autonomous (passive) mode.
-active mode and passive mode can be chosen by different kernel parameters.
-
-Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+Signed-off-by: Perry Yuan <perry.yuan@amd.com>
 ---
- Documentation/admin-guide/pm/amd-pstate.rst | 26 +++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 33ab8ec8fc2f..62744dae3c5f 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -299,8 +299,30 @@ module which supports the new AMD P-States mechanism on most of the future AMD
- platforms. The AMD P-States mechanism is the more performance and energy
- efficiency frequency management method on AMD processors.
- 
--Kernel Module Options for ``amd-pstate``
--=========================================
-+
-+AMD Pstate Driver Operation Modes
-+=================================
-+
-+``amd_pstate`` CPPC has two operation modes: CPPC Autonomous(active) mode and
-+CPPC non-autonomous(passive) mode.
-+active mode and passive mode can be chosen by different kernel parameters.
-+When in Autonomous mode, CPPC ignores requests done in the Desired Performance
-+Target register and takes into account only the values set to the Minimum requested
-+performance, Maximum requested performance, and Energy Performance Preference
-+registers. When Autonomous is disabled, it only considers the Desired Performance Target.
-+
-+Active Mode
-+------------
-+
-+``amd_pstate=active``
-+
-+This is the low-level firmware control mode which is implemented by ``amd_pstate_epp``
-+driver with ``amd_pstate=active`` passed to the kernel in the command line.
-+In this mode, ``amd_pstate_epp`` driver provides a hint to the hardware if software
-+wants to bias toward performance (0x0) or energy efficiency (0xff) to the CPPC firmware.
-+then CPPC power algorithm will calculate the runtime workload and adjust the realtime
-+cores frequency according to the power supply and thermal, core voltage and some other
-+hardware conditions.
- 
- Passive Mode
- ------------
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 42af9ca0127e..8fa0d45add03 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6970,3 +6970,10 @@
+ 			  management firmware translates the requests into actual
+ 			  hardware states (core frequency, data fabric and memory
+ 			  clocks etc.)
++			active
++			  Use amd_pstate_epp driver instace as the scaling driver,
++			  driver provides a hint to the hardware if software wants
++			  to bias toward performance (0x0) or energy efficiency (0xff)
++			  to the CPPC firmware. then CPPC power algorithm will
++			  calculate the runtime workload and adjust the realtime cores
++			  frequency.
 -- 
 2.34.1
 
