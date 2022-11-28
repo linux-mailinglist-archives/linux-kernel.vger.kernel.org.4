@@ -2,133 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2A963B0AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:03:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2820563B0B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbiK1SDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 13:03:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
+        id S231976AbiK1SHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 13:07:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232929AbiK1SDX (ORCPT
+        with ESMTP id S234027AbiK1SGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 13:03:23 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349494A9ED;
-        Mon, 28 Nov 2022 09:49:42 -0800 (PST)
-Received: from g550jk.localnet (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 40FDCD05C0;
-        Mon, 28 Nov 2022 17:49:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1669657751; bh=IqhpQLGGkiGqyy4JQ4pVzD5MqL2+L88to0Jgl2XJDko=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=pEA4Ov+5jgMkGW4lwDrMwTvJUnQH/AjHERSRnos3jRf1KWoEmOLq1GApFcU9NVHqx
-         oNQnNUg1fgqUuZpx3b0jl3NX10bRLa/R0MIcvEMO3/9XWerQnfnUIcGDFOkp/bayLM
-         lOXE9Y7ULU3PNpOFp0qMUMfusUAoTcFJmdKLImiU=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] ARM: dts: msm8974: castor: Define pm8841 regulators
-Date:   Mon, 28 Nov 2022 18:49:10 +0100
-Message-ID: <4785971.31r3eYUQgx@g550jk>
-In-Reply-To: <c6f52e13-3692-5739-eabd-550936f34bed@linaro.org>
-References: <20221121212226.321514-1-luca@z3ntu.xyz> <c6f52e13-3692-5739-eabd-550936f34bed@linaro.org>
+        Mon, 28 Nov 2022 13:06:52 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE9056EFA;
+        Mon, 28 Nov 2022 09:51:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1669657910; x=1701193910;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=CadsEG0q9KIeXpKiPUwPfa3n7odeNEMPY1wpvA775xc=;
+  b=xrz/txrE+JD16ONRVaLToihVvi+ugyfle9P9uWPqE5Q0KeUpSn/SyE7h
+   oEzCesaRqwy16gboCTF57CW5/GuF3z8qojTKSoH5uFOlU8tbI+VrAyRnR
+   fabr7fbbUUB8j5/oYU4ylbdosZ2OjXBmsmAKZx63lxdAvzKzjrENgNimu
+   I=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Nov 2022 09:51:00 -0800
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 09:51:00 -0800
+Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 28 Nov 2022 09:50:59 -0800
+Date:   Mon, 28 Nov 2022 09:50:59 -0800
+From:   Asutosh Das <quic_asutoshd@quicinc.com>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+CC:     <quic_cang@quicinc.com>, <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, <quic_nguyenb@quicinc.com>,
+        <quic_xiaosenh@quicinc.com>, <stanley.chu@mediatek.com>,
+        <eddie.huang@mediatek.com>, <daejun7.park@samsung.com>,
+        <bvanassche@acm.org>, <avri.altman@wdc.com>, <beanhuo@micron.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 04/16] ufs: core: Defer adding host to scsi if mcq is
+ supported
+Message-ID: <20221128175059.GC20677@asutoshd-linux1.qualcomm.com>
+References: <cover.1669176158.git.quic_asutoshd@quicinc.com>
+ <b75e35e1c23b428a6c55396c0fcda5ea22b4e33e.1669176158.git.quic_asutoshd@quicinc.com>
+ <20221128144222.GD62721@thinkpad>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221128144222.GD62721@thinkpad>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Montag, 21. November 2022 23:32:22 CET Konrad Dybcio wrote:
-> On 21.11.2022 22:22, Luca Weiss wrote:
-> > From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > 
-> > Define the pm8841 regulators under SMD/RPM, to allow the modem
-> > remoteproc to set the voltage during boot of the remote processor.
-> > 
-> > Entries are just copied from the Honami dts.
-> 
-> I hope it was supposed to be "identical to" and not "copied and hoped it
-> would be ok" :/
+On Mon, Nov 28 2022 at 06:42 -0800, Manivannan Sadhasivam wrote:
+>On Tue, Nov 22, 2022 at 08:10:17PM -0800, Asutosh Das wrote:
+>> If MCQ support is present, enabling it after MCQ support
+>> has been configured would require reallocating tags and memory.
+>> It would also free up the already allocated memory in
+>> Single Doorbell Mode. So defer invoking scsi_add_host() until
+>> MCQ is configured.
+>
+>Why cannot we do it for non MCQ case as well?
+>
+Hello Mani,
+Thanks for taking a look.
 
-Blame Bjorn from many years ago :P
+I don't think there was any specific reason to defer it for SDB mode.
 
-But I just double checked and in some Sony msm8974 kernel sources I have on my 
-computer (https://github.com/rcstar6696/android_kernel_sony_msm8974 branch 
-cm-14.1) all Sony devices have the same values these pm8841 regulators, none 
-have it overriden from what I could find. So should be fine.
+-asd
 
-Regards
-Luca
-
-> 
-> Maybe I'm a bit picky, but I suppose this is said in a misleading way..
-> 
-> Konrad
-> 
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > ---
-> > Changes in v2:
-> > * new patch in this series
-> > 
-> >  ...-msm8974pro-sony-xperia-shinano-castor.dts | 24 +++++++++++++++++++
-> >  1 file changed, 24 insertions(+)
-> > 
-> > diff --git
-> > a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-> > b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts index
-> > 3f45f5c5d37b..2c33f84a6e4e 100644
-> > --- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-> > +++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-> > @@ -319,6 +319,30 @@ led@7 {
-> > 
-> >  };
-> >  
-> >  &rpm_requests {
-> > 
-> > +	pm8841-regulators {
-> > +		compatible = "qcom,rpm-pm8841-regulators";
-> > +
-> > +		pm8841_s1: s1 {
-> > +			regulator-min-microvolt = <675000>;
-> > +			regulator-max-microvolt = <1050000>;
-> > +		};
-> > +
-> > +		pm8841_s2: s2 {
-> > +			regulator-min-microvolt = <500000>;
-> > +			regulator-max-microvolt = <1050000>;
-> > +		};
-> > +
-> > +		pm8841_s3: s3 {
-> > +			regulator-min-microvolt = <500000>;
-> > +			regulator-max-microvolt = <1050000>;
-> > +		};
-> > +
-> > +		pm8841_s4: s4 {
-> > +			regulator-min-microvolt = <500000>;
-> > +			regulator-max-microvolt = <1050000>;
-> > +		};
-> > +	};
-> > +
-> > 
-> >  	pm8941-regulators {
-> >  	
-> >  		compatible = "qcom,rpm-pm8941-regulators";
-
-
-
-
+>-- 
+>மணிவண்ணன் சதாசிவம்
