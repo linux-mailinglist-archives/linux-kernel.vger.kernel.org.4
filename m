@@ -2,63 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5DF963B22E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:23:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2EA63B230
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:25:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233713AbiK1TX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 14:23:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
+        id S232286AbiK1TZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 14:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233598AbiK1TXd (ORCPT
+        with ESMTP id S232187AbiK1TZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 14:23:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE1C6350;
-        Mon, 28 Nov 2022 11:23:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 888ED6141B;
-        Mon, 28 Nov 2022 19:23:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CF66C433D7;
-        Mon, 28 Nov 2022 19:23:25 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="DpYMLOrZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1669663402;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oH13CIpQ/7n5BcQUws9hK24sibfqfJzuMBXnlvB67Q4=;
-        b=DpYMLOrZ793QCRyuTlQZN8qqEqS0HrsmmXwLJXR5bz/I+2EzFAN6zgzuziiNQ1ACLVDKSU
-        xumueI67SFzmkHSLrNNqv/jNvMERoZYAVRw4+2heDbLejJ7rYRWj3zOZBbIJLj9uRcbO1g
-        go7AJhYWsDuGtykFsUQekMM4/S4kL3M=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b5fc3b82 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 28 Nov 2022 19:23:22 +0000 (UTC)
-Date:   Mon, 28 Nov 2022 20:23:16 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
-        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Samuel Neves <sneves@dei.uc.pt>
-Subject: Re: [PATCH v8 3/3] x86: vdso: Wire up getrandom() vDSO implementation
-Message-ID: <Y4UKpP7/NOwPIkYe@zx2c4.com>
-References: <20221128111829.2477505-1-Jason@zx2c4.com>
- <20221128111829.2477505-4-Jason@zx2c4.com>
- <8f9326ba-f879-4b9e-9e5d-b65cad7cd726@app.fastmail.com>
+        Mon, 28 Nov 2022 14:25:10 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEE3B94
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:25:09 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id c14so4122440qvq.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:25:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zvlGneR6kzy7LLRum6bYtymNr7LK9Ap/NO8h/mpmn5A=;
+        b=N1AywFe8X4kol9Wjs+TbFySd5wbHHGBg0dGNKuGpzBnHF8k2xMmIFpg2tieNI/BuLE
+         WAMIAdUej/+4aWMY8/ahUnc4KD2kbckh2VBSYInQspSBhZ6MIRztkTVMEbHz36I2cqvS
+         MC7siKZRMFw/RxUU9qeftLwiNg7buWzSCPzApq6aqrZigQDeXRLUofPOr6O99o/K9kZh
+         vBxEyp7TlT+cDzPmUsCLchecZmm7SY3UKwS+QU/sveTD4Zi9uUIisfNTdQJJsTtUAs8w
+         /MKH1qVOYUaML9FZ3H1donWEHlIzp3G5fb2g6zZlBmKs/pUfqmAD9TZBciBxMW08r9X0
+         jL1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zvlGneR6kzy7LLRum6bYtymNr7LK9Ap/NO8h/mpmn5A=;
+        b=ZEQbhCJVytQE+1gbjzLj1eBhRCC5stXoUoK8mBDm2vXyjzmqycWismFRLbjfbFplZD
+         S7Mdl+UO8bXTSoObSYt8SbAmFRNOAX0nGYDEMcEfelUpqO2LvUE7I1qZQ04q8SKFMTmK
+         98YwGFeq9HBUA8mmdGcUZobFcq2CzY8uZjhurvMJ0eQgUZ/F4Zn8QblBIMvfvxSgVR56
+         SvbWpxS1BRIxWILw+Pfj5IyOJQH2gjUNBw0/nPiGMmSVh0H+qQdLvf+7V3s/vwSHz5gf
+         /tWBWOFWFBf1EJMJkiBQce8UHnqgs6IM+FvI4A8Ugfvvk/SrTjWlY0u8voP1IGMfB4eZ
+         y0qg==
+X-Gm-Message-State: ANoB5pnrEo/9PbM+pBTQGZc0i6jvwPuTU8JFmwOE12M9VDEv6REYArdg
+        GQCeiw4TkGx9xsE9cWJCOzNESA==
+X-Google-Smtp-Source: AA0mqf4HeEZ298blJ9FGizPTK79ASHDzBVPa7vr9+/D9RtruYFStFQGWUuBeOdsR15jOaT4JTwYzjw==
+X-Received: by 2002:ad4:57ca:0:b0:4bb:6354:8cbb with SMTP id y10-20020ad457ca000000b004bb63548cbbmr48371421qvx.91.1669663508268;
+        Mon, 28 Nov 2022 11:25:08 -0800 (PST)
+Received: from localhost (2603-7000-0c01-2716-9175-2920-760a-79fa.res6.spectrum.com. [2603:7000:c01:2716:9175:2920:760a:79fa])
+        by smtp.gmail.com with ESMTPSA id r139-20020a37a891000000b006e42a8e9f9bsm8832544qke.121.2022.11.28.11.25.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 11:25:07 -0800 (PST)
+Date:   Mon, 28 Nov 2022 14:25:06 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, minchan@kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: Re: [PATCH v7 4/6] zsmalloc: Add a LRU to zs_pool to keep track of
+ zspages in LRU order
+Message-ID: <Y4ULEjoXC50I7Ty8@cmpxchg.org>
+References: <20221128191616.1261026-1-nphamcs@gmail.com>
+ <20221128191616.1261026-5-nphamcs@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8f9326ba-f879-4b9e-9e5d-b65cad7cd726@app.fastmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221128191616.1261026-5-nphamcs@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,53 +74,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
-
-On Mon, Nov 28, 2022 at 08:18:12PM +0100, Arnd Bergmann wrote:
-> On Mon, Nov 28, 2022, at 12:18, Jason A. Donenfeld wrote:
-> > Hook up the generic vDSO implementation to the x86 vDSO data page. Since
-> > the existing vDSO infrastructure is heavily based on the timekeeping
-> > functionality, which works over arrays of bases, a new macro is
-> > introduced for vvars that are not arrays.
-> >
-> > Also enable the vgetrandom_alloc() syscall, which the vDSO
-> > implementation relies on.
-> >
-> > The vDSO function requires a ChaCha20 implementation that does not write
-> > to the stack, yet can still do an entire ChaCha20 permutation, so
-> > provide this using SSE2, since this is userland code that must work on
-> > all x86-64 processors.
-> >
-> > Reviewed-by: Samuel Neves <sneves@dei.uc.pt> # for vgetrandom-chacha.S
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > ---
-> >  arch/x86/Kconfig                        |   1 +
-> >  arch/x86/entry/syscalls/syscall_64.tbl  |   1 +
+On Mon, Nov 28, 2022 at 11:16:13AM -0800, Nhat Pham wrote:
+> This helps determines the coldest zspages as candidates for writeback.
 > 
-> I see that this enables the syscall in x86-64, while patch 1
-> adds it to the eight architecures that use 
-> include/uapi/asm-generic/unistd.h (with the __ARCH_WANT_*
-> guard at the moment, but you already said that will be removed)
-> 
-> I think ideally the syscall.tbl and unistd.h changes should be done
-> in one patch for all architectures that doesn't mix it with
-> any other changes. In particular I think it should be separate
-> from the vdso changes, but could be in the patch that implements
-> the syscall.
+> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
 
-That's more or less how v7 was, but Thomas thought the x86 stuff should
-be separate. So for v8, the organization is:
-
-1) generic syscall
-2) generic vdso
-3) x86 wiring
-
-The primary advantage is that future archs wanting to add this now can
-just look at commit (3) only, and make a similar commit for that new
-arch.
-
-If you think a different organization outweighs that advantage, can you
-spell out what division of patches you want, and I'll do that for v9?
-Or maybe this v8 is okay?
-
-Jason
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
