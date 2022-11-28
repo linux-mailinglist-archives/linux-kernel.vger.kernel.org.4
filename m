@@ -2,84 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A5A0639EAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB38F639EAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiK1BMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 20:12:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35290 "EHLO
+        id S229631AbiK1BPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 20:15:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiK1BMr (ORCPT
+        with ESMTP id S229504AbiK1BPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 20:12:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD7F63BB;
-        Sun, 27 Nov 2022 17:12:44 -0800 (PST)
+        Sun, 27 Nov 2022 20:15:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA1463C1;
+        Sun, 27 Nov 2022 17:15:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8021360F4E;
-        Mon, 28 Nov 2022 01:12:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 208F2C433B5;
-        Mon, 28 Nov 2022 01:12:43 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="nzbuDLVE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1669597960;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1OJzdibFjOZy7mWFF2eT9wN+vFZkU1CupWir6+Z42M4=;
-        b=nzbuDLVE+zOn2qe3+1r+MtwspxrerCAqOZ1spt1UTDMFImpw8w3DR4ZOnn5YewvQmUpU0A
-        F9raCn/IpptZasXMJbQ4De9U04U0fUVS79vPJieRgeyY/HJpq9bCTzf5CoU0WwA76npu+0
-        84uw37NWgEJv7ZJKavS7Xizd0oo/c7c=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fde10b80 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 28 Nov 2022 01:12:40 +0000 (UTC)
-Date:   Mon, 28 Nov 2022 02:12:38 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Matthew Garrett <mjg59@srcf.ucam.org>
-Cc:     linux-efi@vger.kernel.org, linux-crypto@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        ardb@kernel.org
-Subject: Re: [PATCH v3 2/5] efi: stub: use random seed from EFI variable
-Message-ID: <Y4QLBnoJGUoqwo4p@zx2c4.com>
-References: <20221122020404.3476063-1-Jason@zx2c4.com>
- <20221122020404.3476063-3-Jason@zx2c4.com>
- <20221127211244.GB32253@srcf.ucam.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4837B80B42;
+        Mon, 28 Nov 2022 01:14:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED66DC433D6;
+        Mon, 28 Nov 2022 01:14:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669598097;
+        bh=c0qMKTEcqXedIwJS4OLE8R5q7iGVfm98yENhYrrVEIE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lqEcxi3VHqUhzqI/Ce6AzwnTSLpQYfaQ7re7csCtVWdY4IU6ed5ZqOJaDB0Hky0L6
+         Ri4eJRZVmM+n9bxUW+mXxJGWrEiOm6iQkA/RENjTMJlaeV+FaDfg3oCP0iJTtIqARP
+         0mrQG9mVhpmVcvZwDClfQQouwJ/1s5mD/Z0hhHbRJAH7XxuxVpRqBBSWP1SQ9E+hyj
+         JVdxEf399wmLHKnf/lB7y1Rx9y5qhJbjUXys36lRcirL/hU9JaioiiR2sr5aF8tsDC
+         0CWsunx1Wa8F0qMCqoySfabx7ByvHOsUh0pzpBir/dovLAOJ+rzySXxbwuQElOcDq3
+         vDIBv9mlSHQCA==
+Date:   Mon, 28 Nov 2022 03:14:53 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Huewe <peterhuewe@gmx.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 001/606] tpm: st33zp24: Convert to Convert to i2c's
+ .probe_new()
+Message-ID: <Y4QLjYWvqYQUtohO@kernel.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-2-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221127211244.GB32253@srcf.ucam.org>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221118224540.619276-2-uwe@kleine-koenig.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Sun, Nov 27, 2022 at 09:12:44PM +0000, Matthew Garrett wrote:
-> On Tue, Nov 22, 2022 at 03:04:01AM +0100, Jason A. Donenfeld wrote:
+On Fri, Nov 18, 2022 at 11:35:35PM +0100, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > 
-> > +		 * We delete the seed here, and /hope/ that this causes EFI to
-> > +		 * also zero out its representation on disk. This is somewhat
+> The probe function doesn't make use of the i2c_device_id * parameter so it
+> can be trivially converted.
 > 
-> Several implementations I've worked with simply append a deletion marker 
-> or append a new variable value until the variable store fills up 
-> entirely, at which point a garbage collection event is either run or 
-> scheduled for the next reboot. The spec doesn't define how this is 
-> handled so unfortunately I don't think there's any way to get a pony 
-> here.
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/char/tpm/st33zp24/i2c.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+> index 614c7d8ed84f..0cd614933b4a 100644
+> --- a/drivers/char/tpm/st33zp24/i2c.c
+> +++ b/drivers/char/tpm/st33zp24/i2c.c
+> @@ -101,8 +101,7 @@ static const struct st33zp24_phy_ops i2c_phy_ops = {
+>   * @return: 0 in case of success.
+>   *	 -1 in other case.
+>   */
+> -static int st33zp24_i2c_probe(struct i2c_client *client,
+> -			      const struct i2c_device_id *id)
+> +static int st33zp24_i2c_probe(struct i2c_client *client)
+>  {
+>  	struct st33zp24_i2c_phy *phy;
+>  
+> @@ -167,7 +166,7 @@ static struct i2c_driver st33zp24_i2c_driver = {
+>  		.of_match_table = of_match_ptr(of_st33zp24_i2c_match),
+>  		.acpi_match_table = ACPI_PTR(st33zp24_i2c_acpi_match),
+>  	},
+> -	.probe = st33zp24_i2c_probe,
+> +	.probe_new = st33zp24_i2c_probe,
+>  	.remove = st33zp24_i2c_remove,
+>  	.id_table = st33zp24_i2c_id
+>  };
+> -- 
+> 2.38.1
+> 
 
-Yea this is a bummer. During my first attempt at this, I actually
-overwrote the whole thing with zeros and then deleted it. But Ard
-pointed out that this doesn't make a difference anyway. But, as it turns
-out, that's more or less the same thing that happens with seed files on
-SSDs (nobody calls fstrim after overwriting a seed file). So at the very
-least, it's no worse?
+Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Jason
+BR, Jarkko
