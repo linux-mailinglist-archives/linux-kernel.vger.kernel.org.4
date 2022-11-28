@@ -2,110 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B4563AA31
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1533663AA32
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbiK1N42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:56:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52834 "EHLO
+        id S232223AbiK1N4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:56:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbiK1N4R (ORCPT
+        with ESMTP id S232117AbiK1N4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 08:56:17 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00B3FD9
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:56:14 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id b21so10198960plc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:56:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EN7rQQJkZzGKEVRkng3QEGcqHp0wQ4sozNyGRC6tD9w=;
-        b=lZ2i6PZY8eyhSsYyjh+6s0/zQ9/Vo5vtrWFoEW6ECVeZX4emyOz/m78YMnU67H6nky
-         jvR9VAX6So1YT6twa/x4ODb9WhBUPTubbTAn3594Ee6GrTcrH2730TOLcqbvRkGBhXVN
-         scbhIYD5DtEzyPF5/5zg1dU0vN4OYbImSS6Gc9yTO4e654DhB/3xywxoBsCRZuJVrbrS
-         a0hZONlpgUDOxz3VGCVh7Er7e2AYLYdaKH/q4H5vs/q9zaWcecAnO9BbgVjFx5XDbm3+
-         z3l9UEwylLYWMwrPsP26ctDFOc6GCvCxpGjLIU12Gclz9d8Ye6bKrQ0C9V9hLUO/dMeQ
-         +VWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=EN7rQQJkZzGKEVRkng3QEGcqHp0wQ4sozNyGRC6tD9w=;
-        b=uqw5wta01tF31uynEQYF06ffnGJreO5NE7xdlh9OCYckVaVkVOpMjPfVWkL0pRREio
-         6zZ9zHkoMEhTxBZkkFMFa2WSipwHqfvN54DEXLRvnvGc6gDyGW5zhjPQ4xRmr9ymfm4u
-         DuUor459NeSZ4o68eKtiIKipK2c7LJupPlXNRudHlWXRFmGkM0c9w+jnX5RkIFbUhkC5
-         v5qD3rWnNVuj/wJ2xezxbs+cQ5xkzObAMt2D9xea/FSdFton+PaNBXiMMVTgb2NG2m4H
-         gf4Nz1SXoLFk03RU/5D+FUzJizk4cb5NkKf32iJT9su89VG7rDhhhov5NFEWRHqHEWHr
-         +R1w==
-X-Gm-Message-State: ANoB5pl0r2X6HgQXZnOxC821hWschNaEuj8LsuJAWbyOzdxbU5XxPzIW
-        CIDYX24g8np+SodkAzIaHm6rjA==
-X-Google-Smtp-Source: AA0mqf4sjfA9knsCcA5y2f2dZ75SzSmtPB28mKVwtEXzFIdeq4+vIwlvPJsPzGmlyJEbi5cz5RpW1g==
-X-Received: by 2002:a17:90a:9904:b0:213:6442:232a with SMTP id b4-20020a17090a990400b002136442232amr61073250pjp.117.1669643774308;
-        Mon, 28 Nov 2022 05:56:14 -0800 (PST)
-Received: from [10.255.134.244] ([139.177.225.246])
-        by smtp.gmail.com with ESMTPSA id b4-20020a170902d50400b001869ba04c83sm8873745plg.245.2022.11.28.05.56.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 05:56:14 -0800 (PST)
-Message-ID: <042ebc25-f9ab-b407-033b-86d6fe5fda98@bytedance.com>
-Date:   Mon, 28 Nov 2022 21:56:10 +0800
+        Mon, 28 Nov 2022 08:56:18 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FFEE39
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:56:15 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8E41121B50;
+        Mon, 28 Nov 2022 13:56:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669643774; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VkhskPyCJwgUEV7RLLLQCKd7o+qvCH5bVcDsV0x8RN4=;
+        b=stUMV2hVLFmX0527MYCMl2ORlgvUzK9vqo91/bkXQ6AT+o1b6NHWzUqJb6It2t5r9Wjx44
+        OixFQCmSGfeEHBDANOiqPiCvl/IvT2Jfb/uzwTyclQvJzfAXiSMWVfnE5rnGXU82J9Px40
+        3iDlTQ97JuE44AeKlcPAUB+Z3fXXPqo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669643774;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VkhskPyCJwgUEV7RLLLQCKd7o+qvCH5bVcDsV0x8RN4=;
+        b=zH0Xx+ZLXAC1KWRoYGbsjKoua76/o4QxC+cCJnjBVBIErgefQpBNv/ZF+2k0cq+JJXErMN
+        CyzYJjtW5hAG10Cg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 521CC1326E;
+        Mon, 28 Nov 2022 13:56:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 5H9dEv69hGN0FQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Mon, 28 Nov 2022 13:56:14 +0000
+Date:   Mon, 28 Nov 2022 14:56:12 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: Re: [PATCH] ASoC: rsnd: Drop obsolete dependency on COMPILE_TEST
+Message-ID: <20221128145612.74ff3d25@endymion.delvare>
+In-Reply-To: <Y4Sqn0xOP4R/fl9P@sirena.org.uk>
+References: <20221127193441.0b54484d@endymion.delvare>
+        <Y4Sqn0xOP4R/fl9P@sirena.org.uk>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [Phishing Risk] [External] [PATCH v2 2/2] erofs: enable large
- folios for fscache mode
-To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20221128025011.36352-1-jefflexu@linux.alibaba.com>
- <20221128025011.36352-3-jefflexu@linux.alibaba.com>
-From:   Jia Zhu <zhujia.zj@bytedance.com>
-In-Reply-To: <20221128025011.36352-3-jefflexu@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Mark,
 
-
-在 2022/11/28 10:50, Jingbo Xu 写道:
-> Enable large folios for fscache mode.  Enable this feature for
-> non-compressed format for now, until the compression part supports large
-> folios later.
+On Mon, 28 Nov 2022 12:33:35 +0000, Mark Brown wrote:
+> On Sun, Nov 27, 2022 at 07:34:41PM +0100, Jean Delvare wrote:
+> > It is actually better to always build such drivers with OF enabled,
+> > so that the test builds are closer to how each driver will actually be
+> > built on its intended target. Building them without OF may not test
+> > much as the compiler will optimize out potentially large parts of the
+> > code. In the worst case, this could even pop false positive warnings.
+> > Dropping COMPILE_TEST here improves the quality of our testing and
+> > avoids wasting time on non-existent issues.  
 > 
-> One thing worth noting is that, the feature is not enabled for the meta
-> data routine since meta inodes don't need large folios for now, nor do
-> they support readahead yet.
-> 
-> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+> As ever building without OF does not preclude building with OF.
 
-Reviewed-by: Jia Zhu <zhujia.zj@bytedance.com>
+I'm sorry, I'm not sure I understand what point you are trying to make
+here.
 
-Thanks.
-> ---
->   fs/erofs/inode.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
-> index e457b8a59ee7..85932086d23f 100644
-> --- a/fs/erofs/inode.c
-> +++ b/fs/erofs/inode.c
-> @@ -295,8 +295,7 @@ static int erofs_fill_inode(struct inode *inode)
->   		goto out_unlock;
->   	}
->   	inode->i_mapping->a_ops = &erofs_raw_access_aops;
-> -	if (!erofs_is_fscache_mode(inode->i_sb))
-> -		mapping_set_large_folios(inode->i_mapping);
-> +	mapping_set_large_folios(inode->i_mapping);
->   #ifdef CONFIG_EROFS_FS_ONDEMAND
->   	if (erofs_is_fscache_mode(inode->i_sb))
->   		inode->i_mapping->a_ops = &erofs_fscache_access_aops;
+Of course you can build a kernel with and without OF, and without my
+patch, you could build the driver with and without OF. My point is that
+there is no value in allowing that.
+
+There are 2 use cases for COMPILE_TEST. The first use case is kernel
+developers who make changes to a driver and want to be able to
+test-build it. Now they can just enable OF and they will be able to
+test-build the driver (and a better version of it, as explained in my
+patch description). It is no different from enabling I2C if you need to
+test-build an I2C driver, or enabling SPI if you need to test-build an
+SPI driver, etc.
+
+The second use case is the compilation farms. These will typically run
+pre-defined real kernel configurations or allmodconfig or randconfig.
+The first two options are not really affected by this change, only
+randconfig is.
+
+For randconfig, the limiting factor is the build power of the farm. So,
+in a way, yes building without OF does preclude building with OF,
+because you can test only one combination of options at once. Whenever
+you build your driver without OF, you are wasting an opportunity to
+build it with OF instead, which would test the code as it will actually
+be used on its intended target, and thus is a better test.
+
+You may argue that statistically, randconfig will select the driver
+more often if it depends on OF || COMPILE_TEST rather than just OF.
+That's true, but it's a matter of quantity versus quality. Would you
+rather test build the code twice in its crippled form, which may
+trigger false-positive warnings or hide actual warnings, or just once
+in its proper form, where all warnings and build failures are real? I
+definitely believe the latter is a better use of our resources.
+
+Thanks,
+-- 
+Jean Delvare
+SUSE L3 Support
