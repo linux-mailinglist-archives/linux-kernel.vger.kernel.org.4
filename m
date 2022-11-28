@@ -2,90 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78D4463A739
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 932DB63A740
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:35:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbiK1Lav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 06:30:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47410 "EHLO
+        id S230305AbiK1LfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 06:35:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiK1Lar (ORCPT
+        with ESMTP id S230036AbiK1LfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 06:30:47 -0500
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4110264D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:30:46 -0800 (PST)
-Received: by mail-pl1-f181.google.com with SMTP id k7so9834843pll.6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:30:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RmFO5OJ3cd4rLP1Vd2+1lbrtn+fA46/oGhT7pixxOn8=;
-        b=qoq/ZFhkKT9gZ2CXzkV1QjlGz4yVmtwO3S97reYw3ghSipeHKaWBeoA09U04Wbr2qP
-         7G2EuZ4g0+UFsxFR4lP14GyzK4NQdd2eT9psRJFqu8x58jR6ZXM/FdKqQODUCBFMbj08
-         EiuKCwkl9WGvOExsPYUrRmjAfloak08E0BmfLWdqeJzAckGKM1GhzyHeFKmiHKSXI2Qc
-         dbCWKMw6NBdSlTGAyZm1ObCJzR1Loqv2YddMGA3aZrl6ndcLd79vZUCpwWrPl7D3pbHg
-         iV70+S/LgsFVsTb9RgMIayczo/+hYmuvIX6vt4v4G6nw/TCjEdDoXJWeqjepeLMZXUgL
-         WpGA==
-X-Gm-Message-State: ANoB5plMT5Rt2ooCRSnk3pJQ2OkwFN1z6sjFbkXhL4OAmWl0Imq5Cfo0
-        U8xIt7ACWHAWWqCF0Xd1+yZKTnSa/KtH5QmJ46ysXf37X2Pkbw==
-X-Google-Smtp-Source: AA0mqf6pr9VkEctdEd50192SSHk7BNGy7brh38vcW49MrSZc4FoxwDHJsas6GXoEIYCLPHazH12pRLOsbl0pi/NPWHE=
-X-Received: by 2002:a17:902:aa04:b0:17f:6fee:3334 with SMTP id
- be4-20020a170902aa0400b0017f6fee3334mr31752930plb.10.1669635046224; Mon, 28
- Nov 2022 03:30:46 -0800 (PST)
+        Mon, 28 Nov 2022 06:35:17 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28154D2DD
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:35:16 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 82A7441A36;
+        Mon, 28 Nov 2022 11:35:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1669635313; bh=xEcdu2K4hzKmkxDaxzkREF8TV43gjY/bcXwdVMPfj68=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=PZmkBXVrpKuTJU1t5EVAMYQhiS9ett2X1MmRMlV70pD8tl+mngDQjbUG/s4xwC/8y
+         Y5VedcKvLHHP895+VJXn1bkLfaT9vguZ/02IyLnhg9snhAh4JIEt9D1GWGtDYu/DIU
+         QtjQF6GbXVkkjBQ+aDNv5AocZ9Nn4AgP12NmGUkrFMyJ1pC17k928vrTe7FquHP6vL
+         cbjp1qKuQlaKK+0lLNKvdvGbHiLzEPiIzIQlHSgCmNGtegODAr2Og9UsDVbdp3sXy6
+         VN/uAOo/MSKFZOSD2uN625+YRRYG8xxLW9ZGrvqnxtyq6QtiWDDPJfQc3YKH3wHr3f
+         x1toAkfhdw6Gg==
+Message-ID: <d2ff74cc-9835-1573-73ca-d5eebf8f824c@marcan.st>
+Date:   Mon, 28 Nov 2022 20:35:08 +0900
 MIME-Version: 1.0
-References: <20221128091506.gp4l6klznqhigjxv@box.shutemov.name>
- <20221128101117.3614401-1-mailhol.vincent@wanadoo.fr> <20221128111112.dzavip4eqqgpyrai@box.shutemov.name>
-In-Reply-To: <20221128111112.dzavip4eqqgpyrai@box.shutemov.name>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 28 Nov 2022 20:30:35 +0900
-Message-ID: <CAMZ6RqJ0EgbLcz97ujqEzF1MBsH045W0Cu8mMuR0WCx_cTemCQ@mail.gmail.com>
-Subject: Re: [PATCH] x86/asm: Remove unused COMPILE_OFFSETS macro from asm-offsets.c
-To:     kirill.shutemov@linux.intel.com
-Cc:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        jpoimboe@kernel.org, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com, rostedt@goodmis.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        tglx@linutronix.de, viro@zeniv.linux.org.uk, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] soc: apple: sart: Stop casting function pointer
+ signatures
+Content-Language: en-US
+To:     Sven Peter <sven@svenpeter.dev>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+References: <20221104153902.78999-1-sven@svenpeter.dev>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <20221104153902.78999-1-sven@svenpeter.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon. 28 Nov. 2022 at 20:11, <kirill.shutemov@linux.intel.com> wrote:
-> On Mon, Nov 28, 2022 at 07:11:17PM +0900, Vincent Mailhol wrote:
-> > On Mon, 28 Nov 2022 12:15:06 +0300, Kirill A. Shutemov wrote:
-> > > On Sun, Nov 27, 2022 at 03:23:35PM +0900, Vincent Mailhol wrote:
-> > > > Following [1], the macro COMPILE_OFFSETS becomes unused:
-> > >
-> > > Really? I see #ifdef COMPILE_OFFSETS in ftrace.h. Hm?
-> > >
-> > > Have you tested your patch with CONFIG_FTRACE_SYSCALLS=y and
-> > > CONFIG_IA32_EMULATION=y?
-> >
-> > Even if I activate those two configurations, the compiler still
-> > tells me it is unused:
-> >
-> >   $ grep -E "CONFIG_FTRACE_SYSCALLS|CONFIG_IA32_EMULATION" .config
-> >   CONFIG_IA32_EMULATION=y
-> >   CONFIG_FTRACE_SYSCALLS=y
-> >
-> >   $ make W=2 arch/x86/kernel/asm-offsets.o
-> >   <...>
-> >   arch/x86/kernel/asm-offsets.c:7: warning: macro "COMPILE_OFFSETS" is not used [-Wunused-macros]
-> >   <...>
->
-> If you are sure <asm/ftrace.h> is never included from asm-offsets.c,
-> remove #ifndef COMPILE_OFFSETS too.
+On 05/11/2022 00.39, Sven Peter wrote:
+> Fixes: b170143ae111 ("soc: apple: Add SART driver")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> ---
+>  drivers/soc/apple/sart.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/soc/apple/sart.c b/drivers/soc/apple/sart.c
+> index 83804b16ad03..afa111736899 100644
+> --- a/drivers/soc/apple/sart.c
+> +++ b/drivers/soc/apple/sart.c
+> @@ -164,6 +164,11 @@ static int apple_sart_probe(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> +static void apple_sart_put_device(void *dev)
+> +{
+> +	put_device(dev);
+> +}
+> +
+>  struct apple_sart *devm_apple_sart_get(struct device *dev)
+>  {
+>  	struct device_node *sart_node;
+> @@ -187,7 +192,7 @@ struct apple_sart *devm_apple_sart_get(struct device *dev)
+>  		return ERR_PTR(-EPROBE_DEFER);
+>  	}
+>  
+> -	ret = devm_add_action_or_reset(dev, (void (*)(void *))put_device,
+> +	ret = devm_add_action_or_reset(dev, apple_sart_put_device,
+>  				       &sart_pdev->dev);
+>  	if (ret)
+>  		return ERR_PTR(ret);
 
-It is never included from asm-offsets.c but it is still used by
-kvm-asm-offsets.c:
-https://elixir.bootlin.com/linux/v6.1-rc7/source/arch/x86/kvm/kvm-asm-offsets.c#L7
+Applied to asahi-soc/soc, thanks!
+
+- Hector
