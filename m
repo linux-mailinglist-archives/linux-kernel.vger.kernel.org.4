@@ -2,166 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B960B63B23F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B007D63B249
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233526AbiK1TaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 14:30:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
+        id S233617AbiK1TbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 14:31:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbiK1TaD (ORCPT
+        with ESMTP id S231645AbiK1TbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 14:30:03 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3722CC85
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:30:02 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id c15so7425243qtw.8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:30:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NjZkaDVMKTzaqiyH90BF4ExxRXxg/Ij7l2eo+wL7k7Y=;
-        b=4sZ9GwIPbixXbiOcbczJccyJKxuY4hJWzWuvxuGary9Gih0Yd47slt4PVVR+bL+8xU
-         EE8X/PNxZhmH0qtfoAFqCtbwz6MSXHB+mc2Lkp9scdzFAmoqiDuBZrZ7WZxUTncLLPQo
-         JVBdZiX0a4ApgjgZRM6xfCvNFAh9ogDntT9tFjoV9A9J3JoZq0pFZJzjowKH0SXCy2cn
-         YyvDiTO64Ac/pl2nhWQJHpjXXlkc8/Bx/ZgKoJHbemSgmFI521Tt+ViY40bpbtHMvmOt
-         vo231e2gYqhh39oq8axDCuFQvnFPrQHDK6B7DN++RlGH7QCDbadARLNJfDhHsbLYYEqm
-         U8Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NjZkaDVMKTzaqiyH90BF4ExxRXxg/Ij7l2eo+wL7k7Y=;
-        b=IIwqdh89w/h2bHuN0piFr2QEpr4HwB2B4ZUzqeYCB843wySl1ukG5Yzf/N9Zjc+jkI
-         5pyMEPIFsK3U2iXP1HxvDgVFRNoc0N8TpPqdZLAo+9jIvsiDf7iyOMquEfvAJWQgujRH
-         hoFBdm7k10ZnjLCEEZZJ19ndho56SD4Lm6LpkKJodM3gQLwwo93VSB8YAGaGM9df4oLY
-         iu8z4RtP4stLwO3KsHALEVb+PHNsp9ax1kksoqysWa7vugQgzJPdmBXaU0vpB7cfsNY0
-         FO3sTSIGJYmiQ7CGv3QxGQ0fkEXt2kn+A/X4TRHWJguj6P+O11mUu+DUEMHNoE/EDCEO
-         HnVw==
-X-Gm-Message-State: ANoB5pnURLYI3PR+fH+sG4xU73cs1iATLb5P782EH67m6iDc9dSJWai4
-        20IEZdZ+CkIS7HX1Fjw08Z/4Rg==
-X-Google-Smtp-Source: AA0mqf4KT9Uqgg3efFvZhSFMLETz2zg9NQtK+X+Wrve6HgJeaQdUhf5SaOkJY4LErxvJF5p+IlIn9w==
-X-Received: by 2002:ac8:4d4e:0:b0:3a6:5afc:9a20 with SMTP id x14-20020ac84d4e000000b003a65afc9a20mr26215221qtv.183.1669663801991;
-        Mon, 28 Nov 2022 11:30:01 -0800 (PST)
-Received: from smtpclient.apple (172-125-78-211.lightspeed.sntcca.sbcglobal.net. [172.125.78.211])
-        by smtp.gmail.com with ESMTPSA id a195-20020ae9e8cc000000b006fb3884e10bsm8822247qkg.24.2022.11.28.11.30.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 28 Nov 2022 11:30:00 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH] hfs: Fix OOB Write in hfs_asc2mac
-From:   Viacheslav Dubeyko <slava@dubeyko.com>
-In-Reply-To: <20221126043612.853428-1-zhangpeng362@huawei.com>
-Date:   Mon, 28 Nov 2022 11:29:57 -0800
-Cc:     zippel@linux-m68k.org, akpm@osdl.org,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, sunnanyong@huawei.com,
-        wangkefeng.wang@huawei.com,
-        syzbot+dc3b1cf9111ab5fe98e7@syzkaller.appspotmail.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <9F97B7A6-9E20-4D70-BA79-8301D80DF9DB@dubeyko.com>
-References: <20221126043612.853428-1-zhangpeng362@huawei.com>
-To:     Peng Zhang <zhangpeng362@huawei.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 28 Nov 2022 14:31:17 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD842CC85;
+        Mon, 28 Nov 2022 11:31:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=79D1N/wvlSFl18BNsKU0k/is/jrD25t41qoW9u3UtNQ=; b=QYDjpAPHhLoF6BlYY/NN/zcF72
+        FetOordi88yKv+vvVBN5IdCIWm8y6lE5krrM28WdRwivYaIvy1nvRVdf801nGkEA8sBAmv83H1/LI
+        HOzFGfTkz7jkUHeTUx7KAHWhKyPUv4Cc+4t02ITyJlRKeF49A3vCVsFs4FJtX6xyZTbrToOuF4TtQ
+        KT35xJLL+dcnCungBjAXZk+yxgX0ic3rDnT0XWLE56wnO0v73HcrBbFAcR0SEdGg/zBcwH2yuTDho
+        2vs7/Wuf1cE6b56WFrBYOr4cruTInuSO52wu5oHjKop41y4S4aa9l/SCj8ydRB1XFGCS4ds3xW3eP
+        DoEXCVUg==;
+Received: from [177.34.169.227] (helo=[192.168.0.8])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ozjq1-00AbB7-Eo; Mon, 28 Nov 2022 20:30:45 +0100
+Message-ID: <264ee4eb-4385-d9b2-bcfa-fcc5dc27f611@igalia.com>
+Date:   Mon, 28 Nov 2022 16:30:37 -0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 02/17] drm/tests: helpers: Document
+ drm_kunit_device_init()
+To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-media@vger.kernel.org
+References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
+ <20221123-rpi-kunit-tests-v2-2-efe5ed518b63@cerno.tech>
+Content-Language: en-US
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v2-2-efe5ed518b63@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/28/22 11:53, Maxime Ripard wrote:
+> Commit 44a3928324e9 ("drm/tests: Add Kunit Helpers") introduced the
+> drm_kunit_device_init() function but didn't document it properly. Add
+> that documentation.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
+Just a minor nit on naming, besides that:
 
-> On Nov 25, 2022, at 8:36 PM, Peng Zhang <zhangpeng362@huawei.com> =
-wrote:
->=20
-> From: ZhangPeng <zhangpeng362@huawei.com>
->=20
-> Syzbot reported a OOB Write bug:
->=20
-> loop0: detected capacity change from 0 to 64
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> BUG: KASAN: slab-out-of-bounds in hfs_asc2mac+0x467/0x9a0
-> fs/hfs/trans.c:133
-> Write of size 1 at addr ffff88801848314e by task syz-executor391/3632
->=20
-> Call Trace:
-> <TASK>
-> __dump_stack lib/dump_stack.c:88 [inline]
-> dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
-> print_address_description+0x74/0x340 mm/kasan/report.c:284
-> print_report+0x107/0x1f0 mm/kasan/report.c:395
-> kasan_report+0xcd/0x100 mm/kasan/report.c:495
-> hfs_asc2mac+0x467/0x9a0 fs/hfs/trans.c:133
-> hfs_cat_build_key+0x92/0x170 fs/hfs/catalog.c:28
-> hfs_lookup+0x1ab/0x2c0 fs/hfs/dir.c:31
-> lookup_open fs/namei.c:3391 [inline]
-> open_last_lookups fs/namei.c:3481 [inline]
-> path_openat+0x10e6/0x2df0 fs/namei.c:3710
-> do_filp_open+0x264/0x4f0 fs/namei.c:3740
->=20
-> If in->len is much larger than HFS_NAMELEN(31) which is the maximum
-> length of an HFS filename, a OOB Write could occur in hfs_asc2mac(). =
-In
-> that case, when the dst reaches the boundary, the srclen is still
-> greater than 0, which causes a OOB Write.
-> Fix this by adding a Check on dstlen before Writing to dst address.
->=20
-> Fixes: 328b92278650 ("[PATCH] hfs: NLS support")
-> Reported-by: syzbot+dc3b1cf9111ab5fe98e7@syzkaller.appspotmail.com
-> Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
+
 > ---
-> fs/hfs/trans.c | 2 ++
-> 1 file changed, 2 insertions(+)
->=20
-> diff --git a/fs/hfs/trans.c b/fs/hfs/trans.c
-> index 39f5e343bf4d..886158db07b3 100644
-> --- a/fs/hfs/trans.c
-> +++ b/fs/hfs/trans.c
-> @@ -130,6 +130,8 @@ void hfs_asc2mac(struct super_block *sb, struct =
-hfs_name *out, const struct qstr
-> 				dst +=3D size;
-> 				dstlen -=3D size;
-> 			} else {
-> +				if (dstlen =3D=3D 0)
-> +					goto out;
+>  drivers/gpu/drm/tests/drm_kunit_helpers.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/tests/drm_kunit_helpers.c b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> index 6600a4db3158..46a68c2fd80c 100644
+> --- a/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> +++ b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> @@ -35,6 +35,23 @@ static void dev_free(struct kunit_resource *res)
+>  	root_device_unregister(dev);
+>  }
+>  
+> +/**
+> + * drm_kunit_device_init - Allocates a mock DRM device for Kunit tests
 
-Maybe, it makes sense to use dstlen instead of srclen in while()?
+s/Kunit/KUnit
 
-We have now:
+Best Regards,
+- Maíra Canal
 
-while (srclen > 0) {
-   <skipped>
-} else {
-   <skipped>
-}
-
-We can use instead:
-
-while (dstlen > 0) {
-   <skipped>
-} else {
-   <skipped>
-}
-
-Will it fix the issue?
-
-Thanks,
-Slava.
-
-
-> 				*dst++ =3D ch > 0xff ? '?' : ch;
-> 				dstlen--;
-> 			}
-> --=20
-> 2.25.1
->=20
-
+> + * @test: The test context object
+> + * @features: Mocked DRM device driver features
+> + * @name: Name of the struct &device to allocate
+> + *
+> + * This function allocates a new struct &device, creates a struct
+> + * &drm_driver and will create a struct &drm_device using both.
+> + *
+> + * The device and driver are tied to the @test context and will get
+> + * cleaned at the end of the test. The drm_device is allocated through
+> + * devm_drm_dev_alloc() and will thus be freed through a device-managed
+> + * resource.
+> + *
+> + * Returns:
+> + * A pointer to the new drm_device, or an ERR_PTR() otherwise.
+> + */
+>  struct drm_device *drm_kunit_device_init(struct kunit *test, u32 features, char *name)
+>  {
+>  	struct kunit_dev *kdev;
+> 
