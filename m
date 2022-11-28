@@ -2,127 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C72063AD11
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 16:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1698263AD12
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 16:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232142AbiK1P5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 10:57:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
+        id S232480AbiK1P5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 10:57:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232492AbiK1P45 (ORCPT
+        with ESMTP id S232160AbiK1P5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 10:56:57 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D819248C9
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:56:56 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id ml11so2065359ejb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:56:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a7q68kau0RV2x8gL+tmu6PcA/HYPOgKxaU2pNTg0GXA=;
-        b=euLCC7CR9Jl7rkMMHOhUpssm4kmlW2foQRCR/L7TKKrlRHiJNnLQtHhXEHfFsZGr8j
-         qBLfBlsohFgpc0hJBpOXYahZwQll2ogRFq7laO0UxZwykOWOjiIDvc9OfmbvMf4fPTQe
-         mAkB7BpJQB2OwLfUFNnne7zMhgpD2Hvi8x7Do=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a7q68kau0RV2x8gL+tmu6PcA/HYPOgKxaU2pNTg0GXA=;
-        b=rNJDexuksMae060LN8Do9WCjj+p7y5NIKlI8G5RM3gjjJn/3fycK/lOk81eAt/GfnQ
-         CgM5RNEfx4A61p7dq4OksKRvuUqFU8gzMTGo9HQeoS3bsNDXHiUfcD4n6DmKkzGdXoFH
-         xSMG88li95G07v0QlWuH6UZce9DP9kEvaU5x0DD4OmYWeuH0WeHrU6uu8djUymJQfSgF
-         JMaWX5VO3wUYa7vBNluJGQPD/yuSzGM6f2Q+fFgVIqMst7eyQLZXHNSGfZdG87NWmZYp
-         RKxh8mGlBhgyrsm2zkSBX+GNNIpg+WHqCzQJ1PlaYLwGYbTjKWcCZTxjG1550udnnGXH
-         /68Q==
-X-Gm-Message-State: ANoB5plCoJ31SXM9xkHZYnj5XU+B4jHfPsPEH7WuWSFF0wVVICCyQOS+
-        iXcZu58rw0xp8Ccy3TqOdMM8SSBB1/zh1XDg
-X-Google-Smtp-Source: AA0mqf6OiAwf2gE82dhlPMmb4BJImjwLGmSg9vOd2rDM0ikagAtdNPlX9jkT5rxEr8Djvqdn5yqAow==
-X-Received: by 2002:a17:906:a156:b0:78d:9b8b:93cc with SMTP id bu22-20020a170906a15600b0078d9b8b93ccmr44730042ejb.529.1669651014836;
-        Mon, 28 Nov 2022 07:56:54 -0800 (PST)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
-        by smtp.gmail.com with ESMTPSA id x10-20020a1709060a4a00b0073dbaeb50f6sm5020971ejf.169.2022.11.28.07.56.53
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 07:56:54 -0800 (PST)
-Received: by mail-wm1-f47.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so8717512wmg.2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:56:53 -0800 (PST)
-X-Received: by 2002:a05:600c:1e12:b0:3cf:9ad3:a20e with SMTP id
- ay18-20020a05600c1e1200b003cf9ad3a20emr27655311wmb.151.1669651013219; Mon, 28
- Nov 2022 07:56:53 -0800 (PST)
+        Mon, 28 Nov 2022 10:57:37 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9432187
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:57:36 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASEfeVD018341;
+        Mon, 28 Nov 2022 15:57:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=7baz+UzJOq6O95X8/mA3UQPB0CtdP1min6OyihivIO8=;
+ b=JL8dyl+q9SyDdsx4+iXMhvdpLUFdScI/LgYMeJEU0NNEP3J4Kt6VyUazPYn0RbYZkZQa
+ jBx+Pna4v7VBHmjeJwEmISRbJ8xr7D8+tVF/0Or1zr9O38R9CLHqpKly//QJp/Wxui/t
+ r/34fBt7IJLecgzjcPayvIzFmOaYLT4mffN6VA0ssVHcNvnonnbxL/jGs4DlfqyMV9uc
+ K2TFqYGIOEIThDtEVqaQFqO5D/DaghqqXBuh4BKEjmQvZCpjt1Z6jN+AHnxbEmsQBFE3
+ 2T1G1kbDbe44WihntGaCJGNZucT0jc3ER+exVkEnAaLNidljqbIEND9nlYK2L6gbXNh0 rg== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m3xht2yj8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Nov 2022 15:57:29 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2ASFF0ki026827;
+        Mon, 28 Nov 2022 15:57:28 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3m3c1thep1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Nov 2022 15:57:28 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ASFvR84011547;
+        Mon, 28 Nov 2022 15:57:27 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3m3c1themk-1;
+        Mon, 28 Nov 2022 15:57:27 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+To:     sgarzare@redhat.com
+Cc:     harshit.m.mogalapalli@oracle.com, error27@gmail.com,
+        harshit.m.mogalapalli@gmail.com,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        Maxime Coquelin <maxime.coquelin@redhat.com>,
+        Parav Pandit <parav@nvidia.com>, Eli Cohen <elic@nvidia.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] vduse: Validate vq_num in vduse_validate_config()
+Date:   Mon, 28 Nov 2022 07:57:15 -0800
+Message-Id: <20221128155717.2579992-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20221124115712.v4.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
- <CAPao8GK93KMrtaXw7mNWOCE60zk=uCENLfBXhNRVxJXEnnaGFg@mail.gmail.com>
- <f58866c8-0164-2e59-4ff3-f9a4f9334e49@linaro.org> <CAPao8GKbdK79Z7w91x0T6JW9v6VFoeYSaXGGAuzB_=ukR9g0_w@mail.gmail.com>
- <b54cd0a4-7ee8-e8c0-ceda-18b29588d535@linaro.org>
-In-Reply-To: <b54cd0a4-7ee8-e8c0-ceda-18b29588d535@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 28 Nov 2022 07:56:41 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=X9C8nLDrEpZE2tLtq6Brn9cd-15+1JWFOL4cPYdJs5Dg@mail.gmail.com>
-Message-ID: <CAD=FV=X9C8nLDrEpZE2tLtq6Brn9cd-15+1JWFOL4cPYdJs5Dg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: arm: qcom: Add zombie
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     =?UTF-8?B?5qWK5a6X57+w?= <ecs.taipeikernel@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bob Moragues <moragues@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>, Harvey <hunge@google.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Gavin.Lee@ecs.com.tw,
-        Darren.Chen@ecs.com.tw, Abner.Yen@ecs.com.tw, Vicy.Lee@ecs.com.tw,
-        Jason.Huang@ecs.com.tw
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-28_13,2022-11-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 suspectscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211280118
+X-Proofpoint-GUID: 0O9Deg5-KTdXx-GD6rzr1sbmo-lsO3pu
+X-Proofpoint-ORIG-GUID: 0O9Deg5-KTdXx-GD6rzr1sbmo-lsO3pu
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Add a limit to 'config->vq_num' which is user controlled data which
+comes from an vduse_ioctl to prevent large memory allocations.
 
-On Thu, Nov 24, 2022 at 3:27 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 24/11/2022 12:20, =E6=A5=8A=E5=AE=97=E7=BF=B0 wrote:
-> > Hi Krzysztof, Matthias,
-> >
-> > How to use "get_maintainers.pl"?
-> >
-> > I find this script in path "<MyCodebase>/kernel/v5.15/script", and outp=
-ut
->
-> This looks like v5.15 kernel which is heavily outdated. Please never
-> work on such kernels when interacting with upstream. The rule is you
-> work on either last mainline kernel (v6.1-rc6), maintainers for-next
-> branch (you should know who is the maintainer of subsystem you submit
-> to, get_maintainers.pl gives this information) or on moderately recent
-> linux-next. For bigger patchsets there might be exceptions for these
-> rules, but it's not the case here.
+Micheal says  - This limit is somewhat arbitrary.
+However, currently virtio pci and ccw are limited to a 16 bit vq number.
+While MMIO isn't it is also isn't used with lots of VQs due to
+current lack of support for per-vq interrupts.
+Thus, the 0xffff limit on number of VQs corresponding
+to a 16-bit VQ number seems sufficient for now.
 
-Just to add context here, it's a fairly standard workflow for ChromeOS
-kernel engineers to work in a "versioned" kernel directory but still
-checkout and work with the upstream kernel. I'm sure it's confusing to
-anyone not used to working with the ChromeOS source tree and build
-system. Sorry! :( So the fact that Owen is in a directory called
-"v5.15" doesn't mean that he's actually working with the v5.15 kernel.
-The fact that Bjorn's address is correct in his CC list implies to me
-that he's actually got a proper upstream kernel.
+This is found using static analysis with smatch.
 
-I had previously [0] instructed Owen to send against Bjorn's tree, so
-hopefully it's correct.
+Suggested-by: Michael S. Tsirkin <mst@redhat.com>
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+v1->v2: Change title of the commit and description, add a limit to
+	vq_num.
 
-[0] https://lore.kernel.org/r/CAD=3DFV=3DVd4UFabWeEsd7cDhhpnFkjTuYhc38zwAbf=
-yxq2AHnhYA@mail.gmail.com/
+v2->v3: Improve commit message to include reason for setting limit to
+	0xffff
 
--Doug
+Only compile and boot tested.
+---
+ drivers/vdpa/vdpa_user/vduse_dev.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+index 35dceee3ed56..31017ebc4d7c 100644
+--- a/drivers/vdpa/vdpa_user/vduse_dev.c
++++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+@@ -1440,6 +1440,9 @@ static bool vduse_validate_config(struct vduse_dev_config *config)
+ 	if (config->config_size > PAGE_SIZE)
+ 		return false;
+ 
++	if (config->vq_num > 0xffff)
++		return false;
++
+ 	if (!device_is_allowed(config->device_id))
+ 		return false;
+ 
+-- 
+2.38.1
+
