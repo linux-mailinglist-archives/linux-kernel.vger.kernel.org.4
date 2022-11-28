@@ -2,106 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68EA163A64A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DCBE63A616
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbiK1KnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 05:43:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
+        id S229935AbiK1KaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 05:30:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiK1KnP (ORCPT
+        with ESMTP id S229695AbiK1KaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 05:43:15 -0500
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Nov 2022 02:43:13 PST
-Received: from mail.rosalinux.ru (mail.rosalinux.ru [195.19.76.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7890DF1D;
-        Mon, 28 Nov 2022 02:43:13 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rosalinux.ru (Postfix) with ESMTP id 5BDD218FF2A5;
-        Mon, 28 Nov 2022 13:26:51 +0300 (MSK)
-Received: from mail.rosalinux.ru ([127.0.0.1])
-        by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id RD-LcpDkVy8X; Mon, 28 Nov 2022 13:26:51 +0300 (MSK)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rosalinux.ru (Postfix) with ESMTP id 251BC1C969EF;
-        Mon, 28 Nov 2022 13:26:51 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rosalinux.ru 251BC1C969EF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosalinux.ru;
-        s=1D4BB666-A0F1-11EB-A1A2-F53579C7F503; t=1669631211;
-        bh=DarpytoYn3kYclkB5n7ZONEDXs6eBEyuuiBCU4Eg+Lc=;
-        h=From:To:Date:Message-Id:MIME-Version;
-        b=k1BeX7vo4cVZMlrEiZ+3/Qvnlx2qHOxG0cAqETkanCDABZe49Qr77n8At8Fs6w70x
-         AJ4hhllONcOOrcdJR9V5F7s7va8jQhzyc4szZBAMGxakeEgwS6usg9Z+ClMG4m8l2T
-         W9cGblJHvO809Rcg2r3VuO8V4v7D3vLpcpGuxHY3upL2l8TwdcD+yRjQ6EQV5+J0Rb
-         o3EeXGsxiEB60q6xO59MRNXugFuX6VeQdcibXmA/HTzBLy77Ftxy5b48F2cPF4nV/7
-         PgqxQPfTlCipeYTnQrQmRaT1CML60b8uIyGVir6czYlo9Q6Ir1LpmgfBCK8b8KxjDm
-         beUkodERTZczg==
-X-Virus-Scanned: amavisd-new at rosalinux.ru
-Received: from mail.rosalinux.ru ([127.0.0.1])
-        by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 5O0AoDT4in66; Mon, 28 Nov 2022 13:26:50 +0300 (MSK)
-Received: from ubuntu.localdomain (unknown [144.206.93.23])
-        by mail.rosalinux.ru (Postfix) with ESMTPSA id 91C1618FF2A5;
-        Mon, 28 Nov 2022 13:26:50 +0300 (MSK)
-From:   Aleksandr Burakov <a.burakov@rosalinux.ru>
-To:     Derek Chickles <dchickles@marvell.com>,
-        Satanand Burla <sburla@marvell.com>,
-        Felix Manlunas <fmanlunas@marvell.com>
-Cc:     Aleksandr Burakov <a.burakov@rosalinux.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH] liquidio: avoid NULL pointer dereference in lio_vf_rep_copy_packet()
-Date:   Mon, 28 Nov 2022 13:26:59 +0300
-Message-Id: <20221128102659.4946-1-a.burakov@rosalinux.ru>
+        Mon, 28 Nov 2022 05:30:06 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A994C2652;
+        Mon, 28 Nov 2022 02:30:05 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id 9so9996957pfx.11;
+        Mon, 28 Nov 2022 02:30:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=5WzP7R2JeezWg+hdV7Tba+xSsA1ik5Dm+MRW5DkF9e0=;
+        b=oo6qzQAScY8kGVYAXKK32Is/cCaVa66uXHZDaSQmZr/Hhd/EJkvBIw+I6TTKnFPD4g
+         rpAxJ70A3QLcsQgRjI/Ae0OpewommAkpkFRRT0/wMTwUwQBJmBx9SgOJ5MqTnF05Bp1q
+         lF2t7G8KbJELoHEncLL0XRY1b0Noj9Q7tkpmes4QLi5Q/YJmJ9zSe0ML/CdlzeiYIFNS
+         M6DnCCBQMTxsDUwv2vNpX+3yDnWkIdE2C8jjVlps8giI1f621NbsIokmqgW4rflA2div
+         ++iI6URjCndHsPV6QwW68yxDtBJlk1lZkHW3zg7eiioJevvhlLjA8btnKeZAGSLYNgg+
+         BCKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5WzP7R2JeezWg+hdV7Tba+xSsA1ik5Dm+MRW5DkF9e0=;
+        b=RqJyOr694jN8zALa1JwMlmIuHENyKlZwwYiNrvBxj64L2emz/Wvd+Ny0YQ/lEPFqj/
+         HWm7oZ1CZJoLqjcc4eVGi6cGrPNG1Y1++LAsS26dQmbPQmmtGBAZ5hB4CiF8yKfaH1ir
+         OUCOQv3oLBdypSWIpLP0XW0Q0YgGS8HF9iE8IRKjVIRXfbP5QfBC4bJp+cRJ2NdrwLLN
+         xVnmqoUZaQEmd9BVmc7oJ9uNRHf5rsWWoF767/j3PojeW5MLTi7GF3vI8icNP30xT8MN
+         ukB8xuWtAp58x1C5w1Wfr9FHsBHaAYH6C2U7NkJ4VRpO6GVOQxz6cZw+gPzDqZxFHMJz
+         aaJw==
+X-Gm-Message-State: ANoB5pl+gx4lmRcASSEJml2UDD2m55gJTLqhB8ggh2uUuj89v+9nn40U
+        rjZjlJuHKIYHGLBgZQGS6kk=
+X-Google-Smtp-Source: AA0mqf7FESvloU60JlBI3tZKvkhKNAlGtFZmq/3ukpDw+KhHUdJBWFh/014hM6rAO7cBKe8PCTysuw==
+X-Received: by 2002:a05:6a00:a88:b0:574:2c5e:b18c with SMTP id b8-20020a056a000a8800b005742c5eb18cmr27847828pfl.10.1669631405115;
+        Mon, 28 Nov 2022 02:30:05 -0800 (PST)
+Received: from XH22050090-L.ad.ts.tri-ad.global ([103.175.111.222])
+        by smtp.gmail.com with ESMTPSA id iw14-20020a170903044e00b001869f2120a4sm8519954plb.94.2022.11.28.02.30.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 02:30:04 -0800 (PST)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH] usb: add usb_set_intfdata() documentation
+Date:   Mon, 28 Nov 2022 19:29:54 +0900
+Message-Id: <20221128102954.3615579-1-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-lio_vf_rep_copy_packet() passes pg_info->page to skb_add_rx_frag()
-that dereferences it without any check. So, it does not make sense
-to call skb_add_rx_frag() when pg_info->page is NULL to avoid an segfault=
-.
+USB drivers do not need to call usb_set_intfdata(intf, NULL) in their
+usb_driver::disconnect callback because the core already does it in [1].
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+However, this fact is widely unknown, c.f.:
 
-Signed-off-by: Aleksandr Burakov <a.burakov@rosalinux.ru>
-Fixes: 1f233f327913 ("liquidio: switchdev support for LiquidIO NIC")
+  $ git grep "usb_set_intfdata(.*NULL)" | wc -l
+  215
+
+Especially, setting the interface to NULL before all action completed
+can result in a NULL pointer dereference. Not calling
+usb_set_intfdata() at all in disconnect() is the safest method.
+
+Add documentation to usb_set_intfdata() to clarify this point.
+
+Also remove the call in usb-skeletion's disconnect() not to confuse
+the new comers.
+
+[1] function usb_unbind_interface() from drivers/usb/core/driver.c
+Link: https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/core/driver.c#L497
+
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- drivers/net/ethernet/cavium/liquidio/lio_vf_rep.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/usb/usb-skeleton.c |  1 -
+ include/linux/usb.h        | 12 ++++++++++++
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/cavium/liquidio/lio_vf_rep.c b/drivers/=
-net/ethernet/cavium/liquidio/lio_vf_rep.c
-index 600de587d7a9..e70b9ccca380 100644
---- a/drivers/net/ethernet/cavium/liquidio/lio_vf_rep.c
-+++ b/drivers/net/ethernet/cavium/liquidio/lio_vf_rep.c
-@@ -272,13 +272,12 @@ lio_vf_rep_copy_packet(struct octeon_device *oct,
- 				pg_info->page_offset;
- 			memcpy(skb->data, va, MIN_SKB_SIZE);
- 			skb_put(skb, MIN_SKB_SIZE);
-+			skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags,
-+					pg_info->page,
-+					pg_info->page_offset + MIN_SKB_SIZE,
-+					len - MIN_SKB_SIZE,
-+					LIO_RXBUFFER_SZ);
- 		}
--
--		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags,
--				pg_info->page,
--				pg_info->page_offset + MIN_SKB_SIZE,
--				len - MIN_SKB_SIZE,
--				LIO_RXBUFFER_SZ);
- 	} else {
- 		struct octeon_skb_page_info *pg_info =3D
- 			((struct octeon_skb_page_info *)(skb->cb));
---=20
+diff --git a/drivers/usb/usb-skeleton.c b/drivers/usb/usb-skeleton.c
+index d87deee3e26e..900a64ad25e4 100644
+--- a/drivers/usb/usb-skeleton.c
++++ b/drivers/usb/usb-skeleton.c
+@@ -564,7 +564,6 @@ static void skel_disconnect(struct usb_interface *interface)
+ 	int minor = interface->minor;
+ 
+ 	dev = usb_get_intfdata(interface);
+-	usb_set_intfdata(interface, NULL);
+ 
+ 	/* give back our minor */
+ 	usb_deregister_dev(interface, &skel_class);
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 9ff1ad4dfad1..d4afeeec1e1a 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -265,6 +265,18 @@ static inline void *usb_get_intfdata(struct usb_interface *intf)
+ 	return dev_get_drvdata(&intf->dev);
+ }
+ 
++/**
++ * usb_set_intfdata() - associate driver-specific data with the interface
++ * @intf: the usb interface
++ * @data: pointer to the device priv structure or %NULL
++ *
++ * Drivers should use this function in their probe() to associate their
++ * driver-specific data with the usb interface.
++ *
++ * When disconnecting, the core will take care of setting @intf back to %NULL,
++ * so no actions are needed on the driver side. The interface should not be set
++ * to %NULL before all actions completed (e.g. no outsanding URB remaining).
++ */
+ static inline void usb_set_intfdata(struct usb_interface *intf, void *data)
+ {
+ 	dev_set_drvdata(&intf->dev, data);
+-- 
 2.25.1
+
