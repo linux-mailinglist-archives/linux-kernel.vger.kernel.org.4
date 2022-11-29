@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7058863C7E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2E063C7E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:13:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236679AbiK2TMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 14:12:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
+        id S232468AbiK2TNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 14:13:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235850AbiK2TMo (ORCPT
+        with ESMTP id S236651AbiK2TMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 14:12:44 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5923A5F84C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:12:42 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id pa16-20020a17090b265000b0020a71040b4cso9553425pjb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:12:42 -0800 (PST)
+        Tue, 29 Nov 2022 14:12:46 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1AD6034F
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:12:43 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id e190-20020a6369c7000000b004777dc6a02aso9861020pgc.19
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:12:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=Os4PbJiT3Ld5Lv/LgXTKbRpBhRE17eV3B/ireIkXlSU=;
-        b=Erx4H4SVakvlu7N+u2skn+6Xtm64P8cJ6ropYl5zYMS9nxY65pDMbE9n0sCqHGGde1
-         SgjDSWbbWfkDEhfQPcYOKQoLRAAm3ch4sNMw1jkCvzLGlYpBcxT9z2zxP0MRxIRr5h1v
-         BVz5f1igjhYbAvjmg9vc0n84wQ2qHIJLvaYbkTbpyaGvsZMbRVLJXEprYXHEtbRBAKqU
-         YDjxmBew3ESnfTyH4B83Gc75L0jPlI6oUqsa0RaoN0VrfRLlA/PUpirR4iSxr7J4TR/c
-         iZJHh5z8vba2kUUR8g+w8LjE1QJvsODdZ+1KuiQ7go0J79fFK7GqZgXOGWKC0vzZrDJ0
-         lt1g==
+        bh=mEiNt5ftXb0Jkq4g8/ocAWg6a33yQe2tEm6TyHr4HZE=;
+        b=lZqioWnFf7DyOm6+UYrYKd/04nt1Aq0D3ZCgGce6on3ZtO4WSRm+HhLYbLnCI+9xlM
+         hKFO1tqcxti6PMQ2mLl8VD69s58nYbxxU+Ql1VzAbnxtstmgiZ4yOjmDXHuauvX16A6E
+         W4j9VMTVe1lsy8oBZxTGU3/853F2KnviDlm2HnQBwe+gZVu8vly/3kECViq/jUQTPusP
+         ssc88dzR4CB7CiWvGR+LlFKfVhx6t1d0HyN108lbRHhcXn55CRpbqLeNdYcV3mC6TFwG
+         1y/3IRRe+wTctm06tVpWwT0r7iT73qQZ7wEoDdOyQZOlAUrPV3gyrjcUHAz7wvnwJVu1
+         y4dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Os4PbJiT3Ld5Lv/LgXTKbRpBhRE17eV3B/ireIkXlSU=;
-        b=XRpEGmiVkZh7tF8NGIh7CRlWrE5xT4dW/ZFHwhb6qYpl9PeC39SBQ3t8Bkni9eercK
-         MjADw7sKtHedtDrxniFFpsB8Us5ND9xwclXFy+1xak3022fcpLxrLVjAS5ptIjQf4frg
-         DrvojkEYsicqhljA70fGCRhg3vCKI5DiRnhyw0qqotPltOkxvcz/SsruzNL0yar2BKCf
-         t8qOL10JWihw3W931QthTijXZSgRfcGh2CMRyYE1Nqcmbb11JAPkbftlRjK4EYwUCkjk
-         x1zZVimlBFBLUuJfbquZJC8fWFI6SZ5D1fVFGed/fTqb9dyPKwDpI2GsXJa0rH2ZH4s6
-         9oJQ==
-X-Gm-Message-State: ANoB5pkoJyna4hFn0RLrOujzGPD3E/GzITmSOGIxiporO+MSp7DKC2qj
-        Eyt8kIhmB1ugY7GQsApuwH5RSLxtEpS2
-X-Google-Smtp-Source: AA0mqf58OhKp/8MwbUt+pzJ0rvk7EQ9mk0wATzWpcSe+ldobhafLsc0DO2Fr9gPK4Q/e+079YmqlFHkmFiSe
+        bh=mEiNt5ftXb0Jkq4g8/ocAWg6a33yQe2tEm6TyHr4HZE=;
+        b=5zvWaenR1CiU0u4l0xQM3y0zs624FnEVwUNO14bEDTwRKdwxFeYIZi8cO7HO/Lny04
+         JiRsDD140ZpiTKT0+lcgm9zqVAmUsdlpGJZ4FYujwBCR7NAkHWPjHSrt/kUjqYwN+T04
+         lXCUejBKQD8Lnvp8rBT5aHVWCclHDct5+757paNbEnlJ2rIorCXSPa11WGkG/ZRrMHnS
+         fwuB1N2EhUwfttP+IH9OFnHs07i4h506uoE28OKMJ+0t4Sg1k8Q9dF+Bodg/uu0x3L4J
+         m+MZXHsmgulPWcNdZd8ReLSrRdsuZbVdHnRsE1mbgQTsK8Shfpvd7yqGEKeh8NPe2hAb
+         +WPg==
+X-Gm-Message-State: ANoB5pkXbnW9MwWWGaSoDcxsH9p+2+LLkMz7nQWINB1iWg4/MJ9oZDZG
+        Xz+TlUym9JL1SVFAM2AsUD6CLtkyrMJa
+X-Google-Smtp-Source: AA0mqf6jtD572zF0Y4wlCF2WJHZC9nAszbQ82UlVNIZTKigSri1YT8FozMjN7o20znUnyiHgn1QVt9xrZxwr
 X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
- (user=mizhang job=sendgmr) by 2002:a17:90a:dc06:b0:218:9196:1cd1 with SMTP id
- i6-20020a17090adc0600b0021891961cd1mr54466231pjv.230.1669749161858; Tue, 29
- Nov 2022 11:12:41 -0800 (PST)
+ (user=mizhang job=sendgmr) by 2002:a62:5242:0:b0:574:73fc:d260 with SMTP id
+ g63-20020a625242000000b0057473fcd260mr30475727pfb.6.1669749163324; Tue, 29
+ Nov 2022 11:12:43 -0800 (PST)
 Reply-To: Mingwei Zhang <mizhang@google.com>
-Date:   Tue, 29 Nov 2022 19:12:36 +0000
+Date:   Tue, 29 Nov 2022 19:12:37 +0000
 In-Reply-To: <20221129191237.31447-1-mizhang@google.com>
 Mime-Version: 1.0
 References: <20221129191237.31447-1-mizhang@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221129191237.31447-2-mizhang@google.com>
-Subject: [RFC PATCH v4 1/2] KVM: x86/mmu: plumb struct kvm all the way to pte_list_remove()
+Message-ID: <20221129191237.31447-3-mizhang@google.com>
+Subject: [RFC PATCH v4 2/2] KVM: x86/mmu: replace BUG() with KVM_BUG() in
+ shadow mmu
 From:   Mingwei Zhang <mizhang@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -74,120 +75,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Plumb struct kvm all the way to pte_list_remove() to allow the usage of
-KVM_BUG() and/or KVM_BUG_ON(). This is the prepration step to depricate the
-usage of BUG() in pte_list_remove() in shadow mmu.
+Replace BUG() in pte_list_remove() with KVM_BUG() to avoid crashing the
+host. MMU bug is difficult to discover due to various racing conditions and
+corner cases and thus it extremely hard to debug. The situation gets much
+worse when it triggers the shutdown of a host. Host machine crash
+eliminates everything including the potential clues for debugging.
 
+BUG() or BUG_ON() is probably no longer appropriate as the host reliability
+is top priority in many business scenarios. Crashing the physical machine
+is almost never a good option as it eliminates innocent VMs and cause
+service outage in a larger scope. Even worse, if attacker can reliably
+triggers this code by diverting the control flow or corrupting the memory
+or leveraging a KVM bug, then this becomes vm-of-death attack. This is a
+huge attack vector to cloud providers, as the death of one single host
+machine is not the end of the story. Without manual interferences, a failed
+cloud job may be dispatched to other hosts and continue host crashes until
+all of them are dead.
+
+Because of the above reasons, shrink the scope of crash to the target VM
+only.
+
+Cc: Nagareddy Reddy <nspreddy@google.com>
+Cc: Jim Mattson <jmattson@google.com>
+Cc: David Matlack <dmatlack@google.com>
 Signed-off-by: Mingwei Zhang <mizhang@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 4736d7849c60..b5a44b8f5f7b 100644
+index b5a44b8f5f7b..12790ccb8731 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -947,7 +947,8 @@ pte_list_desc_remove_entry(struct kvm_rmap_head *rmap_head,
- 	mmu_free_pte_list_desc(desc);
- }
- 
--static void pte_list_remove(u64 *spte, struct kvm_rmap_head *rmap_head)
-+static void pte_list_remove(struct kvm *kvm, u64 *spte,
-+			    struct kvm_rmap_head *rmap_head)
- {
- 	struct pte_list_desc *desc;
+@@ -954,15 +954,16 @@ static void pte_list_remove(struct kvm *kvm, u64 *spte,
  	struct pte_list_desc *prev_desc;
-@@ -987,7 +988,7 @@ static void kvm_zap_one_rmap_spte(struct kvm *kvm,
- 				  struct kvm_rmap_head *rmap_head, u64 *sptep)
- {
- 	mmu_spte_clear_track_bits(kvm, sptep);
--	pte_list_remove(sptep, rmap_head);
-+	pte_list_remove(kvm, sptep, rmap_head);
- }
+ 	int i;
  
- /* Return true if at least one SPTE was zapped, false otherwise */
-@@ -1077,7 +1078,7 @@ static void rmap_remove(struct kvm *kvm, u64 *spte)
- 	slot = __gfn_to_memslot(slots, gfn);
- 	rmap_head = gfn_to_rmap(gfn, sp->role.level, slot);
- 
--	pte_list_remove(spte, rmap_head);
-+	pte_list_remove(kvm, spte, rmap_head);
- }
- 
- /*
-@@ -1730,16 +1731,16 @@ static void mmu_page_add_parent_pte(struct kvm_mmu_memory_cache *cache,
- 	pte_list_add(cache, parent_pte, &sp->parent_ptes);
- }
- 
--static void mmu_page_remove_parent_pte(struct kvm_mmu_page *sp,
-+static void mmu_page_remove_parent_pte(struct kvm *kvm, struct kvm_mmu_page *sp,
- 				       u64 *parent_pte)
- {
--	pte_list_remove(parent_pte, &sp->parent_ptes);
-+	pte_list_remove(kvm, parent_pte, &sp->parent_ptes);
- }
- 
--static void drop_parent_pte(struct kvm_mmu_page *sp,
-+static void drop_parent_pte(struct kvm *kvm, struct kvm_mmu_page *sp,
- 			    u64 *parent_pte)
- {
--	mmu_page_remove_parent_pte(sp, parent_pte);
-+	mmu_page_remove_parent_pte(kvm, sp, parent_pte);
- 	mmu_spte_clear_no_track(parent_pte);
- }
- 
-@@ -2382,7 +2383,7 @@ static void validate_direct_spte(struct kvm_vcpu *vcpu, u64 *sptep,
- 		if (child->role.access == direct_access)
- 			return;
- 
--		drop_parent_pte(child, sptep);
-+		drop_parent_pte(vcpu->kvm, child, sptep);
- 		kvm_flush_remote_tlbs_with_address(vcpu->kvm, child->gfn, 1);
+-	if (!rmap_head->val) {
+-		pr_err("%s: %p 0->BUG\n", __func__, spte);
+-		BUG();
+-	} else if (!(rmap_head->val & 1)) {
++	if (KVM_BUG(!rmap_head->val, kvm, "rmap for %p is empty", spte))
++		return;
++
++	if (!(rmap_head->val & 1)) {
+ 		rmap_printk("%p 1->0\n", spte);
+-		if ((u64 *)rmap_head->val != spte) {
+-			pr_err("%s:  %p 1->BUG\n", __func__, spte);
+-			BUG();
+-		}
++
++		if (KVM_BUG((u64 *)rmap_head->val != spte, kvm,
++			    "single rmap for %p doesn't match", spte))
++			return;
++
+ 		rmap_head->val = 0;
+ 	} else {
+ 		rmap_printk("%p many->many\n", spte);
+@@ -979,8 +980,7 @@ static void pte_list_remove(struct kvm *kvm, u64 *spte,
+ 			prev_desc = desc;
+ 			desc = desc->more;
+ 		}
+-		pr_err("%s: %p many->many\n", __func__, spte);
+-		BUG();
++		KVM_BUG(true, kvm, "no rmap for %p (many->many)", spte);
  	}
  }
-@@ -2400,7 +2401,7 @@ static int mmu_page_zap_pte(struct kvm *kvm, struct kvm_mmu_page *sp,
- 			drop_spte(kvm, spte);
- 		} else {
- 			child = spte_to_child_sp(pte);
--			drop_parent_pte(child, spte);
-+			drop_parent_pte(kvm, child, spte);
  
- 			/*
- 			 * Recursively zap nested TDP SPs, parentless SPs are
-@@ -2431,13 +2432,13 @@ static int kvm_mmu_page_unlink_children(struct kvm *kvm,
- 	return zapped;
- }
- 
--static void kvm_mmu_unlink_parents(struct kvm_mmu_page *sp)
-+static void kvm_mmu_unlink_parents(struct kvm *kvm, struct kvm_mmu_page *sp)
- {
- 	u64 *sptep;
- 	struct rmap_iterator iter;
- 
- 	while ((sptep = rmap_get_first(&sp->parent_ptes, &iter)))
--		drop_parent_pte(sp, sptep);
-+		drop_parent_pte(kvm, sp, sptep);
- }
- 
- static int mmu_zap_unsync_children(struct kvm *kvm,
-@@ -2475,7 +2476,7 @@ static bool __kvm_mmu_prepare_zap_page(struct kvm *kvm,
- 	++kvm->stat.mmu_shadow_zapped;
- 	*nr_zapped = mmu_zap_unsync_children(kvm, sp, invalid_list);
- 	*nr_zapped += kvm_mmu_page_unlink_children(kvm, sp, invalid_list);
--	kvm_mmu_unlink_parents(sp);
-+	kvm_mmu_unlink_parents(kvm, sp);
- 
- 	/* Zapping children means active_mmu_pages has become unstable. */
- 	list_unstable = *nr_zapped;
-@@ -2839,7 +2840,7 @@ static int mmu_set_spte(struct kvm_vcpu *vcpu, struct kvm_memory_slot *slot,
- 			u64 pte = *sptep;
- 
- 			child = spte_to_child_sp(pte);
--			drop_parent_pte(child, sptep);
-+			drop_parent_pte(vcpu->kvm, child, sptep);
- 			flush = true;
- 		} else if (pfn != spte_to_pfn(*sptep)) {
- 			pgprintk("hfn old %llx new %llx\n",
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
