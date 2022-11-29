@@ -2,92 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34BD63CA7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:29:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FAAC63CA8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237073AbiK2V3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 16:29:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
+        id S236976AbiK2Vhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 16:37:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236072AbiK2V3s (ORCPT
+        with ESMTP id S236731AbiK2Vhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 16:29:48 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E4B5655B;
-        Tue, 29 Nov 2022 13:29:47 -0800 (PST)
-Received: from g550jk.arnhem.chello.nl (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id DA61BCAAFE;
-        Tue, 29 Nov 2022 21:29:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1669757356; bh=cyHwj60MQxWv+m1wQhw3cegdMX2JlrYI3TaYhQorhOg=;
-        h=From:To:Cc:Subject:Date;
-        b=djwIltTvulexjuIPgOcxRiEWJlxKVrmB8/k6c7irIRfQyF/zcg+SokWaHQuhmsd2k
-         wZAPEATvtEhvhEuLopoBthJ7I/LPvU9aSzf70GWep87HZNLKfpXK/Md2F4jl1O66Mu
-         UVn8cCWeqLcgqA3+pvb7QdPzClbutk0WasVtEtPE=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-leds@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>, Pavel Machek <pavel@ucw.cz>,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] leds: is31fl319x: Fix setting current limit for is31fl319{0,1,3}
-Date:   Tue, 29 Nov 2022 22:29:01 +0100
-Message-Id: <20221129212901.1049085-1-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.38.1
+        Tue, 29 Nov 2022 16:37:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3885C75D
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:36:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669757813;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BWaTZSPo+HO/zYxVJ/xWxSiqucUXiQzkU4LC8VS3r40=;
+        b=AhqjkXpWM5wZNluLo3oyVZmcnx5NU6j1o9aMdoKPoDnk3mxvSCeFp4sugQISPyboaa0Sza
+        0crsh4QVVpVFXU8YVhxlFlpbCybUoDy0PYV/nwlH5oXsKXZkdHWbxkDjEZgIotQSH/Ie8v
+        ospr1uwxecGkhGjhLIwaIZCqWkpoeFU=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-389-wwRcTt0pNqWtQ--GZHmdQg-1; Tue, 29 Nov 2022 16:36:52 -0500
+X-MC-Unique: wwRcTt0pNqWtQ--GZHmdQg-1
+Received: by mail-qk1-f200.google.com with SMTP id az31-20020a05620a171f00b006fa2cc1b0bfso33040578qkb.23
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:36:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BWaTZSPo+HO/zYxVJ/xWxSiqucUXiQzkU4LC8VS3r40=;
+        b=b75a6u2MNxSXCB5NESK7NJgEnEYtIircX3+M+xSdvfa315bG+invFcj8d62TFve2V3
+         uiImdPy6Bumw9G1RWDz3DWc1EsPJW45fdyrSzyQJUJq9q5Ft486/2hGqqGGGI2MSBAuP
+         g4MmwBrZ5p6uZv7K9X9CG/RKRuANjSYNFnEc5JUZpaUo76kKqypCMsbA0PFRAggRRQCf
+         VNsxO8+UNxHMMJivk3rEz42OSvekHDfcs0CLolozRJRyn7TUQoa8PfzbrddA6zXWiSPJ
+         udMbVM4aBv+VWKEnBMvMs/m4YNHnxdP0gn5FdghSJqD2h9x8/RLgkvv7n68l6aveeK7F
+         s7dA==
+X-Gm-Message-State: ANoB5pkD78H8h9TbUZIHfj+sWpzJHC+Ld2xYLTzVRZ+vwBrQ1ts1GxoS
+        IOB1N242KU5xUMvPe0boPbt17xNEW5MwatXDwfnY8q/a/erAiLlhwhayiCOv547mOwoufhH/0Zi
+        CsA/qPJVp2RJSzDrsBWNwE74E
+X-Received: by 2002:a05:622a:6022:b0:398:5f25:649 with SMTP id he34-20020a05622a602200b003985f250649mr55357235qtb.673.1669757811540;
+        Tue, 29 Nov 2022 13:36:51 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4O3P88Az221sAQckplDC94c73NQebw1mJ1mivlR3sPQM+UXsSc1nokCTAlyNeJ14Caezk6DA==
+X-Received: by 2002:a05:622a:6022:b0:398:5f25:649 with SMTP id he34-20020a05622a602200b003985f250649mr55357219qtb.673.1669757811297;
+        Tue, 29 Nov 2022 13:36:51 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id dt31-20020a05620a479f00b006fbf88667bcsm11300718qkb.77.2022.11.29.13.36.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 13:36:50 -0800 (PST)
+Date:   Tue, 29 Nov 2022 16:36:49 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        James Houghton <jthoughton@google.com>,
+        Jann Horn <jannh@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH 00/10] mm/hugetlb: Make huge_pte_offset() thread-safe for
+ pmd unshare
+Message-ID: <Y4Z7caUUaS+nV+bk@x1n>
+References: <20221129193526.3588187-1-peterx@redhat.com>
+ <20221129125117.6d31c7cf4c83510be0c8cf10@linux-foundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221129125117.6d31c7cf4c83510be0c8cf10@linux-foundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current setting lives in bits 4:2 (as also defined by the mask) but
-the current limit defines in the driver use bits 2:0 which should be
-shifted over so they don't get masked out completely (except for 17.5mA
-which became 10mA).
+On Tue, Nov 29, 2022 at 12:51:17PM -0800, Andrew Morton wrote:
+> On Tue, 29 Nov 2022 14:35:16 -0500 Peter Xu <peterx@redhat.com> wrote:
+> 
+> > [   17.975943] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> 
+> Do we know which kernel versions are affected here?
 
-Now checking /sys/kernel/debug/regmap/1-0068/registers shows that the
-current limit is applied correctly and doesn't take the default b000 =
-42mA.
+Since lockless walk of huge_pte_offset() existed since the initial git
+commit, it should be the time when we introduced pmd sharing for hugetlb,
+which means any kernel after commit 39dde65c9940 ("[PATCH] shared page
+table for hugetlb page", 2006-12-07) should be prone to the issue at least
+for x86 (as pmd sharing was proposed initially only for x86).
 
-Fixes: fa877cf1abb9 ("leds: is31fl319x: Add support for is31fl319{0,1,3} chips")
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
-Cross-checked with SN3193 datasheet I found online and downstream
-driver, but please double check also against any info you have.
-
-The SN3193 is used on msm8974pro-oneplus-bacon and I will send a patch
-in the future to add it to the dts.
-
- drivers/leds/leds-is31fl319x.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/leds/leds-is31fl319x.c b/drivers/leds/leds-is31fl319x.c
-index 52b59b62f437..b2f4c4ec7c56 100644
---- a/drivers/leds/leds-is31fl319x.c
-+++ b/drivers/leds/leds-is31fl319x.c
-@@ -38,6 +38,7 @@
- #define IS31FL3190_CURRENT_uA_MIN	5000
- #define IS31FL3190_CURRENT_uA_DEFAULT	42000
- #define IS31FL3190_CURRENT_uA_MAX	42000
-+#define IS31FL3190_CURRENT_SHIFT	2
- #define IS31FL3190_CURRENT_MASK		GENMASK(4, 2)
- #define IS31FL3190_CURRENT_5_mA		0x02
- #define IS31FL3190_CURRENT_10_mA	0x01
-@@ -553,7 +554,7 @@ static int is31fl319x_probe(struct i2c_client *client)
- 			     is31fl3196_db_to_gain(is31->audio_gain_db));
- 	else
- 		regmap_update_bits(is31->regmap, IS31FL3190_CURRENT, IS31FL3190_CURRENT_MASK,
--				   is31fl3190_microamp_to_cs(dev, aggregated_led_microamp));
-+				   is31fl3190_microamp_to_cs(dev, aggregated_led_microamp) << IS31FL3190_CURRENT_SHIFT);
- 
- 	for (i = 0; i < is31->cdef->num_leds; i++) {
- 		struct is31fl319x_led *led = &is31->leds[i];
 -- 
-2.38.1
+Peter Xu
 
