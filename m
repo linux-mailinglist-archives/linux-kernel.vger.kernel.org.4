@@ -2,142 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1C863C07B
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:57:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 897E663C07A
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiK2M5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 07:57:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
+        id S231768AbiK2M5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 07:57:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232297AbiK2M4x (ORCPT
+        with ESMTP id S232523AbiK2M4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 07:56:53 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20AA960EBC
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:56:52 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id o127so1821098yba.5
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:56:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eQ2q70MxmrOTbyY/3idcvpot4MIQOw6xbYQRAtAnHRk=;
-        b=k2CNqn4mmj4GxHren8t1/WpNcwnKbVDjdcpLv/RrGu2RoN9vE8ISGcNpmGrZUgp4x6
-         Pl3bgYcY5wHW3oNo/keuSbf9CYoAyPCy5gvbAATXwgkvlFVnte370kxzSxozhMrV70N9
-         54bb4mbKdDeALTNypg9O7h5clw2O+BOLf9O5Bh/evHwxwHwdgtrIpXLZejf3XCie9DLp
-         z46XKJL3U2KAdzHAAI0ki2IjRsKDKTdEiA0ffrm/Q17I3YEwBtn4mI8K28phKEHjt9vc
-         Tzwu2o0PyOR3EmYssrhwKDEyU/w/wO9BcrMeHUIajjRrW9JtAUx7pxuQDdqEP8gay66H
-         gBxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eQ2q70MxmrOTbyY/3idcvpot4MIQOw6xbYQRAtAnHRk=;
-        b=gxqAwFNgDWOgvs49n+IXjkzQ323stXlL3NuWRMH7GCgPvxU8hcJAnKmrU0WNtu+hKt
-         ROmxj44KFXaB4GgF6q2ZZfuBt/9Yweydou+GeI2PM9z4XdM9od+2UuCJclacDSXKPoM2
-         F7NK0n7iXDpQSEZn39XQlYoGZKVqiyWc+1T5cKB8FYo+4L+55mBNJhcaIL3un1eewmXi
-         qrJcSMXtm/B9s4s07bei7MEvM9fjvke435tSmjVlnqWJHEqgmwD8udift4sPY80s+z8a
-         rrRer7h7A8SmNQIrwKZYHm8c2WaD8qY0XTUJzeVd0Xvxhf8rEv7+3fEtzc00JJ3diGel
-         9y2g==
-X-Gm-Message-State: ANoB5pn9S1SKdnVvKr0FMBORJhPEZn9Qr6sqIi3z0sfK4C0GFSN20GZw
-        8C7hKoJVO4EKztzid/n7goCnGPg4zN3CvLvoCbSFpA==
-X-Google-Smtp-Source: AA0mqf4PQ4Y68c2XrynpIIxjyPxdSRYah17bCPQEUU08Zqa1ulpRxof1sNCWke5miQDd6dOMZUbUAmVyyD43g37IsPM=
-X-Received: by 2002:a25:e749:0:b0:6f1:9eb8:76d4 with SMTP id
- e70-20020a25e749000000b006f19eb876d4mr24173229ybh.143.1669726611154; Tue, 29
- Nov 2022 04:56:51 -0800 (PST)
+        Tue, 29 Nov 2022 07:56:42 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E6060E8C;
+        Tue, 29 Nov 2022 04:56:36 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9E7D91EC06C0;
+        Tue, 29 Nov 2022 13:56:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1669726594;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=AWsLPok7ViQ+W8W5j5jc7Ny6BIbEl/sE7BAZHJqUMoI=;
+        b=BHCPPnysS0HVPQeJjNsZqqi9hT9kJDMWYdvBpAKwXf3E3MlbzG9wCwtk8GYdtXxbUa5pCR
+        3iQdDNApBu2nlKJv+V0QyD/1M0sMFzy/B317BmWQ0+M3NKDdom0X2Nmm3+nApLH3Zj09hm
+        OMpDe5wMH6a++coXw66oVTSqI8xofM0=
+Date:   Tue, 29 Nov 2022 13:56:30 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, thomas.lendacky@amd.com,
+        venu.busireddy@oracle.com, sterritt@google.com,
+        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH V2 01/18] x86/sev: Pvalidate memory gab for
+ decompressing kernel
+Message-ID: <Y4YBfk3lyUJie4bR@zn.tnic>
+References: <20221119034633.1728632-1-ltykernel@gmail.com>
+ <20221119034633.1728632-2-ltykernel@gmail.com>
 MIME-Version: 1.0
-References: <20221129063358.3012362-1-feng.tang@intel.com> <20221129063358.3012362-2-feng.tang@intel.com>
- <CANpmjNNkLWvNYUf-bPPDBcqFWegp3_NpYdhygvYU1dtT52m29g@mail.gmail.com>
- <67e6ebce-f8cc-7d28-5e85-8a3909c2d180@suse.cz> <CANpmjNNZhXX830jqPn9eaQZHwKhBb4b_PEuUdH6O69ELqW470w@mail.gmail.com>
- <d6c614fe-cc80-7a19-1fa6-2ed6cc75b705@suse.cz> <Y4YAC9UTxQLg4Y5q@feng-clx>
-In-Reply-To: <Y4YAC9UTxQLg4Y5q@feng-clx>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 29 Nov 2022 13:56:15 +0100
-Message-ID: <CANpmjNPm1JUB6O-xBOT_Ab0ztKnjX1kgnr=81AzTg=Tkt6yCBA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] mm/slub, kunit: Add a test case for kmalloc
- redzone check
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oliver Glitta <glittao@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221119034633.1728632-2-ltykernel@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Nov 2022 at 13:53, Feng Tang <feng.tang@intel.com> wrote:
->
-> On Tue, Nov 29, 2022 at 08:02:51PM +0800, Vlastimil Babka wrote:
-> > On 11/29/22 12:48, Marco Elver wrote:
-> > > On Tue, 29 Nov 2022 at 12:01, Vlastimil Babka <vbabka@suse.cz> wrote:
-> > >>
-> > >> On 11/29/22 10:31, Marco Elver wrote:
-> > >> > On Tue, 29 Nov 2022 at 07:37, Feng Tang <feng.tang@intel.com> wrote:
-> > >
-> > >> For SLAB_SKIP_KFENCE, we could also add the flag after creation to avoid
-> > >> this trouble? After all there is a sysfs file to control it at runtime
-> > >> anyway (via skip_kfence_store()).
-> > >> In that case patch 1 would have to wrap kmem_cache_create() and the flag
-> > >> addition with a new function to avoid repeating. That function could also be
-> > >> adding SLAB_NO_USER_FLAGS to kmem_cache_create(), instead of the #define
-> > >> DEFAULT_FLAGS.
-> > >
-> > > I wouldn't overcomplicate it, all we need is a way to say "this flag
-> > > should not be used directly" - and only have it available via an
-> > > indirect step. Availability via sysfs is one such step.
-> > >
-> > > And for tests, there are 2 options:
-> > >
-> > > 1. we could provide a function "kmem_cache_set_test_flags(cache,
-> > > gfp_flags)" and define SLAB_TEST_FLAGS (which would include
-> > > SLAB_SKIP_KFENCE). This still allows to set it generally, but should
-> > > make abuse less likely due to the "test" in the name of that function.
-> > >
-> > > 2. just set it directly, s->flags |= SLAB_SKIP_KFENCE.
-> > >
-> > > If you're fine with #2, that seems simplest and would be my preference.
-> >
-> > Yeah, that's what I meant. But slub_kunit.c could still have own internal
-> > cache creation function so the "|SLAB_NO_USER_FLAGS" and "s->flags |=
-> > SLAB_SKIP_KFENCE" is not repeated X times.
->
-> I just quickly tried adding a new wrapper, like
->
->   struct kmem_cache *debug_kmem_cache_create(const char *name, unsigned int size,
->                         unsigned int align, slab_flags_t flags,
->                         void (*ctor)(void *), slab_flags_t debug_flags);
->
-> and found that, IIUC, both SLAB_KMALLOC and SLAB_NO_USER are creation
-> time flag, while SLAB_SKIP_KFENCE is an allocation runtime flag which
-> could be set after creation.
->
-> So how about use the initial suggestion from Vlastimil to set the
-> SKIP_KFENCE flag through an internal wrapper in slub_kunit.c?
->
->         /* Only for debug and test use, to skip kfence allocation */
->         static inline void kmem_cache_skip_kfence(struct kmem_cache *s)
->         {
->                 s->flags |= SLAB_SKIP_KFENCE;
->         }
+On Fri, Nov 18, 2022 at 10:46:15PM -0500, Tianyu Lan wrote:
+> Subject: Re: [RFC PATCH V2 01/18] x86/sev: Pvalidate memory gab for decompressing kernel
 
-Yes, that's fine - as long as it's local to slub_kunit.c, this seems
-very reasonable.
+"gab"?
 
-Thanks,
--- Marco
+As in gabber? :-)
+
+> From: Tianyu Lan <tiala@microsoft.com>
+> 
+> Pvalidate needed pages for decompressing kernel. The E820_TYPE_RAM
+
+"Validate" - let's not start inventing new words. We're barely handling
+the existing ones. :)
+
+> entry includes only validated memory. The kernel expects that the
+> RAM entry's addr is fixed while the entry size is to be extended
+
+"addr"?
+
+Commit message needs to be english - not a code/english hybrid. Pls be
+more diligent here. Commit messages are not write-only.
+
+> to cover addresses to the start of next entry. This patch increases
+
+Avoid having "This patch" or "This commit" in the commit message. It is
+tautologically useless.
+
+Also, do
+
+$ git grep 'This patch' Documentation/process
+
+for more details.
+
+Pls check your whole set.
+
+Also, to the tone, from Documentation/process/submitting-patches.rst:
+
+ "Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
+  instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
+  to do frotz", as if you are giving orders to the codebase to change
+  its behaviour."
+
+> the RAM entry size to cover all possilble memory addresses until
+
+Unknown word [possilble] in commit message.
+Suggestions: ['possible', 'possibly', 'passable', 'plausible', 'assailable', 'pliable', 'passably']
+
+Please introduce a spellchecker into your patch creation workflow.
+
+> init_size.
+
+This whole commit message doesn't tell me a whole lot. Please try
+structuring it this way:
+
+Problem is A.
+
+It happens because of B.
+
+Fix it by doing C.
+
+(Potentially do D).
+
+For more detailed info, see
+Documentation/process/submitting-patches.rst, Section "2) Describe your
+changes".
+
+> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+> ---
+>  arch/x86/boot/compressed/head_64.S |  8 +++
+>  arch/x86/boot/compressed/sev.c     | 84 ++++++++++++++++++++++++++++++
+>  2 files changed, 92 insertions(+)
+> 
+> diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+> index d33f060900d2..818edaf5d0cf 100644
+> --- a/arch/x86/boot/compressed/head_64.S
+> +++ b/arch/x86/boot/compressed/head_64.S
+> @@ -348,6 +348,14 @@ SYM_CODE_START(startup_64)
+>  	cld
+>  	cli
+>  
+> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+> +	/* pvalidate memory on demand if SNP is enabled. */
+
+So this is going to be executed unconditionally on *every* SNP guest - not
+only Hyper-V ones.
+
+Why is that ok?
+
+> +	pushq	%rsi
+> +	movq    %rsi, %rdi
+> +	call 	pvalidate_for_startup_64
+> +	popq	%rsi
+> +#endif
+> +
+>  	/* Setup data segments. */
+>  	xorl	%eax, %eax
+>  	movl	%eax, %ds
+> diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
+> index 960968f8bf75..3a5a1ab16095 100644
+> --- a/arch/x86/boot/compressed/sev.c
+> +++ b/arch/x86/boot/compressed/sev.c
+> @@ -12,8 +12,10 @@
+>   */
+>  #include "misc.h"
+>  
+> +#include <asm/msr-index.h>
+>  #include <asm/pgtable_types.h>
+>  #include <asm/sev.h>
+> +#include <asm/svm.h>
+>  #include <asm/trapnr.h>
+>  #include <asm/trap_pf.h>
+>  #include <asm/msr-index.h>
+> @@ -21,6 +23,7 @@
+>  #include <asm/ptrace.h>
+>  #include <asm/svm.h>
+>  #include <asm/cpuid.h>
+> +#include <asm/e820/types.h>
+>  
+>  #include "error.h"
+>  #include "../msr.h"
+> @@ -117,6 +120,22 @@ static enum es_result vc_read_mem(struct es_em_ctxt *ctxt,
+>  /* Include code for early handlers */
+>  #include "../../kernel/sev-shared.c"
+>  
+> +/* Check SEV-SNP via MSR */
+> +static bool sev_snp_runtime_check(void)
+
+Functions need to have a verb in the name.
+
+> +{
+> +	unsigned long low, high;
+> +	u64 val;
+> +
+> +	asm volatile("rdmsr\n" : "=a" (low), "=d" (high) :
+> +			"c" (MSR_AMD64_SEV));
+> +
+> +	val = (high << 32) | low;
+> +	if (val & MSR_AMD64_SEV_SNP_ENABLED)
+> +		return true;
+
+There already is a sev_snp_enabled() in that very same file. Did you not
+see it?
+
+Why are you even adding such a function?!
+
+> +	return false;
+> +}
+> +
+>  static inline bool sev_snp_enabled(void)
+>  {
+>  	return sev_status & MSR_AMD64_SEV_SNP_ENABLED;
+> @@ -456,3 +475,68 @@ void sev_prep_identity_maps(unsigned long top_level_pgt)
+>  
+>  	sev_verify_cbit(top_level_pgt);
+>  }
+> +
+> +static void extend_e820_on_demand(struct boot_e820_entry *e820_entry,
+> +				  u64 needed_ram_end)
+> +{
+> +	u64 end, paddr;
+> +	unsigned long eflags;
+> +	int rc;
+> +
+> +	if (!e820_entry)
+> +		return;
+> +
+> +	/* Validated memory must be aligned by PAGE_SIZE. */
+> +	end = ALIGN(e820_entry->addr + e820_entry->size, PAGE_SIZE);
+> +	if (needed_ram_end > end && e820_entry->type == E820_TYPE_RAM) {
+> +		for (paddr = end; paddr < needed_ram_end; paddr += PAGE_SIZE) {
+> +			rc = pvalidate(paddr, RMP_PG_SIZE_4K, true);
+> +			if (rc) {
+> +				error("Failed to validate address.n");
+> +				return;
+> +			}
+> +		}
+> +		e820_entry->size = needed_ram_end - e820_entry->addr;
+> +	}
+> +}
+> +
+> +/*
+> + * Explicitly pvalidate needed pages for decompressing the kernel.
+> + * The E820_TYPE_RAM entry includes only validated memory. The kernel
+> + * expects that the RAM entry's addr is fixed while the entry size is to be
+> + * extended to cover addresses to the start of next entry.
+> + * The function increases the RAM entry size to cover all possible memory
+
+Similar issue as above: you don't need to say "this function" above this
+function. IOW, it should say:
+
+"Increase the RAM entry size..."
+
+I.e., imperative mood above.
+
+> + * addresses until init_size.
+> + * For example,  init_end = 0x4000000,
+> + * [RAM: 0x0 - 0x0],                       M[RAM: 0x0 - 0xa0000]
+> + * [RSVD: 0xa0000 - 0x10000]                [RSVD: 0xa0000 - 0x10000]
+> + * [ACPI: 0x10000 - 0x20000]      ==>       [ACPI: 0x10000 - 0x20000]
+> + * [RSVD: 0x800000 - 0x900000]              [RSVD: 0x800000 - 0x900000]
+> + * [RAM: 0x1000000 - 0x2000000]            M[RAM: 0x1000000 - 0x2001000]
+> + * [RAM: 0x2001000 - 0x2007000]            M[RAM: 0x2001000 - 0x4000000]
+
+What is this trying to tell me?
+
+That the end range 0x2007000 gets raised to 0x4000000?
+
+Why?
+
+This all sounds like there is some requirement somewhere but nothing
+says what that requirement is and why.
+
+> + * Other RAM memory after init_end is pvalidated by ms_hyperv_init_platform
+> + */
+> +__visible void pvalidate_for_startup_64(struct boot_params *boot_params)
+
+This doesn't do any validation. And yet it has "pvalidate" in the name.
+
+> +{
+> +	struct boot_e820_entry *e820_entry;
+> +	u64 init_end =
+> +		boot_params->hdr.pref_address + boot_params->hdr.init_size;
+
+Nope, we never break lines like that.
+
+> +	u8 i, nr_entries = boot_params->e820_entries;
+> +	u64 needed_end;
+
+The tip-tree preferred ordering of variable declarations at the
+beginning of a function is reverse fir tree order::
+
+	struct long_struct_name *descriptive_name;
+	unsigned long foo, bar;
+	unsigned int tmp;
+	int ret;
+
+The above is faster to parse than the reverse ordering::
+
+	int ret;
+	unsigned int tmp;
+	unsigned long foo, bar;
+	struct long_struct_name *descriptive_name;
+
+And even more so than random ordering::
+
+	unsigned long foo, bar;
+	int ret;
+	struct long_struct_name *descriptive_name;
+	unsigned int tmp;
+
+> +	if (!sev_snp_runtime_check())
+> +		return;
+> +
+> +	for (i = 0; i < nr_entries; ++i) {
+> +		/* Pvalidate memory holes in e820 RAM entries. */
+> +		e820_entry = &boot_params->e820_table[i];
+> +		if (i < nr_entries - 1) {
+> +			needed_end = boot_params->e820_table[i + 1].addr;
+> +			if (needed_end < e820_entry->addr)
+> +				error("e820 table is not sorted.\n");
+> +		} else {
+> +			needed_end = init_end;
+> +		}
+> +		extend_e820_on_demand(e820_entry, needed_end);
+
+Now *this* function does call pvalidate() and yet it doesn't have
+"pvalidate" in the name. This all looks real confused.
+
+So first of all, you need to explain *why* you're doing this.
+
+It looks like it is because the guest needs to do the memory validation
+by itself because nobody else does that.
+
+If so, this needs to be explained in detail in the commit message.
+
+Also, why is that ok for SNP guests on other hypervisors which get the
+memory validated by the boot loader or firmware?
+
+And so on and so on.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
