@@ -2,100 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47AB363B8AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5582963B8B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:21:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235466AbiK2DSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 22:18:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
+        id S233561AbiK2DV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 22:21:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235340AbiK2DSi (ORCPT
+        with ESMTP id S229818AbiK2DVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 22:18:38 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339B427920;
-        Mon, 28 Nov 2022 19:18:37 -0800 (PST)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NLnWG0ZxHzqSdp;
-        Tue, 29 Nov 2022 11:14:34 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 11:18:35 +0800
-Message-ID: <d357e15b-e44a-1e3b-41c3-0b732e4685ed@huawei.com>
-Date:   Tue, 29 Nov 2022 11:18:34 +0800
+        Mon, 28 Nov 2022 22:21:25 -0500
+Received: from out30-6.freemail.mail.aliyun.com (out30-6.freemail.mail.aliyun.com [115.124.30.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D3117070
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 19:21:23 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VVyd4Es_1669692070;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VVyd4Es_1669692070)
+          by smtp.aliyun-inc.com;
+          Tue, 29 Nov 2022 11:21:21 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     jiucheng.xu@amlogic.com
+Cc:     will@kernel.org, mark.rutland@arm.com, neil.armstrong@linaro.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH 2/2] perf/amlogic: Remove unused including <linux/version.h>
+Date:   Tue, 29 Nov 2022 11:21:07 +0800
+Message-Id: <20221129032108.119661-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v2] ext4: fix a NULL pointer when validating an inode
- bitmap
-Content-Language: en-US
-To:     Theodore Ts'o <tytso@mit.edu>,
-        =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>
-CC:     Andreas Dilger <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <stable@vger.kernel.org>
-References: <20221010142035.2051-1-lhenriques@suse.de>
- <20221011155623.14840-1-lhenriques@suse.de> <Y2cAiLNIIJhm4goP@mit.edu>
- <Y2piZT22QwSjNso9@suse.de> <Y4U18wly7K87fX9v@mit.edu>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <Y4U18wly7K87fX9v@mit.edu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/29 6:28, Theodore Ts'o wrote:
-> On Tue, Nov 08, 2022 at 02:06:29PM +0000, Luís Henriques wrote:
->>> What makes you believe that?  Look at how s_group_info is initialized
->>> in ext4_mb_alloc_groupinfo() in fs/ext4/mballoc.c.  It's pretty
->>> careful to make sure this is not the case.
->> Right.  I may be missing something, but I don't think we get that far.
->> __ext4_fill_super() will first call ext4_setup_system_zone() (which is
->> where this bug occurs) and only after that ext4_mb_init() will be invoked
->> (which is where ext4_mb_alloc_groupinfo() will eventually be called).
-> I finally got around to taking a closer look at this, and I have a
-> much better understandign of what is going on.  For more details, and
-> a suggested fix, please see:
->
->       https://bugzilla.kernel.org/show_bug.cgi?id=216541#c1
->
-> 						- Ted
->
->
-Hi Theodore,
+./drivers/perf/amlogic/meson_ddr_pmu_core.c: 19 linux/version.h not needed.
 
-In my opinion, the s_journal_inum should not be modified when the file 
-system is
-mounted, especially after we have successfully loaded and replayed the 
-journal with
-the current s_journal_inum. Even if the s_journal_inumon the disk is 
-modified, we should
-use the current one. This is how journal_devnum is handled in 
-ext4_load_journal():
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3282
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/perf/amlogic/meson_ddr_pmu_core.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-          if (!really_read_only && journal_devnum &&
-              journal_devnum != le32_to_cpu(es->s_journal_dev)) {
-                  es->s_journal_dev = cpu_to_le32(journal_devnum);
-
-                  /* Make sure we flush the recovery flag to disk. */
-                  ext4_commit_super(sb);
-          }
-
-We can avoid this problem by adding a similar check for journal_inum in 
-ext4_load_journal().
-
+diff --git a/drivers/perf/amlogic/meson_ddr_pmu_core.c b/drivers/perf/amlogic/meson_ddr_pmu_core.c
+index 0ff7c0449ac2..b84346dbac2c 100644
+--- a/drivers/perf/amlogic/meson_ddr_pmu_core.c
++++ b/drivers/perf/amlogic/meson_ddr_pmu_core.c
+@@ -16,7 +16,6 @@
+ #include <linux/printk.h>
+ #include <linux/sysfs.h>
+ #include <linux/types.h>
+-#include <linux/version.h>
+ 
+ #include <soc/amlogic/meson_ddr_pmu.h>
+ 
 -- 
-With Best Regards,
-Baokun Li
+2.20.1.7.g153144c
 
