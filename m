@@ -2,164 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A439863C1BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:04:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C98463C191
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234970AbiK2OD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 09:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
+        id S233293AbiK2N67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 08:58:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbiK2ODk (ORCPT
+        with ESMTP id S230129AbiK2N6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 09:03:40 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3CB49081;
-        Tue, 29 Nov 2022 06:03:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669730619; x=1701266619;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=RRv6X9kxxmg0r2Bt/bN85+Xzhbzh0Sz0OFcppuwQCsk=;
-  b=GOTJBVPwrjlex7VY0yK8at7YkujTbm5WSbk9MkRHVv08akW99oJQoLn4
-   EbB+i39Kt6zzzeD52+JSDzVG+KHbAJcOg9VoTvXtEQNTVsJL4md1TFRi3
-   D/nAik/sA36SpHxXXGhs2UoJwK/dNVhQTXr4TAsX24aitkXwJeUHY/BVE
-   J+smxfnAUSVWNNcp+QzDgr3xA3UArOLkJozgJZBjlXa4lBo9JHjC/zpc5
-   P+/Ldl6YOly1+yzvVBMigOpl4nG/5pUf/bx6LCp7/8I+eeGVaOujzpYqi
-   7QTntPVUe5Wns6Cre5dQcPTFJvj2UxH3uSHtwIbTqW3krodOutAzC3ch9
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="316948114"
-X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
-   d="scan'208";a="316948114"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 06:03:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="707221475"
-X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
-   d="scan'208";a="707221475"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by fmsmga008.fm.intel.com with ESMTP; 29 Nov 2022 06:03:05 -0800
-Date:   Tue, 29 Nov 2022 21:58:44 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        mhocko@suse.com, Muchun Song <songmuchun@bytedance.com>,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <20221129135844.GA902164@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
- <20221129000632.sz6pobh6p7teouiu@amd.com>
- <20221129112139.usp6dqhbih47qpjl@box.shutemov.name>
+        Tue, 29 Nov 2022 08:58:51 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4282AC65
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 05:58:50 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id z24so17180744ljn.4
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 05:58:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H2pPVev3RCLudXV+llX32MLBUni5nh/cZHxB+M0bkvM=;
+        b=waDyAGc0fv9NY23aBVzUNd67+z6i2Ph8TR02pjEtX5Gw3qHQxpk4I+q34Asfp8aKNJ
+         K+p4L/Ml0yzueqtCa9osb/bhNa/kqof6YmJg2Q5S8Y+0DICAkYA8fMfbkRI8ZnSxYkM4
+         InYBUxsj890TCUfs+3S7EDh/6ReIQeF8cKTBHCMk/oaNxo9cWTdc+fxUVG/bOiC6Kiw2
+         rgsvViSG2SjV9iykoPSrywu5EBj8dGiO7TYJaJ9JKlPrBdzkxakmpzU0fcl/SVySif7y
+         2ZfIsW9Tg0qlbX0ag0PrmhQjv0R9em3kkW1j9A/CTsecvxMHbOKX+DBlFKq36PmtG5EH
+         BnQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H2pPVev3RCLudXV+llX32MLBUni5nh/cZHxB+M0bkvM=;
+        b=BMj8/pziWITQx83GWQBgI1UbjdPHMKpFw519A1AUuv+cp/teBtF55cxLkFyK5j2b/G
+         ZYRTHv8kn50tDTlttVjxJLYj6Zn3SEAFWvS86shh7RSvvyTC0VXrZkyL7F08IvOd9kKD
+         QuzGJPMZ0iDVdwHiJyRdu06JqGo+2G1UQKEvFsSk0wZEVFYg2G+WobIuIYFxkrccgRSl
+         hxB9C1E6yIcWqAO0dVlnJb4E0uj2ss7kE2y1LN++jGoFGVoA3+YD5JI3cqPJg3h9yZ4z
+         Dt2m5a+yXBEbnKXDxwAW1Rg0pLjJ+yg5vSemABSMlCOIAWzqizNg2ViCJU26sqBxq5gA
+         nfgg==
+X-Gm-Message-State: ANoB5pnTYWH1RtVNc68dzI5MfBV2jWI/U8i2utJiV7eI58xo57VR02j3
+        12DgYCAE4igWXtqKmLgTQ2mfBg==
+X-Google-Smtp-Source: AA0mqf5RacO/5cMNhLm9XvyvLvezEAskC3Cmkn9WrJJSxE0ZF2oNEfvjLLTyegDa4KnVOBnfDjlaqw==
+X-Received: by 2002:a05:6512:13a5:b0:4ad:70f0:c7c with SMTP id p37-20020a05651213a500b004ad70f00c7cmr17467048lfa.190.1669730329197;
+        Tue, 29 Nov 2022 05:58:49 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id 11-20020a05651c128b00b0026fc8855c20sm1548349ljc.19.2022.11.29.05.58.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 05:58:48 -0800 (PST)
+Message-ID: <bf91aac5-7d9a-245f-7c97-b8be901cf538@linaro.org>
+Date:   Tue, 29 Nov 2022 14:58:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221129112139.usp6dqhbih47qpjl@box.shutemov.name>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v1 2/2] dt-bindings: pwm: mediatek: Convert pwm-mediatek
+ to dt schema
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        robh+dt@kernel.org, matthias.bgg@gmail.com, john@phrozen.org,
+        sean.wang@mediatek.com, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20221128112028.58021-1-angelogioacchino.delregno@collabora.com>
+ <20221128112028.58021-3-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221128112028.58021-3-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 02:21:39PM +0300, Kirill A. Shutemov wrote:
-> On Mon, Nov 28, 2022 at 06:06:32PM -0600, Michael Roth wrote:
-> > On Tue, Oct 25, 2022 at 11:13:37PM +0800, Chao Peng wrote:
-> > > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> > > 
-> > 
-> > <snip>
-> > 
-> > > +static struct file *restrictedmem_file_create(struct file *memfd)
-> > > +{
-> > > +	struct restrictedmem_data *data;
-> > > +	struct address_space *mapping;
-> > > +	struct inode *inode;
-> > > +	struct file *file;
-> > > +
-> > > +	data = kzalloc(sizeof(*data), GFP_KERNEL);
-> > > +	if (!data)
-> > > +		return ERR_PTR(-ENOMEM);
-> > > +
-> > > +	data->memfd = memfd;
-> > > +	mutex_init(&data->lock);
-> > > +	INIT_LIST_HEAD(&data->notifiers);
-> > > +
-> > > +	inode = alloc_anon_inode(restrictedmem_mnt->mnt_sb);
-> > > +	if (IS_ERR(inode)) {
-> > > +		kfree(data);
-> > > +		return ERR_CAST(inode);
-> > > +	}
-> > > +
-> > > +	inode->i_mode |= S_IFREG;
-> > > +	inode->i_op = &restrictedmem_iops;
-> > > +	inode->i_mapping->private_data = data;
-> > > +
-> > > +	file = alloc_file_pseudo(inode, restrictedmem_mnt,
-> > > +				 "restrictedmem", O_RDWR,
-> > > +				 &restrictedmem_fops);
-> > > +	if (IS_ERR(file)) {
-> > > +		iput(inode);
-> > > +		kfree(data);
-> > > +		return ERR_CAST(file);
-> > > +	}
-> > > +
-> > > +	file->f_flags |= O_LARGEFILE;
-> > > +
-> > > +	mapping = memfd->f_mapping;
-> > > +	mapping_set_unevictable(mapping);
-> > > +	mapping_set_gfp_mask(mapping,
-> > > +			     mapping_gfp_mask(mapping) & ~__GFP_MOVABLE);
-> > 
-> > Is this supposed to prevent migration of pages being used for
-> > restrictedmem/shmem backend?
+On 28/11/2022 12:20, AngeloGioacchino Del Regno wrote:
+> This converts pwm-mediatek.txt to mediatek,mt2712-pwm.yaml schema;
+> while at it, the clock names were clarified as previously they were
+> documented as "pwmX-Y", but valid names are "pwmN" only.
+> Also, the example was changed to use "mediatek,mt2712-pwm" instead
+> for consistency with the schema filename.
 > 
-> Yes, my bad. I expected it to prevent migration, but it is not true.
-> 
-> Looks like we need to bump refcount in restrictedmem_get_page() and reduce
-> it back when KVM is no longer use it.
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
 
-The restrictedmem_get_page() has taken a reference, but later KVM
-put_page() after populating the secondary page table entry through
-kvm_release_pfn_clean(). One option would let the user feature(e.g.
-TDX/SEV) to get_page/put_page() during populating the secondary page
-table entry, AFAICS, this requirement also comes from these features.
 
-Chao
-> 
-> Chao, could you adjust it?
-> 
-> -- 
->   Kiryl Shutsemau / Kirill A. Shutemov
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
