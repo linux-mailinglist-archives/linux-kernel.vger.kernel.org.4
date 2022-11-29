@@ -2,75 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA6363C33E
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A8663C342
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235810AbiK2O6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 09:58:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
+        id S235818AbiK2O6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 09:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235797AbiK2O6F (ORCPT
+        with ESMTP id S232491AbiK2O6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 09:58:05 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962D9B5C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:58:03 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id s5so20083043edc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:58:03 -0800 (PST)
+        Tue, 29 Nov 2022 09:58:16 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFBC26105
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:58:15 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id l8so17532999ljh.13
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:58:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r75p1eFMXKQ8J7TYZaKWyn27SqsBD3/AsLI3zva19UI=;
-        b=I5ZwJXEwMTDiKm/D6EG/P+e+ITsPwWbKmHcm2TS+XfEPlGsREoWspExg1BF9Q7H2wv
-         s+l1CwZ+6a8zYY8DDlvmRuzkRBqq8AM9t6BQCZqRzv5UBAmCkvfBGEMXYoYVrNYrYOFp
-         EG4+6lakHZUQaXMKIEnZiCE6iSF5F8D9MNwW5gWl9FQzKkFcBOAeKKNcKrru8zSlIrm/
-         ecQQTPmNfUhnEg8qVnJGskgXAQckrV2TQsHY2Frw/Zn+qp89mcQ6JP3e/5VkcKOgdAlm
-         jwGEjUUkggLzAggFrP2QDJoFIa04xXUwBKO7F4s1YZCCvZ0euE7e0BU215KkTgFGHHn+
-         j1Lg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3rMzROJizPl93HGtOKCLbNrY7oFQ4h6JFqbBwgiPoQw=;
+        b=HK7NNJ+m0uo/8YiZigjIrMXrWT37vfCzE7ov3f7OWCf7ekUevZr/VqIA7JEZ2GKayk
+         NRRVL9YSxbesfRYHWDaQuOX+C3/nCgmBSaPtE/344PBJuxVwlIrdUXUU++oqaf9G2qN6
+         EA8zpZKOLeRklTG1AROPnVm+qvCAS9JQm2XG84OxkYA82ZH5d8ay6/OjOEuYmXuV6/vz
+         84cqiQLfQ4fTOoVC4lrGW2dGf5ibfzL4uUZa2bN+ONpzydOi4ONItIRz0XxcdjnC1bAY
+         zWgzwbqm9dmm+XOY5N6W4/zjzXOqa8JoaxQgtz3O6T4BmE72V9m4x+j+wawmEgu7P+9j
+         WNUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r75p1eFMXKQ8J7TYZaKWyn27SqsBD3/AsLI3zva19UI=;
-        b=ATS6mkYf+w5bya3PRRhHWdtDZemxQe/JjRTUnHI31CjZCkYrZHsb2n4cdTzb4SMbQ3
-         zh5N4uy+Hg7S7fIpXwsyK6Elvqu/+j2QaXybbQ1OP4kiBeuCWKoRt9bUmDpW6wwJ/RyL
-         Loi6XSgk9jIDzgSpPVVHIiTDroWXfjV1Cner61DHOMZvj+kuFw0uHR64B8h1pQ/mGr60
-         CKd95jIJG4sG9iupTjsGSjB2ScBc0DU4MbJqassE6EbSql3YJnsEz9KfTVhCApUCAaJZ
-         Dy/PO9+QeW3y3+DDehQ7Cvo00A5xMOIqqR0xLqY2yEA/h+Zk5jINLiJyfobUqPLABKog
-         lx0Q==
-X-Gm-Message-State: ANoB5pn5RyxLkp9WoAs+cbvrRh8g+kBd8z6btMFhzzlbxgghvS0si2yT
-        pqsTadJF3w0FoBTHXKstmsgub4OFA/Q/cTHygqNjzw==
-X-Google-Smtp-Source: AA0mqf5Y/+vzKZPDu0HIiqgRDNP3PDGrpQuTbvEMCglEx8rTPkVQ8nFpFwOr8RBm33gQIypJ1AtzoZQ6VRgAC9IXGOM=
-X-Received: by 2002:aa7:d555:0:b0:464:6485:419b with SMTP id
- u21-20020aa7d555000000b004646485419bmr38297553edr.382.1669733881867; Tue, 29
- Nov 2022 06:58:01 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3rMzROJizPl93HGtOKCLbNrY7oFQ4h6JFqbBwgiPoQw=;
+        b=NSkWAGsS9jbXOVyyB6oTlNDpoWrLkiPjpc/AqtNFpI9uf6PHZ8v6EVAmYvtW616pZv
+         WUve98s3kDW4+krom8eG80hkaPK26gOafpxubPYtP0U2i6j0reIcUg2ZNZ2Xj2r4NPyA
+         R/v48PR62eFqNV5UVL5xntS7gXVDbieQU7Z+bYhDktd6ggdZzcZALzoK5WlyCjJIp1eE
+         hKRocsThRdQ7hTOxyj0Qg6lzDtwnFHGTL8GayTZgz9QeVJWYAlphWzBkeaFROloyMGSA
+         C8RvUgPQbfTSo5GGz9lXyN4Pqh8kClDGU7qYW/fQoUvnICx3Z2H6yBkW+4vx9mlUNNeg
+         rAow==
+X-Gm-Message-State: ANoB5plcqFWF10/65Ca97d5cAseU7XvvRw1+ng+WEgYStFH6BdqzqGUX
+        GQhp/dkPrdMNqSC9P15OtHFKPg==
+X-Google-Smtp-Source: AA0mqf6H7HysSViJIaGj4Ohg+efF0OL6qEvNKbtfijn0aiuYjc56hcFvmqwVVrFHWxq9fJmbcsxrdQ==
+X-Received: by 2002:a2e:800e:0:b0:279:8e27:b42f with SMTP id j14-20020a2e800e000000b002798e27b42fmr6914373ljg.106.1669733894163;
+        Tue, 29 Nov 2022 06:58:14 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id 13-20020ac2484d000000b004aac23e0dd6sm2232708lfy.29.2022.11.29.06.58.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 06:58:13 -0800 (PST)
+Message-ID: <f52e31a5-a12a-b95e-b99c-1af8f8b41c3b@linaro.org>
+Date:   Tue, 29 Nov 2022 15:58:12 +0100
 MIME-Version: 1.0
-References: <20221111095313.2010815-1-sumit.garg@linaro.org>
- <20221111143800.k7xje6g23ujefnye@bogus> <CAFA6WYMdNjbMRZxt3iicmKOhQa3ax7_HYtqmNN9bmpndqT8e9A@mail.gmail.com>
- <20221114102650.qwkaxtnstujaiu6u@bogus> <CAN5uoS8SArNmaxwhJ=tRCPD8ue1D8VvQyLacDDS2sunfg4gLbw@mail.gmail.com>
- <b0bc03f9f2a5afbe3a77b81648a765348073cc36.camel@axis.com> <Y30LXW5Elcur5mlI@e120937-lin>
- <0b24b15bfee6d97d23caf0225d264c14e0ed48f1.camel@axis.com> <Y4X35fXiPHQ5b0cG@e120937-lin>
-In-Reply-To: <Y4X35fXiPHQ5b0cG@e120937-lin>
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-Date:   Tue, 29 Nov 2022 15:57:50 +0100
-Message-ID: <CAN5uoS8pFOLqZ3Jd7rHCisUcJvVkfWQqnOE=DUGyC3EURGLsFg@mail.gmail.com>
-Subject: Re: [PATCH] firmware: arm_scmi: Resolve dependency with TEE subsystem
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     =?UTF-8?Q?Ludvig_P=C3=A4rsson?= <Ludvig.Parsson@axis.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "jens.wiklander@linaro.org" <jens.wiklander@linaro.org>,
-        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 1/5] dt-bindings: pinctrl: Add StarFive JH7110 pinctrl
+ definitions
+Content-Language: en-US
+To:     Jianlong Huang <jianlong.huang@starfivetech.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Cc:     Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+References: <20221118011108.70715-1-hal.feng@starfivetech.com>
+ <20221118011108.70715-2-hal.feng@starfivetech.com>
+ <eb3974a3-f715-f5b0-cac7-551af26bd17b@linaro.org>
+ <08db0f3b-5222-9460-26ba-0e6380d16583@linaro.org>
+ <0ceba170-f844-e733-a49e-e67746f9f836@starfivetech.com>
+ <093ea507-4c42-1af9-4896-64c1a918432e@linaro.org>
+ <30c21787-0c48-ff50-1d63-8e69bdcdbe30@starfivetech.com>
+ <339be655-aee7-e1a4-51be-28ea20de6792@linaro.org>
+ <3db802d6-114f-097a-6c69-e7b40e4d2764@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3db802d6-114f-097a-6c69-e7b40e4d2764@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,90 +91,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Cristian, Ludvig,
+On 29/11/2022 15:46, Jianlong Huang wrote:
+> On Tue, 29 Nov 2022 08:49:49 +0100, Krzysztof Kozlowski wrote:
+>> On 29/11/2022 02:47, Jianlong Huang wrote:
+>>> On Mon, 28 Nov 2022 09:32:45 +0100, Krzysztof Kozlowski wrote:
+>>>> On 28/11/2022 01:48, Jianlong Huang wrote:
+>>>>
+>>>>>>>> +/* aon_iomux doen */
+>>>>>>>> +#define GPOEN_AON_PTC0_OE_N_4			2
+>>>>>>>> +#define GPOEN_AON_PTC0_OE_N_5			3
+>>>>>>>> +#define GPOEN_AON_PTC0_OE_N_6			4
+>>>>>>>> +#define GPOEN_AON_PTC0_OE_N_7			5
+>>>>>>>> +
+>>>>>>>
+>>>>>>> It looks like you add register constants to the bindings. Why? The
+>>>>>>> bindings are not the place to represent hardware programming model. Not
+>>>>>>> mentioning that there is no benefit in this.
+>>>>>>
+>>>>>> Also: this entire file should be dropped, but if it stays, you have to
+>>>>>> name it matching bindings or compatible (vendor,device.h).
+>>>>>
+>>>>> Thanks your comments.
+>>>>> These macros are used to configure pinctrl in dts, so the file should stay,
+>>>>
+>>>> Why they should stay? What's the reason? If it is not a constant used by
+>>>> driver, then register values should not be placed in the bindings, so
+>>>> drop it.
+>>>>
+>>>
+>>> Thanks.
+>>>
+>>> These macros in binding header(example, DOUT, DOEN etc) will be used in DTS,
+>>> and driver will parse the DT for pinctrl configuration.
+>>>
+>>> Example in dts:
+>>> uart0_pins: uart0-0 {
+>>> 	tx-pins {
+>>> 		pinmux = <GPIOMUX(5, GPOUT_SYS_UART0_TX, GPOEN_ENABLE, GPI_NONE)>;
+>>
+>> This is usage in DTS and is not an argument to store register
+>> addresses/offsets as bindings. What is the usage (of define, not value)
+>> in the driver?
+>>
+> 
+> The existing implementation reuse the macros for DTS and driver.
 
-For info, I've tested your patches Cristian on my setup.
-they did the job for probing optee transport at module initcall level.
+Where in the driver? Grep gives zero results.
 
-br,
-etienne
+> Do you mean we need to separate the macros, one for DTS and one for driver usage?
 
-On Tue, 29 Nov 2022 at 13:15, Cristian Marussi <cristian.marussi@arm.com> w=
-rote:
->
-> On Tue, Nov 29, 2022 at 10:49:10AM +0000, Ludvig P=C3=A4rsson wrote:
-> > On Tue, 2022-11-22 at 17:48 +0000, Cristian Marussi wrote:
-> > > On Mon, Nov 14, 2022 at 01:47:25PM +0000, Ludvig P=C3=A4rsson wrote:
-> > > > On Mon, 2022-11-14 at 12:29 +0100, Etienne Carriere wrote:
-> > > > > Hello all,
-> > > > >
-> > >
-> > > Hi Ludvig,
-> > >
-> > > following up on the issues raised by this thread and a few proposals
-> > > that
-> > > were flying around (online and offline), in the past days I took the
-> > > chance
-> > > to have a go at a substantial rework of the init/probe sequences in
-> > > the SCMI
-> > > core to address the issue you faced with SCMI TEE transport while
-> > > trying to
-> > > untangle a bit the SCMI core startup sequences (... while also
-> > > possibly not
-> > > breaking it all :P...)
-> > >
-> > > In a nutshell, building on an idea from an offline chat with Etienne
-> > > ad
-> > > Sudeep, now the SCMI bus initialization is split on its own and
-> > > initialized at
-> > > subsys_initcall level, while the SCMI core stack, including the the
-> > > SCMI TEE
-> > > transport layer, is moved at module_init layer together with the SCMI
-> > > driver users.
-> > >
-> > > This *should* theoretically solve your issue ... (and it seems like
-> > > all the
-> > > rest it's still working :P) ... so I was wondering if you can give a
-> > > go
-> > > at the following pachset on your setup:
-> > >
-> > > https://gitlab.arm.com/linux-arm/linux-cm/-/commits/scmi_rework_stack=
-_init_draft/
-> > >
-> > > ... note that this is just a draft at the moment, which has undergone
-> > > a
-> > > reasonable amount of testing on mailbox/virtio transports only in
-> > > both a
-> > > SCMI builtin and/or modules scenario, but is no where ready for
-> > > review.
-> > >
-> > > The top three patches are really what you need BUT these are probably
-> > > tightly bound to that bunch of early fixes you can see in the
-> > > branch...so in other words better if you pick the whole branch for
-> > > testing :D
-> > >
-> > > Once you've confirmed me that this solves your issues I'll start the
-> > > final cleanup for posting in the next cycle.
-> > >
-> > > Thanks,
-> > > Cristian
-> >
-> > Hi Cristian,
->
-> Hi,
->
-> >
-> > I tried my best to get the patchset to work somehow on my version of
-> > the kernel, and it seems to be working great. I played around with some
-> > things, for example changing order of some drivers that were on the
-> > same init levels, and it still worked. Only tested with voltage domain
-> > protocol and optee transport.
-> >
-> > Thanks for your great work!
-> >
->
-> Great, thanks for testing it.
-> I'll post shortly a cleaned up series aiming at the next release cycle.
->
-> Thanks,
-> Cristian
+No, if driver uses them it is fine. The problem is I cannot find it
+anywhere.
+
+> Or you have any better suggestion?
+> 
+> These macros are the value of register, not register addresses/offsets,
+> except for with prefix of GPI.
+
+Still, values are not usually part of bindings.
+
+> 
+> Drivers rarely reference macros directly, mostly parsing dts and writing them to registers.
+
+So drivers do not use macros? Then there is no reason to store them in
+bindings? What do you "bind" if there is no usage (and we do not talk
+about DTS...)?
+
+Best regards,
+Krzysztof
+
