@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9907063C1BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:03:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB72863C1BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234731AbiK2ODo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 09:03:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38044 "EHLO
+        id S234753AbiK2ODt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 09:03:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234639AbiK2ODY (ORCPT
+        with ESMTP id S234698AbiK2ODd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 09:03:24 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1066418B37
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:03:24 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id b21so13478553plc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:03:24 -0800 (PST)
+        Tue, 29 Nov 2022 09:03:33 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F6F1ADBB
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:03:31 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id jn7so13474541plb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:03:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pjq0SJx9GK7fi74EZz816s2rBUHtlCxatQJYtnjVbuM=;
-        b=HRYib5uKKfPx9dsXiXvzZ9/38Ir8ibfurUtJJpxA8EOiMLOSgoQHFo0Q/WYnFHaSTl
-         BzDPFLTRFg2fHnyZBhxdlCj+Qe9hPUU0iFaM2kuBv46oMQYrqT40aZ/sx6zCL3/GrX9W
-         8zO/EqcFiYmP0xGdhLWtk4LJmfOG5rnhWIDQvb5ORxKoCP6K1bgd9AK7HkpoQZfGVI1O
-         20i54mss0essruIsuaaEnRJ1sFHCBT5j4OwNc53MDDMJqBL/h2zZyXQcANvlkqy5yqrg
-         kCbVXVcWHFV8UD1naeeLA26+g43l0Wyx4KDkAtm1udPorYm9S/8OSIb5ie87X1aYLr5l
-         DYGw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dmATt0XXLfjGq8KTAB6LQCwLbX+al5xHeC21A61DKj0=;
+        b=hY/6z86R84EwODbjkiiGC6QK0QG6Br2dUspKKN2xxrJ8I9quSTGKQCLag9z6OAVc5U
+         EATKmpotnBhW0OItmcD9+yaySF26TlP5OjXCEIpBptR7dWma01PR8ptk7OemJ66JbquV
+         Lb+PnPKW6yYk7VWlNMmwkLfSvnLEfccmBsdRACeew8SunS8mKXTJtt7wCEbM+WTstp9Z
+         Tv880hcMAeQY8/X4jWNG5kueNio+R32G6GlAnPPkSudTu8fBS2MKf4j9utmOa0AYl5vL
+         w7M/n4cIsxQfcp57UyuMiKkFo6dRWmxjFWQ5FM6+Al2cicW24t2uEeZKqUm2/PHm5el3
+         wYHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pjq0SJx9GK7fi74EZz816s2rBUHtlCxatQJYtnjVbuM=;
-        b=OVzYwiLKYZSfBslTAPZp4Q9c2/y4dDDBkdfWoOfu6843eKRu5TDpkDFwR6hr+IrffJ
-         4UzO06E8D8nCzlpf8G5a1MCphX81jZb7X2rM2Jh177h7Q83tCR4zM7MXvsqRnh9sFAoJ
-         akr6yQvKF1/F/oqlSK2Ab8fK7aatoK2s8K2L4GAp/oenf5a5FVIH3Ds3wP4G0NAdluLz
-         gg3oCLZ0jUd0L//RnHarDZTCmnm6qWbQkfJTwcuxBjDz2cin2MwOTTHbE8CWViLKTDp+
-         LtRc/tJo+tZtk8H5H+ByAAT/7Sk6ZUOycN6HHUET3h7ygNLsXn6CksV4w3mhob+XTcpx
-         8rsw==
-X-Gm-Message-State: ANoB5pkhODCvGwTPGHBhO7v4kFAqQyA7lk4+H8ERW262bO0t3EoFYhyK
-        lglJkYWjfDwFVKsIf3KIGq6AzjT9vY7HWQ==
-X-Google-Smtp-Source: AA0mqf5NLlwP8x1H+pb8ntntoBOW1EREsRhfbakgtMzchWSKW+8ALoxPQii4Oo+V7X44nfgwYVsrtg==
-X-Received: by 2002:a17:90a:c68d:b0:219:80b:6ea with SMTP id n13-20020a17090ac68d00b00219080b06eamr24396424pjt.212.1669730603217;
-        Tue, 29 Nov 2022 06:03:23 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dmATt0XXLfjGq8KTAB6LQCwLbX+al5xHeC21A61DKj0=;
+        b=GukcX8wXLrqMMjbvImDgx9927oeuxmsYsbfFAXXL2d8Yh2mj4y02Hw0wHU9VdPH2Z3
+         VIj/WtOa0WpaIPwrlc3BzSxsdBkBoy/Bemu42UpyQNMEh1JcLjFJm649N7/HH9NzrDgr
+         wKruAAjL3TQcn+qp1cEj1017/JCRzCqEuw1JnsihQBeMVGpNkAS8unZuRwnW5g0P5f2A
+         EsHjYZuOGUjQitNYq5lFR6MrnErMCagRQcxKpQD70wmvLw7EA8NnGLG7GTmnMEG9nANX
+         Patkeu/vY+SRZqXPW8a50TQVRsDnpyt6u/6e2luSdb2fbks2pZfYLgRpdwkP480GBPj6
+         c3aw==
+X-Gm-Message-State: ANoB5pnxKKvHywtMIikeAZJOCaMEtYj0LA4FHK1QJmebnkSZrJo5GVQ7
+        U0iI/ZsVgMzoJO2baJ/KjqRGkg==
+X-Google-Smtp-Source: AA0mqf53M2VbsnM+2H/qCK2bbZJbD9dskoicTq7vf6i7UsemhtdUPZBj0ZAKIkhFlUctXmNdwVz6fQ==
+X-Received: by 2002:a17:902:70c9:b0:176:a0cc:5eff with SMTP id l9-20020a17090270c900b00176a0cc5effmr46522128plt.128.1669730607996;
+        Tue, 29 Nov 2022 06:03:27 -0800 (PST)
 Received: from anup-ubuntu-vm.localdomain ([171.76.84.98])
-        by smtp.gmail.com with ESMTPSA id k30-20020aa79d1e000000b00574f83c5d51sm6013747pfp.198.2022.11.29.06.03.18
+        by smtp.gmail.com with ESMTPSA id k30-20020aa79d1e000000b00574f83c5d51sm6013747pfp.198.2022.11.29.06.03.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 06:03:22 -0800 (PST)
+        Tue, 29 Nov 2022 06:03:27 -0800 (PST)
 From:   Anup Patel <apatel@ventanamicro.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -61,12 +62,13 @@ Cc:     Andrew Jones <ajones@ventanamicro.com>,
         Samuel Holland <samuel@sholland.org>,
         Conor Dooley <conor.dooley@microchip.com>,
         Anup Patel <anup@brainfault.org>, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH v4 0/3] Improve CLOCK_EVT_FEAT_C3STOP feature setting
-Date:   Tue, 29 Nov 2022 19:33:10 +0530
-Message-Id: <20221129140313.886192-1-apatel@ventanamicro.com>
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/3] RISC-V: time: initialize broadcast hrtimer based clock event device
+Date:   Tue, 29 Nov 2022 19:33:11 +0530
+Message-Id: <20221129140313.886192-2-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221129140313.886192-1-apatel@ventanamicro.com>
+References: <20221129140313.886192-1-apatel@ventanamicro.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,38 +80,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series improves the RISC-V timer driver to set CLOCK_EVT_FEAT_C3STOP
-feature based on RISC-V platform capabilities.
+From: Conor Dooley <conor.dooley@microchip.com>
 
-These patches can also be found in riscv_timer_dt_imp_v4 branch at:
-https://github.com/avpatel/linux.git
+Similarly to commit 022eb8ae8b5e ("ARM: 8938/1: kernel: initialize
+broadcast hrtimer based clock event device"), RISC-V needs to initiate
+hrtimers before C3STOP can be used. Otherwise, the introduction of C3STOP
+for the RISC-V arch timer in commit 232ccac1bd9b
+("clocksource/drivers/riscv: Events are stopped during CPU suspend")
+breaks timer behaviour, for example clock_nanosleep().
 
-Changes since v3:
- - Rebased on Linux-6.1-rc7
- - Replaced PATCH1 with a patch to initialize broadcast timer
+A test app that sleeps each cpu for 6, 5, 4, 3 ms respectively, HZ=250
+& C3STOP enabled, the sleep times are rounded up to the next jiffy:
+== CPU: 1 ==      == CPU: 2 ==      == CPU: 3 ==      == CPU: 4 ==
+Mean: 7.974992    Mean: 7.976534    Mean: 7.962591    Mean: 3.952179
+Std Dev: 0.154374 Std Dev: 0.156082 Std Dev: 0.171018 Std Dev: 0.076193
+Hi: 9.472000      Hi: 10.495000     Hi: 8.864000      Hi: 4.736000
+Lo: 6.087000      Lo: 6.380000      Lo: 4.872000      Lo: 3.403000
+Samples: 521      Samples: 521      Samples: 521      Samples: 521
 
-Changes since v2:
- - Include Conor's revert patch as the first patch and rebased other patches
- - Update PATCH2 to document bindings for separate RISC-V timer DT node
- - Update PATCH3 based on RISC-V timer DT node bindings
+Link: https://lore.kernel.org/linux-riscv/YzYTNQRxLr7Q9JR0@spud/
+Fixes: 232ccac1bd9b ("clocksource/drivers/riscv: Events are stopped during CPU suspend")
+Suggested-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ arch/riscv/kernel/time.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Changes since v1:
- - Rebased on Linux-5.19-rc8
- - Renamed "riscv,always-on" DT property to "riscv,timer-can-wake-cpu"
-
-Anup Patel (2):
-  dt-bindings: timer: Add bindings for the RISC-V timer device
-  clocksource: timer-riscv: Set CLOCK_EVT_FEAT_C3STOP based on DT
-
-Conor Dooley (1):
-  RISC-V: time: initialize broadcast hrtimer based clock event device
-
- .../bindings/timer/riscv,timer.yaml           | 52 +++++++++++++++++++
- arch/riscv/kernel/time.c                      |  3 ++
- drivers/clocksource/timer-riscv.c             | 12 ++++-
- 3 files changed, 66 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/timer/riscv,timer.yaml
-
+diff --git a/arch/riscv/kernel/time.c b/arch/riscv/kernel/time.c
+index 8217b0f67c6c..1cf21db4fcc7 100644
+--- a/arch/riscv/kernel/time.c
++++ b/arch/riscv/kernel/time.c
+@@ -5,6 +5,7 @@
+  */
+ 
+ #include <linux/of_clk.h>
++#include <linux/clockchips.h>
+ #include <linux/clocksource.h>
+ #include <linux/delay.h>
+ #include <asm/sbi.h>
+@@ -29,6 +30,8 @@ void __init time_init(void)
+ 
+ 	of_clk_init(NULL);
+ 	timer_probe();
++
++	tick_setup_hrtimer_broadcast();
+ }
+ 
+ void clocksource_arch_init(struct clocksource *cs)
 -- 
 2.34.1
 
