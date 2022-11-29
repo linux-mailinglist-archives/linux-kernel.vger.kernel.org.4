@@ -2,179 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEC963B66D
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 01:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E0263B675
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 01:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234340AbiK2ANG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 19:13:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
+        id S234710AbiK2ARH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 19:17:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234642AbiK2AMm (ORCPT
+        with ESMTP id S234807AbiK2AQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 19:12:42 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540376553
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 16:12:40 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id on5-20020a17090b1d0500b0021821a07953so13074810pjb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 16:12:40 -0800 (PST)
+        Mon, 28 Nov 2022 19:16:59 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C042B19F
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 16:16:58 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id z3so8936485iof.3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 16:16:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=X881tlPDVXUlMgACZfZTZeyY92tnJLZ+/B1dNTIs8Gc=;
-        b=Oi0ZjD5sM55sEXkn34mnC5VjQu6xKzBRPB+GDVOF2EnL4UyIrAVAj+ELyBOEjwwDGW
-         s52xHTMYBS43CadhoSIW0qCfFLr9/dNXGbYqxREAcpO5ADcuQcbGGoVLhGcyFqOifAYz
-         ojnWNbwTYlIyOmygoDbJnXy2VtgXqs/+yjKkqA2rMMM90MtJyW8+/OEsUGu7j28fquOe
-         yOvSTpwtVyfqFbCa/Z053nvtEqBPgJ3feWv7yramCZQ80+/cUgNFfd/Hu0S7PmVXRryp
-         Q/eyB0R27WV76y4VZNh25H39JHBqzfwP/Gr7dqgkyyzpXjcPx4HmPcDa9Lj/VZGtOJAy
-         T8zA==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gA7jpYl6yV6P4juXicdMOmof7r1j/N5hUrukqrPzGdk=;
+        b=DQs1Hqu73bNAJW0k4CHMP/GFzfmwIUvzkUhQZaJ16ASZJ+TVA84Uz1ZP4lfZD1yEpm
+         KGFsQvcP4ne79puTyiCDAu2YusMevht3J9nQCgk5pWCogA/prSxN+g1dt8YrLpRHll0O
+         8D3SjMY5yHIP9U9huqa3c15zkiE1NJbD9ihwE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X881tlPDVXUlMgACZfZTZeyY92tnJLZ+/B1dNTIs8Gc=;
-        b=g3xILbF4RjxVQBw5aZTaLIUZ4pbFPvvTA/rY/SNct1NuCvAkMas1uh+dwLQCbStjCQ
-         RCdGWLfvUEpMfuO/lIUXk2oePlx+qTczL/DuRFlQjHpff43l1mgrc8nM+8dOlX0WauqK
-         Uf7Ikx3C/+4Q3OiHne2akqs/X0MUvJ/zeEhEfLhKH/hLFJejTeYqA2ObfDYDXrHzOjYr
-         e4IrakkewZs4dzEPLCS3pQjUZGhzAysAUdEP0r6IhySrSlXsuD9GkWSKmxqxarIXRuy7
-         BeANzWNkgilvF9RC2MbTlOo/5+kuaYOyDXgKg6vrsZlRVbhPW2j3SZELAveAf5BpEnMj
-         EqQA==
-X-Gm-Message-State: ANoB5plyVbf8Vg4tLpZ6BIljh7TE7GQZPXrpLxhT/7TtzZ4ePcm2C0iP
-        YvEG1bwvO4TcIrxXPoKe3SzLHKE813XMCQ==
-X-Google-Smtp-Source: AA0mqf7PIX8W1qzdvgiGt+aiUTDXV/YuuvuJ0Eo/G0bko1Yy573w+vZmfwFWp89lUQwQZ4vFaPcQTbgi/vUM/w==
-X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:a05:6a00:408b:b0:56b:ca57:ba8c with SMTP
- id bw11-20020a056a00408b00b0056bca57ba8cmr35465110pfb.43.1669680759811; Mon,
- 28 Nov 2022 16:12:39 -0800 (PST)
-Date:   Mon, 28 Nov 2022 16:12:34 -0800
-Mime-Version: 1.0
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gA7jpYl6yV6P4juXicdMOmof7r1j/N5hUrukqrPzGdk=;
+        b=ld3q57NsvX8O2rIDnXTvbL6z5n6jFkfxOKb+8AOSuGrchhYS9A2rWEkj78hiy36xip
+         a5VIIZ41jamAuJXc7j4+huxjCrvoKltM05Oo6jMbcNlbh+oMCbJ9hhHTJPfpPSBdX1dA
+         Vk4sLYOqA7RatO1egvxbMJ+JxGHFysBcWY086pHtS3TW/p6QwpZ20NtmYnW83aHbNoK/
+         RDax27fNgsWTnkU3MDP863Yn0LXZUn5wlV82XhZCo/GsFjXKQkrAfJF0zPQIi62x2T7F
+         g/YexhnTCeRPi4g+8vZ68uLio0Vc+C46gb6Cw+zRWFjFOiTn4PRP7G1QyBh2+X2hcoyH
+         6qYg==
+X-Gm-Message-State: ANoB5pmiHSp4QkzVD6Ud2BYdycyo1F+elWoJvVlSixiD0Mqe5hSX0Vrv
+        RScH0yVZqcHotltMwghzv3WITWdSfTiF8g==
+X-Google-Smtp-Source: AA0mqf5O/zpf9bI5X01LNRcc5En7D9DRQc+o4PEsnb6Zkk3bOUWAm6FvBfwZDdw+4jQexdhSlJqa/Q==
+X-Received: by 2002:a05:6638:535:b0:375:b7f:daec with SMTP id j21-20020a056638053500b003750b7fdaecmr6888722jar.154.1669681017666;
+        Mon, 28 Nov 2022 16:16:57 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id m12-20020a02a14c000000b003636cb862d0sm4884318jah.42.2022.11.28.16.16.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 16:16:57 -0800 (PST)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        alsa-devel@alsa-project.org, Judy Hsiao <judyhsiao@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Banajit Goswami <bgoswami@codeaurora.org>
+Subject: [PATCH v2] ASoC: qcom: lpass-sc7180: Delete redundant error log from _resume()
+Date:   Tue, 29 Nov 2022 00:16:54 +0000
+Message-Id: <20221129001633.v2.1.I8d1993f41f0da1eac0ecba321678ac489f9c0b9b@changeid>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221129001234.606653-1-dlatypov@google.com>
-Subject: [PATCH] kunit: tool: don't include KTAP headers and the like in the
- test log
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We print the "test log" on failure.
-This is meant to be all the kernel output that happened during the test.
+sc7180_lpass_dev_resume() logs an error if clk_bulk_prepare_enable()
+fails. The clock framework already generates error logs if anything
+goes wrong, so the logging in _resume() is redundant, drop it.
 
-But we also include the special KTAP lines in it, which are often
-redundant.
-
-E.g. we include the "not ok" line in the log, right before we print
-that the test case failed...
-[13:51:48] Expected 2 + 1 == 2, but
-[13:51:48] 2 + 1 == 3 (0x3)
-[13:51:48] not ok 1 example_simple_test
-[13:51:48] [FAILED] example_simple_test
-
-More full example after this patch:
-[13:51:48] =================== example (4 subtests) ===================
-[13:51:48] # example_simple_test: initializing
-[13:51:48] # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
-[13:51:48] Expected 2 + 1 == 2, but
-[13:51:48] 2 + 1 == 3 (0x3)
-[13:51:48] [FAILED] example_simple_test
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
 ---
- tools/testing/kunit/kunit_parser.py    |  8 ++++----
- tools/testing/kunit/kunit_tool_test.py | 17 +++++++++++++++++
- 2 files changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 4cc2f8b7ecd0..99b8f058db40 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -295,7 +295,7 @@ def parse_ktap_header(lines: LineStream, test: Test) -> bool:
- 		check_version(version_num, TAP_VERSIONS, 'TAP', test)
- 	else:
- 		return False
--	test.log.append(lines.pop())
-+	lines.pop()
- 	return True
- 
- TEST_HEADER = re.compile(r'^# Subtest: (.*)$')
-@@ -318,8 +318,8 @@ def parse_test_header(lines: LineStream, test: Test) -> bool:
- 	match = TEST_HEADER.match(lines.peek())
- 	if not match:
- 		return False
--	test.log.append(lines.pop())
- 	test.name = match.group(1)
-+	lines.pop()
- 	return True
- 
- TEST_PLAN = re.compile(r'1\.\.([0-9]+)')
-@@ -345,9 +345,9 @@ def parse_test_plan(lines: LineStream, test: Test) -> bool:
- 	if not match:
- 		test.expected_count = None
- 		return False
--	test.log.append(lines.pop())
- 	expected_count = int(match.group(1))
- 	test.expected_count = expected_count
-+	lines.pop()
- 	return True
- 
- TEST_RESULT = re.compile(r'^(ok|not ok) ([0-9]+) (- )?([^#]*)( # .*)?$')
-@@ -409,7 +409,7 @@ def parse_test_result(lines: LineStream, test: Test,
- 	# Check if line matches test result line format
- 	if not match:
- 		return False
--	test.log.append(lines.pop())
-+	lines.pop()
- 
- 	# Set name of test object
- 	if skip_match:
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index d7f669cbf2a8..1ef921ac4331 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -84,6 +84,10 @@ class KUnitParserTest(unittest.TestCase):
- 		self.print_mock = mock.patch('kunit_printer.Printer.print').start()
- 		self.addCleanup(mock.patch.stopall)
- 
-+	def noPrintCallContains(self, substr: str):
-+		for call in self.print_mock.mock_calls:
-+			self.assertNotIn(substr, call.args[0])
-+
- 	def assertContains(self, needle: str, haystack: kunit_parser.LineStream):
- 		# Clone the iterator so we can print the contents on failure.
- 		copy, backup = itertools.tee(haystack)
-@@ -327,6 +331,19 @@ class KUnitParserTest(unittest.TestCase):
- 			result = kunit_parser.parse_run_tests(file.readlines())
- 		self.print_mock.assert_any_call(StrContains('suite (1 subtest)'))
- 
-+	def test_show_test_output_on_failure(self):
-+		output = """
-+		KTAP version 1
-+		1..1
-+		  Test output.
-+		not ok 1 test1
-+		"""
-+		result = kunit_parser.parse_run_tests(output.splitlines())
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
-+
-+		self.print_mock.assert_any_call(StrContains('Test output.'))
-+		self.noPrintCallContains('not ok 1 test1')
-+
- def line_stream_from_strs(strs: Iterable[str]) -> kunit_parser.LineStream:
- 	return kunit_parser.LineStream(enumerate(strs, start=1))
- 
+Changes in v2:
+- removed the log in the error path (requested by Doug)
+- updated subject (was "ASoC: qcom: lpass-sc7180: Return 0 instead
+  of 'ret' at the end of _resume()") and commit message
 
-base-commit: 11300092f6f4dc4103ac4bd950d62f94effc736a
+ sound/soc/qcom/lpass-sc7180.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/sound/soc/qcom/lpass-sc7180.c b/sound/soc/qcom/lpass-sc7180.c
+index 6ad1c5b5f2de..db3be15cf14c 100644
+--- a/sound/soc/qcom/lpass-sc7180.c
++++ b/sound/soc/qcom/lpass-sc7180.c
+@@ -162,15 +162,9 @@ static int sc7180_lpass_exit(struct platform_device *pdev)
+ 
+ static int sc7180_lpass_dev_resume(struct device *dev)
+ {
+-	int ret = 0;
+ 	struct lpass_data *drvdata = dev_get_drvdata(dev);
+ 
+-	ret = clk_bulk_prepare_enable(drvdata->num_clks, drvdata->clks);
+-	if (ret) {
+-		dev_err(dev, "sc7180 clk prepare and enable failed\n");
+-		return ret;
+-	}
+-	return ret;
++	return clk_bulk_prepare_enable(drvdata->num_clks, drvdata->clks);
+ }
+ 
+ static int sc7180_lpass_dev_suspend(struct device *dev)
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
