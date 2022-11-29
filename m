@@ -2,79 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8670E63B8E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:47:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA3F63B8E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:48:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235536AbiK2Drq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 22:47:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
+        id S235532AbiK2Dr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 22:47:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234975AbiK2Dro (ORCPT
+        with ESMTP id S235543AbiK2Drz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 22:47:44 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4135FE6;
-        Mon, 28 Nov 2022 19:47:42 -0800 (PST)
-Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NLpBK4xbbz67Q1L;
-        Tue, 29 Nov 2022 11:44:57 +0800 (CST)
-Received: from lhrpeml500004.china.huawei.com (7.191.163.9) by
- fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 04:47:40 +0100
-Received: from mscphis00759.huawei.com (10.123.66.134) by
- lhrpeml500004.china.huawei.com (7.191.163.9) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 29 Nov 2022 03:47:39 +0000
-From:   Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-To:     <Felix.Kuehling@amd.com>
-CC:     <alexander.deucher@amd.com>, <christian.koenig@amd.com>,
-        <Xinhui.Pan@amd.com>, <airlied@gmail.com>, <daniel@ffwll.ch>,
-        <sumit.semwal@linaro.org>, <linux-media@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <amd-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <yusongping@huawei.com>,
-        <hukeping@huawei.com>, <artem.kuzin@huawei.com>
-Subject: [PATCH] drm/amdkfd: Fix memory leakage
-Date:   Tue, 29 Nov 2022 11:47:34 +0800
-Message-ID: <20221129034734.2141562-1-konstantin.meskhidze@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 28 Nov 2022 22:47:55 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFDF11A08
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 19:47:54 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id y17so4288427plp.3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 19:47:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xu/MkNTnbzTmTVxpxZSKeNeNonYzZiZ/WvCG/yFRvMU=;
+        b=ngpvFrUIbdMzDb3VKsM/bULcse782/i69VoDfCTk4NK5NGWn7PCCkEKfOnF4tQjzR3
+         D1ctNMkbQGZYQVB1yR1IaNRbJff86ZHIV0f5HMWCf+lZDlReR5PiwBLm/JRi8v1uvdmO
+         YkhJPMd3mQ2jnbxmcg0vOuQP77cXePU3QmzNk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xu/MkNTnbzTmTVxpxZSKeNeNonYzZiZ/WvCG/yFRvMU=;
+        b=0n5UmF7ImlbLokhRPlxXZ+21lc+lDs3kgZvfBLJM62zczjA4NU1c+WkKX6mTqKguUw
+         Mi1hd+3QmdFu/5aeSyxTBLsmkvIIxvDVQQMMquc+xZcNy4+TnspSE8GK5sDUX2Q/6G3V
+         6+g2YRXKtp7XJZTBYoNtSGI82amkfx0n70kJp7Q5hXErZbqH8r2WYNMbj9J8orLu/svE
+         eTEOWRhgblyhduyPrWb+2tRmVxECi7KIy/HbiR21NHBF4vi+5H3xIJcZP7GCVE5sigYs
+         bvhsv548+wYFrSyHtfDzmChNLn+f+Yf9kwxawI/yyXBwkENN7bizQCihRaUYfF0PHrtH
+         SYtQ==
+X-Gm-Message-State: ANoB5plCnLkKjHBRTrB+0JtkVlAb6yJeLatY89XB/bD2mYrByWFJ02PM
+        YYPlheTV2Nctc53URnnULDL7qw==
+X-Google-Smtp-Source: AA0mqf5krzlbs/ipXQeT5uiqPLFPPBRJ95dOIEb2afXaeCFnajvSvPOhOGZvabmJag94y6wBLmKLSw==
+X-Received: by 2002:a17:902:ead1:b0:188:f461:800f with SMTP id p17-20020a170902ead100b00188f461800fmr35110046pld.56.1669693673807;
+        Mon, 28 Nov 2022 19:47:53 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:2565:b2f5:cacd:a5d9])
+        by smtp.gmail.com with ESMTPSA id 125-20020a620683000000b0056be1581126sm9033112pfg.143.2022.11.28.19.47.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 19:47:53 -0800 (PST)
+Date:   Tue, 29 Nov 2022 12:47:48 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, minchan@kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: Re: [PATCH v7 1/6] zswap: fix writeback lock ordering for zsmalloc
+Message-ID: <Y4WA5DQMjXrjC8uO@google.com>
+References: <20221128191616.1261026-1-nphamcs@gmail.com>
+ <20221128191616.1261026-2-nphamcs@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.123.66.134]
-X-ClientProxiedBy: mscpeml100001.china.huawei.com (7.188.26.227) To
- lhrpeml500004.china.huawei.com (7.191.163.9)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221128191616.1261026-2-nphamcs@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes potential memory leakage and seg fault
-in  _gpuvm_import_dmabuf() function
+On (22/11/28 11:16), Nhat Pham wrote:
+> zswap's customary lock order is tree->lock before pool->lock, because
+> the tree->lock protects the entries' refcount, and the free callbacks in
+> the backends acquire their respective pool locks to dispatch the backing
+> object. zsmalloc's map callback takes the pool lock, so zswap must not
+> grab the tree->lock while a handle is mapped. This currently only
+> happens during writeback, which isn't implemented for zsmalloc. In
+> preparation for it, move the tree->lock section out of the mapped entry
+> section
+> 
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
 
-Signed-off-by: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-index 978d3970b5cc..e0084f712e02 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-@@ -2257,7 +2257,7 @@ int amdgpu_amdkfd_gpuvm_import_dmabuf(struct amdgpu_device *adev,
- 
- 	ret = drm_vma_node_allow(&obj->vma_node, drm_priv);
- 	if (ret) {
--		kfree(mem);
-+		kfree(*mem);
- 		return ret;
- 	}
- 
--- 
-2.25.1
-
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
