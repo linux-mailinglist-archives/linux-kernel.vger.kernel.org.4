@@ -2,204 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C6163BD67
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C99EF63BD69
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbiK2J5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 04:57:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
+        id S232068AbiK2J5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 04:57:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbiK2J5Q (ORCPT
+        with ESMTP id S232021AbiK2J53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 04:57:16 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DD51EC4A
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:57:12 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3b56782b3f6so132816087b3.13
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:57:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SeWaCg5nHpOFeswP59XQShuGjHZJP1Mmj3HGIOnGpxg=;
-        b=GJgy661p18ExaAuAPAU+YQWqybdzGKFXdy+tHMQLauH69FSF04unrPKykkq0PI+Kci
-         kC78xIqqTDEAwdcbm77iFIz9N+p4GkE85pvkyCIG/HUZ6D+dgtk1vW6SP3kPMf7R/H9+
-         IlwahEwP2h43i79kY3nD7/Gv6jyNm5Mc7Swcs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SeWaCg5nHpOFeswP59XQShuGjHZJP1Mmj3HGIOnGpxg=;
-        b=DXD2R7m6sTjRk2b/Yv/tBUNg3sTqTWCpvX74yAdm+YNocfaHZPxH7Jq1On2eF+7UQH
-         4hUKhFJnJ/7muq5sxwAym5W2tBRKovhn8nsSMGPBYmsvyIxQ+JFnTSVsKhCZTwnYe1t7
-         NEd8Bj6DAm6nt+NAis9ElQuEDNW64ykyE4dWPlswSSAyX71gAXL/1py+qXNF5BiYGbq1
-         osvBzNj4TcxkuZ3TJwmbqbNufxJUlzsyS+eIIjDQwZDa10QFpO0+Vz4vKeKYnWhVscFX
-         apvh8acTsUITdDk1Ocu11M74t3jj8wf3yP8P2IzfBnsp9d21/3Qpyvdm0kdjXTDQTVW/
-         BRwg==
-X-Gm-Message-State: ANoB5pnOSgb10PnQqMx3q5PaUDS6A9F/iQycaqO4W9NvK9Ij/5koNTUv
-        w8MPCu8xZND6JS1qhBPjkwi/EsJ4Qea6/C1JlqfyoQ==
-X-Google-Smtp-Source: AA0mqf4P5crX+Ol/zjx/x16vm6O7OwYvBPlTwr20SjOAfMrfH0XPXeB9oM6xBfmly90eTmKH+5p6WPbRPmyzYQIJm9U=
-X-Received: by 2002:a81:3c2:0:b0:36b:e25d:d506 with SMTP id
- 185-20020a8103c2000000b0036be25dd506mr43115734ywd.395.1669715831574; Tue, 29
- Nov 2022 01:57:11 -0800 (PST)
+        Tue, 29 Nov 2022 04:57:29 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F5965C777;
+        Tue, 29 Nov 2022 01:57:26 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 8990B92009C; Tue, 29 Nov 2022 10:57:25 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 8221E92009B;
+        Tue, 29 Nov 2022 09:57:25 +0000 (GMT)
+Date:   Tue, 29 Nov 2022 09:57:25 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+cc:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, Stefan Roese <sr@denx.de>,
+        Jim Wilson <wilson@tuliptree.org>,
+        David Abdurachmanov <david.abdurachmanov@gmail.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 5/5] PCI: Work around PCIe link training failures
+In-Reply-To: <20221109050418.GA529724@bhelgaas>
+Message-ID: <alpine.DEB.2.21.2211091300490.15287@angie.orcam.me.uk>
+References: <20221109050418.GA529724@bhelgaas>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-References: <20221128103227.23171-1-arun.ramadoss@microchip.com>
- <20221128103227.23171-12-arun.ramadoss@microchip.com> <CALs4sv1hZRRdLGCRMLZxi2GjJ2NHYu2o9j5oNf3+BpTZKpdS8g@mail.gmail.com>
-In-Reply-To: <CALs4sv1hZRRdLGCRMLZxi2GjJ2NHYu2o9j5oNf3+BpTZKpdS8g@mail.gmail.com>
-From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
-Date:   Tue, 29 Nov 2022 15:27:00 +0530
-Message-ID: <CALs4sv2+ureQ8JttKZf0-re40fd5PzfHREnJ709DGwotsySMsw@mail.gmail.com>
-Subject: Re: [Patch net-next v1 11/12] net: dsa: microchip: ptp: add periodic
- output signal
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com, richardcochran@gmail.com,
-        ceggers@arri.de
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000009867305ee99035e"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000009867305ee99035e
-Content-Type: text/plain; charset="UTF-8"
+On Tue, 8 Nov 2022, Bjorn Helgaas wrote:
 
-On Tue, Nov 29, 2022 at 2:23 PM Pavan Chebbi <pavan.chebbi@broadcom.com> wrote:
->
-> On Mon, Nov 28, 2022 at 4:05 PM Arun Ramadoss
-> <arun.ramadoss@microchip.com> wrote:
->
-> > +static int ksz_ptp_enable(struct ptp_clock_info *ptp,
-> > +                         struct ptp_clock_request *req, int on)
-> > +{
-> > +       struct ksz_ptp_data *ptp_data = ptp_caps_to_data(ptp);
-> > +       struct ksz_device *dev = ptp_data_to_ksz_dev(ptp_data);
-> > +       struct ptp_perout_request *request = &req->perout;
-> > +       int ret;
-> > +
-> > +       switch (req->type) {
-> > +       case PTP_CLK_REQ_PEROUT:
-> > +               if (request->index > ptp->n_per_out)
-> > +                       return -EINVAL;
->
-> Should be -EOPNOTSUPP ? I see some other places where -EOPNOTSUPP is
-> more appropriate.
->
-> > +
-> > +               mutex_lock(&ptp_data->lock);
-> > +               ret = ksz_ptp_enable_perout(dev, request, on);
-> > +               mutex_unlock(&ptp_data->lock);
-> > +               break;
-> > +       default:
-> > +               return -EINVAL;
+> >  That would be my expectation as well.  Is there a reliable way to request
+> > that however without actually writing a piece of code to do so from inside 
+> > the kernel?  Sadly our documentation is vague on the matter, in particular 
+> > Documentation/ABI/testing/sysfs-bus-pci, but here's what I have obtained:
+> > 
+> > # lspci -t
+> > -[0000:00]---00.0-[01-0b]----00.0-[02-0b]--+-00.0-[03]--
+> >                                            +-02.0-[04]----00.0
+> >                                            +-03.0-[05-09]----00.0-[06-09]--+-01.0-[07]--+-00.0
+> >                                            |                               |            \-00.3
+> >                                            |                               \-02.0-[08-09]----00.0-[09]--+-01.0
+> >                                            |                                                            \-02.0
+> >                                            +-04.0-[0a]----00.0
+> >                                            \-08.0-[0b]--+-00.0
+> >                                                         \-00.1
+> > # for name in /sys/bus/pci/devices/0000\:??\:??.?/reset_method; do echo "$(basename $(dirname $name)): $(cat $name)"; done
+> > 0000:01:00.0: pm bus
+> > 0000:02:00.0: pm bus
+> > 0000:02:02.0: pm
+> > 0000:02:03.0: pm
+> > 0000:02:04.0: pm
+> > 0000:02:08.0: pm
+> > 0000:04:00.0: bus
+> > 0000:05:00.0: bus
+> > 0000:06:01.0: bus
+> > 0000:07:00.0: bus
+> > 0000:08:00.0: bus
+> > 0000:09:01.0: pm bus
+> > 0000:0a:00.0: flr bus
+> > 0000:0b:00.0: pm bus
+> > 0000:0b:00.1: pm
+> > # 
+> > 
+> > (mind that the problematic link is between 0000:02:03.0 and 0000:05:00.0), 
+> > and then:
+> > 
+> > # echo 1 >/sys/bus/pci/devices/0000\:05\:00.0/reset
+> > -sh: echo: write error: Inappropriate ioctl for device
+> > # 
+> > 
+> > (which I gather is supposed to poke at 0000:02:03.0's SBR) so it doesn't 
+> > seem to be effective.  
+> 
+> 05:00.0 supports the "bus" method, i.e., pci_reset_bus_function(),
+> which tries pci_dev_reset_slot_function() followed by
+> pci_parent_bus_reset().  Both of them return -ENOTTY if the device
+> (05:00.0) has a secondary bus ("dev->subordinate"), so I think nothing
+> happens here.
+> 
+> This was prompted by my question about whether the link comes up
+> correctly after an SBR.  It looks like it's not a problem when 02:03.0
+> and 05:00.0 are both switches because we don't use SBR in that case.
+> 
+> But if 05:00.0 were an endpoint instead of a switch, we *would* use
+> SBR, and then (I think) the link would go down, and this quirk would
+> not be applied.
 
-OK I really meant here.
+ After an SBR the link goes down, but the situation is actually somewhat 
+more complex than you describe.
 
-> > +       }
-> > +
-> > +       return ret;
-> > +}
-> > +
-> >  /*  Function is pointer to the do_aux_work in the ptp_clock capability */
-> >  static long ksz_ptp_do_aux_work(struct ptp_clock_info *ptp)
-> >  {
-> > @@ -508,6 +823,8 @@ static const struct ptp_clock_info ksz_ptp_caps = {
-> >         .adjfine        = ksz_ptp_adjfine,
-> >         .adjtime        = ksz_ptp_adjtime,
-> >         .do_aux_work    = ksz_ptp_do_aux_work,
-> > +       .enable         = ksz_ptp_enable,
-> > +       .n_per_out      = 3,
-> >  };
-> >
+ Mind that the Target Link Speed field in the Link Control 2 register is 
+sticky.  Consequently if the link goes down with TLS set to 2.5GT/s then 
+it comes back up just fine, because it's still clamped at 2.5GT/s after 
+reset.  The U-Boot workaround takes advantage of this observation and 
+leaves TLS at 2.5GT/s.  This way if an OS is booted that is unaware of 
+this erratum and resets the PCI/e hierarchy then U-Boot's workaround 
+remains in action and the link resumes operation.
 
---00000000000009867305ee99035e
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+ Now when TLS is reset back to 5GT/s or higher, then the link goes down 
+and starts its infinite training dance again.  This happens when TLS has 
+been reset by hand in U-boot and Linux is booted and resets the PCI/e 
+hierarchy in the course (but then our quirk chimes in), or under running 
+Linux with this change applied when an SBR is issued via `setpci' or by a 
+modified kernel that has the `dev->subordinate' condition removed.
 
-MIIQbQYJKoZIhvcNAQcCoIIQXjCCEFoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg3EMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
-MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
-vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
-rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
-aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
-e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
-cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
-MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
-KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
-/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
-TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
-YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
-b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
-CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
-BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
-jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
-9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
-/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
-jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
-AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
-dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
-MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
-IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
-SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
-XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
-J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
-nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBUwwggQ0oAMCAQICDBX9eQgKNWxyfhI1kzANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAwODE3NDZaFw0yNTA5MTAwODE3NDZaMIGO
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xFTATBgNVBAMTDFBhdmFuIENoZWJiaTEoMCYGCSqGSIb3DQEJ
-ARYZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC
-ggEBAK3X+BRR67FR5+Spki/E25HnHoYhm/cC6VA6qHwC3QqBNhCT13zsi1FLLERdKXPRrtVBM6d0
-mfg/0rQJJ8Ez4C3CcKiO1XHcmESeW6lBKxOo83ZwWhVhyhNbGSwcrytDCKUVYBwwxR3PAyXtIlWn
-kDqifgqn3R9r2vJM7ckge8dtVPS0j9t3CNfDBjGw1DhK91fnoH1s7tLdj3vx9ZnKTmSl7F1psK2P
-OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
-dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
-fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
-9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
-pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
-25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
-Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIAkqhtVhYHBzqC7a7DE2CNk0zPEO+kQG
-i+0GCSPnoQk8MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMTEy
-OTA5NTcxMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQBqa88lFm7i+7BcSUuucCz8nw7QZQlk2e9FceaFYNS+WZK778Nq
-P3WCDyNhgiEcXgqs54zn2KfhetWhUCl95jsMQM6IIEs66qWWNk/xjxxHd+AyHgwTisi2My7OvMD1
-1sTKbvq4HCuY0tEsnLCaSorUaFdjMSBFqQAdbPKHPSo3+5iV7YIaBQS6MW2711PhFhjDnEUNVffS
-7TeX3wgVuXSz0jOniqmVrsXMt93iy3YR2I8vkPdH+jrhQt7aFF1yOQb6hmHRe0ZoXbb7ahiCAEAr
-hPkzCP6/1nJ+1jTMjrs5eNz4h3KROi3ErdqGuHsrRqZLylQgG/elqzso8Z7/8Coy
---00000000000009867305ee99035e--
+> > Needless to say:
+> > 
+> > # echo 1 >/sys/bus/pci/devices/0000\:02\:03.0/reset
+> > # 
+> > 
+> > while apparently succeeds doesn't do anything spectacular.  Any 
+> > suggestions?
+> > 
+> >  In any case I would expect resetting a bus tree to cause all the quirks 
+> > required to be reapplied, preferably after bus re-enumeration even as the 
+> > topology can change afterwards if not for the hardware erratum handled 
+> > here, although indeed I would find it reasonable to only perform the 
+> > actions on the bus subtree reset and not it's parent.  In that case the 
+> > quirk would have to be applied by hand somehow.
+> 
+> A lot of things can change after a reset, especially if it makes a
+> device reload updated firmware, but we don't actually re-enumerate or
+> reapply quirks.  I'm looking at pci_reset_function(), where we
+> basically save the parts of config space we know about, do the reset,
+> and restore config space.
+
+ Right.  That's what the debug messages I have observed indicated as well.  
+
+ For the record, I made an experiment and with the `dev->subordinate'
+condition removed I reset device 05:00.0 in my system via:
+
+# echo 1 >/sys/bus/pci/devices/0000\:05\:00.0/reset
+
+ With the TLS reset back to its 8GT/s default here the link did not come 
+back up as expected and consequently no device from this bus subhierarchy 
+was accessible anymore:
+
+# lspci -s 05: -vnn
+05:00.0 PCI bridge [0604]: Pericom Semiconductor PI7C9X2G304 EL/SL PCIe2 3-Port/4-Lane Packet Switch [12d8:2304] (rev ff) (prog-if ff)
+	!!! Unknown header type 7f
+
+Retraining by hand and then rescanning brought the subhierarchy back:
+
+# setpci -s 02\:03.0 CAP_EXP+0x30.W=0061; setpci -s 02\:03.0 CAP_EXP+0x10.W=0020; sleep 1; setpci -s 02\:03.0 CAP_EXP+0x30.W=0063; setpci -s 02\:03.0 CAP_EXP+0x10.W=0020
+# echo 1 >/sys/bus/pci/devices/0000\:02\:03.0/rescan
+pci_bus 0000:03: busn_res: [bus 03] end is updated to 03
+pci_bus 0000:04: busn_res: [bus 04] end is updated to 04
+pci 0000:05:00.0: bridge configuration invalid ([bus ff-ff]), reconfiguring
+pcieport 0000:06:01.0: bridge configuration invalid ([bus ff-ff]), reconfiguring
+pcieport 0000:06:02.0: bridge configuration invalid ([bus ff-ff]), reconfiguring
+pci_bus 0000:07: busn_res: [bus 07] end is updated to 07
+pci 0000:08:00.0: bridge configuration invalid ([bus ff-ff]), reconfiguring
+pci_bus 0000:09: busn_res: [bus 09] end is updated to 09
+pci_bus 0000:08: busn_res: [bus 08-09] end is updated to 09
+pci_bus 0000:06: busn_res: [bus 06-09] end is updated to 09
+pci_bus 0000:05: busn_res: [bus 05-09] end is updated to 09
+pci_bus 0000:0a: busn_res: [bus 0a] end is updated to 0a
+pci_bus 0000:0b: busn_res: [bus 0b] end is updated to 0b
+# lspci -s 05: -vnn
+05:00.0 PCI bridge [0604]: Pericom Semiconductor PI7C9X2G304 EL/SL PCIe2 3-Port/4-Lane Packet Switch [12d8:2304] (rev 05) (prog-if 00 [Normal decode])
+	Flags: fast devsel
+	Bus: primary=00, secondary=00, subordinate=00, sec-latency=0
+	I/O behind bridge: 00000000-00000fff [size=4K]
+	Memory behind bridge: 00000000-000fffff [size=1M]
+	Prefetchable memory behind bridge: 0000000000000000-00000000000fffff [size=1M]
+	Capabilities: [40] Power Management version 3
+	Capabilities: [5c] Vital Product Data
+	Capabilities: [64] Vendor Specific Information: Len=34 <?>
+	Capabilities: [b0] Subsystem: Device [0000:0000]
+	Capabilities: [c0] Express Upstream Port, MSI 00
+	Capabilities: [100] Advanced Error Reporting
+	Capabilities: [140] Virtual Channel
+	Capabilities: [20c] Power Budgeting <?>
+	Capabilities: [230] Latency Tolerance Reporting
+
+(though bridge BARs aren't exactly correct anymore).
+
+ With the TLS clamped at 2.5GT/s the link did come back up and the bus 
+subhierarchy remained accessible except for a downstream conventional PCI 
+bus:
+
+# lspci -s 09: -vnn
+09:01.0 FDDI network controller [0202]: Digital Equipment Corporation PCI-to-PDQ Interface Chip [PFI] FDDI (DEFPA) [1011:000f] (rev ff) (prog-if ff)
+	!!! Unknown header type 7f
+	Kernel driver in use: defxx
+
+09:02.0 ATM network controller [0203]: Microsemi / PMC / IDT IDT77201/77211 155Mbps ATM SAR Controller [NICStAR] [111d:0001] (rev ff) (prog-if ff)
+	!!! Unknown header type 7f
+	Kernel driver in use: nicstar
+
+which had to be restored by hand:
+
+# echo 1 >/sys/bus/pci/devices/0000\:08\:00.0/rescan
+pci_bus 0000:08: scanning bus
+pci 0000:08:00.0: scanning [bus 00-00] behind bridge, pass 0
+pci 0000:08:00.0: bridge configuration invalid ([bus 00-00]), reconfiguring
+pci 0000:08:00.0: scanning [bus 00-00] behind bridge, pass 1
+pci_bus 0000:09: scanning bus
+pci_bus 0000:09: bus scan returning with max=09
+pci_bus 0000:09: busn_res: [bus 09] end is updated to 09
+pci_bus 0000:08: bus scan returning with max=09
+# lspci -s 09: -vnn
+09:01.0 FDDI network controller [0202]: Digital Equipment Corporation PCI-to-PDQ Interface Chip [PFI] FDDI (DEFPA) [1011:000f] (rev 02)
+	Subsystem: Digital Equipment Corporation FDDIcontroller/PCI (DEFPA) [1011:def1]
+	Flags: bus master, medium devsel, latency 64, IRQ 24
+	Memory at 60831000 (32-bit, non-prefetchable) [size=128]
+	I/O ports at 2100 [size=128]
+	Memory at 60820000 (32-bit, non-prefetchable) [size=64K]
+	Capabilities: [50] Power Management version 2
+        Kernel driver in use: defxx
+
+09:02.0 ATM network controller [0203]: Microsemi / PMC / IDT IDT77201/77211 155Mbps ATM SAR Controller [NICStAR] [111d:0001] (rev 03)
+	Flags: bus master, medium devsel, latency 64, IRQ 26
+	I/O ports at 2000 [size=256]
+	Memory at 60830000 (32-bit, non-prefetchable) [size=4K]
+	Expansion ROM at 60800000 [virtual] [disabled] [size=128K]
+	Kernel driver in use: nicstar
+
+> >  I have chewed it over before choosing this approach and did this for what 
+> > I think is a very good reason, first for U-Boot and then, when I figured 
+> > out a feasible approach, also for Linux.  Bear in mind that we have a pair 
+> > of devices that completely fail to negotiate link ever by default and we 
+> > do not know whether it's the upstream device (which we can see) or the 
+> > downstream device (which we can't, because the link is down) that is the 
+> > culprit.  With that we have as follows.
+> > 
+> > 1. Both devices in question are PCIe switches, so they can be swapped with 
+> >    each other.  In that case what is now the upstream device will become 
+> >    the downstream device and vice versa.  Now the Pericom/Diodes switch 
+> >    only has 2.5GT/s downstream ports, so the issue by definition cannot 
+> >    trigger, but companies/designers tend to reuse hardware IP blocks, and 
+> >    I am quite sure Pericom/Diodes has switches in its product line that 
+> >    support rates beyond 2.5GT/s in their downstream ports.  So a swapped 
+> >    scenario is in my opinion quite real.  Matching on the vendor:device ID 
+> >    won't work then as the suspect ASMedia part will not be seen due to a 
+> >    failed link.  If it's the Pericom/Diodes switch that is the culprit, 
+> >    then it's even worse, as it is the downstream device already.
+> > 
+> > 2. We don't know really what the ultimate cause is and therefore whether 
+> >    the issue can trigger with other vendor devices (and presumably one of 
+> >    the two involved here).  And the nature of the failure is such, that I 
+> >    think it is very unlikely a user will reach out to our (Linux kernel) 
+> >    community for a workaround.  It does not look like a software problem 
+> >    at all and neither like one that can be solved by software.
+> > 
+> >    Therefore they will most likely conclude hardware they have is broken 
+> >    and throw it out causing frustration even though the hardware might be 
+> >    (im)perfectly capable of working, just requiring a little poke to get 
+> >    going.
+> > 
+> >    Just as I almost threw it out even though I dare say I am quite an 
+> >    experienced engineer, reasonably familiar with odd hardware and the 
+> >    Linux kernel and ultimately I was able to come up with a solution.  It 
+> >    is only because I noticed by chance that 0000:02:03.0 device's Link 
+> >    Training bit is flipping, combined with my imagination as to how to 
+> >    possibly deal with such a situation that I succeeded in bringing the 
+> >    link up.  I genuinely thought all was lost and I was exceedingly happy 
+> >    when I overcame it as the PI7C9X2G304 switch module was key to my 
+> >    project with no suitable alternative on the horizon.
+> > 
+> > 3. We apply this quirk to failed links only.  As a non-working link is a
+> >    fatal condition, things cannot get worse by trying to retrain it by 
+> >    hand at 2.5GT/s, as otherwise it doesn't work anyway.  So it's just a 
+> >    last ditch attempt to make it run really.
+> > 
+> >    Can you think of a scenario where retraining a non-working link would 
+> >    cause more damage than leaving it alone in the non-working state?  
+> > 
+> >    This quirk only uses generic PCIe features, common to all hardware, and 
+> >    therefore I think it can be applied in a generic manner.  Now there 
+> >    could be broken hardware that does not correctly handle the generic 
+> >    features used here, but if it has a failed link too, then it will just 
+> >    continue not to work.  So it won't be a regression.
+> 
+> The first big chunk of the quirk (that retrains the link) only runs on
+> Downstream Ports, and only when PCI_EXP_LNKSTA_DLLLA is clear, i.e.,
+> when the link is down.  What happens if this Downstream Port doesn't
+> have anything below it, e.g., it leads to an empty slot?  Is there
+> something that prevents us from attempting a retrain and waiting for
+> the timeout?
+
+ The conditions I came up with for the detection of a failed link 
+negotiation are supposed to tell this situation apart from an absent 
+endpoint on the other end of a link.
+
+ Indeed in the system affected there is the 02:00.0 downstream port device 
+within the same ASM2824 switch that is not connected to anything (no slot 
+there or an onboard device; essentially just a wasted x2 downstream port 
+the board designers could not come up with a use for) and the quirk just 
+does not trigger for it, because the conditions it checks are not met for 
+an unconnected link.  Specifically the Link Bandwidth Management Status 
+bit in the Link Status register cannot be set to 1 for an unconnected 
+link, because setting the bit requires a link to hold the DL_Up status and 
+that does not happen when there is no component on the other side of the 
+link.  That's at least my understanding.
+
+ I have no immediate way to verify other ports, because I am away from my 
+lab now and the system has its PCI/e hierarchy otherwise fully occupied, 
+but the behaviour was consistent as I made extensive verification earlier 
+on.
+
+ The same condition is used by the U-Boot workaround BTW.
+
+> I was about to say the second chunk is always run even when the link
+> was up, but now I see that it's only for the ASMedia ASM2824.  So this
+> part is more like a traditional quirk that could specify that device.
+> 
+> If we think the first part (attempting the retrain) is safe to do
+> whenever the link is down, maybe we should do that more directly as
+> part of the PCI core instead of as a quirk?
+
+ At this point in my understanding of the situation I tend to agree.  
+This will guarantee that device resets issued under our control will do 
+the right thing (we can't do anything I suppose about requests issued by 
+`setpci' behind our back) and is also what the U-Boot workaround I have 
+come up with does.  I'll make v6 along these lines.
+
+ Thank you for your inquisitiveness and the review.
+
+  Maciej
