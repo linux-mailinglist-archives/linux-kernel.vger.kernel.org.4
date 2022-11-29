@@ -2,101 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE67E63B7B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 03:15:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9057863B7B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 03:19:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235157AbiK2CPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 21:15:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
+        id S235048AbiK2CTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 21:19:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235102AbiK2CPL (ORCPT
+        with ESMTP id S234683AbiK2CTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 21:15:11 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5E53F05B;
-        Mon, 28 Nov 2022 18:15:09 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NLmBb27YRz4f3v51;
-        Tue, 29 Nov 2022 10:15:03 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgBnitcoa4Vj6_5UBQ--.52275S3;
-        Tue, 29 Nov 2022 10:15:06 +0800 (CST)
-Subject: Re: [PATCH RFC] scsi: core: remove unsed 'restarts' from scsi_device
-To:     Yu Kuai <yukuai1@huaweicloud.com>, Ming Lei <ming.lei@redhat.com>,
-        Jan Kara <jack@suse.cz>
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20221118113052.1324140-1-yukuai1@huaweicloud.com>
- <cefdae2e-67e3-b4b4-f569-31db960e991f@huaweicloud.com>
- <Y4QqtbXsuYmkOe88@T590>
- <7a747bc3-b902-6f0c-21ef-0ef470ec326e@huaweicloud.com>
- <Y4Q1KPgBsDCZTyTW@T590>
- <1caa7d49-0322-3eb9-7e99-6be96f77c80a@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <8280fa32-4a96-be98-06ac-1890f95f026f@huaweicloud.com>
-Date:   Tue, 29 Nov 2022 10:15:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 28 Nov 2022 21:19:18 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919BF286EA
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:19:17 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id n10-20020a056e02140a00b00302aa23f73fso10766755ilo.20
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:19:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fvnDovLeDuInchJptBNgxNoEypnm0+Vt27KZxiRTKlQ=;
+        b=hbBQ7o5mOmVjrIUyJRqs+mDJjKLKKImq6BMcqw7r/woekvOoljxTpNN0Pjj+yKaSH4
+         AN0ihYvVcnr2/l5meCOzP1nrpFBGAiWGLCDc143sXt4RZv2blsesOjqdweXdtoVIwjOn
+         rIg8EMd5hOy3F8a8c1HYxTIjT6YBbQLhI2b7MJHdEyY1+mYdsWwLZcJuFGRm28EGJhUM
+         92aCws03U1mVNtC3BqCxbeb5H7R3hBxe6m9Qpz4h2WjzZk4is3NNKzzsTUljDK2d4qUI
+         w1R9S5h81/BVK9sclBiO52ukro8ZJ9oGhguzJE58gFIs0gq+HICpIRwTqyd2dP1ChJZM
+         c8xw==
+X-Gm-Message-State: ANoB5pn5v5YkesaBWqIQwWrNK3eelV4eUkIUBz+UE3WFu0+Kbc+DPJyw
+        uz9z+1RrJukPTwgJwm49mRLa+O74ycVi43hbli9SxSr91swN
+X-Google-Smtp-Source: AA0mqf7SGcNIOjzFbnX0ZAiiodzMwRO1bVnC80lUilYmFfuYWeoxJc9aEAvs3ctvhF0KdeKge40ja2CFd0H+1Fka8DHmIPOj8DSl
 MIME-Version: 1.0
-In-Reply-To: <1caa7d49-0322-3eb9-7e99-6be96f77c80a@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBnitcoa4Vj6_5UBQ--.52275S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrZF43tw4kXw48Gw4DZryftFb_yoWxArXE9r
-        1a9rnrtrWrGFyI9rZrKFWrZF9YyFZYqa4rJ3yUtayfX3sxZF13Gr10q3yxAa13J3Wjkrn7
-        Xrs0kFyktrZI9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb48FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_GcCE
-        3s1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
-        1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
-        cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
-        ACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAYIcxG
-        8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUU
-        U==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:6a43:0:b0:375:4725:4b4f with SMTP id
+ m3-20020a026a43000000b0037547254b4fmr25319788jaf.52.1669688356927; Mon, 28
+ Nov 2022 18:19:16 -0800 (PST)
+Date:   Mon, 28 Nov 2022 18:19:16 -0800
+In-Reply-To: <20221129020406.6126-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000066824405ee929d2b@google.com>
+Subject: Re: [syzbot] INFO: task hung in nfnetlink_rcv_msg (3)
+From:   syzbot <syzbot+9204e7399656300bf271@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-> Hi,
-> 
-> 在 2022/11/28 12:12, Ming Lei 写道:
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+INFO: rcu detected stall in corrupted
 
->>
->> BTW, why do you drive nvme via megaraid instead nvme driver?
->>
->>> And by the way, after Jan's patch "blk-mq: Improve performance of non-mq
->>> IO schedulers with multiple HW queues", scsi_run_queue_async() can only
->>> garantee to run hw queue for the current cpu, not all the hw queues.
->>
->> That isn't true, each hctx is still run in case of none & kyber 
->> scheduler.
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4102 } 2679 jiffies s: 2805 root: 0x0/T
+rcu: blocking rcu_node structures (internal RCU debug):
 
-And I really suspect that why Jan's patch can improve performance is
-because it avoid many run queues from scsi_run_queue_async().
 
-> 
-> Yes, but current default hctx shared elevator is deadline.
->>
->> thanks,
->> Ming
->>
->> .
->>
-> 
-> .
-> 
+Tested on:
+
+commit:         08e8a949 net: wwan: t7xx: Fix the ACPI memory leak
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=14bd02ad880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=60808f80d41c27e5
+dashboard link: https://syzkaller.appspot.com/bug?extid=9204e7399656300bf271
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=173c8fed880000
 
