@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF25163CA16
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE5463CA17
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236820AbiK2VJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 16:09:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
+        id S236798AbiK2VJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 16:09:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236761AbiK2VJF (ORCPT
+        with ESMTP id S236084AbiK2VJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 16:09:05 -0500
+        Tue, 29 Nov 2022 16:09:06 -0500
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04B8116E
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:09:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7919F55A0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:09:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669756143; x=1701292143;
+  t=1669756144; x=1701292144;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=niny0WNbiHjtWmixHGOged4GvvPKSLIrCEDitMSqwFg=;
-  b=FNGLCYj4i35hwjjS1y6iTxBpIlA1agriDPHy8G085RPdNfJAa+sjV3gJ
-   P3r+dyqGc/ted7IUccgk4LpdFB9kFI8YvC0YtVuaR4L4elTVFBqZ8duLw
-   g/49BmxDFks4QNYHKpwsuMHIGeu8ehaCTTLrFeV5Lo98qhM4d3SRWw4AX
-   Xf9Yb/csGF50Xn0s+663RGV0dF6rQgg4+GTmji2RlpOwjJ3QdGcs7hQHs
-   0KxE55Inkp8NDjDaiyDQUIJTluZ6xqeXxly7GEoPeRVcwzmnV+om+eYPG
-   t4VHr/JKKhH91EVI4CV9cHY7W+9Ftc3izQko18oNq+eJNLo3S6MqKfCi9
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="317083127"
+  bh=CQp4qbII0DlxhRkqqCYEfCUWHdc6N9otPMAR1s7O/AM=;
+  b=TY4QdO1TM6rxlpJvouVXEdRgnA/UyPI1zFZCbd17oChagrx9LnKEI4+E
+   lJIvy7TrR0GpwxiMolddOJnTQ+Dhd/haAHRvG0jpqldFvtkLXZDSvSy4H
+   LsrHNPpaRAFVN1Tn2Gud0+N+VGI9zxxLUVNrfuT1mwhSbIqFWb5/QwZe5
+   BKD2OmNKM7IoTVcu4fH+k2+rUb6NknL0tPZkpnfRb7wRABSnZ/aLVM/oj
+   Y2SH1cmJBGNIa8HqwzTXDEjUt99mT6shePwY+4IeX9hDAOcOWD3tVG7DJ
+   SMX9T3Ri7/XUfo+wUquFOL/40HjsFNsQjLPonNbfF/KbT3+YD/LF4MMfo
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="317083131"
 X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="317083127"
+   d="scan'208";a="317083131"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 13:09:03 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="646066201"
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 13:09:04 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="646066205"
 X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="646066201"
+   d="scan'208";a="646066205"
 Received: from araj-ucode.jf.intel.com ([10.23.0.19])
   by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 13:09:03 -0800
 From:   Ashok Raj <ashok.raj@intel.com>
@@ -46,9 +46,9 @@ Cc:     X86-kernel <x86@kernel.org>,
         Dave Hansen <dave.hansen@intel.com>,
         Tony Luck <tony.luck@intel.com>, alison.schofield@intel.com,
         reinette.chatre@intel.com
-Subject: [Patch V1 1/7] x86/microcode/intel: Remove redundant microcode rev pr_info()s
-Date:   Tue, 29 Nov 2022 13:08:26 -0800
-Message-Id: <20221129210832.107850-2-ashok.raj@intel.com>
+Subject: [Patch V1 2/7] x86/microcode/intel: Remove retries on early microcode load
+Date:   Tue, 29 Nov 2022 13:08:27 -0800
+Message-Id: <20221129210832.107850-3-ashok.raj@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221129210832.107850-1-ashok.raj@intel.com>
 References: <20221129210832.107850-1-ashok.raj@intel.com>
@@ -63,61 +63,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a pr_info() to dump information about newly loaded microcode.
-The code intends this pr_info() to be just once, but the check to ensure
-is racy. Unfortunately this happens quite often in with this new change
-resulting in multiple redundant prints on the console.
+Microcode loading can fail. This happens today when handling mixed
+steppings. But it can also happen for other reasons such as corrupted
+image, Security Version Number (SVN) preventing anti-rollback,
+dependencies on BIOS loaded microcode image for some capabilities.
 
-microcode_init()->schedule_on_each_cpu(setup_online_cpu)->collect_cpu_info
+When the microcode loading fails, the kernel will quietly hang at boot.
+This has been observed by end users (Links below) who had to revert their
+microcode packages in order to boot again.
 
-[   33.688639] microcode: sig=0x50654, pf=0x80, revision=0x2006e05
-[   33.688659] microcode: sig=0x50654, pf=0x80, revision=0x2006e05
-[   33.688660] microcode: sig=0x50654, pf=0x80, revision=0x2006e05
+The hang is due to an infinite retry loop. The retries were in place to
+support systems with mixed steppings. Now that mixed steppings are no
+longer supported, there is only one microcode image at a time. Any retries
+will simply reattempt to apply the same image over and over without making
+progress.
 
-There is already a pr_info() in microcode/core.c as shown below:
+Some possible past bugs that could be due to this bug are below.
 
-microcode: Reload completed, microcode revision: 0x2b000041 -> 0x2b000070
+There is no direct evidence that these end user issues were caused by this
+retry loop. However, the early boot hangs along with reverting the
+microcode update workaround provide strong circumstantial evidence to
+support the theory that they are linked.
 
-The sig and pf aren't that useful to end user, they are available via
-/proc/cpuinfo and this never changes between microcode loads.
+Remove the retry loop and only attempt to apply microcode once.
 
-Remove the redundant pr_info() and the racy single print checks. This
-removes the race entirely, zap the duplicated pr_info() spam and
-simplify the code.
-
-Fixes: b6f86689d5b7 ("x86/microcode: Rip out the subsys interface gunk")
-Reported-by: Tony Luck <tony.luck@intel.com>
+Link: https://bugs.launchpad.net/ubuntu/+source/intel-microcode/+bug/1911959
+Link: https://forums.linuxmint.com/viewtopic.php?p=1827032#1827032
+Link: https://askubuntu.com/questions/1291486/boot-crash-after-latest-update-of-intel-microcode-nov-11-2020
+Fixes: 06b8534cb728 ("x86/microcode: Rework microcode loading")
+Cc: stable@vger.kernel.org
 Signed-off-by: Ashok Raj <ashok.raj@intel.com>
 ---
- arch/x86/kernel/cpu/microcode/intel.c | 8 --------
- 1 file changed, 8 deletions(-)
+ arch/x86/kernel/cpu/microcode/intel.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
-index c4a00fb97f61..4f93875f57b4 100644
+index 4f93875f57b4..d68b084a17e7 100644
 --- a/arch/x86/kernel/cpu/microcode/intel.c
 +++ b/arch/x86/kernel/cpu/microcode/intel.c
-@@ -554,7 +554,6 @@ void reload_ucode_intel(void)
+@@ -495,7 +495,6 @@ void load_ucode_intel_ap(void)
+ 	else
+ 		iup = &intel_ucode_patch;
  
- static int collect_cpu_info(int cpu_num, struct cpu_signature *csig)
- {
--	static struct cpu_signature prev;
- 	struct cpuinfo_x86 *c = &cpu_data(cpu_num);
- 	unsigned int val[2];
+-reget:
+ 	if (!*iup) {
+ 		patch = __load_ucode_intel(&uci);
+ 		if (!patch)
+@@ -505,13 +504,7 @@ void load_ucode_intel_ap(void)
+ 	}
  
-@@ -570,13 +569,6 @@ static int collect_cpu_info(int cpu_num, struct cpu_signature *csig)
- 
- 	csig->rev = c->microcode;
- 
--	/* No extra locking on prev, races are harmless. */
--	if (csig->sig != prev.sig || csig->pf != prev.pf || csig->rev != prev.rev) {
--		pr_info("sig=0x%x, pf=0x%x, revision=0x%x\n",
--			csig->sig, csig->pf, csig->rev);
--		prev = *csig;
--	}
+ 	uci.mc = *iup;
 -
- 	return 0;
+-	if (apply_microcode_early(&uci, true)) {
+-		/* Mixed-silicon system? Try to refetch the proper patch: */
+-		*iup = NULL;
+-
+-		goto reget;
+-	}
++	apply_microcode_early(&uci, true);
  }
  
+ static struct microcode_intel *find_patch(struct ucode_cpu_info *uci)
 -- 
 2.34.1
 
