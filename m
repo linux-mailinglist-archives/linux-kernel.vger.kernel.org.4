@@ -2,158 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E78E63C8F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 21:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACF063C8F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 21:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237215AbiK2UHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 15:07:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
+        id S237211AbiK2UId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 15:08:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiK2UHB (ORCPT
+        with ESMTP id S230346AbiK2UIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 15:07:01 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741DC2EF0E
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 12:07:00 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id a24-20020a056a001d1800b00575cd7524a2so556056pfx.5
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 12:07:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IJZlDWY2h6FAZWMEwD5hO6Ky1u9533DiRDKfw2y50P4=;
-        b=W4HO3RNvc/Y74RIPeU4zMBsbAqmOEReI49UwtMVn/t0kBzZv4AT9l/wnqrvOP3Hb3b
-         6r2Sl5Ai6aChrf2k0HSJGuoCGVJow34rGusWwatQWfjkMn+j+CjOHtsQ2dKjk0BGhDNJ
-         109Ba3AbXkj4cTcwIa6gmzR2T/6RTzgImRL1o3yD5TOQTeFeGwlRgV3IQ+Gkv8w9dtPW
-         QI0Oq/UVmi9IdOPYgT8VfIo7U48DzDMnKJiRyoKdKJfHYjtCWC8G8cMDXcN0MzbKfhLj
-         saGs8eXdSK7MQweB7pZyur62dT648rhNge9q5oBzGMmkDE1j4FFpEIWbPsHf2WIiTz77
-         40rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IJZlDWY2h6FAZWMEwD5hO6Ky1u9533DiRDKfw2y50P4=;
-        b=uoUbsAQia0U8c6E6KuFV89fkHHtYtr0ztDAC6p6OxXW0qVOB2FgzsSRjinZYpxtS2B
-         q/bYiacTuUO6orIR7nUGU3r+U6/KkctzbsYE8U0iRI1PFcYl/zWSq5jmqXkEbMrNgSEa
-         x4w++asx1gxCmxw58MhlQUza277JUiuJ4WUUO+1Y6u0Nb2d5ovlUGVFHZ0S8bdLZKhAF
-         AVn36XzCl2TABYAzqEKhbOdMbIradUCFP9k6UUY0R517goV3HMmUmkerjiZROjhT0AI5
-         93Yj88TJlCCw9GVPDusFvpJ8cmO8f6jGMaIV23I9YtmNkOCKccrrk83oybcZPlASOTKF
-         uyCw==
-X-Gm-Message-State: ANoB5pn5FknvDA92SU0ECmWDMSqy3n/lZ7eKyChbzmp6DMH+e5Fc+F9q
-        rQ8lTml/7CmkdfCtKGAw6IXf+TIgPeWFFrs=
-X-Google-Smtp-Source: AA0mqf5gnZBj8r3JG/i9eglqJL/fFDFy+dC1qa+/TdY1xO8mcB+EqkBKSg6zEgu34onTtuGR9gMzAT3PTh9kFbQ=
-X-Received: from coco0920.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:5738])
- (user=lixiaoyan job=sendgmr) by 2002:a17:90a:9606:b0:213:2411:50e8 with SMTP
- id v6-20020a17090a960600b00213241150e8mr59998140pjo.181.1669752420003; Tue,
- 29 Nov 2022 12:07:00 -0800 (PST)
-Date:   Tue, 29 Nov 2022 20:06:53 +0000
-In-Reply-To: <20221129200653.962019-1-lixiaoyan@google.com>
-Mime-Version: 1.0
-References: <20221129200653.962019-1-lixiaoyan@google.com>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221129200653.962019-2-lixiaoyan@google.com>
-Subject: [RFC net-next v3 2/2] bnxt: Use generic HBH removal helper in tx path
-From:   Coco Li <lixiaoyan@google.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michael Chan <michael.chan@broadcom.com>
-Cc:     netdev@vger.kernel.org,
-        Daisuke Nishimura <nishimura@mxp.nes.nec.co.jp>,
-        linux-kernel@vger.kernel.org, Coco Li <lixiaoyan@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=no autolearn_force=no version=3.4.6
+        Tue, 29 Nov 2022 15:08:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703AC58BED;
+        Tue, 29 Nov 2022 12:08:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A5DEB818BE;
+        Tue, 29 Nov 2022 20:08:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C05EAC433C1;
+        Tue, 29 Nov 2022 20:08:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669752507;
+        bh=f1gq4ohUujseo9cnRHV3gkS6655KrFsXkNePMpOcDjw=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=TdXJjWeKUJXU58GbLYMvx6CL5IqiPSqfBEnNOykBHio0cGBO9DdQ1sRooKx5eD9Nv
+         +1jLrkz4AFO1OVJsx+4FZxH4HG7ko8xwpyS5Pg+6Q834DC8GJUK0I5GIq5Dsvo7FM3
+         ZxcCNAcIeOaG+CUUn1N6EGLBlJ/WDGcz3zeDb4eLUK84sioK9qOWduvkM9YY3eAvyH
+         V2/F9d6rtPUWU33RdivmIbhYsWRb30JbDRYiR4HlY59gbzUU9DAVaDTtPwan5SzxWK
+         1EToo9Ix7DqYRqFPdGDxasPOFIzG8IlaN/z5eBL4ceOQ9mRxZikSzbrKYekJ03hVcj
+         ldzE1y1wULUow==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20221128094952.667315-1-abel.vesa@linaro.org>
+References: <20221128094952.667315-1-abel.vesa@linaro.org>
+Subject: Re: [GIT PULL] clk: imx: Updates for v6.2
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     NXP Linux Team <linux-imx@nxp.com>, linux-clk@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>
+Date:   Tue, 29 Nov 2022 12:08:25 -0800
+User-Agent: alot/0.10
+Message-Id: <20221129200827.C05EAC433C1@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric Dumazet implemented Big TCP that allowed bigger TSO/GRO packet sizes
-for IPv6 traffic. See patch series:
-'commit 89527be8d8d6 ("net: add IFLA_TSO_{MAX_SIZE|SEGS} attributes")'
+Quoting Abel Vesa (2022-11-28 01:49:52)
+> The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc7=
+80:
+>=20
+>   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git/ tags/=
+clk-imx-6.2
+>=20
+> for you to fetch changes up to 8178e245fa953f793670147368642717fcdb302e:
+>=20
+>   clk: imx: rename imx_obtain_fixed_clk_hw() to imx_get_clk_hw_by_name() =
+(2022-11-25 11:22:15 +0200)
+>=20
+> ----------------------------------------------------------------
 
-This reduces the number of packets traversing the networking stack and
-should usually improves performance. However, it also inserts a
-temporary Hop-by-hop IPv6 extension header.
-
-Using the HBH header removal method in the previous path, the extra header
-be removed in bnxt drivers to allow it to send big TCP packets (bigger
-TSO packets) as well.
-
-Tested:
-Compiled locally
-
-To further test functional correctness, update the GSO/GRO limit on the
-physical NIC:
-
-ip link set eth0 gso_max_size 181000
-ip link set eth0 gro_max_size 181000
-
-Note that if there are bonding or ipvan devices on top of the physical
-NIC, their GSO sizes need to be updated as well.
-
-Then, IPv6/TCP packets with sizes larger than 64k can be observed.
-
-Big TCP functionality is tested by Michael, feature checks not yet.
-
-Tested by Michael:
-I've confirmed with our hardware team that this is supported by our
-chips, and I've tested it up to gso_max_size of 524280.  Thanks.
-
-Tested-by: Michael Chan <michael.chan@broadcom.com>
-Reviewed-by: Michael Chan <michael.chan@broadcom.com>
-Signed-off-by: Coco Li <lixiaoyan@google.com>
----
- drivers/net/ethernet/broadcom/bnxt/bnxt.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index 0fe164b42c5d..f144a5ef2e04 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -389,6 +389,9 @@ static netdev_tx_t bnxt_start_xmit(struct sk_buff *skb, struct net_device *dev)
- 			return NETDEV_TX_BUSY;
- 	}
- 
-+	if (unlikely(ipv6_hopopt_jumbo_remove(skb)))
-+		goto tx_free;
-+
- 	length = skb->len;
- 	len = skb_headlen(skb);
- 	last_frag = skb_shinfo(skb)->nr_frags;
-@@ -11342,9 +11345,15 @@ static bool bnxt_exthdr_check(struct bnxt *bp, struct sk_buff *skb, int nw_off,
- 
- 		if (hdrlen > 64)
- 			return false;
-+
-+		/* The ext header may be a hop-by-hop header inserted for
-+		 * big TCP purposes. This will be removed before sending
-+		 * from NIC, so do not count it.
-+		 */
-+		if (!(*nexthdr == NEXTHDR_HOP && ipv6_has_hopopt_jumbo(skb)))
-+			hdr_count++;
- 		nexthdr = &hp->nexthdr;
- 		start += hdrlen;
--		hdr_count++;
- 	}
- 	if (nextp) {
- 		/* Caller will check inner protocol */
-@@ -13657,6 +13666,8 @@ static int bnxt_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- 		dev->features &= ~NETIF_F_LRO;
- 	dev->priv_flags |= IFF_UNICAST_FLT;
- 
-+	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
-+
- #ifdef CONFIG_BNXT_SRIOV
- 	init_waitqueue_head(&bp->sriov_cfg_wait);
- #endif
--- 
-2.38.1.584.g0f3c55d4c2-goog
-
+Thanks. Pulled into clk-next
