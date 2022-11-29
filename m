@@ -2,125 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E893E63C2F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:46:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 712AD63C301
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235511AbiK2Oqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 09:46:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52038 "EHLO
+        id S235802AbiK2OrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 09:47:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234670AbiK2Oqe (ORCPT
+        with ESMTP id S235412AbiK2OrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 09:46:34 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20ABB4D5F9;
-        Tue, 29 Nov 2022 06:46:27 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id D4D5C24E06F;
-        Tue, 29 Nov 2022 22:46:19 +0800 (CST)
-Received: from EXMBX065.cuchost.com (172.16.6.65) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 29 Nov
- 2022 22:46:19 +0800
-Received: from [192.168.0.104] (219.128.233.15) by EXMBX065.cuchost.com
- (172.16.6.65) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 29 Nov
- 2022 22:46:17 +0800
-Message-ID: <3db802d6-114f-097a-6c69-e7b40e4d2764@starfivetech.com>
-Date:   Tue, 29 Nov 2022 22:46:54 +0800
+        Tue, 29 Nov 2022 09:47:07 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB90358BEB
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:47:04 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id m7-20020a05600c090700b003cf8a105d9eso10983406wmp.5
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:47:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=kifJd8r2Xa1q+K0dxzGSjChYAfuX1ssub9et6+nGfyA=;
+        b=dChll5z5Y5NlSI5MIwkb56C1byWbdDhw5sfw0hWQweOzWb315QmrF7ZsQNBydiL/Es
+         g6KdP2sjNwoAXznEhddww57/tLTot5VL7d4DF0Zvz9vPwn3lVU9U1iByOtmlB4VXyPGC
+         EGCmxK36DDUO/OmQMwsol6duRdnkyx/7+D81pSxCWxjlhfMNxptUhobRvE6mCIOdfpDt
+         mZtOhHIyX9gQYjyClgwT34s79zegD76CGZQqaMgFXQR2uUkzssgOm9LJNKvsy85d5HUH
+         5xcP/ykkhOpMy2uUiords+k4ktBDOvW6ZS3XRR1pXXia5IMXIrAK0escOcmMdTyCfOj5
+         QJwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kifJd8r2Xa1q+K0dxzGSjChYAfuX1ssub9et6+nGfyA=;
+        b=rfyPJ6lZNORyL4FDXqDCGKwEihaq7VGb7rpttdkkhJd+GuYj52h1gZL7j5LzctTCq6
+         8ZWkZho/c7aW7OtCgyz0E6RLUEnntF7l7GB+EKGKfvchneO5cksUxK9PkpbY0ihwmOOM
+         dUx/g6gxUpnMpfuSsyhKbOHBmgiZzric8BVIzYsTaQwn5CH/4j1VCvb2EA61IqQwQEr5
+         /hD1gDaSUn9kR3hE3APzdAzh06iTokdJ/h4BSWiQyKrxRR07LdwqSYByzKcbhNzdwzLb
+         I8AgUQvJuoind7NbfMsjADFa2r0dk0pHgc3Kfzh1lmhDOvftsTHLtNL0CZWxWdYRzMeV
+         ISFA==
+X-Gm-Message-State: ANoB5pnXwQudF94PJAE5oMdiJSfRbp7V9SGQRYL2AghsJ/II9vEaYEhg
+        d2wdv2XxrPqeVng0OI+YtGWOkg==
+X-Google-Smtp-Source: AA0mqf4LwDATeguZjiikhtDg9rpV8OUIcos19ZmT8RhkzAa+eyTqrecpvIOCQeVLgsDFXDR7dN2H1g==
+X-Received: by 2002:a1c:4b12:0:b0:3cf:90de:7724 with SMTP id y18-20020a1c4b12000000b003cf90de7724mr45158928wma.18.1669733223362;
+        Tue, 29 Nov 2022 06:47:03 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id b10-20020adfee8a000000b00241dec4ad16sm13717792wro.96.2022.11.29.06.47.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 06:47:02 -0800 (PST)
+Subject: [PATCH v3 0/6] soc: qcom: add support for the I2C Master Hub
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/5] dt-bindings: pinctrl: Add StarFive JH7110 pinctrl
- definitions
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>
-CC:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221118011108.70715-1-hal.feng@starfivetech.com>
- <20221118011108.70715-2-hal.feng@starfivetech.com>
- <eb3974a3-f715-f5b0-cac7-551af26bd17b@linaro.org>
- <08db0f3b-5222-9460-26ba-0e6380d16583@linaro.org>
- <0ceba170-f844-e733-a49e-e67746f9f836@starfivetech.com>
- <093ea507-4c42-1af9-4896-64c1a918432e@linaro.org>
- <30c21787-0c48-ff50-1d63-8e69bdcdbe30@starfivetech.com>
- <339be655-aee7-e1a4-51be-28ea20de6792@linaro.org>
-Content-Language: en-US
-From:   Jianlong Huang <jianlong.huang@starfivetech.com>
-In-Reply-To: <339be655-aee7-e1a4-51be-28ea20de6792@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [219.128.233.15]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX065.cuchost.com
- (172.16.6.65)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAGQbhmMC/52NzQ7CIBAGX6Xh7BpA+oMn38N4WFosJAUMtCSm6bu78ebV02Y2+WZ2Vmz2trBrs7
+ Nsqy8+RYLLqWGjwzhb8BMxk1xKIYSCiDmUNac4QwlD23LYXsQWA3g5QsCy2gxuM6AU9k8jtOpby8hn
+ sFgwGePoyBi3ZaGn82VN+f3tV0Hn/k+qCuDQKaW04B0KNdwWT+t0TnlmD8pU+bdakhpxQuy07o38VR /H8QHEAKbnQwEAAA==
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Tue, 29 Nov 2022 15:47:00 +0100
+Message-Id: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v3-0-f6a20dc9996e@linaro.org>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.10.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Nov 2022 08:49:49 +0100, Krzysztof Kozlowski wrote:
-> On 29/11/2022 02:47, Jianlong Huang wrote:
->> On Mon, 28 Nov 2022 09:32:45 +0100, Krzysztof Kozlowski wrote:
->>> On 28/11/2022 01:48, Jianlong Huang wrote:
->>>
->>>>>>> +/* aon_iomux doen */
->>>>>>> +#define GPOEN_AON_PTC0_OE_N_4			2
->>>>>>> +#define GPOEN_AON_PTC0_OE_N_5			3
->>>>>>> +#define GPOEN_AON_PTC0_OE_N_6			4
->>>>>>> +#define GPOEN_AON_PTC0_OE_N_7			5
->>>>>>> +
->>>>>>
->>>>>> It looks like you add register constants to the bindings. Why? The
->>>>>> bindings are not the place to represent hardware programming model. Not
->>>>>> mentioning that there is no benefit in this.
->>>>>
->>>>> Also: this entire file should be dropped, but if it stays, you have to
->>>>> name it matching bindings or compatible (vendor,device.h).
->>>>
->>>> Thanks your comments.
->>>> These macros are used to configure pinctrl in dts, so the file should stay,
->>>
->>> Why they should stay? What's the reason? If it is not a constant used by
->>> driver, then register values should not be placed in the bindings, so
->>> drop it.
->>>
->> 
->> Thanks.
->> 
->> These macros in binding header(example, DOUT, DOEN etc) will be used in DTS,
->> and driver will parse the DT for pinctrl configuration.
->> 
->> Example in dts:
->> uart0_pins: uart0-0 {
->> 	tx-pins {
->> 		pinmux = <GPIOMUX(5, GPOUT_SYS_UART0_TX, GPOEN_ENABLE, GPI_NONE)>;
-> 
-> This is usage in DTS and is not an argument to store register
-> addresses/offsets as bindings. What is the usage (of define, not value)
-> in the driver?
-> 
+The I2C Master Hub is a stripped down version of the GENI Serial Engine
+QUP Wrapper Controller but only supporting I2C serial engines without
+DMA support.
 
-The existing implementation reuse the macros for DTS and driver.
-Do you mean we need to separate the macros, one for DTS and one for driver usage?
-Or you have any better suggestion?
+The I2C Master Hub only supports a variant of the I2C serial engine with:
+- a separate "core" clock
+- no DMA support
+- non discoverable fixed FIFO size
 
-These macros are the value of register, not register addresses/offsets,
-except for with prefix of GPI.
+Since DMA isn't supported, the wrapper doesn't need the Master AHB clock
+and the iommus property neither.
 
-Drivers rarely reference macros directly, mostly parsing dts and writing them to registers.
- 
+This patchset adds the bindings changes to the QUPv3 wrapper and I2C serial
+element bindings to reflect the different resources requirements.
+
+In order to reuse the QUPv3 wrapper and I2C serial element driver support,
+the I2C Master Hub requirements are expressed in new desc structs passed
+as device match data.
+
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v3:
+- Fixed check of DT clocks count on geni-se.c with Kondar help
+- Added Krzysztof's Reviewed-by on patches 1 & 2
+- Link to v2: https://lore.kernel.org/r/20221114-narmstrong-sm8550-upstream-i2c-master-hub-v2-0-aadaa6997b28@linaro.org
+
+Changes in v2:
+- Fixed all commits messages to remove "This" and fix grammar
+- Fixed the bindings by moving the if in allOf:if
+- Fixed the bindings by adding minItems: & maxItems: instead of true
+- Added a warning about clock count in patch 3
+- Added Reviewed-by from Konrad on patches 3, 4 & 5
+- Link to v1: https://lore.kernel.org/r/20221114-narmstrong-sm8550-upstream-i2c-master-hub-v1-0-64449106a148@linaro.org
+
+---
+Neil Armstrong (6):
+      dt-bindings: qcom: geni-se: document I2C Master Hub wrapper variant
+      dt-bindings: i2c: qcom-geni: document I2C Master Hub serial I2C engine
+      soc: qcom: geni-se: add desc struct to specify clocks from device match data
+      soc: qcom: geni-se: add support for I2C Master Hub wrapper variant
+      i2c: qcom-geni: add desc struct to prepare support for I2C Master Hub variant
+      i2c: qcom-geni: add support for I2C Master Hub variant
+
+ .../bindings/i2c/qcom,i2c-geni-qcom.yaml           | 64 +++++++++++++++---
+ .../devicetree/bindings/soc/qcom/qcom,geni-se.yaml | 44 ++++++++++--
+ drivers/i2c/busses/i2c-qcom-geni.c                 | 58 +++++++++++++++-
+ drivers/soc/qcom/qcom-geni-se.c                    | 79 ++++++++++++++++++----
+ 4 files changed, 212 insertions(+), 33 deletions(-)
+---
+base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
+change-id: 20221114-narmstrong-sm8550-upstream-i2c-master-hub-44a7fb19475e
+
 Best regards,
-Jianlong Huang
-
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
