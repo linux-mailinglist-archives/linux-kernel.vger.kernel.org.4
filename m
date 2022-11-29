@@ -2,157 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3876563C8C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A1E63C8C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236985AbiK2TsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 14:48:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
+        id S237126AbiK2TtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 14:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237257AbiK2TrP (ORCPT
+        with ESMTP id S237130AbiK2Ts0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 14:47:15 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1019C2EF31;
-        Tue, 29 Nov 2022 11:44:58 -0800 (PST)
-Date:   Tue, 29 Nov 2022 19:44:53 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669751095;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
+        Tue, 29 Nov 2022 14:48:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49D1226
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:47:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669751240;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yXVtIzomxjTksg3tJ+hAHpeadbStKm5VAGTkI7rYqqM=;
-        b=1iuc7NUcn28WY6asYAUrT+ar37PO3frxZAAZ4YuikdJIQApFa2nJ5Pl/qeYz8Mw1K+Y+CN
-        9FyL0UD1nEVoJhJhM9xyw9pi6kjv0yt1fgoXVeFaf1Vfp5Uio+hijTbnqLyW7/xOpfAwmq
-        ewcyxWhHhNo1fsVXGQF/x/0U+uRRDrtPoZ4WQGFAVZvgUzUnZ2jXSeEEBQul4vNRrzcG2s
-        ediuYu9SmgUPjNxo5/vEdu4j5MTxa6TvlpoP+4SOl4wZ/9P490TSvfqnNHaSEVsyTFKOtY
-        0e7LTICeOQjkGv5OL7cMgTomlDJOiys58eanqqZon1xgJFpxJ0MIfG+pgcB2nQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669751095;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yXVtIzomxjTksg3tJ+hAHpeadbStKm5VAGTkI7rYqqM=;
-        b=hT1twTOCUbZPOut7Ldf657AKzPGMjy0XbkslyeqA7LCkSm9pK9Ubz9BDO4TqwTXSEBcr5p
-        rxweYfsiTUyFpDAg==
-From:   "tip-bot2 for Uros Bizjak" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/boot] x86/boot: Remove x86_32 PIC using %ebx workaround
-Cc:     Uros Bizjak <ubizjak@gmail.com>, Borislav Petkov <bp@suse.de>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20221104124546.196077-1-ubizjak@gmail.com>
-References: <20221104124546.196077-1-ubizjak@gmail.com>
+        bh=Vbd23Zx6kbZW7RVz4hFfVIiUakS1MHTk9MEZDu14ZNM=;
+        b=FK+NIJY08ofy84z/TYak8BYJ68KHyKA88DMGNevTp1uePjPylKsvJpTayDhVFKqHIm4pm3
+        g58MNdpOAPhIPScQhYv2qZO2ZdGOd7EEM5yjDx2/vDUI2N10pm+cQi6gKBxIZxbGtrbnnR
+        SMsYfBzOfgln3o19ACd5MvOdcxIZFx0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-54-e9YyuyLyNKOEZtoDUNIhJA-1; Tue, 29 Nov 2022 14:47:16 -0500
+X-MC-Unique: e9YyuyLyNKOEZtoDUNIhJA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4598A101A56D;
+        Tue, 29 Nov 2022 19:47:16 +0000 (UTC)
+Received: from starship (unknown [10.35.206.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2A36140C2140;
+        Tue, 29 Nov 2022 19:47:14 +0000 (UTC)
+Message-ID: <5162c4cbaaae8de01c77093ac005c2f5abc1d040.camel@redhat.com>
+Subject: Re: [PATCH] KVM: X86: set EXITING_GUEST_MODE as soon as vCPU exits
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Jon Kohler <jon@nutanix.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 29 Nov 2022 21:47:13 +0200
+In-Reply-To: <20221129182226.82087-1-jon@nutanix.com>
+References: <20221129182226.82087-1-jon@nutanix.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Message-ID: <166975109360.4906.1198013784402637046.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/boot branch of tip:
+On Tue, 2022-11-29 at 13:22 -0500, Jon Kohler wrote:
+> Set vcpu->mode to EXITING_GUEST_MODE as soon vCPU exits to reflect
+> that we are indeed exiting guest mode, but not quite out of guest
+> mode yet. Note: This is done lazily without an explicit memory
+> barrier so that we do not regress the cost in the critical path
+> of going from the exit to the exit handler.
+> 
+> Flip back to IN_GUEST_MODE for exits that use
+> EXIT_FASTPATH_REENTER_GUEST, such that we are IN_GUEST_MODE upon
+> reentry.
+> 
+> Changing vcpu->mode away from IN_GUEST_MODE as early as possible
+> gives IPI senders as much runway as possible to avoid ringing
+> doorbell or sending posted interrupt IPI in AMD and Intel,
+> respectively. Since this is done without an explicit memory
+> barrier, the worst case is that the IPI sender sees IN_GUEST_MODE
+> still and sends a spurious event, which is the behavior prior
+> to this patch.
 
-Commit-ID:     60253f100c5846029f1370e51be6ebaeb160dcec
-Gitweb:        https://git.kernel.org/tip/60253f100c5846029f1370e51be6ebaeb160dcec
-Author:        Uros Bizjak <ubizjak@gmail.com>
-AuthorDate:    Fri, 04 Nov 2022 13:45:46 +01:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Tue, 29 Nov 2022 16:26:53 +01:00
+Beware that we had a king sized bug in regard to AVIC inhibition races
+vs guest entries, this this should be carefully checked for this.
 
-x86/boot: Remove x86_32 PIC using %ebx workaround
+Also, do you have any perf numbers to see if that actually improves performance?
+(I am just curious, I do think that this can improve performance).
 
-The currently supported minimum gcc version is 5.1. Before that, the
-PIC register, when generating Position Independent Code, was considered
-"fixed" in the sense that it wasn't in the set of registers available to
-the compiler's register allocator. Which, on x86-32, is already a very
-small set.
+Best regards,
+	Maxim Levitsky
 
-What is more, the register allocator was unable to satisfy extended asm
-"=b" constraints. (Yes, PIC code uses %ebx on 32-bit as the base reg.)
 
-With gcc 5.1:
+> 
+> Signed-off-by: Jon Kohler <jon@nutanix.com>
+> ---
+>  arch/x86/kvm/svm/svm.c |  7 +++++++
+>  arch/x86/kvm/vmx/vmx.c | 23 +++++++++++++++++++++++
+>  arch/x86/kvm/x86.c     |  8 ++++++++
+>  3 files changed, 38 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index ce362e88a567..5f0c118a3ffd 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -3907,6 +3907,13 @@ static noinstr void svm_vcpu_enter_exit(struct kvm_vcpu *vcpu, bool spec_ctrl_in
+>  	else
+>  		__svm_vcpu_run(svm, spec_ctrl_intercepted);
+>  
+> +	/* Optimize IPI reduction by setting mode immediately after vmexit
+> +	 * without a memmory barrier as this as not paired anywhere. vcpu->mode
+> +	 * is will be set to OUTSIDE_GUEST_MODE in x86 common code with a memory
+> +	 * barrier, after the host is done fully restoring various host states.
+> +	 */
+> +	vcpu->mode = EXITING_GUEST_MODE;
+> +
+>  	guest_state_exit_irqoff();
+>  }
+>  
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 63247c57c72c..243dcb87c727 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -5878,6 +5878,17 @@ static fastpath_t handle_fastpath_preemption_timer(struct kvm_vcpu *vcpu)
+>  
+>  	if (!vmx->req_immediate_exit &&
+>  	    !unlikely(vmx->loaded_vmcs->hv_timer_soft_disabled)) {
+> +		/* Reset IN_GUEST_MODE since we're going to reenter
+> +		 * guest as part of this fast path. This is done as
+> +		 * an optimization without a memory barrier since
+> +		 * EXITING_GUEST_MODE is also set without a memory
+> +		 * barrier. This also needs to be reset prior to
+> +		 * calling apic_timer_expired() so that
+> +		 * kvm_use_posted_timer_interrupt() returns the proper
+> +		 * value.
+> +		 */
+> +		if (vcpu->mode == EXITING_GUEST_MODE)
+> +			vcpu->mode = IN_GUEST_MODE;
+>  		kvm_lapic_expired_hv_timer(vcpu);
+>  		return EXIT_FASTPATH_REENTER_GUEST;
+>  	}
+> @@ -7031,6 +7042,18 @@ void noinstr vmx_update_host_rsp(struct vcpu_vmx *vmx, unsigned long host_rsp)
+>  void noinstr vmx_spec_ctrl_restore_host(struct vcpu_vmx *vmx,
+>  					unsigned int flags)
+>  {
+> +	struct kvm_vcpu *vcpu = &vmx->vcpu;
+> +
+> +	/* Optimize IPI reduction by setting mode immediately after vmexit
+> +	 * without a memmory barrier as this as not paired anywhere. vcpu->mode
+> +	 * is will be set to OUTSIDE_GUEST_MODE in x86 common code with a memory
+> +	 * barrier, after the host is done fully restoring various host states.
+> +	 * Since the rdmsr and wrmsr below are expensive, this must be done
+> +	 * first, so that the IPI suppression window covers the time dealing
+> +	 * with fixing up SPEC_CTRL.
+> +	 */
+> +	vcpu->mode = EXITING_GUEST_MODE;
+> +
+>  	u64 hostval = this_cpu_read(x86_spec_ctrl_current);
+>  
+>  	if (!cpu_feature_enabled(X86_FEATURE_MSR_SPEC_CTRL))
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 2835bd796639..0e0d228f3fa5 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -2160,6 +2160,14 @@ fastpath_t handle_fastpath_set_msr_irqoff(struct kvm_vcpu *vcpu)
+>  		data = kvm_read_edx_eax(vcpu);
+>  		if (!handle_fastpath_set_tscdeadline(vcpu, data)) {
+>  			kvm_skip_emulated_instruction(vcpu);
+> +			/* Reset IN_GUEST_MODE since we're going to reenter
+> +			 * guest as part of this fast path. This is done as
+> +			 * an optimization without a memory barrier since
+> +			 * EXITING_GUEST_MODE is also set without a memory
+> +			 * barrier.
+> +			 */
+> +			if (vcpu->mode == EXITING_GUEST_MODE)
+> +				vcpu->mode = IN_GUEST_MODE;
+>  			ret = EXIT_FASTPATH_REENTER_GUEST;
+>  		}
+>  		break;
 
-"Reuse of the PIC hard register, instead of using a fixed register,
-was implemented on x86/x86-64 targets. This improves generated PIC
-code performance as more hard registers can be used. Shared libraries
-can significantly benefit from this optimization. Currently it is
-switched on only for x86/x86-64 targets. As RA infrastructure is already
-implemented for PIC register reuse, other targets might follow this in
-the future."
 
-  (from: https://gcc.gnu.org/gcc-5/changes.html)
-
-which basically means that the register allocator has a higher degree
-of freedom when handling %ebx, including reloading it with the correct
-value before a PIC access.
-
-Furthermore:
-
-  arch/x86/Makefile:
-          # Never want PIC in a 32-bit kernel, prevent breakage with GCC built
-          # with nonstandard options
-          KBUILD_CFLAGS += -fno-pic
-
-  $ gcc -Wp,-MMD,arch/x86/boot/.cpuflags.o.d ... -fno-pic ... -D__KBUILD_MODNAME=kmod_cpuflags -c -o arch/x86/boot/cpuflags.o arch/x86/boot/cpuflags.c
-
-so the 32-bit workaround in cpuid_count() is fixing exactly nothing
-because 32-bit configs don't even allow PIC builds.
-
-As to 64-bit builds: they're done using -mcmodel=kernel which produces
-RIP-relative addressing for PIC builds and thus does not apply here
-either.
-
-So get rid of the thing and make cpuid_count() nice and simple.
-
-There should be no functional changes resulting from this.
-
-  [ bp: Expand commit message. ]
-
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20221104124546.196077-1-ubizjak@gmail.com
----
- arch/x86/boot/cpuflags.c | 15 +++------------
- 1 file changed, 3 insertions(+), 12 deletions(-)
-
-diff --git a/arch/x86/boot/cpuflags.c b/arch/x86/boot/cpuflags.c
-index a83d67e..d75237b 100644
---- a/arch/x86/boot/cpuflags.c
-+++ b/arch/x86/boot/cpuflags.c
-@@ -64,20 +64,11 @@ int has_eflag(unsigned long mask)
- 	return !!((f0^f1) & mask);
- }
- 
--/* Handle x86_32 PIC using ebx. */
--#if defined(__i386__) && defined(__PIC__)
--# define EBX_REG "=r"
--#else
--# define EBX_REG "=b"
--#endif
--
- void cpuid_count(u32 id, u32 count, u32 *a, u32 *b, u32 *c, u32 *d)
- {
--	asm volatile(".ifnc %%ebx,%3 ; movl  %%ebx,%3 ; .endif	\n\t"
--		     "cpuid					\n\t"
--		     ".ifnc %%ebx,%3 ; xchgl %%ebx,%3 ; .endif	\n\t"
--		    : "=a" (*a), "=c" (*c), "=d" (*d), EBX_REG (*b)
--		    : "a" (id), "c" (count)
-+	asm volatile("cpuid"
-+		     : "=a" (*a), "=b" (*b), "=c" (*c), "=d" (*d)
-+		     : "0" (id), "2" (count)
- 	);
- }
- 
