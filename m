@@ -2,102 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BD363CAFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 23:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2849A63CAFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 23:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236689AbiK2WN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 17:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47142 "EHLO
+        id S236549AbiK2WNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 17:13:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiK2WNw (ORCPT
+        with ESMTP id S229479AbiK2WNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 17:13:52 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0146C193FD
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:13:51 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id y83so19305603yby.12
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:13:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AChR3z5zwG8J+w96qiQ6SbwWaSdj0A7DrZ0KhnwEfmA=;
-        b=oWc0moBsoFW/Zr95SvGfRYWnk8lGQII/5+TCCJx7PHhRr0sG2xT4vvJWmST4Dv20D0
-         +hbSWTTme3pjxu7QEpSKvENjx6or7eAEmSplgYZafEppu9TkKc6ZTBtwSrlRCHYd3TOC
-         K7w0MMC2z4rcXb0AYGm8Yz/gWCwG4fKYSFI6BCG5HA+X+Z1Wmd9a9DVxP6r9udl9kgq1
-         1TtGBDjYmOY0viKadf1Gvf7n5u4eMgn39hqRUc27jB1AkMZ39ypb9iwBy0dhNPH8/23d
-         7Dcb9PK+/msidOHe6UIr55pU+ph4YLfdSoOEM8mmzjreiY34o8XGsoeJDcFn5/z7vYIK
-         2dWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AChR3z5zwG8J+w96qiQ6SbwWaSdj0A7DrZ0KhnwEfmA=;
-        b=KENcBZ2/B46+0yJZfxcI2M0J9aIqq279YSVE7a3b0MzLcUDmRCzf2bhKgqWH8UKXle
-         TShhzNLXXslT0uVNeWhyp0MXL+ohk/p72s9ls5Zn+zmJ9WeC6/4B/+EkEDxnu/+Ca90q
-         PBqhza6gwclJv7knI6UqStuV+d4+7L7G2C4+QTt8iS2pxBK9FiVTILLWHIJUDPb7suoo
-         iiLkSbnVW3jQ/92WV920N+1O/vHbFpmS0fr54MQBEPlFilJGRWm630xyS6x1fWEvOhbm
-         dasLoPPgTdHtpt97474OyGHNbvJQYesFCP6hdM06ZKMiJA6v+sBdcR0YhlAd62qhd9Rm
-         10DA==
-X-Gm-Message-State: ANoB5pmNuPaygN1vF5tD6lnK1j3tNOg0cG/cebUfrjfv2acVflW4hDEf
-        KCUhIAYcpktGV5BIrRNvE0Egw479RpAXfbVPIUdDGQ==
-X-Google-Smtp-Source: AA0mqf6L29gcgghKWYzswyH8qvjMHxIEwe6DOvuG79a9otQT+UqbSbRNb90qP+B/vJMml3boRfgBUXtCjXxBaI3iDBU=
-X-Received: by 2002:a25:7343:0:b0:6f3:aedd:e75 with SMTP id
- o64-20020a257343000000b006f3aedd0e75mr21530134ybc.611.1669760030058; Tue, 29
- Nov 2022 14:13:50 -0800 (PST)
+        Tue, 29 Nov 2022 17:13:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DF816587;
+        Tue, 29 Nov 2022 14:13:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03B2DB81912;
+        Tue, 29 Nov 2022 22:13:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D65C433D6;
+        Tue, 29 Nov 2022 22:13:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669760024;
+        bh=WuJIvdAWmmKkDImB/RLsLSSsa+0Q9cP0nhzKtCqB2Ow=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=JSp7FHF1hDaU4Auwi9rawziuGW4aJKZia5X/I3nRf92i9o05KHqGEbc8z/rm544J2
+         +GX7oiIo6DCQmIoMWLVczC1+jxorI1WNKjVA6PDRFu67nWyRbdg/23QjE10JU3samG
+         41huRgDjAk3fC006Lxtd0cEYRRjBs0fpPsN2TURUAqWr1iXsv3sTH25inZrR1QJlKe
+         tBbDkKr7/mHTBPyjrE2hrV2JOtCOgVusUqJp3bYhvfiTziceMP1FIq6tADga3HQU9n
+         v0DWFPez0m/sk+aLZuGlCVSyno1ZvQj7aYr8QE9EfWACdxl0M2JWMl7BhVW/SK/G11
+         IwYHqUTWi5L+Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 4548E5C0584; Tue, 29 Nov 2022 14:13:44 -0800 (PST)
+Date:   Tue, 29 Nov 2022 14:13:44 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org
+Subject: Re: [PATCH v2 0/6] selftests: Use "grep -E" instead of "egrep"
+Message-ID: <20221129221344.GF4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <1669165413-12035-1-git-send-email-yangtiezhu@loongson.cn>
+ <bf9b26b5-2793-204f-ba9c-4d9cd55b08ad@loongson.cn>
+ <dc7cb519-584c-55f1-4baa-44cd4e0bbfe9@linuxfoundation.org>
 MIME-Version: 1.0
-References: <0000000000000c379205ec806d6e@google.com> <000000000000d921ab05ee8e4f48@google.com>
-In-Reply-To: <000000000000d921ab05ee8e4f48@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 29 Nov 2022 23:13:13 +0100
-Message-ID: <CANpmjNMS3BGeWix=-OBKCK_iorQiGVay58f5U4fJiebF6msPSQ@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in btrfs_commit_transaction
-To:     syzbot <syzbot+9c37714c07194d816417@syzkaller.appspotmail.com>
-Cc:     clm@fb.com, dsterba@suse.com, dsterba@suse.cz,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dc7cb519-584c-55f1-4baa-44cd4e0bbfe9@linuxfoundation.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz fix: btrfs: don't print stack trace when transaction is aborted
-due to ENOMEM
+On Tue, Nov 29, 2022 at 02:39:25PM -0700, Shuah Khan wrote:
+> On 11/22/22 19:27, Tiezhu Yang wrote:
+> > It seems that patch #2~#6 has no conflicts with the other related
+> > git tree, but patch #1 is conflicted with paulmck/linux-rcu.git dev.
+> > 
+> > What should I do?
+> > 
+> > Shuah, could you please apply patch #2~#6 to your linux-kselftest.git next branch and ignore patch #1?
+> > 
+> > And then let me send a seperate patch #1 rebased on paulmck/linux-rcu.git dev branch to rcu@vger.kernel.org.
+> > 
+> 
+> That won't work because linux-kselftest next won't have the linux-rcu content.
+> I already picked patches 1,2,6
+> 
+> Patches 3 (powerpc) and 5 (net) go through powerpc and net trees. Please resend
+> just those cc'ing the right people. get_maintainers.pl will give you the info.
+> 
+> As for patch 1 - perhaps the conflict could be resolved in next.
+> 
+> Paul, would you like me to drop rcutorture patch from linux-kselftest next?
 
-On Mon, 28 Nov 2022 at 22:11, syzbot
-<syzbot+9c37714c07194d816417@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit 8bb808c6ad91ec3d332f072ce8f8aa4b16e307e0
-> Author: David Sterba <dsterba@suse.com>
-> Date:   Thu Nov 3 13:39:01 2022 +0000
->
->     btrfs: don't print stack trace when transaction is aborted due to ENOMEM
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14e020bd880000
-> start commit:   b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
-> dashboard link: https://syzkaller.appspot.com/bug?extid=9c37714c07194d816417
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17401632880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13176716880000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: btrfs: don't print stack trace when transaction is aborted due to ENOMEM
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000d921ab05ee8e4f48%40google.com.
+I would be happy to carry the rcutorture patch, especially if doing so
+makes life easier.  ;-)
+
+But please do send me some sort of pointer to the patch.  Otherwise,
+I guarantee you that I will queue the wrong one.
+
+							Thanx, Paul
