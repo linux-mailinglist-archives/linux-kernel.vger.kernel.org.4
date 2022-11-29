@@ -2,229 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E29E63C54D
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:38:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D9363C552
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbiK2QiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 11:38:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
+        id S236022AbiK2Qiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 11:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234622AbiK2QiT (ORCPT
+        with ESMTP id S235997AbiK2Qic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 11:38:19 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D286F57B5B;
-        Tue, 29 Nov 2022 08:38:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669739898; x=1701275898;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Pl0aGdARfvWS523S5l0UgKlIzt2EKDvOzbaOvuIoHjk=;
-  b=dnFAzfJMRmUqrPiaHGaQTOgVFugc8VWDDlbFsaHJVzKjT9sTO0WCJ7Uk
-   bZXRmpSpXpPCaJx3iu/4BJgz7npvTYvV6SEQ8YmI5ey+qjmxHYKshAXu4
-   I4HsIlTu7Byoa5TVLj6rJT0AMGbULZhH9dqGcMRyVU17Uy/9Z53S5O4cN
-   iPOOKObPBge5xdVJfBV1BLUfpAuT3yJZQgNc+YZ+ExiORWSOxQZgJ5Bg1
-   x9F4X8zpr461Gqz2kiPvCyB7qYUzkrI6XPOiJQwJwa13i2u8xyUcrrxJH
-   UhJeSvYJKZnG41/9B//zYTR579jAwNTSH16hJpYeLgnldvRmBxqB0P+nX
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="315190281"
-X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
-   d="scan'208";a="315190281"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 08:37:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="768486521"
-X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
-   d="scan'208";a="768486521"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 29 Nov 2022 08:37:44 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p03c6-001muh-15;
-        Tue, 29 Nov 2022 18:37:42 +0200
-Date:   Tue, 29 Nov 2022 18:37:42 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Gerald Loacker <gerald.loacker@wolfvision.net>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jakob Hauser <jahau@rocketmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>
-Subject: Re: [PATCH v4 3/3] iio: magnetometer: add ti tmag5273 driver
-Message-ID: <Y4Y1VqvYS0XsWi1r@smile.fi.intel.com>
-References: <20221129064540.3218982-1-gerald.loacker@wolfvision.net>
- <20221129064540.3218982-4-gerald.loacker@wolfvision.net>
+        Tue, 29 Nov 2022 11:38:32 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFF1554EB;
+        Tue, 29 Nov 2022 08:38:29 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1433ef3b61fso17659223fac.10;
+        Tue, 29 Nov 2022 08:38:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=AIlkOn1RGTq0BXLREQR2dL++z9UYJr3//es7sMDSy6A=;
+        b=EKoyPOxWXAcv0kDDdile+YOyw3OQWwaLEiDIOyN/NHyCAVR6O2RqtkJTe76BiLFIGR
+         17KRZE8DxOXE5pNAdFCrIGA17/SVtvWpg54HaTOay5RFc6fpUvhim0843hcvEN39xnZp
+         0nM8qQUvVqIRZIl4AEmG0e0NQEm3wDcyeB0sM2EbHD2KigmremQkb7BGXWnfmxvk+B+l
+         LqZrpShZt/virc1YvHBrCrHxAEEJXLX3fAQfO2IRykdzBo4IqiJUwN+J44VDvSXBlUme
+         FpoeFTJo54oaFHYRmfJPbL32B+9DiEzbfDf6/Lg9q+5ctkp3T7vv+VknAwdajyP+6oNk
+         87Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AIlkOn1RGTq0BXLREQR2dL++z9UYJr3//es7sMDSy6A=;
+        b=mPVR/z8bgHhHKj1FVb0yqVMf2cWR4/oOwrLHmN2bgkP4zo4A0EHqAmB+GhxgvHONa4
+         suaaW4Gk5/EFFp3S/awtC/VBbUrLFkTM1HxyJ5X9qKx7S2eVwlfsVkoy6KHumBG1m0Zf
+         U573HJtkXDd6UEdCquWGnoq7fV2Fpf0+9yWc1glUBaDJPSlAIZ6/IJfZgdzkhMtZ4XMT
+         vI8RNJzuyXs7E2sW/nofWn4LPMw9F9wMQh4XMn1jH32WV7LJhyk6ztDe+wSKTcHQZn/j
+         LbEGs+wTYG/X5zaCxv7sWMF3HgsiIeOBpB2yw1gsX9DFWhMy1l0wE/dmWOUw0v8pGEO+
+         oZbw==
+X-Gm-Message-State: ANoB5pn/Xqj95QjelvicSMVk7rn3bNRRBHwxyaHBn0z6D/WxlsXB80pm
+        WmYciDUMD6yKESqlWPnpZ4o=
+X-Google-Smtp-Source: AA0mqf4c1P2rrkH8pFF2t7W8Qd8VY+UanFfxu3zqXTVS9B/EJybxD83c1QwxiBefdWn2vIwzBCN7Zg==
+X-Received: by 2002:a05:6870:888d:b0:132:c1e9:728b with SMTP id m13-20020a056870888d00b00132c1e9728bmr21864753oam.241.1669739909056;
+        Tue, 29 Nov 2022 08:38:29 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ce8-20020a056830628800b00661b019accbsm6122281otb.3.2022.11.29.08.38.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 08:38:28 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0d32c71c-9d88-26fe-60a3-e13ff64a47ad@roeck-us.net>
+Date:   Tue, 29 Nov 2022 08:38:26 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221129064540.3218982-4-gerald.loacker@wolfvision.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 2/6] ABI: sysfs-class-hwmon: add a description for
+ fanY_fault
+Content-Language: en-US
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20221128230219.39537-1-nick.hawkins@hpe.com>
+ <20221128230219.39537-3-nick.hawkins@hpe.com>
+ <46cecf77-e989-40d9-3e08-fd970ad12a79@roeck-us.net>
+ <0A5DF9D5-B8C2-44A4-924A-B8957EC8A2A7@hpe.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <0A5DF9D5-B8C2-44A4-924A-B8957EC8A2A7@hpe.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 07:45:40AM +0100, Gerald Loacker wrote:
-> Add support for TI TMAG5273 Low-Power Linear 3D Hall-Effect Sensor.
-> Additionally to temperature and magnetic X, Y and Z-axes the angle and
-> magnitude are reported.
-> The sensor is operating in continuous measurement mode and changes to sleep
-> mode if not used for 5 seconds.
+On 11/29/22 08:15, Hawkins, Nick wrote:
+>> This change is really completely unrelated to a CPLD or specific SoC.
+>> The commit description is just confusing. It should simply state that
+>> it documents the existing fanX_fault attribute.
+> 
+> Understood. Just to confirm should I change fanY_fault to fanX_fault
+> in documentation as well as the patch description? For instance:
+> /sys/class/hwmon/hwmonX/fanX_fault
+> 
+> It seems that the documentation around it uses fanY_ format.
+> 
 
-...
+Now you start splitting hairs ;-). I wanted to point out that
+fan[X,Y,Z,A,B,C,...]_fault is a generic attribute, not that I want you
+to change fanY to fanX.
 
-> +static int tmag5273_get_measure(struct tmag5273_data *data, s16 *t, s16 *x,
-> +				s16 *y, s16 *z, u16 *angle, u16 *magnitude)
-> +{
-> +	unsigned int status, val;
-> +	__be16 reg_data[4];
-> +	int ret;
-> +
-> +	mutex_lock(&data->lock);
-> +
-> +	/*
-> +	 * Max. conversion time is 2425 us in 32x averaging mode for all three
-> +	 * channels. Since we are in continuous measurement mode, a measurement
-> +	 * may already be there, so poll for completed measurement with
-> +	 * timeout.
-> +	 */
-> +	ret = regmap_read_poll_timeout(data->map, TMAG5273_CONV_STATUS, status,
-> +				       status & TMAG5273_CONV_STATUS_COMPLETE,
-> +				       100, 10000);
-> +	if (ret) {
-
-> +		dev_err_probe(data->dev, ret,
-> +			      "timeout waiting for measurement\n");
-
-Is it called from ->probe()? I don't think so...
-
-> +		goto out_unlock;
-> +	}
-> +
-> +	ret = regmap_bulk_read(data->map, TMAG5273_T_MSB_RESULT, reg_data,
-> +			       sizeof(reg_data));
-> +	if (ret)
-> +		goto out_unlock;
-> +	*t = be16_to_cpu(reg_data[0]);
-> +	*x = be16_to_cpu(reg_data[1]);
-> +	*y = be16_to_cpu(reg_data[2]);
-> +	*z = be16_to_cpu(reg_data[3]);
-> +
-> +	ret = regmap_bulk_read(data->map, TMAG5273_ANGLE_RESULT_MSB,
-> +			       &reg_data[0], sizeof(reg_data[0]));
-> +	if (ret)
-> +		goto out_unlock;
-> +	/*
-> +	 * angle has 9 bits integer value and 4 bits fractional part
-> +	 * 15 14 13 12 11 10 9  8  7  6  5  4  3  2  1  0
-> +	 * 0  0  0  a  a  a  a  a  a  a  a  a  f  f  f  f
-> +	 */
-> +	*angle = be16_to_cpu(reg_data[0]);
-> +
-> +	ret = regmap_read(data->map, TMAG5273_MAGNITUDE_RESULT, &val);
-> +	if (ret < 0)
-> +		goto out_unlock;
-> +	*magnitude = val;
-> +
-> +out_unlock:
-> +	mutex_unlock(&data->lock);
-> +	return ret;
-> +}
-
-...
-
-> +static const struct iio_info tmag5273_info = {
-> +	.read_avail = &tmag5273_read_avail,
-> +	.read_raw = &tmag5273_read_raw,
-> +	.write_raw = &tmag5273_write_raw,
-> +};
-
-Functions when being assigned are already pointers, no?
-
-...
-
-> +	ret = match_string(tmag5273_angle_names,
-> +			   ARRAY_SIZE(tmag5273_angle_names), str);
-> +	if (ret < 0)
-> +		dev_warn(dev, "unexpected read angle-measurement property: %s\n", str);
-
-		dev_warn(dev, "unexpected value in angle-measurement property: %s\n", str);
-
-?
-
-> +	else
-> +		data->angle_measurement = ret;
-
-...
-
-> +		snprintf(data->name, sizeof(data->name), "tmag5273x%1u", data->version);
-
-Thinking more about this format, perhaps
-
-		snprintf(data->name, sizeof(data->name), "tmag5273x-v%1u", data->version);
-
-?
-
-...
-
-> +static int tmag5273_runtime_resume(struct device *dev)
-> +{
-> +	struct iio_dev *indio_dev = dev_get_drvdata(dev);
-> +	struct tmag5273_data *data = iio_priv(indio_dev);
-> +	int ret;
-
-> +	/*
-> +	 * Time to go to stand-by mode from sleep mode is 50us
-> +	 * typically. During this time no I2C access is possible.
-> +	 */
-
-Shouldn't be this comment closer to usleep_range()?
-
-> +	tmag5273_set_operating_mode(data, TMAG5273_OP_MODE_CONT);
-> +	usleep_range(80, 200);
-> +	ret = tmag5273_set_operating_mode(data, TMAG5273_OP_MODE_CONT);
-> +	if (ret)
-> +		dev_err(dev, "failed to power on device (%pe)\n", ERR_PTR(ret));
-> +
-> +	return ret;
-> +}
-
-...
-
-> +static DEFINE_RUNTIME_DEV_PM_OPS(tmag5273_pm_ops, tmag5273_runtime_suspend,
-> +				 tmag5273_runtime_resume, NULL);
-
-I would logically split it like:
-
-static DEFINE_RUNTIME_DEV_PM_OPS(tmag5273_pm_ops,
-				 tmag5273_runtime_suspend, tmag5273_runtime_resume, NULL);
-
-or like:
-
-static DEFINE_RUNTIME_DEV_PM_OPS(tmag5273_pm_ops,
-				 tmag5273_runtime_suspend, tmag5273_runtime_resume,
-				 NULL);
-
-or like:
-
-static DEFINE_RUNTIME_DEV_PM_OPS(tmag5273_pm_ops,
-				 tmag5273_runtime_suspend,
-				 tmag5273_runtime_resume,
-				 NULL);
-
-Depending on your preferences.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Guenter
 
