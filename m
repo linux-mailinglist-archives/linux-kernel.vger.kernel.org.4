@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A529B63C919
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 21:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F3863C91A
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 21:16:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236458AbiK2UQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 15:16:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
+        id S236626AbiK2UQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 15:16:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236568AbiK2UQQ (ORCPT
+        with ESMTP id S236517AbiK2UQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 15:16:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6AE4B744;
-        Tue, 29 Nov 2022 12:16:14 -0800 (PST)
+        Tue, 29 Nov 2022 15:16:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EFE2EF0E;
+        Tue, 29 Nov 2022 12:16:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4ACBA618C8;
-        Tue, 29 Nov 2022 20:16:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52747C433C1;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 819A4B81902;
+        Tue, 29 Nov 2022 20:16:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4FEAC433D6;
         Tue, 29 Nov 2022 20:16:12 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="H7Jaro9m"
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="JBFm1xUD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1669752968;
+        t=1669752971;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=LLPRd/r7Rfd9eopyhif5p0pL/LGWthNCokrg0kc/NSs=;
-        b=H7Jaro9mqFo4pjI2bBh6csnPtDnxISIeNc/MQ3zZdNKgNfgzc6P/4r26L0qXJyGmM6HdGg
-        yElPov5R/zuBTGa2EGxhJYxzlBq9Vs+GwagZ/sbnfMZVm5qxhHF5pPKFUktRYMAW/qZOyD
-        tNTBUq4sADK4Ng8jg12WD+QbLaKeF0U=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b1003de2 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 29 Nov 2022 20:16:08 +0000 (UTC)
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=opW6RPpvJERMQVwFUES+fo5WMInJoz20p7tQRvyW+mQ=;
+        b=JBFm1xUDec6UTI4md06Sn4r3iy8XNu9zQzHlVayUmQvXhj1USo24uGoXZYVOkwlaGSXNzq
+        rY2tpYxGOpNk1NLqVAFd9S7Zq0pBqURzPL7863WGSSoVGL9amSZtxZtIFhM3MjAPQVZ0OY
+        fzS0MBBOjOKZs5YE6XMhptZYazw2bUQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0ffaf857 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 29 Nov 2022 20:16:11 +0000 (UTC)
 From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
 To:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
         tglx@linutronix.de
@@ -46,9 +47,11 @@ Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Florian Weimer <fweimer@redhat.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Christian Brauner <brauner@kernel.org>
-Subject: [PATCH v9 0/3] implement getrandom() in vDSO
-Date:   Tue, 29 Nov 2022 21:15:56 +0100
-Message-Id: <20221129201559.39449-1-Jason@zx2c4.com>
+Subject: [PATCH v9 1/3] arch: allocate vgetrandom_alloc() syscall number
+Date:   Tue, 29 Nov 2022 21:15:57 +0100
+Message-Id: <20221129201559.39449-2-Jason@zx2c4.com>
+In-Reply-To: <20221129201559.39449-1-Jason@zx2c4.com>
+References: <20221129201559.39449-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -61,326 +64,283 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes v8->v9:
---------------
-- Allocate system call number on all architectures, and split that off
-  into a separate commit (2/4).
-- Declare missing prototype in syscalls.h.
+Add vgetrandom_alloc() as syscall 451 (or 561 on alpha) by adding it to
+all of the various syscall.tbl and unistd.h files.
 
-Changes v7->v8:
---------------
-- Move lib/vdso/getrandom.h to include/vdso/getrandom.h in order to
-  avoid #include "../../../../../../../../../../../......".
-- Make use of two Kconfig symbols, VDSO_GETRANDOM and
-  VGETRANDOM_ALLOC_SYSCALL, to handle selecting dependencies and
-  conditionalizing code.
-- Rename chacha20_blocks_nostack assembly function to
-  __arch_chacha20_blocks_nostack, which allows removing the awkward C
-  inline wrapper function.
-- Save a byte per instruction by using movups instead of movdqu, and
-  don't bother clearing registers that hold public constants.
-- Add basic signal handling reentrancy protection to vDSO function.
-- Invalidate RNG generation counter if key-refresh syscall fails.
-- Reduce the defines in getrandom.c, which in turn requires using
-  `INT_MAX & PAGE_MASK` explicitly rather than the `MAX_RW_COUNT` macro.
-- Make use of 100 columns when it makes sense, and reformat various bits
-  of code for clarity.
-- Thoroughly document functions and add kernel-doc comments to several
-  key functions.
-- Hoist out repeated `sizeof(struct vgetrandom_state)` into variable.
-- Rename `memcpy_and_zero` to `memcpy_and_zero_src`, and define helper
-  macro outside of function.
-- Separate all x86 work, including syscall wiring, into the x86 commit,
-  so that the first two commits of this series are purely generic.
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ arch/alpha/kernel/syscalls/syscall.tbl              | 1 +
+ arch/arm/tools/syscall.tbl                          | 1 +
+ arch/arm64/include/asm/unistd.h                     | 2 +-
+ arch/arm64/include/asm/unistd32.h                   | 2 ++
+ arch/ia64/kernel/syscalls/syscall.tbl               | 1 +
+ arch/m68k/kernel/syscalls/syscall.tbl               | 1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl         | 1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl           | 1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl           | 1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl           | 1 +
+ arch/parisc/kernel/syscalls/syscall.tbl             | 1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl            | 1 +
+ arch/s390/kernel/syscalls/syscall.tbl               | 1 +
+ arch/sh/kernel/syscalls/syscall.tbl                 | 1 +
+ arch/sparc/kernel/syscalls/syscall.tbl              | 1 +
+ arch/x86/entry/syscalls/syscall_32.tbl              | 1 +
+ arch/x86/entry/syscalls/syscall_64.tbl              | 1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl             | 1 +
+ include/uapi/asm-generic/unistd.h                   | 5 ++++-
+ tools/include/uapi/asm-generic/unistd.h             | 5 ++++-
+ tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl | 1 +
+ tools/perf/arch/powerpc/entry/syscalls/syscall.tbl  | 1 +
+ tools/perf/arch/s390/entry/syscalls/syscall.tbl     | 1 +
+ tools/perf/arch/x86/entry/syscalls/syscall_64.tbl   | 1 +
+ 24 files changed, 31 insertions(+), 3 deletions(-)
 
-Changes v6->v7:
---------------
-- VERY EXCITING! There is now a rudimentary glibc implementation for
-  this from one of the glibc maintainers, Adhemerval Zanella (CC'd). A
-  commit that works with with this latest v7 revision is here:
-
-  https://github.com/bminor/glibc/commit/247ec6dd77ec2a047163fe3a1b60e57880464b39
-
-- Pass an `unsigned int *` instead of an `unsigned long *` for the
-  syscall, to avoid having to add a compat syscall.
-- Use ordinary function framing in assembly, rather than kernel-specific
-  framing.
-- Don't hardcode the number '2', but derive it at compile time with the
-  expression `sizeof(state->batch_key) / CHACHA_BLOCK_SIZE`, as well as
-  adding a BUILD_BUG_ON() in case that doesn't divide cleanly.
-
-Changes v5->v6:
---------------
-- Fix various build errors for odd configurations.
-- Do not leak any secrets onto the stack at all, to account for possibility of
-  fork()ing in a multithreaded scenario, which would ruin forward secrecy.
-  Instead provide a arch-specific implementation that doesn't need stack
-  space.
-- Prevent page alignment from overflowing variable, and clamp to acceptable
-  limits.
-- Read/write unaligned bytes using get/put_unaligned.
-- Add extensive comments to vDSO function explaining subtle aspects.
-- Account for fork() races when writing generation counter.
-
-Changes v4->v5:
---------------
-- Add example code to vDSO addition commit showing intended use and
-  interaction with allocations.
-- Reset buffer to beginning when retrying.
-- Rely on generation counter never being zero for fork detection, rather than
-  adding extra boolean.
-- Make use of __ARCH_WANT_VGETRANDOM_ALLOC macro around new syscall so that
-  it's condition by archs that actually choose to add this, and don't forget
-  to bump __NR_syscalls.
-- Separate __cvdso_getrandom() into __cvdso_getrandom() and
-  __cvdso_getrandom_data() so that powerpc can make a more efficient call.
-
-Changes v3->v4:
---------------
-- Split up into small series rather than one big patch.
-- Use proper ordering in generation counter reads.
-- Make properly generic, not just a hairball with x86, by moving symbols into
-  correct files.
-
-Changes v2->v3:
---------------
-
-Big changes:
-
-Thomas' previous objection was two-fold: 1) vgetrandom
-should really have the same function signature as getrandom, in
-addition to all of the same behavior, and 2) having vgetrandom_alloc
-be a vDSO function doesn't make sense, because it doesn't actually
-need anything from the VDSO data page and it doesn't correspond to an
-existing syscall.
-
-After a discussion at Plumbers this last week, we devised the following
-ways to fix these: 1) we make the opque state argument be the last
-argument of vgetrandom, rather than the first one, since the real
-syscall ignores the additional argument, and that way all the registers
-are the same, and no behavior changes; and 2) we make vgetrandom_alloc a
-syscall, rather than a vDSO function, which also gives it added
-flexibility for the future, which is good.
-
-Making those changes also reduced the size of this patch a bit.
-
-Smaller changes:
-- Properly add buffer offset position.
-- Don't EXPORT_SYMBOL for vDSO code.
-- Account for timens and vvar being in swapped pages.
-
---------------
-
-Two statements:
-
-  1) Userspace wants faster cryptographically secure random numbers of
-     arbitrary size, big or small.
-
-  2) Userspace is currently unable to safely roll its own RNG with the
-     same security profile as getrandom().
-
-Statement (1) has been debated for years, with arguments ranging from
-"we need faster cryptographically secure card shuffling!" to "the only
-things that actually need good randomness are keys, which are few and
-far between" to "actually, TLS CBC nonces are frequent" and so on. I
-don't intend to wade into that debate substantially, except to note that
-recently glibc added arc4random(), whose goal is to return a
-cryptographically secure uint32_t, and there are real user reports of it
-being too slow. So here we are.
-
-Statement (2) is more interesting. The kernel is the nexus of all
-entropic inputs that influence the RNG. It is in the best position, and
-probably the only position, to decide anything at all about the current
-state of the RNG and of its entropy. One of the things it uniquely knows
-about is when reseeding is necessary.
-
-For example, when a virtual machine is forked, restored, or duplicated,
-it's imparative that the RNG doesn't generate the same outputs. For this
-reason, there's a small protocol between hypervisors and the kernel that
-indicates this has happened, alongside some ID, which the RNG uses to
-immediately reseed, so as not to return the same numbers. Were userspace
-to expand a getrandom() seed from time T1 for the next hour, and at some
-point T2 < hour, the virtual machine forked, userspace would continue to
-provide the same numbers to two (or more) different virtual machines,
-resulting in potential cryptographic catastrophe. Something similar
-happens on resuming from hibernation (or even suspend), with various
-compromise scenarios there in mind.
-
-There's a more general reason why userspace rolling its own RNG from a
-getrandom() seed is fraught. There's a lot of attention paid to this
-particular Linuxism we have of the RNG being initialized and thus
-non-blocking or uninitialized and thus blocking until it is initialized.
-These are our Two Big States that many hold to be the holy
-differentiating factor between safe and not safe, between
-cryptographically secure and garbage. The fact is, however, that the
-distinction between these two states is a hand-wavy wishy-washy inexact
-approximation. Outside of a few exceptional cases (e.g. a HW RNG is
-available), we actually don't really ever know with any rigor at all
-when the RNG is safe and ready (nor when it's compromised). We do the
-best we can to "estimate" it, but entropy estimation is fundamentally
-impossible in the general case. So really, we're just doing guess work,
-and hoping it's good and conservative enough. Let's then assume that
-there's always some potential error involved in this differentiator.
-
-In fact, under the surface, the RNG is engineered around a different
-principal, and that is trying to *use* new entropic inputs regularly and
-at the right specific moments in time. For example, close to boot time,
-the RNG reseeds itself more often than later. At certain events, like VM
-fork, the RNG reseeds itself immediately. The various heuristics for
-when the RNG will use new entropy and how often is really a core aspect
-of what the RNG has some potential to do decently enough (and something
-that will probably continue to improve in the future from random.c's
-present set of algorithms). So in your mind, put away the metal
-attachment to the Two Big States, which represent an approximation with
-a potential margin of error. Instead keep in mind that the RNG's primary
-operating heuristic is how often and exactly when it's going to reseed.
-
-So, if userspace takes a seed from getrandom() at point T1, and uses it
-for the next hour (or N megabytes or some other meaningless metric),
-during that time, potential errors in the Two Big States approximation
-are amplified. During that time potential reseeds are being lost,
-forgotten, not reflected in the output stream. That's not good.
-
-The simplest statement you could make is that userspace RNGs that expand
-a getrandom() seed at some point T1 are nearly always *worse*, in some
-way, than just calling getrandom() every time a random number is
-desired.
-
-For those reasons, after some discussion on libc-alpha, glibc's
-arc4random() now just calls getrandom() on each invocation. That's
-trivially safe, and gives us latitude to then make the safe thing faster
-without becoming unsafe at our leasure. Card shuffling isn't
-particularly fast, however.
-
-How do we rectify this? By putting a safe implementation of getrandom()
-in the vDSO, which has access to whatever information a
-particular iteration of random.c is using to make its decisions. I use
-that careful language of "particular iteration of random.c", because the
-set of things that a vDSO getrandom() implementation might need for making
-decisions as good as the kernel's will likely change over time. This
-isn't just a matter of exporting certain *data* to userspace. We're not
-going to commit to a "data API" where the various heuristics used are
-exposed, locking in how the kernel works for decades to come, and then
-leave it to various userspaces to roll something on top and shoot
-themselves in the foot and have all sorts of complexity disasters.
-Rather, vDSO getrandom() is supposed to be the *same exact algorithm*
-that runs in the kernel, except it's been hoisted into userspace as
-much as possible. And so vDSO getrandom() and kernel getrandom() will
-always mirror each other hermetically.
-
-API-wise, the vDSO gains this function:
-
-  ssize_t vgetrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state);
-
-The return value and the first 3 arguments are the same as ordinary
-getrandom(), while the last argument is a pointer to some state
-allocated with vgetrandom_alloc(), explained below. Were all four
-arguments passed to the getrandom syscall, nothing different would
-happen, and the functions would have the exact same behavior.
-
-Then, we introduce a new syscall:
-
-  void *vgetrandom_alloc([inout] unsigned int *num, [out] unsigned int *size_per_each, unsigned int flags);
-
-This takes the desired number of opaque states in `num`, and returns a
-pointer to an array of opaque states, the number actually allocated back
-in `num`, and the size in bytes of each one in `size_per_each`, enabling
-a libc to slice up the returned array into a state per each thread. (The
-`flags` argument is always zero for now.) We very intentionally do *not*
-leave state allocation up to the caller of vgetrandom, but provide
-vgetrandom_alloc for that allocation. There are too many weird things
-that can go wrong, and it's important that vDSO does not provide too
-generic of a mechanism. It's not going to store its state in just any
-old memory address. It'll do it only in ones it allocates.
-
-Right now this means it's a mlock'd page with WIPEONFORK set. In the
-future maybe there will be other interesting page flags or
-anti-heartbleed measures, or other platform-specific kernel-specific
-things that can be set from the syscall. Again, it's important that the
-kernel has a say in how this works rather than agreeing to operate on
-any old address; memory isn't neutral.
-
-The syscall currently accomplishes this with a call to vm_mmap() and
-then a call to do_madvise(). It'd be nice to do this all at once, but
-I'm not sure that a helper function exists for that now, and it seems a
-bit premature to add one, at least for now.
-
-The interesting meat of the implementation is in lib/vdso/getrandom.c,
-as generic C code, and it aims to mainly follow random.c's buffered fast
-key erasure logic. Before the RNG is initialized, it falls back to the
-syscall. Right now it uses a simple generation counter to make its decisions
-on reseeding (though this could be made more extensive over time).
-
-The actual place that has the most work to do is in all of the other
-files. Most of the vDSO shared page infrastructure is centered around
-gettimeofday, and so the main structs are all in arrays for different
-timestamp types, and attached to time namespaces, and so forth. I've
-done the best I could to add onto this in an unintrusive way.
-
-In my test results, performance is pretty stellar (around 15x for uint32_t
-generation), and it seems to be working. There's an extended example in the
-second commit of this series, showing how the syscall and the vDSO function
-are meant to be used together.
-
-Cc: linux-crypto@vger.kernel.org
-Cc: linux-api@vger.kernel.org
-Cc: x86@kernel.org
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>
-Cc: Carlos O'Donell <carlos@redhat.com>
-Cc: Florian Weimer <fweimer@redhat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Christian Brauner <brauner@kernel.org>
-
-Jason A. Donenfeld (3):
-  arch: allocate vgetrandom_alloc() syscall number
-  random: introduce generic vDSO getrandom() implementation
-  x86: vdso: Wire up getrandom() vDSO implementation
-
- MAINTAINERS                                   |   1 +
- arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
- arch/arm/tools/syscall.tbl                    |   1 +
- arch/arm64/include/asm/unistd.h               |   2 +-
- arch/arm64/include/asm/unistd32.h             |   2 +
- arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
- arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
- arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
- arch/mips/kernel/syscalls/syscall_n32.tbl     |   1 +
- arch/mips/kernel/syscalls/syscall_n64.tbl     |   1 +
- arch/mips/kernel/syscalls/syscall_o32.tbl     |   1 +
- arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
- arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
- arch/s390/kernel/syscalls/syscall.tbl         |   1 +
- arch/sh/kernel/syscalls/syscall.tbl           |   1 +
- arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
- arch/x86/Kconfig                              |   1 +
- arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
- arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
- arch/x86/entry/vdso/Makefile                  |   3 +-
- arch/x86/entry/vdso/vdso.lds.S                |   2 +
- arch/x86/entry/vdso/vgetrandom-chacha.S       | 177 +++++++++++++++
- arch/x86/entry/vdso/vgetrandom.c              |  17 ++
- arch/x86/include/asm/vdso/getrandom.h         |  55 +++++
- arch/x86/include/asm/vdso/vsyscall.h          |   2 +
- arch/x86/include/asm/vvar.h                   |  16 ++
- arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
- drivers/char/random.c                         |   9 +
- include/uapi/asm-generic/unistd.h             |   5 +-
- include/vdso/datapage.h                       |  11 +
- lib/vdso/Kconfig                              |   7 +-
- lib/vdso/getrandom.c                          | 204 ++++++++++++++++++
- tools/include/uapi/asm-generic/unistd.h       |   5 +-
- .../arch/mips/entry/syscalls/syscall_n64.tbl  |   1 +
- .../arch/powerpc/entry/syscalls/syscall.tbl   |   1 +
- .../perf/arch/s390/entry/syscalls/syscall.tbl |   1 +
- .../arch/x86/entry/syscalls/syscall_64.tbl    |   1 +
- 37 files changed, 534 insertions(+), 5 deletions(-)
- create mode 100644 arch/x86/entry/vdso/vgetrandom-chacha.S
- create mode 100644 arch/x86/entry/vdso/vgetrandom.c
- create mode 100644 arch/x86/include/asm/vdso/getrandom.h
- create mode 100644 lib/vdso/getrandom.c
-
+diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
+index 8ebacf37a8cf..a4bfd7b53d6f 100644
+--- a/arch/alpha/kernel/syscalls/syscall.tbl
++++ b/arch/alpha/kernel/syscalls/syscall.tbl
+@@ -490,3 +490,4 @@
+ 558	common	process_mrelease		sys_process_mrelease
+ 559	common  futex_waitv                     sys_futex_waitv
+ 560	common	set_mempolicy_home_node		sys_ni_syscall
++561	common	vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
+index ac964612d8b0..e10319cc6c3e 100644
+--- a/arch/arm/tools/syscall.tbl
++++ b/arch/arm/tools/syscall.tbl
+@@ -464,3 +464,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common	futex_waitv			sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
+index 037feba03a51..64a514f90131 100644
+--- a/arch/arm64/include/asm/unistd.h
++++ b/arch/arm64/include/asm/unistd.h
+@@ -39,7 +39,7 @@
+ #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
+ #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
+ 
+-#define __NR_compat_syscalls		451
++#define __NR_compat_syscalls		452
+ #endif
+ 
+ #define __ARCH_WANT_SYS_CLONE
+diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
+index 604a2053d006..7285b5a830cc 100644
+--- a/arch/arm64/include/asm/unistd32.h
++++ b/arch/arm64/include/asm/unistd32.h
+@@ -907,6 +907,8 @@ __SYSCALL(__NR_process_mrelease, sys_process_mrelease)
+ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
+ #define __NR_set_mempolicy_home_node 450
+ __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
++#define __NR_vgetrandom_alloc 451
++__SYSCALL(__NR_vgetrandom_alloc, sys_vgetrandom_alloc)
+ 
+ /*
+  * Please add new compat syscalls above this comment and update
+diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
+index 72c929d9902b..5ed9667051fc 100644
+--- a/arch/ia64/kernel/syscalls/syscall.tbl
++++ b/arch/ia64/kernel/syscalls/syscall.tbl
+@@ -371,3 +371,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
+index b1f3940bc298..d9e7ea26dd26 100644
+--- a/arch/m68k/kernel/syscalls/syscall.tbl
++++ b/arch/m68k/kernel/syscalls/syscall.tbl
+@@ -450,3 +450,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
+index 820145e47350..c109e307a37b 100644
+--- a/arch/microblaze/kernel/syscalls/syscall.tbl
++++ b/arch/microblaze/kernel/syscalls/syscall.tbl
+@@ -456,3 +456,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
+index 253ff994ed2e..6d47d8231f7d 100644
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@ -389,3 +389,4 @@
+ 448	n32	process_mrelease		sys_process_mrelease
+ 449	n32	futex_waitv			sys_futex_waitv
+ 450	n32	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	n32	vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
+index 3f1886ad9d80..890e5b51e1fc 100644
+--- a/arch/mips/kernel/syscalls/syscall_n64.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+@@ -365,3 +365,4 @@
+ 448	n64	process_mrelease		sys_process_mrelease
+ 449	n64	futex_waitv			sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	n64	vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+index 8f243e35a7b2..de512de148f5 100644
+--- a/arch/mips/kernel/syscalls/syscall_o32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+@@ -438,3 +438,4 @@
+ 448	o32	process_mrelease		sys_process_mrelease
+ 449	o32	futex_waitv			sys_futex_waitv
+ 450	o32	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	o32	vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
+index 8a99c998da9b..bab1cee627e3 100644
+--- a/arch/parisc/kernel/syscalls/syscall.tbl
++++ b/arch/parisc/kernel/syscalls/syscall.tbl
+@@ -448,3 +448,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common	futex_waitv			sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
+index a0be127475b1..e6c04eda2363 100644
+--- a/arch/powerpc/kernel/syscalls/syscall.tbl
++++ b/arch/powerpc/kernel/syscalls/syscall.tbl
+@@ -537,3 +537,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450 	nospu	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
+index 799147658dee..5b0b2bea46da 100644
+--- a/arch/s390/kernel/syscalls/syscall.tbl
++++ b/arch/s390/kernel/syscalls/syscall.tbl
+@@ -453,3 +453,4 @@
+ 448  common	process_mrelease	sys_process_mrelease		sys_process_mrelease
+ 449  common	futex_waitv		sys_futex_waitv			sys_futex_waitv
+ 450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
++451  common	vgetrandom_alloc	sys_vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
+index 2de85c977f54..631f0bac0e9a 100644
+--- a/arch/sh/kernel/syscalls/syscall.tbl
++++ b/arch/sh/kernel/syscalls/syscall.tbl
+@@ -453,3 +453,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
+index 4398cc6fb68d..b4925978adea 100644
+--- a/arch/sparc/kernel/syscalls/syscall.tbl
++++ b/arch/sparc/kernel/syscalls/syscall.tbl
+@@ -496,3 +496,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+index 320480a8db4f..f5f863a33824 100644
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -455,3 +455,4 @@
+ 448	i386	process_mrelease	sys_process_mrelease
+ 449	i386	futex_waitv		sys_futex_waitv
+ 450	i386	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	i386	vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index c84d12608cd2..0186f173f0e8 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -372,6 +372,7 @@
+ 448	common	process_mrelease	sys_process_mrelease
+ 449	common	futex_waitv		sys_futex_waitv
+ 450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
++451	common	vgetrandom_alloc	sys_vgetrandom_alloc
+ 
+ #
+ # Due to a historical design error, certain syscalls are numbered differently
+diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
+index 52c94ab5c205..14d63a119cc2 100644
+--- a/arch/xtensa/kernel/syscalls/syscall.tbl
++++ b/arch/xtensa/kernel/syscalls/syscall.tbl
+@@ -421,3 +421,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+index 45fa180cc56a..9d2e299f3e8a 100644
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -886,8 +886,11 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
+ #define __NR_set_mempolicy_home_node 450
+ __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
+ 
++#define __NR_vgetrandom_alloc 451
++__SYSCALL(__NR_vgetrandom_alloc, sys_vgetrandom_alloc)
++
+ #undef __NR_syscalls
+-#define __NR_syscalls 451
++#define __NR_syscalls 452
+ 
+ /*
+  * 32 bit systems traditionally used different
+diff --git a/tools/include/uapi/asm-generic/unistd.h b/tools/include/uapi/asm-generic/unistd.h
+index 45fa180cc56a..9d2e299f3e8a 100644
+--- a/tools/include/uapi/asm-generic/unistd.h
++++ b/tools/include/uapi/asm-generic/unistd.h
+@@ -886,8 +886,11 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
+ #define __NR_set_mempolicy_home_node 450
+ __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
+ 
++#define __NR_vgetrandom_alloc 451
++__SYSCALL(__NR_vgetrandom_alloc, sys_vgetrandom_alloc)
++
+ #undef __NR_syscalls
+-#define __NR_syscalls 451
++#define __NR_syscalls 452
+ 
+ /*
+  * 32 bit systems traditionally used different
+diff --git a/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl b/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
+index 3f1886ad9d80..890e5b51e1fc 100644
+--- a/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
++++ b/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
+@@ -365,3 +365,4 @@
+ 448	n64	process_mrelease		sys_process_mrelease
+ 449	n64	futex_waitv			sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	n64	vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
+index e9e0df4f9a61..d58da67a9766 100644
+--- a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
++++ b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
+@@ -534,3 +534,4 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450 	nospu	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/tools/perf/arch/s390/entry/syscalls/syscall.tbl b/tools/perf/arch/s390/entry/syscalls/syscall.tbl
+index 799147658dee..5b0b2bea46da 100644
+--- a/tools/perf/arch/s390/entry/syscalls/syscall.tbl
++++ b/tools/perf/arch/s390/entry/syscalls/syscall.tbl
+@@ -453,3 +453,4 @@
+ 448  common	process_mrelease	sys_process_mrelease		sys_process_mrelease
+ 449  common	futex_waitv		sys_futex_waitv			sys_futex_waitv
+ 450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
++451  common	vgetrandom_alloc	sys_vgetrandom_alloc		sys_vgetrandom_alloc
+diff --git a/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl b/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
+index c84d12608cd2..0186f173f0e8 100644
+--- a/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -372,6 +372,7 @@
+ 448	common	process_mrelease	sys_process_mrelease
+ 449	common	futex_waitv		sys_futex_waitv
+ 450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
++451	common	vgetrandom_alloc	sys_vgetrandom_alloc
+ 
+ #
+ # Due to a historical design error, certain syscalls are numbered differently
 -- 
 2.38.1
 
