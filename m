@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8826163C9CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 21:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE43B63C9D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 21:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236688AbiK2Urs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 15:47:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
+        id S236790AbiK2Urw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 15:47:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236641AbiK2UrT (ORCPT
+        with ESMTP id S236480AbiK2UrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 15:47:19 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBACD66CB2;
-        Tue, 29 Nov 2022 12:47:18 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id l8so18615786ljh.13;
-        Tue, 29 Nov 2022 12:47:18 -0800 (PST)
+        Tue, 29 Nov 2022 15:47:23 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4F827DCC;
+        Tue, 29 Nov 2022 12:47:20 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id u27so12876305lfc.9;
+        Tue, 29 Nov 2022 12:47:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JM8qWhjtmVz4g8QiVLIg+Ipe0Ovs4/S9ZpUrITzygDw=;
-        b=VTmPTjA0nBXjP2iGsAL/CDBkR2uVwYlxV0pZUds5sisiYqyFAWRgkaG9Hkx6pEEx9z
-         sZwRG+4s4bcSz6txpufg+3mDQnt3GvuP+GrQsWt8jD6qNqa9QcSWDmrDCv961I+rUqay
-         gODis7/X4F7oCOgDWpUHP0l1BbO/A0zt/mS3EqkNDjiQkexgZXAjL36U8etUSKDHyqy/
-         eTQxxIvW1PWHXVPUzriUPgdiuchrtMk3ML1JrsxkQsGYcdYcy3hydV6T7Tlosmaj4MZO
-         QjHa7pyf86rR5EW49I8pAxreREUgmZ+k0JFeotLL72ZjJATJWuiOey/dgzisQh4dpoTM
-         UYBg==
+        bh=8OJbaeSPcoUQhtrSfuzPP+5Xvz9tDw3fpybywrDiLB8=;
+        b=isX5XESaqTPO6t/rIUbSKYmN1N1Dj6iJFY4zi9Q4/cAMTUMA+sX9eL/49g1tvW5Zny
+         rAca4oqEK+DqAek0wERHVCLD3nTdFRwhJ7CscGnoZnKgDpL0RV96PvAfAIqLnEPejxoM
+         Yz70Hahxo6+2JtIbjtQI/tF+uwgYYQfI7G2PF6wHqtAGplmUp3c3i2383B0fjGEYhPQG
+         3i0FCQ/bMG/t3hW1gfm48IPo7p7q53Y1WNf7Vm9jVHFQjcZs6NNLl1/yY25IilHBTgYW
+         bXwk4v9GIAhdmaByNwQsi2txZf/Fko0Vc+SJq7Zc3vPhfnL5cdFq+b5qiZmrl5oAnlB7
+         7f8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JM8qWhjtmVz4g8QiVLIg+Ipe0Ovs4/S9ZpUrITzygDw=;
-        b=RrEnw/mqyLGK74DSuA7Qa98i3jyFsuYrrjAm0Ao3nN8jnysePk+PTKYvj0RPDXOAVa
-         xUFNhPeCtZi/aUS+La7T6MO4B2neeWYDEvhW6y6Ajtp2PJNJ5kjnoqVDRKjOpJ4Xzx+p
-         R07SUcekgEcftSc2BCziVzcA5EqsXYSE5IOLPDSf/HS/ewH7yRtqeMGynAl0Xs+oxdHn
-         fNCProYDVad1/NJFUvCmnz15t09bNLVuE7jW7EDmKZ/m0+7PyBg6VVG2dyEgPGV3Smho
-         3VhkUcsOx9p5PppwAKQYo2AJtohbFPDjj3PFT0Orop/w2jexDsHlGLnhR6HuvCCvbwhs
-         wi4A==
-X-Gm-Message-State: ANoB5pmvnHXoiNhdEsilvr6l8exm2R8dHJU4m8Bd2G5OFb621zIz11Rd
-        KFR7vHuEVKSExb1kM3y8NAH0iiKQMws=
-X-Google-Smtp-Source: AA0mqf5SpcOjRARzwp1NkQxL/CovjoQTjDAIOA8/0GZqKninqGw0BWnE0/HvuzYtIY6HU70h3/QAYA==
-X-Received: by 2002:a05:651c:160b:b0:276:4462:2d20 with SMTP id f11-20020a05651c160b00b0027644622d20mr11957815ljq.19.1669754837049;
-        Tue, 29 Nov 2022 12:47:17 -0800 (PST)
+        bh=8OJbaeSPcoUQhtrSfuzPP+5Xvz9tDw3fpybywrDiLB8=;
+        b=QUHnfYkaD9Vf78nDB2E7TCX+8F0OJMUO9guAATUppNIxK1GSmmuEEA62FJiE3EvOe/
+         Hbs34j9iARrEBjTiXC+FssIdl+anebBP/IcPmB+FW/wT6lmGIs/L296XSaod++L7mouW
+         h7S50LtZIFfK10MZGMjVoztiQ1pfyvSOYGufPnQ1+7D2eu/eDVgF5tUpyQTiqownlIPI
+         LieXDnLS6k4GStd20gWMp5jpOiwVXreoGM3NBR5eg8yHWf3Tlsttfv024W1Z/8KuoeOA
+         0o9iiDxJJuOFC5eaNVBZGvwo++mxv1Gyz/gRkxycjvXzaQU4igGWqjMP04Idu3guiVYq
+         CRJw==
+X-Gm-Message-State: ANoB5pk1oEWa53CziN+5UXLLX+eX/u5+q8Nx/XPssRp1ECyXoAQDVfsb
+        nCgajG5nfT7lWvutXbkevu3r0A+ENYI=
+X-Google-Smtp-Source: AA0mqf54SpyD4y7QdMfh7uhy0hQf6/Lwg3RHDJI54U1OkTsCBQXvOVa2dmVDRScLyX0IIVI4Pm8Ing==
+X-Received: by 2002:ac2:5f9b:0:b0:4a2:5163:f61b with SMTP id r27-20020ac25f9b000000b004a25163f61bmr19237522lfe.177.1669754839327;
+        Tue, 29 Nov 2022 12:47:19 -0800 (PST)
 Received: from localhost.localdomain (ccy110.neoplus.adsl.tpnet.pl. [83.30.148.110])
-        by smtp.gmail.com with ESMTPSA id o11-20020ac24e8b000000b004ae24368195sm2325620lfr.233.2022.11.29.12.47.15
+        by smtp.gmail.com with ESMTPSA id o11-20020ac24e8b000000b004ae24368195sm2325620lfr.233.2022.11.29.12.47.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 12:47:16 -0800 (PST)
+        Tue, 29 Nov 2022 12:47:18 -0800 (PST)
 From:   Adam Skladowski <a39.skl@gmail.com>
 Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         Adam Skladowski <a39.skl@gmail.com>,
@@ -72,9 +72,9 @@ Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 11/12] arm64: dts: qcom: sm6115: Add WCN node.
-Date:   Tue, 29 Nov 2022 21:46:15 +0100
-Message-Id: <20221129204616.47006-12-a39.skl@gmail.com>
+Subject: [PATCH 12/12] arm64: dts: qcom: sm6115: Fallback smmu to qcom generic compatible
+Date:   Tue, 29 Nov 2022 21:46:16 +0100
+Message-Id: <20221129204616.47006-13-a39.skl@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221129204616.47006-1-a39.skl@gmail.com>
 References: <20221129204616.47006-1-a39.skl@gmail.com>
@@ -91,46 +91,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add WCN node to allow using wifi module.
+Change fallback to qcom generic compatible
+in order to prevent reboot during SMMU initialization.
 
 Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ arch/arm64/boot/dts/qcom/sm6115.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index d14a4595be8a..36d1cff23d10 100644
+index 36d1cff23d10..b00d74055eb1 100644
 --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -1294,6 +1294,28 @@ apps_smmu: iommu@c600000 {
- 				     <GIC_SPI 151 IRQ_TYPE_LEVEL_HIGH>;
+@@ -1222,7 +1222,7 @@ dispcc: clock-controller@5f00000 {
  		};
  
-+		wifi: wifi@c800000 {
-+			compatible = "qcom,wcn3990-wifi";
-+			reg = <0x0c800000 0x800000>;
-+			reg-names = "membase";
-+			memory-region = <&wlan_msa_mem>;
-+			interrupts = <GIC_SPI 358 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 359 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 360 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 361 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 362 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 363 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 364 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 365 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 366 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 367 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 368 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 369 IRQ_TYPE_LEVEL_HIGH>;
-+			iommus = <&apps_smmu 0x1a0 0x1>;
-+			qcom,msa-fixed-perm;
-+			status = "disabled";
-+		};
-+
- 		apcs_glb: mailbox@f111000 {
- 			compatible = "qcom,sm6115-apcs-hmss-global";
- 			reg = <0x0f111000 0x1000>;
+ 		apps_smmu: iommu@c600000 {
+-			compatible = "qcom,sm6115-smmu-500", "arm,mmu-500";
++			compatible = "qcom,sm6115-smmu-500", "qcom,smmu-500", "arm,mmu-500";
+ 			reg = <0x0c600000 0x80000>;
+ 			#iommu-cells = <2>;
+ 			#global-interrupts = <1>;
 -- 
 2.25.1
 
