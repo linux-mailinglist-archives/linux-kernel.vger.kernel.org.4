@@ -2,123 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 579ED63C032
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2779463C036
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233643AbiK2MhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 07:37:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
+        id S234120AbiK2MiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 07:38:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234655AbiK2Mg7 (ORCPT
+        with ESMTP id S230128AbiK2MiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 07:36:59 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B912C5DBAF;
-        Tue, 29 Nov 2022 04:36:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669725418; x=1701261418;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=2Ot6kpQYnmX13LuLXGQO8dgigBK9nXEKIxDZ7nwCo+o=;
-  b=WLJIWurnoIkB1hg94welQ5zQB8T8vFqGWa33tjNuVBPsw5uz+FBS9NxY
-   rs1+SjiV1iAAf0AJBI5bFSj3E124/JXwS2oFA/zKCS3HcfmA3JWpRfWW3
-   8+LvPYDHg6rJiqamstJgI/17z6IAudJPM6uXcBhUb8t0TINqzZQRE8yy4
-   I6pvkKZIOvt9MGhFw4AolsgsGjH1la/tSvWJQfj0Se/M0M4QWb7uFFBlZ
-   TjAC+qpYr0EYSmG8PnW+Qpb45qubMdkFkSBpgwMSj+inWOD7InPLLjZVl
-   wR5+aBVLzw9sAq1acRtoruAPoNl/9FGY+xhvfFlxkHnlq+0eitWj6ZrAZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="298446192"
-X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
-   d="scan'208";a="298446192"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 04:36:58 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="676411105"
-X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
-   d="scan'208";a="676411105"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.34.177])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 04:36:56 -0800
-Message-ID: <8f2329cf-d482-7147-bd72-b8832e9bf123@intel.com>
-Date:   Tue, 29 Nov 2022 14:36:50 +0200
+        Tue, 29 Nov 2022 07:38:20 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2A2303ED
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:38:19 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5DFF14E6;
+        Tue, 29 Nov 2022 13:38:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1669725497;
+        bh=iiXEMJmYkobicYzVrgEOHcFIFq/zwPSyahHj3ZvZlzE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z1AYEEQHuNBEIv74qC8NJz7QelXyaKbA5rVMauu0GsNI9x9jZIlf897I2x7b3OU4y
+         nCCMPhp0fPT9Jt3JgYOE0ADHk7+G1Xpahqcto7Ja7mMzFtmua0LMcFvCA2O5+GKEBI
+         7IKvlBNAlQTeqGLGMaTIVo2i3mhKD4/cB2Ka97kg=
+Date:   Tue, 29 Nov 2022 14:38:01 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Joerg Quinten <aBUGSworstnightmare@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: Re: [PATCH v2 3/7] media: uapi: add MEDIA_BUS_FMT_BGR666_1X24_CPADHI
+Message-ID: <Y4X9KY5ZqRUOGnJE@pendragon.ideasonboard.com>
+References: <20221013-rpi-dpi-improvements-v2-0-7691903fb9c8@cerno.tech>
+ <20221013-rpi-dpi-improvements-v2-3-7691903fb9c8@cerno.tech>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.0
-Subject: Re: [PATCHv2] mmc: block: remove non-data R1B ioctl workaround
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_L=c3=b6hle?= <CLoehle@hyperstone.com>,
-        Avri Altman <Avri.Altman@wdc.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <57d4aceb25254e448bd3e575bd99b0c2@hyperstone.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <57d4aceb25254e448bd3e575bd99b0c2@hyperstone.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221013-rpi-dpi-improvements-v2-3-7691903fb9c8@cerno.tech>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/11/22 19:46, Christian Löhle wrote:
-> The workaround of pretending R1B non-data transfers are
-> data transfers in order for the busy timeout to be respected
-> by the host controller driver is removed. It wasn't useful
-> in a long time.
+Hi Maxime and Joerg,
+
+Thank you for the patch.
+
+On Thu, Oct 20, 2022 at 10:30:47AM +0200, Maxime Ripard wrote:
+> From: Joerg Quinten <aBUGSworstnightmare@gmail.com>
 > 
-> Initially the workaround ensured that R1B commands did not
-> time out by setting the data timeout to be the command timeout
-> in commit cb87ea28ed9e ("mmc: core: Add mmc CMD+ACMD passthrough ioctl").
-> This was moved inside of an if clause with idata->buf_bytes being set
-> in commit 4d6144de8ba2 ("mmc: core: check for zero length ioctl data").
-> Since the workaround is now inside of the idata->buf_bytes clause
-> and intended to fix R1B non-data transfers that do not have buf_bytes
-> set we can also remove the workaround altogether.
-> Since there are no data transfer invoking R1B commands this was dead
-> code.
+> Add the BGR666 format MEDIA_BUS_FMT_BGR666_1X24_CPADHI supported by the
+> RaspberryPi.
 > 
-> Fixes: cb87ea28ed9e ("mmc: core: Add mmc CMD+ACMD passthrough ioctl")
-> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
-
-Doesn't Fixes: 4d6144de8ba2 make more sense?
-
-Otherwise:
-
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-
+> Signed-off-by: Joerg Quinten <aBUGSworstnightmare@gmail.com>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 > ---
-> -v2: clarified commit message, no code change
->  drivers/mmc/core/block.c | 13 -------------
->  1 file changed, 13 deletions(-)
+>  .../userspace-api/media/v4l/subdev-formats.rst     | 37 ++++++++++++++++++++++
+>  include/uapi/linux/media-bus-format.h              |  3 +-
+>  2 files changed, 39 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-> index db6d8a099910..20da7ed43e6d 100644
-> --- a/drivers/mmc/core/block.c
-> +++ b/drivers/mmc/core/block.c
-> @@ -514,19 +514,6 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
->  		if (idata->ic.data_timeout_ns)
->  			data.timeout_ns = idata->ic.data_timeout_ns;
->  
-> -		if ((cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B) {
-> -			/*
-> -			 * Pretend this is a data transfer and rely on the
-> -			 * host driver to compute timeout.  When all host
-> -			 * drivers support cmd.cmd_timeout for R1B, this
-> -			 * can be changed to:
-> -			 *
-> -			 *     mrq.data = NULL;
-> -			 *     cmd.cmd_timeout = idata->ic.cmd_timeout_ms;
-> -			 */
-> -			data.timeout_ns = idata->ic.cmd_timeout_ms * 1000000;
-> -		}
-> -
->  		mrq.data = &data;
->  	}
->  
+> diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> index 68f8d7d37984..604a30e2f890 100644
+> --- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> +++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> @@ -1023,6 +1023,43 @@ The following tables list existing packed RGB formats.
+>        - g\ :sub:`2`
+>        - g\ :sub:`1`
+>        - g\ :sub:`0`
+> +    * .. _MEDIA-BUS-FMT-BGR666-1X24_CPADHI:
 
+I would move this just below MEDIA_BUS_FMT_RGB565_1X24_CPADHI. Actually,
+could you check 1/7 and 2/7 to make sure the formats are sorted in the
+documentation in the same order as in the header ?
+
+> +
+> +      - MEDIA_BUS_FMT_BGR666_1X24_CPADHI
+> +      - 0x1024
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      - 0
+> +      - 0
+> +      - b\ :sub:`5`
+> +      - b\ :sub:`4`
+> +      - b\ :sub:`3`
+> +      - b\ :sub:`2`
+> +      - b\ :sub:`1`
+> +      - b\ :sub:`0`
+> +      - 0
+> +      - 0
+> +      - g\ :sub:`5`
+> +      - g\ :sub:`4`
+> +      - g\ :sub:`3`
+> +      - g\ :sub:`2`
+> +      - g\ :sub:`1`
+> +      - g\ :sub:`0`
+> +      - 0
+> +      - 0
+> +      - r\ :sub:`5`
+> +      - r\ :sub:`4`
+> +      - r\ :sub:`3`
+> +      - r\ :sub:`2`
+> +      - r\ :sub:`1`
+> +      - r\ :sub:`0`
+>      * .. _MEDIA-BUS-FMT-RGB565-1X24_CPADHI:
+>  
+>        - MEDIA_BUS_FMT_RGB565_1X24_CPADHI
+> diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+> index 2ee0b38c0a71..d4228d038b54 100644
+> --- a/include/uapi/linux/media-bus-format.h
+> +++ b/include/uapi/linux/media-bus-format.h
+> @@ -34,7 +34,7 @@
+>  
+>  #define MEDIA_BUS_FMT_FIXED			0x0001
+>  
+> -/* RGB - next is	0x1024 */
+> +/* RGB - next is	0x1025 */
+>  #define MEDIA_BUS_FMT_RGB444_1X12		0x1016
+>  #define MEDIA_BUS_FMT_RGB444_2X8_PADHI_BE	0x1001
+>  #define MEDIA_BUS_FMT_RGB444_2X8_PADHI_LE	0x1002
+> @@ -49,6 +49,7 @@
+>  #define MEDIA_BUS_FMT_BGR666_1X18		0x1023
+>  #define MEDIA_BUS_FMT_RGB666_1X18		0x1009
+>  #define MEDIA_BUS_FMT_RBG888_1X24		0x100e
+> +#define MEDIA_BUS_FMT_BGR666_1X24_CPADHI	0x1024
+>  #define MEDIA_BUS_FMT_RGB666_1X24_CPADHI	0x1015
+>  #define MEDIA_BUS_FMT_RGB666_1X7X3_SPWG		0x1010
+>  #define MEDIA_BUS_FMT_BGR888_1X24		0x1013
+> 
+
+-- 
+Regards,
+
+Laurent Pinchart
