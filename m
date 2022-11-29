@@ -2,74 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F1E63B8B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0974363B8BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:32:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235461AbiK2D0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 22:26:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48770 "EHLO
+        id S235471AbiK2Dct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 22:32:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235287AbiK2D0h (ORCPT
+        with ESMTP id S229932AbiK2Dcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 22:26:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3F0490B7;
-        Mon, 28 Nov 2022 19:26:36 -0800 (PST)
+        Mon, 28 Nov 2022 22:32:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B284665C1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 19:32:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02D5D6155E;
-        Tue, 29 Nov 2022 03:26:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D771C43470;
-        Tue, 29 Nov 2022 03:26:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 656EEB80E98
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:32:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38DDAC433C1;
+        Tue, 29 Nov 2022 03:32:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669692395;
-        bh=2wNwy6iThg3PjSBPSHqTNTq6DPiJNZ31+qv039KIXH4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=K80F1J8UOo6eYH2e7bpYdMdoLxjnE/Jwv85+yc+I49z385mKbIV4m+uhp94ZaR1+S
-         ETLr2/xInY+2CvSKFz3pvq5ablHqtiDZasWVvFFYLNMAhhhgfIpRLkoX8aZz6Dzgve
-         h1DCS0Ad/suWRSZMbxS7Zny2yA/X63yleZM1vc0BnnHbxA262uUQ4LI8A9rTALh6iI
-         oQyULI2fHwmTfinWq8lyiavyMErMd8Fn1gohCqTvRZ9r5i64twIK1jTJkmtwnmVe/v
-         h57RW9mY+r6vEfCcOf6gUZnj1GmtrbMQvUMHGULoLHdzzTIMHDCBA7Ft9n+SDkRVwi
-         TaN/6XenKdLuA==
-Received: by mail-ed1-f45.google.com with SMTP id m19so16836514edj.8;
-        Mon, 28 Nov 2022 19:26:35 -0800 (PST)
-X-Gm-Message-State: ANoB5plh6Cf1PEjlwu+/XKXJTi09426WG2GP5j6drFKOlQwwyZ/jcmEg
-        sg48fy5myM6h1WADydgFEHujJR/+FCkg7AIlh3Y=
-X-Google-Smtp-Source: AA0mqf5i6CvvZTeiTvO8vt+TXfnjgmW3rqRqazHO+w1V3Gb2yVa6G2VdOFt1+sVzGUtAoXGJYrnfcv/T0FURzu78BoQ=
-X-Received: by 2002:a05:6402:5003:b0:462:a25f:f0f2 with SMTP id
- p3-20020a056402500300b00462a25ff0f2mr50000667eda.156.1669692393478; Mon, 28
- Nov 2022 19:26:33 -0800 (PST)
+        s=k20201202; t=1669692761;
+        bh=vfEQn8nSU9CBpadePNAGs2wIleKNc/U+KWI2h5u0jIY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pPnfXySPBF2HkE+Z3cmb1z/UNoAGDzAw5CTlWn59WkmYskrqnNsk/bJyzs8r/xe6h
+         3SF2r+VBtVnXaNynPLPtYeed8e7Nr12uv4txqOJm3HphMvo8intgFa6rhTMEqhArqV
+         aRTNaQBoLhe3LuxZOhWUImkP3/PRzXvPqBFgOSNLlJZwSTdxBvzS3b3UhZRMOmQiPA
+         viUke5MVxuEChbXRlbN2vmuxKvNuHwxZqzRx8zC4gFgqZipBmrVdDquiE7TuuXIxji
+         ukRy3EJQ5q7yLWCx57yFTXcshr14YunNzk1+mQ8B9oJ+fZCqDruy9DL5J+EWCbOAh0
+         AoxE0fwFYCSpg==
+From:   guoren@kernel.org
+To:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
+        mhiramat@kernel.org, jolsa@redhat.com, bp@suse.de,
+        jpoimboe@kernel.org, suagrfillet@gmail.com, andy.chiu@sifive.com,
+        mark.rutland@arm.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH V4 0/7] riscv: ftrace: Fixup ftrace detour code & Optimization
+Date:   Mon, 28 Nov 2022 22:32:23 -0500
+Message-Id: <20221129033230.255947-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20221027125253.3458989-1-chenhuacai@loongson.cn>
- <CAAhV-H4Y5qHSXr2uHvMYpXMgvm5fU7WQmcALB+86OYkgM1XbOg@mail.gmail.com>
- <b9c0711c-6efc-4d84-af4e-62e585ac2fa6@app.fastmail.com> <CAAhV-H7PifGc7jEmVURVYHXLdrKBGdRecjjLwOekeqS_cEXkxw@mail.gmail.com>
- <20221128151005.916e4373cd4e5808111dea0c@linux-foundation.org>
-In-Reply-To: <20221128151005.916e4373cd4e5808111dea0c@linux-foundation.org>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 29 Nov 2022 11:26:21 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4cYHJe15oK=3RypmH+FiEuA+KovftXpOgbHy2Rz6uH9Q@mail.gmail.com>
-Message-ID: <CAAhV-H4cYHJe15oK=3RypmH+FiEuA+KovftXpOgbHy2Rz6uH9Q@mail.gmail.com>
-Subject: Re: [PATCH V14 0/4] mm/sparse-vmemmap: Generalise helpers and enable
- for LoongArch
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>, loongarch@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -79,38 +55,206 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 7:10 AM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Sun, 27 Nov 2022 13:01:19 +0800 Huacai Chen <chenhuacai@kernel.org> wrote:
->
-> > Hi, Andrew,
-> >
-> > On Tue, Nov 15, 2022 at 4:09 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> > >
-> > > On Sat, Nov 12, 2022, at 11:26, Huacai Chen wrote:
-> > > > Hi, Arnd,
-> > > >
-> > > > Just a gentle ping, is this series good enough now? I think the last
-> > > > problem (static-key.h inclusion) has also been solved.
-> > >
-> > > Yes, this looks fine to me. Sorry I didn't have this on my
-> > > radar any more.
-> > >
-> > > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > I guess the series should be merged through Andrew's linux-mm
-> > > tree. Let me know if for some reason I should pick it up into
-> > > the asm-generic tree instead.
-> > Another gentle ping, can this series be merged to linux-mm in the 6.2 cycle?
->
-> It's a pretty large patchset and I'm a bit concerned about the amount
-> of review and test which it has received from the MIPS side?
-We have tested on MIPS-based Loongson. :)
+From: Guo Ren <guoren@linux.alibaba.com>
 
->
-> Prudence suggest that we merge this in 6.3-rc1.  But I'll queue it up
-> for now, get a bit of testing while we consider this.
->
-OK, thanks, you are free to decide this.
+The previous ftrace detour implementation fc76b8b8011 ("riscv: Using
+PATCHABLE_FUNCTION_ENTRY instead of MCOUNT") contain three problems.
 
-Huacai
+ - The most horrible bug is preemption panic which found by Andy [1].
+   Let's disable preemption for ftrace first, and Andy could continue
+   the ftrace preemption work.
+ - The "-fpatchable-function-entry= CFLAG" wasted code size
+   !RISCV_ISA_C.
+ - The ftrace detour implementation wasted code size. 
+
+Because Song Shuai has made some features based on reduced detour code
+patch, we include them in the series for test and maintenance.
+
+Make function graph use ftrace directly [2]
+===========================================
+
+In RISC-V architecture, when we enable the ftrace_graph tracer on some
+functions, the function tracings on other functions will suffer extra
+graph tracing work. In essence, graph_ops isn't limited by its func_hash
+due to the global ftrace_graph_[regs]_call label. That should be
+corrected.
+
+What inspires me is the commit 0c0593b45c9b ("x86/ftrace: Make function
+graph use ftrace directly") that uses graph_ops::func function to
+install return_hooker and makes the function called against its
+func_hash.
+
+This series of patches makes function graph use ftrace directly for
+riscv.
+
+If FTRACE_WITH_REGS isn't defined, ftrace_caller keeps ftrace_graph_call
+so that it can be replaced with the calling of prepare_ftrace_return by
+the enable/disable helper.
+
+As for defining FTRACE_WITH_REGS, ftrace_caller is adjusted to save the
+necessary regs against the pt_regs layout, so it can reasonably call the
+graph_ops::func function - ftrace_graph_func. And
+ftrace_graph_[regs]_call
+and its enable/disable helper aren't needed.
+
+Test log:
+
+The tests generated by CONFIG_FTRACE_STARTUP_TEST have passed in the
+local
+qemu-system-riscv64 virt machine. The following is the log during
+startup.
+
+```
+Nov 15 03:07:13 stage4 kernel: Testing tracer function: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace ops #1: 
+Nov 15 03:07:13 stage4 kernel: (1 0 1 0 0)  
+Nov 15 03:07:13 stage4 kernel: (1 1 2 0 0)  
+Nov 15 03:07:13 stage4 kernel: (2 1 3 0 365) 
+Nov 15 03:07:13 stage4 kernel: (2 2 4 0 399) 
+Nov 15 03:07:13 stage4 kernel: (3 2 4 0 146071) 
+Nov 15 03:07:13 stage4 kernel: (3 3 5 0 146105) PASSED
+Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace ops #2: 
+Nov 15 03:07:13 stage4 kernel: (1 0 1 589 0)  
+Nov 15 03:07:13 stage4 kernel: (1 1 2 635 0)  
+Nov 15 03:07:13 stage4 kernel: (2 1 3 1 2)  
+Nov 15 03:07:13 stage4 kernel: (2 2 4 125 126) 
+Nov 15 03:07:13 stage4 kernel: (3 2 4 146001 146078) 
+Nov 15 03:07:13 stage4 kernel: (3 3 5 146035 146112) PASSED
+Nov 15 03:07:13 stage4 kernel: Testing ftrace recursion: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing ftrace recursion safe: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing ftrace regs: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer nop: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer irqsoff: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup:
+Nov 15 03:07:13 stage4 kernel: sched: DL replenish lagged too much
+Nov 15 03:07:13 stage4 kernel: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup_rt: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup_dl: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer function_graph: PASSED
+```
+
+Add WITH_DIRECT_CALLS support [3]
+=================================
+
+This series adds DYNAMIC_FTRACE_WITH_DIRECT_CALLS support for RISC-V.
+SAMPLE_FTRACE_DIRECT and SAMPLE_FTRACE_DIRECT_MULTI are also included
+here as the samples for testing DIRECT_CALLS related interface.
+
+First, select the DYNAMIC_FTRACE_WITH_DIRECT_CALLS to provide 
+register_ftrace_direct[_multi] interfaces allowing user to register 
+the customed trampoline (direct_caller) as the mcount for one or 
+more target functions. And modify_ftrace_direct[_multi] are also 
+provided for modify direct_caller.
+
+At the same time, the samples in ./samples/ftrace/ can be built
+as kerenl module for testing these interfaces with SAMPLE_FTRACE_DIRECT
+and SAMPLE_FTRACE_DIRECT_MULTI selected.
+
+Second, to make the direct_caller and the other ftrace hooks
+(eg. function/fgraph tracer, k[ret]probes) co-exist, a temporary
+register
+are nominated to store the address of direct_caller in
+ftrace_regs_caller.
+After the setting of the address direct_caller by direct_ops->func and
+the RESTORE_REGS in ftrace_regs_caller, direct_caller will be jumped to
+by the `jr` inst.
+
+The following tests have been passed in my local qemu-riscv64 virt
+machine. 
+
+1. tests with CONFIG_FTRACE_STARTUP_TEST
+2. tests of samples/ftrace/ftrace*.ko
+3. manual tests with any combination of the following hooks
+  - function/function_graph tracer 
+  - ftrace*.ko
+  - kprobe/kretprobe
+
+For your reference, here is the log when function tracer, kretprobe and 
+ftrace-direct-too.ko co-hooks the handle_mm_fault function.
+
+```
+[root@stage4 tracing]# echo handle_mm_fault > set_ftrace_filter
+[root@stage4 tracing]# echo 'r:myr handle_mm_fault' > kprobe_events
+[root@stage4 tracing]# echo function > current_tracer 
+[root@stage4 tracing]# echo 1 > events/kprobes/myr/enable 
+[root@stage4 tracing]# insmod /root/ftrace-direct-too.ko 
+[root@stage4 tracing]# 
+[root@stage4 tracing]# cat trace | tail
+             cat-388     [000] ...1.   583.051438: myr: (do_page_fault+0x16c/0x5f2 <- handle_mm_fault)
+             cat-388     [000] ...2.   583.057930: handle_mm_fault <-do_page_fault
+             cat-388     [000] .....   583.057990: my_direct_func: handle mm fault vma=000000002d9fe19c address=ffffffae9b7000 flags=215
+             cat-388     [000] ...1.   583.058284: myr: (do_page_fault+0x16c/0x5f2 <- handle_mm_fault)
+            tail-389     [001] ...2.   583.059062: handle_mm_fault <-do_page_fault
+            tail-389     [001] .....   583.059104: my_direct_func: handle mm fault vma=0000000017f3c48e address=aaaaaabebf3000 flags=215
+            tail-389     [001] ...1.   583.059325: myr: (do_page_fault+0x16c/0x5f2 <- handle_mm_fault)
+            tail-389     [001] ...2.   583.060371: handle_mm_fault <-do_page_fault
+            tail-389     [001] .....   583.060410: my_direct_func: handle mm fault vma=0000000017f3c48e address=aaaaaabebf1000 flags=255
+            tail-389     [001] ...1.   583.060996: myr: (do_page_fault+0x16c/0x5f2 <- handle_mm_fault)
+```
+Note1:
+
+The checkpatch.pl will output some warnings on this series, like this
+
+```
+WARNING: Prefer using '"%s...", __func__' to using 'my_direct_func2',
+this function's name, in a string
+111: FILE: samples/ftrace/ftrace-direct-multi-modify.c:48:
++"       call my_direct_func2\n"
+```
+
+The reason is that checkpatch depends on patch context providing the
+function name. In the above warning, my_direct_func2 has some codeline
+distance with the changed trunk, so its declaration doesn't come into
+the patch, and then the warning jumps out.
+
+You may notice the location of `my_ip` variable changes in the 2nd
+patch. I did that for reducing the warnings to some extent. But killing
+all the warnings will makes the patch less readable, so I stopped here.
+
+[1] https://lpc.events/event/16/contributions/1171/
+[2] https://lore.kernel.org/lkml/20221120084230.910152-1-suagrfillet@gmail.com/
+[3] https://lore.kernel.org/linux-riscv/20221123142025.1504030-1-suagrfillet@gmail.com/ 
+
+Changes in v4:
+ - Include [3] for maintenance. [Song Shuai]
+
+Changes in V3:
+https://lore.kernel.org/linux-riscv/20221123153950.2911981-1-guoren@kernel.org/
+ - Include [2] for maintenance. [Song Shuai]
+
+Changes in V2:
+https://lore.kernel.org/linux-riscv/20220921034910.3142465-1-guoren@kernel.org/
+ - Add Signed-off for preemption fixup.
+
+Changes in V1:
+https://lore.kernel.org/linux-riscv/20220916103817.9490-1-guoren@kernel.org/
+
+Andy Chiu (1):
+  riscv: ftrace: Fixup panic by disabling preemption
+
+Guo Ren (2):
+  riscv: ftrace: Remove wasted nops for !RISCV_ISA_C
+  riscv: ftrace: Reduce the detour code size to half
+
+Song Shuai (4):
+  riscv: ftrace: Add ftrace_graph_func
+  riscv: ftrace: Make ftrace_caller call ftrace_graph_func
+  riscv: ftrace: Add DYNAMIC_FTRACE_WITH_DIRECT_CALLS support
+  samples: ftrace: Add riscv support for SAMPLE_FTRACE_DIRECT[_MULTI]
+
+ arch/riscv/Kconfig                          |   5 +-
+ arch/riscv/Makefile                         |   6 +-
+ arch/riscv/include/asm/ftrace.h             |  69 ++++++--
+ arch/riscv/kernel/ftrace.c                  |  91 ++++------
+ arch/riscv/kernel/mcount-dyn.S              | 181 +++++++++++++-------
+ samples/ftrace/ftrace-direct-modify.c       |  33 ++++
+ samples/ftrace/ftrace-direct-multi-modify.c |  37 ++++
+ samples/ftrace/ftrace-direct-multi.c        |  22 +++
+ samples/ftrace/ftrace-direct-too.c          |  26 +++
+ samples/ftrace/ftrace-direct.c              |  22 +++
+ 10 files changed, 355 insertions(+), 137 deletions(-)
+
+-- 
+2.36.1
+
