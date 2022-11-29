@@ -2,113 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 014DE63C848
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E8D63C851
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:26:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236615AbiK2TY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 14:24:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
+        id S236923AbiK2TZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 14:25:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236948AbiK2TY3 (ORCPT
+        with ESMTP id S236880AbiK2TZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 14:24:29 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1077A6DCEC
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:22:03 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id vv4so36253899ejc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:22:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ar/RYsQiETTjjxvJHozBvp1MbTSOUxcuqSLEZv8K3bo=;
-        b=IZYwoODGdd+jwA/cpGNGwv5RVNFFusI8KtBABIIbcRkVrJJzhiK5zIEiLspZbzaaGV
-         oDqhcwPKD170JD0iiSgVyx0TsbAg7frOFJ8dsJE96I066PsCjGnHiSSFtTGxXmHY2pGJ
-         KWokkMaojB7NcgoV7YICB5tu9WMwDvVV028vLwOvTaAVGK7/TQPYjd2c6hmwOhX74zTa
-         GHI9zhXKwwBa3HfHwW6hAfKSBN3o1bN3JzI0Djl4bJv73ol6x54lpqcT2rY1Cff3vJYv
-         M4aXg73DQBVbhTZdxdtFDCAW0ufVEp5RfUmSVsJVJ+0fbUExxf9ymveozQBAX1zUZtqg
-         OEcA==
+        Tue, 29 Nov 2022 14:25:33 -0500
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600861E3C3;
+        Tue, 29 Nov 2022 11:22:43 -0800 (PST)
+Received: by mail-pl1-f182.google.com with SMTP id io19so14402363plb.8;
+        Tue, 29 Nov 2022 11:22:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ar/RYsQiETTjjxvJHozBvp1MbTSOUxcuqSLEZv8K3bo=;
-        b=fRXs7fr4hIFPYahqjgDOkk8gasa/p+85V0Nin1md97Ce/P/CsBHNs10S/bi1d/Takw
-         WmKUg8d+Bgbw0zQrGSeyU4Le1DbWd+X4B1RayMMuku8Nnx/ufI1ciDliVo6KxMIF4foy
-         nz9WsfF97gQkh/zkMfpfKQOkHxETy4YJhqXUCv/sYXDsvwiQUqVLt0mG14jMVWehV3kj
-         bzS9hQwU8poM9bwmJt0jlwEVzA9WuJXXugeE4qJvYXIQLsiJ/A9m08Oc/jF/1AqSIqpc
-         feAyuBUugwl3JYjXwE/znSCURm+4PaYEvN7PcwWojpMCMJNfrA13ZbOnLjhW+AQWPxfX
-         WqLA==
-X-Gm-Message-State: ANoB5pny9SF+gONK2xSfhs8ETmDHOKdosdq0eHG5JJcyIReaUYHuM8ZJ
-        X6c4xPTeKQjD5+XADTkincf8+NQkHRuI/FIhGSWaOA==
-X-Google-Smtp-Source: AA0mqf4qO90v/zRQdgdyCplcsQ+yuw299RAUrvggn/40wCgn8ZzFOwXKlOY48E7OUmgZx4s0SleJmYDAXCRbrO5Gw/U=
-X-Received: by 2002:a17:907:72d2:b0:7bc:15fc:5398 with SMTP id
- du18-20020a17090772d200b007bc15fc5398mr21465243ejc.438.1669749721411; Tue, 29
- Nov 2022 11:22:01 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ud7QUQrd40h0Xyjtk+wC6bX6renF5UjjCEwypxPzWbY=;
+        b=kG/AQCQULhSSPnElbR+0UswMt+8adcA2nyKl20+tvq4vgtatUzsSW9isc4JQYt5iLa
+         EgW1YSnFOcj1c5GrNiBPILJm+oyjJAJlyDldggj4bpCykL2zZQ+fklbmpVe8PZm2Tm/g
+         /mCo4F2q3V51IJgm2oJrvjbaZwuIMAbKDahYgvucq5gi0/sWBZb4GArq2J0TCDqNeH0L
+         No/nYLflZ0SqGPjiBSYDug04Ox3XSKjuSlYq5YHSZHxEOibtmLNzt4FyqDGHmKOq6Pdc
+         Guy2u/c7oHC8gqFPuuKSJLuoYZrFtHxzRWtFHOqjwbGSkDyle0/iZcWSskvfy+teyDrk
+         Dz5g==
+X-Gm-Message-State: ANoB5pkBlEaZVgyvXUKC3XiwBpavJzx7OWbh4cLKdZtmhJkJk3Hj6TIy
+        u8ruIXJ4Dt2mntdn9EvG5Ee/tNbIzYY=
+X-Google-Smtp-Source: AA0mqf74NWcZBGgWlmT1N9eayQRdNZmN5bY+tJ7R4lYGyiec59ZGomU4zmG2JjRFNKoH5mxbfzzdsg==
+X-Received: by 2002:a17:90a:e398:b0:219:61e2:226b with SMTP id b24-20020a17090ae39800b0021961e2226bmr7449pjz.11.1669749762806;
+        Tue, 29 Nov 2022 11:22:42 -0800 (PST)
+Received: from ?IPV6:2620:15c:211:201:7d15:8e62:30bb:9a14? ([2620:15c:211:201:7d15:8e62:30bb:9a14])
+        by smtp.gmail.com with ESMTPSA id p10-20020a170902e34a00b001873aa85e1fsm11089481plc.305.2022.11.29.11.22.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 11:22:42 -0800 (PST)
+Message-ID: <df585a3d-f69e-7a9f-d006-b58bed56d2bb@acm.org>
+Date:   Tue, 29 Nov 2022 11:22:39 -0800
 MIME-Version: 1.0
-References: <20221129190123.872394-1-nathan@kernel.org>
-In-Reply-To: <20221129190123.872394-1-nathan@kernel.org>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Tue, 29 Nov 2022 11:21:25 -0800
-Message-ID: <CABCJKud96Jrz-NXeW+EW8VwcgYyd1WA=b+H0f-kcWSxkd8PzKw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Fix lack of section mismatch warnings with LTO
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Nicolas Schier <nicolas@fjasle.eu>,
-        Vincent Donnefort <vdonnefort@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        linux-crypto@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v7 06/16] ufs: core: mcq: Configure resource regions
+Content-Language: en-US
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        stanley.chu@mediatek.com, eddie.huang@mediatek.com,
+        daejun7.park@samsung.com, avri.altman@wdc.com, mani@kernel.org,
+        beanhuo@micron.com, linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1669747235.git.quic_asutoshd@quicinc.com>
+ <c655d1e62f619818e034f76c90330393cba8c79b.1669747235.git.quic_asutoshd@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <c655d1e62f619818e034f76c90330393cba8c79b.1669747235.git.quic_asutoshd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 11:02 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
->
-> Hi all,
->
-> Vincent recently reported an issue with lack of section mismatch
-> warnings with LTO. This is due to commit 6c730bfc894f ("modpost: handle
-> -ffunction-sections"), which ignores all function sections for modpost.
->
-> I believe this is incorrect, as these function sections may still refer
-> to symbols in other sections and they will ultimately be coalesced into
-> .text by vmlinux.lds anyways.
->
-> The first patch fixes a warning that I see with allmodconfig + ThinLTO
-> builds after applying the second patch. The second patch moves ".text.*"
-> into TEXT_SECTIONS so that modpost audits them for mismatches.
->
-> I expect this to go via the kbuild tree with an ack from the padata
-> maintainers.
->
-> Cc: Steffen Klassert <steffen.klassert@secunet.com>
-> Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
-> Cc: linux-crypto@vger.kernel.org
->
-> Nathan Chancellor (2):
->   padata: Do not mark padata_mt_helper() as __init
->   modpost: Include '.text.*' in TEXT_SECTIONS
->
->  kernel/padata.c       | 4 ++--
->  scripts/mod/modpost.c | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+On 11/29/22 10:53, Asutosh Das wrote:
+> Define the mcq resources and add support to ioremap
+> the resource regions.
 
-These look good to me. Thanks for fixing the issue, Nathan!
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-
-Sami
