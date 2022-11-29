@@ -2,77 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3BA763C9E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 21:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB8063C9F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:00:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236515AbiK2UwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 15:52:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
+        id S236488AbiK2VAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 16:00:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236568AbiK2UwR (ORCPT
+        with ESMTP id S235854AbiK2VA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 15:52:17 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C10F13DD7
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 12:52:16 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id t17so13797679pjo.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 12:52:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=52SMROLRGWbt9mwpSBUjPx/3msXb6vFt7ItVy/cqB1k=;
-        b=VhKagD+9381ydRAyKPEL5EsmY+AM67HAZZ/33h8VvA8l2VXlMlKxq+fM5BueYSKXKt
-         MlYUlT1r2orjroDtbBdQLFNwyfElcb4r+5lE0sxkugaizGLV5rqQhubBgdx5ttpa3za0
-         oliMzzN9b4nvEx2UounppSrAbCEbsdm/nmGfxJve0S1hIp8oK/34PAiQq2P0gRHNpQON
-         Hed36jy70ZutuQ+XKz5nU9QmAvnQT6CmU+OyL+RjADMzi1jdYipeoPsS5VzO7M2oqh+q
-         oUjXehpCZSlKTc1/n9q+Fw+1tkSNk+0rW8qA5VeEmwAbYZihapsyiUMqxDw9ljYAQ/PU
-         SMqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=52SMROLRGWbt9mwpSBUjPx/3msXb6vFt7ItVy/cqB1k=;
-        b=qNH1brPy18yPD6Ne6xT1wseLV6LaURpJnrG8P9uwPXbyMBqZPULqSv+XYjpLQJLJMW
-         zKJDXi6Su9+a81R/qsv4VBj8QJ4w/WA6bcdrU99UJHoUQX/a/VGjfrv/lngUfYTcmt2e
-         3KG5cEaqnxOOaEr8FGtNWNSpBODKR+50HUvCeoImJEHirAH8Ug9wlNZy0ViPXPCy3ARe
-         Co3SzNG2yiP2Nb/WT8ZtLrIGNlXnwiQzUV2+opkb30R/+3u0xcqyd/S5c4tUo/Dh1Y0J
-         HJB2EpI8q1xgSit3ysZCzWatzFyU+9+2ghohlMvq44IPUaC2igDVSvrb3QauLBXxCODC
-         I91g==
-X-Gm-Message-State: ANoB5pkhBLiRP1bgE5UQJGLFRhUvobY/ropVO/YUfQfqk35OgHhpoYGQ
-        SUJfBnUR+KlJHfqJp55VYuJeKA==
-X-Google-Smtp-Source: AA0mqf5zWdkH3xH2EphKKbDCqWzEBIeWxi3op3Of+IS1hUt3Omy1pEG69elJYrpi56m64lfNCX6qYA==
-X-Received: by 2002:a17:902:7790:b0:189:9973:fb58 with SMTP id o16-20020a170902779000b001899973fb58mr5888074pll.59.1669755135786;
-        Tue, 29 Nov 2022 12:52:15 -0800 (PST)
-Received: from google.com (220.181.82.34.bc.googleusercontent.com. [34.82.181.220])
-        by smtp.gmail.com with ESMTPSA id c31-20020a17090a492200b00218b32f6a9esm1784905pjh.18.2022.11.29.12.52.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 12:52:15 -0800 (PST)
-Date:   Tue, 29 Nov 2022 12:52:12 -0800
-From:   Ricardo Koller <ricarkol@google.com>
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] KVM: arm64: Don't serialize if the access flag isn't
- set
-Message-ID: <Y4Zw/J3srTsZ57P7@google.com>
-References: <20221129191946.1735662-1-oliver.upton@linux.dev>
- <20221129191946.1735662-3-oliver.upton@linux.dev>
+        Tue, 29 Nov 2022 16:00:27 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4F264CD;
+        Tue, 29 Nov 2022 13:00:25 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2ATL08E3022596
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 16:00:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1669755611; bh=pHciYLh07bQD1b1G3RI+mlLVqqEtIIJEFswVqjuCe+8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=AgG+7ayulcZenhhUWWs/6G1DFQaCoKm08nKkyZykr/43xtCOcVUAjvzxqOzEdkvNA
+         yX8ZoEJp5S017zRKmrL/SWex5K12wvSafm2VXCQknI33p7YkT5b8lwO4vS3oIn2aNZ
+         oureYRE44RWmUyXVVwaWrk9HvrjwZ7OKUWFdgUVE2vsqaTEF69z9v8Lh9+lRPzIWXA
+         Zr3xBvz+gALUSCtuRIx71n1CpguzgrT2yrnBUAHp8UCM0GSmFlWasS/Gw9oPMgl2XR
+         1kZoZl/oCgiytaKaQHY+Vjoc0JjiTLeVcIOR988gtUq2bs2OMqCIcyVYjKTkxhezgW
+         lH9+R7+Iq95RQ==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id C6D9115C00E4; Tue, 29 Nov 2022 16:00:08 -0500 (EST)
+Date:   Tue, 29 Nov 2022 16:00:08 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] ext4: fix a NULL pointer when validating an inode
+ bitmap
+Message-ID: <Y4Zy2HHOmak3k637@mit.edu>
+References: <20221010142035.2051-1-lhenriques@suse.de>
+ <20221011155623.14840-1-lhenriques@suse.de>
+ <Y2cAiLNIIJhm4goP@mit.edu>
+ <Y2piZT22QwSjNso9@suse.de>
+ <Y4U18wly7K87fX9v@mit.edu>
+ <d357e15b-e44a-1e3b-41c3-0b732e4685ed@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221129191946.1735662-3-oliver.upton@linux.dev>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d357e15b-e44a-1e3b-41c3-0b732e4685ed@huawei.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,50 +62,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 07:19:44PM +0000, Oliver Upton wrote:
-> Of course, if the PTE wasn't changed then there are absolutely no
-> serialization requirements. Skip the DSB for an unsuccessful update to
-> the access flag.
+On Tue, Nov 29, 2022 at 11:18:34AM +0800, Baokun Li wrote:
 > 
-> Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
-> ---
->  arch/arm64/kvm/hyp/pgtable.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
+> In my opinion, the s_journal_inum should not be modified when the
+> file system is mounted, especially after we have successfully loaded
+> and replayed the journal with the current s_journal_inum. Even if
+> the s_journal_inumon the disk is modified, we should use the current
+> one. This is how journal_devnum is handled in ext4_load_journal():
 > 
-> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-> index b11cf2c618a6..9626f615d9b8 100644
-> --- a/arch/arm64/kvm/hyp/pgtable.c
-> +++ b/arch/arm64/kvm/hyp/pgtable.c
-> @@ -1094,9 +1094,13 @@ int kvm_pgtable_stage2_wrprotect(struct kvm_pgtable *pgt, u64 addr, u64 size)
->  kvm_pte_t kvm_pgtable_stage2_mkyoung(struct kvm_pgtable *pgt, u64 addr)
->  {
->  	kvm_pte_t pte = 0;
-> -	stage2_update_leaf_attrs(pgt, addr, 1, KVM_PTE_LEAF_ATTR_LO_S2_AF, 0,
-> -				 &pte, NULL, 0);
-> -	dsb(ishst);
-> +	int ret;
-> +
-> +	ret = stage2_update_leaf_attrs(pgt, addr, 1, KVM_PTE_LEAF_ATTR_LO_S2_AF, 0,
-> +				       &pte, NULL, 0);
-> +	if (!ret)
-> +		dsb(ishst);
-
-At the moment, the only reason for stage2_update_leaf_attrs() to not
-update the PTE is if it's not valid:
-
-	if (!kvm_pte_valid(pte))
-			return 0;
-
-I guess you could check that as well:
-
-+	if (!ret || kvm_pte_valid(pte))
-+		dsb(ishst);
-
-> +
->  	return pte;
->  }
->  
-> -- 
-> 2.38.1.584.g0f3c55d4c2-goog
+>          if (!really_read_only && journal_devnum &&
+>              journal_devnum != le32_to_cpu(es->s_journal_dev)) {
+>                  es->s_journal_dev = cpu_to_le32(journal_devnum);
 > 
+>                  /* Make sure we flush the recovery flag to disk. */
+>                  ext4_commit_super(sb);
+>          }
 > 
+> We can avoid this problem by adding a similar check for journal_inum in
+> ext4_load_journal().
+
+This check you've pointed out wasn't actually intended to protect
+against the problem where the journal_inum is getting overwritten by
+the journal replay.  The s_journal_dev field is a hint about where to
+find the external journal.  However, this can change over time --- for
+example, if a SCSI disk is removed from the system, so /dev/sdcXX
+becomes /dev/sbdXX.  The official way to find the journal device is
+via the external journal's UUID.  So userspace might use a command
+like:
+
+  mount -t ext4 -o journal_path="$(blkid -U <journal uuid>)" UUID=<fs uuid> /mnt
+
+So s_journal_devnum might get updated, and we don't want the hint to
+get overwritten by the journal replay.  So that's why the code that
+you've quoted exists (and this goes all the way back to ext3).  It's a
+code path that can be quite legitimately triggered when the location
+of the external journal device changes (or when the device's
+major/minor numbers get renumbered).
+
+Now, we *could* do something like this for s_journal_inum, but it
+would be for a different purpose.  In practice, this would never
+happen in real life due to random bit flips, since the journal is
+protected using checksum.  It can only happen when there are
+deliberately, maliciously fuzzed file system images, such as was the
+case here.  And s_journal_inum is only one of any number of superblock
+fields that shouldn't ever be modified by the journal replay.  We have
+had previous failures caused by we validated the superblock fields to
+be valid, but then after that, we replay the journal, and then it
+turns out the superblock fields are incorrect.  (And then some Red Hat
+principal engineer will try to call it a high severity CVE, which is
+really bullshit, since if you allow random unprivileged processes to
+mount arbitrary file system images, you've got other problems.  Don't
+do that.)
+
+If we *really* cared about these sorts of problems, we should special
+case the journal replay of certain blocks, such as the superblock, and
+validate those blocks to make sure they are not crazy --- and if it is
+crazy, we should abort the journal replay right then and there.
+
+Alternatively, one *could* consider making a copy of certain blocks
+(in particular the superblock and block group descriptors), and then
+do a post-hoc validation of the superblock after the replay --- and if
+it is invalid, we could put the old superblock back.  But we need to
+remember that sometimes superblock fields *can* change.  For example,
+in the case of online resize, we can't just say that if the old
+superblock value is different from the new superblock value, something
+Must Be Wrong.  That being said, if the result of the journal replay
+ends up with a result where s_block_count is greater than the physical
+block device, *that's* something that is probably wrong.
+
+That being said, the question is whether all of this complexity is
+really all *that* necessary, since again, thanks to checksums, short
+of Malicious File System Fuzzing, this should never happen.  If all of
+this complexity is only needed to protect against malicious fuzzed
+file systems, then maybe it's not the worth it.
+
+If we can protect against the problem by adding a check that has other
+value as well (such as making usre that when ext4_iget fetches a
+special inode, we enforce that i_links_couint must be > 0), maybe
+that's worth it.
+
+So ultimately it's all a question of engineering tradeoffs.  Is it
+worth it to check for s_journal_inum changing, and changing it back?
+Meh.  At the very least we would want to add a warning, since this is
+only going happen in case of a malicious fuzzed file system.  And
+since we're only undoing the s_journal_inum update, there may be other
+superblock fields beyond s_journal_inum that could get modified by the
+malicious file system fuzzer.  So how many post hoc checks do we
+really want to be adding here?  Should we also do similar checks for
+s_blocks_per_group?  s_inodes_per_group?  s_log_block_size?
+s_first_ino?  s_first_data_block?  I realize this is a slipperly slope
+argument; but the bottom line that it's not immediately obvious that
+it's good idea to only worry about s_journal_inum.
+
+Cheers,
+
+						- Ted
