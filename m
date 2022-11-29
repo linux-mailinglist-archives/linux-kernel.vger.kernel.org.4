@@ -2,83 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBC063C165
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F6A63C16A
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:46:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbiK2NpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 08:45:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
+        id S229445AbiK2Nqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 08:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiK2NpW (ORCPT
+        with ESMTP id S232290AbiK2Nqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 08:45:22 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23525B861;
-        Tue, 29 Nov 2022 05:45:20 -0800 (PST)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NM3VH39XlzmWJB;
-        Tue, 29 Nov 2022 21:44:39 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 21:45:18 +0800
-Received: from localhost.localdomain (10.67.175.61) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 21:45:18 +0800
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>, <corbet@lwn.net>,
-        <bpf@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <zhengyejian1@huawei.com>
-Subject: [PATCH bpf] bpf, docs: Correct the example of BPF_XOR
-Date:   Tue, 29 Nov 2022 21:45:58 +0800
-Message-ID: <20221129134558.2757043-1-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 29 Nov 2022 08:46:35 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB941D323;
+        Tue, 29 Nov 2022 05:46:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=saaWpGLYU8xiJ3I0G6KU/+DLub8YoICcLaj63am14tE=; b=qzBAol75w7QuGpPfsILLYl/mkx
+        xykuV1WD5YnzuJYDm7A57iAoUbyuXU2+dmM7oRTqkKcpfKJg7j6Qzx9Ntgc7Hy8mgNi39C06ji5d6
+        2HUbURHg70zHjdRRpD4PYarzejUzuiR7ceC138atayIgrCCXkgsHq7KjSwH/nPB6snz9meyDQaHwB
+        LnBbNG707I6eqEjy00tO57xDyfAo/LTX9DxhKaYlcoTpsPhfbI2asV78sG+CrQSV37IwAzrYZQSnq
+        0eoUHBbeqdsuzEhidcGHmDX/yyOvc6pAi0n1tlnCUbNQ3PVZtpk6yq3nkd49oiyvywktlW+1d5pW3
+        a2A+HUww==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35478)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1p00wR-0000kQ-5W; Tue, 29 Nov 2022 13:46:31 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1p00wP-0001b0-Kj; Tue, 29 Nov 2022 13:46:29 +0000
+Date:   Tue, 29 Nov 2022 13:46:29 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Sean Anderson <sean.anderson@seco.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Tim Harvey <tharvey@gateworks.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net v2 2/2] phy: aquantia: Determine rate adaptation
+ support from registers
+Message-ID: <Y4YNNb+05iEZhZfp@shell.armlinux.org.uk>
+References: <20221128195409.100873-1-sean.anderson@seco.com>
+ <20221128195409.100873-2-sean.anderson@seco.com>
+ <Y4VCz2i+kkK0z+XY@shell.armlinux.org.uk>
+ <b25b1d9b-35dd-a645-a5f4-05eb0dbc6039@seco.com>
+ <Y4YLryZE6TXCCTbH@lunn.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.61]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4YLryZE6TXCCTbH@lunn.ch>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refer to description of BPF_XOR, dst_reg should be used but not src_reg
-in the examples.
+On Tue, Nov 29, 2022 at 02:39:59PM +0100, Andrew Lunn wrote:
+> > >> This commit should not get backported until it soaks in master for a
+> > >> while.
+> > > 
+> > > You will have to monitor the emails from stable to achieve that - as you
+> > > have a Fixes tag, that will trigger it to be picked up fairly quicky.
+> > 
+> > I know; this is a rather vain attempt :)
+> > 
+> > If I had not added the fixes tag, someone would have asked me to add it.
+> 
+> Hi Sean
+> 
+> If you had put a comment under the --- that you deliberately did not
+> add a Fixes tag because you wanted it to soak for a while, you
+> probably would not be asked.
+> 
+> I think the bot also looks at the subject to decide if it is a fix. So
+> you need to word the subject so it sounds like continuing development,
+> not a fix.
 
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
----
- Documentation/bpf/instruction-set.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Sasha makes use of Google's AI. I believe it looks at the entire patch
+and commit message, and can make some really strange decisions.
 
-diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
-index 5d798437dad4..e672d5ec6cc7 100644
---- a/Documentation/bpf/instruction-set.rst
-+++ b/Documentation/bpf/instruction-set.rst
-@@ -122,11 +122,11 @@ BPF_END   0xd0   byte swap operations (see `Byte swap instructions`_ below)
- 
- ``BPF_XOR | BPF_K | BPF_ALU`` means::
- 
--  src_reg = (u32) src_reg ^ (u32) imm32
-+  dst_reg = (u32) dst_reg ^ (u32) imm32
- 
- ``BPF_XOR | BPF_K | BPF_ALU64`` means::
- 
--  src_reg = src_reg ^ imm32
-+  dst_reg = dst_reg ^ imm32
- 
- 
- Byte swap instructions
 -- 
-2.25.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
