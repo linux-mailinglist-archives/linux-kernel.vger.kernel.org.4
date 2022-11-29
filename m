@@ -2,41 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DBF563BC36
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A78E63BC39
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:55:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiK2Iye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 03:54:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
+        id S230084AbiK2Iy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 03:54:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbiK2IyF (ORCPT
+        with ESMTP id S230134AbiK2IyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 03:54:05 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28AB4FF81
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:53:59 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ozwNK-0005sb-Ad; Tue, 29 Nov 2022 09:53:58 +0100
-Message-ID: <fca2e6df-6c00-8fa4-808c-5021ab5b26d0@leemhuis.info>
-Date:   Tue, 29 Nov 2022 09:53:57 +0100
+        Tue, 29 Nov 2022 03:54:13 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BBFC76D;
+        Tue, 29 Nov 2022 00:54:12 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id h33so7424932pgm.9;
+        Tue, 29 Nov 2022 00:54:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dpO9kHttOEsGZbAoig1yKNBzBhJaK+0I3/p2cAkfaZs=;
+        b=LvLvBHzD8KLR9pMc7aejSFXchfNBTkbIRoKsfBok/8rA+WdFOCnVrs0D7l2dKDmqB0
+         NaKTLlOnD+87r5spzGPMmNiYo367kNARd2oM665oRX22blBCJ5IyjRNH+A24F03sIMXE
+         y5klMJz3G4lwctzcBWKTfAha8WJKXCYV72R1zhY2elc9zGaTalzPltYKAAyCB0KaYB+q
+         EVCPJl1z6Wz3nE6gevFta7y7upsedhnzjLoZp5n587T9LjNcm106ApRtlVdBUZQ2VVb1
+         uTIEj3fkLbxpV8B7kVSB2cvSZPYWp7pz9u2nJ1cnMhK/ouedTHd48xsVa+79xGLxOY//
+         l8Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dpO9kHttOEsGZbAoig1yKNBzBhJaK+0I3/p2cAkfaZs=;
+        b=Y68o0d6dzwyxD6p8kx4yC4T+cnvOnTKq1CJ1fAMlTg5U94ttd/Vynj80Al9DJEklvl
+         MOglITn45YQMR9pF3L3Z0Al02JV0CqNrU0l2cySx1xDbZoVlyLmHEGW/dIYcCh/kYcTs
+         cjaidcxx6N0qqJcWxjKYslAXH2RjNSy0EhS/Noi64NzCEjNnY7oyOqNuTNmWYYq6SwA3
+         VvGRaZ58GFu7vASbuHjiKk2iPoFqvhNXtXmlLyDPuXVWAlRuD8y7lfsKw4SXbMcYUscL
+         BDfiqiIe/AO6MhTcvLa92G6zJQxpkb8oNFEXAy7X4cT8jkH8Lg1XLDEzeN7WRrd11FzZ
+         scgA==
+X-Gm-Message-State: ANoB5pl0SzSJMCxJxb9rHbYKKCf4p90VtJI9aPi0bp0W/lqYmvvElBf1
+        OyZWeKM18jzdidWwqVF1PJibZIkYcGM=
+X-Google-Smtp-Source: AA0mqf4+L0YDUNzkXz4x19cY1soq07P9CzMg9r5Qgob/25mUshX3kNF6iOkAC9jpZ1TSNTMVhC4sDg==
+X-Received: by 2002:a62:1c95:0:b0:571:baf8:8945 with SMTP id c143-20020a621c95000000b00571baf88945mr36191579pfc.83.1669712051911;
+        Tue, 29 Nov 2022 00:54:11 -0800 (PST)
+Received: from localhost ([129.41.58.18])
+        by smtp.gmail.com with ESMTPSA id q14-20020a170902dace00b001895d87225csm10155545plx.182.2022.11.29.00.54.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 00:54:11 -0800 (PST)
+Date:   Tue, 29 Nov 2022 14:24:01 +0530
+From:   "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Jan Kara <jack@suse.cz>, Baokun Li <libaokun1@huawei.com>,
+        linux-ext4@vger.kernel.org, adilger.kernel@dilger.ca,
+        lczerner@redhat.com, enwlinux@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yebin10@huawei.com, yukuai3@huawei.com
+Subject: Re: [PATCH 2/2] ext4: add inode table check in __ext4_get_inode_loc
+ to aovid possible infinite loop
+Message-ID: <20221129085401.amqusrucv3h5ihq7@riteshh-domain>
+References: <20220817132701.3015912-1-libaokun1@huawei.com>
+ <20220817132701.3015912-3-libaokun1@huawei.com>
+ <20220817143138.7krkxzoa3skruiyx@quack3>
+ <20220818144353.q6cq3b7huwkopk5b@riteshh-domain>
+ <Y4UdoyF6+oDI6w5P@mit.edu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: INFO: rcu_preempt detected expedited stalls on CPUs/tasks
- (6.1.0-rc3): in cat /sys/kernel/debug/kmemleak #forregzbot
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <e048a5c5-dea5-a31a-1022-1b007e022adb@alu.unizg.hr>
- <7ebd090d-4a6c-1a26-6e31-b0554c627e83@leemhuis.info>
-In-Reply-To: <7ebd090d-4a6c-1a26-6e31-b0554c627e83@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669712039;3d6cf4e9;
-X-HE-SMSGID: 1ozwNK-0005sb-Ad
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4UdoyF6+oDI6w5P@mit.edu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -45,39 +79,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.11.22 11:48, Thorsten Leemhuis wrote:
-> [Note: this mail is primarily send for documentation purposes and/or for
-> regzbot, my Linux kernel regression tracking bot. That's why I removed
-> most or all folks from the list of recipients, but left any that looked
-> like a mailing lists. These mails usually contain '#forregzbot' in the
-> subject, to make them easy to spot and filter out.]
+On 22/11/28 03:44PM, Theodore Ts'o wrote:
+> On Thu, Aug 18, 2022 at 08:13:53PM +0530, Ritesh Harjani (IBM) wrote:
+> > Folding a small patch to implement the simple bound check. Is this the right
+> > approach?
+> >
+> > From: "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
+> > Date: Thu, 18 Aug 2022 07:53:58 -0500
+> > Subject: [RFC] ext4: Add ext4_sb_getblk() wrapper for block bounds checking
+> >
+> > We might need more bounds checking on the block before calling sb_getblk().
+> > This helper does that and if it is not valid then returns ERR_PTR(-EFSCORRUPTED)
+> > Later we will need to carefully convert the callers to use ext4_sb_getblk()
+> > instead of sb_getblk().
 >
-> On 04.11.22 23:01, Mirsad Goran Todorovac wrote:
->>
->> When investigating thermald kmemleak, it occurred that the "cat
->> /sys/kernel/debug/kmemleak"
->> and "tail -20 /sys/kernel/debug/kmemleak" commands take unusual amount
->> of time.
->>
->> Dmesg output showed expedited stalls that the commands caused NMIs and
->> NMI backtraces:
->>
->> [ 8123.263464] rcu: INFO: rcu_preempt detected expedited stalls on
->> CPUs/tasks: { 0-.... } 26 jiffies s: 3829 root: 0x1/.
->> [ 8123.263500] rcu: blocking rcu_node structures (internal RCU debug):
->> [ 8123.263508] Sending NMI from CPU 7 to CPUs 0:
->> [ 8123.263528] NMI backtrace for cpu 0
->> [ 8123.263539] CPU: 0 PID: 27898 Comm: cat Not tainted 6.1.0-rc3 #1
->> [ 8123.263552] Hardware name: LENOVO 82H8/LNVNB161216, BIOS GGCN34WW
->> 03/08/2022
-> 
-> #regzbot ^introduced 28b3ae426598e
-> #regzbot title rcu: thermald causes a kmemleak
-> #regzbot ignore-activity
+> Hey Ritesh,
+>
+> I was going through some old patches and came across this RFC patch.
+> Have you had a chance to polish this up?  I don't think I've seen a
+> newer version of this patch, but maybe I missed it.
 
-#regzbot invalid: likely not a regression and just a odd config
+Hello Ted,
 
-For details see the discussion ending here:
-https://lore.kernel.org/all/20221124201552.GV4001@paulmck-ThinkPad-P17-Gen-1/
+Sorry, I guess I completely forgot about this, since around those dates
+I was travelling. I will definitely try and get back to this once I finish
+few ongoing things on my plate.
 
-Ciao, Thorsten
+Thanks for bringing it up!
+
+-ritesh
