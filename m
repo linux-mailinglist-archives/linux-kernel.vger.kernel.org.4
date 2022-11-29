@@ -2,363 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A6663C8DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299E663C8E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 21:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237150AbiK2T7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 14:59:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
+        id S237168AbiK2UBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 15:01:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237139AbiK2T7O (ORCPT
+        with ESMTP id S237158AbiK2UBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 14:59:14 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F6C27CD1
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:59:11 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id q7so18502461ljp.9
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:59:11 -0800 (PST)
+        Tue, 29 Nov 2022 15:01:16 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F118248FF
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 12:01:15 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id i12so10516497qvs.2
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 12:01:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AmnMdhMIbuK+ioOE5wyae0BlwkJ1ypVUOrJTSmxMhn8=;
-        b=dgFKKoEXnI+rRu0A8nhpr9dIH8IXvWuvvzO9BpJZlIKDLavNMwYCmA5eeVuu55peXf
-         OBEEo8a7yZU4vrsEm2H9LcvLtSKiOMsQfsN/a6uiTGDgv3q0PIt4aMkxxCnKKoAfChIf
-         auDiKy0ExYOszLxQT+sUCwlIX3ceL1iohbJ6pSzgtfjHtDXGSHFH2fpD3hCTEOIxBYMS
-         4zV1sVz31MK4SLt5UeGdBkqc9H9+2U0224CKZI5tRM8f2YxywtP5EMkDcrNDOH3I9c0m
-         /mB/uykcptyuDWlMtDH+4v1WoybyWJkBPKsHxYX3g9h5hz/TugzFJ6dOnu78AiQGAW9W
-         hcKg==
+        d=joelfernandes.org; s=google;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D6vuecyZV0OYU8Jdj59glPeINOb6y500uXyommfVPBM=;
+        b=oqbUWQUsao1y85I50ELNBr0qzaYhyf4F4mO78udW2am0fiYSWzycjtGJLHXPmL36MN
+         4202hUNMyxrJeeZmI6iQfQHmFFYVrSXmeEog/3tEYsIhOTPmK24teuP04GONgnY1HqHi
+         PTe1HbcK3hcUQVeewVSog9aqpGTPtPIa+1yY0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AmnMdhMIbuK+ioOE5wyae0BlwkJ1ypVUOrJTSmxMhn8=;
-        b=3xti4VFOf3t08ELkjjgv5AE4sYCyLxGLHAR7q1brxdIlZyn4p+Xa1rqIZRgvcJfDnE
-         pyyX29XUVuKXmzZwRiqc2Jc1xbZ/qylM/8qrh3L6eRW8gYA8xA88cesZJ7msp+Zyz/i1
-         r7tCItNZw5/xBHruEurhsGQRaaXW/dDQTFGCwhmv1dQSr0xMlHaiJLqWvp5ZR8QFF32J
-         ZpNkurpl96ssaFZTDuBYPR7goJRyW6EjjN98/+ekk45E+YxTS2Tf+0p28KbBES3Q82fQ
-         N+Q0ctkjPX0TCAPk4NV418OrRytMobOMzHmR2R1Di0bDMbljusPsluufINzPHdGiRvyV
-         FLEg==
-X-Gm-Message-State: ANoB5pnjJOuzGfJV8HELrgksSTEQzh0KbTlTZvXOSqMyNhfjgW++6INa
-        vrKJirOi1nxXbJez9kLw2uoi3Q==
-X-Google-Smtp-Source: AA0mqf6eEb4mm4hewBmMNDBECy0NIbeDiiZarC+hAyVtbboS9KaMxc0n1e9xi4MDoQXy+dx122HEUg==
-X-Received: by 2002:a2e:930f:0:b0:279:a72b:815b with SMTP id e15-20020a2e930f000000b00279a72b815bmr3336062ljh.490.1669751950146;
-        Tue, 29 Nov 2022 11:59:10 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id x7-20020ac259c7000000b004b529517d95sm321732lfn.40.2022.11.29.11.59.06
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D6vuecyZV0OYU8Jdj59glPeINOb6y500uXyommfVPBM=;
+        b=DSRnU2J3J6o7u0orAhJq81oCHtkcwhTyROWR6WWNuaAyyNj3LZX4qmZ3Nq//rzEZgJ
+         e1BGenAAyu4u5iuCVkSY6UZXDYqQX5TvXt8S987JOnjuKtY4sBw/VCsam0824L+DgKfd
+         0guOvLCxz3lGZ4XwhV3ES0x4IXw3nv29FPp0+j6+eve6dcAVo7hYc6tcP4Dxo3V9li/k
+         SAk3T2W8MvFEXzqFRMQ0bIrOw0qmQSNwDFiF3dS+Ua0cYSHQDWRBvkTOwt4jPzYsb3SH
+         6wk/zbwXdwX4JbPpoZ2eZNwajcIPCuI4ZZy+4hIXJ5hYmz3x5iujgigTLVGm/PdkWuVu
+         2g4g==
+X-Gm-Message-State: ANoB5pnpP4nY2muPIHg3uW13TVD88AkgvJnIA1WsFZK4q3+fTQnav8Mi
+        NoxQqHCfyPv50lY32d7gUClozQ==
+X-Google-Smtp-Source: AA0mqf4BTFpYB+3oONEED+nOmHpjjAhnxWLcDF6yGZ1TzmBIWnSRkzXMZTXtLU2oS7OHtLe5vQMrEA==
+X-Received: by 2002:a05:6214:3513:b0:4bb:ddaf:b9e5 with SMTP id nk19-20020a056214351300b004bbddafb9e5mr35287625qvb.52.1669752074098;
+        Tue, 29 Nov 2022 12:01:14 -0800 (PST)
+Received: from smtpclient.apple ([2600:1003:b119:afa3:a9e4:85e0:b8e3:7797])
+        by smtp.gmail.com with ESMTPSA id bw13-20020a05622a098d00b003a586888a20sm9234939qtb.79.2022.11.29.12.01.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 11:59:06 -0800 (PST)
-Message-ID: <a1046ae6-cffb-2dbf-0bfd-3787eafe9a0d@linaro.org>
-Date:   Tue, 29 Nov 2022 21:59:05 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 10/12] arm64: dts: qcom: sm8350: Add display system
- nodes
-Content-Language: en-GB
-To:     Robert Foss <robert.foss@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com, sean@poorly.run,
-        airlied@linux.ie, daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, quic_kalyant@quicinc.com,
-        swboyd@chromium.org, angelogioacchino.delregno@somainline.org,
-        loic.poulain@linaro.org, quic_khsieh@quicinc.com,
-        quic_vpolimer@quicinc.com, vkoul@kernel.org, dianders@chromium.org,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
-        vinod.koul@linaro.org, quic_jesszhan@quicinc.com,
-        andersson@kernel.org
-References: <20221115133105.980877-1-robert.foss@linaro.org>
- <20221115133105.980877-11-robert.foss@linaro.org>
- <dc138171-f7b1-2761-d800-620e85afd6d9@linaro.org>
- <CAG3jFyuC59iX9p9eB7WT0Lx34DszZrwbOSnRyV_X02=TnVs6tg@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CAG3jFyuC59iX9p9eB7WT0Lx34DszZrwbOSnRyV_X02=TnVs6tg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 29 Nov 2022 12:01:13 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v2] rcu-tasks: Make rude RCU-Tasks work well with CPU hotplug
+Date:   Tue, 29 Nov 2022 15:01:12 -0500
+Message-Id: <99F22D19-1340-4F13-8159-5202603C4942@joelfernandes.org>
+References: <20221129191816.GA388190@paulmck-ThinkPad-P17-Gen-1>
+Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>, frederic@kernel.org,
+        quic_neeraju@quicinc.com, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221129191816.GA388190@paulmck-ThinkPad-P17-Gen-1>
+To:     paulmck@kernel.org
+X-Mailer: iPhone Mail (19G82)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/11/2022 18:47, Robert Foss wrote:
-> On Tue, 15 Nov 2022 at 14:47, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->>
->>
->> On 15/11/2022 14:31, Robert Foss wrote:
->>> Add mdss, mdss_mdp, dsi0, dsi0_phy nodes. With these
->>> nodes the display subsystem is configured to support
->>> one DSI output.
->>>
->>> Signed-off-by: Robert Foss <robert.foss@linaro.org>
->>> ---
->>>    arch/arm64/boot/dts/qcom/sm8350.dtsi | 197 ++++++++++++++++++++++++++-
->>>    1 file changed, 193 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
->>> index 434f8e8b12c1..5c98e5cf5ad0 100644
->>> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
->>> @@ -3,6 +3,7 @@
->>>     * Copyright (c) 2020, Linaro Limited
->>>     */
->>>
->>> +#include <dt-bindings/interconnect/qcom,sm8350.h>
->>>    #include <dt-bindings/interrupt-controller/arm-gic.h>
->>>    #include <dt-bindings/clock/qcom,dispcc-sm8350.h>
->>>    #include <dt-bindings/clock/qcom,gcc-sm8350.h>
->>> @@ -2536,14 +2537,201 @@ usb_2_dwc3: usb@a800000 {
->>>                        };
->>>                };
->>>
->>> +             mdss: mdss@ae00000 {
->>> +                     compatible = "qcom,sm8350-mdss";
->>> +                     reg = <0 0x0ae00000 0 0x1000>;
->>> +                     reg-names = "mdss";
->>> +
->>> +                     interconnects = <&mmss_noc MASTER_MDP0 0 &mc_virt SLAVE_EBI1 0>,
->>> +                                     <&mmss_noc MASTER_MDP1 0 &mc_virt SLAVE_EBI1 0>;
->>> +                     interconnect-names = "mdp0-mem", "mdp1-mem";
->>> +
->>> +                     power-domains = <&dispcc MDSS_GDSC>;
->>> +                     resets = <&dispcc DISP_CC_MDSS_CORE_BCR>;
->>> +
->>> +                     clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
->>> +                              <&gcc GCC_DISP_HF_AXI_CLK>,
->>> +                              <&gcc GCC_DISP_SF_AXI_CLK>,
->>> +                              <&dispcc DISP_CC_MDSS_MDP_CLK>;
->>> +                     clock-names = "iface", "bus", "nrt_bus", "core";
->>> +
->>> +                     interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
->>> +                     interrupt-controller;
->>> +                     #interrupt-cells = <1>;
->>> +
->>> +                     iommus = <&apps_smmu 0x820 0x402>;
->>> +
->>> +                     status = "disabled";
->>> +
->>> +                     #address-cells = <2>;
->>> +                     #size-cells = <2>;
->>> +                     ranges;
->>> +
->>> +                     mdss_mdp: display-controller@ae01000 {
->>> +                             compatible = "qcom,sm8350-dpu";
->>> +                             reg = <0 0x0ae01000 0 0x8f000>,
->>> +                                   <0 0x0aeb0000 0 0x2008>;
->>> +                             reg-names = "mdp", "vbif";
->>> +
->>> +                             clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
->>> +                                     <&gcc GCC_DISP_SF_AXI_CLK>,
->>> +                                     <&dispcc DISP_CC_MDSS_AHB_CLK>,
->>> +                                     <&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
->>> +                                     <&dispcc DISP_CC_MDSS_MDP_CLK>,
->>> +                                     <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
->>> +                             clock-names = "bus",
->>> +                                           "nrt_bus",
->>> +                                           "iface",
->>> +                                           "lut",
->>> +                                           "core",
->>> +                                           "vsync";
->>> +
->>> +                             assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
->>> +                             assigned-clock-rates = <19200000>;
->>> +
->>> +                             operating-points-v2 = <&mdp_opp_table>;
->>> +                             power-domains = <&rpmhpd SM8350_MMCX>;
->>> +
->>> +                             interrupt-parent = <&mdss>;
->>> +                             interrupts = <0>;
->>> +
->>> +                             status = "disabled";
->> It doesn't make sense to disable mdp separately, as mdss is essentially
->> useless without it.
-> 
-> Ack
-> 
->>
->>> +
->>> +                             ports {
->>> +                                     #address-cells = <1>;
->>> +                                     #size-cells = <0>;
->>> +
->>> +                                     port@0 {
->>> +                                             reg = <0>;
->>> +                                             dpu_intf1_out: endpoint {
->>> +                                                     remote-endpoint = <&dsi0_in>;
->>> +                                             };
->>> +                                     };
->>> +                             };
->>> +
->>> +                             mdp_opp_table: opp-table {
->>> +                                     compatible = "operating-points-v2";
->>> +
->>> +                                     opp-200000000 {
->>> +                                             opp-hz = /bits/ 64 <200000000>;
->>> +                                             required-opps = <&rpmhpd_opp_low_svs>;
->>> +                                     };
->>> +
->>> +                                     opp-300000000 {
->>> +                                             opp-hz = /bits/ 64 <300000000>;
->>> +                                             required-opps = <&rpmhpd_opp_svs>;
->>> +                                     };
->>> +
->>> +                                     opp-345000000 {
->>> +                                             opp-hz = /bits/ 64 <345000000>;
->>> +                                             required-opps = <&rpmhpd_opp_svs_l1>;
->>> +                                     };
->>> +
->>> +                                     opp-460000000 {
->>> +                                             opp-hz = /bits/ 64 <460000000>;
->>> +                                             required-opps = <&rpmhpd_opp_nom>;
->>> +                                     };
->>> +                             };
->>> +                     };
->>> +
->>> +                     dsi0: dsi@ae94000 {
->>> +                             compatible = "qcom,mdss-dsi-ctrl";
->>> +                             reg = <0 0x0ae94000 0 0x400>;
->>> +                             reg-names = "dsi_ctrl";
->>> +
->>> +                             interrupt-parent = <&mdss>;
->>> +                             interrupts = <4>;
->>> +
->>> +                             clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
->>> +                                      <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
->>> +                                      <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
->>> +                                      <&dispcc DISP_CC_MDSS_ESC0_CLK>,
->>> +                                      <&dispcc DISP_CC_MDSS_AHB_CLK>,
->>> +                                      <&gcc GCC_DISP_HF_AXI_CLK>;
->>> +                             clock-names = "byte",
->>> +                                           "byte_intf",
->>> +                                           "pixel",
->>> +                                           "core",
->>> +                                           "iface",
->>> +                                           "bus";
->>> +
->>> +                             assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>,
->>> +                                               <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
->>> +                             assigned-clock-parents = <&dsi0_phy 0>,
->>> +                                                      <&dsi0_phy 1>;
->>> +
->>> +                             operating-points-v2 = <&dsi_opp_table>;
->>> +                             power-domains = <&rpmhpd SM8350_MMCX>;
->>> +
->>> +                             phys = <&dsi0_phy>;
->>> +                             phy-names = "dsi";
->> I think that was dropped as of late.
-> 
-> Ack
-> 
->>
->>> +
->>> +                             status = "disabled";
->>> +
->>> +                             ports {
->>> +                                     #address-cells = <1>;
->>> +                                     #size-cells = <0>;
->>> +
->>> +                                     port@0 {
->>> +                                             reg = <0>;
->>> +                                             dsi0_in: endpoint {
->>> +                                                     remote-endpoint = <&dpu_intf1_out>;
->>> +                                             };
->>> +                                     };
->>> +
->>> +                                     port@1 {
->>> +                                             reg = <1>;
->>> +                                             dsi0_out: endpoint {
->>> +                                             };
->>> +                                     };
->>> +                             };
->>> +                     };
->>> +
->>> +                     dsi0_phy: phy@ae94400 {
->>> +                             compatible = "qcom,dsi-phy-5nm-8350";
->>> +                             reg = <0 0x0ae94400 0 0x200>,
->>> +                                   <0 0x0ae94600 0 0x280>,
->>> +                                   <0 0x0ae94900 0 0x260>;
->>> +                             reg-names = "dsi_phy",
->>> +                                         "dsi_phy_lane",
->>> +                                         "dsi_pll";
->>> +
->>> +                             #clock-cells = <1>;
->>> +                             #phy-cells = <0>;
->>> +
->>> +                             clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
->>> +                                      <&rpmhcc RPMH_CXO_CLK>;
->>> +                             clock-names = "iface", "ref";
->>> +
->>> +                             status = "disabled";
->>> +
->>> +                             dsi_opp_table: dsi-opp-table {
->>> +                                     compatible = "operating-points-v2";
->>> +
->>> +                                     opp-187500000 {
->>> +                                             opp-hz = /bits/ 64 <187500000>;
->>> +                                             required-opps = <&rpmhpd_opp_low_svs>;
->>> +                                     };
->>> +
->>> +                                     opp-300000000 {
->>> +                                             opp-hz = /bits/ 64 <300000000>;
->>> +                                             required-opps = <&rpmhpd_opp_svs>;
->>> +                                     };
->>> +
->>> +                                     opp-358000000 {
->>> +                                             opp-hz = /bits/ 64 <358000000>;
->>> +                                             required-opps = <&rpmhpd_opp_svs_l1>;
->>> +                                     };
->>> +                             };
->>> +                     };
->>> +             };
->>> +
->>>                dispcc: clock-controller@af00000 {
->>>                        compatible = "qcom,sm8350-dispcc";
->>>                        reg = <0 0x0af00000 0 0x10000>;
->>>                        clocks = <&rpmhcc RPMH_CXO_CLK>,
->>> -                              <0>,
->>> -                              <0>,
->>> -                              <0>,
->>> -                              <0>,
->>> +                              <&dsi0_phy 0>, <&dsi0_phy 1>,
->>> +                              <0>, <0>,
->>>                                 <0>,
->>>                                 <0>;
->>>                        clock-names = "bi_tcxo",
->>> @@ -2558,6 +2746,7 @@ dispcc: clock-controller@af00000 {
->>>                        #power-domain-cells = <1>;
->>>
->>>                        power-domains = <&rpmhpd SM8350_MMCX>;
->>> +                     required-opps = <&rpmhpd_opp_turbo>;
->> A turbo vote is required for it to function? Seems a bit high..
-> 
-> Dmitry hit a snag using &rpmhpd_opp_low_svs, so this was a dummy
-> value. I can't replicate that issue, but am having a conversation with
-> him off-list about this.
-> 
-> On my sm8350-hdk board &rpmhpd_opp_low_svs is working fine.
 
-Maybe this is related to the bootloader setting up the mode or maybe it 
-was caused by the fact that I have the drm_msm set up as built-in rather 
-than a module.
 
-> 
->>
->> Konrad
->>>                };
->>>
->>>                adsp: remoteproc@17300000 {
+> On Nov 29, 2022, at 2:18 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+>=20
+> =EF=BB=BFOn Tue, Nov 29, 2022 at 11:00:05AM -0500, Joel Fernandes wrote:
+>>=20
+>>=20
+>>>> On Nov 29, 2022, at 10:18 AM, Paul E. McKenney <paulmck@kernel.org> wro=
+te:
+>>>=20
+>>> =EF=BB=BFOn Tue, Nov 29, 2022 at 06:25:04AM +0000, Zhang, Qiang1 wrote:
+>>>>>> On Nov 28, 2022, at 11:54 PM, Zhang, Qiang1 <qiang1.zhang@intel.com> w=
+rote:
+>>>>>=20
+>>>>> =EF=BB=BFOn Mon, Nov 28, 2022 at 10:34:28PM +0800, Zqiang wrote:
+>>>>>> Currently, invoke rcu_tasks_rude_wait_gp() to wait one rude
+>>>>>> RCU-tasks grace period, if __num_online_cpus =3D=3D 1, will return
+>>>>>> directly, indicates the end of the rude RCU-task grace period.
+>>>>>> suppose the system has two cpus, consider the following scenario:
+>>>>>>=20
+>>>>>>  CPU0                                   CPU1 (going offline)
+>>>>>>                        migration/1 task:
+>>>>>>                                    cpu_stopper_thread
+>>>>>>                                     -> take_cpu_down
+>>>>>>                                        -> _cpu_disable
+>>>>>>                             (dec __num_online_cpus)
+>>>>>>                                        ->cpuhp_invoke_callback
+>>>>>>                                              preempt_disable
+>>>>>>                      access old_data0
+>>>>>>         task1
+>>>>>> del old_data0                                  .....
+>>>>>> synchronize_rcu_tasks_rude()
+>>>>>> task1 schedule out
+>>>>>> ....
+>>>>>> task2 schedule in
+>>>>>> rcu_tasks_rude_wait_gp()
+>>>>>>   ->__num_online_cpus =3D=3D 1
+>>>>>>     ->return
+>>>>>> ....
+>>>>>> task1 schedule in
+>>>>>> ->free old_data0
+>>>>>>                                              preempt_enable
+>>>>>>=20
+>>>>>> when CPU1 dec __num_online_cpus and __num_online_cpus is equal one,
+>>>>>> the CPU1 has not finished offline, stop_machine task(migration/1)
+>>>>>> still running on CPU1, maybe still accessing 'old_data0', but the
+>>>>>> 'old_data0' has freed on CPU0.
+>>>>>>=20
+>>>>>> This commit add cpus_read_lock/unlock() protection before accessing
+>>>>>> __num_online_cpus variables, to ensure that the CPU in the offline
+>>>>>> process has been completed offline.
+>>>>>>=20
+>>>>>> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+>>>>>>=20
+>>>>>> First, good eyes and good catch!!!
+>>>>>>=20
+>>>>>> The purpose of that check for num_online_cpus() is not performance
+>>>>>> on single-CPU systems, but rather correct operation during early boot=
+.
+>>>>>> So a simpler way to make that work is to check for RCU_SCHEDULER_RUNN=
+ING,
+>>>>>> for example, as follows:
+>>>>>>=20
+>>>>>>  if (rcu_scheduler_active !=3D RCU_SCHEDULER_RUNNING &&
+>>>>>>      num_online_cpus() <=3D 1)
+>>>>>>      return;    // Early boot fastpath for only one CPU.
+>>>>>=20
+>>>>> Hi Paul
+>>>>>=20
+>>>>> During system startup, because the RCU_SCHEDULER_RUNNING is set after s=
+tarting other CPUs,=20
+>>>>>=20
+>>>>>            CPU0                                                       =
+                CPU1                                                        =
+        =20
+>>>>>=20
+>>>>> if (rcu_scheduler_active !=3D                                   =20
+>>>>>  RCU_SCHEDULER_RUNNING &&
+>>>>>         __num_online_cpus  =3D=3D 1)                                  =
+            =20
+>>>>>  return;                                                              =
+           inc  __num_online_cpus
+>>>>>                          (__num_online_cpus =3D=3D 2)
+>>>>>=20
+>>>>> CPU0 didn't notice the update of the __num_online_cpus variable by CPU=
+1 in time
+>>>>> Can we move rcu_set_runtime_mode() before smp_init()
+>>>>> any thoughts?
+>>>>>=20
+>>>>> Is anyone expected to do rcu-tasks operation before the scheduler is r=
+unning?=20
+>>>>=20
+>>>> Not sure if such a scenario exists.
+>>>>=20
+>>>>> Typically this requires the tasks to context switch which is a schedul=
+er operation.
+>>>>>=20
+>>>>> If the scheduler is not yet running, then I don=E2=80=99t think missin=
+g an update the __num_online_cpus matters since no one does a tasks-RCU sync=
+hronize.
+>>>>=20
+>>>> Hi Joel
+>>>>=20
+>>>> After the kernel_init task runs, before calling smp_init() to starting o=
+ther CPUs,=20
+>>>> the scheduler haven been initialization, task context switching can occ=
+ur.
+>>>=20
+>>> Good catch, thank you both.  For some reason, I was thinking that the
+>>> additional CPUs did not come online until later.
+>>>=20
+>>> So how about this?
+>>>=20
+>>>   if (rcu_scheduler_active =3D=3D RCU_SCHEDULER_INACTIVE)
+>>>       return;    // Early boot fastpath.
+>>>=20
+>>> If this condition is true, there is only one CPU and no scheduler,
+>>> thus no preemption.
+>>=20
+>> Agreed. I was going to suggest exactly this :)
+>>=20
+>> Ack.
+>> (Replying by phone but feel free to add my reviewed by tag).
+>=20
+> I should add that the downside of this approach is that there is a short
+> time between the scheduler initializing and workqueues fully initializing
+> where a critical-path call to synchronize_rcu_tasks() will hang the
+> system.  I do -not- consider this to be a real problem because RCU had
+> some hundreds of calls to synchronize_rcu() before this became an issue.
+>=20
+> So this should be fine, but please recall this for when/if someone does
+> stick a synchronize_rcu_tasks() into that short time.  ;-)
 
--- 
-With best wishes
-Dmitry
+Thanks Paul, but why would anyone want to do sync rcu tasks, before the sche=
+duler is fully initialized?=20
+Maybe we can add a warning here in the if-early-return path, to make sure no=
+ such usage slips. And then we can look into someone using it that way, if t=
+hey ever start using it.
 
+Thanks,
+
+- Joel
+
+>=20
+>                            Thanx, Paul
+>=20
+>> - Joel
+>>=20
+>>=20
+>>>=20
+>>>                       Thanx, Paul
+>>>=20
+>>>> Thanks
+>>>> Zqiang
+>>>>=20
+>>>>>=20
+>>>>> Or did I miss something?
+>>>>>=20
+>>>>> Thanks.
+>>>>>=20
+>>>>>=20
+>>>>>=20
+>>>>>=20
+>>>>> Thanks
+>>>>> Zqiang
+>>>>>=20
+>>>>>>=20
+>>>>>> This works because rcu_scheduler_active is set to RCU_SCHEDULER_RUNNI=
+NG
+>>>>>> long before it is possible to offline CPUs.
+>>>>>>=20
+>>>>>> Yes, schedule_on_each_cpu() does do cpus_read_lock(), again, good eye=
+s,
+>>>>>> and it also unnecessarily does the schedule_work_on() the current CPU=
+,
+>>>>>> but the code calling synchronize_rcu_tasks_rude() is on high-overhead=
+
+>>>>>> code paths, so this overhead is down in the noise.
+>>>>>>=20
+>>>>>> Until further notice, anyway.
+>>>>>>=20
+>>>>>> So simplicity is much more important than performance in this code.
+>>>>>> So just adding the check for RCU_SCHEDULER_RUNNING should fix this,
+>>>>>> unless I am missing something (always possible!).
+>>>>>>=20
+>>>>>>                          Thanx, Paul
+>>>>>>=20
+>>>>>> ---
+>>>>>> kernel/rcu/tasks.h | 20 ++++++++++++++++++--
+>>>>>> 1 file changed, 18 insertions(+), 2 deletions(-)
+>>>>>>=20
+>>>>>> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+>>>>>> index 4a991311be9b..08e72c6462d8 100644
+>>>>>> --- a/kernel/rcu/tasks.h
+>>>>>> +++ b/kernel/rcu/tasks.h
+>>>>>> @@ -1033,14 +1033,30 @@ static void rcu_tasks_be_rude(struct work_str=
+uct *work)
+>>>>>> {
+>>>>>> }
+>>>>>>=20
+>>>>>> +static DEFINE_PER_CPU(struct work_struct, rude_work);
+>>>>>> +
+>>>>>> // Wait for one rude RCU-tasks grace period.
+>>>>>> static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
+>>>>>> {
+>>>>>> +    int cpu;
+>>>>>> +    struct work_struct *work;
+>>>>>> +
+>>>>>> +    cpus_read_lock();
+>>>>>>  if (num_online_cpus() <=3D 1)
+>>>>>> -        return;    // Fastpath for only one CPU.
+>>>>>> +        goto end;// Fastpath for only one CPU.
+>>>>>>=20
+>>>>>>  rtp->n_ipis +=3D cpumask_weight(cpu_online_mask);
+>>>>>> -    schedule_on_each_cpu(rcu_tasks_be_rude);
+>>>>>> +    for_each_online_cpu(cpu) {
+>>>>>> +        work =3D per_cpu_ptr(&rude_work, cpu);
+>>>>>> +        INIT_WORK(work, rcu_tasks_be_rude);
+>>>>>> +        schedule_work_on(cpu, work);
+>>>>>> +    }
+>>>>>> +
+>>>>>> +    for_each_online_cpu(cpu)
+>>>>>> +        flush_work(per_cpu_ptr(&rude_work, cpu));
+>>>>>> +
+>>>>>> +end:
+>>>>>> +    cpus_read_unlock();
+>>>>>> }
+>>>>>>=20
+>>>>>> void call_rcu_tasks_rude(struct rcu_head *rhp, rcu_callback_t func);
+>>>>>> --=20
+>>>>>> 2.25.1
+>>>>>>=20
