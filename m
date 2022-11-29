@@ -2,82 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D782563C483
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6829D63C480
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235352AbiK2QBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 11:01:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
+        id S235316AbiK2QBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 11:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235871AbiK2QBS (ORCPT
+        with ESMTP id S236088AbiK2QBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 11:01:18 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C34169A8B;
-        Tue, 29 Nov 2022 07:59:41 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATFmncM016736;
-        Tue, 29 Nov 2022 15:58:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=O1zHUKyMYg/N5w80x5NsEXIV4fzGlq8CSJOktCGLEoc=;
- b=j0PVXACHfpFiyiV3rnlCeFwBcG1yGYvTRRpsz9jkx5zIW59HM4QxuMVk79qmbgT+hktG
- iz14heoVMlFAzwEC9mtcaWwo8WMhh4olSeBDBBixOzm/XqHmH+RpybeHKrOFzITq14/I
- pQOqCyfxWs6uuIbJt/2jrQYDSErW7LXIWsXbMlDyfaLAA1aiUKibiDdL3mBIEgfgKAro
- s0I1NNWkrhnw3PIp4towyuNsE769NKX2bBvzzQrROjT0gVXiILVSZpgzxn3H2L/yiPUx
- PKBqq1hMChU4NmU8naQRiNLVE0ZquYFA9FYp2+BwQzJRZM4lLIBGN3WARjhkBhb6zWZu Zw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m5n1vg0v6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Nov 2022 15:58:54 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ATFwh5f029584
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Nov 2022 15:58:43 GMT
-Received: from [10.216.9.244] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 29 Nov
- 2022 07:58:37 -0800
-Message-ID: <65fd2068-4744-221f-f398-da4303b64fca@quicinc.com>
-Date:   Tue, 29 Nov 2022 21:28:33 +0530
+        Tue, 29 Nov 2022 11:01:00 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEF5697CB
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:59:23 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id c1so22702655lfi.7
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:59:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bDvxVOu+PnvvHRulbZFibX61kwkQP19u6RVUNmmpkgY=;
+        b=bw/kC+x+9HZsxIhQWPogLf1q10xRBgTta5JXdbQzEI3yOW1lB1zVd+DO+mU9OChNsp
+         OwiHrMEjR3cjneLpBilCu5WReSjHfNk1WtkziQM+nASpT277TBPjRo08F0XoVf7DyVJV
+         EQ3+bYudZ/j90oQrP9gpstBeWCQtuha7r6Lr1vQOPG1Yc20bkJeRINKzwAKyiKzpK7ws
+         roEH+azxI+KRjYeHxbMaT39a8q9We7+RTbU81GNNnUV0EqFedsVhQ26bvdjMMRwNv1pr
+         N9Wv0gtWbmS8uSJWUkOn2gXRo9JdZq2tNKFyVWiTSEGV4+GkE6AZuqoLcRlZYPkfDvVI
+         ZW7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bDvxVOu+PnvvHRulbZFibX61kwkQP19u6RVUNmmpkgY=;
+        b=jqqsvnogxCQAYpXTEAgqI5SNSLGuHh/gj5adjDkmWPul9fzHq45GLOkNw/32VYUgs/
+         cWFb8aL1KknDUXEVgugII5e26IbDyOU04+MubJe9EW5Nn9LwrHxH+y29Hs7s8mYDe06s
+         lLBhgBZkJrgs8monDNbbNNsA8y06d4w/w6ZrX8XzhmTl/fMstakgJS/+CI8mycVP+WlK
+         vTQ83bqpYtYmoEWpM1nPZ9zq2QgQ+2WLrkR5pPCNZxzcFFyl1HlkAg7c967XnIGqzZvu
+         +2KPvy1s6MUrvc0t88Hx3xJpefGzdW53Re7fUXSvBwHW1qnaibWYPZ2FNEZSvs5pPku8
+         a0tg==
+X-Gm-Message-State: ANoB5pnd08Ng0LzKzDastaVQj2sZFtcbNWdEjZd8zD9YSmKqKgJ9C+iC
+        d8fOyt2/NaFEgJkCgz60T+5zTA==
+X-Google-Smtp-Source: AA0mqf6s6h21gBLJgUb7HsJExGWf4j/ozGnG1ZJJ/G04lnH7uEnRrIfZndNl3qwLh6+Y0H8lkADvEA==
+X-Received: by 2002:a05:6512:1505:b0:4af:b5d0:695e with SMTP id bq5-20020a056512150500b004afb5d0695emr20039824lfb.6.1669737562297;
+        Tue, 29 Nov 2022 07:59:22 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id z15-20020a056512370f00b004a9b9ccfbe6sm2282883lfr.51.2022.11.29.07.59.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 07:59:21 -0800 (PST)
+Message-ID: <b5a6b8fc-6435-a92f-4b34-8bf95772db65@linaro.org>
+Date:   Tue, 29 Nov 2022 16:59:20 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] ASoC: qcom: lpass-sc7180: Add maybe_unused tag for system
- PM ops
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] dt-bindings: mmc: Make comment on wakeup-source less
+ confusing
 Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
-        <devicetree@vger.kernel.org>
-References: <1669726428-3140-1-git-send-email-quic_srivasam@quicinc.com>
- <Y4YpELN4/0cesonb@dev-arch.thelio-3990X>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <Y4YpELN4/0cesonb@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marek Vasut <marex@denx.de>, kernel@dh-electronics.com,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org
+References: <20221122111124.6828-1-cniedermaier@dh-electronics.com>
+ <20221122111124.6828-3-cniedermaier@dh-electronics.com>
+ <55c29f92-4c6b-266f-2004-ae633a658963@linaro.org>
+ <CAPDyKFparoXMJ-sRxgqi8zDGn5AoNDLfsAF9YkdoaKpTU3EchQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAPDyKFparoXMJ-sRxgqi8zDGn5AoNDLfsAF9YkdoaKpTU3EchQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: c5Gnbz93EI3y_DZwAkv2U-Y1I-f7G-L1
-X-Proofpoint-ORIG-GUID: c5Gnbz93EI3y_DZwAkv2U-Y1I-f7G-L1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-29_10,2022-11-29_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 impostorscore=0 adultscore=0 mlxlogscore=999 malwarescore=0
- spamscore=0 priorityscore=1501 clxscore=1011 mlxscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211290089
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -87,51 +81,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your tie Nathan!!!
-
-On 11/29/2022 9:15 PM, Nathan Chancellor wrote:
-> On Tue, Nov 29, 2022 at 06:23:48PM +0530, Srinivasa Rao Mandadapu wrote:
->> Add __maybe_unused tag for system PM ops suspend and resume.
->> This is required to fix allmodconfig compilation issue.
->> Fixes: c3bf7699747c ("ASoC: qcom: lpass-sc7280: Add system suspend/resume PM ops")
+On 29/11/2022 16:30, Ulf Hansson wrote:
+> On Tue, 29 Nov 2022 at 13:36, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
 >>
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> A better solution would be replacing SET_SYSTEM_SLEEP_PM_OPS() with
-> SYSTEM_SLEEP_PM_OPS(), which was added to avoid needing to add these
-> '__maybe_unused' attributes to these functions. See commit 1a3c7bb08826
-> ("PM: core: Add new *_PM_OPS macros, deprecate old ones") for more info.
-
-Tried this option but as this patch required for Kernel 5.4 version code 
-base,
-
-SYSTEM_SLEEP_PM_OPS didn't work.
-
->> ---
->>   sound/soc/qcom/lpass-sc7180.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
+>> On 22/11/2022 12:11, Christoph Niedermaier wrote:
+>>> The current comment on wakeup-source is a bit confusing, because it isn't
+>>> clear at first sight which property is actually deprecated.
+>>> Change the comment to one that is less confusing.
 >>
->> diff --git a/sound/soc/qcom/lpass-sc7180.c b/sound/soc/qcom/lpass-sc7180.c
->> index b96b85a..41db661 100644
->> --- a/sound/soc/qcom/lpass-sc7180.c
->> +++ b/sound/soc/qcom/lpass-sc7180.c
->> @@ -163,14 +163,14 @@ static int sc7180_lpass_exit(struct platform_device *pdev)
->>   	return 0;
->>   }
->>   
->> -static int sc7180_lpass_dev_resume(struct device *dev)
->> +static int __maybe_unused sc7180_lpass_dev_resume(struct device *dev)
->>   {
->>   	struct lpass_data *drvdata = dev_get_drvdata(dev);
->>   
->>   	return clk_bulk_prepare_enable(drvdata->num_clks, drvdata->clks);
->>   }
->>   
->> -static int sc7180_lpass_dev_suspend(struct device *dev)
->> +static int __maybe_unused sc7180_lpass_dev_suspend(struct device *dev)
->>   {
->>   	struct lpass_data *drvdata = dev_get_drvdata(dev);
->>   
->> -- 
->> 2.7.4
->>
->>
+>> It's still confusing - you mention some non-existing property. I don't
+>> think it's worth to touch it. If you insist, drop entire comment...
+> 
+> Hmm, it doesn't look that easy to me. The "enable-sdio-wakeup" is
+> indeed a deprecated wakeup property [1], but it seems like it's not
+> really described somewhere. I wouldn't mind removing it (as it seems
+> to add some confusions), but in that case it needs to be entirely
+> removed from the DT docs, right?
+
+Yes, from the bindings and from DTSes. It's already gone from
+mmc-controller.yaml bindings, so basically we already did the most of
+such removal.
+
+> 
+> Another option, would be to add a proper description of the property
+> and mark it with "deprecated: true".
+
+
+Best regards,
+Krzysztof
+
