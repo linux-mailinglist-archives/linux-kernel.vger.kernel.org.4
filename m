@@ -2,319 +2,401 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FEDD63C046
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:46:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A3963C044
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234637AbiK2MqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 07:46:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
+        id S234445AbiK2MqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 07:46:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234459AbiK2MqR (ORCPT
+        with ESMTP id S234279AbiK2MqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 07:46:17 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2053.outbound.protection.outlook.com [40.107.244.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B3F6037F
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:46:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xh2jVjDVO8CvzWNxwr6b3cmS9u6MmEDUds+NKjJ9122KJETUSobF+pG6veGH1hHomDp4HgYvFsKu6N4aLZ8kzgoxmsoExV0niQkc+Dr82zlYbJLZdPYZkefMtdzjwq7SsTG9y7my1SMXDkUDQ4ZDpZ+l3E3CaAGlcNP3U4+7SWEc4d10jh1KzgOh1C/XaVpIYcqxOq3IEmCZIjbZDXgyv3j65Ne1bJXTBu3ntQ8Ve6ZsIPQBj+CPIC7jM97vhXDIrQoNKInI63uLQ7IrfKTZWGlLoR/OI2vqUY3na69TQQuDFgb1+YQWpHte4ILMZ/V8PyFcQSRKIHSijsRjCKpyKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y4P3z2JjSfCM9bP4l9+9nLv+sps2uWgWsOxldL5wp9s=;
- b=KVZu0OUjGbWBo6qWvKcFMzDpH3ndzU+nT2FqfXq0qSWvx351jTSoIBi43r3LZUFGB+muhYcuG1AdCz2gDWbMkKs2xQKCPfY9PX+tT9MYoce24Ogyxt4ImcIBbg/AKG0Vh/42SVJDu3hHBNO+FpoIw3GZV7MyZ/jT0yXRnTGLJ9qB0PFJWp/8/rGZT24jpysolPaU56O8K5wkYWAdcIeZOkVgKcQe95oQacS8ul4dwqIEB0WIB74t/Rp4zyQhtZSnGVo+M+i7aGcSNTbsCThQ0p7g8hIdJPXfSFSM/UL/JB7hkTLcc3JFCun5tZ+y83xTGtcaazUUuoaD3A8GhcM6pw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y4P3z2JjSfCM9bP4l9+9nLv+sps2uWgWsOxldL5wp9s=;
- b=RKtSeMOvehGvZ0GfMntpUFDry7hPBCWo2XUUoeEdsYmR40fTPXxzDrnzNvifECb+ApetUZ3sLB/KCAX8PH46wVx16smb5mTKpcR177UeUD8W5KNAl1Lgjf2Dteb0BZr8R7+DZkMNIh8M5pBqDK/Fido1tDmQrTDfcMSW2ty3Vng=
-Received: from BN8PR04CA0043.namprd04.prod.outlook.com (2603:10b6:408:d4::17)
- by PH8PR12MB7231.namprd12.prod.outlook.com (2603:10b6:510:225::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Tue, 29 Nov
- 2022 12:46:05 +0000
-Received: from BN8NAM11FT053.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:d4:cafe::8b) by BN8PR04CA0043.outlook.office365.com
- (2603:10b6:408:d4::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23 via Frontend
- Transport; Tue, 29 Nov 2022 12:46:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT053.mail.protection.outlook.com (10.13.177.209) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5857.22 via Frontend Transport; Tue, 29 Nov 2022 12:46:03 +0000
-Received: from pp-server-two.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 29 Nov
- 2022 06:46:01 -0600
-From:   xinhui pan <xinhui.pan@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     <daniel@ffwll.ch>, <matthew.auld@intel.com>,
-        <christian.koenig@amd.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <intel-gfx@lists.freedesktop.org>,
-        <arunpravin.paneerselvam@amd.com>,
-        "xinhui pan" <xinhui.pan@amd.com>
-Subject: [PATCH v5] drm: Optimise for continuous memory allocation
-Date:   Tue, 29 Nov 2022 20:45:38 +0800
-Message-ID: <20221129124538.177870-1-xinhui.pan@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 29 Nov 2022 07:46:02 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5764B2B602;
+        Tue, 29 Nov 2022 04:45:58 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NM2BR5X7gz4f42V7;
+        Tue, 29 Nov 2022 20:45:51 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+        by APP2 (Coremail) with SMTP id Syh0CgCXrbj8_oVj8E1cBQ--.13678S2;
+        Tue, 29 Nov 2022 20:45:52 +0800 (CST)
+Subject: Re: [net-next] bpf: avoid hashtab deadlock with try_lock
+To:     Boqun Feng <boqun.feng@gmail.com>,
+        Tonghao Zhang <xiangxia.m.yue@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>
+Cc:     netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        "houtao1@huawei.com" <houtao1@huawei.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20221121100521.56601-1-xiangxia.m.yue@gmail.com>
+ <20221121100521.56601-2-xiangxia.m.yue@gmail.com>
+ <7ed2f531-79a3-61fe-f1c2-b004b752c3f7@huawei.com>
+ <CAMDZJNUiPOcnpNg8tM4xCoJABJz_3=AaXLTm5ofQg64mGDkB_A@mail.gmail.com>
+ <9278cf3f-dfb6-78eb-8862-553545dac7ed@huawei.com>
+ <41eda0ea-0ed4-1ffb-5520-06fda08e5d38@huawei.com>
+ <CAMDZJNVSv3Msxw=5PRiXyO8bxNsA-4KyxU8BMCVyHxH-3iuq2Q@mail.gmail.com>
+ <fdb3b69c-a29c-2d5b-a122-9d98ea387fda@huawei.com>
+ <CAMDZJNWTry2eF_n41a13tKFFSSLFyp3BVKakOOWhSDApdp0f=w@mail.gmail.com>
+ <CA+khW7jgsyFgBqU7hCzZiSSANE7f=A+M-0XbcKApz6Nr-ZnZDg@mail.gmail.com>
+ <07a7491e-f391-a9b2-047e-cab5f23decc5@huawei.com>
+ <CAMDZJNUTaiXMe460P7a7NfK1_bbaahpvi3Q9X85o=G7v9x-w=g@mail.gmail.com>
+From:   Hou Tao <houtao@huaweicloud.com>
+Message-ID: <59fc54b7-c276-2918-6741-804634337881@huaweicloud.com>
+Date:   Tue, 29 Nov 2022 20:45:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
+In-Reply-To: <CAMDZJNUTaiXMe460P7a7NfK1_bbaahpvi3Q9X85o=G7v9x-w=g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT053:EE_|PH8PR12MB7231:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0083d91d-ff1f-4f33-81b8-08dad207ad47
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4+rHV+GTZ+n7/DjhGrDewFMhgFYrurUbQ1PX/XJcRkOpiXtI/SPlFwts6tTuU9u+1IlwKNJ9XFt5Ie843UTlW3UusVaYq4zgu+smPlMtdOy1UswFcmadoxeFPR56dNxkpwCUpxxJnM1E4WulHUSxFt52BDoeZzREIpaHEo3401u8uIoBHp2hfSkgd+wrgCqNGBxFKb0KSsSXfY9/AgvdWVLocAnTBsSGI2vQMnGItAdc8xVWMBn1db2ZXYZ8CwcjUSu8y4WaBNXpdT+YxnHtwb6CNwLahlEq8RNj7YKQjKpRbHFsk8BZc8NoV/0ZTLPNyakpgEA0yOJHGt2A4P3yBG0epsrd3GvIheMX2H7fxPNJBFUjv0o8YCvea0OKJmAdZH6Xk79DAPcRtYBgLZyUErulK6eoI+hkevuRfPkH7Ig0MHGPnhMziZnsgYulcirs/mEQHuxQpmKCBXxGlfyZCu/WpgNdqTDEkkFJo44DhUhHyUXSDjcz0BjAhTE4N/8UaYMFwkYr0kk40Gir9awLEgWQTfbCt0JU9Gz7/ETH/97Vj9exk16JhUWNhNRJ6xZH20WFJlZsinK6qetWKVJJIwlv+aN5HNV881B+szOrTBxRsLbAlqgIjo23sC6rC4nj3PLtrIy1MtsRJXaDev0DbjdBDPL83u1YQOaiFTY3+B9gwRsEBzsNDBXZqp8i1jIIWQKP8dMtuchnXiD7ncTgR+EBZaU3R6hM38ATiF0APj4=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(396003)(39860400002)(346002)(451199015)(46966006)(36840700001)(40470700004)(2906002)(83380400001)(36860700001)(40480700001)(1076003)(336012)(41300700001)(2616005)(16526019)(70586007)(70206006)(186003)(40460700003)(86362001)(36756003)(81166007)(356005)(82740400003)(26005)(6916009)(54906003)(82310400005)(8936002)(5660300002)(4326008)(8676002)(426003)(47076005)(478600001)(316002)(7696005)(6666004)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 12:46:03.9626
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0083d91d-ff1f-4f33-81b8-08dad207ad47
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT053.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7231
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-CM-TRANSID: Syh0CgCXrbj8_oVj8E1cBQ--.13678S2
+X-Coremail-Antispam: 1UD129KBjvAXoW3Aw1xXFy5KF13Ar45WF1kAFb_yoW8Gr1xAo
+        Wxur4fCr48urn5CFWfX345Gr43Jas7AF47Aryjkr4DKr17tFWDAry8G39rJw4UAF1rCF43
+        uw17Xw1kua4UAF97n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUYI7kC6x804xWl14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK
+        8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
+        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF
+        7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7
+        CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCYjI0SjxkI
+        62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8
+        ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+        CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
+        uYvjxUFDGOUUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently drm-buddy does not have full knowledge of continuous memory.
+Hi,
 
-Adding a new member leaf_link which links all leaf blocks in asceding
-order. Finding continuous memory within this leaf_link is easier.
+On 11/29/2022 2:06 PM, Tonghao Zhang wrote:
+> On Tue, Nov 29, 2022 at 12:32 PM Hou Tao <houtao1@huawei.com> wrote:
+>> Hi,
+>>
+>> On 11/29/2022 5:55 AM, Hao Luo wrote:
+>>> On Sun, Nov 27, 2022 at 7:15 PM Tonghao Zhang <xiangxia.m.yue@gmail.com> wrote:
+>>> Hi Tonghao,
+>>>
+>>> With a quick look at the htab_lock_bucket() and your problem
+>>> statement, I agree with Hou Tao that using hash &
+>>> min(HASHTAB_MAP_LOCK_MASK, n_bucket - 1) to index in map_locked seems
+>>> to fix the potential deadlock. Can you actually send your changes as
+>>> v2 so we can take a look and better help you? Also, can you explain
+>>> your solution in your commit message? Right now, your commit message
+>>> has only a problem statement and is not very clear. Please include
+>>> more details on what you do to fix the issue.
+>>>
+>>> Hao
+>> It would be better if the test case below can be rewritten as a bpf selftests.
+>> Please see comments below on how to improve it and reproduce the deadlock.
+>>>> Hi
+>>>> only a warning from lockdep.
+>> Thanks for your details instruction.  I can reproduce the warning by using your
+>> setup. I am not a lockdep expert, it seems that fixing such warning needs to set
+>> different lockdep class to the different bucket. Because we use map_locked to
+>> protect the acquisition of bucket lock, so I think we can define  lock_class_key
+>> array in bpf_htab (e.g., lockdep_key[HASHTAB_MAP_LOCK_COUNT]) and initialize the
+>> bucket lock accordingly.
+The proposed lockdep solution doesn't work. Still got lockdep warning after
+that, so cc +locking expert +lkml.org for lockdep help.
 
-Say, memory of order 3 can be combined with corresponding memory of
-order 3 or 2+2 or 1+2+1 or 0+1+2+0 or 0+2+1+0.
-Without this patch, eviction is the final step to cleanup memory.
-Now there is a chance to delay the evction and then reduce the total
-count of evction.
+Hi lockdep experts,
 
-Signed-off-by: xinhui pan <xinhui.pan@amd.com>
----
-change from v4:
-Fix offset check by using <= instead of <
-Change patch description.
+We are trying to fix the following lockdep warning from bpf subsystem:
 
-change from v3:
-reworked totally. adding leaf_link.
+[   36.092222] ================================
+[   36.092230] WARNING: inconsistent lock state
+[   36.092234] 6.1.0-rc5+ #81 Tainted: G            E
+[   36.092236] --------------------------------
+[   36.092237] inconsistent {INITIAL USE} -> {IN-NMI} usage.
+[   36.092238] perf/1515 [HC1[1]:SC0[0]:HE0:SE1] takes:
+[   36.092242] ffff888341acd1a0 (&htab->lockdep_key){....}-{2:2}, at:
+htab_lock_bucket+0x4d/0x58
+[   36.092253] {INITIAL USE} state was registered at:
+[   36.092255]   mark_usage+0x1d/0x11d
+[   36.092262]   __lock_acquire+0x3c9/0x6ed
+[   36.092266]   lock_acquire+0x23d/0x29a
+[   36.092270]   _raw_spin_lock_irqsave+0x43/0x7f
+[   36.092274]   htab_lock_bucket+0x4d/0x58
+[   36.092276]   htab_map_delete_elem+0x82/0xfb
+[   36.092278]   map_delete_elem+0x156/0x1ac
+[   36.092282]   __sys_bpf+0x138/0xb71
+[   36.092285]   __do_sys_bpf+0xd/0x15
+[   36.092288]   do_syscall_64+0x6d/0x84
+[   36.092291]   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   36.092295] irq event stamp: 120346
+[   36.092296] hardirqs last  enabled at (120345): [<ffffffff8180b97f>]
+_raw_spin_unlock_irq+0x24/0x39
+[   36.092299] hardirqs last disabled at (120346): [<ffffffff81169e85>]
+generic_exec_single+0x40/0xb9
+[   36.092303] softirqs last  enabled at (120268): [<ffffffff81c00347>]
+__do_softirq+0x347/0x387
+[   36.092307] softirqs last disabled at (120133): [<ffffffff810ba4f0>]
+__irq_exit_rcu+0x67/0xc6
+[   36.092311]
+[   36.092311] other info that might help us debug this:
+[   36.092312]  Possible unsafe locking scenario:
+[   36.092312]
+[   36.092313]        CPU0
+[   36.092313]        ----
+[   36.092314]   lock(&htab->lockdep_key);
+[   36.092315]   <Interrupt>
+[   36.092316]     lock(&htab->lockdep_key);
+[   36.092318]
+[   36.092318]  *** DEADLOCK ***
+[   36.092318]
+[   36.092318] 3 locks held by perf/1515:
+[   36.092320]  #0: ffff8881b9805cc0 (&cpuctx_mutex){+.+.}-{4:4}, at:
+perf_event_ctx_lock_nested+0x8e/0xba
+[   36.092327]  #1: ffff8881075ecc20 (&event->child_mutex){+.+.}-{4:4}, at:
+perf_event_for_each_child+0x35/0x76
+[   36.092332]  #2: ffff8881b9805c20 (&cpuctx_lock){-.-.}-{2:2}, at:
+perf_ctx_lock+0x12/0x27
+[   36.092339]
+[   36.092339] stack backtrace:
+[   36.092341] CPU: 0 PID: 1515 Comm: perf Tainted: G            E     
+6.1.0-rc5+ #81
+[   36.092344] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+[   36.092349] Call Trace:
+[   36.092351]  <NMI>
+[   36.092354]  dump_stack_lvl+0x57/0x81
+[   36.092359]  lock_acquire+0x1f4/0x29a
+[   36.092363]  ? handle_pmi_common+0x13f/0x1f0
+[   36.092366]  ? htab_lock_bucket+0x4d/0x58
+[   36.092371]  _raw_spin_lock_irqsave+0x43/0x7f
+[   36.092374]  ? htab_lock_bucket+0x4d/0x58
+[   36.092377]  htab_lock_bucket+0x4d/0x58
+[   36.092379]  htab_map_update_elem+0x11e/0x220
+[   36.092386]  bpf_prog_f3a535ca81a8128a_bpf_prog2+0x3e/0x42
+[   36.092392]  trace_call_bpf+0x177/0x215
+[   36.092398]  perf_trace_run_bpf_submit+0x52/0xaa
+[   36.092403]  ? x86_pmu_stop+0x97/0x97
+[   36.092407]  perf_trace_nmi_handler+0xb7/0xe0
+[   36.092415]  nmi_handle+0x116/0x254
+[   36.092418]  ? x86_pmu_stop+0x97/0x97
+[   36.092423]  default_do_nmi+0x3d/0xf6
+[   36.092428]  exc_nmi+0xa1/0x109
+[   36.092432]  end_repeat_nmi+0x16/0x67
+[   36.092436] RIP: 0010:wrmsrl+0xd/0x1b
+[   36.092441] Code: 04 01 00 00 c6 84 07 48 01 00 00 01 5b e9 46 15 80 00 5b c3
+cc cc cc cc c3 cc cc cc cc 48 89 f2 89 f9 89 f0 48 c1 ea 20 0f 30 <66> 90 c3 cc
+cc cc cc 31 d2 e9 2f 04 49 00 0f 1f 44 00 00 40 0f6
+[   36.092443] RSP: 0018:ffffc900043dfc48 EFLAGS: 00000002
+[   36.092445] RAX: 000000000000000f RBX: ffff8881b96153e0 RCX: 000000000000038f
+[   36.092447] RDX: 0000000000000007 RSI: 000000070000000f RDI: 000000000000038f
+[   36.092449] RBP: 000000070000000f R08: ffffffffffffffff R09: ffff8881053bdaa8
+[   36.092451] R10: ffff8881b9805d40 R11: 0000000000000005 R12: ffff8881b9805c00
+[   36.092452] R13: 0000000000000000 R14: 0000000000000000 R15: ffff8881075ec970
+[   36.092460]  ? wrmsrl+0xd/0x1b
+[   36.092465]  ? wrmsrl+0xd/0x1b
+[   36.092469]  </NMI>
+[   36.092469]  <TASK>
+[   36.092470]  __intel_pmu_enable_all.constprop.0+0x7c/0xaf
+[   36.092475]  event_function+0xb6/0xd3
+[   36.092478]  ? cpu_to_node+0x1a/0x1a
+[   36.092482]  ? cpu_to_node+0x1a/0x1a
+[   36.092485]  remote_function+0x1e/0x4c
+[   36.092489]  generic_exec_single+0x48/0xb9
+[   36.092492]  ? __lock_acquire+0x666/0x6ed
+[   36.092497]  smp_call_function_single+0xbf/0x106
+[   36.092499]  ? cpu_to_node+0x1a/0x1a
+[   36.092504]  ? kvm_sched_clock_read+0x5/0x11
+[   36.092508]  ? __perf_event_task_sched_in+0x13d/0x13d
+[   36.092513]  cpu_function_call+0x47/0x69
+[   36.092516]  ? perf_event_update_time+0x52/0x52
+[   36.092519]  event_function_call+0x89/0x117
+[   36.092521]  ? __perf_event_task_sched_in+0x13d/0x13d
+[   36.092526]  ? _perf_event_disable+0x4a/0x4a
+[   36.092528]  perf_event_for_each_child+0x3d/0x76
+[   36.092532]  ? _perf_event_disable+0x4a/0x4a
+[   36.092533]  _perf_ioctl+0x564/0x590
+[   36.092537]  ? __lock_release+0xd5/0x1b0
+[   36.092543]  ? perf_event_ctx_lock_nested+0x8e/0xba
+[   36.092547]  perf_ioctl+0x42/0x5f
+[   36.092551]  vfs_ioctl+0x1e/0x2f
+[   36.092554]  __do_sys_ioctl+0x66/0x89
+[   36.092559]  do_syscall_64+0x6d/0x84
+[   36.092563]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   36.092566] RIP: 0033:0x7fe7110f362b
+[   36.092569] Code: 0f 1e fa 48 8b 05 5d b8 2c 00 64 c7 00 26 00 00 00 48 c7 c0
+ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa b8 10 00 00 00 0f 05 <48> 3d 01 f0
+ff ff 73 01 c3 48 8b 0d 2d b8 2c 00 f7 d8 64 89 018
+[   36.092570] RSP: 002b:00007ffebb8e4b08 EFLAGS: 00000246 ORIG_RAX:
+0000000000000010
+[   36.092573] RAX: ffffffffffffffda RBX: 0000000000002400 RCX: 00007fe7110f362b
+[   36.092575] RDX: 0000000000000000 RSI: 0000000000002400 RDI: 0000000000000013
+[   36.092576] RBP: 00007ffebb8e4b40 R08: 0000000000000001 R09: 000055c1db4a5b40
+[   36.092577] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+[   36.092579] R13: 000055c1db3b2a30 R14: 0000000000000000 R15: 0000000000000000
+[   36.092586]  </TASK>
 
-change from v2:
-search continuous block in nearby root if needed
+The lockdep warning is a false alarm, because per-cpu map_locked must be zero
+before acquire b->raw_lock. If b->raw_lock has already been acquired by a normal
+process through htab_map_update_elem(), then a NMI interrupts the process and
+tries to acquire the same b->raw_lock, the acquisition will fail because per-cpu
+map_locked has already been increased by the process.
 
-change from v1:
-implement top-down continuous allocation
----
- drivers/gpu/drm/drm_buddy.c | 108 +++++++++++++++++++++++++++++++++---
- include/drm/drm_buddy.h     |   1 +
- 2 files changed, 102 insertions(+), 7 deletions(-)
+So beside using lockdep_off() and lockdep_on() to disable/enable lockdep
+temporarily in htab_lock_bucket() and htab_unlock_bucket(), are there other ways
+to fix the lockdep warning ?
 
-diff --git a/drivers/gpu/drm/drm_buddy.c b/drivers/gpu/drm/drm_buddy.c
-index 11bb59399471..00dd6da1e948 100644
---- a/drivers/gpu/drm/drm_buddy.c
-+++ b/drivers/gpu/drm/drm_buddy.c
-@@ -80,6 +80,7 @@ int drm_buddy_init(struct drm_buddy *mm, u64 size, u64 chunk_size)
- {
- 	unsigned int i;
- 	u64 offset;
-+	LIST_HEAD(leaf);
- 
- 	if (size < chunk_size)
- 		return -EINVAL;
-@@ -136,6 +137,7 @@ int drm_buddy_init(struct drm_buddy *mm, u64 size, u64 chunk_size)
- 			goto out_free_roots;
- 
- 		mark_free(mm, root);
-+		list_add_tail(&root->leaf_link, &leaf);
- 
- 		BUG_ON(i > mm->max_order);
- 		BUG_ON(drm_buddy_block_size(mm, root) < chunk_size);
-@@ -147,6 +149,7 @@ int drm_buddy_init(struct drm_buddy *mm, u64 size, u64 chunk_size)
- 		i++;
- 	} while (size);
- 
-+	list_del(&leaf);
- 	return 0;
- 
- out_free_roots:
-@@ -205,6 +208,9 @@ static int split_block(struct drm_buddy *mm,
- 	mark_free(mm, block->left);
- 	mark_free(mm, block->right);
- 
-+	list_add(&block->right->leaf_link, &block->leaf_link);
-+	list_add(&block->left->leaf_link, &block->leaf_link);
-+	list_del(&block->leaf_link);
- 	mark_split(block);
- 
- 	return 0;
-@@ -256,6 +262,9 @@ static void __drm_buddy_free(struct drm_buddy *mm,
- 			break;
- 
- 		list_del(&buddy->link);
-+		list_add(&parent->leaf_link, &block->leaf_link);
-+		list_del(&buddy->leaf_link);
-+		list_del(&block->leaf_link);
- 
- 		drm_block_free(mm, block);
- 		drm_block_free(mm, buddy);
-@@ -386,6 +395,78 @@ alloc_range_bias(struct drm_buddy *mm,
- 	return ERR_PTR(err);
- }
- 
-+static struct drm_buddy_block *
-+find_continuous_blocks(struct drm_buddy *mm,
-+		       int order,
-+		       unsigned long flags,
-+		       struct drm_buddy_block **rblock)
-+{
-+	struct list_head *head = &mm->free_list[order];
-+	struct drm_buddy_block *free_block, *max_block = NULL, *end, *begin;
-+	u64 pages = BIT(order + 1);
-+	u64 cur_pages;
-+
-+	list_for_each_entry(free_block, head, link) {
-+		if (max_block) {
-+			if (!(flags & DRM_BUDDY_TOPDOWN_ALLOCATION))
-+				break;
-+
-+			if (drm_buddy_block_offset(free_block) <
-+			    drm_buddy_block_offset(max_block))
-+				continue;
-+		}
-+
-+		cur_pages = BIT(order);
-+		begin = end = free_block;
-+		while (true) {
-+			struct drm_buddy_block *prev, *next;
-+			int prev_order, next_order;
-+
-+			prev = list_prev_entry(begin, leaf_link);
-+			if (!drm_buddy_block_is_free(prev) ||
-+			    drm_buddy_block_offset(prev) >=
-+			    drm_buddy_block_offset(begin)) {
-+				prev = NULL;
-+			}
-+			next = list_next_entry(end, leaf_link);
-+			if (!drm_buddy_block_is_free(next) ||
-+			    drm_buddy_block_offset(next) <=
-+			    drm_buddy_block_offset(end)) {
-+				next = NULL;
-+			}
-+			if (!prev && !next)
-+				break;
-+
-+			prev_order = prev ? drm_buddy_block_order(prev) : -1;
-+			next_order = next ? drm_buddy_block_order(next) : -1;
-+			if (next_order >= prev_order) {
-+				BUG_ON(drm_buddy_block_offset(end) +
-+				       drm_buddy_block_size(mm, end) !=
-+				       drm_buddy_block_offset(next));
-+				end = next;
-+				cur_pages += BIT(drm_buddy_block_order(next));
-+			}
-+			if (prev_order >= next_order) {
-+				BUG_ON(drm_buddy_block_offset(prev) +
-+				       drm_buddy_block_size(mm, prev) !=
-+				       drm_buddy_block_offset(begin));
-+				begin = prev;
-+				cur_pages += BIT(drm_buddy_block_order(prev));
-+			}
-+			if (pages == cur_pages)
-+				break;
-+			BUG_ON(pages < cur_pages);
-+		}
-+
-+		if (pages > cur_pages)
-+			continue;
-+
-+		*rblock = end;
-+		max_block = begin;
-+	}
-+	return max_block;
-+}
-+
- static struct drm_buddy_block *
- get_maxblock(struct list_head *head)
- {
-@@ -637,7 +718,7 @@ int drm_buddy_alloc_blocks(struct drm_buddy *mm,
- 			   struct list_head *blocks,
- 			   unsigned long flags)
- {
--	struct drm_buddy_block *block = NULL;
-+	struct drm_buddy_block *block = NULL, *rblock = NULL;
- 	unsigned int min_order, order;
- 	unsigned long pages;
- 	LIST_HEAD(allocated);
-@@ -689,17 +770,30 @@ int drm_buddy_alloc_blocks(struct drm_buddy *mm,
- 				break;
- 
- 			if (order-- == min_order) {
-+				if (!(flags & DRM_BUDDY_RANGE_ALLOCATION) &&
-+				    min_order != 0 && pages == BIT(order + 1)) {
-+					block = find_continuous_blocks(mm,
-+								       order,
-+								       flags,
-+								       &rblock);
-+					if (block)
-+						break;
-+				}
- 				err = -ENOSPC;
- 				goto err_free;
- 			}
- 		} while (1);
- 
--		mark_allocated(block);
--		mm->avail -= drm_buddy_block_size(mm, block);
--		kmemleak_update_trace(block);
--		list_add_tail(&block->link, &allocated);
--
--		pages -= BIT(order);
-+		do {
-+			mark_allocated(block);
-+			mm->avail -= drm_buddy_block_size(mm, block);
-+			kmemleak_update_trace(block);
-+			list_add_tail(&block->link, &allocated);
-+			pages -= BIT(drm_buddy_block_order(block));
-+			if (block == rblock || !rblock)
-+				break;
-+			block = list_next_entry(block, leaf_link);
-+		} while (true);
- 
- 		if (!pages)
- 			break;
-diff --git a/include/drm/drm_buddy.h b/include/drm/drm_buddy.h
-index 572077ff8ae7..c5437bd4f4f3 100644
---- a/include/drm/drm_buddy.h
-+++ b/include/drm/drm_buddy.h
-@@ -50,6 +50,7 @@ struct drm_buddy_block {
- 	 */
- 	struct list_head link;
- 	struct list_head tmp_link;
-+	struct list_head leaf_link;
- };
- 
- /* Order-zero must be at least PAGE_SIZE */
--- 
-2.34.1
+Thanks,
+Tao
+
+
+
+
+> Hi
+> Thanks for your reply. define the lock_class_key array looks good.
+> Last question: how about using  raw_spin_trylock_irqsave, if the
+> bucket is locked on the same or other cpu.
+> raw_spin_trylock_irqsave will return the false, we should return the
+> -EBUSY in htab_lock_bucket.
+>
+> static inline int htab_lock_bucket(struct bucket *b,
+>                                    unsigned long *pflags)
+> {
+>         unsigned long flags;
+>
+>         if (!raw_spin_trylock_irqsave(&b->raw_lock, flags))
+>                 return -EBUSY;
+>
+>         *pflags = flags;
+>         return 0;
+> }
+>
+>>>> 1. the kernel .config
+>>>> #
+>>>> # Debug Oops, Lockups and Hangs
+>>>> #
+>>>> CONFIG_PANIC_ON_OOPS=y
+>>>> CONFIG_PANIC_ON_OOPS_VALUE=1
+>>>> CONFIG_PANIC_TIMEOUT=0
+>>>> CONFIG_LOCKUP_DETECTOR=y
+>>>> CONFIG_SOFTLOCKUP_DETECTOR=y
+>>>> # CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC is not set
+>>>> CONFIG_HARDLOCKUP_DETECTOR_PERF=y
+>>>> CONFIG_HARDLOCKUP_CHECK_TIMESTAMP=y
+>>>> CONFIG_HARDLOCKUP_DETECTOR=y
+>>>> CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
+>>>> CONFIG_DETECT_HUNG_TASK=y
+>>>> CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=120
+>>>> # CONFIG_BOOTPARAM_HUNG_TASK_PANIC is not set
+>>>> # CONFIG_WQ_WATCHDOG is not set
+>>>> # CONFIG_TEST_LOCKUP is not set
+>>>> # end of Debug Oops, Lockups and Hangs
+>>>>
+>>>> 2. bpf.c, the map size is 2.
+>>>> struct {
+>>>> __uint(type, BPF_MAP_TYPE_HASH);
+>> Adding __uint(map_flags, BPF_F_ZERO_SEED); to ensure there will be no seed for
+>> hash calculation, so we can use key=4 and key=20 to construct the case that
+>> these two keys have the same bucket index but have different map_locked index.
+>>>> __uint(max_entries, 2);
+>>>> __uint(key_size, sizeof(unsigned int));
+>>>> __uint(value_size, sizeof(unsigned int));
+>>>> } map1 SEC(".maps");
+>>>>
+>>>> static int bpf_update_data()
+>>>> {
+>>>> unsigned int val = 1, key = 0;
+>> key = 20
+>>>> return bpf_map_update_elem(&map1, &key, &val, BPF_ANY);
+>>>> }
+>>>>
+>>>> SEC("kprobe/ip_rcv")
+>>>> int bpf_prog1(struct pt_regs *regs)
+>>>> {
+>>>> bpf_update_data();
+>>>> return 0;
+>>>> }
+>> kprobe on ip_rcv is unnecessary, you can just remove it.
+>>>> SEC("tracepoint/nmi/nmi_handler")
+>>>> int bpf_prog2(struct pt_regs *regs)
+>>>> {
+>>>> bpf_update_data();
+>>>> return 0;
+>>>> }
+>> Please use SEC("fentry/nmi_handle") instead of SEC("tracepoint") and unfold
+>> bpf_update_data(), because the running of bpf program on tracepoint will be
+>> blocked by bpf_prog_active which will be increased bpf_map_update_elem through
+>> bpf_disable_instrumentation().
+>>>> char _license[] SEC("license") = "GPL";
+>>>> unsigned int _version SEC("version") = LINUX_VERSION_CODE;
+>>>>
+>>>> 3. bpf loader.
+>>>> #include "kprobe-example.skel.h"
+>>>>
+>>>> #include <unistd.h>
+>>>> #include <errno.h>
+>>>>
+>>>> #include <bpf/bpf.h>
+>>>>
+>>>> int main()
+>>>> {
+>>>> struct kprobe_example *skel;
+>>>> int map_fd, prog_fd;
+>>>> int i;
+>>>> int err = 0;
+>>>>
+>>>> skel = kprobe_example__open_and_load();
+>>>> if (!skel)
+>>>> return -1;
+>>>>
+>>>> err = kprobe_example__attach(skel);
+>>>> if (err)
+>>>> goto cleanup;
+>>>>
+>>>> /* all libbpf APIs are usable */
+>>>> prog_fd = bpf_program__fd(skel->progs.bpf_prog1);
+>>>> map_fd = bpf_map__fd(skel->maps.map1);
+>>>>
+>>>> printf("map_fd: %d\n", map_fd);
+>>>>
+>>>> unsigned int val = 0, key = 0;
+>>>>
+>>>> while (1) {
+>>>> bpf_map_delete_elem(map_fd, &key);
+>> No needed neither. Only do bpf_map_update_elem() is OK. Also change key=0 from
+>> key=4, so it will have the same bucket index as key=20 but have different
+>> map_locked index.
+>>>> bpf_map_update_elem(map_fd, &key, &val, BPF_ANY);
+>>>> }
+>> Also need to pin the process on a specific CPU (e.g., CPU 0)
+>>>> cleanup:
+>>>> kprobe_example__destroy(skel);
+>>>> return err;
+>>>> }
+>>>>
+>>>> 4. run the bpf loader and perf record for nmi interrupts.  the warming occurs
+>> For perf event, you can reference prog_tests/find_vma.c on how to using
+>> perf_event_open to trigger a perf nmi interrupt. The perf event also needs to
+>> pin on a specific CPU as the caller of bpf_map_update_elem() does.
+>>
+>>>> --
+>>>> Best regards, Tonghao
+>>> .
+>
 
