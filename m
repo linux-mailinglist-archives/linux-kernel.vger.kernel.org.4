@@ -2,119 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BAF63BB0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 08:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D8963BB0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 08:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiK2Hyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 02:54:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46028 "EHLO
+        id S230030AbiK2Hyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 02:54:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiK2HyV (ORCPT
+        with ESMTP id S230024AbiK2Hy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 02:54:21 -0500
-X-Greylist: delayed 75338 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Nov 2022 23:54:19 PST
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A8351C2E;
-        Mon, 28 Nov 2022 23:54:19 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        Tue, 29 Nov 2022 02:54:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4617E3FB83
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 23:54:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NLvk158g0z4y0vY;
-        Tue, 29 Nov 2022 15:54:17 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2AT7s6IS016751;
-        Tue, 29 Nov 2022 15:54:06 +0800 (+08)
-        (envelope-from zhang.songyi@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Tue, 29 Nov 2022 15:54:07 +0800 (CST)
-Date:   Tue, 29 Nov 2022 15:54:07 +0800 (CST)
-X-Zmail-TransId: 2afa6385ba9fffffffffa9e83e62
-X-Mailer: Zmail v1.0
-Message-ID: <202211291554079687539@zte.com.cn>
-Mime-Version: 1.0
-From:   <zhang.songyi@zte.com.cn>
-To:     <leon@kernel.org>
-Cc:     <yishaih@nvidia.com>, <jgg@ziepe.ca>, <linux-rdma@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <zhangsongyi.cgel@gmail.com>
-Subject: =?UTF-8?B?W1BBVENIIHJkbWEtbmV4dF0gUkRNQS9tbHg0OiByZW1vdmUgTlVMTCBjaGVjayBiZWZvcmUgZGV2X3twdXQsIGhvbGR9?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2AT7s6IS016751
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 6385BAA9.000 by FangMail milter!
-X-FangMail-Envelope: 1669708457/4NLvk158g0z4y0vY/6385BAA9.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<zhang.songyi@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6385BAA9.000/4NLvk158g0z4y0vY
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5BCB615B7
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:54:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF9C1C433D6;
+        Tue, 29 Nov 2022 07:54:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669708466;
+        bh=7vBalyth42QY7Wd4sXJsLJfQcQQNSL1bq/tPn3eVsdM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XTMlAi9MfhgmUFVbuoFKrES+oaVwje+i/LLzM+Vp3DfDoJkDu2LHKztVxtDwXeC0y
+         7nxC5MOI6rIk4cJFLY5lOxpqmk3YX8eTi2iQ0LxYjG5ZhaGTthjrEI+xZ5vMwqN8lv
+         TMa41HvKITGaoJksDNa5bw2VZgqe1BXYEhef275k=
+Date:   Tue, 29 Nov 2022 08:54:23 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Yang Yingliang <yangyingliang@huawei.com>, kraig@google.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] genirq/irqdesc: fix WARNING in irq_sysfs_del()
+Message-ID: <Y4W6rzRZ/7llmsVx@kroah.com>
+References: <20221128151612.1786122-1-yangyingliang@huawei.com>
+ <Y4Tt2NIcPFeoss4s@kroah.com>
+ <87zgcavrhm.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87zgcavrhm.ffs@tglx>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhang songyi <zhang.songyi@zte.com.cn>
+On Mon, Nov 28, 2022 at 07:55:17PM +0100, Thomas Gleixner wrote:
+> On Mon, Nov 28 2022 at 18:20, Greg KH wrote:
+> > On Mon, Nov 28, 2022 at 11:16:12PM +0800, Yang Yingliang wrote:
+> >> @@ -292,6 +292,8 @@ static void irq_sysfs_add(int irq, struct irq_desc *desc)
+> >>  		 */
+> >>  		if (kobject_add(&desc->kobj, irq_kobj_base, "%d", irq))
+> >>  			pr_warn("Failed to add kobject for irq %d\n", irq);
+> >> +		else
+> >> +			desc->sysfs_added = true;
+> >
+> > Wait, no.  Why are you just not properly failing and unwinding here?
+> 
+> There is an issue here.
+> 
+> sysfs is not yet available when the first interrupts are allocated. So
+> we add the sysfs files late in the boot.
+> 
+> So what can we do if that fails? Unwind the boot process? :)
+> 
+> Sure we can fail after sysfs has been initialized, but that's
+> inconsistent at best and we need some special treatment for the late add
+> anyway.
+> 
+> I agree that this is not pretty, but the resulting choices are all but
+> pretty.
 
-The call netdev_{put, hold} of dev_{put, hold} will check NULL,
-so there is no need to check before using dev_{put, hold}.
+Ah, ok, that makes more sense.  In this case, yes, the flag should be
+fine to have.
 
-Fix the following coccicheck warnings:
-/drivers/infiniband/hw/mlx4/main.c:1311:2-10: WARNING:
-WARNING  NULL check before dev_{put, hold} functions is not needed.
-
-/drivers/infiniband/hw/mlx4/main.c:148:2-10: WARNING:
-WARNING  NULL check before dev_{put, hold} functions is not needed.
-
-/drivers/infiniband/hw/mlx4/main.c:1959:3-11: WARNING:
-WARNING  NULL check before dev_{put, hold} functions is not needed.
-
-/drivers/infiniband/hw/mlx4/main.c:1962:3-10: WARNING:
-WARNING  NULL check before dev_{put, hold} functions is not needed.
-
-Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
----
- drivers/infiniband/hw/mlx4/main.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/infiniband/hw/mlx4/main.c b/drivers/infiniband/hw/mlx4/main.c
-index ba47874f90d3..dceebcd885bb 100644
---- a/drivers/infiniband/hw/mlx4/main.c
-+++ b/drivers/infiniband/hw/mlx4/main.c
-@@ -144,8 +144,7 @@ static struct net_device *mlx4_ib_get_netdev(struct ib_device *device,
-                        }
-                }
-        }
--       if (dev)
--               dev_hold(dev);
-+       dev_hold(dev);
-
-        rcu_read_unlock();
-        return dev;
-@@ -1307,8 +1306,7 @@ int mlx4_ib_add_mc(struct mlx4_ib_dev *mdev, struct mlx4_ib_qp *mqp,
-
-        spin_lock_bh(&mdev->iboe.lock);
-        ndev = mdev->iboe.netdevs[mqp->port - 1];
--       if (ndev)
--               dev_hold(ndev);
-+       dev_hold(ndev);
-        spin_unlock_bh(&mdev->iboe.lock);
-
-        if (ndev) {
-@@ -1955,11 +1953,9 @@ static int mlx4_ib_mcg_detach(struct ib_qp *ibqp, union ib_gid *gid, u16 lid)
-        if (ge) {
-                spin_lock_bh(&mdev->iboe.lock);
-                ndev = ge->added ? mdev->iboe.netdevs[ge->port - 1] : NULL;
--               if (ndev)
--                       dev_hold(ndev);
-+               dev_hold(ndev);
-                spin_unlock_bh(&mdev->iboe.lock);
--               if (ndev)
--                       dev_put(ndev);
-+               dev_put(ndev);
-                list_del(&ge->list);
-                kfree(ge);
-        } else
---
-2.25.1
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
