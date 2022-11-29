@@ -2,100 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900DA63BDC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 11:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EE263BDC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 11:17:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbiK2KPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 05:15:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
+        id S230011AbiK2KRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 05:17:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232540AbiK2KO4 (ORCPT
+        with ESMTP id S232487AbiK2KRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 05:14:56 -0500
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E72D1FFA1
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 02:14:55 -0800 (PST)
-Received: by mail-pj1-f51.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so16834373pjc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 02:14:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=poSmrhdJ4U00W1z+gbHBDA9DySuHPZHfxMPRbSyJiW0=;
-        b=GlyUwPws0GVRHJkmCDGEoALIe3k+cKrflmkIjBsgkExmKjPW+R4JzfFmbT2OVBzSdY
-         9Ca3TSMUVR97rp36JYkYFCAliF7dFss+LGQKGQ0AxcPOZ5/eAErlXwey9mN8JJ+ujRba
-         6wy7dWjTgQeBEO06CO4o8PWUjqJSQ7Gvu815Jl8ZhYqtWmVdoVveydFIrWhJW88he395
-         PY8lyzE6o1JTFhhInzahnHCDeDHou2+dLZ4NZBEahOXexBupCjUSkhmSVLpKFaiMKAHk
-         NN1bODZs00FYqzCCpbEKQDeDFrWhcYw8cIXnsuhgncrERmSEwHfBkhuOuU4Do2NvSfbr
-         8Slg==
-X-Gm-Message-State: ANoB5pmhfUF2UUUdvzctfWY1jPGn1Hj6zxsKgiH5mN8cdIVA2Bjkbca0
-        nmFoUGF7X3Aw2QdJS51r6YAhPRpXeS84RnkLY9o=
-X-Google-Smtp-Source: AA0mqf5lRr2qpXUVgAGsQ+zxp35mp24tyMktK8I3RmHQqWmIlKgHZm2rYtj+60KiAIGe3PRoJaOXbQJKb+k4ke7lwlw=
-X-Received: by 2002:a17:903:452:b0:189:6574:7ac2 with SMTP id
- iw18-20020a170903045200b0018965747ac2mr22249796plb.65.1669716894564; Tue, 29
- Nov 2022 02:14:54 -0800 (PST)
+        Tue, 29 Nov 2022 05:17:08 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E957A2E7;
+        Tue, 29 Nov 2022 02:17:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669717026; x=1701253026;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=ntIufUXdHMrv3LebSNeNQZucKKAEML05blpxTFqTPd0=;
+  b=acBmnh2y+WExKsEGvFwPF7TNR0Smli4D5HsF6+3zasti0xdDltoC84iB
+   dPD/nL1I3YzwAizb5Wiv2KQHT/NXlgtjL5Aeqq1ndgZSfEpDZPunaJx2h
+   jBbJzK7VMH+mDzNd8xf+iVozBZKKabP2mx1BKiCZaBG8dt+usaYHpYQ9V
+   DO3NYrTm/2GYRxgo0B2SYZw3vnl7sMTJQkEkEcLin9YmSFGPqgfMi9DSv
+   vMMpPvqUalAePkmbuaGsa9gTE4gtQ9DqZFaQapOXEoZSsd5UTU3/duIDh
+   QoOU1IZtrLPISo8uzWelVMIGsxyCALjH/ll9oSANfMSBpeeznlO8Vzp2t
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,202,1665471600"; 
+   d="scan'208";a="185652937"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Nov 2022 03:17:05 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 29 Nov 2022 03:17:02 -0700
+Received: from training-HP-280-G1-MT-PC.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Tue, 29 Nov 2022 03:16:59 -0700
+From:   Divya Koppera <Divya.Koppera@microchip.com>
+To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <richardcochran@gmail.com>
+CC:     <UNGLinuxDriver@microchip.com>, <Madhuri.Sripada@microchip.com>
+Subject: [PATCH v3 net-next] net: phy: micrel: Fix warn: passing zero to PTR_ERR
+Date:   Tue, 29 Nov 2022 15:46:53 +0530
+Message-ID: <20221129101653.6921-1-Divya.Koppera@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20221128091506.gp4l6klznqhigjxv@box.shutemov.name>
- <20221128101117.3614401-1-mailhol.vincent@wanadoo.fr> <20221128111112.dzavip4eqqgpyrai@box.shutemov.name>
- <CAMZ6RqJ0EgbLcz97ujqEzF1MBsH045W0Cu8mMuR0WCx_cTemCQ@mail.gmail.com>
- <20221128124513.76392c3d@gandalf.local.home> <b98429d8-6d18-cf0b-6ca0-d9d6472d21f9@redhat.com>
- <Y4T4msSXCNnfPCMG@google.com> <20221128141056.29ccafd6@gandalf.local.home>
-In-Reply-To: <20221128141056.29ccafd6@gandalf.local.home>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 29 Nov 2022 19:14:43 +0900
-Message-ID: <CAMZ6Rq+fb0AkmeBQwQY32d=_ihAPsN1NR5scerBJ2m5hqn7mLQ@mail.gmail.com>
-Subject: Re: [PATCH] x86/asm: Remove unused COMPILE_OFFSETS macro from asm-offsets.c
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        kirill.shutemov@linux.intel.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, jpoimboe@kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, tglx@linutronix.de,
-        viro@zeniv.linux.org.uk, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue. 29 Nov. 2022 at 04:10, Steven Rostedt <rostedt@goodmis.org> wrote:
-> On Mon, 28 Nov 2022 18:06:18 +0000
-> Sean Christopherson <seanjc@google.com> wrote:
->
-> > > > IIRC, the reason for adding that was because that logic was screwing up
-> > > > asm-offsets.c. I'm not sure it screws up kvm-asm-offsets.c though.
-> > > >
-> > > > This is one of those cases I wish I commented that code better :-/
-> > >
-> > > I don't think KVM includes linux/ftrace.h or asm/ftrace.h at all.
-> >
-> > >From include/linux/kvm_host.h
-> >
-> >   #include <linux/ftrace.h>
-> >
-> > Even if that didn't exist, saying that XYZ never includes a header is a dangerous
-> > business, it's all too easy to indirectly include headers in the kernel, now or
-> > in the future.
+Handle the NULL pointer case
 
-ACK. This is why I relied on the compiler's -Wunused-macros to assert
-that COMPILE_OFFSETS can be removed from asm-offsets.c but not from
-kvm-asm-offsets.c.
-I also asserted that it is
-https://git.kernel.org/torvalds/linux/c/debc5a1ec0d1 which removed the
-dependency.
+Fixes New smatch warnings:
+drivers/net/phy/micrel.c:2613 lan8814_ptp_probe_once() warn: passing zero to 'PTR_ERR'
 
-> But going back to the original intent of COMPILE_OFFSETS. I believe it was
-> because some code that did not work with the auto generation of compiler
-> offsets and was a way to hide them.
->
-> I do not know if it is still an issue or not today.
+Fixes Old smatch warnings:
+drivers/net/phy/micrel.c:1750 ksz886x_cable_test_get_status() error:
+uninitialized symbol 'ret'.
 
-This I do not know. I only have the confidence to remove
-COMPILE_OFFSETS from asm-offsets.c. Nothing more.
+vim +/PTR_ERR +2613 drivers/net/phy/micrel.c
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Fixes: ece19502834d ("net: phy: micrel: 1588 support for LAN8814 phy")
+Fixes: 21b688dabecb ("net: phy: micrel: Cable Diag feature for lan8814 phy")
+Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
+---
+v2 -> v3:
+- Changed subject line from net to net-next
+- Removed config check for ptp and clock configuration
+  instead added null check for ptp_clock
+- Fixed one more warning related to initialisaton.
+
+v1 -> v2:
+- Handled NULL pointer case
+- Changed subject line with net-next to net
+---
+ drivers/net/phy/micrel.c | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index 26ce0c5defcd..3703e2fafbd4 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -2088,7 +2088,8 @@ static int ksz886x_cable_test_get_status(struct phy_device *phydev,
+ 	const struct kszphy_type *type = phydev->drv->driver_data;
+ 	unsigned long pair_mask = type->pair_mask;
+ 	int retries = 20;
+-	int pair, ret;
++	int ret = 0;
++	int pair;
+ 
+ 	*finished = false;
+ 
+@@ -2970,12 +2971,13 @@ static int lan8814_config_intr(struct phy_device *phydev)
+ 
+ static void lan8814_ptp_init(struct phy_device *phydev)
+ {
++	struct lan8814_shared_priv *shared_priv = phydev->shared->priv;
+ 	struct kszphy_priv *priv = phydev->priv;
+ 	struct kszphy_ptp_priv *ptp_priv = &priv->ptp_priv;
+ 	u32 temp;
+ 
+-	if (!IS_ENABLED(CONFIG_PTP_1588_CLOCK) ||
+-	    !IS_ENABLED(CONFIG_NETWORK_PHY_TIMESTAMPING))
++	/* Check if PHC support is missing at the configuration level */
++	if (!shared_priv->ptp_clock)
+ 		return;
+ 
+ 	lanphy_write_page_reg(phydev, 5, TSU_HARD_RESET, TSU_HARD_RESET_);
+@@ -3016,10 +3018,6 @@ static int lan8814_ptp_probe_once(struct phy_device *phydev)
+ {
+ 	struct lan8814_shared_priv *shared = phydev->shared->priv;
+ 
+-	if (!IS_ENABLED(CONFIG_PTP_1588_CLOCK) ||
+-	    !IS_ENABLED(CONFIG_NETWORK_PHY_TIMESTAMPING))
+-		return 0;
+-
+ 	/* Initialise shared lock for clock*/
+ 	mutex_init(&shared->shared_lock);
+ 
+@@ -3039,12 +3037,16 @@ static int lan8814_ptp_probe_once(struct phy_device *phydev)
+ 
+ 	shared->ptp_clock = ptp_clock_register(&shared->ptp_clock_info,
+ 					       &phydev->mdio.dev);
+-	if (IS_ERR_OR_NULL(shared->ptp_clock)) {
++	if (IS_ERR(shared->ptp_clock)) {
+ 		phydev_err(phydev, "ptp_clock_register failed %lu\n",
+ 			   PTR_ERR(shared->ptp_clock));
+ 		return -EINVAL;
+ 	}
+ 
++	/* Check if PHC support is missing at the configuration level */
++	if (!shared->ptp_clock)
++		return 0;
++
+ 	phydev_dbg(phydev, "successfully registered ptp clock\n");
+ 
+ 	shared->phydev = phydev;
+-- 
+2.17.1
+
