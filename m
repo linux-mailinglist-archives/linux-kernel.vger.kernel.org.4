@@ -2,98 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3856763C0D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C17963C0D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:18:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbiK2NRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 08:17:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
+        id S233461AbiK2NR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 08:17:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiK2NRN (ORCPT
+        with ESMTP id S233485AbiK2NR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 08:17:13 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA6D61740;
-        Tue, 29 Nov 2022 05:16:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ovEN2R1RcoyCmUvaJNV3bgGf54R1/0A9UQvs6JwGjy0=; b=VCDjRvvIL7hZ+3BDLMLNcVcDOc
-        Q/TG09qk+hX2Yc7iYpjtjKWpMAg6QuT66/lUBVoOgG1SJddV/G3hF7s1W3QcWtNWasGbt2RHhhpoB
-        2dyBRVPwMKFCZomSisy7eREG1MqGSg9E5wAaNvorozi/v7wJuurqY5oAp+kcCiZvLzKgXyODWVMOE
-        Paf9Dp++B5UFZoPw2Lj5us3iPTL7KTVYS6Nf1ORGgDX2ZHkGnIehszlSxGGBNSGJ7DcrEBcC+K3IO
-        DnL/vPlipbptC4Ti4ZCqKulpGHMOshczri78Z0Ozt/hpiLeITr8taocWAF8cNJDgO6DmR45cLA1LJ
-        0LJ14MBg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1p00TM-007fjC-25;
-        Tue, 29 Nov 2022 13:16:28 +0000
-Date:   Tue, 29 Nov 2022 13:16:28 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     syzbot <syzbot+8c7a4ca1cc31b7ce7070@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, dan.j.williams@intel.com, hch@lst.de,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        willy@infradead.org
-Subject: Re: [syzbot] WARNING in iov_iter_revert (3)
-Message-ID: <Y4YGLBZoXKj6broy@ZenIV>
-References: <000000000000519d0205ee4ba094@google.com>
- <000000000000f5ecad05ee8fccf0@google.com>
- <20221129090831.6281-1-hdanton@sina.com>
- <Y4X5F43D+As21b6M@ZenIV>
+        Tue, 29 Nov 2022 08:17:27 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8946204A
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 05:17:22 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id l4-20020a056e021aa400b00300ad9535c8so11997124ilv.1
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 05:17:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=idplWkIx0VVSllsI4MlCtfwzzribvzY97/kVlTqx25U=;
+        b=UVoFByX2Zdk/E01NUoj2wRfGtBzPuVJOXd07PqWCV8+pAHETNR4R8gA0+XKzv3sYWO
+         zHu6ITAslEj9nxjwMKIN2ivEJ15xOuOurzwqvOojyoec3G/5FpwCYd9D+iVNXceh4tEZ
+         rCYmJ7NFHmuHyNLMl6h5zXRN7gHOdyINAsKwtEbg048Mu8rz1dqyVgpCqoK1dSBD61n5
+         P+yMKro5btd5En3vlhnkBqhAAkvu8h7N/TySQcDJZbwwz6vLCnohHzVk7OOf+jvCgzAO
+         VojpHU04TmnjHQxt+bK9ETZpERJqH0ljNuC8+doXF3Q3I1+mc+10teSV72JRLo14VWgz
+         ZkcA==
+X-Gm-Message-State: ANoB5pnt7chk7L/k0+FB4b1/hbaFVa9wUFAuoxoBdD22hYba9Ybul+JH
+        jBAbWtfcDHsv+hfM8w0LPl02ZKvNNKk8IM0Gxl9akO0nBv2A
+X-Google-Smtp-Source: AA0mqf6Y7aH38ZalHxNfPDePL5Q3bbB1ysjAFhZX1zo2cZmijy5rr3U3OnUoHejPfs8qEbC2mby6lXLJaEM4SNqqbNIlaJwe86z5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4X5F43D+As21b6M@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:801:b0:303:d8b:3cbc with SMTP id
+ u1-20020a056e02080100b003030d8b3cbcmr5915468ilm.117.1669727841511; Tue, 29
+ Nov 2022 05:17:21 -0800 (PST)
+Date:   Tue, 29 Nov 2022 05:17:21 -0800
+In-Reply-To: <20221129123436.6417-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dd751605ee9bcebf@google.com>
+Subject: Re: [syzbot] possible deadlock in btrfs_join_transaction
+From:   syzbot <syzbot+6eb64eace626d6222d2a@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 12:20:39PM +0000, Al Viro wrote:
-> ->direct_IO() should return the amount of data actually copied to userland;
-> if that's how much it has consumed from iterator - great, iov_iter_revert(i, 0)
-> is a no-op.  If it has consumed more, the caller will take care of that.
-> If it has consumed say 4Kb of data from iterator, but claims that it has
-> managed to store 12Kb into that, it's broken and should be fixed.
-> 
-> If it wants to do revert on its own, for whatever reason, it is welcome - nothing
-> will break, as long as you do *not* return the value greater than the amount you
-> ended up taking from iterator.  However, I don't understand the reason why ntfs3
-> wants to bother (and appears to get it wrong, at that); the current rules are
-> such that caller will take care of revert.
+Hello,
 
-Looking at ntfs3, WTF does it bother with zeroing on short reads (?) in the
-first place?  Anyway, immediate bug there is the assumption that
-blockdev_direct_IO() won't consume more than its return value; it bloody
-well might.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-*IF* you want that logics on reads (again, I'm not at all sure what is it
-doing there), you want this:
+Reported-and-tested-by: syzbot+6eb64eace626d6222d2a@syzkaller.appspotmail.com
 
-        } else if (vbo < valid && valid < end) {
-		size_t consumed = iter_count - iov_iter_count(iter);
-		size_t valid_bytes = valid - vbo;
-		iov_iter_revert(iter, consumed - valid_bytes);
-		iov_iter_zero(ret - valid_bytes, iter);
-	}
+Tested on:
 
-This iov_iter_zero() would better not be an attempt to overwrite some
-data that shouldn't have been copied to userland; if that's what it
-is, it's an infoleak - another thread might have observed the data
-copied there before that zeroing.
+commit:         6d464646 Merge branch 'for-next/core' into for-kernelci
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=1082bce3880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=54b747d981acc7b7
+dashboard link: https://syzkaller.appspot.com/bug?extid=6eb64eace626d6222d2a
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=15ac3d03880000
 
-Oh, and
-                if (end > valid && !S_ISBLK(inode->i_mode)) {
-
-several lines above is obvious bollocks - if inode is a block device,
-we won't be going anywhere near any NTFS address_space_operations or
-ntfs_direct_IO().
-
-Seriously, what's going on with zeroing there?
+Note: testing is done by a robot and is best-effort only.
