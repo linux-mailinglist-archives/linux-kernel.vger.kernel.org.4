@@ -2,89 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BBDF63C72A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 19:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4939863C72F
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 19:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235936AbiK2S0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 13:26:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
+        id S234951AbiK2S26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 13:28:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235885AbiK2S0c (ORCPT
+        with ESMTP id S232491AbiK2S2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 13:26:32 -0500
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4307C627C3;
-        Tue, 29 Nov 2022 10:26:31 -0800 (PST)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-13bd2aea61bso18146112fac.0;
-        Tue, 29 Nov 2022 10:26:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=0SKtbTyrcsLd7ib4BwIBICfnm5xqcJzzrg4yk4WZVbs=;
-        b=qOFB6zNhyXBlu7D3vKW/9dqlM+E5XOJ0erfcx4Ps5eASzVnoxE/RpZ244vR7KzmfEK
-         29M0/jRHKgYzwzXg58Ax+32PVMWJFWAuKl740yrdT/77PCuKzV6j2nJqgTu4TPe5/FVE
-         1Dxyun5Zb3iD4dTCQ+465AywoXoW9mFBjxp7eOv9nqsoAsYhuj6ZTyEzF4OYgs1GF3Xh
-         JqQHqZeo4DtSVXD0fruw1P/89CmgdR2OvhWLqoVvNTfN0P+8iustIvygjqo4vVzwhG+h
-         dtkzguR+oruaFzpET36ysLNZnJGyCF0ZXcJKn7T6vNXQU8KcvOGJZLSGmkWJ2o1arbUN
-         5Bkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0SKtbTyrcsLd7ib4BwIBICfnm5xqcJzzrg4yk4WZVbs=;
-        b=IVZW6gHJDlFc5QzpGf9Xi2GwTv40uk+WDO2Y+bIGzzr6Q3T6tJ2Z4LMqYQ3BjBiRBx
-         q1m44qLhLdyzgSK6LFmtvqRqZWydk+ZLCqYL/UDwZ4nSfjWAXiJjjCkKRGuTr1vQSfof
-         kCR02kMDLewWwHz+8/irapKX5nHP85CV8pZGajHwpViCRytCOMyi46HcR1Ai5hHJHymQ
-         e9VyTnN1XZ6A9KL5W+sJwk5wfY279HpZfSPm5eikhFwU7Qg1zj1/85R5VEaHDfK3c8ZU
-         AevBiIyBmyBDcPQOaa2KuY51TZijbZsgLgLGqUBMRCuVYvgyaNIgl58bN8qEPW/JhED0
-         tO2Q==
-X-Gm-Message-State: ANoB5pnef7sRL7TX5URaL4CDBK3xLWiJO1Z2aWPQwhT7zTdOXQ+5Dcte
-        A1cf4274+cdiMwgQUBBcX5U=
-X-Google-Smtp-Source: AA0mqf7pKujXUaAO+DZaepplUOaXjel7eKL7zhvuG5jR3cQhQbUwctGuf/PFl/tDqsFNOv0GQug7iA==
-X-Received: by 2002:a05:6870:6d0d:b0:13c:8028:cbec with SMTP id mw13-20020a0568706d0d00b0013c8028cbecmr20863458oab.33.1669746390642;
-        Tue, 29 Nov 2022 10:26:30 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l16-20020a05683004b000b00662228a27d3sm6240310otd.57.2022.11.29.10.26.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 10:26:30 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4fb6abe0-a68e-f391-5111-dab139891837@roeck-us.net>
-Date:   Tue, 29 Nov 2022 10:26:28 -0800
+        Tue, 29 Nov 2022 13:28:51 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA7527FE6;
+        Tue, 29 Nov 2022 10:28:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AD73BCE13D7;
+        Tue, 29 Nov 2022 18:28:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07DBEC433D6;
+        Tue, 29 Nov 2022 18:28:45 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="PvzCMQo9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669746523;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=40jd/O/f0+35LfGoNsCPN2/bS9KqtfSE7wnr2o/Obt8=;
+        b=PvzCMQo9yw03vDCVlLFBsktpgaTCQ8ltSTevEB/+27lVll5gYQwrfeJphskaTHaRMSYziz
+        UD+erupyHceNtbN0kjdvJE0849JAToBjtVZGC/IF2NzM40AUdmUONOe313MHR/QFuQzSO+
+        fLqZjbsZrhduNt3x8m7GUAaYXH2vV8Q=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 2aea5919 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 29 Nov 2022 18:28:43 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH v3] random: spread out jitter callback to different CPUs
+Date:   Tue, 29 Nov 2022 19:27:52 +0100
+Message-Id: <20221129182751.610558-1-Jason@zx2c4.com>
+In-Reply-To: <20221129160811.563011-1-Jason@zx2c4.com>
+References: <20221129160811.563011-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 1/6] hwmon: (gxp-fan-ctrl) Add GXP fan controller
-Content-Language: en-US
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20221128230219.39537-1-nick.hawkins@hpe.com>
- <20221128230219.39537-2-nick.hawkins@hpe.com>
- <20221129040232.GA1901150@roeck-us.net>
- <B3B2AA1C-0AD8-406D-B766-4CB86C39A834@hpe.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <B3B2AA1C-0AD8-406D-B766-4CB86C39A834@hpe.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,26 +60,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/22 09:13, Hawkins, Nick wrote:
->>> +		writeb(val, drvdata->base + channel);
-> 
->> The mixed use of direct writes and regmap is odd and confusing.
->> Why use regmap for plreg_map and for fn2_map but not for base ?
->> Can this be unified ? If not, why ?
-> 
-> I will still require three separate areas to access these registers as they
-> are spaced far apart (> 0x20000000). I will create a comment to
-> explain this. As for being unified methods I believe they can be
-> all __iomem's or regmaps.
-> 
+Rather than merely hoping that the callback gets called on another CPU,
+arrange for that to actually happen, by round robining which CPU the
+timer fires on. This way, on multiprocessor machines, we exacerbate
+jitter by touching the same memory from multiple different cores.
 
-I understand that there are three regions. What I don't understand is
-that two of them are accessed through regmap and one directly. Either
-access all regions using regmap, or all regions using iomem accessors
-directly. If regmap does not support access to the base region,
-don't use regmap at all, explain why regmap doesn't support this kind
-of access, and make sure to copy the regmap maintainer.
+It's necessary to call [try_to_]del_timer_sync() before calling
+add_timer_on(), so that the final call to del_timer_sync() at the end of
+the function actually succeeds at making sure no handlers are running.
 
-Thanks,
-Guenter
+Cc: Sultan Alsawaf <sultan@kerneltoast.com>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Changes v2->v3:
+- Thomas convinced me try_to_del_timer_sync() was fine.
+
+ drivers/char/random.c | 36 +++++++++++++++++++++++++++---------
+ 1 file changed, 27 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 7b71cea6a6ab..4cb1d606a492 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1232,7 +1232,8 @@ void __cold rand_initialize_disk(struct gendisk *disk)
+ struct entropy_timer_state {
+ 	unsigned long entropy;
+ 	struct timer_list timer;
+-	unsigned int samples, samples_per_bit;
++	atomic_t samples;
++	unsigned int samples_per_bit;
+ };
+ 
+ /*
+@@ -1250,10 +1251,8 @@ static void __cold entropy_timer(struct timer_list *timer)
+ {
+ 	struct entropy_timer_state *state = container_of(timer, struct entropy_timer_state, timer);
+ 
+-	if (++state->samples == state->samples_per_bit) {
++	if (atomic_inc_return(&state->samples) % state->samples_per_bit == 0)
+ 		credit_init_bits(1);
+-		state->samples = 0;
+-	}
+ }
+ 
+ /*
+@@ -1263,9 +1262,10 @@ static void __cold entropy_timer(struct timer_list *timer)
+ static void __cold try_to_generate_entropy(void)
+ {
+ 	enum { NUM_TRIAL_SAMPLES = 8192, MAX_SAMPLES_PER_BIT = HZ / 15 };
+-	struct entropy_timer_state stack;
++	struct entropy_timer_state stack = { 0 };
+ 	unsigned int i, num_different = 0;
+ 	unsigned long last = random_get_entropy();
++	int cpu = -1;
+ 
+ 	for (i = 0; i < NUM_TRIAL_SAMPLES - 1; ++i) {
+ 		stack.entropy = random_get_entropy();
+@@ -1277,19 +1277,37 @@ static void __cold try_to_generate_entropy(void)
+ 	if (stack.samples_per_bit > MAX_SAMPLES_PER_BIT)
+ 		return;
+ 
+-	stack.samples = 0;
+ 	timer_setup_on_stack(&stack.timer, entropy_timer, 0);
+ 	while (!crng_ready() && !signal_pending(current)) {
+-		if (!timer_pending(&stack.timer))
+-			mod_timer(&stack.timer, jiffies);
++		/*
++		 * Check !timer_pending() and then ensure that any previous callback has finished
++		 * executing by checking try_to_del_timer_sync(), before queueing the next one.
++		 */
++		if (!timer_pending(&stack.timer) && try_to_del_timer_sync(&stack.timer) >= 0) {
++			preempt_disable();
++
++			/* Basic CPU round-robin, which avoids the current CPU. */
++			do {
++				cpu = cpumask_next(cpu, cpu_online_mask);
++				if (cpu == nr_cpumask_bits)
++					cpu = cpumask_first(cpu_online_mask);
++			} while (cpu == smp_processor_id() && cpumask_weight(cpu_online_mask) > 1);
++
++			/* Expiring the timer at `jiffies` means it's the next tick. */
++			stack.timer.expires = jiffies;
++
++			add_timer_on(&stack.timer, cpu);
++
++			preempt_enable();
++		}
+ 		mix_pool_bytes(&stack.entropy, sizeof(stack.entropy));
+ 		schedule();
+ 		stack.entropy = random_get_entropy();
+ 	}
++	mix_pool_bytes(&stack.entropy, sizeof(stack.entropy));
+ 
+ 	del_timer_sync(&stack.timer);
+ 	destroy_timer_on_stack(&stack.timer);
+-	mix_pool_bytes(&stack.entropy, sizeof(stack.entropy));
+ }
+ 
+ 
+-- 
+2.38.1
 
