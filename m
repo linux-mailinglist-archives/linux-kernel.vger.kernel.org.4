@@ -2,77 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 975C563C419
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E510063C40A
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:46:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236010AbiK2PrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 10:47:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
+        id S235543AbiK2Pqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 10:46:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235945AbiK2Pq4 (ORCPT
+        with ESMTP id S233216AbiK2Pqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:46:56 -0500
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADEC459FED;
-        Tue, 29 Nov 2022 07:46:54 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.14.30.50])
-        by mail-app4 (Coremail) with SMTP id cS_KCgBnaMxfKYZjT2esCA--.15899S2;
-        Tue, 29 Nov 2022 23:46:48 +0800 (CST)
-From:   Jinlong Chen <nickyc975@zju.edu.cn>
-To:     axboe@kernel.dk
-Cc:     hch@lst.de, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nickyc975@zju.edu.cn
-Subject: [PATCH v2 0/5] random improvements and cleanups for elevator.c
-Date:   Tue, 29 Nov 2022 23:46:33 +0800
-Message-Id: <cover.1669736350.git.nickyc975@zju.edu.cn>
-X-Mailer: git-send-email 2.34.1
+        Tue, 29 Nov 2022 10:46:40 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F8D63B91
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:46:39 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id p24so10056061plw.1
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:46:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TlITRNlSvIRfx/v3kRPBsYLpShexTyED9akuGBOKj48=;
+        b=WHAJKEmiS4xc1GRyJzYfwdJN/UC9HCyYTADcdVJBkbbREzqr0iZ2Rk+OJSvU5Nfxd+
+         dLWeG9iWm7/dFIOtSFBxsgtWDujpxcbA+a85GS/0HSpmslxmg7qaYA50Tlc8Xakm4o6y
+         khW2VDldpgmcmh+wI0kPpfdjT2yMPoBovjsuito0mp5pP20BwpcCnQHmGrYjtLmO1RxS
+         91YwMYC/HY4SOyrOugNHq/sWsAh9imcoziwwGOu6wc5QjGQtU9Dj9iQc9NGVzXZ5/p/u
+         VUm5khJm8F6Ou/en3zLOHhLOa+On90StzKvd5jXIwYlhIFGdMDP1sI36H635OvEzmd73
+         qu3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TlITRNlSvIRfx/v3kRPBsYLpShexTyED9akuGBOKj48=;
+        b=MNfk4YVXYS+oc8ku/fsBIm6E41u11E4sg7zc5Kmxh0UvhVEp9XPQvRi4kRLcPlHix5
+         9GBLo1GdjNEHUTa+E1s7UsujjZhD9CCxUA5jU5ZfHWamtxpIPK0WrtGihjdb9cxr5c8l
+         WRxLrOJTrlm+Di3+MowVrMYJOmFCe4N+G3QmRHrSR0nmJUzaA279F9c6j1YbjXEZUkm1
+         Pjhv3hDwpyfMIz0hLsNXACNpoRtpQDiHh8d+359RVdRr6MA6b7yluP/20oz8sWdzZ/Pz
+         CwENOdLWy3BrvrcpavOyqEEckTXxUmCrwPuZ07oiN/Ye6wFBtfm3HZkN0r6gcMtosXUI
+         bD5A==
+X-Gm-Message-State: ANoB5pnvoZeM/cJsOGZoJLHpEpgdsPeiNRu0D2pIsy0XyNceKEQ+iREF
+        bYAo7ubPqlMIyr1E9imsslJHMA==
+X-Google-Smtp-Source: AA0mqf6B9BzEYfnIu/cqQ3h07jq5XYScwVBdcUkDYQSRSM11MyrdtlrFdURcKUsedAOQ3vdXvT3/MQ==
+X-Received: by 2002:a17:90a:5787:b0:218:8398:5846 with SMTP id g7-20020a17090a578700b0021883985846mr57130609pji.241.1669736798826;
+        Tue, 29 Nov 2022 07:46:38 -0800 (PST)
+Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
+        by smtp.gmail.com with ESMTPSA id h23-20020a63e157000000b00434272fe870sm8562138pgk.88.2022.11.29.07.46.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 07:46:38 -0800 (PST)
+Message-ID: <2487f032-1261-be6e-2e2a-38ca0af7c83c@9elements.com>
+Date:   Tue, 29 Nov 2022 21:16:34 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cS_KCgBnaMxfKYZjT2esCA--.15899S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jr18JryrGr18tr15CF45Wrg_yoWxKFb_Za
-        97tas7Ja1DJ3Wjva47Ka43tr9xuF93X345A3W7JrWSyFW3GF4avrs7ZFZ8ur1rur42ywnI
-        kF4jvFyxZwnrKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbIkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2
-        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAac4AC62xK8xCEY4
-        vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0E
-        wIxGrwCF04k20xvE74AGY7Cv6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
-        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
-        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf
-        9x0JUAkucUUUUU=
-X-CM-SenderInfo: qssqjiaqqzq6lmxovvfxof0/1tbiAgIJB1ZdtcpCQAABs5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v7 1/4] dt-bindings: hwmon: fan: Add fan binding to schema
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+References: <20221121122932.2493174-1-Naresh.Solanki@9elements.com>
+ <20221121122932.2493174-2-Naresh.Solanki@9elements.com>
+ <c35917d1-dfbd-f7d9-5c94-a9f0ee3b7ed8@linaro.org>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <c35917d1-dfbd-f7d9-5c94-a9f0ee3b7ed8@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The series slightly improves the readability of elevator.c.
+Hi Krzysztof,
 
-Changes in v2:
-  - add patch 3 to further improve the readability (suggested by Christoph)
-  - add Reviewed-by tags from Christoph
+On 29-11-2022 01:42 pm, Krzysztof Kozlowski wrote:
+> On 21/11/2022 13:29, Naresh Solanki wrote:
+> 
+>> +  pulses-per-revolution:
+>> +    description:
+>> +      The number of pulse from fan sensor per revolution.
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +
+>> +  target-rpm:
+>> +    description:
+>> +      Target RPM the fan should be configured during driver probe.
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +
+>> +  pwms:
+>> +    description:
+>> +      PWM provider.
+> 
+> Ah, so it is not a PWM provider by this FAN controller? A bit confusing
+> description. Instead maybe:
+> 	PWM signal for the fan
+Sure.
+> 
+> and do you expect more than one PWM for one fan?
+One pwm per fan
+> 
+> Best regards,
+> Krzysztof
+> 
 
-Jinlong Chen (5):
-  elevator: print none at first in elv_iosched_show even if the queue
-    has a scheduler
-  elevator: replace continue with else-if in elv_iosched_show
-  elevator: print e->elevator_name instead of cur->elevator_name in
-    elv_iosched_show
-  elevator: repalce "len+name" with "name+len" in elv_iosched_show
-  elevator: use bool instead of int as the return type of
-    elv_iosched_allow_bio_merge
-
- block/elevator.c | 23 ++++++++++-------------
- 1 file changed, 10 insertions(+), 13 deletions(-)
-
--- 
-2.34.1
-
+Regards,
+Naresh
