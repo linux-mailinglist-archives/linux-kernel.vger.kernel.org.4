@@ -2,122 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9ED763BA1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 08:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0574463BA27
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 08:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiK2HCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 02:02:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42192 "EHLO
+        id S229804AbiK2HEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 02:04:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiK2HCl (ORCPT
+        with ESMTP id S229552AbiK2HED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 02:02:41 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B450711812;
-        Mon, 28 Nov 2022 23:02:37 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NLtZL6Kz8z4xVnd;
-        Tue, 29 Nov 2022 15:02:34 +0800 (CST)
-Received: from szxlzmapp02.zte.com.cn ([10.5.231.79])
-        by mse-fl2.zte.com.cn with SMTP id 2AT71vsp049656;
-        Tue, 29 Nov 2022 15:02:26 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp02[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Tue, 29 Nov 2022 15:02:28 +0800 (CST)
-Date:   Tue, 29 Nov 2022 15:02:28 +0800 (CST)
-X-Zmail-TransId: 2b046385ae847e71f525
-X-Mailer: Zmail v1.0
-Message-ID: <202211291502286285262@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <peppe.cavallaro@st.com>
-Cc:     <alexandre.torgue@foss.st.com>, <joabreu@synopsys.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <mcoquelin.stm32@gmail.com>,
-        <netdev@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
-        <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjJdIG5ldDogc3RtbWFjOiB1c2Ugc3lzZnNfc3RyZXEoKSBpbnN0ZWFkIG9mIHN0cm5jbXAoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2AT71vsp049656
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 6385AE8A.000 by FangMail milter!
-X-FangMail-Envelope: 1669705354/4NLtZL6Kz8z4xVnd/6385AE8A.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6385AE8A.000/4NLtZL6Kz8z4xVnd
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 29 Nov 2022 02:04:03 -0500
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA700391EE;
+        Mon, 28 Nov 2022 23:04:01 -0800 (PST)
+Received: by mail-pj1-f54.google.com with SMTP id hd14-20020a17090b458e00b0021909875bccso518144pjb.1;
+        Mon, 28 Nov 2022 23:04:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FDBBVGb3vVgUNo8t/6IIvRT92H3GgjNyrjnKQ0u5Jiw=;
+        b=35u+fOJrw4/yI0hrmDlB9ogSl2FDErWDaDyQ/zsE74+uF8moKrcRC3wlvu5y6Ak5YS
+         ok/KILUF7WCfZLbUEdvW+70Ec5c9WNDxLMPEEzn3mZJkPEopEJvA67BFxOS0psxfEeEu
+         B3fAOiZZwPOqUjc5F95w8CmHfpcA8ZV0iAQbmctJqttiHlaSYxJrtipmJqAWOrKh3Xr/
+         PW8wxQvl0SQGksY5NV71S0AvZmUvg7eLSttPnbFxLXMgcLBMu38TJJIDFqh8y6HogP6i
+         zVP5hKQKGB/s63fYnRQGD8US6R21UrkMkDDA9g6ZzR6xxu42XCNa/yJbHqIzxhI2jUO6
+         xnMw==
+X-Gm-Message-State: ANoB5pkSZYpLjt591Y7lTDUcpiwPMnRf2UTr0idegzSNQlP9CMtVBe0f
+        0MrA4KVzVovRZH0ED6ybq7oRjYDYnME+Ppjkk1k=
+X-Google-Smtp-Source: AA0mqf6l+enkVVGQLai+KWiZd79TKE9e5GTzpEIPM0wnvPOa9DgHHhjHnDSd7hXaF28h9XrWCvFuXgAw1rjCeASJuBw=
+X-Received: by 2002:a17:90a:a60c:b0:213:2e97:5ea4 with SMTP id
+ c12-20020a17090aa60c00b002132e975ea4mr64367458pjq.92.1669705441138; Mon, 28
+ Nov 2022 23:04:01 -0800 (PST)
+MIME-Version: 1.0
+References: <1669704232-40228-1-git-send-email-wangyufen@huawei.com>
+In-Reply-To: <1669704232-40228-1-git-send-email-wangyufen@huawei.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 29 Nov 2022 16:03:50 +0900
+Message-ID: <CAMZ6Rq+rTiAu3+SZ1GrE1+NoRnuoJ=g_6LA7GKZBOreQZVC3jQ@mail.gmail.com>
+Subject: Re: [PATCH v3] USB: FHCI: fix error return code in of_fhci_probe()
+To:     Wang Yufen <wangyufen@huawei.com>
+Cc:     gregkh@linuxfoundation.org, linus.walleij@linaro.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+On Tue. 29 Nov. 2022 at 15:43, Wang Yufen <wangyufen@huawei.com> wrote:
+> Fix to return a negative error code of PTR_ERR(fhci->gpiods[i])
+> instead of 0.
+>
+> Fixes: a4efdb8a423b ("USB: FHCI: Switch to GPIO descriptors")
+> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+> ---
+>  drivers/usb/host/fhci-hcd.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/usb/host/fhci-hcd.c b/drivers/usb/host/fhci-hcd.c
+> index 95a4446..c8a1b98 100644
+> --- a/drivers/usb/host/fhci-hcd.c
+> +++ b/drivers/usb/host/fhci-hcd.c
+> @@ -639,8 +639,9 @@ static int of_fhci_probe(struct platform_device *ofdev)
+>                                         NULL, i, GPIOD_OUT_LOW);
+>
+>                 if (IS_ERR(fhci->gpiods[i])) {
+> -                       dev_err(dev, "incorrect GPIO%d: %ld\n",
+> -                               i, PTR_ERR(fhci->gpiods[i]));
+> +                       ret = PTR_ERR(fhci->gpiods[i]);
+> +                       dev_err(dev, "incorrect GPIO%d: %d\n",
+> +                               i, ret);
 
-Replace the open-code with sysfs_streq().
+Nitpick: you do not need a new line. It fits the 80 characters limit very well.
 
----
-change for v2
- - fix the mistake of redundant parameter.
----
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+Aside of that:
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 0a9d13d7976f..5ec9f64dadd0 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7562,31 +7562,31 @@ static int __init stmmac_cmdline_opt(char *str)
- 	if (!str || !*str)
- 		return 1;
- 	while ((opt = strsep(&str, ",")) != NULL) {
--		if (!strncmp(opt, "debug:", 6)) {
-+		if (sysfs_streq(opt, "debug:")) {
- 			if (kstrtoint(opt + 6, 0, &debug))
- 				goto err;
--		} else if (!strncmp(opt, "phyaddr:", 8)) {
-+		} else if (sysfs_streq(opt, "phyaddr:")) {
- 			if (kstrtoint(opt + 8, 0, &phyaddr))
- 				goto err;
--		} else if (!strncmp(opt, "buf_sz:", 7)) {
-+		} else if (sysfs_streq(opt, "buf_sz:")) {
- 			if (kstrtoint(opt + 7, 0, &buf_sz))
- 				goto err;
--		} else if (!strncmp(opt, "tc:", 3)) {
-+		} else if (sysfs_streq(opt, "tc:")) {
- 			if (kstrtoint(opt + 3, 0, &tc))
- 				goto err;
--		} else if (!strncmp(opt, "watchdog:", 9)) {
-+		} else if (sysfs_streq(opt, "watchdog:")) {
- 			if (kstrtoint(opt + 9, 0, &watchdog))
- 				goto err;
--		} else if (!strncmp(opt, "flow_ctrl:", 10)) {
-+		} else if (sysfs_streq(opt, "flow_ctrl:")) {
- 			if (kstrtoint(opt + 10, 0, &flow_ctrl))
- 				goto err;
--		} else if (!strncmp(opt, "pause:", 6)) {
-+		} else if (sysfs_streq(opt, "pause:")) {
- 			if (kstrtoint(opt + 6, 0, &pause))
- 				goto err;
--		} else if (!strncmp(opt, "eee_timer:", 10)) {
-+		} else if (sysfs_streq(opt, "eee_timer:")) {
- 			if (kstrtoint(opt + 10, 0, &eee_timer))
- 				goto err;
--		} else if (!strncmp(opt, "chain_mode:", 11)) {
-+		} else if (sysfs_streq(opt, "chain_mode:")) {
- 			if (kstrtoint(opt + 11, 0, &chain_mode))
- 				goto err;
- 		}
--- 
-2.15.2
+>                         goto err_gpios;
+>                 }
+>                 if (!fhci->gpiods[i]) {
+> --
+> 1.8.3.1
+>
