@@ -2,104 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2646763BB8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D58163BB92
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbiK2I32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 03:29:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
+        id S230447AbiK2I3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 03:29:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbiK2I2z (ORCPT
+        with ESMTP id S230435AbiK2I24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 03:28:55 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592F22D4;
-        Tue, 29 Nov 2022 00:28:12 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id C1A7F5C013F;
-        Tue, 29 Nov 2022 03:28:09 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 29 Nov 2022 03:28:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1669710489; x=1669796889; bh=oJL+vWNc8V
-        oEVmSHLNBSd0VMgyTgBe9/oE+igmrFcKM=; b=UciQKjoac7RQ7y0jT76YjelVZd
-        Wg7lOP1uLFHu8vWGye1FPnYNX3eklj0g0viHLo3DzBha3C0WZ5zUo1PbAQoIt+dR
-        ndzMfCZY0Ci4cyzFh/YJlolkQKws4HOBwQKE9Fuuao5oDhE2OWSV9Zjhc03ezcPT
-        rbKrg31+X2AaIfDRekVczGLbRhqnmzQlpav9cIo8qQq46VP/+E9dqZwxcFgEqaVI
-        OFY0qVVqJC9EvaPwKe8l4IWV137Bj69jj/kiY7x5LorAKF2kLS2tKQty80YX0ohp
-        AuVsnROFm/fPYQ+EHtAQwgqD/FbdmgieJxhR3Ln2J3yri6AorxG/+wgVQv/A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669710489; x=1669796889; bh=oJL+vWNc8VoEVmSHLNBSd0VMgyTg
-        Be9/oE+igmrFcKM=; b=TkUUIZh9MTpyv4uVgmRcXSDUJrJGwAEU6xN8Wd0vaVVP
-        TKFYc2NMjsNpVpl2DNFzuA9rHjkG1ThhS5bYzmJsQ0RMC88+yHUfkmDDiE/hLAqW
-        fzbru+D+saF+bo6zzA3Gl0wx9UWTNdnGbLuQX7TVmVKyJefZVJDNCt1GuT557vnQ
-        zoXdKQ1Pi9vF+33C+07be2t+C8dFCGGtfaczknF12hG6F/EJ5Dd0g6EBXjOMRdgw
-        ZYUSWnVBi3MpzjBGFSXGGF+/TO7sX3k8qW5DVGA60NebQf5+2FaEheRbde52g8y/
-        Tkr8xOhSQMJxUDHB5DDRQpz2xwy08yKikqCopvDgbQ==
-X-ME-Sender: <xms:mcKFY8hUTxOqcRe0oMDhjKi-k-4jYcYf-ssywbD05JoKUEe6wL3NQA>
-    <xme:mcKFY1DlSF9XcTr8cijlT0JH6FZXnpV2u-J2Usu1ycRC_S3KYXo2-6eXriIT43dN_
-    9oy6545PEas7w>
-X-ME-Received: <xmr:mcKFY0HbL83eouHfJO2XS9sY10jZfZkrGppdRsJ0nY4TBdyUbxDm0aNB3yZ2Bms5-c9ogq0sBhpRkZxcnqowgg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjeefgdduvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:mcKFY9QsLB-yqoycY16ripkRIeVdk_8-f3WxVdby0JIZr27FxtdqGA>
-    <xmx:mcKFY5xSyV2MDFYYBAxL4Cmeq1eDObbvYmHf9t-XPZvzEEfz2CE52Q>
-    <xmx:mcKFY77wpr-4dz8QbV1ZGTY-OFde7KDIQLz5qhkq9eKpOZgOH0LNFg>
-    <xmx:mcKFY7s2iC50O1RV_URyLB_h5K81MxzWf761qqCEN9WkBaZ5BzxA5g>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 29 Nov 2022 03:28:08 -0500 (EST)
-Date:   Tue, 29 Nov 2022 09:28:05 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the driver-core tree
-Message-ID: <Y4XClZLzBoRZm/7Y@kroah.com>
-References: <20221128133600.14ce44bf@canb.auug.org.au>
- <Y4Sga+ONeDe9Q7yz@kroah.com>
- <20221128234408.7a4dec34@canb.auug.org.au>
- <Y4TgXLb4EweoJb0k@kroah.com>
- <20221129064605.1aadc0e6@canb.auug.org.au>
+        Tue, 29 Nov 2022 03:28:56 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46050C1C
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:28:15 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id s5so18694904edc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:28:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8tKjN8Pr0TOCEiqcL4ygNjCpgur6Un/XBCsGues/Dnc=;
+        b=T1SrL2wtoh+dO1FUeIUSLP7iDrLN8bzK1A6qXgwO/336kstN9A+k8zQvtsa4Ps7sWZ
+         LDyBxMYCAHdzL+hZrD/BUTv8MLEMAc+ojkA0zmya4fbKQRX3fzaJMvVwNJx7qj+InDrw
+         3M0sbE/cn5Q3keMw7bLCRWZB5H/SYiwLWnB7V4VU+Fva5Jr2Ekb0eyaIz51iyfM+zShx
+         nHHoTMFv7Co37+xH5MYBN+5wHA/vc7Bn1C8UTFT0oQKByuSxmrZNr+FLyFdSyHoVNUIv
+         bcRupknoJs0MQ1N+ppVjc04sl7IbMfDV7CVTbsoepTc2QAYV0rXsJv31xujUc7bTu4xW
+         XwHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8tKjN8Pr0TOCEiqcL4ygNjCpgur6Un/XBCsGues/Dnc=;
+        b=J7Vy2shEtWXe9/AG1OfJB9LIVuOZQoiXPPqbhzW69m8sbr3cv0odl4xOP+0FQyFAqe
+         YmyJxReVxY+2+FfiHSa7oN+DjB2sk65BQML/QWih3XWB+aATEAqu6J8ix6ME0wBazRbe
+         X0HnnFz1KLGtP3j42m1HKj3Bwpkl1Kq6IFN/dR9FJLXseAgBOIq1ZPnXSbttk9c37wkN
+         daFSAeIPjFPlCcEfe5y9fvo5ruV8H5Tfv5VjsQqhijUzR27ThW1epBOEGu/C3kgWDMJL
+         rJG9s1vw09kfVcm4g2fX4LYmvu801I5CcNyZJJIQzjbzR1pCd4YO3q+hPmq+i1Kcpo9t
+         DIYQ==
+X-Gm-Message-State: ANoB5pnscXYDf3d40Ns7bqnkFVl4bx7mLXh9qLCovmxg562N7KSOS5e6
+        JlbSGg/EvI3wDi51ZN6a1AGGzF7b0tWn39epgZw=
+X-Google-Smtp-Source: AA0mqf7JGE37tAeUkHP3TD4s8FZGd1nRjeRWiVNzSS6CLCo1ROKQ6oloPpK3fYxFvXVscdfHwnEgTg==
+X-Received: by 2002:a05:6402:550b:b0:45f:9526:e35a with SMTP id fi11-20020a056402550b00b0045f9526e35amr51424330edb.256.1669710493806;
+        Tue, 29 Nov 2022 00:28:13 -0800 (PST)
+Received: from localhost ([86.61.181.4])
+        by smtp.gmail.com with ESMTPSA id c7-20020a50f607000000b00461e4498666sm6060540edn.11.2022.11.29.00.28.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 00:28:13 -0800 (PST)
+Date:   Tue, 29 Nov 2022 09:28:12 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     Jiri Pirko <jiri@nvidia.com>, Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can <linux-can@vger.kernel.org>
+Subject: Re: [PATCH net-next v2] net: devlink: add
+ DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER
+Message-ID: <Y4XCnAA2hGvqgXh0@nanopsycho>
+References: <20221129031406.3849872-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221129064605.1aadc0e6@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221129031406.3849872-1-mailhol.vincent@wanadoo.fr>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 06:46:05AM +1100, Stephen Rothwell wrote:
-> Hi Greg,
+Tue, Nov 29, 2022 at 04:14:06AM CET, mailhol.vincent@wanadoo.fr wrote:
+>As discussed in [1], abbreviating the bootloader to "bl" might not be
+>well understood. Instead, a bootloader technically being a firmware,
+>name it "fw.bootloader".
+>
+>Add a new macro to devlink.h to formalize this new info attribute name
+>and update the documentation.
+>
+>[1] https://lore.kernel.org/netdev/20221128142723.2f826d20@kernel.org/
+>
+>Suggested-by: Jakub Kicinski <kuba@kernel.org>
+>Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>---
+>* Changelog *
+>
+>v1 -> v2:
+>
+>  * update the documentation as well.
+>  Link: https://lore.kernel.org/netdev/20221129020151.3842613-1-mailhol.vincent@wanadoo.fr/
+>---
+> Documentation/networking/devlink/devlink-info.rst | 5 +++++
+> include/net/devlink.h                             | 2 ++
+> 2 files changed, 7 insertions(+)
+>
+>diff --git a/Documentation/networking/devlink/devlink-info.rst b/Documentation/networking/devlink/devlink-info.rst
+>index 7572bf6de5c1..1242b0e6826b 100644
+>--- a/Documentation/networking/devlink/devlink-info.rst
+>+++ b/Documentation/networking/devlink/devlink-info.rst
+>@@ -198,6 +198,11 @@ fw.bundle_id
 > 
-> On Mon, 28 Nov 2022 17:22:52 +0100 Greg KH <greg@kroah.com> wrote:
-> >
-> > Odd, why is 0-day not triggering on any of these in my tree?   Anyway,
-> > I'll go fix it up, thanks...
+> Unique identifier of the entire firmware bundle.
 > 
-> Does 0-day do powerpc builds?
+>+fw.bootloader
+>+-------------
+>+
+>+Version of the bootloader.
+>+
+> Future work
+> ===========
+> 
+>diff --git a/include/net/devlink.h b/include/net/devlink.h
+>index 074a79b8933f..2f552b90b5c6 100644
+>--- a/include/net/devlink.h
+>+++ b/include/net/devlink.h
+>@@ -621,6 +621,8 @@ enum devlink_param_generic_id {
+> #define DEVLINK_INFO_VERSION_GENERIC_FW_ROCE	"fw.roce"
+> /* Firmware bundle identifier */
+> #define DEVLINK_INFO_VERSION_GENERIC_FW_BUNDLE_ID	"fw.bundle_id"
+>+/* Bootloader */
+>+#define DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER	"fw.bootloader"
 
-I thought it did, based on other problems I have had reported.  I'll go
-queue this fix up now.
-
-thanks,
-
-greg k-h
+You add it and don't use it. You should add only what you use.
