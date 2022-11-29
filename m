@@ -2,64 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A1E63C8C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:49:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2B763C8C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237126AbiK2TtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 14:49:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
+        id S236277AbiK2TuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 14:50:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237130AbiK2Ts0 (ORCPT
+        with ESMTP id S236132AbiK2Tt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 14:48:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49D1226
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:47:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669751240;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vbd23Zx6kbZW7RVz4hFfVIiUakS1MHTk9MEZDu14ZNM=;
-        b=FK+NIJY08ofy84z/TYak8BYJ68KHyKA88DMGNevTp1uePjPylKsvJpTayDhVFKqHIm4pm3
-        g58MNdpOAPhIPScQhYv2qZO2ZdGOd7EEM5yjDx2/vDUI2N10pm+cQi6gKBxIZxbGtrbnnR
-        SMsYfBzOfgln3o19ACd5MvOdcxIZFx0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-54-e9YyuyLyNKOEZtoDUNIhJA-1; Tue, 29 Nov 2022 14:47:16 -0500
-X-MC-Unique: e9YyuyLyNKOEZtoDUNIhJA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4598A101A56D;
-        Tue, 29 Nov 2022 19:47:16 +0000 (UTC)
-Received: from starship (unknown [10.35.206.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2A36140C2140;
-        Tue, 29 Nov 2022 19:47:14 +0000 (UTC)
-Message-ID: <5162c4cbaaae8de01c77093ac005c2f5abc1d040.camel@redhat.com>
-Subject: Re: [PATCH] KVM: X86: set EXITING_GUEST_MODE as soon as vCPU exits
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Jon Kohler <jon@nutanix.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 29 Nov 2022 21:47:13 +0200
-In-Reply-To: <20221129182226.82087-1-jon@nutanix.com>
-References: <20221129182226.82087-1-jon@nutanix.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Tue, 29 Nov 2022 14:49:58 -0500
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2043.outbound.protection.outlook.com [40.107.105.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C385B42;
+        Tue, 29 Nov 2022 11:49:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fUcxLQ6s7e8I3vDrlbrRu9CRRQoEGRQspIuFwODdI9A7y6S1Nt1Csq9UeGnDqr/o/qlCDQhlHJZe5cGV2jmyX2lozu41cW0t0bWNZh3fb3y5h89OcMhauoEdrbiWUhGFs5y9Yoj55SvOBrBCII4gEDurIKRN3YN52NcTg0yovIFaSQgfLBAVCp8X8H4LIOPzjKQX/wedURm107wxg8WGMLeaaupCebfGFo0orLAI5KB6KD7zE4CNM6MnpmARHyh3ZXjCYHnrVAmx8fGlZUNFtkGjJqpjPZHp1HZN1stBWmueNGC7sPVSFLO4a1boXYcEdp/2Ut7BNR8/xXlqu4pSJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ljgDa1rheopKppOrYLNijjJgssexG02gbnj2id2wxb4=;
+ b=CDSbr7Be2IVGbFfZn+tCa6D00+0i9rXhj5J1E7djsMGr5sb+m9l1QuKyDw9RACywpyPR8856olNthcTD4hifyBJK1laDiNTHDH0YUHLzPE6+WGQ/61qEnJRuYpD/f/YzkSQQTCT/q85u2WMXBpVAY4SbGMAu/c2ssP7KoUG85trTsLMiyhdNydMtaW6skEKStVVWuW74GbidNtkYYMTM/PLZ6UXkqSKlByg1xap9RxFHyIfP92LoFDGiWcGM7t6CikGzjWCLSba1k29y5QA55Pul6btU4Cp0JO6ftFOEUO0rZGXM/j+0gIae0h3GiYv9Y6uCNE9RgQ4jGoW6aUTF2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ljgDa1rheopKppOrYLNijjJgssexG02gbnj2id2wxb4=;
+ b=I+pnoU5dIqjzioqmf+TeoubAuRxClmY14ewZIC9NzswnnDiq5PiMe986mhSmlVGKpM7t3dIvUcR+2utZGLUWoh6XHLlkQEDgqM8MUv1t6dOiDjRYQ2+ebGFIlIGGyQxQmkARuMBVac5jcFGzlHLcNHEIlyOA5ec1J3Y3WZHqskY=
+Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
+ by VI1PR04MB7199.eurprd04.prod.outlook.com (2603:10a6:800:11d::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Tue, 29 Nov
+ 2022 19:49:55 +0000
+Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
+ ([fe80::203a:e5da:a4a:7663]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
+ ([fe80::203a:e5da:a4a:7663%12]) with mapi id 15.20.5857.023; Tue, 29 Nov 2022
+ 19:49:55 +0000
+From:   Frank Li <frank.li@nxp.com>
+To:     Lars-Peter Clausen <lars@metafoo.de>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Bough Chen <haibo.chen@nxp.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "open list:NXP i.MX 8QXP ADC DRIVER" <linux-iio@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+CC:     "imx@lists.linux.dev" <imx@lists.linux.dev>
+Subject: Re: [PATCH 1/1] iio: imx8qxp-adc: fix irq flood when call
+ imx8qxp_adc_read_raw()
+Thread-Topic: [PATCH 1/1] iio: imx8qxp-adc: fix irq flood when call
+ imx8qxp_adc_read_raw()
+Thread-Index: AQHZBCvAnPKdihzbs0Sge0KlijZkQg==
+Date:   Tue, 29 Nov 2022 19:49:54 +0000
+Message-ID: <HE1PR0401MB233162590D56093385AC4CF888129@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+References: <20221129164531.2164660-1-Frank.Li@nxp.com>
+ <bbacb73a-6904-d196-ab4a-3e388bcab56c@metafoo.de>
+In-Reply-To: <bbacb73a-6904-d196-ab4a-3e388bcab56c@metafoo.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: HE1PR0401MB2331:EE_|VI1PR04MB7199:EE_
+x-ms-office365-filtering-correlation-id: 262e0f65-97b9-4708-fb2b-08dad242e35c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: y5PtgIOxJEcHVQo9F9xOJyjtvGVNrMI6Jjnyb+9BoU+dpJ9/s2oHv9W1thLWpZFrKlCkhkVO6w7H7XJltjdyERDl7r0Scb/L24noHv2iNN4KnLawog6Y3SO5G8LB0wV3GkuwhSjI4Nu8VX1M4yb/83IAh8YyJt4IbJdh1rsRrvt97H+UTUhcyCCCgH9pgQpuT6Zr3uQRjBUnSHpSWIpjBcbsTIEPMIaWw7yhaDVV/Tsk99Cg/eSu9xfNGPBr4+MgwaxnxmzQJNaCq/fjsChVkpv4vhrLyjdTaHmrygjC+mjFsXZeLw9JKggUuYdEiMyOK2nD23CabQM9efejIelVqd59GuqwCgpQh/Q6G7zInhLDAWH/HPyNRzWLDxjIHzWdUhuFjzzeHcS/+FoKb8v1Ekc0fBv+fhBYcikqG1A25g6hKzYpk9U4mC+52sVLt8HRqEVMD6oyTcAlL5eY9ak3ECltk1o5k3713pfONDMxR6gqwxAQa9s+M0un+fpugJUhpYcjxo9h2XOMz1qOJqhGLqTb3Ul7Gz2VisvICT/NuMVAmhT2YY5arl0hv4XzuodmgTFvdPHNhhmrXmZbwyZ3MCuuom5LJDUBPYSpPKDpffu3jHPu0ChX6+Qlsjtc0UHcxyeZJreVkmIAbEaReA+xXgVdm3CUwJVNN928WAk3G78j/HsiATuN7ZmSwiXFW+8u3oNJAUTUNHemrbRE3y2KVMMPZJsMZmCB8JK1p/RlEqc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(366004)(346002)(376002)(136003)(451199015)(52536014)(38070700005)(6506007)(33656002)(921005)(86362001)(55016003)(9686003)(53546011)(55236004)(66946007)(64756008)(41300700001)(66446008)(186003)(66556008)(8676002)(76116006)(8936002)(4326008)(71200400001)(26005)(478600001)(66476007)(7696005)(316002)(110136005)(122000001)(83380400001)(38100700002)(44832011)(4744005)(7416002)(5660300002)(2906002)(32563001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?L0JOSnVCR2ZFYUlyUkVpdmM0eC9vWjM2UTh1dGJzTC9tNU1BeC9lUFlJVHov?=
+ =?utf-8?B?d3dIUVJxQlhYL05vbnNTd2NpeVdndnNURTBNcWpubFdkaldvcnk0dnZqbXZG?=
+ =?utf-8?B?b0hNdklMMkpWaElIUW9kTEQzOFFYWVN3ci9HVWpWQlZVTWpnY3RraVVmYkh2?=
+ =?utf-8?B?TElHMkRmRXdrdmd4ZTFYUlAvL1k3MzB6T0g3dzhDN2lBU0xQOG5xa0Q4KzMx?=
+ =?utf-8?B?UjQzSHhVUzlVa3VGa2xpVDlWRDJsRUt3UGZ1Q2lEM3J4WmRIaXY3RE94dWd3?=
+ =?utf-8?B?UlZhOHhYT3ZXZ2xEUHROYXNLNW1Zc05SekFqclBZS2IrTHhxYmhGL0NRMGxl?=
+ =?utf-8?B?dFptUHNENG9YUmJId1BiU2tkYzRVcEFsUUlHaTd1TXRuY29zR3VuVGJrSlZh?=
+ =?utf-8?B?ajJqM2JBYThiRFZyUnp2RVYvdzJTYktPQTNHU1loSE94NGVQY1RrbkNRZ2RR?=
+ =?utf-8?B?N1FtODMvcmJTQkZqSkYwWHBkSFhiZ2JvMHB2cE0xcGR6S2lhbkFNYldMLzQw?=
+ =?utf-8?B?MmQ4ODdEaDFFNUc3ZDBrajNia1hPQzh0eUpVMjcvUmZKQS85d09ZUzNRQU1n?=
+ =?utf-8?B?WnFJNjc1Vjg3Z0M0R2tLd29GNFhwMDVNQ2o5NTU3Tzkzdk16TXdHRVIzRDRi?=
+ =?utf-8?B?NmlyMDc0VzQxdXpGa0x5Yk9Ja3l0MjQyRk5GVFRkL3haVU1QY2N3d2hSTzBh?=
+ =?utf-8?B?S3ZzY3ZvcDl4WHpwNlRwVjFvL1A2N2Q1SWJvR01nOXF0UENjM3FSZFRQQm5u?=
+ =?utf-8?B?bDlzbml2RFpkZVlwenBwZ0U4TFFleklacjBnZmN3NnFEMWxhYVY1dmltM0U5?=
+ =?utf-8?B?VisxSHEyUXVpVGNRSTVscGE0anRITnAzcVQ1d3lvRlZHMENDSnZWREYxM0dE?=
+ =?utf-8?B?eVBPYUxpa0FOSFo4a0dJQ3JuYzREV2pmYUJ6L1RsUWdUdzljSDhtZ3hBdE5S?=
+ =?utf-8?B?V2drazRUZTVFWWdPdXFYalpaUjFJYzgvWVFzSjczYmg0dWJNdTVMTEhlUngw?=
+ =?utf-8?B?N3VDNW9aVEU1c3R4T2FBZWU2UmtEK2JaQzFubzRFZkR2M2RMTksyZnNwamRy?=
+ =?utf-8?B?WTlwMFZzVEpTM0lVOW45Z3JaSkViMlFWZFhZSmpkMXR6dzRpSThrT0VCTWVU?=
+ =?utf-8?B?RUhNcjh1Q013T3Z0R2s1UHpMeEtaWndsRFdseWxqRGlNTEhVUXkzZytFeTl3?=
+ =?utf-8?B?RmNIczArTWduTTdUSytMd3RJUDk5Y0V4NWllNEhyR0s1d1orekhwQkpaT2Yv?=
+ =?utf-8?B?MkoySGJaaGJEaExMaS9wM3R5dHlyNm5ta1dXbUZYY2hqQ2VHMDNPT3NlM3hI?=
+ =?utf-8?B?NVpaVEZwQmFBZUVEcHd2TkhBcFBOQlJDTXBiWW5WWE1LM1g4S0NrbENxWlhy?=
+ =?utf-8?B?M2hhS3ZzQ1hsSTVwWHpjaDQzTWEwWER3RlgvUEdZUXhjNTN1djFoRUhUWFdE?=
+ =?utf-8?B?ZksyUEZwMmV5Q2tEYjNVb0MzUjZKaWVOTDBCMHMveWxNQng4d0RDMmhUb1J3?=
+ =?utf-8?B?ZjRxSm5iNHJDWDVYZlc1NVVCMWF3aWFQMGJoai9oNXRRQ0plQUtMSklxdlhy?=
+ =?utf-8?B?eHRRdUdXZ3FSWHczUFlCZ0ZvT05vZWp2djJLeDRVWEx5SWt6ZFZ4Z1VvT0NX?=
+ =?utf-8?B?WXpWWjBzOGEyb244L1pYOUMzNDF6SVdla2l6VDJxaEF4a1JIaWUwd2tHMjJT?=
+ =?utf-8?B?dmoyc0VQZytLN2RoaWwrQ3VVOTlHNGVINytsSUpzcGErTjZTYlIrVTNob2pz?=
+ =?utf-8?B?emJEbGw3VXpKeEF2ckdmVDdFbmp5S3hEWkd3NkJoYUtKMVl2VzlQUkh0eTVi?=
+ =?utf-8?B?Y1NSa0R2TUR4ZGxnVGI3T0piYnU0cWt2S3ZJeFp2YmhaLzVCTFg3NG1jZTJY?=
+ =?utf-8?B?WkJaUkhhaDlHMlMzVmtTUEV1Uy9nRVkxT3M1Yy9nK3ZVQy92WFhFSzBhOUJq?=
+ =?utf-8?B?Z0JHS2tJUkx5NVovVTEwcWJNS3RUYTRLejZCcWNZRTc1RWp5SkRlckVGcGIr?=
+ =?utf-8?B?NzRER1dEcS9YOWp5Z0NXaU9nSElWWXVVVWtPb2VkRjJ1ekcyYjFBN2xpTFNv?=
+ =?utf-8?B?cWgwN3gwckM0OUdXcHQ1ZGVCWXhQMjQycmlZZkxRMjZBR0tXVENtL0RMWGxZ?=
+ =?utf-8?Q?mOd0=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 262e0f65-97b9-4708-fb2b-08dad242e35c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2022 19:49:55.0386
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5UpARicugVHDQPYkzXZWkNvtjVElGHYH3WsW7IT5tX/zt05myFSffDmpgzyUBqN8IFeiFTWUHWA5z5r1K4is0w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7199
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,120 +138,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-29 at 13:22 -0500, Jon Kohler wrote:
-> Set vcpu->mode to EXITING_GUEST_MODE as soon vCPU exits to reflect
-> that we are indeed exiting guest mode, but not quite out of guest
-> mode yet. Note: This is done lazily without an explicit memory
-> barrier so that we do not regress the cost in the critical path
-> of going from the exit to the exit handler.
-> 
-> Flip back to IN_GUEST_MODE for exits that use
-> EXIT_FASTPATH_REENTER_GUEST, such that we are IN_GUEST_MODE upon
-> reentry.
-> 
-> Changing vcpu->mode away from IN_GUEST_MODE as early as possible
-> gives IPI senders as much runway as possible to avoid ringing
-> doorbell or sending posted interrupt IPI in AMD and Intel,
-> respectively. Since this is done without an explicit memory
-> barrier, the worst case is that the IPI sender sees IN_GUEST_MODE
-> still and sends a spurious event, which is the behavior prior
-> to this patch.
-
-Beware that we had a king sized bug in regard to AVIC inhibition races
-vs guest entries, this this should be carefully checked for this.
-
-Also, do you have any perf numbers to see if that actually improves performance?
-(I am just curious, I do think that this can improve performance).
-
-Best regards,
-	Maxim Levitsky
-
-
-> 
-> Signed-off-by: Jon Kohler <jon@nutanix.com>
-> ---
->  arch/x86/kvm/svm/svm.c |  7 +++++++
->  arch/x86/kvm/vmx/vmx.c | 23 +++++++++++++++++++++++
->  arch/x86/kvm/x86.c     |  8 ++++++++
->  3 files changed, 38 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index ce362e88a567..5f0c118a3ffd 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -3907,6 +3907,13 @@ static noinstr void svm_vcpu_enter_exit(struct kvm_vcpu *vcpu, bool spec_ctrl_in
->  	else
->  		__svm_vcpu_run(svm, spec_ctrl_intercepted);
->  
-> +	/* Optimize IPI reduction by setting mode immediately after vmexit
-> +	 * without a memmory barrier as this as not paired anywhere. vcpu->mode
-> +	 * is will be set to OUTSIDE_GUEST_MODE in x86 common code with a memory
-> +	 * barrier, after the host is done fully restoring various host states.
-> +	 */
-> +	vcpu->mode = EXITING_GUEST_MODE;
-> +
->  	guest_state_exit_irqoff();
->  }
->  
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 63247c57c72c..243dcb87c727 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -5878,6 +5878,17 @@ static fastpath_t handle_fastpath_preemption_timer(struct kvm_vcpu *vcpu)
->  
->  	if (!vmx->req_immediate_exit &&
->  	    !unlikely(vmx->loaded_vmcs->hv_timer_soft_disabled)) {
-> +		/* Reset IN_GUEST_MODE since we're going to reenter
-> +		 * guest as part of this fast path. This is done as
-> +		 * an optimization without a memory barrier since
-> +		 * EXITING_GUEST_MODE is also set without a memory
-> +		 * barrier. This also needs to be reset prior to
-> +		 * calling apic_timer_expired() so that
-> +		 * kvm_use_posted_timer_interrupt() returns the proper
-> +		 * value.
-> +		 */
-> +		if (vcpu->mode == EXITING_GUEST_MODE)
-> +			vcpu->mode = IN_GUEST_MODE;
->  		kvm_lapic_expired_hv_timer(vcpu);
->  		return EXIT_FASTPATH_REENTER_GUEST;
->  	}
-> @@ -7031,6 +7042,18 @@ void noinstr vmx_update_host_rsp(struct vcpu_vmx *vmx, unsigned long host_rsp)
->  void noinstr vmx_spec_ctrl_restore_host(struct vcpu_vmx *vmx,
->  					unsigned int flags)
->  {
-> +	struct kvm_vcpu *vcpu = &vmx->vcpu;
-> +
-> +	/* Optimize IPI reduction by setting mode immediately after vmexit
-> +	 * without a memmory barrier as this as not paired anywhere. vcpu->mode
-> +	 * is will be set to OUTSIDE_GUEST_MODE in x86 common code with a memory
-> +	 * barrier, after the host is done fully restoring various host states.
-> +	 * Since the rdmsr and wrmsr below are expensive, this must be done
-> +	 * first, so that the IPI suppression window covers the time dealing
-> +	 * with fixing up SPEC_CTRL.
-> +	 */
-> +	vcpu->mode = EXITING_GUEST_MODE;
-> +
->  	u64 hostval = this_cpu_read(x86_spec_ctrl_current);
->  
->  	if (!cpu_feature_enabled(X86_FEATURE_MSR_SPEC_CTRL))
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 2835bd796639..0e0d228f3fa5 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -2160,6 +2160,14 @@ fastpath_t handle_fastpath_set_msr_irqoff(struct kvm_vcpu *vcpu)
->  		data = kvm_read_edx_eax(vcpu);
->  		if (!handle_fastpath_set_tscdeadline(vcpu, data)) {
->  			kvm_skip_emulated_instruction(vcpu);
-> +			/* Reset IN_GUEST_MODE since we're going to reenter
-> +			 * guest as part of this fast path. This is done as
-> +			 * an optimization without a memory barrier since
-> +			 * EXITING_GUEST_MODE is also set without a memory
-> +			 * barrier.
-> +			 */
-> +			if (vcpu->mode == EXITING_GUEST_MODE)
-> +				vcpu->mode = IN_GUEST_MODE;
->  			ret = EXIT_FASTPATH_REENTER_GUEST;
->  		}
->  		break;
-
-
+DQo+IE9uIDExLzI5LzIyIDA4OjQ1LCBGcmFuayBMaSB3cm90ZToNCj4gICAgICAgICAgICAgICAg
+ICAgICAgICByZWFkbChhZGMtPnJlZ3MgKyBJTVg4UVhQX0FEUl9BRENfRkNUUkwpKTsNCj4gPiBA
+QCAtMjcyLDYgKzI3NSwxMCBAQCBzdGF0aWMgaXJxcmV0dXJuX3QgaW14OHF4cF9hZGNfaXNyKGlu
+dCBpcnEsIHZvaWQNCj4gKmRldl9pZCkNCj4gPiAgICAgICBpZiAoZmlmb19jb3VudCkNCj4gPiAg
+ICAgICAgICAgICAgIGNvbXBsZXRlKCZhZGMtPmNvbXBsZXRpb24pOw0KPiANCj4gU2hvdWxkbid0
+IHRoZSBjb21wbGV0aW9uIGJlIHRyaWdnZXJlZCBhZnRlciB0aGUgcmVhZGluZyBvZiB0aGUgc2Ft
+cGxlcz8NCj4gb3RoZXJ3aXNlIHlvdSBoYXZlIGEgcmFjZSBjb25kaXRpb24gb24gYSBtdWx0aS1w
+cm9jZXNzb3Igc3lzdGVtLg0KDQpZZXMsIHlvdSBhcmUgcmlnaHQuIEkgd2lsbCBzZW5kIHVwZGF0
+ZWQgcGF0Y2ggc29vbi4NCg0KPiANCj4gPg0KPiA+ICsgICAgIGZvciAoaSA9IDA7IGkgPCBmaWZv
+X2NvdW50OyBpKyspDQo+ID4gKyAgICAgICAgICAgICBhZGMtPmZpZm9baV0gPSBGSUVMRF9HRVQo
+SU1YOFFYUF9BRENfUkVTRklGT19WQUxfTUFTSywNCj4gPiArICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICByZWFkbF9yZWxheGVkKGFkYy0+cmVncyArIElNWDhRWFBfQURSX0FEQ19SRVNGSUZP
+KSk7DQo+ID4gKw0KPiA+ICAgICAgIHJldHVybiBJUlFfSEFORExFRDsNCj4gPiAgIH0NCj4gPg0K
+DQo=
