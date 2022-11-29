@@ -2,130 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2BC63BFA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5EC63BFAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbiK2MEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 07:04:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
+        id S233912AbiK2MEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 07:04:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233500AbiK2MDt (ORCPT
+        with ESMTP id S233692AbiK2MD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 07:03:49 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFBE532DA
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:02:53 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D21F021A9D;
-        Tue, 29 Nov 2022 12:02:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1669723371; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z/3hsjogRyiywNOtVq13TN6FozNI4uz7VCcPb28njoU=;
-        b=qqpcbvqqo4tXUVc7mA+18PQYvRcs7oDUpGh/g3Up9IsTr804a/89Jyltjdt0zIJEFsGBZL
-        UsLIyrtQcgG9dfy2KjHa8Ar0QoZgz5ZSycs4s5owWC1PuOg0+F3YPJIdktCFL+iUK0W2Yh
-        jxLY53OWK5LF1Tv7U0fwPq+JKpUtHdw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1669723371;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z/3hsjogRyiywNOtVq13TN6FozNI4uz7VCcPb28njoU=;
-        b=UcQe1LxJo8la8OZ6DKqZjiM5CfBtE6Zb/LqKvfCRlOw5VE/1x5802P26oq+jYQSHBp+sfX
-        rPgRrFVUpemBMDAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A54C013428;
-        Tue, 29 Nov 2022 12:02:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id eSCJJ+v0hWNNfQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 29 Nov 2022 12:02:51 +0000
-Message-ID: <d6c614fe-cc80-7a19-1fa6-2ed6cc75b705@suse.cz>
-Date:   Tue, 29 Nov 2022 13:02:51 +0100
+        Tue, 29 Nov 2022 07:03:59 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6030C5802C
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:03:14 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id c15so4168363pfb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:03:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t4Uj47DJf73FxZb3P8g6O9fWjUxsQOikSyAAeVgUhcA=;
+        b=P35CotWzaM2P3ovyTan+dW0r95aJEGTqjZRrro4IiaN6r7sLG4x5QwwOxC23vuRxBS
+         obQTCzC9TcZWGZ6UJMvVn5Vx+c1fM2MDcFhO9fPBF0T2dhWebBUy7sEV01KAZdFmia06
+         tKNoS2f0xttHee5GmSVIqbBmDeBplGQphNx0/efdoc9iGvePyTwo3Ii3L6LjPJdRqT+d
+         dg/y7Svxyg4M4sBdd7JWKc2xDe2wYQhZGolbC7RCA1tF1rZtboNQEadSqoEXdd2q5ae7
+         vlK4rXNMG+4DJf3GtDeb2ylVB2Gg4yds1cCpf1uROZQEZojPAkDLyshkQuYBHvA+3eXj
+         FpXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t4Uj47DJf73FxZb3P8g6O9fWjUxsQOikSyAAeVgUhcA=;
+        b=WS1RAn9F2dlffaHjMWEOoGELaTdvJXkgBGfLORvbcvG0o8KP5odsFnhSE2d/zMsO4n
+         NcbM7FOMFSP2TxZN/CoepwIssd97JNwdG3/YYFJD5ijtb33I9zQk9qyCwKgJuJVsz6h7
+         roiMpKRpI/lxdfvuqjBsbYO0abpa8Z4r0M95W2WX7reYAbHUfg1KfOEi07D5/+ICJsHZ
+         KgqY6ExBDUszRApIm5coHJ5ju35HRRcN8+O1uebaeqBXAHIjNKmB6RUDwwwu1uuNe+QA
+         ChnmgLYZrYbLZPl969k3tTaqwrtImdvw7V0jW39xbf9oPOxo9NeDyYjpCqdDmbcCnFJG
+         xNxg==
+X-Gm-Message-State: ANoB5pm2diQGoyxR38bJJ/6c4cQxPruwEA19HlHhBYkgqxplEiKHekjA
+        8iCSZ7gEtXgltRbVFFrp/NcQIZXfJgPGYiGtxoo=
+X-Google-Smtp-Source: AA0mqf4/dopHy4Uoq3WIsq7+rfzDdzcrMyrEbwpKPtKtcK0vYk4/gyqUWPj6A+PfWF8PSjL4A+A7Ty5zl3QIssAcOCM=
+X-Received: by 2002:aa7:8709:0:b0:572:2189:84ef with SMTP id
+ b9-20020aa78709000000b00572218984efmr37192850pfo.28.1669723393830; Tue, 29
+ Nov 2022 04:03:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 2/2] mm/slub, kunit: Add a test case for kmalloc
- redzone check
-Content-Language: en-US
-To:     Marco Elver <elver@google.com>
-Cc:     Feng Tang <feng.tang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oliver Glitta <glittao@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20221129063358.3012362-1-feng.tang@intel.com>
- <20221129063358.3012362-2-feng.tang@intel.com>
- <CANpmjNNkLWvNYUf-bPPDBcqFWegp3_NpYdhygvYU1dtT52m29g@mail.gmail.com>
- <67e6ebce-f8cc-7d28-5e85-8a3909c2d180@suse.cz>
- <CANpmjNNZhXX830jqPn9eaQZHwKhBb4b_PEuUdH6O69ELqW470w@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CANpmjNNZhXX830jqPn9eaQZHwKhBb4b_PEuUdH6O69ELqW470w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221129033230.255947-1-guoren@kernel.org> <20221129033230.255947-7-guoren@kernel.org>
+In-Reply-To: <20221129033230.255947-7-guoren@kernel.org>
+From:   Song Shuai <suagrfillet@gmail.com>
+Date:   Tue, 29 Nov 2022 12:03:02 +0000
+Message-ID: <CAAYs2=hOY+ib_OYwUfnM10kwyqte7C7=efTL00VkVKHWM9HbAw@mail.gmail.com>
+Subject: Re: [PATCH V4 6/7] riscv: ftrace: Add DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+ support
+To:     guoren@kernel.org
+Cc:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
+        mhiramat@kernel.org, jolsa@redhat.com, bp@suse.de,
+        jpoimboe@kernel.org, andy.chiu@sifive.com, mark.rutland@arm.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/22 12:48, Marco Elver wrote:
-> On Tue, 29 Nov 2022 at 12:01, Vlastimil Babka <vbabka@suse.cz> wrote:
->>
->> On 11/29/22 10:31, Marco Elver wrote:
->> > On Tue, 29 Nov 2022 at 07:37, Feng Tang <feng.tang@intel.com> wrote:
-> 
->> For SLAB_SKIP_KFENCE, we could also add the flag after creation to avoid
->> this trouble? After all there is a sysfs file to control it at runtime
->> anyway (via skip_kfence_store()).
->> In that case patch 1 would have to wrap kmem_cache_create() and the flag
->> addition with a new function to avoid repeating. That function could also be
->> adding SLAB_NO_USER_FLAGS to kmem_cache_create(), instead of the #define
->> DEFAULT_FLAGS.
-> 
-> I wouldn't overcomplicate it, all we need is a way to say "this flag
-> should not be used directly" - and only have it available via an
-> indirect step. Availability via sysfs is one such step.
-> 
-> And for tests, there are 2 options:
-> 
-> 1. we could provide a function "kmem_cache_set_test_flags(cache,
-> gfp_flags)" and define SLAB_TEST_FLAGS (which would include
-> SLAB_SKIP_KFENCE). This still allows to set it generally, but should
-> make abuse less likely due to the "test" in the name of that function.
-> 
-> 2. just set it directly, s->flags |= SLAB_SKIP_KFENCE.
-> 
-> If you're fine with #2, that seems simplest and would be my preference.
+<guoren@kernel.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=8829=E6=97=A5=E5=91=A8=
+=E4=BA=8C 03:33=E5=86=99=E9=81=93=EF=BC=9A
+>
+> From: Song Shuai <suagrfillet@gmail.com>
+>
+> This patch adds DYNAMIC_FTRACE_WITH_DIRECT_CALLS support for RISC-V.
+>
+> select the DYNAMIC_FTRACE_WITH_DIRECT_CALLS to provide the
+> register_ftrace_direct[_multi] interfaces allowing users to register
+> the customed trampoline (direct_caller) as the mcount for one or
+> more target functions. And modify_ftrace_direct[_multi] are also
+> provided for modifying direct_caller.
+>
+> To make the direct_caller and the other ftrace hooks (eg. function/fgraph
+> tracer, k[ret]probes) co-exist, a temporary register is nominated to
+> store the address of direct_caller in ftrace_regs_caller. After the
+> setting of the address direct_caller by direct_ops->func and the
+> RESTORE_REGS in ftrace_regs_caller, direct_caller will be jumped to
+> by the `jr` inst.
+>
+> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+> Tested-by: Guo Ren <guoren@kernel.org>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> ---
+>  arch/riscv/Kconfig              | 1 +
+>  arch/riscv/include/asm/ftrace.h | 6 ++++++
+>  arch/riscv/kernel/mcount-dyn.S  | 4 ++++
+>  3 files changed, 11 insertions(+)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 1d0e5838b11b..2828537abfcd 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -278,6 +278,7 @@ config ARCH_RV64I
+>         select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+>         select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && $(cc-option,-=
+fpatchable-function-entry=3D8)
+I noticed this cc-option uses the '-fpatchable-function-entry=3D8' to
+judge if the compiler supports this option.
+Should we keep up with the CC_FLAGS_FTRACE modified in ("riscv:
+ftrace: Reduce the detour code size to half"),
+or follow the parisc architecture to set the value as '1,1' in the
+case of the CC_FLAGS_FTRACE is not constant.
+```
+./arch/parisc/Makefile:75:CC_FLAGS_FTRACE :=3D
+-fpatchable-function-entry=3D$(NOP_COUNT),$(shell echo
+$$(($(NOP_COUNT)-1)))
+./arch/parisc/Kconfig:70:       select HAVE_DYNAMIC_FTRACE if
+$(cc-option,-fpatchable-function-entry=3D1,1)
+```
+>         select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
+> +       select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+>         select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
+>         select HAVE_FUNCTION_GRAPH_TRACER
+>         select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
+> diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftr=
+ace.h
+> index 84f856a3286e..4539f10fea56 100644
+> --- a/arch/riscv/include/asm/ftrace.h
+> +++ b/arch/riscv/include/asm/ftrace.h
+> @@ -114,6 +114,12 @@ struct ftrace_regs;
+>  void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+>                        struct ftrace_ops *op, struct ftrace_regs *fregs);
+>  #define ftrace_graph_func ftrace_graph_func
+> +
+> +static inline void arch_ftrace_set_direct_caller(struct pt_regs *regs, u=
+nsigned long addr)
+> +{
+> +               regs->t1 =3D addr;
+> +}
+> +
+>  #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+>
+>  #endif /* __ASSEMBLY__ */
+> diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dy=
+n.S
+> index 466c6ef217b1..fef7c460f991 100644
+> --- a/arch/riscv/kernel/mcount-dyn.S
+> +++ b/arch/riscv/kernel/mcount-dyn.S
+> @@ -232,6 +232,7 @@ ENDPROC(ftrace_caller)
+>
+>  #else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+>  ENTRY(ftrace_regs_caller)
+> +       move    t1, zero
+>         SAVE_ABI_REGS 1
+>         PREPARE_ARGS
+>
+> @@ -241,7 +242,10 @@ ftrace_regs_call:
+>
+>
+>         RESTORE_ABI_REGS 1
+> +       bnez    t1,.Ldirect
+>         jr t0
+> +.Ldirect:
+> +       jr t1
+>  ENDPROC(ftrace_regs_caller)
+>
+>  ENTRY(ftrace_caller)
+> --
+> 2.36.1
+>
 
-Yeah, that's what I meant. But slub_kunit.c could still have own internal
-cache creation function so the "|SLAB_NO_USER_FLAGS" and "s->flags |=
-SLAB_SKIP_KFENCE" is not repeated X times.
 
-> 
->> For SLAB_KMALLOC there's probably no such way unless we abuse the internal
->> APIs even more and call e.g. create_boot_cache() instead of
->> kmem_cache_create(). But that one is __init, so probably not. If we do
->> instead allow the flag, I wouldn't add it to SLAB_CORE_FLAGS but rather
->> SLAB_CACHE_FLAGS and SLAB_FLAGS_PERMITTED.
-> 
-> I'd probably go with the simplest solution here.
-
-Agreed.
+--=20
+Thanks,
+Song
