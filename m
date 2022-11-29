@@ -2,54 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B32263B851
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D245463B86E
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235220AbiK2DAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 22:00:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
+        id S235360AbiK2DCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 22:02:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235150AbiK2DAG (ORCPT
+        with ESMTP id S235288AbiK2DBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 22:00:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C785545084;
-        Mon, 28 Nov 2022 19:00:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5931D61551;
-        Tue, 29 Nov 2022 03:00:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48EE1C433C1;
-        Tue, 29 Nov 2022 03:00:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669690803;
-        bh=5btTgIEeLul1wxmf1BM9Yh4gkHLdgzHiv1lNNQuIEws=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BnMSEkCBbbHX04jB5ycyfv9uxQibWA+H5AaTPzc/XeyVD7cvTmSmyxdSma/kJ7yXO
-         NEKm+uEXyhIYEfPLV8wFANdeTYml0nbfiiharpnnsLn8XLXFSbP8C+ztpa93ORrQ6Y
-         hqG+8I9Kpjgw1kwWXlVyCqQOIWdu5gz6dA89lJu3WwYiVlyBX1KP8FEvHhIDToAubo
-         pD9R7ij713Uj/u0wrUTrcRtv+Snx13RxQO6tvryIhAb89rPhycqEyk+MTYs5KfWS82
-         zrFVBGt6WLNkcFN4bkPt2hiFJSLjBUM9Xbsz3xz8jGzy+8ZJZS40OlUm+FNvhCAQPo
-         Ujmqr7AO99oGA==
-Date:   Mon, 28 Nov 2022 19:00:02 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Xiaolei Wang <xiaolei.wang@windriver.com>, andrew@lunn.ch,
-        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v2][PATCH 1/1] net: phy: Add link between phy dev and mac dev
-Message-ID: <20221128190002.0cc0fc95@kernel.org>
-In-Reply-To: <e1c8ef9c-5dce-485e-e363-abba3c1178a9@gmail.com>
-References: <20221125041206.1883833-1-xiaolei.wang@windriver.com>
-        <20221125041206.1883833-2-xiaolei.wang@windriver.com>
-        <e1c8ef9c-5dce-485e-e363-abba3c1178a9@gmail.com>
+        Mon, 28 Nov 2022 22:01:53 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816C3303F3;
+        Mon, 28 Nov 2022 19:01:52 -0800 (PST)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NLnCq75GNzRpVS;
+        Tue, 29 Nov 2022 11:01:11 +0800 (CST)
+Received: from huawei.com (10.174.178.129) by kwepemi500016.china.huawei.com
+ (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 29 Nov
+ 2022 11:01:49 +0800
+From:   Kemeng Shi <shikemeng@huawei.com>
+To:     <tj@kernel.org>, <josef@toxicpanda.com>, <axboe@kernel.dk>
+CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <shikemeng@huawei.com>
+Subject: [PATCH v2 00/10] A few bugfix and cleanup patches for blk-throttle
+Date:   Tue, 29 Nov 2022 11:01:37 +0800
+Message-ID: <20221129030147.27400-1-shikemeng@huawei.com>
+X-Mailer: git-send-email 2.14.1.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.174.178.129]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500016.china.huawei.com (7.221.188.220)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,8 +44,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Nov 2022 13:05:09 -0800 Florian Fainelli wrote:
-> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-> Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Hi, this series contain a few patches to fix problem when on the default
+hierarchy, corrent comment and so on. More detail can be found in
+respective changelogs. Thanks.
 
-Thanks! Is this for next or for net?
+---
+V1->V2:
+ -Thanks for the review and advice from Tejun. The corrected comment of
+  "blk-throttle: correct stale comment in throtl_pd_init" and the
+  solution of "blk-throttle: Fix that bps of child could exceed bps
+  limited in parent" are from reply of Tejun.
+ -Collect Ack from Tejun.
+ -Fix the compile problem when CONFIG_BLK_DEV_THROTTLING_LOW is set.
+ -Drop "blk-throttle: Limit whole system if root group is configured
+  when on the default hierarchy", "blk-throttle: remove unnecessary check
+  for validation of limit index" and "blk-throttle: remove unused variable
+  td in tg_update_has_rules"
+ -Add "blk-throttle: correct stale comment in throtl_pd_init" and
+  "blk-throttle: avoid dead code in throtl_hierarchy_can_upgrade"
+ -Use solution that set the BIO_BPS_THROTTLED flag only when the bio
+  traversed the entire tree to fix that bps of child could exceed bps
+  limited in parent in patch 2/10.
+ -Improve the description and comment of most commits.
+---
+
+Kemeng Shi (10):
+  blk-throttle: correct stale comment in throtl_pd_init
+  blk-throttle: Fix that bps of child could exceed bps limited in parent
+  blk-throttle: ignore cgroup without io queued in
+    blk_throtl_cancel_bios
+  blk-throttle: correct calculation of wait time in tg_may_dispatch
+  blk-throttle: simpfy low limit reached check in throtl_tg_can_upgrade
+  blk-throttle: fix typo in comment of throtl_adjusted_limit
+  blk-throttle: remove incorrect comment for tg_last_low_overflow_time
+  blk-throttle: remove repeat check of elapsed time from last upgrade in
+    throtl_hierarchy_can_downgrade
+  blk-throttle: Use more siutable time_after check for update of
+    slice_start
+  blk-throttle: avoid dead code in throtl_hierarchy_can_upgrade
+
+ block/blk-throttle.c | 104 +++++++++++++++++++++++--------------------
+ 1 file changed, 56 insertions(+), 48 deletions(-)
+
+-- 
+2.30.0
+
