@@ -2,84 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2868A63C7E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8F663C7EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:18:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236085AbiK2TOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 14:14:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
+        id S236226AbiK2TRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 14:17:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236088AbiK2TOP (ORCPT
+        with ESMTP id S235356AbiK2TRw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 14:14:15 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E7068C74;
-        Tue, 29 Nov 2022 11:14:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZT8K1y0fomD3ovOrP25q9qXv8/nKa1NepgBkRGQnx/c=; b=P5TK2Cg/ft8uEaGWEYuJOx2nTq
-        ++BNFtjzHpjkmt+xbZUJCENMP4R5NzonRN+VWLuix+EnM8rejebY5irBlL/lS7/8qJ4JwyL7mm6Gs
-        Z95A632AvwDYz+7Tn2OT3VQF/DrUt32Mq0M6G00VDaVqx1aEoepS1pnx7ZWlQCKxp1ULw+zClGfna
-        pZ9ewuMH+VcS13cN4AxOLfReKqlmfrysPRifXYSfYsE9d3fKQ9pgLpTO+1D8BEQDMLByyRV+p+4am
-        zZbjZlYckPTU2LVb9gfIG0G8RjJfMNxmyXhZk1lhP13nNA8/S4+xUdQxOs/k4FANWCFTxbCvah0RJ
-        mlwkiT4Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p063Z-00E7rA-Hi; Tue, 29 Nov 2022 19:14:13 +0000
-Date:   Tue, 29 Nov 2022 19:14:13 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
-        fengnan chang <fengnanchang@gmail.com>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [f2fs-dev] [PATCH v3 14/23] f2fs: Convert
- f2fs_write_cache_pages() to use filemap_get_folios_tag()
-Message-ID: <Y4ZaBd1r45waieQs@casper.infradead.org>
-References: <20221017202451.4951-1-vishal.moola@gmail.com>
- <20221017202451.4951-15-vishal.moola@gmail.com>
- <9c01bb74-97b3-d1c0-6a5f-dc8b11113e1a@kernel.org>
+        Tue, 29 Nov 2022 14:17:52 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7203515824
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:17:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1669749468; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=x4ACPi/mFEo8bcgZDh23yUYuSMk3MfBQvJRzo/w5mRk=;
+        b=j4W68pBViRgv2A41FrCHCYDXpDP6TsDv5bNM8uiOzylCIHMKLUGSV7f7LF4Dj1Msuhjoo/
+        vVjS3JHL7KxEoq76+/3f22S1w2Gnxpn3ARW53F6Cjgc27wzwHcJ38ogiIVjzZiJ6kUuDVp
+        OE4+MhuB/k4M32ZMrlpK6wjYYsdH3eM=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v2 00/26] drm: Get rid of #ifdef CONFIG_PM* guards
+Date:   Tue, 29 Nov 2022 19:17:07 +0000
+Message-Id: <20221129191733.137897-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9c01bb74-97b3-d1c0-6a5f-dc8b11113e1a@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 03:02:34PM +0800, Chao Yu wrote:
-> On 2022/10/18 4:24, Vishal Moola (Oracle) wrote:
-> > Converted the function to use a folio_batch instead of pagevec. This is in
-> > preparation for the removal of find_get_pages_range_tag().
-> > 
-> > Also modified f2fs_all_cluster_page_ready to take in a folio_batch instead
-> > of pagevec. This does NOT support large folios. The function currently
-> 
-> Vishal,
-> 
-> It looks this patch tries to revert Fengnan's change:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=01fc4b9a6ed8eacb64e5609bab7ac963e1c7e486
-> 
-> How about doing some tests to evaluate its performance effect?
-> 
-> +Cc Fengnan Chang
+Hi,
 
-Thanks for reviewing this.  I think the real solution to this is
-that f2fs should be using large folios.  That way, the page cache
-will keep track of dirtiness on a per-folio basis, and if your folios
-are at least as large as your cluster size, you won't need to do the
-f2fs_prepare_compress_overwrite() dance.  And you'll get at least fifteen
-dirty folios per call instead of fifteen dirty pages, so your costs will
-be much lower.
+This patchset updates the DRM drivers to use the new set of PM-related
+macros introduced recently.
 
-Is anyone interested in doing the work to convert f2fs to support
-large folios?  I can help, or you can look at the work done for XFS,
-AFS and a few other filesystems.
+The point of these macros is to allow the PM functions to be
+automatically dropped by the compiler when CONFIG_PM or CONFIG_SUSPEND
+is disabled, without having to use #ifdef guards.
+
+This has the advantages of always compiling these functions in,
+independently of any Kconfig option. Thanks to that, bugs and other
+regressions are subsequently easier to catch.
+
+Checkpatch complains about patch [11/26], as I replaced a
+"#if defined(IS_NOT_BROKEN)" to a "if (IS_ENABLED(IS_NOT_BROKEN))".
+I don't really know how to make it better so I left it like that.
+
+Compile-tested with allyesconfig, with the following cases:
+- CONFIG_PM=y CONFIG_PM_SLEEP=y
+- CONFIG_PM=y CONFIG_PM_SLEEP=n
+- CONFIG_PM=n
+
+V2:
+- Patch [1/26] now adds a macro named
+  DEFINE_DRM_MODE_CONFIG_HELPER_PM_OPS() instead of exporting a
+  dev_pm_ops instance.
+- Patches [3/26] to [7/26] are updated accordingly.
+- I updated the description of patches [12/26], [20/26] and [23/26].
+  The code itself did not change.
+
+Note that I can commit to drm-misc-next but not drm-next, so I cannot
+apply this patchset myself when it's all properly tagged.
+
+Cheers,
+-Paul
+
+
+Paul Cercueil (26):
+  drm: modeset-helper: Add DEFINE_DRM_MODE_CONFIG_HELPER_PM_OPS macro
+  drm: bochs: Define and use generic PM ops
+  drm: imx: Define and use generic PM ops
+  drm: rockchip: Define and use generic PM ops
+  drm: tegra: Define and use generic PM ops
+  drm: sun4i: Define and use generic PM ops
+  drm: mxsfb: Define and use generic PM ops
+  drm: atmel-hlcdc: Remove #ifdef guards for PM related functions
+  drm: exynos: Remove #ifdef guards for PM related functions
+  drm: imx/dcss: Remove #ifdef guards for PM related functions
+  drm: bridge/dw-hdmi: Remove #ifdef guards for PM related functions
+  drm: etnaviv: Remove #ifdef guards for PM related functions
+  drm: fsl-dcu: Remove #ifdef guards for PM related functions
+  drm: mediatek: Remove #ifdef guards for PM related functions
+  drm: omap: Remove #ifdef guards for PM related functions
+  drm: panfrost: Remove #ifdef guards for PM related functions
+  drm: rcar-du: Remove #ifdef guards for PM related functions
+  drm: rockchip: Remove #ifdef guards for PM related functions
+  drm: shmobile: Remove #ifdef guards for PM related functions
+  drm: tegra: Remove #ifdef guards for PM related functions
+  drm: tilcdc: Remove #ifdef guards for PM related functions
+  drm: vboxvideo: Remove #ifdef guards for PM related functions
+  drm: vc4: Remove #ifdef guards for PM related functions
+  drm: gm12u320: Remove #ifdef guards for PM related functions
+  drm: tidss: Remove #ifdef guards for PM related functions
+  drm/i915/gt: Remove #ifdef guards for PM related functions
+
+ drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c  |  9 ++---
+ .../drm/bridge/synopsys/dw-hdmi-ahb-audio.c   | 17 ++++-----
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.c         | 30 ++++++---------
+ drivers/gpu/drm/exynos/exynos5433_drm_decon.c | 13 ++-----
+ drivers/gpu/drm/exynos/exynos7_drm_decon.c    | 12 ++----
+ drivers/gpu/drm/exynos/exynos_dp.c            | 11 ++----
+ drivers/gpu/drm/exynos/exynos_drm_fimc.c      | 11 ++----
+ drivers/gpu/drm/exynos/exynos_drm_fimd.c      | 11 ++----
+ drivers/gpu/drm/exynos/exynos_drm_g2d.c       | 10 ++---
+ drivers/gpu/drm/exynos/exynos_drm_mic.c       | 11 ++----
+ drivers/gpu/drm/exynos/exynos_drm_rotator.c   | 12 ++----
+ drivers/gpu/drm/exynos/exynos_drm_scaler.c    | 12 ++----
+ drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c     |  9 ++---
+ drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c   |  8 +---
+ drivers/gpu/drm/imx/dcss/dcss-dev.c           | 17 +++++----
+ drivers/gpu/drm/imx/dcss/dcss-dev.h           |  7 ++--
+ drivers/gpu/drm/imx/dcss/dcss-drv.c           |  8 +---
+ drivers/gpu/drm/imx/imx-drm-core.c            | 23 ++---------
+ drivers/gpu/drm/mediatek/mtk_dp.c             |  6 +--
+ drivers/gpu/drm/mediatek/mtk_hdmi.c           |  9 ++---
+ drivers/gpu/drm/mxsfb/mxsfb_drv.c             | 22 +----------
+ drivers/gpu/drm/omapdrm/omap_dmm_tiler.c      |  6 +--
+ drivers/gpu/drm/omapdrm/omap_drv.c            |  7 ++--
+ drivers/gpu/drm/omapdrm/omap_gem.c            |  5 ++-
+ drivers/gpu/drm/omapdrm/omap_gem.h            |  2 -
+ drivers/gpu/drm/panfrost/panfrost_device.c    | 10 +++--
+ drivers/gpu/drm/panfrost/panfrost_device.h    |  4 +-
+ drivers/gpu/drm/panfrost/panfrost_drv.c       |  7 +---
+ drivers/gpu/drm/rcar-du/rcar_du_drv.c         |  9 ++---
+ .../gpu/drm/rockchip/analogix_dp-rockchip.c   |  6 +--
+ drivers/gpu/drm/rockchip/rockchip_drm_drv.c   | 25 ++----------
+ drivers/gpu/drm/shmobile/shmob_drm_drv.c      |  9 ++---
+ drivers/gpu/drm/sun4i/sun4i_drv.c             | 26 ++-----------
+ drivers/gpu/drm/tegra/dpaux.c                 |  6 +--
+ drivers/gpu/drm/tegra/drm.c                   | 23 ++---------
+ drivers/gpu/drm/tidss/tidss_drv.c             | 29 +++++++-------
+ drivers/gpu/drm/tilcdc/tilcdc_drv.c           |  9 ++---
+ drivers/gpu/drm/tiny/bochs.c                  | 29 ++------------
+ drivers/gpu/drm/tiny/gm12u320.c               | 15 ++++----
+ drivers/gpu/drm/vboxvideo/vbox_drv.c          |  6 +--
+ drivers/gpu/drm/vc4/vc4_v3d.c                 |  6 +--
+ include/drm/drm_modeset_helper.h              | 38 +++++++++++++++++++
+ 42 files changed, 184 insertions(+), 361 deletions(-)
+
+-- 
+2.35.1
+
