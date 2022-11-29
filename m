@@ -2,245 +2,522 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8290963B91A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 05:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B33663B91B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 05:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235261AbiK2EZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 23:25:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
+        id S235283AbiK2E0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 23:26:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234872AbiK2EZo (ORCPT
+        with ESMTP id S234872AbiK2E0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 23:25:44 -0500
-Received: from DM4PR02CU001-vft-obe.outbound.protection.outlook.com (mail-centralusazon11012002.outbound.protection.outlook.com [52.101.63.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3294B3AC29;
-        Mon, 28 Nov 2022 20:25:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gEP34gApR6PBHPxWrBH18ULvAJukluq2VVV0MVkkYeOfoMujrgwNUEM+a2HAbYWkFlxcU5YMsteJ+vL6PBvRAk8BRBfmb0WFMAy0EmOAiR5mxCGaDYmCGBy5r/iyywTc4N2xoFw/lDWbRSiwuNpJQhS+wjz+S9Cu0g2+lz1wfvHGTUEE4AXaspvibtKMnunQ49fu2mvsXqhszF1cpzMIZMSdaBmWkMAtrOELVk9GuYhQdhlCXZLmi1JTcEWrGXJDjLRYb2qEDq8vvz4y0IFHnX1ihJJOogE05kBBc4P6R+RihEcKTRw01Mt2xM0UpZJZXbwJq8MOUkRGq5MEhAOGKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0XPY/cLjmtIOwUqQvy+ekL9u1mcQ6yRKxe59hoY17xU=;
- b=mMJ+qruhQNEgQ1ymVopthsMyaTBi8VXBSIX8yi3hwa5hRC21kokLGfdcR2egsS5aLxPkzrgqkzhjLlr1b4239qyFQL02TYEo1ryYZryIhPPTPRzCL3uTmflSaxuanmys2YwsZwb2+7/eFv7me8ktBrIOBIZR+PAq/3gGpHn7zsMsMyqcegdv+VX/GdMqUIcFF8N91CTwUz1rdMNohi1Cuzz2WAgNVsWfcChgtVhji16CwXKPukkKxwF+zIP2HcStXsghv7pT71O0qi/uleIFG6i/dL5EVZWoO9m1gkemmvBvI/ZFQ3o+sjfQ3ANMHP3xmktpbbrUvTCFbEXCoAjxNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0XPY/cLjmtIOwUqQvy+ekL9u1mcQ6yRKxe59hoY17xU=;
- b=ZvSJdxKiOviYspXghR1tqbifCMf5TOxIBrQkQiHr8Wyxf4kYuPf0te70lFYBph4446Qfa5Ttgl2WlNdPamdtmESu+wTsWoAPaUu5/iRVJxPupir34F6G1xfT5efXxB2e7Kt/ktrtXB3G+vX/qUbI0T7alzU04GokCiIvZ2PhPes=
-Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
- by BL0PR05MB5507.namprd05.prod.outlook.com (2603:10b6:208:69::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Tue, 29 Nov
- 2022 04:25:39 +0000
-Received: from BY3PR05MB8531.namprd05.prod.outlook.com
- ([fe80::f57e:85ed:97ea:b642]) by BY3PR05MB8531.namprd05.prod.outlook.com
- ([fe80::f57e:85ed:97ea:b642%9]) with mapi id 15.20.5857.023; Tue, 29 Nov 2022
- 04:25:39 +0000
-From:   Nadav Amit <namit@vmware.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH 3/3] compiler: inline does not imply notrace
-Thread-Topic: [PATCH 3/3] compiler: inline does not imply notrace
-Thread-Index: AQHY/qw4yX0fCsinjkK7j3XEu4rqM65LXzUAgAAL0gCACc5dAIAAG7QAgAAC0wA=
-Date:   Tue, 29 Nov 2022 04:25:38 +0000
-Message-ID: <2CFF9131-48E9-44D3-93CA-976C47106092@vmware.com>
-References: <20221122195329.252654-1-namit@vmware.com>
- <20221122195329.252654-4-namit@vmware.com>
- <de999ab8-78ff-44f7-aacc-68561897c6e2@app.fastmail.com>
- <B764D38F-470D-4022-A818-73814F442473@vmware.com>
- <4BDE3655-CCC3-412B-9DDB-226485113706@vmware.com>
- <20221128231532.40210855@gandalf.local.home>
-In-Reply-To: <20221128231532.40210855@gandalf.local.home>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.120.41.1.1)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BY3PR05MB8531:EE_|BL0PR05MB5507:EE_
-x-ms-office365-filtering-correlation-id: 5535a56c-3e0d-4306-36a3-08dad1c1c4fe
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /Ka6lkH6UeIriH3GBSMsZhm7orkwPP3JiM9gBVSargIHTVhWYMib3yR0gko6s6csWI3jmW8US71nlpwH5wqV/RVkmFbHKaDF/v9MW9VbeXiH8jf+eitZU5sgrp/YQwL82xYi6yc9WF4Ql+GTwhAlcbKL7ya6JKh8bjfEKfnjkfZVZr1WWAosX0/AMmdZrWholzteEC3K61CT4AehRmbx0mBa3l9V6rBSqYvpeLRs1fNPmOSCJNQRo2T+SWmH+Mc0YNHR8mhedT0vYjz8TljD3wRUcJjBtmlykT+rMmJHQtP76+HlgUhQ5xBeU073PB+Xbv5K51HuO2ug0zRAiZQQqOxg7yxXchk6mZoQzPId/UnGsvGZLG8BFMIG737Wgnym5KjgL6UyApuz/Xq7Vt9WOYDGoetyN54CMhwxJHZJNDsJzIIDnlrpmVHDmcbW2J/Hwj9nYrbBJgUVdce6p7pyv/I0/LbSVgBWe8MDbH01yiIMARvmMS15kLnNbrvlMML1M0SGbZklxdv86lhm3bCLx+aipymlokOuqj6wxL3uyKWiPw/PDIrfsr5wmZtLqiNw3SfJRZ9vm7pcR/uZQuHvJArB68yD9cRMbd36USWNkbjWPY5A0IindipNacv5W8XOIjURQDbWtgepkWNGasvt9k+cHAu6rgHWpa1fINQyhJyw0LbVXNHotQDD6QPjX4VsIWa4AkJw3d8q4TNxi9cR751AsYzUC5cxKZJuBIwTfyyBHI1nLwpr7d3eR8fVNOZ97ihjFt/3fpEfvIO7i+oRRA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(366004)(136003)(346002)(376002)(451199015)(71200400001)(6506007)(6512007)(26005)(76116006)(316002)(478600001)(53546011)(6916009)(6486002)(2616005)(83380400001)(41300700001)(66946007)(8936002)(7416002)(8676002)(64756008)(66556008)(66476007)(54906003)(186003)(66446008)(5660300002)(4326008)(2906002)(36756003)(122000001)(86362001)(38100700002)(38070700005)(33656002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VzRIMWFHYzUxL3JXRUNjeUJUZFZKUitBTzRTSFRkRnYxMno1NjBaeFhGVCtw?=
- =?utf-8?B?SkNTTkRCVXJXYk1jL0RJd2VnaEF5bko2dlQwMEo2MDRvSk1EdmcxOUxHMkRP?=
- =?utf-8?B?Z29la2ozU1d2VUhFeTM5M2I1ZWg2QXZSNVMwb2t5bkk4U25kakxhZkJYNERH?=
- =?utf-8?B?S1U3LzFNZXhlemI2K3ltOHkzblFXUGZBaERITnZneEduTXBOZ2o2aVJ4TzMz?=
- =?utf-8?B?YnpRVE1zYVB1YkpCNXhZRWh2bnBTNy9iaElRZ3dsbm9uSmhvdVBqMDcvQU5w?=
- =?utf-8?B?aGhOaGU0OHhubmhKNHVPNnpmdm94NmhYbmptTEFBQ0Nvbk5XNHQ5YzRxWVZv?=
- =?utf-8?B?elhGYjVJSDFnaTFqd0ZzM2JENitPM1I3bis3Wmp2cUovS1g3dnhsVW0rSVJO?=
- =?utf-8?B?ZWkrSzRxM0xBTmNacVJ2SVhjQWtvRHpTaFY0cGhvemczZlRyUVFkcGtheDdm?=
- =?utf-8?B?KzFoeUoxNDc5K0NCKytIZGJBdzhJZzF1UlgvclNJNktjemsxLzh3SC84MC9Q?=
- =?utf-8?B?UTl6R3czQ3ZOQVJjdDFzTmF4eERHNXE4ZTFwRmpDcVFabTdSYml4Vi9yNmtw?=
- =?utf-8?B?WVkyTS9TS0N4SG1Ed09yVGJMamxGSjRVcmRqcmh2SG1KdENHL1BQaUVzUkNh?=
- =?utf-8?B?QVRZN3JrZEloZ3BYdHRwQnlRTnJjTnV1MkUxQVRpWS9iMGFSTHJ6RjdHK0xK?=
- =?utf-8?B?RytKS1lQclFtU3JZa0pjUHZURExCMTc5UWg4RktCZ1ZLZGs3dDVxVXgrMUl1?=
- =?utf-8?B?TS94YU9TWEdEaDRXVDBsM3JhbnFoUENyL29GS0RZS2JoQUxpTVZDTldxOVJT?=
- =?utf-8?B?eXVnaDd3ckJkaXdvUGYrMCs5UGY2L1FhaW1vWkQyMFJTMmo1aEFnazEwU0ZK?=
- =?utf-8?B?ODRkTWZEQzBheW8yblZsMkFYaFUxOWhha2RnMGhPb0dRd2xaUmZpOERTZWdN?=
- =?utf-8?B?c2IyRzYzSUlxbGV4d3NqcjdlMCtvNVQyS1MyN2NxcUZLd3VKeWtDWk9PaWc2?=
- =?utf-8?B?QUZQM0VzQytNNHdwRHNUUzJhREI5cDFhL2ZiY0tBWENqM0xwVWNMaWhVM1hh?=
- =?utf-8?B?Sk5XRi9OeGdnemkyV1laS1RtWThNK2Eyb3VvbnR2cGQzVDZOL096bjhiV3Ny?=
- =?utf-8?B?YnQvVW1sN29aaHVkK2Zwczg3WExxa0VPaHAwTmJIYy9icW9IVm9hLzhwdGxn?=
- =?utf-8?B?d0hYckg1QXZaSDNIVDlTUkhQSmZ5bFZmN2VjZjMrTXRwK0drYy9XcHAvRFZB?=
- =?utf-8?B?NHZsTkxWYjVtVGdSSlBiMGR6MlJKL0Z5WUxCRDhwbk5pdW9TY2lBaDNLYWF3?=
- =?utf-8?B?VXJnV0VEK2M0V2hPZTdUL0FraHk5dXZuNDRDeGp5VmNuSGJobHprcVhuZEhm?=
- =?utf-8?B?TlJRU0xoVldMMHBtVWVhTVBpTWdTKzlGQy9vTkp3b1JvTVhTeG1PdnZQNkF0?=
- =?utf-8?B?WVA1SlZ2T1RyZ3Y4dUFIaklZWHZlRW1IQUhzRStpQXlOc3VLK3RnKzZWdnJK?=
- =?utf-8?B?RUlIeWhaNm9rOHkxM25wa04yWFVjUm5lWC92M3A3VE9lY3Q0QStBVmQ0bWVi?=
- =?utf-8?B?VzN5bmV1Tm4zU1BjVzJCeUxGNkhIUFVFVjd5bURoaTh3VU51a3g4ZVpFYzRH?=
- =?utf-8?B?UGxGUE1HMGI4NkxpM29EbEYxZDh4M1lXcVpURjlkTkFsenArWXVkWXcybEhE?=
- =?utf-8?B?MDhEWHkreEdWTmM2U2RSejdadFpUVklqN0JKaURkbkhYaVl5YXJTNmhDMyt1?=
- =?utf-8?B?L2JnRmdRNWdXZEJiekM3cjU1TEpmVW5YMjJibTJLKzdRbHg0WElRTDNLT0sy?=
- =?utf-8?B?T0pBMXJsaTByTlp0N0piaDgxU0N4V3ZlNldaMTlCNC9ESEVLUm1Ya3JBOWJv?=
- =?utf-8?B?RmxwQTBTYTRYSFB1QThWWEE4eWN3WHBMTXVLVG5uZVdVYlhPanlVTjdsbTEv?=
- =?utf-8?B?WWo5QmlpVUM3eWgrL1liTFQ1Q0tZYWtLUVF3K0JEK05sSkpBY2d3Qit4Rm55?=
- =?utf-8?B?OUViMlhDM2JSVkdNaVpRQkZEWkxjRXJkZjZjU1lCT0ttT3hoZ0crc0t1Skc5?=
- =?utf-8?B?MXY5aUJaVlM4bXRTWTh5a21GUGdGT3hkTURkY3BGWXFQSElXakcvS1VabDRm?=
- =?utf-8?Q?9FFFlf2M51Gf2DEM+oNFkz0AV?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C435735893CE2047B4FC8FB77ACCF1FC@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 28 Nov 2022 23:26:01 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62D145084
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 20:25:49 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id w26-20020a056830061a00b0066c320f5b49so8354172oti.5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 20:25:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZvqTRiUBNFfregTvvcTT9yeHN90bJZgjQrsVN2qOozM=;
+        b=jQTl7Of06BUYrLfxk99FH6RycYP62d9buA8TVcpG38QpxaryCAEYHBjTzAO2EWPD14
+         ZeKfPReoClS1snZgrf4FzRabkFnoyaBZFlHkvaQN298TfEsBiitFidVmPXGmFoQCu33V
+         UPLOZhoLn04FPKjBNZO/9u7pp76Ybsigc51pU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZvqTRiUBNFfregTvvcTT9yeHN90bJZgjQrsVN2qOozM=;
+        b=4r1KQr5bo3y2TQtfn2HILX+Mrr1jkx+bkJUa4qkY7S3+Z5hY2luOC63gLeo4AYtsyx
+         T+vTpdV6RdXtDJXi6rU3S2Rs67XDSyXS2+OUEb2c5z+VMK1frtzsh0QB1ywhk+gGTF13
+         17RoGqJthzlWNsVf/ILw799g/fbNnyiqXQvT/CtdHpS+Yu20o+Wg2BhOGRAq7qmk29E0
+         bsW4fKhjm/ejMH6I5ICnspIEoXkVCApFgDqscs8MqVBUoS2vaSLwqFnpCQUv5K7aeGhh
+         THIAfRMYCb/tpbur72KNQAhhc9jSW47NjgFRMOhuHujCzNtlQQ7Hu6+HykcrfMUB2bNV
+         YvNQ==
+X-Gm-Message-State: ANoB5pmcQ6YOywxCdNlIyve00CBl278PDVS+oCjIUF2IX4otNppMz6VP
+        sfeQlYqfGP1zMPh0BbwiyJPVVN0e9aHcbmQIneEgpQ==
+X-Google-Smtp-Source: AA0mqf5Mh7g4y7UYTj51xZJaBdwwzYILqgIWD//V3xwmVjcwZtbXOr4KfkwAC05uyVoFLAdmVvzPS7QXZeCRHx4EHus=
+X-Received: by 2002:a05:6830:d03:b0:66d:3e45:8e5a with SMTP id
+ bu3-20020a0568300d0300b0066d3e458e5amr17246583otb.177.1669695948895; Mon, 28
+ Nov 2022 20:25:48 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5535a56c-3e0d-4306-36a3-08dad1c1c4fe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2022 04:25:39.0077
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GyCWsE6NpW5lF7Ga4yYq0G30qNZV5wchtYsW0b8SjJ+VJoUcO8jGIBLBp1+rzQ4Pj2IKHQXa2Rrr9wbRNAbFAQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR05MB5507
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221115171851.835-1-vincent.guittot@linaro.org> <20221115171851.835-6-vincent.guittot@linaro.org>
+In-Reply-To: <20221115171851.835-6-vincent.guittot@linaro.org>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Mon, 28 Nov 2022 23:25:38 -0500
+Message-ID: <CAEXW_YSXveyBjVVGQCRdmiZP=r_L5+7ZU-BJujskpxw9ecw9xQ@mail.gmail.com>
+Subject: Re: [PATCH 5/9] sched/fair: Take into account latency priority at wakeup
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
+        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
+        kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_BTC_ID,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTm92IDI4LCAyMDIyLCBhdCA4OjE1IFBNLCBTdGV2ZW4gUm9zdGVkdCA8cm9zdGVkdEBnb29k
-bWlzLm9yZz4gd3JvdGU6DQoNCj4gISEgRXh0ZXJuYWwgRW1haWwNCj4gDQo+IE9uIFR1ZSwgMjkg
-Tm92IDIwMjIgMDI6MzY6MjIgKzAwMDANCj4gTmFkYXYgQW1pdCA8bmFtaXRAdm13YXJlLmNvbT4g
-d3JvdGU6DQo+IA0KPj4gT24gTm92IDIyLCAyMDIyLCBhdCAxMjo1MSBQTSwgTmFkYXYgQW1pdCA8
-bmFtaXRAdm13YXJlLmNvbT4gd3JvdGU6DQo+PiANCj4+PiBCdXQgbW9yZSBpbXBvcnRhbnRseSwg
-dGhlIGN1cnJlbnQg4oCcaW5saW5l4oCdLT7igJ1ub3RyYWNl4oCdIHNvbHV0aW9uIGp1c3QgcGFw
-ZXJzDQo+Pj4gb3ZlciBtaXNzaW5nIOKAnG5vdHJhY2XigJ0gYW5ub3RhdGlvbnMuIEFueW9uZSBj
-YW4gcmVtb3ZlIHRoZSDigJxpbmxpbmXigJ0gYXQgYW55DQo+Pj4gZ2l2ZW4gbW9tZW50IHNpbmNl
-IHRoZXJlIGlzIG5vIGRpcmVjdCAob3IgaW5kaXJlY3QpIHJlbGF0aW9uc2hpcCBiZXR3ZWVuDQo+
-Pj4g4oCcaW5saW5l4oCdIGFuZCDigJxub3RyYWNl4oCdLiBJdCBzZWVtcyB0byBtZSBhbGwgcmFu
-ZG9tIGFuZCBib3VuZCB0byBmYWlsIGF0IHNvbWUNCj4+PiBwb2ludC4NCj4+IA0KPj4gUGV0ZXIs
-IFN0ZXZlbiwgKGFuZCBvdGhlcnMpLA0KPj4gDQo+PiBCZXlvbmQgdGhlIGlzc3VlcyB0aGF0IGFy
-ZSBhZGRyZXNzZWQgaW4gdGhpcyBwYXRjaC1zZXQsIEkgZW5jb3VudGVyZWQgb25lDQo+PiBtb3Jl
-LCB3aGljaCByZWl0ZXJhdGVzIHRoZSBmYWN0IHRoYXQgdGhlIGhldXJpc3RpY3Mgb2YgbWFya2lu
-ZyDigJxpbmxpbmXigJ0NCj4+IGZ1bmN0aW9ucyBhcyDigJxub3RyYWNl4oCdIGlzIG5vdCBnb29k
-IGVub3VnaC4NCj4+IA0KPj4gQmVmb3JlIEkgc2VuZCBhIHBhdGNoLCBJIHdvdWxkIGxpa2UgdG8g
-Z2V0IHlvdXIgZmVlZGJhY2suIEkgaW5jbHVkZSBhIHNwbGF0DQo+PiBiZWxvdy4gSXQgYXBwZWFl
-cnMgdGhlIGV4ZWN1dGlvbiBtaWdodCBnZXQgc3R1Y2sgc2luY2Ugc29tZSBmdW5jdGlvbnMgdGhh
-dA0KPj4gY2FuIGJlIHVzZWQgZm9yIGZ1bmN0aW9uIHRyYWNpbmcgY2FuIGJlIHRyYWNlZCB0aGVt
-c2VsdmVzLg0KPj4gDQo+PiBGb3IgZXhhbXBsZSwgX19rZXJuZWxfdGV4dF9hZGRyZXNzKCkgYW5k
-IHVud2luZF9nZXRfcmV0dXJuX2FkZHJlc3MoKSBhcmUNCj4+IHRyYWNlYWJsZS4gSSB0aGluayB0
-aGF0IHdlIG5lZWQgdG8gZGlzYWxsb3cgdGhlIHRyYWNpbmcgb2YgYWxsIGZ1bmN0aW9ucw0KPj4g
-dGhhdCBhcmUgY2FsbGVkIGRpcmVjdGx5IGFuZCBpbmRpcmVjdGx5IGZyb20gZnVuY3Rpb25fc3Rh
-Y2tfdHJhY2VfY2FsbCgpDQo+PiAoaS5lLiwgdGhleSBhcmUgaW4gdGhlIGR5bmFtaWMgZXh0ZW50
-IG9mIGZ1bmN0aW9uX3N0YWNrX3RyYWNlX2NhbGwpLg0KPiANCj4gSG93IGRpZCB0aGlzIGhhcHBl
-bi4gSXQgc2hvdWxkIGJlIGFibGUgdG8gaGFuZGxlIHJlY3Vyc2lvbjoNCj4gDQo+IHN0YXRpYyB2
-b2lkDQo+IGZ1bmN0aW9uX3N0YWNrX3RyYWNlX2NhbGwodW5zaWduZWQgbG9uZyBpcCwgdW5zaWdu
-ZWQgbG9uZyBwYXJlbnRfaXAsDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1Y3QgZnRy
-YWNlX29wcyAqb3AsIHN0cnVjdCBmdHJhY2VfcmVncyAqZnJlZ3MpDQo+IHsNCj4gICAgICAgIHN0
-cnVjdCB0cmFjZV9hcnJheSAqdHIgPSBvcC0+cHJpdmF0ZTsNCj4gICAgICAgIHN0cnVjdCB0cmFj
-ZV9hcnJheV9jcHUgKmRhdGE7DQo+ICAgICAgICB1bnNpZ25lZCBsb25nIGZsYWdzOw0KPiAgICAg
-ICAgbG9uZyBkaXNhYmxlZDsNCj4gICAgICAgIGludCBjcHU7DQo+ICAgICAgICB1bnNpZ25lZCBp
-bnQgdHJhY2VfY3R4Ow0KPiANCj4gICAgICAgIGlmICh1bmxpa2VseSghdHItPmZ1bmN0aW9uX2Vu
-YWJsZWQpKQ0KPiAgICAgICAgICAgICAgICByZXR1cm47DQo+IA0KPiAgICAgICAgLyoNCj4gICAg
-ICAgICAqIE5lZWQgdG8gdXNlIHJhdywgc2luY2UgdGhpcyBtdXN0IGJlIGNhbGxlZCBiZWZvcmUg
-dGhlDQo+ICAgICAgICAgKiByZWN1cnNpdmUgcHJvdGVjdGlvbiBpcyBwZXJmb3JtZWQuDQo+ICAg
-ICAgICAgKi8NCj4gICAgICAgIGxvY2FsX2lycV9zYXZlKGZsYWdzKTsNCj4gICAgICAgIGNwdSA9
-IHJhd19zbXBfcHJvY2Vzc29yX2lkKCk7DQo+ICAgICAgICBkYXRhID0gcGVyX2NwdV9wdHIodHIt
-PmFycmF5X2J1ZmZlci5kYXRhLCBjcHUpOw0KPiAgICAgICAgZGlzYWJsZWQgPSBhdG9taWNfaW5j
-X3JldHVybigmZGF0YS0+ZGlzYWJsZWQpOw0KPiANCj4gICAgICAgIGlmIChsaWtlbHkoZGlzYWJs
-ZWQgPT0gMSkpIHsgPDw8LS0tLSBUaGlzIHN0b3BzIHJlY3Vyc2lvbg0KPiANCj4gICAgICAgICAg
-ICAgICAgdHJhY2VfY3R4ID0gdHJhY2luZ19nZW5fY3R4X2ZsYWdzKGZsYWdzKTsNCj4gICAgICAg
-ICAgICAgICAgdHJhY2VfZnVuY3Rpb24odHIsIGlwLCBwYXJlbnRfaXAsIHRyYWNlX2N0eCk7DQo+
-ICAgICAgICAgICAgICAgIF9fdHJhY2Vfc3RhY2sodHIsIHRyYWNlX2N0eCwgU1RBQ0tfU0tJUCk7
-DQo+ICAgICAgICB9DQo+IA0KPiAgICAgICAgYXRvbWljX2RlYygmZGF0YS0+ZGlzYWJsZWQpOw0K
-PiAgICAgICAgbG9jYWxfaXJxX3Jlc3RvcmUoZmxhZ3MpOw0KPiB9DQo+IA0KPiBFYWNoIG9mIHRo
-ZSBzdGFjayB0cmFjZSBmdW5jdGlvbnMgbWF5IHJlY3Vyc2UgYmFjayBpbnRvIHRoaXMgZnVuY3Rp
-b24sIGJ1dA0KPiBpdCB3aWxsIG5vdCByZWN1cnNlIGZ1cnRoZXIuIEhvdyBkaWQgaXQgY3Jhc2g/
-DQoNClVnaC4gVGhhbmtzLiBJIGRpZG7igJl0IGtub3cgdGhhdCAtIHNvIHlvdXIgaW5wdXQgaXMg
-cmVhbGx5IGhlbHBmdWwuDQoNCkkgd2lsbCBuZWVkIHRvIGZ1cnRoZXIgZGVidWcgaXQsIGJ1dCB0
-aGlzIGlzc3VlIGRvZXMgbm90IG9jY3VyIGV2ZXJ5IHRpbWUuDQoNClRoZSBrZXJuZWwgZGlkbuKA
-mXQgY3Jhc2ggZXhhY3RseSAtIGl04oCZcyBtb3JlIG9mIGEgZGVhZGxvY2suIEkgaGF2ZSBsb2Nr
-ZGVwDQplbmFibGVkLCBzbyBpdCBpcyBub3QgYSBkZWFkbG9jayB0aGF0IGxvY2tkZXAga25vd3Mu
-IENvdWxkIGl0IGJlIHRoYXQNCnNvbWVob3cgdGhpbmdzIGp1c3Qgc2xvd2VkIGRvd24gZHVlIHRv
-IElQSXMgYW5kIG1vc3RseS1kaXNhYmxlZCBJUlFzPyBJIGhhdmUNCm5vIGlkZWEuIEkgd291bGQg
-bmVlZCB0byByZWNyZWF0ZSB0aGUgc2NlbmFyaW8uIA0KDQpGb3IgdGhlIHJlY29yZCwgSSB0cmll
-ZCB0byBzYXZlZCBzb21lIGRldGFpbHMgaW4gdGhlIHByZXZpb3VzIGVtYWlsLiBJdCB3YXMNCmtp
-bmQgb2YgaGFyZCB0byB1bmRlcnN0YW5kIHdoYXTigJlzIGdvaW5nIG9uIG9uIHRoZSBvdGhlciBj
-b3Jlcywgc2luY2UgdGhlDQp0cmFjZSBvZiBvdGhlciBjb3JlcyB3YXMgaW50ZXJsZWF2ZWQuIEkg
-ZXh0cmFjdCB0aGUgcGFydHMgZnJvbSB0aGF0IEkgdGhpbmsNCnRoZSByZWZlciB0byB0aGUgYW5v
-dGhlciBDUFUgKHllcywgdGhlIG91dHB1dCBpcyByZWFsbHkgc2xvdywgYXMgc2VlbiBpbiB0aGUN
-CnRpbWVzdGFtcHMpOg0KDQpbNTMxNDEzLjkyMzYyOF0gQ29kZTogMDAgMDAgMzEgYzAgZWIgZjEg
-MGYgMWYgODAgMDAgMDAgMDAgMDAgZTggMWIgMmUgMTYgM2UgNTUgNDggODkgZTUgYzYgMDcgMDAg
-MGYgMWYgMDAgZjcgYzYgMDAgMDIgMDAgMDAgNzQgMDYgZmIgMGYgMWYgNDQgMDAgMDAgPGJmPiAw
-MSAwMCAwMCAwMCBlOCA5OSBkYSBmMSBmZSA2NSA4YiAwNSBmMiA5OSBkNyA3ZCA4NSBjMCA3NCAw
-MiA1ZA0KDQpBbGwgY29kZQ0KPT09PT09PT0NCjA6IDAwIDAwIGFkZCAlYWwsKCVyYXgpDQoyOiAz
-MSBjMCB4b3IgJWVheCwlZWF4DQo0OiBlYiBmMSBqbXAgMHhmZmZmZmZmZmZmZmZmZmY3DQo2OiAw
-ZiAxZiA4MCAwMCAwMCAwMCAwMCBub3BsIDB4MCglcmF4KQ0KZDogZTggMWIgMmUgMTYgM2UgY2Fs
-bCAweDNlMTYyZTJkDQoxMjogNTUgcHVzaCAlcmJwDQoxMzogNDggODkgZTUgbW92ICVyc3AsJXJi
-cA0KMTY6IGM2IDA3IDAwIG1vdmIgJDB4MCwoJXJkaSkNCjE5OiAwZiAxZiAwMCBub3BsICglcmF4
-KQ0KMWM6IGY3IGM2IDAwIDAyIDAwIDAwIHRlc3QgJDB4MjAwLCVlc2kNCjIyOiA3NCAwNiBqZSAw
-eDJhDQoyNDogZmIgc3RpIA0KMjU6IDBmIDFmIDQ0IDAwIDAwIG5vcGwgMHgwKCVyYXgsJXJheCwx
-KQ0KMmE6KiBiZiAwMSAwMCAwMCAwMCBtb3YgJDB4MSwlZWRpIDwtLSB0cmFwcGluZyBpbnN0cnVj
-dGlvbg0KMmY6IGU4IDk5IGRhIGYxIGZlIGNhbGwgMHhmZmZmZmZmZmZlZjFkYWNkDQozNDogNjUg
-OGIgMDUgZjIgOTkgZDcgN2QgbW92ICVnczoweDdkZDc5OWYyKCVyaXApLCVlYXggIyAweDdkZDc5
-YTJkDQozYjogODUgYzAgdGVzdCAlZWF4LCVlYXgNCjNkOiA3NCAwMiBqZSAweDQxDQozZjogNWQg
-cG9wICVyYnANCg0KQ29kZSBzdGFydGluZyB3aXRoIHRoZSBmYXVsdGluZyBpbnN0cnVjdGlvbg0K
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KMDogYmYgMDEgMDAg
-MDAgMDAgbW92ICQweDEsJWVkaQ0KNTogZTggOTkgZGEgZjEgZmUgY2FsbCAweGZmZmZmZmZmZmVm
-MWRhYTMNCmE6IDY1IDhiIDA1IGYyIDk5IGQ3IDdkIG1vdiAlZ3M6MHg3ZGQ3OTlmMiglcmlwKSwl
-ZWF4ICMgMHg3ZGQ3OWEwMw0KMTE6IDg1IGMwIHRlc3QgJWVheCwlZWF4DQoxMzogNzQgMDIgamUg
-MHgxNw0KMTU6IDVkIHBvcCAlcmJwDQoNCls1MzE0MTQuMDY2NzY1XSBSU1A6IDAwMTg6ZmZmZmM5
-MDAwYzlhNzdkOCBFRkxBR1M6IDAwMDAwMjA2DQpbNTMxNDE0LjA3Nzk0M10gUklQOiAwMDEwOnNt
-cF9jYWxsX2Z1bmN0aW9uX21hbnlfY29uZCAoa2VybmVsL3NtcC5jOjQ0MyBrZXJuZWwvc21wLmM6
-OTg4KSANCls1MzE0MTYuOTg3MzUxXSBvbl9lYWNoX2NwdV9jb25kX21hc2sgKGtlcm5lbC9zbXAu
-YzoxMTU1KSANCls1MzE0MTYuMjA1ODYyXSA/IHRleHRfcG9rZV9tZW1zZXQgKGFyY2gveDg2L2tl
-cm5lbC9hbHRlcm5hdGl2ZS5jOjEyOTYpIA0KWzUzMTQxNi42ODEyOTRdID8gdGV4dF9wb2tlX21l
-bXNldCAoYXJjaC94ODYva2VybmVsL2FsdGVybmF0aXZlLmM6MTI5NikgDQpbNTMxNDE3LjQ2ODQ0
-M10gdGV4dF9wb2tlX2JwX2JhdGNoIChhcmNoL3g4Ni9rZXJuZWwvYWx0ZXJuYXRpdmUuYzoxNTUz
-KSANCls1MzE0MTguOTM5OTIzXSBhcmNoX2Z0cmFjZV91cGRhdGVfdHJhbXBvbGluZSAoYXJjaC94
-ODYva2VybmVsL2Z0cmFjZS5jOjUwMCkNCls1MzE0MTkuODgyMDU1XSA/IGZ0cmFjZV9ub19waWRf
-d3JpdGUgKGtlcm5lbC90cmFjZS9mdHJhY2UuYzo3ODY0KSANCls1MzE0MjAuNTEwMzc2XSBmdHJh
-Y2VfdXBkYXRlX3BpZF9mdW5jIChrZXJuZWwvdHJhY2UvZnRyYWNlLmM6Mzc0IChkaXNjcmltaW5h
-dG9yIDEpKQ0KWzUzMTQyMC43ODQ3MDNdIGZ0cmFjZV9waWRfb3BlbiAoa2VybmVsL3RyYWNlL2Z0
-cmFjZS5jOjI5MTgga2VybmVsL3RyYWNlL2Z0cmFjZS5jOjI5MzIga2VybmVsL3RyYWNlL2Z0cmFj
-ZS5jOjc3MjUga2VybmVsL3RyYWNlL2Z0cmFjZS5jOjc4MzUga2VybmVsL3RyYWNlL2Z0cmFjZS5j
-Ojc4NjUpIA0KWzUzMTQyMS44NTEyOTRdIHZmc19vcGVuIChmcy9vcGVuLmM6MTAxNykNCg0KDQoN
-Cg==
+On Tue, Nov 15, 2022 at 12:19 PM Vincent Guittot
+<vincent.guittot@linaro.org> wrote:
+>
+> Take into account the latency priority of a thread when deciding to
+> preempt the current running thread. We don't want to provide more CPU
+> bandwidth to a thread but reorder the scheduling to run latency sensitive
+> task first whenever possible.
+>
+> As long as a thread didn't use its bandwidth, it will be able to preempt
+> the current thread.
+>
+> At the opposite, a thread with a low latency priority will preempt current
+> thread at wakeup only to keep fair CPU bandwidth sharing. Otherwise it will
+> wait for the tick to get its sched slice.
+>
+>                                    curr vruntime
+>                                        |
+>                       sysctl_sched_wakeup_granularity
+>                                    <-->
+> ----------------------------------|----|-----------------------|---------------
+>                                   |    |<--------------------->
+>                                   |    .  sysctl_sched_latency
+>                                   |    .
+> default/current latency entity    |    .
+>                                   |    .
+> 1111111111111111111111111111111111|0000|-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-
+> se preempts curr at wakeup ------>|<- se doesn't preempt curr -----------------
+>                                   |    .
+>                                   |    .
+>                                   |    .
+> low latency entity                |    .
+>                                    ---------------------->|
+>                                % of sysctl_sched_latency  |
+> 1111111111111111111111111111111111111111111111111111111111|0000|-1-1-1-1-1-1-1-
+> preempt ------------------------------------------------->|<- do not preempt --
+>                                   |    .
+>                                   |    .
+>                                   |    .
+> high latency entity               |    .
+>          |<-----------------------|----.
+>          | % of sysctl_sched_latency   .
+> 111111111|0000|-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1
+> preempt->|<- se doesn't preempt curr ------------------------------------------
+> Tests results of nice latency impact on heavy load like hackbench:
+>
+> hackbench -l (2560 / group) -g group
+> group        latency 0             latency 19
+> 1            1.378(+/-  1%)      1.337(+/- 1%) + 3%
+> 4            1.393(+/-  3%)      1.312(+/- 3%) + 6%
+> 8            1.308(+/-  2%)      1.279(+/- 1%) + 2%
+> 16           1.347(+/-  1%)      1.317(+/- 1%) + 2%
+>
+> hackbench -p -l (2560 / group) -g group
+> group
+> 1            1.836(+/- 17%)      1.148(+/- 5%) +37%
+> 4            1.586(+/-  6%)      1.109(+/- 8%) +30%
+> 8            1.209(+/-  4%)      0.780(+/- 4%) +35%
+> 16           0.805(+/-  5%)      0.728(+/- 4%) +10%
+>
+> By deacreasing the latency prio, we reduce the number of preemption at
+> wakeup and help hackbench making progress.
+>
+> Test results of nice latency impact on short live load like cyclictest
+> while competing with heavy load like hackbench:
+>
+> hackbench -l 10000 -g $group &
+> cyclictest --policy other -D 5 -q -n
+>         latency 0           latency -20
+> group   min  avg    max     min  avg    max
+> 0       16    19     29      17   18     29
+> 1       43   299   7359      63   84   3422
+> 4       56   449  14806      45   83    284
+> 8       63   820  51123      63   83    283
+> 16      64  1326  70684      41  157  26852
+>
+> group = 0 means that hackbench is not running.
+>
+> The avg is significantly improved with nice latency -20 especially with
+> large number of groups but min and max remain quite similar. If we add the
+> histogram parameter to get details of latency, we have :
+>
+> hackbench -l 10000 -g 16 &
+> cyclictest --policy other -D 5 -q -n  -H 20000 --histfile data.txt
+>               latency 0    latency -20
+> Min Latencies:    64           62
+> Avg Latencies:  1170          107
+> Max Latencies: 88069        10417
+> 50% latencies:   122           86
+> 75% latencies:   614           91
+> 85% latencies:   961           94
+> 90% latencies:  1225           97
+> 95% latencies:  6120          102
+> 99% latencies: 18328          159
+>
+> With percentile details, we see the benefit of nice latency -20 as
+> only 1% of the latencies are above 159us whereas the default latency
+> has got 15% around ~1ms or above and 5% over the 6ms.
+>
+> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> ---
+>  include/linux/sched.h      |  4 ++-
+>  include/linux/sched/prio.h |  9 ++++++
+>  init/init_task.c           |  2 +-
+>  kernel/sched/core.c        | 38 +++++++++++++++++++---
+>  kernel/sched/debug.c       |  2 +-
+>  kernel/sched/fair.c        | 66 ++++++++++++++++++++++++++++++++++----
+>  kernel/sched/sched.h       |  6 ++++
+>  7 files changed, 112 insertions(+), 15 deletions(-)
+>
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 856240573300..2f33326adb8d 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -568,6 +568,8 @@ struct sched_entity {
+>         /* cached value of my_q->h_nr_running */
+>         unsigned long                   runnable_weight;
+>  #endif
+> +       /* preemption offset in ns */
+> +       long                            latency_offset;
+>
+>  #ifdef CONFIG_SMP
+>         /*
+> @@ -784,7 +786,7 @@ struct task_struct {
+>         int                             static_prio;
+>         int                             normal_prio;
+>         unsigned int                    rt_priority;
+> -       int                             latency_nice;
+> +       int                             latency_prio;
+>
+>         struct sched_entity             se;
+>         struct sched_rt_entity          rt;
+> diff --git a/include/linux/sched/prio.h b/include/linux/sched/prio.h
+> index bfcd7f1d1e11..be79503d86af 100644
+> --- a/include/linux/sched/prio.h
+> +++ b/include/linux/sched/prio.h
+> @@ -59,5 +59,14 @@ static inline long rlimit_to_nice(long prio)
+>   * Default tasks should be treated as a task with latency_nice = 0.
+>   */
+>  #define DEFAULT_LATENCY_NICE   0
+> +#define DEFAULT_LATENCY_PRIO   (DEFAULT_LATENCY_NICE + LATENCY_NICE_WIDTH/2)
+> +
+> +/*
+> + * Convert user-nice values [ -20 ... 0 ... 19 ]
+> + * to static latency [ 0..39 ],
+> + * and back.
+> + */
+> +#define NICE_TO_LATENCY(nice)  ((nice) + DEFAULT_LATENCY_PRIO)
+> +#define LATENCY_TO_NICE(prio)  ((prio) - DEFAULT_LATENCY_PRIO)
+>
+>  #endif /* _LINUX_SCHED_PRIO_H */
+> diff --git a/init/init_task.c b/init/init_task.c
+> index 7dd71dd2d261..071deff8dbd1 100644
+> --- a/init/init_task.c
+> +++ b/init/init_task.c
+> @@ -78,7 +78,7 @@ struct task_struct init_task
+>         .prio           = MAX_PRIO - 20,
+>         .static_prio    = MAX_PRIO - 20,
+>         .normal_prio    = MAX_PRIO - 20,
+> -       .latency_nice   = DEFAULT_LATENCY_NICE,
+> +       .latency_prio   = DEFAULT_LATENCY_PRIO,
+>         .policy         = SCHED_NORMAL,
+>         .cpus_ptr       = &init_task.cpus_mask,
+>         .user_cpus_ptr  = NULL,
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 18c31a68eb18..b2b8cb6c08cd 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -1283,6 +1283,16 @@ static void set_load_weight(struct task_struct *p, bool update_load)
+>         }
+>  }
+>
+> +static void set_latency_offset(struct task_struct *p)
+> +{
+> +       long weight = sched_latency_to_weight[p->latency_prio];
+> +       s64 offset;
+> +
+> +       offset = weight * get_sleep_latency(false);
+> +       offset = div_s64(offset, NICE_LATENCY_WEIGHT_MAX);
+> +       p->se.latency_offset = (long)offset;
+> +}
+> +
+>  #ifdef CONFIG_UCLAMP_TASK
+>  /*
+>   * Serializes updates of utilization clamp values
+> @@ -4592,7 +4602,9 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
+>                 p->prio = p->normal_prio = p->static_prio;
+>                 set_load_weight(p, false);
+>
+> -               p->latency_nice = DEFAULT_LATENCY_NICE;
+> +               p->latency_prio = NICE_TO_LATENCY(0);
+> +               set_latency_offset(p);
+> +
+>                 /*
+>                  * We don't need the reset flag anymore after the fork. It has
+>                  * fulfilled its duty:
+> @@ -7358,8 +7370,10 @@ static void __setscheduler_params(struct task_struct *p,
+>  static void __setscheduler_latency(struct task_struct *p,
+>                 const struct sched_attr *attr)
+>  {
+> -       if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE)
+> -               p->latency_nice = attr->sched_latency_nice;
+> +       if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE) {
+> +               p->latency_prio = NICE_TO_LATENCY(attr->sched_latency_nice);
+> +               set_latency_offset(p);
+> +       }
+>  }
+>
+>  /*
+> @@ -7544,7 +7558,7 @@ static int __sched_setscheduler(struct task_struct *p,
+>                 if (attr->sched_flags & SCHED_FLAG_UTIL_CLAMP)
+>                         goto change;
+>                 if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE &&
+> -                   attr->sched_latency_nice != p->latency_nice)
+> +                   attr->sched_latency_nice != LATENCY_TO_NICE(p->latency_prio))
+>                         goto change;
+>
+>                 p->sched_reset_on_fork = reset_on_fork;
+> @@ -8085,7 +8099,7 @@ SYSCALL_DEFINE4(sched_getattr, pid_t, pid, struct sched_attr __user *, uattr,
+>         get_params(p, &kattr);
+>         kattr.sched_flags &= SCHED_FLAG_ALL;
+>
+> -       kattr.sched_latency_nice = p->latency_nice;
+> +       kattr.sched_latency_nice = LATENCY_TO_NICE(p->latency_prio);
+>
+>  #ifdef CONFIG_UCLAMP_TASK
+>         /*
+> @@ -11294,6 +11308,20 @@ const u32 sched_prio_to_wmult[40] = {
+>   /*  15 */ 119304647, 148102320, 186737708, 238609294, 286331153,
+>  };
+>
+> +/*
+> + * latency weight for wakeup preemption
+> + */
+> +const int sched_latency_to_weight[40] = {
+> + /* -20 */     -1024,     -973,     -922,      -870,      -819,
+> + /* -15 */      -768,     -717,     -666,      -614,      -563,
+> + /* -10 */      -512,     -461,     -410,      -358,      -307,
+> + /*  -5 */      -256,     -205,     -154,      -102,       -51,
+> + /*   0 */         0,       51,      102,       154,       205,
+> + /*   5 */       256,      307,      358,       410,       461,
+> + /*  10 */       512,      563,      614,       666,       717,
+> + /*  15 */       768,      819,      870,       922,       973,
+> +};
+> +
+
+The table is linear. You could approximate this as: weight = nice * 51
+since it is a linear scale and do the conversion in place.
+
+Or, since the only place you are using the latency_to_weight is in
+set_latency_offset(), can we drop the sched_latency_to_weight array
+and simplify as follows?
+
+static void set_latency_offset(struct task_struct *p)
+{
+  s64 offset = p->latency_prio * get_sleep_latency(false);
+  p->latency_prio = (long)div_s64(offset, 40);
+}
+
+>  void call_trace_sched_update_nr_running(struct rq *rq, int count)
+>  {
+>          trace_sched_update_nr_running_tp(rq, count);
+> diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
+> index 68be7a3e42a3..b3922184af91 100644
+> --- a/kernel/sched/debug.c
+> +++ b/kernel/sched/debug.c
+> @@ -1043,7 +1043,7 @@ void proc_sched_show_task(struct task_struct *p, struct pid_namespace *ns,
+>  #endif
+>         P(policy);
+>         P(prio);
+> -       P(latency_nice);
+> +       P(latency_prio);
+>         if (task_has_dl_policy(p)) {
+>                 P(dl.runtime);
+>                 P(dl.deadline);
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index c8a697f8db88..0e80e65113bd 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -4858,6 +4858,8 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+>                 update_idle_cfs_rq_clock_pelt(cfs_rq);
+>  }
+>
+> +static long wakeup_latency_gran(struct sched_entity *curr, struct sched_entity *se);
+> +
+>  /*
+>   * Preempt the current task with a newly woken task if needed:
+>   */
+> @@ -4866,7 +4868,7 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+>  {
+>         unsigned long ideal_runtime, delta_exec;
+>         struct sched_entity *se;
+> -       s64 delta;
+> +       s64 delta, offset;
+>
+>         ideal_runtime = sched_slice(cfs_rq, curr);
+>         delta_exec = curr->sum_exec_runtime - curr->prev_sum_exec_runtime;
+> @@ -4891,10 +4893,12 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+>         se = __pick_first_entity(cfs_rq);
+>         delta = curr->vruntime - se->vruntime;
+>
+> -       if (delta < 0)
+> +       offset = wakeup_latency_gran(curr, se);
+> +       if (delta < offset)
+>                 return;
+
+Agreed.
+
+> -       if (delta > ideal_runtime)
+> +       if ((delta > ideal_runtime) ||
+> +           (delta > get_latency_max()))
+>                 resched_curr(rq_of(cfs_rq));
+>  }
+>
+> @@ -6019,6 +6023,35 @@ static int sched_idle_cpu(int cpu)
+>  }
+>  #endif
+>
+> +static void set_next_buddy(struct sched_entity *se);
+> +
+> +static void check_preempt_from_others(struct cfs_rq *cfs, struct sched_entity *se)
+> +{
+> +       struct sched_entity *next;
+> +
+> +       if (se->latency_offset >= 0)
+> +               return;
+> +
+> +       if (cfs->nr_running <= 1)
+> +               return;
+> +       /*
+> +        * When waking from another class, we don't need to check to preempt at
+> +        * wakeup and don't set next buddy as a candidate for being picked in
+> +        * priority.
+> +        * In case of simultaneous wakeup when current is another class, the
+> +        * latency sensitive tasks lost opportunity to preempt non sensitive
+> +        * tasks which woke up simultaneously.
+> +        */
+> +
+> +       if (cfs->next)
+> +               next = cfs->next;
+> +       else
+> +               next = __pick_first_entity(cfs);
+> +
+> +       if (next && wakeup_preempt_entity(next, se) == 1)
+> +               set_next_buddy(se);
+> +}
+> +
+>  /*
+>   * The enqueue_task method is called before nr_running is
+>   * increased. Here we update the fair scheduling stats and
+> @@ -6105,14 +6138,15 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+>         if (!task_new)
+>                 update_overutilized_status(rq);
+>
+> +       if (rq->curr->sched_class != &fair_sched_class)
+> +               check_preempt_from_others(cfs_rq_of(&p->se), &p->se);
+> +
+>  enqueue_throttle:
+>         assert_list_leaf_cfs_rq(rq);
+>
+>         hrtick_update(rq);
+>  }
+>
+> -static void set_next_buddy(struct sched_entity *se);
+> -
+>  /*
+>   * The dequeue_task method is called before nr_running is
+>   * decreased. We remove the task from the rbtree and
+> @@ -7461,6 +7495,23 @@ balance_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
+>  }
+>  #endif /* CONFIG_SMP */
+>
+> +static long wakeup_latency_gran(struct sched_entity *curr, struct sched_entity *se)
+> +{
+> +       long latency_offset = se->latency_offset;
+> +
+> +       /*
+> +        * A negative latency offset means that the sched_entity has latency
+> +        * requirement that needs to be evaluated versus other entity.
+> +        * Otherwise, use the latency weight to evaluate how much scheduling
+> +        * delay is acceptable by se.
+> +        */
+> +       if ((latency_offset < 0) || (curr->latency_offset < 0))
+> +               latency_offset -= curr->latency_offset;
+> +       latency_offset = min_t(long, latency_offset, get_latency_max());
+
+Over here can we make positive latency offsets also be evaluated
+"versus other entity"?
+
+It feels strange to have different rules for positive latency_offset
+when comparing curr and se. IMO we should also factor in latency
+requirements by comparing 2 positive nice values. It should be
+relative even for positive values, just like regular nice IMO and not
+have hidden meaning. If there is hidden meaning, it confuses the user
+and requires documentation that most users will not read. Especially
+because latency_nice shares the word "nice" with regular nice values.
+
+Thanks,
+
+ - Joel
+.
+
+> +
+> +       return latency_offset;
+> +}
+> +
+>  static unsigned long wakeup_gran(struct sched_entity *se)
+>  {
+>         unsigned long gran = sysctl_sched_wakeup_granularity;
+> @@ -7499,11 +7550,12 @@ static int
+>  wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity *se)
+>  {
+>         s64 gran, vdiff = curr->vruntime - se->vruntime;
+> +       s64 offset = wakeup_latency_gran(curr, se);
+>
+> -       if (vdiff <= 0)
+> +       if (vdiff < offset)
+>                 return -1;
+>
+> -       gran = wakeup_gran(se);
+> +       gran = offset + wakeup_gran(se);
+>
+>         /*
+>          * At wake up, the vruntime of a task is capped to not be older than
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 842ce0094d9c..7292652731d0 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -125,6 +125,11 @@ extern int sched_rr_timeslice;
+>   */
+>  #define NS_TO_JIFFIES(TIME)    ((unsigned long)(TIME) / (NSEC_PER_SEC / HZ))
+>
+> +/* Maximum nice latency weight used to scale the latency_offset */
+> +
+> +#define NICE_LATENCY_SHIFT     (SCHED_FIXEDPOINT_SHIFT)
+> +#define NICE_LATENCY_WEIGHT_MAX        (1L << NICE_LATENCY_SHIFT)
+> +
+>  /*
+>   * Increase resolution of nice-level calculations for 64-bit architectures.
+>   * The extra resolution improves shares distribution and load balancing of
+> @@ -2115,6 +2120,7 @@ static_assert(WF_TTWU == SD_BALANCE_WAKE);
+>
+>  extern const int               sched_prio_to_weight[40];
+>  extern const u32               sched_prio_to_wmult[40];
+> +extern const int               sched_latency_to_weight[40];
+>
+>  /*
+>   * {de,en}queue flags:
+> --
+> 2.17.1
+>
