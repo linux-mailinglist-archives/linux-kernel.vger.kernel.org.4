@@ -2,156 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E2D63CB1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 23:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24CE863CB1D
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 23:38:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236387AbiK2Wic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 17:38:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
+        id S236890AbiK2Wim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 17:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235908AbiK2Wi3 (ORCPT
+        with ESMTP id S236517AbiK2Wie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 17:38:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316C3645C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:37:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669761456;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nn5S5p+3X2iJPOWnTWOqifTtu6vA9YRlhoSe/H1ILk8=;
-        b=hd8em6+C5KN43ij2Tp0pOeWBlROdZ5w+7CEW9xvIxZDgUZCVfYMOk3OZUmduKMz5/MIn2j
-        ccHn4XNqgI6e9Ac+Yp0NfOoAizGE2eD2hHzLIUB8FeaCSUPp40ieN9kBL12ksgglBO272n
-        h3G4MqJi/gCdKod/50tfv+V7Ra/eHYU=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-423-oXQ65c9qNfKig6d3tevaEA-1; Tue, 29 Nov 2022 17:37:35 -0500
-X-MC-Unique: oXQ65c9qNfKig6d3tevaEA-1
-Received: by mail-pg1-f197.google.com with SMTP id 69-20020a630148000000b00478118684c4so6145282pgb.20
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:37:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nn5S5p+3X2iJPOWnTWOqifTtu6vA9YRlhoSe/H1ILk8=;
-        b=Gysl4b8RUngmdPl/qsBTIaeI1cMPTqyc3aPfd+CcdNQsdHNRBfkyFAdJ1mgek6/npk
-         2PW3DSJLdtDwnzfbbfVOwH+REg1bi7F+2u+GjS0AOHi8ONhS/wpEBXCkG9UnEOcTooZ5
-         QcBJJsc1kgQabRjb61ZjgLHH+pflZyhkPoGnyDrHimmzO76cOW7KLQ61o/+nNcB3v55g
-         cGpmrQAJJCwtl9OY/jxqGr8wmlL4etOD2Od8MZCtp5ZnfZOW9VY2JrAYnHDjhTlPIyUY
-         pAFxSj6qj2uscMRoqDivwB3AQWprbl35SScbyyfgeDFYWQrq8JIC+El6rRkuqO6Kk2F2
-         LEQA==
-X-Gm-Message-State: ANoB5pkin4q7cPGJlrLcrmlBkS8Dtj5TUnf7mxzIfJATZ8Xgj6yHL7YD
-        00aSSnfEnoh1dcF+rrJkJhmQTQGyG6BMrLCrRHPcaxJAJiW8LKkRD725OucRpRvtxMfkqBKwojv
-        OybU3Www1cWX5tlulMUD+nwYummhZoixEIO1DRjMmgH5ByTw2qPz8dJCSLTcclmQ3OrjBKt4XGA
-        ==
-X-Received: by 2002:a17:902:8b89:b0:186:9c43:5969 with SMTP id ay9-20020a1709028b8900b001869c435969mr50706386plb.32.1669761454457;
-        Tue, 29 Nov 2022 14:37:34 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6UgvM3kKHX8zA0TDXg2cT1SfeYPj1CCQNC2IU+eO5niMvjHNPCf+uu6vVJdRWK6trsR5ZxzQ==
-X-Received: by 2002:a17:902:8b89:b0:186:9c43:5969 with SMTP id ay9-20020a1709028b8900b001869c435969mr50706354plb.32.1669761454083;
-        Tue, 29 Nov 2022 14:37:34 -0800 (PST)
-Received: from [10.72.12.126] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id d12-20020a17090a2a4c00b0021952b5e9bcsm1739923pjg.53.2022.11.29.14.37.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 14:37:33 -0800 (PST)
-Subject: Re: [PATCH v4] ceph: mark directory as non-complete complete after
- loading key
-To:     Ilya Dryomov <idryomov@gmail.com>
-Cc:     Venky Shankar <vshankar@redhat.com>,
-        Gregory Farnum <gfarnum@redhat.com>,
-        =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
-        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221129103949.19737-1-lhenriques@suse.de>
- <4914a195-edc0-747b-6598-9ac9868593a1@redhat.com>
- <CAOi1vP8raoFP2dsc6RY1fONCsHh5FYv2xifFY7pHXZWX=-vePw@mail.gmail.com>
- <20e0674a-4e51-a352-9ce2-d939cd4f3725@redhat.com>
- <CAOi1vP_H8jE4ZU4a4srhQev3odECgZD1LyxA8dv+Fk-bVDvoyQ@mail.gmail.com>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <fcbba3e5-9187-c174-a783-ddf08925b3da@redhat.com>
-Date:   Wed, 30 Nov 2022 06:37:26 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <CAOi1vP_H8jE4ZU4a4srhQev3odECgZD1LyxA8dv+Fk-bVDvoyQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 29 Nov 2022 17:38:34 -0500
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A67F303EF;
+        Tue, 29 Nov 2022 14:38:32 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 43729C009; Tue, 29 Nov 2022 23:38:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1669761519; bh=smCY981fzC9mZh3eGXAC3uy7nL+6sisKTqlh2Hjzenk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NUbKTNPnHK6tuuncFbF/XE8RjNTxugpELitcB2dWP/xV+80Om6B/65tFtkyOE7u/6
+         OMoqAdmfOT2CQOQQWKuwaACVp+VnCzZbjqo0aNM91bIVBNcuwiY+AUpwh4ihRSx5cl
+         iy6P2GcCVgYIQmAQhX+GxGiExdaDD8FLgRHPJeHb734LqxiTQ90l4j4giD6sk2AyqS
+         jEtpMb3LIZPfxNXmsbU79OQ2mTYii5ADJ98qDMnDPfSUtMJjAJ5Mu0u0kTv3YIO0DO
+         7MxIy0tuZQO56bag0lP6H9tY2Jvafo/sxNlHqmsqhWfUu12hYnTaIiWPII4hrJbblB
+         0RiF9Q9xUdvBw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 5C02AC009;
+        Tue, 29 Nov 2022 23:38:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1669761517; bh=smCY981fzC9mZh3eGXAC3uy7nL+6sisKTqlh2Hjzenk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h6y1a2ztn0ZfYgUgUhnaPxMyQ4t+6WLvNiP12gfRIcnLekJ1foIMsNs33nDA6tk/u
+         vSJ/ANhh7xYim9/WGJXKIkWCeG5QGQLGXkCHITcthUgOFI/dncLQsxpiBSKPMxm82+
+         r53aS5ryiXr40YUAH8nQn86eG8RGcsUcUaoRHkyylhPGhhuQ3oCA2OigGhaFdhD3w/
+         wsaI+53uvgy4xp1HH2oJpVio/b2KhEQnVe065T/IAG6iYv4aFNko18JQivt2VXeMsj
+         N8hHq0ifjh9u4ZjxfDvs4/AdZcwPfvrh2udRXnW1n/rU44yoTc4M1h75kLUUcSkdxT
+         B50011CaxcV2w==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id c0600905;
+        Tue, 29 Nov 2022 22:38:21 +0000 (UTC)
+Date:   Wed, 30 Nov 2022 07:38:06 +0900
+From:   asmadeus@codewreck.org
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     ericvh@gmail.com, lucho@ionkov.net, linux_oss@crudebyte.co,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, v9fs-developer@lists.sourceforge.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+8f1060e2aaf8ca55220b@syzkaller.appspotmail.com
+Subject: Re: [PATCH] 9p: fix crash when transaction killed
+Message-ID: <Y4aJzjlkkt5VKy0G@codewreck.org>
+References: <20221129162251.90790-1-schspa@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221129162251.90790-1-schspa@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Schspa Shi wrote on Wed, Nov 30, 2022 at 12:22:51AM +0800:
+> The transport layer of fs does not fully support the cancel request.
+> When the request is in the REQ_STATUS_SENT state, p9_fd_cancelled
+> will forcibly delete the request, and at this time p9_[read/write]_work
+> may continue to use the request. Therefore, it causes UAF .
+> 
+> There is the logs from syzbot.
+> 
+> Corrupted memory at 0xffff88807eade00b [ 0xff 0x07 0x00 0x00 0x00 0x00
+> 0x00 0x00 . . . . . . . . ] (in kfence-#110):
+>  p9_fcall_fini net/9p/client.c:248 [inline]
+>  p9_req_put net/9p/client.c:396 [inline]
+>  p9_req_put+0x208/0x250 net/9p/client.c:390
+>  p9_client_walk+0x247/0x540 net/9p/client.c:1165
+>  clone_fid fs/9p/fid.h:21 [inline]
+>  v9fs_fid_xattr_set+0xe4/0x2b0 fs/9p/xattr.c:118
+>  v9fs_xattr_set fs/9p/xattr.c:100 [inline]
+>  v9fs_xattr_handler_set+0x6f/0x120 fs/9p/xattr.c:159
+>  __vfs_setxattr+0x119/0x180 fs/xattr.c:182
+>  __vfs_setxattr_noperm+0x129/0x5f0 fs/xattr.c:216
+>  __vfs_setxattr_locked+0x1d3/0x260 fs/xattr.c:277
+>  vfs_setxattr+0x143/0x340 fs/xattr.c:309
+>  setxattr+0x146/0x160 fs/xattr.c:617
+>  path_setxattr+0x197/0x1c0 fs/xattr.c:636
+>  __do_sys_setxattr fs/xattr.c:652 [inline]
+>  __se_sys_setxattr fs/xattr.c:648 [inline]
+>  __ia32_sys_setxattr+0xc0/0x160 fs/xattr.c:648
+>  do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+>  __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
+>  do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+>  entry_SYSENTER_compat_after_hwframe+0x70/0x82
+> 
+> Below is a similar scenario, the scenario in the syzbot log looks more
+> complicated than this one, but the root cause seems to be the same.
+> 
+>      T21124               p9_write_work        p9 read_work
+> ======================== first trans =================================
+> p9_client_walk
+>   p9_client_rpc
+>     p9_client_prepare_req
+>     /* req->refcount == 2 */
+>     c->trans_mod->request(c, req);
+>       p9_fd_request
+>         req move to unsent_req_list
+>                             req->status = REQ_STATUS_SENT;
+>                             req move to req_list
+>                             << send to server >>
+>     wait_event_killable
+>     << get kill signal >>
+>     if (c->trans_mod->cancel(c, req))
+>        p9_client_flush(c, req);
+>          /* send flush request */
+>          req = p9_client_rpc(c, P9_TFLUSH, "w", oldtag);
+> 		 if (c->trans_mod->cancelled)
+>             c->trans_mod->cancelled(c, oldreq);
+>               /* old req was deleted from req_list */
+>               /* req->refcount == 1 */
+>   p9_req_put
+>     /* req->refcount == 0 */
+>     << preempted >>
+>                                        << get response, UAF here >>
+>                                        m->rreq = p9_tag_lookup(m->client, m->rc.tag);
+>                                          /* req->refcount == 1 */
+>                                        << do response >>
+>                                        p9_client_cb(m->client, m->rreq, REQ_STATUS_RCVD);
+>                                          /* req->refcount == 0 */
+>                                          p9_fcall_fini
+>                                          /* request have been freed */
+>     p9_fcall_fini
+>      /* double free */
+>                                        p9_req_put(m->client, m->rreq);
+>                                          /* req->refcount == 1 */
+> 
+> To fix it, we can wait the request with status REQ_STATUS_SENT returned.
 
-On 29/11/2022 23:21, Ilya Dryomov wrote:
-> On Tue, Nov 29, 2022 at 3:50 PM Xiubo Li <xiubli@redhat.com> wrote:
->>
->> On 29/11/2022 22:32, Ilya Dryomov wrote:
->>> On Tue, Nov 29, 2022 at 3:15 PM Xiubo Li <xiubli@redhat.com> wrote:
->>>> On 29/11/2022 18:39, Luís Henriques wrote:
->>>>> When setting a directory's crypt context, ceph_dir_clear_complete() needs to
->>>>> be called otherwise if it was complete before, any existing (old) dentry will
->>>>> still be valid.
->>>>>
->>>>> This patch adds a wrapper around __fscrypt_prepare_readdir() which will
->>>>> ensure a directory is marked as non-complete if key status changes.
->>>>>
->>>>> Signed-off-by: Luís Henriques <lhenriques@suse.de>
->>>>> ---
->>>>> Hi Xiubo,
->>>>>
->>>>> Here's a rebase of this patch.  I did some testing but since this branch
->>>>> doesn't really have full fscrypt support, I couldn't even reproduce the
->>>>> bug.  So, my testing was limited.
->>>> I'm planing not to update the wip-fscrypt branch any more, except the IO
->>>> path related fixes, which may introduce potential bugs each time as before.
->>>>
->>>> Since the qa tests PR has finished and the tests have passed, so we are
->>>> planing to merge the first none IO part, around 27 patches. And then
->>>> pull the reset patches from wip-fscrypt branch.
->>> I'm not sure if merging metadata and I/O path patches separately
->>> makes sense.  What would a user do with just filename encryption?
->> Hi Ilya,
->>
->> I think the IO ones should be followed soon.
->>
->> Currently the filename ones have been well testes. And the contents will
->> be by passed for now.
->>
->> Since this is just for Dev Preview feature IMO it should be okay (?)
-> I don't think there is such a thing as a Dev Preview feature when it
-> comes to the mainline kernel, particularly in the area of filesystems
-> and storage.  It should be ready for users at least to some extent.  So
-> my question stands: what would a user do with just filename encryption?
+Christian replied on this (we cannot wait) but I agree with him -- the
+scenario you describe is proteced by p9_tag_lookup checking for refcount
+with refcount_inc_not_zero (p9_req_try_get).
 
-Before why split these patches was that, the content patches will change 
-a lot and this may will stay in the testing branch for months. This will 
-make it hard to test and rebase the non-encrypt patches based on encrypt 
-ones when trying to pick and merge them.
+The normal scenarii for flush are as follow:
+ - cancel before request is sent: no flush, just free
+ - flush is ignored and reply comes first: we get reply from original
+request then reply from flush
+ - flush is handled and reply never comes: we only get reply from flush
 
-The filename ones are simple and won't have the issue.
+Protocol-wise, we can safely reuse the tag after the flush reply got
+received; and as far as I can follow the code we only ever free the tag
+(last p9_call_fini) after flush has returned so the entry should be
+protected.
 
-No worry, I can try to pick the content patches from wip-fscrypt branch 
-soon. But before that please help check the existing non-encypt patches 
-in the testing branch are okay and won't do big change later, which will 
-always make me to rebase the content patches again and again and may 
-involve many changes and potential bugs.
-
-Thanks!
-
-- Xiubo
+If we receive a response on the given tag between cancelled and the main
+thread going out the request has been marked as FLSHD and should be
+ignored. . . here is one p9_req_put in p9_read_work() in this case but
+it corresponds to the ref obtained by p9_tag_lookup() so it should be
+valid.
 
 
-> Thanks,
->
->                  Ilya
->
+I'm happy to believe we have a race somewhere (even if no sane server
+would produce it), but right now I don't see it looking at the code.. :/
 
+-- 
+Dominique
