@@ -2,119 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9E463C5B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 633E363C5B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236400AbiK2QyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 11:54:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
+        id S236446AbiK2Qx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 11:53:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236396AbiK2Qx7 (ORCPT
+        with ESMTP id S236311AbiK2Qxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 11:53:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AF173415
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 08:48:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669740482;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e0muEHBDbnLFxSz/8uKrynkgUxzkHQQXyf0Q/GGNCDo=;
-        b=I1UPBpX690gKst9qm+36xfZ416r4hf/tD31SjdIWa8ouuL08YFQs5ucRG2nfqn2J+YF7W0
-        FH9zo5Zj2x/pCyWuhei0e55fVxSo1EmFdctzIKe3fCc5OYmJe1m1T7+bn9CPr5iCc+GbZd
-        SwdkRaxm7hxEp0Tgtt8YHD5YXui+fDs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-97-NLEV3qqHMjm2VIHjZofz1g-1; Tue, 29 Nov 2022 11:47:58 -0500
-X-MC-Unique: NLEV3qqHMjm2VIHjZofz1g-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EA346101E155;
-        Tue, 29 Nov 2022 16:47:53 +0000 (UTC)
-Received: from [10.22.16.202] (unknown [10.22.16.202])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 417A52166B2D;
-        Tue, 29 Nov 2022 16:47:51 +0000 (UTC)
-From:   Benjamin Coddington <bcodding@redhat.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        =?utf-8?q?Christoph_B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Steve French <sfrench@samba.org>,
-        Christine Caulfield <ccaulfie@redhat.com>,
-        David Teigland <teigland@redhat.com>,
-        Mark Fasheh <mark@fasheh.com>,
-        Joel Becker <jlbec@evilplan.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Xiubo Li <xiubli@redhat.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>, drbd-dev@lists.linbit.com,
-        linux-block@vger.kernel.org, nbd@other.debian.org,
-        linux-nvme@lists.infradead.org, open-iscsi@googlegroups.com,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, cluster-devel@redhat.com,
-        ocfs2-devel@oss.oracle.com, v9fs-developer@lists.sourceforge.net,
-        ceph-devel@vger.kernel.org, linux-nfs@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] Treewide: Stop corrupting socket's task_frag
-Date:   Tue, 29 Nov 2022 11:47:47 -0500
-Message-ID: <794DBAB0-EDAF-4DA2-A837-C1F99916BC8E@redhat.com>
-In-Reply-To: <20221129140242.GA15747@lst.de>
-References: <cover.1669036433.git.bcodding@redhat.com>
- <c2ec184226acd21a191ccc1aa46a1d7e43ca7104.1669036433.git.bcodding@redhat.com>
- <20221129140242.GA15747@lst.de>
+        Tue, 29 Nov 2022 11:53:31 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772E4748CA;
+        Tue, 29 Nov 2022 08:49:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669740540; x=1701276540;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ivbQv4Ys8jAWmrimJAmEXkGgasUDYcsZtmbNGEPMZeo=;
+  b=NZklI9LdhW0vjIugue/w11mX1azN51DV8QDe4vTfAhwbO5eA/XioMUip
+   ECOzRbMxLmg4CmB1+01lzWTSFp3L8pHRiZX9LKz89eDH5MSu6jpQBE2qF
+   1/gcB1lsrL/aYNdnCZH0+o/JKsIEJA0OlF0rfNGD0NXxDfSOr0Le4KuL6
+   XDKd7XQ8LrcIXog9eYO2J1DugSPaDIgZGGc+OJm0A+5nhbg24+BhhRlnf
+   9vtQbZoAEsWRdqlPTPHTa8KRqkDbfq6PrnwbimrI3tRosZsl5e/JptQNj
+   m4oBWkujTAdmYLZkxHjxnNuvDzVm/XVEIy0pNfnGXpNKZK4q3A1FaeXoc
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="315194180"
+X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
+   d="scan'208";a="315194180"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 08:48:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="712439193"
+X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
+   d="scan'208";a="712439193"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 29 Nov 2022 08:48:09 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p03mB-001n98-2j;
+        Tue, 29 Nov 2022 18:48:07 +0200
+Date:   Tue, 29 Nov 2022 18:48:07 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v1 2/2] gpiolib: Introduce gpio_device_get() and
+ gpio_device_put()
+Message-ID: <Y4Y3x/Fd098rRVbz@smile.fi.intel.com>
+References: <20221125181158.67265-1-andriy.shevchenko@linux.intel.com>
+ <20221125181158.67265-2-andriy.shevchenko@linux.intel.com>
+ <CAMRc=Mf14Q7_gMXaK+hZ8PdV2U5GiL97QRc3SGKLPqmEuSyDxA@mail.gmail.com>
+ <Y4YbkUX+bTM5ZEGg@smile.fi.intel.com>
+ <CAMRc=MfAJpcvCj+NZcg554XC07VYXAb2p9vb+fq6x_O4j+trjQ@mail.gmail.com>
+ <Y4YxiHISfSs8crRa@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4YxiHISfSs8crRa@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29 Nov 2022, at 9:02, Christoph Hellwig wrote:
+On Tue, Nov 29, 2022 at 06:21:28PM +0200, Andy Shevchenko wrote:
+> On Tue, Nov 29, 2022 at 04:49:34PM +0100, Bartosz Golaszewski wrote:
+> > On Tue, Nov 29, 2022 at 3:47 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Tue, Nov 29, 2022 at 02:54:10PM +0100, Bartosz Golaszewski wrote:
 
-> Hmm.  Having to set a flag to not accidentally corrupt per-task
-> state seems a bit fragile.  Wouldn't it make sense to find a way to opt
-> into the feature only for sockets created from the syscall layer?
+...
 
-It's totally fragile, and that's why it's currently broken in production.
-The fragile ship sailed when networking decided to depend on users setting
-the socket's GFP_ flags correctly to avoid corruption.
+> > > That said, this can be submitted after v6.2-rc1 is out.
 
-Meantime, this problem needs fixing in a way that makes everyone happy.
-This fix doesn't make it less fragile, but it may (hopefully) address the
-previous criticisms enough that something gets done to fix it.
+Btw, since you are trying to fix a user space race, I would like to
+postpone this since it will conflict with that one anyway.
 
-Ben
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
