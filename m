@@ -2,84 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E29C263B7BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 03:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C9363B7C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 03:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235188AbiK2CUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 21:20:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
+        id S235106AbiK2CXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 21:23:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234909AbiK2CUT (ORCPT
+        with ESMTP id S233537AbiK2CXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 21:20:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9C42AC73;
-        Mon, 28 Nov 2022 18:20:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4AA16153E;
-        Tue, 29 Nov 2022 02:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 16695C4314B;
-        Tue, 29 Nov 2022 02:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669688417;
-        bh=rk0r4aU5kfwuQEX4wGCmf5eLCcx795wJwurnFCh4sqE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=MVJfLD2BNSNsaL66CAEcg/6djJKNQPuR8ZWjd42lIniC0iN4e+xHg3AafpeXDW02d
-         r1m+Ym5CLHlxTTq00Q6cZcW/OJ3d8OVGO08pN3t7NqNyIcjG5qMkEQJrcAn4uNYN5D
-         o9Mpu7qojsRmxoC1lhqBYcLwb4spOf669DPkv0zPGQQYFy+/D4BwqXFZHZods1wBqT
-         CrTD/szg2hZ7UhPqVyGtv5TRojHSi7YVdKHbLuVUAz0zls+LHXoyrskL8jP9cM/aIW
-         pVjdfVDkTlIKZTdrpgvKggxz9HYwjVRScmsin93Ed8KqFs3ZxZqzn+7jTwfbBBBcnL
-         FKVBm10jP1REg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E1707E4D017;
-        Tue, 29 Nov 2022 02:20:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 28 Nov 2022 21:23:53 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1D127937;
+        Mon, 28 Nov 2022 18:23:51 -0800 (PST)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NLmMv42S2zHwDf;
+        Tue, 29 Nov 2022 10:23:07 +0800 (CST)
+Received: from kwepemm600020.china.huawei.com (7.193.23.147) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 29 Nov 2022 10:23:47 +0800
+Received: from [10.174.179.160] (10.174.179.160) by
+ kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 29 Nov 2022 10:23:46 +0800
+Message-ID: <8e298cc0-27b9-a61a-48cc-64a9186048c8@huawei.com>
+Date:   Tue, 29 Nov 2022 10:23:46 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 net] net: hsr: Fix potential use-after-free
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166968841692.21086.15703748887586034418.git-patchwork-notify@kernel.org>
-Date:   Tue, 29 Nov 2022 02:20:16 +0000
-References: <20221125075724.27912-1-yuehaibing@huawei.com>
-In-Reply-To: <20221125075724.27912-1-yuehaibing@huawei.com>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, arvid.brodin@alten.se, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] hfs: Fix OOB Write in hfs_asc2mac
+To:     Viacheslav Dubeyko <slava@dubeyko.com>
+CC:     <zippel@linux-m68k.org>, <akpm@osdl.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sunnanyong@huawei.com>,
+        <wangkefeng.wang@huawei.com>,
+        <syzbot+dc3b1cf9111ab5fe98e7@syzkaller.appspotmail.com>
+References: <20221126043612.853428-1-zhangpeng362@huawei.com>
+ <9F97B7A6-9E20-4D70-BA79-8301D80DF9DB@dubeyko.com>
+Content-Language: en-US
+From:   "zhangpeng (AS)" <zhangpeng362@huawei.com>
+In-Reply-To: <9F97B7A6-9E20-4D70-BA79-8301D80DF9DB@dubeyko.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.160]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600020.china.huawei.com (7.193.23.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On 2022/11/29 3:29, Viacheslav Dubeyko wrote:
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+>> On Nov 25, 2022, at 8:36 PM, Peng Zhang <zhangpeng362@huawei.com> wrote:
+>>
+>> From: ZhangPeng <zhangpeng362@huawei.com>
+>>
+>> Syzbot reported a OOB Write bug:
+>>
+>> loop0: detected capacity change from 0 to 64
+>> ==================================================================
+>> BUG: KASAN: slab-out-of-bounds in hfs_asc2mac+0x467/0x9a0
+>> fs/hfs/trans.c:133
+>> Write of size 1 at addr ffff88801848314e by task syz-executor391/3632
+>>
+>> Call Trace:
+>> <TASK>
+>> __dump_stack lib/dump_stack.c:88 [inline]
+>> dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+>> print_address_description+0x74/0x340 mm/kasan/report.c:284
+>> print_report+0x107/0x1f0 mm/kasan/report.c:395
+>> kasan_report+0xcd/0x100 mm/kasan/report.c:495
+>> hfs_asc2mac+0x467/0x9a0 fs/hfs/trans.c:133
+>> hfs_cat_build_key+0x92/0x170 fs/hfs/catalog.c:28
+>> hfs_lookup+0x1ab/0x2c0 fs/hfs/dir.c:31
+>> lookup_open fs/namei.c:3391 [inline]
+>> open_last_lookups fs/namei.c:3481 [inline]
+>> path_openat+0x10e6/0x2df0 fs/namei.c:3710
+>> do_filp_open+0x264/0x4f0 fs/namei.c:3740
+>>
+>> If in->len is much larger than HFS_NAMELEN(31) which is the maximum
+>> length of an HFS filename, a OOB Write could occur in hfs_asc2mac(). In
+>> that case, when the dst reaches the boundary, the srclen is still
+>> greater than 0, which causes a OOB Write.
+>> Fix this by adding a Check on dstlen before Writing to dst address.
+>>
+>> Fixes: 328b92278650 ("[PATCH] hfs: NLS support")
+>> Reported-by: syzbot+dc3b1cf9111ab5fe98e7@syzkaller.appspotmail.com
+>> Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+>> ---
+>> fs/hfs/trans.c | 2 ++
+>> 1 file changed, 2 insertions(+)
+>>
+>> diff --git a/fs/hfs/trans.c b/fs/hfs/trans.c
+>> index 39f5e343bf4d..886158db07b3 100644
+>> --- a/fs/hfs/trans.c
+>> +++ b/fs/hfs/trans.c
+>> @@ -130,6 +130,8 @@ void hfs_asc2mac(struct super_block *sb, struct hfs_name *out, const struct qstr
+>> 				dst += size;
+>> 				dstlen -= size;
+>> 			} else {
+>> +				if (dstlen == 0)
+>> +					goto out;
+> Maybe, it makes sense to use dstlen instead of srclen in while()?
+>
+> We have now:
+>
+> while (srclen > 0) {
+>     <skipped>
+> } else {
+>     <skipped>
+> }
+>
+> We can use instead:
+>
+> while (dstlen > 0) {
+>     <skipped>
+> } else {
+>     <skipped>
+> }
+>
+> Will it fix the issue?
+>
+> Thanks,
+> Slava.
 
-On Fri, 25 Nov 2022 15:57:24 +0800 you wrote:
-> The skb is delivered to netif_rx() which may free it, after calling this,
-> dereferencing skb may trigger use-after-free.
-> 
-> Fixes: f421436a591d ("net/hsr: Add support for the High-availability Seamless Redundancy protocol (HSRv0)")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> ---
-> v2: correct Fixes tag
-> 
-> [...]
+Thank you for your help.
 
-Here is the summary with links:
-  - [v2,net] net: hsr: Fix potential use-after-free
-    https://git.kernel.org/netdev/net/c/7e177d32442b
+After testing, it fix the issue.
+Would it be better to add dstlen > 0 instead of replacing srclen > 0 with dstlen > 0?
+Because there may be dstlen > 0 and srclen <= 0.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+we can use:
+
+while (srclen > 0 && dstlen > 0) {
+    <skipped>
+} else {
+    <skipped>
+}
 
 
+Thanks,
+Zhang Peng
+
+>> 				*dst++ = ch > 0xff ? '?' : ch;
+>> 				dstlen--;
+>> 			}
+>> -- 
+>> 2.25.1
+>>
+>
