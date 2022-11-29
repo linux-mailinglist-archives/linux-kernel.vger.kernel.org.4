@@ -2,161 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B5C63C2DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A7163C2DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235362AbiK2Olu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 09:41:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
+        id S235535AbiK2Oms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 09:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235774AbiK2Oln (ORCPT
+        with ESMTP id S235736AbiK2Omn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 09:41:43 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE385133D
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:41:42 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id s8so22370886lfc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:41:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Hzlb1a3cyeCN7W0QzilPl7LR0/kB5tZBP2+H1etenzY=;
-        b=VCasnaYnLUqMALy9nkI3JucsTz6MkbOCsfok86c2lB+Vi5Vo+fwfQC0adL2Y/kZD7R
-         iNzYJvtJuYvuqoCFh1iit/DbPWUs+XGdEuO+P55PXgDaAhi6tJiMUsAYQrkYTONrwz8g
-         p1aQKPc9dV7B5q9gkaht3iV/2lqDSapK8UTIo3FbQ6MO8OLHdWGa2dnK+uNWFmSRxBIk
-         ufYM46lgmdKyeU9F0QHFJyzPRQVK45cvK8sSO5I/unm4rjBqU5JxqqZ4E4FFKOugwyWV
-         tRbQL/OPaQ9V7Cwdn73ZcIIjzZXhcqcvU+jPDGVRQXM+xi1mcYvGZDMJVBXNFILD7fWC
-         e8QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hzlb1a3cyeCN7W0QzilPl7LR0/kB5tZBP2+H1etenzY=;
-        b=PrljTopm57t4ClAyd46GIpH+P/AV9OejRTLkmteMtFbxOIo5F7SsWhdtgtt3GFF39r
-         JX1iJEMukriXA/ruh4eDQU0vRxEe+zNcJL73p0gLrcVwzGBQuSgJLIOXN1WG0gvjB1eN
-         5K8X22dQ3BpB8NqOYc++/GTlIKuOvW/ptMEfprPZxgMz2k/+IMIs+TezK1vl3gEsjdtg
-         kRaRUnIDeeGgbCtAuofis9QDSBy5TMuG1tX6Wawc9TV5eZPBnn0hlRs/wMYmY4LE+dtR
-         hHmIf4RClml4IBXbygX+hztodnOsVkqY4nvOwx4zYxA7LLna5suRaGKquSuLUaZBrB1n
-         DYUg==
-X-Gm-Message-State: ANoB5pmU9ok8JLtAsMfatv4FMcULs6reFB5VhjWtAiEupOGQzgKBj6NZ
-        P5dLC64r9p0Am7UuAKf4DucJS+93rA3hXuN4
-X-Google-Smtp-Source: AA0mqf45bL/U5oRqtadETTkUgbgfjJpJn+tyeKkssyPalwh+Ul5G57YjQWdJieiVFDSkEWjq/K64dw==
-X-Received: by 2002:a19:6559:0:b0:4a2:3d2c:d9bc with SMTP id c25-20020a196559000000b004a23d2cd9bcmr21998577lfj.375.1669732900434;
-        Tue, 29 Nov 2022 06:41:40 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id bf36-20020a05651225a400b0049fff3f645esm2195453lfb.70.2022.11.29.06.41.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 06:41:39 -0800 (PST)
-Message-ID: <ce1b5859-4ca6-6d2d-19bc-e33e48165093@linaro.org>
-Date:   Tue, 29 Nov 2022 15:41:38 +0100
+        Tue, 29 Nov 2022 09:42:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA36164E1
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:42:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8965861729
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:42:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1A62C433D6;
+        Tue, 29 Nov 2022 14:42:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669732958;
+        bh=C5ZoA8u7CjRfuYRa/p8LS+BgNNm4KfyQQxeH4LtrxiQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Xf6SFudoEy7GIMULtvUWMiRkg5KY9wX+mngk6qerxcWP0globLzzXMje0gTEe0tGe
+         C2s26B6VLRa2VUvzzeIZ6D5dk3zsVxBr3KmsrEkARFx0fHibTjWbtGsBJnY4OFDYCa
+         61x3aNeTr6xkiR+N/01Z/U6yOdp4YJkdcS972Rn0jDqS3wigEGPiyDptnDJFXqQUCo
+         lTcV9pRKjjgc3NmmmEOanZRc/RDCAiwU7HUeXrxiufLoU2Ihu0V9I4N/d25UTc/I1e
+         k7aKv8P4h8CuQW/IiCvDtysCUenKjwqrnL0BO6ut8z26MseykaXXFJgkISlV0xrCfB
+         iqr2TTRCWqb0A==
+From:   Mark Brown <broonie@kernel.org>
+To:     alsa-devel@alsa-project.org,
+        V sujith kumar Reddy 
+        <vsujithkumar.reddy@amd.corp-partner.google.com>
+Cc:     Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Takashi Iwai <tiwai@suse.com>, ssabakar@amd.com,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
+        open list <linux-kernel@vger.kernel.org>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
+        venkataprasad.potturu@amd.com,
+        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
+        <sound-open-firmware@alsa-project.org>, Vijendar.Mukunda@amd.com,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Chao Song <chao.song@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>
+In-Reply-To: <20221129100102.826781-1-vsujithkumar.reddy@amd.corp-partner.google.com>
+References: <20221129100102.826781-1-vsujithkumar.reddy@amd.corp-partner.google.com>
+Subject: Re: [PATCH v2 1/1] ASoC: SOF: Add DAI configuration support for AMD platforms.
+Message-Id: <166973295442.182170.11091349433910086035.b4-ty@kernel.org>
+Date:   Tue, 29 Nov 2022 14:42:34 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 1/8] dt-bindings: soc: socionext: Add UniPhier system
- controller
-Content-Language: en-US
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221129103509.9958-1-hayashi.kunihiko@socionext.com>
- <20221129103509.9958-2-hayashi.kunihiko@socionext.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221129103509.9958-2-hayashi.kunihiko@socionext.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/11/2022 11:35, Kunihiko Hayashi wrote:
-> Add devicetree binding schema for the system controller implemented on
-> Socionext Uniphier SoCs.
+On Tue, 29 Nov 2022 15:30:59 +0530, V sujith kumar Reddy wrote:
+> From: V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
 > 
-> This system controller has multiple functions such as clock control,
-> reset control, internal watchdog timer, thermal management, and so on.
+> Add support for configuring sp and hs DAI from topology.
 > 
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> ---
->  .../socionext/socionext,uniphier-sysctrl.yaml | 84 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 85 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml
+> Signed-off-by: V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
 > 
-> diff --git a/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml
-> new file mode 100644
-> index 000000000000..e966ce1e4b6c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml
-> @@ -0,0 +1,84 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/socionext/socionext,uniphier-sysctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Socionext UniPhier system controller
+> Changes since v1
+>     -- Apply on latest broonie-git for-next
+> 
+> [...]
 
-As Rob's bot pointed, you need to update here examples in other
-bindings, so they will pass. Otherwise it is not bisectable change.
+Applied to
 
-> +
-> +maintainers:
-> +  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> +
-> +description: |+
-> +  System controller implemented on Socionext UniPhier SoCs has multiple
-> +  functions such as clock control, reset control, internal watchdog timer,
-> +  thermal management, and so on.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - socionext,uniphier-ld4-sysctrl
-> +          - socionext,uniphier-pro4-sysctrl
-> +          - socionext,uniphier-pro5-sysctrl
-> +          - socionext,uniphier-pxs2-sysctrl
-> +          - socionext,uniphier-ld6b-sysctrl
-> +          - socionext,uniphier-sld8-sysctrl
-> +          - socionext,uniphier-ld11-sysctrl
-> +          - socionext,uniphier-ld20-sysctrl
-> +          - socionext,uniphier-pxs3-sysctrl
-> +          - socionext,uniphier-nx1-sysctrl
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-All of them can have children or only some?
+Thanks!
 
-> +          - socionext,uniphier-sysctrl
-> +      - const: simple-mfd
-> +      - const: syscon
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +patternProperties:
-> +  "^clock-controller(@[0-9a-f]+)?$":
-> +    $ref: /schemas/clock/socionext,uniphier-clock.yaml#
-> +
-> +  "^reset-controller(@[0-9a-f]+)?$":
-> +    $ref: /schemas/reset/socionext,uniphier-reset.yaml#
-> +
-> +  "^watchdog(@[0-9a-f]+)?$":
-> +    $ref: /schemas/watchdog/socionext,uniphier-wdt.yaml#
-> +
-> +  "^thermal-sensor(@[0-9a-f]+)?$":
-> +    $ref: /schemas/thermal/socionext,uniphier-thermal.yaml#
-> +
+[1/1] ASoC: SOF: Add DAI configuration support for AMD platforms.
+      commit: 75af41991955205fa0958feb587ce22b35aaa7b0
 
-Best regards,
-Krzysztof
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
