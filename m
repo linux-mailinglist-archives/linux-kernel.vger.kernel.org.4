@@ -2,160 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC3163B94A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 06:05:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F3F63B94E
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 06:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbiK2FFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 00:05:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
+        id S234257AbiK2FHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 00:07:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiK2FE6 (ORCPT
+        with ESMTP id S229461AbiK2FHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 00:04:58 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A284733B
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 21:04:54 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 203F25C00CD;
-        Tue, 29 Nov 2022 00:04:52 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 29 Nov 2022 00:04:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669698292; x=
-        1669784692; bh=7JBhdj+AHR3dAIOe2gseZvC2qPeV3j2qkNBk4trRfdg=; b=C
-        u/lwyGeGHbV7DLYWZDlYiiimjmuOdbSgS641XgIEUQ7MBev0WjcgeIHQMAbEcHk4
-        65BpayAEHpDHbDiCB/m2Z9zLcMOlw6C7J0G2rvLjSP2w1J9BSuvkwNshtpD1No3y
-        f5tMtz1cpzIhLpqvcXakaR8RGQfEXIvtyx3J04I0E+Kc6ffcyLjmHyWPiCSB9laH
-        NsQM0GlYNgeNJsnBcWbv3qQ0ti84bUCpYQzWH+NigWFX9XcWoZ9USH2tzvB0p2sD
-        P3pFXz480A7pGRk57PXUpfpEchkaYKiWU6ffw0xgkl/wSwyGSDcB0TwNccYSk4oJ
-        fweD6Ta6BDy4FtNz7e6Rg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669698292; x=
-        1669784692; bh=7JBhdj+AHR3dAIOe2gseZvC2qPeV3j2qkNBk4trRfdg=; b=M
-        Vu04DsZaIrNTK11Enq8h9uAbbPbvIaamnkXUTZBLEv7sjT+11TU41YBQELfhjLGm
-        a3P25LiOtrxYn6bvV4m3J2eiKL5LA83xq9zjUDp12XrsU5klWwAD/VpRKgBXCK5u
-        hkTuZhwWBImjHi+E/l3Y2Y4WqKFlqUkjwjx1DMSBsrr8vl2psZNzH8400dxG2tAm
-        bwGedGIkQtGxb5/4hBqyH/KezVaZ1Szyo6dB03NRh+POlhHqPAmcAhfG2z72CU7L
-        UGJ1n/Ig3AyVAlEXfAAZkJ+Obzd+lIR/P6EZBpKlTprXweLbH6L/6s2eYv5ykHpN
-        l1sW+5yCa3bfRKW5l2fOA==
-X-ME-Sender: <xms:85KFY6KfoQMhrb7HMjbHOMzpYT3fP9Ke5tqf-ezBHQQGQ__OrvLNVA>
-    <xme:85KFYyKgiq58ka_VtYmf3KYgbKJGjpNUzT7I6d_xQTVE98ZYrlQBnxy1HxlyxVu2Q
-    8gsdUAT0bZjDdZ9Bg>
-X-ME-Received: <xmr:85KFY6sSne-_znocklpvykGzxlTcfzkm9NsTm8ztCzYyQzYR7flNiKHm0TNA3EuQzESY4y9YV3A5C8T9BGLB8C4NgPGJXOxzgRY3HvouWM5Vy_irREQTk69wWg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjeefgdektdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnheptedvueevffevvdelgfffledugeeuleehjeegveekjeeuheefvdeh
-    kefhuefhteevnecuffhomhgrihhnpehhvggrugdrshgsnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdr
-    ohhrgh
-X-ME-Proxy: <xmx:85KFY_YALunrmAOPH5LYQ33_dhtr6OUgWW8LHG8LgloEIO6JCOZA8w>
-    <xmx:85KFYxYxfxDpTGth7XDSVHIgd3-XwsLIfhNzUESACXFmX7bh-7RsPA>
-    <xmx:85KFY7BGcCFZ14w1ytw8NukUPSYTBY8V3v6GbSrmpysEx_isFrXITw>
-    <xmx:9JKFY0yA_QE09KOH-z5mv2C9Ns6IPnRu8_DiFLIIGMMl43PHQrR2eg>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 29 Nov 2022 00:04:49 -0500 (EST)
-Message-ID: <e39851df-251d-662d-3319-af9d948a9430@sholland.org>
-Date:   Mon, 28 Nov 2022 23:04:48 -0600
+        Tue, 29 Nov 2022 00:07:11 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6164A073;
+        Mon, 28 Nov 2022 21:07:09 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AT56jKP009092;
+        Mon, 28 Nov 2022 23:06:45 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1669698405;
+        bh=iwk3oIdldhQM9vSgoDXE1DpAlk1h7MOXHjQVbNnRDM8=;
+        h=From:To:CC:Subject:Date;
+        b=q7yKPk7xXFfft0reaARWjDEHhQuzysWq+4zuPtm9KZgeT7MOTOTsud/xd41+F+LdM
+         yBTgGZUadY0/Nj/B9Rm/Rm9d5BCIsIcflfAaq72eJ9wujI+7EwnH79Z0iVCoPo6R7K
+         KQE4xK25xcfz6pO5AxcGN75dbvaCiJqnxPRQU5/U=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AT56juT032181
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 28 Nov 2022 23:06:45 -0600
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 28
+ Nov 2022 23:06:44 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 28 Nov 2022 23:06:44 -0600
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AT56eM8017073;
+        Mon, 28 Nov 2022 23:06:41 -0600
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <linux@armlinux.org.uk>, <vladimir.oltean@nxp.com>,
+        <pabeni@redhat.com>, <rogerq@kernel.org>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
+        <spatton@ti.com>, <s-vadapalli@ti.com>
+Subject: [PATCH net] net: ethernet: ti: am65-cpsw: Fix RGMII configuration at SPEED_10
+Date:   Tue, 29 Nov 2022 10:36:39 +0530
+Message-ID: <20221129050639.111142-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH] riscv: head: use 0 as the default text_offset
-Content-Language: en-US
-To:     Atish Kumar Patra <atishp@rivosinc.com>,
-        Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221128152442.3403-1-jszhang@kernel.org>
- <CAHBxVyHg0fU9msnV4vgp4oK6aZZv+nc9mFTbTRjHNsgJAG0eyg@mail.gmail.com>
-From:   Samuel Holland <samuel@sholland.org>
-In-Reply-To: <CAHBxVyHg0fU9msnV4vgp4oK6aZZv+nc9mFTbTRjHNsgJAG0eyg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/28/22 14:11, Atish Kumar Patra wrote:
-> On Mon, Nov 28, 2022 at 7:34 AM Jisheng Zhang <jszhang@kernel.org> wrote:
->>
->> Commit 0f327f2aaad6 ("RISC-V: Add an Image header that boot loader can
->> parse.") adds an image header which "is based on ARM64 boot image
->> header and provides an opportunity to combine both ARM64 & RISC-V
->> image headers in future.". At that time, arm64's default text_offset
->> is 0x80000, this is to give "512 KB of guaranteed BSS space to put
->> the swapper page tables" as commit cfa7ede20f13 ("arm64: set TEXT_OFFSET
->> to 0x0 in preparation for removing it entirely") pointed out, but
->> riscv doesn't need the space, so use 0 as the default text_offset.
->>
->> Before this patch, booting linux kernel on Sipeed bl808 M1s Dock
->> with u-boot booti cmd:
->> [    0.000000] OF: fdt: Ignoring memory range 0x50000000 - 0x50200000
->> ...
->> [    0.000000]   DMA32    [mem 0x0000000050200000-0x0000000053ffffff]
->> As can be seen, 2MB DDR(0x50000000 - 0x501fffff) can't be used by
->> linux.
->>
->> After this patch, the 64MB DDR is fully usable by linux
->> [    0.000000]   DMA32    [mem 0x0000000050000000-0x0000000053ffffff]
->>
->> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
->> ---
->>  arch/riscv/kernel/head.S | 12 +-----------
->>  1 file changed, 1 insertion(+), 11 deletions(-)
->>
->> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
->> index b865046e4dbb..ef95943f7a70 100644
->> --- a/arch/riscv/kernel/head.S
->> +++ b/arch/riscv/kernel/head.S
->> @@ -38,18 +38,8 @@ ENTRY(_start)
->>         .word 0
->>  #endif
->>         .balign 8
->> -#ifdef CONFIG_RISCV_M_MODE
->> -       /* Image load offset (0MB) from start of RAM for M-mode */
->> +       /* Image load offset (0MB) from start of RAM */
->>         .dword 0
->> -#else
->> -#if __riscv_xlen == 64
->> -       /* Image load offset(2MB) from start of RAM */
->> -       .dword 0x200000
->> -#else
->> -       /* Image load offset(4MB) from start of RAM */
->> -       .dword 0x400000
->> -#endif
->> -#endif
-> 
-> NACK.
-> RV64 needs to boot at a 2MB aligned address and RV32 needs to boot at
-> a 4MB aligned address.
-> The firmware is assumed to live at the start of DRAM for Linux running
-> in S-mode.
+The am65-cpsw driver supports configuring all RGMII variants at interface
+speed of 10 Mbps. However, in the process of shifting to the PHYLINK
+framework, the support for all variants of RGMII except the
+PHY_INTERFACE_MODE_RGMII variant was accidentally removed.
 
-What needs to happen so we can stop making this assumption? If the SBI
-implementation wants to reserve memory, it should use the devicetree to
-do so. OpenSBI already does this.
+Fix this by using phy_interface_mode_is_rgmii() to check for all variants
+of RGMII mode.
 
-Throwing away 2 MiB of RAM is quite wasteful considering we have
-multiple SoCs (D1s, BL808) that are limited to 64 MiB of in-package RAM.
+Fixes: e8609e69470f ("net: ethernet: ti: am65-cpsw: Convert to PHYLINK")
+Reported-by: Schuyler Patton <spatton@ti.com>
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+---
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Samuel
+diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+index 6b0458df613a..6ae802d73063 100644
+--- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
++++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+@@ -1495,7 +1495,7 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
+ 
+ 	if (speed == SPEED_1000)
+ 		mac_control |= CPSW_SL_CTL_GIG;
+-	if (speed == SPEED_10 && interface == PHY_INTERFACE_MODE_RGMII)
++	if (speed == SPEED_10 && phy_interface_mode_is_rgmii(interface))
+ 		/* Can be used with in band mode only */
+ 		mac_control |= CPSW_SL_CTL_EXT_EN;
+ 	if (speed == SPEED_100 && interface == PHY_INTERFACE_MODE_RMII)
+-- 
+2.25.1
 
