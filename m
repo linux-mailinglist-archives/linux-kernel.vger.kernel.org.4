@@ -2,94 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8779063C6FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 19:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF7C63C707
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 19:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235301AbiK2SCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 13:02:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56798 "EHLO
+        id S234145AbiK2SIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 13:08:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235173AbiK2SCY (ORCPT
+        with ESMTP id S232360AbiK2SIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 13:02:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F346B39F;
-        Tue, 29 Nov 2022 10:02:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0E8761889;
-        Tue, 29 Nov 2022 18:02:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 727F2C433C1;
-        Tue, 29 Nov 2022 18:02:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669744942;
-        bh=qKd9ymqAdWLp6B0pPm4UgjxLqG9aPy3nEPRIKquv6Gs=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=nRj829xdRrmMfjKBaa0SYOXHIVMI+fnAVfSA5NhPp4KXn9mqzM02mgqXRD3qwU0KY
-         YwGRQN2jtNdWGPUIOlKTeNAaOr+qW/dGtH82XLFYO/u9GplHJy//dI0UndiCHueVrP
-         N+D0EAL4YjXg5L4TVA7rWD3OeXpgoOmP0eFdvkF2WXXNOWOZ+y9pg+HFPDuDXGDQ7O
-         sqkPCT5SRvA6q4K4Oh3i/k8AoRlOOjG+ya0f6COsyizgQb6vZZSfKDtUXhVic2+uLv
-         vQr4ke8wRRq93Um7lGA/o9p9Fxo936PhNmSoUUJwIrZPhtyXq0t2zibeN64pW1Z8XD
-         CQHu9QlNzZskQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com
-In-Reply-To: <20221006050514.115564-1-tharunkumar.pasumarthi@microchip.com>
-References: <20221006050514.115564-1-tharunkumar.pasumarthi@microchip.com>
-Subject: Re: [PATCH v2 SPI for-next 0/2] spi: microchip: pci1xxxx: Load SPI driver for SPI endpoint of PCI1XXXX switch
-Message-Id: <166974494118.343760.736502969260374198.b4-ty@kernel.org>
-Date:   Tue, 29 Nov 2022 18:02:21 +0000
+        Tue, 29 Nov 2022 13:08:06 -0500
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8CC1F9E3
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 10:08:03 -0800 (PST)
+Received: by mail-qv1-xf33.google.com with SMTP id e18so8915675qvs.1
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 10:08:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uLGeaz8NT3BELQqUMecnx7omQ6ldn4HqO+/oulNlF3g=;
+        b=iJplMCRi2LhhQadE374lqFmED+tpdcxnO/27Tz7GhsxsGYaov3AHSLgVredAl4EKwf
+         y8y410DKLDpSpT3Vg/nc8WJi8/kmTtcmzjrB7+f6ia7nIR8Fx3ZTXcjIUFvPzTGKcA7N
+         sWqZP2O1KSGzmGfWdZulbDtgFgQt+fgC6FqTMrTCWJYjAcIvClChZJLfa3V7OLx7EIiD
+         3/UMSLouRXc6/u20V8fBpyyQyw4VpjI0d+y3dKINM0DN3bj8C8bVcVVlf7k657Y7eC0l
+         C1PNjG/V/Im5mFkoETZImcdpJ9/+aiX7oXo7pgjfoqk1pwugErWo42C1OW9+7z/62bmZ
+         EwPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uLGeaz8NT3BELQqUMecnx7omQ6ldn4HqO+/oulNlF3g=;
+        b=ugFYaC+0LVHDw4HlYOjLw6LqXLxnaJtP6OFWaXsv2AZ2awMMSsdRX/CgwWul8whJ0a
+         sq2n4SOADrAkwWgBU0V03DnOJgXDFLW84wL9Du+hezgtGXs+RkpvwnXX2KyUu88eBQMq
+         D4UsSgTpxyhtGJ1kZxHZRxMCyvV/sFOTTBR/puh/8jifwgDiCCWIvR4oziACmZxyH9Fq
+         XPQHk8Y9j4EjO/43Eo7gY5w0GoDomQCkKdaSVH0vNHcRcRUtl1gYPNmhW6092Se9OHSO
+         92bZrvSfBMsMaEuqDWNvq6MpZU6L/qqItcrhV4mVkWbB+9JILdmDACSmXIb06HjLOF7D
+         VrFw==
+X-Gm-Message-State: ANoB5pkzh3mzGE88mcCQ/pc6hMCDXdf72Ksvkq7d6pSU8d7Cn16HtLx5
+        G7rBHxNaW3Ue8c0/iE3uY7Yt/A==
+X-Google-Smtp-Source: AA0mqf4IJkpBeqMkP10/WQYwbB4b2vUFv97YcL7SBezywirDtOwEYT22VSC2x2m31tDlZYOy8QPELw==
+X-Received: by 2002:a0c:90f1:0:b0:4c6:8f2e:9a2 with SMTP id p104-20020a0c90f1000000b004c68f2e09a2mr52264929qvp.100.1669745282935;
+        Tue, 29 Nov 2022 10:08:02 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:ea9a])
+        by smtp.gmail.com with ESMTPSA id f3-20020a05622a114300b003434d3b5938sm8911215qty.2.2022.11.29.10.08.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 10:08:02 -0800 (PST)
+Date:   Tue, 29 Nov 2022 13:08:01 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Mina Almasry <almasrymina@google.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
+Message-ID: <Y4ZKgXdUXZ3ycMp4@cmpxchg.org>
+References: <20221122203850.2765015-1-almasrymina@google.com>
+ <Y35fw2JSAeAddONg@cmpxchg.org>
+ <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
+ <Y36XchdgTCsMP4jT@cmpxchg.org>
+ <874juonbmv.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <874juonbmv.fsf@yhuang6-desk2.ccr.corp.intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Oct 2022 10:35:12 +0530, Tharun Kumar P wrote:
-> Microchip PCI1XXXX is an unmanaged PCIe3.1a switch for consumer,
-> industrial, and automotive applications. This switch has multiple
-> downstream ports. One of the switch's downstream ports is a multifunction
-> endpoint; one of those functions supports SPI functionality. This series
-> of patches provides the SPI controller driver for the SPI function of the
-> multifunction PCIe endpoint of the switch.
+Hello Ying,
+
+On Thu, Nov 24, 2022 at 01:51:20PM +0800, Huang, Ying wrote:
+> Johannes Weiner <hannes@cmpxchg.org> writes:
+> > The fallback to reclaim actually strikes me as wrong.
+> >
+> > Think of reclaim as 'demoting' the pages to the storage tier. If we
+> > have a RAM -> CXL -> storage hierarchy, we should demote from RAM to
+> > CXL and from CXL to storage. If we reclaim a page from RAM, it means
+> > we 'demote' it directly from RAM to storage, bypassing potentially a
+> > huge amount of pages colder than it in CXL. That doesn't seem right.
+> >
+> > If demotion fails, IMO it shouldn't satisfy the reclaim request by
+> > breaking the layering. Rather it should deflect that pressure to the
+> > lower layers to make room. This makes sure we maintain an aging
+> > pipeline that honors the memory tier hierarchy.
 > 
-> [...]
+> Yes.  I think that we should avoid to fall back to reclaim as much as
+> possible too.  Now, when we allocate memory for demotion
+> (alloc_demote_page()), __GFP_KSWAPD_RECLAIM is used.  So, we will trigger
+> kswapd reclaim on lower tier node to free some memory to avoid fall back
+> to reclaim on current (higher tier) node.  This may be not good enough,
+> for example, the following patch from Hasan may help via waking up
+> kswapd earlier.
+> 
+> https://lore.kernel.org/linux-mm/b45b9bf7cd3e21bca61d82dcd1eb692cd32c122c.1637778851.git.hasanalmaruf@fb.com/
+> 
+> Do you know what is the next step plan for this patch?
+> 
+> Should we do even more?
+> 
+> From another point of view, I still think that we can use falling back
+> to reclaim as the last resort to avoid OOM in some special situations,
+> for example, most pages in the lowest tier node are mlock() or too hot
+> to be reclaimed.
 
-Applied to
+If they're hotter than reclaim candidates on the toptier, shouldn't
+they get promoted instead and make room that way? We may have to tweak
+the watermark logic a bit to facilitate that (allow promotions where
+regular allocations already fail?). But this sort of resorting would
+be preferable to age inversions.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+The mlock scenario sounds possible. In that case, it wouldn't be an
+aging inversion, since there is nothing colder on the CXL node.
 
-Thanks!
+Maybe a bypass check should explicitly consult the demotion target
+watermarks against its evictable pages (similar to the file_is_tiny
+check in prepare_scan_count)?
 
-[1/2] spi: microchip: pci1xxxx: Add driver for SPI controller of PCI1XXXX PCIe switch
-      (no commit info)
-[2/2] spi: microchip: pci1xxxx: Add suspend and resume support for PCI1XXXX SPI driver
-      commit: 7ba63521a1e9d8ca6fb55ead19e6e2b850b8fd80
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Because in any other scenario, if there is a bug in the promo/demo
+coordination, I think we'd rather have the OOM than deal with age
+inversions causing intermittent performance issues that are incredibly
+hard to track down.
