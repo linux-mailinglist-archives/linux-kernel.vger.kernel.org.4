@@ -2,266 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B9163C807
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:19:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE8063C7F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:18:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236726AbiK2TTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 14:19:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
+        id S236722AbiK2TSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 14:18:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236751AbiK2TTI (ORCPT
+        with ESMTP id S236513AbiK2TSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 14:19:08 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on20624.outbound.protection.outlook.com [IPv6:2a01:111:f400:7ea9::624])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5586C702;
-        Tue, 29 Nov 2022 11:18:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ya78Ezq9m7iGOb0sLxhOhdB9bV1Mpjxj6p+V5fAR9jb9/4LI6MO9HNjAqnosS3U/PFaXdQAhlrcWwfnKRYUn5mvF4iPpPTod6CIPzrptF5/faksK76tetsi19s5lerIGPVLDdyw7B50vf/oihJTwVw7c+FH2djOcCbobiOUkNJKNVZ6SHByxakEUTxSc/mH7zqH8EVdGOuVqmADoSxOF+fmJ32+PPZj492ptcS8gZ8+/y4YtyM5NpeRE06gUfFEERTDSN9/++vmxt2f1O+KaOUUmFfT4R7w/MBBZek5yOMk+lm9OskCPo7k5/Hyv+XC4j2xzDANJrDTaI38WJiNLrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SJbBt7jAQwWyBruyyDiBbG+QCwuQffS38SJ/h8ChIxs=;
- b=OegI722G3BsnsulCrxkkAcDthQ5py0/UANx8PtUSl9lmXkfnKABbn5E3Afuej7UxuU9G/XC7XUBlmAA/RavvHyRdj81eTWovj5RgueabRlRrkHVqOZP8Bx4Q6EiRK1V4tBguINW0VocNIsTvjWoI7w6JyqKamWm6HutBPyrikvwkOPHJYtglgFTjcDhZ4pLJ+IQcEwmhQnnsKBJwCBhaQCwY7y/jDy8QBaUGVN3wQl2WouX5WbxMgZ7WJdwaV9WvhMDbvsNIMf1OzFHngIP6YR5GAaMiMrvWNoG7AgmRohtq+f9E/hl9ZBlra4W6RQwEUsPQtuETnCF9cy2ZiP6+5Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SJbBt7jAQwWyBruyyDiBbG+QCwuQffS38SJ/h8ChIxs=;
- b=YkZuBPysnBEWDO0SyiBUXCNqnZQz3AH2EZlZzxp3L9XQ9V/YhisxT8JlP3X1XyK0cKfluRAaAlfX9lhy7AzUy9wwnf/52nfvBdJFBVjH1YK5iohXOyb7+fwWPNL3T7B6d0FC5qnnt4719/97TpMdcRzR6X4F/RIg44qU0X6m1n4=
-Received: from BL1P221CA0028.NAMP221.PROD.OUTLOOK.COM (2603:10b6:208:2c5::18)
- by BL0PR12MB4882.namprd12.prod.outlook.com (2603:10b6:208:1c3::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Tue, 29 Nov
- 2022 19:18:34 +0000
-Received: from BL02EPF0000EE3E.namprd05.prod.outlook.com
- (2603:10b6:208:2c5:cafe::d) by BL1P221CA0028.outlook.office365.com
- (2603:10b6:208:2c5::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23 via Frontend
- Transport; Tue, 29 Nov 2022 19:18:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF0000EE3E.mail.protection.outlook.com (10.167.241.135) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5857.17 via Frontend Transport; Tue, 29 Nov 2022 19:18:33 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 29 Nov
- 2022 13:18:32 -0600
-Date:   Tue, 29 Nov 2022 13:18:15 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <linux-api@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <qemu-devel@nongnu.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        <luto@kernel.org>, <jun.nakajima@intel.com>,
-        <dave.hansen@intel.com>, <ak@linux.intel.com>, <david@redhat.com>,
-        <aarcange@redhat.com>, <ddutile@redhat.com>, <dhildenb@redhat.com>,
-        Quentin Perret <qperret@google.com>, <tabba@google.com>,
-        <mhocko@suse.com>, Muchun Song <songmuchun@bytedance.com>,
-        <wei.w.wang@intel.com>
-Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <20221129191815.atuv6arhodjbnvb2@amd.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
- <20221129003725.l34qhx6n44mq2gtl@amd.com>
- <20221129140615.GC902164@chaop.bj.intel.com>
- <20221129190658.jefuep7nglp25ugt@amd.com>
+        Tue, 29 Nov 2022 14:18:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0E81DF37;
+        Tue, 29 Nov 2022 11:18:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43E81B818A9;
+        Tue, 29 Nov 2022 19:18:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8FC6C43152;
+        Tue, 29 Nov 2022 19:18:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669749496;
+        bh=/Gzf5VjkGbrloDTfPxv9l92KDFa+IDXWjOaC6u0x8Ow=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=nqD9B2jDz5Wk4t168uyU//16IO+pqrlKydrrB+BdcaGU13pUT7rgEq58N60eEr0xC
+         Q/xY/FJhGv9T8R5nFT7UbWn26+mwhZkscN+nnowowF4HPiEcuqUorq9M5dwEjt043S
+         WjE4aLkV63D+JKyDurx6SbiKc7A1z75LkkXKokzGMUprvcWnFdegxFpQceDZM0v85W
+         looTtVibLGMFbJfwV1IOOxp9ZtjMgA/CfWP8vH/M1hubiyCPP8n5QDygGE98EgGpbL
+         //KwrhjBPiku8eXr8/JKIFvDraCSZbebPl+hEpfsjoVJSv+v9moMCcDkqP6KBRCj9g
+         LHSYBr0MeYiGg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 62B505C0584; Tue, 29 Nov 2022 11:18:16 -0800 (PST)
+Date:   Tue, 29 Nov 2022 11:18:16 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>, frederic@kernel.org,
+        quic_neeraju@quicinc.com, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] rcu-tasks: Make rude RCU-Tasks work well with CPU
+ hotplug
+Message-ID: <20221129191816.GA388190@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221129151810.GY4001@paulmck-ThinkPad-P17-Gen-1>
+ <9299CE62-C7B6-45F5-BD07-C1CB02F0D08C@joelfernandes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221129190658.jefuep7nglp25ugt@amd.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0000EE3E:EE_|BL0PR12MB4882:EE_
-X-MS-Office365-Filtering-Correlation-Id: a53f2ff8-3fec-4330-5e15-08dad23e81d4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: l1YQoXVVqN5Zt/GSq3FNnFzuDCgiUcoO9srG8o3nC50G/UigLFTf0mJbYp3NQV303UTvLYS6vvYOxpmm5qY1F822Z76imP6MtJYsTwfYcU+Kvzev6sx66p1vIq8ivrYQskldJK+Xhg1VJcEz1uMOwBe9Sv4d7eYMPbyOlf5hsL8Hd5NAuGRQrls2e1pRDWeUD3YkoPFHCV3144ibUn2RjjCuBlIxyP44GJmkd9y8XRhI+pBWxdEEukY5i+wjlKBtoko48N8Ldrv5x1cHzxOIl7sjJex/dhoAawXIpMqskuIf2DsImSuY2nWNkguwXtnNqhUBv5DGnrfFG3Mq/vv++eVA0JgKgeYET9tMiGTLe5/xJuFYIiZ9ELFrcEWC77ufGSsIBCyJFiLqNPv5gLyGCUhPRMMjB4sYL/LlCr3KcnPiJI1kMlsUb/XPavFsncES0QALvpA5fL7lTcl/CKnNdT2FKAsekzIypOQbDXNzbnd5D3dJwZ5212lKoIm8dVWr2voFwV96tjHqW2dCnw/NS3LaLmiENH//eZloRJ6bMBI1qqbrvQv9MOHkOiP0pAUN4zMvM7tAo/Se2YPTU+jPwl9wwv2tVIAGRRU8RNiSEcq7SJnzcqcKEDjrcgzIJdAAQyQZ9BfPXd37Yx6xS37UjfMayySNmQpU3H7NkI3kUMmakoDhmQG872kMuO62FaXHTsUwBdwzz3kAcHtNNrDtrxKOoVlFOs1+JnkRFlR1qPcOYyYMPO0kLAhnMjpneQSclaBOHJT4n/qsPygPP3sna+4tRU9F850LYa6mAzwBDNYD7KNXam1g7q49sdlX0bvE
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(39860400002)(346002)(136003)(451199015)(36840700001)(40470700004)(46966006)(8936002)(5660300002)(45080400002)(1076003)(36756003)(8676002)(4326008)(70206006)(54906003)(316002)(36860700001)(82740400003)(47076005)(40480700001)(81166007)(426003)(83380400001)(356005)(966005)(7406005)(82310400005)(40460700003)(86362001)(26005)(478600001)(336012)(2616005)(6666004)(16526019)(7416002)(186003)(6916009)(41300700001)(70586007)(44832011)(2906002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 19:18:33.2299
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a53f2ff8-3fec-4330-5e15-08dad23e81d4
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000EE3E.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4882
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9299CE62-C7B6-45F5-BD07-C1CB02F0D08C@joelfernandes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 01:06:58PM -0600, Michael Roth wrote:
-> On Tue, Nov 29, 2022 at 10:06:15PM +0800, Chao Peng wrote:
-> > On Mon, Nov 28, 2022 at 06:37:25PM -0600, Michael Roth wrote:
-> > > On Tue, Oct 25, 2022 at 11:13:37PM +0800, Chao Peng wrote:
-> > ...
-> > > > +static long restrictedmem_fallocate(struct file *file, int mode,
-> > > > +				    loff_t offset, loff_t len)
-> > > > +{
-> > > > +	struct restrictedmem_data *data = file->f_mapping->private_data;
-> > > > +	struct file *memfd = data->memfd;
-> > > > +	int ret;
-> > > > +
-> > > > +	if (mode & FALLOC_FL_PUNCH_HOLE) {
-> > > > +		if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
-> > > > +			return -EINVAL;
-> > > > +	}
-> > > > +
-> > > > +	restrictedmem_notifier_invalidate(data, offset, offset + len, true);
-> > > 
-> > > The KVM restrictedmem ops seem to expect pgoff_t, but here we pass
-> > > loff_t. For SNP we've made this strange as part of the following patch
-> > > and it seems to produce the expected behavior:
-> > 
-> > That's correct. Thanks.
-> > 
-> > > 
-> > >   https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fmdroth%2Flinux%2Fcommit%2Fd669c7d3003ff7a7a47e73e8c3b4eeadbd2c4eb6&amp;data=05%7C01%7CMichael.Roth%40amd.com%7C0c26815eb6af4f1a243508dad23cf713%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638053456609134623%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=kAL42bmyBB0alVwh%2FN%2BT3D%2BiVTdxxMsJ7V4TNuCTjM4%3D&amp;reserved=0
-> > > 
-> > > > +	ret = memfd->f_op->fallocate(memfd, mode, offset, len);
-> > > > +	restrictedmem_notifier_invalidate(data, offset, offset + len, false);
-> > > > +	return ret;
-> > > > +}
-> > > > +
-> > > 
-> > > <snip>
-> > > 
-> > > > +int restrictedmem_get_page(struct file *file, pgoff_t offset,
-> > > > +			   struct page **pagep, int *order)
-> > > > +{
-> > > > +	struct restrictedmem_data *data = file->f_mapping->private_data;
-> > > > +	struct file *memfd = data->memfd;
-> > > > +	struct page *page;
-> > > > +	int ret;
-> > > > +
-> > > > +	ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
-> > > 
-> > > This will result in KVM allocating pages that userspace hasn't necessary
-> > > fallocate()'d. In the case of SNP we need to get the PFN so we can clean
-> > > up the RMP entries when restrictedmem invalidations are issued for a GFN
-> > > range.
-> > 
-> > Yes fallocate() is unnecessary unless someone wants to reserve some
-> > space (e.g. for determination or performance purpose), this matches its
-> > semantics perfectly at:
-> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.man7.org%2Flinux%2Fman-pages%2Fman2%2Ffallocate.2.html&amp;data=05%7C01%7CMichael.Roth%40amd.com%7C0c26815eb6af4f1a243508dad23cf713%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638053456609134623%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=acBSquFG%2FHtpbcZfHDZrP2O63bu06rI0pjiPJFSJSj8%3D&amp;reserved=0
-> > 
-> > > 
-> > > If the guest supports lazy-acceptance however, these pages may not have
-> > > been faulted in yet, and if the VMM defers actually fallocate()'ing space
-> > > until the guest actually tries to issue a shared->private for that GFN
-> > > (to support lazy-pinning), then there may never be a need to allocate
-> > > pages for these backends.
-> > > 
-> > > However, the restrictedmem invalidations are for GFN ranges so there's
-> > > no way to know inadvance whether it's been allocated yet or not. The
-> > > xarray is one option but currently it defaults to 'private' so that
-> > > doesn't help us here. It might if we introduced a 'uninitialized' state
-> > > or something along that line instead of just the binary
-> > > 'shared'/'private' though...
-> > 
-> > How about if we change the default to 'shared' as we discussed at
-> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2FY35gI0L8GMt9%2BOkK%40google.com%2F&amp;data=05%7C01%7CMichael.Roth%40amd.com%7C0c26815eb6af4f1a243508dad23cf713%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638053456609134623%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=Q1vZWQiZ7mx12Qn5aKl4s8Ea9hNbwCJBb%2BjiA1du3Os%3D&amp;reserved=0?
+On Tue, Nov 29, 2022 at 11:00:05AM -0500, Joel Fernandes wrote:
 > 
-> Need to look at this a bit more, but I think that could work as well.
 > 
-> > > 
-> > > But for now we added a restrictedmem_get_page_noalloc() that uses
-> > > SGP_NONE instead of SGP_WRITE to avoid accidentally allocating a bunch
-> > > of memory as part of guest shutdown, and a
-> > > kvm_restrictedmem_get_pfn_noalloc() variant to go along with that. But
-> > > maybe a boolean param is better? Or maybe SGP_NOALLOC is the better
-> > > default, and we just propagate an error to userspace if they didn't
-> > > fallocate() in advance?
+> > On Nov 29, 2022, at 10:18 AM, Paul E. McKenney <paulmck@kernel.org> wrote:
 > > 
-> > This (making fallocate() a hard requirement) not only complicates the
-> > userspace but also forces the lazy-faulting going through a long path of
-> > exiting to userspace. Unless we don't have other options I would not go
-> > this way.
+> > ﻿On Tue, Nov 29, 2022 at 06:25:04AM +0000, Zhang, Qiang1 wrote:
+> >>>> On Nov 28, 2022, at 11:54 PM, Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:
+> >>> 
+> >>> ﻿On Mon, Nov 28, 2022 at 10:34:28PM +0800, Zqiang wrote:
+> >>>> Currently, invoke rcu_tasks_rude_wait_gp() to wait one rude
+> >>>> RCU-tasks grace period, if __num_online_cpus == 1, will return
+> >>>> directly, indicates the end of the rude RCU-task grace period.
+> >>>> suppose the system has two cpus, consider the following scenario:
+> >>>> 
+> >>>>   CPU0                                   CPU1 (going offline)
+> >>>>                         migration/1 task:
+> >>>>                                     cpu_stopper_thread
+> >>>>                                      -> take_cpu_down
+> >>>>                                         -> _cpu_disable
+> >>>>                              (dec __num_online_cpus)
+> >>>>                                         ->cpuhp_invoke_callback
+> >>>>                                               preempt_disable
+> >>>>                       access old_data0
+> >>>>          task1
+> >>>> del old_data0                                  .....
+> >>>> synchronize_rcu_tasks_rude()
+> >>>> task1 schedule out
+> >>>> ....
+> >>>> task2 schedule in
+> >>>> rcu_tasks_rude_wait_gp()
+> >>>>    ->__num_online_cpus == 1
+> >>>>      ->return
+> >>>> ....
+> >>>> task1 schedule in
+> >>>> ->free old_data0
+> >>>>                                               preempt_enable
+> >>>> 
+> >>>> when CPU1 dec __num_online_cpus and __num_online_cpus is equal one,
+> >>>> the CPU1 has not finished offline, stop_machine task(migration/1)
+> >>>> still running on CPU1, maybe still accessing 'old_data0', but the
+> >>>> 'old_data0' has freed on CPU0.
+> >>>> 
+> >>>> This commit add cpus_read_lock/unlock() protection before accessing
+> >>>> __num_online_cpus variables, to ensure that the CPU in the offline
+> >>>> process has been completed offline.
+> >>>> 
+> >>>> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> >>>> 
+> >>>> First, good eyes and good catch!!!
+> >>>> 
+> >>>> The purpose of that check for num_online_cpus() is not performance
+> >>>> on single-CPU systems, but rather correct operation during early boot.
+> >>>> So a simpler way to make that work is to check for RCU_SCHEDULER_RUNNING,
+> >>>> for example, as follows:
+> >>>> 
+> >>>>   if (rcu_scheduler_active != RCU_SCHEDULER_RUNNING &&
+> >>>>       num_online_cpus() <= 1)
+> >>>>       return;    // Early boot fastpath for only one CPU.
+> >>> 
+> >>> Hi Paul
+> >>> 
+> >>> During system startup, because the RCU_SCHEDULER_RUNNING is set after starting other CPUs, 
+> >>> 
+> >>>             CPU0                                                                       CPU1                                                                 
+> >>> 
+> >>> if (rcu_scheduler_active !=                                    
+> >>>   RCU_SCHEDULER_RUNNING &&
+> >>>          __num_online_cpus  == 1)                                               
+> >>>   return;                                                                         inc  __num_online_cpus
+> >>>                           (__num_online_cpus == 2)
+> >>> 
+> >>> CPU0 didn't notice the update of the __num_online_cpus variable by CPU1 in time
+> >>> Can we move rcu_set_runtime_mode() before smp_init()
+> >>> any thoughts?
+> >>> 
+> >>> Is anyone expected to do rcu-tasks operation before the scheduler is running? 
+> >> 
+> >> Not sure if such a scenario exists.
+> >> 
+> >>> Typically this requires the tasks to context switch which is a scheduler operation.
+> >>> 
+> >>> If the scheduler is not yet running, then I don’t think missing an update the __num_online_cpus matters since no one does a tasks-RCU synchronize.
+> >> 
+> >> Hi Joel
+> >> 
+> >> After the kernel_init task runs, before calling smp_init() to starting other CPUs, 
+> >> the scheduler haven been initialization, task context switching can occur.
+> > 
+> > Good catch, thank you both.  For some reason, I was thinking that the
+> > additional CPUs did not come online until later.
+> > 
+> > So how about this?
+> > 
+> >    if (rcu_scheduler_active == RCU_SCHEDULER_INACTIVE)
+> >        return;    // Early boot fastpath.
+> > 
+> > If this condition is true, there is only one CPU and no scheduler,
+> > thus no preemption.
 > 
-> Unless I'm missing something, it's already the case that userspace is
-> responsible for handling all the shared->private transitions in response
-> to KVM_EXIT_MEMORY_FAULT or (in our case) KVM_EXIT_VMGEXIT. So it only
-> places the additional requirements on the VMM that if they *don't*
-> preallocate, then they'll need to issue the fallocate() prior to issuing
-> the KVM_MEM_ENCRYPT_REG_REGION ioctl in response to these events.
+> Agreed. I was going to suggest exactly this :)
 > 
-> QEMU for example already has a separate 'prealloc' option for cases
-> where they want to prefault all the guest memory, so it makes sense to
-> continue making that an optional thing with regard to UPM.
+> Ack.
+> (Replying by phone but feel free to add my reviewed by tag).
 
-Although I guess what you're suggesting doesn't stop userspace from
-deciding whether they want to prefault or not. I know the Google folks
-had some concerns over unexpected allocations causing 2x memory usage
-though so giving userspace full control of what is/isn't allocated in
-the restrictedmem backend seems to make it easier to guard against this,
-but I think checking the xarray and defaulting to 'shared' would work
-for us if that's the direction we end up going.
+I should add that the downside of this approach is that there is a short
+time between the scheduler initializing and workqueues fully initializing
+where a critical-path call to synchronize_rcu_tasks() will hang the
+system.  I do -not- consider this to be a real problem because RCU had
+some hundreds of calls to synchronize_rcu() before this became an issue.
 
--Mike
+So this should be fine, but please recall this for when/if someone does
+stick a synchronize_rcu_tasks() into that short time.  ;-)
 
+							Thanx, Paul
+
+> - Joel
 > 
-> -Mike
 > 
 > > 
-> > Chao
-> > > 
-> > > -Mike
-> > > 
-> > > > +	if (ret)
-> > > > +		return ret;
-> > > > +
-> > > > +	*pagep = page;
-> > > > +	if (order)
-> > > > +		*order = thp_order(compound_head(page));
-> > > > +
-> > > > +	SetPageUptodate(page);
-> > > > +	unlock_page(page);
-> > > > +
-> > > > +	return 0;
-> > > > +}
-> > > > +EXPORT_SYMBOL_GPL(restrictedmem_get_page);
-> > > > -- 
-> > > > 2.25.1
-> > > > 
+> >                        Thanx, Paul
+> > 
+> >> Thanks
+> >> Zqiang
+> >> 
+> >>> 
+> >>> Or did I miss something?
+> >>> 
+> >>> Thanks.
+> >>> 
+> >>> 
+> >>> 
+> >>> 
+> >>> Thanks
+> >>> Zqiang
+> >>> 
+> >>>> 
+> >>>> This works because rcu_scheduler_active is set to RCU_SCHEDULER_RUNNING
+> >>>> long before it is possible to offline CPUs.
+> >>>> 
+> >>>> Yes, schedule_on_each_cpu() does do cpus_read_lock(), again, good eyes,
+> >>>> and it also unnecessarily does the schedule_work_on() the current CPU,
+> >>>> but the code calling synchronize_rcu_tasks_rude() is on high-overhead
+> >>>> code paths, so this overhead is down in the noise.
+> >>>> 
+> >>>> Until further notice, anyway.
+> >>>> 
+> >>>> So simplicity is much more important than performance in this code.
+> >>>> So just adding the check for RCU_SCHEDULER_RUNNING should fix this,
+> >>>> unless I am missing something (always possible!).
+> >>>> 
+> >>>>                           Thanx, Paul
+> >>>> 
+> >>>> ---
+> >>>> kernel/rcu/tasks.h | 20 ++++++++++++++++++--
+> >>>> 1 file changed, 18 insertions(+), 2 deletions(-)
+> >>>> 
+> >>>> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+> >>>> index 4a991311be9b..08e72c6462d8 100644
+> >>>> --- a/kernel/rcu/tasks.h
+> >>>> +++ b/kernel/rcu/tasks.h
+> >>>> @@ -1033,14 +1033,30 @@ static void rcu_tasks_be_rude(struct work_struct *work)
+> >>>> {
+> >>>> }
+> >>>> 
+> >>>> +static DEFINE_PER_CPU(struct work_struct, rude_work);
+> >>>> +
+> >>>> // Wait for one rude RCU-tasks grace period.
+> >>>> static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
+> >>>> {
+> >>>> +    int cpu;
+> >>>> +    struct work_struct *work;
+> >>>> +
+> >>>> +    cpus_read_lock();
+> >>>>   if (num_online_cpus() <= 1)
+> >>>> -        return;    // Fastpath for only one CPU.
+> >>>> +        goto end;// Fastpath for only one CPU.
+> >>>> 
+> >>>>   rtp->n_ipis += cpumask_weight(cpu_online_mask);
+> >>>> -    schedule_on_each_cpu(rcu_tasks_be_rude);
+> >>>> +    for_each_online_cpu(cpu) {
+> >>>> +        work = per_cpu_ptr(&rude_work, cpu);
+> >>>> +        INIT_WORK(work, rcu_tasks_be_rude);
+> >>>> +        schedule_work_on(cpu, work);
+> >>>> +    }
+> >>>> +
+> >>>> +    for_each_online_cpu(cpu)
+> >>>> +        flush_work(per_cpu_ptr(&rude_work, cpu));
+> >>>> +
+> >>>> +end:
+> >>>> +    cpus_read_unlock();
+> >>>> }
+> >>>> 
+> >>>> void call_rcu_tasks_rude(struct rcu_head *rhp, rcu_callback_t func);
+> >>>> -- 
+> >>>> 2.25.1
+> >>>> 
