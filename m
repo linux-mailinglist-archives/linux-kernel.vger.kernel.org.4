@@ -2,163 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC2663C1C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7EAF63C19D
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:00:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234563AbiK2OF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 09:05:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
+        id S233768AbiK2OAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 09:00:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbiK2OFT (ORCPT
+        with ESMTP id S230148AbiK2OAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 09:05:19 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DD85D690;
-        Tue, 29 Nov 2022 06:05:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669730707; x=1701266707;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=CqOGW8Zm184KDMv0CHU80C03eQzUbVrHdpSNa5YjJCg=;
-  b=e3cA7wEtcBbLJtX7B4+pF4gn/L60TEPpPOdBg46I5zkwfOxaFXLtHtEe
-   BYe5+GsDObd0VQV/LJL2vVrxLJuqPvsVDHs5r6KGdIRcjBvODAyLhawyC
-   Bm2CDm14TP3in5cXNQCNKGPH8GOhlA/Kc1b9v2Q8TWiy+wbK6u+RJNn8i
-   S/uzXv2QBeU8ZDdUllScASEpAWVK9zOHNqjeqh4kkECAVbk2gN8H/d7aE
-   faa9kw1xwA4NF4ItENz5OcM1ZZFey5NIJqmSUMuiMhs7M2xdLPxlt9pvm
-   vFGjUdoQaaHDSOmuEK/G1z1a2Uet7XVIp8iFYTMVGFdjCiWlVUTN3MHGJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="316948610"
-X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
-   d="scan'208";a="316948610"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 06:04:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="707221830"
-X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
-   d="scan'208";a="707221830"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by fmsmga008.fm.intel.com with ESMTP; 29 Nov 2022 06:04:07 -0800
-Date:   Tue, 29 Nov 2022 21:59:46 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        tabba@google.com, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <20221129135946.GB902164@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
- <20221129000632.sz6pobh6p7teouiu@amd.com>
- <20221129112139.usp6dqhbih47qpjl@box.shutemov.name>
- <6d7f7775-5703-c27a-e57b-03aafb4de712@redhat.com>
+        Tue, 29 Nov 2022 09:00:50 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689A532B88;
+        Tue, 29 Nov 2022 06:00:48 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 33E213FB17;
+        Tue, 29 Nov 2022 14:00:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1669730446; bh=adS46JVWH1WlaPbDZblMEFJYiqhfkyXnDs8IpAPLC2w=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=IWzbqBPmY10XvuyP3B89YIfdQPitUUc8VmOhJdYYoFvGO6o3rEW+9bPt3rhVg6WYw
+         Io36r7PLmxsCpw+cSXJPEMJabwGTe+KLxK+R1UGR6mTj3wLIgKrOc0+uP2do0C5Kc4
+         JpeYbXAxFezVdpDv7Lo2DsBIzYapRii4GyUd/zDt9HXVPgw7nfSMNDHiG4jwsD7IgX
+         0f3nV4yp1tx0RHSlBf1wK9zh4OhDOhEuShnm8Y7Kdh8WY4jnL+171EqVQRHNS5Yxjz
+         ESIDwC0CxOL39402m8cm6gFBkbIEG4vgtZT0BdOPx2p5/eR3l/8qEZYwoT6LC7nLQA
+         65PJAxTtnhSyQ==
+Message-ID: <41c6882a-bff0-378c-edd3-160b54be7c1d@marcan.st>
+Date:   Tue, 29 Nov 2022 23:00:38 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6d7f7775-5703-c27a-e57b-03aafb4de712@redhat.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20221128142912.16022-1-marcan@marcan.st>
+ <20221128142912.16022-3-marcan@marcan.st>
+ <CAPDyKFobMvef_BWGMR=7avODh2r5XNMGpwO3xYgrN-u=DqRwbg@mail.gmail.com>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v5 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
+ binding for Apple SoC cpufreq
+In-Reply-To: <CAPDyKFobMvef_BWGMR=7avODh2r5XNMGpwO3xYgrN-u=DqRwbg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 12:39:06PM +0100, David Hildenbrand wrote:
-> On 29.11.22 12:21, Kirill A. Shutemov wrote:
-> > On Mon, Nov 28, 2022 at 06:06:32PM -0600, Michael Roth wrote:
-> > > On Tue, Oct 25, 2022 at 11:13:37PM +0800, Chao Peng wrote:
-> > > > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> > > > 
-> > > 
-> > > <snip>
-> > > 
-> > > > +static struct file *restrictedmem_file_create(struct file *memfd)
-> > > > +{
-> > > > +	struct restrictedmem_data *data;
-> > > > +	struct address_space *mapping;
-> > > > +	struct inode *inode;
-> > > > +	struct file *file;
-> > > > +
-> > > > +	data = kzalloc(sizeof(*data), GFP_KERNEL);
-> > > > +	if (!data)
-> > > > +		return ERR_PTR(-ENOMEM);
-> > > > +
-> > > > +	data->memfd = memfd;
-> > > > +	mutex_init(&data->lock);
-> > > > +	INIT_LIST_HEAD(&data->notifiers);
-> > > > +
-> > > > +	inode = alloc_anon_inode(restrictedmem_mnt->mnt_sb);
-> > > > +	if (IS_ERR(inode)) {
-> > > > +		kfree(data);
-> > > > +		return ERR_CAST(inode);
-> > > > +	}
-> > > > +
-> > > > +	inode->i_mode |= S_IFREG;
-> > > > +	inode->i_op = &restrictedmem_iops;
-> > > > +	inode->i_mapping->private_data = data;
-> > > > +
-> > > > +	file = alloc_file_pseudo(inode, restrictedmem_mnt,
-> > > > +				 "restrictedmem", O_RDWR,
-> > > > +				 &restrictedmem_fops);
-> > > > +	if (IS_ERR(file)) {
-> > > > +		iput(inode);
-> > > > +		kfree(data);
-> > > > +		return ERR_CAST(file);
-> > > > +	}
-> > > > +
-> > > > +	file->f_flags |= O_LARGEFILE;
-> > > > +
-> > > > +	mapping = memfd->f_mapping;
-> > > > +	mapping_set_unevictable(mapping);
-> > > > +	mapping_set_gfp_mask(mapping,
-> > > > +			     mapping_gfp_mask(mapping) & ~__GFP_MOVABLE);
-> > > 
-> > > Is this supposed to prevent migration of pages being used for
-> > > restrictedmem/shmem backend?
-> > 
-> > Yes, my bad. I expected it to prevent migration, but it is not true.
+On 29/11/2022 20.36, Ulf Hansson wrote:
+> On Mon, 28 Nov 2022 at 15:29, Hector Martin <marcan@marcan.st> wrote:
+>> +examples:
+>> +  - |
+>> +    // This example shows a single CPU per domain and 2 domains,
+>> +    // with two p-states per domain.
+>> +    // Shipping hardware has 2-4 CPUs per domain and 2-6 domains.
+>> +    cpus {
+>> +      #address-cells = <2>;
+>> +      #size-cells = <0>;
+>> +
+>> +      cpu@0 {
+>> +        compatible = "apple,icestorm";
+>> +        device_type = "cpu";
+>> +        reg = <0x0 0x0>;
+>> +        operating-points-v2 = <&ecluster_opp>;
 > 
-> Maybe add a comment that these pages are not movable and we don't want to
-> place them into movable pageblocks (including CMA and ZONE_MOVABLE). That's
-> the primary purpose of the GFP mask here.
+> To me, it looks like the operating-points-v2 phandle better belongs in
+> the performance-domains provider node. I mean, isn't the OPPs really a
+> description of the performance-domain provider?
+> 
+> That said, I suggest we try to extend the generic performance-domain
+> binding [1] with an "operating-points-v2". In that way, we should
+> instead be able to reference it from this binding.
+> 
+> In fact, that would be very similar to what already exists for the
+> generic power-domain binding [2]. I think it would be rather nice to
+> follow a similar pattern for the performance-domain binding.
 
-Yes I can do that.
+While I agree with the technical rationale and the proposed approach
+being better in principle...
 
-Chao
-> 
-> -- 
-> Thanks,
-> 
-> David / dhildenb
+We're at v5 of bikeshedding this trivial driver's DT binding, and the
+comment could've been made at v3. To quote IRC just now:
+
+> this way the machines will be obsolete before things are fully upstreamed
+
+I think it's long overdue for the kernel community to take a deep look
+at itself and its development and review process, because it is quite
+honestly insane how pathologically inefficient it is compared to,
+basically, every other large and healthy open source project of similar
+or even greater impact and scope.
+
+Cc Linus, because this is for your Mac and I assume you care. We're at
+v5 here for this silly driver. Meanwhile, rmk recently threw the towel
+on upstreaming macsmc for us. We're trying, and I'll keep trying because
+I actually get paid (by very generous donors) to do this, but if I
+weren't I'd have given up a long time ago. And while I won't give up, I
+can't deny this situation affects my morale and willingness to keep
+pushing on upstreaming on a regular basis.
+
+Meanwhile, OpenBSD has been *shipping* full M1 support for a while now
+in official release images (and since Linux is the source of truth for
+DT bindings, every time we re-bikeshed it we break their users because
+they, quite reasonably, aren't interested in waiting for us Linux
+slowpokes to figure it out first).
+
+Please, let's introspect about this for a moment. Something is deeply
+broken if people with 25+ years being an arch maintainer can't get a
+700-line mfd driver upstreamed before giving up. I don't know how we
+expect to ever get a Rust GPU driver merged if it takes 6+ versions to
+upstream the world's easiest cpufreq hardware.
+
+- Hector
