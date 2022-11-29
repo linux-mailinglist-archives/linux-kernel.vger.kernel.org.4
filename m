@@ -2,85 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9030A63C735
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 19:32:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A69CD63C738
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 19:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbiK2ScL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 13:32:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45148 "EHLO
+        id S234781AbiK2Scc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 13:32:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235940AbiK2ScI (ORCPT
+        with ESMTP id S236002AbiK2ScX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 13:32:08 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C93654C1;
-        Tue, 29 Nov 2022 10:32:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=wIKgYoD0U9V/FJ0sV3et6MEEkcpyezkYMDQv2JE1xug=; b=QEtv03LPOokn2byHbhnSg53HbY
-        jTltuRc+dW47YOXRIu3rvks9tzGAyN+CjLvauNziwoYD6sEM+WMhsvjIV3DCdQddyvdQIk7h/LWFz
-        zhUhSAdRizMqxiSK7l3mPkf5FnxJnjQus7VCsy3JX/80XH5UCML0fHKcCDMRuHeMGGDs=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1p05O7-003tzW-NM; Tue, 29 Nov 2022 19:31:23 +0100
-Date:   Tue, 29 Nov 2022 19:31:23 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Chukun Pan <amadeus@jmu.edu.cn>,
-        "David S . Miller" <davem@davemloft.net>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Wu <david.wu@rock-chips.com>,
+        Tue, 29 Nov 2022 13:32:23 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03ABC68C6E;
+        Tue, 29 Nov 2022 10:32:20 -0800 (PST)
+Received: from g550jk.localnet (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id D6176C7D94;
+        Tue, 29 Nov 2022 18:31:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1669746709; bh=xI6kMiCf4Tsqu4BZfjhWwUhGCtpCyijEZHJ1c16Hm8w=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=rYg1wZXp2d2ADKVSmTfn7SCKk0IHjoZ/9J6vaRQR8xWiYIbZGV2GtRqsBxl7p0s1X
+         rcmOTLT1uOfN9f5yptEZFr4YifrmqQQJuf7rJ03EezmzSur3k/3yhSjavwysZ2vRnf
+         M4H8tqYMCrPVLkJ91VJfLrLCuharuwnbzEcV20DY=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/2] ethernet: stmicro: stmmac: Add SGMII/QSGMII support
- for RK3568
-Message-ID: <Y4ZP+0koq0xIm4H9@lunn.ch>
-References: <20221129072714.22880-1-amadeus@jmu.edu.cn>
- <20221129072714.22880-2-amadeus@jmu.edu.cn>
- <e4676089-7ce2-e123-4e2a-a7d8835e9118@linaro.org>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH 2/2] arm64: dts: qcom: sdm632-fairphone-fp3: Add NFC
+Date:   Tue, 29 Nov 2022 19:31:47 +0100
+Message-ID: <3134585.5fSG56mABF@g550jk>
+In-Reply-To: <b20432e8-115c-407f-2480-6dd429ce5c25@linaro.org>
+References: <20221128173744.833018-1-luca@z3ntu.xyz> <20221128173744.833018-2-luca@z3ntu.xyz> <b20432e8-115c-407f-2480-6dd429ce5c25@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e4676089-7ce2-e123-4e2a-a7d8835e9118@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > -static int phy_power_on(struct rk_priv_data *bsp_priv, bool enable)
-> > +static int rk_gmac_phy_power_on(struct rk_priv_data *bsp_priv, bool enable)
-> >  {
-> >  	struct regulator *ldo = bsp_priv->regulator;
-> >  	int ret;
-> > @@ -1728,6 +1909,18 @@ static struct rk_priv_data *rk_gmac_setup(struct platform_device *pdev,
-> >  							"rockchip,grf");
-> >  	bsp_priv->php_grf = syscon_regmap_lookup_by_phandle(dev->of_node,
-> >  							    "rockchip,php-grf");
-> > +	bsp_priv->xpcs = syscon_regmap_lookup_by_phandle(dev->of_node,
-> > +							 "rockchip,xpcs");
-> > +	if (!IS_ERR(bsp_priv->xpcs)) {
-> > +		struct phy *comphy;
+On Dienstag, 29. November 2022 14:29:36 CET Konrad Dybcio wrote:
+> On 28.11.2022 18:37, Luca Weiss wrote:
+> > Configure the node for the NQ310 chip found on this device, which is
+> > compatible with generic nxp-nci-i2c driver.
+> > 
+> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> > ---
+> > RESEND to fix Cc
+> > 
+> >  arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts | 15 +++++++++++++++
+> >  1 file changed, 15 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
+> > b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts index
+> > 2920504461d3..fde93cbcd180 100644
+> > --- a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
+> > +++ b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
+> > @@ -63,6 +63,21 @@ touchscreen@48 {
+> > 
+> >  	};
+> >  
+> >  };
+> > 
+> > +&i2c_5 {
+> > +	status = "okay";
 > > +
-> > +		comphy = devm_of_phy_get(&pdev->dev, dev->of_node, NULL);
+> > +	nfc@28 {
+> > +		compatible = "nxp,nq310", "nxp,nxp-nci-i2c";
 > 
-> So instead of having PHY driver, you added a syscon and implemented PHY
-> driver here. No. Make a proper PHY driver.
+> Unless there was some binding change (that was not emailed to me with
+> this email, I only got 2/2), only "nxp,nxp-nci-i2c" and
+> "nxp,pn547", "nxp,nxp-nci-i2c" are allowed.
 
-I'm also thinking there should be a proper pcs driver in drivers/net/pcs.
+Yes, I've added the double compatible to the yaml.
+https://lore.kernel.org/lkml/20221128173744.833018-1-luca@z3ntu.xyz/
 
-    Andrew
+I'll try to work on my Cc-script setup, currently it adds the output of 
+get_maintainers.pl for each patch (and adds all for the cover letter), which 
+is based on some script I found a while ago online.
+
+Is there like a recommended way to put all people in Cc for a series, I'm not 
+aware of anything at least...
+
+Perhaps I'll look into b4 for sending patches, that seems to have some goodies 
+there.
+
+Regards
+Luca
+
+> 
+> The node looks good though.
+> 
+> Konrad
+> 
+> > +		reg = <0x28>;
+> > +
+> > +		interrupt-parent = <&tlmm>;
+> > +		interrupts = <17 IRQ_TYPE_LEVEL_HIGH>;
+> > +
+> > +		enable-gpios = <&tlmm 16 GPIO_ACTIVE_HIGH>;
+> > +		firmware-gpios = <&tlmm 62 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +};
+> > +
+> > 
+> >  &pm8953_resin {
+> >  
+> >  	status = "okay";
+> >  	linux,code = <KEY_VOLUMEDOWN>;
+
+
+
+
