@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361AF63C6CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B62863C6CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:53:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236040AbiK2RxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 12:53:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
+        id S236126AbiK2RxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 12:53:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233673AbiK2RxG (ORCPT
+        with ESMTP id S235850AbiK2RxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 12:53:06 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CE720F49
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:53:05 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id p16-20020a254210000000b006f8cd26bfcfso2761063yba.13
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:53:05 -0800 (PST)
+        Tue, 29 Nov 2022 12:53:09 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE42E27140
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:53:06 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id z10-20020a170902ccca00b001898329db72so8226743ple.21
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:53:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KjsC3AuBp17FPwHJyWZC4pwjcMr3p1iEYQDmFhx4K0Y=;
-        b=MB5piJwMiEZ+sPgjxcNWgiGWve4k+XFgzKh4BZenqNyjAnQYDdWhZnVWz0qdsHimku
-         hqsmfhnqNOIOOgQoFn7BzZnoVfYEQzZ2x1Z1VJGjZlOUyhubB5Kp9fMDjTqapTBcNDsA
-         5vKlRif4Lf66Woy7jo8BIBupYqD5FGm0TlxOQZdMFu9LAm8W3uCCB1RgyAdMD52O8Bwo
-         Wl+BE+uyBLKUl/KsH7HjSL56pFFwnDtO2vBa5T46c0x99GHl3bU5mCEFwjzHGhkV9tuW
-         qnUfixmcY19G9OGPTMbJ0iBKniXV2yxHbJaAQaeKD178rXgWOZyMeCLSrPyrmSMB2zBC
-         pTYg==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
+        bh=YQYMQ5TWIkasP9BJVVj6hmvyVoNhk7XnNn3h91+5VkA=;
+        b=frHEo0XtDqPZACEUQ2weEeovjiztTB9ysfaI29EV10g0HOFMziutKKGRFHrQmeSGNR
+         ECaDYAgpppOxjQzHeZk0tlAe6Bt8qy2w9DcMjVtSoiZPSs2bjSX4e/znHpyw6+uEGDxZ
+         66Gce8MvYf4swaRUAlv0aIDvTtBh9PN6Td1fp9uPIoo9k7j5Qr7EanUTXdDsPukVZBs1
+         vO+kUTp4LcwbdeAE6Yv+86QqdtNDj5IG4QxbbJbmT89u36G0sA61RT5c3zrhhsBgzmXt
+         DJMlvf6FZKMa4gWOn+q5HsW84njqECMFsKOXush90wluZAdoKklom1sSJfvjdqeVscCg
+         XZWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KjsC3AuBp17FPwHJyWZC4pwjcMr3p1iEYQDmFhx4K0Y=;
-        b=cLGnW1zS4dDqrpNUrOAtUGT9PxwCufBkaDS8aj/ap3xcI8O3U1Ve05boDY/DJvp+Vz
-         mTcIPnYHE31sZTlh79AXh8n79iPbvE72yORGtub7P35acTMw2E7U16eJZUs8eiifWC93
-         ASeIhka/YEaHcEFA4jSL9gOw8bcucgbuKhmV6hWngXWS/Fi5FSBYXqkM+480YKKuKpJ0
-         fU1UIwPApYKceinsmFOO6DSkOwUre26eDJlSuQzmyR3TXo4l9XE5Zp8wY1jC5I3Kta9H
-         rq7VQnvGWYvDXPeFRxt3lL1JPbjIdfv6oNUD/jUT3fjLwOlkwqQdyUElFF71o6dqy9Ht
-         Eb0g==
-X-Gm-Message-State: ANoB5pmVBxWa274Ldpo1ClSY6gEIklUXcAi61wVVPnanXO9bDX0iX1VJ
-        EhoZdDuNv6Se9hXZOmsOBGSTtXCE5fo=
-X-Google-Smtp-Source: AA0mqf6Yp/ZGoszowG7od85IiWdfy7zque1JZgo9PZxJOxlJ5P0FB8JI0wbRDqWfDettceO2dOylKKnBfpc=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YQYMQ5TWIkasP9BJVVj6hmvyVoNhk7XnNn3h91+5VkA=;
+        b=6Bjv3LdMoJoasEqZWRSpHARk57EyDtJkqlohJj1ZTBkdaR9sGTHSyXUxpiUQKLEEdE
+         b9KDH5/fspE5hwTBLUgeNCCaAPhZXDlW5RyUyOd4mJM3rQM+rSTKUS8RIinQgZKl+7PN
+         6IJ1+tV09SHcawLlFvW3HQgpBakp5VX0gmgSY8kYJqhfp5iEiEPMA/FB2PfCFGIHTR1M
+         Hn6bI92M8NQu3UNMZXLXuBWDSJ33Ww25Ax4WTeMiD3KsYtLPzq7ymP7KXl/FS70mbajh
+         K/L8KpPsNpiA+ZwOg3mMK+Bb0SerwC4N6H2daCn/K861H1DdM7xg3ynO2jzSEDTRT5Q6
+         vJrg==
+X-Gm-Message-State: ANoB5pmLKXzffo7869pnwTZOt9w72k8iX6p3NJIc6ufU58qP8rSnXdEt
+        4Alw7iaIpZysBALBfqW5LRg2eKiGl5w=
+X-Google-Smtp-Source: AA0mqf4PXOL23sfKTrTaOyhFFDDrf0McQzPnBCBetrWYrA4lfqAZM7skUAjsgPQ4amUvnkfsJVaMUCu/QnQ=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:600a:0:b0:3c3:b45e:6ec2 with SMTP id
- u10-20020a81600a000000b003c3b45e6ec2mr2ywb.338.1669744384141; Tue, 29 Nov
- 2022 09:53:04 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:902:6b89:b0:179:eaa8:9113 with SMTP id
+ p9-20020a1709026b8900b00179eaa89113mr37921813plk.55.1669744386298; Tue, 29
+ Nov 2022 09:53:06 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 29 Nov 2022 17:52:58 +0000
+Date:   Tue, 29 Nov 2022 17:52:59 +0000
+In-Reply-To: <20221129175300.4052283-1-seanjc@google.com>
 Mime-Version: 1.0
+References: <20221129175300.4052283-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221129175300.4052283-1-seanjc@google.com>
-Subject: [PATCH 0/2] KVM: selftests: Fixes for access tracking perf test
+Message-ID: <20221129175300.4052283-2-seanjc@google.com>
+Subject: [PATCH 1/2] KVM: selftests: Fix inverted "warning" in access tracking
+ perf test
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -61,7 +65,7 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,21 +73,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix an inverted check in the access tracking perf test, and restore the
-assert that there aren't too many dangling idle pages when running the
-test on x86-64 bare metal.
+Warn if the number of idle pages is greater than or equal to 10% of the
+total number of pages, not if the percentage of idle pages is less than
+10%.  The original code asserted that less than 10% of pages were still
+idle, but the check got inverted when the assert was converted to a
+warning.
 
-Sean Christopherson (2):
-  KVM: selftests: Fix inverted "warning" in access tracking perf test
-  KVM: selftests: Restore assert for non-nested VMs in access tracking
-    test
+Opportunistically clean up the warning; selftests are 64-bit only, there
+is no need to use "%PRIu64" instead of "%lu".
 
- .../selftests/kvm/access_tracking_perf_test.c | 22 ++++++++++++-------
- .../selftests/kvm/include/x86_64/processor.h  |  1 +
- 2 files changed, 15 insertions(+), 8 deletions(-)
+Fixes: 6336a810db5c ("KVM: selftests: replace assertion with warning in access_tracking_perf_test")
+Cc: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ tools/testing/selftests/kvm/access_tracking_perf_test.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-
-base-commit: 3e04435fe60590a1c79ec94d60e9897c3ff7d73b
+diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+index 02d3587cab0a..d45ef319a68f 100644
+--- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
++++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+@@ -185,10 +185,9 @@ static void mark_vcpu_memory_idle(struct kvm_vm *vm,
+ 	 * happens, much more pages are cached there and guest won't see the
+ 	 * "idle" bit cleared.
+ 	 */
+-	if (still_idle < pages / 10)
+-		printf("WARNING: vCPU%d: Too many pages still idle (%" PRIu64
+-		       "out of %" PRIu64 "), this will affect performance results"
+-		       ".\n",
++	if (still_idle >= pages / 10)
++		printf("WARNING: vCPU%d: Too many pages still idle (%lu out of %lu), "
++		       "this will affect performance results.\n",
+ 		       vcpu_idx, still_idle, pages);
+ 
+ 	close(page_idle_fd);
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
