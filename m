@@ -2,118 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B107563C5C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:56:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B77163C5C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236490AbiK2Q4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 11:56:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
+        id S236483AbiK2Q4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 11:56:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235760AbiK2Qzo (ORCPT
+        with ESMTP id S232970AbiK2Q4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 11:55:44 -0500
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D996B74CD1;
-        Tue, 29 Nov 2022 08:50:23 -0800 (PST)
-Received: by mail-qk1-f173.google.com with SMTP id p18so10215475qkg.2;
-        Tue, 29 Nov 2022 08:50:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Reczz2TeQI8YuLHOogtUntCHfa5rl0jqbOQAUswYaAw=;
-        b=gwNSAY492mdgn/QcdSWVFhbR/sIWqH5No4zYXCumnscMUayR6wPiKUDXPi/eGeUvV1
-         zqe2m6N4YCycoJNLv8uoaiZx1dZcVySZsIXsuQ3XNOcheeLitiHgU40xFZYpej3wJzHu
-         0BAHRh+TsFSTdDOxkxqr54/0thmkaVwqTmUxEITP7XRIE/qKWPOHW2sRqzN4uFs6YKjV
-         eIOKQpjEn2kbjvbPDMWGnw5hNAEVcjRfrGXkWtvxaZj2Pwq9ZG1/tvCsX6GpljYyhjCE
-         s43p/eXNGDvwANYGEU1p8Qr/AJLsGHnJBLWqLMwOoTmPxneLhUrsve19dHrc1gwr/hIe
-         QCQw==
-X-Gm-Message-State: ANoB5pm3JQLW9DbaT2citVrjPNd9k9+xHKm9eTT7hrTJ6DW2ZtJ1Ouin
-        kZ19NNbattrunNWv8gDUgXugdTmhKRD32Q==
-X-Google-Smtp-Source: AA0mqf7tqY/EJW8ZBHGvh7C+dpJayMVwS5DUANPOMGlBtuA/MtDKehgJJChIlcOpYx90qk6AYl5b6Q==
-X-Received: by 2002:a37:af07:0:b0:6ee:ee7c:aad8 with SMTP id y7-20020a37af07000000b006eeee7caad8mr33567345qke.470.1669740578423;
-        Tue, 29 Nov 2022 08:49:38 -0800 (PST)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id v12-20020a05620a440c00b006fc2b672950sm11052234qkp.37.2022.11.29.08.49.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 08:49:38 -0800 (PST)
-Received: by mail-yb1-f171.google.com with SMTP id o127so2733160yba.5;
-        Tue, 29 Nov 2022 08:49:37 -0800 (PST)
-X-Received: by 2002:a25:9e84:0:b0:6de:6183:c5c3 with SMTP id
- p4-20020a259e84000000b006de6183c5c3mr37056563ybq.89.1669740577632; Tue, 29
- Nov 2022 08:49:37 -0800 (PST)
+        Tue, 29 Nov 2022 11:56:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162D2663C1;
+        Tue, 29 Nov 2022 08:50:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB070B816AA;
+        Tue, 29 Nov 2022 16:50:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD7C9C433D6;
+        Tue, 29 Nov 2022 16:50:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669740655;
+        bh=IdahP6huwuOhsZoNDIagIDmphdiN6quvNOXg01Cv/cE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hpx8xwdEWqaVdWOJ8DwK5GqrwKyqe0pEZNF3ZGIGp5HZFg/v1O+Nh5BG4/hUCN+Sy
+         dmvbPcDYnH2TBYv0ZaKF35sHry+e5JpnLZT/wr3hyy/3a53Fx0EfifbDuZxtizzOqR
+         9Fp0F9xJz7+B1qKs0KczQFNV3PqzQ1C9DHDDQH2f3+MyENRzSfy2i5Yz0Wr62k1EA1
+         bkwpf1MgcouUi1QEJaFqMU7p0CsN/VQoSiSxRmjGaQNR5mbqsyJmwiWR6zev4DaB7D
+         jXxaCcZaR0LyriqoDq6RULZ7//uyMBAkzvNahTEtzcbwXXesSyUG+bP3TohU7zvTqc
+         rHQjF6WONHZPw==
+Date:   Tue, 29 Nov 2022 16:50:49 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, aou@eecs.berkeley.edu,
+        devicetree@vger.kernel.org, guoren@kernel.org, heiko@sntech.de,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, robh+dt@kernel.org
+Subject: Re: [RFC 0/2] Putting some basic order on isa extension stuff
+Message-ID: <Y4Y4aZUEhCch1Sg+@spud>
+References: <Y4XvnHIPw8ZuBZEk@wendy>
+ <20221129144742.2935581-1-conor.dooley@microchip.com>
+ <20221129154832.27or3ywsx7npuqzq@kamzik>
 MIME-Version: 1.0
-References: <20221124003351.7792-1-hayashi.kunihiko@socionext.com> <20221124003351.7792-3-hayashi.kunihiko@socionext.com>
-In-Reply-To: <20221124003351.7792-3-hayashi.kunihiko@socionext.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 29 Nov 2022 17:49:26 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVH+amC83uMBpsCebaHd2EWp1EO59JNcgRTncbNGNNRsQ@mail.gmail.com>
-Message-ID: <CAMuHMdVH+amC83uMBpsCebaHd2EWp1EO59JNcgRTncbNGNNRsQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] spi: Add Socionext F_OSPI SPI flash controller driver
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221129154832.27or3ywsx7npuqzq@kamzik>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hayashi-san,
+On Tue, Nov 29, 2022 at 04:48:32PM +0100, Andrew Jones wrote:
+> On Tue, Nov 29, 2022 at 02:47:41PM +0000, Conor Dooley wrote:
+> > RFC:
+> > - I have not even tested this, I just did an allmodconfig
+> > - I don't know if I re-ordered something that is sacrosanct
+> > - I don't know if I changed all of the instances
+> > - I didn't write a proper commit message for "patch" 2/2
+> > 
+> > With those caveats out of the way - all I did here was try to make
+> > things consistent so that it'd be easier to point patch submitters at a
+> > "do this order please".
+> > 
+> > I never know which of these can be moved without breaking stuff - but
+> > they all seem to be internal use stuff since they're not in uapi?
+> > 
+> > @drew, I didn't touch the KVM ones - are they re-sortable too? My base
+> > here is rc7 so if you did a reorder at any point there I'd not see it ;)
+> 
+> Right, we can't touch enum KVM_RISCV_ISA_EXT_ID as that's UAPI. All new
+> extensions must be added at the bottom. We originally also had to keep
+> kvm_isa_ext_arr[] in that order, but commit 1b5cbb8733f9 ("RISC-V: KVM:
 
-On Thu, Nov 24, 2022 at 1:36 AM Kunihiko Hayashi
-<hayashi.kunihiko@socionext.com> wrote:
-> Introduce Socionext F_OSPI controller driver. This controller is used to
-> communicate with slave devices such as SPI Flash memories. It supports
-> 4 slave devices and up to 8-bit wide bus, but supports master mode only.
->
-> This driver uses spi-mem framework for SPI flash memory access, and
-> can only operate indirect access mode and single data rate mode.
->
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Right, I knew that something had been changed in KVM land. It's probably
+a good idea to say sort them all alphabetically apart from whichever
+ones must be in other orders & explicitly note the reasons in-place.
 
-Thanks for your patch, which is now commit 1b74dd64c8612619
-("spi: Add Socionext F_OSPI SPI flash controller driver") in
-spi/for-next.
+> Make ISA ext mappings explicit") allows us to list its elements in any
+> order, which means we could sort them in canonical order, if we wanted
+> to. I think I'd rather have them in alphabetical order, though (they
+> nearly are at the moment, except for the bottom two...) The only other
+> place we have ISA extensions listed in KVM is in a switch statement,
+> which of course doesn't matter, and it's currently in alphabetical order.
 
-> --- a/drivers/spi/Kconfig
-> +++ b/drivers/spi/Kconfig
-> @@ -906,6 +906,15 @@ config SPI_SLAVE_MT27XX
->           say Y or M here.If you are not sure, say N.
->           SPI slave drivers for Mediatek MT27XX series ARM SoCs.
->
-> +config SPI_SN_F_OSPI
-> +       tristate "Socionext F_OSPI SPI flash controller"
-> +       depends on OF && HAS_IOMEM
-> +       depends on SPI_MEM
+I did see the one in uAPI for KVM. Your idea in 2/2 of doing
+alphabetical unless otherwise stated works for me as I just want
+something concrete! If it works for the chief too, I'll resubmit and
+drop the RFC...
 
-On which systems is this hardware block found?
-Perhaps this should depend on ARCH_UNIPHIER || COMPILE_TEST?
-
-> +       help
-> +         This enables support for the Socionext F_OSPI controller
-> +         for connecting an SPI Flash memory over up to 8-bit wide bus.
-> +         It supports indirect access mode only.
-> +
->  config SPI_SPRD
->         tristate "Spreadtrum SPI controller"
->         depends on ARCH_SPRD || COMPILE_TEST
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
