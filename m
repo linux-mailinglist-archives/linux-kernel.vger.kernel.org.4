@@ -2,261 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ACF563BD8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 11:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB80363BD9B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 11:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbiK2KIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 05:08:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
+        id S231173AbiK2KKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 05:10:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232238AbiK2KIg (ORCPT
+        with ESMTP id S232461AbiK2KJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 05:08:36 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAA62FC12
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 02:08:17 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1ozxX1-0006y8-NA; Tue, 29 Nov 2022 11:08:03 +0100
-Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1ozxWy-0012hw-An; Tue, 29 Nov 2022 11:08:01 +0100
-Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1ozxWx-00BYHI-M8; Tue, 29 Nov 2022 11:07:59 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     linux-wireless@vger.kernel.org
-Cc:     Neo Jou <neojou@gmail.com>, Hans Ulli Kroll <linux@ulli-kroll.de>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        kernel@pengutronix.de, Johannes Berg <johannes@sipsolutions.net>,
-        Alexander Hochbaum <alex@appudo.com>,
-        Da Xue <da@libre.computer>, Po-Hao Huang <phhuang@realtek.com>,
-        Viktor Petrenko <g0000ga@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Subject: [PATCH v4 11/11] wifi: rtw88: Add rtw8723du chipset support
-Date:   Tue, 29 Nov 2022 11:07:54 +0100
-Message-Id: <20221129100754.2753237-12-s.hauer@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221129100754.2753237-1-s.hauer@pengutronix.de>
-References: <20221129100754.2753237-1-s.hauer@pengutronix.de>
+        Tue, 29 Nov 2022 05:09:05 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0925E3CD;
+        Tue, 29 Nov 2022 02:08:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b+Xe0AV1cRy3KKunK2EetaS8g7dv2dLDKPANhqT2atCOpE/JkzYcq2ld8o/tj4WwAcoFFP7lobMsbEfZ0nsnakLdFBM3JdHQL1Ky8WDBrk9wmzoggIjR8+ZB5qaljqTWMbeCFyRGhREzII2GnsZ8xnlEzIzjP7oKmum4om+af3Pp9fZ1m640DcC+ckXy+WCNuwO+a8UHQGhLaVe1gL7yBCJT0TjD4sIJzcpDFGqkdNPTjt1Jd2g8sKVvEgJsKvVxJQip+t0Tm/bzXyWj3Wu82ZETYg1ni57+kTJa5jpg8e7VtYBp4/WR7AIqs3cF8FsptVi4Q+F5rr4WCI0uGm4kvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zoZe8Hp25AcXvY2UCfzezf6H1GGC9UiwiiNOH8DvPSU=;
+ b=mFQ9EcVuUBsPSnY0qp2uzkFfnvRowhaY+tngcS4aOcixkFzAa2IY3sOFj6ZdChbjcCnqvwxPNJuKhX/nhdI2CyWkq1uUT1Sbqng1XZiY+aH1B32m2Xha6wJxBLytSEvYuHtjVReOyN1OF3oAb4GsmV8EuM0I1dFygRjDKAlcjU/ynNCnjyx9CtH3Rr2ELzfIQEk2/qdO/9X4w98xvsRLmcSWeZNGrBq91XVDF2WLVFjBoETMt5Z/1+s8DVjZ0s2gmrtRKezNubgkMscXIVtn2RZiLKhO4mYSY93ayLxeSD+5oeHgk6H87CsFyMDQ1Vwc+Ap72017iyf/TXhsp1KW7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zoZe8Hp25AcXvY2UCfzezf6H1GGC9UiwiiNOH8DvPSU=;
+ b=AvVZfLtmf4FcyBSRn8sVDElJ19z9XwFXofix7eA5N71eRFyDiNMqk01uuajY3sB5tp9mw5vbJXcr9m3atYr/SA4Ub5nZilB+skHmbei1D/ktbi/2Wu57RKmm5HnlwoSbvv/mWqcpNBLa9NHOVXObtscdxrL3A/tZ7tqJThMzGkkQEvr+hen0erT5xjxgdG9rxAIx6TSouys26YwJm0EBOXFhTXdyyesThpLbjQ+QVnvgS25T4apMb6GwOVY2/XUB1hLvYKiGAPyy49T/jCboNZF9J4aIHfhCqr1v1/FFNCEPUsiiEywRxMwL+RSn2GYe/KnGUzIq/wLsiholk9x9Uw==
+Received: from CY5PR19CA0063.namprd19.prod.outlook.com (2603:10b6:930:69::6)
+ by DM6PR12MB4217.namprd12.prod.outlook.com (2603:10b6:5:219::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Tue, 29 Nov
+ 2022 10:08:26 +0000
+Received: from CY4PEPF0000C97A.namprd02.prod.outlook.com
+ (2603:10b6:930:69:cafe::13) by CY5PR19CA0063.outlook.office365.com
+ (2603:10b6:930:69::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.18 via Frontend
+ Transport; Tue, 29 Nov 2022 10:08:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CY4PEPF0000C97A.mail.protection.outlook.com (10.167.241.138) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5857.17 via Frontend Transport; Tue, 29 Nov 2022 10:08:26 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 29 Nov
+ 2022 02:08:17 -0800
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 29 Nov
+ 2022 02:08:16 -0800
+Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Tue, 29 Nov 2022 02:08:16 -0800
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 5.15 000/180] 5.15.80-rc2 review
+In-Reply-To: <20221125075750.019489581@linuxfoundation.org>
+References: <20221125075750.019489581@linuxfoundation.org>
+X-NVConfidentiality: public
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <b3ad7446-7dfe-4e54-b220-9a47bab139b8@rnnvmail205.nvidia.com>
+Date:   Tue, 29 Nov 2022 02:08:16 -0800
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000C97A:EE_|DM6PR12MB4217:EE_
+X-MS-Office365-Filtering-Correlation-Id: 01a38abb-1840-436b-ac18-08dad1f1a830
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8Z3lwOR6QTWscjm7OUJVAJZ210fOBfkf1IEE55kKy2A4kZ4Fwcfv7Hvc5InJkpDHKI0di/nE80TD4YylVIKhhQcUvM+OjtSHrmlpYQ+E+ep3HLFZwNPUib0QKKhZml/mfOlk1NyCC+WiefS7yQNi8L4AUbClQbKyksgW2+8W5U3u2Cq7L7NwQt1pkDm1RVWh2inHo1LqZn35ZftZQEgGtg3PaSS1KsNxi+69K2zM9Tp114iM2UnoMbeKE50XOEeJb5J6j70OrKJuDyPhg2chIG0sJV3o3+um6KofwkVdBPzHMJDD6QhTJxafSctB/WkEwyVO7VEXOUEDwDxvVKBRMGvilxCbPcfGZsBjslE4VAx5g7ST9IVpjEbkI4jlAOpErzgYE4/mixDbyzrDWghBIkDwwb+3uFbA1s6x9cub7KkGklhHxKjyrg7ScC60vFksyD/P0bKRH+wFlTeDUgDFplZoFq6cLUgs+V84QRxv6GR5Y8pVLylVwKqktc7m2YjbZq5IDDD9BUcBpjrIuhQzIf1Lfi1uwsPpisEbwSTU0v1QPiW7NkJO/F4NipPbf8dkYxSB5SHzP5oZNBLfnwUbsZs4WyarqM+yP/nz9KgADPtyeL+obwGWz+WAAeCLoCd/wCrULrKhmli2DDY70vHxemgfDkSBPcZFxIXdP+4sgpv0hXaghzTJ/KbzBQ7JIuLzSGLlt9zJcI14NEWOuNT051tGGYrV/YDfZPJMmPrbX7FwBwWr6MAXLZvbgddVp1aOYOIJQhBS9Qpxej9JSc/HxXw/jBBsGZ4nXDzkttWPK3c=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(376002)(136003)(346002)(451199015)(36840700001)(40470700004)(46966006)(336012)(426003)(47076005)(186003)(26005)(2906002)(7416002)(82740400003)(70206006)(5660300002)(31696002)(8936002)(31686004)(70586007)(966005)(36860700001)(478600001)(82310400005)(316002)(40460700003)(4326008)(8676002)(41300700001)(86362001)(6916009)(7636003)(54906003)(356005)(40480700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 10:08:26.3869
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01a38abb-1840-436b-ac18-08dad1f1a830
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C97A.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4217
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the rtw8723du chipset based on
-https://github.com/ulli-kroll/rtw88-usb.git
+On Fri, 25 Nov 2022 08:58:52 +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.80 release.
+> There are 180 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 27 Nov 2022 07:57:16 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.80-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
----
+All tests passing for Tegra ...
 
-Notes:
-    Changes since v3:
-    - drop unnecessary rtw8723du.h
-    
-    Changes since v2:
-    - Re-add this patch, tested on hardware now
-    
-    Changes since v1:
-    - Fix txdesc checksum calculation: Unlike other chips this one needs
-      a chksum = ~chksum at the end
-    - Fix efuse layout (struct rtw8723de_efuse and struct rtw8723du_efuse need
-      to be in a union as they are used alternatively)
+Test results for stable-v5.15:
+    11 builds:	11 pass, 0 fail
+    28 boots:	28 pass, 0 fail
+    114 tests:	114 pass, 0 fail
 
- drivers/net/wireless/realtek/rtw88/Kconfig    | 11 ++++++
- drivers/net/wireless/realtek/rtw88/Makefile   |  3 ++
- drivers/net/wireless/realtek/rtw88/rtw8723d.c | 28 +++++++++++++++
- drivers/net/wireless/realtek/rtw88/rtw8723d.h | 13 ++++++-
- .../net/wireless/realtek/rtw88/rtw8723du.c    | 36 +++++++++++++++++++
- 5 files changed, 90 insertions(+), 1 deletion(-)
- create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8723du.c
+Linux version:	5.15.80-rc2-gd0344da1eca6
+Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
+                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
+                tegra20-ventana, tegra210-p2371-2180,
+                tegra210-p3450-0000, tegra30-cardhu-a04
 
-diff --git a/drivers/net/wireless/realtek/rtw88/Kconfig b/drivers/net/wireless/realtek/rtw88/Kconfig
-index 138289bc5ad0c..651ab56d9c6bd 100644
---- a/drivers/net/wireless/realtek/rtw88/Kconfig
-+++ b/drivers/net/wireless/realtek/rtw88/Kconfig
-@@ -86,6 +86,17 @@ config RTW88_8723DE
- 
- 	  802.11n PCIe wireless network adapter
- 
-+config RTW88_8723DU
-+	tristate "Realtek 8723DU USB wireless network adapter"
-+	depends on USB
-+	select RTW88_CORE
-+	select RTW88_USB
-+	select RTW88_8723D
-+	help
-+	  Select this option will enable support for 8723DU chipset
-+
-+	  802.11n USB wireless network adapter
-+
- config RTW88_8821CE
- 	tristate "Realtek 8821CE PCI wireless network adapter"
- 	depends on PCI
-diff --git a/drivers/net/wireless/realtek/rtw88/Makefile b/drivers/net/wireless/realtek/rtw88/Makefile
-index fe2dd90204a78..fe7293ee87b45 100644
---- a/drivers/net/wireless/realtek/rtw88/Makefile
-+++ b/drivers/net/wireless/realtek/rtw88/Makefile
-@@ -44,6 +44,9 @@ rtw88_8723d-objs		:= rtw8723d.o rtw8723d_table.o
- obj-$(CONFIG_RTW88_8723DE)	+= rtw88_8723de.o
- rtw88_8723de-objs		:= rtw8723de.o
- 
-+obj-$(CONFIG_RTW88_8723DU)	+= rtw88_8723du.o
-+rtw88_8723du-objs		:= rtw8723du.o
-+
- obj-$(CONFIG_RTW88_8821C)	+= rtw88_8821c.o
- rtw88_8821c-objs		:= rtw8821c.o rtw8821c_table.o
- 
-diff --git a/drivers/net/wireless/realtek/rtw88/rtw8723d.c b/drivers/net/wireless/realtek/rtw88/rtw8723d.c
-index 0a4f770fcbb7e..2d2f768bae2ea 100644
---- a/drivers/net/wireless/realtek/rtw88/rtw8723d.c
-+++ b/drivers/net/wireless/realtek/rtw88/rtw8723d.c
-@@ -210,6 +210,12 @@ static void rtw8723de_efuse_parsing(struct rtw_efuse *efuse,
- 	ether_addr_copy(efuse->addr, map->e.mac_addr);
- }
- 
-+static void rtw8723du_efuse_parsing(struct rtw_efuse *efuse,
-+				    struct rtw8723d_efuse *map)
-+{
-+	ether_addr_copy(efuse->addr, map->u.mac_addr);
-+}
-+
- static int rtw8723d_read_efuse(struct rtw_dev *rtwdev, u8 *log_map)
- {
- 	struct rtw_efuse *efuse = &rtwdev->efuse;
-@@ -239,6 +245,9 @@ static int rtw8723d_read_efuse(struct rtw_dev *rtwdev, u8 *log_map)
- 	case RTW_HCI_TYPE_PCIE:
- 		rtw8723de_efuse_parsing(efuse, map);
- 		break;
-+	case RTW_HCI_TYPE_USB:
-+		rtw8723du_efuse_parsing(efuse, map);
-+		break;
- 	default:
- 		/* unsupported now */
- 		return -ENOTSUPP;
-@@ -1945,6 +1954,24 @@ static void rtw8723d_pwr_track(struct rtw_dev *rtwdev)
- 	dm_info->pwr_trk_triggered = false;
- }
- 
-+static void rtw8723d_fill_txdesc_checksum(struct rtw_dev *rtwdev,
-+					  struct rtw_tx_pkt_info *pkt_info,
-+					  u8 *txdesc)
-+{
-+	size_t words = 32 / 2; /* calculate the first 32 bytes (16 words) */
-+	__le16 chksum = 0;
-+	__le16 *data = (__le16 *)(txdesc);
-+
-+	SET_TX_DESC_TXDESC_CHECKSUM(txdesc, 0x0000);
-+
-+	while (words--)
-+		chksum ^= *data++;
-+
-+	chksum = ~chksum;
-+
-+	SET_TX_DESC_TXDESC_CHECKSUM(txdesc, __le16_to_cpu(chksum));
-+}
-+
- static struct rtw_chip_ops rtw8723d_ops = {
- 	.phy_set_param		= rtw8723d_phy_set_param,
- 	.read_efuse		= rtw8723d_read_efuse,
-@@ -1965,6 +1992,7 @@ static struct rtw_chip_ops rtw8723d_ops = {
- 	.config_bfee		= NULL,
- 	.set_gid_table		= NULL,
- 	.cfg_csi_rate		= NULL,
-+	.fill_txdesc_checksum	= rtw8723d_fill_txdesc_checksum,
- 
- 	.coex_set_init		= rtw8723d_coex_cfg_init,
- 	.coex_set_ant_switch	= NULL,
-diff --git a/drivers/net/wireless/realtek/rtw88/rtw8723d.h b/drivers/net/wireless/realtek/rtw88/rtw8723d.h
-index 4641f6e047b41..a356318a5c15b 100644
---- a/drivers/net/wireless/realtek/rtw88/rtw8723d.h
-+++ b/drivers/net/wireless/realtek/rtw88/rtw8723d.h
-@@ -41,6 +41,14 @@ struct rtw8723de_efuse {
- 	u8 sub_device_id[2];
- };
- 
-+struct rtw8723du_efuse {
-+	u8 res4[48];                    /* 0xd0 */
-+	u8 vender_id[2];                /* 0x100 */
-+	u8 product_id[2];               /* 0x102 */
-+	u8 usb_option;                  /* 0x104 */
-+	u8 mac_addr[ETH_ALEN];          /* 0x107 */
-+};
-+
- struct rtw8723d_efuse {
- 	__le16 rtl_id;
- 	u8 rsvd[2];
-@@ -69,7 +77,10 @@ struct rtw8723d_efuse {
- 	u8 rfe_option;
- 	u8 country_code[2];
- 	u8 res[3];
--	struct rtw8723de_efuse e;
-+	union {
-+		struct rtw8723de_efuse e;
-+		struct rtw8723du_efuse u;
-+	};
- };
- 
- extern const struct rtw_chip_info rtw8723d_hw_spec;
-diff --git a/drivers/net/wireless/realtek/rtw88/rtw8723du.c b/drivers/net/wireless/realtek/rtw88/rtw8723du.c
-new file mode 100644
-index 0000000000000..4148151037c7c
---- /dev/null
-+++ b/drivers/net/wireless/realtek/rtw88/rtw8723du.c
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+/* Copyright(c) 2018-2019  Realtek Corporation
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/usb.h>
-+#include "main.h"
-+#include "rtw8723d.h"
-+#include "usb.h"
-+
-+static const struct usb_device_id rtw_8723du_id_table[] = {
-+	{ USB_DEVICE_AND_INTERFACE_INFO(RTW_USB_VENDOR_ID_REALTEK,
-+					0xD723,
-+					0xff, 0xff, 0xff),
-+	  .driver_info = (kernel_ulong_t)&(rtw8723d_hw_spec) }, /* 8723DU 1*1 */
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(usb, rtw_8723du_id_table);
-+
-+static int rtw8723du_probe(struct usb_interface *intf,
-+			   const struct usb_device_id *id)
-+{
-+	return rtw_usb_probe(intf, id);
-+}
-+
-+static struct usb_driver rtw_8723du_driver = {
-+	.name = "rtw_8723du",
-+	.id_table = rtw_8723du_id_table,
-+	.probe = rtw8723du_probe,
-+	.disconnect = rtw_usb_disconnect,
-+};
-+module_usb_driver(rtw_8723du_driver);
-+
-+MODULE_AUTHOR("Hans Ulli Kroll <linux@ulli-kroll.de>");
-+MODULE_DESCRIPTION("Realtek 802.11n wireless 8723du driver");
-+MODULE_LICENSE("Dual BSD/GPL");
--- 
-2.30.2
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
 
+Jon
