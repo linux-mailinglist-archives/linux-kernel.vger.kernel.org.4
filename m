@@ -2,81 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E52963CB3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 23:53:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B022F63CB93
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 00:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237227AbiK2WxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 17:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
+        id S237100AbiK2XIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 18:08:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237092AbiK2WxA (ORCPT
+        with ESMTP id S236885AbiK2XIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 17:53:00 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6BA73BB6;
-        Tue, 29 Nov 2022 14:52:08 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669762326;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iYQ/KTiVTFwiwNmU8a7JJ846D8meD3XlX/gNgE9OSzU=;
-        b=QFoUiQQiUV2VF2z1qchWWgFhF/MnTYk37NsaulOyOQzIjpR/WDG0UzMnhgFsRyKo1NsLrE
-        DsERTgAkP+NhZqf8n9Kf3tTC7ibkFsQMCIMbNwpodk9utJTbwacS3kzfd8aMNLWQ+lb2Xz
-        NqS4OD8RYW0u8/kOThi0EfDm9kSmIvIcpUZi86VniCTijRZVh7XFSUSmTv+tjNEa2Jq/tC
-        pOtrK+PD6zEbePwiOZFMDhmYqGNe+fHsCH1JeIh8QpmwTrhOtO5Nz00yRH2EWVss1yqQU+
-        UfKRxNKD153FxIMwyte+uY1pipKa8/G7ZFGdFuUxDPenquEpQR6jeBYHEB94mA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669762326;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iYQ/KTiVTFwiwNmU8a7JJ846D8meD3XlX/gNgE9OSzU=;
-        b=gsYU8PR6M9rLLre6Ld7FaI8hVh5gIWrNz+uZitJu6RcNT1tYS5Fv83fK4bx2OTIvbcYUHD
-        u3wX36vdz/oJ27BA==
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
-        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <brauner@kernel.org>,
-        Samuel Neves <sneves@dei.uc.pt>
-Subject: Re: [PATCH v10 4/4] x86: vdso: Wire up getrandom() vDSO implementation
-In-Reply-To: <20221129210639.42233-5-Jason@zx2c4.com>
-References: <20221129210639.42233-1-Jason@zx2c4.com>
- <20221129210639.42233-5-Jason@zx2c4.com>
-Date:   Tue, 29 Nov 2022 23:52:05 +0100
-Message-ID: <874juhv0fe.ffs@tglx>
+        Tue, 29 Nov 2022 18:08:40 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD41F6DFDF;
+        Tue, 29 Nov 2022 15:08:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669763319; x=1701299319;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fLd+RbKdEt5N7t1sQuFBcbp2DIuuw03BqlrwDN3LPTY=;
+  b=FdmIIWf/cCk5cLAVJzF+Giou1iwhxHoIwUTrzJjQEjdYijFnAgOMw2Vb
+   d2LH+M5FTs0DaLy0P8osGCvfaKhKAK2/I8vKtRxzS+jJMo36GfgFN9XgY
+   H0DsED30pNrImxMUiDB4JwUzZldSMYNMFG73BaNb/Awr/gt3lT6lTzmDk
+   401u+7fxdFaA801hwHRybGDK9b4Gvq3qCDL/RORunIQKtlSPC62DAOZdq
+   d0e3px89mP5lYHqyE62tSTTB9Pcoo1sz3guxGcvZFlGkMlAxs6w1K5O3P
+   1ZEwWFWbZrZ++xl7iC87fBOwYcEyFHAeSYCd/xPD5FktDDoAzManpHBvb
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="342173498"
+X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
+   d="scan'208";a="342173498"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 15:08:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="707416267"
+X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
+   d="scan'208";a="707416267"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga008.fm.intel.com with ESMTP; 29 Nov 2022 15:08:38 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] powercap: idle_inject: Fix warnings with make W=1
+Date:   Tue, 29 Nov 2022 15:08:21 -0800
+Message-Id: <20221129230821.4021932-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29 2022 at 22:06, Jason A. Donenfeld wrote:
-> Hook up the generic vDSO implementation to the x86 vDSO data page. Since
-> the existing vDSO infrastructure is heavily based on the timekeeping
-> functionality, which works over arrays of bases, a new macro is
-> introduced for vvars that are not arrays.
->
-> The vDSO function requires a ChaCha20 implementation that does not write
-> to the stack, yet can still do an entire ChaCha20 permutation, so
-> provide this using SSE2, since this is userland code that must work on
-> all x86-64 processors.
+Fix following warning at three places:
 
-Way more consumable and looks about right. Please take your time and
-give others a chance to look at this lot before rushing out v11.
+Function parameter or member 'ii_dev' not described.
 
-Thanks,
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ drivers/powercap/idle_inject.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-        tglx
+diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
+index 999e218d7793..fe86a09e3b67 100644
+--- a/drivers/powercap/idle_inject.c
++++ b/drivers/powercap/idle_inject.c
+@@ -147,6 +147,7 @@ static void idle_inject_fn(unsigned int cpu)
+ 
+ /**
+  * idle_inject_set_duration - idle and run duration update helper
++ * @ii_dev: idle injection control device structure
+  * @run_duration_us: CPU run time to allow in microseconds
+  * @idle_duration_us: CPU idle time to inject in microseconds
+  */
+@@ -162,6 +163,7 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
+ 
+ /**
+  * idle_inject_get_duration - idle and run duration retrieval helper
++ * @ii_dev: idle injection control device structure
+  * @run_duration_us: memory location to store the current CPU run time
+  * @idle_duration_us: memory location to store the current CPU idle time
+  */
+@@ -175,6 +177,7 @@ void idle_inject_get_duration(struct idle_inject_device *ii_dev,
+ 
+ /**
+  * idle_inject_set_latency - set the maximum latency allowed
++ * @ii_dev: idle injection control device structure
+  * @latency_us: set the latency requirement for the idle state
+  */
+ void idle_inject_set_latency(struct idle_inject_device *ii_dev,
+-- 
+2.31.1
+
