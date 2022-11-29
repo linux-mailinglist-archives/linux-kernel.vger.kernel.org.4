@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC53D63C02C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E7963C02E
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:36:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234380AbiK2MgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 07:36:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58218 "EHLO
+        id S233806AbiK2MgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 07:36:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232141AbiK2MgI (ORCPT
+        with ESMTP id S234360AbiK2MgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 07:36:08 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9ED5E3E0
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:36:02 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id x17so21844726wrn.6
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:36:02 -0800 (PST)
+        Tue, 29 Nov 2022 07:36:09 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F545EF88
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:36:03 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id v7so10795420wmn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:36:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hWVgdCMnhwn+ULQ+BMW4C2l4SMlaLtwN2upBlcvgS5I=;
-        b=gCF3NC4G0Dd0LlP+y1aC2rAe4K+TxDgb5TqSDZcoEf4E3LDMzbb/5RwlSMJaa/i9Nf
-         NTxPIU5rQYUE1Y1oms/Slm3ZdDC7K+uIVxOSkB87oNhJiLTCJ5wRWKnXp2/0NmCoG3XW
-         hUFEsjgZA2BRKWLLnJ0opppCUwKyjhhjKHPMt0dpn8h9/G3E0btTxzAw0Nx0MobK6/Y7
-         5K1nu/I8BmsGrF8I73A7BiIjHYLXzvDCmDitjjdI/U094IqS3namvL9TWUOIs6edfvIG
-         niv1NfQRQbGQqX6i8D0MhI7x3umUotNJpwu6Fo5Q+tkTQiYplEJbvXx0beUzFto2YQSW
-         TIog==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I6khL3o+nYd4EpijUyoz7gbx8Fgdk9OV+QGJ+37UJ6c=;
+        b=klIsnLNDetM7Gn7Mu8MxPmZKmXCifAdJeA/nDHnlS9c46nnt6EEkzBXk3zEadqNBqd
+         sGEzNCfLJ5hzCVwXtRwZaeYwmAmzKR3c5pLJVvlNbwK+iT7lbaz6KFRJ1VaWEEXT/PeH
+         ZYuFC3WEF2/qH5XKm3lu7HbZ8KhHhKga8NgP3+Oo1E+eypaCO/xrK45T1mvZaHhDu7I2
+         Dq8OoBi+O5+CARxL8UARtYaQGP+lk0g4cvg9AwZoqtIS+/tunbKBaOX9w9Fg4rgt6spp
+         V0OkSHGlDLxWmRaI7x1H4AIlFWAhpxg6r03cpR6OY7QBdzFcgGkhaQDCbecAiRGAS678
+         dYRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hWVgdCMnhwn+ULQ+BMW4C2l4SMlaLtwN2upBlcvgS5I=;
-        b=tEoruPVuvF98MmsZUdl0CP368GZ01nleX3K+WV7e58yEQraRmA0L530CJ0Wzer4rm9
-         Zz8rv2TtsCtG5Dfmo/WCYkZoj5uWQ04zCX3M1S6yZy4LqikixgpAnibpupl0ROhULHOw
-         W7kzbbG7L0oCdO6b8wp9qprWtGQOcKu//fE9mIKzX5JOC6a8ZzyR8VaG6CcoT8YRUsjq
-         2trNc0yeS1gGaGpWucmhjNtK0P+G2wtiv9XlIcc5GHwf0euDGyE9jIkQ/r7MngD2PkuR
-         UPXYtBsgOwWzt26gvaS6PZs+EYMZYKz1m9k/EtebbZrZaksqEXZ+RcWZqAegB4ZWwP1L
-         3P1w==
-X-Gm-Message-State: ANoB5pkN6rB2HnptQqtH9HbpvmcbeOEfBbcqxnCUFUJRH4/Er2Ue4sO2
-        ANcn69LwrHtyDU/XgT6kiqrSDg==
-X-Google-Smtp-Source: AA0mqf6qovACsKbyaIex6XGP7sYDtXnXXnhPZUzOzNHxlAzymrBknqzYhUkMUAwles2kf56JxRiq9g==
-X-Received: by 2002:a5d:4f91:0:b0:242:1847:c798 with SMTP id d17-20020a5d4f91000000b002421847c798mr5833664wru.237.1669725361398;
-        Tue, 29 Nov 2022 04:36:01 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I6khL3o+nYd4EpijUyoz7gbx8Fgdk9OV+QGJ+37UJ6c=;
+        b=cKlc6Fq2r0nZQrqQrRXZvfvuTwh/DK+cTsOsvAZPp2eibg/L84rtaKdHm68MigTtQj
+         H07/mxfAoeEpN3PJrIuS2rWPdZjDe0xxqm3We7IT32JFN3PKtFXUGVNGAES0yaqVoUE8
+         xqJaQWmiyPf/3k1dtM67QcT82lnYa1trujudpZDG56ewjpiCcUK0kF+7wd/vSEMZxefc
+         ZPsqYXDrpThwVLIdv/ESTY2Fz8ya1kqTIGrJApPFebcpCq+AcIeg+yD94mG2MjhV/qc1
+         SbgIoyWbIjq/uCfH4PlSO7iPJ5sK2W8b+QEkktiIRd4WOlzAwHb5LpTRI0/8gFIEAzun
+         UOKg==
+X-Gm-Message-State: ANoB5pkZfcCvHJQA4snMwRGUWf8jwlK+0ev4Ku2AEjBkwZU9ej4dHDr2
+        SNXgpKhYAcWAKD0sptCjDt3l+g==
+X-Google-Smtp-Source: AA0mqf4I29VjpXe7kZPrTkE/ZqX3BP2ItLUqbJUzm4nmdNtnc/qzYYkHVSlQggvoQ6Td1w/8/R77rQ==
+X-Received: by 2002:a05:600c:3543:b0:3cf:a6e8:b59b with SMTP id i3-20020a05600c354300b003cfa6e8b59bmr44570512wmq.128.1669725362248;
+        Tue, 29 Nov 2022 04:36:02 -0800 (PST)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:6b19:1d8e:fbca:fd02])
-        by smtp.gmail.com with ESMTPSA id k13-20020a05600c1c8d00b003c6bd91caa5sm2295306wms.17.2022.11.29.04.36.00
+        by smtp.gmail.com with ESMTPSA id k13-20020a05600c1c8d00b003c6bd91caa5sm2295306wms.17.2022.11.29.04.36.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 04:36:00 -0800 (PST)
+        Tue, 29 Nov 2022 04:36:01 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Kent Gibson <warthog618@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v3 0/2] gpiolib: don't allow user-space to crash the kernel with hot-unplugs
-Date:   Tue, 29 Nov 2022 13:35:51 +0100
-Message-Id: <20221129123553.353410-1-brgl@bgdev.pl>
+Subject: [PATCH v3 1/2] gpiolib: cdev: fix NULL-pointer dereferences
+Date:   Tue, 29 Nov 2022 13:35:52 +0100
+Message-Id: <20221129123553.353410-2-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20221129123553.353410-1-brgl@bgdev.pl>
+References: <20221129123553.353410-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,31 +75,125 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-This is a second iteration of the changes that aim at fixing the situation
-in which the user-space can provoke a NULL-pointer derefence in the kernel
-when a GPIO device that's in use by user-space is removed.
+There are several places where we can crash the kernel by requesting
+lines, unbinding the GPIO device, then calling any of the system calls
+relevant to the GPIO character device's annonymous file descriptors:
+ioctl(), read(), poll().
 
-I didn't add the review tags as the code changes significantly.
+While I observed it with the GPIO simulator, it will also happen for any
+of the GPIO devices that can be hot-unplugged - for instance any HID GPIO
+expander (e.g. CP2112).
 
-v2 -> v3:
-- drop the helper variable in patch 1/2 as we won't be using it in 2/2
-- refactor patch 2/2 to use locking wrappers around the syscall callbacks
+This affects both v1 and v2 uAPI.
 
-v1 -> v2:
-- add missing gdev->chip checks in patch 1/2
-- add a second patch that protects the structures that can be accessed
-  by user-space calls against concurrent removal
+This fixes it partially by checking if gdev->chip is not NULL but it
+doesn't entirely remedy the situation as we still have a race condition
+in which another thread can remove the device after the check.
 
-Bartosz Golaszewski (2):
-  gpiolib: cdev: fix NULL-pointer dereferences
-  gpiolib: protect the GPIO device against being dropped while in use by
-    user-space
+Fixes: d7c51b47ac11 ("gpio: userspace ABI for reading/writing GPIO lines")
+Fixes: 3c0d9c635ae2 ("gpiolib: cdev: support GPIO_V2_GET_LINE_IOCTL and GPIO_V2_LINE_GET_VALUES_IOCTL")
+Fixes: aad955842d1c ("gpiolib: cdev: support GPIO_V2_GET_LINEINFO_IOCTL and GPIO_V2_GET_LINEINFO_WATCH_IOCTL")
+Fixes: a54756cb24ea ("gpiolib: cdev: support GPIO_V2_LINE_SET_CONFIG_IOCTL")
+Fixes: 7b8e00d98168 ("gpiolib: cdev: support GPIO_V2_LINE_SET_VALUES_IOCTL")
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+ drivers/gpio/gpiolib-cdev.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
- drivers/gpio/gpiolib-cdev.c | 190 +++++++++++++++++++++++++++++++-----
- drivers/gpio/gpiolib.c      |   3 +
- drivers/gpio/gpiolib.h      |   5 +
- 3 files changed, 176 insertions(+), 22 deletions(-)
-
+diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
+index 0cb6b468f364..911d91668903 100644
+--- a/drivers/gpio/gpiolib-cdev.c
++++ b/drivers/gpio/gpiolib-cdev.c
+@@ -201,6 +201,9 @@ static long linehandle_ioctl(struct file *file, unsigned int cmd,
+ 	unsigned int i;
+ 	int ret;
+ 
++	if (!lh->gdev->chip)
++		return -ENODEV;
++
+ 	switch (cmd) {
+ 	case GPIOHANDLE_GET_LINE_VALUES_IOCTL:
+ 		/* NOTE: It's okay to read values of output lines */
+@@ -1384,6 +1387,9 @@ static long linereq_ioctl(struct file *file, unsigned int cmd,
+ 	struct linereq *lr = file->private_data;
+ 	void __user *ip = (void __user *)arg;
+ 
++	if (!lr->gdev->chip)
++		return -ENODEV;
++
+ 	switch (cmd) {
+ 	case GPIO_V2_LINE_GET_VALUES_IOCTL:
+ 		return linereq_get_values(lr, ip);
+@@ -1410,6 +1416,9 @@ static __poll_t linereq_poll(struct file *file,
+ 	struct linereq *lr = file->private_data;
+ 	__poll_t events = 0;
+ 
++	if (!lr->gdev->chip)
++		return 0;
++
+ 	poll_wait(file, &lr->wait, wait);
+ 
+ 	if (!kfifo_is_empty_spinlocked_noirqsave(&lr->events,
+@@ -1429,6 +1438,9 @@ static ssize_t linereq_read(struct file *file,
+ 	ssize_t bytes_read = 0;
+ 	int ret;
+ 
++	if (!lr->gdev->chip)
++		return -ENODEV;
++
+ 	if (count < sizeof(le))
+ 		return -EINVAL;
+ 
+@@ -1716,6 +1728,9 @@ static __poll_t lineevent_poll(struct file *file,
+ 	struct lineevent_state *le = file->private_data;
+ 	__poll_t events = 0;
+ 
++	if (!le->gdev->chip)
++		return 0;
++
+ 	poll_wait(file, &le->wait, wait);
+ 
+ 	if (!kfifo_is_empty_spinlocked_noirqsave(&le->events, &le->wait.lock))
+@@ -1740,6 +1755,9 @@ static ssize_t lineevent_read(struct file *file,
+ 	ssize_t ge_size;
+ 	int ret;
+ 
++	if (!le->gdev->chip)
++		return -ENODEV;
++
+ 	/*
+ 	 * When compatible system call is being used the struct gpioevent_data,
+ 	 * in case of at least ia32, has different size due to the alignment
+@@ -1821,6 +1839,9 @@ static long lineevent_ioctl(struct file *file, unsigned int cmd,
+ 	void __user *ip = (void __user *)arg;
+ 	struct gpiohandle_data ghd;
+ 
++	if (!le->gdev->chip)
++		return -ENODEV;
++
+ 	/*
+ 	 * We can get the value for an event line but not set it,
+ 	 * because it is input by definition.
+@@ -2407,6 +2428,9 @@ static __poll_t lineinfo_watch_poll(struct file *file,
+ 	struct gpio_chardev_data *cdev = file->private_data;
+ 	__poll_t events = 0;
+ 
++	if (!cdev->gdev->chip)
++		return 0;
++
+ 	poll_wait(file, &cdev->wait, pollt);
+ 
+ 	if (!kfifo_is_empty_spinlocked_noirqsave(&cdev->events,
+@@ -2425,6 +2449,9 @@ static ssize_t lineinfo_watch_read(struct file *file, char __user *buf,
+ 	int ret;
+ 	size_t event_size;
+ 
++	if (!cdev->gdev->chip)
++		return -ENODEV;
++
+ #ifndef CONFIG_GPIO_CDEV_V1
+ 	event_size = sizeof(struct gpio_v2_line_info_changed);
+ 	if (count < event_size)
 -- 
 2.37.2
 
