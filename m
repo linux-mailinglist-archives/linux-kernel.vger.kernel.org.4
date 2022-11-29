@@ -2,154 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A87F63B749
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 02:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8629763B74A
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 02:32:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235060AbiK2BcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 20:32:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60558 "EHLO
+        id S235093AbiK2Bcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 20:32:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbiK2BcM (ORCPT
+        with ESMTP id S233573AbiK2Bca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 20:32:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4D643859
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 17:31:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669685473;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9f2bXp+4ClvcwS7benxBCOAUBMUTKP2OCE5hkEkW8TU=;
-        b=Ax0Uh+s5u5Ipb9NRlaPcnZXrSL2dDJbjXLc4rWA92HGQwx4H6AVlfLEjPg44rXWnRASY4A
-        T+/AJPBSL0/IVl/W5LCIepPjz6A+hJzbUq2WdE7vf6gro3FeUuCCn740kJcjYdin+5qr6s
-        IPYhdaQy4NRMpWocwa9FQ+IcsuEVUOk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-116-B4ChANpgOCyaTpEf1UgV5Q-1; Mon, 28 Nov 2022 20:31:09 -0500
-X-MC-Unique: B4ChANpgOCyaTpEf1UgV5Q-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2AFD21C051B1;
-        Tue, 29 Nov 2022 01:31:09 +0000 (UTC)
-Received: from [10.22.10.34] (unknown [10.22.10.34])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A054F112132C;
-        Tue, 29 Nov 2022 01:31:08 +0000 (UTC)
-Message-ID: <5ff3e87b-b8ce-4836-e95b-f1cbe2f5f253@redhat.com>
-Date:   Mon, 28 Nov 2022 20:31:08 -0500
+        Mon, 28 Nov 2022 20:32:30 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E692429B4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 17:32:29 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id d6so20228906lfs.10
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 17:32:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yqhAJ45Mn60yAGeU39MmfTEM/a4wAbyDIX0NbEi7DBw=;
+        b=nzAFKZFYpYrt0XQczu0dYlhG5WmM9qRVJHMmT8GlA+CDIgPP+7my461zOG4FBhOMGp
+         ee6eq7Tda0KULuh3PlSLZ8pKu+xS2fIPW7CMJvb7ZoRqN5qKxuYHW3ItVEPgCiL47auF
+         MQQ10xNZ0bpoEpZCUvzhmwZrumKD4UrjccOKZMIme6r2vvmhwlxLrqiT3yUiA3An1ekg
+         nqInS12Sz6AAJwlUG/MOS4hJTN7GcQfvItkZ5DKbxtG7UFBmgiX++2/9GQVmi7VFE5E5
+         KYMbzlfzTKC7z5jF7Ikfvlcq8fuf5oH4+d5rO9alI55pPic7CA+rseDW+2XYNYufNAUV
+         y/XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yqhAJ45Mn60yAGeU39MmfTEM/a4wAbyDIX0NbEi7DBw=;
+        b=nSETL6RGfFZDQWmJffyXUJ2rvhoAaOIfv06xJK05tfFNpJ8ZQ7i1/2N2poHSJqoOLV
+         aValL2H25EslicGBFh2HUG6Gf8oaZk1nuBatxaQgp1/vWkJAZNGYX2f5coRRLNu2My9u
+         JQpv8hKrn18XmqY48cO0f0W2Xd7P5a5EVMfQA8eAxk+W6065t6RAJd3i8eIsH+ym+bnM
+         twTqoYn/lpJjN6yEPcD1Mx3h7Vc0C+GJB4VIAYFy7HK/h1X+7AftZGTVb8TBjSOYwYQR
+         qpQH+6WE716MfH8CY27/kfDyOTawaf2j+yMRLCOf1HY7DYF9fYBa1zzTwTwa5apwC0/s
+         ZA0w==
+X-Gm-Message-State: ANoB5plhRyuNTSneMgrMb4g9RgnGwy8t3k2lsX3wY3QQZHoli6qJ/ozb
+        sTIF5bik0iWUnigSTJyFbkWeIBWrhOE2z5YliKLy3A==
+X-Google-Smtp-Source: AA0mqf6Y19vc1bxzipOngZTHl1luLRE9ozxQdJzQYfU/5Ne8ureAO1n42VPkT/oc4OiNLFF2NQr6U3OsMoU3AoLnKcw=
+X-Received: by 2002:ac2:5f41:0:b0:4b3:cc01:102b with SMTP id
+ 1-20020ac25f41000000b004b3cc01102bmr19211562lfz.133.1669685547794; Mon, 28
+ Nov 2022 17:32:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH-tip v2] sched: Use kfree_rcu() in do_set_cpus_allowed()
-Content-Language: en-US
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+References: <20221117005418.3499691-1-joshdon@google.com> <Y3d+1a9AEnWaxFwq@hirez.programming.kicks-ass.net>
+ <CABk29NtSmXVCvkdpymeam7AYmXhZy2JLYLPFTdKpk5g6AN1-zg@mail.gmail.com>
+ <094299a3-f039-04c1-d749-2bea0bc14246@linux.dev> <Y3tn5wz6TjsqfGTA@hirez.programming.kicks-ass.net>
+ <CABk29Nuyp=Ba=qiJAospx-SR2ZQM9GrKW0pDUeJ3sfgNB4uLFg@mail.gmail.com>
+ <Y3ymBOfRikUci/PD@hirez.programming.kicks-ass.net> <Y4CDZXZJpPB0J1BV@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y4CDZXZJpPB0J1BV@hirez.programming.kicks-ass.net>
+From:   Josh Don <joshdon@google.com>
+Date:   Mon, 28 Nov 2022 17:32:15 -0800
+Message-ID: <CABk29NsyhxiOnE7ssJpPEvgFV2_em1k2=9Yy3nMG9z9TssbBNA@mail.gmail.com>
+Subject: Re: [PATCH v3] sched: async unthrottling for cfs bandwidth
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
+        Ingo Molnar <mingo@redhat.com>,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc:     Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org
-References: <20221129012643.1382368-1-longman@redhat.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221129012643.1382368-1-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        anna-maria@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/28/22 20:26, Waiman Long wrote:
-> Commit 851a723e45d1 ("sched: Always clear user_cpus_ptr in
-> do_set_cpus_allowed()") may call kfree() if user_cpus_ptr was previously
-> set. Unfortunately, some of the callers of do_set_cpus_allowed()
-> may have pi_lock held when calling it. So the following splats may be
-> printed especially when running with a PREEMPT_RT kernel:
+> @@ -1686,7 +1698,17 @@ static void __run_hrtimer(struct hrtimer_cpu_base *cpu_base,
 >
->     WARNING: possible circular locking dependency detected
->     BUG: sleeping function called from invalid context
->
-> To avoid these problems, kfree_rcu() is used instead. An internal
-> cpumask_rcuhead union is created for the sole purpose of facilitating
-> the use of kfree_rcu() to free the cpumask.
->
-> Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->   kernel/sched/core.c | 21 ++++++++++++++++++---
->   1 file changed, 18 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index f7c5253bfd21..bf9066b4f481 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -2593,6 +2593,11 @@ __do_set_cpus_allowed(struct task_struct *p, struct affinity_context *ctx)
->   		set_next_task(rq, p);
->   }
->   
-> +union cpumask_rcuhead {
-> +	void *cpumask;
-> +	struct rcu_head rcu;
-> +};
+>         lockdep_hrtimer_exit(expires_in_hardirq);
+>         trace_hrtimer_expire_exit(timer);
+> -       raw_spin_lock_irq(&cpu_base->lock);
 > +
->   /*
->    * Used for kthread_bind() and select_fallback_rq(), in both cases the user
->    * affinity (if any) should be destroyed too.
-> @@ -2606,7 +2611,13 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
->   	};
->   
->   	__do_set_cpus_allowed(p, &ac);
-> -	kfree(ac.user_mask);
+> +       local_irq_disable();
 > +
-> +	/*
-> +	 * Because this is called with p->pi_lock held, it is not possible
-> +	 * to use kfree() here (when PREEMPT_RT=y), therefore punt to using
-> +	 * kfree_rcu().
-> +	 */
-> +	kfree_rcu((union cpumask_rcuhead *)ac.user_mask, rcu);
->   }
->   
->   int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
-> @@ -8220,7 +8231,7 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
->   	struct affinity_context ac;
->   	struct cpumask *user_mask;
->   	struct task_struct *p;
-> -	int retval;
-> +	int retval, size;
->   
->   	rcu_read_lock();
->   
-> @@ -8253,7 +8264,11 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
->   	if (retval)
->   		goto out_put_task;
->   
-> -	user_mask = kmalloc(cpumask_size(), GFP_KERNEL);
-> +	/*
-> +	 * See do_set_cpus_allowed() for the rcu_head usage.
-> +	 */
-> +	size = max_t(int, cpumask_size(), sizeof(union cpumask_rcuhead));
-> +	user_mask = kmalloc(size, GFP_KERNEL);
->   	if (!user_mask) {
->   		retval = -ENOMEM;
->   		goto out_put_task;
+> +       if (restart >= HRTIMER_RESTART_MIGRATE) {
+> +               int cpu = restart - HRTIMER_RESTART_MIGRATE;
 
-Peter, I would like to get this done before the next merge window. I 
-personally prefer to define a useless union to facilitate the use of 
-kfree_rcu(). I can also live without it and call kvfree_call_rcu() 
-directly if this is what you want.
+I know this is just a rough draft, but just noting that this wants a
+check against MIGRATE_MAX :)
 
-Cheers,
-Longman
+> +               if (new_cpu_base != cpu_base) {
+> +                       timer->base = new_base;
+> +                       enqueue_hrtimer(timer, new_base, HRTIMER_MODE_ABS);
+> +                       raw_spin_unlock(&new_cpu_base->lock);
 
+unlock the old base->lock right?
