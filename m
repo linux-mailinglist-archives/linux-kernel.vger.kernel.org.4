@@ -2,63 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3BD663BD05
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78ABF63BD08
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbiK2JeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 04:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
+        id S231848AbiK2JfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 04:35:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiK2JeT (ORCPT
+        with ESMTP id S231841AbiK2JfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 04:34:19 -0500
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DC82AE2B
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:34:17 -0800 (PST)
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 2AT9Xvnv018526
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 18:33:58 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2AT9Xvnv018526
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1669714438;
-        bh=W7/cBOhC6ZWzKLNByGDtoOjb1UE7rlpyI0vm5uWvnSw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=xVQmEFZ1CE9o3mHpfyU7Q+Ga+U8knXckkKGGpOLb/IMTb3Pq5j40cX2JZGWtePMtv
-         LJ/6uv1ZyZtlYT4A1tLP2TQi7vUr/Mh7yJTQVrTZ9QQmsYK2JjqabOpHK++rNGXIy8
-         fQWTIqVvpGcPthYl9m7iucm5qqFiSi9466FoCNZod759lFHpJU/AFK3sP52RjlvXmJ
-         V2GTEvMwhP7tOhhyZG1Ilcr9XnqOvPQTyfvZ6L/lIWu3ZHKHoNhmsgM3J+tr0yJpeJ
-         hR2PB0sEYSTfg8qGivjnm1T/kNjwQsIx87ChVX3I1jolT35Xho+tvi8/+4yfg288O4
-         DhlErQTSCiVgw==
-X-Nifty-SrcIP: [209.85.167.171]
-Received: by mail-oi1-f171.google.com with SMTP id s206so14552921oie.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:33:58 -0800 (PST)
-X-Gm-Message-State: ANoB5pmnYmvgV0lB4JnMCWtF6usQpnzhQ0KLoB85z/qF0PSuUX6LQVJI
-        klyi4/azWieyJVu8jWHRfRQvLrm73GUW0gVxUTg=
-X-Google-Smtp-Source: AA0mqf7vHeDdYzAXYz0tuXeexOFIFTJiCn/xCThNETAbcH1WOB0n2+wXfFWCa2ytnJNfBnXFSmMWIjoKu/QkpHjK1B8=
-X-Received: by 2002:a05:6808:3009:b0:354:94a6:a721 with SMTP id
- ay9-20020a056808300900b0035494a6a721mr17933150oib.194.1669714437267; Tue, 29
- Nov 2022 01:33:57 -0800 (PST)
-MIME-Version: 1.0
-References: <20221126051002.123199-1-linux@weissschuh.net> <20221126051002.123199-3-linux@weissschuh.net>
- <CAK7LNAREVSp_5d1SaFOLyBHJJrJ6zE_qxSYWAFFnfoz3d0w3-Q@mail.gmail.com>
-In-Reply-To: <CAK7LNAREVSp_5d1SaFOLyBHJJrJ6zE_qxSYWAFFnfoz3d0w3-Q@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 29 Nov 2022 18:33:21 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQmk3_L3_QwpsBR_uKN+3kE8F5h-QdOGLz8WOSx05CFRg@mail.gmail.com>
-Message-ID: <CAK7LNAQmk3_L3_QwpsBR_uKN+3kE8F5h-QdOGLz8WOSx05CFRg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] init/version.c: remove #include <generated/utsversion.h>
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
+        Tue, 29 Nov 2022 04:35:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E0A2DAB5
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:34:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669714445;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=caP/rC0nnvQymu6mA/gslxl2NmWqltTNr7bvQqqM/dg=;
+        b=EPIvXs1Y0ax137NV8v7Qwk376wQl+e5TJVKFjjdITT0f+xRJLlWCAceBGc8pW2bLFBBQGO
+        9pEpfz/pg1Um/lY1zrPHLy6IQE0yRfV6gHB6GrOzrD1IJKGGIDhApEeHJirIL6BHRDFkqM
+        46jcYDeU2g6HTK+lUn+Cd/Cy4+nbHCU=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-475-_rH_SdJfOoqlqXcqR7rNxA-1; Tue, 29 Nov 2022 04:34:04 -0500
+X-MC-Unique: _rH_SdJfOoqlqXcqR7rNxA-1
+Received: by mail-qk1-f199.google.com with SMTP id bs7-20020a05620a470700b006fac7447b1cso27292901qkb.17
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:34:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=caP/rC0nnvQymu6mA/gslxl2NmWqltTNr7bvQqqM/dg=;
+        b=BuApovlqRWe6cvDlvb/ls9uULXq/MkBuCxG2F1SSlfC/3NXN0vK1ieoaMcjE53Mrdj
+         A4Zpiti0gH+wjVDZ7ot/1IoJmZ3zYpMxR6cJiAeFfOWFDgJD23ueLjH1/dLMh/LuClnL
+         qlvR7JKSG7jjtHihlLtZGZsRhkVje05oMBEskMN7/yJ0tgiV+igQpl8zbbl51zxYI0vc
+         iuzKx7Am74JhItaM7HK82pZOzH3fiSMY/h/H0ZY+qBHSObaTke2XVBD9EUNs5M8SmzRR
+         ybYYzXMlcPnLI6tfYi47u7FlsNcVayZXdfViw55wIr0o/3sJcVXeJDjqBw0cqQabE0w+
+         PWKA==
+X-Gm-Message-State: ANoB5pkTCmDdfsoazLWMLq++0vqGKRosVgvIu2fRxbAny6Y9poLSDe/q
+        uRdoH02fX+QB4sl2Pvk9O4b0OHSUO0r7O/la51Zk1ZIEE8Xf/6mJbKudV5mcEbdY0sjPaFtascy
+        NilEcR1Tkm5JCmqDT4S1W/Oog
+X-Received: by 2002:ac8:4603:0:b0:3a5:6131:6438 with SMTP id p3-20020ac84603000000b003a561316438mr33520777qtn.164.1669714443536;
+        Tue, 29 Nov 2022 01:34:03 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6m27Q0PzOclZymNF2y2LFVCKpiqKpzsGGtqKJh/5Fu4cvl+5y9qR0W9NW/G+sNNzTdOotjUA==
+X-Received: by 2002:ac8:4603:0:b0:3a5:6131:6438 with SMTP id p3-20020ac84603000000b003a561316438mr33520760qtn.164.1669714443186;
+        Tue, 29 Nov 2022 01:34:03 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
+        by smtp.gmail.com with ESMTPSA id q11-20020a37f70b000000b006ed61f18651sm9941800qkj.16.2022.11.29.01.34.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 01:34:02 -0800 (PST)
+Message-ID: <9480856d183c88a205fd79d9dbc156a7fd3ea0d3.camel@redhat.com>
+Subject: Re: [PATCH net-next v2 1/2] IPv6/GRO: generic helper to remove
+ temporary HBH/jumbo header in driver
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Coco Li <lixiaoyan@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Michael Chan <michael.chan@broadcom.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 29 Nov 2022 10:33:59 +0100
+In-Reply-To: <20221123191627.3442831-1-lixiaoyan@google.com>
+References: <20221123191627.3442831-1-lixiaoyan@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,87 +85,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 27, 2022 at 7:18 AM Masahiro Yamada <masahiroy@kernel.org> wrot=
-e:
->
-> On Sat, Nov 26, 2022 at 2:10 PM Thomas Wei=C3=9Fschuh <linux@weissschuh.n=
-et> wrote:
-> >
-> > Commit 2df8220cc511 ("kbuild: build init/built-in.a just once") moved
-> > the usage of the define UTS_VERSION to the file version-timestamp.c.
->
-> With s/UTS_VERSION/UTS_RELEASE/,
->
->
-> Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
->
-> >
-> > version-timestamp.c in turn is included from version.c but already
-> > includes utsversion.h itself properly.
-> >
-> > The unneeded include of utsversion.h from version.c can be dropped.
-> >
-> > Fixes: 2df8220cc511 ("kbuild: build init/built-in.a just once")
-> > Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-> > ---
-> >  init/version.c | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/init/version.c b/init/version.c
-> > index 01d4ab05f0ba..f117921811b4 100644
-> > --- a/init/version.c
-> > +++ b/init/version.c
-> > @@ -15,7 +15,6 @@
-> >  #include <linux/printk.h>
-> >  #include <linux/uts.h>
-> >  #include <linux/utsname.h>
-> > -#include <generated/utsrelease.h>
-> >  #include <linux/proc_ns.h>
-> >
-> >  static int __init early_hostname(char *arg)
-> > --
-> > 2.38.1
-> >
->
->
-> --
-> Best Regards
-> Masahiro Yamada
+Hello,
 
+Only a couple of minor things below, reporting them as this is still a
+RFC, right ? ;)
 
+On Wed, 2022-11-23 at 11:16 -0800, Coco Li wrote:
+> IPv6/TCP and GRO stacks can build big TCP packets with an added
+> temporary Hop By Hop header.
+> 
+> Is GSO is not involved, then the temporary header needs to be removed in
+> the driver. This patch provides a generic helper for drivers that need
+> to modify their headers in place.
+> 
+> Signed-off-by: Coco Li <lixiaoyan@google.com>
+> ---
+>  include/net/ipv6.h     | 36 ++++++++++++++++++++++++++++++++++++
+>  net/ipv6/ip6_offload.c | 26 ++++----------------------
+>  2 files changed, 40 insertions(+), 22 deletions(-)
+> 
+> diff --git a/include/net/ipv6.h b/include/net/ipv6.h
+> index d383c895592a..c5a1daaf5056 100644
+> --- a/include/net/ipv6.h
+> +++ b/include/net/ipv6.h
+> @@ -500,6 +500,42 @@ static inline int ipv6_has_hopopt_jumbo(const struct sk_buff *skb)
+>  	return jhdr->nexthdr;
+>  }
+>  
+> +/* Return 0 if HBH header is successfully removed
+> + * Or if HBH removal is unnecessary (packet is not big TCP)
+> + * Return error to indicate dropping the packet
+> + */
+> +static inline int ipv6_hopopt_jumbo_remove(struct sk_buff *skb)
+> +{
+> +	const int hophdr_len = sizeof(struct hop_jumbo_hdr);
+> +	int nexthdr = ipv6_has_hopopt_jumbo(skb);
+> +	struct ipv6hdr *h6;
+> +	int err = 0;
+> +
+> +	if (!nexthdr)
+> +		return err;
 
-This patch is so confusing because the subject is also wrong.
+You can help a bit the compiler avoiding err initialization:
 
+	int err;
 
+	if (!nexthdr)
+		return 0;
 
-I fixed up the commit description:
+> +
+> +	err = skb_cow_head(skb, 0);
+> +	if (err)
+> +		return err;
+> +
+> +	/* Remove the HBH header.
+> +	 * Layout: [Ethernet header][IPv6 header][HBH][L4 Header]
+> +	 */
+> +	memmove(skb_mac_header(skb) + hophdr_len, skb_mac_header(skb),
+> +		skb_network_header(skb) - skb_mac_header(skb) +
 
+The have could be:
 
+		skb_mac_header_len(skb)
 
-    init/version.c: remove #include <generated/utsrelease.h>
+which is IMHO a little more clear.
 
-    Commit 2df8220cc511 ("kbuild: build init/built-in.a just once") moved
-    the usage of the define UTS_RELEASE to the file version-timestamp.c.
+Thanks!
 
-    version-timestamp.c in turn is included from version.c but already
-    includes utsrelease.h itself properly.
+Paolo
 
-    The unneeded include of utsrelease.h from version.c can be dropped.
-
-    Fixes: 2df8220cc511 ("kbuild: build init/built-in.a just once")
-    Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-    Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-
-
-
-Applied to linux-kbuild.
-Thanks.
-
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
