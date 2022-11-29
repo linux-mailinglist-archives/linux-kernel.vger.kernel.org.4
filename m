@@ -2,68 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182A063BCE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1D663BCE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbiK2J2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 04:28:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60300 "EHLO
+        id S231358AbiK2J2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 04:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiK2J2T (ORCPT
+        with ESMTP id S231126AbiK2J2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 04:28:19 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AF531EF3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:28:17 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id b73so16682033yba.4
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:28:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6wMpDXGwqSEa5zIifOleCzBwuNiNpLrKwZxtl7KmLTs=;
-        b=x33agDxBeO4O7EFSCRWCTdcNkb/iPgF4+EarkrOVhOk/yL7Jio8FSIU8SnSpw3fCuv
-         3UVICBryhGAQo26F2hG0wR6ZqG4oKEpuT7vdcYC/Zh6V5hDhYAh0j4NxT2qT7CX2QDoP
-         72SEWndv0o77xsrP/MTMYNk14KdZu17R/zAqQJh8m1F4DVyVYdEiiyKX3Uk0FvIKVXcq
-         5jxrGeljkjemcKmL8woVADwiL2QZ+SFLsI6SqEUOy60l58419HRlCaQuT8NtrOL50n0Y
-         ulFFUf8zpUX1vXKWM2Wkz6TZdhzbmIYuM9tGEMZBx2FCvhZ1Zxgo5dD+9ualzV0/FzUY
-         D9pQ==
+        Tue, 29 Nov 2022 04:28:36 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9C431EFF
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:28:35 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id l4-20020a056e021aa400b00300ad9535c8so11526913ilv.1
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:28:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6wMpDXGwqSEa5zIifOleCzBwuNiNpLrKwZxtl7KmLTs=;
-        b=Uxw/CPFBlU17niAZD44um7pGApcgprO03Uc1H3my7MVXwUFPg2siwj6pbMGtTUXx4w
-         w7FAle2iFKaAV81VDOsXPmJ8dXacpwKz46Es1lQOqoqb4Wr8wwxv0Kd1jioxE8eMkSjC
-         1Kud9eenn7Bm5r7zlKARZFAWsOzj1GlH+kqpvhYBvS/avuIJPoxt3HG3JYHTxLIgLDfJ
-         ntorudBt3QDUyBJNtEiwxHIRT2QDHrRLbWs22stD4WgUNN+yb65dPY/hMkY/qF/TwJaY
-         x0+lkS+nkCdMgSb+Ql9swE2BQisNVrHPSJ6/Za3GGGC2aPvsFY1O9bmqOZ9PTLp2aNsL
-         gDmA==
-X-Gm-Message-State: ANoB5pkWtxKQZH+ZsoJ70btguozrCWQTSH6peVp6V75obUSqBKN11PjD
-        SFupN1dIaicf0SRQUkRLyYxT+FcG+MXxFk5wBbyD7w==
-X-Google-Smtp-Source: AA0mqf5Xv4hdzu5fBQxmb4pQkE8zkCXT1qOMN7Ms1zeAxNUa2fHbImjJTivoKFNGn+j6CCDrUiKzS6b74XciRfHzNl0=
-X-Received: by 2002:a25:4dd7:0:b0:6f1:535f:2f38 with SMTP id
- a206-20020a254dd7000000b006f1535f2f38mr25793379ybb.153.1669714097062; Tue, 29
- Nov 2022 01:28:17 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DwHYHMia3SWsCol0zN9hefpCR+EbC2cAXKhyYNd3Nv0=;
+        b=Zi7JkcE5OBjXyBUb3kMScI8qHcrrG/PF6mtZWsMmQBqt/BAtcbIwhb1BPxt4HCmxuT
+         lKijt+9sTD+dJrs3fquK7lW6KnLjGDPuMHpzL9DTsphIwNmAByskGT6Qdw5PDW/S19/o
+         WBWSwRTsT7RYyLYJMiQeJTDXa5+w+FM48YGM2tCsueU8Ga1gXw8RD+Sl+eqRkd9Zo8j9
+         2OA2W8dwx8R3zrUZCQb9bnKXFynYbsQElwtu4uiiqxlRdDJmk+8JFDrf+CAuR+TczEYI
+         difs3Gzz2YvRCiJ3F/AfJTpq52tuZplIpcA8hKXnaFolhGdPw/wYVx+q71YqKvVW6SCP
+         +XzA==
+X-Gm-Message-State: ANoB5plYse+vMUsbXO7Fdup40dieawcbX/M2q2SuFpm4tkkaywGUFxx4
+        3EthEtpzsbNnQa++QRKAZeVNWAHWa6F9YHl1ABHBTl3cE6VD
+X-Google-Smtp-Source: AA0mqf4SlM8ZeHbB1FFBLv6NUjJCFRWfI2GPv7cccYZgGVE2lI1V1zt406ZHnpm7RPupUcg/iYBCP6IjCXRt7LgVhJ3S5L9rx0od
 MIME-Version: 1.0
-References: <20221129000047.697089-1-elder@linaro.org> <CAA8EJpqcQaamPn=6Z0GRKVDvFu8BGQ190EYJH34dApBcC3nzdA@mail.gmail.com>
- <35be9c2d-63d4-01cf-b8d7-de3306d50e64@linaro.org>
-In-Reply-To: <35be9c2d-63d4-01cf-b8d7-de3306d50e64@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 29 Nov 2022 11:28:06 +0200
-Message-ID: <CAA8EJppyYmyiG8U5MdB3_ZsqAO+Cze5RwOMQmMN+GyNNEP260Q@mail.gmail.com>
-Subject: Re: [PATCH] clk: qcom: rpmh: add support for SM6350 rpmh IPA clock
-To:     Alex Elder <elder@linaro.org>
-Cc:     sboyd@kernel.org, mturquette@baylibre.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, agross@kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+X-Received: by 2002:a92:7310:0:b0:302:571f:8d7f with SMTP id
+ o16-20020a927310000000b00302571f8d7fmr25219913ilc.53.1669714114517; Tue, 29
+ Nov 2022 01:28:34 -0800 (PST)
+Date:   Tue, 29 Nov 2022 01:28:34 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ac218905ee989c07@google.com>
+Subject: [syzbot] WARNING in batadv_nc_purge_paths
+From:   syzbot <syzbot+5b817d9e3b5fb5f051fc@syzkaller.appspotmail.com>
+To:     a@unstable.cc, b.a.t.m.a.n@lists.open-mesh.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, mareklindner@neomailbox.ch,
+        netdev@vger.kernel.org, pabeni@redhat.com, sven@narfation.org,
+        sw@simonwunderlich.de, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,78 +57,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Nov 2022 at 03:54, Alex Elder <elder@linaro.org> wrote:
->
-> On 11/28/22 7:35 PM, Dmitry Baryshkov wrote:
-> > On Tue, 29 Nov 2022 at 02:00, Alex Elder <elder@linaro.org> wrote:
-> >>
-> >> From: Luca Weiss <luca.weiss@fairphone.com>
-> >>
-> >> The IPA core clock is required for SM6350.  Define it.
-> >>
-> >> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> >> ---
-> >>   drivers/clk/qcom/clk-rpmh.c | 2 ++
-> >>   1 file changed, 2 insertions(+)
-> >>
-> >> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-> >> index 0471bab824642..6a5887aae21a4 100644
-> >> --- a/drivers/clk/qcom/clk-rpmh.c
-> >> +++ b/drivers/clk/qcom/clk-rpmh.c
-> >> @@ -603,6 +603,7 @@ static const struct clk_rpmh_desc clk_rpmh_sc7280 = {
-> >>   DEFINE_CLK_RPMH_VRM(sm6350, ln_bb_clk2, ln_bb_clk2_ao, "lnbclkg2", 4);
-> >>   DEFINE_CLK_RPMH_VRM(sm6350, ln_bb_clk3, ln_bb_clk3_ao, "lnbclkg3", 4);
-> >>   DEFINE_CLK_RPMH_ARC(sm6350, qlink, qlink_ao, "qphy.lvl", 0x1, 4);
-> >> +DEFINE_CLK_RPMH_BCM(sm6350, ipa, "IP0");
->
-> So you're saying that the above line is unnecessary...
+Hello,
 
-Yes
+syzbot found the following issue on:
 
->
-> >>   static struct clk_hw *sm6350_rpmh_clocks[] = {
-> >>          [RPMH_CXO_CLK]          = &sc7280_bi_tcxo.hw,
-> >> @@ -613,6 +614,7 @@ static struct clk_hw *sm6350_rpmh_clocks[] = {
-> >>          [RPMH_LN_BB_CLK3_A]     = &sm6350_ln_bb_clk3_ao.hw,
-> >>          [RPMH_QLINK_CLK]        = &sm6350_qlink.hw,
-> >>          [RPMH_QLINK_CLK_A]      = &sm6350_qlink_ao.hw,
-> >> +       [RPMH_IPA_CLK]          = &sm6350_ipa.hw,
->
-> ...and that this line (above) can instead look like this:
->
->         [RPMH_IPA_CLK]          = &sdm845_ipa.hw,
->
-> Correct?
+HEAD commit:    65762d97e6fa Merge branch 'for-next/perf' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=1558f7fd880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=56d0c7c3a2304e8f
+dashboard link: https://syzkaller.appspot.com/bug?extid=5b817d9e3b5fb5f051fc
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
-Yes
+Unfortunately, I don't have any reproducer for this issue yet.
 
->
-> > This can use sdm845_ipa.hw instead of defining new clocks.
->
-> Your statement seems to also be true for the [RPMH_IPA_CLK]
-> entry in sdx55_rpmh_clocks[].  (For the record, the commit
-> that added that one was authored by me, and I didn't realize
-> what you have stated here.)
->
-> Please confirm, and I'll update.
->
-> I'll also send another patch to remove the definition of
-> sdx55_ipa if Mani is willing to test it for me...
->
-> Thank you Dmitry.
->
->                                         -Alex
->
-> >>   };
-> >>
-> >>   static const struct clk_rpmh_desc clk_rpmh_sm6350 = {
-> >> --
-> >> 2.34.1
-> >>
-> >
-> >
->
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/52f702197b30/disk-65762d97.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/72189c2789ce/vmlinux-65762d97.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ec0349196c98/Image-65762d97.gz.xz
 
---
-With best wishes
-Dmitry
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5b817d9e3b5fb5f051fc@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3498 at kernel/softirq.c:376 __local_bh_enable_ip+0x180/0x1a4 kernel/softirq.c:376
+Modules linked in:
+CPU: 1 PID: 3498 Comm: kworker/u4:11 Not tainted 6.1.0-rc6-syzkaller-32653-g65762d97e6fa #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Workqueue: bat_events batadv_nc_worker
+
+pstate: 20400005 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __local_bh_enable_ip+0x180/0x1a4 kernel/softirq.c:376
+lr : __raw_spin_unlock_bh include/linux/spinlock_api_smp.h:167 [inline]
+lr : _raw_spin_unlock_bh+0x48/0x58 kernel/locking/spinlock.c:210
+sp : ffff80001398bc60
+x29: ffff80001398bc60
+ x28: ffff80000d2fb000
+ x27: ffff80000d2fb000
+
+x26: 000000000000007e
+ x25: 0000000000000004
+ x24: 0000000000000000
+
+x23: ffff0000f2dcdf80
+ x22: 0000000000000000
+ x21: ffff00011ed2b480
+
+x20: ffff80000bf44c08
+ x19: 0000000000000201
+ x18: 0000000000000163
+
+x17: ffff80000c0cd83c
+ x16: ffff80000dbe6158
+ x15: ffff00011ed2b480
+
+x14: 00000000000000c8
+ x13: 00000000ffffffff
+ x12: ffff00011ed2b480
+
+x11: ff808000095cfff8
+ x10: 00000000ffffffff
+ x9 : ffff80000d2d09a0
+
+x8 : 0000000000000201
+ x7 : ffff80000bf44a98
+ x6 : 0000000000000000
+
+x5 : 0000000000000000
+ x4 : 0000000000000001
+ x3 : 0000000000000000
+
+x2 : 0000000000000001
+ x1 : 0000000000000201
+ x0 : ffff80000bf44c08
+
+Call trace:
+ __local_bh_enable_ip+0x180/0x1a4 kernel/softirq.c:376
+ __raw_spin_unlock_bh include/linux/spinlock_api_smp.h:167 [inline]
+ _raw_spin_unlock_bh+0x48/0x58 kernel/locking/spinlock.c:210
+ spin_unlock_bh include/linux/spinlock.h:395 [inline]
+ batadv_nc_purge_paths+0x1d0/0x214 net/batman-adv/network-coding.c:471
+ batadv_nc_worker+0x3a8/0x484 net/batman-adv/network-coding.c:722
+ process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+ worker_thread+0x340/0x610 kernel/workqueue.c:2436
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
+irq event stamp: 28503233
+hardirqs last  enabled at (28503231): [<ffff800008106f78>] __local_bh_enable_ip+0x13c/0x1a4 kernel/softirq.c:401
+hardirqs last disabled at (28503233): [<ffff80000c0809a4>] __el1_irq arch/arm64/kernel/entry-common.c:468 [inline]
+hardirqs last disabled at (28503233): [<ffff80000c0809a4>] el1_interrupt+0x24/0x68 arch/arm64/kernel/entry-common.c:486
+softirqs last  enabled at (28503230): [<ffff80000bf44c08>] spin_unlock_bh include/linux/spinlock.h:395 [inline]
+softirqs last  enabled at (28503230): [<ffff80000bf44c08>] batadv_nc_purge_paths+0x1d0/0x214 net/batman-adv/network-coding.c:471
+softirqs last disabled at (28503232): [<ffff80000bf44a98>] spin_lock_bh include/linux/spinlock.h:355 [inline]
+softirqs last disabled at (28503232): [<ffff80000bf44a98>] batadv_nc_purge_paths+0x60/0x214 net/batman-adv/network-coding.c:442
+---[ end trace 0000000000000000 ]---
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
