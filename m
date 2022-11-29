@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D9963CBF1
+	by mail.lfdr.de (Postfix) with ESMTP id D65D763CBF2
 	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 00:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiK2Xep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 18:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
+        id S230001AbiK2Xet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 18:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiK2Xeh (ORCPT
+        with ESMTP id S229642AbiK2Xei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 18:34:37 -0500
+        Tue, 29 Nov 2022 18:34:38 -0500
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C351A13D46;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14B013F5A;
         Tue, 29 Nov 2022 15:34:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1669764876; x=1701300876;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Hvisxqquf2yYaCVhVJZxHzOaZVsvlPXCmm2MsGkCZx8=;
-  b=YOK9OlxLztQdsHakZ2JkVlgV+INQoIbtgZLvJ9CgrCmIxOh/YYCOh0Yl
-   0R6JxO9IQUSrO4x+Uz5fmlU7PceH2/LfU6/n9uBwXCxfxf5A69RMZu2dW
-   UD2Y9fqxiMAKvT1BaY3m1oLFzUyrjR/Xpkw8zqpxGc1IaxVYOKsQgCm92
-   DxBSO278mnVDaNwpzRXZy7JXox7NTHwG6GNOOPL3hVJL7n+3fHwrOTka5
-   dh+HjaaQte3hyo6UYXo1aq6e0cKOKr7mpSAJo0KIG/KWx31kLKBnzzHMm
-   nEreD7NdDlp3imd1l42pYm/nxJVjyl4X2+pb12Tbvy7SUGChnU1Qpbm8m
+  bh=JdAL99X3U/wRyQMrUSkXLIkWotT0+se/Lxk0222z2TI=;
+  b=Ovn1PSfee7L/bwSh6OqkU9BcesoTdC5k1nTz6jbEizdeFNnys25g3Hxm
+   vJobmVb/M8hS2FTFMhmX0XZRj20qzJpArbg3qxj8ZkvPsbjNhkDci9J6s
+   PBP5vr4cs13vlY4towX6J5cNUPjU4QI8qvtOPgTdMAwd7ONWXIjpV1Nhb
+   6HU+Ko66tiIzWcOi5tkMemIpXKFJ2LSmYscqmjvRGNqrD4aRm516r6ZeW
+   c1GHpfga1OQsubR7IR+6baFhMwEfTCbcwd/9ACaEN6JQcKy5pLesc5oBD
+   XxGI410XPAOxFWGvzIw3oJDFT1KjsLARucAKJ+RTdXPF1ENG58UCL3eGf
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="342178170"
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="342178173"
 X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="342178170"
+   d="scan'208";a="342178173"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 15:34:35 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="768617604"
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="768617608"
 X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="768617604"
+   d="scan'208";a="768617608"
 Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
   by orsmga004.jf.intel.com with ESMTP; 29 Nov 2022 15:34:35 -0800
 From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 To:     rafael@kernel.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v2 2/4] powercap: idle_inject: Add prepare/complete callbacks
-Date:   Tue, 29 Nov 2022 15:34:17 -0800
-Message-Id: <20221129233419.4022830-3-srinivas.pandruvada@linux.intel.com>
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2 3/4] thermal/drivers/intel_powerclamp: Use powercap idle-inject framework
+Date:   Tue, 29 Nov 2022 15:34:18 -0800
+Message-Id: <20221129233419.4022830-4-srinivas.pandruvada@linux.intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com>
 References: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com>
@@ -62,180 +63,560 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The actual idle percentage can be less than the desired because of
-interrupts. Since the objective for CPU Idle injection is for thermal
-control, there should be some way to compensate for lost idle percentage.
-Some architectures provide interface to get actual idle percent observed
-by the hardware. So, the idle percent can be adjusted using the hardware
-feedback. For example, Intel CPUs provides package idle counters, which
-is currently used by intel powerclamp driver to adjust idle time.
+There are two idle injection implementation in the Linux kernel. One
+via intel_powerclamp and the other using powercap/idle_inject. Both
+implementation end up in calling play_idle* function from a FIFO
+priority thread. Both can't be used at the same time.
 
-The only way this can be done currently is by monitoring hardware idle
-percent from a different software thread. This can be avoided by adding
-callbacks.
+Currently per core idle injection (cpuidle_cooling) is using
+powercap/idle_inject, which is not used in platforms where
+intel_powerclamp is used for system wide idle injection. So there is
+no conflict. But there are some use cases where per core idle injection
+is beneficial on the same system where system wide idle injection is
+also used via intel_powerclamp. To avoid conflict only one of the idle
+injection type must be in use at a time. This require a common framework
+which both per core and system wide idle injection can use.
 
-Add a capability to register a prepare and complete callback during idle
-inject registry. Add a new register function idle_inject_register_full()
-which also allows to register callbacks.
+Here powercap/idle_inject can be used for both per-core and for system
+wide idle injection. This framework has a well defined interface
+which allow registry for per-core or for all CPUs (system wide). If
+particular CPU is already participating in idle injection, the call
+to registry fails. Here the registry can be done when user space
+changes the current cooling device state.
 
-If they are not NULL, then prepare callback is called before calling
-play_idle_precise() and complete callback is called after calling
-play_idle_precise().
+Also one framework for idle injection is better as there is one loop
+calling play_idle*, instead of multiple for better maintenance.
 
-If prepare callback is present and returns non 0 value then
-play_idle_precise() is not called to avoid over compensation.
+So, reuse powercap/idle_inject calls in intel_powerclamp. This simplifies
+the code as all per CPU kthreads which calls play_idle* can be removed.
+
+The changes include:
+- Remove unneeded include files
+- Remove per CPU kthread workers: balancing_work and idle_injection_work
+- Reuse the compensation related code by moving from previous worker
+thread to idle_injection callbacks
+- Adjust the idle_duration and runtime by using powercap/idle_inject
+interface
+- Remove all variables, which are not required once powercap/idle_inject
+is used
+- Add mutex to avoid race during removal of idle injection during module
+unload and user action to change idle inject percent
+- Use READ_ONCE and WRITE_ONCE for data accessed from multiple CPUs
 
 Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
-v2
-- Replace begin/end with prepare/complete
-- Add new interface idle_inject_register_full with callbacks
-- Update kernel doc
-- Update commit description
+v2:
+- Use idle_inject_register_full instead of idle_inject_register
+- Also fix dependency issue with POWERCAP config
+Reported-by: kernel test robot <lkp@intel.com>
 
- drivers/powercap/idle_inject.c | 62 +++++++++++++++++++++++++++++++---
- include/linux/idle_inject.h    |  4 +++
- 2 files changed, 62 insertions(+), 4 deletions(-)
+ drivers/thermal/intel/Kconfig            |   2 +
+ drivers/thermal/intel/intel_powerclamp.c | 292 ++++++++++-------------
+ 2 files changed, 126 insertions(+), 168 deletions(-)
 
-diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
-index dfa989182e71..f48e71501429 100644
---- a/drivers/powercap/idle_inject.c
-+++ b/drivers/powercap/idle_inject.c
-@@ -63,13 +63,31 @@ struct idle_inject_thread {
-  * @idle_duration_us: duration of CPU idle time to inject
-  * @run_duration_us: duration of CPU run time to allow
-  * @latency_us: max allowed latency
-+ * @prepare: Callback function which is called before calling
-+ *		play_idle_precise()
-+ * @complete: Callback function which is called after calling
-+ *		play_idle_precise()
-  * @cpumask: mask of CPUs affected by idle injection
-+ *
-+ * This structure is used to define per instance idle inject device data. Each
-+ * instance has an idle duration, a run duration and mask of CPUs to inject
-+ * idle.
-+ * Actual idle is injected by calling kernel scheduler interface
-+ * play_idle_precise(). There are two optional callbacks which the caller can
-+ * register by calling idle_inject_register_full():
-+ * prepare() - This callback is called just before calling play_idle_precise()
-+ *		If this callback returns non zero value then
-+ *		play_idle_precise() is not called. This means skip injecting
-+ *		idle during this period.
-+ * complete() - This callback is called after calling play_idle_precise().
-  */
- struct idle_inject_device {
- 	struct hrtimer timer;
- 	unsigned int idle_duration_us;
- 	unsigned int run_duration_us;
- 	unsigned int latency_us;
-+	int (*prepare)(unsigned int cpu);
-+	void (*complete)(unsigned int cpu);
- 	unsigned long cpumask[];
+diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
+index f0c845679250..6c2a95f41c81 100644
+--- a/drivers/thermal/intel/Kconfig
++++ b/drivers/thermal/intel/Kconfig
+@@ -3,6 +3,8 @@ config INTEL_POWERCLAMP
+ 	tristate "Intel PowerClamp idle injection driver"
+ 	depends on X86
+ 	depends on CPU_SUP_INTEL
++	select POWERCAP
++	select IDLE_INJECT
+ 	help
+ 	  Enable this to enable Intel PowerClamp idle injection driver. This
+ 	  enforce idle time which results in more package C-state residency. The
+diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+index b80e25ec1261..3f2b20ae8f68 100644
+--- a/drivers/thermal/intel/intel_powerclamp.c
++++ b/drivers/thermal/intel/intel_powerclamp.c
+@@ -2,7 +2,7 @@
+ /*
+  * intel_powerclamp.c - package c-state idle injection
+  *
+- * Copyright (c) 2012, Intel Corporation.
++ * Copyright (c) 2022, Intel Corporation.
+  *
+  * Authors:
+  *     Arjan van de Ven <arjan@linux.intel.com>
+@@ -27,21 +27,15 @@
+ #include <linux/module.h>
+ #include <linux/kernel.h>
+ #include <linux/delay.h>
+-#include <linux/kthread.h>
+ #include <linux/cpu.h>
+ #include <linux/thermal.h>
+-#include <linux/slab.h>
+-#include <linux/tick.h>
+ #include <linux/debugfs.h>
+ #include <linux/seq_file.h>
+-#include <linux/sched/rt.h>
+-#include <uapi/linux/sched/types.h>
++#include <linux/idle_inject.h>
+ 
+-#include <asm/nmi.h>
+ #include <asm/msr.h>
+ #include <asm/mwait.h>
+ #include <asm/cpu_device_id.h>
+-#include <asm/hardirq.h>
+ 
+ #define MAX_TARGET_RATIO (50U)
+ /* For each undisturbed clamping period (no extra wake ups during idle time),
+@@ -60,6 +54,7 @@ static struct dentry *debug_dir;
+ 
+ /* user selected target */
+ static unsigned int set_target_ratio;
++static bool target_ratio_updated;
+ static unsigned int current_ratio;
+ static bool should_skip;
+ 
+@@ -67,26 +62,20 @@ static unsigned int control_cpu; /* The cpu assigned to collect stat and update
+ 				  * control parameters. default to BSP but BSP
+ 				  * can be offlined.
+ 				  */
+-static bool clamping;
+-
+-struct powerclamp_worker_data {
+-	struct kthread_worker *worker;
+-	struct kthread_work balancing_work;
+-	struct kthread_delayed_work idle_injection_work;
++struct powerclamp_data {
+ 	unsigned int cpu;
+ 	unsigned int count;
+ 	unsigned int guard;
+ 	unsigned int window_size_now;
+ 	unsigned int target_ratio;
+-	unsigned int duration_jiffies;
+ 	bool clamping;
  };
  
-@@ -132,6 +150,7 @@ static void idle_inject_fn(unsigned int cpu)
+-static struct powerclamp_worker_data __percpu *worker_data;
++static struct powerclamp_data powerclamp_data;
++
+ static struct thermal_cooling_device *cooling_dev;
+-static unsigned long *cpu_clamping_mask;  /* bit map for tracking per cpu
+-					   * clamping kthread worker
+-					   */
++
++static DEFINE_MUTEX(powerclamp_lock);
+ 
+ static unsigned int duration;
+ static unsigned int pkg_cstate_ratio_cur;
+@@ -344,79 +333,33 @@ static bool powerclamp_adjust_controls(unsigned int target_ratio,
+ 	return set_target_ratio + guard <= current_ratio;
+ }
+ 
+-static void clamp_balancing_func(struct kthread_work *work)
++static unsigned int get_run_time(void)
  {
- 	struct idle_inject_device *ii_dev;
- 	struct idle_inject_thread *iit;
-+	int ret;
+-	struct powerclamp_worker_data *w_data;
+-	int sleeptime;
+-	unsigned long target_jiffies;
+ 	unsigned int compensated_ratio;
+-	int interval; /* jiffies to sleep for each attempt */
+-
+-	w_data = container_of(work, struct powerclamp_worker_data,
+-			      balancing_work);
++	unsigned int runtime;
  
- 	ii_dev = per_cpu(idle_inject_device, cpu);
- 	iit = per_cpu_ptr(&idle_inject_thread, cpu);
-@@ -141,8 +160,18 @@ static void idle_inject_fn(unsigned int cpu)
+ 	/*
+ 	 * make sure user selected ratio does not take effect until
+ 	 * the next round. adjust target_ratio if user has changed
+ 	 * target such that we can converge quickly.
  	 */
- 	iit->should_run = 0;
+-	w_data->target_ratio = READ_ONCE(set_target_ratio);
+-	w_data->guard = 1 + w_data->target_ratio / 20;
+-	w_data->window_size_now = window_size;
+-	w_data->duration_jiffies = msecs_to_jiffies(duration);
+-	w_data->count++;
++	powerclamp_data.target_ratio = READ_ONCE(set_target_ratio);
++	powerclamp_data.guard = 1 + powerclamp_data.target_ratio / 20;
++	powerclamp_data.window_size_now = window_size;
  
-+	if (ii_dev->prepare) {
-+		ret = ii_dev->prepare(cpu);
-+		if (ret)
-+			goto skip;
+ 	/*
+ 	 * systems may have different ability to enter package level
+ 	 * c-states, thus we need to compensate the injected idle ratio
+ 	 * to achieve the actual target reported by the HW.
+ 	 */
+-	compensated_ratio = w_data->target_ratio +
+-		get_compensation(w_data->target_ratio);
++	compensated_ratio = powerclamp_data.target_ratio +
++		get_compensation(powerclamp_data.target_ratio);
+ 	if (compensated_ratio <= 0)
+ 		compensated_ratio = 1;
+-	interval = w_data->duration_jiffies * 100 / compensated_ratio;
+-
+-	/* align idle time */
+-	target_jiffies = roundup(jiffies, interval);
+-	sleeptime = target_jiffies - jiffies;
+-	if (sleeptime <= 0)
+-		sleeptime = 1;
+-
+-	if (clamping && w_data->clamping && cpu_online(w_data->cpu))
+-		kthread_queue_delayed_work(w_data->worker,
+-					   &w_data->idle_injection_work,
+-					   sleeptime);
+-}
+ 
+-static void clamp_idle_injection_func(struct kthread_work *work)
+-{
+-	struct powerclamp_worker_data *w_data;
+-
+-	w_data = container_of(work, struct powerclamp_worker_data,
+-			      idle_injection_work.work);
++	runtime = duration * 100 / compensated_ratio - duration;
+ 
+-	/*
+-	 * only elected controlling cpu can collect stats and update
+-	 * control parameters.
+-	 */
+-	if (w_data->cpu == control_cpu &&
+-	    !(w_data->count % w_data->window_size_now)) {
+-		should_skip =
+-			powerclamp_adjust_controls(w_data->target_ratio,
+-						   w_data->guard,
+-						   w_data->window_size_now);
+-		smp_mb();
+-	}
+-
+-	if (should_skip)
+-		goto balance;
+-
+-	play_idle(jiffies_to_usecs(w_data->duration_jiffies));
+-
+-balance:
+-	if (clamping && w_data->clamping && cpu_online(w_data->cpu))
+-		kthread_queue_work(w_data->worker, &w_data->balancing_work);
++	return runtime;
+ }
+ 
+ /*
+@@ -452,104 +395,127 @@ static void poll_pkg_cstate(struct work_struct *dummy)
+ 	msr_last = msr_now;
+ 	tsc_last = tsc_now;
+ 
+-	if (true == clamping)
++	if (powerclamp_data.clamping)
+ 		schedule_delayed_work(&poll_pkg_cstate_work, HZ);
+ }
+ 
+-static void start_power_clamp_worker(unsigned long cpu)
++static struct idle_inject_device *ii_dev;
++
++static int idle_inject_begin(unsigned int cpu)
+ {
+-	struct powerclamp_worker_data *w_data = per_cpu_ptr(worker_data, cpu);
+-	struct kthread_worker *worker;
++	/*
++	 * only elected controlling cpu can collect stats and update
++	 * control parameters.
++	 */
++	if (cpu == control_cpu) {
++		bool update = READ_ONCE(target_ratio_updated);
++
++		if (!(powerclamp_data.count % powerclamp_data.window_size_now)) {
++			bool skip = powerclamp_adjust_controls(powerclamp_data.target_ratio,
++						       powerclamp_data.guard,
++						       powerclamp_data.window_size_now);
++			WRITE_ONCE(should_skip, skip);
++			update = true;
++		}
+ 
+-	worker = kthread_create_worker_on_cpu(cpu, 0, "kidle_inj/%ld", cpu);
+-	if (IS_ERR(worker))
+-		return;
++		if (update) {
++			unsigned int runtime;
++
++			runtime = get_run_time();
++			idle_inject_set_duration(ii_dev, runtime, duration);
++			WRITE_ONCE(target_ratio_updated, false);
++		}
++		powerclamp_data.count++;
 +	}
 +
- 	play_idle_precise(READ_ONCE(ii_dev->idle_duration_us) * NSEC_PER_USEC,
- 			  READ_ONCE(ii_dev->latency_us) * NSEC_PER_USEC);
-+
-+skip:
-+	if (ii_dev->complete)
-+		ii_dev->complete(cpu);
++	if (READ_ONCE(should_skip))
++		return -EAGAIN;
+ 
+-	w_data->worker = worker;
+-	w_data->count = 0;
+-	w_data->cpu = cpu;
+-	w_data->clamping = true;
+-	set_bit(cpu, cpu_clamping_mask);
+-	sched_set_fifo(worker->task);
+-	kthread_init_work(&w_data->balancing_work, clamp_balancing_func);
+-	kthread_init_delayed_work(&w_data->idle_injection_work,
+-				  clamp_idle_injection_func);
+-	kthread_queue_work(w_data->worker, &w_data->balancing_work);
++	return 0;
  }
  
- /**
-@@ -295,17 +324,23 @@ static int idle_inject_should_run(unsigned int cpu)
- }
- 
- /**
-- * idle_inject_register - initialize idle injection on a set of CPUs
-+ * idle_inject_register_full - initialize idle injection on a set of CPUs
-  * @cpumask: CPUs to be affected by idle injection
-+ * @prepare: callback called before calling play_idle_precise()
-+ * @complete: callback called after calling play_idle_precise()
-  *
-  * This function creates an idle injection control device structure for the
-- * given set of CPUs and initializes the timer associated with it.  It does not
-- * start any injection cycles.
-+ * given set of CPUs and initializes the timer associated with it. This
-+ * function also allows to register prepare() and complete() callbacks.
-+ * It does not start any injection cycles.
-  *
-  * Return: NULL if memory allocation fails, idle injection control device
-  * pointer on success.
-  */
--struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
-+
-+struct idle_inject_device *idle_inject_register_full(struct cpumask *cpumask,
-+						     int (*prepare)(unsigned int cpu),
-+						     void (*complete)(unsigned int cpu))
+-static void stop_power_clamp_worker(unsigned long cpu)
++static void trigger_idle_injection(void)
  {
- 	struct idle_inject_device *ii_dev;
- 	int cpu, cpu_rb;
-@@ -318,6 +353,8 @@ struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
- 	hrtimer_init(&ii_dev->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
- 	ii_dev->timer.function = idle_inject_timer_fn;
- 	ii_dev->latency_us = UINT_MAX;
-+	ii_dev->prepare = prepare;
-+	ii_dev->complete = complete;
+-	struct powerclamp_worker_data *w_data = per_cpu_ptr(worker_data, cpu);
++	unsigned int runtime = get_run_time();
  
- 	for_each_cpu(cpu, to_cpumask(ii_dev->cpumask)) {
- 
-@@ -342,6 +379,23 @@ struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
- 
- 	return NULL;
- }
-+EXPORT_SYMBOL_NS_GPL(idle_inject_register_full, IDLE_INJECT);
-+
-+/**
-+ * idle_inject_register - initialize idle injection on a set of CPUs
-+ * @cpumask: CPUs to be affected by idle injection
-+ *
-+ * This function creates an idle injection control device structure for the
-+ * given set of CPUs and initializes the timer associated with it.  It does not
-+ * start any injection cycles.
-+ *
-+ * Return: NULL if memory allocation fails, idle injection control device
-+ * pointer on success.
-+ */
-+struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
-+{
-+	return idle_inject_register_full(cpumask, NULL, NULL);
+-	if (!w_data->worker)
+-		return;
++	idle_inject_set_duration(ii_dev, runtime, duration);
++	idle_inject_start(ii_dev);
++	powerclamp_data.clamping = true;
 +}
- EXPORT_SYMBOL_NS_GPL(idle_inject_register, IDLE_INJECT);
- 
- /**
-diff --git a/include/linux/idle_inject.h b/include/linux/idle_inject.h
-index fb88e23a99d3..e18d89793490 100644
---- a/include/linux/idle_inject.h
-+++ b/include/linux/idle_inject.h
-@@ -13,6 +13,10 @@ struct idle_inject_device;
- 
- struct idle_inject_device *idle_inject_register(struct cpumask *cpumask);
- 
-+struct idle_inject_device *idle_inject_register_full(struct cpumask *cpumask,
-+						     int (*prepare)(unsigned int cpu),
-+						     void (*complete)(unsigned int cpu));
 +
- void idle_inject_unregister(struct idle_inject_device *ii_dev);
++static int powerclamp_idle_injection_register(void)
++{
++	static cpumask_t idle_injection_cpu_mask;
++	unsigned long cpu;
  
- int idle_inject_start(struct idle_inject_device *ii_dev);
+-	w_data->clamping = false;
+-	/*
+-	 * Make sure that all works that get queued after this point see
+-	 * the clamping disabled. The counter part is not needed because
+-	 * there is an implicit memory barrier when the queued work
+-	 * is proceed.
+-	 */
+-	smp_wmb();
+-	kthread_cancel_work_sync(&w_data->balancing_work);
+-	kthread_cancel_delayed_work_sync(&w_data->idle_injection_work);
+ 	/*
+-	 * The balancing work still might be queued here because
+-	 * the handling of the "clapming" variable, cancel, and queue
+-	 * operations are not synchronized via a lock. But it is not
+-	 * a big deal. The balancing work is fast and destroy kthread
+-	 * will wait for it.
++	 * The idle inject core will only inject for online CPUs,
++	 * So we can register for all present CPUs. In this way
++	 * if some CPU goes online/offline while idle inject
++	 * is registered, nothing additional calls are required.
++	 * The same runtime and idle time is applicable for
++	 * newly onlined CPUs if any.
+ 	 */
+-	clear_bit(w_data->cpu, cpu_clamping_mask);
+-	kthread_destroy_worker(w_data->worker);
++	for_each_present_cpu(cpu) {
++		cpumask_set_cpu(cpu, &idle_injection_cpu_mask);
++	}
++
++	ii_dev = idle_inject_register_full(&idle_injection_cpu_mask,
++					   idle_inject_begin, NULL);
++	if (!ii_dev) {
++		pr_err("powerclamp: idle_inject_register failed\n");
++		return -EAGAIN;
++	}
+ 
+-	w_data->worker = NULL;
++	idle_inject_set_duration(ii_dev, TICK_USEC, duration);
++	idle_inject_set_latency(ii_dev, UINT_MAX);
++
++	return 0;
++}
++
++static void remove_idle_injection(void)
++{
++	if (!powerclamp_data.clamping)
++		return;
++
++	powerclamp_data.clamping = false;
++	idle_inject_stop(ii_dev);
+ }
+ 
+ static int start_power_clamp(void)
+ {
+-	unsigned long cpu;
++	int ret;
+ 
+-	set_target_ratio = clamp(set_target_ratio, 0U, MAX_TARGET_RATIO - 1);
+ 	/* prevent cpu hotplug */
+ 	cpus_read_lock();
+ 
+ 	/* prefer BSP */
+ 	control_cpu = cpumask_first(cpu_online_mask);
+ 
+-	clamping = true;
+-	schedule_delayed_work(&poll_pkg_cstate_work, 0);
+-
+-	/* start one kthread worker per online cpu */
+-	for_each_online_cpu(cpu) {
+-		start_power_clamp_worker(cpu);
++	ret = powerclamp_idle_injection_register();
++	if (!ret) {
++		trigger_idle_injection();
++		schedule_delayed_work(&poll_pkg_cstate_work, 0);
+ 	}
++
+ 	cpus_read_unlock();
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static void end_power_clamp(void)
+ {
+-	int i;
+-
+-	/*
+-	 * Block requeuing in all the kthread workers. They will flush and
+-	 * stop faster.
+-	 */
+-	clamping = false;
+-	for_each_set_bit(i, cpu_clamping_mask, num_possible_cpus()) {
+-		pr_debug("clamping worker for cpu %d alive, destroy\n", i);
+-		stop_power_clamp_worker(i);
++	if (powerclamp_data.clamping) {
++		remove_idle_injection();
++		idle_inject_unregister(ii_dev);
+ 	}
+ }
+ 
+ static int powerclamp_cpu_online(unsigned int cpu)
+ {
+-	if (clamping == false)
++	if (!powerclamp_data.clamping)
+ 		return 0;
+-	start_power_clamp_worker(cpu);
++
+ 	/* prefer BSP as controlling CPU */
+ 	if (cpu == 0) {
+ 		control_cpu = 0;
+@@ -560,10 +526,6 @@ static int powerclamp_cpu_online(unsigned int cpu)
+ 
+ static int powerclamp_cpu_predown(unsigned int cpu)
+ {
+-	if (clamping == false)
+-		return 0;
+-
+-	stop_power_clamp_worker(cpu);
+ 	if (cpu != control_cpu)
+ 		return 0;
+ 
+@@ -585,7 +547,7 @@ static int powerclamp_get_max_state(struct thermal_cooling_device *cdev,
+ static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
+ 				 unsigned long *state)
+ {
+-	if (true == clamping)
++	if (powerclamp_data.clamping)
+ 		*state = pkg_cstate_ratio_cur;
+ 	else
+ 		/* to save power, do not poll idle ratio while not clamping */
+@@ -599,24 +561,30 @@ static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
+ {
+ 	int ret = 0;
+ 
++	mutex_lock(&powerclamp_lock);
++
+ 	new_target_ratio = clamp(new_target_ratio, 0UL,
+-				(unsigned long) (MAX_TARGET_RATIO-1));
+-	if (set_target_ratio == 0 && new_target_ratio > 0) {
++				(unsigned long) (MAX_TARGET_RATIO - 1));
++	if (READ_ONCE(set_target_ratio) == 0 && new_target_ratio > 0) {
+ 		pr_info("Start idle injection to reduce power\n");
+-		set_target_ratio = new_target_ratio;
++		WRITE_ONCE(set_target_ratio, new_target_ratio);
+ 		ret = start_power_clamp();
++		if (ret)
++			WRITE_ONCE(set_target_ratio, 0);
+ 		goto exit_set;
+-	} else	if (set_target_ratio > 0 && new_target_ratio == 0) {
++	} else	if (READ_ONCE(set_target_ratio) > 0 && new_target_ratio == 0) {
+ 		pr_info("Stop forced idle injection\n");
+ 		end_power_clamp();
+-		set_target_ratio = 0;
++		WRITE_ONCE(set_target_ratio, 0);
++		WRITE_ONCE(target_ratio_updated, false);
+ 	} else	/* adjust currently running */ {
+-		set_target_ratio = new_target_ratio;
+-		/* make new set_target_ratio visible to other cpus */
+-		smp_mb();
++		WRITE_ONCE(set_target_ratio, new_target_ratio);
++		WRITE_ONCE(target_ratio_updated, true);
+ 	}
+ 
+ exit_set:
++	mutex_unlock(&powerclamp_lock);
++
+ 	return ret;
+ }
+ 
+@@ -686,14 +654,10 @@ static int __init powerclamp_init(void)
+ {
+ 	int retval;
+ 
+-	cpu_clamping_mask = bitmap_zalloc(num_possible_cpus(), GFP_KERNEL);
+-	if (!cpu_clamping_mask)
+-		return -ENOMEM;
+-
+ 	/* probe cpu features and ids here */
+ 	retval = powerclamp_probe();
+ 	if (retval)
+-		goto exit_free;
++		return retval;
+ 
+ 	/* set default limit, maybe adjusted during runtime based on feedback */
+ 	window_size = 2;
+@@ -702,53 +666,45 @@ static int __init powerclamp_init(void)
+ 					   powerclamp_cpu_online,
+ 					   powerclamp_cpu_predown);
+ 	if (retval < 0)
+-		goto exit_free;
++		return retval;
+ 
+ 	hp_state = retval;
+ 
+-	worker_data = alloc_percpu(struct powerclamp_worker_data);
+-	if (!worker_data) {
+-		retval = -ENOMEM;
+-		goto exit_unregister;
+-	}
+-
+ 	cooling_dev = thermal_cooling_device_register("intel_powerclamp", NULL,
+-						&powerclamp_cooling_ops);
++						      &powerclamp_cooling_ops);
+ 	if (IS_ERR(cooling_dev)) {
+ 		retval = -ENODEV;
+-		goto exit_free_thread;
++		goto exit_unregister;
+ 	}
+ 
+ 	if (!duration)
+-		duration = jiffies_to_msecs(DEFAULT_DURATION_JIFFIES);
++		duration = jiffies_to_usecs(DEFAULT_DURATION_JIFFIES);
+ 
+ 	powerclamp_create_debug_files();
+ 
+ 	return 0;
+ 
+-exit_free_thread:
+-	free_percpu(worker_data);
+ exit_unregister:
+ 	cpuhp_remove_state_nocalls(hp_state);
+-exit_free:
+-	bitmap_free(cpu_clamping_mask);
+ 	return retval;
+ }
+ module_init(powerclamp_init);
+ 
+ static void __exit powerclamp_exit(void)
+ {
++	mutex_lock(&powerclamp_lock);
+ 	end_power_clamp();
++	mutex_unlock(&powerclamp_lock);
+ 	cpuhp_remove_state_nocalls(hp_state);
+-	free_percpu(worker_data);
+ 	thermal_cooling_device_unregister(cooling_dev);
+-	bitmap_free(cpu_clamping_mask);
+ 
+ 	cancel_delayed_work_sync(&poll_pkg_cstate_work);
+ 	debugfs_remove_recursive(debug_dir);
+ }
+ module_exit(powerclamp_exit);
+ 
++MODULE_IMPORT_NS(IDLE_INJECT);
++
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Arjan van de Ven <arjan@linux.intel.com>");
+ MODULE_AUTHOR("Jacob Pan <jacob.jun.pan@linux.intel.com>");
 -- 
 2.31.1
 
