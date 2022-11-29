@@ -2,138 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334D263BFFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DC363C004
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234065AbiK2MZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 07:25:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
+        id S234136AbiK2M0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 07:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiK2MY6 (ORCPT
+        with ESMTP id S234112AbiK2M0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 07:24:58 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CBD4A041;
-        Tue, 29 Nov 2022 04:24:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669724697; x=1701260697;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sgAPAU2YJaG40uPP2ZS1Letyp9PAABP/Vbd40Hx4+eQ=;
-  b=pGz/KLPJv1mLdsP/4BGuOHR/7UIiM5eHPjjk454ke4gHjOxaVJZjQaaq
-   48tyQ8o7+0W9v3NQNWEoZyYTc04UQwaTmY6F3DrfW/3bzfbny7umNqjdG
-   ROU4q7oFy77kA4CbAMpZeNoQFy+3U8H3NrrePStb6JiXH4skhufQmpK2O
-   9PEtCXQQFKtFuGEJO+ce6t1ay+QoA3e5kW+qMoKK9FwOH81C4ogzf5RR2
-   lquzMH8BzksjP9c7D15E2AXkblc1IY4Wm3JxdLbnUIgFLWAd5umt9xEq8
-   IS/i0nMrV5QToVnLdhcvF1X59hPNK0OUhG+5nr1izUJFzD54YkseeUXx+
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
-   d="scan'208";a="189146869"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Nov 2022 05:24:55 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 29 Nov 2022 05:24:53 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 29 Nov 2022 05:24:50 -0700
-Date:   Tue, 29 Nov 2022 12:24:32 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Kees Cook <keescook@chromium.org>
-CC:     Vlastimil Babka <vbabka@suse.cz>, David Gow <davidgow@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-hardening@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-Subject: Re: [PATCH 0/6] slab: Provide full coverage for __alloc_size
- attribute
-Message-ID: <Y4X6AHdMZcxvFnDP@wendy>
-References: <20221101222520.never.109-kees@kernel.org>
+        Tue, 29 Nov 2022 07:26:10 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA16532CC;
+        Tue, 29 Nov 2022 04:26:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1669724765; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3OAstYW1TcYgu5eEwQmk/GWGExhOJXuywR9MICWyv4w=;
+        b=hmsSQxChCPqRM/sZ2awpWC87pw2oT4CtTMfd+XtrPYMnsc4Su06uR4UJLAOdSQYa+hF6IW
+        2PDidp+hZXCyuMInjbrQeKbIamHWxUiJmuyA2wFQsUzxDCEEMzdxKkK88dhAuChA4JdD3V
+        iqb1OqnIUtyIWwvRLmI91BscDQGaDPw=
+Date:   Tue, 29 Nov 2022 12:25:56 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 2/5] pwm: jz4740: Fix pin level of disabled TCU2 channels,
+ part 2
+To:     Uwe =?iso-8859-1?q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, stable@vger.kernel.org
+Message-Id: <8VZ3MR.B9R316RWSFMQ@crapouillou.net>
+In-Reply-To: <20221128143911.n3woy6mjom5n4sad@pengutronix.de>
+References: <20221024205213.327001-1-paul@crapouillou.net>
+        <20221024205213.327001-3-paul@crapouillou.net>
+        <20221025064410.brrx5faa4jtwo67b@pengutronix.de>
+        <Y90BKR.1BA4VWKIBIKU@crapouillou.net>
+        <20221128143911.n3woy6mjom5n4sad@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221101222520.never.109-kees@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 03:33:08PM -0700, Kees Cook wrote:
-> Hi,
-> 
-> This is a series to work around a deficiency in GCC (>=11) and Clang
-> (<16) where the __alloc_size attribute does not apply to inlines. :(
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96503
-> 
-> This manifests as reduced overflow detection coverage for many allocation
-> sites under CONFIG_FORTIFY_SOURCE=y, where the allocation size was
-> not actually being propagated to __builtin_dynamic_object_size(). In
-> addition to working around the issue, expand use of __alloc_size (and
-> __realloc_size) to more places and provide KUnit tests to validate all
-> the covered allocator APIs.
+Hi Uwe,
 
-Hello Kees!
+Le lun. 28 nov. 2022 =E0 15:39:11 +0100, Uwe Kleine-K=F6nig=20
+<u.kleine-koenig@pengutronix.de> a =E9crit :
+> Hello,
+>=20
+> On Tue, Oct 25, 2022 at 11:10:46AM +0100, Paul Cercueil wrote:
+>>  Le mar. 25 oct. 2022 =E0 08:44:10 +0200, Uwe Kleine-K=F6nig
+>>  <u.kleine-koenig@pengutronix.de> a =E9crit :
+>>  > On Mon, Oct 24, 2022 at 09:52:10PM +0100, Paul Cercueil wrote:
+>>  > >  After commit a020f22a4ff5 ("pwm: jz4740: Make PWM start with=20
+>> the
+>>  > > active part"),
+>>  > >  the trick to set duty > period to properly shut down TCU2=20
+>> channels
+>>  > > did
+>>  > >  not work anymore, because of the polarity inversion.
+>>  > >
+>>  > >  Address this issue by restoring the proper polarity before
+>>  > > disabling the
+>>  > >  channels.
+>>  > >
+>>  > >  Fixes: a020f22a4ff5 ("pwm: jz4740: Make PWM start with the=20
+>> active
+>>  > > part")
+>>  > >  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  > >  Cc: stable@vger.kernel.org
+>>  > >  ---
+>>  > >   drivers/pwm/pwm-jz4740.c | 62
+>>  > > ++++++++++++++++++++++++++--------------
+>>  > >   1 file changed, 40 insertions(+), 22 deletions(-)
+>>  > >
+>>  > >  diff --git a/drivers/pwm/pwm-jz4740.c=20
+>> b/drivers/pwm/pwm-jz4740.c
+>>  > >  index 228eb104bf1e..65462a0052af 100644
+>>  > >  --- a/drivers/pwm/pwm-jz4740.c
+>>  > >  +++ b/drivers/pwm/pwm-jz4740.c
+>>  > >  @@ -97,6 +97,19 @@ static int jz4740_pwm_enable(struct pwm_chip
+>>  > > *chip, struct pwm_device *pwm)
+>>  > >   	return 0;
+>>  > >   }
+>>  > >
+>>  > >  +static void jz4740_pwm_set_polarity(struct jz4740_pwm_chip=20
+>> *jz,
+>>  > >  +				    unsigned int hwpwm,
+>>  > >  +				    enum pwm_polarity polarity)
+>>  > >  +{
+>>  > >  +	unsigned int value =3D 0;
+>>  > >  +
+>>  > >  +	if (polarity =3D=3D PWM_POLARITY_INVERSED)
+>>  > >  +		value =3D TCU_TCSR_PWM_INITL_HIGH;
+>>  > >  +
+>>  > >  +	regmap_update_bits(jz->map, TCU_REG_TCSRc(hwpwm),
+>>  > >  +			   TCU_TCSR_PWM_INITL_HIGH, value);
+>>  > >  +}
+>>  > >  +
+>>  > >   static void jz4740_pwm_disable(struct pwm_chip *chip, struct
+>>  > > pwm_device *pwm)
+>>  > >   {
+>>  > >   	struct jz4740_pwm_chip *jz =3D to_jz4740(chip);
+>>  > >  @@ -130,6 +143,7 @@ static int jz4740_pwm_apply(struct pwm_chip
+>>  > > *chip, struct pwm_device *pwm,
+>>  > >   	unsigned long long tmp =3D 0xffffull * NSEC_PER_SEC;
+>>  > >   	struct clk *clk =3D pwm_get_chip_data(pwm);
+>>  > >   	unsigned long period, duty;
+>>  > >  +	enum pwm_polarity polarity;
+>>  > >   	long rate;
+>>  > >   	int err;
+>>  > >
+>>  > >  @@ -169,6 +183,9 @@ static int jz4740_pwm_apply(struct pwm_chip
+>>  > > *chip, struct pwm_device *pwm,
+>>  > >   	if (duty >=3D period)
+>>  > >   		duty =3D period - 1;
+>>  > >
+>>  > >  +	/* Restore regular polarity before disabling the channel. */
+>>  > >  +	jz4740_pwm_set_polarity(jz4740, pwm->hwpwm, state->polarity);
+>>  > >  +
+>>  >
+>>  > Does this introduce a glitch?
+>>=20
+>>  Maybe. But the PWM is shut down before finishing its period anyway,=20
+>> so there
+>>  was already a glitch.
+>>=20
+>>  > >   	jz4740_pwm_disable(chip, pwm);
+>>  > >
+>>  > >   	err =3D clk_set_rate(clk, rate);
+>>  > >  @@ -190,29 +207,30 @@ static int jz4740_pwm_apply(struct=20
+>> pwm_chip
+>>  > > *chip, struct pwm_device *pwm,
+>>  > >   	regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
+>>  > >   			   TCU_TCSR_PWM_SD, TCU_TCSR_PWM_SD);
+>>  > >
+>>  > >  -	/*
+>>  > >  -	 * Set polarity.
+>>  > >  -	 *
+>>  > >  -	 * The PWM starts in inactive state until the internal timer
+>>  > > reaches the
+>>  > >  -	 * duty value, then becomes active until the timer reaches=20
+>> the
+>>  > > period
+>>  > >  -	 * value. In theory, we should then use (period - duty) as=20
+>> the
+>>  > > real duty
+>>  > >  -	 * value, as a high duty value would otherwise result in the=20
+>> PWM
+>>  > > pin
+>>  > >  -	 * being inactive most of the time.
+>>  > >  -	 *
+>>  > >  -	 * Here, we don't do that, and instead invert the polarity=20
+>> of the
+>>  > > PWM
+>>  > >  -	 * when it is active. This trick makes the PWM start with its
+>>  > > active
+>>  > >  -	 * state instead of its inactive state.
+>>  > >  -	 */
+>>  > >  -	if ((state->polarity =3D=3D PWM_POLARITY_NORMAL) ^=20
+>> state->enabled)
+>>  > >  -		regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
+>>  > >  -				   TCU_TCSR_PWM_INITL_HIGH, 0);
+>>  > >  -	else
+>>  > >  -		regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
+>>  > >  -				   TCU_TCSR_PWM_INITL_HIGH,
+>>  > >  -				   TCU_TCSR_PWM_INITL_HIGH);
+>>  > >  -
+>>  > >  -	if (state->enabled)
+>>  > >  +	if (state->enabled) {
+>>  > >  +		/*
+>>  > >  +		 * Set polarity.
+>>  > >  +		 *
+>>  > >  +		 * The PWM starts in inactive state until the internal timer
+>>  > >  +		 * reaches the duty value, then becomes active until the=20
+>> timer
+>>  > >  +		 * reaches the period value. In theory, we should then use
+>>  > >  +		 * (period - duty) as the real duty value, as a high duty=20
+>> value
+>>  > >  +		 * would otherwise result in the PWM pin being inactive=20
+>> most of
+>>  > >  +		 * the time.
+>>  > >  +		 *
+>>  > >  +		 * Here, we don't do that, and instead invert the polarity=20
+>> of
+>>  > >  +		 * the PWM when it is active. This trick makes the PWM start
+>>  > >  +		 * with its active state instead of its inactive state.
+>>  > >  +		 */
+>>  > >  +		if (state->polarity =3D=3D PWM_POLARITY_NORMAL)
+>>  > >  +			polarity =3D PWM_POLARITY_INVERSED;
+>>  > >  +		else
+>>  > >  +			polarity =3D PWM_POLARITY_NORMAL;
+>>  > >  +
+>>  > >  +		jz4740_pwm_set_polarity(jz4740, pwm->hwpwm, polarity);
+>>  > >  +
+>>  > >   		jz4740_pwm_enable(chip, pwm);
+>>  > >  +	}
+>>  >
+>>  > Note that for disabled PWMs there is no official guaranty about=20
+>> the pin
+>>  > state. So it would be ok (but admittedly not great) to simplify=20
+>> the
+>>  > driver and accept that the pinstate is active while the PWM is=20
+>> off.
+>>  > IMHO this is also better than a glitch.
+>>  >
+>>  > If a consumer wants the PWM to be in its inactive state, they=20
+>> should
+>>  > not disable it.
+>>=20
+>>  Completely disagree. I absolutely do not want the backlight to go=20
+>> full
+>>  bright mode when the PWM pin is disabled. And disabling the=20
+>> backlight is a
+>>  thing (for screen blanking and during mode changes).
+>=20
+> For some hardwares there is no pretty choice. So the gist is: If the
+> backlight driver wants to ensure that the PWM pin is driven to its
+> inactive level, it should use:
+>=20
+> 	pwm_apply(pwm, { .period =3D ..., .duty_cycle =3D 0, .enabled =3D true }=
+);
+>=20
+> and better not
+>=20
+> 	pwm_apply(pwm, { ..., .enabled =3D false });
 
-It would appear that one of the macros you've added here is doing Bad
-Things^TM to allmodconfig on RISC-V since the 22nd:
+Well that sounds pretty stupid to me; why doesn't the PWM subsystem=20
+enforce that the pins must be driven to their inactive level when the=20
+PWM function is disabled? Then for such hardware you describe, the=20
+corresponding PWM driver could itself apply a duty_cycle =3D 0 if that's=20
+what it takes to get an inactive state.
 
-../lib/fortify_kunit.c: In function 'alloc_size_kmalloc_const_test':
-../lib/fortify_kunit.c:140:1: error: the frame size of 2384 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
-  140 | }                                                                       \
-      | ^
-../lib/fortify_kunit.c:209:1: note: in expansion of macro 'DEFINE_ALLOC_SIZE_TEST_PAIR'
-  209 | DEFINE_ALLOC_SIZE_TEST_PAIR(kmalloc)
-      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+Cheers,
+-Paul
 
-CONFIG_GCC_VERSION=110100
-CONFIG_AS_VERSION=23700
-CONFIG_LD_VERSION=23700
 
-The report came out of my CI (which I should have passed on sooner) so
-I do not have anything other than stderr - I can get you anything else
-you'd like/need though if you LMK.
-
-Thanks,
-Conor.
-
-> Kees Cook (6):
->   slab: Clean up SLOB vs kmalloc() definition
->   slab: Remove special-casing of const 0 size allocations
->   slab: Provide functional __alloc_size() hints to kmalloc_trace*()
->   string: Add __realloc_size hint to kmemdup()
->   driver core: Add __alloc_size hint to devm allocators
->   kunit/fortify: Validate __alloc_size attribute results
-> 
->  include/linux/device.h         |   7 +-
->  include/linux/fortify-string.h |   2 +-
->  include/linux/slab.h           |  36 ++---
->  include/linux/string.h         |   2 +-
->  lib/Makefile                   |   1 +
->  lib/fortify_kunit.c            | 255 +++++++++++++++++++++++++++++++++
->  mm/slab_common.c               |  14 ++
->  7 files changed, 296 insertions(+), 21 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
-> 
