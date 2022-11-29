@@ -2,75 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD6963BF59
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 220C263BF5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:49:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232091AbiK2Lte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 06:49:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
+        id S232580AbiK2Lts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 06:49:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiK2Ltc (ORCPT
+        with ESMTP id S232463AbiK2Ltp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 06:49:32 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBD624090
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:49:32 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id y83so17086639yby.12
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:49:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KToa7R+tWe57h7Q6F1qr7Lg0Ngx6h/6bFBMqGMkri9A=;
-        b=KWg1WWNqRJYvzYf/3YzwExxOx4ZsMdhCUFqoUpySN1QuMIIERwQ6HLgQ9kXuwvwSFA
-         8WXWjIiCcWG5eBC1Le1kEqGnZOEDw8rUYpit45TFyB7ZVNmP2IvH+qNoAjMSvjZFQex5
-         pNQh2kHhnu7VStMCG5XEfaWLSnWpX8RX1VANUlFrNJCYMJZUDyZO/VWktHOnKk12YGcX
-         UQ0Wtkdzj+lo0YIOfm2b9glRQlAaUcN7HbwP3kTSPFesqZY4c2deBRUnOSlckaI+qyMx
-         f+MFduF22j8WT3IcyPw+UDZHEPUSHmOZqQiPJNA5ZiGq+ejHIR89QSVLfPPGyaw7Yk9H
-         wbsA==
+        Tue, 29 Nov 2022 06:49:45 -0500
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A46326F4;
+        Tue, 29 Nov 2022 03:49:42 -0800 (PST)
+Received: by mail-qv1-f52.google.com with SMTP id i12so9475969qvs.2;
+        Tue, 29 Nov 2022 03:49:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KToa7R+tWe57h7Q6F1qr7Lg0Ngx6h/6bFBMqGMkri9A=;
-        b=PFG7F2qfP5djZgWATWVy5jzoCEQHnH7jj6FiHTIcjsXtaRjiSSDuPW/M+S84do7fH7
-         qTJ4q6JLeJlb5PNmjhxEADQJY75VRLi8u+ixPbZkd3in2wQq2tMTMzfvQ54K5rGZxkzJ
-         f58FHGQ0ZrBhHM+kWG0iDzosS/TY7OssR45G6uaahO/36tlN8S7njuGbxN9FOv1SDtcD
-         lg6Rpkdyq2ViRzRi3F5j+ZWuQJOhee6TD1irBgf4wYqtk9ajGIuHDQurD/YQkUmrFNW+
-         xPGoMmBOcxuZsBHTj0ZzUNdE68GFcQG0V5lnTXYE6acjOIBc0AV8+55w09XwbNw3LnD/
-         AC2Q==
-X-Gm-Message-State: ANoB5pl/aMUi1u5X9h6zO5DG/5oqdZJPmsR6S9atmTJBT9UBCRX8CLht
-        elAeOagAXC3+sq/V0fs2PNxMlykGdLRDfyZsfq23lA==
-X-Google-Smtp-Source: AA0mqf4xYINL19aZTRyDO6h3n08BWVgOeiNMBrRMJNyWu1Pugy+10+BnYK+927KL0NuECb64gZOwp0MlnbUuucUNuCg=
-X-Received: by 2002:a25:e749:0:b0:6f1:9eb8:76d4 with SMTP id
- e70-20020a25e749000000b006f19eb876d4mr23938630ybh.143.1669722571129; Tue, 29
- Nov 2022 03:49:31 -0800 (PST)
+        bh=qwy1vGtxbJANcG7P6mnYEhIP56iYI+V4HEAxAZcQxWs=;
+        b=pQ1aLQAFhauo+XAma7nDVu4Xt0RfVR7cz8A/Qs/LKSMd4/AZ1q8rxWopKNc96+EQ3q
+         HiB8nUUeviiJu25IWKknDm9eBvmRUZKZXDZMBg97LFdCJIB/t8TqmRatvIcRVjQc4Xjv
+         8KLkjbNwBLuN7oGTdSLI9jQ8rpiW6MvGRhkYgT4AUvRQqRbPk8r9FyGQaRaEV3mOEFLg
+         B1B5YUL0lp9EDY3tlGx+A1xPyVcWHbTig+38Ut2xd5Bw0AZHzztKAWqm1WuJJuxEbcyL
+         10iHEMDqi01hOGfQasAe6pjTb1aQtN0FksIVzR34TXBF/3WC4TXbuushISAIzDrpoh+E
+         1IhA==
+X-Gm-Message-State: ANoB5pnkJHg9QR4DyV256lR1aOMvkc8NQPnwmdgK+1R9Z83Qe9wvDf40
+        6HhnTIRnsJwhsXR5IiXHuVFXBDQOyrnRkQ==
+X-Google-Smtp-Source: AA0mqf7TjldwGog/spxeB2DB3pvVNPh5H6VQHXteRqEMFgJZSc/ftztFEM6Rtq6p1dw0FE+VoXMWbg==
+X-Received: by 2002:a05:6214:5cf:b0:4c6:f7e6:dee with SMTP id t15-20020a05621405cf00b004c6f7e60deemr13050672qvz.81.1669722581657;
+        Tue, 29 Nov 2022 03:49:41 -0800 (PST)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id x2-20020ac87ec2000000b0039a9b55b829sm8387242qtj.29.2022.11.29.03.49.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 03:49:40 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id e141so17103172ybh.3;
+        Tue, 29 Nov 2022 03:49:40 -0800 (PST)
+X-Received: by 2002:a25:7204:0:b0:6f0:9ff5:1151 with SMTP id
+ n4-20020a257204000000b006f09ff51151mr27506745ybc.543.1669722579841; Tue, 29
+ Nov 2022 03:49:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20221129063358.3012362-1-feng.tang@intel.com> <20221129063358.3012362-2-feng.tang@intel.com>
- <CANpmjNNkLWvNYUf-bPPDBcqFWegp3_NpYdhygvYU1dtT52m29g@mail.gmail.com> <67e6ebce-f8cc-7d28-5e85-8a3909c2d180@suse.cz>
-In-Reply-To: <67e6ebce-f8cc-7d28-5e85-8a3909c2d180@suse.cz>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 29 Nov 2022 12:48:54 +0100
-Message-ID: <CANpmjNNZhXX830jqPn9eaQZHwKhBb4b_PEuUdH6O69ELqW470w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] mm/slub, kunit: Add a test case for kmalloc
- redzone check
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Feng Tang <feng.tang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oliver Glitta <glittao@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+References: <20221123065946.40415-1-tomi.valkeinen+renesas@ideasonboard.com>
+ <20221123065946.40415-8-tomi.valkeinen+renesas@ideasonboard.com>
+ <Y4VlHIpS9UnvWwt/@pendragon.ideasonboard.com> <d11033df-e103-e33c-c61a-a0725f7098b1@ideasonboard.com>
+ <OS0PR01MB59224C2B4F889534922ACFE186129@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <OS0PR01MB59224C2B4F889534922ACFE186129@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 29 Nov 2022 12:49:27 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXz8ZSge5b4s8v6Oon55gO+3Cu_Uvn7GFV62JCSqNf1Qw@mail.gmail.com>
+Message-ID: <CAMuHMdXz8ZSge5b4s8v6Oon55gO+3Cu_Uvn7GFV62JCSqNf1Qw@mail.gmail.com>
+Subject: Re: [PATCH v2 7/7] drm: rcar-du: dsi: Add r8a779g0 support
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,62 +83,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Nov 2022 at 12:01, Vlastimil Babka <vbabka@suse.cz> wrote:
->
-> On 11/29/22 10:31, Marco Elver wrote:
-> > On Tue, 29 Nov 2022 at 07:37, Feng Tang <feng.tang@intel.com> wrote:
+Hi Biju,
 
-> >> diff --git a/mm/slab.h b/mm/slab.h
-> >> index c71590f3a22b..b6cd98b16ba7 100644
-> >> --- a/mm/slab.h
-> >> +++ b/mm/slab.h
-> >> @@ -327,7 +327,8 @@ static inline slab_flags_t kmem_cache_flags(unsigned int object_size,
-> >>  /* Legal flag mask for kmem_cache_create(), for various configurations */
-> >>  #define SLAB_CORE_FLAGS (SLAB_HWCACHE_ALIGN | SLAB_CACHE_DMA | \
-> >>                          SLAB_CACHE_DMA32 | SLAB_PANIC | \
-> >> -                        SLAB_TYPESAFE_BY_RCU | SLAB_DEBUG_OBJECTS )
-> >> +                        SLAB_KMALLOC | SLAB_SKIP_KFENCE | \
-> >> +                        SLAB_TYPESAFE_BY_RCU | SLAB_DEBUG_OBJECTS)
+On Tue, Nov 29, 2022 at 12:40 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> > On 29/11/2022 03:49, Laurent Pinchart wrote:
+> > > On Wed, Nov 23, 2022 at 08:59:46AM +0200, Tomi Valkeinen wrote:
+> > >> Add DSI support for r8a779g0. The main differences to r8a779a0 are in
+> > >> the PLL and PHTW setups.
+> > >>
+> > >> Signed-off-by: Tomi Valkeinen
+> > >> <tomi.valkeinen+renesas@ideasonboard.com>
+
+> > >> --- a/drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c
+> > >> +++ b/drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c
+> > >> @@ -9,6 +9,7 @@
+> > >>   #include <linux/delay.h>
+> > >>   #include <linux/io.h>
+> > >>   #include <linux/iopoll.h>
+> > >> +#include <linux/math64.h>
+> > >>   #include <linux/module.h>
+> > >>   #include <linux/of.h>
+> > >>   #include <linux/of_device.h>
+> > >> @@ -28,6 +29,20 @@
+> > >>   #include "rcar_mipi_dsi.h"
+> > >>   #include "rcar_mipi_dsi_regs.h"
+> > >>
+> > >> +#define MHZ(v) ((v) * 1000000u)
+> > >
+> > > Isn't the U suffix usually spelled in uppercase ? Same below.
 > >
-> > Shouldn't this hunk be in the previous patch, otherwise that patch
-> > alone will fail?
+> > I couldn't find any coding style guidelines on that. I like the lower
+> > case visually. The suffix stands out much clearer on 10000000u than on
+> > 10000000U. But I can change it if you feel otherwise.
 >
-> Good point.
+> https://elixir.bootlin.com/linux/v6.1-rc7/source/include/linux/units.h#L11
 >
-> > This will also make SLAB_SKIP_KFENCE generally available to be used
-> > for cache creation. This is a significant change, and before it wasn't
-> > possible. Perhaps add a brief note to the commit message (or have a
-> > separate patch). We were trying to avoid making this possible, as it
-> > might be abused - however, given it's required for tests like these, I
-> > suppose there's no way around it.
->
-> For SLAB_SKIP_KFENCE, we could also add the flag after creation to avoid
-> this trouble? After all there is a sysfs file to control it at runtime
-> anyway (via skip_kfence_store()).
-> In that case patch 1 would have to wrap kmem_cache_create() and the flag
-> addition with a new function to avoid repeating. That function could also be
-> adding SLAB_NO_USER_FLAGS to kmem_cache_create(), instead of the #define
-> DEFAULT_FLAGS.
+> Maybe you could add MHZ here??
 
-I wouldn't overcomplicate it, all we need is a way to say "this flag
-should not be used directly" - and only have it available via an
-indirect step. Availability via sysfs is one such step.
+Or use the existing MEGA? The metric system is soooo nice! ;-)
 
-And for tests, there are 2 options:
+BTW, looks like the people adding definitions like
 
-1. we could provide a function "kmem_cache_set_test_flags(cache,
-gfp_flags)" and define SLAB_TEST_FLAGS (which would include
-SLAB_SKIP_KFENCE). This still allows to set it generally, but should
-make abuse less likely due to the "test" in the name of that function.
+    #define MICROHZ_PER_HZ 1000000UL
+    #define MILLIHZ_PER_HZ 1000UL
 
-2. just set it directly, s->flags |= SLAB_SKIP_KFENCE.
+    #define MILLIWATT_PER_WATT 1000UL
+    #define MICROWATT_PER_MILLIWATT 1000UL
+    #define MICROWATT_PER_WATT 1000000UL
 
-If you're fine with #2, that seems simplest and would be my preference.
+didn't grasp the full power...
 
-> For SLAB_KMALLOC there's probably no such way unless we abuse the internal
-> APIs even more and call e.g. create_boot_cache() instead of
-> kmem_cache_create(). But that one is __init, so probably not. If we do
-> instead allow the flag, I wouldn't add it to SLAB_CORE_FLAGS but rather
-> SLAB_CACHE_FLAGS and SLAB_FLAGS_PERMITTED.
+Gr{oetje,eeting}s,
 
-I'd probably go with the simplest solution here.
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
