@@ -2,239 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1DA063C0E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:21:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 446A863C0F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbiK2NVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 08:21:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
+        id S231321AbiK2NY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 08:24:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbiK2NVh (ORCPT
+        with ESMTP id S229818AbiK2NY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 08:21:37 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC41951C0F
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 05:21:35 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id x6so2729845lji.10
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 05:21:35 -0800 (PST)
+        Tue, 29 Nov 2022 08:24:27 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C6C2BF9
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 05:24:27 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id v13so344807oie.3
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 05:24:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qTqB0Cx9TQ+/AdH8ZuJQ7GAbENMQcgVBmVbbVWR1xuY=;
-        b=ExkVn/7btMn7c7EEocrrMeg7Td2aYNz+mZSi9MzJDcPM4/BtLHZopKHtrPiRYRxDQD
-         R7UQqafRAPO4f0cOBC8L+8jNL0bXE0yMxDCDVDRvqJR51FIepN1vvXwOvUHgE0dcQVqy
-         tup2H9Imur+Ak42MhsqzrRUyhzSUeiYBa3RRUuyz5Zo1cLSgOv/69FVoyxfquqUSW6mQ
-         3je7RrVcIBdNN6+jxf21vuSC4YxepGMx9Fb13i57X13rcabO5Poqobq0xO2CQq7KnSOx
-         cOx2Fway75c+v9BKOY8ny6ZCR8ZbSz5yuuvJENghP+B/gPdeXXefXycRffci193xi30A
-         SGUg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gWtMAmUP9N3+Q5OvEhREu9a9b1gM1aNMJmjz1DilZiM=;
+        b=Fk2vQ+zhuHImuAg8yoihnFsNYlNPEV7BGKzJDFQTIsS4g7Ar8DEQNkGQkRJcO4URjm
+         wyTsnj+fSrf20KayigeXd9w32nNM1SHQ9iTvsnhmWqzRPOFxg7S1mvSI+p8znsPCS6Lr
+         bJo60M0vvTVNAw2K/lr2AJfIVcSsWhNVDA+c6cJsVKmdJFAuI+4Ms1l+P8p4x9sm2QHA
+         DPzkMrgZ7TSXDEpV4AUBj53qRZd4LPFcfdkpQi0+pC+AHgfJ+i/bad/pJV9FIThr9UMk
+         F6Rv0sOwjchq0WbU54NPkDweCen/0wwOCDKFbgpI80Xew5kdD8GGDyU/sd2wVxg1ipR6
+         iqeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qTqB0Cx9TQ+/AdH8ZuJQ7GAbENMQcgVBmVbbVWR1xuY=;
-        b=N7eiW+e39u7sNbN8m9RP/jyVf80K1ceIa7FU6DSXcV7lQHo32OYb0p5XzvdAFNHcoM
-         NScIRn9oQ+b+5B97qgsilcXqwId+oNnL50Dw56IQ1aQoxiOhuRlDeTuJu+y5wlAv0V6z
-         +TO9X3CwoKalwe5wXyQuzZYEwMZVh+1dOdxrZQKVLUrYLtAJ3WTnQ0qqd15cysl7gGkP
-         PDEpVImQ5/FxxfspVK4g7u7xpxcSmFzW+X87+/jB5m9RVaXqH4F8IuHFIiQC4VGN/Vg4
-         vpatmN6Rex1EGal+tArRHmdOx9yIS8/PzaCYd/xSaIti1i6GrrLtY1fqaExd85rjJY1Z
-         nSLA==
-X-Gm-Message-State: ANoB5plq1QqyDWH/ce14K/vcAZAXFoMvY3p2yww6jsPEJlKDOCdk/0V6
-        5GBLqojQ8EiODQrfUgIF6LJVw52yMy6NOg==
-X-Google-Smtp-Source: AA0mqf5w36l0Ci6tmjvtVDe42fgeeWY1YhGWg1N9YeU7TPwfwy1jL/ywNOM7+edyvpgNSSDFYd7W2w==
-X-Received: by 2002:a2e:8943:0:b0:279:b56b:8ee8 with SMTP id b3-20020a2e8943000000b00279b56b8ee8mr950946ljk.184.1669728094255;
-        Tue, 29 Nov 2022 05:21:34 -0800 (PST)
-Received: from [192.168.1.101] (95.49.125.236.neoplus.adsl.tpnet.pl. [95.49.125.236])
-        by smtp.gmail.com with ESMTPSA id c28-20020ac25f7c000000b004ae394b6a6fsm2221432lfc.246.2022.11.29.05.21.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 05:21:33 -0800 (PST)
-Message-ID: <92b39c01-1283-0b7c-6ba9-3edd2d4de002@linaro.org>
-Date:   Tue, 29 Nov 2022 14:21:32 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gWtMAmUP9N3+Q5OvEhREu9a9b1gM1aNMJmjz1DilZiM=;
+        b=06CmLCLpYaO0AyXRXzO2Z33EaKcpawT0ywcMBtIGlVIwUbXmJqFvzykMy25AbMUeYS
+         +JkTufZ5PwAAOD43wE7Yyuh0NqToIroEBqTWqS7e+JrJ7iWYle1AtYaltklOzCJN4QE6
+         hP9a0oFkDmal9Ods2j6fkDMvOHCJhNyoLiwv6vFjA9t65FZka9EQamiwDUEDsjaeYF9d
+         RW+br+fn2ArKmGzyF8aqujO5F9wlieFtZhHmQlHPM1VEvR4eOdUgNIN+d6zU4QX4zslB
+         XOnyfvdUnN0JGdpnYfrTwU9TdViZbtV7jBraN2ntTJcUoRVhUp3zg7nCn6+o4b3rASHY
+         yiww==
+X-Gm-Message-State: ANoB5plh6Nl9vQ3NAk7ZYShtWE8iwVp4/Ju/h2CDz+r49nAC9wo93hnH
+        LgtzRCo7+lr85cEEG3YlGupMsvUiO46fHAxYeg==
+X-Google-Smtp-Source: AA0mqf5PA3vm99zqPzb01dtKWQSWYeqNAAF/NwlNGGlh8G6JttPbl6Qbfxh5UhA8yUf25CN5VVMbeqCQq9JwC6+bKUk=
+X-Received: by 2002:a05:6808:213:b0:35a:7b62:704 with SMTP id
+ l19-20020a056808021300b0035a7b620704mr25659834oie.243.1669728266471; Tue, 29
+ Nov 2022 05:24:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 3/6] soc: qcom: geni-se: add desc struct to specify
- clocks from device match data
-To:     neil.armstrong@linaro.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v2-0-aadaa6997b28@linaro.org>
- <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v2-3-aadaa6997b28@linaro.org>
- <24a88a47-7556-20f1-ce9c-fe7bd0466a88@linaro.org>
- <cbccbcbe-5006-cdc9-f3af-39c53d87b8a5@linaro.org>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <cbccbcbe-5006-cdc9-f3af-39c53d87b8a5@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221104124546.196077-1-ubizjak@gmail.com> <Y4U0GwlLgAuxu3WF@zn.tnic>
+ <CAMzpN2jY+m5amE-6JB_eYswG2tx1aT6U3EBdYEtc-KdXSHec0A@mail.gmail.com> <Y4XDlWc+2OvmW7kS@zn.tnic>
+In-Reply-To: <Y4XDlWc+2OvmW7kS@zn.tnic>
+From:   Brian Gerst <brgerst@gmail.com>
+Date:   Tue, 29 Nov 2022 08:24:14 -0500
+Message-ID: <CAMzpN2iTaZ87OomAQ9cJ51osmXNLFsJTZ9f4RKg6ghLqP4gy5Q@mail.gmail.com>
+Subject: Re: [PATCH] x86/boot: Remove x86_32 PIC using ebx workaround
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Uros Bizjak <ubizjak@gmail.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 29, 2022 at 3:32 AM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Mon, Nov 28, 2022 at 10:41:11PM -0500, Brian Gerst wrote:
+> > x86-64 uses a PIC register for the medium and large PIC code models,
+> > where offsets can be larger than +/- 2GB.
+>
+> Right but 64-bit is built with -mcmodel=kernel which obviously generates
+> rip-relative.
 
+Correct.  He quoted the specific part of the GCC changelog that fixed
+the issue for the 32-bit kernel, but it's not applicable to the 64-bit
+kernel.  Perhaps the commit message should be more apparent that it's
+quoting the GCC changelog verbatim, or better yet, reference the
+specific commit or bug number instead of the general release notes.
 
-On 29.11.2022 09:24, Neil Armstrong wrote:
-> On 18/11/2022 10:06, Konrad Dybcio wrote:
->>
->>
->> On 18/11/2022 09:45, Neil Armstrong wrote:
->>> The I2C Master Hub is a stripped down version of the GENI Serial Engine
->>> QUP Wrapper Controller but only supporting I2C serial engines without
->>> DMA support.
->>>
->>> Prepare support for the I2C Master Hub variant by moving the required
->>> clocks list to a new desc struct then passing it through the compatible
->>> match data.
->>>
->>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->>> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>> ---
->>>   drivers/soc/qcom/qcom-geni-se.c | 59 +++++++++++++++++++++++++++++++----------
->>>   1 file changed, 45 insertions(+), 14 deletions(-)
->>>
->>> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
->>> index a0ceeede450f..ced2a2932eda 100644
->>> --- a/drivers/soc/qcom/qcom-geni-se.c
->>> +++ b/drivers/soc/qcom/qcom-geni-se.c
->>> @@ -81,19 +81,31 @@
->>>    */
->>>   #define MAX_CLK_PERF_LEVEL 32
->>> -#define NUM_AHB_CLKS 2
->>> +#define MAX_CLKS 2
->>>   /**
->>>    * struct geni_wrapper - Data structure to represent the QUP Wrapper Core
->>>    * @dev:        Device pointer of the QUP wrapper core
->>>    * @base:        Base address of this instance of QUP wrapper core
->>> - * @ahb_clks:        Handle to the primary & secondary AHB clocks
->>> + * @clks:        Handle to the primary & optional secondary AHB clocks
->>> + * @num_clks:        Count of clocks
->>>    * @to_core:        Core ICC path
->>>    */
->>>   struct geni_wrapper {
->>>       struct device *dev;
->>>       void __iomem *base;
->>> -    struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
->>> +    struct clk_bulk_data clks[MAX_CLKS];
->>> +    unsigned int num_clks;
->>> +};
->>> +
->>> +/**
->>> + * struct geni_se_desc - Data structure to represent the QUP Wrapper resources
->>> + * @clks:        Name of the primary & optional secondary AHB clocks
->>> + * @num_clks:        Count of clock names
->>> + */
->>> +struct geni_se_desc {
->>> +    unsigned int num_clks;
->>> +    const char * const *clks;
->>>   };
->>>   static const char * const icc_path_names[] = {"qup-core", "qup-config",
->>> @@ -496,8 +508,7 @@ static void geni_se_clks_off(struct geni_se *se)
->>>       struct geni_wrapper *wrapper = se->wrapper;
->>>       clk_disable_unprepare(se->clk);
->>> -    clk_bulk_disable_unprepare(ARRAY_SIZE(wrapper->ahb_clks),
->>> -                        wrapper->ahb_clks);
->>> +    clk_bulk_disable_unprepare(wrapper->num_clks, wrapper->clks);
->>>   }
->>>   /**
->>> @@ -528,15 +539,13 @@ static int geni_se_clks_on(struct geni_se *se)
->>>       int ret;
->>>       struct geni_wrapper *wrapper = se->wrapper;
->>> -    ret = clk_bulk_prepare_enable(ARRAY_SIZE(wrapper->ahb_clks),
->>> -                        wrapper->ahb_clks);
->>> +    ret = clk_bulk_prepare_enable(wrapper->num_clks, wrapper->clks);
->>>       if (ret)
->>>           return ret;
->>>       ret = clk_prepare_enable(se->clk);
->>>       if (ret)
->>> -        clk_bulk_disable_unprepare(ARRAY_SIZE(wrapper->ahb_clks),
->>> -                            wrapper->ahb_clks);
->>> +        clk_bulk_disable_unprepare(wrapper->num_clks, wrapper->clks);
->>>       return ret;
->>>   }
->>> @@ -887,11 +896,23 @@ static int geni_se_probe(struct platform_device *pdev)
->>>           return PTR_ERR(wrapper->base);
->>>       if (!has_acpi_companion(&pdev->dev)) {
->>> -        wrapper->ahb_clks[0].id = "m-ahb";
->>> -        wrapper->ahb_clks[1].id = "s-ahb";
->>> -        ret = devm_clk_bulk_get(dev, NUM_AHB_CLKS, wrapper->ahb_clks);
->>> +        const struct geni_se_desc *desc;
->>> +        int i;
->>> +
->>> +        desc = device_get_match_data(&pdev->dev);
->>> +        if (!desc)
->>> +            return -EINVAL;
->>> +
->>> +        wrapper->num_clks = min_t(unsigned int, desc->num_clks, MAX_CLKS);
->>> +        if (wrapper->num_clks < desc->num_clks)
->> This will never execute (except if somebody adding a third desc would make a mistake or not update MAX_CLKS), as wrapper->num_clks will only be < desc->num_clks if desc->num_clks > MAX_CLKS.
-> 
-> You're right, I did read too fast.
-> 
->>
->> I was thinking about getting the number of actual clocks passed to the device in the DT, but I can't find a helper function for that, so it would probably require some kind of manual looping.. I guess we can drop this. Or leave it to save somebody pulling their hair out in an unlikely event. I guess I'm fine with both.
-> 
-> This would be:
-> 
-> of_count_phandle_with_args(dev->of_node, "clocks", "#clock-cells")
-> 
-> but ultimately if the number of clocks is lower than requested, it will fail
-> in the call to devm_clk_bulk_get().
-> 
-> Would we warn if the DT clocks count is higher ? or simply fail if lower ?
-Just "fail if lower" sounds good.
-
-Konrad
-> 
-> Neil
-> 
->>
->>
->>> +            dev_warn(dev, "too much clocks described in DT\n")
->> If you leave it, s/too much/Too many/
->>
->>
->> Konrad
->>> +
->>> +        for (i = 0; i < wrapper->num_clks; ++i)
->>> +            wrapper->clks[i].id = desc->clks[i];
->>> +
->>> +        ret = devm_clk_bulk_get(dev, wrapper->num_clks, wrapper->clks);
->>>           if (ret) {
->>> -            dev_err(dev, "Err getting AHB clks %d\n", ret);
->>> +            dev_err(dev, "Err getting clks %d\n", ret);
->>>               return ret;
->>>           }
->>>       }
->>> @@ -901,8 +922,18 @@ static int geni_se_probe(struct platform_device *pdev)
->>>       return devm_of_platform_populate(dev);
->>>   }
->>> +static const char * const qup_clks[] = {
->>> +    "m-ahb",
->>> +    "s-ahb",
->>> +};
->>> +
->>> +static const struct geni_se_desc qup_desc = {
->>> +    .clks = qup_clks,
->>> +    .num_clks = ARRAY_SIZE(qup_clks),
->>> +};
->>> +
->>>   static const struct of_device_id geni_se_dt_match[] = {
->>> -    { .compatible = "qcom,geni-se-qup", },
->>> +    { .compatible = "qcom,geni-se-qup", .data = &qup_desc },
->>>       {}
->>>   };
->>>   MODULE_DEVICE_TABLE(of, geni_se_dt_match);
->>>
-> 
+--
+Brian Gerst
