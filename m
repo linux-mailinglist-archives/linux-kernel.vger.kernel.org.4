@@ -2,103 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB7A63B67C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 01:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C448F63B680
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 01:21:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234807AbiK2AUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 19:20:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47930 "EHLO
+        id S234862AbiK2AU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 19:20:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234781AbiK2AUO (ORCPT
+        with ESMTP id S234821AbiK2AU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 19:20:14 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831DA3123A
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 16:20:12 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id gu23so11790701ejb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 16:20:12 -0800 (PST)
+        Mon, 28 Nov 2022 19:20:56 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243F43123A
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 16:20:55 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id q17-20020a17090aa01100b002194cba32e9so840050pjp.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 16:20:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=afOr2fmIQC6dBJfLAFZ1lEeNOcz8tKXWZ8GJTXwEGZg=;
-        b=YyohEtJ6qLap4dyHJjxB9q2A69k7/SoCS0qeZMEZLc1ZFBUVRVGlQ33xoNkciPPQ56
-         x5DP20xjts37dK6LNApMJpL4S8D49y38crgVO+gt38n7cXyWChhanVz4BFjZkpVFGVP6
-         OiwfsSQKDsFq3Bxwfk0h8k9bAO9hOq4Ues8Rg=
+        bh=V57uSH08PE25Wlk/c9BqDLzezSRu5me2pfIVdTCTkjo=;
+        b=D+q65hKGOvqVhsHWElVacfBJqkewFRwiZlCYL8dHK3aSw5hsmyl6gdmXYyOLzLA7NP
+         733rRyNp2nxO0dg9OJeTkJlreUeJNkkbrzHNUoUi+Xod1Eiao4uQpgqOgup8ZnhJMInG
+         Ahiz5yXLH1Xw0C9kZpGrdjyi3ImzROsej0IAOw1mR7HpNPABsMVJizvjy2V8wu1H53Ay
+         AMqtjJpNsySlkUt/1X3mrFRn0+sKg5I3upsiFgoHk1o5f5eBcs496YKvAEjY98vWHi5f
+         JT8axftRuPlPQZQH2mwKcq+5uFkD/QuJb9V6JiprfjtWCne/F/KJ0/zjaPXVgI6cE8MD
+         //0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=afOr2fmIQC6dBJfLAFZ1lEeNOcz8tKXWZ8GJTXwEGZg=;
-        b=YDjvvs7G/Y25gADRgwspSaBK+/wWF0475euSQUb0C8yRT+e5H0o0aZ1HGKVYSpR45y
-         hQcuen5nMFZQcJ45NgZv0GXdGiHj90B8/8Lz3g4woa9zkugJFVNVrGCMKuiE4fGSUL67
-         BLDZyDFYDD4o/FJaw2BsyPm4/+M7p8WQaHNUPhmIcFwk6U9T+MCX9qKnZ0i58qEL6VIN
-         KCqB9t04wrRvkvoBMDWZfle29VEYc/3fejtvWuIPkVxu5ajrMH2tt6rmtD/iba4M3ZMK
-         YgnrzOIlm5/h5ZwNKrghVfRGYuWmgjsGGTvkKB8voA1t4PwWB3XyBJED2m9qBCUspexq
-         675w==
-X-Gm-Message-State: ANoB5plhdqCKSMlOUogMkfP+cihW5bdcm2sUwfkuSfDGgfKChPs/+ExC
-        yIAA5FHtGHsGFiosPy72ReHbUrw1CelHkosq
-X-Google-Smtp-Source: AA0mqf735FayllB8qyuUMTJouOQ+J9rV1B4zPLhhxRWWmAaN+Zgv1p+0KiE3FPxMbTC8z77oE9TblA==
-X-Received: by 2002:a17:906:d20a:b0:7a9:8d8e:c3df with SMTP id w10-20020a170906d20a00b007a98d8ec3dfmr30102887ejz.519.1669681210113;
-        Mon, 28 Nov 2022 16:20:10 -0800 (PST)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
-        by smtp.gmail.com with ESMTPSA id la18-20020a170907781200b007b2b98e1f2dsm5450686ejc.122.2022.11.28.16.20.07
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 16:20:08 -0800 (PST)
-Received: by mail-wm1-f47.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso13074512wme.5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 16:20:07 -0800 (PST)
-X-Received: by 2002:a05:600c:3109:b0:3cf:5731:53db with SMTP id
- g9-20020a05600c310900b003cf573153dbmr43823918wmo.85.1669681207310; Mon, 28
- Nov 2022 16:20:07 -0800 (PST)
+        bh=V57uSH08PE25Wlk/c9BqDLzezSRu5me2pfIVdTCTkjo=;
+        b=hCRwvITg/MLxLEjhUFQKUejnLdyuJDSSM2ZrojjaDzkYIwRk0AP8CcvN2Jlc81BHpD
+         iYaUDaTR2+zNadkDjvaoZ0jBPrStcTBpZG3+eiuoK48G2VcSeN202aCWheF038AYHK0n
+         LNwYsxYiOSql5nO7pDQM93V1v6eyIaHc/W6IZAhAYj36ag8dU97gqvABxn8Cc2TJ/E7G
+         ncTDfEZpeT8lxNmVKmIccJ7c1d17ffgf+rzL31XYVg0xJNix4gv3gm7svLvaSn9ENdpb
+         kPsaj/g6BLE+kqjEFi2DeM8dKUxyHoVFvcLUHaZ5SxjYnO711BEZWDnH1Cx8HtLODRPI
+         s0uQ==
+X-Gm-Message-State: ANoB5pm7lFiKi9ESPbl1k1xtMl3LuupTB7zVxKjcoQlB9HavL4ljKcPY
+        9qPjgZsKfj8xHqx8jbvMddegVQurXgUYSm0NjIET/Q==
+X-Google-Smtp-Source: AA0mqf59j2i1wiIGpVCyi0oFg8zlitbjzQg67fFYRUOZyJWEI9t6k/xeK14j1fHIBWVDHLc/vPiKYhsMfkGA85iwTV0=
+X-Received: by 2002:a17:90b:1095:b0:219:237c:7986 with SMTP id
+ gj21-20020a17090b109500b00219237c7986mr12292720pjb.220.1669681254627; Mon, 28
+ Nov 2022 16:20:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20221129001633.v2.1.I8d1993f41f0da1eac0ecba321678ac489f9c0b9b@changeid>
-In-Reply-To: <20221129001633.v2.1.I8d1993f41f0da1eac0ecba321678ac489f9c0b9b@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 28 Nov 2022 16:19:55 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=W3yB8ZGQ6QmBy7wxRSE4TdqOuM5LzM6wtiF9wtenNyXw@mail.gmail.com>
-Message-ID: <CAD=FV=W3yB8ZGQ6QmBy7wxRSE4TdqOuM5LzM6wtiF9wtenNyXw@mail.gmail.com>
-Subject: Re: [PATCH v2] ASoC: qcom: lpass-sc7180: Delete redundant error log
- from _resume()
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Judy Hsiao <judyhsiao@google.com>,
-        Banajit Goswami <bgoswami@codeaurora.org>
+References: <20221114210740.3332937-1-sean.anderson@seco.com>
+ <20221115223732.ctvzjbpeaxulnm5l@skbuf> <3771f5be-3deb-06f9-d0a0-c3139d098bf0@seco.com>
+ <20221115230207.2e77pifwruzkexbr@skbuf> <219dc20d-fd2b-16cc-8b96-efdec5f783c9@seco.com>
+ <Y3bLlUk1wxzAqKmj@lunn.ch>
+In-Reply-To: <Y3bLlUk1wxzAqKmj@lunn.ch>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Mon, 28 Nov 2022 16:20:42 -0800
+Message-ID: <CAJ+vNU1iDuFRbm-9+hzEgqZ=enL2yTkDJq6=7EtsQu3KFAxjDQ@mail.gmail.com>
+Subject: Re: [PATCH] phy: aquantia: Configure SERDES mode by default
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Sean Anderson <sean.anderson@seco.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Nov 17, 2022 at 4:03 PM Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> > Well, part of my goal in sending out this patch is to get some feedback
+> > on the right thing to do here. As I see it, there are three ways of
+> > configuring this phy:
+> >
+> > - Always rate adapt to whatever the initial phy interface mode is
+> > - Switch phy interfaces depending on the link speed
+> > - Do whatever the firmware sets up
+>
+> My understanding of the aQuantia firmware is that it is split into two
+> parts. The first is the actual firmware that runs on the PHY. The
+> second is provisioning, which seems to be a bunch of instructions to
+> put value X in register Y. It seems like aQuantia, now Marvell, give
+> different provisioning to different customers.
+>
+> What this means is, you cannot really trust any register contains what
+> you want, that your devices does the same as somebody elses' device in
+> its reset state.
+>
+> So i would say, "Do whatever the firmware sets up" is the worst
+> choice. Assume nothing, set every register which is important to the
+> correct value.
+>
+>         Andrew
 
-On Mon, Nov 28, 2022 at 4:16 PM Matthias Kaehlcke <mka@chromium.org> wrote:
->
-> sc7180_lpass_dev_resume() logs an error if clk_bulk_prepare_enable()
-> fails. The clock framework already generates error logs if anything
-> goes wrong, so the logging in _resume() is redundant, drop it.
->
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
->
-> Changes in v2:
-> - removed the log in the error path (requested by Doug)
-> - updated subject (was "ASoC: qcom: lpass-sc7180: Return 0 instead
->   of 'ret' at the end of _resume()") and commit message
->
->  sound/soc/qcom/lpass-sc7180.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
+Andrew,
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Sorry for the late reply!
+
+That's exactly what the firmware is doing. According to a Marvell FAE
+they add 'provisioning' of registers to the firmware to ease their
+support effort. That didn't at all ease things for me because I was
+pointed to the wrong firmware by another FAE which led to all of this.
+
+In my case my device-tree is setting the interface to xfi (10g) yet
+the firmware has provisioned the link for xfi/2 (5g) - a warning would
+have probably helped us all understand the issue but again I was just
+pointed to the wrong firmware without an explanation of how their
+firmware works.
+
+Tim
