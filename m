@@ -2,118 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934CC63BD1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D2A63BCFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiK2Jh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 04:37:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
+        id S229534AbiK2JbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 04:31:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbiK2Jhx (ORCPT
+        with ESMTP id S230243AbiK2JbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 04:37:53 -0500
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026FE29815;
-        Tue, 29 Nov 2022 01:37:53 -0800 (PST)
-Received: by mail-pl1-f172.google.com with SMTP id k7so12838719pll.6;
-        Tue, 29 Nov 2022 01:37:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q+AGSUb4FRLyd7s2US6m9NjBG7l9wn0Ll8edLLRQmpU=;
-        b=maMOpqkzTRX349+LKxNQN3z0BKWmATNFMQ6dUtvfXuGUJTa9DBjDYwBe6ID6I5Tqeu
-         p5o5vvQB3Bg63TBnR1CV/Z7M0NI0jRbIHpkJI9A4p3+5s8pg6F5GrjWVSTYtmLPj/DYF
-         IoOLfVkq2IthZP2J/09x8pl7xRv6YfszV2dPNfWpx0FcGJ/DWUc1crmWefT+MelazfnE
-         HEvr4aLblFb9WywCI9+h6hcSql2XzOeruUTHXSTXxQpgBZlwghmR0gZOcTjGu5eKMdBe
-         3TO65JGTbj/YDd7Uk+Msbyau8xnspnQAAI1Wc99c8/0bIBvG+4KPXwvzgTjsSxC2BoNl
-         vqyQ==
-X-Gm-Message-State: ANoB5pm66IX6up5Sz1olCSK+qyBtLVliLFQRCCkuR08qwOclV1u555T/
-        CZULL8FOnqjc6Tu/8Vn/eqpAHxvfEXgu+Fzun1g=
-X-Google-Smtp-Source: AA0mqf7WfI50hoerRcgf3B/Jf6GLxqEsRVWE+x+RBOR4VhqxVFXsP3t8iwfzE3TOjubAK9pXbOzPm3C5PvcYml5Z24M=
-X-Received: by 2002:a17:903:452:b0:189:6574:7ac2 with SMTP id
- iw18-20020a170903045200b0018965747ac2mr22126393plb.65.1669714672421; Tue, 29
- Nov 2022 01:37:52 -0800 (PST)
+        Tue, 29 Nov 2022 04:31:08 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9645BD78
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:31:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669714267; x=1701250267;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zn3TgpOyCXFjKnPgeNLXh/qa7scJstQOq8wptR6uaRs=;
+  b=ZwIOuJmVRSftgKimfFx42E5ofmTP29mP/LNyR12jCuOwyyQPjpwdIfgd
+   rp+TQuzRLDd8k5mSAokt9bPqPkb+rgl+JPRbhAgvpzCQdQX4bq9kKFduj
+   gfmKIp45/KOKtozL6ssk4zxJirjCzS6+K/p2YsXHxTHKW2tzj9ghFbMLE
+   j0Q9zlaiWmJgaYcMNt+wH2dcUNe9APDFSXyyK9l05sEtqtrA7Xg55ffQy
+   34dCHhmuDQhLEfNY9M0P0z+MIifhzUq3UkMGoqyIwcon062e6iNtn+JEk
+   THV38e6z8/ZciZ5uvi738KROIfCmyJkYTOl4jF9fP3pxVHpvCKGWnCTp+
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="313768965"
+X-IronPort-AV: E=Sophos;i="5.96,202,1665471600"; 
+   d="scan'208";a="313768965"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 01:31:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="785974964"
+X-IronPort-AV: E=Sophos;i="5.96,202,1665471600"; 
+   d="scan'208";a="785974964"
+Received: from louislifei-optiplex-7090.sh.intel.com ([10.239.146.218])
+  by fmsmga001.fm.intel.com with ESMTP; 29 Nov 2022 01:31:04 -0800
+From:   Fei Li <fei1.li@intel.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     bp@alien8.de, peterz@infradead.org, dave.hansen@intel.com,
+        gregkh@linuxfoundation.org, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, hpa@zytor.com, yu1.wang@intel.com,
+        conghui.chen@intel.com, fengwei.yin@intel.com, junjie.mao@intel.com
+Subject: [PATCH v3] x86/acrn: Set X86_FEATURE_TSC_KNOWN_FREQ
+Date:   Tue, 29 Nov 2022 17:40:25 +0800
+Message-Id: <20221129094025.907760-1-fei1.li@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221129000550.3833570-1-mailhol.vincent@wanadoo.fr>
- <20221129000550.3833570-3-mailhol.vincent@wanadoo.fr> <Y4XCCl6F+N2w+ngn@nanopsycho>
-In-Reply-To: <Y4XCCl6F+N2w+ngn@nanopsycho>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 29 Nov 2022 18:37:41 +0900
-Message-ID: <CAMZ6RqJnxkDmMtXSvUF2aondZ_8BGYq4XL35Cg7Vxy9qqsfAeg@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 2/4] net: devlink: remove devlink_info_driver_name_put()
-To:     Jiri Pirko <jiri@resnulli.us>
-Cc:     Jiri Pirko <jiri@nvidia.com>, netdev@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Arnaud Ebalard <arno@natisbad.org>,
-        Srujana Challa <schalla@marvell.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Dimitris Michailidis <dmichail@fungible.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Linu Cherian <lcherian@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Jerin Jacob <jerinj@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Shannon Nelson <snelson@pensando.io>, drivers@pensando.io,
-        Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Vadim Fedorenko <vadfed@fb.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Vadim Pasternak <vadimp@mellanox.com>,
-        Shalom Toledo <shalomt@mellanox.com>,
-        linux-crypto@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-rdma@vger.kernel.org, oss-drivers@corigine.com,
-        Jiri Pirko <jiri@mellanox.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hao Chen <chenhao288@hisilicon.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Shijith Thotton <sthotton@marvell.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue. 29 Nov. 2022 at 17:25, Jiri Pirko <jiri@resnulli.us> wrote:
-> Tue, Nov 29, 2022 at 01:05:48AM CET, mailhol.vincent@wanadoo.fr wrote:
-> >Now that the core sets the driver name attribute, drivers are not
-> >supposed to call devlink_info_driver_name_put() anymore. Remove it.
-> >
-> >Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->
-> I agree with Jacob that this could be easily squashed to the previous
-> patch. One way or another:
+Using hypervisor-provided TSC frequency is common practice for guests.
+However, for a Linux guest, it may still to reclibrate the ACRN-specific
+TSC frequency if X86_FEATURE_TSC_KNOWN_FREQ flag is not set.
 
-OK. Let's have the majority decide: I will squash patches 1 and 2 and send a v6.
+When TSC frequency is known (retrieved from ACRN hypervisor), skip TSC
+refined calibration by setting X86_FEATURE_TSC_KNOWN_FREQ.
 
-> Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+Also remove `inline` for acrn_get_tsc_khz() since it doesn't make sense.
 
-Thank you for the review.
+Signed-off-by: Fei Li <fei1.li@intel.com>
+Reviewed-by: Yin, Fengwei <fengwei.yin@intel.com>
+
+---
+v3: Update the commit message base on Borislav's comments
+v2: Detail the commit message
+---
+ arch/x86/include/asm/acrn.h | 5 -----
+ arch/x86/kernel/cpu/acrn.c  | 6 ++++++
+ 2 files changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/include/asm/acrn.h b/arch/x86/include/asm/acrn.h
+index 1dd14381bcb6..aa12c74ea959 100644
+--- a/arch/x86/include/asm/acrn.h
++++ b/arch/x86/include/asm/acrn.h
+@@ -30,11 +30,6 @@ static inline u32 acrn_cpuid_base(void)
+ 	return 0;
+ }
+ 
+-static inline unsigned long acrn_get_tsc_khz(void)
+-{
+-	return cpuid_eax(ACRN_CPUID_TIMING_INFO);
+-}
+-
+ /*
+  * Hypercalls for ACRN
+  *
+diff --git a/arch/x86/kernel/cpu/acrn.c b/arch/x86/kernel/cpu/acrn.c
+index 485441b7f030..c5ff75b6a949 100644
+--- a/arch/x86/kernel/cpu/acrn.c
++++ b/arch/x86/kernel/cpu/acrn.c
+@@ -24,6 +24,12 @@ static u32 __init acrn_detect(void)
+ 	return acrn_cpuid_base();
+ }
+ 
++static unsigned long acrn_get_tsc_khz(void)
++{
++	setup_force_cpu_cap(X86_FEATURE_TSC_KNOWN_FREQ);
++	return cpuid_eax(ACRN_CPUID_TIMING_INFO);
++}
++
+ static void __init acrn_init_platform(void)
+ {
+ 	/* Setup the IDT for ACRN hypervisor callback */
+
+base-commit: b7b275e60bcd5f89771e865a8239325f86d9927d
+-- 
+2.34.1
+
