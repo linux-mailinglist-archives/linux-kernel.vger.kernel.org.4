@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E0F63CB0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 23:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4D863CB0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 23:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236845AbiK2W3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 17:29:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
+        id S236769AbiK2W3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 17:29:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236713AbiK2W24 (ORCPT
+        with ESMTP id S236896AbiK2W3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 17:28:56 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3156C6F80C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:28:55 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id ml11so12319598ejb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:28:55 -0800 (PST)
+        Tue, 29 Nov 2022 17:29:04 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765B970443
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:29:00 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id s5so21684742edc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:29:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z6DufAiLbikmJOcyvk/dpsDJdo2Yt6A4Va3UXdp6vn4=;
-        b=bSbgHd7hgJCYLmAci5POgq7c9xzACAr/4CJtpAngdgrdC6coYb8uiZu2XqhLPmbQXT
-         A7Azk3Hr3Y/t/ycCWOsv4JwIcmu4zG7GiR/cpPTpXl4AEw53lgECOhpbLTQ+zR5Da3se
-         TdJURnDO7SI7EL6/spaUEq/f30sbEP7S4gDAc=
+        bh=6TrUzytMxBgpuzK57XjYnA/tMg3rSbk1sqf4aWr+LLU=;
+        b=eW+60F5ZaNSC2vEWF64zkR5vH38+E1w332c473FboCrBKMdYPCULVkM1vLD2EUZaFX
+         6SOjRXQZffEKd3kUKL7JfsONN9tZY9FK1LGnH4GJCJ0XsqM3CJ4Wsxh7XDVz9egSx93F
+         /IuBBwVFWzHypybwJ9Kp+s91qbenBEmwrD5Qg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Z6DufAiLbikmJOcyvk/dpsDJdo2Yt6A4Va3UXdp6vn4=;
-        b=n3RQEQW0IUGCbJlEMU2oaQoXJaD76zNiuJo1a55DHfDoLcmh1eVVULPAE0+8oJVpxM
-         IthopyK6XV5Vo4s2p0g8SlbU9AHOi4am3l0bmPy+0fvwX/ClHajIcBSxP9wsRqYdHYwp
-         hSWi01/xWt1mh5Dwzr/esbintCUBqhXIBLtPzbdNnv4YsbReIaD44ytYmnJKPpzGm+Cw
-         ZyMwYnQezCRANMjLKcuDMGn6Oiwb+sIXGIEYzOq/BdzziQ3agf9luGc+goXxafNJ9mK3
-         6F+ZYE90fQlZcbmHb0ECA87oU4WOVuJBmi0pVHnaFVqAgHmexk1gynyLeekcHExqdbMD
-         mJ1Q==
-X-Gm-Message-State: ANoB5pnqHdrdU670Ondz+dTQRYB7bH0YyRZkp7ZZqQkmGQx3uut8ob99
-        esXkOe7SQq2xPpaOw3Wak4HhRXTK78i61+xR
-X-Google-Smtp-Source: AA0mqf5fd9xNnHSx5rvuBe+kRHzowHcQcvPbOzQY7sYsI19j0QboxEYPv3RPVZuziHo0Jsu/S3wr/Q==
-X-Received: by 2002:a17:906:1484:b0:7ae:6746:f270 with SMTP id x4-20020a170906148400b007ae6746f270mr36917927ejc.728.1669760933362;
-        Tue, 29 Nov 2022 14:28:53 -0800 (PST)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id f5-20020a056402150500b0045723aa48ccsm6668554edw.93.2022.11.29.14.28.52
+        bh=6TrUzytMxBgpuzK57XjYnA/tMg3rSbk1sqf4aWr+LLU=;
+        b=3w/sgGyPZ3X/WbBPGk7Wq9sIBDQzyP8sICyV2XqfTBscSRpu3bpQLC31XxtbC33F9H
+         eV1p7munKegO7pUpXFRHXmuG2H8K0V/drr8tY1Rrw0cJxWTeBj9x4IgoeRuuU2hF6kLn
+         m8Fut0uCGytzfQoD9DGSn1PRQR/uxoasIVgdqD/7H9QpRb5Tq9TwwmDYIltXUFkDe2qc
+         zNsACrxZbYVpiSu3DcR4fj4kDDDEM97a4/G++mVycplr+SPCVNR2KfE1mZm8Ff0eaFQY
+         NT8cEC8Cu60KVul8DGz/VmR9GwxQIHPOZ+fYFxKM6dGZx8yj6iS3HnMl9qnELnMM01Fl
+         PCCg==
+X-Gm-Message-State: ANoB5pnxZThNLK438VsmNTDJ97h9SxLbO8YAFCk4a3WjPtZuJLfZCZLU
+        ndt9bFfmRW30CvTvBRnRI+g6Mx7Wc0YLCET3
+X-Google-Smtp-Source: AA0mqf7W+b6y6uzIyP6iM/GjCSm8waXIFDbzMcWYzJkLQmMOYwdLrN0ARF8OrqseqhZgCbhPpbXJVA==
+X-Received: by 2002:aa7:c754:0:b0:46b:6096:a884 with SMTP id c20-20020aa7c754000000b0046b6096a884mr7427404eds.152.1669760938696;
+        Tue, 29 Nov 2022 14:28:58 -0800 (PST)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
+        by smtp.gmail.com with ESMTPSA id r1-20020a1709063d6100b007c081cf2d25sm1598154ejf.204.2022.11.29.14.28.57
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 14:28:52 -0800 (PST)
-Received: by mail-wm1-f53.google.com with SMTP id p16so12000899wmc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:28:52 -0800 (PST)
-X-Received: by 2002:a05:600c:3109:b0:3cf:5731:53db with SMTP id
- g9-20020a05600c310900b003cf573153dbmr47280161wmo.85.1669760931831; Tue, 29
- Nov 2022 14:28:51 -0800 (PST)
+        Tue, 29 Nov 2022 14:28:57 -0800 (PST)
+Received: by mail-wm1-f49.google.com with SMTP id 83-20020a1c0256000000b003d0683389e1so73000wmc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:28:57 -0800 (PST)
+X-Received: by 2002:a05:600c:3c8e:b0:3d0:69f4:d3d0 with SMTP id
+ bg14-20020a05600c3c8e00b003d069f4d3d0mr2921033wmb.93.1669760937284; Tue, 29
+ Nov 2022 14:28:57 -0800 (PST)
 MIME-Version: 1.0
 References: <20221117133655.1.I51639dc112bbbe27259df6bdad56dbabd655d91a@changeid>
- <20221117133655.2.Iebd9f79aba0a62015fd2383fe6986c2d6fe12cfd@changeid> <CAD=FV=XzzS-kygLun7u7XMDVqLdtBtxfhdHP0YFQo4TxCTPkSA@mail.gmail.com>
-In-Reply-To: <CAD=FV=XzzS-kygLun7u7XMDVqLdtBtxfhdHP0YFQo4TxCTPkSA@mail.gmail.com>
+ <20221117133655.3.Iebd9f79aba0a62015fd2383fe6986c2d6fe12cfd@changeid> <CAD=FV=Wna4BXgr2CyGGe=m+crf3WMy6y8-dp_CH1Ga-Q8TQD7g@mail.gmail.com>
+In-Reply-To: <CAD=FV=Wna4BXgr2CyGGe=m+crf3WMy6y8-dp_CH1Ga-Q8TQD7g@mail.gmail.com>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 29 Nov 2022 14:28:39 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XGQr9iMBoTPRmaiV3rnK2QNJEZ5C9DhgVuWvVJ8mBGmQ@mail.gmail.com>
-Message-ID: <CAD=FV=XGQr9iMBoTPRmaiV3rnK2QNJEZ5C9DhgVuWvVJ8mBGmQ@mail.gmail.com>
-Subject: Re: [PATCH 2/5] drm/panel-samsung-atna33xc20: Use ktime_get_boottime
- for delays
+Date:   Tue, 29 Nov 2022 14:28:45 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=U9HwRRHo_Q9EQVMFM9kdPyyjzibdV-44+seJRXzLYRkw@mail.gmail.com>
+Message-ID: <CAD=FV=U9HwRRHo_Q9EQVMFM9kdPyyjzibdV-44+seJRXzLYRkw@mail.gmail.com>
+Subject: Re: [PATCH 3/5] drm/panel-simple: Use ktime_get_boottime for delays
 To:     Drew Davenport <ddavenport@chromium.org>
 Cc:     dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@gmail.com>,
@@ -93,18 +92,11 @@ On Thu, Nov 17, 2022 at 1:14 PM Doug Anderson <dianders@chromium.org> wrote:
 > > Signed-off-by: Drew Davenport <ddavenport@chromium.org>
 > > ---
 > >
-> >  drivers/gpu/drm/panel/panel-samsung-atna33xc20.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> You could have carried over from v1 [1]:
->
-> ...which I guess also means that technically this series should have
-> been marked v2, but not a huge deal.
+> >  drivers/gpu/drm/panel/panel-simple.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
 >
 > Reviewed-by: Douglas Anderson <dianders@chromium.org>
->
-> [1] https://lore.kernel.org/r/20221110145102.1.I51639dc112bbbe27259df6bdad56dbabd655d91a@changeid
 
 Pushed to drm-misc-next:
 
-62e43673ca84 drm/panel-samsung-atna33xc20: Use ktime_get_boottime for delays
+7e682946db98 drm/panel-simple: Use ktime_get_boottime for delays
