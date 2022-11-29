@@ -2,122 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD3363BEA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D9363BEA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:09:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232540AbiK2LJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 06:09:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51318 "EHLO
+        id S232689AbiK2LJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 06:09:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbiK2LJb (ORCPT
+        with ESMTP id S232400AbiK2LJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 06:09:31 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0422BC2
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:09:30 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id n186so14759384oih.7
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:09:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cf9n2jaa6cYTVOklMuNk4qObbBfb+M49DmHuLPAMaG8=;
-        b=EQGj1OluD1poCYCp847EqljBv2Ad7K/1G88aFPNPKXsuhiJcjMGoVE4O/IpTOi6grs
-         DqYZyeMry7IkWAxmOVsObvHrdr/u4CHzPmyaVR8QTymd3X6LWpY0Dsxs/yLDVDP1VhaP
-         tp0sWFghX2mKmvsrtbfPRU8FGxdMLOhH/VuekVTXfdKSaPfa9ZuHJakPCobD31IXWdp4
-         +BqClWFUs/lL6XEYozaaPgS+KbkB5k3abcZ8TgF8IvK/p2du9FDw8FXQNZaIfLD9s93T
-         2FlZyEzDBvaZtz6FcmRkxwdCpMNAMLiNpNr518cQA9GbdBTia3NupXIlr8ygDt2EeL6l
-         ITAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cf9n2jaa6cYTVOklMuNk4qObbBfb+M49DmHuLPAMaG8=;
-        b=wYynDpaNVWCx/FwuDnN89b73zQbfJP7oMcPoc/L6axOy58ihbMjViyblYxPRRGKRCb
-         SCSBKRPGbQzdk27SOkBQUtzZpk6wiAgtOXA5P85+yV2Swf5x746msj3Oa0ovqe8MQlkB
-         fR1/7Achhrp9qWmrcvj8ZjGVaApo7VHAXi3fAOLSuStg1t3Rgtc5LwEsm/0ZlvFaiyn2
-         MeW/Grh5R1QQmRR2c5AekRz6SerkCoNcmW4Z8SwseYSJpOc1u+lSX/Ioy5q/bfZNT9xl
-         SBfZnm/ilXRQETWQOeRwpxIbyTDheQ3e5QnfZERM9H9IVjFCIJL068RYaCCLHH9HMAUu
-         FGTg==
-X-Gm-Message-State: ANoB5pkX/itb8We05OUO3pT5rKiiLr19GgI6+l4+2rDTb2sIhFUyO9SB
-        aOhOK1KJWbKslqcxjd+bmyqgWcKis23HdC9nIEfCDA==
-X-Google-Smtp-Source: AA0mqf5fbP4ZbObgYQ/PNpZohM7nKX0Xg43wC7ljqPSKkxNSoLuBv0Tby+XmsYnndNx6Rfpcz+xVv2PD+1lW35gFnFY=
-X-Received: by 2002:aca:5bc4:0:b0:35a:7056:4f9c with SMTP id
- p187-20020aca5bc4000000b0035a70564f9cmr30858789oib.72.1669720170072; Tue, 29
- Nov 2022 03:09:30 -0800 (PST)
+        Tue, 29 Nov 2022 06:09:33 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88F12BCF;
+        Tue, 29 Nov 2022 03:09:30 -0800 (PST)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NM02T6VXhzRpc6;
+        Tue, 29 Nov 2022 19:08:49 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 29 Nov 2022 19:09:28 +0800
+CC:     <anshuman.khandual@arm.com>, <corbet@lwn.net>,
+        <peterz@infradead.org>, <arnd@arndb.de>,
+        <punit.agrawal@bytedance.com>, <linux-kernel@vger.kernel.org>,
+        <darren@os.amperecomputing.com>, <yangyicong@hisilicon.com>,
+        <huzhanyuan@oppo.com>, <lipeifeng@oppo.com>,
+        <zhangshiming@oppo.com>, <guojian@oppo.com>, <realmz6@gmail.com>,
+        <linux-mips@vger.kernel.org>, <openrisc@lists.librecores.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
+        <linux-s390@vger.kernel.org>, Barry Song <21cnbao@gmail.com>,
+        <wangkefeng.wang@huawei.com>, <xhao@linux.alibaba.com>,
+        <prime.zeng@hisilicon.com>, <linux-mm@kvack.org>,
+        <linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>,
+        <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v7 0/2] arm64: support batched/deferred tlb shootdown
+ during page reclamation
+From:   Yicong Yang <yangyicong@huawei.com>
+To:     <akpm@linux-foundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>
+References: <20221117082648.47526-1-yangyicong@huawei.com>
+Message-ID: <938c4c00-8cf9-b37a-d70e-04262d86f01c@huawei.com>
+Date:   Tue, 29 Nov 2022 19:09:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-References: <20221116143523.2126-1-the.cheaterman@gmail.com>
-In-Reply-To: <20221116143523.2126-1-the.cheaterman@gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Tue, 29 Nov 2022 12:09:19 +0100
-Message-ID: <CAG3jFytyzmRnpj8pzSUitLhAHQM9b0zhkc2cbfVmgKStfHpwVA@mail.gmail.com>
-Subject: Re: [PATCH] drm: bridge: dw_hdmi: fix preference of RGB modes over YUV420
-To:     Guillaume BRUN <the.cheaterman@gmail.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        Christian Hewitt <christianshewitt@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221117082648.47526-1-yangyicong@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Nov 2022 at 15:35, Guillaume BRUN <the.cheaterman@gmail.com> wrote:
->
-> Cheap monitors sometimes advertise YUV modes they don't really have
-> (HDMI specification mandates YUV support so even monitors without actual
-> support will often wrongfully advertise it) which results in YUV matches
-> and user forum complaints of a red tint to light colour display areas in
-> common desktop environments.
->
-> Moving the default RGB fall-back before YUV selection results in RGB
-> mode matching in most cases, reducing complaints.
->
-> Fixes: 6c3c719936da ("drm/bridge: synopsys: dw-hdmi: add bus format negociation")
-> Signed-off-by: Guillaume BRUN <the.cheaterman@gmail.com>
-> Tested-by: Christian Hewitt <christianshewitt@gmail.com>
-> ---
->  drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> index 40d8ca37f5bc..aa51c61a78c7 100644
-> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> @@ -2720,6 +2720,9 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
->          * if supported. In any case the default RGB888 format is added
->          */
->
-> +       /* Default 8bit RGB fallback */
-> +       output_fmts[i++] = MEDIA_BUS_FMT_RGB888_1X24;
-> +
->         if (max_bpc >= 16 && info->bpc == 16) {
->                 if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
->                         output_fmts[i++] = MEDIA_BUS_FMT_YUV16_1X48;
-> @@ -2753,9 +2756,6 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
->         if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
->                 output_fmts[i++] = MEDIA_BUS_FMT_YUV8_1X24;
->
-> -       /* Default 8bit RGB fallback */
-> -       output_fmts[i++] = MEDIA_BUS_FMT_RGB888_1X24;
-> -
->         *num_output_fmts = i;
->
->         return output_fmts;
-> --
-> 2.37.3
->
+a gentle ping...
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Hi Andrew, Will and Catalin,
+
+is it ok to pick this series?
+
+Thanks.
+
+On 2022/11/17 16:26, Yicong Yang wrote:
+> From: Yicong Yang <yangyicong@hisilicon.com>
+> 
+> Though ARM64 has the hardware to do tlb shootdown, the hardware
+> broadcasting is not free.
+> A simplest micro benchmark shows even on snapdragon 888 with only
+> 8 cores, the overhead for ptep_clear_flush is huge even for paging
+> out one page mapped by only one process:
+> 5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
+> 
+> While pages are mapped by multiple processes or HW has more CPUs,
+> the cost should become even higher due to the bad scalability of
+> tlb shootdown.
+> 
+> The same benchmark can result in 16.99% CPU consumption on ARM64
+> server with around 100 cores according to Yicong's test on patch
+> 4/4.
+> 
+> This patchset leverages the existing BATCHED_UNMAP_TLB_FLUSH by
+> 1. only send tlbi instructions in the first stage -
+> 	arch_tlbbatch_add_mm()
+> 2. wait for the completion of tlbi by dsb while doing tlbbatch
+> 	sync in arch_tlbbatch_flush()
+> Testing on snapdragon shows the overhead of ptep_clear_flush
+> is removed by the patchset. The micro benchmark becomes 5% faster
+> even for one page mapped by single process on snapdragon 888.
+> 
+> With this support we're possible to do more optimization for memory
+> reclamation and migration[*].
+> 
+> [*] https://lore.kernel.org/lkml/393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com/
+> 
+> -v7:
+> 1. rename arch_tlbbatch_add_mm() to arch_tlbbatch_add_pending() as suggested, since it
+>    takes an extra address for arm64, per Nadav and Anshuman. Also mentioned in the commit.
+> 2. add tags from Xin Hao, thanks.
+> Link: https://lore.kernel.org/lkml/20221115031425.44640-1-yangyicong@huawei.com/
+> 
+> -v6:
+> 1. comment we don't defer TLB flush on platforms affected by ARM64_WORKAROUND_REPEAT_TLBI
+> 2. use cpus_have_const_cap() instead of this_cpu_has_cap()
+> 3. add tags from Punit, Thanks.
+> 4. default enable the feature when cpus >= 8 rather than > 8, since the original
+>    improvement is observed on snapdragon 888 with 8 cores.
+> Link: https://lore.kernel.org/lkml/20221028081255.19157-1-yangyicong@huawei.com/
+> 
+> -v5:
+> 1. Make ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH depends on EXPERT for this stage on arm64.
+> 2. Make a threshold of CPU numbers for enabling batched TLP flush on arm64
+> Link: https://lore.kernel.org/linux-arm-kernel/20220921084302.43631-1-yangyicong@huawei.com/T/
+> 
+> -v4:
+> 1. Add tags from Kefeng and Anshuman, Thanks.
+> 2. Limit the TLB batch/defer on systems with >4 CPUs, per Anshuman
+> 3. Merge previous Patch 1,2-3 into one, per Anshuman
+> Link: https://lore.kernel.org/linux-mm/20220822082120.8347-1-yangyicong@huawei.com/
+> 
+> -v3:
+> 1. Declare arch's tlbbatch defer support by arch_tlbbatch_should_defer() instead
+>    of ARCH_HAS_MM_CPUMASK, per Barry and Kefeng
+> 2. Add Tested-by from Xin Hao
+> Link: https://lore.kernel.org/linux-mm/20220711034615.482895-1-21cnbao@gmail.com/
+> 
+> -v2:
+> 1. Collected Yicong's test result on kunpeng920 ARM64 server;
+> 2. Removed the redundant vma parameter in arch_tlbbatch_add_mm()
+>    according to the comments of Peter Zijlstra and Dave Hansen
+> 3. Added ARCH_HAS_MM_CPUMASK rather than checking if mm_cpumask
+>    is empty according to the comments of Nadav Amit
+> 
+> Thanks, Peter, Dave and Nadav for your testing or reviewing
+> , and comments.
+> 
+> -v1:
+> https://lore.kernel.org/lkml/20220707125242.425242-1-21cnbao@gmail.com/
+> 
+> Anshuman Khandual (1):
+>   mm/tlbbatch: Introduce arch_tlbbatch_should_defer()
+> 
+> Barry Song (1):
+>   arm64: support batched/deferred tlb shootdown during page reclamation
+> 
+>  .../features/vm/TLB/arch-support.txt          |  2 +-
+>  arch/arm64/Kconfig                            |  6 +++
+>  arch/arm64/include/asm/tlbbatch.h             | 12 +++++
+>  arch/arm64/include/asm/tlbflush.h             | 52 ++++++++++++++++++-
+>  arch/x86/include/asm/tlbflush.h               | 17 +++++-
+>  include/linux/mm_types_task.h                 |  4 +-
+>  mm/rmap.c                                     | 19 +++----
+>  7 files changed, 93 insertions(+), 19 deletions(-)
+>  create mode 100644 arch/arm64/include/asm/tlbbatch.h
+> 
