@@ -2,263 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5384563C359
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11EB463C358
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:13:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234933AbiK2PN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 10:13:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42184 "EHLO
+        id S233686AbiK2PNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 10:13:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiK2PN4 (ORCPT
+        with ESMTP id S229693AbiK2PNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:13:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2113B05
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:12:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669734776;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G+0yRb77ltoQSc2X37cXpOsUdhALm0i+PbnCV2ZbJ+8=;
-        b=akg+put82K++M839WNi3ClhGy1Ni/4B6xVmrvb+OMFlX1SwfJcdnc6GxOpVB0L871lbIQv
-        CcajgPKglyc+Y1xPYhoFLHt/BW+h6RCAqYCfByH6qK1czZz7h0YRKEhD7dtplFcduG+duf
-        nUFo1ESxjRo1AAC2XYq3pJn6DAIYw2g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-357-rQxRq_AMN3S0SPWQ2cOZTQ-1; Tue, 29 Nov 2022 10:12:51 -0500
-X-MC-Unique: rQxRq_AMN3S0SPWQ2cOZTQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C27638339C6;
-        Tue, 29 Nov 2022 15:12:50 +0000 (UTC)
-Received: from rotkaeppchen (unknown [10.39.192.193])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 86063492B07;
-        Tue, 29 Nov 2022 15:12:48 +0000 (UTC)
-Date:   Tue, 29 Nov 2022 16:12:44 +0100
-From:   Philipp Rudo <prudo@redhat.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Baoquan He <bhe@redhat.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Ross Zwisler <zwisler@kernel.org>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kexec: Enable runtime allocation of crash_image
-Message-ID: <20221129161244.7ecf59e5@rotkaeppchen>
-In-Reply-To: <CANiDSCuwE8_bVErcKV0UcvaPjMx4vbgXzhw2dY69_x2GcB0VxQ@mail.gmail.com>
-References: <20221124-kexec-noalloc-v1-0-d78361e99aec@chromium.org>
-        <20221128180003.49747650@rotkaeppchen>
-        <CANiDSCuwE8_bVErcKV0UcvaPjMx4vbgXzhw2dY69_x2GcB0VxQ@mail.gmail.com>
-Organization: Red Hat inc.
+        Tue, 29 Nov 2022 10:13:52 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709F9DFFB;
+        Tue, 29 Nov 2022 07:13:51 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATF5BLa007838;
+        Tue, 29 Nov 2022 15:13:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=6DM+s6wNaCi7olYeyp2LZ8PKgJ1P1Ksw181EifA6oxE=;
+ b=mc1mq92bTJoaeKiyFeaY3lLG6+NUU4aeg6hAze4ZHzuwHVk7cuLtaUi1GMwTOLeYjrdi
+ VvSiEYHPEEzGeo1glTlZ3dntAgk2WNLwMzLGXqpXDV/z4G25VO/hEFo3P1MmvvJGw0pK
+ 0KhNiIqRcPpr0cS+8am/i3h33mo0BBslda1bJB1Hyrmp/TTc2GNrmcAj3Of4lhRVIb2u
+ VEB39LlSGytmtVk0Zse97DrZm1x+HGricSFM5tMVy1XdkwGzF5t+OBYlCJsR5DIpCJ3/
+ CNiEbd6tc4Y1uEA0wsPiq3APO+Q32/2Y3/c7rbj9OC3iXbS9Rb4wgiuLoL8Z7ejAxEZl oA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m5mdhg6p9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 15:13:33 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ATF5aCK005278;
+        Tue, 29 Nov 2022 15:13:31 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 3m3ae9c8gb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 15:13:31 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ATFDTtn1180394
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 29 Nov 2022 15:13:29 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EAA2D11C04A;
+        Tue, 29 Nov 2022 15:13:28 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 01D8B11C04C;
+        Tue, 29 Nov 2022 15:13:27 +0000 (GMT)
+Received: from [9.109.198.140] (unknown [9.109.198.140])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 29 Nov 2022 15:13:26 +0000 (GMT)
+Message-ID: <6cdad32e-782d-5bb5-f7e9-a44fb0b6444d@linux.ibm.com>
+Date:   Tue, 29 Nov 2022 20:43:25 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: linux-next: build warnings after merge of the powerpc-objtool
+ tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+References: <20221125143012.6426c2b9@canb.auug.org.au>
+From:   Sathvika Vasireddy <sv@linux.ibm.com>
+In-Reply-To: <20221125143012.6426c2b9@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: F2lH_XEpazIbiNeK9BvuK-gXke5aRu4x
+X-Proofpoint-GUID: F2lH_XEpazIbiNeK9BvuK-gXke5aRu4x
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-29_09,2022-11-29_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ mlxlogscore=999 malwarescore=0 phishscore=0 impostorscore=0
+ lowpriorityscore=0 spamscore=0 suspectscore=0 clxscore=1011 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211290083
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ricardo,
+Hi all,
 
-On Mon, 28 Nov 2022 18:07:06 +0100
-Ricardo Ribalda <ribalda@chromium.org> wrote:
+On 25/11/22 09:00, Stephen Rothwell wrote:
+> Hi all,
+>
+> After merging the powerpc-objtool tree, today's linux-next build (powerpc
+> pseries_le_defconfig) produced these warnings:
+>
+> arch/powerpc/kernel/head_64.o: warning: objtool: end_first_256B(): can't find starting instruction
+> arch/powerpc/kernel/optprobes_head.o: warning: objtool: optprobe_template_end(): can't find starting instruction
+>
+> I have no idea what started this (they may have been there yesterday).
+I was able to recreate the above mentioned warnings with 
+pseries_le_defconfig and powernv_defconfig. The regression report also 
+mentions a warning 
+(https://lore.kernel.org/oe-kbuild-all/202211282102.QUr7HHrW-lkp@intel.com/) 
+seen with arch/powerpc/kernel/kvm_emul.S assembly file.
 
-> Hi Philipp
-> 
-> 
-> Thanks for your review.
-> 
-> 
-> On Mon, 28 Nov 2022 at 18:00, Philipp Rudo <prudo@redhat.com> wrote:
-> >
-> > Hi Ricardo,
-> >
-> > On Thu, 24 Nov 2022 23:23:36 +0100
-> > Ricardo Ribalda <ribalda@chromium.org> wrote:
-> >  
-> > > Usually crash_image is defined statically via the crashkernel parameter
-> > > or DT.
-> > >
-> > > But if the crash kernel is not used, or is smaller than then
-> > > area pre-allocated that memory is wasted.
-> > >
-> > > Also, if the crash kernel was not defined at bootime, there is no way to
-> > > use the crash kernel.
-> > >
-> > > Enable runtime allocation of the crash_image if the crash_image is not
-> > > defined statically. Following the same memory allocation/validation path
-> > > that for the reboot kexec kernel.
-> > >
-> > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>  
-> >
-> > I don't think this patch will work as intended. For one you omit
-> > setting the image->type to KEXEC_TYPE_CRASH. But when you grep for that
-> > type you will find that there is a lot of special handling done for it.
-> > I don't believe that this can simply be skipped without causing
-> > problems.
-> >
-> > Furthermore I think you have missed one important detail. The memory
-> > reserved for the crash kernel is not just a buffer for the image but
-> > the memory it runs in! For that it has to be a continuous piece of
-> > physical memory with usually some additional arch specific limitations.
-> > When allocated dynamically all those limitations need to be considered.
-> > But a standard kexec doesn't care about those limitations as it doesn't
-> > care about the os running before itself. It can simply overwrite the
-> > memory when booting. But if the crash kernel does the same it will
-> > corrupt the dump it is supposed to generate.  
-> 
-> Right now, I do not intend to use it to fetch a kdump, I am using it
-> as the image that will run when the system crashes.
+  [1] arch/powerpc/kernel/optprobes_head.o: warning: objtool: 
+optprobe_template_end(): can't find starting instruction
+  [2] arch/powerpc/kernel/kvm_emul.o: warning: objtool: 
+kvm_template_end(): can't find starting instruction
+  [3] arch/powerpc/kernel/head_64.o: warning: objtool: end_first_256B(): 
+can't find starting instruction
 
-the crash_image is currently all about creating a dump. If you want to
-change that you need to discuss the new behavior in the commit message!
-Please update the commit message.
+The warnings [1] and [2] go away after adding 'nop' instruction. Below 
+diff fixes it for me:
 
-Thanks
-Philipp
+diff --git a/arch/powerpc/kernel/optprobes_head.S 
+b/arch/powerpc/kernel/optprobes_head.S
+index cd4e7bc32609..ea4e3bd82f4f 100644
+--- a/arch/powerpc/kernel/optprobes_head.S
++++ b/arch/powerpc/kernel/optprobes_head.S
+@@ -134,3 +134,4 @@ optprobe_template_ret:
 
-> 
-> It seems to work fine on the two devices that I am using for tests.
-> 
-> >
-> > Thanks
-> > Philipp
-> >  
-> > > ---
-> > > kexec: Enable runtime allocation of crash_image
-> > >
-> > > To: Eric Biederman <ebiederm@xmission.com>
-> > > Cc: kexec@lists.infradead.org
-> > > Cc: linux-kernel@vger.kernel.org
-> > > Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-> > > Cc: linux-kernel@vger.kernel.org
-> > > Cc: Ross Zwisler <zwisler@kernel.org>
-> > > Cc: Philipp Rudo <prudo@redhat.com>
-> > > Cc: Baoquan He <bhe@redhat.com>
-> > > ---
-> > >  include/linux/kexec.h | 1 +
-> > >  kernel/kexec.c        | 9 +++++----
-> > >  kernel/kexec_core.c   | 5 +++++
-> > >  kernel/kexec_file.c   | 7 ++++---
-> > >  4 files changed, 15 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> > > index 41a686996aaa..98ca9a32bc8e 100644
-> > > --- a/include/linux/kexec.h
-> > > +++ b/include/linux/kexec.h
-> > > @@ -427,6 +427,7 @@ extern int kexec_load_disabled;
-> > >  extern bool kexec_in_progress;
-> > >
-> > >  int crash_shrink_memory(unsigned long new_size);
-> > > +bool __crash_memory_valid(void);
-> > >  ssize_t crash_get_memory_size(void);
-> > >
-> > >  #ifndef arch_kexec_protect_crashkres
-> > > diff --git a/kernel/kexec.c b/kernel/kexec.c
-> > > index cb8e6e6f983c..b5c17db25e88 100644
-> > > --- a/kernel/kexec.c
-> > > +++ b/kernel/kexec.c
-> > > @@ -28,7 +28,7 @@ static int kimage_alloc_init(struct kimage **rimage, unsigned long entry,
-> > >       struct kimage *image;
-> > >       bool kexec_on_panic = flags & KEXEC_ON_CRASH;
-> > >
-> > > -     if (kexec_on_panic) {
-> > > +     if (kexec_on_panic && __crash_memory_valid()) {
-> > >               /* Verify we have a valid entry point */
-> > >               if ((entry < phys_to_boot_phys(crashk_res.start)) ||
-> > >                   (entry > phys_to_boot_phys(crashk_res.end)))
-> > > @@ -44,7 +44,7 @@ static int kimage_alloc_init(struct kimage **rimage, unsigned long entry,
-> > >       image->nr_segments = nr_segments;
-> > >       memcpy(image->segment, segments, nr_segments * sizeof(*segments));
-> > >
-> > > -     if (kexec_on_panic) {
-> > > +     if (kexec_on_panic && __crash_memory_valid()) {
-> > >               /* Enable special crash kernel control page alloc policy. */
-> > >               image->control_page = crashk_res.start;
-> > >               image->type = KEXEC_TYPE_CRASH;
-> > > @@ -101,7 +101,7 @@ static int do_kexec_load(unsigned long entry, unsigned long nr_segments,
-> > >
-> > >       if (flags & KEXEC_ON_CRASH) {
-> > >               dest_image = &kexec_crash_image;
-> > > -             if (kexec_crash_image)
-> > > +             if (kexec_crash_image && __crash_memory_valid())
-> > >                       arch_kexec_unprotect_crashkres();
-> > >       } else {
-> > >               dest_image = &kexec_image;
-> > > @@ -157,7 +157,8 @@ static int do_kexec_load(unsigned long entry, unsigned long nr_segments,
-> > >       image = xchg(dest_image, image);
-> > >
-> > >  out:
-> > > -     if ((flags & KEXEC_ON_CRASH) && kexec_crash_image)
-> > > +     if ((flags & KEXEC_ON_CRASH) && kexec_crash_image &&
-> > > +         __crash_memory_valid())
-> > >               arch_kexec_protect_crashkres();
-> > >
-> > >       kimage_free(image);
-> > > diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> > > index ca2743f9c634..77083c9760fb 100644
-> > > --- a/kernel/kexec_core.c
-> > > +++ b/kernel/kexec_core.c
-> > > @@ -1004,6 +1004,11 @@ void crash_kexec(struct pt_regs *regs)
-> > >       }
-> > >  }
-> > >
-> > > +bool __crash_memory_valid(void)
-> > > +{
-> > > +     return crashk_res.end != crashk_res.start;
-> > > +}
-> > > +
-> > >  ssize_t crash_get_memory_size(void)
-> > >  {
-> > >       ssize_t size = 0;
-> > > diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> > > index 45637511e0de..0671f4f370ff 100644
-> > > --- a/kernel/kexec_file.c
-> > > +++ b/kernel/kexec_file.c
-> > > @@ -280,7 +280,7 @@ kimage_file_alloc_init(struct kimage **rimage, int kernel_fd,
-> > >
-> > >       image->file_mode = 1;
-> > >
-> > > -     if (kexec_on_panic) {
-> > > +     if (kexec_on_panic && __crash_memory_valid()) {
-> > >               /* Enable special crash kernel control page alloc policy. */
-> > >               image->control_page = crashk_res.start;
-> > >               image->type = KEXEC_TYPE_CRASH;
-> > > @@ -345,7 +345,7 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
-> > >       dest_image = &kexec_image;
-> > >       if (flags & KEXEC_FILE_ON_CRASH) {
-> > >               dest_image = &kexec_crash_image;
-> > > -             if (kexec_crash_image)
-> > > +             if (kexec_crash_image && __crash_memory_valid())
-> > >                       arch_kexec_unprotect_crashkres();
-> > >       }
-> > >
-> > > @@ -408,7 +408,8 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
-> > >  exchange:
-> > >       image = xchg(dest_image, image);
-> > >  out:
-> > > -     if ((flags & KEXEC_FILE_ON_CRASH) && kexec_crash_image)
-> > > +     if ((flags & KEXEC_FILE_ON_CRASH) && kexec_crash_image &&
-> > > +         __crash_memory_valid())
-> > >               arch_kexec_protect_crashkres();
-> > >
-> > >       kexec_unlock();
-> > >
-> > > ---
-> > > base-commit: 4312098baf37ee17a8350725e6e0d0e8590252d4
-> > > change-id: 20221124-kexec-noalloc-3cab3cbe000f
-> > >
-> > > Best regards,  
-> >  
-> 
-> 
+         .global optprobe_template_end
+  optprobe_template_end:
++       nop
 
+diff --git a/arch/powerpc/kernel/kvm_emul.S b/arch/powerpc/kernel/kvm_emul.S
+index 7af6f8b50c5d..41fd664e3ba0 100644
+--- a/arch/powerpc/kernel/kvm_emul.S
++++ b/arch/powerpc/kernel/kvm_emul.S
+@@ -352,3 +352,4 @@ kvm_tmp_end:
+
+  .global kvm_template_end
+  kvm_template_end:
++       nop
+
+For warning [3], objtool is throwing can't find starting instruction 
+warning because it finds that the symbol (end_first_256B) is zero sized, 
+and such symbols are not added to the rbtree. I tried to fix it by 
+adding a 'nop' instruction (pasted diff below), but that resulted in a 
+kernel build failure.
+
+diff --git a/arch/powerpc/kernel/head_64.S b/arch/powerpc/kernel/head_64.S
+index 874efd25cc45..d48850fe159f 100644
+--- a/arch/powerpc/kernel/head_64.S
++++ b/arch/powerpc/kernel/head_64.S
+@@ -192,6 +192,7 @@ __secondary_hold:
+         EMIT_BUG_ENTRY 0b, __FILE__, __LINE__, 0
+  #endif
+  CLOSE_FIXED_SECTION(first_256B)
++nop
+
+  /*
+   * On server, we include the exception vectors code here as it
+
+diff --git a/arch/powerpc/kernel/exceptions-64s.S 
+b/arch/powerpc/kernel/exceptions-64s.S
+index 26f8fef53c72..f7517d443e9b 100644
+--- a/arch/powerpc/kernel/exceptions-64s.S
++++ b/arch/powerpc/kernel/exceptions-64s.S
+@@ -3104,9 +3104,13 @@ __end_interrupts:
+  DEFINE_FIXED_SYMBOL(__end_interrupts, virt_trampolines)
+
+  CLOSE_FIXED_SECTION(real_vectors);
++nop
+  CLOSE_FIXED_SECTION(real_trampolines);
++nop
+  CLOSE_FIXED_SECTION(virt_vectors);
++nop
+  CLOSE_FIXED_SECTION(virt_trampolines);
++nop
+
+  USE_TEXT_SECTION()
+
+I'm not very sure on how to address this particular warning 
+(arch/powerpc/kernel/head_64.o: warning: objtool: end_first_256B(): 
+can't find starting instruction). Given that there are no calls to 
+_mcount, one workaround is to skip objtool from running on 
+arch/powerpc/kernel/head_64.o file. The below diff works for me:
+
+diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
+index 9b6146056e48..9ef6a040d875 100644
+--- a/arch/powerpc/kernel/Makefile
++++ b/arch/powerpc/kernel/Makefile
+@@ -219,3 +219,5 @@ $(obj)/vdso64_wrapper.o : $(obj)/vdso/vdso64.so.dbg
+
+  # for cleaning
+  subdir- += vdso
++
++OBJECT_FILES_NON_STANDARD_head_64.o := y
+
+
+Thanks,
+Sathvika
