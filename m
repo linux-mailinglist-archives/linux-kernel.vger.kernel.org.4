@@ -2,143 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 036D063B776
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 02:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EE963B77E
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 02:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234955AbiK2Bya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 20:54:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43912 "EHLO
+        id S235031AbiK2B5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 20:57:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234773AbiK2By2 (ORCPT
+        with ESMTP id S234527AbiK2B5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 20:54:28 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CE63135D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 17:54:27 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id e189so9075817iof.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 17:54:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WMM7L0hXLXFUfKlNhgYF7NOBpwKqvN6Tf5K3J+8O/Uc=;
-        b=T8k72MxddQdscOHj6Io3D/OAp4GrC7Gna7f3l9dfpJ6TY7SxKZjBjnCJqc6saP9VMU
-         o9fOEOkEmUtPkCzVQheZlimTTgpxuynrjQjZ/WFchxU6utIQcVcPv5EavSh8+fipxChU
-         JvjBJsC2sff2IFgcv6pyDfv5+1jjnm82hTQzanFFreryRblha3TM/fuIpOoZEOjqn/51
-         ppv4YxgtVMD22chsxOYlEvXrW/cJd3qaAdCidEfBTGtI58G+TpL/FAYIiMD40AgAkz7a
-         jbeVLFo5yTete2IN/73QDKVOtmQjGdAWsILoddNRc9deAf5K3tYiBwYSuA/X9s0uawea
-         dHXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WMM7L0hXLXFUfKlNhgYF7NOBpwKqvN6Tf5K3J+8O/Uc=;
-        b=OFf6kcdFtM+ALGP+OzLWUTJExbFpy6XZzO7JJAHRZwLpLzmVeB0L9bI5kp+fsUUIFp
-         OOC3eQj3wRNjUt6rWoCdT2rnXbTv5L0dmIVAaZB5SbQZGJMrvJzysQdXH4J/C4V/e/HK
-         Ry0QXPjsQT2r/vkWj5R0w/uUD3wNipEkNbdVqwypjg7hHmJuVqzkLhIcpU0fYbhqRpjI
-         ynqg8p7Gc05yFzcoK2JtIeH7t6zfU8+NgSSVzyCcL5tv+TubI6RDGsHfULvq6YMy978A
-         9BuqBDgIGkCILkMmmosol1+zKRBF67hmKTH3gpHaZ+XafmtXowjWkYJjjmLuTc425LT2
-         iXDg==
-X-Gm-Message-State: ANoB5pmIeOdFOuZyQIUkeVyZjj87wmvenTg8cz6zF4zrWJ4/77TZqzgs
-        VGim+MWrwgoJ4Y3KYuZMkwFlrA==
-X-Google-Smtp-Source: AA0mqf7VzALgwv8RJk4O1iZ4K4Lr22DE+J44rlb52zwohsPukVXTnLtXFcO23Yr0xME2jVNFlMMXtA==
-X-Received: by 2002:a05:6638:603:b0:389:ef1f:2ee6 with SMTP id g3-20020a056638060300b00389ef1f2ee6mr323971jar.267.1669686866493;
-        Mon, 28 Nov 2022 17:54:26 -0800 (PST)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id o17-20020a92a811000000b003030d8b3cb7sm1662850ilh.42.2022.11.28.17.54.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 17:54:25 -0800 (PST)
-Message-ID: <35be9c2d-63d4-01cf-b8d7-de3306d50e64@linaro.org>
-Date:   Mon, 28 Nov 2022 19:54:25 -0600
+        Mon, 28 Nov 2022 20:57:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072573135D;
+        Mon, 28 Nov 2022 17:57:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9279661532;
+        Tue, 29 Nov 2022 01:57:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E60C0C433D7;
+        Tue, 29 Nov 2022 01:57:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669687039;
+        bh=RR3l04y9mI6dUbLc2VgWj7KfTEgIhi84deXgt2t8g8I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bd+lP5H1ZonmaSTZAWSB4ReBy/DwkSVI6jWbHxgQNxSC0w50c7lnODTIzXYBDcQ7T
+         T/leNw/QTL63YtLQZJH5c7X1so28BCgBWNFj/MQZumtFY3gyHxM4YetPzhsywvdRi7
+         tUNZHknN83zWD+y6usiSTBnr+EnDPBwqk/Ma0ceVx9v0NZKHiy1aHROHSUylmyvXFu
+         rO16hrXiYEchzTaTLbhGQi0lCNRuXMwRi02q0jWAZe5T8hvKeMhQhtLz9+2Kx2w1VQ
+         nEvX3wGqHOhlgDslSPmGjDRBjjo2mh4lmP2aIOTQRpsfxxcMygRxhZA4sz8fDCwCc7
+         BErs3piClv6iw==
+Received: by mail-ej1-f49.google.com with SMTP id e27so30343924ejc.12;
+        Mon, 28 Nov 2022 17:57:19 -0800 (PST)
+X-Gm-Message-State: ANoB5pmIyiFRpnp/Gg08und5Sw7C0gGJnQXwpvLWQb2IS96ezQc05BjT
+        DEwkGyMjW3Gafh8Ok2UgyYJNue3b3X+RFPgrJhM=
+X-Google-Smtp-Source: AA0mqf7QPwy/gfx9+IQQdiRZ+nRvnL+Bi5qWVedX/jzBfS+m5qi3GdnOmGsm1gidpRnJ5G9t/0ENmzcMuZIq+IlBP8s=
+X-Received: by 2002:a17:906:3954:b0:7bf:852b:e23c with SMTP id
+ g20-20020a170906395400b007bf852be23cmr7332813eje.614.1669687038069; Mon, 28
+ Nov 2022 17:57:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] clk: qcom: rpmh: add support for SM6350 rpmh IPA clock
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     sboyd@kernel.org, mturquette@baylibre.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, agross@kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221129000047.697089-1-elder@linaro.org>
- <CAA8EJpqcQaamPn=6Z0GRKVDvFu8BGQ190EYJH34dApBcC3nzdA@mail.gmail.com>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <CAA8EJpqcQaamPn=6Z0GRKVDvFu8BGQ190EYJH34dApBcC3nzdA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220901171252.2148348-1-song@kernel.org> <Y3expGRt4cPoZgHL@alley>
+In-Reply-To: <Y3expGRt4cPoZgHL@alley>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 28 Nov 2022 17:57:06 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW4qYpX7wzHn5J5Hn9cnOFSZwwQPCjTM_HPTt_zbBS03ww@mail.gmail.com>
+Message-ID: <CAPhsuW4qYpX7wzHn5J5Hn9cnOFSZwwQPCjTM_HPTt_zbBS03ww@mail.gmail.com>
+Subject: Re: [PATCH v6] livepatch: Clear relocation targets on a module removal
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+        x86@kernel.org, joe.lawrence@redhat.com,
+        linuxppc-dev@lists.ozlabs.org, Josh Poimboeuf <jpoimboe@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/28/22 7:35 PM, Dmitry Baryshkov wrote:
-> On Tue, 29 Nov 2022 at 02:00, Alex Elder <elder@linaro.org> wrote:
->>
->> From: Luca Weiss <luca.weiss@fairphone.com>
->>
->> The IPA core clock is required for SM6350.  Define it.
->>
->> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->> ---
->>   drivers/clk/qcom/clk-rpmh.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
->> index 0471bab824642..6a5887aae21a4 100644
->> --- a/drivers/clk/qcom/clk-rpmh.c
->> +++ b/drivers/clk/qcom/clk-rpmh.c
->> @@ -603,6 +603,7 @@ static const struct clk_rpmh_desc clk_rpmh_sc7280 = {
->>   DEFINE_CLK_RPMH_VRM(sm6350, ln_bb_clk2, ln_bb_clk2_ao, "lnbclkg2", 4);
->>   DEFINE_CLK_RPMH_VRM(sm6350, ln_bb_clk3, ln_bb_clk3_ao, "lnbclkg3", 4);
->>   DEFINE_CLK_RPMH_ARC(sm6350, qlink, qlink_ao, "qphy.lvl", 0x1, 4);
->> +DEFINE_CLK_RPMH_BCM(sm6350, ipa, "IP0");
+On Fri, Nov 18, 2022 at 8:24 AM Petr Mladek <pmladek@suse.com> wrote:
+>
+[...]
 
-So you're saying that the above line is unnecessary...
+> >
+> > +#ifdef CONFIG_LIVEPATCH
+> > +void clear_relocate_add(Elf64_Shdr *sechdrs,
+> > +                    const char *strtab,
+> > +                    unsigned int symindex,
+> > +                    unsigned int relsec,
+> > +                    struct module *me)
+> > +{
+> > +     unsigned int i;
+> > +     Elf64_Rela *rela = (void *)sechdrs[relsec].sh_addr;
+> > +     Elf64_Sym *sym;
+> > +     unsigned long *location;
+> > +     const char *symname;
+> > +     u32 *instruction;
+> > +
+> > +     pr_debug("Clearing ADD relocate section %u to %u\n", relsec,
+> > +              sechdrs[relsec].sh_info);
+> > +
+> > +     for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rela); i++) {
+> > +             location = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr
+> > +                     + rela[i].r_offset;
+> > +             sym = (Elf64_Sym *)sechdrs[symindex].sh_addr
+> > +                     + ELF64_R_SYM(rela[i].r_info);
+> > +             symname = me->core_kallsyms.strtab
+> > +                     + sym->st_name;
+> > +
+> > +             if (ELF64_R_TYPE(rela[i].r_info) != R_PPC_REL24)
+> > +                     continue;
+> > +             /*
+> > +              * reverse the operations in apply_relocate_add() for case
+> > +              * R_PPC_REL24.
+> > +              */
+> > +             if (sym->st_shndx != SHN_UNDEF &&
+> > +                 sym->st_shndx != SHN_LIVEPATCH)
+> > +                     continue;
+> > +
+> > +             instruction = (u32 *)location;
+> > +             if (is_mprofile_ftrace_call(symname))
+> > +                     continue;
+> > +
+> > +             if (!instr_is_relative_link_branch(ppc_inst(*instruction)))
+> > +                     continue;
+> > +
+> > +             instruction += 1;
+> > +             patch_instruction(instruction, ppc_inst(PPC_RAW_NOP()));
+> > +     }
+> > +
+> > +}
+>
+> This looks like a lot of duplicated code. Isn't it?
 
->>   static struct clk_hw *sm6350_rpmh_clocks[] = {
->>          [RPMH_CXO_CLK]          = &sc7280_bi_tcxo.hw,
->> @@ -613,6 +614,7 @@ static struct clk_hw *sm6350_rpmh_clocks[] = {
->>          [RPMH_LN_BB_CLK3_A]     = &sm6350_ln_bb_clk3_ao.hw,
->>          [RPMH_QLINK_CLK]        = &sm6350_qlink.hw,
->>          [RPMH_QLINK_CLK_A]      = &sm6350_qlink_ao.hw,
->> +       [RPMH_IPA_CLK]          = &sm6350_ipa.hw,
+TBH, I think the duplicated code is not really bad.
 
-...and that this line (above) can instead look like this:
+apply_relocate_add() is a much more complicated function, I would
+rather not mess it up to make this function a little simpler.
 
-	[RPMH_IPA_CLK]		= &sdm845_ipa.hw,
+[...]
 
-Correct?
+>
+> This duplicates a lot of code. Please, rename apply_relocate_add() the
+> same way as __apply_clear_relocate_add() and add the "apply" parameter.
+> Then add the wrappers for this:
+>
+> int write_relocate_add(Elf64_Shdr *sechdrs,
+>                        const char *strtab,
+>                        unsigned int symindex,
+>                        unsigned int relsec,
+>                        struct module *me,
+>                        bool apply)
+> {
+>         int ret;
+>         bool early = me->state == MODULE_STATE_UNFORMED;
+>         void *(*write)(void *, const void *, size_t) = memcpy;
+>
+>         if (!early) {
+>                 write = text_poke;
+>                 mutex_lock(&text_mutex);
+>         }
 
-> This can use sdm845_ipa.hw instead of defining new clocks.
+How about we move the "early" logic into __write_relocate_add()?
 
-Your statement seems to also be true for the [RPMH_IPA_CLK]
-entry in sdx55_rpmh_clocks[].  (For the record, the commit
-that added that one was authored by me, and I didn't realize
-what you have stated here.)
+>
+>         ret = __write_relocate_add(sechdrs, strtab, symindex, relsec, me,
+>                                          write, apply);
+>
+>         if (!early) {
+>                 text_poke_sync();
+>                 mutex_unlock(&text_mutex);
+>         }
+>
+>         return ret;
+> }
+>
+> int apply_relocate_add(Elf64_Shdr *sechdrs,
+>                        const char *strtab,
+>                        unsigned int symindex,
+>                        unsigned int relsec,
+>                        struct module *me)
+> {
+>         return write_relocate_add(sechdrs, strtab, symindex, relsec, me, true);
 
-Please confirm, and I'll update.
+Then we just call __write_relocate_add() from here...
 
-I'll also send another patch to remove the definition of
-sdx55_ipa if Mani is willing to test it for me...
+> }
+>
+> #ifdef CONFIG_LIVEPATCH
+> void apply_relocate_add(Elf64_Shdr *sechdrs,
+>                         const char *strtab,
+>                         unsigned int symindex,
+>                         unsigned int relsec,
+>                         struct module *me)
+> {
+>         write_relocate_add(sechdrs, strtab, symindex, relsec, me, false);
 
-Thank you Dmitry.
+and here.
 
-					-Alex
 
->>   };
->>
->>   static const struct clk_rpmh_desc clk_rpmh_sm6350 = {
->> --
->> 2.34.1
->>
-> 
-> 
+> }
+> #endif
+>
+>
+> > +#endif
+> > +
+> >  #endif
+> >
+> >  int module_finalize(const Elf_Ehdr *hdr,
+> > --- a/kernel/livepatch/core.c
+> > +++ b/kernel/livepatch/core.c
+> > @@ -316,6 +316,45 @@ int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
+> >       return apply_relocate_add(sechdrs, strtab, symndx, secndx, pmod);
+> >  }
+> >
+> > +static void klp_clear_object_relocations(struct module *pmod,
+> > +                                     struct klp_object *obj)
+> > +{
+> > +     int i, cnt;
+> > +     const char *objname, *secname;
+> > +     char sec_objname[MODULE_NAME_LEN];
+> > +     Elf_Shdr *sec;
+> > +
+> > +     objname = klp_is_module(obj) ? obj->name : "vmlinux";
+> > +
+> > +     /* For each klp relocation section */
+> > +     for (i = 1; i < pmod->klp_info->hdr.e_shnum; i++) {
+> > +             sec = pmod->klp_info->sechdrs + i;
+> > +             secname = pmod->klp_info->secstrings + sec->sh_name;
+> > +             if (!(sec->sh_flags & SHF_RELA_LIVEPATCH))
+> > +                     continue;
+> > +
+> > +             /*
+> > +              * Format: .klp.rela.sec_objname.section_name
+> > +              * See comment in klp_resolve_symbols() for an explanation
+> > +              * of the selected field width value.
+> > +              */
+> > +             secname = pmod->klp_info->secstrings + sec->sh_name;
+> > +             cnt = sscanf(secname, ".klp.rela.%55[^.]", sec_objname);
+> > +             if (cnt != 1) {
+> > +                     pr_err("section %s has an incorrectly formatted name\n",
+> > +                            secname);
+> > +                     continue;
+> > +             }
 
+Actually, I think we don't need the cnt check here. Once it is removed,
+there isn't much duplicated logic.
+
+> > +
+> > +             if (strcmp(objname, sec_objname))
+> > +                     continue;
+> > +
+> > +             clear_relocate_add(pmod->klp_info->sechdrs,
+> > +                                pmod->core_kallsyms.strtab,
+> > +                                pmod->klp_info->symndx, i, pmod);
+> > +     }
+> > +}
+>
+> Huh, this duplicates a lot of tricky code.
+>
+> It is even worse because this squashed code from two functions
+> klp_apply_section_relocs() and klp_apply_object_relocs()
+> into a single function. As a result, the code duplication is not
+> even obvious.
+>
+> Also the suffix "_reloacations() does not match the suffix of
+> the related funciton:
+>
+>         + klp_apply_object_relocs()             (existing)
+>         + klp_clear_object_relocations()        (new)
+>
+> This all would complicate maintenance of the code.
+>
+> Please, implement a common:
+>
+> int klp_write_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
+>                              const char *shstrtab, const char *strtab,
+>                              unsigned int symndx, unsigned int secndx,
+>                              const char *objname, bool apply);
+>
+> and
+>
+> int klp_write_object_relocs(struct klp_patch *patch,
+>                             struct klp_object *obj,
+>                             bool apply);
+>
+> and add the respective wrappers:
+>
+> int klp_apply_section_relocs();   /* also needed in module/main.c */
+> int klp_apply_object_relocs();
+> void klp_clear_object_relocs();
+
+With the above simplification (removing cnt check), do we still need
+all these wrappers? Personally, I think they will make the code more
+difficult to follow..
+
+Thanks,
+Song
