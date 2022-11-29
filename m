@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E101E63B7F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 03:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE13B63B7FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 03:34:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235219AbiK2CeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 21:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37786 "EHLO
+        id S234996AbiK2CeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 21:34:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234976AbiK2CeH (ORCPT
+        with ESMTP id S235176AbiK2CeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Nov 2022 21:34:07 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE39421A5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:34:05 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id ha10so30558654ejb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:34:05 -0800 (PST)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2ED2421AF
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:34:06 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id s12so17962573edd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:34:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZTx+TtbHQiuyemeCcK5ytUKmVUVmCoh0H5eAmJ4K4qk=;
-        b=zdPnBz8LuT1eYde2dmjuvmer7HQPreaOkL/J34wCWMTbFXn/rlUkZgCRefXxmTxSd6
-         ynHItCJhUlhX/oB2no2KlunwGK6IeCorVQeNAtZFV3oyjteMsRZVQXkWRXhjrRtoPFfv
-         5dTvbspYt2uIpdh6UQQCegMEKg5YRfpqkfvCrZnv6NCgczSc7qKFiDJhgpL7nq5Ix5Yw
-         JDv1wHyuf8+45dqkj6Blp5k9x5lc7FxsVJyBNVTlGlCM/p0CjKi6p8sx7XCmaYgR/Pso
-         n4+SrZ1GsX9KXdHppUTzlSbDJaxWGT0Of3R5Nsw2oApzRycZvxrSZv00CIsPOmdE/UTR
-         YTyw==
+        bh=770v95sUrIlvtNLFG2ZFJPK2miGjPEzCsACcRdRH3P0=;
+        b=KtIorSIdh3d3uWlsZA1SrhGsQlbfGeLfo+VHQYFWQtkxRniNSTYERELjM3I5xCQPES
+         iW1aMNWCA9wC7C4/aaVQa1DNgKcQlD0kCogEmpTnekZQiNNzVXywkUMmwJMXV0124wTT
+         VgIr5sURQfKCiUWg8xMSU0fSEODUS2kcAv9kRtnb9l1e7VpAUXIMggTPsR0gGavSYVYf
+         HqrY+qMUOQrxu0XjRe7Wfr0gZbyPsUhV1JpPtywD4DPBiIRVzADw4dzQ0nrS+5Ig4HrG
+         hZ5ltam91ISEz7Ri66w20yPQLBDRWqJmKpiEJuMtkP2obRkKfBAZCudmfLLTnn4gm0SG
+         HfxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZTx+TtbHQiuyemeCcK5ytUKmVUVmCoh0H5eAmJ4K4qk=;
-        b=lkl2snYm84CJ5W95KtuoeP6VgtDzl9x3PO/BlwBrsl+5+cABXPI13rqSfl0YdCM3B4
-         h2nb8HYUAAUGB5O7w647nQFP0YtRs/HwZAYUY3yDcIFwy/A+aOtJKwyOtqW9iaLuG4Wh
-         I486ZSlZxbfI6y8l+Ogvh0yN2brLY2rXgLG8+7cswFpI1KlUj4Q5lcGs+Mtbuev7zyPy
-         ww2kdPE/Gn7Yf2tx59NJS4VegYSn347HGfdkn0CB/gpCITXO2cb/7D9/db2pyOsYPGAX
-         EXqr0fnrxGsMrD66IEmfYS9uA1782UaRPBlKavlIl9RTBEAM2TFChPkAl6aMkMTyN66I
-         dHlA==
-X-Gm-Message-State: ANoB5pmfPh/qTzBGDjFOo/ddqy/D9/TJRYGQGcu3k3cbKRh4vwGY3qZy
-        ffbqvLvQbjUjqG461Dw5kxzuwA==
-X-Google-Smtp-Source: AA0mqf7cNqtLS8XZxcIEfqpN/Zg8AfFILEVbgilC7PIW1LJ9tdQClOSPyxdLvja1MaMQAwYiJDpXfQ==
-X-Received: by 2002:a17:906:8465:b0:7bd:7253:457a with SMTP id hx5-20020a170906846500b007bd7253457amr13730873ejc.81.1669689244396;
-        Mon, 28 Nov 2022 18:34:04 -0800 (PST)
+        bh=770v95sUrIlvtNLFG2ZFJPK2miGjPEzCsACcRdRH3P0=;
+        b=wyf0C2FhzKggFMAsP2079Nk8HuIgqsNVsmoCCIvVJctY28aubvU3nF09R6netceSPD
+         3G2yj++JsA7hCvy2OTZvQzDOTkp9bc327bbEfY6KDNdCinT+DQvIZ9qSvXydxJ2iZ5A6
+         s+ypy2d6TP4EPMAzr7rgUkU8ZA/jXku2kDUuGCELS57JEiG9mUQdojuoUUgH6dNZtn8n
+         ZII7ie7Iy3B40fOZEeQafk55DYYplIrr1JZAh4ZKh0yVBxyuu7OMRz5c1HInzSCe+MR7
+         Bneq3DEJwgWl6xvLFIoWEKh9LkewpYB4aRIpZ46oQv/wuRvAWvzd6aPVtT/uCAIED3Dx
+         ymKQ==
+X-Gm-Message-State: ANoB5pn/5Q5Iy6q2WZ7ssIqv9plh2/BAhf6mSmIV9oQvimzfDrAmZBG1
+        RrW/FBuustNWZhqBYzmzlNeayQ==
+X-Google-Smtp-Source: AA0mqf50ZSA74qR3XCOCM6LUBeSegCpn3qM55F0v3CAeeDj/+bX11XGwWL8FKbwRauaJFIssCHLC4g==
+X-Received: by 2002:a05:6402:5483:b0:468:d5a9:cb4b with SMTP id fg3-20020a056402548300b00468d5a9cb4bmr35890314edb.409.1669689245330;
+        Mon, 28 Nov 2022 18:34:05 -0800 (PST)
 Received: from c64.fritz.box ([81.221.122.240])
-        by smtp.gmail.com with ESMTPSA id a4-20020aa7d744000000b004615f7495e0sm5733817eds.8.2022.11.28.18.34.03
+        by smtp.gmail.com with ESMTPSA id a4-20020aa7d744000000b004615f7495e0sm5733817eds.8.2022.11.28.18.34.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 18:34:04 -0800 (PST)
+        Mon, 28 Nov 2022 18:34:05 -0800 (PST)
 From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
 To:     devicetree@vger.kernel.org
 Cc:     linux-mediatek@lists.infradead.org,
@@ -59,9 +59,9 @@ Cc:     linux-mediatek@lists.infradead.org,
         krzysztof.kozlowski@linaro.org, matthias.bgg@gmail.com,
         angelogioacchino.delregno@collabora.com, khilman@baylibre.com,
         linux-gpio@vger.kernel.org, linus.walleij@linaro.org
-Subject: [PATCH v3 1/7] pinctrl: mediatek: common: Remove check for pins-are-numbered
-Date:   Tue, 29 Nov 2022 03:33:55 +0100
-Message-Id: <20221129023401.278780-2-bero@baylibre.com>
+Subject: [PATCH v3 2/7] pinctrl: stm32: Remove check for pins-are-numbered
+Date:   Tue, 29 Nov 2022 03:33:56 +0100
+Message-Id: <20221129023401.278780-3-bero@baylibre.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221129023401.278780-1-bero@baylibre.com>
 References: <20221129023401.278780-1-bero@baylibre.com>
@@ -77,41 +77,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the check for the unnecessary pins-are-numbered Devicetree property.
+Remove the check for the unnecessary pins-are-numbered
+DeviceTree property
 
 Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Kevin Hilman <khilman@baylibre.com>
 ---
- drivers/pinctrl/mediatek/pinctrl-mtk-common.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/pinctrl/stm32/pinctrl-stm32.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-index 076ae0b38e3d7..553d16703475b 100644
---- a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-@@ -1057,7 +1057,6 @@ int mtk_pctrl_init(struct platform_device *pdev,
- 	struct pinctrl_pin_desc *pins;
- 	struct mtk_pinctrl *pctl;
- 	struct device_node *np = pdev->dev.of_node, *node;
--	struct property *prop;
- 	int ret, i;
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
+index cc9472b284047..1cddca506ad7e 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+@@ -1499,11 +1499,6 @@ int stm32_pctl_probe(struct platform_device *pdev)
+ 	if (!match_data)
+ 		return -EINVAL;
  
- 	pctl = devm_kzalloc(&pdev->dev, sizeof(*pctl), GFP_KERNEL);
-@@ -1066,11 +1065,6 @@ int mtk_pctrl_init(struct platform_device *pdev,
- 
- 	platform_set_drvdata(pdev, pctl);
- 
--	prop = of_find_property(np, "pins-are-numbered", NULL);
--	if (!prop)
--		return dev_err_probe(dev, -EINVAL,
--				     "only support pins-are-numbered format\n");
+-	if (!device_property_present(dev, "pins-are-numbered")) {
+-		dev_err(dev, "only support pins-are-numbered format\n");
+-		return -EINVAL;
+-	}
 -
- 	node = of_parse_phandle(np, "mediatek,pctl-regmap", 0);
- 	if (node) {
- 		pctl->regmap1 = syscon_node_to_regmap(node);
+ 	pctl = devm_kzalloc(dev, sizeof(*pctl), GFP_KERNEL);
+ 	if (!pctl)
+ 		return -ENOMEM;
 -- 
 2.38.1
 
