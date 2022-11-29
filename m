@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C1063BD33
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4F063BD3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiK2JqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 04:46:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44550 "EHLO
+        id S229810AbiK2Jrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 04:47:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiK2JqA (ORCPT
+        with ESMTP id S231938AbiK2Jrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 04:46:00 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C9E5476B;
-        Tue, 29 Nov 2022 01:45:59 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so5857155pje.5;
-        Tue, 29 Nov 2022 01:45:59 -0800 (PST)
+        Tue, 29 Nov 2022 04:47:41 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAEB626E
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:47:39 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-368994f4bc0so121100677b3.14
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:47:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ko+qbf+b0Yv7gj3x+dmqgXT2t4VmwkOjBb0uMWb0qeo=;
-        b=QMTGc8dATSuNa3qa2tdoi28432ZIGdXhepGsvXVGCtpTOLz41a16mSV6pjjVIeEsO9
-         PJrhktRoFkYYeAO5E8N+9SXNKvsJBnpVmZY0oDEWaVJ4nC37dthNqFz+2bX0NyoPb7ji
-         D3/HxVLjkt5GkrZw/CysGVyK3EGEpKo/THJR8Y4wpL092B6BWaFSmqNMjXwB4mWqoEUN
-         jR4GhjSo6zgxjIkYcZt9OQr8ijnL/KwAbKvTjac/uMZE1ZFsFmqlIY33esnYdKCmgngv
-         BTvsjNSh5Vp/JawszvH9dXG0Y2xfdA0UHyun1wvwR0r5/DDXMLHnOiXxFgnUwonl+OPZ
-         ecjg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=jUYvtMPSKjTs5g6MPMmEMkOFRg4aOqr2pjUMfkz/qL0=;
+        b=VQ+VIAZ+G3oo5EFPjNjRqx8Z8Psg8ZPV0zITQA1aPIi9vO2Cpg0DrBU3vtvPcGyT2Y
+         nMV9ijpQ8uFbAwUt95JvQuGa/kqtpAt9OmTGt+VGfGd244AgOKUNGUQ5JHjhUK6+6mQU
+         ZfLDINbdMs+HC7aZHpe4SWXzozkIphqrMNLD8/Xr0sqr7Egy9DVfNy7wMyCuvpN33k9a
+         nFafoqr9wQFcP8RzADkbXouMmadafPfQQ+Hz+G+tuItnwuzMqy6hG0Gt5pEbytpYKffB
+         K8MXyWDFqbobn0eHIVND4B6Osl15gRKgtC2sszltuv7A6zdizeCmCEg5ec1pe7O7Ygei
+         GI2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ko+qbf+b0Yv7gj3x+dmqgXT2t4VmwkOjBb0uMWb0qeo=;
-        b=sMfwjkG+8tGwzJTMYHxnqGcGONkJaGWEuXBZ02CpuFicd/Ju+kH2vnDqd7vUp52FUr
-         mGx/FenaZ5uTBGC3mUnAROFZhj9a4fwlZ8kRzGS+lz1wBlatEUN1Hm/kCEET6QG1ZJoL
-         LsznlsNITwOyumMOhhmffLCYHgpyqLT+KbVblKwCldvgwhvsaSU/Nsv2ADrqJd07wU3X
-         9OF7BDrvgrBLSENbhvpwoR51f6nxaOCaJ+yVLggeBvJaqTmXjvwQf9m2lQfcd5vEhB6g
-         pdV+Dn4ra/FOtMdycTCnhopPG8fLiIyD6iHBPen3QHGscwRJORtHu6HeBSBNUfyhhJCN
-         oJmA==
-X-Gm-Message-State: ANoB5pmVolh0qfD/Wh6I3sRzj7VDFq6hstb92eXbW/K5iNGRZgTZl7WN
-        KYeeXPRaQkAFW4p4cVewDQo=
-X-Google-Smtp-Source: AA0mqf4Ne7K6UCo3LviuEHHi1Ldd3jeDKdUSANZrcIYdiQ5jgjAkHiE15SlUMXjD5rBe+tGAb5h5og==
-X-Received: by 2002:a17:90a:4302:b0:20a:e469:dc7d with SMTP id q2-20020a17090a430200b0020ae469dc7dmr56845748pjg.97.1669715158916;
-        Tue, 29 Nov 2022 01:45:58 -0800 (PST)
-Received: from localhost.localdomain ([43.132.141.9])
-        by smtp.gmail.com with ESMTPSA id h7-20020a170902680700b001895b2d48a1sm8259266plk.253.2022.11.29.01.45.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 01:45:58 -0800 (PST)
-From:   zys.zljxml@gmail.com
-To:     thierry.reding@gmail.com, airlied@gmail.com, daniel@ffwll.ch,
-        jonathanh@nvidia.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com
-Cc:     dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org,
-        Yushan Zhou <katrinzhou@tencent.com>
-Subject: [PATCH] drm/tegra: Remove redundant null checks before kfree
-Date:   Tue, 29 Nov 2022 17:45:46 +0800
-Message-Id: <20221129094546.197424-1-zys.zljxml@gmail.com>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jUYvtMPSKjTs5g6MPMmEMkOFRg4aOqr2pjUMfkz/qL0=;
+        b=kEctwNBXbMOY9nbF5pzmWNpU9bPNMQlufV64XRH0HlCYX99Xw91rv1QI4T1ujEbULG
+         v/tEgBQJuluNNlx5N+4/VFdwGlRAVa2LsDIbiIuKXUut9LzrtzoRtSRZBamF8p5ZUpfZ
+         Goc6lz2pUBO5HsdUWUNZ6QmA2JoMiJEYkEdbLUAXvIfVvHJY1bCN2aauFaVnsVgULjMQ
+         cb2ny64nWHM7e1wG6i5LER3WdscUVvFhaf2f88NnMwf/binsRc1MOUfHPcQ9J1gAmjmb
+         xTHkxzNTXJMfqUO5EZTLRp8vdxA3p7ZR6uPCCThcsuNfvs0qplTqH17l7PP6l7GpyKO4
+         mP3Q==
+X-Gm-Message-State: ANoB5pkyB8+gaVTiCmbd3DNaShBT+VAZAavgzFM2myGP70K7p0x0FNzV
+        jMj6ED8+shFZf2eCjOgs4/icafSr/ywZqQ==
+X-Google-Smtp-Source: AA0mqf7kQDdqeLRiGzeiyFv4w0FSFwHN284HPSYc1KooqTV79U9t2R1k8LQc1SmNrdp8VPuuG9B3LC9I9UjRGg==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a81:aa05:0:b0:38f:f363:c996 with SMTP id
+ i5-20020a81aa05000000b0038ff363c996mr35ywh.442.1669715258425; Tue, 29 Nov
+ 2022 01:47:38 -0800 (PST)
+Date:   Tue, 29 Nov 2022 17:47:32 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221129094732.306449-1-davidgow@google.com>
+Subject: [PATCH] Documentation: kunit: Fix "How Do I Use This" / "Next Steps" sections
+From:   David Gow <davidgow@google.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Sadiya Kazi <sadiyakazi@google.com>
+Cc:     David Gow <davidgow@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Daniel Latypov <dlatypov@google.com>,
+        Rae Moar <rmoar@google.com>, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,31 +71,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yushan Zhou <katrinzhou@tencent.com>
+The 'index' and 'start' pages end with very similar "How Do I Use This"
+/ "Next Steps" sections respectively, which link to the other
+documentation pages. This wasn't updated when the tips.rst page was
+removed.
 
-Fix the following coccicheck warning:
-./drivers/gpu/drm/tegra/submit.c:689:2-7: WARNING:
-NULL check before some freeing functions is not needed.
+Remove the reference to tips.rst, as well as tidy up the descriptions on
+all of the links (especially given that sphinx gives the page titles
+anyway.
 
-Signed-off-by: Yushan Zhou <katrinzhou@tencent.com>
+Fixes: 4399c737a97d ("Documentation: kunit: Remove redundant 'tips.rst' page")
+Signed-off-by: David Gow <davidgow@google.com>
 ---
- drivers/gpu/drm/tegra/submit.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ Documentation/dev-tools/kunit/index.rst | 18 +++++++-----------
+ Documentation/dev-tools/kunit/start.rst | 16 ++++++----------
+ 2 files changed, 13 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/gpu/drm/tegra/submit.c b/drivers/gpu/drm/tegra/submit.c
-index b24738bdf3df..df34c5daa400 100644
---- a/drivers/gpu/drm/tegra/submit.c
-+++ b/drivers/gpu/drm/tegra/submit.c
-@@ -685,8 +685,7 @@ int tegra_drm_ioctl_channel_submit(struct drm_device *drm, void *data,
- 		kfree(job_data->used_mappings);
- 	}
+diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
+index d5629817cd72..beec6f847ef4 100644
+--- a/Documentation/dev-tools/kunit/index.rst
++++ b/Documentation/dev-tools/kunit/index.rst
+@@ -99,14 +99,10 @@ Read also :ref:`kinds-of-tests`.
+ How do I use it?
+ ================
  
--	if (job_data)
--		kfree(job_data);
-+	kfree(job_data);
- put_bo:
- 	gather_bo_put(&bo->base);
- unlock:
+-*   Documentation/dev-tools/kunit/start.rst - for KUnit new users.
+-*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
+-*   Documentation/dev-tools/kunit/run_wrapper.rst - run kunit_tool.
+-*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit_tool.
+-*   Documentation/dev-tools/kunit/usage.rst - write tests.
+-*   Documentation/dev-tools/kunit/tips.rst - best practices with
+-    examples.
+-*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
+-    used for testing.
+-*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
+-    answers.
++*   Documentation/dev-tools/kunit/start.rst - for new KUnit users
++*   Documentation/dev-tools/kunit/architecture.rst - how KUnit is put together
++*   Documentation/dev-tools/kunit/run_wrapper.rst - run tests via kunit.py
++*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit.py
++*   Documentation/dev-tools/kunit/usage.rst - write tests
++*   Documentation/dev-tools/kunit/api/index.rst - API reference
++*   Documentation/dev-tools/kunit/faq.rst - common questions and answers
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index f4f504f1fb15..58c176348885 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -294,13 +294,9 @@ Congrats! You just wrote your first KUnit test.
+ Next Steps
+ ==========
+ 
+-*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
+-*   Documentation/dev-tools/kunit/run_wrapper.rst - run kunit_tool.
+-*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit_tool.
+-*   Documentation/dev-tools/kunit/usage.rst - write tests.
+-*   Documentation/dev-tools/kunit/tips.rst - best practices with
+-    examples.
+-*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
+-    used for testing.
+-*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
+-    answers.
++*   Documentation/dev-tools/kunit/architecture.rst - how KUnit is put together
++*   Documentation/dev-tools/kunit/run_wrapper.rst - run tests via kunit.py
++*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit.py
++*   Documentation/dev-tools/kunit/usage.rst - write tests
++*   Documentation/dev-tools/kunit/api/index.rst - API reference
++*   Documentation/dev-tools/kunit/faq.rst - common questions and answers
 -- 
-2.27.0
+2.38.1.584.g0f3c55d4c2-goog
 
