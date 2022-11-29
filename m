@@ -2,177 +2,464 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F10D63BCD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:23:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BEE63BCD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbiK2JXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 04:23:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
+        id S231202AbiK2JXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 04:23:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbiK2JXA (ORCPT
+        with ESMTP id S230319AbiK2JXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 04:23:00 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2089.outbound.protection.outlook.com [40.107.7.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753003C6F5;
-        Tue, 29 Nov 2022 01:22:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b22bBXOgNXzKiVDxehmyMHnVk+l91oC/KZwPZhuwxUeklbU4bRx6zqipRBskBioQC92UKMYI8Ksg7WqMwBaTS3wnaNJ11m6ab6IXijPDYUo50i2cNH672jxekBf8xAKHs7HJfsReGZhagAm+Pa4a6vd1qA2zYp0DsB947fcqTo5zkwngHUS+o0Vvugzxw5Mmh7qZXMKBKg1MfnnRnyWDkR2wIy2/hB+K3P6BhbpO7V/1nqr2PfUPTZKSJisgSdOaVXSRixNrfLw3mlRySWqJ03CLSUU/Ai7KzT2tiDmGOV0E7WEPfl7Cp7V+0c2pCI/Gdi8g+TbbDugmWIT5lPsXmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B8V/ziIJLn9ItGFW51TzZmUC4/1jHQMlbY4umM7kUqI=;
- b=AMo9FThDMZ3k1GlBokGr8NEVj5Ij7XQAPrSNFOm0WsBddOkdGHoXr13ari84EoisDfI8URDBqWU/tB7wD0jXBkNSpg/dq4wRE3SJkdIhKNblrZrn+LL5kdJLxgtwRyb0nqOLROAF+ak6a4DBGdwOl7hxS+MOsh9ivwCFtuyQBbqYu7oneAP+TQ5RLk2hbNbp+PFDPZI0DQ2o7kw2/sWbpKVrCMnrvIMFPzduNsGBLgWxCYL1B/bJqbgxqmwGiRQVn0I8yiXhO9rUIYMQffakX2bO+E9PKa2ZiMK/9Mz1nHpYpabGbyTkO/54Zb5kHX0jKTGOuboRk1opDDL/taOfiA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B8V/ziIJLn9ItGFW51TzZmUC4/1jHQMlbY4umM7kUqI=;
- b=kRXvkYjbXNamZIU4Ysil1659MCKdbUCZqTJ45amzf1Jx0HS94YsLkejbwc6AQVX6iiw1v6VCaE/yqo1l53VOwKxALDXA2U7snT8QmJ6H1RSC67KypEzViUGKaq5wRkr5kHfyB0VwYBYkjImmDyLL8Cbs/rpk22P7Stl5KUAsOG4=
-Received: from VI1PR0402MB3485.eurprd04.prod.outlook.com (2603:10a6:803:7::25)
- by AM0PR04MB6833.eurprd04.prod.outlook.com (2603:10a6:208:17d::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.17; Tue, 29 Nov
- 2022 09:22:55 +0000
-Received: from VI1PR0402MB3485.eurprd04.prod.outlook.com
- ([fe80::4393:f7bf:6546:5e21]) by VI1PR0402MB3485.eurprd04.prod.outlook.com
- ([fe80::4393:f7bf:6546:5e21%3]) with mapi id 15.20.5857.023; Tue, 29 Nov 2022
- 09:22:55 +0000
-From:   Andy Tang <andy.tang@nxp.com>
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>
-CC:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [EXT] Re: [PATCH] mmc: sdhci-of-esdhc: limit the SDHC clock
- frequency
-Thread-Topic: [EXT] Re: [PATCH] mmc: sdhci-of-esdhc: limit the SDHC clock
- frequency
-Thread-Index: AQHY/85PazG3BJ6Y50eA3qyAcQa4/65VkuUAgAAUC7A=
-Date:   Tue, 29 Nov 2022 09:22:55 +0000
-Message-ID: <VI1PR0402MB34856B28BFBACA9190B2AAD9F3129@VI1PR0402MB3485.eurprd04.prod.outlook.com>
-References: <20221124064608.42019-1-andy.tang@nxp.com>
- <52030ce1-5781-cd62-e0bc-b70a011a024b@intel.com>
-In-Reply-To: <52030ce1-5781-cd62-e0bc-b70a011a024b@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1PR0402MB3485:EE_|AM0PR04MB6833:EE_
-x-ms-office365-filtering-correlation-id: c507b5bf-4ba5-406e-6c9d-08dad1eb4c6d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ukZDfxxg6QA0WRivD+Q0+oTPGacUptgK6Hjr6W2oiiPLaAdT72vvX+o1IxsvaIOF+xWRqA3O6+dOp3K/8KKjOlo9PbK3bmLcWcmSUptnBHFcPId2b6MM09vC9DNFJ0TZsXv6dKF9CArUxfUITpGiXOqxtm0T+50y6dbtuvlkqqcFZfPJ0BsMWb+WrBbOBgK9ULKes2swIW1w2w654EW7hqR4fgEQjvLSj+jebrSDSBcIl2xLUmtBE5l3fkG1mqrWMZgfd+UYSE5+tf0V7fEJkuR3WirtAyjFb1Ido+GQQ/53rDtBdUeqKO4fz7a+6ZEV+3lMODen3yt6V3cLHDsRdW4kFqLdn52rC31/zA/eGJKcmGyb4H4wdbNSxfIWNu0QrQHfrtCqf/Esco5FTOaWieHFoYbOr+MW8yMb6hCNjYZnLczr12DErvnkmwjB+MEjE4a2iPpJPFPWVpLbQWZmAY7QDvqbkVR/Kyr1MS2dz1tpt1dcVtPn3PmBxBv+PCE9uG33p/ngPqkgeQ1y2yOCHPqLQjt1ICZv0z+8pNnrqVB3rMcUY+In3lo6Kq6BIy31BNFfM+aAIC8LU45WusVTt1BNSgdE6df5OvNG5W3iuFG6eryFF+vvVJYJbYaKGz/8vFf6gjqNw0ssEuSl4hqHmmuTDxnspQccAj6XAghMIM5YJeZw8ZfjQGLYnVz0oUnviQWrKzNY1SorgU6ly/IItg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3485.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(136003)(346002)(376002)(396003)(451199015)(316002)(2906002)(76116006)(478600001)(110136005)(66946007)(33656002)(71200400001)(54906003)(83380400001)(122000001)(55016003)(38100700002)(26005)(6506007)(86362001)(53546011)(9686003)(38070700005)(7696005)(186003)(44832011)(5660300002)(52536014)(41300700001)(8676002)(8936002)(66476007)(66446008)(66556008)(4326008)(64756008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bFplcDA5M2tiZncrVjhpMGtoU0ZQc0cvTk5NNjZpbE1TZzRpbCszM1RWOVBN?=
- =?utf-8?B?S3VMdXNROXZybDk0cTgyNHlhSC84c3J1QUpCYWlsa3Y1WFN2S3lZUFdKTGRB?=
- =?utf-8?B?TFdrWEhubFRMWmpFbklzSDFqLzRkbkRmcW1tSlNwL1BvdGNRaVpUTGtEZ0Fj?=
- =?utf-8?B?bXBLMmJCNGs3T3RUakI1WUk0bkgyenpNbzZvT09hNmIvL1RBZzQvUGZpMHlU?=
- =?utf-8?B?YnNBR0x2aEROWVRhVmFYWWRrN0lpWXpBTE42Wng5dTdwNjJhcEdzZUZNSVd5?=
- =?utf-8?B?ZmZkK0M5ZDVoaDZxcGNLd0tJY0dIczZOVTFNNDdxc1V4MUZaY1RLNGJzTUNY?=
- =?utf-8?B?bjJwMDdrVm9EaW1xV1RZTWRwQnhJSTJqallpNVhiS2JWTU45endFcU1QNGhU?=
- =?utf-8?B?VmFCTkhmSmVzVGppMEZKZHdGNHowTG5qNWRKZ3FXOEJiOXZwdnRZb3drTUI2?=
- =?utf-8?B?Nko4VmtsVTFUNUZjQllPYmhkZThMNnNmM1hOeklKeVVwSG1rZTEzV3djMURP?=
- =?utf-8?B?WjJ3bjNHUUhQeTRVNk5MQzNnOUs1WUp5UGVES1pTYlVrL0xBaDY3R0Y2RVM4?=
- =?utf-8?B?YTlWa3pjT3FrV2dGU2VERm05eGVCTklPZEF0Zml6WUJycXRUdnZrcm5RS1ln?=
- =?utf-8?B?QkEzVG5VZWhmNG16TlNQMDc0a2dGbDA1ZXBLS09WdHRid2F6UVJzOFZwVnhk?=
- =?utf-8?B?SnI1VzJKTlhGWU5HQVkraDlMUjdZbU1KcEpPSWYxL3h3MXpJNE5FQmlTUVBr?=
- =?utf-8?B?SjVld1IrYmp3bmtJV2pXZzU0U095SU9VMDdVSlRPMjdzL1VYTmdwMDVWZVBr?=
- =?utf-8?B?SFY0WStja2ZGcG5meVc1YWpFb3FzRnEzbEZ6L1g3bmY3SFlSRFIyRnpiaVJT?=
- =?utf-8?B?b2hLUi90cmJsb0x0RnY1bkMzTmVVdnlTMzZnVTlUSzhrSW83SDhQQ0ovK0JG?=
- =?utf-8?B?SGp3VmRmTUJlZTh2WVl5K2JtRENIQzU3K21MV3pWWHBsOTdNd0pxRVBSenNU?=
- =?utf-8?B?ZUlVUWI2cVViVEltUTNWTWxGaXI2MVZFU3FkZHgzSXdCTXhPT1NYTFJwa3JI?=
- =?utf-8?B?U3Y5NVoxbmZDYVJCUlViZ1ZZQnZUai9mZ3JmNWtJeXZqVzVKOElnQmsyOEVF?=
- =?utf-8?B?ZktnQkJVd216YzFIT0RqSm1xamsrVE93Nk9VdW1MM2RzWHVWY2NtMm0yOWlt?=
- =?utf-8?B?dU1iZTdTQi9RbE5DNlYrRzc4NEY0SWJYaTlsNDdLWVFlQ1NyZ0tLRExXUUlr?=
- =?utf-8?B?NzBHQmh3U3VqTUViQ0ZOOUZBdEpieUcrVHZWOHRWeHNKS0U5emZjSFFmNjZz?=
- =?utf-8?B?MXlLQVd0YSsyWlFDejZpT2JoSDFIVUZ0RXhSTXJKRUIrakhWeEFGbkpOZ0Mw?=
- =?utf-8?B?TlFJeDhXblVHTjhuTEJrcWovRlBrdjlEbHoyTGRZUCtxUXQrUjdqcm5FSHhk?=
- =?utf-8?B?NC9EQzFtNDdrbm1aamtFditwdVNBNG0wQ3dWRFl6b3pyOXhNOTZ5SEJlek5H?=
- =?utf-8?B?WHB2U2ZaUzRwWDVycnUvbWtXdDdPNmF1L1VSbnBGSG5GZzJBdStVcUhSSWdV?=
- =?utf-8?B?UWRyY2ZLa05ML0l1WTNjNXN1VVk4VFMwZytuYkhBVlM4VkIvRCtyNTlnanhG?=
- =?utf-8?B?Yzdnb2lQUTZRVE16emdRWWJlSGRYVFlhVlhSTEpjRzNjSFY2VDJpQk5jQUlt?=
- =?utf-8?B?enhpTXNuem5pSWJ0NmFqSllDcVdxZXk1VUZYN0JQZE1LdmtuV0tqUjYvR3Bk?=
- =?utf-8?B?NG1OY2hNWGNrbTRSRFVHV2VWZnpONy95bkdDTStYTWI2dHQxbUtldm9XZm91?=
- =?utf-8?B?WGt0enk1TjU2RmVmeDRtRjQ2alpCNzFDY2ZoMkl1ZWV6ZmxEUWhpVUh2Snd3?=
- =?utf-8?B?N1ZibXJmZ3dvYTNsa1V3WWd4QmRQV3UzTjVhRkVzeExuRVN0UnNmU0RZTVdj?=
- =?utf-8?B?bmFSdWw2VklBZVhoaCsyUFhCYlRqUVQzaDQ1ZmdDbVljMFZqVld2Vnd4MDV2?=
- =?utf-8?B?dEFSQ2tNSXR0cHVHV3pRUGNnSTdsUUl5b3JVeHRDOHh3Myt1aUczaHVRMzc2?=
- =?utf-8?B?MVZiTFdHZHZpdmYxZHFPdnpESjc1Y3p6azVOS2F3eXhnUVU2ZVpxUzhCc3Z2?=
- =?utf-8?Q?qiPC4gaCPcNJbugcWEdu91hQr?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3485.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c507b5bf-4ba5-406e-6c9d-08dad1eb4c6d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2022 09:22:55.5480
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8AuCdWgwrfBLK/pIKzDd6h9roKC06Q7R1bVVQsbmS4XYYUFINEfRsqCrOwRXLYaqXFR4RP0/mYueBEI+hF5AmQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6833
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 29 Nov 2022 04:23:49 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E08F3C6F5;
+        Tue, 29 Nov 2022 01:23:48 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AT8ZYJp029497;
+        Tue, 29 Nov 2022 09:23:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=aORM50abP9pjnllED/JyO4ySpp5sYscvIX4PR1I5HOc=;
+ b=ldVJN/3RBSQn5Lb7WzwxhZIYIRjoOohq+qBW/2PKO4pMbhBVBsPZ+uXcGTGKEzmFzt+N
+ i3EabsvykBRo3eOoZEzF7Og76OPfohTfrbO7vvnHt/qEtk/OvyARrhexj/sF/+MkQPL1
+ Bs5wfamc+5RLYEpgwXBX9AxycDNba2S1w+SZoCeJT7WXm2J7D/dW+8WJKZVVg1g7sCpk
+ nQu185k2dga9D/f0tuIGBaoucrH9WBJx97vn9Rqpl8J+w8RADQ8SCoztVNq5qyn/uOk+
+ dB6ZCe3bTgtLIn251i2mMiDHAnYiqEhuNdkMaHGheiHYI9sLe0mEPT9c42lP/x2iVXyi bQ== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m5a7f8txk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 09:23:42 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2AT9LlTH004373;
+        Tue, 29 Nov 2022 09:23:38 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3m3bvkfmd4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 29 Nov 2022 09:23:38 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AT9NcWC005734;
+        Tue, 29 Nov 2022 09:23:38 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 2AT9NbbF005733;
+        Tue, 29 Nov 2022 09:23:38 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id 3223D4203; Tue, 29 Nov 2022 14:53:37 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org, quic_vtanuku@quicinc.com, vkoul@kernel.org,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: [V3] spi: spi-geni-qcom: Add support for SE DMA mode
+Date:   Tue, 29 Nov 2022 14:53:34 +0530
+Message-Id: <1669713814-28876-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: OLqmrH2-ue9QSMkKNr8NHjB80RyU_pq2
+X-Proofpoint-ORIG-GUID: OLqmrH2-ue9QSMkKNr8NHjB80RyU_pq2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-29_06,2022-11-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ mlxscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999 spamscore=0
+ lowpriorityscore=0 priorityscore=1501 phishscore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211290058
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQWRyaWFuLA0KDQpUaGFua3MgZm9yIHlvdXIgcmV2aWV3LiBQbGVhc2Ugc2VlIG15IHJlcGx5
-IGlubGluZS4NCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBBZHJpYW4g
-SHVudGVyIDxhZHJpYW4uaHVudGVyQGludGVsLmNvbT4NCj4gU2VudDogMjAyMuW5tDEx5pyIMjnm
-l6UgMTY6MDUNCj4gVG86IEFuZHkgVGFuZyA8YW5keS50YW5nQG54cC5jb20+OyB1bGYuaGFuc3Nv
-bkBsaW5hcm8ub3JnDQo+IENjOiBsaW51eC1tbWNAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJu
-ZWxAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFtFWFRdIFJlOiBbUEFUQ0hdIG1tYzogc2Ro
-Y2ktb2YtZXNkaGM6IGxpbWl0IHRoZSBTREhDIGNsb2NrDQo+IGZyZXF1ZW5jeQ0KPiANCj4gQ2F1
-dGlvbjogRVhUIEVtYWlsDQo+IA0KPiBPbiAyNC8xMS8yMiAwODo0NiwgYW5keS50YW5nQG54cC5j
-b20gd3JvdGU6DQo+ID4gRnJvbTogWXVhbnRpYW4gVGFuZyA8YW5keS50YW5nQG54cC5jb20+DQo+
-ID4NCj4gPiBUaGUgaGlnaGVzdCBjbG9jayBmcmVxdWVuY3kgZm9yIGVNTUMgSFMyMDAgbW9kZSBv
-biBsczEwNDNhIGlzIDExNi43TWh6DQo+ID4gYWNjb3JkaW5nIHRvIGl0cyBzcGVjaWZpY2F0aW9u
-Lg0KPiA+IFNvIGFkZCB0aGUgbGltaXQgdG8gZ2F0ZSB0aGUgZnJlcXVlbmN5Lg0KPiA+DQo+ID4g
-U2lnbmVkLW9mZi1ieTogQW5keSBUYW5nIDxhbmR5LnRhbmdAbnhwLmNvbT4NCj4gDQo+IEl0IGlz
-IHByb2JhYmx5IG5pY2VyIHRvIHVzZSBhIGNvbnNpc3RlbnQgZW1haWwgbmFtZS4gIGNoZWNrcGF0
-Y2ggZ2l2ZXMgdGhpcw0KPiB3YXJuaW5nOg0KPiANCj4gV0FSTklORzogRnJvbTovU2lnbmVkLW9m
-Zi1ieTogZW1haWwgbmFtZSBtaXNtYXRjaDogJ0Zyb206IFl1YW50aWFuIFRhbmcNCj4gPGFuZHku
-dGFuZ0BueHAuY29tPicgIT0gJ1NpZ25lZC1vZmYtYnk6IEFuZHkgVGFuZyA8YW5keS50YW5nQG54
-cC5jb20+Jw0KT0ssIHdpbGwga2VlcCBpdCBjb25zaXN0ZW50Lg0KDQo+IA0KPiA+IC0tLQ0KPiA+
-ICBkcml2ZXJzL21tYy9ob3N0L3NkaGNpLW9mLWVzZGhjLmMgfCA3ICsrKysrKysNCj4gPiAgMSBm
-aWxlIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvbW1jL2hvc3Qvc2RoY2ktb2YtZXNkaGMuYw0KPiA+IGIvZHJpdmVycy9tbWMvaG9zdC9zZGhj
-aS1vZi1lc2RoYy5jDQo+ID4gaW5kZXggMDA1NDJkZDc0YzA3Li4xZmQ0YWUxMDg2MmQgMTAwNjQ0
-DQo+ID4gLS0tIGEvZHJpdmVycy9tbWMvaG9zdC9zZGhjaS1vZi1lc2RoYy5jDQo+ID4gKysrIGIv
-ZHJpdmVycy9tbWMvaG9zdC9zZGhjaS1vZi1lc2RoYy5jDQo+ID4gQEAgLTQzLDYgKzQzLDEyIEBA
-IHN0YXRpYyBjb25zdCBzdHJ1Y3QgZXNkaGNfY2xrX2ZpeHVwDQo+IGxzMTAyMWFfZXNkaGNfY2xr
-ID0gew0KPiA+ICAgICAgIC5tYXhfY2xrW01NQ19USU1JTkdfU0RfSFNdID0gNDY1MDAwMDAsICB9
-Ow0KPiA+DQo+ID4gK3N0YXRpYyBjb25zdCBzdHJ1Y3QgZXNkaGNfY2xrX2ZpeHVwIGxzMTA0M2Ff
-ZXNkaGNfY2xrID0gew0KPiA+ICsgICAgIC5zZF9kZmx0X21heF9jbGsgPSAyNTAwMDAwMCwNCj4g
-PiArICAgICAubWF4X2Nsa1tNTUNfVElNSU5HX1VIU19TRFIxMDRdID0gMTE2NzAwMDAwLA0KPiA+
-ICsgICAgIC5tYXhfY2xrW01NQ19USU1JTkdfTU1DX0hTMjAwXSA9IDExNjcwMDAwMCwgfTsNCj4g
-DQo+IGxzMTA0M2FfZXNkaGNfY2xrIHNlZW1zIHRoZSBzYW1lIGFzIGxzMTA0NmFfZXNkaGNfY2xr
-IFNob3VsZCB0aGV5IGJlDQo+IHNoYXJlZD8gZS5nLiBjYWxsZWQgbHMxMDR4eF9lc2RoY19jbGsN
-ClRoZSB2YWx1ZXMgYXJlIGRpZmZlcmVudC4gT25lIGlzIHRoZSAxMTY3MDBLaHosIHRoZSBvdGhl
-ciBpcyAxNjcwMDBLaHouDQpFdmVuIHRoZXkgYXJlIHRoZSBzYW1lLCBpdCBpcyBiZXR0ZXIgdG8g
-aGF2ZSBpdHMgb3duIGNsayBzdHJ1Y3QgZm9yIGZ1dHVyZSBjb21wYXRpYmlsaXR5Lg0KDQpUaGFu
-a3MsDQpBbmR5DQo+IA0KPiA+ICsNCj4gPiAgc3RhdGljIGNvbnN0IHN0cnVjdCBlc2RoY19jbGtf
-Zml4dXAgbHMxMDQ2YV9lc2RoY19jbGsgPSB7DQo+ID4gICAgICAgLnNkX2RmbHRfbWF4X2NsayA9
-IDI1MDAwMDAwLA0KPiA+ICAgICAgIC5tYXhfY2xrW01NQ19USU1JTkdfVUhTX1NEUjEwNF0gPSAx
-NjcwMDAwMDAsIEBAIC02NCw2DQo+ICs3MCw3IEBADQo+ID4gc3RhdGljIGNvbnN0IHN0cnVjdCBl
-c2RoY19jbGtfZml4dXAgcDEwMTBfZXNkaGNfY2xrID0gew0KPiA+DQo+ID4gIHN0YXRpYyBjb25z
-dCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIHNkaGNpX2VzZGhjX29mX21hdGNoW10gPSB7DQo+ID4gICAg
-ICAgeyAuY29tcGF0aWJsZSA9ICJmc2wsbHMxMDIxYS1lc2RoYyIsIC5kYXRhID0NCj4gPiAmbHMx
-MDIxYV9lc2RoY19jbGt9LA0KPiA+ICsgICAgIHsgLmNvbXBhdGlibGUgPSAiZnNsLGxzMTA0M2Et
-ZXNkaGMiLCAuZGF0YSA9DQo+ID4gKyAmbHMxMDQzYV9lc2RoY19jbGt9LA0KPiA+ICAgICAgIHsg
-LmNvbXBhdGlibGUgPSAiZnNsLGxzMTA0NmEtZXNkaGMiLCAuZGF0YSA9ICZsczEwNDZhX2VzZGhj
-X2Nsa30sDQo+ID4gICAgICAgeyAuY29tcGF0aWJsZSA9ICJmc2wsbHMxMDEyYS1lc2RoYyIsIC5k
-YXRhID0gJmxzMTAxMmFfZXNkaGNfY2xrfSwNCj4gPiAgICAgICB7IC5jb21wYXRpYmxlID0gImZz
-bCxwMTAxMC1lc2RoYyIsICAgLmRhdGEgPSAmcDEwMTBfZXNkaGNfY2xrfSwNCg0K
+SE DMA mode can be used for larger transfers and FIFO mode
+for smaller transfers.
+
+Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+---
+v2 -> v3:
+- indentation change
+- readability change
+
+v1 -> v2:
+- replace writel_relaxed with writel
+- corrected order of performing FSM reset and dma_unprep
+- added more comments in geni_can_dma
+- removed redundant change in spi_geni_init(DMA as default xfer_mode)
+- removed redundant initialisations in setup_se_xfer
+- removed redundant null checks in setup_se_xfer
+- added dma_tx_prep failure handling(rx un_map) in setup_se_xfer
+- move handing return of setip_se_xfer to transfer_one
+- apply irq error handling for DMA mode too in geni_spi_isr
+---
+ drivers/spi/spi-geni-qcom.c | 211 ++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 165 insertions(+), 46 deletions(-)
+
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index 4e83cc5..170c0cb 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -87,6 +87,8 @@ struct spi_geni_master {
+ 	struct completion cs_done;
+ 	struct completion cancel_done;
+ 	struct completion abort_done;
++	struct completion tx_reset_done;
++	struct completion rx_reset_done;
+ 	unsigned int oversampling;
+ 	spinlock_t lock;
+ 	int irq;
+@@ -95,6 +97,7 @@ struct spi_geni_master {
+ 	struct dma_chan *tx;
+ 	struct dma_chan *rx;
+ 	int cur_xfer_mode;
++	u32 cur_m_cmd;
+ };
+ 
+ static int get_spi_clk_cfg(unsigned int speed_hz,
+@@ -129,23 +132,27 @@ static int get_spi_clk_cfg(unsigned int speed_hz,
+ 	return ret;
+ }
+ 
+-static void handle_fifo_timeout(struct spi_master *spi,
++static void handle_se_timeout(struct spi_master *spi,
+ 				struct spi_message *msg)
+ {
+ 	struct spi_geni_master *mas = spi_master_get_devdata(spi);
+ 	unsigned long time_left;
+ 	struct geni_se *se = &mas->se;
++	const struct spi_transfer *xfer;
+ 
+ 	spin_lock_irq(&mas->lock);
+ 	reinit_completion(&mas->cancel_done);
+-	writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
++	if (mas->cur_xfer_mode == GENI_SE_FIFO)
++		writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
++
++	xfer = mas->cur_xfer;
+ 	mas->cur_xfer = NULL;
+ 	geni_se_cancel_m_cmd(se);
+ 	spin_unlock_irq(&mas->lock);
+ 
+ 	time_left = wait_for_completion_timeout(&mas->cancel_done, HZ);
+ 	if (time_left)
+-		return;
++		goto unmap_if_dma;
+ 
+ 	spin_lock_irq(&mas->lock);
+ 	reinit_completion(&mas->abort_done);
+@@ -162,6 +169,45 @@ static void handle_fifo_timeout(struct spi_master *spi,
+ 		 */
+ 		mas->abort_failed = true;
+ 	}
++
++unmap_if_dma:
++	if (mas->cur_xfer_mode == GENI_SE_DMA) {
++		if (mas->cur_m_cmd & SPI_TX_ONLY) {
++			spin_lock_irq(&mas->lock);
++			reinit_completion(&mas->tx_reset_done);
++			writel(1, se->base + SE_DMA_TX_FSM_RST);
++			spin_unlock_irq(&mas->lock);
++			time_left = wait_for_completion_timeout(&mas->tx_reset_done, HZ);
++			if (!time_left)
++				dev_err(mas->dev, "DMA TX RESET failed\n");
++		}
++		if (mas->cur_m_cmd & SPI_RX_ONLY) {
++			spin_lock_irq(&mas->lock);
++			reinit_completion(&mas->rx_reset_done);
++			writel(1, se->base + SE_DMA_RX_FSM_RST);
++			spin_unlock_irq(&mas->lock);
++			time_left = wait_for_completion_timeout(&mas->rx_reset_done, HZ);
++			if (!time_left)
++				dev_err(mas->dev, "DMA RX RESET failed\n");
++		}
++
++		if (xfer) {
++			if (xfer->tx_buf && xfer->tx_dma)
++				geni_se_tx_dma_unprep(se, xfer->tx_dma, xfer->len);
++			if (xfer->rx_buf && xfer->rx_dma)
++				geni_se_rx_dma_unprep(se, xfer->rx_dma, xfer->len);
++		} else {
++			/*
++			 * This can happen if a timeout happened and we had to wait
++			 * for lock in this function because isr was holding the lock
++			 * and handling transfer completion at that time.
++			 * isr will set cur_xfer to NULL when done.
++			 * Unnecessary error but cannot be helped.
++			 * Only do reset, dma_unprep is already done by isr.
++			 */
++			dev_err(mas->dev, "Cancel/Abort on completed SPI transfer\n");
++		}
++	}
+ }
+ 
+ static void handle_gpi_timeout(struct spi_master *spi, struct spi_message *msg)
+@@ -178,7 +224,8 @@ static void spi_geni_handle_err(struct spi_master *spi, struct spi_message *msg)
+ 
+ 	switch (mas->cur_xfer_mode) {
+ 	case GENI_SE_FIFO:
+-		handle_fifo_timeout(spi, msg);
++	case GENI_SE_DMA:
++		handle_se_timeout(spi, msg);
+ 		break;
+ 	case GENI_GPI_DMA:
+ 		handle_gpi_timeout(spi, msg);
+@@ -260,7 +307,7 @@ static void spi_geni_set_cs(struct spi_device *slv, bool set_flag)
+ 	time_left = wait_for_completion_timeout(&mas->cs_done, HZ);
+ 	if (!time_left) {
+ 		dev_warn(mas->dev, "Timeout setting chip select\n");
+-		handle_fifo_timeout(spi, NULL);
++		handle_se_timeout(spi, NULL);
+ 	}
+ 
+ exit:
+@@ -482,8 +529,12 @@ static bool geni_can_dma(struct spi_controller *ctlr,
+ {
+ 	struct spi_geni_master *mas = spi_master_get_devdata(slv->master);
+ 
+-	/* check if dma is supported */
+-	return mas->cur_xfer_mode != GENI_SE_FIFO;
++	/*
++	 * Return true if transfer needs to be mapped prior to
++	 * calling transfer_one which is the case only for GPI_DMA.
++	 * For SE_DMA mode, map/unmap is done in geni_se_*x_dma_prep.
++	 */
++	return mas->cur_xfer_mode == GENI_GPI_DMA;
+ }
+ 
+ static int spi_geni_prepare_message(struct spi_master *spi,
+@@ -494,6 +545,7 @@ static int spi_geni_prepare_message(struct spi_master *spi,
+ 
+ 	switch (mas->cur_xfer_mode) {
+ 	case GENI_SE_FIFO:
++	case GENI_SE_DMA:
+ 		if (spi_geni_is_abort_still_pending(mas))
+ 			return -EBUSY;
+ 		ret = setup_fifo_params(spi_msg->spi, spi);
+@@ -597,7 +649,7 @@ static int spi_geni_init(struct spi_geni_master *mas)
+ 			break;
+ 		}
+ 		/*
+-		 * in case of failure to get dma channel, we can still do the
++		 * in case of failure to get gpi dma channel, we can still do the
+ 		 * FIFO mode, so fallthrough
+ 		 */
+ 		dev_warn(mas->dev, "FIFO mode disabled, but couldn't get DMA, fall back to FIFO mode\n");
+@@ -716,12 +768,12 @@ static void geni_spi_handle_rx(struct spi_geni_master *mas)
+ 	mas->rx_rem_bytes -= rx_bytes;
+ }
+ 
+-static void setup_fifo_xfer(struct spi_transfer *xfer,
++static int setup_se_xfer(struct spi_transfer *xfer,
+ 				struct spi_geni_master *mas,
+ 				u16 mode, struct spi_master *spi)
+ {
+ 	u32 m_cmd = 0;
+-	u32 len;
++	u32 len, fifo_size;
+ 	struct geni_se *se = &mas->se;
+ 	int ret;
+ 
+@@ -748,7 +800,7 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+ 	/* Speed and bits per word can be overridden per transfer */
+ 	ret = geni_spi_set_clock_and_bw(mas, xfer->speed_hz);
+ 	if (ret)
+-		return;
++		return ret;
+ 
+ 	mas->tx_rem_bytes = 0;
+ 	mas->rx_rem_bytes = 0;
+@@ -771,6 +823,12 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+ 		writel(len, se->base + SE_SPI_RX_TRANS_LEN);
+ 		mas->rx_rem_bytes = xfer->len;
+ 	}
++	mas->cur_m_cmd = m_cmd;
++
++	/* Select transfer mode based on transfer length */
++	fifo_size = mas->tx_fifo_depth * mas->fifo_width_bits / mas->cur_bits_per_word;
++	mas->cur_xfer_mode = (len <= fifo_size) ? GENI_SE_FIFO : GENI_SE_DMA;
++	geni_se_select_mode(se, mas->cur_xfer_mode);
+ 
+ 	/*
+ 	 * Lock around right before we start the transfer since our
+@@ -778,11 +836,39 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+ 	 */
+ 	spin_lock_irq(&mas->lock);
+ 	geni_se_setup_m_cmd(se, m_cmd, FRAGMENTATION);
+-	if (m_cmd & SPI_TX_ONLY) {
++
++	if (mas->cur_xfer_mode == GENI_SE_DMA) {
++		if (m_cmd & SPI_RX_ONLY) {
++			ret =  geni_se_rx_dma_prep(se, xfer->rx_buf,
++				xfer->len, &xfer->rx_dma);
++			if (ret) {
++				dev_err(mas->dev, "Failed to setup Rx dma %d\n", ret);
++				xfer->rx_dma = 0;
++				goto unlock_and_return;
++			}
++		}
++		if (m_cmd & SPI_TX_ONLY) {
++			ret =  geni_se_tx_dma_prep(se, (void *)xfer->tx_buf,
++				xfer->len, &xfer->tx_dma);
++			if (ret) {
++				dev_err(mas->dev, "Failed to setup Tx dma %d\n", ret);
++				xfer->tx_dma = 0;
++				if (m_cmd & SPI_RX_ONLY && xfer->rx_dma) {
++					/* Unmap rx buffer if duplex transfer */
++					geni_se_rx_dma_unprep(se, xfer->rx_dma, xfer->len);
++					xfer->rx_dma = 0;
++				}
++				goto unlock_and_return;
++			}
++		}
++	} else if (m_cmd & SPI_TX_ONLY) {
+ 		if (geni_spi_handle_tx(mas))
+ 			writel(mas->tx_wm, se->base + SE_GENI_TX_WATERMARK_REG);
+ 	}
++
++unlock_and_return:
+ 	spin_unlock_irq(&mas->lock);
++	return ret;
+ }
+ 
+ static int spi_geni_transfer_one(struct spi_master *spi,
+@@ -790,6 +876,7 @@ static int spi_geni_transfer_one(struct spi_master *spi,
+ 				struct spi_transfer *xfer)
+ {
+ 	struct spi_geni_master *mas = spi_master_get_devdata(spi);
++	int ret;
+ 
+ 	if (spi_geni_is_abort_still_pending(mas))
+ 		return -EBUSY;
+@@ -798,9 +885,12 @@ static int spi_geni_transfer_one(struct spi_master *spi,
+ 	if (!xfer->len)
+ 		return 0;
+ 
+-	if (mas->cur_xfer_mode == GENI_SE_FIFO) {
+-		setup_fifo_xfer(xfer, mas, slv->mode, spi);
+-		return 1;
++	if (mas->cur_xfer_mode == GENI_SE_FIFO || mas->cur_xfer_mode == GENI_SE_DMA) {
++		ret = setup_se_xfer(xfer, mas, slv->mode, spi);
++		/* SPI framework expects +ve ret code to wait for transfer complete */
++		if (!ret)
++			ret = 1;
++		return ret;
+ 	}
+ 	return setup_gsi_xfer(xfer, mas, slv, spi);
+ }
+@@ -823,39 +913,66 @@ static irqreturn_t geni_spi_isr(int irq, void *data)
+ 
+ 	spin_lock(&mas->lock);
+ 
+-	if ((m_irq & M_RX_FIFO_WATERMARK_EN) || (m_irq & M_RX_FIFO_LAST_EN))
+-		geni_spi_handle_rx(mas);
+-
+-	if (m_irq & M_TX_FIFO_WATERMARK_EN)
+-		geni_spi_handle_tx(mas);
+-
+-	if (m_irq & M_CMD_DONE_EN) {
+-		if (mas->cur_xfer) {
++	if (mas->cur_xfer_mode == GENI_SE_FIFO) {
++		if ((m_irq & M_RX_FIFO_WATERMARK_EN) || (m_irq & M_RX_FIFO_LAST_EN))
++			geni_spi_handle_rx(mas);
++
++		if (m_irq & M_TX_FIFO_WATERMARK_EN)
++			geni_spi_handle_tx(mas);
++
++		if (m_irq & M_CMD_DONE_EN) {
++			if (mas->cur_xfer) {
++				spi_finalize_current_transfer(spi);
++				mas->cur_xfer = NULL;
++				/*
++				 * If this happens, then a CMD_DONE came before all the
++				 * Tx buffer bytes were sent out. This is unusual, log
++				 * this condition and disable the WM interrupt to
++				 * prevent the system from stalling due an interrupt
++				 * storm.
++				 *
++				 * If this happens when all Rx bytes haven't been
++				 * received, log the condition. The only known time
++				 * this can happen is if bits_per_word != 8 and some
++				 * registers that expect xfer lengths in num spi_words
++				 * weren't written correctly.
++				 */
++				if (mas->tx_rem_bytes) {
++					writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
++					dev_err(mas->dev, "Premature done. tx_rem = %d bpw%d\n",
++						mas->tx_rem_bytes, mas->cur_bits_per_word);
++				}
++				if (mas->rx_rem_bytes)
++					dev_err(mas->dev, "Premature done. rx_rem = %d bpw%d\n",
++						mas->rx_rem_bytes, mas->cur_bits_per_word);
++			} else {
++				complete(&mas->cs_done);
++			}
++		}
++	} else if (mas->cur_xfer_mode == GENI_SE_DMA) {
++		const struct spi_transfer *xfer = mas->cur_xfer;
++		u32 dma_tx_status = readl_relaxed(se->base + SE_DMA_TX_IRQ_STAT);
++		u32 dma_rx_status = readl_relaxed(se->base + SE_DMA_RX_IRQ_STAT);
++
++		if (dma_tx_status)
++			writel(dma_tx_status, se->base + SE_DMA_TX_IRQ_CLR);
++		if (dma_rx_status)
++			writel(dma_rx_status, se->base + SE_DMA_RX_IRQ_CLR);
++		if (dma_tx_status & TX_DMA_DONE)
++			mas->tx_rem_bytes = 0;
++		if (dma_rx_status & RX_DMA_DONE)
++			mas->rx_rem_bytes = 0;
++		if (dma_tx_status & TX_RESET_DONE)
++			complete(&mas->tx_reset_done);
++		if (dma_rx_status & RX_RESET_DONE)
++			complete(&mas->rx_reset_done);
++		if (!mas->tx_rem_bytes && !mas->rx_rem_bytes && xfer) {
++			if (xfer->tx_buf && xfer->tx_dma)
++				geni_se_tx_dma_unprep(se, xfer->tx_dma, xfer->len);
++			if (xfer->rx_buf && xfer->rx_dma)
++				geni_se_rx_dma_unprep(se, xfer->rx_dma, xfer->len);
+ 			spi_finalize_current_transfer(spi);
+ 			mas->cur_xfer = NULL;
+-			/*
+-			 * If this happens, then a CMD_DONE came before all the
+-			 * Tx buffer bytes were sent out. This is unusual, log
+-			 * this condition and disable the WM interrupt to
+-			 * prevent the system from stalling due an interrupt
+-			 * storm.
+-			 *
+-			 * If this happens when all Rx bytes haven't been
+-			 * received, log the condition. The only known time
+-			 * this can happen is if bits_per_word != 8 and some
+-			 * registers that expect xfer lengths in num spi_words
+-			 * weren't written correctly.
+-			 */
+-			if (mas->tx_rem_bytes) {
+-				writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
+-				dev_err(mas->dev, "Premature done. tx_rem = %d bpw%d\n",
+-					mas->tx_rem_bytes, mas->cur_bits_per_word);
+-			}
+-			if (mas->rx_rem_bytes)
+-				dev_err(mas->dev, "Premature done. rx_rem = %d bpw%d\n",
+-					mas->rx_rem_bytes, mas->cur_bits_per_word);
+-		} else {
+-			complete(&mas->cs_done);
+ 		}
+ 	}
+ 
+@@ -949,6 +1066,8 @@ static int spi_geni_probe(struct platform_device *pdev)
+ 	init_completion(&mas->cs_done);
+ 	init_completion(&mas->cancel_done);
+ 	init_completion(&mas->abort_done);
++	init_completion(&mas->tx_reset_done);
++	init_completion(&mas->rx_reset_done);
+ 	spin_lock_init(&mas->lock);
+ 	pm_runtime_use_autosuspend(&pdev->dev);
+ 	pm_runtime_set_autosuspend_delay(&pdev->dev, 250);
+-- 
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
+
