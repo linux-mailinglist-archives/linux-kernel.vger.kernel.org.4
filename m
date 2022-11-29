@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 058BA63C5A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:51:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA56763C59B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236426AbiK2Qve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 11:51:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53374 "EHLO
+        id S236399AbiK2QuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 11:50:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236266AbiK2QvI (ORCPT
+        with ESMTP id S236395AbiK2Qtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 11:51:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A0370452
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 08:47:01 -0800 (PST)
+        Tue, 29 Nov 2022 11:49:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8436DFF7
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 08:46:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC81AB816E9
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 16:46:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A61BEC433C1;
-        Tue, 29 Nov 2022 16:46:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B0A7B816EA
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 16:46:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDA99C433D6;
+        Tue, 29 Nov 2022 16:46:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669740368;
-        bh=1uxPxaTClnycnzo3WdqTQKtEilfHzKefuhdmzFy6SZs=;
+        s=k20201202; t=1669740369;
+        bh=jRR+eWZ9p80Q5CZbH9ER0A4R3XYNLWrNlOrh/BtfvQM=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=VkW60Dr0nyNUwHnvurYS0HvZDysnA4i98pTdxZdX9o+LVhf5uPZI3WdvoE0OZGrV5
-         f8bM8O7syCqRA/u+Bq/V2SFrc7rbjAzgnRpkACH/dM/Nudi0pIy2MoiMydVlNjmlES
-         DFyq3DoWq7Xo6fiFtq8gYpN+qG+Iww/lIHw9qtM4PAOBKXlh/6jM5YxtOqcDM5D1xC
-         rDMDa/YGUJmMjpgx15BiPQgoSxunb8sj1LuoDxp41c0rl2E2PMm6qTBYcGMj6ULqr5
-         x55nmXzRsb+K+JpV/dBvCFYWvoualztH7ZphBfIaC1c2U4XLVgVZxBkU2nILrwkETk
-         39hPbT7gH6jRA==
+        b=Refjrf4/qiBWdxm9YcXAbP5nG2gIFIBIPB+E+12XlyUXfNfqTQBXOU182lYoVZw/A
+         VYEVmcl358niTOJImmdGADVpUYswDdJ1zPwq8kzNvCfl/bgPorg/lb5oauWwDjab/m
+         wCzflO+9PRyTU3fHl8jkobvGtfNoh5hb44azU0T8dj0o4lyfyxJF6GvN3pe+1z9x8X
+         MN/e5Oba+dg655KAuET3B5aTZ1LrLxbLFD+9LG/tydr2dV8iQ++NjEPc3RLdq5H5iL
+         GERMMpV4WGkaaa56uwu3+QNLORcJYvE1lxEQ/tk4F86FDeEhXx/2zPUPt8haqzgXFv
+         0hBp2jcosxWpw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
         Support Opensource <support.opensource@diasemi.com>,
         Ricardo Ribalda <ribalda@chromium.org>
 Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <20221124-da9211-v1-0-a54549aa6d3b@chromium.org>
-References: <20221124-da9211-v1-0-a54549aa6d3b@chromium.org>
-Subject: Re: [PATCH v1 0/1] regulator: da9211: Fix crash when irqs are pre-enabled
-Message-Id: <166974036738.313894.8241146715693014720.b4-ty@kernel.org>
-Date:   Tue, 29 Nov 2022 16:46:07 +0000
+In-Reply-To: <20221124-da9211-v2-0-1779e3c5d491@chromium.org>
+References: <20221124-da9211-v2-0-1779e3c5d491@chromium.org>
+Subject: Re: [PATCH v2] regulator: da9211: Use irq handler when ready
+Message-Id: <166974036870.313894.7159003190851344255.b4-ty@kernel.org>
+Date:   Tue, 29 Nov 2022 16:46:08 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,13 +55,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Nov 2022 17:45:30 +0100, Ricardo Ribalda wrote:
+On Sun, 27 Nov 2022 22:06:02 +0100, Ricardo Ribalda wrote:
 > If the system does not come from reset (like when it is kexec()), the
 > regulator might have an IRQ waiting for us.
 > 
 > If we enable the IRQ handler before its structures are ready, we crash.
 > 
+> This patch fixes:
 > 
+> [...]
 
 Applied to
 
