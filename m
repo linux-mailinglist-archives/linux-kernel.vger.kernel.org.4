@@ -2,143 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C006C63BF76
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 382A963BF6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232115AbiK2Lyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 06:54:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
+        id S232797AbiK2Lxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 06:53:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbiK2Lyp (ORCPT
+        with ESMTP id S232052AbiK2Lxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 06:54:45 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3D554B3B;
-        Tue, 29 Nov 2022 03:54:44 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATBIOht022888;
-        Tue, 29 Nov 2022 11:53:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : mime-version : content-type; s=pp1;
- bh=DDN8rVl+bpX39wsMmtBu4zAD3/8mE0dKx+jGxLGVP0k=;
- b=PBAlmsi/4t7//jurN6Y3sIGU+iNFiS2anqgZIQMDndU+Mz+aIrrdzaSHdF7O1YWdSxZe
- 7JeDu08Kn2eMIeOGjXnfjdPM+IoZg6sZy3cfZs4WXqpHRnERvXx98lR9fU7rNXaPdH0e
- GPQEI4b55iW0or9GwIJ1/MF6QriiQM4vouX9g8AIyDR+13v3KN/wMzlvVXwd9cx0sLrw
- 7Qsd3WdIdeDJmNJwAU7kZRcikd5vk5fmbuarB4OvExZDQb5ocEl+b4oattho2cg2+7zY
- PNhSMRLF+4vJcDPw5oAv3QGj4uRDUye/HJTc9TlNmAzEJBgboL5egEaCQ8N/7NrhifQW 8w== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m5h3f0qep-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Nov 2022 11:53:31 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ATBpfEr028674;
-        Tue, 29 Nov 2022 11:53:31 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma03wdc.us.ibm.com with ESMTP id 3m3ae9c9yq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Nov 2022 11:53:31 +0000
-Received: from smtpav01.dal12v.mail.ibm.com ([9.208.128.133])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ATBrUY633161624
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 29 Nov 2022 11:53:30 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EEFF25805D;
-        Tue, 29 Nov 2022 11:53:29 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6A85B58057;
-        Tue, 29 Nov 2022 11:53:27 +0000 (GMT)
-Received: from Dannys-MacBook-Pro.local (unknown [9.211.123.96])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTPS;
-        Tue, 29 Nov 2022 11:53:27 +0000 (GMT)
-Date:   Tue, 29 Nov 2022 19:53:19 +0800
-From:   Danny Tsen <dtsen@linux.ibm.com>
-To:     linux-crypto@vger.kernel.org
-Cc:     herbert@gondor.apana.org.au, leitao@debian.org,
-        nayna@linux.ibm.com, appro@cryptogams.org,
-        linux-kernel@vger.kernel.org, ltcgcw@linux.vnet.ibm.com,
-        dtsen@linux.ibm.com
-Subject: [PATCH 1/6] crypto: Update Kconfig and Makefile.
-Message-ID: <Y4XyrwXxv225exkb@Dannys-MacBook-Pro.local>
+        Tue, 29 Nov 2022 06:53:42 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8971155A87
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:53:41 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so12008684pjo.3
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:53:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=konsulko.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kdr4qqlcDI/C93KNdQRixFidR215xARpd9gca61oCW8=;
+        b=IYWVhThXpeOBdgTAf4CZcma2/HYD9mVPKvq70DQdaREb42zfZ4X8jUCUp8Xcwz2mqG
+         uSti/5atO+xgqDNwbpZN2XpIbDLxZ1KjIGUh3Cn3YJaTDObTos63C+DFDX/tWAGGniNr
+         cS65A7Be80SZZ4eJt9prLujUrkqJS4bEhDic8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kdr4qqlcDI/C93KNdQRixFidR215xARpd9gca61oCW8=;
+        b=Q/EN25BYam+ZbjQPxW2JwxnNgEaKJk1aAfNiNDdXvsIp1qrgBN8+DxvpxA28HT9WY0
+         o9yKZRqHyrFreZkb26aPBJFwl4j/DaZwg6Ca0tiiPAX5GoJXMfdKVBq9hCqAnFJUEwZ5
+         PU/AxL90xl3ls5KW/shLHAAsmpPozGjsnkKJfUQnTu4x7sSCYEhUTGa6Bg8dZtNZ65os
+         jI1NOvj0kT5+Eks0uMjbNUV1LJAYN8qP9Vu9DzfItUUK/6R5IBsHDY6XGxJyIFqseD7A
+         q2PXhIpA1w44h6NiMv0jMYBnAHG/mPSgSV66F4d/RPR5q8AVW0csHkPBU9RSeFUeU9F4
+         Cfew==
+X-Gm-Message-State: ANoB5pkAxjIGysGwSImY5JHwcaDVEJqUi8hK6GWWoI3N3b85UUpm6vZx
+        ftnkni3g9OrNyM0ZWMPAuiRfSc0zZBZD2wS+5rRZ7s2EPW0c6g==
+X-Google-Smtp-Source: AA0mqf7QVFpK5qVliFVVzpjCWhALK8q6Yi2gWV5WFWKFjlfkiWqWFL3UMvyWpK0PekfmGrXyPTajL5gnSxG7CQ28LxI=
+X-Received: by 2002:a17:90a:fa16:b0:218:f998:a9c0 with SMTP id
+ cm22-20020a17090afa1600b00218f998a9c0mr27160673pjb.185.1669722821039; Tue, 29
+ Nov 2022 03:53:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: PcO-8zCP8g_Y0bkd7N4fwmzjIA0492yK
-X-Proofpoint-ORIG-GUID: PcO-8zCP8g_Y0bkd7N4fwmzjIA0492yK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-29_07,2022-11-29_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- impostorscore=0 phishscore=0 mlxlogscore=999 clxscore=1015 malwarescore=0
- mlxscore=0 spamscore=0 priorityscore=1501 bulkscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211290069
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221128191616.1261026-1-nphamcs@gmail.com> <20221128191616.1261026-5-nphamcs@gmail.com>
+In-Reply-To: <20221128191616.1261026-5-nphamcs@gmail.com>
+From:   Vitaly Wool <vitaly.wool@konsulko.com>
+Date:   Tue, 29 Nov 2022 12:53:30 +0100
+Message-ID: <CAM4kBB+7boz+PZfPODbS-KMGOPZpa2QO5xZMoP2q_ZfGyqmQTA@mail.gmail.com>
+Subject: Re: [PATCH v7 4/6] zsmalloc: Add a LRU to zs_pool to keep track of
+ zspages in LRU order
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, minchan@kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
+        ddstreet@ieee.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Defined CRYPTO_P10_AES_GCM in Kconfig to support AES/GCM
-stitched implementation for Power10+ CPU.
+On Mon, Nov 28, 2022 at 8:16 PM Nhat Pham <nphamcs@gmail.com> wrote:
+>
+> This helps determines the coldest zspages as candidates for writeback.
+>
+> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> ---
+>  mm/zsmalloc.c | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+>
+> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+> index 5427a00a0518..b1bc231d94a3 100644
+> --- a/mm/zsmalloc.c
+> +++ b/mm/zsmalloc.c
+> @@ -239,6 +239,11 @@ struct zs_pool {
+>         /* Compact classes */
+>         struct shrinker shrinker;
+>
+> +#ifdef CONFIG_ZPOOL
+> +       /* List tracking the zspages in LRU order by most recently added object */
+> +       struct list_head lru;
+> +#endif
+> +
+>  #ifdef CONFIG_ZSMALLOC_STAT
+>         struct dentry *stat_dentry;
+>  #endif
+> @@ -260,6 +265,12 @@ struct zspage {
+>         unsigned int freeobj;
+>         struct page *first_page;
+>         struct list_head list; /* fullness list */
+> +
+> +#ifdef CONFIG_ZPOOL
+> +       /* links the zspage to the lru list in the pool */
+> +       struct list_head lru;
+> +#endif
+> +
+>         struct zs_pool *pool;
+>  #ifdef CONFIG_COMPACTION
+>         rwlock_t lock;
+> @@ -953,6 +964,9 @@ static void free_zspage(struct zs_pool *pool, struct size_class *class,
+>         }
+>
+>         remove_zspage(class, zspage, ZS_EMPTY);
+> +#ifdef CONFIG_ZPOOL
+> +       list_del(&zspage->lru);
+> +#endif
+>         __free_zspage(pool, class, zspage);
+>  }
+>
+> @@ -998,6 +1012,10 @@ static void init_zspage(struct size_class *class, struct zspage *zspage)
+>                 off %= PAGE_SIZE;
+>         }
+>
+> +#ifdef CONFIG_ZPOOL
+> +       INIT_LIST_HEAD(&zspage->lru);
+> +#endif
+> +
+>         set_freeobj(zspage, 0);
+>  }
+>
+> @@ -1270,6 +1288,31 @@ void *zs_map_object(struct zs_pool *pool, unsigned long handle,
+>         obj_to_location(obj, &page, &obj_idx);
+>         zspage = get_zspage(page);
+>
+> +#ifdef CONFIG_ZPOOL
+> +       /*
+> +        * Move the zspage to front of pool's LRU.
+> +        *
+> +        * Note that this is swap-specific, so by definition there are no ongoing
+> +        * accesses to the memory while the page is swapped out that would make
+> +        * it "hot". A new entry is hot, then ages to the tail until it gets either
+> +        * written back or swaps back in.
+> +        *
+> +        * Furthermore, map is also called during writeback. We must not put an
+> +        * isolated page on the LRU mid-reclaim.
+> +        *
+> +        * As a result, only update the LRU when the page is mapped for write
+> +        * when it's first instantiated.
+> +        *
+> +        * This is a deviation from the other backends, which perform this update
+> +        * in the allocation function (zbud_alloc, z3fold_alloc).
+> +        */
+> +       if (mm == ZS_MM_WO) {
+> +               if (!list_empty(&zspage->lru))
+> +                       list_del(&zspage->lru);
+> +               list_add(&zspage->lru, &pool->lru);
+> +       }
+> +#endif
+> +
+>         /*
+>          * migration cannot move any zpages in this zspage. Here, pool->lock
+>          * is too heavy since callers would take some time until they calls
+> @@ -1988,6 +2031,9 @@ static void async_free_zspage(struct work_struct *work)
+>                 VM_BUG_ON(fullness != ZS_EMPTY);
+>                 class = pool->size_class[class_idx];
+>                 spin_lock(&pool->lock);
+> +#ifdef CONFIG_ZPOOL
+> +               list_del(&zspage->lru);
+> +#endif
+>                 __free_zspage(pool, class, zspage);
+>                 spin_unlock(&pool->lock);
+>         }
+> @@ -2299,6 +2345,10 @@ struct zs_pool *zs_create_pool(const char *name)
+>          */
+>         zs_register_shrinker(pool);
+>
+> +#ifdef CONFIG_ZPOOL
+> +       INIT_LIST_HEAD(&pool->lru);
+> +#endif
 
-Added a new module driver p10-aes-gcm-crypto.
+I think the amount of #ifdefs here becomes absolutely overwhelming.
+Not that zsmalloc code was very readable before, but now it is
+starting to look like a plain disaster.
 
-Signed-off-by: Danny Tsen <dtsen@linux.ibm.com>
----
- arch/powerpc/crypto/Kconfig  | 11 +++++++++++
- arch/powerpc/crypto/Makefile | 10 ++++++++++
- 2 files changed, 21 insertions(+)
+Thanks,
+Vitaly
 
-diff --git a/arch/powerpc/crypto/Kconfig b/arch/powerpc/crypto/Kconfig
-index c1b964447401..db7d99383993 100644
---- a/arch/powerpc/crypto/Kconfig
-+++ b/arch/powerpc/crypto/Kconfig
-@@ -94,4 +94,15 @@ config CRYPTO_AES_PPC_SPE
- 	  architecture specific assembler implementations that work on 1KB
- 	  tables or 256 bytes S-boxes.
- 
-+config CRYPTO_P10_AES_GCM
-+	tristate "Stitched AES/GCM acceleration support on P10+ CPU (PPC)"
-+	depends on PPC64
-+	select CRYPTO_LIB_AES
-+	select CRYPTO_ALGAPI
-+	select CRYPTO_AEAD
-+	default m
-+	help
-+	  Support for cryptographic acceleration instructions on Power10+ CPU.
-+	    This module supports stitched acceleration for AES/GCM in hardware.
-+
- endmenu
-diff --git a/arch/powerpc/crypto/Makefile b/arch/powerpc/crypto/Makefile
-index 4808d97fede5..5b8252013abd 100644
---- a/arch/powerpc/crypto/Makefile
-+++ b/arch/powerpc/crypto/Makefile
-@@ -13,6 +13,7 @@ obj-$(CONFIG_CRYPTO_SHA256_PPC_SPE) += sha256-ppc-spe.o
- obj-$(CONFIG_CRYPTO_CRC32C_VPMSUM) += crc32c-vpmsum.o
- obj-$(CONFIG_CRYPTO_CRCT10DIF_VPMSUM) += crct10dif-vpmsum.o
- obj-$(CONFIG_CRYPTO_VPMSUM_TESTER) += crc-vpmsum_test.o
-+obj-$(CONFIG_CRYPTO_P10_AES_GCM) += p10-aes-gcm-crypto.o
- 
- aes-ppc-spe-y := aes-spe-core.o aes-spe-keys.o aes-tab-4k.o aes-spe-modes.o aes-spe-glue.o
- md5-ppc-y := md5-asm.o md5-glue.o
-@@ -21,3 +22,12 @@ sha1-ppc-spe-y := sha1-spe-asm.o sha1-spe-glue.o
- sha256-ppc-spe-y := sha256-spe-asm.o sha256-spe-glue.o
- crc32c-vpmsum-y := crc32c-vpmsum_asm.o crc32c-vpmsum_glue.o
- crct10dif-vpmsum-y := crct10dif-vpmsum_asm.o crct10dif-vpmsum_glue.o
-+p10-aes-gcm-crypto-y := p10-aes-gcm-glue.o p10_aes_gcm.o ghashp8-ppc.o aesp8-ppc.o
-+
-+quiet_cmd_perl = PERL    $@
-+      cmd_perl = $(PERL) $< $(if $(CONFIG_CPU_LITTLE_ENDIAN), linux-ppc64le, linux-ppc64) > $@
-+
-+targets += aesp8-ppc.S ghashp8-ppc.S
-+
-+$(obj)/aesp8-ppc.S $(obj)/ghashp8-ppc.S: $(obj)/%.S: $(src)/%.pl FORCE
-+	$(call if_changed,perl)
--- 
-2.31.1
-
-
+> +
+>         return pool;
+>
+>  err:
+> --
+> 2.30.2
