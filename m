@@ -2,161 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A8663C342
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A283A63C356
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235818AbiK2O6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 09:58:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35988 "EHLO
+        id S233885AbiK2PMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 10:12:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbiK2O6Q (ORCPT
+        with ESMTP id S229693AbiK2PMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 09:58:16 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFBC26105
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:58:15 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id l8so17532999ljh.13
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:58:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3rMzROJizPl93HGtOKCLbNrY7oFQ4h6JFqbBwgiPoQw=;
-        b=HK7NNJ+m0uo/8YiZigjIrMXrWT37vfCzE7ov3f7OWCf7ekUevZr/VqIA7JEZ2GKayk
-         NRRVL9YSxbesfRYHWDaQuOX+C3/nCgmBSaPtE/344PBJuxVwlIrdUXUU++oqaf9G2qN6
-         EA8zpZKOLeRklTG1AROPnVm+qvCAS9JQm2XG84OxkYA82ZH5d8ay6/OjOEuYmXuV6/vz
-         84cqiQLfQ4fTOoVC4lrGW2dGf5ibfzL4uUZa2bN+ONpzydOi4ONItIRz0XxcdjnC1bAY
-         zWgzwbqm9dmm+XOY5N6W4/zjzXOqa8JoaxQgtz3O6T4BmE72V9m4x+j+wawmEgu7P+9j
-         WNUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3rMzROJizPl93HGtOKCLbNrY7oFQ4h6JFqbBwgiPoQw=;
-        b=NSkWAGsS9jbXOVyyB6oTlNDpoWrLkiPjpc/AqtNFpI9uf6PHZ8v6EVAmYvtW616pZv
-         WUve98s3kDW4+krom8eG80hkaPK26gOafpxubPYtP0U2i6j0reIcUg2ZNZ2Xj2r4NPyA
-         R/v48PR62eFqNV5UVL5xntS7gXVDbieQU7Z+bYhDktd6ggdZzcZALzoK5WlyCjJIp1eE
-         hKRocsThRdQ7hTOxyj0Qg6lzDtwnFHGTL8GayTZgz9QeVJWYAlphWzBkeaFROloyMGSA
-         C8RvUgPQbfTSo5GGz9lXyN4Pqh8kClDGU7qYW/fQoUvnICx3Z2H6yBkW+4vx9mlUNNeg
-         rAow==
-X-Gm-Message-State: ANoB5plcqFWF10/65Ca97d5cAseU7XvvRw1+ng+WEgYStFH6BdqzqGUX
-        GQhp/dkPrdMNqSC9P15OtHFKPg==
-X-Google-Smtp-Source: AA0mqf6H7HysSViJIaGj4Ohg+efF0OL6qEvNKbtfijn0aiuYjc56hcFvmqwVVrFHWxq9fJmbcsxrdQ==
-X-Received: by 2002:a2e:800e:0:b0:279:8e27:b42f with SMTP id j14-20020a2e800e000000b002798e27b42fmr6914373ljg.106.1669733894163;
-        Tue, 29 Nov 2022 06:58:14 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id 13-20020ac2484d000000b004aac23e0dd6sm2232708lfy.29.2022.11.29.06.58.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 06:58:13 -0800 (PST)
-Message-ID: <f52e31a5-a12a-b95e-b99c-1af8f8b41c3b@linaro.org>
-Date:   Tue, 29 Nov 2022 15:58:12 +0100
+        Tue, 29 Nov 2022 10:12:49 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 29 Nov 2022 07:12:47 PST
+Received: from esa4.hc3370-68.iphmx.com (esa4.hc3370-68.iphmx.com [216.71.155.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8DAA441
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:12:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1669734767;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FKAcdCfqcGrJYFfhNECxRdqUbzNbMUCLFKQUQIe3/uU=;
+  b=ECNZYwS/x7zozo+MAKpTIYpLX8Ya2Cb532Nr+VOEo0uCFpe8q+UysKLa
+   VTGbwPBmTWXmw9gILRn0r+v9amg8qRhzzk08RATTLGDfUhejAkJj4nu/9
+   Idzmi9AZrckLXIJOgeFfbkb8DLcUbfvaBFHQDyhvt31ap5PbvlYVaKS3H
+   I=;
+Authentication-Results: esa4.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
+X-SBRS: 4.0
+X-MesageID: 88308420
+X-Ironport-Server: esa4.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.156.83
+X-Policy: $RELAYED
+IronPort-Data: A9a23:sWt9j6354+v2TVIF5/bD5VVxkn2cJEfYwER7XKvMYLTBsI5bp2ZTy
+ TMcDWqHb6zZNGb8Lot/bd6zo0MFvZXcmtNnTQtkpC1hF35El5HIVI+TRqvS04F+DeWYFR46s
+ J9OAjXkBJppJpMJjk71atANlVEliefTAOK5ULSfUsxIbVcMYD87jh5+kPIOjIdtgNyoayuAo
+ tq3qMDEULOf82cc3lk8tuTS9nuDgNyo4GlC5wVkNKgQ1LPjvyJ94Kw3dPnZw0TQGuG4LsbiL
+ 87fwbew+H/u/htFIrtJRZ6iLyXm6paLVeS/oiI+t5qK23CulQRrukoPD9IOaF8/ttm8t4sZJ
+ OOhF3CHYVxB0qXkwIzxWvTDes10FfUuFLTveRBTvSEPpqFvnrSFL/hGVSkL0YMkFulfJnl/+
+ +AaDA43SwGC3dqKg4iCGulRv5F2RCXrFNt3VnBIyDjYCbAtQIzZQrWM7thdtNsyrpkQR7CEP
+ ZNfMGcxKkSbC/FMEg5/5JYWpOqywFP+dyZVgFmUubA28y7YywkZPL3FYIqOIozWH509ckCwq
+ Wno8WX7WC0hNsHEyn3Y3nyPvtHItHauMG4VPOLhraM76LGJ/UQZDwcXTh28uuWjjVClWMN3L
+ FYd8S4j66M18SSDTNPwQhm5q36spQMHVpxbFOhSwBGAzO/Y7hiUAkAATyVdc5o2uckuXzso2
+ 1SV2dTzClRHt7mYSmmU8LuOmi+jIigeLWIEZigsQBMM5p/op4RbphbOSMtzVa24lNv4HRnuz
+ D2Q6isznbMeiYgMzarT1VLImTW3vbDSUxU4oA7QWwqN9RhlbYSoY4ip71nz7vtaKoudCF6bs
+ xA5d9O2tb5US8vXzWrUHbtLTOrBC+u53CP0pkZeEYUj0wqX3m+iJ7hsowtHdEdUC5NREdP2W
+ 3P7tQRU7Z5VGXKla65rfo68Y/gXIbjc+cfNDa6NMIcXCnRlXErepXw1OxbMt4z4uBJ0+ZzTL
+ 6t3ZipF4ZwyLa18hAS7SO4GuVPA7nBvnDiDLXwXIvnO7FZ/WJJ3Ye1dWLdtRrpjhE9hnOky2
+ 4g3Cidy408DONASmwGOmWLpEXgELGIgGbf9oNFNe+iIL2JOQT9/WqGPmehwK9M6wcy5c9skG
+ VnkCidlJKfX3yWbeW1mlFg8AF8QYXqPhS1iZnF9VbpZ83MifZyu/M8im2gfJNEaGBhY5acsF
+ ZEtIpzQasmjvxybo1zxm7Gh9t09HPlq7CrSVxeYjM8XJcQ6GlSXpI+8I2MCNkAmV0KKiCf3m
+ JX4viuzfHbJb1QzV646tNrHI4uNgEUg
+IronPort-HdrOrdr: A9a23:2/a/mqlzZccVWZBw3+DcwPBe/xjpDfIg3DAbv31ZSRFFG/Fxl6
+ iV8sjzsiWE7Ar5OUtQ/+xoV5PhfZqxz/JICOoqTNKftWvdyQiVxehZhOOIqVDd8kXFh4lgPM
+ xbEpSWZueeMbEDt7eZ3DWF
+X-IronPort-AV: E=Sophos;i="5.96,203,1665460800"; 
+   d="scan'208";a="88308420"
+From:   Per Bilse <per.bilse@citrix.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     Per Bilse <per.bilse@citrix.com>, Juergen Gross <jgross@suse.com>,
+        "Stefano Stabellini" <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        "moderated list:XEN HYPERVISOR INTERFACE" 
+        <xen-devel@lists.xenproject.org>
+Subject: [PATCH] drivers/xen/hypervisor: Expose VM SIF flags to userspace
+Date:   Tue, 29 Nov 2022 15:00:57 +0000
+Message-ID: <20221129150058.266943-1-per.bilse@citrix.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/5] dt-bindings: pinctrl: Add StarFive JH7110 pinctrl
- definitions
-Content-Language: en-US
-To:     Jianlong Huang <jianlong.huang@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Cc:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-References: <20221118011108.70715-1-hal.feng@starfivetech.com>
- <20221118011108.70715-2-hal.feng@starfivetech.com>
- <eb3974a3-f715-f5b0-cac7-551af26bd17b@linaro.org>
- <08db0f3b-5222-9460-26ba-0e6380d16583@linaro.org>
- <0ceba170-f844-e733-a49e-e67746f9f836@starfivetech.com>
- <093ea507-4c42-1af9-4896-64c1a918432e@linaro.org>
- <30c21787-0c48-ff50-1d63-8e69bdcdbe30@starfivetech.com>
- <339be655-aee7-e1a4-51be-28ea20de6792@linaro.org>
- <3db802d6-114f-097a-6c69-e7b40e4d2764@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3db802d6-114f-097a-6c69-e7b40e4d2764@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/11/2022 15:46, Jianlong Huang wrote:
-> On Tue, 29 Nov 2022 08:49:49 +0100, Krzysztof Kozlowski wrote:
->> On 29/11/2022 02:47, Jianlong Huang wrote:
->>> On Mon, 28 Nov 2022 09:32:45 +0100, Krzysztof Kozlowski wrote:
->>>> On 28/11/2022 01:48, Jianlong Huang wrote:
->>>>
->>>>>>>> +/* aon_iomux doen */
->>>>>>>> +#define GPOEN_AON_PTC0_OE_N_4			2
->>>>>>>> +#define GPOEN_AON_PTC0_OE_N_5			3
->>>>>>>> +#define GPOEN_AON_PTC0_OE_N_6			4
->>>>>>>> +#define GPOEN_AON_PTC0_OE_N_7			5
->>>>>>>> +
->>>>>>>
->>>>>>> It looks like you add register constants to the bindings. Why? The
->>>>>>> bindings are not the place to represent hardware programming model. Not
->>>>>>> mentioning that there is no benefit in this.
->>>>>>
->>>>>> Also: this entire file should be dropped, but if it stays, you have to
->>>>>> name it matching bindings or compatible (vendor,device.h).
->>>>>
->>>>> Thanks your comments.
->>>>> These macros are used to configure pinctrl in dts, so the file should stay,
->>>>
->>>> Why they should stay? What's the reason? If it is not a constant used by
->>>> driver, then register values should not be placed in the bindings, so
->>>> drop it.
->>>>
->>>
->>> Thanks.
->>>
->>> These macros in binding header(example, DOUT, DOEN etc) will be used in DTS,
->>> and driver will parse the DT for pinctrl configuration.
->>>
->>> Example in dts:
->>> uart0_pins: uart0-0 {
->>> 	tx-pins {
->>> 		pinmux = <GPIOMUX(5, GPOUT_SYS_UART0_TX, GPOEN_ENABLE, GPI_NONE)>;
->>
->> This is usage in DTS and is not an argument to store register
->> addresses/offsets as bindings. What is the usage (of define, not value)
->> in the driver?
->>
-> 
-> The existing implementation reuse the macros for DTS and driver.
+/proc/xen is a legacy pseudo filesystem which predates Xen support
+getting merged into Linux.  It has largely been replaced with more
+normal locations for data (/sys/hypervisor/ for info, /dev/xen/ for
+user devices).  We want to compile xenfs support out of the dom0 kernel.
 
-Where in the driver? Grep gives zero results.
+There is one item which only exists in /proc/xen, namely
+/proc/xen/capabilities with "control_d" being the signal of "you're in
+the control domain".  This ultimately comes from the SIF flags provided
+at VM start.
 
-> Do you mean we need to separate the macros, one for DTS and one for driver usage?
+This patch exposes all SIF flags in /sys/hypervisor/properties/flags,
+which will coexist with /proc/xen while dependencies are being migrated.
+Possible values are "privileged", "initdomain", "multiboot",
+"mod_start_pfn", and "virtmap", with "initdomain" being the equivalent
+of "control_d".
 
-No, if driver uses them it is fine. The problem is I cannot find it
-anywhere.
+Signed-off-by: Per Bilse <per.bilse@citrix.com>
+---
+ drivers/xen/sys-hypervisor.c | 26 ++++++++++++++++++++++++++
+ include/xen/interface/xen.h  | 13 ++++++++-----
+ 2 files changed, 34 insertions(+), 5 deletions(-)
 
-> Or you have any better suggestion?
-> 
-> These macros are the value of register, not register addresses/offsets,
-> except for with prefix of GPI.
-
-Still, values are not usually part of bindings.
-
-> 
-> Drivers rarely reference macros directly, mostly parsing dts and writing them to registers.
-
-So drivers do not use macros? Then there is no reason to store them in
-bindings? What do you "bind" if there is no usage (and we do not talk
-about DTS...)?
-
-Best regards,
-Krzysztof
+diff --git a/drivers/xen/sys-hypervisor.c b/drivers/xen/sys-hypervisor.c
+index fcb0792f090e..7393e04bdb6d 100644
+--- a/drivers/xen/sys-hypervisor.c
++++ b/drivers/xen/sys-hypervisor.c
+@@ -379,6 +379,31 @@ static ssize_t buildid_show(struct hyp_sysfs_attr *attr, char *buffer)
+ 
+ HYPERVISOR_ATTR_RO(buildid);
+ 
++static ssize_t flags_show(struct hyp_sysfs_attr *attr, char *buffer)
++{
++	static char const *const sifstr[SIFN_NUM_SIFN] = {
++		[SIFN_PRIV]  = "privileged",
++		[SIFN_INIT]  = "initdomain",
++		[SIFN_MULTI] = "multiboot",
++		[SIFN_PFN]   = "mod_start_pfn",
++		[SIFN_VIRT]  = "virtmap"
++	};
++	unsigned sifnum, sifmask;
++	ssize_t ret = 0;
++
++	sifmask = ~(~0U << SIFN_NUM_SIFN);  // ...0000111...
++	if (xen_domain() && (xen_start_flags & sifmask) != 0) {
++		for (sifnum = 0; sifnum != SIFN_NUM_SIFN; sifnum++) {
++			if ((xen_start_flags & (1<<sifnum)) != 0)
++				ret += sprintf(buffer+ret, "%s ", sifstr[sifnum]);
++		}
++		buffer[ret-1] = '\n';
++	}
++	return ret;
++}
++
++HYPERVISOR_ATTR_RO(flags);
++
+ static struct attribute *xen_properties_attrs[] = {
+ 	&capabilities_attr.attr,
+ 	&changeset_attr.attr,
+@@ -386,6 +411,7 @@ static struct attribute *xen_properties_attrs[] = {
+ 	&pagesize_attr.attr,
+ 	&features_attr.attr,
+ 	&buildid_attr.attr,
++	&flags_attr.attr,
+ 	NULL
+ };
+ 
+diff --git a/include/xen/interface/xen.h b/include/xen/interface/xen.h
+index 0ca23eca2a9c..762a348abe3e 100644
+--- a/include/xen/interface/xen.h
++++ b/include/xen/interface/xen.h
+@@ -648,11 +648,14 @@ struct start_info {
+ };
+ 
+ /* These flags are passed in the 'flags' field of start_info_t. */
+-#define SIF_PRIVILEGED      (1<<0)  /* Is the domain privileged? */
+-#define SIF_INITDOMAIN      (1<<1)  /* Is this the initial control domain? */
+-#define SIF_MULTIBOOT_MOD   (1<<2)  /* Is mod_start a multiboot module? */
+-#define SIF_MOD_START_PFN   (1<<3)  /* Is mod_start a PFN? */
+-#define SIF_VIRT_P2M_4TOOLS (1<<4)  /* Do Xen tools understand a virt. mapped */
++/* Text strings are printed out in sys-hypervisor.c, we guard   */
++/* against mix-ups and errors by enumerating the flags.         */
++enum { SIFN_PRIV, SIFN_INIT, SIFN_MULTI, SIFN_PFN, SIFN_VIRT, SIFN_NUM_SIFN };
++#define SIF_PRIVILEGED      (1<<SIFN_PRIV)  /* Is the domain privileged? */
++#define SIF_INITDOMAIN      (1<<SIFN_INIT)  /* Is this the initial control domain? */
++#define SIF_MULTIBOOT_MOD   (1<<SIFN_MULTI) /* Is mod_start a multiboot module? */
++#define SIF_MOD_START_PFN   (1<<SIFN_PFN)   /* Is mod_start a PFN? */
++#define SIF_VIRT_P2M_4TOOLS (1<<SIFN_VIRT)  /* Do Xen tools understand a virt. mapped */
+ 				    /* P->M making the 3 level tree obsolete? */
+ #define SIF_PM_MASK       (0xFF<<8) /* reserve 1 byte for xen-pm options */
+ 
+-- 
+2.31.1
 
