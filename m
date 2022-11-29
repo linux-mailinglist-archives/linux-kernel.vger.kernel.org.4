@@ -2,99 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D3A63B92C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 05:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D439563B928
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 05:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbiK2El5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 23:41:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
+        id S231663AbiK2Eim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 23:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234251AbiK2Elt (ORCPT
+        with ESMTP id S234820AbiK2Eii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 23:41:49 -0500
-X-Greylist: delayed 373 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Nov 2022 20:41:48 PST
-Received: from pv50p00im-zteg10011501.me.com (pv50p00im-zteg10011501.me.com [17.58.6.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC8129C88
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 20:41:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zzy040330.moe;
-        s=sig1; t=1669696535;
-        bh=gqMG1+v4/My2KUXkGkqNVJ/uFJ0mxXw/w4pdKkF5idQ=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=AGL7RMNR+K4S6h4eHYj5m0WHMR5igxt7ZDGSdhNCOOKMyDK7TqHYe/Hz9m3SJ6XfV
-         wk+2gCzytBPmsJPfG7ujGYdezsLayiwFzYIlZ7O5cdFSeC3n5ezcBiN9qdlVO5iYh2
-         xpjVHuIQDAe0FqRdOPUmiPnLMYNbLPhS1iKwN5GG39o/DJifB59aZSHw4Tm6FMfn/H
-         g7fGKZR0ArhrCHxXggpK8pbZbQPr3vz+lPAhWWJkf/T6fTOhxF2ererJKRmCm7tOpg
-         s6dKzvxia15jczGE259VJlBqcrSfs+rNqdlZ96eq9lsbu26LqcEQm5O+h5buMf6K7H
-         gHYVvaW0nb17Q==
-Received: from vanilla.lan (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-        by pv50p00im-zteg10011501.me.com (Postfix) with ESMTPSA id 1A03E2E0A11;
-        Tue, 29 Nov 2022 04:35:31 +0000 (UTC)
-From:   JunASAKA <JunASAKA@zzy040330.moe>
-To:     Jes.Sorensen@gmail.com
-Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        JunASAKA <JunASAKA@zzy040330.moe>
-Subject: [PATCH] drivers: rewrite and remove a superfluous parameter.
-Date:   Tue, 29 Nov 2022 12:34:42 +0800
-Message-Id: <20221129043442.14717-1-JunASAKA@zzy040330.moe>
-X-Mailer: git-send-email 2.38.1
+        Mon, 28 Nov 2022 23:38:38 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CE629C88
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 20:38:37 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id hd14-20020a17090b458e00b0021909875bccso311297pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 20:38:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=48Xm3VfV4sx0+bUZmYTNZIpSa0XzNl3vvIQW42o7jJQ=;
+        b=T5LUfnFRWiWAdf7zeRpoyRCNSY164AYnoRT7heMBmwvQh/rkonGTMP2fDaxZ3cb3zq
+         WgnsezEnwq9KAb5FRfzcc5muJkJxXkVwjBgn2+VHTj+wotmFhoJq5rNh+hOLZk0LZ3g/
+         Ozt9Ev52HQoPAwOc9bKAd0REmzrYFGjcYLOh4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=48Xm3VfV4sx0+bUZmYTNZIpSa0XzNl3vvIQW42o7jJQ=;
+        b=2nbxR2MC5eOSxLeyRdTOrAd4ZsWhexmUcQlNtcaNLVayZwsqNV/DVAA5wb+P26BY5J
+         t85NqVgvSmeubws7AJ6O5MOtxnGXnbfGCpNB3RKfNpzzlyZcX5eUe0ldiMtn9vsJWcgr
+         DYh4c5XQ8LuLkP29vj8/0tNlQTmU7VOjpWYzFl0Jhott3yakLgT+XwlQiWiioNbf0cbn
+         AXw9QKhbub5P2EpUrFUpgrCog3LFk/dS258W/Kl1mLnQU++D1aHtNNxKWl3CvHYo3ovA
+         x8ydbayCGxaBCOO75pYVOZKMkHSzaXbKvLAt3x2Qgkla63AhZfttEyFb+TRkitVOYHJy
+         VGFQ==
+X-Gm-Message-State: ANoB5pnR9/v7QfFqv62A6DNPnKnzNQWw/IM6BO086KTwZ7sXkyG3sNT+
+        oybRQTgyJo777MKCQ07qmIPWP58DTzKF+A==
+X-Google-Smtp-Source: AA0mqf5c3WV2DuftkVuXZ0Ps8inmw7FchDxrXziCDRwmtaUhnUDq6si8XtaqqqnfHmFIrk0qg4O0fg==
+X-Received: by 2002:a17:90a:fb86:b0:219:26b5:d41e with SMTP id cp6-20020a17090afb8600b0021926b5d41emr12318785pjb.20.1669696716694;
+        Mon, 28 Nov 2022 20:38:36 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:2565:b2f5:cacd:a5d9])
+        by smtp.gmail.com with ESMTPSA id o42-20020a17090a0a2d00b00219133d0f4esm321809pjo.9.2022.11.28.20.38.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 20:38:36 -0800 (PST)
+Date:   Tue, 29 Nov 2022 13:38:30 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Petr Vorel <pvorel@suse.cz>
+Cc:     Martin Doucha <mdoucha@suse.cz>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Minchan Kim <minchan@kernel.org>, ltp@lists.linux.it,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Nitin Gupta <ngupta@vflare.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Yang Xu <xuyang2018.jy@fujitsu.com>
+Subject: Re: [PATCH 0/1] Possible bug in zram on ppc64le on vfat
+Message-ID: <Y4WMxqyVlAt0Sp3g@google.com>
+References: <20221107191136.18048-1-pvorel@suse.cz>
+ <Y2l3vJb1y2Jynf50@google.com>
+ <3ac740c0-954b-5e68-b413-0adc7bc5a2b5@suse.cz>
+ <Y22b3wWs2QfMjJHi@google.com>
+ <9489dd1c-012c-8b5d-b670-a27213da287a@suse.cz>
+ <Y3zlrBQ8fgJyNm7G@pevik>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: O2CodvTiGlUoqhNMPHn2VKKzHfLnRfAk
-X-Proofpoint-GUID: O2CodvTiGlUoqhNMPHn2VKKzHfLnRfAk
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.517,18.0.883,17.11.64.514.0000000_definitions?=
- =?UTF-8?Q?=3D2022-06-21=5F08:2022-06-21=5F01,2022-06-21=5F08,2022-02-23?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=602
- bulkscore=0 phishscore=0 mlxscore=0 spamscore=0 clxscore=1030
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2211290029
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3zlrBQ8fgJyNm7G@pevik>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I noticed there is a superfluous "*hdr" parameter in rtl8xxxu module
-when I am trying to fix some bugs for the rtl8192eu wifi dongle. This
-parameter can be removed and then gained from the skb object to make the
-function more beautiful.
+On (22/11/22 16:07), Petr Vorel wrote:
+> > On 11. 11. 22 1:48, Sergey Senozhatsky wrote:
+> > > On (22/11/10 15:29), Martin Doucha wrote:
 
-Signed-off-by: JunASAKA <JunASAKA@zzy040330.moe>
----
- drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+[..]
 
-diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-index ac641a56efb0..4c3d97e8e51f 100644
---- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-+++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-@@ -4767,9 +4767,10 @@ static u32 rtl8xxxu_80211_to_rtl_queue(u32 queue)
- 	return rtlqueue;
- }
- 
--static u32 rtl8xxxu_queue_select(struct ieee80211_hdr *hdr, struct sk_buff *skb)
-+static u32 rtl8xxxu_queue_select(struct sk_buff *skb)
- {
- 	u32 queue;
-+	struct ieee80211_hdr *hdr = (struct ieee80211_hdr *)skb->data;
- 
- 	if (ieee80211_is_mgmt(hdr->frame_control))
- 		queue = TXDESC_QUEUE_MGNT;
-@@ -5118,7 +5119,7 @@ static void rtl8xxxu_tx(struct ieee80211_hw *hw,
- 	if (control && control->sta)
- 		sta = control->sta;
- 
--	queue = rtl8xxxu_queue_select(hdr, skb);
-+	queue = rtl8xxxu_queue_select(skb);
- 
- 	tx_desc = skb_push(skb, tx_desc_size);
- 
--- 
-2.38.1
+> > > Can you try using /dev/urandom for dd, not /dev/zero?
+> > > Do you still see zeroes in sysfs output or some random values?
+> 
+> > After 50 test runs on a kernel where the issue is confirmed, I could not
+> > reproduce the failure while filling the device from /dev/urandom instead of
+> > /dev/zero. The test reported compression ratio around 1.8-2.5 which means
+> > the memory usage reported by mm_stat was 10-13MB.
+> 
+> Martin, thanks a lot for reruning tests. I wonder problems on /dev/zero is a
+> kernel bug or just problem which should be workarounded.
 
+Hmm. Does CONFIG_KASAN show anything interesting?
