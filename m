@@ -2,257 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE8063C7F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA3463C810
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:20:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236722AbiK2TSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 14:18:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56356 "EHLO
+        id S236781AbiK2TUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 14:20:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236513AbiK2TSV (ORCPT
+        with ESMTP id S236735AbiK2TTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 14:18:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0E81DF37;
-        Tue, 29 Nov 2022 11:18:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43E81B818A9;
-        Tue, 29 Nov 2022 19:18:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8FC6C43152;
-        Tue, 29 Nov 2022 19:18:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669749496;
-        bh=/Gzf5VjkGbrloDTfPxv9l92KDFa+IDXWjOaC6u0x8Ow=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=nqD9B2jDz5Wk4t168uyU//16IO+pqrlKydrrB+BdcaGU13pUT7rgEq58N60eEr0xC
-         Q/xY/FJhGv9T8R5nFT7UbWn26+mwhZkscN+nnowowF4HPiEcuqUorq9M5dwEjt043S
-         WjE4aLkV63D+JKyDurx6SbiKc7A1z75LkkXKokzGMUprvcWnFdegxFpQceDZM0v85W
-         looTtVibLGMFbJfwV1IOOxp9ZtjMgA/CfWP8vH/M1hubiyCPP8n5QDygGE98EgGpbL
-         //KwrhjBPiku8eXr8/JKIFvDraCSZbebPl+hEpfsjoVJSv+v9moMCcDkqP6KBRCj9g
-         LHSYBr0MeYiGg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 62B505C0584; Tue, 29 Nov 2022 11:18:16 -0800 (PST)
-Date:   Tue, 29 Nov 2022 11:18:16 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>, frederic@kernel.org,
-        quic_neeraju@quicinc.com, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] rcu-tasks: Make rude RCU-Tasks work well with CPU
- hotplug
-Message-ID: <20221129191816.GA388190@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221129151810.GY4001@paulmck-ThinkPad-P17-Gen-1>
- <9299CE62-C7B6-45F5-BD07-C1CB02F0D08C@joelfernandes.org>
+        Tue, 29 Nov 2022 14:19:12 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0440B6D489
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:18:47 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so15214731wma.1
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:18:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wxyzq5HoGGPjbm+gODa1txXf4Q/7Y+OG+18WipqPvk8=;
+        b=C7udiI9DZ9yrtSSFqKTvirw8jYU7kLh3jL5ugkLtf55sgtnKUK0l08r9A82M6adAaq
+         jTkhTdaFW4s9L3hAvLP31VYKygvX0PS4i6Y5wHGHZiJ6mGvrUNTDyJap8TXhjRn+NSL1
+         U+9EPwBIcrL3NQPRXWuFblADZSBovx+GAKF33BCQ2fRRzBBs/cgDcqoOafCoIa2Wr85K
+         kubHmbkWTRBLi+hYf5HI1atoQ4K/NF7JmiE2jfD3fDjl9H43JvRLkg+tVjsrhDkHE7nq
+         drpoU9/5nF+HjuFS365ASEDU8WYmWjX3j4EEczY+2qLP0uskgXo+eXNBHFz31FHXc5Te
+         u7GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Wxyzq5HoGGPjbm+gODa1txXf4Q/7Y+OG+18WipqPvk8=;
+        b=qbv/JrGGKs8QnnuKfCZpn6PeOl8VaDl6EKHYVqslfUCXMEqIuVAlZR2eQnwiEd/qEW
+         yhH0AvUEZYVWNLtuZfHtfO9MOm82PTQgsoYvhZhklqQsCUfEwRpnXjVk/zaQQRNDlEYo
+         bwQsIGd2ZXE91NGOAuactfo5vsVkhv/W8bfVWIAVr3kCeeR/dGnL9VuxEoyMVZNGwirL
+         BFj/PDVWRV+MLPJ1Evdm0/BRcyr9TelCoY1Ban86azJzvco7z5qMoVbtIFwaVbeDBdus
+         RHd1ixiwCTQpUd1S7OOB7/ZYioKFqaCtkd2Eucynz75UILT5ngbV1T9+og7zojlbid8b
+         O6aA==
+X-Gm-Message-State: ANoB5pld+ZYTOfcVOJOo6dNQuyyXyf1gQtvesRL8UpQxW0I7bIPfBp97
+        B59UTIMp5h3bDeU95N2cRYaVRA==
+X-Google-Smtp-Source: AA0mqf7kLqxJPfRzdFeSuQaSd8KasAfw0mgXxSdu4sxBwny26+wgEuzYUj7kChJX2IE1etT3yt85lg==
+X-Received: by 2002:a05:600c:3110:b0:3cf:b07a:cd56 with SMTP id g16-20020a05600c311000b003cfb07acd56mr44367090wmo.143.1669749526203;
+        Tue, 29 Nov 2022 11:18:46 -0800 (PST)
+Received: from localhost ([2a00:79e0:9d:4:5011:adcc:fddd:accf])
+        by smtp.gmail.com with ESMTPSA id p9-20020adfce09000000b0022dc6e76bbdsm14349862wrn.46.2022.11.29.11.18.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 11:18:45 -0800 (PST)
+From:   Jann Horn <jannh@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Andrei Vagin <avagin@gmail.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] time/namespace: Refactor copy-pasted helper into one copy
+Date:   Tue, 29 Nov 2022 20:18:38 +0100
+Message-Id: <20221129191839.2471308-1-jannh@google.com>
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9299CE62-C7B6-45F5-BD07-C1CB02F0D08C@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 11:00:05AM -0500, Joel Fernandes wrote:
-> 
-> 
-> > On Nov 29, 2022, at 10:18 AM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > 
-> > ﻿On Tue, Nov 29, 2022 at 06:25:04AM +0000, Zhang, Qiang1 wrote:
-> >>>> On Nov 28, 2022, at 11:54 PM, Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:
-> >>> 
-> >>> ﻿On Mon, Nov 28, 2022 at 10:34:28PM +0800, Zqiang wrote:
-> >>>> Currently, invoke rcu_tasks_rude_wait_gp() to wait one rude
-> >>>> RCU-tasks grace period, if __num_online_cpus == 1, will return
-> >>>> directly, indicates the end of the rude RCU-task grace period.
-> >>>> suppose the system has two cpus, consider the following scenario:
-> >>>> 
-> >>>>   CPU0                                   CPU1 (going offline)
-> >>>>                         migration/1 task:
-> >>>>                                     cpu_stopper_thread
-> >>>>                                      -> take_cpu_down
-> >>>>                                         -> _cpu_disable
-> >>>>                              (dec __num_online_cpus)
-> >>>>                                         ->cpuhp_invoke_callback
-> >>>>                                               preempt_disable
-> >>>>                       access old_data0
-> >>>>          task1
-> >>>> del old_data0                                  .....
-> >>>> synchronize_rcu_tasks_rude()
-> >>>> task1 schedule out
-> >>>> ....
-> >>>> task2 schedule in
-> >>>> rcu_tasks_rude_wait_gp()
-> >>>>    ->__num_online_cpus == 1
-> >>>>      ->return
-> >>>> ....
-> >>>> task1 schedule in
-> >>>> ->free old_data0
-> >>>>                                               preempt_enable
-> >>>> 
-> >>>> when CPU1 dec __num_online_cpus and __num_online_cpus is equal one,
-> >>>> the CPU1 has not finished offline, stop_machine task(migration/1)
-> >>>> still running on CPU1, maybe still accessing 'old_data0', but the
-> >>>> 'old_data0' has freed on CPU0.
-> >>>> 
-> >>>> This commit add cpus_read_lock/unlock() protection before accessing
-> >>>> __num_online_cpus variables, to ensure that the CPU in the offline
-> >>>> process has been completed offline.
-> >>>> 
-> >>>> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> >>>> 
-> >>>> First, good eyes and good catch!!!
-> >>>> 
-> >>>> The purpose of that check for num_online_cpus() is not performance
-> >>>> on single-CPU systems, but rather correct operation during early boot.
-> >>>> So a simpler way to make that work is to check for RCU_SCHEDULER_RUNNING,
-> >>>> for example, as follows:
-> >>>> 
-> >>>>   if (rcu_scheduler_active != RCU_SCHEDULER_RUNNING &&
-> >>>>       num_online_cpus() <= 1)
-> >>>>       return;    // Early boot fastpath for only one CPU.
-> >>> 
-> >>> Hi Paul
-> >>> 
-> >>> During system startup, because the RCU_SCHEDULER_RUNNING is set after starting other CPUs, 
-> >>> 
-> >>>             CPU0                                                                       CPU1                                                                 
-> >>> 
-> >>> if (rcu_scheduler_active !=                                    
-> >>>   RCU_SCHEDULER_RUNNING &&
-> >>>          __num_online_cpus  == 1)                                               
-> >>>   return;                                                                         inc  __num_online_cpus
-> >>>                           (__num_online_cpus == 2)
-> >>> 
-> >>> CPU0 didn't notice the update of the __num_online_cpus variable by CPU1 in time
-> >>> Can we move rcu_set_runtime_mode() before smp_init()
-> >>> any thoughts?
-> >>> 
-> >>> Is anyone expected to do rcu-tasks operation before the scheduler is running? 
-> >> 
-> >> Not sure if such a scenario exists.
-> >> 
-> >>> Typically this requires the tasks to context switch which is a scheduler operation.
-> >>> 
-> >>> If the scheduler is not yet running, then I don’t think missing an update the __num_online_cpus matters since no one does a tasks-RCU synchronize.
-> >> 
-> >> Hi Joel
-> >> 
-> >> After the kernel_init task runs, before calling smp_init() to starting other CPUs, 
-> >> the scheduler haven been initialization, task context switching can occur.
-> > 
-> > Good catch, thank you both.  For some reason, I was thinking that the
-> > additional CPUs did not come online until later.
-> > 
-> > So how about this?
-> > 
-> >    if (rcu_scheduler_active == RCU_SCHEDULER_INACTIVE)
-> >        return;    // Early boot fastpath.
-> > 
-> > If this condition is true, there is only one CPU and no scheduler,
-> > thus no preemption.
-> 
-> Agreed. I was going to suggest exactly this :)
-> 
-> Ack.
-> (Replying by phone but feel free to add my reviewed by tag).
+find_timens_vvar_page() is not arch-specific, as can be seen from how all
+five per-architecture versions of it are the same.
+(arm64, powerpc and riscv are exactly the same; x86 and s390 have two
+characters difference inside a comment, less blank lines, and mark the
+!CONFIG_TIME_NS version as inline.)
 
-I should add that the downside of this approach is that there is a short
-time between the scheduler initializing and workqueues fully initializing
-where a critical-path call to synchronize_rcu_tasks() will hang the
-system.  I do -not- consider this to be a real problem because RCU had
-some hundreds of calls to synchronize_rcu() before this became an issue.
+Refactor the five copies into a central copy in kernel/time/namespace.c.
 
-So this should be fine, but please recall this for when/if someone does
-stick a synchronize_rcu_tasks() into that short time.  ;-)
+Marked for stable backporting because it is a prerequisite for the
+following patch.
 
-							Thanx, Paul
+Cc: stable@vger.kernel.org
+Signed-off-by: Jann Horn <jannh@google.com>
+---
+ arch/arm64/kernel/vdso.c       | 22 ----------------------
+ arch/powerpc/kernel/vdso.c     | 22 ----------------------
+ arch/riscv/kernel/vdso.c       | 22 ----------------------
+ arch/s390/kernel/vdso.c        | 20 --------------------
+ arch/x86/entry/vdso/vma.c      | 23 -----------------------
+ include/linux/time_namespace.h |  6 ++++++
+ kernel/time/namespace.c        | 20 ++++++++++++++++++++
+ 7 files changed, 26 insertions(+), 109 deletions(-)
 
-> - Joel
-> 
-> 
-> > 
-> >                        Thanx, Paul
-> > 
-> >> Thanks
-> >> Zqiang
-> >> 
-> >>> 
-> >>> Or did I miss something?
-> >>> 
-> >>> Thanks.
-> >>> 
-> >>> 
-> >>> 
-> >>> 
-> >>> Thanks
-> >>> Zqiang
-> >>> 
-> >>>> 
-> >>>> This works because rcu_scheduler_active is set to RCU_SCHEDULER_RUNNING
-> >>>> long before it is possible to offline CPUs.
-> >>>> 
-> >>>> Yes, schedule_on_each_cpu() does do cpus_read_lock(), again, good eyes,
-> >>>> and it also unnecessarily does the schedule_work_on() the current CPU,
-> >>>> but the code calling synchronize_rcu_tasks_rude() is on high-overhead
-> >>>> code paths, so this overhead is down in the noise.
-> >>>> 
-> >>>> Until further notice, anyway.
-> >>>> 
-> >>>> So simplicity is much more important than performance in this code.
-> >>>> So just adding the check for RCU_SCHEDULER_RUNNING should fix this,
-> >>>> unless I am missing something (always possible!).
-> >>>> 
-> >>>>                           Thanx, Paul
-> >>>> 
-> >>>> ---
-> >>>> kernel/rcu/tasks.h | 20 ++++++++++++++++++--
-> >>>> 1 file changed, 18 insertions(+), 2 deletions(-)
-> >>>> 
-> >>>> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-> >>>> index 4a991311be9b..08e72c6462d8 100644
-> >>>> --- a/kernel/rcu/tasks.h
-> >>>> +++ b/kernel/rcu/tasks.h
-> >>>> @@ -1033,14 +1033,30 @@ static void rcu_tasks_be_rude(struct work_struct *work)
-> >>>> {
-> >>>> }
-> >>>> 
-> >>>> +static DEFINE_PER_CPU(struct work_struct, rude_work);
-> >>>> +
-> >>>> // Wait for one rude RCU-tasks grace period.
-> >>>> static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
-> >>>> {
-> >>>> +    int cpu;
-> >>>> +    struct work_struct *work;
-> >>>> +
-> >>>> +    cpus_read_lock();
-> >>>>   if (num_online_cpus() <= 1)
-> >>>> -        return;    // Fastpath for only one CPU.
-> >>>> +        goto end;// Fastpath for only one CPU.
-> >>>> 
-> >>>>   rtp->n_ipis += cpumask_weight(cpu_online_mask);
-> >>>> -    schedule_on_each_cpu(rcu_tasks_be_rude);
-> >>>> +    for_each_online_cpu(cpu) {
-> >>>> +        work = per_cpu_ptr(&rude_work, cpu);
-> >>>> +        INIT_WORK(work, rcu_tasks_be_rude);
-> >>>> +        schedule_work_on(cpu, work);
-> >>>> +    }
-> >>>> +
-> >>>> +    for_each_online_cpu(cpu)
-> >>>> +        flush_work(per_cpu_ptr(&rude_work, cpu));
-> >>>> +
-> >>>> +end:
-> >>>> +    cpus_read_unlock();
-> >>>> }
-> >>>> 
-> >>>> void call_rcu_tasks_rude(struct rcu_head *rhp, rcu_callback_t func);
-> >>>> -- 
-> >>>> 2.25.1
-> >>>> 
+diff --git a/arch/arm64/kernel/vdso.c b/arch/arm64/kernel/vdso.c
+index 99ae81ab91a74..e59a32aa0c49d 100644
+--- a/arch/arm64/kernel/vdso.c
++++ b/arch/arm64/kernel/vdso.c
+@@ -151,28 +151,6 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+ 	mmap_read_unlock(mm);
+ 	return 0;
+ }
+-
+-static struct page *find_timens_vvar_page(struct vm_area_struct *vma)
+-{
+-	if (likely(vma->vm_mm == current->mm))
+-		return current->nsproxy->time_ns->vvar_page;
+-
+-	/*
+-	 * VM_PFNMAP | VM_IO protect .fault() handler from being called
+-	 * through interfaces like /proc/$pid/mem or
+-	 * process_vm_{readv,writev}() as long as there's no .access()
+-	 * in special_mapping_vmops.
+-	 * For more details check_vma_flags() and __access_remote_vm()
+-	 */
+-	WARN(1, "vvar_page accessed remotely");
+-
+-	return NULL;
+-}
+-#else
+-static struct page *find_timens_vvar_page(struct vm_area_struct *vma)
+-{
+-	return NULL;
+-}
+ #endif
+ 
+ static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
+diff --git a/arch/powerpc/kernel/vdso.c b/arch/powerpc/kernel/vdso.c
+index 4abc019497020..507f8228f983b 100644
+--- a/arch/powerpc/kernel/vdso.c
++++ b/arch/powerpc/kernel/vdso.c
+@@ -129,28 +129,6 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+ 
+ 	return 0;
+ }
+-
+-static struct page *find_timens_vvar_page(struct vm_area_struct *vma)
+-{
+-	if (likely(vma->vm_mm == current->mm))
+-		return current->nsproxy->time_ns->vvar_page;
+-
+-	/*
+-	 * VM_PFNMAP | VM_IO protect .fault() handler from being called
+-	 * through interfaces like /proc/$pid/mem or
+-	 * process_vm_{readv,writev}() as long as there's no .access()
+-	 * in special_mapping_vmops.
+-	 * For more details check_vma_flags() and __access_remote_vm()
+-	 */
+-	WARN(1, "vvar_page accessed remotely");
+-
+-	return NULL;
+-}
+-#else
+-static struct page *find_timens_vvar_page(struct vm_area_struct *vma)
+-{
+-	return NULL;
+-}
+ #endif
+ 
+ static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
+diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
+index 123d05255fcfa..e410275918ac4 100644
+--- a/arch/riscv/kernel/vdso.c
++++ b/arch/riscv/kernel/vdso.c
+@@ -137,28 +137,6 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+ 	mmap_read_unlock(mm);
+ 	return 0;
+ }
+-
+-static struct page *find_timens_vvar_page(struct vm_area_struct *vma)
+-{
+-	if (likely(vma->vm_mm == current->mm))
+-		return current->nsproxy->time_ns->vvar_page;
+-
+-	/*
+-	 * VM_PFNMAP | VM_IO protect .fault() handler from being called
+-	 * through interfaces like /proc/$pid/mem or
+-	 * process_vm_{readv,writev}() as long as there's no .access()
+-	 * in special_mapping_vmops.
+-	 * For more details check_vma_flags() and __access_remote_vm()
+-	 */
+-	WARN(1, "vvar_page accessed remotely");
+-
+-	return NULL;
+-}
+-#else
+-static struct page *find_timens_vvar_page(struct vm_area_struct *vma)
+-{
+-	return NULL;
+-}
+ #endif
+ 
+ static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
+diff --git a/arch/s390/kernel/vdso.c b/arch/s390/kernel/vdso.c
+index 3105ca5bd4701..d6df7169c01f2 100644
+--- a/arch/s390/kernel/vdso.c
++++ b/arch/s390/kernel/vdso.c
+@@ -44,21 +44,6 @@ struct vdso_data *arch_get_vdso_data(void *vvar_page)
+ 	return (struct vdso_data *)(vvar_page);
+ }
+ 
+-static struct page *find_timens_vvar_page(struct vm_area_struct *vma)
+-{
+-	if (likely(vma->vm_mm == current->mm))
+-		return current->nsproxy->time_ns->vvar_page;
+-	/*
+-	 * VM_PFNMAP | VM_IO protect .fault() handler from being called
+-	 * through interfaces like /proc/$pid/mem or
+-	 * process_vm_{readv,writev}() as long as there's no .access()
+-	 * in special_mapping_vmops().
+-	 * For more details check_vma_flags() and __access_remote_vm()
+-	 */
+-	WARN(1, "vvar_page accessed remotely");
+-	return NULL;
+-}
+-
+ /*
+  * The VVAR page layout depends on whether a task belongs to the root or
+  * non-root time namespace. Whenever a task changes its namespace, the VVAR
+@@ -84,11 +69,6 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+ 	mmap_read_unlock(mm);
+ 	return 0;
+ }
+-#else
+-static inline struct page *find_timens_vvar_page(struct vm_area_struct *vma)
+-{
+-	return NULL;
+-}
+ #endif
+ 
+ static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
+diff --git a/arch/x86/entry/vdso/vma.c b/arch/x86/entry/vdso/vma.c
+index 311eae30e0894..6b36485054e8a 100644
+--- a/arch/x86/entry/vdso/vma.c
++++ b/arch/x86/entry/vdso/vma.c
+@@ -98,24 +98,6 @@ static int vdso_mremap(const struct vm_special_mapping *sm,
+ }
+ 
+ #ifdef CONFIG_TIME_NS
+-static struct page *find_timens_vvar_page(struct vm_area_struct *vma)
+-{
+-	if (likely(vma->vm_mm == current->mm))
+-		return current->nsproxy->time_ns->vvar_page;
+-
+-	/*
+-	 * VM_PFNMAP | VM_IO protect .fault() handler from being called
+-	 * through interfaces like /proc/$pid/mem or
+-	 * process_vm_{readv,writev}() as long as there's no .access()
+-	 * in special_mapping_vmops().
+-	 * For more details check_vma_flags() and __access_remote_vm()
+-	 */
+-
+-	WARN(1, "vvar_page accessed remotely");
+-
+-	return NULL;
+-}
+-
+ /*
+  * The vvar page layout depends on whether a task belongs to the root or
+  * non-root time namespace. Whenever a task changes its namespace, the VVAR
+@@ -140,11 +122,6 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+ 
+ 	return 0;
+ }
+-#else
+-static inline struct page *find_timens_vvar_page(struct vm_area_struct *vma)
+-{
+-	return NULL;
+-}
+ #endif
+ 
+ static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
+diff --git a/include/linux/time_namespace.h b/include/linux/time_namespace.h
+index 3146f1c056c98..bb9d3f5542f8e 100644
+--- a/include/linux/time_namespace.h
++++ b/include/linux/time_namespace.h
+@@ -45,6 +45,7 @@ struct time_namespace *copy_time_ns(unsigned long flags,
+ void free_time_ns(struct time_namespace *ns);
+ void timens_on_fork(struct nsproxy *nsproxy, struct task_struct *tsk);
+ struct vdso_data *arch_get_vdso_data(void *vvar_page);
++struct page *find_timens_vvar_page(struct vm_area_struct *vma);
+ 
+ static inline void put_time_ns(struct time_namespace *ns)
+ {
+@@ -141,6 +142,11 @@ static inline void timens_on_fork(struct nsproxy *nsproxy,
+ 	return;
+ }
+ 
++static inline struct page *find_timens_vvar_page(struct vm_area_struct *vma)
++{
++	return NULL;
++}
++
+ static inline void timens_add_monotonic(struct timespec64 *ts) { }
+ static inline void timens_add_boottime(struct timespec64 *ts) { }
+ 
+diff --git a/kernel/time/namespace.c b/kernel/time/namespace.c
+index aec832801c26c..761c0ada5142a 100644
+--- a/kernel/time/namespace.c
++++ b/kernel/time/namespace.c
+@@ -192,6 +192,26 @@ static void timens_setup_vdso_data(struct vdso_data *vdata,
+ 	offset[CLOCK_BOOTTIME_ALARM]	= boottime;
+ }
+ 
++struct page *find_timens_vvar_page(struct vm_area_struct *vma)
++{
++	if (likely(vma->vm_mm == current->mm))
++		return current->nsproxy->time_ns->vvar_page;
++
++	/*
++	 * VM_PFNMAP | VM_IO protect .fault() handler from being called
++	 * through interfaces like /proc/$pid/mem or
++	 * process_vm_{readv,writev}() as long as there's no .access()
++	 * in special_mapping_vmops().
++	 * For more details check_vma_flags() and __access_remote_vm()
++	 */
++
++	WARN(1, "vvar_page accessed remotely");
++
++	return NULL;
++}
++
++
++
+ /*
+  * Protects possibly multiple offsets writers racing each other
+  * and tasks entering the namespace.
+
+base-commit: ca57f02295f188d6c65ec02202402979880fa6d8
+-- 
+2.38.1.584.g0f3c55d4c2-goog
+
