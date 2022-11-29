@@ -2,218 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE88763B89C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 751CD63B8A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235303AbiK2DM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 22:12:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
+        id S235432AbiK2DOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 22:14:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235150AbiK2DMy (ORCPT
+        with ESMTP id S234820AbiK2DOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 22:12:54 -0500
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CA8637A;
-        Mon, 28 Nov 2022 19:12:51 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VVym171_1669691567;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VVym171_1669691567)
-          by smtp.aliyun-inc.com;
-          Tue, 29 Nov 2022 11:12:49 +0800
-Date:   Tue, 29 Nov 2022 11:12:46 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     linux-xfs@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Brian Foster <bfoster@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Zirong Lang <zlang@redhat.com>
-Subject: Re: [PATCH] xfs: account extra freespace btree splits for multiple
- allocations
-Message-ID: <Y4V4rlPZ/p6dgISy@B-P7TQMD6M-0146.local>
-Mail-Followup-To: Dave Chinner <david@fromorbit.com>,
-        linux-xfs@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Brian Foster <bfoster@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, Zirong Lang <zlang@redhat.com>
-References: <20221109034802.40322-1-hsiangkao@linux.alibaba.com>
- <20221111203905.GN3600936@dread.disaster.area>
- <Y27e2U155YvH9et4@debian>
- <20221112214545.GQ3600936@dread.disaster.area>
- <Y3NGghqFDEoMPojt@B-P7TQMD6M-0146.local>
- <20221116025106.GB3600936@dread.disaster.area>
- <Y3qrEIy3DgGyhjli@debian>
- <20221122011757.GP3600936@dread.disaster.area>
+        Mon, 28 Nov 2022 22:14:22 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6718D13DC0;
+        Mon, 28 Nov 2022 19:14:21 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id w37so6644168pga.5;
+        Mon, 28 Nov 2022 19:14:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=GqtbVqN1Ji/tLgIK2eSupvgjjaDXGh123VPhBwxrz28=;
+        b=iBTQuMnBjqgW1gYfAZGBAKwfeHpqlSXOuWZzqQ9TUHQMXsiTZA0yCtj0RE4jW03+qQ
+         3RoQ7qAKdz7uJanHoOj2vU4hbRkySOm1X//OakLvdJ+Imk51+zahmingN0ems59RoP8d
+         Q6P5W2g64U5iScdNgHpRfKeBww59PJBjPJ2uH//OtSQMZNlewy7IqozDSzv4OtQw051j
+         lEYTirvPUBAKi+0aFpg4uKwQli+2q5G9eH9k971O0BHf6gXruOrT+e6Lfd+hrwQDeJYQ
+         vMsG2XQkzb4f9cJ0vcrxOgh9b/iXa3phImiSJhO8hPq8DVTEyVYQtEQPk+C7PPndwBkM
+         a2DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GqtbVqN1Ji/tLgIK2eSupvgjjaDXGh123VPhBwxrz28=;
+        b=aSBgu4nKThLaianxuz6eHcELdJ78iEb5NwonfoCMebnv0vLHhCmM9EC5E95qUNIKWl
+         N0tFMVRxiboWJ3NjnFKAYjU6b6GjbNdY4aAY92N8fjiJoL3uFpQuFYUduhVnUH6vScCr
+         maMaIdku6vLBNpjWX/h4NV64LoPi5x0exKH799z1Ox6hsifSuXbnIsnsG+//lMW7pj0E
+         dbE03c/A0pSL76NLiO+Jw/bKNXXLI5jQewG851CZxB85EoEyB7uJqI5y/LiLEWHRH94W
+         OfGA1Rwpi0WId6ld84wyvSv89QOuz+1CpbS1zLhCkkosp/UZzsoLQKnroeusovZ7TwxD
+         gZCQ==
+X-Gm-Message-State: ANoB5plcESPwhXOwD+5oeqROUFstJ5QKTinBna75TsFFpZJprr9pqTxo
+        stg4OOqAltqp95olPerBvVQ=
+X-Google-Smtp-Source: AA0mqf6EtEcFT/KpY3uHhBAbL1OFo09nPg9NGqfF4ECioi/tztfx4q4YMe2VxLgxEntLn25fWfhKqA==
+X-Received: by 2002:a63:1942:0:b0:46f:7b0d:3602 with SMTP id 2-20020a631942000000b0046f7b0d3602mr30386298pgz.143.1669691660708;
+        Mon, 28 Nov 2022 19:14:20 -0800 (PST)
+Received: from XH22050090-L.ad.ts.tri-ad.global ([103.175.111.222])
+        by smtp.gmail.com with ESMTPSA id c31-20020a17090a492200b00218b32f6a9esm210885pjh.18.2022.11.28.19.14.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 19:14:20 -0800 (PST)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Jiri Pirko <jiri@nvidia.com>, Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can <linux-can@vger.kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH net-next v2] net: devlink: add DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER
+Date:   Tue, 29 Nov 2022 12:14:06 +0900
+Message-Id: <20221129031406.3849872-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221122011757.GP3600936@dread.disaster.area>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
+As discussed in [1], abbreviating the bootloader to "bl" might not be
+well understood. Instead, a bootloader technically being a firmware,
+name it "fw.bootloader".
 
-Sorry for some delay again (I was applying some workaround to our
-production to mitigate this and some other stuffs around there.)
+Add a new macro to devlink.h to formalize this new info attribute name
+and update the documentation.
 
-On Tue, Nov 22, 2022 at 12:17:57PM +1100, Dave Chinner wrote:
-> On Mon, Nov 21, 2022 at 06:32:48AM +0800, Gao Xiang wrote:
-> > On Wed, Nov 16, 2022 at 01:51:06PM +1100, Dave Chinner wrote:
-> > > On Tue, Nov 15, 2022 at 03:57:54PM +0800, Gao Xiang wrote:
-> > > > On Sun, Nov 13, 2022 at 08:45:45AM +1100, Dave Chinner wrote:
-> > > ..... because the assumption is that AGFL blocks come from free
-> > > space and so when we are at ENOSPC bno/cnt btrees *do no require
-> > > splits* so will not consume extra space. Hence allocation at ENOSPC
-> > > doesn't need to take into account AGFL block usage because the AGFL
-> > > will not be consumed.
-> > 
-> > I noticed another thing.  I think the reason why the first allocation
-> > in this case caused a cntbt split is that Zorro's workload set
-> > sunit/swidth.  Therefore, due to align requirement, I assume it
-> > called xfs_alloc_fix_len() to fix up agbno and len.
-> > 
-> > Actually I found our workload has the similar sunit/swidth setup and
-> > I am thinking about this these days.  One thing is that why we need
-> > freespace btree splits when consuming free blocks.
-> 
-> stripe alignment does not affect AGFL behaviour, not free space
-> btree allocation requirements. stripe alignment only affects the
-> initial user data allocations from xfs_bmap_btalloc() where the
-> stripe alignment variables (e.g. min align, align slop, etc). None
-> of these parameters are set for AGFL or btree block allocations, so
-> they ignore all alignment constraints.
-> 
-> > Another thing is that considering we're near ENOSPC, and bno/cnt
-> > btrees has only a few records.  If we allocates without alignment,
-> > I also think bno/cnt btrees do no require splits so it will not
-> > consume extra space since the overall extents only decrease.
-> > 
-> > Yet how about allocating with alignment? It seems that it can add
-> > another free extent in order to fulfill the alignment.  I'm not sure
-> > if it can cause some corner cases here.
-> 
-> Alignment never requires an extra allocation - it reserves extra
-> space to select a larger freespace that an aligned extent can be
-> carved out of. If an aligned extent cannot be found, we fall back to
-> unaligned allocation....
+[1] https://lore.kernel.org/netdev/20221128142723.2f826d20@kernel.org/
 
-As we talked on IRC, I skip this part now.  In brief, I think stripe
-allocation can make it reproduce more frequently.
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+* Changelog *
 
-> 
-> > > Similarly, if we have enough free space records to split a free
-> > > space btree block, we have enough free space to refill the AGFL
-> > > multiple times and we don't have to reserve space for them.
-> > > 
-> > > IOWs, the allocation code has, historically, never had to care about
-> > > AGFL refilling when the AG is near ENOSPC as nothing will consume
-> > > AGFL blocks when the AG is near empty.
-> > > 
-> > > This is the design assumption that AG reservations broke. This is
-> > > why I'm asking you to look into taking blocks that are supposedly
-> > > reserved for the AGFL, because as reserved space is used, the
-> > > bno/cnt btrees will shrink and return those blocks to free space and
-> > > hence they are still available for reserved allocations to use as
-> > > the real physical ENOSPC condition approaches.
-> > 
-> > Yeah, intuitively I also imagine like what you said.  However, does it
-> > have strictly monotonicity, especially with stripe alignment setup?
-> > 
-> > > 
-> > > The more I look at this, the more I think overall answer to this
-> > > problem is to allow AGFL refilling to ignore AG reserves rather than
-> > > causing ENOSPC....
-> > 
-> > Could you give more details how to fit this case?  Also we have a
-> > short talk last Wednesday (sorry that I had an urgent thing at that
-> > time).  You mentioned "the simple solution is something like
-> > min(ag reservation blocks, needed AGFL blocks) instead of accounting
-> > them separately", could you give an example for this case as well?
-> 
-> Go read the head comment in xfs_ag_resv.c. Specifically, this bit:
-> 
->  * Reserved blocks can be managed by passing one of the enum xfs_ag_resv_type
->  * values via struct xfs_alloc_arg or directly to the xfs_free_extent
->  * function.  It might seem a little funny to maintain a reservoir of blocks
->  * to feed another reservoir, but the AGFL only holds enough blocks to get
->  * through the next transaction.  The per-AG reservation is to ensure (we
->  * hope) that each AG never runs out of blocks.  Each data structure wanting
->  * to use the reservation system should update ask/used in xfs_ag_resv_init.
-> 
-> This was originally written with RMAPBT updates in mind (rmap btree
-> blocks come from the AGFL, just like the bno/cnt btrees). SInce this
-> was written, AGFL blocks have been carved out of this reservation by
-> XFS_AG_RESV_AGFL, and so this reservation space no longer reserves
-> or accounts for refilling the AGFL for non-RMAPBT operations.
-> 
-> My point is, however, that the reservation space was intended for
-> ensuring the AGFL could be refilled without triggering ENOSPC in
-> certain circumstances. And here we are with a situation where
-> refilling the AGFL triggers ENOSPC because of the reservation
-> space.
-> 
-> The "available" calculation in xfs_alloc_space_available() does:
-> 
-> 	available = (int)(pag->pagf_freeblks + agflcount -
->                           reservation - min_free - args->minleft);
-> 
-> 
-> Which is effectively:
-> 
-> 	available =	(free space) -
-> 			(reserved space) -
-> 			(minimum AG requires to be left free) -
-> 			(minimum allocation requires to left free)
-> 
-> But what we have to consider is that three of these parameters have
-> a component of "AGFL blocks" in them:
-> 
-> free space	= indexed free space + current AGFL blocks
-> reserved space	= space reserved for future AGFL block allocation
-> minimum AG free = AGFL blocks needed for this allocation
-> 
-> Looked at a different way (as a timeline):
-> 
-> free space	= Previously allocated AGFL blocks
-> reserved space  = future allocation AGFL block pool
-> minimum free	= present allocation AGFL needs
-> 
-> So the problem you are seeing is that on the second allocation of a
-> chain, the AGFL blocks previously allocated by the initial
-> allocation in the chain are not sufficient for present AGFL needs
-> and we do not allow the present allocation to use space from the
-> future AGFL block pool to fill the AGFL....
+v1 -> v2:
 
-I agree with your word here.
+  * update the documentation as well.
+  Link: https://lore.kernel.org/netdev/20221129020151.3842613-1-mailhol.vincent@wanadoo.fr/
+---
+ Documentation/networking/devlink/devlink-info.rst | 5 +++++
+ include/net/devlink.h                             | 2 ++
+ 2 files changed, 7 insertions(+)
 
-> 
-> Also, we need to keep in mind that the initial allocation uses
-> args->resv = XFS_AG_RESV_NONE, so the reservation space returned for
-> the initial allocation is the full metadata (finobt) + reserved
-> (RMAPBT) reservation that is being made.
-> 
-> The second allocation in the chain (where minleft is zero) really
-> needs to have a reserve pool for AGFL filling. But we don't have a
-> reserve pool for general AGFL allocations anymore, and this looks
-> like we need it. i.e. instead of XFS_AG_RESV_AGFL just being used to
-> avoid accounting AGFL block usage, perhaps it should actually manage
-> a reserve pool for ensuring the AGFL can be refilled near ENOSPC
-> (due to outstanding RMAP/FINOBT reservations) in a single
-> transaction allocation chain....
-> 
-> i.e. so long as the pool has more blocks in it than the current
-> allocation requires to refill the AGFL, the allocation can
-> proceed...
-
-Ok, let me think out a way to use ag_resv framework to resolve this
-issue now.
-
-Thanks,
-Gao Xiang
+diff --git a/Documentation/networking/devlink/devlink-info.rst b/Documentation/networking/devlink/devlink-info.rst
+index 7572bf6de5c1..1242b0e6826b 100644
+--- a/Documentation/networking/devlink/devlink-info.rst
++++ b/Documentation/networking/devlink/devlink-info.rst
+@@ -198,6 +198,11 @@ fw.bundle_id
+ 
+ Unique identifier of the entire firmware bundle.
+ 
++fw.bootloader
++-------------
++
++Version of the bootloader.
++
+ Future work
+ ===========
+ 
+diff --git a/include/net/devlink.h b/include/net/devlink.h
+index 074a79b8933f..2f552b90b5c6 100644
+--- a/include/net/devlink.h
++++ b/include/net/devlink.h
+@@ -621,6 +621,8 @@ enum devlink_param_generic_id {
+ #define DEVLINK_INFO_VERSION_GENERIC_FW_ROCE	"fw.roce"
+ /* Firmware bundle identifier */
+ #define DEVLINK_INFO_VERSION_GENERIC_FW_BUNDLE_ID	"fw.bundle_id"
++/* Bootloader */
++#define DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER	"fw.bootloader"
+ 
+ /**
+  * struct devlink_flash_update_params - Flash Update parameters
+-- 
+2.25.1
 
