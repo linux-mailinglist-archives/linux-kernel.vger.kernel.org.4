@@ -2,53 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0FE63BEAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB0E63BEAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbiK2LK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 06:10:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
+        id S232995AbiK2LLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 06:11:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232635AbiK2LKy (ORCPT
+        with ESMTP id S232884AbiK2LLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 06:10:54 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE90BBA;
-        Tue, 29 Nov 2022 03:10:50 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NM00707Q0zqSjv;
-        Tue, 29 Nov 2022 19:06:47 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 19:10:48 +0800
-CC:     <yangyicong@hisilicon.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linuxarm@huawei.com>, <f.fangjian@huawei.com>,
-        <prime.zeng@huawei.com>, <shenyang39@huawei.com>,
-        <liuqi6124@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
-        <bagasdotme@gmail.com>, <jonathan.cameron@huawei.com>
-Subject: Re: [PATCH v3 0/4] Add TLP filter support and some fixes for
- HiSilicon PCIe PMU
-To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>
-References: <20221117084136.53572-1-yangyicong@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <b08447e8-9d2c-3855-97cb-b10e3e080e42@huawei.com>
-Date:   Tue, 29 Nov 2022 19:10:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
-MIME-Version: 1.0
-In-Reply-To: <20221117084136.53572-1-yangyicong@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 29 Nov 2022 06:11:10 -0500
+Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CBB265F
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:11:03 -0800 (PST)
+Received: by mail-wm1-x349.google.com with SMTP id c10-20020a7bc84a000000b003cf81c2d3efso4589040wml.7
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:11:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=C35WM+rFOww9oANmi2XKIgD3lZZHmk9pCOYrcDGbk7A=;
+        b=sMaUlF+mKL0TN8tM/IH7nnj6EOZVAMDMNcq0DT6JcGOSAZaxnp5zeOKmanWdPq+0OO
+         uA4KllZNoS8cHkAd01MItYNXSfwQGrPUp62pGTiwX/UvECX50Ol7dtOk07Em3thbzAq9
+         z7aKGINXnQyT90Jpl1HyejJ5oZuOVnFHE3wPAeXQfXf4U1TUmtJQHKblwDr3UxwzhV/G
+         IZwSe585LTE0TscrmaMS0LBhYk6OkOh7DmYuOWYy86Lznsc/W2cAHOy6ydQWb+vcz+QL
+         t4IIctSup2WnNTryME2HywbK+ezh5dvN5PIGlSzAMWZc80OzSQHm1QdTROKqCcRTnFFG
+         0ADg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C35WM+rFOww9oANmi2XKIgD3lZZHmk9pCOYrcDGbk7A=;
+        b=A86ua2WMC55O+Qe1oGVqfk+JIQ4hHhg1A8F7NiFn2iVmoJFzezoWo8+eMSn9GWLZm6
+         Pm52gRE0sCK3ddwiNnXZh865cuwbKM3xqvVT2RxD81VdFcI5LKlWuVr+Fc/Z1+leH93H
+         i5x07pM7Di7Z8zKfclhm8aPMKuIj0NcsOb5NrraJR1Hv2T2oGa/9wE6WbGZNmQ/qyNkX
+         AtrGG1zdVESS2HfXL+uSt2K/8YFL/CaCYQvR+heceTgkq1doZN1Zjjuyjq38OQJ5BbC9
+         D1Q8j/qAERdsXKYlYMtsO+cvc6mRX2VjHQWVm+1tGy+4M86aTVL2C5YmQf3kouUtmV/+
+         slew==
+X-Gm-Message-State: ANoB5pmrWTK2KQYCZECHm3lzh9WrWBeTyMirlHZkAhIdu79F3RVtXPc7
+        CyXYnyd9S17baO6BU09rhOd6PEHzKVCj5R/unw==
+X-Google-Smtp-Source: AA0mqf7EIncJyBJOxt2LLSBe3uzNCWJM3+Uc6c4siivX4wgOYxrFeJVGCxzityPd80jWhV3JQBsiQ44rEKlAN3xL/g==
+X-Received: from peternewman10.zrh.corp.google.com ([2a00:79e0:9d:6:e398:2261:c909:b359])
+ (user=peternewman job=sendgmr) by 2002:a05:6000:1d92:b0:241:6e0a:bfe6 with
+ SMTP id bk18-20020a0560001d9200b002416e0abfe6mr26088628wrb.34.1669720262242;
+ Tue, 29 Nov 2022 03:11:02 -0800 (PST)
+Date:   Tue, 29 Nov 2022 12:10:53 +0100
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221129111055.953833-1-peternewman@google.com>
+Subject: [PATCH v4 0/2] x86/resctrl: Fix task CLOSID update race
+From:   Peter Newman <peternewman@google.com>
+To:     reinette.chatre@intel.com, fenghua.yu@intel.com
+Cc:     bp@alien8.de, derkling@google.com, eranian@google.com,
+        hpa@zytor.com, james.morse@arm.com, jannh@google.com,
+        kpsingh@google.com, linux-kernel@vger.kernel.org, mingo@redhat.com,
+        tglx@linutronix.de, x86@kernel.org,
+        Peter Newman <peternewman@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,39 +69,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-a gentle ping for this...
+Hi Reinette, Fenghua,
 
-On 2022/11/17 16:41, Yicong Yang wrote:
-> From: Yicong Yang <yangyicong@hisilicon.com>
-> 
-> HiSilicon PCIe PMU support count the bandwidth of TLP headers, TLP payloads
-> or both. Add support for it. User can set this through perf tool's
-> 'len_mode' like:
-> 
->   $# perf stat -e hisi_pcie0_core0/rx_mrd_flux,len_mode=0x1/ sleep 5
-> 
-> Also includes fixes and improvement of both driver and documentation in this
-> series.
-> 
-> Change since v2:
-> - Take Patch 3 advance in the series and drop the fix tag, Per Jonathan
-> - Add tags from Jonathan for Patch 3-4, Thanks.
-> Link: https://lore.kernel.org/lkml/20221110085109.45227-2-yangyicong@huawei.com/
-> 
-> Change since v1:
-> - Refine the documentation per Jonathan and Bagas
-> - Collect tags from Jonathan. Thanks.
-> Link: https://lore.kernel.org/lkml/20221025113242.58271-1-yangyicong@huawei.com/
-> 
-> Bagas Sanjaya (1):
->   Documentation: perf: Indent filter options list of hisi-pcie-pmu
-> 
-> Yicong Yang (3):
->   drivers/perf: hisi: Fix some event id for hisi-pcie-pmu
->   docs: perf: Fix PMU instance name of hisi-pcie-pmu
->   drivers/perf: hisi: Add TLP filter support
-> 
->  .../admin-guide/perf/hisi-pcie-pmu.rst        | 112 +++++++++++-------
->  drivers/perf/hisilicon/hisi_pcie_pmu.c        |  22 +++-
->  2 files changed, 85 insertions(+), 49 deletions(-)
-> 
+I've fixed the wording in changelogs and code comments throughout and
+clarified the explanations as Reinette had requested.
+
+The patch series addresses the IPI race we discussed in the container
+move RFD thread[1]. The changelog in the patches should also provide a
+good description.
+
+Updates in v4:
+ - Reorder the patches so that justification for sending more IPIs can
+   reference the patch fixing __rdtgroup_move_task().
+ - Correct tense of wording used in changelog and comments
+Updates in v3:
+ - Split the handling of multi-task and single-task operations into
+   separate patches, now that they're handled differently.
+ - Clarify justification in the commit message, including moving some of
+   it out of inline code comment.
+Updates in v2:
+ - Following Reinette's suggestion: use task_call_func() for single
+   task, IPI broadcast for group movements.
+ - Rebased to v6.1-rc4
+
+v1: https://lore.kernel.org/lkml/20221103141641.3055981-1-peternewman@google.com/
+v2: https://lore.kernel.org/lkml/20221110135346.2209839-1-peternewman@google.com/
+v3: https://lore.kernel.org/lkml/20221115141953.816851-1-peternewman@google.com/
+
+Thanks!
+-Peter
+
+[1] https://lore.kernel.org/all/CALPaoCg2-9ARbK+MEgdvdcjJtSy_2H6YeRkLrT97zgy8Aro3Vg@mail.gmail.com/
+
+Peter Newman (2):
+  x86/resctrl: Update task closid/rmid with task_call_func()
+  x86/resctrl: IPI all online CPUs for group updates
+
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 130 ++++++++++++-------------
+ 1 file changed, 60 insertions(+), 70 deletions(-)
+
+
+base-commit: eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
+--
+2.38.1.584.g0f3c55d4c2-goog
+
