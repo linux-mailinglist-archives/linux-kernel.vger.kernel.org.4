@@ -2,69 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E61963B8A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB8C63B8AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:18:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232997AbiK2DRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 22:17:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
+        id S235454AbiK2DSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 22:18:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiK2DR0 (ORCPT
+        with ESMTP id S235340AbiK2DSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 22:17:26 -0500
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B574733F;
-        Mon, 28 Nov 2022 19:17:25 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VVym2Ua_1669691835;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VVym2Ua_1669691835)
-          by smtp.aliyun-inc.com;
-          Tue, 29 Nov 2022 11:17:23 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     mchehab@kernel.org
-Cc:     p.zabel@pengutronix.de, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] media: platform:  Fix missing error code in rzg2l_cru_start_streaming_vq()
-Date:   Tue, 29 Nov 2022 11:17:12 +0800
-Message-Id: <20221129031712.115354-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Mon, 28 Nov 2022 22:18:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578F2286C1;
+        Mon, 28 Nov 2022 19:18:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0461FB8110F;
+        Tue, 29 Nov 2022 03:18:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30721C433C1;
+        Tue, 29 Nov 2022 03:18:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669691909;
+        bh=MMYaUJnNIhZwUrQoRSepO+ImmUXzeufv93AYTDMROUU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kKSZ/SfLFHTYbdH8x1JN9JVW/ROT3OtbzN5/KvDZoRwYwUfj+fF1j2337TkXqay5R
+         Rt7riDXvTG/Dvn8PtWC21xD1wlubEAn+mBS959ialK/YU8X0EAv5sWTVPKBmZjEkbS
+         XmaCx6v3vfytmX2HvfpOsAEMnfewUc4DKCBmeanDCRqm6xXN6bx6OOfTrFJF8ICXq8
+         4cVuPdQ4S3jrn0+XQZyrPg7rbZ5L13la00RwDIGtFH2CwtJMpNMpnJc1OuS2OasHKX
+         ZYYFts7Ut6JwpyQEnxwBRAGIoLEeeNlecp5xMDIp/w5s0wifmzImGmtSmNYWQE8aUb
+         cAMPsP9E4U18w==
+Date:   Mon, 28 Nov 2022 19:18:28 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     <f.fainelli@broadcom.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        "Arnd Bergmann" <arnd@arndb.de>
+Cc:     YueHaibing <yuehaibing@huawei.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <pabeni@redhat.com>, <arnd@arndb.de>,
+        <naresh.kamboju@linaro.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] net: broadcom: Add PTP_1588_CLOCK_OPTIONAL dependency
+ for BCMGENET under ARCH_BCM2835
+Message-ID: <20221128191828.169197be@kernel.org>
+In-Reply-To: <20221125115003.30308-1-yuehaibing@huawei.com>
+References: <20221125115003.30308-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Failed to allocate scratch buffer, add the error code '-ENOMEM' to the
-return value 'ret'.
+On Fri, 25 Nov 2022 19:50:03 +0800 YueHaibing wrote:
+> commit 8d820bc9d12b ("net: broadcom: Fix BCMGENET Kconfig") fixes the build
+> that contain 99addbe31f55 ("net: broadcom: Select BROADCOM_PHY for BCMGENET")
+> and enable BCMGENET=y but PTP_1588_CLOCK_OPTIONAL=m, which otherwise
+> leads to a link failure. However this may trigger a runtime failure.
+> 
+> Fix the original issue by propagating the PTP_1588_CLOCK_OPTIONAL dependency
+> of BROADCOM_PHY down to BCMGENET.
+> 
+> Fixes: 8d820bc9d12b ("net: broadcom: Fix BCMGENET Kconfig")
+> Fixes: 99addbe31f55 ("net: broadcom: Select BROADCOM_PHY for BCMGENET")
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>  drivers/net/ethernet/broadcom/Kconfig | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/broadcom/Kconfig b/drivers/net/ethernet/broadcom/Kconfig
+> index 55dfdb34e37b..f4ca0c6c0f51 100644
+> --- a/drivers/net/ethernet/broadcom/Kconfig
+> +++ b/drivers/net/ethernet/broadcom/Kconfig
+> @@ -71,13 +71,14 @@ config BCM63XX_ENET
+>  config BCMGENET
+>  	tristate "Broadcom GENET internal MAC support"
+>  	depends on HAS_IOMEM
+> +	depends on PTP_1588_CLOCK_OPTIONAL || !ARCH_BCM2835
+>  	select MII
+>  	select PHYLIB
+>  	select FIXED_PHY
+>  	select BCM7XXX_PHY
+>  	select MDIO_BCM_UNIMAC
+>  	select DIMLIB
+> -	select BROADCOM_PHY if (ARCH_BCM2835 && PTP_1588_CLOCK_OPTIONAL)
+> +	select BROADCOM_PHY if ARCH_BCM2835
+>  	help
+>  	  This driver supports the built-in Ethernet MACs found in the
+>  	  Broadcom BCM7xxx Set Top Box family chipset.
 
-drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c:676 rzg2l_cru_start_streaming_vq() warn: missing error code 'ret'.
+What's the code path that leads to the failure? I want to double check
+that the driver is handling the PTP registration return codes correctly.
+IIUC this is a source of misunderstandings in the PTP API.
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3275
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
-index 9533e4069ecd..91b57c7c2e56 100644
---- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
-+++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
-@@ -673,6 +673,7 @@ static int rzg2l_cru_start_streaming_vq(struct vb2_queue *vq, unsigned int count
- 	if (!cru->scratch) {
- 		return_unused_buffers(cru, VB2_BUF_STATE_QUEUED);
- 		dev_err(cru->dev, "Failed to allocate scratch buffer\n");
-+		ret = -ENOMEM;
- 		goto free_image_conv_irq;
- 	}
- 
--- 
-2.20.1.7.g153144c
-
+Richard, here's the original report:
+https://lore.kernel.org/all/CA+G9fYvKfbJHcMZtybf_0Ru3+6fKPg9HwWTOhdCLrOBXMaeG1A@mail.gmail.com/
