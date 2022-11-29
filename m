@@ -2,216 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6869A63CAAA
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0FE63CAB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:55:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236742AbiK2Vu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 16:50:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
+        id S236952AbiK2Vyz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 29 Nov 2022 16:54:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236616AbiK2Vu0 (ORCPT
+        with ESMTP id S237097AbiK2Vyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 16:50:26 -0500
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A956E548
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:50:21 -0800 (PST)
-Received: (wp-smtpd smtp.tlen.pl 12337 invoked from network); 29 Nov 2022 22:50:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1669758618; bh=IVD3U7umaa5f2mOjx5X7KPJ6YQ8eaBe3vZYbgDlLhjQ=;
-          h=From:To:Cc:Subject;
-          b=Qc47TciVr80fpve617IfPe5eySDEB4VUAlTd0DL3y+17YDHdRDxLhseXmqLBaLCoV
-           zlvNVamTdnDg8MH1F7H4v7z1QgHiuTXMwuXWytofrmBbV6xvz2B/ZKYwltb59nZ+FS
-           CzA22h826hNNSd179GjC4937Q0I9IcB3jg2YoLGg=
-Received: from aaeq124.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.120.124])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with SMTP
-          for <x86@kernel.org>; 29 Nov 2022 22:50:18 +0100
-From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Robert Elliott <elliott@hpe.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Johan Hovold <johan@kernel.org>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Yinghai Lu <yinghai@kernel.org>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>
-Subject: [PATCH] x86/apic: handle no CONFIG_X86_X2APIC on systems with x2APIC enabled by BIOS
-Date:   Tue, 29 Nov 2022 22:50:08 +0100
-Message-Id: <20221129215008.7247-1-mat.jonczyk@o2.pl>
-X-Mailer: git-send-email 2.25.1
+        Tue, 29 Nov 2022 16:54:50 -0500
+Received: from correos.bolipuertos.gob.ve.bolipuertos.gob.ve (correo.bolipuertos.gob.ve [190.202.28.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDD62A73E;
+        Tue, 29 Nov 2022 13:54:49 -0800 (PST)
+Received: from correo.bolipuertos.gob.ve ([10.50.23.160])
+        by correos.bolipuertos.gob.ve.bolipuertos.gob.ve  with ESMTP id 2ATLsNhd005417-2ATLsNhf005417
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 29 Nov 2022 17:54:23 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by correo.bolipuertos.gob.ve (Postfix) with ESMTP id 8D08BAC27C7;
+        Tue, 29 Nov 2022 17:54:23 -0400 (-04)
+Received: from correo.bolipuertos.gob.ve ([127.0.0.1])
+        by localhost (correo.bolipuertos.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ryAjJB5XC0dO; Tue, 29 Nov 2022 17:54:23 -0400 (-04)
+Received: from localhost (localhost [127.0.0.1])
+        by correo.bolipuertos.gob.ve (Postfix) with ESMTP id 54500AC280E;
+        Tue, 29 Nov 2022 17:54:23 -0400 (-04)
+X-Virus-Scanned: amavisd-new at bolipuertos.gob.ve
+Received: from correo.bolipuertos.gob.ve ([127.0.0.1])
+        by localhost (correo.bolipuertos.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id JSxj1upjBCT5; Tue, 29 Nov 2022 17:54:23 -0400 (-04)
+Received: from [103.125.190.179] (unknown [103.125.190.179])
+        by correo.bolipuertos.gob.ve (Postfix) with ESMTPSA id 58F2CAC27C7;
+        Tue, 29 Nov 2022 17:54:17 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: f0dc8ad877cb05c45d5d1b2524f54152
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 000000A [ARN0]                               
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Strategic plan on(ROI)
+To:     Recipients <cindy@cgracephoto.com>
+From:   "Mr.IgorS. Lvovich" <cindy@cgracephoto.com>
+Date:   Tue, 29 Nov 2022 13:54:11 -0800
+Reply-To: richad.tang@yahoo.com.hk
+Message-Id: <20221129215417.58F2CAC27C7@correo.bolipuertos.gob.ve>
+X-FE-Last-Public-Client-IP: 103.125.190.179
+X-FE-Policy-ID: 1:1:2:SYSTEM
+X-Spam-Status: Yes, score=6.7 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,HK_NAME_MR_MRS,KHOP_HELO_FCRDNS,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_H2,RCVD_IN_SBL,
+        RCVD_IN_VALIDITY_RPBL,SPF_FAIL,SPF_HELO_NONE,TO_EQ_FM_DOM_SPF_FAIL,
+        TO_EQ_FM_SPF_FAIL autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
+        *      bl.spamcop.net
+        *      [Blocked - see <https://www.spamcop.net/bl.shtml?103.125.190.179>]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
+        *      [103.125.190.179 listed in zen.spamhaus.org]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [190.202.28.106 listed in bl.score.senderscore.com]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [190.202.28.106 listed in wl.mailspike.net]
+        *  0.0 SPF_FAIL SPF: sender does not match SPF record (fail)
+        *      [SPF failed: Please see http://www.openspf.org/Why?s=mfrom;id=cindy%40cgracephoto.com;ip=190.202.28.106;r=lindbergh.monkeyblade.net]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.0 HK_NAME_MR_MRS No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  0.0 TO_EQ_FM_SPF_FAIL To == From and external SPF failed
+        *  0.0 TO_EQ_FM_DOM_SPF_FAIL To domain == From domain and external SPF
+        *       failed
+        *  0.0 KHOP_HELO_FCRDNS Relay HELO differs from its IP's reverse DNS
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A kernel that was compiled without CONFIG_X86_X2APIC was unable to boot
-on platforms that have x2APIC turned on by BIOS [1]. The kernel was
-supposed to panic with an approprite error message in validate_x2apic()
-in arch/x86/kernel/apic/apic.c .
+Hello
+I will like to use the liberty of this medium to inform you as a consultant,that my principal is interested in investing his bond/funds as a silent business partner in your company.Taking into proper
+consideration the Return on Investment(ROI) based on a ten (10) year strategic plan.
+I shall give you details when you reply.
 
-However, validate_x2apic() was run too late in the boot cycle, and the
-kernel tried to initialize the APIC nonetheless. This resulted in an
-earlier panic in setup_local_APIC() on
-
-	/*
-	 * Double-check whether this APIC is really registered.
-	 * This is meaningless in clustered apic mode, so we skip it.
-	 */
-	BUG_ON(!apic->apic_id_registered());
-
-during execution of
-
-	Call Trace:
-	 <TASK>
-	 ? _printk+0x63/0x7e
-	 apic_intr_mode_init+0xde/0xfc
-	 x86_late_time_init+0x1b/0x2f
-	 start_kernel+0x5db/0x69b
-	 secondary_startup_64_no_verify+0xe0/0xeb
-	 </TASK>
-
-In my experiments, a panic message in setup_local_APIC() was not visible
-in the graphical console, which resulted in a hang with no indication
-what has gone wrong. [2]
-
-Instead of calling panic(), disable the APIC, which should result in a
-somewhat working system with the PIC only (and no SMP). This way the
-user would be able to diagnose the problem more easily. Implementation
-of this is much simpler then disabling the x2APIC mode only, which may
-not be possible on newer systems with locked x2APIC.
-
-The proper place to disable the APIC in this case is in check_x2apic(),
-which is called early from setup_arch(). Doing this in
-__apic_intr_mode_select() is too late, and in my experiments resulted in
-a broken system with no working PCI interrupts and "failed to register
-GSI" warnings on the screen.
-
-The check_x2apic() function was empty on kernels without
-CONFIG_X86_X2APIC. Modify arch/x86/include/asm/apic.h to remove the
-empty inline stub and provide proper declaration irrespective of
-CONFIG_X86_X2APIC setting.
-
-
-[1] Here I differentiate between two cases:
-    1. APIC already switched into the x2APIC mode by BIOS, it is in
-       x2APIC mode when kernel starts booting.
-    2. x2APIC made available by BIOS to the operating system, but is
-       in legacy mode when kernel starts booting.
-
-    Only in case 1. the kernel did not boot without CONFIG_X86_X2APIC.
-
-[2] Tested with CONFIG_FB_EFI and CONFIG_EARLY_PRINTK enabled.
-
-Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Link: https://lkml.org/lkml/2020/2/21/1627
-Reported-by: Robert Elliott (Servers) <elliott@hpe.com>
-Link: https://lore.kernel.org/lkml/20220911084711.13694-3-mat.jonczyk@o2.pl/
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Johan Hovold <johan@kernel.org>
-Cc: Maciej W. Rozycki <macro@orcam.me.uk>
-Cc: Yinghai Lu <yinghai@kernel.org>
-Cc: Daniel Sneddon <daniel.sneddon@linux.intel.com>
----
-
-A separate patch to enable CONFIG_X86_X2APIC by default and update the
-help text of this option is being worked on.
-
- arch/x86/Kconfig            |  4 ++--
- arch/x86/include/asm/apic.h |  3 +--
- arch/x86/kernel/apic/apic.c | 13 ++++++++-----
- 3 files changed, 11 insertions(+), 9 deletions(-)
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 67745ceab0db..b2c0fce3f257 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -462,8 +462,8 @@ config X86_X2APIC
- 
- 	  Some Intel systems circa 2022 and later are locked into x2APIC mode
- 	  and can not fall back to the legacy APIC modes if SGX or TDX are
--	  enabled in the BIOS.  They will be unable to boot without enabling
--	  this option.
-+	  enabled in the BIOS. They will boot with very reduced functionality
-+	  without enabling this option.
- 
- 	  If you don't know what to do here, say N.
- 
-diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
-index 3415321c8240..3216da7074ba 100644
---- a/arch/x86/include/asm/apic.h
-+++ b/arch/x86/include/asm/apic.h
-@@ -249,7 +249,6 @@ static inline u64 native_x2apic_icr_read(void)
- extern int x2apic_mode;
- extern int x2apic_phys;
- extern void __init x2apic_set_max_apicid(u32 apicid);
--extern void __init check_x2apic(void);
- extern void x2apic_setup(void);
- static inline int x2apic_enabled(void)
- {
-@@ -258,13 +257,13 @@ static inline int x2apic_enabled(void)
- 
- #define x2apic_supported()	(boot_cpu_has(X86_FEATURE_X2APIC))
- #else /* !CONFIG_X86_X2APIC */
--static inline void check_x2apic(void) { }
- static inline void x2apic_setup(void) { }
- static inline int x2apic_enabled(void) { return 0; }
- 
- #define x2apic_mode		(0)
- #define	x2apic_supported()	(0)
- #endif /* !CONFIG_X86_X2APIC */
-+extern void __init check_x2apic(void);
- 
- struct irq_data;
- 
-diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
-index c6876d3ea4b1..20d9a604da7c 100644
---- a/arch/x86/kernel/apic/apic.c
-+++ b/arch/x86/kernel/apic/apic.c
-@@ -1931,16 +1931,19 @@ void __init check_x2apic(void)
- 	}
- }
- #else /* CONFIG_X86_X2APIC */
--static int __init validate_x2apic(void)
-+void __init check_x2apic(void)
- {
- 	if (!apic_is_x2apic_enabled())
--		return 0;
-+		return;
- 	/*
--	 * Checkme: Can we simply turn off x2apic here instead of panic?
-+	 * Checkme: Can we simply turn off x2APIC here instead of disabling the APIC?
- 	 */
--	panic("BIOS has enabled x2apic but kernel doesn't support x2apic, please disable x2apic in BIOS.\n");
-+	pr_err("Kernel does not support x2APIC, please recompile with CONFIG_X86_X2APIC.\n");
-+	pr_err("Disabling APIC, expect reduced performance and functionality.\n");
-+
-+	disable_apic = 1;
-+	setup_clear_cpu_cap(X86_FEATURE_APIC);
- }
--early_initcall(validate_x2apic);
- 
- static inline void try_to_enable_x2apic(int remap_mode) { }
- static inline void __x2apic_enable(void) { }
-
-base-commit: b7b275e60bcd5f89771e865a8239325f86d9927d
--- 
-2.25.1
-
+Regards,
+Igor Lvovich
