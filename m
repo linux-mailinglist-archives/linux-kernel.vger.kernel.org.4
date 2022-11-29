@@ -2,156 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F7163B6FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 02:18:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE0263B6FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 02:19:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234748AbiK2BSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 20:18:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
+        id S234675AbiK2BS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 20:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232141AbiK2BSh (ORCPT
+        with ESMTP id S234689AbiK2BSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 20:18:37 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0183F06F;
-        Mon, 28 Nov 2022 17:18:36 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NLkxK27pgz4x1H;
-        Tue, 29 Nov 2022 12:18:29 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1669684711;
-        bh=um0BfxoDtr4r9+x8I9nQygrNqAmT0G+nGZvRVjUq5tk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=KH+heAmmoOdxpzPu3mTU51IOwN/JQSxYTo+zcKi2kekvq/JTY9/RhSDzngCDRJJTc
-         vR/G13kqiZGns5ydjYiGt3YkEZM2fE4e6IYT5ieOqNy/y9PofdpPJy7MtQy2wje3b4
-         mmp/bQ2fnGviHA6QB5gxDkOOytytT6eMaYnwOygEkLw6EhWeCZS2lCtz6HQZA+ngJt
-         yxTiJip6qOR7CBdRueeAehMl12w8KsXdHJu6v0GEwtt1r81DkbvbakQhUKN+YvIEID
-         OnF44VweMD1mmLN5UFq4/w34y/RKcWjzUTL2B7N2YBgtDzNDdjtGHdRoEPd+EaYf/O
-         fJNDWAUH9Vo3w==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>,
-        Josef Schlehofer <josef.schlehofer@nic.cz>
-Subject: Re: [PATCH] powerpc: dts: turris1x.dts: Add channel labels for
- temperature sensor
-In-Reply-To: <20221101224348.xkpzucskunn46i5z@pali>
-References: <20220930123901.10251-1-pali@kernel.org>
- <20220930124618.kyaansrl7ls5kn3i@pali>
- <20221009120506.itwa4n25nljn2tll@pali>
- <20221101224348.xkpzucskunn46i5z@pali>
-Date:   Tue, 29 Nov 2022 12:18:28 +1100
-Message-ID: <87k03eblsr.fsf@mpe.ellerman.id.au>
+        Mon, 28 Nov 2022 20:18:46 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4ACC40462
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 17:18:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669684725; x=1701220725;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=5dlYjQQzNJXVEELBzBTuWoXT7rRAuOKO7yAwUrOMsOA=;
+  b=l4taov+ORLLTMEOK+aRDvkJRDMRib4WYirmJUArEcojZ1utcFUI1R42z
+   +5XgTrms5pkzdIXqk9ZCGB6hjgKSeo5K7MusE7Dxa1sDc90OrU620KPdJ
+   Nu3vuuWPpeQ9W4QpCQ9utS3DZDSLE8kJBR4authmvU73DE1AAig6uV/oL
+   eMlFY0TkfIDnDujt/AlKR2Y8+9xEFjVC53NwKRksoh0/IPKf0gGwbJfsR
+   S1KNDRItYowVKDsAJK/FcEwvXlqUIwVMJDxvaYwmH/pdwqWy1qsX3Y0YZ
+   o5EIFG65H9ZDY+CqBY63uBxKKCep+gYJ96vtdob+cOGM8QBs/8PZck4nM
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="379252973"
+X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
+   d="scan'208";a="379252973"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 17:18:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="768254530"
+X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
+   d="scan'208";a="768254530"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga004.jf.intel.com with ESMTP; 28 Nov 2022 17:18:45 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 28 Nov 2022 17:18:44 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 28 Nov 2022 17:18:44 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.171)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 28 Nov 2022 17:18:44 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LJ/6b1e1ieg5W49u60DFLsxP0r0zlLvAOALPf8hYVcmRcgu2JRnQ4v7GoBzzARPDIJUB6xi0Ma/JFG+hDO2uWOaaDvDMip1BYFIVRJLa3SSnkDTH1XtkIA/TFFQkbdc312HCEjCDkkvakYWfTERAB0VAtT+WlO66HqzfXvOPujYVdDeuz1WJlUbHu4Zf0kLKWld4VqHvP72sg4RT1it7rNPGj72eaohWOIryvUFIp2K/yL1ZFqiIOGdDQCo75S8YkUd/YaHxPpgtnzTVFfteKPx9Y/sYS/SxmifY+MJ8vOjAXXa3iovfVO3/Abosl48Jd2OjMRrcHqGCohzpkMfEbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mInJWijbVAc50E01sjRMA2D89MgAnVmXKynACLpPeZ8=;
+ b=BI4KW+K6wwSyNu1PkG/dQaRl1iHTWWrZbLns0ewW8EJ+vujtU4OCUmoI1buKlobSTdjrZ8484/CEeWQVUov1IYUd5NdzfuESBkW3vfF/mH9BqXHeAAWPVYL2BkRI63VISj6a6f/DMU/1sSWBKYX0aLOLAS1U42YLlW43eNParxnu8U5DKF7FGFNoL2s21yZhFhTtVujDfLKHQv9Z9zO2ZUx9uRapmU8p2FSx9N9dqMsWcmU03G2n0M/o2wqCi15b/5tpWNe/jDcZpp+UAGPDo4p0nMmZ9rlAFyN3loQMnFpyRSsVB8YAx8nwTX0CvttqvBsIeLvZ070B7890urTKwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM5PR11MB1899.namprd11.prod.outlook.com (2603:10b6:3:10b::14)
+ by CH3PR11MB7894.namprd11.prod.outlook.com (2603:10b6:610:12c::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.6; Tue, 29 Nov
+ 2022 01:18:43 +0000
+Received: from DM5PR11MB1899.namprd11.prod.outlook.com
+ ([fe80::eead:b901:ac48:7680]) by DM5PR11MB1899.namprd11.prod.outlook.com
+ ([fe80::eead:b901:ac48:7680%9]) with mapi id 15.20.5857.023; Tue, 29 Nov 2022
+ 01:18:43 +0000
+Message-ID: <6dc8ce0d-6587-5f39-d8cc-e4626ebfaf41@intel.com>
+Date:   Mon, 28 Nov 2022 17:18:40 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH 1/3] firmware_loader: remove #include
+ <generated/utsrelease.h>
+Content-Language: en-US
+To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>
+CC:     Masahiro Yamada <masahiroy@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+References: <20221126051002.123199-1-linux@weissschuh.net>
+From:   Russ Weight <russell.h.weight@intel.com>
+In-Reply-To: <20221126051002.123199-1-linux@weissschuh.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SJ0PR03CA0071.namprd03.prod.outlook.com
+ (2603:10b6:a03:331::16) To DM5PR11MB1899.namprd11.prod.outlook.com
+ (2603:10b6:3:10b::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR11MB1899:EE_|CH3PR11MB7894:EE_
+X-MS-Office365-Filtering-Correlation-Id: 42d9669a-7e84-458d-6067-08dad1a7a7b8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3N4GbxNAfgRQon0lQP0Bzl//4qRfFfvIhyVKuccfZlWxxXC/+ngbfubAPuaW5LMm0p2LyuNRYinxhjwpVy0GWg7dhbD8RFE72g5Lp3Y9LN6OsY86o6unySrn+y2PdTUAPAjrbIEekHnPVMPZM7/X5d7rGxcuF1POaC5klo8SQnTLWSJQI5kr/LZK8EzdYPcFiMvVq7fzI6vWLsUBRE9dvi7Zvetp6RMshEpgKZQx95kBbxIY1+SV48FnW+07au7rrzFu5TGUQQVWYydJNhSKXKY7KS8F2uBYgLWoJs0VH238QGhtCOTYAS7jgVeSN3mvWRgYJjoBacj/M/htIVHfuyVqYYaz9WTGAWk5ZyugSgKB1NiI1Kv0gxh3oZhWMko6hjeX4HMfOYMCpro47gimg+LveEOE6SO2macTsGRYs6fjNDbP7w3rn8eE5X6y2vIcZGSD/N1xDWi6NjKlFhZrcRknMPksHt8eMrF8lpSBX95DBaodzUbOBTQdtFbXBhrrItJxXimTyFvCuMz9v1PAyNiZ1jYqwdO8nXUaQjnf98UfGajIKG0HUYP9Xf/gix37vuTVFRFjnIGVzZ+V/zfH1dMdRvgA9cGMuHNrBCBixDddomxy4Qx+QGj+niJ7qVKFZ/EU3CQhFgW9m2xRNkaWwjiJWvsFf7mR6JsWNlfhACQx3MZgvoByuLCx7U0mAW799fECysuu1/qeJP/tFZYD9qBdDfG7aiP9C2liygFAPWY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1899.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(366004)(136003)(39860400002)(376002)(396003)(451199015)(186003)(26005)(6512007)(2616005)(110136005)(6506007)(53546011)(478600001)(6486002)(36756003)(82960400001)(86362001)(31696002)(83380400001)(38100700002)(31686004)(4744005)(2906002)(66556008)(66476007)(4326008)(8676002)(66946007)(41300700001)(8936002)(316002)(54906003)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bFVnMUZBS0hwOGVzMk9PRU5wTGVNbnVnbm1TM0Y4M3VvdExnWXRwK3ZOdUxL?=
+ =?utf-8?B?K2hGcXNFNUZZRDUrRWFjeWNJVnNMZlRlcEpzYnU4Q2pWd2JGdW5xQm9VbG9n?=
+ =?utf-8?B?NGxhMDZtMnl2UXhKYk93UGY5ME9NZUxNaVQvUGV6bFRiSnlRYXJXa1JVaXJE?=
+ =?utf-8?B?WjdFQ2tLUHZrWUp4OEpvQ3JkL2QyZzdzOTZSVDZjbGFMbXVqbDdTNWhUQUFv?=
+ =?utf-8?B?Y2wweUlkUityUEd6ZEdLQ2JEcVNjUTNMWU0vOE0xVGtCekg5OVVLWFNHMFVQ?=
+ =?utf-8?B?S1JGVzFDT3NoemlCN05qaW9scGlKR0g2VE01NEtFU0VZYlB5YTE5TERjbFd3?=
+ =?utf-8?B?clBFR0VFb2ZRbTJZU1RIbUF2NEFXZ2pzbHRxOW9BeVhDL0hRRkVVN1F3d2hs?=
+ =?utf-8?B?U1ljK0gxQVpQdktnbHR5amxiZjhtcGNZeTVOcldhRnZUQkUvWXJ2M24yM2lY?=
+ =?utf-8?B?RHg1dzk3VjJHYkhZTXRQQ1MxdXRPbE1PWnlJRUd4cUNyaStrVSsrcEJZR0pm?=
+ =?utf-8?B?VHlVY2MrMlZSUG1LS1BXMGdFRTZqTVJsQUk2N2R5Vi9OUkxEc1VZRms4Rk5u?=
+ =?utf-8?B?bk8vSFJSYlpzc2Rxc0NCa3hENGRjUUVjRWhaVXJDa1FHUm12dXUvQXpJS0Yw?=
+ =?utf-8?B?R3B2NzhmRjlhUmZPeFp6WUFZL0w3NVZ3N0VRU21UcHZvUTFTcHUzdVV1b0VP?=
+ =?utf-8?B?UncrNU5KQVRySC9HRWhPNjlEakZHYlM0dTVYT2hQcjI5d0M5bEdEdi9mbm1q?=
+ =?utf-8?B?bWkvWGxzWHJtSS9SRnVkOVN2TThFYmw4WHF3SmhPd3VHaXRvMEY4WTlVc2JZ?=
+ =?utf-8?B?Y1phbkwrQ3ptc2JWK0FOWnNJakdCb3NaK2NrTk9seSsrcHYxYWZhVHMwMFRs?=
+ =?utf-8?B?VWVDZjl3Y1dZYWJ5RS93aWQ0SGNnVmE0TWJHRCt1cm0walVaZmh4VDdJejJC?=
+ =?utf-8?B?bWxVdFBZdGVqWCtPMDY2Z2NyN1laQzdHZWhDdkk2OGhvN3ZvUFZVNytrQXU2?=
+ =?utf-8?B?K1JodXU0VWJqQ3hzRk95SXo2am1BTkIzTjZUSU1WcHhZbzVkMFlLcDlJVXZV?=
+ =?utf-8?B?SmkycmRORE91QW8rVy9lTjJQMVpTNjJMc1dkQ3NZaE4wbnJhdEZzeUZJN0R2?=
+ =?utf-8?B?TFRlbFp0NVlnT05PYmMwa0tFRTlxRHk5NlQwajRwak9vRkE2aFdkT1FyTnpp?=
+ =?utf-8?B?SS8zeUF5cUxWRlRJV0FSYlUrZ0NMOEpTWTFuejl5cFBacUV4UWpMUVNPa0Zx?=
+ =?utf-8?B?NHFGOFlVZENFanY3Z1hHdXdrdHpQR0pldTJFVGl3d29QQUJ6WUhWQi8xT0JR?=
+ =?utf-8?B?UDN5SlBpdVNDV3dwa3loUjYvVGVUMVk3R0FVUEp5dzVIVnF5cVlTOGg4cmZ5?=
+ =?utf-8?B?Tzc4TWwyRXhQZnJpNStJU0NEWWNnNTZRTUJMc1JXK0xYNVJ3ekhXNkdnK1RB?=
+ =?utf-8?B?N21CcWpkTXFXTFl4U2dnWm1HajJYbFZ3bXk4S2ZNdGZ4T3VIZmtLYWlDZC9t?=
+ =?utf-8?B?N09tREkyQ25abzdHVC9IYkxIeU8wMlpSSzFKa2VnREFoN25zaUFsajZudmRv?=
+ =?utf-8?B?RVg5cEpzUVZaWjhEMWRYY0JlZVBEYlp2NG5oK2hMcDFXdmg3eDFuWXI3TjNJ?=
+ =?utf-8?B?bkxybitQUWxLbnMwcjVYcUNJSytmRi83ZFFaSUd6a2RHTm5SeDdSWkxQODRj?=
+ =?utf-8?B?alpvanozazcrM2JCdHFQd3RydTZJRGFYYy9xaDl1TktISmdoV2VBaU10dDNo?=
+ =?utf-8?B?dkJtQmR6T1JtQzVsd240U1pBZ0ZwMGhnY0w2TTRZV254VzMrMmhkdXJWTUsr?=
+ =?utf-8?B?VXRVZlpFWkVxRGRuTk93TjQ5QmJzNER4ZHJPNVRRYTFGUlc3WHU5d1IvV1N4?=
+ =?utf-8?B?SkZNMXAyT09lK1pYOThkb2lXZk1FSG56WUlaMlhUKzBjWCs4RlgvTzRyNjNB?=
+ =?utf-8?B?M2hlNU83WmFmbkYrRWVreWw0RmJBNTM4am50QnlTQkVFU01kMkJFN0prR21M?=
+ =?utf-8?B?L0s0NUxPcFNibEJMUEFxU0tST1MrYXE3cWRtL3Zjd2lJM1B0cTc3N2dkWnB6?=
+ =?utf-8?B?S2l5YmF3eXF2cVZ2ajBLRHJFUWM3OXdNUjNPdXEwUEtLNXlPL05YbXgyOFFJ?=
+ =?utf-8?B?WGtEWUZ0S09OU2tBZ1BiZjlFS0JZbHc3Z2o4Y1h5ZG8rUjFYRktUZnYzdWlO?=
+ =?utf-8?B?cFE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 42d9669a-7e84-458d-6067-08dad1a7a7b8
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1899.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 01:18:43.3093
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Gvmpef/0ICPjYL+dzuPVLsBvoObjGZu0Yt7ICrb6ym2eDtEVOnBS1A+KtWQCMklFOfgaYF31XmORsdb8q+enacEn7rd86sRUz4QalXAbu3g=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB7894
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pali Roh=C3=A1r <pali@kernel.org> writes:
-> Michael, could you take this patch?
 
-Yep.
 
-With these dts patches it always helps if you tell me that it passes the
-DT schema checks, so that I don't get yelled at by the DT people :)
+On 11/25/22 21:09, Thomas Weißschuh wrote:
+> utsrelease.h is potentially generated on each build.
+> By removing this unused include we can get rid of some spurious
+> recompilations.
+Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> ---
+>  drivers/base/firmware_loader/firmware.h | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/base/firmware_loader/firmware.h b/drivers/base/firmware_loader/firmware.h
+> index fe77e91c38a2..bf549d6500d7 100644
+> --- a/drivers/base/firmware_loader/firmware.h
+> +++ b/drivers/base/firmware_loader/firmware.h
+> @@ -9,8 +9,6 @@
+>  #include <linux/list.h>
+>  #include <linux/completion.h>
+>  
+> -#include <generated/utsrelease.h>
+> -
+>  /**
+>   * enum fw_opt - options to control firmware loading behaviour
+>   *
+>
+> base-commit: 0b1dcc2cf55ae6523c6fbd0d741b3ac28c9f4536
 
-cheers
-
-> On Sunday 09 October 2022 14:05:06 Pali Roh=C3=A1r wrote:
->> On Friday 30 September 2022 14:46:18 Pali Roh=C3=A1r wrote:
->> > + CC hwmon ML
->> >=20
->> > On Friday 30 September 2022 14:39:01 Pali Roh=C3=A1r wrote:
->> > > Channel 0 of SA56004ED chip refers to internal SA56004ED chip sensor=
- (chip
->> > > itself is located on the board) and channel 1 of SA56004ED chip refe=
-rs to
->> > > external sensor which is connected to temperature diode of the P2020=
- CPU.
->> > >=20
->> > > Fixes: 54c15ec3b738 ("powerpc: dts: Add DTS file for CZ.NIC Turris 1=
-.x routers")
->> > > Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
->> > > ---
->> > > With this change userspace 'sensors' applications prints labels:
->> > >=20
->> > >     $ sensors
->> > >     sa56004-i2c-0-4c
->> > >     Adapter: MPC adapter (i2c@3000)
->> > >     board:        +34.2=C2=B0C  (low  =3D  +0.0=C2=B0C, high =3D +70=
-.0=C2=B0C)
->> > >                            (crit =3D +85.0=C2=B0C, hyst =3D +75.0=C2=
-=B0C)
->> > >     cpu:          +58.9=C2=B0C  (low  =3D  +0.0=C2=B0C, high =3D +70=
-.0=C2=B0C)
->> > >                            (crit =3D +85.0=C2=B0C, hyst =3D +75.0=C2=
-=B0C)
->> > >=20
->> > > And without this change it prints just generic tempX names:
->> > >=20
->> > >     $ sensors
->> > >     sa56004-i2c-0-4c
->> > >     Adapter: MPC adapter (i2c@3000)
->> > >     temp1:        +43.0=C2=B0C  (low  =3D  +0.0=C2=B0C, high =3D +70=
-.0=C2=B0C)
->> > >                            (crit =3D +85.0=C2=B0C, hyst =3D +75.0=C2=
-=B0C)
->> > >     temp2:        +63.4=C2=B0C  (low  =3D  +0.0=C2=B0C, high =3D +70=
-.0=C2=B0C)
->> > >                            (crit =3D +85.0=C2=B0C, hyst =3D +75.0=C2=
-=B0C)
->> > > ---
->> > >  arch/powerpc/boot/dts/turris1x.dts | 14 ++++++++++++++
->> > >  1 file changed, 14 insertions(+)
->> > >=20
->> > > diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/=
-dts/turris1x.dts
->> > > index 4033c554b06a..5b5278c32e43 100644
->> > > --- a/arch/powerpc/boot/dts/turris1x.dts
->> > > +++ b/arch/powerpc/boot/dts/turris1x.dts
->> > > @@ -69,6 +69,20 @@
->> > >  				interrupt-parent =3D <&gpio>;
->> > >  				interrupts =3D <12 IRQ_TYPE_LEVEL_LOW>, /* GPIO12 - ALERT pin */
->> > >  					     <13 IRQ_TYPE_LEVEL_LOW>; /* GPIO13 - CRIT pin */
->> > > +				#address-cells =3D <1>;
->> > > +				#size-cells =3D <0>;
->> > > +
->> > > +				/* Local temperature sensor (SA56004ED internal) */
->> > > +				channel@0 {
->> > > +					reg =3D <0>;
->> > > +					label =3D "board";
->> > > +				};
->> > > +
->> > > +				/* Remote temperature sensor (D+/D- connected to P2020 CPU Temp=
-erature Diode) */
->> > > +				channel@1 {
->> > > +					reg =3D <1>;
->> > > +					label =3D "cpu";
->> > > +				};
->> >=20
->> > I'm not sure if you want UPPERCASE, lowercase, PascalCase, kebab-case
->> > or snake_case format of labels. Or if you want also "temp" or
->> > "temperature" keyword in the label. So please adjust label to the
->> > preferred one, if proposed format is not the correct.
->>=20
->> Ok, if nobody complains then please take this patch as is.
->>=20
->> > >  			};
->> > >=20=20
->> > >  			/* DDR3 SPD/EEPROM */
->> > > --=20
->> > > 2.20.1
->> > >=20
