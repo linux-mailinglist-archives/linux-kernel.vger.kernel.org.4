@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44CB63C9CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 21:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DED63C9D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 21:48:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235788AbiK2Urh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 15:47:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46624 "EHLO
+        id S236724AbiK2Ure (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 15:47:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236192AbiK2UrO (ORCPT
+        with ESMTP id S236526AbiK2UrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 15:47:14 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333A12D750;
-        Tue, 29 Nov 2022 12:47:09 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id bp15so23824805lfb.13;
-        Tue, 29 Nov 2022 12:47:09 -0800 (PST)
+        Tue, 29 Nov 2022 15:47:17 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B24B6A752;
+        Tue, 29 Nov 2022 12:47:11 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id h10so1937327ljk.11;
+        Tue, 29 Nov 2022 12:47:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+igg1gFuxyIK8r4AnuQnEHqMeR4rDkdTFliuJlyj0JM=;
-        b=lRwYr9F0Zw7I3YQ0P9z9pp1EX9rne1nUteWkaBxGAC87U1MVYlEKocHFExnO83ZiIX
-         n9PmIULoYTL6zFHiWYRJLhbOt9ZRxPmu1wQqA9Y02l1GMZkHV1SV/k3rMeL06ipx//+l
-         LydoEVTbtDB4vui/RdCx+G+EaBysE2VMUGAVzcW+k92swDZwYHU4DwCSeFspBxX3L5Ns
-         TPTCRW842OTLdpUncNgKezqpZOsdDK6XqOZLs6IZpJUDbQTcytlFFocihSTgnlDvOhhP
-         lnKwMk/5+gbFuw1t35naeNeR3m/q/Lrf/hVRFxGUMR/qzVsRvYsxjRoAuWC90r1q1MRX
-         JbYg==
+        bh=mxN9saAhaHyj6ZPoVgv7tMWvA+bJrGztagX7f0iYRp8=;
+        b=EKOfkRku6K7RAUf9XDjX/bzJEeMBGnJr+YgZZCT2E089whrohH/xepfl97H3rygCBq
+         SSxX2sTPQciwjd83RIArZYSAd1HyGTI5mZ9alPUpHjgIMkgf4GcAr75DnwRyGvxPALWQ
+         m9K2G0MWUvNQ1WhZFDiw2zX8J3pM8cFZlgoVtSOYaV8FMdOUk7VJFpiyy+wnyL8uEyIR
+         QUq2Sw5eBNI1OI6iuLoZZH/MRJTDvWH1rrSfLeDb7tuAV2QNNJoSD4r5KhjHjborxb6e
+         gaALpF8Xne2RnO9LG3uEnssIForFJoZcVATf6Rf3E4ZUDsGq3qZljtU6y2F49Tk1TPMh
+         lzpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+igg1gFuxyIK8r4AnuQnEHqMeR4rDkdTFliuJlyj0JM=;
-        b=3yfiLvxyhMEOX7hL7rYTTuF9udBOctWXe+QDv5+aesSF3EcnvZQK1HaQ8qSebq+7Kc
-         oeyaU/RRaR6kEoMU00Px47o5G0I+BPzKVRoZufa0DxMJju7fh7Fj6EX/cmHywO95jBir
-         ytdRi6HkTlFI0BUdoPXgYrFH4EU2ReCCLmEb1lrG6WzWhvjbm4TcUNjpkkBq+FJ+81Nk
-         22tTPciDg6F+HunZFmY9k2Ig0VUpCWmZNXl6w1FWaiTonBMaZGTL6oJb7AesEYW9fjrP
-         rXXkDBVjb2uPCQiVbI64gry5uXarb/3mTP4vwfHHHWy+AsdXnfAkltUJhue7yPfg84VS
-         0ZYg==
-X-Gm-Message-State: ANoB5plk3kBoBnmXesxuU/R9S+iD88H1uQPXAa0+VmxQ8uRyFlsOXzwL
-        7OuqrFgSuzZfLEJhaIgHO06R/TeKsqc=
-X-Google-Smtp-Source: AA0mqf5qYiLSLg45KeZgp/qeZDddSwrnn3Urj3rngk0Idy5+JbkuX+KEXzDkZD0uvEVUUBOMSQxyHQ==
-X-Received: by 2002:ac2:5f6d:0:b0:4b4:f9df:c6a4 with SMTP id c13-20020ac25f6d000000b004b4f9dfc6a4mr8544566lfc.19.1669754827578;
-        Tue, 29 Nov 2022 12:47:07 -0800 (PST)
+        bh=mxN9saAhaHyj6ZPoVgv7tMWvA+bJrGztagX7f0iYRp8=;
+        b=MONbwxipWqxQswWXoiOjWZUgJ8lwUUf1RC4sFhW0VYBCU5+pxpj2NtK6qHwvf9/iPC
+         WIS0VNJVogH2yF/ixj+TbqMgr9HE+DLU5068CP2+9R8FZts85+vdP48l/A3Q9G8Q48wa
+         dmn+OavZTpYNgFj2hC2ycQyF5rWTZ3aOF3p6eQSlgeMY0hDaLg/N8N3wI07IcFdQ6/90
+         12tXhh/vjhZIXXA/beJv15x9Qitszj1PM4nF9l+G7K2t6wQNzsFHunE7OCstkvFu0m33
+         /owGQiYmSbrmpuS6bnT04A1k0j39GJTd6PbFpeNcZOmjjcJs19XFMUHeLjpJ3u9ywGWU
+         LScw==
+X-Gm-Message-State: ANoB5pn8IGY5hZlLOadrED5lPpBg5OLPtyHsIKUSn92VVMvQeb/SWRrY
+        NngcIMFrgmbTRjVkiwaWlvE3LUEyhN8=
+X-Google-Smtp-Source: AA0mqf4Nem329kgRkNkWL4kY5oPzJemV9ZG8Z58VHEC6R2xw4BnxpGydh7FQmoDxjQByrNViKPSraA==
+X-Received: by 2002:a2e:2c0e:0:b0:279:8d29:193c with SMTP id s14-20020a2e2c0e000000b002798d29193cmr8569437ljs.167.1669754829867;
+        Tue, 29 Nov 2022 12:47:09 -0800 (PST)
 Received: from localhost.localdomain (ccy110.neoplus.adsl.tpnet.pl. [83.30.148.110])
-        by smtp.gmail.com with ESMTPSA id o11-20020ac24e8b000000b004ae24368195sm2325620lfr.233.2022.11.29.12.47.06
+        by smtp.gmail.com with ESMTPSA id o11-20020ac24e8b000000b004ae24368195sm2325620lfr.233.2022.11.29.12.47.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 12:47:07 -0800 (PST)
+        Tue, 29 Nov 2022 12:47:09 -0800 (PST)
 From:   Adam Skladowski <a39.skl@gmail.com>
 Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         Adam Skladowski <a39.skl@gmail.com>,
@@ -72,9 +72,9 @@ Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 07/12] arm64: dts: qcom: sm6115: Add dispcc node
-Date:   Tue, 29 Nov 2022 21:46:11 +0100
-Message-Id: <20221129204616.47006-8-a39.skl@gmail.com>
+Subject: [PATCH 08/12] arm64: dts: qcom: sm6115: Add mdss/dpu node
+Date:   Tue, 29 Nov 2022 21:46:12 +0100
+Message-Id: <20221129204616.47006-9-a39.skl@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221129204616.47006-1-a39.skl@gmail.com>
 References: <20221129204616.47006-1-a39.skl@gmail.com>
@@ -91,45 +91,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add display clock controller to allow controlling display related clocks.
+Add mdss and dpu node to enable display support on SM6115.
 
 Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ arch/arm64/boot/dts/qcom/sm6115.dtsi | 183 +++++++++++++++++++++++++++
+ 1 file changed, 183 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index 6d14bbcda9d3..ea0e0b3c5d84 100644
+index ea0e0b3c5d84..b459f1746a7f 100644
 --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -4,6 +4,7 @@
-  */
- 
- #include <dt-bindings/clock/qcom,gcc-sm6115.h>
-+#include <dt-bindings/clock/qcom,sm6115-dispcc.h>
- #include <dt-bindings/clock/qcom,rpmcc.h>
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
-@@ -717,6 +718,19 @@ usb_1_dwc3: usb@4e00000 {
+@@ -718,6 +718,189 @@ usb_1_dwc3: usb@4e00000 {
  			};
  		};
  
-+		dispcc: clock-controller@5f00000 {
-+			compatible = "qcom,sm6115-dispcc";
-+			reg = <0x05f00000 0x20000>;
-+			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
-+				 <&sleep_clk>,
-+				 <&dsi0_phy 0>,
-+				 <&dsi0_phy 1>,
-+				 <&gcc GCC_DISP_GPLL0_DIV_CLK_SRC>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
++		mdss: display-subsystem@5e00000 {
++			compatible = "qcom,sm6115-mdss";
++			reg = <0x05e00000 0x1000>;
++			reg-names = "mdss";
++
++			power-domains = <&dispcc MDSS_GDSC>;
++
++			clocks = <&gcc GCC_DISP_AHB_CLK>,
++				 <&gcc GCC_DISP_HF_AXI_CLK>,
++				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
++
++			interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-controller;
++			#interrupt-cells = <1>;
++
++			iommus = <&apps_smmu 0x420 0x2>,
++				 <&apps_smmu 0x421 0x0>;
++
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges;
++
++			status = "disabled";
++
++			mdp: display-controller@5e01000 {
++				compatible = "qcom,sm6115-dpu";
++				reg = <0x05e01000 0x8f000>,
++				      <0x05eb0000 0x2008>;
++				reg-names = "mdp", "vbif";
++
++				clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
++					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
++					 <&dispcc DISP_CC_MDSS_MDP_CLK>,
++					 <&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
++					 <&dispcc DISP_CC_MDSS_ROT_CLK>,
++					 <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
++				clock-names = "bus",
++					      "iface",
++					      "core",
++					      "lut",
++					      "rot",
++					      "vsync";
++
++				operating-points-v2 = <&mdp_opp_table>;
++				power-domains = <&rpmpd SM6115_VDDCX>;
++
++				interrupt-parent = <&mdss>;
++				interrupts = <0>;
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						dpu_intf1_out: endpoint {
++							remote-endpoint = <&dsi0_in>;
++						};
++					};
++				};
++
++				mdp_opp_table: opp-table {
++					compatible = "operating-points-v2";
++
++					opp-19200000 {
++						opp-hz = /bits/ 64 <19200000>;
++						required-opps = <&rpmpd_opp_min_svs>;
++					};
++
++					opp-192000000 {
++						opp-hz = /bits/ 64 <192000000>;
++						required-opps = <&rpmpd_opp_low_svs>;
++					};
++
++					opp-256000000 {
++						opp-hz = /bits/ 64 <256000000>;
++						required-opps = <&rpmpd_opp_svs>;
++					};
++
++					opp-307200000 {
++						opp-hz = /bits/ 64 <307200000>;
++						required-opps = <&rpmpd_opp_svs_plus>;
++					};
++
++					opp-384000000 {
++						opp-hz = /bits/ 64 <384000000>;
++						required-opps = <&rpmpd_opp_nom>;
++					};
++				};
++			};
++
++			dsi0: dsi@5e94000 {
++				compatible = "qcom,dsi-ctrl-6g-qcm2290";
++				reg = <0x05e94000 0x400>;
++				reg-names = "dsi_ctrl";
++
++				interrupt-parent = <&mdss>;
++				interrupts = <4>;
++
++				clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
++					 <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
++					 <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
++					 <&dispcc DISP_CC_MDSS_ESC0_CLK>,
++					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
++					 <&gcc GCC_DISP_HF_AXI_CLK>;
++				clock-names = "byte",
++					      "byte_intf",
++					      "pixel",
++					      "core",
++					      "iface",
++					      "bus";
++
++				assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>,
++						  <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
++				assigned-clock-parents = <&dsi0_phy 0>, <&dsi0_phy 1>;
++
++				operating-points-v2 = <&dsi_opp_table>;
++				power-domains = <&rpmpd SM6115_VDDCX>;
++				phys = <&dsi0_phy>;
++
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				status = "disabled";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						dsi0_in: endpoint {
++							remote-endpoint = <&dpu_intf1_out>;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++						dsi0_out: endpoint {
++						};
++					};
++				};
++
++				dsi_opp_table: opp-table {
++					compatible = "operating-points-v2";
++
++					opp-19200000 {
++						opp-hz = /bits/ 64 <19200000>;
++						required-opps = <&rpmpd_opp_min_svs>;
++					};
++
++					opp-164000000 {
++						opp-hz = /bits/ 64 <164000000>;
++						required-opps = <&rpmpd_opp_low_svs>;
++					};
++
++					opp-187500000 {
++						opp-hz = /bits/ 64 <187500000>;
++						required-opps = <&rpmpd_opp_svs>;
++					};
++				};
++			};
++
++			dsi0_phy: phy@5e94400 {
++				compatible = "qcom,dsi-phy-14nm-2290";
++				reg = <0x05e94400 0x100>,
++				      <0x05e94500 0x300>,
++				      <0x05e94800 0x188>;
++				reg-names = "dsi_phy",
++					    "dsi_phy_lane",
++					    "dsi_pll";
++
++				#clock-cells = <1>;
++				#phy-cells = <0>;
++
++				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
++					 <&rpmcc RPM_SMD_XO_CLK_SRC>;
++				clock-names = "iface", "ref";
++
++				status = "disabled";
++			};
 +		};
 +
- 		apps_smmu: iommu@c600000 {
- 			compatible = "qcom,sm6115-smmu-500", "arm,mmu-500";
- 			reg = <0x0c600000 0x80000>;
+ 		dispcc: clock-controller@5f00000 {
+ 			compatible = "qcom,sm6115-dispcc";
+ 			reg = <0x05f00000 0x20000>;
 -- 
 2.25.1
 
