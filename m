@@ -2,59 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E8E63B982
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 06:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D4163B986
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 06:46:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235525AbiK2FgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 00:36:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
+        id S235177AbiK2FqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 00:46:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235177AbiK2FgH (ORCPT
+        with ESMTP id S229830AbiK2FqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 00:36:07 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232D127CE1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 21:36:05 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oztHT-0007aB-BQ; Tue, 29 Nov 2022 06:35:43 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oztHP-0004If-Vo; Tue, 29 Nov 2022 06:35:39 +0100
-Date:   Tue, 29 Nov 2022 06:35:39 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Jacob Keller <jacob.e.keller@intel.com>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v1 00/26] net: dsa: microchip: stats64, fdb, error
-Message-ID: <20221129053539.GA25526@pengutronix.de>
-References: <20221128115958.4049431-1-o.rempel@pengutronix.de>
- <7f0a7acc-4b6b-8e33-7098-e5dfcb67945f@intel.com>
+        Tue, 29 Nov 2022 00:46:20 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31FA31DC4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 21:46:18 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id t1so10069692wmi.4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 21:46:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HD7x5LbR33AXrxQu51beO1G2A7rcknzhC17f6V/q6WA=;
+        b=BQUjUq/abpPMUKx7kDHWQPniuBMZ/SoyzcNBUx+f61DXcq6lSMqogL/vR9GTx1b939
+         2YdZRlidock6vR4dUKjdGaX1xxBOWzKRsTRZ7LyY81iHEF4Cywyt81UTBUHfZaf1Esgi
+         5U7sVwtZXhI/g3l55sBpTDvQSEPJProgt8GPRmuT9iaRHuZn6tv4s0l+wltoN+suBxkp
+         Y5tNNpgPmgU+EtXvzQuTtrfqW3zDgfCshKEU1hTnDmkf5/z+dqx7FuhmpQ1sLoubRqUt
+         6lWKhqbiArdmKg01wCgdKTAvnmtrUOV25vIfP2uEXzd95oKg/MjB/HrKjHOKLSBvBq26
+         X7ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HD7x5LbR33AXrxQu51beO1G2A7rcknzhC17f6V/q6WA=;
+        b=NKZZnyFlNkUCM4KEGxeYgHV+F9NCfmJe37TQ3mL2I6v9garhhQQcJ03/mix9LgpvG2
+         oPya9ckHPst9Wj9OJbt60j07XKcLZQJg+mPi02jCcuVn7gZNsPIqrXJZXdZob5tJNUtD
+         CBxuHtfVBSD7yYntIwTCEbr4R2QhPD+DvkKIqINBHlC1kjzGrkaq42+1+4aWUGBq+h7K
+         LCXdVKBVSE2oPNxRTUpKpkqbSoNf6tZxbEVAt5i62CvlXA+OutG9s/vkL0a989tMTsz7
+         o/B9Gm5aHM8hl3FP3+FMd3PDKkpq2YoVcFvA5r6PQ61Z60ux1CsPlUdIWB1fJQnrTUg5
+         bHNw==
+X-Gm-Message-State: ANoB5pm+baNFCwJLdMy7vRIKbSi8rxO4SksdGKOKF+R/HdE/AciUqA3N
+        Klt4XXVryY0+lJAf2kfcFS0sbg==
+X-Google-Smtp-Source: AA0mqf5KLXL6iv9L9l1kcDPpytL/st2EhbV/q40zSXAbSz7I3BYA93wtvFGhaOW/fH+TVZ8dwXatug==
+X-Received: by 2002:a05:600c:3d18:b0:3cf:b7bf:352d with SMTP id bh24-20020a05600c3d1800b003cfb7bf352dmr32068568wmb.106.1669700777581;
+        Mon, 28 Nov 2022 21:46:17 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id p21-20020a1c5455000000b003b4cba4ef71sm698389wmi.41.2022.11.28.21.46.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 21:46:17 -0800 (PST)
+Date:   Tue, 29 Nov 2022 06:46:16 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 8/9] RISC-V: KVM: Add ONE_REG interface for mvendorid,
+ marchid, and mimpid
+Message-ID: <20221129054616.4zju5z7ipg6wki7l@kamzik>
+References: <20221128161424.608889-1-apatel@ventanamicro.com>
+ <20221128161424.608889-9-apatel@ventanamicro.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7f0a7acc-4b6b-8e33-7098-e5dfcb67945f@intel.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20221128161424.608889-9-apatel@ventanamicro.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,70 +77,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 03:09:19PM -0800, Jacob Keller wrote:
+On Mon, Nov 28, 2022 at 09:44:23PM +0530, Anup Patel wrote:
+> We add ONE_REG interface for VCPU mvendorid, marchid, and mimpid
+> so that KVM user-space can change this details to support migration
+> across heterogeneous hosts.
 > 
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  arch/riscv/include/uapi/asm/kvm.h |  3 +++
+>  arch/riscv/kvm/vcpu.c             | 27 +++++++++++++++++++++++++++
+>  2 files changed, 30 insertions(+)
 > 
-> On 11/28/2022 3:59 AM, Oleksij Rempel wrote:
-> > This patch series is a result of maintaining work on ksz8 part of
-> > microchip driver. It includes stats64 and fdb support. Error handling.
-> > Loopback fix and so on...
-> > 
-> > Oleksij Rempel (26):
-> >    net: dsa: microchip: add stats64 support for ksz8 series of switches
-> >    net: dsa: microchip: ksz8: ksz8_fdb_dump: fix port validation and VID
-> >      information
-> >    net: dsa: microchip: ksz8: ksz8_fdb_dump: fix not complete fdb
-> >      extraction
-> >    net: dsa: microchip: ksz8: ksz8_fdb_dump: fix time stamp extraction
-> >    net: dsa: microchip: ksz8: ksz8_fdb_dump: do not extract ghost entry
-> >      from empty table
-> >    net: dsa: microchip: ksz8863_smi: fix bulk access
-> >    net: dsa: microchip: ksz8_r_dyn_mac_table(): remove timestamp support
-> >    net: dsa: microchip: make ksz8_r_dyn_mac_table() static
-> >    net: dsa: microchip: ksz8_r_dyn_mac_table(): remove fid support
-> >    net: dsa: microchip: ksz8: refactor ksz8_fdb_dump()
-> >    net: dsa: microchip: ksz8: ksz8_fdb_dump: dump static MAC table
-> >    net: dsa: microchip: ksz8: move static mac table operations to a
-> >      separate functions
-> >    net: dsa: microchip: ksz8: add fdb_add/del support
-> >    net: dsa: microchip: KSZ88x3 fix loopback support
-> >    net: dsa: microchip: ksz8_r_dyn_mac_table(): move main part of the
-> >      code out of if statement
-> >    net: dsa: microchip: ksz8_r_dyn_mac_table(): use ret instead of rc
-> >    net: dsa: microchip: ksz8_r_dyn_mac_table(): ksz: do not return EAGAIN
-> >      on timeout
-> >    net: dsa: microchip: ksz8_r_dyn_mac_table(): return read/write error
-> >      if we got any
-> >    net: dsa: microchip: ksz8_r_dyn_mac_table(): use entries variable to
-> >      signal 0 entries
-> >    net: dsa: microchip: make ksz8_r_sta_mac_table() static
-> >    net: dsa: microchip: ksz8_r_sta_mac_table(): do not use error code for
-> >      empty entries
-> >    net: dsa: microchip: ksz8_r_sta_mac_table(): make use of error values
-> >      provided by read/write functions
-> >    net: dsa: microchip: make ksz8_w_sta_mac_table() static
-> >    net: dsa: microchip: ksz8_w_sta_mac_table(): make use of error values
-> >      provided by read/write functions
-> >    net: dsa: microchip: remove ksz_port:on variable
-> >    net: dsa: microchip: ksz8: do not force flow control by default
-> > 
-> 
-> 
-> My understanding is that we typically limit series to 15 patches. Do you
-> have some justification for why this goes over 15 and can't reasonably be
-> split into two series?
-> 
-> At a glance it seems like a bunch of smaller cleanups.
+> diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
+> index 8985ff234c01..92af6f3f057c 100644
+> --- a/arch/riscv/include/uapi/asm/kvm.h
+> +++ b/arch/riscv/include/uapi/asm/kvm.h
+> @@ -49,6 +49,9 @@ struct kvm_sregs {
+>  struct kvm_riscv_config {
+>  	unsigned long isa;
+>  	unsigned long zicbom_block_size;
+> +	unsigned long mvendorid;
+> +	unsigned long marchid;
+> +	unsigned long mimpid;
+>  };
+>  
+>  /* CORE registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
+> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> index 312a8a926867..7c08567097f0 100644
+> --- a/arch/riscv/kvm/vcpu.c
+> +++ b/arch/riscv/kvm/vcpu.c
+> @@ -276,6 +276,15 @@ static int kvm_riscv_vcpu_get_reg_config(struct kvm_vcpu *vcpu,
+>  			return -EINVAL;
+>  		reg_val = riscv_cbom_block_size;
+>  		break;
+> +	case KVM_REG_RISCV_CONFIG_REG(mvendorid):
+> +		reg_val = vcpu->arch.mvendorid;
+> +		break;
+> +	case KVM_REG_RISCV_CONFIG_REG(marchid):
+> +		reg_val = vcpu->arch.marchid;
+> +		break;
+> +	case KVM_REG_RISCV_CONFIG_REG(mimpid):
+> +		reg_val = vcpu->arch.mimpid;
+> +		break;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -338,6 +347,24 @@ static int kvm_riscv_vcpu_set_reg_config(struct kvm_vcpu *vcpu,
+>  		break;
+>  	case KVM_REG_RISCV_CONFIG_REG(zicbom_block_size):
+>  		return -EOPNOTSUPP;
+> +	case KVM_REG_RISCV_CONFIG_REG(mvendorid):
+> +		if (!vcpu->arch.ran_atleast_once)
+> +			vcpu->arch.mvendorid = reg_val;
+> +		else
+> +			return -EBUSY;
+> +		break;
+> +	case KVM_REG_RISCV_CONFIG_REG(marchid):
+> +		if (!vcpu->arch.ran_atleast_once)
+> +			vcpu->arch.marchid = reg_val;
+> +		else
+> +			return -EBUSY;
+> +		break;
+> +	case KVM_REG_RISCV_CONFIG_REG(mimpid):
+> +		if (!vcpu->arch.ran_atleast_once)
+> +			vcpu->arch.mimpid = reg_val;
+> +		else
+> +			return -EBUSY;
+> +		break;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> -- 
+> 2.34.1
+>
 
-The previous patch set got request to do more clean ups:
-https://lore.kernel.org/all/20221124101458.3353902-1-o.rempel@pengutronix.de/
+At some point we should patch Documentation/virt/kvm/api.rst to describe
+the possible errors we have. It's missing EOPNOTSUPP and EBUSY.
 
-I need to show, there are already more patches in the queue.
+Also, I see a couple places were we use EOPNOTSUPP that would be better
+as EBUSY. And finally I wonder if we shouldn't use ENOENT when the reg_num
+is wrong/unknown, which would allow us to differentiate between bad
+reg_num and bad reg_val in set-one ioctls.
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+I can send an RFC series to better describe these thoughts.
+
+And for this patch,
+
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+
+Thanks,
+drew
