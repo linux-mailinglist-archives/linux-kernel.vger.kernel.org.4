@@ -2,133 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7EAF63C19D
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAECD63C1A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233768AbiK2OAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 09:00:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
+        id S232478AbiK2OA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 09:00:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiK2OAu (ORCPT
+        with ESMTP id S233851AbiK2OAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 09:00:50 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689A532B88;
-        Tue, 29 Nov 2022 06:00:48 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
+        Tue, 29 Nov 2022 09:00:55 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CAB0429B2;
+        Tue, 29 Nov 2022 06:00:54 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 33E213FB17;
-        Tue, 29 Nov 2022 14:00:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1669730446; bh=adS46JVWH1WlaPbDZblMEFJYiqhfkyXnDs8IpAPLC2w=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=IWzbqBPmY10XvuyP3B89YIfdQPitUUc8VmOhJdYYoFvGO6o3rEW+9bPt3rhVg6WYw
-         Io36r7PLmxsCpw+cSXJPEMJabwGTe+KLxK+R1UGR6mTj3wLIgKrOc0+uP2do0C5Kc4
-         JpeYbXAxFezVdpDv7Lo2DsBIzYapRii4GyUd/zDt9HXVPgw7nfSMNDHiG4jwsD7IgX
-         0f3nV4yp1tx0RHSlBf1wK9zh4OhDOhEuShnm8Y7Kdh8WY4jnL+171EqVQRHNS5Yxjz
-         ESIDwC0CxOL39402m8cm6gFBkbIEG4vgtZT0BdOPx2p5/eR3l/8qEZYwoT6LC7nLQA
-         65PJAxTtnhSyQ==
-Message-ID: <41c6882a-bff0-378c-edd3-160b54be7c1d@marcan.st>
-Date:   Tue, 29 Nov 2022 23:00:38 +0900
+        by smtp-out2.suse.de (Postfix) with ESMTPS id ACAF61FDEC;
+        Tue, 29 Nov 2022 14:00:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669730452; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bpKLT89bAqIFw7A8vMPMGL+OzHZcolGvYqS8fV4b+J4=;
+        b=Hb0yxkfQ7isRJHgS2FEn9/Yb3GKtqRiVg3rnfSQyAOWWARn1N9zCOJlV+cmpWzycmIxig0
+        ZgRLvEKG/xTlBEroL9hX7r5/5JsNB1TNYmfEw34k8aa60Ke8XFQrWNBdhHpG5mLUuAcNF1
+        e4DqfsxulmgtzWAWCeaHD75J9ZQPFUE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669730452;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bpKLT89bAqIFw7A8vMPMGL+OzHZcolGvYqS8fV4b+J4=;
+        b=3zKSd089fZWXd7pXvDLVQm810JBo3TM1kCmyCqZ9tQYE6tKq5RLAKRqYjgmi7fVYLJhGzg
+        wC2igzMNZVs4LrDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 91DDD13428;
+        Tue, 29 Nov 2022 14:00:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id huEtI5QQhmOOQgAAMHmgww
+        (envelope-from <afaerber@suse.de>); Tue, 29 Nov 2022 14:00:52 +0000
+Message-ID: <6d328461-d705-9e82-ccf3-dec8885f17fe@suse.de>
+Date:   Tue, 29 Nov 2022 15:00:52 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: pinctrl: add schema for NXP S32 SoCs
 Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+To:     Chester Lin <clin@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     s32@nxp.com, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20221128142912.16022-1-marcan@marcan.st>
- <20221128142912.16022-3-marcan@marcan.st>
- <CAPDyKFobMvef_BWGMR=7avODh2r5XNMGpwO3xYgrN-u=DqRwbg@mail.gmail.com>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v5 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
- binding for Apple SoC cpufreq
-In-Reply-To: <CAPDyKFobMvef_BWGMR=7avODh2r5XNMGpwO3xYgrN-u=DqRwbg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-arm-kernel@lists.infradead.org,
+        Larisa Grigore <larisa.grigore@nxp.com>,
+        Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>,
+        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
+        Matthias Brugger <mbrugger@suse.com>
+References: <20221128054820.1771-1-clin@suse.com>
+ <20221128054820.1771-2-clin@suse.com>
+From:   =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>
+In-Reply-To: <20221128054820.1771-2-clin@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/11/2022 20.36, Ulf Hansson wrote:
-> On Mon, 28 Nov 2022 at 15:29, Hector Martin <marcan@marcan.st> wrote:
->> +examples:
->> +  - |
->> +    // This example shows a single CPU per domain and 2 domains,
->> +    // with two p-states per domain.
->> +    // Shipping hardware has 2-4 CPUs per domain and 2-6 domains.
->> +    cpus {
->> +      #address-cells = <2>;
->> +      #size-cells = <0>;
->> +
->> +      cpu@0 {
->> +        compatible = "apple,icestorm";
->> +        device_type = "cpu";
->> +        reg = <0x0 0x0>;
->> +        operating-points-v2 = <&ecluster_opp>;
+Hi Chester,
+
+Am 28.11.22 um 06:48 schrieb Chester Lin:
+> Add DT schema for the pinctrl driver of NXP S32 SoC family.
 > 
-> To me, it looks like the operating-points-v2 phandle better belongs in
-> the performance-domains provider node. I mean, isn't the OPPs really a
-> description of the performance-domain provider?
+> Signed-off-by: Larisa Grigore <larisa.grigore@nxp.com>
+> Signed-off-by: Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
+> Signed-off-by: Andrei Stefanescu <andrei.stefanescu@nxp.com>
+> Signed-off-by: Chester Lin <clin@suse.com>
+> ---
 > 
-> That said, I suggest we try to extend the generic performance-domain
-> binding [1] with an "operating-points-v2". In that way, we should
-> instead be able to reference it from this binding.
+> Changes in v2:
+> - Remove the "nxp,pins" property since it has been moved into the driver.
+> - Add descriptions for reg entries.
+> - Refine the compatible name from "nxp,s32g-..." to "nxp,s32g2-...".
+
+Thanks.
+
+> - Fix schema issues and revise the example.
+> - Fix the copyright format suggested by NXP.
 > 
-> In fact, that would be very similar to what already exists for the
-> generic power-domain binding [2]. I think it would be rather nice to
-> follow a similar pattern for the performance-domain binding.
+>   .../pinctrl/nxp,s32cc-siul2-pinctrl.yaml      | 125 ++++++++++++++++++
+>   1 file changed, 125 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,s32cc-siul2-pinctrl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/nxp,s32cc-siul2-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/nxp,s32cc-siul2-pinctrl.yaml
+> new file mode 100644
+> index 000000000000..2fc25a9362af
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pinctrl/nxp,s32cc-siul2-pinctrl.yaml
+> @@ -0,0 +1,125 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 
-While I agree with the technical rationale and the proposed approach
-being better in principle...
+Any reason the code is GPL-2.0-or-later but the schema is GPL-2.0-only?
 
-We're at v5 of bikeshedding this trivial driver's DT binding, and the
-comment could've been made at v3. To quote IRC just now:
+> +# Copyright 2022 NXP
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pinctrl/nxp,s32cc-siul2-pinctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP S32 Common Chassis SIUL2 iomux controller
+> +
+> +maintainers:
+> +  - Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
+> +  - Chester Lin <clin@suse.com>
+> +
+> +description: |
+> +  Core driver for the pin controller found on S32 Common Chassis SoC.
 
-> this way the machines will be obsolete before things are fully upstreamed
+SoC family
 
-I think it's long overdue for the kernel community to take a deep look
-at itself and its development and review process, because it is quite
-honestly insane how pathologically inefficient it is compared to,
-basically, every other large and healthy open source project of similar
-or even greater impact and scope.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nxp,s32g2-siul2-pinctrl
+> +
+> +  reg:
+> +    description:
+> +      A list of MSCR/IMCR register regions to be reserved.
+> +      - MSCR (Multiplexed Signal Configuration Register)
+> +        An MSCR register can configure the associated pin as either a GPIO pin
+> +        or a function output pin depends on the selected signal source.
+> +      - IMCR (Input Multiplexed Signal Configuration Register)
+> +        An IMCR register can configure the associated pin as function input
+> +        pin depends on the selected signal source.
 
-Cc Linus, because this is for your Mac and I assume you care. We're at
-v5 here for this silly driver. Meanwhile, rmk recently threw the towel
-on upstreaming macsmc for us. We're trying, and I'll keep trying because
-I actually get paid (by very generous donors) to do this, but if I
-weren't I'd have given up a long time ago. And while I won't give up, I
-can't deny this situation affects my morale and willingness to keep
-pushing on upstreaming on a regular basis.
+Does this multi-paragraph text not need "description: |" like above?
 
-Meanwhile, OpenBSD has been *shipping* full M1 support for a while now
-in official release images (and since Linux is the source of truth for
-DT bindings, every time we re-bikeshed it we break their users because
-they, quite reasonably, aren't interested in waiting for us Linux
-slowpokes to figure it out first).
+> +    minItems: 5
+> +    items:
+> +      - description: MSCR registers group 0 managed by the SIUL2 controller 0
+> +      - description: MSCR registers group 1 managed by the SIUL2 controller 1
+> +      - description: MSCR registers group 2 managed by the SIUL2 controller 1
+> +      - description: IMCR registers group 0 managed by the SIUL2 controller 0
+> +      - description: IMCR registers group 1 managed by the SIUL2 controller 1
+> +      - description: IMCR registers group 2 managed by the SIUL2 controller 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +patternProperties:
+> +  '-pins$':
+> +    type: object
+> +    additionalProperties: false
+> +
+> +    patternProperties:
+> +      '-grp[0-9]$':
+> +        type: object
+> +        allOf:
+> +          - $ref: pinmux-node.yaml#
+> +          - $ref: pincfg-node.yaml#
+> +        unevaluatedProperties: false
+> +        description:
+> +          Pinctrl node's client devices specify pin muxes using subnodes,
+> +          which in turn use the standard properties.
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +
+> +    /* Pins functions (SSS field) */
+> +    #define FUNC0  0
+> +    #define FUNC1  1
+> +    #define FUNC2  2
+> +    #define FUNC3  3
+> +    #define FUNC4  4
+> +    #define FUNC5  5
+> +    #define FUNC6  6
+> +    #define FUNC7  7
+> +
+> +    #define S32CC_PINMUX(PIN, FUNC) (((PIN) << 4) | (FUNC))
+> +
+> +    #define S32CC_SLEW_208MHZ  0
+> +    #define S32CC_SLEW_166MHZ  4
+> +    #define S32CC_SLEW_150MHZ  5
+> +    #define S32CC_SLEW_133MHZ  6
+> +    #define S32CC_SLEW_83MHZ   7
 
-Please, let's introspect about this for a moment. Something is deeply
-broken if people with 25+ years being an arch maintainer can't get a
-700-line mfd driver upstreamed before giving up. I don't know how we
-expect to ever get a Rust GPU driver merged if it takes 6+ versions to
-upstream the world's easiest cpufreq hardware.
+I notice that neither this patch nor the following one introduces a 
+dt-bindings header for these macros? Is the plan to only have them in 
+TF-A sources? Thinking of DT overlays for SoMs, for example.
 
-- Hector
+Regards,
+Andreas
+
+> +
+> +    pinctrl@4009c240 {
+> +        compatible = "nxp,s32g2-siul2-pinctrl";
+> +
+> +        /*
+> +         * There are two SIUL2 controllers in S32G2:
+> +         *
+> +         *   siul2_0 @ 0x4009c000
+> +         *   siul2_1 @ 0x44010000
+> +         *
+> +         * Every SIUL2 controller has multiple register types, and here
+> +         * only MSCR and IMCR registers need to be revealed for kernel
+> +         * to configure pinmux. Please note that some indexes are reserved,
+> +         * such as MSCR102-MSCR111 in the following reg property.
+> +         */
+> +
+> +              /* MSCR0-MSCR101 registers on siul2_0 */
+> +        reg = <0x4009c240 0x198>,
+> +              /* MSCR112-MSCR122 registers on siul2_1 */
+> +              <0x44010400 0x2c>,
+> +              /* MSCR144-MSCR190 registers on siul2_1 */
+> +              <0x44010480 0xbc>,
+> +              /* IMCR0-IMCR83 registers on siul2_0 */
+> +              <0x4009ca40 0x150>,
+> +              /* IMCR119-IMCR397 registers on siul2_1 */
+> +              <0x44010c1c 0x45c>,
+> +              /* IMCR430-IMCR495 registers on siul2_1 */
+> +              <0x440110f8 0x108>;
+> +
+> +        llce-can0-pins {
+> +            llce-can0-grp0 {
+> +                pinmux = <S32CC_PINMUX(43, FUNC0)>;
+> +                input-enable;
+> +                slew-rate = <S32CC_SLEW_208MHZ>;
+> +            };
+> +
+> +            llce-can0-grp1 {
+> +                pinmux = <S32CC_PINMUX(44, FUNC2)>;
+> +                output-enable;
+> +                slew-rate = <S32CC_SLEW_208MHZ>;
+> +            };
+> +        };
+> +    };
+> +...
+
+-- 
+SUSE Software Solutions Germany GmbH
+Frankenstraße 146, 90461 Nürnberg, Germany
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+HRB 36809 (AG Nürnberg)
