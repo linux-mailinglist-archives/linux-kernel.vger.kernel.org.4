@@ -2,145 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75EE063C3B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:27:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4847163C3B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:27:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235886AbiK2P1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 10:27:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
+        id S235912AbiK2P10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 10:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235914AbiK2P1M (ORCPT
+        with ESMTP id S235817AbiK2P1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:27:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465C1D4C;
-        Tue, 29 Nov 2022 07:27:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 29 Nov 2022 10:27:21 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D94E2EF1E;
+        Tue, 29 Nov 2022 07:27:19 -0800 (PST)
+Received: from mercury (dyndsl-091-096-035-212.ewe-ip-backbone.de [91.96.35.212])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D0E61615F6;
-        Tue, 29 Nov 2022 15:27:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18C8FC433D6;
-        Tue, 29 Nov 2022 15:27:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669735630;
-        bh=05TN/ChYDsZNJQMqNeZeVjm48CGMgr/zwbKgDJxJOfg=;
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B95D566017D3;
+        Tue, 29 Nov 2022 15:27:17 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669735637;
+        bh=2uWz2A7xOoum4HnLr287oebganaus9nvik9/vnxaEhU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WO0ik+5QqM1KtqV5MV3NWG/JLhOv1JfbJ9/uP6h8+w4gS7gxYmbQ0oJMikVEK+VSf
-         LVxYbTawRmhLu+pfSw9gu8qCKiQVhhtxp+jlVG1KXrORGDTRcTjEW2x0tPjzJra3vi
-         ZPvceIl0GN544j8w9psdOs1KVFzXH1DQt7AOi4P8vC0SBpHaMS46A2I9A2gvAfwb+T
-         /3pjI8qEak4UNRDbs2fkPir0KpHRKDY9pKEMTUjaWFKY9mK8QlHFNIG1VMkLHUZOg3
-         FRqtNxNLdqeiK+Gd94f5fdiwygbkWYgmpH3Gf8lwVaAZZ9EmheEQ4eBwSgyLz7qJtx
-         pdTXRia5RvkEg==
-Date:   Tue, 29 Nov 2022 20:56:56 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Asutosh Das <quic_asutoshd@quicinc.com>
-Cc:     quic_cang@quicinc.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, quic_nguyenb@quicinc.com,
-        quic_xiaosenh@quicinc.com, stanley.chu@mediatek.com,
-        eddie.huang@mediatek.com, daejun7.park@samsung.com,
-        bvanassche@acm.org, avri.altman@wdc.com, beanhuo@micron.com,
-        linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 04/16] ufs: core: Defer adding host to scsi if mcq is
- supported
-Message-ID: <20221129152656.GD4931@workstation>
-References: <cover.1669684648.git.quic_asutoshd@quicinc.com>
- <cc28100c0e3037bb07eeaa24d48f64d4b6198c2e.1669684648.git.quic_asutoshd@quicinc.com>
+        b=YcOv7KjDCf2hv8Ylk0oMiT6YFxn8vAOAwb3tP/TznAzcB4hNpZRmZ6pFxwW3gq25Y
+         zuXASNgJQAjvk1B1qZsV2R+ySlEhthBy3jLqSrYE5BFAbsqcjijhUv4sQ42Yk7Smqh
+         GKMhhvrVBmdsTX8DFHe1f587dRog3jQIc0MuHVlACdNsdjDkS18ak16EqycpD/DVOX
+         6rbX2LzcHq3KHbT3OHCFKtEUC/Qj+ZlfwHWRTbxMwxM2bgvOfH2oAyASH9O9GSKGeR
+         Q53Z6Rdh02ej78ArkKkUDvadQMPkgJ8Kti4aJj09N8qs30rQMsD6p/z+LE62RbRDX3
+         +vD4vdXESDGYQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 3E5311060AB4; Tue, 29 Nov 2022 16:27:15 +0100 (CET)
+Date:   Tue, 29 Nov 2022 16:27:15 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Hermes Zhang <chenhuiz@axis.com>
+Cc:     kernel@axis.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: bq256xx: Remove init ichg/vbat with max
+ value
+Message-ID: <20221129152715.4hwtobuv57hrndzu@mercury.elektranox.org>
+References: <20221129090112.3451501-1-chenhuiz@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nhxzr54p4jecfeyb"
 Content-Disposition: inline
-In-Reply-To: <cc28100c0e3037bb07eeaa24d48f64d4b6198c2e.1669684648.git.quic_asutoshd@quicinc.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221129090112.3451501-1-chenhuiz@axis.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 05:20:45PM -0800, Asutosh Das wrote:
-> If MCQ support is present, enabling it after MCQ support
-> has been configured would require reallocating tags and memory.
-> It would also free up the already allocated memory in
-> Single Doorbell Mode. So defer invoking scsi_add_host() until
-> MCQ is configured.
-> 
-> Co-developed-by: Can Guo <quic_cang@quicinc.com>
-> Signed-off-by: Can Guo <quic_cang@quicinc.com>
-> Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+--nhxzr54p4jecfeyb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Mani
+Hi,
 
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+On Tue, Nov 29, 2022 at 05:01:12PM +0800, Hermes Zhang wrote:
+> Init the ichg and vbat reg with max value is not good. First the chip
+> already has a default value for ichg and vbat (small value). Init these
+> two reg with max value will result an unsafe case (e.g. battery is over
+> charging in a hot environment) if no user space change them later.
+>=20
+> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
 > ---
->  drivers/ufs/core/ufshcd.c | 24 ++++++++++++++++++++----
->  1 file changed, 20 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index eca15b0..3c2220c 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -92,6 +92,11 @@
->  /* UFSHC 4.0 compliant HC support this mode, refer param_set_mcq_mode() */
->  static bool use_mcq_mode = true;
->  
-> +static bool is_mcq_supported(struct ufs_hba *hba)
-> +{
-> +        return hba->mcq_sup && use_mcq_mode;
-> +}
-> +
->  static int param_set_mcq_mode(const char *val, const struct kernel_param *kp)
->  {
->  	int ret;
-> @@ -8227,6 +8232,7 @@ static int ufshcd_probe_hba(struct ufs_hba *hba, bool init_dev_params)
->  	int ret;
->  	unsigned long flags;
->  	ktime_t start = ktime_get();
-> +	struct Scsi_Host *host = hba->host;
->  
->  	hba->ufshcd_state = UFSHCD_STATE_RESET;
->  
-> @@ -8261,6 +8267,14 @@ static int ufshcd_probe_hba(struct ufs_hba *hba, bool init_dev_params)
->  		ret = ufshcd_device_params_init(hba);
->  		if (ret)
->  			goto out;
-> +
-> +		if (is_mcq_supported(hba)) {
-> +			ret = scsi_add_host(host, hba->dev);
-> +			if (ret) {
-> +				dev_err(hba->dev, "scsi_add_host failed\n");
-> +				goto out;
-> +			}
-> +		}
->  	}
->  
->  	ufshcd_tune_unipro_params(hba);
-> @@ -9857,10 +9871,12 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
->  		hba->is_irq_enabled = true;
->  	}
->  
-> -	err = scsi_add_host(host, hba->dev);
-> -	if (err) {
-> -		dev_err(hba->dev, "scsi_add_host failed\n");
-> -		goto out_disable;
-> +	if (!is_mcq_supported(hba)) {
-> +		err = scsi_add_host(host, hba->dev);
-> +		if (err) {
-> +			dev_err(hba->dev, "scsi_add_host failed\n");
-> +			goto out_disable;
-> +		}
->  	}
->  
->  	hba->tmf_tag_set = (struct blk_mq_tag_set) {
-> -- 
-> 2.7.4
-> 
+
+It's the driver's task to setup safe initial maximum values.
+Pre-kernel values may or may not be safe if you consider things
+like kexec. If you get unsafe values programmed, then fix the
+values instead.
+
+-- Sebastian
+
+>  drivers/power/supply/bq256xx_charger.c | 10 ----------
+>  1 file changed, 10 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/suppl=
+y/bq256xx_charger.c
+> index 01ad84fd147c..d1aa92c10c22 100644
+> --- a/drivers/power/supply/bq256xx_charger.c
+> +++ b/drivers/power/supply/bq256xx_charger.c
+> @@ -1562,21 +1562,11 @@ static int bq256xx_hw_init(struct bq256xx_device =
+*bq)
+>  	if (ret)
+>  		return ret;
+> =20
+> -	ret =3D bq->chip_info->bq256xx_set_ichg(bq,
+> -				bat_info->constant_charge_current_max_ua);
+> -	if (ret)
+> -		return ret;
+> -
+>  	ret =3D bq->chip_info->bq256xx_set_iprechg(bq,
+>  				bat_info->precharge_current_ua);
+>  	if (ret)
+>  		return ret;
+> =20
+> -	ret =3D bq->chip_info->bq256xx_set_vbatreg(bq,
+> -				bat_info->constant_charge_voltage_max_uv);
+> -	if (ret)
+> -		return ret;
+> -
+>  	ret =3D bq->chip_info->bq256xx_set_iterm(bq,
+>  				bat_info->charge_term_current_ua);
+>  	if (ret)
+> --=20
+> 2.30.2
+>=20
+
+--nhxzr54p4jecfeyb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOGJMoACgkQ2O7X88g7
++pr2/A/+ObAJI1Ihz0lz5Yr5sQVpHXiTtTj+QNVgp7YKWEEFZ3ReQBEL7LPr7ih6
+b15AxbN7PPnELw6tjGOyPA2By87w4ZXScIFR8hiO0wntZI2hbamza+revN+CIvN8
+8qw1t2GhSuGksus+zyHtvWw3Loq60kn3a8IID0LnihdLupZTJuYjD+TzVo0RtZrb
+3N/dPB4nD2XatCNlXkVSA1IFVxMlPy2/i+5SbYXaTbpm5zpETkyYPfa+ywU7EStr
+Ac/eZly+9kIa3q5D3IkZ9ho0EF7FZ7ivPjwbtbszM/6yiHp2KY/qhtJDyfRCCmc8
+f3c6kT/97xQ6vJHSkXpgU13Bs/zud9PXV+QqA0uQUh2eLTquSrYTn2HeV4TV3+/5
+utF4ZNISx6zIQ9S6HafCRlv7gA1XspQy0kEcXPAfifawWBHIkW5tAehv4XQ/PTeE
+jmv9m8r+VFoZhH4upDtT0TLYo3G3eYV75gBgu1RK8OX+I6lzk4E0T6ocaHMJ0ALE
+X6KfKfpIgCW53ZT2XtkErfAYVBFqkOaUIUlO3cXdbutjuzt82MtyJ5YmEZmodLHQ
+CV+rP/V7pzO7MXs6yDrLm1X0LFK6+PVwsu0bqg+GqpFs3aAgroepKGsOUMGpJjVn
+7oXFsBOS4L79tevd51jfT6f0J0+TDLVoutCUsukuoxwGfXMT/fo=
+=TDmG
+-----END PGP SIGNATURE-----
+
+--nhxzr54p4jecfeyb--
