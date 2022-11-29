@@ -2,131 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80EB63BC19
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D4A63BC1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiK2Iv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 03:51:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58268 "EHLO
+        id S230094AbiK2Ivi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 03:51:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbiK2IvA (ORCPT
+        with ESMTP id S231378AbiK2IvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 03:51:00 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA4559866
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:50:37 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-3b48b139b46so131667437b3.12
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:50:37 -0800 (PST)
+        Tue, 29 Nov 2022 03:51:13 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11874198A;
+        Tue, 29 Nov 2022 00:51:12 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id r26so16714586edc.10;
+        Tue, 29 Nov 2022 00:51:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Kp6Snka7N+b4UWFXmZ9UFoqx1hY6vmM2Ik02B3IWRw=;
-        b=Hl8KHITtPPburveZxz28ekrymnjV7p7U0oCIfczeR7qfkWBme2pvSF346tbJK026oQ
-         /z2c7I7y4Em7uH7NtuMnkFjAlw+CIJW9ls0Ce0bEYsV3RvruhEAjC1W6rGe0ljvS6Jxi
-         YMTmi3ogMveuIz3s+p+NC62/JtqmQtK4YGB0f85lI7oOmHaAlIFXqjGz4xagkgLkJiFx
-         2QdaYshWuiiIWuwNomWngyZGhFGsdQj2918FQV2QAJaxiixPJy08/CRnz4+RjvQaYpr4
-         Xn9Kp3xe7V2aAplq0T7c7j51ImRtsJonXyKrFPhE8hj03TygclY+0Ihdp4epMBBH8R4K
-         /4sw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=EAwbcSycvljMKPe5ABsiy+cIxMkpLo2gUjI9R6uNdq4=;
+        b=EFlFtRGjVY6hb45LYjfz4PKYSY8/eYXCDyH2jEWI+6o8+OWi5V8XhsyAL+pxN+iqwF
+         JX1bgxltZTtg+XpbSCDvOeZ9WXsuJHdatr27JZRN9XqqmNcIAjk7Y0MZkVkLAyMQr8LA
+         990qsOV9NVsjmRFs5iQ6x8HH6XoWFHWlztUXrFoLMrs3o8kIsHGcLIaaQan6E/Lputu1
+         nKsNOWZNVdRTWH6cOJ5YJEjOtQQKqsZcp5spPCKfZvGqJQgZ4Bp9JVlhb4JMxvA2Ujnj
+         eg3a1PIJZeRfxkP3OOgqMdAEQAkjUdnOtpkhIJ0aHSvxO8KweJtdH7BCbTxdX6X/iH0d
+         Cjew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3Kp6Snka7N+b4UWFXmZ9UFoqx1hY6vmM2Ik02B3IWRw=;
-        b=7o8H6TCRL6hQSng8J3OGdPs4WvfAFj9lUMaQa+V+DdsKEzE5w/+zarjw7u3NZTwOM9
-         GhnsLtX2E58gb3LLoFnDhFM5QF0bZ9QtbjV3jkESWUUNGK0tORmv2H46lSad6cDOZpkn
-         evb9iQKnSj9xh2V3rGbnLO5ZePSUMoyCxhANOs2KKYkoPy4cLNwMu747bIP5oor0hAl3
-         EOlNyZE8av87MhTyFym4fage5kqfxYKeXDeYupL3jxXB1zwkY9HSWb1irq+zH29RJh9t
-         xoLaH3TAWNcyvOdmxKrZHRxfYw/kzCX0ugx/vQGc/DRRm3jU7siguV5o7sVsV/9yI6Xr
-         E58g==
-X-Gm-Message-State: ANoB5pnrooa/hBpa+fFkJvrlzZfZ78jy4N7u+NtgkS3ksMzCbzkrmBV/
-        Lv22ZhY/+ZDCGCB6Or1RJ5hDVzMSSO2l71hVljk=
-X-Google-Smtp-Source: AA0mqf5cF1az9DH687NxUDMyTcNhzp8L8Fg0Sx07n5rBK0e7nd/ftoq52BzM4cDLdZwmiJZLZJpVbw75aABa3N0lvLw=
-X-Received: by 2002:a81:4642:0:b0:36a:ca92:d207 with SMTP id
- t63-20020a814642000000b0036aca92d207mr37912558ywa.429.1669711836482; Tue, 29
- Nov 2022 00:50:36 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EAwbcSycvljMKPe5ABsiy+cIxMkpLo2gUjI9R6uNdq4=;
+        b=nqO0IF59wvrpy8Haccg3wj3cO8cI7ZaUA8zWvxCtJcEn+9NnpKeEx9UOrHo7P5narD
+         g2e1qektyvHoEmD8G2UqWICpGlvecZGWjtN2ewFtkdy5llFrjoZdOKIP3VC69F5Rd4D3
+         HSL9WD3Kx1etH0RnC9y4v2+2MRMKmkfPMKXSCwFHqieoLLeuTIdOHeHaucQkw5hmXPTi
+         d/weHJbXxV5mR+3ayidl5WP2WoZCQNbPAL9TOLIR1AQwHpcJbf1hg0FyBYPwlsy3B8Sf
+         rZAw8Xb0+sAm2AdOxo2kf6NPnOxShqK233BrG/65w+xRDdt9X4+Eouq/cMecW4DS9nyt
+         DQIg==
+X-Gm-Message-State: ANoB5pnryxx94ijTajxEjaPUfw5Rdaaj/43v2UY33iwVkGN6v5/k5BLo
+        PG82qV+Y3ivTkiL6/5v7Fcw=
+X-Google-Smtp-Source: AA0mqf47u3/yt28Ofv/5FqQdI2MHkbIfMEKktXtQYWe+me4por6kkPGitzwX2sTe4moLj7hZE7ipRA==
+X-Received: by 2002:a05:6402:ea8:b0:462:67bf:c64e with SMTP id h40-20020a0564020ea800b0046267bfc64emr37911025eda.20.1669711871270;
+        Tue, 29 Nov 2022 00:51:11 -0800 (PST)
+Received: from cizrna.home (cst-prg-44-69.cust.vodafone.cz. [46.135.44.69])
+        by smtp.gmail.com with ESMTPSA id kz1-20020a17090777c100b0078de26f66b9sm5873219ejc.114.2022.11.29.00.51.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 00:51:10 -0800 (PST)
+Sender: Tomeu Vizoso <tomeu.vizoso@gmail.com>
+From:   Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     italonicola@collabora.com,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR VIVANTE GPU
+        IP),
+        etnaviv@lists.freedesktop.org (moderated list:DRM DRIVERS FOR VIVANTE
+        GPU IP), Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-amlogic@lists.infradead.org (open list:ARM/Amlogic Meson SoC
+        support),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Amlogic Meson
+        SoC support), linux-kernel@vger.kernel.org (open list),
+        Lucas Stach <l.stach@pengutronix.de>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux+etnaviv@armlinux.org.uk>
+Subject: [PATCH v3 0/5] Support for the NPU in Vim3
+Date:   Tue, 29 Nov 2022 09:50:40 +0100
+Message-Id: <20221129085047.49813-1-tomeu.vizoso@collabora.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221104124546.196077-1-ubizjak@gmail.com> <Y4U0GwlLgAuxu3WF@zn.tnic>
- <CAFULd4Yjp+sNqZrt9kq2orodNckQOWAGi84ZZeXRFPLyE65HPQ@mail.gmail.com> <Y4XDVbuYtFUYCrur@zn.tnic>
-In-Reply-To: <Y4XDVbuYtFUYCrur@zn.tnic>
-From:   Uros Bizjak <ubizjak@gmail.com>
-Date:   Tue, 29 Nov 2022 09:50:25 +0100
-Message-ID: <CAFULd4Yv9ZYu_mWwFBGheJ7_XsP6Ok1uCCPDr-ChDK4yzOK3qA@mail.gmail.com>
-Subject: Re: [PATCH] x86/boot: Remove x86_32 PIC using ebx workaround
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 9:31 AM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Tue, Nov 29, 2022 at 08:39:23AM +0100, Uros Bizjak wrote:
-> > On Mon, Nov 28, 2022 at 11:20 PM Borislav Petkov <bp@alien8.de> wrote:
-> > >
-> > > On Fri, Nov 04, 2022 at 01:45:46PM +0100, Uros Bizjak wrote:
-> > > > Current minimum required version of GCC is version 5.1 which allows
-> > > > reuse of PIC hard register on x86/x86-64 targets [1]. Remove
-> > > > obsolete workaround that was needed for earlier GCC versions.
-> > > >
-> > > > [1] https://gcc.gnu.org/gcc-5/changes.html
-> > >
-> > > Thanks for the doc pointer.
-> > >
-> > > Lemme see if I understand this commit message correctly:
-> > >
-> > > SysV i386 ABI says that %ebx is used as the base reg in PIC. gcc 5 and
-> > > newer can handle all possible cases properly where inline asm could
-> > > clobber the PIC reg. I.e., it is able to deal with the "=b" constraint
-> > > where an insn can overwrite %ebx and it'll push and pop around that
-> > > statement.
-> >
-> > gcc-5 considers PIC register as a pseudo-register and reloads it
->
-> So not a "hard" register as you say above?
+Hi,
 
-There are registers of different "hardness" as far as gcc is
-concerned. Before gcc-5.1, PIC register was considered as "fixed", it
-was simply unavailable to a register allocator, decreasing the
-miniscule available x86_32 register set by one register. Also, RA was
-unable to satisfy the "=b" constraint. OTOH, a pseudo register belongs
-to a certain class of registers (e.g. integer registers) and when
-allocating real ("hard" ) registers, RA uses instruction (or inline
-asm) register constraints to allocate correct "hard" register. In this
-aspect, PIC access "requires" %ebx register in the same way as e.g.
-shift instructions "require" %cl register. gcc-5.1 allows RA much more
-freedom of how to use %ebx register - it can be used for other
-purposes , as long as it is reloaded with correct value before insn
-with PIC access.
+This series adds support for the Verisilicon VIPNano-QI NPU in the A311D
+as in the VIM3 board.
 
-> > x86_64 does not use PIC register for small code models. Also, it uses
-> > %r15 instead of %rbx for PIC register, so the removed workaround
-> > applies only to x86_32.
->
-> Let's see:
->
-> arch/x86/Makefile:
->         # Never want PIC in a 32-bit kernel, prevent breakage with GCC built
->         # with nonstandard options
->         KBUILD_CFLAGS += -fno-pic
->
-> $ gcc -Wp,-MMD,arch/x86/boot/.cpuflags.o.d ... -fno-pic ... -D__KBUILD_MODNAME=kmod_cpuflags -c -o arch/x86/boot/cpuflags.o arch/x86/boot/cpuflags.c
->
-> So this workaround applies to nothing, I'd say. :)
+The IP is very closely based on previous Vivante GPUs, so the etnaviv
+kernel driver works basically unchanged.
 
-It looks like the workaround serves no purpose even when compiled with
-gcc < 5.1.
+The userspace part of the driver is being reviewed at:
 
-Uros.
+https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/18986
+
+v2: Move reference to RESET_NNA to npu node (Neil)
+v3: Fix indentation mistake (Neil)
+
+Regards,
+
+Tomeu
+
+Tomeu Vizoso (5):
+  dt-bindings: reset: meson-g12a: Add missing NNA reset
+  dt-bindings: power: Add G12A NNA power domain
+  soc: amlogic: meson-pwrc: Add NNA power domain for A311D
+  arm64: dts: Add DT node for the VIPNano-QI on the A311D
+  drm/etnaviv: add HWDB entry for VIPNano-QI.7120.0055
+
+ .../boot/dts/amlogic/meson-g12-common.dtsi    | 11 +++++++
+ .../amlogic/meson-g12b-a311d-khadas-vim3.dts  |  4 +++
+ drivers/gpu/drm/etnaviv/etnaviv_hwdb.c        | 31 +++++++++++++++++++
+ drivers/soc/amlogic/meson-ee-pwrc.c           | 17 ++++++++++
+ include/dt-bindings/power/meson-g12a-power.h  |  1 +
+ .../reset/amlogic,meson-g12a-reset.h          |  4 ++-
+ 6 files changed, 67 insertions(+), 1 deletion(-)
+
+-- 
+2.38.1
+
