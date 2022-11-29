@@ -2,251 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E79B63C40D
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F9063C41C
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235849AbiK2Pqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 10:46:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
+        id S235979AbiK2Pru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 10:47:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235718AbiK2Pqs (ORCPT
+        with ESMTP id S235775AbiK2Prs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:46:48 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B211D42F52
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:46:46 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id u27so11654179lfc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:46:46 -0800 (PST)
+        Tue, 29 Nov 2022 10:47:48 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9CB6357
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:47:42 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id v1so22734607wrt.11
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:47:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eao8kVaGm6vtNieE8U5gWdmiaP7djGvEGVzI1sPPoz0=;
-        b=UR1TG1xNPSEMHx/i+CYCrKrY3mHy0JrJUS/XzmhOMJ8yEj/BOytiR4eN/+sXrVa7gv
-         uLHyWK1UByO0oI4LyetUIZfK6fiJCFm9QPAuvBUo+K0b53MCedoNq1319g94jVmfP/QU
-         O1k8fCnEbfg4krzmMyM0lFLRqhfi5pQMXRR8WYdROyBQpDessgKXUsHiHubLZV5AXYSK
-         vKZ/SOp0rBRSt43s2T4G7N7bXQmTtncJBtOpHluIkT0QgVvf9IGnhz3LsT/0Yf9KNNN4
-         LuV0dT/8ZzEkFfvaifKpVYfqXHVMi1gsgfV2chcGIz+cKuzehDrp8+aJC1jj2kqt1Vk6
-         UwbA==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zcNi41xvTMS4NGTUpyHD2vhE6PXJ5qCDMr6KFHcPQag=;
+        b=Ymj/TX58LmBHMlJm2tvaAwNPklk0OGDZu/h2bpwb8PEHBxKhk4ajUV93di2Grz8TVV
+         9lMyxfkKDAp24o03K5+1FRcgoCKVXZjlBGbIytbuviIem7nF4rYyG6KooxotGqK+hP1E
+         oOi+BBXCoaw4iA3xFq6+2BtTm31okvGXqpDLHXAVrSQF4e3INEQh3xc0r9WI6qWJs9vr
+         cn8nSzY+otKe+LsoUuNa8GtXB+bJo3a/2ezw2yBL/OKQ89GnW5aHwVJlGaUwwQWVVlUi
+         OfYz0qsbjPaz3Sq039jK3ZktX72U89/hNuW+ZLmHuz+gzgfB998b5wYXplTrOYLmT1UV
+         HOGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eao8kVaGm6vtNieE8U5gWdmiaP7djGvEGVzI1sPPoz0=;
-        b=Y7laBsnJRMjilDgfsrtw4JRUOu8QsTgXnhvIY6S8/jPpIlq0Qd3U7b+HXJh/CGNImj
-         hMUc46AAxoqJkgmTn8YJmjl5t9TEZe5TTtmkqyS66n2DKw9nvL8FakaslvSThnsLMAvM
-         UhSQc193K+bsP40dukmRrij7E67bJZ+CxwoXByhvYbNDb+RyP3UbhJwIpMtAzNj64pM8
-         eX3UxLdrS+XFkANM7PoPz5j4HK/igMnU+DVGZHLvT3vkdHhp0N6XGev/QP3J0lOmHgnR
-         7pNUBfQ7nxBGJGAgCDCp4VXHuW2WXgbPWyqEGOnMYynUmeQ6ia4DAoZPRwy/hYhuoQKk
-         C6Vg==
-X-Gm-Message-State: ANoB5plHU8vOaNdGHyDFg/k4qOWPqRI1ixraSwnTEcxMFCq2dGYxDM1e
-        pl9H8O7y+b7rscFK0I6kf7AzVQ==
-X-Google-Smtp-Source: AA0mqf53DsdFYQJfi/Q9URNzSLkqg99wIGExsFNfyhACV9rG0dzaqzzqeOEN9a/k+2SIMQd9r9jvUw==
-X-Received: by 2002:ac2:48a8:0:b0:4b5:eef:b810 with SMTP id u8-20020ac248a8000000b004b50eefb810mr4483599lfg.109.1669736803596;
-        Tue, 29 Nov 2022 07:46:43 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id l18-20020a194952000000b004aa427febe5sm2238721lfj.64.2022.11.29.07.46.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 07:46:43 -0800 (PST)
-Message-ID: <4c6b5d55-f6a0-f042-ef10-e282e153a358@linaro.org>
-Date:   Tue, 29 Nov 2022 16:46:41 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zcNi41xvTMS4NGTUpyHD2vhE6PXJ5qCDMr6KFHcPQag=;
+        b=agypwEglpyK4xut2vNW72TMMNiRJNKNKEpttnV5CHd+R1Q3ChM6PaPxCL9gcGOY0RM
+         jqGOF9fJNRYKhKxT6sY/qseQ174qmRqvkH53Aw5KE2M9ztgLVNMuKSGL7App88h2Vl7J
+         K5s2SqG7Hb7NJcAYhTOID4VvpLu+m5B0MNmwQ4/GboUgJkXLIn/QZZGy/YoJqeTsFcRv
+         tsCbYFhhX4Na/MKJYoGMhSxMWYjQHQer6InbxRK0OLnt6bfnMuTJf3V2xEUmsBOxYRQw
+         DRvMz0l0JeLTSqPiDO7Yqfk2qKljZjC1YE8MU7PGdnX9RwzXsIWzFJ1LIfV4dNqu0kgR
+         BP8Q==
+X-Gm-Message-State: ANoB5pnIRwbpjAfDBvansrb20AX8LM03b2KlWbDmknz6Onua4vtxvt82
+        k9rjVcFPd5KRPCICTB6G8+mEpw==
+X-Google-Smtp-Source: AA0mqf4VS2OE+nEDrDPjpzaYNf+mLsm5WKH9zV+k+70WKT3wLEzTcfYv6YO/CIf/HCa4ZWlt9jGz0w==
+X-Received: by 2002:a05:6000:70f:b0:22e:41c5:7ef7 with SMTP id bs15-20020a056000070f00b0022e41c57ef7mr35635050wrb.332.1669736860806;
+        Tue, 29 Nov 2022 07:47:40 -0800 (PST)
+Received: from localhost ([2a00:79e0:9d:4:5011:adcc:fddd:accf])
+        by smtp.gmail.com with ESMTPSA id x9-20020a5d6b49000000b002366e3f1497sm14090293wrw.6.2022.11.29.07.47.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 07:47:40 -0800 (PST)
+From:   Jann Horn <jannh@google.com>
+To:     security@kernel.org, Andrew Morton <akpm@linux-foundation.org>
+Cc:     Yang Shi <shy828301@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v5 1/3] mm/khugepaged: Take the right locks for page table retraction
+Date:   Tue, 29 Nov 2022 16:47:28 +0100
+Message-Id: <20221129154730.2274278-1-jannh@google.com>
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v5 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
- binding for Apple SoC cpufreq
-Content-Language: en-US
-To:     Hector Martin <marcan@marcan.st>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20221128142912.16022-1-marcan@marcan.st>
- <20221128142912.16022-3-marcan@marcan.st>
- <CAPDyKFobMvef_BWGMR=7avODh2r5XNMGpwO3xYgrN-u=DqRwbg@mail.gmail.com>
- <41c6882a-bff0-378c-edd3-160b54be7c1d@marcan.st>
- <a297079e-2dc9-d311-5415-a58332e7a711@linaro.org>
- <e8c481ba-02a7-f1c7-6314-ea1ddf136998@marcan.st>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <e8c481ba-02a7-f1c7-6314-ea1ddf136998@marcan.st>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/11/2022 16:17, Hector Martin wrote:
-> On 29/11/2022 23.34, Krzysztof Kozlowski wrote:
->> On 29/11/2022 15:00, Hector Martin wrote:
->>> On 29/11/2022 20.36, Ulf Hansson wrote:
->>> Please, let's introspect about this for a moment. Something is deeply
->>> broken if people with 25+ years being an arch maintainer can't get a
->>
->> If arch maintainer sends patches which does not build (make
->> dt_binding_check), then what do you exactly expect? Accept them just
->> because it is 25+ years of experience or a maintainer? So we have
->> difference processes - for beginners code should compile. For
->> experienced people, it does not have to build because otherwise they
->> will get discouraged?
-> 
-> I expect the process to not be so confusing and frustrating that a
-> maintainer with 25+ years of experience gives up. That the bindings
-> didn't pass the checker is besides the point. People say the Linux
-> kernel community is hostile to newbies. This issue proves it's not just
-> newbies, the process is failing even experienced folks.
-> 
-> On that specific issue, any other functional open source project would
-> have the binding checks be a CI bot, with a friendly message telling you
-> what to do to fix it, and it would re-run when you push to the PR again,
-> which is a *much* lower friction action than sending a whole new patch
-> series out for review via email (if you don't agree with this, then
-> you're not the average contributor - the Linux kernel is by far the
-> scariest major open source project to contribute to, and I think most
-> people would agree with me on that).
+pagetable walks on address ranges mapped by VMAs can be done under the mmap
+lock, the lock of an anon_vma attached to the VMA, or the lock of the VMA's
+address_space. Only one of these needs to be held, and it does not need to
+be held in exclusive mode.
 
-I agree with this entirely. Not only DT checks, but also for driver code
-with sparse/smatch/coccinelle/W=1/clang builds.
+Under those circumstances, the rules for concurrent access to page table
+entries are:
 
-> I know Rob has a DT checker bot, but its error output is practically
-> line noise, and the error email doesn't even mention the
-> DT_SCHEMA_FILES= make option (which is the only way to make the check
-> not take *forever* to run). Absolutely nobody is going to look at those
-> emails without already knowing the intricacies of DT bindings and the
-> checker and not find them incredibly frustrating.
+ - Terminal page table entries (entries that don't point to another page
+   table) can be arbitrarily changed under the page table lock, with the
+   exception that they always need to be consistent for
+   hardware page table walks and lockless_pages_from_mm().
+   This includes that they can be changed into non-terminal entries.
+ - Non-terminal page table entries (which point to another page table)
+   can not be modified; readers are allowed to READ_ONCE() an entry, verify
+   that it is non-terminal, and then assume that its value will stay as-is.
 
-Ack
+Retracting a page table involves modifying a non-terminal entry, so
+page-table-level locks are insufficient to protect against concurrent
+page table traversal; it requires taking all the higher-level locks under
+which it is possible to start a page walk in the relevant range in
+exclusive mode.
 
-> 
-> But it's not just the DT checker. That came after an argument where the
-> MFD maintainer complained about the driver while offering no solution
-> nor proposed path forward. I had to have an IRC conversation with him to
-> work it out, after which he accepted one of the options I'd already
-> proposed over email. If you have to change communication mediums to
-> resolve an issue, that means your initial medium failed at its job.
+The collapse_huge_page() path for anonymous THP already follows this rule,
+but the shmem/file THP path was getting it wrong, making it possible for
+concurrent rmap-based operations to cause corruption.
 
-Ack
+Cc: stable@kernel.org
+Fixes: 27e1f8273113 ("khugepaged: enable collapse pmd for pte-mapped THP")
+Acked-by: David Hildenbrand <david@redhat.com>
+Reviewed-by: Yang Shi <shy828301@gmail.com>
+Signed-off-by: Jann Horn <jannh@google.com>
+---
 
-> 
-> Not to mention the random drive-by reviews, nitpicks, disagreements
-> between maintainers about how to do things, or just plain cases of
-> maintainers stubbornly being *wrong* and refusing to listen while
-> everyone around them is telling them they're wrong (until someone above
-> them in the maintainer tree tells them they're wrong - then they finally
-> get it. If it takes someone in a position of authority telling you
-> you're wrong for you to accept it, you're doing a poor job at your own
-> position.)
+Notes:
+    v4: added ack by David Hildenbrand
+    v5: added reviewed-by by Yang Shi
 
-Ack
+ mm/khugepaged.c | 55 +++++++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 51 insertions(+), 4 deletions(-)
 
-> 
-> And then there's the coding style. The rest of the world has
-> standardized on formatting tools. Here, every subsystem maintainer has
-> their own pet style you have to learn. "Please put your variables in
-> reverse christmas tree order".
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 4734315f79407..674b111a24fa7 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -1384,16 +1384,37 @@ static int set_huge_pmd(struct vm_area_struct *vma, unsigned long addr,
+ 	return SCAN_SUCCEED;
+ }
+ 
++/*
++ * A note about locking:
++ * Trying to take the page table spinlocks would be useless here because those
++ * are only used to synchronize:
++ *
++ *  - modifying terminal entries (ones that point to a data page, not to another
++ *    page table)
++ *  - installing *new* non-terminal entries
++ *
++ * Instead, we need roughly the same kind of protection as free_pgtables() or
++ * mm_take_all_locks() (but only for a single VMA):
++ * The mmap lock together with this VMA's rmap locks covers all paths towards
++ * the page table entries we're messing with here, except for hardware page
++ * table walks and lockless_pages_from_mm().
++ */
+ static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *vma,
+ 				  unsigned long addr, pmd_t *pmdp)
+ {
+-	spinlock_t *ptl;
+ 	pmd_t pmd;
+ 
+ 	mmap_assert_write_locked(mm);
+-	ptl = pmd_lock(vma->vm_mm, pmdp);
++	if (vma->vm_file)
++		lockdep_assert_held_write(&vma->vm_file->f_mapping->i_mmap_rwsem);
++	/*
++	 * All anon_vmas attached to the VMA have the same root and are
++	 * therefore locked by the same lock.
++	 */
++	if (vma->anon_vma)
++		lockdep_assert_held_write(&vma->anon_vma->root->rwsem);
++
+ 	pmd = pmdp_collapse_flush(vma, addr, pmdp);
+-	spin_unlock(ptl);
+ 	mm_dec_nr_ptes(mm);
+ 	page_table_check_pte_clear_range(mm, addr, pmd);
+ 	pte_free(mm, pmd_pgtable(pmd));
+@@ -1444,6 +1465,14 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
+ 	if (!hugepage_vma_check(vma, vma->vm_flags, false, false, false))
+ 		return SCAN_VMA_CHECK;
+ 
++	/*
++	 * Symmetry with retract_page_tables(): Exclude MAP_PRIVATE mappings
++	 * that got written to. Without this, we'd have to also lock the
++	 * anon_vma if one exists.
++	 */
++	if (vma->anon_vma)
++		return SCAN_VMA_CHECK;
++
+ 	/* Keep pmd pgtable for uffd-wp; see comment in retract_page_tables() */
+ 	if (userfaultfd_wp(vma))
+ 		return SCAN_PTE_UFFD_WP;
+@@ -1477,6 +1506,20 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
+ 		goto drop_hpage;
+ 	}
+ 
++	/*
++	 * We need to lock the mapping so that from here on, only GUP-fast and
++	 * hardware page walks can access the parts of the page tables that
++	 * we're operating on.
++	 * See collapse_and_free_pmd().
++	 */
++	i_mmap_lock_write(vma->vm_file->f_mapping);
++
++	/*
++	 * This spinlock should be unnecessary: Nobody else should be accessing
++	 * the page tables under spinlock protection here, only
++	 * lockless_pages_from_mm() and the hardware page walker can access page
++	 * tables while all the high-level locks are held in write mode.
++	 */
+ 	start_pte = pte_offset_map_lock(mm, pmd, haddr, &ptl);
+ 	result = SCAN_FAIL;
+ 
+@@ -1531,6 +1574,8 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
+ 	/* step 4: remove pte entries */
+ 	collapse_and_free_pmd(mm, vma, haddr, pmd);
+ 
++	i_mmap_unlock_write(vma->vm_file->f_mapping);
++
+ maybe_install_pmd:
+ 	/* step 5: install pmd entry */
+ 	result = install_pmd
+@@ -1544,6 +1589,7 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
+ 
+ abort:
+ 	pte_unmap_unlock(start_pte, ptl);
++	i_mmap_unlock_write(vma->vm_file->f_mapping);
+ 	goto drop_hpage;
+ }
+ 
+@@ -1600,7 +1646,8 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
+ 		 * An alternative would be drop the check, but check that page
+ 		 * table is clear before calling pmdp_collapse_flush() under
+ 		 * ptl. It has higher chance to recover THP for the VMA, but
+-		 * has higher cost too.
++		 * has higher cost too. It would also probably require locking
++		 * the anon_vma.
+ 		 */
+ 		if (vma->anon_vma) {
+ 			result = SCAN_PAGE_ANON;
 
-Ack here as well, and by above Acks I meant - I agree, you are right.  I
-don't think we should discuss people's differences, I mean, different
-people can give you different review, sometimes less sometimes more
-thorough. However at least policies/processes and coding style should be
-heavily unified.
-
-> I once got a review comment that
-> complained that I re-aligned an existing #define when I added another
-> one (to keep them visually aligned, as the new one increased the
-> required tab stop). Because "cleanup patches should be separate" (I
-> didn't submit a cleanup patch after that, I just left the defines
-> misaligned). So now I need to maintain a massive mental map of exactly
-> what style conventions and patch breakup conventions every subsystem
-> maintainer wants me to use.
-
-Yep. I just have a doc, instead of mental map. :)
-
-> 
-> I'm so glad `make rustfmt` is a thing now. Maybe 50 years down the line,
-> most of the kernel will have been rewritten in Rust and we'll finally
-> fix just one of these problems /s
-
-+1
-
-> 
-> Some of these things are, to some extent, a natural result of working
-> with other humans. But the kernel community has both a number of humans
-> harder to work with than is reasonable in their position, and an overall
-> process that multiplies the resulting pain by an order of magnitude for
-> everyone involved.
-> 
->> While I understand your point about bikeschedding, but I think your
->> previous bindings got pretty nice and fast reviews, so using examples of
->> non-building case is poor choice.
-> 
-> Yeah, after a while, because I learned how to do DT bindings the hard
-> way after having to submit a bunch and getting everything wrong (and
-> even then I still get the simplest things wrong, see: v4 here). Which is
-> why I'll pick up after rmk's attempt and try again with macsmc at some
-> point (probably after 6.1). But I'm not holding my breath that I won't
-> need another half dozen rounds of bikeshedding.
-> 
-> When it takes 10 times more man-hours to upstream a driver than to
-> reverse engineer and write it with zero documentation, never mind the
-> calendar time it takes, something is very wrong. 
-
-Yes, that's a point. Yet we (community) still have another goal here
-than the pure goal of submitter. The submitter wants its stuff upstream.
-Therefore this upstreaming effort is for submitter a bit wasted (as I
-agree that reverse-engineering should be the biggest task).
-
-However the community (expressed maybe mostly as maintainers) wants
-something which will be maintainable and usable also for others, not
-only for patch submitters.
-
-Indeed maybe 10x difference between writing code and upstreaming is
-something to improve, but please do not forget that the concept is here
-to be able to manage this big codebase.
-
-> I actively dread
-> submitting new drivers to new subsystems or some existing ones now. How
-> much pain will the next one be? Will I be asked to move files around 3
-> times? Spend 4 rounds bikeshedding the DT schema? Think it's finally
-> ready only for someone to show up and ask to change a major part of the
-> design at the last minute?
-> 
-> And this all when we're actually submitting code of decent quality (I
-> think I have enough experience not to submit crap most of the time). Now
-> imagine how much worse this all is for a newbie who submits a
-> well-intentioned but definitely not up to standard patch. There's a huge
-> chance they'll give up before ever getting the submission through.
-
-You say this like any newbie should be able to send a patch and get it
-accepted right away, regardless of actually what is in that patch (not
-up to standard). It's not newbie's right. No one said it's easy and fast
-process... If you want easy and fast, do JavaScript... If you want to
-make it easier and faster in the kernel, then we need more reviewers and
-maintainers. Somehow many, many people want to send patches, but not
-that many want to review them.
-
-> 
-> Again, I'll keep pushing and sending out patches, because this is
-> important. But this is the reality. This is how bad it is. The process
-> is broken, and everyone outside the kernel community can see that and
-> has been saying that for ages. Just because some of us are willing to
-> put up with the pain anyway doesn't mean it's working as intended.
-Best regards,
-Krzysztof
+base-commit: eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
+-- 
+2.38.1.584.g0f3c55d4c2-goog
 
