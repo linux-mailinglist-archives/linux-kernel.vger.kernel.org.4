@@ -2,180 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C49D63BF2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:38:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4ED63BF30
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiK2Lib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 06:38:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
+        id S230318AbiK2LkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 06:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiK2Li1 (ORCPT
+        with ESMTP id S229768AbiK2LkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 06:38:27 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99825E82;
-        Tue, 29 Nov 2022 03:38:25 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ozywR-0001gv-O2; Tue, 29 Nov 2022 12:38:23 +0100
-Message-ID: <22ea8381-1292-6b8c-873b-309195b54595@leemhuis.info>
-Date:   Tue, 29 Nov 2022 12:38:23 +0100
+        Tue, 29 Nov 2022 06:40:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D10E165A6
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:39:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669721951;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eRu/Hx0QeU09vI6dag4oeFynexJuKZWNYSe4MiEdyGs=;
+        b=DY1pFbkUM1MIGvkYmEzktWFDEJKIDajUf044NWj1aFCx6VfR3SCLfpmRCKjsnEYsub5Awe
+        QCfsxMM/j3ywnZurS9Qcb/sD9qqH41O+7AG53X/WBLMdI0vxZSJrISQFnIy14Yy+oxZprj
+        M77lSprXFA5jMIqYUDPGM/sCTQWturo=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-620-xHse0vmFMIqVXpegWQ_1qg-1; Tue, 29 Nov 2022 06:39:10 -0500
+X-MC-Unique: xHse0vmFMIqVXpegWQ_1qg-1
+Received: by mail-wm1-f72.google.com with SMTP id u9-20020a05600c00c900b003cfb12839d6so4622811wmm.5
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:39:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eRu/Hx0QeU09vI6dag4oeFynexJuKZWNYSe4MiEdyGs=;
+        b=jHufnb/f3wJni/X5gQN3lI8ufshg3GMgglcRu2WPn+a8azDff4052zjxkqfYSZCiHz
+         2Flkum978+KgTjwF7Wa9bVqE1Fi/cvswvqb1AJHEKp41LvH+oVyCI1MgIMx0VIIhE6FN
+         s69WqAbdP+zSIi8hCZvgDPmtXsrH/ibyBO9X2ShtaRzt6ZP4rxRAW1cChjNCwOmGRG6q
+         m3n52iqMYd4D0O21cgr70j6O9PqQxjeis/EkP+oNTPZbSa9Px847L4k1xVD+ywBRKuev
+         cczy5gnoeIB1ytXKwBmvboQJRXd4ItrIPdZc0Kza1KtlxP1ZMzNlTHPqmRc6lJZouecE
+         EU7A==
+X-Gm-Message-State: ANoB5pkmy6LjfmHnSOmbOBqDEwWgXrOrpJCrhpH+YS30yZwGtq43jpyn
+        Ikh5gyh+7wp5t2lgPDrM4CtLhZjLD0Yzja71PBjePrOBmxZETvQ2D/rXk0KQFdd+0i8RYE4kFN4
+        lAK7bxy3RFyJpaCn6o+zIELOo
+X-Received: by 2002:a7b:ca45:0:b0:3c4:bda1:7c57 with SMTP id m5-20020a7bca45000000b003c4bda17c57mr44926217wml.6.1669721948942;
+        Tue, 29 Nov 2022 03:39:08 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6s03pDZ7+AzRjiuWChsKfmd6tu6WfpxK1aogO4cyP+8Olozy3bxlj+8EqBduo9KzTHvAm5sQ==
+X-Received: by 2002:a7b:ca45:0:b0:3c4:bda1:7c57 with SMTP id m5-20020a7bca45000000b003c4bda17c57mr44926175wml.6.1669721948661;
+        Tue, 29 Nov 2022 03:39:08 -0800 (PST)
+Received: from [192.168.3.108] (p5b0c6623.dip0.t-ipconnect.de. [91.12.102.35])
+        by smtp.gmail.com with ESMTPSA id bg11-20020a05600c3c8b00b003d069fc7372sm1471927wmb.1.2022.11.29.03.39.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 03:39:08 -0800 (PST)
+Message-ID: <6d7f7775-5703-c27a-e57b-03aafb4de712@redhat.com>
+Date:   Tue, 29 Nov 2022 12:39:06 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: RFC: considering adding a predefined statement to newly filed kernel
- bugs in bugzilla.kernel.org
-To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "workflows@vger.kernel.org" <workflows@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669721905;bc215e9a;
-X-HE-SMSGID: 1ozywR-0001gv-O2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
+ create restricted user memory
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Michael Roth <michael.roth@amd.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        tabba@google.com, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
+ <20221129000632.sz6pobh6p7teouiu@amd.com>
+ <20221129112139.usp6dqhbih47qpjl@box.shutemov.name>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221129112139.usp6dqhbih47qpjl@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Konstantin!
+On 29.11.22 12:21, Kirill A. Shutemov wrote:
+> On Mon, Nov 28, 2022 at 06:06:32PM -0600, Michael Roth wrote:
+>> On Tue, Oct 25, 2022 at 11:13:37PM +0800, Chao Peng wrote:
+>>> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+>>>
+>>
+>> <snip>
+>>
+>>> +static struct file *restrictedmem_file_create(struct file *memfd)
+>>> +{
+>>> +	struct restrictedmem_data *data;
+>>> +	struct address_space *mapping;
+>>> +	struct inode *inode;
+>>> +	struct file *file;
+>>> +
+>>> +	data = kzalloc(sizeof(*data), GFP_KERNEL);
+>>> +	if (!data)
+>>> +		return ERR_PTR(-ENOMEM);
+>>> +
+>>> +	data->memfd = memfd;
+>>> +	mutex_init(&data->lock);
+>>> +	INIT_LIST_HEAD(&data->notifiers);
+>>> +
+>>> +	inode = alloc_anon_inode(restrictedmem_mnt->mnt_sb);
+>>> +	if (IS_ERR(inode)) {
+>>> +		kfree(data);
+>>> +		return ERR_CAST(inode);
+>>> +	}
+>>> +
+>>> +	inode->i_mode |= S_IFREG;
+>>> +	inode->i_op = &restrictedmem_iops;
+>>> +	inode->i_mapping->private_data = data;
+>>> +
+>>> +	file = alloc_file_pseudo(inode, restrictedmem_mnt,
+>>> +				 "restrictedmem", O_RDWR,
+>>> +				 &restrictedmem_fops);
+>>> +	if (IS_ERR(file)) {
+>>> +		iput(inode);
+>>> +		kfree(data);
+>>> +		return ERR_CAST(file);
+>>> +	}
+>>> +
+>>> +	file->f_flags |= O_LARGEFILE;
+>>> +
+>>> +	mapping = memfd->f_mapping;
+>>> +	mapping_set_unevictable(mapping);
+>>> +	mapping_set_gfp_mask(mapping,
+>>> +			     mapping_gfp_mask(mapping) & ~__GFP_MOVABLE);
+>>
+>> Is this supposed to prevent migration of pages being used for
+>> restrictedmem/shmem backend?
+> 
+> Yes, my bad. I expected it to prevent migration, but it is not true.
 
-The bugzilla.kernel.org situation still bugs me, as I every few days see
-a report or two that at least from a quick look seems valid and good,
-but nevertheless is ignored (for a recent example see
-https://bugzilla.kernel.org/show_bug.cgi?id=216736 ). I can't help each
-of them individually. Hence as a stopgap measure I'm considering adding
-a comment with a predefined statement to any reasonable Linux kernel bug
-report I notice (I look at most of them anyway to check for regressions,
-so quickly adding a comment is not that much trouble for me).
+Maybe add a comment that these pages are not movable and we don't want 
+to place them into movable pageblocks (including CMA and ZONE_MOVABLE). 
+That's the primary purpose of the GFP mask here.
 
-Find the proposed text for the predefined statement below. It's supposed
-to link to a page on the web with even more details; the proposed text
-for that is below, too.
+-- 
+Thanks,
 
-Is it okay for you if I start doing this? Are the texts okay from your
-perspective, too? I tried to be careful with my wording, but maybe I
-didn't find the right tone in some places or forgot something important.
+David / dhildenb
 
-I'm asking as I don't want to undermine your efforts at all, I just want
-to enable users to help themselves *now* until your efforts to improve
-the situation are in place.
-
-Ciao, Thorsten
-
-################# propose statement to be used as comment
-
-Many thanks for your report. There is something important you might not
-be aware of(¹): some, many, or most kernel bug reports submitted here
-will never reach suitable developers. You hence might not get any
-replies from them here. If that’s the outcome after roundabout a week,
-resubmit your report to the place where the developers of the subsystem
-in question expect reports; the document
-https://docs.kernel.org/admin-guide/reporting-issues.html explains how
-to find that place in the section "Check where you need to report your
-issue". Please add a comment here when you go down that route.
-
-There are plans to improve things over the next few months, as explained
-here: <fixme: link to the page in the web with below text>; that page
-also provides a few additional details why things happen to be as
-briefly outlined above.
-
-(¹) Please don't shoot the messenger, I’m quite unhappy about this state
-of things myself. But they are outside of my control. And I think it’s
-better to tell you about the situation now, as you otherwise might be
-waiting weeks or months for a reaction here that might be pretty
-unlikely to happen in the first place.
-
-
-################# text for a webpage
-
-# On the state of bugzilla kernel
-
-## TLDR
-
-Some, many, or most bug reports submitted in bugzilla.kernel.org will
-never reach suitable kernel developers. If you don’t receive a reply
-from them, you might want to re-submit your report to the place where
-developers actually expect bug reports. There are plans to improve this
-situation – a situation which came into being due to various unfortunate
-developments a long time ago.
-
-## What this is about
-
-An unknown quantity of bug reports submitted to bugzilla.kernel.org will
-never reach kernel developers that take care of the code that might
-cause the particular issue. That’s among the reasons why some, many, or
-most of those reports never get a reply. This page will explain what you
-can do in that case, what is planned to improve the situation, and how
-this state of things came to be.
-
-### What can I do if my report in bugzilla.kernel.org is ignored
-
-If your bug report in bugzilla.kernel.org within a week receives no
-replies at all or none from developers working on the code in question,
-consider re-submitting your report to the place where those developers
-expect reports; how to find that place is explained by the document
-“Reporting issues”
-(https://docs.kernel.org/admin-guide/reporting-issues.html) in the
-section “Check where you need to report your issue”. Please add a
-comment to your report in bugzilla when you go down this route.
-
-Side note: you might also want to read and follow the “Reporting issues”
-document as a whole, as that will avoid many other pitfalls that might
-lead to your bug report being ignored. Quite a few or many kernel
-developers for example only handle reports about issues with the latest
-mainline codebase or the latest stable release; reports about issues in
-longterm (aka LTS) kernels or any version more than two weeks old thus
-might not be acted upon. The same fate often happens to reports about
-issues with distro kernels, as most of them are heavily modified or
-enhanced, which might cause the issue you face; that’s also why
-reporting issues with kernels that use any drivers not build straight
-from the Linux kernel sources (like those from Nvidia) are often ignored
-and thus a waste of time.
-
-### What is planned to improve the situation
-
-Konstantin Ryabitsev plans to realize his proposal from early October
-2022:
-https://lore.kernel.org/lkml/20221004175354.bfvg3vhfqch35ib5@meerkat.local/
-
-
-For the backstory on how that proposal came into being, see the
-following text and the sources it links to: https://lwn.net/Articles/910740/
-
-### Why are developers free to ignoring bug reports in bugzilla.kernel.org
-
-Because participation has always been and still is optional for the
-developers of the Linux kernel. That's because well-intended people a
-long time ago thought Linux kernel development would benefit from having
-a bugtracker and set up bugzilla.kernel.org; they did that despite the
-fact that many core Linux developer's beforehand had made it clear they
-didn't like or even opposed the idea -- and thus were unwilling to
-participate.
-
-Many components and products bugzilla.kernel.org lists for the Linux
-kernel thus not even initially had developers on board that looked at
-newly submitted bugs. The idea was to have volunteers for these areas
-that checked the reports and forwarded the good ones to the actual
-kernel developers – but that never really worked out for real on a large
-scale. Many after some time also left without any successors. This is
-why some bug reports are never forwarded to suitable kernel developers.
-
-The people who set up and cared about the bug tracker over time moved on
-to other endeavors. But by then the bugtacker could not simply be
-decommissioned, as a tiny number of kernel developers and the subsystems
-they maintained had started relying on it for internal development. In
-the end as of this writing in 2022 around 20 out of 1500 maintainers and
-subsystems listed in the kernel's MAINTAINERS file officially committed
-to handle bug filled in bugzilla.kernel.org (mainly those from the areas
-of ACPI, Power Management, and PCI). A few other subsystems and an
-unknown number of individual developers keep a close or loose eye on it
-as well; there are also some that participate when pointed to reports
-about their code. But in the end some or many kernel developers don’t
-care about it at all and never receive copies of bugs occurring in the
-they maintain.
