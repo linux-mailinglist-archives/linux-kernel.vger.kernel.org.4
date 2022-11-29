@@ -2,178 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029AF63C0C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:15:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1161363C0D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233326AbiK2NPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 08:15:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
+        id S233887AbiK2NQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 08:16:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233279AbiK2NPN (ORCPT
+        with ESMTP id S233756AbiK2NPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 08:15:13 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E82D61B91
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 05:14:35 -0800 (PST)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NM2kr4lHtzqSmK;
-        Tue, 29 Nov 2022 21:10:28 +0800 (CST)
-Received: from dggpeml500005.china.huawei.com (7.185.36.59) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 21:14:30 +0800
-Received: from [10.174.178.155] (10.174.178.155) by
- dggpeml500005.china.huawei.com (7.185.36.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 21:14:29 +0800
-Subject: Re: [QUESTION] memcg page_counter seems broken in MADV_DONTNEED with
- THP enabled
-To:     Yang Shi <shy828301@gmail.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        <aarcange@redhat.com>, <hughd@google.com>, <mgorman@suse.de>,
-        <mhocko@suse.cz>, <cl@gentwo.org>, <n-horiguchi@ah.jp.nec.com>,
-        <zokeefe@google.com>, <rientjes@google.com>,
-        Matthew Wilcox <willy@infradead.org>, <peterx@redhat.com>,
-        "Wangkefeng (OS Kernel Lab)" <wangkefeng.wang@huawei.com>,
-        "zhangxiaoxu (A)" <zhangxiaoxu5@huawei.com>,
-        <kirill.shutemov@linux.intel.com>, Lu Jialin <lujialin4@huawei.com>
-References: <8a2f2644-71d0-05d7-49d8-878aafa99652@huawei.com>
- <CAHbLzkr-eXk8gateN=EmMoBuW3wxoQKTCfJcTRQsQX3QxD+CmA@mail.gmail.com>
-From:   Yongqiang Liu <liuyongqiang13@huawei.com>
-Message-ID: <6b7142cf-386e-e1d2-a122-b923337a593e@huawei.com>
-Date:   Tue, 29 Nov 2022 21:14:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
-MIME-Version: 1.0
-In-Reply-To: <CAHbLzkr-eXk8gateN=EmMoBuW3wxoQKTCfJcTRQsQX3QxD+CmA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.155]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500005.china.huawei.com (7.185.36.59)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 29 Nov 2022 08:15:41 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E2E62077;
+        Tue, 29 Nov 2022 05:15:35 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATCu9no004117;
+        Tue, 29 Nov 2022 13:14:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=y/kKapuMNDnSVXnnqDIkkqYme+g/37hqRusGVTeU+po=;
+ b=FsyPM2c/w0ag8TufqpFvr7Qwa9h+oC8pufbt5LYRrEknaHXlSVnEyhXAC1C5PoU7WrZO
+ PCO3tCJ+5pK/cZ1h6QI99DOyNXTuKQLPaSrKaSaQpPfgIoVQplUcm12A8HYDR5K0X5ru
+ 49uWnW3vWzc+MK3R3xIUGj8aX5FC/UxG3WGOFrNj/Sidrakbs1vfiweazquSZUsEwN5y
+ OlK6Yq7YNyWPW94Xu6E6aG6heLpTQl9FLoNrPzHdvpA2XgwQBkfCfa2dNxkmk2jq7Bqs
+ xIiEjGd30NxPu+8lOrBqjmGOgcAb2z2WcspX/LkfjGyXYszwE8oS1pi7al7FKwtVupCB vA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m5ebuf42g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 13:14:54 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ATCMCvT029911;
+        Tue, 29 Nov 2022 13:14:54 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m5ebuf41f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 13:14:54 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ATD5FeV007569;
+        Tue, 29 Nov 2022 13:14:52 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma04wdc.us.ibm.com with ESMTP id 3m3ae9mngh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 13:14:52 +0000
+Received: from smtpav06.dal12v.mail.ibm.com ([9.208.128.130])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ATDEpL417957484
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 29 Nov 2022 13:14:51 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 564CF5805F;
+        Tue, 29 Nov 2022 13:14:51 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 25D5758055;
+        Tue, 29 Nov 2022 13:14:50 +0000 (GMT)
+Received: from sig-9-77-136-107.ibm.com (unknown [9.77.136.107])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 29 Nov 2022 13:14:50 +0000 (GMT)
+Message-ID: <8ca5be2f5ac0f5690a9025e5eec9fc93e8613842.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 2/6] ocfs2: Switch to security_inode_init_security()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, mark@fasheh.com,
+        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, Casey Schaufler <casey@schaufler-ca.com>
+Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Tue, 29 Nov 2022 08:14:49 -0500
+In-Reply-To: <44de9254c7abf1c836142cf3262450de1912bbc0.camel@huaweicloud.com>
+References: <20221123095202.599252-1-roberto.sassu@huaweicloud.com>
+         <20221123095202.599252-3-roberto.sassu@huaweicloud.com>
+         <052d91687e813110cc1e1d762ea086cc8085114a.camel@linux.ibm.com>
+         <44de9254c7abf1c836142cf3262450de1912bbc0.camel@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QGbtXPbEFoG0899_hHmsbOkIQfTtrwsP
+X-Proofpoint-ORIG-GUID: rangmDOPJv7jxK-nMBZGxuD7vDRvxvY6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-29_08,2022-11-29_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=999 lowpriorityscore=0 spamscore=0 clxscore=1015 mlxscore=0
+ impostorscore=0 adultscore=0 bulkscore=0 suspectscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211290076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2022-11-24 at 09:11 +0100, Roberto Sassu wrote:
+> On Wed, 2022-11-23 at 12:46 -0500, Mimi Zohar wrote:
+> > On Wed, 2022-11-23 at 10:51 +0100, Roberto Sassu wrote:
+> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > 
+> > > In preparation for removing security_old_inode_init_security(), switch to
+> > > security_inode_init_security().
+> > > 
+> > > Extend the existing ocfs2_initxattrs() to take the
+> > > ocfs2_security_xattr_info structure from fs_info, and populate the
+> > > name/value/len triple with the first xattr provided by LSMs. Supporting
+> > > multiple xattrs is not currently supported, as it requires non-trivial
+> > > changes that can be done at a later time.
+> > 
+> > ocfs2 already defines ocfs2_init_security_get() as a wrapper around
+> > calling either security_old_inode_init_security() or
+> > security_inode_init_security().  Based on "si" one or the other hook is
+> > called.  ocfs2_initxattrs is already defined.
+> > 
+> >         struct ocfs2_security_xattr_info si = {
+> >                 .name = NULL,
+> >                 .enable = 1,
+> >         };
+> > 
+> > The main difference between calling security_old_inode_init_security or
+> > security_inode_init_security() is whether or not security.evm is
+> > calculated and written.
+> 
+> Uhm, it seems unfortunately more complicated.
+> 
+> Calling security_old_inode_init_security() allows filesystems to get
+> the xattr, do some calculations (e.g. for reservation) and then write
+> the xattr.
+> 
+> The initxattrs() callback to be passed to
+> security_inode_init_security() is meant to let filesystems provide a
+> filesystem-specific way of writing the xattrs, just after LSMs provided
+> them. This seems incompatible with the old behavior, as a filesystem
+> might need to do the calculations in the middle before writing the
+> xattrs.
+> 
+> The initxattrs() callback, when security_old_inode_init_security() was
+> used, is just a way of emulating the old behavior, i.e. returning the
+> xattr to the caller.
+> 
+> It should be possible, I guess, to handle more xattrs but if the code
+> was designed to handle one, it would be better if the filesystem
+> maintainers add support for it.
 
-在 2022/11/29 4:01, Yang Shi 写道:
-> On Sat, Nov 26, 2022 at 5:10 AM Yongqiang Liu <liuyongqiang13@huawei.com> wrote:
->> Hi,
->>
->> We use mm_counter to how much a process physical memory used. Meanwhile,
->> page_counter of a memcg is used to count how much a cgroup physical
->> memory used.
->> If a cgroup only contains a process, they looks almost the same. But with
->> THP enabled, sometimes memory.usage_in_bytes in memcg may be twice or
->> more than rss
->> in proc/[pid]/smaps_rollup as follow:
->>
->> [root@localhost sda]# cat /sys/fs/cgroup/memory/test/memory.usage_in_bytes
->> 1080930304
->> [root@localhost sda]# cat /sys/fs/cgroup/memory/test/cgroup.procs
->> 1290
->> [root@localhost sda]# cat /proc/1290/smaps_rollup
->> 55ba80600000-ffffffffff601000 ---p 00000000 00:00 0
->> [rollup]
->> Rss:              500648 kB
->> Pss:              498337 kB
->> Shared_Clean:       2732 kB
->> Shared_Dirty:          0 kB
->> Private_Clean:       364 kB
->> Private_Dirty:    497552 kB
->> Referenced:       500648 kB
->> Anonymous:        492016 kB
->> LazyFree:              0 kB
->> AnonHugePages:    129024 kB
->> ShmemPmdMapped:        0 kB
->> Shared_Hugetlb:        0 kB
->> Private_Hugetlb:       0 kB
->> Swap:                  0 kB
->> SwapPss:               0 kB
->> Locked:                0 kB
->> THPeligible:    0
->>
->> I have found the differences was because that __split_huge_pmd decrease
->> the mm_counter but page_counter in memcg was not decreased with refcount
->> of a head page is not zero. Here are the follows:
->>
->> do_madvise
->>     madvise_dontneed_free
->>       zap_page_range
->>         unmap_single_vma
->>           zap_pud_range
->>             zap_pmd_range
->>               __split_huge_pmd
->>                 __split_huge_pmd_locked
->>                   __mod_lruvec_page_state
->>               zap_pte_range
->>                  add_mm_rss_vec
->>                     add_mm_counter                    -> decrease the
->> mm_counter
->>         tlb_finish_mmu
->>           arch_tlb_finish_mmu
->>             tlb_flush_mmu_free
->>               free_pages_and_swap_cache
->>                 release_pages
->>                   folio_put_testzero(page)            -> not zero, skip
->>                     continue;
->>                   __folio_put_large
->>                     free_transhuge_page
->>                       free_compound_page
->>                         mem_cgroup_uncharge
->>                           page_counter_uncharge        -> decrease the
->> page_counter
->>
->> node_page_stat which shows in meminfo was also decreased. the
->> __split_huge_pmd
->> seems free no physical memory unless the total THP was free.I am
->> confused which
->> one is the true physical memory used of a process.
-> This should be caused by the deferred split of THP. When MADV_DONTNEED
-> is called on the partial of the map, the huge PMD is split, but the
-> THP itself will not be split until the memory pressure is hit (global
-> or memcg limit). So the unmapped sub pages are actually not freed
-> until that point. So the mm counter is decreased due to the zapping
-> but the physical pages are not actually freed then uncharged from
-> memcg.
+Hi Mark, Joel, Joseph,
 
-Thanks!
+Commit 9d8f13ba3f48 ("security: new security_inode_init_security API
+adds function callback") introduced security_old_inode_init_security()
+to support reiserfs and ocfs2 a long time ago.  It was suppose to be a
+temporary fix until they moved to the new
+security_inode_init_security() hook.  ocsf2 partially migrated to
+security_inode_init_security(), but not completely.
 
-I don't know how much memory a real workload will cost.So I just
+security_old_inode_init_security() is finally going away.  Instead of
+migrating the remaining old usage to the new
+security_inode_init_security() properly, this patch simulates the
+existing usage.
 
-test the max_usage_in_bytes of memcg with THP disabled and add a little bit
+Can we get some Reviewed-by, Tested-by tags or comments?
 
-more for the limit_in_byte of memcg with THP enabled which trigger a oom...
+thanks,
 
-(actually it costed 100M more with THP enabled). Another testcase which I
+Mimi
 
-known the amout of memory will cost don't trigger a oom with suitable
+> 
+> > Perhaps it is time to remove the call to
+> > security_old_inode_init_security() in ocfs2_init_security_get().  We
+> > need to hear back from the ocfs2 community.  Mark?  Joel?
+> > 
+> > As noted previously this change affects mknod and symlinks.
+> > 
+> > 
+> > > As fs_info was not used before, ocfs2_initxattrs() can now handle the case
+> > > of replicating the behavior of security_old_inode_init_security(), i.e.
+> > > just obtaining the xattr, in addition to setting all xattrs provided by
+> > > LSMs.
+> > > 
+> > > Finally, modify the handling of the return value from
+> > > ocfs2_init_security_get(). As security_inode_init_security() does not
+> > > return -EOPNOTSUPP, remove this case and directly handle the error if the
+> > > return value is not zero.
+> > > 
+> > > However, the previous case of receiving -EOPNOTSUPP should be still
+> > > taken into account, as security_inode_init_security() could return zero
+> > > without setting xattrs and ocfs2 would consider it as if the xattr was set.
+> > > 
+> > > Instead, if security_inode_init_security() returned zero, look at the xattr
+> > > if it was set, and behave accordingly, i.e. set si->enable to zero to
+> > > notify to the functions following ocfs2_init_security_get() that the xattr
+> > > is not available (same as if security_old_inode_init_security() returned
+> > > -EOPNOTSUPP).
+> > > 
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > ---
+> > >  fs/ocfs2/namei.c | 18 ++++++------------
+> > >  fs/ocfs2/xattr.c | 30 ++++++++++++++++++++++++++----
+> > >  2 files changed, 32 insertions(+), 16 deletions(-)
+> > > 
+> > > diff --git a/fs/ocfs2/namei.c b/fs/ocfs2/namei.c
+> > > index 05f32989bad6..55fba81cd2d1 100644
+> > > --- a/fs/ocfs2/namei.c
+> > > +++ b/fs/ocfs2/namei.c
+> > > @@ -242,6 +242,7 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
+> > >  	int want_meta = 0;
+> > >  	int xattr_credits = 0;
+> > >  	struct ocfs2_security_xattr_info si = {
+> > > +		.name = NULL,
+> > >  		.enable = 1,
+> > >  	};
+> > >  	int did_quota_inode = 0;
+> > > @@ -315,12 +316,8 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
+> > >  	/* get security xattr */
+> > >  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
+> > >  	if (status) {
+> > > -		if (status == -EOPNOTSUPP)
+> > > -			si.enable = 0;
+> > > -		else {
+> > > -			mlog_errno(status);
+> > > -			goto leave;
+> > > -		}
+> > > +		mlog_errno(status);
+> > > +		goto leave;
+> > >  	}
+> > >  
+> > >  	/* calculate meta data/clusters for setting security and acl xattr */
+> > > @@ -1805,6 +1802,7 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
+> > >  	int want_clusters = 0;
+> > >  	int xattr_credits = 0;
+> > >  	struct ocfs2_security_xattr_info si = {
+> > > +		.name = NULL,
+> > >  		.enable = 1,
+> > >  	};
+> > >  	int did_quota = 0, did_quota_inode = 0;
+> > > @@ -1875,12 +1873,8 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
+> > >  	/* get security xattr */
+> > >  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
+> > >  	if (status) {
+> > > -		if (status == -EOPNOTSUPP)
+> > > -			si.enable = 0;
+> > > -		else {
+> > > -			mlog_errno(status);
+> > > -			goto bail;
+> > > -		}
+> > > +		mlog_errno(status);
+> > > +		goto bail;
+> > >  	}
+> > >  
+> > >  	/* calculate meta data/clusters for setting security xattr */
+> > > diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
+> > > index 95d0611c5fc7..55699c573541 100644
+> > > --- a/fs/ocfs2/xattr.c
+> > > +++ b/fs/ocfs2/xattr.c
+> > > @@ -7259,9 +7259,21 @@ static int ocfs2_xattr_security_set(const struct xattr_handler *handler,
+> > >  static int ocfs2_initxattrs(struct inode *inode, const struct xattr *xattr_array,
+> > >  		     void *fs_info)
+> > >  {
+> > > +	struct ocfs2_security_xattr_info *si = fs_info;
+> > >  	const struct xattr *xattr;
+> > >  	int err = 0;
+> > >  
+> > > +	if (si) {
+> > > +		si->value = kmemdup(xattr_array->value, xattr_array->value_len,
+> > > +				    GFP_KERNEL);
+> > > +		if (!si->value)
+> > > +			return -ENOMEM;
+> > > +
+> > > +		si->name = xattr_array->name;
+> > > +		si->value_len = xattr_array->value_len;
+> > > +		return 0;
+> > > +	}
+> > > +
+> > >  	for (xattr = xattr_array; xattr->name != NULL; xattr++) {
+> > >  		err = ocfs2_xattr_set(inode, OCFS2_XATTR_INDEX_SECURITY,
+> > >  				      xattr->name, xattr->value,
+> > > @@ -7277,13 +7289,23 @@ int ocfs2_init_security_get(struct inode *inode,
+> > >  			    const struct qstr *qstr,
+> > >  			    struct ocfs2_security_xattr_info *si)
+> > >  {
+> > > +	int ret;
+> > > +
+> > >  	/* check whether ocfs2 support feature xattr */
+> > >  	if (!ocfs2_supports_xattr(OCFS2_SB(dir->i_sb)))
+> > >  		return -EOPNOTSUPP;
+> > > -	if (si)
+> > > -		return security_old_inode_init_security(inode, dir, qstr,
+> > > -							&si->name, &si->value,
+> > > -							&si->value_len);
+> > > +	if (si) {
+> > > +		ret = security_inode_init_security(inode, dir, qstr,
+> > > +						   &ocfs2_initxattrs, si);
+> > > +		/*
+> > > +		 * security_inode_init_security() does not return -EOPNOTSUPP,
+> > > +		 * we have to check the xattr ourselves.
+> > > +		 */
+> > > +		if (!ret && !si->name)
+> > > +			si->enable = 0;
+> > > +
+> > > +		return ret;
+> > > +	}
+> > >  
+> > >  	return security_inode_init_security(inode, dir, qstr,
+> > >  					    &ocfs2_initxattrs, NULL);
+> 
 
-memcg limit  and I see the THP split when the memory hit the limit.
 
-
-I have another concern that k8s usually use (rss - files) to estimate
-
-the memory workload but the anon_thp in the defered list charged
-
-in memcg will make it look higher than actucal. And it seems the
-
-container will be killed without oom...
-
-Is it suitable to add meminfo of a deferred split list of THP?
-
->>
->> Kind regards,
->>
->> Yongqiang Liu
->>
->>
-> .
