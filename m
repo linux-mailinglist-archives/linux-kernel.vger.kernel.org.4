@@ -2,165 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB85E63C4EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB74663C4E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235918AbiK2QOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 11:14:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
+        id S235951AbiK2QOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 11:14:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235517AbiK2QOV (ORCPT
+        with ESMTP id S235908AbiK2QOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 11:14:21 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3999D637B
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 08:14:19 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so13958016pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 08:14:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kNFxlZ5UZHdqkY5D469ZlAF99iMQpaT7Z5Tb3gRNO6s=;
-        b=mklqGGWoIM/Kk03/T+/9GKUrA6BxCbIlOnGYi47ya+PsGaq5PuQ79ArfHzHUmocpKh
-         UWYRyw2YoIeBkjr3Eqm6k/Gdwca1jZhoqdZYMEv0kDpavQqW0uemlTyNhrp3s8Lyp0wf
-         dfoVI3AWKhWpEbKWDtpXW8RUcscnpr6oqcIWCY5X0aF1OS5tSH/X9xee82Tifpp8sMRD
-         co8Ej+77pmSyRY25H4eiRVWk8ImjBJxYvrt7ksEMgk4BwtOVGzzQd6dW7IwDPPvW45Db
-         MMLLaFIp/OL9/QILpT4+Emv8SB0DSzXuP/u0J5ZxNBL52B7jukWPRDqx1Ry5wVQdlurk
-         K0rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kNFxlZ5UZHdqkY5D469ZlAF99iMQpaT7Z5Tb3gRNO6s=;
-        b=iTRxdmTN/S5SUrq+V205xEfepLavcl1FacBfEiWaCvzSaRPcn3lUiFlxOaS60jS6Vt
-         MEZWe2K1SQK0Bo0qXC3jpl+RiStp4vK3kV8ji+K/FXSzkuf87hEnZO485NkA9YKhr7OZ
-         cchYVo7IWZ1YdZpgCa+lHwZobPD1y+40P5M/rm/vVNMVc2eRIQ6sQZTYsCZoCu7lYFOd
-         U3wQYp9n6rZ+BWbqCaTH59f5pm50aFGb98E2W3d+ePY81xl8/EymKSuaGNCaIwQ+76ZI
-         WPkMDkx8yhsLNzVCItvTOBZFG5tdXJlmq6W+LdyhZ93QJ0eaIkNmG8BFFqrkTW3B/oZ2
-         ljVA==
-X-Gm-Message-State: ANoB5plpqxMHZZwCt2VdYiceSD1xv7GXE7MN7q2oGDdU0AZcOQoSZfzw
-        aHCzfAkdxHUBJBNCGTJ32OgQ00vVYwI3y3I/o++afg==
-X-Google-Smtp-Source: AA0mqf5Rhd9HRwHYXDQMJsdsuHv6CWi3cvL30xHSRd2rhgyF1yVicxH7ZuTFM37ksIosNcYkVDDs3i5NQrVQbGRzqH4=
-X-Received: by 2002:a17:90b:1d45:b0:218:6db5:fd98 with SMTP id
- ok5-20020a17090b1d4500b002186db5fd98mr61969036pjb.164.1669738459171; Tue, 29
- Nov 2022 08:14:19 -0800 (PST)
+        Tue, 29 Nov 2022 11:14:15 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E299C22;
+        Tue, 29 Nov 2022 08:14:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669738450; x=1701274450;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3LzeaXthaYLphoE1w4aLAarbQ8ZxUcNuL5nbnHihJTM=;
+  b=hScX4RMdI1ppO8azXuRMyVsV8NIGeiL4Mdr9WFh0ghaBaIoQk4JEp+v6
+   FLJ/RgphxStfXMrA1JrXsxu9swiG6peW4LcQ5JQmyu5D4j83VEncbivB9
+   y+M9rY5CbvF0WVA3QTaAARF+sdNMxQvJf22kCxPXRJ3EZ2Fu+HKDYZFS/
+   1DT1POdTXt810nrftlX2F8LBAlESEHMeqpvoF1Ng8eDG4hG7luYE5MDN5
+   Eg7NCivIqntbE8BPmMemFA00MwDrejMnB9pm67PEKd5A9E1oo/wtvaS7v
+   HUcUmqWGp1j9aCIBogwu7e73MYQ6HkGNa2S0V4PLnv6GudB/VKm/k3HIv
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="302740405"
+X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
+   d="scan'208";a="302740405"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 08:13:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="768476672"
+X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
+   d="scan'208";a="768476672"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 29 Nov 2022 08:13:36 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 8784F10E; Tue, 29 Nov 2022 18:14:02 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [resend, PATCH net-next v1 1/2] net: thunderbolt: Switch from __maybe_unused to pm_sleep_ptr() etc
+Date:   Tue, 29 Nov 2022 18:13:58 +0200
+Message-Id: <20221129161359.75792-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20221128142912.16022-1-marcan@marcan.st> <20221128142912.16022-3-marcan@marcan.st>
- <CAPDyKFobMvef_BWGMR=7avODh2r5XNMGpwO3xYgrN-u=DqRwbg@mail.gmail.com> <41c6882a-bff0-378c-edd3-160b54be7c1d@marcan.st>
-In-Reply-To: <41c6882a-bff0-378c-edd3-160b54be7c1d@marcan.st>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 29 Nov 2022 17:13:42 +0100
-Message-ID: <CAPDyKFqZJEqijsKMhMSZVCOA-RugnEJ7aqxwRRin1JE3i1WxMA@mail.gmail.com>
-Subject: Re: [PATCH v5 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
- binding for Apple SoC cpufreq
-To:     Hector Martin <marcan@marcan.st>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Nov 2022 at 15:00, Hector Martin <marcan@marcan.st> wrote:
->
-> On 29/11/2022 20.36, Ulf Hansson wrote:
-> > On Mon, 28 Nov 2022 at 15:29, Hector Martin <marcan@marcan.st> wrote:
-> >> +examples:
-> >> +  - |
-> >> +    // This example shows a single CPU per domain and 2 domains,
-> >> +    // with two p-states per domain.
-> >> +    // Shipping hardware has 2-4 CPUs per domain and 2-6 domains.
-> >> +    cpus {
-> >> +      #address-cells = <2>;
-> >> +      #size-cells = <0>;
-> >> +
-> >> +      cpu@0 {
-> >> +        compatible = "apple,icestorm";
-> >> +        device_type = "cpu";
-> >> +        reg = <0x0 0x0>;
-> >> +        operating-points-v2 = <&ecluster_opp>;
-> >
-> > To me, it looks like the operating-points-v2 phandle better belongs in
-> > the performance-domains provider node. I mean, isn't the OPPs really a
-> > description of the performance-domain provider?
-> >
-> > That said, I suggest we try to extend the generic performance-domain
-> > binding [1] with an "operating-points-v2". In that way, we should
-> > instead be able to reference it from this binding.
-> >
-> > In fact, that would be very similar to what already exists for the
-> > generic power-domain binding [2]. I think it would be rather nice to
-> > follow a similar pattern for the performance-domain binding.
->
-> While I agree with the technical rationale and the proposed approach
-> being better in principle...
->
-> We're at v5 of bikeshedding this trivial driver's DT binding, and the
-> comment could've been made at v3. To quote IRC just now:
+Letting the compiler remove these functions when the kernel is built
+without CONFIG_PM_SLEEP support is simpler and less heavier for builds
+than the use of __maybe_unused attributes.
 
-It could and I certainly apologize for that.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/net/thunderbolt.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-It's simply been a busy period for me, so I haven't been able to look
-closer at the DT bindings, until now.
+diff --git a/drivers/net/thunderbolt.c b/drivers/net/thunderbolt.c
+index a52ee2bf5575..4dbc6c7f2e10 100644
+--- a/drivers/net/thunderbolt.c
++++ b/drivers/net/thunderbolt.c
+@@ -1319,7 +1319,7 @@ static void tbnet_shutdown(struct tb_service *svc)
+ 	tbnet_tear_down(tb_service_get_drvdata(svc), true);
+ }
+ 
+-static int __maybe_unused tbnet_suspend(struct device *dev)
++static int tbnet_suspend(struct device *dev)
+ {
+ 	struct tb_service *svc = tb_to_service(dev);
+ 	struct tbnet *net = tb_service_get_drvdata(svc);
+@@ -1334,7 +1334,7 @@ static int __maybe_unused tbnet_suspend(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int __maybe_unused tbnet_resume(struct device *dev)
++static int tbnet_resume(struct device *dev)
+ {
+ 	struct tb_service *svc = tb_to_service(dev);
+ 	struct tbnet *net = tb_service_get_drvdata(svc);
+@@ -1350,9 +1350,7 @@ static int __maybe_unused tbnet_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-static const struct dev_pm_ops tbnet_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(tbnet_suspend, tbnet_resume)
+-};
++static DEFINE_SIMPLE_DEV_PM_OPS(tbnet_pm_ops, tbnet_suspend, tbnet_resume);
+ 
+ static const struct tb_service_id tbnet_ids[] = {
+ 	{ TB_SERVICE("network", 1) },
+@@ -1364,7 +1362,7 @@ static struct tb_service_driver tbnet_driver = {
+ 	.driver = {
+ 		.owner = THIS_MODULE,
+ 		.name = "thunderbolt-net",
+-		.pm = &tbnet_pm_ops,
++		.pm = pm_sleep_ptr(&tbnet_pm_ops),
+ 	},
+ 	.probe = tbnet_probe,
+ 	.remove = tbnet_remove,
+-- 
+2.35.1
 
->
-> > this way the machines will be obsolete before things are fully upstreamed
->
-> I think it's long overdue for the kernel community to take a deep look
-> at itself and its development and review process, because it is quite
-> honestly insane how pathologically inefficient it is compared to,
-> basically, every other large and healthy open source project of similar
-> or even greater impact and scope.
->
-> Cc Linus, because this is for your Mac and I assume you care. We're at
-> v5 here for this silly driver. Meanwhile, rmk recently threw the towel
-> on upstreaming macsmc for us. We're trying, and I'll keep trying because
-> I actually get paid (by very generous donors) to do this, but if I
-> weren't I'd have given up a long time ago. And while I won't give up, I
-> can't deny this situation affects my morale and willingness to keep
-> pushing on upstreaming on a regular basis.
->
-> Meanwhile, OpenBSD has been *shipping* full M1 support for a while now
-> in official release images (and since Linux is the source of truth for
-> DT bindings, every time we re-bikeshed it we break their users because
-> they, quite reasonably, aren't interested in waiting for us Linux
-> slowpokes to figure it out first).
->
-> Please, let's introspect about this for a moment. Something is deeply
-> broken if people with 25+ years being an arch maintainer can't get a
-> 700-line mfd driver upstreamed before giving up. I don't know how we
-> expect to ever get a Rust GPU driver merged if it takes 6+ versions to
-> upstream the world's easiest cpufreq hardware.
->
-> - Hector
-
-I didn't intend to bikesheed this, while I do understand your valid
-concerns from the above statements.
-
-Instead, my intent was to help, by reviewing. Simply, because I care
-about this too.
-
-If you think incorporating the changes I proposed is a too big deal at
-this point, let me not stand in the way of applying this. In the end,
-it's the DT maintainers' decision.
-
-Kind regards
-Uffe
