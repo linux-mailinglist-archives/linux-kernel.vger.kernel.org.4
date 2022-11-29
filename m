@@ -2,163 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC05463CC20
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 01:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA3063CC07
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 00:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231982AbiK3AAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 19:00:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
+        id S230321AbiK2X6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 18:58:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbiK3AAT (ORCPT
+        with ESMTP id S229875AbiK2X6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 19:00:19 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2084.outbound.protection.outlook.com [40.107.223.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8966DFCE;
-        Tue, 29 Nov 2022 15:59:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nljLp/VwNAOpHCmkzKvz+iCkvpl2kM82CiiCj60TYYeubh1wtwTWwdCHREdpESIAfZ9tT0weYXnkuNHp1OWyLiWj61VyOSuHKDmuBaY38qDDCDPGjy9d57AYwrvNtr+2JouSGFVvGby2ukwUIzN95z6n1e5IDXpGiP8SRfG7LjCoq3Z13Zec9kiXGTS1zMGtqbaJVC2rxglPD6RebB/sq2FWGC/Y04UZ8oPeBql1tZtlNrUNBS2ARj//hf5E8Bvw9d1MAjmm2L9b+OW9PPi57VYf8xALBNjRSClG/f/5c347TJ82arAYs15UVQzKoYIRlMAs2wlvmo1WKW7py0KcBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2Y3K0hU9pYTi+63DTkfvm/QK3ks7jn2pT5fO03+8bYE=;
- b=Hk88bnsz+iPOctS57THaZ9t6I/mPfsNO/N6bFEl/L+hG2oRR8PlNFCASmU59mEYATZpZPg79pihYBwd1xO9nS4qcolj//cRnSNv+6Cac+1xTg6eUszvpqKdvAJBKXDlyMJuHVdxiDy77CDzvS49Dq/sf1uiVH3VRFUheFWDB58qwLtR8sUmvhcwtU889lGL79fztsY1K6gZlyyNHd4udT20Bvqw4P22ERZUXxeCJmNePaT4ZOV2cwOXg7vs4hoPUpJtFPn1MUotVCd0WVaZmtkeMUd8iYuiKpV/5PCCKQYt/raoa9C07MXAm8G1iT8r4E/BtX/0r7Q9GJZkPzvTZ6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2Y3K0hU9pYTi+63DTkfvm/QK3ks7jn2pT5fO03+8bYE=;
- b=Dkjok1fIJIOnJ0C+bxoARczBIhZ5PIhpOBb4EaEdXMuMzs+Tcve4IOlEjEIgNI3/dpSQmV3FG5hjFt+fFRwYybSo9q4o/XpjnAJpwV422VbV6FzpyWSIuiggIHG06qGa4HFc0eHdY9Zbz83TsAy5zQoE7n/vdoKJbcjoFGu+YTY=
-Received: from DM6PR12CA0023.namprd12.prod.outlook.com (2603:10b6:5:1c0::36)
- by DM6PR12MB4339.namprd12.prod.outlook.com (2603:10b6:5:2af::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Tue, 29 Nov
- 2022 23:59:55 +0000
-Received: from DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1c0:cafe::b7) by DM6PR12CA0023.outlook.office365.com
- (2603:10b6:5:1c0::36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23 via Frontend
- Transport; Tue, 29 Nov 2022 23:59:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT101.mail.protection.outlook.com (10.13.172.208) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5834.8 via Frontend Transport; Tue, 29 Nov 2022 23:59:55 +0000
-Received: from fritz.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 29 Nov
- 2022 17:59:53 -0600
-From:   Kim Phillips <kim.phillips@amd.com>
-To:     <x86@kernel.org>
-CC:     Kim Phillips <kim.phillips@amd.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Konrad Rzeszutek Wilk" <konrad.wilk@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Alexey Kardashevskiy <aik@amd.com>, <kvm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 7/7] x86/cpu, kvm: Propagate the AMD Automatic IBRS feature to the guest
-Date:   Tue, 29 Nov 2022 17:58:16 -0600
-Message-ID: <20221129235816.188737-8-kim.phillips@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221129235816.188737-1-kim.phillips@amd.com>
-References: <20221129235816.188737-1-kim.phillips@amd.com>
+        Tue, 29 Nov 2022 18:58:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3428057B40;
+        Tue, 29 Nov 2022 15:58:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0665B8196F;
+        Tue, 29 Nov 2022 23:58:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D75CC433C1;
+        Tue, 29 Nov 2022 23:58:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669766311;
+        bh=B1DKOoizHL7L5RKrV8h2vvs/4QEuWHFY9k9GAypOiJM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=q30Fx8mKGa/5f01H0qEQU8/d0ri74h8s7PRXcAOhCslHLwJ2s4Z8Zx3Ff5wMqm3iI
+         3NXPEKoXKfleTBK34hs/gWeWW3/oxaBj6ln0MpJOBENSINgcvVp1LDyIz1e+1HY3ch
+         DttZqxHjm/rd+7OUebcPgUWeWHFPdtB/7n4EpyD3JAxs6bgnh0q3WZYPsnINFUh/gv
+         2SWA/0ogHqih7FsmM8ct9nGbsBXOv56BcyhYh3NWITw3yuLrraxRIni1+eEUCu9N7b
+         tozLZjwjjT7Vsqcw3SzonKToq/K379hJdvnqaqaypjSS0u4+kotqbrhTy77h7ptNT9
+         drYq6rR7VOWSg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1D0735C0584; Tue, 29 Nov 2022 15:58:31 -0800 (PST)
+Date:   Tue, 29 Nov 2022 15:58:31 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org
+Subject: Re: [PATCH v2 0/6] selftests: Use "grep -E" instead of "egrep"
+Message-ID: <20221129235831.GH4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <1669165413-12035-1-git-send-email-yangtiezhu@loongson.cn>
+ <bf9b26b5-2793-204f-ba9c-4d9cd55b08ad@loongson.cn>
+ <dc7cb519-584c-55f1-4baa-44cd4e0bbfe9@linuxfoundation.org>
+ <20221129221344.GF4001@paulmck-ThinkPad-P17-Gen-1>
+ <d48804d5-2ad5-fbfb-ce17-83fbc450d3d6@linuxfoundation.org>
+ <20221129232212.GG4001@paulmck-ThinkPad-P17-Gen-1>
+ <07f475de-98ae-87b2-0215-12a4a2b054d6@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT101:EE_|DM6PR12MB4339:EE_
-X-MS-Office365-Filtering-Correlation-Id: e5f95a8e-8d80-4961-fba1-08dad265d046
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +tYXD9jLNun7oszmC59jA2Vsl+iHYWZc6nAWozNbVH74wGVv7F96fcNXPZEeAEhh+JI1alA3InADFryte3jF3wJq5sfV18yx0fznP5w6sQM7vniaC4ozXAPNrZHgVVncWSJgbZgfoz41TkkJLqY+C3sDOrkbNFD2fywE2rjZRyf4cwbhyXeSHUJzLELLngiLu02dCXEa2ugg0d8dD+DtaZ9dsN1LZIzX4PJAgDr1hEQm07eK8u2Artu/HqGoIsSVJzHJulJ8XbkKodUc7wrJ7nPvKvxdEo6l/ke69pigkZMaIv5a2pvFj3yc7f6Item0BQrWmMZn88wkM455i3qlJqCsutuOfQdI6ZrH5WqhbvXo80ojz8EgwwI66UVp/1zo1G0VTTJoWCKfiUxFUHUnnGgKIufXTX+t2ygRKlAhZ/MnTRYnZp1VF1poAv2VcrqH1TdKRcjMjED9yTIlBqpLC4HDfZJ6NPwbmsl2A7OSOSiz2lW0mH8zFFu5q7X7xcprpb5tofdCGjA0qpr8lZlIqOKgOfDr2NdVXlUXAW2ApkYv+YZEzfaLrmV9dGI93ao0stLBhJmFL88Pzz16WCNkr85/Xji22/0I07nw0OCe6KRMdeXkH3P54NhN3fhCKPL3OwIJq54aSfevqtTrjW0vGfjTQ2f7tfldZoZzW3hdS1Huq8nThjCHxn5C1EB+STA1wRsoAaaGARkOmvTwvmcifPsPzyK1PM/ZEEWjXJ+vaiE=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(396003)(136003)(39860400002)(451199015)(36840700001)(46966006)(40470700004)(54906003)(26005)(6916009)(7696005)(316002)(6666004)(81166007)(70586007)(70206006)(8676002)(4326008)(356005)(426003)(478600001)(40460700003)(47076005)(5660300002)(41300700001)(44832011)(8936002)(336012)(16526019)(186003)(1076003)(2906002)(83380400001)(36860700001)(36756003)(2616005)(82740400003)(82310400005)(7416002)(40480700001)(86362001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 23:59:55.3251
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5f95a8e-8d80-4961-fba1-08dad265d046
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4339
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <07f475de-98ae-87b2-0215-12a4a2b054d6@linuxfoundation.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the AMD Automatic IBRS feature bit to those being
-propagated to the guest.
+On Tue, Nov 29, 2022 at 04:30:39PM -0700, Shuah Khan wrote:
+> On 11/29/22 16:22, Paul E. McKenney wrote:
+> 
+> > Lazybones that I am, I would rather carry the patch than resolve
+> > conflicts.  Especially given the tendency for new rcutorture patches to
+> > appear, thus changing the conflict resolution.
+> > 
+> 
+> Sounds good. I will drop the one I applied to my tree.
+> 
+> > My guess is that the patch is this one:
+> > 
+> > https://lore.kernel.org/lkml/1669165413-12035-2-git-send-email-yangtiezhu@loongson.cn/
+> > 
+> > Or should I be looking elsewhere?
+> 
+> Yup that is one.
 
-Signed-off-by: Kim Phillips <kim.phillips@amd.com>
----
- arch/x86/kvm/cpuid.c         | 2 +-
- arch/x86/kvm/reverse_cpuid.h | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+Very good, thank you!  I have queued it as shown below.
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 8e37760cea1b..acda3883a905 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -743,7 +743,7 @@ void kvm_set_cpu_caps(void)
- 	 */
- 	kvm_cpu_cap_init_scattered(CPUID_8000_0021_EAX,
- 				   SF(NO_NESTED_DATA_BP) | SF(LFENCE_RDTSC) |
--				   SF(NULL_SEL_CLR_BASE));
-+				   SF(NULL_SEL_CLR_BASE) | SF(AUTOIBRS));
- 	if (cpu_feature_enabled(X86_FEATURE_LFENCE_RDTSC))
- 		kvm_cpu_cap_set(X86_FEATURE_LFENCE_RDTSC);
- 	if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
-diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
-index 184614e27d5b..0bf02c02bb0a 100644
---- a/arch/x86/kvm/reverse_cpuid.h
-+++ b/arch/x86/kvm/reverse_cpuid.h
-@@ -30,6 +30,7 @@ enum kvm_only_cpuid_leafs {
- #define KVM_X86_FEATURE_NO_NESTED_DATA_BP	KVM_X86_FEATURE(CPUID_8000_0021_EAX, 0)
- #define KVM_X86_FEATURE_LFENCE_RDTSC		KVM_X86_FEATURE(CPUID_8000_0021_EAX, 2)
- #define KVM_X86_FEATURE_NULL_SEL_CLR_BASE	KVM_X86_FEATURE(CPUID_8000_0021_EAX, 6)
-+#define KVM_X86_FEATURE_AUTOIBRS		KVM_X86_FEATURE(CPUID_8000_0021_EAX, 8)
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+commit 72dcfda0e73be7e2e8b7faf0299b0f43c20af015
+Author: Tiezhu Yang <yangtiezhu@loongson.cn>
+Date:   Wed Nov 23 09:03:28 2022 +0800
+
+    selftests: rcutorture: Use "grep -E" instead of "egrep"
+    
+    The latest version of grep is deprecating the egrep command, so that
+    its output contains warnings as follows:
+    
+            egrep: warning: egrep is obsolescent; using grep -E
+    
+    Fix this using "grep -E" instead.
+    
+      sed -i "s/egrep/grep -E/g" `grep egrep -rwl tools/testing/selftests/rcutorture`
+    
+    Here are the steps to install the latest grep:
+    
+      wget http://ftp.gnu.org/gnu/grep/grep-3.8.tar.gz
+      tar xf grep-3.8.tar.gz
+      cd grep-3.8 && ./configure && make
+      sudo make install
+      export PATH=/usr/local/bin:$PATH
+    
+    Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/tools/testing/selftests/rcutorture/bin/console-badness.sh b/tools/testing/selftests/rcutorture/bin/console-badness.sh
+index 69f8a5958cefc..aad51e7c0183d 100755
+--- a/tools/testing/selftests/rcutorture/bin/console-badness.sh
++++ b/tools/testing/selftests/rcutorture/bin/console-badness.sh
+@@ -10,7 +10,7 @@
+ #
+ # Authors: Paul E. McKenney <paulmck@kernel.org>
  
- struct cpuid_reg {
- 	u32 function;
-@@ -89,6 +90,7 @@ static __always_inline u32 __feature_translate(int x86_feature)
- 	case X86_FEATURE_NO_NESTED_DATA_BP:	return KVM_X86_FEATURE_NO_NESTED_DATA_BP;
- 	case X86_FEATURE_LFENCE_RDTSC:		return KVM_X86_FEATURE_LFENCE_RDTSC;
- 	case X86_FEATURE_NULL_SEL_CLR_BASE:	return KVM_X86_FEATURE_NULL_SEL_CLR_BASE;
-+	case X86_FEATURE_AUTOIBRS:		return KVM_X86_FEATURE_AUTOIBRS;
- 	default: break;
- 	}
+-egrep 'Badness|WARNING:|Warn|BUG|===========|BUG: KCSAN:|Call Trace:|Oops:|detected stalls on CPUs/tasks:|self-detected stall on CPU|Stall ended before state dump start|\?\?\? Writer stall state|rcu_.*kthread starved for|!!!' |
++grep -E 'Badness|WARNING:|Warn|BUG|===========|BUG: KCSAN:|Call Trace:|Oops:|detected stalls on CPUs/tasks:|self-detected stall on CPU|Stall ended before state dump start|\?\?\? Writer stall state|rcu_.*kthread starved for|!!!' |
+ grep -v 'ODEBUG: ' |
+ grep -v 'This means that this is a DEBUG kernel and it is' |
+ grep -v 'Warning: unable to open an initial console' |
+diff --git a/tools/testing/selftests/rcutorture/bin/kvm-build.sh b/tools/testing/selftests/rcutorture/bin/kvm-build.sh
+index e28a82851f7c4..11f8d232b0ee7 100755
+--- a/tools/testing/selftests/rcutorture/bin/kvm-build.sh
++++ b/tools/testing/selftests/rcutorture/bin/kvm-build.sh
+@@ -44,10 +44,10 @@ fi
+ ncpus="`getconf _NPROCESSORS_ONLN`"
+ make -j$((2 * ncpus)) $TORTURE_KMAKE_ARG > $resdir/Make.out 2>&1
+ retval=$?
+-if test $retval -ne 0 || grep "rcu[^/]*": < $resdir/Make.out | egrep -q "Stop|Error|error:|warning:" || egrep -q "Stop|Error|error:" < $resdir/Make.out
++if test $retval -ne 0 || grep "rcu[^/]*": < $resdir/Make.out | grep -E -q "Stop|Error|error:|warning:" || grep -E -q "Stop|Error|error:" < $resdir/Make.out
+ then
+ 	echo Kernel build error
+-	egrep "Stop|Error|error:|warning:" < $resdir/Make.out
++	grep -E "Stop|Error|error:|warning:" < $resdir/Make.out
+ 	echo Run aborted.
+ 	exit 3
+ fi
+diff --git a/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh b/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
+index d4dc059843a43..28981007465bd 100755
+--- a/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
++++ b/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
+@@ -32,9 +32,9 @@ for i in ${rundir}/*/Make.out
+ do
+ 	scenariodir="`dirname $i`"
+ 	scenariobasedir="`echo ${scenariodir} | sed -e 's/\.[0-9]*$//'`"
+-	if egrep -q "error:|warning:|^ld: .*undefined reference to" < $i
++	if grep -E -q "error:|warning:|^ld: .*undefined reference to" < $i
+ 	then
+-		egrep "error:|warning:|^ld: .*undefined reference to" < $i > $i.diags
++		grep -E "error:|warning:|^ld: .*undefined reference to" < $i > $i.diags
+ 		files="$files $i.diags $i"
+ 	elif ! test -f ${scenariobasedir}/vmlinux && ! test -f ${scenariobasedir}/vmlinux.xz && ! test -f "${rundir}/re-run"
+ 	then
+diff --git a/tools/testing/selftests/rcutorture/bin/kvm.sh b/tools/testing/selftests/rcutorture/bin/kvm.sh
+index 7710b1e1cddab..3025a949bc99e 100755
+--- a/tools/testing/selftests/rcutorture/bin/kvm.sh
++++ b/tools/testing/selftests/rcutorture/bin/kvm.sh
+@@ -585,7 +585,7 @@ awk < $T/cfgcpu.pack \
+ echo kvm-end-run-stats.sh "$resdir/$ds" "$starttime" >> $T/script
  
--- 
-2.34.1
-
+ # Extract the tests and their batches from the script.
+-egrep 'Start batch|Starting build\.' $T/script | grep -v ">>" |
++grep -E 'Start batch|Starting build\.' $T/script | grep -v ">>" |
+ 	sed -e 's/:.*$//' -e 's/^echo //' -e 's/-ovf//' |
+ 	awk '
+ 	/^----Start/ {
+@@ -622,7 +622,7 @@ then
+ elif test "$dryrun" = sched
+ then
+ 	# Extract the test run schedule from the script.
+-	egrep 'Start batch|Starting build\.' $T/script | grep -v ">>" |
++	grep -E 'Start batch|Starting build\.' $T/script | grep -v ">>" |
+ 		sed -e 's/:.*$//' -e 's/^echo //'
+ 	nbuilds="`grep 'Starting build\.' $T/script |
+ 		  grep -v ">>" | sed -e 's/:.*$//' -e 's/^echo //' |
+diff --git a/tools/testing/selftests/rcutorture/bin/parse-console.sh b/tools/testing/selftests/rcutorture/bin/parse-console.sh
+index 822eb037a0573..9ab0f6bc172cd 100755
+--- a/tools/testing/selftests/rcutorture/bin/parse-console.sh
++++ b/tools/testing/selftests/rcutorture/bin/parse-console.sh
+@@ -65,7 +65,7 @@ then
+ 	fi
+ 
+ 	grep --binary-files=text 'torture:.*ver:' $file |
+-	egrep --binary-files=text -v '\(null\)|rtc: 000000000* ' |
++	grep -E --binary-files=text -v '\(null\)|rtc: 000000000* ' |
+ 	sed -e 's/^(initramfs)[^]]*] //' -e 's/^\[[^]]*] //' |
+ 	sed -e 's/^.*ver: //' |
+ 	awk '
+@@ -128,17 +128,17 @@ then
+ 	then
+ 		summary="$summary  Badness: $n_badness"
+ 	fi
+-	n_warn=`grep -v 'Warning: unable to open an initial console' $file | grep -v 'Warning: Failed to add ttynull console. No stdin, stdout, and stderr for the init process' | egrep -c 'WARNING:|Warn'`
++	n_warn=`grep -v 'Warning: unable to open an initial console' $file | grep -v 'Warning: Failed to add ttynull console. No stdin, stdout, and stderr for the init process' | grep -E -c 'WARNING:|Warn'`
+ 	if test "$n_warn" -ne 0
+ 	then
+ 		summary="$summary  Warnings: $n_warn"
+ 	fi
+-	n_bugs=`egrep -c '\bBUG|Oops:' $file`
++	n_bugs=`grep -E -c '\bBUG|Oops:' $file`
+ 	if test "$n_bugs" -ne 0
+ 	then
+ 		summary="$summary  Bugs: $n_bugs"
+ 	fi
+-	n_kcsan=`egrep -c 'BUG: KCSAN: ' $file`
++	n_kcsan=`grep -E -c 'BUG: KCSAN: ' $file`
+ 	if test "$n_kcsan" -ne 0
+ 	then
+ 		if test "$n_bugs" = "$n_kcsan"
+@@ -158,7 +158,7 @@ then
+ 	then
+ 		summary="$summary  lockdep: $n_badness"
+ 	fi
+-	n_stalls=`egrep -c 'detected stalls on CPUs/tasks:|self-detected stall on CPU|Stall ended before state dump start|\?\?\? Writer stall state' $file`
++	n_stalls=`grep -E -c 'detected stalls on CPUs/tasks:|self-detected stall on CPU|Stall ended before state dump start|\?\?\? Writer stall state' $file`
+ 	if test "$n_stalls" -ne 0
+ 	then
+ 		summary="$summary  Stalls: $n_stalls"
