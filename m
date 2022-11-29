@@ -2,557 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18F063BC54
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE1863BC5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbiK2I6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 03:58:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
+        id S231513AbiK2I7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 03:59:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbiK2I6r (ORCPT
+        with ESMTP id S231676AbiK2I7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 03:58:47 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433E52A95C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:58:45 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id h17so6300224ila.6
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:58:45 -0800 (PST)
+        Tue, 29 Nov 2022 03:59:15 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578824FFA1
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:59:12 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so10249593wmi.3
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:59:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=broadcom.com; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=J8rVljHDEk1HrhmdkiD5bDyl/qQXgfuLXAl/ENpAjG4=;
-        b=XyA5BpxzdevatPaVSaPMPiorLljXgIrzR6x90LOx4t0E+IOSbXCfhlXM8DANHPxPaN
-         1A2R2Bf9z/emXIoiZv/rm1GCve3b9+pC1Ch1eM8ye115Ay744/3+U+CZvzHfwZIRkUMH
-         juA2mLqzDk0AWTpM0tjpssDws1nYqU7p/hxE3WnMNe6fG356YymC2jCnNtzveT6nr5Hy
-         IsebN0wa5SbO+r8dkW9mzbnLABkZw3xPcqO43fAHI6kp+/m4V/GpeVEjZ3qcGtM2dybz
-         BKAUGo52ZHJISRD1FT+gt0FPcKbir3cHC5z3TjTI7DclbUW/gPLW9p3AZEcX3Hyz3E0i
-         J9Hg==
+        bh=f8yW8U5ddrWtOoGJFVpflKbHgMdd6HNYVc86fWoSDjI=;
+        b=OymM1BiGtzn5JLhlcR/YRDZskojVzMDBE9OFw5pm9QdqTcuXvRvsWjw0gIDSIZn/vz
+         AU8KAfHm/VhodA2Gn+trEWvV4Zw3aIWIUbdkByP+IVccy+EV4noYOEaFd3tu1Rr/C+/S
+         HPvllJJ8B9c/iyiRBxK8XmL+l1H09dckPyVJQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=J8rVljHDEk1HrhmdkiD5bDyl/qQXgfuLXAl/ENpAjG4=;
-        b=hZsUTpm6hGU+cAE0h9EyTRlyDDvCIspOKlrgP/pOkVDUuTNgq20R8GumCxEBY+CO4a
-         mof6fti/T6GqheO5qPK2gZEqNzAiOH7iuv2tjBSs4i70Rd9/ghjYlsU9YirpnUYR6amw
-         wFet9gkbAE5/nruR3JbjCYpLS+8/94coAzrdRo+bXUYwX9gTjs3ej8pG51IQ6fz2onwg
-         Ds5G4KkPWwywhFrqRGHI1VfX7hf02Htqb9j0gVpmIUQqt/R1gvaPp6/I149UNZOhR/eZ
-         fxF4MZZhK7Tk4TxKNNCKbIktLiCzmPtslSBlMoGVyp5K6aN5sfGlkWHWvVmMGQ5l3qF8
-         0EUQ==
-X-Gm-Message-State: ANoB5plWROtBr4RrNgCY5MsJN3x5U7Ceay5vjVA8LOVza3h1JJN+/mwa
-        iLijEAmWE7aIbnhjFY/cNniU9q9PRgLi9WXpu6PQldowjfA=
-X-Google-Smtp-Source: AA0mqf6z+KnogHbYVEmA4IUxW61f5Yd2DcGH00/b8VW7wc3JdPvZrZArDeWVGyVtu3D6n4Zm27xM9fNv1p1m1jFigk8=
-X-Received: by 2002:a05:6e02:ca1:b0:303:1ebe:9c4c with SMTP id
- 1-20020a056e020ca100b003031ebe9c4cmr1530381ilg.301.1669712324376; Tue, 29 Nov
- 2022 00:58:44 -0800 (PST)
+        bh=f8yW8U5ddrWtOoGJFVpflKbHgMdd6HNYVc86fWoSDjI=;
+        b=SmShlWOjsHFJ0HzFC+117YlOBIeSEYAm5TQrY/e83eMXbWAh7VWT4I4u2Fr+0ROaqC
+         2OFBnkxp+WO8OyO0s8yk5I4xx/IvWmPTGO5XLk8h3nG+16gBAiRgqjuggm2t6eGqrOAI
+         gKp085+53Dk7b5/NR2JY1kedvGkyq3KuxTdpakBI3ZNtoU4fz8i3YJofx90DuCz4/qzn
+         cm8STgTQlrAIS6b9qRqrXZj+J4rBM4b+s9WPZGlyhLmkdEcu3m4Krsl4onNVfPHVQ4eq
+         50b1661tadqKjO7Aqd70IYnNSfE1xVl7IfEAYTZF+2sQUd/zHPIzONoHxehhEyTAqCrf
+         EcsQ==
+X-Gm-Message-State: ANoB5plH4iHcVWEf9QsN+BQToxX6e9BVQc8OQnGGNX3eDO8pqIRr5VOZ
+        wgxt8ebWK0lZSqyvmA43SGJRXuau5T0O1W+GvoRlbQ==
+X-Google-Smtp-Source: AA0mqf5MZSgkgodcVHWsZnSLXXRm0TwjT9GqvGD1ux/2IgNpnkoCc9Uos/EI+EecywS7aHFp3sgcp8kXjhh/dqdC360=
+X-Received: by 2002:a05:600c:3495:b0:3cf:a258:99b with SMTP id
+ a21-20020a05600c349500b003cfa258099bmr39932899wmq.34.1669712350624; Tue, 29
+ Nov 2022 00:59:10 -0800 (PST)
 MIME-Version: 1.0
-References: <20221115171851.835-1-vincent.guittot@linaro.org>
- <20221115171851.835-6-vincent.guittot@linaro.org> <CAEXW_YSXveyBjVVGQCRdmiZP=r_L5+7ZU-BJujskpxw9ecw9xQ@mail.gmail.com>
-In-Reply-To: <CAEXW_YSXveyBjVVGQCRdmiZP=r_L5+7ZU-BJujskpxw9ecw9xQ@mail.gmail.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 29 Nov 2022 09:58:33 +0100
-Message-ID: <CAKfTPtCZ5CttibZ9o18woLiQgzFeKCBMDAGrhMd3kbgX2qs29Q@mail.gmail.com>
-Subject: Re: [PATCH 5/9] sched/fair: Take into account latency priority at wakeup
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
-        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_BTC_ID,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221123191627.3442831-1-lixiaoyan@google.com>
+ <20221123191627.3442831-2-lixiaoyan@google.com> <CACKFLin=H_j6Jy+1jZJiG5xuE=C41joZ_dPS_BZmBwcf7W1rHA@mail.gmail.com>
+In-Reply-To: <CACKFLin=H_j6Jy+1jZJiG5xuE=C41joZ_dPS_BZmBwcf7W1rHA@mail.gmail.com>
+From:   Michael Chan <michael.chan@broadcom.com>
+Date:   Tue, 29 Nov 2022 00:58:59 -0800
+Message-ID: <CACKFLin7Pzw5E+kZ8GyrMabcVyyOt3Mb96-J2fBE_=2E4xbS5A@mail.gmail.com>
+Subject: Re: [RFC net-next v2 2/2] bnxt: Use generic HBH removal helper in tx path
+To:     Coco Li <lixiaoyan@google.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Gospodarek <gospo@broadcom.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000090e4dd05ee983349"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Nov 2022 at 05:25, Joel Fernandes <joel@joelfernandes.org> wrote:
->
-> On Tue, Nov 15, 2022 at 12:19 PM Vincent Guittot
-> <vincent.guittot@linaro.org> wrote:
-> >
-> > Take into account the latency priority of a thread when deciding to
-> > preempt the current running thread. We don't want to provide more CPU
-> > bandwidth to a thread but reorder the scheduling to run latency sensitive
-> > task first whenever possible.
-> >
-> > As long as a thread didn't use its bandwidth, it will be able to preempt
-> > the current thread.
-> >
-> > At the opposite, a thread with a low latency priority will preempt current
-> > thread at wakeup only to keep fair CPU bandwidth sharing. Otherwise it will
-> > wait for the tick to get its sched slice.
-> >
-> >                                    curr vruntime
-> >                                        |
-> >                       sysctl_sched_wakeup_granularity
-> >                                    <-->
-> > ----------------------------------|----|-----------------------|---------------
-> >                                   |    |<--------------------->
-> >                                   |    .  sysctl_sched_latency
-> >                                   |    .
-> > default/current latency entity    |    .
-> >                                   |    .
-> > 1111111111111111111111111111111111|0000|-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-
-> > se preempts curr at wakeup ------>|<- se doesn't preempt curr -----------------
-> >                                   |    .
-> >                                   |    .
-> >                                   |    .
-> > low latency entity                |    .
-> >                                    ---------------------->|
-> >                                % of sysctl_sched_latency  |
-> > 1111111111111111111111111111111111111111111111111111111111|0000|-1-1-1-1-1-1-1-
-> > preempt ------------------------------------------------->|<- do not preempt --
-> >                                   |    .
-> >                                   |    .
-> >                                   |    .
-> > high latency entity               |    .
-> >          |<-----------------------|----.
-> >          | % of sysctl_sched_latency   .
-> > 111111111|0000|-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1
-> > preempt->|<- se doesn't preempt curr ------------------------------------------
-> > Tests results of nice latency impact on heavy load like hackbench:
-> >
-> > hackbench -l (2560 / group) -g group
-> > group        latency 0             latency 19
-> > 1            1.378(+/-  1%)      1.337(+/- 1%) + 3%
-> > 4            1.393(+/-  3%)      1.312(+/- 3%) + 6%
-> > 8            1.308(+/-  2%)      1.279(+/- 1%) + 2%
-> > 16           1.347(+/-  1%)      1.317(+/- 1%) + 2%
-> >
-> > hackbench -p -l (2560 / group) -g group
-> > group
-> > 1            1.836(+/- 17%)      1.148(+/- 5%) +37%
-> > 4            1.586(+/-  6%)      1.109(+/- 8%) +30%
-> > 8            1.209(+/-  4%)      0.780(+/- 4%) +35%
-> > 16           0.805(+/-  5%)      0.728(+/- 4%) +10%
-> >
-> > By deacreasing the latency prio, we reduce the number of preemption at
-> > wakeup and help hackbench making progress.
-> >
-> > Test results of nice latency impact on short live load like cyclictest
-> > while competing with heavy load like hackbench:
-> >
-> > hackbench -l 10000 -g $group &
-> > cyclictest --policy other -D 5 -q -n
-> >         latency 0           latency -20
-> > group   min  avg    max     min  avg    max
-> > 0       16    19     29      17   18     29
-> > 1       43   299   7359      63   84   3422
-> > 4       56   449  14806      45   83    284
-> > 8       63   820  51123      63   83    283
-> > 16      64  1326  70684      41  157  26852
-> >
-> > group = 0 means that hackbench is not running.
-> >
-> > The avg is significantly improved with nice latency -20 especially with
-> > large number of groups but min and max remain quite similar. If we add the
-> > histogram parameter to get details of latency, we have :
-> >
-> > hackbench -l 10000 -g 16 &
-> > cyclictest --policy other -D 5 -q -n  -H 20000 --histfile data.txt
-> >               latency 0    latency -20
-> > Min Latencies:    64           62
-> > Avg Latencies:  1170          107
-> > Max Latencies: 88069        10417
-> > 50% latencies:   122           86
-> > 75% latencies:   614           91
-> > 85% latencies:   961           94
-> > 90% latencies:  1225           97
-> > 95% latencies:  6120          102
-> > 99% latencies: 18328          159
-> >
-> > With percentile details, we see the benefit of nice latency -20 as
-> > only 1% of the latencies are above 159us whereas the default latency
-> > has got 15% around ~1ms or above and 5% over the 6ms.
-> >
-> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> > ---
-> >  include/linux/sched.h      |  4 ++-
-> >  include/linux/sched/prio.h |  9 ++++++
-> >  init/init_task.c           |  2 +-
-> >  kernel/sched/core.c        | 38 +++++++++++++++++++---
-> >  kernel/sched/debug.c       |  2 +-
-> >  kernel/sched/fair.c        | 66 ++++++++++++++++++++++++++++++++++----
-> >  kernel/sched/sched.h       |  6 ++++
-> >  7 files changed, 112 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/include/linux/sched.h b/include/linux/sched.h
-> > index 856240573300..2f33326adb8d 100644
-> > --- a/include/linux/sched.h
-> > +++ b/include/linux/sched.h
-> > @@ -568,6 +568,8 @@ struct sched_entity {
-> >         /* cached value of my_q->h_nr_running */
-> >         unsigned long                   runnable_weight;
-> >  #endif
-> > +       /* preemption offset in ns */
-> > +       long                            latency_offset;
-> >
-> >  #ifdef CONFIG_SMP
-> >         /*
-> > @@ -784,7 +786,7 @@ struct task_struct {
-> >         int                             static_prio;
-> >         int                             normal_prio;
-> >         unsigned int                    rt_priority;
-> > -       int                             latency_nice;
-> > +       int                             latency_prio;
-> >
-> >         struct sched_entity             se;
-> >         struct sched_rt_entity          rt;
-> > diff --git a/include/linux/sched/prio.h b/include/linux/sched/prio.h
-> > index bfcd7f1d1e11..be79503d86af 100644
-> > --- a/include/linux/sched/prio.h
-> > +++ b/include/linux/sched/prio.h
-> > @@ -59,5 +59,14 @@ static inline long rlimit_to_nice(long prio)
-> >   * Default tasks should be treated as a task with latency_nice = 0.
-> >   */
-> >  #define DEFAULT_LATENCY_NICE   0
-> > +#define DEFAULT_LATENCY_PRIO   (DEFAULT_LATENCY_NICE + LATENCY_NICE_WIDTH/2)
-> > +
-> > +/*
-> > + * Convert user-nice values [ -20 ... 0 ... 19 ]
-> > + * to static latency [ 0..39 ],
-> > + * and back.
-> > + */
-> > +#define NICE_TO_LATENCY(nice)  ((nice) + DEFAULT_LATENCY_PRIO)
-> > +#define LATENCY_TO_NICE(prio)  ((prio) - DEFAULT_LATENCY_PRIO)
-> >
-> >  #endif /* _LINUX_SCHED_PRIO_H */
-> > diff --git a/init/init_task.c b/init/init_task.c
-> > index 7dd71dd2d261..071deff8dbd1 100644
-> > --- a/init/init_task.c
-> > +++ b/init/init_task.c
-> > @@ -78,7 +78,7 @@ struct task_struct init_task
-> >         .prio           = MAX_PRIO - 20,
-> >         .static_prio    = MAX_PRIO - 20,
-> >         .normal_prio    = MAX_PRIO - 20,
-> > -       .latency_nice   = DEFAULT_LATENCY_NICE,
-> > +       .latency_prio   = DEFAULT_LATENCY_PRIO,
-> >         .policy         = SCHED_NORMAL,
-> >         .cpus_ptr       = &init_task.cpus_mask,
-> >         .user_cpus_ptr  = NULL,
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index 18c31a68eb18..b2b8cb6c08cd 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -1283,6 +1283,16 @@ static void set_load_weight(struct task_struct *p, bool update_load)
-> >         }
-> >  }
-> >
-> > +static void set_latency_offset(struct task_struct *p)
-> > +{
-> > +       long weight = sched_latency_to_weight[p->latency_prio];
-> > +       s64 offset;
-> > +
-> > +       offset = weight * get_sleep_latency(false);
-> > +       offset = div_s64(offset, NICE_LATENCY_WEIGHT_MAX);
-> > +       p->se.latency_offset = (long)offset;
-> > +}
-> > +
-> >  #ifdef CONFIG_UCLAMP_TASK
-> >  /*
-> >   * Serializes updates of utilization clamp values
-> > @@ -4592,7 +4602,9 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
-> >                 p->prio = p->normal_prio = p->static_prio;
-> >                 set_load_weight(p, false);
-> >
-> > -               p->latency_nice = DEFAULT_LATENCY_NICE;
-> > +               p->latency_prio = NICE_TO_LATENCY(0);
-> > +               set_latency_offset(p);
-> > +
-> >                 /*
-> >                  * We don't need the reset flag anymore after the fork. It has
-> >                  * fulfilled its duty:
-> > @@ -7358,8 +7370,10 @@ static void __setscheduler_params(struct task_struct *p,
-> >  static void __setscheduler_latency(struct task_struct *p,
-> >                 const struct sched_attr *attr)
-> >  {
-> > -       if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE)
-> > -               p->latency_nice = attr->sched_latency_nice;
-> > +       if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE) {
-> > +               p->latency_prio = NICE_TO_LATENCY(attr->sched_latency_nice);
-> > +               set_latency_offset(p);
-> > +       }
-> >  }
-> >
-> >  /*
-> > @@ -7544,7 +7558,7 @@ static int __sched_setscheduler(struct task_struct *p,
-> >                 if (attr->sched_flags & SCHED_FLAG_UTIL_CLAMP)
-> >                         goto change;
-> >                 if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE &&
-> > -                   attr->sched_latency_nice != p->latency_nice)
-> > +                   attr->sched_latency_nice != LATENCY_TO_NICE(p->latency_prio))
-> >                         goto change;
-> >
-> >                 p->sched_reset_on_fork = reset_on_fork;
-> > @@ -8085,7 +8099,7 @@ SYSCALL_DEFINE4(sched_getattr, pid_t, pid, struct sched_attr __user *, uattr,
-> >         get_params(p, &kattr);
-> >         kattr.sched_flags &= SCHED_FLAG_ALL;
-> >
-> > -       kattr.sched_latency_nice = p->latency_nice;
-> > +       kattr.sched_latency_nice = LATENCY_TO_NICE(p->latency_prio);
-> >
-> >  #ifdef CONFIG_UCLAMP_TASK
-> >         /*
-> > @@ -11294,6 +11308,20 @@ const u32 sched_prio_to_wmult[40] = {
-> >   /*  15 */ 119304647, 148102320, 186737708, 238609294, 286331153,
-> >  };
-> >
-> > +/*
-> > + * latency weight for wakeup preemption
-> > + */
-> > +const int sched_latency_to_weight[40] = {
-> > + /* -20 */     -1024,     -973,     -922,      -870,      -819,
-> > + /* -15 */      -768,     -717,     -666,      -614,      -563,
-> > + /* -10 */      -512,     -461,     -410,      -358,      -307,
-> > + /*  -5 */      -256,     -205,     -154,      -102,       -51,
-> > + /*   0 */         0,       51,      102,       154,       205,
-> > + /*   5 */       256,      307,      358,       410,       461,
-> > + /*  10 */       512,      563,      614,       666,       717,
-> > + /*  15 */       768,      819,      870,       922,       973,
-> > +};
-> > +
->
-> The table is linear. You could approximate this as: weight = nice * 51
-> since it is a linear scale and do the conversion in place.
->
-> Or, since the only place you are using the latency_to_weight is in
-> set_latency_offset(), can we drop the sched_latency_to_weight array
-> and simplify as follows?
+--00000000000090e4dd05ee983349
+Content-Type: text/plain; charset="UTF-8"
 
-It's also used in cgroup patch and keeps a coherency between
-nice/weight an latency_nice/offset so I prefer keeping current
-implementation
+On Wed, Nov 23, 2022 at 11:42 AM Michael Chan <michael.chan@broadcom.com> wrote:
+>
+> On Wed, Nov 23, 2022 at 11:16 AM Coco Li <lixiaoyan@google.com> wrote:
+> >
+> > Eric Dumazet implemented Big TCP that allowed bigger TSO/GRO packet sizes
+> > for IPv6 traffic. See patch series:
+> > 'commit 89527be8d8d6 ("net: add IFLA_TSO_{MAX_SIZE|SEGS} attributes")'
+> >
+> > This reduces the number of packets traversing the networking stack and
+> > should usually improves performance. However, it also inserts a
+> > temporary Hop-by-hop IPv6 extension header.
+> >
+> > Using the HBH header removal method in the previous path, the extra header
+> > be removed in bnxt drivers to allow it to send big TCP packets (bigger
+> > TSO packets) as well.
+> >
+> > Tested:
+> > Compiled locally
+> >
+> > To further test functional correctness, update the GSO/GRO limit on the
+> > physical NIC:
+> >
+> > ip link set eth0 gso_max_size 181000
+> > ip link set eth0 gro_max_size 181000
+> >
+> > Note that if there are bonding or ipvan devices on top of the physical
+> > NIC, their GSO sizes need to be updated as well.
+> >
+> > Then, IPv6/TCP packets with sizes larger than 64k can be observed.
+> >
+> > Signed-off-by: Coco Li <lixiaoyan@google.com>
 
->
-> static void set_latency_offset(struct task_struct *p)
-> {
->   s64 offset = p->latency_prio * get_sleep_latency(false);
->   p->latency_prio = (long)div_s64(offset, 40);
-> }
->
-> >  void call_trace_sched_update_nr_running(struct rq *rq, int count)
-> >  {
-> >          trace_sched_update_nr_running_tp(rq, count);
-> > diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-> > index 68be7a3e42a3..b3922184af91 100644
-> > --- a/kernel/sched/debug.c
-> > +++ b/kernel/sched/debug.c
-> > @@ -1043,7 +1043,7 @@ void proc_sched_show_task(struct task_struct *p, struct pid_namespace *ns,
-> >  #endif
-> >         P(policy);
-> >         P(prio);
-> > -       P(latency_nice);
-> > +       P(latency_prio);
-> >         if (task_has_dl_policy(p)) {
-> >                 P(dl.runtime);
-> >                 P(dl.deadline);
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index c8a697f8db88..0e80e65113bd 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -4858,6 +4858,8 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
-> >                 update_idle_cfs_rq_clock_pelt(cfs_rq);
-> >  }
-> >
-> > +static long wakeup_latency_gran(struct sched_entity *curr, struct sched_entity *se);
-> > +
-> >  /*
-> >   * Preempt the current task with a newly woken task if needed:
-> >   */
-> > @@ -4866,7 +4868,7 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
-> >  {
-> >         unsigned long ideal_runtime, delta_exec;
-> >         struct sched_entity *se;
-> > -       s64 delta;
-> > +       s64 delta, offset;
-> >
-> >         ideal_runtime = sched_slice(cfs_rq, curr);
-> >         delta_exec = curr->sum_exec_runtime - curr->prev_sum_exec_runtime;
-> > @@ -4891,10 +4893,12 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
-> >         se = __pick_first_entity(cfs_rq);
-> >         delta = curr->vruntime - se->vruntime;
-> >
-> > -       if (delta < 0)
-> > +       offset = wakeup_latency_gran(curr, se);
-> > +       if (delta < offset)
-> >                 return;
->
-> Agreed.
->
-> > -       if (delta > ideal_runtime)
-> > +       if ((delta > ideal_runtime) ||
-> > +           (delta > get_latency_max()))
-> >                 resched_curr(rq_of(cfs_rq));
-> >  }
-> >
-> > @@ -6019,6 +6023,35 @@ static int sched_idle_cpu(int cpu)
-> >  }
-> >  #endif
-> >
-> > +static void set_next_buddy(struct sched_entity *se);
-> > +
-> > +static void check_preempt_from_others(struct cfs_rq *cfs, struct sched_entity *se)
-> > +{
-> > +       struct sched_entity *next;
-> > +
-> > +       if (se->latency_offset >= 0)
-> > +               return;
-> > +
-> > +       if (cfs->nr_running <= 1)
-> > +               return;
-> > +       /*
-> > +        * When waking from another class, we don't need to check to preempt at
-> > +        * wakeup and don't set next buddy as a candidate for being picked in
-> > +        * priority.
-> > +        * In case of simultaneous wakeup when current is another class, the
-> > +        * latency sensitive tasks lost opportunity to preempt non sensitive
-> > +        * tasks which woke up simultaneously.
-> > +        */
-> > +
-> > +       if (cfs->next)
-> > +               next = cfs->next;
-> > +       else
-> > +               next = __pick_first_entity(cfs);
-> > +
-> > +       if (next && wakeup_preempt_entity(next, se) == 1)
-> > +               set_next_buddy(se);
-> > +}
-> > +
-> >  /*
-> >   * The enqueue_task method is called before nr_running is
-> >   * increased. Here we update the fair scheduling stats and
-> > @@ -6105,14 +6138,15 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
-> >         if (!task_new)
-> >                 update_overutilized_status(rq);
-> >
-> > +       if (rq->curr->sched_class != &fair_sched_class)
-> > +               check_preempt_from_others(cfs_rq_of(&p->se), &p->se);
-> > +
-> >  enqueue_throttle:
-> >         assert_list_leaf_cfs_rq(rq);
-> >
-> >         hrtick_update(rq);
-> >  }
-> >
-> > -static void set_next_buddy(struct sched_entity *se);
-> > -
-> >  /*
-> >   * The dequeue_task method is called before nr_running is
-> >   * decreased. We remove the task from the rbtree and
-> > @@ -7461,6 +7495,23 @@ balance_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
-> >  }
-> >  #endif /* CONFIG_SMP */
-> >
-> > +static long wakeup_latency_gran(struct sched_entity *curr, struct sched_entity *se)
-> > +{
-> > +       long latency_offset = se->latency_offset;
-> > +
-> > +       /*
-> > +        * A negative latency offset means that the sched_entity has latency
-> > +        * requirement that needs to be evaluated versus other entity.
-> > +        * Otherwise, use the latency weight to evaluate how much scheduling
-> > +        * delay is acceptable by se.
-> > +        */
-> > +       if ((latency_offset < 0) || (curr->latency_offset < 0))
-> > +               latency_offset -= curr->latency_offset;
-> > +       latency_offset = min_t(long, latency_offset, get_latency_max());
->
-> Over here can we make positive latency offsets also be evaluated
-> "versus other entity"?
->
-> It feels strange to have different rules for positive latency_offset
-> when comparing curr and se. IMO we should also factor in latency
-> requirements by comparing 2 positive nice values. It should be
-> relative even for positive values, just like regular nice IMO and not
-> have hidden meaning. If there is hidden meaning, it confuses the user
-> and requires documentation that most users will not read. Especially
-> because latency_nice shares the word "nice" with regular nice values.
+I've confirmed with our hardware team that this is supported by our
+chips, and I've tested it up to gso_max_size of 524280.  Thanks.
 
-This has already been discussed in the previous revisions. This is not
-a hidden behavior but the normal behavior.
+Tested-by: Michael Chan <michael.chan@broadcom.com>
+Reviewed-by: Michael Chan <michael.chan@broadcom.com>
 
-A negative latency nice, means that the task are not tolerant to
-scheduling delay and it want to preempt current and run now. Or, if
-the task is current, it doesn't want to be preempted and finish its
-slice. In this case, we compare current and wake up task in case there
-is 2 latency sensitive tasks that are fighting to run 1st.
+--00000000000090e4dd05ee983349
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-Whereas a positive latency nice means that the task is tolerant to
-scheduling delay and you don't care preempting current as long as it's
-in an acceptable vruntime range. Why would the latency nice of the
-current task make the wakeup task less tolerant to the scheduling
-delay ? As an example, If current is latency_nice 19 and the wakeup
-task is latency nice 19 too, both are tolerant to scheduling delay and
-the waking up task should preempt current only if there is an
-unfairness problem. By comparing their positive latency nice values,
-you are back to the normal behavior which defeats the purpose of the
-feature.
-
-Thanks
-Vincent
-
->
-> Thanks,
->
->  - Joel
-> .
->
-> > +
-> > +       return latency_offset;
-> > +}
-> > +
-> >  static unsigned long wakeup_gran(struct sched_entity *se)
-> >  {
-> >         unsigned long gran = sysctl_sched_wakeup_granularity;
-> > @@ -7499,11 +7550,12 @@ static int
-> >  wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity *se)
-> >  {
-> >         s64 gran, vdiff = curr->vruntime - se->vruntime;
-> > +       s64 offset = wakeup_latency_gran(curr, se);
-> >
-> > -       if (vdiff <= 0)
-> > +       if (vdiff < offset)
-> >                 return -1;
-> >
-> > -       gran = wakeup_gran(se);
-> > +       gran = offset + wakeup_gran(se);
-> >
-> >         /*
-> >          * At wake up, the vruntime of a task is capped to not be older than
-> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> > index 842ce0094d9c..7292652731d0 100644
-> > --- a/kernel/sched/sched.h
-> > +++ b/kernel/sched/sched.h
-> > @@ -125,6 +125,11 @@ extern int sched_rr_timeslice;
-> >   */
-> >  #define NS_TO_JIFFIES(TIME)    ((unsigned long)(TIME) / (NSEC_PER_SEC / HZ))
-> >
-> > +/* Maximum nice latency weight used to scale the latency_offset */
-> > +
-> > +#define NICE_LATENCY_SHIFT     (SCHED_FIXEDPOINT_SHIFT)
-> > +#define NICE_LATENCY_WEIGHT_MAX        (1L << NICE_LATENCY_SHIFT)
-> > +
-> >  /*
-> >   * Increase resolution of nice-level calculations for 64-bit architectures.
-> >   * The extra resolution improves shares distribution and load balancing of
-> > @@ -2115,6 +2120,7 @@ static_assert(WF_TTWU == SD_BALANCE_WAKE);
-> >
-> >  extern const int               sched_prio_to_weight[40];
-> >  extern const u32               sched_prio_to_wmult[40];
-> > +extern const int               sched_latency_to_weight[40];
-> >
-> >  /*
-> >   * {de,en}queue flags:
-> > --
-> > 2.17.1
-> >
+MIIQbQYJKoZIhvcNAQcCoIIQXjCCEFoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+gg3EMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
+MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
+rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
+aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
+e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
+cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
+MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
+KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
+/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
+TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
+YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
+b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
+CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
+BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
+jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
+9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
+/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
+jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
+AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
+dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
+MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
+IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
+SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
+XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
+J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
+nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBUwwggQ0oAMCAQICDF5AaMOe0cZvaJpCQjANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAwODIxMzhaFw0yNTA5MTAwODIxMzhaMIGO
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xFTATBgNVBAMTDE1pY2hhZWwgQ2hhbjEoMCYGCSqGSIb3DQEJ
+ARYZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC
+ggEBALhEmG7egFWvPKcrDxuNhNcn2oHauIHc8AzGhPyJxU4S6ZUjHM/psoNo5XxlMSRpYE7g7vLx
+J4NBefU36XTEWVzbEkAuOSuJTuJkm98JE3+wjeO+aQTbNF3mG2iAe0AZbAWyqFxZulWitE8U2tIC
+9mttDjSN/wbltcwuti7P57RuR+WyZstDlPJqUMm1rJTbgDqkF2pnvufc4US2iexnfjGopunLvioc
+OnaLEot1MoQO7BIe5S9H4AcCEXXcrJJiAtMCl47ARpyHmvQFQFFTrHgUYEd9V+9bOzY7MBIGSV1N
+/JfsT1sZw6HT0lJkSQefhPGpBniAob62DJP3qr11tu8CAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
+BB0wG4EZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
+HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU31rAyTdZweIF0tJTFYwfOv2w
+L4QwDQYJKoZIhvcNAQELBQADggEBACcuyaGmk0NSZ7Kio7O7WSZ0j0f9xXcBnLbJvQXFYM7JI5uS
+kw5ozATEN5gfmNIe0AHzqwoYjAf3x8Dv2w7HgyrxWdpjTKQFv5jojxa3A5LVuM8mhPGZfR/L5jSk
+5xc3llsKqrWI4ov4JyW79p0E99gfPA6Waixoavxvv1CZBQ4Stu7N660kTu9sJrACf20E+hdKLoiU
+hd5wiQXo9B2ncm5P3jFLYLBmPltIn/uzdiYpFj+E9kS9XYDd+boBZhN1Vh0296zLQZobLfKFzClo
+E6IFyTTANonrXvCRgodKS+QJEH8Syu2jSKe023aVemkuZjzvPK7o9iU7BKkPG2pzLPgxggJtMIIC
+aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
+EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxeQGjDntHGb2iaQkIw
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEINjzasw8vjafgOZ8GiurTXN4oTcfrjE/
+7Nvo312i25acMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMTEy
+OTA4NTkxMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
+ATANBgkqhkiG9w0BAQEFAASCAQAKQdNIhdAQMMWmJHLQl9xeLvJ072u9zAQdxuImCMJepq4j21EA
+AjefmP+88/OnHc8uxNPJyaviSI5L8TX8dGSqM+ujdcNvvvtiGr6JWFbq5W9WD5tPk/NOPSfU3rCj
+fBgBtqENOnJAWgRYLPD5yvRKFrLqUA1fcadftwVHhmBjypSzkve5JF/VgLIWYTleQOrc6/BAZLYE
+uB8Qg6PX123el5Wq2OYTsTRaNA8Lj/wXtMIx2tauzFuOL3C82eFCpuxadRqy2Xh8HicJxzWqSjbO
+gDFAu6UvXZ4SvAgS/H0mhxPVT155NOQaP35WVaPo9huOuKm7CaHQrsXTQZTIRZll
+--00000000000090e4dd05ee983349--
