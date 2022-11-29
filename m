@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B9E63C750
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 19:43:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E11E63C751
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 19:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235082AbiK2Snx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 13:43:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
+        id S236114AbiK2Sn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 13:43:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232988AbiK2Snv (ORCPT
+        with ESMTP id S235871AbiK2Snw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 13:43:51 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EEF24F2A
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 10:43:50 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id y4so14311798plb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 10:43:50 -0800 (PST)
+        Tue, 29 Nov 2022 13:43:52 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98DC524BD6
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 10:43:51 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id d6so14305822pll.7
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 10:43:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IIP9oJ9P+APqb6Nuc1oFCXi9Ku92JtxYoKl2iytzunU=;
-        b=q3vblXcbmKuJHwVKfmwgfjy9/h4v0009YQb+0/FuwZ3Iz1csn6IZnsw5WdOAK6Bu+s
-         lIsdvWmKpPYbHoqKvFZXyVqvjv1uy74XWP8+h1ZCm+EgJYF3Nw/b000sk+ErQNOyW+16
-         N9nqb0EChxhay9SNzmCT53O0LKeIHgWshnVZH6cHxYm1s3qlsSJWYnBM8RAw5d6K+lja
-         wYA/EX6BkBs0tJrwy69C64qsAQJgHNE936RwiiRtC/dsOQ9XDSuQfxkzSoAfxSnzoCvB
-         vvWyI20zoJNU0tu6q2KvDXH8CS4tEH+/qWYMLrSoZKZWS0mc1E+GwOHwvaRxj6+bmhpO
-         dwIQ==
+        bh=v8lGntM4kOktmfQdUaeSjevYi4oUpuqHsLPXR1CgAwY=;
+        b=obeLgfkyGkMKWKCrw/Erz/5BArpTueSCf8bT3iUEDi9Ish/XAzXxW4Xa3+d6AM2QAp
+         Xd6xBZt79tvTggr2GJ1u/dfQrlCmbUvNY2KN7OBfe1kCvhTuHNjwCBkHMNBxyZ7dVsa4
+         fy96fIKU0cjhMj2TgII5L6v8cu28mpTHapAb8pviJIyjbRSL/qbpcnDRKf70+vf0eB9B
+         MiPAH8P7D/5gV5/SOf+MNhyh6vteQKpH0i9QWE52nXmWosRsA1fPUEGo9Y2LuJTRQVGB
+         8/HFAF+4qdPbOLPSUvGnxnYjjYo8ksyeQrO6UfZwiLFlQMKHhLHQJkXsnAxmDcJ+tdpL
+         rMAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IIP9oJ9P+APqb6Nuc1oFCXi9Ku92JtxYoKl2iytzunU=;
-        b=vPRLUc9JT1sGrrXU/z63bnOhEbnwYTzRYpY6X9AwpcWgO632mpE6q5RRIriVgfovTG
-         Dy4UpT3vyIduFHTxZORq6i+WtRVb0RVTyRcI013Mge2Yj9Uu18AitQ7d87MUGwrVWeK1
-         NNZuOdTuh0/XlDVm9nsNQr7v2qsnW51JIx9g9AASj1W071q5n5qzab6H9A4H59XFTOvn
-         7ubAHGw75FHWe3zsOZhlF6dN5g3NnG5z6dtcDC87Ix34Es59kCibF17HGN7Kvl7Bt7G8
-         hf7+Z6Q2Rs4W/QMs2SbtJIxKCJ6vPqq4J0dr0KqU4ws/dHGB4/SfGEHGesn2fv2lfpbT
-         f7VQ==
-X-Gm-Message-State: ANoB5pljig0h2TCrmtxlge5NB3esCRSIDcAspnsrn35tKZq6kihhd/5t
-        BdmZT+bp3c/HnN6a0lFU91+gOA==
-X-Google-Smtp-Source: AA0mqf4IeSQwsDl+1u45CxVm1HfRMtXFY7QhkodjxiwdD7ipkX2OKjUhJJbujpe8qWB0ItynPWazag==
-X-Received: by 2002:a17:902:7443:b0:189:82da:7b70 with SMTP id e3-20020a170902744300b0018982da7b70mr13878354plt.159.1669747429462;
-        Tue, 29 Nov 2022 10:43:49 -0800 (PST)
+        bh=v8lGntM4kOktmfQdUaeSjevYi4oUpuqHsLPXR1CgAwY=;
+        b=GiRqUIjKNSaAI6FHTefPFTo+ozLzglysHvozPQoDq11bxCqJRVAg9SIp07i1biF8eM
+         k/JlaOuxtToBdvN1gQxc3yMLfVp1NkCi2aC8hNaOOU7WFhFr505f7eZ26QR2aBbvfCer
+         9SvQYLDK+cElQTIMi9r6RMMTio935g3oorSzuRehYbvv3FwUS2WGfUamBCROHmFdMKR4
+         MszWvscyBYKdUYZ9W1ZLcOVOD7pU3INeoIl4MOGnNsbYG6tP2U7/XlirIeFb5o+I41Dv
+         7vqzpSlwQGs+7zmDcgEcnL8tAis89zOEhF3v4fKcHcpFsLZi7BYf/SyPtQn6TGtkW0mt
+         F88g==
+X-Gm-Message-State: ANoB5pnJxFHXKg+zAZcHq3LxCmG7du9z5YEhFqFsrD8CzmlXrx3R/uBk
+        wJbYMSp1rk2uxMXQPsBbZe46+g==
+X-Google-Smtp-Source: AA0mqf7cbjoYVp0R9RTwHGzuOaTXMkjf1daC6uT8wIT0jRdIISiBqQiw+C5KaLxr+2dyYMFKxbUmkg==
+X-Received: by 2002:a17:90a:8b03:b0:213:16d2:4d4c with SMTP id y3-20020a17090a8b0300b0021316d24d4cmr61926206pjn.70.1669747430925;
+        Tue, 29 Nov 2022 10:43:50 -0800 (PST)
 Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id u11-20020a170902e80b00b001743ba85d39sm11243785plg.110.2022.11.29.10.43.48
+        by smtp.gmail.com with ESMTPSA id u6-20020a17090a890600b00218abadb6a8sm1658684pjn.49.2022.11.29.10.43.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 10:43:48 -0800 (PST)
-Date:   Tue, 29 Nov 2022 10:43:48 -0800 (PST)
-X-Google-Original-Date: Tue, 29 Nov 2022 10:43:38 PST (-0800)
-Subject:     Re: [PATCH v4 3/3] clocksource: timer-riscv: Set CLOCK_EVT_FEAT_C3STOP based on DT
-In-Reply-To: <CAK9=C2VtgCOk9S_FucJbwsG+nMuBqEsFk3sAMt7_doAKsMHQ8w@mail.gmail.com>
-CC:     Conor Dooley <conor@kernel.org>, anup@brainfault.org,
-        Conor Dooley <conor.dooley@microchip.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
+        Tue, 29 Nov 2022 10:43:50 -0800 (PST)
+Date:   Tue, 29 Nov 2022 10:43:50 -0800 (PST)
+X-Google-Original-Date: Tue, 29 Nov 2022 10:43:40 PST (-0800)
+Subject:     Re: [PATCH v4 0/3] Improve CLOCK_EVT_FEAT_C3STOP feature setting
+In-Reply-To: <20221129140313.886192-1-apatel@ventanamicro.com>
+CC:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         Paul Walmsley <paul.walmsley@sifive.com>,
         daniel.lezcano@linaro.org, tglx@linutronix.de,
         ajones@ventanamicro.com, atishp@atishpatra.org,
-        samuel@sholland.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+        samuel@sholland.org, Conor Dooley <conor.dooley@microchip.com>,
+        anup@brainfault.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        apatel@ventanamicro.com
 From:   Palmer Dabbelt <palmer@dabbelt.com>
 To:     apatel@ventanamicro.com
-Message-ID: <mhng-7ff4d7f4-bbf5-45bf-b4c5-30bc2a53119c@palmer-ri-x1c9a>
+Message-ID: <mhng-767f0a38-40c9-4090-8341-ec0c41dc502b@palmer-ri-x1c9a>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
@@ -77,106 +77,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Nov 2022 09:22:22 PST (-0800), apatel@ventanamicro.com wrote:
-> On Tue, Nov 29, 2022 at 10:47 PM Conor Dooley <conor@kernel.org> wrote:
->>
->> On Tue, Nov 29, 2022 at 10:41:09PM +0530, Anup Patel wrote:
->> > On Tue, Nov 29, 2022 at 8:06 PM Conor Dooley <conor.dooley@microchip.com> wrote:
->> > >
->> > > On Tue, Nov 29, 2022 at 07:33:13PM +0530, Anup Patel wrote:
->> > > > We should set CLOCK_EVT_FEAT_C3STOP for a clock_event_device only
->> > > > when riscv,timer-cant-wake-up DT property is present in the RISC-V
->> > > > timer DT node.
->> > > >
->> > > > This way CLOCK_EVT_FEAT_C3STOP feature is set for clock_event_device
->> > > > based on RISC-V platform capabilities rather than having it set for
->> > > > all RISC-V platforms.
->> > > >
->> > > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
->> > >
->> > > I thought I had left an R-b on this one?
->> > > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->> > >
->> > > Also, I think that we need to backport *something* that disables C3STOP
->> > > which is why I had suggested keeping the revert in place.
->> > > Patch 1 of this series only solves the timer issues but does not restore
->> > > sleep states to their prior behaviour, right?
->> > > Either this patch or the revert needs to go to stable IMO.
->> >
->> > Since it works for you with the C3STOP set and broadcast timer enabled,
->> > we can directly go with this patch. I am fine including the revert as well.
->>
->> I don't mind which gets backported. To me, this one is preferable as it
->> is more "complete" but it is a bit on the new feature side of things,
->> no?
->>
->> Whoever applies it can decide, and I'll backport the revert if they
->> decide that this patch is not stable material :)
+On Tue, 29 Nov 2022 06:03:10 PST (-0800), apatel@ventanamicro.com wrote:
+> This series improves the RISC-V timer driver to set CLOCK_EVT_FEAT_C3STOP
+> feature based on RISC-V platform capabilities.
+>
+> These patches can also be found in riscv_timer_dt_imp_v4 branch at:
+> https://github.com/avpatel/linux.git
+>
+> Changes since v3:
+>  - Rebased on Linux-6.1-rc7
+>  - Replaced PATCH1 with a patch to initialize broadcast timer
+>
+> Changes since v2:
+>  - Include Conor's revert patch as the first patch and rebased other patches
+>  - Update PATCH2 to document bindings for separate RISC-V timer DT node
+>  - Update PATCH3 based on RISC-V timer DT node bindings
+>
+> Changes since v1:
+>  - Rebased on Linux-5.19-rc8
+>  - Renamed "riscv,always-on" DT property to "riscv,timer-can-wake-cpu"
+>
+> Anup Patel (2):
+>   dt-bindings: timer: Add bindings for the RISC-V timer device
+>   clocksource: timer-riscv: Set CLOCK_EVT_FEAT_C3STOP based on DT
+>
+> Conor Dooley (1):
+>   RISC-V: time: initialize broadcast hrtimer based clock event device
+>
+>  .../bindings/timer/riscv,timer.yaml           | 52 +++++++++++++++++++
+>  arch/riscv/kernel/time.c                      |  3 ++
+>  drivers/clocksource/timer-riscv.c             | 12 ++++-
+>  3 files changed, 66 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/devicetree/bindings/timer/riscv,timer.yaml
 
-IIRC the clock folks took the original C3 patch, so that's probably the 
-best way to take these as well?
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
->>
->> Thanks again for helping sort this mess out, I see it helped with your
->> IPI series too!
->
-> Yes, I was surprised to see that it helped the IPI series as well.
-> Thanks for your patch.
->
-> Regards,
-> Anup
->
->>
->> Conor.
->>
->> > > > ---
->> > > >  drivers/clocksource/timer-riscv.c | 12 +++++++++++-
->> > > >  1 file changed, 11 insertions(+), 1 deletion(-)
->> > > >
->> > > > diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
->> > > > index 969a552da8d2..0c8bdd168a45 100644
->> > > > --- a/drivers/clocksource/timer-riscv.c
->> > > > +++ b/drivers/clocksource/timer-riscv.c
->> > > > @@ -28,6 +28,7 @@
->> > > >  #include <asm/timex.h>
->> > > >
->> > > >  static DEFINE_STATIC_KEY_FALSE(riscv_sstc_available);
->> > > > +static bool riscv_timer_cant_wake_cpu;
->> > > >
->> > > >  static int riscv_clock_next_event(unsigned long delta,
->> > > >               struct clock_event_device *ce)
->> > > > @@ -51,7 +52,7 @@ static int riscv_clock_next_event(unsigned long delta,
->> > > >  static unsigned int riscv_clock_event_irq;
->> > > >  static DEFINE_PER_CPU(struct clock_event_device, riscv_clock_event) = {
->> > > >       .name                   = "riscv_timer_clockevent",
->> > > > -     .features               = CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_C3STOP,
->> > > > +     .features               = CLOCK_EVT_FEAT_ONESHOT,
->> > > >       .rating                 = 100,
->> > > >       .set_next_event         = riscv_clock_next_event,
->> > > >  };
->> > > > @@ -85,6 +86,8 @@ static int riscv_timer_starting_cpu(unsigned int cpu)
->> > > >
->> > > >       ce->cpumask = cpumask_of(cpu);
->> > > >       ce->irq = riscv_clock_event_irq;
->> > > > +     if (riscv_timer_cant_wake_cpu)
->> > > > +             ce->features |= CLOCK_EVT_FEAT_C3STOP;
->> > > >       clockevents_config_and_register(ce, riscv_timebase, 100, 0x7fffffff);
->> > > >
->> > > >       enable_percpu_irq(riscv_clock_event_irq,
->> > > > @@ -139,6 +142,13 @@ static int __init riscv_timer_init_dt(struct device_node *n)
->> > > >       if (cpuid != smp_processor_id())
->> > > >               return 0;
->> > > >
->> > > > +     child = of_find_compatible_node(NULL, NULL, "riscv,timer");
->> > > > +     if (child) {
->> > > > +             riscv_timer_cant_wake_cpu = of_property_read_bool(child,
->> > > > +                                             "riscv,timer-cant-wake-cpu");
->> > > > +             of_node_put(child);
->> > > > +     }
->> > > > +
->> > > >       domain = NULL;
->> > > >       child = of_get_compatible_child(n, "riscv,cpu-intc");
->> > > >       if (!child) {
->> > > > --
->> > > > 2.34.1
->> > > >
+IIRC the main issue here were the DT bindings, though, so I think we'll 
+need to make sure that's sorted out.
