@@ -2,184 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ADBB63BFA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2BC63BFA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233829AbiK2MDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 07:03:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
+        id S232238AbiK2MEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 07:04:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233632AbiK2MCf (ORCPT
+        with ESMTP id S233500AbiK2MDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 07:02:35 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44DD27CD9
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:02:31 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id c10-20020a7bc84a000000b003cf81c2d3efso4645781wml.7
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:02:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kKHD6wXDRdVXZxjkYVmrFb70YBOLbGxKyjWRVFbAlzA=;
-        b=hYkv/K0ASciWH84SBcV9WPJD17R0/VCj2CNuTj9xT5CdEWa23xEjclQBK6KFwoX8R/
-         K512drFXtNeGer0JVnaxY6CJRD7iWwj8+2zJs1yFb1tl7IrWPBKJ8zt2HdzuGrgJxBDr
-         TPzIQbwBRacET/yI8gUzujmDswkrqFLMbzkyzkiDbDA6WiIlnhg9Q2J/gA3LMB+GAAbI
-         A+ns2pLy1tD1vPJg9f4yoUu5l3ZS5PJ4KQTkyArOO+Ktz7ykyvlE2ujdutECJnwv0Mur
-         ThAWkDp8T1k4Z6VTenwTSXVk7jgpwME8WaKao94Hk08qf3Rvqagc1QuUMA2+eA9tLGpZ
-         1yug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kKHD6wXDRdVXZxjkYVmrFb70YBOLbGxKyjWRVFbAlzA=;
-        b=WR5ypbvfXZSYqrJM4PW2aq1u1pd/6KwVl+KiQkRdG1A5MTMkPc89ZNMW9syGTeUcN7
-         CykDVV0ajsCDHzFJSLYTbAC8rC/ChE8TSgTU7tEjtUm9tpIU4kbk6idA9SNNG4mR/ra1
-         4+cGGCtpKlVsio+pSO0T2Js5n8b8nXa5oQ8v80zSfkJnDQlfcwAQYd0sdoEWUhpKodqb
-         OQfgk6+HJxRoGcqM7O5XdWkGC9xPvR7zYA7h/F3KBTCk1CB17bh7lG+g4SYBn5AHe2Xd
-         QEI8HB6y8EQ8ddKz5HoZFqeX8lxatBdEUF1d3vLufkQTFJcB4jQLbUKCRdfgjw/16X8t
-         8lLw==
-X-Gm-Message-State: ANoB5pkO+6CslZlEUwregTz9JgEE1vqIrDFaE5tNuq4xkU/AYPR/u+Ge
-        ofGEHwcfGJtbPhlmqcnRjdXHXelj/+ToqV7+Og==
-X-Google-Smtp-Source: AA0mqf7Hu4FblZ/mDtpcqVvgEiX4+Grk4PfFepL1Xs7R/h4nlXvH0Wx4k7HXz+zPNElZ4LDGU3F4Gb8S/H8BRcKMaw==
-X-Received: from peternewman10.zrh.corp.google.com ([2a00:79e0:9d:6:e398:2261:c909:b359])
- (user=peternewman job=sendgmr) by 2002:a05:600c:1da2:b0:3cf:147d:ad9a with
- SMTP id p34-20020a05600c1da200b003cf147dad9amr29113630wms.33.1669723349842;
- Tue, 29 Nov 2022 04:02:29 -0800 (PST)
-Date:   Tue, 29 Nov 2022 13:01:49 +0100
-In-Reply-To: <20221129120149.1035444-1-peternewman@google.com>
-Mime-Version: 1.0
-References: <20221129120149.1035444-1-peternewman@google.com>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221129120149.1035444-3-peternewman@google.com>
-Subject: [PATCH v2 2/2] x86/resctrl: Implement rename op for mon groups
-From:   Peter Newman <peternewman@google.com>
-To:     fenghua.yu@intel.com, reinette.chatre@intel.com
-Cc:     Babu.Moger@amd.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        eranian@google.com, gupasani@google.com, hpa@zytor.com,
-        james.morse@arm.com, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, tglx@linutronix.de, x86@kernel.org,
-        Peter Newman <peternewman@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 29 Nov 2022 07:03:49 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFBE532DA
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:02:53 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D21F021A9D;
+        Tue, 29 Nov 2022 12:02:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1669723371; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z/3hsjogRyiywNOtVq13TN6FozNI4uz7VCcPb28njoU=;
+        b=qqpcbvqqo4tXUVc7mA+18PQYvRcs7oDUpGh/g3Up9IsTr804a/89Jyltjdt0zIJEFsGBZL
+        UsLIyrtQcgG9dfy2KjHa8Ar0QoZgz5ZSycs4s5owWC1PuOg0+F3YPJIdktCFL+iUK0W2Yh
+        jxLY53OWK5LF1Tv7U0fwPq+JKpUtHdw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1669723371;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z/3hsjogRyiywNOtVq13TN6FozNI4uz7VCcPb28njoU=;
+        b=UcQe1LxJo8la8OZ6DKqZjiM5CfBtE6Zb/LqKvfCRlOw5VE/1x5802P26oq+jYQSHBp+sfX
+        rPgRrFVUpemBMDAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A54C013428;
+        Tue, 29 Nov 2022 12:02:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eSCJJ+v0hWNNfQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 29 Nov 2022 12:02:51 +0000
+Message-ID: <d6c614fe-cc80-7a19-1fa6-2ed6cc75b705@suse.cz>
+Date:   Tue, 29 Nov 2022 13:02:51 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 2/2] mm/slub, kunit: Add a test case for kmalloc
+ redzone check
+Content-Language: en-US
+To:     Marco Elver <elver@google.com>
+Cc:     Feng Tang <feng.tang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oliver Glitta <glittao@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20221129063358.3012362-1-feng.tang@intel.com>
+ <20221129063358.3012362-2-feng.tang@intel.com>
+ <CANpmjNNkLWvNYUf-bPPDBcqFWegp3_NpYdhygvYU1dtT52m29g@mail.gmail.com>
+ <67e6ebce-f8cc-7d28-5e85-8a3909c2d180@suse.cz>
+ <CANpmjNNZhXX830jqPn9eaQZHwKhBb4b_PEuUdH6O69ELqW470w@mail.gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <CANpmjNNZhXX830jqPn9eaQZHwKhBb4b_PEuUdH6O69ELqW470w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To change the class of service for a large group of tasks, such as an
-application container, a container manager must write all of the tasks'
-IDs into the tasks file interface of the new control group.
+On 11/29/22 12:48, Marco Elver wrote:
+> On Tue, 29 Nov 2022 at 12:01, Vlastimil Babka <vbabka@suse.cz> wrote:
+>>
+>> On 11/29/22 10:31, Marco Elver wrote:
+>> > On Tue, 29 Nov 2022 at 07:37, Feng Tang <feng.tang@intel.com> wrote:
+> 
+>> For SLAB_SKIP_KFENCE, we could also add the flag after creation to avoid
+>> this trouble? After all there is a sysfs file to control it at runtime
+>> anyway (via skip_kfence_store()).
+>> In that case patch 1 would have to wrap kmem_cache_create() and the flag
+>> addition with a new function to avoid repeating. That function could also be
+>> adding SLAB_NO_USER_FLAGS to kmem_cache_create(), instead of the #define
+>> DEFAULT_FLAGS.
+> 
+> I wouldn't overcomplicate it, all we need is a way to say "this flag
+> should not be used directly" - and only have it available via an
+> indirect step. Availability via sysfs is one such step.
+> 
+> And for tests, there are 2 options:
+> 
+> 1. we could provide a function "kmem_cache_set_test_flags(cache,
+> gfp_flags)" and define SLAB_TEST_FLAGS (which would include
+> SLAB_SKIP_KFENCE). This still allows to set it generally, but should
+> make abuse less likely due to the "test" in the name of that function.
+> 
+> 2. just set it directly, s->flags |= SLAB_SKIP_KFENCE.
+> 
+> If you're fine with #2, that seems simplest and would be my preference.
 
-If a container manager is tracking containers' bandwidth usage by
-placing tasks from each into their own monitoring group, it must first
-move the tasks to the default monitoring group of the new control group
-before it can move the tasks into their new monitoring groups. This is
-undesirable because it makes bandwidth usage during the move
-unattributable to the correct tasks and resets monitoring event counters
-and cache usage information for the group.
+Yeah, that's what I meant. But slub_kunit.c could still have own internal
+cache creation function so the "|SLAB_NO_USER_FLAGS" and "s->flags |=
+SLAB_SKIP_KFENCE" is not repeated X times.
 
-To address this, implement the rename operation for resctrlfs mon groups
-to effect a change in CLOSID for a MON group while otherwise leaving the
-monitoring group intact.
+> 
+>> For SLAB_KMALLOC there's probably no such way unless we abuse the internal
+>> APIs even more and call e.g. create_boot_cache() instead of
+>> kmem_cache_create(). But that one is __init, so probably not. If we do
+>> instead allow the flag, I wouldn't add it to SLAB_CORE_FLAGS but rather
+>> SLAB_CACHE_FLAGS and SLAB_FLAGS_PERMITTED.
+> 
+> I'd probably go with the simplest solution here.
 
-It's important to note that this solution relies on the fact that Intel
-and AMD hardware allow the RMID to be assigned independently of the
-CLOSID. Without this, the operation may not be as useful.
-
-Signed-off-by: Peter Newman <peternewman@google.com>
----
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 66 ++++++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
-
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index 03b51543c26d..d6562d98b816 100644
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -3230,6 +3230,71 @@ static int rdtgroup_rmdir(struct kernfs_node *kn)
- 	return ret;
- }
- 
-+static void mongrp_move(struct rdtgroup *rdtgrp, struct rdtgroup *new_prdtgrp)
-+{
-+	struct rdtgroup *prdtgrp = rdtgrp->mon.parent;
-+	struct task_struct *p, *t;
-+
-+	WARN_ON(list_empty(&prdtgrp->mon.crdtgrp_list));
-+	list_del(&rdtgrp->mon.crdtgrp_list);
-+
-+	list_add_tail(&rdtgrp->mon.crdtgrp_list,
-+		      &new_prdtgrp->mon.crdtgrp_list);
-+	rdtgrp->mon.parent = new_prdtgrp;
-+
-+	read_lock(&tasklist_lock);
-+	for_each_process_thread(p, t) {
-+		if (is_closid_match(t, prdtgrp) && is_rmid_match(t, rdtgrp))
-+			WRITE_ONCE(t->closid, new_prdtgrp->closid);
-+	}
-+	read_unlock(&tasklist_lock);
-+
-+	update_closid_rmid(cpu_online_mask, NULL);
-+}
-+
-+static int rdtgroup_rename(struct kernfs_node *kn,
-+			   struct kernfs_node *new_parent, const char *new_name)
-+{
-+	struct rdtgroup *new_prdtgrp;
-+	struct rdtgroup *rdtgrp;
-+	int ret;
-+
-+	rdtgrp = kernfs_to_rdtgroup(kn);
-+	new_prdtgrp = kernfs_to_rdtgroup(new_parent);
-+	if (!rdtgrp || !new_prdtgrp)
-+		return -EPERM;
-+
-+	/* Release both kernfs active_refs before obtaining rdtgroup mutex. */
-+	rdtgroup_kn_get(rdtgrp, kn);
-+	rdtgroup_kn_get(new_prdtgrp, new_parent);
-+
-+	mutex_lock(&rdtgroup_mutex);
-+
-+	if ((rdtgrp->flags & RDT_DELETED) || (new_prdtgrp->flags & RDT_DELETED)) {
-+		ret = -ESRCH;
-+		goto out;
-+	}
-+
-+	/* Only a mon group can be moved to a new mon_groups directory. */
-+	if (rdtgrp->type != RDTMON_GROUP ||
-+	    !is_mon_groups(new_parent, kn->name)) {
-+		ret = -EPERM;
-+		goto out;
-+	}
-+
-+	ret = kernfs_rename(kn, new_parent, new_name);
-+	if (ret)
-+		goto out;
-+
-+	mongrp_move(rdtgrp, new_prdtgrp);
-+
-+out:
-+	mutex_unlock(&rdtgroup_mutex);
-+	rdtgroup_kn_put(rdtgrp, kn);
-+	rdtgroup_kn_put(new_prdtgrp, new_parent);
-+	return ret;
-+}
-+
- static int rdtgroup_show_options(struct seq_file *seq, struct kernfs_root *kf)
- {
- 	if (resctrl_arch_get_cdp_enabled(RDT_RESOURCE_L3))
-@@ -3247,6 +3312,7 @@ static int rdtgroup_show_options(struct seq_file *seq, struct kernfs_root *kf)
- static struct kernfs_syscall_ops rdtgroup_kf_syscall_ops = {
- 	.mkdir		= rdtgroup_mkdir,
- 	.rmdir		= rdtgroup_rmdir,
-+	.rename		= rdtgroup_rename,
- 	.show_options	= rdtgroup_show_options,
- };
- 
--- 
-2.38.1.584.g0f3c55d4c2-goog
-
+Agreed.
