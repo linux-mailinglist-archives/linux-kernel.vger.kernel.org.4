@@ -2,105 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6EF63B7A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 03:02:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7B663B7A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 03:02:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235119AbiK2CCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 21:02:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48642 "EHLO
+        id S235005AbiK2CC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 21:02:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234969AbiK2CCG (ORCPT
+        with ESMTP id S234969AbiK2CCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 21:02:06 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611CE45ED3;
-        Mon, 28 Nov 2022 18:01:57 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id w129so12306398pfb.5;
-        Mon, 28 Nov 2022 18:01:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=SEEyDFoR/rJt6W9E5UQ/hllazvv+kInvkgHiAjRYRuE=;
-        b=F6TsHjRGgoT4/NKVF1+OfG9CN5wERvdQ5n37SPAlWowHPrq+AppORV6xD2I3gbBndM
-         y/8JA2hq5NJRrofFbzGL6jnHDm2M3MPapAk2grjqqqFm08VCahL5pFSx1uxqga+bz/fO
-         BdTUYuBJybPBhGql4b9iH53damkWd8HPCI9UuEzRv1CmkU3CRQr3mgMvjXrSHBukbIMG
-         kMQlA7uRooYYTPJKaw8T4Ko+n0GtM+8XzbtRbxjxWg6K3n2H5TbW3q/y1P3nMdfiNWwW
-         jR1urrn32BkMV+4kIIe6l7y81lQBtZhnSG/yzR084xptyyLMpMTUESs9NNMUjwX904dW
-         djgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SEEyDFoR/rJt6W9E5UQ/hllazvv+kInvkgHiAjRYRuE=;
-        b=6cD3joVX1FnM2XNOJGqJuEgPFudBGMyUOKA2lpJC0JYlLl64mJIEgIVUJlQf6zIHcL
-         f0u/ww9n1XkpGwsnzcjhRnIngnceGpdVQFZnZmZ3/1+ytYPpfhu0mUSEFGJxgGRB5Pc3
-         2fv1/Ds/UW4grf9rwpGLV+MIdAtPmsSmypsVIvin6FC9OefBFaqnxIPWBSlHXE/qA5vF
-         kTTsv0Wi/nXYnVV2Apuuytwg/VxjsEUBK2eqZouAM6+rx/Y88LK39b70rPnOURPVvC5X
-         XRCVU8ZBv0TjQpI86vajbNx/1XxvpVuF3O5ChtH/9spQBrWGcfykCqR6Jw+3esHQtHuL
-         +JRw==
-X-Gm-Message-State: ANoB5plRaiY9LS33I980u9k5KjkBIrU8ddpEUg0qi86Skwqzq2IeVVWe
-        crHPmgpqdXk+c5GjlLTDoI8=
-X-Google-Smtp-Source: AA0mqf4JcHhquyZThG35aXxIDmPsnKqkNpe8ZloTBYH7CvQ10CKCAbdTAYb6dPv4Q6RWkanW3t0zyQ==
-X-Received: by 2002:a63:389:0:b0:477:7f68:bbbc with SMTP id 131-20020a630389000000b004777f68bbbcmr25979904pgd.279.1669687316944;
-        Mon, 28 Nov 2022 18:01:56 -0800 (PST)
-Received: from XH22050090-L.ad.ts.tri-ad.global ([103.175.111.222])
-        by smtp.gmail.com with ESMTPSA id i65-20020a626d44000000b0057458d1f939sm8602175pfc.152.2022.11.28.18.01.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 18:01:56 -0800 (PST)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Jiri Pirko <jiri@nvidia.com>, Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH net-next] net: devlink: add DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER
-Date:   Tue, 29 Nov 2022 11:01:51 +0900
-Message-Id: <20221129020151.3842613-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.25.1
+        Mon, 28 Nov 2022 21:02:54 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A8FE02
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:02:49 -0800 (PST)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NLlvj3zZrz15MyB;
+        Tue, 29 Nov 2022 10:02:09 +0800 (CST)
+Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 29 Nov 2022 10:02:47 +0800
+Received: from [10.67.103.158] (10.67.103.158) by
+ kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 29 Nov 2022 10:02:47 +0800
+Subject: Re: [PATCH v3 1/5] vfio/migration: Add debugfs to live migration
+ driver
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     <alex.williamson@redhat.com>,
+        <shameerali.kolothum.thodi@huawei.com>, <john.garry@huawei.com>,
+        <cohuck@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>
+References: <20221128031200.11017-1-liulongfang@huawei.com>
+ <20221128031200.11017-2-liulongfang@huawei.com> <Y4S59c2dWqdrdUlg@nvidia.com>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <ca3059d7-c73c-e712-9924-94891229cefd@huawei.com>
+Date:   Tue, 29 Nov 2022 10:02:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y4S59c2dWqdrdUlg@nvidia.com>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.103.158]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As discussed in [1], abbreviating the bootloader to "bl" might not be
-well understood. Instead, a bootloader technically being a firmware,
-name it "fw.bootloader".
+On 2022/11/28 21:39, Jason Gunthorpe wrote:
+> On Mon, Nov 28, 2022 at 11:11:56AM +0800, Longfang Liu wrote:
+> 
+>> @@ -119,6 +132,9 @@ struct vfio_migration_ops {
+>>  				   enum vfio_device_mig_state *curr_state);
+>>  	int (*migration_get_data_size)(struct vfio_device *device,
+>>  				       unsigned long *stop_copy_length);
+>> +	int (*migration_get_data)(struct vfio_device *device, char *buffer);
+>> +	int (*migration_get_attr)(struct vfio_device *device, char *buffer);
+>> +	int (*migration_debug_operate)(struct vfio_device *device,
+>>  				   unsigned int cmd);
+> 
+> Please don't do wrappers like this, give the variant driver a chance
+> to create its own files natively under the debugfs directory
+> 
 
-Add a new macro to devlink.h to formalize this new info attribute
-name.
+Using this public debugfs file does not need to deal with file
+creation and destruction.
+The driver only needs to define its debug operation command,
+isn't it simpler?
 
-[1] https://lore.kernel.org/netdev/20221128142723.2f826d20@kernel.org/
-
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- include/net/devlink.h | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/include/net/devlink.h b/include/net/devlink.h
-index 074a79b8933f..2f552b90b5c6 100644
---- a/include/net/devlink.h
-+++ b/include/net/devlink.h
-@@ -621,6 +621,8 @@ enum devlink_param_generic_id {
- #define DEVLINK_INFO_VERSION_GENERIC_FW_ROCE	"fw.roce"
- /* Firmware bundle identifier */
- #define DEVLINK_INFO_VERSION_GENERIC_FW_BUNDLE_ID	"fw.bundle_id"
-+/* Bootloader */
-+#define DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER	"fw.bootloader"
- 
- /**
-  * struct devlink_flash_update_params - Flash Update parameters
--- 
-2.25.1
-
+Thanks,
+Longfang.
+> Jason
+> .
+> 
