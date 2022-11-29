@@ -2,159 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1565A63B9DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 07:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A82CD63B9DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 07:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiK2GhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 01:37:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
+        id S229591AbiK2Ghu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 01:37:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiK2GhA (ORCPT
+        with ESMTP id S229449AbiK2Ghr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 01:37:00 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE40532E3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 22:36:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669703819; x=1701239819;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7mjnKay8jU2S2Yvtj+sHUiviWAPaCCXEzlMpUe4IYiY=;
-  b=BRDcQ8RLxKBNxjXIazw+5ZxE+WszOzpwPaxafZGe2sINwuB+3u31Df6s
-   brgZRFeFUtwdwbdg8hTT/f8JqfmEVoP+wVPuO1EiLBsvK5KeRHhIHKXG9
-   JTKXJGVJEku3+x7D9OfscT6KxzwqYl2R3DT9LxLWLTAV0wvnfQ8/02pqX
-   d77NyZrdOYkwEziAzoHFHKWki+mxwedUQqQlU7bxa8Zt44wM4K0njqSnB
-   MAIVSwhhcWIMmF4IfQmofC1t1Y9+eQJ5rr5A45opjPDJKxTCohGL92hsW
-   3nKDAeKXl9xbe3yqTbsraDa3uCAT+VkDZiPlxrm0F5/8qnXqogfZMy2jt
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="377178792"
-X-IronPort-AV: E=Sophos;i="5.96,202,1665471600"; 
-   d="scan'208";a="377178792"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 22:36:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="645784217"
-X-IronPort-AV: E=Sophos;i="5.96,202,1665471600"; 
-   d="scan'208";a="645784217"
-Received: from feng-clx.sh.intel.com ([10.238.200.228])
-  by fmsmga007.fm.intel.com with ESMTP; 28 Nov 2022 22:36:56 -0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oliver Glitta <glittao@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Marco Elver <elver@google.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Feng Tang <feng.tang@intel.com>
-Subject: [PATCH v2 2/2] mm/slub, kunit: Add a test case for kmalloc redzone check
-Date:   Tue, 29 Nov 2022 14:33:58 +0800
-Message-Id: <20221129063358.3012362-2-feng.tang@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221129063358.3012362-1-feng.tang@intel.com>
-References: <20221129063358.3012362-1-feng.tang@intel.com>
+        Tue, 29 Nov 2022 01:37:47 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E27610BF;
+        Mon, 28 Nov 2022 22:37:41 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AT4wgDc005078;
+        Tue, 29 Nov 2022 06:36:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=caj+s+czmNQi0XmGAmJvS2ybhS2pZZke9jRdHEJLPhY=;
+ b=iI86H45LC9FR453Ijd+dvBe58idGPajCB0ZHu+PNNzqegJL41mTNo4wcC7fP+gB1KwBe
+ FuitXRobIy1tVRjkltcSSG6koVLmWiLt7le4yVx1O8WxQPIYpkV+/bxq+Rb2bov6n7XH
+ vXbFEM3jZiurEGf0VSpXMeDrJQyuGwWRHkK5XU+OdArvC6k0rF8m141cvFQtVWeE1o/o
+ 7h4dwE/1PcnVb3CooaltGf1+70Ktpm8Xh3+BVJhH6sxFM/rT1pQJIJCi8NuQo4iKL16b
+ B+qcek23Hk0NwRP6jxUXYFzc3oIuOfNPnWT+zNYXOhpDhge8tcgpmYR31huvIygosPIF GA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m56c68s0b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 06:36:45 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AT6aiIb029608
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 06:36:44 GMT
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 28 Nov 2022 22:36:38 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
+        <devicetree@vger.kernel.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH] ASoC: qcom: lpass-sc7280: Add system suspend/resume PM ops
+Date:   Tue, 29 Nov 2022 12:06:24 +0530
+Message-ID: <1669703784-27589-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: xZ2XiQUcoNkUT8SkfIcv5q2dsdGpLfDU
+X-Proofpoint-GUID: xZ2XiQUcoNkUT8SkfIcv5q2dsdGpLfDU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-29_04,2022-11-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ mlxscore=0 phishscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
+ impostorscore=0 bulkscore=0 mlxlogscore=923 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211290042
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmalloc redzone check for slub has been merged, and it's better to add
-a kunit case for it, which is inspired by a real-world case as described
-in commit 120ee599b5bf ("staging: octeon-usb: prevent memory corruption"):
+Update lpass sc7280 platform driver with PM ops, such as
+system supend and resume callbacks.
+This update is required to disable clocks during supend and
+avoid XO shutdown issue.
 
-"
-  octeon-hcd will crash the kernel when SLOB is used. This usually happens
-  after the 18-byte control transfer when a device descriptor is read.
-  The DMA engine is always transferring full 32-bit words and if the
-  transfer is shorter, some random garbage appears after the buffer.
-  The problem is not visible with SLUB since it rounds up the allocations
-  to word boundary, and the extra bytes will go undetected.
-"
-
-To avoid interrupting the normal functioning of kmalloc caches, a
-kmem_cache mimicing kmalloc cache is created with similar and all
-necessary flags to have kmalloc-redzone enabled, and kmalloc_trace()
-is used to really test the orig_size and redzone setup.
-
-Suggested-by: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Feng Tang <feng.tang@intel.com>
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Tested-by: Rahul Ajmeriya <quic_rajmeriy@quicinc.com>
 ---
-Changelog:
- 
-  since v1:
-  * create a new cache mimicing kmalloc cache, reduce dependency
-    over global slub_debug setting (Vlastimil Babka)
+ sound/soc/qcom/lpass-sc7280.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
- lib/slub_kunit.c | 23 +++++++++++++++++++++++
- mm/slab.h        |  3 ++-
- 2 files changed, 25 insertions(+), 1 deletion(-)
-
-diff --git a/lib/slub_kunit.c b/lib/slub_kunit.c
-index a303adf8f11c..dbdd656624d0 100644
---- a/lib/slub_kunit.c
-+++ b/lib/slub_kunit.c
-@@ -122,6 +122,28 @@ static void test_clobber_redzone_free(struct kunit *test)
- 	kmem_cache_destroy(s);
- }
+diff --git a/sound/soc/qcom/lpass-sc7280.c b/sound/soc/qcom/lpass-sc7280.c
+index 70c4df8..65a04d3 100644
+--- a/sound/soc/qcom/lpass-sc7280.c
++++ b/sound/soc/qcom/lpass-sc7280.c
+@@ -232,10 +232,27 @@ static int sc7280_lpass_exit(struct platform_device *pdev)
+ 	struct lpass_data *drvdata = platform_get_drvdata(pdev);
  
-+static void test_kmalloc_redzone_access(struct kunit *test)
-+{
-+	struct kmem_cache *s = kmem_cache_create("TestSlub_RZ_kmalloc", 32, 0,
-+				SLAB_KMALLOC|SLAB_STORE_USER|SLAB_RED_ZONE|DEFAULT_FLAGS,
-+				NULL);
-+	u8 *p = kmalloc_trace(s, GFP_KERNEL, 18);
-+
-+	kasan_disable_current();
-+
-+	/* Suppress the -Warray-bounds warning */
-+	OPTIMIZER_HIDE_VAR(p);
-+	p[18] = 0xab;
-+	p[19] = 0xab;
-+
-+	kmem_cache_free(s, p);
-+	validate_slab_cache(s);
-+	KUNIT_EXPECT_EQ(test, 2, slab_errors);
-+
-+	kasan_enable_current();
-+	kmem_cache_destroy(s);
+ 	clk_bulk_disable_unprepare(drvdata->num_clks, drvdata->clks);
++	return 0;
 +}
 +
- static int test_init(struct kunit *test)
- {
- 	slab_errors = 0;
-@@ -141,6 +163,7 @@ static struct kunit_case test_cases[] = {
- #endif
++static int sc7280_lpass_dev_resume(struct device *dev)
++{
++	struct lpass_data *drvdata = dev_get_drvdata(dev);
++
++	return clk_bulk_prepare_enable(drvdata->num_clks, drvdata->clks);
++}
++
++static int sc7280_lpass_dev_suspend(struct device *dev)
++{
++	struct lpass_data *drvdata = dev_get_drvdata(dev);
  
- 	KUNIT_CASE(test_clobber_redzone_free),
-+	KUNIT_CASE(test_kmalloc_redzone_access),
- 	{}
- };
++	clk_bulk_disable_unprepare(drvdata->num_clks, drvdata->clks);
+ 	return 0;
+ }
  
-diff --git a/mm/slab.h b/mm/slab.h
-index c71590f3a22b..b6cd98b16ba7 100644
---- a/mm/slab.h
-+++ b/mm/slab.h
-@@ -327,7 +327,8 @@ static inline slab_flags_t kmem_cache_flags(unsigned int object_size,
- /* Legal flag mask for kmem_cache_create(), for various configurations */
- #define SLAB_CORE_FLAGS (SLAB_HWCACHE_ALIGN | SLAB_CACHE_DMA | \
- 			 SLAB_CACHE_DMA32 | SLAB_PANIC | \
--			 SLAB_TYPESAFE_BY_RCU | SLAB_DEBUG_OBJECTS )
-+			 SLAB_KMALLOC | SLAB_SKIP_KFENCE | \
-+			 SLAB_TYPESAFE_BY_RCU | SLAB_DEBUG_OBJECTS)
- 
- #if defined(CONFIG_DEBUG_SLAB)
- #define SLAB_DEBUG_FLAGS (SLAB_RED_ZONE | SLAB_POISON | SLAB_STORE_USER)
++static const struct dev_pm_ops sc7280_lpass_pm_ops = {
++	SET_SYSTEM_SLEEP_PM_OPS(sc7280_lpass_dev_suspend, sc7280_lpass_dev_resume)
++};
+ static struct lpass_variant sc7280_data = {
+ 	.i2sctrl_reg_base		= 0x1000,
+ 	.i2sctrl_reg_stride		= 0x1000,
+@@ -426,6 +443,7 @@ static struct platform_driver sc7280_lpass_cpu_platform_driver = {
+ 	.driver = {
+ 		.name = "sc7280-lpass-cpu",
+ 		.of_match_table = of_match_ptr(sc7280_lpass_cpu_device_id),
++		.pm = &sc7280_lpass_pm_ops,
+ 	},
+ 	.probe = asoc_qcom_lpass_cpu_platform_probe,
+ 	.remove = asoc_qcom_lpass_cpu_platform_remove,
 -- 
-2.34.1
+2.7.4
 
