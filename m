@@ -2,82 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1112963C745
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 19:38:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B732463C74B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 19:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236061AbiK2Sic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 13:38:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
+        id S234622AbiK2Slf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 13:41:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234622AbiK2Sia (ORCPT
+        with ESMTP id S235871AbiK2Sl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 13:38:30 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C0412751
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 10:38:29 -0800 (PST)
-Received: from [192.168.2.15] (109-252-124-61.nat.spd-mgts.ru [109.252.124.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EE5DE6602B2C;
-        Tue, 29 Nov 2022 18:38:25 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669747107;
-        bh=SMfclwv6QeX+nPT29Ty4W4fFsR6WCOe7dD5ldDTWBkI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Dym7/QJw+bIu/OjIw8TjrDfCVAlijuJzbieOtAMrEXpEh459oT0YAoasyW130JQ5N
-         wozf8QMdG1Mlw9apFEYKYyi0biskEfdgopRMUCHLSlEbuTKxlvkiK3FYLOBLXZfVlg
-         LqAB+m2J9+SKpzfBa3xDSYVAnlTZLQjbcJO5qVNg7s2+8+GGNZgVR7djU/yTXo09m+
-         LrSXKXf0FaVDqEd0o/krQFOlasvHuJaxTvMVCj94OpLmMtuXdbncTltxmzDvzPqc9H
-         pCcxhRN6J/7pmOxNwjLquH6EZImqo0wmlB/7zP0jvFoKrStXK5aaNeNjmUAks+DCMz
-         xDrHAj5e0F3pQ==
-Message-ID: <887fa036-c370-c241-94c8-3cb7433e09f8@collabora.com>
-Date:   Tue, 29 Nov 2022 21:38:22 +0300
+        Tue, 29 Nov 2022 13:41:28 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E5CC459847;
+        Tue, 29 Nov 2022 10:41:26 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8926ED6E;
+        Tue, 29 Nov 2022 10:41:32 -0800 (PST)
+Received: from [10.57.71.118] (unknown [10.57.71.118])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1E9503FA32;
+        Tue, 29 Nov 2022 10:41:22 -0800 (PST)
+Message-ID: <eb30ad63-92d4-2af4-22e7-d82cdf08565e@arm.com>
+Date:   Tue, 29 Nov 2022 18:41:22 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] drm/virtio: Spiff out cmd queue/response traces
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221129174330.262751-1-robdclark@gmail.com>
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20221129174330.262751-1-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 4/7] iommu: Let iommu.strict override
+ ops->def_domain_type
+Content-Language: en-GB
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
+        Julian Ruess <julianr@linux.ibm.com>
+References: <20221116171656.4128212-1-schnelle@linux.ibm.com>
+ <20221116171656.4128212-5-schnelle@linux.ibm.com>
+ <33eea9bd-e101-4836-19e8-d4b191b78b00@linux.intel.com>
+ <9163440eb6a47fe02730638bbdf72fda5ee5ad2c.camel@linux.ibm.com>
+ <Y4S3z6IpeDHmdUs/@nvidia.com>
+ <52fe7769ca5b66523c2c93c7d46ebc17dc144aca.camel@linux.ibm.com>
+ <Y4TjWOXYD+DK+d/B@nvidia.com> <6c4c3a3e-1d8d-7994-3c03-388ef63dddb3@arm.com>
+ <Y4ZCVgLO9AHatwXe@nvidia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <Y4ZCVgLO9AHatwXe@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/22 20:43, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
+On 2022-11-29 17:33, Jason Gunthorpe wrote:
+> On Mon, Nov 28, 2022 at 09:01:43PM +0000, Robin Murphy wrote:
 > 
-> Add a sequence # for more easily matching up cmd/resp, and the # of free
-> slots in the virtqueue to more easily see starvation issues.
+>> I'm hardly an advocate for trying to save users from themselves, but I
+>> honestly can't see any justifiable reason for not having sysfs respect
+>> iommu_get_def_domain_type().
 > 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->  drivers/gpu/drm/virtio/virtgpu_drv.h   |  3 +++
->  drivers/gpu/drm/virtio/virtgpu_trace.h | 20 ++++++++++++--------
->  drivers/gpu/drm/virtio/virtgpu_vq.c    | 13 ++++++++++---
->  3 files changed, 25 insertions(+), 11 deletions(-)
+> We really need to rename this value if it is not actually just an
+> advisory "default" but a functional requirement ..
 
-Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+It represents a required default domain type. As in, the type for the 
+device's default domain. Not the default type for a domain. It's the 
+iommu_def_domain_type variable that holds the *default* default domain 
+type ;)
 
--- 
-Best regards,
-Dmitry
+Which reminds me I should finish that patch undoing my terrible 
+ops->default_domain_ops idea, not least because they are misleadingly 
+unrelated to default domains...
 
+>>> The driver should have no say in how dma-iommu.c works beyond if it
+>>> provides the required ops functionalities, and hint(s) as to what
+>>> gives best performance.
+>>
+>> That should already be the case today, as outlined in my other mail. It's
+>> just somewhat more evolved than designed, so may not be so clear to
+>> everyone.
+> 
+> It is close to being clear, once we get the last touches of dma-iommu
+> stuff out of the drivers it should be quite clear
+
+Cool, some upheaval of .domain_alloc is next on my hitlist anyway, so 
+that might be a good excuse to upheave it a bit more and streamline the 
+type stuff along the way.
+
+Cheers,
+Robin.
