@@ -2,442 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0690D63C4DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0516D63C4DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:13:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235350AbiK2QMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 11:12:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
+        id S236013AbiK2QM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 11:12:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234738AbiK2QLs (ORCPT
+        with ESMTP id S236004AbiK2QM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 11:11:48 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E7859169
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 08:11:47 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id w15so9678797wrl.9
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 08:11:47 -0800 (PST)
+        Tue, 29 Nov 2022 11:12:29 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C52368C4A
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 08:12:27 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id b2so18702116eja.7
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 08:12:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7XHqJCL0YK4FWR7GzNLRu43PKAghRuEUD3cVbOeK4pc=;
-        b=G1ulTJ7wmHFUAtNopaArrimu8+9gMcFZmLmG608Ew2qPwxeismvzMnCz1iScxGxGh8
-         mSvMMabT+KyIGA8ynlBwzIgayHbodGMrpO6QKNoOU+/BYi0vPZy0DO49jrFSBOSNOZAb
-         o6srRoJiKmbtMKLZBrOEMKAZ3sEq158ATr1cgsdZMs/cZ18lwiCzriu/Sms3LnN7mCVu
-         AX3spXVw4a+LWCFTlWDnx6DiV9RtQXFvNVbvJCzDFIMi+NiFQDQJ12FOZiFikoh2jUj6
-         zgVJBYhMLTXOVlIuvrgdBJDZeBGAh9+G+AvLciJIMfZLoUVYntljkK2FGmxVdr7E8KnG
-         xqaA==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=a2BTyx6zja/aiP2vpU1kgbIcNE6NH07BMx/8T7jRK2A=;
+        b=ANvZAIuNiA+jgFYRHiId7bCAXZ0st4A1Ivv1McCza4miewPJjMOnECcdKk8SgJhoEn
+         xtw4y16QpvZ0E/V8080GtKCOvg2LMJMtzgqCEGoPi4rfQR2n84LHNczcRXT+8/xJ3VkU
+         LGVDginlRkG/X+io9Ml3rtrtf0oPd7OaXKasWvdj3soNdyxD6fo9D5MBVVcvhF27mJ0f
+         lEICX3kOVnfuG+b6ZbisSmnCk3Q30EWVlR9UDBK4wA3NuWRKENrPWb8kZ6ITfxmTD9+k
+         kamM45FdTepWPGm9/Lmybfv9ZIQKSYlWOmqCqKOfGJp2a0i1Y+yf+jdYcDM8XbxkEG7j
+         LivA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7XHqJCL0YK4FWR7GzNLRu43PKAghRuEUD3cVbOeK4pc=;
-        b=fFOCTX3eLoCNVMBUnGbIghe8RyJQ3MspiN/0P3gijHHI8/R3sU2N6LpgcAKhpPVH8d
-         ooplsmEiNiLmo7sH1Gl/1CmAH5FlLJLCn7jkwcucMifgVslcy9RD7tuVoqw3yvzhd0Jh
-         LiZw6Zzjny5pv5Om4Ldu/j6XdvCqjOxD6c90fF2N/e7lC0qu+IwdAizKe4txJJorOEMz
-         lT+hB4qEbNHRhDvNaHAf2h0ceLnrt5gcSEBQBnpVszn+O6b+KH9i1F7zOFJGvpICdu8O
-         Gte2tsKv1WThFWTw6OPUC8oHlX6WzLnhEAXft7KhmuTFthDO/DjIHtwQX9FAOhWZFhEv
-         qtaQ==
-X-Gm-Message-State: ANoB5pk8y0viXeWjdmCpduWGF31c6ivSGqnKGxR5rj8u7WD50BOpV1+X
-        nlKGH6j1ibO0D5AiRdsGdoaWng==
-X-Google-Smtp-Source: AA0mqf6pdFfstKJyCAQ+qo2FaE+Oe7pKTfzd5xV3uB77OxzJDzvCKK6xDxHPqab+QlA2Ia026Y5tNw==
-X-Received: by 2002:adf:e7cd:0:b0:236:960f:161d with SMTP id e13-20020adfe7cd000000b00236960f161dmr28379737wrn.376.1669738305611;
-        Tue, 29 Nov 2022 08:11:45 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id n26-20020a05600c3b9a00b003c6b70a4d69sm3144522wms.42.2022.11.29.08.11.45
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a2BTyx6zja/aiP2vpU1kgbIcNE6NH07BMx/8T7jRK2A=;
+        b=AZL/RW55aLTAxuPa7rAzQ1Gs0rgvkbnCQE6beqqyuBwyd47uuMsq8o+jtg5xn+x5FZ
+         emfekeS1JQOjIOqNnzaRrw0ZMFOS5bDC4CTUxBGOBy9yq0AR3zmNpYEMOLFiarGj9uLk
+         aljE83GYWsUbKd1aeFHyKY5VJ3mfYncxg719sz2K9lXWwqXglMfIS6I1KriZ+JJWbGdS
+         h8N85QNH314QJ3kz+MB2kRLipqMoN9wYlsx1SFmZZ1f+5CsAojFK7i+gRE5mmVr4DnVe
+         3r/vq+R/yEAxkdW1nIEjxvCR12IgNorHQSfu57oRoDY0yZ0VuHYFcwiiu4aQgwZMrRpW
+         Balg==
+X-Gm-Message-State: ANoB5plJzruUYgKK7bi09I849a40H8HE1fGvZmmHxiv6o3cTGtFBlRqM
+        aEQYXnzaixAIgdEvJb8OehajTQ==
+X-Google-Smtp-Source: AA0mqf4omWTvqDfQ/sdcDi7RTXKGQ4FH+dy9PMnwghOxXXZ8/DddGvb6jwUaQVs9VfnK0zywMUMmxQ==
+X-Received: by 2002:a17:906:844:b0:78c:2c03:804c with SMTP id f4-20020a170906084400b0078c2c03804cmr36090401ejd.107.1669738345813;
+        Tue, 29 Nov 2022 08:12:25 -0800 (PST)
+Received: from localhost (2001-1ae9-1c2-4c00-748-2a9a-a2a6-1362.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:748:2a9a:a2a6:1362])
+        by smtp.gmail.com with ESMTPSA id p23-20020a17090635d700b00780b1979adesm6318224ejb.218.2022.11.29.08.12.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 08:11:45 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-pwm@vger.kernel.org
-Subject: [PATCH v8 4/4] hwmon: (max6639) Add pwm support
-Date:   Tue, 29 Nov 2022 17:11:34 +0100
-Message-Id: <20221129161134.2672474-5-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221129161134.2672474-1-Naresh.Solanki@9elements.com>
-References: <20221129161134.2672474-1-Naresh.Solanki@9elements.com>
+        Tue, 29 Nov 2022 08:12:25 -0800 (PST)
+Date:   Tue, 29 Nov 2022 17:12:23 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux-riscv@lists.infradead.org, aou@eecs.berkeley.edu,
+        conor@kernel.org, devicetree@vger.kernel.org, guoren@kernel.org,
+        heiko@sntech.de, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, robh+dt@kernel.org
+Subject: Re: [RFC 1/2] RISC-V: clarify ISA string ordering rules in cpu.c
+Message-ID: <20221129161223.gelsvctfnqg7pdwb@kamzik>
+References: <Y4XvnHIPw8ZuBZEk@wendy>
+ <20221129144742.2935581-2-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221129144742.2935581-2-conor.dooley@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pwm support for max6639. Also configure pwm fan speed based on pwm
-provided in DT.
+On Tue, Nov 29, 2022 at 02:47:42PM +0000, Conor Dooley wrote:
+> While the list of rules may have been accurate when created, it now
+> lacks some clarity in the face of isa-manual updates. Specifically:
+> 
+> - there is no mention here of a distinction between regular 'Z'
+>   extensions which are "Additional Standard Extensions" and "Zxm"
+>   extensions which are "Standard Machine-Level Extensions"
+> 
+> - there is also no explicit mention of where either should be sorted in
+>   the list
+> 
+> - underscores are only required between two *multi-letter* extensions but
+>   the list of rules implies that this is required between a multi-letter
+>   extension and any other extension. IOW "rv64imafdzicsr_zifencei" is a
+>   valid string
+> 
+> Attempt to clean up the list of rules, by adding information on the
+> above & sprinkling in some white space for readability.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  arch/riscv/kernel/cpu.c | 22 +++++++++++++++++-----
+>  1 file changed, 17 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> index 852ecccd8920..5e42c92a8456 100644
+> --- a/arch/riscv/kernel/cpu.c
+> +++ b/arch/riscv/kernel/cpu.c
+> @@ -120,20 +120,32 @@ device_initcall(riscv_cpuinfo_init);
+>  		.uprop = #UPROP,				\
+>  		.isa_ext_id = EXTID,				\
+>  	}
+> +
+>  /*
+>   * Here are the ordering rules of extension naming defined by RISC-V
+>   * specification :
+> - * 1. All extensions should be separated from other multi-letter extensions
+> - *    by an underscore.
+> + *
+> + * 1. All multi-letter extensions should be separated from other multi-letter
+> + *    extensions by an underscore.
+> + *
+>   * 2. The first letter following the 'Z' conventionally indicates the most
+>   *    closely related alphabetical extension category, IMAFDQLCBKJTPVH.
+> - *    If multiple 'Z' extensions are named, they should be ordered first
+> - *    by category, then alphabetically within a category.
+> + *    'Z' extensions should be sorted after single-letter extensions and before
+> + *    any higher-privileged extensions.
+> + *    If multiple 'Z' extensions are named, they should be ordered first by
+> + *    category, then alphabetically within a category.
+> + *
+>   * 3. Standard supervisor-level extensions (starts with 'S') should be
+>   *    listed after standard unprivileged extensions.  If multiple
+>   *    supervisor-level extensions are listed, they should be ordered
+>   *    alphabetically.
+> - * 4. Non-standard extensions (starts with 'X') must be listed after all
+> + *
+> + * 4  Standard machine-level extensions (starts with 'Zxm') should be
+> + *    listed after any lower-privileged, standard extensions.  If multiple
+> + *    machine-level extensions are listed, they should be ordered
+> + *    alphabetically.
+> + *
+> + * 5. Non-standard extensions (starts with 'X') must be listed after all
+>   *    standard extensions. They must be separated from other multi-letter
+>   *    extensions by an underscore.
+>   */
+> -- 
+> 2.38.1
+>
 
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
----
- drivers/hwmon/Kconfig   |   1 +
- drivers/hwmon/max6639.c | 243 +++++++++++++++++++++++++++++++++++++---
- 2 files changed, 230 insertions(+), 14 deletions(-)
+Alternatively, we could change the comment to just point out the spec
+chapter and provide an example, e.g.
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 3176c33af6c6..56d9004b7a38 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1115,6 +1115,7 @@ config SENSORS_MAX6621
- config SENSORS_MAX6639
- 	tristate "Maxim MAX6639 sensor chip"
- 	depends on I2C
-+	depends on PWM
- 	help
- 	  If you say yes here you get support for the MAX6639
- 	  sensor chips.
-diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
-index e09358713bef..302186532e0f 100644
---- a/drivers/hwmon/max6639.c
-+++ b/drivers/hwmon/max6639.c
-@@ -19,6 +19,7 @@
- #include <linux/hwmon-sysfs.h>
- #include <linux/err.h>
- #include <linux/mutex.h>
-+#include <linux/pwm.h>
- 
- /* Addresses to scan */
- static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
-@@ -53,11 +54,17 @@ static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
- #define MAX6639_GCONFIG_PWM_FREQ_HI		0x08
- 
- #define MAX6639_FAN_CONFIG1_PWM			0x80
--
-+#define MAX6639_REG_FAN_CONFIG2a_PWM_POL	0x02
- #define MAX6639_FAN_CONFIG3_THERM_FULL_SPEED	0x40
-+#define MAX6639_FAN_CONFIG3_FREQ_MASK		0x03
-+#define MAX6639_REG_TARGTDUTY_SLOT		120
- 
- static const int rpm_ranges[] = { 2000, 4000, 8000, 16000 };
- 
-+/* Supported PWM frequency */
-+static const unsigned int freq_table[] = { 20, 33, 50, 100, 5000, 8333, 12500,
-+					   25000 };
-+
- #define FAN_FROM_REG(val, rpm_range)	((val) == 0 || (val) == 255 ? \
- 				0 : (rpm_ranges[rpm_range] * 30) / (val))
- #define TEMP_LIMIT_TO_REG(val)	clamp_val((val) / 1000, 0, 255)
-@@ -75,6 +82,9 @@ struct max6639_data {
- 	u16 temp[2];		/* Temperature, in 1/8 C, 0..255 C */
- 	bool temp_fault[2];	/* Detected temperature diode failure */
- 	u8 fan[2];		/* Register value: TACH count for fans >=30 */
-+	struct pwm_device *pwmd[2]; /* max6639 has two pwm device */
-+	u32 target_rpm[2];
-+	u32 max_rpm[2];
- 	u8 status;		/* Detected channel alarms and fan failures */
- 
- 	/* Register values only written to */
-@@ -89,6 +99,8 @@ struct max6639_data {
- 
- 	/* Optional regulator for FAN supply */
- 	struct regulator *reg;
-+	/* max6639 pwm chip */
-+	struct pwm_chip chip;
- };
- 
- static struct max6639_data *max6639_update_device(struct device *dev)
-@@ -279,8 +291,11 @@ static ssize_t pwm_show(struct device *dev, struct device_attribute *dev_attr,
- {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
- 	struct max6639_data *data = dev_get_drvdata(dev);
-+	struct pwm_state state;
-+
-+	pwm_get_state(data->pwmd[attr->index], &state);
- 
--	return sprintf(buf, "%d\n", data->pwm[attr->index] * 255 / 120);
-+	return sprintf(buf, "%d\n", pwm_get_relative_duty_cycle(&state, 255));
- }
- 
- static ssize_t pwm_store(struct device *dev,
-@@ -289,9 +304,9 @@ static ssize_t pwm_store(struct device *dev,
- {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
- 	struct max6639_data *data = dev_get_drvdata(dev);
--	struct i2c_client *client = data->client;
- 	unsigned long val;
- 	int res;
-+	struct pwm_state state;
- 
- 	res = kstrtoul(buf, 10, &val);
- 	if (res)
-@@ -299,12 +314,12 @@ static ssize_t pwm_store(struct device *dev,
- 
- 	val = clamp_val(val, 0, 255);
- 
--	mutex_lock(&data->update_lock);
--	data->pwm[attr->index] = (u8)(val * 120 / 255);
--	i2c_smbus_write_byte_data(client,
--				  MAX6639_REG_TARGTDUTY(attr->index),
--				  data->pwm[attr->index]);
--	mutex_unlock(&data->update_lock);
-+	pwm_get_state(data->pwmd[attr->index], &state);
-+	pwm_set_relative_duty_cycle(&state, val, 255);
-+	res = pwm_apply_state(data->pwmd[attr->index], &state);
-+	if (res)
-+		return res;
-+
- 	return count;
- }
- 
-@@ -404,6 +419,7 @@ static int max6639_init_client(struct i2c_client *client,
- 			       struct max6639_data *data)
- {
- 	int i, err;
-+	struct pwm_state state;
- 
- 	/* Reset chip to default values, see below for GCONFIG setup */
- 	err = i2c_smbus_write_byte_data(client, MAX6639_REG_GCONFIG,
-@@ -457,10 +473,11 @@ static int max6639_init_client(struct i2c_client *client,
- 		if (err)
- 			goto exit;
- 
--		/* PWM 120/120 (i.e. 100%) */
--		data->pwm[i] = 120;
--		err = i2c_smbus_write_byte_data(client,
--				MAX6639_REG_TARGTDUTY(i), data->pwm[i]);
-+		/* Configure PWM controller */
-+		pwm_get_state(data->pwmd[i], &state);
-+		pwm_set_relative_duty_cycle(&state, data->target_rpm[i],
-+					   data->max_rpm[i]);
-+		err = pwm_apply_state(data->pwmd[i], &state);
- 		if (err)
- 			goto exit;
- 	}
-@@ -539,8 +556,31 @@ static int max6639_probe_child_from_dt(struct i2c_client *client,
- 	}
- 
- 	data->rpm_range[i] = rpm_range_to_reg(maxrpm);
-+	data->max_rpm[i] = maxrpm;
- 
--	return 0;
-+	err = of_property_read_u32(child, "target-rpm", &val);
-+	/* Use provided target RPM else default to maxrpm */
-+	if (!err)
-+		data->target_rpm[i] = val;
-+	else
-+		data->target_rpm[i] = maxrpm;
-+
-+	/* Get pwms property for PWM control */
-+	data->pwmd[i] = devm_fwnode_pwm_get(dev, &child->fwnode, NULL);
-+
-+	if (!IS_ERR(data->pwmd[i]))
-+		return 0;
-+
-+	if (PTR_ERR(data->pwmd[i]) == -EPROBE_DEFER)
-+		return PTR_ERR(data->pwmd[i]);
-+
-+	dev_dbg(dev, "Using chip default PWM");
-+	data->pwmd[i] = pwm_request_from_chip(&data->chip, i, NULL);
-+	if (!IS_ERR(data->pwmd[i]))
-+		return 0;
-+
-+	dev_dbg(dev, "Failed to configure pwm for fan %d", i);
-+	return PTR_ERR_OR_ZERO(data->pwmd[i]);
- }
- static int max6639_probe_from_dt(struct i2c_client *client,
- 				struct max6639_data *data)
-@@ -568,6 +608,172 @@ static int max6639_probe_from_dt(struct i2c_client *client,
- 	return 0;
- }
- 
-+static struct max6639_data *to_max6639_pwm(struct pwm_chip *chip)
-+{
-+	return container_of(chip, struct max6639_data, chip);
-+}
-+
-+static void max6639_pwm_get_state(struct pwm_chip *chip,
-+				  struct pwm_device *pwm,
-+				  struct pwm_state *state)
-+{
-+
-+	struct max6639_data *data = to_max6639_pwm(chip);
-+	struct i2c_client *client = data->client;
-+	int value, i = pwm->hwpwm, x;
-+	unsigned int freq;
-+
-+	mutex_lock(&data->update_lock);
-+
-+	value = i2c_smbus_read_byte_data(client, MAX6639_REG_FAN_CONFIG1(i));
-+	if (value < 0)
-+		goto abort;
-+
-+	if (value & MAX6639_FAN_CONFIG1_PWM) {
-+		state->enabled = true;
-+
-+		/* Determine frequency from respective registers */
-+		value = i2c_smbus_read_byte_data(client,
-+						 MAX6639_REG_FAN_CONFIG3(i));
-+		if (value < 0)
-+			goto abort;
-+		x = value & MAX6639_FAN_CONFIG3_FREQ_MASK;
-+
-+		value = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
-+		if (value < 0)
-+			goto abort;
-+		if (value & MAX6639_GCONFIG_PWM_FREQ_HI)
-+			x |= 0x4;
-+		x &= 0x7;
-+		freq = freq_table[x];
-+
-+		state->period = DIV_ROUND_UP(NSEC_PER_SEC, freq);
-+
-+		value = i2c_smbus_read_byte_data(client,
-+						 MAX6639_REG_TARGTDUTY(i));
-+		if (value < 0)
-+			goto abort;
-+		/* max6639 supports 120 slots only */
-+		state->duty_cycle = mul_u64_u32_div(state->period, value, 120);
-+
-+		value = i2c_smbus_read_byte_data(client,
-+						 MAX6639_REG_FAN_CONFIG2a(i));
-+		if (value < 0)
-+			goto abort;
-+		value &= MAX6639_REG_FAN_CONFIG2a_PWM_POL;
-+		state->polarity = (value != 0);
-+	} else
-+		state->enabled = false;
-+
-+abort:
-+	mutex_unlock(&data->update_lock);
-+
-+}
-+
-+static int max6639_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-+			     const struct pwm_state *state)
-+{
-+	struct max6639_data *data = to_max6639_pwm(chip);
-+	struct i2c_client *client = data->client;
-+	int value = 0, i = pwm->hwpwm, x;
-+	unsigned int freq;
-+	struct pwm_state cstate;
-+
-+	cstate = pwm->state;
-+
-+	mutex_lock(&data->update_lock);
-+
-+	if (state->period != cstate.period) {
-+		/* Configure frequency */
-+		freq = DIV_ROUND_UP_ULL(NSEC_PER_SEC, state->period);
-+		/* Chip supports limited number of frequency */
-+		for (x = 0; x < sizeof(freq_table); x++)
-+			if (freq <= freq_table[x])
-+				break;
-+
-+		value = i2c_smbus_read_byte_data(client,
-+						 MAX6639_REG_FAN_CONFIG3(i));
-+		if (value < 0)
-+			goto abort;
-+		value &= ~MAX6639_FAN_CONFIG3_FREQ_MASK;
-+		value |= (x & MAX6639_FAN_CONFIG3_FREQ_MASK);
-+		value = i2c_smbus_write_byte_data(client,
-+						  MAX6639_REG_FAN_CONFIG3(i),
-+						  value);
-+
-+		value = i2c_smbus_read_byte_data(client, MAX6639_REG_GCONFIG);
-+		if (value < 0)
-+			goto abort;
-+
-+		if (x >> 2)
-+			value &= ~MAX6639_GCONFIG_PWM_FREQ_HI;
-+		else
-+			value |= MAX6639_GCONFIG_PWM_FREQ_HI;
-+		value = i2c_smbus_write_byte_data(client, MAX6639_REG_GCONFIG,
-+						  value);
-+		if (value < 0)
-+			goto abort;
-+	}
-+
-+	/* Configure dutycycle */
-+	if (state->duty_cycle != cstate.duty_cycle ||
-+	    state->period != cstate.period) {
-+		value = DIV_ROUND_DOWN_ULL(
-+				state->duty_cycle * MAX6639_REG_TARGTDUTY_SLOT,
-+				state->period);
-+		value = i2c_smbus_write_byte_data(client,
-+						  MAX6639_REG_TARGTDUTY(i),
-+						  value);
-+		if (value < 0)
-+			goto abort;
-+	}
-+
-+	/* Configure polarity */
-+	if (state->polarity != cstate.polarity) {
-+		value = i2c_smbus_read_byte_data(client,
-+						 MAX6639_REG_FAN_CONFIG2a(i));
-+		if (value < 0)
-+			goto abort;
-+		if (state->polarity == PWM_POLARITY_NORMAL)
-+			value |= MAX6639_REG_FAN_CONFIG2a_PWM_POL;
-+		else
-+			value &= ~MAX6639_REG_FAN_CONFIG2a_PWM_POL;
-+		value = i2c_smbus_write_byte_data(client,
-+						  MAX6639_REG_FAN_CONFIG2a(i),
-+						  value);
-+		if (value < 0)
-+			goto abort;
-+	}
-+
-+	if (state->enabled == cstate.enabled)
-+		goto abort;
-+
-+	value = i2c_smbus_read_byte_data(client, MAX6639_REG_FAN_CONFIG1(i));
-+	if (value < 0)
-+		goto abort;
-+	if (state->enabled)
-+		value |= MAX6639_FAN_CONFIG1_PWM;
-+	else
-+		value &= ~MAX6639_FAN_CONFIG1_PWM;
-+
-+	value = i2c_smbus_write_byte_data(client, MAX6639_REG_FAN_CONFIG1(i),
-+					  value);
-+	if (value < 0)
-+		goto abort;
-+	value = 0;
-+
-+abort:
-+	mutex_unlock(&data->update_lock);
-+
-+	return value;
-+}
-+
-+static const struct pwm_ops max6639_pwm_ops = {
-+	.apply = max6639_pwm_apply,
-+	.get_state = max6639_pwm_get_state,
-+	.owner = THIS_MODULE,
-+};
-+
- static int max6639_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
-@@ -581,6 +787,15 @@ static int max6639_probe(struct i2c_client *client)
- 
- 	data->client = client;
- 
-+	/* Add PWM controller of max6639 */
-+	data->chip.dev = dev;
-+	data->chip.ops = &max6639_pwm_ops;
-+	data->chip.npwm = 2;
-+
-+	err = devm_pwmchip_add(dev, &data->chip);
-+	if (err < 0)
-+		return dev_err_probe(dev, err, "failed to add PWM chip\n");
-+
- 	data->reg = devm_regulator_get_optional(dev, "fan");
- 	if (IS_ERR(data->reg)) {
- 		if (PTR_ERR(data->reg) != -ENODEV)
--- 
-2.37.3
+/*
+ * The canonical order of ISA extension names in the ISA string is defined in
+ * chapter 27 of the unprivileged spec. An example string following the
+ * order is
+ *
+ *   rv64imadc_zifoo_zigoo_zafoo_sbar_scar_zxmbaz_xqux_xrux
+ *
+ * Notice how Z-extensions are first sorted by category using the canonical
+ * order of the first letter following the Z. Extension groups are in the
+ * order specified in chapter 27. Extensions within each group are sorted
+ * alphabetically.
+ */
 
+
+Thanks,
+drew
