@@ -2,119 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D12F63C5F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD5363C5F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236268AbiK2RAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 12:00:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59100 "EHLO
+        id S236533AbiK2RAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 12:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236499AbiK2Q74 (ORCPT
+        with ESMTP id S236393AbiK2Q75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 11:59:56 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FB96D96A
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 08:55:33 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id c15so4954862pfb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 08:55:33 -0800 (PST)
+        Tue, 29 Nov 2022 11:59:57 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403C36DCDC;
+        Tue, 29 Nov 2022 08:55:35 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id e13so20614737edj.7;
+        Tue, 29 Nov 2022 08:55:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RZHZ3xLER05lERGmVtojr5I/PMD3IeMahsWj4IK2BO4=;
-        b=FLTqGfw883rvILtX1vl/qcfz1Uk0n8/VtcJ2aZ0sHZFcTaQtSJ7UE2CtgeDaKMfls4
-         45iltsi9nBcj+Gh9BuC6PSJh7YBtViexq6xQLKPimOPClsBFkr1ORh2K7uQujzCI2rll
-         MeDZIdgeDj9Z9FY73QnYgc7D3YcVfK90kszlBRAdwYla21DuHzGBezFPqAk05eO4xlt/
-         +raaZN7pphXcggRvP9rGR2mZB2fhesGTObt5wFziFx955KsqVdWGtzWjsLOkA3dTSdS2
-         iIFLIKm7aDmGTWaG2w/wrvgriSo48nNyZDod5ZzuX+fdc3blyx0JbPCKq85ZrcI+C5KK
-         2btg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H4WRM4i4cJCaSRummZu07jrquhNO6Qjg2TekBEdVbcE=;
+        b=V5ocopjM+waV8hKtdM9oUKjzjikQkHTkxLPRkteuBCt+ovw4+zppKrvMGosxwp1nLS
+         sNgvgguGpHasjUzR2f8hKhrpUw8J033xH7aapuBOMwd/5QLOSj0EIQKpZAocRdFd5t4y
+         auEfFO6rhRUww28QNoEWn9uWmfXN1/iQ322xuQe6mGaZiR9hCZFYGctl2zVaN6/LZtHL
+         uH/N0O2UpbRRR0IrappO8sOvcuKWS0p6itg9Ul4gHkDuRts2HgKRVnRHpsDjk6n1T/Ss
+         XvPL1qx+9SxTESvvqPDKJZKWe7HyerN8UVVLJwM5wwsoJZcSKgCubGe4Zn1NKWFOoLU5
+         cwFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RZHZ3xLER05lERGmVtojr5I/PMD3IeMahsWj4IK2BO4=;
-        b=pbD4+XdHbyLvPP4H7Fov3T/P8UF0a5XeC/gjXwWK96WWLsi4SHwMyYlSmiOf9kZbSS
-         HutCfupiCtylFeVsrYJlXEwD7KQ1LGMMk5DvxcgeZXx5/QVg1apXJjBGHOVEiF8P6vO3
-         EzNPbIamU4GsTtA/b1XY2EPAlrV6cfr3rcZwxUZlXHr4kW4Mgf5acKmr6kRcYNmjfn1M
-         3XqJheinMiwo8tTm/IAK+nFa1U2cfYMkzt1jHa5pP3oKEOPoL9p4H79FWkwOR57cUHmF
-         lNGmiwFHBqOybmNSlFY+INBhUTgQqgT/ogRNl9+GoTapiqE1l63wUIA5HVBGOIQf8EIZ
-         ZFLw==
-X-Gm-Message-State: ANoB5pnKvEbGs9f6YuQsqV0EuDbh2Fz+5UmzLRP2GlCuAgaOTGz5PQ87
-        aKwPXdnP+GBxfKL4myRNlobGTQ==
-X-Google-Smtp-Source: AA0mqf4zbadJGZLXlVcQk6yMXvQO5BV+w3tjYzjLIuoy8pYCkzrKq7A/sFqwdEXyzNbFUYLr4fSDxw==
-X-Received: by 2002:a62:e717:0:b0:572:df9e:d57d with SMTP id s23-20020a62e717000000b00572df9ed57dmr61064060pfh.10.1669740932564;
-        Tue, 29 Nov 2022 08:55:32 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id n7-20020a170902d2c700b0018997f6fc88sm2234583plc.34.2022.11.29.08.55.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 08:55:32 -0800 (PST)
-Message-ID: <3faaa168-9802-9773-aa10-ee8ff0447d97@9elements.com>
-Date:   Tue, 29 Nov 2022 22:25:28 +0530
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H4WRM4i4cJCaSRummZu07jrquhNO6Qjg2TekBEdVbcE=;
+        b=SLiF0XWL70M9FXIZOs3/OWji2PJQIZcKu+SwC/fEOZ4aOR4SoxN2dKuBx6VwNLKBkB
+         KnZEfyxeN10MFECyCaq2YCN3ALHHKOCFty2kwnbMMVf1ODMW4TNpc06fHVAfhAUjFDE+
+         1VtkaY3DNg287nf0ghqknsBHGEHgsSJkZuSVqtF8tvl5gOMc+zH6lWF0n3paO74I0nj7
+         WDI5uJueAJgRhbjUsUK8sT/fZraDy7ubbxmlkg+XBe9sWZbP6k1c/fD/PIt4hJAzfj21
+         9HcFIi+tLnjZZevOUosRSHYRAVCW9wcdclpMXfHI6xLgqKLPbJVVGtKWa/6NzlfPTfHr
+         +vvg==
+X-Gm-Message-State: ANoB5pkE8OTgPwgOt94c4FOT0ugOC2HT2/yJIQPRe1f9vgni1ih7/yd5
+        NRaHaG8/pBKwa4HxNwrTIAU=
+X-Google-Smtp-Source: AA0mqf4CnOnBJvFqGmxhU0Qq9oYKDZkaLNdhJuT+k9UtE/Bd1QezYC2K8/yy74w6LcR1SGG+gstmww==
+X-Received: by 2002:a05:6402:2929:b0:469:b603:ca21 with SMTP id ee41-20020a056402292900b00469b603ca21mr37195795edb.350.1669740933664;
+        Tue, 29 Nov 2022 08:55:33 -0800 (PST)
+Received: from skbuf ([188.26.185.64])
+        by smtp.gmail.com with ESMTPSA id k20-20020a17090627d400b007bf5250b515sm3154943ejc.29.2022.11.29.08.55.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 08:55:33 -0800 (PST)
+Date:   Tue, 29 Nov 2022 18:55:31 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Artem Chernyshev <artem.chernyshev@red-soft.ru>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        Arun Ramadoss <arun.ramadoss@microchip.com>
+Subject: Re: [PATCH] net: dsa: ksz: Check proper trim in ksz_common_rcv()
+Message-ID: <20221129165531.wgeyxgo5el2x43mj@skbuf>
+References: <20221129140809.2755960-1-artem.chernyshev@red-soft.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v8 4/4] hwmon: (max6639) Add pwm support
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-pwm@vger.kernel.org, kernel@pengutronix.de,
-        Rob Herring <robh@kernel.org>
-References: <20221129161134.2672474-1-Naresh.Solanki@9elements.com>
- <20221129161134.2672474-5-Naresh.Solanki@9elements.com>
- <20221129163427.dxnqfay6ur6mvivu@pengutronix.de>
- <d2d54a34-56dc-df83-5fde-ad0a9a73a9e0@roeck-us.net>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <d2d54a34-56dc-df83-5fde-ad0a9a73a9e0@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221129140809.2755960-1-artem.chernyshev@red-soft.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Hi Artyom,
 
-On 29-11-2022 10:11 pm, Guenter Roeck wrote:
-> On 11/29/22 08:34, Uwe Kleine-König wrote:
->> On Tue, Nov 29, 2022 at 05:11:34PM +0100, Naresh Solanki wrote:
->>> Add pwm support for max6639. Also configure pwm fan speed based on pwm
->>> provided in DT.
->>
->> Did you do anything to resolve the questions I had in reply to v5? If
->> yes, I must have missed it.
-I did split the patch to separate dt changes & pwm specific changes.
->>
+On Tue, Nov 29, 2022 at 05:08:09PM +0300, Artem Chernyshev wrote:
+> Return NULL if we got unexpected value from skb_trim_rcsum()
 > 
-> I don't see a response to my concerns either, especially regarding fan mode
-> (dc vs. pwm) in the bindings. For that reason, I won't even look at the 
-> series.
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> Fixes: bafe9ba7d908 ("net: dsa: ksz: Factor out common tag code")
+> Signed-off-by: Artem Chernyshev <artem.chernyshev@red-soft.ru>
+> ---
 
-I intend to use max6639 driver but with DT support.
-Did additional changes(like using PWM provider) based on feedback I 
-received.
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 
+It looks like the same pattern exists in tag_hellcreek.c and in
+tag_sja1105.c. Do you intend to patch those as well?
+
+>  net/dsa/tag_ksz.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> Guenter
+> diff --git a/net/dsa/tag_ksz.c b/net/dsa/tag_ksz.c
+> index 38fa19c1e2d5..429250298ac4 100644
+> --- a/net/dsa/tag_ksz.c
+> +++ b/net/dsa/tag_ksz.c
+> @@ -21,7 +21,8 @@ static struct sk_buff *ksz_common_rcv(struct sk_buff *skb,
+>  	if (!skb->dev)
+>  		return NULL;
+>  
+> -	pskb_trim_rcsum(skb, skb->len - len);
+> +	if (pskb_trim_rcsum(skb, skb->len - len))
+> +		return NULL;
+>  
+>  	dsa_default_offload_fwd_mark(skb);
+>  
+> -- 
+> 2.30.3
 > 
->> Note that maintainer time is scarce and with sending new versions of a
->> patch with no sign that you improved in the aspects that were critized
->> before, you're burning that scarce time and loosing the good will of the
->> responsible maintainers.
->>
->> Best regards
->> Uwe
->>
-> 
-Regards,
-Naresh
