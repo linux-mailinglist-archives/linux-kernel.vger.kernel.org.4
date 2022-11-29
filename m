@@ -2,103 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F9363B848
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 03:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B72A63B854
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235270AbiK2CxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 21:53:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52484 "EHLO
+        id S235285AbiK2DAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 22:00:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235288AbiK2CxI (ORCPT
+        with ESMTP id S235205AbiK2DAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 21:53:08 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498B140918
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:53:07 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so12055219pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:53:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tVdaZGcP4j88Qml5mJfIo0BmHi+s/R7fEtpX29Aegis=;
-        b=eOWHOBNDHn0V8MqJlRrEQyiG3etYoyVj6HwWZjScS+ro7oXp5NnHwhu5V0XnAqkFOl
-         6coP5VmkxdS1kKd8anif+2CIXOCyWCUw00MMJ/B7ruMCC30ZGevpet4thlWyKu6g7Mmo
-         oxCduW3h3rMAWAq4cf/olag3GY2b+yPIMI2YBT05xMmL0/RfvpD0b99A2JEK5SsjTDsA
-         q4MgDxRM4yNHBfjWC2SAQEVHEA+qr+wd4kJUk8aa600dSny2BZsIut+ApQTNkGX8gD+g
-         KnPhKTw4NnFHV0or2ZKsD9P0kbjJ7CMEEo6YXfNUfZKQF5scF01DdHZt5KqHaUvgR0oI
-         XWzw==
+        Mon, 28 Nov 2022 22:00:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5402F303F3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:59:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669690794;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jICdvc9DXcnwskTHg4NcjxqsN06Ny3H6HZZrLEpXAiY=;
+        b=d/yYDA1SiXj+lPrk3ZeeLFRhPtfta20OvzOVTlLl4mTuaCd6VvGb08lN6v/p1Drb4faOmE
+        mzxIK+mRTPOeVPI57yQTx0EstqW/TALERSdFIN7/x54qhftSWM5F8m+NPFOaXgzlv69gNY
+        5DHK4zB5PLy0tUiNwx/QBE1r3VoBB8o=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-435-UaTNM98mOz-PBDxtauKvDQ-1; Mon, 28 Nov 2022 21:59:47 -0500
+X-MC-Unique: UaTNM98mOz-PBDxtauKvDQ-1
+Received: by mail-oi1-f200.google.com with SMTP id p133-20020acaf18b000000b0035b236c8554so4718865oih.15
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:59:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=tVdaZGcP4j88Qml5mJfIo0BmHi+s/R7fEtpX29Aegis=;
-        b=TrTHK8rX6ETdOCIjvB47bXVzo9fyygzM3J76vEZ0cQ8QjabG2u0wXn0dw/CJFHIadV
-         i2POYd1obWcuGkxH+47W/tRk7RzCP7WQuZIS5dcwCvjMPPCr8Ape6ZGxb2+L6EQqXgiB
-         vPFBORhFXOMydlS3spLXZz3ssxvwLjDXr0OjD0HhC5nnZl1dV7/IpMesTCHkcotw5bsl
-         bwPqwiSS2liz4fn9f/glWWzei+eEr6R9Lu0LbiKOGOfTiOfsS4dyNs6ImdUQoC9VihkG
-         FTkorgr2YQMJLhxWZEuYRl8jGH6IwfyvdH3w7A1Tx3jDMvIs+9ad003Z1YXyHIvVDuKk
-         DkGg==
-X-Gm-Message-State: ANoB5pnl4QmNnibhOBtfrPMcFPzgX9+e+5Jfbom8h+jsJAgCfR5RUUEj
-        5Z216L5SQdt6dsJtiOetdoWTcw==
-X-Google-Smtp-Source: AA0mqf5ciHYvPxuAaaVEz4jM+nFvHbYtSONxjtEHHR65kdwaI8ehoRIKYMPx9p3MtfkJfVceVwamuw==
-X-Received: by 2002:a17:902:6505:b0:186:a7ff:e8ae with SMTP id b5-20020a170902650500b00186a7ffe8aemr34845364plk.77.1669690386709;
-        Mon, 28 Nov 2022 18:53:06 -0800 (PST)
-Received: from [10.54.24.49] (static-ip-147-99-134-202.rev.dyxnet.com. [202.134.99.147])
-        by smtp.gmail.com with ESMTPSA id s4-20020a17090a764400b0020087d7e778sm172073pjl.37.2022.11.28.18.53.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 18:53:06 -0800 (PST)
-Message-ID: <db6284ba-b936-b38c-662d-3189c14596e7@shopee.com>
-Date:   Tue, 29 Nov 2022 10:53:02 +0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jICdvc9DXcnwskTHg4NcjxqsN06Ny3H6HZZrLEpXAiY=;
+        b=CT7m40Hxpy4HxWbKhdw+iSWSYQkOZpFoOeDheVJ7EiwLkHG9nXGorpTzleTk7WdGFO
+         Yq1RIqWkXu9/M3xfBE27icaTzqCcO72dMAOlkaEXb9aDMUMn7tfJmFVmvo7r9K7H1ZgC
+         Qs5yJ15aZam94/A56XOjTxQ7QNtCgt2bzaacGrDOISRtPxO28BVt6cMeQ230yGFrP+b/
+         7QwLfQMHWpcMi1fhdzR7CztA9K+wOTGrCne959n4/PY35J+aqhe5XqWoElj0U+lGwx3i
+         exqrUYKOcAy9QlIrt+vhHEPevP6ygwwehVwNDm/BsGobru8QF783fBiXZzm8DQR3ffmd
+         9KZw==
+X-Gm-Message-State: ANoB5plm+YzF6rVp/XhZAYG7ON3PmmiwkkjCOmQ09tYu8XjICREMmiUi
+        hSw/82czvDsGZZmiAM2NbtxyGncHSusPZ9OYHRiecZEJRJGerqxzq22PlomrUH0m61hNWuYNPoY
+        ZFDkoMtYFkHmZ3FR5MAqfiIfxwnFCO9htsF48Xu9s
+X-Received: by 2002:aca:906:0:b0:354:68aa:9c59 with SMTP id 6-20020aca0906000000b0035468aa9c59mr28156749oij.35.1669690787154;
+        Mon, 28 Nov 2022 18:59:47 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6CVNwUgwdj4oC+9mc6XrKlb7k1ISyHQEbQFZggMlCP7aWq/QQQWHqA/iMa/W0aTsOefe6aRq2cy/DzsDKEZSA=
+X-Received: by 2002:aca:906:0:b0:354:68aa:9c59 with SMTP id
+ 6-20020aca0906000000b0035468aa9c59mr28156741oij.35.1669690786942; Mon, 28 Nov
+ 2022 18:59:46 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [PATCH] cgroup/cpuset: Clean up cpuset_task_status_allowed
-To:     Tejun Heo <tj@kernel.org>
-Cc:     longman@redhat.com, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221125075133.12718-1-haifeng.xu@shopee.com>
- <Y4TqvlOmXqY/CBEc@slm.duckdns.org>
-From:   Haifeng Xu <haifeng.xu@shopee.com>
-In-Reply-To: <Y4TqvlOmXqY/CBEc@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221128155717.2579992-1-harshit.m.mogalapalli@oracle.com>
+In-Reply-To: <20221128155717.2579992-1-harshit.m.mogalapalli@oracle.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 29 Nov 2022 10:59:36 +0800
+Message-ID: <CACGkMEuPe_Q1+F47YXdi2=L5bO4JB9+cRB0mn4eZKF6O4N3=Aw@mail.gmail.com>
+Subject: Re: [PATCH v3] vduse: Validate vq_num in vduse_validate_config()
+To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     sgarzare@redhat.com, error27@gmail.com,
+        harshit.m.mogalapalli@gmail.com,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        Maxime Coquelin <maxime.coquelin@redhat.com>,
+        Parav Pandit <parav@nvidia.com>, Eli Cohen <elic@nvidia.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 28, 2022 at 11:57 PM Harshit Mogalapalli
+<harshit.m.mogalapalli@oracle.com> wrote:
+>
+> Add a limit to 'config->vq_num' which is user controlled data which
+> comes from an vduse_ioctl to prevent large memory allocations.
+>
+> Micheal says  - This limit is somewhat arbitrary.
+> However, currently virtio pci and ccw are limited to a 16 bit vq number.
+> While MMIO isn't it is also isn't used with lots of VQs due to
+> current lack of support for per-vq interrupts.
+> Thus, the 0xffff limit on number of VQs corresponding
+> to a 16-bit VQ number seems sufficient for now.
+>
+> This is found using static analysis with smatch.
+>
+> Suggested-by: Michael S. Tsirkin <mst@redhat.com>
+> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 
+Acked-by: Jason Wang <jasowang@redhat.com>
 
-On 2022/11/29 01:07, Tejun Heo wrote:
-> On Fri, Nov 25, 2022 at 07:51:33AM +0000, haifeng.xu wrote:
->> cpuset_task_status_allowed just shows mems_allowed status, so
->> rename it to task_mems_allowed. Moreover, it's only used in
->> proc_pid_status, so move it to fs/proc/array.c. There is no
->> intentional function change.
->>
->> Signed-off-by: haifeng.xu <haifeng.xu@shopee.com>
-> 
-> mems_allowed being a very much cpuset feature, I don't see how this is an
-> improvement. The new code is different and can be another way of doing it,
-> sure, but there's no inherent benefit to it. What's the point of the churn?
-> 
-> Thanks.
-> 
+Thanks
 
-Hi, tejun.
-
-In proc_pid_status, task_cpus_allowed is used to show cpus_allowed, similar to that,
-task_mems_allowed is more specific to show mems_allowed. Also cpuset_task_status_allowed
-is used to dispaly memory status in '/proc/<pid>/status' and isn't used in other files, so
-keep it in the fs/proc/array.c.
-
-Thanks,
-Haifeng.
+> ---
+> v1->v2: Change title of the commit and description, add a limit to
+>         vq_num.
+>
+> v2->v3: Improve commit message to include reason for setting limit to
+>         0xffff
+>
+> Only compile and boot tested.
+> ---
+>  drivers/vdpa/vdpa_user/vduse_dev.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+> index 35dceee3ed56..31017ebc4d7c 100644
+> --- a/drivers/vdpa/vdpa_user/vduse_dev.c
+> +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+> @@ -1440,6 +1440,9 @@ static bool vduse_validate_config(struct vduse_dev_config *config)
+>         if (config->config_size > PAGE_SIZE)
+>                 return false;
+>
+> +       if (config->vq_num > 0xffff)
+> +               return false;
+> +
+>         if (!device_is_allowed(config->device_id))
+>                 return false;
+>
+> --
+> 2.38.1
+>
 
