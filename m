@@ -2,58 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3B663C51F
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5300063C51D
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235703AbiK2Q22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 11:28:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
+        id S235519AbiK2Q1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 11:27:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235472AbiK2Q2Z (ORCPT
+        with ESMTP id S235625AbiK2Q1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 11:28:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3305A6EE
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 08:28:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 724D6B8167C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 16:28:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A995C433C1;
-        Tue, 29 Nov 2022 16:28:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669739302;
-        bh=yj3dm+baXZXQDY3WA4EOUtzNtXKLG6b/rh4CPOPxd90=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nMknn2N4XfA7XlEr6yu/11O8TEbswJLxfQp+ckNc06BhjVN8tbtT4j5Dre++JsVRI
-         BFpl2vonqEpEqBexww5VNyzDNjcLn3dA1tmZ5ewp/PpHS7HSNQFcLtqP8b+65fli5+
-         SiGtXk5NNFK0lScmlBK16P5MzrECoQXkyoXwuzseZVNVrnMAJ7B3fb0sXntOLJAvRP
-         ltQgNwflKBLANISQSOgaHNycoydWEKl1NpRlwtqkGvaeE3L7FWcxO960kJcNkWaBOl
-         /FumYPvJ4lbhLwXB2u8ms26ZP3q7faBhNoRRdKYiJZ0bPDC7wUVQcNBd4WUzd8254i
-         bVjBWJerdfO+g==
-Date:   Wed, 30 Nov 2022 01:28:17 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>
-Subject: Re: [PATCH -tip] x86/kprobes: Drop removed INT3 handling code
-Message-Id: <20221130012817.638dea0fbf4b8abcd4a70019@kernel.org>
-In-Reply-To: <20221128154905.23aa5d07@gandalf.local.home>
-References: <166938748740.2964025.7215038423815144481.stgit@devnote3>
-        <20221128154905.23aa5d07@gandalf.local.home>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 29 Nov 2022 11:27:17 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8047C4C248;
+        Tue, 29 Nov 2022 08:27:16 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id j16so22819917lfe.12;
+        Tue, 29 Nov 2022 08:27:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KDMkrZFWLrSp+7LLIWWLkTwrJI1naRVEumr5IczeOuM=;
+        b=i/cWlAZEJsfRbb0Yosxun7toROgA/8k+rvCjdsiNrtyTCORTp4zP28z1iky4zZNfAT
+         EWlvl7LjYIPLa9Er/dTxYsN7eUuJC6dm1nWbqoOdqmHSkAFXTylR6+aeyN3ONrZDQuhQ
+         xIQf/iDvX+Lr6zuD2lftJWT40lDFj640ymKtQr4xAxzkuiKahYQOeqJboBSrLUksyWli
+         h29dlgqJLEVZ5wpLwvJLAAyIBIn9OXP09kfzVzA4+JwymiPdDxSly4Gi0bcqaEqW4mZ+
+         UH/zEYXt+Efnw/ukH80sLiKYXQg3HExIzq4uR8pE3PNsuuGPoJFsF/24Qv9DxEH66LVM
+         5U9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KDMkrZFWLrSp+7LLIWWLkTwrJI1naRVEumr5IczeOuM=;
+        b=grXiCsXerOjzWt0AJR+rVswNOv6avw3wMCDpw3sJuJME7iU26EBj1FKUtdNGlQw4q4
+         aS/mGSQkqH4S10qdUBnk9XnMwwIH66SJvbQ/79OcfJ8MauiV88u7a/TrEZNU5R0LhPWX
+         hi9uxjIX5/sDV+FSNr7C6s9hv+Nd631mmxhs5geMAQlAUJiaoKQYj5MYlYm8S8zLyYw/
+         WTv41BjuiOgHMgsjeuNrQa4C/mA5VMaU7MQ6yBejAhSy6WgMW5SBkyjYFtIMeNfDJsC8
+         ZqoMclAwP5S2LY+/+v20wsHrUElvvhWLoK6u+1zHCHp4P/NW+bkfoq3whrzjln8Z/bM5
+         5BOw==
+X-Gm-Message-State: ANoB5pkNbGTkk6WHSz5PKytil8WGviLVAX6LG+QgCJLV/aNQIFZv+nX0
+        hBAXCMRo6N5GWzO6y//7OZC29HWhAY0Mjw==
+X-Google-Smtp-Source: AA0mqf7n3rrKTo9grpzjUGyShBKFJXfD5LfP9vp77wPi/sSmEcuZHOrJ5KxI65xDEtUsDItXwUFo9Q==
+X-Received: by 2002:a05:6512:1042:b0:4a2:46f6:6cee with SMTP id c2-20020a056512104200b004a246f66ceemr15622282lfb.642.1669739234439;
+        Tue, 29 Nov 2022 08:27:14 -0800 (PST)
+Received: from ?IPV6:2001:999:230:8bc4:e9e4:a37:1c80:5708? ([2001:999:230:8bc4:e9e4:a37:1c80:5708])
+        by smtp.gmail.com with ESMTPSA id o16-20020a056512053000b004b1756a0ae9sm2263986lfc.55.2022.11.29.08.27.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 08:27:14 -0800 (PST)
+Message-ID: <f954e71b-043c-43bc-a692-530497de2d0b@gmail.com>
+Date:   Tue, 29 Nov 2022 18:28:31 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] dmaengine: ti: k3-udma: drop loglevel for non-fatal probe
+ deferral log
+Content-Language: en-US
+To:     Jayesh Choudhary <j-choudhary@ti.com>, vkoul@kernel.org
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221128101334.512816-1-j-choudhary@ti.com>
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+In-Reply-To: <20221128101334.512816-1-j-choudhary@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,85 +75,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Nov 2022 15:49:05 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> On Fri, 25 Nov 2022 23:44:47 +0900
-> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-> 
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > Drop removed INT3 handling code from kprobe_int3_handler() because this
-> > case (get_kprobe() doesn't return corresponding kprobe AND the INT3 is
-> > removed) must not happen with the kprobe managed INT3, but can happen
-> > with the non-kprobe INT3, which should be handled by other callbacks.
-> > 
-> > For the kprobe managed INT3, the arch_disarm_kprobe() removes the INT3
-> > and then calls text_poke_sync(). Since this text_poke_sync() uses IPI
-> > to call sync_core() on all online cpus, that ensures that all running
-> > INT3 exception handlers have done.
-> > And, the unregister_kprobe() will remove the kprobe from the hash table
-> > after arch_disarm_kprobe().
-> > 
-> > Thus, when the kprobe managed INT3 hits, kprobe_int3_handler() should
-> > be able to find corresponding kprobe always by get_kprobe(). If it can
-> > not find any kprobe, this means that is NOT a kprobe managed INT3.
-> > 
-> 
-> I believe this was fixed by:
-> 
->   5c02ece81848d ("x86/kprobes: Fix ordering while text-patching")
-> 
-> That should be mentioned in the commit log.
 
-Thanks for pointing! Yes, it ensures since it add text_poke_sync()
-in arch_arm/disarm_kprobe(). So this is the last part of the
-commit 5c02ece81848d.
+On 28/11/2022 12:13, Jayesh Choudhary wrote:
+> Change the log level from dev_err() to dev_dbg() for non-fatal probe
+> deferral log for getting MSI domain.
+> This makes the kernel log clean and we do not get recurring logs
+> stating: "Failed to get MSI domain".
+
+Or not print at all?
+
+Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
 
 > 
-> Anyway, looks good.
+> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+> ---
+>   drivers/dma/ti/k3-udma.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
-Thank you!
-
-> 
-> -- Steve
-> 
-> 
-> 
-> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > ---
-> >  arch/x86/kernel/kprobes/core.c |   14 --------------
-> >  1 file changed, 14 deletions(-)
-> > 
-> > diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-> > index 66299682b6b7..33390ed4dcf3 100644
-> > --- a/arch/x86/kernel/kprobes/core.c
-> > +++ b/arch/x86/kernel/kprobes/core.c
-> > @@ -986,20 +986,6 @@ int kprobe_int3_handler(struct pt_regs *regs)
-> >  			kprobe_post_process(p, regs, kcb);
-> >  			return 1;
-> >  		}
-> > -	}
-> > -
-> > -	if (*addr != INT3_INSN_OPCODE) {
-> > -		/*
-> > -		 * The breakpoint instruction was removed right
-> > -		 * after we hit it.  Another cpu has removed
-> > -		 * either a probepoint or a debugger breakpoint
-> > -		 * at this address.  In either case, no further
-> > -		 * handling of this interrupt is appropriate.
-> > -		 * Back up over the (now missing) int3 and run
-> > -		 * the original instruction.
-> > -		 */
-> > -		regs->ip = (unsigned long)addr;
-> > -		return 1;
-> >  	} /* else: not a kprobe fault; let the kernel handle it */
-> >  
-> >  	return 0;
-> 
-
+> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
+> index ce8b80bb34d7..e540166cf4c7 100644
+> --- a/drivers/dma/ti/k3-udma.c
+> +++ b/drivers/dma/ti/k3-udma.c
+> @@ -5344,7 +5344,7 @@ static int udma_probe(struct platform_device *pdev)
+>   	dev->msi.domain = of_msi_get_domain(dev, dev->of_node,
+>   					    DOMAIN_BUS_TI_SCI_INTA_MSI);
+>   	if (!dev->msi.domain) {
+> -		dev_err(dev, "Failed to get MSI domain\n");
+> +		dev_dbg(dev, "Failed to get MSI domain\n");
+>   		return -EPROBE_DEFER;
+>   	}
+>   
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Péter
