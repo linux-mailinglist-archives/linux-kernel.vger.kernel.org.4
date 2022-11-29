@@ -2,137 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D8C63BB68
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D0963BB70
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbiK2IVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 03:21:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
+        id S230157AbiK2IYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 03:24:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiK2IVn (ORCPT
+        with ESMTP id S230155AbiK2IYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 03:21:43 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F5F56EFB
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:21:41 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id h20-20020a056e021d9400b00300581edaa5so11329952ila.12
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:21:41 -0800 (PST)
+        Tue, 29 Nov 2022 03:24:51 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF355655D
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:24:48 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id n3so20822890wrp.5
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:24:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=tYLYGC4+NF53GSUK1U1BbaDChlHeYLa+kefmGNsOQLo=;
+        b=tlInaQk5JAdGJVixJIEPxHZ5uO4OP/98WWK0YcFd2CuALpz3daEqqlCCAYHVJsF5b3
+         Nz7og1BmUP/MlZ8IdBZTYfSCknxLkCIFk8N4FRErZW58FqUwEoi8I1QKtXJJoSnV4izM
+         N0ZnVfdo0hh5UC4p9RYTh4sZi0jyPOkF2sc6eM6Xgjaf8SHEVLE9TFEmLW0ISzEhsZ/4
+         SCNrtq7k79C/GS5SAWC2O7kvvuAk2t09OKdfTCqhJr7nKBbkQoEKXRSeP6AfClUR7w/X
+         +WHmT7Aceuxtl59hzgZABCSGuNG43zvJC9kqXnAh1cQE41z62OKLZkWEC+COlTQcJPwR
+         Zajw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MpQYMLpt/bycVlWC6U8JGOQTt/3IYzJ8U4wO7awntLY=;
-        b=2ncSdXPfrjtSZiPCeZ6OL/sucPBLQKvdhqIxchqrFisdhD4uXomX3NmWM2gbPwX0ij
-         5+jdN4EH5/5pi5434EeysLLUSAw04tu4LiG1ETMQo1wY5IxgYa0SNXfhKb89Ki/JU2/A
-         aO0gVS1ItlI1yp1ZHauhA9rOTSEY0cJfgsrpDy/C6vIcxIQNrGlW4v998hVmizpQ5nAQ
-         JGtTg6eQp1vjGGGz7BQDWlltYDf/fkTHF1qUW/WZ9do43LjM/9UOfL+GI91dVnwyp1zs
-         NuG6sdpDyFZpQ4XhDe8scNe03QIBioEzlU8yxWIXRgocwcAkaTcMFvSOj2vXJ4oiZvJy
-         cpuQ==
-X-Gm-Message-State: ANoB5pm8GLgp12BU8IBFwl/mqKpoArkGcj3Yw67ON/SW4+LWDgv3LQKm
-        UZNMxMSahqF/8aBaz6KmFw+Yz1f91X/8gV4izKJIgGGMNkSO
-X-Google-Smtp-Source: AA0mqf7WLmXhj9IqbhUs6n8OcuccA/0NgC495qCxcagg8ZLcYU0WaYL1mRbrkgoU0K/APVJHXa01Bj8Os0xBuPxHa64xB2fw6S2J
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tYLYGC4+NF53GSUK1U1BbaDChlHeYLa+kefmGNsOQLo=;
+        b=NDF2sksLYmhBiXg9pqmrF+3HL0OVnGHxMDHyjzOxxx9vE4Xtxl6kIagKZinuIHiqoi
+         PlCyiP1SC6OFMxdDh+ZOdOHXF/KlwUgh5rrs3eNP89QOKGTABtEo/RXWZM7ly1pm9Zna
+         Hk31E66+K4LuH3p+Lok4hWIF6LQRLlyUINu2OCNn8g8wC7XBV+Vm584YzetA0hZ00zk7
+         OOk0Ja1uFPAAbgGrBHo6lP1hvkwoLvwou3kezdMW5EdAAaroHCnKNc3w86g9+47hcgS/
+         v1H5q9fuOTxaqAYGyaNW/7sq9o/NoQ2FTfdqxbZCEJyChIf/WbgmVWLVtoyyX0J4YKgg
+         wYYQ==
+X-Gm-Message-State: ANoB5plpiULMj6RiRBGV4z0yCbP8TXddcAg6i2bPkGdDdye6ZpfvGYxT
+        nI1FZUWdsu3eLgTDr24p/LyGOg==
+X-Google-Smtp-Source: AA0mqf47saa479iipml8biPhf2KL71g5Xo9YVRuTvBi/IBp5oYvCer6s+8sxPyzl8Yb1uTtMK5YUJQ==
+X-Received: by 2002:a5d:5709:0:b0:241:d71c:5dde with SMTP id a9-20020a5d5709000000b00241d71c5ddemr25813602wrv.678.1669710286827;
+        Tue, 29 Nov 2022 00:24:46 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:2f85:a28c:5df7:9cd2? ([2a01:e0a:982:cbb0:2f85:a28c:5df7:9cd2])
+        by smtp.gmail.com with ESMTPSA id 124-20020a1c1982000000b003cfa81e2eb4sm1177399wmz.38.2022.11.29.00.24.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 00:24:46 -0800 (PST)
+Message-ID: <cbccbcbe-5006-cdc9-f3af-39c53d87b8a5@linaro.org>
+Date:   Tue, 29 Nov 2022 09:24:47 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a92:db4b:0:b0:302:5575:9e46 with SMTP id
- w11-20020a92db4b000000b0030255759e46mr24667075ilq.41.1669710101191; Tue, 29
- Nov 2022 00:21:41 -0800 (PST)
-Date:   Tue, 29 Nov 2022 00:21:41 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000075a52e05ee97ad74@google.com>
-Subject: [syzbot] WARNING: kmalloc bug in btrfs_ioctl_send
-From:   syzbot <syzbot+4376a9a073770c173269@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 3/6] soc: qcom: geni-se: add desc struct to specify
+ clocks from device match data
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v2-0-aadaa6997b28@linaro.org>
+ <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v2-3-aadaa6997b28@linaro.org>
+ <24a88a47-7556-20f1-ce9c-fe7bd0466a88@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <24a88a47-7556-20f1-ce9c-fe7bd0466a88@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 18/11/2022 10:06, Konrad Dybcio wrote:
+> 
+> 
+> On 18/11/2022 09:45, Neil Armstrong wrote:
+>> The I2C Master Hub is a stripped down version of the GENI Serial Engine
+>> QUP Wrapper Controller but only supporting I2C serial engines without
+>> DMA support.
+>>
+>> Prepare support for the I2C Master Hub variant by moving the required
+>> clocks list to a new desc struct then passing it through the compatible
+>> match data.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>   drivers/soc/qcom/qcom-geni-se.c | 59 +++++++++++++++++++++++++++++++----------
+>>   1 file changed, 45 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+>> index a0ceeede450f..ced2a2932eda 100644
+>> --- a/drivers/soc/qcom/qcom-geni-se.c
+>> +++ b/drivers/soc/qcom/qcom-geni-se.c
+>> @@ -81,19 +81,31 @@
+>>    */
+>>   #define MAX_CLK_PERF_LEVEL 32
+>> -#define NUM_AHB_CLKS 2
+>> +#define MAX_CLKS 2
+>>   /**
+>>    * struct geni_wrapper - Data structure to represent the QUP Wrapper Core
+>>    * @dev:        Device pointer of the QUP wrapper core
+>>    * @base:        Base address of this instance of QUP wrapper core
+>> - * @ahb_clks:        Handle to the primary & secondary AHB clocks
+>> + * @clks:        Handle to the primary & optional secondary AHB clocks
+>> + * @num_clks:        Count of clocks
+>>    * @to_core:        Core ICC path
+>>    */
+>>   struct geni_wrapper {
+>>       struct device *dev;
+>>       void __iomem *base;
+>> -    struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
+>> +    struct clk_bulk_data clks[MAX_CLKS];
+>> +    unsigned int num_clks;
+>> +};
+>> +
+>> +/**
+>> + * struct geni_se_desc - Data structure to represent the QUP Wrapper resources
+>> + * @clks:        Name of the primary & optional secondary AHB clocks
+>> + * @num_clks:        Count of clock names
+>> + */
+>> +struct geni_se_desc {
+>> +    unsigned int num_clks;
+>> +    const char * const *clks;
+>>   };
+>>   static const char * const icc_path_names[] = {"qup-core", "qup-config",
+>> @@ -496,8 +508,7 @@ static void geni_se_clks_off(struct geni_se *se)
+>>       struct geni_wrapper *wrapper = se->wrapper;
+>>       clk_disable_unprepare(se->clk);
+>> -    clk_bulk_disable_unprepare(ARRAY_SIZE(wrapper->ahb_clks),
+>> -                        wrapper->ahb_clks);
+>> +    clk_bulk_disable_unprepare(wrapper->num_clks, wrapper->clks);
+>>   }
+>>   /**
+>> @@ -528,15 +539,13 @@ static int geni_se_clks_on(struct geni_se *se)
+>>       int ret;
+>>       struct geni_wrapper *wrapper = se->wrapper;
+>> -    ret = clk_bulk_prepare_enable(ARRAY_SIZE(wrapper->ahb_clks),
+>> -                        wrapper->ahb_clks);
+>> +    ret = clk_bulk_prepare_enable(wrapper->num_clks, wrapper->clks);
+>>       if (ret)
+>>           return ret;
+>>       ret = clk_prepare_enable(se->clk);
+>>       if (ret)
+>> -        clk_bulk_disable_unprepare(ARRAY_SIZE(wrapper->ahb_clks),
+>> -                            wrapper->ahb_clks);
+>> +        clk_bulk_disable_unprepare(wrapper->num_clks, wrapper->clks);
+>>       return ret;
+>>   }
+>> @@ -887,11 +896,23 @@ static int geni_se_probe(struct platform_device *pdev)
+>>           return PTR_ERR(wrapper->base);
+>>       if (!has_acpi_companion(&pdev->dev)) {
+>> -        wrapper->ahb_clks[0].id = "m-ahb";
+>> -        wrapper->ahb_clks[1].id = "s-ahb";
+>> -        ret = devm_clk_bulk_get(dev, NUM_AHB_CLKS, wrapper->ahb_clks);
+>> +        const struct geni_se_desc *desc;
+>> +        int i;
+>> +
+>> +        desc = device_get_match_data(&pdev->dev);
+>> +        if (!desc)
+>> +            return -EINVAL;
+>> +
+>> +        wrapper->num_clks = min_t(unsigned int, desc->num_clks, MAX_CLKS);
+>> +        if (wrapper->num_clks < desc->num_clks)
+> This will never execute (except if somebody adding a third desc would make a mistake or not update MAX_CLKS), as wrapper->num_clks will only be < desc->num_clks if desc->num_clks > MAX_CLKS.
 
-syzbot found the following issue on:
+You're right, I did read too fast.
 
-HEAD commit:    6d464646530f Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=176a733d880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=54b747d981acc7b7
-dashboard link: https://syzkaller.appspot.com/bug?extid=4376a9a073770c173269
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=134c3d03880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13237ca1880000
+> 
+> I was thinking about getting the number of actual clocks passed to the device in the DT, but I can't find a helper function for that, so it would probably require some kind of manual looping.. I guess we can drop this. Or leave it to save somebody pulling their hair out in an unlikely event. I guess I'm fine with both.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d75f5f77b3a3/disk-6d464646.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9382f86e4d95/vmlinux-6d464646.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/cf2b5f0d51dd/Image-6d464646.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/aa0da055eccb/mount_0.gz
+This would be:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4376a9a073770c173269@syzkaller.appspotmail.com
+of_count_phandle_with_args(dev->of_node, "clocks", "#clock-cells")
 
-BTRFS info (device loop0): using free space tree
-BTRFS info (device loop0): enabling ssd optimizations
-BTRFS info (device loop0): checking UUID tree
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3072 at mm/util.c:596 kvmalloc_node+0x19c/0x1a4
-Modules linked in:
-CPU: 1 PID: 3072 Comm: syz-executor189 Not tainted 6.1.0-rc6-syzkaller-32662-g6d464646530f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : kvmalloc_node+0x19c/0x1a4
-lr : kvmalloc_node+0x198/0x1a4 mm/util.c:596
-sp : ffff800012f13c40
-x29: ffff800012f13c50 x28: ffff0000cbb01000 x27: 0000000000000000
-x26: 0000000000000000 x25: ffff0000c97a8a10 x24: ffff0000c6fa6400
-x23: 0000000000000000 x22: ffff8000091f72d8 x21: 000caf0ca5eccda0
-x20: 00000000ffffffff x19: 0000000000000dc0 x18: 0000000000000010
-x17: ffff80000c0f0b68 x16: ffff80000dbe6158 x15: ffff0000c43a1a40
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c43a1a40
-x11: ff808000084361e8 x10: 0000000000000000 x9 : ffff8000084361e8
-x8 : ffff0000c43a1a40 x7 : ffff800008578874 x6 : 0000000000000000
-x5 : 00000000ffffffff x4 : 0000000000012dc0 x3 : 0010000000000000
-x2 : 000caf0ca5eccda0 x1 : 0000000000000000 x0 : 0000000000000000
-Call trace:
- kvmalloc_node+0x19c/0x1a4
- kvmalloc include/linux/slab.h:706 [inline]
- kvmalloc_array include/linux/slab.h:724 [inline]
- kvcalloc include/linux/slab.h:729 [inline]
- btrfs_ioctl_send+0x64c/0xed0 fs/btrfs/send.c:7915
- _btrfs_ioctl_send+0x188/0x218 fs/btrfs/ioctl.c:5233
- btrfs_ioctl+0x5c0/0xa64
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-irq event stamp: 82706
-hardirqs last  enabled at (82705): [<ffff80000844b028>] mod_lruvec_page_state include/linux/vmstat.h:563 [inline]
-hardirqs last  enabled at (82705): [<ffff80000844b028>] __kmalloc_large_node+0x108/0x188 mm/slab_common.c:1099
-hardirqs last disabled at (82706): [<ffff80000c07d8b4>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
-softirqs last  enabled at (82616): [<ffff80000801c38c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (82614): [<ffff80000801c358>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
+but ultimately if the number of clocks is lower than requested, it will fail
+in the call to devm_clk_bulk_get().
 
+Would we warn if the DT clocks count is higher ? or simply fail if lower ?
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Neil
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> 
+> 
+>> +            dev_warn(dev, "too much clocks described in DT\n")
+> If you leave it, s/too much/Too many/
+> 
+> 
+> Konrad
+>> +
+>> +        for (i = 0; i < wrapper->num_clks; ++i)
+>> +            wrapper->clks[i].id = desc->clks[i];
+>> +
+>> +        ret = devm_clk_bulk_get(dev, wrapper->num_clks, wrapper->clks);
+>>           if (ret) {
+>> -            dev_err(dev, "Err getting AHB clks %d\n", ret);
+>> +            dev_err(dev, "Err getting clks %d\n", ret);
+>>               return ret;
+>>           }
+>>       }
+>> @@ -901,8 +922,18 @@ static int geni_se_probe(struct platform_device *pdev)
+>>       return devm_of_platform_populate(dev);
+>>   }
+>> +static const char * const qup_clks[] = {
+>> +    "m-ahb",
+>> +    "s-ahb",
+>> +};
+>> +
+>> +static const struct geni_se_desc qup_desc = {
+>> +    .clks = qup_clks,
+>> +    .num_clks = ARRAY_SIZE(qup_clks),
+>> +};
+>> +
+>>   static const struct of_device_id geni_se_dt_match[] = {
+>> -    { .compatible = "qcom,geni-se-qup", },
+>> +    { .compatible = "qcom,geni-se-qup", .data = &qup_desc },
+>>       {}
+>>   };
+>>   MODULE_DEVICE_TABLE(of, geni_se_dt_match);
+>>
+
