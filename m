@@ -2,109 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C3A63BFCE
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:12:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B4363BFD6
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:15:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233601AbiK2MMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 07:12:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S233598AbiK2MO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 07:14:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbiK2MMN (ORCPT
+        with ESMTP id S232344AbiK2MO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 07:12:13 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDD6CC2;
-        Tue, 29 Nov 2022 04:12:12 -0800 (PST)
+        Tue, 29 Nov 2022 07:14:56 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6F459868;
+        Tue, 29 Nov 2022 04:14:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669723932; x=1701259932;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=syqkRepxkIQCwrzgin/klTRI4EpfJPD3DQtz+X7x25E=;
-  b=bHjzGPLPuuE102pEZ/tMGMhL0TWBaY83o6s+GfGLYVhA3mOuZ0p6aq8Y
-   0/CvnLGxcMOQCnGPBtBuqdmoRTfTkmkXUQSfLamSy+a2KxLxrl/xfWOWT
-   HsaHhg2cg9q14I5OM4LK41s/JMkhnJ4dkB+rUXf5YLMaQhkY4UZxEymPV
-   Wz2L/EzICr/3zE4i/l0Q2qhCGNiCZ34CO5+7Y/D16qTkJ8NyKTwlebR+V
-   KHJB95I4mRTIfS9TAU825tZe0jpV9EIvcTFvaiXRIFelzkrxz4tOzK0xA
-   1PEfVjaeFUvdQ6BiV1wROozLTjmWmfmFRPNHoHMv5/VzyDt2UYV0IkPwh
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="313794974"
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669724095; x=1701260095;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VB01RoMecb1fnZrCwPJYgm/ivTMxFqaFVHgPsPPtEQU=;
+  b=OOmZ36t9vnqCMW+yM6gJFH5SburRiIEHqeQaXLJHUuy4WNPOmhKUshwE
+   3AsKM5FB488Z2/Fnz0urVI2Xq5F0l/KroI+r8akr9vopuh3Zw32M13vVA
+   UnyFeWqSPaZCutnysHlXsq9pCzuHubmZcJdN1FvC2/dfSEUx3MpNAYUnu
+   nw28p17GuX5YKX+uDn7yQhQmTp/QsMScbeTeHtTUNZL3iGNYlTFCNU8pI
+   X2nT8nPHHLu4/UZb3eoSAbJfEI5E/l50e/nIanpbOmL4W8hMjubQtOtS1
+   QASpDbjHICwmajmZCpoTDJXd1iafaxWZVXpMcuaGQhIYbFSeU5IeHtcIM
+   w==;
 X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
-   d="scan'208";a="313794974"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 04:11:52 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="712349561"
-X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
-   d="scan'208";a="712349561"
-Received: from eliteleevi.tm.intel.com ([10.237.54.20])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 04:11:49 -0800
-Date:   Tue, 29 Nov 2022 14:11:34 +0200 (EET)
-From:   Kai Vehmanen <kai.vehmanen@linux.intel.com>
-X-X-Sender: kvehmane@eliteleevi.tm.intel.com
-To:     Takashi Iwai <tiwai@suse.de>
-cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        alsa-devel@alsa-project.org,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>, stable@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        linux-kernel@vger.kernel.org, sound-open-firmware@alsa-project.org
-Subject: Re: [PATCH v4] ALSA: core: Fix deadlock when shutdown a frozen
- userspace
-In-Reply-To: <87edtmqjtd.wl-tiwai@suse.de>
-Message-ID: <alpine.DEB.2.22.394.2211291355350.3532114@eliteleevi.tm.intel.com>
-References: <20221127-snd-freeze-v4-0-51ca64b7f2ab@chromium.org> <5171929e-b750-d2f1-fec9-b34d76c18dcb@linux.intel.com> <87mt8bqaca.wl-tiwai@suse.de> <16ddcbb9-8afa-ff18-05f9-2e9e01baf3ea@linux.intel.com> <87edtmqjtd.wl-tiwai@suse.de>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7 02160 Espoo
+   d="scan'208";a="201836035"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Nov 2022 05:14:54 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 29 Nov 2022 05:14:54 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Tue, 29 Nov 2022 05:14:51 -0700
+Date:   Tue, 29 Nov 2022 12:14:32 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        <agross@kernel.org>, <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: qcom: lpass-sc7180: Add system suspend/resume PM
+ ops
+Message-ID: <Y4X3qKIaSx3lYlsr@wendy>
+References: <1669621742-28524-1-git-send-email-quic_srivasam@quicinc.com>
+ <CAMuHMdUBojHkaAPsjOEadfaikth+L0R_NrKzvqXrmZS9Kc5zHw@mail.gmail.com>
+ <3b00c04c-cb6d-9e9a-ba0c-0ce093b4a3fb@quicinc.com>
+ <CAMuHMdUfRJmy56eO=ET-Togg-EOgxSjnTgAUYWmixD_zVonipA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUfRJmy56eO=ET-Togg-EOgxSjnTgAUYWmixD_zVonipA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
-
-On Tue, 29 Nov 2022, Takashi Iwai wrote:
-
-> On Mon, 28 Nov 2022 18:26:03 +0100, Pierre-Louis Bossart wrote:
-> > As Kai mentioned it, this step helped with a S5 issue earlier in 2022.
-> > Removing this will mechanically bring the issue back and break other
-> > Chromebooks.
+On Tue, Nov 29, 2022 at 11:53:10AM +0100, Geert Uytterhoeven wrote:
+> Hi Srinivasa,
 > 
-> Yeah I don't mean that this fix is right, either.  But the earlier fix
-> has apparently a problem and needs another fix.
+> On Tue, Nov 29, 2022 at 11:36 AM Srinivasa Rao Mandadapu
+> <quic_srivasam@quicinc.com> wrote:
+> > On 11/29/2022 1:23 PM, Geert Uytterhoeven wrote:
+> > > On Mon, Nov 28, 2022 at 8:50 AM Srinivasa Rao Mandadapu
+> > > <quic_srivasam@quicinc.com> wrote:
+> > >> Update lpass sc7180 platform driver with PM ops, such as
+> > >> system supend and resume callbacks.
+> > >> This update is required to disable clocks during supend and
+> > >> avoid XO shutdown issue.
+> > >>
+> > >> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> > >> Tested-by: Rahul Ajmeriya <quic_rajmeriy@quicinc.com>
+> > > Thanks for your patch, which is now commit 2d68148f8f85ca5a ("ASoC:
+> > > qcom: lpass-sc7180: Add system suspend/resume PM ops") in next-20221129.
+> > >
+> > >> --- a/sound/soc/qcom/lpass-sc7180.c
+> > >> +++ b/sound/soc/qcom/lpass-sc7180.c
+> > >> @@ -12,6 +12,7 @@
+> > >>   #include <linux/module.h>
+> > >>   #include <linux/of.h>
+> > >>   #include <linux/platform_device.h>
+> > >> +#include <linux/pm_runtime.h>
+> > >>   #include <dt-bindings/sound/sc7180-lpass.h>
+> > >>   #include <sound/pcm.h>
+> > >>   #include <sound/soc.h>
+> > >> @@ -156,10 +157,34 @@ static int sc7180_lpass_exit(struct platform_device *pdev)
+> > >>          struct lpass_data *drvdata = platform_get_drvdata(pdev);
+> > >>
+> > >>          clk_bulk_disable_unprepare(drvdata->num_clks, drvdata->clks);
+> > >> +       return 0;
+> > >> +}
+> > >> +
+> > >> +static int sc7180_lpass_dev_resume(struct device *dev)
+> > >> +{
+> > >> +       int ret = 0;
+> > >> +       struct lpass_data *drvdata = dev_get_drvdata(dev);
+> > >>
+> > >> +       ret = clk_bulk_prepare_enable(drvdata->num_clks, drvdata->clks);
+> > >> +       if (ret) {
+> > >> +               dev_err(dev, "sc7180 clk prepare and enable failed\n");
+> > >> +               return ret;
+> > >> +       }
+> > >> +       return ret;
+> > >> +}
+> > >> +
+> > >> +static int sc7180_lpass_dev_suspend(struct device *dev)
+> > >> +{
+> > >> +       struct lpass_data *drvdata = dev_get_drvdata(dev);
+> > >> +
+> > >> +       clk_bulk_disable_unprepare(drvdata->num_clks, drvdata->clks);
+> > >>          return 0;
+> > >>   }
+> > > noreply@ellerman.id.au reports for e.g. m68k-allmodconfig:
+> > >
+> > >      sound/soc/qcom/lpass-sc7180.c:179:12: error:
+> > > 'sc7180_lpass_dev_suspend' defined but not used
+> > > [-Werror=unused-function]
+> > >      sound/soc/qcom/lpass-sc7180.c:166:12: error:
+> > > 'sc7180_lpass_dev_resume' defined but not used
+> > > [-Werror=unused-function]
+> > >
+> > >> +static const struct dev_pm_ops sc7180_lpass_pm_ops = {
+> > >> +       SET_SYSTEM_SLEEP_PM_OPS(sc7180_lpass_dev_suspend, sc7180_lpass_dev_resume)
+> > >> +};
+> > > Please use DEFINE_SIMPLE_DEV_PM_OPS()...
+> > Actually, we need to use this patch in in previous kernels 5.4 and 5.15.
+> > I think these changes won't apply on previous kernel.
+> > Hence ignoring for now and will take care next time.
 > 
-> Though, it's not clear why the full unregister of clients is needed at
-> the first place; judging only from the patch description of commit
-> 83bfc7e793b5, what we want is only to shut up the further user space
-> action?  If so, just call snd_card_disconnect() would suffice?
+> In that case you should add __maybe_unused tags to
+> sc7180_lpass_dev_suspend() and sc7180_lpass_dev_resume() first, so it
+> can be backported to 5.4 and 5.15, and do the DEFINE_SIMPLE_DEV_PM_OPS()
+> conversion later.
 
-I think the snd_card_disconnect() is what we are looking after here, but 
-it's just easiest to do via unregister in SOF as that will trigger will 
-look up the platform device, unregister it, and it eventually the driver 
-owning the card will do the disconnect. Possibility for sure to do a more
-direct implementation and not run the full unregister.
+FWIW, this is now breaking allmodconfig on RISC-V for this reason:
 
-On the other end of the solution spectrum, we had this alternative to let 
-user-space stay connected and just have the DSP implementations handle 
-any pending work in their respective shutdown handlers. I.e. we had
-"ASoC: SOF: Intel: pci-tgl: unblock S5 entry if DMA stop has failed"
-https://github.com/thesofproject/linux/pull/3388
+make[2]: *** [../scripts/Makefile.build:504: lib] Error 2
+../sound/soc/qcom/lpass-sc7180.c:179:12: error: 'sc7180_lpass_dev_suspend' defined but not used [-Werror=unused-function]
+  179 | static int sc7180_lpass_dev_suspend(struct device *dev)
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~
+../sound/soc/qcom/lpass-sc7180.c:166:12: error: 'sc7180_lpass_dev_resume' defined but not used [-Werror=unused-function]
+  166 | static int sc7180_lpass_dev_resume(struct device *dev)
+      |            ^~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-This was eventually dropped (and never sent upstream) as 83bfc7e793b5 got 
-the same result, and covered all SOF platforms with a single code path.
-Bringing this back is of course one option, but then this might suprise 
-other platforms (which might have got used to user-space getting 
-disconnected at shutdown via 83bfc7e793b5).
+Thanks,
+Conor.
 
-Br, Kai
