@@ -2,191 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A53163B895
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 880FD63B89A
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235442AbiK2DJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 22:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36918 "EHLO
+        id S235477AbiK2DMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 22:12:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235408AbiK2DJh (ORCPT
+        with ESMTP id S235058AbiK2DM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 22:09:37 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F34802EF5F;
-        Mon, 28 Nov 2022 19:09:35 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8Bx1vDud4VjTOYBAA--.4454S3;
-        Tue, 29 Nov 2022 11:09:34 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxZ1fmd4VjE+QdAA--.57759S4;
-        Tue, 29 Nov 2022 11:09:32 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yun Liu <liuyun@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        loongarch@lists.linux.dev, Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v11 3/3] dt-bindings: hpet: add loongson-2 hpet
-Date:   Tue, 29 Nov 2022 11:09:25 +0800
-Message-Id: <20221129030925.14074-3-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221129030925.14074-1-zhuyinbo@loongson.cn>
-References: <20221129030925.14074-1-zhuyinbo@loongson.cn>
+        Mon, 28 Nov 2022 22:12:27 -0500
+Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [118.143.206.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 430DF32B91
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 19:12:26 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.96,202,1665417600"; 
+   d="scan'208";a="39313112"
+Received: from hk-mbx11.mioffice.cn (HELO xiaomi.com) ([10.56.21.121])
+  by outboundhk.mxmail.xiaomi.com with ESMTP; 29 Nov 2022 11:11:19 +0800
+Received: from yz-mbx03.mioffice.cn (10.237.88.123) by HK-MBX11.mioffice.cn
+ (10.56.21.121) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 29 Nov
+ 2022 11:11:18 +0800
+Received: from BJ-MBX04.mioffice.cn (10.237.8.124) by yz-mbx03.mioffice.cn
+ (10.237.88.123) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 29 Nov
+ 2022 11:11:17 +0800
+Received: from BJ-MBX04.mioffice.cn ([fe80::44a0:4515:f68b:f8b1]) by
+ BJ-MBX04.mioffice.cn ([fe80::44a0:4515:f68b:f8b1%18]) with mapi id
+ 15.02.0986.036; Tue, 29 Nov 2022 11:11:17 +0800
+From:   =?utf-8?B?RGF2aWQgV2FuZyDnjovmoIc=?= <wangbiao3@xiaomi.com>
+To:     Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        "Daniel Bristot de Oliveira" <bristot@redhat.com>
+CC:     Phil Auld <pauld@redhat.com>,
+        Wenjie Li <wenjieli@qti.qualcomm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: =?utf-8?B?562U5aSNOiDnrZTlpI06IFtFeHRlcm5hbCBNYWlsXVtQQVRDSC10aXBdIHNj?=
+ =?utf-8?B?aGVkOiBGaXggdXNlLWFmdGVyLWZyZWUgYnVnIGluIGR1cF91c2VyX2NwdXNf?=
+ =?utf-8?Q?ptr()?=
+Thread-Topic: =?utf-8?B?562U5aSNOiBbRXh0ZXJuYWwgTWFpbF1bUEFUQ0gtdGlwXSBzY2hlZDogRml4?=
+ =?utf-8?B?IHVzZS1hZnRlci1mcmVlIGJ1ZyBpbiBkdXBfdXNlcl9jcHVzX3B0cigp?=
+Thread-Index: AQHZAssNy10XwAaeOEOvH5Jk+DM0Hq5UU+6w//+gmoCAAURCsA==
+Date:   Tue, 29 Nov 2022 03:11:17 +0000
+Message-ID: <2e85a57310184654bcde18156ddf2e8d@xiaomi.com>
+References: <20221128014441.1264867-1-longman@redhat.com>
+ <63373bf9adfc4e0abd9480d40afa2c5a@xiaomi.com>
+ <f5abd919-c996-6549-8d48-a93a66daaef8@redhat.com>
+In-Reply-To: <f5abd919-c996-6549-8d48-a93a66daaef8@redhat.com>
+Accept-Language: en-US, zh-CN
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.237.8.11]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxZ1fmd4VjE+QdAA--.57759S4
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tF4fWFWxJF1xCrW5GFg_yoWrGF4fpF
-        s7CF95Jr47tF1fu39xKFyI9Fn5Za4DAF9rWr17tw1UAryDX3W5XFn2ga4DurW3GrWxWay7
-        XFySkw18Ka1jvr7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bS8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr
-        1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkE
-        cVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F4
-        0Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC
-        6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2
-        Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
-        1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj
-        6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr
-        0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
-        YxBIdaVFxhVjvjDU0xZFpf9x07jetC7UUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,SPF_HELO_SOFTFAIL,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Loongson-2 High Precision Event Timer (HPET) binding
-with DT schema format using json-schema.
-
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Change in v11:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-                2. This patch need rely on clock patch, which patchwork  
-		   link was "https://patchwork.kernel.org/project/linux-clk/list/?series=691497".
-Change in v10:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-                2. This patch need rely on clock patch, which patchwork  
-		   link was "https://patchwork.kernel.org/project/linux-clk/list/?series=691497".
-Change in v9:
-                1. This patch need rely on clock patch, which patchwork  
-		   link was "https://patchwork.kernel.org/project/linux-clk/list/?series=691497".
-		2. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v8:
-                1. This patch need rely on clock patch, which patchwork  
-		   link was "https://patchwork.kernel.org/project/linux-clk/list/?series=691497".
-		2. Add all history change log information.
-Change in v7:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v6:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v5:
-		1. Replace string loongson2/Loongson2 with Loongson-2/loongson-2.
-		2. Add the patch review information.
-Change in v4: 
-                1. Fixup the clock-names that replace apb-clk with apb.
-                2. This patch need rely on clock patch, which patchwork  
-                   link was "https://patchwork.kernel.org/project/linux-clk/list/?series=688892".
-Change in v3:
-		1. Update dts that base on common clock framework.
-Change in v2:
-		1. Drop the  "hpet0" label.
-		2. Modify the hpet node name to timer.
-
- .../bindings/timer/loongson,ls2k-hpet.yaml    | 50 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 51 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
-
-diff --git a/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml b/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
-new file mode 100644
-index 000000000000..30685c8fbead
---- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
-@@ -0,0 +1,50 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/timer/loongson,ls2k-hpet.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson-2 High Precision Event Timer (HPET)
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+properties:
-+  compatible:
-+    const: loongson,ls2k-hpet
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: SoC apb clock
-+
-+  clock-names:
-+    items:
-+      - const: apb
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/loongson,ls2k-clk.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    timer@1fe24000 {
-+        compatible = "loongson,ls2k-hpet";
-+        reg = <0x1fe24000 0x15f>;
-+        clocks = <&clk LOONGSON2_APB_CLK>;
-+        clock-names = "apb";
-+        interrupt-parent = <&liointc0>;
-+        interrupts = <21 IRQ_TYPE_LEVEL_LOW>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5d5967f55c36..5b04e37a1bd2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12033,6 +12033,7 @@ LOONGSON-2 SOC SERIES HPET DRIVER
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-kernel@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
- F:	drivers/clocksource/loongson2_hpet.c
- 
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
--- 
-2.31.1
-
+SGkgIFdhaW1hbiwgIFBldGVyeiwNCg0KV2UgdGVzdCBuZXcgcGF0Y2ggYmFzaW5nIG9uIHVzZXIg
+cmVxdWVzdGVkIGFmZmluaXR5IHBhdGNoc2V0KHRoZSBsYXRlc3QgdGlwIHRyZWUpLg0KDQpZb3Ug
+dXNlIDcgcGF0Y2ggZnJvbSBBQ0sgY29kZSAuIFlvdSBjaGVjayBmb2xsb3dpbmcgIGxpbmsgY2hh
+bmdlLg0KaHR0cHM6Ly9hbmRyb2lkLXJldmlldy5nb29nbGVzb3VyY2UuY29tL2Mva2VybmVsL2Nv
+bW1vbi8rLzIyNjY3MjQNCmh0dHBzOi8vYW5kcm9pZC1yZXZpZXcuZ29vZ2xlc291cmNlLmNvbS9j
+L2tlcm5lbC9jb21tb24vKy8yMjY2NzQ0DQpodHRwczovL2FuZHJvaWQtcmV2aWV3Lmdvb2dsZXNv
+dXJjZS5jb20vYy9rZXJuZWwvY29tbW9uLysvMjI2Njc0NQ0KaHR0cHM6Ly9hbmRyb2lkLXJldmll
+dy5nb29nbGVzb3VyY2UuY29tL2Mva2VybmVsL2NvbW1vbi8rLzIyNjY4MDQNCmh0dHBzOi8vYW5k
+cm9pZC1yZXZpZXcuZ29vZ2xlc291cmNlLmNvbS9jL2tlcm5lbC9jb21tb24vKy8yMjY2Nzg0DQpo
+dHRwczovL2FuZHJvaWQtcmV2aWV3Lmdvb2dsZXNvdXJjZS5jb20vYy9rZXJuZWwvY29tbW9uLysv
+MjI2NzQ2OA0KaHR0cHM6Ly9hbmRyb2lkLXJldmlldy5nb29nbGVzb3VyY2UuY29tL2Mva2VybmVs
+L2NvbW1vbi8rLzIyNjc2NjQNCg0KWW91IGNhbiBjb25maXJtIHRoaXMgd2l0aCBnb29nbGUgdGVh
+bSBhbmQgY2hlY2sNCmh0dHBzOi8vcGFydG5lcmlzc3VldHJhY2tlci5jb3JwLmdvb2dsZS5jb20v
+dS8wL2lzc3Vlcy8yNTY1NzgzMDIgLg0KDQpIaSAgUGV0ZXJ6ICwNCg0KQ291bGQgeW91IGhlbHAg
+bWVyZ2UNCmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8yMDIyMTEyNTAyMzk0My4xMTE4NjAz
+LTEtbG9uZ21hbkByZWRoYXQuY29tLw0KDQpXZSB3YW50IHRvIHByb3ZpZGUgYmV0dGVyIHByb2R1
+Y3QgZm9yIHVzZXIuDQpUaGFua3MNCg0KRGF2aWQuDQoNCi0tLS0t6YKu5Lu25Y6f5Lu2LS0tLS0N
+CuWPkeS7tuS6ujogV2FpbWFuIExvbmcgPGxvbmdtYW5AcmVkaGF0LmNvbT4NCuWPkemAgeaXtumX
+tDogMjAyMuW5tDEx5pyIMjjml6UgMjM6NDMNCuaUtuS7tuS6ujogRGF2aWQgV2FuZyDnjovmoIcg
+PHdhbmdiaWFvM0B4aWFvbWkuY29tPjsgSW5nbyBNb2xuYXIgPG1pbmdvQHJlZGhhdC5jb20+OyBQ
+ZXRlciBaaWpsc3RyYSA8cGV0ZXJ6QGluZnJhZGVhZC5vcmc+OyBKdXJpIExlbGxpIDxqdXJpLmxl
+bGxpQHJlZGhhdC5jb20+OyBWaW5jZW50IEd1aXR0b3QgPHZpbmNlbnQuZ3VpdHRvdEBsaW5hcm8u
+b3JnPjsgRGlldG1hciBFZ2dlbWFubiA8ZGlldG1hci5lZ2dlbWFubkBhcm0uY29tPjsgU3RldmVu
+IFJvc3RlZHQgPHJvc3RlZHRAZ29vZG1pcy5vcmc+OyBCZW4gU2VnYWxsIDxic2VnYWxsQGdvb2ds
+ZS5jb20+OyBNZWwgR29ybWFuIDxtZ29ybWFuQHN1c2UuZGU+OyBEYW5pZWwgQnJpc3RvdCBkZSBP
+bGl2ZWlyYSA8YnJpc3RvdEByZWRoYXQuY29tPg0K5oqE6YCBOiBQaGlsIEF1bGQgPHBhdWxkQHJl
+ZGhhdC5jb20+OyBXZW5qaWUgTGkgPHdlbmppZWxpQHF0aS5xdWFsY29tbS5jb20+OyBsaW51eC1r
+ZXJuZWxAdmdlci5rZXJuZWwub3JnOyBzdGFibGVAdmdlci5rZXJuZWwub3JnDQrkuLvpopg6IFJl
+OiDnrZTlpI06IFtFeHRlcm5hbCBNYWlsXVtQQVRDSC10aXBdIHNjaGVkOiBGaXggdXNlLWFmdGVy
+LWZyZWUgYnVnIGluIGR1cF91c2VyX2NwdXNfcHRyKCkNCg0KW+WklumDqOmCruS7tl0g5q2k6YKu
+5Lu25p2l5rqQ5LqO5bCP57Gz5YWs5Y+45aSW6YOo77yM6K+36LCo5oWO5aSE55CG44CC6Iul5a+5
+6YKu5Lu25a6J5YWo5oCn5a2Y55aR77yM6K+35bCG6YKu5Lu26L2s5Y+R57uZbWlzZWNAeGlhb21p
+LmNvbei/m+ihjOWPjemmiA0KDQpPbiAxMS8yOC8yMiAwODozNCwgRGF2aWQgV2FuZyDnjovmoIcg
+d3JvdGU6DQo+IEhpLCBXYWltYW4NCj4NCj4gV2UgdXNlIDE0MCBkZXZpY2VzIHRvIHRlc3QgdGhp
+cyBwYXRjaCA3MiBob3Vycy4gIFRoZSBpc3N1ZSBjYW4gbm90IGJlIHJlcHJvZHVjZWQuICBJZiBu
+byB0aGlzIHBhdGNoLCAgdGhlIGlzc3VlIGNhbiBiZSByZXByb2R1Y2VkLg0KPiBDb3VsZCB5b3Ug
+aGVscCBtZXJnZSB0aGlzIHBhdGNoIHRvIG1haWxpbmU/DQo+DQo+IGh0dHBzOi8vbG9yZS5rZXJu
+ZWwub3JnL2FsbC8yMDIyMTEyNTAyMzk0My4xMTE4NjAzLTEtbG9uZ21hbkByZWRoYXQuY28NCj4g
+bS8NCj4NCj4gSWYgdGhpcyBwYXRjaCBpcyBhcHBsaWVkIHRvIHRoZSBtYWludGFpbmVyJ3MgdHJl
+ZSwgIHdlIGNhbiByZXF1ZXN0IGdvb2dsZSB0byBoZWxwIGNoZXJyeXBpY2sgdG8gQUNLIHRvIGZp
+eCBpc3N1ZS4NCg0KSnVzdCB3YW50IHRvIGNsYXJpZnkgaWYgeW91IGFyZSB0ZXN0aW5nIHRoZSBw
+YXRjaCB1c2luZyB0aGUgbGF0ZXN0IHRpcCB0cmVlIG9yIG9uIHRvcCBvZiBhbiBleGlzdGluZyBs
+aW51eCB2ZXJzaW9uIHdpdGhvdXQgdGhlIHBlcnNpc3RlbnQgdXNlciByZXF1ZXN0ZWQgYWZmaW5p
+dHkgcGF0Y2hzZXQuDQoNClBldGVyWiBpcyB0aGUgc2NoZWR1bGVyIG1haW50YWluZXIgd2hvIGlz
+IHJlc3BvbnNpYmxlIGZvciBtZXJnaW5nIHNjaGVkdWxlciByZWxhdGVkIHBhdGNoLiBJdCBpcyB1
+cCB0byBoaW0gYXMgdG8gd2hlbiB0aGF0IHdpbGwgaGFwcGVuLg0KDQpDaGVlcnMsDQpMb25nbWFu
+DQoNCiMvKioqKioq5pys6YKu5Lu25Y+K5YW26ZmE5Lu25ZCr5pyJ5bCP57Gz5YWs5Y+455qE5L+d
+5a+G5L+h5oGv77yM5LuF6ZmQ5LqO5Y+R6YCB57uZ5LiK6Z2i5Zyw5Z2A5Lit5YiX5Ye655qE5Liq
+5Lq65oiW576k57uE44CC56aB5q2i5Lu75L2V5YW25LuW5Lq65Lul5Lu75L2V5b2i5byP5L2/55So
+77yI5YyF5ous5L2G5LiN6ZmQ5LqO5YWo6YOo5oiW6YOo5YiG5Zyw5rOE6Zyy44CB5aSN5Yi244CB
+5oiW5pWj5Y+R77yJ5pys6YKu5Lu25Lit55qE5L+h5oGv44CC5aaC5p6c5oKo6ZSZ5pS25LqG5pys
+6YKu5Lu277yM6K+35oKo56uL5Y2z55S16K+d5oiW6YKu5Lu26YCa55+l5Y+R5Lu25Lq65bm25Yig
+6Zmk5pys6YKu5Lu277yBIFRoaXMgZS1tYWlsIGFuZCBpdHMgYXR0YWNobWVudHMgY29udGFpbiBj
+b25maWRlbnRpYWwgaW5mb3JtYXRpb24gZnJvbSBYSUFPTUksIHdoaWNoIGlzIGludGVuZGVkIG9u
+bHkgZm9yIHRoZSBwZXJzb24gb3IgZW50aXR5IHdob3NlIGFkZHJlc3MgaXMgbGlzdGVkIGFib3Zl
+LiBBbnkgdXNlIG9mIHRoZSBpbmZvcm1hdGlvbiBjb250YWluZWQgaGVyZWluIGluIGFueSB3YXkg
+KGluY2x1ZGluZywgYnV0IG5vdCBsaW1pdGVkIHRvLCB0b3RhbCBvciBwYXJ0aWFsIGRpc2Nsb3N1
+cmUsIHJlcHJvZHVjdGlvbiwgb3IgZGlzc2VtaW5hdGlvbikgYnkgcGVyc29ucyBvdGhlciB0aGFu
+IHRoZSBpbnRlbmRlZCByZWNpcGllbnQocykgaXMgcHJvaGliaXRlZC4gSWYgeW91IHJlY2VpdmUg
+dGhpcyBlLW1haWwgaW4gZXJyb3IsIHBsZWFzZSBub3RpZnkgdGhlIHNlbmRlciBieSBwaG9uZSBv
+ciBlbWFpbCBpbW1lZGlhdGVseSBhbmQgZGVsZXRlIGl0ISoqKioqKi8jDQo=
