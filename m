@@ -2,670 +2,1621 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA6863BF7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8C063BF7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233232AbiK2LzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 06:55:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55226 "EHLO
+        id S233148AbiK2Lzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 06:55:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233016AbiK2Lyr (ORCPT
+        with ESMTP id S232611AbiK2Lzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 06:54:47 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2077.outbound.protection.outlook.com [40.107.95.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348E755ABE
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:54:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=di9tcW/eHTiLDiQKscgfP5525X9l+oKLJ6v6eOrgDVVUc08Sxn7CRrjJtxqVt+2rDBlenmAioIq+7d1Rou15gG5acTh+GglaT8i3nBkowYle8MWNuepu13hp1Lb4uef8GvYDdDfcQiJt56hqAE46+3jaT3U1j4zUGcxMjo9A+smvlXsRB6ksomCGwWKfj2ooBhW+abVEHGwAABalZqb12vWXoQjCiZrxRfUj1TQGjXLliumFV8axs40kmqvM+t1EVta0KLXRZR47/Q/JAaqPkD7qYNVKp4yR9h0sZDpdYBoaOUvb0edESbsSfccJIz85RCpzYcc991TUD9/rJ3OI0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0h9noSsvVYae7vcJESiGKbJqZiOP+xn/i3Lypz/PJz4=;
- b=Qw8u5wa5LHI1X//UmMie4qT51j4ud0iB2v7LwKogsySJ7M1Z3OA9EvYBO/g9LNs2FRFclcotMJhzHNjZ7yEdwx8CX86f3yEOVjHSaamfNJuf90Ox6nzT854hVoMAyPiCL3abaMXh0MVNnIaXRSGCjkEVGIqEk5WYhBJb8rShFMxMcSRh4rPH80saxZt4RZabUgSrPREonNw0WyOJ8IBzGiFKVVUe82nI89PsG6RdvHYRwACxPPH3OGL+kq8CHqSP/LYn5h36GvZz2LKE52LVxmYlo4VPgPRwOWOoU8i7FQrz22mdX2GZhrHa+JAv6r1rizR1iJK3FuyD5QmfS4Pw5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0h9noSsvVYae7vcJESiGKbJqZiOP+xn/i3Lypz/PJz4=;
- b=dGQRkSBASM7n9l4aUdkD1Uc4YiP97JYEmZ26ES+remtDcNXnG1Ct0nkuk+UZKOT/dJzq6Nfr3op+Mo4QtZxxSWT6KdNDSoLXFONYdal0zVQNr992G6r27butc8UVXtNHHL8SNQfeolxl4akQRMWL3jJDri1f4SiQpKQMl+j0Jp4=
-Received: from DM4PR12MB5165.namprd12.prod.outlook.com (2603:10b6:5:394::9) by
- SN7PR12MB7297.namprd12.prod.outlook.com (2603:10b6:806:2ad::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Tue, 29 Nov
- 2022 11:54:43 +0000
-Received: from DM4PR12MB5165.namprd12.prod.outlook.com
- ([fe80::af94:f2ad:209b:c565]) by DM4PR12MB5165.namprd12.prod.outlook.com
- ([fe80::af94:f2ad:209b:c565%4]) with mapi id 15.20.5857.023; Tue, 29 Nov 2022
- 11:54:42 +0000
-Content-Type: multipart/mixed;
-        boundary="_000_DM4PR12MB51650DA0960F7E13F3F64E9687129DM4PR12MB5165namp_"
-From:   "Pan, Xinhui" <Xinhui.Pan@amd.com>
-To:     "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
-CC:     "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "matthew.auld@intel.com" <matthew.auld@intel.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Paneer Selvam, Arunpravin" <Arunpravin.PaneerSelvam@amd.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
-Subject: =?gb2312?B?u9i4tDogW1BBVENIIHY0XSBkcm06IE9wdGltaXNlIGZvciBjb250aW51b3Vz?=
- =?gb2312?Q?_memory_allocation?=
-Thread-Topic: [PATCH v4] drm: Optimise for continuous memory allocation
-Thread-Index: AQHZA+FYf6F+KXzzGkaj7rVsGUeL5q5VxMAAgAAAtX8=
-Date:   Tue, 29 Nov 2022 11:54:42 +0000
-Message-ID: <DM4PR12MB51650DA0960F7E13F3F64E9687129@DM4PR12MB5165.namprd12.prod.outlook.com>
-References: <20221129105655.125571-1-xinhui.pan@amd.com>
- <fe127690-9dbb-797f-c0c3-f1e05657293f@amd.com>
-In-Reply-To: <fe127690-9dbb-797f-c0c3-f1e05657293f@amd.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: <DM4PR12MB51650DA0960F7E13F3F64E9687129@DM4PR12MB5165.namprd12.prod.outlook.com>
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=True;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-11-29T11:54:42.520Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB5165:EE_|SN7PR12MB7297:EE_
-x-ms-office365-filtering-correlation-id: 990badf9-5d32-4973-a73c-08dad20080d6
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: b9XArym2wRBz4iVKKF6hUlLKuIMVCHPoioJPCC3G6clZWgEAesS//fu1sc9Uc6XCWGBa1E6lU6CCPMRsMMaqKcUIQHqzD73WIIHH9FFkfdQS3f/nR6hk2e4/fASZr31KW6JitMl2kBqwckrLKN7x2n1GVVltbFHS0fp7M6SxduJCYeRHC/HF+ce1Gljz+ud5EJvYiqUdkE5lSoWj5/VgAzw5Ewd+ltommG3Vx4dX5w3RFPUGy5/Jc9b3N0PbPBx/PcJqIMsFPHHBEkK84YyB2i5gBuvweEMQYck97pcNyWBo1oBdNUtXNn3PBKxEIVCxPGG9BcazI+QktkQVEj84BCP3WeInJNtrsV9HSiSegeYJryz0Unrt/DtLyIzbU4yF+DPp0lqBjTiBAZKm3Hbr1K5kMoYnKyhw74ws3XqcjZay4s9u270GaqYoG0X74sbAW/XHMnMuVgfwGl43DEIAv0YdvOagPhCXUtjnVFdVzG28XOZM0iJO9Jq7qnUvp9uFReYta3WxsfoIyQXpkYBwH9dqkQEGACLuDj1eT2y9HPk3eTUuft8gFUBliFqT9ZBVeN5tKqybKWnzsiZsCh3RykHVD5pVe2DmOMVDrMERAOCXVvh/VBpghmMylCUfgFd9VHs0NKR98NAUS6l2C2ERWmxd9aRaCuhksCz3rUcaNFM9J4E+3OWzJo2x+TfX058PwxlfZoIgyoWhe+5Ibcfw9A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5165.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(376002)(346002)(396003)(39860400002)(451199015)(122000001)(8936002)(41300700001)(6506007)(76116006)(5660300002)(9686003)(52536014)(316002)(83380400001)(54906003)(110136005)(33656002)(4326008)(55016003)(478600001)(91956017)(186003)(7696005)(86362001)(224303003)(38100700002)(2906002)(66556008)(64756008)(66899015)(71200400001)(66946007)(66446008)(66476007)(38070700005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?TUVBMEh6QVpSZXZPSkRsS0djTktvMU9wQ1lJQlhnTVltcTV2cTdhNEUxQUNM?=
- =?gb2312?B?ZW5Lc3VRbnhzUzk1dm5BTW9iYm1NRUlXclE3VVpxaUlyZWFUNkVNWjlrWE5Z?=
- =?gb2312?B?enlvTWZOV2hMVGNDcFpHVVlSK2lvQlIwVkE4bHZWczBjYnFSVVZDaWN4LzBW?=
- =?gb2312?B?NnR3QWc1aXZ6SHdobERZc0piTmk0ZmUvWmlRV2tmbGYwbVJqOXF3QktVQzVS?=
- =?gb2312?B?aytlM0I3NjJMM0NnTno4aDdZcFRRMWpUSHFmN1QrSSttN0NTYWMvTEtmbGpG?=
- =?gb2312?B?Q0JxRjl1Mmo1L2M5OFZuRVZHWGRKZmI5RTQzOVlIVkNwMXlMTVVGOTB2MmFN?=
- =?gb2312?B?VkJGSFNpUlo3amJ1eTU1Q1Jud3RnVzE5SDk0Y3kwK2lSc2JIY3QwTjk3emtW?=
- =?gb2312?B?NjExQUVnTUFTRzBmVnhZdHlwenM1aVUvWCswVzBXQlV2UW5nSE11OUtXMUMw?=
- =?gb2312?B?UTlHUlhMTVJYNEtpaUZvSTU5RXhEbVQyc2I2TWZCOTF0L1IyZTJ6MmxqdWlq?=
- =?gb2312?B?WFZ6ZjhJdDVLa0lZT2djbHgzQnRhcnBYVE9OWC96Nk9TWnhrb3RxbFhZSU9z?=
- =?gb2312?B?bG5oRHFsSkdzZTlGaUQwWDFyMDZleW8xMjA2V2tXbjcvK2trNXBtYlRHSCs4?=
- =?gb2312?B?OU1rYTljdWROQ3grRllzdmRQcFEvTTA0TGJRTkFhTnBoYlVmNThqQTd0eWo1?=
- =?gb2312?B?SUI4ZStXWG4rRkZqR2JydEdMRkVwVlVPSnlmZEF6TjNsdmpqamRSOHd0YmJI?=
- =?gb2312?B?TFdtbGRsR1Y2R1oxd2FxN0szK01FMElKL0FHbENHUU1tb2MwVmo5c0RaanZL?=
- =?gb2312?B?NXZJcllRdngrYWJDaUIwUEtFN05tYlVSeWJrcVBTSlQvWmlZbVdEUjAycmhw?=
- =?gb2312?B?bDlvL3EwTGt2ZkpNYWoyeTJDYXdvd2JRMEw5ajBzRmJQV2dtSzFobjJicFAr?=
- =?gb2312?B?dzVvVnhVNmJyZGNPdHZYQTBhdHMxbGd4SXlTSllFNGJzdi9wMW9Md0ZJYk5v?=
- =?gb2312?B?TjJ4Q3hFYU40a1J1SXBBb1YxTDhvakFkcm5IdHU4SzZUdDJ0b29CcXJhYlNw?=
- =?gb2312?B?TGxRQ1ZSTlQ0a2pXNlIzSUhHbk9zS3RibDQrTjcxMUZvNUJFdVRNakg2am1P?=
- =?gb2312?B?ZHhBcWYvV3l2cEE3am5DLzVBUUl0a2RRYXlieDFGWGlXWDFDTHUyK1NQQkdK?=
- =?gb2312?B?NXhhSTNsZzNUQWFsOXNSaUVHTWxEVVpuRHc3enM3eFBreDhBbUJkbkovZ3dq?=
- =?gb2312?B?aEhNeUZwYll6SkhCVlYvS2JkQ0lRbi9NcDcrY1h4Zy9mZUlCS3FDbW1MdWZs?=
- =?gb2312?B?em81U1J4WG9UMzR4a0hSeDZEcTRYWXd5cERRUWlVQWFpUHRhZW96S2pDVlhT?=
- =?gb2312?B?a2dUYkVVWUZCc1BOejU4NFh6WE9PaWhWLzZFNGdLVVhxcmJRZGs3azlCOFJ0?=
- =?gb2312?B?a2hoTTV1YTVQdXQ1VlVjOHR6cTRvWFhCdHNqOUJDTUZTOERFdmxZSWRER0pH?=
- =?gb2312?B?OWdobEw5WnhmeXhHb2pyQlpIVk5Sem10bHVDK3VFS2x0RjB5eE85VVd0c1Ns?=
- =?gb2312?B?Z0QzMm1vNk9pSEl6MnZVWHV5Y1RrMmxDc2krRGg2aHdxOXF6cEw2c2JIZm9T?=
- =?gb2312?B?QjFKR2hsek85U0pJZ3lmTnB5eUFacXpVdzFLVVE2N29NR285MWkybDBRV2hu?=
- =?gb2312?B?QWEzanQ5OGw5V2owRElmc3hNbGFIeU13VFRLKzVmQWFiVWFYemxEOHE3dWMw?=
- =?gb2312?B?UDFoMGxCNkgyMlNCejJGQ2p4TlhXSWk3ZTdTVkRNc1RIUlZVY1ZZLzdOdG02?=
- =?gb2312?B?UFNhTXZvZjliSUtLT0JaLzFVSm1lK3I2OXE5TUM4Vkdjb2ZRWTRFWDQwK3k3?=
- =?gb2312?B?YXVrU2U4clh0Ly9ZamVZUE52MFN4MVI4WjlkM0lWakpESUNyTTdMcE84YWhs?=
- =?gb2312?B?VzkzNmkwU1BGQjI1ZmxwejJCUkFRUndENEsrSzNEWWd6QnAyNDVqcUhXT1Fv?=
- =?gb2312?B?NEFoRXJISzRmYjdnRGNETlE2UzJpOU9Fd01IY0MvSVhpaVFVcjRkb0QrVnd4?=
- =?gb2312?B?R2RRdVNzWDZzeFNxRndNSnFScXFBWm5FUFhHa1NMUlVQN29RS1NjU0Q4UjJt?=
- =?gb2312?B?SzJvdnpZdU5VZ2tlL3R2bDRZelJVbnhlVnZnR1BMZTZpQ0RMRXhNZVAvb0Fz?=
- =?gb2312?Q?19hCF9N7OOLPcBDzg09Idg0=3D?=
+        Tue, 29 Nov 2022 06:55:35 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A35F5ADC0;
+        Tue, 29 Nov 2022 03:55:33 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATBBlj8028167;
+        Tue, 29 Nov 2022 11:54:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : mime-version : content-type; s=pp1;
+ bh=oeiu5NIIgW1DMVLnJfRhNOWPzhR6c8YDLqcnE1KXpFQ=;
+ b=bV/f9fEt2XTu72HepyL4Fbrwls6TgonLHLitBPqBSOpgjEN+/6zlHHeOjDsq2zNX6cGU
+ VivJmNaxoxF/McFWdkL3vNC0LzSVSKcmWgtNaJA7ZaX47U1A6FDfo50vBgb9vCqpVwGV
+ 6eW0GMnjWo4fvulZk289HnBSwM/zke5CutbWhpKLOKgCXKullNkXO6d+jlu75e2KhI/t
+ 0cJ+kMYbdlVMnCX+VFUameLuuGbCky+CbFLSj/tJ4szsfEms9R4f0wRcCHQI3zLxh7Ge
+ tfleBtT97wmIdKu31r3fAMtvqRhvb0MPkWM+1aw7J+l/6FfRWe1zqCT6GINFK06/w7Y3 zw== 
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m5ckmg6q9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 11:54:54 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ATBpVxb028617;
+        Tue, 29 Nov 2022 11:54:52 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma03wdc.us.ibm.com with ESMTP id 3m3ae9ca3r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 11:54:52 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com ([9.208.128.115])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ATBsp5613042350
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 29 Nov 2022 11:54:51 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E492158055;
+        Tue, 29 Nov 2022 11:54:50 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 16D6C5804E;
+        Tue, 29 Nov 2022 11:54:48 +0000 (GMT)
+Received: from Dannys-MacBook-Pro.local (unknown [9.211.123.96])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 29 Nov 2022 11:54:47 +0000 (GMT)
+Date:   Tue, 29 Nov 2022 19:54:44 +0800
+From:   Danny Tsen <dtsen@linux.ibm.com>
+To:     linux-crypto@vger.kernel.org
+Cc:     herbert@gondor.apana.org.au, leitao@debian.org,
+        nayna@linux.ibm.com, appro@cryptogams.org,
+        linux-kernel@vger.kernel.org, ltcgcw@linux.vnet.ibm.com,
+        dtsen@linux.ibm.com
+Subject: [PATCH 3/6] crypto: An accelerated AES/GCM stitched implementation.
+Message-ID: <Y4XzBHVlSD3RSzD0@Dannys-MacBook-Pro.local>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5165.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 990badf9-5d32-4973-a73c-08dad20080d6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2022 11:54:42.9261
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Yhb2l1kbTPuHpmrHR1Zc6rm4jVep2BpdBe5/Z76LkA0mRI1St8qnmoDigT6AfQ2h
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7297
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: nd943JFuJgoo7ZO5pjiSCsLEcOYPcfuf
+X-Proofpoint-ORIG-GUID: nd943JFuJgoo7ZO5pjiSCsLEcOYPcfuf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-29_07,2022-11-29_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 priorityscore=1501 mlxscore=0 phishscore=0 impostorscore=0
+ mlxlogscore=831 adultscore=0 suspectscore=0 bulkscore=0 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211290069
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---_000_DM4PR12MB51650DA0960F7E13F3F64E9687129DM4PR12MB5165namp_
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+Implemented 8x AES blocks and 8x ghash blocks operations.  Improve overall
+performance of AES/GCM encrypt and decrypt operations for Power10+ CPU.
 
-W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNCmNvbW1lbnRzIGlubGluZS4NCg0K
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXw0Kt6K8/sjLOiBLb2VuaWcs
-IENocmlzdGlhbiA8Q2hyaXN0aWFuLktvZW5pZ0BhbWQuY29tPg0Kt6LLzcqxvOQ6IDIwMjLE6jEx
-1MIyOcjVIDE5OjMyDQrK1bz+yMs6IFBhbiwgWGluaHVpOyBhbWQtZ2Z4QGxpc3RzLmZyZWVkZXNr
-dG9wLm9yZw0Ks63LzTogZGFuaWVsQGZmd2xsLmNoOyBtYXR0aGV3LmF1bGRAaW50ZWwuY29tOyBk
-cmktZGV2ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwu
-b3JnOyBQYW5lZXIgU2VsdmFtLCBBcnVucHJhdmluOyBpbnRlbC1nZnhAbGlzdHMuZnJlZWRlc2t0
-b3Aub3JnDQrW98ziOiBSZTogW1BBVENIIHY0XSBkcm06IE9wdGltaXNlIGZvciBjb250aW51b3Vz
-IG1lbW9yeSBhbGxvY2F0aW9uDQoNCkFtIDI5LjExLjIyIHVtIDExOjU2IHNjaHJpZWIgeGluaHVp
-IHBhbjoNCj4gQ3VycmVudGx5IGRybS1idWRkeSBkb2VzIG5vdCBoYXZlIGZ1bGwga25vd2xlZGdl
-IG9mIGNvbnRpbnVvdXMgbWVtb3J5Lg0KPg0KPiBMZXRzIGNvbnNpZGVyIHNjZW5hcmlvIGJlbG93
-Lg0KPiBvcmRlciAxOiAgICBMICAgICAgICAgICAgIFINCj4gb3JkZXIgMDogTEwgICBMUiAgICAg
-IFJMICAgICAgUlINCj4gZm9yIG9yZGVyIDEgYWxsb2NhdGlvbiwgaXQgY2FuIG9mZmVyIEwgb3Ig
-UiBvciBMUitSTC4NCj4NCj4gRm9yIG5vdywgd2Ugb25seSBpbXBsZW1lbnQgTCBvciBSIGNhc2Ug
-Zm9yIGNvbnRpbnVvdXMgbWVtb3J5IGFsbG9jYXRpb24uDQo+IFNvIHRoaXMgcGF0Y2ggYWltcyB0
-byBpbXBsZW1lbnQgdGhlIHJlc3QgY2FzZXMuDQo+DQo+IEFkZGluZyBhIG5ldyBtZW1iZXIgbGVh
-Zl9saW5rIHdoaWNoIGxpbmtzIGFsbCBsZWFmIGJsb2NrcyBpbiBhc2NlZGluZw0KPiBvcmRlci4g
-Tm93IHdlIGNhbiBmaW5kIG1vcmUgdGhhbiAyIHN1Yi1vcmRlciBibG9ja3MgZWFzaWVyLg0KPiBT
-YXksIG9yZGVyIDQgY2FuIGJlIGNvbWJpbmVkIHdpdGggY29ycmVzcG9uZGluZyBvcmRlciA0LCAy
-KzIsIDErMisxLA0KPiAwKzErMiswLCAwKzIrMSswLg0KDQpXZWxsIHRoYXQgZGVzY3JpcHRpb24g
-aXMgYSBiaXQgY29uZnVzaW5nIGFuZCBkb2Vzbid0IG1ha2UgdG8gbXVjaCBzZW5zZQ0KdG8gbWUu
-DQoNCldoZW4geW91IGhhdmUgdHdvIGFkamFjZW50IGZyZWUgb3JkZXIgMCBibG9ja3MgdGhlbiB0
-aG9zZSBzaG91bGQgYmUNCmF1dG9tYXRpY2FsbHkgY29tYmluZWQgaW50byBhbiBvcmRlciAxLiBU
-aGlzIGlzIGEgZnVuZGFtZW50YWwgcHJvcGVydHkNCm9mIHRoZSBidWRkeSBhbGxvY2F0b3IsIG90
-aGVyd2lzZSB0aGUgd2hvbGUgYWxnb3JpdGhtIHdvbid0IHdvcmsuDQoNClt4aF0gc29ycnksIFRo
-ZSBvcmRlciBhYm92ZSBpcyBub3QgNCwgc2hvdWxkIGJlIDMuDQpvcmRlciAzIGNhbiBiZSBjb21i
-aW5lZCB3aXRoIGNvcnJlc3BvbmRpbmcgb3JkZXIgMywgMisyLCAxKzIrMSwgMCsxKzIrMCwgMCsy
-KzErMA0KdGhlIG9yZGVyIDAgKyAxICsgMiArIDAgY2FzZSBkb2VzIG5vdCBoYXZlIHR3byBzYW1l
-IG9yZGVyIDAgYWRqYWNlbnQuIHRoZXkgYXJlIGluIGRpZmZlcmVudCB0cmVlLg0KbG9va3MgbGlr
-ZSBiZWxvdw0Kb3JkZXIgMzogICAgICAgICAgICAgICAgICAgICAgICAgICAgTDMgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFIzDQpvcmRlciAyOiAgICAgICAg
-ICAgIEwyICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKFIyKSogICAgICAgICAgICAgICAg
-ICAgIEwyKg0Kb3JkZXIgMTogICAgTDEgICAgICAgICAgICAgKFIxKSAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgTDENCm9yZGVyIDA6IEwwICAgKFIwKSAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoTDApDQpSMCArIFIxK1IyICtM
-MCB3aXRoICgpIGFyb3VuZCBjb21iaW5lZCB0byBiZSBvcmRlciAzLg0KUjIgKyBMMiB3aXRoICog
-Zm9sbG93ZWQgY29tYmluZWQgdG8gYmUgb3JkZXIgMy4NCmV0Yy4uLi4NCg0KV2hlbiB5b3UgaGF2
-ZSB0aGUgY2FzZSBvZiBhIGZyZWUgb3JkZXIgMSBibG9jayB3aXRoIHR3byBhZGphY2VudCBmcmVl
-DQpvcmRlciAwIGJsb2NrcyB0aGVuIHdlIGEgZnJhZ21lbnRlZCBhZGRyZXNzIHNwYWNlLiBJbiB0
-aGlzIGNhc2UgdGhlIGJlc3QNCmFwcHJvYWNoIGlzIHRvIGZhaWwgdGhlIGFsbG9jYXRpb24gYW5k
-IHN0YXJ0IHRvIHN3YXAgdGhpbmdzIG91dC4NCg0KW3hoXSBFdmljdGlvbiBpcyBleHBlbnNpdmUu
-DQpBbmQgaWYgaXQgc3RpbGwgZmFpbHMgdG8gZmluZCB0aGUgY29udGludW91cyBtZW1vcnkgd2l0
-aCB0aGlzIGFwcHJvYWNoLCB0aGVuIGxldCdzIGV2aWN0Lg0KDQpTbyB3aGF0IGV4YWN0bHkgaXMg
-dGhlIGdvYWwgaGVyZT8NCg0KUmVnYXJkcywNCkNocmlzdGlhbi4NCg0KPg0KPiBTaWduZWQtb2Zm
-LWJ5OiB4aW5odWkgcGFuIDx4aW5odWkucGFuQGFtZC5jb20+DQo+IC0tLQ0KPiBjaGFuZ2UgZnJv
-bSB2MzoNCj4gcmV3b3JrZWQgdG90YWxseS4gYWRkaW5nIGxlYWZfbGluay4NCj4NCj4gY2hhbmdl
-IGZyb20gdjI6DQo+IHNlYXJjaCBjb250aW51b3VzIGJsb2NrIGluIG5lYXJieSByb290IGlmIG5l
-ZWRlZA0KPg0KPiBjaGFuZ2UgZnJvbSB2MToNCj4gaW1wbGVtZW50IHRvcC1kb3duIGNvbnRpbnVv
-dXMgYWxsb2NhdGlvbg0KPiAtLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0vZHJtX2J1ZGR5LmMgfCAx
-MDggKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tDQo+ICAgaW5jbHVkZS9kcm0v
-ZHJtX2J1ZGR5LmggICAgIHwgICAxICsNCj4gICAyIGZpbGVzIGNoYW5nZWQsIDEwMiBpbnNlcnRp
-b25zKCspLCA3IGRlbGV0aW9ucygtKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJt
-L2RybV9idWRkeS5jIGIvZHJpdmVycy9ncHUvZHJtL2RybV9idWRkeS5jDQo+IGluZGV4IDExYmI1
-OTM5OTQ3MS4uOGVkYWZiOTliMDJjIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vZHJt
-X2J1ZGR5LmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2RybV9idWRkeS5jDQo+IEBAIC04MCw2
-ICs4MCw3IEBAIGludCBkcm1fYnVkZHlfaW5pdChzdHJ1Y3QgZHJtX2J1ZGR5ICptbSwgdTY0IHNp
-emUsIHU2NCBjaHVua19zaXplKQ0KPiAgIHsNCj4gICAgICAgdW5zaWduZWQgaW50IGk7DQo+ICAg
-ICAgIHU2NCBvZmZzZXQ7DQo+ICsgICAgIExJU1RfSEVBRChsZWFmKTsNCj4NCj4gICAgICAgaWYg
-KHNpemUgPCBjaHVua19zaXplKQ0KPiAgICAgICAgICAgICAgIHJldHVybiAtRUlOVkFMOw0KPiBA
-QCAtMTM2LDYgKzEzNyw3IEBAIGludCBkcm1fYnVkZHlfaW5pdChzdHJ1Y3QgZHJtX2J1ZGR5ICpt
-bSwgdTY0IHNpemUsIHU2NCBjaHVua19zaXplKQ0KPiAgICAgICAgICAgICAgICAgICAgICAgZ290
-byBvdXRfZnJlZV9yb290czsNCj4NCj4gICAgICAgICAgICAgICBtYXJrX2ZyZWUobW0sIHJvb3Qp
-Ow0KPiArICAgICAgICAgICAgIGxpc3RfYWRkX3RhaWwoJnJvb3QtPmxlYWZfbGluaywgJmxlYWYp
-Ow0KPg0KPiAgICAgICAgICAgICAgIEJVR19PTihpID4gbW0tPm1heF9vcmRlcik7DQo+ICAgICAg
-ICAgICAgICAgQlVHX09OKGRybV9idWRkeV9ibG9ja19zaXplKG1tLCByb290KSA8IGNodW5rX3Np
-emUpOw0KPiBAQCAtMTQ3LDYgKzE0OSw3IEBAIGludCBkcm1fYnVkZHlfaW5pdChzdHJ1Y3QgZHJt
-X2J1ZGR5ICptbSwgdTY0IHNpemUsIHU2NCBjaHVua19zaXplKQ0KPiAgICAgICAgICAgICAgIGkr
-KzsNCj4gICAgICAgfSB3aGlsZSAoc2l6ZSk7DQo+DQo+ICsgICAgIGxpc3RfZGVsKCZsZWFmKTsN
-Cj4gICAgICAgcmV0dXJuIDA7DQo+DQo+ICAgb3V0X2ZyZWVfcm9vdHM6DQo+IEBAIC0yMDUsNiAr
-MjA4LDkgQEAgc3RhdGljIGludCBzcGxpdF9ibG9jayhzdHJ1Y3QgZHJtX2J1ZGR5ICptbSwNCj4g
-ICAgICAgbWFya19mcmVlKG1tLCBibG9jay0+bGVmdCk7DQo+ICAgICAgIG1hcmtfZnJlZShtbSwg
-YmxvY2stPnJpZ2h0KTsNCj4NCj4gKyAgICAgbGlzdF9hZGQoJmJsb2NrLT5yaWdodC0+bGVhZl9s
-aW5rLCAmYmxvY2stPmxlYWZfbGluayk7DQo+ICsgICAgIGxpc3RfYWRkKCZibG9jay0+bGVmdC0+
-bGVhZl9saW5rLCAmYmxvY2stPmxlYWZfbGluayk7DQo+ICsgICAgIGxpc3RfZGVsKCZibG9jay0+
-bGVhZl9saW5rKTsNCj4gICAgICAgbWFya19zcGxpdChibG9jayk7DQo+DQo+ICAgICAgIHJldHVy
-biAwOw0KPiBAQCAtMjU2LDYgKzI2Miw5IEBAIHN0YXRpYyB2b2lkIF9fZHJtX2J1ZGR5X2ZyZWUo
-c3RydWN0IGRybV9idWRkeSAqbW0sDQo+ICAgICAgICAgICAgICAgICAgICAgICBicmVhazsNCj4N
-Cj4gICAgICAgICAgICAgICBsaXN0X2RlbCgmYnVkZHktPmxpbmspOw0KPiArICAgICAgICAgICAg
-IGxpc3RfYWRkKCZwYXJlbnQtPmxlYWZfbGluaywgJmJsb2NrLT5sZWFmX2xpbmspOw0KPiArICAg
-ICAgICAgICAgIGxpc3RfZGVsKCZidWRkeS0+bGVhZl9saW5rKTsNCj4gKyAgICAgICAgICAgICBs
-aXN0X2RlbCgmYmxvY2stPmxlYWZfbGluayk7DQo+DQo+ICAgICAgICAgICAgICAgZHJtX2Jsb2Nr
-X2ZyZWUobW0sIGJsb2NrKTsNCj4gICAgICAgICAgICAgICBkcm1fYmxvY2tfZnJlZShtbSwgYnVk
-ZHkpOw0KPiBAQCAtMzg2LDYgKzM5NSw3OCBAQCBhbGxvY19yYW5nZV9iaWFzKHN0cnVjdCBkcm1f
-YnVkZHkgKm1tLA0KPiAgICAgICByZXR1cm4gRVJSX1BUUihlcnIpOw0KPiAgIH0NCj4NCj4gK3N0
-YXRpYyBzdHJ1Y3QgZHJtX2J1ZGR5X2Jsb2NrICoNCj4gK2ZpbmRfY29udGludW91c19ibG9ja3Mo
-c3RydWN0IGRybV9idWRkeSAqbW0sDQo+ICsgICAgICAgICAgICAgICAgICAgIGludCBvcmRlciwN
-Cj4gKyAgICAgICAgICAgICAgICAgICAgdW5zaWduZWQgbG9uZyBmbGFncywNCj4gKyAgICAgICAg
-ICAgICAgICAgICAgc3RydWN0IGRybV9idWRkeV9ibG9jayAqKnJibG9jaykNCj4gK3sNCj4gKyAg
-ICAgc3RydWN0IGxpc3RfaGVhZCAqaGVhZCA9ICZtbS0+ZnJlZV9saXN0W29yZGVyXTsNCj4gKyAg
-ICAgc3RydWN0IGRybV9idWRkeV9ibG9jayAqZnJlZV9ibG9jaywgKm1heF9ibG9jayA9IE5VTEws
-ICplbmQsICpiZWdpbjsNCj4gKyAgICAgdTY0IHBhZ2VzID0gQklUKG9yZGVyICsgMSk7DQo+ICsg
-ICAgIHU2NCBjdXJfcGFnZXM7DQo+ICsNCj4gKyAgICAgbGlzdF9mb3JfZWFjaF9lbnRyeShmcmVl
-X2Jsb2NrLCBoZWFkLCBsaW5rKSB7DQo+ICsgICAgICAgICAgICAgaWYgKG1heF9ibG9jaykgew0K
-PiArICAgICAgICAgICAgICAgICAgICAgaWYgKCEoZmxhZ3MgJiBEUk1fQlVERFlfVE9QRE9XTl9B
-TExPQ0FUSU9OKSkNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYnJlYWs7DQo+ICsN
-Cj4gKyAgICAgICAgICAgICAgICAgICAgIGlmIChkcm1fYnVkZHlfYmxvY2tfb2Zmc2V0KGZyZWVf
-YmxvY2spIDwNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICBkcm1fYnVkZHlfYmxvY2tfb2Zm
-c2V0KG1heF9ibG9jaykpDQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRpbnVl
-Ow0KPiArICAgICAgICAgICAgIH0NCj4gKw0KPiArICAgICAgICAgICAgIGN1cl9wYWdlcyA9IEJJ
-VChvcmRlcik7DQo+ICsgICAgICAgICAgICAgYmVnaW4gPSBlbmQgPSBmcmVlX2Jsb2NrOw0KPiAr
-ICAgICAgICAgICAgIHdoaWxlICh0cnVlKSB7DQo+ICsgICAgICAgICAgICAgICAgICAgICBzdHJ1
-Y3QgZHJtX2J1ZGR5X2Jsb2NrICpwcmV2LCAqbmV4dDsNCj4gKyAgICAgICAgICAgICAgICAgICAg
-IGludCBwcmV2X29yZGVyLCBuZXh0X29yZGVyOw0KPiArDQo+ICsgICAgICAgICAgICAgICAgICAg
-ICBwcmV2ID0gbGlzdF9wcmV2X2VudHJ5KGJlZ2luLCBsZWFmX2xpbmspOw0KPiArICAgICAgICAg
-ICAgICAgICAgICAgaWYgKCFkcm1fYnVkZHlfYmxvY2tfaXNfZnJlZShwcmV2KSB8fA0KPiArICAg
-ICAgICAgICAgICAgICAgICAgICAgIGRybV9idWRkeV9ibG9ja19vZmZzZXQocHJldikgPg0KPiAr
-ICAgICAgICAgICAgICAgICAgICAgICAgIGRybV9idWRkeV9ibG9ja19vZmZzZXQoYmVnaW4pKSB7
-DQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHByZXYgPSBOVUxMOw0KPiArICAgICAg
-ICAgICAgICAgICAgICAgfQ0KPiArICAgICAgICAgICAgICAgICAgICAgbmV4dCA9IGxpc3RfbmV4
-dF9lbnRyeShlbmQsIGxlYWZfbGluayk7DQo+ICsgICAgICAgICAgICAgICAgICAgICBpZiAoIWRy
-bV9idWRkeV9ibG9ja19pc19mcmVlKG5leHQpIHx8DQo+ICsgICAgICAgICAgICAgICAgICAgICAg
-ICAgZHJtX2J1ZGR5X2Jsb2NrX29mZnNldChuZXh0KSA8DQo+ICsgICAgICAgICAgICAgICAgICAg
-ICAgICAgZHJtX2J1ZGR5X2Jsb2NrX29mZnNldChlbmQpKSB7DQo+ICsgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIG5leHQgPSBOVUxMOw0KPiArICAgICAgICAgICAgICAgICAgICAgfQ0KPiAr
-ICAgICAgICAgICAgICAgICAgICAgaWYgKCFwcmV2ICYmICFuZXh0KQ0KPiArICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICBicmVhazsNCj4gKw0KPiArICAgICAgICAgICAgICAgICAgICAgcHJl
-dl9vcmRlciA9IHByZXYgPyBkcm1fYnVkZHlfYmxvY2tfb3JkZXIocHJldikgOiAtMTsNCj4gKyAg
-ICAgICAgICAgICAgICAgICAgIG5leHRfb3JkZXIgPSBuZXh0ID8gZHJtX2J1ZGR5X2Jsb2NrX29y
-ZGVyKG5leHQpIDogLTE7DQo+ICsgICAgICAgICAgICAgICAgICAgICBpZiAobmV4dF9vcmRlciA+
-PSBwcmV2X29yZGVyKSB7DQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEJVR19PTihk
-cm1fYnVkZHlfYmxvY2tfb2Zmc2V0KGVuZCkgKw0KPiArICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgZHJtX2J1ZGR5X2Jsb2NrX3NpemUobW0sIGVuZCkgIT0NCj4gKyAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRybV9idWRkeV9ibG9ja19vZmZzZXQobmV4dCkp
-Ow0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICBlbmQgPSBuZXh0Ow0KPiArICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICBjdXJfcGFnZXMgKz0gQklUKGRybV9idWRkeV9ibG9ja19v
-cmRlcihuZXh0KSk7DQo+ICsgICAgICAgICAgICAgICAgICAgICB9DQo+ICsgICAgICAgICAgICAg
-ICAgICAgICBpZiAocHJldl9vcmRlciA+PSBuZXh0X29yZGVyKSB7DQo+ICsgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIEJVR19PTihkcm1fYnVkZHlfYmxvY2tfb2Zmc2V0KHByZXYpICsNCj4g
-KyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRybV9idWRkeV9ibG9ja19zaXpl
-KG1tLCBwcmV2KSAhPQ0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZHJt
-X2J1ZGR5X2Jsb2NrX29mZnNldChiZWdpbikpOw0KPiArICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICBiZWdpbiA9IHByZXY7DQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGN1cl9w
-YWdlcyArPSBCSVQoZHJtX2J1ZGR5X2Jsb2NrX29yZGVyKHByZXYpKTsNCj4gKyAgICAgICAgICAg
-ICAgICAgICAgIH0NCj4gKyAgICAgICAgICAgICAgICAgICAgIGlmIChwYWdlcyA9PSBjdXJfcGFn
-ZXMpDQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGJyZWFrOw0KPiArICAgICAgICAg
-ICAgICAgICAgICAgQlVHX09OKHBhZ2VzIDwgY3VyX3BhZ2VzKTsNCj4gKyAgICAgICAgICAgICB9
-DQo+ICsNCj4gKyAgICAgICAgICAgICBpZiAocGFnZXMgPiBjdXJfcGFnZXMpDQo+ICsgICAgICAg
-ICAgICAgICAgICAgICBjb250aW51ZTsNCj4gKw0KPiArICAgICAgICAgICAgICpyYmxvY2sgPSBl
-bmQ7DQo+ICsgICAgICAgICAgICAgbWF4X2Jsb2NrID0gYmVnaW47DQo+ICsgICAgIH0NCj4gKyAg
-ICAgcmV0dXJuIG1heF9ibG9jazsNCj4gK30NCj4gKw0KPiAgIHN0YXRpYyBzdHJ1Y3QgZHJtX2J1
-ZGR5X2Jsb2NrICoNCj4gICBnZXRfbWF4YmxvY2soc3RydWN0IGxpc3RfaGVhZCAqaGVhZCkNCj4g
-ICB7DQo+IEBAIC02MzcsNyArNzE4LDcgQEAgaW50IGRybV9idWRkeV9hbGxvY19ibG9ja3Moc3Ry
-dWN0IGRybV9idWRkeSAqbW0sDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1Y3QgbGlz
-dF9oZWFkICpibG9ja3MsDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICB1bnNpZ25lZCBsb25n
-IGZsYWdzKQ0KPiAgIHsNCj4gLSAgICAgc3RydWN0IGRybV9idWRkeV9ibG9jayAqYmxvY2sgPSBO
-VUxMOw0KPiArICAgICBzdHJ1Y3QgZHJtX2J1ZGR5X2Jsb2NrICpibG9jayA9IE5VTEwsICpyYmxv
-Y2sgPSBOVUxMOw0KPiAgICAgICB1bnNpZ25lZCBpbnQgbWluX29yZGVyLCBvcmRlcjsNCj4gICAg
-ICAgdW5zaWduZWQgbG9uZyBwYWdlczsNCj4gICAgICAgTElTVF9IRUFEKGFsbG9jYXRlZCk7DQo+
-IEBAIC02ODksMTcgKzc3MCwzMCBAQCBpbnQgZHJtX2J1ZGR5X2FsbG9jX2Jsb2NrcyhzdHJ1Y3Qg
-ZHJtX2J1ZGR5ICptbSwNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYnJlYWs7DQo+
-DQo+ICAgICAgICAgICAgICAgICAgICAgICBpZiAob3JkZXItLSA9PSBtaW5fb3JkZXIpIHsNCj4g
-KyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaWYgKCEoZmxhZ3MgJiBEUk1fQlVERFlfUkFO
-R0VfQUxMT0NBVElPTikgJiYNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG1p
-bl9vcmRlciAhPSAwICYmIHBhZ2VzID09IEJJVChvcmRlciArIDEpKSB7DQo+ICsgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgYmxvY2sgPSBmaW5kX2NvbnRpbnVvdXNfYmxvY2tz
-KG1tLA0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBvcmRlciwNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZmxhZ3MsDQo+ICsgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICZyYmxvY2spOw0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IGlmIChibG9jaykNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgIGJyZWFrOw0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICB9DQo+ICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIGVyciA9IC1FTk9TUEM7DQo+ICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIGdvdG8gZXJyX2ZyZWU7DQo+ICAgICAgICAgICAgICAgICAgICAgICB9DQo+
-ICAgICAgICAgICAgICAgfSB3aGlsZSAoMSk7DQo+DQo+IC0gICAgICAgICAgICAgbWFya19hbGxv
-Y2F0ZWQoYmxvY2spOw0KPiAtICAgICAgICAgICAgIG1tLT5hdmFpbCAtPSBkcm1fYnVkZHlfYmxv
-Y2tfc2l6ZShtbSwgYmxvY2spOw0KPiAtICAgICAgICAgICAgIGttZW1sZWFrX3VwZGF0ZV90cmFj
-ZShibG9jayk7DQo+IC0gICAgICAgICAgICAgbGlzdF9hZGRfdGFpbCgmYmxvY2stPmxpbmssICZh
-bGxvY2F0ZWQpOw0KPiAtDQo+IC0gICAgICAgICAgICAgcGFnZXMgLT0gQklUKG9yZGVyKTsNCj4g
-KyAgICAgICAgICAgICBkbyB7DQo+ICsgICAgICAgICAgICAgICAgICAgICBtYXJrX2FsbG9jYXRl
-ZChibG9jayk7DQo+ICsgICAgICAgICAgICAgICAgICAgICBtbS0+YXZhaWwgLT0gZHJtX2J1ZGR5
-X2Jsb2NrX3NpemUobW0sIGJsb2NrKTsNCj4gKyAgICAgICAgICAgICAgICAgICAgIGttZW1sZWFr
-X3VwZGF0ZV90cmFjZShibG9jayk7DQo+ICsgICAgICAgICAgICAgICAgICAgICBsaXN0X2FkZF90
-YWlsKCZibG9jay0+bGluaywgJmFsbG9jYXRlZCk7DQo+ICsgICAgICAgICAgICAgICAgICAgICBw
-YWdlcyAtPSBCSVQoZHJtX2J1ZGR5X2Jsb2NrX29yZGVyKGJsb2NrKSk7DQo+ICsgICAgICAgICAg
-ICAgICAgICAgICBpZiAoYmxvY2sgPT0gcmJsb2NrIHx8ICFyYmxvY2spDQo+ICsgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIGJyZWFrOw0KPiArICAgICAgICAgICAgICAgICAgICAgYmxvY2sg
-PSBsaXN0X25leHRfZW50cnkoYmxvY2ssIGxlYWZfbGluayk7DQo+ICsgICAgICAgICAgICAgfSB3
-aGlsZSAodHJ1ZSk7DQo+DQo+ICAgICAgICAgICAgICAgaWYgKCFwYWdlcykNCj4gICAgICAgICAg
-ICAgICAgICAgICAgIGJyZWFrOw0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9kcm0vZHJtX2J1ZGR5
-LmggYi9pbmNsdWRlL2RybS9kcm1fYnVkZHkuaA0KPiBpbmRleCA1NzIwNzdmZjhhZTcuLmM1NDM3
-YmQ0ZjRmMyAxMDA2NDQNCj4gLS0tIGEvaW5jbHVkZS9kcm0vZHJtX2J1ZGR5LmgNCj4gKysrIGIv
-aW5jbHVkZS9kcm0vZHJtX2J1ZGR5LmgNCj4gQEAgLTUwLDYgKzUwLDcgQEAgc3RydWN0IGRybV9i
-dWRkeV9ibG9jayB7DQo+ICAgICAgICAqLw0KPiAgICAgICBzdHJ1Y3QgbGlzdF9oZWFkIGxpbms7
-DQo+ICAgICAgIHN0cnVjdCBsaXN0X2hlYWQgdG1wX2xpbms7DQo+ICsgICAgIHN0cnVjdCBsaXN0
-X2hlYWQgbGVhZl9saW5rOw0KPiAgIH07DQo+DQo+ICAgLyogT3JkZXItemVybyBtdXN0IGJlIGF0
-IGxlYXN0IFBBR0VfU0laRSAqLw0KDQo=
+Signed-off-by: Danny Tsen <dtsen@linux.ibm.com>
+---
+ arch/powerpc/crypto/p10_aes_gcm.S | 1519 +++++++++++++++++++++++++++++
+ 1 file changed, 1519 insertions(+)
+ create mode 100644 arch/powerpc/crypto/p10_aes_gcm.S
 
---_000_DM4PR12MB51650DA0960F7E13F3F64E9687129DM4PR12MB5165namp_
-Content-Disposition: attachment; filename="winmail.dat"
-Content-Transfer-Encoding: base64
-Content-Type: application/ms-tnef; name="winmail.dat"
+diff --git a/arch/powerpc/crypto/p10_aes_gcm.S b/arch/powerpc/crypto/p10_aes_gcm.S
+new file mode 100644
+index 000000000000..ab353e94c1bb
+--- /dev/null
++++ b/arch/powerpc/crypto/p10_aes_gcm.S
+@@ -0,0 +1,1519 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++ #
++ # Accelerated AES-GCM stitched implementation for ppc64le.
++ #
++ # Copyright 2022- IBM Inc. All rights reserved
++ #
++ #===================================================================================
++ # Written by Danny Tsen <dtsen@linux.ibm.com>
++ #
++ # GHASH is based on the Karatsuba multiplication method.
++ #
++ #    Xi xor X1
++ #
++ #    X1 * H^4 + X2 * H^3 + x3 * H^2 + X4 * H =
++ #      (X1.h * H4.h + xX.l * H4.l + X1 * H4) +
++ #      (X2.h * H3.h + X2.l * H3.l + X2 * H3) +
++ #      (X3.h * H2.h + X3.l * H2.l + X3 * H2) +
++ #      (X4.h * H.h + X4.l * H.l + X4 * H)
++ #
++ # Xi = v0
++ # H Poly = v2
++ # Hash keys = v3 - v14
++ #     ( H.l, H, H.h)
++ #     ( H^2.l, H^2, H^2.h)
++ #     ( H^3.l, H^3, H^3.h)
++ #     ( H^4.l, H^4, H^4.h)
++ #
++ # v30 is IV
++ # v31 - counter 1
++ #
++ # AES used,
++ #     vs0 - vs14 for round keys
++ #     v15, v16, v17, v18, v19, v20, v21, v22 for 8 blocks (encrypted)
++ #
++ # This implementation uses stitched AES-GCM approach to improve overall performance.
++ # AES is implemented with 8x blocks and GHASH is using 2 4x blocks.
++ #
++ # ===================================================================================
++ #
++
++.machine        "any"
++.abiversion     2
++.text
++
++ # 4x loops
++ # v15 - v18 - input states
++ # vs1 - vs9 - round keys
++ #
++.macro Loop_aes_middle4x
++	xxlor	19+32, 1, 1
++	xxlor	20+32, 2, 2
++	xxlor	21+32, 3, 3
++	xxlor	22+32, 4, 4
++
++	vcipher	15, 15, 19
++	vcipher	16, 16, 19
++	vcipher	17, 17, 19
++	vcipher	18, 18, 19
++
++	vcipher	15, 15, 20
++	vcipher	16, 16, 20
++	vcipher	17, 17, 20
++	vcipher	18, 18, 20
++
++	vcipher	15, 15, 21
++	vcipher	16, 16, 21
++	vcipher	17, 17, 21
++	vcipher	18, 18, 21
++
++	vcipher	15, 15, 22
++	vcipher	16, 16, 22
++	vcipher	17, 17, 22
++	vcipher	18, 18, 22
++
++	xxlor	19+32, 5, 5
++	xxlor	20+32, 6, 6
++	xxlor	21+32, 7, 7
++	xxlor	22+32, 8, 8
++
++	vcipher	15, 15, 19
++	vcipher	16, 16, 19
++	vcipher	17, 17, 19
++	vcipher	18, 18, 19
++
++	vcipher	15, 15, 20
++	vcipher	16, 16, 20
++	vcipher	17, 17, 20
++	vcipher	18, 18, 20
++
++	vcipher	15, 15, 21
++	vcipher	16, 16, 21
++	vcipher	17, 17, 21
++	vcipher	18, 18, 21
++
++	vcipher	15, 15, 22
++	vcipher	16, 16, 22
++	vcipher	17, 17, 22
++	vcipher	18, 18, 22
++
++	xxlor	23+32, 9, 9
++	vcipher	15, 15, 23
++	vcipher	16, 16, 23
++	vcipher	17, 17, 23
++	vcipher	18, 18, 23
++.endm
++
++ # 8x loops
++ # v15 - v22 - input states
++ # vs1 - vs9 - round keys
++ #
++.macro Loop_aes_middle8x
++	xxlor	23+32, 1, 1
++	xxlor	24+32, 2, 2
++	xxlor	25+32, 3, 3
++	xxlor	26+32, 4, 4
++
++	vcipher	15, 15, 23
++	vcipher	16, 16, 23
++	vcipher	17, 17, 23
++	vcipher	18, 18, 23
++	vcipher	19, 19, 23
++	vcipher	20, 20, 23
++	vcipher	21, 21, 23
++	vcipher	22, 22, 23
++
++	vcipher	15, 15, 24
++	vcipher	16, 16, 24
++	vcipher	17, 17, 24
++	vcipher	18, 18, 24
++	vcipher	19, 19, 24
++	vcipher	20, 20, 24
++	vcipher	21, 21, 24
++	vcipher	22, 22, 24
++
++	vcipher	15, 15, 25
++	vcipher	16, 16, 25
++	vcipher	17, 17, 25
++	vcipher	18, 18, 25
++	vcipher	19, 19, 25
++	vcipher	20, 20, 25
++	vcipher	21, 21, 25
++	vcipher	22, 22, 25
++
++	vcipher	15, 15, 26
++	vcipher	16, 16, 26
++	vcipher	17, 17, 26
++	vcipher	18, 18, 26
++	vcipher	19, 19, 26
++	vcipher	20, 20, 26
++	vcipher	21, 21, 26
++	vcipher	22, 22, 26
++
++	xxlor	23+32, 5, 5
++	xxlor	24+32, 6, 6
++	xxlor	25+32, 7, 7
++	xxlor	26+32, 8, 8
++
++	vcipher	15, 15, 23
++	vcipher	16, 16, 23
++	vcipher	17, 17, 23
++	vcipher	18, 18, 23
++	vcipher	19, 19, 23
++	vcipher	20, 20, 23
++	vcipher	21, 21, 23
++	vcipher	22, 22, 23
++
++	vcipher	15, 15, 24
++	vcipher	16, 16, 24
++	vcipher	17, 17, 24
++	vcipher	18, 18, 24
++	vcipher	19, 19, 24
++	vcipher	20, 20, 24
++	vcipher	21, 21, 24
++	vcipher	22, 22, 24
++
++	vcipher	15, 15, 25
++	vcipher	16, 16, 25
++	vcipher	17, 17, 25
++	vcipher	18, 18, 25
++	vcipher	19, 19, 25
++	vcipher	20, 20, 25
++	vcipher	21, 21, 25
++	vcipher	22, 22, 25
++
++	vcipher	15, 15, 26
++	vcipher	16, 16, 26
++	vcipher	17, 17, 26
++	vcipher	18, 18, 26
++	vcipher	19, 19, 26
++	vcipher	20, 20, 26
++	vcipher	21, 21, 26
++	vcipher	22, 22, 26
++
++	xxlor	23+32, 9, 9
++	vcipher	15, 15, 23
++	vcipher	16, 16, 23
++	vcipher	17, 17, 23
++	vcipher	18, 18, 23
++	vcipher	19, 19, 23
++	vcipher	20, 20, 23
++	vcipher	21, 21, 23
++	vcipher	22, 22, 23
++.endm
++
++.macro Loop_aes_middle_1x
++	xxlor	19+32, 1, 1
++	xxlor	20+32, 2, 2
++	xxlor	21+32, 3, 3
++	xxlor	22+32, 4, 4
++
++	vcipher 15, 15, 19
++	vcipher 15, 15, 20
++	vcipher 15, 15, 21
++	vcipher 15, 15, 22
++
++	xxlor	19+32, 5, 5
++	xxlor	20+32, 6, 6
++	xxlor	21+32, 7, 7
++	xxlor	22+32, 8, 8
++
++	vcipher 15, 15, 19
++	vcipher 15, 15, 20
++	vcipher 15, 15, 21
++	vcipher 15, 15, 22
++
++	xxlor	19+32, 9, 9
++	vcipher 15, 15, 19
++.endm
++
++ #
++ # Compute 4x hash values based on Karatsuba method.
++ #
++ppc_aes_gcm_ghash:
++	vxor		15, 15, 0
++
++	vpmsumd		23, 12, 15		# H4.L * X.L
++	vpmsumd		24, 9, 16
++	vpmsumd		25, 6, 17
++	vpmsumd		26, 3, 18
++
++	vxor		23, 23, 24
++	vxor		23, 23, 25
++	vxor		23, 23, 26		# L
++
++	vpmsumd		24, 13, 15		# H4.L * X.H + H4.H * X.L
++	vpmsumd		25, 10, 16		# H3.L * X1.H + H3.H * X1.L
++	vpmsumd		26, 7, 17
++	vpmsumd		27, 4, 18
++
++	vxor		24, 24, 25
++	vxor		24, 24, 26
++	vxor		24, 24, 27		# M
++
++	# sum hash and reduction with H Poly
++	vpmsumd		28, 23, 2		# reduction
++
++	vxor		29, 29, 29
++	vsldoi		26, 24, 29, 8		# mL
++	vsldoi		29, 29, 24, 8		# mH
++	vxor		23, 23, 26		# mL + L
++
++	vsldoi		23, 23, 23, 8		# swap
++	vxor		23, 23, 28
++
++	vpmsumd		24, 14, 15		# H4.H * X.H
++	vpmsumd		25, 11, 16
++	vpmsumd		26, 8, 17
++	vpmsumd		27, 5, 18
++
++	vxor		24, 24, 25
++	vxor		24, 24, 26
++	vxor		24, 24, 27
++
++	vxor		24, 24, 29
++
++	# sum hash and reduction with H Poly
++	vsldoi		27, 23, 23, 8		# swap
++	vpmsumd		23, 23, 2
++	vxor		27, 27, 24
++	vxor		23, 23, 27
++
++	xxlor		32, 23+32, 23+32		# update hash
++
++	blr
++
++ #
++ # Combine two 4x ghash
++ # v15 - v22 - input blocks
++ #
++.macro ppc_aes_gcm_ghash2_4x
++	# first 4x hash
++	vxor		15, 15, 0		# Xi + X
++
++	vpmsumd		23, 12, 15		# H4.L * X.L
++	vpmsumd		24, 9, 16
++	vpmsumd		25, 6, 17
++	vpmsumd		26, 3, 18
++
++	vxor		23, 23, 24
++	vxor		23, 23, 25
++	vxor		23, 23, 26		# L
++
++	vpmsumd		24, 13, 15		# H4.L * X.H + H4.H * X.L
++	vpmsumd		25, 10, 16		# H3.L * X1.H + H3.H * X1.L
++	vpmsumd		26, 7, 17
++	vpmsumd		27, 4, 18
++
++	vxor		24, 24, 25
++	vxor		24, 24, 26
++
++	# sum hash and reduction with H Poly
++	vpmsumd		28, 23, 2		# reduction
++
++	vxor		29, 29, 29
++
++	vxor		24, 24, 27		# M
++	vsldoi		26, 24, 29, 8		# mL
++	vsldoi		29, 29, 24, 8		# mH
++	vxor		23, 23, 26		# mL + L
++
++	vsldoi		23, 23, 23, 8		# swap
++	vxor		23, 23, 28
++
++	vpmsumd		24, 14, 15		# H4.H * X.H
++	vpmsumd		25, 11, 16
++	vpmsumd		26, 8, 17
++	vpmsumd		27, 5, 18
++
++	vxor		24, 24, 25
++	vxor		24, 24, 26
++	vxor		24, 24, 27		# H
++
++	vxor		24, 24, 29		# H + mH
++
++	# sum hash and reduction with H Poly
++	vsldoi		27, 23, 23, 8		# swap
++	vpmsumd		23, 23, 2
++	vxor		27, 27, 24
++	vxor		27, 23, 27		# 1st Xi
++
++	# 2nd 4x hash
++	vpmsumd		24, 9, 20
++	vpmsumd		25, 6, 21
++	vpmsumd		26, 3, 22
++	vxor		19, 19, 27		# Xi + X
++	vpmsumd		23, 12, 19		# H4.L * X.L
++
++	vxor		23, 23, 24
++	vxor		23, 23, 25
++	vxor		23, 23, 26		# L
++
++	vpmsumd		24, 13, 19		# H4.L * X.H + H4.H * X.L
++	vpmsumd		25, 10, 20		# H3.L * X1.H + H3.H * X1.L
++	vpmsumd		26, 7, 21
++	vpmsumd		27, 4, 22
++
++	vxor		24, 24, 25
++	vxor		24, 24, 26
++
++	# sum hash and reduction with H Poly
++	vpmsumd		28, 23, 2		# reduction
++
++	vxor		29, 29, 29
++
++	vxor		24, 24, 27		# M
++	vsldoi		26, 24, 29, 8		# mL
++	vsldoi		29, 29, 24, 8		# mH
++	vxor		23, 23, 26		# mL + L
++
++	vsldoi		23, 23, 23, 8		# swap
++	vxor		23, 23, 28
++
++	vpmsumd		24, 14, 19		# H4.H * X.H
++	vpmsumd		25, 11, 20
++	vpmsumd		26, 8, 21
++	vpmsumd		27, 5, 22
++
++	vxor		24, 24, 25
++	vxor		24, 24, 26
++	vxor		24, 24, 27		# H
++
++	vxor		24, 24, 29		# H + mH
++
++	# sum hash and reduction with H Poly
++	vsldoi		27, 23, 23, 8		# swap
++	vpmsumd		23, 23, 2
++	vxor		27, 27, 24
++	vxor		23, 23, 27
++
++	xxlor		32, 23+32, 23+32		# update hash
++
++.endm
++
++ #
++ # Compute update single hash
++ #
++.macro ppc_update_hash_1x
++	vxor		28, 28, 0
++
++	vxor		19, 19, 19
++
++	vpmsumd		22, 3, 28		# L
++	vpmsumd		23, 4, 28		# M
++	vpmsumd		24, 5, 28		# H
++
++	vpmsumd		27, 22, 2		# reduction
++
++	vsldoi		25, 23, 19, 8		# mL
++	vsldoi		26, 19, 23, 8		# mH
++	vxor		22, 22, 25		# LL + LL
++	vxor		24, 24, 26		# HH + HH
++
++	vsldoi		22, 22, 22, 8		# swap
++	vxor		22, 22, 27
++
++	vsldoi		20, 22, 22, 8		# swap
++	vpmsumd		22, 22, 2		# reduction
++	vxor		20, 20, 24
++	vxor		22, 22, 20
++
++	vmr		0, 22			# update hash
++
++.endm
++
++.macro SAVE_REGS
++	stdu 1,-640(1)
++	mflr 0
++
++	std	14,112(1)
++	std	15,120(1)
++	std	16,128(1)
++	std	17,136(1)
++	std	18,144(1)
++	std	19,152(1)
++	std	20,160(1)
++	std	21,168(1)
++	li	9, 256
++	stvx	20, 9, 1
++	addi	9, 9, 16
++	stvx	21, 9, 1
++	addi	9, 9, 16
++	stvx	22, 9, 1
++	addi	9, 9, 16
++	stvx	23, 9, 1
++	addi	9, 9, 16
++	stvx	24, 9, 1
++	addi	9, 9, 16
++	stvx	25, 9, 1
++	addi	9, 9, 16
++	stvx	26, 9, 1
++	addi	9, 9, 16
++	stvx	27, 9, 1
++	addi	9, 9, 16
++	stvx	28, 9, 1
++	addi	9, 9, 16
++	stvx	29, 9, 1
++	addi	9, 9, 16
++	stvx	30, 9, 1
++	addi	9, 9, 16
++	stvx	31, 9, 1
++	stxv	14, 464(1)
++	stxv	15, 480(1)
++	stxv	16, 496(1)
++	stxv	17, 512(1)
++	stxv	18, 528(1)
++	stxv	19, 544(1)
++	stxv	20, 560(1)
++	stxv	21, 576(1)
++	stxv	22, 592(1)
++	std	0, 656(1)
++.endm
++
++.macro RESTORE_REGS
++	lxv	14, 464(1)
++	lxv	15, 480(1)
++	lxv	16, 496(1)
++	lxv	17, 512(1)
++	lxv	18, 528(1)
++	lxv	19, 544(1)
++	lxv	20, 560(1)
++	lxv	21, 576(1)
++	lxv	22, 592(1)
++	li	9, 256
++	lvx	20, 9, 1
++	addi	9, 9, 16
++	lvx	21, 9, 1
++	addi	9, 9, 16
++	lvx	22, 9, 1
++	addi	9, 9, 16
++	lvx	23, 9, 1
++	addi	9, 9, 16
++	lvx	24, 9, 1
++	addi	9, 9, 16
++	lvx	25, 9, 1
++	addi	9, 9, 16
++	lvx	26, 9, 1
++	addi	9, 9, 16
++	lvx	27, 9, 1
++	addi	9, 9, 16
++	lvx	28, 9, 1
++	addi	9, 9, 16
++	lvx	29, 9, 1
++	addi	9, 9, 16
++	lvx	30, 9, 1
++	addi	9, 9, 16
++	lvx	31, 9, 1
++
++	ld	0, 656(1)
++	ld      14,112(1)
++	ld      15,120(1)
++	ld      16,128(1)
++	ld      17,136(1)
++	ld      18,144(1)
++	ld      19,152(1)
++	ld      20,160(1)
++	ld	21,168(1)
++
++	mtlr	0
++	addi	1, 1, 640
++.endm
++
++.macro LOAD_HASH_TABLE
++	# Load Xi
++	lxvb16x	32, 0, 8	# load Xi
++
++	# load Hash - h^4, h^3, h^2, h
++	li	10, 32
++	lxvd2x	2+32, 10, 8	# H Poli
++	li	10, 48
++	lxvd2x	3+32, 10, 8	# Hl
++	li	10, 64
++	lxvd2x	4+32, 10, 8	# H
++	li	10, 80
++	lxvd2x	5+32, 10, 8	# Hh
++
++	li	10, 96
++	lxvd2x	6+32, 10, 8	# H^2l
++	li	10, 112
++	lxvd2x	7+32, 10, 8	# H^2
++	li	10, 128
++	lxvd2x	8+32, 10, 8	# H^2h
++
++	li	10, 144
++	lxvd2x	9+32, 10, 8	# H^3l
++	li	10, 160
++	lxvd2x	10+32, 10, 8	# H^3
++	li	10, 176
++	lxvd2x	11+32, 10, 8	# H^3h
++
++	li	10, 192
++	lxvd2x	12+32, 10, 8	# H^4l
++	li	10, 208
++	lxvd2x	13+32, 10, 8	# H^4
++	li	10, 224
++	lxvd2x	14+32, 10, 8	# H^4h
++.endm
++
++ #
++ # aes_p10_gcm_encrypt (const void *inp, void *out, size_t len,
++ #               const char *rk, unsigned char iv[16], void *Xip);
++ #
++ #    r3 - inp
++ #    r4 - out
++ #    r5 - len
++ #    r6 - AES round keys
++ #    r7 - iv and other data
++ #    r8 - Xi, HPoli, hash keys
++ #
++ #    rounds is at offset 240 in rk
++ #    Xi is at 0 in gcm_table (Xip).
++ #
++.global aes_p10_gcm_encrypt
++.align 5
++aes_p10_gcm_encrypt:
++
++	SAVE_REGS
++
++	LOAD_HASH_TABLE
++
++	# initialize ICB: GHASH( IV ), IV - r7
++	lxvb16x	30+32, 0, 7	# load IV  - v30
++
++	mr	12, 5		# length
++	li	11, 0		# block index
++
++	# counter 1
++	vxor	31, 31, 31
++	vspltisb 22, 1
++	vsldoi	31, 31, 22,1	# counter 1
++
++	# load round key to VSR
++	lxv	0, 0(6)
++	lxv	1, 0x10(6)
++	lxv	2, 0x20(6)
++	lxv	3, 0x30(6)
++	lxv	4, 0x40(6)
++	lxv	5, 0x50(6)
++	lxv	6, 0x60(6)
++	lxv	7, 0x70(6)
++	lxv	8, 0x80(6)
++	lxv	9, 0x90(6)
++	lxv	10, 0xa0(6)
++
++	# load rounds - 10 (128), 12 (192), 14 (256)
++	lwz	9,240(6)
++
++	#
++	# vxor	state, state, w # addroundkey
++	xxlor	32+29, 0, 0
++	vxor	15, 30, 29	# IV + round key - add round key 0
++
++	cmpdi	9, 10
++	beq	Loop_aes_gcm_8x
++
++	# load 2 more round keys (v11, v12)
++	lxv	11, 0xb0(6)
++	lxv	12, 0xc0(6)
++
++	cmpdi	9, 12
++	beq	Loop_aes_gcm_8x
++
++	# load 2 more round keys (v11, v12, v13, v14)
++	lxv	13, 0xd0(6)
++	lxv	14, 0xe0(6)
++	cmpdi	9, 14
++	beq	Loop_aes_gcm_8x
++
++	b	aes_gcm_out
++
++.align 5
++Loop_aes_gcm_8x:
++	mr	14, 3
++	mr	9, 4
++
++	#
++	# check partial block
++	#
++Continue_partial_check:
++	ld	15, 56(7)
++	cmpdi	15, 0
++	beq	Continue
++	bgt	Final_block
++	cmpdi	15, 16
++	blt	Final_block
++
++Continue:
++	# n blcoks
++	li	10, 128
++	divdu	10, 12, 10	# n 128 bytes-blocks
++	cmpdi	10, 0
++	beq	Loop_last_block
++
++	vaddudm	30, 30, 31	# IV + counter
++	vxor	16, 30, 29
++	vaddudm	30, 30, 31
++	vxor	17, 30, 29
++	vaddudm	30, 30, 31
++	vxor	18, 30, 29
++	vaddudm	30, 30, 31
++	vxor	19, 30, 29
++	vaddudm	30, 30, 31
++	vxor	20, 30, 29
++	vaddudm	30, 30, 31
++	vxor	21, 30, 29
++	vaddudm	30, 30, 31
++	vxor	22, 30, 29
++
++	mtctr	10
++
++	li	15, 16
++	li	16, 32
++	li	17, 48
++	li	18, 64
++	li	19, 80
++	li	20, 96
++	li	21, 112
++
++	lwz	10, 240(6)
++
++Loop_8x_block:
++
++	lxvb16x		15, 0, 14	# load block
++	lxvb16x		16, 15, 14	# load block
++	lxvb16x		17, 16, 14	# load block
++	lxvb16x		18, 17, 14	# load block
++	lxvb16x		19, 18, 14	# load block
++	lxvb16x		20, 19, 14	# load block
++	lxvb16x		21, 20, 14	# load block
++	lxvb16x		22, 21, 14	# load block
++	addi		14, 14, 128
++
++	Loop_aes_middle8x
++
++	xxlor	23+32, 10, 10
++
++	cmpdi	10, 10
++	beq	Do_next_ghash
++
++	# 192 bits
++	xxlor	24+32, 11, 11
++
++	vcipher	15, 15, 23
++	vcipher	16, 16, 23
++	vcipher	17, 17, 23
++	vcipher	18, 18, 23
++	vcipher	19, 19, 23
++	vcipher	20, 20, 23
++	vcipher	21, 21, 23
++	vcipher	22, 22, 23
++
++	vcipher	15, 15, 24
++	vcipher	16, 16, 24
++	vcipher	17, 17, 24
++	vcipher	18, 18, 24
++	vcipher	19, 19, 24
++	vcipher	20, 20, 24
++	vcipher	21, 21, 24
++	vcipher	22, 22, 24
++
++	xxlor	23+32, 12, 12
++
++	cmpdi	10, 12
++	beq	Do_next_ghash
++
++	# 256 bits
++	xxlor	24+32, 13, 13
++
++	vcipher	15, 15, 23
++	vcipher	16, 16, 23
++	vcipher	17, 17, 23
++	vcipher	18, 18, 23
++	vcipher	19, 19, 23
++	vcipher	20, 20, 23
++	vcipher	21, 21, 23
++	vcipher	22, 22, 23
++
++	vcipher	15, 15, 24
++	vcipher	16, 16, 24
++	vcipher	17, 17, 24
++	vcipher	18, 18, 24
++	vcipher	19, 19, 24
++	vcipher	20, 20, 24
++	vcipher	21, 21, 24
++	vcipher	22, 22, 24
++
++	xxlor	23+32, 14, 14
++
++	cmpdi	10, 14
++	beq	Do_next_ghash
++	b	aes_gcm_out
++
++Do_next_ghash:
++
++	#
++	# last round
++	vcipherlast     15, 15, 23
++	vcipherlast     16, 16, 23
++
++	xxlxor		47, 47, 15
++	stxvb16x        47, 0, 9	# store output
++	xxlxor		48, 48, 16
++	stxvb16x        48, 15, 9	# store output
++
++	vcipherlast     17, 17, 23
++	vcipherlast     18, 18, 23
++
++	xxlxor		49, 49, 17
++	stxvb16x        49, 16, 9	# store output
++	xxlxor		50, 50, 18
++	stxvb16x        50, 17, 9	# store output
++
++	vcipherlast     19, 19, 23
++	vcipherlast     20, 20, 23
++
++	xxlxor		51, 51, 19
++	stxvb16x        51, 18, 9	# store output
++	xxlxor		52, 52, 20
++	stxvb16x        52, 19, 9	# store output
++
++	vcipherlast     21, 21, 23
++	vcipherlast     22, 22, 23
++
++	xxlxor		53, 53, 21
++	stxvb16x        53, 20, 9	# store output
++	xxlxor		54, 54, 22
++	stxvb16x        54, 21, 9	# store output
++
++	addi		9, 9, 128
++
++	# ghash here
++	ppc_aes_gcm_ghash2_4x
++
++	xxlor	27+32, 0, 0
++	vaddudm 30, 30, 31		# IV + counter
++	vmr	29, 30
++	vxor    15, 30, 27		# add round key
++	vaddudm 30, 30, 31
++	vxor    16, 30, 27
++	vaddudm 30, 30, 31
++	vxor    17, 30, 27
++	vaddudm 30, 30, 31
++	vxor    18, 30, 27
++	vaddudm 30, 30, 31
++	vxor    19, 30, 27
++	vaddudm 30, 30, 31
++	vxor    20, 30, 27
++	vaddudm 30, 30, 31
++	vxor    21, 30, 27
++	vaddudm 30, 30, 31
++	vxor    22, 30, 27
++
++	addi    12, 12, -128
++	addi    11, 11, 128
++
++	bdnz	Loop_8x_block
++
++	vmr	30, 29
++	stxvb16x 30+32, 0, 7		# update IV
++
++Loop_last_block:
++	cmpdi   12, 0
++	beq     aes_gcm_out
++
++	# loop last few blocks
++	li      10, 16
++	divdu   10, 12, 10
++
++	mtctr   10
++
++	lwz	10, 240(6)
++
++	cmpdi   12, 16
++	blt     Final_block
++
++Next_rem_block:
++	lxvb16x 15, 0, 14		# load block
++
++	Loop_aes_middle_1x
++
++	xxlor	23+32, 10, 10
++
++	cmpdi	10, 10
++	beq	Do_next_1x
++
++	# 192 bits
++	xxlor	24+32, 11, 11
++
++	vcipher	15, 15, 23
++	vcipher	15, 15, 24
++
++	xxlor	23+32, 12, 12
++
++	cmpdi	10, 12
++	beq	Do_next_1x
++
++	# 256 bits
++	xxlor	24+32, 13, 13
++
++	vcipher	15, 15, 23
++	vcipher	15, 15, 24
++
++	xxlor	23+32, 14, 14
++
++	cmpdi	10, 14
++	beq	Do_next_1x
++
++Do_next_1x:
++	vcipherlast     15, 15, 23
++
++	xxlxor		47, 47, 15
++	stxvb16x	47, 0, 9	# store output
++	addi		14, 14, 16
++	addi		9, 9, 16
++
++	vmr		28, 15
++	ppc_update_hash_1x
++
++	addi		12, 12, -16
++	addi		11, 11, 16
++	xxlor		19+32, 0, 0
++	vaddudm		30, 30, 31		# IV + counter
++	vxor		15, 30, 19		# add round key
++
++	bdnz	Next_rem_block
++
++	li	15, 0
++	std	15, 56(7)		# clear partial?
++	stxvb16x 30+32, 0, 7		# update IV
++	cmpdi	12, 0
++	beq	aes_gcm_out
++
++Final_block:
++	lwz	10, 240(6)
++	Loop_aes_middle_1x
++
++	xxlor	23+32, 10, 10
++
++	cmpdi	10, 10
++	beq	Do_final_1x
++
++	# 192 bits
++	xxlor	24+32, 11, 11
++
++	vcipher	15, 15, 23
++	vcipher	15, 15, 24
++
++	xxlor	23+32, 12, 12
++
++	cmpdi	10, 12
++	beq	Do_final_1x
++
++	# 256 bits
++	xxlor	24+32, 13, 13
++
++	vcipher	15, 15, 23
++	vcipher	15, 15, 24
++
++	xxlor	23+32, 14, 14
++
++	cmpdi	10, 14
++	beq	Do_final_1x
++
++Do_final_1x:
++	vcipherlast     15, 15, 23
++
++	# check partial block
++	li	21, 0			# encrypt
++	ld	15, 56(7)		# partial?
++	cmpdi	15, 0
++	beq	Normal_block
++	bl	Do_partial_block
++
++	cmpdi	12, 0
++	ble aes_gcm_out
++
++	b Continue_partial_check
++
++Normal_block:
++	lxvb16x	15, 0, 14		# load last block
++	xxlxor	47, 47, 15
++
++	# create partial block mask
++	li	15, 16
++	sub	15, 15, 12		# index to the mask
++
++	vspltisb	16, -1		# first 16 bytes - 0xffff...ff
++	vspltisb	17, 0		# second 16 bytes - 0x0000...00
++	li	10, 192
++	stvx	16, 10, 1
++	addi	10, 10, 16
++	stvx	17, 10, 1
++
++	addi	10, 1, 192
++	lxvb16x	16, 15, 10		# load partial block mask
++	xxland	47, 47, 16
++
++	vmr	28, 15
++	ppc_update_hash_1x
++
++	# * should store only the remaining bytes.
++	bl	Write_partial_block
++
++	stxvb16x 30+32, 0, 7		# update IV
++	std	12, 56(7)		# update partial?
++	li	16, 16
++
++	stxvb16x	32, 0, 8		# write out Xi
++	stxvb16x	32, 16, 8		# write out Xi
++	b aes_gcm_out
++
++ #
++ # Compute data mask
++ #
++.macro GEN_MASK _mask _start _end
++	vspltisb	16, -1		# first 16 bytes - 0xffff...ff
++	vspltisb	17, 0		# second 16 bytes - 0x0000...00
++	li	10, 192
++	stxvb16x	17+32, 10, 1
++	add	10, 10, \_start
++	stxvb16x	16+32, 10, 1
++	add	10, 10, \_end
++	stxvb16x	17+32, 10, 1
++
++	addi	10, 1, 192
++	lxvb16x	\_mask, 0, 10		# load partial block mask
++.endm
++
++ #
++ # Handle multiple partial blocks for encrypt and decrypt
++ #   operations.
++ #
++Do_partial_block:
++	add	17, 15, 5
++	cmpdi	17, 16
++	bgt	Big_block
++	GEN_MASK 18, 15, 5
++	b	_Partial
++Big_block:
++	li	16, 16
++	GEN_MASK 18, 15, 16
++
++_Partial:
++	lxvb16x	17+32, 0, 14		# load last block
++	sldi	16, 15, 3
++	mtvsrdd	32+16, 0, 16
++	vsro	17, 17, 16
++	xxlxor	47, 47, 17+32
++	xxland	47, 47, 18
++
++	vxor	0, 0, 0			# clear Xi
++	vmr	28, 15
++
++	cmpdi	21, 0			# encrypt/decrypt ops?
++	beq	Skip_decrypt
++	xxland	32+28, 32+17, 18
++
++Skip_decrypt:
++
++	ppc_update_hash_1x
++
++	li	16, 16
++	lxvb16x 32+29, 16, 8
++	vxor	0, 0, 29
++	stxvb16x 32, 0, 8		# save Xi
++	stxvb16x 32, 16, 8		# save Xi
++
++	# store partial block
++	# loop the rest of the stream if any
++	sldi	16, 15, 3
++	mtvsrdd	32+16, 0, 16
++	vslo	15, 15, 16
++	#stxvb16x 15+32, 0, 9		# last block
++
++	li	16, 16
++	sub	17, 16, 15		# 16 - partial
++
++	add	16, 15, 5
++	cmpdi	16, 16
++	bgt	Larger_16
++	mr	17, 5
++Larger_16:
++
++	# write partial
++	li		10, 192
++	stxvb16x	15+32, 10, 1	# save current block
++
++	addi		10, 9, -1
++	addi		16, 1, 191
++	mtctr		17		# move partial byte count
++
++Write_last_partial:
++        lbzu		18, 1(16)
++	stbu		18, 1(10)
++        bdnz		Write_last_partial
++	# Complete loop partial
++
++	add	14, 14, 17
++	add	9, 9, 17
++	sub	12, 12, 17
++	add	11, 11, 17
++
++	add	15, 15, 5
++	cmpdi	15, 16
++	blt	Save_partial
++
++	vaddudm	30, 30, 31
++	stxvb16x 30+32, 0, 7		# update IV
++	xxlor	32+29, 0, 0
++	vxor	15, 30, 29		# IV + round key - add round key 0
++	li	15, 0
++	std	15, 56(7)		# partial done - clear
++	b	Partial_done
++Save_partial:
++	std	15, 56(7)		# partial
++
++Partial_done:
++	blr
++
++ #
++ # Write partial block
++ # r9 - output
++ # r12 - remaining bytes
++ # v15 - partial input data
++ #
++Write_partial_block:
++	li		10, 192
++	stxvb16x	15+32, 10, 1		# last block
++
++	addi		10, 9, -1
++	addi		16, 1, 191
++
++        mtctr		12			# remaining bytes
++	li		15, 0
++
++Write_last_byte:
++        lbzu		14, 1(16)
++	stbu		14, 1(10)
++        bdnz		Write_last_byte
++	blr
++
++aes_gcm_out:
++	# out = state
++	stxvb16x	32, 0, 8		# write out Xi
++	add	3, 11, 12		# return count
++
++	RESTORE_REGS
++	blr
++
++ #
++ # 8x Decrypt
++ #
++.global aes_p10_gcm_decrypt
++.align 5
++aes_p10_gcm_decrypt:
++
++	SAVE_REGS
++
++	LOAD_HASH_TABLE
++
++	# initialize ICB: GHASH( IV ), IV - r7
++	lxvb16x	30+32, 0, 7	# load IV  - v30
++
++	mr	12, 5		# length
++	li	11, 0		# block index
++
++	# counter 1
++	vxor	31, 31, 31
++	vspltisb 22, 1
++	vsldoi	31, 31, 22,1	# counter 1
++
++	# load round key to VSR
++	lxv	0, 0(6)
++	lxv	1, 0x10(6)
++	lxv	2, 0x20(6)
++	lxv	3, 0x30(6)
++	lxv	4, 0x40(6)
++	lxv	5, 0x50(6)
++	lxv	6, 0x60(6)
++	lxv	7, 0x70(6)
++	lxv	8, 0x80(6)
++	lxv	9, 0x90(6)
++	lxv	10, 0xa0(6)
++
++	# load rounds - 10 (128), 12 (192), 14 (256)
++	lwz	9,240(6)
++
++	#
++	# vxor	state, state, w # addroundkey
++	xxlor	32+29, 0, 0
++	vxor	15, 30, 29	# IV + round key - add round key 0
++
++	cmpdi	9, 10
++	beq	Loop_aes_gcm_8x_dec
++
++	# load 2 more round keys (v11, v12)
++	lxv	11, 0xb0(6)
++	lxv	12, 0xc0(6)
++
++	cmpdi	9, 12
++	beq	Loop_aes_gcm_8x_dec
++
++	# load 2 more round keys (v11, v12, v13, v14)
++	lxv	13, 0xd0(6)
++	lxv	14, 0xe0(6)
++	cmpdi	9, 14
++	beq	Loop_aes_gcm_8x_dec
++
++	b	aes_gcm_out
++
++.align 5
++Loop_aes_gcm_8x_dec:
++	mr	14, 3
++	mr	9, 4
++
++	#
++	# check partial block
++	#
++Continue_partial_check_dec:
++	ld	15, 56(7)
++	cmpdi	15, 0
++	beq	Continue_dec
++	bgt	Final_block_dec
++	cmpdi	15, 16
++	blt	Final_block_dec
++
++Continue_dec:
++	# n blcoks
++	li	10, 128
++	divdu	10, 12, 10	# n 128 bytes-blocks
++	cmpdi	10, 0
++	beq	Loop_last_block_dec
++
++	vaddudm	30, 30, 31	# IV + counter
++	vxor	16, 30, 29
++	vaddudm	30, 30, 31
++	vxor	17, 30, 29
++	vaddudm	30, 30, 31
++	vxor	18, 30, 29
++	vaddudm	30, 30, 31
++	vxor	19, 30, 29
++	vaddudm	30, 30, 31
++	vxor	20, 30, 29
++	vaddudm	30, 30, 31
++	vxor	21, 30, 29
++	vaddudm	30, 30, 31
++	vxor	22, 30, 29
++
++	mtctr	10
++
++	li	15, 16
++	li	16, 32
++	li	17, 48
++	li	18, 64
++	li	19, 80
++	li	20, 96
++	li	21, 112
++
++	lwz	10, 240(6)
++
++Loop_8x_block_dec:
++
++	lxvb16x		15, 0, 14	# load block
++	lxvb16x		16, 15, 14	# load block
++	lxvb16x		17, 16, 14	# load block
++	lxvb16x		18, 17, 14	# load block
++	lxvb16x		19, 18, 14	# load block
++	lxvb16x		20, 19, 14	# load block
++	lxvb16x		21, 20, 14	# load block
++	lxvb16x		22, 21, 14	# load block
++	addi		14, 14, 128
++
++	Loop_aes_middle8x
++
++	xxlor	23+32, 10, 10
++
++	cmpdi	10, 10
++	beq	Do_next_ghash_dec
++
++	# 192 bits
++	xxlor	24+32, 11, 11
++
++	vcipher	15, 15, 23
++	vcipher	16, 16, 23
++	vcipher	17, 17, 23
++	vcipher	18, 18, 23
++	vcipher	19, 19, 23
++	vcipher	20, 20, 23
++	vcipher	21, 21, 23
++	vcipher	22, 22, 23
++
++	vcipher	15, 15, 24
++	vcipher	16, 16, 24
++	vcipher	17, 17, 24
++	vcipher	18, 18, 24
++	vcipher	19, 19, 24
++	vcipher	20, 20, 24
++	vcipher	21, 21, 24
++	vcipher	22, 22, 24
++
++	xxlor	23+32, 12, 12
++
++	cmpdi	10, 12
++	beq	Do_next_ghash_dec
++
++	# 256 bits
++	xxlor	24+32, 13, 13
++
++	vcipher	15, 15, 23
++	vcipher	16, 16, 23
++	vcipher	17, 17, 23
++	vcipher	18, 18, 23
++	vcipher	19, 19, 23
++	vcipher	20, 20, 23
++	vcipher	21, 21, 23
++	vcipher	22, 22, 23
++
++	vcipher	15, 15, 24
++	vcipher	16, 16, 24
++	vcipher	17, 17, 24
++	vcipher	18, 18, 24
++	vcipher	19, 19, 24
++	vcipher	20, 20, 24
++	vcipher	21, 21, 24
++	vcipher	22, 22, 24
++
++	xxlor	23+32, 14, 14
++
++	cmpdi	10, 14
++	beq	Do_next_ghash_dec
++	b	aes_gcm_out
++
++Do_next_ghash_dec:
++
++	#
++	# last round
++	vcipherlast     15, 15, 23
++	vcipherlast     16, 16, 23
++
++	xxlxor		47, 47, 15
++	stxvb16x        47, 0, 9	# store output
++	xxlxor		48, 48, 16
++	stxvb16x        48, 15, 9	# store output
++
++	vcipherlast     17, 17, 23
++	vcipherlast     18, 18, 23
++
++	xxlxor		49, 49, 17
++	stxvb16x        49, 16, 9	# store output
++	xxlxor		50, 50, 18
++	stxvb16x        50, 17, 9	# store output
++
++	vcipherlast     19, 19, 23
++	vcipherlast     20, 20, 23
++
++	xxlxor		51, 51, 19
++	stxvb16x        51, 18, 9	# store output
++	xxlxor		52, 52, 20
++	stxvb16x        52, 19, 9	# store output
++
++	vcipherlast     21, 21, 23
++	vcipherlast     22, 22, 23
++
++	xxlxor		53, 53, 21
++	stxvb16x        53, 20, 9	# store output
++	xxlxor		54, 54, 22
++	stxvb16x        54, 21, 9	# store output
++
++	addi		9, 9, 128
++
++	xxlor           15+32, 15, 15
++	xxlor           16+32, 16, 16
++	xxlor           17+32, 17, 17
++	xxlor           18+32, 18, 18
++	xxlor           19+32, 19, 19
++	xxlor           20+32, 20, 20
++	xxlor           21+32, 21, 21
++	xxlor           22+32, 22, 22
++
++	# ghash here
++	ppc_aes_gcm_ghash2_4x
++
++	xxlor	27+32, 0, 0
++	vaddudm 30, 30, 31		# IV + counter
++	vmr	29, 30
++	vxor    15, 30, 27		# add round key
++	vaddudm 30, 30, 31
++	vxor    16, 30, 27
++	vaddudm 30, 30, 31
++	vxor    17, 30, 27
++	vaddudm 30, 30, 31
++	vxor    18, 30, 27
++	vaddudm 30, 30, 31
++	vxor    19, 30, 27
++	vaddudm 30, 30, 31
++	vxor    20, 30, 27
++	vaddudm 30, 30, 31
++	vxor    21, 30, 27
++	vaddudm 30, 30, 31
++	vxor    22, 30, 27
++
++	addi    12, 12, -128
++	addi    11, 11, 128
++
++	bdnz	Loop_8x_block_dec
++
++	vmr	30, 29
++	stxvb16x 30+32, 0, 7		# update IV
++
++Loop_last_block_dec:
++	cmpdi   12, 0
++	beq     aes_gcm_out
++
++	# loop last few blocks
++	li      10, 16
++	divdu   10, 12, 10
++
++	mtctr   10
++
++	lwz	10, 240(6)
++
++	cmpdi   12, 16
++	blt     Final_block_dec
++
++Next_rem_block_dec:
++	lxvb16x 15, 0, 14		# load block
++
++	Loop_aes_middle_1x
++
++	xxlor	23+32, 10, 10
++
++	cmpdi	10, 10
++	beq	Do_next_1x_dec
++
++	# 192 bits
++	xxlor	24+32, 11, 11
++
++	vcipher	15, 15, 23
++	vcipher	15, 15, 24
++
++	xxlor	23+32, 12, 12
++
++	cmpdi	10, 12
++	beq	Do_next_1x_dec
++
++	# 256 bits
++	xxlor	24+32, 13, 13
++
++	vcipher	15, 15, 23
++	vcipher	15, 15, 24
++
++	xxlor	23+32, 14, 14
++
++	cmpdi	10, 14
++	beq	Do_next_1x_dec
++
++Do_next_1x_dec:
++	vcipherlast     15, 15, 23
++
++	xxlxor		47, 47, 15
++	stxvb16x	47, 0, 9	# store output
++	addi		14, 14, 16
++	addi		9, 9, 16
++
++	xxlor           28+32, 15, 15
++	#vmr		28, 15
++	ppc_update_hash_1x
++
++	addi		12, 12, -16
++	addi		11, 11, 16
++	xxlor		19+32, 0, 0
++	vaddudm		30, 30, 31		# IV + counter
++	vxor		15, 30, 19		# add round key
++
++	bdnz	Next_rem_block_dec
++
++	li	15, 0
++	std	15, 56(7)		# clear partial?
++	stxvb16x 30+32, 0, 7		# update IV
++	cmpdi	12, 0
++	beq	aes_gcm_out
++
++Final_block_dec:
++	lwz	10, 240(6)
++	Loop_aes_middle_1x
++
++	xxlor	23+32, 10, 10
++
++	cmpdi	10, 10
++	beq	Do_final_1x_dec
++
++	# 192 bits
++	xxlor	24+32, 11, 11
++
++	vcipher	15, 15, 23
++	vcipher	15, 15, 24
++
++	xxlor	23+32, 12, 12
++
++	cmpdi	10, 12
++	beq	Do_final_1x_dec
++
++	# 256 bits
++	xxlor	24+32, 13, 13
++
++	vcipher	15, 15, 23
++	vcipher	15, 15, 24
++
++	xxlor	23+32, 14, 14
++
++	cmpdi	10, 14
++	beq	Do_final_1x_dec
++
++Do_final_1x_dec:
++	vcipherlast     15, 15, 23
++
++	# check partial block
++	li	21, 1			# decrypt
++	ld	15, 56(7)		# partial?
++	cmpdi	15, 0
++	beq	Normal_block_dec
++	bl	Do_partial_block
++	cmpdi	12, 0
++	ble aes_gcm_out
++
++	b Continue_partial_check_dec
++
++Normal_block_dec:
++	lxvb16x	15, 0, 14		# load last block
++	xxlxor	47, 47, 15
++
++	# create partial block mask
++	li	15, 16
++	sub	15, 15, 12		# index to the mask
++
++	vspltisb	16, -1		# first 16 bytes - 0xffff...ff
++	vspltisb	17, 0		# second 16 bytes - 0x0000...00
++	li	10, 192
++	stvx	16, 10, 1
++	addi	10, 10, 16
++	stvx	17, 10, 1
++
++	addi	10, 1, 192
++	lxvb16x	16, 15, 10		# load partial block mask
++	xxland	47, 47, 16
++
++	xxland	32+28, 15, 16
++	#vmr	28, 15
++	ppc_update_hash_1x
++
++	# * should store only the remaining bytes.
++	bl	Write_partial_block
++
++	stxvb16x 30+32, 0, 7		# update IV
++	std	12, 56(7)		# update partial?
++	li	16, 16
++
++	stxvb16x	32, 0, 8		# write out Xi
++	stxvb16x	32, 16, 8		# write out Xi
++	b aes_gcm_out
+-- 
+2.31.1
 
-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
-8Phv6/7fXtM1ezA2X3ACkV/T728/WiTN+U+mL/NNZU/dMuO17gcfdG1w7cNuPwcvH+2WtepXMPCf
-9CEvKiDWT4RDLGBytUBtlKB9sJ80kP3AXGFmEBCxUEGJ0TBTSVpFBfjzRX19A/OQE4AAAAAfAEIA
-AQAAABgAAABQAGEAbgAsACAAWABpAG4AaAB1AGkAAAAfAGUAAQAAACYAAABYAGkAbgBoAHUAaQAu
-AFAAYQBuAEAAYQBtAGQALgBjAG8AbQAAAAAAHwBkAAEAAAAKAAAAUwBNAFQAUAAAAAAAAgFBAAEA
-AABgAAAAAAAAAIErH6S+oxAZnW4A3QEPVAIAAACAUABhAG4ALAAgAFgAaQBuAGgAdQBpAAAAUwBN
-AFQAUAAAAFgAaQBuAGgAdQBpAC4AUABhAG4AQABhAG0AZAAuAGMAbwBtAAAAHwACXQEAAAAmAAAA
-WABpAG4AaAB1AGkALgBQAGEAbgBAAGEAbQBkAC4AYwBvAG0AAAAAAB8A5V8BAAAALgAAAHMAaQBw
-ADoAeABpAG4AaAB1AGkALgBwAGEAbgBAAGEAbQBkAC4AYwBvAG0AAAAAAB8AGgwBAAAAGAAAAFAA
-YQBuACwAIABYAGkAbgBoAHUAaQAAAB8AHwwBAAAAJgAAAFgAaQBuAGgAdQBpAC4AUABhAG4AQABh
-AG0AZAAuAGMAbwBtAAAAAAAfAB4MAQAAAAoAAABTAE0AVABQAAAAAAACARkMAQAAAGAAAAAAAAAA
-gSsfpL6jEBmdbgDdAQ9UAgAAAIBQAGEAbgAsACAAWABpAG4AaAB1AGkAAABTAE0AVABQAAAAWABp
-AG4AaAB1AGkALgBQAGEAbgBAAGEAbQBkAC4AYwBvAG0AAAAfAAFdAQAAACYAAABYAGkAbgBoAHUA
-aQAuAFAAYQBuAEAAYQBtAGQALgBjAG8AbQAAAAAACwBAOgEAAAAfABoAAQAAABIAAABJAFAATQAu
-AE4AbwB0AGUAAAAAAAMA8T8ECAAACwBAOgEAAAADAP0/qAMAAAIBCzABAAAAEAAAAMb5ZXXEEtxI
-veFUQhCS4XIDABcAAQAAAEAAOQAALctd6QPZAUAACDAXHlZe6QPZAR8ANwABAAAAfAAAAN5WDVk6
-ACAAWwBQAEEAVABDAEgAIAB2ADQAXQAgAGQAcgBtADoAIABPAHAAdABpAG0AaQBzAGUAIABmAG8A
-cgAgAGMAbwBuAHQAaQBuAHUAbwB1AHMAIABtAGUAbQBvAHIAeQAgAGEAbABsAG8AYwBhAHQAaQBv
-AG4AAAAfAD0AAQAAAAoAAADeVg1ZOgAgAAAAAAADAN4/qAMAAAsAIwAAAAAAAwAmAAAAAAALACkA
-AAAAAAMALgAAAAAAAwA2AAAAAAAfAHAAAQAAAHQAAABbAFAAQQBUAEMASAAgAHYANABdACAAZABy
-AG0AOgAgAE8AcAB0AGkAbQBpAHMAZQAgAGYAbwByACAAYwBvAG4AdABpAG4AdQBvAHUAcwAgAG0A
-ZQBtAG8AcgB5ACAAYQBsAGwAbwBjAGEAdABpAG8AbgAAAAIBcQABAAAAIAAAAAEB2QPhWH+hfil8
-8xpGo+61bBlHi+auVcTAAIAAALV/CwAGDAAAAAAfADUQAQAAAKIAAAA8AEQATQA0AFAAUgAxADIA
-TQBCADUAMQA2ADUAMABEAEEAMAA5ADYAMABGADcARQAxADMARgAzAEYANgA0AEUAOQA2ADgANwAx
-ADIAOQBAAEQATQA0AFAAUgAxADIATQBCADUAMQA2ADUALgBuAGEAbQBwAHIAZAAxADIALgBwAHIA
-bwBkAC4AbwB1AHQAbABvAG8AawAuAGMAbwBtAD4AAAAAAB8AORABAAAAuAAAADwAMgAwADIAMgAx
-ADEAMgA5ADEAMAA1ADYANQA1AC4AMQAyADUANQA3ADEALQAxAC0AeABpAG4AaAB1AGkALgBwAGEA
-bgBAAGEAbQBkAC4AYwBvAG0APgAgADwAZgBlADEAMgA3ADYAOQAwAC0AOQBkAGIAYgAtADcAOQA3
-AGYALQBjADAAYwAzAC0AZgAxAGUAMAA1ADYANQA3ADIAOQAzAGYAQABhAG0AZAAuAGMAbwBtAD4A
-AAAfAEIQAQAAAF4AAAA8AGYAZQAxADIANwA2ADkAMAAtADkAZABiAGIALQA3ADkANwBmAC0AYwAw
-AGMAMwAtAGYAMQBlADAANQA2ADUANwAyADkAMwBmAEAAYQBtAGQALgBjAG8AbQA+AAAAAAADABMS
-AAAAAEAABzDZNeeb5gPZAQIBEzABAAAAEAAAAH+hfil88xpGo+61bBlHi+YCARQwAQAAAAwAAAAN
-AwAAVdN4wmMAAAADAFszAQAAAAMAXjMmAAAAAwBaNgAAAAADAGM2/wcAAAMAaDYGAAAACwD6NgEA
-AAAfANk/AQAAAAACAABjAG8AbQBtAGUAbgB0AHMAIABpAG4AbABpAG4AZQAuAAoACgBfAF8AXwBf
-AF8AXwBfAF8AXwBfAF8AXwBfAF8AXwBfAF8AXwBfAF8AXwBfAF8AXwBfAF8AXwBfAF8AXwBfAF8A
-XwBfAF8AXwBfAF8AXwBfAAoA0VP2TrpOOgAgAEsAbwBlAG4AaQBnACwAIABDAGgAcgBpAHMAdABp
-AGEAbgAgADwAQwBoAHIAaQBzAHQAaQBhAG4ALgBLAG8AZQBuAGkAZwBAAGEAbQBkAC4AYwBvAG0A
-PgAKANFTAZD2ZfSVOgAgADIAMAAyADIAdF4xADEACGcyADkA5WUgADEAOQA6ADMAMgAKADZl9k66
-TjoAIABQAGEAbgAsACAAWABpAG4AaAB1AGkAOwAgAGEAbQBkAC0AZwBmAHgAQABsAGkAcwB0AHMA
-LgBmAHIAZQBlAGQAZQBzAGsAdABvAHAALgBvAHIAZwAKAIRiAZA6ACAAZABhAG4AaQBlAGwAQABm
-AGYAdwBsAGwALgBjAGgAOwAgAG0AYQB0AHQAaABlAHcALgBhAHUAbABkAEAAaQBuAHQAZQBsAC4A
-YwBvAG0AOwAgAGQAcgBpAC0AZABlAHYAZQBsAEAAbABpAHMAdABzAC4AZgByAGUAZQBkAGUAcwBr
-AHQAbwBwAC4AbwAAAB8A+D8BAAAAGAAAAFAAYQBuACwAIABYAGkAbgBoAHUAaQAAAB8A+j8BAAAA
-GAAAAFAAYQBuACwAIABYAGkAbgBoAHUAaQAAAB8AIkABAAAABgAAAEUAWAAAAAAAHwAjQAEAAAAC
-AQAALwBPAD0ARQBYAEMASABBAE4ARwBFAEwAQQBCAFMALwBPAFUAPQBFAFgAQwBIAEEATgBHAEUA
-IABBAEQATQBJAE4ASQBTAFQAUgBBAFQASQBWAEUAIABHAFIATwBVAFAAIAAoAEYAWQBEAEkAQgBP
-AEgARgAyADMAUwBQAEQATABUACkALwBDAE4APQBSAEUAQwBJAFAASQBFAE4AVABTAC8AQwBOAD0A
-NgA3AEMARQAwADYAMwA2AEUANAA0AEMANABFADgARABCADQAOAAxADYAMQAzADEAMgA2AEEAQgAx
-ADgAQwBFAC0AUABBAE4ALAAgAFgASQBOAEgAVQBJAAAAAAAfACRAAQAAAAYAAABFAFgAAAAAAB8A
-JUABAAAAAgEAAC8ATwA9AEUAWABDAEgAQQBOAEcARQBMAEEAQgBTAC8ATwBVAD0ARQBYAEMASABB
-AE4ARwBFACAAQQBEAE0ASQBOAEkAUwBUAFIAQQBUAEkAVgBFACAARwBSAE8AVQBQACAAKABGAFkA
-RABJAEIATwBIAEYAMgAzAFMAUABEAEwAVAApAC8AQwBOAD0AUgBFAEMASQBQAEkARQBOAFQAUwAv
-AEMATgA9ADYANwBDAEUAMAA2ADMANgBFADQANABDADQARQA4AEQAQgA0ADgAMQA2ADEAMwAxADIA
-NgBBAEIAMQA4AEMARQAtAFAAQQBOACwAIABYAEkATgBIAFUASQAAAAAAHwAwQAEAAAAYAAAAUABh
-AG4ALAAgAFgAaQBuAGgAdQBpAAAAHwAxQAEAAAAYAAAAUABhAG4ALAAgAFgAaQBuAGgAdQBpAAAA
-HwA4QAEAAAAYAAAAUABhAG4ALAAgAFgAaQBuAGgAdQBpAAAAHwA5QAEAAAAYAAAAUABhAG4ALAAg
-AFgAaQBuAGgAdQBpAAAAAwBZQAAAAAADAFpAAAAAAAMAN1ABAAAAHwAKXQEAAAAmAAAAWABpAG4A
-aAB1AGkALgBQAGEAbgBAAGEAbQBkAC4AYwBvAG0AAAAAAB8AC10BAAAAJgAAAFgAaQBuAGgAdQBp
-AC4AUABhAG4AQABhAG0AZAAuAGMAbwBtAAAAAAACARVdAQAAABIAAAACH5bYPYjkYE6OEagtmU4Y
-PQEAAAIBFl0BAAAAEgAAAAIfltg9iORgTo4RqC2ZThg9AQAACwAAgAggBgAAAAAAwAAAAAAAAEYA
-AAAAFIUAAAAAAAALAACACCAGAAAAAADAAAAAAAAARgAAAAAGhQAAAAAAAEgAAIBQ42MLzJzQEbzb
-AIBfzM4EAQAAAC4AAABCAGkAZwBGAHUAbgBuAGUAbABDAG8AcgByAGUAbABhAHQAaQBvAG4ASQBk
-AAAAAACPXdi4PwSdSJ2w/l41EbHvQAAAgFDjYwvMnNARvNsAgF/MzgQBAAAAMAAAAEwAYQBzAHQA
-SQBuAGQAZQB4AGkAbgBnAEEAdAB0AGUAbQBwAHQAVABpAG0AZQAAAH+y21vpA9kBAwAAgAggBgAA
-AAAAwAAAAAAAAEYBAAAAMgAAAEUAeABjAGgAYQBuAGcAZQBBAHAAcABsAGkAYwBhAHQAaQBvAG4A
-RgBsAGEAZwBzAAAAAAAgAAAAAgEAgBOP8kH0gxRBpYTu21prC/8BAAAALgAAAEgAZQBhAGQAZQBy
-AEIAbwBkAHkARgByAGEAZwBtAGUAbgB0AEwAaQBzAHQAAAAAAAEAAAA2AAAAAQAKAAAABAAAAAEA
-AAAUAAAAAAAAAAAAAAASAAAAAAAAABQAAAAAAAAAngEAAP////8AAAAAAAALAACAE4/yQfSDFEGl
-hO7bWmsL/wEAAAAcAAAASABhAHMAUQB1AG8AdABlAGQAVABlAHgAdAAAAAEAAAALAACAE4/yQfSD
-FEGlhO7bWmsL/wEAAAAoAAAASQBzAFEAdQBvAHQAZQBkAFQAZQB4AHQAQwBoAGEAbgBnAGUAZAAA
-AAEAAAAfAACAE4/yQfSDFEGlhO7bWmsL/wEAAAAWAAAAQwBsAGkAZQBuAHQASQBuAGYAbwAAAAAA
-AQAAADYAAABDAGwAaQBlAG4AdAA9AE8AVwBBADsAQQBjAHQAaQBvAG4APQBWAGkAYQBQAHIAbwB4
-AHkAAAAAAB8AAIAfpOszqHouQr57eeGpjlSzAQAAADgAAABDAG8AbgB2AGUAcgBzAGEAdABpAG8A
-bgBJAG4AZABlAHgAVAByAGEAYwBrAGkAbgBnAEUAeAAAAAEAAADWAQAASQBJAD0AWwBDAEkARAA9
-ADIAOQA3AGUAYQAxADcAZgAtAGYAMwA3AGMALQA0ADYAMQBhAC0AYQAzAGUAZQAtAGIANQA2AGMA
-MQA5ADQANwA4AGIAZQA2ADsASQBEAFgASABFAEEARAA9ADAAMQBEADkAMAAzAEUAMQA1ADgAOwBJ
-AEQAWABDAE8AVQBOAFQAPQAzAF0AOwBTAEIATQBJAEQAPQAxADUAOwBTADEAPQA8AGYAZQAxADIA
-NwA2ADkAMAAtADkAZABiAGIALQA3ADkANwBmAC0AYwAwAGMAMwAtAGYAMQBlADAANQA2ADUANwAy
-ADkAMwBmAEAAYQBtAGQALgBjAG8AbQA+ADsAUgBUAFAAPQBEAGkAcgBlAGMAdABDAGgAaQBsAGQA
-OwBUAEQATgA9AFMAYQBtAGUAOwBUAEYAUgA9AE4AbwB0AEYAbwByAGsAaQBuAGcAOwBWAGUAcgBz
-AGkAbwBuAD0AVgBlAHIAcwBpAG8AbgAgADEANQAuADIAMAAgACgAQgB1AGkAbABkACAANQA4ADUA
-NwAuADAAKQAsACAAUwB0AGEAZwBlAD0ASAAxADsAVQBQAD0ARAAwADsARABQAD0AMQAwADEAAAAA
-AB8AAIBQ42MLzJzQEbzbAIBfzM4EAQAAACIAAABEAGUAdABlAGMAdABlAGQATABhAG4AZwB1AGEA
-ZwBlAAAAAAABAAAABgAAAGUAbgAAAAAAAwAAgFDjYwvMnNARvNsAgF/MzgQBAAAAJAAAAEkAbgBk
-AGUAeABpAG4AZwBFAHIAcgBvAHIAQwBvAGQAZQAAABsAAAAfAACAUONjC8yc0BG82wCAX8zOBAEA
-AAAqAAAASQBuAGQAZQB4AGkAbgBnAEUAcgByAG8AcgBNAGUAcwBzAGEAZwBlAAAAAAABAAAAcAAA
-AEkAbgBkAGUAeABpAG4AZwAgAFAAZQBuAGQAaQBuAGcAIAB3AGgAaQBsAGUAIABCAGkAZwBGAHUA
-bgBuAGUAbABQAE8ASQBJAHMAVQBwAFQAbwBEAGEAdABlACAAaQBzACAAZgBhAGwAcwBlAC4AAAAL
-AACAUONjC8yc0BG82wCAX8zOBAEAAAAmAAAASQBzAFAAYQByAHQAaQBhAGwAbAB5AEkAbgBkAGUA
-eABlAGQAAAAAAAAAAAALAACAUONjC8yc0BG82wCAX8zOBAEAAAAmAAAASQBzAFAAZQByAG0AYQBu
-AGUAbgB0AEYAYQBpAGwAdQByAGUAAAAAAAAAAABAAACAE4/yQfSDFEGlhO7bWmsL/wEAAAAsAAAA
-TABhAHMAdABTAG0AYQByAHQAUgBlAHMAcABvAG4AcwBlAFQAaQBtAGUAAAC9R/qb5gPZAR8AAIDA
-BUfdz3RbRZiGiU2jCzGxAQAAADoAAABJAG4AZgBvAHIAbQBhAHQAaQBvAG4AUAByAG8AdABlAGMA
-dABpAG8AbgBMAGEAYgBlAGwASQBkAAAAAAABAAAASgAAADQAMwA0ADIAMwAxADQAZQAtADAAZABm
-ADQALQA0AGIANQA4AC0AOAA0AGIAZgAtADMAOABiAGUAZAA2ADEANwAwAGEAMABmAAAAAAAfAACA
-hgMCAAAAAADAAAAAAAAARgEAAAAYAAAAbQBzAGkAcABfAGwAYQBiAGUAbABzAAAAAQAAAEwDAABN
-AFMASQBQAF8ATABhAGIAZQBsAF8ANAAzADQAMgAzADEANABlAC0AMABkAGYANAAtADQAYgA1ADgA
-LQA4ADQAYgBmAC0AMwA4AGIAZQBkADYAMQA3ADAAYQAwAGYAXwBFAG4AYQBiAGwAZQBkAD0AVABy
-AHUAZQA7AE0AUwBJAFAAXwBMAGEAYgBlAGwAXwA0ADMANAAyADMAMQA0AGUALQAwAGQAZgA0AC0A
-NABiADUAOAAtADgANABiAGYALQAzADgAYgBlAGQANgAxADcAMABhADAAZgBfAFMAaQB0AGUASQBk
-AD0AMwBkAGQAOAA5ADYAMQBmAC0AZQA0ADgAOAAtADQAZQA2ADAALQA4AGUAMQAxAC0AYQA4ADIA
-ZAA5ADkANABlADEAOAAzAGQAOwBNAFMASQBQAF8ATABhAGIAZQBsAF8ANAAzADQAMgAzADEANABl
-AC0AMABkAGYANAAtADQAYgA1ADgALQA4ADQAYgBmAC0AMwA4AGIAZQBkADYAMQA3ADAAYQAwAGYA
-XwBTAGUAdABEAGEAdABlAD0AMgAwADIAMgAtADEAMQAtADIAOQBUADEAMQA6ADUANAA6ADQAMgAu
-ADUAMgAwAFoAOwBNAFMASQBQAF8ATABhAGIAZQBsAF8ANAAzADQAMgAzADEANABlAC0AMABkAGYA
-NAAtADQAYgA1ADgALQA4ADQAYgBmAC0AMwA4AGIAZQBkADYAMQA3ADAAYQAwAGYAXwBOAGEAbQBl
-AD0ARwBlAG4AZQByAGEAbAA7AE0AUwBJAFAAXwBMAGEAYgBlAGwAXwA0ADMANAAyADMAMQA0AGUA
-LQAwAGQAZgA0AC0ANABiADUAOAAtADgANABiAGYALQAzADgAYgBlAGQANgAxADcAMABhADAAZgBf
-AEMAbwBuAHQAZQBuAHQAQgBpAHQAcwA9ADAAOwBNAFMASQBQAF8ATABhAGIAZQBsAF8ANAAzADQA
-MgAzADEANABlAC0AMABkAGYANAAtADQAYgA1ADgALQA4ADQAYgBmAC0AMwA4AGIAZQBkADYAMQA3
-ADAAYQAwAGYAXwBNAGUAdABoAG8AZAA9AFMAdABhAG4AZABhAHIAZAA7AAAASAAAgGvFP0AwzcVH
-hvjt6eNaAisBAAAAHAAAAE0AUwBJAFAATABhAGIAZQBsAEcAdQBpAGQAAABOMUJD9A1YS4S/OL7W
-FwoPQAAAgFDjYwvMnNARvNsAgF/MzgQBAAAAPgAAAEIAaQBnAEYAdQBuAG4AZQBsAEMAbwBtAHAA
-bABlAHQAZQBJAG4AZABlAHgAaQBuAGcAUwB0AGEAcgB0AAAAAAB/sttb6QPZAUAAAIBQ42MLzJzQ
-EbzbAIBfzM4EAQAAADoAAABCAGkAZwBGAHUAbgBuAGUAbABDAG8AbQBwAGwAZQB0AGUASQBuAGQA
-ZQB4AGkAbgBnAEUAbgBkAAAAAABPFN5b6QPZAQMADTT9PwAAHwAAgIYDAgAAAAAAwAAAAAAAAEYB
-AAAALgAAAGEAdQB0AGgAZQBuAHQAaQBjAGEAdABpAG8AbgAtAHIAZQBzAHUAbAB0AHMAAAAAAAEA
-AACyAAAAZABrAGkAbQA9AG4AbwBuAGUAIAAoAG0AZQBzAHMAYQBnAGUAIABuAG8AdAAgAHMAaQBn
-AG4AZQBkACkAIABoAGUAYQBkAGUAcgAuAGQAPQBuAG8AbgBlADsAZABtAGEAcgBjAD0AbgBvAG4A
-ZQAgAGEAYwB0AGkAbwBuAD0AbgBvAG4AZQAgAGgAZQBhAGQAZQByAC4AZgByAG8AbQA9AGEAbQBk
-AC4AYwBvAG0AOwAAAAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAAHgAAAGEAYwBjAGUAcAB0AGwA
-YQBuAGcAdQBhAGcAZQAAAAAAAQAAABoAAAB6AGgALQBDAE4ALAAgAGUAbgAtAFUAUwAAAAAAHwAA
-gIYDAgAAAAAAwAAAAAAAAEYBAAAAIAAAAHgALQBtAHMALQBoAGEAcwAtAGEAdAB0AGEAYwBoAAAA
-AQAAAAIAAAAAAAAAHwAAgGvFP0AwzcVHhvjt6eNaAisBAAAAEgAAAE0ASQBQAEwAYQBiAGUAbAAA
-AAAAAQAAANIBAABbAHsAIgBpAGQAIgA6ACIANAAzADQAMgAzADEANABlAC0AMABkAGYANAAtADQA
-YgA1ADgALQA4ADQAYgBmAC0AMwA4AGIAZQBkADYAMQA3ADAAYQAwAGYAIgAsACIAdABpACIAOgAi
-ADMAZABkADgAOQA2ADEAZgAtAGUANAA4ADgALQA0AGUANgAwAC0AOABlADEAMQAtAGEAOAAyAGQA
-OQA5ADQAZQAxADgAMwBkACIALAAiAHAAaQAiADoAIgAwADAAMAAwADAAMAAwADAALQAwADAAMAAw
-AC0AMAAwADAAMAAtADAAMAAwADAALQAwADAAMAAwADAAMAAwADAAMAAwADAAMAAiACwAIgBuAG0A
-IgA6ACIARwBlAG4AZQByAGEAbAAiACwAIgBhAGMAIgA6ADAALAAiAG8AcAAiADoAMQAsACIAYwB0
-ACIAOgAiADIAMAAyADIALQAxADEALQAyADkAVAAxADEAOgA1ADQAOgA0ADIALgA1ADIAWgAiACwA
-IgBtAHQAIgA6ACIAMAAwADAAMQAtADAAMQAtADAAMQBUADAAMAA6ADAAMAA6ADAAMAAiACwAIgB1
-AGMAIgA6AG4AdQBsAGwAfQBdAAAAAABIAACACCAGAAAAAADAAAAAAAAARgEAAAAiAAAATgBlAHQA
-dwBvAHIAawBNAGUAcwBzAGEAZwBlAEkAZAAAAAAA+a0LmTJdc0mnPAja0gCA1h8AAICGAwIAAAAA
-AMAAAAAAAABGAQAAAC4AAAB4AC0AbQBzAC0AcAB1AGIAbABpAGMAdAByAGEAZgBmAGkAYwB0AHkA
-cABlAAAAAAABAAAADAAAAEUAbQBhAGkAbAAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAADYAAAB4
-AC0AbQBzAC0AdAByAGEAZgBmAGkAYwB0AHkAcABlAGQAaQBhAGcAbgBvAHMAdABpAGMAAAAAAAEA
-AABIAAAARABNADQAUABSADEAMgBNAEIANQAxADYANQA6AEUARQBfAHwAUwBOADcAUABSADEAMgBN
-AEIANwAyADkANwA6AEUARQBfAAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAAUAAAAHgALQBtAHMA
-LQBvAGYAZgBpAGMAZQAzADYANQAtAGYAaQBsAHQAZQByAGkAbgBnAC0AYwBvAHIAcgBlAGwAYQB0
-AGkAbwBuAC0AaQBkAAAAAQAAAEoAAAA5ADkAMABiAGEAZABmADkALQA1AGQAMwAyAC0ANAA5ADcA
-MwAtAGEANwAzAGMALQAwADgAZABhAGQAMgAwADAAOAAwAGQANgAAAAAAHwAAgIYDAgAAAAAAwAAA
-AAAAAEYBAAAAOAAAAHgALQBtAHMALQBlAHgAYwBoAGEAbgBnAGUALQBzAGUAbgBkAGUAcgBhAGQA
-YwBoAGUAYwBrAAAAAQAAAAQAAAAxAAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAAOgAAAHgALQBt
-AHMALQBlAHgAYwBoAGEAbgBnAGUALQBhAG4AdABpAHMAcABhAG0ALQByAGUAbABhAHkAAAAAAAEA
-AAAEAAAAMAAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAACoAAAB4AC0AbQBpAGMAcgBvAHMAbwBm
-AHQALQBhAG4AdABpAHMAcABhAG0AAAAAAAEAAAAOAAAAQgBDAEwAOgAwADsAAAAAAB8AAICGAwIA
-AAAAAMAAAAAAAABGAQAAAEQAAAB4AC0AbQBpAGMAcgBvAHMAbwBmAHQALQBhAG4AdABpAHMAcABh
-AG0ALQBtAGUAcwBzAGEAZwBlAC0AaQBuAGYAbwAAAAEAAACyBQAAYgA5AFgAQQByAHkAbQAyAHcA
-UgBCAHoANABpAFYASwBLAEYANgBoAFUAbABMAEsAdQBJAE0AVgBDAEgAUABvAGkAbwBKAFAAQwBD
-ADMARwA2AGMAbABaAFcAZwBFAEEAZQBzAFMALwAvAGYAdQAxAHMAYwA5AFUAYwA2AFgAQwBXAEcA
-QgBhADEARQA2AGwAVQA2AEMAQwBQAE0AUgBzAE0ATQBhAHEASwBjAFUASQBRAEgAcQB6AEQANwAz
-AFcASQBJAEgASAA5AEYARgBrAGYAZABRAFMAMwBmAC8AbgBSADYAaABrADIAZQA0AC8AZgBBAFMA
-WgByADMAMQBLAFcANgBKAGkAdABNAGwAMgBrAEIAcQB3AGMAawByAEwASwBOADcAeAAyAG4AMQBH
-AFYAVgBsAHQAYgBGAEgAUwAwAGYAcAA3AE0ANgBTAHgAZAB1AEoAQwBZAGUAUgBIAEMALwBIAEYA
-KwBjAGUAMQBHAGwAagB6ACsAdQBkADUARQBKAHYAWQBpAHEAVQBkAGsARQA1AGwAUwBvAFcAagA1
-AC8AVgBnAEEAegB3ADUARQB3AGQAKwBsAHQAbwBtAG0ARwAzAFYAeAA0AGQAWAA1AHcAMwBSAEYA
-UABVAEcAeQA1AC8ASgBjADkAYgAzAE4AMABQAGIAUABCAHgALwBQAGMASgBxAEkATQBzAEYAUABI
-AEgAQgBFAGsASwA4ADQAWQB5AEIAMgBpADUAZwBCAHUAdgB3AGUARQBNAFEAWQBjAGsAOQA3AHAA
-YwBOAHkAVwBCAG8AMQBvAEIAZABOAFUAdABYAE4AbgAzAFAAQgBLAHgARQBJAFYAQwB4AFAARwBH
-ADkAQgBjAGEAegBJACsAUQBrAHQAawBRAFYARQBqADgANABCAEMAUAAzAFcAZQBJAG4ASgBOAHQA
-cgBzAFYAOQBIAFMAaQBTAGUAZwBlAFkASgByAHkAegAwAFUAbgByAHQALwBEAHQATAB5AEkAegBi
-AFUANAB5AEYAKwBEAFAAcAAwAGwAcQBCAGoAVABpAEIAQQBaAEsAbQAzAEgAYgByADEASwA1AGsA
-TQBvAFkAbgBLAHkAaAB3ADcANAB3AHMAMwBYAHEAYwBqAFoAYQB5ADQAcwA5AHUAMgA3ADAARwBh
-AHEAWQBvAEcAMABYADcANABzAGIAQQBXAC8AWABIAE0AbgBNAHUAVgBnAGYAdwBHAGwANAAzAEQA
-RQBJAEEAdgAwAFkAZAB2AE8AYQBnAFAAaABDAFgAVQB0AGoAbgBWAEYAZABWAHoARwAyADgAWABP
-AFoATQAwAGkASgBPADkASgBxADcAcQBuAFUAdgBwADkAdQBGAFIAZQBZAHQAYQAzAFcAeABzAGYA
-bwBJAHkAUQBYAHAAawBZAEIAdwBIADkAZABxAGsAUQBFAEcAQQBDAEwAdQBEAGoAMQBlAFQAMgB5
-ADkASABQAGsAMwBlAFQAVQB1AGYAdAA4AGcARgBVAEIAbABpAEYAcQBUADkAWgBCAFYAZQBOADUA
-dABLAHEAeQBiAEsAVwBuAHoAcwBpAFoAcwBDAGgAMwBSAHkAawBIAFYARAA1AHAAVgBlADIARABt
-AE8ATQBWAEQAcgBNAEUAUgBBAE8AQwBYAFYAdgBoAC8AVgBCAHAAZwBoAG0ATQB5AGwAQwBVAGYA
-ZwBGAGQAOQBWAEgAcwAwAE4ASwBSADkAOABOAEEAVQBTADYAbAAyAEMAMgBFAFIAVwBtAHgAZAA5
-AGEAUgBhAEMAdQBoAGsAcwBDAHoAMwByAFUAYwBhAE4ARgBNADkASgA0AEUAKwAzAE8AVwB6AEoA
-bwAyAHgAKwBUAGYAWAAwADUAOABQAHcAeABsAGYAWgBvAEkAZwB5AG8AVwBoAGUAKwA1AEkAYgBj
-AGYAdwA5AEEAPQA9AAAAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAAA4AAAAeAAtAGYAbwByAGUA
-ZgByAG8AbgB0AC0AYQBuAHQAaQBzAHAAYQBtAC0AcgBlAHAAbwByAHQAAAABAAAAQgQAAEMASQBQ
-ADoAMgA1ADUALgAyADUANQAuADIANQA1AC4AMgA1ADUAOwBDAFQAUgBZADoAOwBMAEEATgBHADoA
-ZQBuADsAUwBDAEwAOgAxADsAUwBSAFYAOgA7AEkAUABWADoATgBMAEkAOwBTAEYAVgA6AE4AUwBQ
-AE0AOwBIADoARABNADQAUABSADEAMgBNAEIANQAxADYANQAuAG4AYQBtAHAAcgBkADEAMgAuAHAA
-cgBvAGQALgBvAHUAdABsAG8AbwBrAC4AYwBvAG0AOwBQAFQAUgA6ADsAQwBBAFQAOgBOAE8ATgBF
-ADsAUwBGAFMAOgAoADEAMwAyADMAMAAwADIAMgApACgANAA2ADMANgAwADAAOQApACgAMQAzADYA
-MAAwADMAKQAoADMANgA2ADAAMAA0ACkAKAAzADcANgAwADAAMgApACgAMwA0ADYAMAAwADIAKQAo
-ADMAOQA2ADAAMAAzACkAKAAzADkAOAA2ADAANAAwADAAMAAwADIAKQAoADQANQAxADEAOQA5ADAA
-MQA1ACkAKAAxADIAMgAwADAAMAAwADAAMQApACgAOAA5ADMANgAwADAAMgApACgANAAxADMAMAAw
-ADcAMAAwADAAMAAxACkAKAA2ADUAMAA2ADAAMAA3ACkAKAA3ADYAMQAxADYAMAAwADYAKQAoADUA
-NgA2ADAAMwAwADAAMAAwADIAKQAoADkANgA4ADYAMAAwADMAKQAoADUAMgA1ADMANgAwADEANAAp
-ACgAMwAxADYAMAAwADIAKQAoADgAMwAzADgAMAA0ADAAMAAwADAAMQApACgANQA0ADkAMAA2ADAA
-MAAzACkAKAAxADEAMAAxADMANgAwADAANQApACgAMwAzADYANQA2ADAAMAAyACkAKAA0ADMAMgA2
-ADAAMAA4ACkAKAA1ADUAMAAxADYAMAAwADMAKQAoADQANwA4ADYAMAAwADAAMAAxACkAKAA5ADEA
-OQA1ADYAMAAxADcAKQAoADEAOAA2ADAAMAAzACkAKAA3ADYAOQA2ADAAMAA1ACkAKAA4ADYAMwA2
-ADIAMAAwADEAKQAoADIAMgA0ADMAMAAzADAAMAAzACkAKAAzADgAMQAwADAANwAwADAAMAAwADIA
-KQAoADIAOQAwADYAMAAwADIAKQAoADYANgA1ADUANgAwADAAOAApACgANgA0ADcANQA2ADAAMAA4
-ACkAKAA2ADYAOAA5ADkAMAAxADUAKQAoADcAMQAyADAAMAA0ADAAMAAwADAAMQApACgANgA2ADkA
-NAA2ADAAMAA3ACkAKAA2ADYANAA0ADYAMAAwADgAKQAoADYANgA0ADcANgAwADAANwApACgAMwA4
-ADAANwAwADcAMAAwADAAMAA1ACkAOwBEAEkAUgA6AE8AVQBUADsAUwBGAFAAOgAxADEAMAAxADsA
-AAAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAAFwAAAB4AC0AbQBzAC0AZQB4AGMAaABhAG4AZwBl
-AC0AYQBuAHQAaQBzAHAAYQBtAC0AbQBlAHMAcwBhAGcAZQBkAGEAdABhAC0AYwBoAHUAbgBrAGMA
-bwB1AG4AdAAAAAEAAAAEAAAAMQAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAAEoAAAB4AC0AbQBz
-AC0AZQB4AGMAaABhAG4AZwBlAC0AYQBuAHQAaQBzAHAAYQBtAC0AbQBlAHMAcwBhAGcAZQBkAGEA
-dABhAC0AMAAAAAAAAQAAANoMAABNAEUAQQAwAEgAegBBAFoAUgBlAHYATwBKAEQAbABLAEcAYwBO
-AEsAbwAxAE8AcABDAFkASQBCAFgAZwBNAFkAbQBxADUAdgBxADcAYQA0AEUAMQBBAEMATABlAG4A
-SwBzAHUAUQBuAHgAcwBTADkANQB2AG4AQQBNAG8AYgBiAG0ATQBFAEkAVwByAFEANwBVAFoAcQBp
-AEkAcgBlAGEAVAA2AEUATQBaADkAawBYAE4AWQB6AHkAbwBNAGYATgBXAGgATABUAGMAQwBwAFoA
-RwBVAFkAUgArAGkAbwBCAFIAMABWAEEAOABsAHYAVgBzADAAYwBiAHEAUgBVAFYAQwBpAGMAeAAv
-ADAAVgA2AHQAdwBBAGcANQBpAHYAegBIAHcAaABsAEQAWQBzAEoAYgBOAGkANABmAGUALwBaAGkA
-UQBXAGsAZgBsAGYAMABtAFIAagA5AHEAdwBCAEsAVQBDADUAUgBrACsAZQAzAEIANwA2ADIATAAz
-AEMAZwBOAHoAOABoADcAWQBwAFQAUQAxAGoAVABIAHEAZgA3AFQAKwBJACsAbQA3AEMAUwBhAGMA
-LwBMAEsAZgBsAGoARgBDAEIAcQBGADkAdQAyAGoANQAvAGMAOQA4AFYAbgBFAFYARwBYAGQASgBm
-AGIAOQBFADQAMwA5AFkASABWAEMAcAAxAHkATABNAFUARgA5ADAAdgAyAGEATQBWAEIARgBIAFMA
-aQBSAFoANwBqAGIAdQB5ADUANQBDAFIAbgB3AHQAZwBXADEAOQBIADkANABjAHkAMAArAGkAUgBz
-AGIASABjAHQAMABOADkANwB6AGsAVgA2ADEAMQBBAEUAZwBNAEEAUwBHADAAZgBWAHgAWQB0AHkA
-cAB6AHMANQBpAFUALwBYACsAMABXADAAVwBCAFUAdgBRAG4AZwBIAE0AdQA5AEsAVwAxAEMAMABR
-ADkARwBSAFgATABNAFIAWAA0AEsAaQBpAEYAbwBJADUAOQBFAHgARABtAFQAMgBzAGIANgBNAGYA
-QgA5ADEAdAAvAFIAMgBlADIAegAyAGwAagB1AGkAagBYAFYAegBmADgASQB0ADUASwBrAEkAWQBP
-AGcAYwBsAHgAMwBCAHQAYQByAHAAWABUAE8ATgBYAC8AegA2AE8AUwBaAHgAawBvAHQAcQBsAFgA
-WQBJAE8AcwBsAG4AaABEAHEAbABKAEcAcwBlADkARgBpAEQAMABYADEAcgAwADYAZQB5AG8AMQAy
-ADAANgBXAGsAVwBuADcALwArAGsAawA1AHAAbQBiAFQARwBIACsAOAA5AE0AawBhADkAYwB1AGQA
-TgBDAHgAKwBGAFkAcwB2AGQAUABwAFEALwBNADAANABMAGIAUQBOAEEAYQBOAHAAaABiAFUAZgA1
-ADgAagBBADcAdAB5AGoANQBJAEIAOABlACsAVwBYAG4AKwBGAEYAagBHAGIAcgB0AEcATABGAEUA
-cABWAFUATwBKAHkAZgBkAEEAegBOADMAbAB2AGoAagBqAGQAUgA4AHcAdABiAGIASABMAFcAbQBs
-AGQAbABHAFYANgBHAFoAMQB3AGEAcQA3AEsAMwArAE0ARQAwAEkASgAvAEEARwBsAEMARwBRAE0A
-bQBvAGMAMABWAGoAOQBzAEQAWgBqAHYASwA1AHYASQByAFkAUQB2AHgAKwBhAGIAQwBpAEIAMABQ
-AEsARQA3AE4AbQBiAFUAUgB5AGIAawBxAFAAUwBKAFQALwBaAGkAWQBtAFcARABSADAAMgByAGgA
-cABsADkAbwAvAHEAMABMAGsAdgBmAEoATQBhAGoAMgB5ADIAQwBhAHcAbwB3AGIAUQAwAEwAOQBq
-ADAAcwBGAGIAUABXAGcAbQBLADEAaABuADIAYgBwAFAAKwB3ADUAbwBWAHgAVQA2AGIAcgBkAGMA
-TwB0AHYAWABBADAAYQB0AHMAMQBsAGcAeABJAHkAUwBKAFkARQA0AGIAcwB2AC8AcAAxAG8ATAB3
-AEYASQBiAE4AbwBOADIAeABDAHgARQBhAE4ANABrAFIAdQBJAHAAQQBvAFYAMQBMADgAbwBqAEEA
-ZAByAG4ASAB0AHUAOABLADYAVAB0ADIAdABvAG8AQgBxAHIAYQBiAFMAcABMAGwAUQBDAFYAUgBO
-AFQANABrAGoAVwA2AFIAMwBJAEgARwBuAE8AcwBLAHQAYgBsADQAKwBOADcAMQAxAEYAbwA1AEIA
-RQB1AFQATQBqAEgANgBqAG0ATwBkAHgAQQBxAGYALwBXAHkAdgBwAEEANwBqAG4AQwAvADUAQQBR
-AEkAdABrAGQAUQBhAHkAYgB4ADEARgBYAGkAVwBYADEAQwBMAHUAMgArAFMAUABCAEcASgA1AHgA
-YQBJADMAbABnADMAVABBAGEAbAA5AHMAUgBpAEUARwBNAGwARABVAFoAbgBEAHcANwB6AHMANwB4
-AFAAawB4ADgAQQBtAEIAZABuAEoALwBnAHcAagBoAEgATQB5AEYAcABiAFkAegBKAEgAQgBWAFYA
-LwBLAGIAZABDAEkAUQBuAC8ATQBwADcAKwBjAFgAeABnAC8AZgBlAEkAQgBLAHEAQwBtAG0ATAB1
-AGYAbAB6AG8ANQBTAFIAeABYAG8AVAAzADQAeABrAEgAUgB4ADYARABxADQAWABZAHcAeQBwAEQA
-UQBRAGkAVQBBAGEAaQBQAHQAYQBlAG8AegBLAGoAQwBWAFgAUwBrAGcAVABiAEUAVQBZAEYAQgBz
-AFAATgB6ADUAOAA0AFgAegBYAE8ATwBpAGgAVgAvADYARQA0AGcASwBVAFgAcQByAGIAUQBkAGsA
-NwBrADkAQgA4AFIAdABrAGgAaABNADUAdQBhADUAUAB1AHQANQBWAFUAYwA4AHQAegBxADQAbwBY
-AFgAQgB0AHMAagA5AEIAQwBNAEYAUwA4AEQARQB2AGwAWQBJAGQARABHAEoARwA5AGcAaABsAEwA
-OQBaAHgAZgB5AHgARwBvAGoAcgBCAFoASABWAE4AUgB6AG0AdABsAHUAQwArAHUARQBLAGwAdABG
-ADAAeQB4AE8AOQBVAFcAdABzAFMAbABnAEQAMwAyAG0AbwA2AE8AaQBIAEkAegAyAHYAVQBYAHUA
-eQBjAFQAawAyAGwAQwBzAGkAKwBEAGgANgBoAHcAcQA5AHEAegBwAEwANgBzAGIASABmAG8AUwBC
-ADEASgBHAGgAbAB6AE8AOQBTAEoASQBnAHkAZgBOAHAAeQB5AEEAWgBxAHoAVQB3ADEASwBVAFEA
-NgA3AG8ATQBHAG8AOQAxAGkAMgBsADAAUQBXAGgAbgBBAGEAMwBqAHQAOQA4AGwAOQBXAGoAMABE
-AEkAZgBzAHgATQBsAGEASAB5AE0AdwBUAFQASwArADUAZgBBAGEAYgBVAGEAWAB6AGwARAA4AHEA
-NwB1AGMAMABQADEAaAAwAGwAQgA2AEgAMgAyAFMAQgB6ADIARgBDAGoAeABOAFgAVwBJAGkANwBl
-ADcAUwBWAEQATQBzAFQASABSAFYAVQBjAFYAWQAvADcATgB0AG0ANgBQAFMAYQBNAHYAbwBmADkA
-YgBJAEsASwBPAEIAWgAvADEAVQBKAG0AZQArAHIANgA5AHEAOQBNAEMAOABWAEcAYwBvAGYAUQBZ
-ADQARQBYADQAMAArAHkANwBhAHUAawBTAGUAOAByAFgAdAAvAC8AWQBqAGUAWQBQAE4AdgAwAFMA
-eAAxAFIAOABaADkAZAAzAEkAVgBqAEoARABJAEMAcgBNADcATABwAE8AOABhAGgAbABXADkAMwA2
-AGkAMABTAFAARgBCADIANQBmAGwAcAB6ADIAQgBSAEEAUQBSAHcARAA0AEsAKwBLADMARABZAGcA
-egBCAHAAMgA0ADUAagBxAEgAVwBPAFEAbwA0AEEAaABFAHIASABLADQAZgBiADcAZwBEAGMARABO
-AFEANgBTADIAaQA5AE8ARQB3AE0ASABjAEMALwBJAFgAaQBpAFEAVQByADQAZABvAEQAKwBWAHcA
-eABHAGQAUQB1AFMAcwBYADYAcwB4AFMAcQBGAHcATQBKAHEAUgBxAHEAQQBaAG4ARQBQAFgARwBr
-AFMATABSAFUAUAA3AG8AUQBLAFMAYwBTAEQAOABSADIAbQBLADIAbwB2AHoAWQB1AE4AVQBnAGsA
-ZQAvAHQAdgBsADQAWQB6AFIAVQBuAHgAZQBWAHYAZwBHAFAATABlADYAaQBDAEQATABFAHgATQBl
-AFAALwBvAEEAcwAxADkAaABDAEYAOQBOADcATwBPAEwAUABjAEIARAB6AGcAMAA5AEkAZABnADAA
-PQAAAAAAc1Y=
 
---_000_DM4PR12MB51650DA0960F7E13F3F64E9687129DM4PR12MB5165namp_--
