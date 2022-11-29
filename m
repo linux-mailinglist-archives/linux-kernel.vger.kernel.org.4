@@ -2,155 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BB063BF90
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F03763BF94
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233286AbiK2L7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 06:59:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59880 "EHLO
+        id S233411AbiK2L7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 06:59:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233240AbiK2L6b (ORCPT
+        with ESMTP id S233305AbiK2L65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 06:58:31 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F022D65C1
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:58:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669723110; x=1701259110;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=U3Tl4S3Ip9ci59HnrcRegp2OrXY5p8eKKuV4kx7lCKE=;
-  b=A39i6VWYpsnsT2tm20Z524lCk2gbzwuJ4E1NiWObHdxGb9IpHLCNWjtZ
-   b/uM48eEnj7Hmluru6HMhwYM0W2T+MulFHhSTdJRonFK9eWWuQI8/UIe5
-   Qg4P6aBpisWwhWINhoPnlQTBh1I8vHnzZfxegK1fBn4dh3sahv8OFXDId
-   ioy5QoHdxCp79JGj2LzEyfTqAoOzKEiuUexWORdg8HssUzDUKqOVXpEXJ
-   ojn9NqLVxtbsvVtN4rEYnjzHAXf8+fehOF/73cedI7siJp+MlmQoA11o3
-   V2ZcreViakTe5NuyOKtoYl4bbZ1ofukdOesL8jbW2hwEwt0v2Pk68sKAa
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="315121078"
-X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
-   d="scan'208";a="315121078"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 03:58:30 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="888819302"
-X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
-   d="scan'208";a="888819302"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.214.73]) ([10.254.214.73])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 03:58:24 -0800
-Message-ID: <953f2282-9459-d301-7766-a252703114f5@linux.intel.com>
-Date:   Tue, 29 Nov 2022 19:58:22 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Rob Clark <robdclark@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Yong Wu <yong.wu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 06/20] iommu/mtk: Remove detach_dev callback
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-References: <20221128064648.1934720-1-baolu.lu@linux.intel.com>
- <20221128064648.1934720-7-baolu.lu@linux.intel.com>
- <Y4S8elzfzdTJGtyK@nvidia.com> <cb1b825c-55f1-d305-0727-ce8180d5a79e@arm.com>
- <4a979bdc-d7b4-77b4-490a-5f3e691e3df3@linux.intel.com>
- <f9d005e2-9fc6-bbf4-53fb-95f18201ce2d@arm.com>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <f9d005e2-9fc6-bbf4-53fb-95f18201ce2d@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 29 Nov 2022 06:58:57 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EBC658C;
+        Tue, 29 Nov 2022 03:58:56 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id AEF1C3200A06;
+        Tue, 29 Nov 2022 06:58:54 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Tue, 29 Nov 2022 06:58:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1669723134; x=1669809534; bh=QeS5xMGkD4
+        rRY6zWepk0K92JtGeum9CogY/Tq9dEfh8=; b=Pm0uGiEykoP05sMiaN6h4DRQBw
+        iG+GHIPVl7IuuYL2pGQjSH2WulZv1NO3HZfZrn8HLgJapchmRYuNdz+SJ0f5Ojwn
+        7Re4r3diK2Xzeibmq4XjWPOKcvDYw8pHaDk42xFdh3chGVFBXaGbT4Sm2oKCZDLt
+        FWYDtcS+VVeJ1Vo0n6P8vNQYWPkJUho841ek/W7OHyjfyipZ0wsebo/b1hCk8pzT
+        93GVbaNnC03OKndRXre3e3WM8aEth9RnYxCG7KQCohnE2GdXKnD7A/srZhBFEXXu
+        ItIe4kTAyaJNL3aBz1VKndXB1psepp4U7CRtUWqOnuaC/k4luTjVW+EQPrvA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669723134; x=1669809534; bh=QeS5xMGkD4rRY6zWepk0K92JtGeu
+        m9CogY/Tq9dEfh8=; b=GcFy+Aysk+I2pXQhKEUUEpuumRby/pgJroMN/p1Dlglk
+        7aZRCD97mKveGTOs2ZN8xSOwPMAq1IVZhpkFWbNdP45f44OwZ9OWEc1os2BwixOz
+        2gTw8nPsgGrYrJpuRbDDzDzT+xXK4oUqSHYGIO+tUz7hZgg8ZgPdiTAGVx3JDMT0
+        TQJye4K69WLHFardwmeXvZo3EI7jVO5G81Mb5yr1YiYS3yR+QbdP7fmKRtIFI6ES
+        mn3LhJNi2RTeg2yTigG0bKfICk+CC7R0s4CJ4LnY3GLWou7BgBIqW53jNlxo03EX
+        UiXaRE0cnmRg73c4B2+fYkCYr1PxAQM1Gc006IYpQQ==
+X-ME-Sender: <xms:_vOFY5DxgOuni61vmiztQpi0PLZ9MlrcRmiHJlYUspcYweps6jSNhg>
+    <xme:_vOFY3hWpPcTzxcZQ7ATeWm8L8EkKbAZhbBdBscQ_e-Xe-YbQKHdKMauFFC7LgRiR
+    ELKbO1e7Dv2MZzRBdA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtddtgddtgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeufeeh
+    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgepud
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:_vOFY0n5qNSGgPSu0AjbWJJgZ1w6HEPy4p03CIAtJC-SyXYQz16LpA>
+    <xmx:_vOFYzwmGb6XROvzebwFXoCMozmdtgC2vs0I2GIemQpHDBNaoGXBFg>
+    <xmx:_vOFY-TzogyUFrvvHXnA698t7lMYcLKAJ35VOpCll7X3RuPEHcq09A>
+    <xmx:_vOFYxHGnN2Ahm9vqmdXtsDyBn2iISkDMQ8qe0bOx2wsdmg4iU95-Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 02708B60086; Tue, 29 Nov 2022 06:58:53 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <10c264a3-019e-4473-9c20-9bb0c9af97c3@app.fastmail.com>
+In-Reply-To: <92671929-46fb-4ea8-9e98-1a01f8d6375e@app.fastmail.com>
+References: <20221125115003.30308-1-yuehaibing@huawei.com>
+ <20221128191828.169197be@kernel.org>
+ <92671929-46fb-4ea8-9e98-1a01f8d6375e@app.fastmail.com>
+Date:   Tue, 29 Nov 2022 12:58:23 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jakub Kicinski" <kuba@kernel.org>,
+        "Richard Cochran" <richardcochran@gmail.com>
+Cc:     YueHaibing <yuehaibing@huawei.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Florian Fainelli" <f.fainelli@gmail.com>
+Subject: Re: [PATCH] net: broadcom: Add PTP_1588_CLOCK_OPTIONAL dependency for BCMGENET
+ under ARCH_BCM2835
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/29 19:45, Robin Murphy wrote:
-> On 2022-11-29 02:07, Baolu Lu wrote:
->> On 11/28/22 9:59 PM, Robin Murphy wrote:
->>> On 2022-11-28 13:49, Jason Gunthorpe wrote:
->>>> On Mon, Nov 28, 2022 at 02:46:34PM +0800, Lu Baolu wrote:
->>>>> The IOMMU driver supports default domain, so the detach_dev op will 
->>>>> never
->>>>> be called. Remove it to avoid dead code.
->>>>>
->>>>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->>>>> ---
->>>>>   drivers/iommu/mtk_iommu.c | 9 ---------
->>>>>   1 file changed, 9 deletions(-)
->>>>
->>>> I listed this driver as not supporting default domains:
->>>>
->>>> https://lore.kernel.org/linux-iommu/20220516135741.GV1343366@nvidia.com/
->>>>
->>>> ?
->>>>
->>>> Has something changed? Did I get it wrong?
->>>
->>> static struct iommu_domain *mtk_iommu_domain_alloc(unsigned type)
->>> {
->>>      struct mtk_iommu_domain *dom;
->>>
->>>      if (type != IOMMU_DOMAIN_DMA && type != IOMMU_DOMAIN_UNMANAGED)
->>>          return NULL;
->>> ...
->>>
->>>
->>> This one runs on arm64, so has always supported default domains for 
->>> iommu-dma to work.
->>
->> This, together with several other ones, only support IOMMU_DOMAIN_DMA
->> type of default domain. The iommu core handle this by falling back to
->> IOMMU_DOMAIN_DMA if other types fail.
->>
->>          dom = __iommu_domain_alloc(bus, type);
->>          if (!dom && type != IOMMU_DOMAIN_DMA) {
->>                  dom = __iommu_domain_alloc(bus, IOMMU_DOMAIN_DMA);
->>                  if (dom)
->>                          pr_warn("Failed to allocate default IOMMU 
->> domain of type %u for group %s - Falling back to IOMMU_DOMAIN_DMA",
->>                                  type, group->name);
->>          }
->>
->> I have another cleanup series:
->>
->> https://github.com/LuBaolu/intel-iommu/commits/iommu-use-def_default_type-wip
->>
->> which adds IOMMU_DOMAIN_DMA default domain type requirement in the
->> def_domain_type callback. I planed to bring that to discussion after
->> this one.
-> 
-> Per the discussion over on the s390 thread, I think that would be a step 
-> in the wrong direction. I'd prefer to keep .def_domain_type for 
-> device-specific requirements and express general driver domain support a 
-> different way. If the IOMMU_DOMAIN_DMA fallback is worth removing then 
-> the one for IOMMU_DOMAIN_BLOCKED is as well - no point doing half the 
-> job ;)
+[Florian's broadcom.com address bounces, adding him to Cc
+with his gmail address]
 
-Get you. Thanks for pointing this out. Sure, let's keep the code.
-
-Best regards,
-baolu
+On Tue, Nov 29, 2022, at 12:56, Arnd Bergmann wrote:
+> On Tue, Nov 29, 2022, at 04:18, Jakub Kicinski wrote:
+>> On Fri, 25 Nov 2022 19:50:03 +0800 YueHaibing wrote:
+>>> diff --git a/drivers/net/ethernet/broadcom/Kconfig b/drivers/net/ethernet/broadcom/Kconfig
+>>> index 55dfdb34e37b..f4ca0c6c0f51 100644
+>>> --- a/drivers/net/ethernet/broadcom/Kconfig
+>>> +++ b/drivers/net/ethernet/broadcom/Kconfig
+>>> @@ -71,13 +71,14 @@ config BCM63XX_ENET
+>>>  config BCMGENET
+>>>  	tristate "Broadcom GENET internal MAC support"
+>>>  	depends on HAS_IOMEM
+>>> +	depends on PTP_1588_CLOCK_OPTIONAL || !ARCH_BCM2835
+>>>  	select MII
+>>>  	select PHYLIB
+>>>  	select FIXED_PHY
+>>>  	select BCM7XXX_PHY
+>>>  	select MDIO_BCM_UNIMAC
+>>>  	select DIMLIB
+>>> -	select BROADCOM_PHY if (ARCH_BCM2835 && PTP_1588_CLOCK_OPTIONAL)
+>>> +	select BROADCOM_PHY if ARCH_BCM2835
+>>>  	help
+>>>  	  This driver supports the built-in Ethernet MACs found in the
+>>>  	  Broadcom BCM7xxx Set Top Box family chipset.
+>>
+>> What's the code path that leads to the failure? I want to double check
+>> that the driver is handling the PTP registration return codes correctly.
+>> IIUC this is a source of misunderstandings in the PTP API.
+>>
+>> Richard, here's the original report:
+>> https://lore.kernel.org/all/CA+G9fYvKfbJHcMZtybf_0Ru3+6fKPg9HwWTOhdCLrOBXMaeG1A@mail.gmail.com
+>
+> The original report was for a different bug that resulted in the
+> BROADCOM_PHY driver not being selectable at all.
+>
+> The remaining problem here is this configuration:
+>
+> CONFIG_ARM=y
+> CONFIG_BCM2835=y
+> CONFIG_BCMGENET=y
+> CONFIG_PTP_1588_CLOCK=m
+> CONFIG_PTP_1588_CLOCK_OPTIONAL=m
+> CONFIG_BROADCOM_PHY=m
+>
+> In this case, BCMGENET should 'select BROADCOM_PHY' to make the
+> driver work correctly, but fails to do this because of the
+> dependency. During early boot, this means it cannot access the
+> PHY because that is in a loadable module, despite commit
+> 99addbe31f55 ("net: broadcom: Select BROADCOM_PHY for BCMGENET")
+> trying to ensure that it could.
+>
+> Note that many other ethernet drivers don't have this
+> particular 'select' statement and just rely on the .config
+> to contain a sensible set of drivers. In particular that
+> is true when running 64-bit kernels on the same chip,
+> which is now the normal configuration.
+>
+> The alternative to YueHaibing's fix would be to just revert
+> 99addbe31f55 ("net: broadcom: Select BROADCOM_PHY for BCMGENET")
+> and instead change the defconfig file to include the phy driver,
+> as we do elsewhere.
+>
+>     Arnd
