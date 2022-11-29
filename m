@@ -2,159 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C9363B7C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 03:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 239FB63B7DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 03:30:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235106AbiK2CXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 21:23:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
+        id S235145AbiK2Cam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 21:30:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233537AbiK2CXx (ORCPT
+        with ESMTP id S234976AbiK2Cak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 21:23:53 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1D127937;
-        Mon, 28 Nov 2022 18:23:51 -0800 (PST)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NLmMv42S2zHwDf;
-        Tue, 29 Nov 2022 10:23:07 +0800 (CST)
-Received: from kwepemm600020.china.huawei.com (7.193.23.147) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 10:23:47 +0800
-Received: from [10.174.179.160] (10.174.179.160) by
- kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 10:23:46 +0800
-Message-ID: <8e298cc0-27b9-a61a-48cc-64a9186048c8@huawei.com>
-Date:   Tue, 29 Nov 2022 10:23:46 +0800
+        Mon, 28 Nov 2022 21:30:40 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA71132041
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:30:38 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id y17so4161986plp.3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:30:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IXHv7FKwamfpP3OAbBVNH5dDzTy9Zz0epUrCCXyNIZM=;
+        b=FhCVKJsMGs4GK7GxBOcCZHD/MGhkhAXstFxIr75Jp21bNWRmd8wVfPhuWglC/9KWG+
+         aVuTq/MdLMdFn0B54JBw0FD/bQXKGgKIOh5iZPCIf39eLKVPa3K43+19ugokBQwBdQtY
+         kwv+lJ30ivxZnBnqMkngbN48fkSCpjGsFVI3zHl9gmeSqfNXH6nv/CJ72q6ngHDbhv8M
+         r7gv7MWtnbNvDguA5qfn426z/IYlMUOaifVT/0xBpzTuHMSaQoX7wgHn4HihSBTZU5ea
+         SVQrlAPx6IlaJywHtz23ai85SE2rdQLxg82A3wJy+c62a+Dxy/abPQEBZRS3mkDDI5ha
+         a+bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IXHv7FKwamfpP3OAbBVNH5dDzTy9Zz0epUrCCXyNIZM=;
+        b=cbwVECd++MllI4QzvGKKsfH2rv+gxH7Q5JrQ3D+m9jB+3TqEj5l4tYkS3f0V0eksvk
+         B6i4f8sBfsgr9+9syTaP7lCXNWi5vADJnRHF5zhcsj2IWQw8+cle2b2PKN8ldfJrhu15
+         eUbAbEOewbO9ZqfpoF3UbgHosQGavqGi6IDQcmvnpMULzjthwA+u353XXAtsPEnonw0C
+         iPCzrnydnQeFY+F4palHA686kqIL3a3lHrJdo8ET4jxDAoTMo/hpJkM/3qHazvDKOO9F
+         Hmpd6GlT5sjFKB6o6BJjNaspMsDpmYJeSk5oQplHlBqx1R05YqWDhCnPojnLlmYlcocc
+         6/yQ==
+X-Gm-Message-State: ANoB5pkjcKsT9gti82CfRMnlduj+K4rbK1dSEMhTrFKyAGNBEvjxz0Kz
+        poXF2DgrckTnHG1W5JnHClK+tQ==
+X-Google-Smtp-Source: AA0mqf7l6232RkeFf6beFnopSzjgLRbwjObYX/qsgHzFJqp7fZURrXWhZ8qW+3EobFSqzvndzexfgQ==
+X-Received: by 2002:a17:90a:788b:b0:218:24fc:c6b6 with SMTP id x11-20020a17090a788b00b0021824fcc6b6mr58350735pjk.127.1669689038373;
+        Mon, 28 Nov 2022 18:30:38 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id y23-20020a17090264d700b00189667acf15sm7836307pli.162.2022.11.28.18.30.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 18:30:37 -0800 (PST)
+Message-ID: <c03be0eb-1c4c-b8c9-8325-c7769b966ddf@kernel.dk>
+Date:   Mon, 28 Nov 2022 19:30:36 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH] hfs: Fix OOB Write in hfs_asc2mac
-To:     Viacheslav Dubeyko <slava@dubeyko.com>
-CC:     <zippel@linux-m68k.org>, <akpm@osdl.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <sunnanyong@huawei.com>,
-        <wangkefeng.wang@huawei.com>,
-        <syzbot+dc3b1cf9111ab5fe98e7@syzkaller.appspotmail.com>
-References: <20221126043612.853428-1-zhangpeng362@huawei.com>
- <9F97B7A6-9E20-4D70-BA79-8301D80DF9DB@dubeyko.com>
+Subject: Re: linux-next: Fixes tag needs some work in the block tree
 Content-Language: en-US
-From:   "zhangpeng (AS)" <zhangpeng362@huawei.com>
-In-Reply-To: <9F97B7A6-9E20-4D70-BA79-8301D80DF9DB@dubeyko.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20221129082715.78e44566@canb.auug.org.au>
+ <ab5368d2-5f65-68cb-9703-23d6e451b775@opensource.wdc.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <ab5368d2-5f65-68cb-9703-23d6e451b775@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.160]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600020.china.huawei.com (7.193.23.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/29 3:29, Viacheslav Dubeyko wrote:
+On 11/28/22 4:39?PM, Damien Le Moal wrote:
+> On 11/29/22 06:27, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> In commit
+>>
+>>   4b49197f9fbd ("block: mq-deadline: Rename deadline_is_seq_writes()")
+>>
+>> Fixes tag
+>>
+>>   Fixes: 015d02f4853 ("block: mq-deadline: Do not break sequential write streams to zoned HDDs")
+>>
+>> has these problem(s):
+>>
+>>   - SHA1 should be at least 12 digits long
+>>     This can be fixed for the future by setting core.abbrev to 12 (or
+>>     more) or (for git v2.11 or later) just making sure it is not set
+>>     (or set to "auto").
+> 
+> Oops. Sorry about that. It seems I cannot count up to 12 anymore :)
+> It should be:
+> 
+> Fixes: 015d02f48537 ("block: mq-deadline: Do not break sequential write
+> streams to zoned HDDs")
+> 
+> Jens, can you fix this ?
 
->> On Nov 25, 2022, at 8:36 PM, Peng Zhang <zhangpeng362@huawei.com> wrote:
->>
->> From: ZhangPeng <zhangpeng362@huawei.com>
->>
->> Syzbot reported a OOB Write bug:
->>
->> loop0: detected capacity change from 0 to 64
->> ==================================================================
->> BUG: KASAN: slab-out-of-bounds in hfs_asc2mac+0x467/0x9a0
->> fs/hfs/trans.c:133
->> Write of size 1 at addr ffff88801848314e by task syz-executor391/3632
->>
->> Call Trace:
->> <TASK>
->> __dump_stack lib/dump_stack.c:88 [inline]
->> dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
->> print_address_description+0x74/0x340 mm/kasan/report.c:284
->> print_report+0x107/0x1f0 mm/kasan/report.c:395
->> kasan_report+0xcd/0x100 mm/kasan/report.c:495
->> hfs_asc2mac+0x467/0x9a0 fs/hfs/trans.c:133
->> hfs_cat_build_key+0x92/0x170 fs/hfs/catalog.c:28
->> hfs_lookup+0x1ab/0x2c0 fs/hfs/dir.c:31
->> lookup_open fs/namei.c:3391 [inline]
->> open_last_lookups fs/namei.c:3481 [inline]
->> path_openat+0x10e6/0x2df0 fs/namei.c:3710
->> do_filp_open+0x264/0x4f0 fs/namei.c:3740
->>
->> If in->len is much larger than HFS_NAMELEN(31) which is the maximum
->> length of an HFS filename, a OOB Write could occur in hfs_asc2mac(). In
->> that case, when the dst reaches the boundary, the srclen is still
->> greater than 0, which causes a OOB Write.
->> Fix this by adding a Check on dstlen before Writing to dst address.
->>
->> Fixes: 328b92278650 ("[PATCH] hfs: NLS support")
->> Reported-by: syzbot+dc3b1cf9111ab5fe98e7@syzkaller.appspotmail.com
->> Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
->> ---
->> fs/hfs/trans.c | 2 ++
->> 1 file changed, 2 insertions(+)
->>
->> diff --git a/fs/hfs/trans.c b/fs/hfs/trans.c
->> index 39f5e343bf4d..886158db07b3 100644
->> --- a/fs/hfs/trans.c
->> +++ b/fs/hfs/trans.c
->> @@ -130,6 +130,8 @@ void hfs_asc2mac(struct super_block *sb, struct hfs_name *out, const struct qstr
->> 				dst += size;
->> 				dstlen -= size;
->> 			} else {
->> +				if (dstlen == 0)
->> +					goto out;
-> Maybe, it makes sense to use dstlen instead of srclen in while()?
->
-> We have now:
->
-> while (srclen > 0) {
->     <skipped>
-> } else {
->     <skipped>
-> }
->
-> We can use instead:
->
-> while (dstlen > 0) {
->     <skipped>
-> } else {
->     <skipped>
-> }
->
-> Will it fix the issue?
->
-> Thanks,
-> Slava.
+Sure, it's not that important though as it's just missing one digit. For
+the record, this is what I have in my .gitconfig :
 
-Thank you for your help.
+[alias]
+fixes = log -1 --format=fixes
 
-After testing, it fix the issue.
-Would it be better to add dstlen > 0 instead of replacing srclen > 0 with dstlen > 0?
-Because there may be dstlen > 0 and srclen <= 0.
+[pretty]
+fixes = Fixes: %h (\"%s\")
 
-we can use:
+[core]
+abbrev = 12
 
-while (srclen > 0 && dstlen > 0) {
-    <skipped>
-} else {
-    <skipped>
-}
+and then you just do 'git fixes <sha>' and it spits out the line for the
+commit without needing to count anything and eliminates this error.
 
 
-Thanks,
-Zhang Peng
-
->> 				*dst++ = ch > 0xff ? '?' : ch;
->> 				dstlen--;
->> 			}
->> -- 
->> 2.25.1
->>
->
+-- 
+Jens Axboe
