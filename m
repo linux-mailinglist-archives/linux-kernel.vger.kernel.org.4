@@ -2,113 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C984163C11E
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3E363C126
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233657AbiK2NdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 08:33:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
+        id S229973AbiK2NfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 08:35:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232772AbiK2Ncw (ORCPT
+        with ESMTP id S229632AbiK2NfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 08:32:52 -0500
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565BC20359;
-        Tue, 29 Nov 2022 05:32:51 -0800 (PST)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-142faa7a207so16937782fac.13;
-        Tue, 29 Nov 2022 05:32:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7AbH7r8zfrgUHOwLlSE1ng5DOpa+fGJPYFN/KQ+C+bA=;
-        b=HfSKKRVo9BZSUhDGZbShYMqC3mcFCOK0Aqyg4VqKWpiQ19LWQrZDIrkQbRdL9pBOFl
-         DTBQCv43P89YmCdnBVdPRvlOoPm76z4cesdFikbwkleZDSUltXqgMECIvroM6zrUYe0t
-         xfQohTcfp9/mhF1IQ+W3XG7Q8UAQpKrdXCsUdItPdvE93BRr+QRBJnu650mdc4sXnCDw
-         30i4MMzIhFFV5OiRhNAcUxhtwd4fgf8lK50uO8V78EbZZWlyvD2GznSMSN+RFoCBMJvM
-         XGWX6EUMG/fiKcooLhV8cWAkOoLHpk6Ki1ef3Aers2LeIi5YeZmomtcY/UP+iu8uTt9a
-         n5qA==
-X-Gm-Message-State: ANoB5pmu8+3t59xz2ahkdfeq7kVvc3rPweJ/AYmnNXJ71y6NTRJJrRTf
-        DwrujosvXvTsihO16TylL3xo8PsMXA==
-X-Google-Smtp-Source: AA0mqf50rRVlgY7UKj7g8vZjals77aYIDgUuFDGu6hoTWJb9G0uFW+Ya1ByFd4pbXZIQ2fvIo93PPg==
-X-Received: by 2002:a05:6871:408b:b0:13c:4c85:f3f0 with SMTP id kz11-20020a056871408b00b0013c4c85f3f0mr20697586oab.32.1669728770927;
-        Tue, 29 Nov 2022 05:32:50 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r11-20020a9d750b000000b006621427ecc7sm5867883otk.60.2022.11.29.05.32.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 05:32:50 -0800 (PST)
-Received: (nullmailer pid 3502178 invoked by uid 1000);
-        Tue, 29 Nov 2022 13:32:43 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Masami Hiramatsu <mhiramat@kernel.org>
-In-Reply-To: <20221129103509.9958-8-hayashi.kunihiko@socionext.com>
-References: <20221129103509.9958-1-hayashi.kunihiko@socionext.com>
- <20221129103509.9958-8-hayashi.kunihiko@socionext.com>
-Message-Id: <166972831904.3491773.307319467313805748.robh@kernel.org>
-Subject: Re: [PATCH 7/8] dt-bindings: soc: socionext: Add UniPhier DWC3 USB glue layer
-Date:   Tue, 29 Nov 2022 07:32:43 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Tue, 29 Nov 2022 08:35:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFDC1134;
+        Tue, 29 Nov 2022 05:35:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07679B811BC;
+        Tue, 29 Nov 2022 13:35:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06C6AC433C1;
+        Tue, 29 Nov 2022 13:35:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669728908;
+        bh=AgrFaXDHO4T8urlnogCwZ98IvUvFDANZ++DIGe943KE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jV9BEps1XGs/8fKcoiR/Q1JO799qkN+235RF8yuZya24QM90/LEk0eNABaGTehX1i
+         /BdztpcW1MvnwMxAURXmVb3m8gFbeBfeEQUgICBUypOlEyMmYT0VoqEjviZMSnhBui
+         fD2rFON+a5Pm4IJGoNU7RgE5diimosEHT3Lre9T5xYB0x/wst9GaCEucNDxrJXVmLS
+         9EKoFn4FjSuY22UQs08H/dsEJS+OaneyvcIo5IN1ZmeY2ERiQ37nbuw7xzqDwUN1ik
+         r7/7jLft+MWmNNy2SSf9Jpbxb82SE3bKBVf+Ro7D6m5fpGkW51tN5y+GzRRfNywcCT
+         bHfoaiQUiFU0g==
+From:   Roger Quadros <rogerq@kernel.org>
+To:     davem@davemloft.net, maciej.fijalkowski@intel.com, kuba@kernel.org
+Cc:     andrew@lunn.ch, edumazet@google.com, pabeni@redhat.com,
+        vigneshr@ti.com, linux-omap@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roger Quadros <rogerq@kernel.org>
+Subject: [PATCH v4 net-next 0/6] net: ethernet: ti: am65-cpsw: Fix set channel operation
+Date:   Tue, 29 Nov 2022 15:34:55 +0200
+Message-Id: <20221129133501.30659-1-rogerq@kernel.org>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On Tue, 29 Nov 2022 19:35:08 +0900, Kunihiko Hayashi wrote:
-> Add DT binding schema for components belonging to the platform-specific
-> DWC3 USB glue layer implemented in UniPhier SoCs.
-> 
-> This USB glue layer works as a sideband logic for the host controller,
-> including core reset, vbus control, PHYs, and some signals to the
-> controller.
-> 
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> ---
->  .../socionext,uniphier-dwc3-glue.yaml         | 106 ++++++++++++++++++
->  1 file changed, 106 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-dwc3-glue.yaml
-> 
+This contains a critical bug fix for the recently merged suspend/resume
+support [1] that broke set channel operation. (ethtool -L eth0 tx <n>)
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+As there were 2 dependent patches on top of the offending commit [1]
+first revert them and then apply them back after the correct fix.
 
-yamllint warnings/errors:
+[1] fd23df72f2be ("net: ethernet: ti: am65-cpsw: Add suspend/resume support")
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3ss-phy.example.dtb: usb-glue@65b00000: 'reg' is a required property
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-dwc3-glue.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3ss-phy.example.dtb: usb-glue@65b00000: 'ss-phy@300' does not match any of the regexes: '^phy@[0-9a-f]+$', '^regulator@[0-9a-f]+$', '^reset-controller@[0-9a-f]+$', 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-dwc3-glue.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.example.dtb: usb-glue@65b00000: 'reg' is a required property
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-dwc3-glue.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.example.dtb: usb-glue@65b00000: 'hs-phy@200' does not match any of the regexes: '^phy@[0-9a-f]+$', '^regulator@[0-9a-f]+$', '^reset-controller@[0-9a-f]+$', 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-dwc3-glue.yaml
+cheers,
+-roger
 
-doc reference errors (make refcheckdocs):
+Changelog:
+v4:
+- move am65_cpsw_nuss_ndev_add_tx_napi() earlier to avoid declaration.
+- print error and error out if soft RESET failed in
+  am65_cpsw_nuss_ndo_slave_open()
+- move struct 'am65_cpsw_host *host' where 'common' is defined.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221129103509.9958-8-hayashi.kunihiko@socionext.com
+v3:
+- revert offending commit before applying the updated patch.
+- drop optimization patch to be sent separately.
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+v2:
+- Fix build warning
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c:562:13: warning: variable 'tmo' set but not used [-Wunused-but-set-variable]
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Roger Quadros (6):
+  Revert "net: ethernet: ti: am65-cpsw: Fix hardware switch mode on
+    suspend/resume"
+  Revert "net: ethernet: ti: am65-cpsw: retain PORT_VLAN_REG after
+    suspend/resume"
+  Revert "net: ethernet: ti: am65-cpsw: Add suspend/resume support"
+  net: ethernet: ti: am65-cpsw: Add suspend/resume support
+  net: ethernet: ti: am65-cpsw: retain PORT_VLAN_REG after
+    suspend/resume
+  net: ethernet: ti: am65-cpsw: Fix hardware switch mode on
+    suspend/resume
 
-pip3 install dtschema --upgrade
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c | 197 ++++++++++++-----------
+ 1 file changed, 105 insertions(+), 92 deletions(-)
 
-Please check and re-submit after running the above command.
+-- 
+2.17.1
 
