@@ -2,178 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1720563BE3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 11:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C450763BE3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 11:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232146AbiK2Ktb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 05:49:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S232038AbiK2Kt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 05:49:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231354AbiK2KtQ (ORCPT
+        with ESMTP id S231238AbiK2KtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 05:49:16 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5833F2AC6D;
-        Tue, 29 Nov 2022 02:49:15 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id s8so21850465lfc.8;
-        Tue, 29 Nov 2022 02:49:15 -0800 (PST)
+        Tue, 29 Nov 2022 05:49:14 -0500
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE82D2B1A0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 02:49:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5j3+iUuyMtRi4wQ9/V6gCvkYe/j/BJZzTlBQitRgNPk=;
-        b=iq+gayHBILRtlHdTmW5Wg+dwe80TR83Mqwlg/gHUYomZG1pW3lTQme32mbbfqUs2/V
-         Q5tTKBmst8PbGNLi+tQpZA4opTj8NIB5vH67lbIdq0lyzvf49Ie1tufS0fOnyrxpUmDv
-         J5BR705i2i758K6RvMO9n31SgzgQN+GREwM8MD8Q1BzArJR091eo7Fp+JxRpSIsMRgJJ
-         uXxvLWZImWNpPof7U2JEh8vtjV0yV9mTcoLwxCqxSp0jUOr/VkoybPKtcSh3CXoTjCel
-         fU22Gu4OcM9TcDRmDHhauEBENZfVo5lIYaA8pY6UAVIgFcXJhW0vyLY2Rzw0XFhDBSNP
-         3FwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5j3+iUuyMtRi4wQ9/V6gCvkYe/j/BJZzTlBQitRgNPk=;
-        b=SKeNWQmVDMEoH6Zm7NOwUfHA9f5RPnnBjtrgWhYpkUoDMNMoW39yujadgiHy9WFOAi
-         0/P8Cuh3kekY4TNmkF/xouTg7ASiP44wOWAIz/lBksfFJFEtBSxwSgRQqpQyV19zqTGU
-         t5Ffh7dNPIwV7nVjW61Q9aZsjMdBMdGDc22jINGmLonbFXevrJntXOqN8j7iG3iYSgHU
-         cyGnkV5xL7a/qObW+Njm0DOM0OoCbOuYBuvi1LO5ldxHlqhqiYI73hDWek3/ZKdYPnWz
-         UstCCt13DFNJ8u1sG9+4BReO8MZeqkgCzOVwMrJ3+JrKmSyAqDTJ+Rybp269RpncovwE
-         qyIw==
-X-Gm-Message-State: ANoB5pmALm/MleQ52QVow/bC3udc8uk5EuhWnUKnWjrLH+7PI4QQJQYb
-        71R19z18HpdtOSgP4p0KJW4=
-X-Google-Smtp-Source: AA0mqf54s5SX/22leNnVyt0ysKpjY7T98d4Y5NGp3vJqE4X1I3ztAfykmXoPESz6jH9Q8gfTb/gVRw==
-X-Received: by 2002:a19:4f02:0:b0:4a2:1d18:45d8 with SMTP id d2-20020a194f02000000b004a21d1845d8mr18378313lfb.330.1669718953496;
-        Tue, 29 Nov 2022 02:49:13 -0800 (PST)
-Received: from eldfell ([194.136.85.206])
-        by smtp.gmail.com with ESMTPSA id c3-20020a056512074300b004aa0870b5e5sm2152106lfs.147.2022.11.29.02.49.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 02:49:13 -0800 (PST)
-Date:   Tue, 29 Nov 2022 12:48:59 +0200
-From:   Pekka Paalanen <ppaalanen@gmail.com>
-To:     Hsia-Jun Li <randy.li@synaptics.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        hverkuil@xs4all.nl, tfiga@chromium.org, nicolas@ndufresne.ca,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
-        linux-kernel@vger.kernel.org, ayaka@soulik.info
-Subject: Re: [RFC] drm/fourcc: Add a modifier for contiguous memory
-Message-ID: <20221129124859.6aa3ff00@eldfell>
-In-Reply-To: <20221129101030.57499-1-randy.li@synaptics.com>
-References: <20221129101030.57499-1-randy.li@synaptics.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+  d=axis.com; q=dns/txt; s=axis-central1; t=1669718953;
+  x=1701254953;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=Kyb0/RhRN0WnWp1LU+68YdZTBMN6viWD06Fr9+ueBNU=;
+  b=MbvgSJoQGAuVlduUMxhkjlBglT713WxkJzDz1VproBhyz7piVUNU8Y3P
+   qTk12qnAgtrRETZYU/fbP/r1I+CVt8g93sMunr9DuCuSn3f1pQ8yJNOSL
+   mQoWbuIu2f/GlaZudHQp8+ju367UCAc1fLp3peA9SCcUgNte5R3+ohF/z
+   8ePUJ+kKmzlTMp0XwzE6PWlxdetK5EvUrNeKMTHjm7pTHWlXkOEv2Fs/W
+   wJi4j70ML53Iw31YbhOEtHEFz7eVaZDmPLkJjll10Ac9ROLAALKjBMRT8
+   lUcHSJmrgniYyxF54E8pKOvFReCPMc7D1wC2tVmsACejONYhwha4IluK8
+   Q==;
+From:   =?utf-8?B?THVkdmlnIFDDpHJzc29u?= <Ludvig.Parsson@axis.com>
+To:     =?utf-8?B?THVkdmlnIFDDpHJzc29u?= <Ludvig.Parsson@axis.com>,
+        "cristian.marussi@arm.com" <cristian.marussi@arm.com>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "jens.wiklander@linaro.org" <jens.wiklander@linaro.org>,
+        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
+        "etienne.carriere@linaro.org" <etienne.carriere@linaro.org>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] firmware: arm_scmi: Resolve dependency with TEE subsystem
+Thread-Topic: [PATCH] firmware: arm_scmi: Resolve dependency with TEE
+ subsystem
+Thread-Index: AQHY9bNyMyeFeP3G1keVYelAsguUwK45ujoAgAQvFACAAEG+AIAAEZoAgAAmcICADNXugIAKiz0A
+Date:   Tue, 29 Nov 2022 10:49:10 +0000
+Message-ID: <0b24b15bfee6d97d23caf0225d264c14e0ed48f1.camel@axis.com>
+References: <20221111095313.2010815-1-sumit.garg@linaro.org>
+         <20221111143800.k7xje6g23ujefnye@bogus>
+         <CAFA6WYMdNjbMRZxt3iicmKOhQa3ax7_HYtqmNN9bmpndqT8e9A@mail.gmail.com>
+         <20221114102650.qwkaxtnstujaiu6u@bogus>
+         <CAN5uoS8SArNmaxwhJ=tRCPD8ue1D8VvQyLacDDS2sunfg4gLbw@mail.gmail.com>
+         <b0bc03f9f2a5afbe3a77b81648a765348073cc36.camel@axis.com>
+         <Y30LXW5Elcur5mlI@e120937-lin>
+In-Reply-To: <Y30LXW5Elcur5mlI@e120937-lin>
+Accept-Language: en-US, sv-SE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.0.5.60]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <406527743B61AD419934F82094CA818B@exhub.se.axis.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CjiU_jGWnjlPQD5JQ_UkV.O";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/CjiU_jGWnjlPQD5JQ_UkV.O
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, 29 Nov 2022 18:10:30 +0800
-Hsia-Jun Li <randy.li@synaptics.com> wrote:
-
-> From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
->=20
-> Hello All
->=20
-> Currently, we assume all the pixel formats are multiple planes,
-
-Hi,
-
-that's not true for any definition of "multiple planes" that I know of.
-
-For example, DRM_FORMAT_XRGB8888 is a single-plane format by definition.
-
-=46rom below it sounds like you mean "physically non-contiguous". But no,
-pixel formats make no such assumption at all. Contiguous or not is
-independent of pixel formats.
-
-> devices
-> could support each component has its own memory plane.
-> But that may not apply for any device in the world. We could have a
-> device without IOMMU then this is not impossible.
->=20
-> Besides, when we export an handle through the PRIME, the upstream
-> device(likes a capture card or camera) may not support non-contiguous
-> memory. It would be better to allocate the handle in contiguous memory
-> at the first time.
->=20
-> We may think the memory allocation is done in user space, we could do
-> the trick there. But the dumb_create() sometimes is not the right API
-> for that.
->=20
-> "Note that userspace is not allowed to use such objects for render
-> acceleration - drivers must create their own private ioctls for such a
-> use case."
-> "Note that dumb objects may not be used for gpu acceleration, as has
-> been attempted on some ARM embedded platforms. Such drivers really must
-> have a hardware-specific ioctl to allocate suitable buffer objects."
->=20
-> We need to relay on those device custom APIs then. It would be helpful
-> for their library to calculate the right size for contiguous memory. It
-> would be useful for the driver supports rendering dumb buffer as well.
->=20
-> Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
-> ---
->  include/uapi/drm/drm_fourcc.h | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
-> index bc056f2d537d..ec039ced8257 100644
-> --- a/include/uapi/drm/drm_fourcc.h
-> +++ b/include/uapi/drm/drm_fourcc.h
-> @@ -473,6 +473,11 @@ extern "C" {
->   */
->  #define DRM_FORMAT_MOD_LINEAR	fourcc_mod_code(NONE, 0)
-> =20
-> +/*
-> + * Contiguous memory
-> + */
-> +#define DRM_FORMAT_MOD_CONTIG_MEM	fourcc_mod_code(NONE, 1)
-
-NAK. This is not what modifiers are for.
-
-This also would not work in practise, because if this was a modifier,
-you would not be able to use the actual modifiers.
-
-
-Thanks,
-pq
-
-> +
->  /*
->   * Deprecated: use DRM_FORMAT_MOD_LINEAR instead
->   *
-
-
---Sig_/CjiU_jGWnjlPQD5JQ_UkV.O
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmOF45sACgkQI1/ltBGq
-qqcRPQ//TKyVghVjJvbngGkpqrp0wLr2vTN2hZZNRZ+2ZW7siUbaHrDk7D88M4S5
-oLOBZRm6RSgiarBfHpOIJ9xIbmjM+QbxzGeJeU2a0OgMYc9zMkfi3ohLmOjARq8u
-4EZUGCEDUxUKmA1Z8mBTePUHJ1aEPeEqxIv3oy6ewNFHEzP2h9G4G8s09eFvBlzo
-K8bdZuuVrsssxt+1jN1pQpVGCOXNVewyT2kwDjR5ZEBfEn4sxDiiB2cYpBBOqx5A
-xymiID7dF8qvilEWUfYrJZJAKyJ372z3PozQ18pHOezEoiN+fRJoJRRuUt0r3nWh
-QGZskfdWSWBKAZ5AFzmdb2dBpXX78M7KmmcjMVgTeM7ML81SCx5Sb2gHkXTctJYA
-Aujwu+q++Q+nZlNCaOMV3C7eCEnSiIERaPV518Hm4Po3WU3qSRM1Wat3bTSA9R3E
-FIwq+PRb7tM4BwsyQefdg8pVOsZ45yfSHNdQft1dKLVfIIm7pE2F4C5mc+i8lynr
-IaGxWGXmUPVop2kUBW+cfBRu1qzvg9SGQEmuwfeNkfeAr8e1tWlcHTERuAn/LQGT
-SgvogKeSqufFArePHMxM6ajE+sIXZOJlD7Tc1RisQrNkzre3Hr6L5xN7OE5jlfg2
-wKhgc8n5o4C4gT6cK5XMuDm81aFV0wrMtT6t0jOeyA+qNaGvdHE=
-=QEkC
------END PGP SIGNATURE-----
-
---Sig_/CjiU_jGWnjlPQD5JQ_UkV.O--
+T24gVHVlLCAyMDIyLTExLTIyIGF0IDE3OjQ4ICswMDAwLCBDcmlzdGlhbiBNYXJ1c3NpIHdyb3Rl
+Og0KPiBPbiBNb24sIE5vdiAxNCwgMjAyMiBhdCAwMTo0NzoyNVBNICswMDAwLCBMdWR2aWcgUMOk
+cnNzb24gd3JvdGU6DQo+ID4gT24gTW9uLCAyMDIyLTExLTE0IGF0IDEyOjI5ICswMTAwLCBFdGll
+bm5lIENhcnJpZXJlIHdyb3RlOg0KPiA+ID4gSGVsbG8gYWxsLA0KPiA+ID4gDQo+IA0KPiBIaSBM
+dWR2aWcsDQo+IA0KPiBmb2xsb3dpbmcgdXAgb24gdGhlIGlzc3VlcyByYWlzZWQgYnkgdGhpcyB0
+aHJlYWQgYW5kIGEgZmV3IHByb3Bvc2Fscw0KPiB0aGF0DQo+IHdlcmUgZmx5aW5nIGFyb3VuZCAo
+b25saW5lIGFuZCBvZmZsaW5lKSwgaW4gdGhlIHBhc3QgZGF5cyBJIHRvb2sgdGhlDQo+IGNoYW5j
+ZQ0KPiB0byBoYXZlIGEgZ28gYXQgYSBzdWJzdGFudGlhbCByZXdvcmsgb2YgdGhlIGluaXQvcHJv
+YmUgc2VxdWVuY2VzIGluDQo+IHRoZSBTQ01JDQo+IGNvcmUgdG8gYWRkcmVzcyB0aGUgaXNzdWUg
+eW91IGZhY2VkIHdpdGggU0NNSSBURUUgdHJhbnNwb3J0IHdoaWxlDQo+IHRyeWluZyB0bw0KPiB1
+bnRhbmdsZSBhIGJpdCB0aGUgU0NNSSBjb3JlIHN0YXJ0dXAgc2VxdWVuY2VzICguLi4gd2hpbGUg
+YWxzbw0KPiBwb3NzaWJseSBub3QNCj4gYnJlYWtpbmcgaXQgYWxsIDpQLi4uKQ0KPiANCj4gSW4g
+YSBudXRzaGVsbCwgYnVpbGRpbmcgb24gYW4gaWRlYSBmcm9tIGFuIG9mZmxpbmUgY2hhdCB3aXRo
+IEV0aWVubmUNCj4gYWQNCj4gU3VkZWVwLCBub3cgdGhlIFNDTUkgYnVzIGluaXRpYWxpemF0aW9u
+IGlzIHNwbGl0IG9uIGl0cyBvd24gYW5kDQo+IGluaXRpYWxpemVkIGF0DQo+IHN1YnN5c19pbml0
+Y2FsbCBsZXZlbCwgd2hpbGUgdGhlIFNDTUkgY29yZSBzdGFjaywgaW5jbHVkaW5nIHRoZSB0aGUN
+Cj4gU0NNSSBURUUNCj4gdHJhbnNwb3J0IGxheWVyLCBpcyBtb3ZlZCBhdCBtb2R1bGVfaW5pdCBs
+YXllciB0b2dldGhlciB3aXRoIHRoZSBTQ01JDQo+IGRyaXZlciB1c2Vycy4NCj4gDQo+IFRoaXMg
+KnNob3VsZCogdGhlb3JldGljYWxseSBzb2x2ZSB5b3VyIGlzc3VlIC4uLiAoYW5kIGl0IHNlZW1z
+IGxpa2UNCj4gYWxsIHRoZQ0KPiByZXN0IGl0J3Mgc3RpbGwgd29ya2luZyA6UCkgLi4uIHNvIEkg
+d2FzIHdvbmRlcmluZyBpZiB5b3UgY2FuIGdpdmUgYQ0KPiBnbw0KPiBhdCB0aGUgZm9sbG93aW5n
+IHBhY2hzZXQgb24geW91ciBzZXR1cDoNCj4gDQo+IGh0dHBzOi8vZ2l0bGFiLmFybS5jb20vbGlu
+dXgtYXJtL2xpbnV4LWNtLy0vY29tbWl0cy9zY21pX3Jld29ya19zdGFja19pbml0X2RyYWZ0Lw0K
+PiANCj4gLi4uIG5vdGUgdGhhdCB0aGlzIGlzIGp1c3QgYSBkcmFmdCBhdCB0aGUgbW9tZW50LCB3
+aGljaCBoYXMgdW5kZXJnb25lDQo+IGENCj4gcmVhc29uYWJsZSBhbW91bnQgb2YgdGVzdGluZyBv
+biBtYWlsYm94L3ZpcnRpbyB0cmFuc3BvcnRzIG9ubHkgaW4NCj4gYm90aCBhDQo+IFNDTUkgYnVp
+bHRpbiBhbmQvb3IgbW9kdWxlcyBzY2VuYXJpbywgYnV0IGlzIG5vIHdoZXJlIHJlYWR5IGZvcg0K
+PiByZXZpZXcuDQo+IA0KPiBUaGUgdG9wIHRocmVlIHBhdGNoZXMgYXJlIHJlYWxseSB3aGF0IHlv
+dSBuZWVkIEJVVCB0aGVzZSBhcmUgcHJvYmFibHkNCj4gdGlnaHRseSBib3VuZCB0byB0aGF0IGJ1
+bmNoIG9mIGVhcmx5IGZpeGVzIHlvdSBjYW4gc2VlIGluIHRoZQ0KPiBicmFuY2guLi5zbyBpbiBv
+dGhlciB3b3JkcyBiZXR0ZXIgaWYgeW91IHBpY2sgdGhlIHdob2xlIGJyYW5jaCBmb3INCj4gdGVz
+dGluZyA6RA0KPiANCj4gT25jZSB5b3UndmUgY29uZmlybWVkIG1lIHRoYXQgdGhpcyBzb2x2ZXMg
+eW91ciBpc3N1ZXMgSSdsbCBzdGFydCB0aGUNCj4gZmluYWwgY2xlYW51cCBmb3IgcG9zdGluZyBp
+biB0aGUgbmV4dCBjeWNsZS4NCj4gDQo+IFRoYW5rcywNCj4gQ3Jpc3RpYW4NCg0KSGkgQ3Jpc3Rp
+YW4sDQoNCkkgdHJpZWQgbXkgYmVzdCB0byBnZXQgdGhlIHBhdGNoc2V0IHRvIHdvcmsgc29tZWhv
+dyBvbiBteSB2ZXJzaW9uIG9mDQp0aGUga2VybmVsLCBhbmQgaXQgc2VlbXMgdG8gYmUgd29ya2lu
+ZyBncmVhdC4gSSBwbGF5ZWQgYXJvdW5kIHdpdGggc29tZQ0KdGhpbmdzLCBmb3IgZXhhbXBsZSBj
+aGFuZ2luZyBvcmRlciBvZiBzb21lIGRyaXZlcnMgdGhhdCB3ZXJlIG9uIHRoZQ0Kc2FtZSBpbml0
+IGxldmVscywgYW5kIGl0IHN0aWxsIHdvcmtlZC4gT25seSB0ZXN0ZWQgd2l0aCB2b2x0YWdlIGRv
+bWFpbg0KcHJvdG9jb2wgYW5kIG9wdGVlIHRyYW5zcG9ydC4NCg0KVGhhbmtzIGZvciB5b3VyIGdy
+ZWF0IHdvcmshDQoNCkJSLA0KTHVkdmlnDQo=
