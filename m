@@ -2,133 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 536EF63BF44
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A7863BF47
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231748AbiK2Lp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 06:45:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
+        id S232049AbiK2LqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 06:46:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiK2Lpz (ORCPT
+        with ESMTP id S231954AbiK2LqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 06:45:55 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F8FC1835C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:45:54 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3D956D6E;
-        Tue, 29 Nov 2022 03:46:00 -0800 (PST)
-Received: from [10.57.71.118] (unknown [10.57.71.118])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D4F9D3F73D;
-        Tue, 29 Nov 2022 03:45:49 -0800 (PST)
-Message-ID: <f9d005e2-9fc6-bbf4-53fb-95f18201ce2d@arm.com>
-Date:   Tue, 29 Nov 2022 11:45:45 +0000
+        Tue, 29 Nov 2022 06:46:09 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03194A07B
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:46:04 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6EF437F8;
+        Tue, 29 Nov 2022 12:46:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1669722362;
+        bh=Ovz0LB8la76yzk7QtN0fJ3MeKeUVniHAK4oNq/JmhdU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cLGhsYUKh9UxJ+SJCJ77f75GAT+BO/2VeNTJDLA6jN0v0YKY0s6duz4qL0jE4gETV
+         legWS57dkl03uxvEbeD/Ctk3fty413sM5R65EsIBYcpaLrbWxM6+7zffRmfvHHs87O
+         vSovZANSTSvoqL5M2HILleRXIVk472OCzyI5f4eA=
+Message-ID: <34c2e9c8-9e3d-129c-8295-18ff440f1f84@ideasonboard.com>
+Date:   Tue, 29 Nov 2022 13:45:58 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 06/20] iommu/mtk: Remove detach_dev callback
-Content-Language: en-GB
-To:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Rob Clark <robdclark@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Yong Wu <yong.wu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20221128064648.1934720-1-baolu.lu@linux.intel.com>
- <20221128064648.1934720-7-baolu.lu@linux.intel.com>
- <Y4S8elzfzdTJGtyK@nvidia.com> <cb1b825c-55f1-d305-0727-ce8180d5a79e@arm.com>
- <4a979bdc-d7b4-77b4-490a-5f3e691e3df3@linux.intel.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <4a979bdc-d7b4-77b4-490a-5f3e691e3df3@linux.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: Fix output polarity setting bug
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>,
+        Qiqi Zhang <eddy.zhang@rock-chips.com>
+Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20221125104558.84616-1-eddy.zhang@rock-chips.com>
+ <CAD=FV=XAU8qQ1tFV9_4FF9Rd7ouT5ORzt6JUnQ4KqJgRsEXqHw@mail.gmail.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <CAD=FV=XAU8qQ1tFV9_4FF9Rd7ouT5ORzt6JUnQ4KqJgRsEXqHw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-29 02:07, Baolu Lu wrote:
-> On 11/28/22 9:59 PM, Robin Murphy wrote:
->> On 2022-11-28 13:49, Jason Gunthorpe wrote:
->>> On Mon, Nov 28, 2022 at 02:46:34PM +0800, Lu Baolu wrote:
->>>> The IOMMU driver supports default domain, so the detach_dev op will 
->>>> never
->>>> be called. Remove it to avoid dead code.
->>>>
->>>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->>>> ---
->>>>   drivers/iommu/mtk_iommu.c | 9 ---------
->>>>   1 file changed, 9 deletions(-)
->>>
->>> I listed this driver as not supporting default domains:
->>>
->>> https://lore.kernel.org/linux-iommu/20220516135741.GV1343366@nvidia.com/
->>>
->>> ?
->>>
->>> Has something changed? Did I get it wrong?
+On 29/11/2022 03:13, Doug Anderson wrote:
+> Hi,
+> 
+> On Fri, Nov 25, 2022 at 2:54 AM Qiqi Zhang <eddy.zhang@rock-chips.com> wrote:
 >>
->> static struct iommu_domain *mtk_iommu_domain_alloc(unsigned type)
->> {
->>      struct mtk_iommu_domain *dom;
+>> According to the description in ti-sn65dsi86's datasheet:
 >>
->>      if (type != IOMMU_DOMAIN_DMA && type != IOMMU_DOMAIN_UNMANAGED)
->>          return NULL;
->> ...
+>> CHA_HSYNC_POLARITY:
+>> 0 = Active High Pulse. Synchronization signal is high for the sync
+>> pulse width. (default)
+>> 1 = Active Low Pulse. Synchronization signal is low for the sync
+>> pulse width.
 >>
+>> CHA_VSYNC_POLARITY:
+>> 0 = Active High Pulse. Synchronization signal is high for the sync
+>> pulse width. (Default)
+>> 1 = Active Low Pulse. Synchronization signal is low for the sync
+>> pulse width.
 >>
->> This one runs on arm64, so has always supported default domains for 
->> iommu-dma to work.
+>> We should only set these bits when the polarity is negative.
+>> Signed-off-by: Qiqi Zhang <eddy.zhang@rock-chips.com>
+>> ---
+>>   drivers/gpu/drm/bridge/ti-sn65dsi86.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+>> index 3c3561942eb6..eb24322df721 100644
+>> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+>> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+>> @@ -931,9 +931,9 @@ static void ti_sn_bridge_set_video_timings(struct ti_sn65dsi86 *pdata)
+>>                  &pdata->bridge.encoder->crtc->state->adjusted_mode;
+>>          u8 hsync_polarity = 0, vsync_polarity = 0;
+>>
+>> -       if (mode->flags & DRM_MODE_FLAG_PHSYNC)
+>> +       if (mode->flags & DRM_MODE_FLAG_NHSYNC)
+>>                  hsync_polarity = CHA_HSYNC_POLARITY;
+>> -       if (mode->flags & DRM_MODE_FLAG_PVSYNC)
+>> +       if (mode->flags & DRM_MODE_FLAG_NVSYNC)
+>>                  vsync_polarity = CHA_VSYNC_POLARITY;
 > 
-> This, together with several other ones, only support IOMMU_DOMAIN_DMA
-> type of default domain. The iommu core handle this by falling back to
-> IOMMU_DOMAIN_DMA if other types fail.
+> Looks right to me.
 > 
->          dom = __iommu_domain_alloc(bus, type);
->          if (!dom && type != IOMMU_DOMAIN_DMA) {
->                  dom = __iommu_domain_alloc(bus, IOMMU_DOMAIN_DMA);
->                  if (dom)
->                          pr_warn("Failed to allocate default IOMMU 
-> domain of type %u for group %s - Falling back to IOMMU_DOMAIN_DMA",
->                                  type, group->name);
->          }
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 > 
-> I have another cleanup series:
-> 
-> https://github.com/LuBaolu/intel-iommu/commits/iommu-use-def_default_type-wip
-> 
-> which adds IOMMU_DOMAIN_DMA default domain type requirement in the
-> def_domain_type callback. I planed to bring that to discussion after
-> this one.
+> I've never seen the polarity matter for any eDP panels I've worked
+> with, which presumably explains why this was wrong for so long. As far
 
-Per the discussion over on the s390 thread, I think that would be a step 
-in the wrong direction. I'd prefer to keep .def_domain_type for 
-device-specific requirements and express general driver domain support a 
-different way. If the IOMMU_DOMAIN_DMA fallback is worth removing then 
-the one for IOMMU_DOMAIN_BLOCKED is as well - no point doing half the job ;)
+Afaik, DP doesn't have sync polarity as such (neither does DSI), and the 
+sync polarity is just "metadata". So if you're in full-DP domain, I 
+don't see why it would matter. I guess it becomes relevant when you 
+convert from DP to some other bus format.
 
-Thanks,
-Robin.
+> as I can tell, it's been wrong since the start. Probably you should
+> have:
+> 
+> Fixes: a095f15c00e2 ("drm/bridge: add support for sn65dsi86 bridge driver")
+> 
+> I put this on a sc7180-trogdor-lazor device and it didn't make
+> anything worse. Since the sync polarity never mattered to begin with,
+> I guess this isn't a surprise. ...so I guess that's a weak tested-by:
+> 
+> Tested-by: Douglas Anderson <dianders@chromium.org>
+> 
+> I'm happy to land this patch, but sounds like we're hoping to get
+> extra testing so I'll hold off for now.
+
+Looks fine to me and works for me with my DP monitor.
+
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+
+  Tomi
+
