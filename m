@@ -2,133 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B5663CB0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 23:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3D363CB09
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 23:28:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236827AbiK2W25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 17:28:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
+        id S236555AbiK2W2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 17:28:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236376AbiK2W2y (ORCPT
+        with ESMTP id S229512AbiK2W2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 17:28:54 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91136F803
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:28:53 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id q21so11144808iod.4
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:28:53 -0800 (PST)
+        Tue, 29 Nov 2022 17:28:49 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA5359FEF
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:28:48 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id n20so37292919ejh.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:28:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sZIKiJcgUuWp0oqTM0Nvj4Rb47SDYoygumg7jcsAqcQ=;
-        b=coFxrujpB1pnAva9udLJRWxLMnV7LD329v1GYpOQf6WxwrWjmjgSNLmyoiYmR6Qhhb
-         4OUUTZ6Gs7SE0MlCj3wq7mKQ2iDBwlaGhpZJUWnU9eRwLafGSYJC20xjIs3v6EIUBFIp
-         r4biSJIH10a5XjI/h1t4tMeRHjHvykveeSvGlEFEbp0IkA4y+SKqrvS5pn/llgWxSCyE
-         391kLoDtRRN1lsColupdODBWbA/njBoXZZXbHz6rrtENkpwaGFJkhQbBgKZYDB5YiARY
-         pt3Ij1X+xRdfZiasdeMbKuct//6bKvhTirNM5z44T/3wegwpkHpezNpW0EpfvXUToUpL
-         +EHQ==
+        bh=Cv5P4YKVke8Uiqx6Xk3+EHcpUQ/fZJSaam81ASeevJA=;
+        b=JtnZr6UpSwQNFk6kIu4r9vijUTEsHUkw/JsvAF1ZXWJOpbtaJ0XJwfED9HLlRrtcTK
+         qOV7Phcu9KCrk8HFsBJtK4bGa6axQ6qUZIL8lgQCewFA4X/UvjYX6kr4HAAdEWROPkCv
+         URe7yoen5FEW9c4UDnFv5upSl5zNAZXMbKYsw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sZIKiJcgUuWp0oqTM0Nvj4Rb47SDYoygumg7jcsAqcQ=;
-        b=lGfmsdzq5bvPzWAKSI6xcOWxsxj16ol34C8ZLQXxtoAYo6fmXue+yEXqHmGx7UPrNK
-         leNTmAhPH60FBLZLkdJOMH1ap51napoLBVH57Oena1E+ls1G7xQhSOIHwlyLkf8n/3Ra
-         szFxgxRAKloH71r+17zYCI/7zJ1LQi3w87zxZuCciOQeCwVb1LOxZ6WTM3UufwW5XtRP
-         PVpOl1qvM4CCVdORQT4Mx0igPwbSf6MVj7IeYQUM45R8sCgk+xYEjPC4r+Zjt8S+NfaU
-         mf7tDtX32YoKU82SXl0v2P20kfcPO6JsX3r5cATtT0dVyj6WmHhr4Yyf2vFhcvAvksZU
-         mL2A==
-X-Gm-Message-State: ANoB5pmBcZA+tDTfRGH3IT439+RGPXF6MW2dhWfelTGRdg+Akmfo1aPu
-        Q+DMIJtx5dfmLf8XIiI69QHOHhaLbjeCN2aiWlGuxQ==
-X-Google-Smtp-Source: AA0mqf5LpEubGhhYy56Bdt/Mw00cbqwy1nLVt4MnsK+WZhpYS/w+giE2cuOBflGLkWtMAD18VC535AFhfuQ0i3Tn+dI=
-X-Received: by 2002:a05:6638:3470:b0:389:c976:846e with SMTP id
- q48-20020a056638347000b00389c976846emr9608102jav.246.1669760932985; Tue, 29
- Nov 2022 14:28:52 -0800 (PST)
+        bh=Cv5P4YKVke8Uiqx6Xk3+EHcpUQ/fZJSaam81ASeevJA=;
+        b=donp4+4VWPBoGHRllzD9COwGSO14Rtf6cU8Q5opFkXC5Ng+80tMYGQQ+Rwtyz29A/i
+         3b7u6/Sn+mH4M3VjCIvTlJG0BmObbuZF3de9h3Q8fnc5rp7BEZdeJJ432Hrtc6D8CuR8
+         FKEwG8M63kDr0OJ807pDyJvQLBgk9doChAdfe3vCJaAXBOMI8DwYJPLAiGGxC1rW3G2d
+         FCyVLg9rnAsZ0TF+qgshT6i95jrbqVRgzgUqaHqJOpLmVGUizMHKOAeyJozMvQOOQcFz
+         Ll4SYevVvy/PAsBXg1sdCsL0vXCWZ7l/EqTT09jUoCcEjbp5NHTNe3FWRKvdHCE9f0rB
+         JdYQ==
+X-Gm-Message-State: ANoB5pn5y7LeI4kxIsKeKYVsKzRNl8roCUDj8d8cMPVrTnhjJ8avpqeb
+        FJIRCqo3nFOtEwCIGzgHOWOMHvTUHYfHE/cH
+X-Google-Smtp-Source: AA0mqf6F2uCVBrO0NAa6k7kLmxY5RyKKC49pEmotQ2wPrg2lAuiMfyCyMaBYkBEkF0F/4ez4qR4mPg==
+X-Received: by 2002:a17:906:2594:b0:7c0:8d06:33f8 with SMTP id m20-20020a170906259400b007c08d0633f8mr3406270ejb.150.1669760926310;
+        Tue, 29 Nov 2022 14:28:46 -0800 (PST)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id d5-20020a056402516500b00457b5ba968csm6641126ede.27.2022.11.29.14.28.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 14:28:45 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id o7-20020a05600c510700b003cffc0b3374so116432wms.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:28:45 -0800 (PST)
+X-Received: by 2002:a7b:c4d8:0:b0:3cf:b0ed:de9d with SMTP id
+ g24-20020a7bc4d8000000b003cfb0edde9dmr29570493wmk.188.1669760924865; Tue, 29
+ Nov 2022 14:28:44 -0800 (PST)
 MIME-Version: 1.0
-References: <20221129191839.2471308-1-jannh@google.com> <20221129191839.2471308-2-jannh@google.com>
- <87fse1v4rf.ffs@tglx>
-In-Reply-To: <87fse1v4rf.ffs@tglx>
-From:   Jann Horn <jannh@google.com>
-Date:   Tue, 29 Nov 2022 23:28:16 +0100
-Message-ID: <CAG48ez3UBb3Aq7+AFSmRj5a9czmew5b0PEdhWQ9qvQdeejnJZg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] time/namespace: Forbid timens page faults under kthread_use_mm()
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Andrei Vagin <avagin@gmail.com>, linux-kernel@vger.kernel.org
+References: <20221117133655.1.I51639dc112bbbe27259df6bdad56dbabd655d91a@changeid>
+ <CAD=FV=XFsSoUqkk8zhta1V-oT2AGGvUz=0qFWAcXiJ7m+nnATA@mail.gmail.com>
+In-Reply-To: <CAD=FV=XFsSoUqkk8zhta1V-oT2AGGvUz=0qFWAcXiJ7m+nnATA@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 29 Nov 2022 14:28:32 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WfFNssxLRHKv3OUgAZsfme=k27TaFN1M8hFw2xug+eLQ@mail.gmail.com>
+Message-ID: <CAD=FV=WfFNssxLRHKv3OUgAZsfme=k27TaFN1M8hFw2xug+eLQ@mail.gmail.com>
+Subject: Re: [PATCH 1/5] drm/panel-edp: Use ktime_get_boottime for delays
+To:     Drew Davenport <ddavenport@chromium.org>
+Cc:     dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 10:18 PM Thomas Gleixner <tglx@linutronix.de> wrote:
-> On Tue, Nov 29 2022 at 20:18, Jann Horn wrote:
+Hi,
+
+On Thu, Nov 17, 2022 at 1:14 PM Doug Anderson <dianders@chromium.org> wrote:
 >
-> > find_timens_vvar_page() doesn't work when current's timens does not match
-> > the timens associated with current->mm.
-> > v6 of the series adding this code [1] had some complicated code to deal
-> > with this case, but v7 [2] removed that.
+> Hi,
+>
+> On Thu, Nov 17, 2022 at 12:39 PM Drew Davenport <ddavenport@chromium.org> wrote:
 > >
-> > Since the vvar region is designed to only be accessed by vDSO code, and
-> > vDSO code can't run in kthread context, it should be fine to error out in
-> > this case.
+> > ktime_get is based on CLOCK_MONOTONIC which stops on suspend. On
+> > suspend, the time that the panel was powerd off is recorded with
+> > ktime_get, and on resume this time is compared to the current ktime_get
+> > time to determine if the driver should wait for the panel to power down
+> > completely before re-enabling it.
+> >
+> > Because we're using ktime_get, this delay doesn't account for the time
+> > that the device is suspended, during which the power down delay may have
+> > already elapsed.
+> >
+> > Change to use ktime_get_boottime throughout, which uses CLOCK_BOOTTIME
+> > which does not stop when suspended. This ensures that the resume path
+> > will not be delayed if the power off delay has already been met while
+> > the device is suspended.
+> >
+> > Signed-off-by: Drew Davenport <ddavenport@chromium.org>
+> >
+> > ---
+> >
+> >  drivers/gpu/drm/panel/panel-edp.c | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
 >
-> Should? Either it is correct or not.
->
-> But the way more interesting question is:
->
-> >  struct page *find_timens_vvar_page(struct vm_area_struct *vma)
-> >  {
-> > +     /*
-> > +      * We can't handle faults where current's timens does not match the
-> > +      * timens associated with the mm_struct. This can happen if a page fault
-> > +      * occurs in a kthread that is using kthread_use_mm().
-> > +      */
->
-> How does a kthread, which obvioulsy did kthread_use_mm(), end up trying to
-> fault in the time namespace vvar page?
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-By doing copy_from_user()? That's what kthread_use_mm() is for, right?
-If you look through the users of kthread_use_mm(), most of them use it
-to be able to use the normal usercopy functions. See the users in usb
-gadget code, and the VFIO code, and the AMD GPU code. And if you're
-doing usercopy on userspace addresses, then you can basically always
-hit a vvar page - even if you had somehow checked beforehand what the
-address points to, userspace could have moved a vvar region in that
-spot in the meantime.
+Pushed to drm-misc-next:
 
-That said, I haven't actually tried it. But I don't think there's
-anything in the page fault handling path that distinguishes between
-copy_from_user() faults in kthread context and other userspace faults
-in a relevant way?
-
-> It's probably something nasty, but the changelog has a big information
-> void.
->
-> It neither answers the obvious question why this is a problem of the
-> time namespace vvar page and not a general issue versus a kthread, which
-> borrowed a user mm, ending up in vdso_fault() in the first place?
-
-Is it a problem if a kthread ends up in the other parts of
-vdso_fault() or vvar_fault()? From what I can tell, nothing in there
-except for the timens stuff is going to care whether it's hit from a
-userspace fault or from a kthread.
-
-Though, looking at it again now, I guess the `sym_offset ==
-image->sym_vvar_page` path is also going to misbehave, so I guess we
-could try to instead make the vdso/vvar fault handlers bail out in
-kthread context for all the architectures, since we're only going to
-hit that if userspace is deliberately doing something bad...
-
-> None of those VDSO (user space) addresses are subject to be faulted in
-> by anything else than the associated user space task(s).
-
-Are you saying that it's not possible or that it doesn't happen when
-userspace is well-behaved?
+fa8e91b12697 drm/panel-edp: Use ktime_get_boottime for delays
