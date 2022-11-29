@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871AF63C6CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:53:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D13B763C6D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:54:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236402AbiK2RxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 12:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49734 "EHLO
+        id S236507AbiK2RyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 12:54:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235974AbiK2RxJ (ORCPT
+        with ESMTP id S236202AbiK2RyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 12:53:09 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B6E2BB1A
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:53:08 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3d0465d32deso22732517b3.20
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:53:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=TE8QWGQorC/1BoZc6tBunzgB7sNwcvzYphQolAm92kE=;
-        b=ZRkZwzRyxYLC7OVvXyieN2+DQai2f+Xfj7wfnj14FqduUWE2x5UnhV5Uk44DFCTOlc
-         +O4oLJWBjNswhNxYocIIR6JxaTkkESabsFIxEBhDrFYesv1N4TbE5msXjxeL05aK1o8V
-         qCLnVGyouPviLFQzR/b/E0Xen8uLPLQ7DHv6bJYWYxbBKBIFTI90O06d/9sIpbbK2+a+
-         vZmTuUgbcuQqO8kwq5vBYndxn1KmoJNSvcH5cJ9iQ63hjXawnfzi1VM5JY/UunfB3x3B
-         FPszD65HzSoRFhWChz55SBRKztztXe6bCM3W6R+jKR/oX5Q7gMt58A+caFQ0EQq6cSpp
-         cBDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TE8QWGQorC/1BoZc6tBunzgB7sNwcvzYphQolAm92kE=;
-        b=IyLtryFAxhMGOc+E1wgtCpdHomkVFaWlIMoKlY6/xFT3vmlnh0q+shCncrFsRGpUNX
-         8Q4iYmEkjcxy9IxJCCaZUUtNQulWy2JvOO7UXg/o0fRrOJt4KhTKMWiI4YVA4qiphKtF
-         cs3/KjAYKWDhAR9tivft+lf+XVmpeuEAlhs/WjxNihxIcMy0nMwMwOY96AsdYwyDvQt1
-         iGVDJf8W1uqfqLr8v1GKmLvJwm5qtgy549DSqy3x3LpNAqEVgv2h0OFGbS+hqq3emJtI
-         hCGwr0peSxLd5gRaYcMY39bdrBa7cjRE9YBnFIHsAKBkBCsE37hOC1727OhdM9mNDsnO
-         JDFg==
-X-Gm-Message-State: ANoB5pkLcpmp0q6edwZQ57mqq9OYJBiIkAlNgIr6UzgzYl1r3ZbSx92R
-        7P1GGPvyxtV/0Fg3GfVyiNVVsj+xn/o=
-X-Google-Smtp-Source: AA0mqf53GkAVWGl5pFphtF5KnD4Rh+dv3qIDHGkZOLbOZB0Cvo2PSPSnAuznsatL/GFRCwz+PzWqLeBACVs=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:af1b:0:b0:34d:15db:6195 with SMTP id
- n27-20020a81af1b000000b0034d15db6195mr54721730ywh.240.1669744387838; Tue, 29
- Nov 2022 09:53:07 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 29 Nov 2022 17:53:00 +0000
-In-Reply-To: <20221129175300.4052283-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20221129175300.4052283-1-seanjc@google.com>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221129175300.4052283-3-seanjc@google.com>
-Subject: [PATCH 2/2] KVM: selftests: Restore assert for non-nested VMs in
- access tracking test
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        David Matlack <dmatlack@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        Tue, 29 Nov 2022 12:54:01 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7AE3134B;
+        Tue, 29 Nov 2022 09:53:59 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2ATHrl5e129474;
+        Tue, 29 Nov 2022 11:53:47 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1669744427;
+        bh=OlbUvwSRO5NoPFoWtyXeblUmFGtTGFTosZPDs/UZ6QQ=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Y2j79Eze27aIAEA/RmC5XYAT5mqToFBbgUUL61XLUv9PSCwrGoxAQKKepRFt+7Y2Y
+         Zd7hHopizWLuFaXzHR1PkcFZ8pGuPXi5t3fPbreu/Z0/sJNQiJQLa4wNLVlduDMjoF
+         fAcmE064jYxMhHH8DLb0/NaMHDRkPe84OWqSmrRA=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2ATHrlsU021148
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 29 Nov 2022 11:53:47 -0600
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 29
+ Nov 2022 11:53:47 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 29 Nov 2022 11:53:47 -0600
+Received: from [10.250.38.44] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2ATHrksN025398;
+        Tue, 29 Nov 2022 11:53:46 -0600
+Message-ID: <a88349a2-94ac-1980-1998-a45ac5525f6b@ti.com>
+Date:   Tue, 29 Nov 2022 11:53:46 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 7/8] arm64: dts: ti: k3-j721s2-main: Add PCIe device
+ tree node
+Content-Language: en-US
+To:     Matt Ranostay <mranostay@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
+        <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <s-vadapalli@ti.com>,
+        <r-gunasekaran@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221122101616.770050-1-mranostay@ti.com>
+ <20221122101616.770050-8-mranostay@ti.com>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <20221122101616.770050-8-mranostay@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,76 +71,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Restore the assert (on x86-64) that <10% of pages are still idle when NOT
-running as a nested VM in the access tracking test.  The original assert
-was converted to a "warning" to avoid false failures when running the
-test in a VM, but the non-nested case does not suffer from the same
-"infinite TLB size" issue.
+On 11/22/22 4:16 AM, Matt Ranostay wrote:
+> From: Aswath Govindraju <a-govindraju@ti.com>
+> 
+> Add PCIe1 RC device tree node for the single PCIe instance present on
+> the j721s2.
+> 
+> Reviewed-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+> Signed-off-by: Matt Ranostay <mranostay@ti.com>
+> ---
+>   arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 41 ++++++++++++++++++++++
+>   1 file changed, 41 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+> index 2858ba589d54..27631ef32bf5 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+> @@ -841,6 +841,47 @@ serdes0: serdes@5060000 {
+>   		};
+>   	};
+>   
+> +	pcie1_rc: pcie@2910000 {
 
-Using the HYPERVISOR flag isn't infallible as VMMs aren't strictly
-required to enumerate the "feature" in CPUID, but practically speaking
-anyone that is running KVM selftests in VMs is going to be using a VMM
-and hypervisor that sets the HYPERVISOR flag.
+NIT: Not sure we need to call this "_rc", and "1", 0 index these names for
+consistency, "pcie0".
 
-Cc: David Matlack <dmatlack@google.com>
-Cc: Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- .../selftests/kvm/access_tracking_perf_test.c   | 17 ++++++++++++-----
- .../selftests/kvm/include/x86_64/processor.h    |  1 +
- 2 files changed, 13 insertions(+), 5 deletions(-)
+> +		compatible = "ti,j7200-pcie-host", "ti,j721e-pcie-host";
+> +		reg = <0x00 0x02910000 0x00 0x1000>,
+> +		      <0x00 0x02917000 0x00 0x400>,
+> +		      <0x00 0x0d800000 0x00 0x00800000>,
+> +		      <0x00 0x18000000 0x00 0x00001000>;
+> +		reg-names = "intd_cfg", "user_cfg", "reg", "cfg";
+> +		interrupt-names = "link_state";
+> +		interrupts = <GIC_SPI 330 IRQ_TYPE_EDGE_RISING>;
+> +		device_type = "pci";
+> +		ti,syscon-pcie-ctrl = <&scm_conf 0x074>;
+> +		max-link-speed = <3>;
+> +		num-lanes = <4>;
+> +		power-domains = <&k3_pds 276 TI_SCI_PD_EXCLUSIVE>;
+> +		clocks = <&k3_clks 276 41>;
+> +		clock-names = "fck";
+> +		#address-cells = <3>;
+> +		#size-cells = <2>;
+> +		bus-range = <0x0 0xff>;
+> +		vendor-id = <0x104c>;
+> +		device-id = <0xb013>;
+> +		msi-map = <0x0 &gic_its 0x0 0x10000>;
+> +		dma-coherent;
+> +		ranges = <0x01000000 0x0 0x18001000  0x00 0x18001000  0x0 0x0010000>,
+> +			 <0x02000000 0x0 0x18011000  0x00 0x18011000  0x0 0x7fef000>;
+> +		dma-ranges = <0x02000000 0x0 0x0 0x0 0x0 0x10000 0x0>;
+> +		#interrupt-cells = <1>;
 
-diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-index d45ef319a68f..9f9503e40ca5 100644
---- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
-+++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-@@ -46,6 +46,7 @@
- #include "test_util.h"
- #include "memstress.h"
- #include "guest_modes.h"
-+#include "processor.h"
- 
- /* Global variable used to synchronize all of the vCPU threads. */
- static int iteration;
-@@ -180,15 +181,21 @@ static void mark_vcpu_memory_idle(struct kvm_vm *vm,
- 	 * access tracking but low enough as to not make the test too brittle
- 	 * over time and across architectures.
- 	 *
--	 * Note that when run in nested virtualization, this check will trigger
--	 * much more frequently because TLB size is unlimited and since no flush
--	 * happens, much more pages are cached there and guest won't see the
--	 * "idle" bit cleared.
-+	 * When running the guest as a nested VM, "warn" instead of asserting
-+	 * as the TLB size is effectively unlimited and the KVM doesn't
-+	 * explicitly flush the TLB when aging SPTEs.  As a result, more pages
-+	 * are cached and the guest won't see the "idle" bit cleared.
- 	 */
--	if (still_idle >= pages / 10)
-+	if (still_idle >= pages / 10) {
-+#ifdef __x86_64__
-+		TEST_ASSERT(this_cpu_has(X86_FEATURE_HYPERVISOR),
-+			    "vCPU%d: Too many pages still idle (%lu out of %lu)",
-+			    vcpu_idx, still_idle, pages);
-+#endif
- 		printf("WARNING: vCPU%d: Too many pages still idle (%lu out of %lu), "
- 		       "this will affect performance results.\n",
- 		       vcpu_idx, still_idle, pages);
-+	}
- 
- 	close(page_idle_fd);
- 	close(pagemap_fd);
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 5d310abe6c3f..22852bd32d7b 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -94,6 +94,7 @@ struct kvm_x86_cpu_feature {
- #define	X86_FEATURE_XSAVE		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 26)
- #define	X86_FEATURE_OSXSAVE		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 27)
- #define	X86_FEATURE_RDRAND		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 30)
-+#define	X86_FEATURE_HYPERVISOR		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 31)
- #define X86_FEATURE_PAE			KVM_X86_CPU_FEATURE(0x1, 0, EDX, 6)
- #define	X86_FEATURE_MCE			KVM_X86_CPU_FEATURE(0x1, 0, EDX, 7)
- #define	X86_FEATURE_APIC		KVM_X86_CPU_FEATURE(0x1, 0, EDX, 9)
--- 
-2.38.1.584.g0f3c55d4c2-goog
+Is this node the interrupt controller or is it the "interrupt-controller"?
+Actually, what is that node? I don't see it in the binding docs..
 
+Andrew
+
+> +		interrupt-map-mask = <0 0 0 7>;
+> +		interrupt-map = <0 0 0 1 &pcie1_intc 0>, /* INT A */
+> +				<0 0 0 2 &pcie1_intc 0>, /* INT B */
+> +				<0 0 0 3 &pcie1_intc 0>, /* INT C */
+> +				<0 0 0 4 &pcie1_intc 0>; /* INT D */
+> +
+> +		pcie1_intc: interrupt-controller {
+> +			interrupt-controller;
+> +			#interrupt-cells = <1>;
+> +			interrupt-parent = <&gic500>;
+> +			interrupts = <GIC_SPI 324 IRQ_TYPE_EDGE_RISING>;
+> +		};
+> +	};
+> +
+>   	main_mcan0: can@2701000 {
+>   		compatible = "bosch,m_can";
+>   		reg = <0x00 0x02701000 0x00 0x200>,
