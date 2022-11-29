@@ -2,144 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B9063CA76
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5DB63CA78
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236794AbiK2VZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 16:25:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
+        id S237054AbiK2V0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 16:26:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236072AbiK2VZM (ORCPT
+        with ESMTP id S236072AbiK2V0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 16:25:12 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A022873C;
-        Tue, 29 Nov 2022 13:25:11 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D00644DA;
-        Tue, 29 Nov 2022 22:25:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669757109;
-        bh=u5VM/EgB7yQMqQjQKF0CcQgsCgj+ZZXX6KbdTtfkuT0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g3ZwjqkriwYHCxMWesQ0ByzkNYfTLdWCm8tmyxfMGUqIiqevMVNbn9uiCrhD6YX5P
-         9Vd11qKuBj3PzzokNrDjLjrA2bVQZ19vfDqcp6hjwKaLwNDa12GES+BkirgRAHstCZ
-         v6jveB3IkZWPYC7gUKVgBnq+efaNOjJGNovYt3jY=
-Date:   Tue, 29 Nov 2022 23:24:53 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v2 17/26] drm: rcar-du: Remove #ifdef guards for PM
- related functions
-Message-ID: <Y4Z4pSFrVL9D1gnI@pendragon.ideasonboard.com>
-References: <20221129191733.137897-1-paul@crapouillou.net>
- <20221129191942.138244-1-paul@crapouillou.net>
- <20221129191942.138244-4-paul@crapouillou.net>
- <Y4Zg9yg7KP0yCPIL@pendragon.ideasonboard.com>
- <bc6ece2831188a6041a2956f5efb6a7c3a5b4a18.camel@crapouillou.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bc6ece2831188a6041a2956f5efb6a7c3a5b4a18.camel@crapouillou.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 29 Nov 2022 16:26:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3D52873C
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:26:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59D5A6193C
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 21:26:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62F43C433C1;
+        Tue, 29 Nov 2022 21:26:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1669757180;
+        bh=6ALCXb/pWvuaPqQbiW6kDLBf8N7JSNk2pLYAG27FG00=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EAQhfAtlgmpzYOMolrZDszRgzQkfuSrbi4HidyAWyZd8JUBq3EgRk9XzxH8xx6xCY
+         8NQl2KvQiG39KDECQsim0NJ5h9TQTh+XgCVzxWOJ/kb6Ek9zZ79sAOMzsyfM3c3E3W
+         gX9/OAPT369m8Vpe+d/Kww1WyJaL3l2Wl8oqD/Xo=
+Date:   Tue, 29 Nov 2022 13:26:19 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        James Houghton <jthoughton@google.com>,
+        Jann Horn <jannh@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH 00/10] mm/hugetlb: Make huge_pte_offset() thread-safe
+ for pmd unshare
+Message-Id: <20221129132619.f982806393c607fc20c9cb34@linux-foundation.org>
+In-Reply-To: <Y4Z3eKU/hYFOyGnU@x1n>
+References: <20221129193526.3588187-1-peterx@redhat.com>
+        <20221129124944.8eff54cda65d0f5a8a089e22@linux-foundation.org>
+        <Y4Z3eKU/hYFOyGnU@x1n>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+On Tue, 29 Nov 2022 16:19:52 -0500 Peter Xu <peterx@redhat.com> wrote:
 
-On Tue, Nov 29, 2022 at 09:05:49PM +0000, Paul Cercueil wrote:
-> Le mardi 29 novembre 2022 à 21:43 +0200, Laurent Pinchart a écrit :
-> > On Tue, Nov 29, 2022 at 07:19:33PM +0000, Paul Cercueil wrote:
-> > > Use the DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros to handle
-> > > the .suspend/.resume callbacks.
-> > > 
-> > > These macros allow the suspend and resume functions to be automatically
-> > > dropped by the compiler when CONFIG_SUSPEND is disabled, without having
-> > > to use #ifdef guards.
-> > > 
-> > > This has the advantage of always compiling these functions in,
-> > > independently of any Kconfig option. Thanks to that, bugs and other
-> > > regressions are subsequently easier to catch.
-> > > 
-> > > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> > > Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> On Tue, Nov 29, 2022 at 12:49:44PM -0800, Andrew Morton wrote:
+> > On Tue, 29 Nov 2022 14:35:16 -0500 Peter Xu <peterx@redhat.com> wrote:
 > > 
-> > Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> > > Based on latest mm-unstable (9ed079378408).
+> > > 
+> > > This can be seen as a follow-up series to Mike's recent hugetlb vma lock
+> > > series for pmd unsharing, but majorly covering safe use of huge_pte_offset.
 > > 
-> > Will you get this whole series merged in one go in drm-misc, or do you
-> > expect me to take this patch in my tree ? I'd prefer the first option if
-> > possible (less work for me :-)).
+> > We're at -rc7 (a -rc8 appears probable this time) and I'm looking to
+> > settle down and stabilize things...
 > 
-> I actually answered that in my cover letter ;)
+> I targeted this series for the next release not current, because there's no
+> known report for it per my knowledge.
+> 
+> The reproducer needs explicit kernel delays to trigger as mentioned in the
+> cover letter.  So far I didn't try to reproduce with a generic kernel yet
+> but just to verify the existance of the problem.
 
-Oops. I read until "V2" and didn't notice the last paragraph, sorry.
+OK, thanks, I missed that.
 
-> However I assumed it had to go through drm-next, if you think it can go
-> through drm-misc-next, I can apply it myself.
-
-This seems like a good candidate for drm-misc to me.
-
-> > > ---
-> > > Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> > > Cc: linux-renesas-soc@vger.kernel.org
-> > > ---
-> > >  drivers/gpu/drm/rcar-du/rcar_du_drv.c | 9 +++------
-> > >  1 file changed, 3 insertions(+), 6 deletions(-)
-> > > 
-> > > diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-> > > b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-> > > index d003e8d9e7a2..eeec1e02446f 100644
-> > > --- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-> > > +++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-> > > @@ -599,7 +599,6 @@ static const struct drm_driver rcar_du_driver =
-> > > {
-> > >   * Power management
-> > >   */
-> > >  
-> > > -#ifdef CONFIG_PM_SLEEP
-> > >  static int rcar_du_pm_suspend(struct device *dev)
-> > >  {
-> > >         struct rcar_du_device *rcdu = dev_get_drvdata(dev);
-> > > @@ -613,11 +612,9 @@ static int rcar_du_pm_resume(struct device
-> > > *dev)
-> > >  
-> > >         return drm_mode_config_helper_resume(&rcdu->ddev);
-> > >  }
-> > > -#endif
-> > >  
-> > > -static const struct dev_pm_ops rcar_du_pm_ops = {
-> > > -       SET_SYSTEM_SLEEP_PM_OPS(rcar_du_pm_suspend,
-> > > rcar_du_pm_resume)
-> > > -};
-> > > +static DEFINE_SIMPLE_DEV_PM_OPS(rcar_du_pm_ops,
-> > > +                               rcar_du_pm_suspend,
-> > > rcar_du_pm_resume);
-> > >  
-> > >  /* ---------------------------------------------------------------
-> > > --------------
-> > >   * Platform driver
-> > > @@ -712,7 +709,7 @@ static struct platform_driver
-> > > rcar_du_platform_driver = {
-> > >         .shutdown       = rcar_du_shutdown,
-> > >         .driver         = {
-> > >                 .name   = "rcar-du",
-> > > -               .pm     = &rcar_du_pm_ops,
-> > > +               .pm     = pm_sleep_ptr(&rcar_du_pm_ops),
-> > >                 .of_match_table = rcar_du_of_table,
-> > >         },
-> > >  };
-
--- 
-Regards,
-
-Laurent Pinchart
+I'll give the series a run in -next for a couple of days then I'll pull
+it out until after the next Linus merge window, so it can't invalidate
+testing heading into that merge window.
