@@ -2,387 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21DAE63CBF3
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 00:34:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC2963CBF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 00:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiK2Xey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 18:34:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        id S229622AbiK2Xii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 18:38:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiK2Xei (ORCPT
+        with ESMTP id S229751AbiK2Xig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 18:34:38 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3D4F020;
-        Tue, 29 Nov 2022 15:34:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669764877; x=1701300877;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UB+AsI11L5AiZWNtd3SOlQlASLZ7XjEIFfhbV5ckI+E=;
-  b=HuYim+0Qa99/TKxsuDUMKGp6YI+43Yfi0/3UZ0N4okpSye7zuJrYfaDW
-   7xyyGTZTQBoFcroF10lbPzMkIBOs2PyPiZIyJk/r7OkVrRgnawfh13NGj
-   E1b3zQN7Pjcg14KER4kmMaRZqezAMxrcqxkMQeBPFS7r533VuD6hMaZT1
-   kY7tW7r4QSsZ6vu/GH6l/3LrpAiw+LrG1TNQc0OvauTsF9ag+nIkmvfRb
-   OntBwKkLMVHerBU8d/PQ5LXpOvN9AGiLRNfiGYd6ZeBY6nOwCaY8a8kPc
-   ZsDEE2cJB2kmcjBe1rNogSWCeGwtVMUVvgpFm0OVLDB/y8CZjs6qR2Ig9
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="342178175"
-X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="342178175"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 15:34:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="768617611"
-X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="768617611"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga004.jf.intel.com with ESMTP; 29 Nov 2022 15:34:35 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v2 4/4] thermal/drivers/intel_cpu_idle_cooling: Introduce Intel cpu idle cooling driver
-Date:   Tue, 29 Nov 2022 15:34:19 -0800
-Message-Id: <20221129233419.4022830-5-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com>
-References: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com>
+        Tue, 29 Nov 2022 18:38:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0BF5B841;
+        Tue, 29 Nov 2022 15:38:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 371966195B;
+        Tue, 29 Nov 2022 23:38:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C4F9C433D7;
+        Tue, 29 Nov 2022 23:38:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669765113;
+        bh=LlNv7abHsvSQJUXOKNoMnMcBbroOgNGcMquCXxMr+Ps=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=SKXs8ulgmKXSt0N4sAl7mzGTeKHc3wZzWWUsQ846poNr4lMwEnvsa6yHCelMppqYi
+         9Syz7cYAIZsFRlkkIKGv2AC1eRO9Hsp14hDNopf9ofFR+Uw28gd8JXFuOrp26KQicJ
+         9eAhH4mp9CwW0ZFqaMGWVgXWW11ZezYi4CwXPfbUNUNQgzC8GVVcxedUhjr0a6/a4X
+         3eaAublixCCoQJyfKi2Eje4RdFmBVz+uFvv4l9dRiq8LxMUwM6tOjtmI55QzORG06R
+         4rpnSwN2/xqBITHJjCg2C5v6aCRipqL2tPKUUR+lhEHsjAB0ghjxZ1170ghXV7NZv2
+         Mzosx3op9MkkA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 244125C0584; Tue, 29 Nov 2022 15:38:33 -0800 (PST)
+Date:   Tue, 29 Nov 2022 15:38:33 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH v2 3/4] rcu/kvfree: Move need_offload_krc() out of
+ krcp->lock
+Message-ID: <20221129233833.GA154809@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221129155822.538434-1-urezki@gmail.com>
+ <20221129155822.538434-4-urezki@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221129155822.538434-4-urezki@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The cpu idle cooling is used to cool down a CPU by injecting idle cycles
-at runtime. The objective is similar to intel_powerclamp driver, which is
-used for system wide cooling by injecting idle on each CPU.
+On Tue, Nov 29, 2022 at 04:58:21PM +0100, Uladzislau Rezki (Sony) wrote:
+> Currently a need_offload_krc() function requires the krcp->lock
+> to be held because krcp->head can not be checked concurrently.
+> 
+> Fix it by updating the krcp->head using WRITE_ONCE() macro so
+> it becomes lock-free and safe for readers to see a valid data
+> without any locking.
 
-This driver is modeled after drivers/thermal/cpuidle_cooling.c by reusing
-powercap/idle_inject framework.
+Don't we also need to use READ_ONCE() for the code loading this krcp->head
+pointer?  Or do the remaining plain C-language accesses somehow avoid
+running concurrently with those new WRITE_ONCE() invocations?
 
-On each CPU online a thermal cooling device is registered. The minimum
-state of the cooling device is 0 and maximum is 100. When user space
-changes the current state to non zero, then register with idle inject
-framework and start idle inject.
+						Thanx, Paul
 
-The default idle duration is 24 milli seconds, matching intel_powerclamp,
-which doesn't change based on the current state of cooling device. The
-runtime is changed based on the current state.
-
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
-v2:
-- Removed callback arguments for idle_inject_register
-
- drivers/thermal/intel/Kconfig                 |  10 +
- drivers/thermal/intel/Makefile                |   1 +
- .../thermal/intel/intel_cpu_idle_cooling.c    | 261 ++++++++++++++++++
- 3 files changed, 272 insertions(+)
- create mode 100644 drivers/thermal/intel/intel_cpu_idle_cooling.c
-
-diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
-index 6c2a95f41c81..8c88d6e18414 100644
---- a/drivers/thermal/intel/Kconfig
-+++ b/drivers/thermal/intel/Kconfig
-@@ -115,3 +115,13 @@ config INTEL_HFI_THERMAL
- 	  These capabilities may change as a result of changes in the operating
- 	  conditions of the system such power and thermal limits. If selected,
- 	  the kernel relays updates in CPUs' capabilities to userspace.
-+
-+config INTEL_CPU_IDLE_COOLING
-+	tristate "Intel CPU idle cooling device"
-+	depends on IDLE_INJECT
-+	help
-+	  This implements the CPU cooling mechanism through
-+	  idle injection. This will throttle the CPU by injecting
-+	  idle cycle.
-+	  Unlike Intel Power clamp driver, this driver provides
-+	  idle injection for each CPU.
-diff --git a/drivers/thermal/intel/Makefile b/drivers/thermal/intel/Makefile
-index 9a8d8054f316..8d5f7b5cf9b7 100644
---- a/drivers/thermal/intel/Makefile
-+++ b/drivers/thermal/intel/Makefile
-@@ -14,3 +14,4 @@ obj-$(CONFIG_INTEL_TCC_COOLING)	+= intel_tcc_cooling.o
- obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
- obj-$(CONFIG_INTEL_MENLOW)	+= intel_menlow.o
- obj-$(CONFIG_INTEL_HFI_THERMAL) += intel_hfi.o
-+obj-$(CONFIG_INTEL_CPU_IDLE_COOLING) += intel_cpu_idle_cooling.o
-diff --git a/drivers/thermal/intel/intel_cpu_idle_cooling.c b/drivers/thermal/intel/intel_cpu_idle_cooling.c
-new file mode 100644
-index 000000000000..cdd62756cc3d
---- /dev/null
-+++ b/drivers/thermal/intel/intel_cpu_idle_cooling.c
-@@ -0,0 +1,261 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Per CPU Idle injection cooling device implementation
-+ *
-+ * Copyright (c) 2022, Intel Corporation.
-+ * All rights reserved.
-+ *
-+ */
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/cpufeature.h>
-+#include <linux/cpuhotplug.h>
-+#include <linux/idle_inject.h>
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/slab.h>
-+#include <linux/thermal.h>
-+#include <linux/topology.h>
-+
-+#include <asm/cpu_device_id.h>
-+
-+/* Duration match with intel_powerclamp driver */
-+#define IDLE_DURATION		24000
-+#define IDLE_LATENCY		UINT_MAX
-+
-+static int idle_duration_us = IDLE_DURATION;
-+static int idle_latency_us = IDLE_LATENCY;
-+
-+module_param(idle_duration_us, int, 0644);
-+MODULE_PARM_DESC(idle_duration_us,
-+		 "Idle duration in us.");
-+
-+module_param(idle_latency_us, int, 0644);
-+MODULE_PARM_DESC(idle_latency_us,
-+		 "Idle latency in us.");
-+
-+/**
-+ * struct cpuidle_cooling - Per instance data for cooling device
-+ * @cpu: CPU number for this cooling device
-+ * @ii_dev: Idle inject core instance pointer
-+ * @cdev: Thermal core cooling device instance
-+ * @state:  Current cooling device state
-+ *
-+ * Stores per instance cooling device state.
-+ */
-+struct cpuidle_cooling {
-+	int cpu;
-+	struct idle_inject_device *ii_dev;
-+	struct thermal_cooling_device *cdev;
-+	unsigned long state;
-+};
-+
-+static DEFINE_PER_CPU(struct cpuidle_cooling, cooling_devs);
-+static cpumask_t cpuidle_cpu_mask;
-+
-+/* Used for module unload protection with idle injection operations */
-+static DEFINE_MUTEX(idle_cooling_lock);
-+
-+static unsigned int cpuidle_cooling_runtime(unsigned int idle_duration_us,
-+					    unsigned long state)
-+{
-+	if (!state)
-+		return 0;
-+
-+	return ((idle_duration_us * 100) / state) - idle_duration_us;
-+}
-+
-+static int cpuidle_idle_injection_register(struct cpuidle_cooling *cooling_dev)
-+{
-+	struct idle_inject_device *ii_dev;
-+
-+	ii_dev = idle_inject_register((struct cpumask *)cpumask_of(cooling_dev->cpu));
-+	if (!ii_dev) {
-+		/*
-+		 * It is busy as some other device claimed idle injection for this CPU
-+		 * Also it is possible that memory allocation failure.
-+		 */
-+		pr_err("idle_inject_register failed for cpu:%d\n", cooling_dev->cpu);
-+		return -EAGAIN;
-+	}
-+
-+	idle_inject_set_duration(ii_dev, TICK_USEC, idle_duration_us);
-+	idle_inject_set_latency(ii_dev, idle_latency_us);
-+
-+	cooling_dev->ii_dev = ii_dev;
-+
-+	return 0;
-+}
-+
-+static void cpuidle_idle_injection_unregister(struct cpuidle_cooling *cooling_dev)
-+{
-+	idle_inject_unregister(cooling_dev->ii_dev);
-+}
-+
-+static int cpuidle_cooling_get_max_state(struct thermal_cooling_device *cdev,
-+					 unsigned long *state)
-+{
-+	*state = 100;
-+
-+	return 0;
-+}
-+
-+static int cpuidle_cooling_get_cur_state(struct thermal_cooling_device *cdev,
-+					 unsigned long *state)
-+{
-+	struct cpuidle_cooling *cooling_dev = cdev->devdata;
-+
-+	*state = READ_ONCE(cooling_dev->state);
-+
-+	return 0;
-+}
-+
-+static int cpuidle_cooling_set_cur_state(struct thermal_cooling_device *cdev,
-+					 unsigned long state)
-+{
-+	struct cpuidle_cooling *cooling_dev = cdev->devdata;
-+	unsigned int runtime_us;
-+	unsigned long curr_state;
-+	int ret = 0;
-+
-+	mutex_lock(&idle_cooling_lock);
-+
-+	curr_state = READ_ONCE(cooling_dev->state);
-+
-+	if (!curr_state && state > 0) {
-+		/*
-+		 * This is the first time to start cooling, so register with
-+		 * idle injection framework.
-+		 */
-+		if (!cooling_dev->ii_dev) {
-+			ret = cpuidle_idle_injection_register(cooling_dev);
-+			if (ret)
-+				goto unlock_set_state;
-+		}
-+
-+		runtime_us = cpuidle_cooling_runtime(idle_duration_us, state);
-+
-+		idle_inject_set_duration(cooling_dev->ii_dev, runtime_us, idle_duration_us);
-+		idle_inject_start(cooling_dev->ii_dev);
-+	} else if (curr_state > 0 && state) {
-+		/* Simply update runtime */
-+		runtime_us = cpuidle_cooling_runtime(idle_duration_us, state);
-+		idle_inject_set_duration(cooling_dev->ii_dev, runtime_us, idle_duration_us);
-+	} else if (curr_state > 0 && !state) {
-+		idle_inject_stop(cooling_dev->ii_dev);
-+		cpuidle_idle_injection_unregister(cooling_dev);
-+		cooling_dev->ii_dev = NULL;
-+	}
-+
-+	WRITE_ONCE(cooling_dev->state, state);
-+
-+unlock_set_state:
-+	mutex_unlock(&idle_cooling_lock);
-+
-+	return ret;
-+}
-+
-+/**
-+ * cpuidle_cooling_ops - thermal cooling device ops
-+ */
-+static struct thermal_cooling_device_ops cpuidle_cooling_ops = {
-+	.get_max_state = cpuidle_cooling_get_max_state,
-+	.get_cur_state = cpuidle_cooling_get_cur_state,
-+	.set_cur_state = cpuidle_cooling_set_cur_state,
-+};
-+
-+static int cpuidle_cooling_register(int cpu)
-+{
-+	struct cpuidle_cooling *cooling_dev = &per_cpu(cooling_devs, cpu);
-+	struct thermal_cooling_device *cdev;
-+	char name[14]; /* storage for cpuidle-XXXX */
-+	int ret = 0;
-+
-+	mutex_lock(&idle_cooling_lock);
-+
-+	snprintf(name, sizeof(name), "cpuidle-%d", cpu);
-+	cdev = thermal_cooling_device_register(name, cooling_dev, &cpuidle_cooling_ops);
-+	if (IS_ERR(cdev)) {
-+		ret = PTR_ERR(cdev);
-+		goto unlock_register;
-+	}
-+
-+	cooling_dev->cdev = cdev;
-+	cpumask_set_cpu(cpu, &cpuidle_cpu_mask);
-+	cooling_dev->cpu = cpu;
-+
-+unlock_register:
-+	mutex_unlock(&idle_cooling_lock);
-+
-+	return ret;
-+}
-+
-+static void cpuidle_cooling_unregister(int cpu)
-+{
-+	struct cpuidle_cooling *cooling_dev = &per_cpu(cooling_devs, cpu);
-+
-+	mutex_lock(&idle_cooling_lock);
-+
-+	if (cooling_dev->state) {
-+		idle_inject_stop(cooling_dev->ii_dev);
-+		cpuidle_idle_injection_unregister(cooling_dev);
-+	}
-+
-+	thermal_cooling_device_unregister(cooling_dev->cdev);
-+	cooling_dev->state = 0;
-+
-+	mutex_unlock(&idle_cooling_lock);
-+}
-+
-+static int cpuidle_cooling_cpu_online(unsigned int cpu)
-+{
-+	cpuidle_cooling_register(cpu);
-+
-+	return 0;
-+}
-+
-+static int cpuidle_cooling_cpu_offline(unsigned int cpu)
-+{
-+	cpuidle_cooling_unregister(cpu);
-+
-+	return 0;
-+}
-+
-+static enum cpuhp_state cpuidle_cooling_hp_state __read_mostly;
-+
-+static const struct x86_cpu_id intel_cpuidle_cooling_ids[] __initconst = {
-+	X86_MATCH_VENDOR_FEATURE(INTEL, X86_FEATURE_MWAIT, NULL),
-+	{}
-+};
-+MODULE_DEVICE_TABLE(x86cpu, intel_cpuidle_cooling_ids);
-+
-+static int __init cpuidle_cooling_init(void)
-+{
-+	int ret;
-+
-+	if (!x86_match_cpu(intel_cpuidle_cooling_ids))
-+		return -ENODEV;
-+
-+	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
-+				"thermal/cpuidle_cooling:online",
-+				cpuidle_cooling_cpu_online,
-+				cpuidle_cooling_cpu_offline);
-+	if (ret < 0)
-+		return ret;
-+
-+	cpuidle_cooling_hp_state = ret;
-+
-+	return 0;
-+}
-+module_init(cpuidle_cooling_init)
-+
-+static void __exit cpuidle_cooling_exit(void)
-+{
-+	cpuhp_remove_state(cpuidle_cooling_hp_state);
-+}
-+module_exit(cpuidle_cooling_exit)
-+
-+MODULE_IMPORT_NS(IDLE_INJECT);
-+
-+MODULE_LICENSE("GPL");
--- 
-2.31.1
-
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> ---
+>  kernel/rcu/tree.c | 11 ++++-------
+>  1 file changed, 4 insertions(+), 7 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 445f8c11a9a3..c94c17194299 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -3058,7 +3058,7 @@ static void kfree_rcu_monitor(struct work_struct *work)
+>  			// objects queued on the linked list.
+>  			if (!krwp->head_free) {
+>  				krwp->head_free = krcp->head;
+> -				krcp->head = NULL;
+> +				WRITE_ONCE(krcp->head, NULL);
+>  			}
+>  
+>  			WRITE_ONCE(krcp->count, 0);
+> @@ -3072,6 +3072,8 @@ static void kfree_rcu_monitor(struct work_struct *work)
+>  		}
+>  	}
+>  
+> +	raw_spin_unlock_irqrestore(&krcp->lock, flags);
+> +
+>  	// If there is nothing to detach, it means that our job is
+>  	// successfully done here. In case of having at least one
+>  	// of the channels that is still busy we should rearm the
+> @@ -3079,8 +3081,6 @@ static void kfree_rcu_monitor(struct work_struct *work)
+>  	// still in progress.
+>  	if (need_offload_krc(krcp))
+>  		schedule_delayed_monitor_work(krcp);
+> -
+> -	raw_spin_unlock_irqrestore(&krcp->lock, flags);
+>  }
+>  
+>  static enum hrtimer_restart
+> @@ -3250,7 +3250,7 @@ void kvfree_call_rcu(struct rcu_head *head, void *ptr)
+>  
+>  		head->func = ptr;
+>  		head->next = krcp->head;
+> -		krcp->head = head;
+> +		WRITE_ONCE(krcp->head, head);
+>  		success = true;
+>  	}
+>  
+> @@ -3327,15 +3327,12 @@ static struct shrinker kfree_rcu_shrinker = {
+>  void __init kfree_rcu_scheduler_running(void)
+>  {
+>  	int cpu;
+> -	unsigned long flags;
+>  
+>  	for_each_possible_cpu(cpu) {
+>  		struct kfree_rcu_cpu *krcp = per_cpu_ptr(&krc, cpu);
+>  
+> -		raw_spin_lock_irqsave(&krcp->lock, flags);
+>  		if (need_offload_krc(krcp))
+>  			schedule_delayed_monitor_work(krcp);
+> -		raw_spin_unlock_irqrestore(&krcp->lock, flags);
+>  	}
+>  }
+>  
+> -- 
+> 2.30.2
+> 
