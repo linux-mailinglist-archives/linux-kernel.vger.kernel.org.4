@@ -2,261 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D7C63C47C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 128D663C474
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236104AbiK2QAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 11:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
+        id S235485AbiK2P7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 10:59:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236052AbiK2QAF (ORCPT
+        with ESMTP id S235803AbiK2P65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 11:00:05 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD8F59856;
-        Tue, 29 Nov 2022 07:58:35 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id d20so9625596edn.0;
-        Tue, 29 Nov 2022 07:58:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ndu8NLiGjk7yRkLXGpL0Z42hS5iNlQz7b0o3ua4PdvI=;
-        b=LGJS13DqQAiOtBkjjE+GxM+AJP0mskXMq5M1ui7bL9ICiCIxNir4ZQtWt5IX2CwMUz
-         uE3PdyGluk3ivEKkDoEOLf+ctFNjJV4VmEsXoti0oDJVe0fcVy3ljyChvG7v0KhELMam
-         drXGRLFhZt/F+GFaz5w9ICf62rLfpnbXn2xze+9TM9IUIHOdQyN8ofOZpc7/3bRgaqtT
-         w3NTPy5JqhHiANe7X+A39RBZJhGFx+BKkBgSLwuckeyipaFKTGXXNX8YCqPQz61WM/6j
-         a/DTihkR5lS4g1o33Qzcr4z+SzM0wb4DwXnsdJbGhKHl9HiTb0uHa9HTdNTWxUPYC6Wx
-         1jVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ndu8NLiGjk7yRkLXGpL0Z42hS5iNlQz7b0o3ua4PdvI=;
-        b=YQyAtkt/N6R61bbUfyaa4/RCoFkOEdGw/vJCmf6ggzuucM0msL3iyHOtHKf8BlL6lW
-         vzd0mc9QCXv9IQLXebbvOieZKGnu0VqDdCctIGyRZ2ICgN/TO8wt8WFJVcy6HGvSleX2
-         rnzXkj/WystGC0ndYdXCgKrChuxYbjeMG7WX6BKejGg5x8Qt+eN6c5zJrmXxNQdJuWM+
-         w2JARrqfV1HPwpXDcKeSPuYWsWmXzpqy5/AygwYx124+rpsgRGzj+iYmateLev7irnzA
-         Z1uJqVHk1hOd0LAeHdbpbQy8Cfflw/4Ja1HZn82SET7TuZrfPvb138oEDNOZLudpVggb
-         ekpQ==
-X-Gm-Message-State: ANoB5pmVratW1pq7EyrwoM2qV6crhdziS3hpc67tr7+cSrIdXLzOj37R
-        WlO/pf+HizHligsD5X3pTE1ReI/gLUQ=
-X-Google-Smtp-Source: AA0mqf6jheYnM8cLkZNMbknrGpAhk3zVWsLiJV+U+ifBhgE93tzOkvuvKhoW82EvHxyB6lYSCSlcEg==
-X-Received: by 2002:a05:6402:2421:b0:461:524f:a8f4 with SMTP id t33-20020a056402242100b00461524fa8f4mr51873418eda.260.1669737514117;
-        Tue, 29 Nov 2022 07:58:34 -0800 (PST)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id u23-20020a056402065700b0046778ce5fdfsm6371059edx.10.2022.11.29.07.58.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 07:58:33 -0800 (PST)
-From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: [PATCH v2 4/4] rcu/kvfree: Use a polled API to speedup a reclaim process
-Date:   Tue, 29 Nov 2022 16:58:22 +0100
-Message-Id: <20221129155822.538434-5-urezki@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221129155822.538434-1-urezki@gmail.com>
-References: <20221129155822.538434-1-urezki@gmail.com>
+        Tue, 29 Nov 2022 10:58:57 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F946930A;
+        Tue, 29 Nov 2022 07:57:56 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id D4F4224E023;
+        Tue, 29 Nov 2022 23:57:52 +0800 (CST)
+Received: from EXMBX065.cuchost.com (172.16.6.65) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 29 Nov
+ 2022 23:57:52 +0800
+Received: from [192.168.0.104] (219.128.233.15) by EXMBX065.cuchost.com
+ (172.16.6.65) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 29 Nov
+ 2022 23:57:51 +0800
+Message-ID: <8677051a-604a-210c-066c-75db444d6f09@starfivetech.com>
+Date:   Tue, 29 Nov 2022 23:58:30 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 1/5] dt-bindings: pinctrl: Add StarFive JH7110 pinctrl
+ definitions
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>
+CC:     Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20221118011108.70715-1-hal.feng@starfivetech.com>
+ <20221118011108.70715-2-hal.feng@starfivetech.com>
+ <eb3974a3-f715-f5b0-cac7-551af26bd17b@linaro.org>
+ <08db0f3b-5222-9460-26ba-0e6380d16583@linaro.org>
+ <0ceba170-f844-e733-a49e-e67746f9f836@starfivetech.com>
+ <093ea507-4c42-1af9-4896-64c1a918432e@linaro.org>
+ <30c21787-0c48-ff50-1d63-8e69bdcdbe30@starfivetech.com>
+ <339be655-aee7-e1a4-51be-28ea20de6792@linaro.org>
+ <3db802d6-114f-097a-6c69-e7b40e4d2764@starfivetech.com>
+ <f52e31a5-a12a-b95e-b99c-1af8f8b41c3b@linaro.org>
+Content-Language: en-US
+From:   Jianlong Huang <jianlong.huang@starfivetech.com>
+In-Reply-To: <f52e31a5-a12a-b95e-b99c-1af8f8b41c3b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [219.128.233.15]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX065.cuchost.com
+ (172.16.6.65)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently all objects placed into a batch require a full GP
-after passing which objects in a batch are eligible to be
-freed.
+On Tue, 29 Nov 2022 15:58:12 +0100, Krzysztof Kozlowski wrote:
+> On 29/11/2022 15:46, Jianlong Huang wrote:
+>> On Tue, 29 Nov 2022 08:49:49 +0100, Krzysztof Kozlowski wrote:
+>>> On 29/11/2022 02:47, Jianlong Huang wrote:
+>>>> On Mon, 28 Nov 2022 09:32:45 +0100, Krzysztof Kozlowski wrote:
+>>>>> On 28/11/2022 01:48, Jianlong Huang wrote:
+>>>>>
+>>>>>>>>> +/* aon_iomux doen */
+>>>>>>>>> +#define GPOEN_AON_PTC0_OE_N_4			2
+>>>>>>>>> +#define GPOEN_AON_PTC0_OE_N_5			3
+>>>>>>>>> +#define GPOEN_AON_PTC0_OE_N_6			4
+>>>>>>>>> +#define GPOEN_AON_PTC0_OE_N_7			5
+>>>>>>>>> +
+>>>>>>>>
+>>>>>>>> It looks like you add register constants to the bindings. Why? The
+>>>>>>>> bindings are not the place to represent hardware programming model. Not
+>>>>>>>> mentioning that there is no benefit in this.
+>>>>>>>
+>>>>>>> Also: this entire file should be dropped, but if it stays, you have to
+>>>>>>> name it matching bindings or compatible (vendor,device.h).
+>>>>>>
+>>>>>> Thanks your comments.
+>>>>>> These macros are used to configure pinctrl in dts, so the file should stay,
+>>>>>
+>>>>> Why they should stay? What's the reason? If it is not a constant used by
+>>>>> driver, then register values should not be placed in the bindings, so
+>>>>> drop it.
+>>>>>
+>>>>
+>>>> Thanks.
+>>>>
+>>>> These macros in binding header(example, DOUT, DOEN etc) will be used in DTS,
+>>>> and driver will parse the DT for pinctrl configuration.
+>>>>
+>>>> Example in dts:
+>>>> uart0_pins: uart0-0 {
+>>>> 	tx-pins {
+>>>> 		pinmux = <GPIOMUX(5, GPOUT_SYS_UART0_TX, GPOEN_ENABLE, GPI_NONE)>;
+>>>
+>>> This is usage in DTS and is not an argument to store register
+>>> addresses/offsets as bindings. What is the usage (of define, not value)
+>>> in the driver?
+>>>
+>> 
+>> The existing implementation reuse the macros for DTS and driver.
+> 
+> Where in the driver? Grep gives zero results.
+> 
+>> Do you mean we need to separate the macros, one for DTS and one for driver usage?
+> 
+> No, if driver uses them it is fine. The problem is I cannot find it
+> anywhere.
+> 
+>> Or you have any better suggestion?
+>> 
+>> These macros are the value of register, not register addresses/offsets,
+>> except for with prefix of GPI.
+> 
+> Still, values are not usually part of bindings.
+> 
+>> 
+>> Drivers rarely reference macros directly, mostly parsing dts and writing them to registers.
+> 
+> So drivers do not use macros? Then there is no reason to store them in
+> bindings? What do you "bind" if there is no usage (and we do not talk
+> about DTS...)?
+> 
 
-The problem is that many pointers may already passed several
-GP sequences so there is no need for them in extra delay and
-such objects can be reclaimed right away without waiting.
+Where do you suggest to store these macros used in DTS?
 
-In order to reduce a memory footprint this patch introduces
-a per-page-grace-period-controlling mechanism. It allows us
-to distinguish pointers for which a grace period is passed
-and for which not.
-
-A reclaim thread in its turn frees a memory in a reverse
-order starting from a tail because a GP is likely passed
-for objects in a page. If a page with a GP sequence in a
-list hits a condition when a GP is not ready we bail out
-requesting one more grace period in order to complete a
-drain process for left pages.
-
-Test example:
-
-kvm.sh --memory 10G --torture rcuscale --allcpus --duration 1 \
-  --kconfig CONFIG_NR_CPUS=64 \
-  --kconfig CONFIG_RCU_NOCB_CPU=y \
-  --kconfig CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y \
-  --kconfig CONFIG_RCU_LAZY=n \
-  --bootargs "rcuscale.kfree_rcu_test=1 rcuscale.kfree_nthreads=16 \
-  rcuscale.holdoff=20 rcuscale.kfree_loops=10000 \
-  torture.disable_onoff_at_boot" --trust-make
-
-Total time taken by all kfree'ers: 8535693700 ns, loops: 10000, batches: 1188, memory footprint: 2248MB
-Total time taken by all kfree'ers: 8466933582 ns, loops: 10000, batches: 1157, memory footprint: 2820MB
-Total time taken by all kfree'ers: 5375602446 ns, loops: 10000, batches: 1130, memory footprint: 6502MB
-Total time taken by all kfree'ers: 7523283832 ns, loops: 10000, batches: 1006, memory footprint: 3343MB
-Total time taken by all kfree'ers: 6459171956 ns, loops: 10000, batches: 1150, memory footprint: 6549MB
-
-Total time taken by all kfree'ers: 8560060176 ns, loops: 10000, batches: 1787, memory footprint: 61MB
-Total time taken by all kfree'ers: 8573885501 ns, loops: 10000, batches: 1777, memory footprint: 93MB
-Total time taken by all kfree'ers: 8320000202 ns, loops: 10000, batches: 1727, memory footprint: 66MB
-Total time taken by all kfree'ers: 8552718794 ns, loops: 10000, batches: 1790, memory footprint: 75MB
-Total time taken by all kfree'ers: 8601368792 ns, loops: 10000, batches: 1724, memory footprint: 62MB
-
-Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
----
- kernel/rcu/tree.c | 47 +++++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 39 insertions(+), 8 deletions(-)
-
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index c94c17194299..44279ca488ef 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -2741,11 +2741,13 @@ EXPORT_SYMBOL_GPL(call_rcu);
- /**
-  * struct kvfree_rcu_bulk_data - single block to store kvfree_rcu() pointers
-  * @list: List node. All blocks are linked between each other
-+ * @gp_snap: Snapshot of RCU state for objects placed to this bulk
-  * @nr_records: Number of active pointers in the array
-  * @records: Array of the kvfree_rcu() pointers
-  */
- struct kvfree_rcu_bulk_data {
- 	struct list_head list;
-+	unsigned long gp_snap;
- 	unsigned long nr_records;
- 	void *records[];
- };
-@@ -2762,13 +2764,15 @@ struct kvfree_rcu_bulk_data {
-  * struct kfree_rcu_cpu_work - single batch of kfree_rcu() requests
-  * @rcu_work: Let queue_rcu_work() invoke workqueue handler after grace period
-  * @head_free: List of kfree_rcu() objects waiting for a grace period
-+ * @head_free_gp_snap: Snapshot of RCU state for objects placed to "@head_free"
-  * @bulk_head_free: Bulk-List of kvfree_rcu() objects waiting for a grace period
-  * @krcp: Pointer to @kfree_rcu_cpu structure
-  */
- 
- struct kfree_rcu_cpu_work {
--	struct rcu_work rcu_work;
-+	struct work_struct rcu_work;
- 	struct rcu_head *head_free;
-+	unsigned long head_free_gp_snap;
- 	struct list_head bulk_head_free[FREE_N_CHANNELS];
- 	struct kfree_rcu_cpu *krcp;
- };
-@@ -2964,10 +2968,11 @@ static void kfree_rcu_work(struct work_struct *work)
- 	struct rcu_head *head;
- 	struct kfree_rcu_cpu *krcp;
- 	struct kfree_rcu_cpu_work *krwp;
-+	unsigned long head_free_gp_snap;
- 	int i;
- 
--	krwp = container_of(to_rcu_work(work),
--			    struct kfree_rcu_cpu_work, rcu_work);
-+	krwp = container_of(work,
-+		struct kfree_rcu_cpu_work, rcu_work);
- 	krcp = krwp->krcp;
- 
- 	raw_spin_lock_irqsave(&krcp->lock, flags);
-@@ -2978,12 +2983,29 @@ static void kfree_rcu_work(struct work_struct *work)
- 	// Channel 3.
- 	head = krwp->head_free;
- 	krwp->head_free = NULL;
-+	head_free_gp_snap = krwp->head_free_gp_snap;
- 	raw_spin_unlock_irqrestore(&krcp->lock, flags);
- 
- 	// Handle the first two channels.
--	for (i = 0; i < FREE_N_CHANNELS; i++)
-+	for (i = 0; i < FREE_N_CHANNELS; i++) {
-+		// Start from the tail page, so a GP is likely passed for it.
-+		list_for_each_entry_safe_reverse(bnode, n, &bulk_head[i], list) {
-+			// Not yet ready? Bail out since we need one more GP.
-+			if (!poll_state_synchronize_rcu(bnode->gp_snap))
-+				break;
-+
-+			list_del_init(&bnode->list);
-+			kvfree_rcu_bulk(krcp, bnode, i);
-+		}
-+
-+		// Please note a request for one more extra GP can
-+		// occur only once for all objects in this batch.
-+		if (!list_empty(&bulk_head[i]))
-+			synchronize_rcu();
-+
- 		list_for_each_entry_safe(bnode, n, &bulk_head[i], list)
- 			kvfree_rcu_bulk(krcp, bnode, i);
-+	}
- 
- 	/*
- 	 * This is used when the "bulk" path can not be used for the
-@@ -2992,7 +3014,10 @@ static void kfree_rcu_work(struct work_struct *work)
- 	 * queued on a linked list through their rcu_head structures.
- 	 * This list is named "Channel 3".
- 	 */
--	kvfree_rcu_list(head);
-+	if (head) {
-+		cond_synchronize_rcu(head_free_gp_snap);
-+		kvfree_rcu_list(head);
-+	}
- }
- 
- static bool
-@@ -3059,6 +3084,11 @@ static void kfree_rcu_monitor(struct work_struct *work)
- 			if (!krwp->head_free) {
- 				krwp->head_free = krcp->head;
- 				WRITE_ONCE(krcp->head, NULL);
-+
-+				// Take a snapshot for this krwp. Please note no more
-+				// any objects can be added to attached head_free channel
-+				// therefore fixate a GP for it here.
-+				krwp->head_free_gp_snap = get_state_synchronize_rcu();
- 			}
- 
- 			WRITE_ONCE(krcp->count, 0);
-@@ -3068,7 +3098,7 @@ static void kfree_rcu_monitor(struct work_struct *work)
- 			// be that the work is in the pending state when
- 			// channels have been detached following by each
- 			// other.
--			queue_rcu_work(system_wq, &krwp->rcu_work);
-+			queue_work(system_wq, &krwp->rcu_work);
- 		}
- 	}
- 
-@@ -3196,8 +3226,9 @@ add_ptr_to_bulk_krc_lock(struct kfree_rcu_cpu **krcp,
- 		list_add(&bnode->list, &(*krcp)->bulk_head[idx]);
- 	}
- 
--	/* Finally insert. */
-+	// Finally insert and update the GP for this page.
- 	bnode->records[bnode->nr_records++] = ptr;
-+	bnode->gp_snap = get_state_synchronize_rcu();
- 	return true;
- }
- 
-@@ -4801,7 +4832,7 @@ static void __init kfree_rcu_batch_init(void)
- 		struct kfree_rcu_cpu *krcp = per_cpu_ptr(&krc, cpu);
- 
- 		for (i = 0; i < KFREE_N_BATCHES; i++) {
--			INIT_RCU_WORK(&krcp->krw_arr[i].rcu_work, kfree_rcu_work);
-+			INIT_WORK(&krcp->krw_arr[i].rcu_work, kfree_rcu_work);
- 			krcp->krw_arr[i].krcp = krcp;
- 
- 			for (j = 0; j < FREE_N_CHANNELS; j++)
--- 
-2.30.2
+Best regards,
+Jianlong Huang
 
