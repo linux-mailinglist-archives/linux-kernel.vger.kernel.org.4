@@ -2,123 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA4563BBDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:41:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4973C63BBD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbiK2IlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 03:41:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51064 "EHLO
+        id S230018AbiK2Ikw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 03:40:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbiK2Ik7 (ORCPT
+        with ESMTP id S229457AbiK2Ikt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 03:40:59 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1770610AC
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:40:54 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so16609677pjc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:40:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rYD5rIQKhS/OhTx0Z2BOJefPOcSuVOVdbyHaSlf2Gvk=;
-        b=QNsN6i4r6SXUwQcFRSHAlDdrcAN+sj+wmkOJGOBnCOm3GfQKq4KetYR5dc3ySxrFAZ
-         GjpTQOBSIXHsywGpW1SgUPg6Q4FaabNkCQ+VWDX2Pn4TEJj2rFpEOxMLt+JXGd1DHUCw
-         REusv+3eduQdc9pq39kuRnxUdKGzS0RYb14kGosLxYoKLMR1iPxcAuIJj5w3JMBwd5Dr
-         zOIBbJJQsVovA3H9PUgKHQjMvEpchSgxnaa2YjPIaZVFEwNRouh3iQjh1cveISu3au9+
-         Fxwry14fxKV3FoxaKLpt0p7xJuvnuqLWIGp4V/Gs5anWRvo2uBRFeTxrIPYb51kKsLeg
-         wFdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rYD5rIQKhS/OhTx0Z2BOJefPOcSuVOVdbyHaSlf2Gvk=;
-        b=moEBLqjNk4c/XB2FEBRLk7qktDuXnR/01SW00chL5OcMrGUD1DIcwRR9JS2SJorgVo
-         Dp7WkwAnPnrMyaT2BrCDIVHoxgD80WTgBoAJHEra2z5H6i8PQ1hZJx/G4enKXsNYf9NW
-         RnqAPGEyQPKmejzv2v3535k9QWNdL9BY6yf479twYHGw+H/KLQS2WCrdl8ejlTSuJwxK
-         50jQBKZOLFBsF7dlzouBuvAEJO6mzCc50daiAXFwjN6jrJPvwrHrqHeSUjqft7Ujfsio
-         17uFm/xtDCmRxbwJcm16v1Eg2bgyxOZJbV2TLvaG465oIDgFl4K4+vKZefqPHSL7UZzu
-         aWRw==
-X-Gm-Message-State: ANoB5plSMK+ZClFc2Iua/6ju1RYG+igDfosWrqRnqNi9HeBSDKFv/LS/
-        MJSCGi0A12QF12X9US777Gg=
-X-Google-Smtp-Source: AA0mqf47JmtIb2NvfkQgu889YntCw6oa8afXgVRXQefMosergFiVq3Km37AXVvKfwMgfGPZlzKSqtw==
-X-Received: by 2002:a17:90a:d38b:b0:218:821e:f734 with SMTP id q11-20020a17090ad38b00b00218821ef734mr55232023pju.87.1669711253527;
-        Tue, 29 Nov 2022 00:40:53 -0800 (PST)
-Received: from localhost.localdomain ([47.242.114.172])
-        by smtp.gmail.com with ESMTPSA id b7-20020a170902650700b001801aec1f6bsm10239317plk.141.2022.11.29.00.40.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 00:40:53 -0800 (PST)
-From:   Chuang Wang <nashuiliang@gmail.com>
-Cc:     Chuang Wang <nashuiliang@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] x86/kprobes: Use switch-case for 0xFF opcodes in prepare_emulation
-Date:   Tue, 29 Nov 2022 16:39:51 +0800
-Message-Id: <20221129084022.718355-1-nashuiliang@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 29 Nov 2022 03:40:49 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28092D4;
+        Tue, 29 Nov 2022 00:40:48 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2F66B1EC04AD;
+        Tue, 29 Nov 2022 09:40:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1669711247;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=LtafUuhoGhuxiOxEKxOMOok0bCWTN1htaAAgYkWpfmw=;
+        b=i5XWBIBr7fytFgs7Uf48RLs5dWMHp5K+KK9mvmX6p+c/f8RiFg1SkSTuEH3YhFg2LUJpue
+        0Xgl2zSKsATfHJFPsmiZbVgMxftc/Rlo/tFBkhM3/tkfCFrnhCPpLzT8jsQEis6ic4I2KS
+        Ai7bkeoFc5//t614TyupdVgfKsrswu4=
+Date:   Tue, 29 Nov 2022 09:40:46 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: Re: [Patch v3 07/14] x86/hyperv: Change vTOM handling to use
+ standard coco mechanisms
+Message-ID: <Y4XFjqEATqOgEnR6@zn.tnic>
+References: <BYAPR21MB16886AF404739449CA467B1AD70D9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y31Kqacbp9R5A1PF@zn.tnic>
+ <BYAPR21MB16886FF8B35F51964A515CD5D70C9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <BYAPR21MB1688AF2F106CDC14E4F97DB4D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4Ti4UTBRGmbi0hD@zn.tnic>
+ <BYAPR21MB1688466C7766148C6B3B4684D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4Tu1tx6E1CfnrJi@zn.tnic>
+ <BYAPR21MB1688BCC5DF4636DBF4DEA525D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4USb2niHHicZLCY@zn.tnic>
+ <BYAPR21MB16886FF5A63334994476B6ADD7129@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB16886FF5A63334994476B6ADD7129@BYAPR21MB1688.namprd21.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the `FF /digit` opcodes in prepare_emulation, use switch-case
-instead of hand-written code to make the logic easier to understand.
+On Tue, Nov 29, 2022 at 01:15:39AM +0000, Michael Kelley (LINUX) wrote:
+> So that's why I'm suggesting CC_VENDOR_AMD_VTOM.
 
-Signed-off-by: Chuang Wang <nashuiliang@gmail.com>
----
- arch/x86/kernel/kprobes/core.c | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
+There's no CC_VENDOR_AMD_VTOM. How many times do I need to explain this?!
+CC_VENDOR is well the CC vendor - not some special case.
 
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 66299682b6b7..66ec32b6cd0e 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -655,17 +655,19 @@ static int prepare_emulation(struct kprobe *p, struct insn *insn)
- 		 * is determined by the MOD/RM byte.
- 		 */
- 		opcode = insn->modrm.bytes[0];
--		if ((opcode & 0x30) == 0x10) {
--			if ((opcode & 0x8) == 0x8)
--				return -EOPNOTSUPP;	/* far call */
--			/* call absolute, indirect */
-+		switch (X86_MODRM_REG(opcode)) {
-+		case 0b010:	/* FF /2, call near, absolute indirect */
- 			p->ainsn.emulate_op = kprobe_emulate_call_indirect;
--		} else if ((opcode & 0x30) == 0x20) {
--			if ((opcode & 0x8) == 0x8)
--				return -EOPNOTSUPP;	/* far jmp */
--			/* jmp near absolute indirect */
-+			break;
-+		case 0b100:	/* FF /4, jmp near, absolute indirect */
- 			p->ainsn.emulate_op = kprobe_emulate_jmp_indirect;
--		} else
-+			break;
-+		case 0b011:	/* FF /3, call far, absolute indirect */
-+		case 0b101:	/* FF /5, jmp far, absolute indirect */
-+			return -EOPNOTSUPP;
-+		}
-+
-+		if (!p->ainsn.emulate_op)
- 			break;
- 
- 		if (insn->addr_bytes != sizeof(unsigned long))
+IOW, the goal here is for generic SNP functionality to be the same for
+*all* SNP guests. We won't do the AMD's version of vTOM enablement,
+Hyper-V's version of vTOM enablement and so on. It must be a single
+vTOM feature which works on *all* hypervisors as vTOM is a generic SNP
+feature - not Hyper-V feature.
+
+> Of course, when you go from N=1 hypervisors (i.e., KVM) to N=2 (KVM
+> and Hyper-V, you find some places where incorrect assumptions were
+> made or some generalizations are needed. Dexuan Cui's patch set for
+> TDX support is fixing those places that he has encountered. But with
+> those fixes, the TDX support will JustWork(tm) for Linux guests on
+> Hyper-V.
+
+That sounds like the right direction to take.
+
+> I haven't gone deeply into the situation with AMD C-bit support on
+> Hyper-V. Tianyu Lan's set of patches for that support is a bit bigger,
+> and I'm planning to look closely to understand whether it's also just
+> fixing incorrect assumptions and such, or whether they really are
+> some differences with Hyper-V. If there are differences, I want to
+> understand why.
+
+You and me too. So I guess we should look at Tianyu's set first.
+
+Thx.
+
 -- 
-2.37.2
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
