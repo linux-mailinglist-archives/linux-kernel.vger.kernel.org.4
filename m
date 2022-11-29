@@ -2,135 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E674163C475
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:59:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3FC63C477
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234155AbiK2P7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 10:59:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
+        id S234334AbiK2QAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 11:00:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235173AbiK2P7E (ORCPT
+        with ESMTP id S235976AbiK2P7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:59:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F23E69DD3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:58:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79B62617A3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 15:58:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 480A9C4347C;
-        Tue, 29 Nov 2022 15:58:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669737484;
-        bh=zrEzumqsT84sAsMe/WdazNyakaN/EBtxrup9XhwiJ4Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HC6K4vRPijG2/QsB4kYC85xkx1mTzkG9RkL0BQLiuotFt2sKX0H4H5zXCVYLRUKbn
-         uWQvugQj4i5qxzQ8hY3jdzBj690iJDLfZrS60qEbWPqWpaMdANDmcwv0uzM90Mezcz
-         VunLEvGuVXvpEB1Ujxcz/dCY0nmmsI2eLYu39hruALAvZ2q48qAeOdp1ZQ/2jc6Fd2
-         33shhUUSqaaagf2jJTqjTWQI2b8Kt2SXuvkz0cGJJNNWYpY7NkqH75SuBUp1oR/FZr
-         t2+nXbe0jPRFqyHmURxBRbLhYHVx67zPgYdAbnxhXMnzBxszvp+yLsmVb9E5Ym0iez
-         FPKVX6/4YknqA==
-Date:   Tue, 29 Nov 2022 15:57:58 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Wenjie Li <wenjieli@qti.qualcomm.com>,
-        David Wang =?utf-8?B?546L5qCH?= <wangbiao3@xiaomi.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH-tip v4] sched: Fix NULL user_cpus_ptr check in
- dup_user_cpus_ptr()
-Message-ID: <20221129155757.GC26561@willie-the-truck>
-References: <20221125023943.1118603-1-longman@redhat.com>
- <92b99a5e-1588-4e08-a652-72e9c51421cf@redhat.com>
- <20221128120008.GA25090@willie-the-truck>
- <d49a78bb-dce1-92b1-0f67-d71259609263@redhat.com>
- <20221129140759.GA26437@willie-the-truck>
- <f669ce38-1e23-04b4-fe6f-591579e817de@redhat.com>
+        Tue, 29 Nov 2022 10:59:49 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04835C32;
+        Tue, 29 Nov 2022 07:58:31 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id z20so20365486edc.13;
+        Tue, 29 Nov 2022 07:58:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2jte3UkADbZqkDkz468rdbv/0NOM4s5ZmViVa2ZZlQ8=;
+        b=Ree2fF3HX+AtsxhEFrz1qEpeKKbWHPt72RxapGbQ9mUbpnTqTcYediTJwrsJ5vhV6/
+         94Kq8wTv5UtB4tFX/ROQkaHJSv6QnrQgBTGBAp2chXmAqegzWPlWVFMOLgD8r7AxRfN0
+         P2I/JGlIKlC/Bg68UNxWT/22QOYhzzoE8rKhr0qrQU4FYi+DAX4W6v0Ptzb6DacjyScm
+         Fp9BcWg1QebXz8OQ4gjUrdkmGEWaHwXjgnt8xPbKkqCoMR17Dm5v20X4ZKaPJ7tLUfdU
+         3UY5KDQk549Eg2kMXZ4GilZwMLbX36iZR2KndrYtSS2uSq3I+DB0PVBgBfLL7Q0WajVD
+         l98Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2jte3UkADbZqkDkz468rdbv/0NOM4s5ZmViVa2ZZlQ8=;
+        b=mL93OiXb0GuuOYMxMS5VtymPoqh3PztV1jThfUQ/mWWqKNUIq0Y7mStYfjjF9hOIvL
+         ZrbjAhrc6T5iDhFQOYmPBQ6MDTUIapZe8PUbZIh2UjVUCl/xkcuMyjZ5L03mGI/g4Bkx
+         JdSTsKJcYdvgienuO8054TBH/JUjnMA4pRiYtMVHdFXTqeh/5xhZQ/LS76ZU4XEVdw06
+         YElEni9FYUr8fwjmwFirKQSW0nFjFaK/EYs2My3Tkz3jJ44jiuekdnwKFlGhNl2DUXDU
+         44rIId/hmVQthCzK8+VWz/FqjRmn391qYJFOlKFeNG+4V9WRS7bcea6hs+amRLazzDF8
+         tC5w==
+X-Gm-Message-State: ANoB5pmeUZT4CEt2S1GNMM/2EDOBb1PE2bGtNze8vAjnDBpnnEAywkDp
+        lak/ejHRYIgOMnJnamYTsWdEhuWcM+s=
+X-Google-Smtp-Source: AA0mqf7MLkbVibcb05kCmtJmvGzjV6UQaLM+Y5Puxu0X7+mbJ6jxLm2heIZmnIZoyFtt8yN2Ls5DnQ==
+X-Received: by 2002:a05:6402:388e:b0:468:fb0d:2d8b with SMTP id fd14-20020a056402388e00b00468fb0d2d8bmr20747563edb.124.1669737510334;
+        Tue, 29 Nov 2022 07:58:30 -0800 (PST)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id u23-20020a056402065700b0046778ce5fdfsm6371059edx.10.2022.11.29.07.58.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 07:58:29 -0800 (PST)
+From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: [PATCH v2 0/4] kvfree_rcu() updates related to polled API
+Date:   Tue, 29 Nov 2022 16:58:18 +0100
+Message-Id: <20221129155822.538434-1-urezki@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f669ce38-1e23-04b4-fe6f-591579e817de@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 10:32:49AM -0500, Waiman Long wrote:
-> On 11/29/22 09:07, Will Deacon wrote:
-> > On Mon, Nov 28, 2022 at 10:11:52AM -0500, Waiman Long wrote:
-> > > On 11/28/22 07:00, Will Deacon wrote:
-> > > > On Sun, Nov 27, 2022 at 08:43:27PM -0500, Waiman Long wrote:
-> > > > > On 11/24/22 21:39, Waiman Long wrote:
-> > > > > > In general, a non-null user_cpus_ptr will remain set until the task dies.
-> > > > > > A possible exception to this is the fact that do_set_cpus_allowed()
-> > > > > > will clear a non-null user_cpus_ptr. To allow this possible racing
-> > > > > > condition, we need to check for NULL user_cpus_ptr under the pi_lock
-> > > > > > before duping the user mask.
-> > > > > > 
-> > > > > > Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
-> > > > > > Signed-off-by: Waiman Long <longman@redhat.com>
-> > > > > This is actually a pre-existing use-after-free bug since commit 07ec77a1d4e8
-> > > > > ("sched: Allow task CPU affinity to be restricted on asymmetric systems").
-> > > > > So it needs to be fixed in the stable release as well. Will resend the patch
-> > > > > with an additional fixes tag and updated commit log.
-> > > > Please can you elaborate on the use-after-free here? Looking at
-> > > > 07ec77a1d4e8, the mask is only freed in free_task() when the usage refcount
-> > > > has dropped to zero and I can't see how that can race with fork().
-> > > > 
-> > > > What am I missing?
-> > > I missed that at first. The current task cloning process copies the content
-> > > of the task structure over to the newly cloned/forked task. IOW, if
-> > > user_cpus_ptr had been set up previously, it will be copied over to the
-> > > cloned task. Now if user_cpus_ptr of the source task is cleared right after
-> > > that and before dup_user_cpus_ptr() is called. The obsolete user_cpus_ptr
-> > > value in the cloned task will remain and get used even if it has been freed.
-> > > That is what I call as use-after-free and double-free.
-> > If the parent task can be modified concurrently with dup_task_struct() then
-> > surely we'd have bigger issues because that's not going to be atomic? At the
-> > very least we'd have a data race, but it also feels like we could end up
-> > with inconsistent task state in the child. In fact, couldn't the normal
-> > 'cpus_mask' be corrupted by a concurrent set_cpus_allowed_common()?
-> > 
-> > Or am I still failing to understand the race?
-> > 
-> A major difference between cpus_mask and user_cpus_ptr is that for
-> cpus_mask, the bitmap is embedded into task_struct whereas user_cpus_ptr is
-> a pointer to an external bitmap. So there is no issue of use-after-free wrt
-> cpus_mask. That is not the case where the memory of the user_cpus_ptr of the
-> parent task is freed, but then a reference to that memory is still available
-> in the child's task struct and may be used.
+v1 -> v2:
+  - Rebase on latest dev.2022.11.23a branch.
 
-Sure, I'm not saying there's a UAF on cpus_mask, but I'm concerned that we
-could corrupt the data and end up with an affinity mask that doesn't correspond
-to anything meaningful. Do you agree that's possible?
+Uladzislau Rezki (Sony) (4):
+  rcu/kvfree: Switch to a generic linked list API
+  rcu/kvfree: Move bulk/list reclaim to separate functions
+  rcu/kvfree: Move need_offload_krc() out of krcp->lock
+  rcu/kvfree: Use a polled API to speedup a reclaim process
 
-> Note that the problematic concurrence is not between the copying of task
-> struct and changing of the task struct. It is what will happen after the
-> task struct copying has already been done with an extra reference present in
-> the child's task struct.
+ kernel/rcu/tree.c | 221 +++++++++++++++++++++++++++-------------------
+ 1 file changed, 131 insertions(+), 90 deletions(-)
 
-Well, sort of, but the child only has the extra reference _because_ the parent
-pointer was concurrently cleared to NULL, otherwise dup_user_cpus_ptr() would
-have allocated a new copy and we'd be ok, no?
+-- 
+2.30.2
 
-Overall, I'm just very wary that we seem to be saying that copy_process()
-can run concurrently with changes to the parent. Maybe it's all been written
-with that in mindi (including all the arch callbacks), but I'd be astonished
-if this is the only problem in there.
-
-Will
