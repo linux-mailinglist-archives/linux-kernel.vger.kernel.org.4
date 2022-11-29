@@ -2,200 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C17C63C6AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BDEC63C6B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:47:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbiK2Rqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 12:46:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
+        id S236094AbiK2RrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 12:47:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbiK2RqZ (ORCPT
+        with ESMTP id S235857AbiK2RrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 12:46:25 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCFA55A9C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:46:23 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p04gU-0005vz-NS; Tue, 29 Nov 2022 18:46:18 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p04gT-0017tc-2k; Tue, 29 Nov 2022 18:46:17 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p04gT-001HSw-1w; Tue, 29 Nov 2022 18:46:17 +0100
-Date:   Tue, 29 Nov 2022 18:46:16 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 2/5] pwm: jz4740: Fix pin level of disabled TCU2
- channels, part 2
-Message-ID: <20221129174616.tomdrudlz5e7ub6f@pengutronix.de>
-References: <20221024205213.327001-1-paul@crapouillou.net>
- <20221024205213.327001-3-paul@crapouillou.net>
- <20221025064410.brrx5faa4jtwo67b@pengutronix.de>
- <Y90BKR.1BA4VWKIBIKU@crapouillou.net>
- <20221128143911.n3woy6mjom5n4sad@pengutronix.de>
- <8VZ3MR.B9R316RWSFMQ@crapouillou.net>
- <20221129162447.sqa6veugc2xn6vui@pengutronix.de>
- <dfb368f51365ab068d477154c8051117bae197de.camel@crapouillou.net>
+        Tue, 29 Nov 2022 12:47:12 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B239754B1B;
+        Tue, 29 Nov 2022 09:47:11 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e724329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e724:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DDD711EC04CB;
+        Tue, 29 Nov 2022 18:47:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1669744029;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=JYhgRUKR3FJNpFBq84Sg5nW8vU15kq68SWoPzofwG0Q=;
+        b=C9yhgsGHLVsG8saaLstTe4dmxJhjJrBTCPd3mxTbQfv/ZNKgNmjwaJFRkyIDeReJdY8oJp
+        ijIxUTdRKklOYNwQC8739rCLHnOBfPiMOPxKOA45aWsUni+NS12zAui7+VMmWL4BjXL+IF
+        GJdt2hcUVZySzvYGVvQ2SxFp4+cFRpM=
+Date:   Tue, 29 Nov 2022 18:47:06 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: Re: [Patch v3 07/14] x86/hyperv: Change vTOM handling to use
+ standard coco mechanisms
+Message-ID: <Y4ZFmktxPlEjyoeR@zn.tnic>
+References: <BYAPR21MB16886FF8B35F51964A515CD5D70C9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <BYAPR21MB1688AF2F106CDC14E4F97DB4D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4Ti4UTBRGmbi0hD@zn.tnic>
+ <BYAPR21MB1688466C7766148C6B3B4684D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4Tu1tx6E1CfnrJi@zn.tnic>
+ <BYAPR21MB1688BCC5DF4636DBF4DEA525D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4USb2niHHicZLCY@zn.tnic>
+ <BYAPR21MB16886FF5A63334994476B6ADD7129@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4XFjqEATqOgEnR6@zn.tnic>
+ <BYAPR21MB1688D73FBBF41B6E21265DA3D7129@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="b7nyxzolkfq6ylkb"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <dfb368f51365ab068d477154c8051117bae197de.camel@crapouillou.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <BYAPR21MB1688D73FBBF41B6E21265DA3D7129@BYAPR21MB1688.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 29, 2022 at 03:49:06PM +0000, Michael Kelley (LINUX) wrote:
+> But it turns out that AMD really has two fairly different schemes:
+> the C-bit scheme and the vTOM scheme.
 
---b7nyxzolkfq6ylkb
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Except it doesn't:
 
-On Tue, Nov 29, 2022 at 04:58:28PM +0000, Paul Cercueil wrote:
-> Le mardi 29 novembre 2022 =E0 17:24 +0100, Uwe Kleine-K=F6nig a =E9crit=
-=A0:
-> > Hello Paul,
-> >=20
-> > On Tue, Nov 29, 2022 at 12:25:56PM +0000, Paul Cercueil wrote:
-> > > Hi Uwe,
-> > >=20
-> > > Le lun. 28 nov. 2022 =E0 15:39:11 +0100, Uwe Kleine-K=F6nig
-> > > <u.kleine-koenig@pengutronix.de> a =E9crit :
-> > > > Hello,
-> > > >=20
-> > > > On Tue, Oct 25, 2022 at 11:10:46AM +0100, Paul Cercueil wrote:
-> > > > > > Note that for disabled PWMs there is no official guaranty
-> > > > > > about the pin
-> > > > > > state. So it would be ok (but admittedly not great) to
-> > > > > > simplify the
-> > > > > > driver and accept that the pinstate is active while the PWM
-> > > > > > is off.
-> > > > > > IMHO this is also better than a glitch.
-> > > > > >=20
-> > > > > > If a consumer wants the PWM to be in its inactive state, they
-> > > > > > should
-> > > > > > not disable it.
-> > > > >=20
-> > > > > Completely disagree. I absolutely do not want the backlight to
-> > > > > go full
-> > > > > bright mode when the PWM pin is disabled. And disabling the
-> > > > > backlight is a
-> > > > > thing (for screen blanking and during mode changes).
-> > > >=20
-> > > > For some hardwares there is no pretty choice. So the gist is: If
-> > > > the
-> > > > backlight driver wants to ensure that the PWM pin is driven to
-> > > > its
-> > > > inactive level, it should use:
-> > > >=20
-> > > > =A0=A0=A0=A0=A0=A0=A0=A0pwm_apply(pwm, { .period =3D ..., .duty_cyc=
-le =3D 0, .enabled
-> > > > =3D true });
-> > > >=20
-> > > > and better not
-> > > >=20
-> > > > =A0=A0=A0=A0=A0=A0=A0=A0pwm_apply(pwm, { ..., .enabled =3D false });
-> > >=20
-> > > Well that sounds pretty stupid to me; why doesn't the PWM subsystem
-> > > enforce
-> > > that the pins must be driven to their inactive level when the PWM
-> > > function
-> > > is disabled?
-> > >=20
-> > > Then for such hardware you describe, the corresponding PWM
-> > > driver could itself apply a duty_cycle =3D 0 if that's what it takes
-> > > to get an
-> > > inactive state.
-> >=20
-> > Let's assume we claim that on disable the pin is driven to the
-> > inactive level.
-> >=20
-> > The (bad) effect is that for a use case where the pin state doesn't
-> > matter (e.g. a backlight where the power regulator is off), the PWM
-> > keeps running even though it could be disabled and so save some
-> > power.
-> >=20
-> > So to make this use case properly supported, we need another flag in
-> > struct pwm_state that allows the consumer to tell the lowlevel driver
-> > that it's ok to disable the hardware even with the output being UB.
-> > Let's call this new flag "spam" and the pin is allowed to do whatever
-> > it
-> > wants with .spam =3D false.
-> >=20
-> > After that you can realize that applying any state with:
-> >=20
-> > =A0=A0=A0=A0=A0=A0=A0=A0.duty_cycle =3D A,
-> > =A0=A0=A0=A0=A0=A0=A0=A0.period =3D B,
-> > =A0=A0=A0=A0=A0=A0=A0=A0.polarity =3D C,
-> > =A0=A0=A0=A0=A0=A0=A0=A0.enabled =3D false,
-> > =A0=A0=A0=A0=A0=A0=A0=A0.spam =3D true,
-> >=20
-> > semantically (i.e. just looking at the output) has the same effect as
-> >=20
-> > =A0=A0=A0=A0=A0=A0=A0=A0.duty_cycle =3D 0,
-> > =A0=A0=A0=A0=A0=A0=A0=A0.period =3D $something,
-> > =A0=A0=A0=A0=A0=A0=A0=A0.polarity =3D C,
-> > =A0=A0=A0=A0=A0=A0=A0=A0.enabled =3D true,
-> > =A0=A0=A0=A0=A0=A0=A0=A0.spam =3D true,
-> >=20
-> > So having .enabled doesn't add to the expressiveness of pwm_apply(),
-> > because you can specify any configuration without having to resort to
-> > .enabled =3D false. So the enabled member of struct pwm_state can be
-> > dropped.
-> >=20
-> > Then we end up with the exact scenario we have now, just that the
-> > flag
-> > that specifies if the output should be held in the inactive state has
-> > a
-> > bad name.
->=20
-> If I follow you, then it means that the PWM backlight driver pwm_bl.c
-> should set state.enabled=3Dtrue in pwm_backlight_power_off() to make sure
-> that the pin is inactive?
+"In the VMSA of an SNP-active guest, the VIRTUAL_TOM field designates
+a 2MB aligned guest physical address called the virtual top of memory.
+When bit 1 (vTOM) of SEV_FEATURES is set in the VMSA of an SNP-active
+VM, the VIRTUAL_TOM..."
 
-Correct, that's the only way to ensure that the pinlevel stays at the
-intended level.
+So SEV_FEATURES[1] is vTOM and it is part of SNP.
 
-And lowlevel PWM drivers can be improved to disable the hardware when
-they are asked for .duty_cycle =3D 0 (maybe under some additional
-conditions).
+Why do you keep harping on this being something else is beyond me...
 
-Best regards
-Uwe
+I already pointed you to the patch which adds this along with the other
+SEV_FEATURES.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+> The details of these two AMD schemes are pretty different. vTOM is
+> *not* just a minor option on the C-bit scheme. It's an either/or -- a
+> guest VM is either doing the C-bit scheme or the vTOM scheme, not some
+> combination. Linux code in coco/core.c could choose to treat C-bit and
+> vTOM as two sub-schemes under CC_VENDOR_AMD, but that makes the code a
+> bit messy because we end up with "if" statements to figure out whether
+> to do things the C-bit way or the vTOM way.
 
---b7nyxzolkfq6ylkb
-Content-Type: application/pgp-signature; name="signature.asc"
+Are you saying that that:
 
------BEGIN PGP SIGNATURE-----
+	if (cc_vendor == CC_VENDOR_AMD &&
+	    sev_features & MSR_AMD64_SNP_VTOM_ENABLED)
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOGRWUACgkQwfwUeK3K
-7AmPygf/YrZiaQjwEoBu0yuZx8XfGQUIjTHBaNj6Vqu5tVjGxcvb7mWxYOMs7bLY
-5Qx3ZcRBR48+XWZ4/NIYshT2pwfTCV5WnTspldzH/+qkBWPZlOmEyyyXoR/gVGQU
-USUJ7G2iNBdMtPH81d+nkfWA3WvYoDlRXS8YL1CudpUKlXq3sc1kXM4bNJA4lGlO
-TU48wTXtCOLiP0GtPcB9eNWUcwYcpXMMuM0bCeiK23AyvMBoohm+lu6a85G9zaOX
-v2YbjJGns5SOB+sfHv6pp+kht4NM+dq/kzPpeCAdY6+YWuSZvf4y3GFUoA3qG6MC
-/4EYtStInVkwuzrWHO24Azam/uCmHA==
-=Bc6+
------END PGP SIGNATURE-----
+is messy? Why?
 
---b7nyxzolkfq6ylkb--
+We will have to support vTOM sooner or later.
+
+> Or we could model the two AMD schemes as two different vendors,
+> which is what I'm suggesting.  Doing so recognizes that the two schemes
+> are fairly disjoint, and it makes the code cleaner.
+
+How is that any different from the above check?
+
+You *need* some sort of a check to differentiate between the two anyway.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
