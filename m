@@ -2,119 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D2A63BCFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C46A63BD34
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbiK2JbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 04:31:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
+        id S231350AbiK2Jqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 04:46:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbiK2JbI (ORCPT
+        with ESMTP id S229974AbiK2Jqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 04:31:08 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9645BD78
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:31:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669714267; x=1701250267;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zn3TgpOyCXFjKnPgeNLXh/qa7scJstQOq8wptR6uaRs=;
-  b=ZwIOuJmVRSftgKimfFx42E5ofmTP29mP/LNyR12jCuOwyyQPjpwdIfgd
-   rp+TQuzRLDd8k5mSAokt9bPqPkb+rgl+JPRbhAgvpzCQdQX4bq9kKFduj
-   gfmKIp45/KOKtozL6ssk4zxJirjCzS6+K/p2YsXHxTHKW2tzj9ghFbMLE
-   j0Q9zlaiWmJgaYcMNt+wH2dcUNe9APDFSXyyK9l05sEtqtrA7Xg55ffQy
-   34dCHhmuDQhLEfNY9M0P0z+MIifhzUq3UkMGoqyIwcon062e6iNtn+JEk
-   THV38e6z8/ZciZ5uvi738KROIfCmyJkYTOl4jF9fP3pxVHpvCKGWnCTp+
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="313768965"
-X-IronPort-AV: E=Sophos;i="5.96,202,1665471600"; 
-   d="scan'208";a="313768965"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 01:31:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="785974964"
-X-IronPort-AV: E=Sophos;i="5.96,202,1665471600"; 
-   d="scan'208";a="785974964"
-Received: from louislifei-optiplex-7090.sh.intel.com ([10.239.146.218])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Nov 2022 01:31:04 -0800
-From:   Fei Li <fei1.li@intel.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     bp@alien8.de, peterz@infradead.org, dave.hansen@intel.com,
-        gregkh@linuxfoundation.org, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, hpa@zytor.com, yu1.wang@intel.com,
-        conghui.chen@intel.com, fengwei.yin@intel.com, junjie.mao@intel.com
-Subject: [PATCH v3] x86/acrn: Set X86_FEATURE_TSC_KNOWN_FREQ
-Date:   Tue, 29 Nov 2022 17:40:25 +0800
-Message-Id: <20221129094025.907760-1-fei1.li@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 29 Nov 2022 04:46:35 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8982B5A6D9;
+        Tue, 29 Nov 2022 01:46:33 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NLyBk07ThzHwHs;
+        Tue, 29 Nov 2022 17:45:50 +0800 (CST)
+Received: from dggpemm500015.china.huawei.com (7.185.36.181) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 29 Nov 2022 17:46:31 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500015.china.huawei.com
+ (7.185.36.181) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 29 Nov
+ 2022 17:46:31 +0800
+From:   Wang ShaoBo <bobo.shaobowang@huawei.com>
+CC:     <liwei391@huawei.com>, <sameo@linux.intel.com>, <kuba@kernel.org>,
+        <davem@davemloft.net>, <syzkaller-bugs@googlegroups.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bobo.shaobowang@huawei.com>
+Subject: [PATCH] nfc: llcp: Fix race in handling llcp_devices
+Date:   Tue, 29 Nov 2022 17:44:36 +0800
+Message-ID: <20221129094436.3975668-1-bobo.shaobowang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500015.china.huawei.com (7.185.36.181)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using hypervisor-provided TSC frequency is common practice for guests.
-However, for a Linux guest, it may still to reclibrate the ACRN-specific
-TSC frequency if X86_FEATURE_TSC_KNOWN_FREQ flag is not set.
+There are multiple path operate llcp_devices list without protection:
 
-When TSC frequency is known (retrieved from ACRN hypervisor), skip TSC
-refined calibration by setting X86_FEATURE_TSC_KNOWN_FREQ.
+         CPU0                        CPU1
 
-Also remove `inline` for acrn_get_tsc_khz() since it doesn't make sense.
+nfc_unregister_device()        nfc_register_device()
+ nfc_llcp_unregister_device()    nfc_llcp_register_device() //no lock
+    ...                            list_add(local->list, llcp_devices)
+    local_release()
+      list_del(local->list)
 
-Signed-off-by: Fei Li <fei1.li@intel.com>
-Reviewed-by: Yin, Fengwei <fengwei.yin@intel.com>
+        CPU2
+...
+ nfc_llcp_find_local()
+   list_for_each_entry(,&llcp_devices,)
 
+So reach race condition if two of the three occur simultaneously like
+following crash report, although there is no reproduction script in
+syzbot currently, our artificially constructed use cases can also
+reproduce it:
+
+list_del corruption. prev->next should be ffff888060ce7000, but was ffff88802a0ad000. (prev=ffffffff8e536240)
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:59!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 16622 Comm: syz-executor.5 Not tainted 6.1.0-rc6-next-20221125-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:__list_del_entry_valid.cold+0x12/0x72 lib/list_debug.c:59
+Code: f0 ff 0f 0b 48 89 f1 48 c7 c7 60 96 a6 8a 4c 89 e6 e8 4b 29 f0 ff 0f 0b 4c 89 e1 48 89 ee 48 c7 c7 c0 98 a6 8a e8 37 29 f0 ff <0f> 0b 48 89 ee 48 c7 c7 a0 97 a6 8a e8 26 29 f0 ff 0f 0b 4c 89 e2
+RSP: 0018:ffffc900151afd58 EFLAGS: 00010282
+RAX: 000000000000006d RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff88801e7eba80 RSI: ffffffff8166001c RDI: fffff52002a35f9d
+RBP: ffff888060ce7000 R08: 000000000000006d R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff8e536240
+R13: ffff88801f3f3000 R14: ffff888060ce1000 R15: ffff888079d855f0
+FS:  0000555556f57400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f095d5ad988 CR3: 000000002155a000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __list_del_entry include/linux/list.h:134 [inline]
+ list_del include/linux/list.h:148 [inline]
+ local_release net/nfc/llcp_core.c:171 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ nfc_llcp_local_put net/nfc/llcp_core.c:181 [inline]
+ nfc_llcp_local_put net/nfc/llcp_core.c:176 [inline]
+ nfc_llcp_unregister_device+0xb8/0x260 net/nfc/llcp_core.c:1619
+ nfc_unregister_device+0x196/0x330 net/nfc/core.c:1179
+ virtual_ncidev_close+0x52/0xb0 drivers/nfc/virtual_ncidev.c:163
+ __fput+0x27c/0xa90 fs/file_table.c:320
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+This patch add specific mutex lock llcp_devices_list_lock to ensure
+handling llcp_devices list safety.
+
+Fixes: 30cc4587659e ("NFC: Move LLCP code to the NFC top level diirectory")
+Reported-by: syzbot+81232c4a81a886e2b580@syzkaller.appspotmail.com
+Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
 ---
-v3: Update the commit message base on Borislav's comments
-v2: Detail the commit message
----
- arch/x86/include/asm/acrn.h | 5 -----
- arch/x86/kernel/cpu/acrn.c  | 6 ++++++
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ net/nfc/llcp_core.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/acrn.h b/arch/x86/include/asm/acrn.h
-index 1dd14381bcb6..aa12c74ea959 100644
---- a/arch/x86/include/asm/acrn.h
-+++ b/arch/x86/include/asm/acrn.h
-@@ -30,11 +30,6 @@ static inline u32 acrn_cpuid_base(void)
+diff --git a/net/nfc/llcp_core.c b/net/nfc/llcp_core.c
+index 3364caabef8b..7deaecd9d3cd 100644
+--- a/net/nfc/llcp_core.c
++++ b/net/nfc/llcp_core.c
+@@ -17,6 +17,7 @@
+ static u8 llcp_magic[3] = {0x46, 0x66, 0x6d};
+ 
+ static LIST_HEAD(llcp_devices);
++static DEFINE_MUTEX(llcp_devices_list_lock);
+ 
+ static void nfc_llcp_rx_skb(struct nfc_llcp_local *local, struct sk_buff *skb);
+ 
+@@ -168,7 +169,9 @@ static void local_release(struct kref *ref)
+ 
+ 	local = container_of(ref, struct nfc_llcp_local, ref);
+ 
++	mutex_lock(&llcp_devices_list_lock);
+ 	list_del(&local->list);
++	mutex_unlock(&llcp_devices_list_lock);
+ 	local_cleanup(local);
+ 	kfree(local);
+ }
+@@ -282,9 +285,13 @@ struct nfc_llcp_local *nfc_llcp_find_local(struct nfc_dev *dev)
+ {
+ 	struct nfc_llcp_local *local;
+ 
++	mutex_lock(&llcp_devices_list_lock);
+ 	list_for_each_entry(local, &llcp_devices, list)
+-		if (local->dev == dev)
++		if (local->dev == dev) {
++			mutex_unlock(&llcp_devices_list_lock);
+ 			return local;
++		}
++	mutex_unlock(&llcp_devices_list_lock);
+ 
+ 	pr_debug("No device found\n");
+ 
+@@ -1600,7 +1607,9 @@ int nfc_llcp_register_device(struct nfc_dev *ndev)
+ 	timer_setup(&local->sdreq_timer, nfc_llcp_sdreq_timer, 0);
+ 	INIT_WORK(&local->sdreq_timeout_work, nfc_llcp_sdreq_timeout_work);
+ 
++	mutex_lock(&llcp_devices_list_lock);
+ 	list_add(&local->list, &llcp_devices);
++	mutex_unlock(&llcp_devices_list_lock);
+ 
  	return 0;
  }
- 
--static inline unsigned long acrn_get_tsc_khz(void)
--{
--	return cpuid_eax(ACRN_CPUID_TIMING_INFO);
--}
--
- /*
-  * Hypercalls for ACRN
-  *
-diff --git a/arch/x86/kernel/cpu/acrn.c b/arch/x86/kernel/cpu/acrn.c
-index 485441b7f030..c5ff75b6a949 100644
---- a/arch/x86/kernel/cpu/acrn.c
-+++ b/arch/x86/kernel/cpu/acrn.c
-@@ -24,6 +24,12 @@ static u32 __init acrn_detect(void)
- 	return acrn_cpuid_base();
- }
- 
-+static unsigned long acrn_get_tsc_khz(void)
-+{
-+	setup_force_cpu_cap(X86_FEATURE_TSC_KNOWN_FREQ);
-+	return cpuid_eax(ACRN_CPUID_TIMING_INFO);
-+}
-+
- static void __init acrn_init_platform(void)
- {
- 	/* Setup the IDT for ACRN hypervisor callback */
-
-base-commit: b7b275e60bcd5f89771e865a8239325f86d9927d
 -- 
-2.34.1
+2.25.1
 
