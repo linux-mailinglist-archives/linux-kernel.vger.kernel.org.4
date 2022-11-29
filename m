@@ -2,133 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880FD63B89A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE88763B89C
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235477AbiK2DMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 22:12:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
+        id S235303AbiK2DM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 22:12:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235058AbiK2DM1 (ORCPT
+        with ESMTP id S235150AbiK2DMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 22:12:27 -0500
-Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [118.143.206.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 430DF32B91
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 19:12:26 -0800 (PST)
-X-IronPort-AV: E=Sophos;i="5.96,202,1665417600"; 
-   d="scan'208";a="39313112"
-Received: from hk-mbx11.mioffice.cn (HELO xiaomi.com) ([10.56.21.121])
-  by outboundhk.mxmail.xiaomi.com with ESMTP; 29 Nov 2022 11:11:19 +0800
-Received: from yz-mbx03.mioffice.cn (10.237.88.123) by HK-MBX11.mioffice.cn
- (10.56.21.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 29 Nov
- 2022 11:11:18 +0800
-Received: from BJ-MBX04.mioffice.cn (10.237.8.124) by yz-mbx03.mioffice.cn
- (10.237.88.123) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 29 Nov
- 2022 11:11:17 +0800
-Received: from BJ-MBX04.mioffice.cn ([fe80::44a0:4515:f68b:f8b1]) by
- BJ-MBX04.mioffice.cn ([fe80::44a0:4515:f68b:f8b1%18]) with mapi id
- 15.02.0986.036; Tue, 29 Nov 2022 11:11:17 +0800
-From:   =?utf-8?B?RGF2aWQgV2FuZyDnjovmoIc=?= <wangbiao3@xiaomi.com>
-To:     Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        "Daniel Bristot de Oliveira" <bristot@redhat.com>
-CC:     Phil Auld <pauld@redhat.com>,
-        Wenjie Li <wenjieli@qti.qualcomm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: =?utf-8?B?562U5aSNOiDnrZTlpI06IFtFeHRlcm5hbCBNYWlsXVtQQVRDSC10aXBdIHNj?=
- =?utf-8?B?aGVkOiBGaXggdXNlLWFmdGVyLWZyZWUgYnVnIGluIGR1cF91c2VyX2NwdXNf?=
- =?utf-8?Q?ptr()?=
-Thread-Topic: =?utf-8?B?562U5aSNOiBbRXh0ZXJuYWwgTWFpbF1bUEFUQ0gtdGlwXSBzY2hlZDogRml4?=
- =?utf-8?B?IHVzZS1hZnRlci1mcmVlIGJ1ZyBpbiBkdXBfdXNlcl9jcHVzX3B0cigp?=
-Thread-Index: AQHZAssNy10XwAaeOEOvH5Jk+DM0Hq5UU+6w//+gmoCAAURCsA==
-Date:   Tue, 29 Nov 2022 03:11:17 +0000
-Message-ID: <2e85a57310184654bcde18156ddf2e8d@xiaomi.com>
-References: <20221128014441.1264867-1-longman@redhat.com>
- <63373bf9adfc4e0abd9480d40afa2c5a@xiaomi.com>
- <f5abd919-c996-6549-8d48-a93a66daaef8@redhat.com>
-In-Reply-To: <f5abd919-c996-6549-8d48-a93a66daaef8@redhat.com>
-Accept-Language: en-US, zh-CN
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.237.8.11]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 28 Nov 2022 22:12:54 -0500
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CA8637A;
+        Mon, 28 Nov 2022 19:12:51 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VVym171_1669691567;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VVym171_1669691567)
+          by smtp.aliyun-inc.com;
+          Tue, 29 Nov 2022 11:12:49 +0800
+Date:   Tue, 29 Nov 2022 11:12:46 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     linux-xfs@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Zirong Lang <zlang@redhat.com>
+Subject: Re: [PATCH] xfs: account extra freespace btree splits for multiple
+ allocations
+Message-ID: <Y4V4rlPZ/p6dgISy@B-P7TQMD6M-0146.local>
+Mail-Followup-To: Dave Chinner <david@fromorbit.com>,
+        linux-xfs@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, Zirong Lang <zlang@redhat.com>
+References: <20221109034802.40322-1-hsiangkao@linux.alibaba.com>
+ <20221111203905.GN3600936@dread.disaster.area>
+ <Y27e2U155YvH9et4@debian>
+ <20221112214545.GQ3600936@dread.disaster.area>
+ <Y3NGghqFDEoMPojt@B-P7TQMD6M-0146.local>
+ <20221116025106.GB3600936@dread.disaster.area>
+ <Y3qrEIy3DgGyhjli@debian>
+ <20221122011757.GP3600936@dread.disaster.area>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,SPF_HELO_SOFTFAIL,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221122011757.GP3600936@dread.disaster.area>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgIFdhaW1hbiwgIFBldGVyeiwNCg0KV2UgdGVzdCBuZXcgcGF0Y2ggYmFzaW5nIG9uIHVzZXIg
-cmVxdWVzdGVkIGFmZmluaXR5IHBhdGNoc2V0KHRoZSBsYXRlc3QgdGlwIHRyZWUpLg0KDQpZb3Ug
-dXNlIDcgcGF0Y2ggZnJvbSBBQ0sgY29kZSAuIFlvdSBjaGVjayBmb2xsb3dpbmcgIGxpbmsgY2hh
-bmdlLg0KaHR0cHM6Ly9hbmRyb2lkLXJldmlldy5nb29nbGVzb3VyY2UuY29tL2Mva2VybmVsL2Nv
-bW1vbi8rLzIyNjY3MjQNCmh0dHBzOi8vYW5kcm9pZC1yZXZpZXcuZ29vZ2xlc291cmNlLmNvbS9j
-L2tlcm5lbC9jb21tb24vKy8yMjY2NzQ0DQpodHRwczovL2FuZHJvaWQtcmV2aWV3Lmdvb2dsZXNv
-dXJjZS5jb20vYy9rZXJuZWwvY29tbW9uLysvMjI2Njc0NQ0KaHR0cHM6Ly9hbmRyb2lkLXJldmll
-dy5nb29nbGVzb3VyY2UuY29tL2Mva2VybmVsL2NvbW1vbi8rLzIyNjY4MDQNCmh0dHBzOi8vYW5k
-cm9pZC1yZXZpZXcuZ29vZ2xlc291cmNlLmNvbS9jL2tlcm5lbC9jb21tb24vKy8yMjY2Nzg0DQpo
-dHRwczovL2FuZHJvaWQtcmV2aWV3Lmdvb2dsZXNvdXJjZS5jb20vYy9rZXJuZWwvY29tbW9uLysv
-MjI2NzQ2OA0KaHR0cHM6Ly9hbmRyb2lkLXJldmlldy5nb29nbGVzb3VyY2UuY29tL2Mva2VybmVs
-L2NvbW1vbi8rLzIyNjc2NjQNCg0KWW91IGNhbiBjb25maXJtIHRoaXMgd2l0aCBnb29nbGUgdGVh
-bSBhbmQgY2hlY2sNCmh0dHBzOi8vcGFydG5lcmlzc3VldHJhY2tlci5jb3JwLmdvb2dsZS5jb20v
-dS8wL2lzc3Vlcy8yNTY1NzgzMDIgLg0KDQpIaSAgUGV0ZXJ6ICwNCg0KQ291bGQgeW91IGhlbHAg
-bWVyZ2UNCmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8yMDIyMTEyNTAyMzk0My4xMTE4NjAz
-LTEtbG9uZ21hbkByZWRoYXQuY29tLw0KDQpXZSB3YW50IHRvIHByb3ZpZGUgYmV0dGVyIHByb2R1
-Y3QgZm9yIHVzZXIuDQpUaGFua3MNCg0KRGF2aWQuDQoNCi0tLS0t6YKu5Lu25Y6f5Lu2LS0tLS0N
-CuWPkeS7tuS6ujogV2FpbWFuIExvbmcgPGxvbmdtYW5AcmVkaGF0LmNvbT4NCuWPkemAgeaXtumX
-tDogMjAyMuW5tDEx5pyIMjjml6UgMjM6NDMNCuaUtuS7tuS6ujogRGF2aWQgV2FuZyDnjovmoIcg
-PHdhbmdiaWFvM0B4aWFvbWkuY29tPjsgSW5nbyBNb2xuYXIgPG1pbmdvQHJlZGhhdC5jb20+OyBQ
-ZXRlciBaaWpsc3RyYSA8cGV0ZXJ6QGluZnJhZGVhZC5vcmc+OyBKdXJpIExlbGxpIDxqdXJpLmxl
-bGxpQHJlZGhhdC5jb20+OyBWaW5jZW50IEd1aXR0b3QgPHZpbmNlbnQuZ3VpdHRvdEBsaW5hcm8u
-b3JnPjsgRGlldG1hciBFZ2dlbWFubiA8ZGlldG1hci5lZ2dlbWFubkBhcm0uY29tPjsgU3RldmVu
-IFJvc3RlZHQgPHJvc3RlZHRAZ29vZG1pcy5vcmc+OyBCZW4gU2VnYWxsIDxic2VnYWxsQGdvb2ds
-ZS5jb20+OyBNZWwgR29ybWFuIDxtZ29ybWFuQHN1c2UuZGU+OyBEYW5pZWwgQnJpc3RvdCBkZSBP
-bGl2ZWlyYSA8YnJpc3RvdEByZWRoYXQuY29tPg0K5oqE6YCBOiBQaGlsIEF1bGQgPHBhdWxkQHJl
-ZGhhdC5jb20+OyBXZW5qaWUgTGkgPHdlbmppZWxpQHF0aS5xdWFsY29tbS5jb20+OyBsaW51eC1r
-ZXJuZWxAdmdlci5rZXJuZWwub3JnOyBzdGFibGVAdmdlci5rZXJuZWwub3JnDQrkuLvpopg6IFJl
-OiDnrZTlpI06IFtFeHRlcm5hbCBNYWlsXVtQQVRDSC10aXBdIHNjaGVkOiBGaXggdXNlLWFmdGVy
-LWZyZWUgYnVnIGluIGR1cF91c2VyX2NwdXNfcHRyKCkNCg0KW+WklumDqOmCruS7tl0g5q2k6YKu
-5Lu25p2l5rqQ5LqO5bCP57Gz5YWs5Y+45aSW6YOo77yM6K+36LCo5oWO5aSE55CG44CC6Iul5a+5
-6YKu5Lu25a6J5YWo5oCn5a2Y55aR77yM6K+35bCG6YKu5Lu26L2s5Y+R57uZbWlzZWNAeGlhb21p
-LmNvbei/m+ihjOWPjemmiA0KDQpPbiAxMS8yOC8yMiAwODozNCwgRGF2aWQgV2FuZyDnjovmoIcg
-d3JvdGU6DQo+IEhpLCBXYWltYW4NCj4NCj4gV2UgdXNlIDE0MCBkZXZpY2VzIHRvIHRlc3QgdGhp
-cyBwYXRjaCA3MiBob3Vycy4gIFRoZSBpc3N1ZSBjYW4gbm90IGJlIHJlcHJvZHVjZWQuICBJZiBu
-byB0aGlzIHBhdGNoLCAgdGhlIGlzc3VlIGNhbiBiZSByZXByb2R1Y2VkLg0KPiBDb3VsZCB5b3Ug
-aGVscCBtZXJnZSB0aGlzIHBhdGNoIHRvIG1haWxpbmU/DQo+DQo+IGh0dHBzOi8vbG9yZS5rZXJu
-ZWwub3JnL2FsbC8yMDIyMTEyNTAyMzk0My4xMTE4NjAzLTEtbG9uZ21hbkByZWRoYXQuY28NCj4g
-bS8NCj4NCj4gSWYgdGhpcyBwYXRjaCBpcyBhcHBsaWVkIHRvIHRoZSBtYWludGFpbmVyJ3MgdHJl
-ZSwgIHdlIGNhbiByZXF1ZXN0IGdvb2dsZSB0byBoZWxwIGNoZXJyeXBpY2sgdG8gQUNLIHRvIGZp
-eCBpc3N1ZS4NCg0KSnVzdCB3YW50IHRvIGNsYXJpZnkgaWYgeW91IGFyZSB0ZXN0aW5nIHRoZSBw
-YXRjaCB1c2luZyB0aGUgbGF0ZXN0IHRpcCB0cmVlIG9yIG9uIHRvcCBvZiBhbiBleGlzdGluZyBs
-aW51eCB2ZXJzaW9uIHdpdGhvdXQgdGhlIHBlcnNpc3RlbnQgdXNlciByZXF1ZXN0ZWQgYWZmaW5p
-dHkgcGF0Y2hzZXQuDQoNClBldGVyWiBpcyB0aGUgc2NoZWR1bGVyIG1haW50YWluZXIgd2hvIGlz
-IHJlc3BvbnNpYmxlIGZvciBtZXJnaW5nIHNjaGVkdWxlciByZWxhdGVkIHBhdGNoLiBJdCBpcyB1
-cCB0byBoaW0gYXMgdG8gd2hlbiB0aGF0IHdpbGwgaGFwcGVuLg0KDQpDaGVlcnMsDQpMb25nbWFu
-DQoNCiMvKioqKioq5pys6YKu5Lu25Y+K5YW26ZmE5Lu25ZCr5pyJ5bCP57Gz5YWs5Y+455qE5L+d
-5a+G5L+h5oGv77yM5LuF6ZmQ5LqO5Y+R6YCB57uZ5LiK6Z2i5Zyw5Z2A5Lit5YiX5Ye655qE5Liq
-5Lq65oiW576k57uE44CC56aB5q2i5Lu75L2V5YW25LuW5Lq65Lul5Lu75L2V5b2i5byP5L2/55So
-77yI5YyF5ous5L2G5LiN6ZmQ5LqO5YWo6YOo5oiW6YOo5YiG5Zyw5rOE6Zyy44CB5aSN5Yi244CB
-5oiW5pWj5Y+R77yJ5pys6YKu5Lu25Lit55qE5L+h5oGv44CC5aaC5p6c5oKo6ZSZ5pS25LqG5pys
-6YKu5Lu277yM6K+35oKo56uL5Y2z55S16K+d5oiW6YKu5Lu26YCa55+l5Y+R5Lu25Lq65bm25Yig
-6Zmk5pys6YKu5Lu277yBIFRoaXMgZS1tYWlsIGFuZCBpdHMgYXR0YWNobWVudHMgY29udGFpbiBj
-b25maWRlbnRpYWwgaW5mb3JtYXRpb24gZnJvbSBYSUFPTUksIHdoaWNoIGlzIGludGVuZGVkIG9u
-bHkgZm9yIHRoZSBwZXJzb24gb3IgZW50aXR5IHdob3NlIGFkZHJlc3MgaXMgbGlzdGVkIGFib3Zl
-LiBBbnkgdXNlIG9mIHRoZSBpbmZvcm1hdGlvbiBjb250YWluZWQgaGVyZWluIGluIGFueSB3YXkg
-KGluY2x1ZGluZywgYnV0IG5vdCBsaW1pdGVkIHRvLCB0b3RhbCBvciBwYXJ0aWFsIGRpc2Nsb3N1
-cmUsIHJlcHJvZHVjdGlvbiwgb3IgZGlzc2VtaW5hdGlvbikgYnkgcGVyc29ucyBvdGhlciB0aGFu
-IHRoZSBpbnRlbmRlZCByZWNpcGllbnQocykgaXMgcHJvaGliaXRlZC4gSWYgeW91IHJlY2VpdmUg
-dGhpcyBlLW1haWwgaW4gZXJyb3IsIHBsZWFzZSBub3RpZnkgdGhlIHNlbmRlciBieSBwaG9uZSBv
-ciBlbWFpbCBpbW1lZGlhdGVseSBhbmQgZGVsZXRlIGl0ISoqKioqKi8jDQo=
+Hi Dave,
+
+Sorry for some delay again (I was applying some workaround to our
+production to mitigate this and some other stuffs around there.)
+
+On Tue, Nov 22, 2022 at 12:17:57PM +1100, Dave Chinner wrote:
+> On Mon, Nov 21, 2022 at 06:32:48AM +0800, Gao Xiang wrote:
+> > On Wed, Nov 16, 2022 at 01:51:06PM +1100, Dave Chinner wrote:
+> > > On Tue, Nov 15, 2022 at 03:57:54PM +0800, Gao Xiang wrote:
+> > > > On Sun, Nov 13, 2022 at 08:45:45AM +1100, Dave Chinner wrote:
+> > > ..... because the assumption is that AGFL blocks come from free
+> > > space and so when we are at ENOSPC bno/cnt btrees *do no require
+> > > splits* so will not consume extra space. Hence allocation at ENOSPC
+> > > doesn't need to take into account AGFL block usage because the AGFL
+> > > will not be consumed.
+> > 
+> > I noticed another thing.  I think the reason why the first allocation
+> > in this case caused a cntbt split is that Zorro's workload set
+> > sunit/swidth.  Therefore, due to align requirement, I assume it
+> > called xfs_alloc_fix_len() to fix up agbno and len.
+> > 
+> > Actually I found our workload has the similar sunit/swidth setup and
+> > I am thinking about this these days.  One thing is that why we need
+> > freespace btree splits when consuming free blocks.
+> 
+> stripe alignment does not affect AGFL behaviour, not free space
+> btree allocation requirements. stripe alignment only affects the
+> initial user data allocations from xfs_bmap_btalloc() where the
+> stripe alignment variables (e.g. min align, align slop, etc). None
+> of these parameters are set for AGFL or btree block allocations, so
+> they ignore all alignment constraints.
+> 
+> > Another thing is that considering we're near ENOSPC, and bno/cnt
+> > btrees has only a few records.  If we allocates without alignment,
+> > I also think bno/cnt btrees do no require splits so it will not
+> > consume extra space since the overall extents only decrease.
+> > 
+> > Yet how about allocating with alignment? It seems that it can add
+> > another free extent in order to fulfill the alignment.  I'm not sure
+> > if it can cause some corner cases here.
+> 
+> Alignment never requires an extra allocation - it reserves extra
+> space to select a larger freespace that an aligned extent can be
+> carved out of. If an aligned extent cannot be found, we fall back to
+> unaligned allocation....
+
+As we talked on IRC, I skip this part now.  In brief, I think stripe
+allocation can make it reproduce more frequently.
+
+> 
+> > > Similarly, if we have enough free space records to split a free
+> > > space btree block, we have enough free space to refill the AGFL
+> > > multiple times and we don't have to reserve space for them.
+> > > 
+> > > IOWs, the allocation code has, historically, never had to care about
+> > > AGFL refilling when the AG is near ENOSPC as nothing will consume
+> > > AGFL blocks when the AG is near empty.
+> > > 
+> > > This is the design assumption that AG reservations broke. This is
+> > > why I'm asking you to look into taking blocks that are supposedly
+> > > reserved for the AGFL, because as reserved space is used, the
+> > > bno/cnt btrees will shrink and return those blocks to free space and
+> > > hence they are still available for reserved allocations to use as
+> > > the real physical ENOSPC condition approaches.
+> > 
+> > Yeah, intuitively I also imagine like what you said.  However, does it
+> > have strictly monotonicity, especially with stripe alignment setup?
+> > 
+> > > 
+> > > The more I look at this, the more I think overall answer to this
+> > > problem is to allow AGFL refilling to ignore AG reserves rather than
+> > > causing ENOSPC....
+> > 
+> > Could you give more details how to fit this case?  Also we have a
+> > short talk last Wednesday (sorry that I had an urgent thing at that
+> > time).  You mentioned "the simple solution is something like
+> > min(ag reservation blocks, needed AGFL blocks) instead of accounting
+> > them separately", could you give an example for this case as well?
+> 
+> Go read the head comment in xfs_ag_resv.c. Specifically, this bit:
+> 
+>  * Reserved blocks can be managed by passing one of the enum xfs_ag_resv_type
+>  * values via struct xfs_alloc_arg or directly to the xfs_free_extent
+>  * function.  It might seem a little funny to maintain a reservoir of blocks
+>  * to feed another reservoir, but the AGFL only holds enough blocks to get
+>  * through the next transaction.  The per-AG reservation is to ensure (we
+>  * hope) that each AG never runs out of blocks.  Each data structure wanting
+>  * to use the reservation system should update ask/used in xfs_ag_resv_init.
+> 
+> This was originally written with RMAPBT updates in mind (rmap btree
+> blocks come from the AGFL, just like the bno/cnt btrees). SInce this
+> was written, AGFL blocks have been carved out of this reservation by
+> XFS_AG_RESV_AGFL, and so this reservation space no longer reserves
+> or accounts for refilling the AGFL for non-RMAPBT operations.
+> 
+> My point is, however, that the reservation space was intended for
+> ensuring the AGFL could be refilled without triggering ENOSPC in
+> certain circumstances. And here we are with a situation where
+> refilling the AGFL triggers ENOSPC because of the reservation
+> space.
+> 
+> The "available" calculation in xfs_alloc_space_available() does:
+> 
+> 	available = (int)(pag->pagf_freeblks + agflcount -
+>                           reservation - min_free - args->minleft);
+> 
+> 
+> Which is effectively:
+> 
+> 	available =	(free space) -
+> 			(reserved space) -
+> 			(minimum AG requires to be left free) -
+> 			(minimum allocation requires to left free)
+> 
+> But what we have to consider is that three of these parameters have
+> a component of "AGFL blocks" in them:
+> 
+> free space	= indexed free space + current AGFL blocks
+> reserved space	= space reserved for future AGFL block allocation
+> minimum AG free = AGFL blocks needed for this allocation
+> 
+> Looked at a different way (as a timeline):
+> 
+> free space	= Previously allocated AGFL blocks
+> reserved space  = future allocation AGFL block pool
+> minimum free	= present allocation AGFL needs
+> 
+> So the problem you are seeing is that on the second allocation of a
+> chain, the AGFL blocks previously allocated by the initial
+> allocation in the chain are not sufficient for present AGFL needs
+> and we do not allow the present allocation to use space from the
+> future AGFL block pool to fill the AGFL....
+
+I agree with your word here.
+
+> 
+> Also, we need to keep in mind that the initial allocation uses
+> args->resv = XFS_AG_RESV_NONE, so the reservation space returned for
+> the initial allocation is the full metadata (finobt) + reserved
+> (RMAPBT) reservation that is being made.
+> 
+> The second allocation in the chain (where minleft is zero) really
+> needs to have a reserve pool for AGFL filling. But we don't have a
+> reserve pool for general AGFL allocations anymore, and this looks
+> like we need it. i.e. instead of XFS_AG_RESV_AGFL just being used to
+> avoid accounting AGFL block usage, perhaps it should actually manage
+> a reserve pool for ensuring the AGFL can be refilled near ENOSPC
+> (due to outstanding RMAP/FINOBT reservations) in a single
+> transaction allocation chain....
+> 
+> i.e. so long as the pool has more blocks in it than the current
+> allocation requires to refill the AGFL, the allocation can
+> proceed...
+
+Ok, let me think out a way to use ag_resv framework to resolve this
+issue now.
+
+Thanks,
+Gao Xiang
+
