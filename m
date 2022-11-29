@@ -2,118 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0603963CB2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 23:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 614D363CB2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 23:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236567AbiK2WqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 17:46:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
+        id S236570AbiK2WtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 17:49:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236589AbiK2WqK (ORCPT
+        with ESMTP id S236354AbiK2WtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 17:46:10 -0500
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3553160D8;
-        Tue, 29 Nov 2022 14:46:09 -0800 (PST)
-Received: by mail-wm1-f43.google.com with SMTP id o30so12014509wms.2;
-        Tue, 29 Nov 2022 14:46:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=doewmcbrgpwjzH89FPXB9ag3RThizYw2YLdZZmvdJXQ=;
-        b=mqoJi4bHHJVTNtAwNB0yn/SO3qBgGpMofnRAYtyz7+6zM9fKlKK1FsRvlZMf434i9J
-         8ZXLqOGqjAoURnrQpM4pYRMz0GsVYb4mtl1nO3LiPQAYoILI9c2QmIFBny3LIEIYRiSl
-         AE68hhUZh27MJMIm8VlnPj7EUVt/4mO9XzC90ox11Y6l1U7gjmGK8fRy4O2qPxwIIgIH
-         MaRpJ3GNgCoTWo7KrXdVJZ9M9Q5zLqdqHWS8teE8BoNdyYt6p+KwTFz8vhAh1vyRk+zt
-         7LvXdEct7qfvMR9jCTxaOVrWnwEJTG/EN5GsK9nBkDN0itHi58aGOgsONdU/OE0KpYrd
-         KkIQ==
-X-Gm-Message-State: ANoB5pno0qu7iUF+O+OmdDuyYopQnqCkLlz6KjE+WVbhJBQPoSGTqG3r
-        VnF9WGHAU+2wSwYlWVKaIcKtqZlb4vMCYOZqroo=
-X-Google-Smtp-Source: AA0mqf5FaoFkx1LA1RviPzk6UA+5Zw1Ya4hdKa8dUwBoyPHFHOQCFY64Pi12d1RgLCUyTqLmndw5/JMCcmdLphEGG4U=
-X-Received: by 2002:a05:600c:4f03:b0:3cf:70f7:bfea with SMTP id
- l3-20020a05600c4f0300b003cf70f7bfeamr37626757wmq.104.1669761967478; Tue, 29
- Nov 2022 14:46:07 -0800 (PST)
-MIME-Version: 1.0
-References: <20221123180208.2068936-1-namhyung@kernel.org> <20221123180208.2068936-15-namhyung@kernel.org>
- <CAP-5=fVJjPXk2hmWc6xqDxe06Arq-nOB51CwihAuuVFAoaKJ4g@mail.gmail.com>
- <CAM9d7ciARxBRKpwf-8eQr-x5kR8n0Wv3RmycVFdO4ikeYhDVwg@mail.gmail.com> <CAP-5=fWF7ScB0kHKQsqePHmg3sJf22TOfvKcNeYQdMoD0p8Tbg@mail.gmail.com>
-In-Reply-To: <CAP-5=fWF7ScB0kHKQsqePHmg3sJf22TOfvKcNeYQdMoD0p8Tbg@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 29 Nov 2022 14:45:55 -0800
-Message-ID: <CAM9d7cj-JeKiHUM1Eq36937q+o+yj=DKwt_pYQLD6aC5zCTN+Q@mail.gmail.com>
-Subject: Re: [PATCH 14/15] perf stat: Rename "aggregate-number" to "cpu-count"
- in JSON
-To:     Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+        Tue, 29 Nov 2022 17:49:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4601F624
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:48:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669762105;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HGikrnX364rCVWywnwVxKwVfVWGtIZ6vltliqWh6T0Y=;
+        b=QkbtcaUs6jofWqyQNxcPhO8cZdTiY4ArBcOcNAxY26K8HCUwrR8vNg4FD+tUxj+aRFAxw8
+        Xe66iKljN4Ehpmm9PcW8kRIuu0fvub0ZjgfXk1RAKhsd+AmSeURnpdlrMBN7msB9WEGmfu
+        Ip2fTNLVXqsAed8aPO71iJGxhEoHvK0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-624-jPivghd9PsO6geSKUF7Vmw-1; Tue, 29 Nov 2022 17:48:19 -0500
+X-MC-Unique: jPivghd9PsO6geSKUF7Vmw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CBC1A84ACA0;
+        Tue, 29 Nov 2022 22:48:12 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.22.50.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BC26F140EBF5;
+        Tue, 29 Nov 2022 22:48:09 +0000 (UTC)
+Message-ID: <8b11568a8022cdb759a43f34fdcddf33d9abc37c.camel@redhat.com>
+Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
+From:   Dan Williams <dcbw@redhat.com>
+To:     Nicolas Cavallari <nicolas.cavallari@green-communications.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Maciej =?UTF-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        Ilja Van Sprundel <ivansprundel@ioactive.com>,
+        Joseph Tartaro <joseph.tartaro@ioactive.com>
+Date:   Tue, 29 Nov 2022 16:48:07 -0600
+In-Reply-To: <04ea37cc-d97a-3e00-8a99-135ab38860f2@green-communications.fr>
+References: <04ea37cc-d97a-3e00-8a99-135ab38860f2@green-communications.fr>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 26, 2022 at 7:14 PM Ian Rogers <irogers@google.com> wrote:
->
-> On Thu, Nov 24, 2022 at 11:51 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > Hi Ian,
-> >
-> > On Wed, Nov 23, 2022 at 3:31 PM Ian Rogers <irogers@google.com> wrote:
-> > >
-> > > On Wed, Nov 23, 2022 at 10:02 AM Namhyung Kim <namhyung@kernel.org> wrote:
-> > > >
-> > > > As the JSON output has been broken for a little while, I guess there are
-> > > > not many users.  Let's rename the field to more intuitive one. :)
-> > >
-> > > I'm not sure cpu-count is accurate. For example, an uncore counter in
-> > > a dual socket machine may have a CPU mask of "0, 36", ie one event per
-> > > socket. The aggregate-number in this case I believe is 2.
-> >
-> > You're right.  In case of uncore events, it can be confusing.  But in some
-> > sense it could be thought as cpu count as well since it aggregates the
-> > result from two cpus anyway. :)
-> >
-> > Note that the aggregate-number (or cpu-count) is only printed if users
-> > requested one of aggregation options like --per-socket or --per-core.
-> > In your example, then it could print 1 for each socket.
-> >
-> > But I think uncore events are different from core events, and hopefully
-> > they have separate instances for different sockets or something already.
-> > That means it doesn't need to use those aggregation options for them.
-> >
-> > Also the CSV output uses "cpus" for the same information.  It'd be nice
-> > we could have consistency.
->
-> So in the original patch from Claire she'd passed the name "number"
-> through to the json from the stat code. Having an integer called
-> "number" isn't exactly intention revealing - thank you for your clean
-> up work! :-) I switched "number" to be "aggregate number" as the
-> number comes from the "data" aggregated and the code refers to it as
-> aggregate data. I think aggregate-number is more consistent with the
-> code, and cpu-count would look strange in the uncore case above where
-> the number of CPUs (really hyperthreads) is 72. Perhaps we should also
-> be outputting the aggregation mode with the number. Anyway, I think
-> for the patch series I'd prefer we skipped this one and kept the rest.
+On Wed, 2022-11-23 at 16:40 +0100, Nicolas Cavallari wrote:
+> On 23/11/2022 13:46, Greg Kroah-Hartman wrote:
+> > The Microsoft RNDIS protocol is, as designed, insecure and
+> > vulnerable on
+> > any system that uses it with untrusted hosts or devices.  Because
+> > the
+> > protocol is impossible to make secure, just disable all rndis
+> > drivers to
+> > prevent anyone from using them again.
+> > 
+> > Windows only needed this for XP and newer systems, Windows systems
+> > older
+> > than that can use the normal USB class protocols instead, which do
+> > not
+> > have these problems.
+> > 
+> > Android has had this disabled for many years so there should not be
+> > any
+> > real systems that still need this.
+> 
+> I kind of disagree here. I have seen plenty of android devices that
+> only 
+> support rndis for connection sharing, including my android 11 phone 
+> released in Q3 2020. I suspect the qualcomm's BSP still enable it by 
+> default.
+> 
+> There are also probably cellular dongles that uses rndis by default. 
+> Maybe ask the ModemManager people ?
 
-Right, I think we need a more general term to include non-cpu events.
-But it seems Arnaldo already merged it.
+Yes, there are.
 
-Arnaldo, do you want me to send a revert?
+Another class of WWAN dongles presented as USB RNDIS to the host, had
+an onboard DHCP server, and "bridged" that (for lack of a better term)
+to the WWAN. And like a home router exposed HTTP based management on
+192.168.1.1 to control the WWAN stuff.
 
-Thanks,
-Namhyung
+https://openwrt.org/docs/guide-user/network/wan/wwan/ethernetoverusb_rndis
+
+RE Wifi, (echoing Johannes) there was one Broadcom chipset, but a bunch
+of devices used it. I have some though I don't actively use them. But
+they still work...
+
+Dan
+
+> 
+> I'm also curious if reimplementing it in userspace would solve the 
+> security problem.
+> 
+
