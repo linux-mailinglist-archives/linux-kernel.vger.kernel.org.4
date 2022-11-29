@@ -2,127 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A7863BF47
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E9563BF4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:47:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbiK2LqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 06:46:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
+        id S232341AbiK2Lrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 06:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbiK2LqJ (ORCPT
+        with ESMTP id S229633AbiK2Lrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 06:46:09 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03194A07B
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:46:04 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6EF437F8;
-        Tue, 29 Nov 2022 12:46:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669722362;
-        bh=Ovz0LB8la76yzk7QtN0fJ3MeKeUVniHAK4oNq/JmhdU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cLGhsYUKh9UxJ+SJCJ77f75GAT+BO/2VeNTJDLA6jN0v0YKY0s6duz4qL0jE4gETV
-         legWS57dkl03uxvEbeD/Ctk3fty413sM5R65EsIBYcpaLrbWxM6+7zffRmfvHHs87O
-         vSovZANSTSvoqL5M2HILleRXIVk472OCzyI5f4eA=
-Message-ID: <34c2e9c8-9e3d-129c-8295-18ff440f1f84@ideasonboard.com>
-Date:   Tue, 29 Nov 2022 13:45:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: Fix output polarity setting bug
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        Qiqi Zhang <eddy.zhang@rock-chips.com>
-Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
-        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
-        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20221125104558.84616-1-eddy.zhang@rock-chips.com>
- <CAD=FV=XAU8qQ1tFV9_4FF9Rd7ouT5ORzt6JUnQ4KqJgRsEXqHw@mail.gmail.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <CAD=FV=XAU8qQ1tFV9_4FF9Rd7ouT5ORzt6JUnQ4KqJgRsEXqHw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 29 Nov 2022 06:47:46 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB9323E99;
+        Tue, 29 Nov 2022 03:47:44 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id q17-20020a17090aa01100b002194cba32e9so2197115pjp.1;
+        Tue, 29 Nov 2022 03:47:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TN8un9HpKJ6jCwK6chNoIv5vh7+lXCbI1Cq9dR3jLDM=;
+        b=DgRPd3HpHYjBqkpfMcOfAhhHhMOZuX09/9OZ+YU91yPvGPjeQHvqXvddZ95UM7kS9I
+         IEHzmGqqUj1gYBSfYQWpJYJwDQQ83MdJXdi9gkdgwfqPmwO6EcGEwqOu5UayXtel2sf0
+         uxwnesNdx0jhMbLhQr1q/Rg65Ze75KJtY8E2BfCl1fKNZjcoz80/2+HWQ9Bik88C4XP3
+         CpwXFY4lTHCMnG4/7KMsSaUlIReUV2IMniUxfQ29scl5N9rxn3QXhOGOolfa99DfGFqW
+         RR6cjkKzooQrIWC8df80WnwU5HtoJkNKHqU4Tqk6lxZXmWYhh9TtNiZNh+ps0AoOfpsD
+         +/Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TN8un9HpKJ6jCwK6chNoIv5vh7+lXCbI1Cq9dR3jLDM=;
+        b=8JlRKiUu1W/YUpsn3RUAzqIr+eCORr7y0r63S/aGzdtL8UZy0Uv3dGvczhkm3zN5cS
+         XVx96A57T8HFoS6D0LGM9vEtHyNB72+6mNsVgTq66P5naRZabBuqbXPOJYsVgOP+mDK1
+         BGHG/TrIL+jnt0Cq+3KzRz2nN1KNZ6lMlI6xF4jUENuUgggM9DmeUj5nB5WnGzPNTBYz
+         y1igwdTIxnD1BzssUsba0gULEGD4DYIxzBsUN9AUd9pBjCwV77wT8J+PDJLQo4ywl6/l
+         xX1zSLQ2QFsRNDmVTIb5k0fQz0FW/52Pa9g91MBjEX0RJfq+EBtGJGSdaQ/8p66kOmNz
+         qy/w==
+X-Gm-Message-State: ANoB5pl7EPqtBxSiM7Kmb9LURY2UNoDk/FkMfax5x55GIfIcrbHhi/pJ
+        lUI0YMpQ1SUPQGNHBxwB4sf13HETpEk=
+X-Google-Smtp-Source: AA0mqf6yAKePvogp5gmP0oXugJ5Jp+FCAk6YVnNJnROr1Bt42G69e7CFZNaPUsXZrgPZR7fal7ec2Q==
+X-Received: by 2002:a17:903:cc:b0:189:7441:1ada with SMTP id x12-20020a17090300cc00b0018974411adamr16644845plc.13.1669722463392;
+        Tue, 29 Nov 2022 03:47:43 -0800 (PST)
+Received: from localhost.localdomain (2001-b400-e2d4-7fe5-5c2c-fa0a-e67b-3955.emome-ip6.hinet.net. [2001:b400:e2d4:7fe5:5c2c:fa0a:e67b:3955])
+        by smtp.gmail.com with ESMTPSA id f14-20020a170902684e00b001892af9472esm10560709pln.261.2022.11.29.03.47.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 03:47:42 -0800 (PST)
+From:   Owen Yang <ecs.taipeikernel@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Matthias Kaehlcke <mka@google.com>,
+        Abner Yen <abner.yen@ecs.com.tw>,
+        Gavin Lee <gavin.lee@ecs.com.tw>,
+        Bob Moragues <moragues@google.com>, Harvey <hunge@google.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Owen Yang <ecs.taipeikernel@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v9 1/2] dt-bindings: arm: qcom: Add zombie
+Date:   Tue, 29 Nov 2022 19:47:08 +0800
+Message-Id: <20221129194620.v9.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/11/2022 03:13, Doug Anderson wrote:
-> Hi,
-> 
-> On Fri, Nov 25, 2022 at 2:54 AM Qiqi Zhang <eddy.zhang@rock-chips.com> wrote:
->>
->> According to the description in ti-sn65dsi86's datasheet:
->>
->> CHA_HSYNC_POLARITY:
->> 0 = Active High Pulse. Synchronization signal is high for the sync
->> pulse width. (default)
->> 1 = Active Low Pulse. Synchronization signal is low for the sync
->> pulse width.
->>
->> CHA_VSYNC_POLARITY:
->> 0 = Active High Pulse. Synchronization signal is high for the sync
->> pulse width. (Default)
->> 1 = Active Low Pulse. Synchronization signal is low for the sync
->> pulse width.
->>
->> We should only set these bits when the polarity is negative.
->> Signed-off-by: Qiqi Zhang <eddy.zhang@rock-chips.com>
->> ---
->>   drivers/gpu/drm/bridge/ti-sn65dsi86.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
->> index 3c3561942eb6..eb24322df721 100644
->> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
->> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
->> @@ -931,9 +931,9 @@ static void ti_sn_bridge_set_video_timings(struct ti_sn65dsi86 *pdata)
->>                  &pdata->bridge.encoder->crtc->state->adjusted_mode;
->>          u8 hsync_polarity = 0, vsync_polarity = 0;
->>
->> -       if (mode->flags & DRM_MODE_FLAG_PHSYNC)
->> +       if (mode->flags & DRM_MODE_FLAG_NHSYNC)
->>                  hsync_polarity = CHA_HSYNC_POLARITY;
->> -       if (mode->flags & DRM_MODE_FLAG_PVSYNC)
->> +       if (mode->flags & DRM_MODE_FLAG_NVSYNC)
->>                  vsync_polarity = CHA_VSYNC_POLARITY;
-> 
-> Looks right to me.
-> 
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> 
-> I've never seen the polarity matter for any eDP panels I've worked
-> with, which presumably explains why this was wrong for so long. As far
+Add entries in the device tree binding for sc7280-zombie.
 
-Afaik, DP doesn't have sync polarity as such (neither does DSI), and the 
-sync polarity is just "metadata". So if you're in full-DP domain, I 
-don't see why it would matter. I guess it becomes relevant when you 
-convert from DP to some other bus format.
+Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
+---
 
-> as I can tell, it's been wrong since the start. Probably you should
-> have:
-> 
-> Fixes: a095f15c00e2 ("drm/bridge: add support for sn65dsi86 bridge driver")
-> 
-> I put this on a sc7180-trogdor-lazor device and it didn't make
-> anything worse. Since the sync polarity never mattered to begin with,
-> I guess this isn't a surprise. ...so I guess that's a weak tested-by:
-> 
-> Tested-by: Douglas Anderson <dianders@chromium.org>
-> 
-> I'm happy to land this patch, but sounds like we're hoping to get
-> extra testing so I'll hold off for now.
+(no changes since v1)
 
-Looks fine to me and works for me with my DP monitor.
+ Documentation/devicetree/bindings/arm/qcom.yaml | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-
-  Tomi
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 463509f0f23a..7ec6240311db 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -655,6 +655,16 @@ properties:
+           - const: google,villager-sku512
+           - const: qcom,sc7280
+ 
++      - description: Google Zombie (newest rev)
++        items:
++          - const: google,zombie
++          - const: qcom,sc7280
++
++      - description: Google Zombie with LTE (newest rev)
++        items:
++          - const: google,zombie-sku512
++          - const: qcom,sc7280
++
+       - items:
+           - enum:
+               - lenovo,flex-5g
+-- 
+2.17.1
 
