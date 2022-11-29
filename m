@@ -2,154 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E844063C4A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A4463C4A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235705AbiK2QGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 11:06:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
+        id S233747AbiK2QGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 11:06:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235850AbiK2QGH (ORCPT
+        with ESMTP id S236016AbiK2QF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 11:06:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A1266C99
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 08:03:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669737823;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0Gt3AIWb2ri6G3KKDanOT6IHhzcEIhTnTK93LHPt92E=;
-        b=ajHvdcUcrhZ1ONMyVeO/iKIk3Lu2A/AYfjsISLLqGz5WPWgPTjHFzXQUbOeHsrmrrVczvy
-        dhWBmMby5zqDCBHvOEjJODME9dVfoLZCEfBODLZnfga83AIemM/Vi92CIpzGD3T7uDZ5A/
-        PxLoQGaq/mxLBt4NtbWLLHvwYFVVIsM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-212-ryLL5bSvPnmYfwHwl01TRA-1; Tue, 29 Nov 2022 11:03:39 -0500
-X-MC-Unique: ryLL5bSvPnmYfwHwl01TRA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 29 Nov 2022 11:05:56 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B3349083;
+        Tue, 29 Nov 2022 08:05:15 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9E14A811E87;
-        Tue, 29 Nov 2022 16:03:38 +0000 (UTC)
-Received: from [10.22.17.30] (unknown [10.22.17.30])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CC51C492B07;
-        Tue, 29 Nov 2022 16:03:37 +0000 (UTC)
-Message-ID: <4e93019d-4b19-14f9-14d7-da43456d3546@redhat.com>
-Date:   Tue, 29 Nov 2022 11:03:35 -0500
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id C18E941E2F;
+        Tue, 29 Nov 2022 16:05:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1669737913; bh=+fXKO7nYcSqOfbCc7xjBkYcmUHsZizo/Xgv/Sfz9gTw=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=GrWvkywUFBvAgljJBeOX4iz7MQrnlt0WVX65RzvluTRP9Xa76AYt5fmpnq2Bp0bRY
+         MuRmcFkbcowdxv8K7Kto28HLhHC0PmolIlHNeW5oQR52p8mXDevBcO817IfqGna5H5
+         hOlyKN+wxbQZzyB+izJSSyzyy7zL1pEApAlewsPZXSbySy307bnGlxfpaNTB6NjUcS
+         a6ORitLsMZD1Bj7u3Xo7bPoGw0Z9VvrYBIx1IYuIOhZveoH9YUqWywMZb8RtkFzBIE
+         GwYKNCyDM72J6J6X9/bN+VvJaO1xFuVI7nwwWJoyaQr5quw0s5jaKtVJp347C7Q0GM
+         4n/KUI9pzc1Dg==
+Message-ID: <ff4273fe-e57f-8ce0-be60-b6b05386ffb4@marcan.st>
+Date:   Wed, 30 Nov 2022 01:05:01 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH-tip v4] sched: Fix NULL user_cpus_ptr check in
- dup_user_cpus_ptr()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
 Content-Language: en-US
-To:     Will Deacon <will@kernel.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Wenjie Li <wenjieli@qti.qualcomm.com>,
-        =?UTF-8?B?RGF2aWQgV2FuZyDnjovmoIc=?= <wangbiao3@xiaomi.com>,
-        linux-kernel@vger.kernel.org
-References: <20221125023943.1118603-1-longman@redhat.com>
- <92b99a5e-1588-4e08-a652-72e9c51421cf@redhat.com>
- <20221128120008.GA25090@willie-the-truck>
- <d49a78bb-dce1-92b1-0f67-d71259609263@redhat.com>
- <20221129140759.GA26437@willie-the-truck>
- <f669ce38-1e23-04b4-fe6f-591579e817de@redhat.com>
- <20221129155757.GC26561@willie-the-truck>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221129155757.GC26561@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20221128142912.16022-1-marcan@marcan.st>
+ <20221128142912.16022-3-marcan@marcan.st>
+ <CAPDyKFobMvef_BWGMR=7avODh2r5XNMGpwO3xYgrN-u=DqRwbg@mail.gmail.com>
+ <41c6882a-bff0-378c-edd3-160b54be7c1d@marcan.st>
+ <a297079e-2dc9-d311-5415-a58332e7a711@linaro.org>
+ <e8c481ba-02a7-f1c7-6314-ea1ddf136998@marcan.st>
+ <4c6b5d55-f6a0-f042-ef10-e282e153a358@linaro.org>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v5 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
+ binding for Apple SoC cpufreq
+In-Reply-To: <4c6b5d55-f6a0-f042-ef10-e282e153a358@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/22 10:57, Will Deacon wrote:
-> On Tue, Nov 29, 2022 at 10:32:49AM -0500, Waiman Long wrote:
->> On 11/29/22 09:07, Will Deacon wrote:
->>> On Mon, Nov 28, 2022 at 10:11:52AM -0500, Waiman Long wrote:
->>>> On 11/28/22 07:00, Will Deacon wrote:
->>>>> On Sun, Nov 27, 2022 at 08:43:27PM -0500, Waiman Long wrote:
->>>>>> On 11/24/22 21:39, Waiman Long wrote:
->>>>>>> In general, a non-null user_cpus_ptr will remain set until the task dies.
->>>>>>> A possible exception to this is the fact that do_set_cpus_allowed()
->>>>>>> will clear a non-null user_cpus_ptr. To allow this possible racing
->>>>>>> condition, we need to check for NULL user_cpus_ptr under the pi_lock
->>>>>>> before duping the user mask.
->>>>>>>
->>>>>>> Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
->>>>>>> Signed-off-by: Waiman Long <longman@redhat.com>
->>>>>> This is actually a pre-existing use-after-free bug since commit 07ec77a1d4e8
->>>>>> ("sched: Allow task CPU affinity to be restricted on asymmetric systems").
->>>>>> So it needs to be fixed in the stable release as well. Will resend the patch
->>>>>> with an additional fixes tag and updated commit log.
->>>>> Please can you elaborate on the use-after-free here? Looking at
->>>>> 07ec77a1d4e8, the mask is only freed in free_task() when the usage refcount
->>>>> has dropped to zero and I can't see how that can race with fork().
->>>>>
->>>>> What am I missing?
->>>> I missed that at first. The current task cloning process copies the content
->>>> of the task structure over to the newly cloned/forked task. IOW, if
->>>> user_cpus_ptr had been set up previously, it will be copied over to the
->>>> cloned task. Now if user_cpus_ptr of the source task is cleared right after
->>>> that and before dup_user_cpus_ptr() is called. The obsolete user_cpus_ptr
->>>> value in the cloned task will remain and get used even if it has been freed.
->>>> That is what I call as use-after-free and double-free.
->>> If the parent task can be modified concurrently with dup_task_struct() then
->>> surely we'd have bigger issues because that's not going to be atomic? At the
->>> very least we'd have a data race, but it also feels like we could end up
->>> with inconsistent task state in the child. In fact, couldn't the normal
->>> 'cpus_mask' be corrupted by a concurrent set_cpus_allowed_common()?
->>>
->>> Or am I still failing to understand the race?
->>>
->> A major difference between cpus_mask and user_cpus_ptr is that for
->> cpus_mask, the bitmap is embedded into task_struct whereas user_cpus_ptr is
->> a pointer to an external bitmap. So there is no issue of use-after-free wrt
->> cpus_mask. That is not the case where the memory of the user_cpus_ptr of the
->> parent task is freed, but then a reference to that memory is still available
->> in the child's task struct and may be used.
-> Sure, I'm not saying there's a UAF on cpus_mask, but I'm concerned that we
-> could corrupt the data and end up with an affinity mask that doesn't correspond
-> to anything meaningful. Do you agree that's possible?
-That is certainly possible. So we have to be careful about it.
->
->> Note that the problematic concurrence is not between the copying of task
->> struct and changing of the task struct. It is what will happen after the
->> task struct copying has already been done with an extra reference present in
->> the child's task struct.
-> Well, sort of, but the child only has the extra reference _because_ the parent
-> pointer was concurrently cleared to NULL, otherwise dup_user_cpus_ptr() would
-> have allocated a new copy and we'd be ok, no?
-Yes, that is exactly where the problem is and this is what my patch is 
-trying to fix.
->
-> Overall, I'm just very wary that we seem to be saying that copy_process()
-> can run concurrently with changes to the parent. Maybe it's all been written
-> with that in mindi (including all the arch callbacks), but I'd be astonished
-> if this is the only problem in there.
+On 30/11/2022 00.46, Krzysztof Kozlowski wrote:
+> On 29/11/2022 16:17, Hector Martin wrote:
+>> When it takes 10 times more man-hours to upstream a driver than to
+>> reverse engineer and write it with zero documentation, never mind the
+>> calendar time it takes, something is very wrong. 
+> 
+> Yes, that's a point. Yet we (community) still have another goal here
+> than the pure goal of submitter. The submitter wants its stuff upstream.
+> Therefore this upstreaming effort is for submitter a bit wasted (as I
+> agree that reverse-engineering should be the biggest task).
+> 
+> However the community (expressed maybe mostly as maintainers) wants
+> something which will be maintainable and usable also for others, not
+> only for patch submitters.
+> 
+> Indeed maybe 10x difference between writing code and upstreaming is
+> something to improve, but please do not forget that the concept is here
+> to be able to manage this big codebase.
 
-It seems like that, at least in some cases, the clearing of a task's 
-user_cpus_ptr can be done by another task. So the parent may be unaware 
-of it and so is not its fault.
+You're misunderstanding me here. The problem isn't the goal of keeping
+things maintainable. The problem is that the process involved makes the
+entire experience take much, much longer than it should. A more
+efficient process could maintain the same (actual) code quality with a
+lot less time wasted for everyone, both in process issues and in
+bikeshedding details that don't actually increase code quality.
 
-Cheers,
-Longman
+>> I actively dread
+>> submitting new drivers to new subsystems or some existing ones now. How
+>> much pain will the next one be? Will I be asked to move files around 3
+>> times? Spend 4 rounds bikeshedding the DT schema? Think it's finally
+>> ready only for someone to show up and ask to change a major part of the
+>> design at the last minute?
+>>
+>> And this all when we're actually submitting code of decent quality (I
+>> think I have enough experience not to submit crap most of the time). Now
+>> imagine how much worse this all is for a newbie who submits a
+>> well-intentioned but definitely not up to standard patch. There's a huge
+>> chance they'll give up before ever getting the submission through.
+> 
+> You say this like any newbie should be able to send a patch and get it
+> accepted right away, regardless of actually what is in that patch (not
+> up to standard). It's not newbie's right. No one said it's easy and fast
+> process... If you want easy and fast, do JavaScript... If you want to
+> make it easier and faster in the kernel, then we need more reviewers and
+> maintainers. Somehow many, many people want to send patches, but not
+> that many want to review them.
 
+Again, I'm not saying the bad code should go in. I'm saying the
+*process* is so frustrating that most newbies will give up before the
+code has a chance to evolve from bad to good and go in. The solution
+isn't to let more bad code in, it's to make the process less painful.
+
+And yes, some of it does mean either relaxing style rules or just
+adopting a formatter, because let's face it: complaints that a line is
+81 characters instead of 80 don't *actually* increase code quality to
+any measurable extent, they just waste everyone's time, and if that
+level of style pickiness is desired, that's what formatters are for.
+
+I have personal experience with this with the Asahi Linux bootloader
+(m1n1). We use a formatter for C; the CI tells people when they have to
+run `make format` to fix their style and that solves all our C
+formatting issues (incidentally, we also have a CI bot to check for
+S-o-b lines - very handy). We don't use a formatter for Python, and as a
+result, I don't impose overly strict rules on things like exactly how
+many lines of whitespace should exist between functions or exactly how
+expression continuations should be indented or what the maximum line
+length is (within reason), because code doesn't have to look like it was
+written by a homogeneous robot to still be completely understandable and
+readable to humans using modern editing tools, and trying to teach every
+contributor my own personal style (which isn't even 100% consistent, I'm
+not a robot either!) would be a waste of my and their time. Most
+contributors are capable of defaulting to a readable coding style
+similar to the rest of the code around it, and it's rare I have to tell
+someone to fix the formatting because something is clearly wrong (like
+blatantly inconsistent block indentation).
+
+- Hector
