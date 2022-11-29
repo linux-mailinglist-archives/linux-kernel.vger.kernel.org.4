@@ -2,114 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 181C863CA87
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A131863CA8E
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237082AbiK2VhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 16:37:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
+        id S236838AbiK2Vjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 16:39:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236731AbiK2VhI (ORCPT
+        with ESMTP id S236228AbiK2Vj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 16:37:08 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A215E3E1
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:37:07 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id ud5so36975107ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:37:07 -0800 (PST)
+        Tue, 29 Nov 2022 16:39:28 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038F76153D
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:39:28 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id g7so7303848ile.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:39:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pWF9gOd/OY/hKO0R1X+AR0OfRDJ2mDFKtPhWMv/Y0Hg=;
-        b=C3cqCKNZvB+oxs2Z7PiDFvl3m4uH+qKJOwduAl71kmF3MfYto97m5S60Fz47UIGVVE
-         kTnLFuPBp8XqzvmLdO2DhSNSd+/QRot4t0KXV7WJ9AAzeTkf/suAR3qs6xkayDF5L3T2
-         b8ycGwfFGvOZxsfqaidTxUR3UbGtV59MiZFj4=
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S2p1eoCdr7KfcBrhs1qvBb6yKyIDUaXwqBy/UqiA0oU=;
+        b=CXGl0fZB4PaRYBUGI0z2HYZzP6fqFPVKlGn03PWwWzbfs56WKmqEpQNQu7T8LgiVfR
+         pymxDoBGBdAqVj/jwHnhQZ7xmjPb0yl9JqCEW9ZzerE/3rpiFVaNtV8b9hc2rm7dugfd
+         vvTWxvjiFn0acdJVBTJwP2OD5qbktoNW7SLpE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pWF9gOd/OY/hKO0R1X+AR0OfRDJ2mDFKtPhWMv/Y0Hg=;
-        b=jcJcayZMkv1TfUB1z+QVUKbGA0vnaFx5CE2qbMy5qg4lVjDuN/FrOA9Uqf0qTwUbrV
-         B5MNYr61GItZkursPrAt0Vc74ukC8TzYN+nNTlgaTTB3GCCuaQ9jX7aC/eNYTwids3x0
-         RNNwQo8G+xr5ybcV1yVRUHjF5/z/YF+wMZthYUVyjBCMnjjUsFf0rulwJAilsWquvI6f
-         wIt+Q6EUZEL7qHuon4JbCl1nrs/YDuPXP2PW8GYtc9Ae17jf4V35JiZG+oiOmvyDMFG9
-         g/XcORb7+Sv8xkJ+oKHz6OCA26XJV3gkqxijYhVPFiwk9uVYCqhK85YfQP0IooKRMARE
-         wqVw==
-X-Gm-Message-State: ANoB5plgJyUY2eNPczy2PcbH9PFn8M4jEfVTU+GvRBxUBD7WorBYS1Bd
-        IDG1g99yq4YS0Q3E4JbRy6M3nIEmenjy9lx8
-X-Google-Smtp-Source: AA0mqf6eiHgj4bRq8ifZgcdTJwtRG7zwCmAUdjqZ4vKzxFHpb6GGXkRPbho7yvEuGPF9D3kyOly/Kg==
-X-Received: by 2002:a17:906:a113:b0:7b2:7c9a:1849 with SMTP id t19-20020a170906a11300b007b27c9a1849mr48973978ejy.733.1669757825406;
-        Tue, 29 Nov 2022 13:37:05 -0800 (PST)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id q8-20020a17090676c800b0078db18d7972sm6551458ejn.117.2022.11.29.13.37.02
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S2p1eoCdr7KfcBrhs1qvBb6yKyIDUaXwqBy/UqiA0oU=;
+        b=ALJ+h60EMT3GJNp2/WdrPQcdalJNfN+F+KyuiIrLanMlzilbpXMhiZeQ6l2zyvE7uH
+         RhS9nC3E3wAqISwR5h6HSubDJlG7p4owKMUkgogYm9FWRY9RX5Njvxw9PvWFkv0Pv6O2
+         wqIeRHLg4Zwok1rnXRFvC2p9SQXGMV183IxJ+mwQsEfAWG9/pLTahpWugd/wO0LNM5MH
+         cDqESA6wPPOtgxbFWCQhN3OweFcE8jMwNh27n+RC5WgWZ2z546V+gUGbp0THuFMqNtyF
+         DfsRRkdVoxADvQl/fy/CsM0dIvyLv+2Ax7TdvzbBkYwtLSoMocqP8FZHR4jJH7zHLoFF
+         F0Ww==
+X-Gm-Message-State: ANoB5pm7G4OEr9duX9tEZ2dmIfPuGPgHLsbKdmKTMngUT+tmfp4ZvV1j
+        Ztn5gtNosPTJEY1cdubKXufaGA==
+X-Google-Smtp-Source: AA0mqf6qH8euA+r+n8UH6TRig9rXw48v6aSaV/uV9RFgbhVk5ix+kLdPJC7ckGCJzrlPqLBd3gm7CA==
+X-Received: by 2002:a92:db11:0:b0:303:1648:f2b9 with SMTP id b17-20020a92db11000000b003031648f2b9mr5085884iln.56.1669757967308;
+        Tue, 29 Nov 2022 13:39:27 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id b15-20020a02a58f000000b00389e3ca3285sm2014077jam.114.2022.11.29.13.39.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 13:37:03 -0800 (PST)
-Received: by mail-wr1-f42.google.com with SMTP id x17so24165661wrn.6
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:37:02 -0800 (PST)
-X-Received: by 2002:adf:fd89:0:b0:242:1f81:7034 with SMTP id
- d9-20020adffd89000000b002421f817034mr4218482wrr.617.1669757822248; Tue, 29
- Nov 2022 13:37:02 -0800 (PST)
+        Tue, 29 Nov 2022 13:39:26 -0800 (PST)
+Message-ID: <dc7cb519-584c-55f1-4baa-44cd4e0bbfe9@linuxfoundation.org>
+Date:   Tue, 29 Nov 2022 14:39:25 -0700
 MIME-Version: 1.0
-References: <20221118224540.619276-1-uwe@kleine-koenig.org> <20221118224540.619276-37-uwe@kleine-koenig.org>
-In-Reply-To: <20221118224540.619276-37-uwe@kleine-koenig.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 29 Nov 2022 13:36:50 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VFuDRpkGPazE+xqwAj=0J8GO4EDU_fu+W72E+HQchLsQ@mail.gmail.com>
-Message-ID: <CAD=FV=VFuDRpkGPazE+xqwAj=0J8GO4EDU_fu+W72E+HQchLsQ@mail.gmail.com>
-Subject: Re: [PATCH 036/606] drm/bridge: ti-sn65dsi86: Convert to i2c's .probe_new()
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 0/6] selftests: Use "grep -E" instead of "egrep"
+Content-Language: en-US
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <1669165413-12035-1-git-send-email-yangtiezhu@loongson.cn>
+ <bf9b26b5-2793-204f-ba9c-4d9cd55b08ad@loongson.cn>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <bf9b26b5-2793-204f-ba9c-4d9cd55b08ad@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 11/22/22 19:27, Tiezhu Yang wrote:
+> It seems that patch #2~#6 has no conflicts with the other related
+> git tree, but patch #1 is conflicted with paulmck/linux-rcu.git dev.
+> 
+> What should I do?
+> 
+> Shuah, could you please apply patch #2~#6 to your linux-kselftest.git next branch and ignore patch #1?
+> 
+> And then let me send a seperate patch #1 rebased on paulmck/linux-rcu.git dev branch to rcu@vger.kernel.org.
+> 
 
-On Fri, Nov 18, 2022 at 2:46 PM Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.or=
-g> wrote:
->
-> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
->
-> The probe function doesn't make use of the i2c_device_id * parameter so i=
-t
-> can be trivially converted.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+That won't work because linux-kselftest next won't have the linux-rcu content.
+I already picked patches 1,2,6
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Patches 3 (powerpc) and 5 (net) go through powerpc and net trees. Please resend
+just those cc'ing the right people. get_maintainers.pl will give you the info.
 
-As per request in the cover letter (and no countermands in the replies
-to the cover), I'm landing this myself. Pushed to
-drm-misc/drm-misc-next with my review and Laurent's.
+As for patch 1 - perhaps the conflict could be resolved in next.
 
-de86815b3730 drm/bridge: ti-sn65dsi86: Convert to i2c's .probe_new()
+Paul, would you like me to drop rcutorture patch from linux-kselftest next?
+
+thanks,
+-- Shuah
