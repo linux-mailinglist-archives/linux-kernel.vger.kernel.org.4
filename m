@@ -2,48 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBDD63C8CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B49F63C8CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237013AbiK2TxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 14:53:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
+        id S237064AbiK2TxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 14:53:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236051AbiK2Twz (ORCPT
+        with ESMTP id S237012AbiK2TxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 14:52:55 -0500
+        Tue, 29 Nov 2022 14:53:01 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6580713DD5
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:52:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D4817E38;
+        Tue, 29 Nov 2022 11:53:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC682618CF
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 19:52:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC333C433D6;
-        Tue, 29 Nov 2022 19:52:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43650618CF;
+        Tue, 29 Nov 2022 19:53:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67F50C4347C;
+        Tue, 29 Nov 2022 19:52:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669751573;
-        bh=uUwCDFh6hHmw6wVeCsasDlZgCvsubbQSyCtq/S0iuxA=;
+        s=k20201202; t=1669751579;
+        bh=OcROACIvrb3LiNJuXbTdCona28iOYGS64nqNq44dgWw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nJ6Y/jntq4e6lAUThR+vQCykuFS1lLBp8oxzWTB4O+EZTgG2A0C0Xj8Yn4OXlaTjf
-         ++ywL2ITQ9pybHLeA5beIxnNDKUm4VloSn5J9h1GEf8ELmM+5atVAzXWHZi50ribHd
-         J3/gC51Hw/KFVOhZDooxq3KOadAiOeZrk7CRv2Ve5L7SqH4w9DtblbO6hY9KBMcdBi
-         KSwm6doGNtVS/O7izfWRB8Y81Nfry6dsBV8TV4vMa22WYRB4L5GVK/k6inC8/lT+YM
-         wcomDxZeX/EzuxOWt0hXjRex3dI8+2cwTG69EwChYNcMrp0QqN4cQpN9HERUWpg46Y
-         NgT7BesAxxz6Q==
+        b=BZDG9rV6PHI0J1/ftJBGz7DpzeSMkRNt9WynhIHksSsK35T9UZJh3KbEoav9XcaQ2
+         kFkcItn1ZfL48NR6Pv4PEBiZqbgb7IACsQ3llg2IMLvaMkZTTl1xZUc3vgtXSq+aVF
+         F6sMmoQmV6zk75pmuHhM5tAVqJmc2wud1jUM+E9ClLAeqVFNg3t+kN6ENucNV/yOsn
+         9umvOZYOPRk4belQh/b6d7BHnCoiWfeUgHdpaGex2P7EaUN4zMpXvxmtUDvLyluKYz
+         8R7kQIU31rVWaqE71TR+oxLHXFZEzw4lCD62Ktjifao0U3Er4Z4x0ZM8xi/6J7uChV
+         2Bg3TGdbbF3Ag==
 From:   Will Deacon <will@kernel.org>
-To:     Geoff Blake <blakgeof@amazon.com>, linux-kernel@vger.kernel.org
+To:     jonathan.cameron@huawei.com,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Jonathan Corbet <corbet@lwn.net>, liuqi6124@gmail.com,
+        Mark Rutland <mark.rutland@arm.com>,
+        Yicong Yang <yangyicong@huawei.com>, bagasdotme@gmail.com
 Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH] perf/arm-cmn: Add shutdown routine
-Date:   Tue, 29 Nov 2022 19:52:44 +0000
-Message-Id: <166973320082.112522.10687339610259452670.b4-ty@kernel.org>
+        Will Deacon <will@kernel.org>, linux-doc@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        prime.zeng@huawei.com, f.fangjian@huawei.com,
+        linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com,
+        shenyang39@huawei.com
+Subject: Re: [PATCH v3 0/4] Add TLP filter support and some fixes for HiSilicon PCIe PMU
+Date:   Tue, 29 Nov 2022 19:52:46 +0000
+Message-Id: <166973225546.3127880.2609206485650719654.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221125230153.49468-1-blakgeof@amazon.com>
-References: <20221125230153.49468-1-blakgeof@amazon.com>
+In-Reply-To: <20221117084136.53572-1-yangyicong@huawei.com>
+References: <20221117084136.53572-1-yangyicong@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,20 +62,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Nov 2022 17:01:53 -0600, Geoff Blake wrote:
-> The CMN driver does not gracefully handle all
-> restart cases, such as kexec.  On a kexec if the
-> arm-cmn driver is in use it can be left in a state
-> with still active  events that can cause spurious and/or
-> unhandled interrupts that appear as non-fatal kernel errors
-> like below, that can be confusing and misleading:
+On Thu, 17 Nov 2022 16:41:32 +0800, Yicong Yang wrote:
+> From: Yicong Yang <yangyicong@hisilicon.com>
+> 
+> HiSilicon PCIe PMU support count the bandwidth of TLP headers, TLP payloads
+> or both. Add support for it. User can set this through perf tool's
+> 'len_mode' like:
+> 
+>   $# perf stat -e hisi_pcie0_core0/rx_mrd_flux,len_mode=0x1/ sleep 5
 > 
 > [...]
 
 Applied to will (for-next/perf), thanks!
 
-[1/1] perf/arm-cmn: Add shutdown routine
-      https://git.kernel.org/will/c/316f862a787c
+[1/4] drivers/perf: hisi: Fix some event id for hisi-pcie-pmu
+      https://git.kernel.org/will/c/6b4bb4f38dbf
+[2/4] docs: perf: Fix PMU instance name of hisi-pcie-pmu
+      https://git.kernel.org/will/c/eb79f12b4c41
+[3/4] Documentation: perf: Indent filter options list of hisi-pcie-pmu
+      https://git.kernel.org/will/c/c8dff677e6d4
+[4/4] drivers/perf: hisi: Add TLP filter support
+      https://git.kernel.org/will/c/17d573984d4d
 
 Cheers,
 -- 
