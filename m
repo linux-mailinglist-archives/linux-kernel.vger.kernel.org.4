@@ -2,157 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC6A63B99D
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 06:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C6563B9A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 06:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235634AbiK2F6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 00:58:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
+        id S235641AbiK2F7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 00:59:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiK2F6F (ORCPT
+        with ESMTP id S229532AbiK2F7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 00:58:05 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB7227FC7;
-        Mon, 28 Nov 2022 21:58:04 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 212215C010E;
-        Tue, 29 Nov 2022 00:58:04 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 29 Nov 2022 00:58:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669701484; x=
-        1669787884; bh=toRxxeDncESQ5ly6fHLcJiv4LuWMVHyJPEIjPKru2Cg=; b=G
-        nNXEBVXe4/fRb0d2elSjodffbQpUW6HTYxjt5noLwqTcLzbPnXgg4kZXhJ+y+N5A
-        63IexRDGMr0sBbpXHlKacen0AsPhQwg2JvhVDyKI2pG7aYuyPox1aPYqQUAGS0vS
-        DKeCqWIGOhjKD0RE65S1WrmryKdl4QJPy8lD1IOMzAEwXLDuZv3xc46Fbk+1//ew
-        G8UJ15pOIM10t00bTipGEopPFXgxuxjcFN7ZgdPhO9ITMWqkVGyZ2hAjpAdaLvB+
-        NZVOyqD6mBcAgwa+Kv7NPOMWKMT9+Z7AW/0Z802kkbFhmd8J3zOX7HtjB68zqSFF
-        ThWfwj8i8svWWkQkoAz3A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669701484; x=
-        1669787884; bh=toRxxeDncESQ5ly6fHLcJiv4LuWMVHyJPEIjPKru2Cg=; b=e
-        0O86b1KyCXPKIzyCduorHpOyPLo0c6fqtE4XdsEkGMVNoFjJ2UcVu/t32BDxw1F6
-        VZopeONoAKs7vOX9QKO9QURn22eI6uXzk6xD3UGZ2HknF2z072r/FSJlxOy62QDP
-        G/L+tmztMysaR1FeePGQiQQhF+kShkgO8o2uh/vR7MddHxsuNFQ+NZAqu/T2Aj+1
-        9mlV8uaoC3yt3ATjcnbMFMDZn5+RQpz3FGhujsllztySNRLdo+Fl8UPBH074w5Y5
-        rhH/cz4bWStDGX/NVpaCTy/x46eI7Me85xrDFeUWIsbGplTToygg9X6wOPAgCth7
-        W/32C2sZ7DsrH/vIr2tzA==
-X-ME-Sender: <xms:a5-FY0FPzggBOzOAbZJzLMxv5rdphYcOlbFwbSRStQOkMzWXYun95Q>
-    <xme:a5-FY9VA7tBLpwflzxJjbXD9RXnomVL1y_mc9_injyfdvzM1Z2PaS4QYc-hfVWYst
-    Q9tHpaoyh3soDlKsQ>
-X-ME-Received: <xmr:a5-FY-JQbXX1E2z6nW9tN1zo2jNt7d7fU68O-UuJFaxaLovHL5msujne5iPVjqpOdUtET5wfNpf433hQGNtW2CqwWfp8RcWIcnIlymyaWSycy3sDh4lYgnSJDA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjeefgdeludcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfvvehfhffujggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepjefgfffhudejfedtuedugeeutdetgfeiteffffehjeeugfeuvdeh
-    jeetfedtffdtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:a5-FY2HocQdN1pJKOSMsFwiuscapQ4Xvpw3i2_3L8LwbxA_kFBWFGA>
-    <xmx:a5-FY6Xb9hVl1F91w-jl6U9WyWdio59MDEfHim9K3JV5jNB13041fA>
-    <xmx:a5-FY5NfdDaSOUg18SOEOOeRGC-6D6y6PlhhvAt4nJ8CdpQ_hbHfxg>
-    <xmx:bJ-FYzfOF2aBaFBgeiZqf2JlqgskeJ94j-vLJd08k8E4blXzoRLWFw>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 29 Nov 2022 00:58:02 -0500 (EST)
-Message-ID: <565e1861-7052-9bd3-e7ba-e590bd91cf20@sholland.org>
-Date:   Mon, 28 Nov 2022 23:58:01 -0600
+        Tue, 29 Nov 2022 00:59:14 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E0F2983E;
+        Mon, 28 Nov 2022 21:59:13 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id v8so18398119edi.3;
+        Mon, 28 Nov 2022 21:59:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=A5R4C2aWexZsPArmjDH3ZXhc/nuP+Jv80yeRmE03+3Y=;
+        b=NPoI5sGa4eoD7m3PZcImAedtV9zgPn92Xyvx4je/A8t6DqzT3qlSN47OfxkVDgRw4N
+         Odm7gLkVMAucYLhuhhoqc1IUsQcF+HQFOTgcdhKG4R7OAYiL0rRMr9uWcnOR69LoQids
+         H6X6RVicu5J/LXpCtZEzyRlxvxr05q41N5Ks1n1bV9pFsLz7tK3TxrqANVCYzU5mlDXv
+         IzX5XhhNveW0oUpRv4fVGLFYl2W8tGQQYyImTePRKsH5L8lhX0YAZn62ChTREvo8ESzJ
+         xckoCa7MMfTVq+XLKXI594Oq0TW3Zn6RwpIyMfAqMvGqasTYa6WyQHeg0IEDQ/5OOJnR
+         Fn8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A5R4C2aWexZsPArmjDH3ZXhc/nuP+Jv80yeRmE03+3Y=;
+        b=2ehHp70SIhQDwK8wdHZCSOuIUE84u7TzjnmZufVGG0z4YDKbBfrT+ZVIVPx1cMvCLP
+         k+xJtTX04x7q8h2DgmSfJPZibIi4yJB0SabDt4H1qizMHap33AwJI45fC0dpT5Qr9StM
+         gGu2D6Fi8W2+F/7D2o9zGy3KTqt6Qg7Rou6SzghMvVm/oBhMfPVDdT2+7QlKQ4uBLoiB
+         mj76mE3J9vkkP+ODU4oj/P6+PfNzXGowW8KflyL9agCQRNNoQgrlMxOTc6tE7z9jQ5fi
+         RrBBM4oUaU/iJrgvmKny9JC7mivCu9CRFv5LYp4T/AzQRn1DLWkU0la0UyOI6mrAI9tg
+         a92A==
+X-Gm-Message-State: ANoB5pkrUH1pkd9YwZBMTzPm4pI1NrjtqigiBoYFMkP33o2IcgTq468t
+        QW96ZwpNb30taQPBXI1t5EReiffLbsfuGXrKMh8=
+X-Google-Smtp-Source: AA0mqf61R1pxzPjXd65f/ntApUjrv3GpEO+onbJf191BTNPzrWYZEjQqYgMLUxzhCUoOsLN+wjyk2eU/3vf9wzG/ImY=
+X-Received: by 2002:aa7:d80d:0:b0:46b:7645:86a9 with SMTP id
+ v13-20020aa7d80d000000b0046b764586a9mr2395448edq.311.1669701552145; Mon, 28
+ Nov 2022 21:59:12 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Content-Language: en-US
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221124172207.153718-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <bf8e33fd-a752-d5d5-859e-14302d069f2d@sholland.org>
- <CA+V-a8sz4i_wenTyA5tVTVB8dQWLmuXCf3CGYOPC+C07GJ8WTw@mail.gmail.com>
-From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH v4 7/7] soc: renesas: Add L2 cache management for RZ/Five
- SoC
-In-Reply-To: <CA+V-a8sz4i_wenTyA5tVTVB8dQWLmuXCf3CGYOPC+C07GJ8WTw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221126111147.199366-1-changbin.du@gmail.com> <20221126111147.199366-2-changbin.du@gmail.com>
+In-Reply-To: <20221126111147.199366-2-changbin.du@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 28 Nov 2022 21:59:00 -0800
+Message-ID: <CAEf4BzYt7MhKjWfdxKUe10mUxDoCYeWNHYr1-ruCxMEmNqJqqA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] libbpf: show more info about missing ".BTF" section
+To:     Changbin Du <changbin.du@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/26/22 15:09, Lad, Prabhakar wrote:
->>> +     if (!ax45mp_priv->l2c_base) {
->>> +             ret = -ENOMEM;
->>> +             goto l2c_err;
->>> +     }
->>> +
->>> +     ret = ax45mp_configure_l2_cache(np);
->>> +     if (ret)
->>> +             goto l2c_err;
->>> +
->>> +     ret = ax45mp_configure_pma_regions(np);
->>> +     if (ret)
->>> +             goto l2c_err;
->>> +
->>> +     static_branch_disable(&ax45mp_l2c_configured);
->>
->> Instead of enabling this before the probe function, and disabling it
->> afterward, just enable it once here, in the success case. Then you can
->> drop the !ax45mp_priv check in the functions above.
->>
-> I think I had tried it but static_branch_unlikely() was always returning true.
+On Sat, Nov 26, 2022 at 3:13 AM Changbin Du <changbin.du@gmail.com> wrote:
+>
+> Show more information about why failed instead of just saying "No such file or
+> directory".
+>
+> Now will print below info:
+> libbpf: can not find '.BTF' section
+> libbpf: is CONFIG_DEBUG_INFO_BTF enabled for kernel?
+> Error: failed to load BTF from /home/changbin/work/linux/vmlinux: No such file or directory
+>
+> Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> ---
+>  tools/lib/bpf/btf.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index d88647da2c7f..3f661d991808 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -906,6 +906,15 @@ struct btf *btf__new(const void *data, __u32 size)
+>         return libbpf_ptr(btf_new(data, size, NULL));
+>  }
+>
+> +static bool is_vmlinux(const char *path)
+> +{
+> +       size_t path_len = strlen(path);
+> +       size_t suffix_len = strlen("vmlinux");
+> +
+> +       return (path_len >= suffix_len) &&
+> +              (!memcmp(path + path_len - suffix_len, "vmlinux", suffix_len));
+> +}
+> +
+>  static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+>                                  struct btf_ext **btf_ext)
+>  {
+> @@ -990,6 +999,9 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+>         err = 0;
+>
+>         if (!btf_data) {
+> +               pr_warn("can not find '%s' section\n", BTF_ELF_SEC);
+> +               if (is_vmlinux(path))
+> +                       pr_warn("is CONFIG_DEBUG_INFO_BTF enabled for kernel?\n");
 
-You use DEFINE_STATIC_KEY_FALSE above, so static_branch_unlikely()
-should return false until you call static_branch_enable().
+this is generic piece of BTF loading code in libbpf, it knows nothing
+and should know nothing about vmlinux and CONFIG_DEBUG_INFO_BTF, this
+is not the right place to add such suggestions.
 
->> And none of the functions would get called anyway if the alternative is
->> not applied. I suppose it's not possible to do some of this probe logic
->> in the alternative check function?
->>
-> you mean to check in the vendor errata patch function to see if this
-> driver has probed?
+Check bpf_object__load_vmlinux_btf(), libbpf emits vmlinux-specific
+error there: "Error loading vmlinux BTF". If we need to mention
+CONFIG_DEBUG_INFO_BTF anywhere, that would be the place to do that.
 
-I meant to do the equivalent of:
-
-+     ax45mp_priv->ucctl_ok = ax45mp_cpu_cache_controlable();
-+     ax45mp_priv->l2cache_enabled = ax45mp_cpu_l2c_ctl_status() &
-AX45MP_L2_CACHE_CTL_CEN_MASK;
-
-in the errata function, since that decides if the cache maintenance
-functions actually do anything. But ax45mp_cpu_l2c_ctl_status() gets the
-MMIO address from the DT, and trying to do that from the errata function
-could get ugly, so maybe it is not a good suggestion.
-
-Regards,
-Samuel
-
+>                 err = -ENOENT;
+>                 goto done;
+>         }
+> --
+> 2.37.2
+>
