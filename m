@@ -2,115 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1916B63C082
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C2963C087
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:01:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbiK2M71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 07:59:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S231725AbiK2NB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 08:01:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiK2M7Z (ORCPT
+        with ESMTP id S229650AbiK2NBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 07:59:25 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0110E0F;
-        Tue, 29 Nov 2022 04:59:24 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9FAB84E6;
-        Tue, 29 Nov 2022 13:59:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669726762;
-        bh=Sv4JjA1T3CLcNJwfpw43GPVNyfDqomlM5uT0+4ozKS8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jc1+VXleXR5a7JFtLGFpu7N+IeJaJnI8DKQaBP//Vm5SbiaxnYpCbbNG2R4C6JM2s
-         endSU0TbkKonx5+UKHeVgLa6WtIasgc/3lb06ZbH1Ayfe8n+t3ZOrmq/grC8bVQNvK
-         D4YAHk/j6h2XBTnjm5SSqjdjVV6e33qmtm5ibncY=
-Message-ID: <d710ac65-655a-6a5a-ce6e-6dee4fd1760b@ideasonboard.com>
-Date:   Tue, 29 Nov 2022 14:59:19 +0200
+        Tue, 29 Nov 2022 08:01:24 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4282665EB
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 05:01:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Message-Id:Date:
+        Subject:Cc:To:From:Content-Type:Reply-To:Content-ID:Content-Description:
+        In-Reply-To:References; bh=bKaY7Cs8aW9BtrIz5l8sVTAqT6Jm4plh5nuX1ZZOV7c=; b=4w
+        uyprYTnBDw9+bKADMhMaOYhNV2X9SJzgWDZOed+XhFsd6HC+XilWs4OPNHRkSaw06qZP9Hsa2jsib
+        GZYEwjaR/OQrmb3uPIijnJUgAlz1CA8oTBjeDvvqUyGQaGadLUtRLaHbxawLbG9TKvyDf02hhakIo
+        Tc1xYex1iAzFWmyULhoclApJXpZbCcCe0oIVYnv01/yi5wKBto+vYo/48Kdg2cP57xXUMSm7H/2Qb
+        kvghj0y81P9nFlSVsivPPZliXRtEg/UOYcZGTVdSepYsnTvM9uXNZ3RyRyzLqhJrErSbnCgKga2h+
+        6SzUPLgjsfea4IDdEJjUhDudipuTgSJA==;
+Received: from [81.174.171.191] (helo=donbot.metanate.com)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <john@metanate.com>)
+        id 1p00Ec-0003dc-K7;
+        Tue, 29 Nov 2022 13:01:15 +0000
+From:   John Keeping <john@metanate.com>
+To:     alsa-devel@alsa-project.org
+Cc:     John Keeping <john@metanate.com>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ALSA: usb-audio: Add quirk for Tascam Model 12
+Date:   Tue, 29 Nov 2022 13:00:59 +0000
+Message-Id: <20221129130100.1257904-1-john@metanate.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 7/7] drm: rcar-du: dsi: Add r8a779g0 support
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-References: <20221123065946.40415-1-tomi.valkeinen+renesas@ideasonboard.com>
- <20221123065946.40415-8-tomi.valkeinen+renesas@ideasonboard.com>
- <Y4VlHIpS9UnvWwt/@pendragon.ideasonboard.com>
-From:   Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-In-Reply-To: <Y4VlHIpS9UnvWwt/@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Authenticated: YES
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/11/2022 03:49, Laurent Pinchart wrote:
+Tascam's Model 12 is a mixer which can also operate as a USB audio
+interface.  The audio interface uses explicit feedback but it seems that
+it does not correctly handle missing isochronous frames.
 
->> @@ -198,70 +436,53 @@ static void rcar_mipi_dsi_parameters_calc(struct rcar_mipi_dsi *dsi,
->>   	 */
->>   	fout_target = target * mipi_dsi_pixel_format_to_bpp(dsi->format)
->>   		    / (2 * dsi->lanes);
->> -	if (fout_target < 40000000 || fout_target > 1250000000)
->> +	if (fout_target < MHZ(40) || fout_target > MHZ(1250))
->>   		return;
->>   
->>   	/* Find vco_cntrl */
->> -	for (vco_cntrl = vco_cntrl_table; vco_cntrl->min_freq != 0; vco_cntrl++) {
->> -		if (fout_target > vco_cntrl->min_freq &&
->> -		    fout_target <= vco_cntrl->max_freq) {
->> -			setup_info->vco_cntrl = vco_cntrl->value;
->> -			if (fout_target >= 1150000000)
->> -				setup_info->prop_cntrl = 0x0c;
->> -			else
->> -				setup_info->prop_cntrl = 0x0b;
->> +	for (clkset = dsi->info->clk_cfg; clkset->min_freq != 0; clkset++) {
->> +		if (fout_target > clkset->min_freq &&
->> +		    fout_target <= clkset->max_freq) {
->> +			setup_info->clkset = clkset;
->>   			break;
->>   		}
->>   	}
->>   
->> -	/* Add divider */
->> -	setup_info->div = (setup_info->vco_cntrl & 0x30) >> 4;
->> +	switch (dsi->info->model) {
->> +	case RCAR_DSI_R8A779A0:
->> +		setup_info->vclk_divider = 1 << ((clkset->vco_cntrl >> 4) & 0x3);
-> 
-> If you stored (clkset->vco_cntrl >> 4) & 0x3 in setup_info->vclk_divider
-> you wouldn't have to use __ffs() in rcar_mipi_dsi_startup(). You could
-> also drop the - 1 there, which would allow dropping one of the
-> switch(dsi->info->model). You can store the real divider value in
-> setup_info separately for rcar_mipi_dsi_pll_calc_r8a779a0(), or pass it
-> to the function.
+When injecting an xrun (or doing anything else that pauses the playback
+stream) the feedback rate climbs (for example, at 44,100Hz nominal, I
+see a stable rate around 44,099 but xrun injection sees this peak at
+around 44,135 in most cases) and glitches are heard in the audio stream
+for several seconds - this is significantly worse than the single glitch
+expected for an underrun.
 
-That's true. The reason I chose this approach was to keep dsi_setup_info 
-"neutral", containing only the logical values, and the register specific 
-tinkering is done only where the register is written. Mixing the logical 
-and the register values in the old dsi_setup_info was confusing, and 
-implementing your suggestion would again go that direction. But as you 
-noticed, this is uglified a bit by the need to get the divider from the 
-vco_cntrl.
+While the stream does normally recover and the feedback rate returns to
+a stable value, I have seen some occurrences where this does not happen
+and the rate continues to increase while no audio is heard from the
+output.  I have not found a solid reproduction for this.
 
-We could store the logical divider in the dsi_clk_config table, though, 
-which would remove the need for the above code.
+This misbehaviour can be avoided by totally resetting the stream state
+by switching the interface to alt 0 and back before restarting the
+playback stream.
 
-  Tomi
+Add a new quirk flag which forces the endpoint and interface to be
+reconfigured whenever the stream is stopped, and use this for the Tascam
+Model 12.
+
+Separate interfaces are used for the playback and capture endpoints, so
+resetting the playback interface here will not affect the capture stream
+if it is running.  While there are two endpoints on the interface,
+these are the OUT data endpoint and the IN explicit feedback endpoint
+corresponding to it and these are always stopped and started together.
+
+Signed-off-by: John Keeping <john@metanate.com>
+---
+v2:
+- Set ep->need_prepare not ep->need_setup; this was missed when forward
+  porting the patch as need_prepare is new in 6.1
+- Add more details to the commit message about why it is safe to reset
+  the interface here
+
+ sound/usb/endpoint.c | 7 +++++++
+ sound/usb/quirks.c   | 2 ++
+ sound/usb/usbaudio.h | 4 ++++
+ 3 files changed, 13 insertions(+)
+
+diff --git a/sound/usb/endpoint.c b/sound/usb/endpoint.c
+index 310cd6fb0038..4aaf0784940b 100644
+--- a/sound/usb/endpoint.c
++++ b/sound/usb/endpoint.c
+@@ -1673,6 +1673,13 @@ void snd_usb_endpoint_stop(struct snd_usb_endpoint *ep, bool keep_pending)
+ 		stop_urbs(ep, false, keep_pending);
+ 		if (ep->clock_ref)
+ 			atomic_dec(&ep->clock_ref->locked);
++
++		if (ep->chip->quirk_flags & QUIRK_FLAG_FORCE_IFACE_RESET &&
++		    usb_pipeout(ep->pipe)) {
++			ep->need_prepare = true;
++			if (ep->iface_ref)
++				ep->iface_ref->need_setup = true;
++		}
+ 	}
+ }
+ 
+diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
+index 0f4dd3503a6a..58b37bfc885c 100644
+--- a/sound/usb/quirks.c
++++ b/sound/usb/quirks.c
+@@ -2044,6 +2044,8 @@ static const struct usb_audio_quirk_flags_table quirk_flags_table[] = {
+ 	DEVICE_FLG(0x0644, 0x804a, /* TEAC UD-301 */
+ 		   QUIRK_FLAG_ITF_USB_DSD_DAC | QUIRK_FLAG_CTL_MSG_DELAY |
+ 		   QUIRK_FLAG_IFACE_DELAY),
++	DEVICE_FLG(0x0644, 0x805f, /* TEAC Model 12 */
++		   QUIRK_FLAG_FORCE_IFACE_RESET),
+ 	DEVICE_FLG(0x06f8, 0xb000, /* Hercules DJ Console (Windows Edition) */
+ 		   QUIRK_FLAG_IGNORE_CTL_ERROR),
+ 	DEVICE_FLG(0x06f8, 0xd002, /* Hercules DJ Console (Macintosh Edition) */
+diff --git a/sound/usb/usbaudio.h b/sound/usb/usbaudio.h
+index e97141ef730a..2aba508a4831 100644
+--- a/sound/usb/usbaudio.h
++++ b/sound/usb/usbaudio.h
+@@ -172,6 +172,9 @@ extern bool snd_usb_skip_validation;
+  *  Don't apply implicit feedback sync mode
+  * QUIRK_FLAG_IFACE_SKIP_CLOSE
+  *  Don't closed interface during setting sample rate
++ * QUIRK_FLAG_FORCE_IFACE_RESET
++ *  Force an interface reset whenever stopping & restarting a stream
++ *  (e.g. after xrun)
+  */
+ 
+ #define QUIRK_FLAG_GET_SAMPLE_RATE	(1U << 0)
+@@ -194,5 +197,6 @@ extern bool snd_usb_skip_validation;
+ #define QUIRK_FLAG_GENERIC_IMPLICIT_FB	(1U << 17)
+ #define QUIRK_FLAG_SKIP_IMPLICIT_FB	(1U << 18)
+ #define QUIRK_FLAG_IFACE_SKIP_CLOSE	(1U << 19)
++#define QUIRK_FLAG_FORCE_IFACE_RESET	(1U << 20)
+ 
+ #endif /* __USBAUDIO_H */
+-- 
+2.38.1
 
