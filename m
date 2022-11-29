@@ -2,79 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5640263C13F
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99AA363C140
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:40:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbiK2NkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 08:40:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48446 "EHLO
+        id S233131AbiK2Nkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 08:40:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiK2NkI (ORCPT
+        with ESMTP id S229445AbiK2Nka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 08:40:08 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD3D5A6DC;
-        Tue, 29 Nov 2022 05:40:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=l7SnxiJShzPG3HavT5y0PQZqcm0ae5jDRJd4wXIQYgk=; b=L7WJzUZkrxxfARIAPVEitmoyqh
-        z10vnWusaolLRzfqHp/2aeGlCeRU8HPFpQV+MjrZVlEa1uhnxGQJqQTsPbY4ogHf09pM0l0EQS83e
-        T4vRhCm81ff5MvQFcQxFI8Kp/ydQg5bsWCfXfCRWReQP2md66i5h8apR19nmgtrad5HY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1p00q7-003s9O-GD; Tue, 29 Nov 2022 14:39:59 +0100
-Date:   Tue, 29 Nov 2022 14:39:59 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net v2 2/2] phy: aquantia: Determine rate adaptation
- support from registers
-Message-ID: <Y4YLryZE6TXCCTbH@lunn.ch>
-References: <20221128195409.100873-1-sean.anderson@seco.com>
- <20221128195409.100873-2-sean.anderson@seco.com>
- <Y4VCz2i+kkK0z+XY@shell.armlinux.org.uk>
- <b25b1d9b-35dd-a645-a5f4-05eb0dbc6039@seco.com>
+        Tue, 29 Nov 2022 08:40:30 -0500
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2105.outbound.protection.outlook.com [40.107.117.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B6C5ADCF
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 05:40:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SlDTP/bkqmVCO9iI6RdHrfehmsykfpkjVJ1Kv4Q8ILpMNy6juzOLbKHgGkxqsF1VCW7GguaI9i4LvYrgdMp/EhffWfFVmOM+kixoaMe2JWzpkjZF+r6Ex8Cz0Om0NzCT4yCQy/7ApHOGdLbbPlGZmkdIhi104urKsb9nu/FqLJUnKaT8qfgVfGDsAEyUeSvI4J3KZBFYS0x236Xd0s456/3Fp+B0qlLwbDl9Q5VUMv0DgKNulqJVK3Fg61hZWeam03G/g7r/i2tq1eydGO4hhDki6nlPJh44xIVCpNNVRLdlaimUsAUOTi5pxwpWgi6GcO6Enu4O8W/yu4T5r1khEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lN8sywuQV9rrPuV6+BPQUTe9Pz1aShp5pShrkBzzCGg=;
+ b=Y5/H3BtDjuwPyrjkB1KoT91T+TJQZNzce45VTrQfa50Zp45pOR6Y0C6BBWB3jrrcWnW0B7+s8HRLl2oCFqO/cbNZfvNO7y+w+S8R76Mk5Z8jO8cBOGzrNO9Tx37pRZV2GboMU5bvRGNkyHStTwNe3VOy8Ojnjho0hY1P1EfOMhm071qSZ3CmV115wxJT6MWw3KpqcnFvtdHRt+yTjdvaHIDXPY8ZfVranMquKjjI1v1s8Wxfsa8uOx6/cLHwzuebdBorSsCh/zQqgny52lRY397XI7+e4Z38lQMNFsTp/VbjcnQCNJyZNwjKLWqN3B3PcWEkV37zhvhihxLrabmyOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lN8sywuQV9rrPuV6+BPQUTe9Pz1aShp5pShrkBzzCGg=;
+ b=nL6tjQo4UijjV536MV+WJZVw2aKRgQ/YYJlkbQbNV6/VJ2QHnECelYpS5ru88+eDrvg7IC9JdPF3oT2frbOuMrTLO14mjiQ30clVoGar+vs22dr1mZG+kkeAL9pIHxlBft44hYDuyfy0HsKG1bdi06qy394JFLcIfkvyzWiZyAbYFfAxs4pKRGUdRSUylVwLHlzyVD5vFcDscCH1totM3+RUEaejMCQdzzYRp1YxHy7px3RBasKX5oTEDyqV4CYiyqeC5r2Ej/jT2pkh5n3DFX/Sa5D5mSldShOP/yeIEYr8EjmfrPG1LQeutz0DUNZ4x5KBpXShzctqEY+U2qQQSQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by TY0PR06MB4984.apcprd06.prod.outlook.com (2603:1096:400:1ac::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Tue, 29 Nov
+ 2022 13:40:27 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::ef03:cbfb:f8ef:d88b]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::ef03:cbfb:f8ef:d88b%9]) with mapi id 15.20.5857.023; Tue, 29 Nov 2022
+ 13:40:27 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH] f2fs: issue discard when discard_cmd_cnt is not 0 in f2fs_put_super()
+Date:   Tue, 29 Nov 2022 21:40:18 +0800
+Message-Id: <20221129134018.34120-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR01CA0171.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:28::27) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b25b1d9b-35dd-a645-a5f4-05eb0dbc6039@seco.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TY0PR06MB4984:EE_
+X-MS-Office365-Filtering-Correlation-Id: b7d7987d-c662-4e02-ac43-08dad20f4627
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KSuJfLH0rwD8LbEPHrZQGumKEAB6gfqMW3SJ9ysLcZ1Dueo6cjbJ9NaycOPQv9Jl0TIIshdFG3Llz6WoiFNkgZ85yg32PXw22cLESvAiXhP7UteZPfVB8HzENejJ8rRhsYQU28+K5VmcjpfhrKIMuMOiMvVv6reDIh1arHTwzIslQG/L7IsBXLa+266OOO8y+CqzhHLZ3MeErp1MLo7Uf5DFEbjFFz64fzhj+Mgkx0fLCIrKwmB9yeAFtIr2AdYnLhNXSZq/5llaPElJuCIUatWgBFYOeI7iJBpgVHzrB6wNpMEKCoq+7NiYPhezuLGhUS3ZWoFq/1wHjWAXLJk0zfyZ8tHPz3mBIhO9KlW+JwOPD7UtFOMhMUylcZq7vQx7nwP25ECXLKYJ+JrRlMAFVDI36fXwAWnX+FTbdhOfGa8jaQLLu1vm9Qta85ph1IJwdVx459Epefn/aw7NtSRbl9BYoR9ORdpV2dDzIh6xaEa07FMrmupGN9l2QFYmZ17dSJjlpsHLHU5pW9+kiiUJMGBxCzCEAZr2dcM9UB9x4+wFtUcYlh131aZFShkvkpk0keSwK7RnOO86NhE+NIVJ+omeHlsoQZg4LtUkLcuRcD581X0axk219sdplDoVh1I8xwV8UBv5loeNvziwp2S+Gs7j0+o+BR3YYcRfAIWohLdYx/xw/De/89somYSx7flV
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(366004)(346002)(39860400002)(136003)(451199015)(2616005)(2906002)(83380400001)(107886003)(26005)(38100700002)(38350700002)(6486002)(66476007)(8676002)(66946007)(41300700001)(66556008)(36756003)(52116002)(6666004)(478600001)(6506007)(6512007)(186003)(5660300002)(8936002)(1076003)(4326008)(86362001)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HTC+w/Vy2qRyWtzbg9A5QDc7vRzLTDK/cnQtuC6RKEgUSzDlw/LJ8dHMO+VW?=
+ =?us-ascii?Q?JPk6Bz+g7YGHbGMTLYfGlyY5gDN4QBwif59iYth4WHP2Xn73Ni0gLe2dy9n8?=
+ =?us-ascii?Q?a0/gLWJNF+qoqriHj6X727P0PEdtT/ydjAdlwNOuuj4yyFa/JGWjlr153KgF?=
+ =?us-ascii?Q?WR5rSs6IwWzMikB5P2JzKUZelgQDFRxxLJMup6HC6+SrXO0qy+xzfuJqYib8?=
+ =?us-ascii?Q?k+xMmMYvqfo76HWowBZTt0X+Y7tAxWZHqza/2j5LWNNZNVqw3ra70Mg+Qtww?=
+ =?us-ascii?Q?EgUTw+3n7aF01D9ep3FJdzHbA0t5sKtkFzD1hONf0931TBwtMBwQ7kxCoLDC?=
+ =?us-ascii?Q?yISfBBgBgCP9Smakuv4/qY+Y6fFiN52798VCwes2B0RotfLAkeObQiWh5wLb?=
+ =?us-ascii?Q?YIK2F6+QjCZs0AeNmQquhUTrqI9bH49laWVaROyNvdi9op5t4bSdmjcaShsv?=
+ =?us-ascii?Q?KrdpcD22SGZlSQv6kP2rg8sLgRfMsGsARlsvU5HF0RLnwHRUuoy1dgGgB8MJ?=
+ =?us-ascii?Q?LquNzYSxw9c3UEMhOOqjYv/+gKYC7nJhK1Kv3Md4/CCmtEjgDQDcJBHnk/+H?=
+ =?us-ascii?Q?GurGz0IvozLtQCetN+fjiM2VRtMDb2futaRcNQwqn9Q00fEdDV8ZNlqz0d9l?=
+ =?us-ascii?Q?flQUyWxlcnE3tfPMb7IoOlejxD94uQBBM2Ht8WrTlipNpuXGUEqdTrKialxP?=
+ =?us-ascii?Q?WBRwOmXwfHBhRjiRxIgLQfe7JUkZd1QHDv5U7Ni21yxmTp/JUJrPqeSSIxqv?=
+ =?us-ascii?Q?ZNbp9hr+RzPfAbNipv5NzXyRTley8KM4WyJQhWabfwiakjxUTEmpV2+S6H1D?=
+ =?us-ascii?Q?CxKNwcdkSI8ilXM1/PYA53YyIAbcdR1CcKO7/u25PpYk50BW7mmp3DGJQclf?=
+ =?us-ascii?Q?ZKNuB8cKRJUYQ76V0JaP+nqnZ+mPVrWHazHR1c1opQdLSgw8QHCGuYQzk7YE?=
+ =?us-ascii?Q?3S8f5/FYfpHdSKCj1Tgz5J9N6oqaEXHiOwOYkd04HXrxcQCc+X5lBF9aQrzv?=
+ =?us-ascii?Q?EleCWUfKcqXXe9uQ6vl+d6yJEfMf3I1xajAfGw5fXWeVxqRs3v3GzoUSWpna?=
+ =?us-ascii?Q?KbaRI73jAfPtkegmjxS3V9ph3B7auzEJejBka6wTu5dFSG6eNRqRPX5ZAnX1?=
+ =?us-ascii?Q?giEzLf3jMTWqz89eLOJIpgEcuYp5fjbeg8lDvNZNmUSWHHIXTwgkjimVYOFG?=
+ =?us-ascii?Q?vNz3QKntDIhD0j0Ci5p8kFg0fHVgvITUFMSbReC71sRyCYV9MwhFrWOx7mh6?=
+ =?us-ascii?Q?zgEMWI7F7aVnYi1oJLRJiAuI2RAWMMo7oK+x2PCoddn/Evi0mGYJI0WBtVmX?=
+ =?us-ascii?Q?5+e37m+GQcoIhNyPsVkJYGX1btEmNXNg/YVMEEXmJEjNc1UHixkdvzsnNBuk?=
+ =?us-ascii?Q?6Ag/0OX7SWMMRoSGmXNHfCpIUnV+T5Njv2KB7eGokIcTAPklNpf2oqbwiFjR?=
+ =?us-ascii?Q?mpjimjzUSw9kDD52HxlyfZnJ0fL0zyLMBgCwEoftxmWtYvjp3nDqSPwJ7Avi?=
+ =?us-ascii?Q?2PD6jvhB5MVz3XE5H771M/vTF0Hj7/sbNpi76qibHnLVW3IbONsZ2fcnhSch?=
+ =?us-ascii?Q?ZpkrqN1wD7JIp/LyRL4KmkRb9zq4vglXif+JHZaj?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b7d7987d-c662-4e02-ac43-08dad20f4627
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 13:40:27.0943
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eplMELSvHTGx3SlLRFv2DNEuBUDpSZn5WxwDcHG9x9JfOHSUar2ncIEK8eBMVDrdTVy6ZVNc8XDxORh8zDkV3w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB4984
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >> This commit should not get backported until it soaks in master for a
-> >> while.
-> > 
-> > You will have to monitor the emails from stable to achieve that - as you
-> > have a Fixes tag, that will trigger it to be picked up fairly quicky.
-> 
-> I know; this is a rather vain attempt :)
-> 
-> If I had not added the fixes tag, someone would have asked me to add it.
+No need to call f2fs_issue_discard_timeout() in f2fs_put_super,
+when no discard command requires issue. Since the caller of
+f2fs_issue_discard_timeout() usually judges the number of discard
+commands before using it. Let's move this logic to
+f2fs_issue_discard_timeout().
 
-Hi Sean
+By the way, use f2fs_realtime_discard_enable to simplify the code.
 
-If you had put a comment under the --- that you deliberately did not
-add a Fixes tag because you wanted it to soak for a while, you
-probably would not be asked.
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ fs/f2fs/segment.c | 6 ++++--
+ fs/f2fs/super.c   | 6 ++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-I think the bot also looks at the subject to decide if it is a fix. So
-you need to word the subject so it sounds like continuing development,
-not a fix.
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 9486ca49ecb1..d5f150a08285 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -1655,6 +1655,9 @@ bool f2fs_issue_discard_timeout(struct f2fs_sb_info *sbi)
+ 	struct discard_policy dpolicy;
+ 	bool dropped;
+ 
++	if (!atomic_read(&dcc->discard_cmd_cnt))
++		return false;
++
+ 	__init_discard_policy(sbi, &dpolicy, DPOLICY_UMOUNT,
+ 					dcc->discard_granularity);
+ 	__issue_discard_cmd(sbi, &dpolicy);
+@@ -2110,8 +2113,7 @@ static void destroy_discard_cmd_control(struct f2fs_sb_info *sbi)
+ 	 * Recovery can cache discard commands, so in error path of
+ 	 * fill_super(), it needs to give a chance to handle them.
+ 	 */
+-	if (unlikely(atomic_read(&dcc->discard_cmd_cnt)))
+-		f2fs_issue_discard_timeout(sbi);
++	f2fs_issue_discard_timeout(sbi);
+ 
+ 	kfree(dcc);
+ 	SM_I(sbi)->dcc_info = NULL;
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index 79bf1faf4161..71e6b2bea1f4 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -1576,8 +1576,7 @@ static void f2fs_put_super(struct super_block *sb)
+ 	/* be sure to wait for any on-going discard commands */
+ 	dropped = f2fs_issue_discard_timeout(sbi);
+ 
+-	if ((f2fs_hw_support_discard(sbi) || f2fs_hw_should_discard(sbi)) &&
+-					!sbi->discard_blks && !dropped) {
++	if (f2fs_realtime_discard_enable(sbi) && !sbi->discard_blks && !dropped) {
+ 		struct cp_control cpc = {
+ 			.reason = CP_UMOUNT | CP_TRIMMED,
+ 		};
+@@ -2408,8 +2407,7 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
+ 		} else {
+ 			dcc = SM_I(sbi)->dcc_info;
+ 			f2fs_stop_discard_thread(sbi);
+-			if (atomic_read(&dcc->discard_cmd_cnt))
+-				f2fs_issue_discard_timeout(sbi);
++			f2fs_issue_discard_timeout(sbi);
+ 			need_restart_discard = true;
+ 		}
+ 	}
+-- 
+2.25.1
 
-	 Andrew
