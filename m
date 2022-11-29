@@ -2,189 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ADE563B98A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 06:47:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E67A963B98D
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 06:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235623AbiK2Fq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 00:46:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
+        id S235607AbiK2Fsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 00:48:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235607AbiK2Fqz (ORCPT
+        with ESMTP id S229830AbiK2Fsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 00:46:55 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B03326CD
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 21:46:54 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id o127so637412yba.5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 21:46:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7YR9J0kvRHvjzk4VIAhLDw7kLzB+cZ1suJLVFaxVmqk=;
-        b=T/cYcf+K23XkS+VwHauLNbWvlYActercRNoFovgqnxZ2miF9hgwHnp0dhksj3ZYq/J
-         GKfA/ya2bBQAL3M2A4Xbq46mpq6Km4ems2X8+ze578rOohigd2qw20tUOkXnpJGLfLWj
-         FjhVTJhwHA03hzqFd1B3aYGoAlUDjkkhXqSxA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7YR9J0kvRHvjzk4VIAhLDw7kLzB+cZ1suJLVFaxVmqk=;
-        b=HJYnTTQPvIuDUOWZoUhFHIHL1RDdhnpXqVLvVXu7fpWy0GJ+j5MaulSPtmAgAHFYtB
-         hdBQjq3Fmm4sqGTsxZq7wpU9dsLjPTBd9EBsRrADN52Xj3KYgEluQi9xnvKWRNL0ZhR3
-         Y5uOCny04/jqwQnJhc+LrSCKVP63mdAwP6VfkRgaRPJFlXrutp/QGfPQYn+y11mLmFJQ
-         fb7q+BqG0qfvkEMVln674Cwix112o1cdJA2VmEeVUL2OXYgU5xaO5ZqwWDBe93pZWmKA
-         rLPTDMdKxG28DAVbE6Pbw0Bxj/Et5oigT9iFiUWx+uwvSFuikC346QKQF/MhHTJJHw57
-         W1sg==
-X-Gm-Message-State: ANoB5plKt7iMCb4EDDHNEmmTBbk5PvUhwXih8thspEYsiVWOPVEDhzFc
-        D86d2OCXH/WEXPG4n7kdT76/llImaKj1V4H9USVnVg==
-X-Google-Smtp-Source: AA0mqf7sa3qXyYHxgBjva/Q9liqpTQP1TEzNqfzYIOlv6pxSru9P0ZwsH3K0sGNLAU6E8BZyA96Z6eWDlxvlQqsbQ9o=
-X-Received: by 2002:a25:d383:0:b0:6f6:b3f1:318f with SMTP id
- e125-20020a25d383000000b006f6b3f1318fmr8541306ybf.613.1669700813219; Mon, 28
- Nov 2022 21:46:53 -0800 (PST)
+        Tue, 29 Nov 2022 00:48:36 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AE627DE3;
+        Mon, 28 Nov 2022 21:48:35 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id DD4BD5C01DE;
+        Tue, 29 Nov 2022 00:48:34 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Tue, 29 Nov 2022 00:48:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669700914; x=
+        1669787314; bh=OtfQNo4nBjhbfnvx8isDNgBx4T5htxvRGKcm6tW94mg=; b=o
+        avnOvJEzRNfJ7QUj2BqBionlqcCj/DsrLIsZ3IwKxhy5538k1ZzBTSRtClb04QuM
+        G2Y8ugcQmJDnPw4vuUSlUlTV13DlrmnSLgsa71pGkWXp+IY0jWc6LkRTEK2JO+1Y
+        gOUv3XY9Dlk4c9lMZnF+KQioKtF1q3JKx9hqnVQEGaIssLMQoMG6sIhy6YkST6V0
+        GA4f2g8rIv+H+LT0YZaxce2SIC3rybJLoH0dk7YWbgMFpilZKV4xWaS3EI4Vg1yN
+        pudsB3axUtlccw92duJY0HgswWEdxQYyZ0eKf/EtDgHcv72iEl8TBJDyts//x0q7
+        kHx/IAJqWpMhlvq5Mdcyg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669700914; x=
+        1669787314; bh=OtfQNo4nBjhbfnvx8isDNgBx4T5htxvRGKcm6tW94mg=; b=e
+        T84H1ozXR+7bsLn30kqtVVW/xXB160B9oiA9AcQRX9Ld8A9c3sCzILEiGJOYH2GC
+        dQMtKBhkLfa/VvQbMy1ZMkhk+GDvOg1kl+zFl2sSSlkIUuOpi0pJDDaVYvQAVUBM
+        qTOv4x3eSNuk4+rjfctj3w6n0n90iYgP6vMk/NI+lIEcCZv1A8oDQGZDd0zHIn8/
+        7qLF/ZzBDNEjvr3+bYwgdOPa5QbjLiFlkNjElT2foITOcsqVK7fMIb1rjK83fV6e
+        dIhEALlnMuwaZJA9X3xeqYA8Lr4scOrhLkKJdDEgar84YRiQZq3I6J7nDrppzquC
+        EotvH36gFIQrPLDJxDDCA==
+X-ME-Sender: <xms:MZ2FYy0GJnIOdwFN6ZYPPzr3ULSQeCz83ro34gjwHFGjM4lLbiwMJQ>
+    <xme:MZ2FY1ErL8O0gihDnKlSVlqRQvQCu1ldPteOs2LA4ZcL3z2563SIVFQWaFcgt6Aid
+    W9dypPnPeTQb8Sgug>
+X-ME-Received: <xmr:MZ2FY66PDKB_m2iiDzVViphUSkU-M5pK0U6g-UJym6_hcL-qXbfwRtxGPjkh4KKe1wRktMWSNvMWcIHu6e5cnWtYONkgTm19xGehKTekyE5lmsNgqBqsGfin-g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjeefgdeklecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfvvehfhffujggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepteeuvddvveeigefhkeduueduudefgfdvleejgfeiuefgjefhteei
+    hfdtleffgeelnecuffhomhgrihhnpegrnhguvghsthgvtghhrdgtohhmnecuvehluhhsth
+    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhho
+    lhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:Mp2FYz3tugtGPNTJlPrs0FVGIA4iDG_IuTpKu8k2XsV8BUKor3NkKQ>
+    <xmx:Mp2FY1GVO8bfXIyBPllldm06Ip7cS4oKyn2iSk1_sLOJuoyWSLxYjw>
+    <xmx:Mp2FY8_1F1UbL5viVm-RsYz2Uhu9r7b7Dj84ecrgi6ACNt6jFCvRiA>
+    <xmx:Mp2FY8kX6RIb12MRVwEMimvW_EmQDzR2b9ERm97fYWRCUI9BFaOmuQ>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 29 Nov 2022 00:48:32 -0500 (EST)
+Message-ID: <df0fed9d-6d0a-3e76-1ebf-920e4d19d624@sholland.org>
+Date:   Mon, 28 Nov 2022 23:48:32 -0600
 MIME-Version: 1.0
-References: <20221129050639.111142-1-s-vadapalli@ti.com>
-In-Reply-To: <20221129050639.111142-1-s-vadapalli@ti.com>
-From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
-Date:   Tue, 29 Nov 2022 11:16:42 +0530
-Message-ID: <CALs4sv29ZdyK-k0d9_FrRPd_v_6GrC_NU_dYnU5rLWmYxVM2Zg@mail.gmail.com>
-Subject: Re: [PATCH net] net: ethernet: ti: am65-cpsw: Fix RGMII configuration
- at SPEED_10
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux@armlinux.org.uk, vladimir.oltean@nxp.com, pabeni@redhat.com,
-        rogerq@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        vigneshr@ti.com, spatton@ti.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000e0fb1505ee958340"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Content-Language: en-US
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     opensbi@lists.infradead.org, Anup Patel <apatel@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221124172207.153718-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <bf8e33fd-a752-d5d5-859e-14302d069f2d@sholland.org>
+ <CA+V-a8sz4i_wenTyA5tVTVB8dQWLmuXCf3CGYOPC+C07GJ8WTw@mail.gmail.com>
+ <CAMuHMdWQO_usrJwmVYDx6o-CpzmotVZLt176eKbqLzY-GXiDng@mail.gmail.com>
+ <CA+V-a8s5mZoLMhjjpo_89taaBx+M_EwXMZUu-TUpZc8Q3bw4ug@mail.gmail.com>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH v4 7/7] soc: renesas: Add L2 cache management for RZ/Five
+ SoC
+In-Reply-To: <CA+V-a8s5mZoLMhjjpo_89taaBx+M_EwXMZUu-TUpZc8Q3bw4ug@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000e0fb1505ee958340
-Content-Type: text/plain; charset="UTF-8"
+On 11/28/22 06:08, Lad, Prabhakar wrote:
+> Hi Geert,
+> 
+> On Sun, Nov 27, 2022 at 9:55 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>>
+>> Hi Prabhakar,
+>>
+>> On Sat, Nov 26, 2022 at 10:10 PM Lad, Prabhakar
+>> <prabhakar.csengg@gmail.com> wrote:
+>>> On Fri, Nov 25, 2022 at 7:43 PM Samuel Holland <samuel@sholland.org> wrote:
+>>>> On 11/24/22 11:22, Prabhakar wrote:
+>>>>> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>>>>>
+>>>>> On the AX45MP core, cache coherency is a specification option so it may
+>>>>> not be supported. In this case DMA will fail. As a workaround, firstly we
+>>>>> allocate a global dma coherent pool from which DMA allocations are taken
+>>>>> and marked as non-cacheable + bufferable using the PMA region as specified
+>>>>> in the device tree. Synchronization callbacks are implemented to
+>>>>> synchronize when doing DMA transactions.
+>>>>>
+>>>>> The Andes AX45MP core has a Programmable Physical Memory Attributes (PMA)
+>>>>> block that allows dynamic adjustment of memory attributes in the runtime.
+>>>>> It contains a configurable amount of PMA entries implemented as CSR
+>>>>> registers to control the attributes of memory locations in interest.
+>>>>>
+>>>>> Below are the memory attributes supported:
+>>>>> * Device, Non-bufferable
+>>>>> * Device, bufferable
+>>>>> * Memory, Non-cacheable, Non-bufferable
+>>>>> * Memory, Non-cacheable, Bufferable
+>>>>> * Memory, Write-back, No-allocate
+>>>>> * Memory, Write-back, Read-allocate
+>>>>> * Memory, Write-back, Write-allocate
+>>>>> * Memory, Write-back, Read and Write-allocate
+>>>>>
+>>>>> This patch adds support to configure the memory attributes of the memory
+>>>>> regions as passed from the l2 cache node and exposes the cache management
+>>>>> ops.
+>>>>
+>>>> Forgive my ignorance, but why do you need both a DMA pool and explicit
+>>>> cache maintenance? Wouldn't the purpose of marking a memory region as
+>>>> permanently non-cacheable be to avoid cache maintenance? And likewise,
+>>>> if you are doing cache maintenance anyway, why does it matter if/how the
+>>>> memory is cacheable?
+>>>>
+>>> "Memory, Non-cacheable, Bufferable" raises an AXI signal for
+>>> transactions hence needing SW implementation for cache maintenance.
+>>>
+>>>>> More info about PMA (section 10.3):
+>>>>> Link: http://www.andestech.com/wp-content/uploads/AX45MP-1C-Rev.-5.0.0-Datasheet.pdf
+>>>>>
+>>>>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>>
+>>>>> +static int ax45mp_configure_pma_regions(struct device_node *np)
+>>>>> +{
+>>>>> +     const char *propname = "andestech,pma-regions";
+>>>>> +     u32 start, size, flags;
+>>>>> +     unsigned int entry_id;
+>>>>> +     unsigned int i;
+>>>>> +     int count;
+>>>>> +     int ret;
+>>>>> +
+>>>>> +     count = of_property_count_elems_of_size(np, propname, sizeof(u32) * 3);
+>>>>> +     if (count < 0)
+>>>>> +             return count;
+>>>>> +
+>>>>> +     if (count > AX45MP_MAX_PMA_REGIONS)
+>>>>> +             return -EINVAL;
+>>>>> +
+>>>>> +     for (i = 0, entry_id = 0 ; entry_id < count ; i += 3, entry_id++) {
+>>>>> +             of_property_read_u32_index(np, propname, i, &start);
+>>>>> +             of_property_read_u32_index(np, propname, i + 1, &size);
+>>>>> +             of_property_read_u32_index(np, propname, i + 2, &flags);
+>>>>> +             ret = ax45mp_sbi_set_pma(start, size, flags, entry_id);
+>>>>> +             if (!ret)
+>>>>> +                     pr_err("Failed to setup PMA region 0x%x - 0x%x flags: 0x%x",
+>>>>> +                            start, start + size, flags);
+>>>>> +     }
+>>>>> +
+>>>>> +     return 0;
+>>>>> +}
+>>>>
+>>>> If firmware support is required to set up these PMA regions, why is
+>>>> Linux doing this at all? The firmware has access to the devicetree as
+>>>> well. It can set this up before entering S-mode, and then you don't need
+>>>> to expose this capability via an SBI extension. In fact, firmware could
+>>>> generate the reserved-memory node based on these regions at runtime (or
+>>>> vice versa).
+>>>>
+>>> That's a good point. I'll do some research on this and get back.
+>>>
+>>> Btw are there any existing examples where the firmware adds DT nodes?
+>>
+>> /memory, reserved-memory, optee on ARM, RPC status on R-Car Gen3/4, ...
+>>
+> On the TF-A we pass the FDT blob to u-boot and this does the magic.
+> 
+> On the RISC-V what would be the correct approach?
+> - We setup the PMA regions in OpenSBI
+> - We provide a vendor specific EXT to check if the PMA is setup
+> - In u-boot ft_board_setup() callback add the reserved-memory node
+> 
+> Does the above approach sound good or is there a better approach I'm missing?
 
-Looks like this patch should be directed to net-next?
+My suggestion was to fix up the DT in OpenSBI itself. See
+lib/utils/fdt/fdt_fixup.c in the OpenSBI source tree. There is also a
+platform hook for this. Then OpenSBI passes the FDT to U-Boot, and
+U-Boot passes it on to Linux. No SBI extension is needed in that case.
 
-On Tue, Nov 29, 2022 at 10:37 AM Siddharth Vadapalli <s-vadapalli@ti.com> wrote:
->
-> The am65-cpsw driver supports configuring all RGMII variants at interface
-> speed of 10 Mbps. However, in the process of shifting to the PHYLINK
-> framework, the support for all variants of RGMII except the
-> PHY_INTERFACE_MODE_RGMII variant was accidentally removed.
->
-> Fix this by using phy_interface_mode_is_rgmii() to check for all variants
-> of RGMII mode.
->
-> Fixes: e8609e69470f ("net: ethernet: ti: am65-cpsw: Convert to PHYLINK")
-> Reported-by: Schuyler Patton <spatton@ti.com>
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> ---
->  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> index 6b0458df613a..6ae802d73063 100644
-> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> @@ -1495,7 +1495,7 @@ static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy
->
->         if (speed == SPEED_1000)
->                 mac_control |= CPSW_SL_CTL_GIG;
-> -       if (speed == SPEED_10 && interface == PHY_INTERFACE_MODE_RGMII)
-> +       if (speed == SPEED_10 && phy_interface_mode_is_rgmii(interface))
->                 /* Can be used with in band mode only */
->                 mac_control |= CPSW_SL_CTL_EXT_EN;
->         if (speed == SPEED_100 && interface == PHY_INTERFACE_MODE_RMII)
-> --
-> 2.25.1
->
+If you optionally want your U-Boot to support loading a replacement FDT
+from disk, then ft_board_setup() would need to copy the reserved-memory
+nodes from U-Boot's control FDT to the loaded FDT. But this logic is the
+same for all reserved-memory nodes, including the one OpenSBI adds
+already. U-Boot has some code for this copying which you could reuse.
 
---000000000000e0fb1505ee958340
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Regards,
+Samuel
 
-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
-OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
-dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
-fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
-9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
-pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
-25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
-Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBeZZZQH2Z8vhb+nSaEf3My8vEZcgNGy
-pu5dVee8wji7MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMTEy
-OTA1NDY1M1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQAFq5o0UDgb4clNekLCgVVuU8gMesqVWw+uc/cL8Skpz1A+J0Fu
-GgB+lRNp7385NW1v1AgzAyv42JDxSmgyOCJ6/0N5QYuHvAS9UpBXn/Mjmu2EmueyEL8pEhkxV/Tw
-ShYXYOVt6a28YLuio7f5Jvtswiuk2xFymsDe9Q9tpkB9+zjoiG7/wyH8i4iNHP/iQjA5VkUUDGdv
-zy+FunEh6zvH4yjiwH4j1HHPQIRjveCVxyehxibnDglS7wYHh4N6K4yArw+WcDUh0S9uQEiZogxq
-YVafSVf31ZtvaSV3nUkKLnrR5sEvoxxNiF2NTkO/ylqVnNHF1F++R8r1rKVvLjKV
---000000000000e0fb1505ee958340--
