@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BECA263CBDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 00:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B61A63CBDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 00:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiK2X3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 18:29:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
+        id S230207AbiK2XaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 18:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiK2X3k (ORCPT
+        with ESMTP id S229979AbiK2X3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 18:29:40 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2067.outbound.protection.outlook.com [40.107.94.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3AD6F0E9;
-        Tue, 29 Nov 2022 15:29:29 -0800 (PST)
+        Tue, 29 Nov 2022 18:29:51 -0500
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2042.outbound.protection.outlook.com [40.107.212.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E1B71195;
+        Tue, 29 Nov 2022 15:29:43 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OSzzlrN2blHqxTzwku1OtO3ykocWNsIUByEJ/yUDgUyQcXUVqLcCACAeeGhmN7mVdSF+vkXd+E11ivuTNmVqlk/PHgjpDwbCqjYbfBjLFKEMZVIaXP+WwUlytFcJGcCG/PdIYAVLMVd67s7BiBt4L7lKIh8TYFOhKuYd5cVBqbN6N0zp/ZVEvvfc3j0cPLAMybyUMO3Pj0Tjss8+k8eoKtYDESyW/PoQ9Q1LsfUh4ieRm87HHNpcbfu85ThuqrLrJWSqNPl+OJTb9NVAHPrHU+aMv8D8ETp9w8ZYaYfS3cRMZUq1Brp20fB7/y44LU1sPhepqGA+P0QM6ZVccFiD4A==
+ b=RZZDjsEMLTSEpns8GiNKL03F3M2nWnJMheq5dg04Wugz8Erczh6F7xzAXz8tkvTanuy5fO1opDS4f7tKErV7k4Mzzkof49QTnxh0pun0lBiVtZ/Gmf4NynA7IxMTczOgSglHSEixJGUSDdg29hlfQ1WdCmbcVihQLm0l6GRs4enD/XnJel84WYoV94UV6mGMuNcbEhMlR3z5YXfrZVZvY4h5Nb0wyFQuRYzia6x6f+fnNGtPHOuJOPJQ/qv1QbZXXa2kfqwIfd+XCPyPuBTVsqLmZxRc4M5p72VZ0LRZjtqpdBRWXLWJ+6cCBzjdLj3fcWp9XPYp6ji8erNaAmmWTw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KiLAjJ+YWiKO/cZsJFmLCEH8r2kiulS+akAiHUDdbmA=;
- b=fCcBFEg/kp4G6iJEk9lY7xy+LRpy+iZ0PaY2bEcpVJANt2pr20shFb5QkMmx3axpiMb62rCDpINvaZTCdBCi6h5rupSHgYS4vaidc8l787t+xUxHQ/aZAgTu7Bjk5jKB5QqXXYQrf+iezPE3VMtSLwDZrVyrLWIUv8cJUMKQM5P/zYKngBxh4LF3KJUVjH5KYoRCoM6K6rlUhzTfbcSzwBCJ8yyLMv7Ca8OSOWrBTyOB5vlfUUQp5vYS/HMDxGJwHiaKALfqAnKkYtXiZakTrfwypvKCtNgjtJAN8uWKwEREWvMPXKbE6wzMLhb0yiswqbuxIDY4X2TGYJ4cwLGqMw==
+ bh=AIe4mKOyn70BXMu9ewRDR6BaGZiCjfn7IR9cPrqCt9M=;
+ b=L5N+ko/MoXO/PSPX4oqNCPe4zwnz5CcG1wbIEH+HIxDk2DubN+39zgdZTWng+VlFmoddiByQvu0aH2dLCN9T+JkeB1JitvqaWLA5NTKjBFBef86fiFM2Tptc2c+xAYrFGYpGbJv7avLeMa7TjPXRZa1ExIwwGSx0SgfHEbcInXx8mTJmawibVAV2eJJ9j3Ukg7/JSNq2ggtUVEdmmF5byICVsk2HOiSNV8e5khNPILFuXPyy4Is6uT8dC4JV6NAbIoJa36KLSKXDOHtZ2E3u3xPU7wsT8oMk9jc1ytg27+OYYKPMxEih9UW2uVb/t/eDWXzHeEDPLgbZFodJEjJ9sQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KiLAjJ+YWiKO/cZsJFmLCEH8r2kiulS+akAiHUDdbmA=;
- b=YBvIj7YOnYvQnR8p6+XcDwIRSIiskI0NhPWYVaVluKEVqXtO263MxNYwK2SGAD2mUFysPGDC6aSSs0VUtz5Q5HpnzIHNtJAHp1KDLUPISuLZuBHNUMcWPTDdFD9MvJDjSz08tjvxEh+IvNCVIxmnKWAAAoxVW14eC2gkOItjl1VPKOxgICrUvzKr5hxLE9KfFnxK9M9EnK45bjCc/g44Bu1QjywclJt6Vfdbc8ZzV9QS/wgBFVnju1hsi8DI+GH09ErOrhj0289mpT5K3XE6v31BWnXITxkaXYJuPtG6diwDsTtLelIWXNHQHWZiaqpE8RgfU+O2etLkiQSS22H4mg==
-Received: from BN9PR03CA0172.namprd03.prod.outlook.com (2603:10b6:408:f4::27)
- by DM4PR12MB7501.namprd12.prod.outlook.com (2603:10b6:8:113::14) with
+ bh=AIe4mKOyn70BXMu9ewRDR6BaGZiCjfn7IR9cPrqCt9M=;
+ b=GTgtjxDADylS9Il+VOuY1MUuhSsy1cBPkDY4ziNNS2frPCCzeWjIgxZCIX563abPZzCFB5x/fycf81/Mg0ey98OjHyb/jUnaVz0tw5d6OoVWRHzYS+JDYlx08+60L+Y0pBRjyz2bfk/RSQU7fwpvm85UHGHBmdBZcpp7IoeAQezP2ffJJp+tyUtXav08hMfYJjOh46ex0GKEzas0XQ31buHhHaW65UeYp0Pvkzn5ZzjpucZF4ptd8G7VqKe9iH3nJ5BFks8Lahp9yNZynTuoc1tvkALMoJisP2GbnGfsKehOZhaI0UaK8FW4fBQED2M6hECMxPETEUkbB1yC8HZmKA==
+Received: from DM6PR07CA0080.namprd07.prod.outlook.com (2603:10b6:5:337::13)
+ by MW4PR12MB6729.namprd12.prod.outlook.com (2603:10b6:303:1ed::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Tue, 29 Nov
- 2022 23:29:27 +0000
-Received: from BL02EPF0000EE3E.namprd05.prod.outlook.com
- (2603:10b6:408:f4:cafe::10) by BN9PR03CA0172.outlook.office365.com
- (2603:10b6:408:f4::27) with Microsoft SMTP Server (version=TLS1_2,
+ 2022 23:29:39 +0000
+Received: from DM6NAM11FT010.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:337:cafe::f3) by DM6PR07CA0080.outlook.office365.com
+ (2603:10b6:5:337::13) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23 via Frontend
- Transport; Tue, 29 Nov 2022 23:29:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ Transport; Tue, 29 Nov 2022 23:29:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL02EPF0000EE3E.mail.protection.outlook.com (10.167.241.135) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5857.17 via Frontend Transport; Tue, 29 Nov 2022 23:29:27 +0000
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT010.mail.protection.outlook.com (10.13.172.222) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5857.21 via Frontend Transport; Tue, 29 Nov 2022 23:29:39 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 29 Nov
- 2022 15:29:19 -0800
+ 2022 15:29:30 -0800
 Received: from dev.nvidia.com (10.126.231.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 29 Nov
- 2022 15:29:18 -0800
+ 2022 15:29:29 -0800
 From:   Chaitanya Kulkarni <kch@nvidia.com>
 To:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
         <bvanassche@acm.org>, <shinichiro.kawasaki@wdc.com>,
         <vincent.fu@samsung.com>, Chaitanya Kulkarni <kch@nvidia.com>
-Subject: [PATCH V4 5/8] null_blk: remove extra space in switch condition
-Date:   Tue, 29 Nov 2022 15:28:10 -0800
-Message-ID: <20221129232813.37968-6-kch@nvidia.com>
+Subject: [PATCH V4 6/8] null_blk: add param to set max disacrd sectors
+Date:   Tue, 29 Nov 2022 15:28:11 -0800
+Message-ID: <20221129232813.37968-7-kch@nvidia.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20221129232813.37968-1-kch@nvidia.com>
 References: <20221129232813.37968-1-kch@nvidia.com>
@@ -78,23 +78,23 @@ X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0000EE3E:EE_|DM4PR12MB7501:EE_
-X-MS-Office365-Filtering-Correlation-Id: a347a6e7-91d9-4e43-e06e-08dad2618eee
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT010:EE_|MW4PR12MB6729:EE_
+X-MS-Office365-Filtering-Correlation-Id: a2cae71b-d97c-432f-12cd-08dad26195f2
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gPpF+uSj6OCRV6CHpJt136tRVc2M1MrzQH67cfWXaBlusKiAw0jqU98JUugZ9IXxRX+t+tX/ISoPazKP0uYpq40KnXYrSfPY0FILoX/0mFoJESyyx11zdOCqmq1b4+DYfGiA22uP9Q66rkVZHaHHp92vwO+JwRi228YA5dAJFfUKbOw6aAilMHUG4CuoJQffzkjmAEaQ36XVb62QKgNp+KdjPQJrKSTUX1AfDBvP/4E90aFUo/WEELOQA9uhSu0snDH4/WItCxY0jO7Zsmv8mbnr/wDflLbcaxkrkWTSeziLlWO0AdODpKu4yRFml775ls5ZHZyc6b/nThTrT373NZKRP6CiDx//y3jtnHoGm60F+/9iiedh/23RdT8wjh9N9k+XZDH28N4dwu6BifQlRCGM/EFOhx4ox6LuF0FkKX06tqwQ3F3EIidDJFXldxrqEmE/pq1kd8PTGqmJBOKVSjgpaw9JPOP81NziOuhDQweZ2m88cHwsbwhqa6t6gArfUXk9V1wV8oZVry3b473dOWXpGFkzTwMHq1oGCTctq5EMWX5ndnvzk+lSUu7/SZl0bhTNtsbX1k8EVG7kqzaZARzUMKEt9iwGlOFSnEGE2Xnj1Rs3N3kDrgA0pJYfYDZmStxtR8DcY0lkoqrXcyjEQ7FTRyyd94X7n239QjshiFzGFgaOQtZJ9K11G9oOOTnwp4i++03i2X8MKj3Oh2M6cQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(39860400002)(451199015)(40470700004)(36840700001)(46966006)(40460700003)(8676002)(2906002)(36756003)(7696005)(36860700001)(4744005)(5660300002)(41300700001)(8936002)(4326008)(6666004)(47076005)(107886003)(83380400001)(16526019)(26005)(1076003)(186003)(336012)(2616005)(426003)(54906003)(356005)(110136005)(7636003)(316002)(70206006)(70586007)(82310400005)(82740400003)(40480700001)(478600001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: LeVfjxuzxwNIPAI0hn7SyD/a45gUILPYe6+Kq+3YcrVtsrLd7EddXqAm5rB2xpzMKuwlJUE0E0xRS8Qw42vbUG5i5L+usI2yooVEHInb8wIU+XG6BSwwGKu/xKFzx/OKWNjqlp3NaQXdY6hcDfOYzHT8ONihjqV2qJybyera/YwtLCJuugtaI6XN55bDxcBD6uOMpNa75qq22vWWS0p/qyM4e+yq0skD/ftaj/0ZHwfEX7p3UUDJPCAQwonzIsGB+0ab/Dsg52AHKQqSTlsHWyo/XKAI6dUp+2Tx9NUCqH7kZFSdr9DSvacoJjG9J/fy/fIZmqOTmvqTH6Ve++K1MHxrNsmqJzY5sqfgbu3MV8K/TRLwXXnPsFM7sjwNbqoH8asoxJ5WMl04i3lw/9nOEborvwuhsWQKcOMvdi08HCR6GtavyFTHcHUDfR5J41ZrfWohlYmPOlhonyPSLIl/8HCRL6QdustVSIbkoEK8vo8N4B2QJvR76O2JglmV0lL2sGLN9SIHWjBn2We3NMToY8y9lqZj0QIO9UOcmKOPnaw10Ul7D/aexfo4IUqITK9eBpiJsq4zqhhoXEkp7TREFIiFosB8IlOkm0gavALTHZv5ZKuDFJgnidgGVKVwMoGKAXAjSxr3EUNFNH0a1TE+7DT/frk/s1PoJ7bkG/q23FV81Iza5xeOavZPuh1IQphoqpaMrvTec8DLcHr/I943Ow==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(136003)(376002)(346002)(451199015)(40470700004)(46966006)(36840700001)(26005)(107886003)(6666004)(40480700001)(110136005)(54906003)(36756003)(40460700003)(7696005)(82740400003)(316002)(47076005)(426003)(7636003)(356005)(83380400001)(36860700001)(2906002)(8676002)(70586007)(4326008)(70206006)(8936002)(5660300002)(336012)(1076003)(82310400005)(41300700001)(186003)(16526019)(478600001)(2616005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 23:29:27.5214
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 23:29:39.4114
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a347a6e7-91d9-4e43-e06e-08dad2618eee
+X-MS-Exchange-CrossTenant-Network-Message-Id: a2cae71b-d97c-432f-12cd-08dad26195f2
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000EE3E.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT010.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7501
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6729
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -105,28 +105,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The extra space in after switch condition does not follow kernel coding
-standards, remove extra space in switch condition end_cmd().
+Instead of hardcoding value for the maximum discard sector to
+UINT_MAX >> 9, allow user to set the value with newly added module
+parameter max_discard_sectors.
+
+To retain the backward compatibility make set default value to
+UINT_MAX >> 9.
 
 Signed-off-by: Chaitanya Kulkarni <kch@nvidia.com>
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 ---
- drivers/block/null_blk/main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/block/null_blk/main.c     | 10 +++++++++-
+ drivers/block/null_blk/null_blk.h |  1 +
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/block/null_blk/main.c b/drivers/block/null_blk/main.c
-index db849e6bc475..96b8aca5abda 100644
+index 96b8aca5abda..2f787807cf63 100644
 --- a/drivers/block/null_blk/main.c
 +++ b/drivers/block/null_blk/main.c
-@@ -789,7 +789,7 @@ static void end_cmd(struct nullb_cmd *cmd)
- {
- 	int queue_mode = cmd->nq->dev->queue_mode;
+@@ -216,6 +216,10 @@ static bool g_discard;
+ module_param_named(discard, g_discard, bool, 0444);
+ MODULE_PARM_DESC(discard, "Support discard operations (requires memory-backed null_blk device). Default: false");
  
--	switch (queue_mode)  {
-+	switch (queue_mode) {
- 	case NULL_Q_MQ:
- 		blk_mq_end_request(cmd->rq, cmd->error);
- 		return;
++static unsigned int g_max_discard_sectors = UINT_MAX >> 9;
++module_param_named(max_discard_sectors, g_max_discard_sectors, uint, 0444);
++MODULE_PARM_DESC(max_discard_sectors, "Maximum size of a REQ_OP_DISCARD command (in 512B sectors).");
++
+ static bool g_write_zeroes;
+ module_param_named(write_zeroes, g_write_zeroes, bool, 0444);
+ MODULE_PARM_DESC(write_zeroes, "Support write-zeores operations. Default: false");
+@@ -420,6 +424,7 @@ NULLB_DEVICE_ATTR(home_node, uint, NULL);
+ NULLB_DEVICE_ATTR(queue_mode, uint, NULL);
+ NULLB_DEVICE_ATTR(blocksize, uint, NULL);
+ NULLB_DEVICE_ATTR(max_sectors, uint, NULL);
++NULLB_DEVICE_ATTR(max_discard_sectors, uint, NULL);
+ NULLB_DEVICE_ATTR(irqmode, uint, NULL);
+ NULLB_DEVICE_ATTR(hw_queue_depth, uint, NULL);
+ NULLB_DEVICE_ATTR(index, uint, NULL);
+@@ -544,6 +549,7 @@ static struct configfs_attribute *nullb_device_attrs[] = {
+ 	&nullb_device_attr_queue_mode,
+ 	&nullb_device_attr_blocksize,
+ 	&nullb_device_attr_max_sectors,
++	&nullb_device_attr_max_discard_sectors,
+ 	&nullb_device_attr_irqmode,
+ 	&nullb_device_attr_hw_queue_depth,
+ 	&nullb_device_attr_index,
+@@ -686,6 +692,7 @@ static struct nullb_device *null_alloc_dev(void)
+ 	dev->queue_mode = g_queue_mode;
+ 	dev->blocksize = g_bs;
+ 	dev->max_sectors = g_max_sectors;
++	dev->max_discard_sectors = g_max_discard_sectors;
+ 	dev->irqmode = g_irqmode;
+ 	dev->hw_queue_depth = g_hw_queue_depth;
+ 	dev->blocking = g_blocking;
+@@ -1850,7 +1857,8 @@ static void null_config_discard(struct nullb *nullb)
+ 	}
+ 
+ 	nullb->q->limits.discard_granularity = nullb->dev->blocksize;
+-	blk_queue_max_discard_sectors(nullb->q, UINT_MAX >> 9);
++	blk_queue_max_discard_sectors(nullb->q,
++				      nullb->dev->max_discard_sectors);
+ }
+ 
+ static void null_config_write_zeroes(struct nullb *nullb)
+diff --git a/drivers/block/null_blk/null_blk.h b/drivers/block/null_blk/null_blk.h
+index 2c0c9c29158f..09940211326d 100644
+--- a/drivers/block/null_blk/null_blk.h
++++ b/drivers/block/null_blk/null_blk.h
+@@ -102,6 +102,7 @@ struct nullb_device {
+ 	unsigned int queue_mode; /* block interface */
+ 	unsigned int blocksize; /* block size */
+ 	unsigned int max_sectors; /* Max sectors per command */
++	unsigned int max_discard_sectors; /* Max discard sectors per command */
+ 	unsigned int irqmode; /* IRQ completion handler */
+ 	unsigned int hw_queue_depth; /* queue depth */
+ 	unsigned int index; /* index of the disk, only valid with a disk */
 -- 
 2.29.0
 
