@@ -2,114 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5171F63BE96
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8B363BE9B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:07:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232916AbiK2LGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 06:06:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
+        id S232496AbiK2LH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 06:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232883AbiK2LGW (ORCPT
+        with ESMTP id S232995AbiK2LGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 06:06:22 -0500
-Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fac])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD29A5F85
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:03:29 -0800 (PST)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4NLzwH54j7zMpnsN;
-        Tue, 29 Nov 2022 12:03:27 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4NLzwG46yQzMppBm;
-        Tue, 29 Nov 2022 12:03:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1669719807;
-        bh=TLB1uJhOAIdI/EElBwqY+knrjdOQVyTAQPueqObbA9U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YJe3KcaBhpyR2dws3y80DgSUVZlwx7uKAL8ICdepm5y/JD/cXo3UmTENPWpcoWjdX
-         iGaj99GSJui7kLNVwPx15f58zrG9FynRunm/RKwKzAhDZD9LMb+K24HWd8yBvw5Dsf
-         +FVn3WoG66jczn2bHYe5O1IrpBBzEjGq4PnjBsFA=
-Message-ID: <e62a539b-614c-c008-873a-f9c57c7ecb33@digikod.net>
-Date:   Tue, 29 Nov 2022 12:03:25 +0100
-MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH -next] selftests/landlock: Fix selftest ptrace_test run
- fail
-Content-Language: en-US
-To:     limin <limin100@huawei.com>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
-        shakeelb@google.com, songmuchun@bytedance.com, tj@kernel.org,
-        lizefan.x@bytedance.com
-References: <20221128020409.1545717-1-limin100@huawei.com>
- <1232e4f3-e4b8-ff23-61e8-5465c8406f6e@digikod.net>
- <7379a5fd-5593-c6ce-40fd-c543dcf70d2b@huawei.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <7379a5fd-5593-c6ce-40fd-c543dcf70d2b@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 29 Nov 2022 06:06:33 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49FB62055;
+        Tue, 29 Nov 2022 03:04:06 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so8726696pjm.2;
+        Tue, 29 Nov 2022 03:04:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0QeTQq6wzF697oGF5V/c7AcE3tcQdYXM/Tpo1+r5kqU=;
+        b=VFn92dDYFOjUbV6MdgTMzJj5V9Pknq4wx6y3WZA3YSFJ05mGk4kGTuJOZySZkregoX
+         R09H4U69mqs7UcFlb7WdVrI6FSlLH3BFV4dfmntynPM37mTsPqRmY10D1PcNr021TndO
+         ZJtZT0DZVQOTZVxo5J/TnA2wAB6U4FGrXZ+H2hzG0Al+fVoKV7fQaK6c4SrCQRzz2xNO
+         olnT7FldajgQXGJ3VWtI9ztaAaj6GHsuc8tUY2uGp0TcZiATPhatjrtYQVCgb/ZFsXv0
+         bqcAuIG7TyxgHWPHNXiComhYtC9wYH8JhbKlT2q8vG0tbV+XV0CJOMp/8JzD8+E5h5Dr
+         AIdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0QeTQq6wzF697oGF5V/c7AcE3tcQdYXM/Tpo1+r5kqU=;
+        b=NfPCOehJkIaQd5BhV7IR11TeJ4LWHU9NeVy03nMYMdJhX6e3Pb37+uxdXLh3eWEkob
+         wb5fLlFK/mpNS+V6nVjOOoxktaU4dsrs8icOasjy3N69TmJzfky4039b+fp7NGs+c9kk
+         rIvv+T9S0HqvdSPKSpg84qIjpWcY6LAPclicWtOM8sLZnDXm4++XXJfJYvQDQUCyRVRi
+         heMfI6MEL+D5q5VmZ6/INuhuHaNM9YQEg37U/ploaqsxnl0T2Tasl/ycbtW+GVOx17sB
+         li7w1WGzPh8HfIgQSVhrobC7PbaxjpL7/akX0CeF32kMCeocGLKZySF9itKMVrPPs/PD
+         94Cg==
+X-Gm-Message-State: ANoB5plnFr/aYy4qB0n+QDJ6b84C8pqnqZnFXsmVAGj7OWc35BYaPvpP
+        U6VnonKENnxAwkiAK9NHl1O7gQc3z6s=
+X-Google-Smtp-Source: AA0mqf4WkqY8Eem3Omh2NZ+cUvtx3SzsTQZD9LY5jNFj/Jcqfz3tMr5vZFx3brcefjh0aY216O27dA==
+X-Received: by 2002:a17:90a:a588:b0:218:8eb8:8502 with SMTP id b8-20020a17090aa58800b002188eb88502mr52114855pjq.179.1669719846009;
+        Tue, 29 Nov 2022 03:04:06 -0800 (PST)
+Received: from localhost.localdomain (2001-b400-e2d4-7fe5-5c2c-fa0a-e67b-3955.emome-ip6.hinet.net. [2001:b400:e2d4:7fe5:5c2c:fa0a:e67b:3955])
+        by smtp.gmail.com with ESMTPSA id g8-20020a1709026b4800b001868981a18esm10566761plt.6.2022.11.29.03.04.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 03:04:05 -0800 (PST)
+From:   Owen Yang <ecs.taipeikernel@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Doug Anderson <dianders@chromium.org>, Harvey <hunge@google.com>,
+        Bob Moragues <moragues@google.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Abner Yen <abner.yen@ecs.com.tw>,
+        Gavin Lee <gavin.lee@ecs.com.tw>,
+        Matthias Kaehlcke <mka@google.com>,
+        Owen Yang <ecs.taipeikernel@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v6 1/2] dt-bindings: arm: qcom: Add zombie
+Date:   Tue, 29 Nov 2022 19:03:57 +0800
+Message-Id: <20221129190339.v6.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I tested with next-20221116 and all tests are OK. Could you share your 
-kernel configuration with a link? What is the content of /proc/cmdline?
+Add an entry in the device tree binding for sc7280-zombie.
 
-On 29/11/2022 02:42, limin wrote:
-> I run test on Linux ubuntu2204 6.1.0-next-20221116
-> 
-> I did't use yama.
-> 
-> you can reproduce by this step:
-> 
-> cd kernel_src
-> 
-> cd tools/testing/selftests/landlock/
-> make
-> ./ptrace_test
-> 
-> 
-> 
-> 
-> On 2022/11/29 3:44, Mickaël Salaün wrote:
->> This patch changes the test semantic and then cannot work on my test
->> environment. On which kernel did you run test? Do you use Yama or
->> something similar?
->>
->> On 28/11/2022 03:04, limin wrote:
->>> Tests PTRACE_ATTACH and PTRACE_MODE_READ on the parent,
->>> trace parent return -1 when child== 0
->>> How to reproduce warning:
->>> $ make -C tools/testing/selftests TARGETS=landlock run_tests
->>>
->>> Signed-off-by: limin <limin100@huawei.com>
->>> ---
->>>    tools/testing/selftests/landlock/ptrace_test.c | 5 ++---
->>>    1 file changed, 2 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/landlock/ptrace_test.c
->>> b/tools/testing/selftests/landlock/ptrace_test.c
->>> index c28ef98ff3ac..88c4dc63eea0 100644
->>> --- a/tools/testing/selftests/landlock/ptrace_test.c
->>> +++ b/tools/testing/selftests/landlock/ptrace_test.c
->>> @@ -267,12 +267,11 @@ TEST_F(hierarchy, trace)
->>>            /* Tests PTRACE_ATTACH and PTRACE_MODE_READ on the parent. */
->>>            err_proc_read = test_ptrace_read(parent);
->>>            ret = ptrace(PTRACE_ATTACH, parent, NULL, 0);
->>> +        EXPECT_EQ(-1, ret);
->>> +        EXPECT_EQ(EPERM, errno);
->>>            if (variant->domain_child) {
->>> -            EXPECT_EQ(-1, ret);
->>> -            EXPECT_EQ(EPERM, errno);
->>>                EXPECT_EQ(EACCES, err_proc_read);
->>>            } else {
->>> -            EXPECT_EQ(0, ret);
->>>                EXPECT_EQ(0, err_proc_read);
->>>            }
->>>            if (ret == 0) {
+Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
+---
+
+(no changes since v1)
+
+ Documentation/devicetree/bindings/arm/qcom.yaml | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 463509f0f23a..7ec6240311db 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -655,6 +655,16 @@ properties:
+           - const: google,villager-sku512
+           - const: qcom,sc7280
+ 
++      - description: Google Zombie (newest rev)
++        items:
++          - const: google,zombie
++          - const: qcom,sc7280
++
++      - description: Google Zombie with LTE (newest rev)
++        items:
++          - const: google,zombie-sku512
++          - const: qcom,sc7280
++
+       - items:
+           - enum:
+               - lenovo,flex-5g
+-- 
+2.17.1
+
