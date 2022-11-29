@@ -2,160 +2,565 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F9D63B8F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 05:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E2063B8F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 05:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235559AbiK2EBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 23:01:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
+        id S235336AbiK2ECl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 23:02:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235565AbiK2EBX (ORCPT
+        with ESMTP id S235560AbiK2ECg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 23:01:23 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E634E43A
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 20:01:22 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id x13-20020a17090a46cd00b00218f611b6e9so12141173pjg.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 20:01:22 -0800 (PST)
+        Mon, 28 Nov 2022 23:02:36 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B4C4E405;
+        Mon, 28 Nov 2022 20:02:35 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so8324141otl.10;
+        Mon, 28 Nov 2022 20:02:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xoNynUsXcZWRRQTA42Lr8aZhhKDdqzAsGG5E/HJMyjk=;
-        b=L+ggEBnUdDJGpqbNThJ/vIeO3gs8VDddvHdRi3e2qz7IQ4S0zDDeDIZbKvwIpy/08f
-         /+uKWt9P5uP/Gu6ScjZm80hBBD6oSSJQCHVU+NH/WCPOvocEhb575zy1y6cQL9fEFHbe
-         DCx3iUv2XturIqr7QQ50Cw9fwsn6xso0Arp3w=
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jdBZso3Vwpsp74oXRRyRaVCc75oEZpB0IFHYzSgMfQ4=;
+        b=mqOJlPqOG4YRJeReE/QpFo1T0BieGLHmqCIgckZ0wDKo0GJSAbwH4t07hqcjBpl5mu
+         +eYcKugVKP8J1QvqgUqWXqV4s/9Uue/Z8E9h+YHk+Ka4aBvcmtPCxaocxlMIe08KUNak
+         rZUPSkFt695ps6/MZn/4WiJRORCjhoeUvu10t/mowfgX6nFdHgaBP0GGLuWS+vWPrELZ
+         5dz0WqUgFcPNz04/h7/GgIkUeojgk5k3jTr06zPvLmZjGY72WmGwZpSF1fiDuVFPuqqX
+         AOVDB2AsMj95sg1Pot2lPoEpchQeO7F+G4Df5MjVJVygNJMBKBY6izsweSHz8sMtW6I5
+         DQgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xoNynUsXcZWRRQTA42Lr8aZhhKDdqzAsGG5E/HJMyjk=;
-        b=8LE09NlcCT3Oip0kPQ4Izq8Q6Le58MJ2p9QuwW+Za2QlSWWlhDKxHg6L66LOzeaK3B
-         i0xomdqYiLwvKhL+iYPo53QrZzJ6Mc2buwRlzIvouPmgrr4q4tJsFEtLMgGsFBLcvIhu
-         UEfSVVXK/JwknwBLfSph6k1zqmzb35gLX1dzZfCzPqULODqKCDL1SH3i1xYJbfan2+Y/
-         IcRVPcMyONYVP4TMQDASOdID9AZqLEXu3PtnMPnfvQPsST8myFDMR+zkLg/qW3wp86QK
-         6kMFXj4g/gKN+87HK0ihC2flAgsv4fKlsGwiAW6s1GTe+WTZM7+/9iydex1m2Ltvda++
-         JMpA==
-X-Gm-Message-State: ANoB5plv6TFyadMtmc7JHGObaim9RtwMilbRTzmf+QoY8SRtDE85r97C
-        +4x9oMsYrcLyDuoghJTGdC02Qw==
-X-Google-Smtp-Source: AA0mqf5cllq8xbDaQrTyt/2TeL7ufjfwuaEUbskEY98DprdDjtJX3d1TQZFhzVs8UlGzzuIZ6lJImA==
-X-Received: by 2002:a17:90b:2711:b0:213:9b80:ceee with SMTP id px17-20020a17090b271100b002139b80ceeemr63951801pjb.243.1669694481669;
-        Mon, 28 Nov 2022 20:01:21 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:2565:b2f5:cacd:a5d9])
-        by smtp.gmail.com with ESMTPSA id b196-20020a621bcd000000b0056ddd2ac8f1sm8806807pfb.211.2022.11.28.20.01.18
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jdBZso3Vwpsp74oXRRyRaVCc75oEZpB0IFHYzSgMfQ4=;
+        b=tw1OL8O/tx1RQqlHMdMU85IvkMQJn9VHhxD6X/NpgYw8YyDYIOB7kO78cxjmONTtsO
+         48kIc0/+YInBAePrOvTxqfEpEM0bbu9wBaZX/VWJ8cckFWTzjQHGnGuSEMYv2ZmRlC7X
+         i/nnUC7N8YlPcO1ijG2XlollGdnzm9NRJu++2VikboYp0VQPylDq1KlxzdChR/Nozi6u
+         0NyloDGfY/1DQkKZLup9SEgQMv3cdLOzKLKR3dzgOJRHd7/fSLMUTdmMqSZgxkmaP//J
+         NEu5zXA8GJ6NGAqZSoyeH6obxuOPLuT2VI9pB0ChKWGiGSD20Y9Ufcxne8AccNmdF3xw
+         UCeA==
+X-Gm-Message-State: ANoB5pns9qaYaYjO1Ix2O29DpRHxODGEHRN7ZKipa6moVARllv5Q5ywN
+        Tffh9T52cujnS+jqd3fKp3U=
+X-Google-Smtp-Source: AA0mqf5YHo27FVxUjCeQsfIU+jZLSL3Byyl+i+kAU1cnB2LHq3b76WRLMW7Fg3zOhdsUE3mZAcF8Iw==
+X-Received: by 2002:a9d:6244:0:b0:66c:e574:8a6b with SMTP id i4-20020a9d6244000000b0066ce5748a6bmr26533398otk.183.1669694554282;
+        Mon, 28 Nov 2022 20:02:34 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d23-20020a4aba97000000b0049ea9654facsm5052682oop.32.2022.11.28.20.02.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 20:01:20 -0800 (PST)
-Date:   Tue, 29 Nov 2022 13:01:15 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: Re: [PATCH v7 3/6] zsmalloc: Consolidate zs_pool's migrate_lock and
- size_class's locks
-Message-ID: <Y4WECyoq3fP/cOmi@google.com>
-References: <20221128191616.1261026-1-nphamcs@gmail.com>
- <20221128191616.1261026-4-nphamcs@gmail.com>
+        Mon, 28 Nov 2022 20:02:33 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 28 Nov 2022 20:02:32 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     nick.hawkins@hpe.com
+Cc:     jdelvare@suse.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com, corbet@lwn.net,
+        linux@armlinux.org.uk, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/6] hwmon: (gxp-fan-ctrl) Add GXP fan controller
+Message-ID: <20221129040232.GA1901150@roeck-us.net>
+References: <20221128230219.39537-1-nick.hawkins@hpe.com>
+ <20221128230219.39537-2-nick.hawkins@hpe.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221128191616.1261026-4-nphamcs@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221128230219.39537-2-nick.hawkins@hpe.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/28 11:16), Nhat Pham wrote:
-> Currently, zsmalloc has a hierarchy of locks, which includes a
-> pool-level migrate_lock, and a lock for each size class. We have to
-> obtain both locks in the hotpath in most cases anyway, except for
-> zs_malloc. This exception will no longer exist when we introduce a LRU
-> into the zs_pool for the new writeback functionality - we will need to
-> obtain a pool-level lock to synchronize LRU handling even in zs_malloc.
+On Mon, Nov 28, 2022 at 05:02:14PM -0600, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
 > 
-> In preparation for zsmalloc writeback, consolidate these locks into a
-> single pool-level lock, which drastically reduces the complexity of
-> synchronization in zsmalloc.
+> The GXP SoC can support up to 16 fans through the interface provided by
+> the CPLD. The current support is limited to 8 fans. The fans speeds are
+> controlled via 8 different PWMs which can vary in value from  0-255. The
+> fans are also capable of reporting if they have failed to the CPLD which
+> in turn reports the status to the GXP SoC.
 > 
-> We have also benchmarked the lock consolidation to see the performance
-> effect of this change on zram.
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> ---
 > 
-> First, we ran a synthetic FS workload on a server machine with 36 cores
-> (same machine for all runs), using
+> v2:
+>  *Changed number of supported fans from 16 to 8 in code
+>  *Remove last sentence of commit description
+>  *Removed support for fan[0-15]_input in code and documentation
+>  *Changed documentation to limit fan count to 7
+>  *Changed documentation license
+>  *Removed PWM defines
+>  *Added gxp-fan-ctrl to hwmon's index.rst
+>  *Removed mutex
+>  *Added fan_enable support to report if the fan is enabled
+>  *Changed presents to present
+>  *Removed unnecessary ()
+>  *Add comment for plreg reads and calculations
+>  *Add comment for the use of platform power state in code
+>  *Removed use of variable offsets and went with hardcoding instead
+>  *Rewrote driver to use devm_hwmon_device_register_with_info()
+>  *Remove unused header files
+>  *Fix GPL header
+>  *Changed module description
+>  *Add kfree in case of failure to get regmaps or resource
+> ---
+>  Documentation/hwmon/gxp-fan-ctrl.rst |  28 +++
+>  Documentation/hwmon/index.rst        |   1 +
+>  drivers/hwmon/Kconfig                |   9 +
+>  drivers/hwmon/Makefile               |   1 +
+>  drivers/hwmon/gxp-fan-ctrl.c         | 305 +++++++++++++++++++++++++++
+>  5 files changed, 344 insertions(+)
+>  create mode 100644 Documentation/hwmon/gxp-fan-ctrl.rst
+>  create mode 100644 drivers/hwmon/gxp-fan-ctrl.c
 > 
-> fs_mark  -d  ../zram1mnt  -s  100000  -n  2500  -t  32  -k
-> 
-> before and after for btrfs and ext4 on zram (FS usage is 80%).
-> 
-> Here is the result (unit is file/second):
-> 
-> With lock consolidation (btrfs):
-> Average: 13520.2, Median: 13531.0, Stddev: 137.5961482019028
-> 
-> Without lock consolidation (btrfs):
-> Average: 13487.2, Median: 13575.0, Stddev: 309.08283679298665
-> 
-> With lock consolidation (ext4):
-> Average: 16824.4, Median: 16839.0, Stddev: 89.97388510006668
-> 
-> Without lock consolidation (ext4)
-> Average: 16958.0, Median: 16986.0, Stddev: 194.7370021336469
-> 
-> As you can see, we observe a 0.3% regression for btrfs, and a 0.9%
-> regression for ext4. This is a small, barely measurable difference in my
-> opinion.
-> 
-> For a more realistic scenario, we also tries building the kernel on zram.
-> Here is the time it takes (in seconds):
-> 
-> With lock consolidation (btrfs):
-> real
-> Average: 319.6, Median: 320.0, Stddev: 0.8944271909999159
-> user
-> Average: 6894.2, Median: 6895.0, Stddev: 25.528415540334656
-> sys
-> Average: 521.4, Median: 522.0, Stddev: 1.51657508881031
-> 
-> Without lock consolidation (btrfs):
-> real
-> Average: 319.8, Median: 320.0, Stddev: 0.8366600265340756
-> user
-> Average: 6896.6, Median: 6899.0, Stddev: 16.04057355583023
-> sys
-> Average: 520.6, Median: 521.0, Stddev: 1.140175425099138
-> 
-> With lock consolidation (ext4):
-> real
-> Average: 320.0, Median: 319.0, Stddev: 1.4142135623730951
-> user
-> Average: 6896.8, Median: 6878.0, Stddev: 28.621670111997307
-> sys
-> Average: 521.2, Median: 521.0, Stddev: 1.7888543819998317
-> 
-> Without lock consolidation (ext4)
-> real
-> Average: 319.6, Median: 319.0, Stddev: 0.8944271909999159
-> user
-> Average: 6886.2, Median: 6887.0, Stddev: 16.93221781102523
-> sys
-> Average: 520.4, Median: 520.0, Stddev: 1.140175425099138
-> 
-> The difference is entirely within the noise of a typical run on zram. This
-> hardly justifies the complexity of maintaining both the pool lock and
-> the class lock. In fact, for writeback, we would need to introduce yet
-> another lock to prevent data races on the pool's LRU, further
-> complicating the lock handling logic. IMHO, it is just better to
-> collapse all of these into a single pool-level lock.
-> 
-> Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-> Acked-by: Minchan Kim <minchan@kernel.org>
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> diff --git a/Documentation/hwmon/gxp-fan-ctrl.rst b/Documentation/hwmon/gxp-fan-ctrl.rst
+> new file mode 100644
+> index 000000000000..ae3397e81c04
+> --- /dev/null
+> +++ b/Documentation/hwmon/gxp-fan-ctrl.rst
+> @@ -0,0 +1,28 @@
+> +.. SPDX-License-Identifier: GPL-2.0-only
+> +
+> +Kernel driver gxp-fan-ctrl
+> +==========================
+> +
+> +Supported chips:
+> +
+> +  * HPE GXP SOC
+> +
+> +Author: Nick Hawkins <nick.hawkins@hpe.com>
+> +
+> +
+> +Description
+> +-----------
+> +
+> +gxp-fan-ctrl is a driver which provides fan control for the hpe gxp soc.
+> +The driver allows the gathering of fan status and the use of fan
+> +PWM control.
+> +
+> +
+> +Sysfs attributes
+> +----------------
+> +
+> +======================= ===========================================================
+> +pwm[0-7]		Fan 0 to 7 respective PWM value (0-255)
+> +fan[0-7]_fault		Fan 0 to 7 respective fault status: 1 fail, 0 ok
+> +fan[0-7]_enable         Fan 0 to 7 respective enabled status: 1 enabled, 0 disabled
+> +======================= ===========================================================
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index f7113b0f8b2a..b319ab173d1d 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -73,6 +73,7 @@ Hardware Monitoring Kernel Drivers
+>     g762
+>     gsc-hwmon
+>     gl518sm
+> +   gxp-fan-ctrl
+>     hih6130
+>     ibmaem
+>     ibm-cffps
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index e70d9614bec2..9e0427f20141 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -705,6 +705,15 @@ config SENSORS_GPIO_FAN
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called gpio-fan.
+>  
+> +config SENSORS_GXP_FAN_CTRL
+> +	tristate "HPE GXP fan controller"
+> +	depends on ARCH_HPE_GXP || COMPILE_TEST
+> +	help
+> +	  If you say yes here you get support for GXP fan control functionality.
+> +
+> +	  The GXP controls fan function via the CPLD through the use of PWM
+> +	  registers. This driver reports status and pwm setting of the fans.
+> +
+>  config SENSORS_HIH6130
+>  	tristate "Honeywell Humidicon HIH-6130 humidity/temperature sensor"
+>  	depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 007e829d1d0d..b474dcc708c4 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -83,6 +83,7 @@ obj-$(CONFIG_SENSORS_GL518SM)	+= gl518sm.o
+>  obj-$(CONFIG_SENSORS_GL520SM)	+= gl520sm.o
+>  obj-$(CONFIG_SENSORS_GSC)	+= gsc-hwmon.o
+>  obj-$(CONFIG_SENSORS_GPIO_FAN)	+= gpio-fan.o
+> +obj-$(CONFIG_SENSORS_GXP_FAN_CTRL) += gxp-fan-ctrl.o
+>  obj-$(CONFIG_SENSORS_HIH6130)	+= hih6130.o
+>  obj-$(CONFIG_SENSORS_ULTRA45)	+= ultra45_env.o
+>  obj-$(CONFIG_SENSORS_I5500)	+= i5500_temp.o
+> diff --git a/drivers/hwmon/gxp-fan-ctrl.c b/drivers/hwmon/gxp-fan-ctrl.c
+> new file mode 100644
+> index 000000000000..0b03d33a3a7b
+> --- /dev/null
+> +++ b/drivers/hwmon/gxp-fan-ctrl.c
+> @@ -0,0 +1,305 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P. */
+> +
+> +#include <linux/err.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/slab.h>
+> +
+> +#define OFS_FAN_INST 0 /* Is 0 because plreg base will be set at INST */
+> +#define OFS_FAN_FAIL 2 /* Is 2 bytes after base */
+> +#define OFS_SEVSTAT 0 /* Is 0 because fn2 base will be set at SEVSTAT */
+> +#define POWER_BIT 24
+> +
+> +struct gxp_fan_ctrl_drvdata {
+> +	struct device	*dev;
+> +	struct device	*hwmon_dev;
 
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Both dev and hwmon_dev are unused and thus pointless.
+
+> +	struct regmap	*plreg_map; /* Programmable logic register regmap */
+> +	struct regmap	*fn2_map; /* Function 2 regmap */
+> +	void __iomem	*base;
+> +};
+> +
+> +static bool fan_installed(struct device *dev, int fan)
+> +{
+> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
+> +	u32 val;
+> +
+> +	regmap_read(drvdata->plreg_map, OFS_FAN_INST, &val);
+> +	if (val & BIT(fan))
+> +		return 1;
+> +	else
+> +		return 0;
+
+else after return is unnecessary, and 
+	return !!(val & BIT(fan));
+would avoid the conditional.
+
+> +}
+> +
+> +static long fan_failed(struct device *dev, int fan)
+> +{
+> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
+> +	u32 val;
+> +
+> +	/*
+> +	 * The offset for fan fail is 2 which is not word aligned.
+> +	 * Read from fan installed which is 0 and shift value.
+> +	 */
+> +
+> +	regmap_read(drvdata->plreg_map, OFS_FAN_INST, &val);
+> +
+> +	if ((val >> (8 * OFS_FAN_FAIL)) & BIT(fan))
+> +		return 1;
+> +	else
+> +		return 0;
+
+else after return is pointless, and this can be written as
+
+	return !!((val >> (8 * OFS_FAN_FAIL)) & BIT(fan));
+
+to avoid the conditional.
+
+> +}
+> +
+> +static long fan_enabled(struct device *dev, int fan)
+> +{
+> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
+> +	unsigned int reg;
+> +
+> +	/*
+> +	 * Check the power status as if the platform is off the value
+> +	 * reported for the PWM will be incorrect. Report fan as
+> +	 * disabled.
+> +	 */
+> +	regmap_read(drvdata->fn2_map, OFS_SEVSTAT, &reg);
+> +
+> +	/* If Fan is installed and the system is on it is enabled */
+> +	if ((reg & BIT(POWER_BIT)) && fan_installed(dev, fan))
+> +		return  1;
+> +
+> +	/* Platform power is off, fan is disabled */
+> +	return 0;
+
+Same as above.
+
+> +}
+> +
+> +static int gxp_pwm_write(struct device *dev, u32 attr, int channel, long val)
+> +{
+> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
+> +
+> +	switch (attr) {
+> +	case hwmon_pwm_input:
+> +		if (val > 255)
+> +			return -EINVAL;
+
+Should also check for values < 0.
+
+> +		writeb(val, drvdata->base + channel);
+
+The mixed use of direct writes and regmap is odd and confusing.
+Why use regmap for plreg_map and for fn2_map but not for base ?
+Can this be unified ? If not, why ?
+
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int gxp_fan_ctrl_write(struct device *dev, enum hwmon_sensor_types type,
+> +			      u32 attr, int channel, long val)
+> +{
+> +	switch (type) {
+> +	case hwmon_pwm:
+> +		return gxp_pwm_write(dev, attr, channel, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int gxp_fan_read(struct device *dev, u32 attr, int channel, long *val)
+> +{
+> +	switch (attr) {
+> +	case hwmon_fan_enable:
+> +		*val = fan_enabled(dev, channel);
+> +		return 0;
+> +	case hwmon_fan_fault:
+> +		*val = fan_failed(dev, channel);
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int gxp_pwm_read(struct device *dev, u32 attr, int channel, long *val)
+> +{
+> +	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
+> +	unsigned int reg;
+> +
+> +	/*
+> +	 * Check the power status of the platform. If the platform is off
+> +	 * the value reported for the PWM will be incorrect. In this case
+> +	 * report a PWM of zero.
+> +	 */
+> +	regmap_read(drvdata->fn2_map, 0, &reg);
+> +	if (reg & BIT(POWER_BIT)) {
+> +		/* If Fan present, then read it. */
+> +		*val = fan_installed(dev, channel) ? readb(drvdata->base + channel) : 0;
+> +	} else {
+> +		*val = 0;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int gxp_fan_ctrl_read(struct device *dev, enum hwmon_sensor_types type,
+> +			     u32 attr, int channel, long *val)
+> +{
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		return gxp_fan_read(dev, attr, channel, val);
+> +	case hwmon_pwm:
+> +		return gxp_pwm_read(dev, attr, channel, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static umode_t gxp_fan_ctrl_is_visible(const void *_data,
+> +				       enum hwmon_sensor_types type,
+> +				       u32 attr, int channel)
+> +{
+> +	umode_t mode = 0;
+> +
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		switch (attr) {
+> +		case hwmon_fan_enable:
+> +		case hwmon_fan_fault:
+> +			mode = 0444;
+
+break; missing. Otherwise static analyzers will complain.
+
+> +		default:
+> +			break;
+> +		}
+
+Same as above (and, in this case, prove in point why break;
+should always be added even if it seems unnecessary).
+
+> +	case hwmon_pwm:
+> +		switch (attr) {
+> +		case hwmon_pwm_input:
+> +			mode = 0644;
+
+Same as above.
+
+> +		default:
+> +			break;
+> +		}
+
+Same as above.
+
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return mode;
+> +}
+> +
+> +static const struct hwmon_ops gxp_fan_ctrl_ops = {
+> +	.is_visible = gxp_fan_ctrl_is_visible,
+> +	.read = gxp_fan_ctrl_read,
+> +	.write = gxp_fan_ctrl_write,
+> +};
+> +
+> +static const struct hwmon_channel_info *gxp_fan_ctrl_info[] = {
+> +	HWMON_CHANNEL_INFO(fan,
+> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
+> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
+> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
+> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
+> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
+> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
+> +			   HWMON_F_FAULT | HWMON_F_ENABLE,
+> +			   HWMON_F_FAULT | HWMON_F_ENABLE),
+> +	HWMON_CHANNEL_INFO(pwm,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_chip_info gxp_fan_ctrl_chip_info = {
+> +	.ops = &gxp_fan_ctrl_ops,
+> +	.info = gxp_fan_ctrl_info,
+> +
+> +};
+> +
+> +static struct regmap *gxp_fan_ctrl_init_regmap(struct platform_device *pdev, char *reg_name)
+> +{
+> +	struct regmap_config regmap_config = {
+> +		.reg_bits = 32,
+> +		.reg_stride = 4,
+> +		.val_bits = 32,
+> +	};
+> +	void __iomem *base;
+> +
+> +	base = devm_platform_ioremap_resource_byname(pdev, reg_name);
+> +	if (IS_ERR(base))
+> +		return ERR_CAST(base);
+> +
+> +	regmap_config.name = reg_name;
+> +
+> +	return devm_regmap_init_mmio(&pdev->dev, base, &regmap_config);
+> +}
+> +
+> +static int gxp_fan_ctrl_probe(struct platform_device *pdev)
+> +{
+> +	struct gxp_fan_ctrl_drvdata *drvdata;
+> +	struct resource *res;
+> +	struct device *dev = &pdev->dev;
+> +	int error;
+> +
+> +	drvdata = devm_kzalloc(&pdev->dev, sizeof(struct gxp_fan_ctrl_drvdata),
+> +			       GFP_KERNEL);
+
+There is a local variable (dev) pointing to &pdev->dev.
+I would suggest to use it.
+
+> +	if (!drvdata)
+> +		return -ENOMEM;
+> +
+> +	drvdata->dev = &pdev->dev;
+> +
+> +	platform_set_drvdata(pdev, drvdata);
+
+There is no platform_get_drvdata() in this code, meaning
+platform_set_drvdata() is unnecessary.
+
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	drvdata->base = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(drvdata->base)) {
+> +		error = dev_err_probe(dev, PTR_ERR(drvdata->base),
+> +				      "failed to map base\n");
+> +		goto free_mem;
+> +	}
+> +	drvdata->plreg_map = gxp_fan_ctrl_init_regmap(pdev, "pl");
+> +	if (IS_ERR(drvdata->plreg_map)) {
+> +		error = dev_err_probe(dev, PTR_ERR(drvdata->plreg_map),
+> +				      "failed to map plreg_handle\n");
+> +		goto free_mem;
+> +	}
+> +
+> +	drvdata->fn2_map = gxp_fan_ctrl_init_regmap(pdev, "fn2");
+> +	if (IS_ERR(drvdata->fn2_map)) {
+> +		error = dev_err_probe(dev, PTR_ERR(drvdata->fn2_map),
+> +				      "failed to map fn2_handle\n");
+> +		goto free_mem;
+> +	}
+> +
+> +	drvdata->hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
+> +								  "fan_ctrl",
+
+fan_ctrl is a bit generic. Normally this reflects the driver name.
+
+> +								  drvdata,
+> +								  &gxp_fan_ctrl_chip_info,
+> +								  NULL);
+> +
+> +	if (IS_ERR(drvdata->hwmon_dev)) {
+> +		error = dev_err_probe(dev, PTR_ERR(drvdata->hwmon_dev),
+> +				      "failed to register fan ctrl\n");
+> +
+> +		goto free_mem;
+> +	}
+> +
+> +	return 0;
+> +
+> +free_mem:
+> +	kfree(drvdata);
+
+drvdata was allocated with a devm function. Releasing it with kfree
+results in a double free. This goto and error handling is not only
+unnecessary but wrong.
+
+> +	return error;
+> +}
+> +
+> +static const struct of_device_id gxp_fan_ctrl_of_match[] = {
+> +	{ .compatible = "hpe,gxp-fan-ctrl", },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, gxp_fan_ctrl_of_match);
+> +
+> +static struct platform_driver gxp_fan_ctrl_driver = {
+> +	.probe		= gxp_fan_ctrl_probe,
+> +	.driver = {
+> +		.name	= "gxp-fan-ctrl",
+> +		.of_match_table = gxp_fan_ctrl_of_match,
+> +	},
+> +};
+> +module_platform_driver(gxp_fan_ctrl_driver);
+> +
+> +MODULE_AUTHOR("Nick Hawkins <nick.hawkins@hpe.com>");
+> +MODULE_DESCRIPTION("HPE GXP fan controller");
+> +MODULE_LICENSE("GPL");
