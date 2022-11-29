@@ -2,62 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8468F63C005
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32CF663C006
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234158AbiK2M0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 07:26:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
+        id S234154AbiK2M1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 07:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231856AbiK2M02 (ORCPT
+        with ESMTP id S230351AbiK2M1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 07:26:28 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8323357B72;
-        Tue, 29 Nov 2022 04:26:26 -0800 (PST)
-Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NM1hr6qNnz67PjK;
-        Tue, 29 Nov 2022 20:23:40 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
+        Tue, 29 Nov 2022 07:27:00 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFED95B594
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:26:58 -0800 (PST)
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NM1ln6cfpzHwFs;
+        Tue, 29 Nov 2022 20:26:13 +0800 (CST)
+Received: from [10.174.179.176] (10.174.179.176) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 13:26:24 +0100
-Received: from localhost (10.45.149.100) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 29 Nov
- 2022 12:26:23 +0000
-Date:   Tue, 29 Nov 2022 12:26:20 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alison Schofield <alison.schofield@intel.com>,
-        "Vishal Verma" <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH 02/11] cxl/mem: Implement Get Event Records command
-Message-ID: <20221129122620.00002cf0@Huawei.com>
-In-Reply-To: <Y4VEhNNTbXj5EwOm@iweiny-desk3>
-References: <20221110185758.879472-1-ira.weiny@intel.com>
-        <20221110185758.879472-3-ira.weiny@intel.com>
-        <20221116151936.0000662f@Huawei.com>
-        <Y3WEmMlLfPoYG1R5@iweiny-desk3>
-        <20221117104337.00001a3f@Huawei.com>
-        <Y3gUmSuR3OxUwkDm@iweiny-desk3>
-        <20221121104714.00003bab@Huawei.com>
-        <Y4VEhNNTbXj5EwOm@iweiny-desk3>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+ 15.1.2375.31; Tue, 29 Nov 2022 20:26:55 +0800
+Subject: Re: [PATCH 4/5] arm64: mm: Support ASID isolation feature
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     <will@kernel.org>, <wangkefeng.wang@huawei.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linfeilong@huawei.com>
+References: <20221017083203.3690346-1-yeyunfeng@huawei.com>
+ <20221017083203.3690346-5-yeyunfeng@huawei.com> <Y2ughyNLh9EFw3HT@arm.com>
+ <3607b658-304a-ecc8-b07a-530f4a6365e8@huawei.com> <Y4TpL5IIHUSRtSQo@arm.com>
+From:   Yunfeng Ye <yeyunfeng@huawei.com>
+Message-ID: <6376ad6d-1815-c2c5-575c-2ed89b877047@huawei.com>
+Date:   Tue, 29 Nov 2022 20:26:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+In-Reply-To: <Y4TpL5IIHUSRtSQo@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.45.149.100]
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+X-Originating-IP: [10.174.179.176]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500024.china.huawei.com (7.185.36.10)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,383 +53,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Nov 2022 15:30:12 -0800
-Ira Weiny <ira.weiny@intel.com> wrote:
 
-> On Mon, Nov 21, 2022 at 10:47:14AM +0000, Jonathan Cameron wrote:
-> > On Fri, 18 Nov 2022 15:26:17 -0800
-> > Ira Weiny <ira.weiny@intel.com> wrote:
-> >   
-> > > On Thu, Nov 17, 2022 at 10:43:37AM +0000, Jonathan Cameron wrote:  
-> > > > On Wed, 16 Nov 2022 16:47:20 -0800
-> > > > Ira Weiny <ira.weiny@intel.com> wrote:
-> > > > 
-> > > >     
-> > > 
-> > > [snip]
-> > >   
-> > > > >     
-> > > > > >       
-> > > > > > > +			int i;
-> > > > > > > +
-> > > > > > > +			for (i = 0; i < nr_rec; i++)
-> > > > > > > +				trace_cxl_generic_event(dev_name(cxlds->dev),
-> > > > > > > +							type,
-> > > > > > > +							&payload.record[i]);
-> > > > > > > +		}
-> > > > > > > +
-> > > > > > > +		if (trace_cxl_overflow_enabled() &&
-> > > > > > > +		    (payload.flags & CXL_GET_EVENT_FLAG_OVERFLOW))
-> > > > > > > +			trace_cxl_overflow(dev_name(cxlds->dev), type, &payload);
-> > > > > > > +
-> > > > > > > +	} while (pl_nr > CXL_GET_EVENT_NR_RECORDS ||      
-> > > > > > 
-> > > > > > Isn't pl_nr > CXL_GET_EVENT_NR_RECORDS a hardware bug? It's the number in returned
-> > > > > > payload not the total number.      
-> > > > > 
-> > > > > I don't think so.  The only value passed to the device is the _input_ payload
-> > > > > size.  The output payload size is not passed to the device and is not included
-> > > > > in the Get Event Records Input Payload.  (Table 8-49)
-> > > > > 
-> > > > > So my previous code was wrong.  Here is an example I think which is within the
-> > > > > spec but would result in the more records flag not being set.
-> > > > > 
-> > > > > 	Device log depth == 10
-> > > > > 	nr log entries == 7
-> > > > > 	nr log entries in 1MB ~= (1M - hdr size) / 128 ~= 8000
-> > > > > 
-> > > > > Device sets Output Payload.Event Record Count == 7 (which is < 8000).  Common
-> > > > > mailbox code truncates that to 3.  More Event Records == 0 because it sent all
-> > > > > 7 that it had.
-> > > > > 
-> > > > > This code will clear 3 and read again 2 more times.
-> > > > > 
-> > > > > Am I reading that wrong?    
-> > > > 
-> > > > I think this is still wrong, but for a different reason. :)    
-> > > 
-> > > I hope not...  :-/
-> > >   
-> > > > If we don't clear the records and more records is set, that means it didn't
-> > > > fit in the mailbox payload (potentially 1MB)  then the next read
-> > > > will return the next set of records from there.    
-> > > 
-> > > That is not how I read the Get Event Records command:
-> > > 
-> > > From 8.2.9.2.2 Get Event Records
-> > > 
-> > > ... "Devices shall return event records to the host in the temporal order the
-> > > device detected the events in. The event occurring the earliest in time, in the
-> > > specific event log, shall be returned first."
-> > > 
-> > > If item 3 below is earlier than 4 then it must be returned if we have not
-> > > cleared it.  At least that is how I read the above.  :-/  
-> > 
-> > In general that doesn't work.  Imagine we cleared no records.
-> > In that case we'd return 4 despite there being earlier records.
-> > There is no language to cover this particular case of clearing
-> > part of what was returned.  The device did return the records
-> > in temporal order, we just didn't notice some of them.
-> > 
-> > The wonders of slightly loose spec wording.  Far as I can tell
-> > we are stuck with having to come with all things that could be
-> > read as being valid implementations.  
-> 
-> So I've been thinking about this for a while.
-> 
-> Lets take this example:
-> 
-> > > > 
-> > > > Taking this patch only, let's say the mailbox takes 4 records.
-> > > > Read 1: Records 0, 1, 2, 3 More set.
-> > > >    We handle 0, 1, 2
-> > > > Read 2: Records 4, 5, 6 More not set.
-> > > >    We handle 4, 5, 6
-> > > >   
-> 
-> In this case what happens if you do a 3rd read?  Does the device return
-> nothing?  Or does it return 0, 1, 2, 3 again?
-> 
-> It must start from the beginning right?  But that is no longer in temporal
-> order by your definition either.
 
-Agreed that is not clearly specified either.  I assume it works the same
-way as poison where we raised the question and conclusion was it starts again
-at the beginning. In fact we have to loop twice to guarantee that we have
-all the records (as other software may have crashed half way through reading
-the poison list so we don't know if we have the first record or not)..
+On 2022/11/29 1:00, Catalin Marinas wrote:
+> On Thu, Nov 10, 2022 at 03:07:53PM +0800, Yunfeng Ye wrote:
+>> On 2022/11/9 20:43, Catalin Marinas wrote:
+>>> On Mon, Oct 17, 2022 at 04:32:02PM +0800, Yunfeng Ye wrote:
+>>>> After a rollover, the global generation will be flushed, which will
+>>>> cause the process mm->context.id on all CPUs do not match the
+>>>> generation. Thus, the process will compete for the global spinlock lock
+>>>> to reallocate a new ASID and refresh the TLBs of all CPUs on context
+>>>> switch. This will lead to the increase of scheduling delay and TLB miss.
+>>>>
+>>>> In some delay-sensitive scenarios, for example, part of CPUs are
+>>>> isolated, only a limited number of processes are deployed to run on the
+>>>> isolated CPUs. In this case, we do not want these key processes to be
+>>>> affected by the rollover of ASID.
+>>>
+>>> Part of this commit log should also go in the cover letter and it would> help to back this up by some numbers, e.g. what percentage improvement
+>>> you get with this patchset by running hackbench on an isolated CPU.
+>>>
+>>> In theory it looks like CPU isolation would benefit from this patchset
+>>> but we try not to touch this code often, so any modification should come
+>>> with proper justification, backed by numbers.
+>>>
+>> Yes, CPU isolation will benefit from this patchset. We use cyclictest tool
+>> to test the maximum scheduling and interrupt delays, found that the
+>> sched_switch process takes several microseconds sometimes, The analysis
+>> result shows that the delay is caused by the ASID refresh.
+> 
+> Do you know whether it's predominantly the spinlock or the TLBI that's
+> causing this (or just a combination of the two)?
+> 
+I think the spinlock is the main factor, I didn't distinguish how much
+time it took for each of the two. On the other hand, the TLBI is processed
+under the spinlock currently, its time-consuming will increase the
+time-consuming of the spinlock too.
 
-> 
-> And if it returns nothing then there is no way to recover them except on device
-> reset?
-> 
-> FWIW I'm altering the patch set to do what you say and allocate a buffer large
-> enough to get all the records.  Because I am thinking you are correct.
+> I was talking to Will and concluded we should try to reuse the ASID
+> pinning code that's already in that file rather than adding a new
+> bitmap. At a high level, a thread migrating to an isolated CPU can have
+At first, I want to reuse the ASID pinned bitmap too, which is the same
+idea with you. but there is a difference between pinned bitmap and isolation
+bitmap, the pinned bitmap will not be changed when the generation roll-over,
+while the isolation bitmap need to be flushed.
 
-Horrible, but maybe the best we can do (subject to suggested hack below ;)
+The idea "broadcast a TLBI for the pinned ASID when the task dies" you
+mentioned below maybe can reuse the pinned bitmap. I've considered this idea
+too, I think this method is not as good as the current two bitmap method:
 
-> 
-> However, considering the buffer may be large, I fear we may run afoul of memory
-> allocation failures.  And that will require some more tricky error recovery to
-> continue reading the log because the irq settings state:
-> 
+1. This will introduce some TLBI jitter, and maybe increase the contention
+of spinlock when updating the pinned bitmap, which we don't want the jitter
+on the isolation CPU.
 
-We could implement cleverer mailbox handling to avoid the large allocation requirement.
-Would be messy though as we'd effectively have to lock the mailbox whilst we did
-multiple reads of the content into a smaller buffer.
+2. Another disadvantage is that if only one pinned bitmap is used and a large
+number of processes are on the isolation domain but the processes are not dead,
+the available ASIDs are insufficient. for example, more than 65536 processes
+running or sleeping on the isolation CPU, how to handle this situation?
 
-> "... Settings: Specifies the settings for the interrupt when the <event> event
-> log transitions from having no entries to having one or more entries."
->                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> its ASID pinned. If context switching only happens between pinned ASIDs
+> on an isolated CPU, we may be able to avoid the lock even if the
+> generation rolled over on another CPU.
 > 
-> This means that no more interrupts will happen until the log is empty and
-> additional events occur.  So if an allocation failure happens I'll have to put
-> a task on a work queue to wake up and continue to try.  Otherwise the log will
-> stall.  Or we could just put a WARN_ON_ONCE() in and hope this never happens...
-
-I think the WARN_ON_ONCE() is probably fine.  If we are paranoid vmalloc one
-when we initially connect device as failure less likely...
-
-As a side note, seems like we should maybe take a request to SSWG for devices
-to optionally be told to use a smaller mailbox than they support - in order to allow
-for corners like this. There is such a command but it's prohibited on primary and
-secondary mailboxes (Set Response Message Limit).  That is allowed on switch CCIs,
-I guess because it is assumed they may be connected to a BMC without much memory.
-
+> I think the tricky problem is when a pinned ASID task eventually dies,
+> possibly after migrating to another CPU. If we avoided the TLBI on
+> generation roll-over for the isolated CPU, it will have stale entries.
+> One option would be to broadcast a TLBI for the pinned ASID when the
+> task dies, though this would introduce some jitter. An alternative may
+> be to track whether a pinned ASID ever run on a CPU and do a local TLBI
+> for that ASID when a pinned thread is migrated.
 > 
-> I still believe that with a clear operation defined my method makes more sense.
-> But I agree with you that the language is not strong.
-
-Absolutely agree!  Your method would be the one I'd push for if we were starting
-from scratch (or another similar method looking like what I can't talk about
-for a similar case...)
-
+> All these need a lot more thinking and (formal) modelling. I have a TLA+
+> model but I haven't updated it to cover the pinned ASIDs. Or,
+> alternatively, make the current code stand-alone and get it through CBMC
+> (faking the spinlock as pthread mutexes and implementing some of the
+> atomics in plain C with __CPROVER_atomic_begin/end).
 > 
-> :-(
-> 
-> > > > Record 3 is never handled.
-> > > > 
-> > > > If we add in clearing as happens later in the series,    
-> > > 
-> > > I suppose I should squash the patches as this may not work without the
-> > > clearing.  :-/
-> > >   
-> > > > the current
-> > > > assumption is that if we clear some records a subsequent read will
-> > > > start again.  I'm not sure that is true. If it is spec reference needed.
-> > > > 
-> > > > So assumption is
-> > > > Read 1: Records 0, 1, 2, 3 More set
-> > > >   Clear 0, 1, 2
-> > > > Read 2: Records 3, 4, 5, 6
-> > > >   Clear 3, 4, 5 More not set, but catch it with the condition above.
-> > > > Read 3: 6 only
-> > > >   Clear 6
-> > > > 
-> > > > However, I think a valid implementation could do the following
-> > > > (imagine a ring buffer with a pointer to the 'next' record to read out and
-> > > >  each record has a 'valid' flag to deal with corner cases around
-> > > >  sequences such as read log once, start reading again and some
-> > > >  clears occur using handles obtained from first read - not that
-> > > >  case isn't ruled out by the spec as far as I can see).    
-> > > 
-> > > I believe this is a violation because the next pointer can't be advanced until
-> > > the record is cleared.  Otherwise the device is not returning items in temporal
-> > > order based on what is in the log.  
-> > 
-> > Ah. This is where we disagree.  The temporal order is (potentially?) unconnected
-> > from the clearing.  The device did return them in temporal order, we just didn't
-> > take any novice of record 3 being returned.  
-> 
-> :-/
-> 
-> > A valid reading of that temporal order comment is actually the other way around
-> > that the device must not reset it's idea of temporal order until all records
-> > have been read (reading 3 twice is not in temporal order - imagine we had
-> > read 5 each time and it becomes more obvious as the read order becomes
-> > 0,1,2,3,4,3,4,5,6,7 etc which is clearly not in temporal order by any normal
-> > reading of the term.  
-> 
-> Well I guess.  My reading was that it must return the first element temporally
-> within the list at the time of the Get operation.
-> 
-> So in this example since 3 is still in the list it must return it first.  Each
-> read is considered atomic from the others.  Yes as long as 0 is in the queue it
-> will be returned.
-> 
-> But I can see it your way too...
-
-That pesky text under More Event Records flag doesn't mention clearing when it
-says "The host should continue to retrieve 
-records using this command, until this indicator is no longer set by the 
-device."
-
-I wish it did :(
-
-> 
-> >
-> > The more I read this, the more I think the current implementation
-> > is not compliant with the specification at all.
-> > 
-> > I'm not seeing a spec mention of 'reseting' the ordering on clearing records
-> > (which might have been a good thing in the first place but too late now).  
-> 
-> There is no resetting of order.  Only that the device does not consider the
-> previous reads on determining which events to return on any individual Get
-> call.
-
-Sure, see above quote though. 
-
-> 
-> >   
-> > >   
-> > > > 
-> > > > Read 1: Records 0, 1, 2, 3 More set.  'next' pointer points to record 4.
-> > > >   Clear 0, 1, 2
-> > > > Read 2: Records 4, 5, 6 More not set. 'next' pointer points to record 7.
-> > > >   Clear 4, 5, 6
-> > > > 
-> > > > Skipping record 3.
-> > > > 
-> > > > So I think we have to absorb the full mailbox payload each time to guarantee
-> > > > we don't skip events or process them out of order (which is what would happen
-> > > > if we relied on a retry loop - we aren't allowed to clear them out of
-> > > > order anyway 8.2.9.2.3 "Events shall be cleared in temporal order. The device
-> > > > shall verify the event record handles specified in the input payload are in
-> > > > temporal order. ... "). 
-> > > > Obviously that temporal order thing is only relevant if we get my second
-> > > > example occurring on real hardware.  I think the spec is vague enough
-> > > > to allow that implementation.  Would have been easy to specify this originally
-> > > > but it probably won't go in as errata so we need to cope with all the
-> > > > flexibility that is present.    
-> > > 
-> > > :-(  Yea coulda, woulda, shoulda...  ;-)
-> > >   
-> > > > 
-> > > > What fun and oh for a parameter to control how many records are returned!    
-> > > 
-> > > Yea.  But I really don't think there is a problem unless someone really take
-> > > liberty with the spec.  I think it boils down to how one interprets _when_ a
-> > > record is removed from the log.  
-> > 
-> > This is nothing to do with removal. The wording we have is just about reading
-> > and I think a strict reading of the spec would say your assumption of a reset of the
-> > read pointer on clear is NOT a valid implementation.  There is separate wording
-> > about clears being in temporal order, but that doesn't effect the Get Event
-> > Records handling.
-> >   
-> > > 
-> > > If the record is removed when it is returned (as in your 'next' pointer
-> > > example) then why have a clear at all?  
-> > 
-> > Because if your software crashes, you don't have a handshake to reestablish
-> > state.  If that happens you read the whole log until MORE is not set and
-> > then read it again to get a clean list.  It's messy situation that has
-> > been discussed before for GET POISON LIST which has the same nasty handing
-> > of MORE.  (look in appropriate forum for resolution to that one that we can't
-> > yet discuss here!)  
-> 
-> I can see the similarities but I think events are a more ephemeral item which
-> makes sense to clear once they are consumed.  The idea that they should be left
-> for others to consume does not make sense to me.  Where Poison is something
-> which could be a permanent marker which should be left in a list.
-
-Agreed - but sections use same wording for the More flag.. So we need to interpret
-the same.
-
-> 
-> > 
-> > Also, allows for non destructive readback (debugging tools might take a look
-> > having paused the normal handling).  
-> 
-> That is true.
-> 
-> >   
-> > > If my interpretation is correct then
-> > > the next available entry is the one which has not been cleared.  
-> > 
-> > If that is the case the language in "More Event Records" doesn't work
-> > "The host should continue to retrieve records using this command, until
-> > this indicator is no longer set by the device"
-> > 
-> > With your reading of the spec, if we clear nothing, we'd keep getting the
-> > first set of records and only be able to read more by clearing them...
-> >   
-> 
-> Yea.
-> 
-> >   
-> > >  Therefore in
-> > > your example 'next' is not incremented until clear has been called.  I think
-> > > that implementation is also supported by the idea that records must be cleared
-> > > in temporal order.  Otherwise I think devices would get confused.  
-> > 
-> > Not hard for device to do this (how I now read the spec) properly.
-> > 
-> > Two pointers:
-> > 1) Next to clear: CLEAR
-> > 2) Next to read:  READ
-> > 
-> > Advance the the READ pointer on Get Event Records  
-> 
-> And loop back to the start on a further read...  I'm looking at changing the
-> code for this but I think making it fully robust under a memory allocation
-> failure is going to be more tedious or we punt.
-
-If we get a memory allocation failure, perhaps we could do the follow horrible hack.
-
-1 Allocate a small buffer.
-2 Read once.
-3 Hopefully we get the full record - in which case success.
-4 Clear those records.
-5 If not dealt with all records - read again until More Event Records not set
-  (may already not be if it fitted in the buffer)
-6 Go back to 2.
-
-If we think a valid implementation might reset the read pointer on clear then
-there is a variant where we make use of the fact the handles are constant
- - read 3 records, clear 2 and then use the handle of remaining one to identify
-   if we have the next 3 to clear or not... 
-
-> 
-> > For CLEAR, check that the requested clears are handled in order and that
-> > they are before the READ pointer.
-> > 
-> > Maybe we should just take it to appropriate spec forum to seek a clarification?  
-> 
-> Probably.  I've not paid attention lately.
-> 
-> I've sent a separate email with you cc'ed.  Perhaps we can get some
-> clarification before I completely rework this.
-
-Fingers crossed.
-
-Thanks,
-
-Jonathan
-
-> 
-> Ira
-> 
-> > 
-> > Jonathan
-> >   
-> > > 
-> > > FWIW the qemu implementation is based on my interpretation ATM.
-> > > 
-> > > Ira
-> > >   
-> > > > 
-> > > > Jonathan
-> > > > 
-> > > >     
-> > > > >     
-> > > > > >       
-> > > > > > > +		 payload.flags & CXL_GET_EVENT_FLAG_MORE_RECORDS);
-> > > > > > > +}      
-> > > > > >     
-> > > >     
-> > > > >     
-> > > >     
-> >   
-
