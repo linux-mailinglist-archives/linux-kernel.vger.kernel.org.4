@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE5463CA17
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:09:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A56E663CA19
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236798AbiK2VJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 16:09:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
+        id S236810AbiK2VJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 16:09:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236084AbiK2VJG (ORCPT
+        with ESMTP id S236741AbiK2VJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 29 Nov 2022 16:09:06 -0500
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7919F55A0
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4233E63CE
         for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:09:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669756144; x=1701292144;
+  t=1669756145; x=1701292145;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=CQp4qbII0DlxhRkqqCYEfCUWHdc6N9otPMAR1s7O/AM=;
-  b=TY4QdO1TM6rxlpJvouVXEdRgnA/UyPI1zFZCbd17oChagrx9LnKEI4+E
-   lJIvy7TrR0GpwxiMolddOJnTQ+Dhd/haAHRvG0jpqldFvtkLXZDSvSy4H
-   LsrHNPpaRAFVN1Tn2Gud0+N+VGI9zxxLUVNrfuT1mwhSbIqFWb5/QwZe5
-   BKD2OmNKM7IoTVcu4fH+k2+rUb6NknL0tPZkpnfRb7wRABSnZ/aLVM/oj
-   Y2SH1cmJBGNIa8HqwzTXDEjUt99mT6shePwY+4IeX9hDAOcOWD3tVG7DJ
-   SMX9T3Ri7/XUfo+wUquFOL/40HjsFNsQjLPonNbfF/KbT3+YD/LF4MMfo
+  bh=70gwJLJLXs2AZIFAvJaft9GRLf9mjU7YlemJkv6J9xI=;
+  b=cTLMGliBoVKRr8h8wPJMK6afJnp3psQ5cnPAQPqMHQmBEaxBBC0WVPQv
+   +pf0UOsjJ4ARnfVsRstQDNwrszRIIGypF+5BrgTBdvvFZmcCf/yOkR8fv
+   0y23bo9a/j9pIcgjBRXLtI9NPM24QYhZd9srk+yUaiSld8b7tgISXR0z6
+   yH0nCBLebd6VzNA2dLR+uEZsaDHnDRNDa7d/dBfAzlTYaazpgHlxAmpqf
+   YzZQ8gWiGQc7CignNfCrr8xGHKI5H4Qhwf0da39CU6ubUbjVOUFPLWg2E
+   X3zmp/MirquVkEWg2cCj0l011bR2+8WKwd3NC58zgYDn9HyqDK4SzEJpr
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="317083131"
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="317083136"
 X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="317083131"
+   d="scan'208";a="317083136"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 13:09:04 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="646066205"
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="646066208"
 X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="646066205"
+   d="scan'208";a="646066208"
 Received: from araj-ucode.jf.intel.com ([10.23.0.19])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 13:09:03 -0800
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 13:09:04 -0800
 From:   Ashok Raj <ashok.raj@intel.com>
 To:     Borislav Petkov <bp@alien8.de>
 Cc:     X86-kernel <x86@kernel.org>,
@@ -46,9 +46,9 @@ Cc:     X86-kernel <x86@kernel.org>,
         Dave Hansen <dave.hansen@intel.com>,
         Tony Luck <tony.luck@intel.com>, alison.schofield@intel.com,
         reinette.chatre@intel.com
-Subject: [Patch V1 2/7] x86/microcode/intel: Remove retries on early microcode load
-Date:   Tue, 29 Nov 2022 13:08:27 -0800
-Message-Id: <20221129210832.107850-3-ashok.raj@intel.com>
+Subject: [Patch V1 3/7] x86/microcode/core: Move microcode_check() to cpu/microcode/core.c
+Date:   Tue, 29 Nov 2022 13:08:28 -0800
+Message-Id: <20221129210832.107850-4-ashok.raj@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221129210832.107850-1-ashok.raj@intel.com>
 References: <20221129210832.107850-1-ashok.raj@intel.com>
@@ -63,67 +63,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Microcode loading can fail. This happens today when handling mixed
-steppings. But it can also happen for other reasons such as corrupted
-image, Security Version Number (SVN) preventing anti-rollback,
-dependencies on BIOS loaded microcode image for some capabilities.
+microcode_check() is only called from microcode/core.c. Move it and make
+it static to prepare for upcoming fix of false negative when checking CPU
+features after a microcode update. Also move get_cpu_cap() to processor.h
+for general use outside of kernel/cpu.h
 
-When the microcode loading fails, the kernel will quietly hang at boot.
-This has been observed by end users (Links below) who had to revert their
-microcode packages in order to boot again.
+No functional change.
 
-The hang is due to an infinite retry loop. The retries were in place to
-support systems with mixed steppings. Now that mixed steppings are no
-longer supported, there is only one microcode image at a time. Any retries
-will simply reattempt to apply the same image over and over without making
-progress.
-
-Some possible past bugs that could be due to this bug are below.
-
-There is no direct evidence that these end user issues were caused by this
-retry loop. However, the early boot hangs along with reverting the
-microcode update workaround provide strong circumstantial evidence to
-support the theory that they are linked.
-
-Remove the retry loop and only attempt to apply microcode once.
-
-Link: https://bugs.launchpad.net/ubuntu/+source/intel-microcode/+bug/1911959
-Link: https://forums.linuxmint.com/viewtopic.php?p=1827032#1827032
-Link: https://askubuntu.com/questions/1291486/boot-crash-after-latest-update-of-intel-microcode-nov-11-2020
-Fixes: 06b8534cb728 ("x86/microcode: Rework microcode loading")
-Cc: stable@vger.kernel.org
+Suggested-by: Alison Schofield <alison.schofield@intel.com>
 Signed-off-by: Ashok Raj <ashok.raj@intel.com>
 ---
- arch/x86/kernel/cpu/microcode/intel.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+Tony
+	Add movement of get_cpu_cap() to commit log
+Reinette
+	Avoid including ../cpu.h and move to more general header.
+Alison
+	Split patch to just move the function before use inside microcode
+	files.
+---
+ arch/x86/include/asm/processor.h     |  3 +--
+ arch/x86/kernel/cpu/cpu.h            |  1 -
+ arch/x86/kernel/cpu/common.c         | 32 ----------------------------
+ arch/x86/kernel/cpu/microcode/core.c | 31 +++++++++++++++++++++++++++
+ 4 files changed, 32 insertions(+), 35 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
-index 4f93875f57b4..d68b084a17e7 100644
---- a/arch/x86/kernel/cpu/microcode/intel.c
-+++ b/arch/x86/kernel/cpu/microcode/intel.c
-@@ -495,7 +495,6 @@ void load_ucode_intel_ap(void)
- 	else
- 		iup = &intel_ucode_patch;
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 67c9d73b31fa..f5380806f3fa 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -192,8 +192,8 @@ extern const struct seq_operations cpuinfo_op;
  
--reget:
- 	if (!*iup) {
- 		patch = __load_ucode_intel(&uci);
- 		if (!patch)
-@@ -505,13 +504,7 @@ void load_ucode_intel_ap(void)
- 	}
+ #define cache_line_size()	(boot_cpu_data.x86_cache_alignment)
  
- 	uci.mc = *iup;
++extern void get_cpu_cap(struct cpuinfo_x86 *c);
+ extern void cpu_detect(struct cpuinfo_x86 *c);
 -
--	if (apply_microcode_early(&uci, true)) {
--		/* Mixed-silicon system? Try to refetch the proper patch: */
--		*iup = NULL;
+ static inline unsigned long long l1tf_pfn_limit(void)
+ {
+ 	return BIT_ULL(boot_cpu_data.x86_cache_bits - 1 - PAGE_SHIFT);
+@@ -835,7 +835,6 @@ bool xen_set_default_idle(void);
+ #endif
+ 
+ void __noreturn stop_this_cpu(void *dummy);
+-void microcode_check(void);
+ 
+ enum l1tf_mitigations {
+ 	L1TF_MITIGATION_OFF,
+diff --git a/arch/x86/kernel/cpu/cpu.h b/arch/x86/kernel/cpu/cpu.h
+index 7c9b5893c30a..a142b8d543a3 100644
+--- a/arch/x86/kernel/cpu/cpu.h
++++ b/arch/x86/kernel/cpu/cpu.h
+@@ -63,7 +63,6 @@ static inline void tsx_ap_init(void) { }
+ 
+ extern void init_spectral_chicken(struct cpuinfo_x86 *c);
+ 
+-extern void get_cpu_cap(struct cpuinfo_x86 *c);
+ extern void get_cpu_address_sizes(struct cpuinfo_x86 *c);
+ extern void cpu_detect_cache_sizes(struct cpuinfo_x86 *c);
+ extern void init_scattered_cpuid_features(struct cpuinfo_x86 *c);
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 3e508f239098..bbd362ead043 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -2305,38 +2305,6 @@ void cpu_init_secondary(void)
+ }
+ #endif
+ 
+-#ifdef CONFIG_MICROCODE_LATE_LOADING
+-/*
+- * The microcode loader calls this upon late microcode load to recheck features,
+- * only when microcode has been updated. Caller holds microcode_mutex and CPU
+- * hotplug lock.
+- */
+-void microcode_check(void)
+-{
+-	struct cpuinfo_x86 info;
 -
--		goto reget;
--	}
-+	apply_microcode_early(&uci, true);
+-	perf_check_microcode();
+-
+-	/* Reload CPUID max function as it might've changed. */
+-	info.cpuid_level = cpuid_eax(0);
+-
+-	/*
+-	 * Copy all capability leafs to pick up the synthetic ones so that
+-	 * memcmp() below doesn't fail on that. The ones coming from CPUID will
+-	 * get overwritten in get_cpu_cap().
+-	 */
+-	memcpy(&info.x86_capability, &boot_cpu_data.x86_capability, sizeof(info.x86_capability));
+-
+-	get_cpu_cap(&info);
+-
+-	if (!memcmp(&info.x86_capability, &boot_cpu_data.x86_capability, sizeof(info.x86_capability)))
+-		return;
+-
+-	pr_warn("x86/CPU: CPU features have changed after loading microcode, but might not take effect.\n");
+-	pr_warn("x86/CPU: Please consider either early loading through initrd/built-in or a potential BIOS update.\n");
+-}
+-#endif
+-
+ /*
+  * Invoked from core CPU hotplug code after hotplug operations
+  */
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index 712aafff96e0..ef24e1d228d0 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -431,6 +431,37 @@ static int __reload_late(void *info)
+ 	return ret;
  }
  
- static struct microcode_intel *find_patch(struct ucode_cpu_info *uci)
++/*
++ * The microcode loader calls this upon late microcode load to recheck features,
++ * only when microcode has been updated. Caller holds microcode_mutex and CPU
++ * hotplug lock.
++ */
++static void microcode_check(void)
++{
++	struct cpuinfo_x86 info;
++
++	perf_check_microcode();
++
++	/* Reload CPUID max function as it might've changed. */
++	info.cpuid_level = cpuid_eax(0);
++
++	/*
++	 * Copy all capability leafs to pick up the synthetic ones so that
++	 * memcmp() below doesn't fail on that. The ones coming from CPUID will
++	 * get overwritten in get_cpu_cap().
++	 */
++	memcpy(&info.x86_capability, &boot_cpu_data.x86_capability, sizeof(info.x86_capability));
++
++	get_cpu_cap(&info);
++
++	if (!memcmp(&info.x86_capability, &boot_cpu_data.x86_capability,
++		    sizeof(info.x86_capability)))
++		return;
++
++	pr_warn("x86/CPU: CPU features have changed after loading microcode, but might not take effect.\n");
++	pr_warn("x86/CPU: Please consider either early loading through initrd/built-in or a potential BIOS update.\n");
++}
++
+ /*
+  * Reload microcode late on all CPUs. Wait for a sec until they
+  * all gather together.
 -- 
 2.34.1
 
