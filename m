@@ -2,141 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E593C63C273
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8378363C26F
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232791AbiK2O1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 09:27:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
+        id S233310AbiK2O1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 09:27:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233479AbiK2O1a (ORCPT
+        with ESMTP id S235758AbiK2O07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 09:27:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9755C0E0
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:26:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669731988;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4AEq8/e4uJ/4ykggQax+wHLvQuwMyqFr7ojK3DGvdTA=;
-        b=AkcSdyiaj4HVwm2jNfYaP1CTrD61NjisetmpWT6cg0WyfXdkcmNppn1SdB0DjkpB0Zteli
-        J2etCNOJH5fu+3rVClaOT1nkl5wSwZRxIsElzIBRE6BtoRA1pg4MQp2s8Jqsl+wM4hco5B
-        HRlYPbniql5tsEYXuLgCw1taoUtl4E0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-539-4u3ekesANO6myoqiLy0qIg-1; Tue, 29 Nov 2022 09:26:25 -0500
-X-MC-Unique: 4u3ekesANO6myoqiLy0qIg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 29 Nov 2022 09:26:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02722BFC
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:26:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AB340185A7AA;
-        Tue, 29 Nov 2022 14:26:24 +0000 (UTC)
-Received: from RHTPC1VM0NT (unknown [10.22.34.89])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5A3D8492B07;
-        Tue, 29 Nov 2022 14:26:24 +0000 (UTC)
-From:   Aaron Conole <aconole@redhat.com>
-To:     Adrian Moreno <amorenoz@redhat.com>
-Cc:     Ilya Maximets <i.maximets@ovn.org>, netdev@vger.kernel.org,
-        dev@openvswitch.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kselftest@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [ovs-dev] [RFC net-next 1/6] openvswitch: exclude kernel flow
- key from upcalls
-References: <20221122140307.705112-1-aconole@redhat.com>
-        <20221122140307.705112-2-aconole@redhat.com>
-        <c04242ee-f125-6d95-e263-65470222d3cf@ovn.org>
-        <83a0b3e4-1327-c1c4-4eb4-9a25ff533d1d@redhat.com>
-        <bf975714-7edc-efdd-de84-56194aa6eb60@ovn.org>
-        <753d995d-d4f4-bf2e-994d-435a36414127@redhat.com>
-Date:   Tue, 29 Nov 2022 09:26:22 -0500
-In-Reply-To: <753d995d-d4f4-bf2e-994d-435a36414127@redhat.com> (Adrian
-        Moreno's message of "Mon, 28 Nov 2022 10:12:21 +0100")
-Message-ID: <f7tedtlsupd.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E9C6B81698
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:26:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A9AC433D7;
+        Tue, 29 Nov 2022 14:26:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669732013;
+        bh=1/pxK1g/9lCyqf6nsuXdGzpz8/pQFyTSwL4CCLDy41E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AMTT4mxuctL2FoEPsAd5FkF679W2WOreMKqos+hMbYJOLQHO0RXeBkk7ohje/Qgy1
+         /Z9dHBbd0AcwC2c5B9xSbEEWhto4SFMpAKc+81NbkwUbdnD9KotO9dzzt2+3OJxF4j
+         e4fNvxzeSxMhQMAovdPSNB5VOtplA1ljNU6udQ6uOQ4Qm5DEj86DlBNZz57qUiiMYE
+         0HA6yIbLRqjgrcrRP5VLTVchso/MATE9uluBV6Zxh9PTtL/i0qkhMwxrUudSUYRgto
+         iCeXYn42d1AcnnQhF4bUTEzC35ZGoeY8Q6MeeGJxt9tI9evljM+B+bZ+NHDxHIyrqd
+         LbCwb3NYc9nFA==
+Date:   Tue, 29 Nov 2022 14:26:47 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Denys Vlasenko <dvlasenk@redhat.com>
+Cc:     Liu Shixin <liushixin2@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        David Hildenbrand <dhildenb@redhat.com>,
+        Rafael Aquini <raquini@redhat.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] arm64/mm: fix incorrect file_map_count for invalid pmd
+Message-ID: <20221129142647.GC26437@willie-the-truck>
+References: <20221121073608.4183459-1-liushixin2@huawei.com>
+ <20221121181859.GE7645@willie-the-truck>
+ <954658fd-dc20-e5f1-78b1-a70b064f7993@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <954658fd-dc20-e5f1-78b1-a70b064f7993@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adrian Moreno <amorenoz@redhat.com> writes:
+On Mon, Nov 28, 2022 at 05:26:14PM +0100, Denys Vlasenko wrote:
+> On 11/21/22 19:18, Will Deacon wrote:
+> > On Mon, Nov 21, 2022 at 03:36:08PM +0800, Liu Shixin wrote:
+> > > The page table check trigger BUG_ON() unexpectedly when split hugepage:
+> > > 
+> > >   ------------[ cut here ]------------
+> > >   kernel BUG at mm/page_table_check.c:119!
+> > >   Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
+> > >   Dumping ftrace buffer:
+> > >      (ftrace buffer empty)
+> > >   Modules linked in:
+> > >   CPU: 7 PID: 210 Comm: transhuge-stres Not tainted 6.1.0-rc3+ #748
+> > >   Hardware name: linux,dummy-virt (DT)
+> > >   pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > >   pc : page_table_check_set.isra.0+0x398/0x468
+> > >   lr : page_table_check_set.isra.0+0x1c0/0x468
+> > > [...]
+> > >   Call trace:
+> > >    page_table_check_set.isra.0+0x398/0x468
+> > >    __page_table_check_pte_set+0x160/0x1c0
+> > >    __split_huge_pmd_locked+0x900/0x1648
+> > >    __split_huge_pmd+0x28c/0x3b8
+> > >    unmap_page_range+0x428/0x858
+> > >    unmap_single_vma+0xf4/0x1c8
+> > >    zap_page_range+0x2b0/0x410
+> > >    madvise_vma_behavior+0xc44/0xe78
+> > >    do_madvise+0x280/0x698
+> > >    __arm64_sys_madvise+0x90/0xe8
+> > >    invoke_syscall.constprop.0+0xdc/0x1d8
+> > >    do_el0_svc+0xf4/0x3f8
+> > >    el0_svc+0x58/0x120
+> > >    el0t_64_sync_handler+0xb8/0xc0
+> > >    el0t_64_sync+0x19c/0x1a0
+> > > [...]
+> > > 
+> > > On arm64, pmd_leaf() will return true even if the pmd is invalid due to
+> > > pmd_present_invalid() check. So in pmdp_invalidate() the file_map_count
+> > > will not only decrease once but also increase once. Then in set_pte_at(),
+> > > the file_map_count increase again, and so trigger BUG_ON() unexpectedly.
+> > > 
+> > > Add !pmd_present_invalid() check in pmd_user_accessible_page() to fix the
+> > > problem.
+> > > 
+> > > Fixes: 42b2547137f5 ("arm64/mm: enable ARCH_SUPPORTS_PAGE_TABLE_CHECK")
+> > > Reported-by: Denys Vlasenko <dvlasenk@redhat.com>
+> > > Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+> > > Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> > > Acked-by: David Hildenbrand <david@redhat.com>
+> > > Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> > > ---
+> > > v1->v2: Update comment and optimize the code by moving p?d_valid() at
+> > > 	first place suggested by Mark.
+> > > v2->v3: Replace pmd_valid() with pmd_present_invalid() suggested by Will.
+> > > 
+> > >   arch/arm64/include/asm/pgtable.h | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> > > index edf6625ce965..17afb09f386f 100644
+> > > --- a/arch/arm64/include/asm/pgtable.h
+> > > +++ b/arch/arm64/include/asm/pgtable.h
+> > > @@ -863,7 +863,7 @@ static inline bool pte_user_accessible_page(pte_t pte)
+> > >   static inline bool pmd_user_accessible_page(pmd_t pmd)
+> > >   {
+> > > -	return pmd_leaf(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
+> > > +	return pmd_leaf(pmd) && !pmd_present_invalid(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
+> > >   }
+> > 
+> > Acked-by: Will Deacon <will@kernel.org>
+> > 
+> > But please see my comment on v2 about pud_user_exec() for the PUD case.
+> 
+> Can you be more specific? Do you ask for pud_user_exec() to be defined
+> and used here? Or something else?
 
-> On 11/25/22 16:51, Ilya Maximets wrote:
->> On 11/25/22 16:29, Adrian Moreno wrote:
->>>
->>>
->>> On 11/23/22 22:22, Ilya Maximets wrote:
->>>> On 11/22/22 15:03, Aaron Conole wrote:
->>>>> When processing upcall commands, two groups of data are available to
->>>>> userspace for processing: the actual packet data and the kernel
->>>>> sw flow key data.=C2=A0 The inclusion of the flow key allows the user=
-space
->>>>> avoid running through the dissection again.
->>>>>
->>>>> However, the userspace can choose to ignore the flow key data, as is
->>>>> the case in some ovs-vswitchd upcall processing.=C2=A0 For these mess=
-ages,
->>>>> having the flow key data merely adds additional data to the upcall
->>>>> pipeline without any actual gain.=C2=A0 Userspace simply throws the d=
-ata
->>>>> away anyway.
->>>>
->>>> Hi, Aaron.=C2=A0 While it's true that OVS in userpsace is re-parsing t=
-he
->>>> packet from scratch and using the newly parsed key for the OpenFlow
->>>> translation, the kernel-porvided key is still used in a few important
->>>> places.=C2=A0 Mainly for the compatibility checking.=C2=A0 The use is =
-described
->>>> here in more details:
->>>>  =C2=A0=C2=A0 https://docs.kernel.org/networking/openvswitch.html#flow=
--key-compatibility
->>>>
->>>> We need to compare the key generated in userspace with the key
->>>> generated by the kernel to know if it's safe to install the new flow
->>>> to the kernel, i.e. if the kernel and OVS userpsace are parsing the
->>>> packet in the same way.
->>>>
->>>
->>> Hi Ilya,
->>>
->>> Do we need to do that for every packet?
->>> Could we send a bitmask of supported fields to userspace at feature
->>> negotiation and let OVS slowpath flows that it knows the kernel won't
->>> be able to handle properly?
->> It's not that simple, because supported fields in a packet depend
->> on previous fields in that same packet.  For example, parsing TCP
->> header is generally supported, but it won't be parsed for IPv6
->> fragments (even the first one), number of vlan headers will affect
->> the parsing as we do not parse deeper than 2 vlan headers, etc.
->> So, I'm afraid we have to have a per-packet information, unless we
->> can somehow probe all the possible valid combinations of packet
->> headers.
->>=20
->
-> Surely. I understand that we'd need more than just a bit per
-> field. Things like L4 on IPv6 frags would need another bit and the
-> number of VLAN headers would need some more. But, are these a handful
-> of exceptions or do we really need all the possible combinations of
-> headers? If it's a matter of naming a handful of corner cases I think
-> we could consider expressing them at initialization time and safe some
-> buffer space plus computation time both in kernel and userspace.
+So we now have three patches, all from Liu, that are tripping over each
+other:
 
-I will take a bit more of a look here - there must surely be a way to
-express this when pulling information via DP_GET command so that we
-don't need to wait for a packet to come in to figure out whether we can
-parse it.
+1. 5b47348fc0b1 ("arm64/mm: fix incorrect file_map_count for non-leaf pmd/pud")
 
+	Merged upstream in -rc6
+
+2. This patch ("arm64/mm: fix incorrect file_map_count for invalid pmd")
+
+	This could land for -rc8 (I acked it), but I'd be more comfortable
+	queuing it at -rc1 seeing it as it isn't a recent regression,
+	it explodes in the page-table check code and it will conflict with
+	(1).
+
+3. https://lore.kernel.org/r/20221122123137.429686-1-liushixin2@huawei.com
+   ("arm64/mm: add pud_user_exec() check in pud_user_accessible_page()")
+
+	This was just found by inspection, so it can definitely wait for
+	next time (i.e. 6.3).
+
+> Until this patch lands, arm64 PAGE_TABLE_CHECK + THP remains broken...
+
+It's unfortunate, but I don't think it's new breakage and it's failing a
+synthetic check so it's hard to justify squeezing it in this late.
+
+Will
