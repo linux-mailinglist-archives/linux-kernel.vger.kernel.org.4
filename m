@@ -2,150 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940FF63B941
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 05:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC3163B94A
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 06:05:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235486AbiK2Eyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 23:54:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36700 "EHLO
+        id S231167AbiK2FFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 00:05:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235452AbiK2Eyg (ORCPT
+        with ESMTP id S229461AbiK2FE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 23:54:36 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723B3186C6;
-        Mon, 28 Nov 2022 20:54:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669697675; x=1701233675;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=XU9hr/kWuet6BJSbYMWijXAtYtPsurCS7es5C+aV3es=;
-  b=Wm8LuIxY9PWP4p1Z32tGJBR/6Ti0SW9NYxQ5y7f2ZzI5Ca7S0eGbnDqh
-   orPXt+MXZtl+nu2KdNzcp78YBUEar+nRGb3k4nnt5699GIRXqzNXb4FS3
-   /S2ROLbyVV6j63J6cYatIEFooF9gaOwXPN+hMzB3HQJyYyapynvlLTXMx
-   aMUJDdPVb4quPugnqHr3ESFPMigRQIbEhfq96PlEGPQnY/rajonT221za
-   hsRSFEddberD78TMZeNjcR27GOKBk7u1hyLjLaWGK8l/K13baL2Pr6gN2
-   KjN9mbrUQEU0gSjR87O4HEYcWro7/uF/UdfPj7MaeVUQ3LJ0VDki2+OJ1
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="302608851"
-X-IronPort-AV: E=Sophos;i="5.96,202,1665471600"; 
-   d="scan'208";a="302608851"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 20:54:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="645759611"
-X-IronPort-AV: E=Sophos;i="5.96,202,1665471600"; 
-   d="scan'208";a="645759611"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga007.fm.intel.com with ESMTP; 28 Nov 2022 20:54:34 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 28 Nov 2022 20:54:34 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 28 Nov 2022 20:54:34 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.175)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 28 Nov 2022 20:54:33 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l48/tB33DmNq5mlzQ5GRkiEoI0brb8mxkpBkVMS7NB0SS+JK2KSoF8n7DlLT8X5sJUAWVqXPSGeXRnWguT3RzCV8wdJddbgZ7gwWdsxVU99e43NiWDiUR+aVT8qlnfHj0SDePs6DWg04EHgn8aa03dv5Oyp7xedaMLJaz/v65wqh8Gru8bN0mPNbHp1efNWPnUJoFyJPbhxfZoviVfUoT/5BEbvrcs61yxa3Ht4YL1lEUXmP0Gjb4SB0K0I2OKW4LMtWnMHVb/iBpnLwlJQtOTdvH93OdNsLQ/obnLsXWttI3+NhCcfrAmqfq1kC7T8/BOE75dYJjgU4Gr4znoS+fA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sp3AwHYnRVPeRyO+3DtGCyRxozLHv39GCYrRp3JFs8A=;
- b=PRJIptSADv6HWrwhK+QMfjDmFT08l/zb69/TuiWUqDRm0cazFeM5PQMirhHqJqq/om7T0rQm18Aoh7S8b7jhSoSa61c/CX5dmfojRiE3qu4owpCU7KhTjFn3jhbVSHV4UCCVs77O4cUMKu8c1/rxPWRTbxNQY429XXH8l4XEXwqfG9JYeWEUkCRQ1dMQu6UXXiP0aHtPEX2kfMIvmHosDwnUYz+ixBs/eK3l6TQZtwLCG0Ig+WuvCKDxWO0aIV79sxVhLnYQvrYAKso+O0LvDe+NrOaeqombiOUVlV/0xKdFKZODs4stHCt3Ag1a++/7vXiKZTWyR7ponhnIy6aZdA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH0PR11MB5880.namprd11.prod.outlook.com (2603:10b6:510:143::14)
- by CO6PR11MB5668.namprd11.prod.outlook.com (2603:10b6:5:355::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Tue, 29 Nov
- 2022 04:54:32 +0000
-Received: from PH0PR11MB5880.namprd11.prod.outlook.com
- ([fe80::8f92:b03a:1de2:e315]) by PH0PR11MB5880.namprd11.prod.outlook.com
- ([fe80::8f92:b03a:1de2:e315%5]) with mapi id 15.20.5857.020; Tue, 29 Nov 2022
- 04:54:32 +0000
-From:   "Zhang, Qiang1" <qiang1.zhang@intel.com>
-To:     "paulmck@kernel.org" <paulmck@kernel.org>
-CC:     "frederic@kernel.org" <frederic@kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] rcu-tasks: Make rude RCU-Tasks work well with CPU
- hotplug
-Thread-Topic: [PATCH v2] rcu-tasks: Make rude RCU-Tasks work well with CPU
- hotplug
-Thread-Index: AQHZAzXSKOjuTzu2RUKeoTlESXbs8q5VFkkAgAAryDA=
-Date:   Tue, 29 Nov 2022 04:54:32 +0000
-Message-ID: <PH0PR11MB588001E6982A9DC32F93FD7ADA129@PH0PR11MB5880.namprd11.prod.outlook.com>
-References: <20221128143428.1703744-1-qiang1.zhang@intel.com>
- <20221129010312.GS4001@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20221129010312.GS4001@paulmck-ThinkPad-P17-Gen-1>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR11MB5880:EE_|CO6PR11MB5668:EE_
-x-ms-office365-filtering-correlation-id: 83c9ead6-ef5f-4e56-6651-08dad1c5ce43
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 1T4xW5V2PFpaYJD1caAdJORG+f1tYKaPO1uIbaF7i5tjn4Misp7TlXx3TGP5avWEGQJ0vgE1z91KNpX2M9fHuynCdjXpDnktAzMy3NmfoUmOKr0yesTDyZXAc5pifmCSyu7IGCZYMaaasHu7EB0urVJXXY04z3ZoHwuH2Y6q0rZA/U0rRecP/mbj0az+AVsAMO5MvyqzYDzE9o4c+Z8XAPhNtXhII0PDJ3iMy5tf9cmFUKwAAhnOB+bgVNWYwZu6FHYP03TRq/oFKfe3mtQMQJwngb4pvCo8P/SdwB/dlgnR8/ceGvII0pgeT07jLTLU1HHH70gzM73bQCwE65hZf0Vhi93NIDLu6JfMEQsMcl2uH6jYC7pzCuX2tLwBv15Zl9rwZ90GTR7e3fd8i0BXjORgyn2fZeSpFIwCO2aeI2fxU4aCjbqqb9ZjJjsM0XJVMD5ZOq6Nx+xfXBcA/Y1Wh9Fbl2dVcDXOOxhzDIQP6mGlNqtgLk873ACz27cWC2h34LpnehU+r5zMrPUiLCOdxHXqRS6muhtvZPD/KwaLHLAuX2IZdke04BwqDEm3/r8cHfraFCHWfdqRKRxrhTpy0aU6PFH7CPmXsFPWmbCtlucOWb5KvXHpurFv7JV2+V4o4wvTCohph+qSDlKOxQ/K4S4YZt7r1CB4WHdOrUShxYmkhNKsM75S4POIkpWdBQpt+8PNvXRfN+MpuIk9ah8A3Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5880.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(376002)(346002)(396003)(39860400002)(136003)(451199015)(33656002)(86362001)(478600001)(71200400001)(7696005)(55016003)(38070700005)(2906002)(82960400001)(122000001)(186003)(83380400001)(9686003)(38100700002)(66946007)(66446008)(6506007)(41300700001)(316002)(76116006)(66556008)(64756008)(26005)(4326008)(8676002)(8936002)(54906003)(52536014)(5660300002)(6916009)(66476007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Urf4hfy0q2MiMvaYQHtZJ2+S68vxDDEeaUqteBUllnos+drr4QLK8I+iUvBL?=
- =?us-ascii?Q?+lSoJeX+VYlyaSz3UQxuug6lI1IBmMcMI8arcjvw4gHGCkxBDuZUxC1FPlsl?=
- =?us-ascii?Q?eGMDC3eA6eyKHwVmacipAOkZ9U5KHKNwpHANVlWBdSXH/35HMutFFjo4FMZQ?=
- =?us-ascii?Q?jSNRBpknzuIEM7/jLOk/21L3pLoS6yTFuU/rI/A3ZNebr8UUV0stO6cyjY6j?=
- =?us-ascii?Q?8frvMZDDf1GYDCxW3HC4CPU6ejy6qHvSsd/Kc13P9ezF6016Fw7WqEHBD6eN?=
- =?us-ascii?Q?u0i70c8e5EntpgzntVjRlWru6G7mgZsrYsB9wPJTLD1MSoqiRzP/Gm4dGYEX?=
- =?us-ascii?Q?9ELLIKcR5Q7SoiRcPvqTdzSxTv1DpKjI9DKpkoORAR9Rjv2vj0I7IUEwqxO4?=
- =?us-ascii?Q?073/cw59/EchWcYak/1TtRWMMQIdAjDQdZ6KfDb5vYsTisIMgklX7/WBVmIa?=
- =?us-ascii?Q?+rI66T+RDFPFqG7MJJYsnnl2mX/ER2J9FwB9itMrBZN0ryAqWXDZkK1M/yPl?=
- =?us-ascii?Q?15e0N5VJXESwCcBD10IAvNXrG84fNzCXmBJ96UHK6OO5LfNTjbTh60Szi1Q5?=
- =?us-ascii?Q?vEHuR0egqLSJMRzZybwpXCfbXF+x9pGZG0878sj+nVWsvOYmfeVVSG8joiLp?=
- =?us-ascii?Q?Xm2fRxFm6RCtYLMg5Bu5lv3XIrCNO2MF2Nzu8KM8axPM4DwEffyMxnkZCUsI?=
- =?us-ascii?Q?1Um3cs1KCfVXCbPtzczBXO9SQKbjEWfTrwk4mVNbn4xQ3ub+wgz+bKwwTdJp?=
- =?us-ascii?Q?trLKwZHy2SlSCvjVREvPMBUzC1yn7j8ZodDmN+e30mE++lsT57WWZTxADbwl?=
- =?us-ascii?Q?LmMgYEAtlbyfGrs//5OP7PRF+M6QGatQQUa1nuV3eZMMMMjbpyqJO2AG6JcZ?=
- =?us-ascii?Q?4AXZQIdB8hYwkMe2MnomJtGBKimVVrISBeXR+JdLMjJknY2v44UY1P6aMwrO?=
- =?us-ascii?Q?3E5zcPBwNmcojNnM8kBE5dipCshQIhuE+4cPPWCYqDbFy6/r+tEhYuYiwxbm?=
- =?us-ascii?Q?Ohs0wdknEj2aHvUZtc0adHeT07KSkE+1wsUwjRIBvPwWp/rM74s4Mh3daYMZ?=
- =?us-ascii?Q?RctNx01L1Czaq4GxSskk8jNRzEjuUk+AdXgMzq/C3m7OkZlwK+U9oA5BinAe?=
- =?us-ascii?Q?Hmp3wuE7SxhlOfA07ch0fR8XcPn3qt5qN1Z6RwtLWq5ANJgXx1a59OomEfWU?=
- =?us-ascii?Q?ml81qq88iJw80suNrveAs6fdMoCT90mVphcorKj2WbAAtaCYG7LDy6jLo0Iq?=
- =?us-ascii?Q?11+QtvSK4OnPGaUB8SkTZK8bldHgDjWuypuYNaFV8dfX+sHJEs7wAw+jduwf?=
- =?us-ascii?Q?CHzDt+NTv7Tmh4iLVeeNTIhbRoD6dSMfIFO+Dn1vIMRnf9YcWXVMqy1ekpNC?=
- =?us-ascii?Q?NDxRxhHCU0FwEKN6ZqdbWsZxicsw9ayLLfL1o50CyHZRNg+hOLobXzav7lSW?=
- =?us-ascii?Q?JoeVcFM3vN/nEPIcdGJE6sVSByUhGwYT/Jgt6dAFmRAhxJjCJn3yivoDRPXc?=
- =?us-ascii?Q?yQCJzf0QWDOQ14nBrBuo2uHb7NxTlR5/9H+LVb6TkYdmVmV6o7VzglzauVTs?=
- =?us-ascii?Q?+7+wBSgZ3QZVfEM13635H3JUWP9msRsIIZJPU7Ys?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 29 Nov 2022 00:04:58 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A284733B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 21:04:54 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 203F25C00CD;
+        Tue, 29 Nov 2022 00:04:52 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 29 Nov 2022 00:04:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669698292; x=
+        1669784692; bh=7JBhdj+AHR3dAIOe2gseZvC2qPeV3j2qkNBk4trRfdg=; b=C
+        u/lwyGeGHbV7DLYWZDlYiiimjmuOdbSgS641XgIEUQ7MBev0WjcgeIHQMAbEcHk4
+        65BpayAEHpDHbDiCB/m2Z9zLcMOlw6C7J0G2rvLjSP2w1J9BSuvkwNshtpD1No3y
+        f5tMtz1cpzIhLpqvcXakaR8RGQfEXIvtyx3J04I0E+Kc6ffcyLjmHyWPiCSB9laH
+        NsQM0GlYNgeNJsnBcWbv3qQ0ti84bUCpYQzWH+NigWFX9XcWoZ9USH2tzvB0p2sD
+        P3pFXz480A7pGRk57PXUpfpEchkaYKiWU6ffw0xgkl/wSwyGSDcB0TwNccYSk4oJ
+        fweD6Ta6BDy4FtNz7e6Rg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669698292; x=
+        1669784692; bh=7JBhdj+AHR3dAIOe2gseZvC2qPeV3j2qkNBk4trRfdg=; b=M
+        Vu04DsZaIrNTK11Enq8h9uAbbPbvIaamnkXUTZBLEv7sjT+11TU41YBQELfhjLGm
+        a3P25LiOtrxYn6bvV4m3J2eiKL5LA83xq9zjUDp12XrsU5klWwAD/VpRKgBXCK5u
+        hkTuZhwWBImjHi+E/l3Y2Y4WqKFlqUkjwjx1DMSBsrr8vl2psZNzH8400dxG2tAm
+        bwGedGIkQtGxb5/4hBqyH/KezVaZ1Szyo6dB03NRh+POlhHqPAmcAhfG2z72CU7L
+        UGJ1n/Ig3AyVAlEXfAAZkJ+Obzd+lIR/P6EZBpKlTprXweLbH6L/6s2eYv5ykHpN
+        l1sW+5yCa3bfRKW5l2fOA==
+X-ME-Sender: <xms:85KFY6KfoQMhrb7HMjbHOMzpYT3fP9Ke5tqf-ezBHQQGQ__OrvLNVA>
+    <xme:85KFYyKgiq58ka_VtYmf3KYgbKJGjpNUzT7I6d_xQTVE98ZYrlQBnxy1HxlyxVu2Q
+    8gsdUAT0bZjDdZ9Bg>
+X-ME-Received: <xmr:85KFY6sSne-_znocklpvykGzxlTcfzkm9NsTm8ztCzYyQzYR7flNiKHm0TNA3EuQzESY4y9YV3A5C8T9BGLB8C4NgPGJXOxzgRY3HvouWM5Vy_irREQTk69wWg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjeefgdektdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnheptedvueevffevvdelgfffledugeeuleehjeegveekjeeuheefvdeh
+    kefhuefhteevnecuffhomhgrihhnpehhvggrugdrshgsnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdr
+    ohhrgh
+X-ME-Proxy: <xmx:85KFY_YALunrmAOPH5LYQ33_dhtr6OUgWW8LHG8LgloEIO6JCOZA8w>
+    <xmx:85KFYxYxfxDpTGth7XDSVHIgd3-XwsLIfhNzUESACXFmX7bh-7RsPA>
+    <xmx:85KFY7BGcCFZ14w1ytw8NukUPSYTBY8V3v6GbSrmpysEx_isFrXITw>
+    <xmx:9JKFY0yA_QE09KOH-z5mv2C9Ns6IPnRu8_DiFLIIGMMl43PHQrR2eg>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 29 Nov 2022 00:04:49 -0500 (EST)
+Message-ID: <e39851df-251d-662d-3319-af9d948a9430@sholland.org>
+Date:   Mon, 28 Nov 2022 23:04:48 -0600
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5880.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 83c9ead6-ef5f-4e56-6651-08dad1c5ce43
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2022 04:54:32.5151
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qgID7npB+sRK8/ptD8FI/n6M9rWLYdz9Mdp2c5gx6q1+xxzn3DpHbrxkaezmsYe0BYMJ0KTGTTmamimuMhpBiQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR11MB5668
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH] riscv: head: use 0 as the default text_offset
+Content-Language: en-US
+To:     Atish Kumar Patra <atishp@rivosinc.com>,
+        Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221128152442.3403-1-jszhang@kernel.org>
+ <CAHBxVyHg0fU9msnV4vgp4oK6aZZv+nc9mFTbTRjHNsgJAG0eyg@mail.gmail.com>
+From:   Samuel Holland <samuel@sholland.org>
+In-Reply-To: <CAHBxVyHg0fU9msnV4vgp4oK6aZZv+nc9mFTbTRjHNsgJAG0eyg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -153,141 +93,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 10:34:28PM +0800, Zqiang wrote:
-> Currently, invoke rcu_tasks_rude_wait_gp() to wait one rude
-> RCU-tasks grace period, if __num_online_cpus =3D=3D 1, will return
-> directly, indicates the end of the rude RCU-task grace period.
-> suppose the system has two cpus, consider the following scenario:
->=20
-> 	CPU0                                   CPU1 (going offline)
-> 				          migration/1 task:
->                                       cpu_stopper_thread
->                                        -> take_cpu_down
->                                           -> _cpu_disable
-> 			                   (dec __num_online_cpus)
->                                           ->cpuhp_invoke_callback
->                                                 preempt_disable
-> 						access old_data0
->            task1
->  del old_data0                                  .....
->  synchronize_rcu_tasks_rude()
->  task1 schedule out
->  ....
->  task2 schedule in
->  rcu_tasks_rude_wait_gp()
->      ->__num_online_cpus =3D=3D 1
->        ->return
->  ....
->  task1 schedule in
->  ->free old_data0
->                                                 preempt_enable
->=20
-> when CPU1 dec __num_online_cpus and __num_online_cpus is equal one,
-> the CPU1 has not finished offline, stop_machine task(migration/1)
-> still running on CPU1, maybe still accessing 'old_data0', but the
-> 'old_data0' has freed on CPU0.
->=20
-> This commit add cpus_read_lock/unlock() protection before accessing
-> __num_online_cpus variables, to ensure that the CPU in the offline
-> process has been completed offline.
->=20
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
->
->First, good eyes and good catch!!!
->
->The purpose of that check for num_online_cpus() is not performance
->on single-CPU systems, but rather correct operation during early boot.
->So a simpler way to make that work is to check for RCU_SCHEDULER_RUNNING,
->for example, as follows:
->
->	if (rcu_scheduler_active !=3D RCU_SCHEDULER_RUNNING &&
->	    num_online_cpus() <=3D 1)
->		return;	// Early boot fastpath for only one CPU.
+On 11/28/22 14:11, Atish Kumar Patra wrote:
+> On Mon, Nov 28, 2022 at 7:34 AM Jisheng Zhang <jszhang@kernel.org> wrote:
+>>
+>> Commit 0f327f2aaad6 ("RISC-V: Add an Image header that boot loader can
+>> parse.") adds an image header which "is based on ARM64 boot image
+>> header and provides an opportunity to combine both ARM64 & RISC-V
+>> image headers in future.". At that time, arm64's default text_offset
+>> is 0x80000, this is to give "512 KB of guaranteed BSS space to put
+>> the swapper page tables" as commit cfa7ede20f13 ("arm64: set TEXT_OFFSET
+>> to 0x0 in preparation for removing it entirely") pointed out, but
+>> riscv doesn't need the space, so use 0 as the default text_offset.
+>>
+>> Before this patch, booting linux kernel on Sipeed bl808 M1s Dock
+>> with u-boot booti cmd:
+>> [    0.000000] OF: fdt: Ignoring memory range 0x50000000 - 0x50200000
+>> ...
+>> [    0.000000]   DMA32    [mem 0x0000000050200000-0x0000000053ffffff]
+>> As can be seen, 2MB DDR(0x50000000 - 0x501fffff) can't be used by
+>> linux.
+>>
+>> After this patch, the 64MB DDR is fully usable by linux
+>> [    0.000000]   DMA32    [mem 0x0000000050000000-0x0000000053ffffff]
+>>
+>> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+>> ---
+>>  arch/riscv/kernel/head.S | 12 +-----------
+>>  1 file changed, 1 insertion(+), 11 deletions(-)
+>>
+>> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+>> index b865046e4dbb..ef95943f7a70 100644
+>> --- a/arch/riscv/kernel/head.S
+>> +++ b/arch/riscv/kernel/head.S
+>> @@ -38,18 +38,8 @@ ENTRY(_start)
+>>         .word 0
+>>  #endif
+>>         .balign 8
+>> -#ifdef CONFIG_RISCV_M_MODE
+>> -       /* Image load offset (0MB) from start of RAM for M-mode */
+>> +       /* Image load offset (0MB) from start of RAM */
+>>         .dword 0
+>> -#else
+>> -#if __riscv_xlen == 64
+>> -       /* Image load offset(2MB) from start of RAM */
+>> -       .dword 0x200000
+>> -#else
+>> -       /* Image load offset(4MB) from start of RAM */
+>> -       .dword 0x400000
+>> -#endif
+>> -#endif
+> 
+> NACK.
+> RV64 needs to boot at a 2MB aligned address and RV32 needs to boot at
+> a 4MB aligned address.
+> The firmware is assumed to live at the start of DRAM for Linux running
+> in S-mode.
 
-Hi Paul
+What needs to happen so we can stop making this assumption? If the SBI
+implementation wants to reserve memory, it should use the devicetree to
+do so. OpenSBI already does this.
 
-During system startup, because the RCU_SCHEDULER_RUNNING is set after start=
-ing other CPUs,=20
+Throwing away 2 MiB of RAM is quite wasteful considering we have
+multiple SoCs (D1s, BL808) that are limited to 64 MiB of in-package RAM.
 
-  	    	CPU0                                                               =
-        CPU1                                                               =
- =20
+Regards,
+Samuel
 
-if (rcu_scheduler_active !=3D                                   =20
-	RCU_SCHEDULER_RUNNING &&
-       	__num_online_cpus  =3D=3D 1)                                       =
-       =20
-	return;                                                                   =
-      inc  __num_online_cpus
-							(__num_online_cpus =3D=3D 2)
-
-CPU0 didn't notice the update of the __num_online_cpus variable by CPU1 in =
-time
-Can we move rcu_set_runtime_mode() before smp_init()
-any thoughts?
-
-Thanks
-Zqiang
-
->
->This works because rcu_scheduler_active is set to RCU_SCHEDULER_RUNNING
->long before it is possible to offline CPUs.
->
->Yes, schedule_on_each_cpu() does do cpus_read_lock(), again, good eyes,
->and it also unnecessarily does the schedule_work_on() the current CPU,
->but the code calling synchronize_rcu_tasks_rude() is on high-overhead
->code paths, so this overhead is down in the noise.
->
->Until further notice, anyway.
->
->So simplicity is much more important than performance in this code.
->So just adding the check for RCU_SCHEDULER_RUNNING should fix this,
->unless I am missing something (always possible!).
->
->							Thanx, Paul
->
-> ---
->  kernel/rcu/tasks.h | 20 ++++++++++++++++++--
->  1 file changed, 18 insertions(+), 2 deletions(-)
->=20
-> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-> index 4a991311be9b..08e72c6462d8 100644
-> --- a/kernel/rcu/tasks.h
-> +++ b/kernel/rcu/tasks.h
-> @@ -1033,14 +1033,30 @@ static void rcu_tasks_be_rude(struct work_struct =
-*work)
->  {
->  }
-> =20
-> +static DEFINE_PER_CPU(struct work_struct, rude_work);
-> +
->  // Wait for one rude RCU-tasks grace period.
->  static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
->  {
-> +	int cpu;
-> +	struct work_struct *work;
-> +
-> +	cpus_read_lock();
->  	if (num_online_cpus() <=3D 1)
-> -		return;	// Fastpath for only one CPU.
-> +		goto end;// Fastpath for only one CPU.
-> =20
->  	rtp->n_ipis +=3D cpumask_weight(cpu_online_mask);
-> -	schedule_on_each_cpu(rcu_tasks_be_rude);
-> +	for_each_online_cpu(cpu) {
-> +		work =3D per_cpu_ptr(&rude_work, cpu);
-> +		INIT_WORK(work, rcu_tasks_be_rude);
-> +		schedule_work_on(cpu, work);
-> +	}
-> +
-> +	for_each_online_cpu(cpu)
-> +		flush_work(per_cpu_ptr(&rude_work, cpu));
-> +
-> +end:
-> +	cpus_read_unlock();
->  }
-> =20
->  void call_rcu_tasks_rude(struct rcu_head *rhp, rcu_callback_t func);
-> --=20
-> 2.25.1
->=20
