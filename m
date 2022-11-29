@@ -2,113 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823E063C605
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:02:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5515663C654
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236107AbiK2RCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 12:02:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59676 "EHLO
+        id S236585AbiK2RVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 12:21:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235494AbiK2RBk (ORCPT
+        with ESMTP id S236566AbiK2RVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 12:01:40 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33B36CA27;
-        Tue, 29 Nov 2022 08:59:48 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id a7-20020a056830008700b0066c82848060so9508926oto.4;
-        Tue, 29 Nov 2022 08:59:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=oOwITrigDk1OwF+Mi9TJDaYOfvuQYjStV/5P5QPsTVE=;
-        b=Ph6g6yuPHSN6bBDrYCIA5FRELzz0eJnzTk99CfURB8VHM7YTSJ7KD+fu9ey6O0xebu
-         SQtQE7tT52a5iLRxEpbcrn97WQ7RiD2/YBKTNOgj0M4IlbH32qYuiG4xlQgXDZ1qR25h
-         GCOEemmkCPo+fvnbKMOvSSPQ/o9EwatS5JIRjx1mDUEQ/Lkotq+qtG/LrFAelXZ7XKxo
-         ceOtH0+bsd/mHB78QTp0T/4O0SorX+H8mdRd8HdRcc8dNMupBs4pM3H+Q0Hb4dRURZnQ
-         5FayDZh8E/Zur/2vBWT1L0xw24gz/5oE0JFoIOGZakmBt9Y6kIgfsAqPwpZeVUmbqE+c
-         pRQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oOwITrigDk1OwF+Mi9TJDaYOfvuQYjStV/5P5QPsTVE=;
-        b=ImcDHszdr0jjYONSa9Aff+ci90eSGrBo/DnWMX2hpQkOF2We9oV6+vUjlLe4n9A/Mc
-         NX69d6JAQGpBWnS0FCD1rTgJ3KGe/04kReNVrGF5683LqkubaKAASDQ81D7cy8rKl7HU
-         umZ35OxBMwFTZd00jH2RPXVfP3JuSiE8t1L8yk/yTdzT4Fnj1NDNFzSURh71H/FVZZjE
-         g1xq+/plL9iQYPHGT5wRIHoNRysqh0U1ju8lXTEOI1q89cutNXKy38YPMBd+03lw6SSq
-         rhloC9kint44kPa61BQmPTn6lMpJ8ly+plT7+sha1bgvFFOyRfCfqMq/IgPa2tYj/TL5
-         h4gA==
-X-Gm-Message-State: ANoB5pkinCaOJD54uVQxzL1iN3IkqEpfcbtFJCs5yBRimWBDwJapvKnQ
-        pDhMx2PdSN4znPotD3PNnNc=
-X-Google-Smtp-Source: AA0mqf7Jfy6djaQXwh5cUseAZORmeDeYexzddszzZifjB5o47fSJLy1Sw8GZqrLlEg1dReTwXmAB5g==
-X-Received: by 2002:a9d:6b8b:0:b0:66d:b1bf:dde8 with SMTP id b11-20020a9d6b8b000000b0066db1bfdde8mr18193666otq.18.1669741188001;
-        Tue, 29 Nov 2022 08:59:48 -0800 (PST)
-Received: from [192.168.0.158] ([216.130.59.33])
-        by smtp.gmail.com with ESMTPSA id x64-20020acae043000000b003458d346a60sm5718655oig.25.2022.11.29.08.59.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 08:59:47 -0800 (PST)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <d2113f20-d547-ce16-ff7f-2d1286321014@lwfinger.net>
-Date:   Tue, 29 Nov 2022 10:59:46 -0600
+        Tue, 29 Nov 2022 12:21:37 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5C16150D;
+        Tue, 29 Nov 2022 09:21:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669742495; x=1701278495;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2LMdGOwU9JIK5rvq/D95NYGoaCMrWIZWXFQnmpG85k0=;
+  b=VCVXtNfl5DGHXh7Ot2uwnhUtAyNqOW88gIYVgRjH/nqU0knj6eCV171t
+   kt69NUySe+u+nLWHSXfxPe28EKgeqoIBKcCOnStvyDG7JwycUzF3W+l2G
+   5A/rNIzBgVWL9NTCoVgMHysUxjLrlk3aB80Mnx+7uI9oTs0NZyFRVOJ+F
+   STmiaAvpNAPCpRkmgYiW0r4GanEGhjNdF4HnW5LirviA5ZRCR9U/4Hvx7
+   RCcTsKHPiHBE14yoBLRauJXzk5pS/V6xYM8WVnmg1dj3XIq5yjLEPRXFr
+   9xNFEqcTXmHn4PSORqp5PQZ2MtyFCx27LTtzvYBDE3cjKmaXAkO3ZEg3H
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="316320006"
+X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
+   d="scan'208";a="316320006"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 08:53:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="768492367"
+X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
+   d="scan'208";a="768492367"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 29 Nov 2022 08:53:28 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p03rK-001nHg-2L;
+        Tue, 29 Nov 2022 18:53:26 +0200
+Date:   Tue, 29 Nov 2022 18:53:26 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v3 2/2] gpiolib: protect the GPIO device against being
+ dropped while in use by user-space
+Message-ID: <Y4Y5BjTwVCF5bAn5@smile.fi.intel.com>
+References: <20221129123553.353410-1-brgl@bgdev.pl>
+ <20221129123553.353410-3-brgl@bgdev.pl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v4 08/11] wifi: rtw88: Add rtw8821cu chipset support
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-wireless@vger.kernel.org, Neo Jou <neojou@gmail.com>,
-        Hans Ulli Kroll <linux@ulli-kroll.de>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        kernel@pengutronix.de, Johannes Berg <johannes@sipsolutions.net>,
-        Alexander Hochbaum <alex@appudo.com>,
-        Da Xue <da@libre.computer>, Po-Hao Huang <phhuang@realtek.com>,
-        Viktor Petrenko <g0000ga@gmail.com>
-References: <20221129100754.2753237-1-s.hauer@pengutronix.de>
- <20221129100754.2753237-9-s.hauer@pengutronix.de>
- <20221129081753.087b7a35@kernel.org>
-Content-Language: en-US
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <20221129081753.087b7a35@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221129123553.353410-3-brgl@bgdev.pl>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/22 10:17, Jakub Kicinski wrote:
-> On Tue, 29 Nov 2022 11:07:51 +0100 Sascha Hauer wrote:
->> +config RTW88_8821CU
->> +	tristate "Realtek 8821CU USB wireless network adapter"
->> +	depends on USB
->> +	select RTW88_CORE
->> +	select RTW88_USB
->> +	select RTW88_8821C
->> +	help
->> +	  Select this option will enable support for 8821CU chipset
->> +
->> +	  802.11ac USB wireless network adapter
+On Tue, Nov 29, 2022 at 01:35:53PM +0100, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Those kconfig knobs add so little code, why not combine them all into
-> one? No point bothering the user with 4 different questions with amount
-> to almost nothing.
+> While any of the GPIO cdev syscalls is in progress, the kernel can call
+> gpiochip_remove() (for instance, when a USB GPIO expander is disconnected)
+> which will set gdev->chip to NULL after which any subsequent access will
+> cause a crash.
+> 
+> To avoid that: use an RW-semaphore in which the syscalls take it for
+> reading (so that we don't needlessly prohibit the user-space from calling
+> syscalls simultaneously) while gpiochip_remove() takes it for writing so
+> that it can only happen once all syscalls return.
 
-I see only one knob there, name RTW88_8821CU. The other configuration variables 
-select parts of the code that are shared with other drivers such as RTW88_8821CE 
-and these parts must be there.
+...
 
-Larry
+I would do
+
+typedef __poll_t (*poll_fn)(struct file *, struct poll_table_struct *);
+
+and so on and use that one in the respective parameters.
+
+BUT. Since it's a fix, up to you which one to choose.
+
+> +static __poll_t call_poll_locked(struct file *file,
+> +				 struct poll_table_struct *wait,
+> +				 struct gpio_device *gdev,
+> +				 __poll_t (*func)(struct file *,
+> +						  struct poll_table_struct *))
+> +{
+> +	__poll_t ret;
+> +
+> +	down_read(&gdev->sem);
+> +	ret = func(file, wait);
+> +	up_read(&gdev->sem);
+> +
+> +	return ret;
+> +}
+
+...
+
+> +	down_write(&gdev->sem);
+
++ Blank line?
+
+>  	/* FIXME: should the legacy sysfs handling be moved to gpio_device? */
+>  	gpiochip_sysfs_unregister(gdev);
+>  	gpiochip_free_hogs(gc);
+
+...
+
+>  	gcdev_unregister(gdev);
+
++ Blank line ?
+
+> +	up_write(&gdev->sem);
+>  	put_device(&gdev->dev);
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
