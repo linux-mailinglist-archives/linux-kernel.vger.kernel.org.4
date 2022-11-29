@@ -2,266 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED58D63B99A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 06:56:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC6A63B99D
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 06:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235618AbiK2F4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 00:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
+        id S235634AbiK2F6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 00:58:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiK2F4a (ORCPT
+        with ESMTP id S229830AbiK2F6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 00:56:30 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADE34A581
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 21:56:29 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oztbM-00012a-AM; Tue, 29 Nov 2022 06:56:16 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oztbL-00050c-GO; Tue, 29 Nov 2022 06:56:15 +0100
-Date:   Tue, 29 Nov 2022 06:56:15 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Arun.Ramadoss@microchip.com
-Cc:     olteanv@gmail.com, UNGLinuxDriver@microchip.com,
-        vivien.didelot@gmail.com, andrew@lunn.ch, f.fainelli@gmail.com,
-        kuba@kernel.org, edumazet@google.com, pabeni@redhat.com,
-        Woojung.Huh@microchip.com, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v1 21/26] net: dsa: microchip: ksz8_r_sta_mac_table(): do
- not use error code for empty entries
-Message-ID: <20221129055615.GB25526@pengutronix.de>
-References: <20221128115958.4049431-1-o.rempel@pengutronix.de>
- <20221128115958.4049431-22-o.rempel@pengutronix.de>
- <90add896bd48f5ba80385df4d8a4e27c91f97e7d.camel@microchip.com>
+        Tue, 29 Nov 2022 00:58:05 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB7227FC7;
+        Mon, 28 Nov 2022 21:58:04 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 212215C010E;
+        Tue, 29 Nov 2022 00:58:04 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 29 Nov 2022 00:58:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669701484; x=
+        1669787884; bh=toRxxeDncESQ5ly6fHLcJiv4LuWMVHyJPEIjPKru2Cg=; b=G
+        nNXEBVXe4/fRb0d2elSjodffbQpUW6HTYxjt5noLwqTcLzbPnXgg4kZXhJ+y+N5A
+        63IexRDGMr0sBbpXHlKacen0AsPhQwg2JvhVDyKI2pG7aYuyPox1aPYqQUAGS0vS
+        DKeCqWIGOhjKD0RE65S1WrmryKdl4QJPy8lD1IOMzAEwXLDuZv3xc46Fbk+1//ew
+        G8UJ15pOIM10t00bTipGEopPFXgxuxjcFN7ZgdPhO9ITMWqkVGyZ2hAjpAdaLvB+
+        NZVOyqD6mBcAgwa+Kv7NPOMWKMT9+Z7AW/0Z802kkbFhmd8J3zOX7HtjB68zqSFF
+        ThWfwj8i8svWWkQkoAz3A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669701484; x=
+        1669787884; bh=toRxxeDncESQ5ly6fHLcJiv4LuWMVHyJPEIjPKru2Cg=; b=e
+        0O86b1KyCXPKIzyCduorHpOyPLo0c6fqtE4XdsEkGMVNoFjJ2UcVu/t32BDxw1F6
+        VZopeONoAKs7vOX9QKO9QURn22eI6uXzk6xD3UGZ2HknF2z072r/FSJlxOy62QDP
+        G/L+tmztMysaR1FeePGQiQQhF+kShkgO8o2uh/vR7MddHxsuNFQ+NZAqu/T2Aj+1
+        9mlV8uaoC3yt3ATjcnbMFMDZn5+RQpz3FGhujsllztySNRLdo+Fl8UPBH074w5Y5
+        rhH/cz4bWStDGX/NVpaCTy/x46eI7Me85xrDFeUWIsbGplTToygg9X6wOPAgCth7
+        W/32C2sZ7DsrH/vIr2tzA==
+X-ME-Sender: <xms:a5-FY0FPzggBOzOAbZJzLMxv5rdphYcOlbFwbSRStQOkMzWXYun95Q>
+    <xme:a5-FY9VA7tBLpwflzxJjbXD9RXnomVL1y_mc9_injyfdvzM1Z2PaS4QYc-hfVWYst
+    Q9tHpaoyh3soDlKsQ>
+X-ME-Received: <xmr:a5-FY-JQbXX1E2z6nW9tN1zo2jNt7d7fU68O-UuJFaxaLovHL5msujne5iPVjqpOdUtET5wfNpf433hQGNtW2CqwWfp8RcWIcnIlymyaWSycy3sDh4lYgnSJDA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjeefgdeludcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfvvehfhffujggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepjefgfffhudejfedtuedugeeutdetgfeiteffffehjeeugfeuvdeh
+    jeetfedtffdtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:a5-FY2HocQdN1pJKOSMsFwiuscapQ4Xvpw3i2_3L8LwbxA_kFBWFGA>
+    <xmx:a5-FY6Xb9hVl1F91w-jl6U9WyWdio59MDEfHim9K3JV5jNB13041fA>
+    <xmx:a5-FY5NfdDaSOUg18SOEOOeRGC-6D6y6PlhhvAt4nJ8CdpQ_hbHfxg>
+    <xmx:bJ-FYzfOF2aBaFBgeiZqf2JlqgskeJ94j-vLJd08k8E4blXzoRLWFw>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 29 Nov 2022 00:58:02 -0500 (EST)
+Message-ID: <565e1861-7052-9bd3-e7ba-e590bd91cf20@sholland.org>
+Date:   Mon, 28 Nov 2022 23:58:01 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <90add896bd48f5ba80385df4d8a4e27c91f97e7d.camel@microchip.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Content-Language: en-US
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221124172207.153718-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <bf8e33fd-a752-d5d5-859e-14302d069f2d@sholland.org>
+ <CA+V-a8sz4i_wenTyA5tVTVB8dQWLmuXCf3CGYOPC+C07GJ8WTw@mail.gmail.com>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH v4 7/7] soc: renesas: Add L2 cache management for RZ/Five
+ SoC
+In-Reply-To: <CA+V-a8sz4i_wenTyA5tVTVB8dQWLmuXCf3CGYOPC+C07GJ8WTw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 05:25:55AM +0000, Arun.Ramadoss@microchip.com wrote:
-> On Mon, 2022-11-28 at 12:59 +0100, Oleksij Rempel wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you
-> > know the content is safe
-> > 
-> > This is a preparation for the next patch, to make use of read/write
-> > errors.
-> > 
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > ---
-> >  drivers/net/dsa/microchip/ksz8795.c | 94 +++++++++++++++++--------
-> > ----
-> >  1 file changed, 54 insertions(+), 40 deletions(-)
-> > 
-> > diff --git a/drivers/net/dsa/microchip/ksz8795.c
-> > b/drivers/net/dsa/microchip/ksz8795.c
-> > index 1c08103c9f50..b7487be91f67 100644
-> > --- a/drivers/net/dsa/microchip/ksz8795.c
-> > +++ b/drivers/net/dsa/microchip/ksz8795.c
-> > @@ -457,7 +457,7 @@ static int ksz8_r_dyn_mac_table(struct ksz_device
-> > *dev, u16 addr, u8 *mac_addr,
-> >  }
-> > 
-> >  static int ksz8_r_sta_mac_table(struct ksz_device *dev, u16 addr,
-> > -                               struct alu_struct *alu)
-> > +                               struct alu_struct *alu, bool *valid)
-> >  {
-> >         u32 data_hi, data_lo;
-> >         const u8 *shifts;
-> > @@ -470,28 +470,32 @@ static int ksz8_r_sta_mac_table(struct
-> > ksz_device *dev, u16 addr,
-> >         ksz8_r_table(dev, TABLE_STATIC_MAC, addr, &data);
-> >         data_hi = data >> 32;
-> >         data_lo = (u32)data;
-> > -       if (data_hi & (masks[STATIC_MAC_TABLE_VALID] |
-> > -                       masks[STATIC_MAC_TABLE_OVERRIDE])) {
-> > -               alu->mac[5] = (u8)data_lo;
-> > -               alu->mac[4] = (u8)(data_lo >> 8);
-> > -               alu->mac[3] = (u8)(data_lo >> 16);
-> > -               alu->mac[2] = (u8)(data_lo >> 24);
-> > -               alu->mac[1] = (u8)data_hi;
-> > -               alu->mac[0] = (u8)(data_hi >> 8);
-> > -               alu->port_forward =
-> > -                       (data_hi & masks[STATIC_MAC_TABLE_FWD_PORTS])
-> > >>
-> > -                               shifts[STATIC_MAC_FWD_PORTS];
-> > -               alu->is_override =
-> > -                       (data_hi & masks[STATIC_MAC_TABLE_OVERRIDE])
-> > ? 1 : 0;
-> > -               data_hi >>= 1;
-> > -               alu->is_static = true;
-> > -               alu->is_use_fid =
-> > -                       (data_hi & masks[STATIC_MAC_TABLE_USE_FID]) ?
-> > 1 : 0;
-> > -               alu->fid = (data_hi & masks[STATIC_MAC_TABLE_FID]) >>
-> > -                               shifts[STATIC_MAC_FID];
-> > +
-> > +       if (!(data_hi & (masks[STATIC_MAC_TABLE_VALID] |
-> > +                        masks[STATIC_MAC_TABLE_OVERRIDE]))) {
-> > +               *valid = false;
-> >                 return 0;
-> >         }
-> > -       return -ENXIO;
-> > +
-> > +       alu->mac[5] = (u8)data_lo;
-> > +       alu->mac[4] = (u8)(data_lo >> 8);
-> > +       alu->mac[3] = (u8)(data_lo >> 16);
-> > +       alu->mac[2] = (u8)(data_lo >> 24);
-> > +       alu->mac[1] = (u8)data_hi;
-> > +       alu->mac[0] = (u8)(data_hi >> 8);
-> 
-> u64_to_ether_addr macro can be used to store address into array.
+On 11/26/22 15:09, Lad, Prabhakar wrote:
+>>> +     if (!ax45mp_priv->l2c_base) {
+>>> +             ret = -ENOMEM;
+>>> +             goto l2c_err;
+>>> +     }
+>>> +
+>>> +     ret = ax45mp_configure_l2_cache(np);
+>>> +     if (ret)
+>>> +             goto l2c_err;
+>>> +
+>>> +     ret = ax45mp_configure_pma_regions(np);
+>>> +     if (ret)
+>>> +             goto l2c_err;
+>>> +
+>>> +     static_branch_disable(&ax45mp_l2c_configured);
+>>
+>> Instead of enabling this before the probe function, and disabling it
+>> afterward, just enable it once here, in the success case. Then you can
+>> drop the !ax45mp_priv check in the functions above.
+>>
+> I think I had tried it but static_branch_unlikely() was always returning true.
 
-This should not be done in this patch.
+You use DEFINE_STATIC_KEY_FALSE above, so static_branch_unlikely()
+should return false until you call static_branch_enable().
 
-> > +       alu->port_forward =
-> > +               (data_hi & masks[STATIC_MAC_TABLE_FWD_PORTS]) >>
-> > +                       shifts[STATIC_MAC_FWD_PORTS];
-> 
-> 
-> 
-> > +       alu->is_override = (data_hi &
-> > masks[STATIC_MAC_TABLE_OVERRIDE]) ? 1 : 0;
-> > +       data_hi >>= 1;
-> > +       alu->is_static = true;
-> > +       alu->is_use_fid = (data_hi & masks[STATIC_MAC_TABLE_USE_FID])
-> > ? 1 : 0;
-> > +       alu->fid = (data_hi & masks[STATIC_MAC_TABLE_FID]) >>
-> > +               shifts[STATIC_MAC_FID];
-> 
-> Instead of masks and shifts, you consider using
-> FIELD_GET(STATIC_MAC_TABLE_FID, data_hi);
+>> And none of the functions would get called anyway if the alternative is
+>> not applied. I suppose it's not possible to do some of this probe logic
+>> in the alternative check function?
+>>
+> you mean to check in the vendor errata patch function to see if this
+> driver has probed?
 
-I would love to do this, but in this case, complete driver should be
-splittet in to KSZ88X3 and KSZ879X portions. FIELD_GET can't work with
-dynamic masks and shifts.
+I meant to do the equivalent of:
 
-I would say, it is not for this patch set.
++     ax45mp_priv->ucctl_ok = ax45mp_cpu_cache_controlable();
++     ax45mp_priv->l2cache_enabled = ax45mp_cpu_l2c_ctl_status() &
+AX45MP_L2_CACHE_CTL_CEN_MASK;
 
-> > +
-> > +       *valid = true;
-> > +
-> > +       return 0;
-> >  }
-> > 
-> >  void ksz8_w_sta_mac_table(struct ksz_device *dev, u16 addr,
-> > @@ -969,12 +973,13 @@ int ksz8_fdb_dump(struct ksz_device *dev, int
-> > port,
-> > 
-> >         for (i = 0; i  < dev->info->num_statics; i++) {
-> >                 struct alu_struct alu;
-> > +               bool valid;
-> > 
-> > -               ret = ksz8_r_sta_mac_table(dev, i, &alu);
-> > -               if (ret == -ENXIO)
-> > -                       continue;
-> > +               ret = ksz8_r_sta_mac_table(dev, i, &alu, &valid);
-> >                 if (ret)
-> >                         return ret;
-> > +               if (!valid)
-> > +                       continue;
-> > 
-> >                 if (!(alu.port_forward & BIT(port)))
-> >                         continue;
-> > @@ -1010,20 +1015,25 @@ static int ksz8_add_sta_mac(struct ksz_device
-> > *dev, int port,
-> >                             const unsigned char *addr, u16 vid)
-> >  {
-> >         struct alu_struct alu;
-> > -       int index;
-> > +       int index, ret;
-> >         int empty = 0;
-> > 
-> >         alu.port_forward = 0;
-> >         for (index = 0; index < dev->info->num_statics; index++) {
-> > -               if (!ksz8_r_sta_mac_table(dev, index, &alu)) {
-> > -                       /* Found one already in static MAC table. */
-> > -                       if (!memcmp(alu.mac, addr, ETH_ALEN) &&
-> > -                           alu.fid == vid)
-> > -                               break;
-> > -               /* Remember the first empty entry. */
-> > -               } else if (!empty) {
-> > -                       empty = index + 1;
-> > +               bool valid;
-> > +
-> > +               ret = ksz8_r_sta_mac_table(dev, index, &alu, &valid);
-> > +               if (ret)
-> > +                       return ret;
-> > +               if (!valid) {
-> > +                       /* Remember the first empty entry. */
-> > +                       if (!empty)
-> > +                               empty = index + 1;
-> > +                       continue;
-> >                 }
-> > +
-> > +               if (!memcmp(alu.mac, addr, ETH_ALEN) && alu.fid ==
-> > vid)
-> > +                       break;
-> >         }
-> > 
-> >         /* no available entry */
-> > @@ -1053,15 +1063,19 @@ static int ksz8_del_sta_mac(struct ksz_device
-> > *dev, int port,
-> >                             const unsigned char *addr, u16 vid)
-> >  {
-> >         struct alu_struct alu;
-> > -       int index;
-> > +       int index, ret;
-> 
-> Variable declaration in separate line.
+in the errata function, since that decides if the cache maintenance
+functions actually do anything. But ax45mp_cpu_l2c_ctl_status() gets the
+MMIO address from the DT, and trying to do that from the errata function
+could get ugly, so maybe it is not a good suggestion.
 
-Is it a new coding style requirement? I can't find it here:
-https://www.kernel.org/doc/html/v6.0/process/coding-style.html
+Regards,
+Samuel
 
-> > 
-> >         for (index = 0; index < dev->info->num_statics; index++) {
-> > -               if (!ksz8_r_sta_mac_table(dev, index, &alu)) {
-> > -                       /* Found one already in static MAC table. */
-> > -                       if (!memcmp(alu.mac, addr, ETH_ALEN) &&
-> > -                           alu.fid == vid)
-> > -                               break;
-> > -               }
-> > +               bool valid;
-> > +
-> > +               ret = ksz8_r_sta_mac_table(dev, index, &alu, &valid);
-> > +               if (ret)
-> > +                       return ret;
-> > +               if (!valid)
-> > +                       continue;
-> > +
-> > +               if (!memcmp(alu.mac, addr, ETH_ALEN) && alu.fid ==
-> > vid)
-> > +                       break;
-> >         }
-> > 
-> >         /* no available entry */
-> > --
-> > 2.30.2
-> > 
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
