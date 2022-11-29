@@ -2,155 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FBF563C6C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:49:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FA063C6C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236136AbiK2Rtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 12:49:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
+        id S236349AbiK2Rtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 12:49:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236139AbiK2RtV (ORCPT
+        with ESMTP id S236359AbiK2Rti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 12:49:21 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB302697FA
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:49:19 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id k7so14140827pll.6
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:49:19 -0800 (PST)
+        Tue, 29 Nov 2022 12:49:38 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E1168C5C
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:49:37 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id b21so14145137plc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:49:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=70/eD63Y0IWUOAJT90ZgbeWA+KDFcK6DEdj8lIs5MAg=;
-        b=rQaHWhcip1/xyHCotaGLRwF25yKo8TFHi9SEEUV427xcEckhP0gJHXTSQvWF2dV+ml
-         ZL0FtTFWyPNXMsefQSzmEj4p56pxvDb+0cTBu5IQnD3QFMkKyqYtItaZjaKHdND/DirZ
-         kGq7qPM30uCsPFLxQbw+kXffbVOpPal9IYwtTcE94iu0aP11dzInOH13gMQRbXUfvmga
-         4CKVhYkKRJ0LfOrDYJhTlbO1KVHGENc9rzsXCW8qkdz9ljtTghwgOBlRiJcZiG+8z3b/
-         9zLRTSKJBbKXvnYSb+0x+8J7Ig4HrTiAVn0YBWPpeayvVjyUr9LBSXV+Vfsi0OOkaToA
-         t42A==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hl3DPINmZ1T1XtdjVjeWIBcpMDsqsxiqkNjkViEje6g=;
+        b=S2O6hUY5rTSZmVMXYryt5ZPXz7UTn/t8d0ZpVZ/P7PSEnElhd2Gb9JCwr5oRUL2n+b
+         eska0zL51J7KzNay8y03JpZRAT4X7FXicBAu1rV9/El1Pln8vAnHHisgagi3GkOYDrOA
+         VqptbHTlmJZjIIlwNMkVe/Alh1rHgNBu+d0LdvJ8LKsk+CQvitgJRwyXy4RylfE2zY4T
+         EYifWdhLXJQ+2K90zbyogJcbW4QeKTkk/ekQz6cjXY6yWzU6wpuOaGyzKq+zVG4+0AvJ
+         XYDeopFJoNC9Zc8whw59rhzseZ8CTkW6iwj6kCqvwURac6yuFPZJBbwR5Z7WDPSGWey1
+         vIJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=70/eD63Y0IWUOAJT90ZgbeWA+KDFcK6DEdj8lIs5MAg=;
-        b=RQIT10FI7h+e2B6Wv8eIBhPQ+uorH9INSMLMFR4gfl6Dic/8QTMzS/+X+4YqxtY76K
-         ja6tcKZZtt7wxfQzi02kqq5duK3iP6supCZGN0Kqx1T21jmqcPmOEXjtGkMo6uOfIKlm
-         1Yo6dfBZ3Bi0ZD6SezZtzCbcLRLaiuyB0cZeV+mwX160DKmO3XXFCHHj5C157422yW91
-         6iOyAoRN9Ga/IlgomOYZ1bFumFniE8kU2khYX/uJmk+qLDfk/KZcda5cPZPLCn3wCSVr
-         JRWc8Z9ZRGf4KXpHaJgMpkxIhUePyMboM9m8RrEgd3VkCcXsQPCIljjQyndbQb6ZuHKM
-         2FOg==
-X-Gm-Message-State: ANoB5plsC2ospm5EV0FdxhV3Bq2bFPrTwS312EpiYevB8oxwcjEZpg2r
-        /zBj3jjENDhgP35YJDRoI2ah
-X-Google-Smtp-Source: AA0mqf5SwjQeTa2dWnKTNHmaU1s3XfC5hwfF4g4aDmQFAllp89FcBTKVsFagRH08lOFJwwfoy3snOQ==
-X-Received: by 2002:a17:903:2112:b0:186:cf82:91d5 with SMTP id o18-20020a170903211200b00186cf8291d5mr51332655ple.87.1669744159116;
-        Tue, 29 Nov 2022 09:49:19 -0800 (PST)
-Received: from localhost.localdomain ([117.217.187.207])
-        by smtp.gmail.com with ESMTPSA id k1-20020a170902c40100b0016d9b101413sm11176333plk.200.2022.11.29.09.49.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 09:49:18 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     jacek.anaszewski@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, thunder.leizhen@huawei.com,
-        festevam@gmail.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v4] dt-bindings: leds: Document commonly used LED triggers
-Date:   Tue, 29 Nov 2022 23:19:06 +0530
-Message-Id: <20221129174906.97749-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        bh=Hl3DPINmZ1T1XtdjVjeWIBcpMDsqsxiqkNjkViEje6g=;
+        b=gKE94CVLPvyWfcTW5Rub6jCvdPJwvUHiem6LVIZauCTX7QfXndmL91x5UNkT1oBupi
+         mxsA9ymVZguYahTiQaRSKNGWXBugMm9JqsumoOu4GZFJ5BHkLFTZWAovPLKfLgL/saFI
+         H6Bs3gdVmlxhHs/P9l1XEus5L1gjW/NkTxMfB8dypeVS5aBke60c0QuuQwc/PIE4A3oq
+         rBbcmreV7vC+F2pOdVLBoveMYiLXBz9xPvj15hDVSgbQMNBgTJy1YwgRMrTA45TYFmUH
+         Uu7x7AlPj2vlBCz+HkHzW1lCbrsi0vt7UQ1qoyaMpQACNhy3I4I+l7ch2qemtjHcuivJ
+         ZMkA==
+X-Gm-Message-State: ANoB5pmEsdE19EtqlvC3Ty1Iy5jtdyQIM4TwgUmxBU6jaW1FnYYBDbvz
+        c9ZgcOV/37ZOcE83gWNIooE6dUePW+qMYQTGsqY=
+X-Google-Smtp-Source: AA0mqf7wCQceOB0kuyg1U5MwVqL/zsBXkVIhotZcQN/YuYIJXc0ZmSPqoVm5XCdXCWf8N24AFml7WGTsl0ArZBjEgPM=
+X-Received: by 2002:a17:90a:4889:b0:20d:d531:97cc with SMTP id
+ b9-20020a17090a488900b0020dd53197ccmr62168749pjh.164.1669744177387; Tue, 29
+ Nov 2022 09:49:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <8a2f2644-71d0-05d7-49d8-878aafa99652@huawei.com>
+ <CAHbLzkr-eXk8gateN=EmMoBuW3wxoQKTCfJcTRQsQX3QxD+CmA@mail.gmail.com> <Y4W+joR1rIug0ydA@dhcp22.suse.cz>
+In-Reply-To: <Y4W+joR1rIug0ydA@dhcp22.suse.cz>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Tue, 29 Nov 2022 09:49:25 -0800
+Message-ID: <CAHbLzkpZWp4-XfSpXw86UokPuXSMPRg1UWfgpjL=FixjBr6sFw@mail.gmail.com>
+Subject: Re: [QUESTION] memcg page_counter seems broken in MADV_DONTNEED with
+ THP enabled
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Yongqiang Liu <liuyongqiang13@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        aarcange@redhat.com, hughd@google.com, mgorman@suse.de,
+        cl@gentwo.org, zokeefe@google.com, rientjes@google.com,
+        Matthew Wilcox <willy@infradead.org>, peterx@redhat.com,
+        "Wangkefeng (OS Kernel Lab)" <wangkefeng.wang@huawei.com>,
+        "zhangxiaoxu (A)" <zhangxiaoxu5@huawei.com>,
+        kirill.shutemov@linux.intel.com, Lu Jialin <lujialin4@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the commonly used LED triggers by the SoCs. Not all triggers
-are documented as some of them are very application specific. Most of the
-triggers documented here are currently used in devicetrees of many SoCs.
+On Tue, Nov 29, 2022 at 12:10 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Mon 28-11-22 12:01:37, Yang Shi wrote:
+> > On Sat, Nov 26, 2022 at 5:10 AM Yongqiang Liu <liuyongqiang13@huawei.com> wrote:
+> > >
+> > > Hi,
+> > >
+> > > We use mm_counter to how much a process physical memory used. Meanwhile,
+> > > page_counter of a memcg is used to count how much a cgroup physical
+> > > memory used.
+> > > If a cgroup only contains a process, they looks almost the same. But with
+> > > THP enabled, sometimes memory.usage_in_bytes in memcg may be twice or
+> > > more than rss
+> > > in proc/[pid]/smaps_rollup as follow:
+> [...]
+> > > node_page_stat which shows in meminfo was also decreased. the
+> > > __split_huge_pmd
+> > > seems free no physical memory unless the total THP was free.I am
+> > > confused which
+> > > one is the true physical memory used of a process.
+> >
+> > This should be caused by the deferred split of THP. When MADV_DONTNEED
+> > is called on the partial of the map, the huge PMD is split, but the
+> > THP itself will not be split until the memory pressure is hit (global
+> > or memcg limit). So the unmapped sub pages are actually not freed
+> > until that point. So the mm counter is decreased due to the zapping
+> > but the physical pages are not actually freed then uncharged from
+> > memcg.
+>
+> Yes, and this is not really bound to THP. Consider a page cache. It can
+> be accessed via syscalls when it doesn't correspondent to rss at all
+> while it is still charged to a memcg. Or it can be mapped and then later
+> unmapped so it disappear from rss while it is still charged until it
+> gets reclaimed by the memory pressure. Or it can be an in-memory object
+> that is not bound to any process life time (e.g. tmpfs). Or it can be a
+> kernel memory charged to a memcg which is not covered by rss because it
+> is either not mapped or it is unknown to rss counters.
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
+Yes, good points. Thanks, Michal. And one more thing worth mentioning
+is that the RSS shown by ps or smaps is different from the RSS shown
+by memcg.
 
-Changes in v4:
-
-* Removed the sorting of triggers
-* Removed the "items" as they were not needed
-* Reworded the description
-* Dropped Zhen Lei's tested-by tag as the patch has changed
-* Added kbd-capslock trigger
-
-Changes in v3:
-
-* Rebased on top of v6.1-rc1
-* Added WLAN Rx trigger
-* Added tested tag from Zhen Lei
-
-Changes in v2:
-
-* Added more triggers, fixed the regex
-* Sorted triggers in ascending order
-
- .../devicetree/bindings/leds/common.yaml      | 40 ++++++++++++++++++-
- 1 file changed, 38 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/leds/common.yaml b/Documentation/devicetree/bindings/leds/common.yaml
-index 3c14a98430e1..68da651f29a8 100644
---- a/Documentation/devicetree/bindings/leds/common.yaml
-+++ b/Documentation/devicetree/bindings/leds/common.yaml
-@@ -98,8 +98,44 @@ properties:
-             # LED alters the brightness for the specified duration with one software
-             # timer (requires "led-pattern" property)
-           - pattern
--        # LED is triggered by SD/MMC activity
--      - pattern: "^mmc[0-9]+$"
-+            # LED indicates mic mute state
-+          - audio-micmute
-+            # LED indicates audio mute state
-+          - audio-mute
-+            # LED indicates bluetooth power state
-+          - bluetooth-power
-+            # LED indicates activity of all CPUs
-+          - cpu
-+            # LED indicates disk read activity
-+          - disk-read
-+            # LED indicates disk write activity
-+          - disk-write
-+            # LED indicates camera flash state
-+          - flash
-+            # LED indicated keyboard capslock
-+          - kbd-capslock
-+            # LED indicates MTD memory activity
-+          - mtd
-+            # LED indicates NAND memory activity (deprecated),
-+            # in new implementations use "mtd"
-+          - nand-disk
-+            # No trigger assigned to the LED. This is the default mode
-+            # if trigger is absent
-+          - none
-+            # LED indicates camera torch state
-+          - torch
-+            # LED indicates USB gadget activity
-+          - usb-gadget
-+            # LED indicates USB host activity
-+          - usb-host
-+        # LED indicates [N]th MMC storage activity
-+      - pattern: "^mmc[0-9]{1,2}$"
-+        # LED indicates activity of [N]th CPU
-+      - pattern: "^cpu[0-9]{1,2}$"
-+        # LED indicates power status of [N]th Bluetooth HCI device
-+      - pattern: "^hci[0-9]{1,2}-power$"
-+        # LED indicates [N]th WLAN Tx/Rx activity
-+      - pattern: "^phy[0-9]{1,2}(tx|rx)$"
- 
-   led-pattern:
-     description: |
--- 
-2.25.1
-
+> --
+> Michal Hocko
+> SUSE Labs
