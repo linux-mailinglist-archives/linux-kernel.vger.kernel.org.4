@@ -2,121 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CB963CAFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 23:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DEB463CB04
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 23:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236635AbiK2WWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 17:22:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49742 "EHLO
+        id S236775AbiK2WYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 17:24:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiK2WWV (ORCPT
+        with ESMTP id S236710AbiK2WYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 17:22:21 -0500
-Received: from na01-obe.outbound.protection.outlook.com (mail-westus2azon11010001.outbound.protection.outlook.com [52.101.46.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0252D6F367
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:22:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bPx9JPyzAbNwgvmrsE5HIOI5gPyhPnmomEZyNiyo3DCzIEGdrqR/T8BwjowSUW3Qh/y5eKadJO7sFM3ln9oVgCHxIFnH0V3pT+5FJPk3f5DXdGUCyw+qA1FRGqQsvncSlJuowLpY74Eb9Uyi+dUcZDevX6iPcbXOt6IPclR3XQaF94ehjfYVgdGNbWsfgdXNWDlEkMB1m2qdcE7mXyIqbHlY8+zZhwtEqRu+j9zktnNSRI+95xYOXPpt00+nlm90c8GJGPn9vtuVv4tLiWwIRHWH3x53d3M7seEnxDlnU0Lw5hazR+mBD9Aie1ShoH930eL4lnUmm+OMxSrR1Atysg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eLcouwEriRKAEGMvPCNp6GujK6KvSsAJ0lAfb1XHrT4=;
- b=INSYQxMGI4UPhLHyV0pUwJOsZxRB2BqCjaKXfVo6ShlGr8XlmNZAzaBV3g8932rC4ZwIRkCnB8vd98xZGRG7qRiXWxEA9tMWHOhSNP+jIUJPkXEdUhZGYkFkHGMsaxjMhjBqrsm0ggu7i+k2L4hwii/KC6ICILOAfpI2k90bnJDPbaiLyvlIgPSnS8GqYYvZjWOdbbUcXTd3JxT+mnORfqVWbbjW+bJ1moYzgmFbmLYJdLK2YdTPt7mXhlKD7kRO3TKdF9jGZasofxoZ4eV4TpQAm56EvFEhIfj7LvCEyZDHp6YbJ5Rm+e63DPujjP1gwtzj/7IOnXSIVVbN821lWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eLcouwEriRKAEGMvPCNp6GujK6KvSsAJ0lAfb1XHrT4=;
- b=pJMRUkGtosaYLdCQuH5qja1uabfSMy/01XRd3h+pRPs4ieBL3S7OsbPhDi4VyQqZAqSz8OtyISFXmi0V4cAC1I9dLePdb6h9pFvuAjTFIdXByI2LXFXa27YaNDykW7d8Rl7ZHrUeb5pViX24QQsN2eL0dqEEe0W465fqoLH8Vdc=
-Received: from BYAPR05MB3960.namprd05.prod.outlook.com (2603:10b6:a02:88::12)
- by IA0PR05MB10095.namprd05.prod.outlook.com (2603:10b6:208:3dc::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.8; Tue, 29 Nov
- 2022 22:22:18 +0000
-Received: from BYAPR05MB3960.namprd05.prod.outlook.com
- ([fe80::6764:941b:e0cc:c4e1]) by BYAPR05MB3960.namprd05.prod.outlook.com
- ([fe80::6764:941b:e0cc:c4e1%7]) with mapi id 15.20.5857.022; Tue, 29 Nov 2022
- 22:22:17 +0000
-From:   Vishnu Dasa <vdasa@vmware.com>
-To:     George Kennedy <george.kennedy@oracle.com>
-CC:     Bryan Tan <bryantan@vmware.com>,
-        Pv-drivers <Pv-drivers@vmware.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] VMCI: check context->notify_page after call to
- get_user_pages_fast() to avoid GPF
-Thread-Topic: [PATCH] VMCI: check context->notify_page after call to
- get_user_pages_fast() to avoid GPF
-Thread-Index: AQHZA15ktwl6TZISUUOh1K630Cg8ja5We1eA
-Date:   Tue, 29 Nov 2022 22:22:17 +0000
-Message-ID: <6B18FBD3-2C2D-4C88-96D0-44BE3B4FDAB6@vmware.com>
-References: <1669666705-24012-1-git-send-email-george.kennedy@oracle.com>
-In-Reply-To: <1669666705-24012-1-git-send-email-george.kennedy@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR05MB3960:EE_|IA0PR05MB10095:EE_
-x-ms-office365-filtering-correlation-id: c4cf34a9-c56e-4684-8649-08dad2582cde
-x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mYClEwsyLZFW+H3Lb3GjMOelNLmKmeQGVA1A0MNcteZQYyH1wnDHukzAULUztaC393UZSJU7DieExyLC8mILUqSmzUIR+KMa0yHuOMXbORdEs5Tp/ZEq+9JT/iLOaxONmourciLcjbTagoRe5UuuQVAYmV3eojf1RiJoRm4fWz45PlhKGHgp1iNj8qLTwEKAI4L2UK1VK6z3bmZ4razXOSFhBtDOHvFFFtFLqC3Rlvjb1B9JUfsrjznTYOdwIYwAsKjjp2UU3aK01YlGgs0r2KVI4r7zLXTtEAtbCImjqoxJD0Lujf5ImrpwEJdsTWmLxuGjN2pCWkuust6DrNmn7B+CU6vPL43HpIFYSMjCbNtvHxQCCMG3lHbStMnAHAIfqm6mRY8ql6Ue8Yj6cgPEiYj8N98Li7tppT0/3dLlQxOZB0dr1fc6Ra6JFuYDgpqSvY+n7480yOtpd73cRn3YCTBvQgcjqPoKRqTExFyZ/M5fb9PlQ91EfzrocqC4j6bxJOYL8kyYe4qEEGE+rq6kZEB7AeHbWzqHusDal1V/WuZxBmrIsE8OKMgsPlcrhtpfuWKm6m8tQxHw0wUchTUVk67TIF4ivXLdVzi9qfJOeXr3teG0PNBA2//JuhWD6kw3eDdd3/jEIVmjoTnrabet/LdG1R03wBQiB5toxs6rM7j7Yjl8rQOY4DAZXUvHyXgAMmeZo/oSJJN4m2Z5zHtWx253dmMTGwZaRaDaaDEViE2Fvdy+4nOgkH1xJqXvBdSDSHwWf7UZBKf7TuKbLVaGXw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR05MB3960.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(376002)(136003)(366004)(346002)(451199015)(36756003)(83380400001)(2906002)(66446008)(66556008)(66476007)(8676002)(4326008)(64756008)(8936002)(5660300002)(41300700001)(186003)(2616005)(38070700005)(33656002)(86362001)(122000001)(38100700002)(66946007)(6506007)(6486002)(53546011)(316002)(6512007)(54906003)(6916009)(478600001)(71200400001)(76116006)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?EIJS63sIwOtVPNIMEHIf5iqRtn/bGQ+jjkJLM7e74IsPCKAcmFrIbnOquykY?=
- =?us-ascii?Q?n9KGWpVeEEoOwDNAuVG46fxC41uxqLt86tAoOS6jA6i6fFMvuHGAODo6ecl/?=
- =?us-ascii?Q?Uv6s560Y3iy/70OXY8IOqv/dVEI8UfPcMRC7O6vsuBjgyTlsZ5KxOX63LesN?=
- =?us-ascii?Q?XCp+kh6YVJ78gIWqRpAnPQ/+wVzJgeF+2iWba4BlVm2OsrG1YT4APpgcdrX9?=
- =?us-ascii?Q?LddcTQ1WomPeH2huDNT9h/pHG2AlkaXSTDX/J1QD4lnr2txvy8sNWhbWPyaD?=
- =?us-ascii?Q?LiVMG/Nc6vtUtcM/2vs/HW4+uN6643HiR8D/G0WPvIPiEtWZl0MzXzmvzmbX?=
- =?us-ascii?Q?aXud4wNj+0YW93+UK5xiKoEyEeNU80SPxNET9Z5SDWFk9xUs9K2I/2/uKjgq?=
- =?us-ascii?Q?KzBo4FcTxTI3ioc4SoMPMc/Om2T+fiQTj9csR3HoF5DwsX6hXrDgVuFJKTgD?=
- =?us-ascii?Q?UCaezeEwPNjWBXbGlRcXevduKRiaweT7Fr2dDoDQ8SDqUYOcFBCU6ZqNkXxQ?=
- =?us-ascii?Q?A7J9H5xg9FEcb0uhMXJi6P7HLedt3k1mZbO8TGxV8o7GiFQRAuaynCnxxijr?=
- =?us-ascii?Q?dV9OvueL2J1W7n63etYhcHCgZf9/+kVvnX/l3JFR4pJs3LiAPx3Ju2rG6+3p?=
- =?us-ascii?Q?ldtkEXHxyF3hJXqWrLxSV5nbd6ZOSaYXt1PDKIv0RUm15gA2iYeX0tL3EFPC?=
- =?us-ascii?Q?PNEiELv2bWzHIMFbOQde+Ko4Gbib6qGGn9qV1Gi+dbWr7VTdQejaR5E1gnYt?=
- =?us-ascii?Q?WpkrpfxGimuK6Eg8yUb27DGR1eav5n21fN3jtiLNvNotD/JZN9V77up9XO5p?=
- =?us-ascii?Q?SjS/0xkSy/40Pwk+AChEqnoyD0v71g+vqx5Z4z2WELrW4Q7rrDk2D1h8smnz?=
- =?us-ascii?Q?fNde5878Jm61WdKRKnjaO8VIA11Qq+D6OGk5hxuQHqnw1TMWn+LQkdYyqA78?=
- =?us-ascii?Q?VUgkD9v08/TqSd4iJMbjw0TZKAPEDCyqarOydqsJdncknI6edeBJo4Zl+lvy?=
- =?us-ascii?Q?EKLltu19AN5mpHI2dKKUADcmE9qflQ1X1zbv22gft06R/F8EA7gVzKIvb9u/?=
- =?us-ascii?Q?hd/nQ9r9NQRAau3yuHc5cfAFi7FQq311SIpgmf4bUl5Xd+LhdKH7ZON3HAnM?=
- =?us-ascii?Q?2i0f7Gq69+zn5DpN/3yBQSwsF+dlO8PzkW+pbwqlIuAyAYn+ia7SD9p9s/5Q?=
- =?us-ascii?Q?P3sky8qUcbCc1gbZq0/e3bRm14lG+wGnIJvVggmA/h6NYLcZO2h//Og29bzb?=
- =?us-ascii?Q?+Vf37ORU7/hHtXmFK1Mn4s3L9x7mCAR3XINDIwVhmoaB/NL5bJStBQfg3H/j?=
- =?us-ascii?Q?oGzWXMLUBnRTkiAL/GP0ZVZgxGdTj7sFcIBfSwLxy/aXq+3biDWQs/eTP9su?=
- =?us-ascii?Q?+Jo10/R7Nr9EZ8+K5CZPonh17v9WCqrUEU/LVBisa2xARJOuO/oJHqhMesB8?=
- =?us-ascii?Q?JVsd5ORo1865eOweRJXvq8tVZvRCpAcZuXfW/E9PahjFsdTMamyBjovVWMB9?=
- =?us-ascii?Q?CbRXljIj24Ifn5SQy9Vj1BZe8R2RbUoYMbeks8nfZvxYcQTyuAklTHJuknvM?=
- =?us-ascii?Q?r+X/F0R2lAvO8WpoFqEuWa8VHaK1JWEThJt6to7qWi92chMUDzTN7p0MhDlW?=
- =?us-ascii?Q?ZtCL1K9KfR320Bw3nnNWxnW64Nd4z/oCHNLHkwSsftg8?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <09C908E94062BD419353D143B9D7CAC9@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Tue, 29 Nov 2022 17:24:34 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF46F6D4A2
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:24:33 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id y6so11147340iof.9
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 14:24:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DYum/pWgYnwiga7VoANumBjcItMjRLsiKG9O6XYzRSk=;
+        b=NdQA9M0eePxOZ4OZiEWZlA1clLBTof+xEYQ9v8Z6HVCwhIgqgsL5FEU0kQYxzrSb1w
+         l33pyn6YWXW0AXjjwsE1EjKt+zhBviYuXmxZ2ITX9Psrryw+RAn6EMTbv9cigvTeyBP1
+         JomqS6JgoNfBAyk7orZRll0Y0Cgk0bZcQGy1s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DYum/pWgYnwiga7VoANumBjcItMjRLsiKG9O6XYzRSk=;
+        b=d814ORUW92IapZqy3+SqZLpuaUEuTYp3GjfxxQ3ZXPV0etFrHoVPm2QC7DVwyda3Z/
+         InDsQUaNXIeqwTfj52yVkileNET1CmPPZW9J5oIsOitFGVy79UdqwSWTVRkJdgGbaIIl
+         /pYSzbEgAKg1BfDLTV9EHfLSZmarOMcWpJLhrQ+NCcALoq09dbz1KpKbIzW8cFZypfQ2
+         ct36yzpIybPzia1eCQzZIuPV/r9i+i1eb26AYS1cE+FyMftXxWi8hV8y/GcTbmlpXmBh
+         cUsysPY2D2VcO5/GjMeaejsbQoc9bwBJC0iWyWowhOdGxb5DUFuPosYqOD/tX+RMRwJ/
+         8vIg==
+X-Gm-Message-State: ANoB5plg39KjzfrOlUeeQKiE0zsrMlnai1Uz86nmzQmgUgbeMFhCFgq4
+        SCJVfP8JdaWs9XFswTYm0Xrsvw==
+X-Google-Smtp-Source: AA0mqf7JYr7+b9amwN4jdAtOSlybUhZtlpMT9+NWeq3566dKH6rAbeeOnI65E0oQfy0AUQStTAvafQ==
+X-Received: by 2002:a02:856a:0:b0:389:ce3b:6bc0 with SMTP id g97-20020a02856a000000b00389ce3b6bc0mr8856777jai.61.1669760673110;
+        Tue, 29 Nov 2022 14:24:33 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id t17-20020a92dc11000000b00302f4f69f62sm4682437iln.12.2022.11.29.14.24.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 14:24:32 -0800 (PST)
+Message-ID: <d48804d5-2ad5-fbfb-ce17-83fbc450d3d6@linuxfoundation.org>
+Date:   Tue, 29 Nov 2022 15:24:32 -0700
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR05MB3960.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c4cf34a9-c56e-4684-8649-08dad2582cde
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2022 22:22:17.7613
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8W7O0vvt50pV7nrsitkSYHid+iTBANGryvzowMsH0HmNwKmbtpOtFzbQsrBr3RH8oBWKAHsYQHjBT5jzuN8AkQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR05MB10095
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 0/6] selftests: Use "grep -E" instead of "egrep"
+Content-Language: en-US
+To:     paulmck@kernel.org
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <1669165413-12035-1-git-send-email-yangtiezhu@loongson.cn>
+ <bf9b26b5-2793-204f-ba9c-4d9cd55b08ad@loongson.cn>
+ <dc7cb519-584c-55f1-4baa-44cd4e0bbfe9@linuxfoundation.org>
+ <20221129221344.GF4001@paulmck-ThinkPad-P17-Gen-1>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221129221344.GF4001@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -124,56 +76,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/29/22 15:13, Paul E. McKenney wrote:
+> On Tue, Nov 29, 2022 at 02:39:25PM -0700, Shuah Khan wrote:
+>> On 11/22/22 19:27, Tiezhu Yang wrote:
+>>> It seems that patch #2~#6 has no conflicts with the other related
+>>> git tree, but patch #1 is conflicted with paulmck/linux-rcu.git dev.
+>>>
+>>> What should I do?
+>>>
+>>> Shuah, could you please apply patch #2~#6 to your linux-kselftest.git next branch and ignore patch #1?
+>>>
+>>> And then let me send a seperate patch #1 rebased on paulmck/linux-rcu.git dev branch to rcu@vger.kernel.org.
+>>>
+>>
+>> That won't work because linux-kselftest next won't have the linux-rcu content.
+>> I already picked patches 1,2,6
+>>
+>> Patches 3 (powerpc) and 5 (net) go through powerpc and net trees. Please resend
+>> just those cc'ing the right people. get_maintainers.pl will give you the info.
+>>
+>> As for patch 1 - perhaps the conflict could be resolved in next.
+>>
+>> Paul, would you like me to drop rcutorture patch from linux-kselftest next?
+> 
+> I would be happy to carry the rcutorture patch, especially if doing so
+> makes life easier.  ;-)
+> 
+> But please do send me some sort of pointer to the patch.  Otherwise,
+> I guarantee you that I will queue the wrong one.
+> 
 
-> On Nov 28, 2022, at 12:18 PM, George Kennedy <george.kennedy@oracle.com> =
-wrote:
->=20
-> The call to get_user_pages_fast() in vmci_host_setup_notify() can return
-> NULL context->notify_page causing a GPF. To avoid GPF check if
-> context->notify_page =3D=3D NULL and return error if so.
->=20
-> general protection fault, probably for non-canonical address
->    0xe0009d1000000060: 0000 [#1] PREEMPT SMP KASAN NOPTI
-> KASAN: maybe wild-memory-access in range [0x0005088000000300-
->    0x0005088000000307]
-> CPU: 2 PID: 26180 Comm: repro_34802241 Not tainted 6.1.0-rc4 #1
-> Hardware name: Red Hat KVM, BIOS 1.15.0-2.module+el8.6.0 04/01/2014
-> RIP: 0010:vmci_ctx_check_signal_notify+0x91/0xe0
-> Call Trace:
-> <TASK>
-> vmci_host_unlocked_ioctl+0x362/0x1f40
-> __x64_sys_ioctl+0x1a1/0x230
-> do_syscall_64+0x3a/0x90
-> entry_SYSCALL_64_after_hwframe+0x63/0xcd
->=20
-> Fixes: a1d88436d53a ("VMCI: Fix two UVA mapping bugs")
-> Reported-by: syzkaller <syzkaller@googlegroups.com>
-> Signed-off-by: George Kennedy <george.kennedy@oracle.com>
+I have it queued up in linux-kselftest next for Linux 6.2-rc1 - if it is easier
+we can just resolve the merge in next.
 
-Thanks for the fix!
-
-Reviewed-by: Vishnu Dasa <vdasa@vmware.com>
-
-> ---
-> drivers/misc/vmw_vmci/vmci_host.c | 2 ++
-> 1 file changed, 2 insertions(+)
->=20
-> diff --git a/drivers/misc/vmw_vmci/vmci_host.c b/drivers/misc/vmw_vmci/vm=
-ci_host.c
-> index da1e2a773823..857b9851402a 100644
-> --- a/drivers/misc/vmw_vmci/vmci_host.c
-> +++ b/drivers/misc/vmw_vmci/vmci_host.c
-> @@ -242,6 +242,8 @@ static int vmci_host_setup_notify(struct vmci_ctx *co=
-ntext,
-> 		context->notify_page =3D NULL;
-> 		return VMCI_ERROR_GENERIC;
-> 	}
-> +	if (context->notify_page =3D=3D NULL)
-> +		return VMCI_ERROR_UNAVAILABLE;
->=20
-> 	/*
-> 	 * Map the locked page and set up notify pointer.
-> --=20
-> 2.31.1
->=20
+thanks,
+-- Shuah
 
