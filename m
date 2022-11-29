@@ -2,73 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21B963C518
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:26:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3B663C51F
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234892AbiK2Q0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 11:26:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54682 "EHLO
+        id S235703AbiK2Q22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 11:28:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbiK2Q0T (ORCPT
+        with ESMTP id S235472AbiK2Q2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 11:26:19 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B422B19D;
-        Tue, 29 Nov 2022 08:26:18 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id bp15so22786526lfb.13;
-        Tue, 29 Nov 2022 08:26:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lxf0kyi+s2Sutj6Iq3Va9K/X2sWiGBntVy1/4zVaeeo=;
-        b=f53shSw7iwr3fTocRBL3RJqaS2TtbFH+jso75wE3Sj8/gb7E5JKDmyKql4Y1kvbAoh
-         kRX1BboC3KBu7aEJcFYaFmWlHyRrOPC9u3m7PwaSbraRkbyAIS4WQD8DVzsY1sWUs1j0
-         9KxUWZfNUSHBkFjC/4uHl7H02tzN0VboJ/RbYmlpXoxSCL4twMTN0DnkX+KPNd8Zdkwx
-         Xs8zMrnUx5i4yr4s1/GQwZQNN/hbCh3GUKc3nkcaM902Bz46KqyfFGLkME08ZzQKReHp
-         cD79oerHDP5FBKHenYco27LqTcak71AfK4sJHPaAcRvA2IvyvP2VlLgTgdxIvt5AUedP
-         d2Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lxf0kyi+s2Sutj6Iq3Va9K/X2sWiGBntVy1/4zVaeeo=;
-        b=0zPoeVweUXPyqOtnm/Dld6Y/sqxUBUKxeXYtPrXbjswFAnyiQ+SADT6wYFKqt537kq
-         8tjHZ9Vxd5+z9Bw+6ssgfVDWog+ayIbYOSn6Zbzpta7MI8H7vpcoGF9idcRl2WZfDfdQ
-         Fu0/k3Rs8MT8+Kg2YkWiYUL1iFLPyTY6gDvFUIrWTygw7GrXSnZQBmvsxSBafXA/h6Kd
-         nGyqPeozoR87P0vEp+zPKRfOpC8EFcv6jksUV4GjBmRzJ28eIQhy7q4bNKJ+pL7IM0gx
-         oPQ1tYMOYpUkoOUIyNhV1B/46BrquX8BEjSv5FCBQDcSo9/tvVCJsmkHu80FrLCkXA8Q
-         Qn8w==
-X-Gm-Message-State: ANoB5pk8oyqJPDmf2+Oz3M8HTAOb1zf931BrfVrcUyTdIlZqPL9bAnAb
-        oLtVVYkIxnI1AI3ufDuE7lo=
-X-Google-Smtp-Source: AA0mqf4/20Id36sAcbr1ok6LioIwk86ztFoCnJG/+naQ8a3UqglsWbuIoZDlozYoBZ7pTzE/h8+J2w==
-X-Received: by 2002:a05:6512:2512:b0:4ac:9008:482 with SMTP id be18-20020a056512251200b004ac90080482mr18817538lfb.402.1669739176943;
-        Tue, 29 Nov 2022 08:26:16 -0800 (PST)
-Received: from ?IPV6:2001:999:230:8bc4:e9e4:a37:1c80:5708? ([2001:999:230:8bc4:e9e4:a37:1c80:5708])
-        by smtp.gmail.com with ESMTPSA id v19-20020a056512349300b0049876c1bb24sm2246180lfr.225.2022.11.29.08.26.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 08:26:16 -0800 (PST)
-Message-ID: <e032e055-9677-f332-b4a8-93acb25b78ec@gmail.com>
-Date:   Tue, 29 Nov 2022 18:27:32 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] dmaengine: ti: k3-udma: Do conditional decrement of
- UDMA_CHAN_RT_PEER_BCNT_REG
-To:     Jayesh Choudhary <j-choudhary@ti.com>, vkoul@kernel.org
-Cc:     vaishnav.a@ti.com, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221128085005.489964-1-j-choudhary@ti.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-In-Reply-To: <20221128085005.489964-1-j-choudhary@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 29 Nov 2022 11:28:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3305A6EE
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 08:28:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 724D6B8167C
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 16:28:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A995C433C1;
+        Tue, 29 Nov 2022 16:28:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669739302;
+        bh=yj3dm+baXZXQDY3WA4EOUtzNtXKLG6b/rh4CPOPxd90=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nMknn2N4XfA7XlEr6yu/11O8TEbswJLxfQp+ckNc06BhjVN8tbtT4j5Dre++JsVRI
+         BFpl2vonqEpEqBexww5VNyzDNjcLn3dA1tmZ5ewp/PpHS7HSNQFcLtqP8b+65fli5+
+         SiGtXk5NNFK0lScmlBK16P5MzrECoQXkyoXwuzseZVNVrnMAJ7B3fb0sXntOLJAvRP
+         ltQgNwflKBLANISQSOgaHNycoydWEKl1NpRlwtqkGvaeE3L7FWcxO960kJcNkWaBOl
+         /FumYPvJ4lbhLwXB2u8ms26ZP3q7faBhNoRRdKYiJZ0bPDC7wUVQcNBd4WUzd8254i
+         bVjBWJerdfO+g==
+Date:   Wed, 30 Nov 2022 01:28:17 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>
+Subject: Re: [PATCH -tip] x86/kprobes: Drop removed INT3 handling code
+Message-Id: <20221130012817.638dea0fbf4b8abcd4a70019@kernel.org>
+In-Reply-To: <20221128154905.23aa5d07@gandalf.local.home>
+References: <166938748740.2964025.7215038423815144481.stgit@devnote3>
+        <20221128154905.23aa5d07@gandalf.local.home>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,49 +61,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 28 Nov 2022 15:49:05 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
+> On Fri, 25 Nov 2022 23:44:47 +0900
+> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+> 
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Drop removed INT3 handling code from kprobe_int3_handler() because this
+> > case (get_kprobe() doesn't return corresponding kprobe AND the INT3 is
+> > removed) must not happen with the kprobe managed INT3, but can happen
+> > with the non-kprobe INT3, which should be handled by other callbacks.
+> > 
+> > For the kprobe managed INT3, the arch_disarm_kprobe() removes the INT3
+> > and then calls text_poke_sync(). Since this text_poke_sync() uses IPI
+> > to call sync_core() on all online cpus, that ensures that all running
+> > INT3 exception handlers have done.
+> > And, the unregister_kprobe() will remove the kprobe from the hash table
+> > after arch_disarm_kprobe().
+> > 
+> > Thus, when the kprobe managed INT3 hits, kprobe_int3_handler() should
+> > be able to find corresponding kprobe always by get_kprobe(). If it can
+> > not find any kprobe, this means that is NOT a kprobe managed INT3.
+> > 
+> 
+> I believe this was fixed by:
+> 
+>   5c02ece81848d ("x86/kprobes: Fix ordering while text-patching")
+> 
+> That should be mentioned in the commit log.
 
-On 28/11/2022 10:50, Jayesh Choudhary wrote:
-> PSIL_EP_NATIVE endpoints may not have PEER registers for BCNT and thus
-> udma_decrement_byte_counters() should not try to decrement these counters.
-> This fixes the issue of crypto IPERF testing where the client side (EVM)
-> hangs without transfer of packets to the server side, seen since this
-> function was added.
-
-Right, the BCNT is available on PDMA_XY for sure, I don't know if it is 
-on AASRC/MCAN type tho, but they are not used right now.
-
-I might clarify and use ep_type == PSIL_EP_PDMA_XY to be sure that only 
-the known variant is handled, but this is fine as well.
-
-Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+Thanks for pointing! Yes, it ensures since it add text_poke_sync()
+in arch_arm/disarm_kprobe(). So this is the last part of the
+commit 5c02ece81848d.
 
 > 
-> Fixes: 7c94dcfa8fcf ("dmaengine: ti: k3-udma: Reset UDMA_CHAN_RT byte counters to prevent overflow")
-> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
-> ---
->   drivers/dma/ti/k3-udma.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
+> Anyway, looks good.
 > 
-> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-> index ce8b80bb34d7..4c62274e0b33 100644
-> --- a/drivers/dma/ti/k3-udma.c
-> +++ b/drivers/dma/ti/k3-udma.c
-> @@ -762,11 +762,12 @@ static void udma_decrement_byte_counters(struct udma_chan *uc, u32 val)
->   	if (uc->desc->dir == DMA_DEV_TO_MEM) {
->   		udma_rchanrt_write(uc, UDMA_CHAN_RT_BCNT_REG, val);
->   		udma_rchanrt_write(uc, UDMA_CHAN_RT_SBCNT_REG, val);
-> -		udma_rchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
-> +		if (uc->config.ep_type != PSIL_EP_NATIVE)
-> +			udma_rchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
->   	} else {
->   		udma_tchanrt_write(uc, UDMA_CHAN_RT_BCNT_REG, val);
->   		udma_tchanrt_write(uc, UDMA_CHAN_RT_SBCNT_REG, val);
-> -		if (!uc->bchan)
-> +		if (!uc->bchan && uc->config.ep_type != PSIL_EP_NATIVE)
->   			udma_tchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
->   	}
->   }
+> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+Thank you!
+
+> 
+> -- Steve
+> 
+> 
+> 
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > ---
+> >  arch/x86/kernel/kprobes/core.c |   14 --------------
+> >  1 file changed, 14 deletions(-)
+> > 
+> > diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+> > index 66299682b6b7..33390ed4dcf3 100644
+> > --- a/arch/x86/kernel/kprobes/core.c
+> > +++ b/arch/x86/kernel/kprobes/core.c
+> > @@ -986,20 +986,6 @@ int kprobe_int3_handler(struct pt_regs *regs)
+> >  			kprobe_post_process(p, regs, kcb);
+> >  			return 1;
+> >  		}
+> > -	}
+> > -
+> > -	if (*addr != INT3_INSN_OPCODE) {
+> > -		/*
+> > -		 * The breakpoint instruction was removed right
+> > -		 * after we hit it.  Another cpu has removed
+> > -		 * either a probepoint or a debugger breakpoint
+> > -		 * at this address.  In either case, no further
+> > -		 * handling of this interrupt is appropriate.
+> > -		 * Back up over the (now missing) int3 and run
+> > -		 * the original instruction.
+> > -		 */
+> > -		regs->ip = (unsigned long)addr;
+> > -		return 1;
+> >  	} /* else: not a kprobe fault; let the kernel handle it */
+> >  
+> >  	return 0;
+> 
+
 
 -- 
-Péter
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
