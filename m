@@ -2,82 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C748963B9A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 07:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D55463B9A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 07:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235657AbiK2GAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 01:00:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
+        id S235384AbiK2GGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 01:06:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235310AbiK2GA3 (ORCPT
+        with ESMTP id S235310AbiK2GGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 01:00:29 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1C452175;
-        Mon, 28 Nov 2022 22:00:28 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id bj12so31165531ejb.13;
-        Mon, 28 Nov 2022 22:00:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2pLzq/SzjaM0KPWKXQrCExQaHgJlHt7QEU3lr44aL8w=;
-        b=XYkTC/btf3zjxM2HhgCFpLp1a7ejW0BkcZgv5Wz0DrghPJRGuVHzVbdferWAQK+vwf
-         JqEzcRTX7SZjFu0XPKlkeC/ZMwA9gOqeMZyhTrsJE/8QskM5ql2usS6FZHej5Fn/Yw1G
-         wmA8CmLWaVvaN47Ho7YIdbCQjiMP9QOgpDJRianeC/37oJztFYEUCCWuuZBWIWlSk4D7
-         Dq12BSxoycLRuyC4BYxSswffD7ZgwCmJNcJReq0eWVHZafY/WaZy1hFpxjtkJMU+XXLe
-         hXkCjxgFj1nRRzJvw4pMfZAvcTlKL5MVPkJQ/BX222oFhjh6+blnZsngJ5Qm2xdusJFQ
-         NLwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2pLzq/SzjaM0KPWKXQrCExQaHgJlHt7QEU3lr44aL8w=;
-        b=J09DnPZtpAkikvghpoufjPwYTzk+zZyfEg9TIc2eOzG3VCtc8SwvyBv4RQgvWCZCHE
-         uE1Ho64Wl0nsRqNozVW130RXnOKMNhAzx2to95J8ex8/Q5XEUpiiUZZXCc/mnLZQTcMr
-         bftlz4/VmEDbIwJJRUbJMi8AKAAd3RCvQUutyk7C+sF+1CN4+TgAjd16KZNPI4Q1XzLn
-         l6I2O2p40NKJ7QfExZ2z6S3becVAeseIUwVhKn4lQAfbn30UkYH6Blfp3PYdRFdSdPm5
-         mCD/lwuSdekEIRRkJjlrkUdwkp07/MQEKf/e8zcR8QR40Ge0MTVAlXn1APPMfHd2DGAN
-         Er8g==
-X-Gm-Message-State: ANoB5pmj487c/VuTp4IpCnHr29pir/l4A+mq4QZG2beLSBxXUX6tLOT3
-        1vFSl90ihm14fXInTVa5Qv3/XaQHW7pZXQFkWT0=
-X-Google-Smtp-Source: AA0mqf4j78MxPWCZzHJealetXBtA+Lv7p4mAJ595hxXlWf1ZVQm1ckrdnZtzZ1hNDbX6B4QJa3hYoEea9Wwtd0ykKFs=
-X-Received: by 2002:a17:906:30c1:b0:7b7:eaa9:c1cb with SMTP id
- b1-20020a17090630c100b007b7eaa9c1cbmr32037639ejb.745.1669701626413; Mon, 28
- Nov 2022 22:00:26 -0800 (PST)
+        Tue, 29 Nov 2022 01:06:16 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64FAD4FF89;
+        Mon, 28 Nov 2022 22:06:15 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F6D6D6E;
+        Mon, 28 Nov 2022 22:06:21 -0800 (PST)
+Received: from [10.162.41.67] (unknown [10.162.41.67])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 82F323F67D;
+        Mon, 28 Nov 2022 22:06:10 -0800 (PST)
+Message-ID: <06666fe7-d17c-24c9-98b7-65f5642dfb2b@arm.com>
+Date:   Tue, 29 Nov 2022 11:36:07 +0530
 MIME-Version: 1.0
-References: <20221126111147.199366-1-changbin.du@gmail.com> <20221126111147.199366-3-changbin.du@gmail.com>
-In-Reply-To: <20221126111147.199366-3-changbin.du@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 28 Nov 2022 22:00:14 -0800
-Message-ID: <CAEf4BzZ6Ks0T=72vtGNc0TyPxHMO6PEFQb8TEYj7XmtqWjfDwQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] makefiles: do not generate empty vmlinux.h
-To:     Changbin Du <changbin.du@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH V5 2/7] arm64/perf: Update struct arm_pmu for BRBE
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, will@kernel.org, catalin.marinas@arm.com,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+References: <20221107062514.2851047-1-anshuman.khandual@arm.com>
+ <20221107062514.2851047-3-anshuman.khandual@arm.com>
+ <8f6d3424-2650-8e8b-61f7-1431aec4633b@arm.com>
+ <4efc0ae1-564e-dd05-842a-46fb1aeb4ad8@arm.com>
+ <Y3fFGQN55+LM5s5u@FVFF77S0Q05N.cambridge.arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <Y3fFGQN55+LM5s5u@FVFF77S0Q05N.cambridge.arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,90 +55,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 26, 2022 at 3:13 AM Changbin Du <changbin.du@gmail.com> wrote:
->
-> Remove the empty vmlinux.h if bpftool failed to dump btf info.
-> The emptry vmlinux.h can hide real error when reading output
-> of make.
 
-wouldn't this be better handled by adding .DELETE_ON_ERROR: to
-bpftool's Makefile?
 
->
-> Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> ---
->  samples/bpf/Makefile                 | 2 +-
->  tools/bpf/bpftool/Makefile           | 2 +-
->  tools/bpf/runqslower/Makefile        | 2 +-
->  tools/perf/Makefile.perf             | 2 +-
->  tools/testing/selftests/bpf/Makefile | 2 +-
->  5 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-> index 727da3c5879b..ab4788b4883e 100644
-> --- a/samples/bpf/Makefile
-> +++ b/samples/bpf/Makefile
-> @@ -362,7 +362,7 @@ ifeq ($(VMLINUX_BTF),)
->         $(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)",\
->                 build the kernel or set VMLINUX_BTF or VMLINUX_H variable)
->  endif
-> -       $(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
-> +       $(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@ || { rm $@; exit 1; }
->  else
->         $(Q)cp "$(VMLINUX_H)" $@
->  endif
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index 4a95c017ad4c..d9d6f890884c 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
-> @@ -177,7 +177,7 @@ BUILD_BPF_SKELS := 1
->
->  $(OUTPUT)vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL_BOOTSTRAP)
->  ifeq ($(VMLINUX_H),)
-> -       $(QUIET_GEN)$(BPFTOOL_BOOTSTRAP) btf dump file $< format c > $@
-> +       $(QUIET_GEN)$(BPFTOOL_BOOTSTRAP) btf dump file $< format c > $@ || { rm $@; exit 1; }
->  else
->         $(Q)cp "$(VMLINUX_H)" $@
->  endif
-> diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
-> index 8b3d87b82b7a..2d7911f4666b 100644
-> --- a/tools/bpf/runqslower/Makefile
-> +++ b/tools/bpf/runqslower/Makefile
-> @@ -77,7 +77,7 @@ ifeq ($(VMLINUX_H),)
->                         "specify its location." >&2;                           \
->                 exit 1;\
->         fi
-> -       $(QUIET_GEN)$(BPFTOOL) btf dump file $(VMLINUX_BTF_PATH) format c > $@
-> +       $(QUIET_GEN)$(BPFTOOL) btf dump file $(VMLINUX_BTF_PATH) format c > $@ || { rm $@; exit 1; }
->  else
->         $(Q)cp "$(VMLINUX_H)" $@
->  endif
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index a432e59afc42..0546d408aa4e 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -1064,7 +1064,7 @@ VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
->
->  $(SKEL_OUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
->  ifeq ($(VMLINUX_H),)
-> -       $(QUIET_GEN)$(BPFTOOL) btf dump file $< format c > $@
-> +       $(QUIET_GEN)$(BPFTOOL) btf dump file $< format c > $@ || { rm $@; exit 1; }
->  else
->         $(Q)cp "$(VMLINUX_H)" $@
->  endif
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index e6cf21fad69f..9aa2475b4ac6 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -284,7 +284,7 @@ endif
->  $(INCLUDE_DIR)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL) | $(INCLUDE_DIR)
->  ifeq ($(VMLINUX_H),)
->         $(call msg,GEN,,$@)
-> -       $(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
-> +       $(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@ || { rm $@; exit 1; }
->  else
->         $(call msg,CP,,$@)
->         $(Q)cp "$(VMLINUX_H)" $@
-> --
-> 2.37.2
->
+On 11/18/22 23:17, Mark Rutland wrote:
+> 
+> Hi Anshuman,
+> 
+> Apologies for the delayi n reviewing this.
+> 
+> On Fri, Nov 18, 2022 at 12:09:07PM +0530, Anshuman Khandual wrote:
+>> On 11/9/22 17:00, Suzuki K Poulose wrote:
+>>> On 07/11/2022 06:25, Anshuman Khandual wrote:
+>>>> Although BRBE is an armv8 speciifc HW feature, abstracting out its various
+>>>> function callbacks at the struct arm_pmu level is preferred, as it cleaner
+>>>> , easier to follow and maintain.
+>>>>
+>>>> Besides some helpers i.e brbe_supported(), brbe_probe() and brbe_reset()
+>>>> might not fit seamlessly, when tried to be embedded via existing arm_pmu
+>>>> helpers in the armv8 implementation.
+>>>>
+>>>> Updates the struct arm_pmu to include all required helpers that will drive
+>>>> BRBE functionality for a given PMU implementation. These are the following.
+>>>>
+>>>> - brbe_filter    : Convert perf event filters into BRBE HW filters
+>>>> - brbe_probe    : Probe BRBE HW and capture its attributes
+>>>> - brbe_enable    : Enable BRBE HW with a given config
+>>>> - brbe_disable    : Disable BRBE HW
+>>>> - brbe_read    : Read BRBE buffer for captured branch records
+>>>> - brbe_reset    : Reset BRBE buffer
+>>>> - brbe_supported: Whether BRBE is supported or not
+>>>>
+>>>> A BRBE driver implementation needs to provide these functionalities.
+>>>
+>>> Could these not be hidden from the generic arm_pmu and kept in the
+>>> arm64 pmu backend  ? It looks like they are quite easy to simply
+>>> move these to the corresponding hooks in arm64 pmu.
+>>
+>> We have had this discussion multiple times in the past [1], but I still
+>> believe, keeping BRBE implementation hooks at the PMU level rather than
+>> embedding them with other PMU events handling, is a much better logical
+>> abstraction.
+>>
+>> [1] https://lore.kernel.org/all/c3804290-bdb1-d1eb-3526-9b0ce4c8e8b1@arm.com/
+>>
+>> --------------------------------------------------------------------------
+>>>
+>>> One thing to answer in the commit msg is why we need the hooks here.  
+>>> Have we concluded that adding BRBE hooks to struct arm_pmu for what is 
+>>> an armv8 specific feature is the right approach? I don't recall 
+>>> reaching that conclusion.
+>>
+>> Although it might be possible to have this implementation embedded in
+>> the existing armv8 PMU implementation, I still believe that the BRBE
+>> functionalities abstracted out at the arm_pmu level with a separate
+>> config option is cleaner, easier to follow and to maintain as well.
+>>
+>> Besides some helpers i.e brbe_supported(), brbe_probe() and brbe_reset()
+>> might not fit seamlessly, when tried to be embedded via existing arm_pmu
+>> helpers in the armv8 implementation.
+>>
+>> Nonetheless if arm_pmu based additional BRBE helpers is absolutely a no
+>> go for folks here in general, will explore arm64 based implementation.
+>> ----------------------------------------------------------------------------
+>>
+>> I am still waiting for maintainer's take on this issue. I will be happy to
+>> rework this series to move all these implementation inside arm64 callbacks
+>> instead, if that is required or preferred by the maintainers. But according
+>> to me, this current abstraction layout is much better.
+> 
+> To be honest, I'm not sure what's best right now; but at the moment it's not
+> clear to me why this couldn't fit within the existing hooks.
+> 
+> Above you say brbe_supported() / brbe_probe() / brbe_reset() didn't fit
+> seamlessly; can you give an example of problem? I think I'm missing something
+> obvious.
+
+I tried to move them inside armv8 implementation callbacks.
+
+arm64_pmu_brbe_supported() can be moved inside __armv8_pmuv3_map_event(), so that
+event viability can be validated during armpmu_event_init(). arm64_pmu_brbe_probe()
+can be moved inside __armv8pmu_probe_pmu() as you have suggested earlier on another
+thread. arm64_pmu_brbe_reset() can also be moved inside armv8pmu_enable_event(),
+and also armv8pmu_reset().
+
+The only problem being armpmu_sched_task() where earlier we had BRBE reset, but I
+guess it can be replaced with entire PMU reset which does the BRBE reset as well ?
+
+static void armpmu_sched_task(struct perf_event_context *ctx, bool sched_in)
+{
+        struct arm_pmu *armpmu = to_arm_pmu(ctx->pmu);
+
+        if (sched_in)
+                armpmu->reset(armpmu);
+}
