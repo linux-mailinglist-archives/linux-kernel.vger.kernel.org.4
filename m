@@ -2,129 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF50563C23F
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:17:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7312B63C242
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235629AbiK2ORi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 09:17:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
+        id S235499AbiK2OSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 09:18:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235791AbiK2ORK (ORCPT
+        with ESMTP id S234009AbiK2ORX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 09:17:10 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7938B64A08;
-        Tue, 29 Nov 2022 06:15:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=CFajEF7LzhmFbTWhHrHm09iOIRTmdCIIsnx1w9YoJK0=; b=DiwJ8SWIYWJXgEPMjXLwb+FiqU
-        bza4a7KMWRIK/uG3vEa3hy+zhrqbCrjwfRCy8kI19QlWQbCsoHTU9ATJiKAsgex/n9BFCVNVxLqpq
-        qJ1YxKT/xupmhmJz1ehcbm0hjKhhnl949LoxWrzsMIdhoa8v0qrcSgoVI1x4VF1ASico=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1p01O3-003sSi-NE; Tue, 29 Nov 2022 15:15:03 +0100
-Date:   Tue, 29 Nov 2022 15:15:03 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Jacob Keller <jacob.e.keller@intel.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v1 00/26] net: dsa: microchip: stats64, fdb, error
-Message-ID: <Y4YT5wfckSO1sfRw@lunn.ch>
-References: <20221128115958.4049431-1-o.rempel@pengutronix.de>
- <7f0a7acc-4b6b-8e33-7098-e5dfcb67945f@intel.com>
- <20221129053539.GA25526@pengutronix.de>
+        Tue, 29 Nov 2022 09:17:23 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FE268C66
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:15:30 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id d3so17348595ljl.1
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:15:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hsnckQ+8SFGbO04BpVRnsDtmRSn9Ni4f0qnwe8AiADo=;
+        b=IGhPJ8dX6nb5Z8HsOUNYC5YL8iJKkyqLeGkbHiGxaeoIHpgJyOLHncztlilCAIPeAU
+         aUSrVaGX+5Da0paALXjUFDOBHUJx3ahG+RqzfmLtLWGK3FHqQPg7dlU5vFF+FdTFk52s
+         4B8K0gNzWKLkPxoYmBoONHxuMJi/hx/TompcM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hsnckQ+8SFGbO04BpVRnsDtmRSn9Ni4f0qnwe8AiADo=;
+        b=SNffVxVHHsSPoV4drC0d9DdBmEceflKc0R85ypnc3bqNzDm5xlAqR21BEjh/46N3gc
+         1kV1N135ay/CkNsbRrD1TegAZ9Ih+/nl6nL+oDjND5DQOjIeFOQj6ANg11XtaGrld+tE
+         MpA8nCEUFfxYyqKo/BM8jokRP8ujU6T14S0QfBP57a41s84QjPCXjE2iKwUk7C/EPScH
+         vOKYTouvHFnpEh7ZC4zk1opTg28tHal7ja1qiJuO7XFyuJoy1qJ71AYq3Jj3YAlDwkh6
+         zOdZgnDfOaAgzSc1kZPLkMCKFTE0d0NK8tHP79uh9JzzK40tTbjub+VfTz9/xb4uUA9F
+         qPug==
+X-Gm-Message-State: ANoB5pmDExTrWGo8OeIlYM88uLf1P5JMKTPQeXz/U53/k2UuWNlvDM/t
+        iUJM3Xf+QW64k8vTBJxmivOwaQ==
+X-Google-Smtp-Source: AA0mqf5wUuCLPqi/+uagh8q9RS0D0xLgknDToqVyGJ4p1/SsKlDQOmUWONg6qrKmZ46fs/ER7PD0pg==
+X-Received: by 2002:ac2:558c:0:b0:4a2:4b78:a8e8 with SMTP id v12-20020ac2558c000000b004a24b78a8e8mr15251964lfg.292.1669731315968;
+        Tue, 29 Nov 2022 06:15:15 -0800 (PST)
+Received: from [172.21.3.193] ([87.54.42.112])
+        by smtp.gmail.com with ESMTPSA id v3-20020a2e9243000000b002770eafaafbsm1549640ljg.99.2022.11.29.06.15.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 06:15:15 -0800 (PST)
+Message-ID: <a258befe-8016-4244-346a-12b83012e89d@rasmusvillemoes.dk>
+Date:   Tue, 29 Nov 2022 15:15:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221129053539.GA25526@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 4/5] rtc: isl12022: Join string literals back
+Content-Language: en-US, da
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20221126141806.62205-1-andriy.shevchenko@linux.intel.com>
+ <20221126141806.62205-4-andriy.shevchenko@linux.intel.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20221126141806.62205-4-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 06:35:39AM +0100, Oleksij Rempel wrote:
-> On Mon, Nov 28, 2022 at 03:09:19PM -0800, Jacob Keller wrote:
-> > 
-> > 
-> > On 11/28/2022 3:59 AM, Oleksij Rempel wrote:
-> > > This patch series is a result of maintaining work on ksz8 part of
-> > > microchip driver. It includes stats64 and fdb support. Error handling.
-> > > Loopback fix and so on...
-> > > 
-> > > Oleksij Rempel (26):
-> > >    net: dsa: microchip: add stats64 support for ksz8 series of switches
-> > >    net: dsa: microchip: ksz8: ksz8_fdb_dump: fix port validation and VID
-> > >      information
-> > >    net: dsa: microchip: ksz8: ksz8_fdb_dump: fix not complete fdb
-> > >      extraction
-> > >    net: dsa: microchip: ksz8: ksz8_fdb_dump: fix time stamp extraction
-> > >    net: dsa: microchip: ksz8: ksz8_fdb_dump: do not extract ghost entry
-> > >      from empty table
-> > >    net: dsa: microchip: ksz8863_smi: fix bulk access
-> > >    net: dsa: microchip: ksz8_r_dyn_mac_table(): remove timestamp support
-> > >    net: dsa: microchip: make ksz8_r_dyn_mac_table() static
-> > >    net: dsa: microchip: ksz8_r_dyn_mac_table(): remove fid support
-> > >    net: dsa: microchip: ksz8: refactor ksz8_fdb_dump()
-> > >    net: dsa: microchip: ksz8: ksz8_fdb_dump: dump static MAC table
-> > >    net: dsa: microchip: ksz8: move static mac table operations to a
-> > >      separate functions
-> > >    net: dsa: microchip: ksz8: add fdb_add/del support
-> > >    net: dsa: microchip: KSZ88x3 fix loopback support
-> > >    net: dsa: microchip: ksz8_r_dyn_mac_table(): move main part of the
-> > >      code out of if statement
-> > >    net: dsa: microchip: ksz8_r_dyn_mac_table(): use ret instead of rc
-> > >    net: dsa: microchip: ksz8_r_dyn_mac_table(): ksz: do not return EAGAIN
-> > >      on timeout
-> > >    net: dsa: microchip: ksz8_r_dyn_mac_table(): return read/write error
-> > >      if we got any
-> > >    net: dsa: microchip: ksz8_r_dyn_mac_table(): use entries variable to
-> > >      signal 0 entries
-> > >    net: dsa: microchip: make ksz8_r_sta_mac_table() static
-> > >    net: dsa: microchip: ksz8_r_sta_mac_table(): do not use error code for
-> > >      empty entries
-> > >    net: dsa: microchip: ksz8_r_sta_mac_table(): make use of error values
-> > >      provided by read/write functions
-> > >    net: dsa: microchip: make ksz8_w_sta_mac_table() static
-> > >    net: dsa: microchip: ksz8_w_sta_mac_table(): make use of error values
-> > >      provided by read/write functions
-> > >    net: dsa: microchip: remove ksz_port:on variable
-> > >    net: dsa: microchip: ksz8: do not force flow control by default
-> > > 
-> > 
-> > 
-> > My understanding is that we typically limit series to 15 patches. Do you
-> > have some justification for why this goes over 15 and can't reasonably be
-> > split into two series?
-> > 
-> > At a glance it seems like a bunch of smaller cleanups.
+On 26/11/2022 15.18, Andy Shevchenko wrote:
+> For easy grepping on debug purposes join string literals back in
+> the messages.
 > 
-> The previous patch set got request to do more clean ups:
-> https://lore.kernel.org/all/20221124101458.3353902-1-o.rempel@pengutronix.de/
-> 
-> I need to show, there are already more patches in the queue.
+> While at it, drop __func__ parameter from unique enough dev_dbg()
+> message as Dynamic Debug can retrieve this at run time.
 
-There is some psychology involved here. I see 26 patches and decide i
-need to allocate 30 minutes to this sometime, and put the review off
-until later, without even looking at them. If i get 5 patches, i
-probably just do it, knowing i will be finished pretty quickly. My
-guess is, 5 patches a day for 5 days will be merged faster than 26
-patches in one go.
+Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
-     Andrew
