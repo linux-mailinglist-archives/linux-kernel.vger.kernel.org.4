@@ -2,353 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE52E63BE3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 11:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1720563BE3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 11:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232105AbiK2Kr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 05:47:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
+        id S232146AbiK2Ktb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 05:49:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiK2Kr0 (ORCPT
+        with ESMTP id S231354AbiK2KtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 05:47:26 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3D628E3C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 02:47:24 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATAMhQk001998;
-        Tue, 29 Nov 2022 04:47:07 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=CMHRDKTEunINPo71b13+tNusCsC0jxBYJhiaETYoUJo=;
- b=DuY8md47tso5kvSNNyb91PSw1WdCQ+bZOCOmrXxy3EzEQoqS9uwVnUemIsMo8THdZgWq
- hLX5B7r/u6sO9lSwZM7wtvA7IZJMai8Bag8kR0tFd65jfYo8UL0Z60nxkgSdOHwP6Va1
- i0X1jznhz/gWaYIaEtYvKLtR4ylii6YrAEN3c7SgzWj0bNs6odNQDPz8nemxEwK8r7WY
- U4nK8h1+bJV5ZF6082ZRPBEbTW4QZIlMUJ9BjE5XZftWkeh3S0SSYx2RQxKMcTREnPYX
- koohuD64X1GZ5Kofyh4waCGC2N3Ea6Hix/95WpnzR6Q3d9vKJJH/yN6ZW03gIkGRU4ws ng== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3m5g9200yt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Nov 2022 04:47:06 -0600
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Tue, 29 Nov
- 2022 04:47:05 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.20 via Frontend Transport; Tue, 29 Nov 2022 04:47:05 -0600
-Received: from [198.90.251.111] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.111])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id E2483B10;
-        Tue, 29 Nov 2022 10:47:04 +0000 (UTC)
-Message-ID: <ea8c3ce8-b625-d70a-07f9-4470aec2cb17@opensource.cirrus.com>
-Date:   Tue, 29 Nov 2022 10:47:04 +0000
+        Tue, 29 Nov 2022 05:49:16 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5833F2AC6D;
+        Tue, 29 Nov 2022 02:49:15 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id s8so21850465lfc.8;
+        Tue, 29 Nov 2022 02:49:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5j3+iUuyMtRi4wQ9/V6gCvkYe/j/BJZzTlBQitRgNPk=;
+        b=iq+gayHBILRtlHdTmW5Wg+dwe80TR83Mqwlg/gHUYomZG1pW3lTQme32mbbfqUs2/V
+         Q5tTKBmst8PbGNLi+tQpZA4opTj8NIB5vH67lbIdq0lyzvf49Ie1tufS0fOnyrxpUmDv
+         J5BR705i2i758K6RvMO9n31SgzgQN+GREwM8MD8Q1BzArJR091eo7Fp+JxRpSIsMRgJJ
+         uXxvLWZImWNpPof7U2JEh8vtjV0yV9mTcoLwxCqxSp0jUOr/VkoybPKtcSh3CXoTjCel
+         fU22Gu4OcM9TcDRmDHhauEBENZfVo5lIYaA8pY6UAVIgFcXJhW0vyLY2Rzw0XFhDBSNP
+         3FwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5j3+iUuyMtRi4wQ9/V6gCvkYe/j/BJZzTlBQitRgNPk=;
+        b=SKeNWQmVDMEoH6Zm7NOwUfHA9f5RPnnBjtrgWhYpkUoDMNMoW39yujadgiHy9WFOAi
+         0/P8Cuh3kekY4TNmkF/xouTg7ASiP44wOWAIz/lBksfFJFEtBSxwSgRQqpQyV19zqTGU
+         t5Ffh7dNPIwV7nVjW61Q9aZsjMdBMdGDc22jINGmLonbFXevrJntXOqN8j7iG3iYSgHU
+         cyGnkV5xL7a/qObW+Njm0DOM0OoCbOuYBuvi1LO5ldxHlqhqiYI73hDWek3/ZKdYPnWz
+         UstCCt13DFNJ8u1sG9+4BReO8MZeqkgCzOVwMrJ3+JrKmSyAqDTJ+Rybp269RpncovwE
+         qyIw==
+X-Gm-Message-State: ANoB5pmALm/MleQ52QVow/bC3udc8uk5EuhWnUKnWjrLH+7PI4QQJQYb
+        71R19z18HpdtOSgP4p0KJW4=
+X-Google-Smtp-Source: AA0mqf54s5SX/22leNnVyt0ysKpjY7T98d4Y5NGp3vJqE4X1I3ztAfykmXoPESz6jH9Q8gfTb/gVRw==
+X-Received: by 2002:a19:4f02:0:b0:4a2:1d18:45d8 with SMTP id d2-20020a194f02000000b004a21d1845d8mr18378313lfb.330.1669718953496;
+        Tue, 29 Nov 2022 02:49:13 -0800 (PST)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id c3-20020a056512074300b004aa0870b5e5sm2152106lfs.147.2022.11.29.02.49.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 02:49:13 -0800 (PST)
+Date:   Tue, 29 Nov 2022 12:48:59 +0200
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Hsia-Jun Li <randy.li@synaptics.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        hverkuil@xs4all.nl, tfiga@chromium.org, nicolas@ndufresne.ca,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
+        linux-kernel@vger.kernel.org, ayaka@soulik.info
+Subject: Re: [RFC] drm/fourcc: Add a modifier for contiguous memory
+Message-ID: <20221129124859.6aa3ff00@eldfell>
+In-Reply-To: <20221129101030.57499-1-randy.li@synaptics.com>
+References: <20221129101030.57499-1-randy.li@synaptics.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] soundwire: bus_type: Avoid lockdep assert in
- sdw_drv_probe()
-Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
-        <sanyog.r.kale@intel.com>
-CC:     <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221121162453.1834170-1-rf@opensource.cirrus.com>
- <2d207a51-d415-726b-3bc1-8788df2f06fd@linux.intel.com>
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <2d207a51-d415-726b-3bc1-8788df2f06fd@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 4sidqpR4KEjP7fvhBtiiqglQJoYDPJVH
-X-Proofpoint-ORIG-GUID: 4sidqpR4KEjP7fvhBtiiqglQJoYDPJVH
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/CjiU_jGWnjlPQD5JQ_UkV.O";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/11/2022 17:18, Pierre-Louis Bossart wrote:
-> 
-> 
-> On 11/21/22 10:24, Richard Fitzgerald wrote:
->> Don't hold sdw_dev_lock while calling the peripheral driver
->> probe() and remove() callbacks.
->>
->> Holding sdw_dev_lock around the probe() and remove() calls
->> causes a theoretical mutex inversion which lockdep will
->> assert on. The peripheral driver probe will probably register
->> a soundcard, which will take ALSA and ASoC locks. During
-> 
-> It's extremely unlikely that a peripheral driver would register a sound
-> card, this is what machine drivers do.
-> 
-> Which leads me to the question: is this a real problem?
-> 
+--Sig_/CjiU_jGWnjlPQD5JQ_UkV.O
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes, try turning on lockdep checking and you will get an assert.
-During probe the existing code takes sdw_dev_lock and then calls the
-codec driver probe, so you will get a mutex sequence like:
+On Tue, 29 Nov 2022 18:10:30 +0800
+Hsia-Jun Li <randy.li@synaptics.com> wrote:
 
-sdw_dev_lock -> controls_rw_sem -> pcm_mutex
+> From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
+>=20
+> Hello All
+>=20
+> Currently, we assume all the pixel formats are multiple planes,
 
-but in normal operation the ALSA/ASoC code will take its mutexes first
-and call runtime_resume which then takes the sdw_dev_lock, so you get
+Hi,
 
-pcm_mutex -> sdw_dev_lock
+that's not true for any definition of "multiple planes" that I know of.
 
-and lockdep will assert on that opposite ordering.
-The full assert is at the end of this email.
+For example, DRM_FORMAT_XRGB8888 is a single-plane format by definition.
 
-> Or did you mean 'register components', and if yes what would the problem
-> with lockdep be?
-> 
+=46rom below it sounds like you mean "physically non-contiguous". But no,
+pixel formats make no such assumption at all. Contiguous or not is
+independent of pixel formats.
 
-Argh. Yes, I meant snd_soc_register_component(). I'll re-send this with
-the comment fixed.
+> devices
+> could support each component has its own memory plane.
+> But that may not apply for any device in the world. We could have a
+> device without IOMMU then this is not impossible.
+>=20
+> Besides, when we export an handle through the PRIME, the upstream
+> device(likes a capture card or camera) may not support non-contiguous
+> memory. It would be better to allocate the handle in contiguous memory
+> at the first time.
+>=20
+> We may think the memory allocation is done in user space, we could do
+> the trick there. But the dumb_create() sometimes is not the right API
+> for that.
+>=20
+> "Note that userspace is not allowed to use such objects for render
+> acceleration - drivers must create their own private ioctls for such a
+> use case."
+> "Note that dumb objects may not be used for gpu acceleration, as has
+> been attempted on some ARM embedded platforms. Such drivers really must
+> have a hardware-specific ioctl to allocate suitable buffer objects."
+>=20
+> We need to relay on those device custom APIs then. It would be helpful
+> for their library to calculate the right size for contiguous memory. It
+> would be useful for the driver supports rendering dumb buffer as well.
+>=20
+> Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
+> ---
+>  include/uapi/drm/drm_fourcc.h | 5 +++++
+>  1 file changed, 5 insertions(+)
+>=20
+> diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
+> index bc056f2d537d..ec039ced8257 100644
+> --- a/include/uapi/drm/drm_fourcc.h
+> +++ b/include/uapi/drm/drm_fourcc.h
+> @@ -473,6 +473,11 @@ extern "C" {
+>   */
+>  #define DRM_FORMAT_MOD_LINEAR	fourcc_mod_code(NONE, 0)
+> =20
+> +/*
+> + * Contiguous memory
+> + */
+> +#define DRM_FORMAT_MOD_CONTIG_MEM	fourcc_mod_code(NONE, 1)
 
->> normal operation a runtime resume suspend can be triggered
->> while these locks are held and will then take sdw_dev_lock.
->>
->> It's not necessary to hold sdw_dev_lock when calling the
->> probe() and remove(), it is only used to prevent the bus core
->> calling the driver callbacks if there isn't a driver or the
->> driver is removing.
-> 
-> 
->> If sdw_dev_lock is held while setting and clearing the
->> 'probed' flag this is sufficient to guarantee the safety of
->> callback functions.
-> 
-> not really, the 'probed' flag was kept for convenience. what this lock
-> really protects is the dereferencing of ops after the driver .remove
-> happens.
-> 
+NAK. This is not what modifiers are for.
 
-Yes, I thought about removing it but that's a larger code change that's
-not necessary for the fix. The point is that we don't need to hold the
-mutex around the remove call, only around clearing 'probed' (or, if
-probed was removed, NULLing the callback pointers)
+This also would not work in practise, because if this was a modifier,
+you would not be able to use the actual modifiers.
 
->> The potential race of a bus event happening while probe() is
->> executing is the same as the existing race of the bus event
->> handler taking the mutex first and processing the event
->> before probe() can run. In both cases the event has already
->> happened before the driver is probed and ready to accept
->> callbacks.
-> 
-> Sorry, I wasn't able to parse the first sentence in this paragraph. what
-> 'existing race' are you referring to?
-> 
 
-I will re-write that. The point was that without the lock the probe()
-can run in parallel with a status update. But that is already a race
-with the existing code because the status update could take the
-sdw_dev_lock first. So I think that this change isn't introducing any
-new races.
+Thanks,
+pq
 
-The lockdep assert looks like this:
-[   46.098514] ======================================================
-[   46.104736] WARNING: possible circular locking dependency detected
-[   46.110961] 6.1.0-rc4-jamerson #1 Tainted: G            E
-[   46.116842] ------------------------------------------------------
-[   46.123063] mpg123/1130 is trying to acquire lock:
-[   46.127883] ffff8b445031fb80 (&slave->sdw_dev_lock){+.+.}-{3:3}, at: 
-sdw_update_slave_status+0x26/0x70
-[   46.137225]
-                but task is already holding lock:
-[   46.143074] ffffffffc1455310 (&card->pcm_mutex){+.+.}-{3:3}, at: 
-dpcm_fe_dai_open+0x49/0x830
-[   46.151536]
-                which lock already depends on the new lock.[   46.159732]
-                the existing dependency chain (in reverse order) is:
-[   46.167231]
-                -> #4 (&card->pcm_mutex){+.+.}-{3:3}:
-[   46.173428]        __mutex_lock+0x94/0x920
-[   46.177542]        snd_soc_dpcm_runtime_update+0x2e/0x100
-[   46.182958]        snd_soc_dapm_put_enum_double+0x1c2/0x200
-[   46.188548]        snd_ctl_elem_write+0x10c/0x1d0
-[   46.193268]        snd_ctl_ioctl+0x126/0x850
-[   46.197556]        __x64_sys_ioctl+0x87/0xc0
-[   46.201845]        do_syscall_64+0x38/0x90
-[   46.205959]        entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[   46.211553]
-                -> #3 (&card->controls_rwsem){++++}-{3:3}:
-[   46.218188]        down_write+0x2b/0xd0
-[   46.222038]        snd_ctl_add_replace+0x39/0xb0
-[   46.226672]        snd_soc_add_controls+0x53/0x80
-[   46.231393]        soc_probe_component+0x1e4/0x2a0
-[   46.236202]        snd_soc_bind_card+0x51a/0xc80
-[   46.240836]        devm_snd_soc_register_card+0x43/0x90
-[   46.246079]        mc_probe+0x982/0xfe0 [snd_soc_sof_sdw]
-[   46.251500]        platform_probe+0x3c/0xa0
-[   46.255700]        really_probe+0xde/0x390
-[   46.259814]        __driver_probe_device+0x78/0x180
-[   46.264710]        driver_probe_device+0x1e/0x90
-[   46.269347]        __driver_attach+0x9f/0x1f0
-[   46.273721]        bus_for_each_dev+0x78/0xc0
-[   46.278098]        bus_add_driver+0x1ac/0x200
-[   46.282473]        driver_register+0x8f/0xf0
-[   46.286759]        do_one_initcall+0x58/0x310
-[   46.291136]        do_init_module+0x4c/0x1f0
-[   46.295422]        __do_sys_finit_module+0xb4/0x130
-[   46.300321]        do_syscall_64+0x38/0x90
-[   46.304434]        entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[   46.310027]
-                -> #2 (&card->mutex){+.+.}-{3:3}:
-[   46.315883]        __mutex_lock+0x94/0x920
-[   46.320000]        snd_soc_bind_card+0x3e/0xc80
-[   46.324551]        devm_snd_soc_register_card+0x43/0x90
-[   46.329798]        mc_probe+0x982/0xfe0 [snd_soc_sof_sdw]
-[   46.335219]        platform_probe+0x3c/0xa0
-[   46.339420]        really_probe+0xde/0x390
-[   46.343532]        __driver_probe_device+0x78/0x180
-[   46.348430]        driver_probe_device+0x1e/0x90
-[   46.353065]        __driver_attach+0x9f/0x1f0
-[   46.357437]        bus_for_each_dev+0x78/0xc0
-[   46.361812]        bus_add_driver+0x1ac/0x200
-[   46.366716]        driver_register+0x8f/0xf0
-[   46.371528]        do_one_initcall+0x58/0x310
-[   46.376424]        do_init_module+0x4c/0x1f0
-[   46.381239]        __do_sys_finit_module+0xb4/0x130
-[   46.386665]        do_syscall_64+0x38/0x90
-[   46.391299]        entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[   46.397416]
-                -> #1 (client_mutex){+.+.}-{3:3}:
-[   46.404307]        __mutex_lock+0x94/0x920
-[   46.408941]        snd_soc_add_component+0x24/0x2c0
-[   46.414345]        devm_snd_soc_register_component+0x54/0xa0
-[   46.420522]        cs35l56_common_probe+0x280/0x370 [snd_soc_cs35l56]
-[   46.427487]        cs35l56_sdw_probe+0xf4/0x170 [snd_soc_cs35l56_sdw]
-[   46.434442]        sdw_drv_probe+0x80/0x1a0
-[   46.439136]        really_probe+0xde/0x390
-[   46.443738]        __driver_probe_device+0x78/0x180
-[   46.449120]        driver_probe_device+0x1e/0x90
-[   46.454247]        __driver_attach+0x9f/0x1f0
-[   46.459106]        bus_for_each_dev+0x78/0xc0
-[   46.463971]        bus_add_driver+0x1ac/0x200
-[   46.468825]        driver_register+0x8f/0xf0
-[   46.473592]        do_one_initcall+0x58/0x310
-[   46.478441]        do_init_module+0x4c/0x1f0
-[   46.483202]        __do_sys_finit_module+0xb4/0x130
-[   46.488572]        do_syscall_64+0x38/0x90
-[   46.493158]        entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[   46.499229]
-                -> #0 (&slave->sdw_dev_lock){+.+.}-{3:3}:
-[   46.506737]        __lock_acquire+0x1121/0x1df0
-[   46.511765]        lock_acquire+0xd5/0x300
-[   46.516360]        __mutex_lock+0x94/0x920
-[   46.520949]        sdw_update_slave_status+0x26/0x70
-[   46.526409]        sdw_clear_slave_status+0xd8/0xe0
-[   46.531783]        intel_resume_runtime+0x139/0x2a0
-[   46.537155]        __rpm_callback+0x41/0x120
-[   46.541919]        rpm_callback+0x5d/0x70
-[   46.546422]        rpm_resume+0x531/0x7e0
-[   46.550920]        __pm_runtime_resume+0x4a/0x80
-[   46.556024]        snd_soc_pcm_component_pm_runtime_get+0x2f/0xc0
-[   46.562611]        __soc_pcm_open+0x62/0x520
-[   46.567375]        dpcm_be_dai_startup+0x116/0x210
-[   46.572661]        dpcm_fe_dai_open+0xf7/0x830
-[   46.577597]        snd_pcm_open_substream+0x54a/0x8b0
-[   46.583145]        snd_pcm_open.part.0+0xdc/0x200
-[   46.588341]        snd_pcm_playback_open+0x51/0x80
-[   46.593625]        chrdev_open+0xc0/0x250
-[   46.598129]        do_dentry_open+0x15f/0x430
-[   46.602981]        path_openat+0x75e/0xa80
-[   46.607575]        do_filp_open+0xb2/0x160
-[   46.612162]        do_sys_openat2+0x9a/0x160
-[   46.616922]        __x64_sys_openat+0x53/0xa0
-[   46.621767]        do_syscall_64+0x38/0x90
-[   46.626352]        entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[   46.632414]
-                other info that might help us debug this:[   46.641862] 
-Chain exists of:
-                  &slave->sdw_dev_lock --> &card->controls_rwsem --> 
-&card->pcm_mutex[   46.655145]  Possible unsafe locking scenario:[   
-46.662048]        CPU0                    CPU1
-[   46.667080]        ----                    ----
-[   46.672108]   lock(&card->pcm_mutex);
-[   46.676267]                                lock(&card->controls_rwsem);
-[   46.683382]                                lock(&card->pcm_mutex);
-[   46.690063]   lock(&slave->sdw_dev_lock);
-[   46.694574]
-                 *** DEADLOCK ***[   46.701942] 2 locks held by mpg123/1130:
-[   46.706356]  #0: ffff8b4457b22b90 (&pcm->open_mutex){+.+.}-{3:3}, at: 
-snd_pcm_open.part.0+0xc9/0x200
-[   46.715999]  #1: ffffffffc1455310 (&card->pcm_mutex){+.+.}-{3:3}, at: 
-dpcm_fe_dai_open+0x49/0x830
-[   46.725390]
-                stack backtrace:
-[   46.730752] CPU: 0 PID: 1130 Comm: mpg123 Tainted: G            E     
-  6.1.0-rc4-jamerson #1
-[   46.739703] Hardware name: AAEON UP-WHL01/UP-WHL01, BIOS UPW1AM19 
-11/10/2020
-[   46.747270] Call Trace:
-[   46.750239]  <TASK>
-[   46.752857]  dump_stack_lvl+0x56/0x73
-[   46.757045]  check_noncircular+0x102/0x120
-[   46.761664]  __lock_acquire+0x1121/0x1df0
-[   46.766197]  lock_acquire+0xd5/0x300
-[   46.770292]  ? sdw_update_slave_status+0x26/0x70
-[   46.775432]  ? lock_is_held_type+0xe2/0x140
-[   46.780143]  __mutex_lock+0x94/0x920
-[   46.784241]  ? sdw_update_slave_status+0x26/0x70
-[   46.789387]  ? find_held_lock+0x2b/0x80
-[   46.793750]  ? sdw_update_slave_status+0x26/0x70
-[   46.798894]  ? lock_release+0x147/0x2f0
-[   46.803262]  ? lockdep_init_map_type+0x47/0x250
-[   46.808315]  ? sdw_update_slave_status+0x26/0x70
-[   46.813456]  sdw_update_slave_status+0x26/0x70
-[   46.818422]  sdw_clear_slave_status+0xd8/0xe0
-[   46.823302]  ? pm_generic_runtime_suspend+0x30/0x30
-[   46.828706]  intel_resume_runtime+0x139/0x2a0
-[   46.833583]  ? _raw_spin_unlock_irq+0x24/0x50
-[   46.838462]  ? pm_generic_runtime_suspend+0x30/0x30
-[   46.843866]  __rpm_callback+0x41/0x120
-[   46.848142]  ? pm_generic_runtime_suspend+0x30/0x30
-[   46.853550]  rpm_callback+0x5d/0x70
-[   46.857568]  rpm_resume+0x531/0x7e0
-[   46.861578]  ? _raw_spin_lock_irqsave+0x62/0x70
-[   46.866634]  __pm_runtime_resume+0x4a/0x80
-[   46.871258]  snd_soc_pcm_component_pm_runtime_get+0x2f/0xc0
-[   46.877358]  __soc_pcm_open+0x62/0x520
-[   46.881634]  ? dpcm_add_paths.isra.0+0x35d/0x4c0
-[   46.886784]  dpcm_be_dai_startup+0x116/0x210
-[   46.891592]  dpcm_fe_dai_open+0xf7/0x830
-[   46.896046]  ? debug_mutex_init+0x33/0x50
-[   46.900591]  snd_pcm_open_substream+0x54a/0x8b0
-[   46.905658]  snd_pcm_open.part.0+0xdc/0x200
-[   46.910376]  ? wake_up_q+0x90/0x90
-[   46.914312]  snd_pcm_playback_open+0x51/0x80
-[   46.919118]  chrdev_open+0xc0/0x250
-[   46.923147]  ? cdev_device_add+0x90/0x90
-[   46.927608]  do_dentry_open+0x15f/0x430
-[   46.931976]  path_openat+0x75e/0xa80
-[   46.936086]  do_filp_open+0xb2/0x160
-[   46.940194]  ? lock_release+0x147/0x2f0
-[   46.944563]  ? _raw_spin_unlock+0x29/0x50
-[   46.949101]  do_sys_openat2+0x9a/0x160
-[   46.953377]  __x64_sys_openat+0x53/0xa0
-[   46.957733]  do_syscall_64+0x38/0x90
-[   46.961829]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[   46.967402] RIP: 0033:0x7fa6397ccd3b
-[   46.971506] Code: 25 00 00 41 00 3d 00 00 41 00 74 4b 64 8b 04 25 18 
-00 00 00 85 c0 75 67 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 
-05 <48> 3d 00 f0 ff ff 0f 87 91 00 00 00 48 8b 4c 24 28 64 48 33 0c 25
-[   46.991413] RSP: 002b:00007fff838e8990 EFLAGS: 00000246 ORIG_RAX: 
-0000000000000101
-[   46.999580] RAX: ffffffffffffffda RBX: 0000000000080802 RCX: 
-00007fa6397ccd3b
-[   47.007311] RDX: 0000000000080802 RSI: 00007fff838e8b50 RDI: 
-00000000ffffff9c
-[   47.015047] RBP: 00007fff838e8b50 R08: 0000000000000000 R09: 
-0000000000000011
-[   47.022787] R10: 0000000000000000 R11: 0000000000000246 R12: 
-0000000000080802
-[   47.030539] R13: 0000000000000004 R14: 0000000000000000 R15: 
-00007fff838e8b50
-[   47.038289]  </TASK>
+> +
+>  /*
+>   * Deprecated: use DRM_FORMAT_MOD_LINEAR instead
+>   *
+
+
+--Sig_/CjiU_jGWnjlPQD5JQ_UkV.O
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmOF45sACgkQI1/ltBGq
+qqcRPQ//TKyVghVjJvbngGkpqrp0wLr2vTN2hZZNRZ+2ZW7siUbaHrDk7D88M4S5
+oLOBZRm6RSgiarBfHpOIJ9xIbmjM+QbxzGeJeU2a0OgMYc9zMkfi3ohLmOjARq8u
+4EZUGCEDUxUKmA1Z8mBTePUHJ1aEPeEqxIv3oy6ewNFHEzP2h9G4G8s09eFvBlzo
+K8bdZuuVrsssxt+1jN1pQpVGCOXNVewyT2kwDjR5ZEBfEn4sxDiiB2cYpBBOqx5A
+xymiID7dF8qvilEWUfYrJZJAKyJ372z3PozQ18pHOezEoiN+fRJoJRRuUt0r3nWh
+QGZskfdWSWBKAZ5AFzmdb2dBpXX78M7KmmcjMVgTeM7ML81SCx5Sb2gHkXTctJYA
+Aujwu+q++Q+nZlNCaOMV3C7eCEnSiIERaPV518Hm4Po3WU3qSRM1Wat3bTSA9R3E
+FIwq+PRb7tM4BwsyQefdg8pVOsZ45yfSHNdQft1dKLVfIIm7pE2F4C5mc+i8lynr
+IaGxWGXmUPVop2kUBW+cfBRu1qzvg9SGQEmuwfeNkfeAr8e1tWlcHTERuAn/LQGT
+SgvogKeSqufFArePHMxM6ajE+sIXZOJlD7Tc1RisQrNkzre3Hr6L5xN7OE5jlfg2
+wKhgc8n5o4C4gT6cK5XMuDm81aFV0wrMtT6t0jOeyA+qNaGvdHE=
+=QEkC
+-----END PGP SIGNATURE-----
+
+--Sig_/CjiU_jGWnjlPQD5JQ_UkV.O--
