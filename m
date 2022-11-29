@@ -2,141 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D4F063BD3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:47:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C093363BD40
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiK2Jrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 04:47:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
+        id S231178AbiK2Js2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 04:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231938AbiK2Jrl (ORCPT
+        with ESMTP id S229798AbiK2Js0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 04:47:41 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAEB626E
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:47:39 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-368994f4bc0so121100677b3.14
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:47:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jUYvtMPSKjTs5g6MPMmEMkOFRg4aOqr2pjUMfkz/qL0=;
-        b=VQ+VIAZ+G3oo5EFPjNjRqx8Z8Psg8ZPV0zITQA1aPIi9vO2Cpg0DrBU3vtvPcGyT2Y
-         nMV9ijpQ8uFbAwUt95JvQuGa/kqtpAt9OmTGt+VGfGd244AgOKUNGUQ5JHjhUK6+6mQU
-         ZfLDINbdMs+HC7aZHpe4SWXzozkIphqrMNLD8/Xr0sqr7Egy9DVfNy7wMyCuvpN33k9a
-         nFafoqr9wQFcP8RzADkbXouMmadafPfQQ+Hz+G+tuItnwuzMqy6hG0Gt5pEbytpYKffB
-         K8MXyWDFqbobn0eHIVND4B6Osl15gRKgtC2sszltuv7A6zdizeCmCEg5ec1pe7O7Ygei
-         GI2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jUYvtMPSKjTs5g6MPMmEMkOFRg4aOqr2pjUMfkz/qL0=;
-        b=kEctwNBXbMOY9nbF5pzmWNpU9bPNMQlufV64XRH0HlCYX99Xw91rv1QI4T1ujEbULG
-         v/tEgBQJuluNNlx5N+4/VFdwGlRAVa2LsDIbiIuKXUut9LzrtzoRtSRZBamF8p5ZUpfZ
-         Goc6lz2pUBO5HsdUWUNZ6QmA2JoMiJEYkEdbLUAXvIfVvHJY1bCN2aauFaVnsVgULjMQ
-         cb2ny64nWHM7e1wG6i5LER3WdscUVvFhaf2f88NnMwf/binsRc1MOUfHPcQ9J1gAmjmb
-         xTHkxzNTXJMfqUO5EZTLRp8vdxA3p7ZR6uPCCThcsuNfvs0qplTqH17l7PP6l7GpyKO4
-         mP3Q==
-X-Gm-Message-State: ANoB5pkyB8+gaVTiCmbd3DNaShBT+VAZAavgzFM2myGP70K7p0x0FNzV
-        jMj6ED8+shFZf2eCjOgs4/icafSr/ywZqQ==
-X-Google-Smtp-Source: AA0mqf7kQDdqeLRiGzeiyFv4w0FSFwHN284HPSYc1KooqTV79U9t2R1k8LQc1SmNrdp8VPuuG9B3LC9I9UjRGg==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a81:aa05:0:b0:38f:f363:c996 with SMTP id
- i5-20020a81aa05000000b0038ff363c996mr35ywh.442.1669715258425; Tue, 29 Nov
- 2022 01:47:38 -0800 (PST)
-Date:   Tue, 29 Nov 2022 17:47:32 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221129094732.306449-1-davidgow@google.com>
-Subject: [PATCH] Documentation: kunit: Fix "How Do I Use This" / "Next Steps" sections
-From:   David Gow <davidgow@google.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Sadiya Kazi <sadiyakazi@google.com>
-Cc:     David Gow <davidgow@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Daniel Latypov <dlatypov@google.com>,
-        Rae Moar <rmoar@google.com>, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 29 Nov 2022 04:48:26 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C15A6469
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:48:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669715305; x=1701251305;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wmsGItexe72sOyEj5wmVRCqyjTOHw7jcpbQam55oxUg=;
+  b=BBFZZfxs3tzj+vCjL1NKmGQkXKAbZESqJSIEci+bgIcsPyobXtHsblgh
+   MgHewkcu9NKU6LHUIMXxumSrDwuk9ynIskfL9rvIr5oogDt0wN43es1ZQ
+   TL7kP4luwbFVdSR0oJuHDbHunTyGu0faEGCf4HeunN/w6YxoGC1u7ViPA
+   tiQPW1+HK+oOJkleNAsIihnJ+5O4jbnQjztOlbnEMrUc+GPsS1TUS4Od6
+   n9oFYqkiDjr2uoj0fOXUQ+tGnrj5Q7RApeTDZeg4kPJTpVehGZrJN+Xwk
+   G4c2bTR0hWkMNNjqbzQQBNh+gD20ANtkGqs2+OLSnR4/t2lbtLAlGfA0l
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="379334018"
+X-IronPort-AV: E=Sophos;i="5.96,202,1665471600"; 
+   d="scan'208";a="379334018"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 01:48:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="645837594"
+X-IronPort-AV: E=Sophos;i="5.96,202,1665471600"; 
+   d="scan'208";a="645837594"
+Received: from leirao-pc.bj.intel.com ([10.238.156.101])
+  by fmsmga007.fm.intel.com with ESMTP; 29 Nov 2022 01:48:21 -0800
+From:   Lei Rao <lei.rao@intel.com>
+To:     kbusch@kernel.org, axboe@fb.com, hch@lst.de, sagi@grimberg.me,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        hang.yuan@intel.com
+Cc:     Lei Rao <lei.rao@intel.com>
+Subject: [PATCH] nvme: clear the prp2 field of the nvme command.
+Date:   Tue, 29 Nov 2022 17:48:11 +0800
+Message-Id: <20221129094811.893586-1-lei.rao@intel.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'index' and 'start' pages end with very similar "How Do I Use This"
-/ "Next Steps" sections respectively, which link to the other
-documentation pages. This wasn't updated when the tips.rst page was
-removed.
+If the prp2 field is not filled in nvme_setup_prp_simple(), the prp2
+field is garbage data. According to nvme spec, the prp2 is reserved if
+the data transfer does not cross a memory page boundary. Writing a
+reserved coded value into a controller property field produces undefined
+results, so it needs to be cleared in nvme_setup_prp_simple().
 
-Remove the reference to tips.rst, as well as tidy up the descriptions on
-all of the links (especially given that sphinx gives the page titles
-anyway.
-
-Fixes: 4399c737a97d ("Documentation: kunit: Remove redundant 'tips.rst' page")
-Signed-off-by: David Gow <davidgow@google.com>
+Signed-off-by: Lei Rao <lei.rao@intel.com>
 ---
- Documentation/dev-tools/kunit/index.rst | 18 +++++++-----------
- Documentation/dev-tools/kunit/start.rst | 16 ++++++----------
- 2 files changed, 13 insertions(+), 21 deletions(-)
+ drivers/nvme/host/pci.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
-index d5629817cd72..beec6f847ef4 100644
---- a/Documentation/dev-tools/kunit/index.rst
-+++ b/Documentation/dev-tools/kunit/index.rst
-@@ -99,14 +99,10 @@ Read also :ref:`kinds-of-tests`.
- How do I use it?
- ================
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index f4335519399d..488ad7dabeb8 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -797,6 +797,8 @@ static blk_status_t nvme_setup_prp_simple(struct nvme_dev *dev,
+ 	cmnd->dptr.prp1 = cpu_to_le64(iod->first_dma);
+ 	if (bv->bv_len > first_prp_len)
+ 		cmnd->dptr.prp2 = cpu_to_le64(iod->first_dma + first_prp_len);
++	else
++		cmnd->dptr.prp2 = 0;
+ 	return BLK_STS_OK;
+ }
  
--*   Documentation/dev-tools/kunit/start.rst - for KUnit new users.
--*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
--*   Documentation/dev-tools/kunit/run_wrapper.rst - run kunit_tool.
--*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit_tool.
--*   Documentation/dev-tools/kunit/usage.rst - write tests.
--*   Documentation/dev-tools/kunit/tips.rst - best practices with
--    examples.
--*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
--    used for testing.
--*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
--    answers.
-+*   Documentation/dev-tools/kunit/start.rst - for new KUnit users
-+*   Documentation/dev-tools/kunit/architecture.rst - how KUnit is put together
-+*   Documentation/dev-tools/kunit/run_wrapper.rst - run tests via kunit.py
-+*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit.py
-+*   Documentation/dev-tools/kunit/usage.rst - write tests
-+*   Documentation/dev-tools/kunit/api/index.rst - API reference
-+*   Documentation/dev-tools/kunit/faq.rst - common questions and answers
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index f4f504f1fb15..58c176348885 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -294,13 +294,9 @@ Congrats! You just wrote your first KUnit test.
- Next Steps
- ==========
- 
--*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
--*   Documentation/dev-tools/kunit/run_wrapper.rst - run kunit_tool.
--*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit_tool.
--*   Documentation/dev-tools/kunit/usage.rst - write tests.
--*   Documentation/dev-tools/kunit/tips.rst - best practices with
--    examples.
--*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
--    used for testing.
--*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
--    answers.
-+*   Documentation/dev-tools/kunit/architecture.rst - how KUnit is put together
-+*   Documentation/dev-tools/kunit/run_wrapper.rst - run tests via kunit.py
-+*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit.py
-+*   Documentation/dev-tools/kunit/usage.rst - write tests
-+*   Documentation/dev-tools/kunit/api/index.rst - API reference
-+*   Documentation/dev-tools/kunit/faq.rst - common questions and answers
 -- 
-2.38.1.584.g0f3c55d4c2-goog
+2.34.1
 
