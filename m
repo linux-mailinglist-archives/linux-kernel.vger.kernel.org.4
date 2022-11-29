@@ -2,109 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF13263BCC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:19:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4296363BCCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbiK2JTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 04:19:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
+        id S230310AbiK2JVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 04:21:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiK2JTo (ORCPT
+        with ESMTP id S229631AbiK2JVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 04:19:44 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7003E085
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:19:43 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id d3so16113154ljl.1
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:19:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sg3QtzQpHzzTX1eXKZgkNmLpSXL6VNlIdOuizJonHpU=;
-        b=Cmkt77kYzu0zzeTsUBSsKkObosk1j28KU1I5QCjKJBdQdEIf5nDh2ZlCuWESVYD4ox
-         7u+DwtiqzpDRKqxxozeN7c/TAWS8RTkfj+7FfP1otA+zoNg5+QVN1wfgVYy0NyTSsDvX
-         qtUldOJwcZAUxuFoCUB/z7HOihJsk+L1orPOKiin9LQCeJ2f3T6ylMo8Picdil+Rats9
-         PxdllGY2z9L8R8q86g5y4KTnoI5KsVkr0gM45tZ7sIL+/pQViAQQbIch/SH0kxnH5e0A
-         hMH/CvoSpKPxrMvNwq2G18fGzUpDc4ewP/fxvzecHgUJ9QJOv17wgjjAehmU6SSSVJLa
-         5w3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sg3QtzQpHzzTX1eXKZgkNmLpSXL6VNlIdOuizJonHpU=;
-        b=N58JCNjeO/sDkEH1gXEc/sT/cDoX0kLzhyl+th+BUvw3Td5Tf/kvvPrfHTjPa12XHX
-         pkxZZPawLQICiwn6FUvx12i2wdm4ZvKkj0JloclP6uo71XUTRP99/zmQGvOHmtZaoxOO
-         aUWHQCaqopjoY5Q4TtolHfEWBjlATae9TybA9Unrf+vIfpWhHaUE70AGF2MNTRRy5mAV
-         M6p55lZzAb9PMdD/wBPsAp/N91MqOHnvGtWELtt+2r6wNhrkARoRwwzHqJYjfhDpn0Hw
-         vGvzxBKqEVvo6IAlwGchGoD7pKo/KgRRsY36Bv1PQf5qIp2e4HbDhOlPRQbvPfiEa/HS
-         bTyA==
-X-Gm-Message-State: ANoB5pkl/P0L0YyTtpUhId+PZAcn99igPCvsozVNUvx+jZScpUP4tmyX
-        zjzmbtzNARIABXcoLGjYTBANqQ==
-X-Google-Smtp-Source: AA0mqf5/jT9FnSy57Ipjz48YGhmhY5lSdTAI5VgVIguoY252oCOou9rswszb/1auQGX1dRKN4yjy1g==
-X-Received: by 2002:a05:651c:c89:b0:26f:bd61:ac4f with SMTP id bz9-20020a05651c0c8900b0026fbd61ac4fmr13311910ljb.396.1669713581897;
-        Tue, 29 Nov 2022 01:19:41 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id be13-20020a056512250d00b004947a12232bsm2095956lfb.275.2022.11.29.01.19.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 01:19:41 -0800 (PST)
-Message-ID: <79c1c64b-7072-3e30-78a7-5e3379d3d65f@linaro.org>
-Date:   Tue, 29 Nov 2022 10:19:39 +0100
+        Tue, 29 Nov 2022 04:21:41 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AC63E085
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:21:40 -0800 (PST)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1ozwo3-0001ed-Mr; Tue, 29 Nov 2022 10:21:35 +0100
+Message-ID: <ce69ab2c95e500ab94ab9ebc186c351a605ada89.camel@pengutronix.de>
+Subject: Re: [PATCH v3 5/5] drm/etnaviv: add HWDB entry for
+ VIPNano-QI.7120.0055
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     italonicola@collabora.com,
+        "moderated list:DRM DRIVERS FOR VIVANTE GPU IP" 
+        <etnaviv@lists.freedesktop.org>,
+        "open list:DRM DRIVERS FOR VIVANTE GPU IP" 
+        <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        David Airlie <airlied@gmail.com>
+Date:   Tue, 29 Nov 2022 10:21:33 +0100
+In-Reply-To: <20221129085047.49813-6-tomeu.vizoso@collabora.com>
+References: <20221129085047.49813-1-tomeu.vizoso@collabora.com>
+         <20221129085047.49813-6-tomeu.vizoso@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2] brcmfmac: Add support for BCM43596 PCIe Wi-Fi
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Kalle Valo <kvalo@kernel.org>
-Cc:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>,
-        Hector Martin <marcan@marcan.st>,
-        "~postmarketos/upstreaming@lists.sr.ht" 
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        "martin.botka@somainline.org" <martin.botka@somainline.org>,
-        "angelogioacchino.delregno@somainline.org" 
-        <angelogioacchino.delregno@somainline.org>,
-        "marijn.suijten@somainline.org" <marijn.suijten@somainline.org>,
-        "jamipkettunen@somainline.org" <jamipkettunen@somainline.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
-        "Zhao, Jiaqing" <jiaqing.zhao@intel.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Soon Tak Lee <soontak.lee@cypress.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
- <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st>
- <13b8c67c-399c-d1a6-4929-61aea27aa57d@somainline.org>
- <0e65a8b2-0827-af1e-602c-76d9450e3d11@marcan.st>
- <7fd077c5-83f8-02e2-03c1-900a47f05dc1@somainline.org>
- <CACRpkda3uryD6TOEaTi3pPX5No40LBWoyHR4VcEuKw4iYT0dqA@mail.gmail.com>
- <20220922133056.eo26da4npkg6bpf2@bang-olufsen.dk> <87sfke32pc.fsf@kernel.org>
- <4592f87a-bb61-1c28-13f0-d041a6e7d3bf@linaro.org>
- <CACRpkdax-3VVDd29iH51mfumakqM7jyEc8Pbb=AQwAgp2WsqFQ@mail.gmail.com>
- <d03bd4d4-e4ef-681b-b4a5-02822e1eee75@linaro.org> <87fse76yig.fsf@kernel.org>
- <fc2812b1-db96-caa6-2ecb-c5bb2c33246a@linaro.org> <87bkov6x1q.fsf@kernel.org>
- <CACRpkdbpJ8fw0UsuHXGX43JRyPy6j8P41_5gesXOmitHvyoRwQ@mail.gmail.com>
- <28991d2d-d917-af47-4f5f-4e8183569bb1@linaro.org>
-Content-Language: en-US
-In-Reply-To: <28991d2d-d917-af47-4f5f-4e8183569bb1@linaro.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -112,92 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/11/2022 15:40, Konrad Dybcio wrote:
+Hi Tomeu,
+
+Am Dienstag, dem 29.11.2022 um 09:50 +0100 schrieb Tomeu Vizoso:
+> This is a compute-only module marketed towards AI and vision
+> acceleration. This particular version can be found on the Amlogic A311D
+> SoC.
 > 
+> The feature bits are taken from the Khadas downstream kernel driver
+> 6.4.4.3.310723AAA.
 > 
-> On 26.11.2022 22:45, Linus Walleij wrote:
->> On Fri, Nov 25, 2022 at 1:25 PM Kalle Valo <kvalo@kernel.org> wrote:
->>> Konrad Dybcio <konrad.dybcio@linaro.org> writes:
->>>
->>>> On 25.11.2022 12:53, Kalle Valo wrote:
->>>>> Konrad Dybcio <konrad.dybcio@linaro.org> writes:
->>>>>
->>>>>> On 21.11.2022 14:56, Linus Walleij wrote:
->>>>>>> On Fri, Nov 18, 2022 at 5:47 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>>>>>>
->>>>>>>> I can think of a couple of hacky ways to force use of 43596 fw, but I
->>>>>>>> don't think any would be really upstreamable..
->>>>>>>
->>>>>>> If it is only known to affect the Sony Xperias mentioned then
->>>>>>> a thing such as:
->>>>>>>
->>>>>>> if (of_machine_is_compatible("sony,xyz") ||
->>>>>>>     of_machine_is_compatible("sony,zzz")... ) {
->>>>>>>    // Enforce FW version
->>>>>>> }
->>>>>>>
->>>>>>> would be completely acceptable in my book. It hammers the
->>>>>>> problem from the top instead of trying to figure out itsy witsy
->>>>>>> details about firmware revisions.
->>>>>>>
->>>>>>> Yours,
->>>>>>> Linus Walleij
->>>>>>
->>>>>> Actually, I think I came up with a better approach by pulling a page
->>>>>> out of Asahi folks' book - please take a look and tell me what you
->>>>>> think about this:
->>>>>>
->>>>>> [1]
->>>>>> https://github.com/SoMainline/linux/commit/4b6fccc995cd79109b0dae4e4ab2e48db97695e7
->>>>>> [2]
->>>>>> https://github.com/SoMainline/linux/commit/e3ea1dc739634f734104f37fdbed046873921af7
->>
->> Something in this direction works too.
->>
->> The upside is that it tells all operating systems how to deal
->> with the firmware for this hardware.
->>
->>>>> Instead of a directory path ("brcm/brcmfmac43596-pcie") why not provide
->>>>> just the chipset name ("brcmfmac43596-pcie")? IMHO it's unnecessary to
->>>>> have directory names in Device Tree.
->>>>
->>>> I think it's common practice to include a full $FIRMWARE_DIR-relative
->>>> path when specifying firmware in DT, though here I left out the board
->>>> name bit as that's assigned dynamically anyway. That said, if you don't
->>>> like it, I can change it.
->>>
->>> It's just that I have understood that Device Tree is supposed to
->>> describe hardware and to me a firmware directory "brcm/" is a software
->>> property, not a hardware property. But this is really for the Device
->>> Tree maintainers to decide, they know this best :)
->>
->> I would personally just minimize the amount of information
->> put into the device tree to be exactly what is needed to find
->> the right firmware.
->>
->> brcm,firmware-compatible = "43596";
->>
->> since the code already knows how to conjure the rest of the string.
->>
->> But check with Rob/Krzysztof.
->>
->> Yours,
->> Linus Walleij
+Since the downstream driver uses NNCoreCount or the TP_Engine feature
+bit to tell if a core is a NPU, I think we should add the NNCoreCount
+field to the HWDB to be able to do the same.
+
+Also I would like to see a notice printed into the kernel log that we
+instantiated the driver on a NPU core and show it as experimental, as
+I'm not sure if our UAPI covers all things that are needed for NPU
+operation. I wouldn't want to break our basic assumption that the
+kernel driver is in charge of cleaning write caches when switching
+contexts and event management, which might require some UAPI additions
+to work with the NPU accelerator programming model.
+
+Regards,
+Lucas
+
+> Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
+> ---
+>  drivers/gpu/drm/etnaviv/etnaviv_hwdb.c | 31 ++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
 > 
-> Krzysztof, Rob [added to CC] - can I have your opinions?
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_hwdb.c b/drivers/gpu/drm/etnaviv/etnaviv_hwdb.c
+> index f2fc645c7956..3f6fd9a3c088 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_hwdb.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_hwdb.c
+> @@ -130,6 +130,37 @@ static const struct etnaviv_chip_identity etnaviv_chip_identities[] = {
+>  		.minor_features10 = 0x90044250,
+>  		.minor_features11 = 0x00000024,
+>  	},
+> +	{
+> +		.model = 0x8000,
+> +		.revision = 0x7120,
+> +		.product_id = 0x45080009,
+> +		.customer_id = 0x88,
+> +		.eco_id = 0,
+> +		.stream_count = 8,
+> +		.register_max = 64,
+> +		.thread_count = 256,
+> +		.shader_core_count = 1,
+> +		.vertex_cache_size = 16,
+> +		.vertex_output_buffer_size = 1024,
+> +		.pixel_pipes = 1,
+> +		.instruction_count = 512,
+> +		.num_constants = 320,
+> +		.buffer_size = 0,
+> +		.varyings_count = 16,
+> +		.features = 0xe0287cac,
+> +		.minor_features0 = 0xc1799eff,
+> +		.minor_features1 = 0xfefbfadb,
+> +		.minor_features2 = 0xeb9d6fbf,
+> +		.minor_features3 = 0xedfffced,
+> +		.minor_features4 = 0xd30dafc7,
+> +		.minor_features5 = 0x7b5ac333,
+> +		.minor_features6 = 0xfc8ee200,
+> +		.minor_features7 = 0x03fffa6f,
+> +		.minor_features8 = 0x00fe0ef0,
+> +		.minor_features9 = 0x0088003c,
+> +		.minor_features10 = 0x108048c0,
+> +		.minor_features11 = 0x00000010,
+> +	},
+>  };
+>  
+>  bool etnaviv_fill_identity_from_hwdb(struct etnaviv_gpu *gpu)
 
-I just got here bunch of quotes and no original message, so my response
-probably won't be complete.
-
-Devicetree also describes the system integration properties because we
-need to know how the things are glued together.
-
-We have firmware-name property which is a form of path. The
-"directories" in the firmware-name are actually good because they allow
-to create a hierarchy based on a vendor/SoC/model/board. I don't think
-it is worth adding new properties replacing firmware-name.
-
-
-Best regards,
-Krzysztof
 
