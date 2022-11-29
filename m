@@ -2,132 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B042E63C46B
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E69A63C46E
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236081AbiK2P51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 10:57:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
+        id S236050AbiK2P5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 10:57:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236079AbiK2P5G (ORCPT
+        with ESMTP id S236096AbiK2P5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:57:06 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2063.outbound.protection.outlook.com [40.107.20.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA5F31DCC;
+        Tue, 29 Nov 2022 10:57:08 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DAD3FBAD
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:57:06 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id o7-20020a05600c510700b003cffc0b3374so11186946wms.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:57:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=9cT9eY9V1xGeVmdlYi9xsAkTdg7w7/HSLsB4PWNKGgw=;
+        b=GSFjwxVYrOvZnxXeKOG1mXSHFUUjH+6TfW+LuGB/qqkRkRn+pi2370UkFfKGWthhiW
+         NO4yC2Xm5lZpt/NMfXHlSP7gpPhoWCtCmdxRlaX3BA9j0TCxgIZgtCmJK03ixcS8gu0p
+         wA+Kjt0RYZOl6IBxSvXZ/3shPnk7qUD1Mv1ePqi1TE3KSkwvtYQOezuT2eP9VMq+xJXf
+         bmqFKefY6PggAN7pTXAotNmeeuLivo4QcEJkwIyThCipoQISjo/o8tdeiUOmBSaiwxWU
+         VM4Fnbl8UK6ttX91DiC11G/ldK/8cPsFBnZW2DnjQ1+mPfQ0+M/57KYULDMIlhuAhBxR
+         XNcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9cT9eY9V1xGeVmdlYi9xsAkTdg7w7/HSLsB4PWNKGgw=;
+        b=2t6M2QqhqeB1kAuNyOODHtMEAbnTxYgjBwawRkgMnJAlGL45RZUhR9HBKZmTQYRcED
+         S7/x5EwWzmWZFtw9h+D0mlVj+vbBFmyCWvu/lxwPWnFVZ31d5KyLnkhBNHOd+7mzFpQD
+         JjAVF3y3pShHlILmWNhaHtBVOOZKrEMuF5ZmABgWQEV9by8D04swMfdLeZoU6wJIeGkl
+         G0lvNG/N5Q+BwMPdAP0fY6LTluJEJY64gTgQMyWhMeO6gQPGbAIVHxN/C2vQ8/Yp4nUN
+         iX0e/+bot1EJXtvXXkMufilmfnD2t7a2xdLDNvwXrJlpSOy5PibVYl3S/wYoc6iO2mlR
+         Nmsg==
+X-Gm-Message-State: ANoB5pnDCV7XmsB6SJOxmtET+DbYJn0cneJRchZtYhbGvTQFFoe0lKj3
+        4/34FhODYXnMA6wMesLglBWp3w==
+X-Google-Smtp-Source: AA0mqf7a/uNfdsh/7H4r89x7hh5q1/8Z5l3vM7esHKeAiqIvXE2W93f4XnSlqHDEyHPZ0T6Rrps9Ow==
+X-Received: by 2002:a05:600c:42d2:b0:3cf:c907:a05a with SMTP id j18-20020a05600c42d200b003cfc907a05amr44540859wme.177.1669737425037;
+        Tue, 29 Nov 2022 07:57:05 -0800 (PST)
+Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.googlemail.com with ESMTPSA id f2-20020a7bc8c2000000b003cfb7c02542sm2601550wml.11.2022.11.29.07.57.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 29 Nov 2022 07:57:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lGmK8y+uyw8226zyrMGHJWYXsn6a2QZky0TSIKV73wqPFTY3uvDyEyKaKCI3dHxkuVXYSX6vIpZjcyehfX+Mp30liO4IrG9YjOxr3XBtL4u7PEkiMZpe5yYF5JVMEFfQFw706p3EaEUFWa1GBwvTT1FpAQUjAZh3usjkuY0IFELecK27lW5Av1DB8QC/J0xVVIqHHkCS2NA9vrPsd48+gMUO7uGb0yr08fC3A7CW67gpNgh/KMWWIxgPiItPVtNgjn9ewZcTZZ55X/OIMowNyx5w/XwCxFxYxPU4xWhds75lmx6lMXaV83MWAzvELmr/THpV0ml2/EGIdSIIaeswKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O898Wb9LawqVHc3YA5uePpwOTlEvyyvVdK7xUXf59L4=;
- b=V2br4K6ELI9Oknh+Cmc/hhteERKADDH2Zft+cxwagZfTbGadtxpBHZyWPDG/hRKTLoXXKCWWWuJfiw+mCrsDVNOYN8jgbSyXOafjM1W8QNwrPun/gsipr/zgCVNevJ9EJv0vvG+cBoQ95vUYXHZSyryF9E1Z65nBzZ7Fozbk+7ZrCL54/yLJZlxs4qA1/1GeO3C/fjnIu6yI39uu0R6ib/hTGjE6G8LC+gKNsc+j5LOBxkdJsHEMEhrJH3jGHBAIUDLJkJ/59SBjnggk+lI+5ylP+MvU3LYuTcwfGrRaRN/cctPlomdto7q/Kiy/QuNUGF8rNDGo344QstQ//du0ew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O898Wb9LawqVHc3YA5uePpwOTlEvyyvVdK7xUXf59L4=;
- b=Y5sgimm4jbjnm7wBulj7ItKGS4N8hgVpRJqPxrAhGcMtTFkniw4T4ZKVk63bUu0yg+dEMhUzWuJkSh4E2fkwO0TxhaAY43XdLZeJYp8vxjUPu6DvQ90HcU72NyM9LbwXpFJZHffA3Y0Itd/a074MGQLcDvTBRiRrnu1Z8HSncqWt/q4l2DRQVsmVNqqcSVuK1S5p4LB8z3vDk8SKcugSkK6YNhLrps5ZI+FgbEJyRLHP6EKU1/8MbPYtwdUkqLpqStzjojwTTWdH7YukUPqCB37Au1He98HrWdBE4KqGIPgbAxA3dj2uY3gfLkel1rTmGyBJv0W/QLOXRI0O6XWAZg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
- by AS8PR03MB7287.eurprd03.prod.outlook.com (2603:10a6:20b:2e9::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.20; Tue, 29 Nov
- 2022 15:57:02 +0000
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::2b95:1fe4:5d8f:22fb]) by DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::2b95:1fe4:5d8f:22fb%8]) with mapi id 15.20.5857.023; Tue, 29 Nov 2022
- 15:57:02 +0000
-Message-ID: <9d4db6a2-5d3f-1e2a-b60a-9a051a61b7da@seco.com>
-Date:   Tue, 29 Nov 2022 10:56:56 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH net v2 2/2] phy: aquantia: Determine rate adaptation
- support from registers
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>,
-        "David S . Miller" <davem@davemloft.net>
-References: <20221128195409.100873-1-sean.anderson@seco.com>
- <20221128195409.100873-2-sean.anderson@seco.com>
- <Y4VCz2i+kkK0z+XY@shell.armlinux.org.uk>
- <b25b1d9b-35dd-a645-a5f4-05eb0dbc6039@seco.com>
- <Y4VVhwQqk2iwBzao@shell.armlinux.org.uk>
-From:   Sean Anderson <sean.anderson@seco.com>
-In-Reply-To: <Y4VVhwQqk2iwBzao@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR01CA0065.prod.exchangelabs.com (2603:10b6:208:23f::34)
- To DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
+Subject: [PATCH v7 0/8] Add MediaTek MT6357 PMIC support
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|AS8PR03MB7287:EE_
-X-MS-Office365-Filtering-Correlation-Id: f5605de8-baa7-4d03-bcae-08dad22259cb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NQYUoA50oHnydr1uYZ9Q/aDFS1HlURc8edmoJXKCeiZGrw1kyjRKFwdzLul4jr2JmKS994dhOF8nUYV/LlUXbjVmhSWcTvU46HQPEEj32fKnzcY8A23aGU4NNIFVoBX+7NTz5EO1scMKRbKrynVr9A93PcIjU4j7tZJaJ9ulytdhVMQv69pj27MnvsosLijMUYuRZx95+xKvjDQ5O0SFy0utNAejbHzY4iLE4Vtf1lXk5PNzkuJ5cnX4ToWoo8pyS8Yk/Cu+QevWlVXJtctr6KC7kqbe6O+hUrra0582r8b+wwckIhOXNTH1E8pkAyGK7QcwXwOztr+szWKMHzqoXooGQsb/3XHthufnaR1tZcrN9GHTHJrpYvAHyoVH/X0VtdgV9ePBvlcxW5Uc+orIalzdCe6DtVjqBfXmuJbqfb/kMxojQh4881Fs49Ws85ZMSVAQlGSddBpz7YGIsN/PLXdKFGLH77DKW8Ahxupjmax0/1S4IYcCYehWDWcP+JKB3/DhEJ/P+7VScdDnwM/nxXI1A6iUm1AMxqfs0/IDnKg/bmEQl9b23aiw0w2aHhz58xVG116ljiz0mTOjDz+yoo4+vuAEI+bWF8OrnLDup02tAB3mIyGqaEIpnMunY4L2Cvk9f5zglLhJ1mOUw63Baucse2TCJ7dc+AJrBttBsz8SVW0MXzJ+IBUpjdvOda2M6Fjz9UuOh8U0AEyjsql6MtY1l/F8GKl/9Hmi56jm0R0V/dXwa2jIAjITb2IFLFKQ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39850400004)(376002)(346002)(366004)(136003)(396003)(451199015)(31686004)(36756003)(86362001)(31696002)(478600001)(6666004)(6486002)(7416002)(2906002)(186003)(6512007)(38350700002)(83380400001)(44832011)(66946007)(38100700002)(41300700001)(4326008)(53546011)(8676002)(66476007)(2616005)(6506007)(52116002)(6916009)(8936002)(26005)(316002)(66556008)(5660300002)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WDZvd3Zqb0xzSUJnTkFlWUlEYjlVY2U5T0FKK3g4ZElJbWRLMEVpSXNyM2Zj?=
- =?utf-8?B?WEV0YlBBbWNXOGp2V1ZtU1ZRSG96eEpaV2JhMThzeS9OYnU4UlR4TzJ6cEhN?=
- =?utf-8?B?SnZ0OWxJeENmWW5MUVFBM0lVV3c0eHJQVEtjZm83VUN2RXhqalplUDl4dGVm?=
- =?utf-8?B?Y1lEV0V2SUdSaDgzSFdSZlR6Z0RsNklzb3RIdFhRZGRXcXNNVXV5emZyRVJH?=
- =?utf-8?B?alN4Q0hPMWNqRFFQS1V0dHNmZzJyVGprWHpNVEZ6aG9ueis5ZU5OQkVkZkg0?=
- =?utf-8?B?UmJSeGFlWEJWN05hdjFpN2RDYmNnZmlnd3EvMWRiVEtVQ0hnTFNlNWJNLzdQ?=
- =?utf-8?B?MnFrelk3Zkh6NHNPWFlBbzA1M0VsTmNMSStOclgwSk10NXlZMWRvNDJtekRN?=
- =?utf-8?B?d05TcEJVTk5oNHh0azRqeHloNUxZWnZZQmtpYVRPRHNWTDRoLzg0Z3Y3N0lW?=
- =?utf-8?B?YXp5L2NMSDJUbVdiQVFLMVRHcUxjTlhkVFd4UGFOZGpwbURkeSs1cFVyVi9i?=
- =?utf-8?B?UHVGaVBXT0JTdkJBdnBPZjE2R2ZGYVFDY2pzSUlvMmlORVg4ckpoMDVRbEhE?=
- =?utf-8?B?QlNzOXlrQVdvaitPaHV1b2ZsKzVjYjVHUFowUERYU0RVVUxBeURlcURwVWFa?=
- =?utf-8?B?a1l5YktYRjlJajcwUXpyQXNGY0J5SU12TjIrdkFjUmEwN1NJTVRYL2d2Z3dN?=
- =?utf-8?B?RjNSNnJrRk5yeFF0V1QyR1NsY09VK0tMMlN0dXNkLzJDenpnZWhFK0QxTnVn?=
- =?utf-8?B?L0VYUkRxUmhKZ0tJTFFBSUFUVEJmWGlQbHhDWVVVV1JZbThXSTV6bzFYMXYx?=
- =?utf-8?B?MUhGNldqQlZLeEVURXdtUlNySTBNSFNUdDlDYWlCRUZrS21yZ1BMV0hobUxD?=
- =?utf-8?B?VTZWenZxTEVVV3RLY2daUUpORm8zS2dVb3U0R0EzSXZpQWI2Ni9kUnJERmNC?=
- =?utf-8?B?TjhUV1VIL01UOFExUkZqNWZ6dWtRUGhxNmprZ1R3RzdMRjJvRzN4M3dnRVMy?=
- =?utf-8?B?Q1UyZ2duYW03OEhPTUtvQ0sxUHJhVEdJZnlFemJmaDZoVVR1SzhBQzl1RFFj?=
- =?utf-8?B?SnE0WGd2ZDVKc1JGQlZJVDlYRXRqcUphOHBMd1dralJ5UzVZYS96Y3grUVVT?=
- =?utf-8?B?S2N4N3pVWGhlRlpFZElFdDB6M1NTMG5JaHpYOU9PTDUyaXB3L3Vvc24zeXor?=
- =?utf-8?B?OGtRNzNHTmZNRzgyN3JQMWh2YlpGb3FwaWsyT3U3djJyeDc0MVVkTUxDTUxZ?=
- =?utf-8?B?ZUtNMGw5UVBGNHEySmhpN1BFVit6Zjl1NkVMZ2tkTS96VVhCRWViR2xqSSsx?=
- =?utf-8?B?akhSaTVQNHljOGF2S3hHZ0p3MGx3RWM0Nm1YN3lkdUFGUWtBNkwycEJjSEtp?=
- =?utf-8?B?Ukx4U0pITlFtcmNIWlJSSVVlRXpZbHpvaUY3MWhDc3RYQU5YSFNsM1BkTVRV?=
- =?utf-8?B?UkNxL2ZMODVGWFZCRHBOMlJmemZtYWViUmRJTlV5c2lvREsxNUdueHlLUEZ4?=
- =?utf-8?B?aW00b09SMGJPaytrZ1lCSnE5WURvRzJSOVZxZTVvbHVJWGt6aURrcUhRWDZP?=
- =?utf-8?B?VVFGZTdDSHIvY2I2MG55eGw0b0VxMittdUo4NXJOLzQ4b0VuZW1qUmNxcnJC?=
- =?utf-8?B?ZTNMNXNxSlZ6WjNTMzNFd1Q0ZTJ6RnE2RDJSZTJtdkx1UjRudnl0eEZ4RkJK?=
- =?utf-8?B?eER4NThrUTgweUpwSUVKaEN5U0k5aVkyY1E4QU94b0J2eU5DenAyRGoxQTZy?=
- =?utf-8?B?ZmoyTWh1c1haWk9zKzR6UXZrWUw0dGNFdVhGUFpaY1pzcTZmelZ1NVJ5U05j?=
- =?utf-8?B?QWZPZVVUdUlDZUl3WGVXYVg5R2NXRWQzQVVoVVlvTEwxaXJtNE1hUXVwSjlt?=
- =?utf-8?B?SE1JOHpPc2ZWSng1SDFKK1FpZERTc1UrL2NDa2pxeDhvbmt1ekRpU2VQTnpP?=
- =?utf-8?B?T2pKb3kva3IwbzVPK1JYcEVqazBkcG9mTlRKbzg0Sk9lRzE0bXBaQmpGaklT?=
- =?utf-8?B?a1FRcXZPLzhIcXdvaGp2STYyajQxRlV5djRTL1ROTHM3ZVdHUjNPTGNuLzE5?=
- =?utf-8?B?ekFNMHZ1RVhxMVFXTmJxUmVBczlMemtCdHQyMkxlUkNuNzhQbVlWRk1RWW5R?=
- =?utf-8?B?aWxGWTE1SXpyTG8rN2pUZ3dJcnR0a1R0K244TElOdnVyck9ZT0FFTm9XdUFr?=
- =?utf-8?B?c0E9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f5605de8-baa7-4d03-bcae-08dad22259cb
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR03MB8847.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 15:57:01.9840
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Z11bLtaDkwSY0MZg2vfTDkjQR93JA07TBApNxvm3MF1Dv1Z5ElBYTzoTitPDokFJx6FDeY/t6AM7WArl+u9nMA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB7287
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAMsrhmMC/33NwWrDMAwG4FcpPs/DkSPb6WnvMXawYmUxpEmx00ApefeJHUeWk/gl/k8vVblkru
+ p6eanCW655mSX4t4vqxzh/s85JsgID0BiD+rY6i17Xx/2+lFUjWhMoAFs7KClRrKypxLkfpTY/pkmW
+ Y67rUp6/TzaQ8fmvt4E2emg8RUiQTOw+KD6nTIXf++WmvkTb7LlgRfBsKPneNkhwILTnQisCJiDCwM
+ 4EfyDguYAiBDmlDjElmw4Edy44EdoBQ+fREQ/xj7Dv+w9+AoIavAEAAA==
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Tue, 29 Nov 2022 16:56:59 +0100
+Message-Id: <20221005-mt6357-support-v7-0-477e60126749@baylibre.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Fabien Parent <fabien.parent@linaro.org>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Flora Fu <flora.fu@mediatek.com>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>, Lee Jones <lee@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-rtc@vger.kernel.org, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-leds@vger.kernel.org
+X-Mailer: b4 0.10.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6769; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=XJ7rH7BqCc/2CFaN/h/E5eGeg1OjcZ68setrFIOtCaQ=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBjhivPr8A8ybgzH1k0EI44AOfZwyjUPlUsinHiY5RQ
+ J7VLBiCJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCY4YrzwAKCRArRkmdfjHURZqID/
+ 93t438MbTmhu8y9LJNiU81vhIiJFQGZJonp+/qR0dJgLwAxIS8NVsf6tv6dCBrb47WilqISTf0accb
+ 9tyS9yHOj9rhqkvz27Md1QtOzNbsObad2ljHDcjX2iDTLj8tcr8UpBRsMlEZZT9D0JP5AiEJ5JrnIK
+ fDI6TFyOsh8VpC8VcC4wSpDwkh0kE9p4tsWC1P98KosVHeLJIO17B25KpGT9/AGxflNqUN6x0C2/St
+ SbO+G6jDQAfcxPDetkPX+2745iqSdJI9HdNI7Cah8H2eMJhF/dW52kERjMfeC+BWglj5I8iEaD58/C
+ bnL2DD98GOvY9Dw22BAzv/TkAP4ipzh97lkoky/3T47AC/UlAJxPUdUtXh3jQYnsBv888Rif3hLChp
+ VrTTOJ68Z++IeH1e1VO6TbtZIht46JpmsXziMkoQv/FwgPGYmbbYQdoVDVu+1xpjYjZ/Pkwm6uLAme
+ k6cXRf93bBYsiH8aMSIGlojWCYmd9qjzwqRbB34jXY+mgZJBAY4XBz5U3nuQSUaKMam9dPcfDgm0iB
+ Yh53umXFWr+QXNzfdcfo+GO0GqeIM/gYThOyloiCHHcSwBVBLHNAle80vhUZN4KrqjEST3B/PvPW8W
+ qSTVZOZU0TSiuSaOV/zIRdqS3OjiIoRZiJvtRcdf8z+wF1E+lo5CsA29M8Nw==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,52 +110,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/28/22 19:42, Russell King (Oracle) wrote:
-> On Mon, Nov 28, 2022 at 07:21:56PM -0500, Sean Anderson wrote:
->> On 11/28/22 18:22, Russell King (Oracle) wrote:
->> > This doesn't make any sense. priv->supported_speeds is the set of speeds
->> > read from the PMAPMD. The only bits that are valid for this are the
->> > MDIO_PMA_SPEED_* definitions, but teh above switch makes use of the
->> > MDIO_PCS_SPEED_* definitions. To see why this is wrong, look at these
->> > two definitions:
->> > 
->> > #define MDIO_PMA_SPEED_10               0x0040  /* 10M capable */
->> > #define MDIO_PCS_SPEED_2_5G             0x0040  /* 2.5G capable */
->> > 
->> > Note that they are the same value, yet above, you're testing for bit 6
->> > being clear effectively for both 10M and 2.5G speeds. I suspect this
->> > is *not* what you want.
->> > 
->> > MDIO_PMA_SPEED_* are only valid for the PMAPMD MMD (MMD 1).
->> > MDIO_PCS_SPEED_* are only valid for the PCS MMD (MMD 3).
->> 
->> Ugh. I almost noticed this from the register naming...
->> 
->> Part of the problem is that all the defines are right next to each other
->> with no indication of what you just described.
-> 
-> That's because they all refer to the speed register which is at the same
-> address, but for some reason the 802.3 committees decided to make the
-> register bits mean different things depending on the MMD. That's why the
-> definition states the MMD name in it.
+Hi,
+This patch series adds MFD, PMIC keys, and regulator support for MT6357.
+MT6357 is a MediaTek PMIC very similar to MT6358.
 
-Well, then it's really a different register per MMD (and therefore the
-definitions should be better separated). Grouping them together implies
-that they share bits, when they do not (except for the 10G bit).
+Currently, MTK bindings related to the PMICs are not converted yet (still .txt):
 
-> This is true of all definitions in mdio.h - the naming convention is of
-> the format "MDIO_mmd_register_bit" where the bit is specific to a MMD,
-> or "MDIO_register_bit" where it is non-specific (e.g. the status
-> register 1 link status bit.)
-> 
->> Anyway, what I want are the PCS/PMA speeds from the 2018 revision, which
->> this phy seems to follow.
-> 
-> I think we should add further entries for the PMA/PMD speed register.
-> For example, 2.5G is bit 13 and 5G is bit 14. (vs bits 6 and 7 for the
-> PCS MMD version of the speed register.)
-> 
+soc/mediatek/pwrap.txt (all PMIC parent)
+      |
+      V
+mfd/mt6397.txt (support lot of mt63XX PMIC)
+      +---------------+----------------+---...
+      V               V                V
+regulator/...      rtc/...          codec/...
 
-Yes. I will do this for v3.
+1) Convert pwrap to yaml is ok.
 
---Sean
+2) For the PMIC bindings, there are two option:
+- Convert mt6397.txt to mediatek,mt6397.yaml and continue to support multiple
+  PMIC with only one file. IMO, the file will be hard to read because
+  the supported features aren't the same for each PMIC.
+
+- Make a binding file for each PMIC ref:
+    - mfd/mediatek,mt6357.yaml
+    - mfd/mediatek,mt6358.yaml
+    - ...
+
+3) All PMIC daughter bindings (regulator, rtc, codec, led, ...) aren't fully
+converted yet. Refering to the two PMIC convertion options above:
+- To be clean, all daughter bindings should be converted. This is hard because
+  a good understanding of each device is requiered to write efficient bindings.
+- Only daughter bindings supported by the added PMIC should be converted, that
+  allows to do the task conversion step by step.
+
+In the V4 of this serie, I chose the second option.
+
+Regards,
+Alex
+
+Changes in v7:
+- Drop mt6397 RTC schema conversion.
+- Integrate mt6357 RTC schema directly in mediatek,mt6357.yaml.
+- Fix unit address in mediatek,pwrap.yaml.
+- Link to v6: https://lore.kernel.org/r/20221005-mt6357-support-v6-0-4f589756befa@baylibre.com
+
+Changes in v6:
+- Fix typo in documentations.
+- Remove mediatek,mt6397-rtc.yaml example.
+- Align pwrap convertion with the original .txt file.
+- Remove unecessary include in the mt6357-regulator driver.
+- Link to v5: https://lore.kernel.org/r/20221005-mt6357-support-v5-0-8210d955dd3d@baylibre.com
+
+Changes in v5:
+- Add missing maintainers
+- Improve RTC binding by adding rtc.yaml ref and start-year property
+- Split the txt->yaml conversion in one commit and the addition of the
+  new mt6357-rtc compatible in another commit.
+- Improve PWRAP binding:
+  - clocks and clock-name have been refactored.
+  - reset-names is now properly dependent to resets.
+  - additionalProperties change from true to false.
+  - change example for a most recent and popular SoC.
+  - "allOf" part has been simplified.
+- Pass binding tests with the updated tools. Here the command:
+  "make DT_CHECKER_FLAGS=-m dt_binding_check"
+- Link to v4: https://lore.kernel.org/r/20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com
+
+Changes in v4:
+- "dt-bindings: mfd: mt6397: add binding for MT6357" has been applied
+  by Lee Jones
+- All fixed regulator are now refering to fixed-regulator.yaml
+- vfe28 and vcamio18 regulators have been added
+- pwrap binding has been converted and mt8365 support has been added
+- mt6357 PMIC binding has been created
+- mt6397 RTC binding has been converted and mt6357 support has been added
+- Link to v3: https://lore.kernel.org/r/20221005-mt6357-support-v3-0-7e0bd7c315b2@baylibre.com
+
+Changes in v3:
+- To be consistent with regulator/driver.h and helper.c, shift
+  variables have been removed and the mask values have been directly shifted.
+- Remove index tables and rework volt tables to use set/get helper functions.
+- Add comment to structure and function.
+- Fix Fabien Parent mail address.
+- Link to v2: https://lore.kernel.org/r/20221005-mt6357-support-v2-0-f17ba2d2d0a9@baylibre.com
+
+Changes in v2:
+- Rebase
+- Fix typo
+- Remove dependencies with https://lore.kernel.org/all/20220415153629.1817202-1-fparent@baylibre.com/
+  which is no longer relevant.
+
+Previous versions:
+v1 - https://lore.kernel.org/all/20220531124959.202787-1-fparent@baylibre.com/
+
+To: Lee Jones <lee@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Matthias Brugger <matthias.bgg@gmail.com>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Chen Zhong <chen.zhong@mediatek.com>
+To: Liam Girdwood <lgirdwood@gmail.com>
+To: Mark Brown <broonie@kernel.org>
+To: Fabien Parent <fabien.parent@linaro.org>
+To: Alessandro Zummo <a.zummo@towertech.it>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Sean Wang <sean.wang@mediatek.com>
+To: Pavel Machek <pavel@ucw.cz>
+To: Tianping Fang <tianping.fang@mediatek.com>
+To: Flora Fu <flora.fu@mediatek.com>
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-input@vger.kernel.org
+Cc: Fabien Parent <fparent@baylibre.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-leds@vger.kernel.org
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+
+---
+Alexandre Mergnat (4):
+      dt-bindings: soc: mediatek: convert pwrap documentation
+      dt-bindings: mfd: mediatek: Add bindings for MT6357 PMIC
+      arm64: dts: mt6358: change node names
+      arm64: dts: mt8173: change node name
+
+Fabien Parent (4):
+      dt-bindings: input: mtk-pmic-keys: add binding for MT6357 PMIC
+      regulator: dt-bindings: Add binding schema for mt6357 regulators
+      regulator: add mt6357 regulator
+      Input: mtk-pmic-keys: add MT6357 support
+
+ .../bindings/input/mediatek,pmic-keys.yaml         |   1 +
+ .../devicetree/bindings/leds/leds-mt6323.txt       |   2 +-
+ .../devicetree/bindings/mfd/mediatek,mt6357.yaml   | 111 +++++
+ Documentation/devicetree/bindings/mfd/mt6397.txt   |   2 +-
+ .../regulator/mediatek,mt6357-regulator.yaml       | 294 +++++++++++++
+ .../bindings/soc/mediatek/mediatek,pwrap.yaml      | 147 +++++++
+ .../devicetree/bindings/soc/mediatek/pwrap.txt     |  75 ----
+ arch/arm64/boot/dts/mediatek/mt6358.dtsi           |   6 +-
+ arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi       |   2 +-
+ arch/arm64/boot/dts/mediatek/mt8173-evb.dts        |   2 +-
+ drivers/input/keyboard/mtk-pmic-keys.c             |  17 +
+ drivers/regulator/Kconfig                          |   9 +
+ drivers/regulator/Makefile                         |   1 +
+ drivers/regulator/mt6357-regulator.c               | 453 +++++++++++++++++++++
+ include/linux/regulator/mt6357-regulator.h         |  51 +++
+ 15 files changed, 1091 insertions(+), 82 deletions(-)
+---
+base-commit: f6e37bb630736d880a319b7845e8837c8536dd59
+change-id: 20221005-mt6357-support-55308b82e33f
+
+Best regards,
+-- 
+Alexandre Mergnat <amergnat@baylibre.com>
