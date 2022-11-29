@@ -2,185 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89F563C618
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 216E563C621
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:08:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236415AbiK2RFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 12:05:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
+        id S235786AbiK2RIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 12:08:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236292AbiK2RFP (ORCPT
+        with ESMTP id S234542AbiK2RIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 12:05:15 -0500
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043796D95F
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:03:38 -0800 (PST)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1432a5f6468so17765489fac.12
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:03:37 -0800 (PST)
+        Tue, 29 Nov 2022 12:08:36 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9F324BEB
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:08:33 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id q12so10216445pfn.10
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:08:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bAXWficdb5Gh5FzYn9UMAwDhZ8CYJoMoqCIJ7//eDF4=;
-        b=ljTM73sTaDXWg3oaSywePDjqX298nSKxGHlaRqrv/LsDQrh3Mk9juSNxGkuzLumWxy
-         /O1+AvGM4FAywdTpyxCQGuYt9iKWmSXYzMbOF8AqODsFHqIaEIKHAcDeYgoOxqm3Fr4o
-         TBRSen1aQi9VAoZMPuBILu+kBDk8UQm+R3FRy3pdzsmnDkxBuftdOqpEmxAanK+Th54j
-         b8OVtjKBlDakl7FEtLr3q1dHi6yezL2+/uByMQUdbFwTiXZVM3v9O0eFVdNSo9ZoknNt
-         vw3QrBqFV9EaNlDr4769W5eAGUfmEToEGJFnua/uUW+Qw2+N1owsFPR77QI/qPD9Wf6L
-         rAGg==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cfz3Mcgxkqb1OqUShW9AvM1bJWJ5IVPUimuhgnHTUfM=;
+        b=aB+ZuGMOzbK18zkd0jlC4zEUTSM38tp9K/bCtuVmGeRWETnLRpEwg6Cfsis6G/o8YB
+         2HqB7jorwoOw6h/LjLMxu5ed5EZE92927W/9yhpp/QruynXSUNxJp0OMoVkixJnRoaDz
+         PSuOZAOkF9I4gSS32lclTss+2DBuTn/ncV2ntYH8YMzg9PF3tm8qf0hVKILYBg2UDCmD
+         wbUFp/1Fi7NjOLDWJsNeD/wtnDvCVPYo4knWim39AeNTc1EFLvMkEGW6VYwyktGtW5Qx
+         +UBWGG0y4yJft2CYMgbAUi9qHrNg41pvQg2NXxZ0NdMCIm2c1JLzlQ89YLhdvsbn7Bys
+         PI7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bAXWficdb5Gh5FzYn9UMAwDhZ8CYJoMoqCIJ7//eDF4=;
-        b=E1uzU6nDYc8Z4bo6f4WFilLA4Oj6lledVxIf4TtBCrVij5PAO6nmw5TzTJo4iZLcdI
-         Ic57+V90P3LZyKfQvAScwlxePMyKrD1cda0Z/RwCD2c5ieB1kdSTMzbB/f4SOm2aqTml
-         rIHbLLvA60+1/OUexf753RMX+/s/cAq6uhOL9lqaIt4/D7Lq+xmJgf5Z029C1RP2gje6
-         xC8AT+iKCsahAwx+fEG9W8PsHOfZNRAAMGXEDX9SjKd/zSfharlYYaLhh7FaS5yCrPaW
-         Xt/uIzTtK9jwO/0jBYmbfGTl2hgs0XpcFmvs9FctVW8p6tNwQk+X4lajxZusJowZta1t
-         USDQ==
-X-Gm-Message-State: ANoB5plfgPYleO7ljPFwdRVOHwpWbr4aWO9dSwmB0i5DRKzO7xHpjyQz
-        g7IK2Bx46BYGJDqmlYjeWYTiGred/JnSKNtricTnVg==
-X-Google-Smtp-Source: AA0mqf6Tdo6X8IWcObQq2o/3ErG6HPcwPrWCjYttmbMFTp3CWvG1wKOXHHCA+4UMzfOIMYG1UrxXlV2FAe3l3HjF3RI=
-X-Received: by 2002:a05:6870:7988:b0:13c:84e6:96d2 with SMTP id
- he8-20020a056870798800b0013c84e696d2mr36802093oab.72.1669741416887; Tue, 29
- Nov 2022 09:03:36 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cfz3Mcgxkqb1OqUShW9AvM1bJWJ5IVPUimuhgnHTUfM=;
+        b=6Xamzd8W0yGDyVLyyym43Z5suZ/HnbrFqJXVjkemFlJ+VlKOPizFj+MPAfZbb2loip
+         y9k7LN968TuVpRa/GEIYGJUIwvvEyCzYQj2pWrd+IFUsyUEc9Us1CyXO1JJd0e8Ue0gs
+         GAPluPjQ0WbA31eVa9XRhQKIyfaUhLBJ9gmTTxPDEi9e0OAbYgg5Z7bXbWDIyLlkbuLa
+         Y1jGZeEvgPWx6ylnR0BNhdNAMauhAq5Q+tC+QczEI7JBfVlXx3bUh9eQG4DyQwg2XG+B
+         nfrS2dK6ZfgpMLy2H8AYg3c7jxzjuU8IEq3UGvCldn/crGOQPJp9MIy3hGFx9LdZzLqj
+         gChg==
+X-Gm-Message-State: ANoB5pnpveZc9qs5d4txfLASV/BA2NvxsSF3BMso/uTQsDZA1ccB7i+4
+        sQrdNEPxsB8kauI2jmtl6+F9kA==
+X-Google-Smtp-Source: AA0mqf5swFLksPgiEDo6TRTvtGl0tdoW1L9fhbh0pRyA3vgdzDg/DHK7jSPhCQbx1VNNnHFBlq3wIw==
+X-Received: by 2002:a63:ce58:0:b0:473:e2bb:7fc0 with SMTP id r24-20020a63ce58000000b00473e2bb7fc0mr33307253pgi.604.1669741713274;
+        Tue, 29 Nov 2022 09:08:33 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id h23-20020a63e157000000b00434272fe870sm8633883pgk.88.2022.11.29.09.08.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 09:08:32 -0800 (PST)
+Message-ID: <9044e2b7-193f-ade4-b4a3-69e40b12088a@kernel.dk>
+Date:   Tue, 29 Nov 2022 10:08:30 -0700
 MIME-Version: 1.0
-References: <20221124085436.24900-1-jiaxin.yu@mediatek.com> <20221124085436.24900-3-jiaxin.yu@mediatek.com>
-In-Reply-To: <20221124085436.24900-3-jiaxin.yu@mediatek.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Tue, 29 Nov 2022 18:03:26 +0100
-Message-ID: <CAG3jFyvLAHfxtKVoFFUOwUacO+t+FC3x5J9Eg-qWOUVBnU8JfQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] ASoC: hdmi-codec: Add event handler for hdmi TX
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
-Cc:     broonie@kernel.org, andrzej.hajda@intel.com,
-        neil.armstrong@linaro.org, Laurent.pinchart@ideasonboard.com,
-        kuninori.morimoto.gx@renesas.com,
-        angelogioacchino.delregno@collabora.com, nfraprado@collabora.com,
-        chunxu.li@mediatek.com, ajye_huang@compal.corp-partner.google.com,
-        allen-kh.cheng@mediatek.com, dri-devel@lists.freedesktop.org,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 0/5] Fix probe failed when modprobe modules
+Content-Language: en-US
+To:     Li Zetao <lizetao1@huawei.com>
+Cc:     st@redhat.com, jasowang@redhat.com, pbonzini@redhat.com,
+        stefanha@redhat.com, airlied@redhat.com, kraxel@redhat.com,
+        gurchetansingh@chromium.org, olvaffe@gmail.com, daniel@ffwll.ch,
+        david@redhat.com, ericvh@gmail.com, lucho@ionkov.net,
+        asmadeus@codewreck.org, linux_oss@crudebyte.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, pmorel@linux.vnet.ibm.com,
+        cornelia.huck@de.ibm.com, pankaj.gupta.linux@gmail.com,
+        rusty@rustcorp.com.au, airlied@gmail.com,
+        virtualization@lists.linux-foundation.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org
+References: <20221128021005.232105-1-lizetao1@huawei.com>
+ <20221129160615.3343036-1-lizetao1@huawei.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20221129160615.3343036-1-lizetao1@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Nov 2022 at 09:54, Jiaxin Yu <jiaxin.yu@mediatek.com> wrote:
->
-> If the speaker and hdmi are connect to the same port of I2S,
-> when try to switch to speaker playback, we will find that hdmi
-> is always turned on automatically. The way of switching is
-> through SOC_DAPM_PIN_SWITCH, however, such events can not be
-> handled in hdmi-codec driver.
->
-> So add event handler for hdmi TX to solve the above issue.
->
-> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> ---
->  include/sound/hdmi-codec.h    |  6 ++++++
->  sound/soc/codecs/hdmi-codec.c | 37 +++++++++++++++++++++++++++++++----
->  2 files changed, 39 insertions(+), 4 deletions(-)
->
-> diff --git a/include/sound/hdmi-codec.h b/include/sound/hdmi-codec.h
-> index 48ad33aba393..dcbc09254144 100644
-> --- a/include/sound/hdmi-codec.h
-> +++ b/include/sound/hdmi-codec.h
-> @@ -81,6 +81,12 @@ struct hdmi_codec_ops {
->                        struct hdmi_codec_daifmt *fmt,
->                        struct hdmi_codec_params *hparms);
->
-> +       /*
-> +        * PCM trigger callback.
-> +        * Mandatory
-> +        */
-> +       int (*trigger)(struct device *dev, int cmd);
-> +
->         /*
->          * Shuts down the audio stream.
->          * Mandatory
-> diff --git a/sound/soc/codecs/hdmi-codec.c b/sound/soc/codecs/hdmi-codec.c
-> index 0b1cdb2d6049..cb4479372e09 100644
-> --- a/sound/soc/codecs/hdmi-codec.c
-> +++ b/sound/soc/codecs/hdmi-codec.c
-> @@ -276,7 +276,31 @@ struct hdmi_codec_priv {
->         u8 iec_status[AES_IEC958_STATUS_SIZE];
->  };
->
-> +static int hdmi_tx_event(struct snd_soc_dapm_widget *w,
-> +               struct snd_kcontrol *kcontrol, int event)
+On 11/29/22 9:06 AM, Li Zetao wrote:
+> This patchset fixes similar issue, the root cause of the
+> problem is that the virtqueues are not stopped on error
+> handling path.
 
-checkpatch --strict caught this alignment issue.
+Not related to just this patchset, but guys, Huawei really *REALLY* need
+to get the email situation sorted. I'm digging whole/half patchsets out
+of spam every morning.
 
-ASoC: hdmi-codec: Add event handler for hdmi TX
--:44: CHECK:PARENTHESIS_ALIGNMENT: Alignment should match open parenthesis
-#44: FILE: sound/soc/codecs/hdmi-codec.c:280:
-+static int hdmi_tx_event(struct snd_soc_dapm_widget *w,
-+        struct snd_kcontrol *kcontrol, int event)
+This has been brought up in the past. And no, the cloud variant of
+the email also doesn't work properly.
+
+Talk to your IT department, get this sorted once and for all. You risk
+your patches being dumped on the floor because people don't see them,
+or only see small parts of a patchset. And it's really annoying to have
+to deal with as a recipient.
+
+-- 
+Jens Axboe
 
 
-
-> +{
-> +       struct snd_soc_component *component = snd_soc_dapm_to_component(w->dapm);
-> +       struct hdmi_codec_priv *hcp = snd_soc_component_get_drvdata(component);
-> +
-> +       switch (event) {
-> +       case SND_SOC_DAPM_PRE_PMU:
-> +               if (hcp->hcd.ops->trigger)
-> +                       hcp->hcd.ops->trigger(component->dev->parent, SNDRV_PCM_TRIGGER_START);
-> +               break;
-> +       case SND_SOC_DAPM_POST_PMD:
-> +               if (hcp->hcd.ops->trigger)
-> +                       hcp->hcd.ops->trigger(component->dev->parent, SNDRV_PCM_TRIGGER_STOP);
-> +               break;
-> +       default:
-> +               break;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
->  static const struct snd_soc_dapm_widget hdmi_widgets[] = {
-> +       SND_SOC_DAPM_OUT_DRV_E("SDB", SND_SOC_NOPM, 0, 0, NULL, 0, hdmi_tx_event,
-> +                              SND_SOC_DAPM_POST_PMD | SND_SOC_DAPM_PRE_PMU),
->         SND_SOC_DAPM_OUTPUT("TX"),
->         SND_SOC_DAPM_OUTPUT("RX"),
->  };
-> @@ -808,18 +832,23 @@ static int hdmi_dai_probe(struct snd_soc_dai *dai)
->         struct hdmi_codec_daifmt *daifmt;
->         struct snd_soc_dapm_route route[] = {
->                 {
-> -                       .sink = "TX",
-> +                       .sink = dai->driver->capture.stream_name,
-> +                       .source = "RX",
-> +               },
-> +               {
-> +                       .sink = "SDB",
->                         .source = dai->driver->playback.stream_name,
->                 },
->                 {
-> -                       .sink = dai->driver->capture.stream_name,
-> -                       .source = "RX",
-> +                       .sink = "TX",
-> +                       .source = "SDB",
->                 },
-> +
->         };
->         int ret;
->
->         dapm = snd_soc_component_get_dapm(dai->component);
-> -       ret = snd_soc_dapm_add_routes(dapm, route, 2);
-> +       ret = snd_soc_dapm_add_routes(dapm, route, ARRAY_SIZE(route));
->         if (ret)
->                 return ret;
->
-> --
-> 2.18.0
->
