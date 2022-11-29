@@ -2,84 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC5E63C899
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:39:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C175463C89A
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237076AbiK2Tj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 14:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
+        id S236351AbiK2TkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 14:40:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237069AbiK2TiM (ORCPT
+        with ESMTP id S236754AbiK2Tjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 14:38:12 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802086E553
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:36:35 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3691e040abaso149484727b3.9
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:36:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1bmuvgUk4OTyzS0cP/IZYe3bJ8nPbcieDdEYGxb93AQ=;
-        b=ntXkEtvhVc/YnzEWpIUFZAj9rJeK2awgv14ux5liOk6ARFQ7QDmkY9WvWMn6EqOFU2
-         n0pA2iVfSHzd+Pt8sMCAWm0CK60nTMK4dvyiY3Poqo2zPHY5NUEYZa1aSGTCWnh4Ym/6
-         FI1Te3VLkqFV+1i2lu4M5DO0yWJBf5cq8aVFdwOJAFQ1nSnBIKa0RJYKkq24GZBrTmSk
-         yg4RMe0/JV7RQAWFzsZR5jn7ePqPZQ1dqN2W0hi60e9o8c8NItwV6vTujonY0uxJhbCT
-         cnopifUGk1l7GXsYdCiKrI8P9J0VYSn8g3mZvmOviAWx1ux5LIcU8jKeqjk5RhCWwhe0
-         ByyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1bmuvgUk4OTyzS0cP/IZYe3bJ8nPbcieDdEYGxb93AQ=;
-        b=vf6dI1alzEyK9xXPX68tX6afhjPYAUSsmvbxA/1lKIoPgCav9GbLXIIMGQ1yaf81Bn
-         XSeX6gECYUHXIhU8UaygRCJFRRt6wr3nmePSMzgpm8xkImN8Zue50dP7n0+oIwm8smzT
-         8Lldri1XS+8kcj1uyEqEP0FuNNW6M/Xxy1j8msiUG2S/2APOX6tTrAwDeL7vooaswsQg
-         vFcqLI9qvAedu0RsOZTD1FSxXHisECwbLO3Y7pQ9f0qcd7NH0+BgjWTYbaRwjwnVIMQ/
-         irxXJeApJfdyCeriwZFsmZzkSSWoGmmu4y6cIqh2+61WPwP0j6Eg/D1lCGsEkOaloKHU
-         PuVg==
-X-Gm-Message-State: ANoB5pm8hGUm+PRdlu3KULdb+x8KWfDkn3BCOgDl62NbxpSMIIHOIvLO
-        EK8snCCQq8xa0ote9jgrdv3KSKxNHGBq7FMLVpi5Xg==
-X-Google-Smtp-Source: AA0mqf5x/Ru6NTcJ+v1hnT7joZwXyMEwRPWqS7UveTWznS2uwIh9Ynrw+Ypu1vGW+xSyi3PXx0C43GetrUd2VejyV+k=
-X-Received: by 2002:a0d:f0c5:0:b0:373:4bf9:626e with SMTP id
- z188-20020a0df0c5000000b003734bf9626emr37357556ywe.173.1669750594587; Tue, 29
- Nov 2022 11:36:34 -0800 (PST)
-MIME-Version: 1.0
-References: <41eda0ea-0ed4-1ffb-5520-06fda08e5d38@huawei.com>
- <CAMDZJNVSv3Msxw=5PRiXyO8bxNsA-4KyxU8BMCVyHxH-3iuq2Q@mail.gmail.com>
- <fdb3b69c-a29c-2d5b-a122-9d98ea387fda@huawei.com> <CAMDZJNWTry2eF_n41a13tKFFSSLFyp3BVKakOOWhSDApdp0f=w@mail.gmail.com>
- <CA+khW7jgsyFgBqU7hCzZiSSANE7f=A+M-0XbcKApz6Nr-ZnZDg@mail.gmail.com>
- <07a7491e-f391-a9b2-047e-cab5f23decc5@huawei.com> <CAMDZJNUTaiXMe460P7a7NfK1_bbaahpvi3Q9X85o=G7v9x-w=g@mail.gmail.com>
- <59fc54b7-c276-2918-6741-804634337881@huaweicloud.com> <541aa740-dcf3-35f5-9f9b-e411978eaa06@redhat.com>
- <Y4ZABpDSs4/uRutC@Boquns-Mac-mini.local> <Y4ZCKaQFqDY3aLTy@Boquns-Mac-mini.local>
-In-Reply-To: <Y4ZCKaQFqDY3aLTy@Boquns-Mac-mini.local>
-From:   Hao Luo <haoluo@google.com>
-Date:   Tue, 29 Nov 2022 11:36:23 -0800
-Message-ID: <CA+khW7hkQRFcC1QgGxEK_NeaVvCe3Hbe_mZ-_UkQKaBaqnOLEQ@mail.gmail.com>
-Subject: Re: [net-next] bpf: avoid hashtab deadlock with try_lock
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     Waiman Long <longman@redhat.com>, Hou Tao <houtao@huaweicloud.com>,
-        Tonghao Zhang <xiangxia.m.yue@gmail.com>,
+        Tue, 29 Nov 2022 14:39:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4245E51304
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:37:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669750647;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=tBZ6anhOwTxMVSJuE8Q5eMuTfnMC1c6DPf6ddnr8upA=;
+        b=Xk2OSuozxZx26YC8keCfly5HxoxS8kE4nz7hdctJN/4VDJ2PbbRRz3eL1lb9PbT+2L2z3Z
+        /NVcxmpDlxcc8GWsx12plfcO06FHTmUNj0GSq7bI//6kPId068bwJWeimly4vvTOt5j6DC
+        DN7SrnnK2swmnTYMwD2crV+seK7Jcas=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-613-GQCJg98lOS2L8CozmutRJg-1; Tue, 29 Nov 2022 14:37:23 -0500
+X-MC-Unique: GQCJg98lOS2L8CozmutRJg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7E217802D32;
+        Tue, 29 Nov 2022 19:37:22 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.35.206.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2861D2027064;
+        Tue, 29 Nov 2022 19:37:17 +0000 (UTC)
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Sandipan Das <sandipan.das@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "houtao1@huawei.com" <houtao1@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
+        Jing Liu <jing2.liu@intel.com>,
+        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Subject: [PATCH v2 00/11] SVM: vNMI (with my fixes)
+Date:   Tue, 29 Nov 2022 21:37:06 +0200
+Message-Id: <20221129193717.513824-1-mlevitsk@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,31 +74,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 9:32 AM Boqun Feng <boqun.feng@gmail.com> wrote:
->
-> Just to be clear, I meant to refactor htab_lock_bucket() into a try
-> lock pattern. Also after a second thought, the below suggestion doesn't
-> work. I think the proper way is to make htab_lock_bucket() as a
-> raw_spin_trylock_irqsave().
->
-> Regards,
-> Boqun
->
+Hi!=0D
+=0D
+This is the vNMI patch series based on Santosh Shukla's vNMI patch series.=
+=0D
+=0D
+In this version of this patch series I addressed most of the review feedbac=
+k=0D
+added some more refactoring and also I think fixed the issue with migration=
+.=0D
+=0D
+I only tested this on a machine which doesn't have vNMI, so this does need=
+=0D
+some testing to ensure that nothing is broken.=0D
+=0D
+Best regards,=0D
+       Maxim Levitsky=0D
+=0D
+Maxim Levitsky (9):=0D
+  KVM: nSVM: don't sync back tlb_ctl on nested VM exit=0D
+  KVM: nSVM: clean up the copying of V_INTR bits from vmcb02 to vmcb12=0D
+  KVM: nSVM: explicitly raise KVM_REQ_EVENT on nested VM exit if L1=0D
+    doesn't intercept interrupts=0D
+  KVM: SVM: drop the SVM specific H_FLAGS=0D
+  KVM: x86: emulator: stop using raw host flags=0D
+  KVM: SVM: add wrappers to enable/disable IRET interception=0D
+  KVM: x86: add a delayed hardware NMI injection interface=0D
+  KVM: SVM: implement support for vNMI=0D
+  KVM: nSVM: implement support for nested VNMI=0D
+=0D
+Santosh Shukla (2):=0D
+  x86/cpu: Add CPUID feature bit for VNMI=0D
+  KVM: SVM: Add VNMI bit definition=0D
+=0D
+ arch/x86/include/asm/cpufeatures.h |   1 +=0D
+ arch/x86/include/asm/kvm-x86-ops.h |   2 +=0D
+ arch/x86/include/asm/kvm_host.h    |  24 +++--=0D
+ arch/x86/include/asm/svm.h         |   7 ++=0D
+ arch/x86/kvm/emulate.c             |  11 +--=0D
+ arch/x86/kvm/kvm_emulate.h         |   7 +-=0D
+ arch/x86/kvm/smm.c                 |   2 -=0D
+ arch/x86/kvm/svm/nested.c          | 102 ++++++++++++++++---=0D
+ arch/x86/kvm/svm/svm.c             | 154 ++++++++++++++++++++++-------=0D
+ arch/x86/kvm/svm/svm.h             |  41 +++++++-=0D
+ arch/x86/kvm/x86.c                 |  50 ++++++++--=0D
+ 11 files changed, 318 insertions(+), 83 deletions(-)=0D
+=0D
+-- =0D
+2.26.3=0D
+=0D
 
-The potential deadlock happens when the lock is contended from the
-same cpu. When the lock is contended from a remote cpu, we would like
-the remote cpu to spin and wait, instead of giving up immediately. As
-this gives better throughput. So replacing the current
-raw_spin_lock_irqsave() with trylock sacrifices this performance gain.
-
-I suspect the source of the problem is the 'hash' that we used in
-htab_lock_bucket(). The 'hash' is derived from the 'key', I wonder
-whether we should use a hash derived from 'bucket' rather than from
-'key'. For example, from the memory address of the 'bucket'. Because,
-different keys may fall into the same bucket, but yield different
-hashes. If the same bucket can never have two different 'hashes' here,
-the map_locked check should behave as intended. Also because
-->map_locked is per-cpu, execution flows from two different cpus can
-both pass.
-
-Hao
