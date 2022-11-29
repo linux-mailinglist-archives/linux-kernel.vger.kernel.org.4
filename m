@@ -2,78 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC83F63C292
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:32:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D053463C296
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235423AbiK2Ocd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 09:32:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40334 "EHLO
+        id S235639AbiK2Oco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 09:32:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235385AbiK2Oca (ORCPT
+        with ESMTP id S235391AbiK2Ocf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 09:32:30 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845825800E;
-        Tue, 29 Nov 2022 06:32:24 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NM4XZ45JMzmVJq;
-        Tue, 29 Nov 2022 22:31:42 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 22:32:22 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 22:32:21 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Wolfram Sang <wsa@kernel.org>, Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH] i2c: qcom-geni: Fix error return code in geni_i2c_gpi_xfer()
-Date:   Tue, 29 Nov 2022 22:31:45 +0800
-Message-ID: <20221129143145.2067-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.37.3.windows.1
+        Tue, 29 Nov 2022 09:32:35 -0500
+Received: from pv50p00im-ztdg10021101.me.com (pv50p00im-ztdg10021101.me.com [17.58.6.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CF63AF
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:32:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zzy040330.moe;
+        s=sig1; t=1669732352;
+        bh=D1sY42WHcDsVJr/mrozXVUG4CSOOZzLkdsx1x7wE2EE=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=KxufnIFv9bXmj8ZCvfCCyitPxBDIUFz/5qNlapdNvzeQA2U7/O7LW62pe3pjncdIu
+         5k+MK34sigv3mlZ9cnSJsSHUNS6BbrdKEQ+wXt//oAHHtH4Z10USA+A2D7gif67Z8g
+         0VsfSiD384hBq7gcVaWtw7xMP5EwvMQR0jv0PRwkKwl0avwmWeU8z+dxO8nNtXzlXt
+         CuKY9VYv11pHPfhHEejjMY+L4DmJE6TwtMYC1WAFVdY4mv1Lj3hd+MVae7D2abKr68
+         Zhycb9Ubk+Qg2OmQc+8/E2Yfve/pDDbcZQ22pHM+fhyyMO1vJWxBMAeak+eZXPbbym
+         I3gEcG5icBzJQ==
+Received: from vanilla.lan (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+        by pv50p00im-ztdg10021101.me.com (Postfix) with ESMTPSA id B8D7AD00A38;
+        Tue, 29 Nov 2022 14:32:28 +0000 (UTC)
+From:   JunASAKA <JunASAKA@zzy040330.moe>
+To:     rtl8821cerfe2@gmail.com, Jes.Sorensen@gmail.com
+Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: reply to Bitterblue Smith
+Date:   Tue, 29 Nov 2022 22:32:25 +0800
+Message-Id: <20221129143225.376856-1-JunASAKA@zzy040330.moe>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221129043442.14717-1-JunASAKA@zzy040330.moe>
+References: <20221129043442.14717-1-JunASAKA@zzy040330.moe>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: XqlrtoIyYeu0Ldd9Oh_7RY6MzhcB1tnE
+X-Proofpoint-GUID: XqlrtoIyYeu0Ldd9Oh_7RY6MzhcB1tnE
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.0.605.474.0000000_definitions?=
+ =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2020-01-23?=
+ =?UTF-8?Q?=5F02_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=43 malwarescore=0 clxscore=1030
+ mlxlogscore=12 bulkscore=0 suspectscore=0 spamscore=43 adultscore=0
+ mlxscore=43 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2211290083
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Function geni_i2c_gpi_xfer() returns 'ret' to the upper function instead
-of gi2c->err.
+Hi Bitterblue Smith,
 
-Fixes: d8703554f4de ("i2c: qcom-geni: Add support for GPI DMA")
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- drivers/i2c/busses/i2c-qcom-geni.c | 1 -
- 1 file changed, 1 deletion(-)
+Thanks for your reply. I've seen the discussion.
+As for the bugs of the module, my Tenda U1 wifi module which is using the rtl8192eu chip running into problems with the rtl8xxxu module, more information can be found here: https://bugzilla.kernel.org/show_bug.cgi?id=216746. I want to solve this problem but I haven't got enough experience upon it. I'll appreciate it if you could do me a favour on it. Thanks again.
 
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 84a77512614d9fb..8fce98bb77ff974 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -626,7 +626,6 @@ static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
- 			dev_err(gi2c->se.dev, "I2C timeout gpi flags:%d addr:0x%x\n",
- 				gi2c->cur->flags, gi2c->cur->addr);
- 			gi2c->err = -ETIMEDOUT;
--			goto err;
- 		}
- 
- 		if (gi2c->err) {
--- 
-2.25.1
-
+Jun ASAKA.
