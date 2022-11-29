@@ -2,212 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 892D263C6A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AAFD63C6D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233607AbiK2Rno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 12:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40246 "EHLO
+        id S236534AbiK2Ryc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 12:54:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233312AbiK2Rnl (ORCPT
+        with ESMTP id S233312AbiK2Ry3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 12:43:41 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CE55E3C4
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:43:39 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id y17so6246607plp.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:43:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iXCWILef2PDcL9sLeguo1E8rwfZJ6oNabKhO5H8Gxiw=;
-        b=ZjD8MZVqQwGAMlT9t2izaMXVJU8jMqvIKuBePdb/fltwaex9aK3k0K8d5CtmYAz0oZ
-         Gd4jdz46JxqNygZsNz6S4b+QNLWJye/YbdS0LdoNT8mqHc1Nfrum+jrRPAx5EIqux9IG
-         Pc0zyGudAO5hqgWlNNl9liAX3ezO7n3sVyZn8OubwAHBVY/zjwi7+d+l9akgFsHSKrxl
-         TKW7OZ1VTC05I96JDWw5aNhktRLGiDUci7iS/qPAwwJqoI8odrJQxdry9ItLS98eUfI5
-         AmORBuSvMHZGSR6s67R/CqdEg+nXn2EJPRgmCMWl6tjFhqN6Bxg7Doz/yJAVbVcoSnMT
-         d8pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iXCWILef2PDcL9sLeguo1E8rwfZJ6oNabKhO5H8Gxiw=;
-        b=gPuCHgLuqqlISTBbjYWqCoR/jtue0VFepwb/XYkFV+ubTtFpb8kc54o7BcJ6x7q9+Q
-         lBCYmcGR2QMyJYIzCdGORTQDLCqS+c6wvSBs2HdIa+dxJiQ38vGI/f+mnfS1RixxsAnX
-         kCslZb+Ar3UhdoARzDsm0zI4ZDLA28AzGE+lA7ExZtBXKu+6UtlY08Zi7zvP8exGJzuV
-         UjOjQCEY3WW1iOgfFmcer8f/Yo4eyvDPeWNYNuI+UqutWTK+r+dPBBpW02NYqhz32tDp
-         dxLjZHlq6caPM76RBlDTRk9Wuq9z1uUzSxgaT5ERXcYdxgOSPq3rvPHpfEDIrh+9ASPG
-         zPDg==
-X-Gm-Message-State: ANoB5pl8h1q7iGeByHFMDcci8Tcm2xCfeoT0GBBBiDVmD1lgDmjcIz4m
-        TNN5LTUlvYu4mcQS3AyDQUA=
-X-Google-Smtp-Source: AA0mqf7+2AEstG2zQZWqQIE3UtBcDlP+tNxEcHG7VqwJTz3I0h+3H54yM8gaQDgA2qDzQbmuZ1wi+g==
-X-Received: by 2002:a17:90b:2690:b0:213:f2c9:ce71 with SMTP id pl16-20020a17090b269000b00213f2c9ce71mr60558650pjb.62.1669743819324;
-        Tue, 29 Nov 2022 09:43:39 -0800 (PST)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id x29-20020aa78f1d000000b00575a578a717sm1522947pfr.206.2022.11.29.09.43.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 09:43:38 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        virtualization@lists.linux-foundation.org (open list:VIRTIO GPU DRIVER),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/virtio: Spiff out cmd queue/response traces
-Date:   Tue, 29 Nov 2022 09:43:30 -0800
-Message-Id: <20221129174330.262751-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Tue, 29 Nov 2022 12:54:29 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848D545A0E;
+        Tue, 29 Nov 2022 09:54:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669744467; x=1701280467;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lKETQwm8/AYRbtudWQgvt+s2fE4xcmiG++pU4pE+d6w=;
+  b=DN42QkDy+C6shEKlUZUqF0G4/oESigpuf9wtreqpgfaM0b64GANWx5Xv
+   NbMUHimRlWrY5w+Pga1+K/9VoyzCry/IZ/JX5FSO0N6Jx3vopWXXd2JSU
+   l5ESMl6uo324uoB/e16bOFhLC8T1TsBpI49kQ79UkuFVcGzvANDOKkVTG
+   v6XZNgXa92PwJbsmb7msj+oM4p05V55LJvMM3UdUHS2qsDhPtugYJc8gV
+   /N5swXV/N+Wrm5Tp6eGNUBQJKsdcT1ZoRxqa67ziRxfOI1tUbEmN2RLVi
+   U3zkjsw6WKIQhKiq0d3uIRfQEhpjgl1uku0Pl2GKtEefqqr8HtHiRHa9r
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="316335761"
+X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
+   d="scan'208";a="316335761"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 09:43:54 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="768512573"
+X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
+   d="scan'208";a="768512573"
+Received: from wteng-mobl1.gar.corp.intel.com (HELO [10.209.83.194]) ([10.209.83.194])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 09:43:53 -0800
+Message-ID: <6b212148-4e3f-3ef6-7922-901175746d44@intel.com>
+Date:   Tue, 29 Nov 2022 09:43:53 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/3] acpi/processor: fix evaluating _PDC method when
+ running as Xen dom0
+Content-Language: en-US
+To:     Roger Pau Monne <roger.pau@citrix.com>,
+        linux-kernel@vger.kernel.org
+Cc:     xen-devel@lists.xenproject.org, jgross@suse.com,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Alex Chiang <achiang@hp.com>,
+        Venkatesh Pallipadi <venkatesh.pallipadi@intel.com>,
+        linux-acpi@vger.kernel.org
+References: <20221121102113.41893-1-roger.pau@citrix.com>
+ <20221121102113.41893-2-roger.pau@citrix.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20221121102113.41893-2-roger.pau@citrix.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On 11/21/22 02:21, Roger Pau Monne wrote:
+> When running as a Xen dom0 the number of CPUs available to Linux can
+> be different from the number of CPUs present on the system, but in
+> order to properly fetch processor performance related data _PDC must
+> be executed on all the physical CPUs online on the system.
 
-Add a sequence # for more easily matching up cmd/resp, and the # of free
-slots in the virtqueue to more easily see starvation issues.
+How is the number of CPUs available to Linux different?
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/virtio/virtgpu_drv.h   |  3 +++
- drivers/gpu/drm/virtio/virtgpu_trace.h | 20 ++++++++++++--------
- drivers/gpu/drm/virtio/virtgpu_vq.c    | 13 ++++++++++---
- 3 files changed, 25 insertions(+), 11 deletions(-)
+Is this a result of the ACPI tables that dom0 sees being "wrong"?
 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.h b/drivers/gpu/drm/virtio/virtgpu_drv.h
-index 9b98470593b0..cdc208d9238c 100644
---- a/drivers/gpu/drm/virtio/virtgpu_drv.h
-+++ b/drivers/gpu/drm/virtio/virtgpu_drv.h
-@@ -166,6 +166,8 @@ struct virtio_gpu_vbuffer {
- 
- 	struct virtio_gpu_object_array *objs;
- 	struct list_head list;
-+
-+	uint32_t seqno;
- };
- 
- struct virtio_gpu_output {
-@@ -195,6 +197,7 @@ struct virtio_gpu_queue {
- 	spinlock_t qlock;
- 	wait_queue_head_t ack_queue;
- 	struct work_struct dequeue_work;
-+	uint32_t seqno;
- };
- 
- struct virtio_gpu_drv_capset {
-diff --git a/drivers/gpu/drm/virtio/virtgpu_trace.h b/drivers/gpu/drm/virtio/virtgpu_trace.h
-index 711ecc2bd241..087e860a66f7 100644
---- a/drivers/gpu/drm/virtio/virtgpu_trace.h
-+++ b/drivers/gpu/drm/virtio/virtgpu_trace.h
-@@ -9,8 +9,8 @@
- #define TRACE_INCLUDE_FILE virtgpu_trace
- 
- DECLARE_EVENT_CLASS(virtio_gpu_cmd,
--	TP_PROTO(struct virtqueue *vq, struct virtio_gpu_ctrl_hdr *hdr),
--	TP_ARGS(vq, hdr),
-+	TP_PROTO(struct virtqueue *vq, struct virtio_gpu_ctrl_hdr *hdr, u32 seqno),
-+	TP_ARGS(vq, hdr, seqno),
- 	TP_STRUCT__entry(
- 			 __field(int, dev)
- 			 __field(unsigned int, vq)
-@@ -19,6 +19,8 @@ DECLARE_EVENT_CLASS(virtio_gpu_cmd,
- 			 __field(u32, flags)
- 			 __field(u64, fence_id)
- 			 __field(u32, ctx_id)
-+			 __field(u32, num_free)
-+			 __field(u32, seqno)
- 			 ),
- 	TP_fast_assign(
- 		       __entry->dev = vq->vdev->index;
-@@ -28,21 +30,23 @@ DECLARE_EVENT_CLASS(virtio_gpu_cmd,
- 		       __entry->flags = le32_to_cpu(hdr->flags);
- 		       __entry->fence_id = le64_to_cpu(hdr->fence_id);
- 		       __entry->ctx_id = le32_to_cpu(hdr->ctx_id);
-+		       __entry->num_free = vq->num_free;
-+		       __entry->seqno = seqno;
- 		       ),
--	TP_printk("vdev=%d vq=%u name=%s type=0x%x flags=0x%x fence_id=%llu ctx_id=%u",
-+	TP_printk("vdev=%d vq=%u name=%s type=0x%x flags=0x%x fence_id=%llu ctx_id=%u num_free=%u seqno=%u",
- 		  __entry->dev, __entry->vq, __entry->name,
- 		  __entry->type, __entry->flags, __entry->fence_id,
--		  __entry->ctx_id)
-+		  __entry->ctx_id, __entry->num_free, __entry->seqno)
- );
- 
- DEFINE_EVENT(virtio_gpu_cmd, virtio_gpu_cmd_queue,
--	TP_PROTO(struct virtqueue *vq, struct virtio_gpu_ctrl_hdr *hdr),
--	TP_ARGS(vq, hdr)
-+	TP_PROTO(struct virtqueue *vq, struct virtio_gpu_ctrl_hdr *hdr, u32 seqno),
-+	TP_ARGS(vq, hdr, seqno)
- );
- 
- DEFINE_EVENT(virtio_gpu_cmd, virtio_gpu_cmd_response,
--	TP_PROTO(struct virtqueue *vq, struct virtio_gpu_ctrl_hdr *hdr),
--	TP_ARGS(vq, hdr)
-+	TP_PROTO(struct virtqueue *vq, struct virtio_gpu_ctrl_hdr *hdr, u32 seqno),
-+	TP_ARGS(vq, hdr, seqno)
- );
- 
- #endif
-diff --git a/drivers/gpu/drm/virtio/virtgpu_vq.c b/drivers/gpu/drm/virtio/virtgpu_vq.c
-index 9ff8660b50ad..a04a9b20896d 100644
---- a/drivers/gpu/drm/virtio/virtgpu_vq.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_vq.c
-@@ -215,7 +215,7 @@ void virtio_gpu_dequeue_ctrl_func(struct work_struct *work)
- 	list_for_each_entry(entry, &reclaim_list, list) {
- 		resp = (struct virtio_gpu_ctrl_hdr *)entry->resp_buf;
- 
--		trace_virtio_gpu_cmd_response(vgdev->ctrlq.vq, resp);
-+		trace_virtio_gpu_cmd_response(vgdev->ctrlq.vq, resp, entry->seqno);
- 
- 		if (resp->type != cpu_to_le32(VIRTIO_GPU_RESP_OK_NODATA)) {
- 			if (le32_to_cpu(resp->type) >= VIRTIO_GPU_RESP_ERR_UNSPEC) {
-@@ -261,6 +261,10 @@ void virtio_gpu_dequeue_cursor_func(struct work_struct *work)
- 	spin_unlock(&vgdev->cursorq.qlock);
- 
- 	list_for_each_entry_safe(entry, tmp, &reclaim_list, list) {
-+		struct virtio_gpu_ctrl_hdr *resp =
-+			(struct virtio_gpu_ctrl_hdr *)entry->resp_buf;
-+
-+		trace_virtio_gpu_cmd_response(vgdev->cursorq.vq, resp, entry->seqno);
- 		list_del(&entry->list);
- 		free_vbuf(vgdev, entry);
- 	}
-@@ -353,7 +357,8 @@ static int virtio_gpu_queue_ctrl_sgs(struct virtio_gpu_device *vgdev,
- 	ret = virtqueue_add_sgs(vq, sgs, outcnt, incnt, vbuf, GFP_ATOMIC);
- 	WARN_ON(ret);
- 
--	trace_virtio_gpu_cmd_queue(vq, virtio_gpu_vbuf_ctrl_hdr(vbuf));
-+	vbuf->seqno = ++vgdev->ctrlq.seqno;
-+	trace_virtio_gpu_cmd_queue(vq, virtio_gpu_vbuf_ctrl_hdr(vbuf), vbuf->seqno);
- 
- 	atomic_inc(&vgdev->pending_commands);
- 
-@@ -465,8 +470,10 @@ static void virtio_gpu_queue_cursor(struct virtio_gpu_device *vgdev,
- 		spin_lock(&vgdev->cursorq.qlock);
- 		goto retry;
- 	} else {
-+		vbuf->seqno = ++vgdev->cursorq.seqno;
- 		trace_virtio_gpu_cmd_queue(vq,
--			virtio_gpu_vbuf_ctrl_hdr(vbuf));
-+			virtio_gpu_vbuf_ctrl_hdr(vbuf),
-+			vbuf->seqno);
- 
- 		notify = virtqueue_kick_prepare(vq);
- 	}
--- 
-2.38.1
+> The current checks in processor_physically_present() result in some
+> processor objects not getting their _PDC methods evaluated when Linux
+> is running as Xen dom0.  Fix this by introducing a custom function to
+> use when running as Xen dom0 in order to check whether a processor
+> object matches a CPU that's online.
+
+What is the end user visible effect of this problem and of the solution?
+
 
