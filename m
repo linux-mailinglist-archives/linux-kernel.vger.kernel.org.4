@@ -2,158 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DBAB63BB2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3179E63BB31
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiK2ICM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 03:02:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
+        id S230081AbiK2IEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 03:04:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiK2IBt (ORCPT
+        with ESMTP id S229935AbiK2IEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 03:01:49 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12ED01DF1E;
-        Tue, 29 Nov 2022 00:01:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1669708863; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=Mt8zflQluXrktvTMy1+7/wqUymDJuNvxcCt9uUvUKw10sGTDK0MmA+82aNr+WwHy9LSPljlTOlsgEk2qQ+EFoOjz+teCuYjgTlWnrXhLgNnE8tc4Ud3W0t3AncJ7vXMDugqp76mqGhM2nALe85m0kzUnLVwq/PXuz8TkjBabTtQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1669708863; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=SFqgWmLTPu6Efm5uqI8QHWhAPlyBeMn1zR3+/c+MyV4=; 
-        b=XrJLcU4oGZ6bewSlAoGFPefar0lVihXpG2DX7/j5p01eou8CQKfswf1NEdKjTW33pEsGgoBnOvPF1JHhQyILjBt9OXmPxSquYOZ1IP3sOuLQzdbv22MSDzh9ZRPSZDdndb8TawlE4FdHYC54PhKac4RuD6J1t+Fne3mLQOnEN/w=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669708863;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=SFqgWmLTPu6Efm5uqI8QHWhAPlyBeMn1zR3+/c+MyV4=;
-        b=NzMQ77o6X9I3VrDmPEHUQN1icfGztgC2EGc0z02LnLq1jMb3ZETBFPplSN2gf4gy
-        SoLMOp5SVhwl/Ioye3A0wg2ZZtIwr++hN1PXGbga2DP1ttKOv/OC9+9KCKhrBTR8ucQ
-        zyYoL7Sc7+oh6Um8H7311lXEphsGe+F/tIg5zvrU=
-Received: from [10.10.10.3] (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
-        with SMTPS id 1669708862210987.5702214730692; Tue, 29 Nov 2022 00:01:02 -0800 (PST)
-Message-ID: <25533005-60bf-a9bb-d6a0-d14e1804291a@arinc9.com>
-Date:   Tue, 29 Nov 2022 11:00:53 +0300
+        Tue, 29 Nov 2022 03:04:34 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE61C56D42
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:04:32 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id u27so10240638lfc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:04:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wXyXfpITKQ1f0v4IiIRxCCdu6umQUGRQnWD4tT6S+YU=;
+        b=Zop+AILn4XfFJ1Pe4OIG9kBWpPMnn+ZuEVZL2peZcr6WqqPJFWZfCriecVhYtqPpfd
+         V+ir4ClwKrKpoY9HgQrjEix5cGk+7iR6+WT5ObiJOMMieVWjxU5x54FBFPg3PiOQ1QXC
+         umIhteMpPKVk5ac8BW39bNLtho67DsVwAhiUghyzplPPe16ToFWeS5ZSXJBOafkGw1ED
+         PtIBVHcoeUOv9vYcyBHUt8XNViDmvh5sh4azqjmAjfLYrelPR3bra6dP+aHowNb3sft5
+         2E1+NBf6gCgdDlFaFaJYRyExCgMZLBJKTWp5H4dXL8F2pyuyG7bI+m7bbPKrixST27ML
+         83ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wXyXfpITKQ1f0v4IiIRxCCdu6umQUGRQnWD4tT6S+YU=;
+        b=4XcIY0gFcuw4j9uLD5NyYFsoMJOqqMdMcYnwI/gs3cTKmZgGK4slYgYEH67KZhOl3+
+         mpRI68677Iqo9aRfrOSTYKzsNurd1+5ALDseQ9OuI2bLOU5U5d06TFcZ3JlmJDZtBWZi
+         hPlJodfFhy/OnByboLVfhR02SjHQgz/bOo3Uzgkvn332vAvckafDxv5FOMMgAAwnqV30
+         yUH23LvS7po7aHGKRLmhsaCOka9bbzzwue7h59SajVH0cG5A07fbQrujjfIQDPfyRpXz
+         EpDMnrTUQ0tNOCeNJ1A9DeEYUDm2odDAxRJXadpnmkbT6CwGq3HB1qLWOPkg9JZ1GXL4
+         ivSg==
+X-Gm-Message-State: ANoB5pn7w+0eZnuGXBoChg1Xzd8OotpphOopqaInmsiSmK34pBaD4V7K
+        HDF4V7b+2nRuCVUk9HP5+GJYOQ==
+X-Google-Smtp-Source: AA0mqf7LAvBn/5qmjBUYmO2ML5b/eIC/kz/K85GCEqKLsVxDyPSdydIV8sSvdvwlmxksju2gYtIoHw==
+X-Received: by 2002:ac2:4bc5:0:b0:4b4:c099:a994 with SMTP id o5-20020ac24bc5000000b004b4c099a994mr18163385lfq.193.1669709070963;
+        Tue, 29 Nov 2022 00:04:30 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id z2-20020a056512370200b004b4a0482a53sm2093801lfr.231.2022.11.29.00.04.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 00:04:30 -0800 (PST)
+Message-ID: <54a7fe29-2cde-0e33-6eb6-aa5fcddec93a@linaro.org>
+Date:   Tue, 29 Nov 2022 09:04:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 net-next 06/10] dt-bindings: net: dsa: mediatek,mt7530:
- fix port description location
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        John Crispin <john@phrozen.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Marek Vasut <marex@denx.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        George McCollister <george.mccollister@gmail.com>,
-        Rob Herring <robh@kernel.org>
-References: <20221127224734.885526-1-colin.foster@in-advantage.com>
- <20221127224734.885526-7-colin.foster@in-advantage.com>
- <08784493-7e85-9224-acfa-9a87cbd325e7@arinc9.com> <Y4WnjiE2IxDgi5mc@euler>
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 1/2] spi: dt-bindings: nuvoton,wpcm450-fiu: Fix error in
+ example (bogus include)
 Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <Y4WnjiE2IxDgi5mc@euler>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, openbmc@lists.ozlabs.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20221128214928.3531463-1-j.neuschaefer@gmx.net>
+ <20221128214928.3531463-2-j.neuschaefer@gmx.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221128214928.3531463-2-j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Colin,
-
-On 29.11.2022 09:32, Colin Foster wrote:
-> Hi Arınç,
+On 28/11/2022 22:49, Jonathan Neuschäfer wrote:
+> The nuvoton,wpcm450-fiu binding's example includes
+> nuvoton,wpcm450-clk.h, which has not been merged yet,
+> thus causing a dt_binding_check error on -next.
 > 
-> On Mon, Nov 28, 2022 at 11:28:31AM +0300, Arınç ÜNAL wrote:
->> On 28.11.2022 01:47, Colin Foster wrote:
->>> The description property was located where it applies to every port, not
->>> just ports 5 or 6 (CPU ports). Fix this description.
->>
->> I'm not sure I understand. The description for reg does apply to every port.
->> Both CPU ports and user ports are described. This patch moves the
->> description to under CPU ports only.
+> Fix this error by simply hardcoding the clock index in the example,
+> before the breakage spreads any further.
 > 
-> You're right. I misinterpreted what Rob suggested, so the commit message
-> isn't correct. I see now that reg applies to every port, but is only
-> restricted for CPU ports (if: required: [ ethernet ]).  I'll clean this
-> message up.
-> 
->>
->>>
->>> Suggested-by: Rob Herring <robh@kernel.org>
->>> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
->>> ---
->>>
->>> v2 -> v3
->>>     * New patch.
->>>
->>> ---
->>>    .../bindings/net/dsa/mediatek,mt7530.yaml          | 14 +++-----------
->>>    1 file changed, 3 insertions(+), 11 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>> index 7df4ea1901ce..415e6c40787e 100644
->>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>> @@ -156,17 +156,6 @@ patternProperties:
->>>        patternProperties:
->>>          "^(ethernet-)?port@[0-9]+$":
->>> -        type: object
->>> -        description: Ethernet switch ports
->>> -
->>> -        unevaluatedProperties: false
->>> -
->>
->> Would be nice to mention these being removed on the patch log. Or remove
->> them while doing ("dt-bindings: net: dsa: utilize base definitions for
->> standard dsa switches").
-> 
-> Agreed. My gut is telling me this wants to be in a separate patch from
-> the generic DSA base definitions patch... but I can't say why for
-> certain. I'll plan to move these to the patch you suggest and add a comment
+> Fixes: dd71cd4dd6c9b ("spi: Add Nuvoton WPCM450 Flash Interface Unit (FIU) bindings")
+> Reported-by: Conor Dooley <conor.dooley@microchip.com>
 
-If I understand correctly, with ("dt-bindings: net: dsa: utilize base 
-definitions for standard dsa switches"), these properties are now 
-defined on dsa.yaml#/$defs/base and no longer needed to be defined here 
-since mediatek,mt7530.yaml was also made to refer to it. It'd make sense 
-to remove these properties there as there's continuity.
+Report came from Rob:
 
-> in there about how the type, description, and unevaluatedProperties of
-> mediatek,mt7530 is no longer needed as a result? Keep this patch as more
-> of a "restrict custom port description to CPU ports only" patch?
+Reported-by: Rob Herring <robh@kernel.org>
 
-I'd say get rid of this patch and do above. Trust your gut though. ;P
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Arınç
+Best regards,
+Krzysztof
+
