@@ -2,150 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7831663B993
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 06:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98FB263B996
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 06:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235616AbiK2Fxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 00:53:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35588 "EHLO
+        id S235621AbiK2FyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 00:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiK2Fxr (ORCPT
+        with ESMTP id S235618AbiK2Fx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 00:53:47 -0500
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F98046678;
-        Mon, 28 Nov 2022 21:53:42 -0800 (PST)
-Received: from ubuntu.localdomain (unknown [10.181.252.183])
-        by mail-app4 (Coremail) with SMTP id cS_KCgBXzk1OnoVjutqmCA--.20752S2;
-        Tue, 29 Nov 2022 13:53:25 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-kernel@vger.kernel.org
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH net] net: Add a gfp_t parameter in ip_fib_metrics_init to support atomic context
-Date:   Tue, 29 Nov 2022 13:53:17 +0800
-Message-Id: <20221129055317.53788-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cS_KCgBXzk1OnoVjutqmCA--.20752S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAF4kXF4DtryDAF47ArWrXwb_yoWrJr4xpF
-        10kry3tF4UKry7W34kC3WkZrZxKw1xGFySkr10k39a93s8Wr1xXFy0g34YyF45CFW8Zaya
-        gFyUKry7uFn8CrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk21xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
-        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_
-        JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxF
-        aVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUF9a9DUUUU
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgYJAVZdtcohawAIs6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 29 Nov 2022 00:53:59 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F8B4FFA0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 21:53:57 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id y17so4505995plp.3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 21:53:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QGUEPx1xzxhjCBjmyfak65lMBIhLucPqClHTEgv0v+Q=;
+        b=VwfG/CQdnAymgSvzcRNNCSRZrRkblh4qro+UykiPwg0yquXUtChJ1t0+eAeOC2m54g
+         9H5541QUKuRXUmcQjNkTZ86LBsxKqY+FI5vLZCgiJcsRyHJBbVrff0Szv7O37DtNbGGj
+         mwXUUk+t7+jrh4nWqywyqo+LB5PoyM46jbQBybzkF4MapNsD8MOAe9Em3tnOpoFZgI9J
+         9IJcGj+BgB6X+FAVduyqT6sSuX8HjoWQqK8IrJWIJ2z2U6byMvWoN2i9Z8n7o0yP2ubh
+         5dcD3Ds0vboDBrp8VM9rJ1r0HJOplIzSrPIhRQ+WPXnoRWs1T9wthISuCoBICaugiIlO
+         O1Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QGUEPx1xzxhjCBjmyfak65lMBIhLucPqClHTEgv0v+Q=;
+        b=ylguh1X5c4IdDEwujFJnGs0hf2/rlhWBNQiM0W2Zk3AQSfic2QB73tvq8QFQ+EtyJG
+         9UFBQgC2c7ljW1p9YmIrsvnkJIq8hcNe0IUkoRai9VNkAwcNvLGQHjYULtMlxf6cW55E
+         ngF8bcreeTxzFqGSbZgt0sB2zg60XVCSQRcOUOqH2eSV2jstsqLvBZn/pQuoTZKXVYep
+         a2UWteRNz5NyI/kjUa5r0zt3WBfRuxp3sK5IsunOqw1nFJbnLzObThwbJoQBAHFEN0F6
+         yBL7iV6byUp2dzqMLDtVNM0snQYRXY1Z+SdwDqMam+EDPtevwAAh8z5nBmO7LgXHPLGv
+         mA1g==
+X-Gm-Message-State: ANoB5pkOgLLZDXpWnD+YQ0JPYGY7FRfaOxs13aD3tuNHzNpF24OmrYGj
+        qHixYtaDoaTa6XZBjNO/Jnn+
+X-Google-Smtp-Source: AA0mqf4agF2oc0K3ovVJmPb81+pPhrHenKyRWvpFKt8Me3twmKftFTAZIzSSqrl0TGA3bY5+Z5p9NQ==
+X-Received: by 2002:a17:90a:4745:b0:213:1442:24be with SMTP id y5-20020a17090a474500b00213144224bemr62656499pjg.15.1669701236727;
+        Mon, 28 Nov 2022 21:53:56 -0800 (PST)
+Received: from workstation ([117.207.29.115])
+        by smtp.gmail.com with ESMTPSA id h7-20020a632107000000b0044046aec036sm7614112pgh.81.2022.11.28.21.53.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 28 Nov 2022 21:53:55 -0800 (PST)
+Date:   Tue, 29 Nov 2022 11:23:51 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     bjorn.andersson@linaro.org, mchehab@kernel.org,
+        james.morse@arm.com, rric@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_saipraka@quicinc.com
+Subject: Re: [PATCH v4 1/2] EDAC/qcom: Get rid of hardcoded register offsets
+Message-ID: <20221129055351.GA4931@workstation>
+References: <20221116143352.289303-1-manivannan.sadhasivam@linaro.org>
+ <20221116143352.289303-2-manivannan.sadhasivam@linaro.org>
+ <Y4SmtfSzLbYea+f0@zn.tnic>
+ <20221128181705.GP62721@thinkpad>
+ <Y4T/YlDdDk7gVdfB@zn.tnic>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4T/YlDdDk7gVdfB@zn.tnic>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ip_fib_metrics_init() do not support atomic context, because it
-calls "kzalloc(..., GFP_KERNEL)". When ip_fib_metrics_init() is used
-in atomic context, the sleep-in-atomic-context bug will happen.
+On Mon, Nov 28, 2022 at 07:35:14PM +0100, Borislav Petkov wrote:
+> On Mon, Nov 28, 2022 at 11:47:05PM +0530, Manivannan Sadhasivam wrote:
+> > Well, yes but that would imply both LLCC and EDAC patches going together.
+> > Splitting them will break the build, which is worse.
+> 
+> Sounds like you need to check out:
+> 
+> Documentation/process/stable-kernel-rules.rst
+> 
+> first.
+> 
+> Hint: there are provisions in there how to specify dependencies between
+> commits.
+> 
 
-For example, the neigh_proxy_process() is a timer handler that is
-used to process the proxy request that is timeout. But it could call
-ip_fib_metrics_init(). As a result, the can_block flag in ipv6_add_addr()
-and the gfp_flags in addrconf_f6i_alloc() and ip6_route_info_create()
-are useless. The process is shown below.
+Hmm, I did miss reading this. Thanks for pointing out.
 
-    (atomic context)
-neigh_proxy_process()
-  pndisc_redo()
-    ndisc_recv_ns()
-      addrconf_dad_failure()
-        ipv6_add_addr(..., bool can_block)
-          addrconf_f6i_alloc(..., gfp_t gfp_flags)
-            ip6_route_info_create(..., gfp_t gfp_flags)
-              ip_fib_metrics_init()
-                kzalloc(..., GFP_KERNEL) //may sleep
+> > Sorry, it is because I only tried building for ARM64 architecture. The
+> > error you are seeing is for x86-64 and I could now reproduce it as
+> > well.
+> 
+> Yes, because arch doesn't matter here - the .config does.
+> 
 
-This patch add a gfp_t parameter in ip_fib_metrics_init() in order to
-support atomic context.
+Well, arch does matter here. LLCC driver depends on ARCH_QCOM ||
+COMPILE_TEST. In the case of ARCH_QCOM, the REGMAP_MMIO is implicitly
+selected and you won't see the error with built-in or as a module.
 
-Fixes: f3d9832e56c4 ("ipv6: addrconf: cleanup locking in ipv6_add_addr")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- include/net/ip.h         | 2 +-
- net/ipv4/fib_semantics.c | 2 +-
- net/ipv4/metrics.c       | 4 ++--
- net/ipv6/route.c         | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
+Only if you unselect ARCH_QCOM and use x86_64 (or any other arch) with
+COMPILE_TEST, then you'll see the error with both built-in and module.
 
-diff --git a/include/net/ip.h b/include/net/ip.h
-index 144bdfbb25a..1e99c9d6240 100644
---- a/include/net/ip.h
-+++ b/include/net/ip.h
-@@ -489,7 +489,7 @@ static inline unsigned int ip_skb_dst_mtu(struct sock *sk,
- 
- struct dst_metrics *ip_fib_metrics_init(struct net *net, struct nlattr *fc_mx,
- 					int fc_mx_len,
--					struct netlink_ext_ack *extack);
-+					struct netlink_ext_ack *extack, gfp_t gfp_flags);
- static inline void ip_fib_metrics_put(struct dst_metrics *fib_metrics)
- {
- 	if (fib_metrics != &dst_default_metrics &&
-diff --git a/net/ipv4/fib_semantics.c b/net/ipv4/fib_semantics.c
-index f721c308248..4a0793e7d34 100644
---- a/net/ipv4/fib_semantics.c
-+++ b/net/ipv4/fib_semantics.c
-@@ -1450,7 +1450,7 @@ struct fib_info *fib_create_info(struct fib_config *cfg,
- 	if (!fi)
- 		goto failure;
- 	fi->fib_metrics = ip_fib_metrics_init(fi->fib_net, cfg->fc_mx,
--					      cfg->fc_mx_len, extack);
-+					      cfg->fc_mx_len, extack, GFP_KERNEL);
- 	if (IS_ERR(fi->fib_metrics)) {
- 		err = PTR_ERR(fi->fib_metrics);
- 		kfree(fi);
-diff --git a/net/ipv4/metrics.c b/net/ipv4/metrics.c
-index 25ea6ac44db..b0342603a6d 100644
---- a/net/ipv4/metrics.c
-+++ b/net/ipv4/metrics.c
-@@ -66,7 +66,7 @@ static int ip_metrics_convert(struct net *net, struct nlattr *fc_mx,
- 
- struct dst_metrics *ip_fib_metrics_init(struct net *net, struct nlattr *fc_mx,
- 					int fc_mx_len,
--					struct netlink_ext_ack *extack)
-+					struct netlink_ext_ack *extack, gfp_t gfp_flags)
- {
- 	struct dst_metrics *fib_metrics;
- 	int err;
-@@ -74,7 +74,7 @@ struct dst_metrics *ip_fib_metrics_init(struct net *net, struct nlattr *fc_mx,
- 	if (!fc_mx)
- 		return (struct dst_metrics *)&dst_default_metrics;
- 
--	fib_metrics = kzalloc(sizeof(*fib_metrics), GFP_KERNEL);
-+	fib_metrics = kzalloc(sizeof(*fib_metrics), gfp_flags);
- 	if (unlikely(!fib_metrics))
- 		return ERR_PTR(-ENOMEM);
- 
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index 2f355f0ec32..2687e764a87 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -3751,7 +3751,7 @@ static struct fib6_info *ip6_route_info_create(struct fib6_config *cfg,
- 		goto out;
- 
- 	rt->fib6_metrics = ip_fib_metrics_init(net, cfg->fc_mx, cfg->fc_mx_len,
--					       extack);
-+					       extack, gfp_flags);
- 	if (IS_ERR(rt->fib6_metrics)) {
- 		err = PTR_ERR(rt->fib6_metrics);
- 		/* Do not leave garbage there. */
--- 
-2.17.1
+> Therefore, as requested:
+> 
+> "For the next version, you'd need to fix all possible Kconfig build
+> errors before sending."
+> 
 
+Sure.
+
+Thanks,
+Mani
+
+> Thx.
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
