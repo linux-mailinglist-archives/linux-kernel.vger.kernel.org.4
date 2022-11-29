@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A7563C86A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:30:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F2C63C872
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236338AbiK2Taq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 14:30:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
+        id S236297AbiK2TdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 14:33:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236947AbiK2TaY (ORCPT
+        with ESMTP id S236082AbiK2TdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 14:30:24 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9283825D2
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:29:34 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id n16-20020a25da10000000b006f2b5bc99f9so12186325ybf.11
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:29:34 -0800 (PST)
+        Tue, 29 Nov 2022 14:33:21 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FD31262F
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:33:20 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id bs21so23745217wrb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:33:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0IUlOBzNYwGwCi/kB8Fps4nNnJDZbsGKlmWKEqCDmL4=;
-        b=XvfjvKZWRz3BpkA0IL/xKRzPSSQ0ZNVzAKAZwUyMZTFds48yAOihgfktestrOPCJIG
-         5g3Z2g9OzLAOUqkmej5idDjZa8WFQJ2XzhSqKsbP63Bm3EGjgX+nGmuiB0BN0q4JyPFp
-         51035iIhlvXvBLbMP+V9tvW2cOexrSnsm+Ogh78MtAezWX5UBLaU+HDC/uHDFXFRARqE
-         6mFhSwMQcDTHCXaz7fzxV6O1YE4TDyZYpfuYDYJcqegrb3GZVxK5ESl6DAlQ5j6f7CE4
-         WdsB7MIoGBsYPG+kLF3nd7hGmS9QD2GMbeXI8LgSr80S+HBLyum+k0sT1QCAXyAGX8IA
-         BhOQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DziUPV3FYLxKZaiIMhDeCeZbJbV2j/J3+CJximfrnik=;
+        b=ljIY7f+3ukdZIghKE1EdXX2KIJyvM8xGwKKFJE8BFwfNq2TGrrg8W5xeXZ6/DvkI1U
+         a6Z3wBAVGZxhlYrj6OXjXqeIuhFAXfGmztDuKsJ//zNJZHF1JixxQSQHkxWZ9g8YFhhf
+         fNLSZpSIrAtqMZ9KxfbX6FWW/pW4os3jcrOh7wG2wMPeVviMVWGl4lfjZ2OHnH7Dtmso
+         eXnaQlL4CjvYIy8nrA/1xOvwt7LKMIl7orKKYqX5SLFiGca2NPNsElPdD37aHIXfibZu
+         q+T6RxwLBwCnWzj9rqRXOHxkIQtaSipt52Wd25M9tjs6MwwdAInF+ajziZa99g1P5UgG
+         wU+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0IUlOBzNYwGwCi/kB8Fps4nNnJDZbsGKlmWKEqCDmL4=;
-        b=FzNMrCpByTEI2KCluntTwWrI0rmya63SYTQamhzwajI8kWwcMqrBssAJrkgzY97qS+
-         9wiu5njKewyu49ICFQ2VxkG0I/Ye3wWm+fBsMXEkgnaNpd5Hc5VfNxfU49hbnuY8I3vn
-         g/UYeQl97cVbcsltnqwQVjHzUmFwEOVXFiiD5bLh7D/VhIiyWQvP1RFRRy8P0q5D7SVN
-         OXmJQoU66RGeeXhhr5NF+therCUYEB/sfZ7eqMC1j4EwccNjQmm6iAhO/TmXsP+UFSjg
-         q+ikpyS0/xYWqbRh/s0bSauQOtB7g6y+TUCwBEtvCBB48uf3gZNmHtNaewGv0dbYusxE
-         camw==
-X-Gm-Message-State: ANoB5plru5vHIK/iA0Qt/UPK4Y8f5zL+C6lkdTu/CNYrbKgjHb1szcBk
-        I3NIA+IYs6T5ddsG35rPxguu9fWnPSI7
-X-Google-Smtp-Source: AA0mqf4kxsZ4UL67ZqkI8S97E4rFaKUqDzyi+0fTNj/ukTeJjZ8XZ8ob+aIirVIuSDmzsxW8PfYgat8up1oy
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:788c:ccf4:3670:3362])
- (user=irogers job=sendgmr) by 2002:a25:8e82:0:b0:6d2:70d5:3ed0 with SMTP id
- q2-20020a258e82000000b006d270d53ed0mr56790224ybl.457.1669750173767; Tue, 29
- Nov 2022 11:29:33 -0800 (PST)
-Date:   Tue, 29 Nov 2022 11:29:24 -0800
-Message-Id: <20221129192924.1580537-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Subject: [PATCH] perf build: Fixes for LIBTRACEEVENT_DYNAMIC
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DziUPV3FYLxKZaiIMhDeCeZbJbV2j/J3+CJximfrnik=;
+        b=Baur/H3myvxI9YDtuxfjZBQkJqENuoheUpr4mqU/j90bI7Avspq8VEmD+uyOEQ825D
+         uXYujRSCUm38dKtqyclyJUQ03Ze+dAnYw7rEW5y0v32gLqTE0HMev6Z/gHtG4YHbwWe8
+         e58IdKmlEXxT4IjWGv7NHWjvf5KBwS6KzxlL3N/FkSvh7Zc4dUB8gIIakPA1FOVb26Po
+         XeG+5yiBKVzQbo4usy0wMt0IihJan3vwrtwFkVpxdrsCJ8rLtq1W1k5GecSlxeJEMSsh
+         ACugo92iy49nz3z9Y4ljH0f78f1BA/2UxevZfWQjs3fPfIjLycLtbixcVdQQNz8UxNkw
+         otuw==
+X-Gm-Message-State: ANoB5pkhNtg8l/2zfypH6uqUbph3jf8YYvAsVcHa2Q0D++toDQSJLJR9
+        VMkAwesis7NJM0EYwiZZnGmqhBg3PBxKVnVyx7HdeQ==
+X-Google-Smtp-Source: AA0mqf6g0fmXm+IiK5ByKrmlfR+f9Iloi5aZFvc5rSu+3q8sOstHPCmZ64lRbwgI9u4Y5Y5RvADTTZf2lNJyEPbuePw=
+X-Received: by 2002:a5d:680c:0:b0:242:a38:d0c6 with SMTP id
+ w12-20020a5d680c000000b002420a38d0c6mr12307489wru.375.1669750398699; Tue, 29
+ Nov 2022 11:33:18 -0800 (PST)
+MIME-Version: 1.0
+References: <20221116224631.207631-1-irogers@google.com> <Y4Cb4feK/9q+Wzmt@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <Y4DDsmXU/tkmDfK7@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+In-Reply-To: <Y4DDsmXU/tkmDfK7@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
 From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
+Date:   Tue, 29 Nov 2022 11:33:06 -0800
+Message-ID: <CAP-5=fWv4DXAY1AhMvc47ULVcCUGDdoSZhK5r=+QXeiCWMpd+g@mail.gmail.com>
+Subject: Re: [PATCH] perf build: Fix LIBTRACEEVENT_DYNAMIC
+To:     Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Jiri Olsa <jolsa@kernel.org>,
         Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,43 +80,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If LIBTRACEEVENT_DYNAMIC is enabled then avoid the install step for
-the plugins. If disabled correct DESTDIR so that the plugins are
-installed under <lib>/traceevent/plugins.
+On Fri, Nov 25, 2022 at 5:31 AM Alexander Gordeev
+<agordeev@linux.ibm.com> wrote:
+>
+> On Fri, Nov 25, 2022 at 11:41:40AM +0100, Alexander Gordeev wrote:
+> > > The tools/lib includes fixes break LIBTRACEVENT_DYNAMIC as the
+> > > makefile erroneously had depdendencies on building libtraceevent even
+> > > when not linking with it. This change fixes the issues with
+> > > LIBTRACEEVENT_DYNAMIC by making the built files optional.
+> >
+> > It kernel-next on s390 somehow libtraceevent seems to be bypassed, which leads
+> > to make -C tools/perf install-bin failure. While it does not hit in every
+> > envoronment, could you please hint what could be a reason for that?
+>
+> And unless I am missing something install-traceevent-plugins target
+> is only awailable when LIBTRACEEVENT_DYNAMIC is undefined..
 
-Fixes: ef019df01e20 ("perf build: Install libtraceevent locally when building")
-Reported-by: Alexander Gordeev <agordeev@linux.ibm.com>
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.perf | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Thanks Alexander, I'm guessing you've hit this in your builds as
+LIBTRACEEVENT_DYNAMIC is defined. I've set out a fix in:
+https://lore.kernel.org/lkml/20221129192924.1580537-1-irogers@google.com/T/#u
 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index a17a6ea85e81..f4cd946fe91a 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -884,7 +884,7 @@ $(LIBTRACEEVENT_DYNAMIC_LIST): libtraceevent_plugins
- 
- install-traceevent-plugins: libtraceevent_plugins
- 	$(Q)$(MAKE) -C $(LIBTRACEEVENT_PLUGINS_DIR) O=$(LIBTRACEEVENT_PLUGINS_OUTPUT) \
--		DESTDIR=$(LIBTRACEEVENT_PLUGINS_DESTDIR) prefix= \
-+		DESTDIR=$(DESTDIR_SQ) prefix= \
- 		$(LIBTRACEEVENT_FLAGS) install
- endif
- 
-@@ -1093,7 +1093,11 @@ install-tests: all install-gtk
- 		$(INSTALL) tests/shell/coresight/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/coresight'
- 	$(Q)$(MAKE) -C tests/shell/coresight install-tests
- 
--install-bin: install-tools install-tests install-traceevent-plugins
-+install-bin: install-tools install-tests
-+
-+ifndef LIBTRACEEVENT_DYNAMIC
-+install-bin: install-traceevent-plugins
-+endif
- 
- install: install-bin try-install-man
- 
--- 
-2.38.1.584.g0f3c55d4c2-goog
-
+Thanks,
+Ian
