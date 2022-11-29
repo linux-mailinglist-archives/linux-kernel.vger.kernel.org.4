@@ -2,68 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128D663C474
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D782563C483
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 17:01:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235485AbiK2P7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 10:59:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
+        id S235352AbiK2QBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 11:01:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235803AbiK2P65 (ORCPT
+        with ESMTP id S235871AbiK2QBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:58:57 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F946930A;
-        Tue, 29 Nov 2022 07:57:56 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id D4F4224E023;
-        Tue, 29 Nov 2022 23:57:52 +0800 (CST)
-Received: from EXMBX065.cuchost.com (172.16.6.65) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 29 Nov
- 2022 23:57:52 +0800
-Received: from [192.168.0.104] (219.128.233.15) by EXMBX065.cuchost.com
- (172.16.6.65) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 29 Nov
- 2022 23:57:51 +0800
-Message-ID: <8677051a-604a-210c-066c-75db444d6f09@starfivetech.com>
-Date:   Tue, 29 Nov 2022 23:58:30 +0800
+        Tue, 29 Nov 2022 11:01:18 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C34169A8B;
+        Tue, 29 Nov 2022 07:59:41 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATFmncM016736;
+        Tue, 29 Nov 2022 15:58:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=O1zHUKyMYg/N5w80x5NsEXIV4fzGlq8CSJOktCGLEoc=;
+ b=j0PVXACHfpFiyiV3rnlCeFwBcG1yGYvTRRpsz9jkx5zIW59HM4QxuMVk79qmbgT+hktG
+ iz14heoVMlFAzwEC9mtcaWwo8WMhh4olSeBDBBixOzm/XqHmH+RpybeHKrOFzITq14/I
+ pQOqCyfxWs6uuIbJt/2jrQYDSErW7LXIWsXbMlDyfaLAA1aiUKibiDdL3mBIEgfgKAro
+ s0I1NNWkrhnw3PIp4towyuNsE769NKX2bBvzzQrROjT0gVXiILVSZpgzxn3H2L/yiPUx
+ PKBqq1hMChU4NmU8naQRiNLVE0ZquYFA9FYp2+BwQzJRZM4lLIBGN3WARjhkBhb6zWZu Zw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m5n1vg0v6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 15:58:54 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ATFwh5f029584
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 15:58:43 GMT
+Received: from [10.216.9.244] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 29 Nov
+ 2022 07:58:37 -0800
+Message-ID: <65fd2068-4744-221f-f398-da4303b64fca@quicinc.com>
+Date:   Tue, 29 Nov 2022 21:28:33 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/5] dt-bindings: pinctrl: Add StarFive JH7110 pinctrl
- definitions
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>
-CC:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221118011108.70715-1-hal.feng@starfivetech.com>
- <20221118011108.70715-2-hal.feng@starfivetech.com>
- <eb3974a3-f715-f5b0-cac7-551af26bd17b@linaro.org>
- <08db0f3b-5222-9460-26ba-0e6380d16583@linaro.org>
- <0ceba170-f844-e733-a49e-e67746f9f836@starfivetech.com>
- <093ea507-4c42-1af9-4896-64c1a918432e@linaro.org>
- <30c21787-0c48-ff50-1d63-8e69bdcdbe30@starfivetech.com>
- <339be655-aee7-e1a4-51be-28ea20de6792@linaro.org>
- <3db802d6-114f-097a-6c69-e7b40e4d2764@starfivetech.com>
- <f52e31a5-a12a-b95e-b99c-1af8f8b41c3b@linaro.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] ASoC: qcom: lpass-sc7180: Add maybe_unused tag for system
+ PM ops
 Content-Language: en-US
-From:   Jianlong Huang <jianlong.huang@starfivetech.com>
-In-Reply-To: <f52e31a5-a12a-b95e-b99c-1af8f8b41c3b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Nathan Chancellor <nathan@kernel.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
+        <devicetree@vger.kernel.org>
+References: <1669726428-3140-1-git-send-email-quic_srivasam@quicinc.com>
+ <Y4YpELN4/0cesonb@dev-arch.thelio-3990X>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <Y4YpELN4/0cesonb@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [219.128.233.15]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX065.cuchost.com
- (172.16.6.65)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: c5Gnbz93EI3y_DZwAkv2U-Y1I-f7G-L1
+X-Proofpoint-ORIG-GUID: c5Gnbz93EI3y_DZwAkv2U-Y1I-f7G-L1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-29_10,2022-11-29_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 impostorscore=0 adultscore=0 mlxlogscore=999 malwarescore=0
+ spamscore=0 priorityscore=1501 clxscore=1011 mlxscore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211290089
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,76 +87,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Nov 2022 15:58:12 +0100, Krzysztof Kozlowski wrote:
-> On 29/11/2022 15:46, Jianlong Huang wrote:
->> On Tue, 29 Nov 2022 08:49:49 +0100, Krzysztof Kozlowski wrote:
->>> On 29/11/2022 02:47, Jianlong Huang wrote:
->>>> On Mon, 28 Nov 2022 09:32:45 +0100, Krzysztof Kozlowski wrote:
->>>>> On 28/11/2022 01:48, Jianlong Huang wrote:
->>>>>
->>>>>>>>> +/* aon_iomux doen */
->>>>>>>>> +#define GPOEN_AON_PTC0_OE_N_4			2
->>>>>>>>> +#define GPOEN_AON_PTC0_OE_N_5			3
->>>>>>>>> +#define GPOEN_AON_PTC0_OE_N_6			4
->>>>>>>>> +#define GPOEN_AON_PTC0_OE_N_7			5
->>>>>>>>> +
->>>>>>>>
->>>>>>>> It looks like you add register constants to the bindings. Why? The
->>>>>>>> bindings are not the place to represent hardware programming model. Not
->>>>>>>> mentioning that there is no benefit in this.
->>>>>>>
->>>>>>> Also: this entire file should be dropped, but if it stays, you have to
->>>>>>> name it matching bindings or compatible (vendor,device.h).
->>>>>>
->>>>>> Thanks your comments.
->>>>>> These macros are used to configure pinctrl in dts, so the file should stay,
->>>>>
->>>>> Why they should stay? What's the reason? If it is not a constant used by
->>>>> driver, then register values should not be placed in the bindings, so
->>>>> drop it.
->>>>>
->>>>
->>>> Thanks.
->>>>
->>>> These macros in binding header(example, DOUT, DOEN etc) will be used in DTS,
->>>> and driver will parse the DT for pinctrl configuration.
->>>>
->>>> Example in dts:
->>>> uart0_pins: uart0-0 {
->>>> 	tx-pins {
->>>> 		pinmux = <GPIOMUX(5, GPOUT_SYS_UART0_TX, GPOEN_ENABLE, GPI_NONE)>;
->>>
->>> This is usage in DTS and is not an argument to store register
->>> addresses/offsets as bindings. What is the usage (of define, not value)
->>> in the driver?
->>>
->> 
->> The existing implementation reuse the macros for DTS and driver.
-> 
-> Where in the driver? Grep gives zero results.
-> 
->> Do you mean we need to separate the macros, one for DTS and one for driver usage?
-> 
-> No, if driver uses them it is fine. The problem is I cannot find it
-> anywhere.
-> 
->> Or you have any better suggestion?
->> 
->> These macros are the value of register, not register addresses/offsets,
->> except for with prefix of GPI.
-> 
-> Still, values are not usually part of bindings.
-> 
->> 
->> Drivers rarely reference macros directly, mostly parsing dts and writing them to registers.
-> 
-> So drivers do not use macros? Then there is no reason to store them in
-> bindings? What do you "bind" if there is no usage (and we do not talk
-> about DTS...)?
-> 
+Thanks for your tie Nathan!!!
 
-Where do you suggest to store these macros used in DTS?
+On 11/29/2022 9:15 PM, Nathan Chancellor wrote:
+> On Tue, Nov 29, 2022 at 06:23:48PM +0530, Srinivasa Rao Mandadapu wrote:
+>> Add __maybe_unused tag for system PM ops suspend and resume.
+>> This is required to fix allmodconfig compilation issue.
+>> Fixes: c3bf7699747c ("ASoC: qcom: lpass-sc7280: Add system suspend/resume PM ops")
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> A better solution would be replacing SET_SYSTEM_SLEEP_PM_OPS() with
+> SYSTEM_SLEEP_PM_OPS(), which was added to avoid needing to add these
+> '__maybe_unused' attributes to these functions. See commit 1a3c7bb08826
+> ("PM: core: Add new *_PM_OPS macros, deprecate old ones") for more info.
 
-Best regards,
-Jianlong Huang
+Tried this option but as this patch required for Kernel 5.4 version code 
+base,
 
+SYSTEM_SLEEP_PM_OPS didn't work.
+
+>> ---
+>>   sound/soc/qcom/lpass-sc7180.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/sound/soc/qcom/lpass-sc7180.c b/sound/soc/qcom/lpass-sc7180.c
+>> index b96b85a..41db661 100644
+>> --- a/sound/soc/qcom/lpass-sc7180.c
+>> +++ b/sound/soc/qcom/lpass-sc7180.c
+>> @@ -163,14 +163,14 @@ static int sc7180_lpass_exit(struct platform_device *pdev)
+>>   	return 0;
+>>   }
+>>   
+>> -static int sc7180_lpass_dev_resume(struct device *dev)
+>> +static int __maybe_unused sc7180_lpass_dev_resume(struct device *dev)
+>>   {
+>>   	struct lpass_data *drvdata = dev_get_drvdata(dev);
+>>   
+>>   	return clk_bulk_prepare_enable(drvdata->num_clks, drvdata->clks);
+>>   }
+>>   
+>> -static int sc7180_lpass_dev_suspend(struct device *dev)
+>> +static int __maybe_unused sc7180_lpass_dev_suspend(struct device *dev)
+>>   {
+>>   	struct lpass_data *drvdata = dev_get_drvdata(dev);
+>>   
+>> -- 
+>> 2.7.4
+>>
+>>
