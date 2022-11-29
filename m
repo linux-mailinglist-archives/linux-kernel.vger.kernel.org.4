@@ -2,177 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99AA363C140
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9273663C143
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:40:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233131AbiK2Nkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 08:40:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48520 "EHLO
+        id S233631AbiK2Nkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 08:40:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiK2Nka (ORCPT
+        with ESMTP id S229445AbiK2Nkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 08:40:30 -0500
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2105.outbound.protection.outlook.com [40.107.117.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B6C5ADCF
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 05:40:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SlDTP/bkqmVCO9iI6RdHrfehmsykfpkjVJ1Kv4Q8ILpMNy6juzOLbKHgGkxqsF1VCW7GguaI9i4LvYrgdMp/EhffWfFVmOM+kixoaMe2JWzpkjZF+r6Ex8Cz0Om0NzCT4yCQy/7ApHOGdLbbPlGZmkdIhi104urKsb9nu/FqLJUnKaT8qfgVfGDsAEyUeSvI4J3KZBFYS0x236Xd0s456/3Fp+B0qlLwbDl9Q5VUMv0DgKNulqJVK3Fg61hZWeam03G/g7r/i2tq1eydGO4hhDki6nlPJh44xIVCpNNVRLdlaimUsAUOTi5pxwpWgi6GcO6Enu4O8W/yu4T5r1khEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lN8sywuQV9rrPuV6+BPQUTe9Pz1aShp5pShrkBzzCGg=;
- b=Y5/H3BtDjuwPyrjkB1KoT91T+TJQZNzce45VTrQfa50Zp45pOR6Y0C6BBWB3jrrcWnW0B7+s8HRLl2oCFqO/cbNZfvNO7y+w+S8R76Mk5Z8jO8cBOGzrNO9Tx37pRZV2GboMU5bvRGNkyHStTwNe3VOy8Ojnjho0hY1P1EfOMhm071qSZ3CmV115wxJT6MWw3KpqcnFvtdHRt+yTjdvaHIDXPY8ZfVranMquKjjI1v1s8Wxfsa8uOx6/cLHwzuebdBorSsCh/zQqgny52lRY397XI7+e4Z38lQMNFsTp/VbjcnQCNJyZNwjKLWqN3B3PcWEkV37zhvhihxLrabmyOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lN8sywuQV9rrPuV6+BPQUTe9Pz1aShp5pShrkBzzCGg=;
- b=nL6tjQo4UijjV536MV+WJZVw2aKRgQ/YYJlkbQbNV6/VJ2QHnECelYpS5ru88+eDrvg7IC9JdPF3oT2frbOuMrTLO14mjiQ30clVoGar+vs22dr1mZG+kkeAL9pIHxlBft44hYDuyfy0HsKG1bdi06qy394JFLcIfkvyzWiZyAbYFfAxs4pKRGUdRSUylVwLHlzyVD5vFcDscCH1totM3+RUEaejMCQdzzYRp1YxHy7px3RBasKX5oTEDyqV4CYiyqeC5r2Ej/jT2pkh5n3DFX/Sa5D5mSldShOP/yeIEYr8EjmfrPG1LQeutz0DUNZ4x5KBpXShzctqEY+U2qQQSQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by TY0PR06MB4984.apcprd06.prod.outlook.com (2603:1096:400:1ac::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Tue, 29 Nov
- 2022 13:40:27 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::ef03:cbfb:f8ef:d88b]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::ef03:cbfb:f8ef:d88b%9]) with mapi id 15.20.5857.023; Tue, 29 Nov 2022
- 13:40:27 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH] f2fs: issue discard when discard_cmd_cnt is not 0 in f2fs_put_super()
-Date:   Tue, 29 Nov 2022 21:40:18 +0800
-Message-Id: <20221129134018.34120-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0171.apcprd01.prod.exchangelabs.com
- (2603:1096:4:28::27) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Tue, 29 Nov 2022 08:40:37 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF2B5ADDD;
+        Tue, 29 Nov 2022 05:40:36 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BF45521BDB;
+        Tue, 29 Nov 2022 13:40:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669729234; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FFsalh8bL4seyyKkE319sRhzziNPYV9UGJT999sCXDo=;
+        b=m9WbLzPVNWEkBg6MGv11dvKu7IToHgZmiCDgZkWECgG0NB/Owh8Q9BgC1zcvM/JmMGkbTb
+        jd569w58ZKyKPrcZzZwB1Li9s51hGEFvPUyOwTqmh9HHzvsRLa5CstbFKWmDSAQxPQqLbj
+        TpmF/9TAknfbBDV5rCzVrzgLluCTKv8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669729234;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FFsalh8bL4seyyKkE319sRhzziNPYV9UGJT999sCXDo=;
+        b=RTQVPYO1oq66qprUyOmWT/IRpN3Axbu+HHCH9tolKTPwz6c4HXabaecB4DLAlb+jqH94oA
+        iAJO1eYntazK8bAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8CFBB13AF6;
+        Tue, 29 Nov 2022 13:40:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eWoTItILhmOsNgAAMHmgww
+        (envelope-from <afaerber@suse.de>); Tue, 29 Nov 2022 13:40:34 +0000
+Message-ID: <3276c36e-7dfe-ce2d-14d3-20dab732bd76@suse.de>
+Date:   Tue, 29 Nov 2022 14:40:34 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TY0PR06MB4984:EE_
-X-MS-Office365-Filtering-Correlation-Id: b7d7987d-c662-4e02-ac43-08dad20f4627
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KSuJfLH0rwD8LbEPHrZQGumKEAB6gfqMW3SJ9ysLcZ1Dueo6cjbJ9NaycOPQv9Jl0TIIshdFG3Llz6WoiFNkgZ85yg32PXw22cLESvAiXhP7UteZPfVB8HzENejJ8rRhsYQU28+K5VmcjpfhrKIMuMOiMvVv6reDIh1arHTwzIslQG/L7IsBXLa+266OOO8y+CqzhHLZ3MeErp1MLo7Uf5DFEbjFFz64fzhj+Mgkx0fLCIrKwmB9yeAFtIr2AdYnLhNXSZq/5llaPElJuCIUatWgBFYOeI7iJBpgVHzrB6wNpMEKCoq+7NiYPhezuLGhUS3ZWoFq/1wHjWAXLJk0zfyZ8tHPz3mBIhO9KlW+JwOPD7UtFOMhMUylcZq7vQx7nwP25ECXLKYJ+JrRlMAFVDI36fXwAWnX+FTbdhOfGa8jaQLLu1vm9Qta85ph1IJwdVx459Epefn/aw7NtSRbl9BYoR9ORdpV2dDzIh6xaEa07FMrmupGN9l2QFYmZ17dSJjlpsHLHU5pW9+kiiUJMGBxCzCEAZr2dcM9UB9x4+wFtUcYlh131aZFShkvkpk0keSwK7RnOO86NhE+NIVJ+omeHlsoQZg4LtUkLcuRcD581X0axk219sdplDoVh1I8xwV8UBv5loeNvziwp2S+Gs7j0+o+BR3YYcRfAIWohLdYx/xw/De/89somYSx7flV
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(366004)(346002)(39860400002)(136003)(451199015)(2616005)(2906002)(83380400001)(107886003)(26005)(38100700002)(38350700002)(6486002)(66476007)(8676002)(66946007)(41300700001)(66556008)(36756003)(52116002)(6666004)(478600001)(6506007)(6512007)(186003)(5660300002)(8936002)(1076003)(4326008)(86362001)(316002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HTC+w/Vy2qRyWtzbg9A5QDc7vRzLTDK/cnQtuC6RKEgUSzDlw/LJ8dHMO+VW?=
- =?us-ascii?Q?JPk6Bz+g7YGHbGMTLYfGlyY5gDN4QBwif59iYth4WHP2Xn73Ni0gLe2dy9n8?=
- =?us-ascii?Q?a0/gLWJNF+qoqriHj6X727P0PEdtT/ydjAdlwNOuuj4yyFa/JGWjlr153KgF?=
- =?us-ascii?Q?WR5rSs6IwWzMikB5P2JzKUZelgQDFRxxLJMup6HC6+SrXO0qy+xzfuJqYib8?=
- =?us-ascii?Q?k+xMmMYvqfo76HWowBZTt0X+Y7tAxWZHqza/2j5LWNNZNVqw3ra70Mg+Qtww?=
- =?us-ascii?Q?EgUTw+3n7aF01D9ep3FJdzHbA0t5sKtkFzD1hONf0931TBwtMBwQ7kxCoLDC?=
- =?us-ascii?Q?yISfBBgBgCP9Smakuv4/qY+Y6fFiN52798VCwes2B0RotfLAkeObQiWh5wLb?=
- =?us-ascii?Q?YIK2F6+QjCZs0AeNmQquhUTrqI9bH49laWVaROyNvdi9op5t4bSdmjcaShsv?=
- =?us-ascii?Q?KrdpcD22SGZlSQv6kP2rg8sLgRfMsGsARlsvU5HF0RLnwHRUuoy1dgGgB8MJ?=
- =?us-ascii?Q?LquNzYSxw9c3UEMhOOqjYv/+gKYC7nJhK1Kv3Md4/CCmtEjgDQDcJBHnk/+H?=
- =?us-ascii?Q?GurGz0IvozLtQCetN+fjiM2VRtMDb2futaRcNQwqn9Q00fEdDV8ZNlqz0d9l?=
- =?us-ascii?Q?flQUyWxlcnE3tfPMb7IoOlejxD94uQBBM2Ht8WrTlipNpuXGUEqdTrKialxP?=
- =?us-ascii?Q?WBRwOmXwfHBhRjiRxIgLQfe7JUkZd1QHDv5U7Ni21yxmTp/JUJrPqeSSIxqv?=
- =?us-ascii?Q?ZNbp9hr+RzPfAbNipv5NzXyRTley8KM4WyJQhWabfwiakjxUTEmpV2+S6H1D?=
- =?us-ascii?Q?CxKNwcdkSI8ilXM1/PYA53YyIAbcdR1CcKO7/u25PpYk50BW7mmp3DGJQclf?=
- =?us-ascii?Q?ZKNuB8cKRJUYQ76V0JaP+nqnZ+mPVrWHazHR1c1opQdLSgw8QHCGuYQzk7YE?=
- =?us-ascii?Q?3S8f5/FYfpHdSKCj1Tgz5J9N6oqaEXHiOwOYkd04HXrxcQCc+X5lBF9aQrzv?=
- =?us-ascii?Q?EleCWUfKcqXXe9uQ6vl+d6yJEfMf3I1xajAfGw5fXWeVxqRs3v3GzoUSWpna?=
- =?us-ascii?Q?KbaRI73jAfPtkegmjxS3V9ph3B7auzEJejBka6wTu5dFSG6eNRqRPX5ZAnX1?=
- =?us-ascii?Q?giEzLf3jMTWqz89eLOJIpgEcuYp5fjbeg8lDvNZNmUSWHHIXTwgkjimVYOFG?=
- =?us-ascii?Q?vNz3QKntDIhD0j0Ci5p8kFg0fHVgvITUFMSbReC71sRyCYV9MwhFrWOx7mh6?=
- =?us-ascii?Q?zgEMWI7F7aVnYi1oJLRJiAuI2RAWMMo7oK+x2PCoddn/Evi0mGYJI0WBtVmX?=
- =?us-ascii?Q?5+e37m+GQcoIhNyPsVkJYGX1btEmNXNg/YVMEEXmJEjNc1UHixkdvzsnNBuk?=
- =?us-ascii?Q?6Ag/0OX7SWMMRoSGmXNHfCpIUnV+T5Njv2KB7eGokIcTAPklNpf2oqbwiFjR?=
- =?us-ascii?Q?mpjimjzUSw9kDD52HxlyfZnJ0fL0zyLMBgCwEoftxmWtYvjp3nDqSPwJ7Avi?=
- =?us-ascii?Q?2PD6jvhB5MVz3XE5H771M/vTF0Hj7/sbNpi76qibHnLVW3IbONsZ2fcnhSch?=
- =?us-ascii?Q?ZpkrqN1wD7JIp/LyRL4KmkRb9zq4vglXif+JHZaj?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7d7987d-c662-4e02-ac43-08dad20f4627
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 13:40:27.0943
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eplMELSvHTGx3SlLRFv2DNEuBUDpSZn5WxwDcHG9x9JfOHSUar2ncIEK8eBMVDrdTVy6ZVNc8XDxORh8zDkV3w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB4984
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 2/2] pinctrl: add NXP S32 SoC family support
+Content-Language: en-US
+To:     Chester Lin <clin@suse.com>, Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc:     s32@nxp.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Larisa Grigore <larisa.grigore@nxp.com>,
+        Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>,
+        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
+        Radu Pirea <radu-nicolae.pirea@nxp.com>,
+        Matthias Brugger <mbrugger@suse.com>,
+        Matthew Nunez <matthew.nunez@nxp.com>,
+        Phu Luu An <phu.luuan@nxp.com>,
+        Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+References: <20221128054820.1771-1-clin@suse.com>
+ <20221128054820.1771-3-clin@suse.com>
+From:   =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>
+In-Reply-To: <20221128054820.1771-3-clin@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No need to call f2fs_issue_discard_timeout() in f2fs_put_super,
-when no discard command requires issue. Since the caller of
-f2fs_issue_discard_timeout() usually judges the number of discard
-commands before using it. Let's move this logic to
-f2fs_issue_discard_timeout().
+Hi Chester,
 
-By the way, use f2fs_realtime_discard_enable to simplify the code.
+Am 28.11.22 um 06:48 schrieb Chester Lin:
+> Add the pinctrl driver for NXP S32 SoC family. This driver is mainly based
+> on NXP's downstream implementation on CodeAurora[1].
+> 
+> [1] https://source.codeaurora.org/external/autobsps32/linux/tree/drivers/pinctrl/freescale?h=bsp34.0-5.10.120-rt
+> 
+> Signed-off-by: Matthew Nunez <matthew.nunez@nxp.com>
+> Signed-off-by: Phu Luu An <phu.luuan@nxp.com>
+> Signed-off-by: Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+> Signed-off-by: Larisa Grigore <larisa.grigore@nxp.com>
+> Signed-off-by: Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
+> Signed-off-by: Andrei Stefanescu <andrei.stefanescu@nxp.com>
+> Signed-off-by: Radu Pirea <radu-nicolae.pirea@nxp.com>
+> Signed-off-by: Chester Lin <clin@suse.com>
+> ---
+> 
+> Changes in v2:
+> - Create a s32_pin_range matrix in the driver for replacing the "nxp,pins"
+>    property in DT.
+> - Refine the compatible name to "nxp,s32g2-siul2-pinctrl".
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- fs/f2fs/segment.c | 6 ++++--
- fs/f2fs/super.c   | 6 ++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Thanks.
 
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 9486ca49ecb1..d5f150a08285 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -1655,6 +1655,9 @@ bool f2fs_issue_discard_timeout(struct f2fs_sb_info *sbi)
- 	struct discard_policy dpolicy;
- 	bool dropped;
- 
-+	if (!atomic_read(&dcc->discard_cmd_cnt))
-+		return false;
-+
- 	__init_discard_policy(sbi, &dpolicy, DPOLICY_UMOUNT,
- 					dcc->discard_granularity);
- 	__issue_discard_cmd(sbi, &dpolicy);
-@@ -2110,8 +2113,7 @@ static void destroy_discard_cmd_control(struct f2fs_sb_info *sbi)
- 	 * Recovery can cache discard commands, so in error path of
- 	 * fill_super(), it needs to give a chance to handle them.
- 	 */
--	if (unlikely(atomic_read(&dcc->discard_cmd_cnt)))
--		f2fs_issue_discard_timeout(sbi);
-+	f2fs_issue_discard_timeout(sbi);
- 
- 	kfree(dcc);
- 	SM_I(sbi)->dcc_info = NULL;
-diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-index 79bf1faf4161..71e6b2bea1f4 100644
---- a/fs/f2fs/super.c
-+++ b/fs/f2fs/super.c
-@@ -1576,8 +1576,7 @@ static void f2fs_put_super(struct super_block *sb)
- 	/* be sure to wait for any on-going discard commands */
- 	dropped = f2fs_issue_discard_timeout(sbi);
- 
--	if ((f2fs_hw_support_discard(sbi) || f2fs_hw_should_discard(sbi)) &&
--					!sbi->discard_blks && !dropped) {
-+	if (f2fs_realtime_discard_enable(sbi) && !sbi->discard_blks && !dropped) {
- 		struct cp_control cpc = {
- 			.reason = CP_UMOUNT | CP_TRIMMED,
- 		};
-@@ -2408,8 +2407,7 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
- 		} else {
- 			dcc = SM_I(sbi)->dcc_info;
- 			f2fs_stop_discard_thread(sbi);
--			if (atomic_read(&dcc->discard_cmd_cnt))
--				f2fs_issue_discard_timeout(sbi);
-+			f2fs_issue_discard_timeout(sbi);
- 			need_restart_discard = true;
- 		}
- 	}
+> - Fix the copyright requested by NXP.
+> - Remove a few recipients from the Cc list since these email addresses are no
+>    longer available.
+> 
+>   drivers/pinctrl/freescale/Kconfig         |   16 +
+>   drivers/pinctrl/freescale/Makefile        |    2 +
+>   drivers/pinctrl/freescale/pinctrl-s32.h   |   77 ++
+>   drivers/pinctrl/freescale/pinctrl-s32cc.c | 1003 +++++++++++++++++++++
+>   drivers/pinctrl/freescale/pinctrl-s32g.c  |  773 ++++++++++++++++
+>   5 files changed, 1871 insertions(+)
+>   create mode 100644 drivers/pinctrl/freescale/pinctrl-s32.h
+>   create mode 100644 drivers/pinctrl/freescale/pinctrl-s32cc.c
+>   create mode 100644 drivers/pinctrl/freescale/pinctrl-s32g.c
+> 
+> diff --git a/drivers/pinctrl/freescale/Kconfig b/drivers/pinctrl/freescale/Kconfig
+> index 7a32f77792d9..fdd8f5492830 100644
+> --- a/drivers/pinctrl/freescale/Kconfig
+> +++ b/drivers/pinctrl/freescale/Kconfig
+> @@ -217,3 +217,19 @@ config PINCTRL_IMXRT1170
+>   	select PINCTRL_IMX
+>   	help
+>   	  Say Y here to enable the imxrt1170 pinctrl driver
+> +
+> +config PINCTRL_S32CC
+> +	bool "NXP S32 Common Chassis pinctrl driver core"
+> +	depends on ARCH_S32 && OF
+> +	select GENERIC_PINCTRL_GROUPS
+> +	select GENERIC_PINMUX_FUNCTIONS
+> +	select GENERIC_PINCONF
+> +	help
+> +	  Say Y here to enable the NXP S32CC pinctrl driver core
+
+Does this driver core make any sense without a specific driver?
+
+I.e., could this just be a menu-invisible internal option if S32G is the 
+one the user needs to select anyway?
+The alternative would be to leave it and have S32G depend on it, 
+creating a submenu structure, but that would then still allow to build 
+the driver core without any users.
+
+> +
+> +config PINCTRL_S32G
+> +	depends on ARCH_S32 && OF
+> +	bool "NXP S32G pinctrl driver"
+> +	select PINCTRL_S32CC
+> +	help
+> +	  Say Y here to enable the pinctrl driver for NXP 32G family SoCs
+
+s/32G/S32G/
+
+> diff --git a/drivers/pinctrl/freescale/Makefile b/drivers/pinctrl/freescale/Makefile
+> index 647dff060477..ceb0f61c6215 100644
+> --- a/drivers/pinctrl/freescale/Makefile
+> +++ b/drivers/pinctrl/freescale/Makefile
+> @@ -33,3 +33,5 @@ obj-$(CONFIG_PINCTRL_IMX25)	+= pinctrl-imx25.o
+>   obj-$(CONFIG_PINCTRL_IMX28)	+= pinctrl-imx28.o
+>   obj-$(CONFIG_PINCTRL_IMXRT1050)	+= pinctrl-imxrt1050.o
+>   obj-$(CONFIG_PINCTRL_IMXRT1170)	+= pinctrl-imxrt1170.o
+> +obj-$(CONFIG_PINCTRL_S32CC)	+= pinctrl-s32cc.o
+> +obj-$(CONFIG_PINCTRL_S32G)	+= pinctrl-s32g.o
+[snip]
+
+Regards,
+Andreas
+
 -- 
-2.25.1
-
+SUSE Software Solutions Germany GmbH
+Frankenstraße 146, 90461 Nürnberg, Germany
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+HRB 36809 (AG Nürnberg)
