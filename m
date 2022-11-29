@@ -2,131 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C07263BC32
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:54:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DBF563BC36
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:54:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbiK2IyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 03:54:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
+        id S229994AbiK2Iye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 03:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbiK2IyE (ORCPT
+        with ESMTP id S229694AbiK2IyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 03:54:04 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C50490AA
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:53:52 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id d6so21418979lfs.10
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:53:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/392GykBtHnWPhSp8IdLCn51RY5siGcKVRp0TZIw73Y=;
-        b=AfYOt9xgm8N8sshzqyj5GnPwFJ+Ud+2wHuhE1yU3oqhrEDFnCD4wJ2lbOzn4uBuEqA
-         MmcMBM/HS258xdVZOPmlsr5Uas2/bX4R7UcVjJFhEweaWCbGW0YGXzQizUo8Y/N9EluR
-         m8vQaDohkKsTnOb2yYTpBzNB9LwCda3WIj/pzf1uZyzvjCJWWHazyjFIAc2dl8otHUre
-         +TwGaKsmEzid8rfKECqH9ajtV48SGwvPjZ9Amehm/jOcLDuvTXO63YEqq96IfoZjvgoc
-         I+gdbV5hF9a31nqhycfBvK+iWVglwEoi459sE6Z1PNunrHNbIBL0PwPLup+s6WQK1nAg
-         6kog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/392GykBtHnWPhSp8IdLCn51RY5siGcKVRp0TZIw73Y=;
-        b=DuIv+jQv6fVZl0Hqxe5XB7wwYfohH6H4Om2w3ABU1p7HCGmpH/XzsF4QSzlVgccFa8
-         2DBrGjxH4bemRuhUkkmtvnpEyNP+kKdyeiC+8l9AuJdYCAO5God7CPtTOZxleVzYNknd
-         R79j98jabjFjZexAi6S2as4yNC/JqPaKC8Srw2cGJqMSlQRBtbynAT/fKoFj0u2m4lxk
-         5shlWzqRhxt2eRwWUV2bOgHgchuQExZKvTRipaiorMTVQffpm42JdHNTS6uQcovf5/3e
-         hyeVMhbvf2OGsqgp64BBdM1n7zN3q2NLTCCl22sbtxiKzvu5Eufh6VA58cXJUlJybFPq
-         wLOg==
-X-Gm-Message-State: ANoB5pkpFMPI21P58BGTQ5FCNvJaqunHeBAGQ7i5EVdMXLsr4KDIjmQH
-        mAZWkjDLhtUkaYjfKQL67pL5yg==
-X-Google-Smtp-Source: AA0mqf6qdim8gakdaimBGD+ZKNfFkTChiA2i2Pgz4m5bIeVxjSENpVtYCe5fSjJHTQfXRwe9Xutn2A==
-X-Received: by 2002:a05:6512:3703:b0:4a2:22cf:f44d with SMTP id z3-20020a056512370300b004a222cff44dmr13149775lfr.118.1669712030458;
-        Tue, 29 Nov 2022 00:53:50 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c13-20020a056512324d00b004b40f2e25d3sm2133465lfr.122.2022.11.29.00.53.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 00:53:50 -0800 (PST)
-Message-ID: <e4676089-7ce2-e123-4e2a-a7d8835e9118@linaro.org>
-Date:   Tue, 29 Nov 2022 09:53:48 +0100
+        Tue, 29 Nov 2022 03:54:05 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28AB4FF81
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:53:59 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1ozwNK-0005sb-Ad; Tue, 29 Nov 2022 09:53:58 +0100
+Message-ID: <fca2e6df-6c00-8fa4-808c-5021ab5b26d0@leemhuis.info>
+Date:   Tue, 29 Nov 2022 09:53:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 2/2] ethernet: stmicro: stmmac: Add SGMII/QSGMII support
- for RK3568
-Content-Language: en-US
-To:     Chukun Pan <amadeus@jmu.edu.cn>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Wu <david.wu@rock-chips.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20221129072714.22880-1-amadeus@jmu.edu.cn>
- <20221129072714.22880-2-amadeus@jmu.edu.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221129072714.22880-2-amadeus@jmu.edu.cn>
+ Thunderbird/102.4.1
+Subject: Re: INFO: rcu_preempt detected expedited stalls on CPUs/tasks
+ (6.1.0-rc3): in cat /sys/kernel/debug/kmemleak #forregzbot
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+References: <e048a5c5-dea5-a31a-1022-1b007e022adb@alu.unizg.hr>
+ <7ebd090d-4a6c-1a26-6e31-b0554c627e83@leemhuis.info>
+In-Reply-To: <7ebd090d-4a6c-1a26-6e31-b0554c627e83@leemhuis.info>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669712039;3d6cf4e9;
+X-HE-SMSGID: 1ozwNK-0005sb-Ad
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/11/2022 08:27, Chukun Pan wrote:
-> From: David Wu <david.wu@rock-chips.com>
+On 09.11.22 11:48, Thorsten Leemhuis wrote:
+> [Note: this mail is primarily send for documentation purposes and/or for
+> regzbot, my Linux kernel regression tracking bot. That's why I removed
+> most or all folks from the list of recipients, but left any that looked
+> like a mailing lists. These mails usually contain '#forregzbot' in the
+> subject, to make them easy to spot and filter out.]
+>
+> On 04.11.22 23:01, Mirsad Goran Todorovac wrote:
+>>
+>> When investigating thermald kmemleak, it occurred that the "cat
+>> /sys/kernel/debug/kmemleak"
+>> and "tail -20 /sys/kernel/debug/kmemleak" commands take unusual amount
+>> of time.
+>>
+>> Dmesg output showed expedited stalls that the commands caused NMIs and
+>> NMI backtraces:
+>>
+>> [ 8123.263464] rcu: INFO: rcu_preempt detected expedited stalls on
+>> CPUs/tasks: { 0-.... } 26 jiffies s: 3829 root: 0x1/.
+>> [ 8123.263500] rcu: blocking rcu_node structures (internal RCU debug):
+>> [ 8123.263508] Sending NMI from CPU 7 to CPUs 0:
+>> [ 8123.263528] NMI backtrace for cpu 0
+>> [ 8123.263539] CPU: 0 PID: 27898 Comm: cat Not tainted 6.1.0-rc3 #1
+>> [ 8123.263552] Hardware name: LENOVO 82H8/LNVNB161216, BIOS GGCN34WW
+>> 03/08/2022
 > 
-> The gmac of RK3568 supports RGMII/SGMII/QSGMII interface.
-> This patch adds the remaining SGMII/QSGMII support.
+> #regzbot ^introduced 28b3ae426598e
+> #regzbot title rcu: thermald causes a kmemleak
+> #regzbot ignore-activity
 
-Do not use "This commit/patch".
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+#regzbot invalid: likely not a regression and just a odd config
 
-> 
-> Run-tested-on: Ariaboard Photonicat (GMAC0 SGMII)
-> 
-> Signed-off-by: David Wu <david.wu@rock-chips.com>
-> [rebase, rewrite commit message]
-> Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
-> ---
->  .../net/ethernet/stmicro/stmmac/dwmac-rk.c    | 210 +++++++++++++++++-
->  1 file changed, 207 insertions(+), 3 deletions(-)
-> 
+For details see the discussion ending here:
+https://lore.kernel.org/all/20221124201552.GV4001@paulmck-ThinkPad-P17-Gen-1/
 
->  
-> -static int phy_power_on(struct rk_priv_data *bsp_priv, bool enable)
-> +static int rk_gmac_phy_power_on(struct rk_priv_data *bsp_priv, bool enable)
->  {
->  	struct regulator *ldo = bsp_priv->regulator;
->  	int ret;
-> @@ -1728,6 +1909,18 @@ static struct rk_priv_data *rk_gmac_setup(struct platform_device *pdev,
->  							"rockchip,grf");
->  	bsp_priv->php_grf = syscon_regmap_lookup_by_phandle(dev->of_node,
->  							    "rockchip,php-grf");
-> +	bsp_priv->xpcs = syscon_regmap_lookup_by_phandle(dev->of_node,
-> +							 "rockchip,xpcs");
-> +	if (!IS_ERR(bsp_priv->xpcs)) {
-> +		struct phy *comphy;
-> +
-> +		comphy = devm_of_phy_get(&pdev->dev, dev->of_node, NULL);
-
-So instead of having PHY driver, you added a syscon and implemented PHY
-driver here. No. Make a proper PHY driver.
-
-Best regards,
-Krzysztof
-
+Ciao, Thorsten
