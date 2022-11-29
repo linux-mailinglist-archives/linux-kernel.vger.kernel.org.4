@@ -2,89 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42EF863C85B
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DECF063C85E
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:28:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236774AbiK2T1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 14:27:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
+        id S236328AbiK2T2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 14:28:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236890AbiK2T0b (ORCPT
+        with ESMTP id S236874AbiK2T2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 14:26:31 -0500
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F479303CC;
-        Tue, 29 Nov 2022 11:23:56 -0800 (PST)
-Received: by mail-pj1-f47.google.com with SMTP id ns17so6795500pjb.1;
-        Tue, 29 Nov 2022 11:23:56 -0800 (PST)
+        Tue, 29 Nov 2022 14:28:07 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444886F80B;
+        Tue, 29 Nov 2022 11:26:00 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3c21d6e2f3aso88834447b3.10;
+        Tue, 29 Nov 2022 11:26:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NJmmkqr69JkQ4qKDXYBd8Y2fTOooZBZ0akE2PF6PQ8I=;
+        b=FcVTlQgh18//wOeXZdSMsMRdgcpP2Q7+PGR65FmjHBta8kcOkc6u+oEOiYNWvK1O8U
+         pjugnOX31UffvaYNeBAwEuJmN3MGM/I2jVgXX27TjmYjA5r9IcZtFaLDR79xe0C8FNtC
+         jUCNzN8pd2dzo2mS6w6Ho072PH2+iHrAHUNPc9GVy5CyhRAMTQpXlOWXvEts+J9cqP20
+         CmNGEG/7KXCYIi/yDyXZcUE9I6OL3SZtko8pzX6pXdvF1F0vKizcWbemgOnghv59wZXv
+         ivqulFzBFAXtEt1DVxQdf0cLVK4QxY9uRto7KVEEUvqzSVbIkG0hYPTgL+GEgtc/vtiy
+         aivg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ARJqQMnVzJEz/Ay9uXEGNb3SFN1+JSUcIWe4lkCF+yM=;
-        b=BT/h2OgknxiDjpKjrvM8KGfTtJ97nshRukmKamntS50bOy0Zs68en86VcEkOhG5ZlT
-         QO3v6aRE/8gwMzIpSH5hfJO3uyI/ayPuThrchcY9ZqdQ2bttO1+CftCYJicKzHHg8krO
-         dMK975rpd/dr03WBdwM24cpMeVzSoEvsXeUIz3pdfU4C5OiZwGJ6bIiZOqoZcE8OHzOj
-         qPLHCMbbamN1fQnOGJ6PX6ingWsYo52+GVGqH2ArkHQ+wtRAfWIao5f8QvaQAZGcDM0H
-         o5Zh/lFEt4UY3skzvX6904hcnlxfP1ZXGNhPSVNR4jEeCQ19r/6cN6oBBFvQ/+hYwvTA
-         maqQ==
-X-Gm-Message-State: ANoB5pl7HE0/CwuoaSrx7Tp8p8NpC0H5mvwaH2cWx7Qg5h3NeKCw0F+l
-        jHjITWlIxSkG2nH7TcbF0yQ=
-X-Google-Smtp-Source: AA0mqf7BYTyAgcSc6HnkChJd3jiCeFXaSSWFqiJpCRWWgWsFAFYe3l5nhvG31lMzt7+yJX6FLzd3QQ==
-X-Received: by 2002:a17:90a:de91:b0:219:5f45:7626 with SMTP id n17-20020a17090ade9100b002195f457626mr750736pjv.119.1669749835446;
-        Tue, 29 Nov 2022 11:23:55 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:7d15:8e62:30bb:9a14? ([2620:15c:211:201:7d15:8e62:30bb:9a14])
-        by smtp.gmail.com with ESMTPSA id b6-20020a170903228600b00188fc33e96dsm11232327plh.198.2022.11.29.11.23.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 11:23:54 -0800 (PST)
-Message-ID: <f30fed7c-45bc-9b71-9c57-c8d9ec395597@acm.org>
-Date:   Tue, 29 Nov 2022 11:23:51 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NJmmkqr69JkQ4qKDXYBd8Y2fTOooZBZ0akE2PF6PQ8I=;
+        b=m07lVEWcCr78kdAQbdfYyEconkDCosW6N8y2xgZG7lWNKvsz5XjFD8/e3eAsMK+Eqz
+         WMNpb4YVFTL/B5MpC7KBl09UIvhw3HGPBW28KCHmsTdq0wRuMA848DMpdwAW0zt5FfaA
+         PuBiE+EAwv+8l2EXYZV1GPPPBMGTtD75uTKOIa5hqwfvVXUhg0WdmLzFHp4xtiAVrH3+
+         jSRGmbWkRjYcBoiuU3DgWHVHPza5dkQEL69+ZyBFn1nniUeD7MGrJ3GQP3FKMH2G3VTl
+         6y6pKTXDqZLiLGVHlSFvsOyV7GaKAgGFj5/KQ+XjbZ2RMr6yh9W8SRouZbK6Yui9/IqY
+         /zug==
+X-Gm-Message-State: ANoB5pnFaXJZ42zI2oofwKjcS7k4HjGy80usx/f7M5dzNNrxUoookH34
+        E9QoAN1PPnBCthDdOC+mhBhrzUVA1Jeb/PF2pH/mr4yn
+X-Google-Smtp-Source: AA0mqf7QBVwYyYJOy68rRZkOsISPyAoocPI/jaNNO4mPUqutAvMlsDXDGlRiLDZ56E1jJsFlijQxO2lxJl4V6Xd4ZvI=
+X-Received: by 2002:a0d:eb08:0:b0:3c1:1bd:657a with SMTP id
+ u8-20020a0deb08000000b003c101bd657amr15902914ywe.142.1669749959392; Tue, 29
+ Nov 2022 11:25:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v7 09/16] ufs: core: mcq: Configure operation and runtime
- interface
-Content-Language: en-US
-To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
-Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
-        stanley.chu@mediatek.com, eddie.huang@mediatek.com,
-        daejun7.park@samsung.com, avri.altman@wdc.com, mani@kernel.org,
-        beanhuo@micron.com, linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <cover.1669747235.git.quic_asutoshd@quicinc.com>
- <e90498f7e1ddb751c62086f535acca56454c7b35.1669747235.git.quic_asutoshd@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <e90498f7e1ddb751c62086f535acca56454c7b35.1669747235.git.quic_asutoshd@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221101175326.13265-1-vishal.moola@gmail.com>
+In-Reply-To: <20221101175326.13265-1-vishal.moola@gmail.com>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Tue, 29 Nov 2022 11:25:48 -0800
+Message-ID: <CAOzc2px-5sYh-=_0+J_-km3E10tTDjQS7d0uP1dcqGuZoUW6vA@mail.gmail.com>
+Subject: Re: [PATCH 0/5] Removing the lru_cache_add() wrapper
+To:     linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        akpm@linux-foundation.org, willy@infradead.org, miklos@szeredi.hu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/22 10:53, Asutosh Das wrote:
-> Runtime and operation registers are defined per Submission
-> and Completion queue.
-> The location of these registers is not defined in the spec;
-> meaning the offsets and stride may vary for different
-> HC vendors. Establish the stride, base address and doorbell
-> address offsets from vendor host driver and program it.
+On Tue, Nov 1, 2022 at 10:53 AM Vishal Moola (Oracle)
+<vishal.moola@gmail.com> wrote:
+>
+> This patchset replaces all calls of lru_cache_add() with the folio
+> equivalent: folio_add_lru(). This is allows us to get rid of the wrapper
+> The series passes xfstests and the userfaultfd selftests.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-
+All of these patches have been reviewed. Andrew, is there anything
+you'd like to see changed, or will you take these?
