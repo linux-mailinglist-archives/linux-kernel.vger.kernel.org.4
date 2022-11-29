@@ -2,237 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7184F63BBE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB5363BBE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:43:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbiK2In4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 03:43:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S231158AbiK2Inn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 03:43:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbiK2Ins (ORCPT
+        with ESMTP id S230352AbiK2Inj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 03:43:48 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6447421827
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:43:47 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id y83so16539426yby.12
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:43:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ElZQ2sI+pB8wyf6RA6jVzwDss5zLy1/9BbS9mMdAaLU=;
-        b=a6QOQ0fCNGDwlivrQ1hmZ5n5GnHYuQmmQSlSljbJYsfO09OFvj0KHI8DIq8Xty8g2d
-         UybEyGQh8bPwcsKpWNVJjpc4aPU6OwE+UPKNsvR30Xsnc5U0T/qgMy5nclWYTyUn8lrf
-         JweAaw0/dpCgSs+hiLtamLz0YqcICHi2P64G8=
+        Tue, 29 Nov 2022 03:43:39 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BD3209B6
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:43:38 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id i26-20020a056e021d1a00b003025434c04eso11394595ila.13
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:43:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ElZQ2sI+pB8wyf6RA6jVzwDss5zLy1/9BbS9mMdAaLU=;
-        b=s0wNaw9fK4KSCkMTRF0k358E5mYRyqRwArvEWs2BFZlLGC73/2Q1MZP7PEKNT4pDCc
-         HeQ1LOA9tfpkQZly7EFX8ZU0Btam/H7LBZpPzt9GlsguF2UHwTFd0kFT/4L2ecC9sZ2J
-         s+WmpNLTwAGN+TIzKazrbUzqPS3yfcd0OwTPnTHVKC899pqAB4PYsPMwI3b9+Y0QEXZ6
-         nGHAsqYiS9kU/PgUOrhbsG/PjlYdKNn3VvJ/kIZyY0Uvo59PT8jVgzmwqBIoncgBzVk1
-         TgxHyIF7+vyUqQuL9vIa3EZBxB9qG9v2GnJMWLsGvtwWS54+rYHM+0YLXhCP5alD5h5R
-         JimQ==
-X-Gm-Message-State: ANoB5pllA4kRB22/SdPLgxThxg6XIHJa5vNkNrZnjZgpAKX1/Jp7dd6M
-        9OfG5ZaZHp1s+HUQ2gWW6f1HJEFJtPXvJx+zcv2h+Q==
-X-Google-Smtp-Source: AA0mqf5kKQuDV/bhiQwA2kIpWKSWs9acHkIjDcyDRxK9EO+v9Sjtwuiup588wtZhKqj5b9fWzBbfStZyc6x0z1RaqFE=
-X-Received: by 2002:a25:cf55:0:b0:6f6:f5d0:aa62 with SMTP id
- f82-20020a25cf55000000b006f6f5d0aa62mr8129607ybg.81.1669711426420; Tue, 29
- Nov 2022 00:43:46 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Zg5az6xrnSvzem2gwMfor+gDgHn0N57V8GOUL7tP8Vs=;
+        b=WuaY8L34XtG4wQK5qyVKgRZItJN2j8uf0SiuQgAM12GZ5cmMEktj7NIIL96i5KbLof
+         UWLvGdpuCqS/uXiin88IM6sBeWFbLZluwCQALx6bT23J7y3OiXW3HIO3SjIhRM06sk+2
+         gQuzmnRfeMAW6zOp/zmVnVApZeAj+RBHWAOhJ4bpZM5hyFpk4HMrCg3FuQgxs2Ollh22
+         u9EXov5VCR7NFRXRo61m7k/GNsasBzvRfJWXijT8gxUwVRNhGXFuzkvskYTvq2oNV0cc
+         sTxGiCkticuO80zUytYEiJIMZBgjKk3TrXAE/uBUP09+uXpbxsi4VDHIYODm/6vJHpDn
+         /XEw==
+X-Gm-Message-State: ANoB5plK51OJyRzHtf1ZBOA5pNc9y1j9hrgAlMaQ7sgRaeTzlcrFPYIj
+        /4519/8loEdXTPs4sMiTrEM9vVifviF1ZNUC/XFnoN4jY7Iw
+X-Google-Smtp-Source: AA0mqf42d/jX0JIdrKgatOfuS0V1VVLRZ/xgvKBJO2A+0Zyg1bC4Sd5T3GZtgMUGAeIPdwxzOhTcwyeGsoyPqqDqiCEfCt8LS4Yz
 MIME-Version: 1.0
-References: <20221128103227.23171-1-arun.ramadoss@microchip.com> <20221128103227.23171-5-arun.ramadoss@microchip.com>
-In-Reply-To: <20221128103227.23171-5-arun.ramadoss@microchip.com>
-From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
-Date:   Tue, 29 Nov 2022 14:13:35 +0530
-Message-ID: <CALs4sv0x04ODvWv-av56-FtnnpsC_8Sudp8T0U0buNRt+hq9bA@mail.gmail.com>
-Subject: Re: [Patch net-next v1 04/12] net: dsa: microchip: ptp: Manipulating
- absolute time using ptp hw clock
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com, richardcochran@gmail.com,
-        ceggers@arri.de
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000007950be05ee97fc5e"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:5146:0:b0:371:1431:d4f2 with SMTP id
+ s67-20020a025146000000b003711431d4f2mr26840101jaa.184.1669711417600; Tue, 29
+ Nov 2022 00:43:37 -0800 (PST)
+Date:   Tue, 29 Nov 2022 00:43:37 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ec75b005ee97fbaa@google.com>
+Subject: [syzbot] WARNING in rmqueue
+From:   syzbot <syzbot+aafb3f37cfeb6534c4ac@syzkaller.appspotmail.com>
+To:     chao@kernel.org, huyue2@coolpad.com, jefflexu@linux.alibaba.com,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, xiang@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000007950be05ee97fc5e
-Content-Type: text/plain; charset="UTF-8"
+Hello,
 
-On Mon, Nov 28, 2022 at 4:04 PM Arun Ramadoss
-<arun.ramadoss@microchip.com> wrote:
-> +/*  Function is pointer to the do_aux_work in the ptp_clock capability */
-> +static long ksz_ptp_do_aux_work(struct ptp_clock_info *ptp)
-> +{
-> +       struct ksz_ptp_data *ptp_data = ptp_caps_to_data(ptp);
-> +       struct ksz_device *dev = ptp_data_to_ksz_dev(ptp_data);
-> +       struct timespec64 ts;
-> +
-> +       mutex_lock(&ptp_data->lock);
-> +       _ksz_ptp_gettime(dev, &ts);
-> +       mutex_unlock(&ptp_data->lock);
-> +
-> +       spin_lock_bh(&ptp_data->clock_lock);
-> +       ptp_data->clock_time = ts;
-> +       spin_unlock_bh(&ptp_data->clock_lock);
+syzbot found the following issue on:
 
-If I understand this correctly, the software clock is updated with
-full 64b every 1s. However only 32b timestamp registers are read while
-processing packets and higher bits from this clock are used.
-How do you ensure these higher order bits are in sync with the higher
-order bits in the HW? IOW, what if lower 32b have wrapped around and
-you are required to stamp a packet but you still don't have aux worker
-updated.
+HEAD commit:    b7b275e60bcd Linux 6.1-rc7
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=16a70187880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
+dashboard link: https://syzkaller.appspot.com/bug?extid=aafb3f37cfeb6534c4ac
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15dde8a1880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15685e8d880000
 
-> +
-> +       return HZ;  /* reschedule in 1 second */
-> +}
-> +
->  static int ksz_ptp_start_clock(struct ksz_device *dev)
->  {
-> -       return ksz_rmw16(dev, REG_PTP_CLK_CTRL, PTP_CLK_ENABLE, PTP_CLK_ENABLE);
-> +       struct ksz_ptp_data *ptp_data = &dev->ptp_data;
-> +       int ret;
-> +
-> +       ret = ksz_rmw16(dev, REG_PTP_CLK_CTRL, PTP_CLK_ENABLE, PTP_CLK_ENABLE);
-> +       if (ret)
-> +               return ret;
-> +
-> +       spin_lock_bh(&ptp_data->clock_lock);
-> +       ptp_data->clock_time.tv_sec = 0;
-> +       ptp_data->clock_time.tv_nsec = 0;
-> +       spin_unlock_bh(&ptp_data->clock_lock);
-> +
-> +       return 0;
->  }
->
->  static const struct ptp_clock_info ksz_ptp_caps = {
-> @@ -305,6 +357,7 @@ static const struct ptp_clock_info ksz_ptp_caps = {
->         .settime64      = ksz_ptp_settime,
->         .adjfine        = ksz_ptp_adjfine,
->         .adjtime        = ksz_ptp_adjtime,
-> +       .do_aux_work    = ksz_ptp_do_aux_work,
->  };
->
->  int ksz_ptp_clock_register(struct dsa_switch *ds)
-> @@ -315,6 +368,7 @@ int ksz_ptp_clock_register(struct dsa_switch *ds)
->
->         ptp_data = &dev->ptp_data;
->         mutex_init(&ptp_data->lock);
-> +       spin_lock_init(&ptp_data->clock_lock);
->
->         ptp_data->caps = ksz_ptp_caps;
->
-> diff --git a/drivers/net/dsa/microchip/ksz_ptp.h b/drivers/net/dsa/microchip/ksz_ptp.h
-> index 17f455c3b2c5..81fa2e8b9cf4 100644
-> --- a/drivers/net/dsa/microchip/ksz_ptp.h
-> +++ b/drivers/net/dsa/microchip/ksz_ptp.h
-> @@ -15,6 +15,9 @@ struct ksz_ptp_data {
->         struct ptp_clock *clock;
->         /* Serializes all operations on the PTP hardware clock */
->         struct mutex lock;
-> +       /* lock for accessing the clock_time */
-> +       spinlock_t clock_lock;
-> +       struct timespec64 clock_time;
->  };
->
->  int ksz_ptp_clock_register(struct dsa_switch *ds);
-> --
-> 2.36.1
->
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/525233126d34/disk-b7b275e6.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e8299bf41400/vmlinux-b7b275e6.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/eebf691dbf6f/bzImage-b7b275e6.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/d643567f551d/mount_0.gz
 
---0000000000007950be05ee97fc5e
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+aafb3f37cfeb6534c4ac@syzkaller.appspotmail.com
 
-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
-OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
-dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
-fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
-9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
-pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
-25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
-Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEINAuC3Bc/Udwn9vC8fDHu29gP1Aao3Oq
-Zy5F/2ZHH3W4MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMTEy
-OTA4NDM0NlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQCPlCEbWGIyHvtkGnexn0SKGHAT5F8IyZEbHqHU34SQcAbBJ/6M
-TC4eCHXyJyUbppuD/t5JnyUvTbeexSVIbdOEuX1kwIhDL5cEpPuU5bnBPpDoMVKm7NeaKYjxUBWq
-CP9hsVgYcOI6yjPG5kbsZYabqCsLs2BibAovnE1e0HhjO6whZVDPbS3tiflkfydBlbSMVLiNXq9n
-qsek6gA8/sfi6+waWvpMCTLFVROD515C1m9i/sB0dxRj12T6CoJ6E8MshVvhHIXV0UD3HLm49Ri5
-4s8jakRzXxsnEpodbC0fhhYYQEw9Z+FYm8WopiYDlve9av5ycEF78q+V7Fp02FJb
---0000000000007950be05ee97fc5e--
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 48 at mm/page_alloc.c:3837 __count_numa_events include/linux/vmstat.h:249 [inline]
+WARNING: CPU: 0 PID: 48 at mm/page_alloc.c:3837 zone_statistics mm/page_alloc.c:3692 [inline]
+WARNING: CPU: 0 PID: 48 at mm/page_alloc.c:3837 rmqueue_buddy mm/page_alloc.c:3728 [inline]
+WARNING: CPU: 0 PID: 48 at mm/page_alloc.c:3837 rmqueue+0x1d6b/0x1ed0 mm/page_alloc.c:3853
+Modules linked in:
+CPU: 0 PID: 48 Comm: kworker/u5:0 Not tainted 6.1.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Workqueue: erofs_unzipd z_erofs_decompressqueue_work
+RIP: 0010:rmqueue+0x1d6b/0x1ed0 mm/page_alloc.c:3837
+Code: 48 8b 02 65 48 ff 40 20 49 83 f6 05 42 80 3c 2b 00 74 08 4c 89 e7 e8 a4 44 0b 00 49 8b 04 24 65 4a ff 44 f0 10 e9 2a fe ff ff <0f> 0b e9 29 e3 ff ff 48 89 df be 08 00 00 00 e8 31 46 0b 00 f0 41
+RSP: 0018:ffffc90000b97260 EFLAGS: 00010202
+RAX: f301f204f1f1f1f1 RBX: ffff88813fffae00 RCX: 000000000000adc2
+RDX: 1ffff92000172e70 RSI: 1ffff92000172e70 RDI: ffff88813fffae00
+RBP: ffffc90000b97420 R08: 0000000000000901 R09: 0000000000000009
+R10: ffffed1027fff5b3 R11: 1ffff11027fff5b2 R12: ffff88813fffc310
+R13: dffffc0000000000 R14: 0000000000000000 R15: ffff88813fffa700
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f7bec722f10 CR3: 000000004a430000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ get_page_from_freelist+0x4b6/0x7c0 mm/page_alloc.c:4288
+ __alloc_pages+0x259/0x560 mm/page_alloc.c:5558
+ vm_area_alloc_pages mm/vmalloc.c:2975 [inline]
+ __vmalloc_area_node mm/vmalloc.c:3043 [inline]
+ __vmalloc_node_range+0x8f4/0x1290 mm/vmalloc.c:3213
+ kvmalloc_node+0x13e/0x180 mm/util.c:606
+ kvmalloc include/linux/slab.h:706 [inline]
+ kvmalloc_array include/linux/slab.h:724 [inline]
+ kvcalloc include/linux/slab.h:729 [inline]
+ z_erofs_decompress_pcluster fs/erofs/zdata.c:1049 [inline]
+ z_erofs_decompress_queue+0x693/0x2c30 fs/erofs/zdata.c:1155
+ z_erofs_decompressqueue_work+0x95/0xe0 fs/erofs/zdata.c:1167
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
