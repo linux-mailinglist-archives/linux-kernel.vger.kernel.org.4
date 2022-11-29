@@ -2,93 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7D863C6DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE0E63C6ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 19:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236554AbiK2Ryn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 12:54:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
+        id S236559AbiK2SAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 13:00:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233312AbiK2Ryd (ORCPT
+        with ESMTP id S234427AbiK2SAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 12:54:33 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0888D27140
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:54:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669744473; x=1701280473;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=eWmuqTFqNsAoet0OLkvih5/7bcZ+zSGLf0yM6dcoYG4=;
-  b=QQa281WG+hzqaYQRO/sqRwZoXWZDu61ChX4WuwCpuGlm1XXQQZi1U2XR
-   yAxhSlsb7djzk4HqD2030kBT3hJPmzKe+RhUPjc9qrpip0d+8wHUdlWLN
-   XXtEhrgkqBYtWZ0/N5AQN5bx+DvspRqW3HxlG8Iy1Jb8ZlgYJwMaOWfPp
-   lfga5U5ybzIA5hOEKpo9invWTDrGpi1HbZ1MceSAN8hCL5YfMNEUGh/SS
-   6AXRWMxQl+RTS7ZVEVwSGnE1nO7WIycpdMCxXxVGQPGMxTT/ZUvWyd0EK
-   wsw+9IpKbD/YezgFP1NSYXzGDq3gxKTKgYAa+qMIGr//1ysj2WmLLz/Hp
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="294879775"
-X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="294879775"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 09:54:32 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="732650483"
-X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="732650483"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 09:54:32 -0800
-Date:   Tue, 29 Nov 2022 09:58:23 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Luo, Yuzhang" <yuzhang.luo@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v2] iommu/vt-d: Add a fix for devices need extra dtlb
- flush
-Message-ID: <20221129095823.3009552a@jacob-builder>
-In-Reply-To: <BL1PR11MB52716203AF9CC7CADDAC0B4D8C129@BL1PR11MB5271.namprd11.prod.outlook.com>
-References: <20221128170410.3830605-1-jacob.jun.pan@linux.intel.com>
-        <BL1PR11MB52716203AF9CC7CADDAC0B4D8C129@BL1PR11MB5271.namprd11.prod.outlook.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 29 Nov 2022 13:00:48 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24C26B38D
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 10:00:46 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id w37so8605031pga.5
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 10:00:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TSI5hG4OpJqGbtaBgdMep1PH+0f8Fx62v+X9xZ1Fl94=;
+        b=PVqG6QzEOT3S84aLFS3ebN/+dcswywiw+Tx6QqHnhwexLip1a+xdTIutTPQLHGODOE
+         HUMJxl4i7tyn0wbyWEwmwvBAV5fXYIPCYh+PZ86ivuFF+Z2Evwdp8at1oPYfaqoo67JH
+         DfFuCRaP2xlxa/ergCj0mErkRDRutP8j+PmWU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TSI5hG4OpJqGbtaBgdMep1PH+0f8Fx62v+X9xZ1Fl94=;
+        b=PKThSOis/9LKaJh3B4H/rfpftOxB1Qx2Ln8XSsLpSxddl9uQKqTlgxZxZFuuNmnrdC
+         xoShRSwS9KgbOYmJh7Lrdti84BAEtHNCqnPenVvKVOaPlhbbvFjoz2EaPrMEfM4aQ9IG
+         1B/GsE4L8izBB7Q9VmzirU0OHeRhcJderNS+DtTqOlyZN89IhQBWiSvAtc0Tg2HYOhIW
+         BefQcUd9tDr+xjwAmsAX8Lo5K7uLa8zz/m+e7lQr5VZ0GgZEstrIIwvTLXJ/Xs9D4rbH
+         Nrne80BJEj+w79OZ3WsXZiCXVchTeaQ7cPHIo7B8D261jvPaFWp2jAz17kaFrKPE8bxx
+         mzAg==
+X-Gm-Message-State: ANoB5pn7qZtZMUiByCF3ibtl2QuLtB7u/IOSgLcvz8QnFQ48u0Xrgm8w
+        Si285idsgcp1rUZ8QG+mSJZkqUz57OYerEbFXlP0Gy4OFQjSPyus
+X-Google-Smtp-Source: AA0mqf7u65cBqunX27gIoaEd70af4bgJCUl4C12pXRT79B5hou0hUEMAqHi1rrceJLd5hJK9hxM6ue6EB8yz9NAAWV8=
+X-Received: by 2002:a63:180a:0:b0:470:63e5:5c59 with SMTP id
+ y10-20020a63180a000000b0047063e55c59mr32417999pgl.172.1669744846086; Tue, 29
+ Nov 2022 10:00:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
+ <20221103155756.687789-4-benjamin.tissoires@redhat.com> <ff1a0b34-71f2-cebe-a6ef-675936b276eb@nvidia.com>
+ <CAO-hwJJZxgeTT8mLwFrYynSVASva=o7qL9Kr4xOywV3KDUu2GA@mail.gmail.com>
+ <CAADnVQ+kE+EJ9LAfwge9ksC0LR8r+ShQNYi5g-MDajufXq8Yxw@mail.gmail.com> <CAO-hwJJGxvrLRGSt7g0T1rYiuCCigVzQ-L6yKLM1-44EpYqmsQ@mail.gmail.com>
+In-Reply-To: <CAO-hwJJGxvrLRGSt7g0T1rYiuCCigVzQ-L6yKLM1-44EpYqmsQ@mail.gmail.com>
+From:   Florent Revest <revest@chromium.org>
+Date:   Tue, 29 Nov 2022 19:00:35 +0100
+Message-ID: <CABRcYmKyRchQhabi1Vd9RcMQFCcb=EtWyEbFDFRTc-L-U8WhgA@mail.gmail.com>
+Subject: Re: [PATCH hid v12 03/15] HID: initial BPF implementation
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kevin,
-
-On Tue, 29 Nov 2022 02:37:45 +0000, "Tian, Kevin" <kevin.tian@intel.com>
-wrote:
-
-> > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > Sent: Tuesday, November 29, 2022 1:04 AM
+On Thu, Nov 24, 2022 at 4:50 PM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> On Wed, Nov 23, 2022 at 9:14 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
 > >
-> > +void quirk_dev_tlb(struct device_domain_info *info, unsigned long
-> > address,
-> > +		   unsigned long mask, u32 pasid, u16 qdep)  
-> 
-> quirk_extra_dtlb_flush()
-> 
-> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-will do in the next version!
+> > On Wed, Nov 23, 2022 at 6:53 AM Benjamin Tissoires
+> > <benjamin.tissoires@redhat.com> wrote:
+> > >
+> > > Hi Jon,
+> > >
+> > > On Wed, Nov 23, 2022 at 2:25 PM Jon Hunter <jonathanh@nvidia.com> wrote:
+> > > >
+> > > > We have a kernel test that checks for new warning and error messages on
+> > > > boot and with this change I am now seeing the following error message on
+> > > > our Tegra platforms ...
+> > > >
+> > > >   WARNING KERN hid_bpf: error while preloading HID BPF dispatcher: -13
+> > > >
+> > > > I have a quick look at the code, but I can't say I am familiar with
+> > > > this. So I wanted to ask if a way to fix this or avoid this? I see the
+> > > > code returns 0, so one option would be to make this an informational or
+> > > > debug print.
+> > >
+> > > I am not in favor of debug in that case, because I suspect it'll hide
+> > > too much when getting a bug report. Informational could do, yes.
+> > >
+> > > However, before that, I'd like to dig a little bit more on why it is
+> > > failing. I thought arm64 now has support of tracing bpf programs, so I
+> > > would not expect this to fail.
 
-Thanks,
+We have BPF trampolines on arm64 already but no ftrace direct calls
+right now. (so trampolines get jitted but don't get called eheh :)) So
+indeed BPF tracing programs (fentry/fexit/fmod_ret) do not work on
+arm64 at the moment.
 
-Jacob
+> > Unfortunately the patches to add support for such tracing bpf progs got stuck.
+> > Florent/Mark can probably share the latest status.
+
+We are working on an implementation of ftrace direct calls that would
+fit within the constraints of arm64 and play nice with the other users
+of the ftrace call site. Hopefully we have a patch to share in the
+next couple of weeks I'd say!
+
+> Oh... I noticed Jon's config was lacking CONFIG_FTRACE. So should I
+> also add a depends on CONFIG_FTRACE to enable HID-BPF?
+
+If HID-BPF fundamentally depends on a fmod_ret program being attached
+to function, it seems to me that it should depend on both:
+    CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS (CONFIG_FTRACE or even
+CONFIG_DYNAMIC_FTRACE aren't enough, there can be architectures that
+do not support direct calls. here you noticed it on arm64 which
+luckily should get fixed someday soon but there could be other
+architectures with that issue too)
+and
+    CONFIG_FUNCTION_ERROR_INJECTION (since [1] error injection needs
+to be explicitly opted-in, it's easy to miss it and fail to attach
+fmod_ret programs in mysterious ways)
+
+I'm thinking that maybe encoding these two dependencies in the
+CONFIG_HID_BPF is leaking too much of the bpf tracing abstraction to
+the user. Maybe the BPF Kconfig could provide "proxy" configs like
+HAVE_BPF_FENTRY_FEXIT, HAVE_BPF_FMOD_RET (naming is hard) to expose
+these dependencies better ?
+
+1: https://lore.kernel.org/lkml/20221121104403.1545f9b5@gandalf.local.home/
