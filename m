@@ -2,120 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FCE63C65F
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B673663C663
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:27:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236614AbiK2RXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 12:23:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
+        id S236591AbiK2R1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 12:27:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236598AbiK2RX0 (ORCPT
+        with ESMTP id S235644AbiK2R1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 12:23:26 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B10468C5A;
-        Tue, 29 Nov 2022 09:23:25 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id c2so10299079qko.1;
-        Tue, 29 Nov 2022 09:23:25 -0800 (PST)
+        Tue, 29 Nov 2022 12:27:48 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD64A453;
+        Tue, 29 Nov 2022 09:27:46 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id y17so6201030plp.3;
+        Tue, 29 Nov 2022 09:27:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=7jlcVHL9xXutHyudxpWgmNyuiG9QsSh1Xo0dK9zsWjA=;
-        b=Nov5hLqCze7EZR8kEb6NBupeNB9jWyAdl6Dw9hSGGMGGm5OPqU/mgPXzGOvCl/88ut
-         mD5GIuQXdKYrHvtkj18slwPS+RDLfkmA38senKJMfjzBQr0bZBDvIR46UycvRsPFmamo
-         5qthavMLzepH+BTZs+rMYsZbXMnIUtGejX3VhvI8OPqDFXBLqRkBc9vinLUOs8Z9oB0r
-         Ivi0rX3sH0dzyG5W57V/AgCsjz0+NSir1qvXuoX96SzyzfJYpD0z2iwNkUXxa6d9rXpN
-         te5em0/EpPWv1qS/JuArwp/lwzl+f7iPEN2T0JxnrWc089nCVhW1hH1XKt/dHlH8myN/
-         9dvA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+nfXkLtHcbcHqvlWMT2FI5FkLy2T405brGAlDCc79rA=;
+        b=kwu9geb/XZrQHY0mZJErmlKtIQ1zOENfXRBtEsAUufzgum2upmjcwtB5SuDbE5MEqv
+         gIJVuG8Xm/LtmOahWY3XHgaqoGISeAWqhhypDjedtMMohjCVvXj0I5QyAKoqHmDfIiiX
+         03x8iFaG1ZSPKfaGUmNiTMI4tTgC0afMbjRRvKcuuhV+6WCzkCahw2bxP1paRF+LjqEz
+         2nk0o6nnd5T8UDdrZxQpo5+C9z1BATxOHdUGTM1tN5mMTstUnIjVnk9SqmdwUTAB/ufl
+         mDe8257BkwTPA9lRa+GLqPonhEcZcBsiKZ+q3G7zjC8htvhg2dPI68Pkfy2Et8yYV3Uo
+         n4MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7jlcVHL9xXutHyudxpWgmNyuiG9QsSh1Xo0dK9zsWjA=;
-        b=cD7lJj05Bv18AauPFM88JR2s0j7oQqCzxKxb5yv6iUIzn2ERqct72jpDUbbkxDkB7F
-         ksJDsNr1x5Jf0Zc/fIpMQbjrHYkc5MevozqpzRIICMU07kdlDIQgHytAbRA++l27x00f
-         idsVnM+Qz22iEktEANNbkFl+tdoop5bl+vPoTAttqxUW4u4Pw3ap1HTR9OsGZIyR6Dk5
-         UCtJi2BcGhlPksmmFFx9MQfznfLmuP9Z2+AU9E7vHLSk/bpUlJJKnAksmd9BLdpbo2Tj
-         anqgYDWaxMbUBrCmW/Tf5eHLa5eSwqOO/vP/RkM/5Q9zx9jVbhEfkXVGBipDpd4PdVR3
-         pvYg==
-X-Gm-Message-State: ANoB5pn5usH0W/izC8ZzhJw3sN4Rc4BVnj6mQzHyq8PL8wy3xxzYfVsT
-        /qORriHKKBR2wuILeGxE9Xk=
-X-Google-Smtp-Source: AA0mqf6IDL2RWE/H33qWuzB+/OwKdtxvd/iJIOwpxmlKGEm/zYT9LD2OYB9TH2WQWzdbh2CSWom+dA==
-X-Received: by 2002:a37:f516:0:b0:6fa:32ca:4944 with SMTP id l22-20020a37f516000000b006fa32ca4944mr52045610qkk.738.1669742604409;
-        Tue, 29 Nov 2022 09:23:24 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id t20-20020a05620a451400b006fba0a389a4sm11185702qkp.88.2022.11.29.09.23.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 09:23:23 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 224C727C0054;
-        Tue, 29 Nov 2022 12:23:22 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 29 Nov 2022 12:23:23 -0500
-X-ME-Sender: <xms:CUCGYwMLw060-Ttp4R89ym-Rb7m5Dim28FREUaPNzXGuHl8Xw7MpAw>
-    <xme:CUCGY29-qs3FQI2rGq78JauGjmnH4BUhOfNZx1VaagzJxGnLt7bMZcmcOZXXMsI-i
-    qC9ZN3r3VoSMFRLmQ>
-X-ME-Received: <xmr:CUCGY3Tn44bLjgIikEGZbMYi-V29MM-Qcwqg6dwC2rRjr_ElNthy0Wcc3gq843K3fWXh0UjL0UzTUhFmiKaKGN2RypImojL2Hug>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtddtgdejudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeevuedtteetledvhfdtudekfffggeelhfejlefhgffgfedviefhgeeifeel
-    vddtgeenucffohhmrghinheplhhkmhhlrdhorhhgpdhqvghmuhdrohhrghenucevlhhush
-    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghs
-    mhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhe
-    dvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:CUCGY4swz2xa-cH9gLIe5K78XXKkDE0_FXWYZ_SgDhinIyPNyxtRvw>
-    <xmx:CUCGY4dRPAAviVrLYE0H6uxRqbCkE4-ZQjYrWiJq9SJeKSmCpA0pTg>
-    <xmx:CUCGY82cSAb1_AQ1qjoKvlJXbjIh-b2Dl8KsaTnPoz3fLOBSCVhd-w>
-    <xmx:CkCGY284FjIDhtsUINsru4paIS8xYQHVLE3xXe5i61hDwhrUm1LLbpXrdknDuUXY>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 29 Nov 2022 12:23:21 -0500 (EST)
-Date:   Tue, 29 Nov 2022 09:23:18 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Hou Tao <houtao@huaweicloud.com>,
-        Tonghao Zhang <xiangxia.m.yue@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        "houtao1@huawei.com" <houtao1@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [net-next] bpf: avoid hashtab deadlock with try_lock
-Message-ID: <Y4ZABpDSs4/uRutC@Boquns-Mac-mini.local>
-References: <9278cf3f-dfb6-78eb-8862-553545dac7ed@huawei.com>
- <41eda0ea-0ed4-1ffb-5520-06fda08e5d38@huawei.com>
- <CAMDZJNVSv3Msxw=5PRiXyO8bxNsA-4KyxU8BMCVyHxH-3iuq2Q@mail.gmail.com>
- <fdb3b69c-a29c-2d5b-a122-9d98ea387fda@huawei.com>
- <CAMDZJNWTry2eF_n41a13tKFFSSLFyp3BVKakOOWhSDApdp0f=w@mail.gmail.com>
- <CA+khW7jgsyFgBqU7hCzZiSSANE7f=A+M-0XbcKApz6Nr-ZnZDg@mail.gmail.com>
- <07a7491e-f391-a9b2-047e-cab5f23decc5@huawei.com>
- <CAMDZJNUTaiXMe460P7a7NfK1_bbaahpvi3Q9X85o=G7v9x-w=g@mail.gmail.com>
- <59fc54b7-c276-2918-6741-804634337881@huaweicloud.com>
- <541aa740-dcf3-35f5-9f9b-e411978eaa06@redhat.com>
+        bh=+nfXkLtHcbcHqvlWMT2FI5FkLy2T405brGAlDCc79rA=;
+        b=ECkD/GDcXKvXB8xFs5ioxz36Qx6MlK1Jk3aFfO3dmgYODMv7ebcEL6RrXbGGuqGFsg
+         MDGvUpb08e90o2VZxHRr9Fyr/xvewRFXHl3PvM6hGZlfD7E6vF8i+jCjhNMRKmzonX52
+         l47Y5FpzOQo0WXlmBr6YhFPCrS6v5wrnPKQhCEqmcBig7ex7JnvzIeYtLur3k98GwBKc
+         1WczloCPKq1VZ5hsFQjEvvl9VkQ9OEY65LbyPpLmi9joXmK7OybmwZfPtCya+bhVoydj
+         MCCb0aY7k3Cgk9fbWr0mo4OQMc/DV2xSvlUkPA6ZIxRsXTtHiMmXXg0w+Dj48PjHWTCZ
+         vsbw==
+X-Gm-Message-State: ANoB5pnFqHxh3Ef+gTsUGp90dv+dcdRdaP7pIu1NbvaGC/Btads5GzId
+        JR1m9+gfrnnSpvWMUaSpl2P4y/JWEIhFEcKzBkE=
+X-Google-Smtp-Source: AA0mqf4zImlMiKjDrqJUkHXvzwMr9YMxo5+Qm2bctCGa3Qitgn/8MiJFhpHDGX4PZpJCIavmpsN2ckIwpQHV1Mbh3+E=
+X-Received: by 2002:a17:903:22c4:b0:184:cb7e:ba36 with SMTP id
+ y4-20020a17090322c400b00184cb7eba36mr37721305plg.57.1669742865590; Tue, 29
+ Nov 2022 09:27:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <541aa740-dcf3-35f5-9f9b-e411978eaa06@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221122203850.2765015-1-almasrymina@google.com>
+ <Y35fw2JSAeAddONg@cmpxchg.org> <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
+ <Y36XchdgTCsMP4jT@cmpxchg.org> <874juonbmv.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <CAHbLzkrmxyzH4R7a9sJQavrUyKCEiNYeA543+sdJLsgRPrwBwQ@mail.gmail.com> <87a64ad1iz.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87a64ad1iz.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Tue, 29 Nov 2022 09:27:33 -0800
+Message-ID: <CAHbLzkpVZf-3K0Ys8HG8x6D_XpPChB-H2XMYar7UwnNDeMiw8w@mail.gmail.com>
+Subject: Re: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Mina Almasry <almasrymina@google.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -123,151 +80,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 11:06:51AM -0500, Waiman Long wrote:
-> On 11/29/22 07:45, Hou Tao wrote:
-> > Hi,
-> > 
-> > On 11/29/2022 2:06 PM, Tonghao Zhang wrote:
-> > > On Tue, Nov 29, 2022 at 12:32 PM Hou Tao <houtao1@huawei.com> wrote:
-> > > > Hi,
-> > > > 
-> > > > On 11/29/2022 5:55 AM, Hao Luo wrote:
-> > > > > On Sun, Nov 27, 2022 at 7:15 PM Tonghao Zhang <xiangxia.m.yue@gmail.com> wrote:
-> > > > > Hi Tonghao,
-> > > > > 
-> > > > > With a quick look at the htab_lock_bucket() and your problem
-> > > > > statement, I agree with Hou Tao that using hash &
-> > > > > min(HASHTAB_MAP_LOCK_MASK, n_bucket - 1) to index in map_locked seems
-> > > > > to fix the potential deadlock. Can you actually send your changes as
-> > > > > v2 so we can take a look and better help you? Also, can you explain
-> > > > > your solution in your commit message? Right now, your commit message
-> > > > > has only a problem statement and is not very clear. Please include
-> > > > > more details on what you do to fix the issue.
-> > > > > 
-> > > > > Hao
-> > > > It would be better if the test case below can be rewritten as a bpf selftests.
-> > > > Please see comments below on how to improve it and reproduce the deadlock.
-> > > > > > Hi
-> > > > > > only a warning from lockdep.
-> > > > Thanks for your details instruction.  I can reproduce the warning by using your
-> > > > setup. I am not a lockdep expert, it seems that fixing such warning needs to set
-> > > > different lockdep class to the different bucket. Because we use map_locked to
-> > > > protect the acquisition of bucket lock, so I think we can define  lock_class_key
-> > > > array in bpf_htab (e.g., lockdep_key[HASHTAB_MAP_LOCK_COUNT]) and initialize the
-> > > > bucket lock accordingly.
-> > The proposed lockdep solution doesn't work. Still got lockdep warning after
-> > that, so cc +locking expert +lkml.org for lockdep help.
-> > 
-> > Hi lockdep experts,
-> > 
-> > We are trying to fix the following lockdep warning from bpf subsystem:
-> > 
-> > [   36.092222] ================================
-> > [   36.092230] WARNING: inconsistent lock state
-> > [   36.092234] 6.1.0-rc5+ #81 Tainted: G            E
-> > [   36.092236] --------------------------------
-> > [   36.092237] inconsistent {INITIAL USE} -> {IN-NMI} usage.
-> > [   36.092238] perf/1515 [HC1[1]:SC0[0]:HE0:SE1] takes:
-> > [   36.092242] ffff888341acd1a0 (&htab->lockdep_key){....}-{2:2}, at:
-> > htab_lock_bucket+0x4d/0x58
-> > [   36.092253] {INITIAL USE} state was registered at:
-> > [   36.092255]   mark_usage+0x1d/0x11d
-> > [   36.092262]   __lock_acquire+0x3c9/0x6ed
-> > [   36.092266]   lock_acquire+0x23d/0x29a
-> > [   36.092270]   _raw_spin_lock_irqsave+0x43/0x7f
-> > [   36.092274]   htab_lock_bucket+0x4d/0x58
-> > [   36.092276]   htab_map_delete_elem+0x82/0xfb
-> > [   36.092278]   map_delete_elem+0x156/0x1ac
-> > [   36.092282]   __sys_bpf+0x138/0xb71
-> > [   36.092285]   __do_sys_bpf+0xd/0x15
-> > [   36.092288]   do_syscall_64+0x6d/0x84
-> > [   36.092291]   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > [   36.092295] irq event stamp: 120346
-> > [   36.092296] hardirqs last  enabled at (120345): [<ffffffff8180b97f>]
-> > _raw_spin_unlock_irq+0x24/0x39
-> > [   36.092299] hardirqs last disabled at (120346): [<ffffffff81169e85>]
-> > generic_exec_single+0x40/0xb9
-> > [   36.092303] softirqs last  enabled at (120268): [<ffffffff81c00347>]
-> > __do_softirq+0x347/0x387
-> > [   36.092307] softirqs last disabled at (120133): [<ffffffff810ba4f0>]
-> > __irq_exit_rcu+0x67/0xc6
-> > [   36.092311]
-> > [   36.092311] other info that might help us debug this:
-> > [   36.092312]  Possible unsafe locking scenario:
-> > [   36.092312]
-> > [   36.092313]        CPU0
-> > [   36.092313]        ----
-> > [   36.092314]   lock(&htab->lockdep_key);
-> > [   36.092315]   <Interrupt>
-> > [   36.092316]     lock(&htab->lockdep_key);
-> > [   36.092318]
-> > [   36.092318]  *** DEADLOCK ***
-> > [   36.092318]
-> > [   36.092318] 3 locks held by perf/1515:
-> > [   36.092320]  #0: ffff8881b9805cc0 (&cpuctx_mutex){+.+.}-{4:4}, at:
-> > perf_event_ctx_lock_nested+0x8e/0xba
-> > [   36.092327]  #1: ffff8881075ecc20 (&event->child_mutex){+.+.}-{4:4}, at:
-> > perf_event_for_each_child+0x35/0x76
-> > [   36.092332]  #2: ffff8881b9805c20 (&cpuctx_lock){-.-.}-{2:2}, at:
-> > perf_ctx_lock+0x12/0x27
-> > [   36.092339]
-> > [   36.092339] stack backtrace:
-> > [   36.092341] CPU: 0 PID: 1515 Comm: perf Tainted: G            E
-> > 6.1.0-rc5+ #81
-> > [   36.092344] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> > rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> > [   36.092349] Call Trace:
-> > [   36.092351]  <NMI>
-> > [   36.092354]  dump_stack_lvl+0x57/0x81
-> > [   36.092359]  lock_acquire+0x1f4/0x29a
-> > [   36.092363]  ? handle_pmi_common+0x13f/0x1f0
-> > [   36.092366]  ? htab_lock_bucket+0x4d/0x58
-> > [   36.092371]  _raw_spin_lock_irqsave+0x43/0x7f
-> > [   36.092374]  ? htab_lock_bucket+0x4d/0x58
-> > [   36.092377]  htab_lock_bucket+0x4d/0x58
-> > [   36.092379]  htab_map_update_elem+0x11e/0x220
-> > [   36.092386]  bpf_prog_f3a535ca81a8128a_bpf_prog2+0x3e/0x42
-> > [   36.092392]  trace_call_bpf+0x177/0x215
-> > [   36.092398]  perf_trace_run_bpf_submit+0x52/0xaa
-> > [   36.092403]  ? x86_pmu_stop+0x97/0x97
-> > [   36.092407]  perf_trace_nmi_handler+0xb7/0xe0
-> > [   36.092415]  nmi_handle+0x116/0x254
-> > [   36.092418]  ? x86_pmu_stop+0x97/0x97
-> > [   36.092423]  default_do_nmi+0x3d/0xf6
-> > [   36.092428]  exc_nmi+0xa1/0x109
-> > [   36.092432]  end_repeat_nmi+0x16/0x67
-> > [   36.092436] RIP: 0010:wrmsrl+0xd/0x1b
-> 
-> So the lock is really taken in a NMI context. In general, we advise again
-> using lock in a NMI context unless it is a lock that is used only in that
-> context. Otherwise, deadlock is certainly a possibility as there is no way
-> to mask off again NMI.
-> 
+On Mon, Nov 28, 2022 at 4:54 PM Huang, Ying <ying.huang@intel.com> wrote:
+>
+> Yang Shi <shy828301@gmail.com> writes:
+>
+> > On Wed, Nov 23, 2022 at 9:52 PM Huang, Ying <ying.huang@intel.com> wrote:
+> >>
+> >> Hi, Johannes,
+> >>
+> >> Johannes Weiner <hannes@cmpxchg.org> writes:
+> >> [...]
+> >> >
+> >> > The fallback to reclaim actually strikes me as wrong.
+> >> >
+> >> > Think of reclaim as 'demoting' the pages to the storage tier. If we
+> >> > have a RAM -> CXL -> storage hierarchy, we should demote from RAM to
+> >> > CXL and from CXL to storage. If we reclaim a page from RAM, it means
+> >> > we 'demote' it directly from RAM to storage, bypassing potentially a
+> >> > huge amount of pages colder than it in CXL. That doesn't seem right.
+> >> >
+> >> > If demotion fails, IMO it shouldn't satisfy the reclaim request by
+> >> > breaking the layering. Rather it should deflect that pressure to the
+> >> > lower layers to make room. This makes sure we maintain an aging
+> >> > pipeline that honors the memory tier hierarchy.
+> >>
+> >> Yes.  I think that we should avoid to fall back to reclaim as much as
+> >> possible too.  Now, when we allocate memory for demotion
+> >> (alloc_demote_page()), __GFP_KSWAPD_RECLAIM is used.  So, we will trigger
+> >> kswapd reclaim on lower tier node to free some memory to avoid fall back
+> >> to reclaim on current (higher tier) node.  This may be not good enough,
+> >> for example, the following patch from Hasan may help via waking up
+> >> kswapd earlier.
+> >
+> > For the ideal case, I do agree with Johannes to demote the page tier
+> > by tier rather than reclaiming them from the higher tiers. But I also
+> > agree with your premature OOM concern.
+> >
+> >>
+> >> https://lore.kernel.org/linux-mm/b45b9bf7cd3e21bca61d82dcd1eb692cd32c122c.1637778851.git.hasanalmaruf@fb.com/
+> >>
+> >> Do you know what is the next step plan for this patch?
+> >>
+> >> Should we do even more?
+> >
+> > In my initial implementation I implemented a simple throttle logic
+> > when the demotion is not going to succeed if the demotion target has
+> > not enough free memory (just check the watermark) to make migration
+> > succeed without doing any reclamation. Shall we resurrect that?
+>
+> Can you share the link to your throttle patch?  Or paste it here?
 
-I think here they use a percpu counter as an "outer lock" to make the
-accesses to the real lock exclusive:
+I just found this on the mailing list.
+https://lore.kernel.org/linux-mm/1560468577-101178-8-git-send-email-yang.shi@linux.alibaba.com/
 
-	preempt_disable();
-	a = __this_cpu_inc(->map_locked);
-	if (a != 1) {
-		__this_cpu_dec(->map_locked);
-		preempt_enable();
-		return -EBUSY;
-	}
-	preempt_enable();
-		return -EBUSY;
-	
-	raw_spin_lock_irqsave(->raw_lock);
+But it didn't have the throttling logic, I may not submit that version
+to the mailing list since we decided to drop this and merge mine and
+Dave's.
 
-and lockdep is not aware that ->map_locked acts as a lock.
-
-However, I feel this may be just a reinvented try_lock pattern, Hou Tao,
-could you see if this can be refactored with a try_lock? Otherwise, you
-may need to introduce a virtual lockclass for ->map_locked.
-
-Regards,
-Boqun
-
-> Cheers,
-> Longman
-> 
+Anyway it is not hard to add the throttling logic, we already have a
+few throttling cases in vmscan, for example, "mm/vmscan: throttle
+reclaim until some writeback completes if congested".
+>
+> > Waking kswapd sooner is fine to me, but it may be not enough, for
+> > example, the kswapd may not keep up so remature OOM may happen on
+> > higher tiers or reclaim may still happen. I think throttling the
+> > reclaimer/demoter until kswapd makes progress could avoid both. And
+> > since the lower tiers memory typically is quite larger than the higher
+> > tiers, so the throttle should happen very rarely IMHO.
+> >
+> >>
+> >> From another point of view, I still think that we can use falling back
+> >> to reclaim as the last resort to avoid OOM in some special situations,
+> >> for example, most pages in the lowest tier node are mlock() or too hot
+> >> to be reclaimed.
+> >>
+> >> > So I'm hesitant to design cgroup controls around the current behavior.
+>
+> Best Regards,
+> Huang, Ying
