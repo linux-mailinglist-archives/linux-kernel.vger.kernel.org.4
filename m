@@ -2,156 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D55563CA29
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA8B63CA37
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:13:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236854AbiK2VLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 16:11:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37506 "EHLO
+        id S237029AbiK2VNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 16:13:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236895AbiK2VLH (ORCPT
+        with ESMTP id S236865AbiK2VMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 16:11:07 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1620F70471
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:10:42 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id bf14-20020a056602368e00b006ce86e80414so9515126iob.7
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:10:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+T5btxFITBUYFNemWF4t9XMo8L1hkUwTBYtJ6gvqC3w=;
-        b=zxzDmENv4D6JmqCDHMkKrJJuhqrSL35XdM+089GByHsIkMhpZjCEdtCkjLeactiz7R
-         OW8GzCVTh3dluaR53qvNlhIIuEUn4efIOQfm3VgYF6hJfLd0Yxlrw1r6YLfRsOqa+fWj
-         MtM+nSg4q1XFsJu9YwELoYZuyGEuYygk+r2+r/K3FvrPYzgF6nYvHdWuqmim2fKjLsX0
-         fxicsb7AzpmJY9Tkdvioul/BrwXrj7l9FzN8i3E0gXhx4phMthgi4g9Mfnvq4eiCH1D7
-         nQYvvmzWyLIyMwoN6h8z8LbS31J0SNH/DCIbAWcDDbP3DngZZs1ifcLq2AzwhTlKiPyX
-         SQow==
-X-Gm-Message-State: ANoB5pn69ooz6fg4wd7UrCnDfpcXt5FbDZQ3M8sUzTjShAdb49yrmdLz
-        ZLmn3dMrsb1rhRJRCg6ONUTbwijrBDRfeKkOUcL2XGnSeA5n
-X-Google-Smtp-Source: AA0mqf6itHiSNazy+QcwfhiR8iCnI40NzyQa9ZJ4g9Aty3ZZo4I4bM5OqksgP8YLzUNeWfoZ49RnCnj34JsbIizC8TIWYwUplkgy
+        Tue, 29 Nov 2022 16:12:35 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862FF2613F;
+        Tue, 29 Nov 2022 13:12:26 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2ATLCJB3029725
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 16:12:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1669756342; bh=NVlHbOGEi8Vb8KhBrHaFFO2qVHyHoncNMDQIH/qVy3w=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=WeygZ8mRKmR/BZl1HFfLPtC8TAlzOgRD6poOpU+FxNJG3N/pZC7LHmH5AXCSHKdRy
+         u1lS0nyaNkkOqTyaKStBxZ1HPljxGhHgGWwDq6DbMyb3abL2qid2J0zw+yXer4x7b6
+         XHnCXAa8xsB0nyi1Ojc8VEV76shaXFtR2LSdkMq1uA48KtF+7TMHWPqxnwpCGKbtz9
+         Cs9gla2hqoj5eFOEFdJHEwF4cUgEA1kOu7MnGnJGcyu0TqUA0eeLK/qC9F73mxW1B/
+         MfGoG2A/+DFGe8GvFzrDwCUBixvyIhJBUt6VwLmRTQdzx6iWgLS2VzmtUqb9eENSx2
+         2S2i22mD/vJZA==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 6089F15C33A3; Tue, 29 Nov 2022 16:12:19 -0500 (EST)
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     adilger.kernel@dilger.ca, cgel.zte@gmail.com
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, Zeal Robot <zealci@zte.com.cn>,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH linux-next] ext4: remove redundant variable err
+Date:   Tue, 29 Nov 2022 16:12:08 -0500
+Message-Id: <166975630694.2135297.2012560761216348231.b4-ty@mit.edu>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20220831160843.305836-1-cui.jinpeng2@zte.com.cn>
+References: <20220831160843.305836-1-cui.jinpeng2@zte.com.cn>
 MIME-Version: 1.0
-X-Received: by 2002:a92:2c0e:0:b0:302:e042:9ddd with SMTP id
- t14-20020a922c0e000000b00302e0429dddmr15312188ile.292.1669756241459; Tue, 29
- Nov 2022 13:10:41 -0800 (PST)
-Date:   Tue, 29 Nov 2022 13:10:41 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a2432a05eea26be6@google.com>
-Subject: [syzbot] kernel BUG in insert_state_fast
-From:   syzbot <syzbot+9ce4a36127ca92b59677@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, 31 Aug 2022 16:08:43 +0000, cgel.zte@gmail.com wrote:
+> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+> 
+> Return value directly from ext4_group_extend_no_check()
+> instead of getting value from redundant variable err.
+> 
+> 
 
-syzbot found the following issue on:
+Applied, thanks!
 
-HEAD commit:    644e9524388a Merge tag 'for-v6.1-rc' of git://git.kernel.o..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=12bc57c5880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
-dashboard link: https://syzkaller.appspot.com/bug?extid=9ce4a36127ca92b59677
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12806381880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=127f33c5880000
+[1/1] ext4: remove redundant variable err
+      commit: eb46ec409d2d9f2ea72af29428ad3dad754a7362
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0968428e17b4/disk-644e9524.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fd4c3bfd0777/vmlinux-644e9524.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ee4571f27f1c/bzImage-644e9524.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/3162096f8ebc/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9ce4a36127ca92b59677@syzkaller.appspotmail.com
-
-RSP: 002b:00007ffd0af295c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fdc57eface9
-RDX: 0000000000000049 RSI: 0000000020000180 RDI: 0000000000000005
-RBP: 00007ffd0af295d0 R08: 0000000000000001 R09: 00007fdc57eb0034
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-------------[ cut here ]------------
-kernel BUG at fs/btrfs/extent-io-tree.c:381!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 3632 Comm: syz-executor229 Not tainted 6.1.0-rc6-syzkaller-00308-g644e9524388a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:set_state_bits fs/btrfs/extent-io-tree.c:381 [inline]
-RIP: 0010:insert_state_fast+0x242/0x250 fs/btrfs/extent-io-tree.c:439
-Code: 2e fe e9 77 ff ff ff 44 89 e1 80 e1 07 80 c1 03 38 c1 0f 8c 72 fe ff ff 4c 89 e7 e8 d8 c1 2e fe e9 65 fe ff ff e8 fe a8 da fd <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 66 90 55 41 57 41 56 41 55 41
-RSP: 0018:ffffc90003b6f698 EFLAGS: 00010293
-RAX: ffffffff83afeeb2 RBX: dffffc0000000000 RCX: ffff888018ee57c0
-RDX: 0000000000000000 RSI: 00000000fffffff4 RDI: 0000000000000000
-RBP: 00000000fffffff4 R08: ffffffff83afedd4 R09: 00000000ffffffff
-R10: fffffbfff1a42e97 R11: 1ffffffff1a42e96 R12: 0000000000000000
-R13: ffff888029b51588 R14: ffff888021a0e840 R15: 0000000000001000
-FS:  0000555555986300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055a0f58ad000 CR3: 000000007c25a000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __set_extent_bit+0x1547/0x19a0 fs/btrfs/extent-io-tree.c:997
- set_record_extent_bits+0x50/0x80 fs/btrfs/extent-io-tree.c:1601
- qgroup_reserve_data+0x27b/0x6f0 fs/btrfs/qgroup.c:3739
- btrfs_qgroup_reserve_data+0x2a/0xc0 fs/btrfs/qgroup.c:3782
- btrfs_check_data_free_space+0x144/0x240 fs/btrfs/delalloc-space.c:152
- btrfs_buffered_write+0x56c/0x16f0 fs/btrfs/file.c:1559
- btrfs_direct_write fs/btrfs/file.c:1899 [inline]
- btrfs_do_write_iter+0xeb4/0x1260 fs/btrfs/file.c:1980
- call_write_iter include/linux/fs.h:2191 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x7dc/0xc50 fs/read_write.c:584
- ksys_write+0x177/0x2a0 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fdc57eface9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd0af295c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fdc57eface9
-RDX: 0000000000000049 RSI: 0000000020000180 RDI: 0000000000000005
-RBP: 00007ffd0af295d0 R08: 0000000000000001 R09: 00007fdc57eb0034
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:set_state_bits fs/btrfs/extent-io-tree.c:381 [inline]
-RIP: 0010:insert_state_fast+0x242/0x250 fs/btrfs/extent-io-tree.c:439
-Code: 2e fe e9 77 ff ff ff 44 89 e1 80 e1 07 80 c1 03 38 c1 0f 8c 72 fe ff ff 4c 89 e7 e8 d8 c1 2e fe e9 65 fe ff ff e8 fe a8 da fd <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 66 90 55 41 57 41 56 41 55 41
-RSP: 0018:ffffc90003b6f698 EFLAGS: 00010293
-RAX: ffffffff83afeeb2 RBX: dffffc0000000000 RCX: ffff888018ee57c0
-RDX: 0000000000000000 RSI: 00000000fffffff4 RDI: 0000000000000000
-RBP: 00000000fffffff4 R08: ffffffff83afedd4 R09: 00000000ffffffff
-R10: fffffbfff1a42e97 R11: 1ffffffff1a42e96 R12: 0000000000000000
-R13: ffff888029b51588 R14: ffff888021a0e840 R15: 0000000000001000
-FS:  0000555555986300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055a0f58ad000 CR3: 000000007c25a000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Best regards,
+-- 
+Theodore Ts'o <tytso@mit.edu>
