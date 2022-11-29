@@ -2,303 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1474C63C3C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:28:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7267C63C3C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235894AbiK2P2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 10:28:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57234 "EHLO
+        id S233677AbiK2P3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 10:29:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235574AbiK2P22 (ORCPT
+        with ESMTP id S235872AbiK2P24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:28:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F391160E8C;
-        Tue, 29 Nov 2022 07:28:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E023B816B3;
-        Tue, 29 Nov 2022 15:28:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C55B8C433C1;
-        Tue, 29 Nov 2022 15:28:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669735704;
-        bh=VJdpHOsIacRS6xdV5cAY7LDGF1gj/hMpBlnln/Rlw1Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sKL79Pz/F3n+59iCXKtLSgQtjCPi36ZfftuFoJLV2Q8RLzqxlyuxbsPuysYiWu4+W
-         1eSNJ3LLY40dvFVzJNSOeJ10ZqqqAhbGBlZfUH/YqtD1CIMTDSvw4Ck9O/9RG/zJ83
-         qKfEfv1JF1WQUsTDiJhHDxRhSK/uEkqmemT+2qL+GshPY/r4AKCm5MSEBucmlxpfs3
-         XXJeGD0q8X8t3JYArp4rN71eS/oalMmPye3tFIeSK7w1ZZ7j8RZDf3pxjXb5CtWcYG
-         eMuFZyGopIaEMUQ6DBirfJ5g0Nr0VuOIAZ8pBmf+iG3/vend5GL81uNvj1g7k4Gjk7
-         m4YNCXVcBCubA==
-Date:   Tue, 29 Nov 2022 20:58:09 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Asutosh Das <quic_asutoshd@quicinc.com>
-Cc:     quic_cang@quicinc.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, quic_nguyenb@quicinc.com,
-        quic_xiaosenh@quicinc.com, stanley.chu@mediatek.com,
-        eddie.huang@mediatek.com, daejun7.park@samsung.com,
-        bvanassche@acm.org, avri.altman@wdc.com, beanhuo@micron.com,
-        linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 05/16] ufs: core: mcq: Add support to allocate
- multiple queues
-Message-ID: <20221129152809.GE4931@workstation>
-References: <cover.1669684648.git.quic_asutoshd@quicinc.com>
- <12a4afc650f826cafb218352b5ac25f74779e108.1669684648.git.quic_asutoshd@quicinc.com>
+        Tue, 29 Nov 2022 10:28:56 -0500
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2047.outbound.protection.outlook.com [40.107.12.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8726264576;
+        Tue, 29 Nov 2022 07:28:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lgwteSEgR4Appp751MNdma8+1adfZF0F+ljAxwwyupDdphLxV6DQma2cu4WZMMd05RKczOYuDg3rbz1izS+nJGsGi6qmjYEzUmbdvkIY3z2u8rKFO+sMBgdAidE43zUa8+wt0aCXVOEHOkb0ZinwEt7FQrIfAtnt92Ae4NepezSv8YgjbaRBGsmjQfIVaMbJPcV80BJnm5Z4VGb4ENP7I2ZjZSKSDJT8V6Pmew+Ix9/UN9zWm5C7D+1ArvHa1IL2cZA9jX9R6BXqoCCiLqJ6Z88lNaELLEXp4Wr3hEhRP05AqYoK6eKdMI0nuoLiFt7sHxXCucwsdAW4S29nd119lQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KfNMvhEDO/PsfPXmUqojeCqBJVyGWgSDlvOEhzZj9dw=;
+ b=NSIyQbCEDwYQ9YG8q4GUrmX6n5ogdc1oBYF1ADJfLKc/FtbmOA+Xx15eMOWH0uSddQWXz1h0wF5ciL8UNzMb5UL4OKV9MUF8yxVfM2OyK91sQaIQhSKfch63GvjrMZ0F3fAv8znB5i/dTvHv0xqf+75KsYSK0UGKGqRYpzOoFjH46JNwKSybOvZDWQ3fXgIPBwnlC8k0dAtlmn1W7LgtIXTVKRHkItETYNdOejB6IqNTauunWrEhuhT2TXI93xXf9DPHkhbOaBbnTb3Zj58jeDA3VsBa1AcIh3YObkksgH3UH1ak5In70zdQDQDUS2KMdCPsCbjUTFpTzbrNH81HAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KfNMvhEDO/PsfPXmUqojeCqBJVyGWgSDlvOEhzZj9dw=;
+ b=kFhN+hpoFlFoqAtSd00H7HWy4cRufE0D2mN40++NsppvXu72xJ6qsYSWfCuY5HvG/3nr7QUvlEIfwzQOMsbT0ZZU7i4pcE/W2EryQpLeDZQFQYT51QmeYPLzB17PZxfZ3B9wU41/+zbZXBT8x88X6nlLPPnOjeRLTmVaeWJ+irXko1U+CTHmaruXMm5awJa78J8I+LPVKxfF7Q7w3xWOlE/W3ubzxZOLatLRlQUom/2lZA/dxMCdY38FEvH8CBsbY6w6wmdQ2aM/X437n2wsiZTU/ykGg0ZoHZ6N4smJLjnyT43mzpqOx2tCWGoNfEx/fVtkoZX/EBTXCYbLWd4LMw==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR1P264MB1983.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1b7::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Tue, 29 Nov
+ 2022 15:28:49 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::a85b:a9b6:cb36:fa6]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::a85b:a9b6:cb36:fa6%9]) with mapi id 15.20.5857.023; Tue, 29 Nov 2022
+ 15:28:49 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Sathvika Vasireddy <sv@linux.ibm.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: linux-next: build warnings after merge of the powerpc-objtool
+ tree
+Thread-Topic: linux-next: build warnings after merge of the powerpc-objtool
+ tree
+Thread-Index: AQHZAH4+CSTeB8J+L0G4I3MAaW4g/65WCUSAgAAETYA=
+Date:   Tue, 29 Nov 2022 15:28:49 +0000
+Message-ID: <c0ed0d60-6014-4c5f-e610-b4d3bd9e9e33@csgroup.eu>
+References: <20221125143012.6426c2b9@canb.auug.org.au>
+ <6cdad32e-782d-5bb5-f7e9-a44fb0b6444d@linux.ibm.com>
+In-Reply-To: <6cdad32e-782d-5bb5-f7e9-a44fb0b6444d@linux.ibm.com>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB1983:EE_
+x-ms-office365-filtering-correlation-id: b09bcdd9-80e2-4e58-e281-08dad21e6a31
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: L7naXXMH6cntnsEn4kB5OpXYI1J/7Ej5XuhS6Xxbfs1hxMnaVLhr1Z9ZbHNAClJs/TMYR4trOT8U8idpPeU0cH947kfXJgQzW40MV23G0XK0+YNJRe6fJs7+Usj4mVbbtz9EEUshlWGqqtlzHPYjC9ppT+bjelJutvUNwywvunle5SG550pp/YBlc5M/vI2AigZ0NShXhqUiL4KYoPQOBC+QSa8DmLoDmzA6QV7iUdL1iB6HoSz1YFliNhUGbL/DF5ZkM9oaLXz2pdNxyBdqzbQ5uZh1fUgSxC0cBM22US7QevZ6YOFbr87GIM/TpPgrYCSdl9kjDA/5cG2nqo8YyzsE5nmqXdN6fV/PTLQ47fjTCYRfGzUSNilpbc1//AIreUfgONEAS9nQ2EvLzc4BXMeq0VBjoetlGd8EQgjWcx/WRrn/EpW4sWqdo2UqteDGjI24+trzxg794bFTP/VfGjHsC1kkOr4d8VdDWIBpV576cVBH2IlricoWhgI1Yj/u23ePN6Amas3ptCUhWcwm2+4H8W3KkcophnUw//5XnW4UQMqVWnoToaGu+502cV+nj2BRqM5d9+hZS2zKp7qWQG+tFRqFuc+lo71jfj8NDtqKuviqPgwKa9paRWeX2jxsCaww5RGXFHhUyBh6B1eZWD+nHpRYEuedZ/0U/rUOZ6N+YjFQsWxfsKIC/ur2KOSxpZb4fVPIIimlnbYsdm8C4Ww38+rJ4bbQuG15dctHubwJQhvlVon2vPG6zJSYILXspbPdySi2ZYej2C0Ov9hkkEIo14DreOS0pD3EhFn+rN0=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(39850400004)(376002)(136003)(346002)(451199015)(66556008)(38070700005)(6506007)(31696002)(86362001)(91956017)(186003)(6512007)(8676002)(66946007)(53546011)(76116006)(66476007)(66446008)(4326008)(316002)(41300700001)(8936002)(64756008)(2616005)(71200400001)(6486002)(478600001)(54906003)(110136005)(122000001)(38100700002)(44832011)(2906002)(66574015)(83380400001)(5660300002)(26005)(31686004)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YldHMzZzcCs0UlNiZlR3czRTdzhBQTluWHBpTDljVTUrMGh6cllNeVBTT2Nm?=
+ =?utf-8?B?WFd1eGdkUkpCSzJUV0hOelZBWTFDSlNsRnlyMEtyWml1MEdMTXhmTVFhTU1I?=
+ =?utf-8?B?ZFVaTUQ4TnJXNzdTcmdhc1RZZmRNMzkvM2hrSllJU1BGSmlFVXpTTzA1dnhj?=
+ =?utf-8?B?cEtOeTkvdlY3S01MRXQ1QlBEVWRZRHZib2l4VXdYUTNONFNXWkd3bVVxWWpv?=
+ =?utf-8?B?bkZybFpuTjlOaWI5cnp0bHViUk1BN2o4WGlUakZlbjROamxjUmE3bUwyUDdJ?=
+ =?utf-8?B?dXpyWnI0SHdaMXdXeXRpOWNCRTM0b3JjUGxNWDRsckxPSlVabU0yUmxpUzBu?=
+ =?utf-8?B?TnZWZEp4YlFKZTY3N0FieWg1OXl2Nk43anFUblNGNjdFQWhLK1l5YVR1aXFT?=
+ =?utf-8?B?b0JISjQ0VGdPY3VFT0I2Rkh2NldYZHphdUhtSHBmeGFSOGJQc1MxbWt6cHZ0?=
+ =?utf-8?B?WGN1MTNrVjlzaU9zdWx2bWw3MzZMejJLZ3V4WGRMQ1h6Zmt1Qlc5WTdxSUxG?=
+ =?utf-8?B?MjZMM01uelRGd05rK2k1MXhWbWZLS3lIaW9tREsraUJEbVpIcUg1dFhPU0ZN?=
+ =?utf-8?B?NFd0bm9lRmdQdXJqREZSN2pJeHh6Rm9WeUlQa1J0blRPaW8ydVhOZCtzMU80?=
+ =?utf-8?B?OEVDMWFwMXp6Rmc4VHZnTlJBczB2Y1hmaHlQVklXSE9UV2lMbGYrZFVqOHBI?=
+ =?utf-8?B?T3krOHZFVkltUlBkM2d0UmdJQkgrWGdxcE1oblF2bnZmZWErQ0owaUxLQU0w?=
+ =?utf-8?B?bHlzeHVxZkY0T2t2bXc2akZXNTJWV1E0RzBzdDVldFEycUh6YVoxTGNybGtC?=
+ =?utf-8?B?QUY0NUdLWGxCNkN5Ull1NUVyOGxIOGNXVEtiYVdKTFZwbHg2TVN5OGtLYnM4?=
+ =?utf-8?B?UHEvZlFOV2NIRnpYdW9jTUcwUXdqdDVPZ2dOWkVaMTJIQjBEYktPMXFiWEQ2?=
+ =?utf-8?B?ZWtCMG9LeW1OYzNRYzNvYjI3QUZjdUEyZTJQeXpqRUtaL1g4NXNlZVV1dUl2?=
+ =?utf-8?B?RjRnRVl2dzNtRnEvN3Q0cTVrODh3TzhBaWkzT1MrRkNmUVllaXFrSWo1WjNF?=
+ =?utf-8?B?KzhQb1dlQVRHcGZob3B0bXRmclpTeXAwRzB4MEdHWUk4NE5talBMcERBcndt?=
+ =?utf-8?B?S1hVWUFkeWNPdTJPTzBJUVg5dGpxcUdJUlZ2WjlKSTRHSkJ6YVdwS21lcWU0?=
+ =?utf-8?B?SzN0UGdOeTZzK24vTjlUdDFGaFBTdTFiNWR3UnBSaTBvOXBFTGpTSXFxeE55?=
+ =?utf-8?B?WUEvVTNRVjVtLzNpUXpsLy9JQ3k3Ymd4WEJlenVrRXhSSW9aRko0ODFiNlI2?=
+ =?utf-8?B?dmZXTFRrYXdPYkFHM01uZkdSVktCYXZ3SE5ieVdsektObitBUS8yRW5CSG43?=
+ =?utf-8?B?cEhBU1ZxeHMxRXBPUGpwUXErbkc3ZVMzK0o2WkI5YjJsZkx0d1ZaRXJNM2xE?=
+ =?utf-8?B?TU9SZEhpVVhPZWo3OG8wQVJjY3p4NWRhQTk5Y3lyMFRZalgvOFF5WU50N0xK?=
+ =?utf-8?B?UVllZGkxNjhGVFJscXRXblZEVEl1ZGZwMUt3YXFsd29JM05DNGQ3M01tZkRX?=
+ =?utf-8?B?dFg4SUMrd1d4akVCd2toMnlZNGFyM2hQcjVEUm44dWZRTUJJdlNyamZsTEhn?=
+ =?utf-8?B?SFJpczNIcWRQVU40dlo4a2huVW1hQWdLbHU5N21HNElick1uakMvMms3NStt?=
+ =?utf-8?B?amszL3hXak9pWmMrenBXdHdXSU1yMjluazJDUjhRWE5XVXNCWWZoVTc3MCsv?=
+ =?utf-8?B?ci9CTFUxUHhOd3ZVTnBHakNrQkJWNndpYVo4dVFiMDNnYnVvYjF6TlVTYUVn?=
+ =?utf-8?B?VWswV1V2S2xSbFFwSFQ4SERYSUI2M2YxQmxwOWVsWGxFWXg3andnbWdsZnMw?=
+ =?utf-8?B?ejRxVG1uMnd6V1Nhcmk4ejNzNjBOZ3VHTGFyTDJnNnJzMmV4cURVaUIxamR5?=
+ =?utf-8?B?cE1VNlJyUjFUdVArNVRSek5yUExWR2d1VDJDbnJlV3BURGl2b1BrZUJZRVdF?=
+ =?utf-8?B?SGU3TmxJWjNYcDgwWm9Qa0F1L1FqaXd4MzFSYUpGbGI1MUEyUWc1RXhNRk84?=
+ =?utf-8?B?U3VTNFJiZ1c1QnNhNjdXelVYczIyR2JqTUJQODdvUkp4dmtiYTZZY1Bpbnlp?=
+ =?utf-8?B?WDAwbHc0SGZPQnJ4YVFpQzRPV2dzaU1IUm5sQ1dNdjl4dGUvQzJRYWs3dG5o?=
+ =?utf-8?B?b0E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B89454532D20AC4B9A8BFBECBD0843FB@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <12a4afc650f826cafb218352b5ac25f74779e108.1669684648.git.quic_asutoshd@quicinc.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: b09bcdd9-80e2-4e58-e281-08dad21e6a31
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2022 15:28:49.8696
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 86mMfN6yMMWOsMm/2mbljgJAxEl6dqBGGIsy+A023BQE1HT61ZCB6JAvVPgEpMmxhqcK8dD6p4Z91tEbehXd+2yqkfxaH7Zbpb1cdR2JLCc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB1983
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 05:20:46PM -0800, Asutosh Das wrote:
-> Multi-circular queue (MCQ) has been added in UFSHC v4.0
-> standard in addition to the Single Doorbell mode.
-> The MCQ mode supports multiple submission and completion queues.
-> Add support to allocate and configure the queues.
-> Add module parameters support to configure the queues.
-> 
-> Co-developed-by: Can Guo <quic_cang@quicinc.com>
-> Signed-off-by: Can Guo <quic_cang@quicinc.com>
-> Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
-
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-
-Thanks,
-Mani
-
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->  drivers/ufs/core/Makefile      |   2 +-
->  drivers/ufs/core/ufs-mcq.c     | 125 +++++++++++++++++++++++++++++++++++++++++
->  drivers/ufs/core/ufshcd-priv.h |   1 +
->  drivers/ufs/core/ufshcd.c      |  12 ++++
->  include/ufs/ufshcd.h           |   4 ++
->  5 files changed, 143 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/ufs/core/ufs-mcq.c
-> 
-> diff --git a/drivers/ufs/core/Makefile b/drivers/ufs/core/Makefile
-> index 62f38c5..4d02e0f 100644
-> --- a/drivers/ufs/core/Makefile
-> +++ b/drivers/ufs/core/Makefile
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
->  obj-$(CONFIG_SCSI_UFSHCD)		+= ufshcd-core.o
-> -ufshcd-core-y				+= ufshcd.o ufs-sysfs.o
-> +ufshcd-core-y				+= ufshcd.o ufs-sysfs.o ufs-mcq.o
->  ufshcd-core-$(CONFIG_DEBUG_FS)		+= ufs-debugfs.o
->  ufshcd-core-$(CONFIG_SCSI_UFS_BSG)	+= ufs_bsg.o
->  ufshcd-core-$(CONFIG_SCSI_UFS_CRYPTO)	+= ufshcd-crypto.o
-> diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-> new file mode 100644
-> index 0000000..bf08ec5
-> --- /dev/null
-> +++ b/drivers/ufs/core/ufs-mcq.c
-> @@ -0,0 +1,125 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2022 Qualcomm Innovation Center. All rights reserved.
-> + *
-> + * Authors:
-> + *	Asutosh Das <quic_asutoshd@quicinc.com>
-> + *	Can Guo <quic_cang@quicinc.com>
-> + */
-> +
-> +#include <asm/unaligned.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include "ufshcd-priv.h"
-> +
-> +#define MAX_QUEUE_SUP GENMASK(7, 0)
-> +#define UFS_MCQ_MIN_RW_QUEUES 2
-> +#define UFS_MCQ_MIN_READ_QUEUES 0
-> +#define UFS_MCQ_NUM_DEV_CMD_QUEUES 1
-> +#define UFS_MCQ_MIN_POLL_QUEUES 0
-> +
-> +static int rw_queue_count_set(const char *val, const struct kernel_param *kp)
-> +{
-> +	return param_set_uint_minmax(val, kp, UFS_MCQ_MIN_RW_QUEUES,
-> +				     num_possible_cpus());
-> +}
-> +
-> +static const struct kernel_param_ops rw_queue_count_ops = {
-> +	.set = rw_queue_count_set,
-> +	.get = param_get_uint,
-> +};
-> +
-> +static unsigned int rw_queues;
-> +module_param_cb(rw_queues, &rw_queue_count_ops, &rw_queues, 0644);
-> +MODULE_PARM_DESC(rw_queues,
-> +		 "Number of interrupt driven I/O queues used for rw. Default value is nr_cpus");
-> +
-> +static int read_queue_count_set(const char *val, const struct kernel_param *kp)
-> +{
-> +	return param_set_uint_minmax(val, kp, UFS_MCQ_MIN_READ_QUEUES,
-> +				     num_possible_cpus());
-> +}
-> +
-> +static const struct kernel_param_ops read_queue_count_ops = {
-> +	.set = read_queue_count_set,
-> +	.get = param_get_uint,
-> +};
-> +
-> +static unsigned int read_queues;
-> +module_param_cb(read_queues, &read_queue_count_ops, &read_queues, 0644);
-> +MODULE_PARM_DESC(read_queues,
-> +		 "Number of interrupt driven read queues used for read. Default value is 0");
-> +
-> +static int poll_queue_count_set(const char *val, const struct kernel_param *kp)
-> +{
-> +	return param_set_uint_minmax(val, kp, UFS_MCQ_MIN_POLL_QUEUES,
-> +				     num_possible_cpus());
-> +}
-> +
-> +static const struct kernel_param_ops poll_queue_count_ops = {
-> +	.set = poll_queue_count_set,
-> +	.get = param_get_uint,
-> +};
-> +
-> +static unsigned int poll_queues = 1;
-> +module_param_cb(poll_queues, &poll_queue_count_ops, &poll_queues, 0644);
-> +MODULE_PARM_DESC(poll_queues,
-> +		 "Number of poll queues used for r/w. Default value is 1");
-> +
-> +static int ufshcd_mcq_config_nr_queues(struct ufs_hba *hba)
-> +{
-> +	int i;
-> +	u32 hba_maxq, rem, tot_queues;
-> +	struct Scsi_Host *host = hba->host;
-> +
-> +	hba_maxq = FIELD_GET(MAX_QUEUE_SUP, hba->mcq_capabilities);
-> +
-> +	tot_queues = UFS_MCQ_NUM_DEV_CMD_QUEUES + read_queues + poll_queues +
-> +			rw_queues;
-> +
-> +	if (hba_maxq < tot_queues) {
-> +		dev_err(hba->dev, "Total queues (%d) exceeds HC capacity (%d)\n",
-> +			tot_queues, hba_maxq);
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	rem = hba_maxq - UFS_MCQ_NUM_DEV_CMD_QUEUES;
-> +
-> +	if (rw_queues) {
-> +		hba->nr_queues[HCTX_TYPE_DEFAULT] = rw_queues;
-> +		rem -= hba->nr_queues[HCTX_TYPE_DEFAULT];
-> +	} else {
-> +		rw_queues = num_possible_cpus();
-> +	}
-> +
-> +	if (poll_queues) {
-> +		hba->nr_queues[HCTX_TYPE_POLL] = poll_queues;
-> +		rem -= hba->nr_queues[HCTX_TYPE_POLL];
-> +	}
-> +
-> +	if (read_queues) {
-> +		hba->nr_queues[HCTX_TYPE_READ] = read_queues;
-> +		rem -= hba->nr_queues[HCTX_TYPE_READ];
-> +	}
-> +
-> +	if (!hba->nr_queues[HCTX_TYPE_DEFAULT])
-> +		hba->nr_queues[HCTX_TYPE_DEFAULT] = min3(rem, rw_queues,
-> +							 num_possible_cpus());
-> +
-> +	for (i = 0; i < HCTX_MAX_TYPES; i++)
-> +		host->nr_hw_queues += hba->nr_queues[i];
-> +
-> +	hba->nr_hw_queues = host->nr_hw_queues + UFS_MCQ_NUM_DEV_CMD_QUEUES;
-> +	return 0;
-> +}
-> +
-> +int ufshcd_mcq_init(struct ufs_hba *hba)
-> +{
-> +	int ret;
-> +
-> +	ret = ufshcd_mcq_config_nr_queues(hba);
-> +
-> +	return ret;
-> +}
-> +
-> diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-priv.h
-> index a9e8e1f..9368ba2 100644
-> --- a/drivers/ufs/core/ufshcd-priv.h
-> +++ b/drivers/ufs/core/ufshcd-priv.h
-> @@ -61,6 +61,7 @@ int ufshcd_query_attr(struct ufs_hba *hba, enum query_opcode opcode,
->  int ufshcd_query_flag(struct ufs_hba *hba, enum query_opcode opcode,
->  	enum flag_idn idn, u8 index, bool *flag_res);
->  void ufshcd_auto_hibern8_update(struct ufs_hba *hba, u32 ahit);
-> +int ufshcd_mcq_init(struct ufs_hba *hba);
->  
->  #define SD_ASCII_STD true
->  #define SD_RAW false
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index 3c2220c..9b78814 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -8220,6 +8220,11 @@ static int ufshcd_add_lus(struct ufs_hba *hba)
->  	return ret;
->  }
->  
-> +static int ufshcd_alloc_mcq(struct ufs_hba *hba)
-> +{
-> +	return ufshcd_mcq_init(hba);
-> +}
-> +
->  /**
->   * ufshcd_probe_hba - probe hba to detect device and initialize it
->   * @hba: per-adapter instance
-> @@ -8269,6 +8274,13 @@ static int ufshcd_probe_hba(struct ufs_hba *hba, bool init_dev_params)
->  			goto out;
->  
->  		if (is_mcq_supported(hba)) {
-> +			ret = ufshcd_alloc_mcq(hba);
-> +			if (ret) {
-> +				/* Continue with SDB mode */
-> +				use_mcq_mode = false;
-> +				dev_err(hba->dev, "MCQ mode is disabled, err=%d\n",
-> +					 ret);
-> +			}
->  			ret = scsi_add_host(host, hba->dev);
->  			if (ret) {
->  				dev_err(hba->dev, "scsi_add_host failed\n");
-> diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-> index 70c0f9f..146b613 100644
-> --- a/include/ufs/ufshcd.h
-> +++ b/include/ufs/ufshcd.h
-> @@ -829,6 +829,8 @@ struct ufs_hba_monitor {
->   *	ee_ctrl_mask
->   * @luns_avail: number of regular and well known LUNs supported by the UFS
->   *	device
-> + * @nr_hw_queues: number of hardware queues configured
-> + * @nr_queues: number of Queues of different queue types
->   * @complete_put: whether or not to call ufshcd_rpm_put() from inside
->   *	ufshcd_resume_complete()
->   * @ext_iid_sup: is EXT_IID is supported by UFSHC
-> @@ -981,6 +983,8 @@ struct ufs_hba {
->  	u32 debugfs_ee_rate_limit_ms;
->  #endif
->  	u32 luns_avail;
-> +	unsigned int nr_hw_queues;
-> +	unsigned int nr_queues[HCTX_MAX_TYPES];
->  	bool complete_put;
->  	bool ext_iid_sup;
->  	bool mcq_sup;
-> -- 
-> 2.7.4
-> 
+DQoNCkxlIDI5LzExLzIwMjIgw6AgMTY6MTMsIFNhdGh2aWthIFZhc2lyZWRkeSBhIMOpY3JpdMKg
+Og0KPiBIaSBhbGwsDQo+IA0KPiBPbiAyNS8xMS8yMiAwOTowMCwgU3RlcGhlbiBSb3Rod2VsbCB3
+cm90ZToNCj4+IEhpIGFsbCwNCj4+DQo+PiBBZnRlciBtZXJnaW5nIHRoZSBwb3dlcnBjLW9ianRv
+b2wgdHJlZSwgdG9kYXkncyBsaW51eC1uZXh0IGJ1aWxkIChwb3dlcnBjDQo+PiBwc2VyaWVzX2xl
+X2RlZmNvbmZpZykgcHJvZHVjZWQgdGhlc2Ugd2FybmluZ3M6DQo+Pg0KPj4gYXJjaC9wb3dlcnBj
+L2tlcm5lbC9oZWFkXzY0Lm86IHdhcm5pbmc6IG9ianRvb2w6IGVuZF9maXJzdF8yNTZCKCk6IA0K
+Pj4gY2FuJ3QgZmluZCBzdGFydGluZyBpbnN0cnVjdGlvbg0KPj4gYXJjaC9wb3dlcnBjL2tlcm5l
+bC9vcHRwcm9iZXNfaGVhZC5vOiB3YXJuaW5nOiBvYmp0b29sOiANCj4+IG9wdHByb2JlX3RlbXBs
+YXRlX2VuZCgpOiBjYW4ndCBmaW5kIHN0YXJ0aW5nIGluc3RydWN0aW9uDQo+Pg0KPj4gSSBoYXZl
+IG5vIGlkZWEgd2hhdCBzdGFydGVkIHRoaXMgKHRoZXkgbWF5IGhhdmUgYmVlbiB0aGVyZSB5ZXN0
+ZXJkYXkpLg0KPiBJIHdhcyBhYmxlIHRvIHJlY3JlYXRlIHRoZSBhYm92ZSBtZW50aW9uZWQgd2Fy
+bmluZ3Mgd2l0aCANCj4gcHNlcmllc19sZV9kZWZjb25maWcgYW5kIHBvd2VybnZfZGVmY29uZmln
+LiBUaGUgcmVncmVzc2lvbiByZXBvcnQgYWxzbyANCj4gbWVudGlvbnMgYSB3YXJuaW5nIA0KPiAo
+aHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvb2Uta2J1aWxkLWFsbC8yMDIyMTEyODIxMDIuUVVyN0hI
+clctbGtwQGludGVsLmNvbS8pIHNlZW4gd2l0aCBhcmNoL3Bvd2VycGMva2VybmVsL2t2bV9lbXVs
+LlMgYXNzZW1ibHkgZmlsZS4NCj4gDQo+ICDCoFsxXSBhcmNoL3Bvd2VycGMva2VybmVsL29wdHBy
+b2Jlc19oZWFkLm86IHdhcm5pbmc6IG9ianRvb2w6IA0KPiBvcHRwcm9iZV90ZW1wbGF0ZV9lbmQo
+KTogY2FuJ3QgZmluZCBzdGFydGluZyBpbnN0cnVjdGlvbg0KPiAgwqBbMl0gYXJjaC9wb3dlcnBj
+L2tlcm5lbC9rdm1fZW11bC5vOiB3YXJuaW5nOiBvYmp0b29sOiANCj4ga3ZtX3RlbXBsYXRlX2Vu
+ZCgpOiBjYW4ndCBmaW5kIHN0YXJ0aW5nIGluc3RydWN0aW9uDQo+ICDCoFszXSBhcmNoL3Bvd2Vy
+cGMva2VybmVsL2hlYWRfNjQubzogd2FybmluZzogb2JqdG9vbDogZW5kX2ZpcnN0XzI1NkIoKTog
+DQo+IGNhbid0IGZpbmQgc3RhcnRpbmcgaW5zdHJ1Y3Rpb24NCj4gDQo+IFRoZSB3YXJuaW5ncyBb
+MV0gYW5kIFsyXSBnbyBhd2F5IGFmdGVyIGFkZGluZyAnbm9wJyBpbnN0cnVjdGlvbi4gQmVsb3cg
+DQo+IGRpZmYgZml4ZXMgaXQgZm9yIG1lOg0KDQpZb3UgaGF2ZSB0byBhZGQgTk9QcyBqdXN0IGJl
+Y2F1c2UgdGhvc2UgbGFiZWxzIGFyZSBhdCB0aGUgZW5kIG9mIHRoZSANCmZpbGVzLiBUaGF0J3Mg
+YSBiaXQgb2RkLg0KSSB0aGluayBlaXRoZXIgd2UgYXJlIG1pc3Npbmcgc29tZSBraW5kIG9mIGZs
+YWdnaW5nIGZvciB0aGUgc3ltYm9scywgb3IgDQpvYmp0b29sIGhhcyBhIGJ1Zy4gSW4gYm90aCBj
+YXNlcywgSSdtIG5vdCBzdXJlIGFkZGluZyBhbiBhcnRpZmljaWFsIA0KJ25vcCcgaXMgdGhlIHNv
+bHV0aW9uLiBBdCBsZWFzdCB0aGVyZSBzaG91bGQgYmUgYSBiaWcgaGFtbWVyIHdhcm5pbmcgDQpl
+eHBsYWluaW5nIHdoeS4NCg0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gvcG93ZXJwYy9rZXJuZWwv
+b3B0cHJvYmVzX2hlYWQuUyANCj4gYi9hcmNoL3Bvd2VycGMva2VybmVsL29wdHByb2Jlc19oZWFk
+LlMNCj4gaW5kZXggY2Q0ZTdiYzMyNjA5Li5lYTRlM2JkODJmNGYgMTAwNjQ0DQo+IC0tLSBhL2Fy
+Y2gvcG93ZXJwYy9rZXJuZWwvb3B0cHJvYmVzX2hlYWQuUw0KPiArKysgYi9hcmNoL3Bvd2VycGMv
+a2VybmVsL29wdHByb2Jlc19oZWFkLlMNCj4gQEAgLTEzNCwzICsxMzQsNCBAQCBvcHRwcm9iZV90
+ZW1wbGF0ZV9yZXQ6DQo+IA0KPiAgwqDCoMKgwqDCoMKgwqAgLmdsb2JhbCBvcHRwcm9iZV90ZW1w
+bGF0ZV9lbmQNCj4gIMKgb3B0cHJvYmVfdGVtcGxhdGVfZW5kOg0KPiArwqDCoMKgwqDCoMKgIG5v
+cA0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gvcG93ZXJwYy9rZXJuZWwva3ZtX2VtdWwuUyANCj4g
+Yi9hcmNoL3Bvd2VycGMva2VybmVsL2t2bV9lbXVsLlMNCj4gaW5kZXggN2FmNmY4YjUwYzVkLi40
+MWZkNjY0ZTNiYTAgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvcG93ZXJwYy9rZXJuZWwva3ZtX2VtdWwu
+Uw0KPiArKysgYi9hcmNoL3Bvd2VycGMva2VybmVsL2t2bV9lbXVsLlMNCj4gQEAgLTM1MiwzICsz
+NTIsNCBAQCBrdm1fdG1wX2VuZDoNCj4gDQo+ICDCoC5nbG9iYWwga3ZtX3RlbXBsYXRlX2VuZA0K
+PiAgwqBrdm1fdGVtcGxhdGVfZW5kOg0KPiArwqDCoMKgwqDCoMKgIG5vcA0KPiANCj4gRm9yIHdh
+cm5pbmcgWzNdLCBvYmp0b29sIGlzIHRocm93aW5nIGNhbid0IGZpbmQgc3RhcnRpbmcgaW5zdHJ1
+Y3Rpb24gDQo+IHdhcm5pbmcgYmVjYXVzZSBpdCBmaW5kcyB0aGF0IHRoZSBzeW1ib2wgKGVuZF9m
+aXJzdF8yNTZCKSBpcyB6ZXJvIHNpemVkLCANCj4gYW5kIHN1Y2ggc3ltYm9scyBhcmUgbm90IGFk
+ZGVkIHRvIHRoZSByYnRyZWUuIEkgdHJpZWQgdG8gZml4IGl0IGJ5IA0KPiBhZGRpbmcgYSAnbm9w
+JyBpbnN0cnVjdGlvbiAocGFzdGVkIGRpZmYgYmVsb3cpLCBidXQgdGhhdCByZXN1bHRlZCBpbiBh
+IA0KPiBrZXJuZWwgYnVpbGQgZmFpbHVyZS4NCg0KV2hhdCdzIHRoZSBmYWlsdXJlID8NCg0KDQo+
+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBjL2tlcm5lbC9oZWFkXzY0LlMgYi9hcmNoL3Bv
+d2VycGMva2VybmVsL2hlYWRfNjQuUw0KPiBpbmRleCA4NzRlZmQyNWNjNDUuLmQ0ODg1MGZlMTU5
+ZiAxMDA2NDQNCj4gLS0tIGEvYXJjaC9wb3dlcnBjL2tlcm5lbC9oZWFkXzY0LlMNCj4gKysrIGIv
+YXJjaC9wb3dlcnBjL2tlcm5lbC9oZWFkXzY0LlMNCj4gQEAgLTE5Miw2ICsxOTIsNyBAQCBfX3Nl
+Y29uZGFyeV9ob2xkOg0KPiAgwqDCoMKgwqDCoMKgwqAgRU1JVF9CVUdfRU5UUlkgMGIsIF9fRklM
+RV9fLCBfX0xJTkVfXywgMA0KPiAgwqAjZW5kaWYNCj4gIMKgQ0xPU0VfRklYRURfU0VDVElPTihm
+aXJzdF8yNTZCKQ0KPiArbm9wDQo+IA0KPiAgwqAvKg0KPiAgwqAgKiBPbiBzZXJ2ZXIsIHdlIGlu
+Y2x1ZGUgdGhlIGV4Y2VwdGlvbiB2ZWN0b3JzIGNvZGUgaGVyZSBhcyBpdA0KPiANCj4gZGlmZiAt
+LWdpdCBhL2FyY2gvcG93ZXJwYy9rZXJuZWwvZXhjZXB0aW9ucy02NHMuUyANCj4gYi9hcmNoL3Bv
+d2VycGMva2VybmVsL2V4Y2VwdGlvbnMtNjRzLlMNCj4gaW5kZXggMjZmOGZlZjUzYzcyLi5mNzUx
+N2Q0NDNlOWIgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvcG93ZXJwYy9rZXJuZWwvZXhjZXB0aW9ucy02
+NHMuUw0KPiArKysgYi9hcmNoL3Bvd2VycGMva2VybmVsL2V4Y2VwdGlvbnMtNjRzLlMNCj4gQEAg
+LTMxMDQsOSArMzEwNCwxMyBAQCBfX2VuZF9pbnRlcnJ1cHRzOg0KPiAgwqBERUZJTkVfRklYRURf
+U1lNQk9MKF9fZW5kX2ludGVycnVwdHMsIHZpcnRfdHJhbXBvbGluZXMpDQo+IA0KPiAgwqBDTE9T
+RV9GSVhFRF9TRUNUSU9OKHJlYWxfdmVjdG9ycyk7DQo+ICtub3ANCj4gIMKgQ0xPU0VfRklYRURf
+U0VDVElPTihyZWFsX3RyYW1wb2xpbmVzKTsNCj4gK25vcA0KPiAgwqBDTE9TRV9GSVhFRF9TRUNU
+SU9OKHZpcnRfdmVjdG9ycyk7DQo+ICtub3ANCj4gIMKgQ0xPU0VfRklYRURfU0VDVElPTih2aXJ0
+X3RyYW1wb2xpbmVzKTsNCj4gK25vcA0KDQpXaGF0IGFyZSB0aGUgTk9QcyBhZnRlciB0aGUgQ0xP
+U0VfRklYRURfU0VDVElPTigpID8gWW91IGRvbid0IGV4cGxhaW4gDQp0aGVtLCBhbmQgSSBjYW4n
+dCBzZWUgYW55IHJlbGF0ZWQgd2FybmluZyBpbiB0aGUgd2FybmluZ3MgeW91IHNob3cuDQoNCg0K
+DQo+IA0KPiAgwqBVU0VfVEVYVF9TRUNUSU9OKCkNCj4gDQo+IEknbSBub3QgdmVyeSBzdXJlIG9u
+IGhvdyB0byBhZGRyZXNzIHRoaXMgcGFydGljdWxhciB3YXJuaW5nIA0KPiAoYXJjaC9wb3dlcnBj
+L2tlcm5lbC9oZWFkXzY0Lm86IHdhcm5pbmc6IG9ianRvb2w6IGVuZF9maXJzdF8yNTZCKCk6IA0K
+PiBjYW4ndCBmaW5kIHN0YXJ0aW5nIGluc3RydWN0aW9uKS4gR2l2ZW4gdGhhdCB0aGVyZSBhcmUg
+bm8gY2FsbHMgdG8gDQo+IF9tY291bnQsIG9uZSB3b3JrYXJvdW5kIGlzIHRvIHNraXAgb2JqdG9v
+bCBmcm9tIHJ1bm5pbmcgb24gDQo+IGFyY2gvcG93ZXJwYy9rZXJuZWwvaGVhZF82NC5vIGZpbGUu
+IFRoZSBiZWxvdyBkaWZmIHdvcmtzIGZvciBtZToNCj4gDQo+IGRpZmYgLS1naXQgYS9hcmNoL3Bv
+d2VycGMva2VybmVsL01ha2VmaWxlIGIvYXJjaC9wb3dlcnBjL2tlcm5lbC9NYWtlZmlsZQ0KPiBp
+bmRleCA5YjYxNDYwNTZlNDguLjllZjZhMDQwZDg3NSAxMDA2NDQNCj4gLS0tIGEvYXJjaC9wb3dl
+cnBjL2tlcm5lbC9NYWtlZmlsZQ0KPiArKysgYi9hcmNoL3Bvd2VycGMva2VybmVsL01ha2VmaWxl
+DQo+IEBAIC0yMTksMyArMjE5LDUgQEAgJChvYmopL3Zkc282NF93cmFwcGVyLm8gOiAkKG9iaikv
+dmRzby92ZHNvNjQuc28uZGJnDQo+IA0KPiAgwqAjIGZvciBjbGVhbmluZw0KPiAgwqBzdWJkaXIt
+ICs9IHZkc28NCj4gKw0KPiArT0JKRUNUX0ZJTEVTX05PTl9TVEFOREFSRF9oZWFkXzY0Lm8gOj0g
+eQ0KDQpNaWdodCBiZSB0aGUgc29sdXRpb24sIGFsbHRob3VnaCBJIGNhbid0IHNlZSBvdGhlciBh
+cmNoaXRlY3R1cmVzIGRvaW5nIHRoYXQuDQoNCj4gDQo+IA0KPiBUaGFua3MsDQo+IFNhdGh2aWth
+DQoNCkNocmlzdG9waGUNCg==
