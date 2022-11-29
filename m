@@ -2,65 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FF863BCC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF13263BCC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiK2JS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 04:18:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
+        id S230005AbiK2JTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 04:19:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiK2JSY (ORCPT
+        with ESMTP id S229631AbiK2JTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 04:18:24 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD0D2018E
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:18:19 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id db10-20020a0568306b0a00b0066d43e80118so8681095otb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:18:19 -0800 (PST)
+        Tue, 29 Nov 2022 04:19:44 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7003E085
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:19:43 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id d3so16113154ljl.1
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:19:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mq+M8I9ourU5JGtvx7CAysaHGTlBXUBBlVJ4IO6dNtE=;
-        b=gTre9Yd3WAvRWIMI92/UAwT5NcIIH6E5wVaoD4seOyfwY69cg/1Si04zngmFyhD5vl
-         IA1J0wXEgF5Xfco9cTAHWQucjz4q2HvJmfWkKpuNUPVAjfhB0aTqqihy+vAw/4LytSPG
-         1NjE2/zhaoOsqdEP3ifcOFsgJI+beASwqgDEhmVw0VXEgvooAZyHtMwLlQLCVtXoXdSv
-         yAVhe6tOg68xMHM1fs0xZzupemF+oUlRTdxsh+KkQIJbfnkRxI+HPcFCzGmpoAGJSkMo
-         3XjGyyhF/+Z3sIy9BSE2VLBl3o7XfoPz0mvfj8W3GfLMDq9jPh5KrM2NGVuZNu/CYkLY
-         YEsA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sg3QtzQpHzzTX1eXKZgkNmLpSXL6VNlIdOuizJonHpU=;
+        b=Cmkt77kYzu0zzeTsUBSsKkObosk1j28KU1I5QCjKJBdQdEIf5nDh2ZlCuWESVYD4ox
+         7u+DwtiqzpDRKqxxozeN7c/TAWS8RTkfj+7FfP1otA+zoNg5+QVN1wfgVYy0NyTSsDvX
+         qtUldOJwcZAUxuFoCUB/z7HOihJsk+L1orPOKiin9LQCeJ2f3T6ylMo8Picdil+Rats9
+         PxdllGY2z9L8R8q86g5y4KTnoI5KsVkr0gM45tZ7sIL+/pQViAQQbIch/SH0kxnH5e0A
+         hMH/CvoSpKPxrMvNwq2G18fGzUpDc4ewP/fxvzecHgUJ9QJOv17wgjjAehmU6SSSVJLa
+         5w3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Mq+M8I9ourU5JGtvx7CAysaHGTlBXUBBlVJ4IO6dNtE=;
-        b=Gs05yE+XNXOwZHFD1+eqAbP4gyXk4FnbCdnBZK86otDapDi91CRjG0vUgitz5Tgyoj
-         89sTFvQQ01i6Jq1T4UyM3pfL8fffZlHHtsXfMiCP0lMCiElKd5aSNSl0FAQiOEE8bG9j
-         0yxr4yjQrpgElSQ22hbZMHlJjXOb2OS8E8Q9NhR7uRJ0wGSsxlnNgYuqC4nrXxZcCL8F
-         x0+1R4sYWxcT9sxNgBFwslLj9muXUNqjAWnNGQZOIQ7NA98lq6xgux2BFS/LP0hXU2eD
-         SaCH7O6+kbTH1xP0b0TqnEctXsraABAfhgKDh/67M6m4D97YREFTliFMXgh3YkVnhG8S
-         YFmw==
-X-Gm-Message-State: ANoB5pn9j/kUkxs8fl3rr1lrqsuauCzNyyNbBpwwNgIWhXpU130ehXGo
-        P4Khxy5Jg57bGoWzMjNugNtbWom6YamlN3DOvVZ70A==
-X-Google-Smtp-Source: AA0mqf4M9WPpgu5o0bKUU3S1DuefQLuGU6o98qT9aYktvIskR/xEHM0BML0V0+dmJtYh3k3fBUNNlSPYZGZ5+LtVrNs=
-X-Received: by 2002:a9d:5e0f:0:b0:662:2458:3ef7 with SMTP id
- d15-20020a9d5e0f000000b0066224583ef7mr27837215oti.150.1669713498572; Tue, 29
- Nov 2022 01:18:18 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sg3QtzQpHzzTX1eXKZgkNmLpSXL6VNlIdOuizJonHpU=;
+        b=N58JCNjeO/sDkEH1gXEc/sT/cDoX0kLzhyl+th+BUvw3Td5Tf/kvvPrfHTjPa12XHX
+         pkxZZPawLQICiwn6FUvx12i2wdm4ZvKkj0JloclP6uo71XUTRP99/zmQGvOHmtZaoxOO
+         aUWHQCaqopjoY5Q4TtolHfEWBjlATae9TybA9Unrf+vIfpWhHaUE70AGF2MNTRRy5mAV
+         M6p55lZzAb9PMdD/wBPsAp/N91MqOHnvGtWELtt+2r6wNhrkARoRwwzHqJYjfhDpn0Hw
+         vGvzxBKqEVvo6IAlwGchGoD7pKo/KgRRsY36Bv1PQf5qIp2e4HbDhOlPRQbvPfiEa/HS
+         bTyA==
+X-Gm-Message-State: ANoB5pkl/P0L0YyTtpUhId+PZAcn99igPCvsozVNUvx+jZScpUP4tmyX
+        zjzmbtzNARIABXcoLGjYTBANqQ==
+X-Google-Smtp-Source: AA0mqf5/jT9FnSy57Ipjz48YGhmhY5lSdTAI5VgVIguoY252oCOou9rswszb/1auQGX1dRKN4yjy1g==
+X-Received: by 2002:a05:651c:c89:b0:26f:bd61:ac4f with SMTP id bz9-20020a05651c0c8900b0026fbd61ac4fmr13311910ljb.396.1669713581897;
+        Tue, 29 Nov 2022 01:19:41 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id be13-20020a056512250d00b004947a12232bsm2095956lfb.275.2022.11.29.01.19.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 01:19:41 -0800 (PST)
+Message-ID: <79c1c64b-7072-3e30-78a7-5e3379d3d65f@linaro.org>
+Date:   Tue, 29 Nov 2022 10:19:39 +0100
 MIME-Version: 1.0
-References: <e39851df-251d-662d-3319-af9d948a9430@sholland.org> <mhng-028a3e75-6cd0-4775-ac68-3e0eb70c91ae@palmer-ri-x1c9>
-In-Reply-To: <mhng-028a3e75-6cd0-4775-ac68-3e0eb70c91ae@palmer-ri-x1c9>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Tue, 29 Nov 2022 14:48:08 +0530
-Message-ID: <CAK9=C2VCXLOMBa4JQPRDjXQN5LnNdp3gFKmuMb28EONbkHiRpg@mail.gmail.com>
-Subject: Re: [PATCH] riscv: head: use 0 as the default text_offset
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     samuel@sholland.org, Atish Patra <atishp@rivosinc.com>,
-        jszhang@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2] brcmfmac: Add support for BCM43596 PCIe Wi-Fi
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Kalle Valo <kvalo@kernel.org>
+Cc:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>,
+        Hector Martin <marcan@marcan.st>,
+        "~postmarketos/upstreaming@lists.sr.ht" 
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        "martin.botka@somainline.org" <martin.botka@somainline.org>,
+        "angelogioacchino.delregno@somainline.org" 
+        <angelogioacchino.delregno@somainline.org>,
+        "marijn.suijten@somainline.org" <marijn.suijten@somainline.org>,
+        "jamipkettunen@somainline.org" <jamipkettunen@somainline.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
+        "Zhao, Jiaqing" <jiaqing.zhao@intel.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Soon Tak Lee <soontak.lee@cypress.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "brcm80211-dev-list.pdl@broadcom.com" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
+ <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st>
+ <13b8c67c-399c-d1a6-4929-61aea27aa57d@somainline.org>
+ <0e65a8b2-0827-af1e-602c-76d9450e3d11@marcan.st>
+ <7fd077c5-83f8-02e2-03c1-900a47f05dc1@somainline.org>
+ <CACRpkda3uryD6TOEaTi3pPX5No40LBWoyHR4VcEuKw4iYT0dqA@mail.gmail.com>
+ <20220922133056.eo26da4npkg6bpf2@bang-olufsen.dk> <87sfke32pc.fsf@kernel.org>
+ <4592f87a-bb61-1c28-13f0-d041a6e7d3bf@linaro.org>
+ <CACRpkdax-3VVDd29iH51mfumakqM7jyEc8Pbb=AQwAgp2WsqFQ@mail.gmail.com>
+ <d03bd4d4-e4ef-681b-b4a5-02822e1eee75@linaro.org> <87fse76yig.fsf@kernel.org>
+ <fc2812b1-db96-caa6-2ecb-c5bb2c33246a@linaro.org> <87bkov6x1q.fsf@kernel.org>
+ <CACRpkdbpJ8fw0UsuHXGX43JRyPy6j8P41_5gesXOmitHvyoRwQ@mail.gmail.com>
+ <28991d2d-d917-af47-4f5f-4e8183569bb1@linaro.org>
+Content-Language: en-US
+In-Reply-To: <28991d2d-d917-af47-4f5f-4e8183569bb1@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,160 +112,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 11:50 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
-> On Mon, 28 Nov 2022 21:04:48 PST (-0800), samuel@sholland.org wrote:
-> > On 11/28/22 14:11, Atish Kumar Patra wrote:
-> >> On Mon, Nov 28, 2022 at 7:34 AM Jisheng Zhang <jszhang@kernel.org> wrote:
-> >>>
-> >>> Commit 0f327f2aaad6 ("RISC-V: Add an Image header that boot loader can
-> >>> parse.") adds an image header which "is based on ARM64 boot image
-> >>> header and provides an opportunity to combine both ARM64 & RISC-V
-> >>> image headers in future.". At that time, arm64's default text_offset
-> >>> is 0x80000, this is to give "512 KB of guaranteed BSS space to put
-> >>> the swapper page tables" as commit cfa7ede20f13 ("arm64: set TEXT_OFFSET
-> >>> to 0x0 in preparation for removing it entirely") pointed out, but
-> >>> riscv doesn't need the space, so use 0 as the default text_offset.
-> >>>
-> >>> Before this patch, booting linux kernel on Sipeed bl808 M1s Dock
-> >>> with u-boot booti cmd:
-> >>> [    0.000000] OF: fdt: Ignoring memory range 0x50000000 - 0x50200000
-> >>> ...
-> >>> [    0.000000]   DMA32    [mem 0x0000000050200000-0x0000000053ffffff]
-> >>> As can be seen, 2MB DDR(0x50000000 - 0x501fffff) can't be used by
-> >>> linux.
-> >>>
-> >>> After this patch, the 64MB DDR is fully usable by linux
-> >>> [    0.000000]   DMA32    [mem 0x0000000050000000-0x0000000053ffffff]
-> >>>
-> >>> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> >>> ---
-> >>>  arch/riscv/kernel/head.S | 12 +-----------
-> >>>  1 file changed, 1 insertion(+), 11 deletions(-)
-> >>>
-> >>> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-> >>> index b865046e4dbb..ef95943f7a70 100644
-> >>> --- a/arch/riscv/kernel/head.S
-> >>> +++ b/arch/riscv/kernel/head.S
-> >>> @@ -38,18 +38,8 @@ ENTRY(_start)
-> >>>         .word 0
-> >>>  #endif
-> >>>         .balign 8
-> >>> -#ifdef CONFIG_RISCV_M_MODE
-> >>> -       /* Image load offset (0MB) from start of RAM for M-mode */
-> >>> +       /* Image load offset (0MB) from start of RAM */
-> >>>         .dword 0
-> >>> -#else
-> >>> -#if __riscv_xlen == 64
-> >>> -       /* Image load offset(2MB) from start of RAM */
-> >>> -       .dword 0x200000
-> >>> -#else
-> >>> -       /* Image load offset(4MB) from start of RAM */
-> >>> -       .dword 0x400000
-> >>> -#endif
-> >>> -#endif
-> >>
-> >> NACK.
-> >> RV64 needs to boot at a 2MB aligned address and RV32 needs to boot at
-> >> a 4MB aligned address.
-> >> The firmware is assumed to live at the start of DRAM for Linux running
-> >> in S-mode.
-> >
-> > What needs to happen so we can stop making this assumption? If the SBI
-> > implementation wants to reserve memory, it should use the devicetree to
-> > do so. OpenSBI already does this.
->
-> IMO we've really screwed up the boot flow on RISC-V.  Having Linux
-> reserve space for the firmware is just all backwards, Linux can't know
-> how much memory the firmware needs (which manifests under large hart
-> counts in OpenSBI, for example).  Unfortunately there's no specification
-> that defines these platform-level details, so we're stuck depending on
-> unspecified behavior like this.
->
-> I think we could fix this by either making Linux's early boot relocation
-> code work sanely (fix whatever bugs are there, document what can't be
-> fixed, and then add some sort of Image flag to tell firmware the kernel
-> can be relocated) or relying on relocatable firmware, but both of those
-> come with some costs ...
+On 28/11/2022 15:40, Konrad Dybcio wrote:
+> 
+> 
+> On 26.11.2022 22:45, Linus Walleij wrote:
+>> On Fri, Nov 25, 2022 at 1:25 PM Kalle Valo <kvalo@kernel.org> wrote:
+>>> Konrad Dybcio <konrad.dybcio@linaro.org> writes:
+>>>
+>>>> On 25.11.2022 12:53, Kalle Valo wrote:
+>>>>> Konrad Dybcio <konrad.dybcio@linaro.org> writes:
+>>>>>
+>>>>>> On 21.11.2022 14:56, Linus Walleij wrote:
+>>>>>>> On Fri, Nov 18, 2022 at 5:47 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>>>>>>
+>>>>>>>> I can think of a couple of hacky ways to force use of 43596 fw, but I
+>>>>>>>> don't think any would be really upstreamable..
+>>>>>>>
+>>>>>>> If it is only known to affect the Sony Xperias mentioned then
+>>>>>>> a thing such as:
+>>>>>>>
+>>>>>>> if (of_machine_is_compatible("sony,xyz") ||
+>>>>>>>     of_machine_is_compatible("sony,zzz")... ) {
+>>>>>>>    // Enforce FW version
+>>>>>>> }
+>>>>>>>
+>>>>>>> would be completely acceptable in my book. It hammers the
+>>>>>>> problem from the top instead of trying to figure out itsy witsy
+>>>>>>> details about firmware revisions.
+>>>>>>>
+>>>>>>> Yours,
+>>>>>>> Linus Walleij
+>>>>>>
+>>>>>> Actually, I think I came up with a better approach by pulling a page
+>>>>>> out of Asahi folks' book - please take a look and tell me what you
+>>>>>> think about this:
+>>>>>>
+>>>>>> [1]
+>>>>>> https://github.com/SoMainline/linux/commit/4b6fccc995cd79109b0dae4e4ab2e48db97695e7
+>>>>>> [2]
+>>>>>> https://github.com/SoMainline/linux/commit/e3ea1dc739634f734104f37fdbed046873921af7
+>>
+>> Something in this direction works too.
+>>
+>> The upside is that it tells all operating systems how to deal
+>> with the firmware for this hardware.
+>>
+>>>>> Instead of a directory path ("brcm/brcmfmac43596-pcie") why not provide
+>>>>> just the chipset name ("brcmfmac43596-pcie")? IMHO it's unnecessary to
+>>>>> have directory names in Device Tree.
+>>>>
+>>>> I think it's common practice to include a full $FIRMWARE_DIR-relative
+>>>> path when specifying firmware in DT, though here I left out the board
+>>>> name bit as that's assigned dynamically anyway. That said, if you don't
+>>>> like it, I can change it.
+>>>
+>>> It's just that I have understood that Device Tree is supposed to
+>>> describe hardware and to me a firmware directory "brcm/" is a software
+>>> property, not a hardware property. But this is really for the Device
+>>> Tree maintainers to decide, they know this best :)
+>>
+>> I would personally just minimize the amount of information
+>> put into the device tree to be exactly what is needed to find
+>> the right firmware.
+>>
+>> brcm,firmware-compatible = "43596";
+>>
+>> since the code already knows how to conjure the rest of the string.
+>>
+>> But check with Rob/Krzysztof.
+>>
+>> Yours,
+>> Linus Walleij
+> 
+> Krzysztof, Rob [added to CC] - can I have your opinions?
 
-Clearly, there is a misunderstanding about the "offset" field in the kernel
-image header.
+I just got here bunch of quotes and no original message, so my response
+probably won't be complete.
 
-The "offset" field is not for reserving memory for firmware (OpenSBI). The
-value of "offset" is a hint to bootloader that kernel expects to be booted
-at a particular aligned physical address (2M for RV64 and 4M for RV32).
-This "offset" hint is based on the fact that the kernel tries its best to use
-huge mappings for kernel virtual addresses which results in good
-performance in kernel space.
+Devicetree also describes the system integration properties because we
+need to know how the things are glued together.
 
-In fact, even today a bootloader can happily load the kernel at the
-RAM_START and it will boot perfectly fine.
+We have firmware-name property which is a form of path. The
+"directories" in the firmware-name are actually good because they allow
+to create a hierarchy based on a vendor/SoC/model/board. I don't think
+it is worth adding new properties replacing firmware-name.
 
-The real issue is that whenever __pa(PAGE_OFFSET) > RAM_START,
-kernel will reserve memory from RAM_START to __pa(PAGE_OFFSET)
-and this will happen irrespective where the firmware is running. The
-patch posted by Alex tries to solve this issue whereas the current patch
-tries to change the "offset" in the image header which is totally wrong.
 
-Also, the Linux reserved-memory DT bindings define a standard way
-to inform the kernel about reserved memory areas. The OpenSBI
-firmware uses reserved-memory DT bindings to reserve its own
-memory so kernel does not have to guess anything.
+Best regards,
+Krzysztof
 
->
-> > Throwing away 2 MiB of RAM is quite wasteful considering we have
-> > multiple SoCs (D1s, BL808) that are limited to 64 MiB of in-package RAM.
->
-> ... and I'd argue that users on systems don't want to pay those costs.
-> In fact, I'd argue that systems like that don't want resident firmware
-> at all.
->
-> So let's just add a CONFIG_SBI=n, and then just use direct drivers for
-> everything.  If the firmware doesn't need to be resident then it's
-> pretty straight-forward to support these 0 offsets, so we can just add
-> that as another Kconfig.  Sure this will trip up firmware that depends
-> on these fixed reservations, but saying "the resident firmware fits in 0
-> superpages" is just as much of a platform-specific dependency as saying
-> "the resident firmware fits in 1 superpage".  If firmware can't handle
-> this field in the Image format then we're going to end up with breakages
-> at some point, it might as well be now.
-
-The firmware (OpenSBI) does not depend on any fixed memory
-reservations from the kernel. It is capable of running from any
-memory location since it is compiled using -fPIC.
-
->
-> If these systems don't have all the ISA bits necessary to avoid M-mode
-> entirely then we can just implement a tiny M-mode stub in Linux that
-> gets left around during early boot and then shims stuff to S-mode.
-> That'll be a bit of a headache and with some extensions it can be
-> avoided, the standard stuff won't allow for that until the latest round
-> of specs is done but if it's possible via whatever custom extensions are
-> in these things then that's probably the way to go.
-
-Another misunderstanding here is that SBI stuff == firmware stuff. All
-RISC-V hypervisors implement the SBI spec for Guest/VM. In absence
-of SBI, how will Guest/VM bring-up secondary VCPUs or reboot itself ?
-
-In fact without SBI, all paravirt approaches (such as steal time
-accounting, time scaling, system reset, CPU hotplug etc) become
-fragmented across hypervisors. Do we expect all hypervisors (proprietary
-or opensource) send their own non-standard driver support to Linux
-which is otherwise standardized through SBI spec ?
-
-The M-mode can have dedicated resources (debug CSRs, PMU
-counter configuration CSRs, etc) so in absence of SBI how will
-S-mode use these features? We have more M-mode only resources
-being defined by RVI (example Resumable NMIs) which will eventually
-require SBI abstraction for S-mode.
-
-Let alone CSRs, on future platforms, the M-mode will have attestation
-capability so without SBI how will S-mode get this attestation facility.
-
->
-> We'll probably also end up shaking out some bugs in that early
-> relocation code, but again no big deal: we'll need to chase those down
-> at some point, it might as well be now.
-
-Regards,
-Anup
