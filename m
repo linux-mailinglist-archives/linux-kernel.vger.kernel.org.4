@@ -2,166 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3929063B63A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 01:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D6C63B645
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 01:06:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234212AbiK2ADY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 19:03:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
+        id S234855AbiK2AGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 19:06:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234279AbiK2ADW (ORCPT
+        with ESMTP id S234518AbiK2AGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 19:03:22 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1FF186D1;
-        Mon, 28 Nov 2022 16:03:20 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id ml11so5030777ejb.6;
-        Mon, 28 Nov 2022 16:03:20 -0800 (PST)
+        Mon, 28 Nov 2022 19:06:07 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D5E1E3C1;
+        Mon, 28 Nov 2022 16:06:03 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so15673272pjc.3;
+        Mon, 28 Nov 2022 16:06:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TdT+BmdIneu3TI8BLD07hqcjbUZk43YKZ9BLkChxuPo=;
-        b=ITLzLdBFltzXasiY87QzobnsGAjZcX0eJgUsWviLRRgFDR1MRrM4wsOblh9/4+aPB4
-         0JfrE9SZtsCFujA8tq23N3E0AU5kGd/U9kNLDNPzO9Za1iRKHD9TomJ+/ntSxcAv0Y01
-         wSMzvLcdHUXNh8lqpaHHYYoxOcyrv3yD1kVbu3x+HlgbjGHJ+F1+yj3mtX3BsWqnO+63
-         KTIWo3kYnm8ybgI6QnNyMqUkOFHRs82X2UHVwwg/ihCrBmi5bsW6KRSxLc+CigJKDLRR
-         Jsp60TaeQ6fZLG+iPAmuAkRt30YUaa+EjLRWAOZ7g97549Ly0HjnWS7J7uSH5/yZMJ67
-         W8RQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=OzEu0mNuawYU4A8ixhfSekIPSykA7cQRGHNQPCvkxKI=;
+        b=c29fOTJkGhrSOl14tX8ALzL7Z8JRbAKENjvd46LnS0GWYkCtROYEQPHeBQmx9KXnA+
+         8171rCzdumIi9h1Vb4X0SOxj2L5/Z4ZXw8GKF+twWDpryQu+3JfZDmSHCoSchfko62ij
+         aO4n9mj/JgBDdgzHvTxNopuX3f+tK2dFxRSObYj2PB2SQU/S4vkEwXQj0yJX7cw56tfS
+         JGOaaS48ijJ5gqg7+h2uXsNcPPdOtUOzxVEf6hUrk65gCrXNNqGFO0iSMblLpWywGo6U
+         mw0CwvdFdK69r+MbWD9OGDZldzntUIpPUUQYsyWQW8HjdKSoVwepJHyIvcNHdGwmsqzm
+         OQCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TdT+BmdIneu3TI8BLD07hqcjbUZk43YKZ9BLkChxuPo=;
-        b=QWy7xPeVhog24jn7VED9vydNy5CdhIZG/J6Azq8vZ44ljo5QJEYd+DyoOgvDtLn75s
-         BVnumjbCorBs6FeJmZy0ekUhqLNWD+t04hyg2NC6JDSxkcs8hU0flRH0ECG8Gi5+gWBR
-         A0OrywqLaIpzZxm69+tiqHUO/PY08sF/Z7BBLEomjHzH6aWhvCGOZAPmZpRft9ecKfoz
-         qoEicKMlhoF4UyGUIOr5SPOIdlJ6gHuriFvuYdEzp7qox1DM2hiGko/WSgZWZWQbXze8
-         EacPPvPBH39fyLqWI707tkxoju8xLMmExlzZtpx7d8yOKX6cy2nAJJ1U5oAX/eyi7A7j
-         o3Rg==
-X-Gm-Message-State: ANoB5pngbqfWxhNEH4XMeiQbqQ9VixjI4Hrmn9TMiDD160q/AuxIk9+H
-        gDjDqJymO/cvZpryiIJbed4nCkGew/7bJps1VPg=
-X-Google-Smtp-Source: AA0mqf6fZM8tA810LE12Y15mX6MIkaG2UqDn3lS7Cb+AUhc5yb+m4XendEUXBVGYmQ36nUCanxQnZ2pOmiYUlk7SLu8=
-X-Received: by 2002:a17:906:79c4:b0:778:e3e2:8311 with SMTP id
- m4-20020a17090679c400b00778e3e28311mr31820692ejo.342.1669680198945; Mon, 28
- Nov 2022 16:03:18 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OzEu0mNuawYU4A8ixhfSekIPSykA7cQRGHNQPCvkxKI=;
+        b=FkbUZlYh4ncgHNXwVCTa5Fxs/W+2zqqr7yMCvZt4OkfVASRTaREJwm9haMQxsV3ufS
+         hiVIPKV5+GDw2czD5gdx0KULQxzw48oeQZeWCQqnHQ+bnWbfnPXfWbc1+65ZIAvus0Ou
+         w23iah77LHoyp7QWlNe0ZDZNAU9OmSb9/wDaNAdzaTdQWlgF63O5vY/f9FZBr/9+TP+I
+         erqd0fWrBj4FXxjTEXYjUF9eZXkY3j51ouXKTXBQht8umNE6j2EKDBo7GBIzm93bBEL4
+         qRVZEfINOcB28PdwX1qcyEItjI4KvY5y7qpXfPQQ1gmdBzKrg6jwLXL4S1iC7/zEI5zg
+         vmPw==
+X-Gm-Message-State: ANoB5pn217C10/RmpgMIz68tzjnYp3jbKOJppJ3C3bEUGkCgJ094gyqZ
+        qWiOG5ij5Ses2W77LRJssgM=
+X-Google-Smtp-Source: AA0mqf5ipK95N6mLuCtYJaUwnBnc7IAnNZxYL5uhNiBjgXpNw+6EjQZrnW+cTdQFxZblASBjjVTDLg==
+X-Received: by 2002:a17:90b:48c8:b0:20b:16bc:8493 with SMTP id li8-20020a17090b48c800b0020b16bc8493mr57596434pjb.210.1669680362942;
+        Mon, 28 Nov 2022 16:06:02 -0800 (PST)
+Received: from XH22050090-L.ad.ts.tri-ad.global ([103.175.111.222])
+        by smtp.gmail.com with ESMTPSA id r2-20020aa79ec2000000b00572198393c2sm8588147pfq.194.2022.11.28.16.05.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 16:06:02 -0800 (PST)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Jiri Pirko <jiri@nvidia.com>, netdev@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Arnaud Ebalard <arno@natisbad.org>,
+        Srujana Challa <schalla@marvell.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Dimitris Michailidis <dmichail@fungible.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Linu Cherian <lcherian@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Jerin Jacob <jerinj@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Shannon Nelson <snelson@pensando.io>, drivers@pensando.io,
+        Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Vadim Fedorenko <vadfed@fb.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Vadim Pasternak <vadimp@mellanox.com>,
+        Shalom Toledo <shalomt@mellanox.com>,
+        linux-crypto@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-rdma@vger.kernel.org, oss-drivers@corigine.com,
+        Jiri Pirko <jiri@mellanox.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hao Chen <chenhao288@hisilicon.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH net-next v5 0/4] net: devlink: return the driver name in devlink_nl_info_fill
+Date:   Tue, 29 Nov 2022 09:05:46 +0900
+Message-Id: <20221129000550.3833570-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221031232202.131945-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221031232202.131945-7-prabhakar.mahadev-lad.rj@bp.renesas.com> <738a2461-7a6a-286b-89e8-d46a26ec6506@xs4all.nl>
-In-Reply-To: <738a2461-7a6a-286b-89e8-d46a26ec6506@xs4all.nl>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 29 Nov 2022 00:02:52 +0000
-Message-ID: <CA+V-a8tr9486HV4zvVG3bh4fWNQ-edUDPMZAUM-kKDN-PvRU+w@mail.gmail.com>
-Subject: Re: [PATCH v4 6/9] media: i2c: ov5645: Use runtime PM
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+The driver name is available in device_driver::name. Right now,
+drivers still have to report this piece of information themselves in
+their devlink_ops::info_get callback function.
 
-On Mon, Nov 28, 2022 at 1:49 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
->
-> Hi Prabhakar,
->
-> On 11/1/22 00:21, Prabhakar wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-<snip>
-> > -static void ov5645_set_power_off(struct ov5645 *ov5645)
-> > -{
-> > -     gpiod_set_value_cansleep(ov5645->rst_gpio, 1);
-> > -     gpiod_set_value_cansleep(ov5645->enable_gpio, 0);
-> > -     clk_disable_unprepare(ov5645->xclk);
-> > -     regulator_bulk_disable(OV5645_NUM_SUPPLIES, ov5645->supplies);
-> > -}
-> > -
-> > -static int ov5645_s_power(struct v4l2_subdev *sd, int on)
-> > -{
-> > -     struct ov5645 *ov5645 = to_ov5645(sd);
-> > -     int ret = 0;
-> > -
-> > -     mutex_lock(&ov5645->power_lock);
-> > -
-> > -     /* If the power count is modified from 0 to != 0 or from != 0 to 0,
-> > -      * update the power state.
-> > -      */
-> > -     if (ov5645->power_count == !on) {
-> > -             if (on) {
-> > -                     ret = ov5645_set_power_on(ov5645);
-> > -                     if (ret < 0)
-> > -                             goto exit;
-> > -
-> > -                     ret = ov5645_set_register_array(ov5645,
-> > -                                     ov5645_global_init_setting,
-> > +     ret = ov5645_set_register_array(ov5645, ov5645_global_init_setting,
-> >                                       ARRAY_SIZE(ov5645_global_init_setting));
-> > -                     if (ret < 0) {
-> > -                             dev_err(ov5645->dev,
-> > -                                     "could not set init registers\n");
-> > -                             ov5645_set_power_off(ov5645);
-> > -                             goto exit;
-> > -                     }
-> > -
-> > -                     usleep_range(500, 1000);
-> > -             } else {
-> > -                     ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x58);
-> > -                     ov5645_set_power_off(ov5645);
-> > -             }
-> > +     if (ret < 0) {
-> > +             dev_err(ov5645->dev, "could not set init registers\n");
-> > +             goto exit;
-> >       }
-> >
-> > -     /* Update the power count. */
-> > -     ov5645->power_count += on ? 1 : -1;
-> > -     WARN_ON(ov5645->power_count < 0);
-> > +     usleep_range(500, 1000);
-> >
-> > -exit:
-> > -     mutex_unlock(&ov5645->power_lock);
-> > +     return 0;
-> >
-> > +exit:
-> > +     ov5645_set_power_off(dev);
-> >       return ret;
->
-> smatch gives this warning:
->
-> drivers/media/i2c/ov5645.c:687 ov5645_set_power_on() warn: 'ov5645->xclk' from clk_prepare_enable() not released on lines: 687.
->
-it's a false positive, as in case of error we jump to the exit label
-which calls ov5645_set_power_off() which internally calls
-clk_disable_unprepare() for xclk and on success we need to have xclk
-ON during s_stream(ON) and eventually the
-xclk will be unprepared in s_stream(OFF).
+The goal of this series is to have the devlink core to report this
+information instead of the drivers.
 
-Cheers,
-Prabhakar
+The first patch fulfills the actual goal of this series: modify
+devlink core to report the driver name and clean-up all drivers. Both
+have to be done in an atomic change to avoid attribute duplication.
+
+The second patch removes the devlink_info_driver_name_put() function
+to prevent future drivers from reporting the driver name themselves.
+
+The third patch allows the core to call devlink_nl_info_fill() even if
+the devlink_ops::info_get() callback is NULL. This leads to the fourth
+and final patch which cleans up the drivers which have an empty
+info_get().
+---
+* Changelog *
+
+v4 -> v5
+
+  * [PATCH 1/4] add Tested-by: Ido Schimmel tag.
+
+  * split patch 3/3 in two patches.
+
+v3 -> v4
+
+  * Ido pointed out that the mlxsw did not need to be fixed:
+    https://lore.kernel.org/netdev/Y4ONgD4dAj8yU2%2F+@shredder/
+    Remove the first two patches from the series.
+
+v2 -> v3
+
+  * [PATCH 3/5] remove the call to devlink_info_driver_name_put() in
+    mlxsw driver as well (this was missing in v2, making the build
+    fail... sorry for the noise).
+
+  * add additional people in CC as pointed by netdev patchwork CI:
+    https://patchwork.kernel.org/project/netdevbpf/list/?series=699451
+
+  * use the "Link:" prefix before URL to silence checkpatch's line
+    length warning.
+
+
+RFC v1 -> v2
+
+  * drop the RFC tag
+
+  * big rework following the discussion on RFC:
+    https://lore.kernel.org/netdev/20221122154934.13937-1-mailhol.vincent@wanadoo.fr/
+    Went from one patch to a series of five patches:
+
+  * drop the idea to report the USB serial number following Greg's
+    comment:
+    https://lore.kernel.org/linux-usb/Y3+VfNdt%2FK7UtRcw@kroah.com/
+
+Vincent Mailhol (4):
+  net: devlink: let the core report the driver name instead of the
+    drivers
+  net: devlink: remove devlink_info_driver_name_put()
+  net: devlink: make the devlink_ops::info_get() callback optional
+  net: devlink: clean-up empty devlink_ops::info_get()
+
+ .../marvell/octeontx2/otx2_cpt_devlink.c      |  4 ---
+ drivers/net/dsa/hirschmann/hellcreek.c        |  5 ---
+ drivers/net/dsa/mv88e6xxx/devlink.c           |  5 ---
+ drivers/net/dsa/sja1105/sja1105_devlink.c     | 12 ++-----
+ .../net/ethernet/broadcom/bnxt/bnxt_devlink.c |  4 ---
+ .../freescale/dpaa2/dpaa2-eth-devlink.c       | 11 +-----
+ .../ethernet/fungible/funeth/funeth_devlink.c |  7 ----
+ .../hisilicon/hns3/hns3pf/hclge_devlink.c     |  5 ---
+ .../hisilicon/hns3/hns3vf/hclgevf_devlink.c   |  5 ---
+ drivers/net/ethernet/intel/ice/ice_devlink.c  |  6 ----
+ .../marvell/octeontx2/af/rvu_devlink.c        |  7 ----
+ .../marvell/octeontx2/nic/otx2_devlink.c      | 15 --------
+ .../marvell/prestera/prestera_devlink.c       |  5 ---
+ .../net/ethernet/mellanox/mlx5/core/devlink.c |  4 ---
+ drivers/net/ethernet/mellanox/mlxsw/core.c    |  5 ---
+ .../net/ethernet/netronome/nfp/nfp_devlink.c  |  4 ---
+ .../ethernet/pensando/ionic/ionic_devlink.c   |  4 ---
+ drivers/net/ethernet/qlogic/qed/qed_devlink.c |  4 ---
+ drivers/net/netdevsim/dev.c                   |  3 --
+ drivers/ptp/ptp_ocp.c                         |  4 ---
+ include/net/devlink.h                         |  2 --
+ net/core/devlink.c                            | 35 ++++++++++++-------
+ 22 files changed, 26 insertions(+), 130 deletions(-)
+
+-- 
+2.25.1
+
