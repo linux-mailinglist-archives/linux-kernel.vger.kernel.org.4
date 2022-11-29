@@ -2,105 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515EB63BF67
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:53:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C9E63BF6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:54:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232755AbiK2LxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 06:53:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
+        id S232846AbiK2LyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 06:54:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiK2LxS (ORCPT
+        with ESMTP id S231826AbiK2LyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 06:53:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D213631FA4
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:52:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669722744;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=2Gux2/Som03hICgU5yOVV/Q1V+JmfiX5qRK+2wvl878=;
-        b=R5XSuUSSnCx6HXNwXx6qZK9vzo/hV79H7IDWvZkimVs8gBF08bfYUZe2k0bhaLCHbMlVYK
-        OjIErbruTn2U3ulneOexZ5WoFPaUPXP30YheNzMiK28CwwK9Uws0CZ8Uk62wRyJ4/XCKFb
-        dGMAeD0jgdCmRlhfDCDuTr8cV2xXlhk=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-6-mFCE1HO7OuyfFb-YNVMzmA-1; Tue, 29 Nov 2022 06:52:22 -0500
-X-MC-Unique: mFCE1HO7OuyfFb-YNVMzmA-1
-Received: by mail-wm1-f70.google.com with SMTP id e8-20020a05600c218800b003cf634f5280so4635353wme.8
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:52:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2Gux2/Som03hICgU5yOVV/Q1V+JmfiX5qRK+2wvl878=;
-        b=VhOgEQqZh2Z1eiToqdDDj4D93N2YuWS7x4UBIoWTMjhk+nF7fg+RcdEY6a1GnV2gkV
-         kQdX1+GxNJQ4RBA7eRYmcPN5/aNtn7aDgl2sfw+UOsOk30lDYrLjHLpdmBXH0qhLarWs
-         72oTdkuv97JmeqscEx9r+FLIxwKUuxt++1QYzsH9jOueAFKdkaFwP2mJKDczc5Apk32O
-         1xxMODfDvFu4q/BR7zU0cO45Pd91nz6pwXuISH6T11h2jf2sP+SEpQyT3jBTxJLEgYYc
-         NF7o3YPH+7yRL17r0pxXbPqzdj3UYVk/43dV4ArR0c+cm+k8tqRfRt5bm4ortIl7nF0i
-         4cew==
-X-Gm-Message-State: ANoB5pmXmqmTS5snhDmJHHqsbH2Q3x+TDg4LQKVwGJVMg/lgwiR/xRWt
-        tGfML7rVXHAxXGXEfRP1dyCQANl+J3xuIeeSHhngQN80DDItyh4nDbyFnv6wVwfY0GdbndzzMtB
-        sJmnTmOowikcQrvEA51SmdX0=
-X-Received: by 2002:a1c:4b12:0:b0:3cf:90de:7724 with SMTP id y18-20020a1c4b12000000b003cf90de7724mr44534257wma.18.1669722741538;
-        Tue, 29 Nov 2022 03:52:21 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7jWVYrfMlBCQFeHwziy5QCyzfD2FjXU0pt9cHOO8RRJpocET7EWtBePXu5o9xbIk8wvf++pw==
-X-Received: by 2002:a1c:4b12:0:b0:3cf:90de:7724 with SMTP id y18-20020a1c4b12000000b003cf90de7724mr44534239wma.18.1669722741311;
-        Tue, 29 Nov 2022 03:52:21 -0800 (PST)
-Received: from klayman.redhat.com (net-2-34-28-144.cust.vodafonedsl.it. [2.34.28.144])
-        by smtp.gmail.com with ESMTPSA id u13-20020a5d514d000000b002365b759b65sm13232124wrt.86.2022.11.29.03.52.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 03:52:20 -0800 (PST)
-From:   Marco Pagani <marpagan@redhat.com>
-To:     Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Cc:     Marco Pagani <marpagan@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] habanalabs: fix double assignment in MMU V1
-Date:   Tue, 29 Nov 2022 12:52:17 +0100
-Message-Id: <20221129115217.129290-1-marpagan@redhat.com>
-X-Mailer: git-send-email 2.38.1
+        Tue, 29 Nov 2022 06:54:02 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3203454B3B;
+        Tue, 29 Nov 2022 03:54:02 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AT9kFa4006636;
+        Tue, 29 Nov 2022 11:52:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : mime-version : content-type; s=pp1;
+ bh=jI8jJEOJ6YN347QD8GxvxY855mlZXtRWwg9j7N6zesM=;
+ b=th3qjFSSl1mpo+QQtYQTJrPlGZNUfNJK2avdIsdnprJaa6yIN5jyNWcsZn4EJ6yh1GTr
+ G+2XIdRGAqNSrqGBaNunSoIv5Wnrq3T1AIWh5rNTCMgnzf2iijaSRV47i8CyuMcaHqWq
+ 90nOesfwYybG7Vlarcf6g8/I+IGn3IdK9PkP0xChUbKxwidL0p/VORRPxxas7gv6cZtB
+ GUN7G0H6NiHNUJhA8Jh4f3Q5yh1/5yeip6idIIK8EFMs/iZ/o+flcinMTrzy8fzJbjah
+ zG0l7mAJ1gO1TtaVy6OgK3zYUPHXb3XauFKXsj8qOWikqWahwqUGVSThbG+hzJKBDdBy vw== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m5djwpegf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 11:52:45 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ATBpE7q023615;
+        Tue, 29 Nov 2022 11:52:44 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma04wdc.us.ibm.com with ESMTP id 3m3ae9m8v2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 11:52:44 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com ([9.208.128.115])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ATBqg5k20251160
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 29 Nov 2022 11:52:43 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C92EC58056;
+        Tue, 29 Nov 2022 11:52:42 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4809C5805A;
+        Tue, 29 Nov 2022 11:52:40 +0000 (GMT)
+Received: from Dannys-MacBook-Pro.local (unknown [9.211.123.96])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 29 Nov 2022 11:52:40 +0000 (GMT)
+Date:   Tue, 29 Nov 2022 19:52:30 +0800
+From:   Danny Tsen <dtsen@linux.ibm.com>
+To:     linux-crypto@vger.kernel.org
+Cc:     herbert@gondor.apana.org.au, leitao@debian.org,
+        nayna@linux.ibm.com, appro@cryptogams.org,
+        linux-kernel@vger.kernel.org, ltcgcw@linux.vnet.ibm.com,
+        dtsen@linux.ibm.com
+Subject: [PATCH 0/6] crypto: Accelerated AES/GCM stitched implementation
+Message-ID: <Y4Xyflca/hkvR0eR@Dannys-MacBook-Pro.local>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 3RLrEUFhQJBWWfqdSGvj3-GKjF0xkr7A
+X-Proofpoint-GUID: 3RLrEUFhQJBWWfqdSGvj3-GKjF0xkr7A
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-29_07,2022-11-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ mlxscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=595 spamscore=0
+ clxscore=1011 lowpriorityscore=0 phishscore=0 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211290069
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Removing double assignment of the hop2_pte_addr
-variable in dram_default_mapping_fini().
+This patch series enable an accelerated AES/GCM stitched implementation for
+Power10+ CPU(ppc64le).  This module supports AEAD algorithm.  The stitched
+implementation provides 3.5X+ better performance than the baseline.
 
-Dead store reported by clang-analyzer.
+This patch has been tested with the kernel crypto module tcrypt.ko and has
+passed the selftest.
 
-Signed-off-by: Marco Pagani <marpagan@redhat.com>
----
- drivers/misc/habanalabs/common/mmu/mmu_v1.c | 1 -
- 1 file changed, 1 deletion(-)
+Danny Tsen (7):
+  powerpc/crypto: Define new module in Kconfig.
+  powerpc/crypto: Create new module driver.
+  powerpc/crypto: Functions to set round keys and encrypt data.
+  powerpc/crypto: Functions for creating hash table and generate hash.
+  powerpc/crypto: Glue code to create AEAD algorithm module.
+  powerpc/crypto: Added new stitched AES/GCM implementation.
+  powerpc/crypto: Perl script to process PowerPC asember source.
 
-diff --git a/drivers/misc/habanalabs/common/mmu/mmu_v1.c b/drivers/misc/habanalabs/common/mmu/mmu_v1.c
-index 8a40de4a4761..d925dc4dd097 100644
---- a/drivers/misc/habanalabs/common/mmu/mmu_v1.c
-+++ b/drivers/misc/habanalabs/common/mmu/mmu_v1.c
-@@ -344,7 +344,6 @@ static void dram_default_mapping_fini(struct hl_ctx *ctx)
- 		}
- 	}
- 
--	hop2_pte_addr = hop2_addr;
- 	hop2_pte_addr = hop2_addr;
- 	for (i = 0 ; i < num_of_hop3 ; i++) {
- 		clear_pte(ctx, hop2_pte_addr);
+
+ arch/powerpc/crypto/Kconfig  | 11 +++++++++++
+ arch/powerpc/crypto/Makefile | 10 ++++++++++
+ arch/powerpc/crypto/p10-aes-gcm-glue.c | 341 +++++++++++++++++++++++++
+ arch/powerpc/crypto/p10_aes_gcm.S | 1519 +++++++++++++++++++++++++++++
+ arch/powerpc/crypto/aesp8-ppc.pl | 3846 ++++++++++++++++++++++++++++++
+ arch/powerpc/crypto/ghashp8-ppc.pl | 370 +++++++++++++++++++++++++++++
+ arch/powerpc/crypto/ppc-xlate.pl | 229 +++++++++++++++++++++++++++++++
+ 7 file changed, 6026 insertions(+)
+ create mode 100644 arch/powerpc/crypto/p10-aes-gcm-glue.c
+ create mode 100644 arch/powerpc/crypto/p10_aes_gcm.S
+ create mode 100644 arch/powerpc/crypto/aesp8-ppc.pl
+ create mode 100644 arch/powerpc/crypto/ghashp8-ppc.pl
+ create mode 100644 arch/powerpc/crypto/ppc-xlate.pl
 -- 
-2.38.1
+2.31.1
+
+
 
