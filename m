@@ -2,88 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C2063BB5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3502E63BB5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiK2IQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 03:16:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
+        id S230180AbiK2IQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 03:16:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiK2IQl (ORCPT
+        with ESMTP id S230128AbiK2IQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 03:16:41 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C98045A27
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:16:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=8lfUT
-        btt/lnQSOBZjkdp/PK/8/wp02RYgakBDUnJPyQ=; b=fjbRPVHCa2XGpvODDQXmj
-        XGLvFc86RJap6evvMeBIS43ukXeKx7AddHIY0zAn5tDWkQu0OJe6jNZ40Hxfh/Fw
-        qHuzBp3h+WHFmh4H7eow/2kZ/g2ftrSb9yiHQVpisTrRNf07Kl5TJsJEEtLnKXd1
-        gLtgP694y36Y0ns6EzjXtc=
-Received: from localhost.localdomain (unknown [36.112.3.106])
-        by zwqz-smtp-mta-g2-1 (Coremail) with SMTP id _____wCXDUKvv4VjdrtIAA--.23448S4;
-        Tue, 29 Nov 2022 16:16:01 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     ojeda@kernel.org, andriy.shevchenko@linux.intel.com,
-        geert+renesas@glider.be
-Cc:     linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v3] auxdisplay: hd44780: Fix potential memory leak in hd44780_remove()
-Date:   Tue, 29 Nov 2022 16:15:42 +0800
-Message-Id: <20221129081542.5890-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 29 Nov 2022 03:16:45 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF8057B6E
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:16:44 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id ns17so5131945pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:16:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MqqcI3upkMKe9jgtqKPfvBFqEpkKc3bYwpA9ihzXqPc=;
+        b=LYQWMzk8fwk1ZXmPY95LWiyuQwTHRdE8/013KjievETTzx7IAC0a5IzM3gOqgC0N3h
+         BGZ1rjgpjork3tK/0TK52o+jQ+jjaW2ofjci1U6dboFGw+qeAsPq0uT0FKeSKqwnyACB
+         kOrJEL3QlRQkEIotOyBICUKPrGdcz5zjn3uqcYM0+kf7Om+1snmCOvnldmlzL4wDcZS8
+         BCrnYIhR1I9KJowh4A1THFz6kMKwHKfFdkd0qUwcZ0LFSmBhg1SWgApm7CEjNac7HMPq
+         AiEJvP377sA56YM4wOxpq+je/NbGuUodZGmFcfVeZg8/jwo0USFj7N3t8MBwdS8oJx2s
+         QqtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MqqcI3upkMKe9jgtqKPfvBFqEpkKc3bYwpA9ihzXqPc=;
+        b=sNAzXYWr5kZhZS8xOPI2O67WRde+LfF1WjeYc6VzBpvD3x7SgjMPLIF6S9qbOVwoOL
+         WrkkvUHuAIlRfteDZxsr1oPFWQb0wzHHIqBSAEZjJDKiCSfcV5HBo8F2CxAoWdUHpzDj
+         L0lCxoPYYlF5LwF1cS68qZ5fb6f13AVhzcwQyVZSDH5KYgD2JhbiYNNozq3BMBr6Qfj3
+         1XDj+9vYjYLLfMK/9rU/cawKHTC7UUyo/L/6YJrKEMC+CpBBd8TYxiuLiaS4AECgq1PX
+         vOtp86QZX0bZt5DJP0rBXPBPnY/HKHSLmny/Pe7SMNPc0gSfuaLMBmniDGVpzP+8OZ18
+         w+gw==
+X-Gm-Message-State: ANoB5pnFnOlK8JyF0OQuH+nZidi27F3+rR6T9CDoiJhJIUmqWfufOkdH
+        X0D6dibrnSg4RBSLR/NkhN9XMw==
+X-Google-Smtp-Source: AA0mqf7WLgfLUvX+Ih5A322VuHGcPluj23ukCLLsh8ExG1Cct3WD55Q/hYioCdzGlv/r/Hf9XAQIyQ==
+X-Received: by 2002:a17:90a:307:b0:213:ff80:b37f with SMTP id 7-20020a17090a030700b00213ff80b37fmr65116475pje.118.1669709804401;
+        Tue, 29 Nov 2022 00:16:44 -0800 (PST)
+Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
+        by smtp.gmail.com with ESMTPSA id w13-20020aa7954d000000b00574740c99e9sm9302290pfq.129.2022.11.29.00.16.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 00:16:44 -0800 (PST)
+Message-ID: <1b015a86-0d65-8597-0512-b313769e307b@9elements.com>
+Date:   Tue, 29 Nov 2022 13:46:40 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wCXDUKvv4VjdrtIAA--.23448S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWrZryfAF4fuw1UAF4rZw4rAFb_yoW8JF1kpF
-        W7WaySgr1UXryvgr1DGw1UuFWrC3W0ya4jgasFywn3u345JFyIya4rJ3s2krZxtFWfGa1I
-        qa12qrWxJFs2yFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zR0PfJUUUUU=
-X-Originating-IP: [36.112.3.106]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/xtbBOQbIjF-PQRCQkwAAs5
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 3/3] hwmon: (pmbus/core): Implement irq support
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org
+References: <20221128174715.1969957-1-Naresh.Solanki@9elements.com>
+ <20221128174715.1969957-3-Naresh.Solanki@9elements.com>
+ <bda19726-74f3-b76d-c30c-eb2543979690@roeck-us.net>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <bda19726-74f3-b76d-c30c-eb2543979690@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hd44780_probe() allocates a memory chunk for hd with kzalloc() and
-makes "lcd->drvdata->hd44780" point to it. When we call hd44780_remove(),
-we should release all relevant memory and resource. But "lcd->drvdata
-->hd44780" is not released, which will lead to a memory leak.
+Hi Guenter,
 
-We should release the "lcd->drvdata->hd44780" in hd44780_remove() to fix
-the memory leak bug.
+On 29-11-2022 04:39 am, Guenter Roeck wrote:
+> On 11/28/22 09:47, Naresh Solanki wrote:
+>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>
+>> Implement PMBUS irq handler to notify regulator events.
+>>
+>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> 
+> As I am sure I have mentioned before, this needs to primarily handle
+> sysfs notifications to hwmon status attributes and to generate kobject
+> events. Regulator events are secondary / optional.
 
-Fixes: 718e05ed92ec ("auxdisplay: Introduce hd44780_common.[ch]")
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
----
- drivers/auxdisplay/hd44780.c | 2 ++
- 1 file changed, 2 insertions(+)
+Based on previous feedback, PMBus interrupt handler is made generic
+Based on the use case I have in my machine, my application need to 
+monitor regulator event as soon as they occur and hence the patch.
 
-diff --git a/drivers/auxdisplay/hd44780.c b/drivers/auxdisplay/hd44780.c
-index 8b2a0eb3f32a..d56a5d508ccd 100644
---- a/drivers/auxdisplay/hd44780.c
-+++ b/drivers/auxdisplay/hd44780.c
-@@ -322,8 +322,10 @@ static int hd44780_probe(struct platform_device *pdev)
- static int hd44780_remove(struct platform_device *pdev)
- {
- 	struct charlcd *lcd = platform_get_drvdata(pdev);
-+	struct hd44780_common *hdc = lcd->drvdata;
- 
- 	charlcd_unregister(lcd);
-+	kfree(hdc->hd44780);
- 	kfree(lcd->drvdata);
- 
- 	kfree(lcd);
--- 
-2.25.1
-
+> 
+> Thanks,
+> Guenter
+> 
+Regards,
+Naresh
