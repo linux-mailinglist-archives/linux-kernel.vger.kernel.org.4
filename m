@@ -2,155 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FC963C3CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 578F363C3CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbiK2PbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 10:31:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
+        id S232412AbiK2PbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 10:31:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235823AbiK2PbH (ORCPT
+        with ESMTP id S235924AbiK2PbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:31:07 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBBA60EBF
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:31:03 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id f6so6758143ilu.13
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:31:03 -0800 (PST)
+        Tue, 29 Nov 2022 10:31:18 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476D364576
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:31:14 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id d3so8770071plr.10
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:31:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uMjNraLB6scr/xv9kM9mpf61HY1js/ZvtGhWlHG2rk8=;
-        b=e2HH0dG5vmD1BA10H/FjRsLuqF361HQkMIjd2fOscEY5B1/yxduJlciZ+dvNrFYBsm
-         scC3vBN1hlQXikK9x21+E4UlkGiX3srvT/7XmurqXi0b2LdY0xsm4E1izws3WaVNrPcc
-         jJkCzD+7a2khe/8FXDY8wXwNjUxoo+NxaWcS5Oap2mSg83+KMPGf1T+D2mrbFrCTYvvY
-         Lhv9I9rmVTa0GGM41qyDFFAOkT2vakmP6Jq38DU7slDN2WzlFO4s7s8AILaTaVmAXR1h
-         f67tsuAow7TRlWkS9T7oHDNZNg++2n3Hz9VQ1+n3SJc+zkcg1tkq+pcPBvaKyIkLae4B
-         gPsA==
+        bh=3fVszqxgQ016BSb5qNf+hCvyWQbfpRSMkXlPPrp4GVI=;
+        b=bSoOisz9I9mHhMJiRBlqA98mcW26hkx7Xp/+fcTXZMmZBqyh1NAeNuhydDzv6eniZC
+         UnhSBrDa3rOJUZ0VLUoEvXiSqNsAhcw3I5PiP8hpBWT6Pt33fbt+MTOr3911YUILLMsx
+         X7d39KEEaQg0aOqHk6fOE6sy6Y5atjhFiv53VzRKof/3dSjO4BVCCWNCgZLcku1xFegj
+         eNnGq+i7vNumxfZVraDv0AlhybJTPThiFPFGXaHDCFRAv3Q96CyDdeGMCILaRv82dd6z
+         y3jPFZvGNVxeggjlx8KnjL0sl1novb60iZwlh0keCyMvHVdG11rFb6lmUFPdi/NOyK8K
+         sLoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uMjNraLB6scr/xv9kM9mpf61HY1js/ZvtGhWlHG2rk8=;
-        b=ZgsHiaIWp/YoXQKlJGHSXnuMNXZCujofa25FcoBfb7hCvkvhSF8AdEeFRWfALuopgO
-         hxpzZ7b00tzYbiTYnPosrBXkgOfDURSoUsgQ5H6jRU1htUXegEAZnXsJvcQFk13FSdlT
-         IIO/wklZUhfPh/FE0VMRE/MEmxXKp24+dEv/Gbp26+XrEpMzUchqbR5MxvLR1aBOkpbs
-         lZ0Ba5DuIBaILzDr+O63iQyclhuoCEl+1QYhS56z9SRAcluY68VATdsDdh89D/Sy42cw
-         50A++NvWsk43Mvd1lzvAhBYCfVuKUfcdcVI31OCt0El5ZoSkt+bWgJ9cNRDg92TtyTCo
-         AcEQ==
-X-Gm-Message-State: ANoB5pmiKIZAVZ9N0VkJouZJTp/I/KnXWlyaZjW/hxyz3Ngro0d2ZhiI
-        CzcvUG2iqmcuYtC4Xgr9D5RHEArtPDhecRza4Le1CZCgQ3Q=
-X-Google-Smtp-Source: AA0mqf5H0WkPblZ9WWd2dEdD0H7A50y46L/PoWWxVtSVOwBX/7+zkXb6Rv258KlZroTTNsgYcCkxjub2fARp740h8kk=
-X-Received: by 2002:a92:c10f:0:b0:303:1f6a:b30c with SMTP id
- p15-20020a92c10f000000b003031f6ab30cmr2118645ile.254.1669735862770; Tue, 29
- Nov 2022 07:31:02 -0800 (PST)
+        bh=3fVszqxgQ016BSb5qNf+hCvyWQbfpRSMkXlPPrp4GVI=;
+        b=I6Dm6OnGCItd+Jafxxm5LH6yY3tt2V/UmE2jb67UX19Tr6cMpcWc0adGH2KXJlLLNV
+         yXZAy60DMuSVW+WNj3ujBEt0BM4DWDmf1Gig1SZrXLLuq3O7EnomHIv3p60F6RuzE2xg
+         iA/OR/MJTRCvLMNPZI6Ht/OIFh0ZlCaBFMpgkeweGoF00afQmc/6dj9OYOQwa46qy4zf
+         afQTJgcaJQKzJYUovXrfWXzsAAFZ0TFadk84Ew5PM4hkrsn+JdGny/DZufGGqzk8HFBi
+         mG0YfV7JX+XzyohWn7wQh4gxz42zhKiZj6PH0OL7ITlKMEGQrgLMhQ8aj/Gxxg/JxLuF
+         hbhw==
+X-Gm-Message-State: ANoB5pnnQyvt6f8XcMb3uqxrldxYMYUFa3ayCOeH6eqHVzGOTeq8Le3+
+        rGqD9qd6xjOmMuBCRraoF5/ZW0Ud0RS8Hjoxnh4lMA==
+X-Google-Smtp-Source: AA0mqf5ik5i4ChFnRvy/bmtuc8PRZp06XQinOIdUlzKVikOtmWsKfjSysf196kcbBAdsx08nJT52ptjgdMON40RNQ9k=
+X-Received: by 2002:a17:902:d68b:b0:188:cca8:df29 with SMTP id
+ v11-20020a170902d68b00b00188cca8df29mr44499277ply.148.1669735873662; Tue, 29
+ Nov 2022 07:31:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20221128180252.1684965-1-jannh@google.com> <20221128180252.1684965-2-jannh@google.com>
- <CAHbLzkp7+ZrXkoYcVtqrd2mQN3FZ4Y6tyeZCd31Oubz=+esaJQ@mail.gmail.com>
- <CAG48ez0iS2BZd9BAXZLBA3D0fzNePSLWoXqAbYWsTig4nN5FrQ@mail.gmail.com>
- <CAHbLzkrAsFvUoavXrF_R4aZZm-02Fa7tF0E24TGEsAn8owbDuw@mail.gmail.com>
- <CAG48ez2CdMMOWsD3yo8-EEDc9x19Jdp6B8fJxtsRMNccF3_xCg@mail.gmail.com> <CAHbLzkrfx4TNTFaG2J4DxRT8kXvcV=0mJQ9g64eOZvofazEdEw@mail.gmail.com>
-In-Reply-To: <CAHbLzkrfx4TNTFaG2J4DxRT8kXvcV=0mJQ9g64eOZvofazEdEw@mail.gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Tue, 29 Nov 2022 16:30:26 +0100
-Message-ID: <CAG48ez09vFC1+0y1z=2xgZ3ZV+Peo28o5u64ZNT-iBS8xv=-4w@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] mm/khugepaged: Fix GUP-fast interaction by sending IPI
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     security@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20221122111124.6828-1-cniedermaier@dh-electronics.com>
+ <20221122111124.6828-3-cniedermaier@dh-electronics.com> <55c29f92-4c6b-266f-2004-ae633a658963@linaro.org>
+In-Reply-To: <55c29f92-4c6b-266f-2004-ae633a658963@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 29 Nov 2022 16:30:37 +0100
+Message-ID: <CAPDyKFparoXMJ-sRxgqi8zDGn5AoNDLfsAF9YkdoaKpTU3EchQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: mmc: Make comment on wakeup-source less confusing
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marek Vasut <marex@denx.de>, kernel@dh-electronics.com,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 11:10 PM Yang Shi <shy828301@gmail.com> wrote:
+On Tue, 29 Nov 2022 at 13:36, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> On Mon, Nov 28, 2022 at 12:12 PM Jann Horn <jannh@google.com> wrote:
-> >
-> > On Mon, Nov 28, 2022 at 9:10 PM Yang Shi <shy828301@gmail.com> wrote:
-> > > On Mon, Nov 28, 2022 at 11:57 AM Jann Horn <jannh@google.com> wrote:
-> > > >
-> > > > On Mon, Nov 28, 2022 at 8:54 PM Yang Shi <shy828301@gmail.com> wrote:
-> > > > >
-> > > > > On Mon, Nov 28, 2022 at 10:03 AM Jann Horn <jannh@google.com> wrote:
-> > > > > >
-> > > > > > Since commit 70cbc3cc78a99 ("mm: gup: fix the fast GUP race against THP
-> > > > > > collapse"), the lockless_pages_from_mm() fastpath rechecks the pmd_t to
-> > > > > > ensure that the page table was not removed by khugepaged in between.
-> > > > > >
-> > > > > > However, lockless_pages_from_mm() still requires that the page table is not
-> > > > > > concurrently freed or reused to store non-PTE data. Otherwise, problems
-> > > > > > can occur because:
-> > > > > >
-> > > > > >  - deposited page tables can be freed when a THP page somewhere in the
-> > > > > >    mm is removed
-> > > > > >  - some architectures store non-PTE information inside deposited page
-> > > > > >    tables (see radix__pgtable_trans_huge_deposit())
-> > > > > >
-> > > > > > Additionally, lockless_pages_from_mm() is also somewhat brittle with
-> > > > > > regards to page tables being repeatedly moved back and forth, but
-> > > > > > that shouldn't be an issue in practice.
-> > > > > >
-> > > > > > Fix it by sending IPIs (if the architecture uses
-> > > > > > semi-RCU-style page table freeing) before freeing/reusing page tables.
-> > > > > >
-> > > > > > As noted in mm/gup.c, on configs that define CONFIG_HAVE_FAST_GUP,
-> > > > > > there are two possible cases:
-> > > > > >
-> > > > > >  1. CONFIG_MMU_GATHER_RCU_TABLE_FREE is set, causing
-> > > > > >     tlb_remove_table_sync_one() to send an IPI to synchronize with
-> > > > > >     lockless_pages_from_mm().
-> > > > > >  2. CONFIG_MMU_GATHER_RCU_TABLE_FREE is unset, indicating that all
-> > > > > >     TLB flushes are already guaranteed to send IPIs.
-> > > > > >     tlb_remove_table_sync_one() will do nothing, but we've already
-> > > > > >     run pmdp_collapse_flush(), which did a TLB flush, which must have
-> > > > > >     involved IPIs.
-> > > > >
-> > > > > I'm trying to catch up with the discussion after the holiday break. I
-> > > > > understand you switched from always allocating a new page table page
-> > > > > (we decided before) to sending IPIs to serialize against fast-GUP,
-> > > > > this is fine to me.
-> > > > >
-> > > > > So the code now looks like:
-> > > > >     pmdp_collapse_flush()
-> > > > >     sending IPI
-> > > > >
-> > > > > But the missing part is how we reached "TLB flushes are already
-> > > > > guaranteed to send IPIs" when CONFIG_MMU_GATHER_RCU_TABLE_FREE is
-> > > > > unset? ARM64 doesn't do it IIRC. Or did I miss something?
-> > > >
-> > > > From arch/arm64/Kconfig:
-> > > >
-> > > > select MMU_GATHER_RCU_TABLE_FREE
-> > > >
-> > > > CONFIG_MMU_GATHER_RCU_TABLE_FREE is not a config option that the user
-> > > > can freely toggle; it is an option selected by the architecture.
-> > >
-> > > Aha, I see :-) BTW, shall we revert "mm: gup: fix the fast GUP race
-> > > against THP collapse"? It seems not necessary anymore if this approach
-> > > is used IIUC.
-> >
-> > Yeah, I agree.
+> On 22/11/2022 12:11, Christoph Niedermaier wrote:
+> > The current comment on wakeup-source is a bit confusing, because it isn't
+> > clear at first sight which property is actually deprecated.
+> > Change the comment to one that is less confusing.
 >
-> Since this patch could solve two problems: the use-after-free of the
-> data page (pinned by fast-GUP) and the page table page and my patch
-> will be reverted, so could you please catch both issues in this
-> patch's commit log? I'd like to preserve the description of the issue
-> fixed by my patch. I think that it is helpful to see the information
-> about all the fixed problems in one commit instead of digging into
-> another reverted commit.
+> It's still confusing - you mention some non-existing property. I don't
+> think it's worth to touch it. If you insist, drop entire comment...
 
-OK, I will rewrite the commit message to describe the overall problem,
-including the part addressed by your patch.
+Hmm, it doesn't look that easy to me. The "enable-sdio-wakeup" is
+indeed a deprecated wakeup property [1], but it seems like it's not
+really described somewhere. I wouldn't mind removing it (as it seems
+to add some confusions), but in that case it needs to be entirely
+removed from the DT docs, right?
+
+Another option, would be to add a proper description of the property
+and mark it with "deprecated: true".
+
+>
+> >
+> > Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+> > ---
+> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> > Cc: Marek Vasut <marex@denx.de>
+> > Cc: kernel@dh-electronics.com
+> > Cc: linux-mmc@vger.kernel.org
+> > Cc: devicetree@vger.kernel.org
+> > To: linux-kernel@vger.kernel.org
+> > ---
+> >  Documentation/devicetree/bindings/mmc/mmc-controller.yaml | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> > index 802e3ca8be4d..a921442c6c1d 100644
+> > --- a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> > +++ b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> > @@ -293,7 +293,7 @@ properties:
+> >      description:
+> >        SDIO only. Preserves card power during a suspend/resume cycle.
+> >
+> > -  # Deprecated: enable-sdio-wakeup
+> > +  # Use wakeup-source instead of the deprecated enable-sdio-wakeup
+> >    wakeup-source:
+> >      $ref: /schemas/types.yaml#/definitions/flag
+> >      description:
+
+Kind regards
+Uffe
+
+[1]
+Documentation/devicetree/bindings/power/wakeup-source.txt
