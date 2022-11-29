@@ -2,474 +2,779 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224FD63BEFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 507CA63BEF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:30:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbiK2Lai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 06:30:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
+        id S231630AbiK2LaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 06:30:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231991AbiK2La2 (ORCPT
+        with ESMTP id S229630AbiK2LaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 06:30:28 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0692448749
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:30:22 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3c21d6e2f3aso74967447b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:30:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=beRs3v7jTtffV0p/FLvTaPLQgJBDm8Bmos1QSc2OnQg=;
-        b=sBhEiwr/0pfQsvYuZsg5OancpgGGQ/F1TyOgQbGZv0Qeo2dU7FUlQzA1I3J3+8uaxm
-         FzfZ33IB42llF5M+fHanqtHmSZxJa3oAVFqz6OfBwh8eFtW3b8bPvmCjN5o+ASGKFXlL
-         RA5dRJwa7hRNfTNTHvsaEtNiKITa++5nw4ao1l6PrCW8lTQjhXvgvq8E0FY4qwXBtxRF
-         RuoskltTLQw/P+EGdujwgZTxPCJoB5nXOkWmOPs2q8HxH9FXj15gCQoUJRwhPbKbX7iL
-         HzHCXo2qKPkQ9qW78owhG0r1apI7caB02euudvJdBzqZ4lAUEBWMnFgazqQ2ACb8HJOZ
-         xDGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=beRs3v7jTtffV0p/FLvTaPLQgJBDm8Bmos1QSc2OnQg=;
-        b=ZV1PKORpoZqASLpd8vyAQwVVWrziW9SK8D9NgFWeEvCBdhit1v1hznDJpXAA4X0NNQ
-         MXRKqFdFvE/dElFAQatvy49Hr3ltebF2t/PhzLrKFsbXLo5WKLLS2Q7ibjZeTu9l6Jvg
-         SIKnKCr9CAb1BNXgwU0H+1lwRF6s1FjU0NHjkQoeFbvaxXC1MDrdeFPCFEIcvmCAkvYb
-         L3q5/kcdYrFBG9v5qx3rZ8v/hTmawuP1NvBmnCr3UhQJWrKrnw9/rC2s96EyC03kKSeS
-         HOHi6agAuRLT06ahNl7SqqdlIYZsMB8GOs1iSITxsR8wv3xRQfrMuODDujdmZrkuL+jZ
-         36jw==
-X-Gm-Message-State: ANoB5plJXcjcpQjKp3WLwSOB3fMLozv05nGmfylyXr1LIEPcR7BIXzwS
-        xhkYjVDT56pE2+FA373S8uz1DhgKem4eS56/8ZfONA==
-X-Google-Smtp-Source: AA0mqf4FPbjmScXINxiPquQ7p1fJukJpm7Yxb/BNHLi1oiCdnj0uMDp8SiPz12tCFe9VSuwnDsiSLiFIhXlUbG223SU=
-X-Received: by 2002:a81:1915:0:b0:3bf:9e45:1139 with SMTP id
- 21-20020a811915000000b003bf9e451139mr14791411ywz.267.1669721421365; Tue, 29
- Nov 2022 03:30:21 -0800 (PST)
+        Tue, 29 Nov 2022 06:30:13 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3473C6C8;
+        Tue, 29 Nov 2022 03:30:10 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E2E744DA;
+        Tue, 29 Nov 2022 12:30:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1669721408;
+        bh=PU/ryQeYN6S79w3EZUWlq7MUM8YYYWe5eHEgcy7p7JA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ImnJYWedCcJeuf1ALOf10GDGhVaYhozRaGOgNn/Ch+cSN1JT40CsnWlr9KxUnapmL
+         PBmnskD089SIj08CRFz7cYfwRJoHFOEOi8hDpq5ppuk4ltZDfdK/1MZeKejhhhyJ54
+         SqgrJCMpItOdu7EV+z9Y6NS3NXqfkZXYJ6616cM4=
+Message-ID: <d11033df-e103-e33c-c61a-a0725f7098b1@ideasonboard.com>
+Date:   Tue, 29 Nov 2022 13:30:04 +0200
 MIME-Version: 1.0
-References: <4c341c5609ed09ad6d52f937eeec28d142ff1f46.1669489329.git.andreyknvl@google.com>
-In-Reply-To: <4c341c5609ed09ad6d52f937eeec28d142ff1f46.1669489329.git.andreyknvl@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 29 Nov 2022 12:29:45 +0100
-Message-ID: <CANpmjNODh5mjyPDGpkLyj1MZWHr1eimRSDpX=WYFQRG_sn5JRA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] kasan: allow sampling page_alloc allocations for HW_TAGS
-To:     andrey.konovalov@linux.dev
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>,
-        Jann Horn <jannh@google.com>,
-        Mark Brand <markbrand@google.com>, netdev@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 7/7] drm: rcar-du: dsi: Add r8a779g0 support
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+References: <20221123065946.40415-1-tomi.valkeinen+renesas@ideasonboard.com>
+ <20221123065946.40415-8-tomi.valkeinen+renesas@ideasonboard.com>
+ <Y4VlHIpS9UnvWwt/@pendragon.ideasonboard.com>
+From:   Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+In-Reply-To: <Y4VlHIpS9UnvWwt/@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 26 Nov 2022 at 20:12, <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> Add a new boot parameter called kasan.page_alloc.sample, which makes
-> Hardware Tag-Based KASAN tag only every Nth page_alloc allocation for
-> allocations marked with __GFP_KASAN_SAMPLE.
+On 29/11/2022 03:49, Laurent Pinchart wrote:
+> Hi Tomi,
+> 
+> Thank you for the patch.
+> 
+> On Wed, Nov 23, 2022 at 08:59:46AM +0200, Tomi Valkeinen wrote:
+>> Add DSI support for r8a779g0. The main differences to r8a779a0 are in
+>> the PLL and PHTW setups.
+>>
+>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+>> ---
+>>   drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c      | 484 +++++++++++++++----
+>>   drivers/gpu/drm/rcar-du/rcar_mipi_dsi_regs.h |   6 +-
+>>   2 files changed, 384 insertions(+), 106 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c b/drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c
+>> index a7f2b7f66a17..723c35726c38 100644
+>> --- a/drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c
+>> +++ b/drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c
+>> @@ -9,6 +9,7 @@
+>>   #include <linux/delay.h>
+>>   #include <linux/io.h>
+>>   #include <linux/iopoll.h>
+>> +#include <linux/math64.h>
+>>   #include <linux/module.h>
+>>   #include <linux/of.h>
+>>   #include <linux/of_device.h>
+>> @@ -28,6 +29,20 @@
+>>   #include "rcar_mipi_dsi.h"
+>>   #include "rcar_mipi_dsi_regs.h"
+>>   
+>> +#define MHZ(v) ((v) * 1000000u)
+> 
+> Isn't the U suffix usually spelled in uppercase ? Same below.
 
-This is new - why was it decided that this is a better design?
+I couldn't find any coding style guidelines on that. I like the lower 
+case visually. The suffix stands out much clearer on 10000000u than on 
+10000000U. But I can change it if you feel otherwise.
 
-This means we have to go around introducing the GFP_KASAN_SAMPLE flag
-everywhere where we think it might cause a performance degradation.
+>> +
+>> +enum rcar_mipi_dsi_hw_model {
+>> +	RCAR_DSI_R8A779A0,
+>> +	RCAR_DSI_R8A779G0,
+>> +};
+>> +
+>> +struct rcar_mipi_dsi_device_info {
+>> +	enum rcar_mipi_dsi_hw_model model;
+>> +	const struct dsi_clk_config *clk_cfg;
+>> +	u8 clockset2_m_offset;
+>> +	u8 clockset2_n_offset;
+>> +};
+>> +
+>>   struct rcar_mipi_dsi {
+>>   	struct device *dev;
+>>   	const struct rcar_mipi_dsi_device_info *info;
+>> @@ -50,6 +65,17 @@ struct rcar_mipi_dsi {
+>>   	unsigned int lanes;
+>>   };
+>>   
+>> +struct dsi_setup_info {
+>> +	unsigned long hsfreq;
+>> +	u16 hsfreqrange;
+>> +
+>> +	unsigned long fout;
+>> +	u16 m;
+>> +	u16 n;
+>> +	u16 vclk_divider;
+>> +	const struct dsi_clk_config *clkset;
+>> +};
+>> +
+>>   static inline struct rcar_mipi_dsi *
+>>   bridge_to_rcar_mipi_dsi(struct drm_bridge *bridge)
+>>   {
+>> @@ -62,22 +88,6 @@ host_to_rcar_mipi_dsi(struct mipi_dsi_host *host)
+>>   	return container_of(host, struct rcar_mipi_dsi, host);
+>>   }
+>>   
+>> -static const u32 phtw[] = {
+>> -	0x01020114, 0x01600115, /* General testing */
+>> -	0x01030116, 0x0102011d, /* General testing */
+>> -	0x011101a4, 0x018601a4, /* 1Gbps testing */
+>> -	0x014201a0, 0x010001a3, /* 1Gbps testing */
+>> -	0x0101011f,		/* 1Gbps testing */
+>> -};
+>> -
+>> -static const u32 phtw2[] = {
+>> -	0x010c0130, 0x010c0140, /* General testing */
+>> -	0x010c0150, 0x010c0180, /* General testing */
+>> -	0x010c0190,
+>> -	0x010a0160, 0x010a0170,
+>> -	0x01800164, 0x01800174,	/* 1Gbps testing */
+>> -};
+>> -
+>>   static const u32 hsfreqrange_table[][2] = {
+>>   	{ 80000000U,   0x00 }, { 90000000U,   0x10 }, { 100000000U,  0x20 },
+>>   	{ 110000000U,  0x30 }, { 120000000U,  0x01 }, { 130000000U,  0x11 },
+>> @@ -103,24 +113,53 @@ static const u32 hsfreqrange_table[][2] = {
+>>   	{ /* sentinel */ },
+>>   };
+>>   
+>> -struct vco_cntrl_value {
+>> +struct dsi_clk_config {
+>>   	u32 min_freq;
+>>   	u32 max_freq;
+>> -	u16 value;
+>> +	u8 vco_cntrl;
+>> +	u8 cpbias_cntrl;
+>> +	u8 gmp_cntrl;
+>> +	u8 int_cntrl;
+>> +	u8 prop_cntrl;
+>>   };
+>>   
+>> -static const struct vco_cntrl_value vco_cntrl_table[] = {
+>> -	{ .min_freq = 40000000U,   .max_freq = 55000000U,   .value = 0x3f },
+>> -	{ .min_freq = 52500000U,   .max_freq = 80000000U,   .value = 0x39 },
+>> -	{ .min_freq = 80000000U,   .max_freq = 110000000U,  .value = 0x2f },
+>> -	{ .min_freq = 105000000U,  .max_freq = 160000000U,  .value = 0x29 },
+>> -	{ .min_freq = 160000000U,  .max_freq = 220000000U,  .value = 0x1f },
+>> -	{ .min_freq = 210000000U,  .max_freq = 320000000U,  .value = 0x19 },
+>> -	{ .min_freq = 320000000U,  .max_freq = 440000000U,  .value = 0x0f },
+>> -	{ .min_freq = 420000000U,  .max_freq = 660000000U,  .value = 0x09 },
+>> -	{ .min_freq = 630000000U,  .max_freq = 1149000000U, .value = 0x03 },
+>> -	{ .min_freq = 1100000000U, .max_freq = 1152000000U, .value = 0x01 },
+>> -	{ .min_freq = 1150000000U, .max_freq = 1250000000U, .value = 0x01 },
+>> +static const struct dsi_clk_config dsi_clk_cfg_r8a779a0[] = {
+>> +	{   40000000u,   55000000u, 0x3f, 0x10, 0x01, 0x00, 0x0b },
+>> +	{   52500000u,   80000000u, 0x39, 0x10, 0x01, 0x00, 0x0b },
+> 
+> Would MHZ(52.5) do the right thing ? If so, I'd use the macro through
+> those tables.
 
-This depends on accurate benchmarks. Yet, not everyone's usecases will
-be the same. I fear we might end up with marking nearly all frequent
-and large page-alloc allocations with GFP_KASAN_SAMPLE.
+That's a great idea. It had never occurred to me that we can use floats 
+in the kernel code, as long as we convert to ints when the preprocessor 
+is done.
 
-Is it somehow possible to make the sampling decision more automatic?
+>> +	{   80000000u,  110000000u, 0x2f, 0x10, 0x01, 0x00, 0x0b },
+>> +	{  105000000u,  160000000u, 0x29, 0x10, 0x01, 0x00, 0x0b },
+>> +	{  160000000u,  220000000u, 0x1f, 0x10, 0x01, 0x00, 0x0b },
+>> +	{  210000000u,  320000000u, 0x19, 0x10, 0x01, 0x00, 0x0b },
+>> +	{  320000000u,  440000000u, 0x0f, 0x10, 0x01, 0x00, 0x0b },
+>> +	{  420000000u,  660000000u, 0x09, 0x10, 0x01, 0x00, 0x0b },
+>> +	{  630000000u, 1149000000u, 0x03, 0x10, 0x01, 0x00, 0x0b },
+>> +	{ 1100000000u, 1152000000u, 0x01, 0x10, 0x01, 0x00, 0x0b },
+>> +	{ 1150000000u, 1250000000u, 0x01, 0x10, 0x01, 0x00, 0x0c },
+>> +	{ /* sentinel */ },
+>> +};
+>> +
+>> +static const struct dsi_clk_config dsi_clk_cfg_r8a779g0[] = {
+>> +	{   40000000u,   45310000u, 0x2b, 0x00, 0x00, 0x08, 0x0a },
+>> +	{   45310000u,   54660000u, 0x28, 0x00, 0x00, 0x08, 0x0a },
+>> +	{   54660000u,   62500000u, 0x28, 0x00, 0x00, 0x08, 0x0a },
+>> +	{   62500000u,   75000000u, 0x27, 0x00, 0x00, 0x08, 0x0a },
+>> +	{   75000000u,   90630000u, 0x23, 0x00, 0x00, 0x08, 0x0a },
+>> +	{   90630000u,  109370000u, 0x20, 0x00, 0x00, 0x08, 0x0a },
+>> +	{  109370000u,  125000000u, 0x20, 0x00, 0x00, 0x08, 0x0a },
+>> +	{  125000000u,  150000000u, 0x1f, 0x00, 0x00, 0x08, 0x0a },
+>> +	{  150000000u,  181250000u, 0x1b, 0x00, 0x00, 0x08, 0x0a },
+>> +	{  181250000u,  218750000u, 0x18, 0x00, 0x00, 0x08, 0x0a },
+>> +	{  218750000u,  250000000u, 0x18, 0x00, 0x00, 0x08, 0x0a },
+>> +	{  250000000u,  300000000u, 0x17, 0x00, 0x00, 0x08, 0x0a },
+>> +	{  300000000u,  362500000u, 0x13, 0x00, 0x00, 0x08, 0x0a },
+>> +	{  362500000u,  455480000u, 0x10, 0x00, 0x00, 0x08, 0x0a },
+>> +	{  455480000u,  500000000u, 0x10, 0x00, 0x00, 0x08, 0x0a },
+>> +	{  500000000u,  600000000u, 0x0f, 0x00, 0x00, 0x08, 0x0a },
+>> +	{  600000000u,  725000000u, 0x0b, 0x00, 0x00, 0x08, 0x0a },
+>> +	{  725000000u,  875000000u, 0x08, 0x00, 0x00, 0x08, 0x0a },
+>> +	{  875000000u, 1000000000u, 0x08, 0x00, 0x00, 0x08, 0x0a },
+>> +	{ 1000000000u, 1200000000u, 0x07, 0x00, 0x00, 0x08, 0x0a },
+>> +	{ 1200000000u, 1250000000u, 0x03, 0x00, 0x00, 0x08, 0x0a },
+>>   	{ /* sentinel */ },
+>>   };
+>>   
+>> @@ -144,7 +183,7 @@ static void rcar_mipi_dsi_set(struct rcar_mipi_dsi *dsi, u32 reg, u32 set)
+>>   	rcar_mipi_dsi_write(dsi, reg, rcar_mipi_dsi_read(dsi, reg) | set);
+>>   }
+>>   
+>> -static int rcar_mipi_dsi_phtw_test(struct rcar_mipi_dsi *dsi, u32 phtw)
+>> +static int rcar_mipi_dsi_write_phtw(struct rcar_mipi_dsi *dsi, u32 phtw)
+>>   {
+>>   	u32 status;
+>>   	int ret;
+>> @@ -163,32 +202,231 @@ static int rcar_mipi_dsi_phtw_test(struct rcar_mipi_dsi *dsi, u32 phtw)
+>>   	return ret;
+>>   }
+>>   
+>> +static int rcar_mipi_dsi_write_phtw_arr(struct rcar_mipi_dsi *dsi,
+>> +					const u32 *phtw, unsigned int size)
+>> +{
+>> +	for (unsigned int i = 0; i < size; i++) {
+>> +		int ret = rcar_mipi_dsi_write_phtw(dsi, phtw[i]);
+>> +
+>> +		if (ret < 0)
+>> +			return ret;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +#define WRITE_PHTW(...)                                               \
+>> +	({                                                            \
+>> +		static const u32 phtw[] = { __VA_ARGS__ };            \
+>> +		int ret;                                              \
+>> +		ret = rcar_mipi_dsi_write_phtw_arr(dsi, phtw,         \
+>> +						   ARRAY_SIZE(phtw)); \
+>> +		ret;                                                  \
+>> +	})
+>> +
+>> +static int rcar_mipi_dsi_init_phtw_v3u(struct rcar_mipi_dsi *dsi)
+> 
+> You're mixing the R8A779* names and the short names. I'd use one of the
+> two and stick to it, probably the short name (up to you).
 
-E.g. kasan.page_alloc.sample_order -> only sample page-alloc
-allocations with order greater or equal to sample_order.
+Hmm that's true. The short names are easier to distinguish visually, so 
+I'll use those.
 
-> As Hardware Tag-Based KASAN is intended to be used in production, its
-> performance impact is crucial. As page_alloc allocations tend to be big,
-> tagging and checking all such allocations can introduce a significant
-> slowdown. The new flag allows to alleviate that slowdown for chosen
-> allocations.
->
-> The exact performance improvement caused by using __GFP_KASAN_SAMPLE and
-> kasan.page_alloc.sample depends on how often the marked allocations happen
-> and how large the are. See the next patch for the details about marking and
-> sampling skb allocations.
->
-> Enabling page_alloc sampling has a downside: KASAN will miss bad accesses
-> to a page_alloc allocation that has not been tagged.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
->
-> ---
->
-> Changes v1->v2:
-> - Only sample allocations when __GFP_KASAN_SAMPLE is provided to
->   alloc_pages().
-> - Fix build when KASAN is disabled.
-> - Add more information about the flag to documentation.
-> - Use optimized preemption-safe approach for sampling suggested by Marco.
-> ---
->  Documentation/dev-tools/kasan.rst |  8 ++++++
->  include/linux/gfp_types.h         | 10 +++++--
->  include/linux/kasan.h             | 18 ++++++++-----
->  include/trace/events/mmflags.h    |  3 ++-
->  mm/kasan/common.c                 | 10 +++++--
->  mm/kasan/hw_tags.c                | 26 ++++++++++++++++++
->  mm/kasan/kasan.h                  | 19 +++++++++++++
->  mm/mempool.c                      |  2 +-
->  mm/page_alloc.c                   | 44 +++++++++++++++++++++----------
->  9 files changed, 114 insertions(+), 26 deletions(-)
->
-> diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/kasan.rst
-> index 5c93ab915049..bd6d064c7419 100644
-> --- a/Documentation/dev-tools/kasan.rst
-> +++ b/Documentation/dev-tools/kasan.rst
-> @@ -140,6 +140,14 @@ disabling KASAN altogether or controlling its features:
->  - ``kasan.vmalloc=off`` or ``=on`` disables or enables tagging of vmalloc
->    allocations (default: ``on``).
->
-> +- ``kasan.page_alloc.sample=<sampling interval>`` makes KASAN tag only every
-> +  Nth page_alloc allocation for allocations marked with __GFP_KASAN_SAMPLE,
-> +  where N is the value of the parameter (default: ``1``).
-> +  This parameter is intended to mitigate the performance overhead.
-> +  Note that enabling this parameter makes Hardware Tag-Based KASAN skip checks
-> +  of allocations chosen by sampling and thus miss bad accesses to these
-> +  allocations. Use the default value for accurate bug detection.
-> +
->  Error reports
->  ~~~~~~~~~~~~~
->
-> diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
-> index d88c46ca82e1..c322cd159445 100644
-> --- a/include/linux/gfp_types.h
-> +++ b/include/linux/gfp_types.h
-> @@ -50,13 +50,15 @@ typedef unsigned int __bitwise gfp_t;
->  #define ___GFP_SKIP_ZERO               0x1000000u
->  #define ___GFP_SKIP_KASAN_UNPOISON     0x2000000u
->  #define ___GFP_SKIP_KASAN_POISON       0x4000000u
-> +#define ___GFP_KASAN_SAMPLE            0x8000000u
->  #else
->  #define ___GFP_SKIP_ZERO               0
->  #define ___GFP_SKIP_KASAN_UNPOISON     0
->  #define ___GFP_SKIP_KASAN_POISON       0
-> +#define ___GFP_KASAN_SAMPLE            0
->  #endif
->  #ifdef CONFIG_LOCKDEP
-> -#define ___GFP_NOLOCKDEP       0x8000000u
-> +#define ___GFP_NOLOCKDEP       0x10000000u
->  #else
->  #define ___GFP_NOLOCKDEP       0
->  #endif
-> @@ -243,6 +245,9 @@ typedef unsigned int __bitwise gfp_t;
->   *
->   * %__GFP_SKIP_KASAN_POISON makes KASAN skip poisoning on page deallocation.
->   * Typically, used for userspace pages. Only effective in HW_TAGS mode.
-> + *
-> + * %__GFP_KASAN_SAMPLE makes KASAN use sampling to skip poisoning and
-> + * unpoisoning of page allocations. Only effective in HW_TAGS mode.
->   */
->  #define __GFP_NOWARN   ((__force gfp_t)___GFP_NOWARN)
->  #define __GFP_COMP     ((__force gfp_t)___GFP_COMP)
-> @@ -251,12 +256,13 @@ typedef unsigned int __bitwise gfp_t;
->  #define __GFP_SKIP_ZERO ((__force gfp_t)___GFP_SKIP_ZERO)
->  #define __GFP_SKIP_KASAN_UNPOISON ((__force gfp_t)___GFP_SKIP_KASAN_UNPOISON)
->  #define __GFP_SKIP_KASAN_POISON   ((__force gfp_t)___GFP_SKIP_KASAN_POISON)
-> +#define __GFP_KASAN_SAMPLE        ((__force gfp_t)___GFP_KASAN_SAMPLE)
->
->  /* Disable lockdep for GFP context tracking */
->  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
->
->  /* Room for N __GFP_FOO bits */
-> -#define __GFP_BITS_SHIFT (27 + IS_ENABLED(CONFIG_LOCKDEP))
-> +#define __GFP_BITS_SHIFT (28 + IS_ENABLED(CONFIG_LOCKDEP))
->  #define __GFP_BITS_MASK ((__force gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
->
->  /**
-> diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-> index d811b3d7d2a1..4cc946b8cbc8 100644
-> --- a/include/linux/kasan.h
-> +++ b/include/linux/kasan.h
-> @@ -120,12 +120,15 @@ static __always_inline void kasan_poison_pages(struct page *page,
->                 __kasan_poison_pages(page, order, init);
->  }
->
-> -void __kasan_unpoison_pages(struct page *page, unsigned int order, bool init);
-> -static __always_inline void kasan_unpoison_pages(struct page *page,
-> -                                                unsigned int order, bool init)
-> +bool __kasan_unpoison_pages(struct page *page, unsigned int order,
-> +                           bool init, bool sample);
-> +static __always_inline bool kasan_unpoison_pages(struct page *page,
-> +                                                unsigned int order,
-> +                                                bool init, bool sample)
->  {
->         if (kasan_enabled())
-> -               __kasan_unpoison_pages(page, order, init);
-> +               return __kasan_unpoison_pages(page, order, init, sample);
-> +       return false;
->  }
->
->  void __kasan_cache_create_kmalloc(struct kmem_cache *cache);
-> @@ -249,8 +252,11 @@ static __always_inline bool kasan_check_byte(const void *addr)
->  static inline void kasan_unpoison_range(const void *address, size_t size) {}
->  static inline void kasan_poison_pages(struct page *page, unsigned int order,
->                                       bool init) {}
-> -static inline void kasan_unpoison_pages(struct page *page, unsigned int order,
-> -                                       bool init) {}
-> +static inline bool kasan_unpoison_pages(struct page *page, unsigned int order,
-> +                                       bool init, bool sample)
-> +{
-> +       return false;
-> +}
->  static inline void kasan_cache_create_kmalloc(struct kmem_cache *cache) {}
->  static inline void kasan_poison_slab(struct slab *slab) {}
->  static inline void kasan_unpoison_object_data(struct kmem_cache *cache,
-> diff --git a/include/trace/events/mmflags.h b/include/trace/events/mmflags.h
-> index e87cb2b80ed3..bcaecf859d1f 100644
-> --- a/include/trace/events/mmflags.h
-> +++ b/include/trace/events/mmflags.h
-> @@ -57,7 +57,8 @@
->  #define __def_gfpflag_names_kasan ,                    \
->         gfpflag_string(__GFP_SKIP_ZERO),                \
->         gfpflag_string(__GFP_SKIP_KASAN_POISON),        \
-> -       gfpflag_string(__GFP_SKIP_KASAN_UNPOISON)
-> +       gfpflag_string(__GFP_SKIP_KASAN_UNPOISON),      \
-> +       gfpflag_string(__GFP_KASAN_SAMPLE)
->  #else
->  #define __def_gfpflag_names_kasan
->  #endif
-> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-> index 833bf2cfd2a3..05d799ada873 100644
-> --- a/mm/kasan/common.c
-> +++ b/mm/kasan/common.c
-> @@ -95,19 +95,25 @@ asmlinkage void kasan_unpoison_task_stack_below(const void *watermark)
->  }
->  #endif /* CONFIG_KASAN_STACK */
->
-> -void __kasan_unpoison_pages(struct page *page, unsigned int order, bool init)
-> +bool __kasan_unpoison_pages(struct page *page, unsigned int order,
-> +                           bool init, bool sample)
->  {
->         u8 tag;
->         unsigned long i;
->
->         if (unlikely(PageHighMem(page)))
-> -               return;
-> +               return false;
-> +
-> +       if (sample && !kasan_sample_page_alloc())
-> +               return false;
->
->         tag = kasan_random_tag();
->         kasan_unpoison(set_tag(page_address(page), tag),
->                        PAGE_SIZE << order, init);
->         for (i = 0; i < (1 << order); i++)
->                 page_kasan_tag_set(page + i, tag);
-> +
-> +       return true;
->  }
->
->  void __kasan_poison_pages(struct page *page, unsigned int order, bool init)
-> diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
-> index b22c4f461cb0..5e6571820a3f 100644
-> --- a/mm/kasan/hw_tags.c
-> +++ b/mm/kasan/hw_tags.c
-> @@ -59,6 +59,11 @@ EXPORT_SYMBOL_GPL(kasan_mode);
->  /* Whether to enable vmalloc tagging. */
->  DEFINE_STATIC_KEY_TRUE(kasan_flag_vmalloc);
->
-> +/* Sampling interval of page_alloc allocation (un)poisoning. */
-> +unsigned long kasan_page_alloc_sample = 1;
-> +
-> +DEFINE_PER_CPU(long, kasan_page_alloc_skip);
-> +
->  /* kasan=off/on */
->  static int __init early_kasan_flag(char *arg)
->  {
-> @@ -122,6 +127,27 @@ static inline const char *kasan_mode_info(void)
->                 return "sync";
->  }
->
-> +/* kasan.page_alloc.sample=<sampling interval> */
-> +static int __init early_kasan_flag_page_alloc_sample(char *arg)
-> +{
-> +       int rv;
-> +
-> +       if (!arg)
-> +               return -EINVAL;
-> +
-> +       rv = kstrtoul(arg, 0, &kasan_page_alloc_sample);
-> +       if (rv)
-> +               return rv;
-> +
-> +       if (!kasan_page_alloc_sample || kasan_page_alloc_sample > LONG_MAX) {
-> +               kasan_page_alloc_sample = 1;
-> +               return -EINVAL;
-> +       }
-> +
-> +       return 0;
-> +}
-> +early_param("kasan.page_alloc.sample", early_kasan_flag_page_alloc_sample);
-> +
->  /*
->   * kasan_init_hw_tags_cpu() is called for each CPU.
->   * Not marked as __init as a CPU can be hot-plugged after boot.
-> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-> index abbcc1b0eec5..ce0b30889587 100644
-> --- a/mm/kasan/kasan.h
-> +++ b/mm/kasan/kasan.h
-> @@ -42,6 +42,9 @@ enum kasan_mode {
->
->  extern enum kasan_mode kasan_mode __ro_after_init;
->
-> +extern unsigned long kasan_page_alloc_sample;
-> +DECLARE_PER_CPU(long, kasan_page_alloc_skip);
-> +
->  static inline bool kasan_vmalloc_enabled(void)
->  {
->         return static_branch_likely(&kasan_flag_vmalloc);
-> @@ -57,6 +60,17 @@ static inline bool kasan_sync_fault_possible(void)
->         return kasan_mode == KASAN_MODE_SYNC || kasan_mode == KASAN_MODE_ASYMM;
->  }
->
-> +static inline bool kasan_sample_page_alloc(void)
-> +{
-> +       if (this_cpu_dec_return(kasan_page_alloc_skip) < 0) {
-> +               this_cpu_write(kasan_page_alloc_skip,
-> +                              kasan_page_alloc_sample - 1);
-> +               return true;
-> +       }
-> +
-> +       return false;
-> +}
-> +
->  #else /* CONFIG_KASAN_HW_TAGS */
->
->  static inline bool kasan_async_fault_possible(void)
-> @@ -69,6 +83,11 @@ static inline bool kasan_sync_fault_possible(void)
->         return true;
->  }
->
-> +static inline bool kasan_sample_page_alloc(void)
-> +{
-> +       return true;
-> +}
-> +
->  #endif /* CONFIG_KASAN_HW_TAGS */
->
->  #ifdef CONFIG_KASAN_GENERIC
-> diff --git a/mm/mempool.c b/mm/mempool.c
-> index 96488b13a1ef..d3b3702e5191 100644
-> --- a/mm/mempool.c
-> +++ b/mm/mempool.c
-> @@ -115,7 +115,7 @@ static void kasan_unpoison_element(mempool_t *pool, void *element)
->                 kasan_unpoison_range(element, __ksize(element));
->         else if (pool->alloc == mempool_alloc_pages)
->                 kasan_unpoison_pages(element, (unsigned long)pool->pool_data,
-> -                                    false);
-> +                                    false, false);
->  }
->
->  static __always_inline void add_element(mempool_t *pool, void *element)
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 6e60657875d3..969b0e4f0046 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -1367,6 +1367,8 @@ static int free_tail_pages_check(struct page *head_page, struct page *page)
->   *    see the comment next to it.
->   * 3. Skipping poisoning is requested via __GFP_SKIP_KASAN_POISON,
->   *    see the comment next to it.
-> + * 4. The allocation is excluded from being checked due to sampling,
-> + *    see the call to kasan_unpoison_pages.
->   *
->   * Poisoning pages during deferred memory init will greatly lengthen the
->   * process and cause problem in large memory systems as the deferred pages
-> @@ -2476,7 +2478,8 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
->  {
->         bool init = !want_init_on_free() && want_init_on_alloc(gfp_flags) &&
->                         !should_skip_init(gfp_flags);
-> -       bool init_tags = init && (gfp_flags & __GFP_ZEROTAGS);
-> +       bool zero_tags = init && (gfp_flags & __GFP_ZEROTAGS);
-> +       bool reset_tags = !zero_tags;
->         int i;
->
->         set_page_private(page, 0);
-> @@ -2499,30 +2502,43 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
->          */
->
->         /*
-> -        * If memory tags should be zeroed (which happens only when memory
-> -        * should be initialized as well).
-> +        * If memory tags should be zeroed
-> +        * (which happens only when memory should be initialized as well).
->          */
-> -       if (init_tags) {
-> +       if (zero_tags) {
->                 /* Initialize both memory and tags. */
->                 for (i = 0; i != 1 << order; ++i)
->                         tag_clear_highpage(page + i);
->
-> -               /* Note that memory is already initialized by the loop above. */
-> +               /* Take note that memory was initialized by the loop above. */
->                 init = false;
->         }
->         if (!should_skip_kasan_unpoison(gfp_flags)) {
-> -               /* Unpoison shadow memory or set memory tags. */
-> -               kasan_unpoison_pages(page, order, init);
-> -
-> -               /* Note that memory is already initialized by KASAN. */
-> -               if (kasan_has_integrated_init())
-> -                       init = false;
-> -       } else {
-> -               /* Ensure page_address() dereferencing does not fault. */
-> +               /* Try unpoisoning (or setting tags) and initializing memory. */
-> +               if (kasan_unpoison_pages(page, order, init,
-> +                                        gfp_flags & __GFP_KASAN_SAMPLE)) {
-> +                       /* Take note that memory was initialized by KASAN. */
-> +                       if (kasan_has_integrated_init())
-> +                               init = false;
-> +                       /* Take note that memory tags were set by KASAN. */
-> +                       reset_tags = false;
-> +               } else {
-> +                       /*
-> +                        * KASAN decided to exclude this allocation from being
-> +                        * poisoned due to sampling. Skip poisoning as well.
-> +                        */
-> +                       SetPageSkipKASanPoison(page);
-> +               }
-> +       }
-> +       /*
-> +        * If memory tags have not been set, reset the page tags to ensure
-> +        * page_address() dereferencing does not fault.
-> +        */
-> +       if (reset_tags) {
->                 for (i = 0; i != 1 << order; ++i)
->                         page_kasan_tag_reset(page + i);
->         }
-> -       /* If memory is still not initialized, do it now. */
-> +       /* If memory is still not initialized, initialize it now. */
->         if (init)
->                 kernel_init_pages(page, 1 << order);
->         /* Propagate __GFP_SKIP_KASAN_POISON to page flags. */
-> --
-> 2.25.1
->
+>> +{
+>> +	return WRITE_PHTW(0x01020114, 0x01600115, 0x01030116, 0x0102011d,
+>> +			  0x011101a4, 0x018601a4, 0x014201a0, 0x010001a3,
+>> +			  0x0101011f);
+>> +}
+>> +
+>> +static int rcar_mipi_dsi_post_init_phtw_v3u(struct rcar_mipi_dsi *dsi)
+>> +{
+>> +	return WRITE_PHTW(0x010c0130, 0x010c0140, 0x010c0150, 0x010c0180,
+>> +			  0x010c0190, 0x010a0160, 0x010a0170, 0x01800164,
+>> +			  0x01800174);
+>> +}
+>> +
+>> +static int rcar_mipi_dsi_init_phtw_v4h(struct rcar_mipi_dsi *dsi,
+>> +				       const struct dsi_setup_info *setup_info)
+>> +{
+>> +	int ret;
+>> +
+>> +	if (setup_info->hsfreq < MHZ(450)) {
+>> +		ret = WRITE_PHTW(0x01010100, 0x011b01ac);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+>> +
+>> +	ret = WRITE_PHTW(0x01010100, 0x01030173, 0x01000174, 0x01500175,
+>> +			 0x01030176, 0x01040166, 0x010201ad);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (setup_info->hsfreq <= MHZ(1000))
+>> +		ret = WRITE_PHTW(0x01020100, 0x01910170, 0x01020171,
+>> +				 0x01110172);
+>> +	else if (setup_info->hsfreq <= MHZ(1500))
+>> +		ret = WRITE_PHTW(0x01020100, 0x01980170, 0x01030171,
+>> +				 0x01100172);
+>> +	else if (setup_info->hsfreq <= MHZ(2500))
+>> +		ret = WRITE_PHTW(0x01020100, 0x0144016b, 0x01000172);
+>> +	else
+>> +		return -EINVAL;
+>> +
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (dsi->lanes <= 1) {
+>> +		ret = WRITE_PHTW(0x01070100, 0x010e010b);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+>> +
+>> +	if (dsi->lanes <= 2) {
+>> +		ret = WRITE_PHTW(0x01090100, 0x010e010b);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+>> +
+>> +	if (dsi->lanes <= 3) {
+>> +		ret = WRITE_PHTW(0x010b0100, 0x010e010b);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+>> +
+>> +	if (setup_info->hsfreq <= MHZ(1500)) {
+>> +		ret = WRITE_PHTW(0x01010100, 0x01c0016e);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int
+>> +rcar_mipi_dsi_post_init_phtw_v4h(struct rcar_mipi_dsi *dsi,
+>> +				 const struct dsi_setup_info *setup_info)
+>> +{
+>> +	u32 status;
+>> +	int ret;
+>> +
+>> +	if (setup_info->hsfreq <= MHZ(1500)) {
+>> +		WRITE_PHTW(0x01020100, 0x00000180);
+>> +
+>> +		ret = read_poll_timeout(rcar_mipi_dsi_read, status,
+>> +					status & PHTR_TEST, 2000, 10000, false,
+>> +					dsi, PHTR);
+>> +		if (ret < 0) {
+>> +			dev_err(dsi->dev, "failed to test PHTR\n");
+>> +			return ret;
+>> +		}
+>> +
+>> +		WRITE_PHTW(0x01010100, 0x0100016e);
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   /* -----------------------------------------------------------------------------
+>>    * Hardware Setup
+>>    */
+>>   
+>> -struct dsi_setup_info {
+>> -	unsigned long fout;
+>> -	u16 vco_cntrl;
+>> -	u16 prop_cntrl;
+>> -	u16 hsfreqrange;
+>> -	u16 div;
+>> -	unsigned int m;
+>> -	unsigned int n;
+>> -};
+>> +static void rcar_mipi_dsi_pll_calc_r8a779a0(struct rcar_mipi_dsi *dsi,
+>> +					    struct clk *clk,
+>> +					    unsigned long fout_target,
+>> +					    struct dsi_setup_info *setup_info)
+>> +{
+>> +	unsigned int best_err = -1;
+>> +	unsigned long fin;
+>> +
+>> +	fin = clk_get_rate(clk);
+>> +
+>> +	for (unsigned int n = 3; n <= 8; n++) {
+>> +		unsigned long fpfd;
+>> +
+>> +		fpfd = fin / n;
+>> +
+>> +		if (fpfd < MHZ(2) || fpfd > MHZ(8))
+>> +			continue;
+>> +
+>> +		for (unsigned int m = 64; m <= 625; m++) {
+>> +			unsigned int err;
+>> +			u64 fout;
+>> +
+>> +			fout = (u64)fpfd * m;
+>> +
+>> +			if (fout < MHZ(320) || fout > MHZ(1250))
+>> +				continue;
+>> +
+>> +			fout = div64_u64(fout, setup_info->vclk_divider);
+>> +
+>> +			if (fout < setup_info->clkset->min_freq ||
+>> +			    fout > setup_info->clkset->max_freq)
+>> +				continue;
+>> +
+>> +			err = abs((long)(fout - fout_target) * 10000 /
+>> +				  (long)fout_target);
+>> +
+>> +			if (err < best_err) {
+>> +				setup_info->m = m;
+>> +				setup_info->n = n;
+>> +				setup_info->fout = (unsigned long)fout;
+>> +				best_err = err;
+>> +
+>> +				if (err == 0)
+>> +					return;
+>> +			}
+>> +		}
+>> +	}
+>> +}
+>> +
+>> +static void rcar_mipi_dsi_pll_calc_r8a779g0(struct rcar_mipi_dsi *dsi,
+>> +					    struct clk *clk,
+>> +					    unsigned long fout_target,
+>> +					    struct dsi_setup_info *setup_info)
+>> +{
+>> +	unsigned int best_err = -1;
+>> +	unsigned long fin;
+>> +
+>> +	fin = clk_get_rate(clk);
+> 
+> This could move to the caller.
+
+Ok.
+
+>> +
+>> +	for (unsigned int n = 1; n <= 8; n++) {
+>> +		unsigned long fpfd;
+>> +
+>> +		fpfd = fin / n;
+>> +
+>> +		if (fpfd < MHZ(8) || fpfd > MHZ(24))
+>> +			continue;
+>> +
+>> +		for (unsigned int m = 167; m <= 1000; m++) {
+>> +			unsigned int err;
+>> +			u64 fout;
+>> +
+>> +			fout = div64_u64((u64)fpfd * m, 2);
+>> +
+>> +			if (fout < MHZ(2000) || fout > MHZ(4000))
+>> +				continue;
+>> +
+>> +			fout = div64_u64(fout, setup_info->vclk_divider);
+>> +
+>> +			if (fout < setup_info->clkset->min_freq ||
+>> +			    fout > setup_info->clkset->max_freq)
+>> +				continue;
+>> +
+>> +			err = abs((long)(fout - fout_target) * 10000 /
+>> +				  (long)fout_target);
+> 
+> Add a blank line here, or remove it from the previous function.
+
+Ok.
+
+>> +			if (err < best_err) {
+>> +				setup_info->m = m;
+>> +				setup_info->n = n;
+>> +				setup_info->fout = (unsigned long)fout;
+>> +				best_err = err;
+>> +
+>> +				if (err == 0)
+>> +					return;
+>> +			}
+>> +		}
+>> +	}
+>> +}
+> 
+> This function could be parameterized, up to you.
+
+I thought about it, but it would somewhat obfuscate the code. Now it's 
+easier to look at the HW docs and read the function. If we get more PLL 
+versions, then I think we'll have to create a parametrized version...
+
+>>   
+>>   static void rcar_mipi_dsi_parameters_calc(struct rcar_mipi_dsi *dsi,
+>>   					  struct clk *clk, unsigned long target,
+>>   					  struct dsi_setup_info *setup_info)
+>>   {
+>>   
+>> -	const struct vco_cntrl_value *vco_cntrl;
+>> +	const struct dsi_clk_config *clkset;
+>>   	unsigned long fout_target;
+>> -	unsigned long fin, fout;
+>> -	unsigned long hsfreq;
+>> -	unsigned int best_err = -1;
+>> -	unsigned int divider;
+>> -	unsigned int n;
+>>   	unsigned int i;
+>>   	unsigned int err;
+>>   
+>> @@ -198,70 +436,53 @@ static void rcar_mipi_dsi_parameters_calc(struct rcar_mipi_dsi *dsi,
+>>   	 */
+>>   	fout_target = target * mipi_dsi_pixel_format_to_bpp(dsi->format)
+>>   		    / (2 * dsi->lanes);
+>> -	if (fout_target < 40000000 || fout_target > 1250000000)
+>> +	if (fout_target < MHZ(40) || fout_target > MHZ(1250))
+>>   		return;
+>>   
+>>   	/* Find vco_cntrl */
+>> -	for (vco_cntrl = vco_cntrl_table; vco_cntrl->min_freq != 0; vco_cntrl++) {
+>> -		if (fout_target > vco_cntrl->min_freq &&
+>> -		    fout_target <= vco_cntrl->max_freq) {
+>> -			setup_info->vco_cntrl = vco_cntrl->value;
+>> -			if (fout_target >= 1150000000)
+>> -				setup_info->prop_cntrl = 0x0c;
+>> -			else
+>> -				setup_info->prop_cntrl = 0x0b;
+>> +	for (clkset = dsi->info->clk_cfg; clkset->min_freq != 0; clkset++) {
+>> +		if (fout_target > clkset->min_freq &&
+>> +		    fout_target <= clkset->max_freq) {
+>> +			setup_info->clkset = clkset;
+>>   			break;
+>>   		}
+>>   	}
+>>   
+>> -	/* Add divider */
+>> -	setup_info->div = (setup_info->vco_cntrl & 0x30) >> 4;
+>> +	switch (dsi->info->model) {
+>> +	case RCAR_DSI_R8A779A0:
+>> +		setup_info->vclk_divider = 1 << ((clkset->vco_cntrl >> 4) & 0x3);
+> 
+> If you stored (clkset->vco_cntrl >> 4) & 0x3 in setup_info->vclk_divider
+> you wouldn't have to use __ffs() in rcar_mipi_dsi_startup(). You could
+> also drop the - 1 there, which would allow dropping one of the
+> switch(dsi->info->model). You can store the real divider value in
+> setup_info separately for rcar_mipi_dsi_pll_calc_r8a779a0(), or pass it
+> to the function.
+> 
+>> +		rcar_mipi_dsi_pll_calc_r8a779a0(dsi, clk, fout_target, setup_info);
+>> +		break;
+>> +
+>> +	case RCAR_DSI_R8A779G0:
+>> +		setup_info->vclk_divider = 1 << (((clkset->vco_cntrl >> 3) & 0x7) + 1);
+>> +		rcar_mipi_dsi_pll_calc_r8a779g0(dsi, clk, fout_target, setup_info);
+>> +		break;
+>> +
+>> +	default:
+>> +		return;
+>> +	}
+>>   
+>>   	/* Find hsfreqrange */
+>> -	hsfreq = fout_target * 2;
+>> +	setup_info->hsfreq = setup_info->fout * 2;
+>>   	for (i = 0; i < ARRAY_SIZE(hsfreqrange_table); i++) {
+>> -		if (hsfreqrange_table[i][0] >= hsfreq) {
+>> +		if (hsfreqrange_table[i][0] >= setup_info->hsfreq) {
+>>   			setup_info->hsfreqrange = hsfreqrange_table[i][1];
+>>   			break;
+>>   		}
+>>   	}
+>>   
+>> -	/*
+>> -	 * Calculate n and m for PLL clock
+>> -	 * Following the HW manual the ranges of n and m are
+>> -	 * n = [3-8] and m = [64-625]
+>> -	 */
+> 
+> I'd keep the comment in rcar_mipi_dsi_pll_calc_r8a779a0(), and add a
+> similar comment in rcar_mipi_dsi_pll_calc_r8a779g0().
+
+Well, I dropped the comment as it's just pointing the obvious: we are 
+calculating PLL config, and the n and m ranges are easily visible in the 
+code below. I can add them if you think they are useful.
+
+>> -	fin = clk_get_rate(clk);
+>> -	divider = 1 << setup_info->div;
+>> -	for (n = 3; n < 9; n++) {
+>> -		unsigned long fpfd;
+>> -		unsigned int m;
+>> -
+>> -		fpfd = fin / n;
+>> -
+>> -		for (m = 64; m < 626; m++) {
+>> -			fout = fpfd * m / divider;
+>> -			err = abs((long)(fout - fout_target) * 10000 /
+>> -				  (long)fout_target);
+>> -			if (err < best_err) {
+>> -				setup_info->m = m - 2;
+>> -				setup_info->n = n - 1;
+>> -				setup_info->fout = fout;
+>> -				best_err = err;
+>> -				if (err == 0)
+>> -					goto done;
+>> -			}
+>> -		}
+>> -	}
+>> +	err = abs((long)(setup_info->fout - fout_target) * 10000 / (long)fout_target);
+>>   
+>> -done:
+>>   	dev_dbg(dsi->dev,
+>> -		"%pC %lu Hz -> Fout %lu Hz (target %lu Hz, error %d.%02u%%), PLL M/N/DIV %u/%u/%u\n",
+>> -		clk, fin, setup_info->fout, fout_target, best_err / 100,
+>> -		best_err % 100, setup_info->m, setup_info->n, setup_info->div);
+>> +		"Fout = %u * %lu / (2 * %u * %u) = %lu (target %lu Hz, error %d.%02u%%)\n",
+> 
+> Is the "2 *" valid on V3U too ?
+
+Good catch. It is not.
+
+>> +		setup_info->m, clk_get_rate(clk), setup_info->n, setup_info->vclk_divider,
+> 
+> If you keep the clk_get_rate() call in this function you wouldn't have
+> to call it again here.
+
+Yep.
+
+>> +		setup_info->fout, fout_target,
+>> +		err / 100, err % 100);
+>> +
+>>   	dev_dbg(dsi->dev,
+>>   		"vco_cntrl = 0x%x\tprop_cntrl = 0x%x\thsfreqrange = 0x%x\n",
+>> -		setup_info->vco_cntrl, setup_info->prop_cntrl,
+>> +		clkset->vco_cntrl, clkset->prop_cntrl,
+>>   		setup_info->hsfreqrange);
+>>   }
+>>   
+>> @@ -324,7 +545,7 @@ static int rcar_mipi_dsi_startup(struct rcar_mipi_dsi *dsi,
+>>   {
+>>   	struct dsi_setup_info setup_info = {};
+>>   	unsigned int timeout;
+>> -	int ret, i;
+>> +	int ret;
+>>   	int dsi_format;
+>>   	u32 phy_setup;
+>>   	u32 clockset2, clockset3;
+>> @@ -360,10 +581,21 @@ static int rcar_mipi_dsi_startup(struct rcar_mipi_dsi *dsi,
+>>   	phy_setup |= PHYSETUP_HSFREQRANGE(setup_info.hsfreqrange);
+>>   	rcar_mipi_dsi_write(dsi, PHYSETUP, phy_setup);
+>>   
+>> -	for (i = 0; i < ARRAY_SIZE(phtw); i++) {
+>> -		ret = rcar_mipi_dsi_phtw_test(dsi, phtw[i]);
+>> +	switch (dsi->info->model) {
+>> +	case RCAR_DSI_R8A779A0:
+>> +		ret = rcar_mipi_dsi_init_phtw_v3u(dsi);
+>> +		if (ret < 0)
+>> +			return ret;
+>> +		break;
+>> +
+>> +	case RCAR_DSI_R8A779G0:
+>> +		ret = rcar_mipi_dsi_init_phtw_v4h(dsi, &setup_info);
+>>   		if (ret < 0)
+>>   			return ret;
+>> +		break;
+>> +
+>> +	default:
+>> +		return -ENODEV;
+> 
+> This can't happen. Same below.
+
+I thought the compiler would warn about it, but at least mine doesn't, 
+so I'll drop the default cases.
+
+>>   	}
+>>   
+>>   	/* PLL Clock Setting */
+>> @@ -371,12 +603,13 @@ static int rcar_mipi_dsi_startup(struct rcar_mipi_dsi *dsi,
+>>   	rcar_mipi_dsi_set(dsi, CLOCKSET1, CLOCKSET1_SHADOW_CLEAR);
+>>   	rcar_mipi_dsi_clr(dsi, CLOCKSET1, CLOCKSET1_SHADOW_CLEAR);
+>>   
+>> -	clockset2 = CLOCKSET2_M(setup_info.m) | CLOCKSET2_N(setup_info.n)
+>> -		  | CLOCKSET2_VCO_CNTRL(setup_info.vco_cntrl);
+>> -	clockset3 = CLOCKSET3_PROP_CNTRL(setup_info.prop_cntrl)
+>> -		  | CLOCKSET3_INT_CNTRL(0)
+>> -		  | CLOCKSET3_CPBIAS_CNTRL(0x10)
+>> -		  | CLOCKSET3_GMP_CNTRL(1);
+>> +	clockset2 = CLOCKSET2_M(setup_info.m - dsi->info->clockset2_m_offset)
+>> +		  | CLOCKSET2_N(setup_info.n - dsi->info->clockset2_n_offset)
+>> +		  | CLOCKSET2_VCO_CNTRL(setup_info.clkset->vco_cntrl);
+>> +	clockset3 = CLOCKSET3_PROP_CNTRL(setup_info.clkset->prop_cntrl)
+>> +		  | CLOCKSET3_INT_CNTRL(setup_info.clkset->int_cntrl)
+>> +		  | CLOCKSET3_CPBIAS_CNTRL(setup_info.clkset->cpbias_cntrl)
+>> +		  | CLOCKSET3_GMP_CNTRL(setup_info.clkset->gmp_cntrl);
+>>   	rcar_mipi_dsi_write(dsi, CLOCKSET2, clockset2);
+>>   	rcar_mipi_dsi_write(dsi, CLOCKSET3, clockset3);
+>>   
+>> @@ -407,10 +640,21 @@ static int rcar_mipi_dsi_startup(struct rcar_mipi_dsi *dsi,
+>>   		return -ETIMEDOUT;
+>>   	}
+>>   
+>> -	for (i = 0; i < ARRAY_SIZE(phtw2); i++) {
+>> -		ret = rcar_mipi_dsi_phtw_test(dsi, phtw2[i]);
+>> +	switch (dsi->info->model) {
+>> +	case RCAR_DSI_R8A779A0:
+>> +		ret = rcar_mipi_dsi_post_init_phtw_v3u(dsi);
+>>   		if (ret < 0)
+>>   			return ret;
+>> +		break;
+>> +
+>> +	case RCAR_DSI_R8A779G0:
+>> +		ret = rcar_mipi_dsi_post_init_phtw_v4h(dsi, &setup_info);
+>> +		if (ret < 0)
+>> +			return ret;
+>> +		break;
+>> +
+>> +	default:
+>> +		return -ENODEV;
+>>   	}
+>>   
+>>   	/* Enable DOT clock */
+>> @@ -427,8 +671,21 @@ static int rcar_mipi_dsi_startup(struct rcar_mipi_dsi *dsi,
+>>   		dev_warn(dsi->dev, "unsupported format");
+>>   		return -EINVAL;
+>>   	}
+>> -	vclkset |= VCLKSET_COLOR_RGB | VCLKSET_DIV(setup_info.div)
+>> -		|  VCLKSET_LANE(dsi->lanes - 1);
+>> +
+>> +	vclkset |= VCLKSET_COLOR_RGB | VCLKSET_LANE(dsi->lanes - 1);
+>> +
+>> +	switch (dsi->info->model) {
+>> +	case RCAR_DSI_R8A779A0:
+>> +		vclkset |= VCLKSET_DIV_R8A779A0(__ffs(setup_info.vclk_divider));
+>> +		break;
+>> +
+>> +	case RCAR_DSI_R8A779G0:
+>> +		vclkset |= VCLKSET_DIV_R8A779G0(__ffs(setup_info.vclk_divider) - 1);
+>> +		break;
+>> +
+>> +	default:
+>> +		return -ENODEV;
+>> +	}
+>>   
+>>   	rcar_mipi_dsi_write(dsi, VCLKSET, vclkset);
+>>   
+>> @@ -841,8 +1098,25 @@ static int rcar_mipi_dsi_remove(struct platform_device *pdev)
+>>   	return 0;
+>>   }
+>>   
+>> +static const struct rcar_mipi_dsi_device_info r8a779a0_data = {
+>> +	.model = RCAR_DSI_R8A779A0,
+>> +	.clk_cfg = dsi_clk_cfg_r8a779a0,
+>> +	.clockset2_m_offset = 2,
+>> +	.clockset2_n_offset = 1,
+>> +
+> 
+> Extra blank line.
+
+Yep.
+
+> 
+>> +};
+>> +
+>> +static const struct rcar_mipi_dsi_device_info r8a779g0_data = {
+>> +	.model = RCAR_DSI_R8A779G0,
+>> +	.clk_cfg = dsi_clk_cfg_r8a779g0,
+>> +	.clockset2_m_offset = 0,
+>> +	.clockset2_n_offset = 1,
+> 
+> You could possibly drop clockset2_n_offset as it's identical for the two
+> variants, and there's no indication it would be different in another
+> version of the IP core.
+
+Yep, I think that's fine.
+
+  Tomi
+
