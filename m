@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1210963BAEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 08:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87DB163BAED
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 08:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbiK2HrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 02:47:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40376 "EHLO
+        id S229743AbiK2HsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 02:48:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiK2HrJ (ORCPT
+        with ESMTP id S229998AbiK2Hr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 02:47:09 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A0C51C0E
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 23:47:08 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id g7so21207887lfv.5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 23:47:08 -0800 (PST)
+        Tue, 29 Nov 2022 02:47:58 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C97851328
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 23:47:56 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id b3so21219510lfv.2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 23:47:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=loSpF9AgG01RMo3LBV/v8v6fFtboHwkwvrGYRwDPayw=;
-        b=BCIwFn6W/n3Cf25bMWz/YeiC1vDxWars4v8YMEFnaxBFn1+klIarsq0thr5IvFXBd9
-         y0iEYk/HW1kb38E9fGJQE23xoYKh1JSMPNptDyAci8eDnjw187PoZRcMaTSsGScprKF0
-         3JnzlEVO7XLzbb726ClGkCFzGKUg130Zltw6RkyFgarJr3EFrx3Ku1npNJ8ga77eTfkO
-         69uWTfnN2vC1onzoddkNRL9JzocY4lCxV2vQJqwWxkWEMQCWlm07jXhcvDk8tqH+MEI6
-         NmW+Z+mOT5piPL3GJr0IjEujQDbz1T01BGCV4QvqAHhK5GOztAAeZlu9lhf35ypj5sSe
-         RrOA==
+        bh=etxMVrTTVJSTddGDgARHAHEO1RrGD5Hs7SuIw9ap/3I=;
+        b=rJ2CHbAyVDgULRTpj4MDVg2dwBK1HADystIZFbvhbTYoLIME+/tt+UNXjiftguq7ib
+         w244K+6QPoVERfMg79BoElJO38d82eLScZZat5sFVE49snZOfOK2/+f0fnJIKBPDeYwr
+         FMbKUIjfcevvcaBgXAKIO3MbRsFR3P6ZtMV7rNa9PIY4woHjOWMCcZuqv4pX0tOMHtUg
+         i6K9FHqMYrX/NmhNXcCLLkLhSjNQEx5ifmowHQHPkWFrl7Bjgf4qKioahqfbJwtbyu+O
+         kUj+dvJ58qD1SX7rLqgkoUAxuWicMcWgz3BzKtCsL8WBGDD+0gJi4HnxuReDXO62n9lO
+         ykmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=loSpF9AgG01RMo3LBV/v8v6fFtboHwkwvrGYRwDPayw=;
-        b=BYxO/+rgVlNALSIyJVH6r250HPuXwimgCxLReP6IEmwPy/fobOMRqhmn4tJtx5yzK/
-         oJB8gEq3rnPBEcTWKhL7XSdFw7GDGzSJwHdTtH6oT69TI3+vqIVIHDYswzGmCsns09qO
-         5YLNjDQM0GPJUwOeXk+xJLXkYmBqPn6IYWGnXFEcShDugg4PfRHPSmY5bgcOTZD6WkJi
-         ziX9nrusQ8yVPAjYn9k1BpvNC6RG1mv5GA8DP9Ml+2Yt8ZA0ErZ6rEXXia3fqsctIFGS
-         EWON2Dn82bDbnWCWAlqCeBeTiPzNCqjPbQcEOUE63eWZh2hLWOiB1CslTVUlAUhDvTBJ
-         vtww==
-X-Gm-Message-State: ANoB5pmdfxAJUdkQhepZPgdg6gkdm9vZhM4a92eS4wF0FSOEWF38u0Zm
-        GSvt1yMVHRnZbxwOvm8ABaatWw==
-X-Google-Smtp-Source: AA0mqf6+wcgPAn5cslfEauv8J6Mh6lwM69/leKqgZb2AnXuqe0SSsSZ6WHFsED5uSwSOj/bep+llhw==
-X-Received: by 2002:a05:6512:2212:b0:4b5:acf:8789 with SMTP id h18-20020a056512221200b004b50acf8789mr4757200lfu.549.1669708026761;
-        Mon, 28 Nov 2022 23:47:06 -0800 (PST)
+        bh=etxMVrTTVJSTddGDgARHAHEO1RrGD5Hs7SuIw9ap/3I=;
+        b=iD22pwqBNdeOJzg7Gu83id4qwqXHdviSCnEZ8kkQfm+OFGLDvdYJOG8PcrsXV1+tuT
+         Cknl/mMSRjzxTe9MfxSHM73ugtqPnL2OQfx/QHRETwt3FeVE1yVHs0QEOVNYJ4fWK8Gq
+         lIKm62RKQDUfFkvOM754F4ow09tworoAC96REfSNn+KDfP/nRJprnsWpz5GqhOA0/4Il
+         7U7eCku2LalfrLDfOFshO+R/GjabnonZoC37uf+GiAwhm0qg9obpMZEvliUUQ7ZCQZWq
+         UdFtqh4K0TWVMvOuyiBOE3fYyMQSWTZbRGjFJY1UdFhekJaf+GA3XrKxNFfocUEBi1ij
+         5kig==
+X-Gm-Message-State: ANoB5pmL9bDD7pGQSX6fHzaEaW0FsSpiOPQNd3xxWmqXaOfk2iH2nF2c
+        zyz61mS322O2x7jsUXhOmZqrvA==
+X-Google-Smtp-Source: AA0mqf67TcbUg0koPs/HiroxNXgbbcwrSRcrk/nihBw0w3MO/AQgLVDwdMtZH+S68ivSZKmzzQx01Q==
+X-Received: by 2002:a19:ae18:0:b0:4aa:c879:5bc with SMTP id f24-20020a19ae18000000b004aac87905bcmr12172113lfc.498.1669708074608;
+        Mon, 28 Nov 2022 23:47:54 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id r13-20020ac252ad000000b004b49025f96dsm2096814lfm.187.2022.11.28.23.47.05
+        by smtp.gmail.com with ESMTPSA id k16-20020a0565123d9000b0049e9122bd1bsm2080686lfv.164.2022.11.28.23.47.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 23:47:06 -0800 (PST)
-Message-ID: <08ebc76a-0220-f984-b546-23dba8677be9@linaro.org>
-Date:   Tue, 29 Nov 2022 08:47:05 +0100
+        Mon, 28 Nov 2022 23:47:54 -0800 (PST)
+Message-ID: <e512b7fd-3404-3c2d-dbf6-dc66ee662a06@linaro.org>
+Date:   Tue, 29 Nov 2022 08:47:53 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH 7/9] dt-bindings: spi: mtk-snfi: add two timing delay
- property
+Subject: Re: [PATCH 5/9] dt-bindings: spi: mtk-snfi: add mt7986 IC snfi
+ bindings
 Content-Language: en-US
 To:     =?UTF-8?B?WGlhbmdzaGVuZyBIb3UgKOS+r+elpeiDnCk=?= 
         <Xiangsheng.Hou@mediatek.com>,
@@ -81,16 +81,17 @@ Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         =?UTF-8?B?QmluIFpoYW5nICjnq6Dmlowp?= <bin.zhang@mediatek.com>
 References: <20221128020613.14821-1-xiangsheng.hou@mediatek.com>
- <20221128020613.14821-8-xiangsheng.hou@mediatek.com>
- <9985d44e-977e-d7ea-0932-4879a3ccd14d@linaro.org>
- <f83184ae803dbe0afd37a31a8a83a369a9772880.camel@mediatek.com>
+ <20221128020613.14821-6-xiangsheng.hou@mediatek.com>
+ <8b8e4b23-a3bc-7e3d-199a-e8f591d05d71@linaro.org>
+ <5f76482d33933c19e191ea618f8622cd0660597f.camel@mediatek.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f83184ae803dbe0afd37a31a8a83a369a9772880.camel@mediatek.com>
+In-Reply-To: <5f76482d33933c19e191ea618f8622cd0660597f.camel@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -98,68 +99,30 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 29/11/2022 03:50, Xiangsheng Hou (侯祥胜) wrote:
-
->>> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-
->>> snfi.yaml
->>> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-
->>> snfi.yaml
->>> @@ -55,6 +55,22 @@ properties:
->>>      description: device-tree node of the accompanying ECC engine.
->>>      $ref: /schemas/types.yaml#/definitions/phandle
->>>  
->>> +  rx-sample-delay:
->>
->> No, use existing property, don't invent your own stuff - missing unit
->> suffix. See spi-peripheral-props.yaml.
-> Will change to other private property. The read sample delay with
-> MediaTek SPI NAND controller can be set with values from 0 to 47.
-> However, it`s difficult to say the unit of each vaule, because the unit
-> value will be difference with different chip process or different
-> corner IC.
-
-Why you cannot use same formula as other SPI drivers for sample-delay?
-And divide/multiple by some factor specific to SoC, which is taken from
-driver_data?
-
+> Hi Krzysztof,
 > 
->>> +    description: Rx delay to sample data with this value, the
->>> valid
->>> +                 values are from 0 to 47. The delay is smaller
->>> than
->>> +                 the rx-latch-latency.
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
+> On Mon, 2022-11-28 at 10:00 +0100, Krzysztof Kozlowski wrote:
+>> On 28/11/2022 03:06, Xiangsheng Hou wrote:
+>>> 1. add mt7986 IC bindings
 >>
->> Drop $ref.
-> Will do.
+>> Subject: drop second, redundant "bindings".
+> Will be fixed in next series.
 > 
+>>>    clocks:
+>>> +    minItems: 2
+>>>      items:
+>>>        - description: clock used for the controller
+>>>        - description: clock used for the SPI bus
+>>> +      - description: clock used for the AHB bus dma bus, this
+>>> depends on
+>>> +                     hardware design, so this is optional.
 >>
->>> +    minItems: 0
->>> +    maxItems: 47
->>> +    default: 0
->>> +
->>> +  rx-latch-latency:
->>
->> Same problems. Did you check spi-peripheral-props.yaml or other SPI
->> controller schemas for such property?
->>
->>> +    description: Rx delay to sample data with this value, the
->>> value
->>> +                 unit is clock cycle.
->>
->> I think the unit should be rather time (e.g. us).
->>
-> Yes, I checked the spi-peripheral-props.yaml and the delay values are
-> described exactly unit with ns or us. However the unit of MediaTek read
-> latch latency is clock cycle and it`s difference with different clock
-> frequency.
+>> Optional for which variants? For all of them?
+> It`s only needed for the item 3 nfi_hclk. Is it proper with this
+> description or any other suggestion.
 
-This is fine in such case.
-
-> 
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    enum: [0, 1, 2, 3]
->>> +    default: 0
->>> +
+I understand third clock is optional. For which variants/compatibles it
+is optional? Add allOf:if:then restricting it.
 
 Best regards,
 Krzysztof
