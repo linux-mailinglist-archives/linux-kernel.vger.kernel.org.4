@@ -2,194 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C3A63BE1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 11:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 489E663BE1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 11:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbiK2Kjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 05:39:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
+        id S231209AbiK2Kit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 05:38:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231425AbiK2Kjb (ORCPT
+        with ESMTP id S229954AbiK2Kis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 05:39:31 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDF1C6E;
-        Tue, 29 Nov 2022 02:39:30 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id 62so12584939pgb.13;
-        Tue, 29 Nov 2022 02:39:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ct/dPbMqE7h4fq9J5MYHkEa28gohGcxwuExR+jn/KN4=;
-        b=dZfNI+PJvmBE0K8/tpV17gUYFoJrq/7YYPKSLyrT3W42D7MIR04xIKfZoKqBmU8hLn
-         sysz8GeEG/iceJJW7lCPjthwaS4hvEt1vktABsFlfqb/RelGgwrad3178/G//+isllBA
-         Frudxdh7UtE0a+bb4Dg1RPIhli0g7RC7y5UDPpGl49cUjZKdfOcO6YgCaX0MbMvAyJ8Z
-         uE6L7d0rVIR6IUSwA3yKwVM9zVRThIp/7KPem96bTb6Abr50t0lFJEkwlV5fFxtK4eBS
-         kOYHFs2Dmq415op7mE9d3vmEyAvJ5hfvpOPmLGISVktaJ0EIoguBB9e6Fe1xz7FDrycc
-         rx7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Ct/dPbMqE7h4fq9J5MYHkEa28gohGcxwuExR+jn/KN4=;
-        b=Umla/+gSC33r90qS5pHtgo15C/rG5Jokq8ZJrprjJ2RZwI7tbiHIfIfNzuTbuxpIHg
-         +Y19TIDzYJqyXKy1I2JUn1retD5QjGlmOnToIe2fAUXykNAjp/ZowcBr1hbCWI7GH84+
-         6ILwP7UUBf1tdCOiLM5zGbKbrRIgL7NSbH2RyIQAN+EodGM1rvuWWfmmGUn4ft4tj3ND
-         zjCgcMmxBpnYjvvx/d07L2n6uicSWLY8LjAw5g9RNYnSj1YkRYhXyzgy1/2TUB4ia+4z
-         /ue3xkQJfMZMx8/DwFQ+Af8hKD+OlPWY58ciO7jVpp9XoEU/u+GBXAoenIok7Hq2XLFk
-         ndbw==
-X-Gm-Message-State: ANoB5pk9GT9djXrZ7fXBBE1+QF+vHq2qOblWHSuzagTMG6uOp+mc9hFp
-        s3mr07ST/r3glxRh03uhmlU=
-X-Google-Smtp-Source: AA0mqf67p/212mvFT9Sy0Q8ojeDQfSte4J1QPkHDdKaNdgtjhitBMyj0HLEgKUsBAijfv/fnndHcPw==
-X-Received: by 2002:a63:140e:0:b0:477:b461:3a3b with SMTP id u14-20020a63140e000000b00477b4613a3bmr28146081pgl.623.1669718369512;
-        Tue, 29 Nov 2022 02:39:29 -0800 (PST)
-Received: from localhost (193-116-112-94.tpgi.com.au. [193.116.112.94])
-        by smtp.gmail.com with ESMTPSA id u10-20020a170902714a00b0018941395c40sm10415281plm.285.2022.11.29.02.39.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 02:39:28 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        Tue, 29 Nov 2022 05:38:48 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5311B798;
+        Tue, 29 Nov 2022 02:38:47 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C388F1FDDE;
+        Tue, 29 Nov 2022 10:38:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669718325; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Sn6kDglaa1mYzXYIabbpumL2ZI4pe8py+KGgBZKikr4=;
+        b=xvGmib6LfzlkleVx5q55PBbYpRgpUGDzrU0zq4cLC8FTTnSDXjvymWO2ctyL+dUdE0NP6S
+        uSkKnFx3ZE+oDwgUNey51yZsqp7mQu4budFWYB9rJ8KyI3StqLuhAKF1T2Cv7azsP5ooc4
+        DfCVNgzQg9g8h99zSU4SfAXBvEsJzAs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669718325;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Sn6kDglaa1mYzXYIabbpumL2ZI4pe8py+KGgBZKikr4=;
+        b=efSCJ2l9eDfdL53PqoinnDf+OPrlWHBcYaHaTx10xJ9C4ph8UGBP/XBJvgU2YqaF6/g39o
+        KWNN46svvi0PurBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5BEE113AF6;
+        Tue, 29 Nov 2022 10:38:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ODuNEzXhhWMCSwAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Tue, 29 Nov 2022 10:38:45 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id d80b8a47;
+        Tue, 29 Nov 2022 10:39:50 +0000 (UTC)
+From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+To:     Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+Subject: [PATCH v4] ceph: mark directory as non-complete complete after loading key
+Date:   Tue, 29 Nov 2022 10:39:49 +0000
+Message-Id: <20221129103949.19737-1-lhenriques@suse.de>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 29 Nov 2022 20:39:24 +1000
-Message-Id: <COOPRF72WR3V.1WPE5NI7M8V7J@bobo>
-Subject: Re: [RFC PATCH 03/13] powerpc/dexcr: Handle hashchk exception
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Benjamin Gray" <bgray@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>
-Cc:     <ajd@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>, <cmr@bluescreens.de>
-X-Mailer: aerc 0.13.0
-References: <20221128024458.46121-1-bgray@linux.ibm.com>
- <20221128024458.46121-4-bgray@linux.ibm.com>
-In-Reply-To: <20221128024458.46121-4-bgray@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon Nov 28, 2022 at 12:44 PM AEST, Benjamin Gray wrote:
-> Recognise and pass the appropriate signal to the user program when a
-> hashchk instruction triggers. This is independent of allowing
-> configuration of DEXCR[NPHIE], as a hypervisor can enforce this aspect
-> regardless of the kernel.
->
-> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
-> ---
->  arch/powerpc/include/asm/ppc-opcode.h |  1 +
->  arch/powerpc/include/asm/processor.h  |  6 ++++++
->  arch/powerpc/kernel/dexcr.c           | 22 ++++++++++++++++++++++
->  arch/powerpc/kernel/traps.c           |  6 ++++++
->  4 files changed, 35 insertions(+)
->
-> diff --git a/arch/powerpc/include/asm/ppc-opcode.h b/arch/powerpc/include=
-/asm/ppc-opcode.h
-> index 21e33e46f4b8..89b316466ed1 100644
-> --- a/arch/powerpc/include/asm/ppc-opcode.h
-> +++ b/arch/powerpc/include/asm/ppc-opcode.h
-> @@ -215,6 +215,7 @@
->  #define OP_31_XOP_STFSX	    663
->  #define OP_31_XOP_STFSUX    695
->  #define OP_31_XOP_STFDX     727
-> +#define OP_31_XOP_HASHCHK   754
->  #define OP_31_XOP_STFDUX    759
->  #define OP_31_XOP_LHBRX     790
->  #define OP_31_XOP_LFIWAX    855
-> diff --git a/arch/powerpc/include/asm/processor.h b/arch/powerpc/include/=
-asm/processor.h
-> index 0a8a793b8b8b..c17ec1e44c86 100644
-> --- a/arch/powerpc/include/asm/processor.h
-> +++ b/arch/powerpc/include/asm/processor.h
-> @@ -448,10 +448,16 @@ void *exit_vmx_ops(void *dest);
-> =20
->  #ifdef CONFIG_PPC_BOOK3S_64
-> =20
-> +bool is_hashchk_trap(struct pt_regs const *regs);
->  unsigned long get_thread_dexcr(struct thread_struct const *t);
-> =20
->  #else
-> =20
-> +static inline bool is_hashchk_trap(struct pt_regs const *regs)
-> +{
-> +	return false;
-> +}
-> +
->  static inline unsigned long get_thread_dexcr(struct thread_struct const =
-*t)
->  {
->  	return 0;
-> diff --git a/arch/powerpc/kernel/dexcr.c b/arch/powerpc/kernel/dexcr.c
-> index 32a0a69ff638..11515e67afac 100644
-> --- a/arch/powerpc/kernel/dexcr.c
-> +++ b/arch/powerpc/kernel/dexcr.c
-> @@ -3,6 +3,9 @@
-> =20
->  #include <asm/cpu_has_feature.h>
->  #include <asm/cputable.h>
-> +#include <asm/disassemble.h>
-> +#include <asm/inst.h>
-> +#include <asm/ppc-opcode.h>
->  #include <asm/processor.h>
->  #include <asm/reg.h>
-> =20
-> @@ -19,6 +22,25 @@ static int __init dexcr_init(void)
->  }
->  early_initcall(dexcr_init);
-> =20
-> +bool is_hashchk_trap(struct pt_regs const *regs)
-> +{
-> +	ppc_inst_t insn;
-> +
-> +	if (!cpu_has_feature(CPU_FTR_DEXCR_NPHIE))
-> +		return false;
-> +
-> +	if (get_user_instr(insn, (void __user *)regs->nip)) {
-> +		WARN_ON(1);
-> +		return false;
-> +	}
+When setting a directory's crypt context, ceph_dir_clear_complete() needs to
+be called otherwise if it was complete before, any existing (old) dentry will
+still be valid.
 
-Nice series, just starting to have a look at it.
+This patch adds a wrapper around __fscrypt_prepare_readdir() which will
+ensure a directory is marked as non-complete if key status changes.
 
-You probably don't want a WARN_ON() here because it's user triggerable
-and isn't necessarily even indiciating a problem or attack if the app
-is doing code unmapping in order to get faults.
+Signed-off-by: Luís Henriques <lhenriques@suse.de>
+---
+Hi Xiubo,
 
-Check some of the other instruction emulation for what to do in case of
-an EFAULT.
+Here's a rebase of this patch.  I did some testing but since this branch
+doesn't really have full fscrypt support, I couldn't even reproduce the
+bug.  So, my testing was limited.
 
-> +
-> +	if (ppc_inst_primary_opcode(insn) =3D=3D 31 &&
-> +	    get_xop(ppc_inst_val(insn)) =3D=3D OP_31_XOP_HASHCHK)
-> +		return true;
-> +
-> +	return false;
-> +}
-> +
->  unsigned long get_thread_dexcr(struct thread_struct const *t)
->  {
->  	return DEFAULT_DEXCR;
-> diff --git a/arch/powerpc/kernel/traps.c b/arch/powerpc/kernel/traps.c
-> index 9bdd79aa51cf..b83f5b382f24 100644
-> --- a/arch/powerpc/kernel/traps.c
-> +++ b/arch/powerpc/kernel/traps.c
-> @@ -1516,6 +1516,12 @@ static void do_program_check(struct pt_regs *regs)
->  				return;
->  			}
->  		}
-> +
-> +		if (user_mode(regs) && is_hashchk_trap(regs)) {
-> +			_exception(SIGILL, regs, ILL_ILLOPN, regs->nip);
-> +			return;
-> +		}
+Changes since v3:
+- Rebased patch to 'testing' branch
 
-I guess ILLOPN makes sense. Do you know if any other archs do similar?
+Changes since v2:
+- Created helper wrapper for __fscrypt_prepare_readdir()
+- Added calls to the new helper
 
-Thanks,
-Nick
+Changes since v1:
+- Moved the __ceph_dir_clear_complete() call from ceph_crypt_get_context()
+  to ceph_lookup().
+- Added an __fscrypt_prepare_readdir() wrapper to check key status changes
+
+
+ fs/ceph/crypto.c     | 35 +++++++++++++++++++++++++++++++++--
+ fs/ceph/crypto.h     |  6 ++++++
+ fs/ceph/dir.c        |  8 ++++----
+ fs/ceph/mds_client.c |  6 +++---
+ 4 files changed, 46 insertions(+), 9 deletions(-)
+
+diff --git a/fs/ceph/crypto.c b/fs/ceph/crypto.c
+index 5b807f8f4c69..fe47fbdaead9 100644
+--- a/fs/ceph/crypto.c
++++ b/fs/ceph/crypto.c
+@@ -277,8 +277,8 @@ int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscrypt_str *tname,
+ 	if (fname->name_len > NAME_MAX || fname->ctext_len > NAME_MAX)
+ 		return -EIO;
+ 
+-	ret = __fscrypt_prepare_readdir(fname->dir);
+-	if (ret)
++	ret = ceph_fscrypt_prepare_readdir(fname->dir);
++	if (ret < 0)
+ 		return ret;
+ 
+ 	/*
+@@ -323,3 +323,34 @@ int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscrypt_str *tname,
+ 	fscrypt_fname_free_buffer(&_tname);
+ 	return ret;
+ }
++
++/**
++ * ceph_fscrypt_prepare_readdir - simple __fscrypt_prepare_readdir() wrapper
++ * @dir: directory inode for readdir prep
++ *
++ * Simple wrapper around __fscrypt_prepare_readdir() that will mark directory as
++ * non-complete if this call results in having the directory unlocked.
++ *
++ * Returns:
++ *     1 - if directory was locked and key is now loaded (i.e. dir is unlocked)
++ *     0 - if directory is still locked
++ *   < 0 - if __fscrypt_prepare_readdir() fails
++ */
++int ceph_fscrypt_prepare_readdir(struct inode *dir)
++{
++	bool had_key = fscrypt_has_encryption_key(dir);
++	int err;
++
++	if (!IS_ENCRYPTED(dir))
++		return 0;
++
++	err = __fscrypt_prepare_readdir(dir);
++	if (err)
++		return err;
++	if (!had_key && fscrypt_has_encryption_key(dir)) {
++		/* directory just got unlocked, mark it as not complete */
++		ceph_dir_clear_complete(dir);
++		return 1;
++	}
++	return 0;
++}
+diff --git a/fs/ceph/crypto.h b/fs/ceph/crypto.h
+index 05db33f1a421..f8d5f33f708a 100644
+--- a/fs/ceph/crypto.h
++++ b/fs/ceph/crypto.h
+@@ -94,6 +94,7 @@ static inline void ceph_fname_free_buffer(struct inode *parent, struct fscrypt_s
+ 
+ int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscrypt_str *tname,
+ 			struct fscrypt_str *oname, bool *is_nokey);
++int ceph_fscrypt_prepare_readdir(struct inode *dir);
+ 
+ #else /* CONFIG_FS_ENCRYPTION */
+ 
+@@ -147,6 +148,11 @@ static inline int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscry
+ 	oname->len = fname->name_len;
+ 	return 0;
+ }
++
++static inline int ceph_fscrypt_prepare_readdir(struct inode *dir)
++{
++	return 0;
++}
+ #endif /* CONFIG_FS_ENCRYPTION */
+ 
+ #endif
+diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
+index b136fb923b7a..bc908d0dd224 100644
+--- a/fs/ceph/dir.c
++++ b/fs/ceph/dir.c
+@@ -343,8 +343,8 @@ static int ceph_readdir(struct file *file, struct dir_context *ctx)
+ 		ctx->pos = 2;
+ 	}
+ 
+-	err = fscrypt_prepare_readdir(inode);
+-	if (err)
++	err = ceph_fscrypt_prepare_readdir(inode);
++	if (err < 0)
+ 		return err;
+ 
+ 	spin_lock(&ci->i_ceph_lock);
+@@ -784,8 +784,8 @@ static struct dentry *ceph_lookup(struct inode *dir, struct dentry *dentry,
+ 		return ERR_PTR(-ENAMETOOLONG);
+ 
+ 	if (IS_ENCRYPTED(dir)) {
+-		err = __fscrypt_prepare_readdir(dir);
+-		if (err)
++		err = ceph_fscrypt_prepare_readdir(dir);
++		if (err < 0)
+ 			return ERR_PTR(err);
+ 		if (!fscrypt_has_encryption_key(dir)) {
+ 			spin_lock(&dentry->d_lock);
+diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
+index e3683305445c..cbbaf334b6b8 100644
+--- a/fs/ceph/mds_client.c
++++ b/fs/ceph/mds_client.c
+@@ -2551,8 +2551,8 @@ static u8 *get_fscrypt_altname(const struct ceph_mds_request *req, u32 *plen)
+ 	if (!IS_ENCRYPTED(dir))
+ 		goto success;
+ 
+-	ret = __fscrypt_prepare_readdir(dir);
+-	if (ret)
++	ret = ceph_fscrypt_prepare_readdir(dir);
++	if (ret < 0)
+ 		return ERR_PTR(ret);
+ 
+ 	/* No key? Just ignore it. */
+@@ -2668,7 +2668,7 @@ char *ceph_mdsc_build_path(struct dentry *dentry, int *plen, u64 *pbase, int for
+ 			spin_unlock(&cur->d_lock);
+ 			parent = dget_parent(cur);
+ 
+-			ret = __fscrypt_prepare_readdir(d_inode(parent));
++			ret = ceph_fscrypt_prepare_readdir(d_inode(parent));
+ 			if (ret < 0) {
+ 				dput(parent);
+ 				dput(cur);
