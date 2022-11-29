@@ -2,163 +2,394 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1EC63CA01
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 873F363CA05
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236312AbiK2VF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 16:05:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
+        id S236574AbiK2VHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 16:07:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235854AbiK2VFz (ORCPT
+        with ESMTP id S235779AbiK2VHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 16:05:55 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CFB55AA2;
-        Tue, 29 Nov 2022 13:05:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1669755952; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YAhTqf0mpOfTgrwMsJ93pGWwF6JJXckeKDiFq8AeMac=;
-        b=RQKQFjZx7+KIdZC4o9WymR+WfAhfGjDb9pLmQP3SNNryecamoca3/zQ+FStYCDmUihmpbh
-        qcUL6CyDgP7th5Wc2APfsWheempGuKE/aXzbUyuRfS5WOkvT/q9FXWz003wKP3bnOU74OL
-        01CziRC4hJEy8lJuE8Uj40xz4V49dVg=
-Message-ID: <bc6ece2831188a6041a2956f5efb6a7c3a5b4a18.camel@crapouillou.net>
-Subject: Re: [PATCH v2 17/26] drm: rcar-du: Remove #ifdef guards for PM
- related functions
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        linux-renesas-soc@vger.kernel.org
-Date:   Tue, 29 Nov 2022 21:05:49 +0000
-In-Reply-To: <Y4Zg9yg7KP0yCPIL@pendragon.ideasonboard.com>
-References: <20221129191733.137897-1-paul@crapouillou.net>
-         <20221129191942.138244-1-paul@crapouillou.net>
-         <20221129191942.138244-4-paul@crapouillou.net>
-         <Y4Zg9yg7KP0yCPIL@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 29 Nov 2022 16:07:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837AD55AA2;
+        Tue, 29 Nov 2022 13:07:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 094DDB818F3;
+        Tue, 29 Nov 2022 21:07:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F2C7C433D7;
+        Tue, 29 Nov 2022 21:06:57 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="BZo4BswS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669756014;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Chl8OBXCziuB7nkc+QaWbK+EdkeLNbqrFUFkbN5Qt2I=;
+        b=BZo4BswSjbOblS08Tcm6EyfSWNMWB6p1L01mGOnXWOnX/EA726sDATPLTQHmJQ6CfOFMyl
+        08V5H3hKeZxz+KaQwCJl0twvB4tLd3R/sxk1aa/GhguyYQkFWTVWCZmjqvtR4ysFT50rWp
+        jQpZ626Goc8nRHHyQQFKLoHU3o9+2mQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 692e3484 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 29 Nov 2022 21:06:54 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        tglx@linutronix.de
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
+        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: [PATCH v10 0/4] implement getrandom() in vDSO
+Date:   Tue, 29 Nov 2022 22:06:35 +0100
+Message-Id: <20221129210639.42233-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+Changes v9->v10:
+---------------
+- Actually include all 4 patches.
 
-Le mardi 29 novembre 2022 =C3=A0 21:43 +0200, Laurent Pinchart a =C3=A9crit=
-=C2=A0:
-> Hi Paul,
->=20
-> Thank you for the patch.
->=20
-> On Tue, Nov 29, 2022 at 07:19:33PM +0000, Paul Cercueil wrote:
-> > Use the DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros to
-> > handle
-> > the .suspend/.resume callbacks.
-> >=20
-> > These macros allow the suspend and resume functions to be
-> > automatically
-> > dropped by the compiler when CONFIG_SUSPEND is disabled, without
-> > having
-> > to use #ifdef guards.
-> >=20
-> > This has the advantage of always compiling these functions in,
-> > independently of any Kconfig option. Thanks to that, bugs and other
-> > regressions are subsequently easier to catch.
-> >=20
-> > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> > Reviewed-by: Kieran Bingham
-> > <kieran.bingham+renesas@ideasonboard.com>
->=20
-> Reviewed-by: Laurent Pinchart
-> <laurent.pinchart+renesas@ideasonboard.com>
->=20
-> Will you get this whole series merged in one go in drm-misc, or do
-> you
-> expect me to take this patch in my tree ? I'd prefer the first option
-> if
-> possible (less work for me :-)).
+Changes v8->v9:
+--------------
+- Allocate system call number on all architectures, and split that off
+  into a separate commit (2/4).
+- Declare missing prototype in syscalls.h.
 
-I actually answered that in my cover letter ;)
+Changes v7->v8:
+--------------
+- Move lib/vdso/getrandom.h to include/vdso/getrandom.h in order to
+  avoid #include "../../../../../../../../../../../......".
+- Make use of two Kconfig symbols, VDSO_GETRANDOM and
+  VGETRANDOM_ALLOC_SYSCALL, to handle selecting dependencies and
+  conditionalizing code.
+- Rename chacha20_blocks_nostack assembly function to
+  __arch_chacha20_blocks_nostack, which allows removing the awkward C
+  inline wrapper function.
+- Save a byte per instruction by using movups instead of movdqu, and
+  don't bother clearing registers that hold public constants.
+- Add basic signal handling reentrancy protection to vDSO function.
+- Invalidate RNG generation counter if key-refresh syscall fails.
+- Reduce the defines in getrandom.c, which in turn requires using
+  `INT_MAX & PAGE_MASK` explicitly rather than the `MAX_RW_COUNT` macro.
+- Make use of 100 columns when it makes sense, and reformat various bits
+  of code for clarity.
+- Thoroughly document functions and add kernel-doc comments to several
+  key functions.
+- Hoist out repeated `sizeof(struct vgetrandom_state)` into variable.
+- Rename `memcpy_and_zero` to `memcpy_and_zero_src`, and define helper
+  macro outside of function.
+- Separate all x86 work, including syscall wiring, into the x86 commit,
+  so that the first two commits of this series are purely generic.
 
-However I assumed it had to go through drm-next, if you think it can go
-through drm-misc-next, I can apply it myself.
+Changes v6->v7:
+--------------
+- VERY EXCITING! There is now a rudimentary glibc implementation for
+  this from one of the glibc maintainers, Adhemerval Zanella (CC'd). A
+  commit that works with with this latest v7 revision is here:
 
-Cheers,
--Paul
+  https://github.com/bminor/glibc/commit/247ec6dd77ec2a047163fe3a1b60e57880464b39
 
->=20
-> > ---
-> > Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> > Cc: linux-renesas-soc@vger.kernel.org
-> > ---
-> > =C2=A0drivers/gpu/drm/rcar-du/rcar_du_drv.c | 9 +++------
-> > =C2=A01 file changed, 3 insertions(+), 6 deletions(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-> > b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-> > index d003e8d9e7a2..eeec1e02446f 100644
-> > --- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-> > +++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-> > @@ -599,7 +599,6 @@ static const struct drm_driver rcar_du_driver =3D
-> > {
-> > =C2=A0 * Power management
-> > =C2=A0 */
-> > =C2=A0
-> > -#ifdef CONFIG_PM_SLEEP
-> > =C2=A0static int rcar_du_pm_suspend(struct device *dev)
-> > =C2=A0{
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct rcar_du_device *=
-rcdu =3D dev_get_drvdata(dev);
-> > @@ -613,11 +612,9 @@ static int rcar_du_pm_resume(struct device
-> > *dev)
-> > =C2=A0
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return drm_mode_config_=
-helper_resume(&rcdu->ddev);
-> > =C2=A0}
-> > -#endif
-> > =C2=A0
-> > -static const struct dev_pm_ops rcar_du_pm_ops =3D {
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0SET_SYSTEM_SLEEP_PM_OPS(rcar=
-_du_pm_suspend,
-> > rcar_du_pm_resume)
-> > -};
-> > +static DEFINE_SIMPLE_DEV_PM_OPS(rcar_du_pm_ops,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0rcar_du_pm_suspend,
-> > rcar_du_pm_resume);
-> > =C2=A0
-> > =C2=A0/* --------------------------------------------------------------=
--
-> > --------------
-> > =C2=A0 * Platform driver
-> > @@ -712,7 +709,7 @@ static struct platform_driver
-> > rcar_du_platform_driver =3D {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.shutdown=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D rcar_du_shutdown,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.driver=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0.name=C2=A0=C2=A0=C2=A0=3D "rcar-du",
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0.pm=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D &rcar_du_pm_ops,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0.pm=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D pm_sleep_ptr(&rca=
-r_du_pm_ops),
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0.of_match_table =3D rcar_du_of_table,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0},
-> > =C2=A0};
->=20
+- Pass an `unsigned int *` instead of an `unsigned long *` for the
+  syscall, to avoid having to add a compat syscall.
+- Use ordinary function framing in assembly, rather than kernel-specific
+  framing.
+- Don't hardcode the number '2', but derive it at compile time with the
+  expression `sizeof(state->batch_key) / CHACHA_BLOCK_SIZE`, as well as
+  adding a BUILD_BUG_ON() in case that doesn't divide cleanly.
+
+Changes v5->v6:
+--------------
+- Fix various build errors for odd configurations.
+- Do not leak any secrets onto the stack at all, to account for possibility of
+  fork()ing in a multithreaded scenario, which would ruin forward secrecy.
+  Instead provide a arch-specific implementation that doesn't need stack
+  space.
+- Prevent page alignment from overflowing variable, and clamp to acceptable
+  limits.
+- Read/write unaligned bytes using get/put_unaligned.
+- Add extensive comments to vDSO function explaining subtle aspects.
+- Account for fork() races when writing generation counter.
+
+Changes v4->v5:
+--------------
+- Add example code to vDSO addition commit showing intended use and
+  interaction with allocations.
+- Reset buffer to beginning when retrying.
+- Rely on generation counter never being zero for fork detection, rather than
+  adding extra boolean.
+- Make use of __ARCH_WANT_VGETRANDOM_ALLOC macro around new syscall so that
+  it's condition by archs that actually choose to add this, and don't forget
+  to bump __NR_syscalls.
+- Separate __cvdso_getrandom() into __cvdso_getrandom() and
+  __cvdso_getrandom_data() so that powerpc can make a more efficient call.
+
+Changes v3->v4:
+--------------
+- Split up into small series rather than one big patch.
+- Use proper ordering in generation counter reads.
+- Make properly generic, not just a hairball with x86, by moving symbols into
+  correct files.
+
+Changes v2->v3:
+--------------
+
+Big changes:
+
+Thomas' previous objection was two-fold: 1) vgetrandom
+should really have the same function signature as getrandom, in
+addition to all of the same behavior, and 2) having vgetrandom_alloc
+be a vDSO function doesn't make sense, because it doesn't actually
+need anything from the VDSO data page and it doesn't correspond to an
+existing syscall.
+
+After a discussion at Plumbers this last week, we devised the following
+ways to fix these: 1) we make the opque state argument be the last
+argument of vgetrandom, rather than the first one, since the real
+syscall ignores the additional argument, and that way all the registers
+are the same, and no behavior changes; and 2) we make vgetrandom_alloc a
+syscall, rather than a vDSO function, which also gives it added
+flexibility for the future, which is good.
+
+Making those changes also reduced the size of this patch a bit.
+
+Smaller changes:
+- Properly add buffer offset position.
+- Don't EXPORT_SYMBOL for vDSO code.
+- Account for timens and vvar being in swapped pages.
+
+--------------
+
+Two statements:
+
+  1) Userspace wants faster cryptographically secure random numbers of
+     arbitrary size, big or small.
+
+  2) Userspace is currently unable to safely roll its own RNG with the
+     same security profile as getrandom().
+
+Statement (1) has been debated for years, with arguments ranging from
+"we need faster cryptographically secure card shuffling!" to "the only
+things that actually need good randomness are keys, which are few and
+far between" to "actually, TLS CBC nonces are frequent" and so on. I
+don't intend to wade into that debate substantially, except to note that
+recently glibc added arc4random(), whose goal is to return a
+cryptographically secure uint32_t, and there are real user reports of it
+being too slow. So here we are.
+
+Statement (2) is more interesting. The kernel is the nexus of all
+entropic inputs that influence the RNG. It is in the best position, and
+probably the only position, to decide anything at all about the current
+state of the RNG and of its entropy. One of the things it uniquely knows
+about is when reseeding is necessary.
+
+For example, when a virtual machine is forked, restored, or duplicated,
+it's imparative that the RNG doesn't generate the same outputs. For this
+reason, there's a small protocol between hypervisors and the kernel that
+indicates this has happened, alongside some ID, which the RNG uses to
+immediately reseed, so as not to return the same numbers. Were userspace
+to expand a getrandom() seed from time T1 for the next hour, and at some
+point T2 < hour, the virtual machine forked, userspace would continue to
+provide the same numbers to two (or more) different virtual machines,
+resulting in potential cryptographic catastrophe. Something similar
+happens on resuming from hibernation (or even suspend), with various
+compromise scenarios there in mind.
+
+There's a more general reason why userspace rolling its own RNG from a
+getrandom() seed is fraught. There's a lot of attention paid to this
+particular Linuxism we have of the RNG being initialized and thus
+non-blocking or uninitialized and thus blocking until it is initialized.
+These are our Two Big States that many hold to be the holy
+differentiating factor between safe and not safe, between
+cryptographically secure and garbage. The fact is, however, that the
+distinction between these two states is a hand-wavy wishy-washy inexact
+approximation. Outside of a few exceptional cases (e.g. a HW RNG is
+available), we actually don't really ever know with any rigor at all
+when the RNG is safe and ready (nor when it's compromised). We do the
+best we can to "estimate" it, but entropy estimation is fundamentally
+impossible in the general case. So really, we're just doing guess work,
+and hoping it's good and conservative enough. Let's then assume that
+there's always some potential error involved in this differentiator.
+
+In fact, under the surface, the RNG is engineered around a different
+principal, and that is trying to *use* new entropic inputs regularly and
+at the right specific moments in time. For example, close to boot time,
+the RNG reseeds itself more often than later. At certain events, like VM
+fork, the RNG reseeds itself immediately. The various heuristics for
+when the RNG will use new entropy and how often is really a core aspect
+of what the RNG has some potential to do decently enough (and something
+that will probably continue to improve in the future from random.c's
+present set of algorithms). So in your mind, put away the metal
+attachment to the Two Big States, which represent an approximation with
+a potential margin of error. Instead keep in mind that the RNG's primary
+operating heuristic is how often and exactly when it's going to reseed.
+
+So, if userspace takes a seed from getrandom() at point T1, and uses it
+for the next hour (or N megabytes or some other meaningless metric),
+during that time, potential errors in the Two Big States approximation
+are amplified. During that time potential reseeds are being lost,
+forgotten, not reflected in the output stream. That's not good.
+
+The simplest statement you could make is that userspace RNGs that expand
+a getrandom() seed at some point T1 are nearly always *worse*, in some
+way, than just calling getrandom() every time a random number is
+desired.
+
+For those reasons, after some discussion on libc-alpha, glibc's
+arc4random() now just calls getrandom() on each invocation. That's
+trivially safe, and gives us latitude to then make the safe thing faster
+without becoming unsafe at our leasure. Card shuffling isn't
+particularly fast, however.
+
+How do we rectify this? By putting a safe implementation of getrandom()
+in the vDSO, which has access to whatever information a
+particular iteration of random.c is using to make its decisions. I use
+that careful language of "particular iteration of random.c", because the
+set of things that a vDSO getrandom() implementation might need for making
+decisions as good as the kernel's will likely change over time. This
+isn't just a matter of exporting certain *data* to userspace. We're not
+going to commit to a "data API" where the various heuristics used are
+exposed, locking in how the kernel works for decades to come, and then
+leave it to various userspaces to roll something on top and shoot
+themselves in the foot and have all sorts of complexity disasters.
+Rather, vDSO getrandom() is supposed to be the *same exact algorithm*
+that runs in the kernel, except it's been hoisted into userspace as
+much as possible. And so vDSO getrandom() and kernel getrandom() will
+always mirror each other hermetically.
+
+API-wise, the vDSO gains this function:
+
+  ssize_t vgetrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state);
+
+The return value and the first 3 arguments are the same as ordinary
+getrandom(), while the last argument is a pointer to some state
+allocated with vgetrandom_alloc(), explained below. Were all four
+arguments passed to the getrandom syscall, nothing different would
+happen, and the functions would have the exact same behavior.
+
+Then, we introduce a new syscall:
+
+  void *vgetrandom_alloc([inout] unsigned int *num, [out] unsigned int *size_per_each, unsigned int flags);
+
+This takes the desired number of opaque states in `num`, and returns a
+pointer to an array of opaque states, the number actually allocated back
+in `num`, and the size in bytes of each one in `size_per_each`, enabling
+a libc to slice up the returned array into a state per each thread. (The
+`flags` argument is always zero for now.) We very intentionally do *not*
+leave state allocation up to the caller of vgetrandom, but provide
+vgetrandom_alloc for that allocation. There are too many weird things
+that can go wrong, and it's important that vDSO does not provide too
+generic of a mechanism. It's not going to store its state in just any
+old memory address. It'll do it only in ones it allocates.
+
+Right now this means it's a mlock'd page with WIPEONFORK set. In the
+future maybe there will be other interesting page flags or
+anti-heartbleed measures, or other platform-specific kernel-specific
+things that can be set from the syscall. Again, it's important that the
+kernel has a say in how this works rather than agreeing to operate on
+any old address; memory isn't neutral.
+
+The syscall currently accomplishes this with a call to vm_mmap() and
+then a call to do_madvise(). It'd be nice to do this all at once, but
+I'm not sure that a helper function exists for that now, and it seems a
+bit premature to add one, at least for now.
+
+The interesting meat of the implementation is in lib/vdso/getrandom.c,
+as generic C code, and it aims to mainly follow random.c's buffered fast
+key erasure logic. Before the RNG is initialized, it falls back to the
+syscall. Right now it uses a simple generation counter to make its decisions
+on reseeding (though this could be made more extensive over time).
+
+The actual place that has the most work to do is in all of the other
+files. Most of the vDSO shared page infrastructure is centered around
+gettimeofday, and so the main structs are all in arrays for different
+timestamp types, and attached to time namespaces, and so forth. I've
+done the best I could to add onto this in an unintrusive way.
+
+In my test results, performance is pretty stellar (around 15x for uint32_t
+generation), and it seems to be working. There's an extended example in the
+second commit of this series, showing how the syscall and the vDSO function
+are meant to be used together.
+
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-api@vger.kernel.org
+Cc: x86@kernel.org
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>
+Cc: Carlos O'Donell <carlos@redhat.com>
+Cc: Florian Weimer <fweimer@redhat.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Christian Brauner <brauner@kernel.org>
+
+Jason A. Donenfeld (4):
+  random: add vgetrandom_alloc() syscall
+  arch: allocate vgetrandom_alloc() syscall number
+  random: introduce generic vDSO getrandom() implementation
+  x86: vdso: Wire up getrandom() vDSO implementation
+
+ MAINTAINERS                                   |   2 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/arm64/include/asm/unistd.h               |   2 +-
+ arch/arm64/include/asm/unistd32.h             |   2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
+ arch/x86/Kconfig                              |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/x86/entry/vdso/Makefile                  |   3 +-
+ arch/x86/entry/vdso/vdso.lds.S                |   2 +
+ arch/x86/entry/vdso/vgetrandom-chacha.S       | 177 +++++++++++++++
+ arch/x86/entry/vdso/vgetrandom.c              |  17 ++
+ arch/x86/include/asm/vdso/getrandom.h         |  55 +++++
+ arch/x86/include/asm/vdso/vsyscall.h          |   2 +
+ arch/x86/include/asm/vvar.h                   |  16 ++
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
+ drivers/char/random.c                         |  84 ++++++++
+ include/linux/syscalls.h                      |   3 +
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ include/vdso/datapage.h                       |  11 +
+ include/vdso/getrandom.h                      |  24 +++
+ kernel/sys_ni.c                               |   3 +
+ lib/vdso/Kconfig                              |  14 +-
+ lib/vdso/getrandom.c                          | 204 ++++++++++++++++++
+ tools/include/uapi/asm-generic/unistd.h       |   5 +-
+ .../arch/mips/entry/syscalls/syscall_n64.tbl  |   1 +
+ .../arch/powerpc/entry/syscalls/syscall.tbl   |   1 +
+ .../perf/arch/s390/entry/syscalls/syscall.tbl |   1 +
+ .../arch/x86/entry/syscalls/syscall_64.tbl    |   1 +
+ 40 files changed, 647 insertions(+), 5 deletions(-)
+ create mode 100644 arch/x86/entry/vdso/vgetrandom-chacha.S
+ create mode 100644 arch/x86/entry/vdso/vgetrandom.c
+ create mode 100644 arch/x86/include/asm/vdso/getrandom.h
+ create mode 100644 include/vdso/getrandom.h
+ create mode 100644 lib/vdso/getrandom.c
+
+-- 
+2.38.1
 
