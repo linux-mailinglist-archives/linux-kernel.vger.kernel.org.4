@@ -2,104 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB8C63B8AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:18:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AB363B8AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:18:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235454AbiK2DSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 22:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
+        id S235466AbiK2DSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 22:18:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235340AbiK2DSe (ORCPT
+        with ESMTP id S235340AbiK2DSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 22:18:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578F2286C1;
-        Mon, 28 Nov 2022 19:18:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0461FB8110F;
-        Tue, 29 Nov 2022 03:18:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30721C433C1;
-        Tue, 29 Nov 2022 03:18:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669691909;
-        bh=MMYaUJnNIhZwUrQoRSepO+ImmUXzeufv93AYTDMROUU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kKSZ/SfLFHTYbdH8x1JN9JVW/ROT3OtbzN5/KvDZoRwYwUfj+fF1j2337TkXqay5R
-         Rt7riDXvTG/Dvn8PtWC21xD1wlubEAn+mBS959ialK/YU8X0EAv5sWTVPKBmZjEkbS
-         XmaCx6v3vfytmX2HvfpOsAEMnfewUc4DKCBmeanDCRqm6xXN6bx6OOfTrFJF8ICXq8
-         4cVuPdQ4S3jrn0+XQZyrPg7rbZ5L13la00RwDIGtFH2CwtJMpNMpnJc1OuS2OasHKX
-         ZYYFts7Ut6JwpyQEnxwBRAGIoLEeeNlecp5xMDIp/w5s0wifmzImGmtSmNYWQE8aUb
-         cAMPsP9E4U18w==
-Date:   Mon, 28 Nov 2022 19:18:28 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     <f.fainelli@broadcom.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        "Arnd Bergmann" <arnd@arndb.de>
-Cc:     YueHaibing <yuehaibing@huawei.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <pabeni@redhat.com>, <arnd@arndb.de>,
-        <naresh.kamboju@linaro.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] net: broadcom: Add PTP_1588_CLOCK_OPTIONAL dependency
- for BCMGENET under ARCH_BCM2835
-Message-ID: <20221128191828.169197be@kernel.org>
-In-Reply-To: <20221125115003.30308-1-yuehaibing@huawei.com>
-References: <20221125115003.30308-1-yuehaibing@huawei.com>
+        Mon, 28 Nov 2022 22:18:38 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339B427920;
+        Mon, 28 Nov 2022 19:18:37 -0800 (PST)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NLnWG0ZxHzqSdp;
+        Tue, 29 Nov 2022 11:14:34 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 29 Nov 2022 11:18:35 +0800
+Message-ID: <d357e15b-e44a-1e3b-41c3-0b732e4685ed@huawei.com>
+Date:   Tue, 29 Nov 2022 11:18:34 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v2] ext4: fix a NULL pointer when validating an inode
+ bitmap
+Content-Language: en-US
+To:     Theodore Ts'o <tytso@mit.edu>,
+        =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>
+CC:     Andreas Dilger <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>
+References: <20221010142035.2051-1-lhenriques@suse.de>
+ <20221011155623.14840-1-lhenriques@suse.de> <Y2cAiLNIIJhm4goP@mit.edu>
+ <Y2piZT22QwSjNso9@suse.de> <Y4U18wly7K87fX9v@mit.edu>
+From:   Baokun Li <libaokun1@huawei.com>
+In-Reply-To: <Y4U18wly7K87fX9v@mit.edu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Nov 2022 19:50:03 +0800 YueHaibing wrote:
-> commit 8d820bc9d12b ("net: broadcom: Fix BCMGENET Kconfig") fixes the build
-> that contain 99addbe31f55 ("net: broadcom: Select BROADCOM_PHY for BCMGENET")
-> and enable BCMGENET=y but PTP_1588_CLOCK_OPTIONAL=m, which otherwise
-> leads to a link failure. However this may trigger a runtime failure.
-> 
-> Fix the original issue by propagating the PTP_1588_CLOCK_OPTIONAL dependency
-> of BROADCOM_PHY down to BCMGENET.
-> 
-> Fixes: 8d820bc9d12b ("net: broadcom: Fix BCMGENET Kconfig")
-> Fixes: 99addbe31f55 ("net: broadcom: Select BROADCOM_PHY for BCMGENET")
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> ---
->  drivers/net/ethernet/broadcom/Kconfig | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/broadcom/Kconfig b/drivers/net/ethernet/broadcom/Kconfig
-> index 55dfdb34e37b..f4ca0c6c0f51 100644
-> --- a/drivers/net/ethernet/broadcom/Kconfig
-> +++ b/drivers/net/ethernet/broadcom/Kconfig
-> @@ -71,13 +71,14 @@ config BCM63XX_ENET
->  config BCMGENET
->  	tristate "Broadcom GENET internal MAC support"
->  	depends on HAS_IOMEM
-> +	depends on PTP_1588_CLOCK_OPTIONAL || !ARCH_BCM2835
->  	select MII
->  	select PHYLIB
->  	select FIXED_PHY
->  	select BCM7XXX_PHY
->  	select MDIO_BCM_UNIMAC
->  	select DIMLIB
-> -	select BROADCOM_PHY if (ARCH_BCM2835 && PTP_1588_CLOCK_OPTIONAL)
-> +	select BROADCOM_PHY if ARCH_BCM2835
->  	help
->  	  This driver supports the built-in Ethernet MACs found in the
->  	  Broadcom BCM7xxx Set Top Box family chipset.
+On 2022/11/29 6:28, Theodore Ts'o wrote:
+> On Tue, Nov 08, 2022 at 02:06:29PM +0000, Luís Henriques wrote:
+>>> What makes you believe that?  Look at how s_group_info is initialized
+>>> in ext4_mb_alloc_groupinfo() in fs/ext4/mballoc.c.  It's pretty
+>>> careful to make sure this is not the case.
+>> Right.  I may be missing something, but I don't think we get that far.
+>> __ext4_fill_super() will first call ext4_setup_system_zone() (which is
+>> where this bug occurs) and only after that ext4_mb_init() will be invoked
+>> (which is where ext4_mb_alloc_groupinfo() will eventually be called).
+> I finally got around to taking a closer look at this, and I have a
+> much better understandign of what is going on.  For more details, and
+> a suggested fix, please see:
+>
+>       https://bugzilla.kernel.org/show_bug.cgi?id=216541#c1
+>
+> 						- Ted
+>
+>
+Hi Theodore,
 
-What's the code path that leads to the failure? I want to double check
-that the driver is handling the PTP registration return codes correctly.
-IIUC this is a source of misunderstandings in the PTP API.
+In my opinion, the s_journal_inum should not be modified when the file 
+system is
+mounted, especially after we have successfully loaded and replayed the 
+journal with
+the current s_journal_inum. Even if the s_journal_inumon the disk is 
+modified, we should
+use the current one. This is how journal_devnum is handled in 
+ext4_load_journal():
 
-Richard, here's the original report:
-https://lore.kernel.org/all/CA+G9fYvKfbJHcMZtybf_0Ru3+6fKPg9HwWTOhdCLrOBXMaeG1A@mail.gmail.com/
+          if (!really_read_only && journal_devnum &&
+              journal_devnum != le32_to_cpu(es->s_journal_dev)) {
+                  es->s_journal_dev = cpu_to_le32(journal_devnum);
+
+                  /* Make sure we flush the recovery flag to disk. */
+                  ext4_commit_super(sb);
+          }
+
+We can avoid this problem by adding a similar check for journal_inum in 
+ext4_load_journal().
+
+-- 
+With Best Regards,
+Baokun Li
+
