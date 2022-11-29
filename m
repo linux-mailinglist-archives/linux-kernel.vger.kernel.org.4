@@ -2,143 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C6563B9A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 06:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBC863B9A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 06:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235641AbiK2F7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 00:59:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
+        id S235650AbiK2F7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 00:59:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiK2F7O (ORCPT
+        with ESMTP id S235642AbiK2F7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 00:59:14 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E0F2983E;
-        Mon, 28 Nov 2022 21:59:13 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id v8so18398119edi.3;
-        Mon, 28 Nov 2022 21:59:13 -0800 (PST)
+        Tue, 29 Nov 2022 00:59:48 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8BA4FFA3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 21:59:47 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id d2so4078204qvp.12
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 21:59:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=A5R4C2aWexZsPArmjDH3ZXhc/nuP+Jv80yeRmE03+3Y=;
-        b=NPoI5sGa4eoD7m3PZcImAedtV9zgPn92Xyvx4je/A8t6DqzT3qlSN47OfxkVDgRw4N
-         Odm7gLkVMAucYLhuhhoqc1IUsQcF+HQFOTgcdhKG4R7OAYiL0rRMr9uWcnOR69LoQids
-         H6X6RVicu5J/LXpCtZEzyRlxvxr05q41N5Ks1n1bV9pFsLz7tK3TxrqANVCYzU5mlDXv
-         IzX5XhhNveW0oUpRv4fVGLFYl2W8tGQQYyImTePRKsH5L8lhX0YAZn62ChTREvo8ESzJ
-         xckoCa7MMfTVq+XLKXI594Oq0TW3Zn6RwpIyMfAqMvGqasTYa6WyQHeg0IEDQ/5OOJnR
-         Fn8w==
+        d=joelfernandes.org; s=google;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P2ERg4ZTTEgUi5D5NoUNK3spv5awQcT9Ib2d0Yu1QLY=;
+        b=XBgv9WOtixgCM8/SjMLSGd5P9sZzXxplABTV0WKVCa1wjAtyoNfXMTqkJJZ+brfAEJ
+         wuASw/0T62Cf4+2eWruh6lFMx4gta/s4K1gIYYL3Vj1qoo7YvKS2U7b4u9phvLII9vIA
+         58LDKkql9JvrY2hvDhWlONVNbrL5B/t9Rm5LQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A5R4C2aWexZsPArmjDH3ZXhc/nuP+Jv80yeRmE03+3Y=;
-        b=2ehHp70SIhQDwK8wdHZCSOuIUE84u7TzjnmZufVGG0z4YDKbBfrT+ZVIVPx1cMvCLP
-         k+xJtTX04x7q8h2DgmSfJPZibIi4yJB0SabDt4H1qizMHap33AwJI45fC0dpT5Qr9StM
-         gGu2D6Fi8W2+F/7D2o9zGy3KTqt6Qg7Rou6SzghMvVm/oBhMfPVDdT2+7QlKQ4uBLoiB
-         mj76mE3J9vkkP+ODU4oj/P6+PfNzXGowW8KflyL9agCQRNNoQgrlMxOTc6tE7z9jQ5fi
-         RrBBM4oUaU/iJrgvmKny9JC7mivCu9CRFv5LYp4T/AzQRn1DLWkU0la0UyOI6mrAI9tg
-         a92A==
-X-Gm-Message-State: ANoB5pkrUH1pkd9YwZBMTzPm4pI1NrjtqigiBoYFMkP33o2IcgTq468t
-        QW96ZwpNb30taQPBXI1t5EReiffLbsfuGXrKMh8=
-X-Google-Smtp-Source: AA0mqf61R1pxzPjXd65f/ntApUjrv3GpEO+onbJf191BTNPzrWYZEjQqYgMLUxzhCUoOsLN+wjyk2eU/3vf9wzG/ImY=
-X-Received: by 2002:aa7:d80d:0:b0:46b:7645:86a9 with SMTP id
- v13-20020aa7d80d000000b0046b764586a9mr2395448edq.311.1669701552145; Mon, 28
- Nov 2022 21:59:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20221126111147.199366-1-changbin.du@gmail.com> <20221126111147.199366-2-changbin.du@gmail.com>
-In-Reply-To: <20221126111147.199366-2-changbin.du@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 28 Nov 2022 21:59:00 -0800
-Message-ID: <CAEf4BzYt7MhKjWfdxKUe10mUxDoCYeWNHYr1-ruCxMEmNqJqqA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] libbpf: show more info about missing ".BTF" section
-To:     Changbin Du <changbin.du@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P2ERg4ZTTEgUi5D5NoUNK3spv5awQcT9Ib2d0Yu1QLY=;
+        b=fEKwUnmt3gcd58PKZlHTTdkv0nnelWnUm49/5XORhNeheQCA7RkKx6+6rJFqsE54SM
+         /QqkL7VwQyIoCyoZhOMl463VcITRLVmXciBVK60i7Jn7dTh9dLH8Sf1n3RBn1Ry6T+Zr
+         PdiOYIu2OW+IH5gcbU++8FU3D8waQDMnx3axH8GZZtFRAdqC5Og51Hed/r54HA9rkg0S
+         GqvMOiQgFO4edeLqhxOGZBIX4BUwJorrewa1Y1Kr11rwm4QYwlYQwneKFmA+aNRZrd2X
+         8BhrLTn+uePvyYxWmBN/RUMjBiZljtYSATV/du+gelL/oXU8HQ6pLu3qPr8zT3dmGgRN
+         3MsA==
+X-Gm-Message-State: ANoB5plTEXgMiqvEaEFE/GWQayhIMB6YKQbGwRaQqjrXpr+/otwWzT82
+        z4tuhhmKiYa6ScxbaBSajMzUycWEJkwBGg==
+X-Google-Smtp-Source: AA0mqf5kNGvNQJ3q7qt4dzsmMBHYGfSHEpIlxzFiVCUES9SlJv7hmXGFM3hazrBvBHyunRs79XdcNA==
+X-Received: by 2002:a05:6214:5d8d:b0:4c7:121:d67a with SMTP id mf13-20020a0562145d8d00b004c70121d67amr8127162qvb.79.1669701586823;
+        Mon, 28 Nov 2022 21:59:46 -0800 (PST)
+Received: from smtpclient.apple ([2600:1003:b10f:9e5b:184c:2f74:27ec:e005])
+        by smtp.gmail.com with ESMTPSA id r26-20020ac8425a000000b003a4f435e381sm8086808qtm.18.2022.11.28.21.59.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 21:59:46 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v2] rcu-tasks: Make rude RCU-Tasks work well with CPU hotplug
+Date:   Tue, 29 Nov 2022 00:59:45 -0500
+Message-Id: <24EC376D-B542-4E3C-BC10-3E81F2F2F49C@joelfernandes.org>
+References: <PH0PR11MB588001E6982A9DC32F93FD7ADA129@PH0PR11MB5880.namprd11.prod.outlook.com>
+Cc:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <PH0PR11MB588001E6982A9DC32F93FD7ADA129@PH0PR11MB5880.namprd11.prod.outlook.com>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+X-Mailer: iPhone Mail (19G82)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 26, 2022 at 3:13 AM Changbin Du <changbin.du@gmail.com> wrote:
->
-> Show more information about why failed instead of just saying "No such file or
-> directory".
->
-> Now will print below info:
-> libbpf: can not find '.BTF' section
-> libbpf: is CONFIG_DEBUG_INFO_BTF enabled for kernel?
-> Error: failed to load BTF from /home/changbin/work/linux/vmlinux: No such file or directory
->
-> Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> ---
->  tools/lib/bpf/btf.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index d88647da2c7f..3f661d991808 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
-> @@ -906,6 +906,15 @@ struct btf *btf__new(const void *data, __u32 size)
->         return libbpf_ptr(btf_new(data, size, NULL));
->  }
->
-> +static bool is_vmlinux(const char *path)
-> +{
-> +       size_t path_len = strlen(path);
-> +       size_t suffix_len = strlen("vmlinux");
-> +
-> +       return (path_len >= suffix_len) &&
-> +              (!memcmp(path + path_len - suffix_len, "vmlinux", suffix_len));
-> +}
-> +
->  static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
->                                  struct btf_ext **btf_ext)
->  {
-> @@ -990,6 +999,9 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
->         err = 0;
->
->         if (!btf_data) {
-> +               pr_warn("can not find '%s' section\n", BTF_ELF_SEC);
-> +               if (is_vmlinux(path))
-> +                       pr_warn("is CONFIG_DEBUG_INFO_BTF enabled for kernel?\n");
 
-this is generic piece of BTF loading code in libbpf, it knows nothing
-and should know nothing about vmlinux and CONFIG_DEBUG_INFO_BTF, this
-is not the right place to add such suggestions.
 
-Check bpf_object__load_vmlinux_btf(), libbpf emits vmlinux-specific
-error there: "Error loading vmlinux BTF". If we need to mention
-CONFIG_DEBUG_INFO_BTF anywhere, that would be the place to do that.
+> On Nov 28, 2022, at 11:54 PM, Zhang, Qiang1 <qiang1.zhang@intel.com> wrote=
+:
+>=20
+> =EF=BB=BFOn Mon, Nov 28, 2022 at 10:34:28PM +0800, Zqiang wrote:
+>> Currently, invoke rcu_tasks_rude_wait_gp() to wait one rude
+>> RCU-tasks grace period, if __num_online_cpus =3D=3D 1, will return
+>> directly, indicates the end of the rude RCU-task grace period.
+>> suppose the system has two cpus, consider the following scenario:
+>>=20
+>>    CPU0                                   CPU1 (going offline)
+>>                          migration/1 task:
+>>                                      cpu_stopper_thread
+>>                                       -> take_cpu_down
+>>                                          -> _cpu_disable
+>>                               (dec __num_online_cpus)
+>>                                          ->cpuhp_invoke_callback
+>>                                                preempt_disable
+>>                        access old_data0
+>>           task1
+>> del old_data0                                  .....
+>> synchronize_rcu_tasks_rude()
+>> task1 schedule out
+>> ....
+>> task2 schedule in
+>> rcu_tasks_rude_wait_gp()
+>>     ->__num_online_cpus =3D=3D 1
+>>       ->return
+>> ....
+>> task1 schedule in
+>> ->free old_data0
+>>                                                preempt_enable
+>>=20
+>> when CPU1 dec __num_online_cpus and __num_online_cpus is equal one,
+>> the CPU1 has not finished offline, stop_machine task(migration/1)
+>> still running on CPU1, maybe still accessing 'old_data0', but the
+>> 'old_data0' has freed on CPU0.
+>>=20
+>> This commit add cpus_read_lock/unlock() protection before accessing
+>> __num_online_cpus variables, to ensure that the CPU in the offline
+>> process has been completed offline.
+>>=20
+>> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+>>=20
+>> First, good eyes and good catch!!!
+>>=20
+>> The purpose of that check for num_online_cpus() is not performance
+>> on single-CPU systems, but rather correct operation during early boot.
+>> So a simpler way to make that work is to check for RCU_SCHEDULER_RUNNING,=
 
->                 err = -ENOENT;
->                 goto done;
->         }
-> --
-> 2.37.2
->
+>> for example, as follows:
+>>=20
+>>    if (rcu_scheduler_active !=3D RCU_SCHEDULER_RUNNING &&
+>>        num_online_cpus() <=3D 1)
+>>        return;    // Early boot fastpath for only one CPU.
+>=20
+> Hi Paul
+>=20
+> During system startup, because the RCU_SCHEDULER_RUNNING is set after star=
+ting other CPUs,=20
+>=20
+>              CPU0                                                         =
+              CPU1                                                          =
+      =20
+>=20
+> if (rcu_scheduler_active !=3D                                   =20
+>    RCU_SCHEDULER_RUNNING &&
+>           __num_online_cpus  =3D=3D 1)                                    =
+          =20
+>    return;                                                                =
+         inc  __num_online_cpus
+>                            (__num_online_cpus =3D=3D 2)
+>=20
+> CPU0 didn't notice the update of the __num_online_cpus variable by CPU1 in=
+ time
+> Can we move rcu_set_runtime_mode() before smp_init()
+> any thoughts?
+
+Is anyone expected to do rcu-tasks operation before the scheduler is running=
+? Typically this requires the tasks to context switch which is a scheduler o=
+peration.
+
+If the scheduler is not yet running, then I don=E2=80=99t think missing an u=
+pdate the __num_online_cpus matters since no one does a tasks-RCU synchroniz=
+e.
+
+Or did I miss something?
+
+Thanks.
+
+
+
+>=20
+> Thanks
+> Zqiang
+>=20
+>>=20
+>> This works because rcu_scheduler_active is set to RCU_SCHEDULER_RUNNING
+>> long before it is possible to offline CPUs.
+>>=20
+>> Yes, schedule_on_each_cpu() does do cpus_read_lock(), again, good eyes,
+>> and it also unnecessarily does the schedule_work_on() the current CPU,
+>> but the code calling synchronize_rcu_tasks_rude() is on high-overhead
+>> code paths, so this overhead is down in the noise.
+>>=20
+>> Until further notice, anyway.
+>>=20
+>> So simplicity is much more important than performance in this code.
+>> So just adding the check for RCU_SCHEDULER_RUNNING should fix this,
+>> unless I am missing something (always possible!).
+>>=20
+>>                            Thanx, Paul
+>>=20
+>> ---
+>> kernel/rcu/tasks.h | 20 ++++++++++++++++++--
+>> 1 file changed, 18 insertions(+), 2 deletions(-)
+>>=20
+>> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+>> index 4a991311be9b..08e72c6462d8 100644
+>> --- a/kernel/rcu/tasks.h
+>> +++ b/kernel/rcu/tasks.h
+>> @@ -1033,14 +1033,30 @@ static void rcu_tasks_be_rude(struct work_struct *=
+work)
+>> {
+>> }
+>>=20
+>> +static DEFINE_PER_CPU(struct work_struct, rude_work);
+>> +
+>> // Wait for one rude RCU-tasks grace period.
+>> static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
+>> {
+>> +    int cpu;
+>> +    struct work_struct *work;
+>> +
+>> +    cpus_read_lock();
+>>    if (num_online_cpus() <=3D 1)
+>> -        return;    // Fastpath for only one CPU.
+>> +        goto end;// Fastpath for only one CPU.
+>>=20
+>>    rtp->n_ipis +=3D cpumask_weight(cpu_online_mask);
+>> -    schedule_on_each_cpu(rcu_tasks_be_rude);
+>> +    for_each_online_cpu(cpu) {
+>> +        work =3D per_cpu_ptr(&rude_work, cpu);
+>> +        INIT_WORK(work, rcu_tasks_be_rude);
+>> +        schedule_work_on(cpu, work);
+>> +    }
+>> +
+>> +    for_each_online_cpu(cpu)
+>> +        flush_work(per_cpu_ptr(&rude_work, cpu));
+>> +
+>> +end:
+>> +    cpus_read_unlock();
+>> }
+>>=20
+>> void call_rcu_tasks_rude(struct rcu_head *rhp, rcu_callback_t func);
+>> --=20
+>> 2.25.1
+>>=20
