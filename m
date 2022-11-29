@@ -2,110 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F4B63BFB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:05:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4821C63BFB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 13:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233692AbiK2MFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 07:05:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
+        id S233974AbiK2MGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 07:06:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233657AbiK2MEb (ORCPT
+        with ESMTP id S233706AbiK2MFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 07:04:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FB65EF92
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:03:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2817EB81366
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 12:03:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90033C433D6;
-        Tue, 29 Nov 2022 12:03:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669723419;
-        bh=63J/YnDXq/ACyXdIg6KmYtgzhnBJ09vWSj+HtNFh0UI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Dig0p38rYnVjeiB1Q3M316EajBfyFAxAMXCn8yhYP5O8iREhi56imPXZS9Oi1prcy
-         uMy2q+5I6LmD7hubMhBfnXCvdyiLIB4kCFWrFoOaKLF6uvlxjLWO44umkom3iQxgeR
-         PHI+C5d+bhvFaW/SbRME5W4IjPUr5Qfi3SdoXIrJ2otwrenhxVWHN1AD3r6ueWqswU
-         vbkTprtz0EtWR7NRSgkzHseJHHPJpooA8+5UZerzDYjM/z6ljOoLPel3g5+1CAuwpE
-         sgN9w3X6d8EKFT/5th180AjXMOboxYUNRyoqoL17bRpBBOIOhncN/BhN3UVuheWteU
-         nwV6jJ8JcH5CA==
-Date:   Tue, 29 Nov 2022 12:03:32 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     V sujith kumar Reddy 
-        <vsujithkumar.reddy@amd.corp-partner.google.com>
-Cc:     alsa-devel@alsa-project.org, Vijendar.Mukunda@amd.com,
-        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        venkataprasad.potturu@amd.com, ssabakar@amd.com,
-        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Chao Song <chao.song@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
-        <sound-open-firmware@alsa-project.org>
-Subject: Re: [PATCH v2 1/1] ASoC: SOF: Add DAI configuration support for AMD
- platforms.
-Message-ID: <Y4X1FPSVxpFkEIrN@sirena.org.uk>
-References: <20221129100102.826781-1-vsujithkumar.reddy@amd.corp-partner.google.com>
+        Tue, 29 Nov 2022 07:05:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC393AE
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:04:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669723442;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1imltAz45YNaotAIbFUcpudsIMx54FwHI8IznpWl/fg=;
+        b=DZiWfkSmk9op8LYHLDPa9W3amaOrRk9jTZllB6vcxQahBxMZ7OnMTso0EuxCRbd+9QZ2GH
+        8inMZJ1dMmdw2UudmxcHBtbBUSMRsRs95OXrBkE2rs51lHbtL3em4l9IahP9sO9uLdjty7
+        InckPMs7f9V7chRHxw3VpXP7BY9rF90=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-453-858TOkXrNFqA_slCxMhMLQ-1; Tue, 29 Nov 2022 07:04:00 -0500
+X-MC-Unique: 858TOkXrNFqA_slCxMhMLQ-1
+Received: by mail-qk1-f198.google.com with SMTP id h13-20020a05620a244d00b006fb713618b8so27871625qkn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 04:04:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1imltAz45YNaotAIbFUcpudsIMx54FwHI8IznpWl/fg=;
+        b=mLuWUQK+++VOk/wa4DfI/4K7yL6WMV419x2zviWOL++isRHKdvTJoeEDZ3nH1Y1vNL
+         ywu5mr+5Plyn+YLSa303IbtIZhQsoHYLHcJmD1/Nuli3pge5Px9mxSGTlghK3NKvo/K/
+         38qPyggey9JmKk9Dum8duumHJz40cQDvHQhunRr4scKa55FwMYCOMhZ02kjWs/0bu8tE
+         AOGEhMY6SMfxGX5cOVDTr9CsDjRE/wziqn2oBsCRF1/Nk/mCQfXJtIQOQkG+Ky2We99k
+         CuT8/utluztORBhbpRkxLjWhdY0OJWUj3Tm5xgKWETE9U24Lzu/9xE/7D8BOAnJpagtt
+         N14Q==
+X-Gm-Message-State: ANoB5pksmPH3PLD4J5mxx7NNuNX1cXIXt/qmSB/WSjznNTCIr7UWpfX0
+        HrxMeZiq02iQ/BivPqUWyFg+R6z13OwgvAFHCAAHGrxW38SSp5x1MNffzDwIPn7uMoeCLIsb+1e
+        x+/rLpOZamCh0aeuEOqgt0wA3
+X-Received: by 2002:ac8:528d:0:b0:3a5:1eb:d8ab with SMTP id s13-20020ac8528d000000b003a501ebd8abmr51370139qtn.443.1669723440197;
+        Tue, 29 Nov 2022 04:04:00 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4TSSLYpVE0Uu3PxfwqDzgVNsZDT5tCMmzPIkbJ3ObJ76V32f4dpT3251cTf8VlB2c+vPqSCQ==
+X-Received: by 2002:ac8:528d:0:b0:3a5:1eb:d8ab with SMTP id s13-20020ac8528d000000b003a501ebd8abmr51370110qtn.443.1669723439921;
+        Tue, 29 Nov 2022 04:03:59 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
+        by smtp.gmail.com with ESMTPSA id x5-20020ac84a05000000b0039cc7ebf46bsm8455425qtq.93.2022.11.29.04.03.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 04:03:59 -0800 (PST)
+Message-ID: <a3c723c5a27a75924f9d2f4ecabe26c04add08f3.camel@redhat.com>
+Subject: Re: [PATCH net 2/2] octeontx2-pf: Fix a potential double free in
+ otx2_sq_free_sqbs()
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Ziyang Xuan <william.xuanziyang@huawei.com>, sgoutham@marvell.com,
+        gakula@marvell.com, sbhatta@marvell.com, hkelam@marvell.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Date:   Tue, 29 Nov 2022 13:03:56 +0100
+In-Reply-To: <047b210eb3b3a2e26703d8b0570a0a017789c169.1669361183.git.william.xuanziyang@huawei.com>
+References: <cover.1669361183.git.william.xuanziyang@huawei.com>
+         <047b210eb3b3a2e26703d8b0570a0a017789c169.1669361183.git.william.xuanziyang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="w8MY03ubAP6sTL39"
-Content-Disposition: inline
-In-Reply-To: <20221129100102.826781-1-vsujithkumar.reddy@amd.corp-partner.google.com>
-X-Cookie: An apple a day makes 365 apples a year.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---w8MY03ubAP6sTL39
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Nov 29, 2022 at 03:30:59PM +0530, V sujith kumar Reddy wrote:
-
-> Signed-off-by: V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
->=20
-> Changes since v1
->     -- Apply on latest broonie-git for-next
->=20
+On Fri, 2022-11-25 at 15:45 +0800, Ziyang Xuan wrote:
+> otx2_sq_free_sqbs() will be called twice when goto "err_free_nix_queues"
+> label in otx2_init_hw_resources(). The first calling is within
+> otx2_free_sq_res() at "err_free_nix_queues" label, and the second calling
+> is at later "err_free_sq_ptrs" label.
+> 
+> In otx2_sq_free_sqbs(), If sq->sqb_ptrs[i] is not 0, the memory page it
+> points to will be freed, and sq->sqb_ptrs[i] do not be assigned 0 after
+> memory page be freed. If otx2_sq_free_sqbs() is called twice, the memory
+> page pointed by sq->sqb_ptrs[i] will be freeed twice. To fix the bug,
+> assign 0 to sq->sqb_ptrs[i] after memory page be freed.
+> 
+> Fixes: caa2da34fd25 ("octeontx2-pf: Initialize and config queues")
+> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
 > ---
+>  drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> index 9e10e7471b88..5a25fe51d102 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> @@ -1146,6 +1146,7 @@ void otx2_sq_free_sqbs(struct otx2_nic *pfvf)
+>  					     DMA_FROM_DEVICE,
+>  					     DMA_ATTR_SKIP_CPU_SYNC);
+>  			put_page(virt_to_page(phys_to_virt(pa)));
+> +			sq->sqb_ptrs[sqb] = 0;
 
-As covered in submitting-patches.rst any extra material like the per
-version changes should go after the ---.  No need to resubmit for this
-one.
+The above looks not needed...
+>  		}
+>  		sq->sqb_count = 0;
 
---w8MY03ubAP6sTL39
-Content-Type: application/pgp-signature; name="signature.asc"
+... as this will prevent the next invocation of otx2_sq_free_sqbs()
+from traversing and freeing any sq->sqb_ptrs[] element.
 
------BEGIN PGP SIGNATURE-----
+Cheers,
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOF9RMACgkQJNaLcl1U
-h9Abpwf/dvM9h5uM5L44r+YdBfM/2u7+nQiPr1dt2Akaq5HHIDI6d3RiCHqYYcAP
-ajq5rUq2hqQwcyulxs7ODNvdSJiAGKSuHA0FMC1wPJ1s4lCuNllbeQDFIeNrQCRs
-e18YXg7NO1Q47xzgNZbE34bED8TWQ+dK+zSkZP2nPupUJkRw3JIASHVSy7HAxTwJ
-bwE3xc5U2HG7kmtii6GpZitRTEzPsZgb+c0kOHsOdbPdUkim7w4mPksAYGOkrKTn
-bSp3dddQtRFc/0C+siDDpYTvOjSxIS+TUwkBlr1fvkz+ZxArZn/Q7nhmxs8UPSNS
-y2pgHs1lZB5V9/KEX0OlXAH5v3QJ3w==
-=c9Uq
------END PGP SIGNATURE-----
+Paolo
+>  	}
 
---w8MY03ubAP6sTL39--
+
