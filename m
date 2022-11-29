@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9D263C7F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4366A63C7FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236716AbiK2TSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 14:18:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56390 "EHLO
+        id S236778AbiK2TTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 14:19:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236574AbiK2TSW (ORCPT
+        with ESMTP id S236732AbiK2TTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 14:18:22 -0500
+        Tue, 29 Nov 2022 14:19:02 -0500
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305E44298F
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:18:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144965B851;
+        Tue, 29 Nov 2022 11:18:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1669749472; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1669749478; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+         content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=G8DuH3BuKovOG4Q7ExNfPyHxexqJONRgTC1VLQg6L9Q=;
-        b=XeDFUB1JkUgh0wnq9Xls3sBZht0UmGP/izWeb/iRwRNzHrS979IvpylbCjC2/q+8aUq3tT
-        EOXMv8WFDy5gjLgrVnvlKo9WSBkpvLWBCb0cWc69f1vAl/XjHyvw2TCphvzX22HwJnUhIf
-        4WmBhw+t+MczTtU+iytYxf4ZzAVrONY=
+        bh=V3kGaBl+P4U1/h949YafFHG5seRrZ54TXepde/Fhij8=;
+        b=kwEYPgxoRUvmgmDZgDfr7K/4Nn5SbezOwCc0k/h3X080oKq9a9Xj70tanEW+KEEOVuPxpJ
+        rL45gmZBqARfV7xGUCwObl2/Edrqr2czan00pClSefHDumeRA65jH//CWM7h5mxiEOgXIR
+        ggmTDVYzhX+bVVSx1kFWhbvczDnvX6o=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>,
-        Sandy Huang <hjc@rock-chips.com>,
-        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH v2 04/26] drm: rockchip: Define and use generic PM ops
-Date:   Tue, 29 Nov 2022 19:17:11 +0000
-Message-Id: <20221129191733.137897-5-paul@crapouillou.net>
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH v2 05/26] drm: tegra: Define and use generic PM ops
+Date:   Tue, 29 Nov 2022 19:17:12 +0000
+Message-Id: <20221129191733.137897-6-paul@crapouillou.net>
 In-Reply-To: <20221129191733.137897-1-paul@crapouillou.net>
 References: <20221129191733.137897-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
@@ -59,31 +56,30 @@ v2: Use the DEFINE_DRM_MODE_CONFIG_HELPER_PM_OPS() macro instead of an
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
-Cc: Sandy Huang <hjc@rock-chips.com>
-Cc: "Heiko Stübner" <heiko@sntech.de>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-rockchip@lists.infradead.org
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Jonathan Hunter <jonathanh@nvidia.com>
+Cc: linux-tegra@vger.kernel.org
 ---
- drivers/gpu/drm/rockchip/rockchip_drm_drv.c | 25 +++------------------
- 1 file changed, 3 insertions(+), 22 deletions(-)
+ drivers/gpu/drm/tegra/drm.c | 23 +++--------------------
+ 1 file changed, 3 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
-index 6e0788d14c10..ec117c52cb24 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
-@@ -236,27 +236,6 @@ static const struct drm_driver rockchip_drm_driver = {
- 	.minor	= DRIVER_MINOR,
- };
+diff --git a/drivers/gpu/drm/tegra/drm.c b/drivers/gpu/drm/tegra/drm.c
+index a1f909dac89a..c844444ff522 100644
+--- a/drivers/gpu/drm/tegra/drm.c
++++ b/drivers/gpu/drm/tegra/drm.c
+@@ -1329,25 +1329,6 @@ static int host1x_drm_remove(struct host1x_device *dev)
+ 	return 0;
+ }
  
 -#ifdef CONFIG_PM_SLEEP
--static int rockchip_drm_sys_suspend(struct device *dev)
+-static int host1x_drm_suspend(struct device *dev)
 -{
 -	struct drm_device *drm = dev_get_drvdata(dev);
 -
 -	return drm_mode_config_helper_suspend(drm);
 -}
 -
--static int rockchip_drm_sys_resume(struct device *dev)
+-static int host1x_drm_resume(struct device *dev)
 -{
 -	struct drm_device *drm = dev_get_drvdata(dev);
 -
@@ -91,32 +87,26 @@ index 6e0788d14c10..ec117c52cb24 100644
 -}
 -#endif
 -
--static const struct dev_pm_ops rockchip_drm_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(rockchip_drm_sys_suspend,
--				rockchip_drm_sys_resume)
--};
+-static SIMPLE_DEV_PM_OPS(host1x_drm_pm_ops, host1x_drm_suspend,
+-			 host1x_drm_resume);
 -
- #define MAX_ROCKCHIP_SUB_DRIVERS 16
- static struct platform_driver *rockchip_sub_drivers[MAX_ROCKCHIP_SUB_DRIVERS];
- static int num_rockchip_sub_drivers;
-@@ -473,6 +452,8 @@ static const struct of_device_id rockchip_drm_dt_ids[] = {
+ static const struct of_device_id host1x_drm_subdevs[] = {
+ 	{ .compatible = "nvidia,tegra20-dc", },
+ 	{ .compatible = "nvidia,tegra20-hdmi", },
+@@ -1389,10 +1370,12 @@ static const struct of_device_id host1x_drm_subdevs[] = {
+ 	{ /* sentinel */ }
  };
- MODULE_DEVICE_TABLE(of, rockchip_drm_dt_ids);
  
-+DEFINE_DRM_MODE_CONFIG_HELPER_PM_OPS(rockchip_pm_ops);
++DEFINE_DRM_MODE_CONFIG_HELPER_PM_OPS(tegra_pm_ops);
 +
- static struct platform_driver rockchip_drm_platform_driver = {
- 	.probe = rockchip_drm_platform_probe,
- 	.remove = rockchip_drm_platform_remove,
-@@ -480,7 +461,7 @@ static struct platform_driver rockchip_drm_platform_driver = {
+ static struct host1x_driver host1x_drm_driver = {
  	.driver = {
- 		.name = "rockchip-drm",
- 		.of_match_table = rockchip_drm_dt_ids,
--		.pm = &rockchip_drm_pm_ops,
-+		.pm = pm_sleep_ptr(&rockchip_pm_ops),
+ 		.name = "drm",
+-		.pm = &host1x_drm_pm_ops,
++		.pm = pm_sleep_ptr(&tegra_pm_ops),
  	},
- };
- 
+ 	.probe = host1x_drm_probe,
+ 	.remove = host1x_drm_remove,
 -- 
 2.35.1
 
