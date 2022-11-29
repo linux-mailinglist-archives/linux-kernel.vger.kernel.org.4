@@ -2,114 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF09463C7B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 19:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8D363C770
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 19:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236582AbiK2S72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 13:59:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
+        id S236211AbiK2SyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 13:54:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236502AbiK2S6z (ORCPT
+        with ESMTP id S235964AbiK2SyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 13:58:55 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730D76D97D;
-        Tue, 29 Nov 2022 10:57:16 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATGhuwg022591;
-        Tue, 29 Nov 2022 18:57:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=bUx2F1njbYad5/Bph/yve0YlzZuGc9YGQi5bG0PZGWI=;
- b=ByqpJyK0MzsxqmNirVOrHOP0fyUpRS78w4q3rrIUdYkkO6b1Eu+ag0JzooRHRSvx3D+r
- EkteljUNueT1dfFbABG6j0n3fgiF2LsF/VLld8XqcGSzrqHrb47MA0Z1E+nKntoKQb7q
- MDBBerp7qpWoLHE9vx/Anh0qYWVwyZtDQ5La3+CXXfbYMPAV7EFZVr1gvldGC+Q71pd1
- 9SPWyAb5Rq/f7Pl1PKjNGqYKq00nM0UEVRH9gjnZFtOKGQQWmpTOqn1XkEsApmQWrAZZ
- r4sssi+w4cjc9UKiZsZQnRYps+rRn8C+Fu3FE43A/LcBirxgKp+5WFWyxu7YPGzvMrg4 Aw== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m5fjx1ddg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Nov 2022 18:57:01 +0000
-Received: from nasanex01a.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ATIv0R7020830
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Nov 2022 18:57:00 GMT
-Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 29 Nov 2022 10:57:00 -0800
-From:   Asutosh Das <quic_asutoshd@quicinc.com>
-To:     <quic_cang@quicinc.com>, <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>
-CC:     <quic_nguyenb@quicinc.com>, <quic_xiaosenh@quicinc.com>,
-        <stanley.chu@mediatek.com>, <eddie.huang@mediatek.com>,
-        <daejun7.park@samsung.com>, <bvanassche@acm.org>,
-        <avri.altman@wdc.com>, <mani@kernel.org>, <beanhuo@micron.com>,
-        Asutosh Das <quic_asutoshd@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v7 16/16] ufs: core: mcq: Enable Multi Circular Queue
-Date:   Tue, 29 Nov 2022 10:53:22 -0800
-Message-ID: <8aff808cab2db90ca6c701496ddf370af87d33eb.1669747235.git.quic_asutoshd@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1669747235.git.quic_asutoshd@quicinc.com>
-References: <cover.1669747235.git.quic_asutoshd@quicinc.com>
+        Tue, 29 Nov 2022 13:54:15 -0500
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30EF4E413;
+        Tue, 29 Nov 2022 10:54:14 -0800 (PST)
+Received: by mail-qv1-f43.google.com with SMTP id c14so6391118qvq.0;
+        Tue, 29 Nov 2022 10:54:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tqjJlh60+/poGgPfMfNUOD4lo3vmtRtOphg6/Fz5FDk=;
+        b=NhbcohtzNNZNqqtaY69FqfU+Z2cabzOBz4iNmiI7MtMwbp4PwCEVRxwKXsf8UOZLSq
+         IfK25l3hKnkYdpnuGvDwCxCVZiWtPHiNFf6s0alxdk6ZaUd+PKiz5ikGuDJUgP9FSPu/
+         YTI+fNyQCrdAaZEJoBE8x1h0MhtQuCfXp57gzjqQwkUYVUfuu8Qe7EF8OAe6k3ktlNOq
+         T2mCbowInXgHjzs1X/vPsJtYaujDzlzW2fusQVEah67c+Xh0IMgQvV/fVhch+176E0a/
+         d5ZyEcI0hNGk7O+SKM0+rtHe/D3ZWjLBMO/fUaQQsteaHbg7Z8hlPgWs/cjjDIL2rwKc
+         jygA==
+X-Gm-Message-State: ANoB5pkC2eAoFcNcTG5Fn79EJ/ZpB0eLt1WZk3Zz6o8DXN32ghParHc2
+        99Xvylka28RTfDA3ABw4BrQ=
+X-Google-Smtp-Source: AA0mqf5gAZhU5mj9rpqN3kVXIHgnexqqCVmTdFry+pV3187acgyklmdwNptFqVjDsEUJNsdm8oiOBA==
+X-Received: by 2002:a0c:eb8d:0:b0:4c7:69c:6738 with SMTP id x13-20020a0ceb8d000000b004c7069c6738mr7914410qvo.24.1669748053722;
+        Tue, 29 Nov 2022 10:54:13 -0800 (PST)
+Received: from maniforge.lan (c-24-15-214-156.hsd1.il.comcast.net. [24.15.214.156])
+        by smtp.gmail.com with ESMTPSA id bn31-20020a05620a2adf00b006b95b0a714esm11132232qkb.17.2022.11.29.10.54.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 10:54:13 -0800 (PST)
+Date:   Tue, 29 Nov 2022 12:54:10 -0600
+From:   David Vernet <void@manifault.com>
+To:     Zheng Yejian <zhengyejian1@huawei.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, corbet@lwn.net,
+        bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf] bpf, docs: Correct the example of BPF_XOR
+Message-ID: <Y4ZVUiwGnVIj/V4U@maniforge.lan>
+References: <20221129134558.2757043-1-zhengyejian1@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: VWeUQFi8ts7GDWQ4KBBNvgNDdOJR1cgo
-X-Proofpoint-GUID: VWeUQFi8ts7GDWQ4KBBNvgNDdOJR1cgo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-29_11,2022-11-29_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- malwarescore=0 clxscore=1015 suspectscore=0 mlxlogscore=999
- impostorscore=0 priorityscore=1501 spamscore=0 bulkscore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211290108
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221129134558.2757043-1-zhengyejian1@huawei.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable MCQ in the Host Controller.
+On Tue, Nov 29, 2022 at 09:45:58PM +0800, Zheng Yejian wrote:
+> Refer to description of BPF_XOR, dst_reg should be used but not src_reg
+> in the examples.
+> 
+> Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+> ---
+>  Documentation/bpf/instruction-set.rst | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
+> index 5d798437dad4..e672d5ec6cc7 100644
+> --- a/Documentation/bpf/instruction-set.rst
+> +++ b/Documentation/bpf/instruction-set.rst
+> @@ -122,11 +122,11 @@ BPF_END   0xd0   byte swap operations (see `Byte swap instructions`_ below)
+>  
+>  ``BPF_XOR | BPF_K | BPF_ALU`` means::
+>  
+> -  src_reg = (u32) src_reg ^ (u32) imm32
+> +  dst_reg = (u32) dst_reg ^ (u32) imm32
 
-Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
----
- drivers/ufs/core/ufshcd.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Shouldn't this be 
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index adf3597..e9d6891 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -8381,6 +8381,12 @@ static void ufshcd_config_mcq(struct ufs_hba *hba)
- 
- 	hba->host->can_queue = hba->nutrs - UFSHCD_NUM_RESERVED;
- 	hba->reserved_slot = hba->nutrs - UFSHCD_NUM_RESERVED;
-+
-+	/* Select MCQ mode */
-+	ufshcd_writel(hba, ufshcd_readl(hba, REG_UFS_MEM_CFG) | 0x1,
-+		      REG_UFS_MEM_CFG);
-+	hba->mcq_enabled = true;
-+
- 	dev_info(hba->dev, "MCQ configured, nr_queues=%d, io_queues=%d, read_queue=%d, poll_queues=%d, queue_depth=%d\n",
- 		 hba->nr_hw_queues, hba->nr_queues[HCTX_TYPE_DEFAULT],
- 		 hba->nr_queues[HCTX_TYPE_READ], hba->nr_queues[HCTX_TYPE_POLL],
--- 
-2.7.4
+dst_reg = (u32) dst_reg ^ (u32) src_reg
 
+Same idea below for 64 bit
+
+>  
+>  ``BPF_XOR | BPF_K | BPF_ALU64`` means::
+>  
+> -  src_reg = src_reg ^ imm32
+> +  dst_reg = dst_reg ^ imm32
+>  
+>  
+>  Byte swap instructions
+> -- 
+> 2.25.1
+> 
