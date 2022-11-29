@@ -2,81 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE9263C1C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B38CC63C1C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234516AbiK2OES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 09:04:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
+        id S234789AbiK2OFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 09:05:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234811AbiK2ODz (ORCPT
+        with ESMTP id S235379AbiK2OFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 09:03:55 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46155987F
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:03:51 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id j12so13485923plj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:03:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Z+IcAbiLKvMQ/ifv4+wjr02j49KjulQRaKardeM4iU=;
-        b=X1JUWSnB7jN8UPlhMUWuSe9NpQEFdBjqsTqKXathiY/4oPl8zKvNucEHGkEgR9ZFXa
-         tMiTC/FsrpGedTA+VoPnC4VAKpHEUtRp+pUf6M97UNTDiMIM/aewUVPewHH1Qz7Zqtuw
-         A/6d+S/wQYqFih/kPWM/X7NOPhGr5G5OvIUnY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7Z+IcAbiLKvMQ/ifv4+wjr02j49KjulQRaKardeM4iU=;
-        b=Mi2lntLRVwdwAaksLGUzrn0W+joRfeipRBPwkYgQizxDk7V6TiHrQUw8DXN+5izWYz
-         4AxSxatxG4j9UMvA4UI8h1vfGxsWv18p5y9xOl+E/o0l+gFY4Bh9Eyoe2WDqmL5LXerW
-         DViHQmfODZb9sDcFDJyh9mRF+8jEesSyrgzoGojUq7GjkHqLLxBJ5I69JtKOMNAOHIJ6
-         iXzoMNFYtBbu3Djr9Bz82/P/+cLgCwb1LJcwHsV1utOkNVAe+ErdSnFboVda9TQe5sFt
-         K07DAPnoalGvgjE00SbB6is6wmKuYdqDtyIK/PkWDfZ4AA6YaVz+0qdKIWg3DFgBGkBe
-         wnfA==
-X-Gm-Message-State: ANoB5pkteFcZF6SOuILh7xZbrzB6qfx5u6Xa4iDamVmhvG5HUU2xvYZy
-        kK1tfRIBIfjURLLu7za9VSQXYA==
-X-Google-Smtp-Source: AA0mqf5G8dhoxdxdsNqbby49Z8R+DLxiw0BqTOB6vLWUPI74ZphiFYIDUsml1Fzl8YwZUOYfcWenCg==
-X-Received: by 2002:a17:90a:990d:b0:212:d909:a41e with SMTP id b13-20020a17090a990d00b00212d909a41emr18042535pjp.48.1669730631347;
-        Tue, 29 Nov 2022 06:03:51 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:9a17:1728:aa10:47a1])
-        by smtp.gmail.com with ESMTPSA id k2-20020a170902d58200b00179e1f08634sm10864906plh.222.2022.11.29.06.03.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 06:03:50 -0800 (PST)
-Date:   Tue, 29 Nov 2022 23:03:45 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Vitaly Wool <vitaly.wool@konsulko.com>
-Cc:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
-        ddstreet@ieee.org
-Subject: Re: [PATCH v7 4/6] zsmalloc: Add a LRU to zs_pool to keep track of
- zspages in LRU order
-Message-ID: <Y4YRQdOd55K7iC+q@google.com>
-References: <20221128191616.1261026-1-nphamcs@gmail.com>
- <20221128191616.1261026-5-nphamcs@gmail.com>
- <CAM4kBB+7boz+PZfPODbS-KMGOPZpa2QO5xZMoP2q_ZfGyqmQTA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM4kBB+7boz+PZfPODbS-KMGOPZpa2QO5xZMoP2q_ZfGyqmQTA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 29 Nov 2022 09:05:14 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D334643AD8
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:04:53 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5292421B0E;
+        Tue, 29 Nov 2022 14:04:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669730692; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=irwTfed7jhUDL3QvqQKxnlDd5lsqKyydbwPabpuneq4=;
+        b=rWQX87XckFJaw45/QxzqE6D2vCVsuKQFrb1c/ApufLafZ08Gj6K8KccnaOWA8/Ju4T9hi0
+        VEd81EZzBahIzXV1xXGD2nRUfuZkY4G0AYkb6/LdZBwR50ChbTCBOC7oILKp/up8zp9Eiq
+        U72GuuOmVUoHSmUFYn46uJAuDks/56Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669730692;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=irwTfed7jhUDL3QvqQKxnlDd5lsqKyydbwPabpuneq4=;
+        b=uZ2Ako6mj0YyNmMN0H3+5bzv+X1Xvbc3/loYP7THajbB+fqOj9FcHP/Vfa8DQ9GvEHiiKE
+        xDLxjE7tlvV6/sCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 18A1A13428;
+        Tue, 29 Nov 2022 14:04:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3+X4BIQRhmPFRAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 29 Nov 2022 14:04:52 +0000
+Date:   Tue, 29 Nov 2022 15:04:51 +0100
+Message-ID: <87sfi1q2kc.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     John Keeping <john@metanate.com>
+Cc:     alsa-devel@alsa-project.org, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ALSA: usb-audio: Add quirk for Tascam Model 12
+In-Reply-To: <20221129130100.1257904-1-john@metanate.com>
+References: <20221129130100.1257904-1-john@metanate.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/29 12:53), Vitaly Wool wrote:
-> I think the amount of #ifdefs here becomes absolutely overwhelming.
-> Not that zsmalloc code was very readable before, but now it is
-> starting to look like a plain disaster.
+On Tue, 29 Nov 2022 14:00:59 +0100,
+John Keeping wrote:
+> 
+> Tascam's Model 12 is a mixer which can also operate as a USB audio
+> interface.  The audio interface uses explicit feedback but it seems that
+> it does not correctly handle missing isochronous frames.
+> 
+> When injecting an xrun (or doing anything else that pauses the playback
+> stream) the feedback rate climbs (for example, at 44,100Hz nominal, I
+> see a stable rate around 44,099 but xrun injection sees this peak at
+> around 44,135 in most cases) and glitches are heard in the audio stream
+> for several seconds - this is significantly worse than the single glitch
+> expected for an underrun.
+> 
+> While the stream does normally recover and the feedback rate returns to
+> a stable value, I have seen some occurrences where this does not happen
+> and the rate continues to increase while no audio is heard from the
+> output.  I have not found a solid reproduction for this.
+> 
+> This misbehaviour can be avoided by totally resetting the stream state
+> by switching the interface to alt 0 and back before restarting the
+> playback stream.
+> 
+> Add a new quirk flag which forces the endpoint and interface to be
+> reconfigured whenever the stream is stopped, and use this for the Tascam
+> Model 12.
+> 
+> Separate interfaces are used for the playback and capture endpoints, so
+> resetting the playback interface here will not affect the capture stream
+> if it is running.  While there are two endpoints on the interface,
+> these are the OUT data endpoint and the IN explicit feedback endpoint
+> corresponding to it and these are always stopped and started together.
+> 
+> Signed-off-by: John Keeping <john@metanate.com>
+> ---
+> v2:
+> - Set ep->need_prepare not ep->need_setup; this was missed when forward
+>   porting the patch as need_prepare is new in 6.1
+> - Add more details to the commit message about why it is safe to reset
+>   the interface here
 
-Presumably most of them will go away once LRU moved from
-allocator to upper level.
+Thanks, applied now.
+
+
+Takashi
