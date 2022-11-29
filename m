@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CD963C30D
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3D563C310
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:47:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232201AbiK2OrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 09:47:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
+        id S235683AbiK2OrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 09:47:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235691AbiK2OrI (ORCPT
+        with ESMTP id S235775AbiK2OrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 29 Nov 2022 09:47:08 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8E259859
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:47:05 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id r66-20020a1c4445000000b003d05a3775d4so5057735wma.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:47:05 -0800 (PST)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8815B86F
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:47:06 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id l39-20020a05600c1d2700b003cf93c8156dso10991512wms.4
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:47:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MFuTdix/yEFsrkLuW0V5I25CPqOO/yLI32L0tLkZw6k=;
-        b=R4h2Qpg9sZkYrDXmMCfMGw+BmcxI74XNfHVOJHHbNDfyHc+p0dMu+MfNd7y1Iu/bx+
-         ZmIAvnuX88R6ZWhkEvgxzH8bxaUekssv/ZYjcxpgIMDEPXOjdGA/sGjb6JoC1GUZKI5J
-         oaMki7bjXkT4CzvYVyCBbTDDEVTF1SXmi8VRUtYgfcsxOipACdIucqGrs8Z6+rMnYXjF
-         GTdMVrFiEQKxq5QEuMr0SXOlyT2Tng1dqyRLZDkP+KP9qeoPXx3m85v/DiZ/ExAykktI
-         KleweXEQCkmxGJjfxEJX9e3xZhj2PIYEb6/qic7V6ClD+1TJk0TtV4mRFy8OGdFwxEM/
-         v29w==
+        bh=eBiUrWwuuGLK6muO+p4UxsRMuSisu6TfPuhYR9/KcVs=;
+        b=btAFXB5Xl4kCKcImulbHCBNx0FBTQ0jgsR7Wnuy9B5aaNW+MyWYAg/3pnJtkbqMiCQ
+         vd0XTIv/J5OtEiltMBayX9S0UjAq02MpaHfzTKg4hoSljexvO2SN7rZm1Ih7INiUEMpe
+         wpdecUm46rGOGG1Mg6ntcOyT01ITz+Pb+JzuxNBGjSRHsTWCsg+lVr1/ZhAPg9NQv0RD
+         K7wiVXgrwNtU6hw1sPYn/JGmKx/Hu20TE88EjP/fHV1kZjpem0FNDI39IO3O1eOSXUfD
+         eIog7nq0ysXP+IPi3cf1XCT3K+D35ko28qli8ONONrQqb4shE2mnT+Gm8+G+Hs6C/8NW
+         jhZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MFuTdix/yEFsrkLuW0V5I25CPqOO/yLI32L0tLkZw6k=;
-        b=gssf6Bc0DO+W2ELbWVKnUspbghiZPFQycZFTBa6xa4Ig/dnWCIcw8L3RS+0yQ1eY98
-         8Ud9tFmoRtsKXYO4bcD69qeAFkflrBo4BSnp70hzWFDzSNLc/rcACrSACUubD5hrZLfC
-         UDrS74OvQs30Sr6NKGzWVHTmG/XlH3MhvycYitvcf4ZjTZazf1nqUfLtM6VSQvOaELo9
-         NYbUUvg6P4Cs94SOQfPwoE9+mJsSqdVZU3Sn+gdrXqs0S++uQQUqZgzc27xZAhmFh5Ga
-         8ZgeQkkmRq2DMWUovYQjQlC62ocGJIgwddeklRiTgQVl5RRI5AvZ/s4U/4ogwgFhotDk
-         c+OA==
-X-Gm-Message-State: ANoB5pmIR6tu1kPpdfE28Rh5tKubnjJ/d2sfSEGCNUOoZlmO93cOw9U/
-        7MEtK6MyLJeXXlum6hvPB7HGIg==
-X-Google-Smtp-Source: AA0mqf5N2V7+ZxHFRJ6mDjLUAPfzTIwHfQjdYaTmjUIV1tEpJOoW+TkTCIw9P6kUxnJvG7icuh8sSg==
-X-Received: by 2002:a05:600c:2296:b0:3cf:baa6:8ca5 with SMTP id 22-20020a05600c229600b003cfbaa68ca5mr27410117wmf.178.1669733224199;
-        Tue, 29 Nov 2022 06:47:04 -0800 (PST)
+        bh=eBiUrWwuuGLK6muO+p4UxsRMuSisu6TfPuhYR9/KcVs=;
+        b=06NSK3XXwK+H2QrtMzFHH+yKtPCZS7N6bwjpVYmCbl4S0nowCu/sKBM3LZpcpeEkab
+         lMvSO34syUmM8FU7NgoiEY0rBuUcJeCidOvyvR5KpmGA+WRitqb0SVpb3dctCinCRLKj
+         5JkkW6KdQemJmPFdorIe95o35gDpc/fgU1JL0oUAE1Mxp+1owXOtd0YBbT5YK45pKpi4
+         Lk+bR0bOJxNKznPiPGOTxae9uAZV2wF/jP9P3fma03mw4pXNywYVpqp8zA62c8cuvjf/
+         D+8klVQpeS3QGM4Drpt3K2oiK0k1lajMUA7e3rs7Ti1WPmjOztn4tmMeUTSKGM6b6VcK
+         SqYQ==
+X-Gm-Message-State: ANoB5plwDJghBxs/BOCSblVlwTRvn9iXvC9wrIXDqjU2QDuuQc+rM2+n
+        D61litCSkYzIjNRuxhuk/gM43g==
+X-Google-Smtp-Source: AA0mqf5R3/pLJNwgo1Y3EzpOdfJhTGQLeA+xHc2zaSTJJmVgYbJmpKl1SoZfez1u6MtNlJ/RXwbzvg==
+X-Received: by 2002:a05:600c:384d:b0:3cf:7217:d5fa with SMTP id s13-20020a05600c384d00b003cf7217d5famr31122553wmr.191.1669733225099;
+        Tue, 29 Nov 2022 06:47:05 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id b10-20020adfee8a000000b00241dec4ad16sm13717792wro.96.2022.11.29.06.47.03
+        by smtp.gmail.com with ESMTPSA id b10-20020adfee8a000000b00241dec4ad16sm13717792wro.96.2022.11.29.06.47.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 06:47:03 -0800 (PST)
+        Tue, 29 Nov 2022 06:47:04 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Tue, 29 Nov 2022 15:47:01 +0100
-Subject: [PATCH v3 1/6] dt-bindings: qcom: geni-se: document I2C Master Hub wrapper
- variant
+Date:   Tue, 29 Nov 2022 15:47:02 +0100
+Subject: [PATCH v3 2/6] dt-bindings: i2c: qcom-geni: document I2C Master Hub serial
+ I2C engine
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v3-1-f6a20dc9996e@linaro.org>
+Message-Id: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v3-2-f6a20dc9996e@linaro.org>
 References: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v3-0-f6a20dc9996e@linaro.org>
 In-Reply-To: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v3-0-f6a20dc9996e@linaro.org>
 To:     Bjorn Andersson <andersson@kernel.org>,
@@ -83,83 +83,115 @@ The I2C Master Hub is a stripped down version of the GENI Serial Engine
 QUP Wrapper Controller but only supporting I2C serial engines without
 DMA support.
 
-Document the variant compatible, forbid UART and SPI sub-nodes,
-and remove requirement for the Master AHB clock and iommu property.
+Document the I2C Serial Engine variant used within the I2C Master
+Hub Wrapper.
+
+This serial engine variant lacks DMA support, requires a core clock,
+and since DMA support is lacking the memory interconnect path isn't
+needed.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../devicetree/bindings/soc/qcom/qcom,geni-se.yaml | 44 +++++++++++++++++++---
- 1 file changed, 38 insertions(+), 6 deletions(-)
+ .../bindings/i2c/qcom,i2c-geni-qcom.yaml           | 64 ++++++++++++++++++----
+ 1 file changed, 54 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-index 2bf5293fc995..ab4df0205285 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-@@ -21,20 +21,19 @@ properties:
+diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+index 0e7ed00562e2..f5f7dc8f325c 100644
+--- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
++++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+@@ -10,18 +10,19 @@ maintainers:
+   - Andy Gross <agross@kernel.org>
+   - Bjorn Andersson <bjorn.andersson@linaro.org>
+ 
+-allOf:
+-  - $ref: /schemas/i2c/i2c-controller.yaml#
+-
+ properties:
    compatible:
-     enum:
-       - qcom,geni-se-qup
-+      - qcom,geni-se-i2c-master-hub
- 
-   reg:
-     description: QUP wrapper common register address and length.
-     maxItems: 1
- 
-   clock-names:
--    items:
--      - const: m-ahb
--      - const: s-ahb
-+    minItems: 1
-+    maxItems: 2
+-    const: qcom,geni-i2c
++    enum:
++      - qcom,geni-i2c
++      - qcom,geni-i2c-master-hub
  
    clocks:
--    items:
--      - description: Master AHB Clock
--      - description: Slave AHB Clock
+-    maxItems: 1
 +    minItems: 1
 +    maxItems: 2
  
-   "#address-cells":
-     const: 2
-@@ -81,6 +80,39 @@ patternProperties:
-     description: GENI Serial Engine based UART Controller.
-     $ref: /schemas/serial/qcom,serial-geni-qcom.yaml#
+   clock-names:
+-    const: se
++    minItems: 1
++    maxItems: 2
+ 
+   clock-frequency:
+     default: 100000
+@@ -35,13 +36,12 @@ properties:
+       - const: rx
+ 
+   interconnects:
++    minItems: 2
+     maxItems: 3
+ 
+   interconnect-names:
+-    items:
+-      - const: qup-core
+-      - const: qup-config
+-      - const: qup-memory
++    minItems: 2
++    maxItems: 3
+ 
+   interrupts:
+     maxItems: 1
+@@ -71,6 +71,50 @@ required:
+   - clock-names
+   - reg
  
 +allOf:
++  - $ref: /schemas/i2c/i2c-controller.yaml#
 +  - if:
 +      properties:
 +        compatible:
 +          contains:
-+            const: qcom,geni-se-i2c-master-hub
++            const: qcom,geni-i2c-master-hub
 +    then:
 +      properties:
++        clocks:
++          minItems: 2
++
 +        clock-names:
 +          items:
-+            - const: s-ahb
++            - const: se
++            - const: core
 +
-+        clocks:
++        dmas: false
++        dma-names: false
++
++        interconnects:
++          maxItems: 2
++
++        interconnect-names:
 +          items:
-+            - description: Slave AHB Clock
-+
-+        iommus: false
-+
-+      patternProperties:
-+        "spi@[0-9a-f]+$": false
-+        "serial@[0-9a-f]+$": false
++            - const: qup-core
++            - const: qup-config
 +    else:
 +      properties:
-+        clock-names:
-+          items:
-+            - const: m-ahb
-+            - const: s-ahb
-+
 +        clocks:
-+          items:
-+            - description: Master AHB Clock
-+            - description: Slave AHB Clock
++          maxItems: 1
 +
- additionalProperties: false
++        clock-names:
++          const: se
++
++        interconnects:
++          minItems: 3
++
++        interconnect-names:
++          items:
++            - const: qup-core
++            - const: qup-config
++            - const: qup-memory
++
+ unevaluatedProperties: false
  
  examples:
 
