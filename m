@@ -2,178 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4FF663C36B
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:17:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06BFC63C379
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235059AbiK2PRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 10:17:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44196 "EHLO
+        id S235681AbiK2PSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 10:18:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234902AbiK2PR1 (ORCPT
+        with ESMTP id S235646AbiK2PSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:17:27 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78062F001;
-        Tue, 29 Nov 2022 07:17:24 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 29 Nov 2022 10:18:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1D82EF66;
+        Tue, 29 Nov 2022 07:18:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 1DC623FB17;
-        Tue, 29 Nov 2022 15:17:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1669735042; bh=keFMyCTX0usvCrLsU93OmOyWf2zkklBeuPqknM65WaM=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=zOjS9HtnS3Yl6oUchqXhplrO/uVVMgRv5tfIzFIAZFyJUCd/yiM9kl/xE0TFkj+Bm
-         LiDQcFrtPIw6URVVvX6eYu45m+Mgu7iwu53VW5dQg/4pIlsSb0t8SHgwcNRV8M4RlQ
-         x8/bHWU3xirXgdPPSb6IhrvmHxrIpe0Z1A8eOkoE/T54/H+uOJLU96m5buNfyOXh4v
-         3CJ3H6fmr1d3Bfd0pot4fc0vJdmuSB28RPrKv8gmSnLPWNrIrVTYOeEJtH+/mhp7k2
-         96S2itepvmm9tYgKw5fg1KGyu+c3K74nEtvrfqFWoFmM+pgzq3nwde1ZBfV29+kS3r
-         WbTnSwEuSTfLQ==
-Message-ID: <e8c481ba-02a7-f1c7-6314-ea1ddf136998@marcan.st>
-Date:   Wed, 30 Nov 2022 00:17:08 +0900
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DF06617A3;
+        Tue, 29 Nov 2022 15:18:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E68F0C43470;
+        Tue, 29 Nov 2022 15:18:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669735091;
+        bh=PAhRHefh63QPKzR0YMUfvO7NfJ7s0IoYl5L7+q1ICY8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=LJa0LJR5Sf4jMZ2WcDfEo2oi25kSp64NQlmQZePm47sD6nb0plm8O4tsD30dt6c35
+         xyvvXZPU9OSrjdV4Uqoyqxsbs1PwgXIyBs+VpfXC1hPBbEak/JVN6fiErJ7HkjmP60
+         xcY7Sg6K0MWRGARIEwdkWyYc9Mu3b4W7QXnrfBX2Zyjd18yQg/3ZZ7ICs3l3onNjij
+         gIWCjpJs+4kml+pcB324C8LaTMX93PVEnCWVRML7HcpN8m2Y2YzRbxTEdDJYwr2psL
+         LlYeWi//YInKTNBCi/gkiouotPr7N+nSnaNBlhKlxzhMPBdAL3mT5yDOFS9l0suHdE
+         lmPG1UoWsW9Bg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 8222D5C03A4; Tue, 29 Nov 2022 07:18:10 -0800 (PST)
+Date:   Tue, 29 Nov 2022 07:18:10 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] rcu-tasks: Make rude RCU-Tasks work well with CPU
+ hotplug
+Message-ID: <20221129151810.GY4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <PH0PR11MB588001E6982A9DC32F93FD7ADA129@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <24EC376D-B542-4E3C-BC10-3E81F2F2F49C@joelfernandes.org>
+ <PH0PR11MB58801BEDCA0F6600F01486FEDA129@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20221128142912.16022-1-marcan@marcan.st>
- <20221128142912.16022-3-marcan@marcan.st>
- <CAPDyKFobMvef_BWGMR=7avODh2r5XNMGpwO3xYgrN-u=DqRwbg@mail.gmail.com>
- <41c6882a-bff0-378c-edd3-160b54be7c1d@marcan.st>
- <a297079e-2dc9-d311-5415-a58332e7a711@linaro.org>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v5 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
- binding for Apple SoC cpufreq
-In-Reply-To: <a297079e-2dc9-d311-5415-a58332e7a711@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <PH0PR11MB58801BEDCA0F6600F01486FEDA129@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/11/2022 23.34, Krzysztof Kozlowski wrote:
-> On 29/11/2022 15:00, Hector Martin wrote:
->> On 29/11/2022 20.36, Ulf Hansson wrote:
->> Please, let's introspect about this for a moment. Something is deeply
->> broken if people with 25+ years being an arch maintainer can't get a
+On Tue, Nov 29, 2022 at 06:25:04AM +0000, Zhang, Qiang1 wrote:
+> > On Nov 28, 2022, at 11:54 PM, Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:
+> > 
+> > ﻿On Mon, Nov 28, 2022 at 10:34:28PM +0800, Zqiang wrote:
+> >> Currently, invoke rcu_tasks_rude_wait_gp() to wait one rude
+> >> RCU-tasks grace period, if __num_online_cpus == 1, will return
+> >> directly, indicates the end of the rude RCU-task grace period.
+> >> suppose the system has two cpus, consider the following scenario:
+> >> 
+> >>    CPU0                                   CPU1 (going offline)
+> >>                          migration/1 task:
+> >>                                      cpu_stopper_thread
+> >>                                       -> take_cpu_down
+> >>                                          -> _cpu_disable
+> >>                               (dec __num_online_cpus)
+> >>                                          ->cpuhp_invoke_callback
+> >>                                                preempt_disable
+> >>                        access old_data0
+> >>           task1
+> >> del old_data0                                  .....
+> >> synchronize_rcu_tasks_rude()
+> >> task1 schedule out
+> >> ....
+> >> task2 schedule in
+> >> rcu_tasks_rude_wait_gp()
+> >>     ->__num_online_cpus == 1
+> >>       ->return
+> >> ....
+> >> task1 schedule in
+> >> ->free old_data0
+> >>                                                preempt_enable
+> >> 
+> >> when CPU1 dec __num_online_cpus and __num_online_cpus is equal one,
+> >> the CPU1 has not finished offline, stop_machine task(migration/1)
+> >> still running on CPU1, maybe still accessing 'old_data0', but the
+> >> 'old_data0' has freed on CPU0.
+> >> 
+> >> This commit add cpus_read_lock/unlock() protection before accessing
+> >> __num_online_cpus variables, to ensure that the CPU in the offline
+> >> process has been completed offline.
+> >> 
+> >> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> >> 
+> >> First, good eyes and good catch!!!
+> >> 
+> >> The purpose of that check for num_online_cpus() is not performance
+> >> on single-CPU systems, but rather correct operation during early boot.
+> >> So a simpler way to make that work is to check for RCU_SCHEDULER_RUNNING,
+> >> for example, as follows:
+> >> 
+> >>    if (rcu_scheduler_active != RCU_SCHEDULER_RUNNING &&
+> >>        num_online_cpus() <= 1)
+> >>        return;    // Early boot fastpath for only one CPU.
+> > 
+> > Hi Paul
+> > 
+> > During system startup, because the RCU_SCHEDULER_RUNNING is set after starting other CPUs, 
+> > 
+> >              CPU0                                                                       CPU1                                                                 
+> > 
+> > if (rcu_scheduler_active !=                                    
+> >    RCU_SCHEDULER_RUNNING &&
+> >           __num_online_cpus  == 1)                                               
+> >    return;                                                                         inc  __num_online_cpus
+> >                            (__num_online_cpus == 2)
+> > 
+> > CPU0 didn't notice the update of the __num_online_cpus variable by CPU1 in time
+> > Can we move rcu_set_runtime_mode() before smp_init()
+> > any thoughts?
+> >
+> >Is anyone expected to do rcu-tasks operation before the scheduler is running? 
 > 
-> If arch maintainer sends patches which does not build (make
-> dt_binding_check), then what do you exactly expect? Accept them just
-> because it is 25+ years of experience or a maintainer? So we have
-> difference processes - for beginners code should compile. For
-> experienced people, it does not have to build because otherwise they
-> will get discouraged?
+> Not sure if such a scenario exists.
+> 
+> >Typically this requires the tasks to context switch which is a scheduler operation.
+> >
+> >If the scheduler is not yet running, then I don’t think missing an update the __num_online_cpus matters since no one does a tasks-RCU synchronize.
+> 
+> Hi Joel
+> 
+> After the kernel_init task runs, before calling smp_init() to starting other CPUs, 
+> the scheduler haven been initialization, task context switching can occur.
 
-I expect the process to not be so confusing and frustrating that a
-maintainer with 25+ years of experience gives up. That the bindings
-didn't pass the checker is besides the point. People say the Linux
-kernel community is hostile to newbies. This issue proves it's not just
-newbies, the process is failing even experienced folks.
+Good catch, thank you both.  For some reason, I was thinking that the
+additional CPUs did not come online until later.
 
-On that specific issue, any other functional open source project would
-have the binding checks be a CI bot, with a friendly message telling you
-what to do to fix it, and it would re-run when you push to the PR again,
-which is a *much* lower friction action than sending a whole new patch
-series out for review via email (if you don't agree with this, then
-you're not the average contributor - the Linux kernel is by far the
-scariest major open source project to contribute to, and I think most
-people would agree with me on that).
+So how about this?
 
-I know Rob has a DT checker bot, but its error output is practically
-line noise, and the error email doesn't even mention the
-DT_SCHEMA_FILES= make option (which is the only way to make the check
-not take *forever* to run). Absolutely nobody is going to look at those
-emails without already knowing the intricacies of DT bindings and the
-checker and not find them incredibly frustrating.
+	if (rcu_scheduler_active == RCU_SCHEDULER_INACTIVE)
+		return;    // Early boot fastpath.
 
-But it's not just the DT checker. That came after an argument where the
-MFD maintainer complained about the driver while offering no solution
-nor proposed path forward. I had to have an IRC conversation with him to
-work it out, after which he accepted one of the options I'd already
-proposed over email. If you have to change communication mediums to
-resolve an issue, that means your initial medium failed at its job.
+If this condition is true, there is only one CPU and no scheduler,
+thus no preemption.
 
-Not to mention the random drive-by reviews, nitpicks, disagreements
-between maintainers about how to do things, or just plain cases of
-maintainers stubbornly being *wrong* and refusing to listen while
-everyone around them is telling them they're wrong (until someone above
-them in the maintainer tree tells them they're wrong - then they finally
-get it. If it takes someone in a position of authority telling you
-you're wrong for you to accept it, you're doing a poor job at your own
-position.)
+						Thanx, Paul
 
-And then there's the coding style. The rest of the world has
-standardized on formatting tools. Here, every subsystem maintainer has
-their own pet style you have to learn. "Please put your variables in
-reverse christmas tree order". I once got a review comment that
-complained that I re-aligned an existing #define when I added another
-one (to keep them visually aligned, as the new one increased the
-required tab stop). Because "cleanup patches should be separate" (I
-didn't submit a cleanup patch after that, I just left the defines
-misaligned). So now I need to maintain a massive mental map of exactly
-what style conventions and patch breakup conventions every subsystem
-maintainer wants me to use.
-
-I'm so glad `make rustfmt` is a thing now. Maybe 50 years down the line,
-most of the kernel will have been rewritten in Rust and we'll finally
-fix just one of these problems /s
-
-Some of these things are, to some extent, a natural result of working
-with other humans. But the kernel community has both a number of humans
-harder to work with than is reasonable in their position, and an overall
-process that multiplies the resulting pain by an order of magnitude for
-everyone involved.
-
-> While I understand your point about bikeschedding, but I think your
-> previous bindings got pretty nice and fast reviews, so using examples of
-> non-building case is poor choice.
-
-Yeah, after a while, because I learned how to do DT bindings the hard
-way after having to submit a bunch and getting everything wrong (and
-even then I still get the simplest things wrong, see: v4 here). Which is
-why I'll pick up after rmk's attempt and try again with macsmc at some
-point (probably after 6.1). But I'm not holding my breath that I won't
-need another half dozen rounds of bikeshedding.
-
-When it takes 10 times more man-hours to upstream a driver than to
-reverse engineer and write it with zero documentation, never mind the
-calendar time it takes, something is very wrong. I actively dread
-submitting new drivers to new subsystems or some existing ones now. How
-much pain will the next one be? Will I be asked to move files around 3
-times? Spend 4 rounds bikeshedding the DT schema? Think it's finally
-ready only for someone to show up and ask to change a major part of the
-design at the last minute?
-
-And this all when we're actually submitting code of decent quality (I
-think I have enough experience not to submit crap most of the time). Now
-imagine how much worse this all is for a newbie who submits a
-well-intentioned but definitely not up to standard patch. There's a huge
-chance they'll give up before ever getting the submission through.
-
-Again, I'll keep pushing and sending out patches, because this is
-important. But this is the reality. This is how bad it is. The process
-is broken, and everyone outside the kernel community can see that and
-has been saying that for ages. Just because some of us are willing to
-put up with the pain anyway doesn't mean it's working as intended.
-
-- Hector
+> Thanks
+> Zqiang
+> 
+> >
+> >Or did I miss something?
+> >
+> >Thanks.
+> >
+> >
+> >
+> > 
+> > Thanks
+> > Zqiang
+> > 
+> >> 
+> >> This works because rcu_scheduler_active is set to RCU_SCHEDULER_RUNNING
+> >> long before it is possible to offline CPUs.
+> >> 
+> >> Yes, schedule_on_each_cpu() does do cpus_read_lock(), again, good eyes,
+> >> and it also unnecessarily does the schedule_work_on() the current CPU,
+> >> but the code calling synchronize_rcu_tasks_rude() is on high-overhead
+> >> code paths, so this overhead is down in the noise.
+> >> 
+> >> Until further notice, anyway.
+> >> 
+> >> So simplicity is much more important than performance in this code.
+> >> So just adding the check for RCU_SCHEDULER_RUNNING should fix this,
+> >> unless I am missing something (always possible!).
+> >> 
+> >>                            Thanx, Paul
+> >> 
+> >> ---
+> >> kernel/rcu/tasks.h | 20 ++++++++++++++++++--
+> >> 1 file changed, 18 insertions(+), 2 deletions(-)
+> >> 
+> >> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+> >> index 4a991311be9b..08e72c6462d8 100644
+> >> --- a/kernel/rcu/tasks.h
+> >> +++ b/kernel/rcu/tasks.h
+> >> @@ -1033,14 +1033,30 @@ static void rcu_tasks_be_rude(struct work_struct *work)
+> >> {
+> >> }
+> >> 
+> >> +static DEFINE_PER_CPU(struct work_struct, rude_work);
+> >> +
+> >> // Wait for one rude RCU-tasks grace period.
+> >> static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
+> >> {
+> >> +    int cpu;
+> >> +    struct work_struct *work;
+> >> +
+> >> +    cpus_read_lock();
+> >>    if (num_online_cpus() <= 1)
+> >> -        return;    // Fastpath for only one CPU.
+> >> +        goto end;// Fastpath for only one CPU.
+> >> 
+> >>    rtp->n_ipis += cpumask_weight(cpu_online_mask);
+> >> -    schedule_on_each_cpu(rcu_tasks_be_rude);
+> >> +    for_each_online_cpu(cpu) {
+> >> +        work = per_cpu_ptr(&rude_work, cpu);
+> >> +        INIT_WORK(work, rcu_tasks_be_rude);
+> >> +        schedule_work_on(cpu, work);
+> >> +    }
+> >> +
+> >> +    for_each_online_cpu(cpu)
+> >> +        flush_work(per_cpu_ptr(&rude_work, cpu));
+> >> +
+> >> +end:
+> >> +    cpus_read_unlock();
+> >> }
+> >> 
+> >> void call_rcu_tasks_rude(struct rcu_head *rhp, rcu_callback_t func);
+> >> -- 
+> >> 2.25.1
+> >> 
