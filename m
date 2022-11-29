@@ -2,327 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC6D63C3D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:32:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3D263C3D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235742AbiK2PcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 10:32:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
+        id S233479AbiK2PeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 10:34:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235212AbiK2PcW (ORCPT
+        with ESMTP id S230151AbiK2Pd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:32:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D414019C3F;
-        Tue, 29 Nov 2022 07:32:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 29 Nov 2022 10:33:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A9640465
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:32:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669735977;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XEX/nvgc/F3npA3jw3K2PpyMT0w7VYcn5gyl+BL6F6A=;
+        b=fIuV5y1Uvv3nzlspjA+mXSBtXtwIhsnaHkkqF9v7TFUAIscBNIjgzDfY8+FCmGD+UlRIAO
+        BrYH315l2MmuhLgEs+7DZOKb7+ObE9xqdtwRv8cCxsNMHaLCJnwrhabl19lxVt8JAK2+Bw
+        AHy52pBRKs7SiejsFopM7+ANudFAJA8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-59-41YQtDwHPpeYF79gT9IuKg-1; Tue, 29 Nov 2022 10:32:53 -0500
+X-MC-Unique: 41YQtDwHPpeYF79gT9IuKg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 658BBB8167B;
-        Tue, 29 Nov 2022 15:32:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76867C433C1;
-        Tue, 29 Nov 2022 15:32:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669735938;
-        bh=Rc/mRTNstPtUeWMK/dPadAbKK5S4ec+XTGd/LMZwaVA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rODzPmENKbsIdVTT5nOcyjNgoWDpnfshrP39HUCHC6iI7Qdvupf+78Ys2tvu3aD/T
-         yZsRznxz1RoZKAwlUB9S6ph1x23puSQNxQ5c43e6d4i2v8OHfIEfhzT5EWrrzRc9IQ
-         02Wxf8HJgdXmCqN35ESpCObms7+qJpAS+j3WV/nA5qGQU06gKSAxBm3GYwOXzs5MRs
-         ZCXXxzpT3CDB1arb6HFJ7rzLUgPJQAzjvmo8aj1xOso33sJBJhHQ7IjI0HrGUiQSz9
-         epXAvh1ExxV1CRjcW7xij2jpjiU5k45iQSzZPvH/arg1SDjfWTOLI50a0NpGzRCC9v
-         DR5uHJt+w8UIg==
-Date:   Tue, 29 Nov 2022 21:02:03 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Asutosh Das <quic_asutoshd@quicinc.com>
-Cc:     quic_cang@quicinc.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, quic_nguyenb@quicinc.com,
-        quic_xiaosenh@quicinc.com, stanley.chu@mediatek.com,
-        eddie.huang@mediatek.com, daejun7.park@samsung.com,
-        bvanassche@acm.org, avri.altman@wdc.com, beanhuo@micron.com,
-        linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 06/16] ufs: core: mcq: Configure resource regions
-Message-ID: <20221129153203.GF4931@workstation>
-References: <cover.1669684648.git.quic_asutoshd@quicinc.com>
- <63d8921f95c3ee2678bf8b580f0bd12e93b38cde.1669684648.git.quic_asutoshd@quicinc.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 091F4811E67;
+        Tue, 29 Nov 2022 15:32:52 +0000 (UTC)
+Received: from [10.22.17.30] (unknown [10.22.17.30])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3B388140EBF5;
+        Tue, 29 Nov 2022 15:32:51 +0000 (UTC)
+Message-ID: <f669ce38-1e23-04b4-fe6f-591579e817de@redhat.com>
+Date:   Tue, 29 Nov 2022 10:32:49 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63d8921f95c3ee2678bf8b580f0bd12e93b38cde.1669684648.git.quic_asutoshd@quicinc.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH-tip v4] sched: Fix NULL user_cpus_ptr check in
+ dup_user_cpus_ptr()
+Content-Language: en-US
+To:     Will Deacon <will@kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Wenjie Li <wenjieli@qti.qualcomm.com>,
+        =?UTF-8?B?RGF2aWQgV2FuZyDnjovmoIc=?= <wangbiao3@xiaomi.com>,
+        linux-kernel@vger.kernel.org
+References: <20221125023943.1118603-1-longman@redhat.com>
+ <92b99a5e-1588-4e08-a652-72e9c51421cf@redhat.com>
+ <20221128120008.GA25090@willie-the-truck>
+ <d49a78bb-dce1-92b1-0f67-d71259609263@redhat.com>
+ <20221129140759.GA26437@willie-the-truck>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20221129140759.GA26437@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 05:20:47PM -0800, Asutosh Das wrote:
-> Define the mcq resources and add support to ioremap
-> the resource regions.
-> 
-> Co-developed-by: Can Guo <quic_cang@quicinc.com>
-> Signed-off-by: Can Guo <quic_cang@quicinc.com>
-> Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
+On 11/29/22 09:07, Will Deacon wrote:
+> On Mon, Nov 28, 2022 at 10:11:52AM -0500, Waiman Long wrote:
+>> On 11/28/22 07:00, Will Deacon wrote:
+>>> On Sun, Nov 27, 2022 at 08:43:27PM -0500, Waiman Long wrote:
+>>>> On 11/24/22 21:39, Waiman Long wrote:
+>>>>> In general, a non-null user_cpus_ptr will remain set until the task dies.
+>>>>> A possible exception to this is the fact that do_set_cpus_allowed()
+>>>>> will clear a non-null user_cpus_ptr. To allow this possible racing
+>>>>> condition, we need to check for NULL user_cpus_ptr under the pi_lock
+>>>>> before duping the user mask.
+>>>>>
+>>>>> Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
+>>>>> Signed-off-by: Waiman Long <longman@redhat.com>
+>>>> This is actually a pre-existing use-after-free bug since commit 07ec77a1d4e8
+>>>> ("sched: Allow task CPU affinity to be restricted on asymmetric systems").
+>>>> So it needs to be fixed in the stable release as well. Will resend the patch
+>>>> with an additional fixes tag and updated commit log.
+>>> Please can you elaborate on the use-after-free here? Looking at
+>>> 07ec77a1d4e8, the mask is only freed in free_task() when the usage refcount
+>>> has dropped to zero and I can't see how that can race with fork().
+>>>
+>>> What am I missing?
+>> I missed that at first. The current task cloning process copies the content
+>> of the task structure over to the newly cloned/forked task. IOW, if
+>> user_cpus_ptr had been set up previously, it will be copied over to the
+>> cloned task. Now if user_cpus_ptr of the source task is cleared right after
+>> that and before dup_user_cpus_ptr() is called. The obsolete user_cpus_ptr
+>> value in the cloned task will remain and get used even if it has been freed.
+>> That is what I call as use-after-free and double-free.
+> If the parent task can be modified concurrently with dup_task_struct() then
+> surely we'd have bigger issues because that's not going to be atomic? At the
+> very least we'd have a data race, but it also feels like we could end up
+> with inconsistent task state in the child. In fact, couldn't the normal
+> 'cpus_mask' be corrupted by a concurrent set_cpus_allowed_common()?
+>
+> Or am I still failing to understand the race?
+>
+> Will
 
-My comment about the organization of struct members apply to this patch
-and others also. But it is not a big deal and can be cleaned up later.
-So,
+A major difference between cpus_mask and user_cpus_ptr is that for 
+cpus_mask, the bitmap is embedded into task_struct whereas user_cpus_ptr 
+is a pointer to an external bitmap. So there is no issue of 
+use-after-free wrt cpus_mask. That is not the case where the memory of 
+the user_cpus_ptr of the parent task is freed, but then a reference to 
+that memory is still available in the child's task struct and may be used.
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Note that the problematic concurrence is not between the copying of task 
+struct and changing of the task struct. It is what will happen after the 
+task struct copying has already been done with an extra reference 
+present in the child's task struct.
 
-Thanks,
-Mani
+Cheers,
+Longman
 
-> ---
->  drivers/ufs/core/ufs-mcq.c     |   3 ++
->  drivers/ufs/core/ufshcd-priv.h |   8 ++++
->  drivers/ufs/host/ufs-qcom.c    | 103 +++++++++++++++++++++++++++++++++++++++++
->  include/ufs/ufshcd.h           |  30 ++++++++++++
->  4 files changed, 144 insertions(+)
-> 
-> diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-> index bf08ec5..d6807e3 100644
-> --- a/drivers/ufs/core/ufs-mcq.c
-> +++ b/drivers/ufs/core/ufs-mcq.c
-> @@ -119,7 +119,10 @@ int ufshcd_mcq_init(struct ufs_hba *hba)
->  	int ret;
->  
->  	ret = ufshcd_mcq_config_nr_queues(hba);
-> +	if (ret)
-> +		return ret;
->  
-> +	ret = ufshcd_vops_mcq_config_resource(hba);
->  	return ret;
->  }
->  
-> diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-priv.h
-> index 9368ba2..74cb17b9 100644
-> --- a/drivers/ufs/core/ufshcd-priv.h
-> +++ b/drivers/ufs/core/ufshcd-priv.h
-> @@ -227,6 +227,14 @@ static inline void ufshcd_vops_config_scaling_param(struct ufs_hba *hba,
->  		hba->vops->config_scaling_param(hba, p, data);
->  }
->  
-> +static inline int ufshcd_vops_mcq_config_resource(struct ufs_hba *hba)
-> +{
-> +	if (hba->vops && hba->vops->mcq_config_resource)
-> +		hba->vops->mcq_config_resource(hba);
-> +
-> +	return -EOPNOTSUPP;
-> +}
-> +
->  extern const struct ufs_pm_lvl_states ufs_pm_lvl_states[];
->  
->  /**
-> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-> index 8ad1415..6bea541 100644
-> --- a/drivers/ufs/host/ufs-qcom.c
-> +++ b/drivers/ufs/host/ufs-qcom.c
-> @@ -25,6 +25,12 @@
->  #define UFS_QCOM_DEFAULT_DBG_PRINT_EN	\
->  	(UFS_QCOM_DBG_PRINT_REGS_EN | UFS_QCOM_DBG_PRINT_TEST_BUS_EN)
->  
-> +#define MCQ_QCFGPTR_MASK	GENMASK(7, 0)
-> +#define MCQ_QCFGPTR_UNIT	0x200
-> +#define MCQ_SQATTR_OFFSET(c) \
-> +	((((c) >> 16) & MCQ_QCFGPTR_MASK) * MCQ_QCFGPTR_UNIT)
-> +#define MCQ_QCFG_SIZE	0x40
-> +
->  enum {
->  	TSTBUS_UAWM,
->  	TSTBUS_UARM,
-> @@ -1424,6 +1430,102 @@ static void ufs_qcom_config_scaling_param(struct ufs_hba *hba,
->  }
->  #endif
->  
-> +/* Resources */
-> +static const struct ufshcd_res_info ufs_res_info[RES_MAX] = {
-> +	{.name = "ufs_mem",},
-> +	{.name = "mcq",},
-> +	/* Submission Queue DAO */
-> +	{.name = "mcq_sqd",},
-> +	/* Submission Queue Interrupt Status */
-> +	{.name = "mcq_sqis",},
-> +	/* Completion Queue DAO */
-> +	{.name = "mcq_cqd",},
-> +	/* Completion Queue Interrupt Status */
-> +	{.name = "mcq_cqis",},
-> +	/* MCQ vendor specific */
-> +	{.name = "mcq_vs",},
-> +};
-> +
-> +static int ufs_qcom_mcq_config_resource(struct ufs_hba *hba)
-> +{
-> +	struct platform_device *pdev = to_platform_device(hba->dev);
-> +	struct ufshcd_res_info *res;
-> +	struct resource *res_mem, *res_mcq;
-> +	int i, ret = 0;
-> +
-> +	memcpy(hba->res, ufs_res_info, sizeof(ufs_res_info));
-> +
-> +	for (i = 0; i < RES_MAX; i++) {
-> +		res = &hba->res[i];
-> +		res->resource = platform_get_resource_byname(pdev,
-> +							     IORESOURCE_MEM,
-> +							     res->name);
-> +		if (!res->resource) {
-> +			dev_info(hba->dev, "Resource %s not provided\n", res->name);
-> +			if (i == RES_UFS)
-> +				return -ENOMEM;
-> +			continue;
-> +		} else if (i == RES_UFS) {
-> +			res_mem = res->resource;
-> +			res->base = hba->mmio_base;
-> +			continue;
-> +		}
-> +
-> +		res->base = devm_ioremap_resource(hba->dev, res->resource);
-> +		if (IS_ERR(res->base)) {
-> +			dev_err(hba->dev, "Failed to map res %s, err=%d\n",
-> +					 res->name, (int)PTR_ERR(res->base));
-> +			res->base = NULL;
-> +			ret = PTR_ERR(res->base);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	/* MCQ resource provided in DT */
-> +	res = &hba->res[RES_MCQ];
-> +	/* Bail if MCQ resource is provided */
-> +	if (res->base)
-> +		goto out;
-> +
-> +	/* Explicitly allocate MCQ resource from ufs_mem */
-> +	res_mcq = devm_kzalloc(hba->dev, sizeof(*res_mcq), GFP_KERNEL);
-> +	if (!res_mcq) {
-> +		dev_err(hba->dev, "Failed to allocate MCQ resource\n");
-> +		return ret;
-> +	}
-> +
-> +	res_mcq->start = res_mem->start +
-> +			 MCQ_SQATTR_OFFSET(hba->mcq_capabilities);
-> +	res_mcq->end = res_mcq->start + hba->nr_hw_queues * MCQ_QCFG_SIZE - 1;
-> +	res_mcq->flags = res_mem->flags;
-> +	res_mcq->name = "mcq";
-> +
-> +	ret = insert_resource(&iomem_resource, res_mcq);
-> +	if (ret) {
-> +		dev_err(hba->dev, "Failed to insert MCQ resource, err=%d\n",
-> +			ret);
-> +		goto insert_res_err;
-> +	}
-> +
-> +	res->base = devm_ioremap_resource(hba->dev, res_mcq);
-> +	if (IS_ERR(res->base)) {
-> +		dev_err(hba->dev, "MCQ registers mapping failed, err=%d\n",
-> +			(int)PTR_ERR(res->base));
-> +		ret = PTR_ERR(res->base);
-> +		goto ioremap_err;
-> +	}
-> +
-> +out:
-> +	hba->mcq_base = res->base;
-> +	return 0;
-> +ioremap_err:
-> +	res->base = NULL;
-> +	remove_resource(res_mcq);
-> +insert_res_err:
-> +	devm_kfree(hba->dev, res_mcq);
-> +	return ret;
-> +}
-> +
->  /*
->   * struct ufs_hba_qcom_vops - UFS QCOM specific variant operations
->   *
-> @@ -1447,6 +1549,7 @@ static const struct ufs_hba_variant_ops ufs_hba_qcom_vops = {
->  	.device_reset		= ufs_qcom_device_reset,
->  	.config_scaling_param = ufs_qcom_config_scaling_param,
->  	.program_key		= ufs_qcom_ice_program_key,
-> +	.mcq_config_resource	= ufs_qcom_mcq_config_resource,
->  };
->  
->  /**
-> diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-> index 146b613..0e21a6a 100644
-> --- a/include/ufs/ufshcd.h
-> +++ b/include/ufs/ufshcd.h
-> @@ -297,6 +297,7 @@ struct ufs_pwr_mode_info {
->   * @config_scaling_param: called to configure clock scaling parameters
->   * @program_key: program or evict an inline encryption key
->   * @event_notify: called to notify important events
-> + * @mcq_config_resource: called to configure MCQ platform resources
->   */
->  struct ufs_hba_variant_ops {
->  	const char *name;
-> @@ -335,6 +336,7 @@ struct ufs_hba_variant_ops {
->  			       const union ufs_crypto_cfg_entry *cfg, int slot);
->  	void	(*event_notify)(struct ufs_hba *hba,
->  				enum ufs_event_type evt, void *data);
-> +	int	(*mcq_config_resource)(struct ufs_hba *hba);
->  };
->  
->  /* clock gating state  */
-> @@ -724,6 +726,30 @@ struct ufs_hba_monitor {
->  };
->  
->  /**
-> + * struct ufshcd_res_info_t - MCQ related resource regions
-> + *
-> + * @name: resource name
-> + * @resource: pointer to resource region
-> + * @base: register base address
-> + */
-> +struct ufshcd_res_info {
-> +	const char *name;
-> +	struct resource *resource;
-> +	void __iomem *base;
-> +};
-> +
-> +enum ufshcd_res {
-> +	RES_UFS,
-> +	RES_MCQ,
-> +	RES_MCQ_SQD,
-> +	RES_MCQ_SQIS,
-> +	RES_MCQ_CQD,
-> +	RES_MCQ_CQIS,
-> +	RES_MCQ_VS,
-> +	RES_MAX,
-> +};
-> +
-> +/**
->   * struct ufs_hba - per adapter private structure
->   * @mmio_base: UFSHCI base register address
->   * @ucdl_base_addr: UFS Command Descriptor base address
-> @@ -835,6 +861,8 @@ struct ufs_hba_monitor {
->   *	ufshcd_resume_complete()
->   * @ext_iid_sup: is EXT_IID is supported by UFSHC
->   * @mcq_sup: is mcq supported by UFSHC
-> + * @res: array of resource info of MCQ registers
-> + * @mcq_base: Multi circular queue registers base address
->   */
->  struct ufs_hba {
->  	void __iomem *mmio_base;
-> @@ -988,6 +1016,8 @@ struct ufs_hba {
->  	bool complete_put;
->  	bool ext_iid_sup;
->  	bool mcq_sup;
-> +	struct ufshcd_res_info res[RES_MAX];
-> +	void __iomem *mcq_base;
->  };
->  
->  /* Returns true if clocks can be gated. Otherwise false */
-> -- 
-> 2.7.4
-> 
