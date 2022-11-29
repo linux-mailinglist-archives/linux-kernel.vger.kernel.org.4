@@ -2,104 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA0E63B634
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 01:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3929063B63A
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 01:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234844AbiK2AAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 19:00:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37882 "EHLO
+        id S234212AbiK2ADY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 19:03:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234801AbiK2AAy (ORCPT
+        with ESMTP id S234279AbiK2ADW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 19:00:54 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916542AC77
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 16:00:52 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id e189so8926826iof.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 16:00:52 -0800 (PST)
+        Mon, 28 Nov 2022 19:03:22 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1FF186D1;
+        Mon, 28 Nov 2022 16:03:20 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id ml11so5030777ejb.6;
+        Mon, 28 Nov 2022 16:03:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hhfYdg/3GZik1IMOmAbhjnBOvfz8Tbl2fRiogYFz6Ec=;
-        b=B1K8iVpwgNKycprzKMVupGt5aU3/YPZoE3ne8dVcDjdWV49CsomNWXyocSa3LSVOzY
-         y0VeWqruxwa2dFxPn9Le4BKYckcCT1piWPp07YLttD/d00iAOE4WkHWi3XfanR9acWby
-         VwLnp5rNVcqdnzWJQeJGjyDoYMvfJBkmcwersQBSR3XeiEifLEHf8xI27/pcmia/kqvS
-         QYf7Hz8qm2XmCojHgwCpUnUrxD0tEny0eT0eT1BpskOwwf+oNrAJ40EdRzv5G5UJu50M
-         hryVptODwnMZ7I8mXHW+rWy/xD6w7NqFe/uRShkE0fMftpJKSiVEeqluQ9y83p39vphL
-         u7Pg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TdT+BmdIneu3TI8BLD07hqcjbUZk43YKZ9BLkChxuPo=;
+        b=ITLzLdBFltzXasiY87QzobnsGAjZcX0eJgUsWviLRRgFDR1MRrM4wsOblh9/4+aPB4
+         0JfrE9SZtsCFujA8tq23N3E0AU5kGd/U9kNLDNPzO9Za1iRKHD9TomJ+/ntSxcAv0Y01
+         wSMzvLcdHUXNh8lqpaHHYYoxOcyrv3yD1kVbu3x+HlgbjGHJ+F1+yj3mtX3BsWqnO+63
+         KTIWo3kYnm8ybgI6QnNyMqUkOFHRs82X2UHVwwg/ihCrBmi5bsW6KRSxLc+CigJKDLRR
+         Jsp60TaeQ6fZLG+iPAmuAkRt30YUaa+EjLRWAOZ7g97549Ly0HjnWS7J7uSH5/yZMJ67
+         W8RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hhfYdg/3GZik1IMOmAbhjnBOvfz8Tbl2fRiogYFz6Ec=;
-        b=wxVlsL22KAeet2co15rxp5Ie4qu2tbqzn9KJM4qRwlveTbCL4pZd9NfHiLWqzRVTwV
-         Pdb9COAmnv9xrf9dw0CkI3Ss1iTbkeBFzTDfoagHuzZJp9MHoPDc9xxMZLGFpXtaQ2s/
-         qZalmC+bfi03az9bVk78acz1J4uyUCb7H9R7MaoczH22lk13/cbKv0O+TuZtrr3m+LbC
-         EqgpjOhnB3Q2/f6PlCBnIfb8Mo684H0NQPydgiikJzcwpHkiWbIB7KA9TJHS7Hl7yhir
-         oXgVJdgPGyaktB5Ki5OfG83vjH1Y8YJzDJWCCZUpwcLnjilixvA0huiZUk1lYR8uwvBP
-         CVXg==
-X-Gm-Message-State: ANoB5pn6gKXfMSIW3kRfbVjz5998ilWwwQMpRcji4YGQK3MyRDnsYgHc
-        2hF6yKmCTagsLMMbQ2e//yamVA==
-X-Google-Smtp-Source: AA0mqf7DA4USSvm8KHAP2sWWiM6AxLdfxFxR0kIOpEUl8QFNby1SQ6cUuW6Xh7+oF0bcd5Uj4eGv0Q==
-X-Received: by 2002:a05:6602:887:b0:6bc:1103:f36b with SMTP id f7-20020a056602088700b006bc1103f36bmr15104317ioz.205.1669680051850;
-        Mon, 28 Nov 2022 16:00:51 -0800 (PST)
-Received: from localhost.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id ay10-20020a5d9d8a000000b006de38ee994esm4969314iob.47.2022.11.28.16.00.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 16:00:51 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     sboyd@kernel.org, mturquette@baylibre.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, agross@kernel.org
-Cc:     Luca Weiss <luca.weiss@fairphone.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: qcom: rpmh: add support for SM6350 rpmh IPA clock
-Date:   Mon, 28 Nov 2022 18:00:47 -0600
-Message-Id: <20221129000047.697089-1-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        bh=TdT+BmdIneu3TI8BLD07hqcjbUZk43YKZ9BLkChxuPo=;
+        b=QWy7xPeVhog24jn7VED9vydNy5CdhIZG/J6Azq8vZ44ljo5QJEYd+DyoOgvDtLn75s
+         BVnumjbCorBs6FeJmZy0ekUhqLNWD+t04hyg2NC6JDSxkcs8hU0flRH0ECG8Gi5+gWBR
+         A0OrywqLaIpzZxm69+tiqHUO/PY08sF/Z7BBLEomjHzH6aWhvCGOZAPmZpRft9ecKfoz
+         qoEicKMlhoF4UyGUIOr5SPOIdlJ6gHuriFvuYdEzp7qox1DM2hiGko/WSgZWZWQbXze8
+         EacPPvPBH39fyLqWI707tkxoju8xLMmExlzZtpx7d8yOKX6cy2nAJJ1U5oAX/eyi7A7j
+         o3Rg==
+X-Gm-Message-State: ANoB5pngbqfWxhNEH4XMeiQbqQ9VixjI4Hrmn9TMiDD160q/AuxIk9+H
+        gDjDqJymO/cvZpryiIJbed4nCkGew/7bJps1VPg=
+X-Google-Smtp-Source: AA0mqf6fZM8tA810LE12Y15mX6MIkaG2UqDn3lS7Cb+AUhc5yb+m4XendEUXBVGYmQ36nUCanxQnZ2pOmiYUlk7SLu8=
+X-Received: by 2002:a17:906:79c4:b0:778:e3e2:8311 with SMTP id
+ m4-20020a17090679c400b00778e3e28311mr31820692ejo.342.1669680198945; Mon, 28
+ Nov 2022 16:03:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221031232202.131945-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221031232202.131945-7-prabhakar.mahadev-lad.rj@bp.renesas.com> <738a2461-7a6a-286b-89e8-d46a26ec6506@xs4all.nl>
+In-Reply-To: <738a2461-7a6a-286b-89e8-d46a26ec6506@xs4all.nl>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 29 Nov 2022 00:02:52 +0000
+Message-ID: <CA+V-a8tr9486HV4zvVG3bh4fWNQ-edUDPMZAUM-kKDN-PvRU+w@mail.gmail.com>
+Subject: Re: [PATCH v4 6/9] media: i2c: ov5645: Use runtime PM
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luca Weiss <luca.weiss@fairphone.com>
+Hi Hans,
 
-The IPA core clock is required for SM6350.  Define it.
+On Mon, Nov 28, 2022 at 1:49 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
+>
+> Hi Prabhakar,
+>
+> On 11/1/22 00:21, Prabhakar wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+<snip>
+> > -static void ov5645_set_power_off(struct ov5645 *ov5645)
+> > -{
+> > -     gpiod_set_value_cansleep(ov5645->rst_gpio, 1);
+> > -     gpiod_set_value_cansleep(ov5645->enable_gpio, 0);
+> > -     clk_disable_unprepare(ov5645->xclk);
+> > -     regulator_bulk_disable(OV5645_NUM_SUPPLIES, ov5645->supplies);
+> > -}
+> > -
+> > -static int ov5645_s_power(struct v4l2_subdev *sd, int on)
+> > -{
+> > -     struct ov5645 *ov5645 = to_ov5645(sd);
+> > -     int ret = 0;
+> > -
+> > -     mutex_lock(&ov5645->power_lock);
+> > -
+> > -     /* If the power count is modified from 0 to != 0 or from != 0 to 0,
+> > -      * update the power state.
+> > -      */
+> > -     if (ov5645->power_count == !on) {
+> > -             if (on) {
+> > -                     ret = ov5645_set_power_on(ov5645);
+> > -                     if (ret < 0)
+> > -                             goto exit;
+> > -
+> > -                     ret = ov5645_set_register_array(ov5645,
+> > -                                     ov5645_global_init_setting,
+> > +     ret = ov5645_set_register_array(ov5645, ov5645_global_init_setting,
+> >                                       ARRAY_SIZE(ov5645_global_init_setting));
+> > -                     if (ret < 0) {
+> > -                             dev_err(ov5645->dev,
+> > -                                     "could not set init registers\n");
+> > -                             ov5645_set_power_off(ov5645);
+> > -                             goto exit;
+> > -                     }
+> > -
+> > -                     usleep_range(500, 1000);
+> > -             } else {
+> > -                     ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x58);
+> > -                     ov5645_set_power_off(ov5645);
+> > -             }
+> > +     if (ret < 0) {
+> > +             dev_err(ov5645->dev, "could not set init registers\n");
+> > +             goto exit;
+> >       }
+> >
+> > -     /* Update the power count. */
+> > -     ov5645->power_count += on ? 1 : -1;
+> > -     WARN_ON(ov5645->power_count < 0);
+> > +     usleep_range(500, 1000);
+> >
+> > -exit:
+> > -     mutex_unlock(&ov5645->power_lock);
+> > +     return 0;
+> >
+> > +exit:
+> > +     ov5645_set_power_off(dev);
+> >       return ret;
+>
+> smatch gives this warning:
+>
+> drivers/media/i2c/ov5645.c:687 ov5645_set_power_on() warn: 'ov5645->xclk' from clk_prepare_enable() not released on lines: 687.
+>
+it's a false positive, as in case of error we jump to the exit label
+which calls ov5645_set_power_off() which internally calls
+clk_disable_unprepare() for xclk and on success we need to have xclk
+ON during s_stream(ON) and eventually the
+xclk will be unprepared in s_stream(OFF).
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- drivers/clk/qcom/clk-rpmh.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-index 0471bab824642..6a5887aae21a4 100644
---- a/drivers/clk/qcom/clk-rpmh.c
-+++ b/drivers/clk/qcom/clk-rpmh.c
-@@ -603,6 +603,7 @@ static const struct clk_rpmh_desc clk_rpmh_sc7280 = {
- DEFINE_CLK_RPMH_VRM(sm6350, ln_bb_clk2, ln_bb_clk2_ao, "lnbclkg2", 4);
- DEFINE_CLK_RPMH_VRM(sm6350, ln_bb_clk3, ln_bb_clk3_ao, "lnbclkg3", 4);
- DEFINE_CLK_RPMH_ARC(sm6350, qlink, qlink_ao, "qphy.lvl", 0x1, 4);
-+DEFINE_CLK_RPMH_BCM(sm6350, ipa, "IP0");
- 
- static struct clk_hw *sm6350_rpmh_clocks[] = {
- 	[RPMH_CXO_CLK]		= &sc7280_bi_tcxo.hw,
-@@ -613,6 +614,7 @@ static struct clk_hw *sm6350_rpmh_clocks[] = {
- 	[RPMH_LN_BB_CLK3_A]	= &sm6350_ln_bb_clk3_ao.hw,
- 	[RPMH_QLINK_CLK]	= &sm6350_qlink.hw,
- 	[RPMH_QLINK_CLK_A]	= &sm6350_qlink_ao.hw,
-+	[RPMH_IPA_CLK]		= &sm6350_ipa.hw,
- };
- 
- static const struct clk_rpmh_desc clk_rpmh_sm6350 = {
--- 
-2.34.1
-
+Cheers,
+Prabhakar
