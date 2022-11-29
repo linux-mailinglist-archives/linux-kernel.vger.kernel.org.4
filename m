@@ -2,88 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1F863C365
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23DFA63C367
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234267AbiK2PQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 10:16:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
+        id S234702AbiK2PRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 10:17:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbiK2PQx (ORCPT
+        with ESMTP id S234059AbiK2PRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:16:53 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2382F384;
-        Tue, 29 Nov 2022 07:16:51 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id vv4so34607421ejc.2;
-        Tue, 29 Nov 2022 07:16:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ef9KuAzl4Ml5WfPA/egn9eVef6ufZPHKdL802Tgb7nc=;
-        b=C77tKt1pTDn/lXkTY9vUa9wGM5ZMp5vsG30RaQ2awnSyxtLSoaE9UN5Xeujz/gq+Pc
-         UxRuLBGtXmoXTX7DI4bmw6SU0sjlV2Po6wJLATwzm4ONsG3/LNc6q5KjyeMKJ1cWAfl2
-         FbMGltEaq7hF+h/TrNPD4TdRvZ14+cdy7fNXfPEJ/676XX0Bl2DKMszUkekiz/Olfko9
-         eoflRrSZipswsDvWnvU3Iufu/23MJnnxjDfeWnZWGd21d4qlRjuvdLyY1GtcOxP0PdrC
-         PrBtRkTTAPYH4/ayCSCDuJEcihIusWVLM5mpK8FfXpX/ETNWEyoUQodO+Ic8jUq6bDwd
-         MHJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ef9KuAzl4Ml5WfPA/egn9eVef6ufZPHKdL802Tgb7nc=;
-        b=j6vHUCVihNWegKFsZV4FHuVVW0egvcxZQw1ADCK2BWumsAPKZMcwOO1nxqUKLVfDGU
-         nopaH0JgHadQfPu/B2uKdACqUIKSjvRc9n3zZh/dzjirFQph2WB/8fRRTjCl4ohn1bKu
-         c/ld33J8XzLpfrRIGKcnyycuUa+tbJh9O4ereKnISRzQtI8zMJqEmjc1xO55+pnHXVNy
-         Pd6zxZLCEzTGLJuDhr2cyPK7mdb4dlgJXh9Tmyj6wLMCDfodybGEB5XUGyXxzy9NNC19
-         eAbD5/1ngwi2sMBd43i+uxDQ4G1vDV6SdUMiYMrfENUMljCc4xXt9uuPPBys9/B5wFVk
-         EdKg==
-X-Gm-Message-State: ANoB5pkItxg46z8AhmlG2pst02+PRP+PesfFc4vitgrT9Jxna/YAixML
-        +PUBNtBme6zRgZwNsjINk8zsaPLqchA=
-X-Google-Smtp-Source: AA0mqf4RjUxPstqz1rw0GDB91w9vS8eK94+6zYfcoLpxC+z1vMuqXRAlgWGC9cAzFZsik8HQAAp6Pg==
-X-Received: by 2002:a17:906:7f92:b0:783:7020:53a7 with SMTP id f18-20020a1709067f9200b00783702053a7mr47687206ejr.736.1669735009406;
-        Tue, 29 Nov 2022 07:16:49 -0800 (PST)
-Received: from [192.168.1.50] ([79.119.240.254])
-        by smtp.gmail.com with ESMTPSA id 9-20020a170906210900b007add62dafbasm6225660ejt.157.2022.11.29.07.16.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 07:16:49 -0800 (PST)
-Message-ID: <8736307b-8b09-6cc2-bf89-8ee77f1af62b@gmail.com>
-Date:   Tue, 29 Nov 2022 17:16:47 +0200
+        Tue, 29 Nov 2022 10:17:16 -0500
+Received: from outbound-smtp51.blacknight.com (outbound-smtp51.blacknight.com [46.22.136.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55C245EFD
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:17:14 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
+        by outbound-smtp51.blacknight.com (Postfix) with ESMTPS id 20E72FA9DE
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 15:17:13 +0000 (GMT)
+Received: (qmail 3308 invoked from network); 29 Nov 2022 15:17:12 -0000
+Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPA; 29 Nov 2022 15:17:12 -0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Linux-MM <linux-mm@kvack.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, NeilBrown <neilb@suse.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: [RFC PATCH 0/6] Discard __GFP_ATOMIC
+Date:   Tue, 29 Nov 2022 15:16:55 +0000
+Message-Id: <20221129151701.23261-1-mgorman@techsingularity.net>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: reply to Bitterblue Smith
-Content-Language: en-US
-To:     JunASAKA <JunASAKA@zzy040330.moe>, Jes.Sorensen@gmail.com
-Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221129043442.14717-1-JunASAKA@zzy040330.moe>
- <20221129143225.376856-1-JunASAKA@zzy040330.moe>
-From:   Bitterblue Smith <rtl8821cerfe2@gmail.com>
-In-Reply-To: <20221129143225.376856-1-JunASAKA@zzy040330.moe>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/11/2022 16:32, JunASAKA wrote:
-> Hi Bitterblue Smith,
-> 
-> Thanks for your reply. I've seen the discussion.
-> As for the bugs of the module, my Tenda U1 wifi module which is using the rtl8192eu chip running into problems with the rtl8xxxu module, more information can be found here: https://bugzilla.kernel.org/show_bug.cgi?id=216746. I want to solve this problem but I haven't got enough experience upon it. I'll appreciate it if you could do me a favour on it. Thanks again.
-> 
-> Jun ASAKA.
+Neil's patch has been residing in mm-unstable as commit 2fafb4fe8f7a
+("mm: discard __GFP_ATOMIC") for a long time and recently brought up
+again. Most recently, I was worried that __GFP_HIGH allocations could
+use high-order atomic reserves which is unintentional but there was no
+response so lets revisit -- this series reworks how min reserves are used,
+protects highorder reserves and then finishes with Neil's patch with very
+minor modifications so it fits on top.
 
-My only idea is to compare all the code with the working driver.
-I'm still busy with other things, though.
+There was a review discussion on renaming __GFP_DIRECT_RECLAIM to
+__GFP_ALLOW_BLOCKING but I didn't think it was that big an issue and is
+ortogonal to the removal of __GFP_ATOMIC.
+
+There were some concerns about how the gfp flags affect the min reserves
+but it never reached a solid conclusion so I made my own attempt.
+
+The series tries to iron out some of the details on how reserves are
+used.  ALLOC_HIGH becomes ALLOC_MIN_RESERVE and ALLOC_HARDER becomes
+ALLOC_NON_BLOCK and documents how the reserves are affected. For example,
+ALLOC_NON_BLOCK (no direct reclaim) on its own allows 25% of the min reserve.
+ALLOC_MIN_RESERVE (__GFP_HIGH) allows 50% and both combined allows deeper
+access again. ALLOC_OOM allows access to 75%.
+
+High-order atomic allocations are explicitly handled with the caveat that
+no __GFP_ATOMIC flag means that any high-order allocation that specifies
+GFP_HIGH and cannot enter direct reclaim will be treated as if it was
+GFP_ATOMIC.
+
+-- 
+2.35.3
