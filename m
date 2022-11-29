@@ -2,100 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0302F63CBE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 00:31:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C998063CBEC
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 00:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiK2Xbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 18:31:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
+        id S229750AbiK2Xeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 18:34:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbiK2XbH (ORCPT
+        with ESMTP id S229566AbiK2Xeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 18:31:07 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5772471F00
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 15:30:41 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id x12so4477173ilg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 15:30:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JfTE0wye7LTPK/U7NOzfJnWWxw++LJ/TUF4lsfmPtFk=;
-        b=YhB8mzlJgfRmK85mMB5VDdLW+yGp3Hjjj4NSh1AYwLokWHkP4S3HJm8mlAHcezYPOa
-         4GdlkdOkGHdpzXvCvePTJtuG7RldXI2ZPP6y1VPmZSGENNJ1NeYw9cIEPYPGDTWOPPds
-         4nsBPDRdiKkGiSzTaQsnGF6BgauD5PZkg+oQE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JfTE0wye7LTPK/U7NOzfJnWWxw++LJ/TUF4lsfmPtFk=;
-        b=H5Dx0v3h+1f9MzGQZCRAPMfeGElm4M/yxsav98tTJPvuaZP6p+/GyXW95QaVNZfwlu
-         ZwdA9okNWRdmjTSF7YzF3knH2lm956twylx/cXfe48c2jBI8M/lhN4Yd9eJyAo/WOojo
-         1YWjoytGHt5nzqbAZTh72RaiVCkGt1k9xN5UqFMEcvoMpAGRKG1bK1qRAM/2w7DUXkG2
-         oouFVUnwf03Hx4TXlNy27Eg64WrynuCNzhzVeddZ06aTrooIYTA4nIcI0q5UHgxhenpm
-         Zhw4Np4XaZkRGdU1blDV8dyYlpirsqAaY/wSmtKHGQLnrh4CqzNscgCVQHVjajJZBzVz
-         CFnQ==
-X-Gm-Message-State: ANoB5pmBP/cbcgwWR8QjAxczDo7AXS5YwhCbA9jNSSOIagDQ/J7kYzw3
-        Qy/fFqQhOlP7pk0bdUqz/MJ7fw==
-X-Google-Smtp-Source: AA0mqf4uGQ6McVLvcY8GzQ2GHRIzKqmC6ZptyPot1v7oW9ixuvhW5c0mdZjzhLvOrkYkB1y+gvhCxA==
-X-Received: by 2002:a92:6e07:0:b0:300:1f82:73e5 with SMTP id j7-20020a926e07000000b003001f8273e5mr17223063ilc.85.1669764640682;
-        Tue, 29 Nov 2022 15:30:40 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id z26-20020a05660217da00b006bccaa66ee4sm5914087iox.40.2022.11.29.15.30.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 15:30:40 -0800 (PST)
-Message-ID: <07f475de-98ae-87b2-0215-12a4a2b054d6@linuxfoundation.org>
-Date:   Tue, 29 Nov 2022 16:30:39 -0700
+        Tue, 29 Nov 2022 18:34:36 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D1A13F5A;
+        Tue, 29 Nov 2022 15:34:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669764875; x=1701300875;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=e1iv5i1NQTAnPCTMMmGxu0W1tfFxO0P7ZDyUjFAJ0+Q=;
+  b=aKHbEzzSkCLFq4n5mECXHA9L9gSwuWfNPkkVGlPysV0qr/osJx0EQHHv
+   y81XK6+pZlYCrSW/UEp3evJAci72CYgbHAPLUZyIcjJj+ZnFXzlEyD07G
+   QZG6kTlwFlw59mchDtT2H1JfDHtolyn5KHyS5nB7oI9T7XAFhrAQ3fK7e
+   C5y+yRz7QgGpHFQYANCSl3zqKFflKVZpIECszB6Hl+84wUa+Hfz3HLUoj
+   oX9+kng+52tCfTEYsUMc7DunDpezi+pmkapu8aJ1qqo0iuB4gDSIVTzMD
+   CJijZ4ecqrSd28JBp5yBh4Bk2asf8iEzYCJGtLnabCOgRKYx72Yvc8DV1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="342178165"
+X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
+   d="scan'208";a="342178165"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 15:34:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="768617596"
+X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
+   d="scan'208";a="768617596"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga004.jf.intel.com with ESMTP; 29 Nov 2022 15:34:35 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2 0/4] Per CPU idle injection
+Date:   Tue, 29 Nov 2022 15:34:15 -0800
+Message-Id: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 0/6] selftests: Use "grep -E" instead of "egrep"
-Content-Language: en-US
-To:     paulmck@kernel.org
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <1669165413-12035-1-git-send-email-yangtiezhu@loongson.cn>
- <bf9b26b5-2793-204f-ba9c-4d9cd55b08ad@loongson.cn>
- <dc7cb519-584c-55f1-4baa-44cd4e0bbfe9@linuxfoundation.org>
- <20221129221344.GF4001@paulmck-ThinkPad-P17-Gen-1>
- <d48804d5-2ad5-fbfb-ce17-83fbc450d3d6@linuxfoundation.org>
- <20221129232212.GG4001@paulmck-ThinkPad-P17-Gen-1>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221129232212.GG4001@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/22 16:22, Paul E. McKenney wrote:
+This series introduces per CPU idle injection. In preparation for this
+enhance the existing powercap/idle_inject and modify intel_powerclamp
+to use this. Then add per core idle injection driver.
 
-> Lazybones that I am, I would rather carry the patch than resolve
-> conflicts.  Especially given the tendency for new rcutorture patches to
-> appear, thus changing the conflict resolution.
-> 
+v2
+- Update based on feedback from Rafael on patch 2/4
+- Kconfig dependency issue
+Reported-by: kernel test robot <lkp@intel.com>
 
-Sounds good. I will drop the one I applied to my tree.
+Srinivas Pandruvada (4):
+  powercap: idle_inject: Export symbols
+  powercap: idle_inject: Add prepare/complete callbacks
+  thermal/drivers/intel_powerclamp: Use powercap idle-inject framework
+  thermal/drivers/intel_cpu_idle_cooling: Introduce Intel cpu idle
+    cooling driver
 
-> My guess is that the patch is this one:
-> 
-> https://lore.kernel.org/lkml/1669165413-12035-2-git-send-email-yangtiezhu@loongson.cn/
-> 
-> Or should I be looking elsewhere?
-> 
+ drivers/powercap/idle_inject.c                |  69 ++++-
+ drivers/thermal/intel/Kconfig                 |  12 +
+ drivers/thermal/intel/Makefile                |   1 +
+ .../thermal/intel/intel_cpu_idle_cooling.c    | 261 ++++++++++++++++
+ drivers/thermal/intel/intel_powerclamp.c      | 292 ++++++++----------
+ include/linux/idle_inject.h                   |   4 +
+ 6 files changed, 467 insertions(+), 172 deletions(-)
+ create mode 100644 drivers/thermal/intel/intel_cpu_idle_cooling.c
 
-Yup that is one.
-
-thanks,
--- Shuah
+-- 
+2.31.1
 
