@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC6863B8BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94AB063B8BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235474AbiK2Dcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 22:32:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
+        id S235491AbiK2Dc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 22:32:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235468AbiK2Dct (ORCPT
+        with ESMTP id S235468AbiK2Dcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 22:32:49 -0500
+        Mon, 28 Nov 2022 22:32:54 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC00515724
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 19:32:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D34918B39
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 19:32:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A5FD61564
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:32:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C086AC43470;
-        Tue, 29 Nov 2022 03:32:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09D1661567
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:32:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 495BEC433C1;
+        Tue, 29 Nov 2022 03:32:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669692766;
-        bh=vVvv9Dl3Ond8/L8UdaSALSgt+hLH0wBtdq85SQamt6I=;
+        s=k20201202; t=1669692772;
+        bh=K44IU5zSr+xRSYeCBFFHSvlbL/P6QS9pgaMT4XAkl6o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XJESHQJrO4KYoVBp10iKOSvt6JEN5l5QRp2/fnu5LqhygqWwVS5LRUa2dxb8G4xVv
-         SzuT+lOHQQNsxnQ/CROZ3O1QoouPaN8f4poLM+BUVgcBV666AeQrhAJLgg1N8MPefB
-         3PgRsRvVRvnUB9cj4fzlbU8ybPL6oqbvpJcgbl7e8W5Eu6DMJSzKjcuBXdmKlW5oBT
-         Ku6nh+IWFEZ9JGXaIhXVgNc/iGRJ9frv2qfljSZDBcGGuqSSOahOGa5qXICACpeKsm
-         UigBuAckMEKodDT0rxVjtVgJw5qlX/k6khQ/e2cSVBoSEe+7by74josWmh1rAdSmsu
-         GauCgW4LJiILg==
+        b=JfE3oA5mgIwqLGrffA4x/XQlpl+PMzc9gjYvnBjXyuTbiniCSQxD8ob+NUI/DItKL
+         4+nT8+0XM652AS1VRhoVtKrbHMc9hDpSKtPqzDbWAs2dQCjt6rVDG2cvF7aRXYlL9U
+         CpMmWLe6ojyuppm+G5mt9KY58hJ6m8L25Pxjf4c3x04OSV/+EdltM5R3aC0bbe/5Y2
+         9trkjq31gePrrBdZBp1yM7xqtb6+byICy40k/F1SmgopjOJ2D9Ql6etifZF4NHV9S0
+         Uk3o/IcOnOyrKrTO0OhuETVa9jTV/BJgI+YgK8IBrj1yJVqqlwFE3prSKcRXKxegsG
+         DOvKxUlXS3ZlQ==
 From:   guoren@kernel.org
 To:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
         conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
@@ -39,10 +39,10 @@ To:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
         jpoimboe@kernel.org, suagrfillet@gmail.com, andy.chiu@sifive.com,
         mark.rutland@arm.com
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@kernel.org>
-Subject: [PATCH V4 1/7] riscv: ftrace: Fixup panic by disabling preemption
-Date:   Mon, 28 Nov 2022 22:32:24 -0500
-Message-Id: <20221129033230.255947-2-guoren@kernel.org>
+        Guo Ren <guoren@linux.alibaba.com>, Guo Ren <guoren@kernel.org>
+Subject: [PATCH V4 2/7] riscv: ftrace: Remove wasted nops for !RISCV_ISA_C
+Date:   Mon, 28 Nov 2022 22:32:25 -0500
+Message-Id: <20221129033230.255947-3-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20221129033230.255947-1-guoren@kernel.org>
 References: <20221129033230.255947-1-guoren@kernel.org>
@@ -57,54 +57,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Chiu <andy.chiu@sifive.com>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-In RISCV, we must use an AUIPC + JALR pair to encode an immediate,
-forming a jump that jumps to an address over 4K. This may cause errors
-if we want to enable kernel preemption and remove dependency from
-patching code with stop_machine(). For example, if a task was switched
-out on auipc. And, if we changed the ftrace function before it was
-switched back, then it would jump to an address that has updated 11:0
-bits mixing with previous XLEN:12 part.
+When CONFIG_RISCV_ISA_C=n, -fpatchable-function-entry=8 would generate
+more nops than we expect. Because it treat nop opcode as 0x00000013
+instead of 0x0001.
 
-p: patched area performed by dynamic ftrace
-ftrace_prologue:
-p|      REG_S   ra, -SZREG(sp)
-p|      auipc   ra, 0x? ------------> preempted
-					...
-				change ftrace function
-					...
-p|      jalr    -?(ra) <------------- switched back
-p|      REG_L   ra, -SZREG(sp)
-func:
-	xxx
-	ret
+Dump of assembler code for function dw_pcie_free_msi:
+   0xffffffff806fce94 <+0>:     sd      ra,-8(sp)
+   0xffffffff806fce98 <+4>:     auipc   ra,0xff90f
+   0xffffffff806fce9c <+8>:     jalr    -684(ra) # 0xffffffff8000bbec
+<ftrace_caller>
+   0xffffffff806fcea0 <+12>:    ld      ra,-8(sp)
+   0xffffffff806fcea4 <+16>:    nop /* wasted */
+   0xffffffff806fcea8 <+20>:    nop /* wasted */
+   0xffffffff806fceac <+24>:    nop /* wasted */
+   0xffffffff806fceb0 <+28>:    nop /* wasted */
+   0xffffffff806fceb4 <+0>:     addi    sp,sp,-48
+   0xffffffff806fceb8 <+4>:     sd      s0,32(sp)
+   0xffffffff806fcebc <+8>:     sd      s1,24(sp)
+   0xffffffff806fcec0 <+12>:    sd      s2,16(sp)
+   0xffffffff806fcec4 <+16>:    sd      s3,8(sp)
+   0xffffffff806fcec8 <+20>:    sd      ra,40(sp)
+   0xffffffff806fcecc <+24>:    addi    s0,sp,48
 
-Fixes: afc76b8b8011 ("riscv: Using PATCHABLE_FUNCTION_ENTRY instead of MCOUNT")
-Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
-@Andy, could you give the patch a Signed-off-by? I just copy your most
-important comment, so the first author should be you. First, let's fix
-the problem caused by my previous patch, and you can continue your
-ftrace preemption work.
----
- arch/riscv/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/riscv/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 7cd981f96f48..1d0e5838b11b 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -280,7 +280,7 @@ config ARCH_RV64I
- 	select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
- 	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
- 	select HAVE_FUNCTION_GRAPH_TRACER
--	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
-+	select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
- 	select SWIOTLB if MMU
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 1c8ec656e916..36cc609c5d03 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -11,7 +11,11 @@ LDFLAGS_vmlinux :=
+ ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
+ 	LDFLAGS_vmlinux := --no-relax
+ 	KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
++ifeq ($(CONFIG_RISCV_ISA_C),y)
+ 	CC_FLAGS_FTRACE := -fpatchable-function-entry=8
++else
++	CC_FLAGS_FTRACE := -fpatchable-function-entry=4
++endif
+ endif
  
- endchoice
+ ifeq ($(CONFIG_CMODEL_MEDLOW),y)
 -- 
 2.36.1
 
