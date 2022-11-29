@@ -2,140 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F88863C722
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 19:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E89FC63C72B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 19:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbiK2SZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 13:25:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
+        id S235778AbiK2S0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 13:26:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbiK2SZr (ORCPT
+        with ESMTP id S235838AbiK2S0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 13:25:47 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58885F85E;
-        Tue, 29 Nov 2022 10:25:45 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2ATIOwuG005450;
-        Tue, 29 Nov 2022 12:24:58 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1669746299;
-        bh=ofMM1FHrj8VajyNy27mGe2ShSZNNvZ2bILHbYWk3VJQ=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=djwnf6jE3TwlGYj1RIbw9GX7+4f3x78hY1Mvzg0UKLTW5+V970/q5OXrbSd6AIhL9
-         yAI3A2MbEZsEb+L4GX4j6yomYq3CMSQmEJ2mxJKWpZkgwo//KGkfEXhWzZ6g7+/xiq
-         4nT/8oIbh4X/qE+phQyt4Fuub84oK1EHybTAJaMM=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2ATIOwkr018566
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 29 Nov 2022 12:24:58 -0600
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 29
- Nov 2022 12:24:58 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 29 Nov 2022 12:24:58 -0600
-Received: from [10.250.38.44] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2ATIOvbE020258;
-        Tue, 29 Nov 2022 12:24:57 -0600
-Message-ID: <922413d0-c566-7765-f374-6f64d94f39aa@ti.com>
-Date:   Tue, 29 Nov 2022 12:24:56 -0600
+        Tue, 29 Nov 2022 13:26:24 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701D964555;
+        Tue, 29 Nov 2022 10:26:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=cy0Wc6FUl5cpTdVMiVOmfG61yLTXh8RJczd8KP8IoZA=; b=keVuLupjCmT6F9EPe36KrGtKkD
+        LG5B2kQ3QljwPULHTAUg4iugMd1EkEVtyt2Jav4kfKeTdbsPdpp/svvkSm14nJG7SKd0vEJUMYC+y
+        RvAMNfCW51VkEyDSO04sth7+Bs+os9FqGE0LnCC0uZGjwmojEWMmD5FTI0rii0WD8tPw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p05Ib-003twF-QX; Tue, 29 Nov 2022 19:25:41 +0100
+Date:   Tue, 29 Nov 2022 19:25:41 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     yang.yang29@zte.com.cn
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        xu.panda@zte.com.cn, Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [PATCH linux-next v2] net: stmmac: use sysfs_streq() instead of
+ strncmp()
+Message-ID: <Y4ZOpQL3daLPqXXl@lunn.ch>
+References: <202211291502286285262@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 01/18] block/rnbd: fix mixed module-builtin object
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>
-CC:     Alexander Lobakin <alobakin@pm.me>, <linux-kbuild@vger.kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Boris Brezillon" <bbrezillon@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "Vladimir Oltean" <vladimir.oltean@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Derek Chickles <dchickles@marvell.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        "Hans de Goede" <hdegoede@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        NXP Linux Team <linux-imx@nxp.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221119225650.1044591-1-alobakin@pm.me>
- <20221119225650.1044591-2-alobakin@pm.me>
- <68ceddec-7af9-983d-c8be-7e0dc109df88@ti.com>
- <CAK7LNAT_PuL0vuYaPxKZ3AfrojBC2tEXUA7Gqs2VuVuoTVoXmQ@mail.gmail.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <CAK7LNAT_PuL0vuYaPxKZ3AfrojBC2tEXUA7Gqs2VuVuoTVoXmQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202211291502286285262@zte.com.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/21/22 11:59 PM, Masahiro Yamada wrote:
-> On Tue, Nov 22, 2022 at 6:18 AM Andrew Davis <afd@ti.com> wrote:
->>
->> On 11/19/22 5:04 PM, Alexander Lobakin wrote:
->>> From: Masahiro Yamada <masahiroy@kernel.org>
->>>
->>> With CONFIG_BLK_DEV_RNBD_CLIENT=m and CONFIG_BLK_DEV_RNBD_SERVER=y
->>> (or vice versa), rnbd-common.o is linked to a module and also to
->>> vmlinux even though CFLAGS are different between builtins and modules.
->>>
->>> This is the same situation as fixed by commit 637a642f5ca5 ("zstd:
->>> Fixing mixed module-builtin objects").
->>>
->>> Turn rnbd_access_mode_str() into an inline function.
->>>
->>
->> Why inline? All you should need is "static" to keep these internal to
->> each compilation unit. Inline also bloats the object files when the
->> function is called from multiple places. Let the compiler decide when
->> to inline.
->>
->> Andrew
+On Tue, Nov 29, 2022 at 03:02:28PM +0800, yang.yang29@zte.com.cn wrote:
+> From: Xu Panda <xu.panda@zte.com.cn>
 > 
+> Replace the open-code with sysfs_streq().
 > 
-> Since it is a header file.
-> 
-> 
-> In header files, "static inline" should be always used.
-> Never "static".
-> 
+> ---
+> change for v2
+>  - fix the mistake of redundant parameter.
 
-My comment was more "why"?
+> -		} else if (!strncmp(opt, "tc:", 3)) {
+> +		} else if (sysfs_streq(opt, "tc:")) {
+>  			if (kstrtoint(opt + 3, 0, &tc))
+>  				goto err;
 
+Vladimir made the comment:
+
+> What's even worse is that the patch is flat out wrong. The stmmac_cmdline_opt()
+> function does not parse sysfs input, but cmdline input such as
+> "stmmaceth=tc:1,pause:1". The pattern of using strsep() followed by
+> strncmp() for such strings is not unique to stmmac, it can also be found
+> mainly in drivers under drivers/video/fbdev/.
 > 
-> If a header is included from a C file and there is a function
-> that is not used from that C file,
-> "static" would emit -Wunused-function warning
-> (-Wunused-function is enabled by -Wall, which is the case
-> for the kernel build).
-> 
-> 
+> With strncmp("tc:", 3), the code matches on the "tc:1" token properly.
+> With sysfs_streq("tc:"), it doesn't.
 
-Inline still hints to the compiler to inline, causing unneeded
-object size bloat. Using "inline" to signal something else (that
-the function may be unused) when we already have a flag for that
-(__maybe_unused) feels wrong.
+It is not clear you have addressed this point.
 
-Seems this was already debated way back in 2006.. So maybe not
-worth revisiting today, but still a cleanup that could be good
-to think more about later.
-
-Andrew
+   Andrew
