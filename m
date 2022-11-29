@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736C963BF66
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:52:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 515EB63BF67
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:53:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232699AbiK2Lv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 06:51:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52000 "EHLO
+        id S232755AbiK2LxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 06:53:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiK2Lvy (ORCPT
+        with ESMTP id S229923AbiK2LxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 06:51:54 -0500
+        Tue, 29 Nov 2022 06:53:18 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FF45ADFB
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:50:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D213631FA4
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:52:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669722652;
+        s=mimecast20190719; t=1669722744;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9CBLyH0RXTvLwjlM6E/Boj09BZZIY990XDzCnn9wbPw=;
-        b=e8BVelmnLEGQ0haPfpSlPio1EF+KPaHoLzzT37CdUGNY3bCNICSxJFMGCGqnXHEA7Qa8bs
-        Oo+UyaCdO0o3CYXPEC7V5NJMdHhn0zYB6/bdcrabtTxJYEuSnmLXYnpuCGCmF0lGMurmaT
-        nshhMBCsBBSghCC/y+95GaW6iRLCKJQ=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=2Gux2/Som03hICgU5yOVV/Q1V+JmfiX5qRK+2wvl878=;
+        b=R5XSuUSSnCx6HXNwXx6qZK9vzo/hV79H7IDWvZkimVs8gBF08bfYUZe2k0bhaLCHbMlVYK
+        OjIErbruTn2U3ulneOexZ5WoFPaUPXP30YheNzMiK28CwwK9Uws0CZ8Uk62wRyJ4/XCKFb
+        dGMAeD0jgdCmRlhfDCDuTr8cV2xXlhk=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-372-bPvQrx-TOc-eDOMaL38UoA-1; Tue, 29 Nov 2022 06:50:51 -0500
-X-MC-Unique: bPvQrx-TOc-eDOMaL38UoA-1
-Received: by mail-qv1-f71.google.com with SMTP id nn2-20020a056214358200b004bb7bc3dfdcso19396666qvb.23
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:50:50 -0800 (PST)
+ us-mta-6-mFCE1HO7OuyfFb-YNVMzmA-1; Tue, 29 Nov 2022 06:52:22 -0500
+X-MC-Unique: mFCE1HO7OuyfFb-YNVMzmA-1
+Received: by mail-wm1-f70.google.com with SMTP id e8-20020a05600c218800b003cf634f5280so4635353wme.8
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:52:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9CBLyH0RXTvLwjlM6E/Boj09BZZIY990XDzCnn9wbPw=;
-        b=nLQMk1z9J6pAT/bEmTnpa/G3sQpPVOlDRNB5u7y1rbPGZ1TUsUMhCE4iqWct5DYtxS
-         lcOEK75OCpM2pmy7ajeZ/sSfH7A2UwcgONwAKfbUuPb7kY0NOuckvWyEWMGLZkUmwzGR
-         U72Z8AXgT3TDr4P5S97DznNEMMuMU6Bb+hUCG5eUO+OFQMMl5LwQFUMxlJVViTYW/bbO
-         RW4P+FUkSj53SxUUv5zXhWpfIdBXrDvkzTKpCq0l76CQieUuo37ozDLhLFSiXGAXu2j8
-         4Wfb33giyI/F/IdIeLRgNSBWQRdqtY55s+22OJ3DrtQFvHnXVHzExwDxUgM/vZEpqYte
-         oZBA==
-X-Gm-Message-State: ANoB5pnJD8dqa3k2P4ecDSZo4+o3HX0YZoMUSJ3Oo+IP7LQip1EQCi+s
-        2e6sW24Bsi6LNPVnGxs+0Tx9doB0W1Peh3yjcdenWZ6vqB8IpvpzPc7UVPWxy8iJ9sOgsHW4xqR
-        taeDYDItMV7kA/8m1YeIU8Rb5
-X-Received: by 2002:ac8:4788:0:b0:3a5:9191:da4c with SMTP id k8-20020ac84788000000b003a59191da4cmr33745041qtq.540.1669722650526;
-        Tue, 29 Nov 2022 03:50:50 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf57udU0/n3t8gQZNxAPApMFwNQckm0QqmopAwqKUSexI8spuHalULyPo60nA5QAlJ3wWtYjrQ==
-X-Received: by 2002:ac8:4788:0:b0:3a5:9191:da4c with SMTP id k8-20020ac84788000000b003a59191da4cmr33745022qtq.540.1669722650264;
-        Tue, 29 Nov 2022 03:50:50 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
-        by smtp.gmail.com with ESMTPSA id v68-20020a372f47000000b006fa84082b6dsm10183195qkh.128.2022.11.29.03.50.48
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2Gux2/Som03hICgU5yOVV/Q1V+JmfiX5qRK+2wvl878=;
+        b=VhOgEQqZh2Z1eiToqdDDj4D93N2YuWS7x4UBIoWTMjhk+nF7fg+RcdEY6a1GnV2gkV
+         kQdX1+GxNJQ4RBA7eRYmcPN5/aNtn7aDgl2sfw+UOsOk30lDYrLjHLpdmBXH0qhLarWs
+         72oTdkuv97JmeqscEx9r+FLIxwKUuxt++1QYzsH9jOueAFKdkaFwP2mJKDczc5Apk32O
+         1xxMODfDvFu4q/BR7zU0cO45Pd91nz6pwXuISH6T11h2jf2sP+SEpQyT3jBTxJLEgYYc
+         NF7o3YPH+7yRL17r0pxXbPqzdj3UYVk/43dV4ArR0c+cm+k8tqRfRt5bm4ortIl7nF0i
+         4cew==
+X-Gm-Message-State: ANoB5pmXmqmTS5snhDmJHHqsbH2Q3x+TDg4LQKVwGJVMg/lgwiR/xRWt
+        tGfML7rVXHAxXGXEfRP1dyCQANl+J3xuIeeSHhngQN80DDItyh4nDbyFnv6wVwfY0GdbndzzMtB
+        sJmnTmOowikcQrvEA51SmdX0=
+X-Received: by 2002:a1c:4b12:0:b0:3cf:90de:7724 with SMTP id y18-20020a1c4b12000000b003cf90de7724mr44534257wma.18.1669722741538;
+        Tue, 29 Nov 2022 03:52:21 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7jWVYrfMlBCQFeHwziy5QCyzfD2FjXU0pt9cHOO8RRJpocET7EWtBePXu5o9xbIk8wvf++pw==
+X-Received: by 2002:a1c:4b12:0:b0:3cf:90de:7724 with SMTP id y18-20020a1c4b12000000b003cf90de7724mr44534239wma.18.1669722741311;
+        Tue, 29 Nov 2022 03:52:21 -0800 (PST)
+Received: from klayman.redhat.com (net-2-34-28-144.cust.vodafonedsl.it. [2.34.28.144])
+        by smtp.gmail.com with ESMTPSA id u13-20020a5d514d000000b002365b759b65sm13232124wrt.86.2022.11.29.03.52.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 03:50:49 -0800 (PST)
-Message-ID: <c2004cd0d54c1510dbb8a049527110822dca2d8b.camel@redhat.com>
-Subject: Re: [v2][PATCH 1/1] net: phy: Add link between phy dev and mac dev
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Xiaolei Wang <xiaolei.wang@windriver.com>, andrew@lunn.ch,
-        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 29 Nov 2022 12:50:46 +0100
-In-Reply-To: <20221125041206.1883833-2-xiaolei.wang@windriver.com>
-References: <20221125041206.1883833-1-xiaolei.wang@windriver.com>
-         <20221125041206.1883833-2-xiaolei.wang@windriver.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 29 Nov 2022 03:52:20 -0800 (PST)
+From:   Marco Pagani <marpagan@redhat.com>
+To:     Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Cc:     Marco Pagani <marpagan@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] habanalabs: fix double assignment in MMU V1
+Date:   Tue, 29 Nov 2022 12:52:17 +0100
+Message-Id: <20221129115217.129290-1-marpagan@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -81,84 +79,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-11-25 at 12:12 +0800, Xiaolei Wang wrote:
-> If the external phy used by current mac interface is
-> managed by another mac interface, it means that this
-> network port cannot work independently, especially
-> when the system suspend and resume, the following
-> trace may appear, so we should create a device link
-> between phy dev and mac dev.
-> 
->   WARNING: CPU: 0 PID: 24 at drivers/net/phy/phy.c:983 phy_error+0x20/0x68
->   Modules linked in:
->   CPU: 0 PID: 24 Comm: kworker/0:2 Not tainted 6.1.0-rc3-00011-g5aaef24b5c6d-dirty #34
->   Hardware name: Freescale i.MX6 SoloX (Device Tree)
->   Workqueue: events_power_efficient phy_state_machine
->   unwind_backtrace from show_stack+0x10/0x14
->   show_stack from dump_stack_lvl+0x68/0x90
->   dump_stack_lvl from __warn+0xb4/0x24c
->   __warn from warn_slowpath_fmt+0x5c/0xd8
->   warn_slowpath_fmt from phy_error+0x20/0x68
->   phy_error from phy_state_machine+0x22c/0x23c
->   phy_state_machine from process_one_work+0x288/0x744
->   process_one_work from worker_thread+0x3c/0x500
->   worker_thread from kthread+0xf0/0x114
->   kthread from ret_from_fork+0x14/0x28
->   Exception stack(0xf0951fb0 to 0xf0951ff8)
-> 
-> Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
-> ---
->  drivers/net/phy/phy_device.c | 12 ++++++++++++
->  include/linux/phy.h          |  2 ++
->  2 files changed, 14 insertions(+)
-> 
-> diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-> index 57849ac0384e..ca6d12f37066 100644
-> --- a/drivers/net/phy/phy_device.c
-> +++ b/drivers/net/phy/phy_device.c
-> @@ -1511,6 +1511,15 @@ int phy_attach_direct(struct net_device *dev, struct phy_device *phydev,
->  	phy_resume(phydev);
->  	phy_led_triggers_register(phydev);
->  
-> +	/**
-> +	 * If the external phy used by current mac interface is managed by
-> +	 * another mac interface, so we should create a device link between
-> +	 * phy dev and mac dev.
-> +	 */
-> +	if (phydev->mdio.bus->parent && dev->dev.parent != phydev->mdio.bus->parent)
-> +		phydev->devlink = device_link_add(dev->dev.parent, &phydev->mdio.dev,
-> +						  DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
-> +
->  	return err;
->  
->  error:
-> @@ -1748,6 +1757,9 @@ void phy_detach(struct phy_device *phydev)
->  	struct module *ndev_owner = NULL;
->  	struct mii_bus *bus;
->  
-> +	if (phydev->devlink)
-> +		device_link_del(phydev->devlink);
-> +
->  	if (phydev->sysfs_links) {
->  		if (dev)
->  			sysfs_remove_link(&dev->dev.kobj, "phydev");
-> diff --git a/include/linux/phy.h b/include/linux/phy.h
-> index ddf66198f751..f7f8b909fed0 100644
-> --- a/include/linux/phy.h
-> +++ b/include/linux/phy.h
-> @@ -617,6 +617,8 @@ struct phy_device {
->  	/* And management functions */
->  	struct phy_driver *drv;
->  
-> +	struct device_link *devlink;
+Removing double assignment of the hop2_pte_addr
+variable in dram_default_mapping_fini().
 
-Sorry for the late nit picking, but could you please add the kdoc
-documentation for this new field?
+Dead store reported by clang-analyzer.
 
-Also, please specify explicitly the net-next target tree on repost, as
-per Florian's request.
+Signed-off-by: Marco Pagani <marpagan@redhat.com>
+---
+ drivers/misc/habanalabs/common/mmu/mmu_v1.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thanks,
-
-Paolo
+diff --git a/drivers/misc/habanalabs/common/mmu/mmu_v1.c b/drivers/misc/habanalabs/common/mmu/mmu_v1.c
+index 8a40de4a4761..d925dc4dd097 100644
+--- a/drivers/misc/habanalabs/common/mmu/mmu_v1.c
++++ b/drivers/misc/habanalabs/common/mmu/mmu_v1.c
+@@ -344,7 +344,6 @@ static void dram_default_mapping_fini(struct hl_ctx *ctx)
+ 		}
+ 	}
+ 
+-	hop2_pte_addr = hop2_addr;
+ 	hop2_pte_addr = hop2_addr;
+ 	for (i = 0 ; i < num_of_hop3 ; i++) {
+ 		clear_pte(ctx, hop2_pte_addr);
+-- 
+2.38.1
 
