@@ -2,114 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521D763B782
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 02:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C7563B785
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 02:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235067AbiK2B6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 20:58:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
+        id S234900AbiK2B6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 20:58:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234243AbiK2B6S (ORCPT
+        with ESMTP id S235102AbiK2B6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 20:58:18 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3291E3AC34;
-        Mon, 28 Nov 2022 17:58:18 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B54DF4E6;
-        Tue, 29 Nov 2022 02:58:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669687095;
-        bh=ALlSUwOjuZtKU27sLYVc2psBB7T9v5/F5DOwwLYltHc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=On8J5s89eysO38gufiECkppkwee6jYkIFoEUQHYAXAFG73gZnFPlC273rqPDnG1mD
-         HA6qqNV4BYit1CmixMtUVEz7lpfYCkX7T2oMXXG0uI0Je1sGeDs4DZLBvgaNcFruB9
-         z6aRFTO4gdKvEqFMOHN6cMFpfXR9h3x8puYBvh1g=
-Date:   Tue, 29 Nov 2022 03:58:00 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: Re: [PATCH v2 0/7] Renesas V4H DSI & DP output support
-Message-ID: <Y4VnKBC+fHGwNZOx@pendragon.ideasonboard.com>
-References: <20221123065946.40415-1-tomi.valkeinen+renesas@ideasonboard.com>
+        Mon, 28 Nov 2022 20:58:31 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01593AC34;
+        Mon, 28 Nov 2022 17:58:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669687110; x=1701223110;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7WnAs/ogQxcOHFr4zpg6PBLqxOBhypLc7I/0dnCDlE0=;
+  b=DRDN8s9cM0GY0oA2N7FoDbLrDjoj9sTEHRS/nq8FEml/YxL/4DqMxI8c
+   Ws2gRwsp+fG2IDA/7GFnKKvcVPjgfYk74aYxl0iaI1t3TgmM44fojtbPG
+   JNbs87pJDc5izfsCG6c2khvZGCDZwl+jBoBrAXreHGnOXFEsuC4uUBMKp
+   ekicJKzv5ivLHe5BLyJtjA7aKnhfBvPN/CWkc9NPQ21N/xlATyRf47v8H
+   yFEyoGN8nP7HHxqz1U6sz5SCZhp5KNOBjx3NE5o+THWNZG1sc/qopZ0E8
+   +vwhXHjBd6OrK2tEC3DageeY2h0Irrd54SZ5r/Ej0U5UpuDibmPQlqPby
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="302586115"
+X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
+   d="scan'208";a="302586115"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 17:58:30 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="818044375"
+X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
+   d="scan'208";a="818044375"
+Received: from leiwang7-mobl.ccr.corp.intel.com (HELO [10.254.211.213]) ([10.254.211.213])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 17:58:28 -0800
+Message-ID: <96a53991-3bca-2c0f-84d8-54e2f64d29b3@intel.com>
+Date:   Tue, 29 Nov 2022 09:58:26 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221123065946.40415-1-tomi.valkeinen+renesas@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.5.0
+Subject: Re: [PATCH v2 0/4] KVM: selftests: AMX test fix and cleanups
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221128225735.3291648-1-seanjc@google.com>
+From:   "Wang, Lei" <lei4.wang@intel.com>
+In-Reply-To: <20221128225735.3291648-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
 
-On Wed, Nov 23, 2022 at 08:59:39AM +0200, Tomi Valkeinen wrote:
-> From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+On 11/29/2022 6:57 AM, Sean Christopherson wrote:
+> Fix a bug in the AMX test introduced by moving to kvm_cpu_has() for
+> X86_FEATURE_XFD, and clean up the related code.  The fix and cleanups
+> all revolve around ARCH_REQ_XCOMP_GUEST_PERM impacting the output of
+> KVM_GET_SUPPORTED_CPUID, and thus causing problems for selftest's
+> caching of KVM's supported CPUID.
 > 
-> Hi,
-> 
-> These add support for DSI on V4H SoC (r8a779g0) and DP for Whitehawk
-> board.
-> 
-> Changes in v2:
-> - A few cosmetic changes
-> - Increase vspd address range in dts to 0x7000
-> - Arrange nodes in dts by the block address
-> - Use gen = 4 for r8a779g0 du
-> - Drop the CLOCKSET1 hack patch
-> 
-> The CLOCKSET1 patch is apparently not needed to get the DSI & DP
-> working. Which is baffling, as I'm quite sure it was needed. There are a
-> few possible explanations: 1) it was never needed and I was just messing
-> things up, 2) it was needed, but some of my later improvements made it
-> unnecessary, 3) Whitehawk board firmware was updated in the middle of
-> the development of this series, possibly the firmware made the patch
-> unnecessary.
-> 
->  Tomi
-> 
-> Tomi Valkeinen (7):
->   dt-bindings: display: renesas,du: Provide bindings for r8a779g0
->   dt-bindings: display: bridge: renesas,dsi-csi2-tx: Add r8a779g0
->   clk: renesas: r8a779g0: Add display related clocks
->   arm64: dts: renesas: r8a779g0: Add display related nodes
->   arm64: dts: renesas: white-hawk-cpu: Add DP output support
->   drm: rcar-du: Add r8a779g0 support
->   drm: rcar-du: dsi: Add r8A779g0 support
+> Lei Wang, I adjusted your Author and SOB tags to drop the comma, which I
+> think? violates that "use your real name" rule, and use formatting from
+> patches you've sent in the past[*].  Let me know if that's ok (or not).
 
-I'll take patches 1/7, 2/7 and 6/7 in my tree already for v6.3. I expect
-Geert to handle 3/7, 4/7 and 5/7. 7/7 needs a v3.
+That's OK, thanks!
 
+> [*] https://lore.kernel.org/all/20220424101557.134102-9-lei4.wang@intel.com
 > 
->  .../display/bridge/renesas,dsi-csi2-tx.yaml   |   3 +-
->  .../bindings/display/renesas,du.yaml          |   2 +
->  .../dts/renesas/r8a779g0-white-hawk-cpu.dtsi  |  94 ++++
->  arch/arm64/boot/dts/renesas/r8a779g0.dtsi     | 130 +++++
->  drivers/clk/renesas/r8a779g0-cpg-mssr.c       |  14 +
->  drivers/gpu/drm/rcar-du/rcar_du_drv.c         |  22 +
->  drivers/gpu/drm/rcar-du/rcar_du_group.c       |   2 +-
->  drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c       | 484 ++++++++++++++----
->  drivers/gpu/drm/rcar-du/rcar_mipi_dsi_regs.h  |   6 +-
->  9 files changed, 649 insertions(+), 108 deletions(-)
+> Lei Wang (1):
+>   KVM: selftests: Move XFD CPUID checking out of
+>     __vm_xsave_require_permission()
 > 
-
--- 
-Regards,
-
-Laurent Pinchart
+> Sean Christopherson (3):
+>   KVM: selftests: Move __vm_xsave_require_permission() below CPUID
+>     helpers
+>   KVM: selftests: Disallow "get supported CPUID" before
+>     REQ_XCOMP_GUEST_PERM
+>   KVM: selftests: Do kvm_cpu_has() checks before creating VM+vCPU
+> 
+>  .../selftests/kvm/lib/x86_64/processor.c      | 84 ++++++++++---------
+>  tools/testing/selftests/kvm/x86_64/amx_test.c | 11 ++-
+>  2 files changed, 52 insertions(+), 43 deletions(-)
+> 
+> 
+> base-commit: 519c2002cd92bdc37c8412ca22cb9c7e7bc48c48
