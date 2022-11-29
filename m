@@ -2,71 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A66C63B8B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F1E63B8B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 04:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235247AbiK2DVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 22:21:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46328 "EHLO
+        id S235461AbiK2D0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 22:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235103AbiK2DVe (ORCPT
+        with ESMTP id S235287AbiK2D0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 22:21:34 -0500
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF43C4A040
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 19:21:33 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VVym3zR_1669692086;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VVym3zR_1669692086)
-          by smtp.aliyun-inc.com;
-          Tue, 29 Nov 2022 11:21:31 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     jiucheng.xu@amlogic.com
-Cc:     will@kernel.org, mark.rutland@arm.com, neil.armstrong@linaro.org,
-        khilman@baylibre.com, jbrunet@baylibre.com,
-        martin.blumenstingl@googlemail.com,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH 1/2] perf/amlogic: Remove unused including <linux/version.h>
-Date:   Tue, 29 Nov 2022 11:21:08 +0800
-Message-Id: <20221129032108.119661-2-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
-In-Reply-To: <20221129032108.119661-1-jiapeng.chong@linux.alibaba.com>
-References: <20221129032108.119661-1-jiapeng.chong@linux.alibaba.com>
+        Mon, 28 Nov 2022 22:26:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3F0490B7;
+        Mon, 28 Nov 2022 19:26:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02D5D6155E;
+        Tue, 29 Nov 2022 03:26:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D771C43470;
+        Tue, 29 Nov 2022 03:26:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669692395;
+        bh=2wNwy6iThg3PjSBPSHqTNTq6DPiJNZ31+qv039KIXH4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=K80F1J8UOo6eYH2e7bpYdMdoLxjnE/Jwv85+yc+I49z385mKbIV4m+uhp94ZaR1+S
+         ETLr2/xInY+2CvSKFz3pvq5ablHqtiDZasWVvFFYLNMAhhhgfIpRLkoX8aZz6Dzgve
+         h1DCS0Ad/suWRSZMbxS7Zny2yA/X63yleZM1vc0BnnHbxA262uUQ4LI8A9rTALh6iI
+         oQyULI2fHwmTfinWq8lyiavyMErMd8Fn1gohCqTvRZ9r5i64twIK1jTJkmtwnmVe/v
+         h57RW9mY+r6vEfCcOf6gUZnj1GmtrbMQvUMHGULoLHdzzTIMHDCBA7Ft9n+SDkRVwi
+         TaN/6XenKdLuA==
+Received: by mail-ed1-f45.google.com with SMTP id m19so16836514edj.8;
+        Mon, 28 Nov 2022 19:26:35 -0800 (PST)
+X-Gm-Message-State: ANoB5plh6Cf1PEjlwu+/XKXJTi09426WG2GP5j6drFKOlQwwyZ/jcmEg
+        sg48fy5myM6h1WADydgFEHujJR/+FCkg7AIlh3Y=
+X-Google-Smtp-Source: AA0mqf5i6CvvZTeiTvO8vt+TXfnjgmW3rqRqazHO+w1V3Gb2yVa6G2VdOFt1+sVzGUtAoXGJYrnfcv/T0FURzu78BoQ=
+X-Received: by 2002:a05:6402:5003:b0:462:a25f:f0f2 with SMTP id
+ p3-20020a056402500300b00462a25ff0f2mr50000667eda.156.1669692393478; Mon, 28
+ Nov 2022 19:26:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <20221027125253.3458989-1-chenhuacai@loongson.cn>
+ <CAAhV-H4Y5qHSXr2uHvMYpXMgvm5fU7WQmcALB+86OYkgM1XbOg@mail.gmail.com>
+ <b9c0711c-6efc-4d84-af4e-62e585ac2fa6@app.fastmail.com> <CAAhV-H7PifGc7jEmVURVYHXLdrKBGdRecjjLwOekeqS_cEXkxw@mail.gmail.com>
+ <20221128151005.916e4373cd4e5808111dea0c@linux-foundation.org>
+In-Reply-To: <20221128151005.916e4373cd4e5808111dea0c@linux-foundation.org>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 29 Nov 2022 11:26:21 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4cYHJe15oK=3RypmH+FiEuA+KovftXpOgbHy2Rz6uH9Q@mail.gmail.com>
+Message-ID: <CAAhV-H4cYHJe15oK=3RypmH+FiEuA+KovftXpOgbHy2Rz6uH9Q@mail.gmail.com>
+Subject: Re: [PATCH V14 0/4] mm/sparse-vmemmap: Generalise helpers and enable
+ for LoongArch
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>, loongarch@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-./drivers/perf/amlogic/meson_g12_ddr_pmu.c:15 linux/version.h not needed.
+On Tue, Nov 29, 2022 at 7:10 AM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Sun, 27 Nov 2022 13:01:19 +0800 Huacai Chen <chenhuacai@kernel.org> wrote:
+>
+> > Hi, Andrew,
+> >
+> > On Tue, Nov 15, 2022 at 4:09 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> > >
+> > > On Sat, Nov 12, 2022, at 11:26, Huacai Chen wrote:
+> > > > Hi, Arnd,
+> > > >
+> > > > Just a gentle ping, is this series good enough now? I think the last
+> > > > problem (static-key.h inclusion) has also been solved.
+> > >
+> > > Yes, this looks fine to me. Sorry I didn't have this on my
+> > > radar any more.
+> > >
+> > > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> > >
+> > > I guess the series should be merged through Andrew's linux-mm
+> > > tree. Let me know if for some reason I should pick it up into
+> > > the asm-generic tree instead.
+> > Another gentle ping, can this series be merged to linux-mm in the 6.2 cycle?
+>
+> It's a pretty large patchset and I'm a bit concerned about the amount
+> of review and test which it has received from the MIPS side?
+We have tested on MIPS-based Loongson. :)
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3280
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/perf/amlogic/meson_g12_ddr_pmu.c | 1 -
- 1 file changed, 1 deletion(-)
+>
+> Prudence suggest that we merge this in 6.3-rc1.  But I'll queue it up
+> for now, get a bit of testing while we consider this.
+>
+OK, thanks, you are free to decide this.
 
-diff --git a/drivers/perf/amlogic/meson_g12_ddr_pmu.c b/drivers/perf/amlogic/meson_g12_ddr_pmu.c
-index 932802abd18c..a78fdb15e26c 100644
---- a/drivers/perf/amlogic/meson_g12_ddr_pmu.c
-+++ b/drivers/perf/amlogic/meson_g12_ddr_pmu.c
-@@ -12,7 +12,6 @@
- #include <linux/platform_device.h>
- #include <linux/printk.h>
- #include <linux/types.h>
--#include <linux/version.h>
- 
- #include <soc/amlogic/meson_ddr_pmu.h>
- 
--- 
-2.20.1.7.g153144c
-
+Huacai
