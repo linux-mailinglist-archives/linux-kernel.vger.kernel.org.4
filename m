@@ -2,237 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C3A063BD5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8127A63BD63
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbiK2JzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 04:55:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S229601AbiK2J5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 04:57:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiK2JzF (ORCPT
+        with ESMTP id S231950AbiK2J5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 04:55:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3767189;
-        Tue, 29 Nov 2022 01:55:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89D54615E9;
-        Tue, 29 Nov 2022 09:55:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66C6FC433C1;
-        Tue, 29 Nov 2022 09:55:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669715703;
-        bh=G5gpN06O+XrZ9NkRsUk5sfEk1cZQZe5PJtjFJe7vgLA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tVqGFcnF34wvDaYZSJHSuTaNwFs58GO9+TVxSPMd9akbt1j1U0TzsWPijbQKXtRW5
-         2pRiES7CKN1UtLW61Kco62cJtNMFxZNIz742nmCGhOaFJ6tJ8HaT4uHUQKmN+q5kD1
-         OBDoSgUnfCsKGlUr8gkGOXzlHX137X1CUUEtY66MYDiPix53MAFBEnyRlxwMgFibqd
-         TrpZCR9Tkho9lwObUZT7q55p/XkeWXhXlRfPTM0IvI769M/5qvrxr0ocbGk90s3x2C
-         FEkaE4n0RyF/voBQWuWI8Plm8M0Dz1CyFvI1lJr1IhAGGN0h0AL7HFzuDLBJpXB5P5
-         OduZDw2+Uvvbw==
-Date:   Tue, 29 Nov 2022 10:55:00 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org
-Subject: Re: [PATCH 0/3] rcu-tasks: Fix race against exiting pid_ns
-Message-ID: <20221129095500.GA1706373@lothringen>
-References: <20221125135500.1653800-1-frederic@kernel.org>
- <20221129002240.GP4001@paulmck-ThinkPad-P17-Gen-1>
+        Tue, 29 Nov 2022 04:57:01 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CAFF34;
+        Tue, 29 Nov 2022 01:56:59 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1ozxM0-0002sF-3D; Tue, 29 Nov 2022 10:56:40 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Chukun Pan <amadeus@jmu.edu.cn>,
+        "David S . Miller" <davem@davemloft.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Wu <david.wu@rock-chips.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/2] dt-bindings: net: rockchip-dwmac: add rk3568 xpcs compatible
+Date:   Tue, 29 Nov 2022 10:56:39 +0100
+Message-ID: <4692527.5fSG56mABF@diego>
+In-Reply-To: <6f601615-deab-a1df-b951-dca8467039f8@linaro.org>
+References: <20221129072714.22880-1-amadeus@jmu.edu.cn> <6f601615-deab-a1df-b951-dca8467039f8@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221129002240.GP4001@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 04:22:40PM -0800, Paul E. McKenney wrote:
-> On Fri, Nov 25, 2022 at 02:54:57PM +0100, Frederic Weisbecker wrote:
-> > Pengfei Xu has reported a deadlock involving calls to unshare(),
-> > perf_event_open() and clone3() calls. It requires CAP_SYS_ADMIN
-> > to reproduce (at least I don't see a way for a non privilege process to
-> > reproduce).
+Am Dienstag, 29. November 2022, 09:49:08 CET schrieb Krzysztof Kozlowski:
+> On 29/11/2022 08:27, Chukun Pan wrote:
+> > The gmac of RK3568 supports RGMII/SGMII/QSGMII interface.
+> > This patch adds a compatible string for the required clock.
 > > 
-> > See this thread for details: https://lore.kernel.org/all/Y3sOgrOmMQqPMItu@xpf.sh.intel.com/
-> > And this document for the collaborative analysis with Boqun, Paul and Neeraj:
-> > https://docs.google.com/document/d/1hJxgiZ5TMZ4YJkdJPLAkRvq7sYQ-A7svgA8no6i-v8k
+> > Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
+> > ---
+> >  Documentation/devicetree/bindings/net/rockchip-dwmac.yaml | 6 ++++++
+> >  1 file changed, 6 insertions(+)
 > > 
-> > The two first patches are small improvements. The fix is in the last patch.
-> > 
-> > git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-> > 	rcu/dev
-> > 
-> > HEAD: 45ef5a0a4be4e0db9eadcc86e8f346d34c62e744
+> > diff --git a/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml b/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml
+> > index 42fb72b6909d..36b1e82212e7 100644
+> > --- a/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml
+> > +++ b/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml
+> > @@ -68,6 +68,7 @@ properties:
+> >          - mac_clk_rx
+> >          - aclk_mac
+> >          - pclk_mac
+> > +        - pclk_xpcs
+> >          - clk_mac_ref
+> >          - clk_mac_refout
+> >          - clk_mac_speed
+> > @@ -90,6 +91,11 @@ properties:
+> >        The phandle of the syscon node for the peripheral general register file.
+> >      $ref: /schemas/types.yaml#/definitions/phandle
+> >  
+> > +  rockchip,xpcs:
+> > +    description:
+> > +      The phandle of the syscon node for the peripheral general register file.
 > 
-> Hearing no objections, queued for further review and testing.
-> 
-> And thank you very much!  That race between synchronize_rcu_tasks() and
-> zap_pid_ns_processes() certainly was more than a bit on the non-trivial
-> side.  Good show!!!
+> You used the same description as above, so no, you cannot have two
+> properties which are the same. syscons for GRF are called
+> "rockchip,grf", aren't they?
 
-Thanks!
+Not necessarily :-) .
 
-Also please replace the last patch with the following to fix
-a !CONFIG_RCU_TASKS issue:
+The GRF is Rockchip's way of not sorting their own invented
+additional registers. (aka a bunch of registers 
 
----
-From: Frederic Weisbecker <frederic@kernel.org>
-Date: Thu, 24 Nov 2022 18:15:46 +0100
-Subject: [PATCH] rcu-tasks: Fix synchronize_rcu_tasks() VS
- zap_pid_ns_processes()
+While on the older models there only ever was the one GRF
+as dumping ground, newer SoCs now end up with multiple ones :-)
 
-RCU Tasks and PID-namespace unshare can interact in do_exit() in a
-complicated circular dependency:
+These are still iomem areas separate from the actual device-iomem they
+work with/for but SoCs like the rk3568 now have at least 13 of them.
 
-1) TASK A calls unshare(CLONE_NEWPID), this creates a new PID namespace
-   that every subsequent child of TASK A will belong to. But TASK A
-   doesn't itself belong to that new PID namespace.
 
-2) TASK A forks() and creates TASK B. TASK A stays attached to its PID
-   namespace (let's say PID_NS1) and TASK B is the first task belonging
-   to the new PID namespace created by unshare()  (let's call it PID_NS2).
+_But_ for the patch in question I fail to see what this set does at all.
+The rk3568 (only) has XPCS_CON0 and XPCS_STATUS in its PIPE_GRF syscon
+(according to the TRM), but the patch2 does strange things with
+offset calculations and names that do not seem to have a match in the TRM.
 
-3) Since TASK B is the first task attached to PID_NS2, it becomes the
-   PID_NS2 child reaper.
+So definitely more explanation on what happens here would be necessary.
 
-4) TASK A forks() again and creates TASK C which get attached to PID_NS2.
-   Note how TASK C has TASK A as a parent (belonging to PID_NS1) but has
-   TASK B (belonging to PID_NS2) as a pid_namespace child_reaper.
+Heiko
 
-5) TASK B exits and since it is the child reaper for PID_NS2, it has to
-   kill all other tasks attached to PID_NS2, and wait for all of them to
-   die before getting reaped itself (zap_pid_ns_process()).
 
-6) TASK A calls synchronize_rcu_tasks() which leads to
-   synchronize_srcu(&tasks_rcu_exit_srcu).
 
-7) TASK B is waiting for TASK C to get reaped. But TASK B is under a
-   tasks_rcu_exit_srcu SRCU critical section (exit_notify() is between
-   exit_tasks_rcu_start() and exit_tasks_rcu_finish()), blocking TASK A.
 
-8) TASK C exits and since TASK A is its parent, it waits for it to reap
-   TASK C, but it can't because TASK A waits for TASK B that waits for
-   TASK C.
 
-Pid_namespace semantics can hardly be changed at this point. But the
-coverage of tasks_rcu_exit_srcu can be reduced instead.
-
-The current task is assumed not to be concurrently reapable at this
-stage of exit_notify() and therefore tasks_rcu_exit_srcu can be
-temporarily relaxed without breaking its constraints, providing a way
-out of the deadlock scenario.
-
-Fixes: 3f95aa81d265 ("rcu: Make TASKS_RCU handle tasks that are almost done exiting")
-Reported-by: Pengfei Xu <pengfei.xu@intel.com>
-Suggested-by: Boqun Feng <boqun.feng@gmail.com>
-Suggested-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Suggested-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Oleg Nesterov <oleg@redhat.com>
-Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-Cc: Eric W . Biederman <ebiederm@xmission.com>
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
----
- include/linux/rcupdate.h |  2 ++
- kernel/pid_namespace.c   | 17 +++++++++++++++++
- kernel/rcu/tasks.h       | 15 +++++++++++++--
- 3 files changed, 32 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index 89b3036746d2..a19d91d5461c 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -238,6 +238,7 @@ void synchronize_rcu_tasks_rude(void);
- 
- #define rcu_note_voluntary_context_switch(t) rcu_tasks_qs(t, false)
- void exit_tasks_rcu_start(void);
-+void exit_tasks_rcu_stop(void);
- void exit_tasks_rcu_finish(void);
- #else /* #ifdef CONFIG_TASKS_RCU_GENERIC */
- #define rcu_tasks_classic_qs(t, preempt) do { } while (0)
-@@ -246,6 +247,7 @@ void exit_tasks_rcu_finish(void);
- #define call_rcu_tasks call_rcu
- #define synchronize_rcu_tasks synchronize_rcu
- static inline void exit_tasks_rcu_start(void) { }
-+static inline void exit_tasks_rcu_stop(void) { }
- static inline void exit_tasks_rcu_finish(void) { }
- #endif /* #else #ifdef CONFIG_TASKS_RCU_GENERIC */
- 
-diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
-index f4f8cb0435b4..fc21c5d5fd5d 100644
---- a/kernel/pid_namespace.c
-+++ b/kernel/pid_namespace.c
-@@ -244,7 +244,24 @@ void zap_pid_ns_processes(struct pid_namespace *pid_ns)
- 		set_current_state(TASK_INTERRUPTIBLE);
- 		if (pid_ns->pid_allocated == init_pids)
- 			break;
-+		/*
-+		 * Release tasks_rcu_exit_srcu to avoid following deadlock:
-+		 *
-+		 * 1) TASK A unshare(CLONE_NEWPID)
-+		 * 2) TASK A fork() twice -> TASK B (child reaper for new ns)
-+		 *    and TASK C
-+		 * 3) TASK B exits, kills TASK C, waits for TASK A to reap it
-+		 * 4) TASK A calls synchronize_rcu_tasks()
-+		 *                   -> synchronize_srcu(tasks_rcu_exit_srcu)
-+		 * 5) *DEADLOCK*
-+		 *
-+		 * It is considered safe to release tasks_rcu_exit_srcu here
-+		 * because we assume the current task can not be concurrently
-+		 * reaped at this point.
-+		 */
-+		exit_tasks_rcu_stop();
- 		schedule();
-+		exit_tasks_rcu_start();
- 	}
- 	__set_current_state(TASK_RUNNING);
- 
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index 9a8114114b48..4dda8e6e5707 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -1016,16 +1016,27 @@ void exit_tasks_rcu_start(void) __acquires(&tasks_rcu_exit_srcu)
-  * task is exiting and may be removed from the tasklist. See
-  * corresponding synchronize_srcu() for further details.
-  */
--void exit_tasks_rcu_finish(void) __releases(&tasks_rcu_exit_srcu)
-+void exit_tasks_rcu_stop(void) __releases(&tasks_rcu_exit_srcu)
- {
- 	struct task_struct *t = current;
- 
- 	__srcu_read_unlock(&tasks_rcu_exit_srcu, t->rcu_tasks_idx);
--	exit_tasks_rcu_finish_trace(t);
-+}
-+
-+/*
-+ * Contribute to protect against tasklist scan blind spot while the
-+ * task is exiting and may be removed from the tasklist. See
-+ * corresponding synchronize_srcu() for further details.
-+ */
-+void exit_tasks_rcu_finish(void)
-+{
-+	exit_tasks_rcu_stop();
-+	exit_tasks_rcu_finish_trace(current);
- }
- 
- #else /* #ifdef CONFIG_TASKS_RCU */
- void exit_tasks_rcu_start(void) { }
-+void exit_tasks_rcu_stop(void) { }
- void exit_tasks_rcu_finish(void) { exit_tasks_rcu_finish_trace(current); }
- #endif /* #else #ifdef CONFIG_TASKS_RCU */
- 
--- 
-2.25.1
 
