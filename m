@@ -2,158 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A66D363BCDC
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:24:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5DE563BCDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:25:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbiK2JYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 04:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
+        id S231488AbiK2JZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 04:25:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiK2JYj (ORCPT
+        with ESMTP id S229900AbiK2JZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 04:24:39 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B57F3FB83
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:24:38 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id f13so21517687lfa.6
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:24:38 -0800 (PST)
+        Tue, 29 Nov 2022 04:25:52 -0500
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39534384B;
+        Tue, 29 Nov 2022 01:25:50 -0800 (PST)
+Received: by mail-pl1-x644.google.com with SMTP id y4so12833409plb.2;
+        Tue, 29 Nov 2022 01:25:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hBDc9CcCcTklSkLn2omn0o3yNWgPbE363k3eUvI/h7M=;
-        b=Es2zzDQYxQUOfxd+vsDHLcyrTM7DQmqyh+D+PB6b6KhjmVs66Iw1Yqn2XrszY+3//i
-         5RLbkf9b92gJuqqo1Dcn4Sux20Vw1n0CPi7Ke64abWlPlfmhommdQrQUIxgOJdGGToSg
-         qbosMJRC5XYGV013mo52sFACgUI7X1YVshzxbvCRPn6Eh0BYWrwogP9+PEhrxVbavV94
-         DtQ9LtSdgav1KAawshTUb5+1VjwGdS4an4dnVX7dC/QNLQ2f+TnuqtAwtw20Kn2H7JbQ
-         DvdiclwVseLcof0Uo+d1HokEk58wRZUBMK2ErsQF7+07VhYMGQGghGATi+F8UODoNC/x
-         AfLw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=w3baCgaNs5Hj1HOYdkfTTsua0OK2W4DrazIX6jc/oXc=;
+        b=OKdIuatpQSH+J6N9dvK1dnxe2GwOc6+6BVUXmZLAjdOYDHUBT76QKzX1/yOykZWFCU
+         89SagE3TL1c2y3y8e1aj9jkwFlqNx9BXvAWtgW1ZmcIU/x29q+8DvAlhmiGnpBz8J2DJ
+         jdgWwfyaVIRKUPwIjhFmNjGDZMXNg4wHBi31hf2ckK6LvDZ1fwoMymeClpVXDaP5VOMA
+         PQSsFhZsjyFO2ltsA+Iyasf7GVWs/TM7ix+gKubJmDE2HoiTcv57dDwFhqce6lNUSf87
+         zGiAftQVkjVD6wTMoVplT5krqtLEbUkajezjY/dKgvDcmSFuq/ulRgDTVf1Ne0rpelg/
+         pW1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hBDc9CcCcTklSkLn2omn0o3yNWgPbE363k3eUvI/h7M=;
-        b=W25rVz0h76XV5ISg01NzOrbt9Jn43YxAEVglCP3HA27rkuiDxE9snYBRHpitawQBC3
-         2vCW8h7Ty2otcaYqPl6CRZuZ0plCNLq0xcUEO28qxSFBlGdfV7ugwADWhtLrmR8HaVHy
-         I+uaEJoVPlZv9lUjfEX3+3bSJyQiN744NayK1YpoEwumISno2fkP1UPW681t9nSkV1O0
-         Xy6lPa3l/DDO7gQVIR1wGzzdjeYpm1VggbUQcJlDzwC0wqJ6rNQg9vpwx3HwKwpxyyYZ
-         7NScM+XA661LIsm0pVkeuB8f4ZzbjHHjiCsXUobxhcF6uAy6U027viVxRUNbHdf0C5r1
-         thYw==
-X-Gm-Message-State: ANoB5pmOFY5Lv3uechF/MiVSSx9TmPhiXptjth8tKUJsF+koJiTkFigo
-        l+AK27Y/mRFp0knSzUm85VJ/eA==
-X-Google-Smtp-Source: AA0mqf7Di+vA1MHihgiN372ZA1nFRb+Z/G5naXPqvEmAfNO2xwioDDiYClbUnBMUTROvQc29I6mipg==
-X-Received: by 2002:a19:4f52:0:b0:4a6:2ff5:ddd2 with SMTP id a18-20020a194f52000000b004a62ff5ddd2mr20497054lfk.166.1669713876371;
-        Tue, 29 Nov 2022 01:24:36 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a2-20020ac25202000000b004acff58a951sm1603246lfl.133.2022.11.29.01.24.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 01:24:35 -0800 (PST)
-Message-ID: <89b16ec5-f9a5-f836-f51a-8325448e4775@linaro.org>
-Date:   Tue, 29 Nov 2022 10:24:34 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w3baCgaNs5Hj1HOYdkfTTsua0OK2W4DrazIX6jc/oXc=;
+        b=zvvbJ3aqIlKEs692iWA1NpePIdnmuoEfpm+BJv9aLg5Vcjf1G/YGuBGcqrB2AQJGv5
+         +vXZQyAA3uHn4bcQ6QHiFNXodkm1rZg241Y5+/FxWkhfb1qT2wX25wy73m72rE/Fld+h
+         oudSKiST41226ZUDVUFqAzGQn/v6Rpcyns2AQ0Lwf1IG1wHyx2TdMx3PtKCSW/bnhvj2
+         a7kECT2aynVmWdIJHVJpU3Z7fh6vIELBEMW0NX1t7bQFotj9mGHCXoCZj4n+0KJsnyRv
+         gzm+wzqVt/bXurMrCe7G9nqSOyQcahZQo0d+XKIS0mlf/07tz2Mua0kzyDCDJrojH+LK
+         3WvQ==
+X-Gm-Message-State: ANoB5pmKchw51LpzAu37njYhu3BpVXwKuCu5KSQxTohq50b10fVGpFuL
+        ecnKAamAzCBIuHK7U1llWDc=
+X-Google-Smtp-Source: AA0mqf7YBuo0x764FtOodU/l2wB5AijmXuJH+08X4SJ0PENC459pBtGSpxzwmzbWTUbXIE59uVG8rQ==
+X-Received: by 2002:a17:902:ec04:b0:189:8c37:6f17 with SMTP id l4-20020a170902ec0400b001898c376f17mr9041980pld.67.1669713950116;
+        Tue, 29 Nov 2022 01:25:50 -0800 (PST)
+Received: from localhost.localdomain ([43.132.98.45])
+        by smtp.gmail.com with ESMTPSA id v190-20020a6261c7000000b00574ee8cfdabsm6006813pfb.148.2022.11.29.01.25.48
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 29 Nov 2022 01:25:49 -0800 (PST)
+From:   korantwork@gmail.com
+To:     dave.hansen@intel.com, luto@kernel.org
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, Xinghui Li <korantli@tencent.com>
+Subject: [PATCH] x86/mm: fix the code style issue about "foo* bar"
+Date:   Tue, 29 Nov 2022 17:25:46 +0800
+Message-Id: <20221129092546.62895-1-korantwork@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: RNG: Add Rockchip RNG bindings
-Content-Language: en-US
-To:     Aurelien Jarno <aurelien@aurel32.net>,
-        Olivia Mackall <olivia@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Lin Jinhan <troy.lin@rock-chips.com>
-Cc:     "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Rockchip SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221128184718.1963353-1-aurelien@aurel32.net>
- <20221128184718.1963353-2-aurelien@aurel32.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221128184718.1963353-2-aurelien@aurel32.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/11/2022 19:47, Aurelien Jarno wrote:
-> Add the RNG bindings for the RK3568 SoC from Rockchip
+From: Xinghui Li <korantli@tencent.com>
 
-Use subject prefixes matching the subsystem (git log --oneline -- ...),
-so it is rng, not RNG. Also, you are not adding all-Rockhip RNG but a
-specific device.
+Fix the error:
 
-Subject: drop second, redundant "bindings".
+'ERROR: "(foo*)" should be "(foo *)"
+688: FILE: arch/x86/mm/fault.c:688:
++		call_on_stack(__this_cpu_ist_top_va(DF) - sizeof(void*),'
+reported by checkpatch.pl.
 
-> 
-> Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
-> ---
->  .../bindings/rng/rockchip,rk3568-rng.yaml     | 60 +++++++++++++++++++
->  1 file changed, 60 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/rng/rockchip,rk3568-rng.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/rng/rockchip,rk3568-rng.yaml b/Documentation/devicetree/bindings/rng/rockchip,rk3568-rng.yaml
-> new file mode 100644
-> index 000000000000..c2f5ef69cf07
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rng/rockchip,rk3568-rng.yaml
-> @@ -0,0 +1,60 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rng/rockchip,rk3568-rng.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Rockchip TRNG
-> +
-> +description: True Random Number Generator for some Rockchip SoCs
+Signed-off-by: Xinghui Li <korantli@tencent.com>
+---
+ arch/x86/mm/fault.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-s/for some Rockchip SoCs/on Rokchip RK3568 SoC/
-
-> +
-> +maintainers:
-> +  - Aurelien Jarno <aurelien@aurel32.net>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - rockchip,rk3568-rng
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: TRNG clock
-> +      - description: TRNG AHB clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: trng_clk
-> +      - const: trng_hclk
-
-These are too vague names. Everything is a clk in clock-names, so no
-need usually to add it as name suffix. Give them some descriptive names,
-e.g. core and ahb.
-
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-
-Best regards,
-Krzysztof
+diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+index 7b0d4ab894c8..3f014cdd85f1 100644
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -685,7 +685,7 @@ page_fault_oops(struct pt_regs *regs, unsigned long error_code,
+ 		 * and then double-fault, though, because we're likely to
+ 		 * break the console driver and lose most of the stack dump.
+ 		 */
+-		call_on_stack(__this_cpu_ist_top_va(DF) - sizeof(void*),
++		call_on_stack(__this_cpu_ist_top_va(DF) - sizeof(void *),
+ 			      handle_stack_overflow,
+ 			      ASM_CALL_ARG3,
+ 			      , [arg1] "r" (regs), [arg2] "r" (address), [arg3] "r" (&info));
+-- 
+2.38.1
 
