@@ -2,176 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8344663CAD6
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:59:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A85063CAE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 23:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236874AbiK2V6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 16:58:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
+        id S236365AbiK2WCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 17:02:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236970AbiK2V6T (ORCPT
+        with ESMTP id S235900AbiK2WCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 16:58:19 -0500
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8BA6F0DB
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:58:18 -0800 (PST)
-Received: by mail-oo1-xc2c.google.com with SMTP id k12-20020a4ab08c000000b0049e2ab19e04so2356453oon.6
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:58:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qNiwWVeUDZhUGkAMdWkcINE9IEMdNV90cmxq2ELUVsE=;
-        b=Sj8m+nBoglCwGTAvzyCOZFPLzCTKOMoL4GBgeA2YK+rU5nZnxvl7BtjJRYWDdXLPl+
-         ELsdJ0bO5IOPyfC179kLdQH7gqq9QX5TJwALmkWKyvDq7eKHaF0bMqOMGE+zizOBxBzt
-         VOIHD13NJBVFWCIsyfHaadUqwwbr77vYjS8FGtTYbU5HoMCPgArR/S9Xhjfv9o/U4Usw
-         pMjteBn+4ad6b0ODEzpZJ71grNR4s9TOfZhGjOeGc8bLjBnQGXJwLkgfYNBFyU+DR2Wa
-         q9YBVCQArE19oVLsQHgpP0uMt5vlBuTNGcug5PDzHm/CzZrhrnY07uk5nGlEoaQHMkAx
-         QOOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qNiwWVeUDZhUGkAMdWkcINE9IEMdNV90cmxq2ELUVsE=;
-        b=0d1g75IR/h5w155Jxw/ufFIGx9ZIxrxsxATeOFJNICvhik+b05LQb3Iq5C4BRmGVqA
-         nevZL5G0RA+XJO/MbOrh5TGOoiN66hvNdJeOja8Df4hCUa/hZf1vyS9qppwJGdpNedFZ
-         QyB9b39qn5ArziY8zWIU/I+c9LAidiRkmkQPw3C+K2YCiscxi1ihGD8pviiCqfUKiXkL
-         IWQEMuSn0/kYL34mnb+WJxpKxpUHTgdUUOEjn9atetigpwHW+RNtYttZQuz5uWxYVi/F
-         uoxfsqh7+YkBXfck8Dq5YHFxzq8zaBeo0fukzLzNav8WFT87ca0NVjCep4qrx/I4xgCv
-         enog==
-X-Gm-Message-State: ANoB5pnS7dxupDe4VkYsmOa17WGCAKc2qLh9WuqhBSmh7KeZw/T0OUpt
-        TyAZ44KZ6sPvYOUVywHe+d949aO80vzTMNy+qQRhGA==
-X-Google-Smtp-Source: AA0mqf6AFUPllnZD8NF7NKN1LHRFaxLM5PkE/hfisqVBxp8pN2Dh3n0d8uMbt2bezKPT0FwlLQX23RUNjBtSVA9Hlv0=
-X-Received: by 2002:a4a:e0d3:0:b0:49f:de1:96c0 with SMTP id
- e19-20020a4ae0d3000000b0049f0de196c0mr24898644oot.7.1669759098052; Tue, 29
- Nov 2022 13:58:18 -0800 (PST)
+        Tue, 29 Nov 2022 17:02:34 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEAC20F;
+        Tue, 29 Nov 2022 14:02:32 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669759349;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DZAHwIvckru6Vi3Gbl8PJvR5WTwEr5s4k3inkGZ1KBo=;
+        b=rTPBU8e3CehUcU6xBMQgxtPnl7yv0Eyq/lpyUjWiLrVIZXXBPfGDZTVLLC9V7advjVGav0
+        bzZmBQ5FAvCMnLR/e5/mbseSBTT8TAwBqKyWKGT9BKbT7kjAdcRkqT9XTUypXrkWWMoLaF
+        NLMlQ3FWEN5C0ih8KHyHJG31XrTpaVHVvZUGBWfvZdOwKo6JrL2Nm6cpx3jvAVqHZUpW4W
+        XjE5f8Q5hqtauGGA0L4G0CsZQdIQ0Hy+3g5QNoBcttChK0pRqmtIst5HfzP4e3t1mkMPBx
+        5sylWLMRn4plmS/tktcYP/YoUQ0xEh6+mF3eVG/5Th9UL96ErDm6RYHDnFblXw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669759349;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DZAHwIvckru6Vi3Gbl8PJvR5WTwEr5s4k3inkGZ1KBo=;
+        b=mYKio4bZMU6Ug7qrJUJFVW9uIq38INUZeB8GDyXMJ8u6qoU+7tr2exeT6C/TbpFqNi6hVR
+        g4szvw5IiK2AzWDQ==
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
+        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v10 1/4] random: add vgetrandom_alloc() syscall
+In-Reply-To: <20221129210639.42233-2-Jason@zx2c4.com>
+References: <20221129210639.42233-1-Jason@zx2c4.com>
+ <20221129210639.42233-2-Jason@zx2c4.com>
+Date:   Tue, 29 Nov 2022 23:02:29 +0100
+Message-ID: <87cz95v2q2.ffs@tglx>
 MIME-Version: 1.0
-References: <20221129001234.606653-1-dlatypov@google.com> <CABVgOS=6nx2SGRVjN1Ek1htsXehcnU1fnp6FMc0ATdOJfRd0iQ@mail.gmail.com>
- <CAGS_qxqu+opwMusOGSS3s9fLo2GfpgsCQOgq6VZyBcVb+zS6Zg@mail.gmail.com>
-In-Reply-To: <CAGS_qxqu+opwMusOGSS3s9fLo2GfpgsCQOgq6VZyBcVb+zS6Zg@mail.gmail.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 29 Nov 2022 16:58:05 -0500
-Message-ID: <CA+GJov6QKNy5fxkiu0P29WDtFgNs0GP4T27=X5Sva+V_BYc3+A@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: don't include KTAP headers and the like in
- the test log
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>, brendanhiggins@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 12:09 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> On Tue, Nov 29, 2022 at 12:31 AM David Gow <davidgow@google.com> wrote:
-> >
-> > On Tue, Nov 29, 2022 at 8:12 AM Daniel Latypov <dlatypov@google.com> wrote:
-> > >
-> > > We print the "test log" on failure.
-> > > This is meant to be all the kernel output that happened during the test.
-> > >
-> > > But we also include the special KTAP lines in it, which are often
-> > > redundant.
-> > >
-> > > E.g. we include the "not ok" line in the log, right before we print
-> > > that the test case failed...
-> > > [13:51:48] Expected 2 + 1 == 2, but
-> > > [13:51:48] 2 + 1 == 3 (0x3)
-> > > [13:51:48] not ok 1 example_simple_test
-> > > [13:51:48] [FAILED] example_simple_test
-> > >
-> > > More full example after this patch:
-> > > [13:51:48] =================== example (4 subtests) ===================
-> > > [13:51:48] # example_simple_test: initializing
-> > > [13:51:48] # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
-> > > [13:51:48] Expected 2 + 1 == 2, but
-> > > [13:51:48] 2 + 1 == 3 (0x3)
-> > > [13:51:48] [FAILED] example_simple_test
-> > >
-> > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > > ---
-> >
-> > I totally agree we should skip these from the log. (Unless
-> > --raw_output is enabled, but that obviously doesn't apply.)
-> >
-> > Going forward, I think we should also probably disable
-> > kunit.stats_enabled when running via kunit.py, too (again, unless
-> > --raw_output is used.)
->
-> I considered including that as a patch 2/2 here.
-> But changing the behavior like that felt a bit iffy.
->
-> We've basically been telling people that looking at .kunit/test.log is
-> logically equivalent to running with kunit.py run --raw_output.
-> That would no longer be true after such a change.
-> So I'm torn between that and automatically filtering them out in the
-> parser side.
->
-> Cons of tweaking args based on --raw_output
-> * now more magic, harder to explain (see above)
-> * people might find test counts useful when looking at test.log
->
-> Cons of filtering out test counts in the parser
-> * risks false positives: filtering out other lines besides test counts
-> * when there's missing output, this is less debuggable
->    * 99% of users are *not* going to dig into the python code
->   * but IMO users are fairly likely to notice the extra
-> kunit.stats_enabled=0 cmdline arg
->
-> And overall, the benefit of hiding these is very small and cosmetic in nature.
-> So that means making a tradeoff to do so feels more iffy.
->
-> The hiding done in this patch seemed fine since there was no tradeoff,
-> we just needed to stop including lines we've already recognized as
-> KTAP directives.
->
+Jason!
 
-I tested and reviewed the changes and this all looks good to me. Nice
-to no longer print the KTAP version line or test result lines in the
-test logs.
+On Tue, Nov 29 2022 at 22:06, Jason A. Donenfeld wrote:
+> +
+> +/********************************************************************
+> + *
+> + * vDSO support helpers.
+> + *
+> + * The actual vDSO function is defined over in lib/vdso/getrandom.c,
+> + * but this section contains the kernel-mode helpers to support that.
+> + *
+> + ********************************************************************/
+> +
+> +#ifdef CONFIG_VGETRANDOM_ALLOC_SYSCALL
+> +/**
+> + * vgetrandom_alloc - allocate opaque states for use with vDSO getrandom().
+> + *
+> + * @num: on input, a pointer to a suggested hint of how many states to
+> + * allocate, and on output the number of states actually allocated.
+> + *
+> + * @size_per_each: the size of each state allocated, so that the caller can
+> + * split up the returned allocation into individual states.
+> + *
+> + * @flags: currently always zero.
 
-To comment on the above discussion: of the options discussed, I would
-prefer to either tweak the stats_enabled arg based on the raw_output
-flag or simply leave the output as is. I personally think that
-filtering out the test counts using the parser would be messy and does
-not match the precedent set by this patch to not include only
-recognized KTAP directives in the test log (with the exception of the
-"# Subtest" line, which I am planning to propose for KTAP v2).
+NIT!
 
-I agree with the cons to tweaking the arg based on the raw_output flag
-Daniel mentioned above. Additionally, I think including the test
-counts line in the log could actually be quite useful in the instance
-of combining module results. Since the parser does not include a test
-summary line with counts for failed subtests, this would save the time
-counting up the number of failed/skipped/passed subtests for a
-specific module. This would, in general, also apply to failing tests
-with a large number of subtests within them.
+I personally prefer and ask for it in stuff I maintain:
 
-That being said I would be ok with tweaking the stats_enabled arg
-based on the raw_output flag as well. It does look cleaner without the
-counts printed in the log, especially when there are only a few number
-of tests or the test summary line of the parser repeats the same
-information as the test counts line.
+ * @num:		On input, a pointer to a suggested hint of how many states to
+ *			allocate, and on output the number of states actually allocated.
+ *
+ * @size_per_each: 	The size of each state allocated, so that the caller can
+ * 			split up the returned allocation into individual states.
+ *
+ * @flags: 		Currently always zero.
 
-Reviewed-by: Rae Moar <rmoar@google.com>
+But your turf :)
 
-Thanks!
-Rae
+> + *
+> + * The getrandom() vDSO function in userspace requires an opaque state, which
+> + * this function allocates by mapping a certain number of special pages into
+> + * the calling process. It takes a hint as to the number of opaque states
+> + * desired, and provides the caller with the number of opaque states actually
+> + * allocated, the size of each one in bytes, and the address of the first
+> + * state.
 
-> >
-> > In any case, this looks good and works well here.
-> >
-> > Reviewed-by: David Gow <davidgow@google.com>
-> >
-> > Cheers,
-> > -- David
+make W=1 rightfully complains about:
+
+> +
+
+drivers/char/random.c:182: warning: bad line: 
+
+> + * Returns a pointer to the first state in the allocation.
+
+I have serious doubts that this statement is correct.
+
+Think about this comment and documentation as a boiler plate for the
+mandatory man page for a new syscall (hint...)
+
+> + *
+> + */
+
+and W=1 also complains rightfully here:
+
+> +SYSCALL_DEFINE3(vgetrandom_alloc, unsigned int __user *, num,
+> +		unsigned int __user *, size_per_each, unsigned int, flags)
+
+drivers/char/random.c:188: warning: expecting prototype for vgetrandom_alloc(). Prototype was for sys_vgetrandom_alloc() instead
+
+> +{
+> diff --git a/include/vdso/getrandom.h b/include/vdso/getrandom.h
+> new file mode 100644
+> index 000000000000..5f04c8bf4bd4
+> --- /dev/null
+> +++ b/include/vdso/getrandom.h
+> @@ -0,0 +1,24 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+> + */
+> +
+> +#ifndef _VDSO_GETRANDOM_H
+> +#define _VDSO_GETRANDOM_H
+> +
+> +#include <crypto/chacha.h>
+> +
+> +struct vgetrandom_state {
+> +	union {
+> +		struct {
+> +			u8 batch[CHACHA_BLOCK_SIZE * 3 / 2];
+> +			u32 key[CHACHA_KEY_SIZE / sizeof(u32)];
+> +		};
+> +		u8 batch_key[CHACHA_BLOCK_SIZE * 2];
+> +	};
+> +	unsigned long generation;
+> +	u8 pos;
+> +	bool in_use;
+> +};
+
+Again, please make this properly tabular:
+
+struct vgetrandom_state {
+	union {
+		struct {
+			u8	batch[CHACHA_BLOCK_SIZE * 3 / 2];
+			u32	key[CHACHA_KEY_SIZE / sizeof(u32)];
+		};
+		u8	batch_key[CHACHA_BLOCK_SIZE * 2];
+	};
+	unsigned long	generation;
+	u8		pos;
+	bool		in_use;
+};
+
+Plus some kernel doc which explains what this is about.
+
+Thanks,
+
+        tglx
