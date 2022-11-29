@@ -2,116 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEC863BC88
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E9863BC95
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbiK2JHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 04:07:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S230181AbiK2JI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 04:08:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbiK2JHp (ORCPT
+        with ESMTP id S229730AbiK2JIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 04:07:45 -0500
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF92E15;
-        Tue, 29 Nov 2022 01:07:39 -0800 (PST)
-Received: by mail-qv1-f54.google.com with SMTP id a17so7515649qvt.9;
-        Tue, 29 Nov 2022 01:07:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pRTrs4STHN19HAaWZ6G6ImvhRFTGcXTwtf66lKxgXXI=;
-        b=GtOdZts36iebJA8PYmMx1GVhOxv4n7P6T8nROrX/B40iTpR69UEK/HUFZ+Js54/Sdv
-         xfbTPUhhJHOob6GO8Jzyiq7tOV8T7hb44Fqev2ty7kK0ojuU14DMLwWysL4kkQOyQ7Ib
-         Uk6gYukybiMBgQjOfGRogV1Q6C+6hXPH67bYUdNO8z4xw+o7rmaabqhQLRkG/1RADSmZ
-         KLghesI/s7ueArFzP321xzGje8GaBoHT2ndCURsuLm2oIRPtLY2rvbaqNjtIArbgLseQ
-         2E0Q7s2SOCVep5gAZnTxHcd08Oh0e+lQG2BxvPUC2ZaEOYAyWzxPWnAOXmw//UeQ1FRu
-         rEyg==
-X-Gm-Message-State: ANoB5pk16bF13h3EktD0HrIZYs/qZCmbBBG/jYTsPhnPG64Dz+/DcECR
-        neg3AyLBA5DBwvWRpPSIhGmOAQ8qIb+u8A==
-X-Google-Smtp-Source: AA0mqf5rh86N1EzKg1VnvN+gI0tAXW+F7Y2j/jVCR/5AeIvTWfQ+JUph+GUug7M2jEud3VzF9pAGEw==
-X-Received: by 2002:a0c:9067:0:b0:4bb:a664:4165 with SMTP id o94-20020a0c9067000000b004bba6644165mr32920099qvo.84.1669712858661;
-        Tue, 29 Nov 2022 01:07:38 -0800 (PST)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id f20-20020a05620a409400b006e16dcf99c8sm10189399qko.71.2022.11.29.01.07.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 01:07:37 -0800 (PST)
-Received: by mail-yb1-f175.google.com with SMTP id d128so16602508ybf.10;
-        Tue, 29 Nov 2022 01:07:37 -0800 (PST)
-X-Received: by 2002:a25:7408:0:b0:6f2:49a7:38ef with SMTP id
- p8-20020a257408000000b006f249a738efmr20678381ybc.365.1669712857595; Tue, 29
- Nov 2022 01:07:37 -0800 (PST)
+        Tue, 29 Nov 2022 04:08:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A572BC5;
+        Tue, 29 Nov 2022 01:08:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90112615FC;
+        Tue, 29 Nov 2022 09:08:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EBBAC433D6;
+        Tue, 29 Nov 2022 09:08:43 +0000 (UTC)
+Message-ID: <c2681582-1e24-7ed9-e4fb-e2dd17a93aed@xs4all.nl>
+Date:   Tue, 29 Nov 2022 10:08:41 +0100
 MIME-Version: 1.0
-References: <20221128105844.315bb58a@canb.auug.org.au>
-In-Reply-To: <20221128105844.315bb58a@canb.auug.org.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 29 Nov 2022 10:07:26 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXkDOn+J-Tjd_nDpkAKYXBhHVtNWSrLrkiGjpvYYXJkEg@mail.gmail.com>
-Message-ID: <CAMuHMdXkDOn+J-Tjd_nDpkAKYXBhHVtNWSrLrkiGjpvYYXJkEg@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the drm tree with Linus' tree
-To:     Dave Airlie <airlied@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Stanley.Yang" <Stanley.Yang@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH mm-unstable v1 16/20] mm/frame-vector: remove FOLL_FORCE
+ usage
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-17-david@redhat.com>
+ <81fb0fa3-2e06-b765-56ac-a7d981194e59@redhat.com>
+ <08b65ac6-6786-1080-18f8-d2be109c85fc@xs4all.nl>
+ <9d0bf98a-3d6a-1082-e992-1338e1525935@redhat.com>
+ <20221128145927.df895bf1966cfa125cae9668@linux-foundation.org>
+ <22b1107b-0acc-5772-a883-8f3c4682eb1b@redhat.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <22b1107b-0acc-5772-a883-8f3c4682eb1b@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi DRm people,
+On 29/11/2022 09:48, David Hildenbrand wrote:
+> On 28.11.22 23:59, Andrew Morton wrote:
+>> On Mon, 28 Nov 2022 09:18:47 +0100 David Hildenbrand <david@redhat.com> wrote:
+>>
+>>>> Less chances of things going wrong that way.
+>>>>
+>>>> Just mention in the v2 cover letter that the first patch was added to
+>>>> make it easy to backport that fix without being hampered by merge
+>>>> conflicts if it was added after your frame_vector.c patch.
+>>>
+>>> Yes, that's the way I would naturally do, it, however, Andrew prefers
+>>> delta updates for minor changes.
+>>>
+>>> @Andrew, whatever you prefer!
+>>
+>> I'm inclined to let things sit as they are.  Cross-tree conflicts
+>> happen, and Linus handles them.  I'll flag this (very simple) conflict
+>> in the pull request, if MM merges second.  If v4l merges second then
+>> hopefully they will do the same.  But this one is so simple that Linus
+>> hardly needs our help.
 
-On Mon, Nov 28, 2022 at 1:02 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Today's linux-next merge of the drm tree got a conflict in:
->
->   drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
->
-> between commits:
->
->   3cb93f390453 ("drm/amdgpu: fix use-after-free during gpu recovery")
->   b09d6acba1d9 ("drm/amdgpu: handle gang submit before VMID")
->
-> from Linus' tree and commits:
->
->   1b2d5eda5ad7 ("drm/amdgpu: move explicit sync check into the CS")
->   1728baa7e4e6 ("drm/amdgpu: use scheduler dependencies for CS")
->   c5093cddf56b ("drm/amdgpu: drop the fence argument from amdgpu_vmid_grab")
->   940ca22b7ea9 ("drm/amdgpu: drop amdgpu_sync from amdgpu_vmid_grab v2")
->   1b2d5eda5ad7 ("drm/amdgpu: move explicit sync check into the CS")
->   1728baa7e4e6 ("drm/amdgpu: use scheduler dependencies for CS")
->
-> from the drm tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+It's not about cross-tree conflicts, it's about the fact that my patch is
+a fix that needs to be backported to older kernels. It should apply cleanly
+to those older kernels if my patch goes in first, but if it is the other way
+around I would have to make a new patch for the stable kernels.
 
-Have you considered merging drm-fixes into drm-next, so not everyone
-who consumes your trees needs to resolve the same merge conflicts?
+Also, the updated changelog in David's patch that sits on top of mine
+makes a lot more sense.
 
-Thanks!
+If you really don't want to take my patch as part of this, then let me know
+and I'll take it through the media subsystem and hope for the best :-)
 
-Gr{oetje,eeting}s,
+Regards,
 
-                        Geert
+	Hans
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>>
+>> But Linus won't be editing changelogs so that the changelog makes more
+>> sense after both trees are joined.  I'm inclined to let the changelog
+>> sit as it is as well.
+> 
+> Works for me. Thanks Andrew!
+> 
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
