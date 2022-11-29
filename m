@@ -2,89 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4BC63C85C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EF863C85B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236925AbiK2T1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 14:27:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37754 "EHLO
+        id S236774AbiK2T1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 14:27:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236874AbiK2T02 (ORCPT
+        with ESMTP id S236890AbiK2T0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 14:26:28 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6596D94F
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:23:50 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id fz10so9673090qtb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:23:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=n82HVyeen1bMmFClFboMPGWDCdQZFtBvU3cG7O5fWI8=;
-        b=MRtFC7hP8CY2xCqHP7rCYvfijtDEx8rfOpofNAGAenjjigPd8l2z/ynJKCzqdXRCs8
-         8HqKcLlgR/Mh3Tm8fr5tI6H4dPIaUzK6LWHUAO8HRk8hG7k2Hl4tln+GqsEjL9CQGtlL
-         znctiN96cf02+vcvkm8/vyh2JwKTdgt8JgeZU=
+        Tue, 29 Nov 2022 14:26:31 -0500
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F479303CC;
+        Tue, 29 Nov 2022 11:23:56 -0800 (PST)
+Received: by mail-pj1-f47.google.com with SMTP id ns17so6795500pjb.1;
+        Tue, 29 Nov 2022 11:23:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n82HVyeen1bMmFClFboMPGWDCdQZFtBvU3cG7O5fWI8=;
-        b=zIvlQiskYb5GVmDI5a/c8CJzAhrQsHgHekDT4N9EEpJ63pSZGOTpRrhWLurh9K9wtu
-         86iK7r5KckfbEQDaNX5F6BooyCT6bzjo0fuGRBWUloLeXsaksI46XFKv6rn8loF5Po3c
-         1ry2f2q5dGOBTvyqYnlV5bxwRyrWiVxqp9452df4xTMcsizmYwi+W/3e8aUfywfVavYL
-         Gy8KD4p1sUFPsdmHuVJ5HRN/ucrutRMOm28wrH6azJs7+EiuRh7aCWvTO/5eht2OoPvV
-         zSrc+kjWwT8NaNq/9Wtz5gdtvrGvM8OZlONHeqNh9JgiIT2p2PAtsBVS46+mqudrlJmc
-         cu5w==
-X-Gm-Message-State: ANoB5pl+/zuzLY5qMBO8evZk5PYuxEIkAbrsHDZ7NTBi/nZudBznxom7
-        EXc8moVSs3F6HVv70zK7PnTuIv6JNilq5w==
-X-Google-Smtp-Source: AA0mqf5N0EsCUXwqskV1mG1MboJ2hgWU0noeW26uCy2zSEGo6IiSj/uq/IRMtfFKoMBjjil5ppQkmA==
-X-Received: by 2002:ac8:7447:0:b0:3a5:75dc:ed0a with SMTP id h7-20020ac87447000000b003a575dced0amr34995898qtr.329.1669749829054;
-        Tue, 29 Nov 2022 11:23:49 -0800 (PST)
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com. [209.85.219.41])
-        by smtp.gmail.com with ESMTPSA id u12-20020a05620a084c00b006ee949b8051sm10718161qku.51.2022.11.29.11.23.47
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ARJqQMnVzJEz/Ay9uXEGNb3SFN1+JSUcIWe4lkCF+yM=;
+        b=BT/h2OgknxiDjpKjrvM8KGfTtJ97nshRukmKamntS50bOy0Zs68en86VcEkOhG5ZlT
+         QO3v6aRE/8gwMzIpSH5hfJO3uyI/ayPuThrchcY9ZqdQ2bttO1+CftCYJicKzHHg8krO
+         dMK975rpd/dr03WBdwM24cpMeVzSoEvsXeUIz3pdfU4C5OiZwGJ6bIiZOqoZcE8OHzOj
+         qPLHCMbbamN1fQnOGJ6PX6ingWsYo52+GVGqH2ArkHQ+wtRAfWIao5f8QvaQAZGcDM0H
+         o5Zh/lFEt4UY3skzvX6904hcnlxfP1ZXGNhPSVNR4jEeCQ19r/6cN6oBBFvQ/+hYwvTA
+         maqQ==
+X-Gm-Message-State: ANoB5pl7HE0/CwuoaSrx7Tp8p8NpC0H5mvwaH2cWx7Qg5h3NeKCw0F+l
+        jHjITWlIxSkG2nH7TcbF0yQ=
+X-Google-Smtp-Source: AA0mqf7BYTyAgcSc6HnkChJd3jiCeFXaSSWFqiJpCRWWgWsFAFYe3l5nhvG31lMzt7+yJX6FLzd3QQ==
+X-Received: by 2002:a17:90a:de91:b0:219:5f45:7626 with SMTP id n17-20020a17090ade9100b002195f457626mr750736pjv.119.1669749835446;
+        Tue, 29 Nov 2022 11:23:55 -0800 (PST)
+Received: from ?IPV6:2620:15c:211:201:7d15:8e62:30bb:9a14? ([2620:15c:211:201:7d15:8e62:30bb:9a14])
+        by smtp.gmail.com with ESMTPSA id b6-20020a170903228600b00188fc33e96dsm11232327plh.198.2022.11.29.11.23.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 11:23:48 -0800 (PST)
-Received: by mail-qv1-f41.google.com with SMTP id a17so8705848qvt.9
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:23:47 -0800 (PST)
-X-Received: by 2002:a0c:80e6:0:b0:4c7:1ae2:2787 with SMTP id
- 93-20020a0c80e6000000b004c71ae22787mr1804495qvb.89.1669749826624; Tue, 29 Nov
- 2022 11:23:46 -0800 (PST)
+        Tue, 29 Nov 2022 11:23:54 -0800 (PST)
+Message-ID: <f30fed7c-45bc-9b71-9c57-c8d9ec395597@acm.org>
+Date:   Tue, 29 Nov 2022 11:23:51 -0800
 MIME-Version: 1.0
-References: <20221123181838.1373440-1-hannes@cmpxchg.org> <16dd09c-bb6c-6058-2b3-7559b5aefe9@google.com>
- <Y4TpCJ+5uCvWE6co@cmpxchg.org> <Y4ZYsrXLBFDIxuoO@cmpxchg.org>
-In-Reply-To: <Y4ZYsrXLBFDIxuoO@cmpxchg.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 29 Nov 2022 11:23:30 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjMrsHq2ku9LeO23DnzGMZfQpZVSBFd86rZLLo3Q+H0VQ@mail.gmail.com>
-Message-ID: <CAHk-=wjMrsHq2ku9LeO23DnzGMZfQpZVSBFd86rZLLo3Q+H0VQ@mail.gmail.com>
-Subject: Re: [PATCH] mm: remove lock_page_memcg() from rmap
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v7 09/16] ufs: core: mcq: Configure operation and runtime
+ interface
+Content-Language: en-US
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        stanley.chu@mediatek.com, eddie.huang@mediatek.com,
+        daejun7.park@samsung.com, avri.altman@wdc.com, mani@kernel.org,
+        beanhuo@micron.com, linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1669747235.git.quic_asutoshd@quicinc.com>
+ <e90498f7e1ddb751c62086f535acca56454c7b35.1669747235.git.quic_asutoshd@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <e90498f7e1ddb751c62086f535acca56454c7b35.1669747235.git.quic_asutoshd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 11:08 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
->
-> We can try limiting move candidates to present ptes. But maybe it's
-> indeed time to deprecate the legacy charge moving altogether, and get
-> rid of the entire complication.
+On 11/29/22 10:53, Asutosh Das wrote:
+> Runtime and operation registers are defined per Submission
+> and Completion queue.
+> The location of these registers is not defined in the spec;
+> meaning the offsets and stride may vary for different
+> HC vendors. Establish the stride, base address and doorbell
+> address offsets from vendor host driver and program it.
 
-Please. If that's what it takes..
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
-           Linus
