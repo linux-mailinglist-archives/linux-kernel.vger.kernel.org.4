@@ -2,134 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B4863BAF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 08:50:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E9D63BAFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 08:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiK2HuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 02:50:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S229863AbiK2HwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 02:52:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiK2Htx (ORCPT
+        with ESMTP id S229777AbiK2HwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 02:49:53 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227CA52156
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 23:49:52 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id f13so21195770lfa.6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 23:49:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z7AuujM8+aeCGquyh830lAMw8HGWJigyKqEFa19drNo=;
-        b=JnFA7pQpspbBCPizM4zXsJ2NveZL9iZ/llMZEhzqu7vCVdKlZ4PTn0pq+bfzFkzg3d
-         IS+b2xLwuCS21piN8BlNpd06VA8M0S+7CWR+R03IecplidnP28JkUyt/g5WTgwoVvXgp
-         tuvDxCox7+cWHOihucgZ6qTF6VvdamNeBjQMJD+jm7UorwcUWlwzviKR9GAi0QvrceHA
-         lHdNl7TIkKuZpiArMc5X4ctiMD+OPvyLTuv99KbfY4YZNda7oAChMjuMqxfcEozTZ2Bi
-         8R1MlDP5ueTcz8zha7imXyQ9ssyQcYvwyM90VP75nW1FfeN120UmNvovCs46BNksfKZ7
-         DGxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z7AuujM8+aeCGquyh830lAMw8HGWJigyKqEFa19drNo=;
-        b=1oowbId5mQMHncMUDWWmU2DjyHU4+HKSKLWeNyow+rk05bXoS95d9cFaDnXkzhqitL
-         5LNq4mDZWmOMmQFRvtnz7Qw6rgtingRvahWAhPcxrO3JTKpJ1B815opu+Z/MYHONsE7K
-         /Ta7GoUWHaxg7CHjl0VCLKXPjIALCPlh7/KnEzw3Ej6g0r0/yGcNWUSH5Gowj9q7gK5N
-         9CGLEW0e6N+da5sLQhU1WuWJyPiSr93H0f2/m8PQ8DZelGed47ErzWKkz2KumfdEtaHb
-         Dsn/qc1Ag83hXp1Dt1+emGUmLsXxPQzWcJzppbRHgfQ2e4RRsOJpGcRJb5O88G0jG9Dq
-         oedw==
-X-Gm-Message-State: ANoB5pmz6wtz8AJ1yUHNPHaExnFcRs8EKtqx8rowaDKTELoUPaXV4CRg
-        EHqtlM2EFKcA5zGQ3BhNLU/q/A==
-X-Google-Smtp-Source: AA0mqf64LWlV5ymRt0Y4uGdG28tz9Pfe50jqdaNDybjAyLGTK+WsiZup0t4YfLvpdkzBf8U5SobnWA==
-X-Received: by 2002:a19:7708:0:b0:4a2:6b44:d742 with SMTP id s8-20020a197708000000b004a26b44d742mr20417340lfc.191.1669708190485;
-        Mon, 28 Nov 2022 23:49:50 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id w9-20020a05651234c900b004b4823f02b0sm2084055lfr.152.2022.11.28.23.49.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 23:49:50 -0800 (PST)
-Message-ID: <339be655-aee7-e1a4-51be-28ea20de6792@linaro.org>
-Date:   Tue, 29 Nov 2022 08:49:49 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/5] dt-bindings: pinctrl: Add StarFive JH7110 pinctrl
- definitions
-Content-Language: en-US
-To:     Jianlong Huang <jianlong.huang@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Cc:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-References: <20221118011108.70715-1-hal.feng@starfivetech.com>
- <20221118011108.70715-2-hal.feng@starfivetech.com>
- <eb3974a3-f715-f5b0-cac7-551af26bd17b@linaro.org>
- <08db0f3b-5222-9460-26ba-0e6380d16583@linaro.org>
- <0ceba170-f844-e733-a49e-e67746f9f836@starfivetech.com>
- <093ea507-4c42-1af9-4896-64c1a918432e@linaro.org>
- <30c21787-0c48-ff50-1d63-8e69bdcdbe30@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <30c21787-0c48-ff50-1d63-8e69bdcdbe30@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 29 Nov 2022 02:52:17 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8132C51C2E;
+        Mon, 28 Nov 2022 23:52:16 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 383601FDE2;
+        Tue, 29 Nov 2022 07:52:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669708335; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UCtXcvqaOALnEXAnaeywfxvt3BaAGjAT6PCuZBjIu8U=;
+        b=w2WuPzBeAs1MfNmadXyGfVU7XEo/xH1XPlDu5ki2ZRFXbijfTybWEQ6idq1JEd7ez3I5Wk
+        vUg+i+5NrABlFQW/5l5WEREHF+IUO4iMjKjPfrkuMkydu1A0edIsnE5XrRV9pGgfR0M+er
+        HNLl5xkMERfEjnlgQEN83wbbrJ1xCAU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669708335;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UCtXcvqaOALnEXAnaeywfxvt3BaAGjAT6PCuZBjIu8U=;
+        b=jd4pQJztqijSHbDWUB9WprF7eznFZ0UG4K4ozQvp3E5JUKwj6c2aH8eCuaxNdAbG9E5mFA
+        QzJpEDCBLMnTgWBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E047413428;
+        Tue, 29 Nov 2022 07:52:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id EJcFNi66hWPEcAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 29 Nov 2022 07:52:14 +0000
+Date:   Tue, 29 Nov 2022 08:52:14 +0100
+Message-ID: <87edtmqjtd.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>, stable@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        linux-kernel@vger.kernel.org, sound-open-firmware@alsa-project.org
+Subject: Re: [PATCH v4] ALSA: core: Fix deadlock when shutdown a frozen userspace
+In-Reply-To: <16ddcbb9-8afa-ff18-05f9-2e9e01baf3ea@linux.intel.com>
+References: <20221127-snd-freeze-v4-0-51ca64b7f2ab@chromium.org>
+        <5171929e-b750-d2f1-fec9-b34d76c18dcb@linux.intel.com>
+        <87mt8bqaca.wl-tiwai@suse.de>
+        <16ddcbb9-8afa-ff18-05f9-2e9e01baf3ea@linux.intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/11/2022 02:47, Jianlong Huang wrote:
-> On Mon, 28 Nov 2022 09:32:45 +0100, Krzysztof Kozlowski wrote:
->> On 28/11/2022 01:48, Jianlong Huang wrote:
->>
->>>>>> +/* aon_iomux doen */
->>>>>> +#define GPOEN_AON_PTC0_OE_N_4			2
->>>>>> +#define GPOEN_AON_PTC0_OE_N_5			3
->>>>>> +#define GPOEN_AON_PTC0_OE_N_6			4
->>>>>> +#define GPOEN_AON_PTC0_OE_N_7			5
->>>>>> +
->>>>>
->>>>> It looks like you add register constants to the bindings. Why? The
->>>>> bindings are not the place to represent hardware programming model. Not
->>>>> mentioning that there is no benefit in this.
->>>>
->>>> Also: this entire file should be dropped, but if it stays, you have to
->>>> name it matching bindings or compatible (vendor,device.h).
->>>
->>> Thanks your comments.
->>> These macros are used to configure pinctrl in dts, so the file should stay,
->>
->> Why they should stay? What's the reason? If it is not a constant used by
->> driver, then register values should not be placed in the bindings, so
->> drop it.
->>
+On Mon, 28 Nov 2022 18:26:03 +0100,
+Pierre-Louis Bossart wrote:
 > 
-> Thanks.
 > 
-> These macros in binding header(example, DOUT, DOEN etc) will be used in DTS,
-> and driver will parse the DT for pinctrl configuration.
 > 
-> Example in dts:
-> uart0_pins: uart0-0 {
-> 	tx-pins {
-> 		pinmux = <GPIOMUX(5, GPOUT_SYS_UART0_TX, GPOEN_ENABLE, GPI_NONE)>;
+> On 11/28/22 11:04, Takashi Iwai wrote:
+> > On Mon, 28 Nov 2022 17:49:20 +0100,
+> > Pierre-Louis Bossart wrote:
+> >>
+> >>
+> >>
+> >> On 11/28/22 07:42, Ricardo Ribalda wrote:
+> >>> During kexec(), the userspace is frozen. Therefore we cannot wait for it
+> >>> to complete.
+> >>>
+> >>> Avoid running snd_sof_machine_unregister during shutdown.
+> >>>
+> >>> This fixes:
+> >>>
+> >>> [   84.943749] Freezing user space processes ... (elapsed 0.111 seconds) done.
+> >>> [  246.784446] INFO: task kexec-lite:5123 blocked for more than 122 seconds.
+> >>> [  246.819035] Call Trace:
+> >>> [  246.821782]  <TASK>
+> >>> [  246.824186]  __schedule+0x5f9/0x1263
+> >>> [  246.828231]  schedule+0x87/0xc5
+> >>> [  246.831779]  snd_card_disconnect_sync+0xb5/0x127
+> >>> ...
+> >>> [  246.889249]  snd_sof_device_shutdown+0xb4/0x150
+> >>> [  246.899317]  pci_device_shutdown+0x37/0x61
+> >>> [  246.903990]  device_shutdown+0x14c/0x1d6
+> >>> [  246.908391]  kernel_kexec+0x45/0xb9
+> >>>
+> >>> And:
+> >>>
+> >>> [  246.893222] INFO: task kexec-lite:4891 blocked for more than 122 seconds.
+> >>> [  246.927709] Call Trace:
+> >>> [  246.930461]  <TASK>
+> >>> [  246.932819]  __schedule+0x5f9/0x1263
+> >>> [  246.936855]  ? fsnotify_grab_connector+0x5c/0x70
+> >>> [  246.942045]  schedule+0x87/0xc5
+> >>> [  246.945567]  schedule_timeout+0x49/0xf3
+> >>> [  246.949877]  wait_for_completion+0x86/0xe8
+> >>> [  246.954463]  snd_card_free+0x68/0x89
+> >>> ...
+> >>> [  247.001080]  platform_device_unregister+0x12/0x35
+> >>>
+> >>> Cc: stable@vger.kernel.org
+> >>> Fixes: 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
+> >>> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> >>> ---
+> >>> To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> >>> To: Liam Girdwood <lgirdwood@gmail.com>
+> >>> To: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+> >>> To: Bard Liao <yung-chuan.liao@linux.intel.com>
+> >>> To: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+> >>> To: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+> >>> To: Daniel Baluta <daniel.baluta@nxp.com>
+> >>> To: Mark Brown <broonie@kernel.org>
+> >>> To: Jaroslav Kysela <perex@perex.cz>
+> >>> To: Takashi Iwai <tiwai@suse.com>
+> >>> Cc: sound-open-firmware@alsa-project.org
+> >>> Cc: alsa-devel@alsa-project.org
+> >>> Cc: linux-kernel@vger.kernel.org
+> >>> ---
+> >>> Changes in v4:
+> >>> - Do not call snd_sof_machine_unregister from shutdown.
+> >>> - Link to v3: https://lore.kernel.org/r/20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org
+> >>>
+> >>> Changes in v3:
+> >>> - Wrap pm_freezing in a function
+> >>> - Link to v2: https://lore.kernel.org/r/20221127-snd-freeze-v2-0-d8a425ea9663@chromium.org
+> >>>
+> >>> Changes in v2:
+> >>> - Only use pm_freezing if CONFIG_FREEZER 
+> >>> - Link to v1: https://lore.kernel.org/r/20221127-snd-freeze-v1-0-57461a366ec2@chromium.org
+> >>> ---
+> >>>  sound/soc/sof/core.c | 7 ++-----
+> >>>  1 file changed, 2 insertions(+), 5 deletions(-)
+> >>>
+> >>> diff --git a/sound/soc/sof/core.c b/sound/soc/sof/core.c
+> >>> index 3e6141d03770..9616ba607ded 100644
+> >>> --- a/sound/soc/sof/core.c
+> >>> +++ b/sound/soc/sof/core.c
+> >>> @@ -475,19 +475,16 @@ EXPORT_SYMBOL(snd_sof_device_remove);
+> >>>  int snd_sof_device_shutdown(struct device *dev)
+> >>>  {
+> >>>  	struct snd_sof_dev *sdev = dev_get_drvdata(dev);
+> >>> -	struct snd_sof_pdata *pdata = sdev->pdata;
+> >>>  
+> >>>  	if (IS_ENABLED(CONFIG_SND_SOC_SOF_PROBE_WORK_QUEUE))
+> >>>  		cancel_work_sync(&sdev->probe_work);
+> >>>  
+> >>>  	/*
+> >>> -	 * make sure clients and machine driver(s) are unregistered to force
+> >>> -	 * all userspace devices to be closed prior to the DSP shutdown sequence
+> >>> +	 * make sure clients are unregistered prior to the DSP shutdown
+> >>> +	 * sequence.
+> >>>  	 */
+> >>>  	sof_unregister_clients(sdev);
+> >>>  
+> >>> -	snd_sof_machine_unregister(sdev, pdata);
+> >>> -
+> >>
+> >> The comment clearly says that we do want all userspace devices to be
+> >> closed. This was added in 83bfc7e793b5 ("ASoC: SOF: core: unregister
+> >> clients and machine drivers in .shutdown") precisely to avoid a platform
+> >> hang if the devices are used after the shutdown completes.
+> > 
+> > The problem is that it wants the *close* of the user-space programs
+> > unnecessarily.  Basically the shutdown can be seen as a sort of device
+> > hot unplug; i.e. the disconnection of the device files and the cleanup
+> > of device state are the main task.  The difference is that the hot
+> > unplug (unbind) usually follows the sync for the all processes being
+> > closed (so that you can release all resources gracefully), while this
+> > step is skipped for the shutdown (no need for resource-free).
+> 
+> Sorry Takashi, I don't have enough background to follow your explanations.
+> 
+> As Kai mentioned it, this step helped with a S5 issue earlier in 2022.
+> Removing this will mechanically bring the issue back and break other
+> Chromebooks.
 
-This is usage in DTS and is not an argument to store register
-addresses/offsets as bindings. What is the usage (of define, not value)
-in the driver?
+Yeah I don't mean that this fix is right, either.  But the earlier fix
+has apparently a problem and needs another fix.
+
+Though, it's not clear why the full unregister of clients is needed at
+the first place; judging only from the patch description of commit
+83bfc7e793b5, what we want is only to shut up the further user space
+action?  If so, just call snd_card_disconnect() would suffice?
 
 
-Best regards,
-Krzysztof
-
+Takashi
