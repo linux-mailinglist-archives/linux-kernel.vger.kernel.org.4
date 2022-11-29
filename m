@@ -2,36 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D1B63C84C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:25:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 777BF63C84D
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 20:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236920AbiK2TZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 14:25:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35980 "EHLO
+        id S236940AbiK2TZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 14:25:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236872AbiK2TYv (ORCPT
+        with ESMTP id S236941AbiK2TZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 14:24:51 -0500
+        Tue, 29 Nov 2022 14:25:14 -0500
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B136E56D
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:22:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B11748F5
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 11:22:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1669749651; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1669749652; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VTAcbDsSnpHtQLYEYbOOugt9xH+f+oTO9ezz+BdhRZw=;
-        b=eSSEN8JvJtkcQpLhZiF7dYIrv23KzHI1PDfUftUkizJw6CJpc2fz6gg2JpHVYM25b1bdp1
-        6gEv/7b4uA9vcjfqGCpzFU53cZr8tNN0DDt2Thm7n/45lYH/vjl0kMe6GbUHzjuFsbbSFU
-        afDtSsIWNkd3bhotmWt5AsyjSsC4JHI=
+        bh=O43i3nkhiM8UDAwLE+AJBroZL1tTLrgWyp7LlLtcdyI=;
+        b=wGPcwUhBuziP698+TBgygiBftwCunol6LK9gZC/PAVcuEWZgVn+gjoqIHmG966WJJGKmJj
+        F2YEMh4vwP8gzqR3tw7aMD0OmOS0u2vg5AtmWfaKVTJ1S89f2YEzay7v1pPaPWgAVAwuey
+        KC/7UqXGrEQSt52exEgL4yS2hmd5y7s=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH v2 24/26] drm: gm12u320: Remove #ifdef guards for PM related functions
-Date:   Tue, 29 Nov 2022 19:19:40 +0000
-Message-Id: <20221129191942.138244-11-paul@crapouillou.net>
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Tomi Valkeinen <tomba@kernel.org>
+Subject: [PATCH v2 25/26] drm: tidss: Remove #ifdef guards for PM related functions
+Date:   Tue, 29 Nov 2022 19:19:41 +0000
+Message-Id: <20221129191942.138244-12-paul@crapouillou.net>
 In-Reply-To: <20221129191942.138244-1-paul@crapouillou.net>
 References: <20221129191733.137897-1-paul@crapouillou.net>
  <20221129191942.138244-1-paul@crapouillou.net>
@@ -46,10 +47,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the pm_ptr() macro to handle the .suspend / .resume / .reset_resume
-callbacks.
+Use the SYSTEM_SLEEP_PM_OPS() and RUNTIME_PM_OPS() macros to handle the
+PM callbacks.
 
-This macro allows the suspend and resume functions to be automatically
+These macros allow the suspend and resume functions to be automatically
 dropped by the compiler when CONFIG_PM is disabled, without having
 to use #ifdef guards.
 
@@ -58,60 +59,108 @@ independently of any Kconfig option. Thanks to that, bugs and other
 regressions are subsequently easier to catch. It also allows to drop the
 __maybe_unused tags.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
----
-Cc: Hans de Goede <hdegoede@redhat.com>
----
- drivers/gpu/drm/tiny/gm12u320.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+Some #ifndef CONFIG_PM guards were protecting simple statements, and
+were also converted to "if (!IS_ENABLED(CONFIG_PM))".
 
-diff --git a/drivers/gpu/drm/tiny/gm12u320.c b/drivers/gpu/drm/tiny/gm12u320.c
-index 130fd07a967d..c5bb683e440c 100644
---- a/drivers/gpu/drm/tiny/gm12u320.c
-+++ b/drivers/gpu/drm/tiny/gm12u320.c
-@@ -4,6 +4,7 @@
-  */
- 
- #include <linux/module.h>
-+#include <linux/pm.h>
- #include <linux/usb.h>
- 
- #include <drm/drm_atomic_helper.h>
-@@ -718,15 +719,15 @@ static void gm12u320_usb_disconnect(struct usb_interface *interface)
- 	drm_atomic_helper_shutdown(dev);
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+Cc: Jyri Sarha <jyri.sarha@iki.fi>
+Cc: Tomi Valkeinen <tomba@kernel.org>
+---
+ drivers/gpu/drm/tidss/tidss_drv.c | 29 +++++++++++++----------------
+ 1 file changed, 13 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/gpu/drm/tidss/tidss_drv.c b/drivers/gpu/drm/tidss/tidss_drv.c
+index 07d94b1e8089..3f0217256948 100644
+--- a/drivers/gpu/drm/tidss/tidss_drv.c
++++ b/drivers/gpu/drm/tidss/tidss_drv.c
+@@ -48,7 +48,7 @@ void tidss_runtime_put(struct tidss_device *tidss)
+ 	WARN_ON(r < 0);
  }
  
--static __maybe_unused int gm12u320_suspend(struct usb_interface *interface,
--					   pm_message_t message)
-+static int gm12u320_suspend(struct usb_interface *interface,
-+			    pm_message_t message)
+-static int __maybe_unused tidss_pm_runtime_suspend(struct device *dev)
++static int tidss_pm_runtime_suspend(struct device *dev)
  {
- 	struct drm_device *dev = usb_get_intfdata(interface);
+ 	struct tidss_device *tidss = dev_get_drvdata(dev);
  
- 	return drm_mode_config_helper_suspend(dev);
+@@ -57,7 +57,7 @@ static int __maybe_unused tidss_pm_runtime_suspend(struct device *dev)
+ 	return dispc_runtime_suspend(tidss->dispc);
  }
  
--static __maybe_unused int gm12u320_resume(struct usb_interface *interface)
-+static int gm12u320_resume(struct usb_interface *interface)
+-static int __maybe_unused tidss_pm_runtime_resume(struct device *dev)
++static int tidss_pm_runtime_resume(struct device *dev)
  {
- 	struct drm_device *dev = usb_get_intfdata(interface);
- 	struct gm12u320_device *gm12u320 = to_gm12u320(dev);
-@@ -747,11 +748,9 @@ static struct usb_driver gm12u320_usb_driver = {
- 	.probe = gm12u320_usb_probe,
- 	.disconnect = gm12u320_usb_disconnect,
- 	.id_table = id_table,
--#ifdef CONFIG_PM
--	.suspend = gm12u320_suspend,
--	.resume = gm12u320_resume,
--	.reset_resume = gm12u320_resume,
--#endif
-+	.suspend = pm_ptr(gm12u320_suspend),
-+	.resume = pm_ptr(gm12u320_resume),
-+	.reset_resume = pm_ptr(gm12u320_resume),
+ 	struct tidss_device *tidss = dev_get_drvdata(dev);
+ 	int r;
+@@ -71,7 +71,7 @@ static int __maybe_unused tidss_pm_runtime_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int __maybe_unused tidss_suspend(struct device *dev)
++static int tidss_suspend(struct device *dev)
+ {
+ 	struct tidss_device *tidss = dev_get_drvdata(dev);
+ 
+@@ -80,7 +80,7 @@ static int __maybe_unused tidss_suspend(struct device *dev)
+ 	return drm_mode_config_helper_suspend(&tidss->ddev);
+ }
+ 
+-static int __maybe_unused tidss_resume(struct device *dev)
++static int tidss_resume(struct device *dev)
+ {
+ 	struct tidss_device *tidss = dev_get_drvdata(dev);
+ 
+@@ -89,9 +89,9 @@ static int __maybe_unused tidss_resume(struct device *dev)
+ 	return drm_mode_config_helper_resume(&tidss->ddev);
+ }
+ 
+-static __maybe_unused const struct dev_pm_ops tidss_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(tidss_suspend, tidss_resume)
+-	SET_RUNTIME_PM_OPS(tidss_pm_runtime_suspend, tidss_pm_runtime_resume, NULL)
++static const struct dev_pm_ops tidss_pm_ops = {
++	SYSTEM_SLEEP_PM_OPS(tidss_suspend, tidss_resume)
++	RUNTIME_PM_OPS(tidss_pm_runtime_suspend, tidss_pm_runtime_resume, NULL)
  };
  
- module_usb_driver(gm12u320_usb_driver);
+ /* DRM device Information */
+@@ -145,10 +145,9 @@ static int tidss_probe(struct platform_device *pdev)
+ 
+ 	pm_runtime_enable(dev);
+ 
+-#ifndef CONFIG_PM
+ 	/* If we don't have PM, we need to call resume manually */
+-	dispc_runtime_resume(tidss->dispc);
+-#endif
++	if (!IS_ENABLED(CONFIG_PM))
++		dispc_runtime_resume(tidss->dispc);
+ 
+ 	ret = tidss_modeset_init(tidss);
+ 	if (ret < 0) {
+@@ -190,9 +189,8 @@ static int tidss_probe(struct platform_device *pdev)
+ 	tidss_irq_uninstall(ddev);
+ 
+ err_runtime_suspend:
+-#ifndef CONFIG_PM
+-	dispc_runtime_suspend(tidss->dispc);
+-#endif
++	if (!IS_ENABLED(CONFIG_PM))
++		dispc_runtime_suspend(tidss->dispc);
+ 	pm_runtime_disable(dev);
+ 
+ 	return ret;
+@@ -212,10 +210,9 @@ static int tidss_remove(struct platform_device *pdev)
+ 
+ 	tidss_irq_uninstall(ddev);
+ 
+-#ifndef CONFIG_PM
+ 	/* If we don't have PM, we need to call suspend manually */
+-	dispc_runtime_suspend(tidss->dispc);
+-#endif
++	if (!IS_ENABLED(CONFIG_PM))
++		dispc_runtime_suspend(tidss->dispc);
+ 	pm_runtime_disable(dev);
+ 
+ 	/* devm allocated dispc goes away with the dev so mark it NULL */
 -- 
 2.35.1
 
