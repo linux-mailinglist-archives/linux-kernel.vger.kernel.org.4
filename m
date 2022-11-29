@@ -2,141 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4D363C0F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DA063C0E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 14:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbiK2NWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 08:22:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
+        id S232329AbiK2NVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 08:21:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232598AbiK2NVk (ORCPT
+        with ESMTP id S231151AbiK2NVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 08:21:40 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01olkn2074.outbound.protection.outlook.com [40.92.52.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B738756573;
-        Tue, 29 Nov 2022 05:21:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pearl6HtDHGRuUhp0Mcej4QZUdoSOuS0zdISN3GVOxnJfQYY9GUQhuYKNC7pf0uRReJTiqmdLrf9qlUGCgiifJalffvS0GOXxzjX9ymKAowCJF9yel4Os580Py5pJWSPtB/vCgUCTqF1kP1KWObcEpsM6QJu4cjqnXb9X847StrLMbznwxjaaz4n/8WcST0e+1MGw2d0xA7F75ZYQdGwUovf4oQVgklXFZljm41hxZGwrmatq4l351kyIH4/oxVViIMWnu1Q0Z1p5wvcuSMPw1riSYA2OEliCdvJFe1qgGt+CrU2/vxC2FHwNIn6A7C4E9T+ArXzn7Jc6QVFElcRGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NcHlZyHMmM1LeDIZrUe7hjj/IcsPstLhyYv1534gfn8=;
- b=U4fHos3t/cxMrn+BwpEwIzSt79eZ2YvmMukZmFIQqTJGCNaVX3/yICOo5csX4qMneDUPaF9kF70wIAJL6a3Nl61VR7+9Rord2slS483SNShY8X4T13axaPokxPm90Uq3xtGcbI6wS4GuL+D52Xw9C6BOmNXm99KW2jq65SLa/WWc/hNT+X3BmBCA4QkoVP/EmFnFAbqvTqsvwlF50BilNZRb6WyyhYqBdRRl8K42N3rTcV/mGPEs85rH0YqNMxqY8EFZ5RSwPtOgdmnIiv4xiLUtkp6gTkeqEeVVsU79MSEY14olxKf9PrkCkH24opaMCB/BRKGBgeJIsA1VCMb9yw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NcHlZyHMmM1LeDIZrUe7hjj/IcsPstLhyYv1534gfn8=;
- b=mTMBxSF9fYKW9maWTQYjRxyo5zN7obgq56dl9XWrOhortjF0/Iws601nwn6LsZNLCykcS7pZCK/qX7vz8N+XmoOL6A64xqVXSCc4D6/YudEHJSkyE+3aiFL69qQrhl6x8AF9ni55Y9N9CxIwP1T7DwBwxVANPAC+xvAVstlbjeIeOhOtb44PTBnl3m3cWYNRW3ZzPRLjNff1v304oBLosjnoMikYOFQli5n+G0tO7AIu1SAiUYtoi1LlYn6S8TeH15vYoLYbJE8LayVlNq4aSHfLq6tFgZao7ok6kmUhefP92c2CCBsNcP9YXz6/NN/g9St/iG9/DNxhHYYrmvcMqA==
-Received: from SL2PR01MB2812.apcprd01.prod.exchangelabs.com
- (2603:1096:100:52::18) by KL1PR01MB5229.apcprd01.prod.exchangelabs.com
- (2603:1096:820:d2::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.22; Tue, 29 Nov
- 2022 13:21:31 +0000
-Received: from SL2PR01MB2812.apcprd01.prod.exchangelabs.com
- ([fe80::993a:e6a2:ccfc:8cdd]) by SL2PR01MB2812.apcprd01.prod.exchangelabs.com
- ([fe80::993a:e6a2:ccfc:8cdd%4]) with mapi id 15.20.5857.023; Tue, 29 Nov 2022
- 13:21:31 +0000
-From:   Kushagra Verma <kushagra765@outlook.com>
-To:     Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH] Documentation: Fixed a typo in atomic_t.txt
-Date:   Tue, 29 Nov 2022 18:50:59 +0530
-Message-ID: <SL2PR01MB281219C24708CE54EC1FC610F8129@SL2PR01MB2812.apcprd01.prod.exchangelabs.com>
-X-Mailer: git-send-email 2.38.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [yO4CLxu9Re5qYr6vmjXpx5ZZJhnW9V9SLlz4ihzXMVZl+z4BluHUGlF/glsfLNsO]
-X-ClientProxiedBy: BMXPR01CA0088.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:b00:54::28) To SL2PR01MB2812.apcprd01.prod.exchangelabs.com
- (2603:1096:100:52::18)
-X-Microsoft-Original-Message-ID: <20221129132059.7027-1-kushagra765@outlook.com>
+        Tue, 29 Nov 2022 08:21:37 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC41951C0F
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 05:21:35 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id x6so2729845lji.10
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 05:21:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qTqB0Cx9TQ+/AdH8ZuJQ7GAbENMQcgVBmVbbVWR1xuY=;
+        b=ExkVn/7btMn7c7EEocrrMeg7Td2aYNz+mZSi9MzJDcPM4/BtLHZopKHtrPiRYRxDQD
+         R7UQqafRAPO4f0cOBC8L+8jNL0bXE0yMxDCDVDRvqJR51FIepN1vvXwOvUHgE0dcQVqy
+         tup2H9Imur+Ak42MhsqzrRUyhzSUeiYBa3RRUuyz5Zo1cLSgOv/69FVoyxfquqUSW6mQ
+         3je7RrVcIBdNN6+jxf21vuSC4YxepGMx9Fb13i57X13rcabO5Poqobq0xO2CQq7KnSOx
+         cOx2Fway75c+v9BKOY8ny6ZCR8ZbSz5yuuvJENghP+B/gPdeXXefXycRffci193xi30A
+         SGUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qTqB0Cx9TQ+/AdH8ZuJQ7GAbENMQcgVBmVbbVWR1xuY=;
+        b=N7eiW+e39u7sNbN8m9RP/jyVf80K1ceIa7FU6DSXcV7lQHo32OYb0p5XzvdAFNHcoM
+         NScIRn9oQ+b+5B97qgsilcXqwId+oNnL50Dw56IQ1aQoxiOhuRlDeTuJu+y5wlAv0V6z
+         +TO9X3CwoKalwe5wXyQuzZYEwMZVh+1dOdxrZQKVLUrYLtAJ3WTnQ0qqd15cysl7gGkP
+         PDEpVImQ5/FxxfspVK4g7u7xpxcSmFzW+X87+/jB5m9RVaXqH4F8IuHFIiQC4VGN/Vg4
+         vpatmN6Rex1EGal+tArRHmdOx9yIS8/PzaCYd/xSaIti1i6GrrLtY1fqaExd85rjJY1Z
+         nSLA==
+X-Gm-Message-State: ANoB5plq1QqyDWH/ce14K/vcAZAXFoMvY3p2yww6jsPEJlKDOCdk/0V6
+        5GBLqojQ8EiODQrfUgIF6LJVw52yMy6NOg==
+X-Google-Smtp-Source: AA0mqf5w36l0Ci6tmjvtVDe42fgeeWY1YhGWg1N9YeU7TPwfwy1jL/ywNOM7+edyvpgNSSDFYd7W2w==
+X-Received: by 2002:a2e:8943:0:b0:279:b56b:8ee8 with SMTP id b3-20020a2e8943000000b00279b56b8ee8mr950946ljk.184.1669728094255;
+        Tue, 29 Nov 2022 05:21:34 -0800 (PST)
+Received: from [192.168.1.101] (95.49.125.236.neoplus.adsl.tpnet.pl. [95.49.125.236])
+        by smtp.gmail.com with ESMTPSA id c28-20020ac25f7c000000b004ae394b6a6fsm2221432lfc.246.2022.11.29.05.21.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 05:21:33 -0800 (PST)
+Message-ID: <92b39c01-1283-0b7c-6ba9-3edd2d4de002@linaro.org>
+Date:   Tue, 29 Nov 2022 14:21:32 +0100
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SL2PR01MB2812:EE_|KL1PR01MB5229:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7474d57d-6c13-44c4-7ac6-08dad20ca072
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mHAufLPWJ3RR4Mwqsa4c4EXMKTl0NUoaxM2EBaxcDDMXj/CcsZDifjSH9Mu6UYAweNWV1pHaVsoP8l4yuOis1erljAr85XeXduws50Sury7xK1bn/kpbGB36dPId4sGHy/Lplx0zZ2JGxECN95J2jJ7BDctjUwRMMQeaZOMWuF8at9SF1d4EFXIjMP6opyreKiWoFfYOATYrT6nuA3EOO/sZMtelcMTw5vdQL04Qv69RfP/aKZdEaf7qDfJdO1ZWWpv5sx0kboK0zxD8STwtc76gkLxSlRAZ1C03jNW1ZseL68WF9EYFfuc3JTz9m5LbTI5UFPv8qIB9aw/4HfH6YagJDpWCF9dIeBap6338V027Gm60/nYfv4MXYdxIlXu9/w2iVs6WE9/QntWU/y3B4LL1uBN7AY3G2qNwJq2wI/vOGeG1AQem96iLE0HbcQzwbBzp9cRmQGVz3ncs20QeHztvh4ZCD8ged42vTHRMRjUcCTIFIXw47tfm2hBgiwJrnUlOZKjIt/9vMxUb64nGjbbwAEowVZLfmYj2SDTcmfZXjNg7difSM6l7KfoeYX/aerrdM6tVuoDPD1GFMtaJ927x7ZRz2xNB8RpBh9d9azQ=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xRPI0Zd6X8/kxwPlLjYq2ZHXS88bcZg6kmYHaSxLARA/G9tct3Ehh3K3zMOt?=
- =?us-ascii?Q?v+nSC5dl/XTLZp7lRQHl0mKSQdqF+qoAERXrJUvjyTzilUCUze2d0LdXGbW6?=
- =?us-ascii?Q?S8YDh6gytz6vseMcOTZ7+subaWJWxhpHYc5rfl/jHLKTMQnXFNQoyogOCNGd?=
- =?us-ascii?Q?ZcZDrAkvVY+mSFJzdb3kSbjPrUSLWdhvMaukMoM2CK1PhqDAv2m3wXoUYoIO?=
- =?us-ascii?Q?HNOemxzxGym2odtyHKQEHR/q3u5pEgZJC//QWfwNSvYPLpbwo1HWDlOGpY03?=
- =?us-ascii?Q?cPoZaDkppx+ZHyxQL23GXg219SV1bImZOa/R3HkivMb7e/k4ThJJUHWjaz3c?=
- =?us-ascii?Q?GTi+9t8kJ16u35iBjrFXyQg3clvaVqz6psv909zaqedOCDgieJtyc+c9rW2E?=
- =?us-ascii?Q?9Cwym7KCYJW86HISN0CMUBVa+xMkkrjusiBDERHWZBgKFeb706iTIi4LT4AQ?=
- =?us-ascii?Q?y9F35XQ2nHmWB5uQBbeegyErjdH0+hVUVW/PpRVnHIvaSWOXUkeHp7ipVB89?=
- =?us-ascii?Q?EUHPa2aFP5IufyLRFShDfHv6iswb12M6uE6q9QN5EOViAePflLvMC4jS7pWY?=
- =?us-ascii?Q?csiclaBbtDlq6Tj3HzRL1g21H0e5QbPJDG654R5e5Thl5LVinf/mgUh7oqes?=
- =?us-ascii?Q?XXQSe6iJs6AWllrqo9imE+KaS7TrD+AhaYooEGsSKEVVZP9v2Yg961hwyxPp?=
- =?us-ascii?Q?CcY6ozBn9kTokCOsf2EpzneOH+d/tx/lhd1+SXmi81PZn93VQ9MeGXRRxQ8R?=
- =?us-ascii?Q?NbtQuDMQTag27HpUE0CE3BCO4YFZlFGt4IRkcXRFUPq45mm/xe4JnATnZQGs?=
- =?us-ascii?Q?KqofE+mpEsRdCrAdVF8YNaIoItmjdliDAR1eFJDxlg5NKqfxE4oMGLYZ/Ib9?=
- =?us-ascii?Q?uQeoMFHKY8XPJ1odByg8x7hYUsj4Ka9enuuAO9k7kcOS3oy9I0yuohbGMUIn?=
- =?us-ascii?Q?O61GPj6aAY7vnC64XQk0Csz8EPw4JrKId00cY68Nkgtfh5S7Ww414YOTC79I?=
- =?us-ascii?Q?5g9B8AybLqLIkqMEqj1F8b6fTWCeE2Jk3yAPY2IGmCgsWIaeYjyo0LpXeqom?=
- =?us-ascii?Q?HaKv6+Yz3g4cdMgB/y048DGkhIM/1k2jZ5LlROt+Rm4xXQa1f3v2+qU0whwI?=
- =?us-ascii?Q?mhsHgIkMV+WuVdpktYy8O1SY7FYSlNNKBU1f8bSBG/WfbWyCgkLah0o4PSlR?=
- =?us-ascii?Q?1xnFIOHHsDFJ4abhKlj7FZLUeuMy0bHOIJQw2aF/e7vHkei5bbSrW+FRtbuk?=
- =?us-ascii?Q?58R9CgbYSDDR6xLAmN77OUl04cKx6rHssHkmdQ04xR0K1O5IP5HMJOY+BS0J?=
- =?us-ascii?Q?H2P7xh4Oasoa8PvHmOwfoAyXVCEC/zTJXV37/kegN0I+eg=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7474d57d-6c13-44c4-7ac6-08dad20ca072
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR01MB2812.apcprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 13:21:30.7924
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR01MB5229
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 3/6] soc: qcom: geni-se: add desc struct to specify
+ clocks from device match data
+To:     neil.armstrong@linaro.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v2-0-aadaa6997b28@linaro.org>
+ <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v2-3-aadaa6997b28@linaro.org>
+ <24a88a47-7556-20f1-ce9c-fe7bd0466a88@linaro.org>
+ <cbccbcbe-5006-cdc9-f3af-39c53d87b8a5@linaro.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <cbccbcbe-5006-cdc9-f3af-39c53d87b8a5@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed a typo in the word 'architecture'.
 
-Signed-off-by: Kushagra Verma <kushagra765@outlook.com>
----
- Documentation/atomic_t.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/atomic_t.txt b/Documentation/atomic_t.txt
-index 0f1ffa03db09..d7adc6d543db 100644
---- a/Documentation/atomic_t.txt
-+++ b/Documentation/atomic_t.txt
-@@ -324,7 +324,7 @@ atomic operations.
- 
- Specifically 'simple' cmpxchg() loops are expected to not starve one another
- indefinitely. However, this is not evident on LL/SC architectures, because
--while an LL/SC architecure 'can/should/must' provide forward progress
-+while an LL/SC architecture 'can/should/must' provide forward progress
- guarantees between competing LL/SC sections, such a guarantee does not
- transfer to cmpxchg() implemented using LL/SC. Consider:
- 
--- 
-2.38.1
+On 29.11.2022 09:24, Neil Armstrong wrote:
+> On 18/11/2022 10:06, Konrad Dybcio wrote:
+>>
+>>
+>> On 18/11/2022 09:45, Neil Armstrong wrote:
+>>> The I2C Master Hub is a stripped down version of the GENI Serial Engine
+>>> QUP Wrapper Controller but only supporting I2C serial engines without
+>>> DMA support.
+>>>
+>>> Prepare support for the I2C Master Hub variant by moving the required
+>>> clocks list to a new desc struct then passing it through the compatible
+>>> match data.
+>>>
+>>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+>>>   drivers/soc/qcom/qcom-geni-se.c | 59 +++++++++++++++++++++++++++++++----------
+>>>   1 file changed, 45 insertions(+), 14 deletions(-)
+>>>
+>>> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+>>> index a0ceeede450f..ced2a2932eda 100644
+>>> --- a/drivers/soc/qcom/qcom-geni-se.c
+>>> +++ b/drivers/soc/qcom/qcom-geni-se.c
+>>> @@ -81,19 +81,31 @@
+>>>    */
+>>>   #define MAX_CLK_PERF_LEVEL 32
+>>> -#define NUM_AHB_CLKS 2
+>>> +#define MAX_CLKS 2
+>>>   /**
+>>>    * struct geni_wrapper - Data structure to represent the QUP Wrapper Core
+>>>    * @dev:        Device pointer of the QUP wrapper core
+>>>    * @base:        Base address of this instance of QUP wrapper core
+>>> - * @ahb_clks:        Handle to the primary & secondary AHB clocks
+>>> + * @clks:        Handle to the primary & optional secondary AHB clocks
+>>> + * @num_clks:        Count of clocks
+>>>    * @to_core:        Core ICC path
+>>>    */
+>>>   struct geni_wrapper {
+>>>       struct device *dev;
+>>>       void __iomem *base;
+>>> -    struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
+>>> +    struct clk_bulk_data clks[MAX_CLKS];
+>>> +    unsigned int num_clks;
+>>> +};
+>>> +
+>>> +/**
+>>> + * struct geni_se_desc - Data structure to represent the QUP Wrapper resources
+>>> + * @clks:        Name of the primary & optional secondary AHB clocks
+>>> + * @num_clks:        Count of clock names
+>>> + */
+>>> +struct geni_se_desc {
+>>> +    unsigned int num_clks;
+>>> +    const char * const *clks;
+>>>   };
+>>>   static const char * const icc_path_names[] = {"qup-core", "qup-config",
+>>> @@ -496,8 +508,7 @@ static void geni_se_clks_off(struct geni_se *se)
+>>>       struct geni_wrapper *wrapper = se->wrapper;
+>>>       clk_disable_unprepare(se->clk);
+>>> -    clk_bulk_disable_unprepare(ARRAY_SIZE(wrapper->ahb_clks),
+>>> -                        wrapper->ahb_clks);
+>>> +    clk_bulk_disable_unprepare(wrapper->num_clks, wrapper->clks);
+>>>   }
+>>>   /**
+>>> @@ -528,15 +539,13 @@ static int geni_se_clks_on(struct geni_se *se)
+>>>       int ret;
+>>>       struct geni_wrapper *wrapper = se->wrapper;
+>>> -    ret = clk_bulk_prepare_enable(ARRAY_SIZE(wrapper->ahb_clks),
+>>> -                        wrapper->ahb_clks);
+>>> +    ret = clk_bulk_prepare_enable(wrapper->num_clks, wrapper->clks);
+>>>       if (ret)
+>>>           return ret;
+>>>       ret = clk_prepare_enable(se->clk);
+>>>       if (ret)
+>>> -        clk_bulk_disable_unprepare(ARRAY_SIZE(wrapper->ahb_clks),
+>>> -                            wrapper->ahb_clks);
+>>> +        clk_bulk_disable_unprepare(wrapper->num_clks, wrapper->clks);
+>>>       return ret;
+>>>   }
+>>> @@ -887,11 +896,23 @@ static int geni_se_probe(struct platform_device *pdev)
+>>>           return PTR_ERR(wrapper->base);
+>>>       if (!has_acpi_companion(&pdev->dev)) {
+>>> -        wrapper->ahb_clks[0].id = "m-ahb";
+>>> -        wrapper->ahb_clks[1].id = "s-ahb";
+>>> -        ret = devm_clk_bulk_get(dev, NUM_AHB_CLKS, wrapper->ahb_clks);
+>>> +        const struct geni_se_desc *desc;
+>>> +        int i;
+>>> +
+>>> +        desc = device_get_match_data(&pdev->dev);
+>>> +        if (!desc)
+>>> +            return -EINVAL;
+>>> +
+>>> +        wrapper->num_clks = min_t(unsigned int, desc->num_clks, MAX_CLKS);
+>>> +        if (wrapper->num_clks < desc->num_clks)
+>> This will never execute (except if somebody adding a third desc would make a mistake or not update MAX_CLKS), as wrapper->num_clks will only be < desc->num_clks if desc->num_clks > MAX_CLKS.
+> 
+> You're right, I did read too fast.
+> 
+>>
+>> I was thinking about getting the number of actual clocks passed to the device in the DT, but I can't find a helper function for that, so it would probably require some kind of manual looping.. I guess we can drop this. Or leave it to save somebody pulling their hair out in an unlikely event. I guess I'm fine with both.
+> 
+> This would be:
+> 
+> of_count_phandle_with_args(dev->of_node, "clocks", "#clock-cells")
+> 
+> but ultimately if the number of clocks is lower than requested, it will fail
+> in the call to devm_clk_bulk_get().
+> 
+> Would we warn if the DT clocks count is higher ? or simply fail if lower ?
+Just "fail if lower" sounds good.
 
+Konrad
+> 
+> Neil
+> 
+>>
+>>
+>>> +            dev_warn(dev, "too much clocks described in DT\n")
+>> If you leave it, s/too much/Too many/
+>>
+>>
+>> Konrad
+>>> +
+>>> +        for (i = 0; i < wrapper->num_clks; ++i)
+>>> +            wrapper->clks[i].id = desc->clks[i];
+>>> +
+>>> +        ret = devm_clk_bulk_get(dev, wrapper->num_clks, wrapper->clks);
+>>>           if (ret) {
+>>> -            dev_err(dev, "Err getting AHB clks %d\n", ret);
+>>> +            dev_err(dev, "Err getting clks %d\n", ret);
+>>>               return ret;
+>>>           }
+>>>       }
+>>> @@ -901,8 +922,18 @@ static int geni_se_probe(struct platform_device *pdev)
+>>>       return devm_of_platform_populate(dev);
+>>>   }
+>>> +static const char * const qup_clks[] = {
+>>> +    "m-ahb",
+>>> +    "s-ahb",
+>>> +};
+>>> +
+>>> +static const struct geni_se_desc qup_desc = {
+>>> +    .clks = qup_clks,
+>>> +    .num_clks = ARRAY_SIZE(qup_clks),
+>>> +};
+>>> +
+>>>   static const struct of_device_id geni_se_dt_match[] = {
+>>> -    { .compatible = "qcom,geni-se-qup", },
+>>> +    { .compatible = "qcom,geni-se-qup", .data = &qup_desc },
+>>>       {}
+>>>   };
+>>>   MODULE_DEVICE_TABLE(of, geni_se_dt_match);
+>>>
+> 
