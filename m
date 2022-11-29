@@ -2,258 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9332063B760
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 02:44:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF7463B7AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 03:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235130AbiK2BoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 20:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S235094AbiK2CO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 21:14:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235125AbiK2BoS (ORCPT
+        with ESMTP id S234994AbiK2CO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 20:44:18 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE553C6D1;
-        Mon, 28 Nov 2022 17:44:17 -0800 (PST)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NLlVJ12SqzmWHj;
-        Tue, 29 Nov 2022 09:43:36 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 09:44:14 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <bvanassche@acm.org>, <jgg@ziepe.ca>, <leon@kernel.org>,
-        <dennis.dalessandro@cornelisnetworks.com>
-CC:     <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <andriy.shevchenko@linux.intel.com>, <bart.vanassche@wdc.com>,
-        <easwar.hariharan@intel.com>, Wang Yufen <wangyufen@huawei.com>
-Subject: [PATCH v4 2/2] RDMA/srp: Fix error return code in srp_parse_options()
-Date:   Tue, 29 Nov 2022 10:04:19 +0800
-Message-ID: <1669687459-14180-2-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1669687459-14180-1-git-send-email-wangyufen@huawei.com>
-References: <1669687459-14180-1-git-send-email-wangyufen@huawei.com>
+        Mon, 28 Nov 2022 21:14:57 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F073D927
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:14:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669688096; x=1701224096;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=N5zvBX15lr1YZY8BlmGZXuzWrDu5BekEK8IaVFde6q4=;
+  b=C3n8CvVI5imE8YfvHXQ+48A+DjRnSqnKpqSTZM0aOY/yhruIcIzMyais
+   ozT0A9DTs8PcKT6gsRtWWWplW0rUnYXkrvxLDH44InwlkE+JJinXmAdW9
+   88MSat0uIQULJD5Bw9zIRgKPbWD9VcIAcnf2NoiE5nDXrkjuecPKmES05
+   3uvnFIVk0VcSpXCeLhNFHCfmhKA4nyyt9uJGkUBj2kXVHDaWVdGhx/c/m
+   QE4bnJjqN7eLakimeGY/A0EK1AH6SkSq1ohO4CjmTnCE/0SE0s/yl1BvF
+   61ocUUZ38uZ7AfNguZSBn2sk64bJDlulR2uH4c852syPDI83S/BNCZlrY
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="312629129"
+X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
+   d="scan'208";a="312629129"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 18:14:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="594093098"
+X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
+   d="scan'208";a="594093098"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by orsmga003.jf.intel.com with ESMTP; 28 Nov 2022 18:14:50 -0800
+Message-ID: <4a979bdc-d7b4-77b4-490a-5f3e691e3df3@linux.intel.com>
+Date:   Tue, 29 Nov 2022 10:07:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Rob Clark <robdclark@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 06/20] iommu/mtk: Remove detach_dev callback
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20221128064648.1934720-1-baolu.lu@linux.intel.com>
+ <20221128064648.1934720-7-baolu.lu@linux.intel.com>
+ <Y4S8elzfzdTJGtyK@nvidia.com> <cb1b825c-55f1-d305-0727-ce8180d5a79e@arm.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <cb1b825c-55f1-d305-0727-ce8180d5a79e@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the previous while loop, "ret" may be assigned zero, , so the error
-return code may be incorrectly set to 0 instead of -EINVAL. Alse
-investigate each case separately as Andy suggessted.
+On 11/28/22 9:59 PM, Robin Murphy wrote:
+> On 2022-11-28 13:49, Jason Gunthorpe wrote:
+>> On Mon, Nov 28, 2022 at 02:46:34PM +0800, Lu Baolu wrote:
+>>> The IOMMU driver supports default domain, so the detach_dev op will 
+>>> never
+>>> be called. Remove it to avoid dead code.
+>>>
+>>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>>> ---
+>>>   drivers/iommu/mtk_iommu.c | 9 ---------
+>>>   1 file changed, 9 deletions(-)
+>>
+>> I listed this driver as not supporting default domains:
+>>
+>> https://lore.kernel.org/linux-iommu/20220516135741.GV1343366@nvidia.com/
+>>
+>> ?
+>>
+>> Has something changed? Did I get it wrong?
+> 
+> static struct iommu_domain *mtk_iommu_domain_alloc(unsigned type)
+> {
+>      struct mtk_iommu_domain *dom;
+> 
+>      if (type != IOMMU_DOMAIN_DMA && type != IOMMU_DOMAIN_UNMANAGED)
+>          return NULL;
+> ...
+> 
+> 
+> This one runs on arm64, so has always supported default domains for 
+> iommu-dma to work.
 
-Fixes: e711f968c49c ("IB/srp: replace custom implementation of hex2bin()")
-Fixes: 2a174df0c602 ("IB/srp: Use kstrtoull() instead of simple_strtoull()")
-Fixes: 19f313438c77 ("IB/srp: Add RDMA/CM support")
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
- drivers/infiniband/ulp/srp/ib_srp.c | 71 +++++++++++++++++++++++++++++--------
- 1 file changed, 56 insertions(+), 15 deletions(-)
+This, together with several other ones, only support IOMMU_DOMAIN_DMA
+type of default domain. The iommu core handle this by falling back to
+IOMMU_DOMAIN_DMA if other types fail.
 
-diff --git a/drivers/infiniband/ulp/srp/ib_srp.c b/drivers/infiniband/ulp/srp/ib_srp.c
-index 1075c2a..692c69a 100644
---- a/drivers/infiniband/ulp/srp/ib_srp.c
-+++ b/drivers/infiniband/ulp/srp/ib_srp.c
-@@ -3343,7 +3343,7 @@ static int srp_parse_options(struct net *net, const char *buf,
- 	bool has_port;
- 	int opt_mask = 0;
- 	int token;
--	int ret = -EINVAL;
-+	int ret;
- 	int i;
- 
- 	options = kstrdup(buf, GFP_KERNEL);
-@@ -3410,7 +3410,8 @@ static int srp_parse_options(struct net *net, const char *buf,
- 			break;
- 
- 		case SRP_OPT_PKEY:
--			if (match_hex(args, &token)) {
-+			ret = match_hex(args, &token);
-+			if (ret) {
- 				pr_warn("bad P_Key parameter '%s'\n", p);
- 				goto out;
- 			}
-@@ -3470,7 +3471,8 @@ static int srp_parse_options(struct net *net, const char *buf,
- 			break;
- 
- 		case SRP_OPT_MAX_SECT:
--			if (match_int(args, &token)) {
-+			ret = match_int(args, &token);
-+			if (ret) {
- 				pr_warn("bad max sect parameter '%s'\n", p);
- 				goto out;
- 			}
-@@ -3478,8 +3480,12 @@ static int srp_parse_options(struct net *net, const char *buf,
- 			break;
- 
- 		case SRP_OPT_QUEUE_SIZE:
--			if (match_int(args, &token) || token < 1) {
-+			ret = match_int(args, &token);
-+			if (ret)
-+				goto out;
-+			if (token < 1) {
- 				pr_warn("bad queue_size parameter '%s'\n", p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->scsi_host->can_queue = token;
-@@ -3490,25 +3496,34 @@ static int srp_parse_options(struct net *net, const char *buf,
- 			break;
- 
- 		case SRP_OPT_MAX_CMD_PER_LUN:
--			if (match_int(args, &token) || token < 1) {
-+			ret = match_int(args, &token);
-+			if (ret)
-+				goto out;
-+			if (token < 1) {
- 				pr_warn("bad max cmd_per_lun parameter '%s'\n",
- 					p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->scsi_host->cmd_per_lun = token;
- 			break;
- 
- 		case SRP_OPT_TARGET_CAN_QUEUE:
--			if (match_int(args, &token) || token < 1) {
-+			ret = match_int(args, &token);
-+			if (ret)
-+				goto out;
-+			if (token < 1) {
- 				pr_warn("bad max target_can_queue parameter '%s'\n",
- 					p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->target_can_queue = token;
- 			break;
- 
- 		case SRP_OPT_IO_CLASS:
--			if (match_hex(args, &token)) {
-+			ret = match_hex(args, &token);
-+			if (ret) {
- 				pr_warn("bad IO class parameter '%s'\n", p);
- 				goto out;
- 			}
-@@ -3517,6 +3532,7 @@ static int srp_parse_options(struct net *net, const char *buf,
- 				pr_warn("unknown IO class parameter value %x specified (use %x or %x).\n",
- 					token, SRP_REV10_IB_IO_CLASS,
- 					SRP_REV16A_IB_IO_CLASS);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->io_class = token;
-@@ -3539,16 +3555,21 @@ static int srp_parse_options(struct net *net, const char *buf,
- 			break;
- 
- 		case SRP_OPT_CMD_SG_ENTRIES:
--			if (match_int(args, &token) || token < 1 || token > 255) {
-+			ret = match_int(args, &token);
-+			if (ret)
-+				goto out;
-+			if (token < 1 || token > 255) {
- 				pr_warn("bad max cmd_sg_entries parameter '%s'\n",
- 					p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->cmd_sg_cnt = token;
- 			break;
- 
- 		case SRP_OPT_ALLOW_EXT_SG:
--			if (match_int(args, &token)) {
-+			ret = match_int(args, &token);
-+			if (ret) {
- 				pr_warn("bad allow_ext_sg parameter '%s'\n", p);
- 				goto out;
- 			}
-@@ -3556,43 +3577,62 @@ static int srp_parse_options(struct net *net, const char *buf,
- 			break;
- 
- 		case SRP_OPT_SG_TABLESIZE:
--			if (match_int(args, &token) || token < 1 ||
--					token > SG_MAX_SEGMENTS) {
-+			ret = match_int(args, &token);
-+			if (ret)
-+				goto out;
-+			if (token < 1 || token > SG_MAX_SEGMENTS) {
- 				pr_warn("bad max sg_tablesize parameter '%s'\n",
- 					p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->sg_tablesize = token;
- 			break;
- 
- 		case SRP_OPT_COMP_VECTOR:
--			if (match_int(args, &token) || token < 0) {
-+			ret = match_int(args, &token);
-+			if (ret)
-+				goto out;
-+			if (token < 0) {
- 				pr_warn("bad comp_vector parameter '%s'\n", p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->comp_vector = token;
- 			break;
- 
- 		case SRP_OPT_TL_RETRY_COUNT:
--			if (match_int(args, &token) || token < 2 || token > 7) {
-+			ret = match_int(args, &token);
-+			if (ret)
-+				goto out;
-+			if (token < 2 || token > 7) {
- 				pr_warn("bad tl_retry_count parameter '%s' (must be a number between 2 and 7)\n",
- 					p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->tl_retry_count = token;
- 			break;
- 
- 		case SRP_OPT_MAX_IT_IU_SIZE:
--			if (match_int(args, &token) || token < 0) {
-+			ret = match_int(args, &token);
-+			if (ret)
-+				goto out;
-+			if (token < 0) {
- 				pr_warn("bad maximum initiator to target IU size '%s'\n", p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->max_it_iu_size = token;
- 			break;
- 
- 		case SRP_OPT_CH_COUNT:
--			if (match_int(args, &token) || token < 1) {
-+			ret = match_int(args, &token);
-+			if (ret)
-+				goto out;
-+			if (token < 1) {
- 				pr_warn("bad channel count %s\n", p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->ch_count = token;
-@@ -3601,6 +3641,7 @@ static int srp_parse_options(struct net *net, const char *buf,
- 		default:
- 			pr_warn("unknown parameter or missing value '%s' in target creation request\n",
- 				p);
-+			ret = -EINVAL;
- 			goto out;
- 		}
- 	}
--- 
-1.8.3.1
+         dom = __iommu_domain_alloc(bus, type);
+         if (!dom && type != IOMMU_DOMAIN_DMA) {
+                 dom = __iommu_domain_alloc(bus, IOMMU_DOMAIN_DMA);
+                 if (dom)
+                         pr_warn("Failed to allocate default IOMMU 
+domain of type %u for group %s - Falling back to IOMMU_DOMAIN_DMA",
+                                 type, group->name);
+         }
 
+I have another cleanup series:
+
+https://github.com/LuBaolu/intel-iommu/commits/iommu-use-def_default_type-wip
+
+which adds IOMMU_DOMAIN_DMA default domain type requirement in the
+def_domain_type callback. I planed to bring that to discussion after
+this one.
+
+Best regards,
+baolu
