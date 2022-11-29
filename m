@@ -2,107 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E04063BD47
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:51:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE2B63BD4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 10:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiK2JvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 04:51:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48556 "EHLO
+        id S230488AbiK2Jwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 04:52:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiK2JvA (ORCPT
+        with ESMTP id S229792AbiK2Jw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 04:51:00 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E193024F2D
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 01:50:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669715459; x=1701251459;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=va4oFqeghkExL+xaPKGG+xULxrpZnJfLBRDcWTTKGUM=;
-  b=HGQttzalSPnw5CEiLrCs2VF8DfzF/eGNhFR9gtzLnmAUwtoSrQyD0yXR
-   oH4pcAtgSp+Bg/JCtm8C53Zkt3KKz4V9uJy/bRqdVGs5oqaQ67DH/eVHB
-   m7EmHRRwiMfeQ987/Bu8vRl0/7X6CrsVxCZzvsQFJachYzCFf+PFVbEh9
-   bnw+64rkoSySI11qZ8s2ahmzGoWy9qlPlC/BaJI74JTa/9XOmY6vBBD99
-   A+hnkzj8+GjPR3NX+KO0cIXVsfiROG60M72UpBoyFjpUpCYHh+6l30Tjb
-   /kRHiBlzpxFCrgHdnJus2sxzUJWQcYNqzydvhZqsOHIUz0DNnZSjTaXD+
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="315099370"
-X-IronPort-AV: E=Sophos;i="5.96,202,1665471600"; 
-   d="scan'208";a="315099370"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 01:50:48 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="707151581"
-X-IronPort-AV: E=Sophos;i="5.96,202,1665471600"; 
-   d="scan'208";a="707151581"
-Received: from lclaesso-mobl.ger.corp.intel.com (HELO localhost) ([10.252.53.28])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 01:50:45 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Xia Fukun <xiafukun@huawei.com>, airlied@gmail.com,
-        daniel@ffwll.ch, ville.syrjala@linux.intel.com,
-        lucas.demarchi@intel.com, joonas.lahtinen@linux.intel.com
-Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rodrigo.vivi@intel.com,
-        xiafukun@huawei.com
-Subject: Re: [Intel-gfx] [PATCH] drm/i915/bios: fix a memory leak in
- generate_lfp_data_ptrs
-In-Reply-To: <875yf35tx1.fsf@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20221125063428.69486-1-xiafukun@huawei.com>
- <875yf35tx1.fsf@intel.com>
-Date:   Tue, 29 Nov 2022 11:50:43 +0200
-Message-ID: <87fse23x8s.fsf@intel.com>
+        Tue, 29 Nov 2022 04:52:27 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C333E096;
+        Tue, 29 Nov 2022 01:52:25 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id ns17so5334093pjb.1;
+        Tue, 29 Nov 2022 01:52:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=DoHQzm8iYHF80spHwuizizw7dl9whlXqQdx1rDh9IHE=;
+        b=bejrZVaKDSalOuYZ2B4bydrehFoiPv/luw7eftEZ+420oFiz0yNbZcsJH8YBOGTZXg
+         ilG/oS/g5sxPYVPM66IwLJCszDO5hSQ2qmfZ2Y9C4JMNz1lesIZmB+AqeBRAOjz2qVR8
+         GALd0VrCWA3+gVysZ39W69HIeyJn/a0BB7c+L5aKweukPU4JFJtJ2mPw3l+g37QAXQ2n
+         gVbMCJUdxXADPF+br8E1KmW/piaBj36Foy3ymKF5n8lpic5jofeUkMRPy8D+RYzyPxrX
+         4rtvUENtwE49BpPwayakeJbKCxXYuifofz0eCmo4EIAOm0UgbmPTJayYwmslpQdoUugN
+         QOCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DoHQzm8iYHF80spHwuizizw7dl9whlXqQdx1rDh9IHE=;
+        b=LMI3A+zm28ZrhOcZmmzkfffjmolK9l3OEIqcQWxAa9aevhY/aJ+5f3T/lpKvVyj5Ob
+         25IJqlGinBpGkMcTpUGS3wwChzkVlEdkBvpjeRZWkrJYVylkefTbKrZo20DeePqRCWgG
+         gJMlfTlbWBImRVHEtSMtw6LWs7tnJjoevkkmSfESfiexAPf6NN1pquVSSU+8LxiPefq0
+         CgH/gy22+EeRkUtKOqWOtVm7KwM3/aruD8UlAoh36sRfWHo9o6qwTQGJYyzg1LsQOV1t
+         T6jOUzJoSKEJx2uyZHn3RLX/yMw39khcIFpGN4KaY+tIW3Vy8CA4I2qW1JRAoNPYOXRr
+         SCBg==
+X-Gm-Message-State: ANoB5pm4WdfHDCn5aK09JnwUc5rt1Q9aOS4yjWlgzVGp2/WStad/ISpf
+        HVh/LeZyJg0W2wY3ViGgmyQ=
+X-Google-Smtp-Source: AA0mqf63NvlKwgOFBgeDyFi/Klb4ymtSS/HrjV70mCgba2uIa+LJ+++Eg3CUtocEiNZqs+qoOIBw2w==
+X-Received: by 2002:a17:90b:3944:b0:214:1df0:fe53 with SMTP id oe4-20020a17090b394400b002141df0fe53mr63738466pjb.214.1669715545345;
+        Tue, 29 Nov 2022 01:52:25 -0800 (PST)
+Received: from XH22050090-L.ad.ts.tri-ad.global ([103.175.111.222])
+        by smtp.gmail.com with ESMTPSA id mv15-20020a17090b198f00b0021937b2118bsm941346pjb.54.2022.11.29.01.52.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 01:52:25 -0800 (PST)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Jiri Pirko <jiri@nvidia.com>, netdev@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Arnaud Ebalard <arno@natisbad.org>,
+        Srujana Challa <schalla@marvell.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Dimitris Michailidis <dmichail@fungible.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Linu Cherian <lcherian@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Jerin Jacob <jerinj@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Shannon Nelson <snelson@pensando.io>, drivers@pensando.io,
+        Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Vadim Fedorenko <vadfed@fb.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Vadim Pasternak <vadimp@mellanox.com>,
+        Shalom Toledo <shalomt@mellanox.com>,
+        linux-crypto@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-rdma@vger.kernel.org, oss-drivers@corigine.com,
+        Jiri Pirko <jiri@mellanox.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hao Chen <chenhao288@hisilicon.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH net-next v6 0/3] net: devlink: return the driver name in devlink_nl_info_fill
+Date:   Tue, 29 Nov 2022 18:51:37 +0900
+Message-Id: <20221129095140.3913303-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Nov 2022, Jani Nikula <jani.nikula@linux.intel.com> wrote:
-> On Fri, 25 Nov 2022, Xia Fukun <xiafukun@huawei.com> wrote:
->> When (size != 0 || ptrs->lvds_ entries != 3), the program tries to
->> free() the ptrs. However, the ptrs is not created by calling kzmalloc(),
->> but is obtained by pointer offset operation.
->> This may lead to memory leaks or undefined behavior.
->
-> Yeah probably worse things will happen than just leak.
->
->>
->> Fix this by replacing the arguments of kfree() with ptrs_block.
->>
->> Fixes: a87d0a847607 ("drm/i915/bios: Generate LFP data table pointers if the VBT lacks them")
->> Signed-off-by: Xia Fukun <xiafukun@huawei.com>
->
-> Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+The driver name is available in device_driver::name. Right now,
+drivers still have to report this piece of information themselves in
+their devlink_ops::info_get callback function.
 
-And pushed to drm-intel-next, thanks for the patch.
+The goal of this series is to have the devlink core to report this
+information instead of the drivers.
 
-BR,
-Jani.
+The first patch fulfills the actual goal of this series: modify
+devlink core to report the driver name and clean-up all drivers. Both
+have to be done in an atomic change to avoid attribute
+duplication. This same patch also removes the
+devlink_info_driver_name_put() function to prevent future drivers from
+reporting the driver name themselves.
 
->
->> ---
->>  drivers/gpu/drm/i915/display/intel_bios.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/i915/display/intel_bios.c b/drivers/gpu/drm/i915/display/intel_bios.c
->> index 28bdb936cd1f..edbdb949b6ce 100644
->> --- a/drivers/gpu/drm/i915/display/intel_bios.c
->> +++ b/drivers/gpu/drm/i915/display/intel_bios.c
->> @@ -414,7 +414,7 @@ static void *generate_lfp_data_ptrs(struct drm_i915_private *i915,
->>  		ptrs->lvds_entries++;
->>  
->>  	if (size != 0 || ptrs->lvds_entries != 3) {
->> -		kfree(ptrs);
->> +		kfree(ptrs_block);
->>  		return NULL;
->>  	}
+The second patch allows the core to call devlink_nl_info_fill() even
+if the devlink_ops::info_get() callback is NULL. This leads to the
+third and final patch which cleans up the drivers which have an empty
+info_get().
+---
+* Changelog *
+
+v5 -> v6:
+
+  * No change in code.
+
+  * add Reviewed-by: Jacob Keller tag.
+
+  * add Reviewed-by: Jiri Pirko tag.
+
+  * squash patches 1 and 2 together.
+
+  * [PATCH 1/3]: remove the paragraph explaining why attributes get
+    duplicated if nla_put() is called twice.
+
+v4 -> v5:
+
+  * No change in code.
+
+  * [PATCH 1/4] add Tested-by: Ido Schimmel tag.
+
+  * split patch 3/3 in two patches.
+
+v3 -> v4:
+
+  * Ido pointed out that the mlxsw did not need to be fixed:
+    https://lore.kernel.org/netdev/Y4ONgD4dAj8yU2%2F+@shredder/
+    Remove the first two patches from the series.
+
+v2 -> v3:
+
+  * [PATCH 3/5] remove the call to devlink_info_driver_name_put() in
+    mlxsw driver as well (this was missing in v2, making the build
+    fail... sorry for the noise).
+
+  * add additional people in CC as pointed by netdev patchwork CI:
+    https://patchwork.kernel.org/project/netdevbpf/list/?series=699451
+
+  * use the "Link:" prefix before URL to silence checkpatch's line
+    length warning.
+
+
+RFC v1 -> v2:
+
+  * drop the RFC tag
+
+  * big rework following the discussion on RFC:
+    https://lore.kernel.org/netdev/20221122154934.13937-1-mailhol.vincent@wanadoo.fr/
+    Went from one patch to a series of five patches:
+
+  * drop the idea to report the USB serial number following Greg's
+    comment:
+    https://lore.kernel.org/linux-usb/Y3+VfNdt%2FK7UtRcw@kroah.com/
+
+Vincent Mailhol (3):
+  net: devlink: let the core report the driver name instead of the
+    drivers
+  net: devlink: make the devlink_ops::info_get() callback optional
+  net: devlink: clean-up empty devlink_ops::info_get()
+
+ .../marvell/octeontx2/otx2_cpt_devlink.c      |  4 ---
+ drivers/net/dsa/hirschmann/hellcreek.c        |  5 ---
+ drivers/net/dsa/mv88e6xxx/devlink.c           |  5 ---
+ drivers/net/dsa/sja1105/sja1105_devlink.c     | 12 ++-----
+ .../net/ethernet/broadcom/bnxt/bnxt_devlink.c |  4 ---
+ .../freescale/dpaa2/dpaa2-eth-devlink.c       | 11 +-----
+ .../ethernet/fungible/funeth/funeth_devlink.c |  7 ----
+ .../hisilicon/hns3/hns3pf/hclge_devlink.c     |  5 ---
+ .../hisilicon/hns3/hns3vf/hclgevf_devlink.c   |  5 ---
+ drivers/net/ethernet/intel/ice/ice_devlink.c  |  6 ----
+ .../marvell/octeontx2/af/rvu_devlink.c        |  7 ----
+ .../marvell/octeontx2/nic/otx2_devlink.c      | 15 --------
+ .../marvell/prestera/prestera_devlink.c       |  5 ---
+ .../net/ethernet/mellanox/mlx5/core/devlink.c |  4 ---
+ drivers/net/ethernet/mellanox/mlxsw/core.c    |  5 ---
+ .../net/ethernet/netronome/nfp/nfp_devlink.c  |  4 ---
+ .../ethernet/pensando/ionic/ionic_devlink.c   |  4 ---
+ drivers/net/ethernet/qlogic/qed/qed_devlink.c |  4 ---
+ drivers/net/netdevsim/dev.c                   |  3 --
+ drivers/ptp/ptp_ocp.c                         |  4 ---
+ include/net/devlink.h                         |  2 --
+ net/core/devlink.c                            | 35 ++++++++++++-------
+ 22 files changed, 26 insertions(+), 130 deletions(-)
 
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.25.1
+
