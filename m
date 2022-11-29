@@ -2,120 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A41663CA2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D55563CA29
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 22:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236880AbiK2VLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 16:11:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
+        id S236854AbiK2VLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 16:11:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237017AbiK2VLH (ORCPT
+        with ESMTP id S236895AbiK2VLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 29 Nov 2022 16:11:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4C970474;
-        Tue, 29 Nov 2022 13:10:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E31A5B818F9;
-        Tue, 29 Nov 2022 21:10:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8AFC6C43470;
-        Tue, 29 Nov 2022 21:10:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669756239;
-        bh=sZ267hcgoA0k83l77ahFnqn9gf/hKDhocjpfrizu128=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=F7nZ2uyqPv8qW14hK7m7A1V65W0kdBMkGehQ4VpSbbtFkwrZsF1aldu+/dCp1zz4A
-         0SqdJkr5WvZyJXwuQaZWf9ZeeIw86XLVOWiSh+xuwFo3gv1/4zVlY8tBoibmUV7cZ2
-         sOovxnkUwxbAC5vaJji5DLEVxa4wL9JsJamQn01VfMa5nFNLA20ii/U4n/XSI5ZmQJ
-         IWZOgyPG0n+LajbdXmZ1NhmszrMl58P4cbnKnepG66DJGOq5bCjTnIkAtk8YLM1msZ
-         Kf41ue3YqZ11gSjoow+l5ygHugTKYxE+GMmmZgjdqf103a0wpy+QJ7Sy/WgCA4Me8v
-         ttIWT8FXblvIQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 732CAE21EF7;
-        Tue, 29 Nov 2022 21:10:39 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1620F70471
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:10:42 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id bf14-20020a056602368e00b006ce86e80414so9515126iob.7
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 13:10:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+T5btxFITBUYFNemWF4t9XMo8L1hkUwTBYtJ6gvqC3w=;
+        b=zxzDmENv4D6JmqCDHMkKrJJuhqrSL35XdM+089GByHsIkMhpZjCEdtCkjLeactiz7R
+         OW8GzCVTh3dluaR53qvNlhIIuEUn4efIOQfm3VgYF6hJfLd0Yxlrw1r6YLfRsOqa+fWj
+         MtM+nSg4q1XFsJu9YwELoYZuyGEuYygk+r2+r/K3FvrPYzgF6nYvHdWuqmim2fKjLsX0
+         fxicsb7AzpmJY9Tkdvioul/BrwXrj7l9FzN8i3E0gXhx4phMthgi4g9Mfnvq4eiCH1D7
+         nQYvvmzWyLIyMwoN6h8z8LbS31J0SNH/DCIbAWcDDbP3DngZZs1ifcLq2AzwhTlKiPyX
+         SQow==
+X-Gm-Message-State: ANoB5pn69ooz6fg4wd7UrCnDfpcXt5FbDZQ3M8sUzTjShAdb49yrmdLz
+        ZLmn3dMrsb1rhRJRCg6ONUTbwijrBDRfeKkOUcL2XGnSeA5n
+X-Google-Smtp-Source: AA0mqf6itHiSNazy+QcwfhiR8iCnI40NzyQa9ZJ4g9Aty3ZZo4I4bM5OqksgP8YLzUNeWfoZ49RnCnj34JsbIizC8TIWYwUplkgy
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] Bluteooth: btusb: Add a new VID/PID 0489/e0f2 for MT7922
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <166975623946.18742.7093581077034194288.git-patchwork-notify@kernel.org>
-Date:   Tue, 29 Nov 2022 21:10:39 +0000
-References: <20221128063000.41036-1-andy.chi@canonical.com>
-In-Reply-To: <20221128063000.41036-1-andy.chi@canonical.com>
-To:     Andy Chi <andy.chi@canonical.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:2c0e:0:b0:302:e042:9ddd with SMTP id
+ t14-20020a922c0e000000b00302e0429dddmr15312188ile.292.1669756241459; Tue, 29
+ Nov 2022 13:10:41 -0800 (PST)
+Date:   Tue, 29 Nov 2022 13:10:41 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a2432a05eea26be6@google.com>
+Subject: [syzbot] kernel BUG in insert_state_fast
+From:   syzbot <syzbot+9ce4a36127ca92b59677@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hello,
 
-This patch was applied to bluetooth/bluetooth-next.git (master)
-by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
+syzbot found the following issue on:
 
-On Mon, 28 Nov 2022 14:30:00 +0800 you wrote:
-> Add VID/PID 0489/e0f2 for MediaTek MT7922 Bluetooth chip. Found
-> and tested with HP ProBook.
-> 
-> From /sys/kernel/debug/usb/devices:
-> 
-> T:  Bus=03 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-> D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=0489 ProdID=e0f2 Rev= 1.00
-> S:  Manufacturer=MediaTek Inc.
-> S:  Product=Wireless_Device
-> S:  SerialNumber=000000000
-> C:* #Ifs= 3 Cfg#= 1 Atr=e0 MxPwr=100mA
-> A:  FirstIf#= 0 IfCount= 3 Cls=e0(wlcon) Sub=01 Prot=01
-> I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-> E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=125us
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-> E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-> E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-> I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-> E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-> E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-> I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-> E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-> E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-> I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-> E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-> E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-> I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-> E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-> E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-> I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-> E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-> E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-> I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-> E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-> E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-> I:* If#= 2 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-> E:  Ad=8a(I) Atr=03(Int.) MxPS=  64 Ivl=125us
-> E:  Ad=0a(O) Atr=03(Int.) MxPS=  64 Ivl=125us
-> I:  If#= 2 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-> E:  Ad=8a(I) Atr=03(Int.) MxPS= 512 Ivl=125us
-> E:  Ad=0a(O) Atr=03(Int.) MxPS= 512 Ivl=125us
-> 
-> [...]
+HEAD commit:    644e9524388a Merge tag 'for-v6.1-rc' of git://git.kernel.o..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=12bc57c5880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
+dashboard link: https://syzkaller.appspot.com/bug?extid=9ce4a36127ca92b59677
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12806381880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=127f33c5880000
 
-Here is the summary with links:
-  - Bluteooth: btusb: Add a new VID/PID 0489/e0f2 for MT7922
-    https://git.kernel.org/bluetooth/bluetooth-next/c/773653b4336d
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0968428e17b4/disk-644e9524.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fd4c3bfd0777/vmlinux-644e9524.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ee4571f27f1c/bzImage-644e9524.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/3162096f8ebc/mount_0.gz
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9ce4a36127ca92b59677@syzkaller.appspotmail.com
+
+RSP: 002b:00007ffd0af295c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fdc57eface9
+RDX: 0000000000000049 RSI: 0000000020000180 RDI: 0000000000000005
+RBP: 00007ffd0af295d0 R08: 0000000000000001 R09: 00007fdc57eb0034
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+------------[ cut here ]------------
+kernel BUG at fs/btrfs/extent-io-tree.c:381!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 3632 Comm: syz-executor229 Not tainted 6.1.0-rc6-syzkaller-00308-g644e9524388a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:set_state_bits fs/btrfs/extent-io-tree.c:381 [inline]
+RIP: 0010:insert_state_fast+0x242/0x250 fs/btrfs/extent-io-tree.c:439
+Code: 2e fe e9 77 ff ff ff 44 89 e1 80 e1 07 80 c1 03 38 c1 0f 8c 72 fe ff ff 4c 89 e7 e8 d8 c1 2e fe e9 65 fe ff ff e8 fe a8 da fd <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 66 90 55 41 57 41 56 41 55 41
+RSP: 0018:ffffc90003b6f698 EFLAGS: 00010293
+RAX: ffffffff83afeeb2 RBX: dffffc0000000000 RCX: ffff888018ee57c0
+RDX: 0000000000000000 RSI: 00000000fffffff4 RDI: 0000000000000000
+RBP: 00000000fffffff4 R08: ffffffff83afedd4 R09: 00000000ffffffff
+R10: fffffbfff1a42e97 R11: 1ffffffff1a42e96 R12: 0000000000000000
+R13: ffff888029b51588 R14: ffff888021a0e840 R15: 0000000000001000
+FS:  0000555555986300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055a0f58ad000 CR3: 000000007c25a000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __set_extent_bit+0x1547/0x19a0 fs/btrfs/extent-io-tree.c:997
+ set_record_extent_bits+0x50/0x80 fs/btrfs/extent-io-tree.c:1601
+ qgroup_reserve_data+0x27b/0x6f0 fs/btrfs/qgroup.c:3739
+ btrfs_qgroup_reserve_data+0x2a/0xc0 fs/btrfs/qgroup.c:3782
+ btrfs_check_data_free_space+0x144/0x240 fs/btrfs/delalloc-space.c:152
+ btrfs_buffered_write+0x56c/0x16f0 fs/btrfs/file.c:1559
+ btrfs_direct_write fs/btrfs/file.c:1899 [inline]
+ btrfs_do_write_iter+0xeb4/0x1260 fs/btrfs/file.c:1980
+ call_write_iter include/linux/fs.h:2191 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x7dc/0xc50 fs/read_write.c:584
+ ksys_write+0x177/0x2a0 fs/read_write.c:637
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fdc57eface9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd0af295c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fdc57eface9
+RDX: 0000000000000049 RSI: 0000000020000180 RDI: 0000000000000005
+RBP: 00007ffd0af295d0 R08: 0000000000000001 R09: 00007fdc57eb0034
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:set_state_bits fs/btrfs/extent-io-tree.c:381 [inline]
+RIP: 0010:insert_state_fast+0x242/0x250 fs/btrfs/extent-io-tree.c:439
+Code: 2e fe e9 77 ff ff ff 44 89 e1 80 e1 07 80 c1 03 38 c1 0f 8c 72 fe ff ff 4c 89 e7 e8 d8 c1 2e fe e9 65 fe ff ff e8 fe a8 da fd <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 66 90 55 41 57 41 56 41 55 41
+RSP: 0018:ffffc90003b6f698 EFLAGS: 00010293
+RAX: ffffffff83afeeb2 RBX: dffffc0000000000 RCX: ffff888018ee57c0
+RDX: 0000000000000000 RSI: 00000000fffffff4 RDI: 0000000000000000
+RBP: 00000000fffffff4 R08: ffffffff83afedd4 R09: 00000000ffffffff
+R10: fffffbfff1a42e97 R11: 1ffffffff1a42e96 R12: 0000000000000000
+R13: ffff888029b51588 R14: ffff888021a0e840 R15: 0000000000001000
+FS:  0000555555986300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055a0f58ad000 CR3: 000000007c25a000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
