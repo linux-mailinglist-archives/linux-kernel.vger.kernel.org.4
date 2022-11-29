@@ -2,129 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D58163BB92
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A27163BB99
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbiK2I3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 03:29:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
+        id S230239AbiK2IaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 03:30:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbiK2I24 (ORCPT
+        with ESMTP id S230354AbiK2I3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 03:28:56 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46050C1C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:28:15 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id s5so18694904edc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:28:15 -0800 (PST)
+        Tue, 29 Nov 2022 03:29:19 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EE159850
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:28:48 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id y16so1076934wrm.2
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:28:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8tKjN8Pr0TOCEiqcL4ygNjCpgur6Un/XBCsGues/Dnc=;
-        b=T1SrL2wtoh+dO1FUeIUSLP7iDrLN8bzK1A6qXgwO/336kstN9A+k8zQvtsa4Ps7sWZ
-         LDyBxMYCAHdzL+hZrD/BUTv8MLEMAc+ojkA0zmya4fbKQRX3fzaJMvVwNJx7qj+InDrw
-         3M0sbE/cn5Q3keMw7bLCRWZB5H/SYiwLWnB7V4VU+Fva5Jr2Ekb0eyaIz51iyfM+zShx
-         nHHoTMFv7Co37+xH5MYBN+5wHA/vc7Bn1C8UTFT0oQKByuSxmrZNr+FLyFdSyHoVNUIv
-         bcRupknoJs0MQ1N+ppVjc04sl7IbMfDV7CVTbsoepTc2QAYV0rXsJv31xujUc7bTu4xW
-         XwHw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=UsdFpV0/mKDiXztrE9lqloezboDBtAsqnTTRBiOVtQ8=;
+        b=Lt2YZeLSZM3s91FD+Cb0iXVLAQ7owCjKjUS3Ae1jNlIFM57h8NDDsrdMoGpW7NxjJa
+         Rm8jNQBM0CsA5pty/Bg3BlqfgA0EMOOWKsjso8ekNmvzv7Y0S1J7erclbRbZEQqinaT/
+         gVVrh8W8ZYGjPrjoky8mP++kBkSABMYMc3U2fuidvKGXyp9Tx1Ow6wAxnq5iJZHZdM3r
+         TJi8XcPA8zVgd5aDMCWieNA/HklwLLcgdUsOqu0tEx/W7DQhuBfkJxGdC5NUWn069GFM
+         PfUnT7ajbkDUVv3REcjyLLjLpbC0M1uQMnE2XKM8PA7RuGDz2TTlUlC6ntyIxYIzP1KA
+         kZzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8tKjN8Pr0TOCEiqcL4ygNjCpgur6Un/XBCsGues/Dnc=;
-        b=J7Vy2shEtWXe9/AG1OfJB9LIVuOZQoiXPPqbhzW69m8sbr3cv0odl4xOP+0FQyFAqe
-         YmyJxReVxY+2+FfiHSa7oN+DjB2sk65BQML/QWih3XWB+aATEAqu6J8ix6ME0wBazRbe
-         X0HnnFz1KLGtP3j42m1HKj3Bwpkl1Kq6IFN/dR9FJLXseAgBOIq1ZPnXSbttk9c37wkN
-         daFSAeIPjFPlCcEfe5y9fvo5ruV8H5Tfv5VjsQqhijUzR27ThW1epBOEGu/C3kgWDMJL
-         rJG9s1vw09kfVcm4g2fX4LYmvu801I5CcNyZJJIQzjbzR1pCd4YO3q+hPmq+i1Kcpo9t
-         DIYQ==
-X-Gm-Message-State: ANoB5pnscXYDf3d40Ns7bqnkFVl4bx7mLXh9qLCovmxg562N7KSOS5e6
-        JlbSGg/EvI3wDi51ZN6a1AGGzF7b0tWn39epgZw=
-X-Google-Smtp-Source: AA0mqf7JGE37tAeUkHP3TD4s8FZGd1nRjeRWiVNzSS6CLCo1ROKQ6oloPpK3fYxFvXVscdfHwnEgTg==
-X-Received: by 2002:a05:6402:550b:b0:45f:9526:e35a with SMTP id fi11-20020a056402550b00b0045f9526e35amr51424330edb.256.1669710493806;
-        Tue, 29 Nov 2022 00:28:13 -0800 (PST)
-Received: from localhost ([86.61.181.4])
-        by smtp.gmail.com with ESMTPSA id c7-20020a50f607000000b00461e4498666sm6060540edn.11.2022.11.29.00.28.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 00:28:13 -0800 (PST)
-Date:   Tue, 29 Nov 2022 09:28:12 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     Jiri Pirko <jiri@nvidia.com>, Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>
-Subject: Re: [PATCH net-next v2] net: devlink: add
- DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER
-Message-ID: <Y4XCnAA2hGvqgXh0@nanopsycho>
-References: <20221129031406.3849872-1-mailhol.vincent@wanadoo.fr>
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UsdFpV0/mKDiXztrE9lqloezboDBtAsqnTTRBiOVtQ8=;
+        b=YeGBeItK+UxOuVrx85ry/RAv8CNp3FcKGZUIJjZan4IiHqGx5Zr4NBCT0qYOarrWYQ
+         usBdy+WqMqub3TFkUgfiFrU57Uc8J9hNc4OC7qJgwDWa+GXb8OaQagQ8rahqMvPYhaZo
+         OoeFD5JnYxJcrPHwC8xpnTBV5yYgS7AYF9oLjg1DZVrt3u8XXPM0Xk91FcPc4c0+nfoL
+         SAin2l1GKEj7Bk9ZI9BNe3oi0EitndzszCdNwB92YYreupmV15ry6xGkjySKzFGlLvpk
+         fgYKzS4p5x3390APXl8ZmcmFEINaA0KkHGq9+bmDM3ixMURvwppHCv+tUZIiVwhmD7xM
+         R9Ow==
+X-Gm-Message-State: ANoB5pk6TE10zIqOdEaTwZ0KuqBnVZfbTdd+7MaSXRCATHs6POZhHwco
+        F1znuuJFi0sWY6Mq7wM/rVxJG6ZWboc6AVb6
+X-Google-Smtp-Source: AA0mqf5Z0ZWZ9WQn5gBf/30EXFOX91ieTBWgfiEIeO5U9aZafcjJQFiEzNfLFKEoKitug8Bt471FDA==
+X-Received: by 2002:a5d:68cc:0:b0:242:1c1a:37e6 with SMTP id p12-20020a5d68cc000000b002421c1a37e6mr4279056wrw.549.1669710526889;
+        Tue, 29 Nov 2022 00:28:46 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:2f85:a28c:5df7:9cd2? ([2a01:e0a:982:cbb0:2f85:a28c:5df7:9cd2])
+        by smtp.gmail.com with ESMTPSA id h18-20020adff4d2000000b00242269c8b8esm83142wrp.25.2022.11.29.00.28.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 00:28:46 -0800 (PST)
+Message-ID: <301cfc50-5452-7e71-559e-2586f89464d6@linaro.org>
+Date:   Tue, 29 Nov 2022 09:28:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221129031406.3849872-1-mailhol.vincent@wanadoo.fr>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 0/2] soc: qcom: Add support for Qualcomm Modem
+ Processing SubSystem DSM memory
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20221114-narmstrong-sm8550-upstream-mpss_dsm-v2-0-f7c65d6f0e55@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20221114-narmstrong-sm8550-upstream-mpss_dsm-v2-0-f7c65d6f0e55@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tue, Nov 29, 2022 at 04:14:06AM CET, mailhol.vincent@wanadoo.fr wrote:
->As discussed in [1], abbreviating the bootloader to "bl" might not be
->well understood. Instead, a bootloader technically being a firmware,
->name it "fw.bootloader".
->
->Add a new macro to devlink.h to formalize this new info attribute name
->and update the documentation.
->
->[1] https://lore.kernel.org/netdev/20221128142723.2f826d20@kernel.org/
->
->Suggested-by: Jakub Kicinski <kuba@kernel.org>
->Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->---
->* Changelog *
->
->v1 -> v2:
->
->  * update the documentation as well.
->  Link: https://lore.kernel.org/netdev/20221129020151.3842613-1-mailhol.vincent@wanadoo.fr/
->---
-> Documentation/networking/devlink/devlink-info.rst | 5 +++++
-> include/net/devlink.h                             | 2 ++
-> 2 files changed, 7 insertions(+)
->
->diff --git a/Documentation/networking/devlink/devlink-info.rst b/Documentation/networking/devlink/devlink-info.rst
->index 7572bf6de5c1..1242b0e6826b 100644
->--- a/Documentation/networking/devlink/devlink-info.rst
->+++ b/Documentation/networking/devlink/devlink-info.rst
->@@ -198,6 +198,11 @@ fw.bundle_id
+On 18/11/2022 09:53, Neil Armstrong wrote:
+> The Qualcomm SM8550 SoC Modem Processing SubSystem requires that a memory
+> region named DSM should be shared with the Application Processor SubSystem.
 > 
-> Unique identifier of the entire firmware bundle.
+> This adds bindings for this MPSS DSM memory and driver implementation to
+> share this memory region with the Modem Processing SubSystem.
 > 
->+fw.bootloader
->+-------------
->+
->+Version of the bootloader.
->+
-> Future work
-> ===========
+> The MPSS DSM memory must be shared between the APPS SubSystem and the MPSS
+> SubSystems, for the whole lifetime of the system.
 > 
->diff --git a/include/net/devlink.h b/include/net/devlink.h
->index 074a79b8933f..2f552b90b5c6 100644
->--- a/include/net/devlink.h
->+++ b/include/net/devlink.h
->@@ -621,6 +621,8 @@ enum devlink_param_generic_id {
-> #define DEVLINK_INFO_VERSION_GENERIC_FW_ROCE	"fw.roce"
-> /* Firmware bundle identifier */
-> #define DEVLINK_INFO_VERSION_GENERIC_FW_BUNDLE_ID	"fw.bundle_id"
->+/* Bootloader */
->+#define DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER	"fw.bootloader"
+> To: Andy Gross <agross@kernel.org>
+> To: Bjorn Andersson <andersson@kernel.org>
+> To: Konrad Dybcio <konrad.dybcio@somainline.org>
+> To: Rob Herring <robh+dt@kernel.org>
+> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> To: Frank Rowand <frowand.list@gmail.com>
+> Cc: linux-arm-msm@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> 
+> ---
+> Changes in v2:
+> - Fixed the bindings
+> - Added some precision on the MPSS DSM in commit messages
+> - Link to v1: https://lore.kernel.org/r/20221114-narmstrong-sm8550-upstream-mpss_dsm-v1-0-158dc2bb6e96@linaro.org
+> 
+> ---
+> Neil Armstrong (2):
+>        dt-bindings: reserved-memory: document Qualcomm MPSS DSM memory
+>        soc: qcom: add MDSS DSM memory driver
+> 
+>   .../reserved-memory/qcom,mpss-dsm-mem.yaml         | 37 +++++++++
+>   drivers/of/platform.c                              |  1 +
+>   drivers/soc/qcom/Kconfig                           | 10 +++
+>   drivers/soc/qcom/Makefile                          |  1 +
+>   drivers/soc/qcom/mpss_dsm_mem.c                    | 95 ++++++++++++++++++++++
+>   5 files changed, 144 insertions(+)
+> ---
+> base-commit: 999e0145579c0e04174044a39257a4d96ee30020
+> change-id: 20221114-narmstrong-sm8550-upstream-mpss_dsm-21c438c65f9b
+> 
+> Best regards,
 
-You add it and don't use it. You should add only what you use.
+After discussions on https://lore.kernel.org/all/20221114-narmstrong-sm8550-upstream-mpss_dsm-v1-0-158dc2bb6e96@linaro.org/,
+handling of this memory zone will be integrated into the remoteproc PAS changes.
+
+Neil
