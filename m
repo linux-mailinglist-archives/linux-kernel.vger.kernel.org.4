@@ -2,174 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A283A63C356
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37BB663C34D
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233885AbiK2PMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 10:12:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
+        id S234442AbiK2PGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 10:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiK2PMt (ORCPT
+        with ESMTP id S229693AbiK2PGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:12:49 -0500
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 29 Nov 2022 07:12:47 PST
-Received: from esa4.hc3370-68.iphmx.com (esa4.hc3370-68.iphmx.com [216.71.155.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8DAA441
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:12:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1669734767;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FKAcdCfqcGrJYFfhNECxRdqUbzNbMUCLFKQUQIe3/uU=;
-  b=ECNZYwS/x7zozo+MAKpTIYpLX8Ya2Cb532Nr+VOEo0uCFpe8q+UysKLa
-   VTGbwPBmTWXmw9gILRn0r+v9amg8qRhzzk08RATTLGDfUhejAkJj4nu/9
-   Idzmi9AZrckLXIJOgeFfbkb8DLcUbfvaBFHQDyhvt31ap5PbvlYVaKS3H
-   I=;
-Authentication-Results: esa4.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
-X-SBRS: 4.0
-X-MesageID: 88308420
-X-Ironport-Server: esa4.hc3370-68.iphmx.com
-X-Remote-IP: 162.221.156.83
-X-Policy: $RELAYED
-IronPort-Data: A9a23:sWt9j6354+v2TVIF5/bD5VVxkn2cJEfYwER7XKvMYLTBsI5bp2ZTy
- TMcDWqHb6zZNGb8Lot/bd6zo0MFvZXcmtNnTQtkpC1hF35El5HIVI+TRqvS04F+DeWYFR46s
- J9OAjXkBJppJpMJjk71atANlVEliefTAOK5ULSfUsxIbVcMYD87jh5+kPIOjIdtgNyoayuAo
- tq3qMDEULOf82cc3lk8tuTS9nuDgNyo4GlC5wVkNKgQ1LPjvyJ94Kw3dPnZw0TQGuG4LsbiL
- 87fwbew+H/u/htFIrtJRZ6iLyXm6paLVeS/oiI+t5qK23CulQRrukoPD9IOaF8/ttm8t4sZJ
- OOhF3CHYVxB0qXkwIzxWvTDes10FfUuFLTveRBTvSEPpqFvnrSFL/hGVSkL0YMkFulfJnl/+
- +AaDA43SwGC3dqKg4iCGulRv5F2RCXrFNt3VnBIyDjYCbAtQIzZQrWM7thdtNsyrpkQR7CEP
- ZNfMGcxKkSbC/FMEg5/5JYWpOqywFP+dyZVgFmUubA28y7YywkZPL3FYIqOIozWH509ckCwq
- Wno8WX7WC0hNsHEyn3Y3nyPvtHItHauMG4VPOLhraM76LGJ/UQZDwcXTh28uuWjjVClWMN3L
- FYd8S4j66M18SSDTNPwQhm5q36spQMHVpxbFOhSwBGAzO/Y7hiUAkAATyVdc5o2uckuXzso2
- 1SV2dTzClRHt7mYSmmU8LuOmi+jIigeLWIEZigsQBMM5p/op4RbphbOSMtzVa24lNv4HRnuz
- D2Q6isznbMeiYgMzarT1VLImTW3vbDSUxU4oA7QWwqN9RhlbYSoY4ip71nz7vtaKoudCF6bs
- xA5d9O2tb5US8vXzWrUHbtLTOrBC+u53CP0pkZeEYUj0wqX3m+iJ7hsowtHdEdUC5NREdP2W
- 3P7tQRU7Z5VGXKla65rfo68Y/gXIbjc+cfNDa6NMIcXCnRlXErepXw1OxbMt4z4uBJ0+ZzTL
- 6t3ZipF4ZwyLa18hAS7SO4GuVPA7nBvnDiDLXwXIvnO7FZ/WJJ3Ye1dWLdtRrpjhE9hnOky2
- 4g3Cidy408DONASmwGOmWLpEXgELGIgGbf9oNFNe+iIL2JOQT9/WqGPmehwK9M6wcy5c9skG
- VnkCidlJKfX3yWbeW1mlFg8AF8QYXqPhS1iZnF9VbpZ83MifZyu/M8im2gfJNEaGBhY5acsF
- ZEtIpzQasmjvxybo1zxm7Gh9t09HPlq7CrSVxeYjM8XJcQ6GlSXpI+8I2MCNkAmV0KKiCf3m
- JX4viuzfHbJb1QzV646tNrHI4uNgEUg
-IronPort-HdrOrdr: A9a23:2/a/mqlzZccVWZBw3+DcwPBe/xjpDfIg3DAbv31ZSRFFG/Fxl6
- iV8sjzsiWE7Ar5OUtQ/+xoV5PhfZqxz/JICOoqTNKftWvdyQiVxehZhOOIqVDd8kXFh4lgPM
- xbEpSWZueeMbEDt7eZ3DWF
-X-IronPort-AV: E=Sophos;i="5.96,203,1665460800"; 
-   d="scan'208";a="88308420"
-From:   Per Bilse <per.bilse@citrix.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     Per Bilse <per.bilse@citrix.com>, Juergen Gross <jgross@suse.com>,
-        "Stefano Stabellini" <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        "moderated list:XEN HYPERVISOR INTERFACE" 
-        <xen-devel@lists.xenproject.org>
-Subject: [PATCH] drivers/xen/hypervisor: Expose VM SIF flags to userspace
-Date:   Tue, 29 Nov 2022 15:00:57 +0000
-Message-ID: <20221129150058.266943-1-per.bilse@citrix.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 29 Nov 2022 10:06:10 -0500
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8943FBA4;
+        Tue, 29 Nov 2022 07:06:08 -0800 (PST)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-142faa7a207so17281760fac.13;
+        Tue, 29 Nov 2022 07:06:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=kDwNcelrs2eUV+lrqFjarpCKpHkKCs1VhcZri8buYKI=;
+        b=AoZfmFeYKOl4l2lIHPCkTbcdpAwJpSta0pfkYwaOkFHCISQw8IoGt3aERVL2/nqOkC
+         a6BHyldoXF8TPzDrKg0hHQ+iLMySV9kk5duA9ppJwI3nVnZkecI7mqXVjTzxjc1tPf1s
+         Hlx15iEgHrOjRYo0NFhhTx1q/VYw5qA3kSnG/L/75Bylsq7133s9dlcs8Qr30wwEV7OG
+         fNFek9RS1KKxHLxzZ/tujDKRHxDGuDqt7+cMME8GxWqaraogMMeyD/FP/SgXOdZq/OZw
+         5MI31UGRbttIb/R9Kk+rkdl4d+hqpbnXIkdE9XBkr6wnotATQzBzfuZTkWlopIn4Ubmp
+         l5Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kDwNcelrs2eUV+lrqFjarpCKpHkKCs1VhcZri8buYKI=;
+        b=8KgAi9UJw2PaccUuK3Dotv2811EMQ5V/IvQravvE+tF9mACDZ4MB238HbctXyrrDCk
+         thxg1r9uUk8hewiKQ2uYop1kxi5p0n+/I68z0RObAkFRHm/8jQAw2zBYpi0uZrBUh/MJ
+         d3/ELl7AHrWse/u1xSg2RhD77wlOPkDOXbE+xCVpvhpth5ymFDfUBFopU+uiAQII1Wgy
+         EWr5RefFXOUrcwE4VA3OVa8YcJjOvixkU92TPr8Xw6cqopyuHHtUiKAACWJAWL/ml9Gi
+         nIFztwNHQMshzIT1Eiew0FOxTpLsCzmeraq4w2mVirXZdi+tS/D95sDrd4J/enoyDmH0
+         5RrQ==
+X-Gm-Message-State: ANoB5pm2OwqfbBgH5kVMscQqYo/jEhR3H868CIvr9TmplQjgGM51KEAh
+        vxMZL3hyZwY2mZusv4Tedmw=
+X-Google-Smtp-Source: AA0mqf5oDydb9EGtYPiKSPOiYCPpv8fl65qEocklfg33+p3F9hythil2GZwIwm+FvmCbwsKu6AnaMQ==
+X-Received: by 2002:a05:6870:54d2:b0:131:e200:1492 with SMTP id g18-20020a05687054d200b00131e2001492mr21190025oan.44.1669734367149;
+        Tue, 29 Nov 2022 07:06:07 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h9-20020a4ad009000000b0049be9c3c15dsm5517327oor.33.2022.11.29.07.06.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 07:06:06 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a0b48e60-59ce-0033-b09f-2f92983753b7@roeck-us.net>
+Date:   Tue, 29 Nov 2022 07:06:03 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [v4 5/5] hwmon: Add Aspeed ast2600 TACH support
+Content-Language: en-US
+To:     Billy Tsai <billy_tsai@aspeedtech.com>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Cc:     kernel test robot <lkp@intel.com>
+References: <20221123061635.32025-1-billy_tsai@aspeedtech.com>
+ <20221123061635.32025-6-billy_tsai@aspeedtech.com>
+ <bf851fa1-af62-5cdc-8cb4-bcf29b73731a@roeck-us.net>
+ <D5F454FE-9C4B-4B7E-8817-637D5FCC047A@aspeedtech.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <D5F454FE-9C4B-4B7E-8817-637D5FCC047A@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-/proc/xen is a legacy pseudo filesystem which predates Xen support
-getting merged into Linux.  It has largely been replaced with more
-normal locations for data (/sys/hypervisor/ for info, /dev/xen/ for
-user devices).  We want to compile xenfs support out of the dom0 kernel.
+On 11/28/22 23:08, Billy Tsai wrote:
+> On 2022/11/23, 11:45 PM, "Guenter Roeck" <groeck7@gmail.com on behalf of linux@roeck-us.net> wrote:
+> 
+>      On 11/22/22 22:16, Billy Tsai wrote:
+>      > > +The driver provides the following sensor accesses in sysfs:
+>      > > +=============== ======= =====================================================
+>      > > +fanX_input	ro	provide current fan rotation value in RPM as reported
+>      > > +			by the fan to the device.
+>      > > +fanX_div	rw	Fan divisor: Supported value are power of 4 (1, 4, 16
+>      > > +                        64, ... 4194304)
+> 
+>      > The code doesn't support 1.
+> 
+> The code can support 1.
+> 
+Sorry, leftover from when I misread the code and thought it didn't.
+> 
+>      > The existence of a status register makes me wonder what is in there.
+>      > Does the controller report any errors ? If so, it might be worthwile
+>      > adding attribute(s) for it.
+> 
+>      > > +	if (ret)
+>      > > +		return ret;
+>      > > +
+>      > > +	if (!(val & TACH_ASPEED_FULL_MEASUREMENT))
+>      > > +		return 0;
+>      > > +	rpm = aspeed_tach_val_to_rpm(priv, fan_tach_ch,
+>      > > +				     val & TACH_ASPEED_VALUE_MASK);
+>      > > +
+>      > > +	return rpm;
+> 
+> The status register is the TACH_ASPEED_FULL_MEASUREMENT which is used to indicate that
+> the controller doesn't detect the change in tach pin for a long time.
+> 
+>      > > +static void aspeed_create_fan_tach_channel(struct aspeed_tach_data *priv,
+>      > > +					   u32 tach_ch)
+>      > > +{
+>      > > +	priv->tach_present[tach_ch] = true;
+>      > > +	priv->tach_channel[tach_ch].limited_inverse = 0;
+>      > > +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+>      > > +			  TACH_ASPEED_INVERS_LIMIT,
+>      > > +			  priv->tach_channel[tach_ch].limited_inverse ?
+>      > > +				  TACH_ASPEED_INVERS_LIMIT :
+>      > > +				  0);
+>      > > +
+>      > What is the purpose of the above code ? limited_inverse is always 0.
+> 
+>      > > +	priv->tach_channel[tach_ch].tach_debounce = DEBOUNCE_3_CLK;
+>      > > +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+>      > > +			  TACH_ASPEED_DEBOUNCE_MASK,
+>      > > +			  priv->tach_channel[tach_ch].tach_debounce
+>      > > +				  << TACH_ASPEED_DEBOUNCE_BIT);
+>      > > +
+>      > > +	priv->tach_channel[tach_ch].tach_edge = F2F_EDGES;
+>      > > +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+>      > > +			  TACH_ASPEED_IO_EDGE_MASK,
+>      > > +			  priv->tach_channel[tach_ch].tach_edge
+>      > > +				  << TACH_ASPEED_IO_EDGE_BIT);
+>      > > +
+> 
+>      > limited_inverse, tach_debounce, and tach_edge are constants.
+>      > There is no need to keep constants as per-channel variables.
+> 
+>      > > +	priv->tach_channel[tach_ch].divisor = DEFAULT_TACH_DIV;
+>      > > +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+>      > > +			  TACH_ASPEED_CLK_DIV_T_MASK,
+>      > > +			  DIV_TO_REG(priv->tach_channel[tach_ch].divisor)
+>      > > +				  << TACH_ASPEED_CLK_DIV_BIT);
+>      > > +
+>      > > +	priv->tach_channel[tach_ch].threshold = 0;
+>      > > +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+>      > > +			  TACH_ASPEED_THRESHOLD_MASK,
+>      > > +			  priv->tach_channel[tach_ch].threshold);
+>      > > +
+> 
+>      > The above applies to threshold as well.
+> 
+> The above code is used to retain the adjustable feature of the controller.
+> I will remove them until I add the dts property to support them.
+> 
+>      > > +	}
+>      > > +
+>      > > +	hwmon = devm_hwmon_device_register_with_info(dev, "aspeed_tach", priv,
+>      > > +						     &aspeed_tach_chip_info, NULL);
+>      > > +	ret = PTR_ERR_OR_ZERO(hwmon);
+>      > > +	if (ret)
+>      > > +		return dev_err_probe(dev, ret,
+>      > > +				     "Failed to register hwmon device\n");
+>      > > +	return 0;
+> 
+>      > Why not return the error ? Either it is an error or it isn't. If it is
+>      > not an error, dev_err_probe() is not appropriate. If it is, the error
+>      > should be returned. Either case, if this is on purpose, it needs an
+>      > explanation.
+> 
+> I have return the return value of the dev_err_probe. Did I miss someting?
+> 
+No, me not having enough coffee when reviewing the code. Sorry for the noise.
 
-There is one item which only exists in /proc/xen, namely
-/proc/xen/capabilities with "control_d" being the signal of "you're in
-the control domain".  This ultimately comes from the SIF flags provided
-at VM start.
-
-This patch exposes all SIF flags in /sys/hypervisor/properties/flags,
-which will coexist with /proc/xen while dependencies are being migrated.
-Possible values are "privileged", "initdomain", "multiboot",
-"mod_start_pfn", and "virtmap", with "initdomain" being the equivalent
-of "control_d".
-
-Signed-off-by: Per Bilse <per.bilse@citrix.com>
----
- drivers/xen/sys-hypervisor.c | 26 ++++++++++++++++++++++++++
- include/xen/interface/xen.h  | 13 ++++++++-----
- 2 files changed, 34 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/xen/sys-hypervisor.c b/drivers/xen/sys-hypervisor.c
-index fcb0792f090e..7393e04bdb6d 100644
---- a/drivers/xen/sys-hypervisor.c
-+++ b/drivers/xen/sys-hypervisor.c
-@@ -379,6 +379,31 @@ static ssize_t buildid_show(struct hyp_sysfs_attr *attr, char *buffer)
- 
- HYPERVISOR_ATTR_RO(buildid);
- 
-+static ssize_t flags_show(struct hyp_sysfs_attr *attr, char *buffer)
-+{
-+	static char const *const sifstr[SIFN_NUM_SIFN] = {
-+		[SIFN_PRIV]  = "privileged",
-+		[SIFN_INIT]  = "initdomain",
-+		[SIFN_MULTI] = "multiboot",
-+		[SIFN_PFN]   = "mod_start_pfn",
-+		[SIFN_VIRT]  = "virtmap"
-+	};
-+	unsigned sifnum, sifmask;
-+	ssize_t ret = 0;
-+
-+	sifmask = ~(~0U << SIFN_NUM_SIFN);  // ...0000111...
-+	if (xen_domain() && (xen_start_flags & sifmask) != 0) {
-+		for (sifnum = 0; sifnum != SIFN_NUM_SIFN; sifnum++) {
-+			if ((xen_start_flags & (1<<sifnum)) != 0)
-+				ret += sprintf(buffer+ret, "%s ", sifstr[sifnum]);
-+		}
-+		buffer[ret-1] = '\n';
-+	}
-+	return ret;
-+}
-+
-+HYPERVISOR_ATTR_RO(flags);
-+
- static struct attribute *xen_properties_attrs[] = {
- 	&capabilities_attr.attr,
- 	&changeset_attr.attr,
-@@ -386,6 +411,7 @@ static struct attribute *xen_properties_attrs[] = {
- 	&pagesize_attr.attr,
- 	&features_attr.attr,
- 	&buildid_attr.attr,
-+	&flags_attr.attr,
- 	NULL
- };
- 
-diff --git a/include/xen/interface/xen.h b/include/xen/interface/xen.h
-index 0ca23eca2a9c..762a348abe3e 100644
---- a/include/xen/interface/xen.h
-+++ b/include/xen/interface/xen.h
-@@ -648,11 +648,14 @@ struct start_info {
- };
- 
- /* These flags are passed in the 'flags' field of start_info_t. */
--#define SIF_PRIVILEGED      (1<<0)  /* Is the domain privileged? */
--#define SIF_INITDOMAIN      (1<<1)  /* Is this the initial control domain? */
--#define SIF_MULTIBOOT_MOD   (1<<2)  /* Is mod_start a multiboot module? */
--#define SIF_MOD_START_PFN   (1<<3)  /* Is mod_start a PFN? */
--#define SIF_VIRT_P2M_4TOOLS (1<<4)  /* Do Xen tools understand a virt. mapped */
-+/* Text strings are printed out in sys-hypervisor.c, we guard   */
-+/* against mix-ups and errors by enumerating the flags.         */
-+enum { SIFN_PRIV, SIFN_INIT, SIFN_MULTI, SIFN_PFN, SIFN_VIRT, SIFN_NUM_SIFN };
-+#define SIF_PRIVILEGED      (1<<SIFN_PRIV)  /* Is the domain privileged? */
-+#define SIF_INITDOMAIN      (1<<SIFN_INIT)  /* Is this the initial control domain? */
-+#define SIF_MULTIBOOT_MOD   (1<<SIFN_MULTI) /* Is mod_start a multiboot module? */
-+#define SIF_MOD_START_PFN   (1<<SIFN_PFN)   /* Is mod_start a PFN? */
-+#define SIF_VIRT_P2M_4TOOLS (1<<SIFN_VIRT)  /* Do Xen tools understand a virt. mapped */
- 				    /* P->M making the 3 level tree obsolete? */
- #define SIF_PM_MASK       (0xFF<<8) /* reserve 1 byte for xen-pm options */
- 
--- 
-2.31.1
+Thanks,
+Guenter
 
