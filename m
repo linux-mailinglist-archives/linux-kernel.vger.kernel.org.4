@@ -2,124 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0754F63C42C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2252763C430
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 16:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235980AbiK2Pur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 10:50:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
+        id S232502AbiK2Pwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 10:52:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235974AbiK2Pud (ORCPT
+        with ESMTP id S232134AbiK2Pw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 10:50:33 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE672AE1C;
-        Tue, 29 Nov 2022 07:50:30 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e724329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e724:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D1AD01EC06D0;
-        Tue, 29 Nov 2022 16:50:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1669737028;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=j5TXiePmxL91SlMInx0lOFxR9R7xf7CDOnkMDEo8NOo=;
-        b=Ug7/ioDiJ/T09VA+AtfybQkW2YwL9YgxTYELmnFF8r+jaBqrkU+AQFPeTLo8qVJBWcp6gs
-        aHItuRxbIdJ6etimD4uwbRIS2BEJfu3QTJM5RELq/MNqpYIVcvLbzVks3WKlUZMp1NBjvF
-        UP+Pzmf4O5YrrB38kp4rtCeJUx9xl3E=
-Date:   Tue, 29 Nov 2022 16:50:24 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Kim Phillips <kim.phillips@amd.com>
-Cc:     x86@kernel.org, Babu Moger <Babu.Moger@amd.com>,
-        Borislav Petkov <bp@suse.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] x86/cpu, kvm: Use CPU capabilities for
- CPUID[0x80000021].EAX
-Message-ID: <Y4YqQO/gGwAmn7jI@zn.tnic>
-References: <20221124000449.79014-1-kim.phillips@amd.com>
- <20221124000449.79014-2-kim.phillips@amd.com>
- <Y39qUnlRx05eaGeb@zn.tnic>
- <849464c8-476a-9a14-afdb-cb8793dd6064@amd.com>
+        Tue, 29 Nov 2022 10:52:28 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947E610BA
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:52:27 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id h193so13388249pgc.10
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 07:52:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gUXPD428lBYhvSvCQztehA2Z3LbCwL5Ik8XHuLVfb/M=;
+        b=CmCcjDj3JCqVJtYLhUw4QDs200UMxPYISi8vse95iApevLls+sDrHmvVzRIAqcTmh3
+         8kI/5WcdO1uyn2GHEGW+1lOWH5jn4/Si2m/aePArWyrQ0cvzWbFMZGpGgQ91oNK/pqeB
+         GK1NZOrrV4GyGZt+RBNYvKxvtmZi0kJZoTPvuUeGv2amsYPZbdfhwM05qHw5FOb54tkg
+         5PVOfEo0vLuhjCbnGX5VDTFq39aqGGctyGxRfcoSAhAij7Csns+1E+1vZG7fxSaXYaHN
+         fcSFj9uVAHRbi3RhWkTy5Fszw1LtWLgla2YVxx1VOZGUWZol3c4yYvJ8O0G5GqZ/k01S
+         XRDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gUXPD428lBYhvSvCQztehA2Z3LbCwL5Ik8XHuLVfb/M=;
+        b=BCckTow9/wBMnFlW3Xbkq2QcYH1QhpIO6PZIzYNSm+GeAIrTJZyvmPdORF1eix20fX
+         nVNWyZdIl5omAEJEen/P1jSua6gJNzyw4zqk49YbYeUM5+PsebxQCSJuE/+7enhLdILT
+         fw0E83gRve42I0h0t4nVVwR4X677LZ7KkVByCDM+kmLhpvmpQAQ0Hfu6ZGX5aW0tFw4u
+         qiYchqNprZxzAv+1quvusCqr/2p5YVHMilM3rzvigVUooTDhf17DDeduTjxTT7O+MgPf
+         pdlRELzyOtC7HfQz1KhfO1erO/WZ+nR3iZJuAPqFWaM06BBq2mN8SX0CT/jdc9c8Cmc0
+         eyGw==
+X-Gm-Message-State: ANoB5pn6+8nOjzk2MsG6N7lAZP8VI7MXzFVxUAGrHc7a7+0f7Gx6qAtI
+        u+U/c/5v6/LCmTfjzFhhUWYoeA==
+X-Google-Smtp-Source: AA0mqf58k9X2ecMsq50j2paFChgEdufVtlAKglPxBmptmeIobeVtP6mbLKMyoJ1xZl86jybLkdSJlw==
+X-Received: by 2002:a63:e411:0:b0:45f:b2a7:2659 with SMTP id a17-20020a63e411000000b0045fb2a72659mr33175657pgi.132.1669737147134;
+        Tue, 29 Nov 2022 07:52:27 -0800 (PST)
+Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
+        by smtp.gmail.com with ESMTPSA id b5-20020a170903228500b00176ba091cd3sm11073557plh.196.2022.11.29.07.52.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 07:52:26 -0800 (PST)
+Message-ID: <dad4d480-8c72-46da-b0ad-4a8235bb03cf@9elements.com>
+Date:   Tue, 29 Nov 2022 21:22:22 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <849464c8-476a-9a14-afdb-cb8793dd6064@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v7 2/4] dt-bindings: hwmon: Add binding for max6639
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Roland Stigge <stigge@antcom.de>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+References: <20221121122932.2493174-1-Naresh.Solanki@9elements.com>
+ <20221121122932.2493174-3-Naresh.Solanki@9elements.com>
+ <b6943ec7-8fcd-08dc-605d-4a23629bc39c@linaro.org>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <b6943ec7-8fcd-08dc-605d-4a23629bc39c@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 05:00:43PM -0600, Kim Phillips wrote:
-> > verify_tags: WARNING: Co-developed-by Babu Moger <Babu.Moger@amd.com> hasn't signed off on the patch!
+Hi Krzysztof,
+
+On 29-11-2022 01:44 pm, Krzysztof Kozlowski wrote:
+> On 21/11/2022 13:29, Naresh Solanki wrote:
+>> From: Marcello Sylvester Bauer <sylv@sylv.io>
+>>
+>> Add Devicetree binding documentation for Maxim MAX6639 temperature
+>> monitor with PWM fan-speed controller.
+>>
+>> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>> ---
+>>   .../bindings/hwmon/maxim,max6639.yaml         | 93 +++++++++++++++++++
+>>   1 file changed, 93 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>> new file mode 100644
+>> index 000000000000..da040b11d2ab
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>> @@ -0,0 +1,93 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +
+>> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Maxim max6639
+>> +
+>> +maintainers:
+>> +  - Roland Stigge <stigge@antcom.de>
+>> +
+>> +description: |
+>> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
+>> +  fan-speed controller.  It monitors its own temperature and one external
+>> +  diode-connected transistor or the temperatures of two external diode-connected
+>> +  transistors, typically available in CPUs, FPGAs, or GPUs.
+>> +
+>> +  Datasheets:
+>> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - maxim,max6639
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  '#address-cells':
+>> +    const: 1
+>> +
+>> +  '#size-cells':
+>> +    const: 0
+>> +
+>> +  '#pwm-cells':
+>> +    const: 3
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +patternProperties:
+>> +  "^fan@[0-1]$":
+>> +    type: object
+>> +    description: |
+>> +      Represents the two fans and their specific configuration.
+>> +
+>> +    $ref: fan-common.yaml#
 > 
-> OK, I'll add his signed-off-by.
-
-You can't just add his SOB - he needs to give it himself.
-
-"Certificate of Origin" in Documentation/process/submitting-patches.rst
-needs brushing up on, it seems.
-
-> Not sure I follow.  That code (originally from commit f144c49e8c39
-> ("KVM: x86: synthesize CPUID leaf 0x80000021h if useful") doesn't
-> negate that: the code is saying that if we don't have the bug, then
-> set the feature bit that says we don't have the bug.
-
-I was thinking of the case described here:
-
-415de4407664 ("x86/cpu: Fix migration safety with X86_BUG_NULL_SEL")
-
-but I guess we can do that on the host.
-
-> > Which means, you'd have to update check_null_seg_clears_base() too.
+> unevalauatedProperties: false
 > 
-> Like this?:
+Sure
+>> +
+>> +    properties:
+>> +      reg:
+>> +        description: |
+>> +          The fan number.
+>> +        items:
+>> +          minimum: 0
+>> +          maximum: 1
 > 
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index 73cc546e024d..bbe96d71ff5e 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-> @@ -1682,11 +1682,6 @@ void check_null_seg_clears_base(struct cpuinfo_x86 *c)
->         if (!IS_ENABLED(CONFIG_X86_64))
->                 return;
+> This is a bit unusual syntax. Drop "items", I think it should be more
+> obvious.
 > 
-> -       /* Zen3 CPUs advertise Null Selector Clears Base in CPUID. */
-> -       if (c->extended_cpuid_level >= 0x80000021 &&
-> -           cpuid_eax(0x80000021) & BIT(6))
-> -               return;
-> -
+Sure
+>> +
+>> +    required:
+>> +      - reg
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    i2c {
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +
+>> +        fan1: fan-controller@10 {
+>> +            compatible = "maxim,max6639";
+>> +            reg = <0x10>;
+>> +            #address-cells = <1>;
+>> +            #size-cells = <0>;
+>> +            #pwm-cells = <3>;
+>> +
+>> +            fan@0 {
+>> +                reg = <0x0>;
+>> +                pulses-per-revolution = <2>;
+>> +                max-rpm = <4000>;
+>> +                target-rpm = <1000>;
+>> +                pwms = <&fan1 0 25000 0>;
+>> +            };
+>> +
+>> +            fan@1 {
+>> +                reg = <0x1>;
+>> +                pulses-per-revolution = <2>;
+>> +                max-rpm = <8000>;
+>> +                pwms = <&fan1 1 25000 0>;
+>> +            };
+>> +            };
+> 
+> Fix indentation.
+>
+Sure
 
-No, not like this. The above you've removed needs to be
-
-	if (cpu_has(c, X86_FEATURE_NULL_SEL_CLR_BASE))
-		return;
-
-so that you exit early.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+>> +    };
+>> +...
+> 
+> Best regards,
+> Krzysztof
+> 
+Regards,
+Naresh
