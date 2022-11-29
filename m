@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B62863C6CC
+	by mail.lfdr.de (Postfix) with ESMTP id 871AF63C6CD
 	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 18:53:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236126AbiK2RxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 12:53:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49726 "EHLO
+        id S236402AbiK2RxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 12:53:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235850AbiK2RxJ (ORCPT
+        with ESMTP id S235974AbiK2RxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 29 Nov 2022 12:53:09 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE42E27140
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:53:06 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id z10-20020a170902ccca00b001898329db72so8226743ple.21
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:53:06 -0800 (PST)
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B6E2BB1A
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:53:08 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3d0465d32deso22732517b3.20
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 09:53:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=YQYMQ5TWIkasP9BJVVj6hmvyVoNhk7XnNn3h91+5VkA=;
-        b=frHEo0XtDqPZACEUQ2weEeovjiztTB9ysfaI29EV10g0HOFMziutKKGRFHrQmeSGNR
-         ECaDYAgpppOxjQzHeZk0tlAe6Bt8qy2w9DcMjVtSoiZPSs2bjSX4e/znHpyw6+uEGDxZ
-         66Gce8MvYf4swaRUAlv0aIDvTtBh9PN6Td1fp9uPIoo9k7j5Qr7EanUTXdDsPukVZBs1
-         vO+kUTp4LcwbdeAE6Yv+86QqdtNDj5IG4QxbbJbmT89u36G0sA61RT5c3zrhhsBgzmXt
-         DJMlvf6FZKMa4gWOn+q5HsW84njqECMFsKOXush90wluZAdoKklom1sSJfvjdqeVscCg
-         XZWA==
+        bh=TE8QWGQorC/1BoZc6tBunzgB7sNwcvzYphQolAm92kE=;
+        b=ZRkZwzRyxYLC7OVvXyieN2+DQai2f+Xfj7wfnj14FqduUWE2x5UnhV5Uk44DFCTOlc
+         +O4oLJWBjNswhNxYocIIR6JxaTkkESabsFIxEBhDrFYesv1N4TbE5msXjxeL05aK1o8V
+         qCLnVGyouPviLFQzR/b/E0Xen8uLPLQ7DHv6bJYWYxbBKBIFTI90O06d/9sIpbbK2+a+
+         vZmTuUgbcuQqO8kwq5vBYndxn1KmoJNSvcH5cJ9iQ63hjXawnfzi1VM5JY/UunfB3x3B
+         FPszD65HzSoRFhWChz55SBRKztztXe6bCM3W6R+jKR/oX5Q7gMt58A+caFQ0EQq6cSpp
+         cBDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YQYMQ5TWIkasP9BJVVj6hmvyVoNhk7XnNn3h91+5VkA=;
-        b=6Bjv3LdMoJoasEqZWRSpHARk57EyDtJkqlohJj1ZTBkdaR9sGTHSyXUxpiUQKLEEdE
-         b9KDH5/fspE5hwTBLUgeNCCaAPhZXDlW5RyUyOd4mJM3rQM+rSTKUS8RIinQgZKl+7PN
-         6IJ1+tV09SHcawLlFvW3HQgpBakp5VX0gmgSY8kYJqhfp5iEiEPMA/FB2PfCFGIHTR1M
-         Hn6bI92M8NQu3UNMZXLXuBWDSJ33Ww25Ax4WTeMiD3KsYtLPzq7ymP7KXl/FS70mbajh
-         K/L8KpPsNpiA+ZwOg3mMK+Bb0SerwC4N6H2daCn/K861H1DdM7xg3ynO2jzSEDTRT5Q6
-         vJrg==
-X-Gm-Message-State: ANoB5pmLKXzffo7869pnwTZOt9w72k8iX6p3NJIc6ufU58qP8rSnXdEt
-        4Alw7iaIpZysBALBfqW5LRg2eKiGl5w=
-X-Google-Smtp-Source: AA0mqf4PXOL23sfKTrTaOyhFFDDrf0McQzPnBCBetrWYrA4lfqAZM7skUAjsgPQ4amUvnkfsJVaMUCu/QnQ=
+        bh=TE8QWGQorC/1BoZc6tBunzgB7sNwcvzYphQolAm92kE=;
+        b=IyLtryFAxhMGOc+E1wgtCpdHomkVFaWlIMoKlY6/xFT3vmlnh0q+shCncrFsRGpUNX
+         8Q4iYmEkjcxy9IxJCCaZUUtNQulWy2JvOO7UXg/o0fRrOJt4KhTKMWiI4YVA4qiphKtF
+         cs3/KjAYKWDhAR9tivft+lf+XVmpeuEAlhs/WjxNihxIcMy0nMwMwOY96AsdYwyDvQt1
+         iGVDJf8W1uqfqLr8v1GKmLvJwm5qtgy549DSqy3x3LpNAqEVgv2h0OFGbS+hqq3emJtI
+         hCGwr0peSxLd5gRaYcMY39bdrBa7cjRE9YBnFIHsAKBkBCsE37hOC1727OhdM9mNDsnO
+         JDFg==
+X-Gm-Message-State: ANoB5pkLcpmp0q6edwZQ57mqq9OYJBiIkAlNgIr6UzgzYl1r3ZbSx92R
+        7P1GGPvyxtV/0Fg3GfVyiNVVsj+xn/o=
+X-Google-Smtp-Source: AA0mqf53GkAVWGl5pFphtF5KnD4Rh+dv3qIDHGkZOLbOZB0Cvo2PSPSnAuznsatL/GFRCwz+PzWqLeBACVs=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:6b89:b0:179:eaa8:9113 with SMTP id
- p9-20020a1709026b8900b00179eaa89113mr37921813plk.55.1669744386298; Tue, 29
- Nov 2022 09:53:06 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a81:af1b:0:b0:34d:15db:6195 with SMTP id
+ n27-20020a81af1b000000b0034d15db6195mr54721730ywh.240.1669744387838; Tue, 29
+ Nov 2022 09:53:07 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 29 Nov 2022 17:52:59 +0000
+Date:   Tue, 29 Nov 2022 17:53:00 +0000
 In-Reply-To: <20221129175300.4052283-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20221129175300.4052283-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221129175300.4052283-2-seanjc@google.com>
-Subject: [PATCH 1/2] KVM: selftests: Fix inverted "warning" in access tracking
- perf test
+Message-ID: <20221129175300.4052283-3-seanjc@google.com>
+Subject: [PATCH 2/2] KVM: selftests: Restore assert for non-nested VMs in
+ access tracking test
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -65,7 +65,7 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,40 +73,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Warn if the number of idle pages is greater than or equal to 10% of the
-total number of pages, not if the percentage of idle pages is less than
-10%.  The original code asserted that less than 10% of pages were still
-idle, but the check got inverted when the assert was converted to a
-warning.
+Restore the assert (on x86-64) that <10% of pages are still idle when NOT
+running as a nested VM in the access tracking test.  The original assert
+was converted to a "warning" to avoid false failures when running the
+test in a VM, but the non-nested case does not suffer from the same
+"infinite TLB size" issue.
 
-Opportunistically clean up the warning; selftests are 64-bit only, there
-is no need to use "%PRIu64" instead of "%lu".
+Using the HYPERVISOR flag isn't infallible as VMMs aren't strictly
+required to enumerate the "feature" in CPUID, but practically speaking
+anyone that is running KVM selftests in VMs is going to be using a VMM
+and hypervisor that sets the HYPERVISOR flag.
 
-Fixes: 6336a810db5c ("KVM: selftests: replace assertion with warning in access_tracking_perf_test")
+Cc: David Matlack <dmatlack@google.com>
 Cc: Emanuele Giuseppe Esposito <eesposit@redhat.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/access_tracking_perf_test.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ .../selftests/kvm/access_tracking_perf_test.c   | 17 ++++++++++++-----
+ .../selftests/kvm/include/x86_64/processor.h    |  1 +
+ 2 files changed, 13 insertions(+), 5 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-index 02d3587cab0a..d45ef319a68f 100644
+index d45ef319a68f..9f9503e40ca5 100644
 --- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
 +++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-@@ -185,10 +185,9 @@ static void mark_vcpu_memory_idle(struct kvm_vm *vm,
- 	 * happens, much more pages are cached there and guest won't see the
- 	 * "idle" bit cleared.
+@@ -46,6 +46,7 @@
+ #include "test_util.h"
+ #include "memstress.h"
+ #include "guest_modes.h"
++#include "processor.h"
+ 
+ /* Global variable used to synchronize all of the vCPU threads. */
+ static int iteration;
+@@ -180,15 +181,21 @@ static void mark_vcpu_memory_idle(struct kvm_vm *vm,
+ 	 * access tracking but low enough as to not make the test too brittle
+ 	 * over time and across architectures.
+ 	 *
+-	 * Note that when run in nested virtualization, this check will trigger
+-	 * much more frequently because TLB size is unlimited and since no flush
+-	 * happens, much more pages are cached there and guest won't see the
+-	 * "idle" bit cleared.
++	 * When running the guest as a nested VM, "warn" instead of asserting
++	 * as the TLB size is effectively unlimited and the KVM doesn't
++	 * explicitly flush the TLB when aging SPTEs.  As a result, more pages
++	 * are cached and the guest won't see the "idle" bit cleared.
  	 */
--	if (still_idle < pages / 10)
--		printf("WARNING: vCPU%d: Too many pages still idle (%" PRIu64
--		       "out of %" PRIu64 "), this will affect performance results"
--		       ".\n",
-+	if (still_idle >= pages / 10)
-+		printf("WARNING: vCPU%d: Too many pages still idle (%lu out of %lu), "
-+		       "this will affect performance results.\n",
+-	if (still_idle >= pages / 10)
++	if (still_idle >= pages / 10) {
++#ifdef __x86_64__
++		TEST_ASSERT(this_cpu_has(X86_FEATURE_HYPERVISOR),
++			    "vCPU%d: Too many pages still idle (%lu out of %lu)",
++			    vcpu_idx, still_idle, pages);
++#endif
+ 		printf("WARNING: vCPU%d: Too many pages still idle (%lu out of %lu), "
+ 		       "this will affect performance results.\n",
  		       vcpu_idx, still_idle, pages);
++	}
  
  	close(page_idle_fd);
+ 	close(pagemap_fd);
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+index 5d310abe6c3f..22852bd32d7b 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -94,6 +94,7 @@ struct kvm_x86_cpu_feature {
+ #define	X86_FEATURE_XSAVE		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 26)
+ #define	X86_FEATURE_OSXSAVE		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 27)
+ #define	X86_FEATURE_RDRAND		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 30)
++#define	X86_FEATURE_HYPERVISOR		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 31)
+ #define X86_FEATURE_PAE			KVM_X86_CPU_FEATURE(0x1, 0, EDX, 6)
+ #define	X86_FEATURE_MCE			KVM_X86_CPU_FEATURE(0x1, 0, EDX, 7)
+ #define	X86_FEATURE_APIC		KVM_X86_CPU_FEATURE(0x1, 0, EDX, 9)
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
