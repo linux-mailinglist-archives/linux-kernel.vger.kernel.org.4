@@ -2,85 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B660F63B6C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 01:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8D663B6CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 01:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234877AbiK2AuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 19:50:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
+        id S234790AbiK2Ayn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 19:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234652AbiK2AuR (ORCPT
+        with ESMTP id S233396AbiK2Ayj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 19:50:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F51010B79;
-        Mon, 28 Nov 2022 16:50:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D33BA61356;
-        Tue, 29 Nov 2022 00:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 23D32C433D6;
-        Tue, 29 Nov 2022 00:50:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669683015;
-        bh=gVh2g0Vi1FSHpyi0QX/3SGHx2knvHC+vTGRbDJ9Tg/0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=A2y0HV0WBuZHEV0GYJ/MZJ3NGO8o6Yo+3jHKTQJduA2LKrukDPICEN/IK/nEtp+E3
-         rQ0LRQ9BRTGh07oqSgpxIyhPOez6/vFgqBWtMz1oZWLbqnqHdOiR0wnNlb8fEZV8YN
-         2sHZrOKhxgO3/tfzRcAcJZz94WssYuB56mO9EL1E0IG0a/OEdGpeHY0ywmi9EG5XwT
-         HYsohvw0FVHddZgPMEu0hcrKIi+uQBvHOJqiTdfjnz/wDvLzsV+lEKkalWZId7PcGx
-         roLKVhT9cvYXs5klK94Quac1gzo1azLgffLlCFtAoT98CyZH0NP3euvHwK1DEqsYsb
-         uHREn/H7qO4zg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0128AE21EF6;
-        Tue, 29 Nov 2022 00:50:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 28 Nov 2022 19:54:39 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA59132BA7;
+        Mon, 28 Nov 2022 16:54:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669683278; x=1701219278;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=4P2+jl1RIyYOuHVHfl3LKEnthZGh8okJ/3m5N/abcaU=;
+  b=mv0eUFejlhHqmi48wjkhbZxd7n2qUEVnd/VcS7i/wSTBV3B92KaePOW9
+   +xFQNawG1eiZmktgVRS3/02RcyJIPtlIcjprNaWp88gLxfy2Te2mr1XWi
+   2wgGFiU0cgW5qvi9yjMyLnq3wtcXDrOYxVzYVH5/VZSnDjjcN7K6Z8Inq
+   5NSt5L3hLT+fTgctUi+REtD10jNkfEj4AjYGzDCqiZZVZHuaSlKkfXETI
+   ae+nEdfU5RHaxbMa0fhBUtz03nPJk228fcyuz8OFdBw6VejG9pThhlIBT
+   TpJDcBXQo2DaJsL3cOERuw7ReAbsAX5quNkN/x3d6CWYQEmWCy3Oh4io3
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="379248994"
+X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
+   d="scan'208";a="379248994"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 16:54:33 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="768248692"
+X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
+   d="scan'208";a="768248692"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 16:54:27 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Mina Almasry <almasrymina@google.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
+In-Reply-To: <CAHbLzkrmxyzH4R7a9sJQavrUyKCEiNYeA543+sdJLsgRPrwBwQ@mail.gmail.com>
+        (Yang Shi's message of "Mon, 28 Nov 2022 14:24:03 -0800")
+References: <20221122203850.2765015-1-almasrymina@google.com>
+        <Y35fw2JSAeAddONg@cmpxchg.org>
+        <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
+        <Y36XchdgTCsMP4jT@cmpxchg.org>
+        <874juonbmv.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <CAHbLzkrmxyzH4R7a9sJQavrUyKCEiNYeA543+sdJLsgRPrwBwQ@mail.gmail.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Tue, 29 Nov 2022 08:53:24 +0800
+Message-ID: <87a64ad1iz.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] riscv: Sync efi page table's kernel mappings before switching
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <166968301500.7047.6174959001069239033.git-patchwork-notify@kernel.org>
-Date:   Tue, 29 Nov 2022 00:50:15 +0000
-References: <20221121133303.1782246-1-alexghiti@rivosinc.com>
-In-Reply-To: <20221121133303.1782246-1-alexghiti@rivosinc.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     linux-riscv@lists.infradead.org, ardb@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, heinrich.schuchardt@canonical.com,
-        emil.renner.berthing@canonical.com, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Yang Shi <shy828301@gmail.com> writes:
 
-This patch was applied to riscv/linux.git (fixes)
-by Palmer Dabbelt <palmer@rivosinc.com>:
+> On Wed, Nov 23, 2022 at 9:52 PM Huang, Ying <ying.huang@intel.com> wrote:
+>>
+>> Hi, Johannes,
+>>
+>> Johannes Weiner <hannes@cmpxchg.org> writes:
+>> [...]
+>> >
+>> > The fallback to reclaim actually strikes me as wrong.
+>> >
+>> > Think of reclaim as 'demoting' the pages to the storage tier. If we
+>> > have a RAM -> CXL -> storage hierarchy, we should demote from RAM to
+>> > CXL and from CXL to storage. If we reclaim a page from RAM, it means
+>> > we 'demote' it directly from RAM to storage, bypassing potentially a
+>> > huge amount of pages colder than it in CXL. That doesn't seem right.
+>> >
+>> > If demotion fails, IMO it shouldn't satisfy the reclaim request by
+>> > breaking the layering. Rather it should deflect that pressure to the
+>> > lower layers to make room. This makes sure we maintain an aging
+>> > pipeline that honors the memory tier hierarchy.
+>>
+>> Yes.  I think that we should avoid to fall back to reclaim as much as
+>> possible too.  Now, when we allocate memory for demotion
+>> (alloc_demote_page()), __GFP_KSWAPD_RECLAIM is used.  So, we will trigger
+>> kswapd reclaim on lower tier node to free some memory to avoid fall back
+>> to reclaim on current (higher tier) node.  This may be not good enough,
+>> for example, the following patch from Hasan may help via waking up
+>> kswapd earlier.
+>
+> For the ideal case, I do agree with Johannes to demote the page tier
+> by tier rather than reclaiming them from the higher tiers. But I also
+> agree with your premature OOM concern.
+>
+>>
+>> https://lore.kernel.org/linux-mm/b45b9bf7cd3e21bca61d82dcd1eb692cd32c122c.1637778851.git.hasanalmaruf@fb.com/
+>>
+>> Do you know what is the next step plan for this patch?
+>>
+>> Should we do even more?
+>
+> In my initial implementation I implemented a simple throttle logic
+> when the demotion is not going to succeed if the demotion target has
+> not enough free memory (just check the watermark) to make migration
+> succeed without doing any reclamation. Shall we resurrect that?
 
-On Mon, 21 Nov 2022 14:33:03 +0100 you wrote:
-> The EFI page table is initially created as a copy of the kernel page table.
-> With VMAP_STACK enabled, kernel stacks are allocated in the vmalloc area:
-> if the stack is allocated in a new PGD (one that was not present at the
-> moment of the efi page table creation or not synced in a previous vmalloc
-> fault), the kernel will take a trap when switching to the efi page table
-> when the vmalloc kernel stack is accessed, resulting in a kernel panic.
-> 
-> [...]
+Can you share the link to your throttle patch?  Or paste it here?
 
-Here is the summary with links:
-  - riscv: Sync efi page table's kernel mappings before switching
-    https://git.kernel.org/riscv/c/3f105a742725
+> Waking kswapd sooner is fine to me, but it may be not enough, for
+> example, the kswapd may not keep up so remature OOM may happen on
+> higher tiers or reclaim may still happen. I think throttling the
+> reclaimer/demoter until kswapd makes progress could avoid both. And
+> since the lower tiers memory typically is quite larger than the higher
+> tiers, so the throttle should happen very rarely IMHO.
+>
+>>
+>> From another point of view, I still think that we can use falling back
+>> to reclaim as the last resort to avoid OOM in some special situations,
+>> for example, most pages in the lowest tier node are mlock() or too hot
+>> to be reclaimed.
+>>
+>> > So I'm hesitant to design cgroup controls around the current behavior.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Best Regards,
+Huang, Ying
