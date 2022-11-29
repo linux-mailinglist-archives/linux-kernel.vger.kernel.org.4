@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB0E63BEAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA6663BEAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 12:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbiK2LLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 06:11:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
+        id S233090AbiK2LLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 06:11:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232884AbiK2LLK (ORCPT
+        with ESMTP id S232970AbiK2LLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 06:11:10 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CBB265F
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:11:03 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id c10-20020a7bc84a000000b003cf81c2d3efso4589040wml.7
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:11:03 -0800 (PST)
+        Tue, 29 Nov 2022 06:11:15 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85FA10B64
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:11:10 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id c188-20020a25c0c5000000b006d8eba07513so13064033ybf.17
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 03:11:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=C35WM+rFOww9oANmi2XKIgD3lZZHmk9pCOYrcDGbk7A=;
-        b=sMaUlF+mKL0TN8tM/IH7nnj6EOZVAMDMNcq0DT6JcGOSAZaxnp5zeOKmanWdPq+0OO
-         uA4KllZNoS8cHkAd01MItYNXSfwQGrPUp62pGTiwX/UvECX50Ol7dtOk07Em3thbzAq9
-         z7aKGINXnQyT90Jpl1HyejJ5oZuOVnFHE3wPAeXQfXf4U1TUmtJQHKblwDr3UxwzhV/G
-         IZwSe585LTE0TscrmaMS0LBhYk6OkOh7DmYuOWYy86Lznsc/W2cAHOy6ydQWb+vcz+QL
-         t4IIctSup2WnNTryME2HywbK+ezh5dvN5PIGlSzAMWZc80OzSQHm1QdTROKqCcRTnFFG
-         0ADg==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XGkUDP29a4yBSoWuYgHMkH94AykgrslaPfp+GvPTOqc=;
+        b=Ub3H3IpKDBQJkHIiWOO0oyGDX+cqdRog00hqEGvkod9f856fH7xjr+j5QUH5e74qYC
+         AhSAlnLtUAA2RarZ2+vyhFqrtn4wywNzudg5dX47CzSzMp3s/vyMSHxn7IiR3IrS+5kV
+         +EqcmNtB9J+B9uLZRr5f6UU/waAGzQra9MeZEocLmvAn7R9emgB2bNuC7hT3cXcjm/Tb
+         9aBhEstoB7keQQrVBbGWp88WHXKyDki/PhaEGzno6dJ0Cbo1iyEt8OgbHwgE3S2iQFP8
+         0a6wcmxbBbfYQTVgBrwIknFN22kMKCGS3ELr9jDS8rdwM0jLnG3iFTIU8JR+TTj51sl9
+         cqkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C35WM+rFOww9oANmi2XKIgD3lZZHmk9pCOYrcDGbk7A=;
-        b=A86ua2WMC55O+Qe1oGVqfk+JIQ4hHhg1A8F7NiFn2iVmoJFzezoWo8+eMSn9GWLZm6
-         Pm52gRE0sCK3ddwiNnXZh865cuwbKM3xqvVT2RxD81VdFcI5LKlWuVr+Fc/Z1+leH93H
-         i5x07pM7Di7Z8zKfclhm8aPMKuIj0NcsOb5NrraJR1Hv2T2oGa/9wE6WbGZNmQ/qyNkX
-         AtrGG1zdVESS2HfXL+uSt2K/8YFL/CaCYQvR+heceTgkq1doZN1Zjjuyjq38OQJ5BbC9
-         D1Q8j/qAERdsXKYlYMtsO+cvc6mRX2VjHQWVm+1tGy+4M86aTVL2C5YmQf3kouUtmV/+
-         slew==
-X-Gm-Message-State: ANoB5pmrWTK2KQYCZECHm3lzh9WrWBeTyMirlHZkAhIdu79F3RVtXPc7
-        CyXYnyd9S17baO6BU09rhOd6PEHzKVCj5R/unw==
-X-Google-Smtp-Source: AA0mqf7EIncJyBJOxt2LLSBe3uzNCWJM3+Uc6c4siivX4wgOYxrFeJVGCxzityPd80jWhV3JQBsiQ44rEKlAN3xL/g==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XGkUDP29a4yBSoWuYgHMkH94AykgrslaPfp+GvPTOqc=;
+        b=41iuPBbMqXcNF6DsnhKQSRuTC1odRRsfV5IbkelW21EXGOkqqnpOuQCJYtKhBIW+8X
+         O9jHKUZi+rCpIerjWLNHTqJAFbOh5MjvrfOy8NS2a2ixKUQsmhmqrfdJosl92iFhG+c/
+         4rQ3NZ7gu8apyjA3Srr86SOqXcsziPyWXa2FtXZurtkC97mIdOOeAaUO9n0g8cqJ3DPJ
+         wgQstbvyIcedMq3qHSPJaZQOzUXkoaVb5cBshBOSjXJXiycgwv+fByi8NTQjRy5MJA7E
+         oml/60m246UEP1rkhDdH0TLWsbdQgN2+LKEsI2Jm3yngU8P3KiFGePd1QzIB6WBmFvDc
+         oG9g==
+X-Gm-Message-State: ANoB5pml3m6nr3DAOikah8GcW77IBaiizy8TfclHBXwVp9vWMbLE/Io7
+        gpKr8R46Vsl9F6b/LOCeAC2wIglr6275n9BNMg==
+X-Google-Smtp-Source: AA0mqf6WvtwLJ16U0bJUzIbVMITdvidXn3Elwjfvzuml5qv13d57eLuJcjx5GfrpC7NxYwS4xXgp1H3Gb73baaYCfA==
 X-Received: from peternewman10.zrh.corp.google.com ([2a00:79e0:9d:6:e398:2261:c909:b359])
- (user=peternewman job=sendgmr) by 2002:a05:6000:1d92:b0:241:6e0a:bfe6 with
- SMTP id bk18-20020a0560001d9200b002416e0abfe6mr26088628wrb.34.1669720262242;
- Tue, 29 Nov 2022 03:11:02 -0800 (PST)
-Date:   Tue, 29 Nov 2022 12:10:53 +0100
+ (user=peternewman job=sendgmr) by 2002:a0d:f545:0:b0:377:5ad7:1c9a with SMTP
+ id e66-20020a0df545000000b003775ad71c9amr6149710ywf.306.1669720269444; Tue,
+ 29 Nov 2022 03:11:09 -0800 (PST)
+Date:   Tue, 29 Nov 2022 12:10:54 +0100
+In-Reply-To: <20221129111055.953833-1-peternewman@google.com>
 Mime-Version: 1.0
+References: <20221129111055.953833-1-peternewman@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221129111055.953833-1-peternewman@google.com>
-Subject: [PATCH v4 0/2] x86/resctrl: Fix task CLOSID update race
+Message-ID: <20221129111055.953833-2-peternewman@google.com>
+Subject: [PATCH v4 1/2] x86/resctrl: Update task closid/rmid with task_call_func()
 From:   Peter Newman <peternewman@google.com>
 To:     reinette.chatre@intel.com, fenghua.yu@intel.com
 Cc:     bp@alien8.de, derkling@google.com, eranian@google.com,
@@ -69,47 +71,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette, Fenghua,
+When the user moves a running task to a new rdtgroup using the tasks
+file interface, the resulting change in CLOSID/RMID must be immediately
+propagated to the PQR_ASSOC MSR on the task's CPU.
 
-I've fixed the wording in changelogs and code comments throughout and
-clarified the explanations as Reinette had requested.
+It is possible for a task to wake up or migrate while it is being moved
+to a new group. If __rdtgroup_move_task() fails to observe that a task
+has begun running or misses that it migrated to a new CPU, the task will
+continue to use the old CLOSID or RMID until it switches in again.
 
-The patch series addresses the IPI race we discussed in the container
-move RFD thread[1]. The changelog in the patches should also provide a
-good description.
+__rdtgroup_move_task() assumes that if the task migrates off of its CPU
+before it can IPI the task, then the task has already observed the
+updated CLOSID/RMID. Because this is done locklessly and an x86 CPU can
+delay stores until after loads, the following incorrect scenarios are
+possible:
 
-Updates in v4:
- - Reorder the patches so that justification for sending more IPIs can
-   reference the patch fixing __rdtgroup_move_task().
- - Correct tense of wording used in changelog and comments
-Updates in v3:
- - Split the handling of multi-task and single-task operations into
-   separate patches, now that they're handled differently.
- - Clarify justification in the commit message, including moving some of
-   it out of inline code comment.
-Updates in v2:
- - Following Reinette's suggestion: use task_call_func() for single
-   task, IPI broadcast for group movements.
- - Rebased to v6.1-rc4
+ 1. __rdtgroup_move_task() stores the new closid and rmid in
+    the task structure after it loads task_curr() and task_cpu().
+ 2. resctrl_sched_in() loads t->{closid,rmid} before the calling context
+    switch stores new task_curr() and task_cpu() values.
 
-v1: https://lore.kernel.org/lkml/20221103141641.3055981-1-peternewman@google.com/
-v2: https://lore.kernel.org/lkml/20221110135346.2209839-1-peternewman@google.com/
-v3: https://lore.kernel.org/lkml/20221115141953.816851-1-peternewman@google.com/
+Use task_call_func() in __rdtgroup_move_task() to serialize updates to
+the closid and rmid fields in the task_struct with context switch.
 
-Thanks!
--Peter
+Signed-off-by: Peter Newman <peternewman@google.com>
+Reviewed-by: James Morse <james.morse@arm.com>
+---
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 78 ++++++++++++++++----------
+ 1 file changed, 47 insertions(+), 31 deletions(-)
 
-[1] https://lore.kernel.org/all/CALPaoCg2-9ARbK+MEgdvdcjJtSy_2H6YeRkLrT97zgy8Aro3Vg@mail.gmail.com/
-
-Peter Newman (2):
-  x86/resctrl: Update task closid/rmid with task_call_func()
-  x86/resctrl: IPI all online CPUs for group updates
-
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 130 ++++++++++++-------------
- 1 file changed, 60 insertions(+), 70 deletions(-)
-
-
-base-commit: eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
---
+diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+index e5a48f05e787..59b7ffcd53bb 100644
+--- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
++++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+@@ -528,6 +528,31 @@ static void rdtgroup_remove(struct rdtgroup *rdtgrp)
+ 	kfree(rdtgrp);
+ }
+ 
++static int update_locked_task_closid_rmid(struct task_struct *t, void *arg)
++{
++	struct rdtgroup *rdtgrp = arg;
++
++	/*
++	 * Although task_call_func() serializes the writes below with the paired
++	 * reads in resctrl_sched_in(), resctrl_sched_in() still needs
++	 * READ_ONCE() due to rdt_move_group_tasks(), so use WRITE_ONCE() here
++	 * to conform.
++	 */
++	if (rdtgrp->type == RDTCTRL_GROUP) {
++		WRITE_ONCE(t->closid, rdtgrp->closid);
++		WRITE_ONCE(t->rmid, rdtgrp->mon.rmid);
++	} else if (rdtgrp->type == RDTMON_GROUP) {
++		WRITE_ONCE(t->rmid, rdtgrp->mon.rmid);
++	}
++
++	/*
++	 * If the task is current on a CPU, the PQR_ASSOC MSR needs to be
++	 * updated to make the resource group go into effect. If the task is not
++	 * current, the MSR will be updated when the task is scheduled in.
++	 */
++	return task_curr(t);
++}
++
+ static void _update_task_closid_rmid(void *task)
+ {
+ 	/*
+@@ -538,10 +563,24 @@ static void _update_task_closid_rmid(void *task)
+ 		resctrl_sched_in();
+ }
+ 
+-static void update_task_closid_rmid(struct task_struct *t)
++static void update_task_closid_rmid(struct task_struct *t,
++				    struct rdtgroup *rdtgrp)
+ {
+-	if (IS_ENABLED(CONFIG_SMP) && task_curr(t))
+-		smp_call_function_single(task_cpu(t), _update_task_closid_rmid, t, 1);
++	/*
++	 * Serialize the closid and rmid update with context switch. If
++	 * task_call_func() indicates that the task was running during
++	 * update_locked_task_closid_rmid(), then interrupt it.
++	 */
++	if (task_call_func(t, update_locked_task_closid_rmid, rdtgrp) &&
++	    IS_ENABLED(CONFIG_SMP))
++		/*
++		 * If the task has migrated away from the CPU indicated by
++		 * task_cpu() below, then it has already switched in on the
++		 * new CPU using the updated closid and rmid and the call below
++		 * is unnecessary, but harmless.
++		 */
++		smp_call_function_single(task_cpu(t),
++					 _update_task_closid_rmid, t, 1);
+ 	else
+ 		_update_task_closid_rmid(t);
+ }
+@@ -557,39 +596,16 @@ static int __rdtgroup_move_task(struct task_struct *tsk,
+ 		return 0;
+ 
+ 	/*
+-	 * Set the task's closid/rmid before the PQR_ASSOC MSR can be
+-	 * updated by them.
+-	 *
+-	 * For ctrl_mon groups, move both closid and rmid.
+ 	 * For monitor groups, can move the tasks only from
+ 	 * their parent CTRL group.
+ 	 */
+-
+-	if (rdtgrp->type == RDTCTRL_GROUP) {
+-		WRITE_ONCE(tsk->closid, rdtgrp->closid);
+-		WRITE_ONCE(tsk->rmid, rdtgrp->mon.rmid);
+-	} else if (rdtgrp->type == RDTMON_GROUP) {
+-		if (rdtgrp->mon.parent->closid == tsk->closid) {
+-			WRITE_ONCE(tsk->rmid, rdtgrp->mon.rmid);
+-		} else {
+-			rdt_last_cmd_puts("Can't move task to different control group\n");
+-			return -EINVAL;
+-		}
++	if (rdtgrp->type == RDTMON_GROUP &&
++	    rdtgrp->mon.parent->closid != tsk->closid) {
++		rdt_last_cmd_puts("Can't move task to different control group\n");
++		return -EINVAL;
+ 	}
+ 
+-	/*
+-	 * Ensure the task's closid and rmid are written before determining if
+-	 * the task is current that will decide if it will be interrupted.
+-	 */
+-	barrier();
+-
+-	/*
+-	 * By now, the task's closid and rmid are set. If the task is current
+-	 * on a CPU, the PQR_ASSOC MSR needs to be updated to make the resource
+-	 * group go into effect. If the task is not current, the MSR will be
+-	 * updated when the task is scheduled in.
+-	 */
+-	update_task_closid_rmid(tsk);
++	update_task_closid_rmid(tsk, rdtgrp);
+ 
+ 	return 0;
+ }
+-- 
 2.38.1.584.g0f3c55d4c2-goog
 
