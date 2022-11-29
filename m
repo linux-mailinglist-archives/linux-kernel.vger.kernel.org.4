@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794FF63BB66
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:21:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D8C63BB68
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 09:22:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbiK2IVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 03:21:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34734 "EHLO
+        id S230186AbiK2IVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 03:21:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiK2IVm (ORCPT
+        with ESMTP id S230160AbiK2IVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 03:21:42 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967B456D6C
+        Tue, 29 Nov 2022 03:21:43 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F5F56EFB
         for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:21:41 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id w27-20020a05660205db00b006dbce8dc263so7979407iox.16
+Received: by mail-il1-f197.google.com with SMTP id h20-20020a056e021d9400b00300581edaa5so11329952ila.12
         for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 00:21:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=hzPbScZkJK24zoKRKbiJijafF327q2f4jJuAvi3gIHM=;
-        b=X0c3OuFMGwmuukyXFIfFVL9TBcccVhckU0VgbD9XgEz8DZ0bzGzdPx8K3JspfCpO+D
-         o1UwnyyklvPoEY5vpz+YOmPGSmTXTUvcJAa6b8uHG7mQPWaxR26MKBAtdQm3e00in2w+
-         LRA0C0xTyaFzH3zO2l5oHJrB1kjzfcYmttKjQsFMnPOGS9ObcwoY/E8obQxQ+GMpupxo
-         LX11SdDzT1bHkO2ILMf3Du6P7EKqGVHsfTajSvii0D6M8ajNpgju4Y1ebNbRMScK8eUf
-         rEHx9AbzioY2drPpo1YR4nbnTSAKSHns+6t86lrFHHdxCR8D7NGVqyEWul4KkIncZhnA
-         qefQ==
-X-Gm-Message-State: ANoB5pm9zFMzc6k8DcuGPo46ARErQBTTx2qLxXL0x2Z0W9uNchcNt0ec
-        cUe1woZAO5kSz5JITKtolHtLFgcn//N0JSoq+ZiXUeoV7BDH
-X-Google-Smtp-Source: AA0mqf7d03KkO4hacO3BZKE9g+b8vlxwz2S8JxvxoHBRQ509wRiRdJXsH6yOu372TclvZ3yu4QvThMpIbu7vI2TZ8izzSbsRDQfP
+        bh=MpQYMLpt/bycVlWC6U8JGOQTt/3IYzJ8U4wO7awntLY=;
+        b=2ncSdXPfrjtSZiPCeZ6OL/sucPBLQKvdhqIxchqrFisdhD4uXomX3NmWM2gbPwX0ij
+         5+jdN4EH5/5pi5434EeysLLUSAw04tu4LiG1ETMQo1wY5IxgYa0SNXfhKb89Ki/JU2/A
+         aO0gVS1ItlI1yp1ZHauhA9rOTSEY0cJfgsrpDy/C6vIcxIQNrGlW4v998hVmizpQ5nAQ
+         JGtTg6eQp1vjGGGz7BQDWlltYDf/fkTHF1qUW/WZ9do43LjM/9UOfL+GI91dVnwyp1zs
+         NuG6sdpDyFZpQ4XhDe8scNe03QIBioEzlU8yxWIXRgocwcAkaTcMFvSOj2vXJ4oiZvJy
+         cpuQ==
+X-Gm-Message-State: ANoB5pm8GLgp12BU8IBFwl/mqKpoArkGcj3Yw67ON/SW4+LWDgv3LQKm
+        UZNMxMSahqF/8aBaz6KmFw+Yz1f91X/8gV4izKJIgGGMNkSO
+X-Google-Smtp-Source: AA0mqf7WLmXhj9IqbhUs6n8OcuccA/0NgC495qCxcagg8ZLcYU0WaYL1mRbrkgoU0K/APVJHXa01Bj8Os0xBuPxHa64xB2fw6S2J
 MIME-Version: 1.0
-X-Received: by 2002:a02:194a:0:b0:375:81f:bcdf with SMTP id
- b71-20020a02194a000000b00375081fbcdfmr18617980jab.131.1669710100940; Tue, 29
- Nov 2022 00:21:40 -0800 (PST)
-Date:   Tue, 29 Nov 2022 00:21:40 -0800
+X-Received: by 2002:a92:db4b:0:b0:302:5575:9e46 with SMTP id
+ w11-20020a92db4b000000b0030255759e46mr24667075ilq.41.1669710101191; Tue, 29
+ Nov 2022 00:21:41 -0800 (PST)
+Date:   Tue, 29 Nov 2022 00:21:41 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000071ce7305ee97ad81@google.com>
-Subject: [syzbot] BUG: sleeping function called from invalid context in __bread_gfp
-From:   syzbot <syzbot+5869fb71f59eac925756@syzkaller.appspotmail.com>
-To:     hch@infradead.org, linux-kernel@vger.kernel.org,
+Message-ID: <00000000000075a52e05ee97ad74@google.com>
+Subject: [syzbot] WARNING: kmalloc bug in btrfs_ioctl_send
+From:   syzbot <syzbot+4376a9a073770c173269@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
@@ -57,97 +58,73 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    9e46a7996732 Add linux-next specific files for 20221125
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=16c56e75880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=11e19c740a0b2926
-dashboard link: https://syzkaller.appspot.com/bug?extid=5869fb71f59eac925756
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1620f153880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1623a2c3880000
+HEAD commit:    6d464646530f Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=176a733d880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=54b747d981acc7b7
+dashboard link: https://syzkaller.appspot.com/bug?extid=4376a9a073770c173269
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=134c3d03880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13237ca1880000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/758d818cf966/disk-9e46a799.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f7c8696b40a5/vmlinux-9e46a799.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/810f9750b87f/bzImage-9e46a799.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/961b0d30df48/mount_1.gz
+disk image: https://storage.googleapis.com/syzbot-assets/d75f5f77b3a3/disk-6d464646.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9382f86e4d95/vmlinux-6d464646.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/cf2b5f0d51dd/Image-6d464646.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/aa0da055eccb/mount_0.gz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5869fb71f59eac925756@syzkaller.appspotmail.com
+Reported-by: syzbot+4376a9a073770c173269@syzkaller.appspotmail.com
 
-loop0: rw=0, sector=13466417, nr_sectors = 1 limit=128
-Buffer I/O error on dev loop0, logical block 13466417, async page read
-syz-executor314: attempt to access beyond end of device
-loop0: rw=0, sector=8073605, nr_sectors = 1 limit=128
-Buffer I/O error on dev loop0, logical block 8073605, async page read
-BUG: sleeping function called from invalid context at fs/buffer.c:1331
-in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 5297, name: syz-executor314
-preempt_count: 1, expected: 0
-RCU nest depth: 0, expected: 0
-3 locks held by syz-executor314/5297:
- #0: ffff88802a7b3f20 (&iint->mutex){+.+.}-{3:3}, at: process_measurement+0x3ab/0x18b0 security/integrity/ima/ima_main.c:260
- #1: ffff888076a08328 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
- #1: ffff888076a08328 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: page_cache_ra_unbounded+0x153/0x5e0 mm/readahead.c:226
- #2: ffffffff8cb64d98 (pointers_lock){.+.+}-{2:2}, at: get_block+0x16b/0x1580 fs/sysv/itree.c:217
-Preemption disabled at:
-[<0000000000000000>] 0x0
-CPU: 1 PID: 5297 Comm: syz-executor314 Not tainted 6.1.0-rc6-next-20221125-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- __might_resched.cold+0x222/0x26b kernel/sched/core.c:9991
- __getblk_gfp fs/buffer.c:1331 [inline]
- __bread_gfp+0x40/0x330 fs/buffer.c:1367
- sb_bread include/linux/buffer_head.h:338 [inline]
- get_branch+0x2cd/0x640 fs/sysv/itree.c:104
- get_block+0x188/0x1580 fs/sysv/itree.c:218
- block_read_full_folio+0x35b/0x9d0 fs/buffer.c:2271
- read_pages+0x9fb/0xd40 mm/readahead.c:181
- page_cache_ra_unbounded+0x477/0x5e0 mm/readahead.c:270
- do_page_cache_ra mm/readahead.c:300 [inline]
- page_cache_ra_order+0x6ec/0xa00 mm/readahead.c:560
- ondemand_readahead+0x6b3/0x1000 mm/readahead.c:682
- page_cache_sync_ra+0x1c9/0x200 mm/readahead.c:709
- page_cache_sync_readahead include/linux/pagemap.h:1210 [inline]
- filemap_get_pages+0x2ca/0x16b0 mm/filemap.c:2599
- filemap_read+0x315/0xc00 mm/filemap.c:2693
- generic_file_read_iter+0x3b4/0x5a0 mm/filemap.c:2839
- __kernel_read+0x2ca/0x7c0 fs/read_write.c:428
- integrity_kernel_read+0x7f/0xb0 security/integrity/iint.c:199
- ima_calc_file_hash_tfm+0x2aa/0x3b0 security/integrity/ima/ima_crypto.c:485
- ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
- ima_calc_file_hash+0x195/0x4a0 security/integrity/ima/ima_crypto.c:573
- ima_collect_measurement+0x538/0x650 security/integrity/ima/ima_api.c:292
- process_measurement+0xd23/0x18b0 security/integrity/ima/ima_main.c:339
- ima_file_check+0xb0/0x100 security/integrity/ima/ima_main.c:519
- do_open fs/namei.c:3559 [inline]
- path_openat+0x15f1/0x2a50 fs/namei.c:3714
- do_filp_open+0x1ba/0x410 fs/namei.c:3741
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_open fs/open.c:1334 [inline]
- __se_sys_open fs/open.c:1330 [inline]
- __x64_sys_open+0x11d/0x1c0 fs/open.c:1330
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fcd097ed769
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff5d2c1498 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 0030656c69662f2e RCX: 00007fcd097ed769
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000000
-RBP: 00007fcd097ad000 R08: 0000000000009e07 R09: 0000000000000000
-R10: 00007fff5d2c1360 R11: 0000000000000246 R12: 00007fcd097ad090
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-syz-executor314: attempt to access beyond end of device
-loop0: rw=0, sector=3245518, nr_sectors = 1 limit=128
-Buffer I/O error on dev loop0, logical block 3245518, async page read
-syz-executor314: attempt to access beyond end of device
-loop0: rw=0, sector=8769403, nr_sectors = 1 limit=128
-Buffer I/O error on dev loop0, logical block 8769403, async page read
+BTRFS info (device loop0): using free space tree
+BTRFS info (device loop0): enabling ssd optimizations
+BTRFS info (device loop0): checking UUID tree
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3072 at mm/util.c:596 kvmalloc_node+0x19c/0x1a4
+Modules linked in:
+CPU: 1 PID: 3072 Comm: syz-executor189 Not tainted 6.1.0-rc6-syzkaller-32662-g6d464646530f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : kvmalloc_node+0x19c/0x1a4
+lr : kvmalloc_node+0x198/0x1a4 mm/util.c:596
+sp : ffff800012f13c40
+x29: ffff800012f13c50 x28: ffff0000cbb01000 x27: 0000000000000000
+x26: 0000000000000000 x25: ffff0000c97a8a10 x24: ffff0000c6fa6400
+x23: 0000000000000000 x22: ffff8000091f72d8 x21: 000caf0ca5eccda0
+x20: 00000000ffffffff x19: 0000000000000dc0 x18: 0000000000000010
+x17: ffff80000c0f0b68 x16: ffff80000dbe6158 x15: ffff0000c43a1a40
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c43a1a40
+x11: ff808000084361e8 x10: 0000000000000000 x9 : ffff8000084361e8
+x8 : ffff0000c43a1a40 x7 : ffff800008578874 x6 : 0000000000000000
+x5 : 00000000ffffffff x4 : 0000000000012dc0 x3 : 0010000000000000
+x2 : 000caf0ca5eccda0 x1 : 0000000000000000 x0 : 0000000000000000
+Call trace:
+ kvmalloc_node+0x19c/0x1a4
+ kvmalloc include/linux/slab.h:706 [inline]
+ kvmalloc_array include/linux/slab.h:724 [inline]
+ kvcalloc include/linux/slab.h:729 [inline]
+ btrfs_ioctl_send+0x64c/0xed0 fs/btrfs/send.c:7915
+ _btrfs_ioctl_send+0x188/0x218 fs/btrfs/ioctl.c:5233
+ btrfs_ioctl+0x5c0/0xa64
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+irq event stamp: 82706
+hardirqs last  enabled at (82705): [<ffff80000844b028>] mod_lruvec_page_state include/linux/vmstat.h:563 [inline]
+hardirqs last  enabled at (82705): [<ffff80000844b028>] __kmalloc_large_node+0x108/0x188 mm/slab_common.c:1099
+hardirqs last disabled at (82706): [<ffff80000c07d8b4>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
+softirqs last  enabled at (82616): [<ffff80000801c38c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
+softirqs last disabled at (82614): [<ffff80000801c358>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
+---[ end trace 0000000000000000 ]---
 
 
 ---
