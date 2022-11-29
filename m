@@ -2,95 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C961C63B7A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 03:03:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE04B63B75E
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 02:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235182AbiK2CDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 21:03:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
+        id S235129AbiK2BoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 20:44:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235123AbiK2CDM (ORCPT
+        with ESMTP id S234897AbiK2BoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 21:03:12 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 524F0BE04
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 18:03:09 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Bx3+tdaIVjSuIBAA--.4566S3;
-        Tue, 29 Nov 2022 10:03:09 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxPuBUaIVjPdsdAA--.10463S6;
-        Tue, 29 Nov 2022 10:03:07 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 4/4] samples/kprobes: Add LoongArch support
-Date:   Tue, 29 Nov 2022 10:02:54 +0800
-Message-Id: <1669687374-16432-5-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1669687374-16432-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1669687374-16432-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8AxPuBUaIVjPdsdAA--.10463S6
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWrZw4rWrW5CF1fJw1xZFWDJwb_yoW8JF1fpF
-        n0y3W5t3yFyw13WFW3Jayvgry0yryjkay8u3ykC34Yya429ry5AF1rKayjyw4kur90qF43
-        tr1FvryUGF1xZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b2xYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
-        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-        M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4
-        xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVW8JVWx
-        JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I
-        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
-        xVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
-        AFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
-        cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r
-        4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcHUqUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Nov 2022 20:44:16 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B7455BB;
+        Mon, 28 Nov 2022 17:44:16 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NLlVF0cYSzHwFj;
+        Tue, 29 Nov 2022 09:43:33 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 29 Nov 2022 09:44:14 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <bvanassche@acm.org>, <jgg@ziepe.ca>, <leon@kernel.org>,
+        <dennis.dalessandro@cornelisnetworks.com>
+CC:     <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <andriy.shevchenko@linux.intel.com>, <bart.vanassche@wdc.com>,
+        <easwar.hariharan@intel.com>, Wang Yufen <wangyufen@huawei.com>
+Subject: [PATCH v4 1/2] RDMA/hfi1: Fix error return code in parse_platform_config()
+Date:   Tue, 29 Nov 2022 10:04:18 +0800
+Message-ID: <1669687459-14180-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add LoongArch specific info in handler_pre() and handler_post().
+In the previous while loop, "ret" may be assigned zero, so the error
+return code may be incorrectly set to 0 instead of -EINVAL.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Fixes: 97167e813415 ("staging/rdma/hfi1: Tune for unknown channel if configuration file is absent")
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
 ---
- samples/kprobes/kprobe_example.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/infiniband/hw/hfi1/firmware.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/samples/kprobes/kprobe_example.c b/samples/kprobes/kprobe_example.c
-index fd346f5..ef44c61 100644
---- a/samples/kprobes/kprobe_example.c
-+++ b/samples/kprobes/kprobe_example.c
-@@ -55,6 +55,10 @@ static int __kprobes handler_pre(struct kprobe *p, struct pt_regs *regs)
- 	pr_info("<%s> p->addr, 0x%p, ip = 0x%lx, flags = 0x%lx\n",
- 		p->symbol_name, p->addr, regs->psw.addr, regs->flags);
- #endif
-+#ifdef CONFIG_LOONGARCH
-+	pr_info("<%s> p->addr = 0x%p, era = 0x%lx, estat = 0x%lx\n",
-+		p->symbol_name, p->addr, regs->csr_era, regs->csr_estat);
-+#endif
+diff --git a/drivers/infiniband/hw/hfi1/firmware.c b/drivers/infiniband/hw/hfi1/firmware.c
+index 1d77514..9a08c1a 100644
+--- a/drivers/infiniband/hw/hfi1/firmware.c
++++ b/drivers/infiniband/hw/hfi1/firmware.c
+@@ -1730,7 +1730,7 @@ int parse_platform_config(struct hfi1_devdata *dd)
+ 	u32 *ptr = NULL;
+ 	u32 header1 = 0, header2 = 0, magic_num = 0, crc = 0, file_length = 0;
+ 	u32 record_idx = 0, table_type = 0, table_length_dwords = 0;
+-	int ret = -EINVAL; /* assume failure */
++	int ret;
  
- 	/* A dump_stack() here will give a stack backtrace */
- 	return 0;
-@@ -92,6 +96,10 @@ static void __kprobes handler_post(struct kprobe *p, struct pt_regs *regs,
- 	pr_info("<%s> p->addr, 0x%p, flags = 0x%lx\n",
- 		p->symbol_name, p->addr, regs->flags);
- #endif
-+#ifdef CONFIG_LOONGARCH
-+	pr_info("<%s> p->addr = 0x%p, estat = 0x%lx\n",
-+		p->symbol_name, p->addr, regs->csr_estat);
-+#endif
- }
+ 	/*
+ 	 * For integrated devices that did not fall back to the default file,
+@@ -1743,6 +1743,7 @@ int parse_platform_config(struct hfi1_devdata *dd)
  
- static int __init kprobe_init(void)
+ 	if (!dd->platform_config.data) {
+ 		dd_dev_err(dd, "%s: Missing config file\n", __func__);
++		ret = -EINVAL;
+ 		goto bail;
+ 	}
+ 	ptr = (u32 *)dd->platform_config.data;
+@@ -1751,6 +1752,7 @@ int parse_platform_config(struct hfi1_devdata *dd)
+ 	ptr++;
+ 	if (magic_num != PLATFORM_CONFIG_MAGIC_NUM) {
+ 		dd_dev_err(dd, "%s: Bad config file\n", __func__);
++		ret = -EINVAL;
+ 		goto bail;
+ 	}
+ 
+@@ -1774,6 +1776,7 @@ int parse_platform_config(struct hfi1_devdata *dd)
+ 	if (file_length > dd->platform_config.size) {
+ 		dd_dev_info(dd, "%s:File claims to be larger than read size\n",
+ 			    __func__);
++		ret = -EINVAL;
+ 		goto bail;
+ 	} else if (file_length < dd->platform_config.size) {
+ 		dd_dev_info(dd,
+@@ -1794,6 +1797,7 @@ int parse_platform_config(struct hfi1_devdata *dd)
+ 			dd_dev_err(dd, "%s: Failed validation at offset %ld\n",
+ 				   __func__, (ptr - (u32 *)
+ 					      dd->platform_config.data));
++			ret = -EINVAL;
+ 			goto bail;
+ 		}
+ 
+@@ -1837,6 +1841,7 @@ int parse_platform_config(struct hfi1_devdata *dd)
+ 					   __func__, table_type,
+ 					   (ptr - (u32 *)
+ 					    dd->platform_config.data));
++				ret = -EINVAL;
+ 				goto bail; /* We don't trust this file now */
+ 			}
+ 			pcfgcache->config_tables[table_type].table = ptr;
+@@ -1856,6 +1861,7 @@ int parse_platform_config(struct hfi1_devdata *dd)
+ 					   __func__, table_type,
+ 					   (ptr -
+ 					    (u32 *)dd->platform_config.data));
++				ret = -EINVAL;
+ 				goto bail; /* We don't trust this file now */
+ 			}
+ 			pcfgcache->config_tables[table_type].table_metadata =
 -- 
-2.1.0
+1.8.3.1
 
