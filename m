@@ -2,404 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1EC363BAAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 08:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A02C763BAAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 08:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbiK2H1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 02:27:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
+        id S229704AbiK2H15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 02:27:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiK2H1t (ORCPT
+        with ESMTP id S229718AbiK2H1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 29 Nov 2022 02:27:49 -0500
-Received: from mail-m121145.qiye.163.com (mail-m121145.qiye.163.com [115.236.121.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6306463;
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0805658E;
         Mon, 28 Nov 2022 23:27:43 -0800 (PST)
-Received: from amadeus-VLT-WX0.lan (unknown [112.48.80.27])
-        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 69CF9800292;
-        Tue, 29 Nov 2022 15:27:39 +0800 (CST)
-From:   Chukun Pan <amadeus@jmu.edu.cn>
-To:     "David S . Miller" <davem@davemloft.net>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Wu <david.wu@rock-chips.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Chukun Pan <amadeus@jmu.edu.cn>
-Subject: [PATCH 2/2] ethernet: stmicro: stmmac: Add SGMII/QSGMII support for RK3568
-Date:   Tue, 29 Nov 2022 15:27:14 +0800
-Message-Id: <20221129072714.22880-2-amadeus@jmu.edu.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221129072714.22880-1-amadeus@jmu.edu.cn>
-References: <20221129072714.22880-1-amadeus@jmu.edu.cn>
+Received: by mail-lj1-x229.google.com with SMTP id n1so11133355ljg.3;
+        Mon, 28 Nov 2022 23:27:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7Dml/9oHSBXGehrKnQ+3841cy9PRAO3te2e2VG2uxHo=;
+        b=WZQgZtIUnwuDmYfEvqbeiYn1nnpt8Jglx/AnzAGEOmD+sBPAfVOx7BH15zZnCkaFMl
+         HsfeiHm9/eQ6O60b208LOFn9nADQLqwkGMqtaHo+Qp34bs5vHEy1Wn+8iNT1CY/vxQnT
+         yRyAUf1IRnaOXFfS2bmok/asWkH/qvsbOFM62HeHcLb/y6tNhp9iceyJTB8kl2oxDy4V
+         7YU8ps9ymdw8MpkkoE/FnLG2G7RYJkOSx7w7qKP9qH5kazV/v7GC6QsjsqxTx8MTx/i9
+         2OxhkE1helxVW1ZHPr1EjG+a2TKET/48S+nTqO4ihjn1TrUPCYvQjL15Hymo3ALiJLMt
+         LDPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7Dml/9oHSBXGehrKnQ+3841cy9PRAO3te2e2VG2uxHo=;
+        b=xJDeuY1dbYQsyfwXuCtuB2sF5b62B+eTHdMWhvAzsgyh4kQ61jhuHxs/+Yb5jTM0IN
+         E/muZt1hwEFm62EDkbrmmHEoKf/dWSxYl1Zi1DybbO6jCgKhnngPgjDhF/XMdLz2LkFV
+         Nc9TgIVvxnN4JU9OqW2o/cqNUO8lMq2Uo2JJiBanSH2R2EYOls9vlvOHtDjz2hyFCwv2
+         qeCOO1pP6HNPzHkmpsv9uyTVRGfqXVkKYXSZGKDTj6QdCzYbfROF2jB2Vbb28xbi9pwX
+         TA6yVDX433n8QvqzqxnQIjSNy/UIo44zhlzZ7vfvjI5+h/aWsuLjUegwa3U1IM186Qbz
+         Xrag==
+X-Gm-Message-State: ANoB5pmFaPmItl2q8cchDoacs9u2jIpuzW6Ghc1db6wirK/LLxe9RaH9
+        +JI/+GUSgxcYEWH7okbQk88=
+X-Google-Smtp-Source: AA0mqf71GEWjA8mSSRLO0geez5HHzxBweLm/s/a+C2ApS7gQ3ym3YutcxieyZEjK73o+1tKF8LLKyw==
+X-Received: by 2002:a2e:9789:0:b0:277:41d:6c1e with SMTP id y9-20020a2e9789000000b00277041d6c1emr17031603lji.330.1669706861528;
+        Mon, 28 Nov 2022 23:27:41 -0800 (PST)
+Received: from grain.localdomain ([5.18.253.97])
+        by smtp.gmail.com with ESMTPSA id s30-20020a05651c201e00b0026df5232c7fsm1453905ljo.42.2022.11.28.23.27.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 23:27:40 -0800 (PST)
+Received: by grain.localdomain (Postfix, from userid 1000)
+        id D07395A0020; Tue, 29 Nov 2022 10:27:39 +0300 (MSK)
+Date:   Tue, 29 Nov 2022 10:27:39 +0300
+From:   Cyrill Gorcunov <gorcunov@gmail.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrei Vagin <avagin@gmail.com>, kernel@collabora.com,
+        stable@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mm: set the vma flags dirty before testing if it is
+ mergeable
+Message-ID: <Y4W0axw0ZgORtfkt@grain>
+References: <20221122115007.2787017-1-usama.anjum@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCQhlNVhhJS01ISEIYH0tNSFUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpKSVVPQ1VDS1VJTFlXWRYaDxIVHRRZQVlPS0hVSklLQ05NVUpLS1VLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PEk6LSo6Kj0eChw8DjofCzdJ
-        LwIaCQ5VSlVKTU1CTEtNQ01LQ0pPVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWUpK
-        SVVPQ1VDS1VJTFlXWQgBWUFKSEpMTTcG
-X-HM-Tid: 0a84c248c6b5b03akuuu69cf9800292
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221122115007.2787017-1-usama.anjum@collabora.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Wu <david.wu@rock-chips.com>
+On Tue, Nov 22, 2022 at 04:50:07PM +0500, Muhammad Usama Anjum wrote:
+> The VM_SOFTDIRTY should be set in the vma flags to be tested if new
+> allocation should be merged in previous vma or not. With this patch,
+> the new allocations are merged in the previous VMAs.
 
-The gmac of RK3568 supports RGMII/SGMII/QSGMII interface.
-This patch adds the remaining SGMII/QSGMII support.
+Hi Muhammad! Thanks for the patch and sorry for late reply. Here is a moment
+I don't understand -- when we test for vma merge we use is_mergeable_vma() helper
+which excludes VM_SOFTDIRTY flag from comarision, so setting this flag earlier
+should not change the behaviour. Or I miss something obvious?
 
-Run-tested-on: Ariaboard Photonicat (GMAC0 SGMII)
+> I've tested it by reverting the commit 34228d473efe ("mm: ignore
+> VM_SOFTDIRTY on VMA merging") and after adding this following patch,
+> I'm seeing that all the new allocations done through mmap() are merged
+> in the previous VMAs. The number of VMAs doesn't increase drastically
+> which had contributed to the crash of gimp. If I run the same test after
+> reverting and not including this patch, the number of VMAs keep on
+> increasing with every mmap() syscall which proves this patch.
 
-Signed-off-by: David Wu <david.wu@rock-chips.com>
-[rebase, rewrite commit message]
-Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
----
- .../net/ethernet/stmicro/stmmac/dwmac-rk.c    | 210 +++++++++++++++++-
- 1 file changed, 207 insertions(+), 3 deletions(-)
+The is_mergeable_vma is key function here, either we should setup VM_SOFTDIRTY
+explicitly as your patch does and drop VM_SOFTDIRTY from is_mergeable_vma,
+or we continue excluding this flag in such low level helper as is.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-index 6656d76b6766..c65cb92bb630 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-@@ -11,6 +11,7 @@
- #include <linux/bitops.h>
- #include <linux/clk.h>
- #include <linux/phy.h>
-+#include <linux/phy/phy.h>
- #include <linux/of_net.h>
- #include <linux/gpio.h>
- #include <linux/module.h>
-@@ -30,6 +31,8 @@ struct rk_gmac_ops {
- 	void (*set_to_rgmii)(struct rk_priv_data *bsp_priv,
- 			     int tx_delay, int rx_delay);
- 	void (*set_to_rmii)(struct rk_priv_data *bsp_priv);
-+	void (*set_to_sgmii)(struct rk_priv_data *bsp_priv);
-+	void (*set_to_qsgmii)(struct rk_priv_data *bsp_priv);
- 	void (*set_rgmii_speed)(struct rk_priv_data *bsp_priv, int speed);
- 	void (*set_rmii_speed)(struct rk_priv_data *bsp_priv, int speed);
- 	void (*set_clock_selection)(struct rk_priv_data *bsp_priv, bool input,
-@@ -60,6 +63,7 @@ struct rk_priv_data {
- 	struct clk *clk_mac_speed;
- 	struct clk *aclk_mac;
- 	struct clk *pclk_mac;
-+	struct clk *pclk_xpcs;
- 	struct clk *clk_phy;
- 
- 	struct reset_control *phy_reset;
-@@ -69,6 +73,7 @@ struct rk_priv_data {
- 
- 	struct regmap *grf;
- 	struct regmap *php_grf;
-+	struct regmap *xpcs;
- };
- 
- #define HIWORD_UPDATE(val, mask, shift) \
-@@ -81,6 +86,128 @@ struct rk_priv_data {
- 	(((tx) ? soc##_GMAC_TXCLK_DLY_ENABLE : soc##_GMAC_TXCLK_DLY_DISABLE) | \
- 	 ((rx) ? soc##_GMAC_RXCLK_DLY_ENABLE : soc##_GMAC_RXCLK_DLY_DISABLE))
- 
-+/* XPCS */
-+#define XPCS_APB_INCREMENT		(0x4)
-+#define XPCS_APB_MASK			GENMASK_ULL(20, 0)
-+
-+#define SR_MII_BASE			(0x1F0000)
-+#define SR_MII1_BASE			(0x1A0000)
-+
-+#define VR_MII_DIG_CTRL1		(0x8000)
-+#define VR_MII_AN_CTRL			(0x8001)
-+#define VR_MII_AN_INTR_STS		(0x8002)
-+#define VR_MII_LINK_TIMER_CTRL		(0x800A)
-+
-+#define SR_MII_CTRL_AN_ENABLE		\
-+	(BMCR_ANENABLE | BMCR_ANRESTART | BMCR_FULLDPLX | BMCR_SPEED1000)
-+#define MII_MAC_AUTO_SW			(0x0200)
-+#define PCS_MODE_OFFSET			(0x1)
-+#define MII_AN_INTR_EN			(0x1)
-+#define PCS_SGMII_MODE			(0x2 << PCS_MODE_OFFSET)
-+#define PCS_QSGMII_MODE			(0X3 << PCS_MODE_OFFSET)
-+#define VR_MII_CTRL_SGMII_AN_EN		(PCS_SGMII_MODE | MII_AN_INTR_EN)
-+#define VR_MII_CTRL_QSGMII_AN_EN	(PCS_QSGMII_MODE | MII_AN_INTR_EN)
-+
-+#define SR_MII_OFFSET(_x) ({		\
-+	typeof(_x) (x) = (_x); \
-+	(((x) == 0) ? SR_MII_BASE : (SR_MII1_BASE + ((x) - 1) * 0x10000)); \
-+}) \
-+
-+static int xpcs_read(void *priv, int reg)
-+{
-+	struct rk_priv_data *bsp_priv = (struct rk_priv_data *)priv;
-+	int ret, val;
-+
-+	ret = regmap_read(bsp_priv->xpcs,
-+			  (u32)(reg * XPCS_APB_INCREMENT) & XPCS_APB_MASK,
-+			  &val);
-+	if (ret)
-+		return ret;
-+
-+	return val;
-+}
-+
-+static int xpcs_write(void *priv, int reg, u16 value)
-+{
-+	struct rk_priv_data *bsp_priv = (struct rk_priv_data *)priv;
-+
-+	return regmap_write(bsp_priv->xpcs,
-+			    (reg * XPCS_APB_INCREMENT) & XPCS_APB_MASK, value);
-+}
-+
-+static int xpcs_poll_reset(struct rk_priv_data *bsp_priv, int dev)
-+{
-+	/* Poll until the reset bit clears (50ms per retry == 0.6 sec) */
-+	unsigned int retries = 12;
-+	int ret;
-+
-+	do {
-+		msleep(50);
-+		ret = xpcs_read(bsp_priv, SR_MII_OFFSET(dev) + MDIO_CTRL1);
-+		if (ret < 0)
-+			return ret;
-+	} while (ret & MDIO_CTRL1_RESET && --retries);
-+
-+	return (ret & MDIO_CTRL1_RESET) ? -ETIMEDOUT : 0;
-+}
-+
-+static int xpcs_soft_reset(struct rk_priv_data *bsp_priv, int dev)
-+{
-+	int ret;
-+
-+	ret = xpcs_write(bsp_priv, SR_MII_OFFSET(dev) + MDIO_CTRL1,
-+			 MDIO_CTRL1_RESET);
-+	if (ret < 0)
-+		return ret;
-+
-+	return xpcs_poll_reset(bsp_priv, dev);
-+}
-+
-+static int xpcs_setup(struct rk_priv_data *bsp_priv, int mode)
-+{
-+	int ret, i, idx = bsp_priv->id;
-+	u32 val;
-+
-+	if (mode == PHY_INTERFACE_MODE_QSGMII && idx > 0)
-+		return 0;
-+
-+	ret = xpcs_soft_reset(bsp_priv, idx);
-+	if (ret) {
-+		dev_err(&bsp_priv->pdev->dev, "xpcs_soft_reset fail %d\n", ret);
-+		return ret;
-+	}
-+
-+	xpcs_write(bsp_priv, SR_MII_OFFSET(0) + VR_MII_AN_INTR_STS, 0x0);
-+	xpcs_write(bsp_priv, SR_MII_OFFSET(0) + VR_MII_LINK_TIMER_CTRL, 0x1);
-+
-+	if (mode == PHY_INTERFACE_MODE_SGMII)
-+		xpcs_write(bsp_priv, SR_MII_OFFSET(0) + VR_MII_AN_CTRL,
-+			   VR_MII_CTRL_SGMII_AN_EN);
-+	else
-+		xpcs_write(bsp_priv, SR_MII_OFFSET(0) + VR_MII_AN_CTRL,
-+			   VR_MII_CTRL_QSGMII_AN_EN);
-+
-+	if (mode == PHY_INTERFACE_MODE_QSGMII) {
-+		for (i = 0; i < 4; i++) {
-+			val = xpcs_read(bsp_priv,
-+					SR_MII_OFFSET(i) + VR_MII_DIG_CTRL1);
-+			xpcs_write(bsp_priv,
-+				   SR_MII_OFFSET(i) + VR_MII_DIG_CTRL1,
-+				   val | MII_MAC_AUTO_SW);
-+			xpcs_write(bsp_priv, SR_MII_OFFSET(i) + MII_BMCR,
-+				   SR_MII_CTRL_AN_ENABLE);
-+		}
-+	} else {
-+		val = xpcs_read(bsp_priv, SR_MII_OFFSET(idx) + VR_MII_DIG_CTRL1);
-+		xpcs_write(bsp_priv, SR_MII_OFFSET(idx) + VR_MII_DIG_CTRL1,
-+			   val | MII_MAC_AUTO_SW);
-+		xpcs_write(bsp_priv, SR_MII_OFFSET(idx) + MII_BMCR,
-+			   SR_MII_CTRL_AN_ENABLE);
-+	}
-+
-+	return ret;
-+}
-+
- #define PX30_GRF_GMAC_CON1		0x0904
- 
- /* PX30_GRF_GMAC_CON1 */
-@@ -1008,6 +1135,7 @@ static const struct rk_gmac_ops rk3399_ops = {
- #define RK3568_GRF_GMAC1_CON1		0x038c
- 
- /* RK3568_GRF_GMAC0_CON1 && RK3568_GRF_GMAC1_CON1 */
-+#define RK3568_GMAC_GMII_MODE			GRF_BIT(7)
- #define RK3568_GMAC_PHY_INTF_SEL_RGMII	\
- 		(GRF_BIT(4) | GRF_CLR_BIT(5) | GRF_CLR_BIT(6))
- #define RK3568_GMAC_PHY_INTF_SEL_RMII	\
-@@ -1023,6 +1151,46 @@ static const struct rk_gmac_ops rk3399_ops = {
- #define RK3568_GMAC_CLK_RX_DL_CFG(val)	HIWORD_UPDATE(val, 0x7F, 8)
- #define RK3568_GMAC_CLK_TX_DL_CFG(val)	HIWORD_UPDATE(val, 0x7F, 0)
- 
-+#define RK3568_PIPE_GRF_XPCS_CON0	0X0040
-+
-+#define RK3568_PIPE_GRF_XPCS_QGMII_MAC_SEL	GRF_BIT(0)
-+#define RK3568_PIPE_GRF_XPCS_SGMII_MAC_SEL	GRF_BIT(1)
-+#define RK3568_PIPE_GRF_XPCS_PHY_READY		GRF_BIT(2)
-+
-+static void rk3568_set_to_sgmii(struct rk_priv_data *bsp_priv)
-+{
-+	struct device *dev = &bsp_priv->pdev->dev;
-+	u32 con1;
-+
-+	if (IS_ERR(bsp_priv->grf)) {
-+		dev_err(dev, "Missing rockchip,grf property\n");
-+		return;
-+	}
-+
-+	con1 = (bsp_priv->id == 1) ? RK3568_GRF_GMAC1_CON1 :
-+				     RK3568_GRF_GMAC0_CON1;
-+	regmap_write(bsp_priv->grf, con1, RK3568_GMAC_GMII_MODE);
-+
-+	xpcs_setup(bsp_priv, PHY_INTERFACE_MODE_SGMII);
-+}
-+
-+static void rk3568_set_to_qsgmii(struct rk_priv_data *bsp_priv)
-+{
-+	struct device *dev = &bsp_priv->pdev->dev;
-+	u32 con1;
-+
-+	if (IS_ERR(bsp_priv->grf)) {
-+		dev_err(dev, "Missing rockchip,grf property\n");
-+		return;
-+	}
-+
-+	con1 = (bsp_priv->id == 1) ? RK3568_GRF_GMAC1_CON1 :
-+				     RK3568_GRF_GMAC0_CON1;
-+	regmap_write(bsp_priv->grf, con1, RK3568_GMAC_GMII_MODE);
-+
-+	xpcs_setup(bsp_priv, PHY_INTERFACE_MODE_QSGMII);
-+}
-+
- static void rk3568_set_to_rgmii(struct rk_priv_data *bsp_priv,
- 				int tx_delay, int rx_delay)
- {
-@@ -1094,6 +1262,8 @@ static void rk3568_set_gmac_speed(struct rk_priv_data *bsp_priv, int speed)
- static const struct rk_gmac_ops rk3568_ops = {
- 	.set_to_rgmii = rk3568_set_to_rgmii,
- 	.set_to_rmii = rk3568_set_to_rmii,
-+	.set_to_sgmii = rk3568_set_to_sgmii,
-+	.set_to_qsgmii = rk3568_set_to_qsgmii,
- 	.set_rgmii_speed = rk3568_set_gmac_speed,
- 	.set_rmii_speed = rk3568_set_gmac_speed,
- 	.regs_valid = true,
-@@ -1517,6 +1687,12 @@ static int rk_gmac_clk_init(struct plat_stmmacenet_data *plat)
- 				dev_err(dev, "cannot get clock %s\n",
- 					"clk_mac_refout");
- 		}
-+	} else if (bsp_priv->phy_iface == PHY_INTERFACE_MODE_SGMII ||
-+		   bsp_priv->phy_iface == PHY_INTERFACE_MODE_QSGMII) {
-+		bsp_priv->pclk_xpcs = devm_clk_get(dev, "pclk_xpcs");
-+		if (IS_ERR(bsp_priv->pclk_xpcs))
-+			dev_err(dev, "cannot get clock %s\n",
-+				"pclk_xpcs");
- 	}
- 
- 	bsp_priv->clk_mac_speed = devm_clk_get(dev, "clk_mac_speed");
-@@ -1572,6 +1748,9 @@ static int gmac_clk_enable(struct rk_priv_data *bsp_priv, bool enable)
- 			if (!IS_ERR(bsp_priv->pclk_mac))
- 				clk_prepare_enable(bsp_priv->pclk_mac);
- 
-+			if (!IS_ERR(bsp_priv->pclk_xpcs))
-+				clk_prepare_enable(bsp_priv->pclk_xpcs);
-+
- 			if (!IS_ERR(bsp_priv->mac_clk_tx))
- 				clk_prepare_enable(bsp_priv->mac_clk_tx);
- 
-@@ -1605,6 +1784,8 @@ static int gmac_clk_enable(struct rk_priv_data *bsp_priv, bool enable)
- 
- 			clk_disable_unprepare(bsp_priv->pclk_mac);
- 
-+			clk_disable_unprepare(bsp_priv->pclk_xpcs);
-+
- 			clk_disable_unprepare(bsp_priv->mac_clk_tx);
- 
- 			clk_disable_unprepare(bsp_priv->clk_mac_speed);
-@@ -1623,7 +1804,7 @@ static int gmac_clk_enable(struct rk_priv_data *bsp_priv, bool enable)
- 	return 0;
- }
- 
--static int phy_power_on(struct rk_priv_data *bsp_priv, bool enable)
-+static int rk_gmac_phy_power_on(struct rk_priv_data *bsp_priv, bool enable)
- {
- 	struct regulator *ldo = bsp_priv->regulator;
- 	int ret;
-@@ -1728,6 +1909,18 @@ static struct rk_priv_data *rk_gmac_setup(struct platform_device *pdev,
- 							"rockchip,grf");
- 	bsp_priv->php_grf = syscon_regmap_lookup_by_phandle(dev->of_node,
- 							    "rockchip,php-grf");
-+	bsp_priv->xpcs = syscon_regmap_lookup_by_phandle(dev->of_node,
-+							 "rockchip,xpcs");
-+	if (!IS_ERR(bsp_priv->xpcs)) {
-+		struct phy *comphy;
-+
-+		comphy = devm_of_phy_get(&pdev->dev, dev->of_node, NULL);
-+		if (IS_ERR(comphy))
-+			dev_err(dev, "devm_of_phy_get error\n");
-+		ret = phy_init(comphy);
-+		if (ret)
-+			dev_err(dev, "phy_init error\n");
-+	}
- 
- 	if (plat->phy_node) {
- 		bsp_priv->integrated_phy = of_property_read_bool(plat->phy_node,
-@@ -1805,11 +1998,19 @@ static int rk_gmac_powerup(struct rk_priv_data *bsp_priv)
- 		dev_info(dev, "init for RMII\n");
- 		bsp_priv->ops->set_to_rmii(bsp_priv);
- 		break;
-+	case PHY_INTERFACE_MODE_SGMII:
-+		dev_info(dev, "init for SGMII\n");
-+		bsp_priv->ops->set_to_sgmii(bsp_priv);
-+		break;
-+	case PHY_INTERFACE_MODE_QSGMII:
-+		dev_info(dev, "init for QSGMII\n");
-+		bsp_priv->ops->set_to_qsgmii(bsp_priv);
-+		break;
- 	default:
- 		dev_err(dev, "NO interface defined!\n");
- 	}
- 
--	ret = phy_power_on(bsp_priv, true);
-+	ret = rk_gmac_phy_power_on(bsp_priv, true);
- 	if (ret) {
- 		gmac_clk_enable(bsp_priv, false);
- 		return ret;
-@@ -1830,7 +2031,7 @@ static void rk_gmac_powerdown(struct rk_priv_data *gmac)
- 
- 	pm_runtime_put_sync(&gmac->pdev->dev);
- 
--	phy_power_on(gmac, false);
-+	rk_gmac_phy_power_on(gmac, false);
- 	gmac_clk_enable(gmac, false);
- }
- 
-@@ -1851,6 +2052,9 @@ static void rk_fix_speed(void *priv, unsigned int speed)
- 		if (bsp_priv->ops->set_rmii_speed)
- 			bsp_priv->ops->set_rmii_speed(bsp_priv, speed);
- 		break;
-+	case PHY_INTERFACE_MODE_SGMII:
-+	case PHY_INTERFACE_MODE_QSGMII:
-+		break;
- 	default:
- 		dev_err(dev, "unsupported interface %d", bsp_priv->phy_iface);
- 	}
--- 
-2.25.1
+> The commit 34228d473efe ("mm: ignore VM_SOFTDIRTY on VMA merging")
+> seems like a workaround. But it lets the soft-dirty and non-soft-dirty
+> VMA to get merged. It helps in avoiding the creation of too many VMAs.
+> But it creates the problem while adding the feature of clearing the
+> soft-dirty status of only a part of the memory region.
 
+So you need an extended functionality, could you please put this
+changelog snippet somewhere on top? Otherwise srat reading this patch
+I simply didn't get what we're trying to achieve.
+
+> 
+> Cc: <stable@vger.kernel.org>
+> Fixes: d9104d1ca966 ("mm: track vma changes with VM_SOFTDIRTY bit")
+
+Wait, is there some critical bug or error that needs stable@ to be
+patched? The way softdirty has been implemented in first place is
+to reach minimum needs for dirty page tracking. More precise tracking
+(such as partial cleanup of memory region) will require at least other
+structures to remember which part of vma is cleared and which one is
+dirty after their merge. And I don't think this is possible to implement
+without extending vma structure itself (which is big enough already).
+
+Or maybe I'm blind and not see obvious problem here, sorry then :)
+
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+> We need more testing of this patch.
+> 
+> While implementing clear soft-dirty bit for a range of address space, I'm
+> facing an issue. The non-soft dirty VMA gets merged sometimes with the soft
+> dirty VMA. Thus the non-soft dirty VMA become dirty which is undesirable.
+>
+> When discussed with the some other developers they consider it the
+> regression. Why the non-soft dirty page should appear as soft dirty when it
+> isn't soft dirty in reality? I agree with them. Should we revert
+> 34228d473efe or find a workaround in the IOCTL?
+
+Well, this is not the regression, it is been designed this way because
+there is no place to keep subflags on regions covered by one VMA and non
+merging them cause vma fragmentation (I've seen massive vma fragmentations
+especially in db engines). So no, reverting it is not an option but rather
+will cause problems in real applications I fear.
+
+> 
+> * Revert may cause the VMAs to expand in uncontrollable situation where the
+> soft dirty bit of a lot of memory regions or the whole address space is
+> being cleared again and again. AFAIK normal process must either be only
+> clearing a few memory regions. So the applications should be okay. There is
+> still chance of regressions if some applications are already using the
+> soft-dirty bit. I'm not sure how to test it.
+
+Main purpose of this dirty functionality came from containers c/r procedure.
+As far as I remember we've been clearing vmas for the whole container, though
+it's been a while and i'm not involved into c/r development right now so may
+miss something from my memory.
+
+> * Add a flag in the IOCTL to ignore the dirtiness of VMA. The user will
+> surely lose the functionality to detect reused memory regions. But the
+> extraneous soft-dirty pages would not appear. I'm trying to do this in the
+> patch series [1]. Some discussion is going on that this fails with some
+> mprotect use case [2]. I still need to have a look at the mprotect selftest
+> to see how and why this fails. I think this can be implemented after some
+> more work probably in mprotect side.
+
+ioctl might be an option indeed
+
+> 
+> [1] https://lore.kernel.org/all/20221109102303.851281-1-usama.anjum@collabora.com/
+> [2] https://lore.kernel.org/all/bfcae708-db21-04b4-0bbe-712badd03071@redhat.com/
