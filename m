@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F2563C9CB
+	by mail.lfdr.de (Postfix) with ESMTP id 8826163C9CD
 	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 21:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236580AbiK2Urm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 15:47:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
+        id S236688AbiK2Urs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 15:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236609AbiK2UrS (ORCPT
+        with ESMTP id S236641AbiK2UrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 15:47:18 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A92264AE;
-        Tue, 29 Nov 2022 12:47:16 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id b3so23907052lfv.2;
-        Tue, 29 Nov 2022 12:47:16 -0800 (PST)
+        Tue, 29 Nov 2022 15:47:19 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBACD66CB2;
+        Tue, 29 Nov 2022 12:47:18 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id l8so18615786ljh.13;
+        Tue, 29 Nov 2022 12:47:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1Ma9RUQu1JjVVoYty/WmEXDnYuOfQCd9ANuJ3pmUfPM=;
-        b=T/qBBnIruUH/GUG83CcB0NngH2JXSmSIG9cGLShPtFZWw6A4daVJUvP6xwkdgAaFQW
-         MGvObW7ShX2GrYtOjmizAfsy0e0PCGnYrb2D9M3OZ3dGGNnCM4wSQi3G1Adhteesiyvt
-         BWfmhrLjUDB+LLFiRrgcXMksdn2nrX6rwVhuaYUWRubAHBu0FAhONOelr2nAsxzEzVVE
-         xuFF7N/TdqngKU7p5vmUhzd7CEVprhegjCVeT16r9T1HabdsApxZicqPvon1Jxtam2pq
-         PBJkp6LHq5tIzkAdJkq4zq/+nWn4icmNYzOVmrP1F82YW6mYhj8QVYVHRVbgQCdXneLL
-         Wscg==
+        bh=JM8qWhjtmVz4g8QiVLIg+Ipe0Ovs4/S9ZpUrITzygDw=;
+        b=VTmPTjA0nBXjP2iGsAL/CDBkR2uVwYlxV0pZUds5sisiYqyFAWRgkaG9Hkx6pEEx9z
+         sZwRG+4s4bcSz6txpufg+3mDQnt3GvuP+GrQsWt8jD6qNqa9QcSWDmrDCv961I+rUqay
+         gODis7/X4F7oCOgDWpUHP0l1BbO/A0zt/mS3EqkNDjiQkexgZXAjL36U8etUSKDHyqy/
+         eTQxxIvW1PWHXVPUzriUPgdiuchrtMk3ML1JrsxkQsGYcdYcy3hydV6T7Tlosmaj4MZO
+         QjHa7pyf86rR5EW49I8pAxreREUgmZ+k0JFeotLL72ZjJATJWuiOey/dgzisQh4dpoTM
+         UYBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1Ma9RUQu1JjVVoYty/WmEXDnYuOfQCd9ANuJ3pmUfPM=;
-        b=cbHW9YUP9cie7prKr660KopB/qavM2rDobjhB1CQB3VZ7FNO1jpf67XUpyGgElH1Kf
-         6fsb6zTTLqp+hHfY0Qsdv9f6PI1xC9G9XE2DbOOWZS52VpDYBWB2gdsfOo+ROhrOk56X
-         ak3DEHimwUqA2dJNiSDSaBBOD56/H7xI000eoyC8XRoDcMrovUs6Dom3nnxp/DFgNq/6
-         IwRq9Tnm5k/1acC1My0rMEuLh18Pu6oO6Z99bp5sbaogPE9gvX0p4zDnP4TibRZksSLh
-         a6kXJGzPIDSBt3sn+sXi/82HjCFHRB52c1fmbaLqiRFBowvOq8pypVvciAGye5JVh0dI
-         cqKA==
-X-Gm-Message-State: ANoB5plek2aCVgR+f+r5frcK2GcxrhpIXeLeGBF3U5CzLzpDd4ACUzp9
-        KWuaJWF5Oo2GPCNHmIHSVGcdIQhwos0=
-X-Google-Smtp-Source: AA0mqf4vieHe53nkDLyouG86tJoxjWakBPNUKhkxYRv0lFIj9pr6eplRQSRLVtOwCbUFwy+SymcKLA==
-X-Received: by 2002:a19:5211:0:b0:4b5:1e6f:c9d3 with SMTP id m17-20020a195211000000b004b51e6fc9d3mr2074160lfb.659.1669754834500;
-        Tue, 29 Nov 2022 12:47:14 -0800 (PST)
+        bh=JM8qWhjtmVz4g8QiVLIg+Ipe0Ovs4/S9ZpUrITzygDw=;
+        b=RrEnw/mqyLGK74DSuA7Qa98i3jyFsuYrrjAm0Ao3nN8jnysePk+PTKYvj0RPDXOAVa
+         xUFNhPeCtZi/aUS+La7T6MO4B2neeWYDEvhW6y6Ajtp2PJNJ5kjnoqVDRKjOpJ4Xzx+p
+         R07SUcekgEcftSc2BCziVzcA5EqsXYSE5IOLPDSf/HS/ewH7yRtqeMGynAl0Xs+oxdHn
+         fNCProYDVad1/NJFUvCmnz15t09bNLVuE7jW7EDmKZ/m0+7PyBg6VVG2dyEgPGV3Smho
+         3VhkUcsOx9p5PppwAKQYo2AJtohbFPDjj3PFT0Orop/w2jexDsHlGLnhR6HuvCCvbwhs
+         wi4A==
+X-Gm-Message-State: ANoB5pmvnHXoiNhdEsilvr6l8exm2R8dHJU4m8Bd2G5OFb621zIz11Rd
+        KFR7vHuEVKSExb1kM3y8NAH0iiKQMws=
+X-Google-Smtp-Source: AA0mqf5SpcOjRARzwp1NkQxL/CovjoQTjDAIOA8/0GZqKninqGw0BWnE0/HvuzYtIY6HU70h3/QAYA==
+X-Received: by 2002:a05:651c:160b:b0:276:4462:2d20 with SMTP id f11-20020a05651c160b00b0027644622d20mr11957815ljq.19.1669754837049;
+        Tue, 29 Nov 2022 12:47:17 -0800 (PST)
 Received: from localhost.localdomain (ccy110.neoplus.adsl.tpnet.pl. [83.30.148.110])
-        by smtp.gmail.com with ESMTPSA id o11-20020ac24e8b000000b004ae24368195sm2325620lfr.233.2022.11.29.12.47.12
+        by smtp.gmail.com with ESMTPSA id o11-20020ac24e8b000000b004ae24368195sm2325620lfr.233.2022.11.29.12.47.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 12:47:14 -0800 (PST)
+        Tue, 29 Nov 2022 12:47:16 -0800 (PST)
 From:   Adam Skladowski <a39.skl@gmail.com>
 Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         Adam Skladowski <a39.skl@gmail.com>,
@@ -72,9 +72,9 @@ Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 10/12] arm64: dts: qcom: sm6115: Add i2c/spi nodes
-Date:   Tue, 29 Nov 2022 21:46:14 +0100
-Message-Id: <20221129204616.47006-11-a39.skl@gmail.com>
+Subject: [PATCH 11/12] arm64: dts: qcom: sm6115: Add WCN node.
+Date:   Tue, 29 Nov 2022 21:46:15 +0100
+Message-Id: <20221129204616.47006-12-a39.skl@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221129204616.47006-1-a39.skl@gmail.com>
 References: <20221129204616.47006-1-a39.skl@gmail.com>
@@ -91,325 +91,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add I2C/SPI nodes for SM6115.
+Add WCN node to allow using wifi module.
 
 Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 287 +++++++++++++++++++++++++++
- 1 file changed, 287 insertions(+)
+ arch/arm64/boot/dts/qcom/sm6115.dtsi | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index e9de7aa1efdd..d14a4595be8a 100644
+index d14a4595be8a..36d1cff23d10 100644
 --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -6,6 +6,7 @@
- #include <dt-bindings/clock/qcom,gcc-sm6115.h>
- #include <dt-bindings/clock/qcom,sm6115-dispcc.h>
- #include <dt-bindings/clock/qcom,rpmcc.h>
-+#include <dt-bindings/dma/qcom-gpi.h>
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/power/qcom-rpmpd.h>
-@@ -357,6 +358,90 @@ tlmm: pinctrl@500000 {
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
- 
-+			qup_i2c0_default: qup-i2c0-default {
-+				pins = "gpio0", "gpio1";
-+				function = "qup0";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+			};
-+
-+			qup_i2c1_default: qup-i2c1-default {
-+				pins = "gpio4", "gpio5";
-+				function = "qup1";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+			};
-+
-+			qup_i2c2_default: qup-i2c2-default {
-+				pins = "gpio6", "gpio7";
-+				function = "qup2";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+			};
-+
-+			qup_i2c3_default: qup-i2c3-default {
-+				pins = "gpio8", "gpio9";
-+				function = "qup3";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+			};
-+
-+			qup_i2c4_default: qup-i2c4-default {
-+				pins = "gpio12", "gpio13";
-+				function = "qup4";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+			};
-+
-+			qup_i2c5_default: qup-i2c5-default {
-+				pins = "gpio14", "gpio15";
-+				function = "qup5";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+			};
-+
-+			qup_spi0_default: qup-spi0-default {
-+				pins = "gpio0", "gpio1","gpio2", "gpio3";
-+				function = "qup0";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+			};
-+
-+			qup_spi1_default: qup-spi1-default {
-+				pins = "gpio4", "gpio5", "gpio69", "gpio70";
-+				function = "qup1";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+			};
-+
-+			qup_spi2_default: qup-spi2-default {
-+				pins = "gpio6", "gpio7", "gpio71", "gpio80";
-+				function = "qup2";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+			};
-+
-+			qup_spi3_default: qup-spi3-default {
-+				pins = "gpio8", "gpio9", "gpio10", "gpio11";
-+				function = "qup3";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+			};
-+
-+			qup_spi4_default: qup-spi4-default {
-+				pins = "gpio12", "gpio13", "gpio96", "gpio97";
-+				function = "qup4";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+			};
-+
-+			qup_spi5_default: qup-spi5-default {
-+				pins = "gpio14", "gpio15", "gpio16", "gpio17";
-+				function = "qup5";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+			};
-+
- 			sdc1_state_on: sdc1-on-state {
- 				clk-pins {
- 					pins = "sdc1_clk";
-@@ -693,6 +778,208 @@ gpi_dma0: dma-controller@4a00000 {
- 			status = "disabled";
+@@ -1294,6 +1294,28 @@ apps_smmu: iommu@c600000 {
+ 				     <GIC_SPI 151 IRQ_TYPE_LEVEL_HIGH>;
  		};
  
-+		qupv3_id_0: geniqup@4ac0000 {
-+			compatible = "qcom,geni-se-qup";
-+			reg = <0x04ac0000 0x2000>;
-+			clock-names = "m-ahb", "s-ahb";
-+			clocks = <&gcc GCC_QUPV3_WRAP_0_M_AHB_CLK>,
-+				 <&gcc GCC_QUPV3_WRAP_0_S_AHB_CLK>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			iommus = <&apps_smmu 0xe3 0x0>;
-+			ranges;
++		wifi: wifi@c800000 {
++			compatible = "qcom,wcn3990-wifi";
++			reg = <0x0c800000 0x800000>;
++			reg-names = "membase";
++			memory-region = <&wlan_msa_mem>;
++			interrupts = <GIC_SPI 358 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 359 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 360 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 361 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 362 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 363 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 364 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 365 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 366 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 367 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 368 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 369 IRQ_TYPE_LEVEL_HIGH>;
++			iommus = <&apps_smmu 0x1a0 0x1>;
++			qcom,msa-fixed-perm;
 +			status = "disabled";
-+
-+			i2c0: i2c@4a80000 {
-+				compatible = "qcom,geni-i2c";
-+				reg = <0x04a80000 0x4000>;
-+				clock-names = "se";
-+				clocks = <&gcc GCC_QUPV3_WRAP0_S0_CLK>;
-+				pinctrl-names = "default";
-+				pinctrl-0 = <&qup_i2c0_default>;
-+				interrupts = <GIC_SPI 327 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&gpi_dma0 0 0 QCOM_GPI_I2C>,
-+				       <&gpi_dma0 1 0 QCOM_GPI_I2C>;
-+				dma-names = "tx", "rx";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
-+
-+			spi0: spi@4a80000 {
-+				compatible = "qcom,geni-spi";
-+				reg = <0x04a80000 0x4000>;
-+				clock-names = "se";
-+				clocks = <&gcc GCC_QUPV3_WRAP0_S0_CLK>;
-+				pinctrl-names = "default";
-+				pinctrl-0 = <&qup_spi0_default>;
-+				interrupts = <GIC_SPI 327 IRQ_TYPE_LEVEL_HIGH>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
-+
-+			i2c1: i2c@4a84000 {
-+				compatible = "qcom,geni-i2c";
-+				reg = <0x04a84000 0x4000>;
-+				clock-names = "se";
-+				clocks = <&gcc GCC_QUPV3_WRAP0_S1_CLK>;
-+				pinctrl-names = "default";
-+				pinctrl-0 = <&qup_i2c1_default>;
-+				interrupts = <GIC_SPI 328 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&gpi_dma0 0 1 QCOM_GPI_I2C>,
-+				       <&gpi_dma0 1 1 QCOM_GPI_I2C>;
-+				dma-names = "tx", "rx";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
-+
-+			spi1: spi@4a84000 {
-+				compatible = "qcom,geni-spi";
-+				reg = <0x04a84000 0x4000>;
-+				clock-names = "se";
-+				clocks = <&gcc GCC_QUPV3_WRAP0_S1_CLK>;
-+				pinctrl-names = "default";
-+				pinctrl-0 = <&qup_spi1_default>;
-+				interrupts = <GIC_SPI 328 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&gpi_dma0 0 1 QCOM_GPI_SPI>,
-+				       <&gpi_dma0 1 1 QCOM_GPI_SPI>;
-+				dma-names = "tx", "rx";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
-+
-+			i2c2: i2c@4a88000 {
-+				compatible = "qcom,geni-i2c";
-+				reg = <0x04a88000 0x4000>;
-+				clock-names = "se";
-+				clocks = <&gcc GCC_QUPV3_WRAP0_S2_CLK>;
-+				pinctrl-names = "default";
-+				pinctrl-0 = <&qup_i2c2_default>;
-+				interrupts = <GIC_SPI 329 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&gpi_dma0 0 2 QCOM_GPI_I2C>,
-+				       <&gpi_dma0 1 2 QCOM_GPI_I2C>;
-+				dma-names = "tx", "rx";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
-+
-+			spi2: spi@4a88000 {
-+				compatible = "qcom,geni-spi";
-+				reg = <0x04a88000 0x4000>;
-+				clock-names = "se";
-+				clocks = <&gcc GCC_QUPV3_WRAP0_S2_CLK>;
-+				pinctrl-names = "default";
-+				pinctrl-0 = <&qup_spi2_default>;
-+				interrupts = <GIC_SPI 329 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&gpi_dma0 0 2 QCOM_GPI_SPI>,
-+				       <&gpi_dma0 1 2 QCOM_GPI_SPI>;
-+				dma-names = "tx", "rx";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
-+
-+			i2c3: i2c@4a8c000 {
-+				compatible = "qcom,geni-i2c";
-+				reg = <0x04a8c000 0x4000>;
-+				clock-names = "se";
-+				clocks = <&gcc GCC_QUPV3_WRAP0_S3_CLK>;
-+				pinctrl-names = "default";
-+				pinctrl-0 = <&qup_i2c3_default>;
-+				interrupts = <GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&gpi_dma0 0 3 QCOM_GPI_I2C>,
-+				       <&gpi_dma0 1 3 QCOM_GPI_I2C>;
-+				dma-names = "tx", "rx";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
-+
-+			spi3: spi@4a8c000 {
-+				compatible = "qcom,geni-spi";
-+				reg = <0x04a8c000 0x4000>;
-+				clock-names = "se";
-+				clocks = <&gcc GCC_QUPV3_WRAP0_S3_CLK>;
-+				pinctrl-names = "default";
-+				pinctrl-0 = <&qup_spi3_default>;
-+				interrupts = <GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&gpi_dma0 0 3 QCOM_GPI_SPI>,
-+				       <&gpi_dma0 1 3 QCOM_GPI_SPI>;
-+				dma-names = "tx", "rx";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
-+
-+			i2c4: i2c@4a90000 {
-+				compatible = "qcom,geni-i2c";
-+				reg = <0x04a90000 0x4000>;
-+				clock-names = "se";
-+				clocks = <&gcc GCC_QUPV3_WRAP0_S4_CLK>;
-+				pinctrl-names = "default";
-+				pinctrl-0 = <&qup_i2c4_default>;
-+				interrupts = <GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&gpi_dma0 0 4 QCOM_GPI_I2C>,
-+				       <&gpi_dma0 1 4 QCOM_GPI_I2C>;
-+				dma-names = "tx", "rx";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
-+
-+			spi4: spi@4a90000 {
-+				compatible = "qcom,geni-spi";
-+				reg = <0x04a90000 0x4000>;
-+				clock-names = "se";
-+				clocks = <&gcc GCC_QUPV3_WRAP0_S4_CLK>;
-+				pinctrl-names = "default";
-+				pinctrl-0 = <&qup_spi4_default>;
-+				interrupts = <GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&gpi_dma0 0 4 QCOM_GPI_SPI>,
-+				       <&gpi_dma0 1 4 QCOM_GPI_SPI>;
-+				dma-names = "tx", "rx";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
-+
-+			i2c5: i2c@4a94000 {
-+				compatible = "qcom,geni-i2c";
-+				reg = <0x04a94000 0x4000>;
-+				clock-names = "se";
-+				clocks = <&gcc GCC_QUPV3_WRAP0_S5_CLK>;
-+				pinctrl-names = "default";
-+				pinctrl-0 = <&qup_i2c5_default>;
-+				interrupts = <GIC_SPI 332 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&gpi_dma0 0 5 QCOM_GPI_I2C>,
-+				       <&gpi_dma0 1 5 QCOM_GPI_I2C>;
-+				dma-names = "tx", "rx";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
-+
-+			spi5: spi@4a94000 {
-+				compatible = "qcom,geni-spi";
-+				reg = <0x04a94000 0x4000>;
-+				clock-names = "se";
-+				clocks = <&gcc GCC_QUPV3_WRAP0_S5_CLK>;
-+				pinctrl-names = "default";
-+				pinctrl-0 = <&qup_spi5_default>;
-+				interrupts = <GIC_SPI 332 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&gpi_dma0 0 5 QCOM_GPI_SPI>,
-+				       <&gpi_dma0 1 5 QCOM_GPI_SPI>;
-+				dma-names = "tx", "rx";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
 +		};
 +
- 		usb_1: usb@4ef8800 {
- 			compatible = "qcom,sm6115-dwc3", "qcom,dwc3";
- 			reg = <0x04ef8800 0x400>;
+ 		apcs_glb: mailbox@f111000 {
+ 			compatible = "qcom,sm6115-apcs-hmss-global";
+ 			reg = <0x0f111000 0x1000>;
 -- 
 2.25.1
 
