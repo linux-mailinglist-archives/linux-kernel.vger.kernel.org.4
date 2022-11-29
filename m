@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B8563C262
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:25:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E9363C263
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 15:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235101AbiK2OZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 09:25:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
+        id S235229AbiK2OZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 09:25:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234237AbiK2OZD (ORCPT
+        with ESMTP id S234698AbiK2OZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 09:25:03 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED3B266F
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:25:02 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id k5so12812793pjo.5
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:25:02 -0800 (PST)
+        Tue, 29 Nov 2022 09:25:07 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278D1266F
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:25:07 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso17530410pjt.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 06:25:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TXLvXXdTgugvaqwC5VnS0gtZiRjZW9Lq1RMlH39mGsc=;
-        b=jdsucmnVILuZ3Qemss8/fjATR1/LMZxJMMNLJzvghhxXWtVwdiyQ679xMAD4/YdU+r
-         fFBe1Ho2LUOt7gZAlFMAh75XXttpn2CJEfh5fDXZvj11/242xCM4SoMZHdkCtY0rRq0u
-         liunwBbiTXwg2pFUfG4OJkTii6i0QZYZ83PJ1+/AGUabkpBaBowzctSJRsSyH1vmsPX2
-         fwokAj7ss5ZGxsiZ5rAD+KeKxKI5YS1Tq4F3XUI8tasvBTyiWaYJN1Og1FPm6Z8jHcc1
-         FopsC+YN9vai+YUeZafeP7R4MB2B5gIQtS5IKA4bx6TCh+Vv7gctHuQCmX/DLuR1eD2B
-         peFg==
+        bh=GBh16wlKK1pVBXMjv15TuW7j92X6+xaNPp74Ke5cwzg=;
+        b=MCBPj1/g120Iv1kMjeuMVMrddfHIEvaxRkOp/ainQWEfZaR+H8Me+9I6DCNqlm+T0U
+         xJNT5M0QZZ8806GKqxPZeqtWvYNQIFtnHI+bYxXGwoz69DA/ftjhtga+RJhJj0sC0jxw
+         OSbcf/jRQfVJhCA1mW2yPiEPdzSanu2CHsMLpm95kyas7FCvqxsZWDMJEwlecjovJ6wZ
+         IeOIT6ug2PteDDDHCzEuMxVuiy5F/0FCdnTZN12aSxiWELz9hYRwIn7Gt2oNCijWu1U+
+         1AOqbsplUFy6XRes+Xvcacp2+J+5vIgLrhWUzaVghN2aRLGD7oVDDWgZVVugZRtsVTYv
+         p7Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TXLvXXdTgugvaqwC5VnS0gtZiRjZW9Lq1RMlH39mGsc=;
-        b=j2uEshTAfvmUuYSQNhbn3nQz/WZMW0Ak6TEebjznrzT5lkS9HmyJvPzXgfCIBkIfkN
-         o1u5Jf3eEon1GeGH/DG4X9gtd+SXwKlxrnwbDVyNFUBJGpexzYU4mYhNetnTBm3sUIv1
-         W2sTFQfWtPH1kSIhYwPqIfQqkd2ZUG+f9LDdNyaiPXpGtiIHot3JTib77Hub6JCXf2Ds
-         I5ocRB2UCH9Fz6Wx7UGTLBz0z+GvSwWGw+YkI/sRvrquqk+rm9LLRUcuRhYx1oSZX7MS
-         cL3KxKafAG9OWcUQT0+hI4aoJ4UhDddTbbqZasmMJRHXcdA9k/OdH76S03Vouw5tqyvx
-         vAcg==
-X-Gm-Message-State: ANoB5pluYKVlvE9ZJeAuiheOAU7uRihOEX2gMlZGSC9LOcQqP4xLLKgR
-        1dZyWzC/Gz5aGdJA8s1ytAQ+ag==
-X-Google-Smtp-Source: AA0mqf6zpsQVlYbUz71/pV/CIhxdNR/fGGYGsGYYapd85XiiSvvt55Pl6nwPzz5JBk2M0uJFy0cHYA==
-X-Received: by 2002:a17:903:31d5:b0:185:4e4c:3483 with SMTP id v21-20020a17090331d500b001854e4c3483mr39081193ple.163.1669731902202;
-        Tue, 29 Nov 2022 06:25:02 -0800 (PST)
+        bh=GBh16wlKK1pVBXMjv15TuW7j92X6+xaNPp74Ke5cwzg=;
+        b=Ov98LWhV8egoZ3qC7MR3xUa448qU4CM3GlxLpXXZLDumvtCZ3PCK2DpZsKeBtL/wTd
+         DdJIVtPjPeOrRqdkT9sVroadKQJECsLZ4o2gFlsJ9a//ozfegVatXk/PVwYRM4GSchlN
+         I8d63QvpS8IBoehMTlkAoAIIZUzNia19407TRr0ZSDXxG7N2O5GxvQLO1CjUtWcvGbRW
+         J0//PAa2zgNn0bcSdKVmNZjlyxXfOqnq42RE0XxZDQMswg9CGy7dXCu9YiAQJBjWPEh7
+         NEoemdy3vnt5d8+YCKdjt3q1Scq4oxjZPhl/3Yhy2wPNm9jkaWJRFqOiZqkyeiy1mOTY
+         ZrCQ==
+X-Gm-Message-State: ANoB5pkiT7/SAvUMJCNiLawXEKfOxHH82I+9a5hHwOhoaHTb18ZGPXKZ
+        P73/YQtnjwCeGxkE35LEh5v4bg==
+X-Google-Smtp-Source: AA0mqf7Zs4NNRjRlp2Pqboqc1Lm1mhDRLOAyP10co5P7bSMxQUPRIiN0s46dBZLX9R12MDZEweS/uQ==
+X-Received: by 2002:a17:902:ef4c:b0:189:8b14:55bd with SMTP id e12-20020a170902ef4c00b001898b1455bdmr10500197plx.25.1669731906522;
+        Tue, 29 Nov 2022 06:25:06 -0800 (PST)
 Received: from anup-ubuntu-vm.localdomain ([171.76.84.98])
-        by smtp.gmail.com with ESMTPSA id l12-20020a170903120c00b00176a2d23d1asm11039076plh.56.2022.11.29.06.24.57
+        by smtp.gmail.com with ESMTPSA id l12-20020a170903120c00b00176a2d23d1asm11039076plh.56.2022.11.29.06.25.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 06:25:01 -0800 (PST)
+        Tue, 29 Nov 2022 06:25:06 -0800 (PST)
 From:   Anup Patel <apatel@ventanamicro.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -61,11 +61,10 @@ Cc:     Atish Patra <atishp@atishpatra.org>,
         Anup Patel <anup@brainfault.org>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         Anup Patel <apatel@ventanamicro.com>,
-        Bin Meng <bmeng.cn@gmail.com>,
         Atish Patra <atishp@rivosinc.com>
-Subject: [PATCH v13 1/7] RISC-V: Clear SIP bit only when using SBI IPI operations
-Date:   Tue, 29 Nov 2022 19:54:43 +0530
-Message-Id: <20221129142449.886518-2-apatel@ventanamicro.com>
+Subject: [PATCH v13 2/7] irqchip/riscv-intc: Allow drivers to directly discover INTC hwnode
+Date:   Tue, 29 Nov 2022 19:54:44 +0530
+Message-Id: <20221129142449.886518-3-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221129142449.886518-1-apatel@ventanamicro.com>
 References: <20221129142449.886518-1-apatel@ventanamicro.com>
@@ -80,51 +79,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The software interrupt pending (i.e. [M|S]SIP) bit is writeable for
-S-mode but read-only for M-mode so we clear this bit only when using
-SBI IPI operations.
+Various RISC-V drivers (such as SBI IPI, SBI Timer, SBI PMU, and
+KVM RISC-V) don't have associated DT node but these drivers need
+standard per-CPU (local) interrupts defined by the RISC-V privileged
+specification.
+
+We add riscv_get_intc_hwnode() in arch/riscv which allows RISC-V
+drivers not having DT node to discover INTC hwnode which in-turn
+helps these drivers to map per-CPU (local) interrupts provided
+by the INTC driver.
 
 Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
 Reviewed-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/kernel/sbi.c | 8 +++++++-
- arch/riscv/kernel/smp.c | 2 --
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ arch/riscv/include/asm/irq.h     |  4 ++++
+ arch/riscv/kernel/irq.c          | 18 ++++++++++++++++++
+ drivers/irqchip/irq-riscv-intc.c |  7 +++++++
+ 3 files changed, 29 insertions(+)
 
-diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-index 5c87db8fdff2..ac99a70ead6a 100644
---- a/arch/riscv/kernel/sbi.c
-+++ b/arch/riscv/kernel/sbi.c
-@@ -646,8 +646,14 @@ static void sbi_send_cpumask_ipi(const struct cpumask *target)
- 	sbi_send_ipi(target);
- }
+diff --git a/arch/riscv/include/asm/irq.h b/arch/riscv/include/asm/irq.h
+index e4c435509983..43b9ebfbd943 100644
+--- a/arch/riscv/include/asm/irq.h
++++ b/arch/riscv/include/asm/irq.h
+@@ -12,6 +12,10 @@
  
-+static void sbi_ipi_clear(void)
+ #include <asm-generic/irq.h>
+ 
++void riscv_set_intc_hwnode_fn(struct fwnode_handle *(*fn)(void));
++
++struct fwnode_handle *riscv_get_intc_hwnode(void);
++
+ extern void __init init_IRQ(void);
+ 
+ #endif /* _ASM_RISCV_IRQ_H */
+diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
+index 7207fa08d78f..96d3171f0ca1 100644
+--- a/arch/riscv/kernel/irq.c
++++ b/arch/riscv/kernel/irq.c
+@@ -7,9 +7,27 @@
+ 
+ #include <linux/interrupt.h>
+ #include <linux/irqchip.h>
++#include <linux/irqdomain.h>
++#include <linux/module.h>
+ #include <linux/seq_file.h>
+ #include <asm/smp.h>
+ 
++static struct fwnode_handle *(*__get_intc_node)(void);
++
++void riscv_set_intc_hwnode_fn(struct fwnode_handle *(*fn)(void))
 +{
-+	csr_clear(CSR_IP, IE_SIE);
++	__get_intc_node = fn;
 +}
 +
- static const struct riscv_ipi_ops sbi_ipi_ops = {
--	.ipi_inject = sbi_send_cpumask_ipi
-+	.ipi_inject = sbi_send_cpumask_ipi,
-+	.ipi_clear = sbi_ipi_clear
++struct fwnode_handle *riscv_get_intc_hwnode(void)
++{
++	if (__get_intc_node)
++		return __get_intc_node();
++
++	return NULL;
++}
++EXPORT_SYMBOL_GPL(riscv_get_intc_hwnode);
++
+ int arch_show_interrupts(struct seq_file *p, int prec)
+ {
+ 	show_ipi_stats(p, prec);
+diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
+index 499e5f81b3fe..9066467e99e4 100644
+--- a/drivers/irqchip/irq-riscv-intc.c
++++ b/drivers/irqchip/irq-riscv-intc.c
+@@ -92,6 +92,11 @@ static const struct irq_domain_ops riscv_intc_domain_ops = {
+ 	.xlate	= irq_domain_xlate_onecell,
  };
  
- void __init sbi_init(void)
-diff --git a/arch/riscv/kernel/smp.c b/arch/riscv/kernel/smp.c
-index 760a64518c58..c56d67f53ea9 100644
---- a/arch/riscv/kernel/smp.c
-+++ b/arch/riscv/kernel/smp.c
-@@ -83,8 +83,6 @@ void riscv_clear_ipi(void)
++static struct fwnode_handle *riscv_intc_hwnode(void)
++{
++	return intc_domain->fwnode;
++}
++
+ static int __init riscv_intc_init(struct device_node *node,
+ 				  struct device_node *parent)
  {
- 	if (ipi_ops && ipi_ops->ipi_clear)
- 		ipi_ops->ipi_clear();
--
--	csr_clear(CSR_IP, IE_SIE);
- }
- EXPORT_SYMBOL_GPL(riscv_clear_ipi);
+@@ -126,6 +131,8 @@ static int __init riscv_intc_init(struct device_node *node,
+ 		return rc;
+ 	}
  
++	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
++
+ 	cpuhp_setup_state(CPUHP_AP_IRQ_RISCV_STARTING,
+ 			  "irqchip/riscv/intc:starting",
+ 			  riscv_intc_cpu_starting,
 -- 
 2.34.1
 
