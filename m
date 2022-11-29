@@ -2,158 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604C463BE45
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 11:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE89C63BE52
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 11:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231996AbiK2Kxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 05:53:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S232250AbiK2K5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 05:57:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbiK2Kx1 (ORCPT
+        with ESMTP id S229953AbiK2K5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 05:53:27 -0500
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D9C5F87C;
-        Tue, 29 Nov 2022 02:53:24 -0800 (PST)
-Received: by mail-qv1-f54.google.com with SMTP id c14so5399781qvq.0;
-        Tue, 29 Nov 2022 02:53:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=byCqNO9wNjp3bMa2bdQ4RMa3BFEO/vUEjR67iUdLdSk=;
-        b=Zr9w5CXNPza4SXy4/wnvS0hynIMja0EhHkNKP1HpBDPhCmfhi7nSL1lG2Iub0w/vnf
-         +Ma0/Ej/R5G2fns31DnwdCuGTJY8BVZ7QGWxtaHGdkH4S9TipAid68aoXZog6tXNF9pH
-         Ci27nOEOres2BCMeSJRWJf+NcwKxKd4WkGvJImkTC/4a+n6/pMhQGBe0HgPzKq7QPDpE
-         PtygfjANsr+Mrtjw59pokbU3bZyInAI67PVVJysJcdnRevs8dKiWN3lD8OJsX6vYsBju
-         pjQj6U5kasLgO/fol4hJmmV1G5LVconDICD61Xm9E/NeQYmEK/K1FNFEPbEG44Kuw/DU
-         twdg==
-X-Gm-Message-State: ANoB5plfNkY+buDrQppwoOW1XyoAnf45jPjp3EHFHD5qNwPlMfRlfhoe
-        aVINsdkszb6iqTdrUvAHrGHOKeJReVrjfg==
-X-Google-Smtp-Source: AA0mqf4T4HwW/qrOTYVVjX1M1jxfRCBkXN5GVrTmzffjzY38wXuxrhTgEl/mjRQobDW6EyuSIh+mxQ==
-X-Received: by 2002:a0c:edd0:0:b0:4b1:8d88:1982 with SMTP id i16-20020a0cedd0000000b004b18d881982mr36484357qvr.33.1669719203657;
-        Tue, 29 Nov 2022 02:53:23 -0800 (PST)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id x26-20020ac8539a000000b00398df095cf5sm8316486qtp.34.2022.11.29.02.53.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 02:53:23 -0800 (PST)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-3b56782b3f6so134072637b3.13;
-        Tue, 29 Nov 2022 02:53:22 -0800 (PST)
-X-Received: by 2002:a05:690c:b81:b0:37e:6806:a5f9 with SMTP id
- ck1-20020a05690c0b8100b0037e6806a5f9mr36739244ywb.47.1669719202235; Tue, 29
- Nov 2022 02:53:22 -0800 (PST)
+        Tue, 29 Nov 2022 05:57:17 -0500
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2074.outbound.protection.outlook.com [40.107.212.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924885F872
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 02:57:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QKOaZOUJDnXeFE2DRXeSyeIgVhFGC6PpSQ0z1giLLtSlJC/NaVS4dMx/uZqrh//SwCxvj1Ulm+9/b3Gg4eA3E/V4QJWO5It/udB93kBL8nsaQg/+cPFsjIz9U4NXezyqQG74GwbPOTLDu6O7Gg/wKstvEEocDZd+64jDltV3WVcaZ4x2khXLheVAaurHIPU4ovG6cwsw0uX+T4jmhkndXepSgpqoSvXkpqPga+QM8CfB0krwhoynsT+J7M5zB5sG+TRuGAIM3DLMDvBAqtplcWVmwpd+u5ANCS5HoE25QLZ/H5T8AymFVptkyYY+pPK4uyKCX+ZL6NVaKAR2AQYz4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7XtRd8JrTsbaoCmuxFe3286dfOo1NMfjWxA+WMCp0s0=;
+ b=lDqlku5XlAlU8nD7LZ9MuHX1YYNIfZ6L6AS8OK7CBx0mWiGVSAdQ1c6cjJ8ZvjUlPA/bp68qKsh7PKCpIIQ4vpvICxTM1Jt7btEffYmLgdinkS55Reckc2t/wkt5uUrWAhV0VMiouFTyKwyqxgJe+5S5nId91GTKv9zFsByReciRnsGKQTbQJGNqxgKHAWXz2wWQFNtnuwKsM3L5G4mJY9uVQul9Met2slLzPG/mmM9cgeEfbmBnDqdByghc8tj8BotNj3mOmUMP7YaQ1tp5rEie5i1iwQBHPFG17YMw3OqzUtSf582UBUV+TnnHKc6MyyobkDpLNGDBu7ARJhjMeA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7XtRd8JrTsbaoCmuxFe3286dfOo1NMfjWxA+WMCp0s0=;
+ b=mpiT5VrswrfY8dV8mn57g2VUtBXWFg5Vy+rweM84VuMM7jhSArcxhHhZfsNYNYFs4nSKZD6GCjXKW1FwgbHLs/2MTYPRVuxeUj3dzv0HldeUSuuwWCP+sulWSs2a+kVL0AqCw7BdONhDYegdN4bh5l54r6dlKde5hdABYKn7L90=
+Received: from BL1PR13CA0356.namprd13.prod.outlook.com (2603:10b6:208:2c6::31)
+ by IA1PR12MB6329.namprd12.prod.outlook.com (2603:10b6:208:3e5::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.21; Tue, 29 Nov
+ 2022 10:57:13 +0000
+Received: from BL02EPF0000EE3F.namprd05.prod.outlook.com
+ (2603:10b6:208:2c6:cafe::10) by BL1PR13CA0356.outlook.office365.com
+ (2603:10b6:208:2c6::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23 via Frontend
+ Transport; Tue, 29 Nov 2022 10:57:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0000EE3F.mail.protection.outlook.com (10.167.241.133) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5857.17 via Frontend Transport; Tue, 29 Nov 2022 10:57:13 +0000
+Received: from pp-server-two.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 29 Nov
+ 2022 04:57:10 -0600
+From:   xinhui pan <xinhui.pan@amd.com>
+To:     <amd-gfx@lists.freedesktop.org>
+CC:     <daniel@ffwll.ch>, <matthew.auld@intel.com>,
+        <christian.koenig@amd.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <arunpravin.paneerselvam@amd.com>,
+        <intel-gfx@lists.freedesktop.org>,
+        "xinhui pan" <xinhui.pan@amd.com>
+Subject: [PATCH v4] drm: Optimise for continuous memory allocation
+Date:   Tue, 29 Nov 2022 18:56:55 +0800
+Message-ID: <20221129105655.125571-1-xinhui.pan@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <1669621742-28524-1-git-send-email-quic_srivasam@quicinc.com>
- <CAMuHMdUBojHkaAPsjOEadfaikth+L0R_NrKzvqXrmZS9Kc5zHw@mail.gmail.com> <3b00c04c-cb6d-9e9a-ba0c-0ce093b4a3fb@quicinc.com>
-In-Reply-To: <3b00c04c-cb6d-9e9a-ba0c-0ce093b4a3fb@quicinc.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 29 Nov 2022 11:53:10 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUfRJmy56eO=ET-Togg-EOgxSjnTgAUYWmixD_zVonipA@mail.gmail.com>
-Message-ID: <CAMuHMdUfRJmy56eO=ET-Togg-EOgxSjnTgAUYWmixD_zVonipA@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: qcom: lpass-sc7180: Add system suspend/resume PM ops
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org, quic_plai@quicinc.com,
-        bgoswami@quicinc.com, perex@perex.cz, tiwai@suse.com,
-        srinivas.kandagatla@linaro.org, quic_rohkumar@quicinc.com,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0000EE3F:EE_|IA1PR12MB6329:EE_
+X-MS-Office365-Filtering-Correlation-Id: 219552b0-a752-491b-6ce5-08dad1f878c0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zM0XEtkIjUk2Ja42WyfvxeUuTHSutCiwKWGcOuIPFqLGFB9ApOm1Vli8HaCHJSvJyI99oomYzKzJUiZl6yO+aB280iCpyGaKh5v5sYsf/A/vbQ1YxBZn+2HNYFN8WN6j4j8hOVEPflw+IOMKjo21e2iv/nDVr4jPZyFjhgZGYvQeB4va9Jz08Kl891uPyL8QU7WuPO64TvvgRW8/4+n89m9GHD6kVekOUlmMS6y2Ol8ew8j5igOD0i22hCVpjmfW7hNEHvOZDvCDhe/XPL6L0IWzlis9KSL2ukQp/ftyRIgVmGgdscqzC5/nHID22Jsfpjj+kJP51WSK7WLnpWolnx2rJP0ghtHyfER/miMZFXTNPBlwEJ9Ub5PF5Y0caKsmUsZfvlxHjDNcLQXirpKaxeo1EXtl6EI5wlCYcY+CBOdzJLMfRhYXWEfrVzo/v0sWVGNrqYIQEntmj1nB/i6Q2++4xv/JnMr1cj8Vgh0+1JlP+UrRlwHyvsegqgXZYAke+LHLBR4NNaVIS+YFXn5btSOOFKLRypenK4iof9+tjCrLQE0QdKCVcFTrYeFpJezffZ/eVWaZ8G5t+V13wlzpFSdvxr9tzQOA9jRMX6D+pu8uf+10vpPf93glfaN3xtAGs4nG6R1sc0czdlGn3EZsDQD2pOYMB97DI80KzfhZBLvxgku4SG9R2oip1EtHoTyhm5ff5fDXq5hZxAT1ZaIytsIwHMDeok5u5saFICSH8J8=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(39860400002)(396003)(451199015)(40470700004)(36840700001)(46966006)(66899015)(36756003)(82310400005)(40480700001)(36860700001)(6666004)(7696005)(16526019)(426003)(47076005)(26005)(1076003)(2616005)(83380400001)(41300700001)(86362001)(8936002)(2906002)(5660300002)(356005)(81166007)(336012)(54906003)(316002)(6916009)(186003)(478600001)(70586007)(70206006)(40460700003)(82740400003)(8676002)(4326008)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 10:57:13.3848
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 219552b0-a752-491b-6ce5-08dad1f878c0
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000EE3F.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6329
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Srinivasa,
+Currently drm-buddy does not have full knowledge of continuous memory.
 
-On Tue, Nov 29, 2022 at 11:36 AM Srinivasa Rao Mandadapu
-<quic_srivasam@quicinc.com> wrote:
-> On 11/29/2022 1:23 PM, Geert Uytterhoeven wrote:
-> > On Mon, Nov 28, 2022 at 8:50 AM Srinivasa Rao Mandadapu
-> > <quic_srivasam@quicinc.com> wrote:
-> >> Update lpass sc7180 platform driver with PM ops, such as
-> >> system supend and resume callbacks.
-> >> This update is required to disable clocks during supend and
-> >> avoid XO shutdown issue.
-> >>
-> >> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> >> Tested-by: Rahul Ajmeriya <quic_rajmeriy@quicinc.com>
-> > Thanks for your patch, which is now commit 2d68148f8f85ca5a ("ASoC:
-> > qcom: lpass-sc7180: Add system suspend/resume PM ops") in next-20221129.
-> >
-> >> --- a/sound/soc/qcom/lpass-sc7180.c
-> >> +++ b/sound/soc/qcom/lpass-sc7180.c
-> >> @@ -12,6 +12,7 @@
-> >>   #include <linux/module.h>
-> >>   #include <linux/of.h>
-> >>   #include <linux/platform_device.h>
-> >> +#include <linux/pm_runtime.h>
-> >>   #include <dt-bindings/sound/sc7180-lpass.h>
-> >>   #include <sound/pcm.h>
-> >>   #include <sound/soc.h>
-> >> @@ -156,10 +157,34 @@ static int sc7180_lpass_exit(struct platform_device *pdev)
-> >>          struct lpass_data *drvdata = platform_get_drvdata(pdev);
-> >>
-> >>          clk_bulk_disable_unprepare(drvdata->num_clks, drvdata->clks);
-> >> +       return 0;
-> >> +}
-> >> +
-> >> +static int sc7180_lpass_dev_resume(struct device *dev)
-> >> +{
-> >> +       int ret = 0;
-> >> +       struct lpass_data *drvdata = dev_get_drvdata(dev);
-> >>
-> >> +       ret = clk_bulk_prepare_enable(drvdata->num_clks, drvdata->clks);
-> >> +       if (ret) {
-> >> +               dev_err(dev, "sc7180 clk prepare and enable failed\n");
-> >> +               return ret;
-> >> +       }
-> >> +       return ret;
-> >> +}
-> >> +
-> >> +static int sc7180_lpass_dev_suspend(struct device *dev)
-> >> +{
-> >> +       struct lpass_data *drvdata = dev_get_drvdata(dev);
-> >> +
-> >> +       clk_bulk_disable_unprepare(drvdata->num_clks, drvdata->clks);
-> >>          return 0;
-> >>   }
-> > noreply@ellerman.id.au reports for e.g. m68k-allmodconfig:
-> >
-> >      sound/soc/qcom/lpass-sc7180.c:179:12: error:
-> > 'sc7180_lpass_dev_suspend' defined but not used
-> > [-Werror=unused-function]
-> >      sound/soc/qcom/lpass-sc7180.c:166:12: error:
-> > 'sc7180_lpass_dev_resume' defined but not used
-> > [-Werror=unused-function]
-> >
-> >> +static const struct dev_pm_ops sc7180_lpass_pm_ops = {
-> >> +       SET_SYSTEM_SLEEP_PM_OPS(sc7180_lpass_dev_suspend, sc7180_lpass_dev_resume)
-> >> +};
-> > Please use DEFINE_SIMPLE_DEV_PM_OPS()...
-> Actually, we need to use this patch in in previous kernels 5.4 and 5.15.
-> I think these changes won't apply on previous kernel.
-> Hence ignoring for now and will take care next time.
+Lets consider scenario below.
+order 1:    L		    R
+order 0: LL	LR	RL	RR
+for order 1 allocation, it can offer L or R or LR+RL.
 
-In that case you should add __maybe_unused tags to
-sc7180_lpass_dev_suspend() and sc7180_lpass_dev_resume() first, so it
-can be backported to 5.4 and 5.15, and do the DEFINE_SIMPLE_DEV_PM_OPS()
-conversion later.
+For now, we only implement L or R case for continuous memory allocation.
+So this patch aims to implement the rest cases.
 
-Gr{oetje,eeting}s,
+Adding a new member leaf_link which links all leaf blocks in asceding
+order. Now we can find more than 2 sub-order blocks easier.
+Say, order 4 can be combined with corresponding order 4, 2+2, 1+2+1,
+0+1+2+0, 0+2+1+0.
 
-                        Geert
+Signed-off-by: xinhui pan <xinhui.pan@amd.com>
+---
+change from v3:
+reworked totally. adding leaf_link.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+change from v2:
+search continuous block in nearby root if needed
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+change from v1:
+implement top-down continuous allocation
+---
+ drivers/gpu/drm/drm_buddy.c | 108 +++++++++++++++++++++++++++++++++---
+ include/drm/drm_buddy.h     |   1 +
+ 2 files changed, 102 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/gpu/drm/drm_buddy.c b/drivers/gpu/drm/drm_buddy.c
+index 11bb59399471..8edafb99b02c 100644
+--- a/drivers/gpu/drm/drm_buddy.c
++++ b/drivers/gpu/drm/drm_buddy.c
+@@ -80,6 +80,7 @@ int drm_buddy_init(struct drm_buddy *mm, u64 size, u64 chunk_size)
+ {
+ 	unsigned int i;
+ 	u64 offset;
++	LIST_HEAD(leaf);
+ 
+ 	if (size < chunk_size)
+ 		return -EINVAL;
+@@ -136,6 +137,7 @@ int drm_buddy_init(struct drm_buddy *mm, u64 size, u64 chunk_size)
+ 			goto out_free_roots;
+ 
+ 		mark_free(mm, root);
++		list_add_tail(&root->leaf_link, &leaf);
+ 
+ 		BUG_ON(i > mm->max_order);
+ 		BUG_ON(drm_buddy_block_size(mm, root) < chunk_size);
+@@ -147,6 +149,7 @@ int drm_buddy_init(struct drm_buddy *mm, u64 size, u64 chunk_size)
+ 		i++;
+ 	} while (size);
+ 
++	list_del(&leaf);
+ 	return 0;
+ 
+ out_free_roots:
+@@ -205,6 +208,9 @@ static int split_block(struct drm_buddy *mm,
+ 	mark_free(mm, block->left);
+ 	mark_free(mm, block->right);
+ 
++	list_add(&block->right->leaf_link, &block->leaf_link);
++	list_add(&block->left->leaf_link, &block->leaf_link);
++	list_del(&block->leaf_link);
+ 	mark_split(block);
+ 
+ 	return 0;
+@@ -256,6 +262,9 @@ static void __drm_buddy_free(struct drm_buddy *mm,
+ 			break;
+ 
+ 		list_del(&buddy->link);
++		list_add(&parent->leaf_link, &block->leaf_link);
++		list_del(&buddy->leaf_link);
++		list_del(&block->leaf_link);
+ 
+ 		drm_block_free(mm, block);
+ 		drm_block_free(mm, buddy);
+@@ -386,6 +395,78 @@ alloc_range_bias(struct drm_buddy *mm,
+ 	return ERR_PTR(err);
+ }
+ 
++static struct drm_buddy_block *
++find_continuous_blocks(struct drm_buddy *mm,
++		       int order,
++		       unsigned long flags,
++		       struct drm_buddy_block **rblock)
++{
++	struct list_head *head = &mm->free_list[order];
++	struct drm_buddy_block *free_block, *max_block = NULL, *end, *begin;
++	u64 pages = BIT(order + 1);
++	u64 cur_pages;
++
++	list_for_each_entry(free_block, head, link) {
++		if (max_block) {
++			if (!(flags & DRM_BUDDY_TOPDOWN_ALLOCATION))
++				break;
++
++			if (drm_buddy_block_offset(free_block) <
++			    drm_buddy_block_offset(max_block))
++				continue;
++		}
++
++		cur_pages = BIT(order);
++		begin = end = free_block;
++		while (true) {
++			struct drm_buddy_block *prev, *next;
++			int prev_order, next_order;
++
++			prev = list_prev_entry(begin, leaf_link);
++			if (!drm_buddy_block_is_free(prev) ||
++			    drm_buddy_block_offset(prev) >
++			    drm_buddy_block_offset(begin)) {
++				prev = NULL;
++			}
++			next = list_next_entry(end, leaf_link);
++			if (!drm_buddy_block_is_free(next) ||
++			    drm_buddy_block_offset(next) <
++			    drm_buddy_block_offset(end)) {
++				next = NULL;
++			}
++			if (!prev && !next)
++				break;
++
++			prev_order = prev ? drm_buddy_block_order(prev) : -1;
++			next_order = next ? drm_buddy_block_order(next) : -1;
++			if (next_order >= prev_order) {
++				BUG_ON(drm_buddy_block_offset(end) +
++				       drm_buddy_block_size(mm, end) !=
++				       drm_buddy_block_offset(next));
++				end = next;
++				cur_pages += BIT(drm_buddy_block_order(next));
++			}
++			if (prev_order >= next_order) {
++				BUG_ON(drm_buddy_block_offset(prev) +
++				       drm_buddy_block_size(mm, prev) !=
++				       drm_buddy_block_offset(begin));
++				begin = prev;
++				cur_pages += BIT(drm_buddy_block_order(prev));
++			}
++			if (pages == cur_pages)
++				break;
++			BUG_ON(pages < cur_pages);
++		}
++
++		if (pages > cur_pages)
++			continue;
++
++		*rblock = end;
++		max_block = begin;
++	}
++	return max_block;
++}
++
+ static struct drm_buddy_block *
+ get_maxblock(struct list_head *head)
+ {
+@@ -637,7 +718,7 @@ int drm_buddy_alloc_blocks(struct drm_buddy *mm,
+ 			   struct list_head *blocks,
+ 			   unsigned long flags)
+ {
+-	struct drm_buddy_block *block = NULL;
++	struct drm_buddy_block *block = NULL, *rblock = NULL;
+ 	unsigned int min_order, order;
+ 	unsigned long pages;
+ 	LIST_HEAD(allocated);
+@@ -689,17 +770,30 @@ int drm_buddy_alloc_blocks(struct drm_buddy *mm,
+ 				break;
+ 
+ 			if (order-- == min_order) {
++				if (!(flags & DRM_BUDDY_RANGE_ALLOCATION) &&
++				    min_order != 0 && pages == BIT(order + 1)) {
++					block = find_continuous_blocks(mm,
++								       order,
++								       flags,
++								       &rblock);
++					if (block)
++						break;
++				}
+ 				err = -ENOSPC;
+ 				goto err_free;
+ 			}
+ 		} while (1);
+ 
+-		mark_allocated(block);
+-		mm->avail -= drm_buddy_block_size(mm, block);
+-		kmemleak_update_trace(block);
+-		list_add_tail(&block->link, &allocated);
+-
+-		pages -= BIT(order);
++		do {
++			mark_allocated(block);
++			mm->avail -= drm_buddy_block_size(mm, block);
++			kmemleak_update_trace(block);
++			list_add_tail(&block->link, &allocated);
++			pages -= BIT(drm_buddy_block_order(block));
++			if (block == rblock || !rblock)
++				break;
++			block = list_next_entry(block, leaf_link);
++		} while (true);
+ 
+ 		if (!pages)
+ 			break;
+diff --git a/include/drm/drm_buddy.h b/include/drm/drm_buddy.h
+index 572077ff8ae7..c5437bd4f4f3 100644
+--- a/include/drm/drm_buddy.h
++++ b/include/drm/drm_buddy.h
+@@ -50,6 +50,7 @@ struct drm_buddy_block {
+ 	 */
+ 	struct list_head link;
+ 	struct list_head tmp_link;
++	struct list_head leaf_link;
+ };
+ 
+ /* Order-zero must be at least PAGE_SIZE */
+-- 
+2.34.1
+
