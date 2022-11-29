@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 415FB63B7B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 03:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E29C263B7BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 03:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235092AbiK2CUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 21:20:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59172 "EHLO
+        id S235188AbiK2CUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 21:20:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234795AbiK2CUS (ORCPT
+        with ESMTP id S234909AbiK2CUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 21:20:18 -0500
+        Mon, 28 Nov 2022 21:20:19 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095212AC6D;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9C42AC73;
         Mon, 28 Nov 2022 18:20:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A000C6152E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4AA16153E;
         Tue, 29 Nov 2022 02:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F0A42C43470;
-        Tue, 29 Nov 2022 02:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 16695C4314B;
+        Tue, 29 Nov 2022 02:20:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1669688417;
-        bh=gA9o+Q1pX1a5YN1qUo3JSKHYTmcCScQC4+gx69uFiu0=;
+        bh=rk0r4aU5kfwuQEX4wGCmf5eLCcx795wJwurnFCh4sqE=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=UicuvELBoSSDn1ARVbqWWdNf16aFzuPftno0NkkE1LgDDwkC+3Bw7uQKN+0z/h3jz
-         FffJyp7s0zcnJY5WPKUAMdBX+KxCf+3ToZlkeCssf8oTVA1fe1MFQTqCPP/ZdMisMa
-         e0+GDK3/AMdh3ydZOgAyn8sVurKfpx/8MQRARZgT/W/IVpv18ihUqzOYoKt04uTVmT
-         t8RdSXD9TtxnWChUNpB2Onvkp0MgJhjDlHtLLDimGDJ3epGW9lryWC0TVUmVFbFGzb
-         Iz8QN+vlfMInFqL82nrQiFGajtz6uAM2PyQiXeZICpGZBMj4lI6FWZCHYJT/aXFeu8
-         8gd5Pci9R4DSQ==
+        b=MVJfLD2BNSNsaL66CAEcg/6djJKNQPuR8ZWjd42lIniC0iN4e+xHg3AafpeXDW02d
+         r1m+Ym5CLHlxTTq00Q6cZcW/OJ3d8OVGO08pN3t7NqNyIcjG5qMkEQJrcAn4uNYN5D
+         o9Mpu7qojsRmxoC1lhqBYcLwb4spOf669DPkv0zPGQQYFy+/D4BwqXFZHZods1wBqT
+         CrTD/szg2hZ7UhPqVyGtv5TRojHSi7YVdKHbLuVUAz0zls+LHXoyrskL8jP9cM/aIW
+         pVjdfVDkTlIKZTdrpgvKggxz9HYwjVRScmsin93Ed8KqFs3ZxZqzn+7jTwfbBBBcnL
+         FKVBm10jP1REg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D262CE29F43;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E1707E4D017;
         Tue, 29 Nov 2022 02:20:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [net PATCH] dsa: lan9303: Correct stat name
+Subject: Re: [PATCH v2 net] net: hsr: Fix potential use-after-free
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166968841685.21086.964893464837475677.git-patchwork-notify@kernel.org>
+Message-Id: <166968841692.21086.15703748887586034418.git-patchwork-notify@kernel.org>
 Date:   Tue, 29 Nov 2022 02:20:16 +0000
-References: <20221128193559.6572-1-jerry.ray@microchip.com>
-In-Reply-To: <20221128193559.6572-1-jerry.ray@microchip.com>
-To:     Jerry Ray <jerry.ray@microchip.com>
-Cc:     andrew@lunn.ch, f.fainelli@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
+References: <20221125075724.27912-1-yuehaibing@huawei.com>
+In-Reply-To: <20221125075724.27912-1-yuehaibing@huawei.com>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, arvid.brodin@alten.se, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -63,22 +62,20 @@ Hello:
 This patch was applied to netdev/net.git (master)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon, 28 Nov 2022 13:35:59 -0600 you wrote:
-> Fixes: a1292595e006 ("net: dsa: add new DSA switch driver for the SMSC-LAN9303")
+On Fri, 25 Nov 2022 15:57:24 +0800 you wrote:
+> The skb is delivered to netif_rx() which may free it, after calling this,
+> dereferencing skb may trigger use-after-free.
 > 
-> This patch changes the reported ethtool statistics for the lan9303
-> family of parts covered by this driver.
-> 
-> The TxUnderRun statistic label is renamed to RxShort to accurately
-> reflect what stat the device is reporting.  I did not reorder the
-> statistics as that might cause problems with existing user code that
-> are expecting the stats at a certain offset.
+> Fixes: f421436a591d ("net/hsr: Add support for the High-availability Seamless Redundancy protocol (HSRv0)")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+> v2: correct Fixes tag
 > 
 > [...]
 
 Here is the summary with links:
-  - [net] dsa: lan9303: Correct stat name
-    https://git.kernel.org/netdev/net/c/39f59bca275d
+  - [v2,net] net: hsr: Fix potential use-after-free
+    https://git.kernel.org/netdev/net/c/7e177d32442b
 
 You are awesome, thank you!
 -- 
