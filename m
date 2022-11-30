@@ -2,105 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 203C263E141
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B407863E157
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiK3UK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 15:10:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
+        id S229844AbiK3ULJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 15:11:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbiK3UJw (ORCPT
+        with ESMTP id S229910AbiK3UKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:09:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376F99135E
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 12:09:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9027B81CDF
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 20:09:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26F02C4314A;
-        Wed, 30 Nov 2022 20:09:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669838988;
-        bh=wsgdvbT/35uxHZu2m3onVtLPaAGvmOTx9y/8CzTLOOI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JsatvoLDGeust/Jc03yigWF7AvQ4atAVKdWFKmE0dNZWBmpzz9ZHKZE4BvRsHU9Fi
-         aV7fgIgKo9O+fZIG0rh8nbbzE71dMlsVwQPPORO4oVbGXRx0r7IapuM6n4aC4pHszS
-         9IikxmcflQtlRhbJ55u2cAJ3LARyqvHi3/Z4oQ/D31HNWPpGBZ4Ldjo1ZJ2W/Db0Nz
-         82U+K1uZf+ifNulP0brCg3y9wejFhyh+XGQMM6SobcVMsN/TEgHvpL1k6ANkAIVSQw
-         R0Qngx7chuYTIL2suKnj5btccse85/tHNBxifStrsSfPI4F9FPSsrMZZMwlTR6SGd4
-         2xoJ99lIMtsBA==
-From:   SeongJae Park <sj@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [RFC PATCH v2 11/11] Docs/ABI/damon: document scheme filters files
-Date:   Wed, 30 Nov 2022 20:09:37 +0000
-Message-Id: <20221130200937.118005-12-sj@kernel.org>
+        Wed, 30 Nov 2022 15:10:44 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1C99492B;
+        Wed, 30 Nov 2022 12:09:58 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id p8so28632833lfu.11;
+        Wed, 30 Nov 2022 12:09:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sc8kO01GqDD6/HcwuanEhTRskd8di+x6+a0ibeX+dww=;
+        b=Z0mrGYbObj/vsr0YdYm78sVKlrPMXeltJNT55AdG4euBqwQdCO3M/pUiHQjiKtaARD
+         J4m34uHhVfZAz/Zn3rN2UjuyzApZ8cHFf+OUM0SCwA2pgtNb1xniLibNUBvd6SnUPQKG
+         cGGS+0Fuva7LwMN52YkrdxU8p9BEq59tTEYxuQ7YwdDpRUPavnFgXU5e8V9R1dJARxrX
+         doAbU1IaRXm5zvBiulRtILWHuPBEy+qsyIuAvUYUmRn4kFAWLxOKhThskb7FhnYul9nG
+         mf8pTGEKVxvtrwRMw3c0cjd6Me3KLiB90xGMU9nu8aOCk0ZM7DYCtkImyQG190YJUfrD
+         8Wag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sc8kO01GqDD6/HcwuanEhTRskd8di+x6+a0ibeX+dww=;
+        b=zIkmPphconLzYQqCCMMtpnULup/UyaWFK2wHgNauOFmDWz5KQVSeUGDR5Ybr4BJPV8
+         DCRkqd2Out2taALxVOuJGfbC6IrnVaWYkRy+PT/bBVnE4O8d83arSV/AS/eIDkgmBc7b
+         wx3XPmGL6M69/p+eaLq40QZ+FErYMSLPaHze3jmahGjOlcq+z88DbMA2lD2/Kry+ESVJ
+         A7IGj4yN/zD+nwZwtvwA8d9hpI4kTp7CuqU0q8D+rH3cfzKvcpQFfHLjWl3VbYx8QnSH
+         flYYJF6fAaLzK1CpwAnRdlZoupUAxE0A1CKwFCiRBX7o+jiuoIbVcmdCYa1aWhAQpccZ
+         oLeA==
+X-Gm-Message-State: ANoB5pmIZjweuJ6MD46uivZFDzLwfkWOjbmclbxTgQ4klHwi8VFWQZ9l
+        pv+nLxDFnJBG9zMSrkxg6b2FVi0xFrc=
+X-Google-Smtp-Source: AA0mqf7Nbyfq13CmWJAE4fQKtqOHUvwnOR4hNGvsQdiey5liE4mjym5n+HRpj5svMExCq8coX+7Riw==
+X-Received: by 2002:a19:2d52:0:b0:4b1:dc42:6f85 with SMTP id t18-20020a192d52000000b004b1dc426f85mr20158596lft.568.1669838996495;
+        Wed, 30 Nov 2022 12:09:56 -0800 (PST)
+Received: from localhost.localdomain (ccy110.neoplus.adsl.tpnet.pl. [83.30.148.110])
+        by smtp.gmail.com with ESMTPSA id a25-20020a056512201900b004b4e9580b1asm369754lfb.66.2022.11.30.12.09.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 12:09:56 -0800 (PST)
+From:   Adam Skladowski <a39.skl@gmail.com>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH v2 00/12] SM6115 DTS changes
+Date:   Wed, 30 Nov 2022 21:09:38 +0100
+Message-Id: <20221130200950.144618-1-a39.skl@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221130200937.118005-1-sj@kernel.org>
-References: <20221130200937.118005-1-sj@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document newly added DAMON sysfs interface files for DAMOS filtering on
-the DAMON ABI document.
+This patch series adds bunch of new nodes
+also it fixes some small nitpicks in yamls and adds compatible.
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- .../ABI/testing/sysfs-kernel-mm-damon         | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
+Changes since v1
+================
+1. Changed title for mdss yaml patch
+2. Added missing dmas to spi0
+3. Wired freq domains to CPUs
+4. Added R-b/Ack tags
+5. Reworded smmu dts patch
 
-diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-damon b/Documentation/ABI/testing/sysfs-kernel-mm-damon
-index 13397b853692..2744f21b5a6b 100644
---- a/Documentation/ABI/testing/sysfs-kernel-mm-damon
-+++ b/Documentation/ABI/testing/sysfs-kernel-mm-damon
-@@ -258,6 +258,35 @@ Contact:	SeongJae Park <sj@kernel.org>
- Description:	Writing to and reading from this file sets and gets the low
- 		watermark of the scheme in permil.
- 
-+What:		/sys/kernel/mm/damon/admin/kdamonds/<K>/contexts/<C>/schemes/<S>/filters/nr_filters
-+Date:		Dec 2022
-+Contact:	SeongJae Park <sj@kernel.org>
-+Description:	Writing a number 'N' to this file creates the number of
-+		directories for setting filters of the scheme named '0' to
-+		'N-1' under the filters/ directory.
-+
-+What:		/sys/kernel/mm/damon/admin/kdamonds/<K>/contexts/<C>/schemes/<S>/filters/<F>/type
-+Date:		Dec 2022
-+Contact:	SeongJae Park <sj@kernel.org>
-+Description:	Writing to and reading from this file sets and gets the type of
-+		the memory of the interest.  'anon' for anonymous pages, or
-+		'memcg' for specific memory cgroup can be written and read.
-+
-+What:		/sys/kernel/mm/damon/admin/kdamonds/<K>/contexts/<C>/schemes/<S>/filters/<F>/memcg_path
-+Date:		Dec 2022
-+Contact:	SeongJae Park <sj@kernel.org>
-+Description:	If 'memcg' is written to the 'type' file, writing to and
-+		reading from this file sets and gets the path to the memory
-+		cgroup of the interest.
-+
-+What:		/sys/kernel/mm/damon/admin/kdamonds/<K>/contexts/<C>/schemes/<S>/filters/<F>/matching
-+Date:		Dec 2022
-+Contact:	SeongJae Park <sj@kernel.org>
-+Description:	Writing 'Y' or 'N' to this file sets whether to filter out
-+		pages that do or do not match to the 'type' and 'memcg_path',
-+		respectively.  Filter out means the action of the scheme will
-+		not be applied to.
-+
- What:		/sys/kernel/mm/damon/admin/kdamonds/<K>/contexts/<C>/schemes/<S>/stats/nr_tried
- Date:		Mar 2022
- Contact:	SeongJae Park <sj@kernel.org>
+Adam Skladowski (12):
+  dt-bindings: display: msm: Rename mdss node name in example
+  dt-bindings: thermal: tsens: Add SM6115 compatible
+  arm64: dts: qcom: sm6115: Add cpufreq-hw support
+  arm64: dts: qcom: sm6115: Add TSENS node
+  arm64: dts: qcom: sm6115: Add PRNG node
+  arm64: dts: qcom: sm6115: Add rpm-stats node
+  arm64: dts: qcom: sm6115: Add dispcc node
+  arm64: dts: qcom: sm6115: Add mdss/dpu node
+  arm64: dts: qcom: sm6115: Add GPI DMA
+  arm64: dts: qcom: sm6115: Add i2c/spi nodes
+  arm64: dts: qcom: sm6115: Add WCN node.
+  arm64: dts: qcom: sm6115: Add smmu fallback to qcom generic compatible
+
+ .../display/msm/qcom,qcm2290-mdss.yaml        |   2 +-
+ .../display/msm/qcom,sm6115-mdss.yaml         |   2 +-
+ .../bindings/thermal/qcom-tsens.yaml          |   1 +
+ arch/arm64/boot/dts/qcom/sm6115.dtsi          | 573 +++++++++++++++++-
+ 4 files changed, 575 insertions(+), 3 deletions(-)
+
 -- 
 2.25.1
 
