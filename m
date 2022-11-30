@@ -2,87 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A801663CC68
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 01:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 643A163CC6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 01:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbiK3ANt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 19:13:49 -0500
+        id S231596AbiK3AOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 19:14:16 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231377AbiK3ANe (ORCPT
+        with ESMTP id S231928AbiK3ANo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 19:13:34 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4983A73422
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 16:13:14 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id x66so15300020pfx.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 16:13:14 -0800 (PST)
+        Tue, 29 Nov 2022 19:13:44 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374D873B94;
+        Tue, 29 Nov 2022 16:13:39 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id w26-20020a056830061a00b0066c320f5b49so10233364oti.5;
+        Tue, 29 Nov 2022 16:13:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z0DM5tDpbilfkWF6HtGDZ6Fwkblmq8euBR/PI59m22k=;
-        b=X+w2SodLZ4zP5jI4YvydN9gYtqkXs6XJ17MfOs3yOVYADmyFGcbFekq7l8eDLqRUMq
-         TUgj6BA5D7ot9TR25Hc7JDITCAU1AdIQvCrYviFAd+ovUkQzdFs23sujnZksSbzMhl+O
-         8OWtHcmC6O+tqSAnBpdOakp5kPHN2Tr/NL/JJ1vryKqj4omcMULgCm3e7uluZklaGVoN
-         /FC5pesPAm4r4KgZrqojhAEvvtgE1dSbVSqSfevhpfnxNLeNB/RDKjADBEMPnUdi/pU1
-         ONn9d2ZRzlwwQssbmp5dSBs1hLLwxV6RtyqSB9smw+5qPpDc7tXOzIe8F23mLyVtXA6C
-         1SVg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KvHrrkFT/sm8lmNMi6in5CtlQ/OAaknEj2gVEu/Raao=;
+        b=HV31q5r/lH0jnz39TFGK0pxbFdiAdDKUPE93n8U3+QbuJZtEPLhymq4ZuuxNtK4XBC
+         GgAgCPEFQO0/Yt1lLj5jQW31nFYuML56u33qJkGZKTMi+ShT787jJNKt3Jnu3a6RywOI
+         nXW2kZgy+/rrfrRLmQ+UR0MggZU79azFctA2rrqG39i3Lbr4CyvIItvI0M+knX+7w71M
+         7Y1RryZWLR8yy+WdHLmWSbhSvQHeg0EN4giX+j/qbhGlRwYURZif6EAgBnhxbedeaJcF
+         Y0LBMeH9VcWIMUQN7plUUpMpJexbwvANHRDbvwpOXS9LKM537PVkoO/Kq0YMAeWOloPE
+         kNAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z0DM5tDpbilfkWF6HtGDZ6Fwkblmq8euBR/PI59m22k=;
-        b=AHZoOf9OhT3uSDXuC9oaNixRfGvS7k9ZmpZOyx9yvd8DuYp6jQPfjxC4A2u41W1ePP
-         6kKrr6VzPiqbn2aW9TrxOWMP3PPGhKdje0ChdvEMYCd3HWIRGNGLPurI/gEllN8ot1Xg
-         UKGqFkaDAWl8VPwN2LtCmXWmRaXeSL5P9SNbR57BiA/Quo8F7sTmb7Y+fQ/m3korj0SB
-         F2iuoUMdZmrd7KRauID1CD+y70p//jCuJWYXQgzF1SL3Z+5RqOxW+egLBLV9q16oa31f
-         ECn9IB3blQuqdGxauTNcceFwQT4ForriLzVUBDSsQ1WcKKuTS7ltDodMSHTR2l+sJyXu
-         fAOA==
-X-Gm-Message-State: ANoB5pmmgfYDBacW+fQGiMYTXr553LBEpE5htU1/9vCDe85jI+HnHA+t
-        nLMLXJ3dIhxixY9LLCckG8A8xA==
-X-Google-Smtp-Source: AA0mqf7vrtO27kyWB7weCDRH7BmwrG65H7VSwLRzv7tocPo6tUmL4wlIXj3ONf+Fdd/lvfXEKTP2Hw==
-X-Received: by 2002:a63:1a48:0:b0:477:786:f557 with SMTP id a8-20020a631a48000000b004770786f557mr35233251pgm.476.1669767193543;
-        Tue, 29 Nov 2022 16:13:13 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 15-20020a630f4f000000b0047702d44861sm8617542pgp.18.2022.11.29.16.13.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 16:13:13 -0800 (PST)
-Date:   Wed, 30 Nov 2022 00:13:09 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kim Phillips <kim.phillips@amd.com>
-Cc:     x86@kernel.org, Babu Moger <Babu.Moger@amd.com>,
-        Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/7] x86/cpu, kvm: Move CPUID 0x80000021 EAX feature
- bits propagation to kvm_set_cpu_caps
-Message-ID: <Y4agFT6OwvZzSgn1@google.com>
-References: <20221129235816.188737-1-kim.phillips@amd.com>
- <20221129235816.188737-5-kim.phillips@amd.com>
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KvHrrkFT/sm8lmNMi6in5CtlQ/OAaknEj2gVEu/Raao=;
+        b=36PTI74UojXup93nyEY3j86AyHQpPFXcfl3yIG+w9OUaywK6ev+CBPN1IAh4YNpw+5
+         gLE+1fzX0VV4NtW2EGfas25LCcUamXcpspC24Tf3fxBZoDVOXQSmzng4gbdlnsh4gJZY
+         pdI8/QKN6pPHDNfkrFHmnu3Vaogbuze2R6go93Q8fQ7NxZurMEG1CgQynRVW4mRdeo5b
+         BnyQ85+VnMyn9brRCgAhcKxyqLzM7sIwdo1BfxIwgwhB1cGg1lKC7DbLjxDl0jln1vmH
+         Q54bc8V4JaSN2uQ5NpVWTbxG83CH5Qrq2S+0vpIGASL5nKPwKjYQz3DpavHVjmNfDmzR
+         /1+w==
+X-Gm-Message-State: ANoB5pnobixcSalzGPO+YCbl9Y3RRJvaqjJLdYJSF+WWSp8qmQqMlrxU
+        JUxaF2hDCHHClpdShdY4fGo=
+X-Google-Smtp-Source: AA0mqf48lKa8NdKeQq8VKLANdbo3RPeNcH5CSCT76CNpXboH13ixzW9lXE70pkGBpQQ66eBIQBOvLw==
+X-Received: by 2002:a05:6830:61a:b0:661:9dc0:75a0 with SMTP id w26-20020a056830061a00b006619dc075a0mr20701161oti.327.1669767218973;
+        Tue, 29 Nov 2022 16:13:38 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o16-20020a056870969000b001428eb454e9sm151277oaq.13.2022.11.29.16.13.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 16:13:38 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6bede7bd-81b9-846b-3f7f-9235a3abeaf5@roeck-us.net>
+Date:   Tue, 29 Nov 2022 16:13:36 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221129235816.188737-5-kim.phillips@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org, Eric Anholt <eric@anholt.net>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+References: <20221129200242.298120-3-robdclark@gmail.com>
+ <20221129203205.GA2132357@roeck-us.net>
+ <CAF6AEGuK4jv25cQ4p-rrytx9Qn4JZdRRfkVJn9T3nf7vJmG5VQ@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [2/2] drm/shmem-helper: Avoid vm_open error paths
+In-Reply-To: <CAF6AEGuK4jv25cQ4p-rrytx9Qn4JZdRRfkVJn9T3nf7vJmG5VQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,74 +83,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-() after function names, i.e. kvm_set_cpu_caps().
-
-On Tue, Nov 29, 2022, Kim Phillips wrote:
-> Since they're now all scattered, group CPUID 0x80000021 EAX feature bits
-
-Nit, scattering feature bits isn't required to use KVM's reverse CPUID magic,
-e.g. see commit 047c72299061 ("KVM: x86: Update KVM-only leaf handling to allow
-for 100% KVM-only leafs") that's sitting in kvm/queue.
-
-The real justification for this patch is that open coding numbers is error prone
-and is very frowned upon in KVM.
-
-> propagation to kvm_set_cpu_caps instead of open-coding them in
-
-kvm_set_cpu_caps()
-
-> __do_cpuid_func().
+On 11/29/22 12:47, Rob Clark wrote:
+> On Tue, Nov 29, 2022 at 12:32 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On Tue, Nov 29, 2022 at 12:02:42PM -0800, Rob Clark wrote:
+>>> From: Rob Clark <robdclark@chromium.org>
+>>>
+>>> vm_open() is not allowed to fail.  Fortunately we are guaranteed that
+>>> the pages are already pinned, and only need to increment the refcnt.  So
+>>> just increment it directly.
+>>
+>> I don't know anything about drm or gem, but I am wondering _how_
+>> this would be guaranteed. Would it be through the pin function ?
+>> Just wondering, because that function does not seem to be mandatory.
 > 
-> Signed-off-by: Kim Phillips <kim.phillips@amd.com>
-> ---
->  arch/x86/kvm/cpuid.c         | 35 ++++++++++++++++++++---------------
->  arch/x86/kvm/reverse_cpuid.h | 22 ++++++++++++++++------
->  2 files changed, 36 insertions(+), 21 deletions(-)
+> We've pinned the pages already in mmap.. vm->open() is perhaps not the
+> best name for the callback function, but it is called for copying an
+> existing vma into a new process (and for some other cases which do not
+> apply here because VM_DONTEXPAND).
 > 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index c92c49a0b35b..8e37760cea1b 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -730,6 +730,25 @@ void kvm_set_cpu_caps(void)
->  		0 /* SME */ | F(SEV) | 0 /* VM_PAGE_FLUSH */ | F(SEV_ES) |
->  		F(SME_COHERENT));
->  
-> +	/*
-> +	 * Pass down these bits:
-> +	 *    EAX      0      NNDBP, Processor ignores nested data breakpoints
-> +	 *    EAX      2      LAS, LFENCE always serializing
-> +	 *    EAX      6      NSCB, Null selector clear base
-> +	 *    EAX      8      Automatic IBRS
+> (Other drivers pin pages in the fault handler, where there is actually
+> potential to return an error, but that change was a bit more like
+> re-writing shmem helper ;-))
+> 
 
-Automatic IBRS isn't advertised as of this patch.  Just drop the comment, it's
-guaranteed to become stale at some point, and one of the main reasons for the
-flag magic is so that the code is self-documenting, i.e. so that we don't need
-comments like this.
+Maybe add a bit of that (where the pinning happened) to the commit description
+and to the patch itself ?
 
-> +	 *
-> +	 * Other defined bits are for MSRs that KVM does not expose:
-> +	 *   EAX      3      SPCL, SMM page configuration lock
-> +	 *   EAX      13     PCMSR, Prefetch control MSR
-> +	 */
-> +	kvm_cpu_cap_init_scattered(CPUID_8000_0021_EAX,
-> +				   SF(NO_NESTED_DATA_BP) | SF(LFENCE_RDTSC) |
-> +				   SF(NULL_SEL_CLR_BASE));
+> BR,
+> -R
+> 
+>>>
+>>> Fixes: 2194a63a818d ("drm: Add library for shmem backed GEM objects")
+>>> Cc: stable@vger.kernel.org
+>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+>>> ---
+>>>   drivers/gpu/drm/drm_gem_shmem_helper.c | 14 +++++++++++---
+>>>   1 file changed, 11 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
+>>> index 110a9eac2af8..9885ba64127f 100644
+>>> --- a/drivers/gpu/drm/drm_gem_shmem_helper.c
+>>> +++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
+>>> @@ -571,12 +571,20 @@ static void drm_gem_shmem_vm_open(struct vm_area_struct *vma)
+>>>   {
+>>>        struct drm_gem_object *obj = vma->vm_private_data;
+>>>        struct drm_gem_shmem_object *shmem = to_drm_gem_shmem_obj(obj);
+>>> -     int ret;
+>>>
+>>>        WARN_ON(shmem->base.import_attach);
+>>>
+>>> -     ret = drm_gem_shmem_get_pages(shmem);
+>>> -     WARN_ON_ONCE(ret != 0);
+>>> +     mutex_lock(&shmem->pages_lock);
+>>> +
+>>> +     /*
+>>> +      * We should have already pinned the pages, vm_open() just grabs
+>>
+>> should or guaranteed ? This sounds a bit weaker than the commit
+>> description.
+>>
+like ... the pages were already pinned in (mmap function).
 
-Please follow the established style, e.g.
+>>> +      * an additional reference for the new mm the vma is getting
+>>> +      * copied into.
+>>> +      */
+>>> +     WARN_ON_ONCE(!shmem->pages_use_count);
 
-	kvm_cpu_cap_init_scattered(CPUID_8000_0021_EAX,                         
-		SF(NO_NESTED_DATA_BP) | SF(LFENCE_RDTSC) | SF(NULL_SEL_CLR_BASE)
-	);
+If the code can't be trusted and still needs the warning, how about
+something like the following ?
 
-> +	if (cpu_feature_enabled(X86_FEATURE_LFENCE_RDTSC))
+	if (WARN_ON_ONCE(!shmem->pages_use_count)) {
+		mutex_unlock(&shmem->pages_lock);
+		return;
+	}
 
-I highly doubt it matters, but using cpu_feature_enabled() instead of static_cpu_has()
-is an unrelated change.  At the very least, it should be mentioned in the changelog.
+Thanks,
+Guenter
 
-> +		kvm_cpu_cap_set(X86_FEATURE_LFENCE_RDTSC);
-> +	if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
-> +		kvm_cpu_cap_set(X86_FEATURE_NULL_SEL_CLR_BASE);
-> +
->  	kvm_cpu_cap_mask(CPUID_C000_0001_EDX,
->  		F(XSTORE) | F(XSTORE_EN) | F(XCRYPT) | F(XCRYPT_EN) |
->  		F(ACE2) | F(ACE2_EN) | F(PHE) | F(PHE_EN) |
+>>> +
+>>> +     shmem->pages_use_count++;
+>>> +     mutex_unlock(&shmem->pages_lock);
+>>
+>> The previous code, in that situation, would not increment pages_use_count,
+>> and it would not set not set shmem->pages. Hopefully, it would not try to
+>> do anything with the pages it was unable to get. The new code assumes that
+>> shmem->pages is valid even if pages_use_count is 0, while at the same time
+>> taking into account that this can possibly happen (or the WARN_ON_ONCE
+>> would not be needed).
+>>
+>> Again, I don't know anything about gem and drm, but it seems to me that
+>> there might now be a severe problem later on if the WARN_ON_ONCE()
+>> ever triggers.
+>>
+>> Thanks,
+>> Guenter
+>>
+>>>
+>>>        drm_gem_vm_open(vma);
+>>>   }
+
