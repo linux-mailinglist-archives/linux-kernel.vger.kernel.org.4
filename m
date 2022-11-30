@@ -2,106 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8129863E39E
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6200163E39F
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:48:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiK3WsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 17:48:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
+        id S229456AbiK3WsV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 30 Nov 2022 17:48:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiK3Wr7 (ORCPT
+        with ESMTP id S229541AbiK3WsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 17:47:59 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C02A1AD92
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 14:47:58 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id gu23so66463ejb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 14:47:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QZD29PB1DDnmxaZlq47fhYeHRcAqoUfi3bc/ZNgB9gU=;
-        b=omJRN5aYV43lsSLL/yIGbBrYHdeY5lcQwNAbaYZOIuJbZ1auvK/sIXPiVt/1MzRpUR
-         X89Jvizn78r4Q0w0g2NpVVxk7uaR40j8uv6ukZFpiwji9kVcArT0yeAhGP1MpyI3j+Vc
-         07Uy/Qr7sKaft4E+L+OHOB2/t5OvAyLwaBmKE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QZD29PB1DDnmxaZlq47fhYeHRcAqoUfi3bc/ZNgB9gU=;
-        b=cpjlN+mG/oUSh2HawOsdnZMsvoyGgq0raf95ZjXb4htb+HwSs0BGZhnCihAdZ2eVPB
-         cSE+mBZg6KcPTOL5PKjBGZSbTmkaZQqCJjLcoOqcWGYPzrfD40ozZ+ehEMtRjGwfN/VT
-         iIpv2uunvIkaCPtnsaxqhPucUSeHnAGwjftx4bD+ie6S919N0EEABGvx9fgV1ZKTF/zI
-         xDJ4TyO7XJ0xoEnf7Em1hK218tj5qp6nJ2ol6o+vVrAHC5uo/DSce9Fgq3riGUJTK8iw
-         7a0JD1J16Rn7zfZYA0xlqDIyrQrWs7KwMPnQdA3Ds31MT5TOnbdnqCbvJTgh1yFBquv+
-         73Rg==
-X-Gm-Message-State: ANoB5plXcrSx8RtpUUYtNiADlkmCLi9nLaRSK9pSm9MjGVhKRe8WDFf1
-        W/Bap2vqIDevLoz7c//LUNo6bVtrepRa1UmvACFdDg==
-X-Google-Smtp-Source: AA0mqf6BCXA5CM22fNyGWD/c96fXFEueNSkrFbKgiBvP38k8xPpVPlHBEhq1P0g+KzDS2ef5OtP6Q7GFGQgfT5K4plg=
-X-Received: by 2002:a17:906:fcd0:b0:7ad:b8c0:3057 with SMTP id
- qx16-20020a170906fcd000b007adb8c03057mr54317182ejb.440.1669848476743; Wed, 30
- Nov 2022 14:47:56 -0800 (PST)
+        Wed, 30 Nov 2022 17:48:16 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866E02035A
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 14:48:15 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-48-b7-QnvoZO7-9gfia73WI0A-1; Wed, 30 Nov 2022 22:48:12 +0000
+X-MC-Unique: b7-QnvoZO7-9gfia73WI0A-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 30 Nov
+ 2022 22:48:11 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Wed, 30 Nov 2022 22:48:11 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Thomas Gleixner' <tglx@linutronix.de>,
+        Jann Horn <jannh@google.com>
+CC:     Andrei Vagin <avagin@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 2/2] time/namespace: Forbid timens page faults under
+ kthread_use_mm()
+Thread-Topic: [PATCH 2/2] time/namespace: Forbid timens page faults under
+ kthread_use_mm()
+Thread-Index: AQHZBE/IlsN+XpW55U+9wjAjQGZIJa5YEbrw
+Date:   Wed, 30 Nov 2022 22:48:11 +0000
+Message-ID: <1c767e89dcf8475f90d2d817b9096a55@AcuMS.aculab.com>
+References: <20221129191839.2471308-1-jannh@google.com>
+ <20221129191839.2471308-2-jannh@google.com> <87fse1v4rf.ffs@tglx>
+ <CAG48ez3UBb3Aq7+AFSmRj5a9czmew5b0PEdhWQ9qvQdeejnJZg@mail.gmail.com>
+ <87y1rttid2.ffs@tglx>
+In-Reply-To: <87y1rttid2.ffs@tglx>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20221130181316.GA1012431@paulmck-ThinkPad-P17-Gen-1>
- <20221130181325.1012760-14-paulmck@kernel.org> <CAEXW_YS1nfsV_ohXDaB1i2em=+0KP1DofktS24oGFa4wPAbiiw@mail.gmail.com>
- <639433.1669835344@warthog.procyon.org.uk>
-In-Reply-To: <639433.1669835344@warthog.procyon.org.uk>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Wed, 30 Nov 2022 22:47:41 +0000
-Message-ID: <CAEXW_YSd3dyxHxnU1EuER+xyBGGatONzPovphFX5K9seSbkdkg@mail.gmail.com>
-Subject: Re: [PATCH rcu 14/16] rxrpc: Use call_rcu_hurry() instead of call_rcu()
-To:     David Howells <dhowells@redhat.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        rostedt@goodmis.org, Marc Dionne <marc.dionne@auristor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+From: Thomas Gleixner
+> Sent: 30 November 2022 00:08
+....
+> >> None of those VDSO (user space) addresses are subject to be faulted in
+> >> by anything else than the associated user space task(s).
+> >
+> > Are you saying that it's not possible or that it doesn't happen when
+> > userspace is well-behaved?
+> 
+> My subconcious self told me that a kthread won't do that unless it's
+> buggered which makes the vdso fault path the least of our problems, but
+> thinking more about it: You are right, that there are ways that the
+> kthread ends up with a vdso page address.... Bah!
+> 
+> Still my point stands that this is not a timens VDSO issue, but an issue
+> of: kthread tries to fault in a VDSO page of whatever nature.
 
-On Wed, Nov 30, 2022 at 7:09 PM David Howells <dhowells@redhat.com> wrote:
->
-> Note that this conflicts with my patch:
->
->         rxrpc: Don't hold a ref for connection workqueue
->         https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?h=rxrpc-next&id=450b00011290660127c2d76f5c5ed264126eb229
->
-> which should render it unnecessary.  It's a little ahead of yours in the
-> net-next queue, if that means anything.
+Isn't there also the kernel code path where one user thread
+reads data from another processes address space.
+(It does some unusual calls to the iov_import() functions.)
+I can't remember whether it is used by strace or gdb.
+But there is certainly the option of getting to access
+an 'invalid' address in the other process and then faulting.
 
-Could you clarify why it is unnecessary?
+ISTR not being convinced that there was a correct check
+for user/kernel addresses in it either.
 
-After your patch, you are still doing a wake up in your call_rcu() callback:
+	David
 
-- ASSERTCMP(refcount_read(&conn->ref), ==, 0);
-+ if (atomic_dec_and_test(&rxnet->nr_conns))
-+    wake_up_var(&rxnet->nr_conns);
-+}
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-Are you saying the code can now tolerate delays? What if the RCU
-callback is invoked after arbitrarily long delays making the sleeping
-process to wait?
-
-If you agree, you can convert the call_rcu() to call_rcu_hurry() in
-your patch itself. Would you be willing to do that? If not, that's
-totally OK and I can send a patch later once yours is in (after
-further testing).
-
-Thanks,
-
- - Joel
