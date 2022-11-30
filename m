@@ -2,160 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD84E63E398
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 292BE63E39A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiK3Wnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 17:43:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
+        id S229688AbiK3WqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 17:46:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiK3Wnw (ORCPT
+        with ESMTP id S229477AbiK3WqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 17:43:52 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5633D4E68E
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 14:43:51 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id o8-20020a056e0214c800b00303300b5cbdso34782ilk.9
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 14:43:51 -0800 (PST)
+        Wed, 30 Nov 2022 17:46:24 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849668DBCF;
+        Wed, 30 Nov 2022 14:46:22 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id gu23so59370ejb.10;
+        Wed, 30 Nov 2022 14:46:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pQT5Cu8v5qAJyqREJMcXsMiEc28zpgdBTHMOamR6xfQ=;
+        b=IeKWPX2M3ONOWuMAEn+PPhimDfV+tK7803CNUzmTvIb1EKCnbfFfnTENymzKCxYxe9
+         LxYdLMxxt4obLs+UIfl8vTXgsKC3SqO1sUzobXBr++uslwYCCBLzhHMXlS/jnfZ7om16
+         Vr43+Gf2Vkl9nrMnkeo7G0Q1W58s3Ry3Td/ljGhhJ7lc+tT+aFYTudvx+nIOYuDdmVxE
+         i4UGx3K28bRV5YhHSjKLwcUjAJutHi6AJDzLhAFXfsaMTNHEZ7ukaymEgQSqa3hkDyLw
+         lvSquJeiUKWma3nD5trgosXn3kKsNveJ3XA/M2QrjAzouSplK+uTx0L/w13H7ZRKm7Bv
+         r7Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aP1zmj2nFxLam6JR0lY72TFGiyD5flrr88q+91cw0Rs=;
-        b=AODl0Hts+idvNTtzV02eEWUWHlTtTNTvczuFDkpHkMDJcIZXX+mDv884ZkeccSyzYM
-         ZGtocU1lqlWDdlx5ZSGAtDsJHm5mDzas0RhdykF3YUe1QyLYIDFluCO6ROtru29wkIIZ
-         IAepV5gXijlIQ0UGs4iwAhhnDApHxqvRKduTH/S6NN3ugnSapNHZtqzvxWyrkL5h0zid
-         JwrvXiTPwyOlU+bShV88vD1AtY4ZZKS/bar8CrMDELyLTbIVVevKYO4j47qk2HZIsY4W
-         Y/KTVahDgZodNRK5LBEtAltNoGDPJNHeFisPjQcP2sQIzdWITnQoFiuypXgJ9H++VRfS
-         WwMw==
-X-Gm-Message-State: ANoB5plBDYIi1fQCHINxQaCjGJgxiKe8RCzmb3eJsfc6e+W2C/9otjrV
-        2ZmaHDhrbnPGEq8LOaj3XklxA/UJKhCwaYjbNj4csu+XnYda
-X-Google-Smtp-Source: AA0mqf4wrRBvmA7GzSQa1vfo7iimqTLJT3hMzwIdRI60mS0gZ6M9LDioqOvr4Fo+aQPiuwSbYF7IO3qVj02AcuXYdHFykXh5veeJ
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pQT5Cu8v5qAJyqREJMcXsMiEc28zpgdBTHMOamR6xfQ=;
+        b=jNTsEDj1e+JbiLIfhR82X4d184QUPLRhYPsKu26i6cyaaFwGWoqv945+C+C7KNhCjs
+         Em7Xg2CymrbMUzSfzA0zqxU+x/gAvcgNKHSv0Mw47KN+VdKzmb5W1MIEvq9FXm0pvkiY
+         jr0WUg15v0ZGaOXQzhNztLV4SyYCIz4YaujVv/2uPJPqSBRi4rl8Ioetk8y2//CntfG2
+         4hk0jxhJlsM/euig+KsR5rWfY7nT+NbIAQKGd6t4ghYTxBj9ecmYzjxKZFGbOae87WHG
+         1Bnw66+BUT4lBWaxVyzN2yNw3JOVDXASjE/E7GY/rK7l59Tcyjipc+xKrRZgdW+TWAxu
+         w4Fw==
+X-Gm-Message-State: ANoB5pnnzI1V03ZeDDfHPdQFpdztGQUz4Hy8gHlXiXhk0rnpWyt+74jp
+        kyiK7QhH+o8/Ksnhi/5Fzbs=
+X-Google-Smtp-Source: AA0mqf4eru/8GE4/kcxqr0RG5CO+U5kmuuv9UHUVvYfiH+1rnpGZLpM8goACB/BVLuT9X3BWjX6RgQ==
+X-Received: by 2002:a17:906:49d0:b0:79f:e0b3:3b9b with SMTP id w16-20020a17090649d000b0079fe0b33b9bmr36570904ejv.378.1669848381061;
+        Wed, 30 Nov 2022 14:46:21 -0800 (PST)
+Received: from skbuf ([188.26.184.222])
+        by smtp.gmail.com with ESMTPSA id kx16-20020a170907775000b007c0934db0e0sm1107741ejc.141.2022.11.30.14.46.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 14:46:20 -0800 (PST)
+Date:   Thu, 1 Dec 2022 00:46:18 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Artem Chernyshev <artem.chernyshev@red-soft.ru>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH v2] net: dsa: Check return value from skb_trim_rcsum()
+Message-ID: <20221130224618.efk7tjv54o57lolj@skbuf>
+References: <20221129165531.wgeyxgo5el2x43mj@skbuf>
+ <20221129194309.3428340-1-artem.chernyshev@red-soft.ru>
 MIME-Version: 1.0
-X-Received: by 2002:a02:c905:0:b0:374:e77e:d3d8 with SMTP id
- t5-20020a02c905000000b00374e77ed3d8mr29730572jao.103.1669848230710; Wed, 30
- Nov 2022 14:43:50 -0800 (PST)
-Date:   Wed, 30 Nov 2022 14:43:50 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009ed53d05eeb7d6e8@google.com>
-Subject: [syzbot] WARNING in ep_poll (2)
-From:   syzbot <syzbot+040b317810fd3e21b55d@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221129194309.3428340-1-artem.chernyshev@red-soft.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-syzbot found the following issue on:
+On Tue, Nov 29, 2022 at 10:43:09PM +0300, Artem Chernyshev wrote:
+> Return NULL if we got unexpected value from skb_trim_rcsum()
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> Fixes: 01ef09caad66 ("net: dsa: Add tag handling for Hirschmann Hellcreek switches")
+> Fixes: bafe9ba7d908 ("net: dsa: ksz: Factor out common tag code")
+> Fixes: 4913b8ebf8a9 ("net: dsa: add support for the SJA1110 native tagging protocol")
+> Signed-off-by: Artem Chernyshev <artem.chernyshev@red-soft.ru>
+> ---
 
-HEAD commit:    6d464646530f Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=10905dbb880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=23eec5c79c22aaf8
-dashboard link: https://syzkaller.appspot.com/bug?extid=040b317810fd3e21b55d
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=110f4605880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14ba453d880000
+While you're fixing the same class of bug in 3 drivers, the bugs are
+unrelated to one another.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f22d29413625/disk-6d464646.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/389f0a5f1a4a/vmlinux-6d464646.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/48ddb02d82da/Image-6d464646.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/ba54b6200826/mount_0.gz
+SJA1110, KSZ and Hellcreek are switch families from 3 different hardware
+vendors, and none of those vendors cares about the other.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+040b317810fd3e21b55d@syzkaller.appspotmail.com
+When you squash 3 Fixes: tags into the same patch like that, the
+following will happen.
 
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(lock->magic != lock)
-WARNING: CPU: 1 PID: 3083 at kernel/locking/mutex.c:582 __mutex_lock_common+0x4c4/0xca8 kernel/locking/mutex.c:582
-Modules linked in:
-CPU: 1 PID: 3083 Comm: udevd Not tainted 6.1.0-rc6-syzkaller-32662-g6d464646530f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __mutex_lock_common+0x4c4/0xca8 kernel/locking/mutex.c:582
-lr : __mutex_lock_common+0x4c4/0xca8 kernel/locking/mutex.c:582
-sp : ffff80000ffabb30
-x29: ffff80000ffabba0 x28: ffff80000eec8000 x27: ffff0000c9ac9b40
+$ git tag --contains 01ef09caad66 # "net: dsa: Add tag handling for Hirschmann Hellcreek switches"
+v5.11
+$ git tag --contains bafe9ba7d908 # "net: dsa: ksz: Factor out common tag code"
+v5.0
+$ git tag --contains 4913b8ebf8a9 # "net: dsa: add support for the SJA1110 native tagging protocol"
+v5.14
 
-x26: 0000000000000000
- x25: ffff0000c9289a40
- x24: 0000000000000002
+Your patch can only be backported down to linux-stable branch linux-5.15.y,
+because that's the only stable branch that contains the code you're
+modifying.
 
-x23: ffff80000866ba78
- x22: 0000000000000000
- x21: 0000000000000000
+The Hellcreek driver won't benefit from the bug fix on the 5.10 stable
+branch, and neither KSZ nor Hellcreek will benefit from it on 5.4.
 
-x20: 0000000000000000
- x19: ffff0000c9ac9a00
- x18: 000000000000031c
+Be smart, write 3 patches with 3 distinct Fixes: tags, and each will be
+backported where it needs to, independent from the other.
 
-x17: ffff80000c0cd83c
- x16: 0000000000000000
- x15: 0000000000000000
+Oh, and also, don't send the v3 emails with an In-reply-to: header to v2.
 
-x14: 0000000000000000
- x13: 0000000000000012 x12: ffff80000d93b3d0
-
-x11: ff808000081c4d40
- x10: 0000000000000000
- x9 : c0fb5fb0435d7400
-
-x8 : c0fb5fb0435d7400
- x7 : 4e5241575f534b43
- x6 : ffff80000c08e4f4
-
-x5 : 0000000000000000
- x4 : 0000000000000001
- x3 : 0000000000000000
-
-x2 : 0000000000000000
- x1 : 0000000100000000
- x0 : 0000000000000028
-
-Call trace:
- __mutex_lock_common+0x4c4/0xca8 kernel/locking/mutex.c:582
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
- ep_send_events fs/eventpoll.c:1655 [inline]
- ep_poll+0x320/0xc70 fs/eventpoll.c:1821
- do_epoll_wait+0x144/0x18c fs/eventpoll.c:2256
- do_epoll_pwait fs/eventpoll.c:2290 [inline]
- __do_sys_epoll_pwait+0x110/0x214 fs/eventpoll.c:2303
- __se_sys_epoll_pwait fs/eventpoll.c:2297 [inline]
- __arm64_sys_epoll_pwait+0x30/0x40 fs/eventpoll.c:2297
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-irq event stamp: 121585
-hardirqs last  enabled at (121585): [<ffff8000080387b0>] local_daif_restore arch/arm64/include/asm/daifflags.h:75 [inline]
-hardirqs last  enabled at (121585): [<ffff8000080387b0>] el0_svc_common+0x40/0x220 arch/arm64/kernel/syscall.c:107
-hardirqs last disabled at (121584): [<ffff80000c080d24>] el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-softirqs last  enabled at (121232): [<ffff80000801c38c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (121230): [<ffff80000801c358>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+And please remember to run ./scripts/get_maintainer.pl again, on each
+patch revision.
