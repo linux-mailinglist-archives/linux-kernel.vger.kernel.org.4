@@ -2,128 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 538DB63E282
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5F463E27D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiK3VJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 16:09:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
+        id S229615AbiK3VIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 16:08:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiK3VJL (ORCPT
+        with ESMTP id S229456AbiK3VIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 16:09:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D995474B
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:08:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669842494;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zuR/603fC7oK9nUlhZCLCOYS4yq/2eg7O9E/kbNn+vo=;
-        b=NGqYR0J6lofamqBg7UXL6Yi6zKyEKUi9z+X7fDllO6pgJI7/EkrH1aqpPDktqomOW+s/wL
-        NzC0bh05TwP1eit6Kq6Km95nPT4RqYMfdGJUl+2cj4vfWAEL2Uce0jiTYsUUnC6Ds8AFG7
-        gCoK8OTKo68Ukh53By+6+0x9lWZ+nCU=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-503-jfVSveQ6OgK8nWH0RZZPiw-1; Wed, 30 Nov 2022 16:08:12 -0500
-X-MC-Unique: jfVSveQ6OgK8nWH0RZZPiw-1
-Received: by mail-qv1-f69.google.com with SMTP id ng1-20020a0562143bc100b004bb706b3a27so28836116qvb.20
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:08:11 -0800 (PST)
+        Wed, 30 Nov 2022 16:08:16 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E420454374;
+        Wed, 30 Nov 2022 13:08:15 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id r7so476976pfl.11;
+        Wed, 30 Nov 2022 13:08:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8GLeq4y1VkLChDK5qxV6t3jjI/iORg+c6M0TmX7kjP0=;
+        b=Apb1iWUbB5ph59NuwWq3GeIe1SG2Xnc2Ghfh+Z512kKQUVy0BHy8Xe+4CIpU3ulszy
+         ub8Y8NyUuKCdKtNJLSmNvH4De+/haJKxfuhQ7yUKzGvKD1mvcWbguLuzaHQmzJJTc1S6
+         /33FyHfpujuR0xIbLnLep+jOM+VjSELx9XKKIcX3B71jHSbtdZbUMu51k2Oq4nuBYwbO
+         ulz6t7yHPpy26DRout3+gghJB/gLn8kQ1gWJZrzKRVxd811jlCPKStDzfP24BW0sAJvL
+         wtUHeT/WqoRZm5jQ9rEiykrgkPYa8C8TCSNaPo3WKCnH5E4kabr+VplL0w8PkcLQW1Ah
+         kiBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zuR/603fC7oK9nUlhZCLCOYS4yq/2eg7O9E/kbNn+vo=;
-        b=B6pA0I0982bXA3ooUi9QioPGPDMZ/FEJno526uaIOWMpfUv8JJuuMxkShbz3AX92Zb
-         kUf5B7A5Ym5X+eglh/UDJ6yhg0Agyz0w/JJqHx3DbOgyBGI812b11rT5vk5Hv+xEqMno
-         1uE2tZgUR3hEBqcTz0IXbTikgPhlvrSOyrtIBeSQV6B5sI8qLbSYL0EhE1I3UjMiAuDR
-         STQlMKpnhAkQwHqPY8TT1yuOx+HwsDHw/hN31RWXS90CacnwRoBtC/HdQPJX6NLj7iej
-         X7Zvfc8qC9Axv9q7F2K+jueepcRv0s4e4VGiLafgCtEn6o5uT2VtgJkEHFPfgcCVq8KL
-         NQIw==
-X-Gm-Message-State: ANoB5pnHumydG68igWvK0LNor4Xrjm9hiLB/qqwmLlRKYgqfPvpgMKXG
-        JCgxo794TNubAIj8eZIbZV1F+g7ydgm6M47tG929O7aLqlPf13YiH/Cg5w5d4gm2r/Lvsk6NXdW
-        zSjCxINXtJS6d2RPHiwQzpylX
-X-Received: by 2002:a0c:c3cc:0:b0:4c6:a05d:f67e with SMTP id p12-20020a0cc3cc000000b004c6a05df67emr40931287qvi.4.1669842491511;
-        Wed, 30 Nov 2022 13:08:11 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6/8Pjy+T5/FfojJPxX4yLbLk/OTvhYqmsxgDyVe0BPtb/Wl3vgppylUjojOezJs9ZPj9Po4Q==
-X-Received: by 2002:a0c:c3cc:0:b0:4c6:a05d:f67e with SMTP id p12-20020a0cc3cc000000b004c6a05df67emr40931260qvi.4.1669842491240;
-        Wed, 30 Nov 2022 13:08:11 -0800 (PST)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id x10-20020a05620a258a00b006fc92cf4703sm1898765qko.132.2022.11.30.13.08.10
+        bh=8GLeq4y1VkLChDK5qxV6t3jjI/iORg+c6M0TmX7kjP0=;
+        b=eYYdI+dTNhQp6Xocdw70S6ou6VSF8LPMwuGiOkf1EbOHPHeRHoedWH0Hudxx1gW8Uq
+         1m7z3WIA9iKh2UTaYvsEurZMxuhz3dJprtQn1LJid4Syi3c6y48Qp1uINZyvbJFIoOX5
+         inc607EIiW66P6u4c7pf9Og0lgezQI5sg7JDPvZTQiEdoSXWO+I1FrddzJwaB2OBcDNC
+         d9JdJSKm1XjfWFmVlic0OyK43AtqvYxliV7anON8QRsmeTrw0V4yTM6zy8Yuy+LQlKAK
+         JZTR4gEBEFaXT1GyqOuKqCRI1MDo1IBHa5FKwRXkE/uWd3Nm28W9ahagJefXFzMgbjTe
+         w2rA==
+X-Gm-Message-State: ANoB5pkXFwLSp/XRsG5nGZWYk6hFP0NA0tfQD5W3cpZw2RryZqStrUzr
+        +RtfxUR03keWdCA/K7lgIBQ=
+X-Google-Smtp-Source: AA0mqf5vWRyTIyu007lBQW6ThPpGsX/6ucDzIPHV91olGo/xHAU3N4ehoDFdv44MIDwmSFZJ7/0DKA==
+X-Received: by 2002:aa7:9f0f:0:b0:575:f36c:967f with SMTP id g15-20020aa79f0f000000b00575f36c967fmr3178291pfr.54.1669842495022;
+        Wed, 30 Nov 2022 13:08:15 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id u24-20020a631418000000b0047022e07035sm1348111pgl.47.2022.11.30.13.08.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 13:08:10 -0800 (PST)
-Date:   Wed, 30 Nov 2022 16:08:09 -0500
-From:   Brian Masney <bmasney@redhat.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     irusskikh@marvell.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cth451@gmail.com
-Subject: Re: [PATCH] net: atlantic: fix check for invalid ethernet addresses
-Message-ID: <Y4fGORYQRfYTabH1@x1>
-References: <20221130174259.1591567-1-bmasney@redhat.com>
- <Y4ex6WqiY8IdwfHe@lunn.ch>
+        Wed, 30 Nov 2022 13:08:14 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 30 Nov 2022 11:08:13 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Kemeng Shi <shikemeng@huawei.com>
+Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 01/10] blk-throttle: correct stale comment in
+ throtl_pd_init
+Message-ID: <Y4fGPUBBExrm51IH@slm.duckdns.org>
+References: <20221129030147.27400-1-shikemeng@huawei.com>
+ <20221129030147.27400-2-shikemeng@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y4ex6WqiY8IdwfHe@lunn.ch>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221129030147.27400-2-shikemeng@huawei.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 08:41:29PM +0100, Andrew Lunn wrote:
-> On Wed, Nov 30, 2022 at 12:42:59PM -0500, Brian Masney wrote:
-> > The Qualcomm sa8540p automotive development board (QDrive3) has an
-> > Aquantia NIC wired over PCIe. The ethernet MAC address assigned to
-> > all of the boards in our lab is 00:17:b6:00:00:00. The existing
-> > check in aq_nic_is_valid_ether_addr() only checks for leading zeros
-> > in the MAC address. Let's update the check to also check for trailing
-> > zeros in the MAC address so that a random MAC address is assigned
-> > in this case.
-> > 
-> > Signed-off-by: Brian Masney <bmasney@redhat.com>
-> > ---
-> >  drivers/net/ethernet/aquantia/atlantic/aq_nic.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_nic.c b/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
-> > index 06508eebb585..c9c850bbc805 100644
-> > --- a/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
-> > +++ b/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
-> > @@ -293,7 +293,8 @@ static bool aq_nic_is_valid_ether_addr(const u8 *addr)
-> >  	/* Some engineering samples of Aquantia NICs are provisioned with a
-> >  	 * partially populated MAC, which is still invalid.
-> >  	 */
-> > -	return !(addr[0] == 0 && addr[1] == 0 && addr[2] == 0);
-> > +	return !(addr[0] == 0 && addr[1] == 0 && addr[2] == 0) &&
-> > +		!(addr[3] == 0 && addr[4] == 0 && addr[5] == 0);
+On Tue, Nov 29, 2022 at 11:01:38AM +0800, Kemeng Shi wrote:
+> On the default hierarchy (cgroup2), the throttle interface files don't
+> exist in the root cgroup, so the ablity to limit the whole system
+> by configuring root group is not existing anymore. In general, cgroup
+> doesn't wanna be in the business of restricting resources at the
+> system level, so correct the stale comment that we can limit whole
+> system to we can only limit subtree.
 > 
-> Hi Brian
-> 
-> is_valid_ether_addr()
+> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
 
-aq_nic_ndev_register() already calls is_valid_ether_addr():
+Acked-by: Tejun Heo <tj@kernel.org>
 
-	if (is_valid_ether_addr(addr) &&
-	    aq_nic_is_valid_ether_addr(addr)) {
-		(self->ndev, addr);
-	} else {
-		...
-	}
+> +	 * read_bps limit is set on a "parent" group, summary bps of
+> +	 * "parent" group and its subtree groups can't exceed 16M for the
 
-That won't work for this board since that function only checks that the
-MAC "is not 00:00:00:00:00:00, is not a multicast address, and is not
-FF:FF:FF:FF:FF:FF." The MAC address that we get on all of our boards is
-00:17:b6:00:00:00.
+but why the quotes around parent?
 
-Brian
-
+-- 
+tejun
