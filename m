@@ -2,142 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8039C63CC52
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 01:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 603D063CC5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 01:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiK3ALU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 19:11:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
+        id S231153AbiK3AM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 19:12:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbiK3ALH (ORCPT
+        with ESMTP id S229735AbiK3AMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 19:11:07 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A24C716E0
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 16:11:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669767061; x=1701303061;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=B5h41uyGgikqzhqo86Wn4bWgSPj4zLK0qe0xzVnTtCA=;
-  b=bB+zsYKW2Q4dWixmhoJaA55ORHyHSLqIXg66OvWEUHwhybKAmrMS5VNd
-   FFdpBYrMrPJEZQw8AJxyI9jPAXFQqRIeuaW/KlL/auqT4rCau9Vn1kuQJ
-   cjcoXKapqD4eBulhxpfiN/8XvDqRfAIHXiJ2c30rMrvTeO94l0M9ZTgNP
-   W6ORSMISC+bRa+uclw8hQvD9TNfYrEuC+slm7R5R5DrJvhUyqHLKUoAP9
-   8fkRINvCuVMzfcytiYzufI7k/VgZJ+oVeWV1ipIQ3cQ8Mx6OMltTE/RVx
-   H4UykwqSM1dKJBtd5bjV+LnxelbmIpAyVVCRZBwy2W4/CuoFqO36egvS+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="295626202"
-X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="295626202"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 16:11:01 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="637793416"
-X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="637793416"
-Received: from cwang11-mobl.ccr.corp.intel.com (HELO [10.254.210.199]) ([10.254.210.199])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 16:10:57 -0800
-Message-ID: <9fd4bf6c-5525-c209-28b6-492558c1dd35@linux.intel.com>
-Date:   Wed, 30 Nov 2022 08:10:55 +0800
+        Tue, 29 Nov 2022 19:12:54 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D1A20359;
+        Tue, 29 Nov 2022 16:12:52 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATNivMd019810;
+        Wed, 30 Nov 2022 00:12:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=Hss2amxlNuhEV3jJSRwIasi9hBqMCUBlg9lfs19LDto=;
+ b=S8AGF/UrequVHxARU7ifo1FoH7aouPTzvD5GL9RjRSqlsE9QY2Hn4ez7HK2JAKo+XDaJ
+ jSHinh6coRxG0puZLcmnqBkcSVk+Z1p2er1ywAkHrtTslJd1N9s8nDN5fWEa18WeHV2l
+ sko6Ci8Dm88+6QfzMABWhGdCv2ra8qUbRSDbHc40V+NxI185s4sK4j6OCnS5ju+UgD/X
+ hsMIDITU9v0nqWHqpp7sfvJFYAdhbRYjIVREnwoPhjt+mX1T7x3Sf/0Z2F1IGMbJiM8T
+ sEl1GVM5RjShHRkI2PghTPQ9LIJbLztzB3kqq/AjEmvdeuO+TnbK/VnPWyxbvGhN4z/d 6A== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m5n1rs8j1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Nov 2022 00:12:41 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AU0Ce3V015464
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Nov 2022 00:12:40 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 29 Nov 2022 16:12:39 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 0/3] Add data-lanes and link-frequencies to dp_out endpoint
+Date:   Tue, 29 Nov 2022 16:12:08 -0800
+Message-ID: <1669767131-13854-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Cc:     baolu.lu@linux.intel.com, Yi Liu <yi.l.liu@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        Yuzhang Luo <yuzhang.luo@intel.com>
-Subject: Re: [PATCH v2] iommu/vt-d: Add a fix for devices need extra dtlb
- flush
-Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>, iommu@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>
-References: <20221128170410.3830605-1-jacob.jun.pan@linux.intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20221128170410.3830605-1-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: cY29xPUdZhATBML7H8yC8ItTAKlGFUE0
+X-Proofpoint-ORIG-GUID: cY29xPUdZhATBML7H8yC8ItTAKlGFUE0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-29_13,2022-11-29_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 mlxlogscore=772 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 spamscore=0 adultscore=0
+ clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211290146
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacob,
+Add DP both data-lanes and link-frequencies property to dp_out endpoint and support
+functions to DP driver.
 
-On 2022/11/29 1:04, Jacob Pan wrote:
-> QAT devices on Intel Sapphire Rapids and Emerald Rapids have a defect in
-> address translation service (ATS). These devices may inadvertently issue
-> ATS invalidation completion before posted writes initiated with
-> translated address that utilized translations matching the invalidation
-> address range, violating the invalidation completion ordering.
-> 
-> This patch adds an extra device TLB invalidation for the affected devices,
-> it is needed to ensure no more posted writes with translated address
-> following the invalidation completion. Therefore, the ordering is
-> preserved and data-corruption is prevented.
-> 
-> Device TLBs are invalidated under the following six conditions:
-> 1. Device driver does DMA API unmap IOVA
-> 2. Device driver unbind a PASID from a process, sva_unbind_device()
-> 3. PASID is torn down, after PASID cache is flushed. e.g. process
-> exit_mmap() due to crash
-> 4. Under SVA usage, called by mmu_notifier.invalidate_range() where
-> VM has to free pages that were unmapped
-> 5. userspace driver unmaps a DMA buffer
-> 6. Cache invalidation in vSVA usage (upcoming)
-> 
-> For #1 and #2, device drivers are responsible for stopping DMA traffic
-> before unmap/unbind. For #3, iommu driver gets mmu_notifier to
-> invalidate TLB the same way as normal user unmap which will do an extra
-> invalidation. The dTLB invalidation after PASID cache flush does not
-> need an extra invalidation.
-> 
-> Therefore, we only need to deal with #4 and #5 in this patch. #1 is also
-> covered by this patch due to common code path with #5.
-> 
-> Tested-by: Yuzhang Luo <yuzhang.luo@intel.com>
-> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> Reviewed-by: Ashok Raj <ashok.raj@intel.com>
-> ---
-> v2
-> - removed risky_device() check based on the review by Robin, added comments
->    to explain the exemption.
-> - reworked commit message based on the review from Ashok
-> ---
->   drivers/iommu/intel/iommu.c | 67 +++++++++++++++++++++++++++++++++++--
->   drivers/iommu/intel/iommu.h |  3 ++
->   drivers/iommu/intel/svm.c   |  4 ++-
->   3 files changed, 71 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> index 996a8b5ee5ee..a97e9247037f 100644
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -1396,6 +1396,23 @@ static void domain_update_iotlb(struct dmar_domain *domain)
->   	spin_unlock_irqrestore(&domain->lock, flags);
->   }
->   
-> +/*
-> + * Impacted QAT device IDs ranging from 0x4940 to 0x4943.
-> + * This quirk is exempted from risky_device() check because it applies only
-> + * to the built-in QAT devices.
-> + */
+Kuogee Hsieh (3):
+  arm64: dts: qcom: add data-lanes and link-freuencies into dp_out
+    endpoint
+  drm/msm/dp: parser data-lanes and link-frequencies from endpoint node
+  drm/msm/dp: add support of max dp link rate
 
-How about adding:
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi   |  6 ++++-
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  6 ++++-
+ drivers/gpu/drm/msm/dp/dp_display.c            |  4 +++
+ drivers/gpu/drm/msm/dp/dp_panel.c              |  7 +++---
+ drivers/gpu/drm/msm/dp/dp_panel.h              |  1 +
+ drivers/gpu/drm/msm/dp/dp_parser.c             | 34 ++++++++++++++++++++------
+ drivers/gpu/drm/msm/dp/dp_parser.h             |  2 ++
+ 7 files changed, 47 insertions(+), 13 deletions(-)
 
-"This quirk is exempted from risky_device() check because it doesn't
-effectively grant additional privileges."
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-?
-
---
-Best regards,
-baolu
