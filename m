@@ -2,338 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6976963CF8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 08:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 757F363CF89
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 08:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233609AbiK3HGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 02:06:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
+        id S233560AbiK3HFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 02:05:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233567AbiK3HG3 (ORCPT
+        with ESMTP id S230033AbiK3HFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 02:06:29 -0500
-Received: from na01-obe.outbound.protection.outlook.com (mail-westcentralusazon11012004.outbound.protection.outlook.com [40.93.200.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B029554D1;
-        Tue, 29 Nov 2022 23:06:28 -0800 (PST)
+        Wed, 30 Nov 2022 02:05:49 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E43454767;
+        Tue, 29 Nov 2022 23:05:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669791948; x=1701327948;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=+fgmJM2UvY5iDfOrskxfgnEnb1Y1ijvVz7oTg6btRSQ=;
+  b=GwHiByiHBUk8/U+7JYdTmqtVe/ZWoiWzOpqRRlD0JZiTSt/Y/AdeOfl/
+   qVdoBG3/PQoh+iSbfKFl11zrTIpGeoc9t5dnWUazGtKbwakVMkJSgUl0g
+   dh0vSu0eKsSL17CZEfrfQuZo1RDnaBgEFlg8yp/GgK5V8SxxdSvE8mCYM
+   BtNK7m+wqo70pLWoUdDsfJlADNR8dzm0pl0KjztRLt7Dvdbc7oddMqHYG
+   PoKMVr2iWoU3RxVDpJPEI6zk+YcQYHB8UBZa/D2nz6pU39dkoudyPDM7H
+   +6KF4j/AVDE6bZ97yJFGVY+oYjiy0sD0hSdXKfAvUwxZCRXeQe16Mji7p
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="295019533"
+X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
+   d="scan'208";a="295019533"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 23:05:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="750213995"
+X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
+   d="scan'208";a="750213995"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga002.fm.intel.com with ESMTP; 29 Nov 2022 23:05:47 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 29 Nov 2022 23:05:47 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 29 Nov 2022 23:05:47 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 29 Nov 2022 23:05:46 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=avLq9j0Ie7lX8ZJUsUGl9GPMG6msSNvgJmtKjp6FrpXcEpp6Gmfm9ZZkzWs8mR5u3/i0DqgNobFi/Q6NoTdpHHn0QFC8srKTLBil6J2j+RV1XFihjSF752rkbgbTt//YR3QnOfpEnQWzYtwO+vr3ut0KAv1qcyiOVRsA82449Fd3hFkeQidU8XVLtRt5HrlMv/sHeymwwDoc5FL2+xy4dKiYuCnnSSUds39E6nDlh8YK9uoRcAywiuIgnsyOLy+p59a4bvKgifROEw141Y2yk1xury5DT8a7yWR8bb7ICUM6GOaAys2LcJXYCwY2toHSvh+c1efc7BiHfgLmeujl0A==
+ b=mm5m3KiXrdF3oCbajPlkoksFg2hgSVWtDlAhGFpsoqeNXa6IeLjXKLfbOtZV2jTxdPjhZM30RCzJrrmN83CEp2D3+R9SYaZ8gqIcC2KcSU+f1Vcir4m4HIhXowNOS2BbMYkVFF9JmqQFVUnW0YBxhTGQTcdzGH95d+t0qEluBKZ7gYGExBYTZrsbOVc4MT9aufRHFpF9WcIbj82HzzpnMe4EqhNiFmSt0SEQGEgqOHlODg0McpXWVDISEDoROCbt7AaTg1gTb2qvjo9cE2wl6oKeh8xWW/X6hEjqQA6YVCV1AfK5yLZtlOhG8tF7qHL7Hf2oM8yHsbdXsOP7yEkn6g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xdqMmzsn9mjW4qHIuOcoq1kP4jyTU1hxlaF3HLlDSew=;
- b=ZoJbVQE2e2AFzCvOsu/fNPiyh+Q65kF3r4jCzT2Cku//ipdaGt8oNNhs1ynPag3CqrRzTtHANgrZuxe+nfKGZ4I7GSvRmYMYH4ROU7h7NCJnWYAqXiK274owNDBUbBn9/5a0hQAPt2ohw4ekzMt6hkVeHJVuKP50NxMLnnPO6yS3btm14PZHNbfvPyXWDBuJW+GvnRRM0awBjGQ6K6xFetW5xqqm4TjwCofsUvNQ/rKJ6xyKGisR+RVA8T7eS/PAAhmZO+nWHXCJwBMzcU+OxQWmC9dw1nAUJTdlh4gMpTTZm59iH0KZxO0ledtWIE0JURcOaJ8kNQIhdh+yhphwZQ==
+ bh=5xWIR3xurpuz6iifss8dYXa+BQCOJLsugQ5+2IIuxwk=;
+ b=Irj10EjenKB08Mwsh34+zYCrr7zQg+EurDeRB5dchewax87ILXEuWzStgKpuID9qDRtpPA5NgMRGBY7Zexe29krsshtPcFT1yJYE1HKgc/8C/Fzi3N8Na9N0wVYMD6tz6PomFatBDzS8b0RA2ZnY3+yd2OBL/AZPrJmSU93XTBPbyNnFMucEiE2pbanAR8siMbt5DI2yIiwwGiyPhScFBjcoLMvrQG5INKAxjpXHrKdiMi9WTxROT8VyRWxhngmZrlMF0Y8n7r0bl7nzR4mMwrHcDBNigsMAvRg5n14DdmErAwQvqdSVpGqO9z6clTyVT8BNEpXiwc2hhgBbXLp0Rw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xdqMmzsn9mjW4qHIuOcoq1kP4jyTU1hxlaF3HLlDSew=;
- b=JkTCQIjYttyX+lakU/MWxyeZmXqNTvPlP/dZ13FOgD3fsMK/D7h2qUetBsgqHhuHTG5oo0jigyHHigm36cuv7xiughgmplizIlZd38O3uZ6WUIqOlIpa5xRyRM2jAyqP6a8EmagAAP0/twpTNCMtO9QjXNuQR9ZaRc9bfD9tDyk=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-Received: from BYAPR05MB3960.namprd05.prod.outlook.com (2603:10b6:a02:88::12)
- by BN6PR05MB3009.namprd05.prod.outlook.com (2603:10b6:404:29::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.20; Wed, 30 Nov
- 2022 07:06:25 +0000
-Received: from BYAPR05MB3960.namprd05.prod.outlook.com
- ([fe80::6764:941b:e0cc:c4e1]) by BYAPR05MB3960.namprd05.prod.outlook.com
- ([fe80::6764:941b:e0cc:c4e1%7]) with mapi id 15.20.5857.022; Wed, 30 Nov 2022
- 07:06:25 +0000
-From:   vdasa@vmware.com
-To:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     Vishnu Dasa <vdasa@vmware.com>, Zack Rusin <zackr@vmware.com>,
-        Nadav Amit <namit@vmware.com>,
-        Nathan Chancellor <nathan@kernel.org>, stable@vger.kernel.org,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bryan Tan <bryantan@vmware.com>
-Subject: [PATCH] VMCI: Use threaded irqs instead of tasklets
-Date:   Tue, 29 Nov 2022 23:05:11 -0800
-Message-Id: <20221130070511.46558-1-vdasa@vmware.com>
-X-Mailer: git-send-email 2.35.1
-Reply-To: vdasa@vmware.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR07CA0057.namprd07.prod.outlook.com
- (2603:10b6:a03:60::34) To BYAPR05MB3960.namprd05.prod.outlook.com
- (2603:10b6:a02:88::12)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20) by SA2PR11MB5035.namprd11.prod.outlook.com
+ (2603:10b6:806:116::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Wed, 30 Nov
+ 2022 07:05:39 +0000
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::340d:cb77:604d:b0b]) by MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::340d:cb77:604d:b0b%9]) with mapi id 15.20.5857.023; Wed, 30 Nov 2022
+ 07:05:39 +0000
+Date:   Tue, 29 Nov 2022 23:05:30 -0800
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+CC:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
+        <david@fromorbit.com>, <akpm@linux-foundation.org>
+Subject: Re: [PATCH 0/2] fsdax,xfs: fix warning messages
+Message-ID: <638700ba5db1_c95729435@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+References: <1669301694-16-1-git-send-email-ruansy.fnst@fujitsu.com>
+ <6386d512ce3fc_c9572944e@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+ <Y4bZGvP8Ozp+4De/@magnolia>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y4bZGvP8Ozp+4De/@magnolia>
+X-ClientProxiedBy: BYAPR06CA0023.namprd06.prod.outlook.com
+ (2603:10b6:a03:d4::36) To MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR05MB3960:EE_|BN6PR05MB3009:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5fda90b2-c707-4f48-c7a9-08dad2a16491
-X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|SA2PR11MB5035:EE_
+X-MS-Office365-Filtering-Correlation-Id: 661513f7-f1e0-446a-c23b-08dad2a148a1
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9xMNJzprILTciMLWFH9GVkC9bniPDerz/4D7xaNUxkhiYinb2n51DO+VUMBoozhtZdgSyvja/Wd7LAOZpH92myElAc3Tx99sHGHXpqdmt/u0sVoTgVB3x3iElucf6xHd4b/o0wq1Qvm2ltn1jYFJTLhxdhGW3gknEknnTc1lKNEdwOzcf1O3g8v9D8EGjFNH+6cIaGrlH/DiufLeaJO+mT7OnGZokRFHnYWzR+FmTbILp3cjdj3U9zT/CLzZtkvJil59KTwICX9iKeG/Papq4F8yFU7g/OUNnyxgvSynvs0CwViVvvp9CbbwsKHZEzLFwAczi5B1sAocYFb4EEXaQka26wbm8oyxUpc54lBWrev2FhLHOCimGgw1X/hWWDO/y+ATArlG28RnnhRT2CUe3jZy70Xdm2iK+sxX9TtCx1vIO48sakOZjMDbPt2Npa2ggHWtJ6mhCS4gp2OXi3sS2B8SOP53Oyvv3QY87hl0gjKYyUryTskLHkmVP3K85FP+GmB/fJo+ztD66U2/PREOZQKnZh53kw4xnxFwYWtz439uFUvB7itDGXWUaaer7uXRx96iFE/8+HdJ7NBNmeghGfBoZSkMz6BiuloafUV4K3kQr+JfVL2mik6euKGEO+uiGGY1thV3abOPWt4QxdPug1Civi3Be6DSG6Fen6FAj3vXqQZRB3XD2ZVvjZc3Zd1PL5CREV/EBA1lNihHJHpfispWMAaK4pY4LkuaFzpTM3cqRP3n3vBcmk7mztfUIMpc
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR05MB3960.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(366004)(346002)(136003)(376002)(451199015)(2616005)(2906002)(83380400001)(107886003)(26005)(38100700002)(38350700002)(41300700001)(8676002)(66476007)(9686003)(66946007)(66556008)(6512007)(52116002)(6666004)(6506007)(478600001)(6486002)(36756003)(186003)(1076003)(8936002)(5660300002)(4326008)(86362001)(316002)(54906003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: whxcUbZ8H+Rx8Go4H5r3MV4mgDo6QP/HbbNOzqr1V91lmrB/+uxAWtR202PCkcbaBxFlhgXlxMCi1Z90U+NdPLrBDJq8NMMNckTtSrFAO18lAtCjR+/GTJD22TuyrMdEaZD2njACkCL/t1B7rmEQJHdwQYmUoHt/IKVN/ZRoYoe3l73j4EIinBFbQSYeunqq/4Q8mcg9L4toNJgz9CkiiwsU0B2jfrq5T+K2TfQLlZOaAsun8/ygyEm3oLUMuYNCpMMlatL6SRR+Z7LTSB2SQ4wuKhxBLN3NgeEq/I5GjA0tBUvNHx1pDGo3lp4K11EcCjLIAWOeM8XNy59NZS5kdfYrP7hKbad84r1jcotGUG8W0l1otkaFkThQwT+ARRjPzeDhRNVxnrZ77tNeDx2upi+ItCjaB/PdatPlgr68AtSBnOS2zNHH0SoYPO+KG0OgvAICzdlb+apHfthqDN5mevu/fY0n/9ArrewNtXzN6wAOro67sCrlntepj+xkQe1LE+k7pqka9wHjqyPkK294l5ZbYry04ZrS52/7Sm6Y5tbRzl3ahwrrguurofF1qA3ECYpR+AkStRCt2Db9pDGK9hcUy7cg7++XFJnx+tCZoTZnF+UxQcOr7EYue7A5HXuWyOAI1DE02FNWeNsZgK8AEGC4Fl0PSRb/wVOgYclbUyehGDuJTYN8k6OCsS+4OG1kMLi62/zsqu+OTgDarKR5QQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(346002)(366004)(39860400002)(376002)(451199015)(83380400001)(186003)(86362001)(38100700002)(316002)(82960400001)(66899015)(15650500001)(2906002)(110136005)(66476007)(66556008)(41300700001)(8676002)(4326008)(8936002)(66946007)(5660300002)(6506007)(6512007)(478600001)(6666004)(9686003)(26005)(6486002)(966005);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1650S0hjBphMXbGbHtOdFQ3hcSOk1j8dNuQXkw1EgbpYpEG8EUy4KNV15cCQ?=
- =?us-ascii?Q?HWNAwFPuqo5nEJ1NMuigNqipwaVwhvM4JWVGmzHs1yuphwZxhzMB1qCkXcaJ?=
- =?us-ascii?Q?fNCrRbeb0+5KYucp929NutWqJpoQxrwHX3quY91PFLPxZu0/FExC20tT62eb?=
- =?us-ascii?Q?XRE9tMl6SL6QCmKjSIijl15BQIgldwJBdZ/9uyfvDhJz/HidUy4YJ1L1Vr+/?=
- =?us-ascii?Q?sC0Y49tiem9qj4eG//eS3Kbr1ftjPpZsaCxPV7+aMqzHyQdMfOnDgMAqKcag?=
- =?us-ascii?Q?oDk6rtS6Xu+3WkxsbAyw8V72WkXoeUFhVcU9LI5UFAJoXPIFjm1+Y46da8qB?=
- =?us-ascii?Q?PQr2U5U7okZlvhz+nZzrM3ps9+HUqAlOJCioZ6/3FpJc1SOhO7mG1s4ZI4RG?=
- =?us-ascii?Q?LzARo/lojxHwYCvZht968wrB04WAhACvkxX2JClkWtCI4JLnhUgotsmlst21?=
- =?us-ascii?Q?GN5uhFJTI7NGtOmpAsVFQwcXD1A9n5/LzVsu6lHNuI4TUvKXwdgcLpNEO5AL?=
- =?us-ascii?Q?WicHu6nxZrmFFxSek5hUPNPPoJ6ktjtvrp0z+14djcXuKH17wGFCcaqBBy7B?=
- =?us-ascii?Q?Wn8mcLRgaFhodUt4WbPgHTG7thSSi/jcKKUVUBmHphY6qKDZOzM5ryTpvUUt?=
- =?us-ascii?Q?gp3ys+SHZS6sZAowCm1CN3jbAgIWsf+tTaHvmLaWBN8cbQWyIm1tRmWcexnM?=
- =?us-ascii?Q?IfjsMf5FRCv7D/l515DtGRDmwQCwVn5pLaErarq7oZ5E4DdFt+JRK31IFiW8?=
- =?us-ascii?Q?I5WZRxif8PHDjXs0dfbWA2ZoWU0mYAHKQf8kVbLSdbB66H+ShWmg29O0vjCe?=
- =?us-ascii?Q?MCBnaA7t+olwAc05vdnVvn3lSulLyIZQ4aoNkqZCfx3ucElEl4Z+PCIRyiT/?=
- =?us-ascii?Q?/PckE+IcdHcm9a7eJ8Rqh9RxBmXTHSnmiFAM3QGYjIj5zynlJVJz6Wbm7mPU?=
- =?us-ascii?Q?84rb0k6Q+93uh4BBPnzdy2MUhKgBHv/yDluNLcPL3f/JmYzR3E/H1xAM40/X?=
- =?us-ascii?Q?OhpG0xE3DXKwE8fQl0pPoDM/VPu1nKR54s4moIwEtAHblP0kfD5EeFPB3VPc?=
- =?us-ascii?Q?V4eClWLuViFGGXv2CsiE2YCnh2tf3aVrUqZT5ZZKt16DtWBHKE7Y3fXHx1NZ?=
- =?us-ascii?Q?S+kqDdY5e06AI8Og9+8j6+yP5wNQxpnKa4O888N2+zRZddN830dMPxGlsW8Z?=
- =?us-ascii?Q?4aL8a7FU5xZbQghD8UNcvqroaDt6/qpvMYG3Ym8S33IHNJikC3UjvqBUSMho?=
- =?us-ascii?Q?vjB9h4N1zEt20Ae/2epcjp7u3d1n8ZMjY0/Z7oXxfynC4q5HaLfpzmDOKBmj?=
- =?us-ascii?Q?CXqqwjAeuSfMGOjI9550anQUNnw3TXtJwEEDeFYOFN2cSg7coQAqHVEo5BqA?=
- =?us-ascii?Q?dPKDpLvqYGdNhtplyUDrAE4UTI82tbH1axkBhYhQZEiq65nqHNuedBa/8VBN?=
- =?us-ascii?Q?CS80IIq5OOzMsuvG9BeTAOdKJQsn4lKNtkLREMqqd81mFHQYor3BUq7Kr/Ub?=
- =?us-ascii?Q?pwGg1zIjOvOFkFD/WuRXCMyFMD1+Tg3JY6w8vZoKd2C1dP4T4SiUr4m/4nWy?=
- =?us-ascii?Q?Y7KFaITT9capNEpmcqk=3D?=
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5fda90b2-c707-4f48-c7a9-08dad2a16491
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR05MB3960.namprd05.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/xjGjkwEXRfcrYW/iU4y+X/BZR7ykGHGoEjafRHTjMMdUPS2ZUCcXts554Gt?=
+ =?us-ascii?Q?bRTXA8B+60vW0gm2ZMm3p4nrerTKyVzSwWrTyTAdzUfd5dG3lhTofBjrw0hZ?=
+ =?us-ascii?Q?AAbTOqg1+uK6uvf/QO9JlfGtikwPOw8U+GxMK5EEX6ffaMc5AJIMwLAa3vXY?=
+ =?us-ascii?Q?fzIWu7eRMJNZ6w/WcPdpnYUBkus3CXmhNdkpSCwWx/xkxtP8L7V0AaYU9+6W?=
+ =?us-ascii?Q?dxYK8Z3ADQtheALunXMiazQE5MsUUAe4290CPHpQTajz0KycXzJXAmLVLC3Q?=
+ =?us-ascii?Q?Nq9VoE+093qi8dFgIBAjDi6/6D2LfqNBhP1DqH3ODuLu2cS/+00FrRDGy/t5?=
+ =?us-ascii?Q?3QPw+ZN2okUDWEPtg/3J3W6MOCJQIJwuq260KxMPYRYOOQfYGDlQF6XMvED7?=
+ =?us-ascii?Q?xnwxYyHUKvjh0W0yUqZ0ynYRtDWRS+l2j1+ntI7mpu14djrIrxEsK+nv1Yku?=
+ =?us-ascii?Q?5I68yaH+95HfwCDzyG92ChlyIzsMJwgsvDBWhEUvSyJHNt3srL561w8GB+X9?=
+ =?us-ascii?Q?MMUBIMB5KmsDyjzLPtLzVyQJVIRXI+F33u+E2C3v/C/nZ1QPIl8CmK2fNbIo?=
+ =?us-ascii?Q?1oZJBeWOkadYEjRRESikUlj/dSmuDxT1a4AXMnYJC0QvPnkOgvRiT5dAmyGT?=
+ =?us-ascii?Q?T7PEIlmr1t8FbEPCKJ+S3lBHmGHgTrQS+oJlYWL6JV3ZB0uLZh2NjbvzK4R6?=
+ =?us-ascii?Q?K+mYcYgoY0mV/gL8EMQVkLhBjESRLXb0Zg+R6IRnOAwzKE9GJXNnHTwrnnsM?=
+ =?us-ascii?Q?A5tCN1MW6q5NcIFIlXsaYgmmVJsQj8stlHwT3Fk7VY+WUvfdYgNAtavOLmm9?=
+ =?us-ascii?Q?lXUnfBbHK5gOnkWT3nbw+ZDCnFSh4X3nFDswRQ3BF4iMaIHZ6qK/Vqmp0Fwl?=
+ =?us-ascii?Q?DHWy4Z8UGdFbReWXQ6jZzOQoDlNimJ+qoNGYD7ArIengqS07pnp8WeAjSczq?=
+ =?us-ascii?Q?3Z9aPxFX6qpVEEjWfvX1BMnq926q418RwG39d79ZtIXlEwL+xRnOAeugIM/N?=
+ =?us-ascii?Q?dcdUeg5lKdsZdT1ivyyrqn2Uk3VQAgvUJaDQzLp/id3K5P+kJKnhz/Smowra?=
+ =?us-ascii?Q?qCTcL72vRM5SjDAc9VpSamXNUwKRWnh00sy5jq94dNByY4T29q1Ho0cO+vM3?=
+ =?us-ascii?Q?6YMKG2ec/FJPMBK6YbpkEJ8p/qq4IcDFLf4+vydCjTaGNwQ1EnUi6RqZJ7SF?=
+ =?us-ascii?Q?L2h7uhnXvMSksafHviYCEOEntFmBVGY6Alk8fbWLudHtKyOcxr6TWoQkHBT3?=
+ =?us-ascii?Q?+5tG4HsaB8acObbBCH9Aeq6mR2z8Ov4JDoIAgwA6QWlNmPZI9fC3lLwRPXTW?=
+ =?us-ascii?Q?t7hCiVPuMqzEj5kz3cg/NLAUyz8lFYSswB5Ler2ohsRQpIEtxDPXOjyNkbl2?=
+ =?us-ascii?Q?pDbnvHMxpbv52s+cmsmxuxizyu0x8WPTv2gXQC2knkusQ8TZW/AaqsDviZqV?=
+ =?us-ascii?Q?Zj08Tq9Kek60m/QILK+m6sCLgKbBQHWcm97mqiKUfLOa1r7hYqHeg66miStI?=
+ =?us-ascii?Q?8V8uM4tivzO7v6sPmx1LF59HCVwMoai3tPLpWcWJVnAHZXa7ssklbDKuDLKl?=
+ =?us-ascii?Q?NNl8xEsfHMwUFCK9mURDi47F2sd6kUQ1DjyJ9IAo690ZonNa7j0jrrig7WRx?=
+ =?us-ascii?Q?DA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 661513f7-f1e0-446a-c23b-08dad2a148a1
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 07:06:25.0970
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 07:05:39.0379
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4VRnpcRWJ8a0scGtsHxicx0ZBr3mNGsT7NA9mgKuEjjujGgtwkfmwl79lv4kBjlHLL1FSJ/dosDNCsfubdddcA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR05MB3009
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: po6z5VmIkiUnN0W5rhcY3OpFrDZbW6LBAPjZEeJBAhiE18nkcdzhtyECAVMFiKmP4jCqXUeIuTLAzclkiWfIr/ifsjQPQngk2lm6rtJsRjc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5035
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vishnu Dasa <vdasa@vmware.com>
+Darrick J. Wong wrote:
+> On Tue, Nov 29, 2022 at 07:59:14PM -0800, Dan Williams wrote:
+> > [ add Andrew ]
+> > 
+> > Shiyang Ruan wrote:
+> > > Many testcases failed in dax+reflink mode with warning message in dmesg.
+> > > This also effects dax+noreflink mode if we run the test after a
+> > > dax+reflink test.  So, the most urgent thing is solving the warning
+> > > messages.
+> > > 
+> > > Patch 1 fixes some mistakes and adds handling of CoW cases not
+> > > previously considered (srcmap is HOLE or UNWRITTEN).
+> > > Patch 2 adds the implementation of unshare for fsdax.
+> > > 
+> > > With these fixes, most warning messages in dax_associate_entry() are
+> > > gone.  But honestly, generic/388 will randomly failed with the warning.
+> > > The case shutdown the xfs when fsstress is running, and do it for many
+> > > times.  I think the reason is that dax pages in use are not able to be
+> > > invalidated in time when fs is shutdown.  The next time dax page to be
+> > > associated, it still remains the mapping value set last time.  I'll keep
+> > > on solving it.
+> > > 
+> > > The warning message in dax_writeback_one() can also be fixed because of
+> > > the dax unshare.
+> > 
+> > Thank you for digging in on this, I had been pinned down on CXL tasks
+> > and worried that we would need to mark FS_DAX broken for a cycle, so
+> > this is timely.
+> > 
+> > My only concern is that these patches look to have significant collisions with
+> > the fsdax page reference counting reworks pending in linux-next. Although,
+> > those are still sitting in mm-unstable:
+> > 
+> > http://lore.kernel.org/r/20221108162059.2ee440d5244657c4f16bdca0@linux-foundation.org
+> > 
+> > My preference would be to move ahead with both in which case I can help
+> > rebase these fixes on top. In that scenario everything would go through
+> > Andrew.
+> > 
+> > However, if we are getting too late in the cycle for that path I think
+> > these dax-fixes take precedence, and one more cycle to let the page
+> > reference count reworks sit is ok.
+> 
+> Well now that raises some interesting questions -- dax and reflink are
+> totally broken on 6.1.  I was thinking about cramming them into 6.2 as a
+> data corruption fix on the grounds that is not an acceptable state of
+> affairs.
 
-The vmci_dispatch_dgs() tasklet function calls vmci_read_data()
-which uses wait_event() resulting in invalid sleep in an atomic
-context (and therefore potentially in a deadlock).
+I agree it's not an acceptable state of affairs, but for 6.1 the answer
+may be to just revert to dax+reflink being forbidden again. The fact
+that no end user has noticed is probably a good sign that we can disable
+that without any one screaming. That may be the easy answer for 6.2 as
+well given how late this all is.
 
-Use threaded irqs to fix this issue and completely remove usage
-of tasklets.
+> OTOH we're past -rc7, which is **really late** to be changing core code.
+> Then again, there aren't so many fsdax users and nobody's complained
+> about 6.0/6.1 being busted, so perhaps the risk of regression isn't so
+> bad?  Then again, that could be a sign that this could wait, if you and
+> Andrew are really eager to merge the reworks.
 
-[   20.264639] BUG: sleeping function called from invalid context at drivers/misc/vmw_vmci/vmci_guest.c:145
-[   20.264643] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 762, name: vmtoolsd
-[   20.264645] preempt_count: 101, expected: 0
-[   20.264646] RCU nest depth: 0, expected: 0
-[   20.264647] 1 lock held by vmtoolsd/762:
-[   20.264648]  #0: ffff0000874ae440 (sk_lock-AF_VSOCK){+.+.}-{0:0}, at: vsock_connect+0x60/0x330 [vsock]
-[   20.264658] Preemption disabled at:
-[   20.264659] [<ffff80000151d7d8>] vmci_send_datagram+0x44/0xa0 [vmw_vmci]
-[   20.264665] CPU: 0 PID: 762 Comm: vmtoolsd Not tainted 5.19.0-0.rc8.20220727git39c3c396f813.60.fc37.aarch64 #1
-[   20.264667] Hardware name: VMware, Inc. VBSA/VBSA, BIOS VEFI 12/31/2020
-[   20.264668] Call trace:
-[   20.264669]  dump_backtrace+0xc4/0x130
-[   20.264672]  show_stack+0x24/0x80
-[   20.264673]  dump_stack_lvl+0x88/0xb4
-[   20.264676]  dump_stack+0x18/0x34
-[   20.264677]  __might_resched+0x1a0/0x280
-[   20.264679]  __might_sleep+0x58/0x90
-[   20.264681]  vmci_read_data+0x74/0x120 [vmw_vmci]
-[   20.264683]  vmci_dispatch_dgs+0x64/0x204 [vmw_vmci]
-[   20.264686]  tasklet_action_common.constprop.0+0x13c/0x150
-[   20.264688]  tasklet_action+0x40/0x50
-[   20.264689]  __do_softirq+0x23c/0x6b4
-[   20.264690]  __irq_exit_rcu+0x104/0x214
-[   20.264691]  irq_exit_rcu+0x1c/0x50
-[   20.264693]  el1_interrupt+0x38/0x6c
-[   20.264695]  el1h_64_irq_handler+0x18/0x24
-[   20.264696]  el1h_64_irq+0x68/0x6c
-[   20.264697]  preempt_count_sub+0xa4/0xe0
-[   20.264698]  _raw_spin_unlock_irqrestore+0x64/0xb0
-[   20.264701]  vmci_send_datagram+0x7c/0xa0 [vmw_vmci]
-[   20.264703]  vmci_datagram_dispatch+0x84/0x100 [vmw_vmci]
-[   20.264706]  vmci_datagram_send+0x2c/0x40 [vmw_vmci]
-[   20.264709]  vmci_transport_send_control_pkt+0xb8/0x120 [vmw_vsock_vmci_transport]
-[   20.264711]  vmci_transport_connect+0x40/0x7c [vmw_vsock_vmci_transport]
-[   20.264713]  vsock_connect+0x278/0x330 [vsock]
-[   20.264715]  __sys_connect_file+0x8c/0xc0
-[   20.264718]  __sys_connect+0x84/0xb4
-[   20.264720]  __arm64_sys_connect+0x2c/0x3c
-[   20.264721]  invoke_syscall+0x78/0x100
-[   20.264723]  el0_svc_common.constprop.0+0x68/0x124
-[   20.264724]  do_el0_svc+0x38/0x4c
-[   20.264725]  el0_svc+0x60/0x180
-[   20.264726]  el0t_64_sync_handler+0x11c/0x150
-[   20.264728]  el0t_64_sync+0x190/0x194
+The page reference counting has also been languishing for a long time. A
+6.2 merge would be nice, it relieves maintenance burden, but they do not
+start to have real end user implications until CXL memory hotplug
+platforms arrive and the warts in the reference counting start to show
+real problems in production.
 
-Signed-off-by: Vishnu Dasa <vdasa@vmware.com>
-Suggested-by: Zack Rusin <zackr@vmware.com>
-Reported-by: Nadav Amit <namit@vmware.com>
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-Fixes: 463713eb6164 ("VMCI: dma dg: add support for DMA datagrams receive")
-Cc: <stable@vger.kernel.org> # v5.18+
-Cc: VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Bryan Tan <bryantan@vmware.com>
----
- drivers/misc/vmw_vmci/vmci_guest.c | 49 ++++++++++++------------------
- 1 file changed, 19 insertions(+), 30 deletions(-)
+> Just looking at the stuff that's still broken with dax+reflink -- I
+> noticed that xfs/550-552 (aka the dax poison tests) are still regressing
+> on reflink filesystems.
 
-diff --git a/drivers/misc/vmw_vmci/vmci_guest.c b/drivers/misc/vmw_vmci/vmci_guest.c
-index aa7b05de97dd..6ab717b4a5db 100644
---- a/drivers/misc/vmw_vmci/vmci_guest.c
-+++ b/drivers/misc/vmw_vmci/vmci_guest.c
-@@ -56,8 +56,6 @@ struct vmci_guest_device {
- 
- 	bool exclusive_vectors;
- 
--	struct tasklet_struct datagram_tasklet;
--	struct tasklet_struct bm_tasklet;
- 	struct wait_queue_head inout_wq;
- 
- 	void *data_buffer;
-@@ -304,9 +302,8 @@ static int vmci_check_host_caps(struct pci_dev *pdev)
-  * This function assumes that it has exclusive access to the data
-  * in register(s) for the duration of the call.
-  */
--static void vmci_dispatch_dgs(unsigned long data)
-+static void vmci_dispatch_dgs(struct vmci_guest_device *vmci_dev)
- {
--	struct vmci_guest_device *vmci_dev = (struct vmci_guest_device *)data;
- 	u8 *dg_in_buffer = vmci_dev->data_buffer;
- 	struct vmci_datagram *dg;
- 	size_t dg_in_buffer_size = VMCI_MAX_DG_SIZE;
-@@ -465,10 +462,8 @@ static void vmci_dispatch_dgs(unsigned long data)
-  * Scans the notification bitmap for raised flags, clears them
-  * and handles the notifications.
-  */
--static void vmci_process_bitmap(unsigned long data)
-+static void vmci_process_bitmap(struct vmci_guest_device *dev)
- {
--	struct vmci_guest_device *dev = (struct vmci_guest_device *)data;
--
- 	if (!dev->notification_bitmap) {
- 		dev_dbg(dev->dev, "No bitmap present in %s\n", __func__);
- 		return;
-@@ -486,13 +481,13 @@ static irqreturn_t vmci_interrupt(int irq, void *_dev)
- 	struct vmci_guest_device *dev = _dev;
- 
- 	/*
--	 * If we are using MSI-X with exclusive vectors then we simply schedule
--	 * the datagram tasklet, since we know the interrupt was meant for us.
-+	 * If we are using MSI-X with exclusive vectors then we simply call
-+	 * vmci_dispatch_dgs(), since we know the interrupt was meant for us.
- 	 * Otherwise we must read the ICR to determine what to do.
- 	 */
- 
- 	if (dev->exclusive_vectors) {
--		tasklet_schedule(&dev->datagram_tasklet);
-+		vmci_dispatch_dgs(dev);
- 	} else {
- 		unsigned int icr;
- 
-@@ -502,12 +497,12 @@ static irqreturn_t vmci_interrupt(int irq, void *_dev)
- 			return IRQ_NONE;
- 
- 		if (icr & VMCI_ICR_DATAGRAM) {
--			tasklet_schedule(&dev->datagram_tasklet);
-+			vmci_dispatch_dgs(dev);
- 			icr &= ~VMCI_ICR_DATAGRAM;
- 		}
- 
- 		if (icr & VMCI_ICR_NOTIFICATION) {
--			tasklet_schedule(&dev->bm_tasklet);
-+			vmci_process_bitmap(dev);
- 			icr &= ~VMCI_ICR_NOTIFICATION;
- 		}
- 
-@@ -536,7 +531,7 @@ static irqreturn_t vmci_interrupt_bm(int irq, void *_dev)
- 	struct vmci_guest_device *dev = _dev;
- 
- 	/* For MSI-X we can just assume it was meant for us. */
--	tasklet_schedule(&dev->bm_tasklet);
-+	vmci_process_bitmap(dev);
- 
- 	return IRQ_HANDLED;
- }
-@@ -638,10 +633,6 @@ static int vmci_guest_probe_device(struct pci_dev *pdev,
- 	vmci_dev->iobase = iobase;
- 	vmci_dev->mmio_base = mmio_base;
- 
--	tasklet_init(&vmci_dev->datagram_tasklet,
--		     vmci_dispatch_dgs, (unsigned long)vmci_dev);
--	tasklet_init(&vmci_dev->bm_tasklet,
--		     vmci_process_bitmap, (unsigned long)vmci_dev);
- 	init_waitqueue_head(&vmci_dev->inout_wq);
- 
- 	if (mmio_base != NULL) {
-@@ -808,8 +799,9 @@ static int vmci_guest_probe_device(struct pci_dev *pdev,
- 	 * Request IRQ for legacy or MSI interrupts, or for first
- 	 * MSI-X vector.
- 	 */
--	error = request_irq(pci_irq_vector(pdev, 0), vmci_interrupt,
--			    IRQF_SHARED, KBUILD_MODNAME, vmci_dev);
-+	error = request_threaded_irq(pci_irq_vector(pdev, 0), NULL,
-+				     vmci_interrupt, IRQF_SHARED,
-+				     KBUILD_MODNAME, vmci_dev);
- 	if (error) {
- 		dev_err(&pdev->dev, "Irq %u in use: %d\n",
- 			pci_irq_vector(pdev, 0), error);
-@@ -823,9 +815,9 @@ static int vmci_guest_probe_device(struct pci_dev *pdev,
- 	 * between the vectors.
- 	 */
- 	if (vmci_dev->exclusive_vectors) {
--		error = request_irq(pci_irq_vector(pdev, 1),
--				    vmci_interrupt_bm, 0, KBUILD_MODNAME,
--				    vmci_dev);
-+		error = request_threaded_irq(pci_irq_vector(pdev, 1), NULL,
-+					     vmci_interrupt_bm, 0,
-+					     KBUILD_MODNAME, vmci_dev);
- 		if (error) {
- 			dev_err(&pdev->dev,
- 				"Failed to allocate irq %u: %d\n",
-@@ -833,9 +825,11 @@ static int vmci_guest_probe_device(struct pci_dev *pdev,
- 			goto err_free_irq;
- 		}
- 		if (caps_in_use & VMCI_CAPS_DMA_DATAGRAM) {
--			error = request_irq(pci_irq_vector(pdev, 2),
--					    vmci_interrupt_dma_datagram,
--					    0, KBUILD_MODNAME, vmci_dev);
-+			error = request_threaded_irq(pci_irq_vector(pdev, 2),
-+						     NULL,
-+						    vmci_interrupt_dma_datagram,
-+						     0, KBUILD_MODNAME,
-+						     vmci_dev);
- 			if (error) {
- 				dev_err(&pdev->dev,
- 					"Failed to allocate irq %u: %d\n",
-@@ -871,8 +865,6 @@ static int vmci_guest_probe_device(struct pci_dev *pdev,
- 
- err_free_irq:
- 	free_irq(pci_irq_vector(pdev, 0), vmci_dev);
--	tasklet_kill(&vmci_dev->datagram_tasklet);
--	tasklet_kill(&vmci_dev->bm_tasklet);
- 
- err_disable_msi:
- 	pci_free_irq_vectors(pdev);
-@@ -943,9 +935,6 @@ static void vmci_guest_remove_device(struct pci_dev *pdev)
- 	free_irq(pci_irq_vector(pdev, 0), vmci_dev);
- 	pci_free_irq_vectors(pdev);
- 
--	tasklet_kill(&vmci_dev->datagram_tasklet);
--	tasklet_kill(&vmci_dev->bm_tasklet);
--
- 	if (vmci_dev->notification_bitmap) {
- 		/*
- 		 * The device reset above cleared the bitmap state of the
--- 
-2.34.1
+That's worrying because the whole point of reworking dax, xfs, and
+mm/memory-failure all at once was to handle the collision of poison and
+reflink'd dax files.
+
+> So, uh, what would this patchset need to change if the "fsdax page
+> reference counting reworks" were applied?  Would it be changing the page
+> refcount instead of stashing that in page->index?
+
+Nah, it's things like switching from pages to folios and shifting how
+dax goes from pfns to pages.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?h=mm-unstable&id=cca48ba3196
+
+Ideally fsdax would never deal in pfns at all and do everything in terms
+of offsets relative to a 'struct dax_device'.
+
+My gut is saying these patches, the refcount reworks, and the
+dax+reflink fixes, are important but not end user critical. One more
+status quo release does not hurt, and we can circle back to get this all
+straightened early in v6.3.
+
+I.e. just revert:
+
+35fcd75af3ed xfs: fail dax mount if reflink is enabled on a partition
+
+...for v6.1-rc8 and get back to this early in the New Year.
+
+> 
+> --D
+> 
+> > > Shiyang Ruan (2):
+> > >   fsdax,xfs: fix warning messages at dax_[dis]associate_entry()
+> > >   fsdax,xfs: port unshare to fsdax
+> > > 
+> > >  fs/dax.c             | 166 ++++++++++++++++++++++++++++++-------------
+> > >  fs/xfs/xfs_iomap.c   |   6 +-
+> > >  fs/xfs/xfs_reflink.c |   8 ++-
+> > >  include/linux/dax.h  |   2 +
+> > >  4 files changed, 129 insertions(+), 53 deletions(-)
+> > > 
+> > > -- 
+> > > 2.38.1
+
 
