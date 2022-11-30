@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB0463E15E
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0E963E160
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbiK3ULT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 15:11:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
+        id S230042AbiK3ULV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 15:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiK3UKy (ORCPT
+        with ESMTP id S229868AbiK3UK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:10:54 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA649FED3;
-        Wed, 30 Nov 2022 12:10:01 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id l8so22135533ljh.13;
-        Wed, 30 Nov 2022 12:10:01 -0800 (PST)
+        Wed, 30 Nov 2022 15:10:56 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D239FED0;
+        Wed, 30 Nov 2022 12:10:02 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id x6so7998110lji.10;
+        Wed, 30 Nov 2022 12:10:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EtbcVDOlSSICppU8bmiIzEOVnGi+rn0ffRRtzVm9HYM=;
-        b=SZ5d6ev9r09CMO9NZ5TAAqxnvHGHw5iLAi67TfBuDpgAPToHeOTMHEt5FGGuqZ05fK
-         tRuD1dhKOrKg467YlYTcyqyqKl8P+nLFsz9TbDbCgMKpRNUOaLm3TNwy0gYYhaq303oa
-         joSoJWqcYob1I54np+894tqftUMhE1DfafMji4zK0cp9rQUpGeyKcwpjmBXsaKGeJSnN
-         BNdJrA+U1IqpLJICLdJzBIgAHIOKJD2bDf275p+8mbjtK2Z8qrzekDuOrCn/t/WdstNE
-         cpkjX3FcYcUmtit8BXo9SjOxJrVkPKoF3t/vL14vr+P7mjCBElZk4r6OdLbGyu/g5uff
-         yjVQ==
+        bh=0qIj/q/S/M+xmpa0Crss8iDZZEgJSAa+iZUKMRDbQ1A=;
+        b=fwXoyKVd99qyS5eoWoK6kZVSv67qIbENqpVmajCXCwnWltjp+zrXyAXKH0Obiq5w4d
+         2Mfw9Bq/frgOoGkBPOll4xlsehKKYclGHi+NhBVtFd1nk47L05MYzT/AQW4cPYOG9k7H
+         kt04Mn1WEISAqeMBD8CWlfF0f7aDoHohZl84qPpZlwmHtM2nSED6+qZwak+mPdpNBncR
+         rknHgNvT5duvR5qFd1V0Yp5wrJzamnBxE1E2c08f3ny1Va5zTSixVS8RG9Apnv8U4Xy1
+         sJCx4BvWraIt1CFGu8C3JjZv755jd/smdAE2ff+qVfiKkOfY+DJyBkLaoP0Pdbl2K5uz
+         o/lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EtbcVDOlSSICppU8bmiIzEOVnGi+rn0ffRRtzVm9HYM=;
-        b=3JkPbmuRiPs3MDX05d/RylAVAD2lxE27Y2y5H7n+ClMtzhiXthhUaQGlNtCU2Rotlc
-         8m6RVUjz8+99pk2gtEoyFVmXOC6LIURuTzAffxcdglDZ9Fy2uinlqSR4utK9KabL1hCc
-         rB5DBPhibwZNU68SrBaRPnK+wXcysTQsHq7AL4+BIe+bs1rMGCoy85K7pt2fTR8TEwov
-         jyumPSm7VAqX2UMwd/Syx/bFrpXA7uMFrOw8dySmm5RJ43G8ldzkq7IM1WuToblIAMcp
-         Pf6l48xToOXF5ZxQ3YWIog20vc3JhEmlK9lvsSE6srn2an3NSpsyZOw5fW7DM7EZeXlm
-         yX1A==
-X-Gm-Message-State: ANoB5pm4EPJl7Zq2wYF8oy0lTDVwWiIsvtyerl+kG0+aEz+yP/9OWelv
-        twty1bSx08Udpo/La6Puee/vTAIy1ck=
-X-Google-Smtp-Source: AA0mqf7CPPdhD9/47NvmpJGuRSGX1fRLAxNTyYeYNqwuRejlvC9chRe92gvY63/gfDu3dgJIVFL30w==
-X-Received: by 2002:a2e:93d7:0:b0:279:7294:5e42 with SMTP id p23-20020a2e93d7000000b0027972945e42mr13933762ljh.81.1669838998761;
-        Wed, 30 Nov 2022 12:09:58 -0800 (PST)
+        bh=0qIj/q/S/M+xmpa0Crss8iDZZEgJSAa+iZUKMRDbQ1A=;
+        b=hYGzIr4evOBwdPHPDJiEB66zU2kgFjVs17g9ae4wVJTy7PoSDnWWpb5FtaSSc4yvdH
+         s7PzqKbnUYk2Wm3SikTLeIWL6rhSTAC80iUQrvG58DXdi8S4FuuxqXrDNW/9Lxk/usAC
+         uQtl4rIgCpHX3t1peDiVzLD5CqYSi+U+kOLF6e+uidQqi96tAoa3YR/V3dm+iDPCodl3
+         jJQGWzGLJTr7vNPjqdz0H2zOoO9JktnJOCc4+GbKoRhmYCU6h+s8DoUFpgke4STos70W
+         ZoeLy3Ik7YCduOG7ilFSIVSBtVKvoxLZid5o/YJdRorcja411lhwqzP6WYMvEbZdp7Q4
+         X6uQ==
+X-Gm-Message-State: ANoB5pkGclNI9QN4TKsuLnJCAXn69HPLZSGmjsITJDUki54T32CMMrYp
+        u8/QVbm+k3tEG8kkxhzm/7TGj3lTtx0=
+X-Google-Smtp-Source: AA0mqf6GebFaXhqxSqjzPGpEH8cA6UmpAytnONRCzSRyZXmFXci38kir6+W3OcWKtliqBRb28VbkMw==
+X-Received: by 2002:a05:651c:1c3:b0:278:eab6:7542 with SMTP id d3-20020a05651c01c300b00278eab67542mr15028408ljn.400.1669839001010;
+        Wed, 30 Nov 2022 12:10:01 -0800 (PST)
 Received: from localhost.localdomain (ccy110.neoplus.adsl.tpnet.pl. [83.30.148.110])
-        by smtp.gmail.com with ESMTPSA id a25-20020a056512201900b004b4e9580b1asm369754lfb.66.2022.11.30.12.09.57
+        by smtp.gmail.com with ESMTPSA id a25-20020a056512201900b004b4e9580b1asm369754lfb.66.2022.11.30.12.09.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 12:09:58 -0800 (PST)
+        Wed, 30 Nov 2022 12:10:00 -0800 (PST)
 From:   Adam Skladowski <a39.skl@gmail.com>
 Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         Adam Skladowski <a39.skl@gmail.com>,
@@ -71,10 +71,11 @@ Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         Loic Poulain <loic.poulain@linaro.org>,
         linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH v2 01/12] dt-bindings: display: msm: Rename mdss node name in example
-Date:   Wed, 30 Nov 2022 21:09:39 +0100
-Message-Id: <20221130200950.144618-2-a39.skl@gmail.com>
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 02/12] dt-bindings: thermal: tsens: Add SM6115 compatible
+Date:   Wed, 30 Nov 2022 21:09:40 +0100
+Message-Id: <20221130200950.144618-3-a39.skl@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221130200950.144618-1-a39.skl@gmail.com>
 References: <20221130200950.144618-1-a39.skl@gmail.com>
@@ -91,40 +92,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Follow other YAMLs and replace mdss name into display-subystem.
+Document compatible for tsens on Qualcomm SM6115 platform
+according to downstream dts it ship v2.4 of IP
 
 Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml      | 2 +-
- .../devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml       | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml
-index d6f043a4b08d..4795e13c7b59 100644
---- a/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml
-+++ b/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml
-@@ -72,7 +72,7 @@ examples:
-     #include <dt-bindings/interconnect/qcom,qcm2290.h>
-     #include <dt-bindings/power/qcom-rpmpd.h>
- 
--    mdss@5e00000 {
-+    display-subsystem@5e00000 {
-         #address-cells = <1>;
-         #size-cells = <1>;
-         compatible = "qcom,qcm2290-mdss";
-diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
-index a86d7f53fa84..886858ef6700 100644
---- a/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
-+++ b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
-@@ -62,7 +62,7 @@ examples:
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
-     #include <dt-bindings/power/qcom-rpmpd.h>
- 
--    mdss@5e00000 {
-+    display-subsystem@5e00000 {
-         #address-cells = <1>;
-         #size-cells = <1>;
-         compatible = "qcom,sm6115-mdss";
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index 038d81338fcf..c41fcf404117 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -53,6 +53,7 @@ properties:
+               - qcom,sc8280xp-tsens
+               - qcom,sdm630-tsens
+               - qcom,sdm845-tsens
++              - qcom,sm6115-tsens
+               - qcom,sm6350-tsens
+               - qcom,sm8150-tsens
+               - qcom,sm8250-tsens
 -- 
 2.25.1
 
