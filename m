@@ -2,109 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417F363D98A
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:35:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D979E63D990
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiK3Pfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 10:35:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
+        id S229923AbiK3PhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 10:37:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiK3PfV (ORCPT
+        with ESMTP id S229601AbiK3Pgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 10:35:21 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A158FACF
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 07:35:20 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id t1so13462413wmi.4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 07:35:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ollth9LvKVA7JWRjE8biQu+3eEzKzMvsoDBYHMsXKH8=;
-        b=w/kWhLywCOVt1ed+3YA9pU/z8cM8jEc/z1waVW5ddqCgYnadPaKJ3XiGpq2ojRRSZI
-         k3JPbpX3DiHZAX7MpNfAClrB3vrWIzCLhQeU44l7ot0I0uaqE5ZwZhfaYzIJYZRyCzvx
-         7NBbcC0wuLyWcF82sV9tinwj+rvg2nIx8jalQNuh5IBazTMW5yvqdlnYtwTVMXoBc+Ax
-         evPplaYjb1yRdKvNBQFUuFvUB8qZJPB9SYA96FWd5eY6w2AGAlHoaULD0DDUJFvRiJQG
-         p5uPVs8pvIpNmOld3CyHYWFjntGXefCxBq5i8/wxbjHu0nLVMjvfnI4nh53mhIvm+f20
-         L5qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ollth9LvKVA7JWRjE8biQu+3eEzKzMvsoDBYHMsXKH8=;
-        b=2qdZ63/fvliSo+nRbMnRqvDXN/ocv94l9NRRg66i38AzJEEkybJoXCClCCzzOdXecp
-         ISibTjmVPrtyI8h32MCpaIBfYoBLPAsHt8xw0dVq5QWYOPNvJeDqNpH9Ip/4whnR7VNv
-         tUufJQVq2A4c/wzoGWDI7UbDqup4mwWP4+ff+XnaAYo5ko/ewAA/txmg110NeDZT4LU/
-         mUlzwUBa9I3342KecqEAaaQwrXt/UJWCAc0Fj6eGeKDuFqepPVFD3HWF0XNEGtSqhIdi
-         qlf/Ws3QO+/PXJwU9aP7j+oceLPRNtgIvMJB/YASdXTlpuB+xbs+KrpkrRsens5IPzxM
-         r2WA==
-X-Gm-Message-State: ANoB5plLxRcC8aAt9PNhaXoi8dR0Iil8Urhwqc8bBQgw8SOQ9Lpk76NZ
-        Lj01hrnWcUfzy8fk/YJVrgEeZQ==
-X-Google-Smtp-Source: AA0mqf4eK05an46lUSADsygGYj6YbeCIHWbWkSUKjAIYam5U7HNdVQYycIkts0qBNKwGV9Zw+Vloaw==
-X-Received: by 2002:a05:600c:5010:b0:3cf:b067:416c with SMTP id n16-20020a05600c501000b003cfb067416cmr33797088wmr.134.1669822518964;
-        Wed, 30 Nov 2022 07:35:18 -0800 (PST)
-Received: from localhost ([2a01:cb19:85e6:1900:2bf7:7388:731d:c4e1])
-        by smtp.gmail.com with ESMTPSA id h130-20020a1c2188000000b003b4fdbb6319sm5971128wmh.21.2022.11.30.07.35.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 07:35:18 -0800 (PST)
-From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
-To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Markuss Broks <markuss.broks@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v2 1/3] dt-bindings: input/touchscreen: Add compatible
- for IST3038
-In-Reply-To: <20221118182103.3405-2-linmengbo0689@protonmail.com>
-References: <20221118182103.3405-1-linmengbo0689@protonmail.com>
- <20221118182103.3405-2-linmengbo0689@protonmail.com>
-Date:   Wed, 30 Nov 2022 16:35:17 +0100
-Message-ID: <87h6ygsbey.fsf@baylibre.com>
+        Wed, 30 Nov 2022 10:36:47 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7FA51C43D
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 07:36:45 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 30EE4D6E;
+        Wed, 30 Nov 2022 07:36:52 -0800 (PST)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C77E33F67D;
+        Wed, 30 Nov 2022 07:36:44 -0800 (PST)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     will@kernel.org, mark.rutland@arm.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Geoff Blake <blakgeof@amazon.com>
+Subject: [PATCH 1/2] perf/arm-cmn: Cope with spurious IRQs better
+Date:   Wed, 30 Nov 2022 15:36:38 +0000
+Message-Id: <bc8183fcd7f6ca07b0d56aa8061d816485b84341.1669822447.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.36.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 18:21, "Lin, Meng-Bo" <linmengbo0689@protonmail.com> wrote:
+Although we reset the CMN state during probe before requesting our
+interrupt(s), a pending IRQ could already have been latched at the
+interrupt controller, and thus be delivered spuriously as soon as the
+IRQ is enabled. Not handling that can then lead to the IRQ layer
+disabling it again, and things subseuqently going wonky.
 
-> From: Markuss Broks <markuss.broks@gmail.com>
->
-> Imagis IST3038 is a variant (firmware?) of Imagis IST3038 IC,
-> add the compatible for it to the IST3038C bindings.
->
-> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
-> [Change from IST3038B to IST3038]
-> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+Since we can't support shared IRQs anyway for affinity-management
+reasons, the only time we should concievably return IRQ_NONE is for a
+spurious interrupt which did somehow originate from our CMN, so there
+should be no harm in removing the problem by simply claiming to have
+handled those as well.
 
-Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Reported-by: Geoff Blake <blakgeof@amazon.com>
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
+ drivers/perf/arm-cmn.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-> ---
->  .../devicetree/bindings/input/touchscreen/imagis,ist3038c.yaml   | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/input/touchscreen/imagis,ist3038c.yaml b/Documentation/devicetree/bindings/input/touchscreen/imagis,ist3038c.yaml
-> index e3a2b871e50c..a58c045d2ba1 100644
-> --- a/Documentation/devicetree/bindings/input/touchscreen/imagis,ist3038c.yaml
-> +++ b/Documentation/devicetree/bindings/input/touchscreen/imagis,ist3038c.yaml
-> @@ -18,6 +18,7 @@ properties:
->  
->    compatible:
->      enum:
-> +      - imagis,ist3038
->        - imagis,ist3038c
->  
->    reg:
-> -- 
-> 2.30.2
+diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
+index b80a9b74662b..9e8be5586423 100644
+--- a/drivers/perf/arm-cmn.c
++++ b/drivers/perf/arm-cmn.c
+@@ -1798,7 +1798,6 @@ static int arm_cmn_pmu_offline_cpu(unsigned int cpu, struct hlist_node *cpuhp_no
+ static irqreturn_t arm_cmn_handle_irq(int irq, void *dev_id)
+ {
+ 	struct arm_cmn_dtc *dtc = dev_id;
+-	irqreturn_t ret = IRQ_NONE;
+ 
+ 	for (;;) {
+ 		u32 status = readl_relaxed(dtc->base + CMN_DT_PMOVSR);
+@@ -1807,7 +1806,6 @@ static irqreturn_t arm_cmn_handle_irq(int irq, void *dev_id)
+ 
+ 		for (i = 0; i < CMN_DTM_NUM_COUNTERS; i++) {
+ 			if (status & (1U << i)) {
+-				ret = IRQ_HANDLED;
+ 				if (WARN_ON(!dtc->counters[i]))
+ 					continue;
+ 				delta = (u64)arm_cmn_read_counter(dtc, i) << 16;
+@@ -1816,7 +1814,6 @@ static irqreturn_t arm_cmn_handle_irq(int irq, void *dev_id)
+ 		}
+ 
+ 		if (status & (1U << CMN_DT_NUM_COUNTERS)) {
+-			ret = IRQ_HANDLED;
+ 			if (dtc->cc_active && !WARN_ON(!dtc->cycles)) {
+ 				delta = arm_cmn_read_cc(dtc);
+ 				local64_add(delta, &dtc->cycles->count);
+@@ -1826,7 +1823,7 @@ static irqreturn_t arm_cmn_handle_irq(int irq, void *dev_id)
+ 		writel_relaxed(status, dtc->base + CMN_DT_PMOVSR_CLR);
+ 
+ 		if (!dtc->irq_friend)
+-			return ret;
++			return IRQ_HANDLED;
+ 		dtc += dtc->irq_friend;
+ 	}
+ }
+-- 
+2.36.1.dirty
+
