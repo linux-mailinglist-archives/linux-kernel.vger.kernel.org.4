@@ -2,71 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22EC963E43D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C11B863E442
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:07:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiK3XGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 18:06:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41974 "EHLO
+        id S229644AbiK3XHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:07:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiK3XGL (ORCPT
+        with ESMTP id S229642AbiK3XHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 18:06:11 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28D397033;
-        Wed, 30 Nov 2022 15:06:07 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id s5so76819edc.12;
-        Wed, 30 Nov 2022 15:06:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UQlapujHjKw7zEIFDE0bIVyHKZ7ZDtpnlk0TFhcybwA=;
-        b=Ysm8TV/wU765nO4TfDrEonAPGjEFGm6E5iiVUYJOpUTVRLXFO3g8PSVucc0QBO77qc
-         RotMShY3b1/V8LPZ+LTzTvOwYtDXl1whxa23u4QnDrou4mw86hzWbB2eCC69gybYw7TW
-         smQ5ZQXFdzRLVJu1tRka0CNIHqBmT/wN6ONRqZOsbUTSP9z0IdRTPONmCLEg8YTZND9D
-         KmvHnVx4MzMB4nGmQMVWwjCW9Tt/5g8kUHJEpPsSx6OdWTbHV0/fS8i0NaJWBnhCCTEJ
-         jppNDTC7lFN5JUGJCU/NNBRqRydvrYiGDi+FAvFuu7z25o5hk8qSlAm27IylwMNvc2k/
-         K9WA==
+        Wed, 30 Nov 2022 18:07:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7555C975D3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:06:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669849588;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d26lChXoDlvGkCKOjB2wAez7JUC+UbRJaOgpbj3f1C4=;
+        b=HNIdzqc8+oFEOfpTjm6eCKNgmDfzHNU6W3xv5xlniIZNmB6y1nkE5POnOc48diAWnj+We8
+        owQ78IWoMXMoY+kp8SxSQiC6DZBOeD1bGTww26+0tJL2zdokKCNiIC6JdnLxj1/Br983R4
+        z6i60oQq3jOJMLTeLmSCchExD85Y8jA=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-540-r1Pb3SagM5G5IzCIejy3ag-1; Wed, 30 Nov 2022 18:06:27 -0500
+X-MC-Unique: r1Pb3SagM5G5IzCIejy3ag-1
+Received: by mail-io1-f69.google.com with SMTP id y5-20020a056602120500b006cf628c14ddso12456695iot.15
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:06:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UQlapujHjKw7zEIFDE0bIVyHKZ7ZDtpnlk0TFhcybwA=;
-        b=0oF7Pz2wmfcwxj93D4G47KqsMaJxgUTSEmbxJMeNa30l4U30ihwuvMaNvroOCLGBs3
-         pCjillY+bSJN+RHdli34+TUTR9wdQe9i5v2uC9YjPdUFUYORQVwKCEk5hr7b0h18zUB6
-         8gdWzgeMG3jZXKnL99jWgxwobui0AhzYfMaQZ+nQT3bl48USzzqpXClO+n4mJTeGyMlH
-         Kfi1L/ciG7gkLZ853QjxtKYlEFDMvCltajBaNPNLSuQqVDFzWWliuwtt0TTU4X9yjyp6
-         AY2PHtXAyv0Q116O1n5tVicLpqtxsy9DTnDwL2WbjY4vCWZg28uGs+Yj8GwhRBdiI8Bu
-         GAbQ==
-X-Gm-Message-State: ANoB5pnqQXRdiCXUr6jtmc8poYzQ68Qjp3ExJJc0S/da3IlIxESx7eKL
-        HvDW4Ip/WNTqHjw0Y3NNHcuVCQQQcBpcsWw4ql/ePrCl
-X-Google-Smtp-Source: AA0mqf7PtDPrIxDqKatcWfpFTL79ZuvV3WUTnTPNI4tc9Zv92huJfMiwWmwTqHWYV+x88CA6tbxVdC/+182b6AVVNFs=
-X-Received: by 2002:a50:ed90:0:b0:46a:e6e3:b3cf with SMTP id
- h16-20020a50ed90000000b0046ae6e3b3cfmr21089221edr.333.1669849566068; Wed, 30
- Nov 2022 15:06:06 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d26lChXoDlvGkCKOjB2wAez7JUC+UbRJaOgpbj3f1C4=;
+        b=eHN5c1XBdiBhwBL1wrLZWb9UOCkkWXCVaG5++6nXsS+v+eNk0QOUjX+uZQcA2pDbKH
+         xESD8Ha9vZ4RKZBVVwcnd+3gjG1k1i8Y4Ixd/QjzP/eVwuh4MWq+78E40ExA0GgAExRm
+         ZEiAkh+CSxAEVUBngh6+B1jG0CYf2AWUKt1y/1DPcbbmZ9eI/cVDnyhFG4Dp4xf8YFWR
+         py4SOMByfONcw2PRNSyzCwAre8SBql9z91CoDnByGusYKCc6vLhukjIFILtRB2lGM21e
+         qm6pIgSyvO5OQIfijsF/Ib8m3F+hmToTAXMKr9haM613vAp0TEqEhIO5at+HlJlSM31w
+         dRmg==
+X-Gm-Message-State: ANoB5plbuRLflAHuH2StxqxsZYVI1xFfvnwQQKxnaa9dTwXzV/Kmjnzm
+        RudUvnQ8aaMOjaSfcwFCHp3Eee7OK0AT0oM5NaEQAraJWlGO4+41aLgKVvpUNPVMtSR88Eh9piF
+        eskY8NFkM4DVmtbFlr43J2WX1
+X-Received: by 2002:a92:cb89:0:b0:302:3c43:20b9 with SMTP id z9-20020a92cb89000000b003023c4320b9mr21109384ilo.300.1669849583863;
+        Wed, 30 Nov 2022 15:06:23 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6OkVj5fnMzli9bMlTgGf4gH6vOhgMRZnkJ53hmRbgsaIa7w51XM4Qyhc+P8kRwsJ8espFwxg==
+X-Received: by 2002:a92:cb89:0:b0:302:3c43:20b9 with SMTP id z9-20020a92cb89000000b003023c4320b9mr21109374ilo.300.1669849583558;
+        Wed, 30 Nov 2022 15:06:23 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id w10-20020a05660205ca00b0067b75781af9sm982859iox.37.2022.11.30.15.06.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 15:06:23 -0800 (PST)
+Date:   Wed, 30 Nov 2022 16:06:22 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     ruanjinjie <ruanjinjie@huawei.com>
+Cc:     <kwankhede@nvidia.com>, <kraxel@redhat.com>, <cjia@nvidia.com>,
+        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        akrowiak@linux.ibm.com, pasic@linux.ibm.com, jjherne@linux.ibm.com,
+        farman@linux.ibm.com, mjrosato@linux.ibm.com
+Subject: Re: [PATCH] vfio/mdev: fix possible memory leak in module init
+ funcs
+Message-ID: <20221130160622.0cf3e47d.alex.williamson@redhat.com>
+In-Reply-To: <20221118032827.3725190-1-ruanjinjie@huawei.com>
+References: <20221118032827.3725190-1-ruanjinjie@huawei.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20221124151603.807536-1-benjamin.tissoires@redhat.com> <20221124151603.807536-2-benjamin.tissoires@redhat.com>
-In-Reply-To: <20221124151603.807536-2-benjamin.tissoires@redhat.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 30 Nov 2022 15:05:53 -0800
-Message-ID: <CAEf4Bzaq3QfhzqQK=BqCkzNcoS3A5L-ntJ5vj16uMc=jS4bxkw@mail.gmail.com>
-Subject: Re: [RFC hid v1 01/10] bpftool: generate json output of skeletons
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,134 +82,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 7:16 AM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> So we can then build light skeletons with loaders in any language.
->
+[Cc +vfio-ap, vfio-ccw]
 
-It would be useful to include an example generated JSON. Other than
-that the overall idea makes sense. Kind of machine-friendly "BPF
-object schema" to allow automation.
+On Fri, 18 Nov 2022 11:28:27 +0800
+ruanjinjie <ruanjinjie@huawei.com> wrote:
 
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> Inject fault while probing module, if device_register() fails,
+> but the refcount of kobject is not decreased to 0, the name
+> allocated in dev_set_name() is leaked. Fix this by calling
+> put_device(), so that name can be freed in callback function
+> kobject_cleanup().
+> 
+> unreferenced object 0xffff88807d687008 (size 8):
+>   comm "modprobe", pid 8280, jiffies 4294807686 (age 12.378s)
+>   hex dump (first 8 bytes):
+>     6d 64 70 79 00 6b 6b a5                          mdpy.kk.
+>   backtrace:
+>     [<ffffffff8174f19e>] __kmalloc_node_track_caller+0x4e/0x150
+>     [<ffffffff81731d53>] kstrdup+0x33/0x60
+>     [<ffffffff83aa1421>] kobject_set_name_vargs+0x41/0x110
+>     [<ffffffff82d91abb>] dev_set_name+0xab/0xe0
+>     [<ffffffffa0260105>] 0xffffffffa0260105
+>     [<ffffffff81001c27>] do_one_initcall+0x87/0x2e0
+>     [<ffffffff813739cb>] do_init_module+0x1ab/0x640
+>     [<ffffffff81379d20>] load_module+0x5d00/0x77f0
+>     [<ffffffff8137bc40>] __do_sys_finit_module+0x110/0x1b0
+>     [<ffffffff83c944a5>] do_syscall_64+0x35/0x80
+>     [<ffffffff83e0006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> 
+> unreferenced object 0xffff888101ccbcf8 (size 8):
+>   comm "modprobe", pid 15662, jiffies 4295164481 (age 13.282s)
+>   hex dump (first 8 bytes):
+>     6d 74 74 79 00 6b 6b a5                          mtty.kk.
+>   backtrace:
+>     [<ffffffff8174f19e>] __kmalloc_node_track_caller+0x4e/0x150
+>     [<ffffffff81731d53>] kstrdup+0x33/0x60
+>     [<ffffffff83aa1421>] kobject_set_name_vargs+0x41/0x110
+>     [<ffffffff82d91abb>] dev_set_name+0xab/0xe0
+>     [<ffffffffa0248134>] 0xffffffffa0248134
+>     [<ffffffff81001c27>] do_one_initcall+0x87/0x2e0
+>     [<ffffffff813739cb>] do_init_module+0x1ab/0x640
+>     [<ffffffff81379d20>] load_module+0x5d00/0x77f0
+>     [<ffffffff8137bc40>] __do_sys_finit_module+0x110/0x1b0
+>     [<ffffffff83c944a5>] do_syscall_64+0x35/0x80
+>     [<ffffffff83e0006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> 
+> unreferenced object 0xffff88810177c6c8 (size 8):
+>   comm "modprobe", pid 23657, jiffies 4295314656 (age 13.227s)
+>   hex dump (first 8 bytes):
+>     6d 62 6f 63 68 73 00 a5                          mbochs..
+>   backtrace:
+>     [<ffffffff8174f19e>] __kmalloc_node_track_caller+0x4e/0x150
+>     [<ffffffff81731d53>] kstrdup+0x33/0x60
+>     [<ffffffff83aa1421>] kobject_set_name_vargs+0x41/0x110
+>     [<ffffffff82d91abb>] dev_set_name+0xab/0xe0
+>     [<ffffffffa0248124>] 0xffffffffa0248124
+>     [<ffffffff81001c27>] do_one_initcall+0x87/0x2e0
+>     [<ffffffff813739cb>] do_init_module+0x1ab/0x640
+>     [<ffffffff81379d20>] load_module+0x5d00/0x77f0
+>     [<ffffffff8137bc40>] __do_sys_finit_module+0x110/0x1b0
+>     [<ffffffff83c944a5>] do_syscall_64+0x35/0x80
+>     [<ffffffff83e0006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> 
+> Fixes: d61fc96f47fd ("sample: vfio mdev display - host device")
+> Fixes: 9d1a546c53b4 ("docs: Sample driver to demonstrate how to use Mediated device framework.")
+> Fixes: a5e6e6505f38 ("sample: vfio bochs vbe display (host device for bochs-drm)")
+> Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
 > ---
->  tools/bpf/bpftool/gen.c | 95 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 95 insertions(+)
->
-> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-> index cf8b4e525c88..818a5209b3ac 100644
-> --- a/tools/bpf/bpftool/gen.c
-> +++ b/tools/bpf/bpftool/gen.c
-> @@ -904,6 +904,96 @@ codegen_progs_skeleton(struct bpf_object *obj, size_t prog_cnt, bool populate_li
->         }
->  }
->
-> +static int gen_json(struct bpf_object *obj, const char *obj_name, size_t file_sz, uint8_t *obj_data)
-> +{
-> +       struct bpf_program *prog;
-> +       struct bpf_map *map;
-> +       char ident[256];
-> +
-> +       jsonw_start_object(json_wtr);   /* root object */
-> +
-> +       jsonw_string_field(json_wtr, "name", obj_name);
-> +
-> +       jsonw_bool_field(json_wtr, "use_loader", use_loader);
-> +
-> +       /* print all maps */
-> +       jsonw_name(json_wtr, "maps");
-> +       jsonw_start_array(json_wtr);
-> +       bpf_object__for_each_map(map, obj) {
-> +               if (!get_map_ident(map, ident, sizeof(ident))) {
-> +                       p_err("ignoring unrecognized internal map '%s'...",
-> +                             bpf_map__name(map));
-> +                       continue;
-> +               }
-> +
-> +               jsonw_start_object(json_wtr);   /* map object */
-> +               jsonw_string_field(json_wtr, "ident", ident);
-> +               jsonw_string_field(json_wtr, "name", bpf_map__name(map));
-> +
-> +               /* print mmap data value */
-> +               if (is_internal_mmapable_map(map, ident, sizeof(ident))) {
-> +                       const void *mmap_data = NULL;
-> +                       size_t mmap_size = 0;
-> +
-> +                       mmap_data = bpf_map__initial_value(map, &mmap_size);
-> +
-> +                       jsonw_uint_field(json_wtr, "size", mmap_size);
-> +                       jsonw_uint_field(json_wtr, "mmap_sz", bpf_map_mmap_sz(map));
-> +                       jsonw_name(json_wtr, "data");
-> +                       print_hex_data_json((uint8_t *)mmap_data, mmap_size);
-> +
-> +               }
-> +               jsonw_end_object(json_wtr);     /* map object */
-> +       }
-> +       jsonw_end_array(json_wtr);
-> +
-> +       /* print all progs */
-> +       jsonw_name(json_wtr, "progs");
-> +       jsonw_start_array(json_wtr);
-> +       bpf_object__for_each_program(prog, obj) {
-> +               jsonw_start_object(json_wtr);   /* prog object */
-> +               jsonw_string_field(json_wtr, "name", bpf_program__name(prog));
-> +               jsonw_string_field(json_wtr, "sec", bpf_program__section_name(prog));
-> +               jsonw_end_object(json_wtr);     /* prog object */
-> +       }
-> +       jsonw_end_array(json_wtr);
-> +
-> +       /* print object data */
-> +       if (use_loader) {
-> +               DECLARE_LIBBPF_OPTS(gen_loader_opts, opts);
-> +               int err = 0;
-> +
-> +               err = bpf_object__gen_loader(obj, &opts);
-> +               if (err)
-> +                       return err;
-> +
-> +               err = bpf_object__load(obj);
-> +               if (err) {
-> +                       p_err("failed to load object file");
-> +                       return err;
-> +               }
-> +               /* If there was no error during load then gen_loader_opts
-> +                * are populated with the loader program.
-> +                */
-> +
-> +               jsonw_uint_field(json_wtr, "data_sz", opts.data_sz);
-> +               jsonw_name(json_wtr, "data");
-> +               print_hex_data_json((uint8_t *)opts.data, opts.data_sz);
-> +
-> +               jsonw_uint_field(json_wtr, "insns_sz", opts.insns_sz);
-> +               jsonw_name(json_wtr, "insns");
-> +               print_hex_data_json((uint8_t *)opts.insns, opts.insns_sz);
-> +
-> +       } else {
-> +               jsonw_name(json_wtr, "data");
-> +               print_hex_data_json(obj_data, file_sz);
-> +       }
-> +
-> +       jsonw_end_object(json_wtr);     /* root object */
-> +
-> +       return 0;
-> +}
-> +
->  static int do_skeleton(int argc, char **argv)
->  {
->         char header_guard[MAX_OBJ_NAME_LEN + sizeof("__SKEL_H__")];
-> @@ -986,6 +1076,11 @@ static int do_skeleton(int argc, char **argv)
->                 goto out;
->         }
->
-> +       if (json_output) {
-> +               err = gen_json(obj, obj_name, file_sz, (uint8_t *)obj_data);
-> +               goto out;
-> +       }
-> +
->         bpf_object__for_each_map(map, obj) {
->                 if (!get_map_ident(map, ident, sizeof(ident))) {
->                         p_err("ignoring unrecognized internal map '%s'...",
-> --
-> 2.38.1
->
+>  samples/vfio-mdev/mbochs.c | 4 +++-
+>  samples/vfio-mdev/mdpy.c   | 4 +++-
+>  samples/vfio-mdev/mtty.c   | 4 +++-
+>  3 files changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/samples/vfio-mdev/mbochs.c b/samples/vfio-mdev/mbochs.c
+> index 117a8d799f71..1c47672be815 100644
+> --- a/samples/vfio-mdev/mbochs.c
+> +++ b/samples/vfio-mdev/mbochs.c
+> @@ -1430,8 +1430,10 @@ static int __init mbochs_dev_init(void)
+>  	dev_set_name(&mbochs_dev, "%s", MBOCHS_NAME);
+>  
+>  	ret = device_register(&mbochs_dev);
+> -	if (ret)
+> +	if (ret) {
+> +		put_device(&mbochs_dev);
+>  		goto err_class;
+> +	}
+>  
+>  	ret = mdev_register_parent(&mbochs_parent, &mbochs_dev, &mbochs_driver,
+>  				   mbochs_mdev_types,
+
+
+vfio-ap has a similar unwind as the sample drivers, but actually makes
+an attempt to catch this ex:
+
+	...
+        ret = device_register(&matrix_dev->device);
+        if (ret)
+                goto matrix_reg_err;
+
+        ret = driver_register(&matrix_driver);
+        if (ret)
+                goto matrix_drv_err;
+
+        return 0;
+
+matrix_drv_err:
+        device_unregister(&matrix_dev->device);
+matrix_reg_err:
+        put_device(&matrix_dev->device);
+	...
+
+So of the vfio drivers calling device_register(), vfio-ap is the only
+one that does a put_device() if device_register() fails, but it also
+seems sketchy to call both device_unregister() and put_device() in the
+case that we exit via matrix_drv_err.
+
+I wonder if all of these shouldn't adopt a flow like:
+
+	ret = device_register(&dev);
+	if (ret)
+		goto err1;
+
+	....
+
+	return 0;
+
+err2:
+	device_del(&dev);
+err1:
+	put_device(&dev);
+
+Thanks,
+
+Alex
+
+> diff --git a/samples/vfio-mdev/mdpy.c b/samples/vfio-mdev/mdpy.c
+> index 946e8cfde6fd..bfb93eaf535b 100644
+> --- a/samples/vfio-mdev/mdpy.c
+> +++ b/samples/vfio-mdev/mdpy.c
+> @@ -717,8 +717,10 @@ static int __init mdpy_dev_init(void)
+>  	dev_set_name(&mdpy_dev, "%s", MDPY_NAME);
+>  
+>  	ret = device_register(&mdpy_dev);
+> -	if (ret)
+> +	if (ret) {
+> +		put_device(&mdpy_dev);
+>  		goto err_class;
+> +	}
+>  
+>  	ret = mdev_register_parent(&mdpy_parent, &mdpy_dev, &mdpy_driver,
+>  				   mdpy_mdev_types,
+> diff --git a/samples/vfio-mdev/mtty.c b/samples/vfio-mdev/mtty.c
+> index e72085fc1376..dddb0619846c 100644
+> --- a/samples/vfio-mdev/mtty.c
+> +++ b/samples/vfio-mdev/mtty.c
+> @@ -1330,8 +1330,10 @@ static int __init mtty_dev_init(void)
+>  	dev_set_name(&mtty_dev.dev, "%s", MTTY_NAME);
+>  
+>  	ret = device_register(&mtty_dev.dev);
+> -	if (ret)
+> +	if (ret) {
+> +		put_device(&mtty_dev.dev);
+>  		goto err_class;
+> +	}
+>  
+>  	ret = mdev_register_parent(&mtty_dev.parent, &mtty_dev.dev,
+>  				   &mtty_driver, mtty_mdev_types,
+
