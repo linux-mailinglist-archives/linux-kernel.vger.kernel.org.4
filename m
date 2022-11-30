@@ -2,132 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CA863CECA
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 06:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96ABF63CECD
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 06:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233521AbiK3FmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 00:42:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
+        id S233095AbiK3FnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 00:43:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233563AbiK3FmJ (ORCPT
+        with ESMTP id S233565AbiK3FnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 00:42:09 -0500
-Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F154F3FB97
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 21:42:05 -0800 (PST)
-Received: from [192.168.42.220] (62-nat1-1.centrio.cz [217.195.172.62])
-        by mx.gpxsee.org (Postfix) with ESMTPSA id 94F04353FD;
-        Wed, 30 Nov 2022 06:42:03 +0100 (CET)
-Message-ID: <0aa32a6f-2ec1-4ba8-ce62-2e998bc8c93a@gpxsee.org>
-Date:   Wed, 30 Nov 2022 06:42:06 +0100
+        Wed, 30 Nov 2022 00:43:11 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EF7240A0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 21:43:10 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id d18so4829435pls.4
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 21:43:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=e5ZuVSNXu5dNBIFu9aboWpOIhLYgTfI2KhViYMf8Wno=;
+        b=hbYkzSlvgmiV0jOHzz8kR63yGr8+W95zQ7es2pHJVKzJ6DakPJl2Thq6zVYbLCyQgK
+         YydKqbuXEq2T8Ibk9ckAbrDoXp2TXi9tj0kF3yMX0+z7YQ/xVFkKgp24R0vZn6hxelJE
+         N5aiRdum17bOpI+/SYPrgsJ6eGEykg5SM2qlztLtVvId163M80ulVkSYhJK/qoeYg5rR
+         h1A+t1HotzSIG6NQdFDbD3Z6ibkGxUZCPNUTSQoevm+7gw9n5sK4R2GlOadxWbbWs8dq
+         M1CqlJzg9LL1EfUTlK2TGWxtRjRpM+rxl5lb+EyWbbmdWIbVQjnUrjPaODVO36RZlk3f
+         YfNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e5ZuVSNXu5dNBIFu9aboWpOIhLYgTfI2KhViYMf8Wno=;
+        b=zfJMsYKOdm31RXff8syy3SfOG6QiwcEYlzpTVza+1OhdVpttw43HA6yiCIf65EllVU
+         4uXICV4MFGKDR3rP9423YSetH7KRmYwndfEsnTGMhfPgUlWbZxxc9Jy5QLof6FZoeV6C
+         wn5ds1EX3vTr+/GvjVPiGtX7Biv77nANghFt/UNEDbx2XscHU64IhTeSrZ04zCe6p4nz
+         IjHLQHnDEJzMwXtcBmcKMLS3Id5dj2JIp1lfcYWOu1iRGFUGuyagpTeQPwcqJLAckM9A
+         pZGsBlE/3ZIPKA9ZH5DsSl35XNFHvqohKpPKJLT9WQzi9R08VZ4laEaLdmL4nSNJ37qa
+         9rfg==
+X-Gm-Message-State: ANoB5pnuWfOLoovcq0Z+UUbxiNrymOVrSDB+EjDNz38MjYiG2mv19S4k
+        ol0Zj3c0W04o0YR3aeika1QySQ==
+X-Google-Smtp-Source: AA0mqf79rVuoW+aeNhb/sXSPJiqJ4dWDIWgpBk0H875f/t1m0PFjg2YguQ4/IIVTxIrgDTNJjgi3WQ==
+X-Received: by 2002:a17:90a:5c85:b0:20a:92d2:226a with SMTP id r5-20020a17090a5c8500b0020a92d2226amr52199943pji.155.1669786989559;
+        Tue, 29 Nov 2022 21:43:09 -0800 (PST)
+Received: from localhost ([122.172.87.149])
+        by smtp.gmail.com with ESMTPSA id p2-20020a1709027ec200b0017da2798025sm298512plb.295.2022.11.29.21.43.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 21:43:08 -0800 (PST)
+Date:   Wed, 30 Nov 2022 11:13:06 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/4] cpufreq: apple-soc: Add new driver to control
+ Apple SoC CPU P-states
+Message-ID: <20221130054306.3tjbf6spbtknpmyq@vireshk-i7>
+References: <20221128142912.16022-1-marcan@marcan.st>
+ <20221128142912.16022-4-marcan@marcan.st>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [RESEND PATCH V10 XDMA 0/2] xilinx XDMA driver
-Content-Language: en-US
-To:     Lizhi Hou <lizhi.hou@amd.com>, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     max.zhen@amd.com, sonal.santan@amd.com, larry.liu@amd.com,
-        brian.xu@amd.com
-References: <1669137709-22028-1-git-send-email-lizhi.hou@amd.com>
-From:   =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>
-In-Reply-To: <1669137709-22028-1-git-send-email-lizhi.hou@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221128142912.16022-4-marcan@marcan.st>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22. 11. 22 18:21, Lizhi Hou wrote:
-> Hello,
+On 28-11-22, 23:29, Hector Martin wrote:
+> This driver implements CPU frequency scaling for Apple Silicon SoCs,
+> including M1 (t8103), M1 Max/Pro/Ultra (t600x), and M2 (t8112).
 > 
-> This V10 of patch series is to provide the platform driver to support the
-> Xilinx XDMA subsystem. The XDMA subsystem is used in conjunction with the
-> PCI Express IP block to provide high performance data transfer between host
-> memory and the card's DMA subsystem. It also provides up to 16 user
-> interrupt wires to user logic that generate interrupts to the host.
+> Each CPU cluster has its own register set, and frequency management is
+> fully automated by the hardware; the driver only has to write one
+> register. There is boost frequency support, but the hardware will only
+> allow their use if only a subset of cores in a cluster are in
+> non-deep-idle. Since we don't support deep idle yet, these frequencies
+> are not achievable, but the driver supports them. They will remain
+> disabled in the device tree until deep idle is implemented, to avoid
+> confusing users.
 > 
->              +-------+       +-------+       +-----------+
->     PCIe     |       |       |       |       |           |
->     Tx/Rx    |       |       |       |  AXI  |           |
->   <=======>  | PCIE  | <===> | XDMA  | <====>| User Logic|
->              |       |       |       |       |           |
->              +-------+       +-------+       +-----------+
+> This driver does not yet implement the memory controller performance
+> state tuning that usually accompanies higher CPU p-states. This will be
+> done in a future patch.
 > 
-> The XDMA has been used for Xilinx Alveo PCIe devices.
-> And it is also integrated into Versal ACAP DMA and Bridge Subsystem.
->      https://www.xilinx.com/products/boards-and-kits/alveo.html
->      https://docs.xilinx.com/r/en-US/pg344-pcie-dma-versal/Introduction-to-the-DMA-and-Bridge-Subsystems
-> 
-> The device driver for any FPGA based PCIe device which leverages XDMA can
-> call the standard dmaengine APIs to discover and use the XDMA subsystem
-> without duplicating the XDMA driver code in its own driver.
-> 
-> Changes since v9:
-> - Cleanup code based on review comments.
-> 
-> Changes since v8:
-> - Fixed test robot failure on s390.
-> 
-> Changes since v7:
-> - Used pci device pointer for dma_pool_create().
-> 
-> Changes since v6:
-> - Fixed descriptor filling bug.
-> 
-> Changes since v5:
-> - Modified user logic interrupt APIs to handle user logic IP which does not
->    have its own register to enable/disable interrupt.
-> - Clean up code based on review comments.
-> 
-> Changes since v4:
-> - Modified user logic interrupt APIs.
-> 
-> Changes since v3:
-> - Added one patch to support user logic interrupt.
-> 
-> Changes since v2:
-> - Removed tasklet.
-> - Fixed regression bug introduced to V2.
-> - Test Robot warning.
-> 
-> Changes since v1:
-> - Moved filling hardware descriptor to xdma_prep_device_sg().
-> - Changed hardware descriptor enum to "struct xdma_hw_desc".
-> - Minor changes from code review comments.
-> 
-> Lizhi Hou (2):
->    dmaengine: xilinx: xdma: Add xilinx xdma driver
->    dmaengine: xilinx: xdma: Add user logic interrupt support
-> 
->   MAINTAINERS                            |   11 +
->   drivers/dma/Kconfig                    |   14 +
->   drivers/dma/xilinx/Makefile            |    1 +
->   drivers/dma/xilinx/xdma-regs.h         |  173 ++++
->   drivers/dma/xilinx/xdma.c              | 1004 ++++++++++++++++++++++++
->   include/linux/dma/amd_xdma.h           |   16 +
->   include/linux/platform_data/amd_xdma.h |   34 +
->   7 files changed, 1253 insertions(+)
->   create mode 100644 drivers/dma/xilinx/xdma-regs.h
->   create mode 100644 drivers/dma/xilinx/xdma.c
->   create mode 100644 include/linux/dma/amd_xdma.h
->   create mode 100644 include/linux/platform_data/amd_xdma.h
-> 
+> Acked-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  drivers/cpufreq/Kconfig.arm          |   9 +
+>  drivers/cpufreq/Makefile             |   1 +
+>  drivers/cpufreq/apple-soc-cpufreq.c  | 352 +++++++++++++++++++++++++++
+>  drivers/cpufreq/cpufreq-dt-platdev.c |   2 +
+>  4 files changed, 364 insertions(+)
+>  create mode 100644 drivers/cpufreq/apple-soc-cpufreq.c
 
-Hi,
-I see that there is no response for more than two weeks on this driver, 
-is there some problem with it? The XDMA driver is required for our mgb4
-v4l2 driver to work:
+Applied. Thanks.
 
-https://patchwork.kernel.org/project/linux-media/patch/20221123140431.4730-2-tumic@gpxsee.org/
-
-The patches not being included in the kernel block the progress on our 
-driver as it naturally fails to compile and as a result the willingness 
-to deal with our patch is quiet low among the v4l2 people... Thanks for 
-any help.
-
-Martin Tůma
+-- 
+viresh
