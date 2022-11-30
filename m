@@ -2,127 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9228C63CDA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 04:00:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 441FE63CDA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 04:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiK3DAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 22:00:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
+        id S232244AbiK3DAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 22:00:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232655AbiK3DAg (ORCPT
+        with ESMTP id S232655AbiK3DAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 22:00:36 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A9A6F362
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 19:00:32 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso664200pjt.0
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 19:00:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+UTTKtw9h/uDbm2sJVfPVsezkUtjRi/h4SZI/iHnG9Y=;
-        b=k8lZtI/9upV1XjKYxj6UK1eTBLZPJiWF8ENyjv+QbEmsPmmQpquoHC7g8okx1kKPSt
-         mQjm6DM42IDKuL6H/+eyk2r5qa5kUwjsgCHGJrYVNSMnG9oJNnba3UywSf9LybkTImG5
-         hT1Ha5Xj86XyySxPYQCUGL8E2aepf74J1kp34+yUiX7lHgjjikglWYXIuzh/agr1AGDG
-         cdyWNV3WLjWaPD/Le7vUFBw+TDVGujDmgKOITjkIezWsglloj2WtWt5cl0VWSIIKTou4
-         enUwlbAG01JqIIWExb2MszQEfqHcnoLwuVZlRCBTcD8U/Kf80nYUCM0dnJ/AWDDzaG9P
-         hy9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+UTTKtw9h/uDbm2sJVfPVsezkUtjRi/h4SZI/iHnG9Y=;
-        b=jQfVwfGn3m0ewH61u31ZvUlalyrtzG7OOgiuFbqaMyvS6OWXS/6L7wDxIfnLVqlbWt
-         8xz8wkoPEtddL+Khd3lPvubNRBquNBPOdfrdcgk2ezokjL331LmAZ6Uody/VCZ9GdNcP
-         xVOTVf1yFZWEN+GjvG0nMvik8n4HMBDKSLdi9SA03IiBmEeE7uKdbYXQmJyWSiVgyOvP
-         cI/VhFZCAv5jb9IWIkxhIdj7DFx9hnqCiXDPy0uInOLPhw0EqR+uIjpN80KZbqnJ9oVC
-         QLk8jiTykkcf6jEui+z/JDnbnjqaMe9q3zqwtWdd9xCPzxoJ8nZwCBokvYEtaYzZjrcM
-         6GbQ==
-X-Gm-Message-State: ANoB5plh1+Mgw6D5vIsLwXzHkMLjRb9QqxfqA6azrFyM8Zlg3Vvyyqzs
-        IDXHoOxPaMAc0wlCQ4P9haNQCA==
-X-Google-Smtp-Source: AA0mqf7aaJe0L4LvowJ1ooGBcGu5N74WM1WKdlGm9HYpnPv86VmcYosD/uucvwnEBzXbnPsu5kdMcw==
-X-Received: by 2002:a17:902:70c9:b0:176:a0cc:5eff with SMTP id l9-20020a17090270c900b00176a0cc5effmr49371814plt.128.1669777231878;
-        Tue, 29 Nov 2022 19:00:31 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id q14-20020a170902eb8e00b0018685aaf41dsm55167plg.18.2022.11.29.19.00.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 19:00:31 -0800 (PST)
-Date:   Tue, 29 Nov 2022 19:00:31 -0800 (PST)
-X-Google-Original-Date: Tue, 29 Nov 2022 19:00:23 PST (-0800)
-Subject:     Re: [PATCH 1/2] RISC-V: Align the shadow stack
-In-Reply-To: <CAMKF1sryF=inn0B=n=cZi7ZmRcWh3cAtR4uq9DYJfVpD_zOpVA@mail.gmail.com>
-CC:     jszhang@kernel.org, guoren@kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Khem Raj <raj.khem@gmail.com>
-Message-ID: <mhng-5a2b0379-88e4-43be-8d47-1f019aed05e0@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 29 Nov 2022 22:00:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE9A6E571;
+        Tue, 29 Nov 2022 19:00:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28D8CB819FA;
+        Wed, 30 Nov 2022 03:00:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37295C433C1;
+        Wed, 30 Nov 2022 03:00:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669777246;
+        bh=IWQo4SSdovd7II4a3BN6Ku/F6HwhfznsqvyOPegEjQQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SSXLjOXClSrRHvhJSt+ogmAoeLAldynncH1XLRJ+ffjNT8UxKTDkEZ1oYPQpsZd9Q
+         zr8jdwc42kmeFLnO2L/Ibj1J/S86zMjbP1BQNh6leYHwm5HKHFWsk7xrVpDd/iAisO
+         m4puiGZCQs0k4eU0WmEu0BcBSFxb+dB3pAtqD8WiFz1Bqj19SslIgv6WhQCN4bggT4
+         g7V7d4ZPGokkbMUIDBf3Zo4i8ggmwLKCHs9Scdqb/TZ6YnUCX6VzO9HN0wQDHPDcdz
+         1nexwS2WGelmKLj+Cmh2pgutaoBM5Jsglopv2chsz03+Tr0ZAihvVge9Z6v02rXx2Q
+         u773h4L2eUN+Q==
+Date:   Tue, 29 Nov 2022 21:00:44 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Sarannya S <quic_sarannya@quicinc.com>
+Cc:     quic_bjorande@quicinc.com, arnaud.pouliquen@foss.st.com,
+        swboyd@chromium.org, quic_clew@quicinc.com,
+        mathieu.poirier@linaro.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH V4 0/3] rpmsg signaling/flowcontrol patches
+Message-ID: <20221130030044.hqp6vwovhgl37or5@builder.lan>
+References: <1669658575-21993-1-git-send-email-quic_sarannya@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1669658575-21993-1-git-send-email-quic_sarannya@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Nov 2022 18:56:48 PST (-0800), Khem Raj wrote:
-> On Tue, Nov 29, 2022 at 6:50 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->>
->> On Tue, 29 Nov 2022 18:47:55 PST (-0800), Khem Raj wrote:
->> > Hi Palmer
->> >
->> > On Tue, Nov 29, 2022 at 6:36 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->> >>
->> >> The standard RISC-V ABIs all require 16-byte stack alignment.  We're
->> >> only calling that one function on the shadow stack so I doubt it'd
->> >> result in a real issue, but might as well keep this lined up.
->> >
->> > Is 16-byte alignment required on rv32 as well ?
->>
->> For the standard ABIs that's the case, it's so the Q extension can spill
->> without aligning the stack.  There's also at least a proposed embedded
->> ABI that has just XLEN (32-bit on rv32) alignment, as the bigger stack
->> alignment has an impact on some use cases.
->
-> Thanks, so in this case 16byte will be valid for both rv64/rv32 here.
+On Mon, Nov 28, 2022 at 11:32:52PM +0530, Sarannya S wrote:
+> [Change from V3]:
+> Fixed review comments in previous set.
+> 
 
-Yes, though the long-alignment wouldn't break anything because we don't 
-have Q support and we're just calling that one function -- it's not like 
-the compiler is actively checking for 16-byte alignment or anything, 
-it's just assuming it.
+Please do list the actual changes that you did. This ensures that new
+people can focus on the new areas, if preferred, and that returning
+reviewers get confirmation that their feedback was addressed.
 
-Still best to keep things to the spec where we can, though.
+Thanks,
+Bjorn
 
->> >> Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
->> >> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->> >> ---
->> >>  arch/riscv/kernel/traps.c | 2 +-
->> >>  1 file changed, 1 insertion(+), 1 deletion(-)
->> >>
->> >> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
->> >> index be54ccea8c47..acdfcacd7e57 100644
->> >> --- a/arch/riscv/kernel/traps.c
->> >> +++ b/arch/riscv/kernel/traps.c
->> >> @@ -206,7 +206,7 @@ static DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
->> >>   * shadow stack, handled_ kernel_ stack_ overflow(in kernel/entry.S) is used
->> >>   * to get per-cpu overflow stack(get_overflow_stack).
->> >>   */
->> >> -long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)];
->> >> +long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)] __aligned(16);
->> >>  asmlinkage unsigned long get_overflow_stack(void)
->> >>  {
->> >>         return (unsigned long)this_cpu_ptr(overflow_stack) +
->> >> --
->> >> 2.38.1
->> >>
->> >>
->> >> _______________________________________________
->> >> linux-riscv mailing list
->> >> linux-riscv@lists.infradead.org
->> >> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> Sarannya S (3):
+>   rpmsg: core: Add signal API support
+>   rpmsg: glink: Add support to handle signals command
+>   rpmsg: char: Add TIOCMGET/TIOCMSET ioctl support
+> 
+>  drivers/rpmsg/qcom_glink_native.c | 63 +++++++++++++++++++++++++++++++++++++++
+>  drivers/rpmsg/rpmsg_char.c        | 60 ++++++++++++++++++++++++++++++++-----
+>  drivers/rpmsg/rpmsg_core.c        | 20 +++++++++++++
+>  drivers/rpmsg/rpmsg_internal.h    |  2 ++
+>  include/linux/rpmsg.h             | 15 ++++++++++
+>  5 files changed, 152 insertions(+), 8 deletions(-)
+> 
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 
