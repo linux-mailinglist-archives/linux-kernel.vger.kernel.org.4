@@ -2,184 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570D963DFB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:49:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2842363DFC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:50:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiK3Stl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:49:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
+        id S229734AbiK3Su1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:50:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbiK3St3 (ORCPT
+        with ESMTP id S231483AbiK3SuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:49:29 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D993031DC5;
-        Wed, 30 Nov 2022 10:49:27 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id h33so11941042pgm.9;
-        Wed, 30 Nov 2022 10:49:27 -0800 (PST)
+        Wed, 30 Nov 2022 13:50:19 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826229B7B8
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:50:18 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id t62so19717750oib.12
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:50:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=joelfernandes.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IJBORR57XCU3YHwAEY1sBiHydghPuO3AB7bOwtnJSV8=;
-        b=Zyy7efYIFmdVY592UdgrRWz6tkO7F/h5RFzDEb2dVN3gEw9KR4hW6FdfyhjFooNMzP
-         gRK0YI7BDJP6ICqBl3fh98vl3mbY5/ohe7zzTmTJ0XHHC6tqSzfEIQ9+nPLuWVFmMB+r
-         YjucT7t4eeCjOUx1TWXtKrgKxsyoun/UcBgxMUGBYx01GZgznBIFlbtzU5wl8/0gMLzQ
-         Zr8AiL1aloLFsDzXJFedaAXu1I9Hylzsrc9VZa+gvTplZuECajIaW/2vS5wHls7tYosj
-         cy3TcQL7gUEGdV5yI5HMC4bKGVxk+X/Rk19i4eL5P3tOtM7ZSVzGf3URlta2IHYMH6n1
-         qPdA==
+        bh=vRCw5HgdZ6+i+5rxJnQV5DsJbEr03vS+VFP709b7Mj0=;
+        b=Fj7wpBqfoKfCWqoddByeKCliiIhXWseC/prDubeJZMHCNycQ02GhMtCAVmR9tcFjFj
+         DfBiUniDNdOT01JiTghH+KQH04DHEJeuVOsDZEQT+Yg17EVcIlDdDcHWVQZFvMcW6Ikn
+         SBXzsr3nawMrT0TrxZz9eHu4IhIqN5adlS11Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IJBORR57XCU3YHwAEY1sBiHydghPuO3AB7bOwtnJSV8=;
-        b=3HIxqek/0ehonjwfS+8tUybxaKu05l25ktXFyxWV3L6oQcdMvh5F14JN8bn1912bhe
-         P65NMTc9a0hmOafssQyQ//y7/1JAiPIWIWFPnwAhPgNrikFbJMde40UpIXAAP/f54Ie/
-         iL17m071tschUfd/SjHvgLBKau7vsXtGD64ThBkln2qK5EnyfJy2CDqPQu4ccJCEm9Bx
-         t4eto+nTUhUuSCYeDH3aRzi/DDl7SVbqm89484DWjmvuvftLd0XRDrKINcxrK5VUYqKx
-         fPEGhcgUuYN4TBTEwgkuqdqR8sZM6AAOOnhiW9wspIOW0oPiK1s4WTiQUkgtouGTakhp
-         g9OQ==
-X-Gm-Message-State: ANoB5pkDRCXSoJO3PnU4FfiMQuWeXrFG22mgPY+Sr6fW3rDVOhVXao61
-        Dd0snV6/xnuzVcyvx1de19VnCzwsaoCY5GB+h9I=
-X-Google-Smtp-Source: AA0mqf73a+OFuwlwmC4zJLeQAZuXio6JeHRzVbI8mKEOkeMfP9QQgUTmZ3bJJZuN6Vm+YVbr69x9Q6JyEyaC65Z0AWA=
-X-Received: by 2002:a05:6a00:1696:b0:53e:6656:d829 with SMTP id
- k22-20020a056a00169600b0053e6656d829mr65746088pfc.63.1669834167390; Wed, 30
- Nov 2022 10:49:27 -0800 (PST)
+        bh=vRCw5HgdZ6+i+5rxJnQV5DsJbEr03vS+VFP709b7Mj0=;
+        b=y0jC1OAGLuX7hkid4cGpsbqZzxWBYZQ9Mm9I6eTBCwcDACVr64qw5pu+IISl+5kp/3
+         fplTQGLm89E11Mi5kqGLgSWYeKTVskGY8EfFyOBhm6e3YZsXImFBTvpe1qWINUAD+1po
+         b/RqBp7ZERsHbQKhNMNN68dq0p1gvbF3RnZgWbAzhI2cECU6jL8Zc9kYFVc8B6LCEmEw
+         swaxa6r7fgNqaWxiJC7eCx4iA5DV/ipBiMJDFo1+1xVg9px2nQ/u7AFBMmN8NwS8Pc6s
+         /0kmjorlTEXuCzYpfiV3DCN9v3YZUHHpR5gHPgF1KSDTdglZAK7sAGXpwzbiWD+Sqt6Z
+         PB6g==
+X-Gm-Message-State: ANoB5pkiFcfRh+/+nMZE4ZQLRopyb1DWe7Mt7T3iFQvvNvX587fRzSk/
+        cKw6XASnB0QQN1jxHMOffmRHXsza9PTuBbGQzknWYw==
+X-Google-Smtp-Source: AA0mqf5zZ4OhgadIuAOlhIl42LnTHrlqOZnhhcAxa8Ejt2e76YOhwQv/ANm9w6iLKjI4GT6DPpyBAu9Bn2JOnMBXBBg=
+X-Received: by 2002:a05:6808:46:b0:35a:ff1:bf0d with SMTP id
+ v6-20020a056808004600b0035a0ff1bf0dmr22785001oic.115.1669834217790; Wed, 30
+ Nov 2022 10:50:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20221122203850.2765015-1-almasrymina@google.com>
- <Y35fw2JSAeAddONg@cmpxchg.org> <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
- <Y36XchdgTCsMP4jT@cmpxchg.org> <874juonbmv.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <CAHbLzkrmxyzH4R7a9sJQavrUyKCEiNYeA543+sdJLsgRPrwBwQ@mail.gmail.com>
- <87a64ad1iz.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAHbLzkpVZf-3K0Ys8HG8x6D_XpPChB-H2XMYar7UwnNDeMiw8w@mail.gmail.com>
- <87ilixatyw.fsf@yhuang6-desk2.ccr.corp.intel.com>
-In-Reply-To: <87ilixatyw.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 30 Nov 2022 10:49:15 -0800
-Message-ID: <CAHbLzkr_njh2xtAf6RME_Fe0TgTKdC4mcsUe24orqVScjibUrA@mail.gmail.com>
-Subject: Re: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Mina Almasry <almasrymina@google.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
-        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org
+References: <20221130181316.GA1012431@paulmck-ThinkPad-P17-Gen-1>
+ <20221130181325.1012760-15-paulmck@kernel.org> <CAEXW_YQci19yD5wr2jyYi4wdNZ_CrZuGJ==jF9MObOzWg7f=_Q@mail.gmail.com>
+ <CANn89iKifFXDpF8sZXd+rXPhF+3ajVLTuEj6n2Z4H9f27_K0kA@mail.gmail.com>
+In-Reply-To: <CANn89iKifFXDpF8sZXd+rXPhF+3ajVLTuEj6n2Z4H9f27_K0kA@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Wed, 30 Nov 2022 18:50:06 +0000
+Message-ID: <CAEXW_YTY4mD7z6y_vtQATCzPwe3_VmRxJNipsSo6GmwQa20e8g@mail.gmail.com>
+Subject: Re: [PATCH rcu 15/16] net: Use call_rcu_hurry() for dst_release()
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rostedt@goodmis.org, David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 9:33 PM Huang, Ying <ying.huang@intel.com> wrote:
+Hi Eric,
+
+On Wed, Nov 30, 2022 at 6:39 PM Eric Dumazet <edumazet@google.com> wrote:
 >
-> Yang Shi <shy828301@gmail.com> writes:
+> Sure, thanks.
 >
-> > On Mon, Nov 28, 2022 at 4:54 PM Huang, Ying <ying.huang@intel.com> wrote:
-> >>
-> >> Yang Shi <shy828301@gmail.com> writes:
-> >>
-> >> > On Wed, Nov 23, 2022 at 9:52 PM Huang, Ying <ying.huang@intel.com> wrote:
-> >> >>
-> >> >> Hi, Johannes,
-> >> >>
-> >> >> Johannes Weiner <hannes@cmpxchg.org> writes:
-> >> >> [...]
-> >> >> >
-> >> >> > The fallback to reclaim actually strikes me as wrong.
-> >> >> >
-> >> >> > Think of reclaim as 'demoting' the pages to the storage tier. If we
-> >> >> > have a RAM -> CXL -> storage hierarchy, we should demote from RAM to
-> >> >> > CXL and from CXL to storage. If we reclaim a page from RAM, it means
-> >> >> > we 'demote' it directly from RAM to storage, bypassing potentially a
-> >> >> > huge amount of pages colder than it in CXL. That doesn't seem right.
-> >> >> >
-> >> >> > If demotion fails, IMO it shouldn't satisfy the reclaim request by
-> >> >> > breaking the layering. Rather it should deflect that pressure to the
-> >> >> > lower layers to make room. This makes sure we maintain an aging
-> >> >> > pipeline that honors the memory tier hierarchy.
-> >> >>
-> >> >> Yes.  I think that we should avoid to fall back to reclaim as much as
-> >> >> possible too.  Now, when we allocate memory for demotion
-> >> >> (alloc_demote_page()), __GFP_KSWAPD_RECLAIM is used.  So, we will trigger
-> >> >> kswapd reclaim on lower tier node to free some memory to avoid fall back
-> >> >> to reclaim on current (higher tier) node.  This may be not good enough,
-> >> >> for example, the following patch from Hasan may help via waking up
-> >> >> kswapd earlier.
-> >> >
-> >> > For the ideal case, I do agree with Johannes to demote the page tier
-> >> > by tier rather than reclaiming them from the higher tiers. But I also
-> >> > agree with your premature OOM concern.
-> >> >
-> >> >>
-> >> >> https://lore.kernel.org/linux-mm/b45b9bf7cd3e21bca61d82dcd1eb692cd32c122c.1637778851.git.hasanalmaruf@fb.com/
-> >> >>
-> >> >> Do you know what is the next step plan for this patch?
-> >> >>
-> >> >> Should we do even more?
-> >> >
-> >> > In my initial implementation I implemented a simple throttle logic
-> >> > when the demotion is not going to succeed if the demotion target has
-> >> > not enough free memory (just check the watermark) to make migration
-> >> > succeed without doing any reclamation. Shall we resurrect that?
-> >>
-> >> Can you share the link to your throttle patch?  Or paste it here?
+> Reviewed-by: Eric Dumazet <edumazet@google.com>
+>
+> I think we can work later to change how dst are freed/released to
+> avoid using call_rcu_hurry()
+
+That sounds great, if you can give me any high-level guidance (in the
+future) on that and what to look for, I can give it a try as well. I
+have been wanting to learn more about the networking code :-)
+
+Thanks,
+
+ - Joel
+
+
+> On Wed, Nov 30, 2022 at 7:17 PM Joel Fernandes <joel@joelfernandes.org> wrote:
 > >
-> > I just found this on the mailing list.
-> > https://lore.kernel.org/linux-mm/1560468577-101178-8-git-send-email-yang.shi@linux.alibaba.com/
->
-> Per my understanding, this patch will avoid demoting if there's no free
-> space on demotion target?  If so, I think that we should trigger kswapd
-> reclaiming on demotion target before that.  And we can simply avoid to
-> fall back to reclaim firstly, then avoid to scan as an improvement as
-> that in your patch above.
-
-Yes, it should. The rough idea looks like:
-
-if (the demote target is contended)
-    wake up kswapd
-    reclaim_throttle(VMSCAN_THROTTLE_DEMOTION)
-    retry demotion
-
-The kswapd is responsible for clearing the contention flag.
-
->
-> Best Regards,
-> Huang, Ying
->
-> > But it didn't have the throttling logic, I may not submit that version
-> > to the mailing list since we decided to drop this and merge mine and
-> > Dave's.
+> > Hi Eric,
 > >
-> > Anyway it is not hard to add the throttling logic, we already have a
-> > few throttling cases in vmscan, for example, "mm/vmscan: throttle
-> > reclaim until some writeback completes if congested".
-> >>
-> >> > Waking kswapd sooner is fine to me, but it may be not enough, for
-> >> > example, the kswapd may not keep up so remature OOM may happen on
-> >> > higher tiers or reclaim may still happen. I think throttling the
-> >> > reclaimer/demoter until kswapd makes progress could avoid both. And
-> >> > since the lower tiers memory typically is quite larger than the higher
-> >> > tiers, so the throttle should happen very rarely IMHO.
-> >> >
-> >> >>
-> >> >> From another point of view, I still think that we can use falling back
-> >> >> to reclaim as the last resort to avoid OOM in some special situations,
-> >> >> for example, most pages in the lowest tier node are mlock() or too hot
-> >> >> to be reclaimed.
-> >> >>
-> >> >> > So I'm hesitant to design cgroup controls around the current behavior.
-> >>
-> >> Best Regards,
-> >> Huang, Ying
+> > Could you give your ACK for this patch for this one as well? This is
+> > the other networking one.
+> >
+> > The networking testing passed on ChromeOS and it has been in -next for
+> > some time so has gotten testing there. The CONFIG option is default
+> > disabled.
+> >
+> > Thanks a lot,
+> >
+> > - Joel
+> >
+> > On Wed, Nov 30, 2022 at 6:14 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > >
+> > > From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+> > >
+> > > In a networking test on ChromeOS, kernels built with the new
+> > > CONFIG_RCU_LAZY=y Kconfig option fail a networking test in the teardown
+> > > phase.
+> > >
+> > > This failure may be reproduced as follows: ip netns del <name>
+> > >
+> > > The CONFIG_RCU_LAZY=y Kconfig option was introduced by earlier commits
+> > > in this series for the benefit of certain battery-powered systems.
+> > > This Kconfig option causes call_rcu() to delay its callbacks in order
+> > > to batch them.  This means that a given RCU grace period covers more
+> > > callbacks, thus reducing the number of grace periods, in turn reducing
+> > > the amount of energy consumed, which increases battery lifetime which
+> > > can be a very good thing.  This is not a subtle effect: In some important
+> > > use cases, the battery lifetime is increased by more than 10%.
+> > >
+> > > This CONFIG_RCU_LAZY=y option is available only for CPUs that offload
+> > > callbacks, for example, CPUs mentioned in the rcu_nocbs kernel boot
+> > > parameter passed to kernels built with CONFIG_RCU_NOCB_CPU=y.
+> > >
+> > > Delaying callbacks is normally not a problem because most callbacks do
+> > > nothing but free memory.  If the system is short on memory, a shrinker
+> > > will kick all currently queued lazy callbacks out of their laziness,
+> > > thus freeing their memory in short order.  Similarly, the rcu_barrier()
+> > > function, which blocks until all currently queued callbacks are invoked,
+> > > will also kick lazy callbacks, thus enabling rcu_barrier() to complete
+> > > in a timely manner.
+> > >
+> > > However, there are some cases where laziness is not a good option.
+> > > For example, synchronize_rcu() invokes call_rcu(), and blocks until
+> > > the newly queued callback is invoked.  It would not be a good for
+> > > synchronize_rcu() to block for ten seconds, even on an idle system.
+> > > Therefore, synchronize_rcu() invokes call_rcu_hurry() instead of
+> > > call_rcu().  The arrival of a non-lazy call_rcu_hurry() callback on a
+> > > given CPU kicks any lazy callbacks that might be already queued on that
+> > > CPU.  After all, if there is going to be a grace period, all callbacks
+> > > might as well get full benefit from it.
+> > >
+> > > Yes, this could be done the other way around by creating a
+> > > call_rcu_lazy(), but earlier experience with this approach and
+> > > feedback at the 2022 Linux Plumbers Conference shifted the approach
+> > > to call_rcu() being lazy with call_rcu_hurry() for the few places
+> > > where laziness is inappropriate.
+> > >
+> > > Returning to the test failure, use of ftrace showed that this failure
+> > > cause caused by the aadded delays due to this new lazy behavior of
+> > > call_rcu() in kernels built with CONFIG_RCU_LAZY=y.
+> > >
+> > > Therefore, make dst_release() use call_rcu_hurry() in order to revert
+> > > to the old test-failure-free behavior.
+> > >
+> > > [ paulmck: Apply s/call_rcu_flush/call_rcu_hurry/ feedback from Tejun Heo. ]
+> > >
+> > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > Cc: David Ahern <dsahern@kernel.org>
+> > > Cc: "David S. Miller" <davem@davemloft.net>
+> > > Cc: Eric Dumazet <edumazet@google.com>
+> > > Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+> > > Cc: Jakub Kicinski <kuba@kernel.org>
+> > > Cc: Paolo Abeni <pabeni@redhat.com>
+> > > Cc: <netdev@vger.kernel.org>
+> > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > ---
+> > >  net/core/dst.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/net/core/dst.c b/net/core/dst.c
+> > > index bc9c9be4e0801..a4e738d321ba2 100644
+> > > --- a/net/core/dst.c
+> > > +++ b/net/core/dst.c
+> > > @@ -174,7 +174,7 @@ void dst_release(struct dst_entry *dst)
+> > >                         net_warn_ratelimited("%s: dst:%p refcnt:%d\n",
+> > >                                              __func__, dst, newrefcnt);
+> > >                 if (!newrefcnt)
+> > > -                       call_rcu(&dst->rcu_head, dst_destroy_rcu);
+> > > +                       call_rcu_hurry(&dst->rcu_head, dst_destroy_rcu);
+> > >         }
+> > >  }
+> > >  EXPORT_SYMBOL(dst_release);
+> > > --
+> > > 2.31.1.189.g2e36527f23
+> > >
