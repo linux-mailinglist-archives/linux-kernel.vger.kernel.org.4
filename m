@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3EA63E13D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A30B763E139
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:10:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiK3UKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 15:10:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
+        id S229848AbiK3UKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 15:10:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiK3UJu (ORCPT
+        with ESMTP id S229827AbiK3UJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:09:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2B69135F
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 12:09:48 -0800 (PST)
+        Wed, 30 Nov 2022 15:09:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3706B9135D;
+        Wed, 30 Nov 2022 12:09:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF5CEB81CD4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 20:09:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07B3CC433D7;
-        Wed, 30 Nov 2022 20:09:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7CF361D9A;
+        Wed, 30 Nov 2022 20:09:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99DDBC43144;
+        Wed, 30 Nov 2022 20:09:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669838986;
-        bh=np2Yu8Q2x8gtS0MXr5n11c7mRGrlDAkmbbQ8z9YhO6Y=;
+        s=k20201202; t=1669838987;
+        bh=qgpIYxCoLxiSbmookPCEJSX95mijzZoDksXEWue5IhI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nDZWQCv37cmXsYFuxYM0g0H2ZjJowAriJKZo8FsXKWLj8qlWolYjcXjJhwvkk3d+c
-         KQSwHfNNcGPzZhiYi+zZjbJjkFTHjbJf7r6/nufM6eSWVZAfIlpIFd7m3Ba6KrSoFx
-         HieZTIPofdbQ2oSR1BigvrpLdka6+X3JdbGGuK+F3IRvKeVn3NyejfBiTQCZwxG4he
-         uq6BJqRPwkHZM8YbBFPfp5cFD8PUxZLtp6VZUDb5vJCKw/IoqD1LHcZkYxfnEc3hXM
-         2H/w2J1I2+5UBCRXz4Zma5Jiw0jomnS5mTxTgUWV/8P/pWXT5PVtGDoUN8RSlL3+Gn
-         x/mC1E2bxhKQg==
+        b=Ph1+PQPZYu6to+v4+E7MJsXG71DdCfottZMxf1eZpKiRNy4oCyTaMkgg7vIjsTWfd
+         zMoWUqXoDWvNEBc0SXOkA4kCbcz8+t/yk+iMNwmT2Un1nhaDleVV8d+NV40r6ftxFj
+         cxwH/mphoi9jaylPCjBmsFX3CMsKSYtVmfsXEzVqvsWNcpVFcrTW+ZEB67mk9YGLv3
+         W3mh7bEz/PuxeV5DmQzgOSjK/tDXQOeP7Ga1mIlO5ES80sVZ8vV4i+f8DRDnA3LTnS
+         EtP2kTMnYfhQeCLR8axup+u4wdlSNN+bgwsXC3Q71oVMYx0c/72Z8Ngh4GMbBzYA1Y
+         JDRI5XE0qxaHQ==
 From:   SeongJae Park <sj@kernel.org>
 To:     SeongJae Park <sj@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
+Cc:     Shuah Khan <shuah@kernel.org>, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v2 08/11] mm/damon/sysfs-schemes: implement scheme filters
-Date:   Wed, 30 Nov 2022 20:09:34 +0000
-Message-Id: <20221130200937.118005-9-sj@kernel.org>
+Subject: [RFC PATCH v2 09/11] selftests/damon/sysfs: test filters directory
+Date:   Wed, 30 Nov 2022 20:09:35 +0000
+Message-Id: <20221130200937.118005-10-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221130200937.118005-1-sj@kernel.org>
 References: <20221130200937.118005-1-sj@kernel.org>
@@ -54,144 +55,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement scheme filters functionality of DAMON sysfs interface by
-making the code reads the values of files under the filter directories
-and pass that to DAMON using DAMON kernel API.
+Add simple test cases for scheme filters of DAMON sysfs interface.  The
+test cases check if the files are populated as expected, receives some
+valid inputs, and refuses some invalid inputs.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/sysfs-schemes.c | 89 +++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 88 insertions(+), 1 deletion(-)
+ tools/testing/selftests/damon/sysfs.sh | 29 ++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/mm/damon/sysfs-schemes.c b/mm/damon/sysfs-schemes.c
-index e79c678a69d5..0501862534f2 100644
---- a/mm/damon/sysfs-schemes.c
-+++ b/mm/damon/sysfs-schemes.c
-@@ -1403,6 +1403,75 @@ struct kobj_type damon_sysfs_schemes_ktype = {
- 	.default_groups = damon_sysfs_schemes_groups,
- };
+diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
+index db4942383a50..a00336ffdcad 100644
+--- a/tools/testing/selftests/damon/sysfs.sh
++++ b/tools/testing/selftests/damon/sysfs.sh
+@@ -96,6 +96,34 @@ test_stats()
+ 	done
+ }
  
-+static bool damon_sysfs_memcg_path_eq(struct mem_cgroup *memcg,
-+		char *memcg_path_buf, char *path)
++test_filter()
 +{
-+#ifdef CONFIG_MEMCG
-+	cgroup_path(memcg->css.cgroup, memcg_path_buf, PATH_MAX);
-+	if (sysfs_streq(memcg_path_buf, path))
-+		return true;
-+#endif /* CONFIG_MEMCG */
-+	return false;
++	filter_dir=$1
++	ensure_file "$filter_dir/type" "exist" "600"
++	ensure_write_succ "$filter_dir/type" "anon" "valid input"
++	ensure_write_succ "$filter_dir/type" "memcg" "valid input"
++	ensure_write_fail "$filter_dir/type" "foo" "invalid input"
++	ensure_file "$filter_dir/matching" "exist" "600"
++	ensure_file "$filter_dir/memcg_path" "exist" "600"
 +}
 +
-+static int damon_sysfs_memcg_path_to_id(char *memcg_path, unsigned short *id)
++test_filters()
 +{
-+	struct mem_cgroup *memcg;
-+	char *path;
++	filters_dir=$1
++	ensure_dir "$filters_dir" "exist"
++	ensure_file "$filters_dir/nr_filters" "exist" "600"
++	ensure_write_succ  "$filters_dir/nr_filters" "1" "valid input"
++	test_filter "$filters_dir/0"
 +
-+	if (!memcg_path)
-+		return -EINVAL;
++	ensure_write_succ  "$filters_dir/nr_filters" "2" "valid input"
++	test_filter "$filters_dir/0"
++	test_filter "$filters_dir/1"
 +
-+	path = kmalloc(sizeof(*path) * PATH_MAX, GFP_KERNEL);
-+	if (!path)
-+		return -ENOMEM;
-+
-+	for (memcg = mem_cgroup_iter(NULL, NULL, NULL); memcg;
-+			memcg = mem_cgroup_iter(NULL, memcg, NULL)) {
-+		/* skip removed memcg */
-+		if (!mem_cgroup_id(memcg))
-+			continue;
-+		if (damon_sysfs_memcg_path_eq(memcg, path, memcg_path)) {
-+			*id = mem_cgroup_id(memcg);
-+			break;
-+		}
-+	}
-+
-+	kfree(path);
-+	return 0;
++	ensure_write_succ "$filters_dir/nr_filters" "0" "valid input"
++	ensure_dir "$filters_dir/0" "not_exist"
++	ensure_dir "$filters_dir/1" "not_exist"
 +}
 +
-+static int damon_sysfs_set_scheme_filters(struct damos *scheme,
-+		struct damon_sysfs_scheme_filters *sysfs_filters)
-+{
-+	int i;
-+	struct damos_filter *filter, *next;
-+
-+	damos_for_each_filter_safe(filter, next, scheme)
-+		damos_destroy_filter(filter);
-+
-+	for (i = 0; i < sysfs_filters->nr; i++) {
-+		struct damon_sysfs_scheme_filter *sysfs_filter =
-+			sysfs_filters->filters_arr[i];
-+		struct damos_filter *filter =
-+			damos_new_filter(sysfs_filter->type,
-+					sysfs_filter->matching);
-+		int err;
-+
-+		if (!filter)
-+			return -ENOMEM;
-+		if (filter->type == DAMOS_FILTER_TYPE_MEMCG) {
-+			err = damon_sysfs_memcg_path_to_id(
-+					sysfs_filter->memcg_path,
-+					&filter->memcg_id);
-+			if (err)
-+				return err;
-+		}
-+		damos_add_filter(scheme, filter);
-+	}
-+	return 0;
-+}
-+
- static struct damos *damon_sysfs_mk_scheme(
- 		struct damon_sysfs_scheme *sysfs_scheme)
+ test_watermarks()
  {
-@@ -1411,6 +1480,10 @@ static struct damos *damon_sysfs_mk_scheme(
- 	struct damon_sysfs_quotas *sysfs_quotas = sysfs_scheme->quotas;
- 	struct damon_sysfs_weights *sysfs_weights = sysfs_quotas->weights;
- 	struct damon_sysfs_watermarks *sysfs_wmarks = sysfs_scheme->watermarks;
-+	struct damon_sysfs_scheme_filters *sysfs_filters =
-+		sysfs_scheme->filters;
-+	struct damos *scheme;
-+	int err;
- 
- 	struct damos_access_pattern pattern = {
- 		.min_sz_region = access_pattern->sz->min,
-@@ -1436,8 +1509,17 @@ static struct damos *damon_sysfs_mk_scheme(
- 		.low = sysfs_wmarks->low,
- 	};
- 
--	return damon_new_scheme(&pattern, sysfs_scheme->action, &quota,
-+	scheme = damon_new_scheme(&pattern, sysfs_scheme->action, &quota,
- 			&wmarks);
-+	if (!scheme)
-+		return NULL;
-+
-+	err = damon_sysfs_set_scheme_filters(scheme, sysfs_filters);
-+	if (err) {
-+		damon_destroy_scheme(scheme);
-+		return NULL;
-+	}
-+	return scheme;
+ 	watermarks_dir=$1
+@@ -143,6 +171,7 @@ test_scheme()
+ 	test_access_pattern "$scheme_dir/access_pattern"
+ 	test_quotas "$scheme_dir/quotas"
+ 	test_watermarks "$scheme_dir/watermarks"
++	test_filters "$scheme_dir/filters"
+ 	test_stats "$scheme_dir/stats"
+ 	test_tried_regions "$scheme_dir/tried_regions"
  }
- 
- static void damon_sysfs_update_scheme(struct damos *scheme,
-@@ -1448,6 +1530,7 @@ static void damon_sysfs_update_scheme(struct damos *scheme,
- 	struct damon_sysfs_quotas *sysfs_quotas = sysfs_scheme->quotas;
- 	struct damon_sysfs_weights *sysfs_weights = sysfs_quotas->weights;
- 	struct damon_sysfs_watermarks *sysfs_wmarks = sysfs_scheme->watermarks;
-+	int err;
- 
- 	scheme->pattern.min_sz_region = access_pattern->sz->min;
- 	scheme->pattern.max_sz_region = access_pattern->sz->max;
-@@ -1470,6 +1553,10 @@ static void damon_sysfs_update_scheme(struct damos *scheme,
- 	scheme->wmarks.high = sysfs_wmarks->high;
- 	scheme->wmarks.mid = sysfs_wmarks->mid;
- 	scheme->wmarks.low = sysfs_wmarks->low;
-+
-+	err = damon_sysfs_set_scheme_filters(scheme, sysfs_scheme->filters);
-+	if (err)
-+		damon_destroy_scheme(scheme);
- }
- 
- int damon_sysfs_set_schemes(struct damon_ctx *ctx,
 -- 
 2.25.1
 
