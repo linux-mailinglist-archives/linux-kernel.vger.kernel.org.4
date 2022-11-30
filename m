@@ -2,127 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9E163D8CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6768463D8D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbiK3PHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 10:07:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
+        id S229797AbiK3PIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 10:08:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiK3PHv (ORCPT
+        with ESMTP id S229644AbiK3PIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 10:07:51 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECAD13F58;
-        Wed, 30 Nov 2022 07:07:49 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 211863200918;
-        Wed, 30 Nov 2022 10:07:48 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 30 Nov 2022 10:07:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1669820867; x=1669907267; bh=EYBohq7Wmj
-        /uFHqGx3hCuQfFGuTEIDd6kMXNccH+gNw=; b=GDUdx+GjmEKduBDSilj+n1NSbq
-        Ic269td72thVocWg+G4micCeNOnsNyYyY4jbe32JM9KaxP3/HY715S6euRzl+OHM
-        vvP+p/DD8NJa2LIAXh9AAqgR9FWQsGlcFQ/cYyQ65Ew2hLxpbng8K+KpuGfucXDX
-        KYCEjcOfukOVqfYxVtv+4UPg+4twU4BFjYlHZ1+4uTUodumLkwFmsUexfCE4NQ/E
-        8rCZg7ulhiE6NT5uT7tuB8XRHYGJjApwLHWVw6nU2UZP4CcoKKH6ap82W4pSnHzR
-        ndwDTRKc3SljqM6y98atShVleNRl8pjLcwXHwnriopbaLH/Qw3SX0EKfR2qA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669820867; x=1669907267; bh=EYBohq7Wmj/uFHqGx3hCuQfFGuTE
-        IDd6kMXNccH+gNw=; b=A1flL476eQAuzf8UkuooY5DxSucqSeE95cwMSYX0kTEg
-        SzBwA2GK6ljdkdkwdorqSBZtoZ2TP4Zdo/4dGYiZkqZVuQeV5+DlSKCHwYl3UYA2
-        56HApMp86ss11am5cqJ2xITBAz/pM4yqD1Bi8T21G9zU6FLRdHN2kITMFTNw1ncL
-        kFchvmlT5D4pSQy4AVip1T4rQ7s1qiAwc5n2XQoHgcyq6+XzMGlXWjJXTLhmrQHo
-        civsyuYklJ2Fth64UNKk7p1Q16WPCoA2ranGOgnKFi3KtITN3jxWxlmOWxrE7zBG
-        ZAVExXIaQz0zXNQ1nMBytulZyJQiZhYXQ26NLP5QUg==
-X-ME-Sender: <xms:w3GHYznk0rDeI1d3_ezT3PuosqDm49PneBdXT7kqegg27GA51_7w-w>
-    <xme:w3GHY21-WN0M0ktSvUrnlV2_wKd8qizoZelh2yxP9qmePucvABqGheZkdfvEvdqdc
-    BxehDAhSyM81eSd-4k>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtdefgdejudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:w3GHY5oaIMr9yh-DhE4M2HRagQXXaT6UehFnyz82n8LaUjkTttz3ag>
-    <xmx:w3GHY7kbbT5sWTMIBbYCisB4q1n_KNaDONStIdU-MfpP0daRw_bc2A>
-    <xmx:w3GHYx3ILNR7cN8vF6Dd1-qzbIOiZVGR88yyoUuw0rwwmuP2FsR1Uw>
-    <xmx:w3GHY7yc1MCRzilAJXIF86WaJFSx6qgQaNZ2LVRjC2Os-_6jbbvjEQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5A85BB60086; Wed, 30 Nov 2022 10:07:47 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <16ec2a7a-c469-4732-aeca-e74a9fb88d3e@app.fastmail.com>
-In-Reply-To: <Y4dvz4d0dpFzJZ9L@zx2c4.com>
-References: <20221129210639.42233-1-Jason@zx2c4.com>
- <20221129210639.42233-4-Jason@zx2c4.com>
- <878rjs7mcx.fsf@oldenburg.str.redhat.com> <Y4dt1dLZMmogRlKa@zx2c4.com>
- <Y4dvz4d0dpFzJZ9L@zx2c4.com>
-Date:   Wed, 30 Nov 2022 16:07:27 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        "Florian Weimer" <fweimer@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
-        x86@kernel.org, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Adhemerval Zanella Netto" <adhemerval.zanella@linaro.org>,
-        "Carlos O'Donell" <carlos@redhat.com>,
-        "Christian Brauner" <brauner@kernel.org>
-Subject: Re: [PATCH v10 3/4] random: introduce generic vDSO getrandom() implementation
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 10:08:00 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D786193CA
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 07:07:58 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id b3so27426262lfv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 07:07:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cJqrClHiZPXq+FVkSMKW0Xw+s2okc9K9A5evAAtGTUc=;
+        b=RPnc/lltAqPuUJR2we1iwIcV3yGPf/+Rq00frStCStqEAEPC2KiqlNAK0E+USCVdMR
+         AdX5iqF2ljKhuWEZ3zFTsU3qwhArQrMRIVVZR2mnLpuoUo7/8kUNqx6FSinAXd+qvcY+
+         USy9Q3fxaysmVgNgtEU8UoYrPgfzphMi3vPzxDen/c8xafkFwI9ryL/3sq3dKJQBu1kx
+         pdv9nv2tu9K0vNgFA4FoEbrP5hKNXR01xhyECNeR+HC+Mlf03gW3dInsD1j2IsdbERKi
+         ajd9/SXttFzRZIQtoBlPOktOaqH92jE96L+8OfcYpe5NN6kFsxKAtdMZJe8yVVLA+TDU
+         6UDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cJqrClHiZPXq+FVkSMKW0Xw+s2okc9K9A5evAAtGTUc=;
+        b=QcRlVkB4fHT1WoODV8CF5gm8jsXOiUIYWzxMC0eBMUOZ6Vl5xdgu4k3Qp+fOfgeY8y
+         fr3nduybhQDrd2Dmu/J3FbItoeALhs3ZXb+wKhKxR9AluXHTeD1UItOBD0K/oJNRsSpt
+         pseX1BA/h7XB4BpWmebAh/AJSSwI+nSK945j8csvWZRT3a0edx+zTgNjDYPYVaSblpIH
+         lrcfLCzXB18NsuUbTvEp/H1Xw0h5zGH54e9majKlZU78OGT4wV5vdBs5xiEWXW8NRQcm
+         XG/Zhy38FvcyxHqp+4BAoXheOtSPDArqyp7BhfnIKwhFVdLOBOK3VxtoxOD58rxQiKAQ
+         s2gg==
+X-Gm-Message-State: ANoB5pn4PjvBpRWpiDd4EVizKV8IbgYzAugIoxb+GgRktvfd1ThP0q6g
+        EgjCZ7BBSpNfFNXCV6wKE30JNQ==
+X-Google-Smtp-Source: AA0mqf734sY6ZDYeK/G5AR3EnvJhvF9S6ueO3jz/KPo7tyikas7hMGIGuMUsj5L17EBc21tQpzfyNQ==
+X-Received: by 2002:a19:6717:0:b0:4b4:e13f:6a17 with SMTP id b23-20020a196717000000b004b4e13f6a17mr15560450lfc.372.1669820876997;
+        Wed, 30 Nov 2022 07:07:56 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q16-20020a2e9150000000b00277045dcb5bsm155073ljg.97.2022.11.30.07.07.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 07:07:56 -0800 (PST)
+Message-ID: <502a28b2-e77d-37aa-4f14-10917fca18b2@linaro.org>
+Date:   Wed, 30 Nov 2022 16:07:54 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 01/12] dt-bindings: display: msm: Replace mdss with
+ display-subsystem
+Content-Language: en-US
+To:     Adam Skladowski <a39.skl@gmail.com>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20221129204616.47006-1-a39.skl@gmail.com>
+ <20221129204616.47006-2-a39.skl@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221129204616.47006-2-a39.skl@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022, at 15:59, Jason A. Donenfeld wrote:
-> On Wed, Nov 30, 2022 at 03:51:01PM +0100, Jason A. Donenfeld wrote:
->> On Wed, Nov 30, 2022 at 11:44:30AM +0100, Florian Weimer wrote:
->> > 
->> >  * vdso_data will be accessed by 64 bit and compat code at the same time
->> >  * so we should be careful before modifying this structure.
->> > 
->> > So the ABI must be same for 32-bit and 64-bit mode, and long isn't.
+On 29/11/2022 21:46, Adam Skladowski wrote:
+> Follow other YAMLs and replace mdss name.
 
-> I'll do something like this:
->
+That's really not explaining what you are doing here. Your commit msg
+and subject suggest you rename mdss. But you don't. You touch only examples.
+
 > 
-> +#ifdef CONFIG_64BIT
-> +typedef u64 vdso_kernel_ulong;
-> +#else
-> +typedef u32 vdso_kernel_ulong;
-> +#endif
+> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+> ---
+>  .../devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml      | 2 +-
+>  .../devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml       | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
 
-This does not address the ABI concern: to allow 32-bit and 64-bit
-tasks to share the same data page, it has to be the same width on
-both, either u32 or 64, but not depending on a configuration
-option.
+Best regards,
+Krzysztof
 
-> struct vdso_rng_data {
->	vdso_kernel_ulong	generation;
->	bool			is_ready;
-> };
-
-There is another problem with this: you have implicit padding
-in the structure because the two members have different size
-and alignment requirements. The easiest fix is to make them
-both u64, or you could have a u32 is_ready and an explit u32
-for the padding.
-
-      Arnd
