@@ -2,184 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDC863E2A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A6263E2A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiK3VYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 16:24:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54408 "EHLO
+        id S229609AbiK3V0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 16:26:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiK3VYb (ORCPT
+        with ESMTP id S229483AbiK3V0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 16:24:31 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453358D67F;
-        Wed, 30 Nov 2022 13:24:30 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AULDSbv004773;
-        Wed, 30 Nov 2022 21:23:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=yifZRjcnME4KdiCrx4XAH30YdBt6VKv7hfRn0v4FRuc=;
- b=l1XUiN1rW6f+ee6TrpN9jk5ssoNSaDOiPcxMdZauO8mKygmAxvaRnHoG31vayk9PgxHr
- bnrusCji3tMF8gNxXVxyKptv/w6DBipSxA+jUHZPaKQlnX1VA6veuNfnO4T0U9hHUmjT
- Y8LtbWrLuqkjh12fLywGfGt8FtkeENfaXiLvCKlhTB3SHROi0j4psDHZlDj/cvAHjVuj
- NL1hijVMJJh4dHNqKg7eBrzLejruYTDP006FlqAY4ckD2FnyWxCDyzWIQDFmuEpogPXV
- 5szbiEKjhNrPIFvt8pvIUWohtN6IFLNqUliTFjBXXkHzaJ4/+uucgc8gQi22pUqMQ2ZO ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m6ewd86mb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Nov 2022 21:23:48 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AULHKau018482;
-        Wed, 30 Nov 2022 21:23:47 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m6ewd86kt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Nov 2022 21:23:47 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AULKxnj005739;
-        Wed, 30 Nov 2022 21:23:45 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
-        by ppma02wdc.us.ibm.com with ESMTP id 3m3aea6hkq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Nov 2022 21:23:45 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AULNj8B37618096
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 30 Nov 2022 21:23:45 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EEA2E5803F;
-        Wed, 30 Nov 2022 21:23:44 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C5AA458056;
-        Wed, 30 Nov 2022 21:23:43 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.97.169])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 30 Nov 2022 21:23:43 +0000 (GMT)
-Message-ID: <b929e0c597161fd5be79c18163a11649dd7f237f.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 4/6] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>, mark@fasheh.com,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org
-Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 30 Nov 2022 16:23:43 -0500
-In-Reply-To: <50232f2b-d5ce-1e5a-3f5b-8d3eb53fe1ec@schaufler-ca.com>
-References: <20221123154712.752074-1-roberto.sassu@huaweicloud.com>
-         <20221123154712.752074-5-roberto.sassu@huaweicloud.com>
-         <13350b79f708cb089e2ff2ee5cead52bafb10982.camel@linux.ibm.com>
-         <bb63eba9a9f24558f4a1acd9bf012b59b5c6e98e.camel@huaweicloud.com>
-         <9859294adb0a9b9587ea7fb70a836a312aaf3c69.camel@linux.ibm.com>
-         <50232f2b-d5ce-1e5a-3f5b-8d3eb53fe1ec@schaufler-ca.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: RFYdom96nPEAcgZBzGdM3xm3tZ0uHlwx
-X-Proofpoint-GUID: gNLYuWXFEUBW_-uMEoVK_Brk6AGGQYmE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-30_04,2022-11-30_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- mlxlogscore=999 spamscore=0 lowpriorityscore=0 priorityscore=1501
- bulkscore=0 mlxscore=0 impostorscore=0 phishscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211300148
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 16:26:50 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED118DBD6
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:26:49 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id 4so18005750pli.0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:26:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6saT+q5ezDQ177rT53B59Pf17d135h+Oe9v073LR0cQ=;
+        b=TYLgl4SDIlOgIM1p5/s3P0/xE+k81DJUqppgCSnPchv8RIojqA/1XCiDCoxM93+n3i
+         jYMlN9hLJMl30itHOyj8vzuPMhYxr4q/6FakXZFxsenGV25bvMIV3cmimYgHYOPhoiBJ
+         DoM8sM3D6JrzbfwFyjn9nIBo3Bg3QK9iavMGI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6saT+q5ezDQ177rT53B59Pf17d135h+Oe9v073LR0cQ=;
+        b=lDUpKhkErKaNUCQF2wAZILVfxSNgd2x2uDqmr/8D1/VBWDsupsfmziEtO+/wZhK2MA
+         yf7W2LmMXgy1RsPLTpO/a0BUIK3eJY+xkI/k9yV+VlZflBFyqsZFCJ5bgCMTbL2jwR5d
+         W7OkSKTNXz9z3+Jd5jGh+LS5zIIc0BvdhEFuVNKk+9Iyb3xQGUA8UzB1DiXN072S2UgC
+         TxR5dQHnhhz+tVagQLcNYzUJSCWpO/Q55r9KMSGpxDme32+0txETgj41AuquqI2VByAf
+         M+1zRdoRhMxYHUlqwKpCfQuedvxSNWmfXEyKOxOX6BGe9lxiZz/cG0mieTGgWpGmpVRW
+         2GdA==
+X-Gm-Message-State: ANoB5pnP6Cu/9Dq/u5o85BKSUkd4fo9ALn39s/qPKgPnYb4C2IHrWaej
+        bJ0mHtuhBPksNVVT0aWlLFhjhw==
+X-Google-Smtp-Source: AA0mqf6LUlZ3xGSjUHJvfh7bTIQnzkZsoyONol/ka/ZULyta/NTEd7BwDqAVAkl+pmc9nDZTUyOrsw==
+X-Received: by 2002:a17:90b:3c45:b0:20a:db08:8a8a with SMTP id pm5-20020a17090b3c4500b0020adb088a8amr72164973pjb.141.1669843608744;
+        Wed, 30 Nov 2022 13:26:48 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id m8-20020a1709026bc800b001897e2fd65dsm1965267plt.9.2022.11.30.13.26.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 13:26:48 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     Kees Cook <keescook@chromium.org>, Kalle Valo <kvalo@kernel.org>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] wifi: ieee80211: Do not open-code qos address offsets
+Date:   Wed, 30 Nov 2022 13:26:45 -0800
+Message-Id: <20221130212641.never.627-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3438; h=from:subject:message-id; bh=qZxXxI21JC4mN+ljaOuKqxqbLwAquUPCxUGbmUAdtlE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjh8qVfqRVaiLZwrWKZBsTnGkWYgjdX4AEocT03P5E +egjltSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY4fKlQAKCRCJcvTf3G3AJnGbD/ 9eLN44SC31Sfm16KmOEF+mtK8blu718iQGEZTvgbxx0w2aSj4UFjBWqJ1BEKMex8I87jo5WHNo922P ESqDuHRWT/xFXiHBP86/C93S5/ko/+1stUjOkZBJq0+/qR/eN78gpLx6Eo7xMzFB8DYT1EnSHDNwo/ ifPp2uYIaiAICdjVry3ZXELwzqZ70+xmsJuTzLxh+0V/d0ADGwSabRzjm34oD9QB+yxrLZeJrUCFS9 CtKMwLXVXBfQc7SBR47izPMtJlTr5TO1vqNXNjBl4DWDAjwLXUH1H5gyj5Lb0+icPqES1oYhtSo1kK kZzF5vEAMTwBVJx3dzDEmbxecHx8eJhgqHy22hsbHy1OfYr1GhINi5ItTltq0NjKCTotCyWhQATIB4 esln3aWsvU4q3zbvA6f22XnTtMUb1mAAJc/0fAQru5YjqI4eMc+TKIYtxx4FBpeEBBM4IPLd0d+U1y UW52ozdZHEITFf5/tVPObbZAZFTCNI3ISBYQvNXJYNoNbcVrPq2FeGLP+nN78afpxmxb9Qeat7YuRd inBgAjjtIjUE1gfsXLkoI0GT5ST2nll+8GX4DiPSkJ4G3wT/G8M0o2qpM5bfPbNi64tqYFdJA3FZT+ 4rJdCpRqYHSCOIbVvv7VqkxiV+ZVI4da0EKftcFprsutzwC5dG7Sv/CGygdA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-29 at 07:39 -0800, Casey Schaufler wrote:
-> On 11/29/2022 3:23 AM, Mimi Zohar wrote:
-> > On Thu, 2022-11-24 at 09:17 +0100, Roberto Sassu wrote:
-> >> On Wed, 2022-11-23 at 20:14 -0500, Mimi Zohar wrote:
-> >>> Hi Roberto,
-> >>>
-> >>> On Wed, 2022-11-23 at 16:47 +0100, Roberto Sassu wrote:
-> >>>>  int security_inode_init_security(struct inode *inode, struct inode *dir,
-> >>>>                                  const struct qstr *qstr,
-> >>>>                                  const initxattrs initxattrs, void *fs_data)
-> >>>>  {
-> >>>> -       struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
-> >>>> -       struct xattr *lsm_xattr, *evm_xattr, *xattr;
-> >>>> -       int ret;
-> >>>> +       struct security_hook_list *P;
-> >>>> +       struct xattr *new_xattrs;
-> >>>> +       struct xattr *xattr;
-> >>>> +       int ret = -EOPNOTSUPP, num_filled_xattrs = 0;
-> >>>>  
-> >>>>         if (unlikely(IS_PRIVATE(inode)))
-> >>>>                 return 0;
-> >>>>  
-> >>>> +       if (!blob_sizes.lbs_xattr)
-> >>>> +               return 0;
-> >>>> +
-> >>>>         if (!initxattrs)
-> >>>>                 return call_int_hook(inode_init_security, -EOPNOTSUPP, inode,
-> >>>> -                                    dir, qstr, NULL, NULL, NULL);
-> >>>> -       memset(new_xattrs, 0, sizeof(new_xattrs));
-> >>>> -       lsm_xattr = new_xattrs;
-> >>>> -       ret = call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir, qstr,
-> >>>> -                                               &lsm_xattr->name,
-> >>>> -                                               &lsm_xattr->value,
-> >>>> -                                               &lsm_xattr->value_len);
-> >>>> -       if (ret)
-> >>>> +                                   dir, qstr, NULL);
-> >>>> +       /* Allocate +1 for EVM and +1 as terminator. */
-> >>>> +       new_xattrs = kcalloc(blob_sizes.lbs_xattr + 2, sizeof(*new_xattrs),
-> >>>> +                            GFP_NOFS);
-> >>>> +       if (!new_xattrs)
-> >>>> +               return -ENOMEM;
-> >>>> +
-> >>>> +       hlist_for_each_entry(P, &security_hook_heads.inode_init_security,
-> >>>> +                            list) {
-> >>>> +               ret = P->hook.inode_init_security(inode, dir, qstr, new_xattrs);
-> >>>> +               if (ret && ret != -EOPNOTSUPP)
-> >>>> +                       goto out;
-> >>>> +               if (ret == -EOPNOTSUPP)
-> >>>> +                       continue;
-> >>> In this context, -EOPNOTSUPP originally signified that the filesystem
-> >>> does not support writing xattrs.  Writing any xattr would fail. 
-> >>> Returning -ENODATA for no LSM xattr(s) data would seem to be more
-> >>> appropriate than -EOPNOTSUPP.
-> >> Hi Mimi
-> >>
-> >> I thought about adding new return values. Currently only -EOPNOTSUPP
-> >> and -ENOMEM are expected as errors.
-> >>
-> >> However, changing the conventions would mean revisiting the LSMs code
-> >> and ensuring that they follow the new conventions.
-> >>
-> >> I would be more in favor of not touching it.
-> > Casey, Paul, any comment?
-> 
-> I don't see value in adding -ENODATA as a value special to
-> the infrastructure. What would the infrastructure do differently?
-> The use of -EOPNOTSUPP isn't consistent throughout, and the amount
-> of "correctness" you get by returning -ENODATA is really small.
+When building with -Wstringop-overflow, GCC's KASAN implementation does
+not correctly perform bounds checking within some complex structures
+when faced with literal offsets, and can get very confused. For example,
+this warning is seen due to literal offsets into sturct ieee80211_hdr
+that may or may not be large enough:
 
-Agreed, it isn't worthwhile for this case.  Roberto, to ease code
-review, could you document the overloading of the -EOPNOTSUPP meaning,
-which results in the loop continuing?
+drivers/net/wireless/intel/iwlwifi/mvm/rxmq.c: In function 'iwl_mvm_rx_mpdu_mq':
+drivers/net/wireless/intel/iwlwifi/mvm/rxmq.c:2022:29: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+ 2022 |                         *qc &= ~IEEE80211_QOS_CTL_A_MSDU_PRESENT;
+In file included from drivers/net/wireless/intel/iwlwifi/mvm/fw-api.h:32,
+                 from drivers/net/wireless/intel/iwlwifi/mvm/sta.h:15,
+                 from drivers/net/wireless/intel/iwlwifi/mvm/mvm.h:27,
+                 from drivers/net/wireless/intel/iwlwifi/mvm/rxmq.c:10:
+drivers/net/wireless/intel/iwlwifi/mvm/../fw/api/rx.h:559:16: note: at offset [78, 166] into destination object 'mpdu_len' of size 2
+  559 |         __le16 mpdu_len;
+      |                ^~~~~~~~
 
-thanks,
+Refactor ieee80211_get_qos_ctl() to avoid using literal offsets,
+requiring the creation of the actual structure that is described in the
+comments. Explicitly choose the desired offset, making the code more
+human-readable too. This is one of the last remaining warning to fix
+before enabling -Wstringop-overflow globally.
 
-Mimi
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97490
+Link: https://github.com/KSPP/linux/issues/181
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Cc: Kalle Valo <kvalo@kernel.org>
+Cc: Gregory Greenman <gregory.greenman@intel.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/ieee80211.h | 28 ++++++++++++++++++++++------
+ 1 file changed, 22 insertions(+), 6 deletions(-)
+
+diff --git a/include/linux/ieee80211.h b/include/linux/ieee80211.h
+index 6252f02f38b7..80d6308dea06 100644
+--- a/include/linux/ieee80211.h
++++ b/include/linux/ieee80211.h
+@@ -338,6 +338,17 @@ struct ieee80211_qos_hdr {
+ 	__le16 qos_ctrl;
+ } __packed __aligned(2);
+ 
++struct ieee80211_qos_hdr_4addr {
++	__le16 frame_control;
++	__le16 duration_id;
++	u8 addr1[ETH_ALEN];
++	u8 addr2[ETH_ALEN];
++	u8 addr3[ETH_ALEN];
++	__le16 seq_ctrl;
++	u8 addr4[ETH_ALEN];
++	__le16 qos_ctrl;
++} __packed __aligned(2);
++
+ struct ieee80211_trigger {
+ 	__le16 frame_control;
+ 	__le16 duration;
+@@ -4060,16 +4071,21 @@ struct ieee80211_he_6ghz_capa {
+  * @hdr: the frame
+  *
+  * The qos ctrl bytes come after the frame_control, duration, seq_num
+- * and 3 or 4 addresses of length ETH_ALEN.
+- * 3 addr: 2 + 2 + 2 + 3*6 = 24
+- * 4 addr: 2 + 2 + 2 + 4*6 = 30
++ * and 3 or 4 addresses of length ETH_ALEN. Checks frame_control to choose
++ * between struct ieee80211_qos_hdr_4addr and struct ieee80211_qos_hdr.
+  */
+ static inline u8 *ieee80211_get_qos_ctl(struct ieee80211_hdr *hdr)
+ {
+-	if (ieee80211_has_a4(hdr->frame_control))
+-		return (u8 *)hdr + 30;
++	union {
++		struct ieee80211_qos_hdr	addr3;
++		struct ieee80211_qos_hdr_4addr	addr4;
++	} *qos;
++
++	qos = (void *)hdr;
++	if (ieee80211_has_a4(qos->addr3.frame_control))
++		return (u8 *)&qos->addr4.qos_ctrl;
+ 	else
+-		return (u8 *)hdr + 24;
++		return (u8 *)&qos->addr3.qos_ctrl;
+ }
+ 
+ /**
+-- 
+2.34.1
 
