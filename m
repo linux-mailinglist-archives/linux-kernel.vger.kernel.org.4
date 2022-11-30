@@ -2,110 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E42C163E2E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0777063E2E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:44:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiK3VoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 16:44:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
+        id S229712AbiK3VoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 16:44:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiK3VoD (ORCPT
+        with ESMTP id S229472AbiK3VoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 16:44:03 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EDB31ED9;
-        Wed, 30 Nov 2022 13:44:02 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id j4so28987804lfk.0;
-        Wed, 30 Nov 2022 13:44:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SoweguhVdE9rkHNrrE2YnwSJZtPETT6uz4SqPHeAVg8=;
-        b=IB9l1JuueX9k7YvnYxgtAXfq1Y4yF0UbKLjtpuxrqZRmtpkYLkm5pndlEj0U31dfxz
-         IhuGO+OvT35+dXY/iQOfGYso+sP5TLLqHlwAWesH6mzVHf/8dUvvK3WZxJ90zbZ1d0Sa
-         Abg6Zz/UCTYW63icUCyTyjEuWoE3gwAO0hrxmKCTCZGKl+veLeX5MuYsmy2JVioaF4df
-         kOlMrN1xJ/WnhO8YLRdD4Cj0tgfyEQDogfUfe+sszj5GBL0mZNw4LKCkLvdRi2JQRkAq
-         WsPcoSlRD0eHDBIlvhrMGB6496NLHe/9um3DhTN/qa4VW4lFbbaNLLV9K33PvHKli6bq
-         plNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SoweguhVdE9rkHNrrE2YnwSJZtPETT6uz4SqPHeAVg8=;
-        b=7n+O75Rfl+xZ+TnVJmTULXfInuIS/q2+nAcpibxzQ5fSH8DZJ1wU2UvtTXfw+k0SAn
-         AadmCLthq8CMEBWsMknORKjYlemWut/tVGiUtOYdt4iruQGN8bQV6t5WTugFp96VKG4Z
-         u74IOsLIFPfEdD/4H8A+bMdVMzwFQZ8bcXTMJFJGGdL+Hbfae5/fx2Cre8sJB4iJOz3i
-         0Wkm6YeV30QFmVY4l3cplvVrR7srWtCP+cgXjK+8qAGlokC4Il+zWZ2KJjZBsFX3NLcX
-         YBEfjWlGUCtxj5FDyFltPnEW63UtKtUCAI9WqLzvEzXEL3UVxhRZsdDbY0LG6NxDjHl0
-         9HGA==
-X-Gm-Message-State: ANoB5plr85vj4wAcSXrpW4xtvmTSUJvYLts6pGRkk2hq2/ixtudYB/dq
-        QOSBepHxzIP/GPF55eTY/KY=
-X-Google-Smtp-Source: AA0mqf4B/6E4EQ88UDDyZW5P57Lh2mzUsmkSKC70YBsSuWrNqFNuyHK2zVlIRbnYwst1Z4zgXiklpA==
-X-Received: by 2002:ac2:47ea:0:b0:4a2:2f4b:2f30 with SMTP id b10-20020ac247ea000000b004a22f4b2f30mr23696915lfp.357.1669844640254;
-        Wed, 30 Nov 2022 13:44:00 -0800 (PST)
-Received: from grain.localdomain ([5.18.253.97])
-        by smtp.gmail.com with ESMTPSA id a19-20020ac25e73000000b0049110ba325asm385891lfr.158.2022.11.30.13.43.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 13:43:59 -0800 (PST)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id B77925A0020; Thu,  1 Dec 2022 00:43:58 +0300 (MSK)
-Date:   Thu, 1 Dec 2022 00:43:58 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrei Vagin <avagin@gmail.com>, kernel@collabora.com,
-        stable@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm: set the vma flags dirty before testing if it is
- mergeable
-Message-ID: <Y4fOnsav2CK5lcA7@grain>
-References: <20221122115007.2787017-1-usama.anjum@collabora.com>
- <Y4W0axw0ZgORtfkt@grain>
- <ecef5201-04d5-3618-a667-2e7c4770b908@collabora.com>
+        Wed, 30 Nov 2022 16:44:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A4631ED9;
+        Wed, 30 Nov 2022 13:44:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C59BBB81B97;
+        Wed, 30 Nov 2022 21:44:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50466C433D6;
+        Wed, 30 Nov 2022 21:44:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669844643;
+        bh=qD0Rli9JXd8tq5gzZqVcpKKh0sLQJzXsETSrA7cBLoE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=iIsRvFPmlSFnfkTZGuPyoNqrQYobjXgXCUjn5jCIr3u0fhlfNCVbZfE6JxInH72mu
+         qVHdTom2PfdjMF9kZr0zS68ge2WowIKoNJLhDmUyQnbCmXU0s64BePUn7LlAQhjS21
+         zUMUVrXw8B/yMZ/O1uHzvKj9wxLD2M9/0U1QuCf1QOudMIM92xjSAnFXjmGTiK1xNM
+         19gNfmEs6paVJAfrMsdnIM9M1mqegdAdqkm3eOonag1yXDtXEYxkXfy4OfGgFviH2a
+         boljbCA0LhVcrI3sICI8kAVpmGxEpxLFIRAvP9d8HhHKuzpPrBSlauaeTpU3AuQT4n
+         K1gTTNEeM8nDg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id E53B55C051C; Wed, 30 Nov 2022 13:44:02 -0800 (PST)
+Date:   Wed, 30 Nov 2022 13:44:02 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, rostedt@goodmis.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Dennis Zhou <dennis@kernel.org>,
+        Christoph Lameter <cl@linux.com>, linux-mm@kvack.org
+Subject: Re: [PATCH rcu 12/16] percpu-refcount: Use call_rcu_hurry() for
+ atomic switch
+Message-ID: <20221130214402.GV4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221130181316.GA1012431@paulmck-ThinkPad-P17-Gen-1>
+ <20221130181325.1012760-12-paulmck@kernel.org>
+ <Y4eycHpdYz7aoq10@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ecef5201-04d5-3618-a667-2e7c4770b908@collabora.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y4eycHpdYz7aoq10@slm.duckdns.org>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 06:49:53PM +0500, Muhammad Usama Anjum wrote:
-> > ioctl might be an option indeed
-> Thank you for supporting this. I'll track down the issue caused by
-> remapping and mprotect mentioned here:
-> https://lore.kernel.org/all/bfcae708-db21-04b4-0bbe-712badd03071@redhat.com/
-> and we can proceed with this.
-> 
+On Wed, Nov 30, 2022 at 09:43:44AM -1000, Tejun Heo wrote:
+> On Wed, Nov 30, 2022 at 10:13:21AM -0800, Paul E. McKenney wrote:
+> > From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
 > > 
-> >>
-> >> [1] https://lore.kernel.org/all/20221109102303.851281-1-usama.anjum@collabora.com/
-> >> [2] https://lore.kernel.org/all/bfcae708-db21-04b4-0bbe-712badd03071@redhat.com/
+> > Earlier commits in this series allow battery-powered systems to build
+> > their kernels with the default-disabled CONFIG_RCU_LAZY=y Kconfig option.
+> > This Kconfig option causes call_rcu() to delay its callbacks in order to
+> > batch callbacks.  This means that a given RCU grace period covers more
+> > callbacks, thus reducing the number of grace periods, in turn reducing
+> > the amount of energy consumed, which increases battery lifetime which
+> > can be a very good thing.  This is not a subtle effect: In some important
+> > use cases, the battery lifetime is increased by more than 10%.
+> > 
+> > This CONFIG_RCU_LAZY=y option is available only for CPUs that offload
+> > callbacks, for example, CPUs mentioned in the rcu_nocbs kernel boot
+> > parameter passed to kernels built with CONFIG_RCU_NOCB_CPU=y.
+> > 
+> > Delaying callbacks is normally not a problem because most callbacks do
+> > nothing but free memory.  If the system is short on memory, a shrinker
+> > will kick all currently queued lazy callbacks out of their laziness,
+> > thus freeing their memory in short order.  Similarly, the rcu_barrier()
+> > function, which blocks until all currently queued callbacks are invoked,
+> > will also kick lazy callbacks, thus enabling rcu_barrier() to complete
+> > in a timely manner.
+> > 
+> > However, there are some cases where laziness is not a good option.
+> > For example, synchronize_rcu() invokes call_rcu(), and blocks until
+> > the newly queued callback is invoked.  It would not be a good for
+> > synchronize_rcu() to block for ten seconds, even on an idle system.
+> > Therefore, synchronize_rcu() invokes call_rcu_hurry() instead of
+> > call_rcu().  The arrival of a non-lazy call_rcu_hurry() callback on a
+> > given CPU kicks any lazy callbacks that might be already queued on that
+> > CPU.  After all, if there is going to be a grace period, all callbacks
+> > might as well get full benefit from it.
+> > 
+> > Yes, this could be done the other way around by creating a
+> > call_rcu_lazy(), but earlier experience with this approach and
+> > feedback at the 2022 Linux Plumbers Conference shifted the approach
+> > to call_rcu() being lazy with call_rcu_hurry() for the few places
+> > where laziness is inappropriate.
+> > 
+> > And another call_rcu() instance that cannot be lazy is the one on the
+> > percpu refcounter's "per-CPU to atomic switch" code path, which
+> > uses RCU when switching to atomic mode.  The enqueued callback
+> > wakes up waiters waiting in the percpu_ref_switch_waitq.  Allowing
+> > this callback to be lazy would result in unacceptable slowdowns for
+> > users of per-CPU refcounts, such as blk_pre_runtime_suspend().
+> > 
+> > Therefore, make __percpu_ref_switch_to_atomic() use call_rcu_hurry()
+> > in order to revert to the old behavior.
+> > 
+> > [ paulmck: Apply s/call_rcu_flush/call_rcu_hurry/ feedback from Tejun Heo. ]
+> > 
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Cc: Dennis Zhou <dennis@kernel.org>
+> > Cc: Tejun Heo <tj@kernel.org>
+> > Cc: Christoph Lameter <cl@linux.com>
+> > Cc: <linux-mm@kvack.org>
+> 
+> Acked-by: Tejun Heo <tj@kernel.org>
 
-Hi Muhammad! Hopefully I'll find some time soon to read all these conversation,
-so for now my replies might be simply out of context. Initially the vma softdirty
-was needed to catch a case where memory remapped inplace and what is worse it might
-have _same_ ptes dirty after clear_refs call. IOW, the process allocated vma and
-write some data into. Then we (page tracker process) come in, read pagemap and clear
-softdirty bits, and page traker process terminates. While we're not watching the program
-unmaps vma, maps new one with same size and what is worse it writes data to the same pages
-as we saw at last scan time. So without VM_SOFTDIRTY we won't be able to find that this
-VMA is actually carrying new pages which were not yet dumped.
+I applied both, thank you very much!
 
-And similar scenario can be for merging: say former vma has been 4 pages, we scan it
-and clear dirty pages at low and hight address. Then process splits this VMA to two with
-gap inbetween and then map new area which merge them all into one vma, and process can
-write again pages to same address so we have to mark this new VMA as softdirty. If only
-I rememeber correctly about the initial idea :)
+							Thanx, Paul
