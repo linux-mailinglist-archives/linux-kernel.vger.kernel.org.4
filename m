@@ -2,177 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9521163E101
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75FD163E105
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiK3TsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 14:48:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
+        id S229773AbiK3Tu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 14:50:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiK3Tr5 (ORCPT
+        with ESMTP id S229614AbiK3TuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 14:47:57 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430515436C
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:47:56 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id 4so17760049pli.0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:47:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ihh5oofyez3CtNOQIHwFTADZecAohqCOwiubz5fncqA=;
-        b=mgji7ObiNmN8eVbpaz2mjgRdwSAUpuTFhzRs1nBB0wl7tOLWdgahWX5R8pzXzsKC1V
-         Qtn1fkqFBjJjcQDgKlDh57l5mnYK+Ecoh1a2vOJcc2t63/bIEFUCiKEps0W/XWxLwcjS
-         uEipbR9RmK8lHa3HKHs3GtiVqO61aYeRnQQBYU17wQNjkUKUZrQGXXWfYl9Buyk/5/mA
-         FrKfxv15/oPRfpGjiNA5iuwI5hpZXV2Gr4+XrjCWbXfELTHOed6nOoV7sUsNVRnSsyxm
-         lXB/RiZWL7eAwrTDd/bgWKDUr1Z4Q4M8R1g2bsjva2QnWftYdStcgeEeDNzrZS1jB//i
-         HeLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ihh5oofyez3CtNOQIHwFTADZecAohqCOwiubz5fncqA=;
-        b=DHckz2UbaROOw6OEXmPO9N7gtWNLuwWzsppzwrtEU95yWXERKzQkYiJ310vbLtfj1b
-         NK/xN4CS2CPyK6vV5l6TYDJxA3JtIyYFPDc3BJblRvDGNpIbdLrykSrUAUa5yXYQdef8
-         59itw8AnuU0aL89lIFY1p00h5LSUe9ls8LSBk6/k6WwSC7EwLUlnhItjzDjoAhKCb+ZZ
-         pZNxWhQtXYfkj+7Fg+XNuyNtC2R2dTVFHTOADLMKsoGcvEhyUqLqObt6I3Pxz4Gs8jfT
-         /jaYZGQgiFrKucjttbweYi6woH68DhFABoqWgqxwS1K4vgZI7ZtXjV7MhxDM1Zg2TQND
-         W6jA==
-X-Gm-Message-State: ANoB5pmMACCple+chSDC5r8V/3sgQ5KIXn7fUoet68KbubhLVNsph1qT
-        LHjs6f2K2yyfz4Xkl8y4LVpPe9g2uezp7QR1A6FSQA==
-X-Google-Smtp-Source: AA0mqf7qPQwpY05hjWXylLqQi7yyJwO1Q1xUae2EZKtA8JJJtC3bef3O0Mr18W2iV3UxDeupUhFwyQrATnCV4d5QlPo=
-X-Received: by 2002:a17:90a:5317:b0:213:34f7:fb14 with SMTP id
- x23-20020a17090a531700b0021334f7fb14mr70448861pjh.25.1669837675431; Wed, 30
- Nov 2022 11:47:55 -0800 (PST)
+        Wed, 30 Nov 2022 14:50:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3792754375;
+        Wed, 30 Nov 2022 11:50:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E328AB81CCD;
+        Wed, 30 Nov 2022 19:50:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FCFC43147;
+        Wed, 30 Nov 2022 19:50:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669837820;
+        bh=QOqw927fxRzrbF/F3Jnf30+Wco4wM1OzEviRcFlVUEM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=V3zEJ+E37k+PcTuehrx445ZgWfK+r063zKQF13cD/Q9IDc5a1UsKXM1vM0X3PxAW8
+         5A+ubiQPnrThXbkKEw6Kas8R20BH+ZffyYOlLplY9Cz6jJzjpdQr/IKrLZGoe3Hw3V
+         7KO0pKJnrRcemGaKShSL6r0H8va1Bb3nUOMqiZ7sP6zme8H4HOKDWoqmt3Z8K8yauc
+         VFdkNnx4PeUcl6Amnm2yeRQ59w1vNAPMuX7E9taqMesk+ekaBkPRmsYtnUjScumNIg
+         qvr5PiSgJ7PIzDXlula4TqQ+eexBUq8hqnQlv+3C/2UmD/HvlInYbEMbQT3/2MIvTL
+         M762HhtGWxJwg==
+Received: by mail-vs1-f54.google.com with SMTP id c184so18394904vsc.3;
+        Wed, 30 Nov 2022 11:50:20 -0800 (PST)
+X-Gm-Message-State: ANoB5pkkpV7QGdpbTJjNkAHDZOolERjNh3nUniDGGT/NzfSsl9Su2xQE
+        5YrRMMgxHF1MpqF6QDeVlnzcevvZHXZRe5SUWQ==
+X-Google-Smtp-Source: AA0mqf52Y1Vj9n3ybkEc5FmCE5sMcIYABT3Rc5wjqxKa7c1Iw7w12pQuxt5Kk2YnjZv2U8m3ZeRxCLTHwseH2sbP40I=
+X-Received: by 2002:a05:6102:2381:b0:3b0:c6ec:cc6a with SMTP id
+ v1-20020a056102238100b003b0c6eccc6amr5171717vsr.0.1669837819471; Wed, 30 Nov
+ 2022 11:50:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20221128020409.1545717-1-limin100@huawei.com> <1232e4f3-e4b8-ff23-61e8-5465c8406f6e@digikod.net>
- <7379a5fd-5593-c6ce-40fd-c543dcf70d2b@huawei.com> <e62a539b-614c-c008-873a-f9c57c7ecb33@digikod.net>
- <2bc18685-f975-497f-9c20-da99dbc296c0@huawei.com> <ed1f6874-0f24-8145-63d4-efe28545381b@digikod.net>
-In-Reply-To: <ed1f6874-0f24-8145-63d4-efe28545381b@digikod.net>
-From:   Jeff Xu <jeffxu@google.com>
-Date:   Wed, 30 Nov 2022 11:47:18 -0800
-Message-ID: <CALmYWFs0GG8o3WQw7PEGvT=qgHHGiTC_mE1kQ0oRVjNUJa36gA@mail.gmail.com>
-Subject: Re: [PATCH -next] selftests/landlock: Fix selftest ptrace_test run fail
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     limin <limin100@huawei.com>, hannes@cmpxchg.org, mhocko@kernel.org,
-        roman.gushchin@linux.dev, shakeelb@google.com,
-        songmuchun@bytedance.com, tj@kernel.org, lizefan.x@bytedance.com,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jorge Lucangeli Obes <jorgelo@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Kees Cook <keescook@chromium.org>
+References: <20221128142912.16022-1-marcan@marcan.st> <20221128142912.16022-3-marcan@marcan.st>
+ <CAPDyKFobMvef_BWGMR=7avODh2r5XNMGpwO3xYgrN-u=DqRwbg@mail.gmail.com>
+ <41c6882a-bff0-378c-edd3-160b54be7c1d@marcan.st> <a297079e-2dc9-d311-5415-a58332e7a711@linaro.org>
+ <e8c481ba-02a7-f1c7-6314-ea1ddf136998@marcan.st> <20221129232837.GA432535-robh@kernel.org>
+In-Reply-To: <20221129232837.GA432535-robh@kernel.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 30 Nov 2022 13:50:08 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJFEBFSeTrCc6QSCAN8C7rsiyoiy8D-9ZFr6Xk35TqhGg@mail.gmail.com>
+Message-ID: <CAL_JsqJFEBFSeTrCc6QSCAN8C7rsiyoiy8D-9ZFr6Xk35TqhGg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
+ binding for Apple SoC cpufreq
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 11:32 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>=
- wrote:
+On Tue, Nov 29, 2022 at 5:28 PM Rob Herring <robh@kernel.org> wrote:
 >
-> I checked and the Landlock ptrace test failed because Yama is enabled,
-> which is expected. You can check that with
-> /proc/sys/kernel/yama/ptrace_scope
+> On Wed, Nov 30, 2022 at 12:17:08AM +0900, Hector Martin wrote:
+> > On 29/11/2022 23.34, Krzysztof Kozlowski wrote:
+> > > On 29/11/2022 15:00, Hector Martin wrote:
+> > >> On 29/11/2022 20.36, Ulf Hansson wrote:
+> > >> Please, let's introspect about this for a moment. Something is deeply
+> > >> broken if people with 25+ years being an arch maintainer can't get a
+> > >
+> > > If arch maintainer sends patches which does not build (make
+> > > dt_binding_check), then what do you exactly expect? Accept them just
+> > > because it is 25+ years of experience or a maintainer? So we have
+> > > difference processes - for beginners code should compile. For
+> > > experienced people, it does not have to build because otherwise they
+> > > will get discouraged?
+> >
+> > I expect the process to not be so confusing and frustrating that a
+> > maintainer with 25+ years of experience gives up. That the bindings
+> > didn't pass the checker is besides the point. People say the Linux
+> > kernel community is hostile to newbies. This issue proves it's not just
+> > newbies, the process is failing even experienced folks.
 >
-> Jeff Xu sent a patch to fix this case but it is not ready yet:
-> https://lore.kernel.org/r/20220628222941.2642917-1-jeffxu@google.com
+> IME, a lack of response is a bigger issue and more frustrating.
 >
-> Could you please send a new patch Jeff, and add Limin in Cc?
+> > On that specific issue, any other functional open source project would
+> > have the binding checks be a CI bot, with a friendly message telling you
+> > what to do to fix it, and it would re-run when you push to the PR again,
+> > which is a *much* lower friction action than sending a whole new patch
+> > series out for review via email (if you don't agree with this, then
+> > you're not the average contributor - the Linux kernel is by far the
+> > scariest major open source project to contribute to, and I think most
+> > people would agree with me on that).
 >
-Yes. This work is planned for Dec. I will start working on it soon.
-Jeff
+> We could probably add a $ci_provider job description to do that. In
+> fact, I did try that once[1]. The challenge would be what to run if
+> there's multiple maintainers doing something. Otherwise, it's a
+> maintainer creating their own thing which we have too much of already.
 
->
-> On 29/11/2022 12:26, limin wrote:
-> > cat /proc/cmdline
-> > BOOT_IMAGE=3D/vmlinuz-6.1.0-next-20221116
-> > root=3DUUID=3Da65b3a79-dc02-4728-8a0c-5cf24f4ae08b ro
-> > systemd.unified_cgroup_hierarchy=3D1 cgroup_no_v1=3Dall
-> >
-> >
-> > config
-> >
-> > #
-> > # Automatically generated file; DO NOT EDIT.
-> > # Linux/x86 6.1.0-rc6 Kernel Configuration
-> > #
->
-> [...]
->
-> > CONFIG_SECURITY_YAMA=3Dy
->
-> [...]
->
-> > CONFIG_LSM=3D"landlock,lockdown,yama,integrity,apparmor"
-> [...]
-> >
-> > On 2022/11/29 19:03, Micka=C3=ABl Sala=C3=BCn wrote:
-> >> I tested with next-20221116 and all tests are OK. Could you share your
-> >> kernel configuration with a link? What is the content of /proc/cmdline=
-?
-> >>
-> >> On 29/11/2022 02:42, limin wrote:
-> >>> I run test on Linux ubuntu2204 6.1.0-next-20221116
-> >>>
-> >>> I did't use yama.
-> >>>
-> >>> you can reproduce by this step:
-> >>>
-> >>> cd kernel_src
-> >>>
-> >>> cd tools/testing/selftests/landlock/
-> >>> make
-> >>> ./ptrace_test
-> >>>
-> >>>
-> >>>
-> >>>
-> >>> On 2022/11/29 3:44, Micka=C3=ABl Sala=C3=BCn wrote:
-> >>>> This patch changes the test semantic and then cannot work on my test
-> >>>> environment. On which kernel did you run test? Do you use Yama or
-> >>>> something similar?
-> >>>>
-> >>>> On 28/11/2022 03:04, limin wrote:
-> >>>>> Tests PTRACE_ATTACH and PTRACE_MODE_READ on the parent,
-> >>>>> trace parent return -1 when child=3D=3D 0
-> >>>>> How to reproduce warning:
-> >>>>> $ make -C tools/testing/selftests TARGETS=3Dlandlock run_tests
-> >>>>>
-> >>>>> Signed-off-by: limin <limin100@huawei.com>
-> >>>>> ---
-> >>>>>     tools/testing/selftests/landlock/ptrace_test.c | 5 ++---
-> >>>>>     1 file changed, 2 insertions(+), 3 deletions(-)
-> >>>>>
-> >>>>> diff --git a/tools/testing/selftests/landlock/ptrace_test.c
-> >>>>> b/tools/testing/selftests/landlock/ptrace_test.c
-> >>>>> index c28ef98ff3ac..88c4dc63eea0 100644
-> >>>>> --- a/tools/testing/selftests/landlock/ptrace_test.c
-> >>>>> +++ b/tools/testing/selftests/landlock/ptrace_test.c
-> >>>>> @@ -267,12 +267,11 @@ TEST_F(hierarchy, trace)
-> >>>>>             /* Tests PTRACE_ATTACH and PTRACE_MODE_READ on the
-> >>>>> parent. */
-> >>>>>             err_proc_read =3D test_ptrace_read(parent);
-> >>>>>             ret =3D ptrace(PTRACE_ATTACH, parent, NULL, 0);
-> >>>>> +        EXPECT_EQ(-1, ret);
-> >>>>> +        EXPECT_EQ(EPERM, errno);
-> >>>>>             if (variant->domain_child) {
-> >>>>> -            EXPECT_EQ(-1, ret);
-> >>>>> -            EXPECT_EQ(EPERM, errno);
-> >>>>>                 EXPECT_EQ(EACCES, err_proc_read);
-> >>>>>             } else {
-> >>>>> -            EXPECT_EQ(0, ret);
-> >>>>>                 EXPECT_EQ(0, err_proc_read);
-> >>>>>             }
-> >>>>>             if (ret =3D=3D 0) {
+Actually, turns out this pretty much already exists with my CI. I just
+had to turn on merge requests on the project. If anyone actually uses
+it, I'll have to tweak it to not do 'make dtbs_check' because that is
+really slow. And this all runs on my machines, so that is another
+issue. It already is just running it for patches on the list (which is
+a different CI job).
+
+Just create a MR here:
+
+https://gitlab.com/robherring/linux-dt/-/merge_requests
+
+Rob
