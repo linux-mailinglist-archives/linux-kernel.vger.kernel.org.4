@@ -2,214 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4849663E122
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:08:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB9B63E1A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiK3UIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 15:08:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
+        id S230040AbiK3UNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 15:13:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiK3UIK (ORCPT
+        with ESMTP id S230002AbiK3UNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:08:10 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6BF0F711A4;
-        Wed, 30 Nov 2022 12:08:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669838888; x=1701374888;
-  h=from:to:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8guv5jwcaPQnC7by4n9uUpuRQSBkVBi41RgNbjLZ4lI=;
-  b=U4yK5oV/5RhUvxKCPmIKeqqghxdMagcYu6pgMXYmbWUMj8sgRPc1PyjH
-   RqNWy17a390Cnvl5OuFfHIp9FvnkE29GXXSD7lD6I/4piLGMqZDuC3N+2
-   I42p17uwvAc21pONyaoQDlsReTiKzAeAe8qxbp0uxdBzES1c2HuSzog4I
-   eexBv68elP2GqqfPC0+LXZUj+vQyTCGS68A6oRMhJj7rdlf+t3DSvBe0C
-   xrWXnY3eB+tgOsLjrYWvN8rgQlRmkd3u1fQ54hrEsPgUCLIuo8rXHuMiW
-   uEy8pC8QgZDmtYTSlCGWG+aQG+yOKKLSstXZECMJCW8l30Do5SgWk+nQ3
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
-   d="scan'208";a="202086423"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Nov 2022 13:08:07 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 30 Nov 2022 13:08:07 -0700
-Received: from AUS-LT-C33025.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 30 Nov 2022 13:08:05 -0700
-From:   Jerry Ray <jerry.ray@microchip.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Jerry Ray <jerry.ray@microchip.com>
-Subject: [PATCH net-next v4] dsa: lan9303: Add 3 ethtool stats
-Date:   Wed, 30 Nov 2022 14:08:04 -0600
-Message-ID: <20221130200804.21778-1-jerry.ray@microchip.com>
+        Wed, 30 Nov 2022 15:13:11 -0500
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923E78E593;
+        Wed, 30 Nov 2022 12:10:59 -0800 (PST)
+Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AUJdOWX003830;
+        Wed, 30 Nov 2022 20:10:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id; s=pps0720;
+ bh=NvKRpWwARiR1R6jiUA1E/7tyYTKcdAewqA3BKmUjJqc=;
+ b=WZf94o/9fxZUwiSHyhlxF8UiC7GPKaqQDGszDWSNVEd9uxrcXbX0uuTPoFJt1D8MfPlN
+ 9VqVX8TfwmNiH4WlniLzdMJ5/i+49kanKa1BXZNEXKutFzq34v1sGJcckv9duAiDipuI
+ gxLxoy3fNQNuIObSqCnzQK+VFzs5o8xiwLgqC49Nd70GAXb8S+3ado2QC+ux6YVP3vCZ
+ BNMrh2B2Jo1653atZ1McSRz6U3YZ5Ix+HB27hPaXT8+UR3yclFxyBqxtSojBmTtxbZbF
+ It00sQdnttt5P7PsUOLkpc5k+gX5qs4am04gp1w6Ood5B5+SOAQVT6D6E9f0/ao329Dh TA== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3m6axy1h0v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Nov 2022 20:10:17 +0000
+Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id E429A8066DC;
+        Wed, 30 Nov 2022 20:10:16 +0000 (UTC)
+Received: from hpe.com (unknown [16.231.227.36])
+        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id BF0558097EA;
+        Wed, 30 Nov 2022 20:10:14 +0000 (UTC)
+From:   nick.hawkins@hpe.com
+To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com,
+        nick.hawkins@hpe.com, corbet@lwn.net, linux@armlinux.org.uk,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/6] ARM: Add GXP Fan and SPI controllers
+Date:   Wed, 30 Nov 2022 14:08:40 -0600
+Message-Id: <20221130200846.4226-1-nick.hawkins@hpe.com>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-GUID: BLVa7lzsyuNhb0l9CEw7C1f_k8Hv_vYT
+X-Proofpoint-ORIG-GUID: BLVa7lzsyuNhb0l9CEw7C1f_k8Hv_vYT
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-30_04,2022-11-30_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 impostorscore=0 suspectscore=0 adultscore=0 spamscore=0
+ phishscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999 bulkscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211300142
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding Buffer Manager and Switch Engine counters to the reported
-statistics. As these stats are kept by the switch rather than the port
-instance, they are indexed differently.
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-These statistics are maintained by the switch and count the packets
-dropped due to buffer limits. Note that the rtnl_link_stats: rx_dropped
-statistic does not include dropped packets due to buffer exhaustion and as
-such, part of this counter would more appropriately fall under the
-rx_missed_errors.
+The GXP SoC can support up to 16 fans through the interface provided by
+the CPLD. The fans speeds are controlled via a pwm value 0-255. The fans
+are also capable of reporting if they have failed to the CPLD which in
+turn reports the status to the GXP SoC. Based on previous feedback the
+registers required for fan control have been regmaped individualy to fan
+driver. Specifically these registers are the function 2 registers and the
+programmable logic registers from the CPLD. Additionally in this patchset
+there is support for the SPI driver which already exists as spi-gxp.c in
+the SPI driver.
 
-Migrating to phylink will be a pre-requisite for adding the stats64 API,
-at which point the rtnl_link_stats will come into play.
-
-Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
 ---
-v3->v4:
-  added returning stat of 0 if there is a device read failure.
-  removed unrelated change.
-v2->v3:
-  Isolating this patch to include only the added counters.
-  Renamed the new statsistic labels to better identify them.
-  Added the SWE Filtered counter to the reported statistics.
-  Added comments to explain the added counters.
-v1->v2:
-  Split patch into 2 pieces.
-  Removed the adding of a module number to the driver.
----
- drivers/net/dsa/lan9303-core.c | 57 +++++++++++++++++++++++++++++++---
- 1 file changed, 53 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/dsa/lan9303-core.c b/drivers/net/dsa/lan9303-core.c
-index 80f07bd20593..93c2a3c549cb 100644
---- a/drivers/net/dsa/lan9303-core.c
-+++ b/drivers/net/dsa/lan9303-core.c
-@@ -176,11 +176,14 @@
- # define LAN9303_SWE_PORT_MIRROR_DISABLED 0
- #define LAN9303_SWE_INGRESS_PORT_TYPE 0x1847
- #define  LAN9303_SWE_INGRESS_PORT_TYPE_VLAN 3
-+#define LAN9303_SWE_FILTERED_CNT_SRC_0 0x1850
- #define LAN9303_BM_CFG 0x1c00
-+#define LAN9303_BM_DRP_CNT_SRC_0 0x1c05
- #define LAN9303_BM_EGRSS_PORT_TYPE 0x1c0c
- # define LAN9303_BM_EGRSS_PORT_TYPE_SPECIAL_TAG_PORT2 (BIT(17) | BIT(16))
- # define LAN9303_BM_EGRSS_PORT_TYPE_SPECIAL_TAG_PORT1 (BIT(9) | BIT(8))
- # define LAN9303_BM_EGRSS_PORT_TYPE_SPECIAL_TAG_PORT0 (BIT(1) | BIT(0))
-+#define LAN9303_BM_RATE_DRP_CNT_SRC_0 0x1c16
- 
- #define LAN9303_SWITCH_PORT_REG(port, reg0) (0x400 * (port) + (reg0))
- 
-@@ -978,10 +981,33 @@ static const struct lan9303_mib_desc lan9303_mib[] = {
- 	{ .offset = LAN9303_MAC_TX_LATECOL_0, .name = "TxLateCol", },
- };
- 
-+/* Buffer Management Statistics (indexed by port) */
-+/* Switch Engine Statistics (indexed by port) */
-+static const struct lan9303_mib_desc lan9303_switch_mib[] = {
-+	{ .offset = LAN9303_BM_DRP_CNT_SRC_0, .name = "TotalDropped", },
-+	{ .offset = LAN9303_BM_RATE_DRP_CNT_SRC_0, .name = "LimitDropped", },
-+	{ .offset = LAN9303_SWE_FILTERED_CNT_SRC_0, .name = "SweFiltered", },
-+};
-+
-+/* TotalDropped:     This register counts the total number of packets dropped
-+ * by the Buffer Manager that were received on the given port. This count
-+ * includes packets dropped due to buffer space limits and ingress rate limit
-+ * discarding (Red and random Yellow dropping).
-+ *
-+ * LimitDropped:     This register counts the number of packets received on a
-+ * port that were dropped by the Buffer Manager solely due to ingress rate
-+ * limiting (discarding packets due to Red and random Yellow dropping).
-+ *
-+ * SweFiltered:      This counter contains the number of packets filtered by
-+ * the Switch Engine at ingress for a given port. The count includes packets
-+ * filtered due to broadcast throttling, but does not include packets dropped
-+ * due to ingress rate limiting.
-+ */
-+
- static void lan9303_get_strings(struct dsa_switch *ds, int port,
- 				u32 stringset, uint8_t *data)
- {
--	unsigned int u;
-+	unsigned int i, u;
- 
- 	if (stringset != ETH_SS_STATS)
- 		return;
-@@ -990,26 +1016,49 @@ static void lan9303_get_strings(struct dsa_switch *ds, int port,
- 		strncpy(data + u * ETH_GSTRING_LEN, lan9303_mib[u].name,
- 			ETH_GSTRING_LEN);
- 	}
-+	for (i = 0; i < ARRAY_SIZE(lan9303_switch_mib); i++) {
-+		strncpy(data + (u + i) * ETH_GSTRING_LEN,
-+			lan9303_switch_mib[i].name, ETH_GSTRING_LEN);
-+	}
- }
- 
- static void lan9303_get_ethtool_stats(struct dsa_switch *ds, int port,
- 				      uint64_t *data)
- {
- 	struct lan9303 *chip = ds->priv;
--	unsigned int u;
-+	unsigned int i, u;
- 
- 	for (u = 0; u < ARRAY_SIZE(lan9303_mib); u++) {
- 		u32 reg;
- 		int ret;
- 
-+		/* Read Port-based MIB stats. */
- 		ret = lan9303_read_switch_port(
- 			chip, port, lan9303_mib[u].offset, &reg);
- 
--		if (ret)
-+		if (ret) {
- 			dev_warn(chip->dev, "Reading status port %d reg %u failed\n",
- 				 port, lan9303_mib[u].offset);
-+			reg = 0;
-+		}
- 		data[u] = reg;
- 	}
-+	for (i = 0; i < ARRAY_SIZE(lan9303_switch_mib); i++) {
-+		u32 reg;
-+		int ret;
-+
-+		/* Read Switch stats indexed by port. */
-+		ret = lan9303_read_switch_reg(chip,
-+					      (lan9303_switch_mib[i].offset +
-+					       port), &reg);
-+
-+		if (ret) {
-+			dev_warn(chip->dev, "Reading status port %d reg %u failed\n",
-+				 port, lan9303_switch_mib[i].offset + port);
-+			reg = 0;
-+		}
-+		data[i + u] = reg;
-+	}
- }
- 
- static int lan9303_get_sset_count(struct dsa_switch *ds, int port, int sset)
-@@ -1017,7 +1066,7 @@ static int lan9303_get_sset_count(struct dsa_switch *ds, int port, int sset)
- 	if (sset != ETH_SS_STATS)
- 		return 0;
- 
--	return ARRAY_SIZE(lan9303_mib);
-+	return ARRAY_SIZE(lan9303_mib) + ARRAY_SIZE(lan9303_switch_mib);
- }
- 
- static int lan9303_phy_read(struct dsa_switch *ds, int phy, int regnum)
+Changes since v2:
+ *Removed use of regmap in favor of __iomem
+ *Updated description on yaml documentation
+ *Simplified commit description on sysfs-class-hwmon
+ *Removed use of dev and hwmon_dev from drvdata structure
+ *Fixed missing breaks in switch statements
+ *Added check for pwm values less than 0
+ *Removed regmap and slab header file includes
+
+Changes since v1:
+
+*Renamed fn2reg to fn2 in dtsi file and documentation
+*Renamed plreg to pl in dtsi file and documentation
+*Renamed fanctrl to fan-controller in dtsi file and documentation
+*Adjusted base register range for fan ctrl in dtsi
+*Changed commit description on fan-ctrl device-tree binding
+*Changed register description on fan-ctrl device-tree binding
+*Changed number of supported fans from 16 to 8 in driver code and
+ documentation
+*Modified commit description of fan code
+*Removed support for fan[0-15]_input
+*Removed PWM defines in driver code
+*Added gxp-fan-ctrl to hwmon's index.rst
+*Removed mutex in driver code
+*Added fan_enable support in fan code and documentation
+*Fixed comment in driver code presents -> present
+*Removed unecessary include files in fan code
+*Added comments to describe what power state is and
+ calculations for accessing plreg in fan code
+*Removed use of variable offsets in fan code
+*Fixed GPL header in fan code
+*Changed module description for fan controller
+*Added kfree in case of failure to initialize driver
+*Added missing yaml file to MAINTAINERS*** SUBJECT HERE ***
+
+Nick Hawkins (6):
+  hwmon: (gxp-fan-ctrl) Add GXP fan controller
+  ABI: sysfs-class-hwmon: add a description for fanY_fault
+  dt-bindings: hwmon: Add hpe,gxp-fan-ctrl
+  ARM: dts: add GXP Support for fans and SPI
+  ARM: multi_v7_defconfig: Add GXP Fan and SPI support
+  MAINTAINERS: add gxp fan controller and documents
+
+ Documentation/ABI/testing/sysfs-class-hwmon   |   9 +
+ .../bindings/hwmon/hpe,gxp-fan-ctrl.yaml      |  45 ++++
+ Documentation/hwmon/gxp-fan-ctrl.rst          |  28 ++
+ Documentation/hwmon/index.rst                 |   1 +
+ MAINTAINERS                                   |   3 +
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      |  58 ++++
+ arch/arm/boot/dts/hpe-gxp.dtsi                |  64 +++--
+ arch/arm/configs/multi_v7_defconfig           |   2 +
+ drivers/hwmon/Kconfig                         |   9 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/gxp-fan-ctrl.c                  | 254 ++++++++++++++++++
+ 11 files changed, 455 insertions(+), 19 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
+ create mode 100644 Documentation/hwmon/gxp-fan-ctrl.rst
+ create mode 100644 drivers/hwmon/gxp-fan-ctrl.c
+
 -- 
 2.17.1
 
