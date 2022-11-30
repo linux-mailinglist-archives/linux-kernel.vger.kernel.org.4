@@ -2,166 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 400BC63D37E
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:35:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D59B63D384
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234820AbiK3KfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 05:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36328 "EHLO
+        id S235291AbiK3KhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 05:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiK3KfT (ORCPT
+        with ESMTP id S229457AbiK3KhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 05:35:19 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9744645A33;
-        Wed, 30 Nov 2022 02:35:16 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 30 Nov 2022 05:37:19 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D6E45EDD
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:37:18 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 20D3421B12;
+        Wed, 30 Nov 2022 10:37:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669804637; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=shiALCOBs6Gr0Fj6n/xwDyUCSQqGUoGgam4so5jJ91A=;
+        b=PiD8Bvnvc7HUJgEHthVGkG1yYFDPSVdhAXH8A36YGgcZV/S0jz3gMlUmHW8RCqU7l0nxax
+        XPa0nzmB/wlWxO+yyTdcZ9hzmW64ul0dzCMVSipGEG/hdRZuKUofBzMLHWhj85GIClMByJ
+        5QlBNdE/eRmsdWjta1RfzwCrZXFaYLU=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMbF95Gf9z4wgn;
-        Wed, 30 Nov 2022 21:35:09 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1669804512;
-        bh=2MrGuwIIFFf8mJjgY+3KK6RoTtnWaC4YdC9C/t0dJp8=;
-        h=From:To:Subject:In-Reply-To:References:Date:From;
-        b=MZz6Vyz4jl/7be4CLSCqS1NokHNG94MkNHF4tEP8RWNQrNXtBfIMQBqudMSGwo8mg
-         3oZqIZ8CQubtYrcKyhl7S+v8fgJNf+NrF6aRMcBl3DcSPDjltNLEUXP7UaB1+jsI5e
-         bdTkVOO6uRsI+gpCJvN7HXYDsaXKrKE631J7LpxPvOTEyPvfWKuP0cEoI+t5eOlPCz
-         clndMy9QGm0t/VEirfX0Ru7fVj3ZxNkeUgnRQIRB8DAE8p2PXlcJM5A9xKJvAnmiQN
-         b4dIKQvOE8GAlenAjw76sz6bkv615PzP58HtJ7hJz9AWL3BIVuI75EX3alww0GjANO
-         UMkmfYx8b1rzg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     syzbot <syzbot+adec8406ad17413d4c06@syzkaller.appspotmail.com>,
-        christophe.leroy@csgroup.eu, clm@fb.com, dsterba@suse.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, npiggin@gmail.com, shuah@kernel.org,
-        syzkaller-bugs@googlegroups.com, ye.xingchen@zte.com.cn
-Subject: Re: [syzbot] WARNING in btrfs_free_reserved_data_space_noquota
-In-Reply-To: <000000000000fac82605ee97fb72@google.com>
-References: <000000000000fac82605ee97fb72@google.com>
-Date:   Wed, 30 Nov 2022 21:35:09 +1100
-Message-ID: <87bkoobuhu.fsf@mpe.ellerman.id.au>
+        by relay2.suse.de (Postfix) with ESMTPS id EB8422C149;
+        Wed, 30 Nov 2022 10:37:16 +0000 (UTC)
+Date:   Wed, 30 Nov 2022 11:37:16 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     paulmck@kernel.org, Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: next-20221122: tinyconfig: ppc n s390:
+ kernel/printk/printk.c:95:1: error: type specifier missing, defaults to
+ 'int'; ISO C99 and later do not support implicit int
+ [-Werror,-Wimplicit-int]
+Message-ID: <Y4cyXLfpTXRwOsof@alley>
+References: <CA+G9fYvCWwndXdsvuW7iJ25wgfN6_iMY-OC_z6ufSwiJkzFFMw@mail.gmail.com>
+ <87o7szoyij.fsf@jogness.linutronix.de>
+ <20221122144839.GI4001@paulmck-ThinkPad-P17-Gen-1>
+ <87leo3ovpw.fsf@jogness.linutronix.de>
+ <Y3zw7nv5KJ32P4FG@alley>
+ <20221122220053.GO4001@paulmck-ThinkPad-P17-Gen-1>
+ <87wn7m7fas.fsf@jogness.linutronix.de>
+ <20221122234222.GQ4001@paulmck-ThinkPad-P17-Gen-1>
+ <20221130001834.GA552288@paulmck-ThinkPad-P17-Gen-1>
+ <877czcx1ph.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877czcx1ph.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot <syzbot+adec8406ad17413d4c06@syzkaller.appspotmail.com> writes:
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    b7b275e60bcd Linux 6.1-rc7
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=158a7b73880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
-> dashboard link: https://syzkaller.appspot.com/bug?extid=adec8406ad17413d4c06
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=169ccb75880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17bf7153880000
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/525233126d34/disk-b7b275e6.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/e8299bf41400/vmlinux-b7b275e6.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/eebf691dbf6f/bzImage-b7b275e6.xz
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/5423c2d2ad62/mount_0.gz
->
-> The issue was bisected to:
->
-> commit c814bf958926ff45a9c1e899bd001006ab6cfbae
-> Author: ye xingchen <ye.xingchen@zte.com.cn>
-> Date:   Tue Aug 16 10:51:06 2022 +0000
->
->     powerpc/selftests: Use timersub() for gettimeofday()
+On Wed 2022-11-30 09:59:46, John Ogness wrote:
+> Hi Paul,
+> 
+> On 2022-11-29, "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > And this seems have avoided breaking things, so I moved it on top of
+> > the earlier srcunmisafe.2022.11.09a stack with a new
+> > srcunmisafe.2022.11.29a branch name.
+> >
+> > If you need me to, I can push this into the upcoming merge window.  Or
+> > you could rebase on top of it, so that when the printk() series goes
+> > in, this commit will come along for the ride.
+> 
+> It would be great if the series could land in linux-next, to give any
+> other issues with the series a chance to show up.
+> 
+> Also, since the series is relatively significant, it would probably be
+> better if it was pushed into the 6.2 merge window by you. Petr will need
+> to make sure the printk series for the merge window is properly rebased
+> for it.
 
-That can't be right, that patch only touches
-tools/testing/selftests/powerpc/benchmarks/gettimeofday.c which isn't
-built into vmlinux - and definitely not for an x86 build.
+I have rebased the branch rework/console-list-lock in printk/linux.git
+on top of the new srcunmisafe.2022.11.29a.
 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=118c3d03880000
+It means that the changes will be part of the pull request from
+the printk tree.
 
-This says:
-  Reproducer flagged being flaky
+Anyway, it would be nice if Paul adds this branch into the pull request
+for RCU tree as well. Then we could both send pull request soon
+and it will not matter which one will be handled first.
 
-AFAICS there isn't a syzbot command to ask for a new bisection, so
-someone will have to do it manually.
+Does it make any sense, please?
 
-cheers
+I have never done it this way before. The motivation is to allow
+sending both pull requests soon. Linus likes early pull requests.
+The fact that it will go also via RCU tree would make it clear
+that Paul wanted to send it in this form. Or is it a bad idea?
+Do I over-complicate it?
 
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=138c3d03880000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=158c3d03880000
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+adec8406ad17413d4c06@syzkaller.appspotmail.com
-> Fixes: c814bf958926 ("powerpc/selftests: Use timersub() for gettimeofday()")
->
-> RDX: 0000000000000001 RSI: 0000000020000280 RDI: 0000000000000005
-> RBP: 00007ffd32e91c70 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000008000000 R11: 0000000000000246 R12: 0000000000000006
-> R13: 00007ffd32e91cb0 R14: 00007ffd32e91c90 R15: 0000000000000006
->  </TASK>
-> ------------[ cut here ]------------
-> WARNING: CPU: 1 PID: 3764 at fs/btrfs/space-info.h:122 btrfs_space_info_free_bytes_may_use fs/btrfs/space-info.h:154 [inline]
-> WARNING: CPU: 1 PID: 3764 at fs/btrfs/space-info.h:122 btrfs_free_reserved_data_space_noquota+0x219/0x2b0 fs/btrfs/delalloc-space.c:179
-> Modules linked in:
-> CPU: 1 PID: 3764 Comm: syz-executor759 Not tainted 6.1.0-rc7-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> RIP: 0010:btrfs_space_info_update_bytes_may_use fs/btrfs/space-info.h:122 [inline]
-> RIP: 0010:btrfs_space_info_free_bytes_may_use fs/btrfs/space-info.h:154 [inline]
-> RIP: 0010:btrfs_free_reserved_data_space_noquota+0x219/0x2b0 fs/btrfs/delalloc-space.c:179
-> Code: 2f 00 74 08 4c 89 ef e8 b5 98 32 fe 49 8b 5d 00 48 89 df 4c 8b 74 24 08 4c 89 f6 e8 21 81 de fd 4c 39 f3 73 16 e8 d7 7e de fd <0f> 0b 31 db 4c 8b 34 24 41 80 3c 2f 00 75 8c eb 92 e8 c1 7e de fd
-> RSP: 0018:ffffc9000443f410 EFLAGS: 00010293
-> RAX: ffffffff83ac1919 RBX: 00000000005cb000 RCX: ffff888027989d40
-> RDX: 0000000000000000 RSI: 0000000000800000 RDI: 00000000005cb000
-> RBP: dffffc0000000000 R08: ffffffff83ac190f R09: fffffbfff1cebe0e
-> R10: fffffbfff1cebe0e R11: 1ffffffff1cebe0d R12: ffff8880774f3800
-> R13: ffff8880774f3860 R14: 0000000000800000 R15: 1ffff1100ee9e70c
-> FS:  0000555555aaa300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f0d98f20140 CR3: 0000000025ccf000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  btrfs_free_reserved_data_space+0x9d/0xd0 fs/btrfs/delalloc-space.c:199
->  btrfs_dio_iomap_begin+0x8f7/0x1070 fs/btrfs/inode.c:7762
->  iomap_iter+0x606/0x8a0 fs/iomap/iter.c:74
->  __iomap_dio_rw+0xd91/0x20d0 fs/iomap/direct-io.c:601
->  btrfs_dio_write+0x9c/0xe0 fs/btrfs/inode.c:8094
->  btrfs_direct_write fs/btrfs/file.c:1835 [inline]
->  btrfs_do_write_iter+0x871/0x1260 fs/btrfs/file.c:1980
->  do_iter_write+0x6c2/0xc20 fs/read_write.c:861
->  vfs_writev fs/read_write.c:934 [inline]
->  do_pwritev+0x200/0x350 fs/read_write.c:1031
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f0d98ea8ea9
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffd32e91c38 EFLAGS: 00000246 ORIG_RAX: 0000000000000148
-> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f0d98ea8ea9
-> RDX: 0000000000000001 RSI: 0000000020000280 RDI: 0000000000000005
-> RBP: 00007ffd32e91c70 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000008000000 R11: 0000000000000246 R12: 0000000000000006
-> R13: 00007ffd32e91cb0 R14: 00007ffd32e91c90 R15: 0000000000000006
->  </TASK>
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+Best Regards,
+Petr
