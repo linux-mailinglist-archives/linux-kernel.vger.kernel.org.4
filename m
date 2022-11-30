@@ -2,126 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171AC63D4F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:51:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA1363D4FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiK3Lvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:51:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42446 "EHLO
+        id S233860AbiK3LwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:52:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234475AbiK3LvQ (ORCPT
+        with ESMTP id S233173AbiK3Lvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:51:16 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA597B4E9;
-        Wed, 30 Nov 2022 03:51:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=SeprZaUCrg6YMDUQVxQrpsNw17qVCxSs694K/ikvslE=; b=DnY+sP3ETdi6+M6MeNzJpuGBM6
-        3Q6mYmwux7sT7CkxU9xl+BfJZD/l/CWSP7TJ89V45p9uBVpPkx93KWoG0cc3IYXfqmRGy6/3sjbb2
-        78COo1ggeQOWJ9vPx3R3AMbUuwvnNPNDg8DA8Wn0cCOnN3ofoQnrNeLi2AjJnyFeBHVx8YX2IsuR+
-        3P1WvrTUBxgG1MZWTnEC21nXmOBjnawcYVt7AfFcfeJ1MJ242SqdZYl8tm1PRWZQbayVKpSx/BaSs
-        y2BgKvCaFE3O/hRa66dxpbjWwiBKoPLlN/07nYrBtiDMqM2mwRX64X7uXf/sM9qJS6/C7lpYN12V0
-        t/t3DfAA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35498)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1p0Lc5-0001fp-7X; Wed, 30 Nov 2022 11:50:53 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1p0Lc2-0002TM-C2; Wed, 30 Nov 2022 11:50:50 +0000
-Date:   Wed, 30 Nov 2022 11:50:50 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Clark Wang <xiaoning.wang@nxp.com>
-Cc:     "peppe.cavallaro@st.com" <peppe.cavallaro@st.com>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "joabreu@synopsys.com" <joabreu@synopsys.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] net: phylink: add sync flag mac_ready to fix resume
- issue with WoL enabled
-Message-ID: <Y4dDmvOQwuIYxgro@shell.armlinux.org.uk>
-References: <20221130111148.1064475-1-xiaoning.wang@nxp.com>
- <20221130111148.1064475-2-xiaoning.wang@nxp.com>
- <Y4c9PlfEC17pVE08@shell.armlinux.org.uk>
- <HE1PR0402MB2939242DB6E909B4A62109E5F3159@HE1PR0402MB2939.eurprd04.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Wed, 30 Nov 2022 06:51:45 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A993B3E0B9;
+        Wed, 30 Nov 2022 03:51:44 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AUA0gS0019088;
+        Wed, 30 Nov 2022 11:51:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=oIHKq/myA7HLr2985sZUEcGP0oT5nkkNhnQnMwS55Ac=;
+ b=RSIcjdm2zOSFHW+pCV0v/W0DFmpQynIcT/52Y1kGidbdEGCKhhZtWcl8WLyoNNdkVafC
+ D3TU9F7SL1EO5wIMypbKwFSTU+V0D5C0PYDf0lfaYD41W3K16NFa3mJxr8WYZsAqrUWZ
+ NewyGqpjkVnMCb5RZbbz7IdBZvRQ4m2CtfaYvD9EV41BnFQxxTsGE6yK2H+8TSh/tYXz
+ ZYogZMdp8iLy5tsrr6dwugauaOoG687WFJB3pZsvje8FpQ27YkKD9D+xQOPL8Ykoxh3k
+ bPFNAIwPpLFh1VK/nhGEq3xnIB1c9Hjcu3Gyva7t22kUj8M1kRm5xwbR+6mx+9lCUhOk Zw== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m60wdggp9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Nov 2022 11:51:14 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AUBbWXn025176;
+        Wed, 30 Nov 2022 11:51:13 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3m3ae944h9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Nov 2022 11:51:12 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AUBpr034522564
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Nov 2022 11:51:53 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B7FA34203F;
+        Wed, 30 Nov 2022 11:51:10 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E4ECD42041;
+        Wed, 30 Nov 2022 11:51:08 +0000 (GMT)
+Received: from [9.109.198.140] (unknown [9.109.198.140])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 30 Nov 2022 11:51:08 +0000 (GMT)
+Message-ID: <74552090-c654-5356-773d-47ead2d63ab2@linux.ibm.com>
+Date:   Wed, 30 Nov 2022 17:21:06 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: linux-next: build warnings after merge of the powerpc-objtool
+ tree
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        "peterz@infradead.org" <peterz@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+References: <20221125143012.6426c2b9@canb.auug.org.au>
+ <6cdad32e-782d-5bb5-f7e9-a44fb0b6444d@linux.ibm.com>
+ <c0ed0d60-6014-4c5f-e610-b4d3bd9e9e33@csgroup.eu>
+From:   Sathvika Vasireddy <sv@linux.ibm.com>
+In-Reply-To: <c0ed0d60-6014-4c5f-e610-b4d3bd9e9e33@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: sq6LEsvmOJe7ooOxwtgqhSbDP5-tpx_V
+X-Proofpoint-ORIG-GUID: sq6LEsvmOJe7ooOxwtgqhSbDP5-tpx_V
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <HE1PR0402MB2939242DB6E909B4A62109E5F3159@HE1PR0402MB2939.eurprd04.prod.outlook.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-30_04,2022-11-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ priorityscore=1501 mlxscore=0 impostorscore=0 mlxlogscore=999
+ lowpriorityscore=0 suspectscore=0 clxscore=1015 phishscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211300083
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 11:32:09AM +0000, Clark Wang wrote:
-> Hi Russell,
-> 
-> > -----Original Message-----
-> > From: Russell King <linux@armlinux.org.uk>
-> > Sent: 2022年11月30日 19:24
-> > To: Clark Wang <xiaoning.wang@nxp.com>
-> > Cc: peppe.cavallaro@st.com; alexandre.torgue@foss.st.com;
-> > joabreu@synopsys.com; davem@davemloft.net; edumazet@google.com;
-> > kuba@kernel.org; pabeni@redhat.com; mcoquelin.stm32@gmail.com;
-> > andrew@lunn.ch; hkallweit1@gmail.com; netdev@vger.kernel.org;
-> > linux-stm32@st-md-mailman.stormreply.com;
-> > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH 1/2] net: phylink: add sync flag mac_ready to fix resume
-> > issue with WoL enabled
-> > 
-> > On Wed, Nov 30, 2022 at 07:11:47PM +0800, Clark Wang wrote:
-> > > Issue we met:
-> > > On some platforms, mac cannot work after resumed from the suspend with
-> > > WoL enabled.
-> > >
-> > > The cause of the issue:
-> > > 1. phylink_resolve() is in a workqueue which will not be executed immediately.
-> > >    This is the call sequence:
-> > >        phylink_resolve()->phylink_link_up()->pl->mac_ops->mac_link_up()
-> > >    For stmmac driver, mac_link_up() will set the correct speed/duplex...
-> > >    values which are from link_state.
-> > > 2. In stmmac_resume(), it will call stmmac_hw_setup() after called the
-> > >    phylink_resume(). stmmac_core_init() is called in function
-> > > stmmac_hw_setup(),
-> > 
-> > ... and that is where the problem is. Don't call phylink_resume() before your
-> > hardware is ready to see a link-up event.
-> 
-> Thank you very much for your reply!
-> 
-> You are right.
-> 
-> However, stmmac requires RXC to have a clock input when performing a reset(in stmmac_hw_setup()). On our board, RXC is provided by the phy.
-> 
-> In WoL mode, this is not a problem, because the phy will not be down when suspend. RXC will keep output. But in normal suspend(without WoL), the phy will be down, which does not guarantee the output of the RXC of the phy. Therefore, the previous code will call phylink_resume() before stmmac_hw_setup().
 
-I think we need phylink_phy_resume() which stmmac can use to resume the
-PHY without resuming phylink, assuming that will output the RXC. Which
-PHY driver(s) are used with stmmac?
+On 29/11/22 20:58, Christophe Leroy wrote:
+>
+> Le 29/11/2022 à 16:13, Sathvika Vasireddy a écrit :
+>> Hi all,
+>>
+>> On 25/11/22 09:00, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> After merging the powerpc-objtool tree, today's linux-next build (powerpc
+>>> pseries_le_defconfig) produced these warnings:
+>>>
+>>> arch/powerpc/kernel/head_64.o: warning: objtool: end_first_256B():
+>>> can't find starting instruction
+>>> arch/powerpc/kernel/optprobes_head.o: warning: objtool:
+>>> optprobe_template_end(): can't find starting instruction
+>>>
+>>> I have no idea what started this (they may have been there yesterday).
+>> I was able to recreate the above mentioned warnings with
+>> pseries_le_defconfig and powernv_defconfig. The regression report also
+>> mentions a warning
+>> (https://lore.kernel.org/oe-kbuild-all/202211282102.QUr7HHrW-lkp@intel.com/) seen with arch/powerpc/kernel/kvm_emul.S assembly file.
+>>
+>>    [1] arch/powerpc/kernel/optprobes_head.o: warning: objtool:
+>> optprobe_template_end(): can't find starting instruction
+>>    [2] arch/powerpc/kernel/kvm_emul.o: warning: objtool:
+>> kvm_template_end(): can't find starting instruction
+>>    [3] arch/powerpc/kernel/head_64.o: warning: objtool: end_first_256B():
+>> can't find starting instruction
+>>
+>> The warnings [1] and [2] go away after adding 'nop' instruction. Below
+>> diff fixes it for me:
+> You have to add NOPs just because those labels are at the end of the
+> files. That's a bit odd.
+> I think either we are missing some kind of flagging for the symbols, or
+> objtool has a bug. In both cases, I'm not sure adding an artificial
+> 'nop' is the solution. At least there should be a big hammer warning
+> explaining why.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+I don't see these warnings with powerpc/topic/objtool branch. However, 
+they are seen with linux-next master branch.
+Commit dbcdbdfdf137b49144204571f1a5e5dc01b8aaad objtool: Rework 
+instruction -> symbol mapping in linux-next is resulting in objtool 
+can't find starting instruction warnings on powerpc.
+
+Reverting this particular hunk (pasted below), resolves it and we don't 
+see the problem anymore.
+
+@@ -427,7 +427,10 @@ static int decode_instructions(struct objtool_file 
+*file)
+                 }
+
+                 list_for_each_entry(func, &sec->symbol_list, list) {
+-                       if (func->type != STT_FUNC || func->alias != func)
++                       if (func->type != STT_NOTYPE && func->type != 
+STT_FUNC)
++                               continue;
++
++                       if (func->return_thunk || func->alias != func)
+                                 continue;
+
+                         if (!find_insn(file, sec, func->offset)) {
+
+Peterz, can we ignore STT_NOTYPE symbols?
+
+>> diff --git a/arch/powerpc/kernel/optprobes_head.S
+>> b/arch/powerpc/kernel/optprobes_head.S
+>> index cd4e7bc32609..ea4e3bd82f4f 100644
+>> --- a/arch/powerpc/kernel/optprobes_head.S
+>> +++ b/arch/powerpc/kernel/optprobes_head.S
+>> @@ -134,3 +134,4 @@ optprobe_template_ret:
+>>
+>>           .global optprobe_template_end
+>>    optprobe_template_end:
+>> +       nop
+>>
+>> diff --git a/arch/powerpc/kernel/kvm_emul.S
+>> b/arch/powerpc/kernel/kvm_emul.S
+>> index 7af6f8b50c5d..41fd664e3ba0 100644
+>> --- a/arch/powerpc/kernel/kvm_emul.S
+>> +++ b/arch/powerpc/kernel/kvm_emul.S
+>> @@ -352,3 +352,4 @@ kvm_tmp_end:
+>>
+>>    .global kvm_template_end
+>>    kvm_template_end:
+>> +       nop
+>>
+>> For warning [3], objtool is throwing can't find starting instruction
+>> warning because it finds that the symbol (end_first_256B) is zero sized,
+>> and such symbols are not added to the rbtree. I tried to fix it by
+>> adding a 'nop' instruction (pasted diff below), but that resulted in a
+>> kernel build failure.
+> What's the failure ?
+>
+>
+>> diff --git a/arch/powerpc/kernel/head_64.S b/arch/powerpc/kernel/head_64.S
+>> index 874efd25cc45..d48850fe159f 100644
+>> --- a/arch/powerpc/kernel/head_64.S
+>> +++ b/arch/powerpc/kernel/head_64.S
+>> @@ -192,6 +192,7 @@ __secondary_hold:
+>>           EMIT_BUG_ENTRY 0b, __FILE__, __LINE__, 0
+>>    #endif
+>>    CLOSE_FIXED_SECTION(first_256B)
+>> +nop
+>>
+>>    /*
+>>     * On server, we include the exception vectors code here as it
+>>
+>> diff --git a/arch/powerpc/kernel/exceptions-64s.S
+>> b/arch/powerpc/kernel/exceptions-64s.S
+>> index 26f8fef53c72..f7517d443e9b 100644
+>> --- a/arch/powerpc/kernel/exceptions-64s.S
+>> +++ b/arch/powerpc/kernel/exceptions-64s.S
+>> @@ -3104,9 +3104,13 @@ __end_interrupts:
+>>    DEFINE_FIXED_SYMBOL(__end_interrupts, virt_trampolines)
+>>
+>>    CLOSE_FIXED_SECTION(real_vectors);
+>> +nop
+>>    CLOSE_FIXED_SECTION(real_trampolines);
+>> +nop
+>>    CLOSE_FIXED_SECTION(virt_vectors);
+>> +nop
+>>    CLOSE_FIXED_SECTION(virt_trampolines);
+>> +nop
+> What are the NOPs after the CLOSE_FIXED_SECTION() ? You don't explain
+> them, and I can't see any related warning in the warnings you show.
+>
+>
+After fixing arch/powerpc/kernel/head_64.o: warning: objtool: 
+end_first_256B(): can't find starting instruction warning, objtool 
+started showing more warnings in the same file.
+Below is the list of warnings:
+  arch/powerpc/kernel/head_64.o: warning: objtool: end_real_vectors(): 
+can't find starting instruction
+  arch/powerpc/kernel/head_64.o: warning: objtool: 
+end_real_trampolines(): can't find starting instruction
+  arch/powerpc/kernel/head_64.o: warning: objtool: end_virt_vectors(): 
+can't find starting instruction
+  arch/powerpc/kernel/head_64.o: warning: objtool: 
+end_virt_trampolines(): can't find starting instruction
+
+
+Thanks,
+Sathvika
