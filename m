@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90D9863E576
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:30:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF5763E574
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiK3XaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 18:30:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49220 "EHLO
+        id S229736AbiK3X3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:29:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiK3X3m (ORCPT
+        with ESMTP id S229971AbiK3X30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 18:29:42 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6C82BD5;
-        Wed, 30 Nov 2022 15:20:05 -0800 (PST)
-Date:   Wed, 30 Nov 2022 15:50:55 +0100
+        Wed, 30 Nov 2022 18:29:26 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7D9AD985;
+        Wed, 30 Nov 2022 15:19:46 -0800 (PST)
+Date:   Wed, 30 Nov 2022 15:56:33 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
         s=mail; t=1669850360;
-        bh=AOooFKU7NIxLs7yLATARLHPgA86wAoxNAcbcgPZM9II=;
+        bh=lMd/Ab2MOUBi5t1VUZde5XMv406zWEvfnprZnZ23DB0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YZ7g80E1uS2FjZUXZepWD0GWT2LswMhWGPDrY6iItcUht2OhtmIjdSMLA3N8pxqVI
-         Jp2ozhHPa4vOeklRuAX4zU13ndJldrhTeeCQg0vls8qIhNC4W5X8/y94LXJNZcBS/U
-         vnO0viZBlBj8/Td4MeF4UtHKFBIWWcIWK6Zik19g=
+        b=KK36kGVJJsHbA+RE+PK9eplFpMUZn84XFvP0AWuGpZMiaLLFM8PVqHOEclWBeXttd
+         iSjdOeh2tvQc4VerOM0mv7ZqcHkjvryo4tUfbvGNuCKrzIrTmxa6zM6nCl7hTMDjrc
+         0PICaw9/tMrR4pbEtxIUoeIfHLgG/+I3COMhpTLA=
 From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 To:     Petr Mladek <pmladek@suse.com>
-Cc:     Joe Perches <joe@perches.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
         linux-pm@vger.kernel.org,
         Sergey Senozhatsky <senozhatsky@chromium.org>,
         Andy Whitcroft <apw@canonical.com>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
         Dwaipayan Ray <dwaipayanray1@gmail.com>,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>
 Subject: Re: [PATCH v2 1/3] printk: introduce new macros pr_<level>_cont()
-Message-ID: <42950773-aac6-4ec6-8cbe-543489afe316@t-8ch.de>
+Message-ID: <6bc60e00-30b8-40ff-81f4-e7973c701ad4@t-8ch.de>
 References: <20221125190948.2062-1-linux@weissschuh.net>
  <20221125190948.2062-2-linux@weissschuh.net>
- <1fb146231e1810b4c9923f384afa166e07e7f253.camel@perches.com>
- <cf45b62e-6248-42f3-807f-5df0954437e0@t-8ch.de>
- <Y4dhs1G3mcX/YraJ@alley>
+ <Y4dndyIiosT7l4RG@alley>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y4dhs1G3mcX/YraJ@alley>
+In-Reply-To: <Y4dndyIiosT7l4RG@alley>
 Jabber-ID: thomas@t-8ch.de
 X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
 X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
@@ -58,80 +56,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-30 14:59+0100, Petr Mladek wrote:
-> On Fri 2022-11-25 21:33:40, Thomas Weißschuh wrote:
->> On 2022-11-25 12:18-0800, Joe Perches wrote:
->>> On Fri, 2022-11-25 at 20:09 +0100, Thomas Weißschuh wrote:
->>>> These macros emit continuation messages with explicit levels.
->>>> In case the continuation is logged separately from the original message
->>>> it will retain its level instead of falling back to KERN_DEFAULT.
->>>> 
->>>> This remedies the issue that logs filtered by level contain stray
->>>> continuation messages without context.
->>>> 
->>>> --- a/include/linux/printk.h
->>>> +++ b/include/linux/printk.h
->>>> @@ -701,6 +703,27 @@ do {									\
->>>>  	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
->>>>  #endif
->>>>  
->>>> +/*
->>>> + * Print a continuation message with level. In case the continuation is split
->>>> + * from the main message it preserves the level.
->>>> + */
->>>> +
->>>> +#define pr_emerg_cont(fmt, ...)					\
->>>> +	printk(KERN_EMERG KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
->>> 
->>> Aren't this rather backwards?
->>> KERN_CONT KERN_<LEVEL> seems to make more sense to me.
+On 2022-11-30 15:23+0100, Petr Mladek wrote:
+> On Fri 2022-11-25 20:09:46, Thomas Weißschuh wrote:
+>> These macros emit continuation messages with explicit levels.
+>> In case the continuation is logged separately from the original message
+>> it will retain its level instead of falling back to KERN_DEFAULT.
 >> 
->> If nobody else disagrees I'll do this for v3.
+>> This remedies the issue that logs filtered by level contain stray
+>> continuation messages without context.
+>> 
+>> Suggested-by: Petr Mladek <pmladek@suse.com>
+>> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+>> ---
+>>  include/linux/printk.h | 23 +++++++++++++++++++++++
+>>  1 file changed, 23 insertions(+)
+>> 
+>> diff --git a/include/linux/printk.h b/include/linux/printk.h
+>> index 8c81806c2e99..8f564c38f121 100644
+>> --- a/include/linux/printk.h
+>> +++ b/include/linux/printk.h
+>> @@ -537,6 +537,8 @@ struct pi_entry {
+>>   * This macro expands to a printk with KERN_CONT loglevel. It should only be
+>>   * used when continuing a log message with no newline ('\n') enclosed. Otherwise
+>>   * it defaults back to KERN_DEFAULT loglevel.
+>> + *
+>> + * Use the dedicated pr_<level>_cont() macros instead.
+>>   */
+>>  #define pr_cont(fmt, ...) \
+>>  	printk(KERN_CONT fmt, ##__VA_ARGS__)
+>> @@ -701,6 +703,27 @@ do {									\
+>>  	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+>>  #endif
+>>  
+>> +/*
+>> + * Print a continuation message with level. In case the continuation is split
+>> + * from the main message it preserves the level.
+>> + */
+>> +
+>> +#define pr_emerg_cont(fmt, ...)					\
+>> +	printk(KERN_EMERG KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
+>> +#define pr_alert_cont(fmt, ...)					\
+>> +	printk(KERN_ALERT KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
+>> +#define pr_crit_cont(fmt, ...)					\
+>> +	printk(KERN_CRIT KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
+>> +#define pr_err_cont(fmt, ...)					\
+>> +	printk(KERN_ERR KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
+>> +#define pr_warn_cont(fmt, ...)					\
+>> +	printk(KERN_WARN KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
+>> +#define pr_notice_cont(fmt, ...)					\
+>> +	printk(KERN_NOTICE KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
+>> +#define pr_info_cont(fmt, ...)					\
+>> +	printk(KERN_INFO KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
+>> +/* no pr_debug_ratelimited, it doesn't make sense with CONFIG_DYNAMIC_DEBUG. */
 > 
-> I slightly prefer the way how it is now. IMHO, it makes it easier
-> to check the related levels in /sys/kernel/debug/printk/index/vmlinux [*]:
+> I guess that you wanted to write "pr_debug_cont".
+
+Indeed.
+
+> Also I am not sure what you mean with "doesn't make sense". IMHO, it
+> might  make sense. But it would be hard to use and error prone
+> with CONFIG_DYNAMIC_DEBUG.
 > 
-> <6> kernel/power/process.c:227 thaw_kernel_threads "Restarting kernel threads ... "
-> <6,c> kernel/power/process.c:218 thaw_processes "done.\n"
-> <6> kernel/power/process.c:197 thaw_processes "Restarting tasks ... "
-> <6,c> kernel/power/process.c:176 freeze_kernel_threads "\n"
-> <6,c> kernel/power/process.c:174 freeze_kernel_threads "done."
-> <6> kernel/power/process.c:169 freeze_kernel_threads "Freezing remaining freezable tasks ... "
-> <6,c> kernel/power/process.c:140 freeze_processes "\n"
-> <6,c> kernel/power/process.c:138 freeze_processes "done."
-> <6> kernel/power/process.c:133 freeze_processes "Freezing user space processes ... "
-> <6,c> kernel/power/process.c:105 try_to_freeze_tasks "(elapsed %d.%03d seconds) "
-
-I did not test it (will do so later) but it seems to me that the code in
-kernel/printk/index.c should do this correctly in either case. At least it
-tries to:
-
-if (flags & LOG_CONT) {
-	/*
-	 * LOGLEVEL_DEFAULT here means "use the same level as the
-	 * message we're continuing from", not the default message
-	 * loglevel, so don't display it as such.
-	 */
-	if (level == LOGLEVEL_DEFAULT)
-		seq_puts(s, "<c>");
-		else
-		seq_printf(s, "<%d,c>", level);
-	} else
-		seq_printf(s, "<%d>", level);
-	}
-}
-
-I'll try to validate it.
-
-If it doesn't work it may make more sense to fix the index file generation.
-What do you think
-
-> That said, I do not want to fight over it. It is hidden behind the
-> API. The only really visible place is the printk index.
+> And more importantly, it probably would not work properly. If I get
+> it corretly the dynamic debug messages are printed by the wrapper:
 > 
-> [*] The index is available only when CONFIG_PRINTK_INDEX is enabled.
+> void __dynamic_pr_debug(struct _ddebug *descriptor, const char *fmt, ...)
+> {
+> [...]
+> 	vaf.fmt = fmt;
+> 	vaf.va = &args;
 > 
-> Best Regards,
-> Petr
+> 	printk(KERN_DEBUG "%s%pV", dynamic_emit_prefix(descriptor, buf), &vaf);
+> [...]
+> 
+> This clearly does not support KERN_CONT in "fmt".
+
+Good point.
+
+My doubt was more that it would force users to know which message
+continuations belong together and always enable all of them together with
+dynamic debug.
+Which would be very errorprone and annoying to use.
+
+But if it doesn't work at all that's an even stronger point.
+
+> I suggest to either remove the comment completely. Or write something
+> like:
+> 
+> /* no pr_debug_cont(), can't be supported easily with CONFIG_DYNAMIC_DEBUG */
+
+What about:
+
+/* no pr_debug_cont(), it's errorprone to use
+ * and can't be supported easily with CONFIG_DYNAMIC_DEBUG */
 
 Thomas
