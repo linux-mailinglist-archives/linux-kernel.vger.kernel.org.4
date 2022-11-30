@@ -2,78 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BB763E0B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:26:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 286E463E0B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbiK3T0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 14:26:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40308 "EHLO
+        id S229608AbiK3T0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 14:26:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiK3T0S (ORCPT
+        with ESMTP id S229449AbiK3T0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 14:26:18 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31A355A8C
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:26:17 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id f2-20020a5ec602000000b006dc67829888so11986160iok.3
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:26:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mHDlPEbyxcL50hjC4RDuSLTtc0u9OjOuwet1Hn6ykis=;
-        b=MJP9WYSl2XOTRqM2iV6FduxyOIKT/XDNRWt1mr3HSj2nMFkm710JbEWgjMYRWHz8rM
-         YtSI0X5RLmPQQb9rdlXIR41aPFjSzc21ScXyi1rhF7BZ0rwpehjcwHggr+k56fOIaEE6
-         HRuUYDQFP/GB4g1eLfLzBTS9HpPSoCYEn93hvmXyMtOsAQTmvbEf/j2QSrpIQY/hyOiG
-         Z7XXZly8616Uo6TbR+6PnN1gFhVUOZKY8a0qGU5HRy96+CG54cYEPctyTGc5CD/f3i0K
-         HzNtVxHWahr5hLJHhDmI6ui01Roy7D5hetyw15aj0RIfnjFhZn5e9sccH+9wtvpWr3lA
-         QWHg==
-X-Gm-Message-State: ANoB5pmcRZ8LxQNB3BtJuM/wmELGVd404d3yUFA0WB3NgPWkOfdGXu3J
-        Q7NMf0sLmNMaoEL/c/IDqnckN5x+DX9/OLduQUeEBSKnGxgX
-X-Google-Smtp-Source: AA0mqf7soXd7jOnwY0B+aHPhvjOt3jilZIWveY+Dx3xEUYDRtEHyu3QDruNVzFgMvkQPltsZUlQsrtx/mYbGE4/QlCnQfhm945Lz
+        Wed, 30 Nov 2022 14:26:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82838565E
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:26:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 638D0B81CB8
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 19:26:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3069C433C1;
+        Wed, 30 Nov 2022 19:26:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669836398;
+        bh=5LR5nZNtSi/Kxu1y5TcusuYTtmflF/F58GD4wz8A6tU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SREZe5jdo0z5QVLSdrd5b0OVFXg61U4/Toe+uHLqAu5+dhjXGqEcvPpu5Bf5uzF2f
+         ejG8HkfnDf60Z5/pj8/h6WGr1ajfx6psmvzyv9J7XaH53zaa+ZDnVh8morJRd8r6Gj
+         qT9OPkWumBDYRPx1esRxs+bpOlnEsUGnsWTfzbRpeY3IinzZTKE1d09QKFdKWCAPNt
+         6ao2pdaLZSgdULhCDyCZWVKdw2nL2I7XPvHOT6MfwiG2fZjncbIadndltZhYrgOv1G
+         NsokxYq/ch394MEBS93KP2g/mpcWauv3KfJ7PTrWmLg6IKeUYOuR8rbHM0iDv57eFw
+         daF7L8MIHjN/A==
+From:   SeongJae Park <sj@kernel.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 08/11] mm/damon/sysfs-schemes: implement scheme filters
+Date:   Wed, 30 Nov 2022 19:26:36 +0000
+Message-Id: <20221130192636.116555-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221124212114.136863-9-sj@kernel.org>
+References: 
 MIME-Version: 1.0
-X-Received: by 2002:a92:db4b:0:b0:302:5575:9e46 with SMTP id
- w11-20020a92db4b000000b0030255759e46mr28390061ilq.41.1669836377119; Wed, 30
- Nov 2022 11:26:17 -0800 (PST)
-Date:   Wed, 30 Nov 2022 11:26:17 -0800
-In-Reply-To: <cd4158d0-bfc0-099c-c914-4889eaf95036@huawei.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001767a405eeb514eb@google.com>
-Subject: Re: [syzbot] INFO: task hung in gfs2_gl_hash_clear (3)
-From:   syzbot <syzbot+ed7d0f71a89e28557a77@syzkaller.appspotmail.com>
-To:     bobo.shaobowang@huawei.com, brauner@kernel.org, broonie@kernel.org,
-        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, liwei391@huawei.com,
-        madvenka@linux.microsoft.com, scott@os.amperecomputing.com,
-        syzkaller-bugs@googlegroups.com, will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, 24 Nov 2022 21:21:11 +0000 SeongJae Park <sj@kernel.org> wrote:
 
-syzbot tried to test the proposed patch but the build/boot failed:
+> Implement scheme filters functionality of DAMON sysfs interface by
+> making the code reads the values of files under the filter directories
+> and pass that to DAMON using DAMON kernel API.
+> 
+> Signed-off-by: SeongJae Park <sj@kernel.org>
+> ---
+>  mm/damon/sysfs-schemes.c | 85 +++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 84 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/damon/sysfs-schemes.c b/mm/damon/sysfs-schemes.c
+> index 7f2bab617156..6f014b328e6f 100644
+> --- a/mm/damon/sysfs-schemes.c
+> +++ b/mm/damon/sysfs-schemes.c
+[...]
+> +static int damon_sysfs_memcg_path_to_id(char *memcg_path, unsigned short *id)
+> +{
+> +	struct mem_cgroup *memcg;
+> +	char *path;
+> +
+> +	if (!memcg_path)
+> +		return -EINVAL;
+> +
+> +	path = kmalloc(sizeof(*path) * PATH_MAX, GFP_KERNEL);
+> +	if (!path)
+> +		return -ENOMEM;
+> +
+> +	for (memcg = mem_cgroup_iter(NULL, NULL, NULL); memcg;
+> +			memcg = mem_cgroup_iter(NULL, memcg, NULL)) {
+> +		if (damon_sysfs_memcg_path_eq(memcg, path, memcg_path)) {
+> +			*id = mem_cgroup_id(memcg);
 
-failed to apply patch:
-checking file fs/gfs2/super.c
-patch: **** unexpected end of file in patch
+Forgot mentioning this.  Removed memcgs can still be iterated, so this can
+result in getting id of already removed cgroup.  If the user input is valid but
+there is a removed memcg that has same path, this could be confused.
+
+Removed memcg would have id 0.  The next version of this will handle the case.
 
 
+Thanks,
+SJ
 
-Tested on:
-
-commit:         b7b275e6 Linux 6.1-rc7
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-dashboard link: https://syzkaller.appspot.com/bug?extid=ed7d0f71a89e28557a77
-compiler:       
-userspace arch: arm64
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1751c2bd880000
-
+> +			break;
+> +		}
+> +	}
+> +
+> +	kfree(path);
+> +	return 0;
+> +}
