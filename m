@@ -2,99 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13EBD63DD0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4CD63DD11
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:21:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbiK3SVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:21:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49592 "EHLO
+        id S230324AbiK3SVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:21:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbiK3SUt (ORCPT
+        with ESMTP id S230289AbiK3SUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 30 Nov 2022 13:20:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701B51AF21;
-        Wed, 30 Nov 2022 10:19:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E07D761D41;
-        Wed, 30 Nov 2022 18:19:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FF0DC433C1;
-        Wed, 30 Nov 2022 18:19:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669832357;
-        bh=bK39FsjBF/+0kLaurZ9wMrHdi5SfqFphkImLrVtOP4g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=OidmiENukGHG7vHWGYtvFXe2r/wPC9Zv30zcRkHTjouKPzQG5Q8x473R7wWNhRLiM
-         AFTzPSYCqspzwp1eZuNIGKDJGaTo5X+b2TV1Wv7gpEho5O37OlG20QMQE8FpxKzf1w
-         0YfBbSbNmqHeJAqgV6UaF0nkWnNf8vJ51QPjO6+l1hGgvQZPIhGFCbFooxk/vk0uoU
-         qpznDdSQ7N3JEvevhR+oO/7IN9n5o4SUGnN3UZQAB2zYfmZQPtNAncCdPIu10GSOXm
-         dbWtWeYjGr47IfW0ccoA6uy8k5XySa3AsdPfY2BLD9K6K6GnL9VnSvwSgvSZHiYmwy
-         MLNduUzDp7nIg==
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V4 0/3] Add osnoise/options options
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E0A8C46A;
+        Wed, 30 Nov 2022 10:19:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=4c09+CUgf/2EPKD4iaGq2aTS0q8Ubfdgolp1/FJx814=; b=DysGmG6Tr3Q1hxLAFB2v+yoiX+
+        RQjxudqAX9v2CpHHusShXSIll1fM9jg+KylojiYgu/tsLE2CBy7tmhoAN/GwGxB/n0h+buvrjcEoN
+        9imHJYaMPKAWLcrn/KROi0AwImFIVyl2ECfwUw9iCMyhGz2Pgy7c1+JlNWRy1nLws7js=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p0Rfo-003zJo-Vu; Wed, 30 Nov 2022 19:19:09 +0100
 Date:   Wed, 30 Nov 2022 19:19:08 +0100
-Message-Id: <cover.1669832184.git.bristot@kernel.org>
-X-Mailer: git-send-email 2.32.0
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Frank <Frank.Sae@motor-comm.com>, Peter Geis <pgwipeout@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, yinghong.zhang@motor-comm.com,
+        fei.zhang@motor-comm.com, hua.sun@motor-comm.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] net: phy: Add driver for Motorcomm yt8531
+ gigabit ethernet phy
+Message-ID: <Y4eenBOnpWt17ovJ@lunn.ch>
+References: <20221130094928.14557-1-Frank.Sae@motor-comm.com>
+ <Y4copjAzKpGSeunB@shell.armlinux.org.uk>
+ <Y4eOkiaRywaUJa9n@lunn.ch>
+ <Y4eT25bT7T8W6UXW@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4eT25bT7T8W6UXW@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After adding the osnoise/options file, a set of on/off options
-came to my mind, most based on discussions while debugging problems
-with Juri and Clark.
+On Wed, Nov 30, 2022 at 05:33:15PM +0000, Russell King (Oracle) wrote:
+> Hi Andrew,
+> 
+> On Wed, Nov 30, 2022 at 06:10:42PM +0100, Andrew Lunn wrote:
+> > This is not the first time Russell has pointed out your locking is
+> > wrong.
+> > 
+> > How about adding a check in functions which should be called with the
+> > lock taken really do have the lock taken?
+> 
+> They already do:
+> 
+>         lockdep_assert_held_once(&bus->mdio_lock);
+> 
+> but I guess people just aren't testing their code with lockdep enabled.
+> 
+> The only other thing I can think of trying is to use mutex_trylock():
+> 
+> 	if (WARN_ON_ONCE(mutex_trylock(&bus->mdio_lock)))
+> 		mutex_unlock(&bus->mdio_lock);
+> 
+> scattered throughout.
 
-The PANIC_ON_STOP option facilitates the vmcore generation to aid
-in the latency analysis using a crash dump.
+The ASSERT_RTNL() macro does this, it does not depend on lockdep.
 
-The OSNOISE_PREEMPT_DISABLE and OSNOISE_IRQ_DISABLE options refine
-the type of noise that the osnoise tracer detects, allowing the
-tool to measure only IRQ-related noise, or NMI/HW-related noise,
-respectively.
+And given the persistent sort of problems we have seen, you are
+probably correct, lockdep is not being enabled by some developers.  I
+guess they don't even know what it is.
 
-Each patch has a description of the options and the last patch
-documents them in the osnoise documentation file.
-
-[1] https://lore.kernel.org/r/cover.1668692096.git.bristot@kernel.org/
-
-Changes from V3:
-  - Fix documentation (Bagas Sanjaya)
-  - Optmize the preempt disable option (Steven Rostedt)
-Changes from v2:
-  - rebased on top of linux-trace.git/ftrace/core
-  - removed the patches already added to the ftrace/core
-Changes from v1:
-  - Changed the cover letter topic
-  - Add Acked-by Masami to the first patch
-  - Add the PANIC_ON_STOP option
-  - Add the OSNOISE_PREEMPT_DISABLE and OSNOISE_IRQ_DISABLE options
-  - Improved the documentation
-
-Daniel Bristot de Oliveira (3):
-  tracing/osnoise: Add PANIC_ON_STOP option
-  tracing/osnoise: Add preempt and/or irq disabled options
-  Documentation/osnoise: Add osnoise/options documentation
-
- Documentation/trace/osnoise-tracer.rst | 20 +++++++++-
- kernel/trace/trace_osnoise.c           | 52 +++++++++++++++++++++++---
- 2 files changed, 65 insertions(+), 7 deletions(-)
-
--- 
-2.32.0
-
+	 Andrew
