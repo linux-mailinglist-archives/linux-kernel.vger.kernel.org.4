@@ -2,166 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFC163DCC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E2C63DCC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiK3SMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:12:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
+        id S229830AbiK3SNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:13:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiK3SMi (ORCPT
+        with ESMTP id S229904AbiK3SNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:12:38 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4828365D6
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:12:37 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id b13-20020a17090a5a0d00b0021906102d05so3062858pjd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:12:37 -0800 (PST)
+        Wed, 30 Nov 2022 13:13:01 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA0C1AF17;
+        Wed, 30 Nov 2022 10:12:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669831979; x=1701367979;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=TVHzia00OKIpvouQ0QyIYlUD/mCnkIt8tWHN/gK8c9U=;
+  b=Wh9paAdqh+/nMrB66v7GxHneOEQ86Unzesz2YSZYhva/h17R+J8qilaV
+   nS3XiMATB5qXwciK4+xkPCNEamViu5eUlOad7GDth7f4g5MtYyWzAUG6k
+   dPkoN2ZAIH2j7Bg+/XEzLLrJTTC+QsjcYV/LckngZJCvKqPo950FY/P/H
+   vhvPcJSGgrM2E9Zz8AFqUASy2GNsGtCid1s4lyQpF/ffa21wB69cQ6Juq
+   y/3sA1hlcXHneKh5EaM/gemcNSNjetHLPve+GCuVGkgSsEKpHfEbu0KRU
+   FthR4I6o9dcUQYKUPfc+iPIqxIjJq3cnyvS7lF8fTDPQO7ASXOaaHNbVY
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="191187677"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Nov 2022 11:12:58 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 30 Nov 2022 11:12:56 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12 via Frontend Transport; Wed, 30 Nov 2022 11:12:56 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aj7z2ms/mwb04S0vqS7vc9PUlPL/C+ZvLFHj9030rNq2Qyw2N+qyAFCCwE/9rL8KVlss1tqE7GYbL7cvPjZnnFdiSTHwBAAHcSyHjaQ6m0uMvDaTqD/FKr4Lb2qedF3oVRsvR+30hamp19MWVdJrjpM/Mk/aRyCwDxManmEJGvXj1KH4XJhy0+GB7Gsr4ieW2DnbGojQ914HoDD6MqGAcnj9umqq+r913SyKEQNltH2SnNKPBZBQ77Zv95bcJDVW7G8lFC71CO922VH3pm/PM/cIBv7nPaceuNrMYVWw/9NvXy3NJVGerDRN/rh/qocsoFjwOXoWU0S7jBYyvgkwUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SgN5rhofwXfG03Xpwx6/dLOGopZSbAJLEaT+XiOMltM=;
+ b=DB5dEZN6kOSDiYkJl/zsNZm6nbwmtA+HFGFzmvHYIymWEZGPzWBGRC/xKnWY2tnwkx0zvLD8wmgIXyFxOqTGWGm0ym3mBvyECttk8Lt8Y2YMIfqyRweko6Dbp5uZSkqccb3FMUoboeAkt3+cwaWTyKmEsH8pmtXba/j6pCtnxPy9+bOmYEDWSg0/eUuKWB9Cxy97ZZ8lOZD7eVfax1GEZINK62AENNnci/CjT+1rcArghREUeU/OE0DMjICZSHIR2RNA/dYpTqS/kWEI8B11e4VWQOVDCkTo/LiWTn7r9Y1qwtfRpWRc4Y9s7WOUVujNmv02H0AaeJrmIohfbr5hFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+yxxovaF5Rrf7ztlABqNCOJeXd/kVJI7IAu8URnud6w=;
-        b=HlNsB0vjysuevgUV/NvPZ5C52Wlx5AeGC4tumTuvDwdbrVanvElBG4UJaX1gNpkH5O
-         rt4PgMpK4fBOzQUqt2zitJfu6VR76HDh5yaDlT4TUNM9gCNk+xVnqFomd6QQbNvwGvIB
-         SH2ZNvXCdzWhepR46MLf+9fwhOxEmffz8YVk4D8yKTIkgYGHmNUpJnfl4O7tBF/B+LpO
-         5otPFnyLMlXJTytOnb/MNQ2WI58pweIJW18kDzrSDNtzJYZbqPY8093i/oHEFssg893E
-         R+zBuRgawgm0AlMZJnMAEMftVdu7LHBB5v8D/Yc+yluEAQ+lane4RY6FeFZ2MQs/z/XG
-         luZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+yxxovaF5Rrf7ztlABqNCOJeXd/kVJI7IAu8URnud6w=;
-        b=fqMixCKe7ED3dUO859RU8/jIeFVdqltnwz45BzTv3uo5y65EHSi1Gy6KoX1KrzbhAo
-         ChHI19zNI21QIsl1TKNd5wEuFf/0LmOhUOOGH6tHlRZL3FjHVIeT/cDhjb35Ae42JKKR
-         S8gmdFh1Rj5YNcnXu9+A/i6CxlEYEtXfTeBuzHr2pZP897USgrQI/6eSSR/QtLJwtr9z
-         lI8yND5KDU95weCctXcVrC8iOkan7QQN61BSD3HU0e5B32MXHyZF7OAdWha3VA8/HJUh
-         Sc6PAlWNXWipPlLQcAd9LOhw/IcbT2FXVmq8HUYgyiS1jSr5ZPLVDaYuj/R6Q6Q2M+NY
-         6/Dg==
-X-Gm-Message-State: ANoB5pml7D9dCyxlVPKcVK39w93c46Pw8o5qt1ZKaGqHLXg0VdIZqZAD
-        eYrba+Xr7syJemDZUEEPYh6NJw==
-X-Google-Smtp-Source: AA0mqf6woT3/sCwqUwYWcMp7MDjkb19scEmzMe2rkXu1KfLHq29d2cK81Uw+ixK6eTeEjCXfOAoQZw==
-X-Received: by 2002:a17:903:22c4:b0:171:5092:4d12 with SMTP id y4-20020a17090322c400b0017150924d12mr44204783plg.107.1669831956753;
-        Wed, 30 Nov 2022 10:12:36 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id g3-20020aa79f03000000b00565c8634e55sm1685227pfr.135.2022.11.30.10.12.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 10:12:36 -0800 (PST)
-Message-ID: <b6f0a393-0715-1541-631d-5b98c0d7b155@9elements.com>
-Date:   Wed, 30 Nov 2022 23:42:32 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 1/4] hwmon: (pmbus/core): Add status byte to regulator
- flag map
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SgN5rhofwXfG03Xpwx6/dLOGopZSbAJLEaT+XiOMltM=;
+ b=bF0hW5z8Hzl8veuvE8HfDaIH4xvAzB8qPjdESBFzZjFWGKfDFX5PiRP5X1njRjC7tBkNBGRHt558asOVKsL9MPjNKr06aaMCJ5ctJXGySckyiEnFPKNxp1Iwk7Yfk87wicXN4e6HPjFLIklerwx4xC/3BYdhOZBbg46Z7dKAGb4=
+Received: from MWHPR11MB1693.namprd11.prod.outlook.com (2603:10b6:300:2b::21)
+ by DM4PR11MB6382.namprd11.prod.outlook.com (2603:10b6:8:be::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Wed, 30 Nov
+ 2022 18:12:54 +0000
+Received: from MWHPR11MB1693.namprd11.prod.outlook.com
+ ([fe80::5928:21d9:268f:3481]) by MWHPR11MB1693.namprd11.prod.outlook.com
+ ([fe80::5928:21d9:268f:3481%10]) with mapi id 15.20.5857.023; Wed, 30 Nov
+ 2022 18:12:54 +0000
+From:   <Jerry.Ray@microchip.com>
+To:     <kuba@kernel.org>
+CC:     <andrew@lunn.ch>, <f.fainelli@gmail.com>, <olteanv@gmail.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH net-next v3] dsa: lan9303: Add 3 ethtool stats
+Thread-Topic: [PATCH net-next v3] dsa: lan9303: Add 3 ethtool stats
+Thread-Index: AQHZA2vPxK4eDIuP5kOkg3W32g1dkK5U+YSAgAKmf0CAABFlAIAAFinA
+Date:   Wed, 30 Nov 2022 18:12:54 +0000
+Message-ID: <MWHPR11MB1693909B5E06A7791F0FD079EF159@MWHPR11MB1693.namprd11.prod.outlook.com>
+References: <20221128205521.32116-1-jerry.ray@microchip.com>
+        <20221128152145.486c6e4b@kernel.org>
+        <MWHPR11MB1693E002721F0696949C5DCBEF159@MWHPR11MB1693.namprd11.prod.outlook.com>
+ <20221130085226.16c1ffc3@kernel.org>
+In-Reply-To: <20221130085226.16c1ffc3@kernel.org>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-References: <20221130165833.3478555-1-Naresh.Solanki@9elements.com>
- <20221130180642.GA2656856@roeck-us.net>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <20221130180642.GA2656856@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MWHPR11MB1693:EE_|DM4PR11MB6382:EE_
+x-ms-office365-filtering-correlation-id: e442a461-4f5b-44ff-2304-08dad2fe8078
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: pldCIFXjURf986/HrETImGqIZpTvsnPrj8eVMhrynQLcYwgdYOl/bt4Nvk2ikcUK/jJzmCIC1InlydAVjJ7ljZfqIolMPKxPID1/QhUct7DlkVwoieKk3qWtHhHSgirk4uVoamKzfL2wfLjUTLrvSAgrcT25jWsuDPMgcfmgHrikaaCl5JTvztNgz1n1X4p7nTtHU9Hz3Lgi63CMYutAtpaS6NWDuwr2+ULzSoEtLEXtrU7FxTxJsv6VYJAoJ0qTnxE1jrPOBELd+1bq/J9yS6ZiheIN/K6IPw5oCoW69/4jMhXMMFny7mC+4a8nYXW+XHauopf8Yg3vM6nLpM9wzOxknmrQbFqwK/Go7uAN5Rxc7scMmTt6XVjUlMzbnQFgFmCD2VcDqophsccrhsP+ixzwm3Oqlr6k4wOOhg703vA1Ta+N/LGS7P7mtWROYsgNpc5B7q7niC71cCfrCENWUcDpUX/IU2mFvuWrd3DrPHjG6qrx7MCgqdtjxylBFvU4hR/M9K0EGAXr1VCP7weqr5zLQNZicXZSDtHRMNnxDg91WLWS9AICTJe0xHMPBeZAayJAExQyChNMENlgIOZVfN6K7ZRyVD6CaeM46cSu6n8gAwVWXVFPqKyyrQjtQMtCp8U30aoM40cVnsoSDeTHQOaGm3EInBkzGWMZ5jnTc4q1Hra0QNahFE7L/xhxL+XlCM9gP6GMIPLA5y2TNs7Png==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1693.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(39860400002)(346002)(366004)(376002)(136003)(451199015)(38070700005)(55016003)(33656002)(86362001)(54906003)(316002)(6916009)(76116006)(5660300002)(41300700001)(4744005)(71200400001)(8936002)(66476007)(66556008)(4326008)(66946007)(52536014)(8676002)(2906002)(478600001)(66446008)(64756008)(83380400001)(122000001)(7696005)(9686003)(26005)(6506007)(38100700002)(186003)(66899015);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?llgqfZTp65sow6o4xNeh6gOBeq3iqDGmHI/5e6hk6VAA+1sJP4gHwJjhinPV?=
+ =?us-ascii?Q?IvyvYyfH7m8jOWz8RBt0ZTqOxG9FGrwfWmuJ329hjDEE1VWBCQY1wVFNdjX2?=
+ =?us-ascii?Q?jMyLQwMzxFgW70/6V0l0kYZAY2Xswk6DIQQQtgqiVj4olTA485sPEplAyBO3?=
+ =?us-ascii?Q?IFNljLNzm/qwDOOmLMcQt9UKiC553D2yIlGakU1861JZHm9ugFwd++u3AVP/?=
+ =?us-ascii?Q?axjEWtR9UiexjguO/LP46Sb9yn57TelG3O5nRCYXv0vAo4AkX5Ow12HWRDK2?=
+ =?us-ascii?Q?9g+b/YchJsWzkHzUIJLgq/oJnYKRWPJRDbc6EXpt0/EWRCwkuEv5n+T846uC?=
+ =?us-ascii?Q?NL2510hFg44qtH/aHYmgqHy9QJWLnz6bE5iHaTVWY+RLEBA6g3L1vPzroZkg?=
+ =?us-ascii?Q?GLWH/928KVWbr1kszcJEAdIYWnxFP2LS3L9vPiac95tyPDS8vOuMp0wqXtbQ?=
+ =?us-ascii?Q?yrzad5zHZJe7uCupB0c9LFCs2wHPaGPdS633/3ZxhTICcWAcZBqoh0U10SWB?=
+ =?us-ascii?Q?hlo4vCwdGHWdyBr1BwhhJaUVQPx1Rn/IsojD3UUFFQOWvsAz+A5DlTwr2gjs?=
+ =?us-ascii?Q?KGrXLvslljxukxHPUIXSy9NNE8O7JXMPWSfjTwON75/vCNJw8GnO3eUjamLM?=
+ =?us-ascii?Q?auAQ3sDcQl37XFC+gI2Xtr2jtqTrrdnV0i3WG1ar6+/HAJEmJ7bMvVY9e7Qg?=
+ =?us-ascii?Q?wC/ZupQtHnU5wZ76qhs5/CWjACe0oF2xGMzfX4SwXu6NNmlEFCbUYSr5M4tm?=
+ =?us-ascii?Q?l4/GQYz21nTFBGPh5kzklu4XxTXIhVSJaelrECK3S6gdYwua0Rv/rh644gvV?=
+ =?us-ascii?Q?/c/QUXe+bNATbTIkZwlYArcbMymwthC1SIro+FRZ70o5ijQLwk+fwc1iHZbs?=
+ =?us-ascii?Q?9cLapi+kYujq0d0YAeYpx/TVrkRFlYko3OhFoIJ6IM3mPd8giokECkfeCTq2?=
+ =?us-ascii?Q?TZzKzb+Ym1jSublI3SH/qq29F7Tn1awwqmXlY+mxxP9NSLLSSiqO1Em5eV82?=
+ =?us-ascii?Q?DpfY4c3/Os8LTuISlhioIG3/33llvXk13mybtQHW05QDw+oIbnyjHFsRUNX0?=
+ =?us-ascii?Q?BrISjeZhEEJjhlhSc00GJB2df2llg2rFSe/CYKVK+wjh2nvwdzoctF8rD9Ao?=
+ =?us-ascii?Q?Q/vQ2VA5K53Bik66wunSAmhk98YKvWITajXQwI+pj947DVpFnjT8DY7QryJe?=
+ =?us-ascii?Q?48oVCurf6HP9JiS+2iizjG22mBG/B2KCbPfNdl2SrbMi4Ph+vPksdD+c0pVJ?=
+ =?us-ascii?Q?MtalGBgTL2YlJOUgSte77eHMBlVnUVUQcfsF7zUXgAi6eIgvyGG8M93fBSw8?=
+ =?us-ascii?Q?gJ/3HYloVW83AzqJl8FBk4jB1TbUx7jBEdaf0/XsLUD1GrXGzoj8PfHbqmvc?=
+ =?us-ascii?Q?yFMDFrL1jUUbdx5PpP2bYHMLDWaOYv/aOwFrTcEDwaS7+H8IpWHO3qDkZhs/?=
+ =?us-ascii?Q?NdNWH2JLufQ4WXm9Vymx133HZC5swTksWoP2oSh5BEuf7h/zPe1j69M6ByP9?=
+ =?us-ascii?Q?Gz4Tgbaoq04WVU6VDXTHvCQ1FUbCydtL/ciwWjigC8WiUQ9aeXJOUQfYAHeC?=
+ =?us-ascii?Q?9uxdC0f5uJEIj39u2PKZUfLPuPJI9ptZ73RcNB+1?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1693.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e442a461-4f5b-44ff-2304-08dad2fe8078
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2022 18:12:54.4917
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 8I6Pq+32qpTdkmABTyte6ohIye8+5i9YUSfoEygokBmOa7dsVZAfDNPDZr8SOhYvN+9XF5bHYkbSvorttCg0tQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6382
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+>>> Why not add them there as well?
+>>>
+>>> Are these drops accounted for in any drop / error statistics within
+>>> rtnl_link_stats?
+>>>
+>>> It's okay to provide implementation specific breakdown via ethtool -S
+>>> but user must be able to notice that there are some drops / errors in
+>>> the system by looking at standard stats.
+>>
+>> The idea here is to provide the statistics as documented in the part
+>> datasheet.  In the future, I'll be looking to add support for the stats6=
+4
+>> API and will deal with appropriately sorting the available hardware stat=
+s
+>> into the rtnl_link_stats buckets.
+>
+>Upstream we care about providing reasonably uniform experience across
+>drivers and vendors. Because I don't know you and therefore don't trust
+>you to follow up you must do the standard thing in the same patch set,
+>pretty please.
+>
 
-On 30-11-2022 11:36 pm, Guenter Roeck wrote:
-> On Wed, Nov 30, 2022 at 05:58:28PM +0100, Naresh Solanki wrote:
->> Add PMBus status byte to regulator flag map.
->>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->>
->> ---
->> Changes:
->> - Remove status input
-> 
-> Not really.
-> 
-This was about PMBUS_STATUS_INPUT & not STATUS_BYTE
->> - Add comment for PMBUS status byte.
->> ---
->>   drivers/hwmon/pmbus/pmbus_core.c | 20 +++++++++++---------
->>   1 file changed, 11 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
->> index 95e95783972a..a7b4ae0f1f3b 100644
->> --- a/drivers/hwmon/pmbus/pmbus_core.c
->> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->> @@ -2751,7 +2751,16 @@ struct pmbus_regulator_status_category {
->>   };
->>   
->>   static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
->> -	{
->> +	{	/* STATUS byte is always present. */
->> +		.func = -1,
->> +		.reg = PMBUS_STATUS_BYTE,
->> +		.bits = (const struct pmbus_regulator_status_assoc[]) {
->> +			{ PB_STATUS_IOUT_OC,   REGULATOR_ERROR_OVER_CURRENT },
->> +			{ PB_STATUS_VOUT_OV,   REGULATOR_ERROR_REGULATION_OUT },
->> +			{ PB_STATUS_VIN_UV,    REGULATOR_ERROR_UNDER_VOLTAGE },
-> 
-> Still there.
-> 
-STATUS_INPUT remove & STATUS_BYTE retained.
->> +			{ },
->> +		},
->> +	}, {
->>   		.func = PMBUS_HAVE_STATUS_VOUT,
->>   		.reg = PMBUS_STATUS_VOUT,
->>   		.bits = (const struct pmbus_regulator_status_assoc[]) {
->> @@ -2768,6 +2777,7 @@ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] =
->>   			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
->>   			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
->>   			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
->> +			{ PB_POUT_OP_FAULT,      REGULATOR_ERROR_FAIL },
-> 
-> Please document your changes in the description. There are two functional
-> changes hidden under "Add PMBus status byte to regulator flag map".
-> That is inappropriate. Those, as I have pointed out, should be separate
-> patches.
-My bad. I kept this change in this patch. Will remove this from this patch.
-> 
-> Guenter
-> 
->>   			{ },
->>   		},
->>   	}, {
->> @@ -2834,14 +2844,6 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->>   		if (status & PB_STATUS_POWER_GOOD_N)
->>   			*flags |= REGULATOR_ERROR_REGULATION_OUT;
->>   	}
->> -	/*
->> -	 * Unlike most other status bits, PB_STATUS_{IOUT_OC,VOUT_OV} are
->> -	 * defined strictly as fault indicators (not warnings).
->> -	 */
->> -	if (status & PB_STATUS_IOUT_OC)
->> -		*flags |= REGULATOR_ERROR_OVER_CURRENT;
->> -	if (status & PB_STATUS_VOUT_OV)
->> -		*flags |= REGULATOR_ERROR_REGULATION_OUT;
->>   
->>   	/*
->>   	 * If we haven't discovered any thermal faults or warnings via
->>
->> base-commit: 9494c53e1389b120ba461899207ac8a3aab2632c
->> -- 
->> 2.37.3
->>
+Won't be able to get to stats64 this cycle.  Looking to migrate to phylink
+first.  This is a pretty old driver.
+
+Understand you don't know me - yet. =20
 
 Regards,
-Naresh
+Jerry.
