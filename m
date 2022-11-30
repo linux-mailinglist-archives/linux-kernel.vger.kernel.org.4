@@ -2,101 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D511763E430
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CB163E435
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbiK3XDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 18:03:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
+        id S229520AbiK3XFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:05:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiK3XCn (ORCPT
+        with ESMTP id S229445AbiK3XFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 18:02:43 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C04097010
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:02:22 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id h193so60689pgc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:02:22 -0800 (PST)
+        Wed, 30 Nov 2022 18:05:08 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8538894921;
+        Wed, 30 Nov 2022 15:05:07 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id bj12so117129ejb.13;
+        Wed, 30 Nov 2022 15:05:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nHOMyfsfvQkL/nShVDUzK82mKXXqJYsG0axSizIXaLY=;
-        b=NnMo7/46lbMBrXBXQZRYVq3GggYMT+7jEJcq9CL/cSVNfI9/zGr929gpN24qaTzNDj
-         EuAX3kX5hoFkykznYnPSEMhpqrvV96Ls6XOPXnZJFhl++LMNCZ1xBLhLYGuEyeIeBOlg
-         1Pda6St2Grg/DjBtBU5P+snxis04vfL2wZmjtsQkvZDNryITBkJPcp25ppL/joru6uaX
-         pdFAr7CPrxA89GBOBBQLxyhlYq8vGrdtF3rzEmU5z3DvHeLGy15BW/hWdiMul0LnS4v8
-         aUBoc+y5QRGugr1owVbIQyI2ZzhFRbthIb2QpbXN2iQwGAYLSCnMYOTrkzCCC2hVImkh
-         7vwA==
+        bh=sAPj1OEKh4A63q6py1ZO6zRPXlsc0BcP6GjS55qu28I=;
+        b=cxcam8c12sm2fR2HQyP5xusWpcLImVe6SVyw6cBelCRxvI+lrijxd0xW72TDQOUhNJ
+         SyAloa/2TqqjtIkVqPTTDed5nOmQPFzaSvI0B9f4QJA9mIINX10UWBelsn1FDZl11lbp
+         rIRjp3OcbZfQCaFgd3G1oaf+m0OTudetBUeVsTbxTi6iGTCGvKa6iHfd7zXe3nVSjQRs
+         NwuL6YZz7DBLHKB26QlzQ/NIPcUyYHpdx9D5PY5h82BLeaOQVxW9eJMeY5QZwSmMgV88
+         nWFcvrEP/YRyMlfNzUUNGrn1obqtYwzCkb+dzNEbHJn8ZpYzP8goCCg3W9KzrgOor7YE
+         n0MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nHOMyfsfvQkL/nShVDUzK82mKXXqJYsG0axSizIXaLY=;
-        b=VYpf/0Tg/fQJVNh3tsDygqTZ4K9pBLycOjogXahCxFzrDypQDCHicbcT8/3RXyFKjx
-         UxFlVgkX+DM4ma9aP2Vg3dG3FrLbM5BuPfQ8pcTc+jwKOSR70vmehtOZNk18bobvEqZR
-         /fPkFtEJNRqSJF62VTqr21/9Bl7d8+x3BxBSn+zE47ryJip5lPE4dMIQbUD30Prze2RO
-         e7H7xPhAuPTXHSLjOJgri3ni7t+G2ly3bOKUJsijIrTpRsTdRFduWkkJ+noo7PMquqhl
-         OBsqpiikfgN+3k2fMKpjoDQ9jhYhu6pwFkfimTShc0bVqHVUqZYL6/UV1ERfGfrn7XVS
-         7NZw==
-X-Gm-Message-State: ANoB5plh/T4jNy0iZ8G0jMwKJg2majRUPMviJTn8mNq3QdWrIRuBGXYL
-        ZM4EPEtAVKgTUonyETu5jTz9bg==
-X-Google-Smtp-Source: AA0mqf5Nj1181KAxR2A/WI368LXBMRYoBlCi8ORJRhPIy6nAs8C080UTF7/1gaOFg5Avl9sdvRAfNA==
-X-Received: by 2002:a63:2361:0:b0:45f:f8df:108e with SMTP id u33-20020a632361000000b0045ff8df108emr37236360pgm.127.1669849341423;
-        Wed, 30 Nov 2022 15:02:21 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id a6-20020a624d06000000b005633a06ad67sm509519pfb.64.2022.11.30.15.02.20
+        bh=sAPj1OEKh4A63q6py1ZO6zRPXlsc0BcP6GjS55qu28I=;
+        b=hTX1BpMsgnJnMI+5yZSMucx2Ah5HFQbfsF+kryQvLwoeiARABO0H1VSXpZ7Tm09HRe
+         acH6xFMObWyjZuqFhwtq1/9j2eJse7je2XFByX2eldN50dJ9Ci+tclAh+PJHlAIoIZ28
+         vqyql80cxkV2Vqu8bH84qB1il1cpUg8eocu63bltSuNZqQdlXvJgU84D02iAKNW8C2K5
+         s1BE7CsORFnlroH32rhrec6r+vly39+xKLLPGgfd2G8Sol4Y/J9CmZsmeco2Of03PpuF
+         mPrnppSIr5Zpnq2bx/tHs2OoO8qVHriLTFjbGXO3mlhDpTSM4OAV6MpwRTVSTvElukWT
+         eZ4Q==
+X-Gm-Message-State: ANoB5pkz/yPb3lqsdkflDwB58PnYHuh+YwUrJt5tgn1tyuJ2eURIvCNE
+        ozEIpehZiPmTfFFJ4BChhJw=
+X-Google-Smtp-Source: AA0mqf5PWBdijLGvRw6jOTQsfQLdPSebW1ObSVZfpfDSqqy8iimaYaRXuVhAt/i7sTD2g7aCs48Law==
+X-Received: by 2002:a17:906:9f02:b0:7b5:f5c9:b450 with SMTP id fy2-20020a1709069f0200b007b5f5c9b450mr43140197ejc.65.1669849506093;
+        Wed, 30 Nov 2022 15:05:06 -0800 (PST)
+Received: from skbuf ([188.26.184.222])
+        by smtp.gmail.com with ESMTPSA id sb25-20020a1709076d9900b007ba46867e6asm1138559ejc.16.2022.11.30.15.05.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 15:02:20 -0800 (PST)
-Date:   Wed, 30 Nov 2022 23:02:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Robert Hoo <robert.hu@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-Subject: Re: [PATCH 32/44] KVM: x86: Unify pr_fmt to use module name for all
- KVM modules
-Message-ID: <Y4fg+MO2DusqMSZO@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-33-seanjc@google.com>
- <ff0e8701d02ee161d064f92c8b742c2cc061bce0.camel@linux.intel.com>
- <Y20r2NR9MaBbOGLn@google.com>
+        Wed, 30 Nov 2022 15:05:05 -0800 (PST)
+Date:   Thu, 1 Dec 2022 01:05:03 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Christian Eggers <ceggers@arri.de>
+Cc:     Arun Ramadoss <arun.ramadoss@microchip.com>,
+        Pavan Chebbi <pavan.chebbi@broadcom.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux@armlinux.org.uk,
+        Tristram.Ha@microchip.com, richardcochran@gmail.com
+Subject: Re: [Patch net-next v1 01/12] net: dsa: microchip: ptp: add the
+ posix clock support
+Message-ID: <20221130230503.elc4hbxl6fcemx7y@skbuf>
+References: <20221128103227.23171-1-arun.ramadoss@microchip.com>
+ <20221128103227.23171-2-arun.ramadoss@microchip.com>
+ <CALs4sv19Efi0oKVqRqRFtF2SCr6Phejh4RFvuRN1UCkdvcKJeg@mail.gmail.com>
+ <5639053.DvuYhMxLoT@n95hx1g2>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y20r2NR9MaBbOGLn@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <5639053.DvuYhMxLoT@n95hx1g2>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,13 +81,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022, Sean Christopherson wrote:
-> On Thu, Nov 10, 2022, Robert Hoo wrote:
-> > After this patch set, still find some printk()s left in arch/x86/kvm/*,
-> > consider clean all of them up?
+On Mon, Nov 28, 2022 at 03:56:30PM +0100, Christian Eggers wrote:
+> > > +#define PTP_LOAD_TIME                  BIT(3)
+> > 
+> > PTP_WRITE_TIME sounds more intuitive than PTP_LOAD_TIME?
 > 
-> Hmm, yeah, I suppose at this point it makes sense to tack on a patch to clean
-> them up.
+> PTP_LOAD_TIME has been derived from the data sheet:
+> 
+> -------------8<--------------
+> PTP Clock Load
+> --------------
+> Setting this bit will cause the PTP clock to be loaded with the time value in
+> registers 0x0502 to 0x050B.
+> ------------->8--------------
+> 
+> I would also prefer PTP_WRITE_TIME. But is it ok to deviate from data sheet?
 
-Actually, I'm going to pass on this for now.  The series is already too big.  I'll
-add this to my todo list for the future.
+It depends. When the datasheet has succint and uniquely identifiable
+names for registers, there's no reason to not use them. Exceptions are
+obnoxious things like "BASIC_MODE_CONTROL_REGISTER" or "MDIO_CONTROL_1"
+which get abbreviated in kernel code to "BMCR" and "MDIO_CTRL1".
+
+When the register names in the datasheet are literally prose ("PTP Clock Load",
+with spaces and all), some divergence from the datasheet will have to
+exist no matter what you do. So I guess you can just go for what makes
+the most sense and is in line with existing kernel conventions. People
+who cross-reference kernel definitions with the datasheet will still
+have a hell of a life, but hey, you can tell them it's not your fault
+you can't name a C variable "PTP Clock Load".
+
+OTOH, I don't find "PTP_LOAD_TIME" unintuitive, but I won't oppose a
+rename if there's agreement from people who care more than me.
