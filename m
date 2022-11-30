@@ -2,176 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8736763D45C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3989963D460
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234581AbiK3LWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:22:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42892 "EHLO
+        id S234905AbiK3LXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:23:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234905AbiK3LVj (ORCPT
+        with ESMTP id S234890AbiK3LXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:21:39 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6755077219
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:21:23 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id t1so12959619wmi.4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:21:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RuSCu6Sc5O77Oj3wELaaUy6VtrciSxnoo8y2CPFyY+U=;
-        b=M5OU+UwmCE1dEQUm9MGdXnRpdzmbCWLfqjalSYP23MuqwTZ9RwFy/pfMOsPhuvK6s3
-         RiK7JxFxDC/TRdJDjog5UlAx3+QHvvk+4eHlFtUCvbrEYR1WO7WCBR59V08EJk4u9QnO
-         N8B08dkiBlp3ZJc8e7cHv8OxsGRBeXy47Ce3k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RuSCu6Sc5O77Oj3wELaaUy6VtrciSxnoo8y2CPFyY+U=;
-        b=C3+V7aKC9hRBjJ7qY6421EZ7XQNiPSqA6lLjcOW0DubqTO07Lc+MMpmEYRjIvaYU0u
-         0vRVSoST2e5/a8m6JKaXEkZDuESpkUTl8fozGHX9cyQAweCzcxwnfsyhPPViwwokf1EG
-         TgcJWWduvTs5lWNHRjwcP0uMd0N75t+4IzlYfL+749n/qnWVDJ9e3+dhzrB1o0nbPON6
-         lCvmlqRoJDr8aBiKTeq2xbeqQRMFKilhYx29hT1eSmxWVlmUTgX0QpLKISgnLK41dqU/
-         7dJQOpHKtTWRwwwCTxKrRA2To8Iy/95LKEkYIlS230vf/jAgT+iRh/ispKaMbBHn494O
-         fubw==
-X-Gm-Message-State: ANoB5pl0lTOfYFhv1wBbt2afnhgacDJ0HI/QbrUB2DeoTbehvwRB5ewD
-        1HF1isQLWO+Wy5/eEZZlvXc/kg==
-X-Google-Smtp-Source: AA0mqf7Y6ivv5bQ1OH3MnYDxUtlCUbzKEC1tIMe0iHw9hdRx5C5HeGZP24b3Lywyd5EKm1ITulLBpg==
-X-Received: by 2002:a05:600c:2241:b0:3cf:9ced:dce4 with SMTP id a1-20020a05600c224100b003cf9ceddce4mr43768262wmm.120.1669807281946;
-        Wed, 30 Nov 2022 03:21:21 -0800 (PST)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id f11-20020a05600c154b00b003c6f3e5ba42sm5960234wmg.46.2022.11.30.03.21.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 03:21:21 -0800 (PST)
-Date:   Wed, 30 Nov 2022 12:21:19 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Rob Clark <robdclark@chromium.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org, Eric Anholt <eric@anholt.net>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [2/2] drm/shmem-helper: Avoid vm_open error paths
-Message-ID: <Y4c8r0fxjI+WsvhM@phenom.ffwll.local>
-Mail-Followup-To: Rob Clark <robdclark@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Clark <robdclark@chromium.org>,
-        open list <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
-        Eric Anholt <eric@anholt.net>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-References: <20221129200242.298120-3-robdclark@gmail.com>
- <20221129203205.GA2132357@roeck-us.net>
- <CAF6AEGuK4jv25cQ4p-rrytx9Qn4JZdRRfkVJn9T3nf7vJmG5VQ@mail.gmail.com>
+        Wed, 30 Nov 2022 06:23:06 -0500
+Received: from emcscan.emc.com.tw (emcscan.emc.com.tw [192.72.220.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5862A7B4FD
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:22:31 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.96,206,1665417600"; 
+   d="scan'208";a="1046873"
+Received: from unknown (HELO webmail.emc.com.tw) ([192.168.10.1])
+  by emcscan.emc.com.tw with ESMTP; 30 Nov 2022 19:22:28 +0800
+Received: from 192.168.10.23
+        by webmail.emc.com.tw with MailAudit ESMTP Server V5.0(32974:0:AUTH_RELAY)
+        (envelope-from <phoenix@emc.com.tw>); Wed, 30 Nov 2022 19:22:26 +0800 (CST)
+Received: from 192.168.33.13
+        by webmail.emc.com.tw with Mail2000 ESMTPA Server V7.00(128282:0:AUTH_LOGIN)
+        (envelope-from <phoenix@emc.com.tw>); Wed, 30 Nov 2022 19:22:25 +0800 (CST)
+From:   "phoenix" <phoenix@emc.com.tw>
+To:     "'Dmitry Torokhov'" <dmitry.torokhov@gmail.com>,
+        "'Eirin Nya'" <nyanpasu256@gmail.com>
+Cc:     <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "'Josh.Chen'" <josh.chen@emc.com.tw>
+References: <20221014111533.908-1-nyanpasu256@gmail.com> <20221014111533.908-4-nyanpasu256@gmail.com> <Y4T2nygbxkhAQRvM@google.com> <Y4T21vl0mJocdpdV@google.com> 
+In-Reply-To: 
+Subject: RE: [PATCH V2 3/3] Input: elantech - Fix incorrectly halved touchpad range on ELAN v3 touchpads
+Date:   Wed, 30 Nov 2022 19:22:25 +0800
+Message-ID: <003201d904ae$05d38870$117a9950$@emc.com.tw>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAF6AEGuK4jv25cQ4p-rrytx9Qn4JZdRRfkVJn9T3nf7vJmG5VQ@mail.gmail.com>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQDbt+ppC1xC+keScPeVlOENSMuCUQN/vwKcAiwO8jQCAyhLLLASYmNwgAHaGDA=
+Content-Language: zh-tw
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcODgwNTFcYXBwZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZiODRiYTI5ZTM1Ylxtc2dzXG1zZy00MzI0ZDdhMS03MGExLTExZWQtYTkzZi04OGQ3ZjY1ODJkZmNcYW1lLXRlc3RcNDMyNGQ3YTItNzBhMS0xMWVkLWE5M2YtODhkN2Y2NTgyZGZjYm9keS50eHQiIHN6PSI2MjQzIiB0PSIxMzMxNDI4MDk0NDc2NDQ0ODciIGg9IldZY2RwMGVrWDI1aDFBS24vSGJTdmFJMytBYz0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
+x-dg-rorf: true
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 12:47:42PM -0800, Rob Clark wrote:
-> On Tue, Nov 29, 2022 at 12:32 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On Tue, Nov 29, 2022 at 12:02:42PM -0800, Rob Clark wrote:
-> > > From: Rob Clark <robdclark@chromium.org>
-> > >
-> > > vm_open() is not allowed to fail.  Fortunately we are guaranteed that
-> > > the pages are already pinned, and only need to increment the refcnt.  So
-> > > just increment it directly.
-> >
-> > I don't know anything about drm or gem, but I am wondering _how_
-> > this would be guaranteed. Would it be through the pin function ?
-> > Just wondering, because that function does not seem to be mandatory.
-> 
-> We've pinned the pages already in mmap.. vm->open() is perhaps not the
-> best name for the callback function, but it is called for copying an
-> existing vma into a new process (and for some other cases which do not
-> apply here because VM_DONTEXPAND).
-> 
-> (Other drivers pin pages in the fault handler, where there is actually
-> potential to return an error, but that change was a bit more like
-> re-writing shmem helper ;-))
+Consulted with FW team, we suggest re-querying x/y resolution after setting
+absolute mode.
 
-Yhea vm_ops->open should really be called vm_ops->dupe or ->copy or
-something like that ...
--Daniel
+-----Original Message-----
+From: phoenix [mailto:phoenix@emc.com.tw] 
+Sent: Tuesday, November 29, 2022 11:47 AM
+To: 'Dmitry Torokhov' <dmitry.torokhov@gmail.com>; 'Eirin Nya'
+<nyanpasu256@gmail.com>
+Cc: 'linux-input@vger.kernel.org' <linux-input@vger.kernel.org>;
+'linux-kernel@vger.kernel.org' <linux-kernel@vger.kernel.org>; 'Josh.Chen'
+<josh.chen@emc.com.tw>
+Subject: RE: [PATCH V2 3/3] Input: elantech - Fix incorrectly halved
+touchpad range on ELAN v3 touchpads
+
+Loop Josh
+
+-----Original Message-----
+From: Dmitry Torokhov [mailto:dmitry.torokhov@gmail.com]
+Sent: Tuesday, November 29, 2022 1:59 AM
+To: Eirin Nya <nyanpasu256@gmail.com>; Phoenix Huang <phoenix@emc.com.tw>
+Cc: linux-input@vger.kernel.org; linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 3/3] Input: elantech - Fix incorrectly halved
+touchpad range on ELAN v3 touchpads
+
+On Mon, Nov 28, 2022 at 09:57:51AM -0800, Dmitry Torokhov wrote:
+> On Fri, Oct 14, 2022 at 04:15:33AM -0700, Eirin Nya wrote:
+> > On Linux 5.19.10, on my laptop (Dell Inspiron 15R SE 7520) with an 
+> > Elan
+> > v3 touchpad (dmesg says "with firmware version 0x450f02"), the 
+> > reported size of my touchpad (in userspace by calling
+> > mtdev_configure() and libevdev_get_abs_maximum(), in kernel space 
+> > elantech_device_info::x_max/y_max, either way 1470 by 700) is half 
+> > that of the actual touch range (2940 by 1400), and the upper half of 
+> > my touchpad reports negative values. As a result, with the Synaptics 
+> > or libinput X11 driver set to edge scrolling mode, the entire right 
+> > half of my touchpad has x-values past evdev's reported maximum size, 
+> > and acts as a giant scrollbar!
+> > 
+> > The problem is that elantech_setup_ps2() ->
+> > elantech_set_absolute_mode() sets up absolute mode and doubles the 
+> > hardware resolution (doubling the hardware's maximum reported x/y 
+> > coordinates and its response to ETP_FW_ID_QUERY), *after*
+> > elantech_query_info() fetches the touchpad coordinate system size 
+> > using ETP_FW_ID_QUERY, which gets cached and reported to userspace 
+> > through ioctl(fd, EVIOCGABS(ABS_X/Y), ...). So the touchpad size 
+> > reported to userspace (and used to subtract vertical coordinates from)
+is half the maximum position of actual touches.
+> > 
+> > This patch splits out a function elantech_query_range_v3() which 
+> > fetches
+> > *only* ETP_FW_ID_QUERY (touchpad size), and calls it a second time 
+> > if
+> > elantech_set_absolute_mode() enables double-size mode. This means 
+> > the first call is redundant and wasted if a second call occurs, but 
+> > this minimizes the need to restructure the driver.
+> 
+> If the setting is indeed double resolution, can we simply multiply 
+> x_max and y_max by 2 instead of re-querying it?
+> 
+> Also let's try adding one of Elan engineers for their take in this.
+> Phoenix, do you have any suggestions please?
+
+Argh, adding Phoenix for real now.
 
 > 
-> BR,
-> -R
+> > 
+> > Link: 
+> > https://lore.kernel.org/linux-input/CAL57YxZNutUVxBtvbVWKMw-V2kqeVB5
+> > kTQ5BFdJmN=mdPq8Q8Q@mail.gmail.com/
+> > Link: 
+> > https://lore.kernel.org/linux-input/20221008093437.72d0f6b0@dell-voi
+> > d.nyanpasu256.gmail.com.beta.tailscale.net/
+> > Fixes: 37548659bb22 ("Input: elantech - query the min/max 
+> > information beforehand too")
+> > Signed-off-by: Eirin Nya <nyanpasu256@gmail.com>
+> > ---
+> > 
+> > Notes:
+> >     Should we move (elantech_set_absolute_mode ->
+> >     elantech_write_reg(...0x0b or 0x01)) *earlier* into
+elantech_query_info()
+> >     before "query range information"? See discussion at
+> >     
+> > https://lore.kernel.org/linux-input/20221008093437.72d0f6b0@dell-voi
+> > d.nyanpasu256.gmail.com.beta.tailscale.net/
+> > 
+> >  drivers/input/mouse/elantech.c | 30 ++++++++++++++++++++++++++----
+> >  1 file changed, 26 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/input/mouse/elantech.c 
+> > b/drivers/input/mouse/elantech.c index 263779c031..a2176f0fd3 100644
+> > --- a/drivers/input/mouse/elantech.c
+> > +++ b/drivers/input/mouse/elantech.c
+> > @@ -1006,6 +1006,9 @@ static void
+elantech_set_rate_restore_reg_07(struct psmouse *psmouse,
+> >  		psmouse_err(psmouse, "restoring reg_07 failed\n");  }
+> >  
+> > +static int elantech_query_range_v3(struct psmouse *psmouse,
+> > +				   struct elantech_device_info *info);
+> > +
+> >  /*
+> >   * Put the touchpad into absolute mode
+> >   */
+> > @@ -1047,6 +1050,14 @@ static int elantech_set_absolute_mode(struct
+psmouse *psmouse)
+> >  		if (elantech_write_reg(psmouse, 0x10, etd->reg_10))
+> >  			rc = -1;
+> >  
+> > +		/*
+> > +		 * If we boost hardware resolution, we have to re-query
+> > +		 * info->x_max and y_max.
+> > +		 */
+> > +		if (etd->info.set_hw_resolution)
+> > +			if (elantech_query_range_v3(psmouse, &etd->info))
+> > +				rc = -1;
+> > +
+> >  		break;
+> >  
+> >  	case 4:
+> > @@ -1671,6 +1682,20 @@ static int elantech_set_properties(struct
+elantech_device_info *info)
+> >  	return 0;
+> >  }
+> >  
+> > +static int elantech_query_range_v3(struct psmouse *psmouse,
+> > +				   struct elantech_device_info *info) {
+> > +	unsigned char param[3];
+> > +
+> > +	if (info->send_cmd(psmouse, ETP_FW_ID_QUERY, param))
+> > +		return -EINVAL;
+> > +
+> > +	info->x_max = (0x0f & param[0]) << 8 | param[1];
+> > +	info->y_max = (0xf0 & param[0]) << 4 | param[2];
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static int elantech_query_info(struct psmouse *psmouse,
+> >  			       struct elantech_device_info *info)  { @@
+-1826,11 +1851,8 
+> > @@ static int elantech_query_info(struct psmouse *psmouse,
+> >  		break;
+> >  
+> >  	case 3:
+> > -		if (info->send_cmd(psmouse, ETP_FW_ID_QUERY, param))
+> > +		if (elantech_query_range_v3(psmouse, info))
+> >  			return -EINVAL;
+> > -
+> > -		info->x_max = (0x0f & param[0]) << 8 | param[1];
+> > -		info->y_max = (0xf0 & param[0]) << 4 | param[2];
+> >  		break;
+> >  
+> >  	case 4:
+> > --
+> > 2.38.0
+> > 
 > 
-> > >
-> > > Fixes: 2194a63a818d ("drm: Add library for shmem backed GEM objects")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > > ---
-> > >  drivers/gpu/drm/drm_gem_shmem_helper.c | 14 +++++++++++---
-> > >  1 file changed, 11 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-> > > index 110a9eac2af8..9885ba64127f 100644
-> > > --- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-> > > +++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-> > > @@ -571,12 +571,20 @@ static void drm_gem_shmem_vm_open(struct vm_area_struct *vma)
-> > >  {
-> > >       struct drm_gem_object *obj = vma->vm_private_data;
-> > >       struct drm_gem_shmem_object *shmem = to_drm_gem_shmem_obj(obj);
-> > > -     int ret;
-> > >
-> > >       WARN_ON(shmem->base.import_attach);
-> > >
-> > > -     ret = drm_gem_shmem_get_pages(shmem);
-> > > -     WARN_ON_ONCE(ret != 0);
-> > > +     mutex_lock(&shmem->pages_lock);
-> > > +
-> > > +     /*
-> > > +      * We should have already pinned the pages, vm_open() just grabs
-> >
-> > should or guaranteed ? This sounds a bit weaker than the commit
-> > description.
-> >
-> > > +      * an additional reference for the new mm the vma is getting
-> > > +      * copied into.
-> > > +      */
-> > > +     WARN_ON_ONCE(!shmem->pages_use_count);
-> > > +
-> > > +     shmem->pages_use_count++;
-> > > +     mutex_unlock(&shmem->pages_lock);
-> >
-> > The previous code, in that situation, would not increment pages_use_count,
-> > and it would not set not set shmem->pages. Hopefully, it would not try to
-> > do anything with the pages it was unable to get. The new code assumes that
-> > shmem->pages is valid even if pages_use_count is 0, while at the same time
-> > taking into account that this can possibly happen (or the WARN_ON_ONCE
-> > would not be needed).
-> >
-> > Again, I don't know anything about gem and drm, but it seems to me that
-> > there might now be a severe problem later on if the WARN_ON_ONCE()
-> > ever triggers.
-> >
-> > Thanks,
-> > Guenter
-> >
-> > >
-> > >       drm_gem_vm_open(vma);
-> > >  }
+> Thanks.
+> 
+> --
+> Dmitry
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+--
+Dmitry
+
