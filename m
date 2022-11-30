@@ -2,252 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7731063DAE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03EA063DAE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:41:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbiK3Qks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 11:40:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60284 "EHLO
+        id S230364AbiK3QlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 11:41:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiK3Qkl (ORCPT
+        with ESMTP id S229610AbiK3Qkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 11:40:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E506DFEA;
-        Wed, 30 Nov 2022 08:40:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6D50B81BB5;
-        Wed, 30 Nov 2022 16:40:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A557C433D6;
-        Wed, 30 Nov 2022 16:40:33 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="gby+j1c7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1669826430;
+        Wed, 30 Nov 2022 11:40:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A357B4EC38
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:39:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669826394;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UpuNagX9yGWmz76JAkOLaM+VS0TPgWzkWZvprmcKQbY=;
-        b=gby+j1c7NXWwpVuXnHiMmJj+lPbOBkli/O9dEo2H5OspsHqBGo9JSgGSCUis3tMXl0Cpr0
-        xW5RlhjXuKo0k48ojwY3B9Q84+zlzXZJE1stp5RrYVYsy+GAU2K8S0O43J8Hy6EZstPYXJ
-        Za2Lb5aA0cjThbxvATAe40Q8emKtqik=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 74a5b925 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 30 Nov 2022 16:40:30 +0000 (UTC)
-Date:   Wed, 30 Nov 2022 17:38:13 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        tglx@linutronix.de, linux-crypto@vger.kernel.org,
-        linux-api@vger.kernel.org, x86@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v10 1/4] random: add vgetrandom_alloc() syscall
-Message-ID: <Y4eG9cUE28s0YpgO@zx2c4.com>
-References: <20221129210639.42233-1-Jason@zx2c4.com>
- <20221129210639.42233-2-Jason@zx2c4.com>
- <877czc7m0g.fsf@oldenburg.str.redhat.com>
- <Y4d5SyU3akA9ZBaJ@zx2c4.com>
+        bh=FibScgnLZTZQVJwSPq/5rFupjljThtgCjtutjs0/d8U=;
+        b=e/p1mFqUPLhUr7CPYo4W4ZM/I2dMlsCUoiEnVc50azQg+EVy5hWGA+fMBWMAUtpu2djWWv
+        vbny2HxKaM+pkHezGuTWgIiJnlD8Yr9e/CQnLKrqqrhqGv4Hsbz4MEUMRRxyfs3YDwA9JP
+        t79dkWPPCtjLSDsSZ4kx8FKFOAelhXw=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-613-Gv9LkrGeNHSmQV8l15I9_w-1; Wed, 30 Nov 2022 11:39:53 -0500
+X-MC-Unique: Gv9LkrGeNHSmQV8l15I9_w-1
+Received: by mail-wm1-f69.google.com with SMTP id u9-20020a05600c00c900b003cfb12839d6so817161wmm.5
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:39:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FibScgnLZTZQVJwSPq/5rFupjljThtgCjtutjs0/d8U=;
+        b=UtJ1ZzLQQdtD2UPtGPfWr6rx/NbwjrWglhZd/8O/hjNdYDdLhST45nrCZeWMgAgL7v
+         r9deghdDGSD9CFE4Qdj+x1mUxK4158trWqB7+SqifZU3E4653zqWqI4f+soRBGfdH4wg
+         Jui4MQT7SlK4GqpRDsPADsseeSYGw0mKnmvYyb8VWow7FDAXUDvBPr5ZUVJ5I6w65FH+
+         FEYhDNRWrz7fCNuCjXWu6IROyvCGCirYVE2kCpOIfqkBWi+4fMf0X5sRBFSnaxFV/rZa
+         T+ljhej4VDBE8ciiMpl2v94cT+KP74Ate6YUxb3gxZb1ytZuS3iqgLfkAEheZ7Lpw9Eb
+         zPbg==
+X-Gm-Message-State: ANoB5pnRisc5gv4c0mHlGo+boqgMuYTUEIEkJ51Jcqj0uCA1k3GN9OvO
+        cEtHoz5y0N2Z+VbMlSnYqr/ByT/roqNSvfTFN1HIOOJ2ROvgb353v3OUnnRKtPiBmG/1neBqTyi
+        M47qcxbs+n0y/3uK5z/x/Phta
+X-Received: by 2002:a05:600c:3495:b0:3cf:ae53:918f with SMTP id a21-20020a05600c349500b003cfae53918fmr34347032wmq.131.1669826391943;
+        Wed, 30 Nov 2022 08:39:51 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4IzXvotDDH3ARJouInxJxra3FD5+ga8g8sHGirbSriZuhOGHjtFxK+lAN+vFsR8EswaedPnA==
+X-Received: by 2002:a05:600c:3495:b0:3cf:ae53:918f with SMTP id a21-20020a05600c349500b003cfae53918fmr34347013wmq.131.1669826391634;
+        Wed, 30 Nov 2022 08:39:51 -0800 (PST)
+Received: from ?IPV6:2003:cb:c703:7600:a8ea:29ce:7ee3:dd41? (p200300cbc7037600a8ea29ce7ee3dd41.dip0.t-ipconnect.de. [2003:cb:c703:7600:a8ea:29ce:7ee3:dd41])
+        by smtp.gmail.com with ESMTPSA id u11-20020a5d6acb000000b00241c4bd6c09sm2060024wrw.33.2022.11.30.08.39.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 08:39:51 -0800 (PST)
+Message-ID: <8290e578-9eaa-5859-6309-e62634b66fb5@redhat.com>
+Date:   Wed, 30 Nov 2022 17:39:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y4d5SyU3akA9ZBaJ@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 09/10] mm/hugetlb: Make page_vma_mapped_walk() safe to pmd
+ unshare
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        James Houghton <jthoughton@google.com>,
+        Jann Horn <jannh@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+References: <20221129193526.3588187-1-peterx@redhat.com>
+ <20221129193526.3588187-10-peterx@redhat.com>
+ <65a3a912-3534-6718-2c55-e0d4b5246f1e@redhat.com> <Y4eFq4ZyQ2xHaISy@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Y4eFq4ZyQ2xHaISy@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 04:39:55PM +0100, Jason A. Donenfeld wrote:
-> 2) Convert vgetrandom_alloc() into a clone3-style syscall, as Christian
->    suggested earlier, which might allow for a bit more overloading
->    capability. That would be a struct that looks like:
+On 30.11.22 17:32, Peter Xu wrote:
+> On Wed, Nov 30, 2022 at 05:18:45PM +0100, David Hildenbrand wrote:
+>> On 29.11.22 20:35, Peter Xu wrote:
+>>> Since page_vma_mapped_walk() walks the pgtable, it needs the vma lock
+>>> to make sure the pgtable page will not be freed concurrently.
+>>>
+>>> Signed-off-by: Peter Xu <peterx@redhat.com>
+>>> ---
+>>>    include/linux/rmap.h | 4 ++++
+>>>    mm/page_vma_mapped.c | 5 ++++-
+>>>    2 files changed, 8 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+>>> index bd3504d11b15..a50d18bb86aa 100644
+>>> --- a/include/linux/rmap.h
+>>> +++ b/include/linux/rmap.h
+>>> @@ -13,6 +13,7 @@
+>>>    #include <linux/highmem.h>
+>>>    #include <linux/pagemap.h>
+>>>    #include <linux/memremap.h>
+>>> +#include <linux/hugetlb.h>
+>>>    /*
+>>>     * The anon_vma heads a list of private "related" vmas, to scan if
+>>> @@ -408,6 +409,9 @@ static inline void page_vma_mapped_walk_done(struct page_vma_mapped_walk *pvmw)
+>>>    		pte_unmap(pvmw->pte);
+>>>    	if (pvmw->ptl)
+>>>    		spin_unlock(pvmw->ptl);
+>>> +	/* This needs to be after unlock of the spinlock */
+>>> +	if (is_vm_hugetlb_page(pvmw->vma))
+>>> +		hugetlb_vma_unlock_read(pvmw->vma);
+>>>    }
+>>>    bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw);
+>>> diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
+>>> index 93e13fc17d3c..f94ec78b54ff 100644
+>>> --- a/mm/page_vma_mapped.c
+>>> +++ b/mm/page_vma_mapped.c
+>>> @@ -169,10 +169,13 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
+>>>    		if (pvmw->pte)
+>>>    			return not_found(pvmw);
+>>> +		hugetlb_vma_lock_read(vma);
+>>>    		/* when pud is not present, pte will be NULL */
+>>>    		pvmw->pte = huge_pte_offset(mm, pvmw->address, size);
+>>> -		if (!pvmw->pte)
+>>> +		if (!pvmw->pte) {
+>>> +			hugetlb_vma_unlock_read(vma);
+>>>    			return false;
+>>> +		}
+>>>    		pvmw->ptl = huge_pte_lock(hstate, mm, pvmw->pte);
+>>>    		if (!check_pte(pvmw))
+>>
+>> Looking at code like  mm/damon/paddr.c:__damon_pa_mkold() and reading the
+>> doc of page_vma_mapped_walk(), this might be broken.
+>>
+>> Can't we get page_vma_mapped_walk() called multiple times?
 > 
->       struct vgetrandom_alloc_args {
-> 	  __aligned_u64 flags;
->           __aligned_u64 states;
-> 	  __aligned_u64 num;
-> 	  __aligned_u64 size_of_each;
->       }
+> Yes it normally can, but not for hugetlbfs?  Feel free to check:
 > 
->   - If flags is VGRA_ALLOCATE, states and size_of_each must be zero on
->     input, while num is the hint, as is the case now. On output, states,
->     size_of_each, and num are filled in.
-> 
->   - If flags is VGRA_DEALLOCATE, states, size_of_each, and num must be as
->     they were originally, and then it deallocates.
-> 
-> I suppose (2) would alleviate your concerns entirely, without future
-> uncertainty over what it'd be like to add special cases to munmap(). And
-> it'd add a bit more future proofing to the syscall, depending on what we
-> do.
-> 
-> So maybe I'm warming up to that approach a bit.
+> 	if (unlikely(is_vm_hugetlb_page(vma))) {
+>                  ...
+> 		/* The only possible mapping was handled on last iteration */
+> 		if (pvmw->pte)
+> 			return not_found(pvmw);
+>          }
 
-So I just did a little quick implementation to see what it'd feel like,
-and actually, it's quite simple, and might address a lot of concerns all
-at once. What do you think of the below? Documentation and such still
-needs work obviously, but the bones should be there.
+Ah, I see, thanks.
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 4341c6a91207..dae6095b937d 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -189,44 +189,53 @@ int __cold execute_with_initialized_rng(struct notifier_block *nb)
- /**
-  * sys_vgetrandom_alloc - Allocate opaque states for use with vDSO getrandom().
-  *
-- * @num:	   On input, a pointer to a suggested hint of how many states to
-- * 		   allocate, and on output the number of states actually allocated.
-- *
-- * @size_per_each: The size of each state allocated, so that the caller can
-- *		   split up the returned allocation into individual states.
-- *
-- * @flags:	   Currently always zero.
-+ * @uargs:	A vgetrandom_alloc_args which may be updated on return.
-+ * 		allocate, and on output the number of states actually allocated.
-+ * @usize:	The size of @uargs, which determines the version of the struct used.
-  *
-  * The getrandom() vDSO function in userspace requires an opaque state, which
-  * this function allocates by mapping a certain number of special pages into
-  * the calling process. It takes a hint as to the number of opaque states
-  * desired, and provides the caller with the number of opaque states actually
-  * allocated, the size of each one in bytes, and the address of the first
-- * state.
-+ * state. Alternatively, if the VGRA_DEALLOCATE flag is specified, the provided
-+ * states parameter is unmapped.
-  *
-- * Returns the address of the first state in the allocation on success, or a
-- * negative error value on failure.
-+ * Returns 0 on success and an error value otherwise.
-  */
--SYSCALL_DEFINE3(vgetrandom_alloc, unsigned int __user *, num,
--		unsigned int __user *, size_per_each, unsigned int, flags)
-+SYSCALL_DEFINE2(vgetrandom_alloc, struct vgetrandom_alloc_args __user *, uargs, size_t, usize)
- {
- 	const size_t state_size = sizeof(struct vgetrandom_state);
-+	const size_t max_states = (SIZE_MAX & PAGE_MASK) / state_size;
-+	struct vgetrandom_alloc_args args;
- 	size_t alloc_size, num_states;
- 	unsigned long pages_addr;
--	unsigned int num_hint;
- 	int ret;
+Acked-by: David Hildenbrand <david@redhat.com>
 
--	if (flags)
-+	if (usize > PAGE_SIZE)
-+		return -E2BIG;
-+	if (usize < VGETRANDOM_ALLOC_ARGS_SIZE_VER0)
- 		return -EINVAL;
-+	ret = copy_struct_from_user(&args, sizeof(args), uargs, usize);
-+	if (ret)
-+		return ret;
 
--	if (get_user(num_hint, num))
--		return -EFAULT;
-+	/* Currently only VGRA_DEALLOCATE is defined. */
-+	if (args.flags & ~VGRA_DEALLOCATE)
-+		return -EINVAL;
+-- 
+Thanks,
 
--	num_states = clamp_t(size_t, num_hint, 1, (SIZE_MAX & PAGE_MASK) / state_size);
--	alloc_size = PAGE_ALIGN(num_states * state_size);
-+	if (args.flags & VGRA_DEALLOCATE) {
-+		if (args.size_per_each != state_size || args.num > max_states || !args.states)
-+			return -EINVAL;
-+		return vm_munmap(args.states, args.num * state_size);
-+	}
-
--	if (put_user(alloc_size / state_size, num) || put_user(state_size, size_per_each))
--		return -EFAULT;
-+	/* These don't make sense as input values if allocating, so reject them. */
-+	if (args.size_per_each || args.states)
-+		return -EINVAL;
-+
-+	num_states = clamp_t(size_t, args.num, 1, max_states);
-+	alloc_size = PAGE_ALIGN(num_states * state_size);
-
- 	pages_addr = vm_mmap(NULL, 0, alloc_size, PROT_READ | PROT_WRITE,
- 			     MAP_PRIVATE | MAP_ANONYMOUS | MAP_LOCKED, 0);
-@@ -237,7 +246,14 @@ SYSCALL_DEFINE3(vgetrandom_alloc, unsigned int __user *, num,
- 	if (ret < 0)
- 		goto err_unmap;
-
--	return pages_addr;
-+	args.num = num_states;
-+	args.size_per_each = state_size;
-+	args.states = pages_addr;
-+
-+	ret = -EFAULT;
-+	if (copy_to_user(uargs, &args, sizeof(args)))
-+		goto err_unmap;
-+	return 0;
-
- err_unmap:
- 	vm_munmap(pages_addr, alloc_size);
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index 7741dc94f10c..de4338e26db0 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -72,6 +72,7 @@ struct open_how;
- struct mount_attr;
- struct landlock_ruleset_attr;
- enum landlock_rule_type;
-+struct vgetrandom_alloc_args;
-
- #include <linux/types.h>
- #include <linux/aio_abi.h>
-@@ -1006,9 +1007,8 @@ asmlinkage long sys_seccomp(unsigned int op, unsigned int flags,
- 			    void __user *uargs);
- asmlinkage long sys_getrandom(char __user *buf, size_t count,
- 			      unsigned int flags);
--asmlinkage long sys_vgetrandom_alloc(unsigned int __user *num,
--				     unsigned int __user *size_per_each,
--				     unsigned int flags);
-+asmlinkage long sys_vgetrandom_alloc(struct vgetrandom_alloc_args __user *uargs,
-+				     size_t size);
- asmlinkage long sys_memfd_create(const char __user *uname_ptr, unsigned int flags);
- asmlinkage long sys_bpf(int cmd, union bpf_attr *attr, unsigned int size);
- asmlinkage long sys_execveat(int dfd, const char __user *filename,
-diff --git a/include/uapi/linux/random.h b/include/uapi/linux/random.h
-index e744c23582eb..49911ea2c343 100644
---- a/include/uapi/linux/random.h
-+++ b/include/uapi/linux/random.h
-@@ -55,4 +55,30 @@ struct rand_pool_info {
- #define GRND_RANDOM	0x0002
- #define GRND_INSECURE	0x0004
-
-+/*
-+ * Flags for vgetrandom_alloc(2)
-+ *
-+ * VGRA_DEALLOCATE	Deallocate supplied states.
-+ */
-+#define VGRA_DEALLOCATE	0x0001ULL
-+
-+/**
-+ * struct vgetrandom_alloc_args - Arguments for the vgetrandom_alloc(2) syscall.
-+ *
-+ * @flags:	   Zero or more VGRA_* flags.
-+ * @states:	   Zero on input if allocating, and filled in on successful
-+ *		   return. An existing allocation, if deallocating.
-+ * @num:	   A hint as to the desired number of states, if allocating. The
-+ *		   number of existing states in @states, if deallocating
-+ * @size_per_each: The size of each state in @states.
-+ */
-+struct vgetrandom_alloc_args {
-+	__aligned_u64 flags;
-+	__aligned_u64 states;
-+	__aligned_u64 num;
-+	__aligned_u64 size_per_each;
-+};
-+
-+#define VGETRANDOM_ALLOC_ARGS_SIZE_VER0 32 /* sizeof first published struct */
-+
- #endif /* _UAPI_LINUX_RANDOM_H */
+David / dhildenb
 
