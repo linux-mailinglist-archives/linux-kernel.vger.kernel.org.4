@@ -2,337 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA7C63DB7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 18:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4D063DB7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 18:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbiK3RFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 12:05:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
+        id S229671AbiK3RFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 12:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbiK3REl (ORCPT
+        with ESMTP id S230361AbiK3RFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 12:04:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E6193A4F
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:59:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669827566;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2y2eQYmgW93Oe8z+N6AtyddIxcUSht93G9L7qmS2NKY=;
-        b=NkbhvjC1pMnRrr1STof8Plfy+fbJx9VdRGeV1395bRGSCCJypenAl335AcWnQGg3C/zxgi
-        44OECyfXepiUDHNj8Epfc/oGq8+rmirrVlwkfFFDYQTvfop4asMG+HKBTv6vkROyY7BKbQ
-        h/TiLhu/5o2x3+XFTPx+Ae7qTeqsS+w=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-202-9mhrbNkgN3mnfUeguO8gKA-1; Wed, 30 Nov 2022 11:59:24 -0500
-X-MC-Unique: 9mhrbNkgN3mnfUeguO8gKA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0939B38173CC;
-        Wed, 30 Nov 2022 16:59:24 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.36])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4ADBB492B04;
-        Wed, 30 Nov 2022 16:59:23 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH net-next 35/35] rxrpc: Transmit ACKs at the point of
- generation
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, dhowells@redhat.com,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Wed, 30 Nov 2022 16:59:20 +0000
-Message-ID: <166982756095.621383.1390522561920223769.stgit@warthog.procyon.org.uk>
-In-Reply-To: <166982725699.621383.2358362793992993374.stgit@warthog.procyon.org.uk>
-References: <166982725699.621383.2358362793992993374.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Wed, 30 Nov 2022 12:05:01 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596AA70634
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 09:00:04 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so1915442wmb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 09:00:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xm/vpmwhJgDMht8f1OqkuJQbgIo2XHirTX9u59ErmCw=;
+        b=YRIWNKwOKtKOAVADiQlwkkGbVDhFN7bL0mUA71LmY+JBSjuKhPOxzeLxkgQFb6m3rM
+         Pu60RTcJEOLceyYrS6ugloVBqiNKuUzY5HPYruWg0jSoMi7Z+8TPrT/o2jYkvRB2Tqq0
+         YTxs3ZIO2YNYJ9UerVamih6zqCzRT5qwSSuWzmrjrQmFsZZ5QC/dseAn1rd36uUQMwCZ
+         qJfIPiQhoxCZJi/9QuxwY9P/847Vm8Xl+6w7qG3z1ZGuapVsXynsTngIbVRtir3LNXyD
+         aG08Js6Ilnmj3PA9PjK6Uh1YNJC7MJP7HQXTCuslXY3ALapPSN/w0qLvLNAGHTMIhDUH
+         IY8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xm/vpmwhJgDMht8f1OqkuJQbgIo2XHirTX9u59ErmCw=;
+        b=a94a3erza+/TNOvl56wI9RkpK+0eQvTeXoAS5YVc/PybjqkSMXeAKkpofqRdwjRKWg
+         pZgGAcy7eC3SqcrQvz+rqLgcOSBj9FDnL25XBMmix87mobHZ5HedbyS7/qpNHTmh38y+
+         DxLBL73lrbMR6TzQtii4o0I3Bl4rTis49ia3ydNOiJtbLydByASdHqv6GnB5gIDn53Gf
+         wTR22KmXBetDR3BiQL7MJ3x5dNLozpcGkp3xo3vGrFWMq5t0ujcwuiWBHuRxHj+2NYBm
+         K101dfkdwFloRTnYAgVB+V0YmNYfOE3p/VntMZL5NjaXboIzVSMRsLKwbBtJ3ecwPgN2
+         6qYA==
+X-Gm-Message-State: ANoB5pmO2PoKNG4OP4yJVBlb+TrwYJuPBRwHZussa70QvaGXJNXVd3ju
+        SRDTNAhfQcC87j2kZtB8b+8JSQ==
+X-Google-Smtp-Source: AA0mqf7bZVp+Eg6fmULlxyfV3Om/6addnJlUPeBJpAiuNlvTfk1CTvzGSCZBLoPHeRpyKTtf8sNTiA==
+X-Received: by 2002:a1c:6a04:0:b0:3cf:77cc:5f65 with SMTP id f4-20020a1c6a04000000b003cf77cc5f65mr39421824wmc.25.1669827602880;
+        Wed, 30 Nov 2022 09:00:02 -0800 (PST)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id fn7-20020a05600c688700b003c6b70a4d69sm2457159wmb.42.2022.11.30.09.00.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 09:00:02 -0800 (PST)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>
+Subject: [PATCH v3 1/4] hwmon: (pmbus/core): Add status byte to regulator flag map
+Date:   Wed, 30 Nov 2022 17:59:51 +0100
+Message-Id: <20221130165955.3479143-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For ACKs generated inside the I/O thread, transmit the ACK at the point of
-generation.  Where the ACK is generated outside of the I/O thread, it's
-offloaded to the I/O thread to transmit it.
+Add PMBus status byte to regulator flag map.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+
 ---
+Changes:
+- Remove status input
+- Add comment for PMBUS status byte.
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
- include/trace/events/rxrpc.h |    3 ---
- net/rxrpc/ar-internal.h      |    5 +----
- net/rxrpc/call_event.c       |   17 ++---------------
- net/rxrpc/io_thread.c        |    5 -----
- net/rxrpc/local_object.c     |    2 --
- net/rxrpc/output.c           |   42 ++----------------------------------------
- net/rxrpc/recvmsg.c          |    3 ---
- net/rxrpc/sendmsg.c          |    2 --
- net/rxrpc/txbuf.c            |    1 -
- 9 files changed, 5 insertions(+), 75 deletions(-)
-
-diff --git a/include/trace/events/rxrpc.h b/include/trace/events/rxrpc.h
-index b41e913ae78a..049b52e7aa6a 100644
---- a/include/trace/events/rxrpc.h
-+++ b/include/trace/events/rxrpc.h
-@@ -63,7 +63,6 @@
- 	EM(rxrpc_local_put_peer,		"PUT peer    ") \
- 	EM(rxrpc_local_put_prealloc_conn,	"PUT conn-pre") \
- 	EM(rxrpc_local_put_release_sock,	"PUT rel-sock") \
--	EM(rxrpc_local_see_tx_ack,		"SEE tx-ack  ") \
- 	EM(rxrpc_local_stop,			"STOP        ") \
- 	EM(rxrpc_local_stopped,			"STOPPED     ") \
- 	EM(rxrpc_local_unuse_bind,		"UNU bind    ") \
-@@ -156,7 +155,6 @@
- 	EM(rxrpc_call_get_recvmsg,		"GET recvmsg ") \
- 	EM(rxrpc_call_get_release_sock,		"GET rel-sock") \
- 	EM(rxrpc_call_get_sendmsg,		"GET sendmsg ") \
--	EM(rxrpc_call_get_send_ack,		"GET send-ack") \
- 	EM(rxrpc_call_get_userid,		"GET user-id ") \
- 	EM(rxrpc_call_new_client,		"NEW client  ") \
- 	EM(rxrpc_call_new_prealloc_service,	"NEW prealloc") \
-@@ -168,7 +166,6 @@
- 	EM(rxrpc_call_put_recvmsg,		"PUT recvmsg ") \
- 	EM(rxrpc_call_put_release_sock,		"PUT rls-sock") \
- 	EM(rxrpc_call_put_release_sock_tba,	"PUT rls-sk-a") \
--	EM(rxrpc_call_put_send_ack,		"PUT send-ack") \
- 	EM(rxrpc_call_put_sendmsg,		"PUT sendmsg ") \
- 	EM(rxrpc_call_put_unnotify,		"PUT unnotify") \
- 	EM(rxrpc_call_put_userid_exists,	"PUT u-exists") \
-diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
-index 2a4928249a64..e7dccab7b741 100644
---- a/net/rxrpc/ar-internal.h
-+++ b/net/rxrpc/ar-internal.h
-@@ -287,8 +287,6 @@ struct rxrpc_local {
- 	struct hlist_node	link;
- 	struct socket		*socket;	/* my UDP socket */
- 	struct task_struct	*io_thread;
--	struct list_head	ack_tx_queue;	/* List of ACKs that need sending */
--	spinlock_t		ack_tx_lock;	/* ACK list lock */
- 	struct rxrpc_sock __rcu	*service;	/* Service(s) listening on this endpoint */
- 	struct rw_semaphore	defrag_sem;	/* control re-enablement of IP DF bit */
- 	struct sk_buff_head	rx_queue;	/* Received packets */
-@@ -762,7 +760,6 @@ struct rxrpc_txbuf {
- 	struct rcu_head		rcu;
- 	struct list_head	call_link;	/* Link in call->tx_sendmsg/tx_buffer */
- 	struct list_head	tx_link;	/* Link in live Enc queue or Tx queue */
--	struct rxrpc_call	*call;		/* Call to which belongs */
- 	ktime_t			last_sent;	/* Time at which last transmitted */
- 	refcount_t		ref;
- 	rxrpc_seq_t		seq;		/* Sequence number of this packet */
-@@ -1047,7 +1044,7 @@ static inline struct rxrpc_net *rxrpc_net(struct net *net)
- /*
-  * output.c
-  */
--void rxrpc_transmit_ack_packets(struct rxrpc_local *);
-+int rxrpc_send_ack_packet(struct rxrpc_call *call, struct rxrpc_txbuf *txb);
- int rxrpc_send_abort_packet(struct rxrpc_call *);
- int rxrpc_send_data_packet(struct rxrpc_call *, struct rxrpc_txbuf *);
- void rxrpc_reject_packet(struct rxrpc_local *local, struct sk_buff *skb);
-diff --git a/net/rxrpc/call_event.c b/net/rxrpc/call_event.c
-index fd122e3726bd..b2cf448fb02c 100644
---- a/net/rxrpc/call_event.c
-+++ b/net/rxrpc/call_event.c
-@@ -69,7 +69,6 @@ void rxrpc_propose_delay_ACK(struct rxrpc_call *call, rxrpc_serial_t serial,
- void rxrpc_send_ACK(struct rxrpc_call *call, u8 ack_reason,
- 		    rxrpc_serial_t serial, enum rxrpc_propose_ack_trace why)
- {
--	struct rxrpc_local *local = call->conn->local;
- 	struct rxrpc_txbuf *txb;
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 95e95783972a..a7b4ae0f1f3b 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2751,7 +2751,16 @@ struct pmbus_regulator_status_category {
+ };
  
- 	if (test_bit(RXRPC_CALL_DISCONNECTED, &call->flags))
-@@ -96,17 +95,9 @@ void rxrpc_send_ACK(struct rxrpc_call *call, u8 ack_reason,
- 	txb->ack.reason		= ack_reason;
- 	txb->ack.nAcks		= 0;
- 
--	if (!rxrpc_try_get_call(call, rxrpc_call_get_send_ack)) {
--		rxrpc_put_txbuf(txb, rxrpc_txbuf_put_nomem);
--		return;
--	}
--
--	spin_lock(&local->ack_tx_lock);
--	list_add_tail(&txb->tx_link, &local->ack_tx_queue);
--	spin_unlock(&local->ack_tx_lock);
- 	trace_rxrpc_send_ack(call, why, ack_reason, serial);
--
--	rxrpc_wake_up_io_thread(local);
-+	rxrpc_send_ack_packet(call, txb);
-+	rxrpc_put_txbuf(txb, rxrpc_txbuf_put_ack_tx);
- }
- 
- /*
-@@ -294,10 +285,6 @@ static void rxrpc_decant_prepared_tx(struct rxrpc_call *call)
- 
- 		rxrpc_transmit_one(call, txb);
- 
--		// TODO: Drain the transmission buffers.  Do this somewhere better
--		if (after(call->acks_hard_ack, call->tx_bottom + 16))
--			rxrpc_shrink_call_tx_buffer(call);
--
- 		if (!rxrpc_tx_window_has_space(call))
- 			break;
+ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
+-	{
++	{	/* STATUS byte is always present. */
++		.func = -1,
++		.reg = PMBUS_STATUS_BYTE,
++		.bits = (const struct pmbus_regulator_status_assoc[]) {
++			{ PB_STATUS_IOUT_OC,   REGULATOR_ERROR_OVER_CURRENT },
++			{ PB_STATUS_VOUT_OV,   REGULATOR_ERROR_REGULATION_OUT },
++			{ PB_STATUS_VIN_UV,    REGULATOR_ERROR_UNDER_VOLTAGE },
++			{ },
++		},
++	}, {
+ 		.func = PMBUS_HAVE_STATUS_VOUT,
+ 		.reg = PMBUS_STATUS_VOUT,
+ 		.bits = (const struct pmbus_regulator_status_assoc[]) {
+@@ -2768,6 +2777,7 @@ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] =
+ 			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
+ 			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
+ 			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
++			{ PB_POUT_OP_FAULT,      REGULATOR_ERROR_FAIL },
+ 			{ },
+ 		},
+ 	}, {
+@@ -2834,14 +2844,6 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+ 		if (status & PB_STATUS_POWER_GOOD_N)
+ 			*flags |= REGULATOR_ERROR_REGULATION_OUT;
  	}
-diff --git a/net/rxrpc/io_thread.c b/net/rxrpc/io_thread.c
-index 19aa315eddf5..d83ae3193032 100644
---- a/net/rxrpc/io_thread.c
-+++ b/net/rxrpc/io_thread.c
-@@ -447,11 +447,6 @@ int rxrpc_io_thread(void *data)
- 			continue;
- 		}
+-	/*
+-	 * Unlike most other status bits, PB_STATUS_{IOUT_OC,VOUT_OV} are
+-	 * defined strictly as fault indicators (not warnings).
+-	 */
+-	if (status & PB_STATUS_IOUT_OC)
+-		*flags |= REGULATOR_ERROR_OVER_CURRENT;
+-	if (status & PB_STATUS_VOUT_OV)
+-		*flags |= REGULATOR_ERROR_REGULATION_OUT;
  
--		if (!list_empty(&local->ack_tx_queue)) {
--			rxrpc_transmit_ack_packets(local);
--			continue;
--		}
--
- 		/* Process received packets and errors. */
- 		if ((skb = __skb_dequeue(&rx_queue))) {
- 			switch (skb->mark) {
-diff --git a/net/rxrpc/local_object.c b/net/rxrpc/local_object.c
-index 1e994a83db2b..44222923c0d1 100644
---- a/net/rxrpc/local_object.c
-+++ b/net/rxrpc/local_object.c
-@@ -96,8 +96,6 @@ static struct rxrpc_local *rxrpc_alloc_local(struct rxrpc_net *rxnet,
- 		atomic_set(&local->active_users, 1);
- 		local->rxnet = rxnet;
- 		INIT_HLIST_NODE(&local->link);
--		INIT_LIST_HEAD(&local->ack_tx_queue);
--		spin_lock_init(&local->ack_tx_lock);
- 		init_rwsem(&local->defrag_sem);
- 		skb_queue_head_init(&local->rx_queue);
- 		INIT_LIST_HEAD(&local->call_attend_q);
-diff --git a/net/rxrpc/output.c b/net/rxrpc/output.c
-index 8147a47d1702..3d8c9f830ee0 100644
---- a/net/rxrpc/output.c
-+++ b/net/rxrpc/output.c
-@@ -203,12 +203,11 @@ static void rxrpc_cancel_rtt_probe(struct rxrpc_call *call,
- }
- 
- /*
-- * Send an ACK call packet.
-+ * Transmit an ACK packet.
-  */
--static int rxrpc_send_ack_packet(struct rxrpc_local *local, struct rxrpc_txbuf *txb)
-+int rxrpc_send_ack_packet(struct rxrpc_call *call, struct rxrpc_txbuf *txb)
- {
- 	struct rxrpc_connection *conn;
--	struct rxrpc_call *call = txb->call;
- 	struct msghdr msg;
- 	struct kvec iov[1];
- 	rxrpc_serial_t serial;
-@@ -271,43 +270,6 @@ static int rxrpc_send_ack_packet(struct rxrpc_local *local, struct rxrpc_txbuf *
- 	return ret;
- }
- 
--/*
-- * ACK transmitter for a local endpoint.  The UDP socket locks around each
-- * transmission, so we can only transmit one packet at a time, ACK, DATA or
-- * otherwise.
-- */
--void rxrpc_transmit_ack_packets(struct rxrpc_local *local)
--{
--	LIST_HEAD(queue);
--	int ret;
--
--	rxrpc_see_local(local, rxrpc_local_see_tx_ack);
--
--	if (list_empty(&local->ack_tx_queue))
--		return;
--
--	spin_lock(&local->ack_tx_lock);
--	list_splice_tail_init(&local->ack_tx_queue, &queue);
--	spin_unlock(&local->ack_tx_lock);
--
--	while (!list_empty(&queue)) {
--		struct rxrpc_txbuf *txb =
--			list_entry(queue.next, struct rxrpc_txbuf, tx_link);
--
--		ret = rxrpc_send_ack_packet(local, txb);
--		if (ret < 0 && ret != -ECONNRESET) {
--			spin_lock(&local->ack_tx_lock);
--			list_splice_init(&queue, &local->ack_tx_queue);
--			spin_unlock(&local->ack_tx_lock);
--			break;
--		}
--
--		list_del_init(&txb->tx_link);
--		rxrpc_put_call(txb->call, rxrpc_call_put_send_ack);
--		rxrpc_put_txbuf(txb, rxrpc_txbuf_put_ack_tx);
--	}
--}
--
- /*
-  * Send an ABORT call packet.
-  */
-diff --git a/net/rxrpc/recvmsg.c b/net/rxrpc/recvmsg.c
-index 3a8576e9daf3..36b25d003cf0 100644
---- a/net/rxrpc/recvmsg.c
-+++ b/net/rxrpc/recvmsg.c
-@@ -320,7 +320,6 @@ static int rxrpc_recvmsg_data(struct socket *sock, struct rxrpc_call *call,
- 				ret = ret2;
- 				goto out;
- 			}
--			rxrpc_transmit_ack_packets(call->peer->local);
- 		} else {
- 			trace_rxrpc_recvdata(call, rxrpc_recvmsg_cont, seq,
- 					     rx_pkt_offset, rx_pkt_len, 0);
-@@ -502,7 +501,6 @@ int rxrpc_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
- 		if (ret == -EAGAIN)
- 			ret = 0;
- 
--		rxrpc_transmit_ack_packets(call->peer->local);
- 		if (!skb_queue_empty(&call->recvmsg_queue))
- 			rxrpc_notify_socket(call);
- 		break;
-@@ -632,7 +630,6 @@ int rxrpc_kernel_recv_data(struct socket *sock, struct rxrpc_call *call,
- read_phase_complete:
- 	ret = 1;
- out:
--	rxrpc_transmit_ack_packets(call->peer->local);
- 	if (_service)
- 		*_service = call->dest_srx.srx_service;
- 	mutex_unlock(&call->user_mutex);
-diff --git a/net/rxrpc/sendmsg.c b/net/rxrpc/sendmsg.c
-index 2c861c55ed70..9fa7e37f7155 100644
---- a/net/rxrpc/sendmsg.c
-+++ b/net/rxrpc/sendmsg.c
-@@ -276,8 +276,6 @@ static int rxrpc_send_data(struct rxrpc_sock *rx,
- 		rxrpc_see_txbuf(txb, rxrpc_txbuf_see_send_more);
- 
- 	do {
--		rxrpc_transmit_ack_packets(call->peer->local);
--
- 		if (!txb) {
- 			size_t remain, bufsize, chunk, offset;
- 
-diff --git a/net/rxrpc/txbuf.c b/net/rxrpc/txbuf.c
-index a5054389dfbb..d2cf2aac3adb 100644
---- a/net/rxrpc/txbuf.c
-+++ b/net/rxrpc/txbuf.c
-@@ -26,7 +26,6 @@ struct rxrpc_txbuf *rxrpc_alloc_txbuf(struct rxrpc_call *call, u8 packet_type,
- 		INIT_LIST_HEAD(&txb->call_link);
- 		INIT_LIST_HEAD(&txb->tx_link);
- 		refcount_set(&txb->ref, 1);
--		txb->call		= call;
- 		txb->call_debug_id	= call->debug_id;
- 		txb->debug_id		= atomic_inc_return(&rxrpc_txbuf_debug_ids);
- 		txb->space		= sizeof(txb->data);
+ 	/*
+ 	 * If we haven't discovered any thermal faults or warnings via
 
+base-commit: 9494c53e1389b120ba461899207ac8a3aab2632c
+-- 
+2.37.3
 
