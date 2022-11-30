@@ -2,137 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3EE063CF57
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 07:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9027A63CF5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 07:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233385AbiK3GtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 01:49:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
+        id S233223AbiK3GxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 01:53:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232297AbiK3GtG (ORCPT
+        with ESMTP id S232172AbiK3GxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 01:49:06 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF0E45EDB;
-        Tue, 29 Nov 2022 22:49:04 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 6962432008C3;
-        Wed, 30 Nov 2022 01:49:01 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 30 Nov 2022 01:49:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669790940; x=
-        1669877340; bh=Oo4m/M2CLmFBs936diTgoNkM47vJxV+hsa4z7Pi/W/c=; b=i
-        UybVenTBMuICmg1qOTvvLhVZhFOCVQ2TUs07wvfeMI6oGBlIby4tTDTP2WehHFUq
-        JuXJW3HKOX+xthigiaMlemR8XB4s+kw+U/8M354F7214xlZ/EwOYO7T/wp3rF5cV
-        ostq0XKldLMxoF1pFJQRkR9rX/rGajiU5DtVdOqKgjRn4wLpUfeRS3jwnPzHJHql
-        zok6S8GtW2rDEJAqn1q1Rji2/HVSbN/wzZ+IYgMiu6W/Sc1OPGnHV3Mfin+Rq9jA
-        1cY6AwylGgipbF0XhfAxjum82IqFDAqqJBAazpPcR6s7pAlHZDkSPVO1/mxzBEAf
-        PzH6M/GkQP7BRt9aBdlqA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669790940; x=
-        1669877340; bh=Oo4m/M2CLmFBs936diTgoNkM47vJxV+hsa4z7Pi/W/c=; b=W
-        140O6eix5o9QGCjvzrQHyoM5YtS44aVc+YsF5ecHuZqgadvwyHJiiZd00p/NEMuw
-        dMCEqKjGV5z9ra54AsBqsHTjfQ8jW1mkTJKj06WXMQsHQLlRhsUqQd0g+y/zd2fx
-        7k5+jYaBmoYndpEVzWq6CrlDoAmKfxuewht9l/FelucM3wHt+6Fmedg+7rF71CIw
-        mU0+W4m/x8+9yuMRG7chKUdk8/4D5tW3kf2RJYNnYDnCrfCg3qvbdGov5mBw3ar1
-        xrzNVCPZ6TJujTYcUuCsLYYPSXJCTQ7oHWLLgcB+N0qA3GHAH1CliOzQKxVzTfL8
-        QyDpIFS8bDSKlhCM8WbKw==
-X-ME-Sender: <xms:2_yGYz0Y49q2bNvS5nkXckNWHbFLgDzTGWWRKbd-gvlkNS8gBa0hcA>
-    <xme:2_yGYyE8qsDxm79tnHHpiJgqVlpAKjCU-fLs9ui8qF9fofJCXsA-lt0zeZUy_tGIg
-    rAvDMjXkQuLA153jw>
-X-ME-Received: <xmr:2_yGYz6YTf4tziAk4X2ZgRzInmxjOwq94ysEjs3vWVqAhS4hw6lDk3gLUyGNqCb859MAgTfrMEfvoZchab9PSFB8Lcd0R0sT7QwqMJ6gsSVDG8yXK0mOjtII3A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtddvgdellecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepudfhffefhfffuddutedvffekteevieeugeefleelffeitddutdff
-    udehgfdtfefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgr
-    nhgurdhorhhg
-X-ME-Proxy: <xmx:2_yGY43y3F_JIzreruW5KaMjdYX6lCBtFKEAw0-f067mmFQXJj5nhw>
-    <xmx:2_yGY2G4PW9MSLevbKpqlAOlAlCP15_qWMzLUU23c7FN2OPIqUE3Pg>
-    <xmx:2_yGY59DQWmk2HPhM8j52r53VsjSu3g7Q7EGlXzBbfFZNbB-qMZTww>
-    <xmx:3PyGYyH_b_OEbiRJP5xFF7ri_CaEbLmi19Chl0sOjTQDPTgy5yaciQ>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 30 Nov 2022 01:48:58 -0500 (EST)
-Message-ID: <d0344e62-b9ff-8465-9556-5562e195f4a3@sholland.org>
-Date:   Wed, 30 Nov 2022 00:48:58 -0600
+        Wed, 30 Nov 2022 01:53:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA715490A4
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 22:53:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60E60B81A67
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 06:53:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6236C433C1;
+        Wed, 30 Nov 2022 06:53:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669791187;
+        bh=EggWEo4gY6wAJqsf5Ch9n9RvX5agJx+Zh7mWiG7SLJo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c63HYoQRP63HhfGAXFRzhBRh8b1o5y/5YpPAoO/UJiaFzGS9C1io8veZgzNaX45yp
+         aHnt1wyQgabIe9eWSPtISiptkBfOiVPTGkalu1XlbFgDjWkzNd/9qmO6KTRHOO8iqR
+         gA06wh8UpWhM2mbBil8Wt5dEl0faGPQrsA6IxrOFMGHDzvgtm63zR/G4J35pi/pc0m
+         vA729xWGhY5rseO03g1KMyeO2hpyh50nalG20MPeyV136KL2StSk2II5cIGk5+RhtB
+         ntU1WE90oLayO3gLSN34cel8jEXftvaCt4UdsSdckl+XqatOvsKQmOIdSBRT0QDL4R
+         6eXxY45Ke8Q6A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p0Gxw-0005Vd-B4; Wed, 30 Nov 2022 07:53:09 +0100
+Date:   Wed, 30 Nov 2022 07:53:08 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] firmware/psci: demote suspend-mode warning to info
+ level
+Message-ID: <Y4b91JYeuToJ25LD@hovoldconsulting.com>
+References: <20221026135445.8004-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2 3/9] riscv: add the Bouffalolab SoC family Kconfig
- option
-Content-Language: en-US
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-References: <20221127132448.4034-1-jszhang@kernel.org>
- <20221127132448.4034-4-jszhang@kernel.org>
-From:   Samuel Holland <samuel@sholland.org>
-In-Reply-To: <20221127132448.4034-4-jszhang@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026135445.8004-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/27/22 07:24, Jisheng Zhang wrote:
-> The Bouffalolab bl808 SoC contains three riscv CPUs, namely M0, D0 and
-> LP. The D0 is 64bit RISC-V GC compatible, so can run linux.
+On Wed, Oct 26, 2022 at 03:54:45PM +0200, Johan Hovold wrote:
+> On some Qualcomm platforms, like SC8280XP, the attempt to set PC mode
+> during boot fails with PSCI_RET_DENIED and since commit 998fcd001feb
+> ("firmware/psci: Print a warning if PSCI doesn't accept PC mode") this
+> is now logged at warning level:
 > 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> 	psci: failed to set PC mode: -3
+> 
+> As there is nothing users can do about the firmware behaving this way,
+> demote the warning to info level and clearly mark it as a firmware bug:
+> 
+> 	psci: [Firmware Bug]: failed to set PC mode: -3
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
->  arch/riscv/Kconfig.socs | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  drivers/firmware/psci/psci.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-> index 69774bb362d6..90256f44ed4a 100644
-> --- a/arch/riscv/Kconfig.socs
-> +++ b/arch/riscv/Kconfig.socs
-> @@ -1,5 +1,11 @@
->  menu "SoC selection"
+> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> index e7bcfca4159f..f8fa32f0a130 100644
+> --- a/drivers/firmware/psci/psci.c
+> +++ b/drivers/firmware/psci/psci.c
+> @@ -165,7 +165,8 @@ int psci_set_osi_mode(bool enable)
 >  
-> +config SOC_BOUFFALOLAB
+>  	err = invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE, suspend_mode, 0, 0);
+>  	if (err < 0)
+> -		pr_warn("failed to set %s mode: %d\n", enable ? "OSI" : "PC", err);
+> +		pr_info(FW_BUG "failed to set %s mode: %d\n",
+> +				enable ? "OSI" : "PC", err);
+>  	return psci_to_linux_errno(err);
+>  }
 
-The options in this file are getting renamed soon, so this should be
-named ARCH_BOUFFALOLAB. See
+Mark and Lorenzo, I noticed this one hasn't been picked up yet. Is that
+something you will do or is Arnd supposed to take it?
 
-https://lore.kernel.org/linux-riscv/20221121221414.109965-1-conor@kernel.org/
-
-Regards,
-Samuel
-
-> +	bool "Bouffalolab SoCs"
-> +	select SIFIVE_PLIC
-> +	help
-> +	  This enables support for Bouffalolab SoC platforms.
-> +
->  config SOC_MICROCHIP_POLARFIRE
->  	bool "Microchip PolarFire SoCs"
->  	select MCHP_CLK_MPFS
-
+Johan
