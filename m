@@ -2,177 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E19263DC97
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA3463DC9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbiK3SDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:03:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57054 "EHLO
+        id S229767AbiK3SE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:04:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiK3SC6 (ORCPT
+        with ESMTP id S229747AbiK3SE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:02:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1172948424
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:02:56 -0800 (PST)
+        Wed, 30 Nov 2022 13:04:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7FD748F6;
+        Wed, 30 Nov 2022 10:04:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 986F161D01
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 18:02:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0E1EC433D7;
-        Wed, 30 Nov 2022 18:02:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 264A0B81C8A;
+        Wed, 30 Nov 2022 18:04:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25DABC433C1;
+        Wed, 30 Nov 2022 18:04:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669831375;
-        bh=Y9g7phTOGvNc4CFm3fAtwIfggfZ/yOOnreTfYzARfZ0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AKAaytmGy4nwo0o2XypCIP1SLXaibMtmFQYjTlLnYcPL3TlB01xbiZNsIplEOESVj
-         f5DCVgc1txkD4EtOCo1kh5V+qF3vqN6am3iHZHNwiowyFEGK9nbhZxtabeMNk7VNXO
-         6T+xVbkTEBbjeMYy6Z4LVxQBCBhLwscACu2otNaYwtoezCHJ+Ye9O75dcKashEL/mj
-         yJDTpdlI35BljepvO1zIGRqgg/Et4HGFbjDZI1DvO9Z9KjQwPNBo2EIANByBnrzJNJ
-         WxPAvrUpWlBhx7wnEaWjsfPiqsj5JBDB0wr6sRPFVussoBRBltvUg43cd3k7w2tvNX
-         If+pFYMl8jbKA==
-Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1p0RQ2-009eMw-Ri;
-        Wed, 30 Nov 2022 18:02:52 +0000
-Date:   Wed, 30 Nov 2022 18:02:29 +0000
-Message-ID: <87o7sotj62.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
+        s=k20201202; t=1669831493;
+        bh=gbEP0d3/Dzbwbi8UXaAA6LqakazFzwGDxZhVIwGTAwA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gdRcWit9svEV1OMGEO104lxJKfZsPqZUsRQnWrIU5xchUhe2lTQeqHINsRIKgD6eq
+         anYmi1nDmX2AD8kxTWdfF/KNz9mGe4KMUlHYg4fEYo7xmhbU0yKhdJTMm9i8azTy2A
+         P9KB9PuW45tFhours+KC7ZoVqz1AP2Ou7C/bpMStDXCc2AQ/YBalUn6isD5Ixi09mq
+         Uv+rc+R2tp1ZG5HgpJj8tHnd3qtKk8ks4CzAXilJbXVyQm1PHzswrhD26Vs82awLz5
+         G3y4C4rx0dAt6NeSFq1x5rQEEI/jq1L0ESfAMYNmTomqmK7JJ4FimzCJdApsMbh/rw
+         QEqYPdHcKdPog==
+From:   Conor Dooley <conor@kernel.org>
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Conor Dooley <conor@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v13 4/7] RISC-V: Treat IPIs as normal Linux IRQs
-In-Reply-To: <CAAhSdy0T1G7=XVSmtYxONtfk+5-XYnv3qWyFL2Nnp-MS3aQroA@mail.gmail.com>
-References: <20221129142449.886518-1-apatel@ventanamicro.com>
-        <20221129142449.886518-5-apatel@ventanamicro.com>
-        <86bkoomn4h.wl-maz@kernel.org>
-        <CAAhSdy0T1G7=XVSmtYxONtfk+5-XYnv3qWyFL2Nnp-MS3aQroA@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.104.136.29
-X-SA-Exim-Rcpt-To: anup@brainfault.org, apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Guo Ren <guoren@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] riscv,isa fixups
+Date:   Wed, 30 Nov 2022 18:04:21 +0000
+Message-Id: <20221130180422.1642652-1-conor@kernel.org>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Nov 2022 17:14:09 +0000,
-Anup Patel <anup@brainfault.org> wrote:
-> 
-> On Wed, Nov 30, 2022 at 9:48 PM Marc Zyngier <maz@kernel.org> wrote:
-> >
-> > On Tue, 29 Nov 2022 14:24:46 +0000,
-> > Anup Patel <apatel@ventanamicro.com> wrote:
-> > >
-> > > Currently, the RISC-V kernel provides arch specific hooks (i.e.
-> > > struct riscv_ipi_ops) to register IPI handling methods. The stats
-> > > gathering of IPIs is also arch specific in the RISC-V kernel.
-> > >
-> > > Other architectures (such as ARM, ARM64, and MIPS) have moved away
-> > > from custom arch specific IPI handling methods. Currently, these
-> > > architectures have Linux irqchip drivers providing a range of Linux
-> > > IRQ numbers to be used as IPIs and IPI triggering is done using
-> > > generic IPI APIs. This approach allows architectures to treat IPIs
-> > > as normal Linux IRQs and IPI stats gathering is done by the generic
-> > > Linux IRQ subsystem.
-> > >
-> > > We extend the RISC-V IPI handling as-per above approach so that arch
-> > > specific IPI handling methods (struct riscv_ipi_ops) can be removed
-> > > and the IPI handling is done through the Linux IRQ subsystem.
-> > >
-> > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > > ---
-> > >  arch/riscv/Kconfig                |   2 +
-> > >  arch/riscv/include/asm/sbi.h      |  10 +-
-> > >  arch/riscv/include/asm/smp.h      |  35 ++++---
-> > >  arch/riscv/kernel/Makefile        |   1 +
-> > >  arch/riscv/kernel/cpu-hotplug.c   |   3 +-
-> > >  arch/riscv/kernel/irq.c           |   3 +-
-> > >  arch/riscv/kernel/sbi-ipi.c       |  81 ++++++++++++++++
-> > >  arch/riscv/kernel/sbi.c           | 106 +++-----------------
-> > >  arch/riscv/kernel/smp.c           | 155 +++++++++++++++---------------
-> > >  arch/riscv/kernel/smpboot.c       |   5 +-
-> > >  drivers/clocksource/timer-clint.c |  65 ++++++++++---
-> > >  drivers/irqchip/Kconfig           |   1 +
-> > >  drivers/irqchip/irq-riscv-intc.c  |  55 +++++------
-> > >  13 files changed, 287 insertions(+), 235 deletions(-)
-> > >  create mode 100644 arch/riscv/kernel/sbi-ipi.c
-> > >
-> >
-> > [...]
-> >
-> > > diff --git a/arch/riscv/kernel/sbi-ipi.c b/arch/riscv/kernel/sbi-ipi.c
-> > > new file mode 100644
-> > > index 000000000000..6466706b03a7
-> > > --- /dev/null
-> > > +++ b/arch/riscv/kernel/sbi-ipi.c
-> > > @@ -0,0 +1,81 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * Multiplex several IPIs over a single HW IPI.
-> > > + *
-> > > + * Copyright (c) 2022 Ventana Micro Systems Inc.
-> > > + */
-> > > +
-> > > +#define pr_fmt(fmt) "riscv: " fmt
-> > > +#include <linux/cpu.h>
-> > > +#include <linux/init.h>
-> > > +#include <linux/irq.h>
-> > > +#include <linux/irqdomain.h>
-> > > +#include <linux/percpu.h>
-> > > +#include <asm/sbi.h>
-> > > +
-> > > +static int sbi_ipi_virq;
-> > > +static DEFINE_PER_CPU_READ_MOSTLY(int, sbi_ipi_dummy_dev);
-> > > +
-> > > +static irqreturn_t sbi_ipi_handle(int irq, void *dev_id)
-> > > +{
-> > > +     csr_clear(CSR_IP, IE_SIE);
-> > > +     ipi_mux_process();
-> > > +     return IRQ_HANDLED;
-> >
-> > Urgh... I really wish I hadn't seen this. This requires a chained
-> > handler. You had it before, and yet you dropped it. Why?
-> >
-> > Either you call ipi_mux_process() from your root interrupt controller,
-> > or you implement a chained handler. But not this.
-> >
-> > Same thing about the clint stuff.
-> 
-> We had chained handler all along but there is problem (which
-> was pointed to us) in using chained handler because the parent
-> RISC-V INTC irqchip driver does not have irq_eoi() so the
-> chained_irq_enter() and chained_irq_exit() will do the interrupt
-> mask/unmask dance which seems unnecessary.
-> 
-> Is there a better way to avoid the interrupt mask/unmask dance ?
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Well, you could have an IPI-specific irqchip, with an empty EOI
-callback. Or something. But not *that*.
+I noticed ~today~ while looking at the isa manual that I had not
+accounted for another couple of edge cases with my regex. As before, I
+think attempting to validate the canonical order for multiletter stuff
+makes no sense - but we should totally try to avoid false-positives for
+combinations that are known to be valid.
 
-And next time you change something of that importance, add it to your
-change log.
+All I've changed here for v2 is collecting tags & adding in the missing
+commit reference that Heiko pointed out.
 
-	M.
+@Palmer, either you can take this once the DT folks have ACKed it if you
+like, or I will take onto some v6.2-rcN fixes branch. I don't think that
+there is any urgency :)
+
+Thanks,
+Conor.
+
+CC: Conor Dooley <conor@kernel.org>
+CC: Rob Herring <robh+dt@kernel.org>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC: Paul Walmsley <paul.walmsley@sifive.com>
+CC: Palmer Dabbelt <palmer@dabbelt.com>
+CC: Albert Ou <aou@eecs.berkeley.edu>
+CC: Heiko Stuebner <heiko@sntech.de>
+CC: Andrew Jones <ajones@ventanamicro.com>
+CC: Guo Ren <guoren@kernel.org>
+CC: linux-riscv@lists.infradead.org
+CC: devicetree@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+
+Conor Dooley (2):
+  dt-bindings: riscv: fix underscore requirement for addtional standard
+    extensions
+  dt-bindings: riscv: fix single letter canonical order
+
+ Documentation/devicetree/bindings/riscv/cpus.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 -- 
-Without deviation from the norm, progress is not possible.
+2.38.1
+
