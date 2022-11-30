@@ -2,62 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B4763DCEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C71C63DCF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbiK3SRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:17:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42324 "EHLO
+        id S229812AbiK3SSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:18:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbiK3SRL (ORCPT
+        with ESMTP id S230053AbiK3SSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:17:11 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D04C497003
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:15:08 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF0F6D6E;
-        Wed, 30 Nov 2022 10:15:07 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 48BEA3F73B;
-        Wed, 30 Nov 2022 10:14:59 -0800 (PST)
-Message-ID: <2eb769e6-0749-0cd2-3c1c-44262b3a8110@arm.com>
-Date:   Wed, 30 Nov 2022 19:14:51 +0100
+        Wed, 30 Nov 2022 13:18:25 -0500
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74ED9897B;
+        Wed, 30 Nov 2022 10:15:42 -0800 (PST)
+Received: by mail-ot1-f49.google.com with SMTP id l42-20020a9d1b2d000000b0066c6366fbc3so11758302otl.3;
+        Wed, 30 Nov 2022 10:15:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JQgMv+4kwESBu57U9sIa1Qhs40zZZUjyRdV30we0JoU=;
+        b=2w5+3hzeNhvnPmhc8BE9pnXTYLELFXlf8pMYGsrwtxap9p+1aeG/nvqr7TiwzXgpdc
+         DHh/eOPfOsX+vdA2Wo4RGZvgdxlafEINJdWWi3aBEr5SYeWYo3VEQYYWZWiDhaX7cPmP
+         VuoBbh6u9OCZ6f0khh4IlNa6iYk59U7W768A02W3nX1wmWEiahKAUM+s33bNv1XPqAwj
+         7TMAncgofOofNdICX/f3mrcq4f/r34mPd48YtvdsXn0tPj9c3XFbKybhjKxm4/eV5zW1
+         CUdk6wMQ+XANgKNKJr0cQEllX1LUdhFCydh6L44fEW6xvXCu8ccNpa/D4sMV75tlYHIN
+         noOw==
+X-Gm-Message-State: ANoB5pndIpmMxFmlyq9NIsDMeAzF5FdUF/uJQ2Khq2TCKTEMvo5HZ4e1
+        tQGGgURsiUmtbdX83F16I328zTvJMg==
+X-Google-Smtp-Source: AA0mqf7Gyq/9uTW6zQxKhmsY5gzkvXymZgl+qZcZo2UBY55Qqq62o+YalOdkJKa3fE9puNdFsdefAA==
+X-Received: by 2002:a9d:2c42:0:b0:66c:754e:869b with SMTP id f60-20020a9d2c42000000b0066c754e869bmr30820357otb.198.1669832137870;
+        Wed, 30 Nov 2022 10:15:37 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v12-20020acaac0c000000b00342ded07a75sm902245oie.18.2022.11.30.10.15.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 10:15:37 -0800 (PST)
+Received: (nullmailer pid 2555328 invoked by uid 1000);
+        Wed, 30 Nov 2022 18:15:36 -0000
+Date:   Wed, 30 Nov 2022 12:15:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Tao Zhang <quic_taozha@quicinc.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org
+Subject: Re: [PATCH v1 1/9] dt-bindings: arm: Add support for DSB element
+Message-ID: <20221130181536.GA2553507-robh@kernel.org>
+References: <1669018873-4718-1-git-send-email-quic_taozha@quicinc.com>
+ <1669018873-4718-2-git-send-email-quic_taozha@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Jian-Min Liu <jian-min.liu@mediatek.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Vincent Donnefort <vdonnefort@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Patrick Bellasi <patrick.bellasi@matbug.net>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Jonathan JMChen <jonathan.jmchen@mediatek.com>
-References: <20220829055450.1703092-1-dietmar.eggemann@arm.com>
- <0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com>
- <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net>
- <YzV9Gejo/+DL3UjK@e126311.manchester.arm.com>
- <YzV/yT6OYMgaq0kD@hirez.programming.kicks-ass.net>
- <YzWuq5ShtJC6KWqe@e126311.manchester.arm.com>
- <Y2kLA8x40IiBEPYg@hirez.programming.kicks-ass.net>
- <d2789d23-816b-11f1-d654-a7989f323ac8@arm.com>
- <Y2z2/nhGfud7NIM8@hirez.programming.kicks-ass.net>
- <48c178fc-108f-382b-e054-83e88ef9b01b@arm.com>
- <Y206GnmFDU9QcgN5@hirez.programming.kicks-ass.net>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <Y206GnmFDU9QcgN5@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1669018873-4718-2-git-send-email-quic_taozha@quicinc.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,110 +78,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/2022 18:51, Peter Zijlstra wrote:
-> On Thu, Nov 10, 2022 at 03:59:01PM +0100, Dietmar Eggemann wrote:
->> On 10/11/2022 14:05, Peter Zijlstra wrote:
->>> On Thu, Nov 10, 2022 at 12:16:26PM +0100, Dietmar Eggemann wrote:
->>>> On 07/11/2022 14:41, Peter Zijlstra wrote:
->>>>> On Thu, Sep 29, 2022 at 03:41:47PM +0100, Kajetan Puchalski wrote:
->>>>
->>>> [...]
->>>>
->>>>> @@ -2956,13 +2958,26 @@ static inline unsigned long cpu_util_dl(struct rq *rq)
->>>>>   */
->>>>>  static inline unsigned long cpu_util_cfs(int cpu)
->>>>>  {
->>>>> +	struct rq *rq = cpu_rq(cpu);
->>>>>  	struct cfs_rq *cfs_rq;
->>>>>  	unsigned long util;
->>>>>  
->>>>> -	cfs_rq = &cpu_rq(cpu)->cfs;
->>>>> +	cfs_rq = &rq->cfs;
->>>>>  	util = READ_ONCE(cfs_rq->avg.util_avg);
->>>>>  
->>>>>  	if (sched_feat(UTIL_EST)) {
->>>>> +		if (sched_feat(UTIL_EST_FASTER)) {
->>>>> +			struct task_struct *curr;
->>>>> +
->>>>> +			rcu_read_lock();
->>>>> +			curr = rcu_dereference(rq->curr);
->>>>> +			if (likely(curr->sched_class == &fair_sched_class)) {
->>>>> +				u64 runtime = curr->se.sum_exec_runtime - curr->se.exec_start;
->>>>
->>>> Don't we and up with gigantic runtime numbers here?
->>>>
->>>> oot@juno:~# cat /proc/1676/task/1676/schedstat
->>>> 36946300 1150620 11
->>>> root@juno:~# cat /proc/1676/task/1676/sched
->>>> rt-app (1676, #threads: 2)
->>>> -------------------------------------------------------------------
->>>> se.exec_start                                :         77766.964240 <- !
->>>> se.vruntime                                  :           563.587883
->>>> e.sum_exec_runtime                          :            36.946300  <- !
->>>> se.nr_migrations                             :                    0
->>>> ...
->>>>
->>>> I expect cpu_util_cfs() to be ~1024 almost all the time now.
->>>
->>> Duh, obviously I meant to measure the runtime of the current activation
->>> and messed up.
->>>
->>> We don't appear to have the right information to compute this atm :/
->>
->> This would be:
->>
->> u64 now = rq_clock_task(rq);
->> u64 runtime = now - curr->se.exec_start;
->>
->> but we don't hold the rq lock so we can't get `now`?
+On Mon, Nov 21, 2022 at 04:21:05PM +0800, Tao Zhang wrote:
+> Add property "qcom,dsb-elem-size" to support DSB(Discrete Single
+> Bit) element for TPDA. Specifies the DSB element size supported
+> by each monitor connected to the aggregator on each port. Should
+> be specified in pairs (port, dsb element size).
 > 
-> Not quite the same; that's the time since we got on-cpu last, but that's
-> not the same as the runtime of this activation (it is when you discount
-> preemption).
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml b/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
+> index c46ddea..e3b58b5 100644
+> --- a/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
+> +++ b/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
+> @@ -58,6 +58,13 @@ properties:
+>      minItems: 1
+>      maxItems: 2
+>  
+> +  qcom,dsb-elem-size:
+> +    description: |
+> +      Specifies the DSB element size supported by each monitor
+> +      connected to the aggregator on each port. Should be specified
+> +      in pairs (port, dsb element size).
 
+Please define DSB somewhere here and not just the commit msg.
 
-----|----|----|----|----|----|--->
-    a    s1   p1   s2   p2   d
-
-a ... activate_task() -> enqueue_task()
-
-s ... set_next_entity()
-
-p ... put_prev_entity()
-
-d ... deactivate_task() -> dequeue_task()
-
-By `runtime of the activation` you refer to `curr->sum_exec_runtime -
-time(a)` ? And the latter we don't have?
-
-And `runtime = curr->se.sum_exec_runtime - curr->se.prev_sum_exec_run`
-is only covering the time since we got onto the cpu, right?
-
-With a missing `runtime >>= 10` (from __update_load_sum()) and using
-`runtime = curr->se.sum_exec_runtime - curr->se.prev_sum_exec_runtime`
-for a 1 task-workload (so no preemption) with factor 2 or 4 I get at
-least close to the original rq->cfs.avg.util_avg and util_est.enqueued
-signals (cells (5)-(8) in the notebook below).
-
-https://nbviewer.org/github/deggeman/lisa/blob/ipynbs/ipynb/scratchpad/UTIL_EST_FASTER.ipynb?flush_cache=true
-
-----
-
-set_next_entity()
-    update_stats_curr_start()
-        se->exec_start = rq_clock_task()
-
-    cfs_rq->curr = se                                (1)
-
-    se->prev_sum_exec_runtime = se->sum_exec_runtime (2)
-
-update_curr()
-
-    now = rq_clock_task(rq_of(cfs_rq))
-    delta_exec = now - curr->exec_start              (3)
-    curr->exec_start = now
-    curr->sum_exec_runtime += delta_exec;            (4)
-
-put_prev_entity()
-
-    cfs_rq->curr = NULL                              (5)
+> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +
+>    clocks:
+>      maxItems: 1
+>  
+> @@ -100,6 +107,8 @@ examples:
+>         compatible = "qcom,coresight-tpda", "arm,primecell";
+>         reg = <0x6004000 0x1000>;
+>  
+> +       qcom,dsb-elem-size = <0 32>;
+> +
+>         clocks = <&aoss_qmp>;
+>         clock-names = "apb_pclk";
+>  
+> -- 
+> 2.7.4
+> 
+> 
