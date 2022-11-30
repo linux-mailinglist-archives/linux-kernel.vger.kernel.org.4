@@ -2,85 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 159C263D994
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDFD63D9A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiK3PiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 10:38:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
+        id S229955AbiK3PmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 10:42:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiK3PiS (ORCPT
+        with ESMTP id S229911AbiK3PmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 10:38:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471FF48422
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 07:37:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669822639;
+        Wed, 30 Nov 2022 10:42:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73985252A5;
+        Wed, 30 Nov 2022 07:42:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2783AB81B80;
+        Wed, 30 Nov 2022 15:42:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DCA2C433D6;
+        Wed, 30 Nov 2022 15:42:14 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="MxRj9dwk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669822931;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=KkCbDmPSlV3ED2kYMn/nY2F1Zfm2btT/2SFqyr4HySI=;
-        b=AFtbxk8CudMVEKrw0b99AEFs236JyaEYDyuaolixaAwxS9O7MB8iKbD05xttUCLEhgwIM5
-        y8v08aOXZOCd+fsJaKYWNgEUierKyIEfoXP15VQmPfJ9V8I+8XQ4abt7lcGf4aqEy9jjqy
-        3wiwUlPIAZsAwHVn2vCQ9mwOQKLu2qM=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-652-Gf2ETivNOruT5u87QYl2OQ-1; Wed, 30 Nov 2022 10:37:17 -0500
-X-MC-Unique: Gf2ETivNOruT5u87QYl2OQ-1
-Received: by mail-qk1-f200.google.com with SMTP id az31-20020a05620a171f00b006fa2cc1b0bfso40672466qkb.23
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 07:37:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KkCbDmPSlV3ED2kYMn/nY2F1Zfm2btT/2SFqyr4HySI=;
-        b=lUIBR7tgxK4i6UE9dl+2E0csOEkPyY9JwUSTMTzfL2+p6AjLOuheTJsqIufa057zlx
-         Qnrj4EXmYBuJT0650QKvGN7iJQw9lq0Ylo6avJvGcn1sfisPTuiUfwE8LLQj7m+UvZ2k
-         M8OG3VqWWHZzXI6QUCu/kvpXpvUl3o1RK+RdeNNkpye1Iym+pRUy96cWPQ/tLQiWs0cm
-         9e3hU6X17yfPzVJzA1pccLx9SORp5TmmG82xtrKZc+OnsFSafRKqYzoUn3FGrWdWipH7
-         SGmK59uhGOJw1ncWhm4tmI1uHh+zzFLP15uRSoWQH/TOSrXIFT4Fp2afgeMbB1kWn3yw
-         PdAQ==
-X-Gm-Message-State: ANoB5pmGtXr6jo3VvbHXIGFh9MUgm3JDSYJlbRk5RXeGWs1HOYKDMEmu
-        4XCefiOOXyXvZUKlxnvfbfw2fwbZo988VD18YT+efhO+EvwdGunfGaLvqUpiPzBmnejaDNb02+w
-        RNfl6T9gJOSYEgusso5rY5f0E
-X-Received: by 2002:a0c:fdea:0:b0:4b3:fd4b:e86e with SMTP id m10-20020a0cfdea000000b004b3fd4be86emr39065959qvu.109.1669822636849;
-        Wed, 30 Nov 2022 07:37:16 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6P5HJ+dItim/tVlZkLVf1jiPTB+2nXKLau8ou1fOB71h9KeP0G98ZIH2C6XFsEXY8UI753oA==
-X-Received: by 2002:a0c:fdea:0:b0:4b3:fd4b:e86e with SMTP id m10-20020a0cfdea000000b004b3fd4be86emr39065940qvu.109.1669822636603;
-        Wed, 30 Nov 2022 07:37:16 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id z26-20020ac87cba000000b003a586888a20sm977387qtv.79.2022.11.30.07.37.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 07:37:15 -0800 (PST)
-Date:   Wed, 30 Nov 2022 10:37:14 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        James Houghton <jthoughton@google.com>,
-        Jann Horn <jannh@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH 10/10] mm/hugetlb: Introduce hugetlb_walk()
-Message-ID: <Y4d4qh0ACmo455Nj@x1n>
-References: <20221129193526.3588187-1-peterx@redhat.com>
- <20221129193526.3588187-11-peterx@redhat.com>
- <Y4bnkO3ikp5bu44x@sol.localdomain>
+        bh=y/JyZnolFsNU/DtisgU1TQMbXNJVT8YzDCxIA1dG6rY=;
+        b=MxRj9dwkPu9bL05ltCfBAE4o+L3ukf0+VKg3D+SJQqMDA2Kul//U9rFPYhetiSvkfYUkRY
+        soKIN+KloBgarP+NJn/I1aqKPXfx/VYvYGPsHBkzSywiEfcPlIc0D2jncq7zcy00BclZfg
+        8igxieSmQre+FhGlu74GZ4ghSd2pVpg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 18a6a81c (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 30 Nov 2022 15:42:11 +0000 (UTC)
+Date:   Wed, 30 Nov 2022 16:39:55 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        tglx@linutronix.de, linux-crypto@vger.kernel.org,
+        linux-api@vger.kernel.org, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v10 1/4] random: add vgetrandom_alloc() syscall
+Message-ID: <Y4d5SyU3akA9ZBaJ@zx2c4.com>
+References: <20221129210639.42233-1-Jason@zx2c4.com>
+ <20221129210639.42233-2-Jason@zx2c4.com>
+ <877czc7m0g.fsf@oldenburg.str.redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="oQiZbfNmI500Ok+U"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y4bnkO3ikp5bu44x@sol.localdomain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <877czc7m0g.fsf@oldenburg.str.redhat.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,91 +65,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Florian,
 
---oQiZbfNmI500Ok+U
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+On Wed, Nov 30, 2022 at 11:51:59AM +0100, Florian Weimer wrote:
+> * Jason A. Donenfeld:
+> 
+> > +#ifdef CONFIG_VGETRANDOM_ALLOC_SYSCALL
+> > +/**
+> > + * vgetrandom_alloc - allocate opaque states for use with vDSO getrandom().
+> > + *
+> > + * @num: on input, a pointer to a suggested hint of how many states to
+> > + * allocate, and on output the number of states actually allocated.
+> 
+> Should userspace call this system call again if it needs more states?
+> The interface description doesn't make this clear.
 
-On Tue, Nov 29, 2022 at 09:18:08PM -0800, Eric Biggers wrote:
-> On Tue, Nov 29, 2022 at 02:35:26PM -0500, Peter Xu wrote:
-> > +static inline pte_t *
-> > +hugetlb_walk(struct vm_area_struct *vma, unsigned long addr, unsigned long sz)
-> > +{
-> > +#if defined(CONFIG_ARCH_WANT_HUGE_PMD_SHARE) && defined(CONFIG_LOCKDEP)
-> > +	struct hugetlb_vma_lock *vma_lock = vma->vm_private_data;
+Yes. And indeed that's what Adhemerval's patch does.
+
+> 
+> > + * @size_per_each: the size of each state allocated, so that the caller can
+> > + * split up the returned allocation into individual states.
+> > + *
+> > + * @flags: currently always zero.
+> > + *
+> > + * The getrandom() vDSO function in userspace requires an opaque state, which
+> > + * this function allocates by mapping a certain number of special pages into
+> > + * the calling process. It takes a hint as to the number of opaque states
+> > + * desired, and provides the caller with the number of opaque states actually
+> > + * allocated, the size of each one in bytes, and the address of the first
+> > + * state.
 > > +
-> > +	/*
-> > +	 * If pmd sharing possible, locking needed to safely walk the
-> > +	 * hugetlb pgtables.  More information can be found at the comment
-> > +	 * above huge_pte_offset() in the same file.
-> > +	 *
-> > +	 * NOTE: lockdep_is_held() is only defined with CONFIG_LOCKDEP.
-> > +	 */
-> > +	if (__vma_shareable_flags_pmd(vma))
-> > +		WARN_ON_ONCE(!lockdep_is_held(&vma_lock->rw_sema) &&
-> > +			     !lockdep_is_held(
-> > +				 &vma->vm_file->f_mapping->i_mmap_rwsem));
-> > +#endif
+> > + * Returns a pointer to the first state in the allocation.
+> > + *
+> > + */
 > 
-> FYI, in next-20221130 there is a compile error here due to this commit:
+> How do we deallocate this memory?  Must it remain permanently allocated?
+
+It can be deallocated with munmap.
+
+> Can userspace use the memory for something else if it's not passed to
+> getrandom?
+
+I suspect the documentation answer here is, "no", even if technically it
+might happen to work on this kernel or that kernel. I suppose this could
+even be quasi-enforced by xoring the top bits with some vdso
+compile-time constant, so you can't rely on being able to dereference
+it yourself.
+
+> The separate system call strongly suggests that the
+> allocation is completely owned by the kernel, but there isn't
+> documentation here how the allocation life-cycle is supposed to look
+> like.  In particular, it is not clear if vgetrandom_alloc or getrandom
+> could retain a reference to the allocation in a future implementation of
+> these interfaces.
 > 
->     In file included from security/commoncap.c:19:
->     ./include/linux/hugetlb.h:1262:42: error: incomplete definition of type 'struct hugetlb_vma_lock'
->                     WARN_ON_ONCE(!lockdep_is_held(&vma_lock->rw_sema) &&
->                                                    ~~~~~~~~^
->     ./include/linux/lockdep.h:286:47: note: expanded from macro 'lockdep_is_held'
->     #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
->                                                            ^~~~
+> Some users might want to zap the memory for extra hardening after use,
+> and it's not clear if that's allowed, either.
 
-This probably means the config has:
+I don't think zapping that memory is supported, or even a sensible thing
+to do. In the first place, I don't think we should suggest that the user
+can dereference that pointer, at all. In that sense, maybe it's best to
+call it a "handle" or something similar (a "HANDLE"! a "HWND"? a "HRNG"?
+just kidding). In the second place, the fast erasure aspect of this
+means that such hardening would have no effect -- the key is overwritten
+after using for forward secrecy, anyway, and batched bytes are zeroed.
+(There is a corner case that might make it interesting to wipe in the
+parent, not just the child, on fork, but that's sort of a separate
+matter and would ideally be handled by kernel space anyway.)
 
-  CONFIG_HUGETLB_PAGE=n
-  CONFIG_ARCH_WANT_HUGE_PMD_SHARE=y
+> If there's no registration of the allocation, it's not clear why we need
+> a separate system call for this.  From a documentation perspective, it
+> may be easier to describe proper use of the getrandom vDSO call if
+> ownership resides with userspace.
 
-And I'm surprised we didn't have a dependency that ARCH_WANT_HUGE_PMD_SHARE
-should depend on HUGETLB_PAGE already.  Mike, what do you think?
+No, absolutely not, for the multiple reasons already listed in the
+commit messages and cover letter and previous emails. But you seem
+aware of this:
 
-I've also attached a quick fix for this patch to be squashed in.  Hope it
-works.
+> But it will constrain future
+> evolution of the implementation because you can't add registration
+> (retaining a reference to the passed-in area in getrandom) after the
+> fact.  But I'm not sure if this is possible with the current interface,
+> either.  Userspace has to make some assumptions about the life-cycle to
+> avoid a memory leak on thread exit.
 
-Thanks,
+It sounds like this is sort of a different angle on Rasmus' earlier
+comment about how munmap leaks implementation details. Maybe there's
+something to that after all? Or not? I see two approaches:
 
--- 
-Peter Xu
+1) Keep munmap as the allocation function. If later on we do fancy
+   registration and in-kernel state tracking, or add fancy protection
+   flags, or whatever else, munmap should be able to identify these
+   pages and carry out whatever special treatment is necessary.
 
---oQiZbfNmI500Ok+U
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment;
-	filename="0001-fixup-mm-hugetlb-Introduce-hugetlb_walk.patch"
+2) Convert vgetrandom_alloc() into a clone3-style syscall, as Christian
+   suggested earlier, which might allow for a bit more overloading
+   capability. That would be a struct that looks like:
 
-From 9787a7f5492ca251fcce5c09bd7e4a80ac157726 Mon Sep 17 00:00:00 2001
-From: Peter Xu <peterx@redhat.com>
-Date: Wed, 30 Nov 2022 10:33:44 -0500
-Subject: [PATCH] fixup! mm/hugetlb: Introduce hugetlb_walk()
-Content-type: text/plain
+      struct vgetrandom_alloc_args {
+	  __aligned_u64 flags;
+          __aligned_u64 states;
+	  __aligned_u64 num;
+	  __aligned_u64 size_of_each;
+      }
 
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- include/linux/hugetlb.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+  - If flags is VGRA_ALLOCATE, states and size_of_each must be zero on
+    input, while num is the hint, as is the case now. On output, states,
+    size_of_each, and num are filled in.
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 1a51c45fdf2e..ec2a1f93b12d 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -1248,7 +1248,8 @@ __vma_shareable_flags_pmd(struct vm_area_struct *vma)
- static inline pte_t *
- hugetlb_walk(struct vm_area_struct *vma, unsigned long addr, unsigned long sz)
- {
--#if defined(CONFIG_ARCH_WANT_HUGE_PMD_SHARE) && defined(CONFIG_LOCKDEP)
-+#if defined(CONFIG_HUGETLB_PAGE) && \
-+	defined(CONFIG_ARCH_WANT_HUGE_PMD_SHARE) && defined(CONFIG_LOCKDEP)
- 	struct hugetlb_vma_lock *vma_lock = vma->vm_private_data;
- 
- 	/*
--- 
-2.37.3
+  - If flags is VGRA_DEALLOCATE, states, size_of_each, and num must be as
+    they were originally, and then it deallocates.
 
+I suppose (2) would alleviate your concerns entirely, without future
+uncertainty over what it'd be like to add special cases to munmap(). And
+it'd add a bit more future proofing to the syscall, depending on what we
+do.
 
---oQiZbfNmI500Ok+U--
+So maybe I'm warming up to that approach a bit.
 
+> > +	num_states = clamp_t(size_t, num_hint, 1, (SIZE_MAX & PAGE_MASK) / state_size);
+> > +	alloc_size = PAGE_ALIGN(num_states * state_size);
+> 
+> Doesn't this waste space for one state if state_size happens to be a
+> power of 2?  Why do this SIZE_MAX & PAGE_MASK thing at all?  Shouldn't
+> it be PAGE_SIZE / state_size?
+
+The first line is a clamp. That fixes num_hint between 1 and the largest
+number that when multiplied and rounded up won't overflow.
+
+So, if state_size is a power of two, let's say 256, and there's only one
+state, here's what that looks like:
+
+    num_states = clamp(1, 1, (0xffffffff & (~(4096 - 1))) / 256 = 16777200) = 1
+    alloc_size = PAGE_ALIGN(1 * 256) = 4096
+
+So that seems like it's working as intended, right? Or if not, maybe
+it'd help to write out the digits you're concerned about?
+
+> > +	if (put_user(alloc_size / state_size, num) || put_user(state_size, size_per_each))
+> > +		return -EFAULT;
+> > +
+> > +	pages_addr = vm_mmap(NULL, 0, alloc_size, PROT_READ | PROT_WRITE,
+> > +			     MAP_PRIVATE | MAP_ANONYMOUS | MAP_LOCKED, 0);
+> 
+> I think Rasmus has already raised questions about MAP_LOCKED.
+> 
+> I think the kernel cannot rely on it because userspace could call
+> munlock on the allocation.
+
+Then they're caught holding the bag? This doesn't seem much different
+from userspace shooting themselves in general, like writing garbage into
+the allocated states and then trying to use them. If this is something
+you really, really are concerned about, then maybe my cheesy dumb xor
+thing mentioned above would be a low effort mitigation here.
+
+Jason
