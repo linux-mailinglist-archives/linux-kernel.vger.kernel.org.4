@@ -2,79 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C7363E1B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B0B63E1B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiK3URZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 15:17:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56140 "EHLO
+        id S230166AbiK3USD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 15:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiK3UQp (ORCPT
+        with ESMTP id S230344AbiK3URU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:16:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E43689301;
-        Wed, 30 Nov 2022 12:13:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04AD661DBE;
-        Wed, 30 Nov 2022 20:13:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5979AC433D6;
-        Wed, 30 Nov 2022 20:13:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669839180;
-        bh=pyfET1ToAw3P7uNG+TwmmC/YKEAYeHY3LwFAqLPkGuY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=s3ziu1MLDHz/XzIZoldakOWlQ63NfX8SLBbOxIRGytLtTq19KSXwavlc/JUtJoLCF
-         /9mMILqTat0Cznb6OCtI0JPoYlSE2xOi0ha3Hp0eVrDjrlsgT4Es1sDAVoTr0Yp+7r
-         ecBJvOoUfEGfJF3F3NfdKy/dBLC7lwgbE6hLFFgskzZx8A8X/CcFjHuZvekJSwuB0x
-         oSnmGZdHOjx+O4I4PKCC21Thf0R54jtoHJmI8vBMJzERqlQ0sLk3ahBeCXX7fhcFAF
-         Sda+3ql1w83Vp+hFMLBdSE1F4UBtp3fbvSAC479BtrKi7PO6HOjEPR+JF4/ZJGRNma
-         FeRrBe0m7yvYw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id EEEED5C051C; Wed, 30 Nov 2022 12:12:59 -0800 (PST)
-Date:   Wed, 30 Nov 2022 12:12:59 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        rostedt@goodmis.org, Marc Dionne <marc.dionne@auristor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH rcu 14/16] rxrpc: Use call_rcu_hurry() instead of
- call_rcu()
-Message-ID: <20221130201259.GR4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <CAEXW_YS1nfsV_ohXDaB1i2em=+0KP1DofktS24oGFa4wPAbiiw@mail.gmail.com>
- <20221130181316.GA1012431@paulmck-ThinkPad-P17-Gen-1>
- <20221130181325.1012760-14-paulmck@kernel.org>
- <639433.1669835344@warthog.procyon.org.uk>
+        Wed, 30 Nov 2022 15:17:20 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF67189328
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 12:13:24 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id w15so15736322wrl.9
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 12:13:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2AAz1p3amdjSsxmPSJU+uGZAdAbSjyxAbikHqGyzpmk=;
+        b=nCNaAYb3XzkERXQkz2iPfkCS79RviSzmXslWPza+frd/CWKfVpYgJwneIY7uYo0TJE
+         kTbxjGHIjrWKsDkbC77zJRHJIZY8KNuLnUwx/6LFHKUJ0Rj35SAew4DrxVajLXWcYNoW
+         5+VTUZzEfuSwVKPFQK4L3hTKlZtN51Lpl0yL7hQ80XRYqz0ZZUMpdy+61UlN2IBdNAD+
+         kje/YBR6vT4oA5Pw74sFZBmbBKnW8QtQtP4ngiGm3HefZOjiJ0OTB/tKpK6i943h0XvF
+         SqljAkss+WFcGjsgETKJIo3dhnHpqwyKWI2GcEMp0dJSvYtIIePuC5E68lx1PbHNWYpQ
+         qfGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2AAz1p3amdjSsxmPSJU+uGZAdAbSjyxAbikHqGyzpmk=;
+        b=KqZlDccJr5QWAFb6VFjKvFgOdmexi5sjI5gUgLHWf3Dw00shpViu5c+0HDqBr2wyAC
+         DPh2fpDMRSvq9unTK0DifG7WpKk2pTvsVZyOxfma0Ev2UO4HkpJ6gjZmM0DHbpLJGyot
+         1HdkfxrG/EMnRbDmPvqSGTPwEkSc9LYnYKZaAP1Cg+lEdpQAj5GGHAjx5YGeDZPyVP2t
+         BEUB8olmphHoYqXd9QkUnZrrAxXsquL9k3OkkveY/rOGPi5ztrQwtpJwfQWcY9EQdnIQ
+         stegHRNbPVieZQ2X97rf8Xshfydiz6UKZLjmFj1gI0FZFYjbytWqTov3ocOy0jcf+w3k
+         wFaw==
+X-Gm-Message-State: ANoB5pmhu5KfdQe2yRUTSwMV7uB8+fCUdqllwMAIZfzC0+JeIOGBlvTW
+        A7IU1/lvTIkop4hJrmd/igeodpeJNBDkgXb8wIreQQ==
+X-Google-Smtp-Source: AA0mqf61KLGmp/Qm9g4FE973BvCOpu9OqNPOjOG4J5nE13JCMq7A8rvlH6yRlbfRF5bTYaCm/bglFAEjkAec+P1WlEc=
+X-Received: by 2002:adf:e64f:0:b0:241:e2f1:8b44 with SMTP id
+ b15-20020adfe64f000000b00241e2f18b44mr25818541wrn.300.1669839202034; Wed, 30
+ Nov 2022 12:13:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <639433.1669835344@warthog.procyon.org.uk>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221130062935.2219247-1-irogers@google.com> <20221130062935.2219247-4-irogers@google.com>
+ <CAM9d7chrsLHoGe=RcU2e5hRL22j=813j3uuEHDOPZrkpWqnSsw@mail.gmail.com>
+In-Reply-To: <CAM9d7chrsLHoGe=RcU2e5hRL22j=813j3uuEHDOPZrkpWqnSsw@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 30 Nov 2022 12:13:10 -0800
+Message-ID: <CAP-5=fWZVHN5tDG+eKRr7v_RXKYA_uUgY-dFH_g3Yc3mFgkXbA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] perf build: Use libtraceevent from the system
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 07:09:04PM +0000, David Howells wrote:
-> Note that this conflicts with my patch:
-> 
-> 	rxrpc: Don't hold a ref for connection workqueue
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?h=rxrpc-next&id=450b00011290660127c2d76f5c5ed264126eb229
-> 
-> which should render it unnecessary.  It's a little ahead of yours in the
-> net-next queue, if that means anything.
+On Wed, Nov 30, 2022 at 11:05 AM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> On Tue, Nov 29, 2022 at 10:30 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > Remove the LIBTRACEEVENT_DYNAMIC and LIBTRACEFS_DYNAMIC. If
+> > libtraceevent isn't installed or NO_LIBTRACEEVENT=1 is passed to the
+> > build, don't compile in libtraceevent and libtracefs support. This
+> > also disables CONFIG_TRACE that controls "perf
+> > trace". CONFIG_TRACEEVENT is used to control enablement in
+> > Build/Makefiles, HAVE_LIBTRACEEVENT is used in C code. Without
+> > HAVE_LIBTRACEEVENT tracepoints are disabled and as such the commands
+> > kmem, kwork, lock, sched and timechart are removed. The majority of
+> > commands continue to work including "perf test".
+>
+> Maybe we can have a different approach.  I guess the trace data
+> access is isolated then we can make dummy interfaces when there's
+> no libtraceevent.  This way we don't need to touch every command
+> and let it fail when it's asked.
 
-OK, I will drop this patch in favor of yours, thank you!
+Sounds like a worthwhile refactor that can land on top of this change.
 
-							Thanx, Paul
+> The motivation is that we should be able to run the sub-commands
+> as much as possible.  In fact, we could run 'record' part only on the
+> target machine and pass the data to the host for analysis with a
+> full-fledged perf.  Also some commands like 'perf lock contention'
+> can run with or without libtraceevent (using BPF only).
+
+The issue here is that perf lock contention will use evsel__new_tp and
+internally that uses libtraceevent. As such it is removed without
+HAVE_LIBTRACEEVENT. Without the evsel there's not much perf lock
+contention can do, so rather than litter the code with
+HAVE_LIBTRACEEVENT and for it to be broken, I made the choice just to
+remove it from the no libtraceevent build for now.
+
+I think it is worth pursuing these patches in the shape they are in so
+that we can land the removal of tools/lib/traceevent and ensure the
+migration away from an out-of-date version of that library.
+
+Thanks,
+Ian
+
+> Thanks,
+> Namhyung
