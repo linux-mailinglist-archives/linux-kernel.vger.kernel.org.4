@@ -2,161 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D7863D0A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C9963D0AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235438AbiK3Iag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 03:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
+        id S235510AbiK3Ibn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 03:31:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235377AbiK3IaI (ORCPT
+        with ESMTP id S235496AbiK3IbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 03:30:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598A06D95C
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 00:25:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669796727;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cLhw+4YCDLU54mdWJRFJtop//lKH4CfPzwb9WT359CY=;
-        b=ZInIOHv01wg/+CnRmt0iHmu0827EtwYELhiWg4+ssKcXe39fRinMhFSkzwET1nUAmPIvet
-        NdmdzR95YXmIOuqSNc4ieJa3cdO2JxjcpImjUTv9S+bjpX8MNvLNvEaoY0HGMwGjbaFTea
-        UVkFprKABUA8bX9D4XRmDNcQXXSI/YA=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-582-4L094SiHNrKkRaQrLqfv1g-1; Wed, 30 Nov 2022 03:25:26 -0500
-X-MC-Unique: 4L094SiHNrKkRaQrLqfv1g-1
-Received: by mail-pg1-f200.google.com with SMTP id i19-20020a63e913000000b004705d1506a6so11510908pgh.13
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 00:25:26 -0800 (PST)
+        Wed, 30 Nov 2022 03:31:25 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F6B769E4
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 00:27:22 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id p8so25777712lfu.11
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 00:27:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+lx3sySWedVDOe+3DR0W4CZhtHEM1KzEHeNBxVD2bIw=;
+        b=zE9hpJtq+E0R0Qgz+pPl9E25bGmJQOEEcnTKv5ajZcCutfU5GAZC6ma04alI4nSMc0
+         9IGp+zBymLKyaFMx2YTutQM65cC5mZba6qdDvOFmmAzLqrIsKovP/tTegxHY4GiiDICH
+         Mq+el2jIQ//pHoVtEfRxjerpKW7g7fI1Q0OflIWhGpMni4EXQyEt+Ec3l/uLM+6JNnCG
+         hD9I3zwTe1yHkY8oBsBveYdY6jncjihhrjCE81+HsMujHqK2ChrIqWEDxuLphR3WxD/b
+         SlZE33i3Q518guZm2Mz5DUueprg5rIwmwVvvyfCUubiYhvLRiPxqRnLbt5ufnEE4T7fA
+         GWMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cLhw+4YCDLU54mdWJRFJtop//lKH4CfPzwb9WT359CY=;
-        b=cabv3P6X2dNAonDhzfv3gQuhD9MygLhMudyJECqsFv6Nu5326tGySrtH74ns+36m7+
-         2UlDxqqcbXkEHPPWvYryCPsHfEB6XWKJcAPtX0/Z2QVL4kWwlwpSVa0OP5u/5H38tSgY
-         Md6adVrNNJp9axJIok+69BbDqTyQc3Sfh6SdTT58mFmsToStmDIgmjj3THSeulbdVwai
-         9mgqsfkzka4laJsnzkIxbG9v2r+UEIlfKfdW6D38meU1ogQAYS2WoN/Ken8JCyjin4Wx
-         d72Ps4oyHMz8yjU3GVCHEVdJrcfIYMx1H7ivzSdS/vzZbpihpvxZ3gFuVzaUsr6V/uWG
-         Imdw==
-X-Gm-Message-State: ANoB5pnRG3NJtOB0NDkacOU1RhWbssw8fP81DrbAB9GhUZW9DDQso+KP
-        6FIqj1a4xWrq9SjaoJV7mI8AXPYrqD6UaTR0d8rcL0YoP25bmOwu9lRXfudiJINHRRl68UkrNCV
-        4Odui2Or/wIQBIl0gO57t3WEPXDNfCFlHzQ06AljmNuXMFSWZ7cPGxmuzmJMxJ5dldYKX4oEMnA
-        ==
-X-Received: by 2002:a63:f003:0:b0:45f:bf86:c917 with SMTP id k3-20020a63f003000000b0045fbf86c917mr53684632pgh.201.1669796725036;
-        Wed, 30 Nov 2022 00:25:25 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5l6HxGuRdUgFze8Xav0NBiW2FtnsKMFNGxrQXmyLUy40JkncqzspqWNEwMQWjmDlzniGmdCQ==
-X-Received: by 2002:a63:f003:0:b0:45f:bf86:c917 with SMTP id k3-20020a63f003000000b0045fbf86c917mr53684612pgh.201.1669796724713;
-        Wed, 30 Nov 2022 00:25:24 -0800 (PST)
-Received: from [10.72.13.22] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id c10-20020a056a00008a00b0057255b82bd1sm790295pfj.217.2022.11.30.00.25.21
+        bh=+lx3sySWedVDOe+3DR0W4CZhtHEM1KzEHeNBxVD2bIw=;
+        b=iJS6mx15X5NIH3ClgoB4y5DctdzQGjCn7vliiqBL5E4HiXDZLNNBZYoh2LZl99mxrP
+         5/ehdCYg/TNseqEb5WA/14KK4KkRjKXuDBxwsZ4OC+eLT60dQLGqaFEXx96nNVds034Z
+         L95BHOkxy8HmrFW5d5IpvA2U2DUz5Ezw80YNhehS+7vZchdd9QtlMcJbbNb7U6PElx6b
+         cLTm+njCHG8IAB/x1NECcQU/QN3Rwuih8MAsGuU1HlIcc7HG8DnxG8hi35nQekk7vgdR
+         9kI+WwiTFfEcwVbLt7ubTKn7AnicFJobsXh5cundA3ZcsrYz0WUEDKUYwOd1GAhJH0fg
+         FM2Q==
+X-Gm-Message-State: ANoB5pkFVHGd8JhQWHq0XpXynPjzCNsr5iZJkNLujqeqBjYeoB9J237y
+        /MbMrnEXQ+pgymneiGstFp4sSQ==
+X-Google-Smtp-Source: AA0mqf6zuoFrOxLVpa30q4aaP76XjuelQRS6AmxczJ7tcbu2jkeS8eUbn1/TiuPhLEuFIihQEvTAyQ==
+X-Received: by 2002:a19:3853:0:b0:4a2:3955:109a with SMTP id d19-20020a193853000000b004a23955109amr23342473lfj.73.1669796838884;
+        Wed, 30 Nov 2022 00:27:18 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c19-20020ac24153000000b00499aefcf68esm160746lfi.292.2022.11.30.00.27.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 00:25:24 -0800 (PST)
-Subject: Re: [PATCH v4] ceph: mark directory as non-complete complete after
- loading key
-To:     Gregory Farnum <gfarnum@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>
-Cc:     Venky Shankar <vshankar@redhat.com>,
-        =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
-        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221129103949.19737-1-lhenriques@suse.de>
- <4914a195-edc0-747b-6598-9ac9868593a1@redhat.com>
- <CAOi1vP8raoFP2dsc6RY1fONCsHh5FYv2xifFY7pHXZWX=-vePw@mail.gmail.com>
- <20e0674a-4e51-a352-9ce2-d939cd4f3725@redhat.com>
- <CAOi1vP_H8jE4ZU4a4srhQev3odECgZD1LyxA8dv+Fk-bVDvoyQ@mail.gmail.com>
- <CAJ4mKGb=_CWTh5rrAFiib66-S6WeT=ajjkN_pOAac4d8uC9fDQ@mail.gmail.com>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <4b7ccbee-1135-09a7-9255-2f84e8907614@redhat.com>
-Date:   Wed, 30 Nov 2022 16:25:19 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 30 Nov 2022 00:27:18 -0800 (PST)
+Message-ID: <7661de74-f68c-6617-6a4e-3b0eb76a2a2e@linaro.org>
+Date:   Wed, 30 Nov 2022 09:27:15 +0100
 MIME-Version: 1.0
-In-Reply-To: <CAJ4mKGb=_CWTh5rrAFiib66-S6WeT=ajjkN_pOAac4d8uC9fDQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v1 1/2] dt-binding: soc: nuvoton: Add NPCM BPC LPC
+ documentation
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        arnd@arndb.de, hasegawa-hitomi@fujitsu.com, marcan@marcan.st,
+        nicolas.ferre@microchip.com, conor.dooley@microchip.com,
+        heiko@sntech.de, sven@svenpeter.dev, briannorris@chromium.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20221122201232.107065-1-tmaimon77@gmail.com>
+ <20221122201232.107065-2-tmaimon77@gmail.com>
+ <cedc0013-f0c0-3180-6995-477b77b919f8@linaro.org>
+ <CAP6Zq1iGwqOVOnhmF0ijYw=KoTRJj5CUpFv6WDouZmjVxXhQ-g@mail.gmail.com>
+ <5c7a06bf-94e3-5c65-f202-105f74a41d29@linaro.org>
+ <CAP6Zq1jdy-qDGFsk4sKcp3tx7d-nBMxOK72CRt3LLO8CrWJyKQ@mail.gmail.com>
 Content-Language: en-US
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAP6Zq1jdy-qDGFsk4sKcp3tx7d-nBMxOK72CRt3LLO8CrWJyKQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 30/11/2022 14:54, Gregory Farnum wrote:
-> On Tue, Nov 29, 2022 at 7:21 AM Ilya Dryomov <idryomov@gmail.com> wrote:
->> On Tue, Nov 29, 2022 at 3:50 PM Xiubo Li <xiubli@redhat.com> wrote:
->>>
->>> On 29/11/2022 22:32, Ilya Dryomov wrote:
->>>> On Tue, Nov 29, 2022 at 3:15 PM Xiubo Li <xiubli@redhat.com> wrote:
->>>>> On 29/11/2022 18:39, Luís Henriques wrote:
->>>>>> When setting a directory's crypt context, ceph_dir_clear_complete() needs to
->>>>>> be called otherwise if it was complete before, any existing (old) dentry will
->>>>>> still be valid.
->>>>>>
->>>>>> This patch adds a wrapper around __fscrypt_prepare_readdir() which will
->>>>>> ensure a directory is marked as non-complete if key status changes.
->>>>>>
->>>>>> Signed-off-by: Luís Henriques <lhenriques@suse.de>
->>>>>> ---
->>>>>> Hi Xiubo,
->>>>>>
->>>>>> Here's a rebase of this patch.  I did some testing but since this branch
->>>>>> doesn't really have full fscrypt support, I couldn't even reproduce the
->>>>>> bug.  So, my testing was limited.
->>>>> I'm planing not to update the wip-fscrypt branch any more, except the IO
->>>>> path related fixes, which may introduce potential bugs each time as before.
->>>>>
->>>>> Since the qa tests PR has finished and the tests have passed, so we are
->>>>> planing to merge the first none IO part, around 27 patches. And then
->>>>> pull the reset patches from wip-fscrypt branch.
->>>> I'm not sure if merging metadata and I/O path patches separately
->>>> makes sense.  What would a user do with just filename encryption?
->>> Hi Ilya,
->>>
->>> I think the IO ones should be followed soon.
->>>
->>> Currently the filename ones have been well testes. And the contents will
->>> be by passed for now.
->>>
->>> Since this is just for Dev Preview feature IMO it should be okay (?)
->> I don't think there is such a thing as a Dev Preview feature when it
->> comes to the mainline kernel, particularly in the area of filesystems
->> and storage.  It should be ready for users at least to some extent.  So
->> my question stands: what would a user do with just filename encryption?
-> I think how this merges is up to you guys and the kernel practices.
-> Merging only the filename encryption is definitely of *limited*
-> utility, but I don't think it's totally pointless -- the data versus
-> metadata paths are different and you are protecting against somewhat
-> different vulnerabilities and threat models with them. For instance,
-> MDS logs dump filenames, but OSD logs do not dump object data. There's
-> some obvious utility there even if you basically trust your provider,
-> or run your own cluster but want to be more secure about sending logs
-> via ceph-post-file.
-
-Hi Greg,
-
-Sounds reasonable to me.
-
-I will leave this to Ilya.
-
-Thanks!
-
-- Xiubo
-
-> -Greg
->
->> Thanks,
+On 29/11/2022 17:44, Tomer Maimon wrote:
+> hi Krzysztof,
+> 
+> Thanks for your comments.
+> 
+> On Thu, 24 Nov 2022 at 18:18, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
 >>
->>                  Ilya
+>> On 24/11/2022 16:38, Tomer Maimon wrote:
+>>> Hi Krzysztof,
+>>>
+>>> Thanks a lot for your comments.
+>>>
+>>> On Wed, 23 Nov 2022 at 12:03, Krzysztof Kozlowski
+>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>
+>>>> On 22/11/2022 21:12, Tomer Maimon wrote:
+>>>>
+>>>> 1. Subject: drop second, redundant "documentation" (dt-bindings are
+>>>> documentation).
+>>> O.K.
+>>>>
+>>>> 2. Use subject prefixes matching the subsystem (git log --oneline -- ...).
+>>> this is what I did dt-binding: soc: nuvoton... do you mean dt-binding: nuvoton.
 >>
+>> You didn't run the command, did you?
+> I did run this command "git log --oneline
+> Documentation/devicetree/bindings/soc" and I got this log list
+> e47206d71e67 dt-binding: soc: nuvoton: Add NPCM BPC LPC documentation
+> 121494030c53 dt-bindings: soc: add i.MX93 mediamix blk ctrl
+> 4fed4d20c59b dt-bindings: soc: add i.MX93 SRC
+> c7ebd54158d3 dt-bindings: soc: imx: add i.MX8MP vpu blk ctrl
+> 2345fc8dc2ec dt-bindings: soc: imx: add interconnect property for
+> i.MX8MM vpu blk ctrl
+> c1d9381ce430 dt-bindings: soc: imx: drop minItems for i.MX8MM vpu blk ctrl
+> f3894f969cf5 dt-bindings: soc: mediatek: Add display mutex support for MT6795
+> b2d7616e13c4 dt-bindings: soc: qcom: apr: add missing properties
+> 301628d80501 ASoC: dt-bindings: qcom,q6adm: convert to dtschema
+> 7b0ad4629d1f ASoC: dt-bindings: qcom,q6asm: convert to dtschema
+> b2496de1dfdd dt-bindings: soc: qcom: apr: correct service children
+> 
+> most of the subjects are similar to what I did, if it is not correct
+> please let me know exactly what to write (beside the word
+> documentation that I will remove)
+
+None of them have "dt-binding", so fix that part.
+
+Best regards,
+Krzysztof
 
