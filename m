@@ -2,169 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA7363CDB0
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 04:08:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F47263CDB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 04:10:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbiK3DII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 22:08:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
+        id S232748AbiK3DKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 22:10:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiK3DIE (ORCPT
+        with ESMTP id S229579AbiK3DKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 22:08:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F64F5C0EF
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 19:07:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669777621;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=05YZUrxC9fujgNfFDXzVRk/CJWC6WegjsSO4HrBVROk=;
-        b=SAFwH8GmzzIEkUS9Ch0+GXDpQKGNS7nGYP8jAmdmdH8lsIw80qpdtDgNg2InBvqLigDwMx
-        L0m9MJU8QyPDd3fSJXMRpb5oDfqQrL3JaBGXZG6yJaKAOZYuO+RAdI5rWSoDDt8m5Ws1EX
-        5yGHZLdQENpd64iv2CLn1kdxGsiXUik=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-294-1eJOFMpnNLeWBdN-Lc-Zfw-1; Tue, 29 Nov 2022 22:06:56 -0500
-X-MC-Unique: 1eJOFMpnNLeWBdN-Lc-Zfw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 858DF1C051AC;
-        Wed, 30 Nov 2022 03:06:55 +0000 (UTC)
-Received: from [10.22.17.30] (unknown [10.22.17.30])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 444F42166B26;
-        Wed, 30 Nov 2022 03:06:54 +0000 (UTC)
-Message-ID: <9455ff51-098c-87f0-dc83-2303921032a2@redhat.com>
-Date:   Tue, 29 Nov 2022 22:06:52 -0500
+        Tue, 29 Nov 2022 22:10:04 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C01A51333
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 19:10:03 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-142306beb9aso19492821fac.11
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 19:10:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MiBfGy/D50+OJo68XURRrTVFMzHCGYAlCy+F0thcAJI=;
+        b=cFztHSyj4cEkRpf5XW0Y8jH62ueQCuY8rfd4oepOLSUPBSzLptI9niAG9KfrlEaCIf
+         2IxR+A6w/abzd/5wNkC10VTvrJvJ4vXfxbhNqQOQx8vygP09Wh2FC672RPePfsep0r4j
+         YaHnrBlJhN8B10hphOYxoCAoODlOtlMlViLJQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MiBfGy/D50+OJo68XURRrTVFMzHCGYAlCy+F0thcAJI=;
+        b=BI8wucHGmFl6emxiLPead85EokQ4PH6PHGIbxWbJLlSSS/SoCCpSeJrxJLEeuYRetQ
+         hpjxFiXNlUw6aVH24FkbLiQ/DlZ/2uOcdpRdu/8adb2QRwYiDnSA5sleEDuy5z3wJSFU
+         NUlHIc4BpHphhNivTJLrQdeuJE7aPz1pdzoFCOOCM0PtKMncTRIIew0jWuViCEA9rpUE
+         NECQdqDK1EMdoPDNxVwkiWOT/8Ux8IwFMMIjHI68Pt5wryGkXIu3l4mmVHrvY27wfmCi
+         9+tQG/KJYtwEWNR0JoutB88ye1CHId/v7eCtAKUavl5/eXgSuYzQ+Z7/y6ND8Aeo48l1
+         9W/A==
+X-Gm-Message-State: ANoB5pnOtIWfWmKyi9m1FfjjW5mrK77jv8BrQWLlE0HkLrv/CdDzNEK0
+        hz05IJy+6scupUg79f7/IL/iwlRzd+RGssHmDInXaA==
+X-Google-Smtp-Source: AA0mqf7kdWYMlkb5NOwv/nEEEM4hHk1y1g7QlwmpEkE9Ryu9nNRVzFEi3lALO6X38I/EVpzmJR3PEjQ2szl83cWX1Bw=
+X-Received: by 2002:a05:6870:bacb:b0:13a:dd16:9b83 with SMTP id
+ js11-20020a056870bacb00b0013add169b83mr35872901oab.15.1669777802465; Tue, 29
+ Nov 2022 19:10:02 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [net-next] bpf: avoid hashtab deadlock with try_lock
-Content-Language: en-US
-To:     Tonghao Zhang <xiangxia.m.yue@gmail.com>,
-        Hou Tao <houtao@huaweicloud.com>
-Cc:     Hao Luo <haoluo@google.com>, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "houtao1@huawei.com" <houtao1@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-References: <41eda0ea-0ed4-1ffb-5520-06fda08e5d38@huawei.com>
- <CAMDZJNVSv3Msxw=5PRiXyO8bxNsA-4KyxU8BMCVyHxH-3iuq2Q@mail.gmail.com>
- <fdb3b69c-a29c-2d5b-a122-9d98ea387fda@huawei.com>
- <CAMDZJNWTry2eF_n41a13tKFFSSLFyp3BVKakOOWhSDApdp0f=w@mail.gmail.com>
- <CA+khW7jgsyFgBqU7hCzZiSSANE7f=A+M-0XbcKApz6Nr-ZnZDg@mail.gmail.com>
- <07a7491e-f391-a9b2-047e-cab5f23decc5@huawei.com>
- <CAMDZJNUTaiXMe460P7a7NfK1_bbaahpvi3Q9X85o=G7v9x-w=g@mail.gmail.com>
- <59fc54b7-c276-2918-6741-804634337881@huaweicloud.com>
- <541aa740-dcf3-35f5-9f9b-e411978eaa06@redhat.com>
- <Y4ZABpDSs4/uRutC@Boquns-Mac-mini.local>
- <Y4ZCKaQFqDY3aLTy@Boquns-Mac-mini.local>
- <CA+khW7hkQRFcC1QgGxEK_NeaVvCe3Hbe_mZ-_UkQKaBaqnOLEQ@mail.gmail.com>
- <23b5de45-1a11-b5c9-d0d3-4dbca0b7661e@huaweicloud.com>
- <CAMDZJNWtyanKtXtAxYGwvJ0LTgYLf=5iYFm63pbvvJLPE8oHSQ@mail.gmail.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <CAMDZJNWtyanKtXtAxYGwvJ0LTgYLf=5iYFm63pbvvJLPE8oHSQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <CAKfTPtCZ5CttibZ9o18woLiQgzFeKCBMDAGrhMd3kbgX2qs29Q@mail.gmail.com>
+ <E5C05A33-06E4-4627-8108-145752D72A24@joelfernandes.org> <CAKfTPtBZ8xfoP4=W1K5vaBBm5b05Ak9ojAdJeb2hvs5W=W3gmw@mail.gmail.com>
+In-Reply-To: <CAKfTPtBZ8xfoP4=W1K5vaBBm5b05Ak9ojAdJeb2hvs5W=W3gmw@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Wed, 30 Nov 2022 03:09:51 +0000
+Message-ID: <CAEXW_YRpYx3VC+PdM2J=QhZipcy59A46YnjyE0zpUQe3c4Ck8A@mail.gmail.com>
+Subject: Re: [PATCH 5/9] sched/fair: Take into account latency priority at wakeup
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
+        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
+        kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/22 21:47, Tonghao Zhang wrote:
-> On Wed, Nov 30, 2022 at 9:50 AM Hou Tao <houtao@huaweicloud.com> wrote:
->> Hi Hao,
->>
->> On 11/30/2022 3:36 AM, Hao Luo wrote:
->>> On Tue, Nov 29, 2022 at 9:32 AM Boqun Feng <boqun.feng@gmail.com> wrote:
->>>> Just to be clear, I meant to refactor htab_lock_bucket() into a try
->>>> lock pattern. Also after a second thought, the below suggestion doesn't
->>>> work. I think the proper way is to make htab_lock_bucket() as a
->>>> raw_spin_trylock_irqsave().
->>>>
->>>> Regards,
->>>> Boqun
->>>>
->>> The potential deadlock happens when the lock is contended from the
->>> same cpu. When the lock is contended from a remote cpu, we would like
->>> the remote cpu to spin and wait, instead of giving up immediately. As
->>> this gives better throughput. So replacing the current
->>> raw_spin_lock_irqsave() with trylock sacrifices this performance gain.
->>>
->>> I suspect the source of the problem is the 'hash' that we used in
->>> htab_lock_bucket(). The 'hash' is derived from the 'key', I wonder
->>> whether we should use a hash derived from 'bucket' rather than from
->>> 'key'. For example, from the memory address of the 'bucket'. Because,
->>> different keys may fall into the same bucket, but yield different
->>> hashes. If the same bucket can never have two different 'hashes' here,
->>> the map_locked check should behave as intended. Also because
->>> ->map_locked is per-cpu, execution flows from two different cpus can
->>> both pass.
->> The warning from lockdep is due to the reason the bucket lock A is used in a
->> no-NMI context firstly, then the same bucke lock is used a NMI context, so
-> Yes, I tested lockdep too, we can't use the lock in NMI(but only
-> try_lock work fine) context if we use them no-NMI context. otherwise
-> the lockdep prints the warning.
-> * for the dead-lock case: we can use the
-> 1. hash & min(HASHTAB_MAP_LOCK_MASK, htab->n_buckets -1)
-> 2. or hash bucket address.
->
-> * for lockdep warning, we should use in_nmi check with map_locked.
->
-> BTW, the patch doesn't work, so we can remove the lock_key
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c50eb518e262fa06bd334e6eec172eaf5d7a5bd9
->
-> static inline int htab_lock_bucket(const struct bpf_htab *htab,
->                                     struct bucket *b, u32 hash,
->                                     unsigned long *pflags)
-> {
->          unsigned long flags;
->
->          hash = hash & min(HASHTAB_MAP_LOCK_MASK, htab->n_buckets -1);
->
->          preempt_disable();
->          if (unlikely(__this_cpu_inc_return(*(htab->map_locked[hash])) != 1)) {
->                  __this_cpu_dec(*(htab->map_locked[hash]));
->                  preempt_enable();
->                  return -EBUSY;
->          }
->
->          if (in_nmi()) {
->                  if (!raw_spin_trylock_irqsave(&b->raw_lock, flags))
->                          return -EBUSY;
-That is not right. You have to do the same step as above by decrementing 
-the percpu count and enable preemption. So you may want to put all these 
-busy_out steps after the return 0 and use "goto busy_out;" to jump there.
->          } else {
->                  raw_spin_lock_irqsave(&b->raw_lock, flags);
->          }
->
->          *pflags = flags;
->          return 0;
-> }
+Hi Vincent,
 
-BTW, with that change, I believe you can actually remove all the percpu 
-map_locked count code.
+On Tue, Nov 29, 2022 at 5:21 PM Vincent Guittot
+<vincent.guittot@linaro.org> wrote:
+[...]
+> > >>> }
+> > >>>
+> > >>> /*
+> > >>> @@ -7544,7 +7558,7 @@ static int __sched_setscheduler(struct task_s=
+truct *p,
+> > >>>                if (attr->sched_flags & SCHED_FLAG_UTIL_CLAMP)
+> > >>>                        goto change;
+> > >>>                if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE &&
+> > >>> -                   attr->sched_latency_nice !=3D p->latency_nice)
+> > >>> +                   attr->sched_latency_nice !=3D LATENCY_TO_NICE(p=
+->latency_prio))
+> > >>>                        goto change;
+> > >>>
+> > >>>                p->sched_reset_on_fork =3D reset_on_fork;
+> > >>> @@ -8085,7 +8099,7 @@ SYSCALL_DEFINE4(sched_getattr, pid_t, pid, st=
+ruct sched_attr __user *, uattr,
+> > >>>        get_params(p, &kattr);
+> > >>>        kattr.sched_flags &=3D SCHED_FLAG_ALL;
+> > >>>
+> > >>> -       kattr.sched_latency_nice =3D p->latency_nice;
+> > >>> +       kattr.sched_latency_nice =3D LATENCY_TO_NICE(p->latency_pri=
+o);
+> > >>>
+> > >>> #ifdef CONFIG_UCLAMP_TASK
+> > >>>        /*
+> > >>> @@ -11294,6 +11308,20 @@ const u32 sched_prio_to_wmult[40] =3D {
+> > >>>  /*  15 */ 119304647, 148102320, 186737708, 238609294, 286331153,
+> > >>> };
+> > >>>
+> > >>> +/*
+> > >>> + * latency weight for wakeup preemption
+> > >>> + */
+> > >>> +const int sched_latency_to_weight[40] =3D {
+> > >>> + /* -20 */     -1024,     -973,     -922,      -870,      -819,
+> > >>> + /* -15 */      -768,     -717,     -666,      -614,      -563,
+> > >>> + /* -10 */      -512,     -461,     -410,      -358,      -307,
+> > >>> + /*  -5 */      -256,     -205,     -154,      -102,       -51,
+> > >>> + /*   0 */         0,       51,      102,       154,       205,
+> > >>> + /*   5 */       256,      307,      358,       410,       461,
+> > >>> + /*  10 */       512,      563,      614,       666,       717,
+> > >>> + /*  15 */       768,      819,      870,       922,       973,
+> > >>> +};
+> > >>> +
+> > >>
+> > >> The table is linear. You could approximate this as: weight =3D nice =
+* 51
+> > >> since it is a linear scale and do the conversion in place.
+> > >>
+> > >> Or, since the only place you are using the latency_to_weight is in
+> > >> set_latency_offset(), can we drop the sched_latency_to_weight array
+> > >> and simplify as follows?
+> > >
+> > > It's also used in cgroup patch and keeps a coherency between
+> > > nice/weight an latency_nice/offset so I prefer
+> >
+> > I dont think it=E2=80=99s a valid comparison as nice/weight conversion =
+are non linear and over there a table makes sense: weight =3D 1024 / 1.25 ^=
+ nice
+> >
+> > > keeping current
+> > > implementation
+> >
+> > I could be missing something, but, since its a linear scale, why does c=
+group need weight at all? Just store nice directly. Why would that not work=
+?
+> >
+> > In the end the TG and SE has the latency offset in the struct, that is =
+all you care about. All the conversion back and forth is unnecessary, as it=
+ is a linear scale and just increases LOC and takes more memory to store li=
+near arrays.
+> >
+> > Again I could be missing something and I will try to play with your ser=
+ies and see if I can show you what I mean (or convince myself it=E2=80=99s =
+needed).
+>
+> I get what you mean but I think that having an array gives latitude to
+> adjust this internal offset mapping at a minimum cost of a const array
 
-Cheers,
-Longman
+Ok that makes sense. If you feel like there might be updates in the
+future to this mapping array (like changing the constants as you
+mentioned), then I am Ok with us keeping it.
 
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+
+I am excited about your series, the CFS latency issues have been
+thorny. This feels like a step forward in the right direction. Cheers,
+
+ - Joel
