@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B407863E157
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB0463E15E
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:11:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiK3ULJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 15:11:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44754 "EHLO
+        id S229989AbiK3ULT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 15:11:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiK3UKo (ORCPT
+        with ESMTP id S229934AbiK3UKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:10:44 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1C99492B;
-        Wed, 30 Nov 2022 12:09:58 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id p8so28632833lfu.11;
-        Wed, 30 Nov 2022 12:09:58 -0800 (PST)
+        Wed, 30 Nov 2022 15:10:54 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA649FED3;
+        Wed, 30 Nov 2022 12:10:01 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id l8so22135533ljh.13;
+        Wed, 30 Nov 2022 12:10:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sc8kO01GqDD6/HcwuanEhTRskd8di+x6+a0ibeX+dww=;
-        b=Z0mrGYbObj/vsr0YdYm78sVKlrPMXeltJNT55AdG4euBqwQdCO3M/pUiHQjiKtaARD
-         J4m34uHhVfZAz/Zn3rN2UjuyzApZ8cHFf+OUM0SCwA2pgtNb1xniLibNUBvd6SnUPQKG
-         cGGS+0Fuva7LwMN52YkrdxU8p9BEq59tTEYxuQ7YwdDpRUPavnFgXU5e8V9R1dJARxrX
-         doAbU1IaRXm5zvBiulRtILWHuPBEy+qsyIuAvUYUmRn4kFAWLxOKhThskb7FhnYul9nG
-         mf8pTGEKVxvtrwRMw3c0cjd6Me3KLiB90xGMU9nu8aOCk0ZM7DYCtkImyQG190YJUfrD
-         8Wag==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EtbcVDOlSSICppU8bmiIzEOVnGi+rn0ffRRtzVm9HYM=;
+        b=SZ5d6ev9r09CMO9NZ5TAAqxnvHGHw5iLAi67TfBuDpgAPToHeOTMHEt5FGGuqZ05fK
+         tRuD1dhKOrKg467YlYTcyqyqKl8P+nLFsz9TbDbCgMKpRNUOaLm3TNwy0gYYhaq303oa
+         joSoJWqcYob1I54np+894tqftUMhE1DfafMji4zK0cp9rQUpGeyKcwpjmBXsaKGeJSnN
+         BNdJrA+U1IqpLJICLdJzBIgAHIOKJD2bDf275p+8mbjtK2Z8qrzekDuOrCn/t/WdstNE
+         cpkjX3FcYcUmtit8BXo9SjOxJrVkPKoF3t/vL14vr+P7mjCBElZk4r6OdLbGyu/g5uff
+         yjVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sc8kO01GqDD6/HcwuanEhTRskd8di+x6+a0ibeX+dww=;
-        b=zIkmPphconLzYQqCCMMtpnULup/UyaWFK2wHgNauOFmDWz5KQVSeUGDR5Ybr4BJPV8
-         DCRkqd2Out2taALxVOuJGfbC6IrnVaWYkRy+PT/bBVnE4O8d83arSV/AS/eIDkgmBc7b
-         wx3XPmGL6M69/p+eaLq40QZ+FErYMSLPaHze3jmahGjOlcq+z88DbMA2lD2/Kry+ESVJ
-         A7IGj4yN/zD+nwZwtvwA8d9hpI4kTp7CuqU0q8D+rH3cfzKvcpQFfHLjWl3VbYx8QnSH
-         flYYJF6fAaLzK1CpwAnRdlZoupUAxE0A1CKwFCiRBX7o+jiuoIbVcmdCYa1aWhAQpccZ
-         oLeA==
-X-Gm-Message-State: ANoB5pmIZjweuJ6MD46uivZFDzLwfkWOjbmclbxTgQ4klHwi8VFWQZ9l
-        pv+nLxDFnJBG9zMSrkxg6b2FVi0xFrc=
-X-Google-Smtp-Source: AA0mqf7Nbyfq13CmWJAE4fQKtqOHUvwnOR4hNGvsQdiey5liE4mjym5n+HRpj5svMExCq8coX+7Riw==
-X-Received: by 2002:a19:2d52:0:b0:4b1:dc42:6f85 with SMTP id t18-20020a192d52000000b004b1dc426f85mr20158596lft.568.1669838996495;
-        Wed, 30 Nov 2022 12:09:56 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EtbcVDOlSSICppU8bmiIzEOVnGi+rn0ffRRtzVm9HYM=;
+        b=3JkPbmuRiPs3MDX05d/RylAVAD2lxE27Y2y5H7n+ClMtzhiXthhUaQGlNtCU2Rotlc
+         8m6RVUjz8+99pk2gtEoyFVmXOC6LIURuTzAffxcdglDZ9Fy2uinlqSR4utK9KabL1hCc
+         rB5DBPhibwZNU68SrBaRPnK+wXcysTQsHq7AL4+BIe+bs1rMGCoy85K7pt2fTR8TEwov
+         jyumPSm7VAqX2UMwd/Syx/bFrpXA7uMFrOw8dySmm5RJ43G8ldzkq7IM1WuToblIAMcp
+         Pf6l48xToOXF5ZxQ3YWIog20vc3JhEmlK9lvsSE6srn2an3NSpsyZOw5fW7DM7EZeXlm
+         yX1A==
+X-Gm-Message-State: ANoB5pm4EPJl7Zq2wYF8oy0lTDVwWiIsvtyerl+kG0+aEz+yP/9OWelv
+        twty1bSx08Udpo/La6Puee/vTAIy1ck=
+X-Google-Smtp-Source: AA0mqf7CPPdhD9/47NvmpJGuRSGX1fRLAxNTyYeYNqwuRejlvC9chRe92gvY63/gfDu3dgJIVFL30w==
+X-Received: by 2002:a2e:93d7:0:b0:279:7294:5e42 with SMTP id p23-20020a2e93d7000000b0027972945e42mr13933762ljh.81.1669838998761;
+        Wed, 30 Nov 2022 12:09:58 -0800 (PST)
 Received: from localhost.localdomain (ccy110.neoplus.adsl.tpnet.pl. [83.30.148.110])
-        by smtp.gmail.com with ESMTPSA id a25-20020a056512201900b004b4e9580b1asm369754lfb.66.2022.11.30.12.09.54
+        by smtp.gmail.com with ESMTPSA id a25-20020a056512201900b004b4e9580b1asm369754lfb.66.2022.11.30.12.09.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 12:09:56 -0800 (PST)
+        Wed, 30 Nov 2022 12:09:58 -0800 (PST)
 From:   Adam Skladowski <a39.skl@gmail.com>
 Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         Adam Skladowski <a39.skl@gmail.com>,
@@ -71,10 +72,12 @@ Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH v2 00/12] SM6115 DTS changes
-Date:   Wed, 30 Nov 2022 21:09:38 +0100
-Message-Id: <20221130200950.144618-1-a39.skl@gmail.com>
+Subject: [PATCH v2 01/12] dt-bindings: display: msm: Rename mdss node name in example
+Date:   Wed, 30 Nov 2022 21:09:39 +0100
+Message-Id: <20221130200950.144618-2-a39.skl@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221130200950.144618-1-a39.skl@gmail.com>
+References: <20221130200950.144618-1-a39.skl@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,37 +91,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series adds bunch of new nodes
-also it fixes some small nitpicks in yamls and adds compatible.
+Follow other YAMLs and replace mdss name into display-subystem.
 
-Changes since v1
-================
-1. Changed title for mdss yaml patch
-2. Added missing dmas to spi0
-3. Wired freq domains to CPUs
-4. Added R-b/Ack tags
-5. Reworded smmu dts patch
+Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+---
+ .../devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml      | 2 +-
+ .../devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Adam Skladowski (12):
-  dt-bindings: display: msm: Rename mdss node name in example
-  dt-bindings: thermal: tsens: Add SM6115 compatible
-  arm64: dts: qcom: sm6115: Add cpufreq-hw support
-  arm64: dts: qcom: sm6115: Add TSENS node
-  arm64: dts: qcom: sm6115: Add PRNG node
-  arm64: dts: qcom: sm6115: Add rpm-stats node
-  arm64: dts: qcom: sm6115: Add dispcc node
-  arm64: dts: qcom: sm6115: Add mdss/dpu node
-  arm64: dts: qcom: sm6115: Add GPI DMA
-  arm64: dts: qcom: sm6115: Add i2c/spi nodes
-  arm64: dts: qcom: sm6115: Add WCN node.
-  arm64: dts: qcom: sm6115: Add smmu fallback to qcom generic compatible
-
- .../display/msm/qcom,qcm2290-mdss.yaml        |   2 +-
- .../display/msm/qcom,sm6115-mdss.yaml         |   2 +-
- .../bindings/thermal/qcom-tsens.yaml          |   1 +
- arch/arm64/boot/dts/qcom/sm6115.dtsi          | 573 +++++++++++++++++-
- 4 files changed, 575 insertions(+), 3 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml
+index d6f043a4b08d..4795e13c7b59 100644
+--- a/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml
++++ b/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss.yaml
+@@ -72,7 +72,7 @@ examples:
+     #include <dt-bindings/interconnect/qcom,qcm2290.h>
+     #include <dt-bindings/power/qcom-rpmpd.h>
+ 
+-    mdss@5e00000 {
++    display-subsystem@5e00000 {
+         #address-cells = <1>;
+         #size-cells = <1>;
+         compatible = "qcom,qcm2290-mdss";
+diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
+index a86d7f53fa84..886858ef6700 100644
+--- a/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
++++ b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
+@@ -62,7 +62,7 @@ examples:
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+     #include <dt-bindings/power/qcom-rpmpd.h>
+ 
+-    mdss@5e00000 {
++    display-subsystem@5e00000 {
+         #address-cells = <1>;
+         #size-cells = <1>;
+         compatible = "qcom,sm6115-mdss";
 -- 
 2.25.1
 
