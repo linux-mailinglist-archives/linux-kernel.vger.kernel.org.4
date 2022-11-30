@@ -2,63 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E3F63D6FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C723563D703
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiK3Nl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 08:41:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
+        id S229841AbiK3Nmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 08:42:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbiK3NlV (ORCPT
+        with ESMTP id S229509AbiK3Nmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 08:41:21 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E6B2CDF2;
-        Wed, 30 Nov 2022 05:41:14 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AUDevOV021235;
-        Wed, 30 Nov 2022 07:40:57 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1669815657;
-        bh=A7z8Fp/H044MBWnXHzH4hSrFN1wiZTRrVgcxaAEShb0=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=qYfff1XSEcIX6QAAxc6VYC8QX7omQFnadLd0/any9m6k7Y2FNw5cP9rQwPhZ8LHkM
-         afqp/qhXpqOrXRg7C08ewZ3e8cGYSbtm9fF98ycjHs0kIoKhARXMW+WQA3gTc/OibY
-         G5CEw18cwIILImnUbJbcaaJ9kcus20P7lHWhCwLM=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AUDevSM015161
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 30 Nov 2022 07:40:57 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 30
- Nov 2022 07:40:57 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 30 Nov 2022 07:40:57 -0600
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AUDeuOT050494;
-        Wed, 30 Nov 2022 07:40:57 -0600
-From:   Devarsh Thakkar <devarsht@ti.com>
-To:     <andersson@kernel.org>, <mathieu.poirier@linaro.org>,
-        <p.zabel@pengutronix.de>, <linux-remoteproc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <s-anna@ti.com>
-CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <hnagalla@ti.com>, <praneeth@ti.com>, <nm@ti.com>,
-        <vigneshr@ti.com>, <a-bhatia1@ti.com>, <j-luthra@ti.com>
-Subject: [PATCH v2 2/2] remoteproc: k3-r5: Use separate compatible string for TI AM62 SoC family
-Date:   Wed, 30 Nov 2022 19:10:52 +0530
-Message-ID: <20221130134052.7513-3-devarsht@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221130134052.7513-1-devarsht@ti.com>
-References: <20221130134052.7513-1-devarsht@ti.com>
+        Wed, 30 Nov 2022 08:42:50 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBDB193E7
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 05:42:49 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id x12so5189141ilg.1
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 05:42:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xB02vOOmC8AmHX6fqjha6NVxRlyLrOOR3HyAmHWblj0=;
+        b=nQfdFp3454odqTKzzy6HtAWFTgGjw4E9Dk09UAYiTJcriqUPMTJSoRln2X+LTdUKb4
+         SWsbcZh9IFw5fnZjJ6Y/E78vlFd5BR9DZIvjTnl3cJYPx293X0/IyD2zp+amitl+ABDB
+         STcZxD2hAeZPKmciJVu3Y2T3VfRvlIwr4NCskPwVhnSh1zO2B0mMXsaGmCNTZez2atZi
+         aEcwzCGgua6CaOHiG5nAebWpF5DlwRlStYUdwZsemkxWGptr7N7WRG/659ctBqoHxBl9
+         N7kJfFgXBeJFkqySpImT6gcLlelNpC/oLZxWqLdxhrcAFtzQiR6bv+yNfdyg5Le1sYtB
+         OF4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xB02vOOmC8AmHX6fqjha6NVxRlyLrOOR3HyAmHWblj0=;
+        b=jnNOb6UYaKDANThQiHm4eJtCcKyarkCZfRbxx8l47wrB6wPn26GSOIuZSbEGXXuQY0
+         ko/HT/tWFhtLcraVb2GBiZsKm7wTl+xNAk+1o1epl21j9eSaGYOEdJ0MvhZjwYuvJjX2
+         o8YtFFO1d9cPHl24uD6SX50TXeFE2G1hRag6WoHnzuhyHKDmhPyqUM4oL11zkMIC9eQc
+         NGutgdXIlpgFHU08tZwvPblDmZzhnuQeZKaclf4AOWYvPQXvJea/1RwIS6ByyI+ISEa1
+         /LON9qKmUQ0q40eepNWO1i/Di0rzC6ekEQWjbfYXReE+GllgtB7QcBq7weFadmZcWufy
+         E9cQ==
+X-Gm-Message-State: ANoB5pn1vQYwU8hD+nhF/alJvmkBa5WErh9OucEzBjUGiHJnIQBfC03z
+        5D3V5m9OV6C1wmroMTdqGoPQkcjz3kari7rg+yGElQ==
+X-Google-Smtp-Source: AA0mqf5/UvyJdf0Zl/lV8T0zyuJg/0ksLKcor1mnU5+8IbELuGTlASPy/KHdkynw1pGgxifzSXuOZhVtSFpeDCexP+s=
+X-Received: by 2002:a05:6e02:ca1:b0:303:1ebe:9c4c with SMTP id
+ 1-20020a056e020ca100b003031ebe9c4cmr4429252ilg.301.1669815768941; Wed, 30 Nov
+ 2022 05:42:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <CAKfTPtCZ5CttibZ9o18woLiQgzFeKCBMDAGrhMd3kbgX2qs29Q@mail.gmail.com>
+ <E5C05A33-06E4-4627-8108-145752D72A24@joelfernandes.org> <CAKfTPtBZ8xfoP4=W1K5vaBBm5b05Ak9ojAdJeb2hvs5W=W3gmw@mail.gmail.com>
+ <CAEXW_YRpYx3VC+PdM2J=QhZipcy59A46YnjyE0zpUQe3c4Ck8A@mail.gmail.com>
+In-Reply-To: <CAEXW_YRpYx3VC+PdM2J=QhZipcy59A46YnjyE0zpUQe3c4Ck8A@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 30 Nov 2022 14:42:37 +0100
+Message-ID: <CAKfTPtCKL5Ea9f13ONbC92UUeNMnd8qrt2KcsRmWg70ufrNzUg@mail.gmail.com>
+Subject: Re: [PATCH 5/9] sched/fair: Take into account latency priority at wakeup
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
+        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
+        kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,180 +78,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AM62 and AM62A SoCs use single core R5F which is a new scenario
-different than the one being used with CLUSTER_MODE_SINGLECPU
-which is for utilizing a single core from a set of cores available
-in R5F cluster present in the SoC.
+On Wed, 30 Nov 2022 at 04:10, Joel Fernandes <joel@joelfernandes.org> wrote=
+:
+>
+> Hi Vincent,
+>
+> On Tue, Nov 29, 2022 at 5:21 PM Vincent Guittot
+> <vincent.guittot@linaro.org> wrote:
+> [...]
+> > > >>> }
+> > > >>>
+> > > >>> /*
+> > > >>> @@ -7544,7 +7558,7 @@ static int __sched_setscheduler(struct task=
+_struct *p,
+> > > >>>                if (attr->sched_flags & SCHED_FLAG_UTIL_CLAMP)
+> > > >>>                        goto change;
+> > > >>>                if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE &&
+> > > >>> -                   attr->sched_latency_nice !=3D p->latency_nice=
+)
+> > > >>> +                   attr->sched_latency_nice !=3D LATENCY_TO_NICE=
+(p->latency_prio))
+> > > >>>                        goto change;
+> > > >>>
+> > > >>>                p->sched_reset_on_fork =3D reset_on_fork;
+> > > >>> @@ -8085,7 +8099,7 @@ SYSCALL_DEFINE4(sched_getattr, pid_t, pid, =
+struct sched_attr __user *, uattr,
+> > > >>>        get_params(p, &kattr);
+> > > >>>        kattr.sched_flags &=3D SCHED_FLAG_ALL;
+> > > >>>
+> > > >>> -       kattr.sched_latency_nice =3D p->latency_nice;
+> > > >>> +       kattr.sched_latency_nice =3D LATENCY_TO_NICE(p->latency_p=
+rio);
+> > > >>>
+> > > >>> #ifdef CONFIG_UCLAMP_TASK
+> > > >>>        /*
+> > > >>> @@ -11294,6 +11308,20 @@ const u32 sched_prio_to_wmult[40] =3D {
+> > > >>>  /*  15 */ 119304647, 148102320, 186737708, 238609294, 286331153,
+> > > >>> };
+> > > >>>
+> > > >>> +/*
+> > > >>> + * latency weight for wakeup preemption
+> > > >>> + */
+> > > >>> +const int sched_latency_to_weight[40] =3D {
+> > > >>> + /* -20 */     -1024,     -973,     -922,      -870,      -819,
+> > > >>> + /* -15 */      -768,     -717,     -666,      -614,      -563,
+> > > >>> + /* -10 */      -512,     -461,     -410,      -358,      -307,
+> > > >>> + /*  -5 */      -256,     -205,     -154,      -102,       -51,
+> > > >>> + /*   0 */         0,       51,      102,       154,       205,
+> > > >>> + /*   5 */       256,      307,      358,       410,       461,
+> > > >>> + /*  10 */       512,      563,      614,       666,       717,
+> > > >>> + /*  15 */       768,      819,      870,       922,       973,
+> > > >>> +};
+> > > >>> +
+> > > >>
+> > > >> The table is linear. You could approximate this as: weight =3D nic=
+e * 51
+> > > >> since it is a linear scale and do the conversion in place.
+> > > >>
+> > > >> Or, since the only place you are using the latency_to_weight is in
+> > > >> set_latency_offset(), can we drop the sched_latency_to_weight arra=
+y
+> > > >> and simplify as follows?
+> > > >
+> > > > It's also used in cgroup patch and keeps a coherency between
+> > > > nice/weight an latency_nice/offset so I prefer
+> > >
+> > > I dont think it=E2=80=99s a valid comparison as nice/weight conversio=
+n are non linear and over there a table makes sense: weight =3D 1024 / 1.25=
+ ^ nice
+> > >
+> > > > keeping current
+> > > > implementation
+> > >
+> > > I could be missing something, but, since its a linear scale, why does=
+ cgroup need weight at all? Just store nice directly. Why would that not wo=
+rk?
+> > >
+> > > In the end the TG and SE has the latency offset in the struct, that i=
+s all you care about. All the conversion back and forth is unnecessary, as =
+it is a linear scale and just increases LOC and takes more memory to store =
+linear arrays.
+> > >
+> > > Again I could be missing something and I will try to play with your s=
+eries and see if I can show you what I mean (or convince myself it=E2=80=99=
+s needed).
+> >
+> > I get what you mean but I think that having an array gives latitude to
+> > adjust this internal offset mapping at a minimum cost of a const array
+>
+> Ok that makes sense. If you feel like there might be updates in the
+> future to this mapping array (like changing the constants as you
+> mentioned), then I am Ok with us keeping it.
+>
+> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+>
+> I am excited about your series, the CFS latency issues have been
+> thorny. This feels like a step forward in the right direction. Cheers,
 
-To support this single core scenario map it with
-newly defined CLUSTER_MODE_NONE and use it when
-compatible is set to ti,am62-r5fss.
+Thanks
+Vincent
 
-Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
----
-V2: Fix indentation and ordering issues as per review comments
----
- drivers/remoteproc/ti_k3_r5_remoteproc.c | 55 ++++++++++++++++++------
- 1 file changed, 43 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-index 0481926c6975..9698b29a0b56 100644
---- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
-+++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-@@ -74,11 +74,13 @@ struct k3_r5_mem {
-  *   Split mode      : AM65x, J721E, J7200 and AM64x SoCs
-  *   LockStep mode   : AM65x, J721E and J7200 SoCs
-  *   Single-CPU mode : AM64x SoCs only
-+ *   None            : AM62x, AM62A SoCs
-  */
- enum cluster_mode {
- 	CLUSTER_MODE_SPLIT = 0,
- 	CLUSTER_MODE_LOCKSTEP,
- 	CLUSTER_MODE_SINGLECPU,
-+	CLUSTER_MODE_NONE,
- };
- 
- /**
-@@ -86,11 +88,13 @@ enum cluster_mode {
-  * @tcm_is_double: flag to denote the larger unified TCMs in certain modes
-  * @tcm_ecc_autoinit: flag to denote the auto-initialization of TCMs for ECC
-  * @single_cpu_mode: flag to denote if SoC/IP supports Single-CPU mode
-+ * @is_single_core: flag to denote if SoC/IP has only single core R5
-  */
- struct k3_r5_soc_data {
- 	bool tcm_is_double;
- 	bool tcm_ecc_autoinit;
- 	bool single_cpu_mode;
-+	bool is_single_core;
- };
- 
- /**
-@@ -838,7 +842,8 @@ static int k3_r5_rproc_configure(struct k3_r5_rproc *kproc)
- 
- 	core0 = list_first_entry(&cluster->cores, struct k3_r5_core, elem);
- 	if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
--	    cluster->mode == CLUSTER_MODE_SINGLECPU) {
-+	    cluster->mode == CLUSTER_MODE_SINGLECPU ||
-+	    cluster->mode == CLUSTER_MODE_NONE) {
- 		core = core0;
- 	} else {
- 		core = kproc->core;
-@@ -853,7 +858,7 @@ static int k3_r5_rproc_configure(struct k3_r5_rproc *kproc)
- 		boot_vec, cfg, ctrl, stat);
- 
- 	/* check if only Single-CPU mode is supported on applicable SoCs */
--	if (cluster->soc_data->single_cpu_mode) {
-+	if (cluster->soc_data->single_cpu_mode || cluster->soc_data->is_single_core) {
- 		single_cpu =
- 			!!(stat & PROC_BOOT_STATUS_FLAG_R5_SINGLECORE_ONLY);
- 		if (single_cpu && cluster->mode == CLUSTER_MODE_SPLIT) {
-@@ -1074,6 +1079,7 @@ static void k3_r5_adjust_tcm_sizes(struct k3_r5_rproc *kproc)
- 
- 	if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
- 	    cluster->mode == CLUSTER_MODE_SINGLECPU ||
-+	    cluster->mode == CLUSTER_MODE_NONE ||
- 	    !cluster->soc_data->tcm_is_double)
- 		return;
- 
-@@ -1147,7 +1153,9 @@ static int k3_r5_rproc_configure_mode(struct k3_r5_rproc *kproc)
- 	atcm_enable = cfg & PROC_BOOT_CFG_FLAG_R5_ATCM_EN ?  1 : 0;
- 	btcm_enable = cfg & PROC_BOOT_CFG_FLAG_R5_BTCM_EN ?  1 : 0;
- 	loczrama = cfg & PROC_BOOT_CFG_FLAG_R5_TCM_RSTBASE ?  1 : 0;
--	if (cluster->soc_data->single_cpu_mode) {
-+	if (cluster->soc_data->is_single_core) {
-+		mode = CLUSTER_MODE_NONE;
-+	} else if (cluster->soc_data->single_cpu_mode) {
- 		mode = cfg & PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE ?
- 				CLUSTER_MODE_SINGLECPU : CLUSTER_MODE_SPLIT;
- 	} else {
-@@ -1271,7 +1279,8 @@ static int k3_r5_cluster_rproc_init(struct platform_device *pdev)
- 
- 		/* create only one rproc in lockstep mode or single-cpu mode */
- 		if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
--		    cluster->mode == CLUSTER_MODE_SINGLECPU)
-+		    cluster->mode == CLUSTER_MODE_SINGLECPU ||
-+		    cluster->mode == CLUSTER_MODE_NONE)
- 			break;
- 	}
- 
-@@ -1704,21 +1713,32 @@ static int k3_r5_probe(struct platform_device *pdev)
- 	 * default to most common efuse configurations - Split-mode on AM64x
- 	 * and LockStep-mode on all others
- 	 */
--	cluster->mode = data->single_cpu_mode ?
-+	if (!data->is_single_core)
-+		cluster->mode = data->single_cpu_mode ?
- 				CLUSTER_MODE_SPLIT : CLUSTER_MODE_LOCKSTEP;
-+	else
-+		cluster->mode = CLUSTER_MODE_NONE;
-+
- 	cluster->soc_data = data;
- 	INIT_LIST_HEAD(&cluster->cores);
- 
--	ret = of_property_read_u32(np, "ti,cluster-mode", &cluster->mode);
--	if (ret < 0 && ret != -EINVAL) {
--		dev_err(dev, "invalid format for ti,cluster-mode, ret = %d\n",
--			ret);
--		return ret;
-+	if (!data->is_single_core) {
-+		ret = of_property_read_u32(np, "ti,cluster-mode", &cluster->mode);
-+		if (ret < 0 && ret != -EINVAL) {
-+			dev_err(dev, "invalid format for ti,cluster-mode, ret = %d\n", ret);
-+			return ret;
-+		}
- 	}
- 
- 	num_cores = of_get_available_child_count(np);
--	if (num_cores != 2) {
--		dev_err(dev, "MCU cluster requires both R5F cores to be enabled, num_cores = %d\n",
-+	if (num_cores != 2 && !data->is_single_core) {
-+		dev_err(dev, "MCU cluster requires both R5F cores to be enabled but num_cores is set to = %d\n",
-+			num_cores);
-+		return -ENODEV;
-+	}
-+
-+	if (num_cores != 1 && data->is_single_core) {
-+		dev_err(dev, "SoC supports only single core R5 but num_cores is set to %d\n",
- 			num_cores);
- 		return -ENODEV;
- 	}
-@@ -1760,18 +1780,28 @@ static const struct k3_r5_soc_data am65_j721e_soc_data = {
- 	.tcm_is_double = false,
- 	.tcm_ecc_autoinit = false,
- 	.single_cpu_mode = false,
-+	.is_single_core = false,
- };
- 
- static const struct k3_r5_soc_data j7200_j721s2_soc_data = {
- 	.tcm_is_double = true,
- 	.tcm_ecc_autoinit = true,
- 	.single_cpu_mode = false,
-+	.is_single_core = false,
- };
- 
- static const struct k3_r5_soc_data am64_soc_data = {
- 	.tcm_is_double = true,
- 	.tcm_ecc_autoinit = true,
- 	.single_cpu_mode = true,
-+	.is_single_core = false,
-+};
-+
-+static const struct k3_r5_soc_data am62_soc_data = {
-+	.tcm_is_double = false,
-+	.tcm_ecc_autoinit = true,
-+	.single_cpu_mode = false,
-+	.is_single_core = true,
- };
- 
- static const struct of_device_id k3_r5_of_match[] = {
-@@ -1779,6 +1809,7 @@ static const struct of_device_id k3_r5_of_match[] = {
- 	{ .compatible = "ti,j721e-r5fss", .data = &am65_j721e_soc_data, },
- 	{ .compatible = "ti,j7200-r5fss", .data = &j7200_j721s2_soc_data, },
- 	{ .compatible = "ti,am64-r5fss",  .data = &am64_soc_data, },
-+	{ .compatible = "ti,am62-r5fss",  .data = &am62_soc_data, },
- 	{ .compatible = "ti,j721s2-r5fss",  .data = &j7200_j721s2_soc_data, },
- 	{ /* sentinel */ },
- };
--- 
-2.17.1
-
+>
+>  - Joel
