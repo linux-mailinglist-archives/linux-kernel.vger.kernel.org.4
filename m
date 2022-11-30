@@ -2,87 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8396863E230
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:33:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C4863E236
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbiK3Udo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 15:33:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43326 "EHLO
+        id S229615AbiK3Uf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 15:35:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiK3Ud0 (ORCPT
+        with ESMTP id S229472AbiK3Ufz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:33:26 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4F88E5B7;
-        Wed, 30 Nov 2022 12:32:21 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id v3-20020a17090ac90300b00218441ac0f6so2728489pjt.0;
-        Wed, 30 Nov 2022 12:32:21 -0800 (PST)
+        Wed, 30 Nov 2022 15:35:55 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7A1119;
+        Wed, 30 Nov 2022 12:35:54 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso3156812pjt.0;
+        Wed, 30 Nov 2022 12:35:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s+f73qQSWaZWQn5PMXIm5ddroitzO0fXj2VGSW5dgd4=;
-        b=BGROMH3G14bf8t+5QZBF8EIw7DJlp2M69BITlayk5RGIWu5mNUNjLIwEntSuAXgoGO
-         P87aZf2H9okTAtAvyUGhhYTXP1R1c0HvcGtF6oOmpH/AsjC2ZnLAUM+ZDFG50EtBaeM5
-         KGLxpgoe1IdmVLAWtMdASGG8Y3NNnio4jdbNm5Jbz8nofwg0orveW/0yTrYkaCQgsF+J
-         kmWIYEdlCmYOvqZCmsZDw8NVEZcFR7/wa0FmfXM7HlJWFPXVTu95gDNR/uE6f8xdr5YO
-         d7vb4ikzLzG+TKHr2tWloyVj9jbP7mTm2qutSQ17RdzICHvycDY59fIM+h5QlDG8du51
-         19ag==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gSEjPF93GMI3z5E1hQkgEscxi559x8HTBtezk/0B3sM=;
+        b=F0XixuXZEk2UTAsNqC7vceNho1K4AE+FJ0RvADRizDnWeTE9clf7X6O8B2gy6wUnZV
+         JHGZ8sB0kSijDJfB9lOYv/za7yVGmeWvMgKrh5h9/ocxd6zpBh4iH8+Ac8kGiKA24S7S
+         LDy4WxejU6DA3oRZvhxGdEddA+imoExbJvbnBQKAuAhJUy+zpTENRyQYUWu4tjcRjMOR
+         EcYR8wPn8kAnMP2yWcbI0ZctL8KIHcCd5rjAw2M5jW7vjMvmutDMz62AmRmk57v7JLAg
+         h7SWjFNNJst8+tNLfUklZAS0izR4pQikWoge3vmcJbQ5lqToZ9XnHHGuCupUs8ZvaEJ9
+         POIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s+f73qQSWaZWQn5PMXIm5ddroitzO0fXj2VGSW5dgd4=;
-        b=1cHyU0YoaHmzn97ZUIiHaackhSkGGGTfmPyUtglhkahfA+Ma8q/Ba3Jy8Ynyqsr5oq
-         os4ONU6wqSZyN9wsyaxOby9crbbAtjmtUo8sW4Y97WPBKHaodPrBCl8MgFQfceXU1hN1
-         ct/RW+4SfBCxZyg+3TOiR+y86uwkr2C047ViVD9868bEw+OWMHjc9/6LwtGN4RTYImGD
-         ZdGqU233a1JsmmyCt562wql0bI67A+9Bit7gRug2l8uRP33jA+22zRJEXr7H9ovaSj3Y
-         vvzX54oqAFyDEpifyh5lT85Ap6GxXMnV7iMANUz1kuGxKM1FuD6QA2FwQe+f4HKo6agf
-         +lDQ==
-X-Gm-Message-State: ANoB5pnFVxxpE8szki+n8rqqbH6pxXyQGkBknbpOvlyQcQUizUpO/CYO
-        4BIskiEHnsK/EXZdD3LAaMk=
-X-Google-Smtp-Source: AA0mqf6t98y2Qu97avdGRXp5f3d9HhWZq4w7sVVholxd7NKSPPSSvUxYIn/oHka1yFAhSMYpzlHFpw==
-X-Received: by 2002:a17:902:ef4c:b0:189:8b14:55bd with SMTP id e12-20020a170902ef4c00b001898b1455bdmr17163554plx.25.1669840340739;
-        Wed, 30 Nov 2022 12:32:20 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id c30-20020a056a00009e00b0056be1581126sm1849972pfj.143.2022.11.30.12.32.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 12:32:20 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 30 Nov 2022 10:32:19 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Li Nan <linan122@huawei.com>
-Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com
-Subject: Re: [PATCH -next v2 2/9] blk-iocost: improve hanlder of match_u64()
-Message-ID: <Y4e90zFnhhq764lP@slm.duckdns.org>
-References: <20221130132156.2836184-1-linan122@huawei.com>
- <20221130132156.2836184-3-linan122@huawei.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gSEjPF93GMI3z5E1hQkgEscxi559x8HTBtezk/0B3sM=;
+        b=OF0hXfCoJcrjwNqf4vjOIq/EuH5it78YxMaEYbT+7Bx6iCrZUYRtPzM+Jg+CNr8I05
+         Lhmpq14M+4H+dUbILatn6CF85CCdzerIXIegUK9NPtWZPE7mKH8eZNktLsvN0tNP7y4V
+         KMy3XoBVBepVYcaxcce0ND1Dj1HO3zdLYnYRhwaQ38nvnzaqupr6RY4YQBiBARmRMoKD
+         CI9rBz0Xak6nUzINRzMHUcM7wlJN1SfhJPNcudA0aIFBswJGgOSNM89ZQhIqLRxJ30aY
+         iGmrwoyjFhGJuGpS3th1fnbwTNuSQXngUSkQUlMqpR0BSd38U+334d1vQjGAKjYP80KK
+         XtsA==
+X-Gm-Message-State: ANoB5pndtoYDbqbLGAQcQqQyo12FvT4HBXNjOvtsHBNwwMssWOzYeWx8
+        zbAzCQP6tFo70Qg3ycCXkZc=
+X-Google-Smtp-Source: AA0mqf5DhFdlnhKi8U10qOmeowf+5XiyAAeogl4c6RW380zZBR5Wev9gOPnGQJ36tCRMNA49oIvJvg==
+X-Received: by 2002:a17:903:32ca:b0:189:9031:675c with SMTP id i10-20020a17090332ca00b001899031675cmr14548535plr.139.1669840554198;
+        Wed, 30 Nov 2022 12:35:54 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id c1-20020a63d501000000b004351358f056sm1333987pgg.85.2022.11.30.12.35.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 12:35:53 -0800 (PST)
+Message-ID: <8a1564c1-3321-e180-7340-f70cdddd40fd@gmail.com>
+Date:   Wed, 30 Nov 2022 12:35:49 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130132156.2836184-3-linan122@huawei.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 6.0 000/289] 6.0.11-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221130180544.105550592@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221130180544.105550592@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 09:21:49PM +0800, Li Nan wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
+On 11/30/22 10:19, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.11 release.
+> There are 289 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> 1) There are one place that return value of match_u64() is not checked.
-> 2) If match_u64() failed, return value is set to -EINVAL despite that
->    there are other possible errnos.
+> Responses should be made by Fri, 02 Dec 2022 18:05:05 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.11-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Ditto. Does this matter?
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-tejun
+Florian
+
