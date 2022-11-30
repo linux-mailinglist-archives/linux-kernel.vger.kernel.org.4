@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1873663E49D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C5363E4B0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiK3XLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 18:11:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47586 "EHLO
+        id S229788AbiK3XLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:11:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiK3XKY (ORCPT
+        with ESMTP id S229778AbiK3XKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 18:10:24 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4793898036
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:09:55 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id md9-20020a17090b23c900b00218fa3308a9so156009pjb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:09:55 -0800 (PST)
+        Wed, 30 Nov 2022 18:10:41 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE3263D77
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:10:02 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id a33-20020a630b61000000b00429d91cc649so87821pgl.8
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:10:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=GJ+yfhkspt7ZNo22OgQpawec1Ei4RCTiEbe5vknIrT0=;
-        b=B3425sD5ssEx57pTtG98b8HpTdxzwssCBDuFcB0njTKI/XsYVhIlUT7t8VxfTZyCaj
-         rNNcjy7ZkLO7sRu1croI6V17oM3JUWZ66KJz3dPOFnS6ZNXt9vF/ufrGiEJRrVh1rawx
-         jBIyIycJ1nYQ/Tln+uKRdhBxUMbn2zrY+g01yeSgTRVjheiz5bWBhhhmJyUaJsAkE6GE
-         dL6EhA0QNU/VHGk45s0/jNhjn17XdiiiF1JWKkMNdSlcYBJTXiZUBYEqCsiTUua4xdbH
-         Vsh2/Hg502nb0uGz/tvW1rhibXANnp+7b1r3Lx8wxi+xiH/bRTNX1OQgA8zn4Jd+xIMD
-         ResQ==
+        bh=uhI8yDhdR7lIAaqvku/gdFE7HWy6VU8JNAGQp8QsO6I=;
+        b=JGKTwFHTr3zFyFeRyDhx800NTwE8fbKBoChRZ4rCsQDcOc/eGjPbGsVDNkCwWmSHdn
+         4zWsAcy02h7DG9I7KIrR/3G3ynUAl5zHFprvqWawNYq0ujuz0rj9xQPN87hRttEvJWya
+         MaZkpYk6hJDhRKiSggxmfSLSCGk6wAycOhmze7v3vnTNsBJM82DsGnT9K7gXXth5q453
+         GXnW0gnhFQMQ7rKcFFJUmj9xHXOE1CyUnZYbsfJ9eekI1f6DwJJHgA0YwjDavFZGHgxi
+         PIdF3Xw7u6ZSs+rqvW6sJFzKLF1Mn/CCKFnzXLHVYU5aHYTg5a9RqdAAC/8bhq/W34bo
+         HRWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GJ+yfhkspt7ZNo22OgQpawec1Ei4RCTiEbe5vknIrT0=;
-        b=mVlf729apoIly+jj2Ht6wPD/awS0VZ5ed/gNcISYUMuN8PzJbhn2GoKUmU2gT42c+2
-         ekQCUI1iyyKoZ1TX1/v1sFKmzoNnN5nnKWagI4WZhD0TlLRxS99qCVJvRafRlse1Zerq
-         ssxyK3LOxaVWF+Kgb6SzqlVvwI4aGUwxEO6k7K41u8SywpVRdJw5JFQGiragqUAvU0fY
-         TFAq5FABGxqEhbvrqMynh8KT4w8sEjEg8sViDL4zg/OZyuGBop9qvIgdzt/rWl0Z9zmD
-         78QSELexhBUfo0Z6OckFL1LU7fhAzx9ILbFeBfaMxgfVubUI8jICIKLf9NGY0KKYRdIe
-         qyZw==
-X-Gm-Message-State: ANoB5pliT6boG5o5F/A4FF68y6e/knGt9Rdhmeb/pFLroD4ae1KbeHuG
-        erka1Ysmr5pgf493D8MmX+NAsqH7IkY=
-X-Google-Smtp-Source: AA0mqf7QiNOgWP00XAD7anVxRZ3dDrQeLQqiZYyRJhfOxzgfK7hENIJxdqXXKq1jBfur3SWcS0zGNy7/Bfo=
+        bh=uhI8yDhdR7lIAaqvku/gdFE7HWy6VU8JNAGQp8QsO6I=;
+        b=IHEjL2j/rN4Nsm9sgKD8LB//+/ae8Am2hgU7t+hdD8Sp70tp13lgdDI5gvkwiqMqwV
+         YWH6Q8Bt/2f2Ipr/Zm6+9GO5XRxaXw4YQWF3dFT8CWncwdmOlanrN2/IeLbolSsXZZBr
+         zVpKQ2Gr8Wno4hKoVE357y4UmqfNABHA6Sb/AdwdQEkp2iWkvz7Udc7kERLxZbaLPGCu
+         gKSgG1PrA++FdOk0oMmH2wXs5iNvngBHWhfkusLJqnV43ITbl88K7tZy8SbvFjKglQdg
+         bQP4aYGDTQtg8bm+OeJS4dTS5Z0+Rs6TblE4/hGm0ApUnbkiEWcB77cfxuG2gReOKBZe
+         9fqg==
+X-Gm-Message-State: ANoB5pk1N3otP/ZsZ8I02C/ZtrGcdljEnr0qSa7hZXqKxanygDHaiNA7
+        BB0XXiAXPpOSAnR9X3H6UNfwvLgAXaI=
+X-Google-Smtp-Source: AA0mqf4UbHeO/7xp9TeaJC3lcd9wjoTeVcRzR2/roKzeL1N7msdBGBxph7L3Wcu7JbcPwh3sZzXNOI19OJg=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:27ab:b0:56c:71a4:efe with SMTP id
- bd43-20020a056a0027ab00b0056c71a40efemr48704277pfb.84.1669849794774; Wed, 30
- Nov 2022 15:09:54 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a62:3084:0:b0:56d:dd2a:c494 with SMTP id
+ w126-20020a623084000000b0056ddd2ac494mr44472082pfw.76.1669849796263; Wed, 30
+ Nov 2022 15:09:56 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 30 Nov 2022 23:08:54 +0000
+Date:   Wed, 30 Nov 2022 23:08:55 +0000
 In-Reply-To: <20221130230934.1014142-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20221130230934.1014142-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221130230934.1014142-11-seanjc@google.com>
-Subject: [PATCH v2 10/50] KVM: VMX: Reset eVMCS controls in VP assist page
- during hardware disabling
+Message-ID: <20221130230934.1014142-12-seanjc@google.com>
+Subject: [PATCH v2 11/50] KVM: VMX: Don't bother disabling eVMCS static key on
+ module exit
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -102,101 +102,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reset the eVMCS controls in the per-CPU VP assist page during hardware
-disabling instead of waiting until kvm-intel's module exit.  The controls
-are activated if and only if KVM creates a VM, i.e. don't need to be
-reset if hardware is never enabled.
+Don't disable the eVMCS static key on module exit, kvm_intel.ko owns the
+key so there can't possibly be users after the kvm_intel.ko is unloaded,
+at least not without much bigger issues.
 
-Doing the reset during hardware disabling will naturally fix a potential
-NULL pointer deref bug once KVM disables CPU hotplug while enabling and
-disabling hardware (which is necessary to fix a variety of bugs).  If the
-kernel is running as the root partition, the VP assist page is unmapped
-during CPU hot unplug, and so KVM's clearing of the eVMCS controls needs
-to occur with CPU hot(un)plug disabled, otherwise KVM could attempt to
-write to a CPU's VP assist page after it's unmapped.
-
-Reported-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/vmx.c | 50 +++++++++++++++++++++++++-----------------
- 1 file changed, 30 insertions(+), 20 deletions(-)
+ arch/x86/kvm/vmx/vmx.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index cea8c07f5229..d85d175dca70 100644
+index d85d175dca70..c0de7160700b 100644
 --- a/arch/x86/kvm/vmx/vmx.c
 +++ b/arch/x86/kvm/vmx/vmx.c
-@@ -551,6 +551,33 @@ static int hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu)
- 	return 0;
- }
+@@ -8490,10 +8490,6 @@ static void vmx_exit(void)
  
-+static void hv_reset_evmcs(void)
-+{
-+	struct hv_vp_assist_page *vp_ap;
-+
-+	if (!static_branch_unlikely(&enable_evmcs))
-+		return;
-+
-+	/*
-+	 * KVM should enable eVMCS if and only if all CPUs have a VP assist
-+	 * page, and should reject CPU onlining if eVMCS is enabled the CPU
-+	 * doesn't have a VP assist page allocated.
-+	 */
-+	vp_ap = hv_get_vp_assist_page(smp_processor_id());
-+	if (WARN_ON_ONCE(!vp_ap))
-+		return;
-+
-+	/*
-+	 * Reset everything to support using non-enlightened VMCS access later
-+	 * (e.g. when we reload the module with enlightened_vmcs=0)
-+	 */
-+	vp_ap->nested_control.features.directhypercall = 0;
-+	vp_ap->current_nested_vmcs = 0;
-+	vp_ap->enlighten_vmentry = 0;
-+}
-+
-+#else /* IS_ENABLED(CONFIG_HYPERV) */
-+static void hv_reset_evmcs(void) {}
- #endif /* IS_ENABLED(CONFIG_HYPERV) */
- 
- /*
-@@ -2496,6 +2523,8 @@ static void vmx_hardware_disable(void)
- 	if (cpu_vmxoff())
- 		kvm_spurious_fault();
- 
-+	hv_reset_evmcs();
-+
- 	intel_pt_handle_vmx(0);
- }
- 
-@@ -8462,27 +8491,8 @@ static void vmx_exit(void)
  	kvm_exit();
  
- #if IS_ENABLED(CONFIG_HYPERV)
--	if (static_branch_unlikely(&enable_evmcs)) {
--		int cpu;
--		struct hv_vp_assist_page *vp_ap;
--		/*
--		 * Reset everything to support using non-enlightened VMCS
--		 * access later (e.g. when we reload the module with
--		 * enlightened_vmcs=0)
--		 */
--		for_each_online_cpu(cpu) {
--			vp_ap =	hv_get_vp_assist_page(cpu);
--
--			if (!vp_ap)
--				continue;
--
--			vp_ap->nested_control.features.directhypercall = 0;
--			vp_ap->current_nested_vmcs = 0;
--			vp_ap->enlighten_vmentry = 0;
--		}
--
-+	if (static_branch_unlikely(&enable_evmcs))
- 		static_branch_disable(&enable_evmcs);
--	}
- #endif
+-#if IS_ENABLED(CONFIG_HYPERV)
+-	if (static_branch_unlikely(&enable_evmcs))
+-		static_branch_disable(&enable_evmcs);
+-#endif
  	vmx_cleanup_l1d_flush();
  
+ 	allow_smaller_maxphyaddr = false;
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
