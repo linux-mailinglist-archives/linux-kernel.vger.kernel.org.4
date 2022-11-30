@@ -2,113 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C007863DE94
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3DE63DEA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbiK3Sid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:38:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
+        id S230503AbiK3SjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:39:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbiK3Sib (ORCPT
+        with ESMTP id S230501AbiK3SjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:38:31 -0500
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8D02C1;
-        Wed, 30 Nov 2022 10:38:30 -0800 (PST)
-Received: by mail-qt1-f178.google.com with SMTP id l15so11800304qtv.4;
-        Wed, 30 Nov 2022 10:38:30 -0800 (PST)
+        Wed, 30 Nov 2022 13:39:15 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576EC8DFD3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:39:14 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id n196so2729093yba.6
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:39:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OmNYHQ87jUtb5aK4EnCchCezDsC03KpUUikHHBwmz1U=;
+        b=hM8fAGmbVUpSg0bshwhdBqoAETj09emtZtyATn2/YdkJv/RppRRohbgPweefZuAJg3
+         AggTj8vfGNLhroF4rzrh56LA4EvvnWZlCOfpKgNDBeadr75kfCsf2XXj262T99aH6sFM
+         gdTOqZ5155WfFRf57Uus46Kqd9WTJYWtjwSyt9VUQL5l4fsAc8IKR7SM7YBD7Zc+hhOH
+         IjQon4p4/tt0sPHle1d/rztok1ryFC9JMU8Ud7kiAZMqYA0p7E1fFY3n097+eRrMx+jI
+         O1KxbFpYRtgondwzeZhENJ9nreC1GckW9wVyoLVtrCtum7ihKJ8HXVAHCy82IWrSKfas
+         oevA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vvYccHRItsFtfbX1LjYVA7khVN/vC5lTWUwZfNTayMk=;
-        b=4siRStvvjiA7bK4OCI/bDRbSoJSYGyoJM92jCLMx3vamOZ7vjyM9nbc2ViRmfuhCDe
-         aFzxT8zkkOBHyhV0W2s4F0HVfhhaRvjpF5Vnqxj9i/+t2KOv63EUPPnT6/1iD/hwmWpf
-         3rqwcrz3fm8eObVL5FG7tqdCc8/4KJ/Kev36aObEtRFeCCrIZwdgYc/OiFpQAS2ef2tS
-         MVXQqAU1v1RBKh3fK24/je7CmNnzlakb/EoscSoNXJSCYPFi2D4VJgjLMKIJaMupYsNW
-         5mfGR+Z6+n4uFUYYhMrt4SwFzXZ0mibgeqoQyrCsSBnIGfh892ItAebKO2iqGEI7TjsB
-         bLsA==
-X-Gm-Message-State: ANoB5pm9o7+rR9VR0/guo+KneK+3VWJu1pP0qteuSglNjIvvvFagrFpc
-        HwG+Altv6Y05D0+DCSFMcowFeOsNoxIaHaW3dSbEHJJO
-X-Google-Smtp-Source: AA0mqf60AJyzMPy+rgqZSrXCq1fakf/7vJvxHcra023KFbFYnzvwGfrSiSUxWXZe7dndQx1LZkzn70lE2HD7JJ52NpQ=
-X-Received: by 2002:ac8:73c4:0:b0:3a5:a53d:a102 with SMTP id
- v4-20020ac873c4000000b003a5a53da102mr58461117qtp.153.1669833509483; Wed, 30
- Nov 2022 10:38:29 -0800 (PST)
+        bh=OmNYHQ87jUtb5aK4EnCchCezDsC03KpUUikHHBwmz1U=;
+        b=H11wc//phKcAqkBj8Irpz+krbvVSjDdJhGHSZDDE8k/Hxi65Ppt7Ax+yEbyDCWVykE
+         6hFI4FrDErLdlrJidZOBtlbxo9t7PixQQFfsMlNu+Clb4UCjlKrsEzM2e4k7VX2JD8Cv
+         s7h2KzBGBX2IY9OsE1Wm9wud5mzanVr8uYtExVilsUtOB1Kut0m4B2tQ8D/m9KRIb5xL
+         2u0M1Vrdrg1p5iWtMBtSiPK0BWz9OcidOS/Ymp7Xbkn1DPC59bkUE/GcJm6hVW/PkVY1
+         N2eU1aiiW/NUl6PCjjCfbB/FCQtGn0eTeIjs93doaeM/7VIhtrVjVBVuWfLftNa5YgUI
+         UN3w==
+X-Gm-Message-State: ANoB5pkhM+lBahj0/vQAKgnEK0XxGOSUxjI70mcINmbRWaPcCyXz22yl
+        7W0W233IprVy8A07OYZoi0s1vehgSNquPPi5lzC0OA==
+X-Google-Smtp-Source: AA0mqf4Naxqj7J8vNfDSPzWzHopJH9dVe1p1cydYMctQ0Lsg/szV8QiM6gq07riGXHq8I3Cup0jlPb0dBsBGwUn4Bzg=
+X-Received: by 2002:a25:5045:0:b0:6f0:9f69:6cd3 with SMTP id
+ e66-20020a255045000000b006f09f696cd3mr33343170ybb.407.1669833553217; Wed, 30
+ Nov 2022 10:39:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20221110142307.981883-1-liuyongqiang13@huawei.com> <20221114032301.gipu5l3fcndq7oy3@vireshk-i7>
-In-Reply-To: <20221114032301.gipu5l3fcndq7oy3@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Nov 2022 19:38:18 +0100
-Message-ID: <CAJZ5v0iQ1=zDmcHW_JLEtzd6UHV4MFHF_HM9RXSY0j0+QpLVpg@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: Init completion before kobject_init_and_add()
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Yongqiang Liu <liuyongqiang13@huawei.com>
-Cc:     rafael@kernel.org, tobin@kernel.org, zhangxiaoxu5@huawei.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221130181316.GA1012431@paulmck-ThinkPad-P17-Gen-1>
+ <20221130181325.1012760-15-paulmck@kernel.org> <CAEXW_YQci19yD5wr2jyYi4wdNZ_CrZuGJ==jF9MObOzWg7f=_Q@mail.gmail.com>
+In-Reply-To: <CAEXW_YQci19yD5wr2jyYi4wdNZ_CrZuGJ==jF9MObOzWg7f=_Q@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 30 Nov 2022 19:39:02 +0100
+Message-ID: <CANn89iKifFXDpF8sZXd+rXPhF+3ajVLTuEj6n2Z4H9f27_K0kA@mail.gmail.com>
+Subject: Re: [PATCH rcu 15/16] net: Use call_rcu_hurry() for dst_release()
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rostedt@goodmis.org, David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 4:23 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+Sure, thanks.
+
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+
+I think we can work later to change how dst are freed/released to
+avoid using call_rcu_hurry()
+
+On Wed, Nov 30, 2022 at 7:17 PM Joel Fernandes <joel@joelfernandes.org> wrote:
 >
-> On 10-11-22, 14:23, Yongqiang Liu wrote:
-> > In cpufreq_policy_alloc(), it will call uninitialed completion in
-> > cpufreq_sysfs_release() when kobject_init_and_add() fails. And
-> > that will cause a crash such as the following page fault in complete:
+> Hi Eric,
+>
+> Could you give your ACK for this patch for this one as well? This is
+> the other networking one.
+>
+> The networking testing passed on ChromeOS and it has been in -next for
+> some time so has gotten testing there. The CONFIG option is default
+> disabled.
+>
+> Thanks a lot,
+>
+> - Joel
+>
+> On Wed, Nov 30, 2022 at 6:14 PM Paul E. McKenney <paulmck@kernel.org> wrote:
 > >
-> > BUG: unable to handle page fault for address: fffffffffffffff8
-> > [..]
-> > RIP: 0010:complete+0x98/0x1f0
-> > [..]
-> > Call Trace:
-> >  kobject_put+0x1be/0x4c0
-> >  cpufreq_online.cold+0xee/0x1fd
-> >  cpufreq_add_dev+0x183/0x1e0
-> >  subsys_interface_register+0x3f5/0x4e0
-> >  cpufreq_register_driver+0x3b7/0x670
-> >  acpi_cpufreq_init+0x56c/0x1000 [acpi_cpufreq]
-> >  do_one_initcall+0x13d/0x780
-> >  do_init_module+0x1c3/0x630
-> >  load_module+0x6e67/0x73b0
-> >  __do_sys_finit_module+0x181/0x240
-> >  do_syscall_64+0x35/0x80
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
 > >
-> > Fixes: 4ebe36c94aed ("cpufreq: Fix kobject memleak")
-> > Signed-off-by: Yongqiang Liu <liuyongqiang13@huawei.com>
+> > In a networking test on ChromeOS, kernels built with the new
+> > CONFIG_RCU_LAZY=y Kconfig option fail a networking test in the teardown
+> > phase.
+> >
+> > This failure may be reproduced as follows: ip netns del <name>
+> >
+> > The CONFIG_RCU_LAZY=y Kconfig option was introduced by earlier commits
+> > in this series for the benefit of certain battery-powered systems.
+> > This Kconfig option causes call_rcu() to delay its callbacks in order
+> > to batch them.  This means that a given RCU grace period covers more
+> > callbacks, thus reducing the number of grace periods, in turn reducing
+> > the amount of energy consumed, which increases battery lifetime which
+> > can be a very good thing.  This is not a subtle effect: In some important
+> > use cases, the battery lifetime is increased by more than 10%.
+> >
+> > This CONFIG_RCU_LAZY=y option is available only for CPUs that offload
+> > callbacks, for example, CPUs mentioned in the rcu_nocbs kernel boot
+> > parameter passed to kernels built with CONFIG_RCU_NOCB_CPU=y.
+> >
+> > Delaying callbacks is normally not a problem because most callbacks do
+> > nothing but free memory.  If the system is short on memory, a shrinker
+> > will kick all currently queued lazy callbacks out of their laziness,
+> > thus freeing their memory in short order.  Similarly, the rcu_barrier()
+> > function, which blocks until all currently queued callbacks are invoked,
+> > will also kick lazy callbacks, thus enabling rcu_barrier() to complete
+> > in a timely manner.
+> >
+> > However, there are some cases where laziness is not a good option.
+> > For example, synchronize_rcu() invokes call_rcu(), and blocks until
+> > the newly queued callback is invoked.  It would not be a good for
+> > synchronize_rcu() to block for ten seconds, even on an idle system.
+> > Therefore, synchronize_rcu() invokes call_rcu_hurry() instead of
+> > call_rcu().  The arrival of a non-lazy call_rcu_hurry() callback on a
+> > given CPU kicks any lazy callbacks that might be already queued on that
+> > CPU.  After all, if there is going to be a grace period, all callbacks
+> > might as well get full benefit from it.
+> >
+> > Yes, this could be done the other way around by creating a
+> > call_rcu_lazy(), but earlier experience with this approach and
+> > feedback at the 2022 Linux Plumbers Conference shifted the approach
+> > to call_rcu() being lazy with call_rcu_hurry() for the few places
+> > where laziness is inappropriate.
+> >
+> > Returning to the test failure, use of ftrace showed that this failure
+> > cause caused by the aadded delays due to this new lazy behavior of
+> > call_rcu() in kernels built with CONFIG_RCU_LAZY=y.
+> >
+> > Therefore, make dst_release() use call_rcu_hurry() in order to revert
+> > to the old test-failure-free behavior.
+> >
+> > [ paulmck: Apply s/call_rcu_flush/call_rcu_hurry/ feedback from Tejun Heo. ]
+> >
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > Cc: David Ahern <dsahern@kernel.org>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Eric Dumazet <edumazet@google.com>
+> > Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Paolo Abeni <pabeni@redhat.com>
+> > Cc: <netdev@vger.kernel.org>
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 > > ---
-> >  drivers/cpufreq/cpufreq.c | 2 +-
+> >  net/core/dst.c | 2 +-
 > >  1 file changed, 1 insertion(+), 1 deletion(-)
 > >
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index 69b3d61852ac..7e56a42750ea 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -1207,6 +1207,7 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
-> >       if (!zalloc_cpumask_var(&policy->real_cpus, GFP_KERNEL))
-> >               goto err_free_rcpumask;
+> > diff --git a/net/core/dst.c b/net/core/dst.c
+> > index bc9c9be4e0801..a4e738d321ba2 100644
+> > --- a/net/core/dst.c
+> > +++ b/net/core/dst.c
+> > @@ -174,7 +174,7 @@ void dst_release(struct dst_entry *dst)
+> >                         net_warn_ratelimited("%s: dst:%p refcnt:%d\n",
+> >                                              __func__, dst, newrefcnt);
+> >                 if (!newrefcnt)
+> > -                       call_rcu(&dst->rcu_head, dst_destroy_rcu);
+> > +                       call_rcu_hurry(&dst->rcu_head, dst_destroy_rcu);
+> >         }
+> >  }
+> >  EXPORT_SYMBOL(dst_release);
+> > --
+> > 2.31.1.189.g2e36527f23
 > >
-> > +     init_completion(&policy->kobj_unregister);
-> >       ret = kobject_init_and_add(&policy->kobj, &ktype_cpufreq,
-> >                                  cpufreq_global_kobject, "policy%u", cpu);
-> >       if (ret) {
-> > @@ -1245,7 +1246,6 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
-> >       init_rwsem(&policy->rwsem);
-> >       spin_lock_init(&policy->transition_lock);
-> >       init_waitqueue_head(&policy->transition_wait);
-> > -     init_completion(&policy->kobj_unregister);
-> >       INIT_WORK(&policy->update, handle_update);
-> >
-> >       policy->cpu = cpu;
->
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-
-Applied as 6.2 material, thanks!
