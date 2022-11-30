@@ -2,151 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8E663D3B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A29A663D3B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:45:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbiK3Kpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 05:45:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
+        id S229793AbiK3Kpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 05:45:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiK3Kps (ORCPT
+        with ESMTP id S232071AbiK3Kpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 05:45:48 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C98466CB7
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:45:48 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id w23so16245744ply.12
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:45:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CWkLpPEq2gVXtRl771foWiTd76LStnIAXpLqiAwtIew=;
-        b=UWZDWRr2GVUKW/3md70o/3LfYk0B0WBjLBQoAr5wXn086Gu9AA+rE6TAwbltQhHWWc
-         VxDt+QXuvxmmmFGfu4jqxOPuhB1zm2Uf4xIS5Rdj+C4s1rKCUOiU/oj6GG9WXicDh7Wh
-         6SFLfjpNVRHvInPfgAuzZJun0Cu0cAAm0FRrEv7fWtmplRH8CzD2oTHPQbu/ClOoJrLI
-         xGCftMCmyO28CUbNcSTnOwAoa8SZsAPQqCZs1YD4jQpmiwQveUIvcbLmiFq+3aMwsHgO
-         7jquLOQJGgzDtG22U6Sf9y2zNnexKq2F6JdhgEGjUK9aeXaEW5krPxhXNfLyywq0QI8Q
-         pqjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CWkLpPEq2gVXtRl771foWiTd76LStnIAXpLqiAwtIew=;
-        b=Bhw5uXmJPZMUrTlfuMWvdVo2yuF4JjNvraaQyUeUoKMjY7BjPdyBu7/u8NUoTf4Hay
-         lA48bHuJ0B1De/f3Wgpewn35kwy4RajWLAV9c7JHWk2otksDu6x0V3AKivfS3BeIghFF
-         PJg0xCrm+ZQT77RhrNb5inKhjsyG9HLKoOm7RxHOKzTcJUksBxPPSPF2H512cm+CB8mY
-         XgvfWDtg0hURMHlQCV62X4ijYU5DVQILO+GA69rF/rxuVcFUwpPd4QB9sLFIZoEdek91
-         CANHXc5ZXNciTZnGe8cfhr/z2PLKHAZl/OOLpf8LL2SXWf7+AiKBLcQYIAn7mTxaAyij
-         KtRQ==
-X-Gm-Message-State: ANoB5pmormNEA9g7vYnfcmH8tiL9PUim2UTF+xpXH7Q8dgrthKd0zqob
-        uBkB4+yRvx8Ln7CwlBe5Y30HVg==
-X-Google-Smtp-Source: AA0mqf4POs9aDlAw5FsEoA4DeXwQubz3OuXbZNblhgs2jL8Df637+WYaLYCGrsKwMAuPWF4q9undWw==
-X-Received: by 2002:a17:903:2112:b0:186:67b0:afab with SMTP id o18-20020a170903211200b0018667b0afabmr41776660ple.17.1669805147451;
-        Wed, 30 Nov 2022 02:45:47 -0800 (PST)
-Received: from localhost.localdomain ([2401:4900:1c5f:27a2:d13a:7614:addb:b29d])
-        by smtp.gmail.com with ESMTPSA id v30-20020aa799de000000b0056b3c863950sm1121696pfi.8.2022.11.30.02.45.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 02:45:46 -0800 (PST)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, agross@kernel.org,
-        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, konrad.dybcio@linaro.org,
-        a39.skl@gmail.com, andersson@kernel.org
-Subject: [PATCH] arm64: dts: qcom: sm6115: Add interconnect nodes
-Date:   Wed, 30 Nov 2022 16:15:19 +0530
-Message-Id: <20221130104519.2266918-1-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
+        Wed, 30 Nov 2022 05:45:52 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477E25F865
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:45:51 -0800 (PST)
+Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NMbT10wGfz67TN2;
+        Wed, 30 Nov 2022 18:45:25 +0800 (CST)
+Received: from lhrpeml500004.china.huawei.com (7.191.163.9) by
+ fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 30 Nov 2022 11:45:48 +0100
+Received: from mscphis00759.huawei.com (10.123.66.134) by
+ lhrpeml500004.china.huawei.com (7.191.163.9) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 30 Nov 2022 10:45:47 +0000
+From:   Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+To:     <jpoimboe@kernel.org>
+CC:     <peterz@infradead.org>, <nathan@kernel.org>,
+        <ndesaulniers@google.com>, <trix@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+        <yusongping@huawei.com>, <hukeping@huawei.com>,
+        <artem.kuzin@huawei.com>
+Subject: [PATCH] objtool: Fix memory leakage
+Date:   Wed, 30 Nov 2022 18:45:44 +0800
+Message-ID: <20221130104544.2789085-1-konstantin.meskhidze@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.123.66.134]
+X-ClientProxiedBy: mscpeml100002.china.huawei.com (7.188.26.75) To
+ lhrpeml500004.china.huawei.com (7.191.163.9)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the interconnect nodes inside SM6115 dtsi.
+This commit fixes potential memory leakage in
+elf_create_section_symbol() function.
 
-Cc: Bjorn Andersson <andersson@kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Signed-off-by: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
 ---
-- Based on linux-next/master
-- Depends on the SM6115 dt-binding and driver patchset, which can be
-  seen here: https://lore.kernel.org/linux-arm-msm/20221130103841.2266464-1-bhupesh.sharma@linaro.org/ 
+ tools/objtool/elf.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 51 ++++++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index e4a2440ce544..dad5ab3edf0e 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -485,6 +485,57 @@ usb_1_hsphy: phy@1613000 {
- 			status = "disabled";
- 		};
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index 7e24b09b1163..58f30840358f 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -776,6 +776,7 @@ elf_create_section_symbol(struct elf *elf, struct section *sec)
  
-+		snoc: interconnect@1880000 {
-+			compatible = "qcom,sm6115-snoc";
-+			reg = <0x01880000 0x60200>;
-+			#interconnect-cells = <1>;
-+			clock-names = "bus", "bus_a";
-+			clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
-+				 <&rpmcc RPM_SMD_SNOC_A_CLK>;
-+
-+			clk_virt: interconnect-clk {
-+				compatible = "qcom,sm6115-clk-virt";
-+				#interconnect-cells = <1>;
-+				clock-names = "bus", "bus_a";
-+				clocks = <&rpmcc RPM_SMD_QUP_CLK>,
-+					 <&rpmcc RPM_SMD_QUP_A_CLK>;
-+			};
-+
-+			mmnrt_virt: interconnect-mmnrt {
-+				compatible = "qcom,sm6115-mmnrt-virt";
-+				#interconnect-cells = <1>;
-+				clock-names = "bus", "bus_a";
-+				clocks = <&rpmcc RPM_SMD_MMNRT_CLK>,
-+					 <&rpmcc RPM_SMD_MMNRT_A_CLK>;
-+			};
-+
-+			mmrt_virt: interconnect-mmrt {
-+				compatible = "qcom,sm6115-mmrt-virt";
-+				#interconnect-cells = <1>;
-+				clock-names = "bus", "bus_a";
-+				clocks = <&rpmcc RPM_SMD_MMRT_CLK>,
-+					 <&rpmcc RPM_SMD_MMRT_A_CLK>;
-+			};
-+		};
-+
-+		cnoc: interconnect@1900000 {
-+			compatible = "qcom,sm6115-cnoc";
-+			reg = <0x01900000 0x8200>;
-+			#interconnect-cells = <1>;
-+			clock-names = "bus", "bus_a";
-+			clocks = <&rpmcc RPM_SMD_CNOC_CLK>,
-+				 <&rpmcc RPM_SMD_CNOC_A_CLK>;
-+		};
-+
-+		bimc: interconnect@4480000 {
-+			compatible = "qcom,sm6115-bimc";
-+			reg = <0x04480000 0x80000>;
-+			#interconnect-cells = <1>;
-+			clock-names = "bus", "bus_a";
-+			clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
-+				 <&rpmcc RPM_SMD_BIMC_A_CLK>;
-+		};
-+
- 		qfprom@1b40000 {
- 			compatible = "qcom,sm6115-qfprom", "qcom,qfprom";
- 			reg = <0x01b40000 0x7000>;
+ 		if (elf_update_symbol(elf, symtab, symtab_shndx, old)) {
+ 			WARN("elf_update_symbol move");
++			free(sym);
+ 			return NULL;
+ 		}
+ 
+@@ -785,6 +786,7 @@ elf_create_section_symbol(struct elf *elf, struct section *sec)
+ 	sym->idx = new_idx;
+ 	if (elf_update_symbol(elf, symtab, symtab_shndx, sym)) {
+ 		WARN("elf_update_symbol");
++		free(sym);
+ 		return NULL;
+ 	}
+ 
 -- 
-2.38.1
+2.25.1
 
