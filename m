@@ -2,95 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CBC63E3BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B022863E3CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiK3W4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 17:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33718 "EHLO
+        id S229599AbiK3W5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 17:57:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbiK3W4I (ORCPT
+        with ESMTP id S229514AbiK3W5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 17:56:08 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFD192089
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 14:56:06 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id c15so155363pfb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 14:56:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BPYmy5zhAGqq2nGzX5m2iL8cfIBwPQzj7RKxKIpRxts=;
-        b=gngr2dsQxUoxgrfjcMrO2lRS8QgSBYcCmjqKUkHXa2pIJE1qDDFWX03B3gDNOINmp7
-         zeA4aD6INEmF0IE2AVLZcGQxNMVs2pqldh0PgnPCWZJyO52Raxp6OgRUtxD6kWBeIBtz
-         81E3rQ8By9mHV/6uN5+nf6TCeR2trqFx2YHCzCCN5sIT6hoIoAHdoCoLg9sXNKk9Fx+E
-         i8jpY/jt7DuMj0zgtJGT6HMYPdnFr0CqBXHrm7lY4O+qqBmC7SlpGqpsuT4cy0ea787I
-         FuVma0jRK/vmYKViIWuztHsYFqP7xtn5820EvNsJgZudJYDXDk69INUW0wyIDvAt+J01
-         NhVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BPYmy5zhAGqq2nGzX5m2iL8cfIBwPQzj7RKxKIpRxts=;
-        b=srlLkopaC3kgu0UP2VgWmMRPUEn7GSgixh3FE855mRvky+rdBvg7QilgcIVx5O2lgy
-         O4pR+3NleAhzoGpfL17Vf8etWc0PGcqce7+nxrRY8rPxxGnoXaFkUqV29ur6/SOC2lKb
-         OjWVEcSGdodQUJOUdqfTvIyDYWspeJ26urdb5IfHB8F7nZX1mkGdimFLD21+7SYgm52f
-         6BwXriAQQBOcsxNSQ6Oy8tdsFltpTPwZ0q6GyEluBZs6sBkiy/desrWBoXeKTVcU/uyx
-         YS15dmHxvuiT0+3De//RGSkrzEp9y/dHnchu1kczb64KhOornrgCfn6e3Z2a6sLr6wfH
-         UkNA==
-X-Gm-Message-State: ANoB5pmC7Yw0Fe2HBg/MDILPHlDFHHr1QDZKzUsv35BCgIBpPwA+V4+Q
-        7Iz03Z+sLpzpArLkUmjD+5hQlw==
-X-Google-Smtp-Source: AA0mqf4zbMKUGhqOrmt+FcSgRVmsRyWYxSQG/grvBn6WVLMMMxoaPP1N132gmW2vWAldO9VuQS7U3g==
-X-Received: by 2002:a05:6a00:98e:b0:574:6929:e50e with SMTP id u14-20020a056a00098e00b005746929e50emr36690700pfg.67.1669848965552;
-        Wed, 30 Nov 2022 14:56:05 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id p2-20020a1709027ec200b0017da2798025sm1967465plb.295.2022.11.30.14.56.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 14:56:04 -0800 (PST)
-Date:   Wed, 30 Nov 2022 22:56:00 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Subject: Re: [PATCH] KVM: selftests: restore special vmmcall code layout
- needed by the harness
-Message-ID: <Y4ffgC+HbftkPbaW@google.com>
-References: <20221130181147.9911-1-pbonzini@redhat.com>
+        Wed, 30 Nov 2022 17:57:12 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B97192A0A;
+        Wed, 30 Nov 2022 14:57:09 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMvjD3ktTz4xGM;
+        Thu,  1 Dec 2022 09:57:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669849025;
+        bh=lH3ZdNsbzBDqZQvPGPjYU5CgMs8PuJgaZZ7rFv3jwkY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dPhWv0FYg+1/xZLFLgSXaQDwgo7cEg9x/dRCSwEVx7gVbMk2Cpwx36VExiqtLvz+N
+         l6Ncul0o4h0Ekk9S0/Qnne+YlEy4b+sG+chOKvsJ8y95cRg6RFfBLhnD2u7cE00vFC
+         KChZxC+sbFwRBwAsm9bYhUBxRBwI7W58jkthMUz7tTwkGGrByD1VCOlrxKztTxsD6G
+         QvcNU+qKTizVa8Xbk5h8RWRaUbdiCX7SI1WbW0QYCry00F2CrMXfU5h9KNJxVOF0Pb
+         WfFfdf+i7i26kw+67Ru2ZjPeny7h43IVV0czp82qnDqnO8Vp/JPyaoJ+kHdVGCogX7
+         HWAIwX2rsrfjg==
+Date:   Thu, 1 Dec 2022 09:57:00 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dave Airlie <airlied@redhat.com>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Matt Roper <matthew.d.roper@intel.com>
+Subject: linux-next: manual merge of the drm tree with Linus' tree
+Message-ID: <20221201095700.7325e73a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130181147.9911-1-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/oxECwUXRyVqokrbyUg1Ffx.";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022, Paolo Bonzini wrote:
-> Commit 8fda37cf3d41 ("KVM: selftests: Stuff RAX/RCX with 'safe' values
-> in vmmcall()/vmcall()", 2022-11-21) broke the svm_nested_soft_inject_test
-> because it placed a "pop rbp" instruction after vmmcall.  While this is
-> correct and mimics what is done in the VMX case, this particular test
-> expects a ud2 instruction right after the vmmcall, so that it can skip
-> over it in the L1 part of the test.
-> 
-> Inline a suitably-modified version of vmmcall() to restore the
-> functionality of the test.
->
-> Fixes: 8fda37cf3d41 ("KVM: selftests: Stuff RAX/RCX with 'safe' values in vmmcall()/vmcall()"
-> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
+--Sig_/oxECwUXRyVqokrbyUg1Ffx.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-We really, really need to save/restore guest GPRs in L1 when handling exits from L2.
+Hi all,
 
-For now,
+Today's linux-next merge of the drm tree got a conflict in:
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+  drivers/gpu/drm/i915/gt/intel_gt.c
+
+between commit:
+
+  04aa64375f48 ("drm/i915: fix TLB invalidation for Gen12 video and compute=
+ engines")
+
+from Linus' tree and commit:
+
+  46c507f03a46 ("drm/i915/gt: Always use MCR functions on multicast registe=
+rs")
+
+from the drm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/i915/gt/intel_gt.c
+index 7caa3412a244,0325f071046c..000000000000
+--- a/drivers/gpu/drm/i915/gt/intel_gt.c
++++ b/drivers/gpu/drm/i915/gt/intel_gt.c
+@@@ -1018,16 -1103,17 +1108,22 @@@ static void mmio_invalidate_full(struc
+  		if (!intel_engine_pm_is_awake(engine))
+  			continue;
+ =20
+- 		rb =3D get_reg_and_bit(engine, regs =3D=3D gen8_regs, regs, num);
+- 		if (!i915_mmio_reg_offset(rb.reg))
+- 			continue;
+-=20
+- 		if (GRAPHICS_VER(i915) =3D=3D 12 && (engine->class =3D=3D VIDEO_DECODE_=
+CLASS ||
+- 		    engine->class =3D=3D VIDEO_ENHANCEMENT_CLASS ||
+- 		    engine->class =3D=3D COMPUTE_CLASS))
+- 			rb.bit =3D _MASKED_BIT_ENABLE(rb.bit);
+-=20
+- 		intel_uncore_write_fw(uncore, rb.reg, rb.bit);
++ 		if (GRAPHICS_VER_FULL(i915) >=3D IP_VER(12, 50)) {
++ 			intel_gt_mcr_multicast_write_fw(gt,
++ 							xehp_regs[engine->class],
++ 							BIT(engine->instance));
++ 		} else {
++ 			rb =3D get_reg_and_bit(engine, regs =3D=3D gen8_regs, regs, num);
++ 			if (!i915_mmio_reg_offset(rb.reg))
++ 				continue;
++=20
+++			if (GRAPHICS_VER(i915) =3D=3D 12 && (engine->class =3D=3D VIDEO_DECODE=
+_CLASS ||
+++			    engine->class =3D=3D VIDEO_ENHANCEMENT_CLASS ||
+++			    engine->class =3D=3D COMPUTE_CLASS))
+++				rb.bit =3D _MASKED_BIT_ENABLE(rb.bit);
+++
++ 			intel_uncore_write_fw(uncore, rb.reg, rb.bit);
++ 		}
+  		awake |=3D engine->mask;
+  	}
+ =20
+
+--Sig_/oxECwUXRyVqokrbyUg1Ffx.
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOH37wACgkQAVBC80lX
+0GzfMwf/Qepx3h9aOZxYgOEt7rWD7j5qK0RXF6BWoM3cH7eFzzP5/+fFuLrXB2ma
+ZVZVrSZYw3hUps2CuxGuPGGvlfl+p+PWT3r8RQYOeYeh1a9r2eFPIghL8k9PALz8
+Qw0StT3jlOwiq4YiUNgKQL54SCG2AxLKZTRuzZ7rig1RWFASuOk6gCdMJZlcygjf
+pA7WdCwXtJl+7dw9Qx5rJtdYXktuEiFeFz7Ne+Jw1bFjocKFOirlUsBuDfmOOcfn
+bK2L1o8zU7WfJAKUXyfkVvgJniEkb1E0cV7O5ZmMdowXPV1b2AnD7mRZZVoDgqHO
+L8tmtAccPuBye0y+9nrd8WUdcJG/ww==
+=+Eex
+-----END PGP SIGNATURE-----
+
+--Sig_/oxECwUXRyVqokrbyUg1Ffx.--
