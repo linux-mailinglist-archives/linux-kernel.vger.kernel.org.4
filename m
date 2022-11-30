@@ -2,368 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E3963DAD2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:37:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7731063DAE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbiK3Qh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 11:37:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
+        id S230307AbiK3Qks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 11:40:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbiK3QhZ (ORCPT
+        with ESMTP id S229610AbiK3Qkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 11:37:25 -0500
-Received: from esa1.hc3370-68.iphmx.com (esa1.hc3370-68.iphmx.com [216.71.145.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5A78BD1B
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:37:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1669826232;
-  h=from:to:cc:subject:date:message-id:
-   content-transfer-encoding:mime-version;
-  bh=aLK/4rYA/lP/TxDJxKDrnon9y4jvbOFcMo7+a78jTvc=;
-  b=c4ZYNc3ec5CTq0XVAfixiE6aNgbbZZZST17z0tuxKt4tppY/lJaurgtx
-   N6MMq/uvGND8o/pgj4bKYIABF+cYkkGgsEUlQu1uOm7UgoKzenRlBZZNq
-   yATKP12ypf+HJf0HVzqJa2USx59cKv/tIWFcbA/eKRPZaWx+QBrrgZ9KL
-   8=;
-X-IronPort-RemoteIP: 104.47.56.168
-X-IronPort-MID: 86302173
-X-IronPort-Reputation: None
-X-IronPort-Listener: OutboundMail
-X-IronPort-SenderGroup: RELAY_O365
-X-IronPort-MailFlowPolicy: $RELAYED
-IronPort-Data: A9a23:gJeZBK1xsdz1zXPmt/bD5bRxkn2cJEfYwER7XKvMYLTBsI5bpzMOy
- 2NLCG/UOv2IMzT2LoxyYYy+ox4HvpXSzoQ3SVNppC1hF35El5HIVI+TRqvS04F+DeWYFR46s
- J9OAjXkBJppJpMJjk71atANlVEliefTAOK5ULSfUsxIbVcMYD87jh5+kPIOjIdtgNyoayuAo
- tq3qMDEULOf82cc3lk8tuTS9nuDgNyo4GlC5wVlPagR1LPjvyJ94Kw3dPnZw0TQGuG4LsbiL
- 87fwbew+H/u/htFIrtJRZ6iLyXm6paLVeS/oiI+t5qK23CulQRrukoPD9IOaF8/ttm8t4sZJ
- OOhF3CHYVxB0qXkwIzxWvTDes10FfUuFLTveRBTvSEPpqFvnrSFL/hGVSkL0YMkFulfAV9tz
- /cxFBo2YFORodqtkIyiFORnv5F2RCXrFNt3VnBI6xj8VK9jareaBqLA6JlfwSs6gd1IEbDGf
- c0FZDFzbRPGJRpSJlMQD5F4l+Ct7pX9W2QA9BTJ+uxqvS6KklwZPLvFabI5fvSQQspYhACAr
- 3/u9GXlGBAKcteYzFJp91r82LSXx3qkA+r+EpXj/Ll4jWGO2VUWIx8bU2HrnamyhnaxDoc3x
- 0s8v3BGQbIJ3EiqSMTtGh61uniJujYCVNdKVe438geAzuzT+QnxLngJSHtNZcIrsOcyRCc2z
- RmZktXxHzttvbaJD3WH+d+8oim/NisVBWsDYzIUQwwY5dXqvIA0iFTIVNkLOKy0lNzuHTj60
- hiJoTI4irFVitQEv4258krAmCmEvYXSQ0g+4QC/dmii9AJiIom+e5av90PY/N5HNo+SSlTHt
- 38B8+Cc5u0TCZCGlASWXf4AWrqu4p6tKybAiFRiG50g8TWF+HO5e41UpjZkKy9BMcECYzblJ
- lDSvQB544VaN3+nK6RwZuqZD8Us0Lj4Dd+gWv3KRt5PeYRqMgiV+ChkfgiXxW+FraQ3uaQ2O
- JPeesH1C38fUP1j1GDvGbdb1qI3zCcjw2+VXYr80xmszbuZYjiSVKsBN1yNKOs+6ctovTnoz
- jqWDOPSoz03bQE0SnC/HVI7RbzSEUUGOA==
-IronPort-HdrOrdr: A9a23:ZPSbV6NantNhHMBcTgajsMiBIKoaSvp037By7TEJdfRUGvb4qy
- ncpoVi6faUskduZJhOo6HkBEDtexzhHNtOkO8s1NSZLXjbUQmTXeVfBOLZqlWKcUCTygce79
- YGT0EUMr3N5C1B/KTHCX6DYrUdKbe8npxAzt2utEuFBTsaEZ1I/kN1AhuSCU1tRgNCDYAiFJ
- Wd7MJbpzymEE5nE/hTKEN1INQqELfw5e7bXSI=
-X-IronPort-AV: E=Sophos;i="5.96,206,1665460800"; 
-   d="scan'208";a="86302173"
-Received: from mail-co1nam11lp2168.outbound.protection.outlook.com (HELO NAM11-CO1-obe.outbound.protection.outlook.com) ([104.47.56.168])
-  by ob1.hc3370-68.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Nov 2022 11:37:11 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c209cZJox8fbDBdJi9CeYWU6m7FTrqY3+WhVSsoFPei1/P1qXtDAN2+bajTlphWPlN2Y0/VNUTnxYtC8T6UQ2PaqxXxFbjmLC7Eu2bPJ6hhpw5mOGSbLz8OscRH29d6cGGLoP0rHds30c/FJ/xz0Bnbr78NNUn4kiTA9BPmkZxjX+TlHqNylGkVUCVds8oLmydZPP/mDJUmBGHG2MwjpAGcz7TMXfXykNlljcocz6NRP8kHVeTVxsdj7jx3Nv3W7ZRyAPt4qmUUnGzKMjfdrUrtniWf5KAaPPCayUChXireV8En/rhq60ZAtxHessSriLhExXNXqD4K48WK42PvoAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TEk6iK5GvuVMLVelUUxiis8clwrCKUaO8K0CKeMME58=;
- b=Fql3cSUfTvkH2EgyWXKoe7FKwby3AyLKSyFj8eO5vlSCljT2Amck684NgwfbOVCPTvOT3OLoFAVz5vPW/ECMLpQ4/zPq9ziJtd1smXVK+XAaXFld26UkAMSVgDAecQZWd+uCfT7YXljp4sHz14ReicalHzJnykXpTbEr7bud+HiNvyHsqDdLjsMXTBUqsRZvPQ0gjjDpQ4UWubht963WYsGewQqCGedBNVUigI77CyohzTy45TagM3ZfIERfrw+VNzfWx2Qsjl7jDUxB6XJmOC1jVSc3IkalMIQGMOGCFJtVngFgu6n45n18FGnsoBbXuF/uoi6nC14mXnPioQHhmQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TEk6iK5GvuVMLVelUUxiis8clwrCKUaO8K0CKeMME58=;
- b=Ausfw2FzzLP1btz4wMGE1I6CVvRmf7/DID/hd4bWHQqmechomyuxqVGdyFVyDCSVD4gch7FfE+RMLskPtgUxllbbhEX8dGT7Sb0KG7CHDpmoL33OfoKi+j+oqTCMfW39FLThJ4lv7NWbMcBatKit+3ZNO4N4OagCipihqksINks=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=citrix.com;
-Received: from SJ0PR03MB6360.namprd03.prod.outlook.com (2603:10b6:a03:395::11)
- by BL1PR03MB5974.namprd03.prod.outlook.com (2603:10b6:208:313::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Wed, 30 Nov
- 2022 16:37:09 +0000
-Received: from SJ0PR03MB6360.namprd03.prod.outlook.com
- ([fe80::740b:4e0a:7de4:5ab1]) by SJ0PR03MB6360.namprd03.prod.outlook.com
- ([fe80::740b:4e0a:7de4:5ab1%9]) with mapi id 15.20.5857.023; Wed, 30 Nov 2022
- 16:37:08 +0000
-From:   Roger Pau Monne <roger.pau@citrix.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     xen-devel@lists.xenproject.org,
-        Roger Pau Monne <roger.pau@citrix.com>,
+        Wed, 30 Nov 2022 11:40:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E506DFEA;
+        Wed, 30 Nov 2022 08:40:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6D50B81BB5;
+        Wed, 30 Nov 2022 16:40:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A557C433D6;
+        Wed, 30 Nov 2022 16:40:33 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="gby+j1c7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669826430;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UpuNagX9yGWmz76JAkOLaM+VS0TPgWzkWZvprmcKQbY=;
+        b=gby+j1c7NXWwpVuXnHiMmJj+lPbOBkli/O9dEo2H5OspsHqBGo9JSgGSCUis3tMXl0Cpr0
+        xW5RlhjXuKo0k48ojwY3B9Q84+zlzXZJE1stp5RrYVYsy+GAU2K8S0O43J8Hy6EZstPYXJ
+        Za2Lb5aA0cjThbxvATAe40Q8emKtqik=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 74a5b925 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 30 Nov 2022 16:40:30 +0000 (UTC)
+Date:   Wed, 30 Nov 2022 17:38:13 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        tglx@linutronix.de, linux-crypto@vger.kernel.org,
+        linux-api@vger.kernel.org, x86@kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v2] hvc/xen: lock console list traversal
-Date:   Wed, 30 Nov 2022 17:36:02 +0100
-Message-Id: <20221130163611.14686-1-roger.pau@citrix.com>
-X-Mailer: git-send-email 2.37.3
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO6P123CA0028.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:313::20) To SJ0PR03MB6360.namprd03.prod.outlook.com
- (2603:10b6:a03:395::11)
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v10 1/4] random: add vgetrandom_alloc() syscall
+Message-ID: <Y4eG9cUE28s0YpgO@zx2c4.com>
+References: <20221129210639.42233-1-Jason@zx2c4.com>
+ <20221129210639.42233-2-Jason@zx2c4.com>
+ <877czc7m0g.fsf@oldenburg.str.redhat.com>
+ <Y4d5SyU3akA9ZBaJ@zx2c4.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR03MB6360:EE_|BL1PR03MB5974:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2401b07c-0811-4c4d-b529-08dad2f11f9e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TtSWEofdWbLjERcNpzjf0HSLJev25IVXtnHHdxF+ZQbFUPTX+FZOhpG7M4kJEtChu7e+4w8a10KbdwETY8IWS0tZDJveXowiuQxozCYyR9HO5AJT/AAhiqO+zh2mcNCf2qgOGa662jwbIPXPuWWwE8bhMfipSDBk5+23/WZGJwHfQn/NLpKrXGAT4WIlLvMzmqR5u6y0gSGq9pt3/6GmQlCko21Pb980JL8Dc/h4RCEgzRmQP3LGxvvwjCz/8h0xV0cZVMIv9JGXKaEzLdjn/7QGwWh1IzRdQs9heO/RA6zn4voLSIEyy2W4/fyprSfJvC5aSxMqbq0c60YwJqiaVYIAMSaRUIzKGWPZVzYrvtIfHsrG1PFw8JQMvSWb+tggmAf1J0TAwhkhP5JMiYDcT/7JQJUwKkL5JWGU49zGii672DDhzPGRp/e7xOm1kK7kF120mQuKIXSg1+tRsWh9fxVlz0Hdu8Aqo0s8tj2aYWdyNi4hE44brKTTtVk9tXRfQqSp3NBOimH2V0uSIao2wQjqqMncN1+nRJDsEMlpD61duNvqJ9o4BHm6tM1KkRUTJnJKgwMyDMzm+Bhe+4VYmTujcu3+gTU9geb+SSxrghTcT9xFrkX5LXXkEI60aUbonTw4/FLRZw3r9MGbfecMgg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR03MB6360.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(136003)(376002)(396003)(346002)(451199015)(83380400001)(38100700002)(6916009)(86362001)(6506007)(6666004)(6486002)(54906003)(36756003)(6512007)(26005)(82960400001)(1076003)(2616005)(186003)(8676002)(66476007)(5660300002)(478600001)(41300700001)(66946007)(4326008)(8936002)(2906002)(316002)(66556008)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NGZJSHhHZklOUVFhWWFST2dTbWR5OVJhU21QYzQ0MU5PYWpKZmF6QVkrZWRh?=
- =?utf-8?B?WmZIRDlFUTQ0K1ZuaTM4NkhvMUFqTURrUVU1ZlIrTEk2Qm1WV2ZaaGRDM1Ax?=
- =?utf-8?B?MFRsVVJEblNzdFc3Tm5wcDAxOGFoZEg1RElPSzBXcW9ETDhvTi9xSjQreng2?=
- =?utf-8?B?dVBPT0Jyem9oMVBNNnY4OTdaUSt0Q0xEMVREZmxlWU53OWxmWVpENGtySGNa?=
- =?utf-8?B?VzNXSGZhOHNDZlZlSSt1cHhlTGxnODNndUFibmFUMG00dUJ3dWpOeCtlU01o?=
- =?utf-8?B?SDVyWjIyS1lSRW4xRVRYSHRvc3lHMWkwR2lVcmJhRTBhNjZMOEZ1TzJsRGgx?=
- =?utf-8?B?K3BQNWhoR1dwKzh3YTFEVHRJR3hzcHptT29nRENuVHFUa0l5ZTJNc2FZNUhl?=
- =?utf-8?B?LzhuaGhSZTVCOCtid3ZqWkRqcDQzc1UrNDB2Wi8xdHNyYUNnVWt5WGE1dXhq?=
- =?utf-8?B?WUtyYW9IRzYwU3RuRk1uMEs4OEUwRWxpV3FjUzMyQ3pUM2thZTNhV1hXR2NB?=
- =?utf-8?B?c2JhWWIxd1lUUThaTVhWUkNFMzNIMngxY3grU2dZRVhmQlpudWd3cW4vcDlF?=
- =?utf-8?B?cHRyMDRwNWZiY0tXaXhRYVF2SFVyUlJpS3JFZnd2MjY5ZDBpbXhVTjlwU09l?=
- =?utf-8?B?anhSYythQ3U0NHNjRzRXZVVGckVUdlVPNWM1VWMyVzhZNXNiWEdORzlmRTIz?=
- =?utf-8?B?ZGt6RUNtV05PUE9GRGlLMFBFSmliRUE3ckhNWlhkSnBpRlZ5K2lpN001QnU0?=
- =?utf-8?B?dUZ5YzRCSWJVT0lucEVhSURWRm1OTkJzeTNGeXIyalAxZC9ZSy8rR0lZN1B6?=
- =?utf-8?B?K2hUZVZvcXdzc2xUUVM5Z3kxWGIyQlRjQ2YxVnQzTGM4R0d0WHFwdjlIUDZM?=
- =?utf-8?B?Zy9xUjNYNHRBVmNMZTNQeHhpb2JVVW1nS1o1ekJ4ZVJCWitFUHN5OWxKRGdW?=
- =?utf-8?B?YU9OR28rMGNVQnRCc3pDN2QyZ0ZOUGRIR3psYk16WWFzc0FtNGc4amlxMnh5?=
- =?utf-8?B?TTdvQXFJQnFmVnBrbjNZenJKKzlETVkwazNtRE9aNGt1MGZwUExmYWFwbXg1?=
- =?utf-8?B?RlhEdi9HQ2pTalJVRm1xWllzTjZpSFVvL0lrMzUyT3hMZVpQeEt2dDBOK0Vh?=
- =?utf-8?B?emEvRGMyc1NBRlZGLzUxakVUL1pQSVA3TFRNOGhWZndTc3JpVXRMbjU0cExp?=
- =?utf-8?B?Y0cva3lHM2dub2o4SlYvL3dOd1JTSHI5OHMrNDM2REtqUmVtU1EwTUNrZ3dw?=
- =?utf-8?B?bmRWZmtBRVhybHpaUU1nSW0xNTdpaXVNb1RHWUVUNkdUbGZiTEFqdG85SmJm?=
- =?utf-8?B?N0F2RzZXa1k2cktmZXRrZHRKcStKcnhBOVFDZU9OdW5pb3F1RmxWT2xPdlFu?=
- =?utf-8?B?eitLaDk4UzJXMGhRMzJnQWQ1cUZSYkc4bXc1WVh4ZUlBRkJuZVgvam5nNHdN?=
- =?utf-8?B?MG96bXI4MmhZaFdRdmNoTHdxeDVHUTBTMVUzemMxNXB5Z0ZxV0VUekc3VXk3?=
- =?utf-8?B?aW5UUFlQb2F5WTBtTVlFMU8rTEc2MDM3YnFuanEzSVV4L1RCa3JOM2Q2aHBn?=
- =?utf-8?B?emVrSmxPbkZTTmJya1hReUpCRGltM0FvN3FHaGJpNkRUOHE2NFUvOXFDOFNx?=
- =?utf-8?B?QTV6M2xYeTc0MjZnc1dqVmFGS2Z5Z1Zqd000RHR6QnJaREpxY3hQYi9WbUpz?=
- =?utf-8?B?Y3EwR09ZM0xwQllFRkwvZkN6OEhIUUFXVnFtcW90dmx3Z0N4eHYyU1B1blhF?=
- =?utf-8?B?Tk9QZUxua2V2eGV5MW5iMnhMVFhaVjBNaGs1a0dpSzlLZnRPMnhFOVp2alRB?=
- =?utf-8?B?NnBYRkhQVittS1RUMVhKRS9sZ0VHTTNvSWFaQkZiNC9OdVBNd1NxanVSL2FF?=
- =?utf-8?B?OG5nclJWd2xDeW5GNzZUTFhLRUM2ZGczRzFtTklGMGVLOE9ua3QvM0xJaEtH?=
- =?utf-8?B?UFQwR3BENlNqWTd3Z3FDOEJaSnFyUU0vcHBXa0szVWhNVHVtZU80Vzg5UnZr?=
- =?utf-8?B?dVBObmpEQXNIdXl6bitEMzcweXRzbzVaM3c2NnhEcDVrcEpmMnFFczhFRkh5?=
- =?utf-8?B?bWhyVWFzcFVHZjdsb2svUG5ZUFlKWFd2Q3FTNTYrclloTyttR1N1ZERwYUI4?=
- =?utf-8?Q?jumEieS/po16dcq/iVcgElH86?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?Wkg5ZWlmZU9tczBuTHBXV0NOMEVSUHlJdyt0YVI0Qm55Y2lXZTlmaVRsNXcy?=
- =?utf-8?B?bVUybVpsWGNaSXhsM1VLNXJsUzBvdlUrYnpkU1IwUndXS1AxQ0FHZXNqamV3?=
- =?utf-8?B?SHBXSDFkMGhnRm9EOExEbExpUkpFMkxQSXJWZm1ad2EyNHl5MlJZbzM3UXBp?=
- =?utf-8?B?MWVEVFF6Um9xdHFpTXFnZ1lIMmhHZEIzVjFhTVJKWnVzazBEUU5tVms2Qnp5?=
- =?utf-8?B?RVdYeVZGajdQb3FrQjdXRy80dVUrUmEzVVplWWdYVE93dVNod2Z5dHdPVUht?=
- =?utf-8?B?SjdDelhLZUpYd0VoODFUQ2kvSzVwYjQrc0FDVTJRUDNnMlJKOGs4Mml2QzZQ?=
- =?utf-8?B?NzFpNTJNT0RyMk1RZkhTOXVwVmpFMjlQRXdOWHJGa01weTlmWjdCUWNMTk56?=
- =?utf-8?B?Umk0ZXFOeDh2NlpGN0pvMGQ1M2JSL09hQjNyS1R6bE8zT0RiUlBtNnVLNitR?=
- =?utf-8?B?bE16blZ1czdPVW5VUjlJckZiMUJ1TzBDV09nZlFWU1paVVgwaGZHZzRNbXlv?=
- =?utf-8?B?RVlnRCt0NWZ1anFqb2RkNFFQQjNtK1UrOURLeFNMMllSQ2pLWVBEdk1zbmh4?=
- =?utf-8?B?My9TTkFQeDYweDdicERKdVk3K2dhUUlWa0VJeGMvZklmRXhuR2NNOG9wSEpQ?=
- =?utf-8?B?V2R0Z0Zqdlc4dDZVN1FxV0JyQlI3Q3QzVk9KMG45VUZhUGdkTkU0ZmtMTzI3?=
- =?utf-8?B?RWFEcjZVaWZQVU96NmhMNjVjU0JHRkhjc0pCU0lqZWVmVTdGTUZOb0UyL1lm?=
- =?utf-8?B?aFFlSTl2NllFRlVNa3hhYzZOWXJDdm9lRCsrNzJzdHV0QTY0R25obGQvVG82?=
- =?utf-8?B?RXNkV0dXT3VDSFZoUEl0S3U3MXArd3RSb0FsMTA5cTl5cVh6Y0E3ZVlYUDdO?=
- =?utf-8?B?UTNxNlYrZjRSdHRJU0k5cHRlbmRWQTVaQ3FSRG5pMHB1SlJ5ajZ3Q1F3b3lJ?=
- =?utf-8?B?bVo4YzNDaGJ3cU1ISW9TZlp2NDdTU1MxbGhGcW45SW11bkl1VlJ2VnN2Tnc4?=
- =?utf-8?B?dGNxbDBVb2hUbnVZK2JGTnNMcEhNTlJ3empvZ2hFUVk1cXhoYUtGaVJVdjlJ?=
- =?utf-8?B?bGlLZmk1R2R4TW1UNXRRdkl0S2ZYeGxEY1Nrc1BLRDU0L0hlVE1UbG5pajJW?=
- =?utf-8?B?ZHYvamhWNjhQSnRTN2VFZ3JhekFLenlUZnVhSnQ4aUFSQzJGaWUwcDU3UXNq?=
- =?utf-8?B?VGYyZ1lHU1V1aDNnd1lYVUl0d0s5RTRpSUhxODRDZGc1K0RWMjBQanRlUUxP?=
- =?utf-8?B?cDZ2NXBVRGN5Yi92QmtmeFFZQy9jQUNPd09aZlIrWmJWM21SaDN0T3lPbHBN?=
- =?utf-8?B?Y1JqK0NTRGJEeEl1TTR6UEIrUk5rdjR6V1hkQm4vV0tzdnFCTzA1dUpKdXd4?=
- =?utf-8?B?UEx3N014MEgweFpma0wyWDRMSCt0Y2VTYTllYXc3Z2JZTUVRdlJIdmdGVjdP?=
- =?utf-8?B?Ym54enF3MlhSbEd5U1VCQUJVREptc3RYTUlTdTRRPT0=?=
-X-OriginatorOrg: citrix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2401b07c-0811-4c4d-b529-08dad2f11f9e
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR03MB6360.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 16:37:08.8135
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: T0qVeVlYhH2uO0F3jAoPrY6g7geZegC9mApJURMivRMKFataV/8DoY+S9XjZgAeiq55A9RxPgfcm8YzUugABXQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR03MB5974
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y4d5SyU3akA9ZBaJ@zx2c4.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The currently lockless access to the xen console list in
-vtermno_to_xencons() is incorrect, as additions and removals from the
-list can happen anytime, and as such the traversal of the list to get
-the private console data for a given termno needs to happen with the
-lock held.  Note users that modify the list already do so with the
-lock taken.
+On Wed, Nov 30, 2022 at 04:39:55PM +0100, Jason A. Donenfeld wrote:
+> 2) Convert vgetrandom_alloc() into a clone3-style syscall, as Christian
+>    suggested earlier, which might allow for a bit more overloading
+>    capability. That would be a struct that looks like:
+> 
+>       struct vgetrandom_alloc_args {
+> 	  __aligned_u64 flags;
+>           __aligned_u64 states;
+> 	  __aligned_u64 num;
+> 	  __aligned_u64 size_of_each;
+>       }
+> 
+>   - If flags is VGRA_ALLOCATE, states and size_of_each must be zero on
+>     input, while num is the hint, as is the case now. On output, states,
+>     size_of_each, and num are filled in.
+> 
+>   - If flags is VGRA_DEALLOCATE, states, size_of_each, and num must be as
+>     they were originally, and then it deallocates.
+> 
+> I suppose (2) would alleviate your concerns entirely, without future
+> uncertainty over what it'd be like to add special cases to munmap(). And
+> it'd add a bit more future proofing to the syscall, depending on what we
+> do.
+> 
+> So maybe I'm warming up to that approach a bit.
 
-Adjust current lock takers to use the _irq{save,restore} helpers,
-since the context in which vtermno_to_xencons() is called can have
-interrupts disabled.  Use the _irq{save,restore} set of helpers to
-switch the current callers to disable interrupts in the locked region.
-I haven't checked if existing users could instead use the _irq
-variant, as I think it's safer to use _irq{save,restore} upfront.
+So I just did a little quick implementation to see what it'd feel like,
+and actually, it's quite simple, and might address a lot of concerns all
+at once. What do you think of the below? Documentation and such still
+needs work obviously, but the bones should be there.
 
-While there switch from using list_for_each_entry_safe to
-list_for_each_entry: the current entry cursor won't be removed as
-part of the code in the loop body, so using the _safe variant is
-pointless.
-
-Fixes: 02e19f9c7cac ('hvc_xen: implement multiconsole support')
-Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
----
-Changes since v1:
- - Switch current lock users to disable interrupts in the locked
-   region.
----
- drivers/tty/hvc/hvc_xen.c | 46 ++++++++++++++++++++++++---------------
- 1 file changed, 29 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/tty/hvc/hvc_xen.c b/drivers/tty/hvc/hvc_xen.c
-index e63c1761a361..d9d023275328 100644
---- a/drivers/tty/hvc/hvc_xen.c
-+++ b/drivers/tty/hvc/hvc_xen.c
-@@ -53,17 +53,22 @@ static DEFINE_SPINLOCK(xencons_lock);
- 
- static struct xencons_info *vtermno_to_xencons(int vtermno)
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 4341c6a91207..dae6095b937d 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -189,44 +189,53 @@ int __cold execute_with_initialized_rng(struct notifier_block *nb)
+ /**
+  * sys_vgetrandom_alloc - Allocate opaque states for use with vDSO getrandom().
+  *
+- * @num:	   On input, a pointer to a suggested hint of how many states to
+- * 		   allocate, and on output the number of states actually allocated.
+- *
+- * @size_per_each: The size of each state allocated, so that the caller can
+- *		   split up the returned allocation into individual states.
+- *
+- * @flags:	   Currently always zero.
++ * @uargs:	A vgetrandom_alloc_args which may be updated on return.
++ * 		allocate, and on output the number of states actually allocated.
++ * @usize:	The size of @uargs, which determines the version of the struct used.
+  *
+  * The getrandom() vDSO function in userspace requires an opaque state, which
+  * this function allocates by mapping a certain number of special pages into
+  * the calling process. It takes a hint as to the number of opaque states
+  * desired, and provides the caller with the number of opaque states actually
+  * allocated, the size of each one in bytes, and the address of the first
+- * state.
++ * state. Alternatively, if the VGRA_DEALLOCATE flag is specified, the provided
++ * states parameter is unmapped.
+  *
+- * Returns the address of the first state in the allocation on success, or a
+- * negative error value on failure.
++ * Returns 0 on success and an error value otherwise.
+  */
+-SYSCALL_DEFINE3(vgetrandom_alloc, unsigned int __user *, num,
+-		unsigned int __user *, size_per_each, unsigned int, flags)
++SYSCALL_DEFINE2(vgetrandom_alloc, struct vgetrandom_alloc_args __user *, uargs, size_t, usize)
  {
--	struct xencons_info *entry, *n, *ret = NULL;
-+	struct xencons_info *entry, *ret = NULL;
-+	unsigned long flags;
- 
--	if (list_empty(&xenconsoles))
--			return NULL;
-+	spin_lock_irqsave(&xencons_lock, flags);
-+	if (list_empty(&xenconsoles)) {
-+		spin_unlock_irqrestore(&xencons_lock, flags);
-+		return NULL;
+ 	const size_t state_size = sizeof(struct vgetrandom_state);
++	const size_t max_states = (SIZE_MAX & PAGE_MASK) / state_size;
++	struct vgetrandom_alloc_args args;
+ 	size_t alloc_size, num_states;
+ 	unsigned long pages_addr;
+-	unsigned int num_hint;
+ 	int ret;
+
+-	if (flags)
++	if (usize > PAGE_SIZE)
++		return -E2BIG;
++	if (usize < VGETRANDOM_ALLOC_ARGS_SIZE_VER0)
+ 		return -EINVAL;
++	ret = copy_struct_from_user(&args, sizeof(args), uargs, usize);
++	if (ret)
++		return ret;
+
+-	if (get_user(num_hint, num))
+-		return -EFAULT;
++	/* Currently only VGRA_DEALLOCATE is defined. */
++	if (args.flags & ~VGRA_DEALLOCATE)
++		return -EINVAL;
+
+-	num_states = clamp_t(size_t, num_hint, 1, (SIZE_MAX & PAGE_MASK) / state_size);
+-	alloc_size = PAGE_ALIGN(num_states * state_size);
++	if (args.flags & VGRA_DEALLOCATE) {
++		if (args.size_per_each != state_size || args.num > max_states || !args.states)
++			return -EINVAL;
++		return vm_munmap(args.states, args.num * state_size);
 +	}
- 
--	list_for_each_entry_safe(entry, n, &xenconsoles, list) {
-+	list_for_each_entry(entry, &xenconsoles, list) {
- 		if (entry->vtermno == vtermno) {
- 			ret  = entry;
- 			break;
- 		}
- 	}
-+	spin_unlock_irqrestore(&xencons_lock, flags);
- 
- 	return ret;
- }
-@@ -234,7 +239,7 @@ static int xen_hvm_console_init(void)
- {
- 	int r;
- 	uint64_t v = 0;
--	unsigned long gfn;
-+	unsigned long gfn, flags;
- 	struct xencons_info *info;
- 
- 	if (!xen_hvm_domain())
-@@ -270,9 +275,9 @@ static int xen_hvm_console_init(void)
- 		goto err;
- 	info->vtermno = HVC_COOKIE;
- 
--	spin_lock(&xencons_lock);
-+	spin_lock_irqsave(&xencons_lock, flags);
- 	list_add_tail(&info->list, &xenconsoles);
--	spin_unlock(&xencons_lock);
-+	spin_unlock_irqrestore(&xencons_lock, flags);
- 
- 	return 0;
- err:
-@@ -296,6 +301,7 @@ static int xencons_info_pv_init(struct xencons_info *info, int vtermno)
- static int xen_pv_console_init(void)
- {
- 	struct xencons_info *info;
-+	unsigned long flags;
- 
- 	if (!xen_pv_domain())
- 		return -ENODEV;
-@@ -312,9 +318,9 @@ static int xen_pv_console_init(void)
- 		/* already configured */
- 		return 0;
- 	}
--	spin_lock(&xencons_lock);
-+	spin_lock_irqsave(&xencons_lock, flags);
- 	xencons_info_pv_init(info, HVC_COOKIE);
--	spin_unlock(&xencons_lock);
-+	spin_unlock_irqrestore(&xencons_lock, flags);
- 
- 	return 0;
- }
-@@ -322,6 +328,7 @@ static int xen_pv_console_init(void)
- static int xen_initial_domain_console_init(void)
- {
- 	struct xencons_info *info;
-+	unsigned long flags;
- 
- 	if (!xen_initial_domain())
- 		return -ENODEV;
-@@ -337,9 +344,9 @@ static int xen_initial_domain_console_init(void)
- 	info->irq = bind_virq_to_irq(VIRQ_CONSOLE, 0, false);
- 	info->vtermno = HVC_COOKIE;
- 
--	spin_lock(&xencons_lock);
-+	spin_lock_irqsave(&xencons_lock, flags);
- 	list_add_tail(&info->list, &xenconsoles);
--	spin_unlock(&xencons_lock);
-+	spin_unlock_irqrestore(&xencons_lock, flags);
- 
- 	return 0;
- }
-@@ -394,10 +401,12 @@ static void xencons_free(struct xencons_info *info)
- 
- static int xen_console_remove(struct xencons_info *info)
- {
-+	unsigned long flags;
+
+-	if (put_user(alloc_size / state_size, num) || put_user(state_size, size_per_each))
+-		return -EFAULT;
++	/* These don't make sense as input values if allocating, so reject them. */
++	if (args.size_per_each || args.states)
++		return -EINVAL;
 +
- 	xencons_disconnect_backend(info);
--	spin_lock(&xencons_lock);
-+	spin_lock_irqsave(&xencons_lock, flags);
- 	list_del(&info->list);
--	spin_unlock(&xencons_lock);
-+	spin_unlock_irqrestore(&xencons_lock, flags);
- 	if (info->xbdev != NULL)
- 		xencons_free(info);
- 	else {
-@@ -478,6 +487,7 @@ static int xencons_probe(struct xenbus_device *dev,
- {
- 	int ret, devid;
- 	struct xencons_info *info;
-+	unsigned long flags;
- 
- 	devid = dev->nodename[strlen(dev->nodename) - 1] - '0';
- 	if (devid == 0)
-@@ -497,9 +507,9 @@ static int xencons_probe(struct xenbus_device *dev,
- 	ret = xencons_connect_backend(dev, info);
++	num_states = clamp_t(size_t, args.num, 1, max_states);
++	alloc_size = PAGE_ALIGN(num_states * state_size);
+
+ 	pages_addr = vm_mmap(NULL, 0, alloc_size, PROT_READ | PROT_WRITE,
+ 			     MAP_PRIVATE | MAP_ANONYMOUS | MAP_LOCKED, 0);
+@@ -237,7 +246,14 @@ SYSCALL_DEFINE3(vgetrandom_alloc, unsigned int __user *, num,
  	if (ret < 0)
- 		goto error;
--	spin_lock(&xencons_lock);
-+	spin_lock_irqsave(&xencons_lock, flags);
- 	list_add_tail(&info->list, &xenconsoles);
--	spin_unlock(&xencons_lock);
-+	spin_unlock_irqrestore(&xencons_lock, flags);
- 
- 	return 0;
- 
-@@ -599,10 +609,12 @@ static int __init xen_hvc_init(void)
- 
- 	info->hvc = hvc_alloc(HVC_COOKIE, info->irq, ops, 256);
- 	if (IS_ERR(info->hvc)) {
-+		unsigned long flags;
+ 		goto err_unmap;
+
+-	return pages_addr;
++	args.num = num_states;
++	args.size_per_each = state_size;
++	args.states = pages_addr;
 +
- 		r = PTR_ERR(info->hvc);
--		spin_lock(&xencons_lock);
-+		spin_lock_irqsave(&xencons_lock, flags);
- 		list_del(&info->list);
--		spin_unlock(&xencons_lock);
-+		spin_unlock_irqrestore(&xencons_lock, flags);
- 		if (info->irq)
- 			unbind_from_irqhandler(info->irq, NULL);
- 		kfree(info);
--- 
-2.37.3
++	ret = -EFAULT;
++	if (copy_to_user(uargs, &args, sizeof(args)))
++		goto err_unmap;
++	return 0;
+
+ err_unmap:
+ 	vm_munmap(pages_addr, alloc_size);
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index 7741dc94f10c..de4338e26db0 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -72,6 +72,7 @@ struct open_how;
+ struct mount_attr;
+ struct landlock_ruleset_attr;
+ enum landlock_rule_type;
++struct vgetrandom_alloc_args;
+
+ #include <linux/types.h>
+ #include <linux/aio_abi.h>
+@@ -1006,9 +1007,8 @@ asmlinkage long sys_seccomp(unsigned int op, unsigned int flags,
+ 			    void __user *uargs);
+ asmlinkage long sys_getrandom(char __user *buf, size_t count,
+ 			      unsigned int flags);
+-asmlinkage long sys_vgetrandom_alloc(unsigned int __user *num,
+-				     unsigned int __user *size_per_each,
+-				     unsigned int flags);
++asmlinkage long sys_vgetrandom_alloc(struct vgetrandom_alloc_args __user *uargs,
++				     size_t size);
+ asmlinkage long sys_memfd_create(const char __user *uname_ptr, unsigned int flags);
+ asmlinkage long sys_bpf(int cmd, union bpf_attr *attr, unsigned int size);
+ asmlinkage long sys_execveat(int dfd, const char __user *filename,
+diff --git a/include/uapi/linux/random.h b/include/uapi/linux/random.h
+index e744c23582eb..49911ea2c343 100644
+--- a/include/uapi/linux/random.h
++++ b/include/uapi/linux/random.h
+@@ -55,4 +55,30 @@ struct rand_pool_info {
+ #define GRND_RANDOM	0x0002
+ #define GRND_INSECURE	0x0004
+
++/*
++ * Flags for vgetrandom_alloc(2)
++ *
++ * VGRA_DEALLOCATE	Deallocate supplied states.
++ */
++#define VGRA_DEALLOCATE	0x0001ULL
++
++/**
++ * struct vgetrandom_alloc_args - Arguments for the vgetrandom_alloc(2) syscall.
++ *
++ * @flags:	   Zero or more VGRA_* flags.
++ * @states:	   Zero on input if allocating, and filled in on successful
++ *		   return. An existing allocation, if deallocating.
++ * @num:	   A hint as to the desired number of states, if allocating. The
++ *		   number of existing states in @states, if deallocating
++ * @size_per_each: The size of each state in @states.
++ */
++struct vgetrandom_alloc_args {
++	__aligned_u64 flags;
++	__aligned_u64 states;
++	__aligned_u64 num;
++	__aligned_u64 size_per_each;
++};
++
++#define VGETRANDOM_ALLOC_ARGS_SIZE_VER0 32 /* sizeof first published struct */
++
+ #endif /* _UAPI_LINUX_RANDOM_H */
 
