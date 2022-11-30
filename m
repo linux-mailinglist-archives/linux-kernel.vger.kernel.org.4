@@ -2,102 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E22A663E166
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7D163E1AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbiK3ULe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 15:11:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
+        id S229711AbiK3UOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 15:14:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiK3ULE (ORCPT
+        with ESMTP id S229925AbiK3UOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:11:04 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4302498974;
-        Wed, 30 Nov 2022 12:10:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=NwdMiyCjs6mBb9kzRTViptsfgQPSjSYNBJwUO380cGY=; b=uxj1BF9/I/5pNSHmqGTJuYm1N3
-        tohajqYrPBHQV8fIjEsRWOBkskUeekGasvvjKuVZVYVoT+0KuVqGPtzWYQuhz/z5uqjJbI+kSkbv2
-        Pp55Z+uH8QXeGgIA88m3+VNQ/Oo1GpoVgXC7hXvitzpcVcVrk2zMMpARsbR/QjoIdvS4mvhIg71i2
-        Lc2CDfDoG/RMXultHOWY0LUyPfRxK5tarBXAq7HAQnx+c70DcvFuAK2jPChUo3Miu8Jp/V87a6VnG
-        UyizTR2IPrz5b+EAO72nFY2W6SHIUsf3qpKkpx1pmOFJHHRH4Sco3JHinEGsiYPu8iLoluRpD5im1
-        A599fzTA==;
-Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p0TPG-00FGSf-4M; Wed, 30 Nov 2022 20:10:10 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        linux-rdma@vger.kernel.org, Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org
-Subject: [PATCH 2/2] IB/rdmavt: don't use rdmavt for UML
-Date:   Wed, 30 Nov 2022 12:09:58 -0800
-Message-Id: <20221130200958.25305-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.38.1
+        Wed, 30 Nov 2022 15:14:21 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5369457E;
+        Wed, 30 Nov 2022 12:11:28 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id jl24so304412plb.8;
+        Wed, 30 Nov 2022 12:11:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8ws56OmnbODsSag8ifeH+mKjjjBdZv6y7WQ6kCsX4bY=;
+        b=dScuvAJJ0o4Ciy/CCDZmemhr9OhcMjBs1RogvmT/oIyPC9KoHFhcsnD6OViMUT3pj1
+         m6Cdp8f0DYbhc+SMcl3zN9OwGEdsPPSLzD/SUDFZoc+TdUlSN70LI4MC+j1XKnKcCz2O
+         ubVnUCdIHUhNu+dkjvBTxJiVpRgiVHvxZYzgkGEAfm7Uvloy5uXAEBhdLHeO2t6Jt/9w
+         MYnlqDYenr9fpSr6JR86y7k3+fGuIDBJ/PO8bV3Ma42Ln7LLdXVXofTqIO36WCOygzFZ
+         jJk3ScsGT8EN0OwpnpUlcISDZtmrWFGPpos289IOvN6Xa4bnQnWKLzDJM72JeNupd6tr
+         kkzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8ws56OmnbODsSag8ifeH+mKjjjBdZv6y7WQ6kCsX4bY=;
+        b=hsvmtozhDHdiWsJQPW5SBB4vvQIDDdTAfNHBAVqDO5JApejEl2aCtK/JksO5gvPAp6
+         j9UqbVUIgqrII8P3BkKxd5gmohojub53xvL7BS1UsFWQpNjiaJdXIUxMj6loOdX0a9DC
+         0HyGd13bMYNkiHJWT3HVmIryFoKB8lAozGZfgWdJvC59Qk8+CdV2OYH3z+wScZjLPM1F
+         e5RtwhuWpDOf/tRw87bcnR7c63d6etVLGwfCpnWmk3KdD/o/UcS8vjJt3j/MGJLP32vM
+         C6HOhvSFopaZiYhO6caQJ5XO92F7LH5UEc/Zg3HfIjpySf2UEsGAIEPPxppo09ss7mbk
+         77LQ==
+X-Gm-Message-State: ANoB5pmxQL63J1g8Ho/4cgnA8FSWni8Tr+UqgVWllSsO/o1N/gI4/1Bi
+        tz5NcFFdyYSeUXdapvi9eCU=
+X-Google-Smtp-Source: AA0mqf4aoJxrffqEDGlugp0KzDPS2+B1GhRh7qDm2TRsD7t+QG3BBEe5SsMmIZmGZyhi8bGpUDYPcw==
+X-Received: by 2002:a17:90a:df0e:b0:20b:22fb:2ef with SMTP id gp14-20020a17090adf0e00b0020b22fb02efmr73260481pjb.158.1669839088041;
+        Wed, 30 Nov 2022 12:11:28 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id o2-20020a17090a744200b0020d67a726easm3495877pjk.10.2022.11.30.12.11.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 12:11:27 -0800 (PST)
+Message-ID: <66894fc0-78d3-0334-5227-a961dc4aa205@gmail.com>
+Date:   Wed, 30 Nov 2022 12:11:22 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [v3][net-next][PATCH 1/1] net: phy: Add link between phy dev and
+ mac dev
+Content-Language: en-US
+To:     Xiaolei Wang <xiaolei.wang@windriver.com>, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221130021216.1052230-1-xiaolei.wang@windriver.com>
+ <20221130021216.1052230-2-xiaolei.wang@windriver.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221130021216.1052230-2-xiaolei.wang@windriver.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building rdmavt for ARCH=um, qp.c has a build error on a reference
-to the x86-specific cpuinfo field 'x86_cache_size'.
+On 11/29/22 18:12, Xiaolei Wang wrote:
+> If the external phy used by current mac interface is
+> managed by another mac interface, it means that this
+> network port cannot work independently, especially
+> when the system suspends and resumes, the following
+> trace may appear, so we should create a device link
+> between phy dev and mac dev.
+> 
+>    WARNING: CPU: 0 PID: 24 at drivers/net/phy/phy.c:983 phy_error+0x20/0x68
+>    Modules linked in:
+>    CPU: 0 PID: 24 Comm: kworker/0:2 Not tainted 6.1.0-rc3-00011-g5aaef24b5c6d-dirty #34
+>    Hardware name: Freescale i.MX6 SoloX (Device Tree)
+>    Workqueue: events_power_efficient phy_state_machine
+>    unwind_backtrace from show_stack+0x10/0x14
+>    show_stack from dump_stack_lvl+0x68/0x90
+>    dump_stack_lvl from __warn+0xb4/0x24c
+>    __warn from warn_slowpath_fmt+0x5c/0xd8
+>    warn_slowpath_fmt from phy_error+0x20/0x68
+>    phy_error from phy_state_machine+0x22c/0x23c
+>    phy_state_machine from process_one_work+0x288/0x744
+>    process_one_work from worker_thread+0x3c/0x500
+>    worker_thread from kthread+0xf0/0x114
+>    kthread from ret_from_fork+0x14/0x28
+>    Exception stack(0xf0951fb0 to 0xf0951ff8)
+> 
+> Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
 
-Fix the build errors by making this driver depend on !UML.
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-Prevents these build errors:
-
-../drivers/infiniband/sw/rdmavt/qp.c: In function ‘rvt_wss_llc_size’:
-../drivers/infiniband/sw/rdmavt/qp.c:88:29: error: ‘struct cpuinfo_um’ has no member named ‘x86_cache_size’
-   88 |         return boot_cpu_data.x86_cache_size;
-../drivers/infiniband/sw/rdmavt/qp.c: In function ‘cacheless_memcpy’:
-../drivers/infiniband/sw/rdmavt/qp.c:100:9: error: implicit declaration of function ‘__copy_user_nocache’; did you mean ‘copy_user_page’? [-Werror=implicit-function-declaration]
-  100 |         __copy_user_nocache(dst, (void __user *)src, n, 0);
-../drivers/infiniband/sw/rdmavt/qp.c: In function ‘rvt_wss_llc_size’:
-../drivers/infiniband/sw/rdmavt/qp.c:89:1: error: control reaches end of non-void function [-Werror=return-type]
-   89 | }
-
-Fixes: 68f5d3f3b654 ("um: add PCI over virtio emulation driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Cc: linux-rdma@vger.kernel.org
-Cc: Jeff Dike <jdike@addtoit.com>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Cc: Johannes Berg <johannes@sipsolutions.net>
-Cc: linux-um@lists.infradead.org
----
-v2: rebase & resend
-
- drivers/infiniband/sw/rdmavt/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff -- a/drivers/infiniband/sw/rdmavt/Kconfig b/drivers/infiniband/sw/rdmavt/Kconfig
---- a/drivers/infiniband/sw/rdmavt/Kconfig
-+++ b/drivers/infiniband/sw/rdmavt/Kconfig
-@@ -2,7 +2,7 @@
- config INFINIBAND_RDMAVT
- 	tristate "RDMA verbs transport library"
- 	depends on INFINIBAND_VIRT_DMA
--	depends on X86_64
-+	depends on X86_64 && !UML
- 	depends on PCI
- 	help
- 	This is a common software verbs provider for RDMA networks.
