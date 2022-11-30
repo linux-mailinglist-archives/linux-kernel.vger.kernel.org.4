@@ -2,163 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6C263DCFD
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F9063DCFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbiK3ST3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:19:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
+        id S230218AbiK3STe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:19:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiK3STM (ORCPT
+        with ESMTP id S230070AbiK3STO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:19:12 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3DC8D645
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:16:22 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id c129so19691113oia.0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:16:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BZx3c6pdH3tvbbV8hd9d5C+kOw6FjAWMt/tV6RWix8Y=;
-        b=oBDpW4gxowQLjwbJ4RHVMMkexMHrXMKjhTZQiyPABVqPYrQ7s01TUq7w7ZZQI5r4Kc
-         xu0yJ8r8HcgO+Nip5velLlgN0y+gGXA0vL+fjBPBfHGMF/OM2vvp/pnSvvU4WT0/+MIh
-         M71zdaOSYzXBAjKLzTCXd0oAQ3DD1ySOkIDek=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BZx3c6pdH3tvbbV8hd9d5C+kOw6FjAWMt/tV6RWix8Y=;
-        b=hxYHgFG+TzCTzkf3kBTtV4osdGe8Fz2tit9kQc8qa2VSzDtGDwOEH+DNFIKni+Ij0L
-         07Wyg95qIDDcbmxR9vfKAegdpnuMgk6Bd3Voq/0VFBPjf9MOaba0Nyj9NhWSGx7tQ+P8
-         A9wdhWjT8GxQ9E6H4VKCBBJKGBi50Z8+4LeYvWGY9yIQiRzT6/KlsUzzC+QO9QIA537i
-         VQVdBmlWAshoWfTGlAQIWUN+0q+bcuqXCt5mKt08JQHzYW1e0UVAzR/84RvFi4Ca/vqq
-         MoJOsurhgpEH1leyvAodJF4sNnWLmGMA3kaaczH55Tg/iVqcjysUMoXxtNkZ5r4b3Ghz
-         WacQ==
-X-Gm-Message-State: ANoB5plzH+WrC8uMG9HXyBC6g9XwDSqlChhnzFGYQiamNA5jBQlws+v8
-        KDli0c9vxONFO9+HfPUQJ+nMXErhovU29Y1+E0Jhvw==
-X-Google-Smtp-Source: AA0mqf6ktv4Mbw61Q5evf5XgM9SEqSo3B9f7VRAeR5VeuVYN1GfdLs+BjPg/oU+Mvra8qnf8D7T0V+5TYSr+T+2Sxns=
-X-Received: by 2002:a05:6808:1a09:b0:354:4a36:aa32 with SMTP id
- bk9-20020a0568081a0900b003544a36aa32mr32435098oib.15.1669832181662; Wed, 30
- Nov 2022 10:16:21 -0800 (PST)
+        Wed, 30 Nov 2022 13:19:14 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9ADA98D64E
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:16:24 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 07E61D6E;
+        Wed, 30 Nov 2022 10:16:31 -0800 (PST)
+Received: from [10.57.71.118] (unknown [10.57.71.118])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 84B0B3F73B;
+        Wed, 30 Nov 2022 10:16:23 -0800 (PST)
+Message-ID: <c34db006-4d5b-fb71-f998-63fcdcde6c0b@arm.com>
+Date:   Wed, 30 Nov 2022 18:16:19 +0000
 MIME-Version: 1.0
-References: <20221130181316.GA1012431@paulmck-ThinkPad-P17-Gen-1> <20221130181325.1012760-14-paulmck@kernel.org>
-In-Reply-To: <20221130181325.1012760-14-paulmck@kernel.org>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Wed, 30 Nov 2022 18:16:11 +0000
-Message-ID: <CAEXW_YS1nfsV_ohXDaB1i2em=+0KP1DofktS24oGFa4wPAbiiw@mail.gmail.com>
-Subject: Re: [PATCH rcu 14/16] rxrpc: Use call_rcu_hurry() instead of call_rcu()
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 1/2] perf/arm-cmn: Cope with spurious IRQs better
+Content-Language: en-GB
+To:     Geoff Blake <blakgeof@amazon.com>
+Cc:     will@kernel.org, mark.rutland@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <bc8183fcd7f6ca07b0d56aa8061d816485b84341.1669822447.git.robin.murphy@arm.com>
+ <f41af5cb-7fc7-4bd3-ec9e-53071b9a41f9@amazon.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <f41af5cb-7fc7-4bd3-ec9e-53071b9a41f9@amazon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+On 2022-11-30 16:02, Geoff Blake wrote:
+> Robin,
+> 
+>  From my perspective, this is a worse solution as now we're sweeping an
+> issue under the rug and consuming CPU cycles handling IRQs we should not
+> be getting in the first place.  While an overflow IRQ from the cmn should
+> not be high frequency, there is a non-zero chance in the future it could
+> be and this could lead to a very hard to debug performance issue instead
+> of the current problem, which is discovering we need to clean up better
+> from a noisy kernel message.
 
-Could you give your ACK for this patch?
+Kexec is not the only possible source of spurious IRQs. If they cause a 
+problem for this driver, that cannot be robustly addressed by trying to 
+rely on whatever software might happen to run before this driver.
 
-The networking testing passed on ChromeOS and it has been in -next for
-some time so has gotten testing there. The CONFIG option is default
-disabled.
+> The driver as best I can grok currently is optimized to limit the amount
+> of register writes for the common use-case, which is setting and unsetting
+> events, so all the wiring for the PMU to feed events to the DTC is done up
+> front on load: DTC_CTL's DT_EN bit is set immediately during probe, as is
+> OVFL_INTR_EN. All the DN states and DTM PMU_CONFIG_PMU_EN is deferred
+> for when an event is actually set, and here we go through all of them
+> anyways for each event unless its bynodeid, so the expense of setting
+> events grows linearly with the mesh size anyways.
 
-Thanks a lot,
+If arm_cmn_init_dtc() writing 0 to PMCR didn't stop the PMU then we've 
+got bigger problems, because that's how we expect to start and stop it 
+in normal operation. I'm not ruling out that some subtle bug in that 
+regard might exist, since I've still not yet had a chance to reproduce 
+and observe this behaviour on my board, but I've also not seen 
+sufficient evidence to suggest that that is the case either. (Now that 
+I'm looking closely, I think there *is* actually a small oversight for 
+the DTMs, but that would lead to different symptoms than you reported)
 
-- Joel
+At least the writes to PMOVSR_CLR *did* clearly work, because you're 
+seeing the "nobody cared" message from the IRQ core rather than the 
+WARN_ON(!dtc->counters[i]) which would happen if a fresh overflow was 
+actually asserted. Currently I would expect to see up to 4 of those 
+messages since there can be up to 4 IRQs, but once those are all 
+requested, enabled, and "handled", all the spurious initially-latched 
+state should be cleared and any *new* overflows will be indicated in 
+PMOVSR. I don't see how a single IRQ could ever be unhandled more than 
+once anyway, if the first time disables it.
 
-On Wed, Nov 30, 2022 at 6:13 PM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
->
-> Earlier commits in this series allow battery-powered systems to build
-> their kernels with the default-disabled CONFIG_RCU_LAZY=y Kconfig option.
-> This Kconfig option causes call_rcu() to delay its callbacks in order
-> to batch them.  This means that a given RCU grace period covers more
-> callbacks, thus reducing the number of grace periods, in turn reducing
-> the amount of energy consumed, which increases battery lifetime which
-> can be a very good thing.  This is not a subtle effect: In some important
-> use cases, the battery lifetime is increased by more than 10%.
->
-> This CONFIG_RCU_LAZY=y option is available only for CPUs that offload
-> callbacks, for example, CPUs mentioned in the rcu_nocbs kernel boot
-> parameter passed to kernels built with CONFIG_RCU_NOCB_CPU=y.
->
-> Delaying callbacks is normally not a problem because most callbacks do
-> nothing but free memory.  If the system is short on memory, a shrinker
-> will kick all currently queued lazy callbacks out of their laziness,
-> thus freeing their memory in short order.  Similarly, the rcu_barrier()
-> function, which blocks until all currently queued callbacks are invoked,
-> will also kick lazy callbacks, thus enabling rcu_barrier() to complete
-> in a timely manner.
->
-> However, there are some cases where laziness is not a good option.
-> For example, synchronize_rcu() invokes call_rcu(), and blocks until
-> the newly queued callback is invoked.  It would not be a good for
-> synchronize_rcu() to block for ten seconds, even on an idle system.
-> Therefore, synchronize_rcu() invokes call_rcu_hurry() instead of
-> call_rcu().  The arrival of a non-lazy call_rcu_hurry() callback on a
-> given CPU kicks any lazy callbacks that might be already queued on that
-> CPU.  After all, if there is going to be a grace period, all callbacks
-> might as well get full benefit from it.
->
-> Yes, this could be done the other way around by creating a
-> call_rcu_lazy(), but earlier experience with this approach and
-> feedback at the 2022 Linux Plumbers Conference shifted the approach
-> to call_rcu() being lazy with call_rcu_hurry() for the few places
-> where laziness is inappropriate.
->
-> And another call_rcu() instance that cannot be lazy is the one
-> in rxrpc_kill_connection(), which sometimes does a wakeup
-> that should not be unduly delayed.
->
-> Therefore, make rxrpc_kill_connection() use call_rcu_hurry() in order
-> to revert to the old behavior.
->
-> [ paulmck: Apply s/call_rcu_flush/call_rcu_hurry/ feedback from Tejun Heo. ]
->
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: Marc Dionne <marc.dionne@auristor.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: <linux-afs@lists.infradead.org>
-> Cc: <netdev@vger.kernel.org>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> ---
->  net/rxrpc/conn_object.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/rxrpc/conn_object.c b/net/rxrpc/conn_object.c
-> index 22089e37e97f0..9c5fae9ca106c 100644
-> --- a/net/rxrpc/conn_object.c
-> +++ b/net/rxrpc/conn_object.c
-> @@ -253,7 +253,7 @@ void rxrpc_kill_connection(struct rxrpc_connection *conn)
->          * must carry a ref on the connection to prevent us getting here whilst
->          * it is queued or running.
->          */
-> -       call_rcu(&conn->rcu, rxrpc_destroy_connection);
-> +       call_rcu_hurry(&conn->rcu, rxrpc_destroy_connection);
->  }
->
->  /*
-> --
-> 2.31.1.189.g2e36527f23
->
+Thanks,
+Robin.
