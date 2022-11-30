@@ -2,220 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A891F63D40C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F6563D414
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233641AbiK3LLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:11:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35004 "EHLO
+        id S233811AbiK3LMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:12:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231550AbiK3LLp (ORCPT
+        with ESMTP id S233774AbiK3LMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:11:45 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C6474AAC
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:11:44 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id g12so26489718wrs.10
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:11:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=juKWxF5oTD0FcdVr6vmRKJx9lD1N7VVH5XonHNDYvKI=;
-        b=ZeLJpRgvKOGWEOW4EgtAkpVPc8pF30xRPEQDkJvUfV4oWOggtksYkh0wrqehizoYQZ
-         qgWms415U1t3zr+nXd6FDdXnOZKbAeNH8D8m9SSNLLkDeAk8GOm4Yz+uPZhYeJ7LPqV4
-         1EhJdMtb76hFaUYi5iCkoy5P1q4EZZB5DFFlw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=juKWxF5oTD0FcdVr6vmRKJx9lD1N7VVH5XonHNDYvKI=;
-        b=mApVluLxFpVuz6SprBqu4u4Nt0azTXwGhC2nFZqE6sXAxIljeR7gS1F3evj+OoiqKC
-         394qw8E3ebEIWe9OpxpP1mxwzZ949mi7dKyj81tb1+IdzcAfeVrhcCCNVCa05bdeVCB3
-         Q7/WuPcHp709TKUQGZdBTykLO4zer4iScaqOW6uISs/cVJrGY3MBw9L6p5lw06IHK0wY
-         QCL7nXcrVayHrAU87n3b+iQAKdzVc5Qqq0K35NsBfrOp5gpT7WZELEhMJXMiuFh2MiLs
-         gTMFQzLvwOJrRt8bbZK9f57AgJ0BwATNt9izz4nKAsO+lvaiBFo7qQapqrTpnyL6x/oU
-         GHFA==
-X-Gm-Message-State: ANoB5pkaZU9XX+uUvY2OKqGSLOAHtieXDPQHtPwc2VZyamQyER486Nq+
-        S3rD+etufzjjGRcX0qTR3v+1bQ==
-X-Google-Smtp-Source: AA0mqf6BVoJ5NdmkjOUzns5ytVRpOWb5ZskQA0IXSEu46GclvHUql9ZDew4cSkL5vDOJV2/HzlkZ1Q==
-X-Received: by 2002:adf:ec4b:0:b0:242:803:538c with SMTP id w11-20020adfec4b000000b002420803538cmr15569253wrn.656.1669806702599;
-        Wed, 30 Nov 2022 03:11:42 -0800 (PST)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id w12-20020a05600c474c00b003b435c41103sm6798614wmo.0.2022.11.30.03.11.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 03:11:40 -0800 (PST)
-Date:   Wed, 30 Nov 2022 12:11:38 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
-        alexander.deucher@amd.com, contactshashanksharma@gmail.com,
-        amaranath.somalapuram@amd.com, christian.koenig@amd.com,
-        pierre-eric.pelloux-prayer@amd.com,
-        Simon Ser <contact@emersion.fr>,
-        Rob Clark <robdclark@gmail.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Stone <daniel@fooishbar.org>,
-        'Marek =?utf-8?B?T2zFocOhayc=?= <maraeo@gmail.com>,
-        Dave Airlie <airlied@gmail.com>,
-        "Pierre-Loup A . Griffais" <pgriffais@valvesoftware.com>
-Subject: Re: [PATCH v3 0/2] drm: Add GPU reset sysfs
-Message-ID: <Y4c6arwh4NAxbeTv@phenom.ffwll.local>
-Mail-Followup-To: =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
-        alexander.deucher@amd.com, contactshashanksharma@gmail.com,
-        amaranath.somalapuram@amd.com, christian.koenig@amd.com,
-        pierre-eric.pelloux-prayer@amd.com, Simon Ser <contact@emersion.fr>,
-        Rob Clark <robdclark@gmail.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        'Marek =?utf-8?B?T2zFocOhayc=?= <maraeo@gmail.com>,
-        Dave Airlie <airlied@gmail.com>,
-        "Pierre-Loup A . Griffais" <pgriffais@valvesoftware.com>
-References: <20221125175203.52481-1-andrealmeid@igalia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        Wed, 30 Nov 2022 06:12:39 -0500
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2087.outbound.protection.outlook.com [40.107.7.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DDBE082;
+        Wed, 30 Nov 2022 03:12:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SbEEPn0TF1QuiZdMjCDDu53FTIE3OQORphwxr4lvKe9/vlfoKU5OGRg9/4EP6CeFxUt/dz6/T9oeEeZBcJfhNunduAdqaWhb1gRBOxnIhBlhwqPdqr04qTpbRsFc3itcVGkQJXUAhgsEtwHGh+Igu63k/KSp8Yqn8QDVOLrmNufIfaak0whz+puaknJAXpzy7NEIa7FXmFCeIdVpbEUNm6wLzxtRr/OTrLJ2mL2c2iqpvlA9dh5CXve3+Mu817PXQQDh8uyXSAfX/KumC9CElF5GyV6EOH7qT4dvrVN3P1pjVLztWQY4bMn4sjkDw9smvu92yGqB1XnqsA3y+jcdaw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pcGcUItpjeww0tGMOp8wBKaG3cQ0i4UcshYGUsVqJpI=;
+ b=bCmqHuwkPgW45CYZyphmqT7kbWP86X3UqA4vM0DdV8iE9BQu+4cztKsgMBztfFDI/uoaZUhpCHATWMu7mNgfrISlxFrlUhE9aqwgD5ImxvFTd8M46DZWEoAOSr5yVFabTxKDYafFHYMVlK28YEEOc9HWZXIEmshp5THq7pTqEaktBFqA1HZ39NYGLincFsCCacq4vonc0aQI1pY5voYtnA535UafKvSJ/Ltn0gfb5Ne+gLOU8B7HfvjYxWr3v6DE9DRgnkiPHlGY74RmSKslP1sGcmaqZ/Fy4OEORenTdFNpf3xgZ3vyU9yRB+MfmxrT+FOkouN1K+zu6omivJIuow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pcGcUItpjeww0tGMOp8wBKaG3cQ0i4UcshYGUsVqJpI=;
+ b=I5SJ24OZSb1oqW3ShPcp1+/qE0rUBLHhrNezYxOdkm4i7hRqa8hfbqIAkm5nmOWOqbZgYiFDoL4FPHrbKeIFVhQdeZfuCOu1/9aXHdYi3FcHc3PB2mYhMQSum4aZqV1/AFReyy4hC7fRzt/D4D5s46hHtMY4MISPyJK9aXQhPI0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from HE1PR0402MB2939.eurprd04.prod.outlook.com (2603:10a6:3:db::18)
+ by VI1PR04MB6783.eurprd04.prod.outlook.com (2603:10a6:803:130::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.20; Wed, 30 Nov
+ 2022 11:12:35 +0000
+Received: from HE1PR0402MB2939.eurprd04.prod.outlook.com
+ ([fe80::7682:a2e6:b891:2f4d]) by HE1PR0402MB2939.eurprd04.prod.outlook.com
+ ([fe80::7682:a2e6:b891:2f4d%10]) with mapi id 15.20.5857.023; Wed, 30 Nov
+ 2022 11:12:34 +0000
+From:   Clark Wang <xiaoning.wang@nxp.com>
+To:     linux@armlinux.org.uk, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mcoquelin.stm32@gmail.com, andrew@lunn.ch,
+        hkallweit1@gmail.com
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] fix mac not working after system resumed with WoL enabled
+Date:   Wed, 30 Nov 2022 19:11:46 +0800
+Message-Id: <20221130111148.1064475-1-xiaoning.wang@nxp.com>
+X-Mailer: git-send-email 2.34.1
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221125175203.52481-1-andrealmeid@igalia.com>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0020.apcprd02.prod.outlook.com
+ (2603:1096:4:1f4::9) To HE1PR0402MB2939.eurprd04.prod.outlook.com
+ (2603:10a6:3:db::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HE1PR0402MB2939:EE_|VI1PR04MB6783:EE_
+X-MS-Office365-Filtering-Correlation-Id: e3b81c8a-6d8d-4678-fc65-08dad2c3c824
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NdGmo/J9GCZ76K28+H7orieByCKQlk4rk67CiJyKawmwi0wDjw2TI3PndBKlK13/BBVzCHsBfVYefQwX4LPynwCcl4ymr4oyc0G+u1OcKq2TUKpxkeL+VIano4kQPPOctrudg1bKaOFciMxHxy55sWXHo9pIY2C0an3n2BcfuIxmaiCmQGwH6Ac5yFiTVc3av4gw9x/BJnihQ0AgggVgEkn4hEfng0SKeLb+eArEdbNNZRLwrOmY1zs2zG7fvY23ZQ9AxJtQZ02J+ieuwXnQwJG9PAdvseVOnFjtE9nZkR1mE7wXDAnxIj6aP6eONjwQmc9pMIgC/QyYnk4JNH/GzXnest4gdxTvDd1izhVm8uZit4s0V6zK3Zfcm0QrgvuYxqefxySf/BTepawWO86V5HNnas2h86W+j6efpsN/pR5BxhUP2lZiuFyX6sWU8a1RBNufMgjP5bbBIk1pmNsD9IFF9FiSeagXRsUxFkgs/F4rl2QIEdcIa1E9GBnKuBijXDybwLhBel6Dj066sZjhleNHEKPt7pwd/H0A0nYaF2V/B8ujs9+xFPm252u7Cnem5fCy3kUEib0+s1rlfw9Qgbltk3wRAtkKXU/mVsNc1wsEkmGmj5hBx8cAT7rZ1RwmNtdAbBw5S/M2vKrti+yJVqobqN8UMnDwvrjIwfyQfWUAZQ2sdwW81W1vk26hVXsFgS8i4BWGX9vPjN6W1zGT+w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0402MB2939.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(39860400002)(366004)(451199015)(36756003)(921005)(41300700001)(7416002)(2906002)(38350700002)(4744005)(478600001)(38100700002)(86362001)(83380400001)(66556008)(8676002)(6486002)(316002)(2616005)(66946007)(66476007)(8936002)(5660300002)(6666004)(26005)(186003)(1076003)(52116002)(6512007)(4326008)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0amvugjOxO2gBcy5J9b4pSCL+qFdzeu2Nyuy6359f707Rg0VxBwWzTNlo6uL?=
+ =?us-ascii?Q?EOyqE5hUP/2g+jaPAIsQjVwRcSkoJ3u8qMiKnpC/27VPtMUY75VGE6J7P/wK?=
+ =?us-ascii?Q?tOrylaibVyh9r8Z/wcHxtdkAou4dflAGmh49OXZ/06Pgv/k5lfXJrmMv4/5p?=
+ =?us-ascii?Q?6oqvqoU13HrTFvrQKCfCUDEPe/O//kTrTGrDXecCAIvni28OTAq6lga+7aNP?=
+ =?us-ascii?Q?9JkxlMroRdhJz+3r+RGJ4/ZPNtDKy2zVqtJ3Z4ks3R1vxjL1ZO0SHZfO7eLL?=
+ =?us-ascii?Q?k36QPLa4dyyijnbPPZXR5BjU854OCtJgtRaGthRORb87P2NJiWw5l7XfEfWt?=
+ =?us-ascii?Q?aZsWAsRpjyNgsXGSm277L+KpFgTNJ0YNnggSk5GtECOajKzbqpnoH2wAXOaa?=
+ =?us-ascii?Q?3SyoJ6ierlgMC8q5Rki1rZDX8nJGP14C0Suij1lsG5c1lWXN4HsQgWCpXtiA?=
+ =?us-ascii?Q?h+LQRdERb34NRalOaUaEzfR1zZmkaCoA7PfR35SfNlmNsOFWsmhkbwa0Tv/o?=
+ =?us-ascii?Q?eoD8nLjOmSDabD2Krucd1ZsuWM6iVl6+UVNeNkJIt1L4O4lWLZ/h5KeD7K7A?=
+ =?us-ascii?Q?Vq2WVWaCl/hbekO23ytv/9mplYIoRDUsXzq30v6Bunzj9dDPTFF2reNus3JD?=
+ =?us-ascii?Q?iNb0zGzfeJLStHIBE8u5OwW76bllEbTblLtjFV0KFg9iRjzZ18bovSZx3ZxF?=
+ =?us-ascii?Q?vnwAf41tTzsMwta9GWAW0CHsjFTedGUmf+p4UpCliR/zoVQE+lo6DD1gjf8R?=
+ =?us-ascii?Q?7HNUZs99Fs9hcKsNdeNhrZu+faNMAPOmxu46+RSe2U4irBLEpNfsZ4Aw6hTn?=
+ =?us-ascii?Q?bG0iGdq3tMCg60myRjrmUIeCNrgBbX1yP1IGIbMnRKt4Ra5pANWz1dxe1OR4?=
+ =?us-ascii?Q?ndBb4Ta3uFr2UK/Xb9h+SAJJJOX1HMyFH608uAE1NTQtjVkcNxCcxV66ofND?=
+ =?us-ascii?Q?rbnO+ikm/jINPRHfxtwkNOFwKJL5L/F78t0qBKa1O3I7+mEtuvHtLBCupG9a?=
+ =?us-ascii?Q?lSZR8MxkWpec86XpT0wG1nitW4mWLiMHlH1MGv/Rprf/tLTNmnEfrjf+qqme?=
+ =?us-ascii?Q?SlY7kPLOfi50Y8e6FPWo7kegIJkbYxJuxGf3ikIcntpJ0INhPIUG1+DAYJyu?=
+ =?us-ascii?Q?wuq2uQ7vfo7AcEbsXxTCMF4Kcd/WiX1gmIyypH4SbDaaM6PH8VbEaOzFwPzK?=
+ =?us-ascii?Q?C6tNhsSNMiZ45MHm7W3FjZlJBgDPZTRLB2wgUl90HFEiqoFGS5cJT1vBskJH?=
+ =?us-ascii?Q?NuNwbDBeyIJZsRQasaXyQ0XBfKxWJDMwG/4ckKbH7jQ7V+/RQ2uH8UtDrcEZ?=
+ =?us-ascii?Q?hVauwB9WJesWDPhDnWxr2wS0k10+9EYPLx67ZBXE2q7usxcQLQuzR5ckAfqM?=
+ =?us-ascii?Q?XKBUbXFYp1Q5Suh0qQT+tDYjGmQTjrhR8bS/CfSa9vO13eZlbxCw1jwPIkpm?=
+ =?us-ascii?Q?5xixhhfOcMyuF5z+Ph07cuJtm4SewonaQOpTNFF36wqo5alKqH+isN3NCqLo?=
+ =?us-ascii?Q?VL5GO5Fz+g1WEvCfEGSoiq3A2cqnxAMCi4CGXuwciIa5dIB/Tex3nL1yhbE2?=
+ =?us-ascii?Q?QFC9fZamcmYnugujZ8fAwzOLl+UMCez7zZzr3Hrg?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3b81c8a-6d8d-4678-fc65-08dad2c3c824
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0402MB2939.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 11:12:34.8731
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ih/pEyR/JyA7Fl6PcTiGO5ADKk6B16R6pO/CcZJjpSF0s6RhDCUmH57cRfUAYyPlZHkxDGoPQdAlz5+YkTHHbA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6783
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 02:52:01PM -0300, André Almeida wrote:
-> This patchset adds a udev event for DRM device's resets.
-> 
-> Userspace apps can trigger GPU resets by misuse of graphical APIs or driver
-> bugs. Either way, the GPU reset might lead the system to a broken state[1], that
-> might be recovered if user has access to a tty or a remote shell. Arguably, this
-> recovery could happen automatically by the system itself, thus this is the goal
-> of this patchset.
-> 
-> For debugging and report purposes, device coredump support was already added
-> for amdgpu[2], but it's not suitable for programmatic usage like this one given
-> the uAPI not being stable and the need for parsing.
-> 
-> GL/VK is out of scope for this use, giving that we are dealing with device
-> resets regardless of API.
-> 
-> A basic userspace daemon is provided at [3] showing how the interface is used
-> to recovery from resets.
-> 
-> [1] A search for "reset" in DRM/AMD issue tracker shows reports of resets
-> making the system unusable:
-> https://gitlab.freedesktop.org/drm/amd/-/issues/?search=reset
-> 
-> [2] https://lore.kernel.org/amd-gfx/20220602081538.1652842-2-Amaranath.Somalapuram@amd.com/
-> 
-> [3] https://gitlab.freedesktop.org/andrealmeid/gpu-resetd
-> 
-> v2: https://lore.kernel.org/dri-devel/20220308180403.75566-1-contactshashanksharma@gmail.com/
-> 
-> André Almeida (1):
->   drm/amdgpu: Add work function for GPU reset event
-> 
-> Shashank Sharma (1):
->   drm: Add GPU reset sysfs event
+Hi,
+The issue description is in the commit message.
+This patchset currently looks more like a workaround.
+I haven't found a better way to fix it yet. Any suggestions/solutions would
+be appreciated.
 
-This seems a bit much amd specific, and a bit much like an ad-hoc stopgap.
+Thanks.
 
-On the amd specific piece:
+Clark Wang (2):
+  net: phylink: add sync flag mac_ready to fix resume issue with WoL
+    enabled
+  net: stmmac: synchronize status with phylink via flag during
+    suspend/resume
 
-- amd's gpus suck the most for gpu hangs, because aside from the shader
-  unblock, there's only device reset, which thrashes vram and display and
-  absolutely everything. Which is terrible. Everyone else has engine only
-  reset since years (i.e. doesn't thrash display or vram), and very often
-  even just context reset (i.e. unless the driver is busted somehow or hw
-  bug, malicious userspace will _only_ ever impact itself).
-
-- robustness extensions for gl/vk already have very clear specifications
-  of all cases of reset, and this work here just ignores that. Yes on amd
-  you only have device reset, but this is drm infra, so you need to be
-  able to cope with ctx reset or reset which only affected a limited set
-  of context. If this is for compute and compute apis lack robustness
-  extensions, then those apis need to be fixed to fill that gap.
-
-- the entire deamon thing feels a bit like overkill and I'm not sure why
-  it exists. I think for a start it would be much simpler if we just have
-  a (per-device maybe) sysfs knob to enable automatic killing of process
-  that die and which don't have arb robustness enabled (for gl case, for
-  vk case the assumption is that _every_ app supports VK_DEVICE_LOST and
-  can recover).
-
-Now onto the ad-hoc part:
-
-- Everyone hand-rolls ad-hoc gpu context structures and how to associate
-  them with a pid. I think we need to stop doing that, because it's just
-  endless pain and prevents us from building useful management stuff like
-  cgroups for drivers that work across drivers (and driver/vendor specific
-  cgroup wont be accepted by upstream cgroup maintainers). Or gpu reset
-  events and dumps like here. This is going to be some work unforutnately.
-
-- I think the best starting point is the context structure drm/scheduler
-  already has, but it needs some work:
-  * untangling it from the scheduler part, so it can be used also for
-    compute context that are directly scheduled by hw
-  * (amd specific) moving amdkfd over to that context structure, at least
-    internally
-  * tracking the pid in there
-
-- I think the error dump facility should also be integrated into this.
-  Userspace needs to know which dump is associated with which reset event,
-  so that remote crash reporting works correctly.
-
-- ideally this framework can keep track of impacted context so that
-  drivers don't have to reinvent the "which context are impacted"
-  robustness ioctl book-keeping all on their own. For amd gpus it's kinda
-  easy, since the impact is "everything", but for other gpus the impact
-  can be all the way from "only one context" to "only contexts actively
-  running on $set_of_engines" to "all the context actively running" to "we
-  thrashed vram, everything is gone"
-
-- i915 has a bunch of this already, but I have honestly no idea whether
-  it's any use because i915-gem is terminally not switching over to
-  drm/scheduler (it needs a full rewrite, which is happening somewhere).
-  So might only be useful to look at to make sure we're not building
-  something which only works for full device reset gpus and nothing else.
-  Over the various generations i915 has pretty much every possible gpu
-  reset options you can think of, with resulting different reporting
-  requirements to make sure robustness extensions work correctly.
-
-- pid isn't enough once you have engine/context reset, you need pid (well
-  drm_file really, but I guess we can bind those to pid somehow) and gpu
-  ctx id. Both gl and vk allow you to allocate limitless gpu context on
-  the same device, and so this matters.
-
-- igt for this stuff. Probably needs some work to generalize the i915
-  infra for endless batchbuffers so that you can make very controlled gpu
-  hangs.
-
-Cheers, Daniel
-
->  drivers/gpu/drm/amd/amdgpu/amdgpu.h        |  4 +++
->  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 30 ++++++++++++++++++++++
->  drivers/gpu/drm/drm_sysfs.c                | 26 +++++++++++++++++++
->  include/drm/drm_sysfs.h                    | 13 ++++++++++
->  4 files changed, 73 insertions(+)
-> 
-> -- 
-> 2.38.1
-> 
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |  2 ++
+ drivers/net/phy/phylink.c                     | 36 +++++++++++++++++++
+ include/linux/phylink.h                       |  2 ++
+ 3 files changed, 40 insertions(+)
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.34.1
+
