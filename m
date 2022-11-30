@@ -2,123 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C9363D6E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C49EE63D6F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbiK3Nii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 08:38:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
+        id S229854AbiK3NlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 08:41:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230393AbiK3Nia (ORCPT
+        with ESMTP id S229622AbiK3NlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 08:38:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377222E6BF
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 05:38:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B595761BF2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:38:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9BF2C433D6;
-        Wed, 30 Nov 2022 13:38:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669815499;
-        bh=jw+awRGtgAZKGubWrz02rHawUZJ43c/ZqUDs43or8tI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fFkq7BVurt14DpUJg5zr+OW1tB7uUyAHvmDFfvbV5ken2SYrRNMBgu2K4znbWbwY2
-         eMBxxVXzSyZbLaE7AO8oq8/C2xIPwdeW2zmFZbmB6r5i5uAwm2b4TE43TXUEFUEKXg
-         6Y3MD6026UeiRb2D+iLZbvU5r2MrX1F+ueSeTIs/Ee13E0JOJMKuBPWAQ+vVpIByoS
-         Dbb84OQw9nWcCRbW3umDu+MY0XMOWWSN182fChctJYSQ2cccl/UxcdGge9xO/cPQ7p
-         xMXgx7hbotjZMuVUtiODrsRERUt9oGUr4idfjDaFtz3gy39frz2nxgHyBHXktZKy11
-         EtmpgACOHNKmA==
-Date:   Wed, 30 Nov 2022 22:38:14 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Chuang Wang <nashuiliang@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/kprobes: Use switch-case for 0xFF opcodes in
- prepare_emulation
-Message-Id: <20221130223814.667999640ad298f843c2aaf2@kernel.org>
-In-Reply-To: <20221129084022.718355-1-nashuiliang@gmail.com>
-References: <20221129084022.718355-1-nashuiliang@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 08:41:11 -0500
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABF72C66E;
+        Wed, 30 Nov 2022 05:41:10 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 276E2C021; Wed, 30 Nov 2022 14:41:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1669815671; bh=wK7gil3l4vmYRUAOnl5jdLn8zStI0QDqyB8y/TsL16M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FdFDD6Uz58G4iRZYHOyKH6RPc/FVo2Z/25c6IOj77hlSR4lgSNQibJ5NI7LISZfuB
+         oZzJ9Jf/ufYOZUx98saQMf8Xcap4QeWw/9dSAoSh1YEJYnaOlyVHUKdSn3pSkLJ18p
+         ys4sYTWU+9+efnM7FqXQz6eZTpyENMJ2ATuOgTVNX3f10P0BU1nMgKJolGVEE+Pt29
+         ZbQqfGbOMdhB9oW8WY/CqV45uCbqkW9ADEsWyaZ4vcH9qkLymHttA1AwNhVe583h2Q
+         N3r4OvbfCrasV1124k/BujUe9iYC369pK8NOLgpYdj6zPefrLaWUcW8dWXfjdYZfMr
+         8ah4ydg3AlGXQ==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 974EFC009;
+        Wed, 30 Nov 2022 14:41:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1669815670; bh=wK7gil3l4vmYRUAOnl5jdLn8zStI0QDqyB8y/TsL16M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r+BMqFUF9WKhW5PNf+DWOmHLbcJkGyHVAL+R0MLQ1Kr8M5FadO0kfkdjfObPHvptQ
+         9cf4j3/m2WOGjbVJEiFZMmm6CS3Wl1BcTFCIo0xmk3tXpSKxFWW8v8SHBnRArkuR81
+         /r/azHxfNFtp3PmgW6PpqE2ETOiz81BS+KPkmX1ZEfHFj0TQc6keWXfr2WhaiQB7CZ
+         Ef5tYMo/68sm1fkgXC+xHTRQ2Hq0n6ZbV3ji/yu3bK53rOqpU564liR5kuSXBAYj1p
+         EYVtRIPGEGWZnLxLgJHe6KfqJbjpVBoU/m/wroLxtroq4bOiWtxvWmESWsfag/tCMC
+         bb1NFfFdU4QaQ==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 2100fd79;
+        Wed, 30 Nov 2022 13:40:55 +0000 (UTC)
+Date:   Wed, 30 Nov 2022 22:40:40 +0900
+From:   asmadeus@codewreck.org
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     Schspa Shi <schspa@gmail.com>, ericvh@gmail.com, lucho@ionkov.net,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, v9fs-developer@lists.sourceforge.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+8f1060e2aaf8ca55220b@syzkaller.appspotmail.com
+Subject: Re: [PATCH] 9p: fix crash when transaction killed
+Message-ID: <Y4ddWNXozZyH+fnc@codewreck.org>
+References: <20221129162251.90790-1-schspa@gmail.com>
+ <2356667.R3SNuAaExM@silver>
+ <Y4dSfYoU6F8+D8ac@codewreck.org>
+ <4084178.bTz7GqEF8p@silver>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4084178.bTz7GqEF8p@silver>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Nov 2022 16:39:51 +0800
-Chuang Wang <nashuiliang@gmail.com> wrote:
-
-> For the `FF /digit` opcodes in prepare_emulation, use switch-case
-> instead of hand-written code to make the logic easier to understand.
+Christian Schoenebeck wrote on Wed, Nov 30, 2022 at 02:25:59PM +0100:
+> > I'm also not convinced it'd fix anything here, we're not talking about a
+> > real server but about a potential attacker -- if a reply comes in with
+> > the next tag while we're allocating it, we'll get the exact same problem
+> > as we have right now.
+> > Frankly, 9p has no security at all so I'm not sure this is something we
+> > really need to worry about, but bugs are bugs so we might as well fix
+> > them if someone has the time for that...
+> > 
+> > Anyway, I can appreciate that logs will definitely be easier to read, so
+> > an option to voluntarily switch to cyclic allocation would be more than
+> > welcome as a first step and shouldn't be too hard to do...
 > 
-> Signed-off-by: Chuang Wang <nashuiliang@gmail.com>
-
-This looks good to me.
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thank you!
-
-> ---
->  arch/x86/kernel/kprobes/core.c | 20 +++++++++++---------
->  1 file changed, 11 insertions(+), 9 deletions(-)
+> I would actually do it the other way around: generating continuous sequential
+> tags by default and only reverting back to dense tags if requested by mount
+> option.
 > 
-> diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-> index 66299682b6b7..66ec32b6cd0e 100644
-> --- a/arch/x86/kernel/kprobes/core.c
-> +++ b/arch/x86/kernel/kprobes/core.c
-> @@ -655,17 +655,19 @@ static int prepare_emulation(struct kprobe *p, struct insn *insn)
->  		 * is determined by the MOD/RM byte.
->  		 */
->  		opcode = insn->modrm.bytes[0];
-> -		if ((opcode & 0x30) == 0x10) {
-> -			if ((opcode & 0x8) == 0x8)
-> -				return -EOPNOTSUPP;	/* far call */
-> -			/* call absolute, indirect */
-> +		switch (X86_MODRM_REG(opcode)) {
-> +		case 0b010:	/* FF /2, call near, absolute indirect */
->  			p->ainsn.emulate_op = kprobe_emulate_call_indirect;
-> -		} else if ((opcode & 0x30) == 0x20) {
-> -			if ((opcode & 0x8) == 0x8)
-> -				return -EOPNOTSUPP;	/* far jmp */
-> -			/* jmp near absolute indirect */
-> +			break;
-> +		case 0b100:	/* FF /4, jmp near, absolute indirect */
->  			p->ainsn.emulate_op = kprobe_emulate_jmp_indirect;
-> -		} else
-> +			break;
-> +		case 0b011:	/* FF /3, call far, absolute indirect */
-> +		case 0b101:	/* FF /5, jmp far, absolute indirect */
-> +			return -EOPNOTSUPP;
-> +		}
-> +
-> +		if (!p->ainsn.emulate_op)
->  			break;
->  
->  		if (insn->addr_bytes != sizeof(unsigned long))
-> -- 
-> 2.37.2
-> 
+> Is there any server implementation known to rely on current dense tag
+> generation?
 
+No, I thought ganesha did when we discussed it last time, but checked
+just now and it appears to be correct.
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+I had a quick look at other servers I have around (diod uses a plain
+list, libixp uses a bucket list like ganesha...), but there are so many
+9p servers out here that I'm far from keeping track...
+
+Happy to give it a try and see who complains...
+
+> If there is really some exotic server somewhere that uses e.g. a simple
+> constant size array to lookup tags and nobody is able to replace that array by
+> a hash table or something for whatever reason, then I am pretty sure that
+> server is limited at other ends as well (e.g. small 'msize'). So what we could
+> do is adjusting the default behaviour according to the other side and allow to
+> explicitly set both sequential and dense tags by mount option (i.e. not just
+> a boolean mount option).
+
+Well, TVERSION doesn't have much negotiation capability aside of msize,
+not sure what to suggest here...
