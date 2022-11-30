@@ -2,255 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED6763CF2A
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 07:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C96663CF2F
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 07:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233843AbiK3GVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 01:21:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42718 "EHLO
+        id S234068AbiK3G3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 01:29:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiK3GVC (ORCPT
+        with ESMTP id S233735AbiK3G3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 01:21:02 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79D331350
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 22:21:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669789261; x=1701325261;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=LUeWxWmjVm3akRt4cUHVyVlUrmIQ4Wukv83FFYOHGpc=;
-  b=MFPhx8IG24hor37RqanKoc2lKguaVk8IFTEBTC5zcrCpJpGl23MNaiS9
-   sCQMWk+I+XW+CmH6PdmgvNEr0bfiH3QHfh9jjrc5wYhd/A/7GUjKC/gjm
-   o8n4U+WuAuJOsb3LJfZZFDdwHiCzKqWYJeNUhFDzEv7Gm2jTfmAj20Rh4
-   7eQW6Y/u3ssTeP+u8zfqaxnAyTN09aKo2d+oFnJJwYIWQhnSnap4jbXMr
-   fmDwXGxAACAMAnp/p+U35JUliWLhdn4quTkXbkGsm2gj7pCYiqawSJ9uX
-   kIidKPF9F6FSbivhbxFkP4DJORdW1bEALIw95shdo8cCmZT2LGXibUy3m
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="302922977"
-X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
-   d="scan'208";a="302922977"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 22:21:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="637878338"
-X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
-   d="scan'208";a="637878338"
-Received: from otc-nc-03.jf.intel.com (HELO jacob-builder.jf.intel.com) ([10.54.39.110])
-  by orsmga007.jf.intel.com with ESMTP; 29 Nov 2022 22:21:00 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        "Lu Baolu" <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     "Robin Murphy" <robin.murphy@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Yuzhang Luo <yuzhang.luo@intel.com>
-Subject: [PATCH v3] iommu/vt-d: Add a fix for devices need extra dtlb flush
-Date:   Tue, 29 Nov 2022 22:24:49 -0800
-Message-Id: <20221130062449.1360063-1-jacob.jun.pan@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 01:29:51 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752B51E720
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 22:29:46 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3ceb4c331faso45959617b3.2
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 22:29:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=eUHyVliKjk6E4L3Mp8lrO/R0wPtbiqqoWIvdgha/83w=;
+        b=IUFhznSFg/YWVHruqFXEx9mN+nUFOFRK2VMjAsJ82DHNc3x9ndU0ZmeeDqpsJDlQLL
+         zw7T2iY3jZ5nR+tKfRpSkq01xR++qq7Y64wMetqV3wyvw6bMUw9IMxgoQbXVY7bD8C39
+         qR1Hyo2d04eicNFPF3YkfMmhYk0Nibd/Y/KuE1I7DcigvUXX9DuprbFBvAmsBQmbF60e
+         Mr9+1G6EUX/mVWN9vXQnkG/dsg7ky/RqQKtoU7w1KPJlnXIo2lk72IhCxn3nkVK6LiP2
+         APZRj5rVwhwS7xNciDZCNm2YSmYACtdyDNeICm63N1wdUkYVkdjDeDtR3oC4VHOgwPLD
+         kPxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eUHyVliKjk6E4L3Mp8lrO/R0wPtbiqqoWIvdgha/83w=;
+        b=CcX67Q5aWaMCMlppQ43VCiU+Mxre1YM25C5OyPvRLtclQQfnvl+DQVx//8SHnt3Cc0
+         b5ik3fc/4gPjrlFKZROMkpchYihEPV/IbCVNAbMJtFEB/ChrEDmlJJfh2Lpq7e/f05g7
+         m4X4A/Z9EYjw6C+aaVaRtDUsONiff2iwtegvq6eM32D9fAXNCAAuU4AqQwANixP12h7D
+         jEkaXBzBLIik2kQxXNIJ6dEPzXclyJ8P9AjIoLy7DWqnYmUaOs3IYQ7EhMLTaSbFMcRg
+         wUCCxrxu+E5Sre5vEoDSrOaqLopIjnqvuWHzTbGDOMiiPET2pSGeB+8oYsMcFQietOUp
+         dPZw==
+X-Gm-Message-State: ANoB5pmH4IIij8djs+y4HcRTxlvVJTBGALBdR9pTTKDE51pAFt5pZ63x
+        LQpx3aXcWQN+8dLhkt/jJdnYCTaNEhDM
+X-Google-Smtp-Source: AA0mqf6lLgcujZVvEK0aBOKCAjQ5A2049KaaDtdc6B10iTKGiTQMrLQR/a8qtLRq112hKs29lRpgSlfV9UJr
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:788c:ccf4:3670:3362])
+ (user=irogers job=sendgmr) by 2002:a05:6902:143:b0:6d4:e3fe:8294 with SMTP id
+ p3-20020a056902014300b006d4e3fe8294mr41396420ybh.461.1669789785706; Tue, 29
+ Nov 2022 22:29:45 -0800 (PST)
+Date:   Tue, 29 Nov 2022 22:29:31 -0800
+Message-Id: <20221130062935.2219247-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Subject: [PATCH v2 0/4] perf use system libtraceevent
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QAT devices on Intel Sapphire Rapids and Emerald Rapids have a defect in
-address translation service (ATS). These devices may inadvertently issue
-ATS invalidation completion before posted writes initiated with
-translated address that utilized translations matching the invalidation
-address range, violating the invalidation completion ordering.
+Detect whether libtraceevent is installed and if so build against
+it. If not installed, warn and build a subset of perf that works
+without libtraceevent. With nothing using the now out-of-date
+tools/lib/traceevent remove it.
 
-This patch adds an extra device TLB invalidation for the affected devices,
-it is needed to ensure no more posted writes with translated address
-following the invalidation completion. Therefore, the ordering is
-preserved and data-corruption is prevented.
+Discussed on LKML here:
+https://lore.kernel.org/lkml/CAP-5=fWxAjEia-Qbm0RVzKOxyiod8rUOBieqaGK=DtQboDe3Qw@mail.gmail.com/
 
-Device TLBs are invalidated under the following six conditions:
-1. Device driver does DMA API unmap IOVA
-2. Device driver unbind a PASID from a process, sva_unbind_device()
-3. PASID is torn down, after PASID cache is flushed. e.g. process
-exit_mmap() due to crash
-4. Under SVA usage, called by mmu_notifier.invalidate_range() where
-VM has to free pages that were unmapped
-5. userspace driver unmaps a DMA buffer
-6. Cache invalidation in vSVA usage (upcoming)
+Builds upon:
+https://lore.kernel.org/lkml/20221116224631.207631-1-irogers@google.com/
 
-For #1 and #2, device drivers are responsible for stopping DMA traffic
-before unmap/unbind. For #3, iommu driver gets mmu_notifier to
-invalidate TLB the same way as normal user unmap which will do an extra
-invalidation. The dTLB invalidation after PASID cache flush does not
-need an extra invalidation.
+Based on discussion of the v1 patch set:
+https://lore.kernel.org/lkml/20221117224952.358639-1-irogers@google.com/
+v2 conditionally compiles a subset of perf that doesn't require
+libtraceevent to avoid having to have libtraceevent installed on a
+system.
 
-Therefore, we only need to deal with #4 and #5 in this patch. #1 is also
-covered by this patch due to common code path with #5.
+The changes build upon the fix in:
+https://lore.kernel.org/lkml/20221129192924.1580537-1-irogers@google.com/
 
-Tested-by: Yuzhang Luo <yuzhang.luo@intel.com>
-Reviewed-by: Ashok Raj <ashok.raj@intel.com>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
----
-v3
-- renamed quirk function
-- add more comments to explain risky_device() check
-v2
-- removed risky_device() check based on the review by Robin, added comments
-  to explain the exemption.
-- reworked commit message based on the review from Ashok
----
- drivers/iommu/intel/iommu.c | 67 +++++++++++++++++++++++++++++++++++--
- drivers/iommu/intel/iommu.h |  3 ++
- drivers/iommu/intel/svm.c   |  5 ++-
- 3 files changed, 72 insertions(+), 3 deletions(-)
+Ian Rogers (4):
+  perf util: Make header guard consistent with tool
+  perf util: Add host_is_bigendian to util.h
+  perf build: Use libtraceevent from the system
+  tools lib traceevent: Remove libtraceevent
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 996a8b5ee5ee..d8759f445aff 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -1396,6 +1396,23 @@ static void domain_update_iotlb(struct dmar_domain *domain)
- 	spin_unlock_irqrestore(&domain->lock, flags);
- }
- 
-+/*
-+ * Impacted QAT device IDs ranging from 0x4940 to 0x4943.
-+ * This quirk is exempted from risky_device() check because it applies only
-+ * to the built-in QAT devices and it doesn't grant additional privileges.
-+ */
-+#define BUGGY_QAT_DEVID_MASK 0x494c
-+static bool dev_needs_extra_dtlb_flush(struct pci_dev *pdev)
-+{
-+	if (pdev->vendor != PCI_VENDOR_ID_INTEL)
-+		return false;
-+
-+	if ((pdev->device & 0xfffc) != BUGGY_QAT_DEVID_MASK)
-+		return false;
-+
-+	return true;
-+}
-+
- static void iommu_enable_pci_caps(struct device_domain_info *info)
- {
- 	struct pci_dev *pdev;
-@@ -1478,6 +1495,7 @@ static void __iommu_flush_dev_iotlb(struct device_domain_info *info,
- 	qdep = info->ats_qdep;
- 	qi_flush_dev_iotlb(info->iommu, sid, info->pfsid,
- 			   qdep, addr, mask);
-+	quirk_extra_dev_tlb_flush(info, addr, mask, PASID_RID2PASID, qdep);
- }
- 
- static void iommu_flush_dev_iotlb(struct dmar_domain *domain,
-@@ -4490,9 +4508,10 @@ static struct iommu_device *intel_iommu_probe_device(struct device *dev)
- 	if (dev_is_pci(dev)) {
- 		if (ecap_dev_iotlb_support(iommu->ecap) &&
- 		    pci_ats_supported(pdev) &&
--		    dmar_ats_supported(pdev, iommu))
-+		    dmar_ats_supported(pdev, iommu)) {
- 			info->ats_supported = 1;
--
-+			info->dtlb_extra_inval = dev_needs_extra_dtlb_flush(pdev);
-+		}
- 		if (sm_supported(iommu)) {
- 			if (pasid_supported(iommu)) {
- 				int features = pci_pasid_features(pdev);
-@@ -4931,3 +4950,47 @@ static void __init check_tylersburg_isoch(void)
- 	pr_warn("Recommended TLB entries for ISOCH unit is 16; your BIOS set %d\n",
- 	       vtisochctrl);
- }
-+
-+/*
-+ * Here we deal with a device TLB defect where device may inadvertently issue ATS
-+ * invalidation completion before posted writes initiated with translated address
-+ * that utilized translations matching the invalidation address range, violating
-+ * the invalidation completion ordering.
-+ * Therefore, any use cases that cannot guarantee DMA is stopped before unmap is
-+ * vulnerable to this defect. In other words, any dTLB invalidation initiated not
-+ * under the control of the trusted/privileged host device driver must use this
-+ * quirk.
-+ * Device TLBs are invalidated under the following six conditions:
-+ * 1. Device driver does DMA API unmap IOVA
-+ * 2. Device driver unbind a PASID from a process, sva_unbind_device()
-+ * 3. PASID is torn down, after PASID cache is flushed. e.g. process
-+ *    exit_mmap() due to crash
-+ * 4. Under SVA usage, called by mmu_notifier.invalidate_range() where
-+ *    VM has to free pages that were unmapped
-+ * 5. Userspace driver unmaps a DMA buffer
-+ * 6. Cache invalidation in vSVA usage (upcoming)
-+ *
-+ * For #1 and #2, device drivers are responsible for stopping DMA traffic
-+ * before unmap/unbind. For #3, iommu driver gets mmu_notifier to
-+ * invalidate TLB the same way as normal user unmap which will use this quirk.
-+ * The dTLB invalidation after PASID cache flush does not need this quirk.
-+ *
-+ * As a reminder, #6 will *NEED* this quirk as we enable nested translation.
-+ */
-+void quirk_extra_dev_tlb_flush(struct device_domain_info *info, unsigned long address,
-+		   unsigned long mask, u32 pasid, u16 qdep)
-+{
-+	u16 sid;
-+
-+	if (likely(!info->dtlb_extra_inval))
-+		return;
-+
-+	sid = PCI_DEVID(info->bus, info->devfn);
-+	if (pasid == PASID_RID2PASID) {
-+		qi_flush_dev_iotlb(info->iommu, sid, info->pfsid,
-+				   qdep, address, mask);
-+	} else {
-+		qi_flush_dev_iotlb_pasid(info->iommu, sid, info->pfsid,
-+					 pasid, qdep, address, mask);
-+	}
-+}
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index 92023dff9513..36297e17d815 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -623,6 +623,7 @@ struct device_domain_info {
- 	u8 pri_enabled:1;
- 	u8 ats_supported:1;
- 	u8 ats_enabled:1;
-+	u8 dtlb_extra_inval:1;	/* Quirk for devices need extra flush */
- 	u8 ats_qdep;
- 	struct device *dev; /* it's NULL for PCIe-to-PCI bridge */
- 	struct intel_iommu *iommu; /* IOMMU used by this device */
-@@ -728,6 +729,8 @@ void qi_flush_piotlb(struct intel_iommu *iommu, u16 did, u32 pasid, u64 addr,
- void qi_flush_dev_iotlb_pasid(struct intel_iommu *iommu, u16 sid, u16 pfsid,
- 			      u32 pasid, u16 qdep, u64 addr,
- 			      unsigned int size_order);
-+void quirk_extra_dev_tlb_flush(struct device_domain_info *info, unsigned long address,
-+		   unsigned long pages, u32 pasid, u16 qdep);
- void qi_flush_pasid_cache(struct intel_iommu *iommu, u16 did, u64 granu,
- 			  u32 pasid);
- 
-diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-index 7d08eb034f2d..fe615c53479c 100644
---- a/drivers/iommu/intel/svm.c
-+++ b/drivers/iommu/intel/svm.c
-@@ -184,10 +184,13 @@ static void __flush_svm_range_dev(struct intel_svm *svm,
- 		return;
- 
- 	qi_flush_piotlb(sdev->iommu, sdev->did, svm->pasid, address, pages, ih);
--	if (info->ats_enabled)
-+	if (info->ats_enabled) {
- 		qi_flush_dev_iotlb_pasid(sdev->iommu, sdev->sid, info->pfsid,
- 					 svm->pasid, sdev->qdep, address,
- 					 order_base_2(pages));
-+		quirk_extra_dev_tlb_flush(info, address, order_base_2(pages),
-+					  svm->pasid, sdev->qdep);
-+	}
- }
- 
- static void intel_flush_svm_range_dev(struct intel_svm *svm,
+ tools/lib/traceevent/.gitignore               |    4 -
+ tools/lib/traceevent/Build                    |    8 -
+ tools/lib/traceevent/Documentation/Makefile   |  207 -
+ .../traceevent/Documentation/asciidoc.conf    |  120 -
+ .../Documentation/libtraceevent-commands.txt  |  153 -
+ .../Documentation/libtraceevent-cpus.txt      |   77 -
+ .../libtraceevent-endian_read.txt             |   78 -
+ .../libtraceevent-event_find.txt              |  103 -
+ .../Documentation/libtraceevent-event_get.txt |   99 -
+ .../libtraceevent-event_list.txt              |  122 -
+ .../libtraceevent-event_print.txt             |  130 -
+ .../libtraceevent-field_find.txt              |  118 -
+ .../libtraceevent-field_get_val.txt           |  122 -
+ .../libtraceevent-field_print.txt             |  126 -
+ .../libtraceevent-field_read.txt              |   81 -
+ .../Documentation/libtraceevent-fields.txt    |  105 -
+ .../libtraceevent-file_endian.txt             |   91 -
+ .../Documentation/libtraceevent-filter.txt    |  209 -
+ .../Documentation/libtraceevent-func_apis.txt |  183 -
+ .../Documentation/libtraceevent-func_find.txt |   88 -
+ .../Documentation/libtraceevent-handle.txt    |  101 -
+ .../libtraceevent-header_page.txt             |  102 -
+ .../libtraceevent-host_endian.txt             |  104 -
+ .../Documentation/libtraceevent-long_size.txt |   78 -
+ .../Documentation/libtraceevent-page_size.txt |   82 -
+ .../libtraceevent-parse_event.txt             |   90 -
+ .../libtraceevent-parse_head.txt              |   82 -
+ .../Documentation/libtraceevent-plugins.txt   |  122 -
+ .../libtraceevent-record_parse.txt            |  137 -
+ .../libtraceevent-reg_event_handler.txt       |  156 -
+ .../libtraceevent-reg_print_func.txt          |  155 -
+ .../Documentation/libtraceevent-set_flag.txt  |  104 -
+ .../Documentation/libtraceevent-strerror.txt  |   85 -
+ .../Documentation/libtraceevent-tseq.txt      |  158 -
+ .../Documentation/libtraceevent.txt           |  192 -
+ .../traceevent/Documentation/manpage-1.72.xsl |   14 -
+ .../traceevent/Documentation/manpage-base.xsl |   35 -
+ .../Documentation/manpage-bold-literal.xsl    |   17 -
+ .../Documentation/manpage-normal.xsl          |   13 -
+ .../Documentation/manpage-suppress-sp.xsl     |   21 -
+ tools/lib/traceevent/Makefile                 |  300 -
+ tools/lib/traceevent/event-parse-api.c        |  333 -
+ tools/lib/traceevent/event-parse-local.h      |  123 -
+ tools/lib/traceevent/event-parse.c            | 7624 -----------------
+ tools/lib/traceevent/event-parse.h            |  750 --
+ tools/lib/traceevent/event-plugin.c           |  711 --
+ tools/lib/traceevent/event-utils.h            |   67 -
+ tools/lib/traceevent/kbuffer-parse.c          |  809 --
+ tools/lib/traceevent/kbuffer.h                |   68 -
+ .../lib/traceevent/libtraceevent.pc.template  |   10 -
+ tools/lib/traceevent/parse-filter.c           | 2281 -----
+ tools/lib/traceevent/parse-utils.c            |   71 -
+ tools/lib/traceevent/plugins/Build            |   12 -
+ tools/lib/traceevent/plugins/Makefile         |  225 -
+ .../lib/traceevent/plugins/plugin_cfg80211.c  |   43 -
+ .../lib/traceevent/plugins/plugin_function.c  |  282 -
+ tools/lib/traceevent/plugins/plugin_futex.c   |  123 -
+ tools/lib/traceevent/plugins/plugin_hrtimer.c |   74 -
+ tools/lib/traceevent/plugins/plugin_jbd2.c    |   61 -
+ tools/lib/traceevent/plugins/plugin_kmem.c    |   80 -
+ tools/lib/traceevent/plugins/plugin_kvm.c     |  527 --
+ .../lib/traceevent/plugins/plugin_mac80211.c  |   88 -
+ .../traceevent/plugins/plugin_sched_switch.c  |  146 -
+ tools/lib/traceevent/plugins/plugin_scsi.c    |  434 -
+ tools/lib/traceevent/plugins/plugin_tlb.c     |   66 -
+ tools/lib/traceevent/plugins/plugin_xen.c     |  138 -
+ tools/lib/traceevent/tep_strerror.c           |   53 -
+ tools/lib/traceevent/trace-seq.c              |  249 -
+ tools/lib/traceevent/trace-seq.h              |   55 -
+ tools/perf/Build                              |   11 +-
+ tools/perf/Makefile.config                    |   37 +-
+ tools/perf/Makefile.perf                      |   99 +-
+ tools/perf/arch/x86/util/Build                |    2 +-
+ tools/perf/arch/x86/util/intel-pt.c           |    4 +
+ tools/perf/builtin-annotate.c                 |    2 +
+ tools/perf/builtin-inject.c                   |    8 +
+ tools/perf/builtin-kmem.c                     |    1 +
+ tools/perf/builtin-kvm.c                      |   12 +-
+ tools/perf/builtin-kwork.c                    |    1 +
+ tools/perf/builtin-record.c                   |    2 +
+ tools/perf/builtin-report.c                   |    9 +-
+ tools/perf/builtin-script.c                   |   19 +-
+ tools/perf/builtin-timechart.c                |    1 +
+ tools/perf/builtin-trace.c                    |    5 +-
+ tools/perf/builtin-version.c                  |    1 +
+ tools/perf/perf.c                             |   24 +-
+ .../perf/scripts/python/Perf-Trace-Util/Build |    2 +-
+ tools/perf/tests/Build                        |   12 +-
+ tools/perf/tests/builtin-test.c               |    6 +
+ tools/perf/tests/code-reading.c               |    4 +-
+ tools/perf/tests/parse-events.c               |   20 +
+ tools/perf/tests/sample-parsing.c             |    4 +-
+ tools/perf/util/Build                         |   10 +-
+ tools/perf/util/data-convert-bt.c             |    5 +-
+ tools/perf/util/data-convert-json.c           |    9 +-
+ tools/perf/util/evlist.c                      |    6 +-
+ tools/perf/util/evlist.h                      |    4 +
+ tools/perf/util/evsel.c                       |   16 +-
+ tools/perf/util/evsel.h                       |   12 +-
+ tools/perf/util/evsel_fprintf.c               |    7 +-
+ tools/perf/util/header.c                      |   19 +
+ tools/perf/util/header.h                      |    2 +
+ tools/perf/util/intel-pt.c                    |    7 +-
+ tools/perf/util/parse-events.c                |   15 +
+ tools/perf/util/parse-events.h                |    1 -
+ tools/perf/util/python.c                      |    4 +
+ tools/perf/util/scripting-engines/Build       |    6 +-
+ .../scripting-engines/trace-event-python.c    |    1 +
+ tools/perf/util/session.c                     |    2 +
+ tools/perf/util/session.h                     |    2 +
+ tools/perf/util/sort.c                        |   60 +-
+ tools/perf/util/synthetic-events.c            |    6 +
+ tools/perf/util/trace-event-info.c            |   14 +-
+ tools/perf/util/trace-event-parse.c           |    2 +
+ tools/perf/util/trace-event-read.c            |    4 +-
+ tools/perf/util/trace-event-scripting.c       |    1 +
+ tools/perf/util/trace-event.c                 |    1 -
+ tools/perf/util/trace-event.h                 |   13 +-
+ tools/perf/util/util.h                        |   25 +-
+ 119 files changed, 344 insertions(+), 20071 deletions(-)
+ delete mode 100644 tools/lib/traceevent/.gitignore
+ delete mode 100644 tools/lib/traceevent/Build
+ delete mode 100644 tools/lib/traceevent/Documentation/Makefile
+ delete mode 100644 tools/lib/traceevent/Documentation/asciidoc.conf
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-commands.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-cpus.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-endian_read.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-event_find.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-event_get.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-event_list.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-event_print.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-field_find.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-field_get_val.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-field_print.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-field_read.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-fields.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-file_endian.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-filter.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-func_apis.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-func_find.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-handle.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-header_page.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-host_endian.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-long_size.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-page_size.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-parse_event.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-parse_head.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-plugins.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-record_parse.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-reg_event_handler.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-reg_print_func.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-set_flag.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-strerror.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent-tseq.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/libtraceevent.txt
+ delete mode 100644 tools/lib/traceevent/Documentation/manpage-1.72.xsl
+ delete mode 100644 tools/lib/traceevent/Documentation/manpage-base.xsl
+ delete mode 100644 tools/lib/traceevent/Documentation/manpage-bold-literal.xsl
+ delete mode 100644 tools/lib/traceevent/Documentation/manpage-normal.xsl
+ delete mode 100644 tools/lib/traceevent/Documentation/manpage-suppress-sp.xsl
+ delete mode 100644 tools/lib/traceevent/Makefile
+ delete mode 100644 tools/lib/traceevent/event-parse-api.c
+ delete mode 100644 tools/lib/traceevent/event-parse-local.h
+ delete mode 100644 tools/lib/traceevent/event-parse.c
+ delete mode 100644 tools/lib/traceevent/event-parse.h
+ delete mode 100644 tools/lib/traceevent/event-plugin.c
+ delete mode 100644 tools/lib/traceevent/event-utils.h
+ delete mode 100644 tools/lib/traceevent/kbuffer-parse.c
+ delete mode 100644 tools/lib/traceevent/kbuffer.h
+ delete mode 100644 tools/lib/traceevent/libtraceevent.pc.template
+ delete mode 100644 tools/lib/traceevent/parse-filter.c
+ delete mode 100644 tools/lib/traceevent/parse-utils.c
+ delete mode 100644 tools/lib/traceevent/plugins/Build
+ delete mode 100644 tools/lib/traceevent/plugins/Makefile
+ delete mode 100644 tools/lib/traceevent/plugins/plugin_cfg80211.c
+ delete mode 100644 tools/lib/traceevent/plugins/plugin_function.c
+ delete mode 100644 tools/lib/traceevent/plugins/plugin_futex.c
+ delete mode 100644 tools/lib/traceevent/plugins/plugin_hrtimer.c
+ delete mode 100644 tools/lib/traceevent/plugins/plugin_jbd2.c
+ delete mode 100644 tools/lib/traceevent/plugins/plugin_kmem.c
+ delete mode 100644 tools/lib/traceevent/plugins/plugin_kvm.c
+ delete mode 100644 tools/lib/traceevent/plugins/plugin_mac80211.c
+ delete mode 100644 tools/lib/traceevent/plugins/plugin_sched_switch.c
+ delete mode 100644 tools/lib/traceevent/plugins/plugin_scsi.c
+ delete mode 100644 tools/lib/traceevent/plugins/plugin_tlb.c
+ delete mode 100644 tools/lib/traceevent/plugins/plugin_xen.c
+ delete mode 100644 tools/lib/traceevent/tep_strerror.c
+ delete mode 100644 tools/lib/traceevent/trace-seq.c
+ delete mode 100644 tools/lib/traceevent/trace-seq.h
+
 -- 
-2.25.1
+2.38.1.584.g0f3c55d4c2-goog
 
