@@ -2,453 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB4E63D810
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:29:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 428D563D818
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiK3O3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 09:29:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
+        id S229862AbiK3OaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 09:30:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbiK3O3c (ORCPT
+        with ESMTP id S229539AbiK3OaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 09:29:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14D454B07;
-        Wed, 30 Nov 2022 06:29:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A275B81B41;
-        Wed, 30 Nov 2022 14:29:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0582AC433C1;
-        Wed, 30 Nov 2022 14:29:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669818567;
-        bh=RziCBqCUV5tPNAGWyWkSe0uBA5GZb2y9QL8JDIF5ssc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=haVYBk0WDzVB/3EblOyY86oclxQZHdX0/NVD6i8cep0/pv/DEM0J09cA4FRHpbq97
-         dSaCu3i27Sn7bqPt9KoFShDihR+L2Y4IdkyDm5lSZO9sKHk9UddGf5VOoOdAS0w51u
-         oODTBSejcOJseHTAxQByc9vYw21RMcSIJ+AWManY/oxiZm6wJODqao5Gtsg2AA+Oad
-         +6pntq/cTrwMNNOA8IYTlpOgZUCQgkWA+wwZRcZ02MOmU5VD0CydWXkIkti5Cbg8V1
-         a27EXF/dDRL/cCVAcXmCWPxr9zN2Ovmgvsy5JOFLdCJVLWN+QxB1cMrqcjrVfyQABG
-         fIQD/L5oyB41w==
-Date:   Wed, 30 Nov 2022 08:29:25 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     linux-pci@vger.kernel.org
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jean Delvare <jdelvare@suse.de>
-Subject: Re: [PATCH v2 2/2] PCI: Allow building CONFIG_OF drivers with
- COMPILE_TEST
-Message-ID: <20221130142925.GA809356@bhelgaas>
+        Wed, 30 Nov 2022 09:30:14 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D6D54756
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 06:30:11 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id r81so12421667iod.2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 06:30:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=e/Y6JfFohmJ3Rvsl0Sh/xfP65FizKCMZT85La1Uopwg=;
+        b=b/Gj5j1bXT22qxr3wLHfYKT9tFptmaXZVPwMIaIDifwBWb9HTyAwFvD+WaREAgL2Df
+         pWlTpGE5HTetahStiRBlUxLtEtSmgTaR/Z+TOB8vS5u2ea3aYdjNA1XgePMPs9168NyL
+         71E98kacyf/2WEdn+FM95hAe9MTmSdPX+38FpnVoL6mQbTe1vV6YOiOcuKB0dHI1bsdP
+         70eVvzGK7xFUONE8KW/VzCNC1XPhS84k6czdLzLLycRkw5YyUMvn1r0DXl2wytt/mY7p
+         LQ4byboM4I/bWmmZgqWGXn4/vokHmjSD6WGOeEA/mnTeiZalPCYWfNGIPMv64DzsZtMq
+         JRHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e/Y6JfFohmJ3Rvsl0Sh/xfP65FizKCMZT85La1Uopwg=;
+        b=UCUoneGTzm1OMyprruM7I6ZtTHej4sE75GWW0FxC1cZNNbR1dS4Arv2ef40El4HQIR
+         UZSKx2lVwdIA/CYnazaR6WJ5hJWKsDFBXNoZhbXkN3McO8KKlmOcGLun/hO+M1Pt1y/U
+         JZYfMNOs4K345Wwt2RysluNpBWm3VhgYDgLMrJZsZsHoCI6X8tGJcLTwIE15/q6OqiU6
+         lXjazC6w4u3F4t9+MYvGZru2Z+PB09pONKps/I70EwNbad/Zmhg4OQEsq+Pz/Ilq2JHP
+         iUy/eszu6/FmCgx1XrIuVDhxgTBPrKe+UK+LbbMqquRHjOap4GIyYHfFw4XIJ27pVKDe
+         BwtA==
+X-Gm-Message-State: ANoB5pnpYl8ubwXIqfYzFzph3xCc8QMCLP35qy0TIcFgKjX4ITjvYQ+p
+        kn4f2him+bTUaiLOJLOVhIwf+Mrf6cz4zRJ5gCflPw==
+X-Google-Smtp-Source: AA0mqf5zySZLEHJnlYwInWzy0W/FGXYBQN1FoIQ1TLD+7TDdTSAIe71NporRYBjZu8oXnxSvkq3rvprfO5JXOndmpZs=
+X-Received: by 2002:a02:2b01:0:b0:374:fe84:1e9 with SMTP id
+ h1-20020a022b01000000b00374fe8401e9mr29409189jaa.71.1669818610739; Wed, 30
+ Nov 2022 06:30:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221116205100.1136224-3-helgaas@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221110195732.1382314-1-wusamuel@google.com> <CAGETcx_aAynvykDSL4aue3zf5Pv7+hELUHQ=MWOzBbyZBPySDA@mail.gmail.com>
+ <880b7332-562c-4934-4e92-493b112568c9@arm.com> <CAG2Kctp_VwryYTYMoqe6EBKFs-FZuNcB94e_MzLgBN9jJ5tpQA@mail.gmail.com>
+ <CAJZ5v0iNjPAAn0-uygpJe0ya_LW7pfF4C8OHd+8EMLg+Ws=02Q@mail.gmail.com>
+ <97af1300-541d-a79c-404c-92886f10b220@arm.com> <CAKfTPtAPniqQyDzh=Yu8Z9R9+H2PzBKkHT0SJgHZiUOdNdw3Mg@mail.gmail.com>
+ <75bba88a-0516-a6a2-d4e6-8cedabadf413@arm.com>
+In-Reply-To: <75bba88a-0516-a6a2-d4e6-8cedabadf413@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 30 Nov 2022 15:29:59 +0100
+Message-ID: <CAKfTPtA=7DkjADnNijLPDm_6hh9XkFjC9ZUVQ_5_NSU2Fn5pHQ@mail.gmail.com>
+Subject: Re: [PATCH v1] Revert "cpufreq: schedutil: Move max CPU capacity to sugov_policy"
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sam Wu <wusamuel@google.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "Isaac J . Manjarres" <isaacmanjarres@google.com>,
+        kernel-team@android.com,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Jean]
+On Wed, 30 Nov 2022 at 15:04, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> Hi Vincent,
+>
+> On 11/30/22 10:42, Vincent Guittot wrote:
+> > Hi All
+> >
+> > Just for the log and because it took me a while to figure out the root
+> > cause of the problem: This patch also creates a regression for
+> > snapdragon845 based systems and probably on any QC chipsets that use a
+> > LUT to update the OPP table at boot. The behavior is the same as
+> > described by Sam with a staled value in sugov_policy.max field.
+>
+> Thanks for sharing this info and apologies that you spent cycles
+> on it.
+>
+> I have checked that whole setup code (capacity + cpufreq policy and
+> governor). It looks like to have a proper capacity of CPUs, we need
+> to wait till the last policy is created. It's due to the arch_topology.c
+> mechanism which is only triggered after all CPUs' got the policy.
+> Unfortunately, this leads to a chicken & egg situation for this
+> schedutil setup of max capacity.
+>
+> I have experimented with this code, which triggers an update in
+> the schedutil, when all CPUs got the policy and sugov gov
+> (with trace_printk() to mach the output below)
 
-On Wed, Nov 16, 2022 at 02:51:00PM -0600, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> Many drivers depend on OF interfaces, so they won't be functional if
-> CONFIG_OF is not set.  But OF provides stub functions in that case, so make
-> them buildable if CONFIG_COMPILE_TEST is set.
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Your proposal below looks similar to what is done in arch_topology.c.
+arch_topology.c triggers a rebuild of sched_domain and removes its
+cpufreq notifier cb once it has visited all CPUs, could it also
+trigger an update of CPU's policy with cpufreq_update_policy() ?
 
-After wasting all your time on this, I think this patch is a bad idea
-and I should drop it.
+At this point you will be sure that the normalization has happened and
+the max capacity will not change.
 
-Jean pointed out at [1] that after 0166dc11be91 ("of: make CONFIG_OF
-user selectable"), we can enable CONFIG_OF on any architecture
-regardless of whether it *needs* OF, and doing so yields better
-compile testing than simply using COMPILE_TEST to build without
-CONFIG_OF.
+I don't know if it's a global problem or only for systems using arch_topology
 
-Thank you very much, Jean, for pointing this out!
-
-[1] https://lore.kernel.org/r/20221124142441.3a230524@endymion.delvare
-
-> ---
->  drivers/pci/controller/Kconfig          | 34 +++++++++++----------
->  drivers/pci/controller/cadence/Kconfig  | 12 ++++----
->  drivers/pci/controller/dwc/Kconfig      | 40 ++++++++++++++++---------
->  drivers/pci/controller/mobiveil/Kconfig |  2 +-
->  4 files changed, 51 insertions(+), 37 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-> index bfd9bac37e24..a62e9fbb69ca 100644
-> --- a/drivers/pci/controller/Kconfig
-> +++ b/drivers/pci/controller/Kconfig
-> @@ -8,7 +8,7 @@ config PCI_MVEBU
->  	depends on ARCH_MVEBU || ARCH_DOVE || COMPILE_TEST
->  	depends on MVEBU_MBUS
->  	depends on ARM
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	select PCI_BRIDGE_EMUL
->  	help
->  	 Add support for Marvell EBU PCIe controller. This PCIe controller
-> @@ -18,7 +18,7 @@ config PCI_MVEBU
->  config PCI_AARDVARK
->  	tristate "Aardvark PCIe controller"
->  	depends on (ARCH_MVEBU && ARM64) || COMPILE_TEST
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	select PCI_BRIDGE_EMUL
->  	help
-> @@ -38,13 +38,14 @@ config PCIE_XILINX_NWL
->  
->  config PCI_FTPCI100
->  	bool "Faraday Technology FTPCI100 PCI controller"
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	default ARCH_GEMINI
->  
->  config PCI_IXP4XX
->  	bool "Intel IXP4xx PCI controller"
-> -	depends on ARM && OF
-> +	depends on ARM
->  	depends on ARCH_IXP4XX || COMPILE_TEST
-> +	depends on OF || COMPILE_TEST
->  	default ARCH_IXP4XX
->  	help
->  	  Say Y here if you want support for the PCI host controller found
-> @@ -89,7 +90,7 @@ config PCI_HOST_COMMON
->  
->  config PCI_HOST_GENERIC
->  	tristate "Generic PCI host controller"
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	select PCI_HOST_COMMON
->  	select IRQ_DOMAIN
->  	help
-> @@ -115,7 +116,7 @@ config PCIE_XILINX_CPM
->  config PCI_XGENE
->  	bool "X-Gene PCIe controller"
->  	depends on ARM64 || COMPILE_TEST
-> -	depends on OF || (ACPI && PCI_QUIRKS)
-> +	depends on (OF || COMPILE_TEST) || (ACPI && PCI_QUIRKS)
->  	help
->  	  Say Y here if you want internal PCI support on APM X-Gene SoC.
->  	  There are 5 internal PCIe ports available. Each port is GEN3 capable
-> @@ -132,7 +133,7 @@ config PCI_XGENE_MSI
->  
->  config PCI_V3_SEMI
->  	bool "V3 Semiconductor PCI controller"
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	depends on ARM || COMPILE_TEST
->  	default ARCH_INTEGRATOR_AP
->  
-> @@ -150,7 +151,7 @@ config PCIE_IPROC
->  config PCIE_IPROC_PLATFORM
->  	tristate "Broadcom iProc PCIe platform bus driver"
->  	depends on ARCH_BCM_IPROC || (ARM && COMPILE_TEST)
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	select PCIE_IPROC
->  	default ARCH_BCM_IPROC
->  	help
-> @@ -194,7 +195,7 @@ config PCIE_ALTERA_MSI
->  config PCI_HOST_THUNDER_PEM
->  	bool "Cavium Thunder PCIe controller to off-chip devices"
->  	depends on ARM64 || COMPILE_TEST
-> -	depends on OF || (ACPI && PCI_QUIRKS)
-> +	depends on (OF || COMPILE_TEST) || (ACPI && PCI_QUIRKS)
->  	select PCI_HOST_COMMON
->  	help
->  	  Say Y here if you want PCIe support for CN88XX Cavium Thunder SoCs.
-> @@ -202,7 +203,7 @@ config PCI_HOST_THUNDER_PEM
->  config PCI_HOST_THUNDER_ECAM
->  	bool "Cavium Thunder ECAM controller to on-chip devices on pass-1.x silicon"
->  	depends on ARM64 || COMPILE_TEST
-> -	depends on OF || (ACPI && PCI_QUIRKS)
-> +	depends on (OF || COMPILE_TEST) || (ACPI && PCI_QUIRKS)
->  	select PCI_HOST_COMMON
->  	help
->  	  Say Y here if you want ECAM support for CN88XX-Pass-1.x Cavium Thunder SoCs.
-> @@ -214,7 +215,7 @@ config PCIE_ROCKCHIP
->  config PCIE_ROCKCHIP_HOST
->  	tristate "Rockchip PCIe host controller"
->  	depends on ARCH_ROCKCHIP || COMPILE_TEST
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	select MFD_SYSCON
->  	select PCIE_ROCKCHIP
-> @@ -226,7 +227,7 @@ config PCIE_ROCKCHIP_HOST
->  config PCIE_ROCKCHIP_EP
->  	bool "Rockchip PCIe endpoint controller"
->  	depends on ARCH_ROCKCHIP || COMPILE_TEST
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_ENDPOINT
->  	select MFD_SYSCON
->  	select PCIE_ROCKCHIP
-> @@ -238,7 +239,7 @@ config PCIE_ROCKCHIP_EP
->  config PCIE_MEDIATEK
->  	tristate "MediaTek PCIe controller"
->  	depends on ARCH_AIROHA || ARCH_MEDIATEK || COMPILE_TEST
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	help
->  	  Say Y here if you want to enable PCIe controller support on
-> @@ -276,7 +277,7 @@ config PCIE_BRCMSTB
->  	tristate "Broadcom Brcmstb PCIe host controller"
->  	depends on ARCH_BRCMSTB || ARCH_BCM2835 || ARCH_BCMBCA || \
->  		   BMIPS_GENERIC || COMPILE_TEST
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	default ARCH_BRCMSTB || BMIPS_GENERIC
->  	help
-> @@ -302,7 +303,8 @@ config PCI_LOONGSON
->  
->  config PCIE_MICROCHIP_HOST
->  	bool "Microchip AXI PCIe host bridge support"
-> -	depends on PCI_MSI && OF
-> +	depends on OF || COMPILE_TEST
-> +	depends on PCI_MSI
->  	select PCI_MSI_IRQ_DOMAIN
->  	select GENERIC_MSI_IRQ_DOMAIN
->  	select PCI_HOST_COMMON
-> @@ -325,7 +327,7 @@ config PCIE_APPLE_MSI_DOORBELL_ADDR
->  config PCIE_APPLE
->  	tristate "Apple PCIe controller"
->  	depends on ARCH_APPLE || COMPILE_TEST
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	select PCI_HOST_COMMON
->  	help
-> diff --git a/drivers/pci/controller/cadence/Kconfig b/drivers/pci/controller/cadence/Kconfig
-> index 5d30564190e1..44f18b88817f 100644
-> --- a/drivers/pci/controller/cadence/Kconfig
-> +++ b/drivers/pci/controller/cadence/Kconfig
-> @@ -8,13 +8,13 @@ config PCIE_CADENCE
->  
->  config PCIE_CADENCE_HOST
->  	bool
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	select IRQ_DOMAIN
->  	select PCIE_CADENCE
->  
->  config PCIE_CADENCE_EP
->  	bool
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_ENDPOINT
->  	select PCIE_CADENCE
->  
-> @@ -23,7 +23,7 @@ config PCIE_CADENCE_PLAT
->  
->  config PCIE_CADENCE_PLAT_HOST
->  	bool "Cadence PCIe platform host controller"
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	select PCIE_CADENCE_HOST
->  	select PCIE_CADENCE_PLAT
->  	help
-> @@ -33,7 +33,7 @@ config PCIE_CADENCE_PLAT_HOST
->  
->  config PCIE_CADENCE_PLAT_EP
->  	bool "Cadence PCIe platform endpoint controller"
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_ENDPOINT
->  	select PCIE_CADENCE_EP
->  	select PCIE_CADENCE_PLAT
-> @@ -47,7 +47,7 @@ config PCI_J721E
->  
->  config PCI_J721E_HOST
->  	bool "TI J721E PCIe platform host controller"
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	select PCIE_CADENCE_HOST
->  	select PCI_J721E
->  	help
-> @@ -57,7 +57,7 @@ config PCI_J721E_HOST
->  
->  config PCI_J721E_EP
->  	bool "TI J721E PCIe platform endpoint controller"
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_ENDPOINT
->  	select PCIE_CADENCE_EP
->  	select PCI_J721E
-> diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
-> index 62ce3abf0f19..aa0a2fcd41f1 100644
-> --- a/drivers/pci/controller/dwc/Kconfig
-> +++ b/drivers/pci/controller/dwc/Kconfig
-> @@ -20,7 +20,8 @@ config PCI_DRA7XX
->  config PCI_DRA7XX_HOST
->  	tristate "TI DRA7xx PCIe controller Host Mode"
->  	depends on SOC_DRA7XX || COMPILE_TEST
-> -	depends on OF && HAS_IOMEM && TI_PIPE3
-> +	depends on OF || COMPILE_TEST
-> +	depends on HAS_IOMEM && TI_PIPE3
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	select PCIE_DW_HOST
->  	select PCI_DRA7XX
-> @@ -36,7 +37,8 @@ config PCI_DRA7XX_HOST
->  config PCI_DRA7XX_EP
->  	tristate "TI DRA7xx PCIe controller Endpoint Mode"
->  	depends on SOC_DRA7XX || COMPILE_TEST
-> -	depends on OF && HAS_IOMEM && TI_PIPE3
-> +	depends on OF || COMPILE_TEST
-> +	depends on HAS_IOMEM && TI_PIPE3
->  	depends on PCI_ENDPOINT
->  	select PCIE_DW_EP
->  	select PCI_DRA7XX
-> @@ -134,7 +136,8 @@ config PCI_KEYSTONE_EP
->  
->  config PCI_LAYERSCAPE
->  	bool "Freescale Layerscape PCIe controller - Host mode"
-> -	depends on OF && (ARM || ARCH_LAYERSCAPE || COMPILE_TEST)
-> +	depends on ARM || ARCH_LAYERSCAPE || COMPILE_TEST
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	select PCIE_DW_HOST
->  	select MFD_SYSCON
-> @@ -147,7 +150,8 @@ config PCI_LAYERSCAPE
->  
->  config PCI_LAYERSCAPE_EP
->  	bool "Freescale Layerscape PCIe controller - Endpoint mode"
-> -	depends on OF && (ARM || ARCH_LAYERSCAPE || COMPILE_TEST)
-> +	depends on ARM || ARCH_LAYERSCAPE || COMPILE_TEST
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_ENDPOINT
->  	select PCIE_DW_EP
->  	help
-> @@ -158,8 +162,9 @@ config PCI_LAYERSCAPE_EP
->  	  controller works in RC mode.
->  
->  config PCI_HISI
-> -	depends on OF && (ARM64 || COMPILE_TEST)
->  	bool "HiSilicon Hip05 and Hip06 SoCs PCIe controllers"
-> +	depends on ARM64 || COMPILE_TEST
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	select PCIE_DW_HOST
->  	select PCI_HOST_COMMON
-> @@ -169,7 +174,8 @@ config PCI_HISI
->  
->  config PCIE_QCOM
->  	bool "Qualcomm PCIe controller"
-> -	depends on OF && (ARCH_QCOM || COMPILE_TEST)
-> +	depends on ARCH_QCOM || COMPILE_TEST
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	select PCIE_DW_HOST
->  	select CRC8
-> @@ -180,7 +186,8 @@ config PCIE_QCOM
->  
->  config PCIE_QCOM_EP
->  	tristate "Qualcomm PCIe controller - Endpoint mode"
-> -	depends on OF && (ARCH_QCOM || COMPILE_TEST)
-> +	depends on ARCH_QCOM || COMPILE_TEST
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_ENDPOINT
->  	select PCIE_DW_EP
->  	help
-> @@ -226,16 +233,17 @@ config PCIE_ROCKCHIP_DW_HOST
->  	bool "Rockchip DesignWare PCIe controller"
->  	select PCIE_DW
->  	select PCIE_DW_HOST
-> -	depends on PCI_MSI_IRQ_DOMAIN
->  	depends on ARCH_ROCKCHIP || COMPILE_TEST
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
-> +	depends on PCI_MSI_IRQ_DOMAIN
->  	help
->  	  Enables support for the DesignWare PCIe controller in the
->  	  Rockchip SoC except RK3399.
->  
->  config PCIE_INTEL_GW
->  	bool "Intel Gateway PCIe host controller support"
-> -	depends on OF && (X86 || COMPILE_TEST)
-> +	depends on X86 || COMPILE_TEST
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	select PCIE_DW_HOST
->  	help
-> @@ -273,8 +281,9 @@ config PCIE_KEEMBAY_EP
->  	  DesignWare core functions.
->  
->  config PCIE_KIRIN
-> -	depends on OF && (ARM64 || COMPILE_TEST)
->  	tristate "HiSilicon Kirin series SoCs PCIe controllers"
-> +	depends on ARM64 || COMPILE_TEST
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	select PCIE_DW_HOST
->  	help
-> @@ -345,7 +354,8 @@ config PCIE_VISCONTI_HOST
->  config PCIE_UNIPHIER
->  	bool "Socionext UniPhier PCIe host controllers"
->  	depends on ARCH_UNIPHIER || COMPILE_TEST
-> -	depends on OF && HAS_IOMEM
-> +	depends on OF || COMPILE_TEST
-> +	depends on HAS_IOMEM
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	select PCIE_DW_HOST
->  	help
-> @@ -355,7 +365,8 @@ config PCIE_UNIPHIER
->  config PCIE_UNIPHIER_EP
->  	bool "Socionext UniPhier PCIe endpoint controllers"
->  	depends on ARCH_UNIPHIER || COMPILE_TEST
-> -	depends on OF && HAS_IOMEM
-> +	depends on OF || COMPILE_TEST
-> +	depends on HAS_IOMEM
->  	depends on PCI_ENDPOINT
->  	select PCIE_DW_EP
->  	help
-> @@ -364,7 +375,8 @@ config PCIE_UNIPHIER_EP
->  
->  config PCIE_AL
->  	bool "Amazon Annapurna Labs PCIe controller"
-> -	depends on OF && (ARM64 || COMPILE_TEST)
-> +	depends on ARM64 || COMPILE_TEST
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	select PCIE_DW_HOST
->  	select PCI_ECAM
-> diff --git a/drivers/pci/controller/mobiveil/Kconfig b/drivers/pci/controller/mobiveil/Kconfig
-> index e4643fb94e78..24ea35927185 100644
-> --- a/drivers/pci/controller/mobiveil/Kconfig
-> +++ b/drivers/pci/controller/mobiveil/Kconfig
-> @@ -14,7 +14,7 @@ config PCIE_MOBIVEIL_HOST
->  config PCIE_MOBIVEIL_PLAT
->  	bool "Mobiveil AXI PCIe controller"
->  	depends on ARCH_ZYNQMP || COMPILE_TEST
-> -	depends on OF
-> +	depends on OF || COMPILE_TEST
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	select PCIE_MOBIVEIL_HOST
->  	help
-> -- 
-> 2.25.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>
+> -------------------------8<-----------------------------------------
+> diff --git a/kernel/sched/cpufreq_schedutil.c
+> b/kernel/sched/cpufreq_schedutil.c
+> index 9161d1136d01..f1913a857218 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -59,6 +59,7 @@ struct sugov_cpu {
+>   };
+>
+>   static DEFINE_PER_CPU(struct sugov_cpu, sugov_cpu);
+> +static cpumask_var_t cpus_to_visit;
+>
+>   /************************ Governor internals ***********************/
+>
+> @@ -783,6 +784,22 @@ static int sugov_start(struct cpufreq_policy *policy)
+>
+>                  cpufreq_add_update_util_hook(cpu, &sg_cpu->update_util,
+> uu);
+>          }
+> +
+> +       cpumask_andnot(cpus_to_visit, cpus_to_visit, policy->related_cpus);
+> +
+> +       if (cpumask_empty(cpus_to_visit)) {
+> +               trace_printk("schedutil the visit cpu mask is empty now\n");
+> +               for_each_possible_cpu(cpu) {
+> +                       struct sugov_cpu *sg_cpu = &per_cpu(sugov_cpu, cpu);
+> +                       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+> +
+> +                       sg_policy->max = arch_scale_cpu_capacity(cpu);
+> +
+> +                       trace_printk("SCHEDUTIL: NEW  CPU%u
+> cpu_capacity=%lu\n",
+> +                               cpu, sg_policy->max);
+> +               }
+> +       }
+> +
+>          return 0;
+>   }
+>
+> @@ -800,6 +817,8 @@ static void sugov_stop(struct cpufreq_policy *policy)
+>                  irq_work_sync(&sg_policy->irq_work);
+>                  kthread_cancel_work_sync(&sg_policy->work);
+>          }
+> +
+> +       cpumask_or(cpus_to_visit, cpus_to_visit, policy->related_cpus);
+>   }
+>
+>   static void sugov_limits(struct cpufreq_policy *policy)
+> @@ -829,6 +848,11 @@ struct cpufreq_governor schedutil_gov = {
+>   #ifdef CONFIG_CPU_FREQ_DEFAULT_GOV_SCHEDUTIL
+>   struct cpufreq_governor *cpufreq_default_governor(void)
+>   {
+> +       if (!alloc_cpumask_var(&cpus_to_visit, GFP_KERNEL))
+> +               return NULL;
+> +
+> +       cpumask_copy(cpus_to_visit, cpu_possible_mask);
+> +
+>          return &schedutil_gov;
+>   }
+>   #endif
+>
+> ---------------------------------->8---------------------------------
+>
+>
+> That simple approach fixes the issue. I have also tested it with
+> governor change a few times and setting back the schedutil.
+>
+> -------------------------------------------
+>     kworker/u12:1-48      [004] .....     2.208847: sugov_start:
+> schedutil the visit cpu mask is empty now
+>     kworker/u12:1-48      [004] .....     2.208854: sugov_start:
+> SCHEDUTIL: NEW  CPU0 cpu_capacity=381
+>     kworker/u12:1-48      [004] .....     2.208857: sugov_start:
+> SCHEDUTIL: NEW  CPU1 cpu_capacity=381
+>     kworker/u12:1-48      [004] .....     2.208860: sugov_start:
+> SCHEDUTIL: NEW  CPU2 cpu_capacity=381
+>     kworker/u12:1-48      [004] .....     2.208862: sugov_start:
+> SCHEDUTIL: NEW  CPU3 cpu_capacity=381
+>     kworker/u12:1-48      [004] .....     2.208864: sugov_start:
+> SCHEDUTIL: NEW  CPU4 cpu_capacity=1024
+>     kworker/u12:1-48      [004] .....     2.208866: sugov_start:
+> SCHEDUTIL: NEW  CPU5 cpu_capacity=1024
+>              bash-615     [005] .....    35.317113: sugov_start:
+> schedutil the visit cpu mask is empty now
+>              bash-615     [005] .....    35.317120: sugov_start:
+> SCHEDUTIL: NEW  CPU0 cpu_capacity=381
+>              bash-615     [005] .....    35.317123: sugov_start:
+> SCHEDUTIL: NEW  CPU1 cpu_capacity=381
+>              bash-615     [005] .....    35.317125: sugov_start:
+> SCHEDUTIL: NEW  CPU2 cpu_capacity=381
+>              bash-615     [005] .....    35.317127: sugov_start:
+> SCHEDUTIL: NEW  CPU3 cpu_capacity=381
+>              bash-615     [005] .....    35.317129: sugov_start:
+> SCHEDUTIL: NEW  CPU4 cpu_capacity=1024
+>              bash-615     [005] .....    35.317131: sugov_start:
+> SCHEDUTIL: NEW  CPU5 cpu_capacity=1024
+>              bash-623     [003] .....    57.633328: sugov_start:
+> schedutil the visit cpu mask is empty now
+>              bash-623     [003] .....    57.633336: sugov_start:
+> SCHEDUTIL: NEW  CPU0 cpu_capacity=381
+>              bash-623     [003] .....    57.633339: sugov_start:
+> SCHEDUTIL: NEW  CPU1 cpu_capacity=381
+>              bash-623     [003] .....    57.633340: sugov_start:
+> SCHEDUTIL: NEW  CPU2 cpu_capacity=381
+>              bash-623     [003] .....    57.633342: sugov_start:
+> SCHEDUTIL: NEW  CPU3 cpu_capacity=381
+>              bash-623     [003] .....    57.633343: sugov_start:
+> SCHEDUTIL: NEW  CPU4 cpu_capacity=1024
+>              bash-623     [003] .....    57.633344: sugov_start:
+> SCHEDUTIL: NEW  CPU5 cpu_capacity=1024
+> ----------------------------------------------------
+>
+> It should work.
+>
+> Regards,
+> Lukasz
