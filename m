@@ -2,156 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E4A63D5DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2EB063D5E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:44:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbiK3Mnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 07:43:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55068 "EHLO
+        id S235035AbiK3MoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 07:44:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbiK3Mno (ORCPT
+        with ESMTP id S235057AbiK3MoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 07:43:44 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1CA4B753;
-        Wed, 30 Nov 2022 04:43:43 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id z17so11899292pff.1;
-        Wed, 30 Nov 2022 04:43:43 -0800 (PST)
+        Wed, 30 Nov 2022 07:44:08 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1429E58BC7
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 04:44:08 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id g65so16738283vsc.11
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 04:44:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0SYFP0szIO4uQWosjf/DBeQUEddgh/eJCRxGlHyoP1o=;
-        b=lGFEahgyoDkFfO4MTJBxV+WDKKjYFLDSWD9cIm+boSkjj2uoMWRWiQcNtpl/TOm5rK
-         sSHEv/glh5oOTksk41RVezXagw6jbuZ40TXl7NEnFNYManHa/w1R71xZZI36J4lX25UM
-         cbcUfD4gneaUwM4QD+SBL6cBzhU+wznPmwiJK9DMF2KXg2dr+bRBElQibmy510sUXU9m
-         PDGF6zV6GJt6ZojTKhrgyy9u/iQhayTWSqnd1UbNFjJ59iUnn8gey849SPnDD1NkqUem
-         y+2zRdZvWk7CPIYegPztuRmyowZwiKIAvxOhInYXosz5F72MggNoCosSPckKf+1f0vF1
-         S69A==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MNA7eZi9VQf69CeBVlQwZ04/y+5gTO1SaFbD25OjShk=;
+        b=uSk5JtGDkFtZkUVlSh2i3p7XW+BEpm0qle2Qeku5sBhEFvEtjxwJcJO/dKAIH6mtnM
+         ihCM776HxUIm9bISIC0XuUG2ntUDh43aYrOMKAm8kyIKgsGhNiQWX3jWqJ7nrDkcrJux
+         P6HiyheNg1ARMUwTofYkN+5TdwWAD+Ief4jrVs3kTBRmPfEJV+1Fj/Kobmxo1TAft8FS
+         86v6pEod24fy4y15bRVI/fgHouGGWPW/5cHlox5WDNAg1oMIcSXrXjoxUuke9vjsCIUJ
+         /Tk2xkrcwu9Rx5yVD7NwJ2YtxgrQifkgBuMZI59vLsuMVQHnRn7y6HHSroWm49Z+GqcQ
+         dgTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0SYFP0szIO4uQWosjf/DBeQUEddgh/eJCRxGlHyoP1o=;
-        b=x6FeW+M2RH1uyFt2ru45iPSctMNc2R3/x/JKx0QXAc7HUhsVS+RhlFg2BKJCALJHk0
-         b4O+tearRIn3s+Ezl/HrIi0sZU/2KCqvyST6ZiSFgetElmvR6F1yZZCwMr2n+QzUumrI
-         dEYuVpy0DxE9FAGD98MqiiWCYIvUNyYZs3tE9p6TKjUWrGIQB6DelMk1lck9AugA+lgT
-         g7j0wDR7xH0Uu8Kk0mJmyk/lv0kWVMre14SSgzCwG9a57uBPQypAps9kPunBpZMSSDJO
-         Wha0QcL2f5trkUklwhCg8bBiPT6O+kLVkOHEUtAAK3XGuLQFr+XfWixK31uin0bj8CFx
-         i5XA==
-X-Gm-Message-State: ANoB5pkfUwBPXuH1Bqk+YNNeundu6DJc03Z5Kj6bmo8iJaPHH97r/oe5
-        833JW589frlhvvcNjLMffy4=
-X-Google-Smtp-Source: AA0mqf6gJ2VDhQCzPJjGyRfnk3iFdVRCTTJb/bbVvhipQMA64yPolrxBfQn0+QAJf7edKJ9vxrG42g==
-X-Received: by 2002:aa7:9416:0:b0:575:518e:dc11 with SMTP id x22-20020aa79416000000b00575518edc11mr11919945pfo.86.1669812223326;
-        Wed, 30 Nov 2022 04:43:43 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-85.three.co.id. [180.214.232.85])
-        by smtp.gmail.com with ESMTPSA id z9-20020a1709027e8900b00186b8752a78sm1374421pla.80.2022.11.30.04.43.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 04:43:42 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 492AB103FF3; Wed, 30 Nov 2022 19:43:39 +0700 (WIB)
-Date:   Wed, 30 Nov 2022 19:43:39 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Tao pilgrim <pilgrimtao@gmail.com>
-Cc:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        corbet@lwn.net, mhocko@kernel.org, roman.gushchin@linux.dev,
-        shakeelb@google.com, akpm@linux-foundation.org,
-        songmuchun@bytedance.com, cgel.zte@gmail.com,
-        ran.xiaokai@zte.com.cn, viro@zeniv.linux.org.uk,
-        zhengqi.arch@bytedance.com, ebiederm@xmission.com,
-        Liam.Howlett@oracle.com, chengzhihao1@huawei.com,
-        haolee.swjtu@gmail.com, yuzhao@google.com, willy@infradead.org,
-        vasily.averin@linux.dev, vbabka@suse.cz, surenb@google.com,
-        sfr@canb.auug.org.au, mcgrof@kernel.org, sujiaxun@uniontech.com,
-        feng.tang@intel.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        chengkaitao@didiglobal.com
-Subject: Re: [PATCH] mm: memcontrol: protect the memory in cgroup from being
- oom killed
-Message-ID: <Y4dP+3VEYl/YUfK1@debian.me>
-References: <20221130070158.44221-1-chengkaitao@didiglobal.com>
- <fd28321c-5f00-ba94-daed-2b8da2292c1f@gmail.com>
- <CAAWJmAYPUK+1GBS0R460pDvDKrLr9zs_X2LT2yQTP_85kND5Ew@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MNA7eZi9VQf69CeBVlQwZ04/y+5gTO1SaFbD25OjShk=;
+        b=F4D/dh9ieXwO1tZmtTLFl5walH2/PCK+Mq61vjXyahuxIrclqy6gG2q2+YkWz1vYY0
+         NpTc8tqhPdr3j9oR+59HE17iHDsY3wbnJi0Q3l/6uucr64FQ0AZwy3h4cQSJshauIVoI
+         /rBtZjwN7vJM1e+gbQr09cksQK4E+e1VVgbYVKxtJ1Dm3vHoIrqbUnP8i02dQwzChatK
+         m0okkcFQ3Tm1i074bELOEiPGXcWwCj7/Gi13rV0rue5GDLXVfOR4gul0PgQH5cgnoTBb
+         bKBcJ98OHhDvzDoJTANcozpy7z8iPspfsl4QlN8VfkpuJoJfkGMKAyT5bjyc2MvmrHni
+         AwZw==
+X-Gm-Message-State: ANoB5pnPzN3qH1wAFwDAQTbfXFr3x0L+4cWPD2WOJiUZcyOiPqBEqc7P
+        3Exj/FatndZxqIc6adw7eMKVpYt94uPkZhdIp/RliQ==
+X-Google-Smtp-Source: AA0mqf54Z2CrPKxSRMlbr73gv+438gnoVt/fuaLT9AfACCSJrTBHJXFmdawHwFRgJOYgsFogG3EQ+yCbag8p/gkY3HY=
+X-Received: by 2002:a67:eb11:0:b0:3b0:c9bc:7abe with SMTP id
+ a17-20020a67eb11000000b003b0c9bc7abemr3394360vso.61.1669812247176; Wed, 30
+ Nov 2022 04:44:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="U2At7WgeybTkF08j"
-Content-Disposition: inline
-In-Reply-To: <CAAWJmAYPUK+1GBS0R460pDvDKrLr9zs_X2LT2yQTP_85kND5Ew@mail.gmail.com>
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221129110012.224685-1-brgl@bgdev.pl> <20221129110012.224685-12-brgl@bgdev.pl>
+ <22332676-9d3a-1e21-aa70-e9c367b19bd9@kernel.org>
+In-Reply-To: <22332676-9d3a-1e21-aa70-e9c367b19bd9@kernel.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 30 Nov 2022 13:43:56 +0100
+Message-ID: <CAMRc=MczfMKYEWfV_WOazXni9FbXX8x_iwjm4URD7-WWQQmUsA@mail.gmail.com>
+Subject: Re: [PATCH v4 11/13] tty: serial: qcom-geni-serial: stop operations
+ in progress at shutdown
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---U2At7WgeybTkF08j
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Nov 30, 2022 at 07:33:01PM +0800, Tao pilgrim wrote:
-> On Wed, Nov 30, 2022 at 4:41 PM Bagas Sanjaya <bagasdotme@gmail.com> wrot=
-e:
+On Wed, Nov 30, 2022 at 10:37 AM Jiri Slaby <jirislaby@kernel.org> wrote:
+>
+> On 29. 11. 22, 12:00, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > >
-> > On 11/30/22 14:01, chengkaitao wrote:
-> > > From: chengkaitao <pilgrimtao@gmail.com>
-> > >
+> > We don't stop transmissions in progress at shutdown. This is fine with
+> > FIFO SE mode but with DMA it causes trouble so fix it now.
 > >
-> > Yikes! Another patch from ZTE guys.
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> > ---
+> >   drivers/tty/serial/qcom_geni_serial.c | 3 +++
+> >   1 file changed, 3 insertions(+)
 > >
-> > I'm suspicious to patches sent from them due to bad reputation with
-> > kernel development community. First, they sent all patches via
-> > cgel.zte@gmail.com (listed in Cc) but Greg can't sure these are really
-> > sent from them ([1] & [2]). Then they tried to workaround by sending
-> > from their personal Gmail accounts, again with same response from him
-> > [3]. And finally they sent spoofed emails (as he pointed out in [4]) -
-> > they pretend to send from ZTE domain but actually sent from their
-> > different domain (see raw message and look for X-Google-Original-From:
-> > header.
->=20
-> Hi Bagas Sanjaya,
->=20
-> I'm not an employee of ZTE, just an ordinary developer. I really don't kn=
-ow
-> all the details about community and ZTE, The reason why I cc cgel.zte@gma=
-il.com
-> is because the output of the script <get_maintainer.pl> has the
-> address <cgel.zte@gmail.com>.
->=20
-> If there is any error in the format of the email, I will try my best
-> to correct it.
->=20
+> > diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> > index fe15fc0e1345..c0270eec2a66 100644
+> > --- a/drivers/tty/serial/qcom_geni_serial.c
+> > +++ b/drivers/tty/serial/qcom_geni_serial.c
+> > @@ -864,6 +864,9 @@ static void get_tx_fifo_size(struct qcom_geni_serial_port *port)
+> >
+> >   static void qcom_geni_serial_shutdown(struct uart_port *uport)
+> >   {
+> > +     qcom_geni_serial_stop_tx(uport);
+> > +     qcom_geni_serial_stop_rx(uport);
+> > +
+> >       disable_irq(uport->irq);
+>
+> I'm just asking without actually looking into the code: cannot the
+> interrupt reschedule/restart the above?
+>
 
-OK, thanks for clarification. At first I thought you were ZTE guys.
-Sorry for inconvenience.
+It can actually, good catch, thanks.
 
-Now I ask: why do your email seem spoofed (sending from your gmail
-account but there is extra gmail-specific header that makes you like
-"sending" from your corporate email address? Wouldn't it be nice (and
-appropriate) if you can send and receive email with the latter address
-instead?
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---U2At7WgeybTkF08j
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY4dP9QAKCRD2uYlJVVFO
-o2fFAP9CcwtLbXBJc0AgmMHIUvGNiyhA9iDVaDQGg5tezc3siAD+MdwAl/MqnXUT
-o9/M5ZNbB5lgA8Gdug0py/N/VDy0TQc=
-=RwhN
------END PGP SIGNATURE-----
-
---U2At7WgeybTkF08j--
+Bart
