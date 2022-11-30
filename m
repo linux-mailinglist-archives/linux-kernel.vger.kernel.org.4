@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF0863E4C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF6163E4B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiK3XM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 18:12:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
+        id S229914AbiK3XLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:11:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiK3XLH (ORCPT
+        with ESMTP id S229908AbiK3XKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 18:11:07 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6244975D3
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:10:16 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id g13-20020a056a000b8d00b0056e28b15757so210131pfj.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:10:16 -0800 (PST)
+        Wed, 30 Nov 2022 18:10:42 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D950934FE
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:10:03 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id u10-20020a17090a400a00b00215deac75b4so201823pjc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:10:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=di4GPfaF6WKRfgW0XqJub+upfuRM26VzAsGaqEV4LGw=;
-        b=Zp0X+tvqlodbVDmXJAlHsgiG3eKVrrt9FqJ/G91Ka+FyaPGocW43mHdutS/PZpQE36
-         Iieu9/BWXmUBsCNeoXw2w6AGd8PrG42NkgB6lU08wcdcc8UwAyPwoD57C6YJX6W8d8L6
-         zT+J1YBLZIf8EiLqUI0I1OI8MzvM21Wx5gQBxNbTBtyOAXzto+GobOper+U00pyFgXJf
-         UdMZA+TjdcslZ9rB8fGS/EHatJp3upDo3FA+0llGAcT+1sttGOmsewFGvBZuTST5TDKg
-         atyPT5DCNi18z7jSv+tnMdXu5HV1aXplTTP+Szmkxtce4LN+raVvUsuQA85wOwn+8uqH
-         psnA==
+        bh=DDPlKttPz95bIPigIbsZnvNedazYOn7GaaeDonhS6tI=;
+        b=Z6nLxfTzgTUuiwpAG8cvYQa+dN+u8gdYDmvalMupYvTiyNB08ya32PPN3JMi5MQ+zn
+         CKFON4bHGY9uO+OU5rvKypZLm5hBqJSLnUUDK1HFwnV5UgI7QftrXIwrcqqGD/J7JfqE
+         CFBmidj59C7V6og88vcOwpoym4GNhD2bRgcqaNBUXoe/misowqQibWZd3vr8QsfUhhwX
+         i4uWK4yeRp3DB4lRFiuIJyrUfchRtOmsamHvLHwY72jxQuWnDEt5quvvWruAYj+4E7Dq
+         3qk+oHrWcenEcx4E4wlD8i3c5crP7WSMTS/kUAiUvOcd3cx88naWVp5yOAiefRxYVySU
+         2z9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=di4GPfaF6WKRfgW0XqJub+upfuRM26VzAsGaqEV4LGw=;
-        b=RgaHx0F/Q5dBO+MZCht06PIB0a0XkuvOVbwkT/TWreM86S2kkY1djotWL7FIxlJ7ZT
-         oIShqhVt2WkdX3U1dR+cpzVj1Q4Qod9kDOfmVSuUr6ixuox2ko91/jY353JCHZQgCkKg
-         XRLrGLmMAgyYNHOnJGBRvvg1kEYf1PV12cDsdxjj5Gap/O/FXTFoDSDW4O7pIg2aLsaV
-         AOpvtzNrauspJ7y3oWv8pmVuFr6a8e2BZtyTQnn0d3C3rNCj1m3xV75G1z+242M77/+S
-         7PT7q44SPok9mfCdSEffRQ7qfiQy/g5ajoErkbOJPwrSOx65OcmE0txgd1l8PugwEFyV
-         mOKw==
-X-Gm-Message-State: ANoB5pnpbEj5NEkF9FVEZJP9Q+JdCSQSr/odHVfqCqh5qEIBndAu9+bF
-        ssy0WmSEAVyFbon3A7lKSQ3yn0zQ4FI=
-X-Google-Smtp-Source: AA0mqf4OklfcBkfFMEfVjeAO6z8Tg9xRFY+PEerZY3OMpeOrjrDiJtxtxuLC1x65bjbuGkZn4Pd66WRIuco=
+        bh=DDPlKttPz95bIPigIbsZnvNedazYOn7GaaeDonhS6tI=;
+        b=pPEXlufgO24Ogfpj5yyg9VHN2AWQKVThHt2N1jjFRwskXO6YNT8kMBd4IQIm1+Rm2Z
+         GDAHKj6JJ0VCfD3PID8/eQEVCv14kcedPJz8/OzrzlYja5BJrARojgJ4m9lELj+BZ69B
+         5xAtyB3O2HFSoosJ4iazatZYW0yxJhbZ1drz4TG/ODw2yJTv1/0+M16l8MTrhmBW/qsK
+         RaFeZwrUTxMiucvPve/5EcCtqIZFgwWf3Hy7i20EV3z97M/PaHYgzP3Q4YiHr+u+vFjl
+         U45PKo2uWHs32p0yV9B9szFxPe17bH4jl3D1yquf94piqfNbnmAsWdCNXva8pLpPAWWE
+         6uiw==
+X-Gm-Message-State: ANoB5pljKD+WlDo2emB2li4kCEDdTEe/pnjGAsOI37TXMAjWrci9iEri
+        5oZs2AWP8mUnHQU4pwyPxk6xhTEAAPw=
+X-Google-Smtp-Source: AA0mqf5zruXq4Znt6GWyW9YI72qBn8AYfe7bpB45wh6N7oxAIVQAewpSb0tYUlF1SUbzH3yBDOmCkMMzIcM=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:1409:b0:56b:e1d8:e7a1 with SMTP id
- l9-20020a056a00140900b0056be1d8e7a1mr44197245pfu.28.1669849801157; Wed, 30
- Nov 2022 15:10:01 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:902:b691:b0:17e:fb19:63ba with SMTP id
+ c17-20020a170902b69100b0017efb1963bamr47034838pls.160.1669849802860; Wed, 30
+ Nov 2022 15:10:02 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 30 Nov 2022 23:08:58 +0000
+Date:   Wed, 30 Nov 2022 23:08:59 +0000
 In-Reply-To: <20221130230934.1014142-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20221130230934.1014142-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221130230934.1014142-15-seanjc@google.com>
-Subject: [PATCH v2 14/50] KVM: VMX: Do _all_ initialization before exposing
- /dev/kvm to userspace
+Message-ID: <20221130230934.1014142-16-seanjc@google.com>
+Subject: [PATCH v2 15/50] KVM: x86: Serialize vendor module initialization
+ (hardware setup)
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -94,7 +94,7 @@ Cc:     James Morse <james.morse@arm.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,109 +102,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Call kvm_init() only after _all_ setup is complete, as kvm_init() exposes
-/dev/kvm to userspace and thus allows userspace to create VMs (and call
-other ioctls).  E.g. KVM will encounter a NULL pointer when attempting to
-add a vCPU to the per-CPU loaded_vmcss_on_cpu list if userspace is able to
-create a VM before vmx_init() configures said list.
+Acquire a new mutex, vendor_module_lock, in kvm_x86_vendor_init() while
+doing hardware setup to ensure that concurrent calls are fully serialized.
+KVM rejects attempts to load vendor modules if a different module has
+already been loaded, but doesn't handle the case where multiple vendor
+modules are loaded at the same time, and module_init() doesn't run under
+the global module_mutex.
 
- BUG: kernel NULL pointer dereference, address: 0000000000000008
- #PF: supervisor write access in kernel mode
- #PF: error_code(0x0002) - not-present page
- PGD 0 P4D 0
- Oops: 0002 [#1] SMP
- CPU: 6 PID: 1143 Comm: stable Not tainted 6.0.0-rc7+ #988
- Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
- RIP: 0010:vmx_vcpu_load_vmcs+0x68/0x230 [kvm_intel]
-  <TASK>
-  vmx_vcpu_load+0x16/0x60 [kvm_intel]
-  kvm_arch_vcpu_load+0x32/0x1f0 [kvm]
-  vcpu_load+0x2f/0x40 [kvm]
-  kvm_arch_vcpu_create+0x231/0x310 [kvm]
-  kvm_vm_ioctl+0x79f/0xe10 [kvm]
-  ? handle_mm_fault+0xb1/0x220
-  __x64_sys_ioctl+0x80/0xb0
-  do_syscall_64+0x2b/0x50
-  entry_SYSCALL_64_after_hwframe+0x46/0xb0
- RIP: 0033:0x7f5a6b05743b
-  </TASK>
- Modules linked in: vhost_net vhost vhost_iotlb tap kvm_intel(+) kvm irqbypass
+Note, in practice, this is likely a benign bug as no platform exists that
+supports both SVM and VMX, i.e. barring a weird VM setup, one of the
+vendor modules is guaranteed to fail a support check before modifying
+common KVM state.
 
-Cc: stable@vger.kernel.org
+Alternatively, KVM could perform an atomic CMPXCHG on .hardware_enable,
+but that comes with its own ugliness as it would require setting
+.hardware_enable before success is guaranteed, e.g. attempting to load
+the "wrong" could result in spurious failure to load the "right" module.
+
+Introduce a new mutex as using kvm_lock is extremely deadlock prone due
+to kvm_lock being taken under cpus_write_lock(), and in the future, under
+under cpus_read_lock().  Any operation that takes cpus_read_lock() while
+holding kvm_lock would potentially deadlock, e.g. kvm_timer_init() takes
+cpus_read_lock() to register a callback.  In theory, KVM could avoid
+such problematic paths, i.e. do less setup under kvm_lock, but avoiding
+all calls to cpus_read_lock() is subtly difficult and thus fragile.  E.g.
+updating static calls also acquires cpus_read_lock().
+
+Inverting the lock ordering, i.e. always taking kvm_lock outside
+cpus_read_lock(), is not a viable option as kvm_lock is taken in various
+callbacks that may be invoked under cpus_read_lock(), e.g. x86's
+kvmclock_cpufreq_notifier().
+
+The lockdep splat below is dependent on future patches to take
+cpus_read_lock() in hardware_enable_all(), but as above, deadlock is
+already is already possible.
+
+  ======================================================
+  WARNING: possible circular locking dependency detected
+  6.0.0-smp--7ec93244f194-init2 #27 Tainted: G           O
+  ------------------------------------------------------
+  stable/251833 is trying to acquire lock:
+  ffffffffc097ea28 (kvm_lock){+.+.}-{3:3}, at: hardware_enable_all+0x1f/0xc0 [kvm]
+
+               but task is already holding lock:
+  ffffffffa2456828 (cpu_hotplug_lock){++++}-{0:0}, at: hardware_enable_all+0xf/0xc0 [kvm]
+
+               which lock already depends on the new lock.
+
+               the existing dependency chain (in reverse order) is:
+
+               -> #1 (cpu_hotplug_lock){++++}-{0:0}:
+         cpus_read_lock+0x2a/0xa0
+         __cpuhp_setup_state+0x2b/0x60
+         __kvm_x86_vendor_init+0x16a/0x1870 [kvm]
+         kvm_x86_vendor_init+0x23/0x40 [kvm]
+         0xffffffffc0a4d02b
+         do_one_initcall+0x110/0x200
+         do_init_module+0x4f/0x250
+         load_module+0x1730/0x18f0
+         __se_sys_finit_module+0xca/0x100
+         __x64_sys_finit_module+0x1d/0x20
+         do_syscall_64+0x3d/0x80
+         entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+               -> #0 (kvm_lock){+.+.}-{3:3}:
+         __lock_acquire+0x16f4/0x30d0
+         lock_acquire+0xb2/0x190
+         __mutex_lock+0x98/0x6f0
+         mutex_lock_nested+0x1b/0x20
+         hardware_enable_all+0x1f/0xc0 [kvm]
+         kvm_dev_ioctl+0x45e/0x930 [kvm]
+         __se_sys_ioctl+0x77/0xc0
+         __x64_sys_ioctl+0x1d/0x20
+         do_syscall_64+0x3d/0x80
+         entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+               other info that might help us debug this:
+
+   Possible unsafe locking scenario:
+
+         CPU0                    CPU1
+         ----                    ----
+    lock(cpu_hotplug_lock);
+                                 lock(kvm_lock);
+                                 lock(cpu_hotplug_lock);
+    lock(kvm_lock);
+
+                *** DEADLOCK ***
+
+  1 lock held by stable/251833:
+   #0: ffffffffa2456828 (cpu_hotplug_lock){++++}-{0:0}, at: hardware_enable_all+0xf/0xc0 [kvm]
+
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/vmx.c | 34 +++++++++++++++++++++-------------
- 1 file changed, 21 insertions(+), 13 deletions(-)
+ Documentation/virt/kvm/locking.rst |  6 ++++++
+ arch/x86/kvm/x86.c                 | 18 ++++++++++++++++--
+ 2 files changed, 22 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 8e81cd94407d..76185a7a7ded 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -8521,19 +8521,23 @@ static void vmx_cleanup_l1d_flush(void)
- 	l1tf_vmx_mitigation = VMENTER_L1D_FLUSH_AUTO;
+diff --git a/Documentation/virt/kvm/locking.rst b/Documentation/virt/kvm/locking.rst
+index 845a561629f1..132a9e5436e5 100644
+--- a/Documentation/virt/kvm/locking.rst
++++ b/Documentation/virt/kvm/locking.rst
+@@ -282,3 +282,9 @@ time it will be set using the Dirty tracking mechanism described above.
+ 		wakeup notification event since external interrupts from the
+ 		assigned devices happens, we will find the vCPU on the list to
+ 		wakeup.
++
++``vendor_module_lock``
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++:Type:		mutex
++:Arch:		x86
++:Protects:	loading a vendor module (kvm_amd or kvm_intel)
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index b33932fca36e..45184ca89317 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -128,6 +128,7 @@ static int kvm_vcpu_do_singlestep(struct kvm_vcpu *vcpu);
+ static int __set_sregs2(struct kvm_vcpu *vcpu, struct kvm_sregs2 *sregs2);
+ static void __get_sregs2(struct kvm_vcpu *vcpu, struct kvm_sregs2 *sregs2);
+ 
++static DEFINE_MUTEX(vendor_module_lock);
+ struct kvm_x86_ops kvm_x86_ops __read_mostly;
+ 
+ #define KVM_X86_OP(func)					     \
+@@ -9286,7 +9287,7 @@ void kvm_arch_exit(void)
+ 
  }
  
--static void vmx_exit(void)
-+static void __vmx_exit(void)
+-int kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
++static int __kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
  {
-+	allow_smaller_maxphyaddr = false;
-+
- #ifdef CONFIG_KEXEC_CORE
- 	RCU_INIT_POINTER(crash_vmclear_loaded_vmcss, NULL);
- 	synchronize_rcu();
- #endif
--
--	kvm_exit();
--	kvm_x86_vendor_exit();
--
- 	vmx_cleanup_l1d_flush();
-+}
- 
--	allow_smaller_maxphyaddr = false;
-+static void vmx_exit(void)
-+{
-+	kvm_exit();
-+	kvm_x86_vendor_exit();
-+
-+	__vmx_exit();
- }
- module_exit(vmx_exit);
- 
-@@ -8551,11 +8555,6 @@ static int __init vmx_init(void)
- 	if (r)
- 		return r;
- 
--	r = kvm_init(&vmx_init_ops, sizeof(struct vcpu_vmx),
--		     __alignof__(struct vcpu_vmx), THIS_MODULE);
--	if (r)
--		goto err_kvm_init;
--
- 	/*
- 	 * Must be called after common x86 init so enable_ept is properly set
- 	 * up. Hand the parameter mitigation value in which was stored in
-@@ -8589,11 +8588,20 @@ static int __init vmx_init(void)
- 	if (!enable_ept)
- 		allow_smaller_maxphyaddr = true;
- 
-+	/*
-+	 * Common KVM initialization _must_ come last, after this, /dev/kvm is
-+	 * exposed to userspace!
-+	 */
-+	r = kvm_init(&vmx_init_ops, sizeof(struct vcpu_vmx),
-+		     __alignof__(struct vcpu_vmx), THIS_MODULE);
-+	if (r)
-+		goto err_kvm_init;
-+
- 	return 0;
- 
--err_l1d_flush:
--	vmx_exit();
- err_kvm_init:
-+	__vmx_exit();
-+err_l1d_flush:
- 	kvm_x86_vendor_exit();
+ 	u64 host_pat;
+ 	int r;
+@@ -9419,6 +9420,17 @@ int kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
+ 	kmem_cache_destroy(x86_emulator_cache);
  	return r;
  }
++
++int kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
++{
++	int r;
++
++	mutex_lock(&vendor_module_lock);
++	r = __kvm_x86_vendor_init(ops);
++	mutex_unlock(&vendor_module_lock);
++
++	return r;
++}
+ EXPORT_SYMBOL_GPL(kvm_x86_vendor_init);
+ 
+ void kvm_x86_vendor_exit(void)
+@@ -9441,7 +9453,6 @@ void kvm_x86_vendor_exit(void)
+ 	cancel_work_sync(&pvclock_gtod_work);
+ #endif
+ 	static_call(kvm_x86_hardware_unsetup)();
+-	kvm_x86_ops.hardware_enable = NULL;
+ 	kvm_mmu_vendor_module_exit();
+ 	free_percpu(user_return_msrs);
+ 	kmem_cache_destroy(x86_emulator_cache);
+@@ -9449,6 +9460,9 @@ void kvm_x86_vendor_exit(void)
+ 	static_key_deferred_flush(&kvm_xen_enabled);
+ 	WARN_ON(static_branch_unlikely(&kvm_xen_enabled.key));
+ #endif
++	mutex_lock(&vendor_module_lock);
++	kvm_x86_ops.hardware_enable = NULL;
++	mutex_unlock(&vendor_module_lock);
+ }
+ EXPORT_SYMBOL_GPL(kvm_x86_vendor_exit);
+ 
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
