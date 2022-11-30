@@ -2,175 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E1763E0B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9BB763E0B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiK3TY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 14:24:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39796 "EHLO
+        id S229541AbiK3T0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 14:26:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiK3TYD (ORCPT
+        with ESMTP id S229449AbiK3T0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 14:24:03 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B571855A8C
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:24:02 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id m204so19875689oib.6
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:24:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+wo+rpyosrQ5mo9ZKXiEdshfV8pblh1Ox95hEXjzopc=;
-        b=lN5NZq66xcfgJmWvkkoUluI350bdxZR00+FKoZxMShq9efk+8Ito/DmHVUAqiIZSj/
-         HLC5ZS3q8yiIl6OMYtzoomsmFwxjrbaYBHRambc5r56FFvdEvwmVL22/c89sELLl7Wsv
-         dr8jdIMx2/ogKPh0XRRh+VnQwgcBU8+5sSLa4EevsSBWM13Us0E0pyloCjrTAFVx1SOO
-         PnL5OqbegXw5uerTa2r93gI7++ZPnIoahH+NJnzmhXo3rFgNzEvFiAHA2PC2OU8d/yn0
-         2enDE7G8oj+M8KXNxMRTk5w0UqWrHT5jIqpAGNlKjiww0N9TSA2GYrW8QRgGY7YB6n0+
-         KCDw==
+        Wed, 30 Nov 2022 14:26:18 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31A355A8C
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:26:17 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id f2-20020a5ec602000000b006dc67829888so11986160iok.3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:26:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+wo+rpyosrQ5mo9ZKXiEdshfV8pblh1Ox95hEXjzopc=;
-        b=5MmRfKKJ8j/BQ9NeP5jsS6w2kLwKzJtVFel6Gjb2UntD3mNomT/XnsFHGYapF8vJTe
-         fofa/7Xy7W+QDoQRlNULITETH2asrh86me7SEiAhUvtQntPix/wBea6BoQqSMMyFUAi2
-         9wvT1CUVeZYWpN9BAip11wpsOdvPeZWSsa5JOBfi5v/9n8NGl6mCvjdL8nLtg15ZW4oG
-         N1vf3o+zxnVqMiL6+YEUva+JoxhK9x5Bu/dJIGh/pRaAckr10+DfDOksZmVBjK4uE69F
-         5cvZmldhIxqUQurTQqjX3ivvAR5dsqDiYBPN2/mOCWo49PgoRfSj4kvmygBOp34JNKXc
-         ixQw==
-X-Gm-Message-State: ANoB5plHNf2sPxeiHfuDfXJgv9I22yH5zgokJzsJpExRJJswQY1qt+Sy
-        jSUOwkEL3NlltFAWIZiHBKIdpA==
-X-Google-Smtp-Source: AA0mqf758Pu+ja29ReuXlHGUpRKc/XuI+oOE7XGxbaP8x37MIQDpqzC4Mn9T29U26LQ54g7cXZLuTg==
-X-Received: by 2002:a05:6808:10d6:b0:354:9397:4cc4 with SMTP id s22-20020a05680810d600b0035493974cc4mr21155160ois.147.1669836241968;
-        Wed, 30 Nov 2022 11:24:01 -0800 (PST)
-Received: from smtpclient.apple (172-125-78-211.lightspeed.sntcca.sbcglobal.net. [172.125.78.211])
-        by smtp.gmail.com with ESMTPSA id c39-20020a9d27aa000000b00661b019accbsm1283915otb.3.2022.11.30.11.23.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 30 Nov 2022 11:24:00 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH] hfs: Fix OOB Read in __hfs_brec_find
-From:   Viacheslav Dubeyko <slava@dubeyko.com>
-In-Reply-To: <20221130065959.2168236-1-zhangpeng362@huawei.com>
-Date:   Wed, 30 Nov 2022 11:23:56 -0800
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, sunnanyong@huawei.com,
-        wangkefeng.wang@huawei.com,
-        syzbot+e836ff7133ac02be825f@syzkaller.appspotmail.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <AF1D5323-061B-4B7E-83E4-90BF1275DB30@dubeyko.com>
-References: <20221130065959.2168236-1-zhangpeng362@huawei.com>
-To:     Peng Zhang <zhangpeng362@huawei.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mHDlPEbyxcL50hjC4RDuSLTtc0u9OjOuwet1Hn6ykis=;
+        b=MJP9WYSl2XOTRqM2iV6FduxyOIKT/XDNRWt1mr3HSj2nMFkm710JbEWgjMYRWHz8rM
+         YtSI0X5RLmPQQb9rdlXIR41aPFjSzc21ScXyi1rhF7BZ0rwpehjcwHggr+k56fOIaEE6
+         HRuUYDQFP/GB4g1eLfLzBTS9HpPSoCYEn93hvmXyMtOsAQTmvbEf/j2QSrpIQY/hyOiG
+         Z7XXZly8616Uo6TbR+6PnN1gFhVUOZKY8a0qGU5HRy96+CG54cYEPctyTGc5CD/f3i0K
+         HzNtVxHWahr5hLJHhDmI6ui01Roy7D5hetyw15aj0RIfnjFhZn5e9sccH+9wtvpWr3lA
+         QWHg==
+X-Gm-Message-State: ANoB5pmcRZ8LxQNB3BtJuM/wmELGVd404d3yUFA0WB3NgPWkOfdGXu3J
+        Q7NMf0sLmNMaoEL/c/IDqnckN5x+DX9/OLduQUeEBSKnGxgX
+X-Google-Smtp-Source: AA0mqf7soXd7jOnwY0B+aHPhvjOt3jilZIWveY+Dx3xEUYDRtEHyu3QDruNVzFgMvkQPltsZUlQsrtx/mYbGE4/QlCnQfhm945Lz
+MIME-Version: 1.0
+X-Received: by 2002:a92:db4b:0:b0:302:5575:9e46 with SMTP id
+ w11-20020a92db4b000000b0030255759e46mr28390061ilq.41.1669836377119; Wed, 30
+ Nov 2022 11:26:17 -0800 (PST)
+Date:   Wed, 30 Nov 2022 11:26:17 -0800
+In-Reply-To: <cd4158d0-bfc0-099c-c914-4889eaf95036@huawei.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001767a405eeb514eb@google.com>
+Subject: Re: [syzbot] INFO: task hung in gfs2_gl_hash_clear (3)
+From:   syzbot <syzbot+ed7d0f71a89e28557a77@syzkaller.appspotmail.com>
+To:     bobo.shaobowang@huawei.com, brauner@kernel.org, broonie@kernel.org,
+        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, liwei391@huawei.com,
+        madvenka@linux.microsoft.com, scott@os.amperecomputing.com,
+        syzkaller-bugs@googlegroups.com, will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot tried to test the proposed patch but the build/boot failed:
+
+failed to apply patch:
+checking file fs/gfs2/super.c
+patch: **** unexpected end of file in patch
 
 
-> On Nov 29, 2022, at 10:59 PM, Peng Zhang <zhangpeng362@huawei.com> =
-wrote:
->=20
-> From: ZhangPeng <zhangpeng362@huawei.com>
->=20
-> Syzbot reported a OOB read bug:
->=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> BUG: KASAN: slab-out-of-bounds in hfs_strcmp+0x117/0x190
-> fs/hfs/string.c:84
-> Read of size 1 at addr ffff88807eb62c4e by task kworker/u4:1/11
-> CPU: 1 PID: 11 Comm: kworker/u4:1 Not tainted
-> 6.1.0-rc6-syzkaller-00308-g644e9524388a #0
-> Workqueue: writeback wb_workfn (flush-7:0)
-> Call Trace:
-> <TASK>
-> __dump_stack lib/dump_stack.c:88 [inline]
-> dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
-> print_address_description+0x74/0x340 mm/kasan/report.c:284
-> print_report+0x107/0x1f0 mm/kasan/report.c:395
-> kasan_report+0xcd/0x100 mm/kasan/report.c:495
-> hfs_strcmp+0x117/0x190 fs/hfs/string.c:84
-> __hfs_brec_find+0x213/0x5c0 fs/hfs/bfind.c:75
-> hfs_brec_find+0x276/0x520 fs/hfs/bfind.c:138
-> hfs_write_inode+0x34c/0xb40 fs/hfs/inode.c:462
-> write_inode fs/fs-writeback.c:1440 [inline]
->=20
-> If the input inode of hfs_write_inode() is incorrect:
-> struct inode
->  struct hfs_inode_info
->    struct hfs_cat_key
->      struct hfs_name
->        u8 len # len is greater than HFS_NAMELEN(31) which is the
-> maximum length of an HFS filename
->=20
-> OOB read occurred:
-> hfs_write_inode()
->  hfs_brec_find()
->    __hfs_brec_find()
->      hfs_cat_keycmp()
->        hfs_strcmp() # OOB read occurred due to len is too large
->=20
-> Fix this by adding a Check on len in hfs_write_inode() before calling
-> hfs_brec_find().
->=20
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Reported-by: syzbot+e836ff7133ac02be825f@syzkaller.appspotmail.com
-> Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
-> ---
-> fs/hfs/inode.c | 2 ++
-> 1 file changed, 2 insertions(+)
->=20
-> diff --git a/fs/hfs/inode.c b/fs/hfs/inode.c
-> index c4526f16355d..a0746be3c1de 100644
-> --- a/fs/hfs/inode.c
-> +++ b/fs/hfs/inode.c
-> @@ -458,6 +458,8 @@ int hfs_write_inode(struct inode *inode, struct =
-writeback_control *wbc)
-> 		/* panic? */
-> 		return -EIO;
->=20
-> +	if (HFS_I(main_inode)->cat_key.CName.len > HFS_NAMELEN)
-> +		return -EIO;
 
-If I understood correctly, we have corrupted struct hfs_cat_key =
-instance. But what is the initial place
-of this corruption? What function could introduce such corruption? =
-Maybe, it needs to find a place(s)
-where we can add some additional check and potentially exclude the =
-incorrect input into
-hfs_write_inode()?
+Tested on:
 
-I think it is not only place where it makes sense to check the =
-correctness of struct hfs_cat_key
-instance. Could we introduce a special function that check struct =
-hfs_cat_key on corrupted
-state and to use this function to check the state of the key in =
-functions that operates by
-keys?
-
-Thanks,
-Slava.=20
-
-> 	fd.search_key->cat =3D HFS_I(main_inode)->cat_key;
-> 	if (hfs_brec_find(&fd))
-> 		/* panic? */
-> --=20
-> 2.25.1
->=20
+commit:         b7b275e6 Linux 6.1-rc7
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+dashboard link: https://syzkaller.appspot.com/bug?extid=ed7d0f71a89e28557a77
+compiler:       
+userspace arch: arm64
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1751c2bd880000
 
