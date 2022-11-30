@@ -2,101 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F5D63D7A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56CA763D7A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiK3OGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 09:06:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
+        id S229914AbiK3OHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 09:07:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiK3OGW (ORCPT
+        with ESMTP id S229895AbiK3OHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 09:06:22 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6517463F
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 06:06:20 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id o30so13267738wms.2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 06:06:20 -0800 (PST)
+        Wed, 30 Nov 2022 09:07:22 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF0C8BD05
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 06:06:56 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id vv4so41613532ejc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 06:06:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=newflow-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cZK+iipkHl/pJApvhUcvpWuoeG0v04wAY4UNOC37vzE=;
-        b=04RThbWA/+v6wP1k/7fkx43V5YD+NUt+nFK9/NA7SGUJC4567NIQnKu8MXSDWU5/Ap
-         bkfMUUT9XJ8apuyUDFRs4Dy1EgMI28NRXczg/bQ5YDLKFJ39FeN9xXOOFLIXuhNj/Gqx
-         xF0tsfz4W8B0E4GQxytUH5h52ZIAjaNdK5mAJx7Zb8JpmQLHZSe57X1BXpOKkl2cHBP6
-         P9Mq1JOgDb3+rJMY/dPizZveUcFf/K4euhPK0+JdT/dQ+Otdl2tdYH4skFdyY8uPeT7Q
-         lvWOhrZflPIRZ9Fk4N9XnZs/uZM/RM24oMtkD6Lt8r75KpC76L/5zv8jUBiAHH/gKAV/
-         SDLQ==
+        d=tessares.net; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rt1ilKFDzEzlhdKfYbR+znkHTtNyBE/kTERl0l5cx8w=;
+        b=XGgNGGxtOChAIQsnl1Rw6eAqP+KQCn5XAKjAhxawLhkHMNZRCws2UYSArJhydm3uAO
+         KT5dcraiYYrJavkOmIw3396ajGj1HsM6sA3eM9u1GZXDiFZ9oYIvlyW9KYGTH6D1Nqdl
+         fLAHntstcW3ONz0ZqIBI7ssM8K+Z+5peQEg1SvAEj0F+OWCoAsb8rTyPGA5wrZ5iZNpp
+         cD9T5CEUwUfcVd0W612EAQPva43vpQOTnrATCiBrruJGtuVgQLgU5w5I+2Ci93qRq/1U
+         rLuEM6lSG5SrBusRnRc4B1Wxmr9bRMTsc7WoFxpJ42SKM8mH2ta1VsZ42y6z4ZfMGn24
+         M8Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cZK+iipkHl/pJApvhUcvpWuoeG0v04wAY4UNOC37vzE=;
-        b=ICjGaO0zRUECu7P37vDIpeJfLRKk/3e3lbh6QAjH7nG5xLCoYJnDOJI/ZI8uaJveft
-         /j1rE78zfBnNuXTyMM4wc4OyFt3659Y5peEok8hnwX1D3Od+8pNm1V6qctdOc/d6mdSp
-         HOUMkQHF8I8NsB1ShrO1jYdg++b0hiJIe196r2WZNWLHpb4UxCnoEOg3qR4GPjysw0sO
-         Da3/W4qczkAvbh4EgyjpVwbcgQ5GPbccWp1tAgEbrDC539MBwe1zWrJHeE9rJuJ6sYn8
-         xneOhK70xIISPYxkLgWseN8G81kq4Re1xihJ9xQco4FPp5GLNho5D+9YUTLtBabR0XMZ
-         a0sw==
-X-Gm-Message-State: ANoB5pkzTdq0br7llY4Uiy1h1fLD2NiUlvOzxi1593f/d70gLnITgU5g
-        VZyG6kj0bwyzIW51YP/2/km2YA==
-X-Google-Smtp-Source: AA0mqf7H+IP49fZG476zanx03QWDNwT6bptGYlMh93TqEzY53h9PL2Z9YTNfNwMRrEqM/ptA55LvPA==
-X-Received: by 2002:a7b:cbcb:0:b0:3cf:a83b:cf25 with SMTP id n11-20020a7bcbcb000000b003cfa83bcf25mr33535477wmi.170.1669817179005;
-        Wed, 30 Nov 2022 06:06:19 -0800 (PST)
-Received: from mpfj-unity.. ([94.12.112.226])
-        by smtp.gmail.com with ESMTPSA id v128-20020a1cac86000000b003cfa80443a0sm2062542wme.35.2022.11.30.06.06.18
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rt1ilKFDzEzlhdKfYbR+znkHTtNyBE/kTERl0l5cx8w=;
+        b=gMh7CE4R7vAraJWtn0cnoG1xgy2zVMVfjBNtiVJg8ThlX1vwktMfOolUvB0SpG+1UL
+         FVN8nfku4o1PLazBA9gg6iTgXKt1rIiYtG0eTFKtRjruIoPlUdMYfKXbIt+UXVRdHF6T
+         EMCNJsIZW4rinEuhrms9GxOA77f+UNYle/Wy5JC9gIljpIofJo0pxKT4xLWOpaPtKGqK
+         l+97+f4qzGL06MdQtrfo/yMtQNpongiH6HGHlWReQWaqZkpeMb7dUtYke21okNafGuAV
+         sSXBrrUtl2PsrFMWqnfMVBdO2v2xts6fZyA2l2OK75mQBNeeRWwkSCHkKHUxTZOMjqD/
+         LM9A==
+X-Gm-Message-State: ANoB5pnvBOGZhT3e/DdEcJt15TDm43E6Z3fTRr8l/E+TKVvT14OrmghA
+        A6CfRqJ7E/bOWBcA2pXBZOGjnA==
+X-Google-Smtp-Source: AA0mqf5rBUQp06bOPeb2P50vGhfAiW493UUbrMxL6CqiT7DSfI3HjTNhhwFvxgv3FyimqSG/D/nYcQ==
+X-Received: by 2002:a17:906:79c4:b0:778:e3e2:8311 with SMTP id m4-20020a17090679c400b00778e3e28311mr38419262ejo.342.1669817214914;
+        Wed, 30 Nov 2022 06:06:54 -0800 (PST)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id mh1-20020a170906eb8100b0073d83f80b05sm692454ejb.94.2022.11.30.06.06.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 06:06:18 -0800 (PST)
-From:   Mark Jackson <mpfj@newflow.co.uk>
-To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Mark Jackson <mpfj@newflow.co.uk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 RESEND 5/5] ARM: dts: am335x-nano: Enable USB host
-Date:   Wed, 30 Nov 2022 14:05:47 +0000
-Message-Id: <20221130140547.295859-6-mpfj@newflow.co.uk>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221130140547.295859-1-mpfj@newflow.co.uk>
-References: <20221130140547.295859-1-mpfj@newflow.co.uk>
+        Wed, 30 Nov 2022 06:06:54 -0800 (PST)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        mptcp@lists.linux.dev, netdev@vger.kernel.org
+Subject: [PATCH net-next 00/11] mptcp: PM listener events + selftests cleanup
+Date:   Wed, 30 Nov 2022 15:06:22 +0100
+Message-Id: <20221130140637.409926-1-matthieu.baerts@tessares.net>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2590; i=matthieu.baerts@tessares.net;
+ h=from:subject; bh=pl1o6f40D2/19YlccetSq1+bjdqP611/9GCIe0J7Hbs=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjh2Nn+X5cqZr4yFarrOLufGxDeYDd/qEfd0Z/hsBE
+ U9Ou3IKJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY4djZwAKCRD2t4JPQmmgc/ZkEA
+ CrhsRPYiY1HY18bBWROwXSiegcbNbajaWlgMHWIPeBX/HUhbweqo45mTB2AQJ0LfdDFCHZ/jLk5KaB
+ bUTbXhGfBoV5BRJYtZHqnYnFSh3SoNFAlacDxG8AZQX3ZgqvHWY7eap9mK5cympe63LNxfRUNiVUsC
+ pKMdP22IPNNlpa7ZZbWBcEtaExeJ2wZryNdMIHEjuyZ07oxoAquQs+yv3kWcL57UcNdzi58R6vbj9t
+ O19eTfT6TA0KApwz9zsHIFuZPhwdS4Pj7KZxAYyACEncduMx+UcHjxLMJzDz0Cl3FUzwFpovdHsjl0
+ hp5rqgmYCRUiPYmLwG6QggbHvK72/97znq3LvymB0tMZjFKN6t8D57j8RriSjaM/KTnnyXk5CS+W9x
+ mjKV41zTlHmH7S8/OHu8OYzL8MJVS20dWJVe19MyDFKD1f8tY47nU8HdtE4RFpMns2V8OBaToVpcy4
+ lr/L8fs0qEpGuOJy0zKXsbGXa4j8vGs1ViAHMD93OXj2Xe/lvpEh3uJdgQn+zwAxypWKWxQ5ZaEtwA
+ /po4jh+7S1HNJyTMsfLouZLAF2dCNegSK/fJ47FhmQTh0mXVSYL68MoMnuRMTtcrYI3Yk+EX6LeTqd
+ gT4tfSYxNB/7xdA+mfM/JNKcklq77kSM/MNV0k8UmpPuw4xvRGuZ0Qnzrc2w==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp; fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing entry to enable the USB host.
+Thanks to the patch 6/11, the MPTCP path manager now sends Netlink events when
+MPTCP listening sockets are created and closed. The reason why it is needed is
+explained in the linked ticket [1]:
 
-Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
----
- arch/arm/boot/dts/am335x-nano.dts | 4 ++++
- 1 file changed, 4 insertions(+)
+  MPTCP for Linux, when not using the in-kernel PM, depends on the userspace PM
+  to create extra listening sockets before announcing addresses and ports. Let's
+  call these "PM listeners".
 
-diff --git a/arch/arm/boot/dts/am335x-nano.dts b/arch/arm/boot/dts/am335x-nano.dts
-index 58062cec39c0..c447aebd8d86 100644
---- a/arch/arm/boot/dts/am335x-nano.dts
-+++ b/arch/arm/boot/dts/am335x-nano.dts
-@@ -423,6 +423,10 @@ &mmc1 {
- 	wp-gpios = <&gpio3 18 GPIO_ACTIVE_HIGH>;
- };
- 
-+&usb0 {
-+	dr_mode = "host";
-+};
-+
- #include "tps65217.dtsi"
- 
- &tps {
+  With the existing MPTCP netlink events, a userspace PM can create PM listeners
+  at startup time, or in response to an incoming connection. Creating sockets in
+  response to connections is not optimal: ADD_ADDRs can't be sent until the
+  sockets are created and listen()ed, and if all connections are closed then it
+  may not be clear to the userspace PM daemon that PM listener sockets should be
+  cleaned up.
+
+  Hence this feature request: to add MPTCP netlink events for listening socket
+  close & create, so PM listening sockets can be managed based on application
+  activity.
+
+  [1] https://github.com/multipath-tcp/mptcp_net-next/issues/313
+
+Selftests for these new Netlink events have been added in patches 9,11/11.
+
+The remaining patches introduce different cleanups and small improvements in
+MPTCP selftests to ease the maintenance and the addition of new tests.
+
+
+Geliang Tang (6):
+  mptcp: add pm listener events
+  selftests: mptcp: enhance userspace pm tests
+  selftests: mptcp: make evts global in userspace_pm
+  selftests: mptcp: listener test for userspace PM
+  selftests: mptcp: make evts global in mptcp_join
+  selftests: mptcp: listener test for in-kernel PM
+
+Matthieu Baerts (5):
+  selftests: mptcp: run mptcp_inq from a clean netns
+  selftests: mptcp: removed defined but unused vars
+  selftests: mptcp: uniform 'rndh' variable
+  selftests: mptcp: clearly declare global ns vars
+  selftests: mptcp: declare var as local
+
+ include/uapi/linux/mptcp.h                    |   9 +
+ net/mptcp/pm_netlink.c                        |  57 ++++
+ net/mptcp/protocol.c                          |   3 +
+ net/mptcp/protocol.h                          |   2 +
+ tools/testing/selftests/net/mptcp/diag.sh     |   1 +
+ .../selftests/net/mptcp/mptcp_connect.sh      |   6 +-
+ .../testing/selftests/net/mptcp/mptcp_join.sh | 118 +++++--
+ .../selftests/net/mptcp/mptcp_sockopt.sh      |  69 ++--
+ .../selftests/net/mptcp/simult_flows.sh       |   4 +-
+ .../selftests/net/mptcp/userspace_pm.sh       | 298 ++++++++++--------
+ 10 files changed, 375 insertions(+), 192 deletions(-)
+
+
+base-commit: 91a7de85600d5dfa272cea3cef83052e067dc0ab
 -- 
-2.34.1
+2.37.2
 
