@@ -2,167 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC5C63D0D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5974563D0D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235399AbiK3IhG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 30 Nov 2022 03:37:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
+        id S235603AbiK3IhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 03:37:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232818AbiK3Igr (ORCPT
+        with ESMTP id S235571AbiK3Igj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 03:36:47 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 176E8206;
-        Wed, 30 Nov 2022 00:36:43 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2AU8ZDNG0032302, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2AU8ZDNG0032302
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Wed, 30 Nov 2022 16:35:13 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Wed, 30 Nov 2022 16:35:58 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Wed, 30 Nov 2022 16:35:58 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
- RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
- 15.01.2375.007; Wed, 30 Nov 2022 16:35:58 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        Neo Jou <neojou@gmail.com>,
-        Hans Ulli Kroll <linux@ulli-kroll.de>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Alexander Hochbaum <alex@appudo.com>,
-        Da Xue <da@libre.computer>,
-        "Bernie Huang" <phhuang@realtek.com>,
-        Viktor Petrenko <g0000ga@gmail.com>,
-        neo_jou <neo_jou@realtek.com>
-Subject: RE: [PATCH v4 07/11] wifi: rtw88: Add common USB chip support
-Thread-Topic: [PATCH v4 07/11] wifi: rtw88: Add common USB chip support
-Thread-Index: AQHZA9rfU40VmmVRiUGte21yFx1HBa5WonIA///29oCAAIjmkA==
-Date:   Wed, 30 Nov 2022 08:35:57 +0000
-Message-ID: <2f65e44cf7d14a228f03eb0ba3b018d7@realtek.com>
-References: <20221129100754.2753237-1-s.hauer@pengutronix.de>
- <20221129100754.2753237-8-s.hauer@pengutronix.de>
- <4eee82341ef84d4aa063edeb6f23a70d@realtek.com>
- <20221130081323.GE29728@pengutronix.de>
-In-Reply-To: <20221130081323.GE29728@pengutronix.de>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/11/30_=3F=3F_06:00:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 30 Nov 2022 03:36:39 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16474F75;
+        Wed, 30 Nov 2022 00:36:38 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-13bd19c3b68so20143589fac.7;
+        Wed, 30 Nov 2022 00:36:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=C8cqmGzfVCjxCPHfgIL2xOfMEXlcwATS1T5/zK1+jbw=;
+        b=EYP+xYeqqZV43Hrcy1u1vdcjPdZAda0tkb1dbQgNTKv39FaYQuSuP7cms+SSiOHdym
+         pahu7SiBHnXNc7T0l3+mERK5AkatUP9Uay8VaJOnssP3tNb47jPO2QM6sX2zJ6dlpJst
+         vsTdPlAhyOUF3OJdqol0JdXD6ocpqXtw6nYlvKxHHb80q9bUhPBVyQLorp1jk3dg8f3o
+         PkB64P+k/f6APGEjzikXQFoKagVFQ3fB9+eYMlKn3FiPAOP/yze14+R8fPpfFvz+FneS
+         kciPIivW2C3naKDvWrSykNUJD3hultU5i7broL2WHsXxG7M9uOSskzKA51WyMxwuvRJX
+         rC6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C8cqmGzfVCjxCPHfgIL2xOfMEXlcwATS1T5/zK1+jbw=;
+        b=nDc7BDez2MikOcMNzVAx4jHy622fdW9GavukFbTOvtCLcX7s2/EaEDssNq/Ugi7C87
+         Ay/rqyETurL2XkBOTGIanJkVrg2FiXhMpWLIQLG7D3oLRDUE/LdxsZreTpW9FCRklgd5
+         Sg4pFmB1nobsdLMe28Z0Xl2tUt0m1sgrRIp88/1v3NsVij9sgspFtuOTPoN0JG26qePr
+         6h7nEr70jWatD6ceelWhq6WnuZU1KwJrTY2u8h9WYEm6ZdvFoII+r5sQImnK483K34vV
+         qEuZgKPw1tdjSfuWWhCjlEcNyP6Y4okMvHeIdBThoGYEstay4fmh6aWLvsrFjbtj4g6U
+         U1bQ==
+X-Gm-Message-State: ANoB5pmE3NjDLTzmdWK6i/LOQ1UynjRN+u33GiSxV8jyNogrbVgMnlrI
+        6EL7vFu8XTxxqba6bFvKRBIR/XYPNBKvXMGezvE=
+X-Google-Smtp-Source: AA0mqf4LrL4qMWi9+zmjHRnmpWUEVNwAPF1yGUgE4xfVwRsDc9zZoq/qbovaZLLi+W+5OG1uVOq/e+ePL2+k50n0hlc=
+X-Received: by 2002:a05:6870:ab86:b0:13c:5763:9411 with SMTP id
+ gs6-20020a056870ab8600b0013c57639411mr32666222oab.288.1669797397394; Wed, 30
+ Nov 2022 00:36:37 -0800 (PST)
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221129140955.137361-1-gch981213@gmail.com> <20221129140955.137361-3-gch981213@gmail.com>
+ <98b72494-3188-76d5-2e24-9dc127a8b31a@linaro.org>
+In-Reply-To: <98b72494-3188-76d5-2e24-9dc127a8b31a@linaro.org>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Wed, 30 Nov 2022 16:36:26 +0800
+Message-ID: <CAJsYDVJknDWKMW1tH0M=85tJOPG-HngxhhMzvJpk5qn_Q9mzAg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] dt-bindings: leds: add dt schema for worldsemi,ws2812b-spi
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi!
 
+On Wed, Nov 30, 2022 at 12:54 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> > +description: |
+> > +  WorldSemi WS2812B is a individually addressable LED chip that can be chained
+> > +  together and controlled individually using a single wire.
+> > +  This driver simulates the protocol used by this LED chip with SPI bus.
+>
+> Drop references to Linux driver, unless important for the binding.
 
-> -----Original Message-----
-> From: Sascha Hauer <s.hauer@pengutronix.de>
-> Sent: Wednesday, November 30, 2022 4:13 PM
-> To: Ping-Ke Shih <pkshih@realtek.com>
-> Cc: linux-wireless@vger.kernel.org; Neo Jou <neojou@gmail.com>; Hans Ulli Kroll <linux@ulli-kroll.de>;
-> Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; netdev@vger.kernel.org;
-> linux-kernel@vger.kernel.org; Martin Blumenstingl <martin.blumenstingl@googlemail.com>;
-> kernel@pengutronix.de; Johannes Berg <johannes@sipsolutions.net>; Alexander Hochbaum <alex@appudo.com>;
-> Da Xue <da@libre.computer>; Bernie Huang <phhuang@realtek.com>; Viktor Petrenko <g0000ga@gmail.com>;
-> neo_jou <neo_jou@realtek.com>
-> Subject: Re: [PATCH v4 07/11] wifi: rtw88: Add common USB chip support
-> 
-> On Wed, Nov 30, 2022 at 01:40:36AM +0000, Ping-Ke Shih wrote:
-> >
-> >
-> > > -----Original Message-----
-> > > From: Sascha Hauer <s.hauer@pengutronix.de>
-> > > Sent: Tuesday, November 29, 2022 6:08 PM
-> > > To: linux-wireless@vger.kernel.org
-> > > Cc: Neo Jou <neojou@gmail.com>; Hans Ulli Kroll <linux@ulli-kroll.de>; Ping-Ke Shih
-> <pkshih@realtek.com>;
-> > > Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; netdev@vger.kernel.org;
-> > > linux-kernel@vger.kernel.org; Martin Blumenstingl <martin.blumenstingl@googlemail.com>;
-> > > kernel@pengutronix.de; Johannes Berg <johannes@sipsolutions.net>; Alexander Hochbaum
-> <alex@appudo.com>;
-> > > Da Xue <da@libre.computer>; Bernie Huang <phhuang@realtek.com>; Viktor Petrenko <g0000ga@gmail.com>;
-> > > Sascha Hauer <s.hauer@pengutronix.de>; neo_jou <neo_jou@realtek.com>
-> > > Subject: [PATCH v4 07/11] wifi: rtw88: Add common USB chip support
-> > >
-> > > Add the common bits and pieces to add USB support to the RTW88 driver.
-> > > This is based on https://github.com/ulli-kroll/rtw88-usb.git which
-> > > itself is first written by Neo Jou.
-> > >
-> > > Signed-off-by: neo_jou <neo_jou@realtek.com>
-> > > Signed-off-by: Hans Ulli Kroll <linux@ulli-kroll.de>
-> > > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> > > ---
-> >
-> > > +static void rtw_usb_write_port_tx_complete(struct urb *urb)
-> > > +{
-> > > +	struct rtw_usb_txcb *txcb = urb->context;
-> > > +	struct rtw_dev *rtwdev = txcb->rtwdev;
-> > > +	struct ieee80211_hw *hw = rtwdev->hw;
-> > > +	int max_iter = RTW_USB_MAX_XMITBUF_SZ;
-> > > +
-> > > +	while (true) {
-> > > +		struct sk_buff *skb = skb_dequeue(&txcb->tx_ack_queue);
-> > > +		struct ieee80211_tx_info *info;
-> > > +		struct rtw_usb_tx_data *tx_data;
-> > > +
-> > > +		if (!skb)
-> > > +			break;
-> > > +
-> > > +		if (!--max_iter) {
-> >
-> > Don't you need to free 'skb'? or you should not dequeue skb in this situation?
-> 
-> My first reaction here was to call skb_queue_purge(), but that is
-> implemented as:
-> 
-> 	while ((skb = skb_dequeue(list)) != NULL)
-> 		kfree_skb(skb);
-> 
-> So basically it brings us into the same endless loop we are trying to
-> break out here.
-> 
-> If it was me I would just remove this check. *txcb is allocated once
-> in rtw_usb_tx_agg_skb(), &txcb->tx_ack_queue is added the number of skbs
-> that fit into RTW_USB_MAX_XMITBUF_SZ and here we dequeue these skbs
-> again. No other code even has the pointer to add skbs to this queue
-> concurrently.
+I think the SPI part is important. (I'll explain it below.) What about:
 
-Agree with you after I trace the flow again. The number of skb is limited
-and all skb(s) belong to this urb must be freed in one go, or we don't
-have another chance to free them. Therefore, I think we can use this
-chunk of v3.
+This binding describes a chain of WS2812B LEDs connected to the SPI MOSI pin.
 
-Ping-Ke
+instead?
 
+> > +  Typical setups includes connecting the data pin of the LED chain to MOSI as
+> > +  the only device or using CS and MOSI with a tri-state voltage-level shifter
+> > +  for the data pin.
+> > +  The SPI frequency needs to be 2.105MHz~2.85MHz for the timing to be correct
+> > +  and the controller needs to send all the bytes continuously.
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: worldsemi,ws2812b-spi
+>
+> Drop "-spi". Compatibles are not supposed to include bus information.
+> The same for file name.
+
+WS2812B isn't a SPI chip. It's controlled with only a single wire and
+can be driven
+using anything that can produce a long and a short pulse meeting its timing
+requirement.
+This driver uses a SPI bus to send the pulses, but it can also be
+controlled with
+I2S and the PIO pins on a Raspberry Pi Pico.
+This spi suffix is to distinguish it from other possible
+implementations if someone
+else submits a support with a different peripheral.
+
+>
+> > +
+> > +  reg:
+> > +    description: The chip-select line on the SPI bus
+>
+> Drop description, it's obvious.
+
+OK.
+
+>
+> > +    maxItems: 1
+> > +
+> > +  spi-max-frequency:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description:
+> > +      Maximum SPI clocking speed of the device in Hz.
+>
+> No need for ref and description. It comes from spi-peripheral-props.
+
+OK.
+
+>
+> > +    minimum: 2105000
+> > +    maximum: 2850000
+> > +
+> > +  "#address-cells":
+> > +    const: 1
+> > +
+> > +  "#size-cells":
+> > +    const: 0
+> > +
+> > +patternProperties:
+> > +  "^multi-led(@[0-9a-f])?$":
+>
+> Why unit address is optional?
+
+It isn't. I copy-pasted it from led-class-multicolor.yaml and
+didn't check the exact regex.
+I'll fix it in the next version.
+
+>
+> > +    type: object
+> > +    $ref: leds-class-multicolor.yaml#
+>
+>     unevaluatedProperties: false
+
+OK.
+
+> > +
+> > +    properties:
+> > +      color-index:
+> > +        description: |
+> > +          A 3-item array specifying color of each components in this LED. It
+> > +          should be one of the LED_COLOR_ID_* prefixed definitions from the
+> > +          header include/dt-bindings/leds/common.h. Defaults to
+> > +          <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>
+> > +          if unspecified.
+> > +        $ref: /schemas/types.yaml#/definitions/uint32-array
+> > +        minItems: 3
+>
+> Drop minItems.... but see comment below:
+>
+> > +        maxItems: 3
+>
+> Why this is different than other multi-color LEDs? I would expect here
+> children with common.yaml.
+
+WS2812B is a single LED package with 3 diodes and a microcontroller.
+Each LED package has 3 colors. The original chip comes with GRB
+color while there are some clones with RGB arrangement instead.
+The LED chain can be really long so I'd like to simplify the binding
+by using a single property to override the only variable, color, here.
+
+>
+> > +
+> > +      default-intensity:
+> > +        description: |
+> > +          An array of 3 integer specifying the default intensity of each color
+> > +          components in this LED. <255 255 255> if unspecified.
+> > +        $ref: /schemas/types.yaml#/definitions/uint32-array
+> > +        minItems: 3
+>
+> Drop minItems.... but:
+>
+> > +        maxItems: 3
+> > +        items:
+> > +          minimum: 0
+> > +          maximum: 255
+>
+> default: 255
+>
+> What controls the intensity? Don't you have PWM there?
+
+The LED takes 3-byte brightness value of each color. This property is used to
+specify the default multi_intensity field for the multi-color LED. The final
+brightness value is calculated with led_mc_calc_color_components like this:
+
+mcled_cdev->subled_info[i].brightness = brightness *
+mcled_cdev->subled_info[i].intensity / led_cdev->max_brightness;
+
+The LED chip takes exactly 8 bits for the brightness (max_brightness = 255
+which can't be changed.), so according to the formula above the maximum
+intensity should be 255.
+
+>
+> > +
+> > +      reg:
+> > +        description: |
+> > +          Which LED this node represents. The reg of the first LED on the chain
+> > +          is 0.
+>
+> maxItems: 1
+
+OK.
+
+>
+> > +
+> > +    required:
+> > +      - reg
+> > +      - color
+> > +      - function
+> > +
+> > +required:
+> > +  - compatible
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/leds/common.h>
+> > +    spi {
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        ws2812b@0 {
+>
+> Node names should be generic.
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+OK. I'll use leds instead.
+
+>
+> > +            #address-cells = <1>;
+> > +            #size-cells = <0>;
+> > +            compatible = "worldsemi,ws2812b-spi";
+> > +            reg = <0>;
+>
+> compatible is first property, reg is second.
+
+Got it.
+
+--
+Regards,
+Chuanhong Guo
