@@ -2,412 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36EF263CE39
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 05:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5FC63CE3B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 05:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232225AbiK3EJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 23:09:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
+        id S231747AbiK3EKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 23:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233244AbiK3EIy (ORCPT
+        with ESMTP id S229777AbiK3EKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 23:08:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12E729803;
-        Tue, 29 Nov 2022 20:08:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F14A9B819FC;
-        Wed, 30 Nov 2022 04:08:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 998CAC433C1;
-        Wed, 30 Nov 2022 04:08:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669781327;
-        bh=YqgkfAkC7fkxgy0kQrNLPnoW4g3hvntZHdESVA87dbI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rxus8bK+AeMi3jmPxJ9YYnQ9eNRWMKBAk2NIrm28RPOyPrHAoQhobrQQoaxb2HEDG
-         /zZAwrvErNsq4nYExnOVodJ4RtwBC3NZ1rRPYzmp9RrolDntYkFCQN+CjvyKBPa4g/
-         nTLsaqJK5B64jbADSGx3FW0qQITA3KEtD69rXwc3u6oDCG+peIQHeY7XJGUyzNPlBJ
-         p/u6ip95fQ45MosyDEKrktDzJJXIFNXUEaPijMYnBTjQDEEAQesxkNvkqSBiZ53e49
-         qinB1a9tdT8GaZYJG5BbKQghDiJjJ57aBgV+JZeAzqxXoaVaHtOm2fN2AYe5WLRH7S
-         3V5VeXop36R2A==
-Date:   Tue, 29 Nov 2022 20:08:47 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        david@fromorbit.com, dan.j.williams@intel.com
-Subject: Re: [PATCH 1/2] fsdax,xfs: fix warning messages at
- dax_[dis]associate_entry()
-Message-ID: <Y4bXTywl3PQTY3Er@magnolia>
-References: <1669301694-16-1-git-send-email-ruansy.fnst@fujitsu.com>
- <1669301694-16-2-git-send-email-ruansy.fnst@fujitsu.com>
+        Tue, 29 Nov 2022 23:10:13 -0500
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2077.outbound.protection.outlook.com [40.107.13.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA81013F1A;
+        Tue, 29 Nov 2022 20:10:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I9N+mRGOQuol4mB7UcwHXVJLnNo36gNm0UcaLhQ/TDkHYzkYfrDj4W7VnXMjapZmcWoRzzvtzBfrTtPN4axGfuCi+TEWYdp9L0DildESv5BHh7nlzFV56jXMq1h7MHrkLxwEuIOGNGdCdVO/UjLvzO8Wwm4ZtZTiHwbGkhpQAU/zx00Bs/NrHQXod9WwWPzlCoCsGLJU7PMc78jPXV8a8mXiia8xju13IuOtpAopfLdoUQ+4AKzFmJJhq812eRXHEBz5isfSUaLvVw7wJ+JLG0g6LedSSPoSNF2XVF166QPJqO74QHNDsCo863pHK9cLoYBnxYEdN2OmcomYxXKgaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+5DkrDefDg/kYAqyeeoCkENqVKsAhh1DHqMonEOzyak=;
+ b=dXpZYYcwuU1+3KMtPnhMsfQ/p+awxX+Z7toqvVgzwh5U/VjnfQbKushLODi8u7UuMpuPOfq10T40MaWLfQ7bLrubmMYysrenJ3eDeXwjTAyZXhK4HFFInIqi+xERH8aNex8sUvoYvDsMl2vqY5Pt+YwxdLDWgM+I2+ChroMDiuNztc+T4N5h9nUVborD6Uq15aI1IIv1cKjYxN/25i2v+2NSrBYPcAYecXzYwo3UxvNbaUTuo+eJrCx/T9CCRbxQsGtQewQH+KP73TXjwOYeRvTEEqIT4xssMd3Je1+Ehz9gz7tvgXNBjJKbbmabbaSgdr4WVn1uuWdXWyqSVSHsDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+5DkrDefDg/kYAqyeeoCkENqVKsAhh1DHqMonEOzyak=;
+ b=l4FQxwEkMYmIQYMdKze+uWSjAYo/mxFOL+aM4LdoJqib8yJhFDa8nz/3OjVweNAfC/YCuYR7iOhmU2olDvNwsIwavSJ2tagg//E2X6wCN9xy4gMHJcY3Vx04Nx828RJnM3QYQNVvcJ4stn/Oxjc0SfQ+fuppynwG/iwmIagXL1A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB6407.eurprd04.prod.outlook.com (2603:10a6:20b:d9::10)
+ by AS8PR04MB8071.eurprd04.prod.outlook.com (2603:10a6:20b:3f9::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.22; Wed, 30 Nov
+ 2022 04:10:09 +0000
+Received: from AM6PR04MB6407.eurprd04.prod.outlook.com
+ ([fe80::3222:ed58:9b36:beee]) by AM6PR04MB6407.eurprd04.prod.outlook.com
+ ([fe80::3222:ed58:9b36:beee%4]) with mapi id 15.20.5857.023; Wed, 30 Nov 2022
+ 04:10:09 +0000
+Message-ID: <dfe167cf-5d4e-6fc7-c954-25f719b1e843@nxp.com>
+Date:   Wed, 30 Nov 2022 09:39:59 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [EXT] Re: [PATCH v5 2/2] misc: nxp-sr1xx: UWB driver support for
+ sr1xx series chip
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        robh+dt@kernel.org, mb@lightnvm.io, ckeepax@opensource.cirrus.com,
+        arnd@arndb.d, mst@redhat.com, javier@javigon.com,
+        mikelley@microsoft.com, jasowang@redhat.com,
+        sunilmut@microsoft.com, bjorn.andersson@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        ashish.deshpande@nxp.com, rvmanjumce@gmail.com
+References: <20220914142944.576482-1-manjunatha.venkatesh@nxp.com>
+ <20220914142944.576482-3-manjunatha.venkatesh@nxp.com>
+ <0b2da6f2-62f8-41a3-bf07-b6895a2dedee@www.fastmail.com>
+ <cd397721-f549-5c65-2c65-35b09c3ea7f9@nxp.com> <Y0A+Y3uNzpzGx0Ey@kroah.com>
+From:   Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
+In-Reply-To: <Y0A+Y3uNzpzGx0Ey@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI2PR04CA0004.apcprd04.prod.outlook.com
+ (2603:1096:4:197::22) To AM6PR04MB6407.eurprd04.prod.outlook.com
+ (2603:10a6:20b:d9::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1669301694-16-2-git-send-email-ruansy.fnst@fujitsu.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB6407:EE_|AS8PR04MB8071:EE_
+X-MS-Office365-Filtering-Correlation-Id: b33b34ce-85de-4a94-6f7a-08dad288c4d1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: l5BwdwL9UWopZCRTufPc4TfBazc2zjedoFddoPTDRGQP7vKWxxNs2Qbm66xwRMkIxbIMNGjauYTLjNIiQGV4PscqOReFR/oWUP8cjUfVCTHu+r9ibtJrtywmgz22fCSajbxPpXkY8u/WhK5nv81A2e+5Bw57TGxTvU3KS90zyfwOHwX4mepqGLbwqU45ZR1mhjfQ9Hwgx9Lb7x+jBKANfVugtFxD8Op3wXJqfzyu7nn526NsYOS1ndRyugtOla6Xny1uTa0oYRhalmkERiKfLoS3vQzu0a16PMFXnRRV5GrUqTUYiSNdxz60BTU6VmUaCh7TrggSyVtZmvAayg3QGx1SWpd2MOOKzMFjLyolvtldeyOCpGJWRZrKRHrT4/GZ2ffzt97d85TgWkBB3aiRPAsB00XvnfaofEJHzDIOEwdKt8kH6fb1JYuwToiwmXK8ohzJABfzKFptqRxJ5wNBCQAdHoMD0621aZx72Klssd8SOmB6eYDhx55Dm8lcN7TeJpbSiXrbXXVdVyGq/zG91cPr1glf28k4am6pCu5+g8Ovvy8N5YXxMBN8WELUXeWCLGM0zPIDAXADC9LtaY1yYdelroh2LxujJ+4x7yuK/97y6hX6wONRVb5LawJdKjuhlnR/KDC/H/HlaHtM7hIFuwlQzAA5uMk4IV0FnE90l93qudTzm3VKg9ugF3QGAd/y5SaPTxaa0h/lHu35GTMwsUVIByXgm295gO+g/CyZfDfqCe8vGdd1A4EKFDh19Bm9P4352JMq04AeeChy8imxZXM385eyEqNzcGcTHDHWTedvINA4OgTBtEh2Cy2g52Cqcz7Y/GV6A+R2gKm62PdLC76stPtH5a+nNOLeHy39EbsFv7t8X0JEC7bDnmX6EkGz
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6407.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(396003)(346002)(376002)(136003)(451199015)(83380400001)(86362001)(66476007)(31696002)(2906002)(44832011)(41300700001)(7416002)(6506007)(8936002)(5660300002)(4326008)(55236004)(52116002)(186003)(6666004)(26005)(53546011)(6512007)(2616005)(966005)(54906003)(316002)(6486002)(8676002)(38350700002)(45080400002)(38100700002)(6916009)(478600001)(66946007)(66556008)(36756003)(31686004)(32563001)(43740500002)(45980500001)(473944003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?LytVangrV2tJU2w5SEZDaXd2ZUFVUEpGbzVvRm16b0FyNWdDSko1Q3l6M2pu?=
+ =?utf-8?B?QlhIVG5nSVE1Y2R2bFZKZHhsRjdVV1lLVS9ncVY5Z081N0JrWmtWbkhWZW5S?=
+ =?utf-8?B?NjRiSU9TeHZST0hvUGxIZ1BhN0dkaXU1Q0puOE5vSnM0MWJMd1MyZEsrVWVz?=
+ =?utf-8?B?RUZ1NGF0YStWcFZFRFVzOHlaR2dpdVJsSDNsZWl2T2k3cEl5d3FIWUgwWmhj?=
+ =?utf-8?B?NFh6OG03UjZDZFhKTHBrNW1WVm1kaDBxblVIeDQ0Zm8veCtwOVFYeCtvVzho?=
+ =?utf-8?B?ckZLbHU5WXhuQ2JnTUtXNlU2RElwV1ppaEVUcTVOSXZEWEFtRjZtOHhwV2pH?=
+ =?utf-8?B?NXNCMTROSWF6R3lMS0x5SS9FVlhHQ2NDVnA5eVhTcFJzanJDOUtNQzlLdzl1?=
+ =?utf-8?B?VG9TR0taYXhXa0JIeFlRbUgyci9EWkJWT1FFSktDdHhSR082R1IzZUpkMndu?=
+ =?utf-8?B?dWVacW1wTGU2K05MNVhiOGhrR2YyZkVTWEg4L0ZYa1hMeGliUnRoNWo1Z2Ez?=
+ =?utf-8?B?U3krM3JEQ082YnJpRExDUlVnZExLSlhyVStvaUQvcHhybXVKbVNMOXRoOVVK?=
+ =?utf-8?B?Q1ZWczJrRTRzOUxBRCtiRHFJbnBmUjcycHBRM2NsKzAvMVpRVXlmNUZEUmhI?=
+ =?utf-8?B?Ti8yUTMxSERacXJNZGQ4aUIxZmxyallqMUVXQmJydUJXUkk3L2pXOVVTQ0c5?=
+ =?utf-8?B?Q3FUclU0SzB0YkJpTXNnd3J4ZlRJNmpqWTlqeG1DOWpqRUJLTnR4YWpNMUxP?=
+ =?utf-8?B?UDNXV1pVbm1XOW5IQVJxUC9kb0k1R0E0KzUyU0hhemcycWg0QWhMNmVqOUdO?=
+ =?utf-8?B?ZGlaQk9qdTRRZ3lTTzh0cXdOTDRVaGttTGovMk44Q1U5VTZZT21uU2Z4bHVI?=
+ =?utf-8?B?a1lHNE5JeGdiUHlQRGhRb2YrYy9hanEwRVl0aDNjVi9MSmkrclViN2c5M2Q4?=
+ =?utf-8?B?ZSs0UDlVTlFrVzNuVEd3MjVLRDVZcEl0R1hWbm9ZWDM3NmIwS0xOdWNML0lM?=
+ =?utf-8?B?MTFOaU5oR0dIM0hkTlZPUjM5SkZzNUZKUFRCZ09MMG44ck10Q01Vd3QyVjlh?=
+ =?utf-8?B?NWJQbEhQZC9raW1NSHEyUUdzMzJaUXdFTjBHSE9lODdtZi9jYmJnMHpmcnNC?=
+ =?utf-8?B?ZmxkWkVFQk00eFlWeDJRTWxQQlFqZUxucksrcG9VY0NibHNTRXZiUTZBV05s?=
+ =?utf-8?B?VEVnZ1pDSG5QTW9NeFJyOWJuSmJjU1YrYk5Pa250TXFqek55NXRSK1hzWkY2?=
+ =?utf-8?B?a2RWL1JyaVI3bS9WdWtCZTV2eXh5OTArazhyQ1loM1Q1NHUzVVVZcUJpdnZR?=
+ =?utf-8?B?aFJNa2FjZmkzd25ML3MrSkExaXFiTFVINlorY2l3Y3NubDFPZ1F1MlRHYlNH?=
+ =?utf-8?B?T2hOMEl0bTdzOFFjcnRJQlBTUCtVV2RuM1Q0RkVWcGtkU0NXU0Fkb0x0azQx?=
+ =?utf-8?B?YlNiRmR3djJWRmlvTi9XYmtrMFlWdXU5NWtpOXBiSWxqQW04K1B3aEJwRE9k?=
+ =?utf-8?B?dDZBVEFXT2hkSERoUXN1VkZLcVhTL2pnU3ZZcFJLeG1ReWRrTTFsa3FBU09p?=
+ =?utf-8?B?YStFYVV4cUxYSkRGdzUrSXcvcjM0UHdXZWVFYzhzREdUVWhOY0J3UDZ0N2Nm?=
+ =?utf-8?B?RCswYzlzdld5RVVtZXpTMmIzVEVXcnJCZW4zdHFrbENoUVFPY0cwSmxhdHlw?=
+ =?utf-8?B?TzhSVGZydm9CWFg4a0hhcDBnZGxHdnY4dEVaaWZIKytxVTJ3TTBacW1oZFh5?=
+ =?utf-8?B?RVRpYTlsZHFzSmVucUpzTTY4ZEwyV3RVbFh5VWk3Y0NyemJkQnptdWxwZVZq?=
+ =?utf-8?B?ZGZYZHBFeUdHb0RmZ0RFVEZUQ2dOOTJmeUkxWjNHL3RReWcvenVwMjV1R2FJ?=
+ =?utf-8?B?NzhyYzU2M2xPNjVmcXUrVnlxUmFYcFlDOVUyYnJJb3pBWlUrRE1NODA0YkUz?=
+ =?utf-8?B?ckJvempZQmx2WXBLRWNWTEcvWjJOZlhuODZla2luQmJ0T0dZK0dpN0RkZkRm?=
+ =?utf-8?B?WldPQmx6VWN4S3p0OThORllKdTRBYmczcTU3ZXZxeFBnYmxud01FR0NlYklC?=
+ =?utf-8?B?a1hIdE9lUWExUnNDa3ZOOE9vUk9kQjJWSWs1MTVPSjUzUlVqWkZZK05xQ0Jp?=
+ =?utf-8?B?SjdtUWhiQ1I2OHJ4WjlaSnVQZEpKa001QmlES2xqc3kvUEVoNUxWQ1p1U2Rm?=
+ =?utf-8?B?Q2c9PQ==?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b33b34ce-85de-4a94-6f7a-08dad288c4d1
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6407.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 04:10:09.1572
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5Jb1509TLSRojhFAV6hsDK8rzRtKTcoJ96TxFse6xRVBlFF5HycHP7T3owo8tR2CEvincDdFyIVjjRkjZWT8Ly1lHaRsGhxbwSlngjYwu3M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8071
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 02:54:53PM +0000, Shiyang Ruan wrote:
-> This patch fixes the warning message reported in dax_associate_entry()
-> and dax_disassociate_entry().
 
-Hmm, that's quite a bit to put in a single patch, but I'll try to get
-through this...
-
-> 1. reset page->mapping and ->index when refcount counting down to 0.
-> 2. set IOMAP_F_SHARED flag when iomap read to allow one dax page to be
-> associated more than once for not only write but also read.
-
-That makes sense, I think.
-
-> 3. should zero the edge (when not aligned) if srcmap is HOLE or
-
-When is IOMAP_F_SHARED set on the /source/ mapping?
-
-> UNWRITTEN.
-> 4. iterator of two files in dedupe should be executed side by side, not
-> nested.
-
-Why?  Also, this seems like a separate change?
-
-> 5. use xfs_dax_write_iomap_ops for xfs zero and truncate. 
-
-Makes sense.
-
-> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> ---
->  fs/dax.c           | 114 ++++++++++++++++++++++++++-------------------
->  fs/xfs/xfs_iomap.c |   6 +--
->  2 files changed, 69 insertions(+), 51 deletions(-)
-> 
-> diff --git a/fs/dax.c b/fs/dax.c
-> index 1c6867810cbd..5ea7c0926b7f 100644
-> --- a/fs/dax.c
-> +++ b/fs/dax.c
-> @@ -398,7 +398,7 @@ static void dax_disassociate_entry(void *entry, struct address_space *mapping,
->  		WARN_ON_ONCE(trunc && page_ref_count(page) > 1);
->  		if (dax_mapping_is_cow(page->mapping)) {
->  			/* keep the CoW flag if this page is still shared */
-> -			if (page->index-- > 0)
-> +			if (page->index-- > 1)
-
-Hmm.  So if the fsdax "page" sharing factor drops from 2 to 1, we'll now
-null out the mapping and index?  Before, we only did that when it
-dropped from 1 to 0.
-
-Does this leave the page with no mapping?  And I guess a subsequent
-access will now take a fault to map it back in?
-
->  				continue;
->  		} else
->  			WARN_ON_ONCE(page->mapping && page->mapping != mapping);
-> @@ -840,12 +840,6 @@ static bool dax_fault_is_synchronous(const struct iomap_iter *iter,
->  		(iter->iomap.flags & IOMAP_F_DIRTY);
->  }
->  
-> -static bool dax_fault_is_cow(const struct iomap_iter *iter)
-> -{
-> -	return (iter->flags & IOMAP_WRITE) &&
-> -		(iter->iomap.flags & IOMAP_F_SHARED);
-> -}
-> -
->  /*
->   * By this point grab_mapping_entry() has ensured that we have a locked entry
->   * of the appropriate size so we don't have to worry about downgrading PMDs to
-> @@ -859,13 +853,14 @@ static void *dax_insert_entry(struct xa_state *xas, struct vm_fault *vmf,
->  {
->  	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
->  	void *new_entry = dax_make_entry(pfn, flags);
-> -	bool dirty = !dax_fault_is_synchronous(iter, vmf->vma);
-> -	bool cow = dax_fault_is_cow(iter);
-> +	bool write = iter->flags & IOMAP_WRITE;
-> +	bool dirty = write && !dax_fault_is_synchronous(iter, vmf->vma);
-> +	bool shared = iter->iomap.flags & IOMAP_F_SHARED;
->  
->  	if (dirty)
->  		__mark_inode_dirty(mapping->host, I_DIRTY_PAGES);
->  
-> -	if (cow || (dax_is_zero_entry(entry) && !(flags & DAX_ZERO_PAGE))) {
-> +	if (shared || (dax_is_zero_entry(entry) && !(flags & DAX_ZERO_PAGE))) {
-
-Ah, ok, so now we're yanking the mapping if the extent is shared,
-presumably so that...
-
->  		unsigned long index = xas->xa_index;
->  		/* we are replacing a zero page with block mapping */
->  		if (dax_is_pmd_entry(entry))
-> @@ -877,12 +872,12 @@ static void *dax_insert_entry(struct xa_state *xas, struct vm_fault *vmf,
->  
->  	xas_reset(xas);
->  	xas_lock_irq(xas);
-> -	if (cow || dax_is_zero_entry(entry) || dax_is_empty_entry(entry)) {
-> +	if (shared || dax_is_zero_entry(entry) || dax_is_empty_entry(entry)) {
->  		void *old;
->  
->  		dax_disassociate_entry(entry, mapping, false);
->  		dax_associate_entry(new_entry, mapping, vmf->vma, vmf->address,
-> -				cow);
-> +				shared);
-
-...down here we can rebuild the association, but this time we'll set the
-page->mapping to PAGE_MAPPING_DAX_COW?  I see a lot of similar changes,
-so I'm guessing this is how you fixed the failures that were a result of
-read file A -> reflink A to B -> read file B sequences?
-
->  		/*
->  		 * Only swap our new entry into the page cache if the current
->  		 * entry is a zero page or an empty entry.  If a normal PTE or
-> @@ -902,7 +897,7 @@ static void *dax_insert_entry(struct xa_state *xas, struct vm_fault *vmf,
->  	if (dirty)
->  		xas_set_mark(xas, PAGECACHE_TAG_DIRTY);
->  
-> -	if (cow)
-> +	if (write && shared)
->  		xas_set_mark(xas, PAGECACHE_TAG_TOWRITE);
->  
->  	xas_unlock_irq(xas);
-> @@ -1107,23 +1102,35 @@ static int dax_iomap_cow_copy(loff_t pos, uint64_t length, size_t align_size,
-
-I think this function isn't well named.  It's copying into the parts of
-the @daddr page that are *not* covered by @pos/@length.  In other words,
-it's really copying *around* the range that's supplied, isn't it?
-
->  	loff_t end = pos + length;
->  	loff_t pg_end = round_up(end, align_size);
->  	bool copy_all = head_off == 0 && end == pg_end;
-> +	/* write zero at edge if srcmap is a HOLE or IOMAP_UNWRITTEN */
-> +	bool zero_edge = srcmap->flags & IOMAP_F_SHARED ||
-
-When is IOMAP_F_SHARED set on the /source/ mapping?  I don't understand
-that circumstance, so I don't understand why we want to zero around in
-that case.
-
-> +			 srcmap->type == IOMAP_UNWRITTEN;
-
-Though it's self evident why we'd do that if the source map is
-unwritten.
-
->  	void *saddr = 0;
->  	int ret = 0;
->  
-> -	ret = dax_iomap_direct_access(srcmap, pos, size, &saddr, NULL);
-> -	if (ret)
-> -		return ret;
-> +	if (!zero_edge) {
-> +		ret = dax_iomap_direct_access(srcmap, pos, size, &saddr, NULL);
-> +		if (ret)
-> +			return ret;
-> +	}
->  
->  	if (copy_all) {
-> -		ret = copy_mc_to_kernel(daddr, saddr, length);
-> -		return ret ? -EIO : 0;
-> +		if (zero_edge)
-> +			memset(daddr, 0, size);
-> +		else
-> +			ret = copy_mc_to_kernel(daddr, saddr, length);
-> +		goto out;
->  	}
->  
->  	/* Copy the head part of the range */
->  	if (head_off) {
-> -		ret = copy_mc_to_kernel(daddr, saddr, head_off);
-> -		if (ret)
-> -			return -EIO;
-> +		if (zero_edge)
-> +			memset(daddr, 0, head_off);
-> +		else {
-> +			ret = copy_mc_to_kernel(daddr, saddr, head_off);
-> +			if (ret)
-> +				return -EIO;
-> +		}
->  	}
->  
->  	/* Copy the tail part of the range */
-> @@ -1131,12 +1138,19 @@ static int dax_iomap_cow_copy(loff_t pos, uint64_t length, size_t align_size,
->  		loff_t tail_off = head_off + length;
->  		loff_t tail_len = pg_end - end;
->  
-> -		ret = copy_mc_to_kernel(daddr + tail_off, saddr + tail_off,
-> -					tail_len);
-> -		if (ret)
-> -			return -EIO;
-> +		if (zero_edge)
-> +			memset(daddr + tail_off, 0, tail_len);
-> +		else {
-> +			ret = copy_mc_to_kernel(daddr + tail_off,
-> +						saddr + tail_off, tail_len);
-> +			if (ret)
-> +				return -EIO;
-> +		}
->  	}
-> -	return 0;
-> +out:
-> +	if (zero_edge)
-> +		dax_flush(srcmap->dax_dev, daddr, size);
-> +	return ret ? -EIO : 0;
->  }
->  
->  /*
-> @@ -1235,13 +1249,9 @@ static int dax_memzero(struct iomap_iter *iter, loff_t pos, size_t size)
->  	if (ret < 0)
->  		return ret;
->  	memset(kaddr + offset, 0, size);
-> -	if (srcmap->addr != iomap->addr) {
-> -		ret = dax_iomap_cow_copy(pos, size, PAGE_SIZE, srcmap,
-> -					 kaddr);
-> -		if (ret < 0)
-> -			return ret;
-> -		dax_flush(iomap->dax_dev, kaddr, PAGE_SIZE);
-> -	} else
-> +	if (iomap->flags & IOMAP_F_SHARED)
-> +		ret = dax_iomap_cow_copy(pos, size, PAGE_SIZE, srcmap, kaddr);
-> +	else
->  		dax_flush(iomap->dax_dev, kaddr + offset, size);
->  	return ret;
->  }
-> @@ -1258,6 +1268,15 @@ static s64 dax_zero_iter(struct iomap_iter *iter, bool *did_zero)
->  	if (srcmap->type == IOMAP_HOLE || srcmap->type == IOMAP_UNWRITTEN)
->  		return length;
->  
-> +	/*
-> +	 * invalidate the pages whose sharing state is to be changed
-> +	 * because of CoW.
-> +	 */
-> +	if (iomap->flags & IOMAP_F_SHARED)
-> +		invalidate_inode_pages2_range(iter->inode->i_mapping,
-> +					      pos >> PAGE_SHIFT,
-> +					      (pos + length - 1) >> PAGE_SHIFT);
-> +
->  	do {
->  		unsigned offset = offset_in_page(pos);
->  		unsigned size = min_t(u64, PAGE_SIZE - offset, length);
-> @@ -1318,12 +1337,13 @@ static loff_t dax_iomap_iter(const struct iomap_iter *iomi,
->  		struct iov_iter *iter)
->  {
->  	const struct iomap *iomap = &iomi->iomap;
-> -	const struct iomap *srcmap = &iomi->srcmap;
-> +	const struct iomap *srcmap = iomap_iter_srcmap(iomi);
->  	loff_t length = iomap_length(iomi);
->  	loff_t pos = iomi->pos;
->  	struct dax_device *dax_dev = iomap->dax_dev;
->  	loff_t end = pos + length, done = 0;
->  	bool write = iov_iter_rw(iter) == WRITE;
-> +	bool cow = write && iomap->flags & IOMAP_F_SHARED;
->  	ssize_t ret = 0;
->  	size_t xfer;
->  	int id;
-> @@ -1350,7 +1370,7 @@ static loff_t dax_iomap_iter(const struct iomap_iter *iomi,
->  	 * into page tables. We have to tear down these mappings so that data
->  	 * written by write(2) is visible in mmap.
->  	 */
-> -	if (iomap->flags & IOMAP_F_NEW) {
-> +	if (iomap->flags & IOMAP_F_NEW || cow) {
->  		invalidate_inode_pages2_range(iomi->inode->i_mapping,
->  					      pos >> PAGE_SHIFT,
->  					      (end - 1) >> PAGE_SHIFT);
-> @@ -1384,8 +1404,7 @@ static loff_t dax_iomap_iter(const struct iomap_iter *iomi,
->  			break;
->  		}
->  
-> -		if (write &&
-> -		    srcmap->type != IOMAP_HOLE && srcmap->addr != iomap->addr) {
-> +		if (cow) {
->  			ret = dax_iomap_cow_copy(pos, length, PAGE_SIZE, srcmap,
->  						 kaddr);
->  			if (ret)
-> @@ -1532,7 +1551,7 @@ static vm_fault_t dax_fault_iter(struct vm_fault *vmf,
->  		struct xa_state *xas, void **entry, bool pmd)
->  {
->  	const struct iomap *iomap = &iter->iomap;
-> -	const struct iomap *srcmap = &iter->srcmap;
-> +	const struct iomap *srcmap = iomap_iter_srcmap(iter);
->  	size_t size = pmd ? PMD_SIZE : PAGE_SIZE;
->  	loff_t pos = (loff_t)xas->xa_index << PAGE_SHIFT;
->  	bool write = iter->flags & IOMAP_WRITE;
-> @@ -1563,8 +1582,7 @@ static vm_fault_t dax_fault_iter(struct vm_fault *vmf,
->  
->  	*entry = dax_insert_entry(xas, vmf, iter, *entry, pfn, entry_flags);
->  
-> -	if (write &&
-> -	    srcmap->type != IOMAP_HOLE && srcmap->addr != iomap->addr) {
-> +	if (write && iomap->flags & IOMAP_F_SHARED) {
->  		err = dax_iomap_cow_copy(pos, size, size, srcmap, kaddr);
->  		if (err)
->  			return dax_fault_return(err);
-> @@ -1936,15 +1954,15 @@ int dax_dedupe_file_range_compare(struct inode *src, loff_t srcoff,
-
-Does the dedupe change need to be in this patch?  It looks ok both
-before and after, so I don't know why it's necessary.
-
-Welp, thank you for fixing the problems, at least.  After a couple of
-days it looks like the serious problems have cleared up.
-
---D
-
->  		.len		= len,
->  		.flags		= IOMAP_DAX,
->  	};
-> -	int ret;
-> +	int ret, compared = 0;
->  
-> -	while ((ret = iomap_iter(&src_iter, ops)) > 0) {
-> -		while ((ret = iomap_iter(&dst_iter, ops)) > 0) {
-> -			dst_iter.processed = dax_range_compare_iter(&src_iter,
-> -						&dst_iter, len, same);
-> -		}
-> -		if (ret <= 0)
-> -			src_iter.processed = ret;
-> +	while ((ret = iomap_iter(&src_iter, ops)) > 0 &&
-> +	       (ret = iomap_iter(&dst_iter, ops)) > 0) {
-> +		compared = dax_range_compare_iter(&src_iter, &dst_iter, len,
-> +						  same);
-> +		if (compared < 0)
-> +			return ret;
-> +		src_iter.processed = dst_iter.processed = compared;
->  	}
->  	return ret;
->  }
-> diff --git a/fs/xfs/xfs_iomap.c b/fs/xfs/xfs_iomap.c
-> index 07da03976ec1..d9401d0300ad 100644
-> --- a/fs/xfs/xfs_iomap.c
-> +++ b/fs/xfs/xfs_iomap.c
-> @@ -1215,7 +1215,7 @@ xfs_read_iomap_begin(
->  		return error;
->  	error = xfs_bmapi_read(ip, offset_fsb, end_fsb - offset_fsb, &imap,
->  			       &nimaps, 0);
-> -	if (!error && (flags & IOMAP_REPORT))
-> +	if (!error && ((flags & IOMAP_REPORT) || IS_DAX(inode)))
->  		error = xfs_reflink_trim_around_shared(ip, &imap, &shared);
->  	xfs_iunlock(ip, lockmode);
->  
-> @@ -1370,7 +1370,7 @@ xfs_zero_range(
->  
->  	if (IS_DAX(inode))
->  		return dax_zero_range(inode, pos, len, did_zero,
-> -				      &xfs_direct_write_iomap_ops);
-> +				      &xfs_dax_write_iomap_ops);
->  	return iomap_zero_range(inode, pos, len, did_zero,
->  				&xfs_buffered_write_iomap_ops);
->  }
-> @@ -1385,7 +1385,7 @@ xfs_truncate_page(
->  
->  	if (IS_DAX(inode))
->  		return dax_truncate_page(inode, pos, did_zero,
-> -					&xfs_direct_write_iomap_ops);
-> +					&xfs_dax_write_iomap_ops);
->  	return iomap_truncate_page(inode, pos, did_zero,
->  				   &xfs_buffered_write_iomap_ops);
->  }
-> -- 
-> 2.38.1
-> 
+On 10/7/2022 8:27 PM, Greg Kroah-Hartman wrote:
+> Caution: EXT Email
+>
+> On Fri, Oct 07, 2022 at 07:34:25PM +0530, Manjunatha Venkatesh wrote:
+>> On 9/14/2022 8:39 PM, Arnd Bergmann wrote:
+>>> Caution: EXT Email
+>>>
+>>> On Wed, Sep 14, 2022, at 4:29 PM, Manjunatha Venkatesh wrote:
+>>>
+>>>> NXP has SR1XX family of UWB Subsystems (UWBS) devices. SR1XX SOCs
+>>>> are FiRa Compliant. SR1XX SOCs are flash less devices and they need
+>>>> Firmware Download on every device boot. More details on the SR1XX Family
+>>>> can be found athttps://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.nxp.com%2Fproducts%2F%3AUWB-TRIMENSION&amp;data=05%7C01%7Cmanjunatha.venkatesh%40nxp.com%7C8478b7c0aa694618aae608daa87430fa%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638007514231447184%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=y3t8eT%2BIX1OP%2B1wu%2B8hWp2HI%2FhnZj32L%2BDCcIA7m9hs%3D&amp;reserved=0
+>>>>
+>>>> The sr1xx driver work the SR1XX Family of UWBS, and uses UWB Controller
+>>>> Interface (UCI).  The corresponding details are available in the FiRa
+>>>> Consortium Website (https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.firaconsortium.org%2F&amp;data=05%7C01%7Cmanjunatha.venkatesh%40nxp.com%7C8478b7c0aa694618aae608daa87430fa%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638007514231447184%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=xhFUUcJ7a3oU6pefXHTunBCI73%2Fy2PnnwsTn1KZbeFk%3D&amp;reserved=0).
+>>> I know nothing about UWB, so I have no idea if the user interface
+>>> you propose here makes sense. My guess is that there is a good chance
+>>> that there are other implementations of UWB that would not work
+>>> with this specific driver interface, so you probably need a
+>>> slightly higher-level abstraction.
+>>>
+>>> We had an older subsystem that was called UWB and that got removed
+>>> a while ago:
+>>>
+>>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Ftorvalds%2Flinux.git%2Fcommit%2Fdrivers%2Fstaging%2Fuwb%3Fid%3Dcaa6772db4c1deb5d9add48e95d6eab50699ee5e&amp;data=05%7C01%7Cmanjunatha.venkatesh%40nxp.com%7C8478b7c0aa694618aae608daa87430fa%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638007514231447184%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=gcF%2B%2FzD%2F0TWJ5AEJvXCGv5n%2FrPg2qXJigedOq4IeVPI%3D&amp;reserved=0
+>>>
+>>> Is that the same UWB or something completely different?
+>> Basically, it is SPI device driver which supports UCI(Ultra-wide band
+>> Command Interface) packet structure. It is not same as in mentioned link.
+> Why isn't this just a normal SPI driver and you do the "UCI" commands
+> from userspace through the device node there?
+>
+> I know I asked this before, but I can't remember the answer, sorry, so
+> please include that in the changelog information when you resubmit.
+>
+> thanks,
+>
+> greg k-h
+The IO Handshake needed with SR1XX Family of SOCs cannot use the RAW SPI
+Module's APIs and hence custom APIs are added for communication with the
+UWBS,
+With this will get required throughput for UWBS use cases to avoid multiple
+round trip between user  and kernel mode.
