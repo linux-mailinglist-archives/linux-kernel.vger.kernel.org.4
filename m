@@ -2,103 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0086363D75E
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C5F63D762
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbiK3N6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 08:58:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
+        id S230320AbiK3N7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 08:59:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiK3N6g (ORCPT
+        with ESMTP id S229456AbiK3N7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 08:58:36 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D3F2124F
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 05:58:34 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id j4so27111635lfk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 05:58:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z/IkgJhGlC2jakl2mEql5tWtZmP6qrQiICZlujfOmWc=;
-        b=qeI5DGC7HVu7dL1ljYAK70PykFG9IlTdEiF+RN4EhqN+g45Vwfb0ZYUgY30IcuUq1v
-         IV1dR+9CViyrU70Ec/JtxkG8vbmJ9DUibs57hRzRMWRhm+b+BWeQqtMAlNk3vcj5vFiG
-         dNVaLLdvj6Hx3mzzDZszjzXd06PV4+zwPffdOIlaYUjPb1fdyVTsbB8OcGz6YK70hPFP
-         ZfJIWvXt8VFoqdXTPOKHzktLJCAu5zw/lWf4s38du6xHZA6/sbhephVAediUlGN+PIwP
-         fwvmp8iMn7N/u3w9zv7nl6VgkDr03TsXtZnrPjhtdBZMbefGO0ouDX9wYea6vX/QqU9Z
-         bsZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z/IkgJhGlC2jakl2mEql5tWtZmP6qrQiICZlujfOmWc=;
-        b=ygGXqzcXdPYeiBIIPCsUoIaaarcmu6202uwxylZqZ/3GYcG+l3GulUqYEuvWmoCnkT
-         YxO5TyOXxsGx3DD9Lk7uuP4muUgotNXGCXEfyOjQ9OtUPkU6ahbTTrMrFrzXyKMSm1qs
-         zMQwVAOVLjHih1H1ALXVB91vbld3FzEwjmIwhwBiCUBvYUPGEADOBK/2l7oxxbCO3aO7
-         85HzbxHDto8xUvFpaDEVNH+JiOWuOKpBzX19qjMF5YRFYhRChvcuKzvwFbTp6rP/KYpv
-         pB3yQ94G7UhYSD4CAJWUcqMBloM4cI2NDhN7HdsAPrvJ57CfnfDT46A+p05Hp145BHNN
-         5V0A==
-X-Gm-Message-State: ANoB5pn/vLauHz8wtVM9Jq1UUVqwx55Eq/XFuG2zXIixEGBFuhLBRGsO
-        1Nkwbd/fHXF18cIL6W2BpX426w==
-X-Google-Smtp-Source: AA0mqf4mhUxGdxDyd1aKC1Sf0nP8jRR+iC9NP6I0ui600XlVx0c7uo//PmdFxfl+aNiow/+mVRXJDA==
-X-Received: by 2002:a05:6512:3153:b0:4a2:da6:d969 with SMTP id s19-20020a056512315300b004a20da6d969mr17496716lfi.671.1669816712596;
-        Wed, 30 Nov 2022 05:58:32 -0800 (PST)
-Received: from localhost.localdomain (95.49.125.236.neoplus.adsl.tpnet.pl. [95.49.125.236])
-        by smtp.gmail.com with ESMTPSA id 6-20020ac25f06000000b00498fbec3f8asm269889lfq.129.2022.11.30.05.58.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 05:58:28 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: msm/dsi: Don't require vcca-supply on 14nm PHY
-Date:   Wed, 30 Nov 2022 14:58:07 +0100
-Message-Id: <20221130135807.45028-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.38.1
+        Wed, 30 Nov 2022 08:59:18 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B58B29815;
+        Wed, 30 Nov 2022 05:59:17 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 283651F8D4;
+        Wed, 30 Nov 2022 13:59:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669816756; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BmWydEyxVCtO1F3KxVGX1dvHBxkV4Dnqpc/owJqFkOE=;
+        b=fzTGWCena/BFQ2Eq38B1LD+fqh7nkLAlqycR5BkW4pQjnxHB/In1wZAF2Dt4lioNX0URY2
+        JqTNokmchp/RHmF8o1DQsGN4f84+GHA+Oa+LQL2nvAU2ABh+3b2n7zCTY0Z7mI/7rmyKQO
+        QOniOTv1QYfiaAvRq/1kEIGZ2Ke0agk=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B8F0E2C152;
+        Wed, 30 Nov 2022 13:59:15 +0000 (UTC)
+Date:   Wed, 30 Nov 2022 14:59:15 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Joe Perches <joe@perches.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: [PATCH v2 1/3] printk: introduce new macros pr_<level>_cont()
+Message-ID: <Y4dhs1G3mcX/YraJ@alley>
+References: <20221125190948.2062-1-linux@weissschuh.net>
+ <20221125190948.2062-2-linux@weissschuh.net>
+ <1fb146231e1810b4c9923f384afa166e07e7f253.camel@perches.com>
+ <cf45b62e-6248-42f3-807f-5df0954437e0@t-8ch.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <cf45b62e-6248-42f3-807f-5df0954437e0@t-8ch.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some SoCs (hello SM6115) vcca-supply is not wired to any smd-rpm
-or rpmh regulator, but instead powered by the VDD_MX line, which is
-voted for in the DSI ctrl node.
+On Fri 2022-11-25 21:33:40, Thomas Weißschuh wrote:
+> On 2022-11-25 12:18-0800, Joe Perches wrote:
+> > On Fri, 2022-11-25 at 20:09 +0100, Thomas Weißschuh wrote:
+> >> These macros emit continuation messages with explicit levels.
+> >> In case the continuation is logged separately from the original message
+> >> it will retain its level instead of falling back to KERN_DEFAULT.
+> >> 
+> >> This remedies the issue that logs filtered by level contain stray
+> >> continuation messages without context.
+> >> 
+> >> --- a/include/linux/printk.h
+> >> +++ b/include/linux/printk.h
+> >> @@ -701,6 +703,27 @@ do {									\
+> >>  	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+> >>  #endif
+> >>  
+> >> +/*
+> >> + * Print a continuation message with level. In case the continuation is split
+> >> + * from the main message it preserves the level.
+> >> + */
+> >> +
+> >> +#define pr_emerg_cont(fmt, ...)					\
+> >> +	printk(KERN_EMERG KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
+> > 
+> > Aren't this rather backwards?
+> > KERN_CONT KERN_<LEVEL> seems to make more sense to me.
+> 
+> If nobody else disagrees I'll do this for v3.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml | 1 -
- 1 file changed, 1 deletion(-)
+I slightly prefer the way how it is now. IMHO, it makes it easier
+to check the related levels in /sys/kernel/debug/printk/index/vmlinux [*]:
 
-diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
-index 819de5ce0bc9..a43e11d3b00d 100644
---- a/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
-+++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
-@@ -39,7 +39,6 @@ required:
-   - compatible
-   - reg
-   - reg-names
--  - vcca-supply
- 
- unevaluatedProperties: false
- 
--- 
-2.38.1
+<6> kernel/power/process.c:227 thaw_kernel_threads "Restarting kernel threads ... "
+<6,c> kernel/power/process.c:218 thaw_processes "done.\n"
+<6> kernel/power/process.c:197 thaw_processes "Restarting tasks ... "
+<6,c> kernel/power/process.c:176 freeze_kernel_threads "\n"
+<6,c> kernel/power/process.c:174 freeze_kernel_threads "done."
+<6> kernel/power/process.c:169 freeze_kernel_threads "Freezing remaining freezable tasks ... "
+<6,c> kernel/power/process.c:140 freeze_processes "\n"
+<6,c> kernel/power/process.c:138 freeze_processes "done."
+<6> kernel/power/process.c:133 freeze_processes "Freezing user space processes ... "
+<6,c> kernel/power/process.c:105 try_to_freeze_tasks "(elapsed %d.%03d seconds) "
 
+That said, I do not want to fight over it. It is hidden behind the
+API. The only really visible place is the printk index.
+
+[*] The index is available only when CONFIG_PRINTK_INDEX is enabled.
+
+Best Regards,
+Petr
