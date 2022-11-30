@@ -2,85 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C65163E06E
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A908363E075
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbiK3TKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 14:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57592 "EHLO
+        id S229726AbiK3TL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 14:11:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiK3TKJ (ORCPT
+        with ESMTP id S229449AbiK3TL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 14:10:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4005445B
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:09:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669835352;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+QVNS4KGKiQlkWq9pmeMaxREOPvT9GqK+wYyEoJX7MI=;
-        b=fNAztgTguVuNSrC9xuzn/Lfq7O64cfU2uESPPb+GlBtrog+4udObjb0/BjgJ4oSPZGR2Sb
-        0xzQGCh7lvLq/UlWEi2KibKUa3iJjJau7Poxwq/Lr02az3liAkuukivOkwY8/pREzp6A6H
-        S/eQIgwsfqC5mJjdqSeQqSNmBvL+FWk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-539-bh4-bCdXMWOFNg7UvKspPg-1; Wed, 30 Nov 2022 14:09:09 -0500
-X-MC-Unique: bh4-bCdXMWOFNg7UvKspPg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 92AD31C0896A;
-        Wed, 30 Nov 2022 19:09:08 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.36])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 043FF1121314;
-        Wed, 30 Nov 2022 19:09:06 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAEXW_YS1nfsV_ohXDaB1i2em=+0KP1DofktS24oGFa4wPAbiiw@mail.gmail.com>
-References: <CAEXW_YS1nfsV_ohXDaB1i2em=+0KP1DofktS24oGFa4wPAbiiw@mail.gmail.com> <20221130181316.GA1012431@paulmck-ThinkPad-P17-Gen-1> <20221130181325.1012760-14-paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     dhowells@redhat.com, "Paul E. McKenney" <paulmck@kernel.org>,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        Marc Dionne <marc.dionne@auristor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH rcu 14/16] rxrpc: Use call_rcu_hurry() instead of call_rcu()
+        Wed, 30 Nov 2022 14:11:28 -0500
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC5D5445D;
+        Wed, 30 Nov 2022 11:11:27 -0800 (PST)
+Received: by mail-oi1-f178.google.com with SMTP id n205so19846071oib.1;
+        Wed, 30 Nov 2022 11:11:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1JhMgGZW7My2+iKHTLOJlbdH8i+Z4qqitNV2auxp8XE=;
+        b=3Lx4kzjCVjChRS7YDzWxLyYITAZRBR3VeCqG5MYAbEBDrnrtdzu83PW6fMwBKpFyoY
+         CD6xEFzcTzw5weSDMkQeYmTGRyaVJKnBWRtUonlHdJAv4aqs4jSVj3JuR2V2/z5hCln6
+         DFKMESXqWY+evHPAYGjcVIpJZPXNi54gNwWy66tcI+IxXJlR+ugrr6n9YMLEaRxEAMyi
+         +n752g/MO3q2DDF1uw8iJ5HwvKRWKb2jwoI67bfTJwuCAc013MOnQlPopNMZeBbHDwpq
+         x0mpohtMFV2YsnhuzAfn1wS8wRHWMmJmkg9x39mrB1gJU3oEppBJ9EVYpLdf+jPokbbW
+         UsxA==
+X-Gm-Message-State: ANoB5pmPQLaLJZig+SbBwjC/oHqCczTKHYPpWl0IfqRFydUOdO5zFFpS
+        laMehRX26KBobNq363o00A==
+X-Google-Smtp-Source: AA0mqf7htfyXtTOqZ6SLwCWAtka03LgntaMGU5dLEbwjX1nbs89vbcUHfQasU5eIlJmkF1/HAWFS4g==
+X-Received: by 2002:a05:6808:1309:b0:359:d97b:3f6f with SMTP id y9-20020a056808130900b00359d97b3f6fmr23361909oiv.298.1669835486319;
+        Wed, 30 Nov 2022 11:11:26 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s16-20020a056830439000b0066c7733be43sm1290820otv.30.2022.11.30.11.11.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 11:11:25 -0800 (PST)
+Received: (nullmailer pid 2629509 invoked by uid 1000);
+        Wed, 30 Nov 2022 19:11:25 -0000
+Date:   Wed, 30 Nov 2022 13:11:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Robert Marko <robimarko@gmail.com>,
+        Abel Vesa <abel.vesa@linaro.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Das Srinagesh <quic_gurus@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: firmware: qcom,scm: document MSM8226
+ clocks
+Message-ID: <166983548453.2629449.4233608295006445088.robh@kernel.org>
+References: <20221122092345.44369-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <639432.1669835344.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 30 Nov 2022 19:09:04 +0000
-Message-ID: <639433.1669835344@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221122092345.44369-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Note that this conflicts with my patch:
 
-	rxrpc: Don't hold a ref for connection workqueue
-	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/com=
-mit/?h=3Drxrpc-next&id=3D450b00011290660127c2d76f5c5ed264126eb229
+On Tue, 22 Nov 2022 10:23:44 +0100, Krzysztof Kozlowski wrote:
+> Document the clocks (core, bus and iface) used on MSM8226 SCM.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Cc: Abel Vesa <abel.vesa@linaro.org>
+> Cc: Sibi Sankar <quic_sibis@quicinc.com>
+> Cc: Melody Olvera <quic_molvera@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-which should render it unnecessary.  It's a little ahead of yours in the
-net-next queue, if that means anything.
-
-David
-
+Acked-by: Rob Herring <robh@kernel.org>
