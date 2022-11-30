@@ -2,87 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF2963E27A
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 538DB63E282
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiK3VHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 16:07:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
+        id S229723AbiK3VJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 16:09:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiK3VG7 (ORCPT
+        with ESMTP id S229475AbiK3VJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 16:06:59 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A402862CB
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:06:58 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so3177304pjc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:06:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ra/gOzDNFG0eeALE33ZJcJC4OwrLB1F+C50L6Bg9NsY=;
-        b=IWsyTZOMah093ZX+ocqvvaw/wSZFlYoA0Dfkn6U7CeDM4Hwgshj91iG6YULchp8UT9
-         imDzV5l1WznZeU+LlGYxlaBvkm+sHdJzHGwDEQiPs/tpQET9GxL0+32R/ahLwiYdCYxQ
-         bIgQSO7oqcEwf59D+YOEZA/OmvCuB/68hjZsc6ZeyOGi67OgenU1mT9sFXerPyki978I
-         wXHgOqn2D34Wus26ZOgNpnFsBaD1T5tyExMcpy9e8px1GDUkxM0i6h3agNHJjPJjrq77
-         vkfd1TXakTGvMM5xn3VjHx4wt85GxdK2hiuau3784fX2sUGSkWaune5yyRxkROYltfW9
-         YbGg==
+        Wed, 30 Nov 2022 16:09:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D995474B
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:08:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669842494;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zuR/603fC7oK9nUlhZCLCOYS4yq/2eg7O9E/kbNn+vo=;
+        b=NGqYR0J6lofamqBg7UXL6Yi6zKyEKUi9z+X7fDllO6pgJI7/EkrH1aqpPDktqomOW+s/wL
+        NzC0bh05TwP1eit6Kq6Km95nPT4RqYMfdGJUl+2cj4vfWAEL2Uce0jiTYsUUnC6Ds8AFG7
+        gCoK8OTKo68Ukh53By+6+0x9lWZ+nCU=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-503-jfVSveQ6OgK8nWH0RZZPiw-1; Wed, 30 Nov 2022 16:08:12 -0500
+X-MC-Unique: jfVSveQ6OgK8nWH0RZZPiw-1
+Received: by mail-qv1-f69.google.com with SMTP id ng1-20020a0562143bc100b004bb706b3a27so28836116qvb.20
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:08:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ra/gOzDNFG0eeALE33ZJcJC4OwrLB1F+C50L6Bg9NsY=;
-        b=ah8dkZJBbeRIRwAXvdpv12wz8BwJutcNwlW/scBlI0XTV4hOn8Qv5wlsJNs83BJuoQ
-         xPK4TISAx5r4RmFEoq+WFFdhadZpWuMVThq+5hrpVVDT/pb0yTEppN/C+WTtOyQ1PHv4
-         bCC021wR3dV6UYIrBIJrhewVK6gEUZAJJMH/nk+VahcDrLTibFEtA1/nG/d1wCNw2O5T
-         fH9DrHj6PL1oszh8sjFVejB+8ibmJda5tnDkyJp/MKnSPCQk1323EgjQ0Hd67gg7gYHQ
-         Lr4qrrQv3XWaAsd+g8ySHdoPlghXIMFolKfoEPYcX7pgB6Rk1+khCkg4rmLsrRcYRS1m
-         KN1A==
-X-Gm-Message-State: ANoB5pmfViUhkrPoqGrtP7f/ouVAvW82tqLm8EMFlg6+ZgG8Bj/hXdx2
-        81C3bRgEJ0wRwnmi8CBiMhTTSU0+orLDYQ==
-X-Google-Smtp-Source: AA0mqf5IgUBN4jInv+Q01bWY+W/A81kK9HdwLRJHVzsWv7G7shhCaXxptOlua8Q0mruAcElLMtXrCg==
-X-Received: by 2002:a17:902:7d93:b0:186:9cf4:e53b with SMTP id a19-20020a1709027d9300b001869cf4e53bmr48114816plm.50.1669842417581;
-        Wed, 30 Nov 2022 13:06:57 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id pl11-20020a17090b268b00b001faafa42a9esm1671627pjb.26.2022.11.30.13.06.56
+        bh=zuR/603fC7oK9nUlhZCLCOYS4yq/2eg7O9E/kbNn+vo=;
+        b=B6pA0I0982bXA3ooUi9QioPGPDMZ/FEJno526uaIOWMpfUv8JJuuMxkShbz3AX92Zb
+         kUf5B7A5Ym5X+eglh/UDJ6yhg0Agyz0w/JJqHx3DbOgyBGI812b11rT5vk5Hv+xEqMno
+         1uE2tZgUR3hEBqcTz0IXbTikgPhlvrSOyrtIBeSQV6B5sI8qLbSYL0EhE1I3UjMiAuDR
+         STQlMKpnhAkQwHqPY8TT1yuOx+HwsDHw/hN31RWXS90CacnwRoBtC/HdQPJX6NLj7iej
+         X7Zvfc8qC9Axv9q7F2K+jueepcRv0s4e4VGiLafgCtEn6o5uT2VtgJkEHFPfgcCVq8KL
+         NQIw==
+X-Gm-Message-State: ANoB5pnHumydG68igWvK0LNor4Xrjm9hiLB/qqwmLlRKYgqfPvpgMKXG
+        JCgxo794TNubAIj8eZIbZV1F+g7ydgm6M47tG929O7aLqlPf13YiH/Cg5w5d4gm2r/Lvsk6NXdW
+        zSjCxINXtJS6d2RPHiwQzpylX
+X-Received: by 2002:a0c:c3cc:0:b0:4c6:a05d:f67e with SMTP id p12-20020a0cc3cc000000b004c6a05df67emr40931287qvi.4.1669842491511;
+        Wed, 30 Nov 2022 13:08:11 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6/8Pjy+T5/FfojJPxX4yLbLk/OTvhYqmsxgDyVe0BPtb/Wl3vgppylUjojOezJs9ZPj9Po4Q==
+X-Received: by 2002:a0c:c3cc:0:b0:4c6:a05d:f67e with SMTP id p12-20020a0cc3cc000000b004c6a05df67emr40931260qvi.4.1669842491240;
+        Wed, 30 Nov 2022 13:08:11 -0800 (PST)
+Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id x10-20020a05620a258a00b006fc92cf4703sm1898765qko.132.2022.11.30.13.08.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 13:06:57 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 30 Nov 2022 11:06:55 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v6 0/4] workqueue: destroy_worker() vs isolated CPUs
-Message-ID: <Y4fF7/CtH+sq4KqC@slm.duckdns.org>
-References: <20221128183109.446754-1-vschneid@redhat.com>
+        Wed, 30 Nov 2022 13:08:10 -0800 (PST)
+Date:   Wed, 30 Nov 2022 16:08:09 -0500
+From:   Brian Masney <bmasney@redhat.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     irusskikh@marvell.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, cth451@gmail.com
+Subject: Re: [PATCH] net: atlantic: fix check for invalid ethernet addresses
+Message-ID: <Y4fGORYQRfYTabH1@x1>
+References: <20221130174259.1591567-1-bmasney@redhat.com>
+ <Y4ex6WqiY8IdwfHe@lunn.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221128183109.446754-1-vschneid@redhat.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y4ex6WqiY8IdwfHe@lunn.ch>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Nov 30, 2022 at 08:41:29PM +0100, Andrew Lunn wrote:
+> On Wed, Nov 30, 2022 at 12:42:59PM -0500, Brian Masney wrote:
+> > The Qualcomm sa8540p automotive development board (QDrive3) has an
+> > Aquantia NIC wired over PCIe. The ethernet MAC address assigned to
+> > all of the boards in our lab is 00:17:b6:00:00:00. The existing
+> > check in aq_nic_is_valid_ether_addr() only checks for leading zeros
+> > in the MAC address. Let's update the check to also check for trailing
+> > zeros in the MAC address so that a random MAC address is assigned
+> > in this case.
+> > 
+> > Signed-off-by: Brian Masney <bmasney@redhat.com>
+> > ---
+> >  drivers/net/ethernet/aquantia/atlantic/aq_nic.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_nic.c b/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
+> > index 06508eebb585..c9c850bbc805 100644
+> > --- a/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
+> > +++ b/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
+> > @@ -293,7 +293,8 @@ static bool aq_nic_is_valid_ether_addr(const u8 *addr)
+> >  	/* Some engineering samples of Aquantia NICs are provisioned with a
+> >  	 * partially populated MAC, which is still invalid.
+> >  	 */
+> > -	return !(addr[0] == 0 && addr[1] == 0 && addr[2] == 0);
+> > +	return !(addr[0] == 0 && addr[1] == 0 && addr[2] == 0) &&
+> > +		!(addr[3] == 0 && addr[4] == 0 && addr[5] == 0);
+> 
+> Hi Brian
+> 
+> is_valid_ether_addr()
 
-So, this generally looks great to me. Lai, what do you think?
+aq_nic_ndev_register() already calls is_valid_ether_addr():
 
-Thanks.
+	if (is_valid_ether_addr(addr) &&
+	    aq_nic_is_valid_ether_addr(addr)) {
+		(self->ndev, addr);
+	} else {
+		...
+	}
 
--- 
-tejun
+That won't work for this board since that function only checks that the
+MAC "is not 00:00:00:00:00:00, is not a multicast address, and is not
+FF:FF:FF:FF:FF:FF." The MAC address that we get on all of our boards is
+00:17:b6:00:00:00.
+
+Brian
+
