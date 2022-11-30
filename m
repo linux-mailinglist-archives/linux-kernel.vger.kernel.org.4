@@ -2,475 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD9E63CDD6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 04:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9DB63CDDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 04:34:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232686AbiK3Dc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 22:32:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
+        id S231883AbiK3Dep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 22:34:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiK3Dcx (ORCPT
+        with ESMTP id S229448AbiK3Den (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 22:32:53 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6419627B38;
-        Tue, 29 Nov 2022 19:32:50 -0800 (PST)
-Received: from loongson.cn (unknown [112.94.31.56])
-        by gateway (Coremail) with SMTP id _____8Dx_+vgzoZj2kACAA--.5203S3;
-        Wed, 30 Nov 2022 11:32:48 +0800 (CST)
-Received: from [127.0.0.1] (unknown [112.94.31.56])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxNlfezoZjVjQiAA--.1228S3;
-        Wed, 30 Nov 2022 11:32:47 +0800 (CST)
-Message-ID: <f0399e7d-d9be-d72f-2693-fb07984a4be6@loongson.cn>
-Date:   Wed, 30 Nov 2022 11:32:46 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v10 2/4] clk: clk-loongson2: add clock controller driver
- support
+        Tue, 29 Nov 2022 22:34:43 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2044.outbound.protection.outlook.com [40.107.92.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D01565E75;
+        Tue, 29 Nov 2022 19:34:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cXfCzLS9fiKpTjD3b5cBSafE9Yiz7D+/9ZbcW3yqellZPus+xQeQjPlG9W+Wfqae0/v6OVInk+WtrPMyke5lu1gOXcURTWGvvC3J8kDVebsf1Th9TS/d1+OMD23wjLVrius0dprVkD27JBFb3VAiCViybkQjWfz4+j75qxN/8enUkLdDUbRij+FMEaQRbTdvaJ863iO9YpP/R/PXhC5lPdHbN7/Hjk4n6Yw4nZ3vl/3Tkyaqr3XJmnqGoBjS1dYKclXJBZhE/WYDXXJzpb4ShMv8/3Ech0hmc72aYYJP/ApR16Q6tXEwXcUCoQZm59RFce/m7Zp1ePl8HR/oJ3l8DQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GyRgP0HoF2QXuGR5aYpnpMmSFjwqsM7Gqc9MgphN6QU=;
+ b=RN5TW8f57NEfTR/9QIGwmPdM537+Nkbyxujv7/DmCHKsmpaMgxixN4h5ACKIfaD/oEXQTZ7oG5F1KVGYbjEmKv5QaQ5RBeYaS/5M+Vrz3beDx+jUhf8AS2Ji8vZAtTP71kCGz5m3Xkei9lW+Mwj6K1LuORmQW+gqA9dYDL35sScLIFMFrshBp68+LGFzNLn1/045WeWcug6y9DEZHQnHxSoJzPPA+6nR9S4pbPiV0CkmIhgV/Kf34CID6j98rpT19PPY9wSNaFBzZHSqIhTPH3fDCLlvTQo/yLJdMpVaWjv/MX2VxfY79CykwLGE1I3pp3SKMmOLEZhV5NKoXP+sSQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GyRgP0HoF2QXuGR5aYpnpMmSFjwqsM7Gqc9MgphN6QU=;
+ b=j+jwi2Ky384ZqalNzq1a4SfK4iovXWREiMGAwlX4BwGWYO1geMdSKk9vWkpluo9msKUVOAAEHT7iRavUNiGMBAjNQcCApHl6X9ncN6YcnYJno0DLXvfbVWPY10hm+vNaLvndsEBrMKq6NjyKy4KOuE8S6DGEVmwkFkzIVtWZYOCnMgD6x72RPcb46AJhi1PvFtZprxOqQH0NljgikyaJ+HTjho2egH2eBqukXTnFVUnNeKsMLyxQlsLTtPLI3XnpdtMIDkMsHhoQF3MHdOvQj2hkMrXovNHk17f8VmJY6cS/LzbuoynVCZSgnhKTz/SxFctQYE6t810J9u22I+MPSA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from IA1PR12MB6604.namprd12.prod.outlook.com (2603:10b6:208:3a0::7)
+ by SJ0PR12MB5453.namprd12.prod.outlook.com (2603:10b6:a03:37f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Wed, 30 Nov
+ 2022 03:34:39 +0000
+Received: from IA1PR12MB6604.namprd12.prod.outlook.com
+ ([fe80::2349:ec6b:2442:8c52]) by IA1PR12MB6604.namprd12.prod.outlook.com
+ ([fe80::2349:ec6b:2442:8c52%3]) with mapi id 15.20.5857.023; Wed, 30 Nov 2022
+ 03:34:33 +0000
+Message-ID: <5145d9d3-d3ae-e95a-6583-803f31d6d9b7@nvidia.com>
+Date:   Tue, 29 Nov 2022 19:34:29 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Subject: Re: [PATCH 5/7] hte: Re-phrase tegra API document
 Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-References: <20221129034157.15036-1-zhuyinbo@loongson.cn>
- <20221129034157.15036-2-zhuyinbo@loongson.cn>
-From:   XiaochuanMao <maoxiaochuan@loongson.cn>
-In-Reply-To: <20221129034157.15036-2-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxNlfezoZjVjQiAA--.1228S3
-X-CM-SenderInfo: xpdr5xxdrfx3ldqnw6o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBjvAXoWfJw1UGFykAr4rWF1xZw1kZrb_yoW8Jr48Wo
-        W3uFn3Zr4fJ348Jay0qr15tr42qFnI9rsrAFyxZrs8JFWSkr98JrW8Gr43CF4xAFyrKFnx
-        Aa4S9ayrJF4IqrZ8n29KB7ZKAUJUUUUt529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
-        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
-        UUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
-        0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-        M2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
-        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2
-        z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2
-        IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E
-        4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGw
-        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48J
-        MIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMI
-        IF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUShiSDUUUU
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linus.walleij@linaro.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        robh+dt@kernel.org, timestamp@lists.linux.dev
+References: <20221103174523.29592-1-dipenp@nvidia.com>
+ <20221103174523.29592-6-dipenp@nvidia.com> <Y2XZj4j/NQH2igvJ@debian.me>
+X-Nvconfidentiality: public
+From:   Dipen Patel <dipenp@nvidia.com>
+In-Reply-To: <Y2XZj4j/NQH2igvJ@debian.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0170.namprd03.prod.outlook.com
+ (2603:10b6:a03:338::25) To IA1PR12MB6604.namprd12.prod.outlook.com
+ (2603:10b6:208:3a0::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR12MB6604:EE_|SJ0PR12MB5453:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3d3cc439-73ad-4aec-a6c9-08dad283cc4e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: U550BkoAEdML41U2wiN0uP3ar/BrNpBLlcRKc+a+tCnRQRFN5nB4DdmjIiUfSuA55OfI1bIxk+Hsru7el7Oy9atPFhcTblwB/sE41bcaG8htaZb900QnyO+4N8Fln5ByeyShU/IZEi1qhqrN1r29pM/PQZ6aSw+uMCHK1KSMt+gB4X5BxVtujGkWvCYF7FB6XShIYed9VgOjR2XoVTsxvN9Iy9mq37C0L50LmVhSbg/iUeCHOZBg7aZP6vJbVxl7gHD5QTAtmA/urSgTvuVOY/3/p5bWM4bmbElYga05nHeuOnJ5vqRSQgRlx+SJq5hXW1P1k3PBHfQjMJC8VLS1D+Nvv9JI32VCm0s3q9PfPJ4Li6ThSxXBuilE6Id8u97WUJ87Vw+bjV0rtIRRzftwsqZBi78WD6conn3EyKrK1fccjfmYIZXteQiKRlXaHOOKtXXDP7KfnL9fBZK3O5/LTqgKVIzm1UAYqw/GGh9zrGJq4dqfITPySgvuxsDJXP3i+Th5SLzld74UQMVPymuu+MAs3jRqqfIBbpXSnryp/glxmnKF6x0Z/iT8lt+UjhfMr2XsWwrDLgaabxm+I9JW9gTL5+rpm8Pc+35XdLVsK1XC3Qs6pOZc5mwFKE8nuwUZy0y3RQSS9DQ+ZYLAF/Qb17cABXvh8D7l/AN5tVXj/Q15d01dCdV4kHWnT9ns62lLhnUnNCo/dgwCjiTv/l7uMtNTB9CfinFM/091HHMF24E=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6604.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(376002)(366004)(396003)(136003)(451199015)(66556008)(6486002)(53546011)(36756003)(26005)(6506007)(6666004)(6512007)(38100700002)(8676002)(41300700001)(66946007)(478600001)(66476007)(86362001)(31696002)(4326008)(316002)(6916009)(7416002)(5660300002)(8936002)(186003)(2616005)(31686004)(83380400001)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OXlyQStoS2tPNGdXanFPVXJpY09JTk91cHFYQVcyOUpZS3NNcTkwK25sUFFZ?=
+ =?utf-8?B?RjJRZ3RsSm81L09zVW8vZnNudUQvY3J0L0xEUTJJUkRkdEE3VVNnUkFHQmla?=
+ =?utf-8?B?Y1k1TWc2UnlLWjlRVFRzWXRTSFhvRFpETlFlamlFNUpoZDBvSGpaT2loMU9u?=
+ =?utf-8?B?NUhZblZWUytKaFQxemIxaW9sc2NmREhrbHdVMWNYT3BKeTgvYWlHY2crcy9G?=
+ =?utf-8?B?MDZjYkNzWW9MNGh3ZjVDclZQQkFmdUZEL1RiVDlaWnpkczY3M044NTNOTHFm?=
+ =?utf-8?B?dkdNNG1mZTM0WHgyU0RYTGg1M2kyR1QyVDlZdjRhanlBZlNCajNndXZvZVNF?=
+ =?utf-8?B?T3Y2VjZEdERIRmh5QnB2MllnL1BrdjhIZHMyV3BENUFOSTlsckREQmNzS09P?=
+ =?utf-8?B?RXRNaDR0ZWgvdzFwTVM5TDQ2dXBpWVkrNlBvd21RWE45MU9MNFhqRlFyQzN1?=
+ =?utf-8?B?dnhjcW5sZytNemZyY1ZEYnhtUnRYQmxGU1Y2aVlzNWZ5aXJUQjhVSzhOWWk5?=
+ =?utf-8?B?Q2pkSjQrZlh0TUtKcUtSdFc3QXh4NkdZbHRsbVRJazVkS3BtY2lnY3NYcGx4?=
+ =?utf-8?B?RFgwMGZQMUpJMFEvamZYQzQvaVNxVVBHZjlibmtqYk5TKys0ZGZEZm1NZ0Yx?=
+ =?utf-8?B?cThVeFJRM0FEWHJUeTMwVVBtNzl4eTYwY0NyOVdBMXFaRGFzYThveGlrcmtV?=
+ =?utf-8?B?UDhvdjFKcHN0NFZ4TStBSjJPVWo1QmVaSGc4L2JRRjNYL2svUDVnTVI0cnRt?=
+ =?utf-8?B?c1Zab2NNOVkrWHVhaUwzNmt6NTBUSE5IM09mRURHd2tqQngyUDA2NWRWSTJk?=
+ =?utf-8?B?QlIxQklGWlc2Zkw0NEZiWjBtSlpWT3RxYlo3WWFRdUtQL2VTQ2NxbGlHVXNr?=
+ =?utf-8?B?R0gwSnhRL2YzSmIvbEkwbklrTHZLbUJjV2FKcGNMbFNNVHdmaVVwcEVIV3pu?=
+ =?utf-8?B?SlVWTUZwb1JKbzVDTGRDMWhLdk5McUMycHNoQ1Q4aWVScG9nbSs4WDluaitx?=
+ =?utf-8?B?TTk0M1NMVFN3N1o2Mk8vRUZaZVA2bmxEV1JYNVlCcnBXSU1jZ0kxaWhNeXc5?=
+ =?utf-8?B?ZVZGWUZNMWlJZ1phOU1BSTBlWm9xekR6UEVqNXhkMXRvazhIb2ROUjM5eFNW?=
+ =?utf-8?B?Z1hqdkc2S1Rlcy9nTVhNY2tyM0lBZkdidTJGOVV2SnpXbHlvTkpqVlNLbi90?=
+ =?utf-8?B?ZWM2cGRsczBZZldURDhvd1lWYlJ1bU9YdFBYUHBpNGFjRnk2NDdvMzh3dHZk?=
+ =?utf-8?B?SElhTy9XOWF3V3VZSzErYkphR2NxQmZkTU01NSt2QVFpWVFMRFdLcUt3MXVI?=
+ =?utf-8?B?dk4yWXBJTjRueXlTN1lrOEJXU1g0cFBzRk5uSHFUa2Z2U3J3cHc5Qm03TzJv?=
+ =?utf-8?B?VU1VQS9FRGtpbGlVdVF1Q3FVSXZKYU54a0xYdVp6N2h0UUIrTEtJeU9wb0hl?=
+ =?utf-8?B?Q3gvcUtvMGxBTFZzdXNPYWkyZFovZGlaQjU0eHkvY044RVI2M09GL0JGeG0x?=
+ =?utf-8?B?aVlWQzNKTWNJbGcwL3Fjd3FERmRFSm1iaXBqR0VJUmpjNTN0UXJOclFoU0d3?=
+ =?utf-8?B?TkgvMDdCa3BoMnRsRzRQSVl2R3p0MGhsSWkzdU1RclltZDJCOEtXVTUzdkVW?=
+ =?utf-8?B?VWhtaGtUb0J5eDlNaklsZjM3WThVYnh1V2UxaU5OYWw0UjFjZjJkN3Z5VnFU?=
+ =?utf-8?B?OTJoMkhrY0xRdzk1RS9mbDVlKzVGc3BRSnEvZHBhYUJQU0ZENkd6TVVnQkh1?=
+ =?utf-8?B?T3FzRzhvZUYvbEhhTXBOY3JOK0hyQ1ladm9Rc0ZFakRCSC9KaFQrTm5aWGg4?=
+ =?utf-8?B?UFpHdmE5L3dmcENoclpwVEFRUmplZE1OZmk2R280VjBIK1ROazVxNG11d1lq?=
+ =?utf-8?B?YkltWmlQbklQNUpiZWZIVSttVWpoek1ENDYxYklrb21JLzJMSThyUktkUUpo?=
+ =?utf-8?B?L1ZHMUVVU1BXaEJBU1JDeDhyYUVjV0FQSmszd0dhd1M0ZGVoSFlFZkFVSE5u?=
+ =?utf-8?B?S3BESzRneG9ISitGd05sK3BPeHZQRjhyQ3cra2hiY3pWN1BHRm5hekZnVVUw?=
+ =?utf-8?B?dlMyVFJ1U0JGMTYvbktMM2VpeHhYVkNiNnVuSGI1UXJzK2gyU25qS0VaOXIx?=
+ =?utf-8?Q?KHvjo9hmNr8/HpC+gYoMuIslY?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d3cc439-73ad-4aec-a6c9-08dad283cc4e
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6604.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 03:34:33.8788
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: slFyX1b2XMbJGdhoobxi+1leX5hMHEOFCFKEi3e+aKVTFCU/xuOmTXSlpYJD5oACszAVFwZFmBQHZcqUAndR5Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5453
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi, yinbo
-
-On 2022/11/29 11:41, Yinbo Zhu wrote:
-> This driver provides support for clock controller on Loongson-2 SoC,
-> the Loongson-2 SoC uses a 100MHz clock as the PLL reference clock,
-> there are five independent PLLs inside, each of which PLL can
-> provide up to three sets of frequency dependent clock outputs.
->
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
-> Change in v10:
-> 		1. Detach of_clk_init to another patch.
-> Change in v9:
-> 		1. Add all history changelog information.
-> Change in v8:
-> 		1. Remove the flag "CLK_IS_BASIC".
-> Change in v7:
-> 		1. Adjust position alphabetically in Kconfig and Makefile.
-> 		2. Add static for loongson2_pll_base.
-> 		3. Move other file-scope variables in probe.
-> Change in v6:
-> 		1. NO change, but other patch in this series of patches has
-> 		   changes.
-> Change in v5:
-> 		1. Replace loongson2 with Loongson-2 in commit info.
-> 		2. Replace Loongson2 with Loongson-2 in binding and
-> 		   Kconfig file.
-> 		3. Replace soc with SoC.
-> Change in v4:
-> 		1. Fixup clock-names that replace "xxx-clk" with "xxx".
-> Change in v3:
-> 		1. NO change, but other patch in this series of patches has
-> 		   changes.
-> Change in v2:
-> 		1. Update the include filename.
-> 		2. Change string from refclk/REFCLK to ref/REF.
->
->   MAINTAINERS                 |   1 +
->   arch/loongarch/Kconfig      |   1 +
->   drivers/clk/Kconfig         |   9 ++
->   drivers/clk/Makefile        |   1 +
->   drivers/clk/clk-loongson2.c | 286 ++++++++++++++++++++++++++++++++++++
->   5 files changed, 298 insertions(+)
->   create mode 100644 drivers/clk/clk-loongson2.c
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ab94893fe2f6..73fa56f1fd5d 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12025,6 +12025,7 @@ LOONGSON-2 SOC SERIES CLOCK DRIVER
->   M:	Yinbo Zhu <zhuyinbo@loongson.cn>
->   L:	linux-clk@vger.kernel.org
->   S:	Maintained
-> +F:	drivers/clk/clk-loongson2.c
->   F:	include/dt-bindings/clock/loongson,ls2k-clk.h
->   
->   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 903096bd87f8..4f8f1b8f796d 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -127,6 +127,7 @@ config LOONGARCH
->   	select USE_PERCPU_NUMA_NODE_ID
->   	select USER_STACKTRACE_SUPPORT
->   	select ZONE_DMA32
-> +	select COMMON_CLK
->   
->   config 32BIT
->   	bool
-> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-> index d79905f3e174..d13626f63739 100644
-> --- a/drivers/clk/Kconfig
-> +++ b/drivers/clk/Kconfig
-> @@ -326,6 +326,15 @@ config COMMON_CLK_LOCHNAGAR
->   	  This driver supports the clocking features of the Cirrus Logic
->   	  Lochnagar audio development board.
->   
-> +config COMMON_CLK_LOONGSON2
-> +	bool "Clock driver for Loongson-2 SoC"
-> +	depends on COMMON_CLK && OF
-> +	help
-> +	  This driver provides support for Clock Controller that base on
-> +	  Common Clock Framework Controller (CCF) on Loongson-2 SoC. The
-> +	  Clock Controller can generates and supplies clock to various
-> +	  peripherals within the SoC.
-> +
->   config COMMON_CLK_NXP
->   	def_bool COMMON_CLK && (ARCH_LPC18XX || ARCH_LPC32XX)
->   	select REGMAP_MMIO if ARCH_LPC32XX
-> diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-> index e3ca0d058a25..b298c5dabc1a 100644
-> --- a/drivers/clk/Makefile
-> +++ b/drivers/clk/Makefile
-> @@ -43,6 +43,7 @@ obj-$(CONFIG_COMMON_CLK_K210)		+= clk-k210.o
->   obj-$(CONFIG_LMK04832)			+= clk-lmk04832.o
->   obj-$(CONFIG_COMMON_CLK_LAN966X)	+= clk-lan966x.o
->   obj-$(CONFIG_COMMON_CLK_LOCHNAGAR)	+= clk-lochnagar.o
-> +obj-$(CONFIG_COMMON_CLK_LOONGSON2)	+= clk-loongson2.o
->   obj-$(CONFIG_COMMON_CLK_MAX77686)	+= clk-max77686.o
->   obj-$(CONFIG_COMMON_CLK_MAX9485)	+= clk-max9485.o
->   obj-$(CONFIG_ARCH_MILBEAUT_M10V)	+= clk-milbeaut.o
-> diff --git a/drivers/clk/clk-loongson2.c b/drivers/clk/clk-loongson2.c
-> new file mode 100644
-> index 000000000000..7487effceeab
-> --- /dev/null
-> +++ b/drivers/clk/clk-loongson2.c
-> @@ -0,0 +1,286 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
-> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/clkdev.h>
-> +#include <linux/err.h>
-> +#include <linux/init.h>
-> +#include <linux/of.h>
-> +#include <linux/of_address.h>
-> +#include <dt-bindings/clock/loongson,ls2k-clk.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/slab.h>
-> +#include <linux/clk.h>
-> +
-> +#define LOONGSON2_PLL_MULT_SHIFT		32
-> +#define LOONGSON2_PLL_MULT_WIDTH		10
-> +#define LOONGSON2_PLL_DIV_SHIFT			26
-> +#define LOONGSON2_PLL_DIV_WIDTH			6
-> +#define LOONGSON2_APB_FREQSCALE_SHIFT		20
-> +#define LOONGSON2_APB_FREQSCALE_WIDTH		3
-> +#define LOONGSON2_USB_FREQSCALE_SHIFT		16
-> +#define LOONGSON2_USB_FREQSCALE_WIDTH		3
-> +#define LOONGSON2_SATA_FREQSCALE_SHIFT		12
-> +#define LOONGSON2_SATA_FREQSCALE_WIDTH		3
-> +
-> +static void __iomem *loongson2_pll_base;
-> +
-> +static struct clk_hw *loongson2_clk_register(struct device *dev,
-> +					  const char *name,
-> +					  const char *parent_name,
-> +					  const struct clk_ops *ops,
-> +					  unsigned long flags)
-> +{
-> +	int ret;
-> +	struct clk_hw *hw;
-> +	struct clk_init_data init;
-> +
-> +	/* allocate the divider */
-> +	hw = kzalloc(sizeof(*hw), GFP_KERNEL);
-> +	if (!hw)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	init.name = name;
-> +	init.ops = ops;
-> +	init.flags = flags;
-> +	init.parent_names = (parent_name ? &parent_name : NULL);
-> +	init.num_parents = (parent_name ? 1 : 0);
-> +	hw->init = &init;
-> +
-> +	/* register the clock */
-> +	ret = clk_hw_register(dev, hw);
-> +	if (ret) {
-> +		kfree(hw);
-> +		hw = ERR_PTR(ret);
-> +	}
-> +
-> +	return hw;
-> +}
-> +
-> +static struct clk_hw *loongson2_clk_pll_register(const char *name,
-> +				const char *parent, void __iomem *reg)
-> +{
-> +	u64 val;
-> +	u32 mult = 1, div = 1;
-> +
-> +	val = readq((void *)reg);
-> +
-> +	mult = (val >> LOONGSON2_PLL_MULT_SHIFT) &
-> +			clk_div_mask(LOONGSON2_PLL_MULT_WIDTH);
-> +	div = (val >> LOONGSON2_PLL_DIV_SHIFT) &
-> +			clk_div_mask(LOONGSON2_PLL_DIV_WIDTH);
-> +
-> +	return clk_hw_register_fixed_factor(NULL, name, parent,
-> +				CLK_SET_RATE_PARENT, mult, div);
-> +}
-> +
-> +static unsigned long loongson2_apb_recalc_rate(struct clk_hw *hw,
-> +					  unsigned long parent_rate)
-> +{
-> +	u64 val;
-> +	u32 mult;
-> +	unsigned long rate;
-> +
-> +	val = readq((void *)(loongson2_pll_base + 0x50));
-> +
-> +	mult = (val >> LOONGSON2_APB_FREQSCALE_SHIFT) &
-> +			clk_div_mask(LOONGSON2_APB_FREQSCALE_WIDTH);
-> +
-> +	rate = parent_rate * (mult + 1);
-> +	do_div(rate, 8);
-> +
-> +	return rate;
-> +}
-> +
-> +static const struct clk_ops loongson2_apb_clk_ops = {
-> +	.recalc_rate = loongson2_apb_recalc_rate,
-> +};
-> +
-> +static unsigned long loongson2_usb_recalc_rate(struct clk_hw *hw,
-> +					  unsigned long parent_rate)
-> +{
-> +	u64 val;
-> +	u32 mult;
-> +	unsigned long rate;
-> +
-> +	val = readq((void *)(loongson2_pll_base + 0x50));
-> +
-> +	mult = (val >> LOONGSON2_USB_FREQSCALE_SHIFT) &
-> +			clk_div_mask(LOONGSON2_USB_FREQSCALE_WIDTH);
-> +
-> +	rate = parent_rate * (mult + 1);
-> +	do_div(rate, 8);
-> +
-> +	return rate;
-> +}
-> +
-> +static const struct clk_ops loongson2_usb_clk_ops = {
-> +	.recalc_rate = loongson2_usb_recalc_rate,
-> +};
-> +
-> +static unsigned long loongson2_sata_recalc_rate(struct clk_hw *hw,
-> +					  unsigned long parent_rate)
-> +{
-> +	u64 val;
-> +	u32 mult;
-> +	unsigned long rate;
-> +
-> +	val = readq((void *)(loongson2_pll_base + 0x50));
-it may be more common to use macro defintions instead of magic number. 
-the clock configuration logic of  2k500 is  same as 2k1000, only the 
-base  and offset are different。
-> +
-> +	mult = (val >> LOONGSON2_SATA_FREQSCALE_SHIFT) &
-> +			clk_div_mask(LOONGSON2_SATA_FREQSCALE_WIDTH);
-> +
-> +	rate = parent_rate * (mult + 1);
-> +	do_div(rate, 8);
-> +
-> +	return rate;
-> +}
-> +
-> +static const struct clk_ops loongson2_sata_clk_ops = {
-> +	.recalc_rate = loongson2_sata_recalc_rate,
-> +};
-> +
-> +static void loongson2_check_clk_hws(struct clk_hw *clks[], unsigned int count)
-> +{
-> +	unsigned int i;
-> +
-> +	for (i = 0; i < count; i++)
-> +		if (IS_ERR(clks[i]))
-> +			pr_err("Loongson2 clk %u: register failed with %ld\n"
-> +				, i, PTR_ERR(clks[i]));
-> +}
-> +
-> +static struct clk_hw *loongson2_obtain_fixed_clk_hw(
-> +					struct device_node *np,
-> +					const char *name)
-> +{
-> +	struct clk *clk;
-> +
-> +	clk = of_clk_get_by_name(np, name);
-> +	if (IS_ERR(clk))
-> +		return ERR_PTR(-ENOENT);
-> +
-> +	return __clk_get_hw(clk);
-> +}
-> +
-> +static void __init loongson2_clocks_init(struct device_node *np)
-> +{
-> +	struct clk_hw **hws;
-> +	struct clk_hw_onecell_data *clk_hw_data;
-> +	spinlock_t loongson2_clk_lock;
-> +
-> +	loongson2_pll_base = of_iomap(np, 0);
-> +
-> +	if (!loongson2_pll_base) {
-> +		pr_err("clk: unable to map loongson2 clk registers\n");
-> +		goto err;
-> +	}
-> +
-> +	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws, LOONGSON2_CLK_END),
-> +					GFP_KERNEL);
-> +	if (WARN_ON(!clk_hw_data))
-> +		goto err;
-> +
-> +	clk_hw_data->num = LOONGSON2_CLK_END;
-> +	hws = clk_hw_data->hws;
-> +
-> +	hws[LOONGSON2_REF_100M] = loongson2_obtain_fixed_clk_hw(np,
-> +						"ref_100m");
-> +
-> +	hws[LOONGSON2_NODE_PLL] = loongson2_clk_pll_register("node_pll",
-> +						"ref_100m",
-> +						loongson2_pll_base);
-> +
-> +	hws[LOONGSON2_DDR_PLL] = loongson2_clk_pll_register("ddr_pll",
-> +						"ref_100m",
-> +						loongson2_pll_base + 0x10);
-> +
-> +	hws[LOONGSON2_DC_PLL] = loongson2_clk_pll_register("dc_pll",
-> +						"ref_100m",
-> +						loongson2_pll_base + 0x20);
-> +
-> +	hws[LOONGSON2_PIX0_PLL] = loongson2_clk_pll_register("pix0_pll",
-> +						"ref_100m",
-> +						loongson2_pll_base + 0x30);
-> +
-> +	hws[LOONGSON2_PIX1_PLL] = loongson2_clk_pll_register("pix1_pll",
-> +						"ref_100m",
-> +						loongson2_pll_base + 0x40);
-> +
-> +	hws[LOONGSON2_NODE_CLK] = clk_hw_register_divider(NULL, "node",
-> +						"node_pll", 0,
-> +						loongson2_pll_base + 0x8, 0,
-> +						6, CLK_DIVIDER_ONE_BASED,
-> +						&loongson2_clk_lock);
-> +
-> +	/*
-> +	 * The hda clk divisor in the upper 32bits and the clk-prodiver
-> +	 * layer code doesn't support 64bit io operation thus a conversion
-> +	 * is required that subtract shift by 32 and add 4byte to the hda
-> +	 * address
-> +	 */
-> +	hws[LOONGSON2_HDA_CLK] = clk_hw_register_divider(NULL, "hda",
-> +						"ddr_pll", 0,
-> +						loongson2_pll_base + 0x22, 12,
-> +						7, CLK_DIVIDER_ONE_BASED,
-> +						&loongson2_clk_lock);
-> +
-> +	hws[LOONGSON2_GPU_CLK] = clk_hw_register_divider(NULL, "gpu",
-> +						"ddr_pll", 0,
-> +						loongson2_pll_base + 0x18, 22,
-> +						6, CLK_DIVIDER_ONE_BASED,
-> +						&loongson2_clk_lock);
-> +
-> +	hws[LOONGSON2_DDR_CLK] = clk_hw_register_divider(NULL, "ddr",
-> +						"ddr_pll", 0,
-> +						loongson2_pll_base + 0x18, 0,
-> +						6, CLK_DIVIDER_ONE_BASED,
-> +						&loongson2_clk_lock);
-> +
-> +	hws[LOONGSON2_GMAC_CLK] = clk_hw_register_divider(NULL, "gmac",
-> +						"dc_pll", 0,
-> +						loongson2_pll_base + 0x28, 22,
-> +						6, CLK_DIVIDER_ONE_BASED,
-> +						&loongson2_clk_lock);
-> +
-> +	hws[LOONGSON2_DC_CLK] = clk_hw_register_divider(NULL, "dc",
-> +						"dc_pll", 0,
-> +						loongson2_pll_base + 0x28, 0,
-> +						6, CLK_DIVIDER_ONE_BASED,
-> +						&loongson2_clk_lock);
-> +
-> +	hws[LOONGSON2_APB_CLK] = loongson2_clk_register(NULL, "apb",
-> +						"gmac",
-> +						&loongson2_apb_clk_ops, 0);
-> +
-> +	hws[LOONGSON2_USB_CLK] = loongson2_clk_register(NULL, "usb",
-> +						"gmac",
-> +						&loongson2_usb_clk_ops, 0);
-> +
-> +	hws[LOONGSON2_SATA_CLK] = loongson2_clk_register(NULL, "sata",
-> +						"gmac",
-> +						&loongson2_sata_clk_ops, 0);
-> +
-> +	hws[LOONGSON2_PIX0_CLK] = clk_hw_register_divider(NULL, "pix0",
-> +						"pix0_pll", 0,
-> +						loongson2_pll_base + 0x38, 0, 6,
-> +						CLK_DIVIDER_ONE_BASED,
-> +						&loongson2_clk_lock);
-> +
-> +	hws[LOONGSON2_PIX1_CLK] = clk_hw_register_divider(NULL, "pix1",
-> +						"pix1_pll", 0,
-> +						loongson2_pll_base + 0x48, 0, 6,
-> +						CLK_DIVIDER_ONE_BASED,
-> +						&loongson2_clk_lock);
-> +
-above this,   it may be more common to use macro defintions instead of 
-magic number. the clock configuration logic of 2k500 is same as 2k1000， 
-only the base  and offset are different
-> +	loongson2_check_clk_hws(hws, LOONGSON2_CLK_END);
-> +
-> +	of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
-> +
-> +err:
-> +	iounmap(loongson2_pll_base);
-> +}
-> +
-> +CLK_OF_DECLARE(loongson2_clk, "loongson,ls2k-clk", loongson2_clocks_init);
+On 11/4/22 8:33 PM, Bagas Sanjaya wrote:
+> On Thu, Nov 03, 2022 at 10:45:21AM -0700, Dipen Patel wrote:
+>>  Description
+>>  -----------
+>> -The Nvidia tegra194 HTE provider driver implements two GTE
+>> -(Generic Timestamping Engine) instances: 1) GPIO GTE and 2) LIC
+>> -(Legacy Interrupt Controller) IRQ GTE. Both GTE instances get the
+>> -timestamp from the system counter TSC which has 31.25MHz clock rate, and the
+>> -driver converts clock tick rate to nanoseconds before storing it as timestamp
+>> -value.
+>> +The Nvidia tegra HTE provider also known as GTE (Generic Timestamping Engine)
+>> +driver implements two GTE instances: 1) GPIO GTE and 2) LIC
+>> +(Legacy Interrupt Controller) IRQ GTE. Both GTE instances get the timestamp
+>> +from the system counter TSC which has 31.25MHz clock rate, and the driver
+>> +converts clock tick rate to nanoseconds before storing it as timestamp value.
+>>  
+>>  GPIO GTE
+>>  --------
+>>  
+>>  This GTE instance timestamps GPIO in real time. For that to happen GPIO
+>> -needs to be configured as input. The always on (AON) GPIO controller instance
+>> -supports timestamping GPIOs in real time and it has 39 GPIO lines. The GPIO GTE
+>> -and AON GPIO controller are tightly coupled as it requires very specific bits
+>> -to be set in GPIO config register before GPIO GTE can be used, for that GPIOLIB
+>> -adds two optional APIs as below. The GPIO GTE code supports both kernel
+>> -and userspace consumers. The kernel space consumers can directly talk to HTE
+>> -subsystem while userspace consumers timestamp requests go through GPIOLIB CDEV
+>> -framework to HTE subsystem.
+>> +needs to be configured as input. Only the always on (AON) GPIO controller
+>> +instance supports timestamping GPIOs in real time as it is tightly coupled with
+>> +the GPIO GTE. To support this, GPIOLIB adds two optional APIs as mentioned
+>> +below. The GPIO GTE code supports both kernel and userspace consumers. The
+>> +kernel space consumers can directly talk to HTE subsystem while userspace
+>> +consumers timestamp requests go through GPIOLIB CDEV framework to HTE
+>> +subsystem. The hte devicetree binding described at
+>> +``Documentation/devicetree/bindings/timestamp`` provides an example of how a
+>> +consumer can request an GPIO line.
+>>  
+>>  See gpiod_enable_hw_timestamp_ns() and gpiod_disable_hw_timestamp_ns().
+>>  
+> 
+> I think the wording can be better:
+I do  not understand, can you please elaborate?
+> 
+> ---- >8 ----
+> 
+> diff --git a/Documentation/driver-api/hte/tegra194-hte.rst b/Documentation/driver-api/hte/tegra194-hte.rst
+> index 85e654772782c1..13c45bfc03a75e 100644
+> --- a/Documentation/driver-api/hte/tegra194-hte.rst
+> +++ b/Documentation/driver-api/hte/tegra194-hte.rst
+> @@ -5,11 +5,11 @@ HTE Kernel provider driver
+>  
+>  Description
+>  -----------
+> -The Nvidia tegra HTE provider also known as GTE (Generic Timestamping Engine)
+> -driver implements two GTE instances: 1) GPIO GTE and 2) LIC
+> -(Legacy Interrupt Controller) IRQ GTE. Both GTE instances get the timestamp
+> -from the system counter TSC which has 31.25MHz clock rate, and the driver
+> -converts clock tick rate to nanoseconds before storing it as timestamp value.
+> +The Nvidia tegra HTE provider, also known as GTE (Generic Timestamping Engine)
+> +driver implements two GTE instances: GPIO GTE and LIC (Legacy Interrupt
+> +Controller) IRQ GTE. Both GTE instances get the timestamp from system counter
+> +TSC which has 31.25MHz clock rate, and the driver converts clock tick rate to
+> +nanoseconds before storing it as timestamp value.
+>  
+>  GPIO GTE
+>  --------
+> @@ -19,17 +19,17 @@ needs to be configured as input. Only the always on (AON) GPIO controller
+>  instance supports timestamping GPIOs in real time as it is tightly coupled with
+>  the GPIO GTE. To support this, GPIOLIB adds two optional APIs as mentioned
+>  below. The GPIO GTE code supports both kernel and userspace consumers. The
+> -kernel space consumers can directly talk to HTE subsystem while userspace
+> -consumers timestamp requests go through GPIOLIB CDEV framework to HTE
+> -subsystem. The hte devicetree binding described at
+> -``Documentation/devicetree/bindings/timestamp`` provides an example of how a
+> -consumer can request an GPIO line.
+> +kernel space consumers can directly talk to HTE subsystem while requests from
+> +userspace consumers go through GPIOLIB CDEV framework to HTE subsystem. The hte
+> +devicetree binding described at ``Documentation/devicetree/bindings/timestamp``
+> +provides an example of how a consumer can request an GPIO line.
+>  
+> -See gpiod_enable_hw_timestamp_ns() and gpiod_disable_hw_timestamp_ns().
+> +To toggle hardware timestamp, use gpiod_enable_hw_timestamp_ns() and
+> +gpiod_disable_hw_timestamp_ns().
+>  
+>  For userspace consumers, GPIO_V2_LINE_FLAG_EVENT_CLOCK_HTE flag must be
+> -specified during IOCTL calls. Refer to ``tools/gpio/gpio-event-mon.c``, which
+> -returns the timestamp in nanoseconds.
+> +specified during IOCTL calls. Refer to ``tools/gpio/gpio-event-mon.c`` for
+> +example.
+>  
+>  LIC (Legacy Interrupt Controller) IRQ GTE
+>  -----------------------------------------
+> 
+> Thanks.
+> 
 
