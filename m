@@ -2,69 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E05163D8FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6730E63D8FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbiK3PNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 10:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
+        id S229852AbiK3PN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 10:13:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiK3PNV (ORCPT
+        with ESMTP id S229769AbiK3PNY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 10:13:21 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9934C18B0D;
-        Wed, 30 Nov 2022 07:13:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AC4ADCE1928;
-        Wed, 30 Nov 2022 15:13:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EA45C433D6;
-        Wed, 30 Nov 2022 15:13:14 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="fAVgMKq6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1669821191;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7ehcLEnrmYdooboo6C8RqDRNIDhpqFZtLvwqVG7Hw+8=;
-        b=fAVgMKq6Riw/gzU9p3R+4uU7gWKsb4jXNlxQZhG6hZCQjaFHhkn57SCWHgkLuSJlissX9/
-        pI83l41q3tknVyPf0sb3Qb59pF4wYDgWLHucwUe+9bk5J6kENcDVprNaqabdY1KwYMdg3S
-        0cNjoAQJfonLpTbw9oebQAOyYGIar0k=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fd6b750a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 30 Nov 2022 15:13:11 +0000 (UTC)
-Received: by mail-vs1-f48.google.com with SMTP id i2so17572823vsc.1;
-        Wed, 30 Nov 2022 07:13:10 -0800 (PST)
-X-Gm-Message-State: ANoB5pmQUP4bD6ze5BieyRCw9293s7F4OyQ0ev/VoG3r9Vb6SX9/YA8U
-        yqTealCvr0M49KeoUSqikHjlmbfIt8rTABdNWnk=
-X-Google-Smtp-Source: AA0mqf6Yl/T+OAmoD0yazsnLCOATWbsGEI4/bldaoexY6SLa+x8gkonaehR/KkIlFpsUee1zbzFLip7zOgDwOVo3DmU=
-X-Received: by 2002:a67:f54e:0:b0:3b0:4e31:10f7 with SMTP id
- z14-20020a67f54e000000b003b04e3110f7mr24842897vsn.73.1669821189935; Wed, 30
- Nov 2022 07:13:09 -0800 (PST)
+        Wed, 30 Nov 2022 10:13:24 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47C52F65F;
+        Wed, 30 Nov 2022 07:13:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669821203; x=1701357203;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=t0g+VAX2SuLcI7520dAKthU0OO4VL8H7Rn6/w+sOkno=;
+  b=FT9tDUKJfiM7NyOmarAFSAjxAF/cOFK9BBgv0Wam+6eU0521qH6eIoSz
+   brYSQiXoVqTnHFNBh/fVTJ4b5kXmeXZCkidmQdhdKotwwLSU0IEF9ZBQr
+   rqVhyo4fKyFZwQoOInl0omAOQnIwAvL3nCMQLk1Vc54OxvJp1InDLwgY+
+   2LCv5OSFLj3VG+HjEe2728HV7JxA3DGTCDPUdtoAVZrjwxqOEGUBx9lC9
+   moEiRwy89HWDBlCyEdVcPpwhFM5fxxSU/NWZltQyVviINfNQsvsakgksC
+   CgiMusfondnydi6sJI8Evm7lELp6asbox+FxLZTozO9idGv8gPjY7AnLh
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="377578171"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="377578171"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 07:13:23 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="712841768"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="712841768"
+Received: from avintux-mobl1.amr.corp.intel.com (HELO [10.212.242.146]) ([10.212.242.146])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 07:13:19 -0800
+Message-ID: <6b0980fc-74e7-3be5-c4a3-2583d6c26137@intel.com>
+Date:   Wed, 30 Nov 2022 07:13:18 -0800
 MIME-Version: 1.0
-References: <20221129210639.42233-1-Jason@zx2c4.com> <20221129210639.42233-4-Jason@zx2c4.com>
- <878rjs7mcx.fsf@oldenburg.str.redhat.com> <Y4dt1dLZMmogRlKa@zx2c4.com>
- <Y4dvz4d0dpFzJZ9L@zx2c4.com> <16ec2a7a-c469-4732-aeca-e74a9fb88d3e@app.fastmail.com>
-In-Reply-To: <16ec2a7a-c469-4732-aeca-e74a9fb88d3e@app.fastmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 30 Nov 2022 16:12:58 +0100
-X-Gmail-Original-Message-ID: <CAHmME9rpdCGLQzfsNkX=mLHfWeEWi4TyrOf_2rP_9hsyX9v6ow@mail.gmail.com>
-Message-ID: <CAHmME9rpdCGLQzfsNkX=mLHfWeEWi4TyrOf_2rP_9hsyX9v6ow@mail.gmail.com>
-Subject: Re: [PATCH v10 3/4] random: introduce generic vDSO getrandom() implementation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Florian Weimer <fweimer@redhat.com>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Thomas Gleixner <tglx@linutronix.de>,
-        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
-        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        "Carlos O'Donell" <carlos@redhat.com>,
-        Christian Brauner <brauner@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v7 17/20] x86/virt/tdx: Configure global KeyID on all
+ packages
+Content-Language: en-US
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+References: <cover.1668988357.git.kai.huang@intel.com>
+ <8d8285cc5efa6302cf42a3fe2c9153d1a9dbcdac.1668988357.git.kai.huang@intel.com>
+ <a537b97b-0bdc-5bcc-9ce7-470f8fc1245b@linux.intel.com>
+ <3d19683cdc13b7a3884f1e9e75743e922d4630f3.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <3d19683cdc13b7a3884f1e9e75743e922d4630f3.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,41 +87,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On 11/30/22 00:34, Huang, Kai wrote:
+> On Wed, 2022-11-30 at 11:35 +0800, Binbin Wu wrote:
+>> On 11/21/2022 8:26 AM, Kai Huang wrote:
+>>> After the array of TDMRs and the global KeyID are configured to the TDX
+>>> module, use TDH.SYS.KEY.CONFIG to configure the key of the global KeyID
+>>> on all packages.
+>>>
+>>> TDH.SYS.KEY.CONFIG must be done on one (any) cpu for each package.  And
+>>> it cannot run concurrently on different CPUs.  Implement a helper to
+>>> run SEAMCALL on one cpu for each package one by one, and use it to
+>>> configure the global KeyID on all packages.
+>>>
+>>> Intel hardware doesn't guarantee cache coherency across different
+>>> KeyIDs.  The kernel needs to flush PAMT's dirty cachelines (associated
+>>> with KeyID 0) before the TDX module uses the global KeyID to access the
+>>> PAMT.  Following the TDX module specification, flush cache before
+>>> configuring the global KeyID on all packages.
+>>>
+>>> Given the PAMT size can be large (~1/256th of system RAM), just use
+>>> WBINVD on all CPUs to flush.
+>>>
+>>> Note if any TDH.SYS.KEY.CONFIG fails, the TDX module may already have
+>>> used the global KeyID to write any PAMT.  Therefore, need to use WBINVD
+>>> to flush cache before freeing the PAMTs back to the kernel.  Note using
+>>> MOVDIR64B (which changes the page's associated KeyID from the old TDX
+>>> private KeyID back to KeyID 0, which is used by the kernel)
+>>
+>> It seems not accurate to say MOVDIR64B changes the page's associated KeyID.
+>> It just uses the current KeyID for memory operations.
+> 
+> The "write" to the memory changes the page's associated KeyID to the KeyID that
+> does the "write".  A more accurate expression perhaps should be MOVDIR64B +
+> MFENSE, but I think it doesn't matter in changelog.
 
-On Wed, Nov 30, 2022 at 4:07 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > +#ifdef CONFIG_64BIT
-> > +typedef u64 vdso_kernel_ulong;
-> > +#else
-> > +typedef u32 vdso_kernel_ulong;
-> > +#endif
->
-> This does not address the ABI concern: to allow 32-bit and 64-bit
-> tasks to share the same data page, it has to be the same width on
-> both, either u32 or 64, but not depending on a configuration
-> option.
+Just delete it from the changelog.  It's a distraction.  I'm not even
+sure it's *necessary* to do any memory content conversion after the TDX
+module has written gunk.
 
-I think it does address the issue. CONFIG_64BIT is a .config setting,
-not a compiler-derived setting. So a 64-bit kernel will get a u64 in
-kernel mode, and then it will get a u64 for the 64-bit vdso usermode
-compile, and finally it will get a u64 for the 32-bit vdso usermode
-compile. So in all three cases, the size is the same.
+There won't be any integrity issues because integrity errors don't do
+anything for KeyID-0 (no #MC).
 
-> > struct vdso_rng_data {
-> >       vdso_kernel_ulong       generation;
-> >       bool                    is_ready;
-> > };
->
-> There is another problem with this: you have implicit padding
-> in the structure because the two members have different size
-> and alignment requirements. The easiest fix is to make them
-> both u64, or you could have a u32 is_ready and an explit u32
-> for the padding.
+I _think_ the reads of the page using KeyID-0 will see abort page
+semantics.  That's *FINE*.
 
-There's padding at the end of the structure, yes. But both
-`generation` and `is_ready` will be at the same offset. If the
-structure grows, then sure, that'll have to be taken into account. But
-that's not a problem because this is a private implementation detail
-between the vdso code and the kernel.
-
-Jason
