@@ -2,346 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F39563CE0E
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 04:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B832463CDEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 04:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233287AbiK3DpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 22:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59100 "EHLO
+        id S232920AbiK3DlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 22:41:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233281AbiK3DoV (ORCPT
+        with ESMTP id S231757AbiK3DlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 22:44:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59A9FAD2;
-        Tue, 29 Nov 2022 19:43:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5928FB819F9;
-        Wed, 30 Nov 2022 03:43:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6AEAC433C1;
-        Wed, 30 Nov 2022 03:43:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669779834;
-        bh=/WZwLxNR9v9Ha8Sj5CelT2bjLZH+6wtJq3o/8HRr1Zg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QifbGw3o+9MeBaz8t02q8GEDYwu6q9Smxz5EgKWylxJ31M/dD7sfXlOLiJ3Wvf/hM
-         DmGvkizsubkN/BQ6erGANeDCJ3ig/BaENE8OC6EldYGURgy0wUpwQQIPC9ffd9GNNJ
-         Ni/7diYZYgycHzFu46NVtBiNjHr27gecLcTxC8Xel/YzHiDE76R8805kDaBnvb1/9r
-         N/lqF+EK7p12wnI2t8/E0To1igd3+DD+rXMnd0W6xWg0gc//XMJmFshHRb2TojAD3G
-         1zTM3fIurfrGw6w1aLsnUyK3d75GXaKR7D+P4VN4nhG3PC3WqOpeOvIeGTPlkXeTCq
-         jiyXfLSoPqhZw==
-From:   guoren@kernel.org
-To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
-        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
-        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
-        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
-        apatel@ventanamicro.com, atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mark.rutland@arm.com,
-        zouyipeng@huawei.com, bigeasy@linutronix.de,
-        David.Laight@aculab.com, chenzhongjin@huawei.com,
-        greentime.hu@sifive.com, andy.chiu@sifive.com, ben@decadent.org.uk
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH -next V9 14/14] riscv: entry: consolidate general regs saving/restoring
-Date:   Tue, 29 Nov 2022 22:40:59 -0500
-Message-Id: <20221130034059.826599-15-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221130034059.826599-1-guoren@kernel.org>
-References: <20221130034059.826599-1-guoren@kernel.org>
+        Tue, 29 Nov 2022 22:41:05 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB0C70DE7;
+        Tue, 29 Nov 2022 19:41:05 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id h10so11155801qvq.7;
+        Tue, 29 Nov 2022 19:41:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xoKwaxsoBTuq6caiMH51+e7OBBLm1ZQwP+caQE5Hz20=;
+        b=MzAwN7oBWwvha7Zlwgs6liSVdb1KbBAyeKIDEaNZaOdDjbIgac4GcW5KTBGkjpQE3f
+         pYo3whXLEgbbB47IomRI1kyqGdJ9zlDAzon5JQ2R3ZUAhcxgEHcp0ghwbPSV0BD1Nu+P
+         Wb4c+WZi/9GaflpFa3xEeRR7nkwH7Z4NurCHByL55Ld/F/iOOJna/4u1D3OKhJf3hEsf
+         zPlUcoIfCU937f9VtpNjbGzxVzwt7OzPi++BHenfPBrqLpgXr2F7mvZXM91ruNVE+mls
+         rucFXZNSYawLiBUujtS+6CuSH0wvrCxLWhoU23zk/yLBxXTMJ4PbdY5eB1PjoqYtlD9B
+         wQkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xoKwaxsoBTuq6caiMH51+e7OBBLm1ZQwP+caQE5Hz20=;
+        b=TKuZJs20wfaF3o7kiAmVVubvBll2bq5TWrQ5XzXih9dIv4aEoJsVGMmDC3OQiS8Xww
+         cvQ8DWCSmCGQcaNhvRO+4ulW3siC0sa9vPo0wM7FT/cnMcOB21qpub1WqwXJoKinWW6w
+         Zh4PoVZWbPdujOYaS/Huh18M97bRngm1zw1xMSlB23cBH86Ffv/7hzK0tZcuE99WZzWE
+         gpx+3tjTrbkVOEQD2xGVr+5rLfBRQ0sFmqtcxqNVhc8t+vQuyDKNTZtAhQXqMGw7SY2w
+         OBIoJFG2QI0FIC0o4bu085gzLk2S1JMoUnOOBVmwwNmemCumoQlbgUCaCZP1tPZ2i4ga
+         PRXg==
+X-Gm-Message-State: ANoB5plhiL1AEHjIpeDEuxjwBaCksBqZRD+PiJ5jVPc9yEu44yB3+0k9
+        zMTZzvA5cIfwhjf8fwQDFLdDOxz7pg==
+X-Google-Smtp-Source: AA0mqf7tlkWerd5rkQoMPHDrUNDmPDiFf+gKXZLcaMuERvq8N5JAav7JnU5BULtTFecNTLUzycGrBw==
+X-Received: by 2002:ad4:5291:0:b0:4c6:e1ba:b1c with SMTP id v17-20020ad45291000000b004c6e1ba0b1cmr25609989qvr.73.1669779664172;
+        Tue, 29 Nov 2022 19:41:04 -0800 (PST)
+Received: from bytedance ([130.44.212.155])
+        by smtp.gmail.com with ESMTPSA id do33-20020a05620a2b2100b006cdd0939ffbsm209018qkb.86.2022.11.29.19.41.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 19:41:03 -0800 (PST)
+Date:   Tue, 29 Nov 2022 19:40:59 -0800
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] coredump: Use vmsplice_to_pipe() for pipes in
+ dump_emit_page()
+Message-ID: <20221130034059.GA2246@bytedance>
+References: <20221029005147.2553-1-yepeilin.cs@gmail.com>
+ <20221031210349.3346-1-yepeilin.cs@gmail.com>
+ <Y3hfmYF6b5T35Xqi@ZenIV>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3hfmYF6b5T35Xqi@ZenIV>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jisheng Zhang <jszhang@kernel.org>
+On Sat, Nov 19, 2022 at 04:46:17AM +0000, Al Viro wrote:
+> On Mon, Oct 31, 2022 at 02:03:49PM -0700, Peilin Ye wrote:
+> 
+> > +	n = vmsplice_to_pipe(file, &iter, 0);
+> > +	if (n == -EBADF)
+> > +		n = __kernel_write_iter(cprm->file, &iter, &pos);
+> 
+> Yuck.  If anything, I would rather put a flag into coredump_params
+> and check it instead; this check for -EBADF is both unidiomatic and
+> brittle.  Suppose someday somebody looks at vmsplice(2) and
+> decides that it would make sense to lift the "is it a pipe" check
+> into e.g. vmsplice_type().  There's no obvious reasons not to,
+> unless one happens to know that coredump relies upon that check done
+> in vmsplice_to_pipe().  It's asking for trouble several years down
+> the road.
+> 
+> Make it explicit and independent from details of error checking
+> in vmsplice(2).
 
-Consolidate the saving/restoring GPs(except zero, ra, sp, gp and
-tp) into save_from_x5_to_x31/restore_from_x5_to_x31 macros.
+Thanks for the review!  I was a bit hesitant about introducing a new
+field to coredump_params for this optimization.  Will do it in v3.
 
-No functional change intended.
-
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Tested-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Guo Ren <guoren@kernel.org>
----
- arch/riscv/include/asm/asm.h   | 63 +++++++++++++++++++++++++
- arch/riscv/kernel/entry.S      | 84 ++--------------------------------
- arch/riscv/kernel/mcount-dyn.S | 56 +----------------------
- 3 files changed, 68 insertions(+), 135 deletions(-)
-
-diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
-index 1b471ff73178..bf5247aa317d 100644
---- a/arch/riscv/include/asm/asm.h
-+++ b/arch/riscv/include/asm/asm.h
-@@ -68,6 +68,7 @@
- #endif
- 
- #ifdef __ASSEMBLY__
-+#include <asm/asm-offsets.h>
- 
- /* Common assembly source macros */
- 
-@@ -80,6 +81,68 @@
- 	.endr
- .endm
- 
-+	/* save all GPs except zero, ra, sp, gp and tp */
-+	.macro save_from_x5_to_x31
-+	REG_S x5,  PT_T0(sp)
-+	REG_S x6,  PT_T1(sp)
-+	REG_S x7,  PT_T2(sp)
-+	REG_S x8,  PT_S0(sp)
-+	REG_S x9,  PT_S1(sp)
-+	REG_S x10, PT_A0(sp)
-+	REG_S x11, PT_A1(sp)
-+	REG_S x12, PT_A2(sp)
-+	REG_S x13, PT_A3(sp)
-+	REG_S x14, PT_A4(sp)
-+	REG_S x15, PT_A5(sp)
-+	REG_S x16, PT_A6(sp)
-+	REG_S x17, PT_A7(sp)
-+	REG_S x18, PT_S2(sp)
-+	REG_S x19, PT_S3(sp)
-+	REG_S x20, PT_S4(sp)
-+	REG_S x21, PT_S5(sp)
-+	REG_S x22, PT_S6(sp)
-+	REG_S x23, PT_S7(sp)
-+	REG_S x24, PT_S8(sp)
-+	REG_S x25, PT_S9(sp)
-+	REG_S x26, PT_S10(sp)
-+	REG_S x27, PT_S11(sp)
-+	REG_S x28, PT_T3(sp)
-+	REG_S x29, PT_T4(sp)
-+	REG_S x30, PT_T5(sp)
-+	REG_S x31, PT_T6(sp)
-+	.endm
-+
-+	/* restore all GPs except zero, ra, sp, gp and tp */
-+	.macro restore_from_x5_to_x31
-+	REG_L x5,  PT_T0(sp)
-+	REG_L x6,  PT_T1(sp)
-+	REG_L x7,  PT_T2(sp)
-+	REG_L x8,  PT_S0(sp)
-+	REG_L x9,  PT_S1(sp)
-+	REG_L x10, PT_A0(sp)
-+	REG_L x11, PT_A1(sp)
-+	REG_L x12, PT_A2(sp)
-+	REG_L x13, PT_A3(sp)
-+	REG_L x14, PT_A4(sp)
-+	REG_L x15, PT_A5(sp)
-+	REG_L x16, PT_A6(sp)
-+	REG_L x17, PT_A7(sp)
-+	REG_L x18, PT_S2(sp)
-+	REG_L x19, PT_S3(sp)
-+	REG_L x20, PT_S4(sp)
-+	REG_L x21, PT_S5(sp)
-+	REG_L x22, PT_S6(sp)
-+	REG_L x23, PT_S7(sp)
-+	REG_L x24, PT_S8(sp)
-+	REG_L x25, PT_S9(sp)
-+	REG_L x26, PT_S10(sp)
-+	REG_L x27, PT_S11(sp)
-+	REG_L x28, PT_T3(sp)
-+	REG_L x29, PT_T4(sp)
-+	REG_L x30, PT_T5(sp)
-+	REG_L x31, PT_T6(sp)
-+	.endm
-+
- #endif /* __ASSEMBLY__ */
- 
- #endif /* _ASM_RISCV_ASM_H */
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index d4c061f7fbfa..51eb1ef52e47 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -41,33 +41,7 @@ _save_context:
- 	addi sp, sp, -(PT_SIZE_ON_STACK)
- 	REG_S x1,  PT_RA(sp)
- 	REG_S x3,  PT_GP(sp)
--	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
--	REG_S x10, PT_A0(sp)
--	REG_S x11, PT_A1(sp)
--	REG_S x12, PT_A2(sp)
--	REG_S x13, PT_A3(sp)
--	REG_S x14, PT_A4(sp)
--	REG_S x15, PT_A5(sp)
--	REG_S x16, PT_A6(sp)
--	REG_S x17, PT_A7(sp)
--	REG_S x18, PT_S2(sp)
--	REG_S x19, PT_S3(sp)
--	REG_S x20, PT_S4(sp)
--	REG_S x21, PT_S5(sp)
--	REG_S x22, PT_S6(sp)
--	REG_S x23, PT_S7(sp)
--	REG_S x24, PT_S8(sp)
--	REG_S x25, PT_S9(sp)
--	REG_S x26, PT_S10(sp)
--	REG_S x27, PT_S11(sp)
--	REG_S x28, PT_T3(sp)
--	REG_S x29, PT_T4(sp)
--	REG_S x30, PT_T5(sp)
--	REG_S x31, PT_T6(sp)
-+	save_from_x5_to_x31
- 
- 	/*
- 	 * Disable user-mode memory access as it should only be set in the
-@@ -186,33 +160,7 @@ ENTRY(ret_from_exception)
- 	REG_L x1,  PT_RA(sp)
- 	REG_L x3,  PT_GP(sp)
- 	REG_L x4,  PT_TP(sp)
--	REG_L x5,  PT_T0(sp)
--	REG_L x6,  PT_T1(sp)
--	REG_L x7,  PT_T2(sp)
--	REG_L x8,  PT_S0(sp)
--	REG_L x9,  PT_S1(sp)
--	REG_L x10, PT_A0(sp)
--	REG_L x11, PT_A1(sp)
--	REG_L x12, PT_A2(sp)
--	REG_L x13, PT_A3(sp)
--	REG_L x14, PT_A4(sp)
--	REG_L x15, PT_A5(sp)
--	REG_L x16, PT_A6(sp)
--	REG_L x17, PT_A7(sp)
--	REG_L x18, PT_S2(sp)
--	REG_L x19, PT_S3(sp)
--	REG_L x20, PT_S4(sp)
--	REG_L x21, PT_S5(sp)
--	REG_L x22, PT_S6(sp)
--	REG_L x23, PT_S7(sp)
--	REG_L x24, PT_S8(sp)
--	REG_L x25, PT_S9(sp)
--	REG_L x26, PT_S10(sp)
--	REG_L x27, PT_S11(sp)
--	REG_L x28, PT_T3(sp)
--	REG_L x29, PT_T4(sp)
--	REG_L x30, PT_T5(sp)
--	REG_L x31, PT_T6(sp)
-+	restore_from_x5_to_x31
- 
- 	REG_L x2,  PT_SP(sp)
- 
-@@ -278,33 +226,7 @@ restore_caller_reg:
- 	//save context to overflow stack
- 	REG_S x1,  PT_RA(sp)
- 	REG_S x3,  PT_GP(sp)
--	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
--	REG_S x10, PT_A0(sp)
--	REG_S x11, PT_A1(sp)
--	REG_S x12, PT_A2(sp)
--	REG_S x13, PT_A3(sp)
--	REG_S x14, PT_A4(sp)
--	REG_S x15, PT_A5(sp)
--	REG_S x16, PT_A6(sp)
--	REG_S x17, PT_A7(sp)
--	REG_S x18, PT_S2(sp)
--	REG_S x19, PT_S3(sp)
--	REG_S x20, PT_S4(sp)
--	REG_S x21, PT_S5(sp)
--	REG_S x22, PT_S6(sp)
--	REG_S x23, PT_S7(sp)
--	REG_S x24, PT_S8(sp)
--	REG_S x25, PT_S9(sp)
--	REG_S x26, PT_S10(sp)
--	REG_S x27, PT_S11(sp)
--	REG_S x28, PT_T3(sp)
--	REG_S x29, PT_T4(sp)
--	REG_S x30, PT_T5(sp)
--	REG_S x31, PT_T6(sp)
-+	save_from_x5_to_x31
- 
- 	REG_L s0, TASK_TI_KERNEL_SP(tp)
- 	csrr s1, CSR_STATUS
-diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
-index d171eca623b6..040d098279a9 100644
---- a/arch/riscv/kernel/mcount-dyn.S
-+++ b/arch/riscv/kernel/mcount-dyn.S
-@@ -70,33 +70,7 @@
- 	REG_S x2,  PT_SP(sp)
- 	REG_S x3,  PT_GP(sp)
- 	REG_S x4,  PT_TP(sp)
--	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
--	REG_S x10, PT_A0(sp)
--	REG_S x11, PT_A1(sp)
--	REG_S x12, PT_A2(sp)
--	REG_S x13, PT_A3(sp)
--	REG_S x14, PT_A4(sp)
--	REG_S x15, PT_A5(sp)
--	REG_S x16, PT_A6(sp)
--	REG_S x17, PT_A7(sp)
--	REG_S x18, PT_S2(sp)
--	REG_S x19, PT_S3(sp)
--	REG_S x20, PT_S4(sp)
--	REG_S x21, PT_S5(sp)
--	REG_S x22, PT_S6(sp)
--	REG_S x23, PT_S7(sp)
--	REG_S x24, PT_S8(sp)
--	REG_S x25, PT_S9(sp)
--	REG_S x26, PT_S10(sp)
--	REG_S x27, PT_S11(sp)
--	REG_S x28, PT_T3(sp)
--	REG_S x29, PT_T4(sp)
--	REG_S x30, PT_T5(sp)
--	REG_S x31, PT_T6(sp)
-+	save_from_x5_to_x31
- 	.endm
- 
- 	.macro RESTORE_ALL
-@@ -108,33 +82,7 @@
- 	REG_L x2,  PT_SP(sp)
- 	REG_L x3,  PT_GP(sp)
- 	REG_L x4,  PT_TP(sp)
--	REG_L x5,  PT_T0(sp)
--	REG_L x6,  PT_T1(sp)
--	REG_L x7,  PT_T2(sp)
--	REG_L x8,  PT_S0(sp)
--	REG_L x9,  PT_S1(sp)
--	REG_L x10, PT_A0(sp)
--	REG_L x11, PT_A1(sp)
--	REG_L x12, PT_A2(sp)
--	REG_L x13, PT_A3(sp)
--	REG_L x14, PT_A4(sp)
--	REG_L x15, PT_A5(sp)
--	REG_L x16, PT_A6(sp)
--	REG_L x17, PT_A7(sp)
--	REG_L x18, PT_S2(sp)
--	REG_L x19, PT_S3(sp)
--	REG_L x20, PT_S4(sp)
--	REG_L x21, PT_S5(sp)
--	REG_L x22, PT_S6(sp)
--	REG_L x23, PT_S7(sp)
--	REG_L x24, PT_S8(sp)
--	REG_L x25, PT_S9(sp)
--	REG_L x26, PT_S10(sp)
--	REG_L x27, PT_S11(sp)
--	REG_L x28, PT_T3(sp)
--	REG_L x29, PT_T4(sp)
--	REG_L x30, PT_T5(sp)
--	REG_L x31, PT_T6(sp)
-+	restore_from_x5_to_x31
- 
- 	addi	sp, sp, PT_SIZE_ON_STACK
- 	addi	sp, sp, SZREG
--- 
-2.36.1
+Peilin Ye
 
