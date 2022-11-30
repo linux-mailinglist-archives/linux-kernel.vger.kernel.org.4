@@ -2,132 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBFC63D90D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D91E63D913
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiK3PQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 10:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40864 "EHLO
+        id S229719AbiK3PSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 10:18:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiK3PQo (ORCPT
+        with ESMTP id S229528AbiK3PSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 10:16:44 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC4C2FA69;
-        Wed, 30 Nov 2022 07:16:42 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1D5C0218DF;
-        Wed, 30 Nov 2022 15:16:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669821401; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ATM8wuEZO4F8LmfuabnM5oV4K3RnnbDMeyDmwCZSpdY=;
-        b=j6xq7JSq+Wr3SnG8eqNE+ECS5hPr743xQ5eo4n+UP7l3stds48QDvKwIiUHdHLnjAe5FLh
-        i3ipUvJUniXllps7G5UVsQKq8e4auYqUEEFMQ/03zLcVsv9A4c4d2v2B6rezUF+XYnSfwU
-        8/nlKl2px4rsGu4yjPnAuTS9c0Ex8fE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C987F1331F;
-        Wed, 30 Nov 2022 15:16:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id tYxQMNhzh2MWGwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 30 Nov 2022 15:16:40 +0000
-Date:   Wed, 30 Nov 2022 16:16:39 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Ming Lei <ming.lei@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Yi Zhang <yi.zhang@redhat.com>
-Subject: Re: [PATCH-block v2] bdi, blk-cgroup: Fix potential UAF of blkcg
-Message-ID: <20221130151639.GE27838@blackbody.suse.cz>
-References: <20221129203400.1456100-1-longman@redhat.com>
+        Wed, 30 Nov 2022 10:18:48 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA92837235;
+        Wed, 30 Nov 2022 07:18:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=N9HXBBW7P/KvVNawmxP/5nCywoMe+jH+9tdbHKm2yx4=; b=lQ1WyiKRrQeHAg4aAhQC4Jx+kF
+        RcVZQAoZ2Reaiz5xHiiSxbFcwo041E6tsoUwVaGybmugem8+4hWo4WFjyOX3jFA2HYI7lvXcHKn+6
+        h7mmjbxsORZKqCW5OipGo8f/FbZrXYnf/RWm9p8tkML3rwfEiVigFzsrNmSJJQ1twbm2qSDMcttHa
+        mDNQgjabRUZkO5EOzzr04YbceD+HjlJSuBFmtrVhLUJba1383ukKb7CKz07LEPOl33OB5gbk05iRz
+        EEgraQ++6paX17JPyMs1AiM5aJncrYPcaaPXhlH2OX25db/LYTfnvbHkFmJmGfqPlqbwVDHxbxBnH
+        o/9lgL9w==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p0OrC-00F5XG-0W; Wed, 30 Nov 2022 15:18:42 +0000
+Date:   Wed, 30 Nov 2022 15:18:41 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     jaegeuk@kernel.org, chao@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, fengnanchang@gmail.com,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        vishal.moola@gmail.com
+Subject: Re: [PATCH] f2fs: Support enhanced hot/cold data separation for f2fs
+Message-ID: <Y4d0UReDb+EmUJOz@casper.infradead.org>
+References: <Y4ZaBd1r45waieQs@casper.infradead.org>
+ <20221130124804.79845-1-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="T6xhMxlHU34Bk0ad"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221129203400.1456100-1-longman@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20221130124804.79845-1-frank.li@vivo.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Nov 30, 2022 at 08:48:04PM +0800, Yangtao Li wrote:
+> Hi,
+> 
+> > Thanks for reviewing this.  I think the real solution to this is
+> > that f2fs should be using large folios.  That way, the page cache
+> > will keep track of dirtiness on a per-folio basis, and if your folios
+> > are at least as large as your cluster size, you won't need to do the
+> > f2fs_prepare_compress_overwrite() dance.  And you'll get at least fifteen
+> > dirty folios per call instead of fifteen dirty pages, so your costs will
+> > be much lower.
+> >
+> > Is anyone interested in doing the work to convert f2fs to support
+> > large folios?  I can help, or you can look at the work done for XFS,
+> > AFS and a few other filesystems.
+> 
+> Seems like an interesting job. Not sure if I can be of any help.
+> What needs to be done currently to support large folio?
+> 
+> Are there any roadmaps and reference documents.
 
---T6xhMxlHU34Bk0ad
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+From a filesystem point of view, you need to ensure that you handle folios
+larger than PAGE_SIZE correctly.  The easiest way is to spread the use
+of folios throughout the filesystem.  For example, today the first thing
+we do in f2fs_read_data_folio() is convert the folio back into a page.
+That works because f2fs hasn't told the kernel that it supports large
+folios, so the VFS won't create large folios for it.
 
-On Tue, Nov 29, 2022 at 03:34:00PM -0500, Waiman Long <longman@redhat.com> =
-wrote:
-> The reproducing system can no longer produce a warning with this patch.
-> All the runnable block/0* tests including block/027 were run successfully
-> without failure.
+It's a lot of subtle things.  Here's an obvious one:
+                        zero_user_segment(page, 0, PAGE_SIZE);
+There's a folio equivalent that will zero an entire folio.
 
-Thanks for the test!
+But then there is code which assumes the number of blocks per page (maybe
+not in f2fs?) and so on.  Every filesystem will have its own challenges.
 
-> @@ -1088,7 +1088,15 @@ static void blkcg_destroy_blkgs(struct blkcg *blkc=
-g)
-> =20
->  	might_sleep();
-> =20
-> -	css_get(&blkcg->css);
-> +	/*
-> +	 * blkcg_destroy_blkgs() shouldn't be called with all the blkcg
-> +	 * references gone and rcu_read_lock not held.
-> +	 */
-> +	if (!css_tryget(&blkcg->css)) {
-> +		WARN_ON_ONCE(!rcu_read_lock_held());
-> +		return;
-> +	}
+One way to approach this is to just enable large folios (see commit
+6795801366da or 8549a26308f9) and see what breaks when you run xfstests
+over it.  Probably quite a lot!
 
-As I followed the previous discussion, the principle is that obtaining a
-reference or being inside an RCU read section is sufficient.
-
-Consequently, I'd expect the two situations handled equally but here the
-no-ref but RCU bails out. (Which is OK because blkg_list must be empty?)
-
-However, the might_sleep() in (non-sleepable) RCU reader section combo
-makes me wary anyway (not with the early return but tools would likely
-complain).
-
-All in all, can't the contract of blkcg_destroy_blkgs() declare that
-a caller must pass blkcg with a valid reference? (The body of
-blkcg_destroy_blkgs then wouldn't need to get neither put the inner
-reference).
-
-HTH,
-Michal
-
---T6xhMxlHU34Bk0ad
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCY4dzxgAKCRAkDQmsBEOq
-ua6MAQCYfYVZAsH1NgOid00l0b52FcccC2/s0ITlu8jm7ZQs6wEAhKRvdwKu6lsC
-VQgfYht9U8f+lQdK562Fh/ONyn6DzQw=
-=M1ug
------END PGP SIGNATURE-----
-
---T6xhMxlHU34Bk0ad--
