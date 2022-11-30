@@ -2,128 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 429E463E1BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C7363E1B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbiK3USk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 15:18:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
+        id S229619AbiK3URZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 15:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiK3USN (ORCPT
+        with ESMTP id S229821AbiK3UQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:18:13 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DDA950EB
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 12:13:41 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id x12so5690838ilg.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 12:13:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K4gs1nqhWEkh1q6oBgpXv2FkSjhvCSKGs/o2Pfz2jr8=;
-        b=M/3A/m/rdnLCwq+N0mKcmdE9X0YNCiy+AKyIyVOzqAFNENc7fYG+WQp3vAo7AhXL3I
-         /c99IHcFQIxBAKtKzz91w/vQs9yd0iVRHu0YI3a23Rk4+SO7U123BhA/BbYlNt3DyohU
-         KKwz+K4DFd/l4UaDzw0Y0Qbq4Skp95Fid0TF8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K4gs1nqhWEkh1q6oBgpXv2FkSjhvCSKGs/o2Pfz2jr8=;
-        b=AjcBoZaUKZuYY1/OvB1WwE3aIKxqpY1XJ7IS3Cv4MmdO3Wib4g5hR7uJQtoZUusD/A
-         qTEaC0uXvnc1RDLGBUCV0LVjrQxl2WVBoH6q+k3N6Em8EvKhKWzeWWo48eDmy24fBEo5
-         cwTETVeHvQYYCybBX0XD/7IaFi2V3d/3IolcK2my3GfrwKL2BEJmu+FS44knDipYMXWn
-         JZn8dM6AoDZWfd3fRUMCIONy8PfAPpfOBa9NOEAzlp9b2/m/qdebfyOBMmbsExUSzNXp
-         OAEPv7bKiHS3sgNJE/UZGqbjvT9HbMrV6kCH/6ukTIbOz0nPpZbrfHATz/ILA9k8LSsX
-         niNQ==
-X-Gm-Message-State: ANoB5pliHmXXK8wN0ARaBEm1BAmerjEjKh2XB7Jbeg2ehrdmtoPU2rSi
-        fx5IO6LjfyyEN3hblwWx0Am0vZMYzpnYEQ==
-X-Google-Smtp-Source: AA0mqf6T5GN72ySu99K1kzD6N8MC7OS5wEzGjRwq1jjcy6Lq7g/+7JYtHedGalV19WPXMWRa1LRi2A==
-X-Received: by 2002:a05:6e02:2197:b0:302:391a:f67b with SMTP id j23-20020a056e02219700b00302391af67bmr22128556ila.265.1669839220208;
-        Wed, 30 Nov 2022 12:13:40 -0800 (PST)
-Received: from markhas1.lan (184-96-172-159.hlrn.qwest.net. [184.96.172.159])
-        by smtp.gmail.com with ESMTPSA id r2-20020a02b102000000b00363e61908bfsm902158jah.10.2022.11.30.12.13.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 12:13:40 -0800 (PST)
-From:   Mark Hasemeyer <markhas@chromium.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Raul Rangel <rrangel@chromium.org>,
-        Mark Hasemeyer <markhas@chromium.org>,
-        Bhanu Prakash Maiya <bhanumaiya@chromium.org>,
-        Benson Leung <bleung@google.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        chrome-platform@lists.linux.dev
-Subject: [PATCH v8 3/3] platform/chrome: cros_ec_uart: Add DT enumeration support
-Date:   Wed, 30 Nov 2022 13:12:56 -0700
-Message-Id: <20221130131245.v8.3.Ie23c217d69ff25d7354db942613f143bbc8ef891@changeid>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-In-Reply-To: <20221130131245.v8.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
-References: <20221130131245.v8.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
+        Wed, 30 Nov 2022 15:16:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E43689301;
+        Wed, 30 Nov 2022 12:13:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04AD661DBE;
+        Wed, 30 Nov 2022 20:13:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5979AC433D6;
+        Wed, 30 Nov 2022 20:13:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669839180;
+        bh=pyfET1ToAw3P7uNG+TwmmC/YKEAYeHY3LwFAqLPkGuY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=s3ziu1MLDHz/XzIZoldakOWlQ63NfX8SLBbOxIRGytLtTq19KSXwavlc/JUtJoLCF
+         /9mMILqTat0Cznb6OCtI0JPoYlSE2xOi0ha3Hp0eVrDjrlsgT4Es1sDAVoTr0Yp+7r
+         ecBJvOoUfEGfJF3F3NfdKy/dBLC7lwgbE6hLFFgskzZx8A8X/CcFjHuZvekJSwuB0x
+         oSnmGZdHOjx+O4I4PKCC21Thf0R54jtoHJmI8vBMJzERqlQ0sLk3ahBeCXX7fhcFAF
+         Sda+3ql1w83Vp+hFMLBdSE1F4UBtp3fbvSAC479BtrKi7PO6HOjEPR+JF4/ZJGRNma
+         FeRrBe0m7yvYw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id EEEED5C051C; Wed, 30 Nov 2022 12:12:59 -0800 (PST)
+Date:   Wed, 30 Nov 2022 12:12:59 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rostedt@goodmis.org, Marc Dionne <marc.dionne@auristor.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH rcu 14/16] rxrpc: Use call_rcu_hurry() instead of
+ call_rcu()
+Message-ID: <20221130201259.GR4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <CAEXW_YS1nfsV_ohXDaB1i2em=+0KP1DofktS24oGFa4wPAbiiw@mail.gmail.com>
+ <20221130181316.GA1012431@paulmck-ThinkPad-P17-Gen-1>
+ <20221130181325.1012760-14-paulmck@kernel.org>
+ <639433.1669835344@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <639433.1669835344@warthog.procyon.org.uk>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Existing firmware uses the "PRP0001" _HID and an associated compatible
-string to enumerate the cros_ec_uart.
+On Wed, Nov 30, 2022 at 07:09:04PM +0000, David Howells wrote:
+> Note that this conflicts with my patch:
+> 
+> 	rxrpc: Don't hold a ref for connection workqueue
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?h=rxrpc-next&id=450b00011290660127c2d76f5c5ed264126eb229
+> 
+> which should render it unnecessary.  It's a little ahead of yours in the
+> net-next queue, if that means anything.
 
-Add DT enumeration support for already shipped firmware.
+OK, I will drop this patch in favor of yours, thank you!
 
-Signed-off-by: Bhanu Prakash Maiya <bhanumaiya@chromium.org>
-Signed-off-by: Mark Hasemeyer <markhas@chromium.org>
----
-
-Changes in v8:
-- No change
-
-Changes in v7:
-- Move PRP0001 enumeration support to its own commit
-
- drivers/platform/chrome/cros_ec_uart.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/platform/chrome/cros_ec_uart.c b/drivers/platform/chrome/cros_ec_uart.c
-index ef9ac7ace04b6..521a3ee6f60b3 100644
---- a/drivers/platform/chrome/cros_ec_uart.c
-+++ b/drivers/platform/chrome/cros_ec_uart.c
-@@ -11,6 +11,7 @@
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/of.h>
- #include <linux/platform_data/cros_ec_commands.h>
- #include <linux/platform_data/cros_ec_proto.h>
- #include <linux/serdev.h>
-@@ -385,6 +386,12 @@ static int __maybe_unused cros_ec_uart_resume(struct device *dev)
- static SIMPLE_DEV_PM_OPS(cros_ec_uart_pm_ops, cros_ec_uart_suspend,
- 			 cros_ec_uart_resume);
- 
-+static const struct of_device_id cros_ec_uart_of_match[] = {
-+	{ .compatible = "google,cros-ec-uart" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, cros_ec_uart_of_match);
-+
- #ifdef CONFIG_ACPI
- static const struct acpi_device_id cros_ec_uart_acpi_id[] = {
- 	{ "GOOG0019", 0 },
-@@ -398,6 +405,7 @@ static struct serdev_device_driver cros_ec_uart_driver = {
- 	.driver	= {
- 		.name	= "cros-ec-uart",
- 		.acpi_match_table = ACPI_PTR(cros_ec_uart_acpi_id),
-+		.of_match_table = cros_ec_uart_of_match,
- 		.pm	= &cros_ec_uart_pm_ops,
- 	},
- 	.probe		= cros_ec_uart_probe,
--- 
-2.38.1.584.g0f3c55d4c2-goog
-
+							Thanx, Paul
