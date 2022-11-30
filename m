@@ -2,221 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4948C63D2D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:08:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 891F863D2DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235533AbiK3KIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 05:08:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
+        id S233628AbiK3KLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 05:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234125AbiK3KIU (ORCPT
+        with ESMTP id S235624AbiK3KLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 05:08:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B463B248EB;
-        Wed, 30 Nov 2022 02:08:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BF5261AA2;
-        Wed, 30 Nov 2022 10:08:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7617C433D7;
-        Wed, 30 Nov 2022 10:08:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669802896;
-        bh=9FvSvVLzySD8LbTfnoYpcK38CCZwnNYjsIckhInqktQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P0Yd5YZnMurOBSMnc+1boBGbX7+HW/x6DAtfPeXD3vOX+NZu9c/rTJbwa3nYtQfC1
-         5jh51yyT0/rdJ4UyhXfKtJHzmPV9i89AaDWJnydAV4vGaKLbcY0Y5LlPeXTqt9cqvP
-         jFQownQSEWgOAUhX3swf4M67FWa8XssUy2yhee7Z2hpva2KCXq/6vWJSqS59m1nf3W
-         Dze7SR7/FcFULDdvElVuJkbbbgDokuz4ek9aJFqaI2NpZ/nXNu7gNbWqdh2W2b+6AS
-         2nDwZOiWdgh8LV5V5V48cKLdEvX2/0sglK4kNObcAoltdrMboWzfzMN0uXeG2yndoH
-         POpULBl8lpocA==
-Date:   Wed, 30 Nov 2022 10:08:07 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Flora Fu <flora.fu@mediatek.com>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-rtc@vger.kernel.org, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-leds@vger.kernel.org
-Subject: Re: [PATCH v7 4/8] dt-bindings: mfd: mediatek: Add bindings for
- MT6357 PMIC
-Message-ID: <Y4crh0Ob3sz20s5T@google.com>
-References: <20221005-mt6357-support-v7-0-477e60126749@baylibre.com>
- <20221005-mt6357-support-v7-4-477e60126749@baylibre.com>
+        Wed, 30 Nov 2022 05:11:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFC12DA8A
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:10:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669803003;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NoPdGdP1XN2IHlWy3xzG7ljlYAvy6qLxs9MsnW+HAEQ=;
+        b=ZlZdyiD78BGnR/7hjwAEKvQuX3EWxeCxZAEK1un/gXLY11oC2oLzTipH7O2gQvjAkNXSfl
+        VWCLswQXrsJ0DeE4uElLYmxNPYlFjF7gMIja7EsP/eBVb8zgPxM2525nGISImPvjh3nbLQ
+        xTmuQ3MdMBKlw/dgan7AxN2Yc7Qd600=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-463-GFisTFeFNT-f0JqYGCfqjQ-1; Wed, 30 Nov 2022 05:10:02 -0500
+X-MC-Unique: GFisTFeFNT-f0JqYGCfqjQ-1
+Received: by mail-wm1-f69.google.com with SMTP id v125-20020a1cac83000000b003cfa148576dso9180418wme.3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:10:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NoPdGdP1XN2IHlWy3xzG7ljlYAvy6qLxs9MsnW+HAEQ=;
+        b=F2v1CMocNWEz8kaH5jWnxBSca7lFlwoBcfT2laeQjm0zDbM9sIp2dvnwZTBM4tSyn+
+         LnFHTO9ESL0wO6YLm6tot+TNIC4gNr8xFcpWdPiW6CQXW3N7wUQMKuQ3FZokIalih+S8
+         h3WYJdaHeL8EHEnujZQMSSTuGUqkH9mhRAKL9IcdZOiXzkrfipbIiCqNIEfIlibVGZG6
+         lm+IkfFswnnAcZ4W7yYc8N3WYsrx0ZtEzy3eRTo+AYCNRO9Y4QAsCoHGQqkc/2cl26y7
+         6cK7FC0XwNtD+IkDzgITRomvkND+mJIFPKjrWBymB2Zgf/Mu8NF23miQdpKYC240VJNk
+         9mrQ==
+X-Gm-Message-State: ANoB5pmRO3U/3aR6pOQISEs0EANfOdToFoBJ/xjmEJ2RwGMRjdBF7mJj
+        P/zAezluFTlSDBdgJkKKRFTM6uQktmWKr41ex5UXTTtXEOV4X7/Sb5gsjfCX8Mzu1cXZeYsm1t5
+        B9qRrdV+VEJgSwOCc/aYOFTq8
+X-Received: by 2002:a5d:504d:0:b0:242:246c:2f89 with SMTP id h13-20020a5d504d000000b00242246c2f89mr3758394wrt.108.1669803000956;
+        Wed, 30 Nov 2022 02:10:00 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5FkWQT/k1GHgrsZnt54cNcc31t/15SG2tVARml33QGcmHm1VSq1hvfrPDi51V6Qbq5abMc4Q==
+X-Received: by 2002:a5d:504d:0:b0:242:246c:2f89 with SMTP id h13-20020a5d504d000000b00242246c2f89mr3758377wrt.108.1669803000781;
+        Wed, 30 Nov 2022 02:10:00 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id b18-20020a5d5512000000b0023c8026841csm514653wrv.23.2022.11.30.02.09.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 02:10:00 -0800 (PST)
+Message-ID: <31351d94-91ba-b0fe-cb20-3dcc8254fb66@redhat.com>
+Date:   Wed, 30 Nov 2022 11:09:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221005-mt6357-support-v7-4-477e60126749@baylibre.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 16/17] drm/vc4: tests: Fail the current test if we
+ access a register
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-media@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
+References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
+ <20221123-rpi-kunit-tests-v2-16-efe5ed518b63@cerno.tech>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v2-16-efe5ed518b63@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Nov 2022, Alexandre Mergnat wrote:
-
-> Currently, almost all MT63XX PMIC are documented mfd/mt6397.txt.
-> Unfortunately, the PMICs haven't always similar HW sub-features.
-> To have a better human readable schema, I chose to make one PMIC schema
-> to match the exact HW capabilities instead of convert mt6397.txt to
-> mediatek,mt63xx.yaml and put a bunch of properties behind
-> "if contain ... then ..."
+On 11/28/22 15:53, Maxime Ripard wrote:
+> Accessing a register when running under kunit is a bad idea since our
+> device is completely mocked.
 > 
-> - add interrupt property
-> - change property refs to match with new yaml documentation
+> Fail the current test if we ever access any of our hardware registers.
 > 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-
-Acked-by: Lee Jones <lee@kernel.org>
-
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 > ---
->  .../devicetree/bindings/mfd/mediatek,mt6357.yaml   | 111 +++++++++++++++++++++
->  1 file changed, 111 insertions(+)
+
+[...]
+
+> -#define CRTC_WRITE(offset, val) writel(val, vc4_crtc->regs + (offset))
+> -#define CRTC_READ(offset) readl(vc4_crtc->regs + (offset))
+> +#define CRTC_WRITE(offset, val)								\
+> +	do {										\
+> +		kunit_fail_current_test("Accessing a register in a unit test!\n");	\
+> +		writel(val, vc4_crtc->regs + (offset));					\
+> +	} while (0)
+> +
+> +#define CRTC_READ(offset)								\
+> +	({										\
+> +		kunit_fail_current_test("Accessing a register in a unit test!\n");	\
+> +		readl(vc4_crtc->regs + (offset));					\
+> +	})
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6357.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6357.yaml
-> new file mode 100644
-> index 000000000000..837a77013d57
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6357.yaml
-> @@ -0,0 +1,111 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/mediatek,mt6357.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek MT6357 PMIC
-> +
-> +maintainers:
-> +  - Flora Fu <flora.fu@mediatek.com>
-> +  - Alexandre Mergnat <amergnat@baylibre.com>
-> +
-> +description: |
-> +  MT6357 is a power management system chip containing 5 buck
-> +  converters and 29 LDOs. Supported features are audio codec,
-> +  USB battery charging, fuel gauge, RTC
-> +
-> +  This is a multifunction device with the following sub modules:
-> +  - Regulator
-> +  - RTC
-> +  - Keys
-> +
-> +  It is interfaced to host controller using SPI interface by a proprietary hardware
-> +  called PMIC wrapper or pwrap. This MFD is a child device of pwrap.
-> +  See the following for pwrap node definitions:
-> +  Documentation/devicetree/bindings/soc/mediatek/mediatek,pwrap.yaml
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt6357
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  interrupt-controller: true
-> +
-> +  "#interrupt-cells":
-> +    const: 2
-> +
-> +  regulators:
-> +    type: object
-> +    $ref: /schemas/regulator/mediatek,mt6357-regulator.yaml
-> +    description:
-> +      List of MT6357 BUCKs and LDOs regulators.
-> +
-> +  rtc:
-> +    type: object
-> +    $ref: /schemas/rtc/rtc.yaml#
-> +    description:
-> +      MT6357 Real Time Clock.
-> +    properties:
-> +      compatible:
-> +        const: mediatek,mt6357-rtc
-> +      start-year: true
-> +    required:
-> +      - compatible
-> +
-> +  keys:
-> +    type: object
-> +    $ref: /schemas/input/mediatek,pmic-keys.yaml
-> +    description:
-> +      MT6357 power and home keys.
-> +
-> +required:
-> +  - compatible
-> +  - regulators
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    pwrap {
-> +        pmic {
-> +            compatible = "mediatek,mt6357";
-> +
-> +            interrupt-parent = <&pio>;
-> +            interrupts = <145 IRQ_TYPE_LEVEL_HIGH>;
-> +            interrupt-controller;
-> +            #interrupt-cells = <2>;
-> +
-> +            regulators {
-> +                mt6357_vproc_reg: buck-vproc {
-> +                    regulator-name = "vproc";
-> +                    regulator-min-microvolt = <518750>;
-> +                    regulator-max-microvolt = <1312500>;
-> +                    regulator-ramp-delay = <6250>;
-> +                    regulator-enable-ramp-delay = <220>;
-> +                    regulator-always-on;
-> +                };
-> +
-> +                // ...
-> +
-> +                mt6357_vusb33_reg: ldo-vusb33 {
-> +                    regulator-name = "vusb33";
-> +                    regulator-min-microvolt = <3000000>;
-> +                    regulator-max-microvolt = <3100000>;
-> +                    regulator-enable-ramp-delay = <264>;
-> +                };
-> +            };
-> +
-> +            rtc {
-> +                compatible = "mediatek,mt6357-rtc";
-> +            };
-> +
-> +            keys {
-> +                compatible = "mediatek,mt6357-keys";
-> +            };
-> +        };
-> +    };
-> 
+
+Should this be made conditional on whether DRM_VC4_KUNIT_TEST is enabled ? 
+
+That is, just define the simpler macros when is disabled? The kunit_fail_current_test()
+is just a no-op if CONFIG_KUNIT isn't enabled, but I think my question still stands.
+
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
 -- 
-Lee Jones [李琼斯]
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
