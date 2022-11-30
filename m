@@ -2,125 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD3163D6CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABF963D6A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiK3NdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 08:33:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
+        id S232795AbiK3N0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 08:26:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiK3NdS (ORCPT
+        with ESMTP id S229472AbiK3N0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 08:33:18 -0500
-X-Greylist: delayed 363 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Nov 2022 05:33:15 PST
-Received: from mx5.didiglobal.com (mx5.didiglobal.com [111.202.70.122])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 44C0B13F23;
-        Wed, 30 Nov 2022 05:33:14 -0800 (PST)
-Received: from mail.didiglobal.com (unknown [10.79.71.35])
-        by mx5.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 4D2E0B00DB009;
-        Wed, 30 Nov 2022 21:25:07 +0800 (CST)
-Received: from ZJY03-ACTMBX-05.didichuxing.com (10.79.71.35) by
- ZJY03-ACTMBX-05.didichuxing.com (10.79.71.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 30 Nov 2022 21:25:06 +0800
-Received: from ZJY03-ACTMBX-05.didichuxing.com ([fe80::1dcd:f7bf:746e:c769])
- by ZJY03-ACTMBX-05.didichuxing.com ([fe80::1dcd:f7bf:746e:c769%8]) with mapi
- id 15.01.2375.017; Wed, 30 Nov 2022 21:25:06 +0800
-X-MD-Sfrom: chengkaitao@didiglobal.com
-X-MD-SrcIP: 10.79.71.35
-From:   =?utf-8?B?56iL5Z6y5rabIENoZW5na2FpdGFvIENoZW5n?= 
-        <chengkaitao@didiglobal.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Tao pilgrim <pilgrimtao@gmail.com>
-CC:     "tj@kernel.org" <tj@kernel.org>,
-        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "cgel.zte@gmail.com" <cgel.zte@gmail.com>,
-        "ran.xiaokai@zte.com.cn" <ran.xiaokai@zte.com.cn>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
-        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
-        "yuzhao@google.com" <yuzhao@google.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "surenb@google.com" <surenb@google.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "sujiaxun@uniontech.com" <sujiaxun@uniontech.com>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] mm: memcontrol: protect the memory in cgroup from being
- oom killed
-Thread-Topic: [PATCH] mm: memcontrol: protect the memory in cgroup from being
- oom killed
-Thread-Index: AQHZBK+NwNVzWF9Xk0ibAn/rxGrWSq5W40KAgACRsQA=
-Date:   Wed, 30 Nov 2022 13:25:06 +0000
-Message-ID: <9F11BDDA-D9B6-4F61-9EAA-9B959BD4AE0A@didiglobal.com>
-In-Reply-To: <Y4dP+3VEYl/YUfK1@debian.me>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.79.71.102]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DCB81BB2AA69C24198FC73EC4273842D@didichuxing.com>
-Content-Transfer-Encoding: base64
+        Wed, 30 Nov 2022 08:26:15 -0500
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC7450D41;
+        Wed, 30 Nov 2022 05:26:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=a26lIzJ4dptbrOGi0GFPN+IgCtoaj1aHi7+e9iGicfE=; b=Kh/Dn3L6ycIIXU8wsJwzKY4WSB
+        n+TEVb/X6z4AQG7GQETxE4KLClWaBBdYGqh3moY/8eXeLWYyzYVdJYrKl9VwdRA5DqNr6UvAkwmfU
+        1mhRdHE7RYfBbJch9V3b0RNBzWimGXhpAw2ALBYb+9msmuVLi5dfZJtLF6F2LjHZq0yZE+chlJARm
+        8uXqBLI+5D9/1knP7f3r62PqMHC2o4v9QLjHSAXjAQL8hcGvIqCYxOxZpdGAGaMPBo+LQu+4dAISS
+        T6Vyfh3srdvx9KXruov3YrsZ3KfK1jyGrENJZKCjruMqWNQwVTNgLrCsOTZFfNXi2jtxV+ZOusJPq
+        ynaNQii5LHhImkDbtw5BUzCAaCQ569TzySiksa4vynILiD9/WD1AlTFQH5cREfi8eBeLycPrild1X
+        NlDRCAQQjE7dM7MYT8ULcvKcCmzn6ZG70UncJlxMitrUfKlCGxN09UO2PP31I1xgbm/kY44vRqyNc
+        jwMRvUtQL/h1tBPwHktbtGBCj1xnyFBi7flXuDcrBLnOhWCEvUzX7jBRE6Y7TJPtt6flhTqzPAAuK
+        q054eLNaGDGQCbPxRpoHATanim4e1XBYxMswLuxOo2Ho28gqyBgxYJu5IZhkeBMTkm7JFt6kGD4kV
+        l/m7NFeqp6tLl4Q0DtONOEybY/kpXJGTn+4OeakxE=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     asmadeus@codewreck.org
+Cc:     Schspa Shi <schspa@gmail.com>, ericvh@gmail.com, lucho@ionkov.net,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, v9fs-developer@lists.sourceforge.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+8f1060e2aaf8ca55220b@syzkaller.appspotmail.com
+Subject: Re: [PATCH] 9p: fix crash when transaction killed
+Date:   Wed, 30 Nov 2022 14:25:59 +0100
+Message-ID: <4084178.bTz7GqEF8p@silver>
+In-Reply-To: <Y4dSfYoU6F8+D8ac@codewreck.org>
+References: <20221129162251.90790-1-schspa@gmail.com> <2356667.R3SNuAaExM@silver>
+ <Y4dSfYoU6F8+D8ac@codewreck.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMjAyMi8xMS8zMCAyMDo0M++8jOKAnEJhZ2FzIFNhbmpheWHigJ08YmFnYXNkb3RtZUBnbWFp
-bC5jb20+IHdyb3RlOg0KPiBPbiBXZWQsIE5vdiAzMCwgMjAyMiBhdCAwNzozMzowMVBNICswODAw
-LCBUYW8gcGlsZ3JpbSB3cm90ZToNCj4gPiBPbiBXZWQsIE5vdiAzMCwgMjAyMiBhdCA0OjQxIFBN
-IEJhZ2FzIFNhbmpheWEgPGJhZ2FzZG90bWVAZ21haWwuY29tPiB3cm90ZToNCj4gPiA+DQo+ID4g
-PiBPbiAxMS8zMC8yMiAxNDowMSwgY2hlbmdrYWl0YW8gd3JvdGU6DQo+ID4gPiA+IEZyb206IGNo
-ZW5na2FpdGFvIDxwaWxncmltdGFvQGdtYWlsLmNvbT4NCj4gPiA+ID4NCj4gPiA+DQo+ID4gPiBZ
-aWtlcyEgQW5vdGhlciBwYXRjaCBmcm9tIFpURSBndXlzLg0KPiA+ID4NCj4gPiA+IEknbSBzdXNw
-aWNpb3VzIHRvIHBhdGNoZXMgc2VudCBmcm9tIHRoZW0gZHVlIHRvIGJhZCByZXB1dGF0aW9uIHdp
-dGgNCj4gPiA+IGtlcm5lbCBkZXZlbG9wbWVudCBjb21tdW5pdHkuIEZpcnN0LCB0aGV5IHNlbnQg
-YWxsIHBhdGNoZXMgdmlhDQo+ID4gPiBjZ2VsLnp0ZUBnbWFpbC5jb20gKGxpc3RlZCBpbiBDYykg
-YnV0IEdyZWcgY2FuJ3Qgc3VyZSB0aGVzZSBhcmUgcmVhbGx5DQo+ID4gPiBzZW50IGZyb20gdGhl
-bSAoWzFdICYgWzJdKS4gVGhlbiB0aGV5IHRyaWVkIHRvIHdvcmthcm91bmQgYnkgc2VuZGluZw0K
-PiA+ID4gZnJvbSB0aGVpciBwZXJzb25hbCBHbWFpbCBhY2NvdW50cywgYWdhaW4gd2l0aCBzYW1l
-IHJlc3BvbnNlIGZyb20gaGltDQo+ID4gPiBbM10uIEFuZCBmaW5hbGx5IHRoZXkgc2VudCBzcG9v
-ZmVkIGVtYWlscyAoYXMgaGUgcG9pbnRlZCBvdXQgaW4gWzRdKSAtDQo+ID4gPiB0aGV5IHByZXRl
-bmQgdG8gc2VuZCBmcm9tIFpURSBkb21haW4gYnV0IGFjdHVhbGx5IHNlbnQgZnJvbSB0aGVpcg0K
-PiA+ID4gZGlmZmVyZW50IGRvbWFpbiAoc2VlIHJhdyBtZXNzYWdlIGFuZCBsb29rIGZvciBYLUdv
-b2dsZS1PcmlnaW5hbC1Gcm9tOg0KPiA+ID4gaGVhZGVyLg0KPiA+DQo+ID4gSGkgQmFnYXMgU2Fu
-amF5YSwNCj4gPg0KPiA+IEknbSBub3QgYW4gZW1wbG95ZWUgb2YgWlRFLCBqdXN0IGFuIG9yZGlu
-YXJ5IGRldmVsb3Blci4gSSByZWFsbHkgZG9uJ3Qga25vdw0KPiA+IGFsbCB0aGUgZGV0YWlscyBh
-Ym91dCBjb21tdW5pdHkgYW5kIFpURSwgVGhlIHJlYXNvbiB3aHkgSSBjYyBjZ2VsLnp0ZUBnbWFp
-bC5jb20NCj4gPiBpcyBiZWNhdXNlIHRoZSBvdXRwdXQgb2YgdGhlIHNjcmlwdCA8Z2V0X21haW50
-YWluZXIucGw+IGhhcyB0aGUNCj4gPiBhZGRyZXNzIDxjZ2VsLnp0ZUBnbWFpbC5jb20+Lg0KPiA+
-DQo+ID4gSWYgdGhlcmUgaXMgYW55IGVycm9yIGluIHRoZSBmb3JtYXQgb2YgdGhlIGVtYWlsLCBJ
-IHdpbGwgdHJ5IG15IGJlc3QNCj4gPiB0byBjb3JyZWN0IGl0Lg0KPiA+DQo+DQo+IE9LLCB0aGFu
-a3MgZm9yIGNsYXJpZmljYXRpb24uIEF0IGZpcnN0IEkgdGhvdWdodCB5b3Ugd2VyZSBaVEUgZ3V5
-cy4NCj4gU29ycnkgZm9yIGluY29udmVuaWVuY2UuDQo+IA0KPiBOb3cgSSBhc2s6IHdoeSBkbyB5
-b3VyIGVtYWlsIHNlZW0gc3Bvb2ZlZCAoc2VuZGluZyBmcm9tIHlvdXIgZ21haWwNCj4gYWNjb3Vu
-dCBidXQgdGhlcmUgaXMgZXh0cmEgZ21haWwtc3BlY2lmaWMgaGVhZGVyIHRoYXQgbWFrZXMgeW91
-IGxpa2UNCj4gInNlbmRpbmciIGZyb20geW91ciBjb3Jwb3JhdGUgZW1haWwgYWRkcmVzcz8gV291
-bGRuJ3QgaXQgYmUgbmljZSAoYW5kDQo+IGFwcHJvcHJpYXRlKSBpZiB5b3UgY2FuIHNlbmQgYW5k
-IHJlY2VpdmUgZW1haWwgd2l0aCB0aGUgbGF0dGVyIGFkZHJlc3MNCj4gaW5zdGVhZD8NCj4NCkl0
-IG1heSBiZSBjYXVzZWQgYnkgbXkgcHJldmlvdXMgaGFiaXRzLg0KVGhhbmtzIGZvciB5b3VyIGFk
-dmljZS4gSSdsbCBkbyBpdC4NCg0KVGhhbmtzLg0KLS0gDQo+IEFuIG9sZCBtYW4gZG9sbC4uLiBq
-dXN0IHdoYXQgSSBhbHdheXMgd2FudGVkISAtIENsYXJhDQoNCg==
+On Wednesday, November 30, 2022 1:54:21 PM CET asmadeus@codewreck.org wrote:
+> Christian Schoenebeck wrote on Wed, Nov 30, 2022 at 01:43:20PM +0100:
+> > > > As for the release case, the next request will have the same tag with
+> > > > high probability. It's better to make the tag value to be an increase
+> > > > sequence, thus will avoid very much possible req reuse.
+> > > 
+> > > I'd love to be able to do this, but it would break some servers that
+> > > assume tags are small (e.g. using it as an index for a tag array)
+> > > ... I thought nfs-ganesha was doing this but they properly put in in
+> > > buckets, so that's one less server to worry about, but I wouldn't put
+> > > it past some simple servers to do that; having a way to lookup a given
+> > > tag for flush is an implementation requirement.
+> > 
+> > I really think it's time to emit tag number sequentially. If it turns out that
+> > it's a server that is broken, we could then simply ignore replies with old/
+> > unknown tag number. It would also help a lot when debugging 9p issues in
+> > general when you know tag numbers are not re-used (in near future).
+> > 
+> > A 9p server must not make any assumptions how tag numbers are generated by
+> > client, whether dense or sparse, or whatever. If it does then server is
+> > broken, which is much easier to fix than synchronization issues we have to
+> > deal with like this one.
+> 
+> Well, it's a one line change: just replace the idr_alloc in the else
+> branch of p9_tag_alloc with idr_alloc_cyclic.
+> But linux has an history of not breaking userspace, even if it's broken.
+> One could argue that the server side of a networked protocol isn't
+> as tightly coupled but I still think we should be careful with it --
+> adding a new mount option to rever to the old behaviour at the very
+> least.
+
++1 for the mount option.
+
+> I'm also not convinced it'd fix anything here, we're not talking about a
+> real server but about a potential attacker -- if a reply comes in with
+> the next tag while we're allocating it, we'll get the exact same problem
+> as we have right now.
+> Frankly, 9p has no security at all so I'm not sure this is something we
+> really need to worry about, but bugs are bugs so we might as well fix
+> them if someone has the time for that...
+> 
+> Anyway, I can appreciate that logs will definitely be easier to read, so
+> an option to voluntarily switch to cyclic allocation would be more than
+> welcome as a first step and shouldn't be too hard to do...
+
+I would actually do it the other way around: generating continuous sequential
+tags by default and only reverting back to dense tags if requested by mount
+option.
+
+Is there any server implementation known to rely on current dense tag
+generation?
+
+If there is really some exotic server somewhere that uses e.g. a simple
+constant size array to lookup tags and nobody is able to replace that array by
+a hash table or something for whatever reason, then I am pretty sure that
+server is limited at other ends as well (e.g. small 'msize'). So what we could
+do is adjusting the default behaviour according to the other side and allow to
+explicitly set both sequential and dense tags by mount option (i.e. not just
+a boolean mount option).
+
+Best regards,
+Christian Schoenebeck
+
+
