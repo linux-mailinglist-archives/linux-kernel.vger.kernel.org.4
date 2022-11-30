@@ -2,151 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B8863E117
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:03:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C83AB63E11A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:05:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbiK3UDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 15:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
+        id S229784AbiK3UFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 15:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiK3UDH (ORCPT
+        with ESMTP id S229472AbiK3UFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:03:07 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F2A23BFA
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 12:03:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 84398CE1B0A
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 20:03:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05C5AC433C1;
-        Wed, 30 Nov 2022 20:03:01 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ddpmDtlY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1669838580;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1vH/NcoP2zEaCp8SEXsclpeZY780y8IHRUsr5heJWX8=;
-        b=ddpmDtlYq+odsPu2QUDUygcoSXrMGP7Ot8jHYu9zRWQ7eoYjl7RNrwfXvlQvn1x73rQ7MG
-        752Dg0fz3wnQqDVH7C7Oum214dOKVkJxUdPm/zWbCmGduUSzYDzXm8BzbIcHoLcH9k5caG
-        FQWwjAwpue1bClbkErdNk0hj3Xmls0Q=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id dd68b3be (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 30 Nov 2022 20:03:00 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH v2] random: align entropy_timer_state to cache line
-Date:   Wed, 30 Nov 2022 21:02:53 +0100
-Message-Id: <20221130200253.511606-1-Jason@zx2c4.com>
-In-Reply-To: <CAHmME9rFNXpCrmoQ7Uk1T3ykVj2-ap_TCerDMSjLMyADh3XJAA@mail.gmail.com>
-References: <CAHmME9rFNXpCrmoQ7Uk1T3ykVj2-ap_TCerDMSjLMyADh3XJAA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 15:05:06 -0500
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FD28565B;
+        Wed, 30 Nov 2022 12:05:03 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id B3E7AC01D; Wed, 30 Nov 2022 21:05:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1669838710; bh=PrVpEb8uC8MO75/KKnPwfTD4c6f26p9EYuEmyToPrZc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=v2cakNGE3wWtE7Olt8MHGLu+RZpRoUz1shSd2NYNGCmSURAp/GcsO+ieSXq0ZqvmA
+         KiBHMLbDqVlPkiPENNprrrBSoBXSpjVnealaa34rS1sSlLTj0zu5azARKvI7BHySzS
+         3tX0nLxwA0QDLxd+5R59MaXa7qqvT0A4nkaAPaol2+Ef6NQUwGmrK6S01DfNVeM7Ws
+         0kzERfIE5ZC4tq3QaxDt4pvHyxcZWuakgaEy/5Y8lB4Sm7z3UluJEJHsH3iWguAxSd
+         jud9apCXkYz9ZJGyDEmKyoQwGyGlaypuusuviUrrN1o+cbn3/mjACgqI04UgiV1yhd
+         FAXGzaSnSVWBg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 02960C009;
+        Wed, 30 Nov 2022 21:05:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1669838710; bh=PrVpEb8uC8MO75/KKnPwfTD4c6f26p9EYuEmyToPrZc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=v2cakNGE3wWtE7Olt8MHGLu+RZpRoUz1shSd2NYNGCmSURAp/GcsO+ieSXq0ZqvmA
+         KiBHMLbDqVlPkiPENNprrrBSoBXSpjVnealaa34rS1sSlLTj0zu5azARKvI7BHySzS
+         3tX0nLxwA0QDLxd+5R59MaXa7qqvT0A4nkaAPaol2+Ef6NQUwGmrK6S01DfNVeM7Ws
+         0kzERfIE5ZC4tq3QaxDt4pvHyxcZWuakgaEy/5Y8lB4Sm7z3UluJEJHsH3iWguAxSd
+         jud9apCXkYz9ZJGyDEmKyoQwGyGlaypuusuviUrrN1o+cbn3/mjACgqI04UgiV1yhd
+         FAXGzaSnSVWBg==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 83fc1053;
+        Wed, 30 Nov 2022 20:04:55 +0000 (UTC)
+Date:   Thu, 1 Dec 2022 05:04:40 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Marco Elver <elver@google.com>, rcu <rcu@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        kunit-dev@googlegroups.com, lkft-triage@lists.linaro.org,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: arm64: allmodconfig: BUG: KCSAN: data-race in p9_client_cb /
+ p9_client_rpc
+Message-ID: <Y4e3WC4UYtszfFBe@codewreck.org>
+References: <CA+G9fYsK5WUxs6p9NaE4e3p7ew_+s0SdW0+FnBgiLWdYYOvoMg@mail.gmail.com>
+ <CANpmjNOQxZ--jXZdqN3tjKE=sd4X6mV4K-PyY40CMZuoB5vQTg@mail.gmail.com>
+ <CA+G9fYs55N3J8TRA557faxvAZSnCTUqnUx+p1GOiCiG+NVfqnw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYs55N3J8TRA557faxvAZSnCTUqnUx+p1GOiCiG+NVfqnw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The theory behind the jitter dance is that multiple things are poking at
-the same cache line. This only works, however, if what's being poked at
-is actually all in the same cache line. Ensure this is the case by
-aligning the struct on the stack to the cache line size.
+Naresh Kamboju wrote on Wed, Nov 30, 2022 at 09:34:45PM +0530:
+> > > [  424.418214] write to 0xffff00000a753000 of 4 bytes by interrupt on cpu 0:
+> > > [  424.422437]  p9_client_cb+0x84/0x100
+> >
+> > Then we can look at git blame of the lines and see if it's new code.
+> 
+> True.
+> Hope that tree and tag could help you get git details.
 
-We can't use ____cacheline_aligned on a stack variable, because gcc
-assumes 16 byte alignment when only 8 byte alignment is provided by the
-kernel, which means gcc could technically do something pathological
-like `(rsp & ~48) - 64`. It doesn't, but rather than risk it, just do
-the stack alignment manually with PTR_ALIGN and an oversized buffer.
+Even with the git tag, if we don't build for the same arch with the same
+compiler version/options and the same .config we aren't likely to have
+identical binaries, so we cannot make sense of these offsets without
+much work.
 
-Fixes: 50ee7529ec45 ("random: try to actively add entropy rather than passively wait for it")
-Cc: Eric Biggers <ebiggers@kernel.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 33 +++++++++++++++++----------------
- 1 file changed, 17 insertions(+), 16 deletions(-)
+As much as I'd like to investigate a data race in 9p (and geez that code
+has been such a headache from syzbot already so I don't doubt there are
+more), having line numbers is really not optional if we want to scale at
+all.
+If you still have the vmlinux binary from that build (or if you can
+rebuild with the same options), running this text through addr2line
+should not take you too long.
+(You might need to build with at least CONFIG_DEBUG_INFO_REDUCED (or not
+reduced), but that is on by default for aarch64)
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index acb9548a870e..46bb81c2da6e 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1265,29 +1265,30 @@ static void __cold entropy_timer(struct timer_list *timer)
- static void __cold try_to_generate_entropy(void)
- {
- 	enum { NUM_TRIAL_SAMPLES = 8192, MAX_SAMPLES_PER_BIT = HZ / 15 };
--	struct entropy_timer_state stack;
-+	u8 stack_bytes[sizeof(struct entropy_timer_state) + SMP_CACHE_BYTES - 1];
-+	struct entropy_timer_state *stack = PTR_ALIGN((void *)stack_bytes, SMP_CACHE_BYTES);
- 	unsigned int i, num_different = 0;
- 	unsigned long last = random_get_entropy();
- 	int cpu = -1;
- 
- 	for (i = 0; i < NUM_TRIAL_SAMPLES - 1; ++i) {
--		stack.entropy = random_get_entropy();
--		if (stack.entropy != last)
-+		stack->entropy = random_get_entropy();
-+		if (stack->entropy != last)
- 			++num_different;
--		last = stack.entropy;
-+		last = stack->entropy;
- 	}
--	stack.samples_per_bit = DIV_ROUND_UP(NUM_TRIAL_SAMPLES, num_different + 1);
--	if (stack.samples_per_bit > MAX_SAMPLES_PER_BIT)
-+	stack->samples_per_bit = DIV_ROUND_UP(NUM_TRIAL_SAMPLES, num_different + 1);
-+	if (stack->samples_per_bit > MAX_SAMPLES_PER_BIT)
- 		return;
- 
--	atomic_set(&stack.samples, 0);
--	timer_setup_on_stack(&stack.timer, entropy_timer, 0);
-+	atomic_set(&stack->samples, 0);
-+	timer_setup_on_stack(&stack->timer, entropy_timer, 0);
- 	while (!crng_ready() && !signal_pending(current)) {
- 		/*
- 		 * Check !timer_pending() and then ensure that any previous callback has finished
- 		 * executing by checking try_to_del_timer_sync(), before queueing the next one.
- 		 */
--		if (!timer_pending(&stack.timer) && try_to_del_timer_sync(&stack.timer) >= 0) {
-+		if (!timer_pending(&stack->timer) && try_to_del_timer_sync(&stack->timer) >= 0) {
- 			struct cpumask timer_cpus;
- 			unsigned int num_cpus;
- 
-@@ -1312,20 +1313,20 @@ static void __cold try_to_generate_entropy(void)
- 			} while (cpu == smp_processor_id() && num_cpus > 1);
- 
- 			/* Expiring the timer at `jiffies` means it's the next tick. */
--			stack.timer.expires = jiffies;
-+			stack->timer.expires = jiffies;
- 
--			add_timer_on(&stack.timer, cpu);
-+			add_timer_on(&stack->timer, cpu);
- 
- 			preempt_enable();
- 		}
--		mix_pool_bytes(&stack.entropy, sizeof(stack.entropy));
-+		mix_pool_bytes(&stack->entropy, sizeof(stack->entropy));
- 		schedule();
--		stack.entropy = random_get_entropy();
-+		stack->entropy = random_get_entropy();
- 	}
--	mix_pool_bytes(&stack.entropy, sizeof(stack.entropy));
-+	mix_pool_bytes(&stack->entropy, sizeof(stack->entropy));
- 
--	del_timer_sync(&stack.timer);
--	destroy_timer_on_stack(&stack.timer);
-+	del_timer_sync(&stack->timer);
-+	destroy_timer_on_stack(&stack->timer);
- }
- 
- 
--- 
-2.38.1
-
+--
+Dominique
