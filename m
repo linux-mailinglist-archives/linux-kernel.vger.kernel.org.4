@@ -2,57 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E99563CD73
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 03:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B9C63CD74
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 03:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbiK3Cfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 21:35:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50694 "EHLO
+        id S232311AbiK3Cfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 21:35:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiK3Cfr (ORCPT
+        with ESMTP id S230293AbiK3Cft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 21:35:47 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D7612091
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 18:35:46 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so574227pjc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 18:35:46 -0800 (PST)
+        Tue, 29 Nov 2022 21:35:49 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17EA13CD1
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 18:35:47 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so581917pjo.3
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 18:35:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=cCcorQr3xt7S/9kPkpKfyFY9wnh4zyqAGWy8g0u82Pg=;
-        b=zIgXfyOIwEsoklp4Pj2VNqVlzqwOyXMyUOmtxXL8XX0HZeDXxESlEZt18Ufk8JeuWs
-         7Q7DrZZk/oBitKWBF64Y72Kp2UZQ7dqDF1tWUk9honYowHZWf7T07fwYEp42FE86aX1Z
-         gotSBlRsn35YWoYFAbebcGNynvUUURc8MWORwvu2WIiMk6mdXfZHEGtdcZ0V537kul+v
-         xAfm8oj9auHJEgnhK834L9M7MGTTIIaw5+ZBB9pNrXTs3FyLHdQzM9t0LKeC8H5zFH92
-         oL0JH5gN1h6OJbnPfadyReZYXdDjEC1MrmIOqa9EU60CrE7FKP5+UH69dvLJ3D/kKeOV
-         roog==
+        h=to:from:cc:content-transfer-encoding:mime-version:references
+         :in-reply-to:message-id:date:subject:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WK41owb8xQar3YPAMlOv6Q9IlVxICe86b2kCZ83CjmI=;
+        b=NYaY1njFT+Iv04FROrsPA9asr8bF0H1T04E0ghH8zlytybXdGXaucom+/NQFSJL3iN
+         efDS5zB46j0rOji8pcj485H1bPAwEnbMedmSqSEmf9B0wOaK9y7b1cF2ad77M3muEnbi
+         qstWPWEJs/VJ5jCtWTtcb7YUXNolbQ28uZPsHenqV73ygMFTNij1XXA1rKcB0p91dDSg
+         +bpgfhsHSzWV1Tyhw4e43BlxsTlU2cGT7GoXFBSE8FPrEOI9hkNdf7a2KEI+vkMrrO1l
+         AJvx8bfKnp+cn/ARJvoFo0ELvjUsXydRIUgT9uh8J5GQOc3rLSUsST/k+m1AtfbnbM4a
+         FzgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
-         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cCcorQr3xt7S/9kPkpKfyFY9wnh4zyqAGWy8g0u82Pg=;
-        b=2duwX4HUnFjLcqFQw80wcFePk24Y2rub64xeOyiTHaFC2C/jwVJnaoNOzsEuE9CkO1
-         brc5Gv9KhPRCij2JiQWm/v3LG0mKtfqY0XD7Si8EdfJjHIcrkcnwYSyCUwVBPz1+tSGr
-         l4wCLctcEJHeMeXbFt8wLEmHW9BLXhXUO84KZ/mEN3lJN9bNbaAvXZXMa6FQ9l6LB5bU
-         GHWNbAVhyI1htge4tNcXGI+GHAv+/ZkjRBtORvTylxoyPK4VWFgX7k9yTmeXLQ3c/I2w
-         iMIjVs++rEHXQwCVd0M6g+s3VjF2aIWcpN5UAjhdEjRKl9Bgi9zo6bEoQQIv/bMZ4hVb
-         BO0Q==
-X-Gm-Message-State: ANoB5pnvj1mPWAnf8Zoz232d/MX4ZB747wk1zTSj9DPCIbqQu18XfOCo
-        SGYlxOBTD4R4NgiAT4xZnhgzl/7qgcCoQw==
-X-Google-Smtp-Source: AA0mqf4G6U9qyc4jE7f2+26f9t+8SDqoSZjzcCGOgkAolwJTuoVkqtHn3/RkqtSOEZJoe1ltS8Cs8g==
-X-Received: by 2002:a17:90a:588b:b0:219:c40:e5f with SMTP id j11-20020a17090a588b00b002190c400e5fmr25718858pji.49.1669775746080;
-        Tue, 29 Nov 2022 18:35:46 -0800 (PST)
+        h=to:from:cc:content-transfer-encoding:mime-version:references
+         :in-reply-to:message-id:date:subject:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WK41owb8xQar3YPAMlOv6Q9IlVxICe86b2kCZ83CjmI=;
+        b=VVImN6ohPGy4S+917QZsiO3P6oPr3/0CUnpuznIF7Uo568+vRrQy2xnkoK4xlMLyPm
+         MkF8/x/vt61q50vdtNSjP5wDEOhsSpCDJPbsf1eayAFsxwrtluDd5zbOTU3rcoF3dnL5
+         ccZnKY/kVvVSu/u48gyUcjtxbHBOsNlZwMAMUp/hoYa/2b6/rJ13Fsaj+BB57RaB/UiQ
+         ej6PrI9k6T5VvEcP19Y+0RUF76yuHfAr2WBeH+8i2d5JwqNPUbdNKsU+GxCtnXKb3F8y
+         ld/ysOq0Gi+dwZHOuhnX7Jlpva5ER7sEAn+xa9HvDiMMnnH5eQBcy3HUJLloEnMcsnBT
+         du+Q==
+X-Gm-Message-State: ANoB5pl6CN1imuTECeuM6VdqG5LWNcYWRKqIjG+rGaOLc9NJt6DrcDWV
+        4gzz665WOawb9/k4EiGOEa3CyTZuNXNIaQ==
+X-Google-Smtp-Source: AA0mqf5bUTnWIeZUMTYfWzcYyQ2Ayw75862olJovnwQkgFAZMu4TKHAv/LhckeZcuq6IEBmsNETSfA==
+X-Received: by 2002:a17:903:120c:b0:188:fc5f:84f3 with SMTP id l12-20020a170903120c00b00188fc5f84f3mr51970782plh.2.1669775747099;
+        Tue, 29 Nov 2022 18:35:47 -0800 (PST)
 Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id a10-20020a1709027e4a00b0018912c37c8fsm7638pln.129.2022.11.29.18.35.45
+        by smtp.gmail.com with ESMTPSA id v11-20020a63464b000000b00476b165ff8bsm15069pgk.57.2022.11.29.18.35.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 18:35:45 -0800 (PST)
-Subject: [PATCH 1/2] RISC-V: Align the shadow stack
-Date:   Tue, 29 Nov 2022 18:35:14 -0800
-Message-Id: <20221130023515.20217-1-palmer@rivosinc.com>
+        Tue, 29 Nov 2022 18:35:46 -0800 (PST)
+Subject: [PATCH 2/2] RISC-V: Add some comments about the shadow and overflow stacks
+Date:   Tue, 29 Nov 2022 18:35:15 -0800
+Message-Id: <20221130023515.20217-2-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221130023515.20217-1-palmer@rivosinc.com>
+References: <20221130023515.20217-1-palmer@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Cc:     Palmer Dabbelt <palmer@rivosinc.com>
@@ -68,29 +71,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The standard RISC-V ABIs all require 16-byte stack alignment.  We're
-only calling that one function on the shadow stack so I doubt it'd
-result in a real issue, but might as well keep this lined up.
+It took me a while to page all this back in when trying to review the
+recent spin_shadow_stack, so I figured I'd just write up some comments.
 
-Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
- arch/riscv/kernel/traps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/riscv/kernel/traps.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
 diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-index be54ccea8c47..acdfcacd7e57 100644
+index acdfcacd7e57..336d4aadadb1 100644
 --- a/arch/riscv/kernel/traps.c
 +++ b/arch/riscv/kernel/traps.c
-@@ -206,7 +206,7 @@ static DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
-  * shadow stack, handled_ kernel_ stack_ overflow(in kernel/entry.S) is used
-  * to get per-cpu overflow stack(get_overflow_stack).
+@@ -200,18 +200,18 @@ void __init trap_init(void)
+ }
+ 
+ #ifdef CONFIG_VMAP_STACK
++/*
++ * Extra stack space that allows us to provide panic messages when the kernel
++ * has overflowed its stack.
++ */
+ static DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
+ 		overflow_stack)__aligned(16);
+ /*
+- * shadow stack, handled_ kernel_ stack_ overflow(in kernel/entry.S) is used
+- * to get per-cpu overflow stack(get_overflow_stack).
++ * A temporary stack for use by handle_kernel_stack_overflow.  This is used so
++ * we can call into C code to get the per-hart overflow stack.  Usage of this
++ * stack must be protected by spin_shadow_stack.
   */
--long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)];
-+long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)] __aligned(16);
- asmlinkage unsigned long get_overflow_stack(void)
+ long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)] __aligned(16);
+-asmlinkage unsigned long get_overflow_stack(void)
+-{
+-	return (unsigned long)this_cpu_ptr(overflow_stack) +
+-		OVERFLOW_STACK_SIZE;
+-}
+ 
+ /*
+  * A pseudo spinlock to protect the shadow stack from being used by multiple
+@@ -222,6 +222,12 @@ asmlinkage unsigned long get_overflow_stack(void)
+  */
+ unsigned long spin_shadow_stack;
+ 
++asmlinkage unsigned long get_overflow_stack(void)
++{
++	return (unsigned long)this_cpu_ptr(overflow_stack) +
++		OVERFLOW_STACK_SIZE;
++}
++
+ asmlinkage void handle_bad_stack(struct pt_regs *regs)
  {
- 	return (unsigned long)this_cpu_ptr(overflow_stack) +
+ 	unsigned long tsk_stk = (unsigned long)current->stack;
 -- 
 2.38.1
 
