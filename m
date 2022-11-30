@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D9063D402
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9084E63D405
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232950AbiK3LJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:09:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
+        id S233895AbiK3LKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:10:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232924AbiK3LJt (ORCPT
+        with ESMTP id S233641AbiK3LJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:09:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD9F220E4;
-        Wed, 30 Nov 2022 03:09:46 -0800 (PST)
+        Wed, 30 Nov 2022 06:09:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260B474CCE;
+        Wed, 30 Nov 2022 03:09:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6C17B81AC8;
-        Wed, 30 Nov 2022 11:09:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4421AC433C1;
-        Wed, 30 Nov 2022 11:09:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABDDD61B23;
+        Wed, 30 Nov 2022 11:09:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF78AC433D6;
+        Wed, 30 Nov 2022 11:09:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669806583;
-        bh=ocPZhZgzoPIVfxsA4toGQ0IWxLCIQtMwwZ9pKtidytE=;
+        s=korg; t=1669806594;
+        bh=VrGx7vva0UE6iHhAKgadVFwkUCKa9rYDmB273vEMUaM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YaNqiWxk5onijvPaHZ5T1WndtTkIwLqtTg7g62uxDlS+P60MGMJJjOtJWdRCqgP/n
-         YW4RjbCtAqNJhiPHoUgYEtGRH98991uNxFS1CEZJ7Eg6lsH+8g7Cq8HO1wFY7boa/e
-         jpe4ZtarsDM47lo85uMuDlkBHgTjOaut9DNZB0R4=
-Date:   Wed, 30 Nov 2022 12:09:40 +0100
+        b=ExopNyTSR3VYIlbunrbIkaALgSVsLjYtV5vaCK5f2yX7qUu7d6raatNpeMK+Ks8bm
+         ZLgsNcFYY9EXk5yZYBbbysRz4K3RE40U6LNP8yX/Z4vUlbYbRz4Kol7gV8oFQjkGQ+
+         LdP5mdZvYdFfGTG2OYtIBm6obZUr2SlBfgNDekxg=
+Date:   Wed, 30 Nov 2022 12:09:50 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Ji-Ze Hong <hpeter@gmail.com>
-Subject: Re: [PATCH] USB: serial: f81232: fix division by zero on line-speed
- change
-Message-ID: <Y4c59EVP+0lb4ZHI@kroah.com>
-References: <20221129141749.15270-1-johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: xr: avoid requesting zero DTE rate
+Message-ID: <Y4c5/lUf4OAECuV9@kroah.com>
+References: <20221129141857.15363-1-johan@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221129141749.15270-1-johan@kernel.org>
+In-Reply-To: <20221129141857.15363-1-johan@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,14 +49,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 03:17:49PM +0100, Johan Hovold wrote:
-> The driver leaves the line speed unchanged in case a requested speed is
-> not supported. Make sure to handle the case where the current speed is
-> B0 (hangup) without dividing by zero when determining the clock source.
+On Tue, Nov 29, 2022 at 03:18:57PM +0100, Johan Hovold wrote:
+> When the requested line speed is B0 (hangup) there is no need to use the
+> current speed in the line-coding request. This specifically avoids
+> requesting a zero DTE rate when the current speed is B0, which could
+> potentially confuse buggy firmware.
 > 
-> Fixes: 268ddb5e9b62 ("USB: serial: f81232: add high baud rate support")
-> Cc: stable@vger.kernel.org      # 5.2
-> Cc: Ji-Ze Hong (Peter Hong) <hpeter@gmail.com>
 > Signed-off-by: Johan Hovold <johan@kernel.org>
 
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
