@@ -2,115 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96ABF63CECD
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 06:43:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC3663CED3
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 06:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233095AbiK3FnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 00:43:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
+        id S231192AbiK3FpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 00:45:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233565AbiK3FnL (ORCPT
+        with ESMTP id S233034AbiK3FpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 00:43:11 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EF7240A0
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 21:43:10 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id d18so4829435pls.4
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 21:43:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=e5ZuVSNXu5dNBIFu9aboWpOIhLYgTfI2KhViYMf8Wno=;
-        b=hbYkzSlvgmiV0jOHzz8kR63yGr8+W95zQ7es2pHJVKzJ6DakPJl2Thq6zVYbLCyQgK
-         YydKqbuXEq2T8Ibk9ckAbrDoXp2TXi9tj0kF3yMX0+z7YQ/xVFkKgp24R0vZn6hxelJE
-         N5aiRdum17bOpI+/SYPrgsJ6eGEykg5SM2qlztLtVvId163M80ulVkSYhJK/qoeYg5rR
-         h1A+t1HotzSIG6NQdFDbD3Z6ibkGxUZCPNUTSQoevm+7gw9n5sK4R2GlOadxWbbWs8dq
-         M1CqlJzg9LL1EfUTlK2TGWxtRjRpM+rxl5lb+EyWbbmdWIbVQjnUrjPaODVO36RZlk3f
-         YfNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e5ZuVSNXu5dNBIFu9aboWpOIhLYgTfI2KhViYMf8Wno=;
-        b=zfJMsYKOdm31RXff8syy3SfOG6QiwcEYlzpTVza+1OhdVpttw43HA6yiCIf65EllVU
-         4uXICV4MFGKDR3rP9423YSetH7KRmYwndfEsnTGMhfPgUlWbZxxc9Jy5QLof6FZoeV6C
-         wn5ds1EX3vTr+/GvjVPiGtX7Biv77nANghFt/UNEDbx2XscHU64IhTeSrZ04zCe6p4nz
-         IjHLQHnDEJzMwXtcBmcKMLS3Id5dj2JIp1lfcYWOu1iRGFUGuyagpTeQPwcqJLAckM9A
-         pZGsBlE/3ZIPKA9ZH5DsSl35XNFHvqohKpPKJLT9WQzi9R08VZ4laEaLdmL4nSNJ37qa
-         9rfg==
-X-Gm-Message-State: ANoB5pnuWfOLoovcq0Z+UUbxiNrymOVrSDB+EjDNz38MjYiG2mv19S4k
-        ol0Zj3c0W04o0YR3aeika1QySQ==
-X-Google-Smtp-Source: AA0mqf79rVuoW+aeNhb/sXSPJiqJ4dWDIWgpBk0H875f/t1m0PFjg2YguQ4/IIVTxIrgDTNJjgi3WQ==
-X-Received: by 2002:a17:90a:5c85:b0:20a:92d2:226a with SMTP id r5-20020a17090a5c8500b0020a92d2226amr52199943pji.155.1669786989559;
-        Tue, 29 Nov 2022 21:43:09 -0800 (PST)
-Received: from localhost ([122.172.87.149])
-        by smtp.gmail.com with ESMTPSA id p2-20020a1709027ec200b0017da2798025sm298512plb.295.2022.11.29.21.43.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 21:43:08 -0800 (PST)
-Date:   Wed, 30 Nov 2022 11:13:06 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/4] cpufreq: apple-soc: Add new driver to control
- Apple SoC CPU P-states
-Message-ID: <20221130054306.3tjbf6spbtknpmyq@vireshk-i7>
-References: <20221128142912.16022-1-marcan@marcan.st>
- <20221128142912.16022-4-marcan@marcan.st>
+        Wed, 30 Nov 2022 00:45:10 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE311EADC;
+        Tue, 29 Nov 2022 21:45:09 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 753073200904;
+        Wed, 30 Nov 2022 00:45:05 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 30 Nov 2022 00:45:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669787105; x=
+        1669873505; bh=LkZuJhoFPALKZewfNv71Q2bTIVj19V0FYRHh96YSopA=; b=V
+        b14HqnKNhghBeiSxGLwAxdjwLwPaUu1p/bYwm5hqd0cfIH83Fn4xckngJMp2AoJb
+        /wZ1UTRAJ3cLMhfrhSpBz0HK6q84comT/SQu0b8oAXd5UAOvnl+H3sTBfFGg7Gpf
+        d+2PcsALD3uC25R7iYve+aekl1e0Cxo8sj4uLXTKbj9ewbA/3C98Et/vA++ZOb2/
+        1wJOyfuNjw3w+hzqpbgYHamUsvjOD6L4FSA/tmsCfbHI2bo/aTu4wePVkvVcY9UX
+        yLhB5Xk3RbvX18+HG/WCnij6OgJuYa6U6EXJzzu2uZGcvUjR/hjQVEqEpYgbI6gC
+        usdBbHg8odzIRHy43YkNA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669787105; x=
+        1669873505; bh=LkZuJhoFPALKZewfNv71Q2bTIVj19V0FYRHh96YSopA=; b=k
+        wGiPT9yBN5R0ELE4mGlBKh4ypOq5HHBkngvvtP8Eb0QCsEeDidhwaG/9yOFitZ7X
+        BfI/eXk8BlZyEr3zokiheY2NzH/m1CwOUJ/YpT86iR4AalQ6mqgQ+NuwX1mCZ6Wa
+        EDCpo00ORWsIHS6aEsG4XTcbZXhvZP9HcwU/r0zC6V1RaRX5KZzOHRGU3Q+7O678
+        7X8ptn3H3Wnr8EKbrYvIIDwOuNUCKeJPVkGTgBF0IdaQG25Spb1tR2BynU5dXv2s
+        OMFnrkFHRqGtNovf6KtDfjf1jF4doQhdEmsMMKADa1xjDtKQazTACP5HqDAwPz6w
+        JdDhSOWlFl3gPryVk31HQ==
+X-ME-Sender: <xms:3-2GY4LfYbXANE94B4-b3M6xbVSF1n52BB5Uq3CssrNTRHjASw5-yA>
+    <xme:3-2GY4ISSTk5zdS7G30qZmANE49qtUrkOCt_tf1Sa-4PWtHRR6bzC7p6QupT-cX24
+    Pb3Nf7g0MhmEN3IRQ>
+X-ME-Received: <xmr:3-2GY4sF9s3ko5Bvsdv3gi0PAVIk8IS8XguHMxweVh8LrSCsxwPUfoAZ-mo81iNWsXBRbKnvKmiqDKg9K8z3hcVLip1ruI7f2He3X-YMIdRNLwN7m1wTWrfchw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtddvgdekiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfhvfevfhfujggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnheptefghfelffeiueetjefhteektddvkedttdetleevlefhhefgkeeu
+    gfekieduleejnecuffhomhgrihhnpeguvghvihgtvghtrhgvvgdrohhrghenucevlhhush
+    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhh
+    ohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:4O2GY1aqwqVKHzbN5zqeT9yy2cfQkK0xDGWSy_nMy6UetU53rqBBfA>
+    <xmx:4O2GY_aOd1BaVEmTOjzsBq-Uqj82iwuRJMJmyvkJ_3ZlMLJ9hNKj0g>
+    <xmx:4O2GYxB_B017LvgwjXTIDi_gHFOA6FNfzbsiKytdums5foyMQMaMpQ>
+    <xmx:4e2GYzSNNOMBxGZ921_CrEzbqHkcYhfJnbvqT-QqVLZ9m8y7lR2s4A>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 30 Nov 2022 00:45:01 -0500 (EST)
+Message-ID: <eee2d11d-a3b3-41d7-5f51-02294d5ee2cc@sholland.org>
+Date:   Tue, 29 Nov 2022 23:45:00 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221128142912.16022-4-marcan@marcan.st>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+From:   Samuel Holland <samuel@sholland.org>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+References: <20221127132448.4034-1-jszhang@kernel.org>
+ <20221127132448.4034-2-jszhang@kernel.org>
+Content-Language: en-US
+Subject: Re: [PATCH v2 1/9] dt-bindings: serial: add documentation for
+ Bouffalolab UART Driver
+In-Reply-To: <20221127132448.4034-2-jszhang@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28-11-22, 23:29, Hector Martin wrote:
-> This driver implements CPU frequency scaling for Apple Silicon SoCs,
-> including M1 (t8103), M1 Max/Pro/Ultra (t600x), and M2 (t8112).
+On 11/27/22 07:24, Jisheng Zhang wrote:
+> Add bindings doc for Bouffalolab UART Driver
 > 
-> Each CPU cluster has its own register set, and frequency management is
-> fully automated by the hardware; the driver only has to write one
-> register. There is boost frequency support, but the hardware will only
-> allow their use if only a subset of cores in a cluster are in
-> non-deep-idle. Since we don't support deep idle yet, these frequencies
-> are not achievable, but the driver supports them. They will remain
-> disabled in the device tree until deep idle is implemented, to avoid
-> confusing users.
-> 
-> This driver does not yet implement the memory controller performance
-> state tuning that usually accompanies higher CPU p-states. This will be
-> done in a future patch.
-> 
-> Acked-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 > ---
->  drivers/cpufreq/Kconfig.arm          |   9 +
->  drivers/cpufreq/Makefile             |   1 +
->  drivers/cpufreq/apple-soc-cpufreq.c  | 352 +++++++++++++++++++++++++++
->  drivers/cpufreq/cpufreq-dt-platdev.c |   2 +
->  4 files changed, 364 insertions(+)
->  create mode 100644 drivers/cpufreq/apple-soc-cpufreq.c
+>  .../bindings/serial/bouffalolab,uart.yaml     | 47 +++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/serial/bouffalolab,uart.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/serial/bouffalolab,uart.yaml b/Documentation/devicetree/bindings/serial/bouffalolab,uart.yaml
+> new file mode 100644
+> index 000000000000..a8293444ca31
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/serial/bouffalolab,uart.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/serial/bouffalolab,uart.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Bouffalolab UART Controller
+> +
+> +maintainers:
+> +  - Jisheng Zhang <jszhang@kernel.org>
+> +
+> +allOf:
+> +  - $ref: serial.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: bouffalolab,bl808-uart
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
 
-Applied. Thanks.
+There is also a reset control for this peripheral (in the GLB registers
+at GLB_SWRST_S1A0).
 
--- 
-viresh
+And since you set additionalProperties, I believe you need to add the
+DMA channel properties here as well.
+
+Regards,
+Samuel
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    uart0: serial@30002000 {
+> +        compatible = "bouffalolab,bl808-uart";
+> +        reg = <0x30002000 0x1000>;
+> +        interrupts = <53 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&xtal>;
+> +    };
+> +...
