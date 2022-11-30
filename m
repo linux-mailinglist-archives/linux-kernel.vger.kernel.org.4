@@ -2,145 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6C363E579
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6604463E57C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiK3XbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 18:31:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
+        id S230157AbiK3Xbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:31:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiK3Xav (ORCPT
+        with ESMTP id S230142AbiK3Xb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 18:30:51 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0819838F
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:21:21 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso3540815pjt.0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:21:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oOrPD6CB7rqzyj1SaEV3kuD/IhDMhOZPI51nCiB/NGg=;
-        b=ZRW2ZUTv1n147KoQiZQIoZW74j4A7EtjIYOcRFO0rF0DPUCmy6VUy2g0JuJ1nS/0PG
-         bPSRbTqLAdAfhndt51DMfOPkb6sHyNfjGeyL8kdbar+k+xIpBX4SiQnfKVs3jxbhY30i
-         fE+0B93J3f1zH3nafXrLqY7rdRuq0maSuVI9QpeW8enceqQk351ZWU6NHH/BazdCHb+E
-         L5o+TvbdnPsX9MioomkdsvtUqYHZQq6KqAvnuPAuThxGPwZ++G4eWoki6stkyg4QcWza
-         6l0SCQXCBclmuJYQ9VytxAYkOvwHCR0J4TrW1rGbFwPNrD/IzVnCsAgUxIa0vHOndA6A
-         NTuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oOrPD6CB7rqzyj1SaEV3kuD/IhDMhOZPI51nCiB/NGg=;
-        b=d//oocrvod5PAjSzXMdX9wLMOOs/NxINK/9NyGCYH5Gm7l/g/PCrDioLUNIXS8MGw1
-         HiqD/QyGWaCGGAS06aDJav/rmpt47BZIAR+3v2SRSa7f1xcIsc+Bhwmlk0AW/MF4mpvU
-         IteuekQtFqt780E7gJHDVnn54OonK00gtLlchbUpIf4KNu5Nxzh673xu8Sig7UaG6jP5
-         bdXsSrhkQNb4oi9O5iChwMXaU5O/iDwRW9CUBpioUgzuc6v/2rG5bHpUQJIeljzgqSQ0
-         H/vpjT3uilrKMimG7tus+o8Ouz4B4zsNllL1bouyDos+HkjOOjXRJBvKGsTUOUAfsSbJ
-         t9fw==
-X-Gm-Message-State: ANoB5pmfV77RwdWfzA34adfqjHTK4eBtsPikXznRU1CXCBKFVbTTpoZT
-        C9YkaRfhrrkCSEQY84jBL28wPHWuKNvcnA==
-X-Google-Smtp-Source: AA0mqf7MFNPbEgt6osld/lAYA9wa6vF/JYI716/qDYMZhDxdPiOnFjxOBihEjXxstiNyC9WOq9G0Fg==
-X-Received: by 2002:a17:90a:d24e:b0:218:b478:f44f with SMTP id o14-20020a17090ad24e00b00218b478f44fmr46173649pjw.232.1669850480496;
-        Wed, 30 Nov 2022 15:21:20 -0800 (PST)
-Received: from google.com (220.181.82.34.bc.googleusercontent.com. [34.82.181.220])
-        by smtp.gmail.com with ESMTPSA id o13-20020a17090a0a0d00b0021896fa945asm3637054pjo.15.2022.11.30.15.21.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 15:21:20 -0800 (PST)
-Date:   Wed, 30 Nov 2022 15:21:16 -0800
-From:   Ricardo Koller <ricarkol@google.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] KVM: arm64: Don't serialize if the access flag isn't
- set
-Message-ID: <Y4flbAiRyGgpDvnJ@google.com>
-References: <20221129191946.1735662-1-oliver.upton@linux.dev>
- <20221129191946.1735662-3-oliver.upton@linux.dev>
- <Y4Zw/J3srTsZ57P7@google.com>
- <Y4Z2aWVEnluy+d3+@google.com>
- <Y4awiKLuKORZmU2z@google.com>
- <87pmd4ua2q.wl-maz@kernel.org>
+        Wed, 30 Nov 2022 18:31:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933AD60376
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:25:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F0FEB81D68
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 23:25:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F5B4C433D6;
+        Wed, 30 Nov 2022 23:24:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669850700;
+        bh=gqcFXZHwwBwyWaUhRXSzf2GnKgPLlzaIwX0k3rlJp4Q=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=uB6Gy53iThRwFUtXz0Lrt0gouRzm76Xw6GupSl/Il/ITiYN6eZNV0tlhrGqk76arO
+         zKfEYpxEcumW46KA2Rm49M1isUzl2ZNz4Ps1qN1S7oiU598V+ONGImxHZOqdeidcMO
+         BCW2U161XPLpGcBhLDO6e1aA+tjfOBIa4NZVS4ZiR1hDsQcahacrbQ4JKQLCqmNi29
+         sgIkgb0goTGHi6rvR5gxo3QV+3p3GYpRUTVV+K8Kto07jywH32KmpW7b00f2A1/m/B
+         bZHOhKDUZGg6ieVvPQxtVRCtLkWkusFmdolNJKgvZnTHCHuOkr8DnuiQJTS3OdyFeq
+         /k2l6pkaSMjvA==
+From:   SeongJae Park <sj@kernel.org>
+To:     Yun Levi <ppbuk5246@gmail.com>
+Cc:     SeongJae Park <sj@kernel.org>, damon@lists.linux.dev,
+        linux-mm@kvack.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [Question] Should we reuse target when damon's operation changed?
+Date:   Wed, 30 Nov 2022 23:24:57 +0000
+Message-Id: <20221130232457.56003-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAM7-yPSL2ewn9kjaR01vq8V410G+F1taJzAqVuvNOJOkbX7URw@mail.gmail.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87pmd4ua2q.wl-maz@kernel.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 08:21:17AM +0000, Marc Zyngier wrote:
-> On Wed, 30 Nov 2022 01:23:20 +0000,
-> Ricardo Koller <ricarkol@google.com> wrote:
-> > 
-> > On Tue, Nov 29, 2022 at 09:15:21PM +0000, Oliver Upton wrote:
-> > > Hi Ricardo,
-> > > 
-> > > Thanks for having a look.
-> > > 
-> > > On Tue, Nov 29, 2022 at 12:52:12PM -0800, Ricardo Koller wrote:
-> > > > On Tue, Nov 29, 2022 at 07:19:44PM +0000, Oliver Upton wrote:
-> > > 
-> > > [...]
-> > > 
-> > > > > +	ret = stage2_update_leaf_attrs(pgt, addr, 1, KVM_PTE_LEAF_ATTR_LO_S2_AF, 0,
-> > > > > +				       &pte, NULL, 0);
-> > > > > +	if (!ret)
-> > > > > +		dsb(ishst);
-> > > > 
-> > > > At the moment, the only reason for stage2_update_leaf_attrs() to not
-> > > > update the PTE is if it's not valid:
-> > > > 
-> > > > 	if (!kvm_pte_valid(pte))
-> > > > 			return 0;
-> > > > 
-> > > > I guess you could check that as well:
-> > > > 
-> > > > +	if (!ret || kvm_pte_valid(pte))
-> > > > +		dsb(ishst);
-> > > 
-> > > Thanks for catching this.
-> > > 
-> > > Instead of pivoting on the returned PTE value, how about we return
-> > > -EAGAIN from the early return in stage2_attr_walker()? It would better
-> > > match the pattern used elsewhere in the pgtable code.
-> > 
-> > That works, although I would use another return code (e.g., EINVAL)? as
-> > that's not exactly a "try again" type of error.
-> 
-> EINVAL usually is an indication of something that went horribly wrong.
-> 
-> But is that really a failure mode? Here, failing to update the PTE
-> should not be considered a failure, but just a benign race: access
-> fault being taken on a CPU and the page being evicted on another (not
-> unlikely, as the page was marked old before).
+Hi Levi,
 
-I see, I agree, what you describe not look like a failure.
+On Wed, 30 Nov 2022 15:01:29 +0900 Yun Levi <ppbuk5246@gmail.com> wrote:
+
+> Hello SJ.
+> 
+> While I try to use damon, I have some questions whether it is correct
+> to reuse damon_target structure when damon's operation is changed.
+> 
+> At first, one user set up damon like below.
+>     echo 1 > /sys/kernel/mm/damon/admin/kdamonds/nr_kdamonds
+>     echo 1 > /sys/kernel/mm/damon/admin/kdamonds/0/contexts/nr_contexts
+>     echo 1 > /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/nr_targets
+>     echo 1 > /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/pid_target
+>     echo 1 > /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/regions/nr_regions
+>     echo 0 > /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/regions/nr_regions/0/start
+>     echo 16384 >
+> /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/regions/nr_regions/0/end
+> 
+>     echo vaddr >  /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/operation
+>     echo on >  /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/state
+> 
+> And some time pass, user change the operation as "paddr" like below:
+>     echo paddr >  /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/operation
+>     echo commit >  /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/state
+> 
+> In that situation, the damon_target is reused and the region isn't changed,
+> former region information which damon_region has -- nr_accesse,
+> last_nr_accesss, last_sample addr is kept.
+> 
+> But, former accessed information is based on vaddr and changed
+> accessed information should be based on paddr and it seems the wrong
+> information to new applied operation.
+> 
+> IIUC, it makes some confusion to kdamond when it merges or splits
+> regions based on above information.
+> 
+> So, Is it much better to remove the target and region information when
+> the operation is changed? or should we check whether it's possible to
+> reuse former access information between former and new operation?
+
+Thank you for the good question and the suggestion.  I agree that it could be
+confusing.  Such a scenario could be just a mistake in many cases.  However,
+I'm unsure how we could distinguish the mistake from intended usage.  That is,
+the intended initial monitoring range for previous 'operation' and later one
+could be really same in some cases, as DAMON doesn't ask it to be strict.
+
+After all, DAMON allows users to set the values as much as they want before
+committing the input, so this looks mistake of the user, not DAMON.  Of course
+DAMON could take care of more things, but in my humble opinion, it's hard to
+distinguish the mistake from the intended change in a simple way.  And I'm not
+sure if this is a real critical issue that deserves to add some extent of
+complexity.  So unless you know critical issue due to this or have a good way
+for improving the situation in a simple way, please suggest.  If not, I'd
+suggest to keep this in current simple form.
+
+Nevertheless, maybe we could improve this situation by warning this case on the
+documentation.  If you'd like to, please feel free to send a patch for that.
+
+
+Thanks,
+SJ
 
 > 
-> And if I'm correct above, this is definitely a "try again" situation:
-> you probably won't take the same type of fault the second time though.
-> 
-> Thanks,
-> 
-> 	M.
+> Thanks.
 > 
 > -- 
-> Without deviation from the norm, progress is not possible.
-> 
+> Best regards,
+> Levi
