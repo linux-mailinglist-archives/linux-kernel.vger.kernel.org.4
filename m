@@ -2,101 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B86463D3B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:45:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8E663D3B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:45:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbiK3Kpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 05:45:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
+        id S231213AbiK3Kpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 05:45:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiK3Kpi (ORCPT
+        with ESMTP id S229793AbiK3Kps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 05:45:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A48C5EFA4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:44:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669805081;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QpiS+lqB9/nD3c7h6a4WkksXWdpwbKquOlt3y6VqM1A=;
-        b=aRZhrqHxqDflgA8trfPRC2qTDnLmvVEotOyK9JzY2K2YbaoqDaNkjOo+iTn27zvSVvCYKn
-        TSTZJALy3DH2ki95tsRuQLP1YGQciUhna2K/FzrpG+KZc9wSrHNjpte5M357d1/iDwd8D2
-        imLM+QbscZBEbkN1V5lbx/X/Z2Tw3JU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-253-0B0kZKdnMq6rQRzxcMBaLg-1; Wed, 30 Nov 2022 05:44:37 -0500
-X-MC-Unique: 0B0kZKdnMq6rQRzxcMBaLg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 519DE3C0F227;
-        Wed, 30 Nov 2022 10:44:36 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.2.16.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E5B642166B26;
-        Wed, 30 Nov 2022 10:44:33 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        tglx@linutronix.de, linux-crypto@vger.kernel.org,
-        linux-api@vger.kernel.org, x86@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v10 3/4] random: introduce generic vDSO getrandom()
- implementation
-References: <20221129210639.42233-1-Jason@zx2c4.com>
-        <20221129210639.42233-4-Jason@zx2c4.com>
-Date:   Wed, 30 Nov 2022 11:44:30 +0100
-In-Reply-To: <20221129210639.42233-4-Jason@zx2c4.com> (Jason A. Donenfeld's
-        message of "Tue, 29 Nov 2022 22:06:38 +0100")
-Message-ID: <878rjs7mcx.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Wed, 30 Nov 2022 05:45:48 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C98466CB7
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:45:48 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id w23so16245744ply.12
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:45:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CWkLpPEq2gVXtRl771foWiTd76LStnIAXpLqiAwtIew=;
+        b=UWZDWRr2GVUKW/3md70o/3LfYk0B0WBjLBQoAr5wXn086Gu9AA+rE6TAwbltQhHWWc
+         VxDt+QXuvxmmmFGfu4jqxOPuhB1zm2Uf4xIS5Rdj+C4s1rKCUOiU/oj6GG9WXicDh7Wh
+         6SFLfjpNVRHvInPfgAuzZJun0Cu0cAAm0FRrEv7fWtmplRH8CzD2oTHPQbu/ClOoJrLI
+         xGCftMCmyO28CUbNcSTnOwAoa8SZsAPQqCZs1YD4jQpmiwQveUIvcbLmiFq+3aMwsHgO
+         7jquLOQJGgzDtG22U6Sf9y2zNnexKq2F6JdhgEGjUK9aeXaEW5krPxhXNfLyywq0QI8Q
+         pqjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CWkLpPEq2gVXtRl771foWiTd76LStnIAXpLqiAwtIew=;
+        b=Bhw5uXmJPZMUrTlfuMWvdVo2yuF4JjNvraaQyUeUoKMjY7BjPdyBu7/u8NUoTf4Hay
+         lA48bHuJ0B1De/f3Wgpewn35kwy4RajWLAV9c7JHWk2otksDu6x0V3AKivfS3BeIghFF
+         PJg0xCrm+ZQT77RhrNb5inKhjsyG9HLKoOm7RxHOKzTcJUksBxPPSPF2H512cm+CB8mY
+         XgvfWDtg0hURMHlQCV62X4ijYU5DVQILO+GA69rF/rxuVcFUwpPd4QB9sLFIZoEdek91
+         CANHXc5ZXNciTZnGe8cfhr/z2PLKHAZl/OOLpf8LL2SXWf7+AiKBLcQYIAn7mTxaAyij
+         KtRQ==
+X-Gm-Message-State: ANoB5pmormNEA9g7vYnfcmH8tiL9PUim2UTF+xpXH7Q8dgrthKd0zqob
+        uBkB4+yRvx8Ln7CwlBe5Y30HVg==
+X-Google-Smtp-Source: AA0mqf4POs9aDlAw5FsEoA4DeXwQubz3OuXbZNblhgs2jL8Df637+WYaLYCGrsKwMAuPWF4q9undWw==
+X-Received: by 2002:a17:903:2112:b0:186:67b0:afab with SMTP id o18-20020a170903211200b0018667b0afabmr41776660ple.17.1669805147451;
+        Wed, 30 Nov 2022 02:45:47 -0800 (PST)
+Received: from localhost.localdomain ([2401:4900:1c5f:27a2:d13a:7614:addb:b29d])
+        by smtp.gmail.com with ESMTPSA id v30-20020aa799de000000b0056b3c863950sm1121696pfi.8.2022.11.30.02.45.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 02:45:46 -0800 (PST)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, agross@kernel.org,
+        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@linaro.org, konrad.dybcio@linaro.org,
+        a39.skl@gmail.com, andersson@kernel.org
+Subject: [PATCH] arm64: dts: qcom: sm6115: Add interconnect nodes
+Date:   Wed, 30 Nov 2022 16:15:19 +0530
+Message-Id: <20221130104519.2266918-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Jason A. Donenfeld:
+Add the interconnect nodes inside SM6115 dtsi.
 
-> diff --git a/include/vdso/datapage.h b/include/vdso/datapage.h
-> index 73eb622e7663..9ae4d76b36c7 100644
-> --- a/include/vdso/datapage.h
-> +++ b/include/vdso/datapage.h
-> @@ -109,6 +109,16 @@ struct vdso_data {
->  	struct arch_vdso_data	arch_data;
->  };
->  
-> +/**
-> + * struct vdso_rng_data - vdso RNG state information
-> + * @generation:	a counter representing the number of RNG reseeds
-> + * @is_ready:	whether the RNG is initialized
-> + */
-> +struct vdso_rng_data {
-> +	unsigned long	generation;
-> +	bool		is_ready;
-> +};
-> +
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+---
+- Based on linux-next/master
+- Depends on the SM6115 dt-binding and driver patchset, which can be
+  seen here: https://lore.kernel.org/linux-arm-msm/20221130103841.2266464-1-bhupesh.sharma@linaro.org/ 
 
-I don't think you can use a type like long here.  The header says this:
+ arch/arm64/boot/dts/qcom/sm6115.dtsi | 51 ++++++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
- * vdso_data will be accessed by 64 bit and compat code at the same time
- * so we should be careful before modifying this structure.
-
-So the ABI must be same for 32-bit and 64-bit mode, and long isn't.
-
-Thanks,
-Florian
+diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+index e4a2440ce544..dad5ab3edf0e 100644
+--- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+@@ -485,6 +485,57 @@ usb_1_hsphy: phy@1613000 {
+ 			status = "disabled";
+ 		};
+ 
++		snoc: interconnect@1880000 {
++			compatible = "qcom,sm6115-snoc";
++			reg = <0x01880000 0x60200>;
++			#interconnect-cells = <1>;
++			clock-names = "bus", "bus_a";
++			clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
++				 <&rpmcc RPM_SMD_SNOC_A_CLK>;
++
++			clk_virt: interconnect-clk {
++				compatible = "qcom,sm6115-clk-virt";
++				#interconnect-cells = <1>;
++				clock-names = "bus", "bus_a";
++				clocks = <&rpmcc RPM_SMD_QUP_CLK>,
++					 <&rpmcc RPM_SMD_QUP_A_CLK>;
++			};
++
++			mmnrt_virt: interconnect-mmnrt {
++				compatible = "qcom,sm6115-mmnrt-virt";
++				#interconnect-cells = <1>;
++				clock-names = "bus", "bus_a";
++				clocks = <&rpmcc RPM_SMD_MMNRT_CLK>,
++					 <&rpmcc RPM_SMD_MMNRT_A_CLK>;
++			};
++
++			mmrt_virt: interconnect-mmrt {
++				compatible = "qcom,sm6115-mmrt-virt";
++				#interconnect-cells = <1>;
++				clock-names = "bus", "bus_a";
++				clocks = <&rpmcc RPM_SMD_MMRT_CLK>,
++					 <&rpmcc RPM_SMD_MMRT_A_CLK>;
++			};
++		};
++
++		cnoc: interconnect@1900000 {
++			compatible = "qcom,sm6115-cnoc";
++			reg = <0x01900000 0x8200>;
++			#interconnect-cells = <1>;
++			clock-names = "bus", "bus_a";
++			clocks = <&rpmcc RPM_SMD_CNOC_CLK>,
++				 <&rpmcc RPM_SMD_CNOC_A_CLK>;
++		};
++
++		bimc: interconnect@4480000 {
++			compatible = "qcom,sm6115-bimc";
++			reg = <0x04480000 0x80000>;
++			#interconnect-cells = <1>;
++			clock-names = "bus", "bus_a";
++			clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
++				 <&rpmcc RPM_SMD_BIMC_A_CLK>;
++		};
++
+ 		qfprom@1b40000 {
+ 			compatible = "qcom,sm6115-qfprom", "qcom,qfprom";
+ 			reg = <0x01b40000 0x7000>;
+-- 
+2.38.1
 
