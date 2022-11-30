@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBD463E293
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:19:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB76F63E297
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:20:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiK3VTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 16:19:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        id S229615AbiK3VUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 16:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiK3VTr (ORCPT
+        with ESMTP id S229604AbiK3VU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 16:19:47 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFB58B190
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:19:46 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id vv4so44413414ejc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:19:46 -0800 (PST)
+        Wed, 30 Nov 2022 16:20:27 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7418B190
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:20:25 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id ud5so44404478ejc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:20:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=G2ciZKFGb7wlsZU3hBpWnnJGAjRhKB6ThoGOD1MmZTg=;
-        b=YyZZAgg9GfGJYeUSWxMKVAdtaJSDhQL1d0UyJ2GUUWo0DD14x70Nc2Uk4aNpZzQKcc
-         epjbVSjkck3DvE5ruS0hdnw/PGmLapHLMTt5y14EOPPqfyZD46SlJPlF9qP7ZWtm52eI
-         LLRgt3s20ISsVQSpIIW22HolxZonGZgCkYIrs=
+        bh=O/Z8JYSlIL5b/NaGmnUjVRx48qydsMASmxAsCA/K9VY=;
+        b=JUEoYyGbYelG/R2BnPlxHeOgXELSGTlwMsJBPpwA13wQ1aBwg4OoDo5gbA/GNmqSZa
+         bRcwHS+g5pqINlDo/prC0YD4RAuh6Tu4nU30bB83LRLstoc0/Hlnez//3Zrs/sMVYs1I
+         MNkKE3p/oT3+gR+V9Bgg+BY4OJ2g1c1lMCT/g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=G2ciZKFGb7wlsZU3hBpWnnJGAjRhKB6ThoGOD1MmZTg=;
-        b=N48FaaA0Vz93Cp7l1IeijZgsFxsIqxjUiu/shDjijjghlIezTQ6rtV69/wcOvKeoTV
-         dZjfy6676oEWdYK5eoQ2OTI+o6r+QzN9aVhICt+a9QsHZBrSHPl+Y/DkelXFg/P44OMx
-         wS+F/L2gR4K4kSMwOxfA7AIZ70SUuMUQrBZvYwDKiuDBZNAIxukDhuuf161s8936H+Xh
-         Hi0wfGoj5yG+IPPRcZpZhOxz/1wG39Z9mr1SFdcUKDH/KmhoZdXcNHRc9O7V4u0klOz6
-         hCIn+nrRC5hWBAE/7bDgnzt8gMyt0tQ/DFefPV07hT0KwHXVk1ud4UDMcZmUcbYOR29P
-         07eQ==
-X-Gm-Message-State: ANoB5pnW+FJ3LG9RqJ9GjtpXlZUoX76QPUiA6wZZVQgnzEgc1Pgu+hFp
-        L6Bi/TvbnhqoKlRvx6jif//k4WsiPqiL6EXn
-X-Google-Smtp-Source: AA0mqf7cnjX3NTaUuwRE8x+gDoK7kFZHSCWiMchKBk1IIP00NPNhuWaeTFDvLLu3mgN2M23tIT5uYw==
-X-Received: by 2002:a17:906:5398:b0:7be:43a6:a8f0 with SMTP id g24-20020a170906539800b007be43a6a8f0mr18112709ejo.758.1669843184441;
-        Wed, 30 Nov 2022 13:19:44 -0800 (PST)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id 2-20020a170906218200b007be886f0db5sm1016029eju.209.2022.11.30.13.19.43
+        bh=O/Z8JYSlIL5b/NaGmnUjVRx48qydsMASmxAsCA/K9VY=;
+        b=XVc5u1Xvm+/ZL6+A8kkZfEx8gJ+exi7KsVtamZYVSSOnQzzNrSakZElbTe9YrIKDh8
+         5j0RdRXNJeGxJhU5U3fs29c09aZnsAGOCpdLq+Izxq9dYeGXFWZRJo9KGR9GTKUo6Apm
+         Z8/UfPCCCb/wsqpZc6b/dYt8nmyE1bEAyVhYslvyXS8Gb0IYAVvnhPk0gEdTHyVvny7i
+         69A4h+ucNK//p9Qte/jjo+kE6qck0ZnlQ+wDS2pVIGk3I1msoYO8Aa3x2oHGNNwwvOuE
+         N276xj24Mi9jU8ABCqDI1YjGBwuyuNpJcuW/p8TJ3F4iWhCBJ7ufvLmpxqJvnCJU9cG9
+         NHvA==
+X-Gm-Message-State: ANoB5pnA6CjEUuG1x5jovqbyITEHqGOJYHFa4jekU1SBHX9t8IGp/lVG
+        Y1ASvBaPn/nvKm+9DWcyXxF7y3bhUOoN7hCW
+X-Google-Smtp-Source: AA0mqf4SkjWxvnnXnyoQ5zvoNdAs5JifPOBFwhgZQNz6661HwdUn/Tieq7rMkEqSo30bAX5RNOjLgg==
+X-Received: by 2002:a17:906:a107:b0:77f:9082:73c7 with SMTP id t7-20020a170906a10700b0077f908273c7mr36682812ejy.517.1669843223876;
+        Wed, 30 Nov 2022 13:20:23 -0800 (PST)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
+        by smtp.gmail.com with ESMTPSA id iy17-20020a170907819100b007c03fa39c33sm1033302ejc.71.2022.11.30.13.20.22
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 13:19:43 -0800 (PST)
-Received: by mail-wr1-f53.google.com with SMTP id h12so37354wrv.10
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:19:43 -0800 (PST)
-X-Received: by 2002:adf:cd82:0:b0:238:b29e:4919 with SMTP id
- q2-20020adfcd82000000b00238b29e4919mr38939604wrj.583.1669843183080; Wed, 30
- Nov 2022 13:19:43 -0800 (PST)
+        Wed, 30 Nov 2022 13:20:23 -0800 (PST)
+Received: by mail-wr1-f51.google.com with SMTP id d1so29178433wrs.12
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:20:22 -0800 (PST)
+X-Received: by 2002:adf:fb4c:0:b0:236:5270:735e with SMTP id
+ c12-20020adffb4c000000b002365270735emr27787482wrs.659.1669843222443; Wed, 30
+ Nov 2022 13:20:22 -0800 (PST)
 MIME-Version: 1.0
 References: <20221130142829.v10.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
- <20221130142829.v10.2.I80aa32497bfd67bc8a372c1418ccc443ccf193e4@changeid>
-In-Reply-To: <20221130142829.v10.2.I80aa32497bfd67bc8a372c1418ccc443ccf193e4@changeid>
+In-Reply-To: <20221130142829.v10.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 30 Nov 2022 13:19:29 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VSLz6TLgdvzqdqi04C48gmqyRxVOtzWEdFmKQy9NuAOQ@mail.gmail.com>
-Message-ID: <CAD=FV=VSLz6TLgdvzqdqi04C48gmqyRxVOtzWEdFmKQy9NuAOQ@mail.gmail.com>
-Subject: Re: [PATCH v10 2/2] arm64: dts: qcom: sc7280: Add DT for sc7280-herobrine-zombie
+Date:   Wed, 30 Nov 2022 13:20:09 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=VQ-NTEOtg7_BZRT8zMrmt0B1FEMxixCynmnCH+aciFqg@mail.gmail.com>
+Message-ID: <CAD=FV=VQ-NTEOtg7_BZRT8zMrmt0B1FEMxixCynmnCH+aciFqg@mail.gmail.com>
+Subject: Re: [PATCH v10 1/2] dt-bindings: arm: qcom: Add zombie
 To:     Owen Yang <ecs.taipeikernel@gmail.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>, Harvey <hunge@google.com>,
         Bob Moragues <moragues@google.com>,
@@ -88,20 +87,16 @@ Hi,
 
 On Tue, Nov 29, 2022 at 10:30 PM Owen Yang <ecs.taipeikernel@gmail.com> wrote:
 >
-> +&pm8350c_pwm_backlight{
-> +       pwms = <&pm8350c_pwm 3 200000>;
-> +};
+> Add entries in the device tree binding for sc7280-zombie.
+>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+>
+> Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
 
-This is in the right location now, but previously I mentioned that it
-would be nice to have a comment explaining what you're doing. In other
-words, I wish the above was something like:
-
-&pm8350c_pwm_backlight{
-       /* Set the PWM period to 200 microseconds (5kHz duty cycle)
-       pwms = <&pm8350c_pwm 3 200000>;
-};
-
-If you spin a v11 with that change feel free to add my Reviewed-by tag.
-
+When you send v11, please remove the blank line between the
+Reviewed-by tags and the Signed-off-by tag. All tags should be
+together.
 
 -Doug
