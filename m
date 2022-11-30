@@ -2,151 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380EE63DB92
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 18:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFD363DB98
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 18:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiK3RIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 12:08:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
+        id S231138AbiK3RJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 12:09:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiK3RIR (ORCPT
+        with ESMTP id S230510AbiK3RJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 12:08:17 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A71A81396
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 09:03:18 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id td2so28767265ejc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 09:03:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NYMMG0Xx78ci4rSGafg1aeshdWrMZWJAaUMKgBBaQfE=;
-        b=DbnaczQgP2VrIkHihS0MpCnlYRHv+RYEnBbS+N7MSHdXWjZnojAbmCZPLQUg5ZEsI2
-         ojl6YTACqG3+fMtXxKsIH8ucWc4prE0JxoqQh+VNjo14vQy/O9zUufyp9SJErPb6buBT
-         m+Xa21SnYvaFbleMngbhCSMI5Osj8qdHOUcmIuWthBA/tVMJ+dcq7RThmp1PUbaz9h/j
-         VP/se8gAUYFY1Fd7ApWJ6vj1TkMLajsDtKslTNUW8syVVNGg/nbrYtFxEYqa5tD841Mr
-         qBRIUnTUrma7j54foglKvBQOjh403kzbKPRJdqz4xPiccM3wV/PhCVm3n9Nz9W1FXLbP
-         gwyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NYMMG0Xx78ci4rSGafg1aeshdWrMZWJAaUMKgBBaQfE=;
-        b=ZHgTi/Lhfjndo/tyy55bhSYk1qd6XvOY+zHe4/tN9QWaW4w90SZsOyB/fdUIKveBJE
-         fXmxbtrkJhQRbjqAP/+KMfjzTXkPrpiBVlmIom7BOk/jL5o7/hA6HxPXM5j6dbArhV9T
-         yOgLPSEDS0/gZtw/d8q/kcAX6sJiDGPNEF/4/nvhgoCttO7WgyEc6kouFovcy3kuLtNJ
-         nSoHb7c3T+rFIdgGa486gxiTLUaL0lW1pFWpYaFqPDwmWQpGgpr2pi7JsAnWAmHOK+Je
-         YTV2ogD/UxcQLiAI/99Wy19VPEgBtYKamE8OSxXGi8yjPaXwoKBNdxF7EWG2oXKu+u15
-         bkgw==
-X-Gm-Message-State: ANoB5plyausVHjcxrLxsxioT2z97RgMzJz5QF0h0gZ6yLOQM6Ll6W226
-        FEgNvXJfNnVMha5GsmxmcZobXFrI7RemMBDMurtJeQ==
-X-Google-Smtp-Source: AA0mqf6EyA7YtrTBcFZJK174OkTrsKWiLmYM0e6dIjaTX3tgPfsjUx3jdGQ2rw5PNYzp8U3ztlRdTrtIgLPscTc5gbU=
-X-Received: by 2002:a17:906:ae99:b0:7c0:82d8:243a with SMTP id
- md25-20020a170906ae9900b007c082d8243amr8545786ejb.230.1669827796637; Wed, 30
- Nov 2022 09:03:16 -0800 (PST)
+        Wed, 30 Nov 2022 12:09:24 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EFF9B795
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 09:04:10 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p0QV0-0005r7-Bq; Wed, 30 Nov 2022 18:03:54 +0100
+Received: from pengutronix.de (unknown [IPv6:2a0a:edc0:0:701:cf48:5678:3bb0:eeda])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1960812E2AE;
+        Wed, 30 Nov 2022 17:03:52 +0000 (UTC)
+Date:   Wed, 30 Nov 2022 18:03:51 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Jiri Pirko <jiri@resnulli.us>, Jiri Pirko <jiri@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        linux-can <linux-can@vger.kernel.org>
+Subject: Re: [PATCH net-next v2] net: devlink: add
+ DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER
+Message-ID: <20221130170351.cjyaqr22vhqzq4hv@pengutronix.de>
+References: <20221129031406.3849872-1-mailhol.vincent@wanadoo.fr>
+ <Y4XCnAA2hGvqgXh0@nanopsycho>
+ <CAMZ6RqJ54rfLfODB1JNaFr_pxWxzHJBoC2UmCKAZ7mSkEbcdzQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221129142449.886518-1-apatel@ventanamicro.com>
- <20221129142449.886518-4-apatel@ventanamicro.com> <86cz94mrc4.wl-maz@kernel.org>
-In-Reply-To: <86cz94mrc4.wl-maz@kernel.org>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Wed, 30 Nov 2022 22:33:05 +0530
-Message-ID: <CAAhSdy150BemP2YR2gf6yNMiJiD+os8VHkvyx7Nnqrqaz1+xjA@mail.gmail.com>
-Subject: Re: [PATCH v13 3/7] genirq: Add mechanism to multiplex a single HW IPI
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="obziojiov5xhwwjh"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqJ54rfLfODB1JNaFr_pxWxzHJBoC2UmCKAZ7mSkEbcdzQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 8:17 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Tue, 29 Nov 2022 14:24:45 +0000,
-> Anup Patel <apatel@ventanamicro.com> wrote:
-> >
-> > All RISC-V platforms have a single HW IPI provided by the INTC local
-> > interrupt controller. The HW method to trigger INTC IPI can be through
-> > external irqchip (e.g. RISC-V AIA), through platform specific device
-> > (e.g. SiFive CLINT timer), or through firmware (e.g. SBI IPI call).
-> >
-> > To support multiple IPIs on RISC-V, we add a generic IPI multiplexing
-> > mechanism which help us create multiple virtual IPIs using a single
-> > HW IPI. This generic IPI multiplexing is inspired from the Apple AIC
-> > irqchip driver and it is shared by various RISC-V irqchip drivers.
-> >
-> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > ---
-> >  include/linux/irq.h  |   3 +
-> >  kernel/irq/Kconfig   |   5 ++
-> >  kernel/irq/Makefile  |   1 +
-> >  kernel/irq/ipi-mux.c | 193 +++++++++++++++++++++++++++++++++++++++++++
-> >  4 files changed, 202 insertions(+)
-> >  create mode 100644 kernel/irq/ipi-mux.c
->
-> [...]
->
-> This is finally starting to look acceptable. My only changes are:
->
-> diff --git a/kernel/irq/ipi-mux.c b/kernel/irq/ipi-mux.c
-> index 626c564233e9..1a6ba19b736c 100644
-> --- a/kernel/irq/ipi-mux.c
-> +++ b/kernel/irq/ipi-mux.c
-> @@ -69,6 +69,12 @@ static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
->                  */
->                 smp_mb__after_atomic();
->
-> +               /*
-> +                * The flag writes must complete before the physical IPI is
-> +                * issued to another CPU. This is implied by the control
-> +                * dependency on the result of atomic_read() below, which is
-> +                * itself already ordered after the vIPI flag write.
-> +                */
->                 if (!(pending & ibit) && (atomic_read(&icpu->enable) & ibit))
->                         ipi_mux_send(cpu);
->         }
-> @@ -160,7 +166,7 @@ int ipi_mux_create(unsigned int nr_ipi, void (*mux_send)(unsigned int cpu))
->                 goto fail_free_cpu;
->         }
->
-> -       domain = irq_domain_create_simple(fwnode, nr_ipi, 0,
-> +       domain = irq_domain_create_linear(fwnode, nr_ipi,
->                                           &ipi_mux_domain_ops, NULL);
->         if (!domain) {
->                 pr_err("unable to add IPI Mux domain\n");
->
-> The first hunk preserve an important piece of information about how
-> delicate the ordering is, while the second only allocates the irqdesc
-> structures as needed, not upfront.
->
-> I'll shortly go over the rest of the irqchip code and can apply the
-> above myself if there is nothing more to fix.
->
-> I've also converted the AIC driver over to this[1], and nothing broke
-> so far...
->
->         M.
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/ipi-mux
 
-Thanks Marc, I will include your changes in the next patch revision.
+--obziojiov5xhwwjh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> --
-> Without deviation from the norm, progress is not possible.
+On 29.11.2022 18:28:44, Vincent MAILHOL wrote:
+> On Tue. 29 Nov. 2022 at 17:33, Jiri Pirko <jiri@resnulli.us> wrote:
+> > Tue, Nov 29, 2022 at 04:14:06AM CET, mailhol.vincent@wanadoo.fr wrote:
+> > >As discussed in [1], abbreviating the bootloader to "bl" might not be
+> > >well understood. Instead, a bootloader technically being a firmware,
+> > >name it "fw.bootloader".
+> > >
+> > >Add a new macro to devlink.h to formalize this new info attribute name
+> > >and update the documentation.
+> > >
+> > >[1] https://lore.kernel.org/netdev/20221128142723.2f826d20@kernel.org/
+> > >
+> > >Suggested-by: Jakub Kicinski <kuba@kernel.org>
+> > >Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > >---
+> > >* Changelog *
+> > >
+> > >v1 -> v2:
+> > >
+> > >  * update the documentation as well.
+> > >  Link: https://lore.kernel.org/netdev/20221129020151.3842613-1-mailho=
+l.vincent@wanadoo.fr/
+> > >---
+> > > Documentation/networking/devlink/devlink-info.rst | 5 +++++
+> > > include/net/devlink.h                             | 2 ++
+> > > 2 files changed, 7 insertions(+)
+> > >
+> > >diff --git a/Documentation/networking/devlink/devlink-info.rst b/Docum=
+entation/networking/devlink/devlink-info.rst
+> > >index 7572bf6de5c1..1242b0e6826b 100644
+> > >--- a/Documentation/networking/devlink/devlink-info.rst
+> > >+++ b/Documentation/networking/devlink/devlink-info.rst
+> > >@@ -198,6 +198,11 @@ fw.bundle_id
+> > >
+> > > Unique identifier of the entire firmware bundle.
+> > >
+> > >+fw.bootloader
+> > >+-------------
+> > >+
+> > >+Version of the bootloader.
+> > >+
+> > > Future work
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > >
+> > >diff --git a/include/net/devlink.h b/include/net/devlink.h
+> > >index 074a79b8933f..2f552b90b5c6 100644
+> > >--- a/include/net/devlink.h
+> > >+++ b/include/net/devlink.h
+> > >@@ -621,6 +621,8 @@ enum devlink_param_generic_id {
+> > > #define DEVLINK_INFO_VERSION_GENERIC_FW_ROCE  "fw.roce"
+> > > /* Firmware bundle identifier */
+> > > #define DEVLINK_INFO_VERSION_GENERIC_FW_BUNDLE_ID     "fw.bundle_id"
+> > >+/* Bootloader */
+> > >+#define DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER    "fw.bootloader"
+> >
+> > You add it and don't use it. You should add only what you use.
+>=20
+> I will use it in this series for the linux-can tree:
+> https://lore.kernel.org/netdev/20221126162211.93322-4-mailhol.vincent@wan=
+adoo.fr/
+>=20
+> If it is a problem to send this as a standalone patch, I will then
+> just add it to my series and have the patch go through the linux-can
+> tree.
 
-Regards,
-Anup
+As you have the Ok from Greg, include this in you v5 series.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--obziojiov5xhwwjh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOHjPQACgkQrX5LkNig
+011yRQf/Z//khRUupApjepNa7hj73LOXKehQrdvABWt+K/GUaMpnRFtDMASWz4ZJ
+D9DH4Gk9+dsV6y8/tHnE9VNMYXZCkDqLxqq3INn7b4Th+eyS6Ajfk79k51Iervdv
+Q7IgNfeuEV52vnjIUrfGXIpqpV/1Tc83nmyiHM1yuhKPFv88hWAppuzZ53lTZRnE
+YHfAL9iy/FaA85w0334LSuIst36Mj2CFtFWc4+ymA0aBwL2t8dbiIQ0dDgYOowep
+Rk7NkT0LSsPXNUfm0KYq12z4VYG7lvWAtzWcSHwX0G+axxzWQKGY4lMAd8mBsAoY
++1jDIuaKCXorISuFceKoD2ock+4+jw==
+=7wqE
+-----END PGP SIGNATURE-----
+
+--obziojiov5xhwwjh--
