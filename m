@@ -2,275 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 226D763CC8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 01:39:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B1863CC96
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 01:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbiK3Ajp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 19:39:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
+        id S230444AbiK3ApX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 19:45:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiK3Ajo (ORCPT
+        with ESMTP id S229610AbiK3ApT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 19:39:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4646DFF4;
-        Tue, 29 Nov 2022 16:39:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32D2AB819A1;
-        Wed, 30 Nov 2022 00:39:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B285FC433D6;
-        Wed, 30 Nov 2022 00:39:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669768779;
-        bh=ibtj29gIcaNxV775RpJRHacuF/zELEUQHcSE2cCABio=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=eka3rG7Gb+zMTb0/+0MiuLy6oH8EJr9NKtSvb6E9dcAd29L9QlRGxeBPiBTydTwJW
-         tWjIph1abbqbyDIrZG36LuW3Z4gOm2q9VC1CMm0zYOdMSW1EAzkp5R4nUFuqVXWN2/
-         zPVHL8Co9rJZHm4m56LO0jjGtp0za+mhRPlFnTH9yR21QxzuZFdb1hBvqKok0hNQnt
-         9lqYSLnOqPx9biWUm+wdqaSWB5lSJJid+RHCO6wwCJXSWWjCzrXFr3DGBWTEyGBcSb
-         5lzDCSmbw4W/2rwPPEYL/VpZIdnGkL3ecrMMucUIrRRceW9m2bg1pC/b4eMwMgT7zK
-         6PIKuG8Ljlnog==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 563A55C0584; Tue, 29 Nov 2022 16:39:39 -0800 (PST)
-Date:   Tue, 29 Nov 2022 16:39:39 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] rcu-tasks: Make rude RCU-Tasks work well with CPU
- hotplug
-Message-ID: <20221130003939.GI4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <PH0PR11MB588001E6982A9DC32F93FD7ADA129@PH0PR11MB5880.namprd11.prod.outlook.com>
- <24EC376D-B542-4E3C-BC10-3E81F2F2F49C@joelfernandes.org>
- <PH0PR11MB58801BEDCA0F6600F01486FEDA129@PH0PR11MB5880.namprd11.prod.outlook.com>
- <20221129151810.GY4001@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB5880AF19BD36D2B9DF3E88A2DA159@PH0PR11MB5880.namprd11.prod.outlook.com>
+        Tue, 29 Nov 2022 19:45:19 -0500
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356AE6DFEF;
+        Tue, 29 Nov 2022 16:45:19 -0800 (PST)
+Received: by mail-oi1-f179.google.com with SMTP id m204so17198431oib.6;
+        Tue, 29 Nov 2022 16:45:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zkp8DbvjvFYX60bdCB1aPl/nyh8CuvJUTer76i3Ow+g=;
+        b=Y6OOXKc9/CdrgfBQva+5V8gIJV+tmgfM09yl/znLqSdTtSva/hElWProolA2cTrKoj
+         Uf6q/j7u97xkc5ij3ilcPCvOfl1Uoqtzmv+6HCw/cbbjfGBSOXyxnM4kXtGpSHxJ5Fmu
+         iq5k0aDOykLV9HrrSq51uLRuHRUZoxIti4avUtY0oQF9DmVAy8XzewoMqbDhe5cHdyXG
+         o6lqu64vucX8ElX0GnfoZ3a2+v6ptqZJAI+xqMCKLKHZ1jAtJRuKisM8tcXcxTwGBhOZ
+         5f1t7jeaGwhPq5gi3W7N6gc5aMN3QiXxbO+mdkFdr2dof144gwgEE+iTmViVvfVPQHN2
+         iQuw==
+X-Gm-Message-State: ANoB5plrL7mCvaEeGWfpW8akiQ/zue3P5rpeBxlTxl0fM6s3VNpmqcEo
+        sGhZJI5OJfESIHOw60PCYw==
+X-Google-Smtp-Source: AA0mqf494FbbhWWY2FgA9I5hXIffKfBR434zz9Q+fxsy2WaeSOtOylTB8YkzE5uIqIBdKq+OcaLOkw==
+X-Received: by 2002:a54:451a:0:b0:35b:3f80:32e8 with SMTP id l26-20020a54451a000000b0035b3f8032e8mr17963598oil.177.1669769118441;
+        Tue, 29 Nov 2022 16:45:18 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i22-20020a056830011600b006619483182csm152394otp.18.2022.11.29.16.45.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 16:45:18 -0800 (PST)
+Received: (nullmailer pid 604336 invoked by uid 1000);
+        Wed, 30 Nov 2022 00:45:17 -0000
+Date:   Tue, 29 Nov 2022 18:45:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Jonathan Corbet <corbet@lwn.net>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Frank Rowand <frowand.list@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v4 03/20] of: property: make #.*-cells optional for
+ simple props
+Message-ID: <166976911579.604253.5395868954946458991.robh@kernel.org>
+References: <20221123180151.2160033-1-michael@walle.cc>
+ <20221123180151.2160033-4-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <PH0PR11MB5880AF19BD36D2B9DF3E88A2DA159@PH0PR11MB5880.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221123180151.2160033-4-michael@walle.cc>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 12:26:37AM +0000, Zhang, Qiang1 wrote:
-> On Tue, Nov 29, 2022 at 06:25:04AM +0000, Zhang, Qiang1 wrote:
-> > > On Nov 28, 2022, at 11:54 PM, Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:
-> > > 
-> > > ﻿On Mon, Nov 28, 2022 at 10:34:28PM +0800, Zqiang wrote:
-> > >> Currently, invoke rcu_tasks_rude_wait_gp() to wait one rude
-> > >> RCU-tasks grace period, if __num_online_cpus == 1, will return
-> > >> directly, indicates the end of the rude RCU-task grace period.
-> > >> suppose the system has two cpus, consider the following scenario:
-> > >> 
-> > >>    CPU0                                   CPU1 (going offline)
-> > >>                          migration/1 task:
-> > >>                                      cpu_stopper_thread
-> > >>                                       -> take_cpu_down
-> > >>                                          -> _cpu_disable
-> > >>                               (dec __num_online_cpus)
-> > >>                                          ->cpuhp_invoke_callback
-> > >>                                                preempt_disable
-> > >>                        access old_data0
-> > >>           task1
-> > >> del old_data0                                  .....
-> > >> synchronize_rcu_tasks_rude()
-> > >> task1 schedule out
-> > >> ....
-> > >> task2 schedule in
-> > >> rcu_tasks_rude_wait_gp()
-> > >>     ->__num_online_cpus == 1
-> > >>       ->return
-> > >> ....
-> > >> task1 schedule in
-> > >> ->free old_data0
-> > >>                                                preempt_enable
-> > >> 
-> > >> when CPU1 dec __num_online_cpus and __num_online_cpus is equal one,
-> > >> the CPU1 has not finished offline, stop_machine task(migration/1)
-> > >> still running on CPU1, maybe still accessing 'old_data0', but the
-> > >> 'old_data0' has freed on CPU0.
-> > >> 
-> > >> This commit add cpus_read_lock/unlock() protection before accessing
-> > >> __num_online_cpus variables, to ensure that the CPU in the offline
-> > >> process has been completed offline.
-> > >> 
-> > >> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> > >> 
-> > >> First, good eyes and good catch!!!
-> > >> 
-> > >> The purpose of that check for num_online_cpus() is not performance
-> > >> on single-CPU systems, but rather correct operation during early boot.
-> > >> So a simpler way to make that work is to check for RCU_SCHEDULER_RUNNING,
-> > >> for example, as follows:
-> > >> 
-> > >>    if (rcu_scheduler_active != RCU_SCHEDULER_RUNNING &&
-> > >>        num_online_cpus() <= 1)
-> > >>        return;    // Early boot fastpath for only one CPU.
-> > > 
-> > > Hi Paul
-> > > 
-> > > During system startup, because the RCU_SCHEDULER_RUNNING is set after starting other CPUs, 
-> > > 
-> > >              CPU0                                                                       CPU1                                                                 
-> > > 
-> > > if (rcu_scheduler_active !=                                    
-> > >    RCU_SCHEDULER_RUNNING &&
-> > >           __num_online_cpus  == 1)                                               
-> > >    return;                                                                         inc  __num_online_cpus
-> > >                            (__num_online_cpus == 2)
-> > > 
-> > > CPU0 didn't notice the update of the __num_online_cpus variable by CPU1 in time
-> > > Can we move rcu_set_runtime_mode() before smp_init()
-> > > any thoughts?
-> > >
-> > >Is anyone expected to do rcu-tasks operation before the scheduler is running? 
-> > 
-> > Not sure if such a scenario exists.
-> > 
-> > >Typically this requires the tasks to context switch which is a scheduler operation.
-> > >
-> > >If the scheduler is not yet running, then I don’t think missing an update the __num_online_cpus matters since no one does a tasks-RCU synchronize.
-> > 
-> > Hi Joel
-> > 
-> > After the kernel_init task runs, before calling smp_init() to starting other CPUs, 
-> > the scheduler haven been initialization, task context switching can occur.
-> >
-> >Good catch, thank you both.  For some reason, I was thinking that the
-> >additional CPUs did not come online until later.
-> >
-> >So how about this?
-> >
-> >	if (rcu_scheduler_active == RCU_SCHEDULER_INACTIVE)
-> >		return;    // Early boot fastpath.
-> 
-> If use RCU_SCHEDULER_INACTIVE to check, Can we make the following changes?
 
-You will need s/WARN_ONCE/WARN_ON_ONCE/ (or supply the added arguments),
-but yes, this looks good.
+On Wed, 23 Nov 2022 19:01:34 +0100, Michael Walle wrote:
+> Sometimes, future bindings for phandles will get additional arguments.
+> Thus the target node of the phandle will need a new #.*-cells property.
+> To be backwards compatible, this needs to be optional.
+> 
+> Prepare the DEFINE_SIMPLE_PROPS() to handle the cells name as optional.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> Tested-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> ---
+> changes since v3:
+>  - new patch
+> 
+>  drivers/of/property.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
 
-And thank you for digging down the extra level!
-
-							Thanx, Paul
-
-> --- a/kernel/rcu/tasks.h
-> +++ b/kernel/rcu/tasks.h
-> @@ -562,8 +562,8 @@ static int __noreturn rcu_tasks_kthread(void *arg)
->  static void synchronize_rcu_tasks_generic(struct rcu_tasks *rtp)
->  {
->         /* Complain if the scheduler has not started.  */
-> -       WARN_ONCE(rcu_scheduler_active == RCU_SCHEDULER_INACTIVE,
-> -                        "synchronize_rcu_tasks called too soon");
-> +       if(WARN_ONCE(rcu_scheduler_active == RCU_SCHEDULER_INACTIVE))
-> +               return;
-> 
->         // If the grace-period kthread is running, use it.
->         if (READ_ONCE(rtp->kthread_ptr)) {
-> @@ -1066,9 +1066,6 @@ static void rcu_tasks_be_rude(struct work_struct *work)
->  // Wait for one rude RCU-tasks grace period.
->  static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
->  {
-> -       if (num_online_cpus() <= 1)
-> -               return; // Fastpath for only one CPU.
-> -
->         rtp->n_ipis += cpumask_weight(cpu_online_mask);
->         schedule_on_each_cpu(rcu_tasks_be_rude);
->  }
-> 
-> Thanks
-> Zqiang
-> 
-> >
-> >If this condition is true, there is only one CPU and no scheduler,
-> >thus no preemption.
-> >
-> >						Thanx, Paul
-> 
-> > Thanks
-> > Zqiang
-> > 
-> > >
-> > >Or did I miss something?
-> > >
-> > >Thanks.
-> > >
-> > >
-> > >
-> > > 
-> > > Thanks
-> > > Zqiang
-> > > 
-> > >> 
-> > >> This works because rcu_scheduler_active is set to RCU_SCHEDULER_RUNNING
-> > >> long before it is possible to offline CPUs.
-> > >> 
-> > >> Yes, schedule_on_each_cpu() does do cpus_read_lock(), again, good eyes,
-> > >> and it also unnecessarily does the schedule_work_on() the current CPU,
-> > >> but the code calling synchronize_rcu_tasks_rude() is on high-overhead
-> > >> code paths, so this overhead is down in the noise.
-> > >> 
-> > >> Until further notice, anyway.
-> > >> 
-> > >> So simplicity is much more important than performance in this code.
-> > >> So just adding the check for RCU_SCHEDULER_RUNNING should fix this,
-> > >> unless I am missing something (always possible!).
-> > >> 
-> > >>                            Thanx, Paul
-> > >> 
-> > >> ---
-> > >> kernel/rcu/tasks.h | 20 ++++++++++++++++++--
-> > >> 1 file changed, 18 insertions(+), 2 deletions(-)
-> > >> 
-> > >> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-> > >> index 4a991311be9b..08e72c6462d8 100644
-> > >> --- a/kernel/rcu/tasks.h
-> > >> +++ b/kernel/rcu/tasks.h
-> > >> @@ -1033,14 +1033,30 @@ static void rcu_tasks_be_rude(struct work_struct *work)
-> > >> {
-> > >> }
-> > >> 
-> > >> +static DEFINE_PER_CPU(struct work_struct, rude_work);
-> > >> +
-> > >> // Wait for one rude RCU-tasks grace period.
-> > >> static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
-> > >> {
-> > >> +    int cpu;
-> > >> +    struct work_struct *work;
-> > >> +
-> > >> +    cpus_read_lock();
-> > >>    if (num_online_cpus() <= 1)
-> > >> -        return;    // Fastpath for only one CPU.
-> > >> +        goto end;// Fastpath for only one CPU.
-> > >> 
-> > >>    rtp->n_ipis += cpumask_weight(cpu_online_mask);
-> > >> -    schedule_on_each_cpu(rcu_tasks_be_rude);
-> > >> +    for_each_online_cpu(cpu) {
-> > >> +        work = per_cpu_ptr(&rude_work, cpu);
-> > >> +        INIT_WORK(work, rcu_tasks_be_rude);
-> > >> +        schedule_work_on(cpu, work);
-> > >> +    }
-> > >> +
-> > >> +    for_each_online_cpu(cpu)
-> > >> +        flush_work(per_cpu_ptr(&rude_work, cpu));
-> > >> +
-> > >> +end:
-> > >> +    cpus_read_unlock();
-> > >> }
-> > >> 
-> > >> void call_rcu_tasks_rude(struct rcu_head *rhp, rcu_callback_t func);
-> > >> -- 
-> > >> 2.25.1
-> > >> 
+Reviewed-by: Rob Herring <robh@kernel.org>
