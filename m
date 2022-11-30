@@ -2,111 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A93963D1D7
+	by mail.lfdr.de (Postfix) with ESMTP id E4E3963D1D8
 	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:29:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233348AbiK3J27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 04:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
+        id S233425AbiK3J3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 04:29:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233070AbiK3J24 (ORCPT
+        with ESMTP id S233218AbiK3J26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 04:28:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D877937234
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:27:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669800476;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zpmq/XpiWXbMOZEg66Zy7jVIb78OWdpjdWyyx9Qsyt0=;
-        b=gKaEgE7SSHttqzJN8lMisT51+bpYyc1S9D31ehv/MSir8kheumjuYJdKYcMwLQ3Sai35K6
-        i+IZSz84KfoAio2/yMFSuIXt896LQtLG4k3JDsEZK383LwhQ59fRBU9XkEy/5c2rfeSD91
-        Uglutv45Pko5GX4FXxrI3od21ULxkVg=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-92-n9nBvIEMMA-TOOvjVh9uOg-1; Wed, 30 Nov 2022 04:27:54 -0500
-X-MC-Unique: n9nBvIEMMA-TOOvjVh9uOg-1
-Received: by mail-wr1-f71.google.com with SMTP id o8-20020adfba08000000b00241e80f08e0so3372877wrg.12
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:27:54 -0800 (PST)
+        Wed, 30 Nov 2022 04:28:58 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935DB37230
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:28:57 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id q186so18109519oia.9
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:28:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WE/wpoe8wyBxBHKakNxetZ2YMP80E+8QwJz69OkRN0U=;
+        b=HssRzSbrSQyJoGkd5nNJrJ47K/btKlVQCYR/JLZLF5KIJAHzuAFLQQulvXQ4yzcMML
+         RrpMnm+4A9MDUAKE0oXnobLNLWbTtEvFsVmIJ0v5lxi9qZTEfHm/fAI8/UT84yQRvGZw
+         Eh7/pGBPNd0L/L1gvNLk6jKMuimN2iRDfvqcfGzEzzGpPZvI5fDsztgpBvqAok44s+Id
+         CN5Ndrf2IEJGp63AMdUdtMqMNCkZFwRykKeHYY5GvQyqUNOBWsxs+XDrWrpDFqP9HRNU
+         MlntVSVUW9HCUATiv8MGJOS/s+/xGZcQIaFIEFegGqsG44jPgeoNJXsSMPk9Gy+3LRzu
+         yUcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zpmq/XpiWXbMOZEg66Zy7jVIb78OWdpjdWyyx9Qsyt0=;
-        b=copJmj65eKNRa44qpPOuiSyxlnmJKCKceWI0sA3Ov0Ou+vEip+1envjmuULuGCHJXI
-         hI7UE0VN1rtG6nmrVclTfNHzhgpG/SFW74q1qOzjHTM/fDrAfKn78lPDI1RYH7VEyHVS
-         utLHAnzaWxBHl9kBZTI+zf/425PERKc+FVWvkfuR4cyBewdwpb4GD193zUpjZ12T8Ecz
-         RUdFEwRIGmvQ/W2O1NHYA6A5KJVg2COl41Yi4RJO4U5ZSGsSedu1rqgnKHDCRFILfQ5M
-         4RM6h7U+30lIZehVwNb6UPXwajN6PckqNOSFjqU5xQoEWazbpPV8ZrT3rMqpbID7Jm8i
-         tMSQ==
-X-Gm-Message-State: ANoB5plm79EelDwgd9a2Alzw9mJhVn6vi5TzMS+UhbTwOSx5UpDFdAUM
-        uyu9akpdW62ng7jLfkbumdTChD/dWMAvQKJoXrcauykHW9BiVbfGn0EZ3qnLO7R7bbCzDE92U78
-        /RSWUyPpy76uYb6oC4vpmfyLJ
-X-Received: by 2002:a05:600c:3548:b0:3d0:4776:7b73 with SMTP id i8-20020a05600c354800b003d047767b73mr18743925wmq.40.1669800473521;
-        Wed, 30 Nov 2022 01:27:53 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5lMQdNez6CG3ydcQTzf9gZFREx6F1ll3xRE649QPAQacBdUj+444faNh8sCrwOukxHZKgLEw==
-X-Received: by 2002:a05:600c:3548:b0:3d0:4776:7b73 with SMTP id i8-20020a05600c354800b003d047767b73mr18743910wmq.40.1669800473261;
-        Wed, 30 Nov 2022 01:27:53 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id n187-20020a1ca4c4000000b003d005aab31asm1684955wme.40.2022.11.30.01.27.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 01:27:52 -0800 (PST)
-Message-ID: <d2e3752d-ce25-2f79-7022-fc1f4cfacc07@redhat.com>
-Date:   Wed, 30 Nov 2022 10:27:51 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WE/wpoe8wyBxBHKakNxetZ2YMP80E+8QwJz69OkRN0U=;
+        b=kyEqBZsWqtSANTWCsUNl4PyTA11W878o2IWPok/cmfdI7ZcW+xGHtTMiSq5K+Csgme
+         5CHjQYrXlD4LxMPBjCceX2vP8O/E16sK3OYs0JSjvM+R61FQKIYNsGFkWwLNk3tKgq/l
+         AcSDKgLuk9kJajr49k5SQIw0C/NfLly2p+u45whEoYVLjiHVC6hX4NIHthfMLnQKbJVu
+         WKE3KF4NN46yxMaR3Y25/SWdIfK7OVu0w8r1JaeIrBPqrEfIKiV5u4Lqh32y9cexSYr8
+         sQqUbqiMQiQxkOuUUdz9NuicLgHOz60PTPNMD1QDs/RRjUZdAmOJMjgn8KZ7q0nEQKUg
+         LaNw==
+X-Gm-Message-State: ANoB5pnDGDhuAWko2VU93DRtw9FpTZdPKQAE1wVwUt5Nhqo5lS/KWn7n
+        4jZ7vDMZBfrr7T+wnPQcitza7h0dZp4pqhCYPO/YDQ==
+X-Google-Smtp-Source: AA0mqf4DiGy4FVHY1mnnDBa34cgVhJ/HgpD1QUBSqmURBcBBYIt34SlIStjXcaonS7eB+apS4mqD3mh3Y+jEI7qkx24=
+X-Received: by 2002:a05:6808:1115:b0:359:cb71:328b with SMTP id
+ e21-20020a056808111500b00359cb71328bmr28507259oih.282.1669800536644; Wed, 30
+ Nov 2022 01:28:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 09/17] drm/tests: helpers: Allow to pass a custom
- drm_driver
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-media@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
-References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
- <20221123-rpi-kunit-tests-v2-9-efe5ed518b63@cerno.tech>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221123-rpi-kunit-tests-v2-9-efe5ed518b63@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <00000000000055882e05ed9445a2@google.com> <a700b13.191985.1848090ad97.Coremail.linma@zju.edu.cn>
+In-Reply-To: <a700b13.191985.1848090ad97.Coremail.linma@zju.edu.cn>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 30 Nov 2022 10:28:45 +0100
+Message-ID: <CACT4Y+bj=xVbT+s6VmsiK12frTuPZCOf-hS+tZkuH_dSNKsb-w@mail.gmail.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference in nci_cmd_timer
+To:     Lin Ma <linma@zju.edu.cn>,
+        =?UTF-8?B?6ams6bqf?= <kylin.formalin@gmail.com>
+Cc:     syzbot <syzbot+10257d01dd285b15170a@syzkaller.appspotmail.com>,
+        krzysztof.kozlowski@linaro.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/28/22 15:53, Maxime Ripard wrote:
-> Some tests will need to provide their own drm_driver instead of relying
-> on the dumb one in the helpers, so let's create a helper that allows to
-> do so.
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
+On Wed, 16 Nov 2022 at 14:11, Lin Ma <linma@zju.edu.cn> wrote:
+>
+> > Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in nci_cmd_timer
+> >
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    9500fc6e9e60 Merge branch 'for-next/core' into for-kernelci
+> > git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=16cbf7a5880000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=b25c9f218686dd5e
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=10257d01dd285b15170a
+> > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> > userspace arch: arm64
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1354dce9880000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10880a95880000
+> >
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/1363e60652f7/disk-9500fc6e.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/fcc4da811bb6/vmlinux-9500fc6e.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/0b554298f1fa/Image-9500fc6e.gz.xz
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+10257d01dd285b15170a@syzkaller.appspotmail.com
+> >
+> > Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+> > Mem abort info:
+> >   ESR = 0x0000000096000004
+> >   EC = 0x25: DABT (current EL), IL = 32 bits
+> >   SET = 0, FnV = 0
+> >   EA = 0, S1PTW = 0
+> >   FSC = 0x04: level 0 translation fault
+> > Data abort info:
+> >   ISV = 0, ISS = 0x00000004
+> >   CM = 0, WnR = 0
+> > user pgtable: 4k pages, 48-bit VAs, pgdp=000000010c75b000
+> > [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+> > Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+> > Modules linked in:
+> > CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+> > pstate: 004000c5 (nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > pc : __queue_work+0x3c4/0x8b4
+> > lr : __queue_work+0x3c4/0x8b4 kernel/workqueue.c:1458
+> > sp : ffff800008003d60
+> > x29: ffff800008003d60 x28: 0000000000000000 x27: ffff80000d3a9000
+> > x26: ffff80000d3ad050 x25: ffff80000d2fe008 x24: ffff80000db54000
+> > x23: 0000000000000000 x22: 0000000000000023 x21: ffff0000c7a95400
+> > x20: 0000000000000008 x19: ffff0000cd0d20f8 x18: ffff80000db78158
+> > x17: ffff80000ddda198 x16: ffff80000dc18158 x15: ffff80000d3cbc80
+> > x14: 0000000000000000 x13: 00000000ffffffff x12: ffff80000d3cbc80
+> > x11: ff8080000c07dfe4 x10: 0000000000000000 x9 : ffff80000c07dfe4
+> > x8 : ffff80000d3cbc80 x7 : ffff80000813bae8 x6 : 0000000000000000
+> > x5 : 0000000000000080 x4 : 0000000000000000 x3 : 0000000000000002
+> > x2 : 0000000000000008 x1 : 0000000000000000 x0 : ffff0000c0014c00
+> > Call trace:
+> >  __queue_work+0x3c4/0x8b4 kernel/workqueue.c:1458
+> >  queue_work_on+0xb0/0x15c kernel/workqueue.c:1545
+> >  queue_work include/linux/workqueue.h:503 [inline]
+> >  nci_cmd_timer+0x30/0x40 net/nfc/nci/core.c:615
+> >  call_timer_fn+0x90/0x144 kernel/time/timer.c:1474
+> >  expire_timers kernel/time/timer.c:1519 [inline]
+> >  __run_timers+0x280/0x374 kernel/time/timer.c:1790
+> >  run_timer_softirq+0x34/0x5c kernel/time/timer.c:1803
+> >  _stext+0x168/0x37c
+> >  ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
+> >  call_on_irq_stack+0x2c/0x54 arch/arm64/kernel/entry.S:892
+> >  do_softirq_own_stack+0x20/0x2c arch/arm64/kernel/irq.c:84
+> >  invoke_softirq+0x70/0xbc kernel/softirq.c:452
+> >  __irq_exit_rcu+0xf0/0x140 kernel/softirq.c:650
+> >  irq_exit_rcu+0x10/0x40 kernel/softirq.c:662
+> >  __el1_irq arch/arm64/kernel/entry-common.c:472 [inline]
+> >  el1_interrupt+0x38/0x68 arch/arm64/kernel/entry-common.c:486
+> >  el1h_64_irq_handler+0x18/0x24 arch/arm64/kernel/entry-common.c:491
+> >  el1h_64_irq+0x64/0x68 arch/arm64/kernel/entry.S:580
+> >  arch_local_irq_enable+0xc/0x18 arch/arm64/include/asm/irqflags.h:35
+> >  default_idle_call+0x48/0xb8 kernel/sched/idle.c:109
+> >  cpuidle_idle_call kernel/sched/idle.c:191 [inline]
+> >  do_idle+0x110/0x2d4 kernel/sched/idle.c:303
+> >  cpu_startup_entry+0x24/0x28 kernel/sched/idle.c:400
+> >  kernel_init+0x0/0x290 init/main.c:729
+> >  start_kernel+0x0/0x620 init/main.c:890
+> >  start_kernel+0x450/0x620 init/main.c:1145
+> >  __primary_switched+0xb4/0xbc arch/arm64/kernel/head.S:471
+> > Code: 94001384 aa0003f7 aa1303e0 9400144a (f94002f8)
+> > ---[ end trace 0000000000000000 ]---
+> > ----------------
+> > Code disassembly (best guess):
+> >    0: 94001384        bl      0x4e10
+> >    4: aa0003f7        mov     x23, x0
+> >    8: aa1303e0        mov     x0, x19
+> >    c: 9400144a        bl      0x5134
+> > * 10: f94002f8        ldr     x24, [x23] <-- trapping instruction
+> >
+> >
+> > ---
+> > This report is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> >
+> > syzbot will keep track of this issue. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> > syzbot can test patches for this issue, for details see:
+> > https://goo.gl/tpsmEJ#testing-patches
+>
+> #syz test: https://github.com/f0rm2l1n/linux-fix.git master
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+#syz dup: WARNING in nci_send_cmd
