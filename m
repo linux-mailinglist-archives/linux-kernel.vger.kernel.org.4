@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6890A63D4C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7D663D4CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235051AbiK3LkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:40:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
+        id S230326AbiK3LlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:41:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234729AbiK3LkV (ORCPT
+        with ESMTP id S235105AbiK3Lk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:40:21 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162C02EF4E
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:40:20 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id k5so15438519pjo.5
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:40:20 -0800 (PST)
+        Wed, 30 Nov 2022 06:40:57 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552F431F8C
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:40:56 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id s8so26513620lfc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:40:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9LNjWyH35fVY/TMIzB5ImQEdzHY0s+B+xCvg9O56BsM=;
-        b=z5CawRqPrYDA48WMicMvok00qsLCphUB2bR6AkZ/d9YBlR2s4zjnPdO9kK7hRXpzgg
-         pyHgndfm3URHkyHq3sZChFZbNKLbevZK8BtyEBcjgUqj+e5OmI7jyrfQJaInYxqrDq3y
-         IY7Y9lGxslKC7eKrUgyhNNnU02mrs3jLvcxT2M0iK3uzbfmKALbUSeqUVUXXvFtuTMaF
-         U0SQGDcsBmeGnj13YRDFRKnMoxHB38c/HFaNVrE33jjs8BHRwO8wih2vHrnAbmmxApTH
-         9nNpiXL/XwvauD76pxaD9e9UGVmx1JufEeW5+H4HZ8cp5wO+bK/VqjZOnRCRNg/n7bRP
-         phPQ==
+        bh=99xaCqf5qa96S/0p46JeVNvLFHKLRC11O1smnInaBoM=;
+        b=TdxiikQ3Y0c6IVyFZ4iyWQbI2TGQKoRUIgCK0SC837s9dBRRtxPWpb+LYBtvW6nvxn
+         djIGiEmGgFM2juXI9ACsyvjvDNjrP6HX5qWfWUXMLqh4NeoUBdzThUyh0LQfaK7eVHqU
+         YizLifR/JSMRlHb5QjvMb06OrUEVIZkH9+IpF9o5UTkToQ/CxK0CrJ0ZlW4YWsjrYD8l
+         ijvVglTn+A18pD0TZBtxfqZEJxBBgs52NXeO2Ggwz44LgzuCX3IJN6eLNYNF8rVNOD16
+         3Bukpab+5UkP9O5/bk71ZXMqbeoviOaPl7Rh3ttjpUtDoYMprAKjfm1tfjgIVtZYObYA
+         kw5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9LNjWyH35fVY/TMIzB5ImQEdzHY0s+B+xCvg9O56BsM=;
-        b=ibM7oENpLW3ZtOqr1wKaMaKdHuxfGgtYELUzjCeapPZiPkqVdSYqlhsRUvHZWLrUM/
-         RW74WdanMEwHWW4Sun7/S0RqLLZbJT7dOVayEv2b/acWfDiCFMgJS+ip7WWdx43hIfy/
-         KQsGrZ+ssrrBC26CistjCqnZeCj7feYlM8l2Da9kfsu/VdHWbUusPVktOqStPHwQSir1
-         8L4hYSQM+ZxKzrpw0y0SkQaHJMRuxJ9xcVkoUwP2RLYWgu0lS51mw4bn5xV1yJw/Teum
-         Yclb+AnW0U0PCDNEyhRIqY44EnyQq3pHqrwLLrknEANPtxS/fvDesJqSzYRcgJaSkeOc
-         figg==
-X-Gm-Message-State: ANoB5pliscXucQK+kd0+nokeNj3KYfGX9q3GIhF0EkL97aIXvnCKSooQ
-        G+eOJ+146JMRpCuz65XFfztwPjcJ2iYHmYz8GJjyFMXI1zAc9A==
-X-Google-Smtp-Source: AA0mqf6iaywNXQp7J6No+cTnfXmbnavNVNaL9Gtrh9Vdjr65ORYiD9n0kq1vcrM3ud2gzVPfwi75crAIe0SaKgFEjvI=
-X-Received: by 2002:a17:902:a503:b0:188:6baf:2011 with SMTP id
- s3-20020a170902a50300b001886baf2011mr39978056plq.165.1669808419589; Wed, 30
- Nov 2022 03:40:19 -0800 (PST)
+        bh=99xaCqf5qa96S/0p46JeVNvLFHKLRC11O1smnInaBoM=;
+        b=yBmWhDzuvFCMWOzuUlguNixYhXet2AQJfCNqMQuOgH8BeUQbREg+VRhI42191EwFJF
+         CtURzFSMYr2eCoGmkMZT2Zu+1fGMxZ4VoTGfxPl51T+9weg6zE7E9ZDF+gF79cQCiRgC
+         0yiOPVP8GCRYVTmJ8XlY68DLArAhWHBLc2NCyXU7sMcZxw3v/BzGkWAJw3HSp8QgyyyZ
+         albc/4EOPuAXjKTBcxT6h9VsBTmr8VaGg438vA1yjfFBbrC3Yof37i+zSdTRgqGbMg4y
+         pMLWGwS4iEIHajHdxq2UWuWPQxU1FsQBmBDfnzl9ZH2XEKJQtsVNxg7Ce+FfSOjfuYLZ
+         J8gA==
+X-Gm-Message-State: ANoB5pl7aZonnuS2+2Q8Yye7P3+d30FfktkJZVS3tu9uA3905lfa78ET
+        BNzoibCF+FHVzTKuqeOr0W6hZJP1+5sM9VGUMKxyZQ==
+X-Google-Smtp-Source: AA0mqf4EVpFZeTrPK+w9qTOJAKynQ0HdWZJHtWUKzSXrhSBS3+ZtRHiF9v1eRygV044dkfRp4Kuf80qVW6j9uSq5EZU=
+X-Received: by 2002:a05:6512:34d0:b0:4a8:ebec:7140 with SMTP id
+ w16-20020a05651234d000b004a8ebec7140mr20444382lfr.150.1669808454555; Wed, 30
+ Nov 2022 03:40:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20221130101852.5408-1-cniedermaier@dh-electronics.com>
-In-Reply-To: <20221130101852.5408-1-cniedermaier@dh-electronics.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 30 Nov 2022 12:39:43 +0100
-Message-ID: <CAPDyKFpZnnx_4+NmsVewMs8duDqf=qY57a134QD+1NdcKRnK_A@mail.gmail.com>
-Subject: Re: [PATCH V2] dt-bindings: mmc: Remove comment on wakeup-source property
-To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marek Vasut <marex@denx.de>, kernel@dh-electronics.com,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org
+References: <20221130103841.2266464-1-bhupesh.sharma@linaro.org>
+ <20221130103841.2266464-2-bhupesh.sharma@linaro.org> <3c8c3cc8-60b9-13e2-a80f-dc397d84adf0@linaro.org>
+In-Reply-To: <3c8c3cc8-60b9-13e2-a80f-dc397d84adf0@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Wed, 30 Nov 2022 17:10:42 +0530
+Message-ID: <CAH=2Nty3zM+arxJaeZ7YWh6fyuE8jWnV9rpKjuNxDS2zUnqNVw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] interconnect: qcom: Add SM6115 interconnect provider driver
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@linaro.org, djakov@kernel.org,
+        a39.skl@gmail.com, andersson@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -69,49 +71,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Nov 2022 at 11:20, Christoph Niedermaier
-<cniedermaier@dh-electronics.com> wrote:
->
-> The current comment on wakeup-source is a little confusing because
-> the word deprecated can be interpreted at first glance to mean that
-> wakeup-source is deprecated. Also mentioning the obsolete property
-> confuses more than it helps. Therefore, the comment should be removed
-> completely because the enable-sdio-wakeup property is not used in
-> any current DTs.
->
-> Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-> ---
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Marek Vasut <marex@denx.de>
-> Cc: kernel@dh-electronics.com
-> Cc: linux-mmc@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> To: linux-kernel@vger.kernel.org
-> ---
-> V2: - Instead of changing the comment, remove it
-> ---
->  Documentation/devicetree/bindings/mmc/mmc-controller.yaml | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
-> index 802e3ca8be4d..e82c00368088 100644
-> --- a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
-> @@ -293,7 +293,6 @@ properties:
->      description:
->        SDIO only. Preserves card power during a suspend/resume cycle.
->
-> -  # Deprecated: enable-sdio-wakeup
->    wakeup-source:
->      $ref: /schemas/types.yaml#/definitions/flag
->      description:
+Hi Konrad,
 
-This looks good to me!
+On Wed, 30 Nov 2022 at 16:37, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+>
+>
+> On 30.11.2022 11:38, Bhupesh Sharma wrote:
+> > Add driver for the Qualcomm interconnect buses found in SM6115 based
+> > platforms. The topology consists of several NoCs that are controlled by
+> > a remote processor that collects the aggregated bandwidth for each
+> > master-slave pairs.
+> >
+> > Cc: Bjorn Andersson <andersson@kernel.org>
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+>
+> [...]
+>
+> > +MODULE_DEVICE_TABLE(of, sm6115_qnoc_of_match);
+> > +
+> > +static struct platform_driver sm6115_qnoc_driver = {
+> > +     .probe = qnoc_probe,
+> > +     .remove = qnoc_remove,
+> > +     .driver = {
+> > +             .name = "qnoc-sm6115",
+> > +             .of_match_table = sm6115_qnoc_of_match,
+> No .sync_state?
 
-However, let's also drop the reference to the property from
-Documentation/devicetree/bindings/power/wakeup-source.txt.
+Oops. Will add it in v2,
 
-Kind regards
-Uffe
+> > +     },
+> > +};
+> > +module_platform_driver(sm6115_qnoc_driver);
+> > +
+> > +MODULE_DESCRIPTION("Qualcomm SM6115 NoC driver");
+> > +MODULE_LICENSE("GPL v2");
+> "GPL", checkpatch should have pointed that out.
+
+Sure, I will fix this in v2.
+
+Thanks,
+Bhupesh
