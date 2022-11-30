@@ -2,247 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13EB463D289
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:54:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A59263D293
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234931AbiK3JyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 04:54:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55794 "EHLO
+        id S234999AbiK3Jza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 04:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiK3JyN (ORCPT
+        with ESMTP id S235013AbiK3JzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 04:54:13 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FAC28E1A;
-        Wed, 30 Nov 2022 01:54:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669802053; x=1701338053;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=FQUudcpbrwWHkFfuVM0pAZ6RGvYOLQp3yxH7VudB6wg=;
-  b=j8uaqVBVq7sedfiyUakLwXOb5k92vWFP1rCUNkq8L5G8/muz/PH1iIXC
-   pCuFPwLAlyNPfTTx6W+71GNEbBG2mFF6ObhEPevSCmAq2C1N5Zf0pjPXs
-   FggetWMG2+9cc0k2GfUTiOCaQiC2cpkvTA4XS7shvgybEexqDD29BmKO5
-   mQxsbFguQzqZUJugSEUJPtmR1uRVOyRR3ZYLIOMdSldcyKRadi1+BYgjz
-   uZguXmFk64eEKrT8DHR9MuirUBvvAWr1mZRbUoHO8KBlTFzIfH2lzUYD8
-   rfm6K3l7ZCBnXqTXAiWkAPvnajVOyBl/EsUo0cGzBU3ftiSNeyt6fEDpy
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
-   d="scan'208";a="191103996"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Nov 2022 02:54:13 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 30 Nov 2022 02:54:12 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Wed, 30 Nov 2022 02:54:10 -0700
-Date:   Wed, 30 Nov 2022 09:53:51 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Conor Dooley <conor@kernel.org>, <u.kleine-koenig@pengutronix.de>
-CC:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v12 1/2] pwm: add microchip soft ip corePWM driver
-Message-ID: <Y4coL74qQX80TNaT@wendy>
-References: <20221110093512.333881-1-conor.dooley@microchip.com>
- <20221110093512.333881-2-conor.dooley@microchip.com>
- <20221117164950.cssukd63fywzuwua@pengutronix.de>
- <Y3Zxkt3OSPQc46Q2@spud>
- <20221117210433.n5j7upqqksld42mu@pengutronix.de>
- <Y3avobkvYK3ydKTS@spud>
- <Y3uZY5mt/ZIWk3sS@wendy>
+        Wed, 30 Nov 2022 04:55:22 -0500
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA58F2CDEF
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:55:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1669802121; x=1701338121;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PfmM6a5gkT8LDyP+3VBEQwikCCOkyxOtDnm2zOUOXHY=;
+  b=LCLKD0i887G/zIaZSMZbc/V+5/n69MLJJjmFBr2d2oN8emdf7+PBOhSm
+   e46biym6jXU06zqpAeqU3cn1HkeItv+bbrS2e3w+iWRd9MpgxstxsC6n+
+   ulYSCgW6T7hnM+HIGAKfizL3lYpAJRJ7moShTCy4/wCv1TVTDjScIewKd
+   wTj72VD+59fih0QE9sW8mqUb7WoNg/QkGHPL+6j6GjBqDuOiRmJFtq/qd
+   EC1LrTWx9u6VQwW4t217L3Rup1wgz+L9y/CVy5OK1P59rjiBBh7DxHd2C
+   fSy8vg+Gv6XFFOpFxJUPaU91yV3wYfXhVkKLis3nmrIhnCyLUfdanAIEs
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,206,1665417600"; 
+   d="scan'208";a="329640824"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 30 Nov 2022 17:55:21 +0800
+IronPort-SDR: p5QRw9D+WzZP0rlRRfAYVMEMCqfRofg5YMVx2tsLLmZS17yt99AtOMzfHQ/XpIs2E1LQwvJUPu
+ pYoWxZV7C0r0rMv0T0G1myOgKMs822wFC+qV0r8SUfcuX+cI/I3+sHxEOsXZIQTQdKmdMy2fd3
+ 1yFpCadbkkfMGIaU+07ucw89eZO+6WgqMygojzvATqfC4ggoLRD0JKnG4YYAkqg+HhG6ujj277
+ yG1GRrsf0ZXkLS4ksozVFzkBIqLfC4/cYkAJ0sB+qX519XvbOBQV6nxVNNcPNIpycAn+sLIAIV
+ LHc=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Nov 2022 01:14:00 -0800
+IronPort-SDR: /N/qeXovhMCVHhg3ZLnVlOjHhoMS3ZoxESxXCgO6bHKknpZsbXu9xwK1+6KCjVgbN/8BeLPX2b
+ u0l1CNE3eeaUTBwx5lNtJ1zg4YkhAYftok/A35OSBgoQIxcTvTbbih5uzZEJDxgnc4pJWE7bxw
+ vLSWgcaLuuip02nyUDQOJR5WT0T3unGUYBJ3Swi0nNsilxsrfx2gXUCKWdUTiiCdenlI0Do0nE
+ lKtL79lmNYKoHY7D85FWTiaeh4IH4YI6NkaSb/ponf5z/cjSxJZPcL05A4mJA1m1t6c/OFtG/4
+ a2s=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Nov 2022 01:55:22 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NMZMD70DZz1RvTp
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:55:20 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1669802108; x=1672394109; bh=PfmM6a5gkT8LDyP+3VBEQwikCCOkyxOtDnm
+        2zOUOXHY=; b=WO70GxcfoJkaidzfqKTpf6XdrSJR92gGBcqtVjjWImgnNKJFA3C
+        1qQ9Pac2+l9iEMRSkNYcb3YtQr2CmP64cVFOL1AzWKkAattcadn9VRgdDzzu3sYw
+        a+b7n0DmPMTxgPx0L+moOK5KuWtWefFwiMikDVPA+Rm9ccaiG+TK/Gt1Nscesz8s
+        zfjKvyMMqoH4tmasBu11mn7xan6xxRBhghlPHoQ+BCXda+WI3SAj0t1z+JF5L3w+
+        lOZ1r/wbs/0FcsfgTQXKDer3VH0RggQmo59VaOB/EpQKyYPqFr39FgByPQi74sIu
+        yFIjzvJNf44Tp2JxaVnhNqH5C0oypUoGLzQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id UDaAl29QsGVV for <linux-kernel@vger.kernel.org>;
+        Wed, 30 Nov 2022 01:55:08 -0800 (PST)
+Received: from [10.225.163.66] (unknown [10.225.163.66])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NMZLx09szz1RvLy;
+        Wed, 30 Nov 2022 01:55:04 -0800 (PST)
+Message-ID: <1ef5747a-9469-4365-ffc9-05daa6f69288@opensource.wdc.com>
+Date:   Wed, 30 Nov 2022 18:55:03 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y3uZY5mt/ZIWk3sS@wendy>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v5 10/10] fs: add support for copy file range in zonefs
+Content-Language: en-US
+To:     Nitesh Shetty <nj.shetty@samsung.com>
+Cc:     axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        dm-devel@redhat.com, kbusch@kernel.org, hch@lst.de,
+        sagi@grimberg.me, james.smart@broadcom.com, kch@nvidia.com,
+        naohiro.aota@wdc.com, jth@kernel.org, viro@zeniv.linux.org.uk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        anuj20.g@samsung.com, joshi.k@samsung.com, p.raghav@samsung.com,
+        nitheshshetty@gmail.com, gost.dev@samsung.com
+References: <20221123055827.26996-1-nj.shetty@samsung.com>
+ <CGME20221123061044epcas5p2ac082a91fc8197821f29e84278b6203c@epcas5p2.samsung.com>
+ <20221123055827.26996-11-nj.shetty@samsung.com>
+ <729254f8-2468-e694-715e-72bcbef80ff3@opensource.wdc.com>
+ <349a4d66-3a9f-a095-005c-1f180c5f3aac@opensource.wdc.com>
+ <20221129122232.GC16802@test-zns>
+ <b22652ee-9cca-a5b1-e9f1-862ed8f0354d@opensource.wdc.com>
+ <20221130041728.GB17533@test-zns>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20221130041728.GB17533@test-zns>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Uwe,
+On 11/30/22 13:17, Nitesh Shetty wrote:
+> On Wed, Nov 30, 2022 at 08:45:55AM +0900, Damien Le Moal wrote:
+>> On 11/29/22 21:22, Nitesh Shetty wrote:
+>>> Acked. I do see a gap in current zonefs cfr implementation. I will drop this
+>>
+>> cfr ?
+>>
+> 
+> yes, will drop zonefs cfr for next version.
 
-On Mon, Nov 21, 2022 at 03:29:39PM +0000, Conor Dooley wrote:
-> On Thu, Nov 17, 2022 at 10:03:13PM +0000, Conor Dooley wrote:
-> > On Thu, Nov 17, 2022 at 10:04:33PM +0100, Uwe Kleine-König wrote:
-> > > On Thu, Nov 17, 2022 at 05:38:26PM +0000, Conor Dooley wrote:
-> > > > On Thu, Nov 17, 2022 at 05:49:50PM +0100, Uwe Kleine-König wrote:
-> > > > > Hello Conor,
-> > > > 
-> > > > Hello Uwe,
-> > > > 
-> > > > > On Thu, Nov 10, 2022 at 09:35:12AM +0000, Conor Dooley wrote:
-> > > > > > [...]
-> > > > > > +
-> > > > > > +static void mchp_core_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm,
-> > > > > > +				 bool enable, u64 period)
-> > > > > > +{
-> > > > > > +	struct mchp_core_pwm_chip *mchp_core_pwm = to_mchp_core_pwm(chip);
-> > > > > > +	u8 channel_enable, reg_offset, shift;
-> > > > > > +
-> > > > > > +	/*
-> > > > > > +	 * There are two adjacent 8 bit control regs, the lower reg controls
-> > > > > > +	 * 0-7 and the upper reg 8-15. Check if the pwm is in the upper reg
-> > > > > > +	 * and if so, offset by the bus width.
-> > > > > > +	 */
-> > > > > > +	reg_offset = MCHPCOREPWM_EN(pwm->hwpwm >> 3);
-> > > > > > +	shift = pwm->hwpwm & 7;
-> > > > > > +
-> > > > > > +	channel_enable = readb_relaxed(mchp_core_pwm->base + reg_offset);
-> > > > > > +	channel_enable &= ~(1 << shift);
-> > > > > > +	channel_enable |= (enable << shift);
-> > > > > > +
-> > > > > > +	writel_relaxed(channel_enable, mchp_core_pwm->base + reg_offset);
-> > > > > > +	mchp_core_pwm->channel_enabled &= ~BIT(pwm->hwpwm);
-> > > > > > +	mchp_core_pwm->channel_enabled |= enable << pwm->hwpwm;
-> > > > > > +
-> > > > > > +	/*
-> > > > > > +	 * Notify the block to update the waveform from the shadow registers.
-> > > > > > +	 * The updated values will not appear on the bus until they have been
-> > > > > > +	 * applied to the waveform at the beginning of the next period. We must
-> > > > > > +	 * write these registers and wait for them to be applied before
-> > > > > > +	 * considering the channel enabled.
-> > > > > > +	 * If the delay is under 1 us, sleep for at least 1 us anyway.
-> > > > > > +	 */
-> > > > > > +	if (mchp_core_pwm->sync_update_mask & (1 << pwm->hwpwm)) {
-> > > > > > +		u64 delay;
-> > > > > > +
-> > > > > > +		delay = div_u64(period, 1000u) ? : 1u;
-> > > > > > +		writel_relaxed(1U, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
-> > > > > > +		usleep_range(delay, delay * 2);
-> > > > > > +	}
-> > > > > 
-> > > > > In some cases the delay could be prevented. e.g. when going from one
-> > > > > disabled state to another. If you don't want to complicate the driver
-> > > > > here, maybe point it out in a comment at least?
-> > > > 
-> > > > Maybe this is my naivity talking, but I'd rather wait. Is there not the
-> > > > chance that we re-enter pwm_apply() before the update has actually gone
-> > > > through?
-> > > 
-> > > My idea was to do something like that:
-> > > 
-> > > 	int mchp_core_pwm_apply(....)
-> > > 	{
-> > > 		if (mchp_core_pwm->sync_update_mask & (1 << pwm->hwpwm)) {
-> > > 			/*
-> > > 			 * We're still waiting for an update, don't
-> > > 			 * interfer until it's completed.
-> > > 			 */
-> > > 			while (readl_relaxed(mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD)) {
-> > > 				cpu_relax();
-> > > 				if (waited_unreasonably_long())
-> > > 					return -ETIMEOUT;
-> > > 			}
-> > > 		}
-> > > 
-> > > 		update_period_and_duty(...);
-> > > 		return 0;
-> > > 	}
-> 
-> So I was doing some fiddling, and the following works reasonably well:
-> 	if (mchp_core_pwm->sync_update_mask & (1 << pwm->hwpwm)) {
-> 		u32 delay = MCHPCOREPWM_TIMEOUT_US;
-> 		u32 sync_upd;
-> 		int ret;
-> 
-> 		writel_relaxed(1u, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
-> 
-> 		ret = read_poll_timeout(readl, sync_upd, !sync_upd, delay/100, delay,
-> 					false, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
-> 		if (ret)
-> 			dev_dbg(mchp_core_pwm->chip.dev,
-> 				"timed out waiting for shadow register sync\n");
-> 	}
-> 
-> but...
-> 
-> > > This way you don't have to wait at all if the calls to pwm_apply() are
-> > > infrequent. Of course this only works this way, if you can determine if
-> > > there is a pending update.
-> > 
-> > Ah I think I get what you mean now about waiting for completion &
-> > reading the bit. I don't know off the top of my head if that bit is
-> > readable. Docs say that they're R/W but I don't know if that means that
-> > an AXI read works or if the value is actually readable. I'll try
-> > something like this if I can.
-> 
-> ...it does not implement what I think you suggested & comes with the
-> drawback of inconsistent behaviour depending on whether the timeout is
-> hit or not.
-> 
-> Instead, waiting in apply(), as you suggested, & get_state() looks to be the
-> better option, using the same sort of logic as above, say:
-> static int mchp_core_pwm_wait_for_sync_update(struct mchp_core_pwm_chip *mchp_core_pwm,
-> 					      unsigned int channel)
-> {
-> 	int ret;
-> 
-> 	/*
-> 	 * If a shadow register is used for this PWM channel, and iff there is
-> 	 * a pending update to the waveform, we must wait for it to be applied
-> 	 * before attempting to read its state, as reading the registers yields
-> 	 * the currently implemented settings, the new ones are only readable
-> 	 * once the current period has ended.
-> 	 *
-> 	 * Rather large delays are possible, in the seconds, so to avoid waiting
-> 	 * around for **too** long - cap the wait at 100 ms.
-> 	 */
-> 	if (mchp_core_pwm->sync_update_mask & (1 << channel)) {
-> 		u32 delay = MCHPCOREPWM_TIMEOUT_US;
-> 		u32 sync_upd;
-> 
-> 		writel_relaxed(1u, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
-> 
-> 		ret = read_poll_timeout(readl, sync_upd, !sync_upd, delay/100, delay,
-> 					false, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
-> 		if (ret)
-> 			return -ETIMEDOUT;
-> 	}
-> 
-> 	return 0;
-> }
-> 
-> I think that strikes a good balance? We return quickly & don't blocker
-> the caller, but simultaneously try to prevent them from either trying to
-> apply new settings or get the current settings until the last request
-> has gone though?
-> 
-> get_state() returns void though, is it valid behaviour to wait for the
-> timeout there?
-> I had a check in the core code and found some places where the call in
-> looks like:
-> 	struct pwm_state s1, s2; 
-> 	chip->ops->get_state(chip, pwm, &s1);
-> In this case, exiting early would leave us with a completely wrong
-> idead of the state, if it was to time out.
-> 
-> Either way, it seems like either way we would be misleading the caller
-> of get_state() - perhaps the way around that is to do the wait & then
-> just carry on with get_state()?
-> In that scenario, you'd get the new settings where possible and the old ones
-> otherwise.
-> Returning if the timeout is hit would give you the new settings where possible
-> & otherwise you'd get whatever was passed to get_state().
-> I'm not really sure which of those two situations would be preferred?
+I meant: I do not understand "cfr". I now realize that it probably means
+copy-file-range ? Please be clear and do not use abbreviations.
 
-Apologies for bumping this, I was wondering if any thoughts on the
-above? I'm not sure which is the lesser evil here (or if I have
-misunderstood something).
-
-Thanks,
-Conor.
+-- 
+Damien Le Moal
+Western Digital Research
 
