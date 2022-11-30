@@ -2,114 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF0363D2EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3EA63D2EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234206AbiK3KMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 05:12:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
+        id S235565AbiK3KM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 05:12:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbiK3KM1 (ORCPT
+        with ESMTP id S235740AbiK3KMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 05:12:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF1032B85
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:11:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669803087;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SH27Slsouj00dLidJeYoe+PORUNdekUcaagS5Y6tfm4=;
-        b=WVtJ/i7MSyZF6npcQuxUJZoCjl+vTDXq7QS78B/YR+cnXoF100sFrnKWd1qWRPHPluAMhN
-        Q2yGQ59IgHqPjmXH3j/btoF3KTWRzg71OLBK8o8Cp1zJstTmUPHh2C/zJU0whCpmWWhLWj
-        yTln0TLuhYKXyObzZNYNYMC4j6F9SRc=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-446-YGX2kvf6N22i_xrvmV3bjg-1; Wed, 30 Nov 2022 05:11:26 -0500
-X-MC-Unique: YGX2kvf6N22i_xrvmV3bjg-1
-Received: by mail-wm1-f72.google.com with SMTP id p14-20020a05600c204e00b003cf4cce4da5so475907wmg.0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:11:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SH27Slsouj00dLidJeYoe+PORUNdekUcaagS5Y6tfm4=;
-        b=uxAWAZ2qTRMC7HzsNj9ja1dEjDe37K3wCgKnECGKw/eHrZN66Miz4XVNSth5z/TmHF
-         LMp7t6o6SHTzXFHB5nKDLFVNTpiEmDzWg1y0F6gckf1axZj2+OWVhkMbfZFisMLYJxv7
-         hFpCt+rkqU6Ls7tgZn1zVKBnYB4NASpBv8+a4xzEJDtOzw4ETGEypV+6jbvJR0n1VZl/
-         q6i92ztXwlVim/OeMvpvDR3t5UT3vYjm8PdGOq9zFdoPGiqKmEJBayw6Jdp4nykXodCz
-         /qf6tkquvMvg/39yhydpQp7MRTokBbdcnURhcL9HuQEpniIUb6LvxMJdnBSglAtUcro/
-         59qA==
-X-Gm-Message-State: ANoB5pkAAJSjmqPB76uxijbh8ymwaIoyctFsFE1ex3c9p+Pz52cfuFcc
-        NvnpWux5vTnzP5BXfK3N9B+kSRCd/+zpC3fLhSNgAx4rxSKgvCCPfwUDvbkc+ywp5nxZA3Sh3gi
-        j2UVkRY9hy/rjgDxkasy7cqha
-X-Received: by 2002:a5d:52cb:0:b0:236:4a87:2c25 with SMTP id r11-20020a5d52cb000000b002364a872c25mr36267353wrv.19.1669803084714;
-        Wed, 30 Nov 2022 02:11:24 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5+KpD1E7gNGYpwXrZp+0JqgVnfC8gVUoc+Iv0/fDTkcFi2v2R4M7bL0kmdvamjefN52ZEAkg==
-X-Received: by 2002:a5d:52cb:0:b0:236:4a87:2c25 with SMTP id r11-20020a5d52cb000000b002364a872c25mr36267337wrv.19.1669803084433;
-        Wed, 30 Nov 2022 02:11:24 -0800 (PST)
-Received: from [192.168.3.108] (p5b0c6655.dip0.t-ipconnect.de. [91.12.102.85])
-        by smtp.gmail.com with ESMTPSA id n5-20020adff085000000b00236c1f2cecesm1313464wro.81.2022.11.30.02.11.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 02:11:23 -0800 (PST)
-Message-ID: <ee6a1830-7218-d01d-e860-c4d19536a5d4@redhat.com>
-Date:   Wed, 30 Nov 2022 11:11:22 +0100
+        Wed, 30 Nov 2022 05:12:22 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD7231DF0;
+        Wed, 30 Nov 2022 02:12:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669803142; x=1701339142;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gkLkJR8RE36XG9BI0LgN87G1MnvrwDX8Iwn1/fvXg/U=;
+  b=V4x8Six4JXLpmprvqJntS6w7bbIKKj/HSn7BGYTvxlvvde2rRn7UNP43
+   tXSUt+p07FdJJ374nVYneE8FKH12Teur29W6dqn1KD/byuSM44OAC6Yl+
+   n8IvNrD70oJ6u1Fp53D1STqz8xIrczI7LzUdmXiBkxsbU4GpQT8LXNhmP
+   Lu7nRgsgMDIPCQJsQUXJ/9Eiz4oH44qwMEoFqNiC39cPwRAHgXcsyLfLF
+   uSEt8xkyeDVMEcpcYfprIJ+D1BiI3dFxJVUoMq0m0kR6GKycDRschA27i
+   oWxphPAAKOgy3v+rL4sciqcu0FmDO6J2pMoNj0iTUFPN1taZduPHIjnIQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="316511239"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="316511239"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 02:12:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="818575930"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="818575930"
+Received: from b49691a74bf0.jf.intel.com ([10.165.59.99])
+  by orsmga005.jf.intel.com with ESMTP; 30 Nov 2022 02:12:20 -0800
+From:   Chen Hu <hu1.chen@intel.com>
+Cc:     hu1.chen@intel.com, jpoimboe@kernel.org, memxor@gmail.com,
+        bpf@vger.kernel.org, Pengfei Xu <pengfei.xu@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH bpf v3] selftests/bpf: Fix "missing ENDBR" BUG for destructor kfunc
+Date:   Wed, 30 Nov 2022 02:11:31 -0800
+Message-Id: <20221130101135.26806-1-hu1.chen@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     James Houghton <jthoughton@google.com>,
-        Jann Horn <jannh@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-References: <20221129193526.3588187-1-peterx@redhat.com>
- <20221129193526.3588187-2-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 01/10] mm/hugetlb: Let vma_offset_start() to return start
-In-Reply-To: <20221129193526.3588187-2-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.11.22 20:35, Peter Xu wrote:
-> Even though vma_offset_start() is named like that, it's not returning "the
-> start address of the range" but rather the offset we should use to offset
-> the vma->vm_start address.
-> 
-> Make it return the real value of the start vaddr, and it also helps for all
-> the callers because whenever the retval is used, it'll be ultimately added
-> into the vma->vm_start anyway, so it's better.
+With CONFIG_X86_KERNEL_IBT enabled, the test_verifier triggers the
+following BUG:
 
-... the function name is a bit unfortunate ("offset" what?, "start" what?).
+  traps: Missing ENDBR: bpf_kfunc_call_test_release+0x0/0x30
+  ------------[ cut here ]------------
+  kernel BUG at arch/x86/kernel/traps.c:254!
+  invalid opcode: 0000 [#1] PREEMPT SMP
+  <TASK>
+   asm_exc_control_protection+0x26/0x50
+  RIP: 0010:bpf_kfunc_call_test_release+0x0/0x30
+  Code: 00 48 c7 c7 18 f2 e1 b4 e8 0d ca 8c ff 48 c7 c0 00 f2 e1 b4 c3
+	0f 1f 44 00 00 66 0f 1f 00 0f 1f 44 00 00 0f 0b 31 c0 c3 66 90
+       <66> 0f 1f 00 0f 1f 44 00 00 48 85 ff 74 13 4c 8d 47 18 b8 ff ff ff
+   bpf_map_free_kptrs+0x2e/0x70
+   array_map_free+0x57/0x140
+   process_one_work+0x194/0x3a0
+   worker_thread+0x54/0x3a0
+   ? rescuer_thread+0x390/0x390
+   kthread+0xe9/0x110
+   ? kthread_complete_and_exit+0x20/0x20
 
-But it now matches the semantics of vma_offset_end() and the actual 
-"v_start" variables.
+It turns out that ENDBR in bpf_kfunc_call_test_release() is converted to
+NOP by apply_ibt_endbr().
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+The only text references to this function from kernel side are:
 
+  $ grep -r bpf_kfunc_call_test_release
+  net/bpf/test_run.c:noinline void bpf_kfunc_call_test_release(...)
+  net/bpf/test_run.c:BTF_ID_FLAGS(func, bpf_kfunc_call_test_release, ...)
+  net/bpf/test_run.c:BTF_ID(func, bpf_kfunc_call_test_release)
+
+but it may be called from bpf program as kfunc. (no other caller from
+kernel)
+
+This fix creates dummy references to destructor kfuncs so ENDBR stay
+there.
+
+Also modify macro XXX_NOSEAL slightly:
+- ASM_IBT_NOSEAL now stands for pure asm
+- IBT_NOSEAL can be used directly in C
+
+Signed-off-by: Chen Hu <hu1.chen@intel.com>
+Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+---
+v3:
+- Macro go to IBT related header as suggested by Jiri Olsa
+- Describe reference to the func clearly in commit message as suggested
+  by Peter Zijlstra and Jiri Olsa
+ 
+v2: https://lore.kernel.org/all/20221122073244.21279-1-hu1.chen@intel.com/
+
+v1: https://lore.kernel.org/all/20221121085113.611504-1-hu1.chen@intel.com/
+
+ arch/x86/include/asm/ibt.h | 6 +++++-
+ arch/x86/kvm/emulate.c     | 2 +-
+ net/bpf/test_run.c         | 5 +++++
+ 3 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/include/asm/ibt.h b/arch/x86/include/asm/ibt.h
+index 9b08082a5d9f..be86dc31661c 100644
+--- a/arch/x86/include/asm/ibt.h
++++ b/arch/x86/include/asm/ibt.h
+@@ -36,11 +36,14 @@
+  * the function as needing to be "sealed" (i.e. ENDBR converted to NOP by
+  * apply_ibt_endbr()).
+  */
+-#define IBT_NOSEAL(fname)				\
++#define ASM_IBT_NOSEAL(fname)				\
+ 	".pushsection .discard.ibt_endbr_noseal\n\t"	\
+ 	_ASM_PTR fname "\n\t"				\
+ 	".popsection\n\t"
+ 
++#define IBT_NOSEAL(name)				\
++	asm(ASM_IBT_NOSEAL(#name))
++
+ static inline __attribute_const__ u32 gen_endbr(void)
+ {
+ 	u32 endbr;
+@@ -94,6 +97,7 @@ extern __noendbr void ibt_restore(u64 save);
+ #ifndef __ASSEMBLY__
+ 
+ #define ASM_ENDBR
++#define ASM_IBT_NOSEAL(name)
+ #define IBT_NOSEAL(name)
+ 
+ #define __noendbr
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index 4a43261d25a2..d870c8bb5831 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -327,7 +327,7 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
+ 	".type " name ", @function \n\t" \
+ 	name ":\n\t" \
+ 	ASM_ENDBR \
+-	IBT_NOSEAL(name)
++	ASM_IBT_NOSEAL(name)
+ 
+ #define FOP_FUNC(name) \
+ 	__FOP_FUNC(#name)
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index fcb3e6c5e03c..9e9c8e8d50d7 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -601,6 +601,11 @@ noinline void bpf_kfunc_call_memb_release(struct prog_test_member *p)
+ {
+ }
+ 
++#ifdef CONFIG_X86_KERNEL_IBT
++IBT_NOSEAL(bpf_kfunc_call_test_release);
++IBT_NOSEAL(bpf_kfunc_call_memb_release);
++#endif
++
+ noinline void bpf_kfunc_call_memb1_release(struct prog_test_member1 *p)
+ {
+ 	WARN_ON_ONCE(1);
 -- 
-Thanks,
-
-David / dhildenb
+2.34.1
 
