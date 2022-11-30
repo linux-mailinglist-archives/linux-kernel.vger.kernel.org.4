@@ -2,114 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E294663D05A
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9BB63D08D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234568AbiK3IXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 03:23:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
+        id S235401AbiK3I0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 03:26:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234772AbiK3IXN (ORCPT
+        with ESMTP id S234873AbiK3IZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 03:23:13 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96678282
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 00:23:12 -0800 (PST)
-X-UUID: e15af86f09524a93b1bb2e33569ce7fc-20221130
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=1ih/5AZ7VH4p7skGfYkFy1TDMephGSqfFTBm8ZbhGsk=;
-        b=FcII+bSoo/NSaB5tOGDmAEsu7MGK95o6KlK8dPvz3utWjM39luFj66v5AwcXxcYbBXDUzJ4or5BA7khTg4kYXgfTcSdSCD8hq3Wu1ZNo/KtbHQ4kdUl14790zpL6nAd9B/GeZQuGKjInwYHTiLY2xQX88A5m1+BeWJ3c2POv8Yk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:986dd338-f3c8-46fc-a91d-0f4026fa5e46,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:45
-X-CID-INFO: VERSION:1.1.14,REQID:986dd338-f3c8-46fc-a91d-0f4026fa5e46,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-        elease,TS:45
-X-CID-META: VersionHash:dcaaed0,CLOUDID:f52c216c-41fe-47b6-8eb4-ec192dedaf7d,B
-        ulkID:221130162307VUMOZIKQ,BulkQuantity:0,Recheck:0,SF:28|17|19|48|102,TC:
-        nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: e15af86f09524a93b1bb2e33569ce7fc-20221130
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <andrew.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1755579773; Wed, 30 Nov 2022 16:23:07 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 30 Nov 2022 16:23:06 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 30 Nov 2022 16:23:06 +0800
-From:   Andrew Yang <andrew.yang@mediatek.com>
-To:     <rostedt@goodmis.org>
-CC:     <andrew.yang@mediatek.com>, <casper.li@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <mhiramat@kernel.org>
-Subject: Re: [PATCH v2] mm/writeback: fix dereferencing NULL mapping->host
-Date:   Wed, 30 Nov 2022 16:23:03 +0800
-Message-ID: <20221130082303.30859-2-andrew.yang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20221130082303.30859-1-andrew.yang@mediatek.com>
-References: <20221129095620.4c1a8056@gandalf.local.home>
- <20221130082303.30859-1-andrew.yang@mediatek.com>
+        Wed, 30 Nov 2022 03:25:25 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E722E5C776;
+        Wed, 30 Nov 2022 00:24:24 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id d3so10968524plr.10;
+        Wed, 30 Nov 2022 00:24:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sTx6H8f+ndFeS1WR24S49kfIzumfz2ZStsXAYvcIlho=;
+        b=WeAHEayqB1rE8cJMhH0BNAf20UpSIBGx/i4g+C1yIjyzBp9rAcSEniWNobf/5Dav7C
+         CESxiyh0gEtHlZTT3hG7TPOaPAEz8DFjxfhUzbdSF3yAX9CA9VkXKLYMS5nr9fPXj/3l
+         5m81ZwF1hwCsHzmLC9BqebSdD+uwBb06HVnQsUseYgseGzz+sm2wgOSFgmMrajiOak8j
+         8SDninprROYJep3hfEgrexvxoJ0NFjWSdiJVuX2HpKGLbPqTJoERJOHMxwnzL5Pd6mvk
+         ddaGJ3PPHSU225HBlRahWCQi38moCjShla+JoAtZ0Wa7wqvDb2nqQ6K4Fdjy4fFQXPng
+         HLlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=sTx6H8f+ndFeS1WR24S49kfIzumfz2ZStsXAYvcIlho=;
+        b=CpRvGj406fh5PcEKvh4pm0HbOsf1sxrHTze04aSkLS2lycXwip9XoMJzeKUjqovFbG
+         EyJJOF+nNcE1IvnyBSGdwCrCMTJzDQSPh2iHoqBJBiQcKXJYdY+XgKiN/9IiGQJi8wAV
+         PDkyWSSTuwBfGxWyOJLAdy6DrimgkcWiCIQ/HET2U/oKKnelfXn87bhX1eE5nVC2ySrN
+         Gs1CKgU586qWATaiXnfBhEYX8AMut9RU4ppy5ShjoOZ+BIvWIxSgdw0YakhxWgUHIzy+
+         so0of0eKnT/cZ1t99pcBISDW/uZmDNIuSEYCcDS0deOXVWr/xofKqFtN8uAyX0oqUyH3
+         NnmQ==
+X-Gm-Message-State: ANoB5pkkKiYaqE+YOFveiAGx8DpQylRv4StnRbDWfTAeIhe2kJZEA04V
+        Ub5fmBMm2sgHjGUxI1/lY8I=
+X-Google-Smtp-Source: AA0mqf5TZN5pEmu46xuGXI8smPjweGBma2CdnQPyJR3K7eVBRBdquc+nxuWiBys1CYzH3/JZLn04Yg==
+X-Received: by 2002:a17:902:e807:b0:188:f6b7:bbf8 with SMTP id u7-20020a170902e80700b00188f6b7bbf8mr41537349plg.112.1669796664242;
+        Wed, 30 Nov 2022 00:24:24 -0800 (PST)
+Received: from localhost ([2600:380:4a00:1415:d028:b547:7d35:7b0b])
+        by smtp.gmail.com with ESMTPSA id i15-20020a17090332cf00b001892af9472esm741249plr.261.2022.11.30.00.24.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 00:24:23 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+From:   Tejun Heo <tj@kernel.org>
+To:     torvalds@linux-foundation.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        joshdon@google.com, brho@google.com, pjt@google.com,
+        derkling@google.com, haoluo@google.com, dvernet@meta.com,
+        dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@meta.com, Tejun Heo <tj@kernel.org>
+Subject: [PATCH 22/31] sched_ext: Add task state tracking operations
+Date:   Tue, 29 Nov 2022 22:23:04 -1000
+Message-Id: <20221130082313.3241517-23-tj@kernel.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221130082313.3241517-1-tj@kernel.org>
+References: <20221130082313.3241517-1-tj@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-29 at 09:56 -0500, Steven Rostedt wrote:
-> On Tue, 29 Nov 2022 11:32:59 +0800
-> Andrew Yang <andrew.yang@mediatek.com> wrote:
-> 
-> > From: "andrew.yang" <andrew.yang@mediatek.com>
-> > 
-> > Check before dereferencing mapping->host
-> > 
-> > Signed-off-by: andrew.yang <andrew.yang@mediatek.com>
-> > ---
-> >  include/trace/events/writeback.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/include/trace/events/writeback.h
-> > b/include/trace/events/writeback.h
-> > index 86b2a82da546..56f6e114d3ed 100644
-> > --- a/include/trace/events/writeback.h
-> > +++ b/include/trace/events/writeback.h
-> > @@ -68,7 +68,7 @@ DECLARE_EVENT_CLASS(writeback_folio_template,
-> >  		strscpy_pad(__entry->name,
-> >  			    bdi_dev_name(mapping ?
-> > inode_to_bdi(mapping->host) :
-> >  					 NULL), 32);
-> > -		__entry->ino = mapping ? mapping->host->i_ino : 0;
-> > +		__entry->ino = mapping && mapping->host ? mapping-
-> > >host->i_ino : 0;
-> 
-> I hate remembering precedence. Can we add parenthesis around this to
-> be
-> clear?
-> 
-> 		__entry->ino = (mapping && mapping->host) ? mapping-
-> >host->i_ino : 0;
-> 
-> Thanks,
-> 
-> -- Steve
-> 
-> 
-> >  		__entry->index = folio->index;
-> >  	),
-> >  
-> 
-> 
-Sure, that's a good suggestion
+Being able to track the task runnable and running state transitions are
+useful for a variety of purposes including latency tracking and load factor
+calculation.
+
+Currently, BPF schedulers don't have a good way of tracking these
+transitions. Becoming runnable can be determined from ops.enqueue() but
+becoming quiescent can only be inferred from the lack of subsequent enqueue.
+Also, as the local dsq can have multiple tasks and some events are handled
+in the sched_ext core, it's difficult to determine when a given task starts
+and stops executing.
+
+This patch adds sched_ext_ops.runnable(), .running(), .stopping() and
+.quiescent() operations to track the task runnable and running state
+transitions. They're mostly self explanatory; however, we want to ensure
+that running <-> stopping transitions are always contained within runnable
+<-> quiescent transitions which is a bit different from how the scheduler
+core behaves. This adds a bit of complication. See the comment in
+dequeue_task_scx().
+
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Reviewed-by: David Vernet <dvernet@meta.com>
+Acked-by: Josh Don <joshdon@google.com>
+Acked-by: Hao Luo <haoluo@google.com>
+Acked-by: Barret Rhoden <brho@google.com>
+---
+ include/linux/sched/ext.h | 65 +++++++++++++++++++++++++++++++++++++++
+ kernel/sched/ext.c        | 31 +++++++++++++++++++
+ 2 files changed, 96 insertions(+)
+
+diff --git a/include/linux/sched/ext.h b/include/linux/sched/ext.h
+index 6e25c3431bb4..4f8898556b28 100644
+--- a/include/linux/sched/ext.h
++++ b/include/linux/sched/ext.h
+@@ -209,6 +209,71 @@ struct sched_ext_ops {
+ 	 */
+ 	void (*consume_final)(s32 cpu);
+ 
++	/**
++	 * runnable - A task is becoming runnable on its associated CPU
++	 * @p: task becoming runnable
++	 * @enq_flags: %SCX_ENQ_*
++	 *
++	 * This and the following three functions can be used to track a task's
++	 * execution state transitions. A task becomes ->runnable() on a CPU,
++	 * and then goes through one or more ->running() and ->stopping() pairs
++	 * as it runs on the CPU, and eventually becomes ->quiescent() when it's
++	 * done running on the CPU.
++	 *
++	 * @p is becoming runnable on the CPU because it's
++	 *
++	 * - waking up (%SCX_ENQ_WAKEUP)
++	 * - being moved from another CPU
++	 * - being restored after temporarily taken off the queue for an
++	 *   attribute change.
++	 *
++	 * This and ->enqueue() are related but not coupled. This operation
++	 * notifies @p's state transition and may not be followed by ->enqueue()
++	 * e.g. when @p is being dispatched to a remote CPU. Likewise, a task
++	 * may be ->enqueue()'d without being preceded by this operation e.g.
++	 * after exhausting its slice.
++	 */
++	void (*runnable)(struct task_struct *p, u64 enq_flags);
++
++	/**
++	 * running - A task is starting to run on its associated CPU
++	 * @p: task starting to run
++	 *
++	 * See ->runnable() for explanation on the task state notifiers.
++	 */
++	void (*running)(struct task_struct *p);
++
++	/**
++	 * stopping - A task is stopping execution
++	 * @p: task stopping to run
++	 * @runnable: is task @p still runnable?
++	 *
++	 * See ->runnable() for explanation on the task state notifiers. If
++	 * !@runnable, ->quiescent() will be invoked after this operation
++	 * returns.
++	 */
++	void (*stopping)(struct task_struct *p, bool runnable);
++
++	/**
++	 * quiescent - A task is becoming not runnable on its associated CPU
++	 * @p: task becoming not runnable
++	 * @deq_flags: %SCX_DEQ_*
++	 *
++	 * See ->runnable() for explanation on the task state notifiers.
++	 *
++	 * @p is becoming quiescent on the CPU because it's
++	 *
++	 * - sleeping (%SCX_DEQ_SLEEP)
++	 * - being moved to another CPU
++	 * - being temporarily taken off the queue for an attribute change
++	 *   (%SCX_DEQ_SAVE)
++	 *
++	 * This and ->dequeue() are related but not coupled. This operation
++	 * notifies @p's state transition and may not be preceded by ->dequeue()
++	 * e.g. when @p is being dispatched to a remote CPU.
++	 */
++	void (*quiescent)(struct task_struct *p, u64 deq_flags);
++
+ 	/**
+ 	 * yield - Yield CPU
+ 	 * @from: yielding task
+diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
+index 4a98047a06bc..2eb382ed0e2f 100644
+--- a/kernel/sched/ext.c
++++ b/kernel/sched/ext.c
+@@ -670,6 +670,9 @@ static void enqueue_task_scx(struct rq *rq, struct task_struct *p, int enq_flags
+ 	rq->scx.nr_running++;
+ 	add_nr_running(rq, 1);
+ 
++	if (SCX_HAS_OP(runnable))
++		scx_ops.runnable(p, enq_flags);
++
+ 	do_enqueue_task(rq, p, enq_flags, sticky_cpu);
+ }
+ 
+@@ -716,6 +719,26 @@ static void dequeue_task_scx(struct rq *rq, struct task_struct *p, int deq_flags
+ 		break;
+ 	}
+ 
++	/*
++	 * A currently running task which is going off @rq first gets dequeued
++	 * and then stops running. As we want running <-> stopping transitions
++	 * to be contained within runnable <-> quiescent transitions, trigger
++	 * ->stopping() early here instead of in put_prev_task_scx().
++	 *
++	 * @p may go through multiple stopping <-> running transitions between
++	 * here and put_prev_task_scx() if task attribute changes occur while
++	 * balance_scx() leaves @rq unlocked. However, they don't contain any
++	 * information meaningful to the BPF scheduler and can be suppressed by
++	 * skipping the callbacks if the task is !QUEUED.
++	 */
++	if (SCX_HAS_OP(stopping) && task_current(rq, p)) {
++		update_curr_scx(rq);
++		scx_ops.stopping(p, false);
++	}
++
++	if (SCX_HAS_OP(quiescent))
++		scx_ops.quiescent(p, deq_flags);
++
+ 	p->scx.flags &= ~SCX_TASK_QUEUED;
+ 	scx_rq->nr_running--;
+ 	sub_nr_running(rq, 1);
+@@ -1223,6 +1246,10 @@ static void set_next_task_scx(struct rq *rq, struct task_struct *p, bool first)
+ 
+ 	p->se.exec_start = rq_clock_task(rq);
+ 
++	/* see dequeue_task_scx() on why we skip when !QUEUED */
++	if (SCX_HAS_OP(running) && (p->scx.flags & SCX_TASK_QUEUED))
++		scx_ops.running(p);
++
+ 	watchdog_unwatch_task(p, true);
+ }
+ 
+@@ -1230,6 +1257,10 @@ static void put_prev_task_scx(struct rq *rq, struct task_struct *p)
+ {
+ 	update_curr_scx(rq);
+ 
++	/* see dequeue_task_scx() on why we skip when !QUEUED */
++	if (SCX_HAS_OP(stopping) && (p->scx.flags & SCX_TASK_QUEUED))
++		scx_ops.stopping(p, true);
++
+ 	/*
+ 	 * If we're being called from put_prev_task_balance(), balance_scx() may
+ 	 * have decided that @p should keep running.
+-- 
+2.38.1
+
