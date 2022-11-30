@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F422763DC77
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 18:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DF163DC83
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 18:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiK3Rwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 12:52:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
+        id S229955AbiK3R5Y convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 30 Nov 2022 12:57:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiK3Rw3 (ORCPT
+        with ESMTP id S229497AbiK3R5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 12:52:29 -0500
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1D9252;
-        Wed, 30 Nov 2022 09:52:29 -0800 (PST)
-Received: by mail-pg1-f178.google.com with SMTP id v3so16773348pgh.4;
-        Wed, 30 Nov 2022 09:52:29 -0800 (PST)
+        Wed, 30 Nov 2022 12:57:22 -0500
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7824A9FE;
+        Wed, 30 Nov 2022 09:57:21 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id c15so11673774qtw.8;
+        Wed, 30 Nov 2022 09:57:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AK8P6Fl6Gl8hJBklqr3lYKP7boOFbdA07yIc5/BbDqg=;
-        b=6X8YncQRGlE0XHdc1b3knET9M7FwaKOlVghZq7Fi7I3bh9nLsTVVcIwTfbaMYCyM83
-         H52wGLZ/wnC+z59CmgWuQ1dJQ3hcaTvauDII7K9kcwzO4nJhLnADkb5pu1/HaJiDBXHh
-         eWc7Idvv9/zsbNkeX7YAWUx8VfvRNm0DiwAtc+7XBORNBGGi+db8jsstQAsmPHTaJJsw
-         ZKGggdORoI4tkwJFuPY9fg8amGI3DZSXbUdrDcP//aoU7x/nvkuc9MT3xEfA3rv+w2RM
-         49puIkS8ZVT31CcKryM+r6wy6HjmaeS6/O1clZbmaS4tX+SMd4cN/Hgp464MdJ6ejzrN
-         W/jg==
-X-Gm-Message-State: ANoB5plLsjgHeFq/Sq3KKVU+DteBcVYHg9UbLYN3YmV/zcIQM20wgU+k
-        1YgAkMQ4UJ54zuXXTn1jhiqnGrXiQw+yn+vn2Do=
-X-Google-Smtp-Source: AA0mqf5JHUZ4VH1l7y3UQOWl6cSZftofpIQTDhvTXCDPtlZ8sE0xLJUWAhZOxj+Hmn9Nf307yRTWa63fJ5BygTGXdY4=
-X-Received: by 2002:a63:1955:0:b0:477:50ed:6415 with SMTP id
- 21-20020a631955000000b0047750ed6415mr45496852pgz.535.1669830748612; Wed, 30
- Nov 2022 09:52:28 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0r+qoVGex27F3PzpZtPMiTDGjKKV7o+719GPjal98r0=;
+        b=xgP9Zgnzclog5C0xh73dpDMbpSBdkRz5hwCpkRFDaTOSkM0USojRQH6pFsO5bWkjDf
+         mI3vXuUhu7734xmuViMatJIae3U5EZMDacnwtyrs0sBVyIFMT8D3MNjsPxb3iwKlmiJb
+         mUiz6cJm1eouECCdW9l0x7G392F3KaiMcJMGavvjUTEfou4aoIoTfFqAEZTBkwHkWS5C
+         //oKPeLsbraXdeRcrOfcDOmdMXGjCi+JhGJdWW8DvgEapimfE3KHMRfqIMAk6nC1j08P
+         VVzeYu0g6mGHKsQVtza/Ok97AvxQpV4jXo4xAhc+s/isrbmqUIt6HjY47/MKPk5wzl/Q
+         2hDg==
+X-Gm-Message-State: ANoB5pkp2+ptf8OI253W3owQC1lDtI1/XvqYPtISnhmDsd/qdAw5BSNf
+        8niXZNkvbg2zr9ziAVdaoTY9aagGD/SGPocX0z0=
+X-Google-Smtp-Source: AA0mqf5MSsQw2lo+u3a2PKwj4cdrb0LTqNXPpvKWPMiVbpzw5t7TBdFnrCeYShTgtv8eCF5xSqWvP/Pw5cSrcCQYQeA=
+X-Received: by 2002:a05:622a:1989:b0:3a5:7cf8:1a6e with SMTP id
+ u9-20020a05622a198900b003a57cf81a6emr58578957qtc.48.1669831040582; Wed, 30
+ Nov 2022 09:57:20 -0800 (PST)
 MIME-Version: 1.0
-References: <20221129031406.3849872-1-mailhol.vincent@wanadoo.fr>
- <Y4XCnAA2hGvqgXh0@nanopsycho> <CAMZ6RqJ54rfLfODB1JNaFr_pxWxzHJBoC2UmCKAZ7mSkEbcdzQ@mail.gmail.com>
- <20221130170351.cjyaqr22vhqzq4hv@pengutronix.de>
-In-Reply-To: <20221130170351.cjyaqr22vhqzq4hv@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Thu, 1 Dec 2022 02:52:17 +0900
-Message-ID: <CAMZ6RqLy_H-A-=_jgPh6dUdHa_wMLB20X0rCFY7vkgBwvS1Uyg@mail.gmail.com>
-Subject: Re: [PATCH net-next v2] net: devlink: add DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Jiri Pirko <jiri@resnulli.us>, Jiri Pirko <jiri@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        linux-can <linux-can@vger.kernel.org>
+References: <20221125190948.2062-1-linux@weissschuh.net>
+In-Reply-To: <20221125190948.2062-1-linux@weissschuh.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 30 Nov 2022 18:57:09 +0100
+Message-ID: <CAJZ5v0i8pm1vxQeQu4GJqvf=rinU9dO2gswsLseyEt3E2CgbtA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] printk: introduce new macros pr_<level>_cont()
+To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
@@ -63,81 +64,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu. 1 Dec. 2022 at 02:14, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 29.11.2022 18:28:44, Vincent MAILHOL wrote:
-> > On Tue. 29 Nov. 2022 at 17:33, Jiri Pirko <jiri@resnulli.us> wrote:
-> > > Tue, Nov 29, 2022 at 04:14:06AM CET, mailhol.vincent@wanadoo.fr wrote:
-> > > >As discussed in [1], abbreviating the bootloader to "bl" might not be
-> > > >well understood. Instead, a bootloader technically being a firmware,
-> > > >name it "fw.bootloader".
-> > > >
-> > > >Add a new macro to devlink.h to formalize this new info attribute name
-> > > >and update the documentation.
-> > > >
-> > > >[1] https://lore.kernel.org/netdev/20221128142723.2f826d20@kernel.org/
-> > > >
-> > > >Suggested-by: Jakub Kicinski <kuba@kernel.org>
-> > > >Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > > >---
-> > > >* Changelog *
-> > > >
-> > > >v1 -> v2:
-> > > >
-> > > >  * update the documentation as well.
-> > > >  Link: https://lore.kernel.org/netdev/20221129020151.3842613-1-mailhol.vincent@wanadoo.fr/
-> > > >---
-> > > > Documentation/networking/devlink/devlink-info.rst | 5 +++++
-> > > > include/net/devlink.h                             | 2 ++
-> > > > 2 files changed, 7 insertions(+)
-> > > >
-> > > >diff --git a/Documentation/networking/devlink/devlink-info.rst b/Documentation/networking/devlink/devlink-info.rst
-> > > >index 7572bf6de5c1..1242b0e6826b 100644
-> > > >--- a/Documentation/networking/devlink/devlink-info.rst
-> > > >+++ b/Documentation/networking/devlink/devlink-info.rst
-> > > >@@ -198,6 +198,11 @@ fw.bundle_id
-> > > >
-> > > > Unique identifier of the entire firmware bundle.
-> > > >
-> > > >+fw.bootloader
-> > > >+-------------
-> > > >+
-> > > >+Version of the bootloader.
-> > > >+
-> > > > Future work
-> > > > ===========
-> > > >
-> > > >diff --git a/include/net/devlink.h b/include/net/devlink.h
-> > > >index 074a79b8933f..2f552b90b5c6 100644
-> > > >--- a/include/net/devlink.h
-> > > >+++ b/include/net/devlink.h
-> > > >@@ -621,6 +621,8 @@ enum devlink_param_generic_id {
-> > > > #define DEVLINK_INFO_VERSION_GENERIC_FW_ROCE  "fw.roce"
-> > > > /* Firmware bundle identifier */
-> > > > #define DEVLINK_INFO_VERSION_GENERIC_FW_BUNDLE_ID     "fw.bundle_id"
-> > > >+/* Bootloader */
-> > > >+#define DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER    "fw.bootloader"
-> > >
-> > > You add it and don't use it. You should add only what you use.
-> >
-> > I will use it in this series for the linux-can tree:
-> > https://lore.kernel.org/netdev/20221126162211.93322-4-mailhol.vincent@wanadoo.fr/
-> >
-> > If it is a problem to send this as a standalone patch, I will then
-> > just add it to my series and have the patch go through the linux-can
-> > tree.
+On Fri, Nov 25, 2022 at 8:10 PM Thomas Weißschuh <linux@weissschuh.net> wrote:
 >
-> As you have the Ok from Greg, include this in you v5 series.
+> This series adds new printk wrapper macros pr_<level>_cont().
+> These create continuation messages with an explicit level.
+>
+> Explicit levels are useful when a continuation message is split from its main
+> message. Without the explicit level KERN_DEFAULT ("warn" by default) is used
+> which can lead to stray partial log messages when filtering by level.
+>
+> Also checkpatch is modified to recommend the new macros over plain pr_cont().
+>
+> Lastly the new macros are used in kernel/power/process.c as this file uses
+> continuation messages during system suspend-resume which creates a high
+> likelyhood of interspersed messages.
 
-This is a different patch. Greg gave me his ACK to export usb_cache_string():
-  https://lore.kernel.org/linux-usb/Y3zyCz5HbGdsxmRT@kroah.com/
+Well, if process.c is the only problematic piece of code in this
+respect, I'm not sure if adding the new infrastructure for its benefit
+alone is worth it, because it can very well do without pr_cont() at
+all.
 
-This is a new patch to add an info attribute for the bootloader in
-devlink.h. Regardless, I added it to the v5:
-  https://lore.kernel.org/linux-can/20221130174658.29282-5-mailhol.vincent@wanadoo.fr/
+Please see the patch below (compiled only, sorry for gmail-induced
+white space damage).  I'll submit it properly later if it works for
+everyone.
 
-@Jakub (and other netdev maintainers): do not pick this, it will go
-through linux-can.
+---
+ kernel/power/process.c |   25 ++++++++++---------------
+ 1 file changed, 10 insertions(+), 15 deletions(-)
 
+Index: linux-pm/kernel/power/process.c
+===================================================================
+--- linux-pm.orig/kernel/power/process.c
++++ linux-pm/kernel/power/process.c
+@@ -27,6 +27,8 @@ unsigned int __read_mostly freeze_timeou
 
-Yours sincerely,
-Vincent Mailhol
+ static int try_to_freeze_tasks(bool user_only)
+ {
++    const char *what = user_only ? "user space processes" :
++                    "remaining freezable tasks";
+     struct task_struct *g, *p;
+     unsigned long end_time;
+     unsigned int todo;
+@@ -36,6 +38,8 @@ static int try_to_freeze_tasks(bool user
+     bool wakeup = false;
+     int sleep_usecs = USEC_PER_MSEC;
+
++    pr_info("Freezing %s\n", what);
++
+     start = ktime_get_boottime();
+
+     end_time = jiffies + msecs_to_jiffies(freeze_timeout_msecs);
+@@ -82,9 +86,8 @@ static int try_to_freeze_tasks(bool user
+     elapsed_msecs = ktime_to_ms(elapsed);
+
+     if (todo) {
+-        pr_cont("\n");
+-        pr_err("Freezing of tasks %s after %d.%03d seconds "
+-               "(%d tasks refusing to freeze, wq_busy=%d):\n",
++        pr_err("Freezing %s %s after %d.%03d seconds "
++               "(%d tasks refusing to freeze, wq_busy=%d):\n", what,
+                wakeup ? "aborted" : "failed",
+                elapsed_msecs / 1000, elapsed_msecs % 1000,
+                todo - wq_busy, wq_busy);
+@@ -101,8 +104,8 @@ static int try_to_freeze_tasks(bool user
+             read_unlock(&tasklist_lock);
+         }
+     } else {
+-        pr_cont("(elapsed %d.%03d seconds) ", elapsed_msecs / 1000,
+-            elapsed_msecs % 1000);
++        pr_info("Freezing %s completed (elapsed %d.%03d seconds)\n",
++            what, elapsed_msecs / 1000, elapsed_msecs % 1000);
+     }
+
+     return todo ? -EBUSY : 0;
+@@ -130,14 +133,11 @@ int freeze_processes(void)
+         static_branch_inc(&freezer_active);
+
+     pm_wakeup_clear(0);
+-    pr_info("Freezing user space processes ... ");
+     pm_freezing = true;
+     error = try_to_freeze_tasks(true);
+-    if (!error) {
++    if (!error)
+         __usermodehelper_set_disable_depth(UMH_DISABLED);
+-        pr_cont("done.");
+-    }
+-    pr_cont("\n");
++
+     BUG_ON(in_atomic());
+
+     /*
+@@ -166,14 +166,9 @@ int freeze_kernel_threads(void)
+ {
+     int error;
+
+-    pr_info("Freezing remaining freezable tasks ... ");
+-
+     pm_nosig_freezing = true;
+     error = try_to_freeze_tasks(false);
+-    if (!error)
+-        pr_cont("done.");
+
+-    pr_cont("\n");
+     BUG_ON(in_atomic());
+
+     if (error)
