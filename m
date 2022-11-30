@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF6163E4B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:11:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5510C63E4C9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbiK3XLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 18:11:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
+        id S229908AbiK3XMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:12:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiK3XKm (ORCPT
+        with ESMTP id S229952AbiK3XLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 18:10:42 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D950934FE
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:10:03 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id u10-20020a17090a400a00b00215deac75b4so201823pjc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:10:03 -0800 (PST)
+        Wed, 30 Nov 2022 18:11:23 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3CA9AE0D
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:10:20 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id 84-20020a630257000000b00477f88d334eso81692pgc.11
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:10:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=DDPlKttPz95bIPigIbsZnvNedazYOn7GaaeDonhS6tI=;
-        b=Z6nLxfTzgTUuiwpAG8cvYQa+dN+u8gdYDmvalMupYvTiyNB08ya32PPN3JMi5MQ+zn
-         CKFON4bHGY9uO+OU5rvKypZLm5hBqJSLnUUDK1HFwnV5UgI7QftrXIwrcqqGD/J7JfqE
-         CFBmidj59C7V6og88vcOwpoym4GNhD2bRgcqaNBUXoe/misowqQibWZd3vr8QsfUhhwX
-         i4uWK4yeRp3DB4lRFiuIJyrUfchRtOmsamHvLHwY72jxQuWnDEt5quvvWruAYj+4E7Dq
-         3qk+oHrWcenEcx4E4wlD8i3c5crP7WSMTS/kUAiUvOcd3cx88naWVp5yOAiefRxYVySU
-         2z9A==
+        bh=dcQvNId+1/lZrSHF7uunpbezCT+tuo/sIJb5/wlRPe4=;
+        b=pHmagdtfQ4rK+aGEXZjdjDGthSGMalpKOUI7GqmTThtcoGM3uif6SuxCKGFccSMhzF
+         yXa6bXXeOyIZVV80kJ2S8h6K+mMCejoDaZ/ii2EUL468p93Ajf6t43DB1Wt8JLJVCK3k
+         fqXtMCFFaLo2Yrtm5TWBEaDppU5iHM6i37aozepB5rFwVkB6w9kckW+YlLEmnktq1HXV
+         AeupN9sJKY0Z8mPllbegidvlJtPJLBWqNGjw+FxYfr+Jh6eBu00SDQq/7ROHpk2uqD/h
+         azdvQ2Z1YBskieoxau57lCCiX5XS1wltjhHLwIJ4a4YKTmeK1EHTBVc1iP46NnMXtyrr
+         8gWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DDPlKttPz95bIPigIbsZnvNedazYOn7GaaeDonhS6tI=;
-        b=pPEXlufgO24Ogfpj5yyg9VHN2AWQKVThHt2N1jjFRwskXO6YNT8kMBd4IQIm1+Rm2Z
-         GDAHKj6JJ0VCfD3PID8/eQEVCv14kcedPJz8/OzrzlYja5BJrARojgJ4m9lELj+BZ69B
-         5xAtyB3O2HFSoosJ4iazatZYW0yxJhbZ1drz4TG/ODw2yJTv1/0+M16l8MTrhmBW/qsK
-         RaFeZwrUTxMiucvPve/5EcCtqIZFgwWf3Hy7i20EV3z97M/PaHYgzP3Q4YiHr+u+vFjl
-         U45PKo2uWHs32p0yV9B9szFxPe17bH4jl3D1yquf94piqfNbnmAsWdCNXva8pLpPAWWE
-         6uiw==
-X-Gm-Message-State: ANoB5pljKD+WlDo2emB2li4kCEDdTEe/pnjGAsOI37TXMAjWrci9iEri
-        5oZs2AWP8mUnHQU4pwyPxk6xhTEAAPw=
-X-Google-Smtp-Source: AA0mqf5zruXq4Znt6GWyW9YI72qBn8AYfe7bpB45wh6N7oxAIVQAewpSb0tYUlF1SUbzH3yBDOmCkMMzIcM=
+        bh=dcQvNId+1/lZrSHF7uunpbezCT+tuo/sIJb5/wlRPe4=;
+        b=gvVfrRkV9e2BUmWm2yWKJ8GcYgcLth/+2vnAHs7ho2xLeTYta6U4XRCmTyssDZ23Xg
+         mWYd4xncAraeTxKKM4BZrUYtrWctpZMB8RNCyIep1MdZRi5nJqM/K+a5dxviZWpnq2a4
+         OtQIzpvmNwiXjwLMRA9fB+WFdWqGc8PoJ6nQhvYrUWmxKO3B8fsuVQ3klAX/aBo5qXdm
+         o+2UfHyIhAUvM5BPgWBksrp1StNK68pE1NJD7K1rXy0zUJqqcdbHD9wjYAjt6hXPiS0N
+         5xb26pVuinTAZUQZauJWXlSCY+AgF9BYRA1cekeZUKpcW0qsJUePcRGA3Yv54onAFo3u
+         79tw==
+X-Gm-Message-State: ANoB5plh0yKf36zKkGxrRMBIqxSN6lAqfptmLRTm8sQcElSSmSMm0EST
+        IJnUss8reyYBT9SE5I1DGkbwLjLgYhs=
+X-Google-Smtp-Source: AA0mqf7ZWgyt1epRJUyUxB4XV55CE8DXheZJV/3IY8TnkDCqHbUc8SwU1nVFbmRSfIFlm9uXCObVa4N3hDQ=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:b691:b0:17e:fb19:63ba with SMTP id
- c17-20020a170902b69100b0017efb1963bamr47034838pls.160.1669849802860; Wed, 30
- Nov 2022 15:10:02 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:d24e:b0:218:b478:f44f with SMTP id
+ o14-20020a17090ad24e00b00218b478f44fmr46131273pjw.232.1669849804458; Wed, 30
+ Nov 2022 15:10:04 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 30 Nov 2022 23:08:59 +0000
+Date:   Wed, 30 Nov 2022 23:09:00 +0000
 In-Reply-To: <20221130230934.1014142-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20221130230934.1014142-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221130230934.1014142-16-seanjc@google.com>
-Subject: [PATCH v2 15/50] KVM: x86: Serialize vendor module initialization
- (hardware setup)
+Message-ID: <20221130230934.1014142-17-seanjc@google.com>
+Subject: [PATCH v2 16/50] KVM: arm64: Simplify the CPUHP logic
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -94,7 +93,7 @@ Cc:     James Morse <james.morse@arm.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,174 +101,200 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Acquire a new mutex, vendor_module_lock, in kvm_x86_vendor_init() while
-doing hardware setup to ensure that concurrent calls are fully serialized.
-KVM rejects attempts to load vendor modules if a different module has
-already been loaded, but doesn't handle the case where multiple vendor
-modules are loaded at the same time, and module_init() doesn't run under
-the global module_mutex.
+From: Marc Zyngier <maz@kernel.org>
 
-Note, in practice, this is likely a benign bug as no platform exists that
-supports both SVM and VMX, i.e. barring a weird VM setup, one of the
-vendor modules is guaranteed to fail a support check before modifying
-common KVM state.
+For a number of historical reasons, the KVM/arm64 hotplug setup is pretty
+complicated, and we have two extra CPUHP notifiers for vGIC and timers.
 
-Alternatively, KVM could perform an atomic CMPXCHG on .hardware_enable,
-but that comes with its own ugliness as it would require setting
-.hardware_enable before success is guaranteed, e.g. attempting to load
-the "wrong" could result in spurious failure to load the "right" module.
+It looks pretty pointless, and gets in the way of further changes.
+So let's just expose some helpers that can be called from the core
+CPUHP callback, and get rid of everything else.
 
-Introduce a new mutex as using kvm_lock is extremely deadlock prone due
-to kvm_lock being taken under cpus_write_lock(), and in the future, under
-under cpus_read_lock().  Any operation that takes cpus_read_lock() while
-holding kvm_lock would potentially deadlock, e.g. kvm_timer_init() takes
-cpus_read_lock() to register a callback.  In theory, KVM could avoid
-such problematic paths, i.e. do less setup under kvm_lock, but avoiding
-all calls to cpus_read_lock() is subtly difficult and thus fragile.  E.g.
-updating static calls also acquires cpus_read_lock().
+This gives us the opportunity to drop a useless notifier entry,
+as well as tidy-up the timer enable/disable, which was a bit odd.
 
-Inverting the lock ordering, i.e. always taking kvm_lock outside
-cpus_read_lock(), is not a viable option as kvm_lock is taken in various
-callbacks that may be invoked under cpus_read_lock(), e.g. x86's
-kvmclock_cpufreq_notifier().
-
-The lockdep splat below is dependent on future patches to take
-cpus_read_lock() in hardware_enable_all(), but as above, deadlock is
-already is already possible.
-
-  ======================================================
-  WARNING: possible circular locking dependency detected
-  6.0.0-smp--7ec93244f194-init2 #27 Tainted: G           O
-  ------------------------------------------------------
-  stable/251833 is trying to acquire lock:
-  ffffffffc097ea28 (kvm_lock){+.+.}-{3:3}, at: hardware_enable_all+0x1f/0xc0 [kvm]
-
-               but task is already holding lock:
-  ffffffffa2456828 (cpu_hotplug_lock){++++}-{0:0}, at: hardware_enable_all+0xf/0xc0 [kvm]
-
-               which lock already depends on the new lock.
-
-               the existing dependency chain (in reverse order) is:
-
-               -> #1 (cpu_hotplug_lock){++++}-{0:0}:
-         cpus_read_lock+0x2a/0xa0
-         __cpuhp_setup_state+0x2b/0x60
-         __kvm_x86_vendor_init+0x16a/0x1870 [kvm]
-         kvm_x86_vendor_init+0x23/0x40 [kvm]
-         0xffffffffc0a4d02b
-         do_one_initcall+0x110/0x200
-         do_init_module+0x4f/0x250
-         load_module+0x1730/0x18f0
-         __se_sys_finit_module+0xca/0x100
-         __x64_sys_finit_module+0x1d/0x20
-         do_syscall_64+0x3d/0x80
-         entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-               -> #0 (kvm_lock){+.+.}-{3:3}:
-         __lock_acquire+0x16f4/0x30d0
-         lock_acquire+0xb2/0x190
-         __mutex_lock+0x98/0x6f0
-         mutex_lock_nested+0x1b/0x20
-         hardware_enable_all+0x1f/0xc0 [kvm]
-         kvm_dev_ioctl+0x45e/0x930 [kvm]
-         __se_sys_ioctl+0x77/0xc0
-         __x64_sys_ioctl+0x1d/0x20
-         do_syscall_64+0x3d/0x80
-         entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-               other info that might help us debug this:
-
-   Possible unsafe locking scenario:
-
-         CPU0                    CPU1
-         ----                    ----
-    lock(cpu_hotplug_lock);
-                                 lock(kvm_lock);
-                                 lock(cpu_hotplug_lock);
-    lock(kvm_lock);
-
-                *** DEADLOCK ***
-
-  1 lock held by stable/251833:
-   #0: ffffffffa2456828 (cpu_hotplug_lock){++++}-{0:0}, at: hardware_enable_all+0xf/0xc0 [kvm]
-
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- Documentation/virt/kvm/locking.rst |  6 ++++++
- arch/x86/kvm/x86.c                 | 18 ++++++++++++++++--
- 2 files changed, 22 insertions(+), 2 deletions(-)
+ arch/arm64/kvm/arch_timer.c     | 27 ++++++++++-----------------
+ arch/arm64/kvm/arm.c            | 13 +++++++++++++
+ arch/arm64/kvm/vgic/vgic-init.c | 19 ++-----------------
+ include/kvm/arm_arch_timer.h    |  4 ++++
+ include/kvm/arm_vgic.h          |  4 ++++
+ include/linux/cpuhotplug.h      |  3 ---
+ 6 files changed, 33 insertions(+), 37 deletions(-)
 
-diff --git a/Documentation/virt/kvm/locking.rst b/Documentation/virt/kvm/locking.rst
-index 845a561629f1..132a9e5436e5 100644
---- a/Documentation/virt/kvm/locking.rst
-+++ b/Documentation/virt/kvm/locking.rst
-@@ -282,3 +282,9 @@ time it will be set using the Dirty tracking mechanism described above.
- 		wakeup notification event since external interrupts from the
- 		assigned devices happens, we will find the vCPU on the list to
- 		wakeup.
-+
-+``vendor_module_lock``
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+:Type:		mutex
-+:Arch:		x86
-+:Protects:	loading a vendor module (kvm_amd or kvm_intel)
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index b33932fca36e..45184ca89317 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -128,6 +128,7 @@ static int kvm_vcpu_do_singlestep(struct kvm_vcpu *vcpu);
- static int __set_sregs2(struct kvm_vcpu *vcpu, struct kvm_sregs2 *sregs2);
- static void __get_sregs2(struct kvm_vcpu *vcpu, struct kvm_sregs2 *sregs2);
- 
-+static DEFINE_MUTEX(vendor_module_lock);
- struct kvm_x86_ops kvm_x86_ops __read_mostly;
- 
- #define KVM_X86_OP(func)					     \
-@@ -9286,7 +9287,7 @@ void kvm_arch_exit(void)
- 
+diff --git a/arch/arm64/kvm/arch_timer.c b/arch/arm64/kvm/arch_timer.c
+index bb24a76b4224..33fca1a691a5 100644
+--- a/arch/arm64/kvm/arch_timer.c
++++ b/arch/arm64/kvm/arch_timer.c
+@@ -811,10 +811,18 @@ void kvm_timer_vcpu_init(struct kvm_vcpu *vcpu)
+ 	ptimer->host_timer_irq_flags = host_ptimer_irq_flags;
  }
  
--int kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
-+static int __kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
+-static void kvm_timer_init_interrupt(void *info)
++void kvm_timer_cpu_up(void)
  {
- 	u64 host_pat;
- 	int r;
-@@ -9419,6 +9420,17 @@ int kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
- 	kmem_cache_destroy(x86_emulator_cache);
- 	return r;
- }
-+
-+int kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
-+{
-+	int r;
-+
-+	mutex_lock(&vendor_module_lock);
-+	r = __kvm_x86_vendor_init(ops);
-+	mutex_unlock(&vendor_module_lock);
-+
-+	return r;
+ 	enable_percpu_irq(host_vtimer_irq, host_vtimer_irq_flags);
+-	enable_percpu_irq(host_ptimer_irq, host_ptimer_irq_flags);
++	if (host_ptimer_irq)
++		enable_percpu_irq(host_ptimer_irq, host_ptimer_irq_flags);
 +}
- EXPORT_SYMBOL_GPL(kvm_x86_vendor_init);
- 
- void kvm_x86_vendor_exit(void)
-@@ -9441,7 +9453,6 @@ void kvm_x86_vendor_exit(void)
- 	cancel_work_sync(&pvclock_gtod_work);
- #endif
- 	static_call(kvm_x86_hardware_unsetup)();
--	kvm_x86_ops.hardware_enable = NULL;
- 	kvm_mmu_vendor_module_exit();
- 	free_percpu(user_return_msrs);
- 	kmem_cache_destroy(x86_emulator_cache);
-@@ -9449,6 +9460,9 @@ void kvm_x86_vendor_exit(void)
- 	static_key_deferred_flush(&kvm_xen_enabled);
- 	WARN_ON(static_branch_unlikely(&kvm_xen_enabled.key));
- #endif
-+	mutex_lock(&vendor_module_lock);
-+	kvm_x86_ops.hardware_enable = NULL;
-+	mutex_unlock(&vendor_module_lock);
++
++void kvm_timer_cpu_down(void)
++{
++	disable_percpu_irq(host_vtimer_irq);
++	if (host_ptimer_irq)
++		disable_percpu_irq(host_ptimer_irq);
  }
- EXPORT_SYMBOL_GPL(kvm_x86_vendor_exit);
  
+ int kvm_arm_timer_set_reg(struct kvm_vcpu *vcpu, u64 regid, u64 value)
+@@ -976,18 +984,6 @@ void kvm_arm_timer_write_sysreg(struct kvm_vcpu *vcpu,
+ 	preempt_enable();
+ }
+ 
+-static int kvm_timer_starting_cpu(unsigned int cpu)
+-{
+-	kvm_timer_init_interrupt(NULL);
+-	return 0;
+-}
+-
+-static int kvm_timer_dying_cpu(unsigned int cpu)
+-{
+-	disable_percpu_irq(host_vtimer_irq);
+-	return 0;
+-}
+-
+ static int timer_irq_set_vcpu_affinity(struct irq_data *d, void *vcpu)
+ {
+ 	if (vcpu)
+@@ -1185,9 +1181,6 @@ int kvm_timer_hyp_init(bool has_gic)
+ 		goto out_free_irq;
+ 	}
+ 
+-	cpuhp_setup_state(CPUHP_AP_KVM_ARM_TIMER_STARTING,
+-			  "kvm/arm/timer:starting", kvm_timer_starting_cpu,
+-			  kvm_timer_dying_cpu);
+ 	return 0;
+ out_free_irq:
+ 	free_percpu_irq(host_vtimer_irq, kvm_get_running_vcpus());
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index c6732ac329ca..07f5cef5c33b 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -1670,7 +1670,15 @@ static void _kvm_arch_hardware_enable(void *discard)
+ 
+ int kvm_arch_hardware_enable(void)
+ {
++	int was_enabled = __this_cpu_read(kvm_arm_hardware_enabled);
++
+ 	_kvm_arch_hardware_enable(NULL);
++
++	if (!was_enabled) {
++		kvm_vgic_cpu_up();
++		kvm_timer_cpu_up();
++	}
++
+ 	return 0;
+ }
+ 
+@@ -1684,6 +1692,11 @@ static void _kvm_arch_hardware_disable(void *discard)
+ 
+ void kvm_arch_hardware_disable(void)
+ {
++	if (__this_cpu_read(kvm_arm_hardware_enabled)) {
++		kvm_timer_cpu_down();
++		kvm_vgic_cpu_down();
++	}
++
+ 	if (!is_protected_kvm_enabled())
+ 		_kvm_arch_hardware_disable(NULL);
+ }
+diff --git a/arch/arm64/kvm/vgic/vgic-init.c b/arch/arm64/kvm/vgic/vgic-init.c
+index f6d4f4052555..6c7f6ae21ec0 100644
+--- a/arch/arm64/kvm/vgic/vgic-init.c
++++ b/arch/arm64/kvm/vgic/vgic-init.c
+@@ -465,17 +465,15 @@ int kvm_vgic_map_resources(struct kvm *kvm)
+ 
+ /* GENERIC PROBE */
+ 
+-static int vgic_init_cpu_starting(unsigned int cpu)
++void kvm_vgic_cpu_up(void)
+ {
+ 	enable_percpu_irq(kvm_vgic_global_state.maint_irq, 0);
+-	return 0;
+ }
+ 
+ 
+-static int vgic_init_cpu_dying(unsigned int cpu)
++void kvm_vgic_cpu_down(void)
+ {
+ 	disable_percpu_irq(kvm_vgic_global_state.maint_irq);
+-	return 0;
+ }
+ 
+ static irqreturn_t vgic_maintenance_handler(int irq, void *data)
+@@ -584,19 +582,6 @@ int kvm_vgic_hyp_init(void)
+ 		return ret;
+ 	}
+ 
+-	ret = cpuhp_setup_state(CPUHP_AP_KVM_ARM_VGIC_INIT_STARTING,
+-				"kvm/arm/vgic:starting",
+-				vgic_init_cpu_starting, vgic_init_cpu_dying);
+-	if (ret) {
+-		kvm_err("Cannot register vgic CPU notifier\n");
+-		goto out_free_irq;
+-	}
+-
+ 	kvm_info("vgic interrupt IRQ%d\n", kvm_vgic_global_state.maint_irq);
+ 	return 0;
+-
+-out_free_irq:
+-	free_percpu_irq(kvm_vgic_global_state.maint_irq,
+-			kvm_get_running_vcpus());
+-	return ret;
+ }
+diff --git a/include/kvm/arm_arch_timer.h b/include/kvm/arm_arch_timer.h
+index cd6d8f260eab..1638418f72dd 100644
+--- a/include/kvm/arm_arch_timer.h
++++ b/include/kvm/arm_arch_timer.h
+@@ -104,4 +104,8 @@ void kvm_arm_timer_write_sysreg(struct kvm_vcpu *vcpu,
+ u32 timer_get_ctl(struct arch_timer_context *ctxt);
+ u64 timer_get_cval(struct arch_timer_context *ctxt);
+ 
++/* CPU HP callbacks */
++void kvm_timer_cpu_up(void);
++void kvm_timer_cpu_down(void);
++
+ #endif
+diff --git a/include/kvm/arm_vgic.h b/include/kvm/arm_vgic.h
+index 4df9e73a8bb5..fc4acc91ba06 100644
+--- a/include/kvm/arm_vgic.h
++++ b/include/kvm/arm_vgic.h
+@@ -431,4 +431,8 @@ int vgic_v4_load(struct kvm_vcpu *vcpu);
+ void vgic_v4_commit(struct kvm_vcpu *vcpu);
+ int vgic_v4_put(struct kvm_vcpu *vcpu, bool need_db);
+ 
++/* CPU HP callbacks */
++void kvm_vgic_cpu_up(void);
++void kvm_vgic_cpu_down(void);
++
+ #endif /* __KVM_ARM_VGIC_H */
+diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+index f61447913db9..7337414e4947 100644
+--- a/include/linux/cpuhotplug.h
++++ b/include/linux/cpuhotplug.h
+@@ -186,9 +186,6 @@ enum cpuhp_state {
+ 	CPUHP_AP_TI_GP_TIMER_STARTING,
+ 	CPUHP_AP_HYPERV_TIMER_STARTING,
+ 	CPUHP_AP_KVM_STARTING,
+-	CPUHP_AP_KVM_ARM_VGIC_INIT_STARTING,
+-	CPUHP_AP_KVM_ARM_VGIC_STARTING,
+-	CPUHP_AP_KVM_ARM_TIMER_STARTING,
+ 	/* Must be the last timer callback */
+ 	CPUHP_AP_DUMMY_TIMER_STARTING,
+ 	CPUHP_AP_ARM_XEN_STARTING,
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
