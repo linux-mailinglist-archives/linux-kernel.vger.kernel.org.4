@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6FE63E592
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC8D63E594
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbiK3XhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 18:37:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
+        id S229863AbiK3XhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiK3Xg6 (ORCPT
+        with ESMTP id S229814AbiK3XhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 18:36:58 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6055102F
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:36:57 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id mh8-20020a17090b4ac800b0021348e084a0so3837849pjb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:36:57 -0800 (PST)
+        Wed, 30 Nov 2022 18:37:00 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9437AEB5
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:36:59 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id z10-20020a170902ccca00b001898329db72so13184247ple.21
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:36:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Ac7XTrKyealJvttnej4gqUHiXpbMGi2BgXlQ8TSBek=;
-        b=YklaFhYbAovNTKW/H+xKi4bkAw0j+BumngcZB3OlflQPR0hl5TLLW/d3npxDohI8NT
-         VgcAbLoHTd44LVdVzGM3yxudxW2ho3QXdF+/SGcfBR0PdrsCn8xQkMDcpYZUOITiq3tm
-         ejsfEgqpx0zgTMo0usF5nLH8vXSTbwryscEhsVb1IFTPrKoVppmft3n5n1r9sAeZDxaz
-         j5BwvQOzX8Zx2dBw2LVdlOwa6/MDTBkjd39lP3EsJd6aSHUTLgpXDwH+jKqnM1j2M1Io
-         Unm/D0mL5mkskraYkuzDrFZIqViANCMp/8MAezMKZeOLngNa+ZVA48UX7PdCIqBwSMBB
-         6yBQ==
+        bh=Gab+7smmEIeAzCswMeinhNnVkpeemsKL4/AIt3t4698=;
+        b=ZJiwYaMvGcPJ2o6DfJu9KidimXxl4J+NW5eoqSBhAX4kZ+WPgDR8YQpHsF8I2pm3Hj
+         u2AZ3u4vgrf43j/UtrcH9r9f1BMELIEBxQScRF3vEb7okCvXsEm3sLXo3I1OXzNtpIMO
+         eSUiGAv86HRwAX7VJOF2WQ+5Muz5vqZRHkmjWkYn32GHVJulKdBB7+hMZ22OhD9IV5XN
+         uFEoNX/r4vp9anjRuVb/U/rwtImPO+24HlJ0ZA8d/0UxOMJZDsulI322mBzUMbNuT92W
+         7KVmMwsSbSQ81Ncz6cur428ZbWpaHi3J0iIHFrwDjN1xElSPZnEUdDexEU0IxrXuJle3
+         pItQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3Ac7XTrKyealJvttnej4gqUHiXpbMGi2BgXlQ8TSBek=;
-        b=l14x3hv2G7lPX/BlDu5A6DpjZbrO540rju1RPbDeVs8OSQQibUQNpg4YWn5eFMmuCM
-         Sx5dxrlPvo71iNTGEGzL0yrYF7nk+84tWABL5nwzKYhSUBCh/kCP1ZL9Y3Go21Sq02Yx
-         UhR4LU2SWr/kqdrSz9u0hzAquYrDoaLPcyxHiuY9E3x4qL71dkeY11ZBbJIWjd7CFviJ
-         +SzQyCjDgm6M7WDa8rBYDnmHGratiWAxWtuX341tw2tVyxu2KeFhE5fqmDuN9EXAaSiH
-         4XqNPZ+8A9SIj8P+uyMnZWWXBK0hwP31n1DaDzDhOJ+pwUGPuuMwft9J0lLXFLLFAXjt
-         QxiQ==
-X-Gm-Message-State: ANoB5pn6PhRbqydr+1vXmPlheXcJoSJPCCQT+YN8j55UCwvJpx0gouhP
-        qPpWX+6siiB+fhJ3rPXCV8oju8pqqMI=
-X-Google-Smtp-Source: AA0mqf7O2+RC3iulookuc0UqIvdRSsr8CeX5htydeb2IqKZvPiNaaLfq01QOUjTegMhduBkiOk5RT6c56N0=
+        bh=Gab+7smmEIeAzCswMeinhNnVkpeemsKL4/AIt3t4698=;
+        b=Qs4UeGut7kK4FBK9Z9uoRn34zLZhAR5p5SkZ0JGRryXnmenalbbQyyVHhHOnNEV/SW
+         p1WutI3CgZMJ9dDvqLCjsEoPYIrriTv1O7U+jTtDM8pxyDk3thRys3dwFhBXSQbtuzK3
+         khInxy2jtX/Xu9c9oUKXdv3qDDU/jSJFg6tRhcTV+juz3M6FbhEORnLRMY2otV7UP1Pr
+         xIL8Gdae8rrgqE9FOnAdWgkAeZhksOwGpW5dGsooj0tHzObqVt16/zcKYJRYK2dpMpkT
+         8F06dPTEXNKi/gTP+1gSt+g74U12JckMd3GuJcdZsJRm2HwV5G94Sl8I7Koz3Jtp13o6
+         h09Q==
+X-Gm-Message-State: ANoB5plY8i4oVmUNdmOSaM9Eawf6pO0QkCJN4MzmvEZm1t7K7LZO7l1y
+        V5QbTKKeZEdLPWYwjnMNHCoaFLCVcb4=
+X-Google-Smtp-Source: AA0mqf5BU7myFNSKbIJT1C1eVP57Ls7Ae41Vu5YGVA1dp7FypEeyBYAY/wcZijWTQ61QxY/9mYbEIpPftGI=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a62:ea18:0:b0:56c:2d:1e56 with SMTP id
- t24-20020a62ea18000000b0056c002d1e56mr45222870pfh.41.1669851417445; Wed, 30
- Nov 2022 15:36:57 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90b:1e0f:b0:213:c5ae:55ec with SMTP id
+ pg15-20020a17090b1e0f00b00213c5ae55ecmr65534712pjb.182.1669851419154; Wed, 30
+ Nov 2022 15:36:59 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 30 Nov 2022 23:36:49 +0000
+Date:   Wed, 30 Nov 2022 23:36:50 +0000
 In-Reply-To: <20221130233650.1404148-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20221130233650.1404148-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221130233650.1404148-4-seanjc@google.com>
-Subject: [PATCH v4 3/4] x86/reboot: Disable virtualization in an emergency if
- SVM is supported
+Message-ID: <20221130233650.1404148-5-seanjc@google.com>
+Subject: [PATCH v4 4/4] x86/reboot: Disable SVM, not just VMX, when stopping CPUs
 From:   Sean Christopherson <seanjc@google.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -78,67 +77,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Disable SVM on all CPUs via NMI shootdown during an emergency reboot.
-Like VMX, SVM can block INIT, e.g. if the emergency reboot is triggered
-between CLGI and STGI, and thus can prevent bringing up other CPUs via
-INIT-SIPI-SIPI.
+Disable SVM and more importantly force GIF=1 when halting a CPU or
+rebooting the machine.  Similar to VMX, SVM allows software to block
+INITs via CLGI, and thus can be problematic for a crash/reboot.  The
+window for failure is smaller with SVM as INIT is only blocked while
+GIF=0, i.e. between CLGI and STGI, but the window does exist.
 
-Cc: stable@vger.kernel.org
+Fixes: fba4f472b33a ("x86/reboot: Turn off KVM when halting a CPU")
+Cc: stable@vger.kernel
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kernel/reboot.c | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+ arch/x86/kernel/smp.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kernel/reboot.c b/arch/x86/kernel/reboot.c
-index 374c14b3a9bf..d03c551defcc 100644
---- a/arch/x86/kernel/reboot.c
-+++ b/arch/x86/kernel/reboot.c
-@@ -530,27 +530,26 @@ static inline void kb_wait(void)
+diff --git a/arch/x86/kernel/smp.c b/arch/x86/kernel/smp.c
+index 06db901fabe8..375b33ecafa2 100644
+--- a/arch/x86/kernel/smp.c
++++ b/arch/x86/kernel/smp.c
+@@ -32,7 +32,7 @@
+ #include <asm/mce.h>
+ #include <asm/trace/irq_vectors.h>
+ #include <asm/kexec.h>
+-#include <asm/virtext.h>
++#include <asm/reboot.h>
  
- static inline void nmi_shootdown_cpus_on_restart(void);
+ /*
+  *	Some notes on x86 processor bugs affecting SMP operation:
+@@ -122,7 +122,7 @@ static int smp_stop_nmi_callback(unsigned int val, struct pt_regs *regs)
+ 	if (raw_smp_processor_id() == atomic_read(&stopping_cpu))
+ 		return NMI_HANDLED;
  
--/* Use NMIs as IPIs to tell all CPUs to disable virtualization */
--static void emergency_vmx_disable_all(void)
-+static void emergency_reboot_disable_virtualization(void)
+-	cpu_emergency_vmxoff();
++	cpu_emergency_disable_virtualization();
+ 	stop_this_cpu(NULL);
+ 
+ 	return NMI_HANDLED;
+@@ -134,7 +134,7 @@ static int smp_stop_nmi_callback(unsigned int val, struct pt_regs *regs)
+ DEFINE_IDTENTRY_SYSVEC(sysvec_reboot)
  {
- 	/* Just make sure we won't change CPUs while doing this */
- 	local_irq_disable();
- 
- 	/*
--	 * Disable VMX on all CPUs before rebooting, otherwise we risk hanging
--	 * the machine, because the CPU blocks INIT when it's in VMX root.
-+	 * Disable virtualization on all CPUs before rebooting to avoid hanging
-+	 * the system, as VMX and SVM block INIT when running in the host.
- 	 *
- 	 * We can't take any locks and we may be on an inconsistent state, so
--	 * use NMIs as IPIs to tell the other CPUs to exit VMX root and halt.
-+	 * use NMIs as IPIs to tell the other CPUs to disable VMX/SVM and halt.
- 	 *
--	 * Do the NMI shootdown even if VMX if off on _this_ CPU, as that
--	 * doesn't prevent a different CPU from being in VMX root operation.
-+	 * Do the NMI shootdown even if virtualization is off on _this_ CPU, as
-+	 * other CPUs may have virtualization enabled.
- 	 */
--	if (cpu_has_vmx()) {
--		/* Safely force _this_ CPU out of VMX root operation. */
--		__cpu_emergency_vmxoff();
-+	if (cpu_has_vmx() || cpu_has_svm(NULL)) {
-+		/* Safely force _this_ CPU out of VMX/SVM operation. */
-+		cpu_emergency_disable_virtualization();
- 
--		/* Halt and exit VMX root operation on the other CPUs. */
-+		/* Disable VMX/SVM and halt on other CPUs. */
- 		nmi_shootdown_cpus_on_restart();
- 	}
+ 	ack_APIC_irq();
+-	cpu_emergency_vmxoff();
++	cpu_emergency_disable_virtualization();
+ 	stop_this_cpu(NULL);
  }
-@@ -587,7 +586,7 @@ static void native_machine_emergency_restart(void)
- 	unsigned short mode;
- 
- 	if (reboot_emergency)
--		emergency_vmx_disable_all();
-+		emergency_reboot_disable_virtualization();
- 
- 	tboot_shutdown(TB_SHUTDOWN_REBOOT);
  
 -- 
 2.38.1.584.g0f3c55d4c2-goog
