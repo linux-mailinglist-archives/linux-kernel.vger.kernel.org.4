@@ -2,65 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9CA63D0D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8361263D0DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:38:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235796AbiK3IiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 03:38:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
+        id S234586AbiK3Ii4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 03:38:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235717AbiK3Ih6 (ORCPT
+        with ESMTP id S233790AbiK3Iiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 03:37:58 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D901BEAB
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 00:37:53 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id mv18so15094570pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 00:37:53 -0800 (PST)
+        Wed, 30 Nov 2022 03:38:52 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C3213F95;
+        Wed, 30 Nov 2022 00:38:51 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id c129so18049316oia.0;
+        Wed, 30 Nov 2022 00:38:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=POXigpl8APO9IUP53K10fp0GXszPMpqd75en0jJlNCI=;
-        b=BKEb7vdqAI7Q9DB9QLXxAXPXGy0HSu3VCUUJO+kBh9DXhs9RShE0maxetIm2uaEfvF
-         v/Eb5rGCEJus3URWVvtttM9RWHID8ZNd5d6DLcA+HZfUbgHKq4bDV1DVn2bJGXfqfE1H
-         9ZkBU8e4wJjq+/WUYHdVZhuc05qAzdeypWGQ6+qUuxIeQh6nXVJDbVk2LpAMF3hSh4LN
-         2ymjUXn0qPaLupxSJRLn2bp4jOrvuqzZ6uqnvZpZR4VLrmXCNSmmt6BeYSA31cc7J2PH
-         ZQ4MwCEtAKowKrtwFq/jvfEH7nbHci7F92OxCTXaxnDmepS6pBBet6hnj5wvkHFVOyhi
-         YTzg==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uC/UArEcgpKpph4bJxT7wEjXZbjXvymdCdz7vGSqQtc=;
+        b=mLtuX4cfzQXLt8gLePA7UBJgao8qylxC3w5INwzHbsaLSvTwEdhKZQC3Meoi7lMStB
+         bmaMXSgGlJh8w4bwQElmXaswRyQFVPnaJ6AC3Q4RfPwzrFRqiBmofbvaIA5pdXBRzw9h
+         f5/mbq1Wm/rrUfXeYZh8jPN+laHcS/981ek+mjZU2CmOTNB0IZa7Co3lGRXPWU2S9zzX
+         v+i1+iBQgZ1AagrTNSEl4pCR8tEywyG4dicRSUb9K/M1eWLakHOLnK1PIKoQzHGJDX7p
+         1vrCvw3Q/ZWAaIXvbIhDLvXj+mxPW1GLbaWoYC+wCD/Iyxgaw0Cd2TKRmu5YFJi0/Amd
+         xTxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=POXigpl8APO9IUP53K10fp0GXszPMpqd75en0jJlNCI=;
-        b=nk9lRTLCWAiTRm8HQvWNB7Te91lf+hbS9hOFH3lXMEU8VYSpomzTKir/WLpU6fPz+f
-         Zbf8wjsQPk74DTah2F3CoE3kI0byEPOzblSXHyxcHJzLDfclsxJ6HmAPUbr9kbepBu9U
-         ZBpESq42EgV0z2gwJgZJ/QQzLJaWBbhi+jQPwWPf/U82/phlr4/QdCuczk7zY0hTkgbw
-         kjYxKphLEgE08tCe/D6WsShCa4IXPW6FurteEHVGo8ZLB6Gr9kWXbE85YnFxIfCRo4pn
-         YUPN/PTmz8o5z4UvCNOkrUQuzIZG041hSOAX8GhAI7Az8Ix1vjXJFGHA2Bh14ug/TUE3
-         43QA==
-X-Gm-Message-State: ANoB5pmVaLJI0/0hXQVkkKQABJFkJBrdiGQmx1OzbX3McG66AyMgFFic
-        nILxJIhDsk7mIWgoqmpB3u8=
-X-Google-Smtp-Source: AA0mqf5WJiR8VoV02b5F/zM3g0jGxJVYY6WftuvLBETu2TT9GBNn3c+sOCMDgGX9NPeUP+QiFVQZbA==
-X-Received: by 2002:a17:90a:4605:b0:218:7dd7:ad4c with SMTP id w5-20020a17090a460500b002187dd7ad4cmr61548048pjg.224.1669797473202;
-        Wed, 30 Nov 2022 00:37:53 -0800 (PST)
-Received: from localhost.localdomain ([2402:7500:486:4b30:18c:3eab:7c3:c142])
-        by smtp.gmail.com with ESMTPSA id c10-20020a056a00008a00b0057255b82bd1sm817583pfj.217.2022.11.30.00.37.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 30 Nov 2022 00:37:52 -0800 (PST)
-From:   cy_huang <u0084500@gmail.com>
-To:     broonie@kernel.org
-Cc:     lgirdwood@gmail.com, lee@kernel.org, matthias.bgg@gmail.com,
-        yangyingliang@huawei.com, chiaen_wu@richtek.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        ChiYuan Huang <cy_huang@richtek.com>
-Subject: [PATCH 2/2] regulator: mt6370: Switch to use dev_err_probe() helper
-Date:   Wed, 30 Nov 2022 16:37:43 +0800
-Message-Id: <1669797463-24887-2-git-send-email-u0084500@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1669797463-24887-1-git-send-email-u0084500@gmail.com>
-References: <1669797463-24887-1-git-send-email-u0084500@gmail.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uC/UArEcgpKpph4bJxT7wEjXZbjXvymdCdz7vGSqQtc=;
+        b=47X37RgdErE+Gsj/1qudM2yLz2PMIX3chhFzc9Cz+VQBDuEODg2677DGyUElaGf3DV
+         jjrQ522jhbz3GHyUQzuWae4GnLBK6HzdNjoZmx1iDmDV9ssHEAreO8TCbN5bky6pdTjp
+         HLtNkldShn5ThTKQmzwgO1j4Q6UCSBLem6UrbcdptFZYCOOLbiNg1onKlMB3/dTM7c1Y
+         5fPhN9fVst8Vv0JCyS6mLYC6FzXttt+f2BHhppwBF7eigwJHzbxC1VmKGhes2CJwf2ai
+         /jCNJodcOcbW01ntaBqU4kdAWRYIQotkLq5oIH5/kLLt2rcsHO5VG0f3cAVPOBAcwf1N
+         xMzA==
+X-Gm-Message-State: ANoB5pmomnurwYvh0z8aCLZv8PfnNtxfsfITX8eCkQSbUKBK9Rr4FGz2
+        005WNVkbRysmQ6+cgknsuWuDLBqMUzE7QZIvxpI=
+X-Google-Smtp-Source: AA0mqf7g5OYxXzKTWvPQS9hE42X+5T7OGVOtIImiVoUjf1nZA7rf5u6hrnyZQ11Mqb+p90ekE53jQ9rX/i3AInTn+AU=
+X-Received: by 2002:a05:6808:2ca:b0:359:ca42:419 with SMTP id
+ a10-20020a05680802ca00b00359ca420419mr30871759oid.98.1669797531045; Wed, 30
+ Nov 2022 00:38:51 -0800 (PST)
+MIME-Version: 1.0
+References: <20221129140955.137361-1-gch981213@gmail.com> <20221129140955.137361-3-gch981213@gmail.com>
+ <98b72494-3188-76d5-2e24-9dc127a8b31a@linaro.org> <20221130001459.3wyxnwpjaxvla6oj@mercury.elektranox.org>
+ <08bd485b-51f6-8249-63a7-a6864a431276@linaro.org>
+In-Reply-To: <08bd485b-51f6-8249-63a7-a6864a431276@linaro.org>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Wed, 30 Nov 2022 16:38:39 +0800
+Message-ID: <CAJsYDVJHa9qoBp0Em+Waj1TpAgHy0N504zHGkFEf+3VNA42omw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] dt-bindings: leds: add dt schema for worldsemi,ws2812b-spi
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-leds@vger.kernel.org,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -71,95 +82,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+Hi!
 
-Use dev_err_probe helper to simplify the probe function.
+On Wed, Nov 30, 2022 at 4:33 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> >> What controls the intensity? Don't you have PWM there?
+> >
+> > WS2812 is a RGB led, which contains a small Microcontroller. The =C2=B5=
+C
+> > takes 24 byte intensity data from a serial input and then passes on
+> > any following bits to the next LED. SPI clk and chip-select are
+> > ignored (chip-select support can be trivially added though).
+> >
+> > You can find them everywhere nowadays, since they are quite cheap
+> > (a few cents per LED) and need only one MOSI pin to control hundreds
+> > of LEDs.
+>
+> OK. This should be anyway existing property, so default-brightness.
 
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
- drivers/regulator/mt6370-regulator.c | 39 +++++++++++++-----------------------
- 1 file changed, 14 insertions(+), 25 deletions(-)
+default-intensity is a different property. Intensity controls only the
+color for a multicolor led. The final brightness is calculated with
+this intensity value with the single brightness value of the current
+LED. (See my previous mail.)
 
-diff --git a/drivers/regulator/mt6370-regulator.c b/drivers/regulator/mt6370-regulator.c
-index c2b589a..e090fbe 100644
---- a/drivers/regulator/mt6370-regulator.c
-+++ b/drivers/regulator/mt6370-regulator.c
-@@ -303,11 +303,9 @@ static int mt6370_regulator_irq_register(struct mt6370_priv *priv)
- 		ret = devm_request_threaded_irq(priv->dev, irq, NULL,
- 						mt6370_irqs[i].handler, 0,
- 						mt6370_irqs[i].name, rdev);
--		if (ret) {
--			dev_err(priv->dev,
--				"Failed to register (%d) interrupt\n", i);
--			return ret;
--		}
-+		if (ret)
-+			return dev_err_probe(priv->dev, ret,
-+					     "Failed to register (%d) interrupt\n", i);
- 	}
- 
- 	return 0;
-@@ -329,20 +327,16 @@ static int mt6370_regualtor_register(struct mt6370_priv *priv)
- 	int i, ret;
- 
- 	regulator_np = of_get_child_by_name(parent->of_node, "regulators");
--	if (!regulator_np) {
--		dev_err(dev, "Could not find parent 'regulators' node\n");
--		return -ENODEV;
--	}
-+	if (!regulator_np)
-+		return dev_err_probe(dev, -ENODEV, "Could not find parent 'regulators' node\n");
- 
- 	ret = of_regulator_match(dev, regulator_np, mt6370_regulator_match,
- 				 ARRAY_SIZE(mt6370_regulator_match));
- 
- 	of_node_put(regulator_np);
- 
--	if (ret < 0) {
--		dev_err(dev, "Error parsing regulator init data: %d\n", ret);
--		return ret;
--	}
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "Error parsing regulator init data\n");
- 
- 	for (i = 0; i < MT6370_MAX_IDX; i++) {
- 		const struct regulator_desc *desc = mt6370_regulator_descs + i;
-@@ -355,17 +349,14 @@ static int mt6370_regualtor_register(struct mt6370_priv *priv)
- 
- 		if (cfg.of_node && desc->of_parse_cb) {
- 			ret = desc->of_parse_cb(cfg.of_node, desc, &cfg);
--			if (ret) {
--				dev_err(dev, "Failed in of_parse_cb\n");
--				return ret;
--			}
-+			if (ret)
-+				return dev_err_probe(dev, ret, "Failed in of_parse_cb\n");
- 		}
- 
- 		rdev = devm_regulator_register(dev, desc, &cfg);
--		if (IS_ERR(rdev)) {
--			dev_err(dev, "Failed to register (%d) regulator\n", i);
--			return PTR_ERR(rdev);
--		}
-+		if (IS_ERR(rdev))
-+			return dev_err_probe(dev, PTR_ERR(rdev),
-+					     "Failed to register (%d) regulator\n", i);
- 
- 		priv->rdev[i] = rdev;
- 	}
-@@ -385,10 +376,8 @@ static int mt6370_regulator_probe(struct platform_device *pdev)
- 	priv->dev = &pdev->dev;
- 
- 	priv->regmap = dev_get_regmap(pdev->dev.parent, NULL);
--	if (!priv->regmap) {
--		dev_err(&pdev->dev, "Failed to init regmap\n");
--		return -ENODEV;
--	}
-+	if (!priv->regmap)
-+		return dev_err_probe(&pdev->dev, -ENODEV, "Failed to init regmap\n");
- 
- 	ret = mt6370_regualtor_register(priv);
- 	if (ret)
--- 
-2.7.4
-
+--=20
+Regards,
+Chuanhong Guo
