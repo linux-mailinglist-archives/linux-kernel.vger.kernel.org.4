@@ -2,108 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7800A63D4B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5733F63D4B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235284AbiK3LeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:34:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
+        id S232226AbiK3Let (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235085AbiK3Ld3 (ORCPT
+        with ESMTP id S235308AbiK3Ldq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:33:29 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DEB363DA;
-        Wed, 30 Nov 2022 03:32:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=bala5sYXRYw+sGi8PWv5pz9c1EOsKG0X5boc/1rjBGA=; b=AgOWSJCqrMdjpt/RLVZvdAOeUK
-        xpWG2CF3aCC/+Z6UDvNjRIOuths+gW7BwUI0HoW76l0YHVFPIxv/+dR2TI30LFQEUNkWXjzzqYM9u
-        rKcb00iFtgZDeJ3m8AOKekdE7vrBJnvA0zFDat+gJdmqTrgWdJ6d/IAN5E+MVuNam/Cu5gf20BJ0H
-        qVdkki/yQjiF1DE52usTcJf0/CLXStCKMDbWN2zGm54fpu9y/Qg0mqgKdPoDmSrsbwvkRuU+GiElb
-        ygwh4y0HvbVy5PibWanCGzbZ4JXYIVu74CQG72YM7Cp4BfUVyCkIUc1WWqAepU6d5qcVfLuKJTBAj
-        w07kh9pw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35494)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1p0LKM-0001eb-Vm; Wed, 30 Nov 2022 11:32:35 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1p0LKK-0002S4-Le; Wed, 30 Nov 2022 11:32:32 +0000
-Date:   Wed, 30 Nov 2022 11:32:32 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Clark Wang <xiaoning.wang@nxp.com>
-Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
-        andrew@lunn.ch, hkallweit1@gmail.com, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] net: phylink: add sync flag mac_ready to fix resume
- issue with WoL enabled
-Message-ID: <Y4c/UCHxIWZQVwi6@shell.armlinux.org.uk>
-References: <20221130111148.1064475-1-xiaoning.wang@nxp.com>
- <20221130111148.1064475-2-xiaoning.wang@nxp.com>
- <Y4c9PlfEC17pVE08@shell.armlinux.org.uk>
+        Wed, 30 Nov 2022 06:33:46 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC6A4B9BC;
+        Wed, 30 Nov 2022 03:33:15 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id x6so6363079lji.10;
+        Wed, 30 Nov 2022 03:33:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bbgF/8QJth7Q6iZLlIiOpcOOnk+o4nClIAC+d8Lf9z0=;
+        b=cgrBYVcGGaOmhs4NUM2DMBzEteSqsnNo+s1OWAu0xrFfR8SfGHhoYWl6cON5bJQf5H
+         kBXo+HTMLYJlc0NNqyXTeNHVsKFqrN9RnSJvYMAt9wsTzoHjoBDz54HyrId55uPzhcey
+         WrkHDI90HmJoIfjTMzlxSFuMRM+ZEK+h+tp2CXCTYTjqjx+4Ho1p2q1qT5Xh0Pe1NIpw
+         kh3Ph4481EH6HJsaTRzldrzwYx9ab3Q4uT9o4p32qRaA2tLn+Hf0w3FMTq1prgn3d5jp
+         NtxVXq9wW/MEdgV2FWkhhU7TsMvsvlWqvebJsqA+xk8HaXGX4H+zuKYU5RX6czhqRUDe
+         TW5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bbgF/8QJth7Q6iZLlIiOpcOOnk+o4nClIAC+d8Lf9z0=;
+        b=NbDaJ4bhCdEyY92Rmg+X9V7pKl7RshHcGab+wiKVGu4QAM6+8t5Ejncj2PcQUpV6KY
+         gFU0yhV+uHOa/LQX1pW0KAXocC6+tvlvT2VCcdBjpHmcZrC0e4qho97BEG5UDGObbfj4
+         rinfUQSX6E7C8Sj8Me4T6C9PtIfpIAYbYpTij27qtaykZC+qqN5jQphgJgZ7MHYlhvEa
+         Y95m25M0T5qgstUdiXaVKX+mhg6+26VezlBXkryXaWn+KJ9fqgY8b+pGJ628o38ENu0c
+         M21vERilU3VlmEqEGrGtFCRfMmwdNoqwA9bZstG5EOcrlgXKs+T5KUrqe4CuBazffj7w
+         jeAg==
+X-Gm-Message-State: ANoB5pnyPrsN30UH5B9l3CRgAsLD+RGXmMmIh7QtXReycuchoadhUUx2
+        CCI7dpjJL3yVp1rHKHupyx+3qdNOumkIyflToXc=
+X-Google-Smtp-Source: AA0mqf4DNgrzSTa3qDkcM1vR3wsA4xbwLoMawo/HYfBGJ5539OEYNPmp+YyAmqJIJYo2LXuFpOGWdNGqzEgPvVjR9QQ=
+X-Received: by 2002:a2e:3815:0:b0:279:8c75:b1a8 with SMTP id
+ f21-20020a2e3815000000b002798c75b1a8mr8432976lja.140.1669807993775; Wed, 30
+ Nov 2022 03:33:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4c9PlfEC17pVE08@shell.armlinux.org.uk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221130070158.44221-1-chengkaitao@didiglobal.com> <fd28321c-5f00-ba94-daed-2b8da2292c1f@gmail.com>
+In-Reply-To: <fd28321c-5f00-ba94-daed-2b8da2292c1f@gmail.com>
+From:   Tao pilgrim <pilgrimtao@gmail.com>
+Date:   Wed, 30 Nov 2022 19:33:01 +0800
+Message-ID: <CAAWJmAYPUK+1GBS0R460pDvDKrLr9zs_X2LT2yQTP_85kND5Ew@mail.gmail.com>
+Subject: Re: [PATCH] mm: memcontrol: protect the memory in cgroup from being
+ oom killed
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        corbet@lwn.net, mhocko@kernel.org, roman.gushchin@linux.dev,
+        shakeelb@google.com, akpm@linux-foundation.org,
+        songmuchun@bytedance.com, cgel.zte@gmail.com,
+        ran.xiaokai@zte.com.cn, viro@zeniv.linux.org.uk,
+        zhengqi.arch@bytedance.com, ebiederm@xmission.com,
+        Liam.Howlett@oracle.com, chengzhihao1@huawei.com,
+        haolee.swjtu@gmail.com, yuzhao@google.com, willy@infradead.org,
+        vasily.averin@linux.dev, vbabka@suse.cz, surenb@google.com,
+        sfr@canb.auug.org.au, mcgrof@kernel.org, sujiaxun@uniontech.com,
+        feng.tang@intel.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        chengkaitao@didiglobal.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 11:23:42AM +0000, Russell King (Oracle) wrote:
-> On Wed, Nov 30, 2022 at 07:11:47PM +0800, Clark Wang wrote:
-> > Issue we met:
-> > On some platforms, mac cannot work after resumed from the suspend with WoL
-> > enabled.
-> > 
-> > The cause of the issue:
-> > 1. phylink_resolve() is in a workqueue which will not be executed immediately.
-> >    This is the call sequence:
-> >        phylink_resolve()->phylink_link_up()->pl->mac_ops->mac_link_up()
-> >    For stmmac driver, mac_link_up() will set the correct speed/duplex...
-> >    values which are from link_state.
-> > 2. In stmmac_resume(), it will call stmmac_hw_setup() after called the
-> >    phylink_resume(). stmmac_core_init() is called in function stmmac_hw_setup(),
-> 
-> ... and that is where the problem is. Don't call phylink_resume() before
-> your hardware is ready to see a link-up event.
+On Wed, Nov 30, 2022 at 4:41 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> On 11/30/22 14:01, chengkaitao wrote:
+> > From: chengkaitao <pilgrimtao@gmail.com>
+> >
+>
+> Yikes! Another patch from ZTE guys.
+>
+> I'm suspicious to patches sent from them due to bad reputation with
+> kernel development community. First, they sent all patches via
+> cgel.zte@gmail.com (listed in Cc) but Greg can't sure these are really
+> sent from them ([1] & [2]). Then they tried to workaround by sending
+> from their personal Gmail accounts, again with same response from him
+> [3]. And finally they sent spoofed emails (as he pointed out in [4]) -
+> they pretend to send from ZTE domain but actually sent from their
+> different domain (see raw message and look for X-Google-Original-From:
+> header.
 
-... and while that is being fixed, maybe the stupid code in
-stmmac_resume() can also be fixed:
+Hi Bagas Sanjaya,
 
-        rtnl_lock();
-        if (device_may_wakeup(priv->device) && priv->plat->pmt) {
-                phylink_resume(priv->phylink);
-        } else {
-                phylink_resume(priv->phylink);
-                if (device_may_wakeup(priv->device))
-                        phylink_speed_up(priv->phylink);
-        }
-        rtnl_unlock();
+I'm not an employee of ZTE, just an ordinary developer. I really don't know
+all the details about community and ZTE, The reason why I cc cgel.zte@gmail.com
+is because the output of the script <get_maintainer.pl> has the
+address <cgel.zte@gmail.com>.
 
-        rtnl_lock();
+If there is any error in the format of the email, I will try my best
+to correct it.
 
-1. phylink_resume() is always called after that first rtnl_lock(), so
-there's no point it being stupidly in each side of the if().
+>
+> I was about to review documentation part of this patch, but due to
+> concerns above, I have to write this reply instead. So I'm not going
+> to review, sorry for inconvenience.
+>
+> PS: Adding Greg to Cc: list.
+>
+> [1]: https://lore.kernel.org/lkml/Yw94xsOp6gvdS0UF@kroah.com/
+> [2]: https://lore.kernel.org/lkml/Yylv5hbSBejJ58nt@kroah.com/
+> [3]: https://lore.kernel.org/lkml/Y1EVnZS9BalesrC1@kroah.com/
+> [4]: https://lore.kernel.org/lkml/Y3NrBvIV7lH2GrWz@kroah.com/
+>
+> --
+> An old man doll... just what I always wanted! - Clara
+>
 
-2. the rtnl_unlock() followed by rtnl_lock() is completely unnecessary.
-
-Thanks.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Yours,
+Kaitao Cheng
