@@ -2,115 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3115663D6CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:33:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B003F63D6D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbiK3NdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 08:33:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
+        id S229921AbiK3NfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 08:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiK3NdP (ORCPT
+        with ESMTP id S229636AbiK3NfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 08:33:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4546C2A976
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 05:33:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99DA161BEA
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:33:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BFB1C433C1;
-        Wed, 30 Nov 2022 13:33:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669815193;
-        bh=XO5UJqdtuocJYtQeIVXnMEv2iX5AN+0skfN/KK6ex14=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Tl81z/noFegDucrDO/148YmlTLCpLmQXXrq0HQamnuT/lYSlxG0zL75XB9jt4Zyav
-         ulbHsnITYoTmzQy59PMt2RyC2l57y3zn42h6MN6A3Hj9X/zH/NDqOHD6BG9m9kczkr
-         OVafDTpKeVJpQT6i8fnh5X8DBwDXw1o/ZsVQ3QCWAQuYfdSmMQw1Pc6tfE5Uuab+/b
-         McQbiZhS9Fjnm5iQEIlMh9SRN2Ucq6eNXiv43e1Ib/9ai1BUxdos/HrIDXK4os7YMh
-         PCoH5sIL1xU1hkedljc50HqFiaQKnGsrFOXt1VuFeCASZb7kpoBgz6ewDMtwljVoYw
-         GP0Td1RZUXiyQ==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     x86@kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>
-Subject: [PATCH -tip v2] x86/kprobes: Drop removed INT3 handling code
-Date:   Wed, 30 Nov 2022 22:33:09 +0900
-Message-Id: <166981518895.1131462.4693062055762912734.stgit@devnote3>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-User-Agent: StGit/0.19
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 08:35:21 -0500
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF6549B41;
+        Wed, 30 Nov 2022 05:35:20 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 002A0C022; Wed, 30 Nov 2022 14:35:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1669815328; bh=DFwsM28ZAHCOTIWVrHbYM9F79eW1XgktjNJ3t+S8qmY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ese4d+HxKUGOiU4QD65t7NG6Z4sCJZf10F3wchc91Fq9HPlJhbVIZMGTzlUsVlhUu
+         NoAhoAnZB1j2YmDfxG9S/Aim3wtPrAHz351+by/Ez4o+L9sGb/M/n1E8yVjw1wMLkc
+         68m2CV6QHJyWCNXepX52bddhbIveqyHWCTyxXgevRkjnx1Yu6NflsngUtf1VTYxbWi
+         G4W7wfGNTaPffna9RukcFVQ57M2ln2xR+S+cKVW93G1CFPHICbO0hu3/b9Pbm4O8eg
+         HhQ7ABBmpxsimlkpiGkiwDJfmDtitiLKLFAExvGAPKtBtwnotjos/LBFV953/VUaSw
+         Xzw46zF4i9AtA==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 71FA0C009;
+        Wed, 30 Nov 2022 14:35:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1669815327; bh=DFwsM28ZAHCOTIWVrHbYM9F79eW1XgktjNJ3t+S8qmY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XX/+Zwid75/ISSCwteyg/2Q9TG/nlh9pPNpdO+rsCMcRWMSu0+zYcm2WJhYJufH1k
+         nInYUSTNJBUn/O/AVu8b3MzvpRD/eRX3dHbQies9FT3PrHSt85oHaHFcsB1U1Kg69i
+         ipgvIDqUQvLP7Uo+vydLiS/SW/JDKetM+eMYQWFwvJYBHIaBmW8AYGnTTFgvDUiqG3
+         u1wyOL/YBCy9sUgawBHx+zDwHEvtIVGXccnOmBa8bR7y7D47jUJX6N5OWKfEZhNBeA
+         A+9sWAkaMWpn1YvrqyETu9NpsVE2xZNTDdXDnCXuYvB3HS7gVw9ML8zoO5on7gIJq8
+         SwQF8VS61u00A==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 24854f8a;
+        Wed, 30 Nov 2022 13:35:11 +0000 (UTC)
+Date:   Wed, 30 Nov 2022 22:34:56 +0900
+From:   asmadeus@codewreck.org
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     ericvh@gmail.com, lucho@ionkov.net, linux_oss@crudebyte.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, v9fs-developer@lists.sourceforge.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+8f1060e2aaf8ca55220b@syzkaller.appspotmail.com
+Subject: Re: [PATCH] 9p: fix crash when transaction killed
+Message-ID: <Y4dcAGM+0xzOgSCa@codewreck.org>
+References: <20221129162251.90790-1-schspa@gmail.com>
+ <Y4aJzjlkkt5VKy0G@codewreck.org>
+ <m2r0xli1mq.fsf@gmail.com>
+ <Y4b1MQaEsPRK+3lF@codewreck.org>
+ <m2o7sowzas.fsf@gmail.com>
+ <Y4c5N/SAuszTLiEA@codewreck.org>
+ <m2a6487f23.fsf@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <m2a6487f23.fsf@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Schspa Shi wrote on Wed, Nov 30, 2022 at 09:15:12PM +0800:
+> >> If the req was newly alloced(It was at a new page), refcount maybe not
+> >> 0, there will be problem in this case. It seems we can't relay on this.
+> >> 
+> >> We need to set the refcount to zero before add it to idr in p9_tag_alloc.
+> >
+> > Hmm, if it's reused then it's zero by definition, but if it's a new
+> > allocation (uninitialized) then anything goes; that lookup could find
+> > and increase it before the refcount_set, and we'd have an off by one
+> > leading to use after free. Good catch!
+> >
+> > Initializing it to zero will lead to the client busy-looping until after
+> > the refcount is properly set, which should work.
+> 
+> Why? It looks no different from the previous process here. Initializing
+> it to zero should makes no difference.
 
-Drop removed INT3 handling code from kprobe_int3_handler() because this
-case (get_kprobe() doesn't return corresponding kprobe AND the INT3 is
-removed) must not happen with the kprobe managed INT3, but can happen
-with the non-kprobe INT3, which should be handled by other callbacks.
+I do not understand this remark.
+If this is a freed request it will be zero, because we freed the request
+as the refcount hit zero, but if it's a newly allocated request then the
+memory is uninitalized, and the lookup can get anything.
 
-For the kprobe managed INT3, it is already safe. The commit 5c02ece81848d
-("x86/kprobes: Fix ordering while text-patching") introduced
-text_poke_sync() to the arch_disarm_kprobe() right after removing INT3.
-Since this text_poke_sync() uses IPI to call sync_core() on all online
-cpus, that ensures that all running INT3 exception handlers have done.
-And, the unregister_kprobe() will remove the kprobe from the hash table
-after arch_disarm_kprobe().
+In that case we want refcount to be zero to have the check in
+p9_tag_lookup to not use the request until we set the refcount to 2.
 
-Thus, when the kprobe managed INT3 hits, kprobe_int3_handler() should
-be able to find corresponding kprobe always by get_kprobe(). If it can
-not find any kprobe, this means that is NOT a kprobe managed INT3.
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- Changes in v2:
-  - update comment to mention that the first safe commit.
----
- arch/x86/kernel/kprobes/core.c |   14 --------------
- 1 file changed, 14 deletions(-)
+> > Setting refcount early might have us use an re-used req before the tag
+> > has been changed so that one cannot move.
+> >
+> > Could you test with just that changed if syzbot still reproduces this
+> > bug? (perhaps add a comment if you send this)
+> >
+> 
+> I have upload a new v2 change for this. But I can't easily reproduce
+> this problem.
 
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 66299682b6b7..33390ed4dcf3 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -986,20 +986,6 @@ int kprobe_int3_handler(struct pt_regs *regs)
- 			kprobe_post_process(p, regs, kcb);
- 			return 1;
- 		}
--	}
--
--	if (*addr != INT3_INSN_OPCODE) {
--		/*
--		 * The breakpoint instruction was removed right
--		 * after we hit it.  Another cpu has removed
--		 * either a probepoint or a debugger breakpoint
--		 * at this address.  In either case, no further
--		 * handling of this interrupt is appropriate.
--		 * Back up over the (now missing) int3 and run
--		 * the original instruction.
--		 */
--		regs->ip = (unsigned long)addr;
--		return 1;
- 	} /* else: not a kprobe fault; let the kernel handle it */
- 
- 	return 0;
+Ah, I read that v2 as you actually ran some tests with this, sorry for
+the misuderstanding.
 
+Well, it's a fix anyway, so it cannot hurt to apply...
+-- 
+Dominique
