@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D372563CD26
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 03:08:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D76DF63CD2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 03:08:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiK3CIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 21:08:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36118 "EHLO
+        id S230165AbiK3CI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 21:08:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiK3CIQ (ORCPT
+        with ESMTP id S230117AbiK3CIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 21:08:16 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9715B4B760;
-        Tue, 29 Nov 2022 18:08:15 -0800 (PST)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NMMzV32r5z15Mn9;
-        Wed, 30 Nov 2022 10:07:34 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 30 Nov 2022 10:08:13 +0800
-Message-ID: <3cd4e5d1-4837-a569-18b4-72fcaabf103d@huawei.com>
-Date:   Wed, 30 Nov 2022 10:08:13 +0800
+        Tue, 29 Nov 2022 21:08:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3EB61BBE
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 18:08:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D961C61975
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:08:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB4D6C43470;
+        Wed, 30 Nov 2022 02:08:22 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="SzFBB6kv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669774100;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qx27PPQsL8B5UR3meaN6u0WkQxvqKygl6e21SY/4K90=;
+        b=SzFBB6kvF0S7FWPQPSyvgKOElnuPY/k6YToCSxAvEYG6ayB/lCZrlLJoeDSmKMzOWpDOvF
+        +eJ44cerf8wDRfviChonRji1TWeqdFRyzhXKZvEGchTW0sdnGBWe7vUfxAGfZHX/+n8I09
+        d1L9sHYnivH1GgpRRwhhsfftoV6k250=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 877dbd7b (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 30 Nov 2022 02:08:19 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Sultan Alsawaf <sultan@kerneltoast.com>
+Subject: [PATCH] random: align entropy_timer_state to cache line
+Date:   Wed, 30 Nov 2022 03:08:15 +0100
+Message-Id: <20221130020815.283814-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 0/2] ext4: fix a infinite loop in do_writepages after
- online resizing
-Content-Language: en-US
-To:     Theodore Ts'o <tytso@mit.edu>, <linux-ext4@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <enwlinux@gmail.com>,
-        <jack@suse.cz>, <lczerner@redhat.com>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>, <yebin10@huawei.com>,
-        <ritesh.list@gmail.com>, <adilger.kernel@dilger.ca>
-References: <20220817132701.3015912-1-libaokun1@huawei.com>
- <166975630697.2135297.7495422853696969304.b4-ty@mit.edu>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <166975630697.2135297.7495422853696969304.b4-ty@mit.edu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,49 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/30 5:12, Theodore Ts'o wrote:
-> On Wed, 17 Aug 2022 21:26:59 +0800, Baokun Li wrote:
->> We got a issue: the ext4 writeback process was stuck in do_writepages and
->> do_writepages kept retrying. However, '-ENOMEM' is returned each time, even
->> if there is still free memory on the current machine.
->>
->> We find that the direct cause of this issue is that the bg_inode_table_hi
->> in the group descriptor is written to an incorrect value, which causes the
->> inode block found through the inode table to exceed the end_ block。Then,
->> sb_getblk always returns null, __ext4_get_inode_loc returns `-ENOMEM`,
->> and do_writepages keeps retrying.
->>
->> [...]
-> Applied, thanks!
->
-> [1/2] ext4: fix GDT corruption after online resizing with bigalloc enable and blocksize is 1024
->        commit: 496fb12f8e236f303de6bc73a0334dd50c4eb64a
-> [2/2] ext4: add inode table check in __ext4_get_inode_loc to aovid possible infinite loop
->        commit: bfb0625e8e86f8797264b1c7d10e146afe243d23
->
-> Best regards,
+The theory behind the jitter dance is that multiple things are poking at
+the same cache line. This only works, however, if those things are
+actually all in the same cache line. Ensure this is the case by aligning
+the struct on the stack to the cache line size.
 
-Hi Theodore,
+On x86, this indeed aligns the stack struct:
 
-Thank you very much for applying this patch set!
+ 000000000000000c <try_to_generate_entropy>:
+ {
+    c:  55                      push   %rbp
+-   d:  53                      push   %rbx
+-   e:  48 83 ec 38             sub    $0x38,%rsp
++   d:  48 89 e5                mov    %rsp,%rbp
++  10:  41 54                   push   %r12
++  12:  53                      push   %rbx
++  13:  48 83 e4 c0             and    $0xffffffffffffffc0,%rsp
++  17:  48 83 ec 40             sub    $0x40,%rsp
 
-But I thought this patch set was discarded because there was no 
-"Reviewed-by".
-And a few days ago, I came up with a better solution to the problem 
-fixed by PATCH 1/2.
-The new solution is called "ext4: fix corruption when online resizing a 
-1K bigalloc fs", which
-is in another patch set  ("[PATCH v3 0/3] ext4: fix some bugs in online 
-resize") that fixes
-some online resize problems. This patch set has been reviewed, and I 
-would appreciate it if
-you could revert PATCH 1/2 and apply the patch set containing the new 
-solution.
+Cc: Sultan Alsawaf <sultan@kerneltoast.com>
+Fixes: 50ee7529ec45 ("random: try to actively add entropy rather than passively wait for it")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sorry for wasting your time without stating that a new solution is 
-available after the old patch.
-
-Thanks again!
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 67558b95d531..2494e08c76d8 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1262,7 +1262,7 @@ static void __cold entropy_timer(struct timer_list *timer)
+ static void __cold try_to_generate_entropy(void)
+ {
+ 	enum { NUM_TRIAL_SAMPLES = 8192, MAX_SAMPLES_PER_BIT = HZ / 15 };
+-	struct entropy_timer_state stack;
++	struct entropy_timer_state stack ____cacheline_aligned;
+ 	unsigned int i, num_different = 0;
+ 	unsigned long last = random_get_entropy();
+ 	int cpu = -1;
 -- 
-With Best Regards,
-Baokun Li
+2.38.1
+
