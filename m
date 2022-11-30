@@ -2,113 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF1563E112
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B8863E117
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbiK3T6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 14:58:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
+        id S229690AbiK3UDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 15:03:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiK3T6k (ORCPT
+        with ESMTP id S229472AbiK3UDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 14:58:40 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3678C69A
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:58:39 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id l4-20020a056e021aa400b00300ad9535c8so16370116ilv.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:58:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6m31B3T4WPKdD8D5Hi6zvUudwhOCA6A3RJwv+AxyDTQ=;
-        b=TTLYeE8drKAFW+C05EpkEofmvviVROPTjxYMg4NpRO0nJuToLtkx3BNHyBgtQiY69G
-         wgwS1sY9AkVQOdp1GzkC6H12ln/IzVNns53d9tg0zhGlAQ/Xb/vh2lxUaNnsH3xVNVvf
-         epbuHq63EYsHMdExBE51euXKLUWJlReyUtlyhF22w+XktVT6azSM7J9c5CAGfIWPK93N
-         c45Uykm2Fk8wEz1Goly/iWW5kcaaU6sGKHKYFoEKFypr5GWt6qwqK6o23Zye29Pd3Nkd
-         uIC6sEFziqWSkIbEQPt/hfHe9m9QezoGVPl+8mGWR5hl185LrLMVYZGE0m8BmhEcMGaQ
-         j+Bg==
-X-Gm-Message-State: ANoB5pmBjN2FqfuJgC72xIbsKnmnrqbjq3K41e1SW4aJtWzvO2PEM16S
-        drK1h+1OkiknaryvJsN1Q5OO8RBpfuD1SIih9rAbXQEtWYqx
-X-Google-Smtp-Source: AA0mqf4/7eLRzvNNL8cDkrvtuTLVvoEVDNrUsEeYSY195AdijVZNdTLla0EuIvYRI1zuEmDkU7f6jTqZiNp6x9qVQwC48M1iU2Rs
+        Wed, 30 Nov 2022 15:03:07 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F2A23BFA
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 12:03:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 84398CE1B0A
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 20:03:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05C5AC433C1;
+        Wed, 30 Nov 2022 20:03:01 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ddpmDtlY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669838580;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1vH/NcoP2zEaCp8SEXsclpeZY780y8IHRUsr5heJWX8=;
+        b=ddpmDtlYq+odsPu2QUDUygcoSXrMGP7Ot8jHYu9zRWQ7eoYjl7RNrwfXvlQvn1x73rQ7MG
+        752Dg0fz3wnQqDVH7C7Oum214dOKVkJxUdPm/zWbCmGduUSzYDzXm8BzbIcHoLcH9k5caG
+        FQWwjAwpue1bClbkErdNk0hj3Xmls0Q=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id dd68b3be (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 30 Nov 2022 20:03:00 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Eric Biggers <ebiggers@kernel.org>
+Subject: [PATCH v2] random: align entropy_timer_state to cache line
+Date:   Wed, 30 Nov 2022 21:02:53 +0100
+Message-Id: <20221130200253.511606-1-Jason@zx2c4.com>
+In-Reply-To: <CAHmME9rFNXpCrmoQ7Uk1T3ykVj2-ap_TCerDMSjLMyADh3XJAA@mail.gmail.com>
+References: <CAHmME9rFNXpCrmoQ7Uk1T3ykVj2-ap_TCerDMSjLMyADh3XJAA@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8e0a:0:b0:6df:c191:c691 with SMTP id
- e10-20020a5d8e0a000000b006dfc191c691mr1824785iod.103.1669838318673; Wed, 30
- Nov 2022 11:58:38 -0800 (PST)
-Date:   Wed, 30 Nov 2022 11:58:38 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d1495205eeb58712@google.com>
-Subject: [syzbot] WARNING in btrfs_put_transaction
-From:   syzbot <syzbot+3706b1df47f2464f0c1e@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The theory behind the jitter dance is that multiple things are poking at
+the same cache line. This only works, however, if what's being poked at
+is actually all in the same cache line. Ensure this is the case by
+aligning the struct on the stack to the cache line size.
 
-syzbot found the following issue on:
+We can't use ____cacheline_aligned on a stack variable, because gcc
+assumes 16 byte alignment when only 8 byte alignment is provided by the
+kernel, which means gcc could technically do something pathological
+like `(rsp & ~48) - 64`. It doesn't, but rather than risk it, just do
+the stack alignment manually with PTR_ALIGN and an oversized buffer.
 
-HEAD commit:    644e9524388a Merge tag 'for-v6.1-rc' of git://git.kernel.o..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=134bee03880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
-dashboard link: https://syzkaller.appspot.com/bug?extid=3706b1df47f2464f0c1e
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1476f2c3880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17e6e3c9880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0968428e17b4/disk-644e9524.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fd4c3bfd0777/vmlinux-644e9524.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ee4571f27f1c/bzImage-644e9524.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/68219d51df73/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3706b1df47f2464f0c1e@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3706 at fs/btrfs/transaction.c:132 btrfs_put_transaction+0x377/0x3d0
-Modules linked in:
-CPU: 0 PID: 3706 Comm: btrfs-transacti Not tainted 6.1.0-rc6-syzkaller-00308-g644e9524388a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:btrfs_put_transaction+0x377/0x3d0 fs/btrfs/transaction.c:131
-Code: da 31 c0 e8 bd 56 09 07 e9 e5 fd ff ff e8 a1 a1 03 fe 0f 0b e9 f7 fc ff ff e8 95 a1 03 fe 0f 0b e9 69 fd ff ff e8 89 a1 03 fe <0f> 0b e9 89 fd ff ff e8 7d a1 03 fe 4c 89 ff be 03 00 00 00 48 83
-RSP: 0018:ffffc90003fefbf8 EFLAGS: 00010293
-RAX: ffffffff8386f627 RBX: ffff8880188b3330 RCX: ffff8880799eba80
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000001
-RBP: ffff8880188b3000 R08: ffffffff8386f330 R09: ffffed1003116603
-R10: ffffed1003116603 R11: 1ffff11003116602 R12: ffff8880188b3028
-R13: dffffc0000000000 R14: ffff888027cecce8 R15: ffff8880188b3010
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055b2eb954e90 CR3: 0000000027fcd000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_cleanup_transaction+0x55b/0x1b60 fs/btrfs/disk-io.c:5237
- transaction_kthread+0x3f5/0x490 fs/btrfs/disk-io.c:1913
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-
-
+Fixes: 50ee7529ec45 ("random: try to actively add entropy rather than passively wait for it")
+Cc: Eric Biggers <ebiggers@kernel.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/char/random.c | 33 +++++++++++++++++----------------
+ 1 file changed, 17 insertions(+), 16 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index acb9548a870e..46bb81c2da6e 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1265,29 +1265,30 @@ static void __cold entropy_timer(struct timer_list *timer)
+ static void __cold try_to_generate_entropy(void)
+ {
+ 	enum { NUM_TRIAL_SAMPLES = 8192, MAX_SAMPLES_PER_BIT = HZ / 15 };
+-	struct entropy_timer_state stack;
++	u8 stack_bytes[sizeof(struct entropy_timer_state) + SMP_CACHE_BYTES - 1];
++	struct entropy_timer_state *stack = PTR_ALIGN((void *)stack_bytes, SMP_CACHE_BYTES);
+ 	unsigned int i, num_different = 0;
+ 	unsigned long last = random_get_entropy();
+ 	int cpu = -1;
+ 
+ 	for (i = 0; i < NUM_TRIAL_SAMPLES - 1; ++i) {
+-		stack.entropy = random_get_entropy();
+-		if (stack.entropy != last)
++		stack->entropy = random_get_entropy();
++		if (stack->entropy != last)
+ 			++num_different;
+-		last = stack.entropy;
++		last = stack->entropy;
+ 	}
+-	stack.samples_per_bit = DIV_ROUND_UP(NUM_TRIAL_SAMPLES, num_different + 1);
+-	if (stack.samples_per_bit > MAX_SAMPLES_PER_BIT)
++	stack->samples_per_bit = DIV_ROUND_UP(NUM_TRIAL_SAMPLES, num_different + 1);
++	if (stack->samples_per_bit > MAX_SAMPLES_PER_BIT)
+ 		return;
+ 
+-	atomic_set(&stack.samples, 0);
+-	timer_setup_on_stack(&stack.timer, entropy_timer, 0);
++	atomic_set(&stack->samples, 0);
++	timer_setup_on_stack(&stack->timer, entropy_timer, 0);
+ 	while (!crng_ready() && !signal_pending(current)) {
+ 		/*
+ 		 * Check !timer_pending() and then ensure that any previous callback has finished
+ 		 * executing by checking try_to_del_timer_sync(), before queueing the next one.
+ 		 */
+-		if (!timer_pending(&stack.timer) && try_to_del_timer_sync(&stack.timer) >= 0) {
++		if (!timer_pending(&stack->timer) && try_to_del_timer_sync(&stack->timer) >= 0) {
+ 			struct cpumask timer_cpus;
+ 			unsigned int num_cpus;
+ 
+@@ -1312,20 +1313,20 @@ static void __cold try_to_generate_entropy(void)
+ 			} while (cpu == smp_processor_id() && num_cpus > 1);
+ 
+ 			/* Expiring the timer at `jiffies` means it's the next tick. */
+-			stack.timer.expires = jiffies;
++			stack->timer.expires = jiffies;
+ 
+-			add_timer_on(&stack.timer, cpu);
++			add_timer_on(&stack->timer, cpu);
+ 
+ 			preempt_enable();
+ 		}
+-		mix_pool_bytes(&stack.entropy, sizeof(stack.entropy));
++		mix_pool_bytes(&stack->entropy, sizeof(stack->entropy));
+ 		schedule();
+-		stack.entropy = random_get_entropy();
++		stack->entropy = random_get_entropy();
+ 	}
+-	mix_pool_bytes(&stack.entropy, sizeof(stack.entropy));
++	mix_pool_bytes(&stack->entropy, sizeof(stack->entropy));
+ 
+-	del_timer_sync(&stack.timer);
+-	destroy_timer_on_stack(&stack.timer);
++	del_timer_sync(&stack->timer);
++	destroy_timer_on_stack(&stack->timer);
+ }
+ 
+ 
+-- 
+2.38.1
+
