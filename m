@@ -2,129 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89CEE63D03C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:16:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC8963D040
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234484AbiK3IQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 03:16:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
+        id S233203AbiK3ISV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 03:18:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233203AbiK3IQo (ORCPT
+        with ESMTP id S233944AbiK3ISI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 03:16:44 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A6E52899
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 00:16:43 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id g4-20020a92cda4000000b00301ff06da14so14636842ild.11
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 00:16:43 -0800 (PST)
+        Wed, 30 Nov 2022 03:18:08 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE8150D7C;
+        Wed, 30 Nov 2022 00:18:07 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id d6so15935830pll.7;
+        Wed, 30 Nov 2022 00:18:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=d9sMTxC8II1dCsJCjBXb3maOeenY72L6eiTYH4CMWYE=;
+        b=fNgVyKAMXNAgexRoxHMRD+C1AHD6NkAy6KFbRWt6SZIG5ws1j7R+eLixqtGrT4xKE/
+         W7vfxb9XHXyAfxQqASunsEyugTX7odam4s6e0ZWxIg/hOGR6PmMmn8VLelTV2Qzac1cp
+         ivpV6fJYwu694O5BzNGAl/KA7Pj+H0B41r8u8gmCZhkai003PYQiefdjgyzRq/SAJVF/
+         iAahRhQ44EuXtk9GSp4mckaFF4x3gg3nkpYYg0HOBSG0fARKlvE60H0IgEbtNiKq/Flt
+         cvgAI//RIwx6P5YshrBQ69ZNIWUGzJ7P84hKJYDIyedlUURsLWG4EiEGBhJpz2hUHWrG
+         v46A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ia1ggW+CohV0hM6g6vlRES5+xm4wz+/jHYfjyKI2m+U=;
-        b=MhMS7NrhorbBx/QK0Q94sRrSQpRzlks90MUcgD6fblRVxllUvAQIkPtupaYyvfGffK
-         BAGCZxrRw1A+hYEYXW/XNFPb85lbsHyIwyOXxr6ceAYrjduuvjWw+Yx96VGG6IzkaUN1
-         g9e5KXhlhOhn7MQbUTdZFzATTG9yD8NhnV5h0VuRIvhbtIuD7DXJaSDoJA/+/pObfZ4v
-         vLnF8C5zqO0kQebrLG0dlc5zzi7M6X6l9EWv14XKkEdrhe+focc9GcKeLW/xKMWBrqFw
-         5a0PA797R2GV5fs1tE4hjj8YkFOx9zqTtvtI6kcHjCTK8aO07uEBO6ND7cgHjvAPPXeP
-         arlA==
-X-Gm-Message-State: ANoB5pn6JMNXE801n2r4asC4+4joC0EvSwR/C3mW7clVkoHDTVniyAcO
-        2O46E8I8s+fPbCFQk32Yx8ZCXiAd1Ec/DcMUkKe61dyMGYue
-X-Google-Smtp-Source: AA0mqf5AszZ02rsX9E++seylfB/ee8zWgLjyoO1uX2F/8x9XTx8qXsGj35oL6xHbPli3SYxBaZXMLxsgP0Gj006qUw5dSwoZsOeN
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d9sMTxC8II1dCsJCjBXb3maOeenY72L6eiTYH4CMWYE=;
+        b=yVMv9CfeN/O6n2RZ/LCIRDuYC4BMjcl3uwf3nTr/7eRs0T81f5x0pdgKg8oVlWHi0c
+         G4y+iDeuHdnnv/CrwOMrWdfIwklee1EM0NqC4ghtfYN8Rs9WnRzlYVJblEDKAmbeljFv
+         PcYK+5FSXPaYzbZut+b6J3bHR+hzSn3F+ZWh57SkR0MnYTRKzjEiIx+L8/qmcskXDGkP
+         0DzWe7R25TnyZBb8KKuPfQ9rpKOmJeiKlO1qhoJr+jY/NX+nniC/jMrwlKD+SeJCvj2l
+         hnQI3yzNMSOka1mfHAMcEgf6ILzF4fM19yz0CHjyoRLL5GPddNvRLctziNNM3Izjw4PZ
+         VyOg==
+X-Gm-Message-State: ANoB5pnRxQ6p3CSyxqJwbKJaR0ZbM2TrYV3yuNe8s/kNosVBR6UJh02T
+        LFqL6pSVBXlsFt7e5XXK354xYoV+2fs=
+X-Google-Smtp-Source: AA0mqf77narn1YWb6xAoj/for2X8JOJ/M+lM6+Re/861YZHQGTtKuHYCAQX8dt3geaBfwKbitnVLxg==
+X-Received: by 2002:a17:902:82c2:b0:189:a208:d124 with SMTP id u2-20020a17090282c200b00189a208d124mr4820626plz.143.1669796287104;
+        Wed, 30 Nov 2022 00:18:07 -0800 (PST)
+Received: from [192.168.43.80] (subs02-180-214-232-19.three.co.id. [180.214.232.19])
+        by smtp.gmail.com with ESMTPSA id z30-20020aa7991e000000b0056da2bf607csm780533pff.214.2022.11.30.00.18.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 00:18:06 -0800 (PST)
+Message-ID: <cfa439e1-e216-8285-8283-1664453ac337@gmail.com>
+Date:   Wed, 30 Nov 2022 15:18:02 +0700
 MIME-Version: 1.0
-X-Received: by 2002:a02:880b:0:b0:363:d7b3:7d4 with SMTP id
- r11-20020a02880b000000b00363d7b307d4mr19476634jai.166.1669796203166; Wed, 30
- Nov 2022 00:16:43 -0800 (PST)
-Date:   Wed, 30 Nov 2022 00:16:43 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000089839605eeabb948@google.com>
-Subject: [syzbot] WARNING in btrfs_remove_chunk
-From:   syzbot <syzbot+e8582cc16881ec70a430@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] Documentation: kunit: Fix "How Do I Use This" / "Next
+ Steps" sections
+To:     David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Sadiya Kazi <sadiyakazi@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Daniel Latypov <dlatypov@google.com>,
+        Rae Moar <rmoar@google.com>, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20221129094732.306449-1-davidgow@google.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20221129094732.306449-1-davidgow@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 11/29/22 16:47, David Gow wrote:
+> The 'index' and 'start' pages end with very similar "How Do I Use This"
+> / "Next Steps" sections respectively, which link to the other
+> documentation pages. This wasn't updated when the tips.rst page was
+> removed.
+> 
+> Remove the reference to tips.rst, as well as tidy up the descriptions on
+> all of the links (especially given that sphinx gives the page titles
+> anyway.
+> 
 
-syzbot found the following issue on:
+While this patch is LGTM, what about simply drop these sections and
+replace with "see the sidebar for other KUnit documentations"?
 
-HEAD commit:    ca57f02295f1 afs: Fix fileserver probe RTT handling
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15e3bf8d880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
-dashboard link: https://syzkaller.appspot.com/bug?extid=e8582cc16881ec70a430
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13152047880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1491a7fd880000
+-- 
+An old man doll... just what I always wanted! - Clara
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/af66f1d3a389/disk-ca57f022.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c0c7ec393108/vmlinux-ca57f022.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ea8871940eaa/bzImage-ca57f022.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/4b0128811f09/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e8582cc16881ec70a430@syzkaller.appspotmail.com
-
-BTRFS info (device loop0): balance: start -s
-BTRFS info (device loop0): relocating block group 1048576 flags system
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 4053 at fs/btrfs/volumes.c:3175 btrfs_remove_chunk+0x16c9/0x17f0 fs/btrfs/volumes.c:3175
-Modules linked in:
-CPU: 1 PID: 4053 Comm: syz-executor367 Not tainted 6.1.0-rc7-syzkaller-00012-gca57f02295f1 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:btrfs_remove_chunk+0x16c9/0x17f0 fs/btrfs/volumes.c:3175
-Code: 8b 44 89 f6 31 c0 e8 f6 5c bf fd 0f 0b b3 01 e9 be fd ff ff e8 28 be f7 fd 48 c7 c7 60 da 39 8b 44 89 f6 31 c0 e8 d7 5c bf fd <0f> 0b b3 01 e9 bb fd ff ff 44 89 e9 80 e1 07 38 c1 0f 8c 58 fe ff
-RSP: 0018:ffffc900049ff8e0 EFLAGS: 00010246
-RAX: 6006f843c165f400 RBX: ffff88801e194001 RCX: ffff8880752d57c0
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc900049ffab0 R08: ffffffff816e560d R09: ffffed1017324f1c
-R10: ffffed1017324f1c R11: 1ffff11017324f1b R12: ffff88802787a600
-R13: ffff8880756eb690 R14: ffffffffffffffe4 R15: dffffc0000000000
-FS:  00007f54b37a1700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffe4bdea9c0 CR3: 0000000026c6e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_relocate_chunk+0x24b/0x350 fs/btrfs/volumes.c:3298
- __btrfs_balance+0x1dbf/0x2960 fs/btrfs/volumes.c:3990
- btrfs_balance+0xbfc/0x1140 fs/btrfs/volumes.c:4373
- btrfs_ioctl_balance+0x478/0x780 fs/btrfs/ioctl.c:4484
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f54b37f5ed9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f54b37a12f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f54b38807a0 RCX: 00007f54b37f5ed9
-RDX: 0000000020000480 RSI: 00000000c4009420 RDI: 0000000000000004
-RBP: 00007f54b384d28c R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 8000000000000000
-R13: 697265765f666572 R14: 0030656c69662f2e R15: 00007f54b38807a8
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
