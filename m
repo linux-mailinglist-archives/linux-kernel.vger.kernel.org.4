@@ -2,70 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6A863D254
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED0B63D156
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233925AbiK3JqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 04:46:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
+        id S229658AbiK3JCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 04:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233414AbiK3JqC (ORCPT
+        with ESMTP id S229515AbiK3JCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 04:46:02 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9186A1D337;
-        Wed, 30 Nov 2022 01:46:01 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id d3so11149694plr.10;
-        Wed, 30 Nov 2022 01:46:01 -0800 (PST)
+        Wed, 30 Nov 2022 04:02:51 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C2315838
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:02:50 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id vp12so38441823ejc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:02:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=+w/tU+ayhTwkehfOK8SHtMU808QnEhUkne08i443iwo=;
-        b=GPiGiD4M+pymUFT990D5jqPZdlbcZSruG5C354xy/PsGPCT3F6u/R/Dz2aVF7yIAnW
-         czJFIxQzc1HdNjo66a9ChzO6vFKiaXy6Fbb7qqHZEsPJtGbDmwZWpN8K3w5Jstwm878s
-         d4WZW1cr2lzKsiA8WK324+hGyXSogk56VD06B8nLIxIDu8iK28uYExiYS9b0/04Sy7HU
-         vaAVlLNCEj2LL8xAug1LgidmEWOhMuRWrDOzXuHJHraTUcXIjv2Ke72ytlb9Jn8YmZsd
-         5vnS/CxQ+jFG5ohQu4+3Ms1zE1PEoqW1rwSsw+rO6tgkJYOH87b2+2hDYJakqmEogbzO
-         rqPA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bvCkSPWWXEisBKO+mE/xfJ0iMceCkypfEF6PFvX87bk=;
+        b=LjLp7O13cRq+xDrs1MAO2ZcpkbECDNbMAGdmn1nST/EMEngSM+h+F7Iae4N0CyzhT3
+         asYogNfUqIBeeN8Bxf7Fb9LYfuHCYzJMQA09Ydkei5tkdlJsKYWvPz9zcyr+Fe0Y6Jtn
+         IGNVsq7PheOygDpPiAPN3kT/GVTyJ+Lvy1znjQP81zgEve2NFF8J16qwk1HKWU2m+BjW
+         ZXmR7rZQUrFFk4ybAylMqu4qumJ1bqog4E7SLmHvDSTRMCw8DRC/8u3GKRvcJWsvgtXa
+         zMFhcu6DVwm9JwN9SaZqEMMkiNsGeXea9pVSbqVeNaZpcu1xzniXMJq6RDcaiILC/3wh
+         EPZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+w/tU+ayhTwkehfOK8SHtMU808QnEhUkne08i443iwo=;
-        b=rlKeUnKd4yT2PhfjBdJBQydOHkuM7mLRgfycVXYkvyjYy0zjoBWTz/DqPCu+v6VG0E
-         kSGnYt1nOMmgDvqfL8SsVlSlL0N6sGQWhTiXdfvQ2/+4Y6oyQUECq7zMwFa+2lD0YmBt
-         Y09FDPGxT2JkZdRY1Y4cXzWQpBSEmtBo4k+NlIFJNlzB7DbtG1dcXlZ3NQoFN5DjEVRU
-         h6wdz5MAGMBrXBCLUsHU9r2E0it3cqamLaBQzCKuTQdGFKbiLBLU8gLTXJGPvpSQpPxB
-         0/EbH2+tRUjSibGvBg1EGK/RVL7BRIZ08ZcyqbQpj1dR+YQdYmu/saIAqefXGZKmEKAI
-         Lwpw==
-X-Gm-Message-State: ANoB5pkuLwmavdY0LkJTeM31ZPnbNjixPRjfWv9gQC1nUZxPRBRZvX4u
-        5yVk0XsTCVMAKoRK5Oj3bUw=
-X-Google-Smtp-Source: AA0mqf7tK9vXUEqI2FDTGVCOJFqDEG4Yorq6ZMneFnQ17ErDPUBAP+TM8MzmjoFH33rAZdYV4XG9fA==
-X-Received: by 2002:a17:90b:3c0a:b0:213:5de3:13e with SMTP id pb10-20020a17090b3c0a00b002135de3013emr70472277pjb.6.1669801560993;
-        Wed, 30 Nov 2022 01:46:00 -0800 (PST)
-Received: from MBP ([39.170.101.209])
-        by smtp.gmail.com with ESMTPSA id 24-20020a631358000000b004393f60db36sm676368pgt.32.2022.11.30.01.45.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 01:46:00 -0800 (PST)
-References: <20221129162251.90790-1-schspa@gmail.com>
- <Y4aJzjlkkt5VKy0G@codewreck.org> <m2r0xli1mq.fsf@gmail.com>
- <Y4b1MQaEsPRK+3lF@codewreck.org>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Schspa Shi <schspa@gmail.com>
-To:     asmadeus@codewreck.org
-Cc:     ericvh@gmail.com, lucho@ionkov.net, linux_oss@crudebyte.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, v9fs-developer@lists.sourceforge.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+8f1060e2aaf8ca55220b@syzkaller.appspotmail.com
-Subject: Re: [PATCH] 9p: fix crash when transaction killed
-Date:   Wed, 30 Nov 2022 16:14:32 +0800
-In-reply-to: <Y4b1MQaEsPRK+3lF@codewreck.org>
-Message-ID: <m2o7sowzas.fsf@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bvCkSPWWXEisBKO+mE/xfJ0iMceCkypfEF6PFvX87bk=;
+        b=rgUAGo0uO/86EOuweUst70SIprPaKvAYWqmNk3NtlWUXIw+mB2BL526qb2JPZL0dnw
+         G5glHoEmDf6UirLecqCqQnFeIJ348IGFDtiu1Eg6qiueZnLWeSw6g7lCU5mbQEYa36YX
+         GJeDamGyK57rNbwnVVJhCBtow8SoYNcc9VSYHAG/dE5gf5/E91RGk9pSMzx9aPHQ7vLo
+         DRLcffqKQyvXpULt2eGYUgcgqKuZxv1KmhqGWxs8H5dZI2OO2zxwmqOLxlbP60GQqVwN
+         hFeCj2pPVakGBGGTpur0JPRyJjPX5aT/gztpRXDar6wWA5/leEHaGaggSPgDsQWOAoEU
+         tM4w==
+X-Gm-Message-State: ANoB5pl03h5u4TnZ60dnqZQ2K/x2aM3TKNrCCvE8kVzc0eOF3AwB/Yd3
+        kRHkw142XVp+oFkwFtkWWTFPe5mFnrc+hOzqrTM=
+X-Google-Smtp-Source: AA0mqf4/GBvpR8BDs7aXcNHCJIURnlX8+Q4URsljIZcfS/jf5Ko1DXgZkiwT07uqHCIh2Z7p4zHN0wKVOWUvDZPbXKA=
+X-Received: by 2002:a17:906:9c8a:b0:7bf:6698:d444 with SMTP id
+ fj10-20020a1709069c8a00b007bf6698d444mr12679921ejc.548.1669798968899; Wed, 30
+ Nov 2022 01:02:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20221128064648.1934720-1-baolu.lu@linux.intel.com>
+ <20221128064648.1934720-9-baolu.lu@linux.intel.com> <BL1PR11MB5271FF59EEAC72D3C4A04E538C129@BL1PR11MB5271.namprd11.prod.outlook.com>
+In-Reply-To: <BL1PR11MB5271FF59EEAC72D3C4A04E538C129@BL1PR11MB5271.namprd11.prod.outlook.com>
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+Date:   Wed, 30 Nov 2022 17:02:11 +0800
+Message-ID: <CAAfSe-vZEAVS05GUPQ0qf1hW20LyCGhgyHu+K5EueU=_FJRF=g@mail.gmail.com>
+Subject: Re: [PATCH v3 08/20] iommu/sprd: Remove detach_dev callback
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Rob Clark <robdclark@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -76,58 +91,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-asmadeus@codewreck.org writes:
-
-> (fixed Christophe's address, hopefully that will do for good...)
+On Tue, 29 Nov 2022 at 11:35, Tian, Kevin <kevin.tian@intel.com> wrote:
 >
-> Schspa Shi wrote on Wed, Nov 30, 2022 at 10:22:44AM +0800:
->> > I'm happy to believe we have a race somewhere (even if no sane server
->> > would produce it), but right now I don't see it looking at the code.. :/
->> 
->> And I think there is a race too. because the syzbot report about 9p fs
->> memory corruption multi times.
+> > From: Lu Baolu <baolu.lu@linux.intel.com>
+> > Sent: Monday, November 28, 2022 2:47 PM
+> >
+> > The IOMMU driver supports default domain, so the detach_dev op will never
+> > be called. Remove it to avoid dead code.
+> >
+> > Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> > ---
+> >  drivers/iommu/sprd-iommu.c | 16 ----------------
+> >  1 file changed, 16 deletions(-)
+> >
+> > diff --git a/drivers/iommu/sprd-iommu.c b/drivers/iommu/sprd-iommu.c
+> > index 219bfa11f7f4..ae94d74b73f4 100644
+> > --- a/drivers/iommu/sprd-iommu.c
+> > +++ b/drivers/iommu/sprd-iommu.c
+> > @@ -255,21 +255,6 @@ static int sprd_iommu_attach_device(struct
+> > iommu_domain *domain,
+> >       return 0;
+> >  }
+> >
+> > -static void sprd_iommu_detach_device(struct iommu_domain *domain,
+> > -                                          struct device *dev)
+> > -{
+> > -     struct sprd_iommu_domain *dom = to_sprd_domain(domain);
+> > -     struct sprd_iommu_device *sdev = dom->sdev;
+> > -     size_t pgt_size = sprd_iommu_pgt_size(domain);
+> > -
+> > -     if (!sdev)
+> > -             return;
+> > -
+> > -     dma_free_coherent(sdev->dev, pgt_size, dom->pgt_va, dom-
+> > >pgt_pa);
+> > -     sprd_iommu_hw_en(sdev, false);
+> > -     dom->sdev = NULL;
+> > -}
+> > -
 >
-> Yes, no point in denying that :)
+> Looks this reveals a bug in this driver (not caused by this removal).
 >
->> As for the problem, the p9_tag_lookup only takes the rcu_read_lock when
->> accessing the IDR, why it doesn't take the p9_client->lock? Maybe the
->> root cause is that a lock is missing here.
+> sprd_iommu_attach_device() doesn't check whether the device has
+> been already attached to a domain and do auto detach.
 >
-> It shouldn't need to, but happy to try adding it.
-> For the logic:
->  - idr_find is RCU-safe (trusting the comment above it)
->  - reqs are alloced in a kmem_cache created with SLAB_TYPESAFE_BY_RCU.
->  This means that if we get a req from idr_find, even if it has just been
->  freed, it either is still in the state it was freed at (hence refcount
->  0, we ignore it) or is another req coming from the same cache (if
-
-If the req was newly alloced(It was at a new page), refcount maybe not
-0, there will be problem in this case. It seems we can't relay on this.
-
-We need to set the refcount to zero before add it to idr in p9_tag_alloc.
-
->  refcount isn't zero, we can check its tag)
-
-As for the release case, the next request will have the same tag with
-high probability. It's better to make the tag value to be an increase
-sequence, thus will avoid very much possible req reuse.
-
->  The refcount itself is an atomic operation so doesn't require lock.
->  ... And in the off chance I hadn't considered that we're already
->  dealing with a new request with the same tag here, we'll be updating
->  its status so another receive for it shouldn't use it?...
+> It's written in a way that .detach_dev() must be called to free the
+> dma buffer but ignores the fact that it's not called when default
+> domain support is claimed.
 >
-> I don't think adding the client lock helps with anything here, but it'll
-> certainly simplify this logic as we then are guaranteed not to get
-> obsolete results from idr_find.
->
-> Unfortunately adding a lock will slow things down regardless of
-> correctness, so it might just make the race much harder to hit without
-> fixing it and we might not notice that, so it'd be good to understand
-> the race.
+> Then the dma buffer allocated for the previous domain was left
+> unhandled, causing memory leak.
 
+I'll look into the issue, thanks for pointing this out.
 
--- 
-BRs
-Schspa Shi
+Chunyan
