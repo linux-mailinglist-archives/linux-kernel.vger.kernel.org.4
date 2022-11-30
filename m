@@ -2,201 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A389363CCF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 02:41:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56AF163CCFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 02:43:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiK3Blg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 29 Nov 2022 20:41:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
+        id S231945AbiK3Bm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 20:42:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231314AbiK3Bl3 (ORCPT
+        with ESMTP id S231852AbiK3Bmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 20:41:29 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5EA0C7343B;
-        Tue, 29 Nov 2022 17:41:25 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2AU1dqjiF025207, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2AU1dqjiF025207
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Wed, 30 Nov 2022 09:39:52 +0800
-Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Wed, 30 Nov 2022 09:40:37 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Wed, 30 Nov 2022 09:40:36 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
- RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
- 15.01.2375.007; Wed, 30 Nov 2022 09:40:36 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Sascha Hauer <s.hauer@pengutronix.de>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-CC:     Neo Jou <neojou@gmail.com>, Hans Ulli Kroll <linux@ulli-kroll.de>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Alexander Hochbaum <alex@appudo.com>,
-        Da Xue <da@libre.computer>,
-        "Bernie Huang" <phhuang@realtek.com>,
-        Viktor Petrenko <g0000ga@gmail.com>,
-        neo_jou <neo_jou@realtek.com>
-Subject: RE: [PATCH v4 07/11] wifi: rtw88: Add common USB chip support
-Thread-Topic: [PATCH v4 07/11] wifi: rtw88: Add common USB chip support
-Thread-Index: AQHZA9rfU40VmmVRiUGte21yFx1HBa5WonIA
-Date:   Wed, 30 Nov 2022 01:40:36 +0000
-Message-ID: <4eee82341ef84d4aa063edeb6f23a70d@realtek.com>
-References: <20221129100754.2753237-1-s.hauer@pengutronix.de>
- <20221129100754.2753237-8-s.hauer@pengutronix.de>
-In-Reply-To: <20221129100754.2753237-8-s.hauer@pengutronix.de>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/11/29_=3F=3F_10:00:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Tue, 29 Nov 2022 20:42:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0182BF2;
+        Tue, 29 Nov 2022 17:42:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32EF9B819AC;
+        Wed, 30 Nov 2022 01:42:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C08BC433C1;
+        Wed, 30 Nov 2022 01:42:48 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="K7IubIt0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669772565;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WuN+KhpT8YNfloW483gLZz6haZ2usQ2Rlgmnbqxalyo=;
+        b=K7IubIt0hZQBV+CqO3q1bKqvECB/bTg6+RQGig2PLj/QQ/JydF5843lv9HvmzfhhTV9Sny
+        kYo9if1fJI5iU+/y4e0j0v/nMoCgzMGZhpkrUbGjxaJCxDDEvYn+EZ4K/9TG+aAtaAdfzJ
+        dzWJtoFpb5n9DR1edRYismBfSvCJvKo=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e3f8f065 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 30 Nov 2022 01:42:45 +0000 (UTC)
+Date:   Wed, 30 Nov 2022 02:42:40 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
+        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v10 1/4] random: add vgetrandom_alloc() syscall
+Message-ID: <Y4a1ELq0rM3/gGv3@zx2c4.com>
+References: <20221129210639.42233-1-Jason@zx2c4.com>
+ <20221129210639.42233-2-Jason@zx2c4.com>
+ <87cz95v2q2.ffs@tglx>
+ <Y4arB7/zB8mRoapK@zx2c4.com>
+ <87mt89te77.ffs@tglx>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87mt89te77.ffs@tglx>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Sascha Hauer <s.hauer@pengutronix.de>
-> Sent: Tuesday, November 29, 2022 6:08 PM
-> To: linux-wireless@vger.kernel.org
-> Cc: Neo Jou <neojou@gmail.com>; Hans Ulli Kroll <linux@ulli-kroll.de>; Ping-Ke Shih <pkshih@realtek.com>;
-> Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; netdev@vger.kernel.org;
-> linux-kernel@vger.kernel.org; Martin Blumenstingl <martin.blumenstingl@googlemail.com>;
-> kernel@pengutronix.de; Johannes Berg <johannes@sipsolutions.net>; Alexander Hochbaum <alex@appudo.com>;
-> Da Xue <da@libre.computer>; Bernie Huang <phhuang@realtek.com>; Viktor Petrenko <g0000ga@gmail.com>;
-> Sascha Hauer <s.hauer@pengutronix.de>; neo_jou <neo_jou@realtek.com>
-> Subject: [PATCH v4 07/11] wifi: rtw88: Add common USB chip support
+On Wed, Nov 30, 2022 at 02:37:32AM +0100, Thomas Gleixner wrote:
+> On Wed, Nov 30 2022 at 01:59, Jason A. Donenfeld wrote:
+> > On Tue, Nov 29, 2022 at 11:02:29PM +0100, Thomas Gleixner wrote:
+> >> > + * Returns a pointer to the first state in the allocation.
+> >> 
+> >> I have serious doubts that this statement is correct.
+> >
+> > "Returns the address of the first state in the allocation" is better I
+> > guess.
 > 
-> Add the common bits and pieces to add USB support to the RTW88 driver.
-> This is based on https://github.com/ulli-kroll/rtw88-usb.git which
-> itself is first written by Neo Jou.
+> Does not even come close to correct.
 > 
-> Signed-off-by: neo_jou <neo_jou@realtek.com>
-> Signed-off-by: Hans Ulli Kroll <linux@ulli-kroll.de>
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> ---
-> 
-> Notes:
->     Changes since v3:
->     - Add sanity break out of potentially endless loop
->     - Do not interleave PCI and USB support in Makefile
->     - fix rtwusb->usb_data_index locking
->     - make data_ptr variable in rtw_usb_tx_agg_skb() unnecessary
->     - Some coding style fixup
->     - drop set-but-unused variable in rtw_usb_write_data()
->     - Increase RTW_USB_MAX_RXQ_LEN to 512. I've seen "failed to get rx_queue, overflow\n"
->       trigger otherwise
-> 
->     Changes since v2:
->     - Fix buffer length for aggregated tx packets
->     - Increase maximum transmit buffer size to 20KiB as found in downstream drivers
->     - Change register write functions to synchronous accesses instead of just firing
->       a URB without waiting for its completion
->     - requeue rx URBs directly in completion handler rather than having a workqueue
->       for it.
-> 
->     Changes since v1:
->     - Make checkpatch.pl clean
->     - Drop WIPHY_FLAG_HAS_REMAIN_ON_CHANNEL flag
->     - Use 'ret' as variable name for return values
->     - Sort variable declarations in reverse Xmas tree order
->     - Change potentially endless loop to a limited loop
->     - Change locking to be more obviously correct
->     - drop unnecessary check for !rtwdev
->     - make sure the refill workqueue is not restarted again after we have
->       cancelled it
-> 
->  drivers/net/wireless/realtek/rtw88/Kconfig  |   3 +
->  drivers/net/wireless/realtek/rtw88/Makefile |   3 +
->  drivers/net/wireless/realtek/rtw88/mac.c    |   3 +
->  drivers/net/wireless/realtek/rtw88/main.c   |   4 +
->  drivers/net/wireless/realtek/rtw88/main.h   |   4 +
->  drivers/net/wireless/realtek/rtw88/reg.h    |   1 +
->  drivers/net/wireless/realtek/rtw88/tx.h     |  31 +
->  drivers/net/wireless/realtek/rtw88/usb.c    | 917 ++++++++++++++++++++
->  drivers/net/wireless/realtek/rtw88/usb.h    | 107 +++
->  9 files changed, 1073 insertions(+)
->  create mode 100644 drivers/net/wireless/realtek/rtw88/usb.c
->  create mode 100644 drivers/net/wireless/realtek/rtw88/usb.h
-> 
+> As my previous hint of 'using this as template for the (hint:missing)
+> man page' did not work well, may I suggest that you look at the various
+> return statements in that function and validate whether your proposed
+> return value documentation is valid for all of them?
 
-[...]
+Ahh, the error values and such. Righto. Will do. I'll match the style of
+similar functions.
 
-> +static void rtw_usb_write_port_tx_complete(struct urb *urb)
-> +{
-> +	struct rtw_usb_txcb *txcb = urb->context;
-> +	struct rtw_dev *rtwdev = txcb->rtwdev;
-> +	struct ieee80211_hw *hw = rtwdev->hw;
-> +	int max_iter = RTW_USB_MAX_XMITBUF_SZ;
-> +
-> +	while (true) {
-> +		struct sk_buff *skb = skb_dequeue(&txcb->tx_ack_queue);
-> +		struct ieee80211_tx_info *info;
-> +		struct rtw_usb_tx_data *tx_data;
-> +
-> +		if (!skb)
-> +			break;
-> +
-> +		if (!--max_iter) {
-
-Don't you need to free 'skb'? or you should not dequeue skb in this situation?
-
-> +			rtw_err(rtwdev, "failed to empty TX ack queue\n");
-> +			break;
-> +		}
-> +
-> +		info = IEEE80211_SKB_CB(skb);
-> +		tx_data = rtw_usb_get_tx_data(skb);
-> +
-> +		/* enqueue to wait for tx report */
-> +		if (info->flags & IEEE80211_TX_CTL_REQ_TX_STATUS) {
-> +			rtw_tx_report_enqueue(rtwdev, skb, tx_data->sn);
-> +			continue;
-> +		}
-> +
-> +		/* always ACK for others, then they won't be marked as drop */
-> +		ieee80211_tx_info_clear_status(info);
-> +		if (info->flags & IEEE80211_TX_CTL_NO_ACK)
-> +			info->flags |= IEEE80211_TX_STAT_NOACK_TRANSMITTED;
-> +		else
-> +			info->flags |= IEEE80211_TX_STAT_ACK;
-> +
-> +		ieee80211_tx_status_irqsafe(hw, skb);
-> +	}
-> +
-> +	kfree(txcb);
-> +}
-> +
-
-[...]
-
-I have reviewed patchset v4, and only one comment.
-
---
-Ping-Ke
-
+Jason
