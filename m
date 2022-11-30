@@ -2,102 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B5E63D408
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A891F63D40C
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:11:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbiK3LKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:10:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
+        id S233641AbiK3LLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:11:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234266AbiK3LKZ (ORCPT
+        with ESMTP id S231550AbiK3LLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:10:25 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092F074AAC;
-        Wed, 30 Nov 2022 03:10:20 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 27F4A6602B30;
-        Wed, 30 Nov 2022 11:10:18 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669806618;
-        bh=7oMfqslqjC4FH70ZlLLwmJ6wNhE3DEsyVazeisOoOzY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=iA46UbVmQiGhwuAjFApfJ0W5FpNTR2AkxX+XIKvJzDSmnIvsIZpEeijmxcyX4FM79
-         3yOd71F23Yj+MK24QU535Eaau3j1PtDirFk44cHaBDPwG0Z3FqylNLfzxWXGMggOPH
-         TCUGtMN1WJ7bRAmltM6DBu5ejg9ngyO/9cYngUFmFvEcEu7tgypho0BBsm6uM0hbj8
-         C3haxogMkdTvsA+mY/VHa9GE5QgLGIG8bWq+r026Dw+k7O6QBV5RTegPW6Ks25CQTV
-         08kEnRSQ7i50OhRFOerPxoT5MAmXoFN219edNQGp5dYECgfIbqhWy4m3raH3h29Ze0
-         vuG6J/zwdZALQ==
-Message-ID: <2ec80bd8-dfef-d2e6-eb41-6e6088043e33@collabora.com>
-Date:   Wed, 30 Nov 2022 12:10:14 +0100
+        Wed, 30 Nov 2022 06:11:45 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C6474AAC
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:11:44 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id g12so26489718wrs.10
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:11:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=juKWxF5oTD0FcdVr6vmRKJx9lD1N7VVH5XonHNDYvKI=;
+        b=ZeLJpRgvKOGWEOW4EgtAkpVPc8pF30xRPEQDkJvUfV4oWOggtksYkh0wrqehizoYQZ
+         qgWms415U1t3zr+nXd6FDdXnOZKbAeNH8D8m9SSNLLkDeAk8GOm4Yz+uPZhYeJ7LPqV4
+         1EhJdMtb76hFaUYi5iCkoy5P1q4EZZB5DFFlw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=juKWxF5oTD0FcdVr6vmRKJx9lD1N7VVH5XonHNDYvKI=;
+        b=mApVluLxFpVuz6SprBqu4u4Nt0azTXwGhC2nFZqE6sXAxIljeR7gS1F3evj+OoiqKC
+         394qw8E3ebEIWe9OpxpP1mxwzZ949mi7dKyj81tb1+IdzcAfeVrhcCCNVCa05bdeVCB3
+         Q7/WuPcHp709TKUQGZdBTykLO4zer4iScaqOW6uISs/cVJrGY3MBw9L6p5lw06IHK0wY
+         QCL7nXcrVayHrAU87n3b+iQAKdzVc5Qqq0K35NsBfrOp5gpT7WZELEhMJXMiuFh2MiLs
+         gTMFQzLvwOJrRt8bbZK9f57AgJ0BwATNt9izz4nKAsO+lvaiBFo7qQapqrTpnyL6x/oU
+         GHFA==
+X-Gm-Message-State: ANoB5pkaZU9XX+uUvY2OKqGSLOAHtieXDPQHtPwc2VZyamQyER486Nq+
+        S3rD+etufzjjGRcX0qTR3v+1bQ==
+X-Google-Smtp-Source: AA0mqf6BVoJ5NdmkjOUzns5ytVRpOWb5ZskQA0IXSEu46GclvHUql9ZDew4cSkL5vDOJV2/HzlkZ1Q==
+X-Received: by 2002:adf:ec4b:0:b0:242:803:538c with SMTP id w11-20020adfec4b000000b002420803538cmr15569253wrn.656.1669806702599;
+        Wed, 30 Nov 2022 03:11:42 -0800 (PST)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id w12-20020a05600c474c00b003b435c41103sm6798614wmo.0.2022.11.30.03.11.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 03:11:40 -0800 (PST)
+Date:   Wed, 30 Nov 2022 12:11:38 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
+        alexander.deucher@amd.com, contactshashanksharma@gmail.com,
+        amaranath.somalapuram@amd.com, christian.koenig@amd.com,
+        pierre-eric.pelloux-prayer@amd.com,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@gmail.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Stone <daniel@fooishbar.org>,
+        'Marek =?utf-8?B?T2zFocOhayc=?= <maraeo@gmail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        "Pierre-Loup A . Griffais" <pgriffais@valvesoftware.com>
+Subject: Re: [PATCH v3 0/2] drm: Add GPU reset sysfs
+Message-ID: <Y4c6arwh4NAxbeTv@phenom.ffwll.local>
+Mail-Followup-To: =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
+        alexander.deucher@amd.com, contactshashanksharma@gmail.com,
+        amaranath.somalapuram@amd.com, christian.koenig@amd.com,
+        pierre-eric.pelloux-prayer@amd.com, Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@gmail.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        'Marek =?utf-8?B?T2zFocOhayc=?= <maraeo@gmail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        "Pierre-Loup A . Griffais" <pgriffais@valvesoftware.com>
+References: <20221125175203.52481-1-andrealmeid@igalia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH resend] arm64: dts: mediatek: mt8192: Mark scp_adsp clock
- as broken
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
-References: <20221130031741.3176853-1-wenst@chromium.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221130031741.3176853-1-wenst@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221125175203.52481-1-andrealmeid@igalia.com>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 30/11/22 04:17, Chen-Yu Tsai ha scritto:
-> The scp_adsp clock controller is under the SCP_ADSP power domain. This
-> power domain is currently not supported nor defined.
+On Fri, Nov 25, 2022 at 02:52:01PM -0300, André Almeida wrote:
+> This patchset adds a udev event for DRM device's resets.
 > 
-> Mark the clock controller as broken for now, to avoid the system from
-> trying to access it, and causing the CPU or bus to stall.
+> Userspace apps can trigger GPU resets by misuse of graphical APIs or driver
+> bugs. Either way, the GPU reset might lead the system to a broken state[1], that
+> might be recovered if user has access to a tty or a remote shell. Arguably, this
+> recovery could happen automatically by the system itself, thus this is the goal
+> of this patchset.
 > 
-> Fixes: 5d2b897bc6f5 ("arm64: dts: mediatek: Add mt8192 clock controllers")
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-
-....or we can add the ADSP power domain to actually fix this properly, which looks
-like being a generally good idea :-)
-
-Allen, can you please take care of that?
-
-Thank you,
-Angelo
-
-> ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 2 ++
->   1 file changed, 2 insertions(+)
+> For debugging and report purposes, device coredump support was already added
+> for amdgpu[2], but it's not suitable for programmatic usage like this one given
+> the uAPI not being stable and the need for parsing.
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 6b20376191a7..ef91941848ae 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -575,6 +575,8 @@ scp_adsp: clock-controller@10720000 {
->   			compatible = "mediatek,mt8192-scp_adsp";
->   			reg = <0 0x10720000 0 0x1000>;
->   			#clock-cells = <1>;
-> +			/* power domain dependency not upstreamed */
-> +			status = "broken";
->   		};
->   
->   		uart0: serial@11002000 {
+> GL/VK is out of scope for this use, giving that we are dealing with device
+> resets regardless of API.
+> 
+> A basic userspace daemon is provided at [3] showing how the interface is used
+> to recovery from resets.
+> 
+> [1] A search for "reset" in DRM/AMD issue tracker shows reports of resets
+> making the system unusable:
+> https://gitlab.freedesktop.org/drm/amd/-/issues/?search=reset
+> 
+> [2] https://lore.kernel.org/amd-gfx/20220602081538.1652842-2-Amaranath.Somalapuram@amd.com/
+> 
+> [3] https://gitlab.freedesktop.org/andrealmeid/gpu-resetd
+> 
+> v2: https://lore.kernel.org/dri-devel/20220308180403.75566-1-contactshashanksharma@gmail.com/
+> 
+> André Almeida (1):
+>   drm/amdgpu: Add work function for GPU reset event
+> 
+> Shashank Sharma (1):
+>   drm: Add GPU reset sysfs event
+
+This seems a bit much amd specific, and a bit much like an ad-hoc stopgap.
+
+On the amd specific piece:
+
+- amd's gpus suck the most for gpu hangs, because aside from the shader
+  unblock, there's only device reset, which thrashes vram and display and
+  absolutely everything. Which is terrible. Everyone else has engine only
+  reset since years (i.e. doesn't thrash display or vram), and very often
+  even just context reset (i.e. unless the driver is busted somehow or hw
+  bug, malicious userspace will _only_ ever impact itself).
+
+- robustness extensions for gl/vk already have very clear specifications
+  of all cases of reset, and this work here just ignores that. Yes on amd
+  you only have device reset, but this is drm infra, so you need to be
+  able to cope with ctx reset or reset which only affected a limited set
+  of context. If this is for compute and compute apis lack robustness
+  extensions, then those apis need to be fixed to fill that gap.
+
+- the entire deamon thing feels a bit like overkill and I'm not sure why
+  it exists. I think for a start it would be much simpler if we just have
+  a (per-device maybe) sysfs knob to enable automatic killing of process
+  that die and which don't have arb robustness enabled (for gl case, for
+  vk case the assumption is that _every_ app supports VK_DEVICE_LOST and
+  can recover).
+
+Now onto the ad-hoc part:
+
+- Everyone hand-rolls ad-hoc gpu context structures and how to associate
+  them with a pid. I think we need to stop doing that, because it's just
+  endless pain and prevents us from building useful management stuff like
+  cgroups for drivers that work across drivers (and driver/vendor specific
+  cgroup wont be accepted by upstream cgroup maintainers). Or gpu reset
+  events and dumps like here. This is going to be some work unforutnately.
+
+- I think the best starting point is the context structure drm/scheduler
+  already has, but it needs some work:
+  * untangling it from the scheduler part, so it can be used also for
+    compute context that are directly scheduled by hw
+  * (amd specific) moving amdkfd over to that context structure, at least
+    internally
+  * tracking the pid in there
+
+- I think the error dump facility should also be integrated into this.
+  Userspace needs to know which dump is associated with which reset event,
+  so that remote crash reporting works correctly.
+
+- ideally this framework can keep track of impacted context so that
+  drivers don't have to reinvent the "which context are impacted"
+  robustness ioctl book-keeping all on their own. For amd gpus it's kinda
+  easy, since the impact is "everything", but for other gpus the impact
+  can be all the way from "only one context" to "only contexts actively
+  running on $set_of_engines" to "all the context actively running" to "we
+  thrashed vram, everything is gone"
+
+- i915 has a bunch of this already, but I have honestly no idea whether
+  it's any use because i915-gem is terminally not switching over to
+  drm/scheduler (it needs a full rewrite, which is happening somewhere).
+  So might only be useful to look at to make sure we're not building
+  something which only works for full device reset gpus and nothing else.
+  Over the various generations i915 has pretty much every possible gpu
+  reset options you can think of, with resulting different reporting
+  requirements to make sure robustness extensions work correctly.
+
+- pid isn't enough once you have engine/context reset, you need pid (well
+  drm_file really, but I guess we can bind those to pid somehow) and gpu
+  ctx id. Both gl and vk allow you to allocate limitless gpu context on
+  the same device, and so this matters.
+
+- igt for this stuff. Probably needs some work to generalize the i915
+  infra for endless batchbuffers so that you can make very controlled gpu
+  hangs.
+
+Cheers, Daniel
+
+>  drivers/gpu/drm/amd/amdgpu/amdgpu.h        |  4 +++
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 30 ++++++++++++++++++++++
+>  drivers/gpu/drm/drm_sysfs.c                | 26 +++++++++++++++++++
+>  include/drm/drm_sysfs.h                    | 13 ++++++++++
+>  4 files changed, 73 insertions(+)
+> 
+> -- 
+> 2.38.1
 > 
 
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
