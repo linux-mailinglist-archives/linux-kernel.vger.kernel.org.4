@@ -2,483 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0EA663D832
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F9163D858
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiK3ObR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 09:31:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59732 "EHLO
+        id S229636AbiK3OiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 09:38:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiK3Oau (ORCPT
+        with ESMTP id S229548AbiK3OiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 09:30:50 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944215A6D1;
-        Wed, 30 Nov 2022 06:30:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669818644; x=1701354644;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lzm0el2pIW5XEkLy/cFxN5xypRKBeJSkfcfcn8PuzD8=;
-  b=Tf7+CZjWGZhulLEN2WPj+KEmLN04dUoTAEP5108Yh202ap/3IxOdEDI8
-   XS0BRoAnyOPTPM/Rq66YTUGcGCKD+C87X46o+JVhbBzsCTcGnUnk5sSh4
-   lLzBzjlbzgGkQYjov15qJqKEoB0RJ+Mh8yvJu0PAFFZwhQnvj13flocPj
-   brOTEW/6XtH7kjysDE42UvlaRE0lOde8sz1dVgKjBy1Wwci1QJETbUt+a
-   FkVJka0fObKTYJ9EeQDFbAFNARRBwgvkjL5ncldzcQlod2j59WM7YyYHu
-   u+mQfR9HgkZb40QUxq2N2VUV3ACQ2DXjL6gDalN4WlKoVVt3L0xP3lTu2
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
-   d="scan'208";a="189363497"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Nov 2022 07:30:43 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 30 Nov 2022 07:30:39 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 30 Nov 2022 07:30:37 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <lars.povlsen@microchip.com>,
-        <Steen.Hegelund@microchip.com>, <daniel.machon@microchip.com>,
-        <richardcochran@gmail.com>, <UNGLinuxDriver@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next 4/4] net: lan966x: Add ptp trap rules
-Date:   Wed, 30 Nov 2022 15:35:25 +0100
-Message-ID: <20221130143525.934906-5-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221130143525.934906-1-horatiu.vultur@microchip.com>
-References: <20221130143525.934906-1-horatiu.vultur@microchip.com>
-MIME-Version: 1.0
+        Wed, 30 Nov 2022 09:38:20 -0500
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48192D1EE;
+        Wed, 30 Nov 2022 06:38:18 -0800 (PST)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1322d768ba7so21199567fac.5;
+        Wed, 30 Nov 2022 06:38:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=43xx9qXCrz3F8S6qKQa/eXVCPWGL75F49yrEq5R54q8=;
+        b=IBhtpIFlLPo21J6/q9llYogJ04glnWB6B1UD02Csreifk9x6ZmQBk+Z6gk1NQwjBKp
+         l2bD3FEK0ccKU4/sCS1huel+/ESHnb2ApfxOYopqWHZKZeqTuzk/kx1OLMZVNf5oSxTk
+         I01/1LSEKjXeVX7M+FIJHMejAfbvdgSqsKV1R0tMyM1a9MXciBf8vN9YalgeqpChvVzN
+         ov7zHy2Bmi5u0+ug4MlxywwCD+W8feuAFssfhlcropuOQ1lGhwSdY2Le/1lubrg0efLT
+         BT6M3PeMZRIVYVrtCyQBeKY02YmkFwxRtLoHpqanywF+17DPL0xIH88hOArcIMt9lX41
+         APAA==
+X-Gm-Message-State: ANoB5plaxnq9UQ2PC1GiQFm7npXgilehkARiEftMQRJ5isw/gklyUkPe
+        iZuY+RFez1Mq21bvUBhdOkjTadVQNQ==
+X-Google-Smtp-Source: AA0mqf79hdNMKYx0txvg9ckRZy0JkGHEHBqBvnJbWTqho7minJHj6ftuvOmsKTTf6XvzSczucPaEfQ==
+X-Received: by 2002:a05:6871:aa:b0:13b:ccc0:b292 with SMTP id u42-20020a05687100aa00b0013bccc0b292mr36788300oaa.258.1669819098028;
+        Wed, 30 Nov 2022 06:38:18 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i6-20020a9d53c6000000b0066cacb8343bsm1005861oth.41.2022.11.30.06.38.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 06:38:17 -0800 (PST)
+Received: (nullmailer pid 2122811 invoked by uid 1000);
+        Wed, 30 Nov 2022 14:38:16 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org, Georgi Djakov <djakov@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <20221130132059.3145243-2-abel.vesa@linaro.org>
+References: <20221130132059.3145243-1-abel.vesa@linaro.org>
+ <20221130132059.3145243-2-abel.vesa@linaro.org>
+Message-Id: <166981906152.2121820.815257956142894552.robh@kernel.org>
+Subject: Re: [PATCH v4 1/2] dt-bindings: interconnect: Add Qualcomm SM8550
+Date:   Wed, 30 Nov 2022 08:38:16 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently lan966x, doesn't allow to run PTP over interfaces that are
-part of the bridge. The reason is when the lan966x was receiving a
-PTP frame (regardless if L2/IPv4/IPv6) the HW it would flood this
-frame.
-Now that it is possible to add VCAP rules to the HW, such to trap these
-frames to the CPU, it is possible to run PTP also over interfaces that
-are part of the bridge.
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- .../ethernet/microchip/lan966x/lan966x_main.c |  19 +-
- .../ethernet/microchip/lan966x/lan966x_main.h |  14 ++
- .../ethernet/microchip/lan966x/lan966x_ptp.c  | 237 +++++++++++++++++-
- .../microchip/lan966x/lan966x_tc_flower.c     |   8 -
- .../microchip/lan966x/lan966x_vcap_impl.c     |  11 +-
- 5 files changed, 266 insertions(+), 23 deletions(-)
+On Wed, 30 Nov 2022 15:20:58 +0200, Abel Vesa wrote:
+> The Qualcomm SM8550 SoC has several bus fabrics that could be
+> controlled and tuned dynamically according to the bandwidth demand.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+> 
+> Changes since v3:
+>  * Dropped qcom,sm8550-rpmh.h and qcom,rpmh.h from examples
+>  * Added the header for interconnect IDs to the top-level description
+>  * Fixed examples indentation
+> 
+>  .../interconnect/qcom,sm8550-rpmh.yaml        | 139 +++++++++++++
+>  .../interconnect/qcom,sm8550-rpmh.h           | 190 ++++++++++++++++++
+>  2 files changed, 329 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
+>  create mode 100644 include/dt-bindings/interconnect/qcom,sm8550-rpmh.h
+> 
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index f6092983d0281..cadde20505ba0 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -443,11 +443,22 @@ static int lan966x_port_ioctl(struct net_device *dev, struct ifreq *ifr,
- 			      int cmd)
- {
- 	struct lan966x_port *port = netdev_priv(dev);
-+	int err;
-+
-+	if (cmd == SIOCSHWTSTAMP) {
-+		err = lan966x_ptp_setup_traps(port, ifr);
-+		if (err)
-+			return err;
-+	}
- 
- 	if (!phy_has_hwtstamp(dev->phydev) && port->lan966x->ptp) {
- 		switch (cmd) {
- 		case SIOCSHWTSTAMP:
--			return lan966x_ptp_hwtstamp_set(port, ifr);
-+			err = lan966x_ptp_hwtstamp_set(port, ifr);
-+			if (err)
-+				lan966x_ptp_del_traps(port);
-+
-+			return err;
- 		case SIOCGHWTSTAMP:
- 			return lan966x_ptp_hwtstamp_get(port, ifr);
- 		}
-@@ -456,7 +467,11 @@ static int lan966x_port_ioctl(struct net_device *dev, struct ifreq *ifr,
- 	if (!dev->phydev)
- 		return -ENODEV;
- 
--	return phy_mii_ioctl(dev->phydev, ifr, cmd);
-+	err = phy_mii_ioctl(dev->phydev, ifr, cmd);
-+	if (err && cmd == SIOCSHWTSTAMP)
-+		lan966x_ptp_del_traps(port);
-+
-+	return err;
- }
- 
- static const struct net_device_ops lan966x_port_netdev_ops = {
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index f2e45da7ffd4f..3491f19618358 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -88,6 +88,10 @@
- #define SE_IDX_QUEUE			0  /* 0-79 : Queue scheduler elements */
- #define SE_IDX_PORT			80 /* 80-89 : Port schedular elements */
- 
-+#define LAN966X_VCAP_CID_IS2_L0 VCAP_CID_INGRESS_STAGE2_L0 /* IS2 lookup 0 */
-+#define LAN966X_VCAP_CID_IS2_L1 VCAP_CID_INGRESS_STAGE2_L1 /* IS2 lookup 1 */
-+#define LAN966X_VCAP_CID_IS2_MAX (VCAP_CID_INGRESS_STAGE2_L2 - 1) /* IS2 Max */
-+
- /* MAC table entry types.
-  * ENTRYTYPE_NORMAL is subject to aging.
-  * ENTRYTYPE_LOCKED is not subject to aging.
-@@ -116,6 +120,14 @@ enum lan966x_fdma_action {
- 	FDMA_REDIRECT,
- };
- 
-+/* Controls how PORT_MASK is applied */
-+enum LAN966X_PORT_MASK_MODE {
-+	LAN966X_PMM_NO_ACTION,
-+	LAN966X_PMM_REPLACE,
-+	LAN966X_PMM_FORWARDING,
-+	LAN966X_PMM_REDIRECT,
-+};
-+
- struct lan966x_port;
- 
- struct lan966x_db {
-@@ -473,6 +485,8 @@ irqreturn_t lan966x_ptp_irq_handler(int irq, void *args);
- irqreturn_t lan966x_ptp_ext_irq_handler(int irq, void *args);
- u32 lan966x_ptp_get_period_ps(void);
- int lan966x_ptp_gettime64(struct ptp_clock_info *ptp, struct timespec64 *ts);
-+int lan966x_ptp_setup_traps(struct lan966x_port *port, struct ifreq *ifr);
-+int lan966x_ptp_del_traps(struct lan966x_port *port);
- 
- int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev);
- int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c
-index e5a2bbe064f8f..1f6614ee83169 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c
-@@ -3,6 +3,8 @@
- #include <linux/ptp_classify.h>
- 
- #include "lan966x_main.h"
-+#include "vcap_api.h"
-+#include "vcap_api_client.h"
- 
- #define LAN966X_MAX_PTP_ID	512
- 
-@@ -18,6 +20,17 @@
- 
- #define TOD_ACC_PIN		0x7
- 
-+/* This represents the base rule ID for the PTP rules that are added in the
-+ * VCAP to trap frames to CPU. This number needs to be bigger than the maximum
-+ * number of entries that can exist in the VCAP.
-+ */
-+#define LAN966X_VCAP_PTP_RULE_ID	1000000
-+#define LAN966X_VCAP_L2_PTP_TRAP	(LAN966X_VCAP_PTP_RULE_ID + 0)
-+#define LAN966X_VCAP_IPV4_EV_PTP_TRAP	(LAN966X_VCAP_PTP_RULE_ID + 1)
-+#define LAN966X_VCAP_IPV4_GEN_PTP_TRAP	(LAN966X_VCAP_PTP_RULE_ID + 2)
-+#define LAN966X_VCAP_IPV6_EV_PTP_TRAP	(LAN966X_VCAP_PTP_RULE_ID + 3)
-+#define LAN966X_VCAP_IPV6_GEN_PTP_TRAP	(LAN966X_VCAP_PTP_RULE_ID + 4)
-+
- enum {
- 	PTP_PIN_ACTION_IDLE = 0,
- 	PTP_PIN_ACTION_LOAD,
-@@ -35,19 +48,229 @@ static u64 lan966x_ptp_get_nominal_value(void)
- 	return 0x304d4873ecade305;
- }
- 
-+static int lan966x_ptp_add_trap(struct lan966x_port *port,
-+				int (*add_ptp_key)(struct vcap_rule *vrule,
-+						   struct lan966x_port*),
-+				u32 rule_id,
-+				u16 proto)
-+{
-+	struct lan966x *lan966x = port->lan966x;
-+	struct vcap_rule *vrule;
-+	int err;
-+
-+	vrule = vcap_get_rule(lan966x->vcap_ctrl, rule_id);
-+	if (vrule) {
-+		u32 value, mask;
-+
-+		/* Just modify the ingress port mask and exit */
-+		vcap_rule_get_key_u32(vrule, VCAP_KF_IF_IGR_PORT_MASK,
-+				      &value, &mask);
-+		mask &= ~BIT(port->chip_port);
-+		vcap_rule_mod_key_u32(vrule, VCAP_KF_IF_IGR_PORT_MASK,
-+				      value, mask);
-+
-+		err = vcap_mod_rule(vrule);
-+		goto free_rule;
-+	}
-+
-+	vrule = vcap_alloc_rule(lan966x->vcap_ctrl, port->dev,
-+				LAN966X_VCAP_CID_IS2_L0,
-+				VCAP_USER_PTP, 0, rule_id);
-+	if (!vrule)
-+		return -ENOMEM;
-+	if (IS_ERR(vrule))
-+		return PTR_ERR(vrule);
-+
-+	err = add_ptp_key(vrule, port);
-+	if (err)
-+		goto free_rule;
-+
-+	err = vcap_set_rule_set_actionset(vrule, VCAP_AFS_BASE_TYPE);
-+	err |= vcap_rule_add_action_bit(vrule, VCAP_AF_CPU_COPY_ENA, VCAP_BIT_1);
-+	err |= vcap_rule_add_action_u32(vrule, VCAP_AF_MASK_MODE, LAN966X_PMM_REPLACE);
-+	err |= vcap_val_rule(vrule, proto);
-+	if (err)
-+		goto free_rule;
-+
-+	err = vcap_add_rule(vrule);
-+
-+free_rule:
-+	/* Free the local copy of the rule */
-+	vcap_free_rule(vrule);
-+	return err;
-+}
-+
-+static int lan966x_ptp_del_trap(struct lan966x_port *port,
-+				u32 rule_id)
-+{
-+	struct lan966x *lan966x = port->lan966x;
-+	struct vcap_rule *vrule;
-+	u32 value, mask;
-+	int err;
-+
-+	vrule = vcap_get_rule(lan966x->vcap_ctrl, rule_id);
-+	if (!vrule)
-+		return -EEXIST;
-+
-+	vcap_rule_get_key_u32(vrule, VCAP_KF_IF_IGR_PORT_MASK, &value, &mask);
-+	mask |= BIT(port->chip_port);
-+
-+	/* No other port requires this trap, so it is safe to remove it */
-+	if (mask == GENMASK(lan966x->num_phys_ports, 0)) {
-+		err = vcap_del_rule(lan966x->vcap_ctrl, port->dev, rule_id);
-+		goto free_rule;
-+	}
-+
-+	vcap_rule_mod_key_u32(vrule, VCAP_KF_IF_IGR_PORT_MASK, value, mask);
-+	err = vcap_mod_rule(vrule);
-+
-+free_rule:
-+	vcap_free_rule(vrule);
-+	return err;
-+}
-+
-+static int lan966x_ptp_add_l2_key(struct vcap_rule *vrule,
-+				  struct lan966x_port *port)
-+{
-+	return vcap_rule_add_key_u32(vrule, VCAP_KF_ETYPE, ETH_P_1588, ~0);
-+}
-+
-+static int lan966x_ptp_add_ip_event_key(struct vcap_rule *vrule,
-+					struct lan966x_port *port)
-+{
-+	return vcap_rule_add_key_u32(vrule, VCAP_KF_L4_DPORT, 319, ~0) ||
-+	       vcap_rule_add_key_bit(vrule, VCAP_KF_TCP_IS, VCAP_BIT_0);
-+}
-+
-+static int lan966x_ptp_add_ip_general_key(struct vcap_rule *vrule,
-+					  struct lan966x_port *port)
-+{
-+	return vcap_rule_add_key_u32(vrule, VCAP_KF_L4_DPORT, 320, ~0) ||
-+		vcap_rule_add_key_bit(vrule, VCAP_KF_TCP_IS, VCAP_BIT_0);
-+}
-+
-+static int lan966x_ptp_add_l2_rule(struct lan966x_port *port)
-+{
-+	return lan966x_ptp_add_trap(port, lan966x_ptp_add_l2_key,
-+				    LAN966X_VCAP_L2_PTP_TRAP, ETH_P_ALL);
-+}
-+
-+static int lan966x_ptp_add_ipv4_rules(struct lan966x_port *port)
-+{
-+	int err;
-+
-+	err = lan966x_ptp_add_trap(port, lan966x_ptp_add_ip_event_key,
-+				   LAN966X_VCAP_IPV4_EV_PTP_TRAP, ETH_P_IP);
-+	if (err)
-+		return err;
-+
-+	err = lan966x_ptp_add_trap(port, lan966x_ptp_add_ip_general_key,
-+				   LAN966X_VCAP_IPV4_GEN_PTP_TRAP, ETH_P_IP);
-+	if (err)
-+		lan966x_ptp_del_trap(port, LAN966X_VCAP_IPV4_EV_PTP_TRAP);
-+
-+	return err;
-+}
-+
-+static int lan966x_ptp_add_ipv6_rules(struct lan966x_port *port)
-+{
-+	int err;
-+
-+	err = lan966x_ptp_add_trap(port, lan966x_ptp_add_ip_event_key,
-+				   LAN966X_VCAP_IPV6_EV_PTP_TRAP, ETH_P_IPV6);
-+	if (err)
-+		return err;
-+
-+	err = lan966x_ptp_add_trap(port, lan966x_ptp_add_ip_general_key,
-+				   LAN966X_VCAP_IPV6_GEN_PTP_TRAP,
-+				   ETH_P_IPV6);
-+	if (err)
-+		lan966x_ptp_del_trap(port, LAN966X_VCAP_IPV6_EV_PTP_TRAP);
-+
-+	return err;
-+}
-+
-+static int lan966x_ptp_del_l2_rule(struct lan966x_port *port)
-+{
-+	return lan966x_ptp_del_trap(port, LAN966X_VCAP_L2_PTP_TRAP);
-+}
-+
-+static int lan966x_ptp_del_ipv4_rules(struct lan966x_port *port)
-+{
-+	int err;
-+
-+	err = lan966x_ptp_del_trap(port, LAN966X_VCAP_IPV4_EV_PTP_TRAP);
-+	err |= lan966x_ptp_del_trap(port, LAN966X_VCAP_IPV4_GEN_PTP_TRAP);
-+
-+	return err;
-+}
-+
-+static int lan966x_ptp_del_ipv6_rules(struct lan966x_port *port)
-+{
-+	int err;
-+
-+	err = lan966x_ptp_del_trap(port, LAN966X_VCAP_IPV6_EV_PTP_TRAP);
-+	err |= lan966x_ptp_del_trap(port, LAN966X_VCAP_IPV6_GEN_PTP_TRAP);
-+
-+	return err;
-+}
-+
-+static int lan966x_ptp_add_traps(struct lan966x_port *port)
-+{
-+	int err;
-+
-+	err = lan966x_ptp_add_l2_rule(port);
-+	if (err)
-+		goto err_l2;
-+
-+	err = lan966x_ptp_add_ipv4_rules(port);
-+	if (err)
-+		goto err_ipv4;
-+
-+	err = lan966x_ptp_add_ipv6_rules(port);
-+	if (err)
-+		goto err_ipv6;
-+
-+	return err;
-+
-+err_ipv6:
-+	lan966x_ptp_del_ipv4_rules(port);
-+err_ipv4:
-+	lan966x_ptp_del_l2_rule(port);
-+err_l2:
-+	return err;
-+}
-+
-+int lan966x_ptp_del_traps(struct lan966x_port *port)
-+{
-+	int err;
-+
-+	err = lan966x_ptp_del_l2_rule(port);
-+	err |= lan966x_ptp_del_ipv4_rules(port);
-+	err |= lan966x_ptp_del_ipv6_rules(port);
-+
-+	return err;
-+}
-+
-+int lan966x_ptp_setup_traps(struct lan966x_port *port, struct ifreq *ifr)
-+{
-+	struct hwtstamp_config cfg;
-+
-+	if (copy_from_user(&cfg, ifr->ifr_data, sizeof(cfg)))
-+		return -EFAULT;
-+
-+	if (cfg.rx_filter == HWTSTAMP_FILTER_NONE)
-+		return lan966x_ptp_del_traps(port);
-+	else
-+		return lan966x_ptp_add_traps(port);
-+}
-+
- int lan966x_ptp_hwtstamp_set(struct lan966x_port *port, struct ifreq *ifr)
- {
- 	struct lan966x *lan966x = port->lan966x;
- 	struct hwtstamp_config cfg;
- 	struct lan966x_phc *phc;
- 
--	/* For now don't allow to run ptp on ports that are part of a bridge,
--	 * because in case of transparent clock the HW will still forward the
--	 * frames, so there would be duplicate frames
--	 */
--	if (lan966x->bridge_mask & BIT(port->chip_port))
--		return -EINVAL;
--
- 	if (copy_from_user(&cfg, ifr->ifr_data, sizeof(cfg)))
- 		return -EFAULT;
- 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c b/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
-index 04a2afd683cca..ba3fa917d6b78 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_tc_flower.c
-@@ -4,14 +4,6 @@
- #include "vcap_api.h"
- #include "vcap_api_client.h"
- 
--/* Controls how PORT_MASK is applied */
--enum LAN966X_PORT_MASK_MODE {
--	LAN966X_PMM_NO_ACTION,
--	LAN966X_PMM_REPLACE,
--	LAN966X_PMM_FORWARDING,
--	LAN966X_PMM_REDIRECT,
--};
--
- struct lan966x_tc_flower_parse_usage {
- 	struct flow_cls_offload *f;
- 	struct flow_rule *frule;
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_vcap_impl.c b/drivers/net/ethernet/microchip/lan966x/lan966x_vcap_impl.c
-index 44f40d9149470..d8dc9fbb81e1a 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_vcap_impl.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_vcap_impl.c
-@@ -5,10 +5,6 @@
- #include "vcap_api.h"
- #include "vcap_api_client.h"
- 
--#define LAN966X_VCAP_CID_IS2_L0 VCAP_CID_INGRESS_STAGE2_L0 /* IS2 lookup 0 */
--#define LAN966X_VCAP_CID_IS2_L1 VCAP_CID_INGRESS_STAGE2_L1 /* IS2 lookup 1 */
--#define LAN966X_VCAP_CID_IS2_MAX (VCAP_CID_INGRESS_STAGE2_L2 - 1) /* IS2 Max */
--
- #define STREAMSIZE (64 * 4)
- 
- #define LAN966X_IS2_LOOKUPS 2
-@@ -219,9 +215,12 @@ static void lan966x_vcap_add_default_fields(struct net_device *dev,
- 					    struct vcap_rule *rule)
- {
- 	struct lan966x_port *port = netdev_priv(dev);
-+	u32 value, mask;
- 
--	vcap_rule_add_key_u32(rule, VCAP_KF_IF_IGR_PORT_MASK, 0,
--			      ~BIT(port->chip_port));
-+	if (vcap_rule_get_key_u32(rule, VCAP_KF_IF_IGR_PORT_MASK,
-+				  &value, &mask))
-+		vcap_rule_add_key_u32(rule, VCAP_KF_IF_IGR_PORT_MASK, 0,
-+				      ~BIT(port->chip_port));
- 
- 	if (lan966x_vcap_is_first_chain(rule))
- 		vcap_rule_add_key_bit(rule, VCAP_KF_LOOKUP_FIRST_IS,
--- 
-2.38.0
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.example.dts:18:18: fatal error: dt-bindings/clock/qcom,sm8550-gcc.h: No such file or directory
+   18 |         #include <dt-bindings/clock/qcom,sm8550-gcc.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1492: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221130132059.3145243-2-abel.vesa@linaro.org
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
