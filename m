@@ -2,253 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFEDD63E0CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CDD63E0CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:31:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbiK3TaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 14:30:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
+        id S229686AbiK3Tbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 14:31:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiK3TaS (ORCPT
+        with ESMTP id S229449AbiK3Tbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 14:30:18 -0500
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207808C44C;
-        Wed, 30 Nov 2022 11:30:17 -0800 (PST)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-14263779059so22267697fac.1;
-        Wed, 30 Nov 2022 11:30:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vey2xyZWw852h6h6+sA2dVPI7ZTC37aAaOAnPv7n9Cs=;
-        b=I6pnVW1Zml+1uikWb+2tCdDpqX9aKyudylPaMRNuXlxeXA2paVyAk48AVmTzAov1jh
-         0Cj+SWwle57WeIwteNjD385Px+DXdhQS20uiajWTaLjwkqUu6abjJ7ulpSD8JjSElN/d
-         MpW/JsZnIms0ewTBaE9L6ytSTVWN63Rwaf7471COyNhvAWlGG0P9XLjmAY1Y7RioT/LN
-         K1i1dlSBW2XF1iX57GXGMi1mHzNCBxtU7filqzTe/GlXfZ7ivrR5w0lp8XS9XoJcN740
-         KV5Mnk2yUF9YfXlgosI9cJj1buVfyvtR708OlyLv2fHOfTy4FFgnkPPo1WfOSWyMRbmT
-         ffhg==
-X-Gm-Message-State: ANoB5plaCgW8S/j0kU3DYF7WaRUbvMMhDfn0EBQ8KHt+DFvU7pfGtNlc
-        AQoW1H71x534ZZEw9bD9bw==
-X-Google-Smtp-Source: AA0mqf6euqww3Wd1rIgPAv+lutmMx14inHv1/54xYfDjWH7CJCTALg8wNYpo9bIiKFtWbL0Uj8+vnA==
-X-Received: by 2002:a05:6870:a11d:b0:132:3c19:8cbc with SMTP id m29-20020a056870a11d00b001323c198cbcmr34597528oae.185.1669836616291;
-        Wed, 30 Nov 2022 11:30:16 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s10-20020acadb0a000000b0035b439a4b81sm970779oig.31.2022.11.30.11.30.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 11:30:15 -0800 (PST)
-Received: (nullmailer pid 2655052 invoked by uid 1000);
-        Wed, 30 Nov 2022 19:30:14 -0000
-Date:   Wed, 30 Nov 2022 13:30:14 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, arnd@arndb.de,
-        hasegawa-hitomi@fujitsu.com, marcan@marcan.st,
-        nicolas.ferre@microchip.com, conor.dooley@microchip.com,
-        heiko@sntech.de, sven@svenpeter.dev, briannorris@chromium.org,
-        krzysztof.kozlowski+dt@linaro.org, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] dt-binding: soc: nuvoton: Add NPCM BPC LPC
- documentation
-Message-ID: <20221130193014.GA2645083-robh@kernel.org>
-References: <20221122201232.107065-1-tmaimon77@gmail.com>
- <20221122201232.107065-2-tmaimon77@gmail.com>
- <cedc0013-f0c0-3180-6995-477b77b919f8@linaro.org>
+        Wed, 30 Nov 2022 14:31:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FAF86A14
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:31:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FEF461D96
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 19:31:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 264D8C4347C
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 19:31:48 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="HMBhsAXD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669836706;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8ScMaAIgcavRwlnc4K5Bo/PJrf8VIf6mrT3T2oiNawk=;
+        b=HMBhsAXD/2ls5hHnyzrHsZvKaX/qCCBffiYotopqAyrtFIDFROcOxzr8Uk0ANLTiOApN2r
+        5Qxb+6ZD/hKMXj4eceBkY8IYC8F3i5AhQojD9sc920IADnc3vUI9aeY8fbtLYblhWHKY9g
+        AP3+6/l40UZOJ4OGTGxSwI1/43q02yw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5d16cd9d (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Wed, 30 Nov 2022 19:31:45 +0000 (UTC)
+Received: by mail-vs1-f44.google.com with SMTP id m4so18354225vsc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:31:45 -0800 (PST)
+X-Gm-Message-State: ANoB5pmeBIcStCwrErBDJHMUwa1kSJnSpHcV3QG3T6cRG15SLaly4V9Q
+        eGGHEV8VpHwMWM6cMjMyBB0X9HdrDKxQVJlt+uQ=
+X-Google-Smtp-Source: AA0mqf4wDWFsoIop7y9uDv0CAz1F0ELRaeOde/n4mSE5vseu/TD9+EtjGBC37rBf2EVkGw/nkTAEd29V2QCmSI7ezOE=
+X-Received: by 2002:a05:6102:30bc:b0:3b0:93af:fc3f with SMTP id
+ y28-20020a05610230bc00b003b093affc3fmr10983840vsd.55.1669836704982; Wed, 30
+ Nov 2022 11:31:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cedc0013-f0c0-3180-6995-477b77b919f8@linaro.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221130020815.283814-1-Jason@zx2c4.com> <Y4biVHVPhVyVJ6Fc@sol.localdomain>
+ <Y4cqpwwbNBKhdidq@zx2c4.com> <Y4en9fSll1vSY4Bt@gmail.com>
+In-Reply-To: <Y4en9fSll1vSY4Bt@gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 30 Nov 2022 20:31:33 +0100
+X-Gmail-Original-Message-ID: <CAHmME9p63Cpi4273OMFB=8F3+CfEfMUxZ4vV=xjWqxQ=frr34Q@mail.gmail.com>
+Message-ID: <CAHmME9p63Cpi4273OMFB=8F3+CfEfMUxZ4vV=xjWqxQ=frr34Q@mail.gmail.com>
+Subject: Re: [PATCH] random: align entropy_timer_state to cache line
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Sultan Alsawaf <sultan@kerneltoast.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 11:03:28AM +0100, Krzysztof Kozlowski wrote:
-> On 22/11/2022 21:12, Tomer Maimon wrote:
-> 
-> 1. Subject: drop second, redundant "documentation" (dt-bindings are
-> documentation).
-> 
-> 2. Use subject prefixes matching the subsystem (git log --oneline -- ...).
-> 
-> > Added device tree binding documentation for Nuvoton BMC NPCM BIOS Post
-> > Code (BPC).
-> > 
-> > The NPCM BPC monitoring two configurable I/O addresses written by the
-> > host on Low Pin Count (LPC) bus.
-> > 
-> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> > ---
-> >  .../bindings/soc/nuvoton/npcm-lpc-bpc.yaml    | 112 ++++++++++++++++++
-> >  1 file changed, 112 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/soc/nuvoton/npcm-lpc-bpc.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/soc/nuvoton/npcm-lpc-bpc.yaml b/Documentation/devicetree/bindings/soc/nuvoton/npcm-lpc-bpc.yaml
-> > new file mode 100644
-> > index 000000000000..2c8e66546891
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/soc/nuvoton/npcm-lpc-bpc.yaml
-> 
-> Filename should match compatibles, at least in the "vendor,device"
-> style, so for example: nuvoton,lpc.yaml
-> 
-> > @@ -0,0 +1,112 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/soc/nuvoton/npcm-lpc-bpc.yaml#
-> 
-> LPC is a generic bus, so this should not be in "soc" directory. Where?
-> Depends what is this... Generic bus bindings could be in "bus" directory
-> or dedicated "lpc", if we have more of these.
-> 
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Nuvoton Low Pin Count (LPC) Bus Controller
-> > +
-> > +maintainers:
-> > +  - Tomer Maimon <tmaimon77@gmail.com>
-> > +
-> > +description:
-> > +  The Low Pin Count (LPC) is a low bandwidth bus that is used to connect
-> > +  peripherals around the CPU and to replace the Industry Standard Architecture
-> > +  (ISA) bus.
-> 
-> You need to decide whether you describe here bus, bus controller or
-> device on the bus.
-> 
-> > +
-> > +  The Nuvoton NPCM LPC bus is a bridge of host CPU to a several of peripheral
-> > +  devices.
-> 
-> LPC bus is a bridge? It's either incorrect or so generic that every bus
-> is a "bridge"?
-> 
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - enum:
-> > +          - nuvoton,npcm750-lpc
-> > +          - nuvoton,npcm845-lpc
-> > +      - const: simple-mfd
-> > +      - const: syscon
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  "#address-cells":
-> > +    const: 1
+On Wed, Nov 30, 2022 at 7:59 PM Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> On Wed, Nov 30, 2022 at 11:04:23AM +0100, Jason A. Donenfeld wrote:
+> > > > diff --git a/drivers/char/random.c b/drivers/char/random.c
+> > > > index 67558b95d531..2494e08c76d8 100644
+> > > > --- a/drivers/char/random.c
+> > > > +++ b/drivers/char/random.c
+> > > > @@ -1262,7 +1262,7 @@ static void __cold entropy_timer(struct timer_list *timer)
+> > > >  static void __cold try_to_generate_entropy(void)
+> > > >  {
+> > > >   enum { NUM_TRIAL_SAMPLES = 8192, MAX_SAMPLES_PER_BIT = HZ / 15 };
+> > > > - struct entropy_timer_state stack;
+> > > > + struct entropy_timer_state stack ____cacheline_aligned;
+> > >
+> > > Several years ago, there was a whole thing about how __attribute__((aligned)) to
+> > > more than 8 bytes doesn't actually work on stack variables in the kernel on x86,
+> > > because the kernel only keeps the stack 8-byte aligned but gcc assumes it is
+> > > 16-byte aligned.  See
+> > > https://lore.kernel.org/linux-crypto/20170110143340.GA3787@gondor.apana.org.au/T/#t
+> > >
+> > > IIRC, nothing was done about it at the time.
+> > >
+> > > Has that been resolved in the intervening years?
+> >
+> > Maybe things are different for ____cacheline_aligned, which is 64 bytes.
+> > Reading that thread, it looks like it was a case of trying to align the
+> > stack to 16 bytes, but gcc assumed 16 bytes already while the kernel
+> > only gave it 8. So gcc didn't think it needed to emit any code to align
+> > it. Here, though, it's 64, and gcc certainly isn't assuming 64-byte
+> > stack alignment.
+> >
+> > Looking at the codegen, gcc appears to doing `rsp = (rsp & ~63) - 64`,
+> > which appears correct.
+>
+> Well, if gcc thinks the stack is already 16-byte aligned, then it would be
+> perfectly within its rights to do 'rsp = (rsp & ~47) - 64', right?  You probably
+> don't want to be relying on an implementation detail of gcc codegen...
 
-ISA type bus is 2 cells.
+The really pathological one would be ~48, which would just clear those
+two extra bits. I can't imagine gcc or clang ever deciding to do that.
+But I guess they could?
 
-> > +
-> > +  "#size-cells":
-> > +    const: 1
-> > +
-> > +  ranges: true
-> > +
-> > +patternProperties:
-> > +  "^lpc_bpc@[0-9a-f]+$":
-> 
-> No underscores in node names. Generic node names, so maybe "bpc"
-> 
-> This also does not match your example at all.
-> 
-> 
-> > +    type: object
-> > +    additionalProperties: false
-> > +
-> > +    description:
-> > +      Nuvoton BMC NPCM BIOS Post Code (BPC) monitoring two configurable I/O
-> > +      addresses written by the host on the Low Pin Count (LPC) bus, the capure
-> 
-> typo: capture
-> 
-> > +      data stored in 128-word FIFO.
-> > +
-> > +      NPCM BPC supports capture double words, when using capture
-> > +      double word only I/O address 1 is monitored.
-> 
-> This sentence is not grammatically correct. BPC supports capturing
-> double words when using double word capturing? Aren't these two sentences?
-> 
-> > +
-> > +    properties:
-> > +      compatible:
-> > +        items:
-> 
-> No items here.
-> 
-> > +          - enum:
-> > +              - nuvoton,npcm750-lpc-bpc
-> > +              - nuvoton,npcm845-lpc-bpc
-> > +
-> > +      reg:
-> > +        maxItems: 1
-> > +
-> > +      interrupts:
-> > +        maxItems: 1
-> > +
-> > +      nuvoton,monitor-ports:
-> > +        $ref: /schemas/types.yaml#/definitions/uint32-array
-> > +        description: 
-> > +          Contain monitor I/O addresses, at least one monitor I/O address 
-> 
-> Contains
-> 
-> But you need to explain what are these... I/O addresses on the bus?
+What would you recommend here? kmalloc'ing it instead? Keeping things
+as is with ____cacheline_aligned, since this has always been broken,
+and it's not the end of the world? Something else?
 
-What does 'reg' contain then?
-
-> 
-> > +          required.
-> > +
-> > +      nuvoton,bpc-en-dwcapture:
-> > +        description: If present, Enable capture double words support.
-> 
-> Is it the same as reg-io-width?
-> 
-> > +        type: boolean
-> > +
-> > +    required:
-> > +      - compatible
-> > +      - reg
-> > +      - interrupts
-> > +      - nuvoton,monitor-ports
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - "#address-cells"
-> > +  - "#size-cells"
-> > +  - ranges
-> > +
-> > +additionalProperties:
-> > +  type: object
-> 
-> No, only bus schemas could have it. Here additionalProperties: false.
-> 
-> It seems there are already few LPC controllers and all are put in
-> different places:
-> Documentation/devicetree/bindings/mfd/aspeed-lpc.yaml
-> Documentation/devicetree/bindings/arm/hisilicon/low-pin-count.yaml
-
-Always the 3rd instance that gets to restructure things...
-
-> Maybe Rob why this was made not really as two bindings - for bus
-> controller and devices?
-
-This schema should certainly be split between LPC and BPC. As LPC is 
-logically ISA bus, there is an ISA bus schema in dtschema already which 
-should be referenced.
-
-Rob
+Jason
