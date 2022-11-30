@@ -2,118 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE0D63E3D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90D9863E576
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbiK3W50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 17:57:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
+        id S230136AbiK3XaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:30:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiK3W5X (ORCPT
+        with ESMTP id S229461AbiK3X3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 17:57:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC36792A0A;
-        Wed, 30 Nov 2022 14:57:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64E4161E36;
-        Wed, 30 Nov 2022 22:57:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7BB9C433C1;
-        Wed, 30 Nov 2022 22:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669849041;
-        bh=pybQYKi2gR0IlbnVuLeDx89kUYolz4gTT5Rd9aKijSI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bZkPwGIbaM8iGj5LhDqvrwo985+pfYojiKg05qNp3H3XmjAI1tyYdQGTgYaLlYmAl
-         371OvfRJ0itE5oFguAUTc/0x3b9vzWrSD2c9otXF/isS9n/dB1M+eo+10shBliDh5t
-         5P+u2kMCSeXkiCebeThs7tLYcmeJ3N1SOVkesNQclP1iGtgRHIwRBCFtKA44dQRFWx
-         VsQcSjH2PE7lCSkkIT2Jvg8qBpVQuNdPOqohyTHdy+UFrnU7YR0HkrgUlHDwWNFrnR
-         /90zev+LSTn5LuRBL8i2g+pox+i6iayu7Oo1dgUrZjaTjhxAYMjMObOCu5MGgEg2Kx
-         FvsJKRceafadw==
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] clk fixes for v6.1-rc7
-Date:   Wed, 30 Nov 2022 14:57:20 -0800
-Message-Id: <20221130225720.1615026-1-sboyd@kernel.org>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+        Wed, 30 Nov 2022 18:29:42 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6C82BD5;
+        Wed, 30 Nov 2022 15:20:05 -0800 (PST)
+Date:   Wed, 30 Nov 2022 15:50:55 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1669850360;
+        bh=AOooFKU7NIxLs7yLATARLHPgA86wAoxNAcbcgPZM9II=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YZ7g80E1uS2FjZUXZepWD0GWT2LswMhWGPDrY6iItcUht2OhtmIjdSMLA3N8pxqVI
+         Jp2ozhHPa4vOeklRuAX4zU13ndJldrhTeeCQg0vls8qIhNC4W5X8/y94LXJNZcBS/U
+         vnO0viZBlBj8/Td4MeF4UtHKFBIWWcIWK6Zik19g=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Joe Perches <joe@perches.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: [PATCH v2 1/3] printk: introduce new macros pr_<level>_cont()
+Message-ID: <42950773-aac6-4ec6-8cbe-543489afe316@t-8ch.de>
+References: <20221125190948.2062-1-linux@weissschuh.net>
+ <20221125190948.2062-2-linux@weissschuh.net>
+ <1fb146231e1810b4c9923f384afa166e07e7f253.camel@perches.com>
+ <cf45b62e-6248-42f3-807f-5df0954437e0@t-8ch.de>
+ <Y4dhs1G3mcX/YraJ@alley>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y4dhs1G3mcX/YraJ@alley>
+Jabber-ID: thomas@t-8ch.de
+X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
+X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ffa20aa581cf5377fc397b0d0ff9d67ea823629b:
+On 2022-11-30 14:59+0100, Petr Mladek wrote:
+> On Fri 2022-11-25 21:33:40, Thomas Weißschuh wrote:
+>> On 2022-11-25 12:18-0800, Joe Perches wrote:
+>>> On Fri, 2022-11-25 at 20:09 +0100, Thomas Weißschuh wrote:
+>>>> These macros emit continuation messages with explicit levels.
+>>>> In case the continuation is logged separately from the original message
+>>>> it will retain its level instead of falling back to KERN_DEFAULT.
+>>>> 
+>>>> This remedies the issue that logs filtered by level contain stray
+>>>> continuation messages without context.
+>>>> 
+>>>> --- a/include/linux/printk.h
+>>>> +++ b/include/linux/printk.h
+>>>> @@ -701,6 +703,27 @@ do {									\
+>>>>  	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+>>>>  #endif
+>>>>  
+>>>> +/*
+>>>> + * Print a continuation message with level. In case the continuation is split
+>>>> + * from the main message it preserves the level.
+>>>> + */
+>>>> +
+>>>> +#define pr_emerg_cont(fmt, ...)					\
+>>>> +	printk(KERN_EMERG KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
+>>> 
+>>> Aren't this rather backwards?
+>>> KERN_CONT KERN_<LEVEL> seems to make more sense to me.
+>> 
+>> If nobody else disagrees I'll do this for v3.
+> 
+> I slightly prefer the way how it is now. IMHO, it makes it easier
+> to check the related levels in /sys/kernel/debug/printk/index/vmlinux [*]:
+> 
+> <6> kernel/power/process.c:227 thaw_kernel_threads "Restarting kernel threads ... "
+> <6,c> kernel/power/process.c:218 thaw_processes "done.\n"
+> <6> kernel/power/process.c:197 thaw_processes "Restarting tasks ... "
+> <6,c> kernel/power/process.c:176 freeze_kernel_threads "\n"
+> <6,c> kernel/power/process.c:174 freeze_kernel_threads "done."
+> <6> kernel/power/process.c:169 freeze_kernel_threads "Freezing remaining freezable tasks ... "
+> <6,c> kernel/power/process.c:140 freeze_processes "\n"
+> <6,c> kernel/power/process.c:138 freeze_processes "done."
+> <6> kernel/power/process.c:133 freeze_processes "Freezing user space processes ... "
+> <6,c> kernel/power/process.c:105 try_to_freeze_tasks "(elapsed %d.%03d seconds) "
 
-  clk: qcom: Update the force mem core bit for GPU clocks (2022-10-27 17:23:29 -0700)
+I did not test it (will do so later) but it seems to me that the code in
+kernel/printk/index.c should do this correctly in either case. At least it
+tries to:
 
-are available in the Git repository at:
+if (flags & LOG_CONT) {
+	/*
+	 * LOGLEVEL_DEFAULT here means "use the same level as the
+	 * message we're continuing from", not the default message
+	 * loglevel, so don't display it as such.
+	 */
+	if (level == LOGLEVEL_DEFAULT)
+		seq_puts(s, "<c>");
+		else
+		seq_printf(s, "<%d,c>", level);
+	} else
+		seq_printf(s, "<%d>", level);
+	}
+}
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
+I'll try to validate it.
 
-for you to fetch changes up to f6abcc21d94393801937aed808b8f055ffec8579:
+If it doesn't work it may make more sense to fix the index file generation.
+What do you think
 
-  clk: qcom: gcc-sc8280xp: add cxo as parent for three ufs ref clks (2022-11-22 18:27:07 -0800)
+> That said, I do not want to fight over it. It is hidden behind the
+> API. The only really visible place is the printk index.
+> 
+> [*] The index is available only when CONFIG_PRINTK_INDEX is enabled.
+> 
+> Best Regards,
+> Petr
 
-----------------------------------------------------------------
-A set of clk driver fixes that resolve issues for various SoCs. Most of
-these are incorrect clk data, like bad parent descriptions. When the clk
-tree is improperly described things don't work, like USB and UFS
-controllers, because clk frequencies are wonky. Here are the extra
-details:
-
- - Fix the parent of UFS reference clks on Qualcomm SC8280XP so that UFS
-   works properly.
- - Fix the clk ID for USB on AT91 RM9200 so the USB driver continues to
-   probe.
- - Stop using of_device_get_match_data() on the wrong device for a
-   Samsung Exynos driver so it gets the proper clk data.
- - Fix ExynosAutov9 binding.
- - Fix the parent of the div4 clk on Exynos7885.
- - Stop calling runtime PM APIs from the Qualcomm GDSC driver directly
-   as it leads to a lockdep splat and is just plain wrong because it
-   violates runtime PM semantics by calling runtime PM APIs when the
-   device has been runtime PM disabled.
-
-----------------------------------------------------------------
-David Virag (1):
-      clk: samsung: exynos7885: Correct "div4" clock parents
-
-Inbaraj E (1):
-      dt-bindings: clock: exynosautov9: fix reference to CMU_FSYS1
-
-Marek Szyprowski (1):
-      clk: samsung: Revert "clk: samsung: exynos-clkout: Use of_device_get_match_data()"
-
-Michael Grzeschik (1):
-      ARM: at91: rm9200: fix usb device clock id
-
-Shazad Hussain (1):
-      clk: qcom: gcc-sc8280xp: add cxo as parent for three ufs ref clks
-
-Stephen Boyd (3):
-      clk: qcom: gdsc: Remove direct runtime PM calls
-      Merge tag 'samsung-clk-6.2' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into clk-fixes
-      Merge tag 'clk-microchip-fixes-6.1' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into clk-fixes
-
- .../bindings/clock/samsung,exynosautov9-clock.yaml |  2 +-
- arch/arm/boot/dts/at91rm9200.dtsi                  |  2 +-
- drivers/clk/at91/at91rm9200.c                      |  2 +-
- drivers/clk/qcom/gcc-sc8280xp.c                    |  6 +++
- drivers/clk/qcom/gdsc.c                            | 61 +++-------------------
- drivers/clk/qcom/gdsc.h                            |  2 -
- drivers/clk/samsung/clk-exynos-clkout.c            |  6 ++-
- drivers/clk/samsung/clk-exynos7885.c               |  4 +-
- 8 files changed, 21 insertions(+), 64 deletions(-)
-
--- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+Thomas
