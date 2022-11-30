@@ -2,112 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2EB063D5E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B0663D5EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235035AbiK3MoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 07:44:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
+        id S234971AbiK3Mqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 07:46:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235057AbiK3MoI (ORCPT
+        with ESMTP id S229613AbiK3Mqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 07:44:08 -0500
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1429E58BC7
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 04:44:08 -0800 (PST)
-Received: by mail-vs1-xe2c.google.com with SMTP id g65so16738283vsc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 04:44:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MNA7eZi9VQf69CeBVlQwZ04/y+5gTO1SaFbD25OjShk=;
-        b=uSk5JtGDkFtZkUVlSh2i3p7XW+BEpm0qle2Qeku5sBhEFvEtjxwJcJO/dKAIH6mtnM
-         ihCM776HxUIm9bISIC0XuUG2ntUDh43aYrOMKAm8kyIKgsGhNiQWX3jWqJ7nrDkcrJux
-         P6HiyheNg1ARMUwTofYkN+5TdwWAD+Ief4jrVs3kTBRmPfEJV+1Fj/Kobmxo1TAft8FS
-         86v6pEod24fy4y15bRVI/fgHouGGWPW/5cHlox5WDNAg1oMIcSXrXjoxUuke9vjsCIUJ
-         /Tk2xkrcwu9Rx5yVD7NwJ2YtxgrQifkgBuMZI59vLsuMVQHnRn7y6HHSroWm49Z+GqcQ
-         dgTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MNA7eZi9VQf69CeBVlQwZ04/y+5gTO1SaFbD25OjShk=;
-        b=F4D/dh9ieXwO1tZmtTLFl5walH2/PCK+Mq61vjXyahuxIrclqy6gG2q2+YkWz1vYY0
-         NpTc8tqhPdr3j9oR+59HE17iHDsY3wbnJi0Q3l/6uucr64FQ0AZwy3h4cQSJshauIVoI
-         /rBtZjwN7vJM1e+gbQr09cksQK4E+e1VVgbYVKxtJ1Dm3vHoIrqbUnP8i02dQwzChatK
-         m0okkcFQ3Tm1i074bELOEiPGXcWwCj7/Gi13rV0rue5GDLXVfOR4gul0PgQH5cgnoTBb
-         bKBcJ98OHhDvzDoJTANcozpy7z8iPspfsl4QlN8VfkpuJoJfkGMKAyT5bjyc2MvmrHni
-         AwZw==
-X-Gm-Message-State: ANoB5pnPzN3qH1wAFwDAQTbfXFr3x0L+4cWPD2WOJiUZcyOiPqBEqc7P
-        3Exj/FatndZxqIc6adw7eMKVpYt94uPkZhdIp/RliQ==
-X-Google-Smtp-Source: AA0mqf54Z2CrPKxSRMlbr73gv+438gnoVt/fuaLT9AfACCSJrTBHJXFmdawHwFRgJOYgsFogG3EQ+yCbag8p/gkY3HY=
-X-Received: by 2002:a67:eb11:0:b0:3b0:c9bc:7abe with SMTP id
- a17-20020a67eb11000000b003b0c9bc7abemr3394360vso.61.1669812247176; Wed, 30
- Nov 2022 04:44:07 -0800 (PST)
+        Wed, 30 Nov 2022 07:46:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488154A5A4;
+        Wed, 30 Nov 2022 04:46:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F13E3B81B3D;
+        Wed, 30 Nov 2022 12:46:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E0DDC433D6;
+        Wed, 30 Nov 2022 12:46:26 +0000 (UTC)
+Message-ID: <a1177348-9f53-01f4-5903-f44b807c10dd@xs4all.nl>
+Date:   Wed, 30 Nov 2022 13:46:25 +0100
 MIME-Version: 1.0
-References: <20221129110012.224685-1-brgl@bgdev.pl> <20221129110012.224685-12-brgl@bgdev.pl>
- <22332676-9d3a-1e21-aa70-e9c367b19bd9@kernel.org>
-In-Reply-To: <22332676-9d3a-1e21-aa70-e9c367b19bd9@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 30 Nov 2022 13:43:56 +0100
-Message-ID: <CAMRc=MczfMKYEWfV_WOazXni9FbXX8x_iwjm4URD7-WWQQmUsA@mail.gmail.com>
-Subject: Re: [PATCH v4 11/13] tty: serial: qcom-geni-serial: stop operations
- in progress at shutdown
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>,
-        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] media: Add ignore patterns to frontend.h.rst.exceptions
+Content-Language: en-US
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-media@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Robert Schlabbach <robert_s@gmx.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <d9ba832c-4851-f826-247f-b29b26369a74@gmail.com>
+ <3632a781-0595-d165-3514-36fb75ee477a@xs4all.nl>
+ <d23d5827-7f44-a82a-869e-a3b704cfda94@gmail.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <d23d5827-7f44-a82a-869e-a3b704cfda94@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 10:37 AM Jiri Slaby <jirislaby@kernel.org> wrote:
->
-> On 29. 11. 22, 12:00, Bartosz Golaszewski wrote:
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> > We don't stop transmissions in progress at shutdown. This is fine with
-> > FIFO SE mode but with DMA it causes trouble so fix it now.
-> >
-> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> > ---
-> >   drivers/tty/serial/qcom_geni_serial.c | 3 +++
-> >   1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> > index fe15fc0e1345..c0270eec2a66 100644
-> > --- a/drivers/tty/serial/qcom_geni_serial.c
-> > +++ b/drivers/tty/serial/qcom_geni_serial.c
-> > @@ -864,6 +864,9 @@ static void get_tx_fifo_size(struct qcom_geni_serial_port *port)
-> >
-> >   static void qcom_geni_serial_shutdown(struct uart_port *uport)
-> >   {
-> > +     qcom_geni_serial_stop_tx(uport);
-> > +     qcom_geni_serial_stop_rx(uport);
-> > +
-> >       disable_irq(uport->irq);
->
-> I'm just asking without actually looking into the code: cannot the
-> interrupt reschedule/restart the above?
->
+On 11/30/22 13:37, Akira Yokosawa wrote:
+> On Wed, 30 Nov 2022 13:08:57 +0100, Hans Verkuil wrote:
+>> On 11/30/22 13:02, Akira Yokosawa wrote:
+>>> Commit 6508a50fe84f ("media: dvb: add DVB-C2 and DVB-S2X parameter
+>>> values") failed to add ignore patterns to frontend.h.rst.exceptions.
+>>> This results in new warning msgs from "make htmldocs" as reported
+>>> by Stephen [1].
+>>>
+>>> Fix the issue by adding needed patterns.
+>>
+>> Patch has already been posted:
+>>
+>> https://patchwork.linuxtv.org/project/linux-media/patch/2bff9dd2-e4ef-1b10-e64e-3c62849eb3b0@xs4all.nl/
+> 
+> Even better!
+> 
+>>
+>> Regards,
+>>
+>> 	Hans
+>>
+>>>
+>>> While at it, fix typos of "QAM-1024" and "QAM-4096" in frontend.h.
+> 
+> Have these typos been taken care of?
 
-It can actually, good catch, thanks.
+Yes, in another patch.
 
-Bart
+https://patchwork.linuxtv.org/project/linux-media/patch/20221128054303.3124-1-rdunlap@infradead.org/
+
+	Hans
+
+> 
+>         Thanks, Akira
+> 
+>>>
+>>> Fixes: 6508a50fe84f ("media: dvb: add DVB-C2 and DVB-S2X parameter values")
+>>> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+>>> Link: [1] https://lore.kernel.org/r/20221128151900.5eb94a01@canb.auug.org.au/
+>>> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+>>> Cc: Robert Schlabbach <robert_s@gmx.net>
+>>> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+>>> ---
+>>>  .../media/frontend.h.rst.exceptions           | 28 +++++++++++++++++++
+>>>  include/uapi/linux/dvb/frontend.h             |  4 +--
+>>>  2 files changed, 30 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/Documentation/userspace-api/media/frontend.h.rst.exceptions b/Documentation/userspace-api/media/frontend.h.rst.exceptions
+>>> index 6283702c08c8..6f03c704d6ac 100644
+>>> --- a/Documentation/userspace-api/media/frontend.h.rst.exceptions
+>>> +++ b/Documentation/userspace-api/media/frontend.h.rst.exceptions
+>>> @@ -86,6 +86,13 @@ ignore symbol APSK_16
+>>>  ignore symbol APSK_32
+>>>  ignore symbol DQPSK
+>>>  ignore symbol QAM_4_NR
+>>> +ignore symbol QAM_1024
+>>> +ignore symbol QAM_4096
+>>> +ignore symbol APSK_8_L
+>>> +ignore symbol APSK_16_L
+>>> +ignore symbol APSK_32_L
+>>> +ignore symbol APSK_64
+>>> +ignore symbol APSK_64_L
+>>>  
+>>>  ignore symbol SEC_VOLTAGE_13
+>>>  ignore symbol SEC_VOLTAGE_18
+>>> @@ -119,6 +126,22 @@ ignore symbol FEC_AUTO
+>>>  ignore symbol FEC_3_5
+>>>  ignore symbol FEC_9_10
+>>>  ignore symbol FEC_2_5
+>>> +ignore symbol FEC_1_3
+>>> +ignore symbol FEC_1_4
+>>> +ignore symbol FEC_5_9
+>>> +ignore symbol FEC_7_9
+>>> +ignore symbol FEC_8_15
+>>> +ignore symbol FEC_11_15
+>>> +ignore symbol FEC_13_18
+>>> +ignore symbol FEC_9_20
+>>> +ignore symbol FEC_11_20
+>>> +ignore symbol FEC_23_36
+>>> +ignore symbol FEC_25_36
+>>> +ignore symbol FEC_13_45
+>>> +ignore symbol FEC_26_45
+>>> +ignore symbol FEC_28_45
+>>> +ignore symbol FEC_32_45
+>>> +ignore symbol FEC_77_90
+>>>  
+>>>  ignore symbol TRANSMISSION_MODE_AUTO
+>>>  ignore symbol TRANSMISSION_MODE_1K
+>>> @@ -143,6 +166,7 @@ ignore symbol GUARD_INTERVAL_19_256
+>>>  ignore symbol GUARD_INTERVAL_PN420
+>>>  ignore symbol GUARD_INTERVAL_PN595
+>>>  ignore symbol GUARD_INTERVAL_PN945
+>>> +ignore symbol GUARD_INTERVAL_1_64
+>>>  
+>>>  ignore symbol HIERARCHY_NONE
+>>>  ignore symbol HIERARCHY_AUTO
+>>> @@ -163,6 +187,9 @@ ignore symbol ROLLOFF_35
+>>>  ignore symbol ROLLOFF_20
+>>>  ignore symbol ROLLOFF_25
+>>>  ignore symbol ROLLOFF_AUTO
+>>> +ignore symbol ROLLOFF_15
+>>> +ignore symbol ROLLOFF_10
+>>> +ignore symbol ROLLOFF_5
+>>>  
+>>>  ignore symbol INVERSION_ON
+>>>  ignore symbol INVERSION_OFF
+>>> @@ -172,6 +199,7 @@ ignore symbol SYS_UNDEFINED
+>>>  ignore symbol SYS_DVBC_ANNEX_A
+>>>  ignore symbol SYS_DVBC_ANNEX_B
+>>>  ignore symbol SYS_DVBC_ANNEX_C
+>>> +ignore symbol SYS_DVBC2
+>>>  ignore symbol SYS_ISDBC
+>>>  ignore symbol SYS_DVBT
+>>>  ignore symbol SYS_DVBT2
+>>> diff --git a/include/uapi/linux/dvb/frontend.h b/include/uapi/linux/dvb/frontend.h
+>>> index 4fed9e316147..ab215d1c15d2 100644
+>>> --- a/include/uapi/linux/dvb/frontend.h
+>>> +++ b/include/uapi/linux/dvb/frontend.h
+>>> @@ -363,8 +363,8 @@ enum fe_code_rate {
+>>>   * @APSK_32:	32-APSK modulation
+>>>   * @DQPSK:	DQPSK modulation
+>>>   * @QAM_4_NR:	4-QAM-NR modulation
+>>> - * @QAM-1024:	1024-QAM modulation
+>>> - * @QAM-4096:	4096-QAM modulation
+>>> + * @QAM_1024:	1024-QAM modulation
+>>> + * @QAM_4096:	4096-QAM modulation
+>>>   * @APSK_8_L:	8APSK-L modulation
+>>>   * @APSK_16_L:	16APSK-L modulation
+>>>   * @APSK_32_L:	32APSK-L modulation
+>>>
+>>> base-commit: 6a5a4514854a637d01c50f5ea17b28f78b31ddb8
+>>
+
