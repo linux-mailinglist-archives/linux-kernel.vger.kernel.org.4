@@ -2,69 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D06C63DA1F
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C052063DA21
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbiK3P77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 10:59:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
+        id S230099AbiK3QA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 11:00:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbiK3P7z (ORCPT
+        with ESMTP id S229566AbiK3QAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 10:59:55 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E432D76C;
-        Wed, 30 Nov 2022 07:59:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZBaZLAQcwXpgoc/wypFSnGvG1ormvMqRTKZGjeGBWso=; b=YftUeZ3edM8lh3hLMLYkvoIm89
-        BxMFibmnOQOwhtduBbuDosrHkBE1rrJvFUHUECFI5o7XPdRF5WPEl7+mVzRrOal09xRXlmNITBVqw
-        wDuXPsFsczEXCNNxYsTurNDni9una+CM6XGZ+3nX1BxOhaqajdhwzizSzo+zJjx2RzW6TqS/kW4M7
-        k+y7qxo2sIKMwObnqvc1CqSN7I7dXBwWkH+2jwuxQv8T18OtJfYRAb9dAkZu6rfmnY6RFhMcUNcUV
-        HGEBNnZG1PekSCXVo73TulcJwICZTck1WBGvPHO5HvYywy/1lalyQ+InzvyjuI4VoTrdtSl8aIm4+
-        Q1m2xNMQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p0PUr-000E2B-I7; Wed, 30 Nov 2022 15:59:41 +0000
-Date:   Wed, 30 Nov 2022 07:59:41 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Li Nan <linan122@huawei.com>, tj@kernel.org,
-        josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [PATCH -next 8/8] block: fix null-pointer dereference in
- ioc_pd_init
-Message-ID: <Y4d97Ui+3ORzRhxF@infradead.org>
-References: <20221128154434.4177442-1-linan122@huawei.com>
- <20221128154434.4177442-9-linan122@huawei.com>
- <Y4YWQcb4PMmIdzIM@infradead.org>
- <e46fdde5-f320-9276-72ec-0f5fb5b48ffd@huaweicloud.com>
+        Wed, 30 Nov 2022 11:00:55 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5828E2D76C;
+        Wed, 30 Nov 2022 08:00:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=OUNGczKLtoTFfHGD0SF31C8NuWnHJPpbTjgMWEvvmPg=; b=ufOCFYwR5jmgFZ3usHJpYBuEmt
+        aiF0jisuM22MFMausqtbapSe3Pz2QEGhWVSNaYyVnah0yrEUxcDpCu2+n4jNBC07GQFULP0628044
+        qzhQ9UbsD9ueFdAibw2zUEObHsFLRzVca2ISt2M5nFK6l7/5ZhJEqKNp0DrjzW9acFjc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p0PVp-003yHF-B4; Wed, 30 Nov 2022 17:00:41 +0100
+Date:   Wed, 30 Nov 2022 17:00:41 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jerry.Ray@microchip.com
+Cc:     olteanv@gmail.com, f.fainelli@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3] dsa: lan9303: Add 3 ethtool stats
+Message-ID: <Y4d+KcqQQzKBpo8z@lunn.ch>
+References: <20221128205521.32116-1-jerry.ray@microchip.com>
+ <20221128210515.kqvdshlh3phmdpxx@skbuf>
+ <MWHPR11MB1693C29AFEAE5386D0EE3AEFEF159@MWHPR11MB1693.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e46fdde5-f320-9276-72ec-0f5fb5b48ffd@huaweicloud.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <MWHPR11MB1693C29AFEAE5386D0EE3AEFEF159@MWHPR11MB1693.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 09:32:58AM +0800, Yu Kuai wrote:
-> > No, that now means it is removed to later.  You need to add proper
-> > synchronization.
-> > .
-> > 
+On Wed, Nov 30, 2022 at 03:57:35PM +0000, Jerry.Ray@microchip.com wrote:
+> >>  static void lan9303_get_ethtool_stats(struct dsa_switch *ds, int port,
+> >>                                     uint64_t *data)
+> >>  {
+> >>       struct lan9303 *chip = ds->priv;
+> >> -     unsigned int u;
+> >> +     unsigned int i, u;
+> >>
+> >>       for (u = 0; u < ARRAY_SIZE(lan9303_mib); u++) {
+> >>               u32 reg;
+> >>               int ret;
+> >>
+> >> -             ret = lan9303_read_switch_port(
+> >> -                     chip, port, lan9303_mib[u].offset, &reg);
+> >> -
+> >> +             /* Read Port-based MIB stats. */
+> >> +             ret = lan9303_read_switch_port(chip, port,
+> >> +                                            lan9303_mib[u].offset,
+> >> +                                            &reg);
+> >
+> >Speaking of unrelated changes...
+> >
 > 
-> Can you explain a bit more? Maybe I'm being noob, here disk is about to
-> be freed, and I can think of any contention.
+> Cleaning up a warning generated from checkpatch
 
-Right now we need synchronization with e.g. open_mutex and a check
-for a dead disk, which I suggst to add insted of creating a lifetime
-imbalance.
+Cleanups a good, but please put them in a patch of their own.
+
+https://www.kernel.org/doc/html/v4.10/process/submitting-patches.html#separate-your-changes
+
+   3) Separate your changes
+
+   Separate each logical change into a separate patch.
+
+Andrew
+
