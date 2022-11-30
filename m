@@ -2,109 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3722663D964
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 813A563D966
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiK3PYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 10:24:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
+        id S229924AbiK3PZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 10:25:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiK3PYy (ORCPT
+        with ESMTP id S229617AbiK3PZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 10:24:54 -0500
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E0152171;
-        Wed, 30 Nov 2022 07:24:53 -0800 (PST)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-12c8312131fso21388675fac.4;
-        Wed, 30 Nov 2022 07:24:53 -0800 (PST)
+        Wed, 30 Nov 2022 10:25:01 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5A17E439
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 07:24:58 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id b3so27505024lfv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 07:24:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+0BCcjLSSdMLqYLWjpCC6aMjjhEkfHkguLFqsvsQY2M=;
+        b=wJEYzJPvPNQ+WbLH5BwUtMd05wUMgMjQWoAv4Jerr2yHAPrNp4ZusglHKI/ze3DxYt
+         uRdq00ofY59stTD86gAEsOM0DRIOMhFYFyuMfhXYR2pIVJfb7cGMaIrBz4nVp/u1yUlU
+         8ohuAcGWqkYc7fMy4yjb3l/uo38F6JEPfDtn5b8Ypmvn4KnkVM6kQ+89ELgZ62yxiqLr
+         6EogoyS8H7IRZga3ZYSFnBQYgO8RkyqPrjjazvgEhPpxZWL7qozn1TSn+hPf4lt3PwZU
+         TjWa4mIB6vYdfBa1ZQRTfPj6wpuC1hQ36q4VuJs9vchihf8CUgEpww2Ect3ngxtgVHHL
+         VTkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SlACntbArX7b3kCKVV+bhldppIYRKiicqjQCNfxe6xc=;
-        b=zGju+DtcOnFTymcJpaMVe1NlsOjmOph//wD8t4ojCPXD+dU+KoWGccCvH0Ab7HIwUv
-         V/qfC+rJx17dZbr3J3dlOmB2J7is9v3zPlnqXqedcRi1zD5FqJYNMqG70/YARGHaduKL
-         TJ8izN1olUt5Ih/wGi/FxTbVpogAtRgFU/G1Vt+BwSh6DbL+W7RPw/c6bi2ng48mh28/
-         nJbarGp+/EeJr8uiXL6pRw81weR3zo74K0uOVvb2Q2nBJvooDOnhd40NnHp7YOlZ89nK
-         6yNMmK/T64sa1h3bXMS1XOh4LlN7IkhPXx999ZH/M47GvUwaK83fAzc7AAGWHzxmUBrw
-         HfYg==
-X-Gm-Message-State: ANoB5pndzeBmBMeaE/Fe5ROBpxoShVd0r436UvALE6fX1LONde7w2ycc
-        HxcGwCSu9tR6qLLnAgFWWg==
-X-Google-Smtp-Source: AA0mqf5x+OdF/baS7qLHAVmukK6f4ncA4i+9mLv9a6t8OILL4W5A/PqjSnmH4cu4Ow0KVyie+oLneA==
-X-Received: by 2002:a05:6870:f592:b0:144:543:c801 with SMTP id eh18-20020a056870f59200b001440543c801mr1399989oab.201.1669821892698;
-        Wed, 30 Nov 2022 07:24:52 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r127-20020aca4485000000b0034d9042758fsm727106oia.24.2022.11.30.07.24.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 07:24:52 -0800 (PST)
-Received: (nullmailer pid 2194178 invoked by uid 1000);
-        Wed, 30 Nov 2022 15:24:51 -0000
-Date:   Wed, 30 Nov 2022 09:24:51 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Walker Chen <walker.chen@starfivetech.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/4] dt-bindings: power: Add starfive,jh71xx-power
- bindings
-Message-ID: <20221130152451.GA2192004-robh@kernel.org>
-References: <20221118133216.17037-1-walker.chen@starfivetech.com>
- <20221118133216.17037-3-walker.chen@starfivetech.com>
- <99302e53-c0c9-cfe8-4e6a-c70e8428d9c3@linaro.org>
- <f21b0aa9-2ac8-ae28-755a-d530171f930a@starfivetech.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+0BCcjLSSdMLqYLWjpCC6aMjjhEkfHkguLFqsvsQY2M=;
+        b=relAxTZ2/3EclLjST/1WIAj4mLdH2oni+cPmV2KYe+bWXmFZEDDh7fwOZi+0pXeVbB
+         M7QNkDVgRkrA59afNqseHrMp/t2Yp+DtfBjBqWwANDS2y0XEKyVHhpOykDOCfmb0gbia
+         zFH7M+bk1xetS5vYAlJUm6CSvgnOtON+CLdEELjh4PT91yEW+Aw+rijAeQziby9GAFJN
+         ObghqaQw2eVtQPG8tsOcO7UDSHHJlRtotrwWYX/y2QhStcwFCk+PdIjLCeC9Z59VMKEz
+         sJZyEEE+gqKGPlomontwtSxm41zLTuCPCR/1RQS/IDeO1roSJREm46E2ll3YGi4cvjpc
+         9qOQ==
+X-Gm-Message-State: ANoB5ple7Ew/2lLdWkiKY8+2y/yE+59hZFNhrvk06824qSXAUt5KqK8a
+        ZdzJ+ZLmvGppGipI7L5EVEJEAQ==
+X-Google-Smtp-Source: AA0mqf4bPQ8Fltgiqp+JUq+K+K68Yb7F2StiWajMAq5Uz7JQnjaz8QbZr0Bb2QSbmHgNT0hgnKgMLw==
+X-Received: by 2002:a05:6512:3e2a:b0:4ab:534b:1b2c with SMTP id i42-20020a0565123e2a00b004ab534b1b2cmr15709904lfv.426.1669821897312;
+        Wed, 30 Nov 2022 07:24:57 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id e13-20020a05651236cd00b00492e5d31201sm297593lfs.7.2022.11.30.07.24.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 07:24:56 -0800 (PST)
+Message-ID: <cb76a56f-6492-5209-be30-e31aa075ce8e@linaro.org>
+Date:   Wed, 30 Nov 2022 16:24:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f21b0aa9-2ac8-ae28-755a-d530171f930a@starfivetech.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 1/8] dt-bindings: soc: socionext: Add UniPhier system
+ controller
+Content-Language: en-US
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221129103509.9958-1-hayashi.kunihiko@socionext.com>
+ <20221129103509.9958-2-hayashi.kunihiko@socionext.com>
+ <ce1b5859-4ca6-6d2d-19bc-e33e48165093@linaro.org>
+ <adee56c4-6932-9272-3319-e003ab8413b5@socionext.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <adee56c4-6932-9272-3319-e003ab8413b5@socionext.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 09:22:03PM +0800, Walker Chen wrote:
-> On 2022/11/21 18:13, Krzysztof Kozlowski wrote:
-> > On 18/11/2022 14:32, Walker Chen wrote:
-> >> Add bindings for the power domain controller on the StarFive JH71XX SoC.
-> >> 
-> > 
-> > Subject: drop second, redundant "bindings".
+On 30/11/2022 09:59, Kunihiko Hayashi wrote:
+>>> +maintainers:
+>>> +  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+>>> +
+>>> +description: |+
+>>> +  System controller implemented on Socionext UniPhier SoCs has multiple
+>>> +  functions such as clock control, reset control, internal watchdog
+>>> timer,
+>>> +  thermal management, and so on.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    items:
+>>> +      - enum:
+>>> +          - socionext,uniphier-ld4-sysctrl
+>>> +          - socionext,uniphier-pro4-sysctrl
+>>> +          - socionext,uniphier-pro5-sysctrl
+>>> +          - socionext,uniphier-pxs2-sysctrl
+>>> +          - socionext,uniphier-ld6b-sysctrl
+>>> +          - socionext,uniphier-sld8-sysctrl
+>>> +          - socionext,uniphier-ld11-sysctrl
+>>> +          - socionext,uniphier-ld20-sysctrl
+>>> +          - socionext,uniphier-pxs3-sysctrl
+>>> +          - socionext,uniphier-nx1-sysctrl
+>>
+>> All of them can have children or only some?
 > 
-> Will fix.
+> In case of this system controller,
+> all SoCs has clock-controller, reset-controller and watchdog.
 > 
-> > 
-> >> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
-> >> ---
-> >>  .../bindings/power/starfive,jh71xx-power.yaml | 46 +++++++++++++++++++
-> > 
-> > 1st patch should be squashed here. Headers are part of bindings file.
-> 
-> Will be done in the next version of patch.
-> 
-> > 
-> >>  1 file changed, 46 insertions(+)
-> >>  create mode 100644 Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml
-> >> 
-> >> diff --git a/Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml b/Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml
-> >> new file mode 100644
-> >> index 000000000000..2537303b4829
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml
-> > 
-> > Filename like compatible.
-> 
-> As mentioned in the previous email, the compatible in the driver should be changed to "starfive,jh7110-power".
+> However, some SoCs don't have thermal-sensor and
+> their register addresses are reserved.
 
-Is the h/w block called 'power' or 'pmu'? Call it what the h/w is 
-called.
+OK
 
-Rob
+> 
+>>> +          - socionext,uniphier-sysctrl
+
+What about this one? What SoC is this? Looks too generic.
+
+
+Best regards,
+Krzysztof
+
