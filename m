@@ -2,103 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0003563E2E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E42C163E2E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiK3Vnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 16:43:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40050 "EHLO
+        id S229698AbiK3VoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 16:44:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiK3Vna (ORCPT
+        with ESMTP id S229472AbiK3VoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 16:43:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D51769FD;
-        Wed, 30 Nov 2022 13:43:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2980761E05;
-        Wed, 30 Nov 2022 21:43:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D9A1C433D7;
-        Wed, 30 Nov 2022 21:43:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669844608;
-        bh=d+XZQFsoyZn0bNyAsgJB+8TgIz28In9nJ8iHQfRcRYg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=VF3vM0r/sflL3CIjAmqERb8k1Tq4IXO9IEyOq1g3+o4Fzebw+En7brY7ummjpjZC8
-         oSB/Y8bHHxsye8Mqst4A4BKk/inirFjstR3Vzpl5XSsnroqcTaeGR0Pstjna21ogyc
-         0WC025Ql1GdumPJbt5FZ0dmz8qLL4b+5dLYT89pdaTGpzsygNMHZWdimi7V8XxHiMz
-         3ei6s2HMGRfF90sMa7/WrXZ2hgiUTZVFDIFwQEi4ulmdNm2QCXrwocWD8fQpPQyyeF
-         S3M1YBLKgToZJzy7v0P9oP1s1Tu8mZC6jIAGhJQ85b1ZwvjmRE5bGOH7Dt2/hDv3PW
-         Vt2IYcpmtez/w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E9D785C051C; Wed, 30 Nov 2022 13:43:27 -0800 (PST)
-Date:   Wed, 30 Nov 2022 13:43:27 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     David Howells <dhowells@redhat.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        rostedt@goodmis.org, Marc Dionne <marc.dionne@auristor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH rcu 14/16] rxrpc: Use call_rcu_hurry() instead of
- call_rcu()
-Message-ID: <20221130214327.GU4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <639433.1669835344@warthog.procyon.org.uk>
- <B4935931-239F-4C48-9646-2C20578F027C@joelfernandes.org>
+        Wed, 30 Nov 2022 16:44:03 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EDB31ED9;
+        Wed, 30 Nov 2022 13:44:02 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id j4so28987804lfk.0;
+        Wed, 30 Nov 2022 13:44:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SoweguhVdE9rkHNrrE2YnwSJZtPETT6uz4SqPHeAVg8=;
+        b=IB9l1JuueX9k7YvnYxgtAXfq1Y4yF0UbKLjtpuxrqZRmtpkYLkm5pndlEj0U31dfxz
+         IhuGO+OvT35+dXY/iQOfGYso+sP5TLLqHlwAWesH6mzVHf/8dUvvK3WZxJ90zbZ1d0Sa
+         Abg6Zz/UCTYW63icUCyTyjEuWoE3gwAO0hrxmKCTCZGKl+veLeX5MuYsmy2JVioaF4df
+         kOlMrN1xJ/WnhO8YLRdD4Cj0tgfyEQDogfUfe+sszj5GBL0mZNw4LKCkLvdRi2JQRkAq
+         WsPcoSlRD0eHDBIlvhrMGB6496NLHe/9um3DhTN/qa4VW4lFbbaNLLV9K33PvHKli6bq
+         plNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SoweguhVdE9rkHNrrE2YnwSJZtPETT6uz4SqPHeAVg8=;
+        b=7n+O75Rfl+xZ+TnVJmTULXfInuIS/q2+nAcpibxzQ5fSH8DZJ1wU2UvtTXfw+k0SAn
+         AadmCLthq8CMEBWsMknORKjYlemWut/tVGiUtOYdt4iruQGN8bQV6t5WTugFp96VKG4Z
+         u74IOsLIFPfEdD/4H8A+bMdVMzwFQZ8bcXTMJFJGGdL+Hbfae5/fx2Cre8sJB4iJOz3i
+         0Wkm6YeV30QFmVY4l3cplvVrR7srWtCP+cgXjK+8qAGlokC4Il+zWZ2KJjZBsFX3NLcX
+         YBEfjWlGUCtxj5FDyFltPnEW63UtKtUCAI9WqLzvEzXEL3UVxhRZsdDbY0LG6NxDjHl0
+         9HGA==
+X-Gm-Message-State: ANoB5plr85vj4wAcSXrpW4xtvmTSUJvYLts6pGRkk2hq2/ixtudYB/dq
+        QOSBepHxzIP/GPF55eTY/KY=
+X-Google-Smtp-Source: AA0mqf4B/6E4EQ88UDDyZW5P57Lh2mzUsmkSKC70YBsSuWrNqFNuyHK2zVlIRbnYwst1Z4zgXiklpA==
+X-Received: by 2002:ac2:47ea:0:b0:4a2:2f4b:2f30 with SMTP id b10-20020ac247ea000000b004a22f4b2f30mr23696915lfp.357.1669844640254;
+        Wed, 30 Nov 2022 13:44:00 -0800 (PST)
+Received: from grain.localdomain ([5.18.253.97])
+        by smtp.gmail.com with ESMTPSA id a19-20020ac25e73000000b0049110ba325asm385891lfr.158.2022.11.30.13.43.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 13:43:59 -0800 (PST)
+Received: by grain.localdomain (Postfix, from userid 1000)
+        id B77925A0020; Thu,  1 Dec 2022 00:43:58 +0300 (MSK)
+Date:   Thu, 1 Dec 2022 00:43:58 +0300
+From:   Cyrill Gorcunov <gorcunov@gmail.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrei Vagin <avagin@gmail.com>, kernel@collabora.com,
+        stable@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mm: set the vma flags dirty before testing if it is
+ mergeable
+Message-ID: <Y4fOnsav2CK5lcA7@grain>
+References: <20221122115007.2787017-1-usama.anjum@collabora.com>
+ <Y4W0axw0ZgORtfkt@grain>
+ <ecef5201-04d5-3618-a667-2e7c4770b908@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <B4935931-239F-4C48-9646-2C20578F027C@joelfernandes.org>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ecef5201-04d5-3618-a667-2e7c4770b908@collabora.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 02:20:52PM -0500, Joel Fernandes wrote:
-> 
-> 
-> > On Nov 30, 2022, at 2:09 PM, David Howells <dhowells@redhat.com> wrote:
-> > 
-> > ﻿Note that this conflicts with my patch:
-> 
-> Oh.  I don’t see any review or Ack tags on it. Is it still under review?
-
-So what I have done is to drop this patch from the series, but to also
-preserve it for posterity at -rcu branch lazy-obsolete.2022.11.30a.
-
-It looks like that wakeup is still delayed, but I could easily be
-missing something.
-
-Joel, could you please test the effects of having the current lazy branch,
-but also David Howells's patch?  That way, if there is an issue, we can
-work it sooner rather than later, and if it all works fine, we can stop
-worrying about it.  ;-)
-
-							Thanx, Paul
-
-> Thanks,
-> 
-> - Joel
-> 
-> 
+On Tue, Nov 29, 2022 at 06:49:53PM +0500, Muhammad Usama Anjum wrote:
+> > ioctl might be an option indeed
+> Thank you for supporting this. I'll track down the issue caused by
+> remapping and mprotect mentioned here:
+> https://lore.kernel.org/all/bfcae708-db21-04b4-0bbe-712badd03071@redhat.com/
+> and we can proceed with this.
 > 
 > > 
-> >    rxrpc: Don't hold a ref for connection workqueue
-> >    https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?h=rxrpc-next&id=450b00011290660127c2d76f5c5ed264126eb229
-> > 
-> > which should render it unnecessary.  It's a little ahead of yours in the
-> > net-next queue, if that means anything.
-> > 
-> > David
-> > 
+> >>
+> >> [1] https://lore.kernel.org/all/20221109102303.851281-1-usama.anjum@collabora.com/
+> >> [2] https://lore.kernel.org/all/bfcae708-db21-04b4-0bbe-712badd03071@redhat.com/
+
+Hi Muhammad! Hopefully I'll find some time soon to read all these conversation,
+so for now my replies might be simply out of context. Initially the vma softdirty
+was needed to catch a case where memory remapped inplace and what is worse it might
+have _same_ ptes dirty after clear_refs call. IOW, the process allocated vma and
+write some data into. Then we (page tracker process) come in, read pagemap and clear
+softdirty bits, and page traker process terminates. While we're not watching the program
+unmaps vma, maps new one with same size and what is worse it writes data to the same pages
+as we saw at last scan time. So without VM_SOFTDIRTY we won't be able to find that this
+VMA is actually carrying new pages which were not yet dumped.
+
+And similar scenario can be for merging: say former vma has been 4 pages, we scan it
+and clear dirty pages at low and hight address. Then process splits this VMA to two with
+gap inbetween and then map new area which merge them all into one vma, and process can
+write again pages to same address so we have to mark this new VMA as softdirty. If only
+I rememeber correctly about the initial idea :)
