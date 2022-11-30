@@ -2,98 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8390F63D40A
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:10:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B5E63D408
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233593AbiK3LKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:10:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33164 "EHLO
+        id S232711AbiK3LKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:10:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231550AbiK3LKb (ORCPT
+        with ESMTP id S234266AbiK3LKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:10:31 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E12474CC6;
-        Wed, 30 Nov 2022 03:10:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669806630; x=1701342630;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SHCCZ8tHX7swHS+8I5E5Yfv024KDVI1AhlbR7nZOZSI=;
-  b=LBAYZ7W3HYv5kaT6uLUBSxdX5aptsu5H97aHAk05xV5MGDSXl2e/pcwa
-   IsHCZCCMEeGGcjYRmw78c8mwuNMbfHicucG80gq5mEGzoDqnC8JG/uUmG
-   KUIhGWeconyQ1Veodu3ms+EHb76PXtUwruUFuwSt9E8NxPlwMhMn/oe2V
-   Oedy8nKcfDXPmvVR5WIMUDFXb2UQNBAJsonHre9RyavybdJgkEeBDhnTV
-   H+eC4aSvaY1A/cnEAxOfR/jPSE5r1iE+DggD8gaq9piS9vch7sNn9R3PV
-   2WegSojcau9gEGKbf7V/LFTn5DCcJCpkEnXC1ZEkBJ8tkrJV7UGQN5Zkh
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="342289945"
-X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
-   d="scan'208";a="342289945"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 03:09:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="786425773"
-X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
-   d="scan'208";a="786425773"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Nov 2022 03:09:32 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 8F510184; Wed, 30 Nov 2022 13:09:59 +0200 (EET)
-Date:   Wed, 30 Nov 2022 13:09:59 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [resend, PATCH net-next v1 2/2] net: thunderbolt: Use separate
- header data type for the Rx
-Message-ID: <Y4c6B/mj+g2BCwy9@black.fi.intel.com>
-References: <20221129161359.75792-1-andriy.shevchenko@linux.intel.com>
- <20221129161359.75792-2-andriy.shevchenko@linux.intel.com>
- <Y4cKSJI/TSQVMMJr@black.fi.intel.com>
- <Y4c1mtUlJfcxUQSi@smile.fi.intel.com>
+        Wed, 30 Nov 2022 06:10:25 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092F074AAC;
+        Wed, 30 Nov 2022 03:10:20 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 27F4A6602B30;
+        Wed, 30 Nov 2022 11:10:18 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669806618;
+        bh=7oMfqslqjC4FH70ZlLLwmJ6wNhE3DEsyVazeisOoOzY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=iA46UbVmQiGhwuAjFApfJ0W5FpNTR2AkxX+XIKvJzDSmnIvsIZpEeijmxcyX4FM79
+         3yOd71F23Yj+MK24QU535Eaau3j1PtDirFk44cHaBDPwG0Z3FqylNLfzxWXGMggOPH
+         TCUGtMN1WJ7bRAmltM6DBu5ejg9ngyO/9cYngUFmFvEcEu7tgypho0BBsm6uM0hbj8
+         C3haxogMkdTvsA+mY/VHa9GE5QgLGIG8bWq+r026Dw+k7O6QBV5RTegPW6Ks25CQTV
+         08kEnRSQ7i50OhRFOerPxoT5MAmXoFN219edNQGp5dYECgfIbqhWy4m3raH3h29Ze0
+         vuG6J/zwdZALQ==
+Message-ID: <2ec80bd8-dfef-d2e6-eb41-6e6088043e33@collabora.com>
+Date:   Wed, 30 Nov 2022 12:10:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y4c1mtUlJfcxUQSi@smile.fi.intel.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH resend] arm64: dts: mediatek: mt8192: Mark scp_adsp clock
+ as broken
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
+        <nfraprado@collabora.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
+References: <20221130031741.3176853-1-wenst@chromium.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221130031741.3176853-1-wenst@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 12:51:06PM +0200, Andy Shevchenko wrote:
-> On Wed, Nov 30, 2022 at 09:46:16AM +0200, Mika Westerberg wrote:
-> > On Tue, Nov 29, 2022 at 06:13:59PM +0200, Andy Shevchenko wrote:
-> > > The same data type structure is used for bitwise operations and
-> > > regular ones. It makes sparse unhappy, for example:
-> > > 
-> > >   .../thunderbolt.c:718:23: warning: cast to restricted __le32
-> > > 
-> > >   .../thunderbolt.c:953:23: warning: incorrect type in initializer (different base types)
-> > >   .../thunderbolt.c:953:23:    expected restricted __wsum [usertype] wsum
-> > >   .../thunderbolt.c:953:23:    got restricted __be32 [usertype]
-> > > 
-> > > Split the header to bitwise one and specific for Rx to make sparse
-> > > happy. Assure the layout by involving static_assert() against size
-> > > and offsets of the member of the structures.
+Il 30/11/22 04:17, Chen-Yu Tsai ha scritto:
+> The scp_adsp clock controller is under the SCP_ADSP power domain. This
+> power domain is currently not supported nor defined.
 > 
-> > I would much rather keep the humans reading this happy than add 20+
-> > lines just to silence a tool. Unless this of course is some kind of a
-> > real bug.
+> Mark the clock controller as broken for now, to avoid the system from
+> trying to access it, and causing the CPU or bus to stall.
 > 
-> Actually, changing types to bitwise ones reduces the sparse noise
-> (I will double check this) without reducing readability.
-> Would it be accepted?
+> Fixes: 5d2b897bc6f5 ("arm64: dts: mediatek: Add mt8192 clock controllers")
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 
-Sure if it makes it more readable and does not add too many lines :)
+....or we can add the ADSP power domain to actually fix this properly, which looks
+like being a generally good idea :-)
+
+Allen, can you please take care of that?
+
+Thank you,
+Angelo
+
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> index 6b20376191a7..ef91941848ae 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> @@ -575,6 +575,8 @@ scp_adsp: clock-controller@10720000 {
+>   			compatible = "mediatek,mt8192-scp_adsp";
+>   			reg = <0 0x10720000 0 0x1000>;
+>   			#clock-cells = <1>;
+> +			/* power domain dependency not upstreamed */
+> +			status = "broken";
+>   		};
+>   
+>   		uart0: serial@11002000 {
+> 
+
