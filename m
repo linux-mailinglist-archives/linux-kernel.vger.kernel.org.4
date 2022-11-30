@@ -2,63 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2010F63E573
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6C363E579
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbiK3X3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 18:29:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
+        id S230166AbiK3XbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:31:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiK3X3Y (ORCPT
+        with ESMTP id S229767AbiK3Xav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 18:29:24 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE388AB033
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:19:45 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id j16-20020a170902da9000b001893d5da3acso19314654plx.23
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:19:45 -0800 (PST)
+        Wed, 30 Nov 2022 18:30:51 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0819838F
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:21:21 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso3540815pjt.0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:21:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=psZEL5ww/2k9YPeWOOCAXsjMZnFtn9I23/0F0XLJjGo=;
-        b=dcy27hQ1oZRdKqdf1nM0wAFdLBtZ+drOiDMvLMXuisGs4TsbPgCOMhdNsxgnH+NAXa
-         xJa7WfFmbXvg0DT4bOOA6DYjE61uFM+DWtDr7XuRSqoCsH2YSode9+4ARKmqmfRsdbZj
-         61FypBgVkQW/bxWqJqcHRWFxEofW+q5RKTf+LsRW5Ib8iQJnJVpmdB/+ht5pM037QwUW
-         jcf4AP0OBxWho7Sydm5lO7OdSmqh5BVT7NLQoe6oVA3EanKY5ZKsBw0CgI2YwoCgJJ24
-         Mu7s6zKTqMeKRdlB9Mq5AVUv9GRWJL59HwwjrOLXkuDbCUUi9nzKk/eBFADdwvyRCnEc
-         h8ig==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oOrPD6CB7rqzyj1SaEV3kuD/IhDMhOZPI51nCiB/NGg=;
+        b=ZRW2ZUTv1n147KoQiZQIoZW74j4A7EtjIYOcRFO0rF0DPUCmy6VUy2g0JuJ1nS/0PG
+         bPSRbTqLAdAfhndt51DMfOPkb6sHyNfjGeyL8kdbar+k+xIpBX4SiQnfKVs3jxbhY30i
+         fE+0B93J3f1zH3nafXrLqY7rdRuq0maSuVI9QpeW8enceqQk351ZWU6NHH/BazdCHb+E
+         L5o+TvbdnPsX9MioomkdsvtUqYHZQq6KqAvnuPAuThxGPwZ++G4eWoki6stkyg4QcWza
+         6l0SCQXCBclmuJYQ9VytxAYkOvwHCR0J4TrW1rGbFwPNrD/IzVnCsAgUxIa0vHOndA6A
+         NTuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=psZEL5ww/2k9YPeWOOCAXsjMZnFtn9I23/0F0XLJjGo=;
-        b=Ikasfhr8X27JN0byGSovJMGZtSqWXBWwNZGtwz05+P9J2oNwYxEQwud0xuugjuV/oQ
-         EXLr/SLdEJ7LJZiM9JYXZHR9dI1JSdVQRb1zalIjst/MHNuvoUb5+/JBAYTLUQX4H7Is
-         M0zWJfwItqorMAEgbLPo4IRtpQLNIkjnlAl7O37MvHaBGnjMo40ZbWdffga4EzgI87HD
-         lcA+Jqd29ZhXe2AYMs6pbf+zI4rAfmS0G88+J88AXqZ59m+gkybTt8o1tyfy/2pWQ0Uy
-         SO057VX5E2Zn9gm54AP5wPtuyca7JQwR6SAXt3N//8hj0fe/rBupJY7lU+Q9/XJ2nwZ1
-         Kqjw==
-X-Gm-Message-State: ANoB5pmf1yw0sw/0ZtEhvB9oMWKfd8NSSbUbjcVfPNMjdcRx7pZc23CJ
-        C40nFjsw3JZyQ86DVrw6JCRwJhj9D+7LgA==
-X-Google-Smtp-Source: AA0mqf77VInAyRbXo2x8Y6PwP2A7ZiPUqHPx2P2ELAIIUt9HJqsLDFpW7960UiOr2s39ATpVGmYoW6xoI030WA==
-X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
- (user=wonchung job=sendgmr) by 2002:a17:90b:3c52:b0:219:2b64:cc0e with SMTP
- id pm18-20020a17090b3c5200b002192b64cc0emr20856888pjb.161.1669850379424; Wed,
- 30 Nov 2022 15:19:39 -0800 (PST)
-Date:   Wed, 30 Nov 2022 23:19:36 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-Message-ID: <20221130231936.1666390-1-wonchung@google.com>
-Subject: [PATCH] platform/chrome: Create new USB driver for RGB keyboard in
- ChromeOS devices
-From:   Won Chung <wonchung@google.com>
-To:     wonchung@google.com, Benson Leung <bleung@chromium.org>,
-        linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oOrPD6CB7rqzyj1SaEV3kuD/IhDMhOZPI51nCiB/NGg=;
+        b=d//oocrvod5PAjSzXMdX9wLMOOs/NxINK/9NyGCYH5Gm7l/g/PCrDioLUNIXS8MGw1
+         HiqD/QyGWaCGGAS06aDJav/rmpt47BZIAR+3v2SRSa7f1xcIsc+Bhwmlk0AW/MF4mpvU
+         IteuekQtFqt780E7gJHDVnn54OonK00gtLlchbUpIf4KNu5Nxzh673xu8Sig7UaG6jP5
+         bdXsSrhkQNb4oi9O5iChwMXaU5O/iDwRW9CUBpioUgzuc6v/2rG5bHpUQJIeljzgqSQ0
+         H/vpjT3uilrKMimG7tus+o8Ouz4B4zsNllL1bouyDos+HkjOOjXRJBvKGsTUOUAfsSbJ
+         t9fw==
+X-Gm-Message-State: ANoB5pmfV77RwdWfzA34adfqjHTK4eBtsPikXznRU1CXCBKFVbTTpoZT
+        C9YkaRfhrrkCSEQY84jBL28wPHWuKNvcnA==
+X-Google-Smtp-Source: AA0mqf7MFNPbEgt6osld/lAYA9wa6vF/JYI716/qDYMZhDxdPiOnFjxOBihEjXxstiNyC9WOq9G0Fg==
+X-Received: by 2002:a17:90a:d24e:b0:218:b478:f44f with SMTP id o14-20020a17090ad24e00b00218b478f44fmr46173649pjw.232.1669850480496;
+        Wed, 30 Nov 2022 15:21:20 -0800 (PST)
+Received: from google.com (220.181.82.34.bc.googleusercontent.com. [34.82.181.220])
+        by smtp.gmail.com with ESMTPSA id o13-20020a17090a0a0d00b0021896fa945asm3637054pjo.15.2022.11.30.15.21.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 15:21:20 -0800 (PST)
+Date:   Wed, 30 Nov 2022 15:21:16 -0800
+From:   Ricardo Koller <ricarkol@google.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] KVM: arm64: Don't serialize if the access flag isn't
+ set
+Message-ID: <Y4flbAiRyGgpDvnJ@google.com>
+References: <20221129191946.1735662-1-oliver.upton@linux.dev>
+ <20221129191946.1735662-3-oliver.upton@linux.dev>
+ <Y4Zw/J3srTsZ57P7@google.com>
+ <Y4Z2aWVEnluy+d3+@google.com>
+ <Y4awiKLuKORZmU2z@google.com>
+ <87pmd4ua2q.wl-maz@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87pmd4ua2q.wl-maz@kernel.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,100 +85,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Without any driver bound to RGB keyboard, it may not be suspended
-properly, preventing USB xHCI to be suspended and causing power drain.
-Create new USB driver for RGB keyboard so that it can be suspended
-properly.
+On Wed, Nov 30, 2022 at 08:21:17AM +0000, Marc Zyngier wrote:
+> On Wed, 30 Nov 2022 01:23:20 +0000,
+> Ricardo Koller <ricarkol@google.com> wrote:
+> > 
+> > On Tue, Nov 29, 2022 at 09:15:21PM +0000, Oliver Upton wrote:
+> > > Hi Ricardo,
+> > > 
+> > > Thanks for having a look.
+> > > 
+> > > On Tue, Nov 29, 2022 at 12:52:12PM -0800, Ricardo Koller wrote:
+> > > > On Tue, Nov 29, 2022 at 07:19:44PM +0000, Oliver Upton wrote:
+> > > 
+> > > [...]
+> > > 
+> > > > > +	ret = stage2_update_leaf_attrs(pgt, addr, 1, KVM_PTE_LEAF_ATTR_LO_S2_AF, 0,
+> > > > > +				       &pte, NULL, 0);
+> > > > > +	if (!ret)
+> > > > > +		dsb(ishst);
+> > > > 
+> > > > At the moment, the only reason for stage2_update_leaf_attrs() to not
+> > > > update the PTE is if it's not valid:
+> > > > 
+> > > > 	if (!kvm_pte_valid(pte))
+> > > > 			return 0;
+> > > > 
+> > > > I guess you could check that as well:
+> > > > 
+> > > > +	if (!ret || kvm_pte_valid(pte))
+> > > > +		dsb(ishst);
+> > > 
+> > > Thanks for catching this.
+> > > 
+> > > Instead of pivoting on the returned PTE value, how about we return
+> > > -EAGAIN from the early return in stage2_attr_walker()? It would better
+> > > match the pattern used elsewhere in the pgtable code.
+> > 
+> > That works, although I would use another return code (e.g., EINVAL)? as
+> > that's not exactly a "try again" type of error.
+> 
+> EINVAL usually is an indication of something that went horribly wrong.
+> 
+> But is that really a failure mode? Here, failing to update the PTE
+> should not be considered a failure, but just a benign race: access
+> fault being taken on a CPU and the page being evicted on another (not
+> unlikely, as the page was marked old before).
 
-Signed-off-by: Won Chung <wonchung@google.com>
----
- drivers/platform/chrome/Kconfig             |  8 ++++
- drivers/platform/chrome/Makefile            |  1 +
- drivers/platform/chrome/cros_rgb_keyboard.c | 44 +++++++++++++++++++++
- 3 files changed, 53 insertions(+)
- create mode 100644 drivers/platform/chrome/cros_rgb_keyboard.c
+I see, I agree, what you describe not look like a failure.
 
-diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
-index c45fb376d653..a7c36df99432 100644
---- a/drivers/platform/chrome/Kconfig
-+++ b/drivers/platform/chrome/Kconfig
-@@ -265,6 +265,14 @@ config CHROMEOS_PRIVACY_SCREEN
- 	  this should probably always be built into the kernel to avoid or
- 	  minimize drm probe deferral.
- 
-+config CROS_RGB_KEYBOARD
-+	tristate "ChromeOS RGB keyboard"
-+	depends on USB
-+	help
-+	  This driver supports RGB keyboard in some ChromeOS devices. This shall be
-+	  enabled if RGB keyboard is present, otherwise it may not be suspended
-+	  properly.
-+
- source "drivers/platform/chrome/wilco_ec/Kconfig"
- 
- # Kunit test cases
-diff --git a/drivers/platform/chrome/Makefile b/drivers/platform/chrome/Makefile
-index f7e74a845afc..e4ffa17c57fc 100644
---- a/drivers/platform/chrome/Makefile
-+++ b/drivers/platform/chrome/Makefile
-@@ -28,6 +28,7 @@ obj-$(CONFIG_CROS_EC_SENSORHUB)		+= cros-ec-sensorhub.o
- obj-$(CONFIG_CROS_EC_SYSFS)		+= cros_ec_sysfs.o
- obj-$(CONFIG_CROS_USBPD_LOGGER)		+= cros_usbpd_logger.o
- obj-$(CONFIG_CROS_USBPD_NOTIFY)		+= cros_usbpd_notify.o
-+obj-$(CONFIG_CROS_RGB_KEYBOARD)		+= cros_rgb_keyboard.o
- 
- obj-$(CONFIG_WILCO_EC)			+= wilco_ec/
- 
-diff --git a/drivers/platform/chrome/cros_rgb_keyboard.c b/drivers/platform/chrome/cros_rgb_keyboard.c
-new file mode 100644
-index 000000000000..1d53fc832d76
---- /dev/null
-+++ b/drivers/platform/chrome/cros_rgb_keyboard.c
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// RGB keyboard driver for ChromeOS
-+//
-+// Copyright (C) 2022 Google, Inc.
-+
-+#include <linux/module.h>
-+#include <linux/usb.h>
-+
-+#define DRV_NAME "cros-rgb-keyboard"
-+
-+/* vendor ID */
-+#define ID_GOOGLE 0x18d1
-+/* product ID */
-+#define ID_PRISM 0x5022
-+
-+static const struct usb_device_id cros_rgb_keyboard_table[] = {
-+	{USB_DEVICE(ID_GOOGLE, ID_PRISM)},
-+	{} // terminating null entry
-+};
-+
-+static int cros_rgb_keyboard_probe(struct usb_interface *interface, const struct usb_device_id *id)
-+{
-+	struct usb_device *udev = interface_to_usbdev(interface);
-+
-+	usb_enable_autosuspend(udev);
-+	return 0;
-+}
-+
-+static void cros_rgb_keyboard_disconnect(struct usb_interface *interface)
-+{
-+}
-+
-+/* usb specific object needed to register this driver with the usb subsystem */
-+static struct usb_driver cros_rgb_keyboard_driver = {
-+	.name = DRV_NAME,
-+	.id_table = cros_rgb_keyboard_table,
-+	.probe = cros_rgb_keyboard_probe,
-+	.disconnect = cros_rgb_keyboard_disconnect,
-+};
-+
-+module_usb_driver(cros_rgb_keyboard_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("ChromeOS RGB keyboard driver");
--- 
-2.39.0.rc0.267.gcb52ba06e7-goog
-
+> 
+> And if I'm correct above, this is definitely a "try again" situation:
+> you probably won't take the same type of fault the second time though.
+> 
+> Thanks,
+> 
+> 	M.
+> 
+> -- 
+> Without deviation from the norm, progress is not possible.
+> 
