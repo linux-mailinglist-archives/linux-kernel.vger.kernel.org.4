@@ -2,59 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFD363DB98
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 18:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E490963DB9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 18:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbiK3RJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 12:09:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
+        id S231266AbiK3RJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 12:09:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbiK3RJY (ORCPT
+        with ESMTP id S231217AbiK3RJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 12:09:24 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EFF9B795
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 09:04:10 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p0QV0-0005r7-Bq; Wed, 30 Nov 2022 18:03:54 +0100
-Received: from pengutronix.de (unknown [IPv6:2a0a:edc0:0:701:cf48:5678:3bb0:eeda])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1960812E2AE;
-        Wed, 30 Nov 2022 17:03:52 +0000 (UTC)
-Date:   Wed, 30 Nov 2022 18:03:51 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Jiri Pirko <jiri@resnulli.us>, Jiri Pirko <jiri@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        linux-can <linux-can@vger.kernel.org>
-Subject: Re: [PATCH net-next v2] net: devlink: add
- DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER
-Message-ID: <20221130170351.cjyaqr22vhqzq4hv@pengutronix.de>
-References: <20221129031406.3849872-1-mailhol.vincent@wanadoo.fr>
- <Y4XCnAA2hGvqgXh0@nanopsycho>
- <CAMZ6RqJ54rfLfODB1JNaFr_pxWxzHJBoC2UmCKAZ7mSkEbcdzQ@mail.gmail.com>
+        Wed, 30 Nov 2022 12:09:33 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF0B91C3C;
+        Wed, 30 Nov 2022 09:04:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LFKoiJFPBSgQ2y+tMQXCNyjnjbf0vYK+AhkweABct47IVsGHmfwLGw4Vb4FVQBYcz/bos0tUBdXP4h+XiehQUjyOKlnH93ZvB5q4wbUuiQMzfldNj8zbG14wYzuz+Yo9XBoyMzwo09s8TJkn5pk6ix4uWwQqmw5uKyuMXhLiZ1ltRluZ3kmkUZ3INB60K+XLyOStQG56BxKZiNLhghxMBLy+vCNwZ9Vv/lZUhDDJWieRmmavItkels50+7e/PwwT6Juj+bPNoMmsGRyjPhfsCX8zbmlKKMSyJv5RoZlaN+6iabK+2AxMV+o93EeLXpr0Hdg5r/A/Nm34AAG1N3YMJQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WfKEPPrC9RCLpmJboXWBhFiiU82Q1RUlCJm5oQQT/yk=;
+ b=btzE2OieRbciItOKizNgsMKa93467DcdJ1UL0aCyNn/WVFCVw9YZBA4NSqgwnZO1a4Vx0jEJOHFPx5LEQGHyhhNTcbhdSB1bECJpGzOPFt8sbqvQelVRoG8XIq9xzZl/ghE/iCUkvvp2yewUaHBWobWcuPfUAaWV+FGfr5J8ZCmSIZ4nX6j70x2DMQ6RR5QT1b5Nolz71XG06zWwAct5qaMt3BlYg2BQ4AgMF2mON2JplPU5dc1/eCgiToTCutMFeeAvOWP8By53YCJjSySwnUvvL977aGqp97IFkNmgsx4N1B8E1ubhS4lBgWh1dXXwDyECCNKYZP8iCFIRcZY06A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WfKEPPrC9RCLpmJboXWBhFiiU82Q1RUlCJm5oQQT/yk=;
+ b=gv8f7YqnwSdBTMuM+Wsg5FSIqptxzOV9JrfVd0VpsqWAgFOjP8JjGRlEag3OzjK0Ud2hk5eq4WE5sR43GxDTTDsM1dgMU//YjLD0NryPDVC+EwCZnSiUdCKhA3ktavHf0Kq9qx5HQSHimOj6hplsT/qzWszkh4b5j/OzpATZ56g=
+Received: from BN0PR02CA0023.namprd02.prod.outlook.com (2603:10b6:408:e4::28)
+ by MN2PR12MB4406.namprd12.prod.outlook.com (2603:10b6:208:268::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Wed, 30 Nov
+ 2022 17:04:35 +0000
+Received: from CO1NAM11FT107.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e4:cafe::32) by BN0PR02CA0023.outlook.office365.com
+ (2603:10b6:408:e4::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23 via Frontend
+ Transport; Wed, 30 Nov 2022 17:04:34 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT107.mail.protection.outlook.com (10.13.175.97) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5880.8 via Frontend Transport; Wed, 30 Nov 2022 17:04:34 +0000
+Received: from [10.254.241.50] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 30 Nov
+ 2022 11:04:29 -0600
+Message-ID: <7127c7f4-89b3-31f8-cabc-43f955eded64@amd.com>
+Date:   Wed, 30 Nov 2022 18:04:26 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="obziojiov5xhwwjh"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqJ54rfLfODB1JNaFr_pxWxzHJBoC2UmCKAZ7mSkEbcdzQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] iio: adc: xilinx-ams: fix devm_krealloc() return value
+ check
+Content-Language: en-US
+To:     Marco Pagani <marpagan@redhat.com>,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Manish Narani <manish.narani@xilinx.com>
+CC:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+References: <20221125113112.219290-1-marpagan@redhat.com>
+From:   Michal Simek <michal.simek@amd.com>
+In-Reply-To: <20221125113112.219290-1-marpagan@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT107:EE_|MN2PR12MB4406:EE_
+X-MS-Office365-Filtering-Correlation-Id: e97eecab-8258-4d42-0f03-08dad2f4f4ad
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lAl2/XiZX6VE9fbtmSBgVpLe/aZ6G25uLiASXiseEPw4BXdwofe/IC7UhSHUaXQDOAdm1UZr72dm+NvcOJfjYVVnf44bXc8SRFQqiPDh4KMSFPIP1ipaw9l9sRFokoDxFHyUo2H9vz8RINoQ3Zk271Lv3Y2ABB5YVIJi+yPPsJJlPV1Tx5y22/lc1R208Lh9e0WhrzPbsBCZXYUNyY/zOVM+Zc6CWLxcqQ+qUlw9DAooFx4z5QwEE3M99VOQyXjR8Nr0L8B+fNzy75IU+qoZ7QqcYOG+J6/QcQ7zcyJdnzw4PqMBnSPzUttyilPszcPJVLBOsdVhN9Xvtp5ifG+uJQicRJ5zilq5V0oE69kOMOl93X1O5wQeGTEp/KYCgWChZk35zunJCqkVaPK5kIK/cH9++foDopQqYZZv4rVXpVBOrc5e7XMghGxV/Hr2YuMiqfsV0fXfapikoca1zNQfnRYI6vGbJTTlo7XlNoY83fahwVwVbCmFyk3b4Qe4BlKHMDvE5fTEQHo87WJFRVcyVnSbEULDaNGSnvoJaBvsfZBMadSz7UFvZd3ZI4IwOJuDDZTqzKGwRzb58N8dLaQaMVFIYoj3gu+iOatdMdcXQIWDNDEe48T4RifgxSN4z1TpY4X9unmJgbUBc+I6otqIcg90a03+2kB0iaaf+I8FQxc0TXl4DfgHnwDmXY3elMjvgZufTZXm8UYmzyGMF3SsjYwgZ3PNkHVevcRxMh3H7SmP8eoieFeX+jCFfTeIQKrurV//cwCnLMDyXIldd5NUZQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(396003)(346002)(451199015)(36840700001)(46966006)(40470700004)(36756003)(82310400005)(41300700001)(8936002)(70206006)(53546011)(336012)(2616005)(16526019)(6666004)(478600001)(4326008)(316002)(8676002)(26005)(40460700003)(70586007)(31696002)(356005)(81166007)(86362001)(40480700001)(31686004)(7416002)(2906002)(186003)(5660300002)(426003)(47076005)(44832011)(16576012)(36860700001)(110136005)(54906003)(83380400001)(82740400003)(36900700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 17:04:34.3619
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e97eecab-8258-4d42-0f03-08dad2f4f4ad
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT107.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4406
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -62,99 +113,41 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---obziojiov5xhwwjh
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 29.11.2022 18:28:44, Vincent MAILHOL wrote:
-> On Tue. 29 Nov. 2022 at 17:33, Jiri Pirko <jiri@resnulli.us> wrote:
-> > Tue, Nov 29, 2022 at 04:14:06AM CET, mailhol.vincent@wanadoo.fr wrote:
-> > >As discussed in [1], abbreviating the bootloader to "bl" might not be
-> > >well understood. Instead, a bootloader technically being a firmware,
-> > >name it "fw.bootloader".
-> > >
-> > >Add a new macro to devlink.h to formalize this new info attribute name
-> > >and update the documentation.
-> > >
-> > >[1] https://lore.kernel.org/netdev/20221128142723.2f826d20@kernel.org/
-> > >
-> > >Suggested-by: Jakub Kicinski <kuba@kernel.org>
-> > >Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > >---
-> > >* Changelog *
-> > >
-> > >v1 -> v2:
-> > >
-> > >  * update the documentation as well.
-> > >  Link: https://lore.kernel.org/netdev/20221129020151.3842613-1-mailho=
-l.vincent@wanadoo.fr/
-> > >---
-> > > Documentation/networking/devlink/devlink-info.rst | 5 +++++
-> > > include/net/devlink.h                             | 2 ++
-> > > 2 files changed, 7 insertions(+)
-> > >
-> > >diff --git a/Documentation/networking/devlink/devlink-info.rst b/Docum=
-entation/networking/devlink/devlink-info.rst
-> > >index 7572bf6de5c1..1242b0e6826b 100644
-> > >--- a/Documentation/networking/devlink/devlink-info.rst
-> > >+++ b/Documentation/networking/devlink/devlink-info.rst
-> > >@@ -198,6 +198,11 @@ fw.bundle_id
-> > >
-> > > Unique identifier of the entire firmware bundle.
-> > >
-> > >+fw.bootloader
-> > >+-------------
-> > >+
-> > >+Version of the bootloader.
-> > >+
-> > > Future work
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > >
-> > >diff --git a/include/net/devlink.h b/include/net/devlink.h
-> > >index 074a79b8933f..2f552b90b5c6 100644
-> > >--- a/include/net/devlink.h
-> > >+++ b/include/net/devlink.h
-> > >@@ -621,6 +621,8 @@ enum devlink_param_generic_id {
-> > > #define DEVLINK_INFO_VERSION_GENERIC_FW_ROCE  "fw.roce"
-> > > /* Firmware bundle identifier */
-> > > #define DEVLINK_INFO_VERSION_GENERIC_FW_BUNDLE_ID     "fw.bundle_id"
-> > >+/* Bootloader */
-> > >+#define DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER    "fw.bootloader"
-> >
-> > You add it and don't use it. You should add only what you use.
->=20
-> I will use it in this series for the linux-can tree:
-> https://lore.kernel.org/netdev/20221126162211.93322-4-mailhol.vincent@wan=
-adoo.fr/
->=20
-> If it is a problem to send this as a standalone patch, I will then
-> just add it to my series and have the patch go through the linux-can
-> tree.
+On 11/25/22 12:31, Marco Pagani wrote:
+> CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
+> 
+> 
+> The clang-analyzer reported a warning: "Value stored to 'ret'
+> is never read".
+> 
+> Fix the return value check if devm_krealloc() fails to resize
+> ams_channels.
+> 
+> Fixes: d5c70627a794 ("iio: adc: Add Xilinx AMS driver")
+> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> ---
+>   drivers/iio/adc/xilinx-ams.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/adc/xilinx-ams.c b/drivers/iio/adc/xilinx-ams.c
+> index 5b4bdf3a26bb..a507d2e17079 100644
+> --- a/drivers/iio/adc/xilinx-ams.c
+> +++ b/drivers/iio/adc/xilinx-ams.c
+> @@ -1329,7 +1329,7 @@ static int ams_parse_firmware(struct iio_dev *indio_dev)
+> 
+>          dev_channels = devm_krealloc(dev, ams_channels, dev_size, GFP_KERNEL);
+>          if (!dev_channels)
+> -               ret = -ENOMEM;
+> +               return -ENOMEM;
+> 
+>          indio_dev->channels = dev_channels;
+>          indio_dev->num_channels = num_channels;
+> --
+> 2.38.1
+> 
 
-As you have the Ok from Greg, include this in you v5 series.
+Acked-by: Michal Simek <michal.simek@amd.com>
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---obziojiov5xhwwjh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOHjPQACgkQrX5LkNig
-011yRQf/Z//khRUupApjepNa7hj73LOXKehQrdvABWt+K/GUaMpnRFtDMASWz4ZJ
-D9DH4Gk9+dsV6y8/tHnE9VNMYXZCkDqLxqq3INn7b4Th+eyS6Ajfk79k51Iervdv
-Q7IgNfeuEV52vnjIUrfGXIpqpV/1Tc83nmyiHM1yuhKPFv88hWAppuzZ53lTZRnE
-YHfAL9iy/FaA85w0334LSuIst36Mj2CFtFWc4+ymA0aBwL2t8dbiIQ0dDgYOowep
-Rk7NkT0LSsPXNUfm0KYq12z4VYG7lvWAtzWcSHwX0G+axxzWQKGY4lMAd8mBsAoY
-+1jDIuaKCXorISuFceKoD2ock+4+jw==
-=7wqE
------END PGP SIGNATURE-----
-
---obziojiov5xhwwjh--
+Thanks,
+Michal
