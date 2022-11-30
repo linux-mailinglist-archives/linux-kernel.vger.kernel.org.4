@@ -2,237 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F7A63DB06
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F9963DB21
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbiK3Qw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 11:52:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
+        id S230374AbiK3Qzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 11:55:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbiK3Qwt (ORCPT
+        with ESMTP id S230392AbiK3QzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 11:52:49 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CDA1CFD4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:52:46 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id z17so12552134pff.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:52:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=70hrIKE/Lh0Xe2sfkWCWl/PvBxei19HaDqCvJkKWhco=;
-        b=UFRitgEDGJg5MoCtIDYXjzCjzLyMME5GtargjP8D8ozTmzgApORZIIQ+vWBAvTpKan
-         EHCJPLCiNhPpIc4devgESIWMvAM1H72/Ag4hbBWEaGrF/kBa3YHXS89t2E7Mu8pqF7bx
-         R4zK/oggbVyqqL17hjTLeVGdjpP2bchNhL+P1JQXXC2KPyJB8DsxZ+kJgQ4Bhi1cVeep
-         WnfqYROyJzaURETqFMUgAbTrCG91HWyJ7XbmmHoiYRf9mh9vxo9JcHNVQ6TDe0ZTznCo
-         UJJ80zO0dkFVQ7cGpCAl17Bh/9n4FmWAa81jSUe+6AIaTXjdzmfrKFehO9H5x+CkElvc
-         cxrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=70hrIKE/Lh0Xe2sfkWCWl/PvBxei19HaDqCvJkKWhco=;
-        b=8GfSESuwVV19lm5bBRFtacpG+IY+BYqUbHydDYehwG2FIE3zxJJ5I8y4Ga2dvXpgKe
-         k15+t7X08CMm3i6aaLFSUwu5dkZqAPjx/6RwVDbpdaSGoamGFo8fnIKooNuGyzW5cK0R
-         mH2G136+7+J/sFQJcZvvoh9fahvfEJzegxGM9Bx1mKnbn7GyMBoIIPgAxQON6/OFI2U0
-         Of1WLV2qW0bxyjbWandg8P6s9isKCysbAAkKxwWei8mU+QO5eSJTIXngs8us4avn3IU2
-         n1bI5WoVtU7QO/+gQ4GIsOgxbQMI80snlymL6IlyPu8Mc6yuQmfkOgoidmibKwxLJqw5
-         Gi5w==
-X-Gm-Message-State: ANoB5pmYDhWw5TkOIIQUzPHiT2N4aOTBj+9tYjKfIyz3eP6MJ6UKedX/
-        U1BqC4M/hvf4Fopd9YSoZUCsNg==
-X-Google-Smtp-Source: AA0mqf5NLJOmwyNwn/gipNidE9gEHwgNDNMVWONi/Dr1Lruk/b6q4wvYsV25K0Zt4f4DtIuXWhSiNA==
-X-Received: by 2002:a63:eb16:0:b0:477:5f10:204f with SMTP id t22-20020a63eb16000000b004775f10204fmr37251550pgh.144.1669827166047;
-        Wed, 30 Nov 2022 08:52:46 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id a10-20020a1709027e4a00b001898aa48d17sm1700015pln.185.2022.11.30.08.52.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 08:52:45 -0800 (PST)
-Message-ID: <75f01776-a95f-d0a7-4803-0b3d17f19800@9elements.com>
-Date:   Wed, 30 Nov 2022 22:22:42 +0530
+        Wed, 30 Nov 2022 11:55:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9EB10FA
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:54:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669827265;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZxTQX3FVnO/SHqCMWgrIdWjeF2TtLVLhYNl7VH04u1Y=;
+        b=T/UGvnbKZsqDlGTqokqHzSPgp4EHnleIN/DldjjulxLK0lHzegRB7nboeRE5rTCn/cMEBa
+        8XSD7j0mE3K6B92MUx5woBvn9mGnFv/TEjpUMiUJSlJifX1Wubi2F5JkKzOoutBGc1yk3t
+        ueUEoiKhlznhr1cABtScgcfV2Q3w1M8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-584-36147enXOMKo_Xu_tw7GWQ-1; Wed, 30 Nov 2022 11:54:21 -0500
+X-MC-Unique: 36147enXOMKo_Xu_tw7GWQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D32083C01D85;
+        Wed, 30 Nov 2022 16:54:20 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.36])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1B198C15BA4;
+        Wed, 30 Nov 2022 16:54:20 +0000 (UTC)
+Subject: [PATCH net-next 00/35] rxrpc: Increasing SACK size and moving away
+ from softirq, parts 2 & 3
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     linux-afs@lists.infradead.org,
+        Marc Dionne <marc.dionne@auristor.com>, dhowells@redhat.com,
+        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Wed, 30 Nov 2022 16:54:17 +0000
+Message-ID: <166982725699.621383.2358362793992993374.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/3] hwmon: (pmbus/core): Update regulator flag map
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org
-References: <20221128174715.1969957-1-Naresh.Solanki@9elements.com>
- <bbba5774-b886-df08-1263-7e3489b84a8e@roeck-us.net>
- <32b17cb1-754f-684b-a7d2-583d2e32030f@9elements.com>
- <6366dfd8-9e81-1ada-f41d-a687b4ab8e5a@roeck-us.net>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <6366dfd8-9e81-1ada-f41d-a687b4ab8e5a@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
 
-On 29-11-2022 08:54 pm, Guenter Roeck wrote:
-> On 11/28/22 23:55, Naresh Solanki wrote:
->> Hi Guenter,
->>
->> On 29-11-2022 04:11 am, Guenter Roeck wrote:
->>> On 11/28/22 09:47, Naresh Solanki wrote:
->>>> Add regulator flag map for PMBUS status byte & status input.
->>>>
->>>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->>>
->>> You are adding a lot of input errors here. The regulator documentation
->>> only covers output errors. I am not sure if this set of changes is
->>> really appropriate. You'll have to make a much better case for those 
->>> changes;
->>> from what I can see they are all controversial and were originally 
->>> left out
->>> on purpose.
->> I felt it may be worth to monitor status input, but you feel otherwise 
->> then shall I remove this in next revision ?
-> 
-> It is a set of changes which needs input from regulator subsystem 
-> maintainers.
-> Maybe it even needs changes on the regulator side, for example to report
-> input and/or power failures properly.
-> 
-> It isn't something I would have expected as part of a patch or patch series
-> series which is supposed to add interrupt support to pmbus drivers.
-> Since it is the first patch in your series, in may hold up the series
-> for some period of time until the questions around it are resolved.
-> Your call, really, how to handle it. Just don't be surprised if it takes
-> a while to resolve the issues.
-I'll check with regulator subsystem maintainer on input error & based on 
-feedback will post separate patch.
-> 
->>>
->>>> ---
->>>>   drivers/hwmon/pmbus/pmbus_core.c | 30 ++++++++++++++++++++++--------
->>>>   1 file changed, 22 insertions(+), 8 deletions(-)
->>>>
->>>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c 
->>>> b/drivers/hwmon/pmbus/pmbus_core.c
->>>> index 95e95783972a..f5caceaaef2a 100644
->>>> --- a/drivers/hwmon/pmbus/pmbus_core.c
->>>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->>>> @@ -2752,6 +2752,15 @@ struct pmbus_regulator_status_category {
->>>>   static const struct pmbus_regulator_status_category 
->>>> pmbus_regulator_flag_map[] = {
->>>>       {
->>>> +        .func = -1,
->>>
->>> This would need a comment. I don't really see the benefit over the 
->>> original
->>> code.
->> I pulled that in so as to handle it in same way as other status register.
-> 
-> That would have to be a separate patch. It took me a while to understand
-> how .func = -1 is handled, so without comment it just adds confusion.
-Yes. Will make separate patch & add comment here.
-> 
->>>
->>>> +        .reg = PMBUS_STATUS_BYTE,
->>>> +        .bits = (const struct pmbus_regulator_status_assoc[]) {
->>>> +            { PB_STATUS_IOUT_OC,   REGULATOR_ERROR_OVER_CURRENT },
->>>> +            { PB_STATUS_VOUT_OV,   REGULATOR_ERROR_REGULATION_OUT },
->>>> +            { PB_STATUS_VIN_UV,    REGULATOR_ERROR_UNDER_VOLTAGE },
->>>> +            { },
->>>> +        },
->>>> +    }, {
->>>>           .func = PMBUS_HAVE_STATUS_VOUT,
->>>>           .reg = PMBUS_STATUS_VOUT,
->>>>           .bits = (const struct pmbus_regulator_status_assoc[]) {
->>>> @@ -2768,6 +2777,7 @@ static const struct 
->>>> pmbus_regulator_status_category pmbus_regulator_flag_map[] =
->>>>               { PB_IOUT_OC_WARNING, 
->>>> REGULATOR_ERROR_OVER_CURRENT_WARN },
->>>>               { PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
->>>>               { PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
->>>> +            { PB_POUT_OP_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
->>>
->>> OP_FAULT (power fault) and over current are really not the same thing.
->>>
->> I agree. But thats best I could think of. Not sure if there is better 
->> REGULATOR_ERROR_* code for this scenario. Suggestions?
-> 
-> Options are REGULATOR_ERROR_OVER_CURRENT or REGULATOR_ERROR_FAIL or
-> a new failure code or doing nothing. Personally I think 
-> REGULATOR_ERROR_FAIL
-> would be better if adding a new failure code is not an option.
-Will update to REGULATOR_ERROR_FAIL.
-> 
-> Anyway, clarify on the regulator subsystem mailing list how to handle input
-> errors, and how to handle power failures. If they say it is acceptable to
-> report input errors as output errors, and to report power failures as
-> current failures, resubmit. Say in comments that this is what you are 
-> doing,
-> and in the commit description that this is how input errors and power
-> failures are handled in the regulator subsystem. Copy regulator subsystem
-> maintainers on your patch.
-Sure. Will hold back input errors for now & after checking with 
-regulator maintainer, will make separate patch accordingly.
-> 
-> Thanks,
-> Guenter
-> 
->>>>               { },
->>>>           },
->>>>       }, {
->>>> @@ -2778,6 +2788,18 @@ static const struct 
->>>> pmbus_regulator_status_category pmbus_regulator_flag_map[] =
->>>>               { PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
->>>>               { },
->>>>           },
->>>> +    }, {
->>>> +        .func = PMBUS_HAVE_STATUS_INPUT,
->>>> +        .reg = PMBUS_STATUS_INPUT,
->>>> +        .bits = (const struct pmbus_regulator_status_assoc[]) {
->>>> +            { PB_IIN_OC_FAULT,       REGULATOR_ERROR_OVER_CURRENT },
->>>> +            { PB_IIN_OC_WARNING, REGULATOR_ERROR_OVER_CURRENT_WARN },
->>>> +            { PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
->>>> +            { PB_VOLTAGE_UV_WARNING, 
->>>> REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
->>>> +            { PB_VOLTAGE_OV_WARNING, 
->>>> REGULATOR_ERROR_OVER_VOLTAGE_WARN },
->>>> +            { PB_VOLTAGE_OV_FAULT, 
->>>> REGULATOR_ERROR_OVER_VOLTAGE_WARN },
->>>
->>> fault -> warning ? Shouldn't this be REGULATOR_ERROR_FAIL (Regulator
->>> output has failed) ?
->>>
->> Yes. REGULATOR_ERROR_FAIL is best fit here. Will update in next revision.
->>>> +            { },
->>>> +        },
->>>>       },
->>>>   };
->>>> @@ -2834,14 +2856,6 @@ static int 
->>>> pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->>>>           if (status & PB_STATUS_POWER_GOOD_N)
->>>>               *flags |= REGULATOR_ERROR_REGULATION_OUT;
->>>>       }
->>>> -    /*
->>>> -     * Unlike most other status bits, PB_STATUS_{IOUT_OC,VOUT_OV} are
->>>> -     * defined strictly as fault indicators (not warnings).
->>>> -     */
->>>> -    if (status & PB_STATUS_IOUT_OC)
->>>> -        *flags |= REGULATOR_ERROR_OVER_CURRENT;
->>>> -    if (status & PB_STATUS_VOUT_OV)
->>>> -        *flags |= REGULATOR_ERROR_REGULATION_OUT;
->>>>       /*
->>>>        * If we haven't discovered any thermal faults or warnings via
->>>>
->>>> base-commit: 9494c53e1389b120ba461899207ac8a3aab2632c
->>>
-> 
+Here are the second and third parts of patches in the process of moving
+rxrpc from doing a lot of its stuff in softirq context to doing it in an
+I/O thread in process context and thereby making it easier to support a
+larger SACK table.
 
-Regards,
-Naresh
+The full description is in the description for the first part[1] which is
+already in net-next.
+
+The second part includes some cleanups, adds some testing and overhauls
+some tracing:
+
+ (1) Remove declaration of rxrpc_kernel_call_is_complete() as the
+     definition is no longer present.
+
+ (2) Remove the knet() and kproto() macros in favour of using tracepoints.
+
+ (3) Remove handling of duplicate packets from recvmsg.  The input side
+     isn't now going to insert overlapping/duplicate packets into the
+     recvmsg queue.
+
+ (4) Don't use the rxrpc_conn_parameters struct in the rxrpc_connection or
+     rxrpc_bundle structs - rather put the members in directly.
+
+ (5) Extract the abort code from a received abort packet right up front
+     rather than doing it in multiple places later.
+
+ (6) Use enums and symbol lists rather than __builtin_return_address() to
+     indicate where a tracepoint was triggered for local, peer, conn, call
+     and skbuff tracing.
+
+ (7) Add a refcount tracepoint for the rxrpc_bundle struct.
+
+ (8) Implement an in-kernel server for the AFS rxperf testing program to
+     talk to (enabled by a Kconfig option).
+
+This is tagged as rxrpc-next-20221130-a.
+
+The third part introduces the I/O thread and switches various bits over to
+running there:
+
+ (1) Fix call timers and call and connection workqueues to not hold refs on
+     the rxrpc_call and rxrpc_connection structs to thereby avoid messy
+     cleanup when the last ref is put in softirq mode.
+
+ (2) Split input.c so that the call packet processing bits are separate
+     from the received packet distribution bits.  Call packet processing
+     gets bumped over to the call event handler.
+
+ (3) Create a per-local endpoint I/O thread.  Barring some tiny bits that
+     still get done in softirq context, all packet reception, processing
+     and transmission is done in this thread.  That will allow a load of
+     locking to be removed.
+
+ (4) Perform packet processing and error processing from the I/O thread.
+
+ (5) Provide a mechanism to process call event notifications in the I/O
+     thread rather than queuing a work item for that call.
+
+ (6) Move data and ACK transmission into the I/O thread.  ACKs can then be
+     transmitted at the point they're generated rather than getting
+     delegated from softirq context to some process context somewhere.
+
+ (7) Move call and local processor event handling into the I/O thread.
+
+ (8) Move cwnd degradation to after packets have been transmitted so that
+     they don't shorten the window too quickly.
+
+A bunch of simplifications can then be done:
+
+ (1) The input_lock is no longer necessary as exclusion is achieved by
+     running the code in the I/O thread only.
+
+ (2) Don't need to use sk->sk_receive_queue.lock to guard socket state
+     changes as the socket mutex should suffice.
+
+ (3) Don't take spinlocks in RCU callback functions as they get run in
+     softirq context and thus need _bh annotations.
+
+ (4) RCU is then no longer needed for the peer's error_targets list.
+
+ (5) Simplify the skbuff handling in the receive path by dropping the ref
+     in the basic I/O thread loop and getting an extra ref as and when we
+     need to queue the packet for recvmsg or another context.
+
+ (6) Get the peer address earlier in the input process and pass it to the
+     users so that we only do it once.
+
+This is tagged as rxrpc-next-20221130-b.
+
+Tested-by: Marc Dionne <marc.dionne@auristor.com>
+Tested-by: kafs-testing+fedora36_64checkkafs-build-144@auristor.com
+Link: https://lore.kernel.org/r/166794587113.2389296.16484814996876530222.stgit@warthog.procyon.org.uk/ [1]
+
+---
+The patches are tagged here:
+
+	git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/rxrpc-next-20221130-b
+
+And can be found on this branch:
+
+	http://git.kernel.org/cgit/linux/kernel/git/dhowells/linux-fs.git/log/?h=rxrpc-next
+
+David
+---
+David Howells (35):
+      rxrpc: Implement an in-kernel rxperf server for testing purposes
+      rxrpc: Fix call leak
+      rxrpc: Remove decl for rxrpc_kernel_call_is_complete()
+      rxrpc: Remove handling of duplicate packets in recvmsg_queue
+      rxrpc: Remove the [k_]proto() debugging macros
+      rxrpc: Remove the [_k]net() debugging macros
+      rxrpc: Drop rxrpc_conn_parameters from rxrpc_connection and rxrpc_bundle
+      rxrpc: Extract the code from a received ABORT packet much earlier
+      rxrpc: trace: Don't use __builtin_return_address for rxrpc_local tracing
+      rxrpc: trace: Don't use __builtin_return_address for rxrpc_peer tracing
+      rxrpc: trace: Don't use __builtin_return_address for rxrpc_conn tracing
+      rxrpc: trace: Don't use __builtin_return_address for rxrpc_call tracing
+      rxrpc: Trace rxrpc_bundle refcount
+      rxrpc: trace: Don't use __builtin_return_address for sk_buff tracing
+      rxrpc: Don't hold a ref for call timer or workqueue
+      rxrpc: Don't hold a ref for connection workqueue
+      rxrpc: Split the receive code
+      rxrpc: Create a per-local endpoint receive queue and I/O thread
+      rxrpc: Move packet reception processing into I/O thread
+      rxrpc: Move error processing into the local endpoint I/O thread
+      rxrpc: Remove call->input_lock
+      rxrpc: Don't use sk->sk_receive_queue.lock to guard socket state changes
+      rxrpc: Implement a mechanism to send an event notification to a call
+      rxrpc: Copy client call parameters into rxrpc_call earlier
+      rxrpc: Move DATA transmission into call processor work item
+      rxrpc: Remove RCU from peer->error_targets list
+      rxrpc: Simplify skbuff accounting in receive path
+      rxrpc: Reduce the use of RCU in packet input
+      rxrpc: Extract the peer address from an incoming packet earlier
+      rxrpc: Make the I/O thread take over the call and local processor work
+      rxrpc: Remove the _bh annotation from all the spinlocks
+      rxrpc: Trace/count transmission underflows and cwnd resets
+      rxrpc: Move the cwnd degradation after transmitting packets
+      rxrpc: Fold __rxrpc_unuse_local() into rxrpc_unuse_local()
+      rxrpc: Transmit ACKs at the point of generation
+
+
+ include/net/af_rxrpc.h       |   2 +-
+ include/trace/events/rxrpc.h | 486 +++++++++++++++++++-------
+ net/rxrpc/Kconfig            |   7 +
+ net/rxrpc/Makefile           |   4 +
+ net/rxrpc/af_rxrpc.c         |  18 +-
+ net/rxrpc/ar-internal.h      | 211 +++++------
+ net/rxrpc/call_accept.c      | 191 +++++-----
+ net/rxrpc/call_event.c       | 260 ++++++++------
+ net/rxrpc/call_object.c      | 318 ++++++++---------
+ net/rxrpc/conn_client.c      | 143 ++++----
+ net/rxrpc/conn_event.c       | 128 ++++---
+ net/rxrpc/conn_object.c      | 309 ++++++++---------
+ net/rxrpc/conn_service.c     |  29 +-
+ net/rxrpc/input.c            | 653 +++++------------------------------
+ net/rxrpc/io_thread.c        | 496 ++++++++++++++++++++++++++
+ net/rxrpc/key.c              |   2 +-
+ net/rxrpc/local_event.c      |  46 +--
+ net/rxrpc/local_object.c     | 167 +++------
+ net/rxrpc/net_ns.c           |   2 +-
+ net/rxrpc/output.c           | 227 ++++++------
+ net/rxrpc/peer_event.c       | 167 +++------
+ net/rxrpc/peer_object.c      |  52 ++-
+ net/rxrpc/proc.c             |  67 ++--
+ net/rxrpc/recvmsg.c          |  88 ++---
+ net/rxrpc/rxkad.c            |  63 ++--
+ net/rxrpc/rxperf.c           | 619 +++++++++++++++++++++++++++++++++
+ net/rxrpc/security.c         |  34 +-
+ net/rxrpc/sendmsg.c          | 105 ++----
+ net/rxrpc/server_key.c       |  25 ++
+ net/rxrpc/skbuff.c           |  36 +-
+ net/rxrpc/txbuf.c            |  15 +-
+ 31 files changed, 2873 insertions(+), 2097 deletions(-)
+ create mode 100644 net/rxrpc/io_thread.c
+ create mode 100644 net/rxrpc/rxperf.c
+
+
