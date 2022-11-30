@@ -2,145 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1894E63D1C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9371A63D1CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:26:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbiK3JYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 04:24:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
+        id S233117AbiK3J0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 04:26:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232373AbiK3JYx (ORCPT
+        with ESMTP id S229895AbiK3JZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 04:24:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B9F2A967;
-        Wed, 30 Nov 2022 01:24:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9362B81A99;
-        Wed, 30 Nov 2022 09:24:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D885BC433C1;
-        Wed, 30 Nov 2022 09:24:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669800287;
-        bh=TdyM8hMpRwYA7lJLFOBGQQtN/uspLzJubg/tO0o+fBo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qg/4JEpHq0VapvPQZG7o5odpmHpLltXvEx5sITQmJKCpHaaMtJZtLnqP50biDk+fP
-         x/wACcZj6kakpvLUFNkXXEG91fjV2fc9frXFy/meS2rYHkYgBA/0pjGITswxQnoLec
-         YS230P55xqjrmSnZNvqouwTSbArGMIT31m6aRWr7Z3op0Tm+Tb5ncKnWA/gwt5JKYn
-         RlhgI9X9Ytne/HP4aJECeB9AuwuPkccN/WmKIzOda6Ia5SHTRuB1Lsvmdywc7lwBmz
-         fISykQFyh8P3jKXuzmBQXeO/RHVlLxsgD8KeuT0y3xU263DpeEjY6NOBsMd556pV7s
-         v+rcRUZRyflgA==
-Date:   Wed, 30 Nov 2022 11:24:43 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Veerasenareddy Burru <vburru@marvell.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lironh@marvell.com, aayarekar@marvell.com, sedara@marvell.com,
-        sburla@marvell.com, linux-doc@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next v2 1/9] octeon_ep: defer probe if firmware not
- ready
-Message-ID: <Y4chWyR6qTlptkTE@unreal>
-References: <20221129130933.25231-1-vburru@marvell.com>
- <20221129130933.25231-2-vburru@marvell.com>
+        Wed, 30 Nov 2022 04:25:59 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9922C2A967;
+        Wed, 30 Nov 2022 01:25:58 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id n205so18140623oib.1;
+        Wed, 30 Nov 2022 01:25:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zbHI1uW0B/bUDnJ0AXXSb3CdFb68rbl4AKwLYqiwj+I=;
+        b=dRrlLbN0dLYqYxMdXq7PcZcM4pdcMPyjUPM2N9Qjrli6oFHMVq7YxmOxGIpd8dSRvH
+         NBF2HhAlED9O8eMR7sNTiEwORU2jjLUjMflfhp5R+zrL8I3/Dt4pTfx2EVgeElo51j+H
+         JPUaZZrF11poDygHcDSfMJWwGFntVzLAxxu2Qoym+YtgtAHUBKbvBuHd+9W1OX3svlwU
+         3jKitxJ8Ib6CzUMJFed9mwvjXPMZ6pj05dpWGgCBYZpuGOLjfm+dFSKNwBzoxafGuBXs
+         iD8OFthAgUF7AW/eBkzmVKY/7tfIXBybf6g+waWeF67esSNNhYTU1w3XgLBX3Som0iS2
+         Md5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zbHI1uW0B/bUDnJ0AXXSb3CdFb68rbl4AKwLYqiwj+I=;
+        b=6EN8JWyWW66NU+yU/rVwRfiaWFdXT+5CibREpjqJcDlfyJBdQ7I5oLebBvd+HNFhwX
+         vFu/Cted8ASUkWG9QQv0v6ywCQEjoQtMe0018fcVq7lipuh/X3InZxy4op3OfhERlWSo
+         GyAkrw143yHVBiVkdo6+eR0ndNQvewwbiXHUqrhZJGZSEKrnnRSlBRIDq+P4gScQ6B9c
+         Qy6so8OYMm0PIgpScYzfsi/QUm6E88TR0liLyf4tedwC6ZfTecvf1t3f99BBN8uyq9n8
+         fzbiNwiKeu2wxYuTl0DSoiSMYz/j1y8BULRJvFmiCxUfEzbUXTn6ENSJKfOQD2R9/als
+         602g==
+X-Gm-Message-State: ANoB5pkwkUH1Zv2uI7oQ0hu/3zL5jazHv964o75yjI6fwz6NWAghE0Rf
+        +Y0qyuWkae6mCML3+3iBSBCifNZ5MfjdTIqL2uJ5C/Yow6OhUw==
+X-Google-Smtp-Source: AA0mqf7CAQ+AKTVLm+ECt9KESEXsJKRM65EWepkH0WhXm5liXbwWk0ortUwnZID/hBWY29xEamAr2C+iGy1fsdT7A1w=
+X-Received: by 2002:a05:6808:2ca:b0:359:ca42:419 with SMTP id
+ a10-20020a05680802ca00b00359ca420419mr30927505oid.98.1669800357956; Wed, 30
+ Nov 2022 01:25:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221129130933.25231-2-vburru@marvell.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221129140955.137361-1-gch981213@gmail.com> <20221129140955.137361-3-gch981213@gmail.com>
+ <98b72494-3188-76d5-2e24-9dc127a8b31a@linaro.org> <CAJsYDVJknDWKMW1tH0M=85tJOPG-HngxhhMzvJpk5qn_Q9mzAg@mail.gmail.com>
+ <7b3f97f9-34af-413c-aaad-9108b4f36c51@linaro.org>
+In-Reply-To: <7b3f97f9-34af-413c-aaad-9108b4f36c51@linaro.org>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Wed, 30 Nov 2022 17:25:46 +0800
+Message-ID: <CAJsYDVKXvJZaqCBx7RSsfVZkKTGdbp78GHA4mvmUdQwyEyGkBQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] dt-bindings: leds: add dt schema for worldsemi,ws2812b-spi
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 05:09:24AM -0800, Veerasenareddy Burru wrote:
-> Defer probe if firmware is not ready for device usage.
-> 
-> Signed-off-by: Veerasenareddy Burru <vburru@marvell.com>
-> Signed-off-by: Abhijit Ayarekar <aayarekar@marvell.com>
-> Signed-off-by: Satananda Burla <sburla@marvell.com>
-> ---
-> v1 -> v2:
->  * was scheduling workqueue task to wait for firmware ready,
->    to probe/initialize the device.
->  * now, removed the workqueue task; the probe returns EPROBE_DEFER,
->    if firmware is not ready.
->  * removed device status oct->status, as it is not required with the
->    modified implementation.
-> 
->  .../ethernet/marvell/octeon_ep/octep_main.c   | 26 +++++++++++++++++++
->  1 file changed, 26 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-> index 5a898fb88e37..aa7d0ced9807 100644
-> --- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-> +++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-> @@ -1017,6 +1017,25 @@ static void octep_device_cleanup(struct octep_device *oct)
->  	oct->conf = NULL;
->  }
->  
-> +static u8 get_fw_ready_status(struct pci_dev *pdev)
+Hi!
 
-Please change this function to return bool, you are not interested in
-status.
+On Wed, Nov 30, 2022 at 5:08 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> And that's exactly what I said - the compatibles should not include bus
+> information. The bus information comes from... the bus!
 
-> +{
-> +	u32 pos = 0;
-> +	u16 vsec_id;
-> +	u8 status;
-> +
-> +	while ((pos = pci_find_next_ext_capability(pdev, pos,
-> +						   PCI_EXT_CAP_ID_VNDR))) {
-> +		pci_read_config_word(pdev, pos + 4, &vsec_id);
-> +#define FW_STATUS_VSEC_ID  0xA3
-> +		if (vsec_id == FW_STATUS_VSEC_ID) {
+Oh. I thought there will be a conflict if there is a SPI driver and
+, say, an I2C driver with the same compatible string.
 
-Success oriented flow, plase
-if (vsec_id != FW_STATUS_VSEC_ID)
- cotitnue;
+> [...]
+> >>
+> >> Why unit address is optional?
+> >
+> > It isn't. I copy-pasted it from led-class-multicolor.yaml and
+> > didn't check the exact regex.
+> > I'll fix it in the next version.
+>
+> Make it required and matching your case.
 
-....
+Got it.
 
-> +			pci_read_config_byte(pdev, (pos + 8), &status);
-> +			dev_info(&pdev->dev, "Firmware ready %u\n", status);
-> +			return status;
-> +		}
-> +	}
-> +	return 0;
-> +}
-> +
->  /**
->   * octep_probe() - Octeon PCI device probe handler.
->   *
-> @@ -1053,6 +1072,13 @@ static int octep_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->  	pci_enable_pcie_error_reporting(pdev);
->  	pci_set_master(pdev);
->  
-> +#define FW_STATUS_READY    1
-> +	if (get_fw_ready_status(pdev) != FW_STATUS_READY) {
+> [...]
+> >>> +      default-intensity:
+> >>> +        description: |
+> >>> +          An array of 3 integer specifying the default intensity of each color
+> >>> +          components in this LED. <255 255 255> if unspecified.
+> >>> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+> >>> +        minItems: 3
+> [...]
+> So this is brightness of each color...
 
-No need to this new define if you change get_fw_ready_status() to return
-true/false.
+I don't think so.
+See the kernel doc for multicolor LED:
+https://docs.kernel.org/leds/leds-class-multicolor.html
+This property sets the sysfs file multi_intensity while the
+actual LED brightness is controlled with another sysfs
+file called 'brightness'.
+Setting multi_intensity alone doesn't change the LED
+brightness at all.
 
-And I think that you can put this check earlier in octep_probe().
-
-Thanks
-
-> +		dev_notice(&pdev->dev, "Firmware not ready; defer probe.\n");
-> +		err = -EPROBE_DEFER;
-> +		goto err_alloc_netdev;
-> +	}
-> +
->  	netdev = alloc_etherdev_mq(sizeof(struct octep_device),
->  				   OCTEP_MAX_QUEUES);
->  	if (!netdev) {
-> -- 
-> 2.36.0
-> 
+-- 
+Regards,
+Chuanhong Guo
