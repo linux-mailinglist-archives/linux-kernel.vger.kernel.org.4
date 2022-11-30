@@ -2,127 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A909D63DC22
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 18:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E27963DC35
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 18:38:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbiK3RiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 12:38:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34908 "EHLO
+        id S229827AbiK3Rix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 12:38:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiK3RiF (ORCPT
+        with ESMTP id S229678AbiK3Rip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 12:38:05 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBC330540;
-        Wed, 30 Nov 2022 09:38:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669829883; x=1701365883;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=jgk+/gRksD/zcs3SEL3Csm7ScRic4ED0irw6NfZJsSk=;
-  b=XCuC3EyiO1qXfsDqj7fsWtYf0ZG1KbHhDShofFVT1ccPRcFlmvLOXbNH
-   pVojtcZAwcfxS9TBPDjqCzKIQCrrt+tIUv3B+KJeOLgToyOPn/aus7v/A
-   jVQseH3pZzufK88f8XS8UIyoEKCJqKZkIzDWmikTlkK5GEfz2KbgOYOA1
-   7oPcci7+xTxXVTLbCm5AQMsQ5qk88+bdzO2XiHaduT2tQPJRxFIuZIdxO
-   XC+mqDXcA4qWgH7ck4fwruXQF0t3/qBSrGdI9rycTFPi79U8XNW/GkhdO
-   qQLuPyTxwOepiykYEPyumUj7zHOOM5U3r2suftI0hS0iw0mrAG7Rwhl4s
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="298832519"
-X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
-   d="scan'208";a="298832519"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 09:38:02 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="676903764"
-X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
-   d="scan'208";a="676903764"
-Received: from xwang-mobl1.amr.corp.intel.com (HELO [10.212.177.221]) ([10.212.177.221])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 09:38:01 -0800
-Message-ID: <c93a0fed-23d8-addd-b6ac-cd4076d0a528@intel.com>
-Date:   Wed, 30 Nov 2022 09:37:59 -0800
+        Wed, 30 Nov 2022 12:38:45 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374C137207;
+        Wed, 30 Nov 2022 09:38:44 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id be13so28093833lfb.4;
+        Wed, 30 Nov 2022 09:38:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=q0gEAiCJn5AZTB/dbyoiOBb5ffbCZ/uTpNxONaIFz18=;
+        b=J6lajX9tsiXHJgLqUZmFEdmfv8FS7/kTgRDuyv3WpZ9m356pQUikwQFj6dyzjaXg+3
+         eRzomTMaXqyduXqVuOsfGcCXNdASB+ZwCvQ0C8EyVAFfJJ/x4mECaX3/aFdrNdAgp/pP
+         qHbqevifRuwME/A120twFedHKLujnU2x8vS1Y1ppNxC7DWageO+sABHjFPEhpAmx66s1
+         QirPTa7MI/ThrAvOsLhVB077uchnByY/i+E4H9k06NwgIA99Txn43y34NzN+ArqPNyoW
+         C+pCnNbUMioQixEdIYqehipknwx4KKQBdU4jr8ciHeTKy/VIPJbPqQ25ZA1Z2pskbgol
+         +aZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q0gEAiCJn5AZTB/dbyoiOBb5ffbCZ/uTpNxONaIFz18=;
+        b=5aVgL3m4zhrsjdlqn0kxP05MNp0vCLV0OQ5SvecVi++G0HBCOk1T77QM1G8clFFh1j
+         3wh0Yr8kMXxWJcz3VUuLRQw9fdx3gc+Fco2mP7BaXZcx9Z3BjzRfQITHukHc47DJ0FJG
+         3fKc1qvYRU5lLI/lcMcb05+c6M6jaXDML0HKAd8KZiqzFpA5fLHXWs3rFV3S7cPpfNzr
+         zRzuHkrxw1nR4AqmhgqCdkfagtraqCB31BDxgoXDaRJkCeDDMS4bBWbZC0zvRci6yrpU
+         Tl6CDzIGFCjNKvj+mCsUtpjfq4mXZ2NVZ5qk1CATz6w5xaP1Sz7v0AEHjJPC747747Vf
+         thjQ==
+X-Gm-Message-State: ANoB5pk2/PbRuvLassrGkAiy2GWebehLZY9u/teL5IoGoh3zsMgo/nmu
+        kjkbtHiQh8CCWPU3sO2rGAkU2CXImTajbigsBLA=
+X-Google-Smtp-Source: AA0mqf5XNPSQLLaBiO+sG8KHhpSX8MC9f7lmnJ8wppxw1A/GfGBYg6y6BYtlmpiC5sF7yKk+w1aUe71oRPcq0S/Ubtw=
+X-Received: by 2002:a05:6512:2116:b0:4b4:b904:a310 with SMTP id
+ q22-20020a056512211600b004b4b904a310mr20296491lfr.576.1669829922436; Wed, 30
+ Nov 2022 09:38:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v7 17/20] x86/virt/tdx: Configure global KeyID on all
- packages
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
-        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
-        kirill.shutemov@linux.intel.com, ying.huang@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com,
-        tony.luck@intel.com, peterz@infradead.org, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-References: <cover.1668988357.git.kai.huang@intel.com>
- <8d8285cc5efa6302cf42a3fe2c9153d1a9dbcdac.1668988357.git.kai.huang@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <8d8285cc5efa6302cf42a3fe2c9153d1a9dbcdac.1668988357.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221130150857.67113-1-tmaimon77@gmail.com> <20221130150857.67113-3-tmaimon77@gmail.com>
+ <CAHp75Vf-EKa9rdpmO54h0rgMcN4TLk8GcYfrjb-2Cy-GRVgEKA@mail.gmail.com>
+In-Reply-To: <CAHp75Vf-EKa9rdpmO54h0rgMcN4TLk8GcYfrjb-2Cy-GRVgEKA@mail.gmail.com>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Wed, 30 Nov 2022 19:38:30 +0200
+Message-ID: <CAP6Zq1iqFmOWCZJa+qg=trw0M3jgJRoqX9CJDHqJovoFt9=24Q@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] mmc: sdhci-npcm: Add NPCM SDHCI driver
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     ulf.hansson@linaro.org, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, adrian.hunter@intel.com,
+        skhan@linuxfoundation.org, davidgow@google.com,
+        pbrobinson@gmail.com, gsomlo@gmail.com, briannorris@chromium.org,
+        arnd@arndb.de, krakoczy@antmicro.com, openbmc@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/20/22 16:26, Kai Huang wrote:
-> After the array of TDMRs and the global KeyID are configured to the TDX
-> module, use TDH.SYS.KEY.CONFIG to configure the key of the global KeyID
-> on all packages.
+Hi Andy,
 
-I want to circle back to this because it potentially has the same class
-of issue that TDH.SYS.LP.INIT had.  So, here's some more background
-followed by the key question: is TDH.SYS.KEY.CONFIG too strict?  Should
-we explore relaxing it?
+Thanks for your comments.
 
-Here's the very long-winded way of asking the same thing:
+On Wed, 30 Nov 2022 at 17:50, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+>
+> On Wed, Nov 30, 2022 at 5:09 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
+> >
+> > Add Nuvoton NPCM BMC sdhci-pltfm controller driver.
+>
+> ...
+>
+> >  obj-$(CONFIG_MMC_S3C)          += s3cmci.o
+> >  obj-$(CONFIG_MMC_SDRICOH_CS)   += sdricoh_cs.o
+> >  obj-$(CONFIG_MMC_TMIO)         += tmio_mmc.o
+>
+> > +obj-$(CONFIG_MMC_SDHCI_NPCM)   += sdhci-npcm.o
+>
+> Keep it ordered by module name.
+>
+> >  obj-$(CONFIG_MMC_TMIO_CORE)    += tmio_mmc_core.o
+> >  obj-$(CONFIG_MMC_SDHI)         += renesas_sdhi_core.o
+> >  obj-$(CONFIG_MMC_SDHI_SYS_DMAC)                += renesas_sdhi_sys_dmac.o
+>
+> ...
+>
+> > +/*
+> > + * NPCM SDHC MMC host controller driver.
+> > + *
+> > + */
+>
+> Too many lines for seems to be oneliner comment.
+>
+> ...
+>
+> > +#include <linux/of.h>
+>
+> I don't see how it's being used.
+> But it seems the mod_devicetable.h is missing.
+>
+> ...
+>
+> > +static const struct sdhci_pltfm_data npcm_sdhci_pdata = {
+> > +       .quirks  = SDHCI_QUIRK_DELAY_AFTER_POWER,
+> > +       .quirks2 = SDHCI_QUIRK2_STOP_WITH_TC |
+> > +                  SDHCI_QUIRK2_NO_1_8_V,
+> > +};
+>
+> Why? Can't you use the sdhci as a library?
+Can you explain what you mean by using sdhci as a library?
+is it not to use the pltfm_data structure and only to set the quirks
+directly through the host?
+> ...
+>
+> > +static int npcm_sdhci_probe(struct platform_device *pdev)
+> > +{
+> > +       struct sdhci_pltfm_host *pltfm_host;
+> > +       struct sdhci_host *host;
+> > +       u32 caps;
+> > +       int ret;
+> > +
+> > +       host = sdhci_pltfm_init(pdev, &npcm_sdhci_pdata, 0);
+> > +       if (IS_ERR(host))
+> > +               return PTR_ERR(host);
+> > +
+> > +       pltfm_host = sdhci_priv(host);
+>
+> > +       pltfm_host->clk = devm_clk_get(&pdev->dev, NULL);
+> > +
+>
+> Blank line in a wrong position, should be before devm_clk_get().
+>
+> > +       if (!IS_ERR(pltfm_host->clk))
+> > +               clk_prepare_enable(pltfm_host->clk);
+>
+> Why not use a specific helper that gets the clock enabled?
+which specific helper? can you give me more specific details?
+>
+> > +       caps = sdhci_readl(host, SDHCI_CAPABILITIES);
+> > +       if (caps & SDHCI_CAN_DO_8BIT)
+> > +               host->mmc->caps |= MMC_CAP_8_BIT_DATA;
+> > +
+> > +       ret = mmc_of_parse(host->mmc);
+> > +       if (ret)
+> > +               goto err_sdhci_add;
+> > +
+> > +       ret = sdhci_add_host(host);
+> > +       if (ret)
+> > +               goto err_sdhci_add;
+> > +
+> > +       return 0;
+> > +
+> > +err_sdhci_add:
+> > +       clk_disable_unprepare(pltfm_host->clk);
+> > +       sdhci_pltfm_free(pdev);
+> > +       return ret;
+> > +}
+>
+> ...
+>
+> > +
+>
+> Redundant blank line.
+>
+> > +module_platform_driver(npcm_sdhci_driver);
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
 
-This key is used to protect TDX module memory which is too large to fit
-into the limited range-register-protected (SMRR) areas that most of the
-module uses.  Right now, that metadata includes the Physical Address
-Metadata Tables (PAMT) and "TD Root" (TDR) pages.  Using this "global
-KeyID" provides stronger isolation and integrity protection for these
-structures than is provided by KeyID-0.
+Best regards,
 
-The "global KeyID" only strictly needs to be programmed into a memory
-controllers if a PAMT or TDR page is allocated in memory attached to
-that controller.  However, the TDX module currently requires that
-TDH.SYS.KEY.CONFIG be executed on one processor in each package.  This
-is true even if there is no TDX Memory Region (TDMR) attached to that
-package.
-
-This was likely done for simplicity in the TDX module.  It currently has
-no NUMA awareness (or even trusted NUMA metadata) and no ability to
-correlate processor packages with the memory attached to their memory
-controllers.
-
-The TDH.SYS.KEY.CONFIG design is actually pretty similar to Kirill's
-MKTME implementation[1].  Basically blast the KeyID configuration out to
-one processor in each package, regardless of whether the KeyID will ever
-get used on that package.
-
-While this requirement from the TDX module is _slightly_ too strict, I'm
-not quite as worried about it as I was about the *super* strict
-TDH.SYS.LP.INIT requirements.  It's a lot harder and more rare to have
-an entire package of CPUs unavailable versus a single logical CPU.
-There is, for instance, no side-channel mitigation that disables an
-entire package worth of CPUs.  I'm not even sure if we allow an entire
-package worth of NOHZ_FULL-indisposed processors.
-
-I'm happy to go run the same drill for TDH.SYS.KEY.CONFIG that we did
-for TDH.SYS.LP.INIT.  Basically, can we relax the too-strict
-restrictions?  But, I'm not sure anyone will ever reap a practical
-benefit from it.  I'm tempted to just leave it as-is.
-
-Does anyone feel differently?
-
-1.
-https://lore.kernel.org/lkml/20190508144422.13171-1-kirill.shutemov@linux.intel.com/T/#m936f260a345284687f8e929675f68f3d514725f5
-
-
+Tomer
