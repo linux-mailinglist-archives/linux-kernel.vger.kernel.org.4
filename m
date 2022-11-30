@@ -2,112 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A812163D0FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E8E63D102
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236432AbiK3IpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 03:45:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
+        id S233580AbiK3Ips (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 03:45:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236672AbiK3IoV (ORCPT
+        with ESMTP id S236924AbiK3IpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 03:44:21 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B66430F75;
-        Wed, 30 Nov 2022 00:44:19 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id t17so15067141pjo.3;
-        Wed, 30 Nov 2022 00:44:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nX9u5Fipz7QbP1G6lS7SK8y5UdXxGb4XBtSgvsH1ex8=;
-        b=HGg1XUBOCu82ZW+TXKFrDzMOhzT3qhH5/0+upzC/MFORU/djS9EShs8RWQGhA54loM
-         +k6NJCRNXDJNxM6sbRBwiIBo/OcIM0fhyianG1qSBJ5Wmx9QHrGTh/KbDnS09g3nvbmJ
-         NIG9Wvn+WzT/MVyJpUH04RIow7GXkhx9+9THVjE7EmjkRTjfj4u5BeRoil9YD6Y73UzQ
-         Egf8NgiZqcJh1NuoRJc0KeI1QHGOtEM9BO/x9WU+eKo1jVIZEfrKLgh68gIcU2WSTHEv
-         p6AhzxuMSRWx4Jq0+gGOvstl9MGxxHf483dY52Nn2Lyndh6M1j7/s5mIL65cOYy3UIGy
-         gwdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nX9u5Fipz7QbP1G6lS7SK8y5UdXxGb4XBtSgvsH1ex8=;
-        b=RC1oF1PIGiiKJCZWWoij6uUGlNbJeLxnZHA9lFtpabg84n0C7WldFuN9K+ZR9co/QW
-         TMC0XKbyd0tQDCe9qUs+AZiMvivcfii5Z1FNQMUl6jBAx4SpZQMI/bXVc8kc/4MDBlrx
-         VId2pwWbgLhwvQMIQT6Z3S7hvHZmMYUQtHrOBOPI1ZrfPwYbCN9RleA70H2pDANww+9r
-         VRJsjcEuPN9WiB/LCdjHZkAhmTGiu4uPyLZ/K5zn5F+CR8YEXhJldVx8IwqZE8KFF095
-         sWUgT0P0QfcUIfVK4hIYfrAAHCNrwqRNyLK7bG30BQGjMVDByYBSOz2Zp28mv3LSzTDt
-         D/mA==
-X-Gm-Message-State: ANoB5pn0XuM0oiRrgNvyIE6dWYYU/nrxRNvZbHay1gmsYCkbCNLx0++B
-        0Hqkxn435x/MYDp7HlECyjM=
-X-Google-Smtp-Source: AA0mqf4Ab9AZLI8b84EDfh+GAUEJl6G7DQN191GfDQhhfMYBYdtvBwlJZMVGLiQBmQ3LOIRPPWBB+w==
-X-Received: by 2002:a17:90a:7b82:b0:219:629a:8ad8 with SMTP id z2-20020a17090a7b8200b00219629a8ad8mr2465244pjc.159.1669797859148;
-        Wed, 30 Nov 2022 00:44:19 -0800 (PST)
-Received: from [192.168.43.80] (subs02-180-214-232-19.three.co.id. [180.214.232.19])
-        by smtp.gmail.com with ESMTPSA id c6-20020a170902d48600b0017f72a430adsm824570plg.71.2022.11.30.00.44.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 00:44:18 -0800 (PST)
-Message-ID: <7c5e0ca5-0ad1-452d-60b9-50dbb63d2dee@gmail.com>
-Date:   Wed, 30 Nov 2022 15:44:11 +0700
+        Wed, 30 Nov 2022 03:45:21 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F95630F58;
+        Wed, 30 Nov 2022 00:45:15 -0800 (PST)
+Received: from ykarpov.intra.ispras.ru (unknown [10.10.2.71])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 7867A40D403D;
+        Wed, 30 Nov 2022 08:45:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 7867A40D403D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1669797911;
+        bh=r3Rg2YhNmfjZGaScA5OcxaOz3tJEP+T11CxUAPtKqrI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hpkfxYnEjSReIcIiVajn4hcK9ueNnjTwjcBMwyyLcH2d2JVxpcir1hX6UbqGcZ+FU
+         xnIAYlSTYc2dj6/fddzRKpFupf/qZpbwweZHBbWkJasQdHk7pRoKwOuHZWRmAeA+Xa
+         rvuXQOSRN537ymkTDz1fh8AFggEIQBkUGtSe4aRU=
+From:   Yuri Karpov <YKarpov@ispras.ru>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Yuri Karpov <YKarpov@ispras.ru>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: [PATCH] net: dsa: fix NULL pointer dereference in seq_match()
+Date:   Wed, 30 Nov 2022 11:44:31 +0300
+Message-Id: <20221130084431.3299054-1-YKarpov@ispras.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [RFC PATCH v2] mm: Add nodes= arg to memory.reclaim
-Content-Language: en-US
-To:     Mina Almasry <almasrymina@google.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
-        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20221130020328.1009347-1-almasrymina@google.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20221130020328.1009347-1-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/30/22 09:03, Mina Almasry wrote:
-> -	This file accepts a single key, the number of bytes to reclaim.
-> -	No nested keys are currently supported.
-> +	This file accepts a string which contains the number of bytes to
-> +	reclaim.
-> 
-Amount of memory to reclaim?
+ptp_parse_header() result is not checked in seq_match() that can lead
+to NULL pointer dereferense.
 
-> +	This file also allows the user to specify the nodes to reclaim from,
-> +	via the 'nodes=' key, example::
-> +
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-"..., for example"
+Fixes: c6fe0ad2c349 ("net: dsa: mv88e6xxx: add rx/tx timestamping support")
+Signed-off-by: Yuri Karpov <YKarpov@ispras.ru>
+---
+ drivers/net/dsa/mv88e6xxx/hwtstamp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +	  echo "1G nodes=0,1" > memory.reclaim
-> +
-> +	The above instructs the kernel to reclaim memory from nodes 0,1.
-> +
-
-Thanks.
-
+diff --git a/drivers/net/dsa/mv88e6xxx/hwtstamp.c b/drivers/net/dsa/mv88e6xxx/hwtstamp.c
+index 331b4ca089ff..97f30795a2bb 100644
+--- a/drivers/net/dsa/mv88e6xxx/hwtstamp.c
++++ b/drivers/net/dsa/mv88e6xxx/hwtstamp.c
+@@ -246,7 +246,7 @@ static int seq_match(struct sk_buff *skb, u16 ts_seqid)
+ 
+ 	hdr = ptp_parse_header(skb, type);
+ 
+-	return ts_seqid == ntohs(hdr->sequence_id);
++	return hdr ? ts_seqid == ntohs(hdr->sequence_id) : 0;
+ }
+ 
+ static void mv88e6xxx_get_rxts(struct mv88e6xxx_chip *chip,
 -- 
-An old man doll... just what I always wanted! - Clara
+2.34.1
 
