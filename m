@@ -2,167 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DB563CE3C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 05:12:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5644563CE3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 05:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbiK3EMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 23:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
+        id S232579AbiK3EMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 23:12:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiK3EMJ (ORCPT
+        with ESMTP id S232385AbiK3EM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 23:12:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7690C23EBD
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 20:12:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 00A4B619B2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 04:12:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A082C433D6;
-        Wed, 30 Nov 2022 04:12:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669781527;
-        bh=i0UCnRo6p8XchvOW5oE8LgTSkii9KWeVMWyOeuOFqMs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Zpoyz07+LVH5M8/BOgPQ5ILWd7cxMTtYslKHELCLRI2ZqHv4eSvrtK+mAzcXuH78P
-         fEPKanqGOMa5z441Ipdy+kf8U1BZ6dkaS5wY6Cq5Y+x/8fPy8FKMVuJWJyn/77IUIX
-         iapde0VhYGyL7DCO0euRoDY2QYKvAGr3mVEDRDrmVPBDYVTZFzp2+FXReg1XYKwYJe
-         LgFpMJTt3+AEQGX+ELo6QkejmhH9R2204ysXV4jfWe28TbZb24AfxFbRkSrHusgjpa
-         j6FzU7szTF2UhPTtEY8DKnBs0xUkblw/KHWSRtn8ZLrdkKLAb8WplO6mvRtZu3RNm7
-         S109SSMWZpNiA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E29895C097E; Tue, 29 Nov 2022 20:12:06 -0800 (PST)
-Date:   Tue, 29 Nov 2022 20:12:06 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        john.stultz@linaro.org, sboyd@kernel.org, corbet@lwn.net,
-        Mark.Rutland@arm.com, maz@kernel.org, kernel-team@meta.com,
-        neeraju@codeaurora.org, ak@linux.intel.com,
-        zhengjun.xing@intel.com, Chris Mason <clm@meta.com>,
-        John Stultz <jstultz@google.com>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH clocksource 1/3] clocksource: Reject bogus watchdog
- clocksource measurements
-Message-ID: <20221130041206.GK4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221117230910.GI4001@paulmck-ThinkPad-P17-Gen-1>
- <Y3rMc2VbgVLHN9db@feng-clx>
- <20221121181449.GA3774542@paulmck-ThinkPad-P17-Gen-1>
- <Y3zxB6r1kin8pSH1@feng-clx>
- <20221122220712.GP4001@paulmck-ThinkPad-P17-Gen-1>
- <Y32HFE+BaATh9+l/@feng-clx>
- <20221123212348.GI4001@paulmck-ThinkPad-P17-Gen-1>
- <Y4QZzzk+FdGj4AXm@feng-clx>
- <20221129192915.GD4001@paulmck-ThinkPad-P17-Gen-1>
- <Y4az+FT5YjpAWjZc@feng-clx>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+        Tue, 29 Nov 2022 23:12:29 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E5A1F2F4;
+        Tue, 29 Nov 2022 20:12:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669781546; x=1701317546;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=FCe+ggnPOTosDVHXgqL2aUHH69GmXEhCPa+Zjcy7Mos=;
+  b=JmNQHmHijcWbn3x9SiBDcJW5oStxj1nYV7mrCzIV9Npos7P2PWtnBOmR
+   8+lzXaM0TxvWNPnKbu1AhRlc0nQ7i3o/p8YBMCX9HuohQ3d7oboXORSa2
+   gQADraUtRnjnnQUj5T2Wy4p28+PgzTDyjXEYT1S9MZlTlMZj5GbZyWwlV
+   Zumlt90Dh3QS9xq39WC5x3tgveTifrKtOY742ojIqjTGGC5RAiEQjhux/
+   vsLVOHJIGfP7MuSZ2HCn+GmPE4MbnfeW6Ib5RGWlqzQXQJQWTO/Q/5nQD
+   BpqtV0qvgbJDEGmsLpCCKiDoS5IFNskBXsYRGXjKi6EoA00QtISw0kM8B
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="312914291"
+X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
+   d="scan'208";a="312914291"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 20:12:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="621731957"
+X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
+   d="scan'208";a="621731957"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga006.jf.intel.com with ESMTP; 29 Nov 2022 20:12:25 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 29 Nov 2022 20:12:25 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 29 Nov 2022 20:12:24 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 29 Nov 2022 20:12:24 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.103)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 29 Nov 2022 20:12:24 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VwcVfYMney+BBlXg5XmNkgkNU+8+qiG3VN1OBwKMT3seq818Ln0rrO07J+CBijvwCXTeYQtabNEY3tTRom31Hc2pGY4CqpyXMP4OGGGSUGPzYPGpWjj2Gzutc4VBNF/sDYYfxqLCe4WcVbGbljiVMG5drA1MKoN0GLnloXm4Zk5j3zvTLWk8efuB+yoX3OZ3UzbqFWYlo/zpkj4CvYwxuVHG1NK7qvkRnFmlEKzJrIJpNfxtBncfQ4PbFMUawOjCZ6BMxssfWMMOgbfsjemajjfSoylFAVDiGwplJBhuwM54x0uJ1LDYbvud9bIBGy/4NU74chyoCRx7/7GyJoJOaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sLauvTcUWy2xIET4K7aV4UT93X67B6eNLQBShcJRWR0=;
+ b=QGGKfCw7gGbBuYeIltbv725pK5qrQo2PT3l2Qnl+tL4ypTW3LE0KV9ouIMkQHnT1z+LLbDWXs9ocdS5IJaVVPObhg5gAzeBD1mPFw83Q3u8/lnQ7yC5SgfTYXWH3y6FnWPONEEUJDVfV2O/uAfOfk8nAu3/gf+/gK9f9kui0955aaFO4OlYH53E5dKbeUy0BkwsOkKMFK0cywLDLpyr9GW+Ekt8rDS2yyVlIFfLzIulzpZQtFkPyakttsNSYuCVX2k1MB9kK3LaNczsRpVwO+Wzsfoqjpqpnrv1nBUgkvyJuPFsBGZrfUfTbGSbuAQoE/+lY02BZ85a5RAm/r5fJYQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20) by CY8PR11MB7799.namprd11.prod.outlook.com
+ (2603:10b6:930:78::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.6; Wed, 30 Nov
+ 2022 04:12:22 +0000
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::340d:cb77:604d:b0b]) by MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::340d:cb77:604d:b0b%9]) with mapi id 15.20.5857.023; Wed, 30 Nov 2022
+ 04:12:22 +0000
+Date:   Tue, 29 Nov 2022 20:12:16 -0800
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>
+CC:     <djwong@kernel.org>, <david@fromorbit.com>,
+        <dan.j.williams@intel.com>
+Subject: RE: [PATCH 1/2] fsdax,xfs: fix warning messages at
+ dax_[dis]associate_entry()
+Message-ID: <6386d82011018_c95729485@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+References: <1669301694-16-1-git-send-email-ruansy.fnst@fujitsu.com>
+ <1669301694-16-2-git-send-email-ruansy.fnst@fujitsu.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y4az+FT5YjpAWjZc@feng-clx>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1669301694-16-2-git-send-email-ruansy.fnst@fujitsu.com>
+X-ClientProxiedBy: SJ0PR05CA0080.namprd05.prod.outlook.com
+ (2603:10b6:a03:332::25) To MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|CY8PR11MB7799:EE_
+X-MS-Office365-Filtering-Correlation-Id: 57bad7e4-f8bb-40a4-1dac-08dad289147d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Q1P6af0sCHy3RzA710KQxVd1SoX/EMBiMeq8dCQn5qwv/yE+baLKGUkY+oi12rVMSWfJxKONiv2mgrKOYDGmPoiqUGqxS6AiJqIighIaud6CJJa6ra9GaJ6tvY48B/tlsO1yL6kvavjUOtcHblLLVu5JxIcOhHmsB4G4XnMJTOtfn/8tGTCgeQdGtx4FyGWo0LsHYjIkUraDcjbf6ivbFPeYn8CVMzTxOyORaR2GQ5T6IG3hA/1PC702LknH8Hcg7hQ1y521MwHQVJWWfOHI3bgdY6cOgVVgUSYZZ2+8bGNbjpS1oazF8dPqqqY2XW+nCTIh2z2T3ZoFGH+QpzmSltlm1xKVc7/vhHPQqUVHwR7zrtrT8pQjcoehk2SJWwe1ng+6QLD4PGLk7ZsjIYJ4ART8R8zgVcBzNjICU7Ko6FjRj6mgFdvzKWTSvqw77ywv23aWbHyQ5hHR7kO3qdRDx0ZtKa9IMHKFxq6WH3ET7kNID7QKKEkwnV4lTQ12AuX1twDWu1MUppSNjRtq6+XRJgPyQ6AzYawD3gNy96U4lDGTNE3P1rMcSvlQ1m7Ncy5GG8h6mbCFWKIwzmloSiFO6cc6En84txSyK72zl8y4c/k1P3GhICwSbvNSncL9myp/CpkIHXQM5teE8Qpt0K+4rA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(376002)(396003)(366004)(346002)(136003)(451199015)(38100700002)(83380400001)(86362001)(2906002)(82960400001)(41300700001)(15650500001)(5660300002)(66476007)(8936002)(6506007)(6512007)(4326008)(186003)(107886003)(26005)(6666004)(9686003)(8676002)(316002)(6486002)(478600001)(66946007)(66556008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VnZIwVQWtpFTgVQspypLuI1Jihny1VGKjkf03w4kKnm/5f4WmO0vvRi9IiKT?=
+ =?us-ascii?Q?iSI7XmAKXfwmPODODpxrP9GDxLfHiV3dGwRmlsgJE9rrEylv65TsBuanSYRu?=
+ =?us-ascii?Q?qWyw9b3//dvl4lTrUREZ5WdJP2v1YohFwiwaNlgIH5PedJU4Vr05LOuFotDk?=
+ =?us-ascii?Q?JhwBadrLESI2vkYXutj4XN47jEKh5lJtG29sLJmVBjSP34Tv/YpQS4H0M4X+?=
+ =?us-ascii?Q?8hMqexNMbdEnpEVinbSqfr2l6LDPk9R4aOstnGJlA7lUa8WyYUujtzwAFjya?=
+ =?us-ascii?Q?/DUXJdPffTs82RDjvCBQNT6BazbfAXdZkpqsrEuSg0+mAqt/iGhgQrEPdEJj?=
+ =?us-ascii?Q?iX46k7eHVW/5cLkuoj1MVLSytJcyAN/9hpP+GXrYluc9+6ZToQ3CbRMiaRav?=
+ =?us-ascii?Q?KSM4mKE/2z7XdIR5j2NXV5CxZg8U5wURiwgJj2Vf4x6+cHUUwQzZ/PmPEfnm?=
+ =?us-ascii?Q?u359H2Sha+3xTPDFOE/mixr82s+d0OguoGlhdGDrgYaeg8dROMIyHzNF76Yy?=
+ =?us-ascii?Q?/HaC45njxnyyEAetrtS+oDidoFomB5+QiUgsFr3ReKGmPqxdGbUt3tepDZG+?=
+ =?us-ascii?Q?QFCDOZl5TprrQ5FFeJuuOO/ezjz2AP36Jbymu5cREIAdJcSvpXkgO+FctwmQ?=
+ =?us-ascii?Q?eqSV7XyrB6xagskieQyURXDi921dkr/EnVZYWY5mlAsCOUY43ChXPOUd7ege?=
+ =?us-ascii?Q?P1VbEtwDtIXKaEbv10lwmIrfMp/i0Q9aKi7BrME82VxNzM+KiGprkeUszvU7?=
+ =?us-ascii?Q?SedJKBDRNS13wZIG4r3kY+o2CvNeGJ6RYI+c87ks9ih4ElM/GKC5aY33iyJp?=
+ =?us-ascii?Q?p/G9/AsLl3UCKOlcLwTJsGasz6vpDPLI6O3QsSB0W6d0s6lAltm+/eBSskhE?=
+ =?us-ascii?Q?lbtW9knRnZ/Lyj5pvhe/eMowLjqcS7O7bhIR+uUw/n1RkuFj2v0Kr+lZjj+K?=
+ =?us-ascii?Q?6L3LgrRZ/Y9GdH78RxXSOVA6G+W29nLQ7npgr6ZYKJuL89vEz7Puo8t/bopc?=
+ =?us-ascii?Q?nsMxq6KjCjx8aex7MYfJ7bqqsRNa4b84L3akVNSoC+gBNEyZK08A4kNmdmFn?=
+ =?us-ascii?Q?0V4bvE1wOV5aVqu+i9z56zfR8Sth487zJ8QXI660GPV5vRtb6Oq1tC8J0V3r?=
+ =?us-ascii?Q?PXiTjYkX2VRKqKArsVj+FzgkTkhY88cJseWd0zq5VTYPsZCedroSpI2f5L6k?=
+ =?us-ascii?Q?aT464FqqrsutnD82P7Xe412AqhHNHfAS9UKuQFGbMiDQJz5XmtEgqHw3XDit?=
+ =?us-ascii?Q?DxZmK38CpynxDgwJYjbl9Ig8QfXOOriY35schB2xboIMQkqmRE2VkiZ9oai0?=
+ =?us-ascii?Q?ZLlarn936hQIMid/5v9d1XyIf2PJXWFGEeA8wGmfKTmlqVpTwH0B7SgCF421?=
+ =?us-ascii?Q?qDitLNVpjr3skzC8r8RhtEsYjRvefMf0bpTYkTn/oRRegEysC68Pdu9JvvIl?=
+ =?us-ascii?Q?MAU7Wutsdl1ZpMIBIpRIPo66bTv9dNJb5Bu2X5LOXwN3EkPtLBy3KD+o7VxH?=
+ =?us-ascii?Q?tbSZE5BZmqCw+At0JCUCuo11dLAQMUP71DXzH/Pcxi9cLRwgfHgssObU+Oh8?=
+ =?us-ascii?Q?9TovpXyV0IeVQVEbFX1gO8Xl8qSaFUjMCmHbpXfbuNSypRSqptJnDaN+QhC3?=
+ =?us-ascii?Q?Gg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57bad7e4-f8bb-40a4-1dac-08dad289147d
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 04:12:22.4317
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jKHp0hxkqD32aLjdba5LQ79MiCaNSpoAzzSMkeU8qKNvfagVmNgihBi36z02FsPG/m1AbCYs0wDmU+RsrPWjtYqF1HanfcMlJJ16UXLXvPk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7799
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 09:38:00AM +0800, Feng Tang wrote:
-> On Tue, Nov 29, 2022 at 11:29:15AM -0800, Paul E. McKenney wrote:
-> [...]
-> > > > > IIUC, this will make TSC to watchdog HPET every 500 ms. We have got
-> > > > > report that the 500ms watchdog timer had big impact on some parallel
-> > > > > workload on big servers, that was another factor for us to seek
-> > > > > stopping the timer.
-> > > > 
-> > > > Another approach would be to slow it down.  Given the tighter bounds
-> > > > on skew, it could be done every (say) 10 seconds while allowing
-> > > > 2 milliseconds skew instead of the current 100 microseconds.
-> > > 
-> > > Yes, this can reduce the OS noise much. One problem is if we make it
-> > > a general interface, there is some clocksource whose warp time is
-> > > less than 10 seconds, like ACPI PM_TIMER (3-4 seconds), and I don't
-> > > know if other ARCHs have similar cases.
-> > 
-> > Maybe a simpler approach is for systems with such high sensitivity to
-> > OS noise to simply disable the clocksource watchdog.  ;-)
+Shiyang Ruan wrote:
+> This patch fixes the warning message reported in dax_associate_entry()
+> and dax_disassociate_entry().
+
+Can you include the xfstest test number and a snippet of the warning
+message.
+
+> 1. reset page->mapping and ->index when refcount counting down to 0.
+> 2. set IOMAP_F_SHARED flag when iomap read to allow one dax page to be
+> associated more than once for not only write but also read.
+> 3. should zero the edge (when not aligned) if srcmap is HOLE or
+> UNWRITTEN.
+> 4. iterator of two files in dedupe should be executed side by side, not
+> nested.
+> 5. use xfs_dax_write_iomap_ops for xfs zero and truncate. 
+
+Do these all need to be done at once, or is this 5 patches?
+
 > 
-> That's what the reported did, test with and without "tsc=reliable"
-> parameter :)
+> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> ---
+>  fs/dax.c           | 114 ++++++++++++++++++++++++++-------------------
+>  fs/xfs/xfs_iomap.c |   6 +--
+>  2 files changed, 69 insertions(+), 51 deletions(-)
 > 
-> And AFAIK, many customers with big server farms hate to add more
-> cmdline parameters when we suggested so.
+> diff --git a/fs/dax.c b/fs/dax.c
+> index 1c6867810cbd..5ea7c0926b7f 100644
+> --- a/fs/dax.c
+> +++ b/fs/dax.c
+> @@ -398,7 +398,7 @@ static void dax_disassociate_entry(void *entry, struct address_space *mapping,
+>  		WARN_ON_ONCE(trunc && page_ref_count(page) > 1);
+>  		if (dax_mapping_is_cow(page->mapping)) {
+>  			/* keep the CoW flag if this page is still shared */
+> -			if (page->index-- > 0)
+> +			if (page->index-- > 1)
 
-It can be surprisingly hard.  It is sometimes easier to patch the kernel
-to change the default.  Part of the problem is getting the right set
-of command-line parameters associated with the right versions of the
-kernel in the not-uncommon case where different portions of the server
-farm are running different versions of the kernel.
+I think this wants either a helper function to make it clear that
+->index is being used as a share count, or go ahead and rename that
+field in this context with something like:
 
-> > > > > Is this about the concern of possible TSC frequency calibration
-> > > > > issue, as the 40 ms per second drift between HPET and TSC? With 
-> > > > > b50db7095fe0 backported, we also have another patch to force TSC
-> > > > > calibration for those platforms which get the TSC freq directly
-> > > > > from CPUID or MSR and don't have such info in dmesg:
-> > > > >  "tsc: Refined TSC clocksource calibration: 2693.509 MHz" 
-> > > > > 
-> > > > > https://lore.kernel.org/lkml/20220509144110.9242-1-feng.tang@intel.com/
-> > > > > 
-> > > > > We did met tsc calibration issue due to some firmware issue, and
-> > > > > this can help to catch it. You can try it if you think it's relevant.
-> > > > 
-> > > > I am giving this a go, thank you!
-> > > 
-> > > Thanks for spending time testing it!
-> > 
-> > And here are the results from setting tsc_force_recalibrate to 1:
-> > 
-> > $ dmesg | grep -E 'calibrat|clocksource'
-> > [    5.272939] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1910969940391419 ns
-> > [   16.830644] clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 76450417870 ns
-> > [   17.938020] clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x36a8d32ce31, max_idle_ns: 881590731004 ns
-> > [   24.548583] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275000 ns
-> > [   49.762432] clocksource: Switched to clocksource tsc-early
-> > [   50.076769] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
-> > [   55.615946] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x36a8d32ce31, max_idle_ns: 881590731004 ns
-> > [   55.640270] clocksource: Switched to clocksource tsc
-> > [   56.694371] tsc: Warning: TSC freq calibrated by CPUID/MSR differs from what is calibrated by HW timer, please check with vendor!!
-> > [   56.724550] tsc: Previous calibrated TSC freq:        1896.000 MHz
-> > [   56.737646] tsc: TSC freq recalibrated by [HPET]:     1975.000 MHz
-> 
-> Looks like there is really something wrong here. I assume the first
-> number '1896 MHz' is got from CPUID(0x15)'s math calculation.
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 910d880e67eb..1a409288f39d 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -103,7 +103,10 @@ struct page {
+                        };
+                        /* See page-flags.h for PAGE_MAPPING_FLAGS */
+                        struct address_space *mapping;
+-                       pgoff_t index;          /* Our offset within mapping. */
++                       union {
++                               pgoff_t index;          /* Our offset within mapping. */
++                               unsigned long share;
++                       };
+                        /**
+                         * @private: Mapping-private opaque data.
+                         * Usually used for buffer_heads if PagePrivate.
 
-How about this from earlier in that same console?
-
-[    0.000000] efi: EFI v2.80 by American Megatrends
-[    0.000000] efi: ACPI=0x6f569000 ACPI 2.0=0x6f569014 TPMFinalLog=0x6f56b000 SMBIOS=0x753e1000 SMBIOS 3.0=0x753e0000 MEMATTR=0x62176018 ESRT=0x64bd1018 TPMEventLog=0x58737018
-[    0.000000] [Firmware Bug]: TPM Final Events table missing or invalid
-[    0.000000] SMBIOS 3.5.0 present.
-[    0.000000] DMI: Quanta Grand Teton 1F0TUBZ0007/Grand Teton MB, BIOS F0T_1A15 08/25/2022
-[    0.000000] tsc: Detected 1900.000 MHz processor
-[    0.000000] tsc: Detected 1896.000 MHz TSC
-
-> I thinks 2 more things could be try:
-> 
-> * add "nohpet" to the cmdline, so the tsc_force_recalibrate should use
->   ACPI PM_TIMER to do the calibration, say a third-party check.
-
-OK, getting things teed up for TSC recalibration and nohpet.
-
-> * If the system don't have auto-adjusted time setting like NTP, I
->   guess the system time will have obvious drift comparing to a normal
->   clock or a mobile phone time, as the deviation is about 4%, which
->   is 2.4 minutes per hour.
-
-No ntpd, but there is a chronyd.
-
-I will let you know what happens with HPET disabled and TSC recalibration
-enabled.
-
-							Thanx, Paul
