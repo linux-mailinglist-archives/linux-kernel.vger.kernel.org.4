@@ -2,84 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B8E63D2FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6612863D322
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235643AbiK3KQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 05:16:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
+        id S235759AbiK3KTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 05:19:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235551AbiK3KQT (ORCPT
+        with ESMTP id S235785AbiK3KQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 05:16:19 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3B05FB1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:16:18 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id g26so11342253iob.11
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:16:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/NOyJxk2/Y6QVXbjn7P9cDJ9R1iTzMssSUy2u203sIM=;
-        b=HpmpPUHi//OjVLtHOe3jtNn0Yc74jJH5bczpNpj9/tK420WNNVQ3mMOF6bWBLp18wg
-         /a/qrs250q0JB3+cskXnuSlyl7pYUXm+xXXVwbLkhrw58C+ukZDoNwGjvcdfBS+B7dR5
-         OqcvJwbatRbE7zsuNralDjU1+U1n36B9pjXgHBIPjcNbVA5gd4NMvpnaMujeHERQ4Aj/
-         M0IaXmYio44KY1I1EphXZT5jFaQXz/khtGkg4ROZKBUMZD8luDUXUqEx8YG2a6BcXtId
-         9pBmJr+hFR3qPW4MTHk0cjOK4IYvGrHEhCL+3P46EvFwHm+IK7C0pg2BnFugAU9PNuaq
-         HMNA==
+        Wed, 30 Nov 2022 05:16:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C68C7E
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:15:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669803349;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CxbB2FEXTvRF2CzuUkTWE4rFXxyela8ryo1CFsrhtF4=;
+        b=Ilu7a2SO+i0LeScqUcu5bN0e6oxFILp0xY6uymxsTrxrpiTnJ3CHSsWePUwMJcX+APlU/V
+        sEeNAV0H0ndS8XoOle4arHS3ICzg8w7QhZKQa+6aIn9aiBY+DTLTdYWljaMRTWfo3ansnz
+        ZwX0zckvG+Z9J8+gMKzZl0k85YSEq08=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-629-YikgaKWQNMWcoSAAwnYV3g-1; Wed, 30 Nov 2022 05:15:48 -0500
+X-MC-Unique: YikgaKWQNMWcoSAAwnYV3g-1
+Received: by mail-wm1-f72.google.com with SMTP id e8-20020a05600c218800b003cf634f5280so461701wme.8
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:15:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/NOyJxk2/Y6QVXbjn7P9cDJ9R1iTzMssSUy2u203sIM=;
-        b=I3ydhTSMLazQqFpj7w5mgckeXjoD8fbFLYPUBIb+Xj31puiM+DwXJrF2MkygaKDpCG
-         XXRSYk1JxLyFeaECrTXT+9itSxJX10nGlU7n+vWL+tZTLRyzZXuDSOcGoeffeLePuP3H
-         FuM9RDv1SPPzylIE2IA0s//vYW90MsVZPJijYlNbEkdHmbYkBRuLIKEZheasK0bloYrD
-         hG4g0hibs2iuFUoTCOz+weIKIKbrcFMOa0Mjy1GxrGWcL8FXhkaeQw8WLBNwKrEZFQNy
-         iF2yZHRtqDKP+te10PWXkmsJ3phnLKAceTK4Fwion2Xol+iAfYAwl8YQs/zsEIjcRFKY
-         RkZA==
-X-Gm-Message-State: ANoB5plDr71bhYxljLDjM9zMxE3HLNrNMrO+eq072NvFxjeHZCM8kY1W
-        gABVJ/pijMT+I7tj8IXKL0FDjVNtl6PTeTSUnWgu4w==
-X-Google-Smtp-Source: AA0mqf7g6dndi/Ye2L9SL5a5x9mB856mHIBg0sJ7puDmqe/wSElbGHfm0gcsPXuzbXovJbbd1YhFjoCEEjrlKrZM958=
-X-Received: by 2002:a02:b691:0:b0:389:af9:4860 with SMTP id
- i17-20020a02b691000000b003890af94860mr14137510jam.164.1669803377393; Wed, 30
- Nov 2022 02:16:17 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CxbB2FEXTvRF2CzuUkTWE4rFXxyela8ryo1CFsrhtF4=;
+        b=1GWVTtihMOanv2QO6ajGZv1kZyvNdOBv/W8cP1g9WKg0qJhucVKfRQTJKROs3e5ahh
+         NueTtrMhvsyZYWyzqm1whKTxivenPJzlkiTnK7Op0qfB1LjLVZFA2JQSs75DJS+W9foK
+         CQkItijVmWsjdjUZDrvekcy0F1MseipPzb2usOJ2EXQjb/qEl/+Gdl8nmSYrf8OfQKVt
+         Oy6MFL7K3ZKqW/pd5FI7arzQO1FLpJ+lEi46kfrRfAFOes6ffhQ5/7+o+Bvn5Z/3Sku1
+         dJ53dL5/7IyqnkmHZUjGGP6pQGzkEYNp/EZDKproGehfgqjzFvBSK6HzHJSljY+LXJJN
+         6BMQ==
+X-Gm-Message-State: ANoB5pn42jrICi4w0YheCEBD2MlBh+ocAygHGQ6Kx4FNLgNYUOBxNLVL
+        e1vfXkfQaHG4pjisBSzIvnE7V1SzVt/8N4qthDiPnEuGNT5P1WdsWEXk3/gbrTAHtd+CLbF7A44
+        1glmwnoMoqVW6hPoCx4U1lA41
+X-Received: by 2002:a05:6000:71e:b0:241:df3f:f5d6 with SMTP id bs30-20020a056000071e00b00241df3ff5d6mr25887794wrb.288.1669803347043;
+        Wed, 30 Nov 2022 02:15:47 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf489Ao4FvIZrt2NmdFFZZC3lnncO3vTH3xWCwvBSPnOhZqxpghPRCNXtDB4BiPRHtQZXu9P+w==
+X-Received: by 2002:a05:6000:71e:b0:241:df3f:f5d6 with SMTP id bs30-20020a056000071e00b00241df3ff5d6mr25887772wrb.288.1669803346802;
+        Wed, 30 Nov 2022 02:15:46 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id l11-20020a1ced0b000000b003b3307fb98fsm1397702wmh.24.2022.11.30.02.15.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 02:15:46 -0800 (PST)
+Message-ID: <6222f13a-a03f-cf20-343a-e885f80cc4ed@redhat.com>
+Date:   Wed, 30 Nov 2022 11:15:45 +0100
 MIME-Version: 1.0
-References: <20221129191839.2471308-1-jannh@google.com>
-In-Reply-To: <20221129191839.2471308-1-jannh@google.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Wed, 30 Nov 2022 11:15:41 +0100
-Message-ID: <CAG48ez1_uq6a4rq_89Ua=2P1jSsDV7u4fCh2y13X9v2JfC5MsA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] time/namespace: Refactor copy-pasted helper into one copy
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Andrei Vagin <avagin@gmail.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 17/17] drm/vc4: tests: Add unit test suite for the PV
+ muxing
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-media@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
+References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
+ <20221123-rpi-kunit-tests-v2-17-efe5ed518b63@cerno.tech>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v2-17-efe5ed518b63@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 8:18 PM Jann Horn <jannh@google.com> wrote:
-> find_timens_vvar_page() is not arch-specific, as can be seen from how all
-> five per-architecture versions of it are the same.
-> (arm64, powerpc and riscv are exactly the same; x86 and s390 have two
-> characters difference inside a comment, less blank lines, and mark the
-> !CONFIG_TIME_NS version as inline.)
->
-> Refactor the five copies into a central copy in kernel/time/namespace.c.
->
-> Marked for stable backporting because it is a prerequisite for the
-> following patch.
->
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jann Horn <jannh@google.com>
+On 11/28/22 15:53, Maxime Ripard wrote:
+> The HVS to PixelValve muxing code is fairly error prone and has a bunch
+> of arbitrary constraints due to the hardware setup.
+> 
+> Let's create a test suite that makes sure that the possible combinations
+> work and the invalid ones don't.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
 
-Should I resend this one without the Cc stable as a standalone cleanup patch?
+Thanks for this patch. It shows how powerful KUnit can be for testing drivers. 
+
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
