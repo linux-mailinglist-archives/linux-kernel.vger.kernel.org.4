@@ -2,427 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E4863D4D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2E763D4D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234803AbiK3LlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:41:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34476 "EHLO
+        id S234888AbiK3Llk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:41:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234119AbiK3LlH (ORCPT
+        with ESMTP id S231159AbiK3Lle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:41:07 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF2B2EF23;
-        Wed, 30 Nov 2022 03:41:05 -0800 (PST)
-Date:   Wed, 30 Nov 2022 11:41:02 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669808464;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sAAXxhLK1PhnrCXMeKDMnRnD3e/sj6jVUormXog/ISI=;
-        b=YCHFXoaMYElZMgwRw7YfRoe5B+lgqIwoopFcRTyoNlR5UNqXXqN2zToB3F+K1RuXjTE9VQ
-        tOd7Aj9r6LGSEH+2Jt7fbfb61n6GZiK9Rmtw4bBF8WK6YVDQWqA78DPjNIazM6y5/HUeOl
-        HcOicGyVV13YS0IcR4h127/GV4keZRZyavoL/y1CD6W+u980TBJ54e6P9/w2DjnQcGipu8
-        yq/yN/f1oWfWZZDLO5sa4B9pVIVkwMMyTQKOfLLjiRx+V8elisURLxJGedO3LTNyH3XbN8
-        uJB6lPLYN2bng/skWUXxnwAygXcXW05pHUh6VCKI+dzykXHkuB1ZXRnaJSj3Vg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669808464;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sAAXxhLK1PhnrCXMeKDMnRnD3e/sj6jVUormXog/ISI=;
-        b=mvZLgZVK9hTwTEBhK+gaQr7a0EcXoyRCxA5Q6C09VDSecZyJ0RQ2TGRUPnigLHJ5DOP/kU
-        k/M9DZzPF7H+caDA==
-From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cpu] x86/cpuid: Carve out all CPUID functionality
-Cc:     Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221124164150.3040-1-bp@alien8.de>
-References: <20221124164150.3040-1-bp@alien8.de>
+        Wed, 30 Nov 2022 06:41:34 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4287D3E0B2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:41:24 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id bp15so26443223lfb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:41:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W6U4jWl0YX+0wZ2tHeX0Zdfl9CbnGOHdgFH3EJM7rvE=;
+        b=VlImjinigFrpzpISnF2fFZhGjZfORwYmBSPGrKG8Iyq/GYCNHiT2/pDsj0vSKJSp6V
+         yaFqXu3OfHPcv+gZw/obLuDGfRKhPBBPLs+XgaXaGhnmZassT2SrD/r8eaf0ulEYDyFA
+         i04RjqnIiC69WjEjBxFITm9BFRpzERhzv8LTST+S5KAoOP2hPnqV6SBhNUySDKykgeUQ
+         KywrvWOqeCm2oAME74l+9r0HFgB1e1WH2k9k4L2d3iT/uEO9mfbxbj9MV+f2C4xs+i/m
+         MLv4qw8tNCxSJ/8YQXmwnmiN8luAmHVQZkvoWcCOVINe6BOL1Ti5p1JVXLQw0j6szXKz
+         K/XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W6U4jWl0YX+0wZ2tHeX0Zdfl9CbnGOHdgFH3EJM7rvE=;
+        b=tpxOEeGhgGrnFIQTt81bC/vWiBi0DV4xjlIT4qh6SSqHvfbyvK4dwwWxC2RzcQSHol
+         io/pf5P/woMojXSF69ksloLTuphcG7roFaCf+FHmvyxjI4oJF2VhOa80N1McyCA8z10A
+         e2hzDtvt04qbLHfXR1SLxpDvLT2YX3cdcOc7Np+MTpIKlDCeqkag0q11lsOA0Hrux/DJ
+         xHZ5fWA87h1+pbhJlkw01SOHnA2PcEKPSe9Vr/2ngFhyIylVhIKQhHCwlILSUv7bGEpM
+         OhkqOe8UtKZ77L0odKm+0GL/1SQyAkID5s1jX0ijPgmU3PWINC3KTEfdgx6jBiF+6gpY
+         hZzQ==
+X-Gm-Message-State: ANoB5pldA//UgilmENN2Tyg42Bql9xQVIC2bVM8zpR350pd6gQLouuGt
+        AlIAorx49/s1z8PyIrP3Y9e+QA==
+X-Google-Smtp-Source: AA0mqf6vI7368+n4pMvnxi95VA1iyP5io7fGxgExwiA82zCaQaCmxm8ukx9e+6+7K5FUfEXl2FApkg==
+X-Received: by 2002:a05:6512:47c:b0:48a:e80f:4b3a with SMTP id x28-20020a056512047c00b0048ae80f4b3amr15533040lfd.575.1669808482638;
+        Wed, 30 Nov 2022 03:41:22 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id be11-20020a05651c170b00b002799b5aa42esm111713ljb.55.2022.11.30.03.41.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 03:41:22 -0800 (PST)
+Message-ID: <5d3ff57a-cb51-5dbf-7d38-7cc40aeea59c@linaro.org>
+Date:   Wed, 30 Nov 2022 12:41:21 +0100
 MIME-Version: 1.0
-Message-ID: <166980846247.4906.12851925292211041024.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 2/2] dt-bindings: interconnect: Add SM6115 DT bindings
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        djakov@kernel.org, konrad.dybcio@linaro.org, a39.skl@gmail.com,
+        andersson@kernel.org
+References: <20221130103841.2266464-1-bhupesh.sharma@linaro.org>
+ <20221130103841.2266464-3-bhupesh.sharma@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221130103841.2266464-3-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cpu branch of tip:
+On 30/11/2022 11:38, Bhupesh Sharma wrote:
+> The Qualcomm SM6115 SoC has several bus fabrics that could be
+> controlled and tuned dynamically according to the bandwidth demand.
+> 
+> Add the support for the same.
+> 
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
 
-Commit-ID:     d800169041c0e035160c8b81f30d4b7e8f8ef777
-Gitweb:        https://git.kernel.org/tip/d800169041c0e035160c8b81f30d4b7e8f8ef777
-Author:        Borislav Petkov <bp@suse.de>
-AuthorDate:    Thu, 24 Nov 2022 16:31:27 +01:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Tue, 29 Nov 2022 20:41:24 +01:00
+Thank you for your patch. There is something to discuss/improve.
 
-x86/cpuid: Carve out all CPUID functionality
+We could create common properties for these bindings, but it's fine now.
 
-Carve it out into a special header, where it belongs.
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/qcom,rpmcc.h>
+> +
+> +    snoc: interconnect@1880000 {
+> +        compatible = "qcom,sm6115-snoc";
+> +        reg = <0x01880000 0x60200>;
+> +        #interconnect-cells = <1>;
+> +        clock-names = "bus", "bus_a";
+> +        clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
+> +                 <&rpmcc RPM_SMD_SNOC_A_CLK>;
+> +
+> +        clk_virt: interconnect-clk {
+> +            compatible = "qcom,sm6115-clk-virt";
+> +            #interconnect-cells = <1>;
+> +            clock-names = "bus", "bus_a";
+> +            clocks = <&rpmcc RPM_SMD_QUP_CLK>,
+> +                     <&rpmcc RPM_SMD_QUP_A_CLK>;
+> +        };
+> +
+> +        mmnrt_virt: interconnect-mmnrt {
+> +            compatible = "qcom,sm6115-mmnrt-virt";
+> +            #interconnect-cells = <1>;
+> +            clock-names = "bus", "bus_a";
+> +            clocks = <&rpmcc RPM_SMD_MMNRT_CLK>,
+> +                     <&rpmcc RPM_SMD_MMNRT_A_CLK>;
+> +        };
+> +
+> +        mmrt_virt: interconnect-mmrt {
+> +            compatible = "qcom,sm6115-mmrt-virt";
+> +            #interconnect-cells = <1>;
+> +            clock-names = "bus", "bus_a";
+> +            clocks = <&rpmcc RPM_SMD_MMRT_CLK>,
+> +                     <&rpmcc RPM_SMD_MMRT_A_CLK>;
+> +        };
 
-No functional changes.
+Drop last two nodes - they are the same as first.
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20221124164150.3040-1-bp@alien8.de
----
- arch/x86/include/asm/cpuid.h     | 141 +++++++++++++++++++++++++++++-
- arch/x86/include/asm/processor.h | 133 +----------------------------
- 2 files changed, 140 insertions(+), 134 deletions(-)
+> +    };
+> +
+> +    cnoc: interconnect@1900000 {
+> +        compatible = "qcom,sm6115-cnoc";
+> +        reg = <0x01900000 0x8200>;
+> +        #interconnect-cells = <1>;
+> +        clock-names = "bus", "bus_a";
+> +        clocks = <&rpmcc RPM_SMD_CNOC_CLK>,
+> +                 <&rpmcc RPM_SMD_CNOC_A_CLK>;
+> +    };
+> +
+> +    bimc: interconnect@4480000 {
+> +        compatible = "qcom,sm6115-bimc";
+> +        reg = <0x04480000 0x80000>;
+> +        #interconnect-cells = <1>;
+> +        clock-names = "bus", "bus_a";
+> +        clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
+> +                 <&rpmcc RPM_SMD_BIMC_A_CLK>;
+> +    };
 
-diff --git a/arch/x86/include/asm/cpuid.h b/arch/x86/include/asm/cpuid.h
-index 70b2db1..9bee3e7 100644
---- a/arch/x86/include/asm/cpuid.h
-+++ b/arch/x86/include/asm/cpuid.h
-@@ -1,13 +1,132 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * CPUID-related helpers/definitions
-- *
-- * Derived from arch/x86/kvm/cpuid.c
-  */
- 
- #ifndef _ASM_X86_CPUID_H
- #define _ASM_X86_CPUID_H
- 
-+#include <asm/string.h>
-+
-+struct cpuid_regs {
-+	u32 eax, ebx, ecx, edx;
-+};
-+
-+enum cpuid_regs_idx {
-+	CPUID_EAX = 0,
-+	CPUID_EBX,
-+	CPUID_ECX,
-+	CPUID_EDX,
-+};
-+
-+#ifdef CONFIG_X86_32
-+extern int have_cpuid_p(void);
-+#else
-+static inline int have_cpuid_p(void)
-+{
-+	return 1;
-+}
-+#endif
-+static inline void native_cpuid(unsigned int *eax, unsigned int *ebx,
-+				unsigned int *ecx, unsigned int *edx)
-+{
-+	/* ecx is often an input as well as an output. */
-+	asm volatile("cpuid"
-+	    : "=a" (*eax),
-+	      "=b" (*ebx),
-+	      "=c" (*ecx),
-+	      "=d" (*edx)
-+	    : "0" (*eax), "2" (*ecx)
-+	    : "memory");
-+}
-+
-+#define native_cpuid_reg(reg)					\
-+static inline unsigned int native_cpuid_##reg(unsigned int op)	\
-+{								\
-+	unsigned int eax = op, ebx, ecx = 0, edx;		\
-+								\
-+	native_cpuid(&eax, &ebx, &ecx, &edx);			\
-+								\
-+	return reg;						\
-+}
-+
-+/*
-+ * Native CPUID functions returning a single datum.
-+ */
-+native_cpuid_reg(eax)
-+native_cpuid_reg(ebx)
-+native_cpuid_reg(ecx)
-+native_cpuid_reg(edx)
-+
-+#ifdef CONFIG_PARAVIRT_XXL
-+#include <asm/paravirt.h>
-+#else
-+#define __cpuid			native_cpuid
-+#endif
-+
-+/*
-+ * Generic CPUID function
-+ * clear %ecx since some cpus (Cyrix MII) do not set or clear %ecx
-+ * resulting in stale register contents being returned.
-+ */
-+static inline void cpuid(unsigned int op,
-+			 unsigned int *eax, unsigned int *ebx,
-+			 unsigned int *ecx, unsigned int *edx)
-+{
-+	*eax = op;
-+	*ecx = 0;
-+	__cpuid(eax, ebx, ecx, edx);
-+}
-+
-+/* Some CPUID calls want 'count' to be placed in ecx */
-+static inline void cpuid_count(unsigned int op, int count,
-+			       unsigned int *eax, unsigned int *ebx,
-+			       unsigned int *ecx, unsigned int *edx)
-+{
-+	*eax = op;
-+	*ecx = count;
-+	__cpuid(eax, ebx, ecx, edx);
-+}
-+
-+/*
-+ * CPUID functions returning a single datum
-+ */
-+static inline unsigned int cpuid_eax(unsigned int op)
-+{
-+	unsigned int eax, ebx, ecx, edx;
-+
-+	cpuid(op, &eax, &ebx, &ecx, &edx);
-+
-+	return eax;
-+}
-+
-+static inline unsigned int cpuid_ebx(unsigned int op)
-+{
-+	unsigned int eax, ebx, ecx, edx;
-+
-+	cpuid(op, &eax, &ebx, &ecx, &edx);
-+
-+	return ebx;
-+}
-+
-+static inline unsigned int cpuid_ecx(unsigned int op)
-+{
-+	unsigned int eax, ebx, ecx, edx;
-+
-+	cpuid(op, &eax, &ebx, &ecx, &edx);
-+
-+	return ecx;
-+}
-+
-+static inline unsigned int cpuid_edx(unsigned int op)
-+{
-+	unsigned int eax, ebx, ecx, edx;
-+
-+	cpuid(op, &eax, &ebx, &ecx, &edx);
-+
-+	return edx;
-+}
-+
- static __always_inline bool cpuid_function_is_indexed(u32 function)
- {
- 	switch (function) {
-@@ -31,4 +150,22 @@ static __always_inline bool cpuid_function_is_indexed(u32 function)
- 	return false;
- }
- 
-+#define for_each_possible_hypervisor_cpuid_base(function) \
-+	for (function = 0x40000000; function < 0x40010000; function += 0x100)
-+
-+static inline uint32_t hypervisor_cpuid_base(const char *sig, uint32_t leaves)
-+{
-+	uint32_t base, eax, signature[3];
-+
-+	for_each_possible_hypervisor_cpuid_base(base) {
-+		cpuid(base, &eax, &signature[0], &signature[1], &signature[2]);
-+
-+		if (!memcmp(sig, signature, 12) &&
-+		    (leaves == 0 || ((eax - base) >= leaves)))
-+			return base;
-+	}
-+
-+	return 0;
-+}
-+
- #endif /* _ASM_X86_CPUID_H */
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 67c9d73..6836c64 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -16,6 +16,7 @@ struct vm86;
- #include <uapi/asm/sigcontext.h>
- #include <asm/current.h>
- #include <asm/cpufeatures.h>
-+#include <asm/cpuid.h>
- #include <asm/page.h>
- #include <asm/pgtable_types.h>
- #include <asm/percpu.h>
-@@ -146,17 +147,6 @@ struct cpuinfo_x86 {
- 	unsigned		initialized : 1;
- } __randomize_layout;
- 
--struct cpuid_regs {
--	u32 eax, ebx, ecx, edx;
--};
--
--enum cpuid_regs_idx {
--	CPUID_EAX = 0,
--	CPUID_EBX,
--	CPUID_ECX,
--	CPUID_EDX,
--};
--
- #define X86_VENDOR_INTEL	0
- #define X86_VENDOR_CYRIX	1
- #define X86_VENDOR_AMD		2
-@@ -205,45 +195,6 @@ extern void identify_secondary_cpu(struct cpuinfo_x86 *);
- extern void print_cpu_info(struct cpuinfo_x86 *);
- void print_cpu_msr(struct cpuinfo_x86 *);
- 
--#ifdef CONFIG_X86_32
--extern int have_cpuid_p(void);
--#else
--static inline int have_cpuid_p(void)
--{
--	return 1;
--}
--#endif
--static inline void native_cpuid(unsigned int *eax, unsigned int *ebx,
--				unsigned int *ecx, unsigned int *edx)
--{
--	/* ecx is often an input as well as an output. */
--	asm volatile("cpuid"
--	    : "=a" (*eax),
--	      "=b" (*ebx),
--	      "=c" (*ecx),
--	      "=d" (*edx)
--	    : "0" (*eax), "2" (*ecx)
--	    : "memory");
--}
--
--#define native_cpuid_reg(reg)					\
--static inline unsigned int native_cpuid_##reg(unsigned int op)	\
--{								\
--	unsigned int eax = op, ebx, ecx = 0, edx;		\
--								\
--	native_cpuid(&eax, &ebx, &ecx, &edx);			\
--								\
--	return reg;						\
--}
--
--/*
-- * Native CPUID functions returning a single datum.
-- */
--native_cpuid_reg(eax)
--native_cpuid_reg(ebx)
--native_cpuid_reg(ecx)
--native_cpuid_reg(edx)
--
- /*
-  * Friendlier CR3 helpers.
-  */
-@@ -578,7 +529,6 @@ static __always_inline bool on_thread_stack(void)
- #ifdef CONFIG_PARAVIRT_XXL
- #include <asm/paravirt.h>
- #else
--#define __cpuid			native_cpuid
- 
- static inline void load_sp0(unsigned long sp0)
- {
-@@ -589,69 +539,6 @@ static inline void load_sp0(unsigned long sp0)
- 
- unsigned long __get_wchan(struct task_struct *p);
- 
--/*
-- * Generic CPUID function
-- * clear %ecx since some cpus (Cyrix MII) do not set or clear %ecx
-- * resulting in stale register contents being returned.
-- */
--static inline void cpuid(unsigned int op,
--			 unsigned int *eax, unsigned int *ebx,
--			 unsigned int *ecx, unsigned int *edx)
--{
--	*eax = op;
--	*ecx = 0;
--	__cpuid(eax, ebx, ecx, edx);
--}
--
--/* Some CPUID calls want 'count' to be placed in ecx */
--static inline void cpuid_count(unsigned int op, int count,
--			       unsigned int *eax, unsigned int *ebx,
--			       unsigned int *ecx, unsigned int *edx)
--{
--	*eax = op;
--	*ecx = count;
--	__cpuid(eax, ebx, ecx, edx);
--}
--
--/*
-- * CPUID functions returning a single datum
-- */
--static inline unsigned int cpuid_eax(unsigned int op)
--{
--	unsigned int eax, ebx, ecx, edx;
--
--	cpuid(op, &eax, &ebx, &ecx, &edx);
--
--	return eax;
--}
--
--static inline unsigned int cpuid_ebx(unsigned int op)
--{
--	unsigned int eax, ebx, ecx, edx;
--
--	cpuid(op, &eax, &ebx, &ecx, &edx);
--
--	return ebx;
--}
--
--static inline unsigned int cpuid_ecx(unsigned int op)
--{
--	unsigned int eax, ebx, ecx, edx;
--
--	cpuid(op, &eax, &ebx, &ecx, &edx);
--
--	return ecx;
--}
--
--static inline unsigned int cpuid_edx(unsigned int op)
--{
--	unsigned int eax, ebx, ecx, edx;
--
--	cpuid(op, &eax, &ebx, &ecx, &edx);
--
--	return edx;
--}
--
- extern void select_idle_routine(const struct cpuinfo_x86 *c);
- extern void amd_e400_c1e_apic_setup(void);
- 
-@@ -805,24 +692,6 @@ static inline u32 amd_get_nodes_per_socket(void)	{ return 0; }
- static inline u32 amd_get_highest_perf(void)		{ return 0; }
- #endif
- 
--#define for_each_possible_hypervisor_cpuid_base(function) \
--	for (function = 0x40000000; function < 0x40010000; function += 0x100)
--
--static inline uint32_t hypervisor_cpuid_base(const char *sig, uint32_t leaves)
--{
--	uint32_t base, eax, signature[3];
--
--	for_each_possible_hypervisor_cpuid_base(base) {
--		cpuid(base, &eax, &signature[0], &signature[1], &signature[2]);
--
--		if (!memcmp(sig, signature, 12) &&
--		    (leaves == 0 || ((eax - base) >= leaves)))
--			return base;
--	}
--
--	return 0;
--}
--
- extern unsigned long arch_align_stack(unsigned long sp);
- void free_init_pages(const char *what, unsigned long begin, unsigned long end);
- extern void free_kernel_image_pages(const char *what, void *begin, void *end);
+Drop these two as well, they do not bring anything new here.
+
+> diff --git a/include/dt-bindings/interconnect/qcom,sm6115.h b/include/dt-bindings/interconnect/qcom,sm6115.h
+> new file mode 100644
+> index 000000000000..2997106a661e
+> --- /dev/null
+> +++ b/include/dt-bindings/interconnect/qcom,sm6115.h
+> @@ -0,0 +1,115 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +/*
+> + * Qualcomm SM6115 interconnect IDs
+> + *
+> + * Copyright (c) 2022, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022, Linaro Limited
+
+Best regards,
+Krzysztof
+
