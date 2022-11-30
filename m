@@ -2,101 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15EE563E09B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:21:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A280263E0A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:22:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiK3TVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 14:21:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
+        id S229575AbiK3TVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 14:21:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiK3TUz (ORCPT
+        with ESMTP id S229675AbiK3TVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 14:20:55 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDB183276
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:20:54 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id l15so11885126qtv.4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:20:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QTqXUSUHOfSCHe+q8lEezcpVoHrYxPM2K46ADRFSg4Q=;
-        b=rJe4KttveESN6bqLtat/sAagy0F4KKW/91TY5Ydc/Kx5uqZeIHwD6IGOYlJFqBqq/6
-         LunTJYbb1hSAdwE1sAbhVcMu6fcw5v0xsuu2iaxasGbHxYAfhKBPKsejSeiyBE4UQMit
-         AuOMboAwJEyJpltGCRqBLw8or294DF8LJ850s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QTqXUSUHOfSCHe+q8lEezcpVoHrYxPM2K46ADRFSg4Q=;
-        b=m2/wJHCMyvYvcbXOPPD2RU6hOAdyYyVc8LHNdRKkXZKcpl0JABOvtk2xi5Q3tmLA61
-         Q0II/h0ixjkW1pZg/7UBJ+fy6nPcAbCIF1oQdofRUWvcHr1LbgnVpDoItjlx99XLHhhl
-         g/N32HxBWketOx6qjZsqvHTit09BdCUPj09L+VvYz1IRvdakgN3HC88lLewZA70qt3hl
-         ukiQljLqlLO2JJCi2fFTxpWzdHnRJon6euEnNk542X0WkYsOkxWsM0iJ/b82OoBYNU1f
-         srkCLhVrX/im5qrYP7WlvdEVapMV/iZgVZJBhTsn/atCWDAPtw/xy8IVS5VVNxe3moR1
-         TBeQ==
-X-Gm-Message-State: ANoB5pkR3bK7tnrxSs3qY41dgZ0iJ5iHefiJN8L4uy3P55xaRrxRMHHz
-        IHtMeTCtjQFV78SeeHc9CicRLw==
-X-Google-Smtp-Source: AA0mqf58g0O4rzxbrzoBvEk2vIch+NoFrco8tr2vUXCSmOlH0ZhRx1JSuW2Ezbdm9OJJupUeGrvUyA==
-X-Received: by 2002:ac8:5ec8:0:b0:3a5:280d:31ff with SMTP id s8-20020ac85ec8000000b003a5280d31ffmr39265777qtx.646.1669836053521;
-        Wed, 30 Nov 2022 11:20:53 -0800 (PST)
-Received: from smtpclient.apple (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id z18-20020ac87112000000b0039853b7b771sm1299541qto.80.2022.11.30.11.20.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 11:20:52 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH rcu 14/16] rxrpc: Use call_rcu_hurry() instead of call_rcu()
-Date:   Wed, 30 Nov 2022 14:20:52 -0500
-Message-Id: <B4935931-239F-4C48-9646-2C20578F027C@joelfernandes.org>
-References: <639433.1669835344@warthog.procyon.org.uk>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        rostedt@goodmis.org, Marc Dionne <marc.dionne@auristor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        netdev@vger.kernel.org
-In-Reply-To: <639433.1669835344@warthog.procyon.org.uk>
-To:     David Howells <dhowells@redhat.com>
-X-Mailer: iPhone Mail (19G82)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 14:21:17 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52775837C0;
+        Wed, 30 Nov 2022 11:21:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1669836074; bh=e1SzejAshlwmjIJTPtgfJldWkml6WCbTZ/fi+IT8JiQ=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=ha8J8zvp5EzUrEBvjCO1JLCkl6kNoPZE+zSPrjZtlMbG0cEtsYk/XrVw7elSWHZgk
+         WipyhPZWlLQlJtJ5olNcDzeM1kj9mGEfQuMYGFIB/VkznquovIHcSs64e3y6AxdS5z
+         cBqhd1ukKsmasnyoy7EaRRx7NrnFUUXsWIi2RcTriW91bWYjiQAIfK6vYbFDKtoEM2
+         6eAhipHfRK7ue+IF9bWFPoCu83XO1TR+A3gXxwLgBgdtRDePa9iK0AroHC2poksse0
+         2r4MQgJppevm24rosx63k9nQtvsOoGSIl89ULlBLzXq6XdTXweRIb5KVKtrOtWxhEn
+         ImOPhjOU/T5Iw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.100.20] ([46.142.33.165]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N33Ib-1osN0R2Y1t-013Jsn; Wed, 30
+ Nov 2022 20:21:14 +0100
+Message-ID: <e286ff2b-9072-a009-209a-4008f47bab94@gmx.de>
+Date:   Wed, 30 Nov 2022 20:21:14 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Subject: Re: [PATCH 6.0 000/289] 6.0.11-rc1 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:uujxpXT/r1Ufq3N8wp6bXOTl5r58zuIDWBpWxPWr92iDX5SYIBD
+ XUA+0f9EGCc3reHcYiZ5rrKGSDygmAkNBTT8XHlIegDOBD5peX65m5M7xRGZwKNh/NfjTuQ
+ CFCazrX2pQGztvBJRpYeplNLpyv6+/oggVfrF+BryeCdpV7TIwzLz1KITR/JysRNKc6EgZu
+ 84oxAQX//zWPY0EEKB4uQ==
+UI-OutboundReport: notjunk:1;M01:P0:aAUpxFf6uGY=;08R5yohcpZlw5Am8n2GLKeTubVt
+ uWWB4eXH++8FQqPjFziYYrWCW/md8MM+/PBwxUXtOQ9qpPGGt5APQRN4v2gpnFNjlxAffo3Ua
+ b/xWMGQZbfdXHz18A4NIG3vfjfRQNqmM09b5N6i4sVSIfaVl4QkmLQ7cV3A/0sDQ/L5Z4Y4c2
+ mK9CZ8HmdzvxNtLdONdiR7FQWkbgeiUXty5/Y+xy5QXLwQbsz0YbCOiQY40f9nvU5x3ujIAKj
+ fSSQ9uwNZiOHd8pEfWEFpvVMCDBaQhZl3STybrM30+o4H1p/sqT9HhnASc3FA/dk7HKvDSFUY
+ qZXE/O6EtEc+zTlhvnO8eo2zf4aGwdbDoNMXhk/4o/sK/ehOqiSGwBBN2bpE2MTu4aFAPGQtf
+ 5+kVEC7hjs5uRqCs7dkte+d4O5dM7LR5rmYqSY3p9mWmzom0sXqOYFTYpbQjhYcAvwFTb6h+4
+ MZdNKT/Mt4Wjn+LXqONzJlOVwfPbRaVLrEh3zqG7JPdvHZ4aSQgI+Jh2DREaw9+oNm1Q0v1YJ
+ COW0gwhpKwpBjJDm9i2Vk//d4JQ+Si+CHQ84znm1eLixxFf0726k7iEJPx98XUP3V4wPuSgtJ
+ 9qLSnK1cfxDhV2QhzVKjyAScNIljJ2+vw+nxcoDAAEITpyvKxdmFcj6IVaPp8jpxRVKH4IadQ
+ h074eWhMRUKN6Et90zxZmnZyH0pvJSEctCgoD0koBpxBXKct9Q2UQ6Mv/b0nAERHWwA1q5h9T
+ 42cdSKeN/DBZAzf2TsnO/xZ/5tN2gyVwhw6LsRb97TgcWrITIvCS9mTR/F+nT2cT1lpvNwdqP
+ 2Y/5kunXF0nYcStl5ownFrL5vDAUhK+RPSTCYpO+B8RvlW7qwcUSTXYYEg+2BRsY5IFLPVmzf
+ Pz0VaqxyBnSvk6s7r6R3uIaDYlhahS1pGmGGYX0kygVsmj8hrWqWsWm8cASAz4gRZ6fMl7GLN
+ wA95kiu1Q1aLMg2fY9B81IDwVh0=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Greg
 
+6.0.11-rc1
 
-> On Nov 30, 2022, at 2:09 PM, David Howells <dhowells@redhat.com> wrote:
->=20
-> =EF=BB=BFNote that this conflicts with my patch:
+compiles, boots and runs here on x86_64
+(Intel i5-11400, Fedora 37)
 
-Oh.  I don=E2=80=99t see any review or Ack tags on it. Is it still under rev=
-iew?
+Thanks
 
-Thanks,
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 
-- Joel
-
-
-
->=20
->    rxrpc: Don't hold a ref for connection workqueue
->    https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/c=
-ommit/?h=3Drxrpc-next&id=3D450b00011290660127c2d76f5c5ed264126eb229
->=20
-> which should render it unnecessary.  It's a little ahead of yours in the
-> net-next queue, if that means anything.
->=20
-> David
->=20
