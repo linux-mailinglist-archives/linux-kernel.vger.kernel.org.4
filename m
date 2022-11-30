@@ -2,256 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8515763CCEE
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 02:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E1563CCF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 02:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbiK3Bj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 20:39:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S231741AbiK3Blb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 20:41:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbiK3BjR (ORCPT
+        with ESMTP id S231841AbiK3BlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 20:39:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC2F1EC46
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 17:38:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669772305;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GowjTITXbXHhFLVXsn/J2IRPd19QkjVMTvNWNDRGo5c=;
-        b=cZX0gqRV5hRWWHOGSL66hsBgQllSXzd5M+3ujdkDy4vuR/nKVwhMdQzU/6dUaeGILS1meR
-        8EYM/bLIbbKAUo1M+xjOnFsQz7iV72s0h2OVsBeeBTo3u3eCTwsg4c5dsXDot9hNqAbaO7
-        3kBqa7J3qdCcxN2TaqJbc1NWZ+OvNiM=
-Received: from mail-ua1-f70.google.com (mail-ua1-f70.google.com
- [209.85.222.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-7-qG8FTsWnM3qqiGNXQfClIg-1; Tue, 29 Nov 2022 20:38:24 -0500
-X-MC-Unique: qG8FTsWnM3qqiGNXQfClIg-1
-Received: by mail-ua1-f70.google.com with SMTP id o43-20020ab0596e000000b0038421e4c7deso8482131uad.19
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 17:38:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GowjTITXbXHhFLVXsn/J2IRPd19QkjVMTvNWNDRGo5c=;
-        b=uRoGJ/oF9Ga35K6YK0kPZuxEG5IZQdYrNyxjCEm87gpuOEjFUdkZr3XB5x1HNTrdOz
-         dWDtpgdSTVDK/NJ/ZXndG29FWp1r1a4SkdxLtPDVAor8hPhWGVxeje4+nFpMko15sqkX
-         oI9LYbwEoGf1pQLL3vj4j2YUccRcB8+8DQWH8CG9ljKyjAQGfixfyFjf92zMcobl52S8
-         oWrJiBDL8QtEH8/atz0m4YGSHMZOWAmr7c+o6MmfNPEa2yrPvJdYhNUqnNSXDWBNWDwt
-         mQljkiv4W5teWH52eZNI9mSmjLmtpmccb4dbzT1nKLiSzFgtjIlKGIzUIfFbIMS+vTBp
-         rtFw==
-X-Gm-Message-State: ANoB5pl/z152LBgTdSq0KLd2IDkNhxtuZgFucOk4U6mhKczncysMPTK9
-        DBKPlCHik4TzpBu1xgN8VjYaNweUZq2YSk2vgxgq+aRGidB0/9D/Ctdn98UnhpvCY/v6jLr9Elo
-        HKPRKvMgrFnKfDvMjuy3Jl9zIGSA/C3+2E+sRLB8E
-X-Received: by 2002:a05:6102:579a:b0:3b0:620b:f642 with SMTP id dh26-20020a056102579a00b003b0620bf642mr23111117vsb.81.1669772303249;
-        Tue, 29 Nov 2022 17:38:23 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5fD5lWlo7herbb50TKeCbSU8MM9DoxfQ8arA9LJkn26oUTy+Ta8ED3+bbjF8tqqagZrHMtG1qUb8/lvrOZWTU=
-X-Received: by 2002:a05:6102:579a:b0:3b0:620b:f642 with SMTP id
- dh26-20020a056102579a00b003b0620bf642mr23111106vsb.81.1669772302998; Tue, 29
- Nov 2022 17:38:22 -0800 (PST)
+        Tue, 29 Nov 2022 20:41:23 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E7973BBC
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 17:41:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669772478; x=1701308478;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=/UoOAd3GNMw7hOxVXfww7tCSSy80DspGBK3AFKRDcrs=;
+  b=ZyrvYu2B92KJILslS1DPmmlFval8qnskEsjjxPdm/ZMCtfYcUxNEN1RM
+   xz+EPv37cIaVJHQmEr5vz2uGTj1lG/gt2Cj58ohCoKb+3fkOJBNI9vTpz
+   eJPVwPVBzOIfQPttE5Pe3HhgLp2pK1MLimD2rkb7uYert8a/zM7rWXoqc
+   t1OwPlBUfZoQxqhQY6CDUlxpcLit72T/Smnd2asISjK+ok7m4JgayL5CF
+   uCyikI39gYh6f7ODHGdDlHf4IYBq887tFwbDTKgFuTlVQpWYBKzCzorFA
+   5TuM+SzdUQQNLeob/FatLIWf1MS2jQKNPHqLKHeSylRk6kk7v1InVTde0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="295641039"
+X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
+   d="scan'208";a="295641039"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 17:41:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="818445048"
+X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
+   d="scan'208";a="818445048"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga005.jf.intel.com with ESMTP; 29 Nov 2022 17:41:17 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 29 Nov 2022 17:41:16 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 29 Nov 2022 17:41:16 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 29 Nov 2022 17:41:16 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=au816qdcOt1bncfnFPHFYnNjjjjbxoKke1KdVGVUergbyKeJVzYSlZ9ntzCcF5OdYsSZnLXaWqaGCfGx/a3H4jClRfQ6jgWEhii/PEIvUTVWgNn05uSYUE+2XrUHcnHpIXfkpEvTYW0x8AMxkxOwnLZZcet8rUNOmfMj7xLNFCAxo7qvs9kH4ig6UFbAZ2p8msVJOsa5Ox2BeJEM+ldwPgRz1gX1AVuNHQmCikJWIYpI6BMMIt8UtnHZv9jgvwFCEAwJcJ62hJdnEzswFdYGfBNwpPwjQMTB/47W8hAT1VIgOZ+AqKc/unch8pPmRQeNTs0bcBMN9sxzFHL7tEnytg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KvrUB5V0S20bJTH+E3nQ5UUT9pea1HosWjcQErXUE5Q=;
+ b=mbjII/mbHa7291ijCcKizJyH8NcvseWEnYUpWQUGWaZKkqSXJVhK6EjPfh4huX8Di9bTaLBQdS+CnutXwZSJrXnwzPqIJJPxcABD7eyW/x6twLfva7/dBFSOpYfmA9XywWl9ORe2gSv5DumniSgRZ8dyH3XBEtFUi7k9eWmeKWXmhM46K1/xmGMgQTgOZThvZtmRluCbvhtHCC6Eb8CmPX9amJid/0Fv2zmXh7n1bF3Hd6ge5D+NLEu1e9NoO7oLBMh2FEomT4nzUIbcf3qOKtWU4fVSdJYSCjLUGBnb8BDQna12qVMHLpCp4RlIiKUk2GdtX18eq3I5g0x2ROr0Wg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+ by PH7PR11MB7145.namprd11.prod.outlook.com (2603:10b6:510:1ec::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Wed, 30 Nov
+ 2022 01:41:14 +0000
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::1564:b428:df98:96eb]) by MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::1564:b428:df98:96eb%6]) with mapi id 15.20.5857.023; Wed, 30 Nov 2022
+ 01:41:07 +0000
+Date:   Wed, 30 Nov 2022 09:38:00 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        <linux-kernel@vger.kernel.org>, <john.stultz@linaro.org>,
+        <sboyd@kernel.org>, <corbet@lwn.net>, <Mark.Rutland@arm.com>,
+        <maz@kernel.org>, <kernel-team@meta.com>, <neeraju@codeaurora.org>,
+        <ak@linux.intel.com>, <zhengjun.xing@intel.com>,
+        Chris Mason <clm@meta.com>, John Stultz <jstultz@google.com>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH clocksource 1/3] clocksource: Reject bogus watchdog
+ clocksource measurements
+Message-ID: <Y4az+FT5YjpAWjZc@feng-clx>
+References: <87mt8pkzw1.ffs@tglx>
+ <20221117230910.GI4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y3rMc2VbgVLHN9db@feng-clx>
+ <20221121181449.GA3774542@paulmck-ThinkPad-P17-Gen-1>
+ <Y3zxB6r1kin8pSH1@feng-clx>
+ <20221122220712.GP4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y32HFE+BaATh9+l/@feng-clx>
+ <20221123212348.GI4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y4QZzzk+FdGj4AXm@feng-clx>
+ <20221129192915.GD4001@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221129192915.GD4001@paulmck-ThinkPad-P17-Gen-1>
+X-ClientProxiedBy: SI2PR02CA0007.apcprd02.prod.outlook.com
+ (2603:1096:4:194::23) To MN0PR11MB6304.namprd11.prod.outlook.com
+ (2603:10b6:208:3c0::7)
 MIME-Version: 1.0
-References: <20221125022317.2157263-1-lulu@redhat.com> <20221128104730.6igmyh6jz7voymdp@sgarzare-redhat>
-In-Reply-To: <20221128104730.6igmyh6jz7voymdp@sgarzare-redhat>
-From:   Cindy Lu <lulu@redhat.com>
-Date:   Wed, 30 Nov 2022 09:37:44 +0800
-Message-ID: <CACLfguW7BdPjjuk=YuhDiganwFO5QqSw3R2W6es4Zg8zixjLHA@mail.gmail.com>
-Subject: Re: [PATCH v2] vhost_vdpa: fix the crash in unmap a large memory
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     jasowang@redhat.com, mst@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6304:EE_|PH7PR11MB7145:EE_
+X-MS-Office365-Filtering-Correlation-Id: 19d4fd66-1731-4701-2203-08dad273f2fb
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iYaPu1DpX+mtvHj+WXN1UeLrA3YJDkJRWia1H/bdzu/GOInBOPLPTf9C39OHNNFlZJenGTUX8xczrSWZ4mN2H/zPwgd/xeoC3r9tVyTQ0XMv6iyvjX31bgaoTooSOHA8gujSsVGTkioDYUAaUa+H1VOxb/o5AURjYT7bEIVE4M/jUViaVyIYpYMdYgaD9KhtV6AXp9Ix9AU5dGBQet3cE0v1jFx0ikOVIDv7D+4DVgaECJie5ScbfnFdf2q4wsTr+4QXHNPxAD1saXNS+hSeDu7cL+c1yttL4tr/ZRR0+XT84yUcOAbq9bS9KuqnxXxacqGrWVglKw5hCYgnf8I/Hnq+/09KYLPk32tM0ambDg4khzSEVrBWuFFQBb1axQL7XHQaIWPsAq+RHihkBVN66w9Bx03Y7nifRH22EPCkgEgrZ/53/nmpH6z9KFdLikilZGKFoYB+L0+SL3atLrFC5HfzxSmd9HhfPm6FLFMTK+7Xiulq1yiLFkhhKdV4/4kt0ATP11IoWoG/L0V9ZOpJVsTc97doXNwykvwsKlbmSKFjw7wtnALYmeEgCMrC91N77rIT66sK2ISjHuPi617albfuBgw2txb34Zb6aiUgpwzQfCvOnr7KV5hJfsC/+NjmzpW2ZK+wwaao3VvIrqI8g+9cidfYtT0Ku6RpNqcyc6tdElPknICJA0j+lQCCd0nWAOUMFXc2lXBFJ3XuGgfMa7C3baGk1eAhZW/zkCCwJqU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(376002)(346002)(136003)(366004)(39860400002)(451199015)(5660300002)(7416002)(44832011)(66556008)(66476007)(4326008)(8936002)(8676002)(41300700001)(966005)(6916009)(6486002)(54906003)(2906002)(478600001)(316002)(66946007)(9686003)(86362001)(6512007)(6506007)(186003)(83380400001)(33716001)(26005)(6666004)(38100700002)(82960400001)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SHQwQ2R2RVpEK3VsYlIxS3oxdGxHWXhVSVhrczVBSllBd2t2M1B0YU9KSVJY?=
+ =?utf-8?B?amtrNVFjRFJwUVliSU9wakY3UUI0c3J6VVI5Nmg2SGl2QXRMdGU3T0J5eXUv?=
+ =?utf-8?B?ODNGVlREM0VZdnlaQ0UvaEJvMTYyYUhSaGI4elIrY25DSUpacEZFNlhzZnI1?=
+ =?utf-8?B?QTQ0ODVmRFdhaWhRVUZoaCtZV3dnWFdVTXlZdU9oTlN6VFB3VVRxR0gxTmZ4?=
+ =?utf-8?B?V3pzdExFMHBBTllCTDBZbmx6MWd2TzBrVWxsYWFRamtnNXhjb1RhWm1UQ1VE?=
+ =?utf-8?B?RDZ1c1pveGpvejE5U2s1ZHBNYVpmZnN3RTlrcnVpMmV4MjlsN1hWbkFtbExP?=
+ =?utf-8?B?d0tjTGQxbXdIdkR1em1lbVYxRk5EbVhzYUcxSklORVBhM1A1dys4ejNBNjVt?=
+ =?utf-8?B?RUhwa2RjSG1OOTkwRjBpRFNXc0JsR0twMTI5OUZkY3dHSUxrVFN6Ly9kcENl?=
+ =?utf-8?B?ajhrcWFWS25sME4vdXNGdERONXFsbE1HQjFwU1BHTUxzV3AwSkpXcEg5ZXRX?=
+ =?utf-8?B?SUN4cTlTU2lsb0IyZEk0VDRNVElsWW9uS1JvU1RTcjdsVjJkRTFKMTVTVi8z?=
+ =?utf-8?B?c243RWlVWGZoL3Fja29pK1NmcG1XOU1SRjRSV0JVeGFkOGxSWjBTbWJ0eUto?=
+ =?utf-8?B?YkhicHh0ZVlCNnEwWWpZMEsveWpsdmx1YjRtcjV1c1hYQkRTaXhmRkRLUXJm?=
+ =?utf-8?B?U3JNbklXZXh5UGpwNk9IZzNYZ0pSVmxUQ3ljM09GS2NnSHRkaGN3eVVtSkJv?=
+ =?utf-8?B?R1lhMEpTa0ZGbEYveVV4UUVVdlczQ25BN3RhRHd4V3JTUWhDb2pObjRPcHdm?=
+ =?utf-8?B?RE52YytMb0RmM2RJL3hNRGg2M2FIL2RXNnBNWlI2cXB5cHJob2doeDRRRFBu?=
+ =?utf-8?B?QS93N3J0Z2lnQnFMdjhSUTErcE9VWEN5bWVsMXNrcEZlbHNnWjd6SWxvZCtp?=
+ =?utf-8?B?MXl0Nmg3MktHbVM4NlpNOEFkamZudEg1OXluTHQwSHhKdzFZei8wWkZRMHhG?=
+ =?utf-8?B?VlZOU2hGVzRmS2haYXJmWHM5Q1l3S0tRMjNtbnJhbDdTY0JNcWxJV2FHV2Y3?=
+ =?utf-8?B?RG56YVEzMmptSjBWQ29UeVpmZXFsTFRCQmpwdjU1dEFVSFV2c3VzNU5xQW1Y?=
+ =?utf-8?B?djFIbDBUYVpodGowL3NwVWJpdWNxSXhBaGhEV0dTeXVwaUNhNVp1b2o4RW8x?=
+ =?utf-8?B?NzY0RjFsOEVSYkhRU01MOXJjY25KaTZmZlJiUjhNRzFYUlRBaTg4dUVHeTNK?=
+ =?utf-8?B?ajVkYjJHbXltTHcyWEErekdaakVrVk5Ld3VURzEvVGx2WmcyR0h6a09HMVp4?=
+ =?utf-8?B?OHVKeW1wS3FoUnR4WTgxYzE0YURZSXFjYkpvaDZzcWRYQ3ZqbnNBWkhiV2VU?=
+ =?utf-8?B?bXFaQTlwUHNxZVVSM2x3cEdCVFJFdEhlLzdGTEcrdlBNTmsrQ0xpNkUwc1ZR?=
+ =?utf-8?B?dzlMdmc0MUNKcEkxb2tqeG43OTdyRkJOZ0ZwdmJnSVZGRTNoR1lmL1JFM2lW?=
+ =?utf-8?B?SGp2VXYrMkx3R2tpYU9ZRUdoand2YS9jRC9NSHprbjFiNlRLcjh2MzZEZHlR?=
+ =?utf-8?B?SDZFekU3TWpWMVllZnRBUE5OOWpJSTdta3VpUlJ0VXZYdFlYYVMyOEJRUmVQ?=
+ =?utf-8?B?VXhnQWhDcXhUTTdjSk01S2dQVXZIYXVQNVJjVFZQNWdwQzdRU0d5ZW96MGVI?=
+ =?utf-8?B?Y3lWZFoxMUY3TkRGMk9oNWRpUHAzK3JnUGp6amRxUGpZL3BvZ2xmL1UwK1Vv?=
+ =?utf-8?B?S2pUVjZ1cVczeUdTM3dHSFE2SlVDZFNZWlJxSUtrdngrOGdqWEpoeVVIUWVo?=
+ =?utf-8?B?MGxQc3lzL3Q2M0FzdGFHZkJZa3c3MlpBSVVsUExDNHVhc3BOaFkyYVNHMWc5?=
+ =?utf-8?B?Y285QXp0bzNmc05HR2tVemQva1VTTm1jZ2p1ajJOZkkxSVVxTlBxV3JXaEcw?=
+ =?utf-8?B?TlcrYkJCbi9saHBrZ3hncXpqNWdtdlF1dkYzRHMrSUozMitYUDVKbWtVeERI?=
+ =?utf-8?B?R2gweThyYlNjTS9BeWFkd1EwN3kxc1UzUTZGbzdqeHRWOSs4ejI2NHJuZkpa?=
+ =?utf-8?B?bUxwYWp2MWVCalpodmdMd2huMDh5a0NSVVVVbXE2YWpNUng2OWFtWEFEclIy?=
+ =?utf-8?Q?OiXMQ4U8IkWp3tCwuzQ1OIOGv?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 19d4fd66-1731-4701-2203-08dad273f2fb
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 01:41:06.8774
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: stYwlfwZG1LrVcbSQm5siiJI1K4XPYl4zqF/TCy75wmbM/r32XpBDvvXwptDFZyRd6W5YZcvx1oNDNiiHyz5wg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7145
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Nov 2022 at 18:47, Stefano Garzarella <sgarzare@redhat.com> wrot=
-e:
->
-> On Fri, Nov 25, 2022 at 10:23:17AM +0800, Cindy Lu wrote:
-> >While testing in vIOMMU, sometimes guest will unmap very large memory,
-> >which will cause the crash. To fix this,Move the iommu_unmap to
-> >vhost_vdpa_pa_unmap/vhost_vdpa_va_unmap and only unmap the memory
-> >that saved in iotlb.
-> >
-> >Call Trace:
-> >[  647.820144] ------------[ cut here ]------------
-> >[  647.820848] kernel BUG at drivers/iommu/intel/iommu.c:1174!
-> >[  647.821486] invalid opcode: 0000 [#1] PREEMPT SMP PTI
-> >[  647.822082] CPU: 10 PID: 1181 Comm: qemu-system-x86 Not tainted 6.0.0=
--rc1home_lulu_2452_lulu7_vhost+ #62
-> >[  647.823139] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS =
-rel-1.15.0-29-g6a62e0cb0dfe-prebuilt.qem4
-> >[  647.824365] RIP: 0010:domain_unmap+0x48/0x110
-> >[  647.825424] Code: 48 89 fb 8d 4c f6 1e 39 c1 0f 4f c8 83 e9 0c 83 f9 =
-3f 7f 18 48 89 e8 48 d3 e8 48 85 c0 75 59
-> >[  647.828064] RSP: 0018:ffffae5340c0bbf0 EFLAGS: 00010202
-> >[  647.828973] RAX: 0000000000000001 RBX: ffff921793d10540 RCX: 00000000=
-0000001b
-> >[  647.830083] RDX: 00000000080000ff RSI: 0000000000000001 RDI: ffff9217=
-93d10540
-> >[  647.831214] RBP: 0000000007fc0100 R08: ffffae5340c0bcd0 R09: 00000000=
-00000003
-> >[  647.832388] R10: 0000007fc0100000 R11: 0000000000100000 R12: 00000000=
-080000ff
-> >[  647.833668] R13: ffffae5340c0bcd0 R14: ffff921793d10590 R15: 00000080=
-00100000
-> >[  647.834782] FS:  00007f772ec90640(0000) GS:ffff921ce7a80000(0000) knl=
-GS:0000000000000000
-> >[  647.836004] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >[  647.836990] CR2: 00007f02c27a3a20 CR3: 0000000101b0c006 CR4: 00000000=
-00372ee0
-> >[  647.838107] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 00000000=
-00000000
-> >[  647.839283] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 00000000=
-00000400
-> >[  647.840666] Call Trace:
-> >[  647.841437]  <TASK>
-> >[  647.842107]  intel_iommu_unmap_pages+0x93/0x140
-> >[  647.843112]  __iommu_unmap+0x91/0x1b0
-> >[  647.844003]  iommu_unmap+0x6a/0x95
-> >[  647.844885]  vhost_vdpa_unmap+0x1de/0x1f0 [vhost_vdpa]
-> >[  647.845985]  vhost_vdpa_process_iotlb_msg+0xf0/0x90b [vhost_vdpa]
-> >[  647.847235]  ? _raw_spin_unlock+0x15/0x30
-> >[  647.848181]  ? _copy_from_iter+0x8c/0x580
-> >[  647.849137]  vhost_chr_write_iter+0xb3/0x430 [vhost]
-> >[  647.850126]  vfs_write+0x1e4/0x3a0
-> >[  647.850897]  ksys_write+0x53/0xd0
-> >[  647.851688]  do_syscall_64+0x3a/0x90
-> >[  647.852508]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >[  647.853457] RIP: 0033:0x7f7734ef9f4f
-> >[  647.854408] Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 29 76 f8 =
-ff 48 8b 54 24 18 48 8b 74 24 10 41 89 c8
-> >[  647.857217] RSP: 002b:00007f772ec8f040 EFLAGS: 00000293 ORIG_RAX: 000=
-0000000000001
-> >[  647.858486] RAX: ffffffffffffffda RBX: 00000000fef00000 RCX: 00007f77=
-34ef9f4f
-> >[  647.859713] RDX: 0000000000000048 RSI: 00007f772ec8f090 RDI: 00000000=
-00000010
-> >[  647.860942] RBP: 00007f772ec8f1a0 R08: 0000000000000000 R09: 00000000=
-00000000
-> >[  647.862206] R10: 0000000000000001 R11: 0000000000000293 R12: 00000000=
-00000010
-> >[  647.863446] R13: 0000000000000002 R14: 0000000000000000 R15: ffffffff=
-01100000
-> >[  647.864692]  </TASK>
-> >[  647.865458] Modules linked in: rpcsec_gss_krb5 auth_rpcgss nfsv4 dns_=
-resolver nfs lockd grace fscache netfs v]
-> >[  647.874688] ---[ end trace 0000000000000000 ]---
->
-> I think you can remove the part below this line.
->
->  From here:
->
-> >[  647.876013] RIP: 0010:domain_unmap+0x48/0x110
-> >[  647.878306] Code: 48 89 fb 8d 4c f6 1e 39 c1 0f 4f c8 83 e9 0c 83 f9 =
-3f 7f 18 48 89 e8 48 d3 e8 48 85 c0 75 59
-> >[  647.884581] RSP: 0018:ffffae5340c0bbf0 EFLAGS: 00010202
-> >[  647.886308] RAX: 0000000000000001 RBX: ffff921793d10540 RCX: 00000000=
-0000001b
-> >[  647.888775] RDX: 00000000080000ff RSI: 0000000000000001 RDI: ffff9217=
-93d10540
-> >[  647.890295] RBP: 0000000007fc0100 R08: ffffae5340c0bcd0 R09: 00000000=
-00000003
-> >[  647.891660] R10: 0000007fc0100000 R11: 0000000000100000 R12: 00000000=
-080000ff
-> >[  647.893019] R13: ffffae5340c0bcd0 R14: ffff921793d10590 R15: 00000080=
-00100000
-> >[  647.894506] FS:  00007f772ec90640(0000) GS:ffff921ce7a80000(0000) knl=
-GS:0000000000000000
-> >[  647.895963] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >[  647.897348] CR2: 00007f02c27a3a20 CR3: 0000000101b0c006 CR4: 00000000=
-00372ee0
-> >[  647.898719] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 00000000=
-00000000
->
-> To here.
->
-> And maybe I would also remove the timestamps; in the end they are not
-> useful for this fix and they crowd this trace.
->
-thanks Stefano =EF=BC=8CI will fix this
-> >
-> >Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
-> >Signed-off-by: Cindy Lu <lulu@redhat.com>
-> >---
-> > drivers/vhost/vdpa.c | 10 ++++++++--
-> > 1 file changed, 8 insertions(+), 2 deletions(-)
-> >
-> >diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> >index 166044642fd5..e5a07751bf45 100644
-> >--- a/drivers/vhost/vdpa.c
-> >+++ b/drivers/vhost/vdpa.c
-> >@@ -692,6 +692,8 @@ static void vhost_vdpa_pa_unmap(struct vhost_vdpa *v=
-,
-> >       struct vhost_iotlb_map *map;
-> >       struct page *page;
-> >       unsigned long pfn, pinned;
-> >+      struct vdpa_device *vdpa =3D v->vdpa;
-> >+      const struct vdpa_config_ops *ops =3D vdpa->config;
-> >
-> >       while ((map =3D vhost_iotlb_itree_first(iotlb, start, last)) !=3D=
- NULL) {
-> >               pinned =3D PFN_DOWN(map->size);
-> >@@ -703,6 +705,8 @@ static void vhost_vdpa_pa_unmap(struct vhost_vdpa *v=
-,
-> >                       unpin_user_page(page);
-> >               }
-> >               atomic64_sub(PFN_DOWN(map->size), &dev->mm->pinned_vm);
-> >+              if ((ops->dma_map =3D=3D NULL) && (ops->set_map =3D=3D NU=
-LL))
-> >+                      iommu_unmap(v->domain, map->start, map->size);
-> >               vhost_iotlb_map_free(iotlb, map);
-> >       }
-> > }
-> >@@ -713,11 +717,15 @@ static void vhost_vdpa_va_unmap(struct vhost_vdpa =
-*v,
-> > {
-> >       struct vhost_iotlb_map *map;
-> >       struct vdpa_map_file *map_file;
-> >+      struct vdpa_device *vdpa =3D v->vdpa;
-> >+      const struct vdpa_config_ops *ops =3D vdpa->config;
-> >
-> >       while ((map =3D vhost_iotlb_itree_first(iotlb, start, last)) !=3D=
- NULL) {
-> >               map_file =3D (struct vdpa_map_file *)map->opaque;
-> >               fput(map_file->file);
-> >               kfree(map_file);
-> >+              if (ops->set_map =3D=3D NULL)
->
-> Should we check that `dma_map` is also NULL as in the previous hunk?
->
-> Thanks,
-> Stefano
->
-Thanks Stefano, I wIll rewrite this part
-> >+                      iommu_unmap(v->domain, map->start, map->size);
-> >               vhost_iotlb_map_free(iotlb, map);
-> >       }
-> > }
-> >@@ -805,8 +813,6 @@ static void vhost_vdpa_unmap(struct vhost_vdpa *v,
-> >       } else if (ops->set_map) {
-> >               if (!v->in_batch)
-> >                       ops->set_map(vdpa, asid, iotlb);
-> >-      } else {
-> >-              iommu_unmap(v->domain, iova, size);
-> >       }
-> >
-> >       /* If we are in the middle of batch processing, delay the free
-> >--
-> >2.34.3
-> >
->
+On Tue, Nov 29, 2022 at 11:29:15AM -0800, Paul E. McKenney wrote:
+[...]
+> > > > IIUC, this will make TSC to watchdog HPET every 500 ms. We have got
+> > > > report that the 500ms watchdog timer had big impact on some parallel
+> > > > workload on big servers, that was another factor for us to seek
+> > > > stopping the timer.
+> > > 
+> > > Another approach would be to slow it down.  Given the tighter bounds
+> > > on skew, it could be done every (say) 10 seconds while allowing
+> > > 2 milliseconds skew instead of the current 100 microseconds.
+> > 
+> > Yes, this can reduce the OS noise much. One problem is if we make it
+> > a general interface, there is some clocksource whose warp time is
+> > less than 10 seconds, like ACPI PM_TIMER (3-4 seconds), and I don't
+> > know if other ARCHs have similar cases.
+> 
+> Maybe a simpler approach is for systems with such high sensitivity to
+> OS noise to simply disable the clocksource watchdog.  ;-)
 
+That's what the reported did, test with and without "tsc=reliable"
+parameter :)
+
+And AFAIK, many customers with big server farms hate to add more
+cmdline parameters when we suggested so.
+
+> > > > Is this about the concern of possible TSC frequency calibration
+> > > > issue, as the 40 ms per second drift between HPET and TSC? With 
+> > > > b50db7095fe0 backported, we also have another patch to force TSC
+> > > > calibration for those platforms which get the TSC freq directly
+> > > > from CPUID or MSR and don't have such info in dmesg:
+> > > >  "tsc: Refined TSC clocksource calibration: 2693.509 MHz" 
+> > > > 
+> > > > https://lore.kernel.org/lkml/20220509144110.9242-1-feng.tang@intel.com/
+> > > > 
+> > > > We did met tsc calibration issue due to some firmware issue, and
+> > > > this can help to catch it. You can try it if you think it's relevant.
+> > > 
+> > > I am giving this a go, thank you!
+> > 
+> > Thanks for spending time testing it!
+> 
+> And here are the results from setting tsc_force_recalibrate to 1:
+> 
+> $ dmesg | grep -E 'calibrat|clocksource'
+> [    5.272939] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1910969940391419 ns
+> [   16.830644] clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 76450417870 ns
+> [   17.938020] clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x36a8d32ce31, max_idle_ns: 881590731004 ns
+> [   24.548583] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275000 ns
+> [   49.762432] clocksource: Switched to clocksource tsc-early
+> [   50.076769] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+> [   55.615946] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x36a8d32ce31, max_idle_ns: 881590731004 ns
+> [   55.640270] clocksource: Switched to clocksource tsc
+> [   56.694371] tsc: Warning: TSC freq calibrated by CPUID/MSR differs from what is calibrated by HW timer, please check with vendor!!
+> [   56.724550] tsc: Previous calibrated TSC freq:        1896.000 MHz
+> [   56.737646] tsc: TSC freq recalibrated by [HPET]:     1975.000 MHz
+
+Looks like there is really something wrong here. I assume the first
+number '1896 MHz' is got from CPUID(0x15)'s math calculation.
+
+I thinks 2 more things could be try:
+
+* add "nohpet" to the cmdline, so the tsc_force_recalibrate should use
+  ACPI PM_TIMER to do the calibration, say a third-party check.
+* If the system don't have auto-adjusted time setting like NTP, I
+  guess the system time will have obvious drift comparing to a normal
+  clock or a mobile phone time, as the deviation is about 4%, which
+  is 2.4 minutes per hour.
+
+> Apologies for the delay, but reconfigurations put the system off the
+> net for some time.
+
+No problem at all, it's your holiday time! Thanks for trying this!
+
+Thanks,
+Feng
+
+> 							Thanx, Paul
