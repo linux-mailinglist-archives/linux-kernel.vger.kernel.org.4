@@ -2,122 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3458C63E362
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AFB63E36A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbiK3WYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 17:24:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
+        id S229736AbiK3W0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 17:26:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiK3WYa (ORCPT
+        with ESMTP id S229684AbiK3W0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 17:24:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272A64FFBB;
-        Wed, 30 Nov 2022 14:24:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96DFC61E11;
-        Wed, 30 Nov 2022 22:24:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C26AC433D6;
-        Wed, 30 Nov 2022 22:24:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1669847067;
-        bh=GObiuqWePXvleVN+hRN2W6TyciF+HakME2P3Lh61n28=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YAhbHJpYikQUx0jNOf+ItowlR2w21iqvGsxoJvyc3gVS/fyS7GsRYyVC5aHcGMwxW
-         dqefHsBBpntp00i/4r6pJ6oZ3BPgxPgUbp+zvSU2tyL5JAOZHBzkvJfcjpFONibaSV
-         vtPIAfMwt6bIwxefV+7aK10fUV23UobOvgs0sgSE=
-Date:   Wed, 30 Nov 2022 14:24:25 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Ives van Hoorne <ives@codesandbox.io>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Alistair Popple <apopple@nvidia.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] mm/migrate: Fix read-only page got writable when
- recover pte
-Message-Id: <20221130142425.6a7fdfa3e5954f3c305a77ee@linux-foundation.org>
-In-Reply-To: <5ddf1310-b49f-6e66-a22a-6de361602558@redhat.com>
-References: <20221114000447.1681003-1-peterx@redhat.com>
-        <20221114000447.1681003-2-peterx@redhat.com>
-        <5ddf1310-b49f-6e66-a22a-6de361602558@redhat.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Wed, 30 Nov 2022 17:26:13 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00AB87CB7;
+        Wed, 30 Nov 2022 14:26:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669847172; x=1701383172;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vB3zUTLnMXl5iiPneAlLL6sdoFY16u7w9ki2HcepyIU=;
+  b=RDwmuS2G1x5dgi/Yd02oq+v3msFuXHYkKboyF9OuW/LNeyypL0ueCHOO
+   M16GUwhj0U7xc9j2NzsT01HZHH7AiKk3JY5K+nkMO4WOnncELfH8L7Aih
+   KQ5hf7BB1IuaEnzBgLrshQKlPE7SjHr0rdPvH44BT180u/6av5xXJtN++
+   1RAyyuio1gLW+G1QXFLnevh5uFlRDvdvXisSCAPfYM3AtHMSMswRzPmBx
+   IFvwVbUiZGSTd6ZJH+510ceAeVeGILIJgktHAQBgP793A6XG91q76TuXS
+   zClMnsVsRQTPtYS5G9u8LeKCeHoP62NIf+7S23Wq2fpi7tNOR5ibyvbKC
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="315549359"
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="315549359"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 14:26:12 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="707823341"
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="707823341"
+Received: from xwang-mobl1.amr.corp.intel.com (HELO [10.212.177.221]) ([10.212.177.221])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 14:26:09 -0800
+Message-ID: <f898bec4-887b-9e3f-9b10-5d70f9294c65@intel.com>
+Date:   Wed, 30 Nov 2022 14:26:07 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v7 10/20] x86/virt/tdx: Use all system memory when
+ initializing TDX module as TDX memory
+Content-Language: en-US
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>
+References: <cover.1668988357.git.kai.huang@intel.com>
+ <9b545148275b14a8c7edef1157f8ec44dc8116ee.1668988357.git.kai.huang@intel.com>
+ <637ecded7b0f9_160eb329418@dwillia2-xfh.jf.intel.com.notmuch>
+ <Y384vDcfTpTnFxx+@hirez.programming.kicks-ass.net>
+ <699700de9d63fa72fda4620d052fda3427193b21.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <699700de9d63fa72fda4620d052fda3427193b21.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022 19:17:43 +0100 David Hildenbrand <david@redhat.com> wrote:
-
-> On 14.11.22 01:04, Peter Xu wrote:
-> > Ives van Hoorne from codesandbox.io reported an issue regarding possible
-> > data loss of uffd-wp when applied to memfds on heavily loaded systems.  The
-> > symptom is some read page got data mismatch from the snapshot child VMs.
-> > 
-> > Here I can also reproduce with a Rust reproducer that was provided by Ives
-> > that keeps taking snapshot of a 256MB VM, on a 32G system when I initiate
-> > 80 instances I can trigger the issues in ten minutes.
-> > 
-> > It turns out that we got some pages write-through even if uffd-wp is
-> > applied to the pte.
-> > 
-> > The problem is, when removing migration entries, we didn't really worry
-> > about write bit as long as we know it's not a write migration entry.  That
-> > may not be true, for some memory types (e.g. writable shmem) mk_pte can
-> > return a pte with write bit set, then to recover the migration entry to its
-> > original state we need to explicit wr-protect the pte or it'll has the
-> > write bit set if it's a read migration entry.  For uffd it can cause
-> > write-through.
-> > 
-> > The relevant code on uffd was introduced in the anon support, which is
-> > commit f45ec5ff16a7 ("userfaultfd: wp: support swap and page migration",
-> > 2020-04-07).  However anon shouldn't suffer from this problem because anon
-> > should already have the write bit cleared always, so that may not be a
-> > proper Fixes target, while I'm adding the Fixes to be uffd shmem support.
-> > 
->
-> ...
->
-> > --- a/mm/migrate.c
-> > +++ b/mm/migrate.c
-> > @@ -213,8 +213,14 @@ static bool remove_migration_pte(struct folio *folio,
-> >   			pte = pte_mkdirty(pte);
-> >   		if (is_writable_migration_entry(entry))
-> >   			pte = maybe_mkwrite(pte, vma);
-> > -		else if (pte_swp_uffd_wp(*pvmw.pte))
-> > +		else
-> > +			/* NOTE: mk_pte can have write bit set */
-> > +			pte = pte_wrprotect(pte);
-> > +
-> > +		if (pte_swp_uffd_wp(*pvmw.pte)) {
-> > +			WARN_ON_ONCE(pte_write(pte));
-
-Will this warnnig trigger in the scenario you and Ives have discovered?
-
-> >   			pte = pte_mkuffd_wp(pte);
-> > +		}
-> >   
-> >   		if (folio_test_anon(folio) && !is_readable_migration_entry(entry))
-> >   			rmap_flags |= RMAP_EXCLUSIVE;
+On 11/24/22 02:02, Huang, Kai wrote:
+> Thanks for input.  I am fine with 'tdx=force'.
 > 
-> As raised, I don't agree to this generic non-uffd-wp change without 
-> further, clear justification.
+> Although, I'd like to point out KVM will have a module parameter 'enable_tdx'.
+> 
+> Hi Dave, Sean, do you have any comments?
 
-Pater, can you please work this further?
-
-> I won't nack it, but I won't ack it either.
-
-I wouldn't mind seeing a little code comment which explains why we're
-doing this.
+That's fine.  Just keep it out of the initial implementation.  Ignore it
+for now,
