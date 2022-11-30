@@ -2,281 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 232A763CC45
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 01:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3F763CC41
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 01:09:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiK3AJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 19:09:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
+        id S229575AbiK3AIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 19:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiK3AIy (ORCPT
+        with ESMTP id S230142AbiK3AIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 19:08:54 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B9B10EC;
-        Tue, 29 Nov 2022 16:08:53 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATNtRlv027019;
-        Wed, 30 Nov 2022 00:08:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=cMfhvGu8gnk240Ky57fJE8zipaaLCQWGyZdEWoo56WU=;
- b=lfmFeiUjHSU4VnPokT92OegpYJ6LxL5N0EN5aC3qhilhYJdIbvM4TVMZ7fRjYcAMD41C
- Ym1d9uPCj0Y6FmUykJJrJ7lSmmHxmIw7qq5QrvzV9hvfSFGYJrCghhVyORIeKIDNTBCM
- yyNHUfD3eZOoHqcc8hyb1/oCYpaTTPOYNN6u13N1bwLo+P/o/Ul/8mHeDJWtIr1P3eCs
- SJZM2XubrFQNJqGV20l5uHz27Su9LVmmJ0Xhy25oj+O3Oqsi2DfAyGThBT+vBf5dAebK
- +xcMqMaPOcxQBr9rLdOJpvLwhE7PpU9qaeH6OpD9HJOBzVGLsM+kLATqBTp1ctUzzfnq Kg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m5bnh2rnr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Nov 2022 00:08:46 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AU08iqK011654
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Nov 2022 00:08:44 GMT
-Received: from [10.110.20.134] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 29 Nov
- 2022 16:08:43 -0800
-Message-ID: <0bd08349-d6ec-bec4-e1bd-6f98d1af5968@quicinc.com>
-Date:   Tue, 29 Nov 2022 16:08:35 -0800
+        Tue, 29 Nov 2022 19:08:45 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5134042F52
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 16:08:44 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id 6so14543440pgm.6
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 16:08:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1uNcYpPMrI5BUKS+4cI51gDVBMIA/yEg/AUAY95wTKw=;
+        b=e/AzuKdsYAHWb3FkvHU4t2hkVxTQgkWyNmOJcccAWQKcQNHjzJPNvB3Cnkq5ORn7v1
+         OsHP3UW2UdgIK3u6lfFonG9+MPSdES8+DKsxsJPDdmjmHwN6YlezNNl7FvGJAi8fMrZn
+         4fJdUwmF2yZArXNGkx+dWVyyK3xIOBDOzhL5Ew3IMw4uEHbVj2zk7Z13XXR3bEfkorbp
+         qQDO9pjAjjvgEVIuu8rcP3lfePEHPerKjqj81D3U8onXLsYHRz83qDSCS14MLk2AKWOW
+         bviWwz9juRxi2LQopPz3D3oAFbJnPjsNq0Ulu+AwV5JXmvYfPF8FtdDda6iSN+vZYyH3
+         NR/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1uNcYpPMrI5BUKS+4cI51gDVBMIA/yEg/AUAY95wTKw=;
+        b=iH/313v0GtkdsViOehNP4ivc29R4qZmOUNzB69z14rbDxu5VkDWfYAjJqZPGmkmbim
+         ra37U+sqL9rI+xIG06i0iuyUyYeevH7R+i5pJkD9UCieuN5FasNNbkmYUsHTjRkxckxJ
+         lMhNo11+pTHv2h7X6LnXzW6kV5pY1Cz/Ii3wOS0SPAZ7BiIgGNw8pmPCubDqSoTJgsR2
+         2a1eRBcLeuqBuktOqKfRFJrr10J8DhjHtblO3hGOcu3ArX1GNLjpsGBOnLR/jUoFDtQp
+         fJSOCayilFHVSiFxzbNFWuyTb3BWhPDNlfBXlRJHmcNqF6P8Z1mJZ4Tbmad9whosgFmK
+         xSsg==
+X-Gm-Message-State: ANoB5pnMHYzs3mXOExoqDuqHfj/FAatJ8Y270A0z49AfBKkSElZOsd33
+        bXuDcZu1YsydTuLUvTk1m7U=
+X-Google-Smtp-Source: AA0mqf6wrXy3pUVubbhsCKYanMOJSCDsa/HXBw7jsyjID2CJl9LuFqBBXRKBhg86aaf6OtYN8bcpSA==
+X-Received: by 2002:a05:6a00:1812:b0:575:19b6:dfe9 with SMTP id y18-20020a056a00181200b0057519b6dfe9mr14574544pfa.16.1669766923741;
+        Tue, 29 Nov 2022 16:08:43 -0800 (PST)
+Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
+        by smtp.gmail.com with ESMTPSA id x8-20020aa78f08000000b005745eb7ecc3sm38261pfr.209.2022.11.29.16.08.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 16:08:43 -0800 (PST)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        virtualization@lists.linux-foundation.org (open list:VIRTIO GPU DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] drm/virtio: Spiff out cmd queue/response traces
+Date:   Tue, 29 Nov 2022 16:08:41 -0800
+Message-Id: <20221130000841.318037-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 2/2] drm/msm/dp: add support of max dp link rate
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <agross@kernel.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1668725369-6331-1-git-send-email-quic_khsieh@quicinc.com>
- <1668725369-6331-3-git-send-email-quic_khsieh@quicinc.com>
- <8d75f389-9698-891f-5eff-2b76ddecad2b@linaro.org>
-Content-Language: en-US
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <8d75f389-9698-891f-5eff-2b76ddecad2b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: OqjB7sBk9zUjl1Yj4zduLECGR8_MPi2d
-X-Proofpoint-GUID: OqjB7sBk9zUjl1Yj4zduLECGR8_MPi2d
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-29_13,2022-11-29_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=999
- suspectscore=0 malwarescore=0 bulkscore=0 impostorscore=0 mlxscore=0
- spamscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211290145
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Rob Clark <robdclark@chromium.org>
 
-On 11/18/2022 3:04 AM, Dmitry Baryshkov wrote:
-> On 18/11/2022 01:49, Kuogee Hsieh wrote:
->> dp_out endpoint contains both data-lanes and link-frequencies 
->> properties.
->> This patch parser dp_out endpoint properties and acquire dp_max_lanes 
->> and
->> dp_max_link_rate from respective property. Finally, comparing them 
->> against
->> both data lane and link rate read back from sink to ensure both data 
->> lane
->> and link rate are supported by platform.
->> In the case there is no data-lanes or link-frequencies property 
->> defined at
->> dp_out endpoint, the default value are 4 data lanes with 5.4 Ghz link 
->> rate.
->>
->> Changes in v2:
->> -- add max link rate from dtsi
->>
->> Changes in v3:
->> -- parser max_data_lanes and max_dp_link_rate from dp_out endpoint
->>
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sc7280.dtsi |  1 +
->
-> Should not be a part of this patch.
->
->>   drivers/gpu/drm/msm/dp/dp_display.c  | 4 ++++
->>   drivers/gpu/drm/msm/dp/dp_panel.c    |  7 ++++---
->>   drivers/gpu/drm/msm/dp/dp_panel.h    |  1 +
->>   drivers/gpu/drm/msm/dp/dp_parser.c   | 30 
->> ++++++++++++++++++++++--------
->>   drivers/gpu/drm/msm/dp/dp_parser.h   |  2 ++
->>   6 files changed, 34 insertions(+), 11 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi 
->> b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> index 4afe53b..d456e76 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> @@ -3897,6 +3897,7 @@
->>                           reg = <0>;
->>                           dp_in: endpoint {
->>                               remote-endpoint = <&dpu_intf0_out>;
->> +                            data-lanes = <0 1 2 3>;
->>                           };
->>                       };
->>                   };
->> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c 
->> b/drivers/gpu/drm/msm/dp/dp_display.c
->> index 29c9845..4fe2092 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_display.c
->> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
->> @@ -390,6 +390,10 @@ static int dp_display_process_hpd_high(struct 
->> dp_display_private *dp)
->>       struct edid *edid;
->>         dp->panel->max_dp_lanes = dp->parser->max_dp_lanes;
->> +    dp->panel->max_dp_link_rate = dp->parser->max_dp_link_rate;
->> +
->> +    drm_dbg_dp(dp->drm_dev, "max_lanes=%d max_link_rate=%d\n",
->> +        dp->panel->max_dp_lanes, dp->panel->max_dp_link_rate);
->>         rc = dp_panel_read_sink_caps(dp->panel, 
->> dp->dp_display.connector);
->>       if (rc)
->> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c 
->> b/drivers/gpu/drm/msm/dp/dp_panel.c
->> index 5149ceb..933fa9c 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_panel.c
->> +++ b/drivers/gpu/drm/msm/dp/dp_panel.c
->> @@ -75,12 +75,13 @@ static int dp_panel_read_dpcd(struct dp_panel 
->> *dp_panel)
->>       link_info->rate = 
->> drm_dp_bw_code_to_link_rate(dpcd[DP_MAX_LINK_RATE]);
->>       link_info->num_lanes = dpcd[DP_MAX_LANE_COUNT] & 
->> DP_MAX_LANE_COUNT_MASK;
->>   +    /* Limit data lanes from data-lanes of endpoint properity of 
->> dtsi */
->>       if (link_info->num_lanes > dp_panel->max_dp_lanes)
->>           link_info->num_lanes = dp_panel->max_dp_lanes;
->>   -    /* Limit support upto HBR2 until HBR3 support is added */
->> -    if (link_info->rate >= 
->> (drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4)))
->> -        link_info->rate = drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4);
->> +    /* Limit link rate from link-frequencies of endpoint properity 
->> of dtsi */
->> +    if (link_info->rate > dp_panel->max_dp_link_rate)
->> +        link_info->rate = dp_panel->max_dp_link_rate;
->>         drm_dbg_dp(panel->drm_dev, "version: %d.%d\n", major, minor);
->>       drm_dbg_dp(panel->drm_dev, "link_rate=%d\n", link_info->rate);
->> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.h 
->> b/drivers/gpu/drm/msm/dp/dp_panel.h
->> index d861197a..f04d021 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_panel.h
->> +++ b/drivers/gpu/drm/msm/dp/dp_panel.h
->> @@ -50,6 +50,7 @@ struct dp_panel {
->>         u32 vic;
->>       u32 max_dp_lanes;
->> +    u32 max_dp_link_rate;
->>         u32 max_bw_code;
->>   };
->> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.c 
->> b/drivers/gpu/drm/msm/dp/dp_parser.c
->> index dd73221..667981e 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_parser.c
->> +++ b/drivers/gpu/drm/msm/dp/dp_parser.c
->> @@ -94,16 +94,30 @@ static int dp_parser_ctrl_res(struct dp_parser 
->> *parser)
->>   static int dp_parser_misc(struct dp_parser *parser)
->>   {
->>       struct device_node *of_node = parser->pdev->dev.of_node;
->> -    int len;
->> -
->> -    len = drm_of_get_data_lanes_count(of_node, 1, DP_MAX_NUM_DP_LANES);
->> -    if (len < 0) {
->> -        DRM_WARN("Invalid property \"data-lanes\", default max DP 
->> lanes = %d\n",
->> -             DP_MAX_NUM_DP_LANES);
->> -        len = DP_MAX_NUM_DP_LANES;
->> +    struct device_node *endpoint;
->> +    int cnt;
->> +    u32 frequence = 0;
->> +
->> +    endpoint = of_graph_get_endpoint_by_regs(of_node, 1, 0);
->> +
->> +    if (endpoint) {
->> +        cnt = of_property_count_u32_elems(endpoint, "data-lanes");
->> +        if (cnt < 0)
->> +            parser->max_dp_lanes = DP_MAX_NUM_DP_LANES; /* 4 lanes */
->> +        else
->> +            parser->max_dp_lanes = cnt;
->
-> This should be a separate patch. And now what, 
-> drm_of_get_data_lanes_count() can be used here too. Why are you 
-> dropping the generic function for the sake of your custom implementatoin.
-drm_of_get_data_lanes_count() expect the parent node of endpoint.
+Add a sequence # for more easily matching up cmd/resp, and the # of free
+slots in the virtqueue to more easily see starvation issues.
 
-It will locate endpoint first and call of_property_count_u32_elems() to 
-retrieve count of elements and there is no similar function for 
-link-frequencies.
+v2: Fix handling of string fields as well
 
-To get link-frequencies we have to locate endpoint already. so why not 
-use same endpoint for both data-lanes and link-frequencies.
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+---
+ drivers/gpu/drm/virtio/virtgpu_drv.h   |  3 +++
+ drivers/gpu/drm/virtio/virtgpu_trace.h | 26 +++++++++++++++-----------
+ drivers/gpu/drm/virtio/virtgpu_vq.c    | 13 ++++++++++---
+ 3 files changed, 28 insertions(+), 14 deletions(-)
 
-So that consistent way are used  to retrieve both data-lanes and 
-link-frequencies.
+diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.h b/drivers/gpu/drm/virtio/virtgpu_drv.h
+index 9b98470593b0..cdc208d9238c 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_drv.h
++++ b/drivers/gpu/drm/virtio/virtgpu_drv.h
+@@ -166,6 +166,8 @@ struct virtio_gpu_vbuffer {
+ 
+ 	struct virtio_gpu_object_array *objs;
+ 	struct list_head list;
++
++	uint32_t seqno;
+ };
+ 
+ struct virtio_gpu_output {
+@@ -195,6 +197,7 @@ struct virtio_gpu_queue {
+ 	spinlock_t qlock;
+ 	wait_queue_head_t ack_queue;
+ 	struct work_struct dequeue_work;
++	uint32_t seqno;
+ };
+ 
+ struct virtio_gpu_drv_capset {
+diff --git a/drivers/gpu/drm/virtio/virtgpu_trace.h b/drivers/gpu/drm/virtio/virtgpu_trace.h
+index 711ecc2bd241..031bc77689d5 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_trace.h
++++ b/drivers/gpu/drm/virtio/virtgpu_trace.h
+@@ -9,40 +9,44 @@
+ #define TRACE_INCLUDE_FILE virtgpu_trace
+ 
+ DECLARE_EVENT_CLASS(virtio_gpu_cmd,
+-	TP_PROTO(struct virtqueue *vq, struct virtio_gpu_ctrl_hdr *hdr),
+-	TP_ARGS(vq, hdr),
++	TP_PROTO(struct virtqueue *vq, struct virtio_gpu_ctrl_hdr *hdr, u32 seqno),
++	TP_ARGS(vq, hdr, seqno),
+ 	TP_STRUCT__entry(
+ 			 __field(int, dev)
+ 			 __field(unsigned int, vq)
+-			 __field(const char *, name)
++			 __string(name, vq->name)
+ 			 __field(u32, type)
+ 			 __field(u32, flags)
+ 			 __field(u64, fence_id)
+ 			 __field(u32, ctx_id)
++			 __field(u32, num_free)
++			 __field(u32, seqno)
+ 			 ),
+ 	TP_fast_assign(
+ 		       __entry->dev = vq->vdev->index;
+ 		       __entry->vq = vq->index;
+-		       __entry->name = vq->name;
++		       __assign_str(name, vq->name);
+ 		       __entry->type = le32_to_cpu(hdr->type);
+ 		       __entry->flags = le32_to_cpu(hdr->flags);
+ 		       __entry->fence_id = le64_to_cpu(hdr->fence_id);
+ 		       __entry->ctx_id = le32_to_cpu(hdr->ctx_id);
++		       __entry->num_free = vq->num_free;
++		       __entry->seqno = seqno;
+ 		       ),
+-	TP_printk("vdev=%d vq=%u name=%s type=0x%x flags=0x%x fence_id=%llu ctx_id=%u",
+-		  __entry->dev, __entry->vq, __entry->name,
++	TP_printk("vdev=%d vq=%u name=%s type=0x%x flags=0x%x fence_id=%llu ctx_id=%u num_free=%u seqno=%u",
++		  __entry->dev, __entry->vq, __get_str(name),
+ 		  __entry->type, __entry->flags, __entry->fence_id,
+-		  __entry->ctx_id)
++		  __entry->ctx_id, __entry->num_free, __entry->seqno)
+ );
+ 
+ DEFINE_EVENT(virtio_gpu_cmd, virtio_gpu_cmd_queue,
+-	TP_PROTO(struct virtqueue *vq, struct virtio_gpu_ctrl_hdr *hdr),
+-	TP_ARGS(vq, hdr)
++	TP_PROTO(struct virtqueue *vq, struct virtio_gpu_ctrl_hdr *hdr, u32 seqno),
++	TP_ARGS(vq, hdr, seqno)
+ );
+ 
+ DEFINE_EVENT(virtio_gpu_cmd, virtio_gpu_cmd_response,
+-	TP_PROTO(struct virtqueue *vq, struct virtio_gpu_ctrl_hdr *hdr),
+-	TP_ARGS(vq, hdr)
++	TP_PROTO(struct virtqueue *vq, struct virtio_gpu_ctrl_hdr *hdr, u32 seqno),
++	TP_ARGS(vq, hdr, seqno)
+ );
+ 
+ #endif
+diff --git a/drivers/gpu/drm/virtio/virtgpu_vq.c b/drivers/gpu/drm/virtio/virtgpu_vq.c
+index 9ff8660b50ad..a04a9b20896d 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_vq.c
++++ b/drivers/gpu/drm/virtio/virtgpu_vq.c
+@@ -215,7 +215,7 @@ void virtio_gpu_dequeue_ctrl_func(struct work_struct *work)
+ 	list_for_each_entry(entry, &reclaim_list, list) {
+ 		resp = (struct virtio_gpu_ctrl_hdr *)entry->resp_buf;
+ 
+-		trace_virtio_gpu_cmd_response(vgdev->ctrlq.vq, resp);
++		trace_virtio_gpu_cmd_response(vgdev->ctrlq.vq, resp, entry->seqno);
+ 
+ 		if (resp->type != cpu_to_le32(VIRTIO_GPU_RESP_OK_NODATA)) {
+ 			if (le32_to_cpu(resp->type) >= VIRTIO_GPU_RESP_ERR_UNSPEC) {
+@@ -261,6 +261,10 @@ void virtio_gpu_dequeue_cursor_func(struct work_struct *work)
+ 	spin_unlock(&vgdev->cursorq.qlock);
+ 
+ 	list_for_each_entry_safe(entry, tmp, &reclaim_list, list) {
++		struct virtio_gpu_ctrl_hdr *resp =
++			(struct virtio_gpu_ctrl_hdr *)entry->resp_buf;
++
++		trace_virtio_gpu_cmd_response(vgdev->cursorq.vq, resp, entry->seqno);
+ 		list_del(&entry->list);
+ 		free_vbuf(vgdev, entry);
+ 	}
+@@ -353,7 +357,8 @@ static int virtio_gpu_queue_ctrl_sgs(struct virtio_gpu_device *vgdev,
+ 	ret = virtqueue_add_sgs(vq, sgs, outcnt, incnt, vbuf, GFP_ATOMIC);
+ 	WARN_ON(ret);
+ 
+-	trace_virtio_gpu_cmd_queue(vq, virtio_gpu_vbuf_ctrl_hdr(vbuf));
++	vbuf->seqno = ++vgdev->ctrlq.seqno;
++	trace_virtio_gpu_cmd_queue(vq, virtio_gpu_vbuf_ctrl_hdr(vbuf), vbuf->seqno);
+ 
+ 	atomic_inc(&vgdev->pending_commands);
+ 
+@@ -465,8 +470,10 @@ static void virtio_gpu_queue_cursor(struct virtio_gpu_device *vgdev,
+ 		spin_lock(&vgdev->cursorq.qlock);
+ 		goto retry;
+ 	} else {
++		vbuf->seqno = ++vgdev->cursorq.seqno;
+ 		trace_virtio_gpu_cmd_queue(vq,
+-			virtio_gpu_vbuf_ctrl_hdr(vbuf));
++			virtio_gpu_vbuf_ctrl_hdr(vbuf),
++			vbuf->seqno);
+ 
+ 		notify = virtqueue_kick_prepare(vq);
+ 	}
+-- 
+2.38.1
 
-
-
-
->
->> +
->> +        cnt = of_property_count_u32_elems(endpoint, 
->> "link-frequencies");
->> +        if (cnt < 0) {
->> +            parser->max_dp_link_rate = DP_LINK_FREQUENCY_HBR2; /* 
->> 54000 khz */
->> +        } else {
->> +            of_property_read_u32_array(endpoint, "link-frequencies", 
->> &frequence, 1);
->
-> link-frequencies is u64 array.
->
->> +            parser->max_dp_link_rate = frequence;
->> +        }
->>       }
->>   -    parser->max_dp_lanes = len;
->> +    pr_err("%s: kuogee, lane=%d frequency=%d\n", __func__, 
->> parser->max_dp_lanes, parser->max_dp_link_rate);
->> +
->
-> Leftover?
->
->>       return 0;
->>   }
->>   diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h 
->> b/drivers/gpu/drm/msm/dp/dp_parser.h
->> index 866c1a8..76ddb751 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_parser.h
->> +++ b/drivers/gpu/drm/msm/dp/dp_parser.h
->> @@ -15,6 +15,7 @@
->>   #define DP_LABEL "MDSS DP DISPLAY"
->>   #define DP_MAX_PIXEL_CLK_KHZ    675000
->>   #define DP_MAX_NUM_DP_LANES    4
->> +#define DP_LINK_FREQUENCY_HBR2    540000
->>     enum dp_pm_type {
->>       DP_CORE_PM,
->> @@ -119,6 +120,7 @@ struct dp_parser {
->>       struct dp_io io;
->>       struct dp_display_data disp_data;
->>       u32 max_dp_lanes;
->> +    u32 max_dp_link_rate;
->>       struct drm_bridge *next_bridge;
->>         int (*parse)(struct dp_parser *parser);
->
