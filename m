@@ -2,128 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE47963E43E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E165F63E437
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiK3XG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 18:06:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S229559AbiK3XFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:05:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiK3XGV (ORCPT
+        with ESMTP id S229445AbiK3XFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 18:06:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E11950EC
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:05:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669849529;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Wed, 30 Nov 2022 18:05:44 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B6294939
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:05:42 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AB1A41F45B;
+        Wed, 30 Nov 2022 23:05:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1669849541; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=chCgMEOdPcT2pjDuX1oaF0+9J3jNNFoDJQhqkxGPISA=;
-        b=h7hHT419mpZn7L0A+INRNceHcGUftkeEvaio0744bs1m0mrnUqi3TjteYJ5L6VvIU5wTl9
-        IYxO3CZn/jwJ1sPBZmVkp9DItHKTIP2a81w+7mWYFJmeMLWKSwQw1Oaj2bfL3siKmSgizE
-        v1+PasCE9ZP/Jxb5/b0v8DJZjenhsHs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-617-hLY3PVO3Mv259JTv7fsqyw-1; Wed, 30 Nov 2022 18:05:27 -0500
-X-MC-Unique: hLY3PVO3Mv259JTv7fsqyw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        bh=x6t/1gH9rWwLg3waldr2UlOAUoUcBLbX/7yAdRnju3k=;
+        b=S4dvT7AAegiHK2rewnwfpJ3fDHpmbEElZFQH7qyk2FtAJdF1owpiBfegGuTLj/mfFcWuSi
+        VSkS4yqWIZCg6WWH+gmBLmGq0RztvMRnCdcxkAdy5JKnqxOwuRHXhXE3Nd2k2SiL3ZqC1i
+        llQVfqJn2CyM2tm4OoHD1F1Z+Bcswcc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1669849541;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x6t/1gH9rWwLg3waldr2UlOAUoUcBLbX/7yAdRnju3k=;
+        b=vQ+jVArFkV0qwv4Kn+exiXdJbzxi+pgL6c3v1SpZkTHCcz06jrKMH957eMeSdjipdHPkLg
+        C+pETNm6uGiP87CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E622E2999B58;
-        Wed, 30 Nov 2022 23:05:26 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.36])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 56C42C15BB4;
-        Wed, 30 Nov 2022 23:05:25 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAEXW_YSd3dyxHxnU1EuER+xyBGGatONzPovphFX5K9seSbkdkg@mail.gmail.com>
-References: <CAEXW_YSd3dyxHxnU1EuER+xyBGGatONzPovphFX5K9seSbkdkg@mail.gmail.com> <20221130181316.GA1012431@paulmck-ThinkPad-P17-Gen-1> <20221130181325.1012760-14-paulmck@kernel.org> <CAEXW_YS1nfsV_ohXDaB1i2em=+0KP1DofktS24oGFa4wPAbiiw@mail.gmail.com> <639433.1669835344@warthog.procyon.org.uk>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     dhowells@redhat.com, "Paul E. McKenney" <paulmck@kernel.org>,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        Marc Dionne <marc.dionne@auristor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH rcu 14/16] rxrpc: Use call_rcu_hurry() instead of call_rcu()
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7274513A70;
+        Wed, 30 Nov 2022 23:05:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id lSwGG8Xhh2MhbgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 30 Nov 2022 23:05:41 +0000
+Message-ID: <b98a61ae-da11-00c0-60a9-30a3c043f761@suse.cz>
+Date:   Thu, 1 Dec 2022 00:05:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <658623.1669849522.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 30 Nov 2022 23:05:22 +0000
-Message-ID: <658624.1669849522@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v3 2/2] mm/slub, kunit: Add a test case for kmalloc
+ redzone check
+To:     Feng Tang <feng.tang@intel.com>, Marco Elver <elver@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oliver Glitta <glittao@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20221130085451.3390992-1-feng.tang@intel.com>
+ <20221130085451.3390992-2-feng.tang@intel.com>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221130085451.3390992-2-feng.tang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Joel Fernandes <joel@joelfernandes.org> wrote:
+On 11/30/22 09:54, Feng Tang wrote:
+> kmalloc redzone check for slub has been merged, and it's better to add
+> a kunit case for it, which is inspired by a real-world case as described
+> in commit 120ee599b5bf ("staging: octeon-usb: prevent memory corruption"):
+> 
+> "
+>   octeon-hcd will crash the kernel when SLOB is used. This usually happens
+>   after the 18-byte control transfer when a device descriptor is read.
+>   The DMA engine is always transferring full 32-bit words and if the
+>   transfer is shorter, some random garbage appears after the buffer.
+>   The problem is not visible with SLUB since it rounds up the allocations
+>   to word boundary, and the extra bytes will go undetected.
+> "
+> 
+> To avoid interrupting the normal functioning of kmalloc caches, a
+> kmem_cache mimicing kmalloc cache is created with similar flags, and
+> kmalloc_trace() is used to really test the orig_size and redzone setup.
+> 
+> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
+> Signed-off-by: Feng Tang <feng.tang@intel.com>
+> ---
+> Changelog:
+> 
+>   since v2:
+>     * only add SLAB_KMALLOC to SLAB_CACHE_FLAGS and SLAB_FLAGS_PERMITTEDa,
+>       and use new wrapper of cache creation(Vlastimil Babka)
+> 
+>   since v1:
+>     * create a new cache mimicing kmalloc cache, reduce dependency
+>       over global slub_debug setting (Vlastimil Babka)
+> 
+>  lib/slub_kunit.c | 22 ++++++++++++++++++++++
+>  mm/slab.h        |  4 +++-
+>  2 files changed, 25 insertions(+), 1 deletion(-)
+> 
+> diff --git a/lib/slub_kunit.c b/lib/slub_kunit.c
+> index 5b0c8e7eb6dc..ff24879e3afe 100644
+> --- a/lib/slub_kunit.c
+> +++ b/lib/slub_kunit.c
+> @@ -135,6 +135,27 @@ static void test_clobber_redzone_free(struct kunit *test)
+>  	kmem_cache_destroy(s);
+>  }
+>  
+> +static void test_kmalloc_redzone_access(struct kunit *test)
+> +{
+> +	struct kmem_cache *s = test_kmem_cache_create("TestSlub_RZ_kmalloc", 32,
+> +				SLAB_KMALLOC|SLAB_STORE_USER|SLAB_RED_ZONE);
+> +	u8 *p = kmalloc_trace(s, GFP_KERNEL, 18);
+> +
+> +	kasan_disable_current();
+> +
+> +	/* Suppress the -Warray-bounds warning */
+> +	OPTIMIZER_HIDE_VAR(p);
+> +	p[18] = 0xab;
+> +	p[19] = 0xab;
+> +
+> +	kmem_cache_free(s, p);
+> +	validate_slab_cache(s);
+> +	KUNIT_EXPECT_EQ(test, 2, slab_errors);
 
-> > Note that this conflicts with my patch:
-> >
-> >         rxrpc: Don't hold a ref for connection workqueue
-> >         https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux=
--fs.git/commit/?h=3Drxrpc-next&id=3D450b00011290660127c2d76f5c5ed264126eb2=
-29
-> >
-> > which should render it unnecessary.  It's a little ahead of yours in t=
-he
-> > net-next queue, if that means anything.
-> =
+With this ordering the expectation was failing as slab_Errors was 0, had to
+fix it up to look more like TestSlub_RZ_alloc:
 
-> Could you clarify why it is unnecessary?
-
-Rather than tearing down parts of the connection it only logs a trace line=
-,
-frees the memory and decrements the counter on the namespace.  This it use=
-d to
-account that all the pieces of memory allocated in that namespace are gone
-before the namespace is removed to check for leaks.  The RCU cleanup used =
-to
-use some other stuff (such as the peer hash) in the rxrpc_net struct but n=
-o
-longer will after the patches I submitted.
-
-> After your patch, you are still doing a wake up in your call_rcu() callb=
-ack:
->
-> - ASSERTCMP(refcount_read(&conn->ref), =3D=3D, 0);
-> + if (atomic_dec_and_test(&rxnet->nr_conns))
-> +    wake_up_var(&rxnet->nr_conns);
+> +	kasan_enable_current();
+> +	kmem_cache_destroy(s);
 > +}
-> =
+> +
 
-> Are you saying the code can now tolerate delays? What if the RCU
-> callback is invoked after arbitrarily long delays making the sleeping
-> process to wait?
+--- a/lib/slub_kunit.c
++++ b/lib/slub_kunit.c
+@@ -148,11 +148,11 @@ static void test_kmalloc_redzone_access(struct kunit *test)
+        p[18] = 0xab;
+        p[19] = 0xab;
+ 
+-       kmem_cache_free(s, p);
+        validate_slab_cache(s);
+        KUNIT_EXPECT_EQ(test, 2, slab_errors);
+ 
+        kasan_enable_current();
++       kmem_cache_free(s, p);
+        kmem_cache_destroy(s);
+ }
 
-True.  But that now only holds up the destruction of a net namespace and t=
-he
-removal of the rxrpc module.
-
-> If you agree, you can convert the call_rcu() to call_rcu_hurry() in
-> your patch itself. Would you be willing to do that? If not, that's
-> totally OK and I can send a patch later once yours is in (after
-> further testing).
-
-I can add it to part 4 (see my rxrpc-ringless-5 branch) if it is necessary=
-.
-
-David
-
+With that, added both to slab.git branch slab/for-6.2/kmalloc_redzone
+Thanks!
