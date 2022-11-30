@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9371A63D1CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEF463D1CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:26:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233117AbiK3J0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 04:26:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
+        id S233189AbiK3J0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 04:26:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiK3JZ7 (ORCPT
+        with ESMTP id S229895AbiK3J0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 04:25:59 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9922C2A967;
-        Wed, 30 Nov 2022 01:25:58 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id n205so18140623oib.1;
-        Wed, 30 Nov 2022 01:25:58 -0800 (PST)
+        Wed, 30 Nov 2022 04:26:02 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5096932B82
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:26:01 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id o12so7329966pjo.4
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:26:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zbHI1uW0B/bUDnJ0AXXSb3CdFb68rbl4AKwLYqiwj+I=;
-        b=dRrlLbN0dLYqYxMdXq7PcZcM4pdcMPyjUPM2N9Qjrli6oFHMVq7YxmOxGIpd8dSRvH
-         NBF2HhAlED9O8eMR7sNTiEwORU2jjLUjMflfhp5R+zrL8I3/Dt4pTfx2EVgeElo51j+H
-         JPUaZZrF11poDygHcDSfMJWwGFntVzLAxxu2Qoym+YtgtAHUBKbvBuHd+9W1OX3svlwU
-         3jKitxJ8Ib6CzUMJFed9mwvjXPMZ6pj05dpWGgCBYZpuGOLjfm+dFSKNwBzoxafGuBXs
-         iD8OFthAgUF7AW/eBkzmVKY/7tfIXBybf6g+waWeF67esSNNhYTU1w3XgLBX3Som0iS2
-         Md5w==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TyJDDvQfeBb1GezHTkEwABeQFr6KK0pjnwnX5KAKxeg=;
+        b=VYtBzJfydNprTCCyGjvSmq2UTPhRtCyEM+GYH3ITzI0kz1LzU38rjc4HNh7eMcTvkn
+         X0NQpBCzxsFcCT2ki5WQXUSmjnkIP3Eg/ALHNonI+eNxpuIV6CBEM0j8tm8z1iIEaN7g
+         6zcKPmXhuHV0HfKCaUPinFddN6vqk/37Ff1LF4ogXL2tIbJg5HQHHiW/y/ATv3TT1Rsf
+         n4RPsURVcttAjBL/EmBnSM8Zu4Yhpk6NnLdOXzs952NRo2ZG30a/RcBJy+iwcqPeHcxu
+         r2VHAMKM6MElynNf6Cfx8cQ8xz7oXg0Fag11t1Alz3045obcUuVp0COnZhcx0HL0eUQm
+         MRhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zbHI1uW0B/bUDnJ0AXXSb3CdFb68rbl4AKwLYqiwj+I=;
-        b=6EN8JWyWW66NU+yU/rVwRfiaWFdXT+5CibREpjqJcDlfyJBdQ7I5oLebBvd+HNFhwX
-         vFu/Cted8ASUkWG9QQv0v6ywCQEjoQtMe0018fcVq7lipuh/X3InZxy4op3OfhERlWSo
-         GyAkrw143yHVBiVkdo6+eR0ndNQvewwbiXHUqrhZJGZSEKrnnRSlBRIDq+P4gScQ6B9c
-         Qy6so8OYMm0PIgpScYzfsi/QUm6E88TR0liLyf4tedwC6ZfTecvf1t3f99BBN8uyq9n8
-         fzbiNwiKeu2wxYuTl0DSoiSMYz/j1y8BULRJvFmiCxUfEzbUXTn6ENSJKfOQD2R9/als
-         602g==
-X-Gm-Message-State: ANoB5pkwkUH1Zv2uI7oQ0hu/3zL5jazHv964o75yjI6fwz6NWAghE0Rf
-        +Y0qyuWkae6mCML3+3iBSBCifNZ5MfjdTIqL2uJ5C/Yow6OhUw==
-X-Google-Smtp-Source: AA0mqf7CAQ+AKTVLm+ECt9KESEXsJKRM65EWepkH0WhXm5liXbwWk0ortUwnZID/hBWY29xEamAr2C+iGy1fsdT7A1w=
-X-Received: by 2002:a05:6808:2ca:b0:359:ca42:419 with SMTP id
- a10-20020a05680802ca00b00359ca420419mr30927505oid.98.1669800357956; Wed, 30
- Nov 2022 01:25:57 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TyJDDvQfeBb1GezHTkEwABeQFr6KK0pjnwnX5KAKxeg=;
+        b=h/W2dIPNZKSwvNSK512D3HtKLsNdSC6mpVuIy2jUOgaQ6r9WomhcxTUUN7IheqnuAF
+         iG5dHhoxsoLLEi9aciDeOu6+92GdWGwx1cy0Zvd7EdX3ICl3QEnuWcdXLP2vUFhm2mwq
+         ooP6rifL20B5NX2+qPNsT3iHgR7omCQkxhSJHf0wVrBiors6q7EC8OsGmtOI70wHnHJT
+         31y+ju5jwv55F4fiTum/DDXql4dIstuDM4AuZEuNouqS5T9KDGnK9eOCiTm6JOD4f2QY
+         8XklPeiFqmD6REhvYANvP9Nttk/r75OMwiwPQgNMtV8AJmxe9Xwfz/zd++nNPAdI7OU4
+         Dk3Q==
+X-Gm-Message-State: ANoB5plWaPuPkXW2BGUUcdksQJlCx5xqGyOhjhSAZFB1eXQQ1Rnu+tUE
+        DawYI8Bi/nKt3JHlNIiWN78=
+X-Google-Smtp-Source: AA0mqf4oI2QKPut3fSn0Z5fZ4t3zbzf+pNIa00ryxVxejW3LTRP4t9O+dRs3TIeX/GvXbvRHUPS6ig==
+X-Received: by 2002:a17:902:ccce:b0:185:4880:91cd with SMTP id z14-20020a170902ccce00b00185488091cdmr41401879ple.130.1669800360563;
+        Wed, 30 Nov 2022 01:26:00 -0800 (PST)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id 21-20020a621615000000b00575f348aa3esm375326pfw.122.2022.11.30.01.25.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 01:25:59 -0800 (PST)
+Date:   Wed, 30 Nov 2022 18:25:54 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, Marco Elver <elver@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oliver Glitta <glittao@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] mm/slub, kunit: add SLAB_SKIP_KFENCE flag for
+ cache creation
+Message-ID: <Y4chov84Uxgls97S@hyeyoo>
+References: <20221130085451.3390992-1-feng.tang@intel.com>
 MIME-Version: 1.0
-References: <20221129140955.137361-1-gch981213@gmail.com> <20221129140955.137361-3-gch981213@gmail.com>
- <98b72494-3188-76d5-2e24-9dc127a8b31a@linaro.org> <CAJsYDVJknDWKMW1tH0M=85tJOPG-HngxhhMzvJpk5qn_Q9mzAg@mail.gmail.com>
- <7b3f97f9-34af-413c-aaad-9108b4f36c51@linaro.org>
-In-Reply-To: <7b3f97f9-34af-413c-aaad-9108b4f36c51@linaro.org>
-From:   Chuanhong Guo <gch981213@gmail.com>
-Date:   Wed, 30 Nov 2022 17:25:46 +0800
-Message-ID: <CAJsYDVKXvJZaqCBx7RSsfVZkKTGdbp78GHA4mvmUdQwyEyGkBQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] dt-bindings: leds: add dt schema for worldsemi,ws2812b-spi
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221130085451.3390992-1-feng.tang@intel.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,47 +79,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+On Wed, Nov 30, 2022 at 04:54:50PM +0800, Feng Tang wrote:
+> When kfence is enabled, the buffer allocated from the test case
+> could be from a kfence pool, and the operation could be also
+> caught and reported by kfence first, causing the case to fail.
+> 
+> With default kfence setting, this is very difficult to be triggered.
+> By changing CONFIG_KFENCE_NUM_OBJECTS from 255 to 16383, and
+> CONFIG_KFENCE_SAMPLE_INTERVAL from 100 to 5, the allocation from
+> kfence did hit 7 times in different slub_kunit cases out of 900
+> times of boot test.
+> 
+> To avoid this, initially we tried is_kfence_address() to check this
+> and repeated allocation till finding a non-kfence address. Vlastimil
+> Babka suggested SLAB_SKIP_KFENCE flag could be used to achieve this,
+> and better add a wrapper function for simplifying cache creation.
+> 
+> Signed-off-by: Feng Tang <feng.tang@intel.com>
+> ---
+> Changelog:
+> 
+>   since v2:
+>     * Don't make SKIP_KFENCE an allowd flag for cache creation, and
+>       solve a bug of failed cache creation issue (Marco Elver)
+>     * Add a wrapper cache creation function to simplify code
+>      including SKIP_KFENCE handling (Vlastimil Babka)
+> 
+>  lib/slub_kunit.c | 35 +++++++++++++++++++++++++----------
+>  1 file changed, 25 insertions(+), 10 deletions(-)
+> 
+> diff --git a/lib/slub_kunit.c b/lib/slub_kunit.c
+> index 7a0564d7cb7a..5b0c8e7eb6dc 100644
+> --- a/lib/slub_kunit.c
+> +++ b/lib/slub_kunit.c
+> @@ -9,10 +9,25 @@
+>  static struct kunit_resource resource;
+>  static int slab_errors;
+>  
+> +/*
+> + * Wrapper function for kmem_cache_create(), which reduces 2 parameters:
+> + * 'align' and 'ctor', and sets SLAB_SKIP_KFENCE flag to avoid getting an
+> + * object from kfence pool, where the operation could be caught by both
+> + * our test and kfence sanity check.
+> + */
+> +static struct kmem_cache *test_kmem_cache_create(const char *name,
+> +				unsigned int size, slab_flags_t flags)
+> +{
+> +	struct kmem_cache *s = kmem_cache_create(name, size, 0,
+> +					(flags | SLAB_NO_USER_FLAGS), NULL);
+> +	s->flags |= SLAB_SKIP_KFENCE;
+> +	return s;
+> +}
+> +
+>  static void test_clobber_zone(struct kunit *test)
+>  {
+> -	struct kmem_cache *s = kmem_cache_create("TestSlub_RZ_alloc", 64, 0,
+> -				SLAB_RED_ZONE|SLAB_NO_USER_FLAGS, NULL);
+> +	struct kmem_cache *s = test_kmem_cache_create("TestSlub_RZ_alloc", 64,
+> +							SLAB_RED_ZONE);
+>  	u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
+>  
+>  	kasan_disable_current();
+> @@ -29,8 +44,8 @@ static void test_clobber_zone(struct kunit *test)
+>  #ifndef CONFIG_KASAN
+>  static void test_next_pointer(struct kunit *test)
+>  {
+> -	struct kmem_cache *s = kmem_cache_create("TestSlub_next_ptr_free", 64, 0,
+> -				SLAB_POISON|SLAB_NO_USER_FLAGS, NULL);
+> +	struct kmem_cache *s = test_kmem_cache_create("TestSlub_next_ptr_free",
+> +							64, SLAB_POISON);
+>  	u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
+>  	unsigned long tmp;
+>  	unsigned long *ptr_addr;
+> @@ -74,8 +89,8 @@ static void test_next_pointer(struct kunit *test)
+>  
+>  static void test_first_word(struct kunit *test)
+>  {
+> -	struct kmem_cache *s = kmem_cache_create("TestSlub_1th_word_free", 64, 0,
+> -				SLAB_POISON|SLAB_NO_USER_FLAGS, NULL);
+> +	struct kmem_cache *s = test_kmem_cache_create("TestSlub_1th_word_free",
+> +							64, SLAB_POISON);
+>  	u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
+>  
+>  	kmem_cache_free(s, p);
+> @@ -89,8 +104,8 @@ static void test_first_word(struct kunit *test)
+>  
+>  static void test_clobber_50th_byte(struct kunit *test)
+>  {
+> -	struct kmem_cache *s = kmem_cache_create("TestSlub_50th_word_free", 64, 0,
+> -				SLAB_POISON|SLAB_NO_USER_FLAGS, NULL);
+> +	struct kmem_cache *s = test_kmem_cache_create("TestSlub_50th_word_free",
+> +							64, SLAB_POISON);
+>  	u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
+>  
+>  	kmem_cache_free(s, p);
+> @@ -105,8 +120,8 @@ static void test_clobber_50th_byte(struct kunit *test)
+>  
+>  static void test_clobber_redzone_free(struct kunit *test)
+>  {
+> -	struct kmem_cache *s = kmem_cache_create("TestSlub_RZ_free", 64, 0,
+> -				SLAB_RED_ZONE|SLAB_NO_USER_FLAGS, NULL);
+> +	struct kmem_cache *s = test_kmem_cache_create("TestSlub_RZ_free", 64,
+> +							SLAB_RED_ZONE);
+>  	u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
+>  
+>  	kasan_disable_current();
+> -- 
+> 2.34.1
+> 
 
-On Wed, Nov 30, 2022 at 5:08 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> And that's exactly what I said - the compatibles should not include bus
-> information. The bus information comes from... the bus!
-
-Oh. I thought there will be a conflict if there is a SPI driver and
-, say, an I2C driver with the same compatible string.
-
-> [...]
-> >>
-> >> Why unit address is optional?
-> >
-> > It isn't. I copy-pasted it from led-class-multicolor.yaml and
-> > didn't check the exact regex.
-> > I'll fix it in the next version.
->
-> Make it required and matching your case.
-
-Got it.
-
-> [...]
-> >>> +      default-intensity:
-> >>> +        description: |
-> >>> +          An array of 3 integer specifying the default intensity of each color
-> >>> +          components in this LED. <255 255 255> if unspecified.
-> >>> +        $ref: /schemas/types.yaml#/definitions/uint32-array
-> >>> +        minItems: 3
-> [...]
-> So this is brightness of each color...
-
-I don't think so.
-See the kernel doc for multicolor LED:
-https://docs.kernel.org/leds/leds-class-multicolor.html
-This property sets the sysfs file multi_intensity while the
-actual LED brightness is controlled with another sysfs
-file called 'brightness'.
-Setting multi_intensity alone doesn't change the LED
-brightness at all.
+Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
 -- 
-Regards,
-Chuanhong Guo
+Thanks,
+Hyeonggon
