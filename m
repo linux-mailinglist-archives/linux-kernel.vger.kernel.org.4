@@ -2,113 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5C763D3E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C85C863D3E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233630AbiK3K7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 05:59:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
+        id S233763AbiK3LA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:00:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233443AbiK3K7q (ORCPT
+        with ESMTP id S230151AbiK3LAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 05:59:46 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025F3240A9
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:59:46 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p0KoK-0005hp-EB; Wed, 30 Nov 2022 11:59:28 +0100
-Received: from pengutronix.de (unknown [IPv6:2a0a:edc0:0:701:38ad:958d:3def:4382])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 7F7A612DD71;
-        Wed, 30 Nov 2022 10:59:25 +0000 (UTC)
-Date:   Wed, 30 Nov 2022 11:59:24 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH] dt-bindings: can: renesas,rcar-canfd: Document RZ/Five
- SoC
-Message-ID: <20221130105924.auw7agizdiguxuod@pengutronix.de>
-References: <20221115123811.1182922-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Wed, 30 Nov 2022 06:00:23 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11202748D6
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:00:22 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 35FC36602B30;
+        Wed, 30 Nov 2022 11:00:21 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669806021;
+        bh=u9Hf8fb2wkuZTn14GmxwJyRB86szK4ksntM7PiVG0SY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HRvIXJ1/iWohl8AyG5Zl/CkNVTrdyazzQ8aBH2BDVYoLG8sc1lTF8H/bVqxUtwB4R
+         nZQVd9bQosAo2rgf4J2uyAX9iSzGwFwj0R5Bs11GlXijpbKnFi/NR/SNXLN4FZH4wi
+         WHreNcd95chi4SzQv5H3tO+RB+fThoYR6PAUfdAy2sw8XRWLZC/qBBdYiJj6D9TCfw
+         RzBjgpHsMiIPsSaO/JDKwq3wmKKWS6OsK61wjvpvJw9XSJAtKVvRrPpQ1z2J0tA3Al
+         +7cuBycU5FNNQlv5OUqYOhJfx0iX6awXthFgF6xgwSf6qnPuca2/C9AzS3oZXXgvpW
+         oGxUK8RXsJndQ==
+Message-ID: <d683a2e7-b886-9bf6-27df-d8c67cedbbdd@collabora.com>
+Date:   Wed, 30 Nov 2022 12:00:18 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="i7azc2naz74qg5oe"
-Content-Disposition: inline
-In-Reply-To: <20221115123811.1182922-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] soc: mediatek: mtk-svs: Enable the IRQ later
+Content-Language: en-US
+To:     Ricardo Ribalda <ribalda@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20221127-mtk-svs-v1-0-7a5819595838@chromium.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221127-mtk-svs-v1-0-7a5819595838@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 27/11/22 21:22, Ricardo Ribalda ha scritto:
+> If the system does not come from reset (like when is booted via
+> kexec()), the peripheral might triger an IRQ before the data structures
+> are initialised.
+> 
+> Fixes:
+> 
+> [    0.227710] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000f08
+> [    0.227913] Call trace:
+> [    0.227918]  svs_isr+0x8c/0x538
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
---i7azc2naz74qg5oe
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-On 15.11.2022 12:38:11, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->=20
-> The CANFD block on the RZ/Five SoC is identical to one found on the
-> RZ/G2UL SoC. "renesas,r9a07g043-canfd" compatible string will be used
-> on the RZ/Five SoC so to make this clear, update the comment to include
-> RZ/Five SoC.
->=20
-> No driver changes are required as generic compatible string
-> "renesas,rzg2l-canfd" will be used as a fallback on RZ/Five SoC.
->=20
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Added to linux-can-next.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---i7azc2naz74qg5oe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOHN4kACgkQrX5LkNig
-012NxAf+Ntvb2Ef9ysCZGZ5eY3r5vbnbeAcAS0jenynLu81pQYhU+jWXN+k3BE4H
-v0Y9+zhfJdu2jfwqcSaHwZ84WNlkz+aRpxgE3bg4L5KqPbyTB34tON3eYQbHzEfN
-ie/O/GkkGFsFx7X2GJ/xpfHqPATIjlifdbnkcp9FVz7dITH2mD3bFc2WM3XrKLnc
-J10glxlNli5aeEK2onSg7fFEGXTX3dt4etLRss+mbuX4HoXHQecvCRcVAQxTwpn+
-Ir6ULc7xvipPY4yLKJlmlGPGito8UksB4L3muQ2sW0arwJdcRW9sdhRCeJz1T8YE
-GTV8tQtODFAkVPXkG/rQAJutnKtolg==
-=Pm24
------END PGP SIGNATURE-----
-
---i7azc2naz74qg5oe--
