@@ -2,106 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF6F63D610
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4DD63D616
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235105AbiK3M41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 07:56:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36230 "EHLO
+        id S233889AbiK3M6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 07:58:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbiK3M4X (ORCPT
+        with ESMTP id S235482AbiK3M6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 07:56:23 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417AC4AF1E;
-        Wed, 30 Nov 2022 04:56:22 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id f13so26787487lfa.6;
-        Wed, 30 Nov 2022 04:56:22 -0800 (PST)
+        Wed, 30 Nov 2022 07:58:49 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDBC4E408
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 04:58:47 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id fy37so41061523ejc.11
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 04:58:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4n4Rmn2+hL+sb6SthagDvmYUmd9v80kaLiVhP5QVD3s=;
-        b=hM2C/JJipHE0NssqshaieloPzbqX2890mUlJ93k/KB7RbHCP9Eoe2x60we3Icoe0Vw
-         akTJgj85AlCEVJAp9R9lBae24DOQQg1I31SGIYxtqAg8y1U0O0j0yXCZP+7K+Owumthf
-         X1GODKixGcox2f8NCUzC5n8ewnp8bOBGzEFu8Zhwwy1nmZ0ZgL3ENFNZhlhbwdbWTCQ5
-         oN0L9JXiSVF09ub4e1wfK1M7RCu6xYpdBKBLGvERUubhYnSRO+AMqcxB9Bh3ctc6Onmu
-         l5BPBNelx9jGHLa9FF8KdFFt1d0+/blNlTXy1V2vcMhdQ7ZDY0M1kxX4WCko5TF1HExn
-         TdVw==
+        d=chromium.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VZK/oG0G2NuDkN3Zt9Gzw1YbRQao+w/pvv7GC7syMzY=;
+        b=cax1DoaooXKpn0DF2NXjX+cZUNFQzeHQsCF3ZlsrPv1mureGxgy8+ADefVUXNM9uIW
+         CKdRCuZ1qiDSLkuA/mpqLbMJT48eBQA4KsmIXG17gTWU82KIzEJXH3n38mFc6HfFhK5+
+         ril5KOr3MFDTFh3dl6cvFxSrNY3+19bKzJ7HU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4n4Rmn2+hL+sb6SthagDvmYUmd9v80kaLiVhP5QVD3s=;
-        b=19SYepF2d3l3knvTQdw6ma3FPMMP1m4J+036KbVS5E14YLbNIb4ke9A5rDfTiDs/Gp
-         PSkvnV4ikTP7idZQHzoPjq50rp7yZjFnLrmd94w8uh4HcqD0YA2NoX9YHMAhfqeJ8Dh9
-         auj3fPKKlab3NKWFkGd6DXzjvhXdKv3WqXXQEIyhxRSOmw0yPCm2nYPWfk33m5wfuWFI
-         2xjA8FI1w8xu2yao83+mE85ZJXxB3YClk1/M2uxT7L4mD2chZDcb+hoh3Ms9vm0PFNhn
-         rk2ngHOE7y1mA4OQ4QUpnS5bh4zH/625HUwP3njbgQmgj5TFBEz+H3uSSOxM4yBx1CgB
-         qVMg==
-X-Gm-Message-State: ANoB5pkuJ3FNQpLWZQLcHYlCTkIRm6XQYCqETmx/ALdeXieF0qbiI9Ac
-        AD/Sn0U6GMMpWTIobSK4lG4=
-X-Google-Smtp-Source: AA0mqf6AtLceB37mD91TwgSsjTW1So+gjiWnxbsmWjercUyyO8pkkaoWj6LbCijX3kDE7ZX+hccRyQ==
-X-Received: by 2002:ac2:4d4f:0:b0:4ae:2436:818c with SMTP id 15-20020ac24d4f000000b004ae2436818cmr19365933lfp.346.1669812980354;
-        Wed, 30 Nov 2022 04:56:20 -0800 (PST)
-Received: from pc636 (host-90-235-25-230.mobileonline.telia.com. [90.235.25.230])
-        by smtp.gmail.com with ESMTPSA id g5-20020a2eb5c5000000b0027781448499sm125715ljn.85.2022.11.30.04.56.19
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VZK/oG0G2NuDkN3Zt9Gzw1YbRQao+w/pvv7GC7syMzY=;
+        b=gnoeg+CYvEoypRKVCi4f5QJt+ons9pfn4cqsQDojZOq//riu5AlnZgvtvAu5swaG8o
+         D6rciROwSE8TKlKLRBUk3Y+O63Cl49dsc7/dA92Sx81Kwk/KlDwpm0Vau4zWEyGN0hGk
+         M1nna0bSvRD7HM2xSPsUsWWJ8hgMzJUD+oqAd96ea0wWO0fG1xWzHPufH4lOXP+D5KFc
+         UowNWNOsVHWdj65cipDHkR6I4UwaXg6HP8sQ/O4JdOBsV8zyrSiweB0aRFWf6il7JHjw
+         d5Y2mw69i8hPR5oJeWGMk1dl4iNRgl6VzeZnWv0w/bVm8MFvUQ857TLjjEinudemZ/J/
+         rLhg==
+X-Gm-Message-State: ANoB5pkEHhnZd3Poh/RAxYEQFshyAdcR5XaMhSkBS6t79ebUiikLZc6V
+        3irogZsWGVJIQBevMn77dTN3jg==
+X-Google-Smtp-Source: AA0mqf7o7/gIBBokSQZ3QX/bREXblDhig+YjdUuH56LgZKXBvfJV2rnrsfAhMcMRbMa/ZSeYTImISQ==
+X-Received: by 2002:a17:906:dfc1:b0:78d:894d:e123 with SMTP id jt1-20020a170906dfc100b0078d894de123mr1246435ejc.112.1669813126359;
+        Wed, 30 Nov 2022 04:58:46 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:29cf:b72a:5a9b:a4aa])
+        by smtp.gmail.com with ESMTPSA id j10-20020a50ed0a000000b0046892e493dcsm619872eds.26.2022.11.30.04.58.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 04:56:20 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Wed, 30 Nov 2022 13:56:17 +0100
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH v2 3/4] rcu/kvfree: Move need_offload_krc() out of
- krcp->lock
-Message-ID: <Y4dS8X+Ir7egYBTD@pc636>
-References: <20221129155822.538434-1-urezki@gmail.com>
- <20221129155822.538434-4-urezki@gmail.com>
- <20221129233833.GA154809@paulmck-ThinkPad-P17-Gen-1>
+        Wed, 30 Nov 2022 04:58:46 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 30 Nov 2022 13:58:22 +0100
+Subject: [PATCH v3] mailbox: mtk-cmdq: Do not request irq until we are ready
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221129233833.GA154809@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221125-mtk-mailbox-v3-0-c4b635052b65@chromium.org>
+To:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2213; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=JaMGeOMpmAXuv3OKor0whCcN0kyMhzBZsPq/TlDMCd0=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjh1N1HmjWa3ZkM+ohfEpYfD/yTFRjgkqcXvs7TAbz
+ iHD9waiJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4dTdQAKCRDRN9E+zzrEiNVbD/
+ 997bPhkM4Tp0Vm9eaTCHZ8XZDPLNvOrVogWdgK/ByjYWNQ4137QEZwgW+YLN7LCGEm6Z5ByeTACf0+
+ 3dSNgK+4ftYeEsYPIEzOVSVkfK+bWMz4H/y4/OrzicCKQOJTXsO9r47SmwYHLLM/7YL09pdpuGxAIG
+ 7Aa2DYVQ8cQy0WctP5qFfZ7W6iGXFdZKRtTSCX2eHGwb6iPjCXAc1l+INxVyF8URkCIHF3zIF3zTL+
+ 3uyntHRoTPECk+hDVXm+htEE/l40MiVxoR6+/BH2YzMOJK4n0h8nhU4zTwok1Vkt5x8q9SpJsOnZFA
+ nn3LauNEQJSHpUwhac+Y04QnL1FZCg6nhGOxLGtleSNrc3wDuLtHI0oMMx82SvGI7gH4FQgaP9yQte
+ fvEClF21UVBxwTm0ZwEJG779oWAFitYo1NhkZOL2UN9/PytWLjI+NA8rj0bJVP+FNrvcQuMivvUbAv
+ Xo6N5hFPbfCetD0jkRt0UGQ/FylvHNNzURWVIamvdZCuUTZUHcRQmojrT8EFSQKTprna5Q5HVYELKz
+ LG/ze+fwSOUyskGXYl4KLaNvEjB7qZ/Q7t2YRAG1GnhHdZIlTEVrsiYL+e9OwA6eUSSvF+gxqAsqBx
+ GaoDFXUS7nA3mDn7Joo3MvwEqbtrdjczM91St6Jt3JqhzuRpChFdNKAbrdYA==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 03:38:33PM -0800, Paul E. McKenney wrote:
-> On Tue, Nov 29, 2022 at 04:58:21PM +0100, Uladzislau Rezki (Sony) wrote:
-> > Currently a need_offload_krc() function requires the krcp->lock
-> > to be held because krcp->head can not be checked concurrently.
-> > 
-> > Fix it by updating the krcp->head using WRITE_ONCE() macro so
-> > it becomes lock-free and safe for readers to see a valid data
-> > without any locking.
-> 
-> Don't we also need to use READ_ONCE() for the code loading this krcp->head
-> pointer?  Or do the remaining plain C-language accesses somehow avoid
-> running concurrently with those new WRITE_ONCE() invocations?
->
-It can be concurrent. I was thinking about it. For some reason i decided
-to keep readers as a "regular" ones for loading the krcp->head.
+If the system comes from kexec() the peripheral might trigger an IRQ
+befoe we are ready for it. Triggering a crash due to an access to
+invalid memory.
 
-In this case it might take time for readers to see an updated value
-as a worst case scenario.
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: Jassi Brar <jassisinghbrar@gmail.com>
+To: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+---
+Changes in v3:
+- Rebase on top of https://patchwork.kernel.org/project/linux-mediatek/patch/20221102100736.37815-1-angelogioacchino.delregno@collabora.com/
+- Link to v2: https://lore.kernel.org/r/20221125-mtk-mailbox-v2-0-886f70c7173c@chromium.org
 
-So i need to update it or upload one more patch on top of v2. Should
-i upload a new patch?
+Changes in v2:
+- I have managed to repro a different panic. Moving the irq enabling to the very end of probe.
+- Link to v1: https://lore.kernel.org/r/20221125-mtk-mailbox-v1-0-2e3ee120850c@chromium.org
+---
+ drivers/mailbox/mtk-cmdq-mailbox.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-Thanks!
+diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
+index a460ee26eb11..b18d47ea13a0 100644
+--- a/drivers/mailbox/mtk-cmdq-mailbox.c
++++ b/drivers/mailbox/mtk-cmdq-mailbox.c
+@@ -569,12 +569,6 @@ static int cmdq_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	cmdq->irq_mask = GENMASK(cmdq->pdata->thread_nr - 1, 0);
+-	err = devm_request_irq(dev, cmdq->irq, cmdq_irq_handler, IRQF_SHARED,
+-			       "mtk_cmdq", cmdq);
+-	if (err < 0) {
+-		dev_err(dev, "failed to register ISR (%d)\n", err);
+-		return err;
+-	}
+ 
+ 	dev_dbg(dev, "cmdq device: addr:0x%p, va:0x%p, irq:%d\n",
+ 		dev, cmdq->base, cmdq->irq);
+@@ -641,6 +635,13 @@ static int cmdq_probe(struct platform_device *pdev)
+ 
+ 	cmdq_init(cmdq);
+ 
++	err = devm_request_irq(dev, cmdq->irq, cmdq_irq_handler, IRQF_SHARED,
++			       "mtk_cmdq", cmdq);
++	if (err < 0) {
++		dev_err(dev, "failed to register ISR (%d)\n", err);
++		return err;
++	}
++
+ 	return 0;
+ }
+ 
 
---
-Uladzislau Rezki
+---
+base-commit: 1642107db81361b4339643eb90af4839e2cf229f
+change-id: 20221125-mtk-mailbox-ba6cbd1d91b6
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
