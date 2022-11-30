@@ -2,127 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97BF263D5D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:43:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E4A63D5DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234543AbiK3Mno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 07:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
+        id S230151AbiK3Mnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 07:43:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234222AbiK3Mng (ORCPT
+        with ESMTP id S234278AbiK3Mno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 07:43:36 -0500
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42532C664;
-        Wed, 30 Nov 2022 04:43:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=/BlcjrhlqFewCWUJrrIEfdV+ZSjxYvhgiyJGvIdAx+w=; b=bpjDeNkppxzTtMyTUxjxhx0xQh
-        EWKf76ISQ7SoDJ0EOpicgmCOEREw5IHvO653wvxSVqfCsoyjv87MzjvGiTej4MQfOCmLx1x3kdnuD
-        OumJcs7i/XH0vslJ9seiobfgQmmHnCK80GE1XM13w6PHTOmzqI18HEQo2O2wRYzoCJ1R51gBjjrtl
-        Dif7dAIxl5BhbmmOqr7Lpc94+2gOP3MmEGUJ6d72tJsbnqKAzKIiZ9eaaoYjVV37cS8fNW42C8r+v
-        NcEfnn9durihatI+ZxjmdDFlJ0b4HsxQQlmQZHoQ9ludbQJObFoch5RwjKdXg8ASlfns1m1S39a2c
-        Ltmf1QMp7P6atn6OJG8lOC69LNVMlHnEeHhI+Orfdri134X4fa11hX/FHDVJodMk3vG4dYAVE5XnO
-        uMvvXabkcdpip95UufW4LqU1l4tzLXEcR67N62bBWKkXAKU6/wpO846Do6CMRRd+He13JAjXo9O1f
-        t1xU5+fXophHji8FycSiBTiIL71wTwQR/rzyIngTffoGUf436lNQGK+zvQTpTDJ6IVJleV8PhPa0J
-        UQ9FANkrfNtSxzxk3yFASZaGpvD+1HxXNfAgGc8U3RE1rrj3bQVIwYfq6r4xqpzEWBBj2H5iCVeDu
-        SeE7oIWwV8uowKRZB/GoE9zkf/CnLhgGMb2X/DaKI=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Schspa Shi <schspa@gmail.com>, asmadeus@codewreck.org
-Cc:     ericvh@gmail.com, lucho@ionkov.net, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+8f1060e2aaf8ca55220b@syzkaller.appspotmail.com
-Subject: Re: [PATCH] 9p: fix crash when transaction killed
-Date:   Wed, 30 Nov 2022 13:43:20 +0100
-Message-ID: <2356667.R3SNuAaExM@silver>
-In-Reply-To: <Y4c5N/SAuszTLiEA@codewreck.org>
-References: <20221129162251.90790-1-schspa@gmail.com> <m2o7sowzas.fsf@gmail.com>
- <Y4c5N/SAuszTLiEA@codewreck.org>
+        Wed, 30 Nov 2022 07:43:44 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1CA4B753;
+        Wed, 30 Nov 2022 04:43:43 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id z17so11899292pff.1;
+        Wed, 30 Nov 2022 04:43:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0SYFP0szIO4uQWosjf/DBeQUEddgh/eJCRxGlHyoP1o=;
+        b=lGFEahgyoDkFfO4MTJBxV+WDKKjYFLDSWD9cIm+boSkjj2uoMWRWiQcNtpl/TOm5rK
+         sSHEv/glh5oOTksk41RVezXagw6jbuZ40TXl7NEnFNYManHa/w1R71xZZI36J4lX25UM
+         cbcUfD4gneaUwM4QD+SBL6cBzhU+wznPmwiJK9DMF2KXg2dr+bRBElQibmy510sUXU9m
+         PDGF6zV6GJt6ZojTKhrgyy9u/iQhayTWSqnd1UbNFjJ59iUnn8gey849SPnDD1NkqUem
+         y+2zRdZvWk7CPIYegPztuRmyowZwiKIAvxOhInYXosz5F72MggNoCosSPckKf+1f0vF1
+         S69A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0SYFP0szIO4uQWosjf/DBeQUEddgh/eJCRxGlHyoP1o=;
+        b=x6FeW+M2RH1uyFt2ru45iPSctMNc2R3/x/JKx0QXAc7HUhsVS+RhlFg2BKJCALJHk0
+         b4O+tearRIn3s+Ezl/HrIi0sZU/2KCqvyST6ZiSFgetElmvR6F1yZZCwMr2n+QzUumrI
+         dEYuVpy0DxE9FAGD98MqiiWCYIvUNyYZs3tE9p6TKjUWrGIQB6DelMk1lck9AugA+lgT
+         g7j0wDR7xH0Uu8Kk0mJmyk/lv0kWVMre14SSgzCwG9a57uBPQypAps9kPunBpZMSSDJO
+         Wha0QcL2f5trkUklwhCg8bBiPT6O+kLVkOHEUtAAK3XGuLQFr+XfWixK31uin0bj8CFx
+         i5XA==
+X-Gm-Message-State: ANoB5pkfUwBPXuH1Bqk+YNNeundu6DJc03Z5Kj6bmo8iJaPHH97r/oe5
+        833JW589frlhvvcNjLMffy4=
+X-Google-Smtp-Source: AA0mqf6gJ2VDhQCzPJjGyRfnk3iFdVRCTTJb/bbVvhipQMA64yPolrxBfQn0+QAJf7edKJ9vxrG42g==
+X-Received: by 2002:aa7:9416:0:b0:575:518e:dc11 with SMTP id x22-20020aa79416000000b00575518edc11mr11919945pfo.86.1669812223326;
+        Wed, 30 Nov 2022 04:43:43 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-85.three.co.id. [180.214.232.85])
+        by smtp.gmail.com with ESMTPSA id z9-20020a1709027e8900b00186b8752a78sm1374421pla.80.2022.11.30.04.43.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 04:43:42 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 492AB103FF3; Wed, 30 Nov 2022 19:43:39 +0700 (WIB)
+Date:   Wed, 30 Nov 2022 19:43:39 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Tao pilgrim <pilgrimtao@gmail.com>
+Cc:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        corbet@lwn.net, mhocko@kernel.org, roman.gushchin@linux.dev,
+        shakeelb@google.com, akpm@linux-foundation.org,
+        songmuchun@bytedance.com, cgel.zte@gmail.com,
+        ran.xiaokai@zte.com.cn, viro@zeniv.linux.org.uk,
+        zhengqi.arch@bytedance.com, ebiederm@xmission.com,
+        Liam.Howlett@oracle.com, chengzhihao1@huawei.com,
+        haolee.swjtu@gmail.com, yuzhao@google.com, willy@infradead.org,
+        vasily.averin@linux.dev, vbabka@suse.cz, surenb@google.com,
+        sfr@canb.auug.org.au, mcgrof@kernel.org, sujiaxun@uniontech.com,
+        feng.tang@intel.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        chengkaitao@didiglobal.com
+Subject: Re: [PATCH] mm: memcontrol: protect the memory in cgroup from being
+ oom killed
+Message-ID: <Y4dP+3VEYl/YUfK1@debian.me>
+References: <20221130070158.44221-1-chengkaitao@didiglobal.com>
+ <fd28321c-5f00-ba94-daed-2b8da2292c1f@gmail.com>
+ <CAAWJmAYPUK+1GBS0R460pDvDKrLr9zs_X2LT2yQTP_85kND5Ew@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="U2At7WgeybTkF08j"
+Content-Disposition: inline
+In-Reply-To: <CAAWJmAYPUK+1GBS0R460pDvDKrLr9zs_X2LT2yQTP_85kND5Ew@mail.gmail.com>
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, November 30, 2022 12:06:31 PM CET asmadeus@codewreck.org wrote:
-> Schspa Shi wrote on Wed, Nov 30, 2022 at 04:14:32PM +0800:
-> > >  - reqs are alloced in a kmem_cache created with SLAB_TYPESAFE_BY_RCU.
-> > >  This means that if we get a req from idr_find, even if it has just been
-> > >  freed, it either is still in the state it was freed at (hence refcount
-> > >  0, we ignore it) or is another req coming from the same cache (if
-> > 
-> > If the req was newly alloced(It was at a new page), refcount maybe not
-> > 0, there will be problem in this case. It seems we can't relay on this.
-> > 
-> > We need to set the refcount to zero before add it to idr in p9_tag_alloc.
-> 
-> Hmm, if it's reused then it's zero by definition, but if it's a new
-> allocation (uninitialized) then anything goes; that lookup could find
-> and increase it before the refcount_set, and we'd have an off by one
-> leading to use after free. Good catch!
-> 
-> Initializing it to zero will lead to the client busy-looping until after
-> the refcount is properly set, which should work.
-> Setting refcount early might have us use an re-used req before the tag
-> has been changed so that one cannot move.
-> 
-> Could you test with just that changed if syzbot still reproduces this
-> bug? (perhaps add a comment if you send this)
-> 
-> ------
-> diff --git a/net/9p/client.c b/net/9p/client.c
-> index aaa37b07e30a..aa64724f6a69 100644
-> --- a/net/9p/client.c
-> +++ b/net/9p/client.c
-> @@ -297,6 +297,7 @@ p9_tag_alloc(struct p9_client *c, int8_t type, uint t_size, uint r_size,
->  	p9pdu_reset(&req->rc);
->  	req->t_err = 0;
->  	req->status = REQ_STATUS_ALLOC;
-> +	refcount_set(&req->refcount, 0);
->  	init_waitqueue_head(&req->wq);
->  	INIT_LIST_HEAD(&req->req_list);
-> 
-> ----- 
-> 
-> > >  refcount isn't zero, we can check its tag)
-> > 
-> > As for the release case, the next request will have the same tag with
-> > high probability. It's better to make the tag value to be an increase
-> > sequence, thus will avoid very much possible req reuse.
-> 
-> I'd love to be able to do this, but it would break some servers that
-> assume tags are small (e.g. using it as an index for a tag array)
-> ... I thought nfs-ganesha was doing this but they properly put in in
-> buckets, so that's one less server to worry about, but I wouldn't put
-> it past some simple servers to do that; having a way to lookup a given
-> tag for flush is an implementation requirement.
 
-I really think it's time to emit tag number sequentially. If it turns out that
-it's a server that is broken, we could then simply ignore replies with old/
-unknown tag number. It would also help a lot when debugging 9p issues in
-general when you know tag numbers are not re-used (in near future).
+--U2At7WgeybTkF08j
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-A 9p server must not make any assumptions how tag numbers are generated by
-client, whether dense or sparse, or whatever. If it does then server is
-broken, which is much easier to fix than synchronization issues we have to
-deal with like this one.
+On Wed, Nov 30, 2022 at 07:33:01PM +0800, Tao pilgrim wrote:
+> On Wed, Nov 30, 2022 at 4:41 PM Bagas Sanjaya <bagasdotme@gmail.com> wrot=
+e:
+> >
+> > On 11/30/22 14:01, chengkaitao wrote:
+> > > From: chengkaitao <pilgrimtao@gmail.com>
+> > >
+> >
+> > Yikes! Another patch from ZTE guys.
+> >
+> > I'm suspicious to patches sent from them due to bad reputation with
+> > kernel development community. First, they sent all patches via
+> > cgel.zte@gmail.com (listed in Cc) but Greg can't sure these are really
+> > sent from them ([1] & [2]). Then they tried to workaround by sending
+> > from their personal Gmail accounts, again with same response from him
+> > [3]. And finally they sent spoofed emails (as he pointed out in [4]) -
+> > they pretend to send from ZTE domain but actually sent from their
+> > different domain (see raw message and look for X-Google-Original-From:
+> > header.
+>=20
+> Hi Bagas Sanjaya,
+>=20
+> I'm not an employee of ZTE, just an ordinary developer. I really don't kn=
+ow
+> all the details about community and ZTE, The reason why I cc cgel.zte@gma=
+il.com
+> is because the output of the script <get_maintainer.pl> has the
+> address <cgel.zte@gmail.com>.
+>=20
+> If there is any error in the format of the email, I will try my best
+> to correct it.
+>=20
 
-> That shouldn't be a problem though as that will just lead to either fail
-> the guard check after lookup (m->rreq->status != REQ_STATUS_SENT) or be
-> processed as a normal reply if it's already been sent by the other
-> thread at this point.
-> OTOH, that m->rreq->status isn't protected by m->req_lock in trans_fd,
-> and that is probably another bug...
+OK, thanks for clarification. At first I thought you were ZTE guys.
+Sorry for inconvenience.
 
+Now I ask: why do your email seem spoofed (sending from your gmail
+account but there is extra gmail-specific header that makes you like
+"sending" from your corporate email address? Wouldn't it be nice (and
+appropriate) if you can send and receive email with the latter address
+instead?
 
+Thanks.
 
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--U2At7WgeybTkF08j
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY4dP9QAKCRD2uYlJVVFO
+o2fFAP9CcwtLbXBJc0AgmMHIUvGNiyhA9iDVaDQGg5tezc3siAD+MdwAl/MqnXUT
+o9/M5ZNbB5lgA8Gdug0py/N/VDy0TQc=
+=RwhN
+-----END PGP SIGNATURE-----
+
+--U2At7WgeybTkF08j--
