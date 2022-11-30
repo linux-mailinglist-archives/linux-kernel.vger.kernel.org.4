@@ -2,118 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4FA263DA4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D05963DA50
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiK3QNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 11:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37078 "EHLO
+        id S230134AbiK3QNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 11:13:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiK3QNp (ORCPT
+        with ESMTP id S229642AbiK3QNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 30 Nov 2022 11:13:45 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F270D1173;
-        Wed, 30 Nov 2022 08:13:43 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id C601A3200940;
-        Wed, 30 Nov 2022 11:13:39 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 30 Nov 2022 11:13:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1669824819; x=1669911219; bh=6rNwOE8DeU
-        XOqrm/Kv8c4D9qT8aLyNOPDcz87qvtpV0=; b=bTDLd0LmS+taWzPqET6R468smt
-        ICpm5PaW9y9FF9OX9WWDBtiDPCqlaBa2hLWfZdeSeOo9irnuayXDqGjh21/JSEDJ
-        SjRa10tBk9bWBCl6+V1h3osSzo2XY1d8pOA0QL8+siqwrzKeFDJK5XDddQeKITaz
-        W2L/KO+o8HJAayx0MGw7d1xi7dC6+qUcSXVCM4UIlk2F2gu1vXF9/Mo7BpTRbYD+
-        vR2q14OKEp9anR5mJx84UueAJxlyl2W8cmtD5HsxokNS/jjEVxzi9GaEbMVqdrkn
-        dPs4mMbqZWqwPlpxxdFMRKRPYk6GtQqr+hnZz2SY7bOmUFo/lveg0NgEvVJg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669824819; x=1669911219; bh=6rNwOE8DeUXOqrm/Kv8c4D9qT8aL
-        yNOPDcz87qvtpV0=; b=alGiynL0TA91iv2tpMX0NO/ThMKI94ZgXZK0nPeZLsB2
-        J9Jm1w0fRKWyoBnnYY9uLxef6Qxbtf6XB+UAq9YRn/7T3057pwW6C2GJS1Xauwa/
-        V1SZBzDDCkbSMHcnQmmse1iStOugP5CiuhBFwP/L1bnGHHCuoVJIFfMupBv2ZfwE
-        FKogwX/v2NSThUvGukI2WTH2QntNfQxLojtzT1k2cjSrFYEoh1oJcQxNioWvtU4i
-        /vaoBpsd6OIAQr0lLeVpcH3OX1SH8sDeCBHTqe6pZWcyfu2lYTeCSVJ6s06RZ/bG
-        IO3FCHHnr2O+XuTaLcsjVccRv/Q7IKDxetuK8ISktg==
-X-ME-Sender: <xms:M4GHY6cO3AM7unfeJbFxhoSPwNRza2DVkFpcMN4-E77M_f7cFgPueA>
-    <xme:M4GHY0NjxvUB_r2RHvnkuHrIMfC71iarmrn3GI05pG4w4IANCc6VMcooTB-dBWbNa
-    Q_hJFMjQ-gg3D7oDfI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtdefgdekgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:M4GHY7jNynUKD_DT8MF6EJ2ds_yRdFF0iWJeptOAlxD2XXQe9oABVQ>
-    <xmx:M4GHY39TsNaXxsxgJpYcqSX_4RupMOzuRehE6o53QaOkHuo-9gtnKg>
-    <xmx:M4GHY2trbyuVJJkddnJYpVuxSvGHvyWCLJ0WAFw9NwOeVPVdz8wNuw>
-    <xmx:M4GHYwJSDXZSIDajwEIU2vgxcucjE6iT7ybXYUq4jNfd579k7rCN7A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id F365AB60086; Wed, 30 Nov 2022 11:13:38 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <974d7fcb-efbb-4508-a4cb-4b5328669c14@app.fastmail.com>
-In-Reply-To: <CAHmME9oGffi539nEAJkOjC-2yAR+0Ra+wQw5oG6Y6+CRr5e62g@mail.gmail.com>
-References: <20221129210639.42233-1-Jason@zx2c4.com>
- <20221129210639.42233-4-Jason@zx2c4.com>
- <878rjs7mcx.fsf@oldenburg.str.redhat.com> <Y4dt1dLZMmogRlKa@zx2c4.com>
- <Y4dvz4d0dpFzJZ9L@zx2c4.com>
- <16ec2a7a-c469-4732-aeca-e74a9fb88d3e@app.fastmail.com>
- <CAHmME9rpdCGLQzfsNkX=mLHfWeEWi4TyrOf_2rP_9hsyX9v6ow@mail.gmail.com>
- <574ad32d-566e-4c18-a645-1470fc081ede@app.fastmail.com>
- <CAHmME9oGffi539nEAJkOjC-2yAR+0Ra+wQw5oG6Y6+CRr5e62g@mail.gmail.com>
-Date:   Wed, 30 Nov 2022 17:13:18 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Jason A . Donenfeld" <Jason@zx2c4.com>
-Cc:     "Florian Weimer" <fweimer@redhat.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
-        x86@kernel.org, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Adhemerval Zanella Netto" <adhemerval.zanella@linaro.org>,
-        "Carlos O'Donell" <carlos@redhat.com>,
-        "Christian Brauner" <brauner@kernel.org>
-Subject: Re: [PATCH v10 3/4] random: introduce generic vDSO getrandom() implementation
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: from na01-obe.outbound.protection.outlook.com (mail-westus2azolkn19010002.outbound.protection.outlook.com [52.103.10.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234D850D41
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:13:43 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DFuf6IAa6WlAvtRn1/P9yyKBKjJLafCqUf4FwD6B2J82/ayqnNRTOTpkfSAhNu7nszjuIQUzpR/B9dUvlCnw0Z1oiQW1yXEQ9lefjhx0BDau6u/nrKhoeujP5T0iWJQ2kijARfsPZlWEBy8WkJ2FJMucrRqnySS47OgOKK8kI2FQ0E3GXMdYPUjZMACElZTAbQbGJJClWqnZDWa+h5JE+i7g+VAzuL31JrucJw5/LrfuY30ULhempJp19AD+SH2p4T4mQH+nYiaLHe4rOcbe1KMQIJQuD3HseKF8IX4ivbAAsiuFM18Owul+H04MnsB+KLRg8p3nddFtcZa84y1hHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sPKtceQEkvgP9Zy4ewLLPZNpzlgexH8YfKfiXq7TJTo=;
+ b=O+p62O6tKy/i0vUB8T66saChS767fRtVd+K3UQB/FJ4EoUnf99XfZtjRkHgC9FIGRBXCOqS/orvfE+rxA+41eTHR2VNcTxOE0G6htUw6LxgNhZ0J5EmuxkDY2wQ1pAK8GimmjKQXmbzpwI5+E/dZa8Oso+Nwd9AJ8K+LUdqp3vu51KbR5XmJLFjR2W5cwfux7YGyWZSkuScVKgtEywlwp9LnKpZ+4TBsJhODD5pcyGLo/EsSMW8etgR/7kNSJMfTrv4dlOZbgJKNnAlZZGyT+vsXoQxEn94CZ9f0DhtJdxsada8/QKVTH0Dg7LoQOFrhknGLPutVycwlZaEUDOgN7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from DS0PR05MB9544.namprd05.prod.outlook.com (2603:10b6:8:11f::15)
+ by DM5PR05MB3273.namprd05.prod.outlook.com (2603:10b6:3:ca::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.20; Wed, 30 Nov
+ 2022 16:13:41 +0000
+Received: from DS0PR05MB9544.namprd05.prod.outlook.com
+ ([fe80::33e4:cb6f:e54a:778f]) by DS0PR05MB9544.namprd05.prod.outlook.com
+ ([fe80::33e4:cb6f:e54a:778f%5]) with mapi id 15.20.5857.023; Wed, 30 Nov 2022
+ 16:13:41 +0000
+From:   Soha Jin <soha@lohu.info>
+To:     Soha Jin <soha@lohu.info>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH driver-core-next] platform: remove useless if-branch in
+ __platform_get_irq_byname()
+Thread-Topic: [PATCH driver-core-next] platform: remove useless if-branch in
+ __platform_get_irq_byname()
+Thread-Index: AQGNOzpBNLe6pR+Hdv3rzYKtKpIDNK7vNeIg
+Sender: Soha Jin <soha@live.cn>
+Date:   Wed, 30 Nov 2022 16:13:41 +0000
+Message-ID: <DS0PR05MB95443EF90A23C41D4700F03ADA159@DS0PR05MB9544.namprd05.prod.outlook.com>
+References: <20221111094542.270540-1-soha@lohu.info>
+In-Reply-To: <20221111094542.270540-1-soha@lohu.info>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 2
+x-tmn:  [zzHc37Pfq3Bjh2u2+O550yfBeyqTAOipOea8fM43QdcokCnQH3EavyOzeSngjww4]
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DS0PR05MB9544:EE_|DM5PR05MB3273:EE_
+x-ms-office365-filtering-correlation-id: ead66a53-c8be-4648-6ae2-08dad2edd926
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ywiZFG/5Dlj1ENgP0tCpe2usGBDXSAB6gEpfWm42fcPtAoin0V5JVL1voTi9SZckTuLdQbBWEAihos6Tte+ll0PuPOKtTxzXWijL2EHxLA3RDFYOHhcTSc27KZV+m0G+rK+H7DOSLfC9BRV2f5ClTZlnAaILx1w2A434kqxoW+mRPQREqxdq7RSWeUaxZyt9e59DzjqKSZ56zhFIHb3X0bTuBfs7Oxc0UBInOmoEu5g4z277lM7B2i8O01RoumdB6HwsDWpnG7cT28rgRibhKTOyx2R7FUPJXniE6/5+ET6QX7DPG9ItZnQ3VDaFE6SXa6qIMxJGUbCMj6EoyczMt444XHe+LCUHuDls9NbmLwXlfZxPKfUXe4KTMlqzphllGHuG4Zd4aS0MxKf6thXEfx95hqCQEgjdKR/H6/euVT38x0u93ScFFYrlTTsZuDmt326GB9Fa2R2AzKibd7CuNErPYuasKkDe3Oyi0qleruTi9q6rcRm/ZeVY6WIfg8/nyZP6TyTXColK7GSs1PJOFz52+iPWZZ39/ObNaBPjG91cHgRGUlyKbn8sTvPdSxCsWLnu8U88xFPTKsB8Ov+E1MPcWtCf5euqK7C3CjANezhzxYt0oHeihUkpP9cilVYRptQdJFJIGA0nPDGOiQjJAJGGmxiWikAWWkAdwR9qBAGoB1gFdoE/8LLOQgHzng0d
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RHZyd3IvTll5QjVDRkM5Ym1HRHVWcFNHOFY0SWt0MTF2a2ltdTByRG94L3JR?=
+ =?utf-8?B?Uy9GeFlIamhveUJGQ1poeUhRS3lQWDFIQ3UrTXRMVnArQzVoRVR0RHkxSjVu?=
+ =?utf-8?B?YjFpdysvTTRaTW1BMVY4VjN2aXllVFNzNmY4amN0UmN2QXd6MXM0eDBPa2J6?=
+ =?utf-8?B?OHFzWUxWVkJCRUdwOE1aUXp0bFl0elhiMUJYNC8yYWEvZ2ZzQSsyclJOWGRz?=
+ =?utf-8?B?N1U5VjBqYjBIR0IxcnRmWEIyZkgxYW51QmM2VnhGdDRoZVgyN3VLZ0FtYVFj?=
+ =?utf-8?B?K002RURnNi9OaytCUlF1QjFrcExHRmZhakxNaXFYdSsyNWVOc1g1ZUhDTldj?=
+ =?utf-8?B?aWxMb3NpRHVGU2l3WlV4cGFaSUV5NCtsdzFpMlk1ZE5KNkRvMnVNeHZGWHll?=
+ =?utf-8?B?aCtUSCs0Vllkb3hZRkErVGpNZmJUM1pWY3B3eWo5Sms2cUdDbkV1MmRWK1JD?=
+ =?utf-8?B?TGNOdEdTZ0FkNXpKRHA4UEtXRDJXZjlkUGFIcjVsUFU5L2RPbDJzZVdmeUw0?=
+ =?utf-8?B?MWMwZ0I3UU85OGNuY28yVzIzeFJDUXpQTEZlMDc2NG50cUU4UXJLZjZiaExm?=
+ =?utf-8?B?UW1nL0dDbE5IdTlBZmFiSjlQRnE4N3lTVTVYZ2hlbHhPRlBwQyswNFRxOHNH?=
+ =?utf-8?B?SFVtc0ZEMC9vcElhdncxVk1ZN1dMbXNWTTZXcldjb25GWUJZN2Zja3hvdER5?=
+ =?utf-8?B?eXV6eFc5b0tQbHhwZlFUc0FPa3pHYUFyekJLV3hyc3NUNXlKdk81ekd4aXJU?=
+ =?utf-8?B?Z0Y3S2w1SUFUVldCT2JVejFIQkVZcnprOTZldG1WS2ZwdUNiTCtKSmFPTnRq?=
+ =?utf-8?B?YjQrY1pxOXhXMVI2ZjIxcjVKQ2J3ZDlaQzFoc2dVQStkTE5OZUFrTjhmcHRa?=
+ =?utf-8?B?WmN0ZXYwTzBGbDBwZ0o1Q3MvSVBwV1QzZldPRHBjT2RrdU04RGtwSU5kdWIw?=
+ =?utf-8?B?cUZ5ci9nUjNweGwyVU1GdXAvY2Z4cmt5VTcxY05iendLOUtiYi80dGJuYjZ6?=
+ =?utf-8?B?Z3U3L3pQRWo2dEQyUFNMZG5kMndvUVpIZ21ZekxZZFVoSzdSRDlNckRnQURs?=
+ =?utf-8?B?S1hlNjVYb3ZZKzhCL3diVXZyYUd3bU5NRVhuQXZZTngySlc3bG1NWG5PZ3ZX?=
+ =?utf-8?B?aEdTaGZMQ1FWRGJodEM4RnhqUzFHYmFTYzRuSnlzVWR4eUVZSFVLMkZYNi8x?=
+ =?utf-8?B?NWhyVFdVNWVEcmtJNEQvc3p2OW1HNmZZZjNQMkMzU09ySlNvMEpMYWVkUXNv?=
+ =?utf-8?B?b3JBNk04bmdUT2R0YUlZTzZaQUdBaFdONUlhZHFMY05SWHlFU1pTQnVzQm14?=
+ =?utf-8?B?dFNGUlo4K0R2WWxlQSt6SnlMUkdMcEFoUm5QaWFVNlNLTlRXY3dsazdFeUFu?=
+ =?utf-8?B?L25nUU1MUXIyVTg1eHJ6SnBjQlZaaVZWNkt3azdqWmlwSDhYRG8yb3hlRWFq?=
+ =?utf-8?B?Z2M2ZTI1VExDVGxKZ3h6UU4zQi9WMnBLSTdYTENIQVBsZlpJdG0rNGljckJz?=
+ =?utf-8?B?bFo5TnJCTmNuV0hGOEdDSWxBT2dOTG9vWExSeVBiTjZCNHVZL3ZvNHZ0K2tE?=
+ =?utf-8?B?Q3JOZGJGRUw3Qm5Fa0pud1Y2aU9VRTNtN3pXdUYvZ29rR0grSlJpODFvU2Z3?=
+ =?utf-8?B?c1A0WU10b09ZTnl3a2NVbUhkWitrRFphYUg4Y0s4dGNFd0ZXdTk2UG9QNkRL?=
+ =?utf-8?B?RnJrWVMyY0xBdkZIQ042OHV1M1E5R0xmT00wUVRzZGdRWjROc0N5eGN5WWho?=
+ =?utf-8?Q?qvsQjD54ye/nkA/Zng=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: sct-15-20-4823-7-msonline-outlook-84f76.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR05MB9544.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: ead66a53-c8be-4648-6ae2-08dad2edd926
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2022 16:13:41.7977
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR05MB3273
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022, at 16:47, Jason A. Donenfeld wrote:
-
->> > There's padding at the end of the structure, yes. But both
->> > `generation` and `is_ready` will be at the same offset. If the
->> > structure grows, then sure, that'll have to be taken into account. But
->> > that's not a problem because this is a private implementation detail
->> > between the vdso code and the kernel.
->>
->> I was not concerned about incompatibility here, but rather about
->> possibly leaking kernel data to the vdso page.
->
-> The vvar page starts out zeroed, no?
-
-The typical problem is someone doing a copy_to_user() of an in-kernel
-structure into the userspace side, which would then copy the
-padding as well. If the source is on the stack, a malicious caller
-can trick the another syscall into leaving sensitive data at this
-exact stack location. Again, I'm not saying that your code is
-vulnerable to that type of attack, just that making all ABI
-structures not have holes is useful for auditing.
-
-    Arnd
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBTb2hhIEppbiA8c29oYUBsb2h1
+LmluZm8+DQo+IFNlbnQ6IEZyaWRheSwgTm92ZW1iZXIgMTEsIDIwMjIgNTo0NiBQTQ0KPiANCj4g
+V2hlbiBDT05GSUdfT0ZfSVJRIGlzIG5vdCBlbmFibGVkLCB0aGVyZSB3aWxsIGJlIGEgc3R1YiBt
+ZXRob2QgdGhhdCBhbHdheXMNCj4gcmV0dXJucyAwIHdoZW4gZ2V0dGluZyBJUlEuIFRodXMsIHRo
+ZSBpZi1icmFuY2ggY2FuIGJlIHJlbW92ZWQgc2FmZWx5Lg0KPiANCj4gRml4ZXM6IGQ0YWQwMTdk
+NjM0NSAoInBsYXRmb3JtOiB1c2UgZndub2RlX2lycV9nZXRfYnluYW1lIGluc3RlYWQgb2YNCj4g
+b2ZfaXJxX2dldF9ieW5hbWUgdG8gZ2V0IGlycSIpDQo+IFNpZ25lZC1vZmYtYnk6IFNvaGEgSmlu
+IDxzb2hhQGxvaHUuaW5mbz4NCj4gLS0tDQo+ICBkcml2ZXJzL2Jhc2UvcGxhdGZvcm0uYyB8IDgg
+KysrLS0tLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25z
+KC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9iYXNlL3BsYXRmb3JtLmMgYi9kcml2ZXJz
+L2Jhc2UvcGxhdGZvcm0uYyBpbmRleA0KPiA5NjhmM2Q3MWVlYWIuLjZjZDdmZDQ3OGM1ZiAxMDA2
+NDQNCj4gLS0tIGEvZHJpdmVycy9iYXNlL3BsYXRmb3JtLmMNCj4gKysrIGIvZHJpdmVycy9iYXNl
+L3BsYXRmb3JtLmMNCj4gQEAgLTQ0MSwxMSArNDQxLDkgQEAgc3RhdGljIGludCBfX3BsYXRmb3Jt
+X2dldF9pcnFfYnluYW1lKHN0cnVjdA0KPiBwbGF0Zm9ybV9kZXZpY2UgKmRldiwNCj4gIAlzdHJ1
+Y3QgcmVzb3VyY2UgKnI7DQo+ICAJaW50IHJldDsNCj4gDQo+IC0JaWYgKCFkZXYtPmRldi5vZl9u
+b2RlIHx8IElTX0VOQUJMRUQoQ09ORklHX09GX0lSUSkpIHsNCj4gLQkJcmV0ID0gZndub2RlX2ly
+cV9nZXRfYnluYW1lKGRldl9md25vZGUoJmRldi0+ZGV2KSwgbmFtZSk7DQo+IC0JCWlmIChyZXQg
+PiAwIHx8IHJldCA9PSAtRVBST0JFX0RFRkVSKQ0KPiAtCQkJcmV0dXJuIHJldDsNCj4gLQl9DQo+
+ICsJcmV0ID0gZndub2RlX2lycV9nZXRfYnluYW1lKGRldl9md25vZGUoJmRldi0+ZGV2KSwgbmFt
+ZSk7DQo+ICsJaWYgKHJldCA+IDAgfHwgcmV0ID09IC1FUFJPQkVfREVGRVIpDQo+ICsJCXJldHVy
+biByZXQ7DQo+IA0KPiAgCXIgPSBwbGF0Zm9ybV9nZXRfcmVzb3VyY2VfYnluYW1lKGRldiwgSU9S
+RVNPVVJDRV9JUlEsIG5hbWUpOw0KPiAgCWlmIChyKSB7DQo+IC0tDQo+IDIuMzAuMg0KPiANCg0K
+UElORy4NCg0KUmVnYXJkcywNClNvaGENCg==
