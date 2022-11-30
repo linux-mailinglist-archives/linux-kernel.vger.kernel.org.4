@@ -2,38 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A076863D677
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5379D63D67A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:20:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233590AbiK3NT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 08:19:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
+        id S234531AbiK3NUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 08:20:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiK3NT4 (ORCPT
+        with ESMTP id S229971AbiK3NUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 08:19:56 -0500
+        Wed, 30 Nov 2022 08:20:47 -0500
 Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F84327920;
-        Wed, 30 Nov 2022 05:19:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BB627920;
+        Wed, 30 Nov 2022 05:20:46 -0800 (PST)
 Received: from local
         by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
          (Exim 4.94.2)
         (envelope-from <daniel@makrotopia.org>)
-        id 1p0N05-0006BA-NZ; Wed, 30 Nov 2022 14:19:45 +0100
-Date:   Wed, 30 Nov 2022 13:19:39 +0000
+        id 1p0N12-0006Bf-9f; Wed, 30 Nov 2022 14:20:44 +0100
+Date:   Wed, 30 Nov 2022 13:20:38 +0000
 From:   Daniel Golle <daniel@makrotopia.org>
 To:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     Steven Liu <steven.liu@mediatek.com>,
         Henry Yen <Henry.Yen@mediatek.com>
-Subject: [PATCH v2 1/2] thermal: mediatek: add support for MT7986 and MT7981
-Message-ID: <Y4dYazyXF02eRGC5@makrotopia.org>
+Subject: [PATCH v2 2/2] dt-bindings: thermal: mediatek: add compatible string
+ for MT7986 and MT7981 SoC
+Message-ID: <Y4dYpoVBmKZSaX2q@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -45,233 +48,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for V3 generation thermal found in MT7986 and MT7981 SoCs.
-Brings code to assign values from efuse as well as new function to
-convert raw temperature to millidegree celsius, as found in MediaTek's
-SDK sources (but cleaned up and de-duplicated)
+Document compatible string 'mediatek,mt7986-thermal' for V3 thermal
+unit found in MT7986 SoCs.
+'mediatek,mt7981-thermal' is also added as it is identical with the
+thermal unit of MT7986.
 
-[1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/baf36c7eef477aae1f8f2653b6c29e2caf48475b
 Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 ---
-Changes since v1: Drop use of adc_oe field in efuse, Henry Yen confirmed
-its use has been dropped intentionally in MTK SDK as well.
+Changes since v1: Properly document both supported SoCs
 
- drivers/thermal/mtk_thermal.c | 122 +++++++++++++++++++++++++++++++++-
- 1 file changed, 119 insertions(+), 3 deletions(-)
+ Documentation/devicetree/bindings/thermal/mediatek-thermal.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 8440692e3890..6a69419f8960 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -150,6 +150,21 @@
- #define CALIB_BUF1_VALID_V2(x)		(((x) >> 4) & 0x1)
- #define CALIB_BUF1_O_SLOPE_SIGN_V2(x)	(((x) >> 3) & 0x1)
- 
-+/*
-+ * Layout of the fuses providing the calibration data
-+ * These macros can be used for MT7981 and MT7986.
-+ */
-+#define CALIB_BUF0_ADC_GE_V3(x)		(((x) >> 0) & 0x3ff)
-+#define CALIB_BUF0_ADC_OE_V3(x)		(((x) >> 10) & 0x3ff)
-+#define CALIB_BUF0_DEGC_CALI_V3(x)	(((x) >> 20) & 0x3f)
-+#define CALIB_BUF0_O_SLOPE_V3(x)	(((x) >> 26) & 0x3f)
-+#define CALIB_BUF1_VTS_TS1_V3(x)	(((x) >> 0) & 0x1ff)
-+#define CALIB_BUF1_VTS_TS2_V3(x)	(((x) >> 21) & 0x1ff)
-+#define CALIB_BUF1_VTS_TSABB_V3(x)	(((x) >> 9) & 0x1ff)
-+#define CALIB_BUF1_VALID_V3(x)		(((x) >> 18) & 0x1)
-+#define CALIB_BUF1_O_SLOPE_SIGN_V3(x)	(((x) >> 19) & 0x1)
-+#define CALIB_BUF1_ID_V3(x)		(((x) >> 20) & 0x1)
-+
- enum {
- 	VTS1,
- 	VTS2,
-@@ -163,6 +178,7 @@ enum {
- enum mtk_thermal_version {
- 	MTK_THERMAL_V1 = 1,
- 	MTK_THERMAL_V2,
-+	MTK_THERMAL_V3,
- };
- 
- /* MT2701 thermal sensors */
-@@ -245,6 +261,27 @@ enum mtk_thermal_version {
- /* The calibration coefficient of sensor  */
- #define MT8183_CALIBRATION	153
- 
-+/* AUXADC channel 11 is used for the temperature sensors */
-+#define MT7986_TEMP_AUXADC_CHANNEL	11
-+
-+/* The total number of temperature sensors in the MT7986 */
-+#define MT7986_NUM_SENSORS		1
-+
-+/* The number of banks in the MT7986 */
-+#define MT7986_NUM_ZONES		1
-+
-+/* The number of sensing points per bank */
-+#define MT7986_NUM_SENSORS_PER_ZONE	1
-+
-+/* MT7986 thermal sensors */
-+#define MT7986_TS1			0
-+
-+/* The number of controller in the MT7986 */
-+#define MT7986_NUM_CONTROLLER		1
-+
-+/* The calibration coefficient of sensor  */
-+#define MT7986_CALIBRATION		165
-+
- struct mtk_thermal;
- 
- struct thermal_bank_cfg {
-@@ -386,6 +423,14 @@ static const int mt7622_mux_values[MT7622_NUM_SENSORS] = { 0, };
- static const int mt7622_vts_index[MT7622_NUM_SENSORS] = { VTS1 };
- static const int mt7622_tc_offset[MT7622_NUM_CONTROLLER] = { 0x0, };
- 
-+/* MT7986 thermal sensor data */
-+static const int mt7986_bank_data[MT7986_NUM_SENSORS] = { MT7986_TS1, };
-+static const int mt7986_msr[MT7986_NUM_SENSORS_PER_ZONE] = { TEMP_MSR0, };
-+static const int mt7986_adcpnp[MT7986_NUM_SENSORS_PER_ZONE] = { TEMP_ADCPNP0, };
-+static const int mt7986_mux_values[MT7986_NUM_SENSORS] = { 0, };
-+static const int mt7986_vts_index[MT7986_NUM_SENSORS] = { VTS1 };
-+static const int mt7986_tc_offset[MT7986_NUM_CONTROLLER] = { 0x0, };
-+
- /*
-  * The MT8173 thermal controller has four banks. Each bank can read up to
-  * four temperature sensors simultaneously. The MT8173 has a total of 5
-@@ -549,6 +594,30 @@ static const struct mtk_thermal_data mt8183_thermal_data = {
- 	.version = MTK_THERMAL_V1,
- };
- 
-+/*
-+ * MT7986 uses AUXADC Channel 11 for raw data access.
-+ */
-+static const struct mtk_thermal_data mt7986_thermal_data = {
-+	.auxadc_channel = MT7986_TEMP_AUXADC_CHANNEL,
-+	.num_banks = MT7986_NUM_ZONES,
-+	.num_sensors = MT7986_NUM_SENSORS,
-+	.vts_index = mt7986_vts_index,
-+	.cali_val = MT7986_CALIBRATION,
-+	.num_controller = MT7986_NUM_CONTROLLER,
-+	.controller_offset = mt7986_tc_offset,
-+	.need_switch_bank = true,
-+	.bank_data = {
-+		{
-+			.num_sensors = 1,
-+			.sensors = mt7986_bank_data,
-+		},
-+	},
-+	.msr = mt7986_msr,
-+	.adcpnp = mt7986_adcpnp,
-+	.sensor_mux_values = mt7986_mux_values,
-+	.version = MTK_THERMAL_V3,
-+};
-+
- /**
-  * raw_to_mcelsius - convert a raw ADC value to mcelsius
-  * @mt:	The thermal controller
-@@ -603,6 +672,22 @@ static int raw_to_mcelsius_v2(struct mtk_thermal *mt, int sensno, s32 raw)
- 	return (format_2 - tmp) * 100;
- }
- 
-+static int raw_to_mcelsius_v3(struct mtk_thermal *mt, int sensno, s32 raw)
-+{
-+	s32 tmp;
-+
-+	if (raw == 0)
-+		return 0;
-+
-+	raw &= 0xfff;
-+	tmp = 100000 * 15 / 16 * 10000;
-+	tmp /= 4096 - 512 + mt->adc_ge;
-+	tmp /= 1490;
-+	tmp *= raw - mt->vts[sensno] - 2900;
-+
-+	return mt->degc_cali * 500 - tmp;
-+}
-+
- /**
-  * mtk_thermal_get_bank - get bank
-  * @bank:	The bank
-@@ -659,9 +744,12 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
- 		if (mt->conf->version == MTK_THERMAL_V1) {
- 			temp = raw_to_mcelsius_v1(
- 				mt, conf->bank_data[bank->id].sensors[i], raw);
--		} else {
-+		} else if (mt->conf->version == MTK_THERMAL_V2) {
- 			temp = raw_to_mcelsius_v2(
- 				mt, conf->bank_data[bank->id].sensors[i], raw);
-+		} else {
-+			temp = raw_to_mcelsius_v3(
-+				mt, conf->bank_data[bank->id].sensors[i], raw);
- 		}
- 
- 		/*
-@@ -887,6 +975,26 @@ static int mtk_thermal_extract_efuse_v2(struct mtk_thermal *mt, u32 *buf)
- 	return 0;
- }
- 
-+static int mtk_thermal_extract_efuse_v3(struct mtk_thermal *mt, u32 *buf)
-+{
-+	if (!CALIB_BUF1_VALID_V3(buf[1]))
-+		return -EINVAL;
-+
-+	mt->adc_oe = CALIB_BUF0_ADC_OE_V3(buf[0]);
-+	mt->adc_ge = CALIB_BUF0_ADC_GE_V3(buf[0]);
-+	mt->degc_cali = CALIB_BUF0_DEGC_CALI_V3(buf[0]);
-+	mt->o_slope = CALIB_BUF0_O_SLOPE_V3(buf[0]);
-+	mt->vts[VTS1] = CALIB_BUF1_VTS_TS1_V3(buf[1]);
-+	mt->vts[VTS2] = CALIB_BUF1_VTS_TS2_V3(buf[1]);
-+	mt->vts[VTSABB] = CALIB_BUF1_VTS_TSABB_V3(buf[1]);
-+	mt->o_slope_sign = CALIB_BUF1_O_SLOPE_SIGN_V3(buf[1]);
-+
-+	if (CALIB_BUF1_ID_V3(buf[1]) == 0)
-+		mt->o_slope = 0;
-+
-+	return 0;
-+}
-+
- static int mtk_thermal_get_calibration_data(struct device *dev,
- 					    struct mtk_thermal *mt)
- {
-@@ -897,6 +1005,7 @@ static int mtk_thermal_get_calibration_data(struct device *dev,
- 
- 	/* Start with default values */
- 	mt->adc_ge = 512;
-+	mt->adc_oe = 512;
- 	for (i = 0; i < mt->conf->num_sensors; i++)
- 		mt->vts[i] = 260;
- 	mt->degc_cali = 40;
-@@ -924,8 +1033,10 @@ static int mtk_thermal_get_calibration_data(struct device *dev,
- 
- 	if (mt->conf->version == MTK_THERMAL_V1)
- 		ret = mtk_thermal_extract_efuse_v1(mt, buf);
--	else
-+	else if (mt->conf->version == MTK_THERMAL_V2)
- 		ret = mtk_thermal_extract_efuse_v2(mt, buf);
-+	else
-+		ret = mtk_thermal_extract_efuse_v3(mt, buf);
- 
- 	if (ret) {
- 		dev_info(dev, "Device not calibrated, using default calibration values\n");
-@@ -955,6 +1066,10 @@ static const struct of_device_id mtk_thermal_of_match[] = {
- 		.compatible = "mediatek,mt7622-thermal",
- 		.data = (void *)&mt7622_thermal_data,
- 	},
-+	{
-+		.compatible = "mediatek,mt7986-thermal",
-+		.data = (void *)&mt7986_thermal_data,
-+	},
- 	{
- 		.compatible = "mediatek,mt8183-thermal",
- 		.data = (void *)&mt8183_thermal_data,
-@@ -1070,7 +1185,8 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 		goto err_disable_clk_auxadc;
- 	}
- 
--	if (mt->conf->version == MTK_THERMAL_V2) {
-+	if (mt->conf->version == MTK_THERMAL_V2 ||
-+	    mt->conf->version == MTK_THERMAL_V3) {
- 		mtk_thermal_turn_on_buffer(apmixed_base);
- 		mtk_thermal_release_periodic_ts(mt, auxadc_base);
- 	}
+diff --git a/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt b/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
+index 5c7e7bdd029a..38b32bb447e3 100644
+--- a/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
++++ b/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
+@@ -13,6 +13,8 @@ Required properties:
+   - "mediatek,mt2701-thermal" : For MT2701 family of SoCs
+   - "mediatek,mt2712-thermal" : For MT2712 family of SoCs
+   - "mediatek,mt7622-thermal" : For MT7622 SoC
++  - "mediatek,mt7981-thermal", "mediatek,mt7986-thermal" : For MT7981 SoC
++  - "mediatek,mt7986-thermal" : For MT7986 SoC
+   - "mediatek,mt8183-thermal" : For MT8183 family of SoCs
+   - "mediatek,mt8516-thermal", "mediatek,mt2701-thermal : For MT8516 family of SoCs
+ - reg: Address range of the thermal controller
 -- 
 2.38.1
 
