@@ -2,47 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7AF63CCEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 02:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6A563CCF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 02:41:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiK3BjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 20:39:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48258 "EHLO
+        id S231546AbiK3BlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 20:41:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiK3BjB (ORCPT
+        with ESMTP id S230101AbiK3BlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 20:39:01 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867AD419AB;
-        Tue, 29 Nov 2022 17:38:59 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMMLR4ZbGz4xN1;
-        Wed, 30 Nov 2022 12:38:55 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669772335;
-        bh=S09qSTxVAeYLa+bEiTStg2a5aihdhW/RVjbfsQ+wyNI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gRriNOGprfi16fxiwu57dQvOm049aXL2lGf/6kCDLjp4i7alGJypfwsDEPKE6csmq
-         dWx35fEKydCB8CdLsFxbCsEaWlSRcZWFzW+cwUJLqpRYfDKvrdRM05cgeMWYp0yhYH
-         YY6C16LbQypoNnm0ofoP7FDkmVtGVFUy/Xcj0OHAVwBbiJgeVYo2BIislB7KSeMuYc
-         VtA1obHrrEK6DwXL5ySdIm99R5uAfISfhjYhSUmuryrtvXvVQ+i5SXcMukMU06wz17
-         Vqv+wS0v4FEylfJKXB9/XVE4hUW1B/K225NuCQerlAH3Xf7RCoJXx7sOPQ1XztRn9X
-         M+E/vfmauDRXw==
-Date:   Wed, 30 Nov 2022 12:38:51 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the driver-core tree
-Message-ID: <20221130123851.6a9f2242@canb.auug.org.au>
+        Tue, 29 Nov 2022 20:41:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4ECE720AF
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 17:40:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669772407;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rNO7g8bYXcgKYmsyunc7q9RriXvgw7+u6mtPM1gx+ic=;
+        b=Zzsvmblwls+I90vlUxSN4NX90573P46ZsH7eKe8+V12upWNFpx8FmoPOmb5X6gjBuvf/jM
+        X52vFNkDgyk9mFhcmlzPSmCCspai0RVG7rXvUK5uvdSK+PLf9FvXwLAgNRW5lRZ7KqdFlY
+        dw0mnTdB9h71k8CPyLbWe1Gfpmh5WLE=
+Received: from mail-vs1-f71.google.com (mail-vs1-f71.google.com
+ [209.85.217.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-483-S0u_W4yPOJW5RrvwI2R71A-1; Tue, 29 Nov 2022 20:40:06 -0500
+X-MC-Unique: S0u_W4yPOJW5RrvwI2R71A-1
+Received: by mail-vs1-f71.google.com with SMTP id k17-20020a056102005100b003b09dba645fso3568229vsp.9
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 17:40:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rNO7g8bYXcgKYmsyunc7q9RriXvgw7+u6mtPM1gx+ic=;
+        b=ExaFu7G7ZVnf6cyKdJq4YTdcKUqZWY6eJM38vNw9p3e5oFvspz7IJVECXw9WrWrSSs
+         +Em3t0X2wktR6V8kuxMd9aPGltZYSBBwW/4Kcp+8FmaeJb74L+eQFulm76n0hjIsSGX3
+         n5TcqjqK4M7hDQJ+iTP+JM5vKVNVrisJ09Im2bEcGop8Rw0ALEcEslyaohETHUxErEo2
+         JsIBwMibcP89NylWmJ7wywhteTb+kyn/ZY7Sx4rwLHOVFBm5UkDwduNBwRGSo5v4oh3/
+         ZFjWKF+q9zz1iF+sEBtGH20W13TgpNOfcxWoQ3WPsvy1SXhcHKfT4r6s0OPgYVMxJ89U
+         NMoA==
+X-Gm-Message-State: ANoB5pmfoovl8VJxvJtvvWhAZEVBc2J2GIWoPaxE2LtOLJvqe1zp3b2p
+        +ytCqW5t2Moy9z38tKK4Q2OvF/mTJgSyCUYnZWlGLpEK1hhVUHZ/7evZeXJ7KE0jictmrHrZ/jv
+        jmepA/0a6niSBKbLBxgcJqJ7UG04Z24SAEqpvasUc
+X-Received: by 2002:a05:6102:3354:b0:3a9:8207:bb1a with SMTP id j20-20020a056102335400b003a98207bb1amr24634196vse.58.1669772405269;
+        Tue, 29 Nov 2022 17:40:05 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7j6L7GT+iLZduG+t5pmCEYt9a7U645cU+T+eAKT4xR/0GB7I+totc2AtxCOh8A9urWLIWyxPZad14aOGpOlME=
+X-Received: by 2002:a05:6102:3354:b0:3a9:8207:bb1a with SMTP id
+ j20-20020a056102335400b003a98207bb1amr24634184vse.58.1669772404971; Tue, 29
+ Nov 2022 17:40:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VB85lSD9ypfr+.h9aNp6B8k";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20221125023045.2158413-1-lulu@redhat.com> <CACGkMEuPMYVamb9saZWX8E38Xu_Q5vS7BKweyUeOaS==uiVZqw@mail.gmail.com>
+ <CACLfguU6VZ7PPf7coj7Fe5ZPdqitekHkL9rfc3o4nWG2uFmonw@mail.gmail.com> <CACGkMEuxuk3nXK3SnXw1k39jcQr-QGTQMeF8-ZPszxHaBJ6f-w@mail.gmail.com>
+In-Reply-To: <CACGkMEuxuk3nXK3SnXw1k39jcQr-QGTQMeF8-ZPszxHaBJ6f-w@mail.gmail.com>
+From:   Cindy Lu <lulu@redhat.com>
+Date:   Wed, 30 Nov 2022 09:39:27 +0800
+Message-ID: <CACLfguVJoe3oGM+NbECOaXZa7AkiJHjfK3-4cBLhLDvBpTf7CA@mail.gmail.com>
+Subject: Re: [PATCH v3] vhost_vdpa: fix the crash in unmap a large memory
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst@redhat.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,109 +77,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/VB85lSD9ypfr+.h9aNp6B8k
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 29 Nov 2022 at 11:04, Jason Wang <jasowang@redhat.com> wrote:
+>
+> On Fri, Nov 25, 2022 at 3:38 PM Cindy Lu <lulu@redhat.com> wrote:
+> >
+> > / and
+> >
+> >
+> > On Fri, 25 Nov 2022 at 15:17, Jason Wang <jasowang@redhat.com> wrote:
+> > >
+> > > On Fri, Nov 25, 2022 at 10:31 AM Cindy Lu <lulu@redhat.com> wrote:
+> > > >
+> > > > While testing in vIOMMU, sometimes guest will unmap very large memo=
+ry,
+> > > > which will cause the crash. To fix this,Move the iommu_unmap to
+> > > > vhost_vdpa_pa_unmap/vhost_vdpa_va_unmap and only unmap the memory
+> > > > that saved in iotlb.
+> > > >
+> > > > Call Trace:
+> > > > [  647.820144] ------------[ cut here ]------------
+> > > > [  647.820848] kernel BUG at drivers/iommu/intel/iommu.c:1174!
+> > > > [  647.821486] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+> > > > [  647.822082] CPU: 10 PID: 1181 Comm: qemu-system-x86 Not tainted =
+6.0.0-rc1home_lulu_2452_lulu7_vhost+ #62
+> > > > [  647.823139] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), =
+BIOS rel-1.15.0-29-g6a62e0cb0dfe-prebuilt.qem4
+> > > > [  647.824365] RIP: 0010:domain_unmap+0x48/0x110
+> > > > [  647.825424] Code: 48 89 fb 8d 4c f6 1e 39 c1 0f 4f c8 83 e9 0c 8=
+3 f9 3f 7f 18 48 89 e8 48 d3 e8 48 85 c0 75 59
+> > > > [  647.828064] RSP: 0018:ffffae5340c0bbf0 EFLAGS: 00010202
+> > > > [  647.828973] RAX: 0000000000000001 RBX: ffff921793d10540 RCX: 000=
+000000000001b
+> > > > [  647.830083] RDX: 00000000080000ff RSI: 0000000000000001 RDI: fff=
+f921793d10540
+> > > > [  647.831214] RBP: 0000000007fc0100 R08: ffffae5340c0bcd0 R09: 000=
+0000000000003
+> > > > [  647.832388] R10: 0000007fc0100000 R11: 0000000000100000 R12: 000=
+00000080000ff
+> > > > [  647.833668] R13: ffffae5340c0bcd0 R14: ffff921793d10590 R15: 000=
+0008000100000
+> > > > [  647.834782] FS:  00007f772ec90640(0000) GS:ffff921ce7a80000(0000=
+) knlGS:0000000000000000
+> > > > [  647.836004] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > [  647.836990] CR2: 00007f02c27a3a20 CR3: 0000000101b0c006 CR4: 000=
+0000000372ee0
+> > > > [  647.838107] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 000=
+0000000000000
+> > > > [  647.839283] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 000=
+0000000000400
+> > > > [  647.840666] Call Trace:
+> > > > [  647.841437]  <TASK>
+> > > > [  647.842107]  intel_iommu_unmap_pages+0x93/0x140
+> > > > [  647.843112]  __iommu_unmap+0x91/0x1b0
+> > > > [  647.844003]  iommu_unmap+0x6a/0x95
+> > > > [  647.844885]  vhost_vdpa_unmap+0x1de/0x1f0 [vhost_vdpa]
+> > > > [  647.845985]  vhost_vdpa_process_iotlb_msg+0xf0/0x90b [vhost_vdpa=
+]
+> > > > [  647.847235]  ? _raw_spin_unlock+0x15/0x30
+> > > > [  647.848181]  ? _copy_from_iter+0x8c/0x580
+> > > > [  647.849137]  vhost_chr_write_iter+0xb3/0x430 [vhost]
+> > > > [  647.850126]  vfs_write+0x1e4/0x3a0
+> > > > [  647.850897]  ksys_write+0x53/0xd0
+> > > > [  647.851688]  do_syscall_64+0x3a/0x90
+> > > > [  647.852508]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > > [  647.853457] RIP: 0033:0x7f7734ef9f4f
+> > > > [  647.854408] Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 29 7=
+6 f8 ff 48 8b 54 24 18 48 8b 74 24 10 41 89 c8
+> > > > [  647.857217] RSP: 002b:00007f772ec8f040 EFLAGS: 00000293 ORIG_RAX=
+: 0000000000000001
+> > > > [  647.858486] RAX: ffffffffffffffda RBX: 00000000fef00000 RCX: 000=
+07f7734ef9f4f
+> > > > [  647.859713] RDX: 0000000000000048 RSI: 00007f772ec8f090 RDI: 000=
+0000000000010
+> > > > [  647.860942] RBP: 00007f772ec8f1a0 R08: 0000000000000000 R09: 000=
+0000000000000
+> > > > [  647.862206] R10: 0000000000000001 R11: 0000000000000293 R12: 000=
+0000000000010
+> > > > [  647.863446] R13: 0000000000000002 R14: 0000000000000000 R15: fff=
+fffff01100000
+> > > > [  647.864692]  </TASK>
+> > > > [  647.865458] Modules linked in: rpcsec_gss_krb5 auth_rpcgss nfsv4=
+ dns_resolver nfs lockd grace fscache netfs v]
+> > > > [  647.874688] ---[ end trace 0000000000000000 ]---
+> > > > [  647.876013] RIP: 0010:domain_unmap+0x48/0x110
+> > > > [  647.878306] Code: 48 89 fb 8d 4c f6 1e 39 c1 0f 4f c8 83 e9 0c 8=
+3 f9 3f 7f 18 48 89 e8 48 d3 e8 48 85 c0 75 59
+> > > > [  647.884581] RSP: 0018:ffffae5340c0bbf0 EFLAGS: 00010202
+> > > > [  647.886308] RAX: 0000000000000001 RBX: ffff921793d10540 RCX: 000=
+000000000001b
+> > > > [  647.888775] RDX: 00000000080000ff RSI: 0000000000000001 RDI: fff=
+f921793d10540
+> > > > [  647.890295] RBP: 0000000007fc0100 R08: ffffae5340c0bcd0 R09: 000=
+0000000000003
+> > > > [  647.891660] R10: 0000007fc0100000 R11: 0000000000100000 R12: 000=
+00000080000ff
+> > > > [  647.893019] R13: ffffae5340c0bcd0 R14: ffff921793d10590 R15: 000=
+0008000100000
+> > > > [  647.894506] FS:  00007f772ec90640(0000) GS:ffff921ce7a80000(0000=
+) knlGS:0000000000000000
+> > > > [  647.895963] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > [  647.897348] CR2: 00007f02c27a3a20 CR3: 0000000101b0c006 CR4: 000=
+0000000372ee0
+> > > > [  647.898719] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 000=
+0000000000000
+> > > >
+> > > > Cc: stable@vger.kernel.org
+> > > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
+> > > > Signed-off-by: Cindy Lu <lulu@redhat.com>
+> > > > ---
+> > > >  drivers/vhost/vdpa.c | 10 ++++++++--
+> > > >  1 file changed, 8 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> > > > index 166044642fd5..e5a07751bf45 100644
+> > > > --- a/drivers/vhost/vdpa.c
+> > > > +++ b/drivers/vhost/vdpa.c
+> > > > @@ -692,6 +692,8 @@ static void vhost_vdpa_pa_unmap(struct vhost_vd=
+pa *v,
+> > > >         struct vhost_iotlb_map *map;
+> > > >         struct page *page;
+> > > >         unsigned long pfn, pinned;
+> > > > +       struct vdpa_device *vdpa =3D v->vdpa;
+> > > > +       const struct vdpa_config_ops *ops =3D vdpa->config;
+> > > >
+> > > >         while ((map =3D vhost_iotlb_itree_first(iotlb, start, last)=
+) !=3D NULL) {
+> > > >                 pinned =3D PFN_DOWN(map->size);
+> > > > @@ -703,6 +705,8 @@ static void vhost_vdpa_pa_unmap(struct vhost_vd=
+pa *v,
+> > > >                         unpin_user_page(page);
+> > > >                 }
+> > > >                 atomic64_sub(PFN_DOWN(map->size), &dev->mm->pinned_=
+vm);
+> > > > +               if ((ops->dma_map =3D=3D NULL) && (ops->set_map =3D=
+=3D NULL))
+> > > > +                       iommu_unmap(v->domain, map->start, map->siz=
+e);
+> > >
+> > > I think we'd better move the ops->dma_unmap() here as well as iommu_u=
+nmap()?
+> > >
+> > > >                 vhost_iotlb_map_free(iotlb, map);
+> > > >         }
+> > > >  }
+> > > > @@ -713,11 +717,15 @@ static void vhost_vdpa_va_unmap(struct vhost_=
+vdpa *v,
+> > > >  {
+> > > >         struct vhost_iotlb_map *map;
+> > > >         struct vdpa_map_file *map_file;
+> > > > +       struct vdpa_device *vdpa =3D v->vdpa;
+> > > > +       const struct vdpa_config_ops *ops =3D vdpa->config;
+> > > >
+> > > >         while ((map =3D vhost_iotlb_itree_first(iotlb, start, last)=
+) !=3D NULL) {
+> > > >                 map_file =3D (struct vdpa_map_file *)map->opaque;
+> > > >                 fput(map_file->file);
+> > > >                 kfree(map_file);
+> > > > +               if (ops->set_map =3D=3D NULL)
+> > > > +                       iommu_unmap(v->domain, map->start, map->siz=
+e);
+> > >
+> > > Need to check where we have dma_unmap() and call that if it exists?
+> > >
+> > > Thanks
+> > >
+> > Hi Jason=EF=BC=8C
+> > I think  these functions are called in vhost_vdpa_unmap,
+> > Do you want to separate the function in vhost_vdpa_unmap
+> > and move it to vhost_vdpa_va_unmap and vhost_vdpa_pa_unmap? I
+>
+> I meant dma_map()/dma_unmap() should be functional equivalent to
+> iommu_map/unmap(). That means we should unmap exactly what is mapped
+> before (vDPA parent may call iommu_unmap in its own dma_unmap() if it
+> needs). If we move the iommu_unmap() from vhost_vdpa_unmap() to
+> vhost_vdpa_{pa|va}_umap, we should move dma_unmap() as well.
+>
+> Thanks
+>
+Got it.thanks Jason, I will change this part
+Thanks
+Cindy
 
-Hi all,
+> > thanks
+> > cindy
+> >
+> > > >                 vhost_iotlb_map_free(iotlb, map);
+> > > >         }
+> > > >  }
+> > > > @@ -805,8 +813,6 @@ static void vhost_vdpa_unmap(struct vhost_vdpa =
+*v,
+> > > >         } else if (ops->set_map) {
+> > > >                 if (!v->in_batch)
+> > > >                         ops->set_map(vdpa, asid, iotlb);
+> > > > -       } else {
+> > > > -               iommu_unmap(v->domain, iova, size);
+> > > >         }
+> > > >
+> > > >         /* If we are in the middle of batch processing, delay the f=
+ree
+> > > > --
+> > > > 2.34.3
+> > > >
+> > >
+> >
+>
 
-After merging the driver-core tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
-
-drivers/scsi/cxlflash/main.c: In function 'cxlflash_class_init':
-drivers/scsi/cxlflash/main.c:3890:33: error: assignment to 'char * (*)(cons=
-t struct device *, umode_t *)' {aka 'char * (*)(const struct device *, shor=
-t unsigned int *)'} from incompatible pointer type 'char * (*)(struct devic=
-e *, umode_t *)' {aka 'char * (*)(struct device *, short unsigned int *)'} =
-[-Werror=3Dincompatible-pointer-types]
- 3890 |         cxlflash_class->devnode =3D cxlflash_devnode;
-      |                                 ^
-
-Caused by commit
-
-  ff62b8e6588f ("driver core: make struct class.devnode() take a const *")
-
-I have applied the following patch for today (please add it to your tree).
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 30 Nov 2022 12:13:00 +1100
-Subject: [PATCH] driver core: fix up missed scsi/cxlflash class.devnode() c=
-onversion.
-
-Fixes: ff62b8e6588f ("driver core: make struct class.devnode() take a const=
- *")
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/scsi/cxlflash/main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/cxlflash/main.c b/drivers/scsi/cxlflash/main.c
-index cd1324ec742d..395b00b942f7 100644
---- a/drivers/scsi/cxlflash/main.c
-+++ b/drivers/scsi/cxlflash/main.c
-@@ -3857,7 +3857,7 @@ static void cxlflash_pci_resume(struct pci_dev *pdev)
-  *
-  * Return: Allocated string describing the devtmpfs structure.
-  */
--static char *cxlflash_devnode(struct device *dev, umode_t *mode)
-+static char *cxlflash_devnode(const struct device *dev, umode_t *mode)
- {
- 	return kasprintf(GFP_KERNEL, "cxlflash/%s", dev_name(dev));
- }
---=20
-2.35.1
-
-I also added the following (found using
-git grep '(struct device\s*\*[^,]*,\s*umode_t[^,]*)'
-- please also add this):
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 30 Nov 2022 12:32:57 +1100
-Subject: [PATCH] driver core: fix up missed drivers/s390/char/hmcdrv_dev.c =
-class.devnode() conversion.
-
-Fixes: ff62b8e6588f ("driver core: make struct class.devnode() take a const=
- *")
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/s390/char/hmcdrv_dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/s390/char/hmcdrv_dev.c b/drivers/s390/char/hmcdrv_dev.c
-index 20e9cd542e03..cb8fdf057eca 100644
---- a/drivers/s390/char/hmcdrv_dev.c
-+++ b/drivers/s390/char/hmcdrv_dev.c
-@@ -90,7 +90,7 @@ static dev_t hmcdrv_dev_no; /* device number (major/minor=
-) */
-  *
-  * Return: recommended device file name in /dev
-  */
--static char *hmcdrv_dev_name(struct device *dev, umode_t *mode)
-+static char *hmcdrv_dev_name(const struct device *dev, umode_t *mode)
- {
- 	char *nodename =3D NULL;
- 	const char *devname =3D dev_name(dev); /* kernel device name */
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/VB85lSD9ypfr+.h9aNp6B8k
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOGtCwACgkQAVBC80lX
-0Gy+WAgAhJYjCPCHHfrlMMnwpwRix4aAtHp/0QmOAqCWesSYhhH/b3eRLpTLkbPc
-HCYyf9Yq69sWt8tswjjXC39IkFEDN34TBQAfAGHZCQbMfQX2z1DyblLy9BYHd5A3
-L80ei5Ja1dVblR+XyrG2yVXl8gw+FDhrwHJWs7FG+b3G5/12bzomFBt9wPijhFra
-pFoWBo+jFP/Z44Vheq6MbpV05T7vfNjPGMJ5zp5CK2YYsEANUNdsEwssTWlRA93/
-ValkkaQBsv1ODw3cawzN4E3wGezAULPOSNRZwIYNsrE/3gPowG6kB6fNvydqDvZJ
-b5ALWCjNr01klURdELdxp05IgixUoQ==
-=B0HT
------END PGP SIGNATURE-----
-
---Sig_/VB85lSD9ypfr+.h9aNp6B8k--
