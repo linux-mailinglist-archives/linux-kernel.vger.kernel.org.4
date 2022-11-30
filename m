@@ -2,103 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8561363E286
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFBD463E293
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:19:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiK3VJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 16:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
+        id S229589AbiK3VTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 16:19:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiK3VJX (ORCPT
+        with ESMTP id S229532AbiK3VTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 16:09:23 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E0288B4F;
-        Wed, 30 Nov 2022 13:09:22 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id f3so17243439pgc.2;
-        Wed, 30 Nov 2022 13:09:22 -0800 (PST)
+        Wed, 30 Nov 2022 16:19:47 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFB58B190
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:19:46 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id vv4so44413414ejc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:19:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7v4d6zaC4L81hfiBNb2Cor9kyL3VqKmV3/kGNvOemQ4=;
-        b=KkQfDW/gc08jpOQwU7UFqMKS7YNnQ9pn2xJKWk1O/71hBqhVuZvr0RPB+dmEmUL5ye
-         xDpaMQ4XhbVldeIM5DIbTL0SLuUc1TY8tpvitVtwhxyYnuHHzufMBZLcTM0uWv4mUKg9
-         WcjfkyG6DzHJOhP3nUpI7C0Kx9TooMPDylwUQ2yRjIsK4pbudxvzTQZYkV3I75xd38c8
-         39fm+Z7m1U8xCTByy7ZY4l0ggq7zbR9Ilgwl6I/3X8P20eJd+68SaFY3ySEWh0o8/tZb
-         V5X8HJayccgkIWTrGUSa2b0gTfKURFTnRcDDQ0h8qJqJV31igDseAKynOE7XcHHBW9Sn
-         eXIA==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=G2ciZKFGb7wlsZU3hBpWnnJGAjRhKB6ThoGOD1MmZTg=;
+        b=YyZZAgg9GfGJYeUSWxMKVAdtaJSDhQL1d0UyJ2GUUWo0DD14x70Nc2Uk4aNpZzQKcc
+         epjbVSjkck3DvE5ruS0hdnw/PGmLapHLMTt5y14EOPPqfyZD46SlJPlF9qP7ZWtm52eI
+         LLRgt3s20ISsVQSpIIW22HolxZonGZgCkYIrs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7v4d6zaC4L81hfiBNb2Cor9kyL3VqKmV3/kGNvOemQ4=;
-        b=jrO45cxDPOSn4/0pGRbkIGjsrGpRZ2GgLKRxGwtSXQKBmarXCEb3nw7zLQHEL2D3AO
-         AR1tceYa9wf8xL36mVJ0KLZKqR40aXdG/s6s/RdQadluPszjftS2b4mzKXUCDck3q2rc
-         cm9qrXP00YmDZQj08HcpN7cxCY/Efo9VJPonn9FwY0SONM2wKI4Sk8XkbqeQPpt3jkOJ
-         p5tp52czK1+5WJJKQQDCWQpzOu54POFSrpRw9LXoK13BMibcFsSGdcJoDAm0G8gbHu85
-         j9BRg03S03uyljkjBARgvNRO8gzQomrTNzQ0gfGRRYOdFbMGxUqzdSwHXc9QgJNjB0mP
-         +wpg==
-X-Gm-Message-State: ANoB5pmiy+HiWUiV2DhMWT1muG8NNQn8lwNh1OXYMsXqza7L9QlbcV5z
-        HBnW2ba9xUByITQRmjKDACo=
-X-Google-Smtp-Source: AA0mqf727J+qaCOMRUQATA0i/21bN+qxdroHDJhyjdFZ3e6lTo6Xn5AhSo1sN4FwwsiuajQVHmnPAA==
-X-Received: by 2002:a63:525e:0:b0:477:bca8:1cd9 with SMTP id s30-20020a63525e000000b00477bca81cd9mr31590682pgl.581.1669842562016;
-        Wed, 30 Nov 2022 13:09:22 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id z17-20020aa79e51000000b0056c3d3f5a8dsm1812338pfq.56.2022.11.30.13.09.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 13:09:21 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 30 Nov 2022 11:09:20 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Kemeng Shi <shikemeng@huawei.com>
-Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 02/10] blk-throttle: Fix that bps of child could
- exceed bps limited in parent
-Message-ID: <Y4fGgGaNBueotI1E@slm.duckdns.org>
-References: <20221129030147.27400-1-shikemeng@huawei.com>
- <20221129030147.27400-3-shikemeng@huawei.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G2ciZKFGb7wlsZU3hBpWnnJGAjRhKB6ThoGOD1MmZTg=;
+        b=N48FaaA0Vz93Cp7l1IeijZgsFxsIqxjUiu/shDjijjghlIezTQ6rtV69/wcOvKeoTV
+         dZjfy6676oEWdYK5eoQ2OTI+o6r+QzN9aVhICt+a9QsHZBrSHPl+Y/DkelXFg/P44OMx
+         wS+F/L2gR4K4kSMwOxfA7AIZ70SUuMUQrBZvYwDKiuDBZNAIxukDhuuf161s8936H+Xh
+         Hi0wfGoj5yG+IPPRcZpZhOxz/1wG39Z9mr1SFdcUKDH/KmhoZdXcNHRc9O7V4u0klOz6
+         hCIn+nrRC5hWBAE/7bDgnzt8gMyt0tQ/DFefPV07hT0KwHXVk1ud4UDMcZmUcbYOR29P
+         07eQ==
+X-Gm-Message-State: ANoB5pnW+FJ3LG9RqJ9GjtpXlZUoX76QPUiA6wZZVQgnzEgc1Pgu+hFp
+        L6Bi/TvbnhqoKlRvx6jif//k4WsiPqiL6EXn
+X-Google-Smtp-Source: AA0mqf7cnjX3NTaUuwRE8x+gDoK7kFZHSCWiMchKBk1IIP00NPNhuWaeTFDvLLu3mgN2M23tIT5uYw==
+X-Received: by 2002:a17:906:5398:b0:7be:43a6:a8f0 with SMTP id g24-20020a170906539800b007be43a6a8f0mr18112709ejo.758.1669843184441;
+        Wed, 30 Nov 2022 13:19:44 -0800 (PST)
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
+        by smtp.gmail.com with ESMTPSA id 2-20020a170906218200b007be886f0db5sm1016029eju.209.2022.11.30.13.19.43
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 13:19:43 -0800 (PST)
+Received: by mail-wr1-f53.google.com with SMTP id h12so37354wrv.10
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:19:43 -0800 (PST)
+X-Received: by 2002:adf:cd82:0:b0:238:b29e:4919 with SMTP id
+ q2-20020adfcd82000000b00238b29e4919mr38939604wrj.583.1669843183080; Wed, 30
+ Nov 2022 13:19:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221129030147.27400-3-shikemeng@huawei.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221130142829.v10.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
+ <20221130142829.v10.2.I80aa32497bfd67bc8a372c1418ccc443ccf193e4@changeid>
+In-Reply-To: <20221130142829.v10.2.I80aa32497bfd67bc8a372c1418ccc443ccf193e4@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 30 Nov 2022 13:19:29 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=VSLz6TLgdvzqdqi04C48gmqyRxVOtzWEdFmKQy9NuAOQ@mail.gmail.com>
+Message-ID: <CAD=FV=VSLz6TLgdvzqdqi04C48gmqyRxVOtzWEdFmKQy9NuAOQ@mail.gmail.com>
+Subject: Re: [PATCH v10 2/2] arm64: dts: qcom: sc7280: Add DT for sc7280-herobrine-zombie
+To:     Owen Yang <ecs.taipeikernel@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Harvey <hunge@google.com>,
+        Bob Moragues <moragues@google.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Gavin Lee <gavin.lee@ecs.com.tw>,
+        Matthias Kaehlcke <mka@google.com>,
+        Abner Yen <abner.yen@ecs.com.tw>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 11:01:39AM +0800, Kemeng Shi wrote:
-> Consider situation as following (on the default hierarchy):
->  HDD
->   |
-> root (bps limit: 4k)
->   |
-> child (bps limit :8k)
->   |
-> fio bs=8k
-> Rate of fio is supposed to be 4k, but result is 8k. Reason is as
-> following:
-> Size of single IO from fio is larger than bytes allowed in one
-> throtl_slice in child, so IOs are always queued in child group first.
-> When queued IOs in child are dispatched to parent group, BIO_BPS_THROTTLED
-> is set and these IOs will not be limited by tg_within_bps_limit anymore.
-> Fix this by only set BIO_BPS_THROTTLED when the bio traversed the entire
-> tree.
-> 
-> There patch has no influence on situation which is not on the default
-> hierarchy as each group is a single root group without parent.
-> 
-> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
+Hi,
 
-Acked-by: Tejun Heo <tj@kernel.org>
+On Tue, Nov 29, 2022 at 10:30 PM Owen Yang <ecs.taipeikernel@gmail.com> wrote:
+>
+> +&pm8350c_pwm_backlight{
+> +       pwms = <&pm8350c_pwm 3 200000>;
+> +};
 
--- 
-tejun
+This is in the right location now, but previously I mentioned that it
+would be nice to have a comment explaining what you're doing. In other
+words, I wish the above was something like:
+
+&pm8350c_pwm_backlight{
+       /* Set the PWM period to 200 microseconds (5kHz duty cycle)
+       pwms = <&pm8350c_pwm 3 200000>;
+};
+
+If you spin a v11 with that change feel free to add my Reviewed-by tag.
+
+
+-Doug
