@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A78863D895
+	by mail.lfdr.de (Postfix) with ESMTP id AC06863D897
 	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiK3OyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 09:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S229780AbiK3OyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 09:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiK3OyR (ORCPT
+        with ESMTP id S229727AbiK3OyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 09:54:17 -0500
+        Wed, 30 Nov 2022 09:54:18 -0500
 Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2076.outbound.protection.outlook.com [40.107.21.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522332AC60;
-        Wed, 30 Nov 2022 06:54:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3B7209B5;
+        Wed, 30 Nov 2022 06:54:17 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eQv4pCh4Q0m1K2sLHHRMdDvRu00gaOxphMp4tZ3mhXFn6wfkPs3UEppB8ciaXVRSAvQS67vKA9g4Pta1oXKVlaT0fzHbnMRe8n6w8a4galaLuJxoUfJQ042zj9I55qW4URyrD99+UPRrEmDoE4/xiJFgZDf/iFeK212Gv10zCYEWkhJX+tcspfxlXY3XD+npJj2LBEE+cp6E0t+E770AIHNxJNfUf9WaxAS0qdiDHWjOfCI8kqkfeMjyIID01PEHNk/cxBHEnm6D4Loe9tr2864Q3/VJXNWCVOa2TXkAE2j1aXvW3YWALOs+vknuj+hfqwUcgOMgswa9XJzKz3TloA==
+ b=ZWnV1h/+HPlL6K8jSUdt2BZvhcHO+BIZyGGyw7of4eymO6QZYAXLc8rmKsxvlSY9rx2tHyh3pFdfWwN6HCtmXUnvrDP/gYRo9TV6OrZzUaMcQYXXK4UdcllznySqlxvZX2nmaDeQNlPZU5N4gsD05TT0Dc8ZEp8XW/OoZl/wWgzjG0UCqPVXynzANgDAAnms6GLYoIes2TbiBC/tI7xacyESGXW4ohMpNb0ZRp1u1KJeXXb1B3EYleI//fwpXmFCmmRaUkzkj8XAFpNbgA6Gsol6gcOzY0Bnmof1fiLuuakyL15+A07BjkLAVvnge6A+ThGGt+6i13HkeaWS4fJ1Ow==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6KGfj0a4nDe53WaQ65o+byEaBR3heOWkJau4frimBEo=;
- b=iw78QA9eU2zlHOu1jLo2CHm0HdZ0FB8r/X8IlsuaK0zwTmGpiej4tQBX+BnNjg55IpspQu2xVhQjdSKjVRiOrRg846QdcHfBmpOpbnW4wCscnpmuL/egca7Rr8jbDR3CyQHElFJ5gpVEmHspf/pKOFRa+MgsbrnpBXdd4uhn9SlTeGJxbTjpC/MnoPpm1ojTLkXSenE7j5Et4uzjHPop/HKQL5/AsQ7Hx6b/qAaxjf6X5adOMIiqXQZ/W7wMkqQ0NEmnY+14piuTlKHB/A6ry48B2hZC043OyCVU8+wZa/aGp+AmbOT5E1DXktbKVOd1LIZfx3o0t4nZbc8oU0Is4w==
+ bh=EgJFone7l8oqZfqhQiTfHhuxlAO7drpTi8/2adeKPDA=;
+ b=mnM62A1SaBrLvYxy2N5KC3AzqWyd2lCC17b+BLyhC/NXqQturHNpoKJB2sd9YeRoDouF1eps0u6XgvzM6zsereDa5BwrpSSykxnGoXv9ZcMioIB1mQgbbN9FBHfoDiXIEf1hRf+L2tOofZUUR1tq0OlFjpBMVsRHAdwcKe6BNo1KtNhAUHoJTi94MGJaX35Qf+7Bt8zIM2zgaFsI3tAVO7lsBOV4nsDMMEc2MUZAHqn8kKF2HUD9RlF68bTG8UeSeK466VaMhh/4j5rqL8fG30G+jvg5OZLdpPTKlE5GLJwkCERCpGeqEqxsCsBVEaNzdmK3njrDxHDiAZsBhKA6rw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wolfvision.net; dmarc=pass action=none
  header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6KGfj0a4nDe53WaQ65o+byEaBR3heOWkJau4frimBEo=;
- b=iPyZXysfYuXK35UXIGcsjsMt3DTbDff6GGIVMU0KAtQEhPdy/qJpp7X0K2W6KwQgp3wGlOu4zIr+psJwbgJ5q2GaHPMhjhhLMGnVUBGiwoMefYPIomPap2UPvihEELr/qPOyeaG2Ebxnh3hKjqIv/5ejfbTzTyimhsYH5sfSwgM=
+ bh=EgJFone7l8oqZfqhQiTfHhuxlAO7drpTi8/2adeKPDA=;
+ b=2Dq+6nl/k5xJ6IlVIyFkDS/8eMLqWl9yUWtAG0y2TJsA6mGi7Y6KQM3kdY2kjCihPKjC6R5dKPIpzTdxyWKnjlqMSkZZPkEClRQCMEIxekColc8CoHKu3BgJMzM7y+DRfDVqaMvQVY+rQdxOzS7hPl51D9rgAC1TDuSjkRPBsQY=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=wolfvision.net;
 Received: from VI1PR08MB4544.eurprd08.prod.outlook.com (2603:10a6:803:100::13)
  by DBBPR08MB5977.eurprd08.prod.outlook.com (2603:10a6:10:209::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Wed, 30 Nov
- 2022 14:54:13 +0000
+ 2022 14:54:14 +0000
 Received: from VI1PR08MB4544.eurprd08.prod.outlook.com
  ([fe80::bcc7:bc51:bf44:1454]) by VI1PR08MB4544.eurprd08.prod.outlook.com
  ([fe80::bcc7:bc51:bf44:1454%6]) with mapi id 15.20.5880.008; Wed, 30 Nov 2022
- 14:54:13 +0000
+ 14:54:14 +0000
 From:   Gerald Loacker <gerald.loacker@wolfvision.net>
 To:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
@@ -53,66 +53,76 @@ Cc:     Jonathan Cameron <jic23@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
         Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
         Michael Riesch <michael.riesch@wolfvision.net>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>
-Subject: [PATCH v5 1/3] iio: add struct declaration for iio types
-Date:   Wed, 30 Nov 2022 15:53:54 +0100
-Message-Id: <20221130145356.1129901-2-gerald.loacker@wolfvision.net>
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v5 2/3] dt-bindings: iio: magnetometer: add ti tmag5273 documentation file
+Date:   Wed, 30 Nov 2022 15:53:55 +0100
+Message-Id: <20221130145356.1129901-3-gerald.loacker@wolfvision.net>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221130145356.1129901-1-gerald.loacker@wolfvision.net>
 References: <20221130145356.1129901-1-gerald.loacker@wolfvision.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-ClientProxiedBy: VI1PR0102CA0084.eurprd01.prod.exchangelabs.com
  (2603:10a6:803:15::25) To VI1PR08MB4544.eurprd08.prod.outlook.com
  (2603:10a6:803:100::13)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: VI1PR08MB4544:EE_|DBBPR08MB5977:EE_
-X-MS-Office365-Filtering-Correlation-Id: 37d13749-aa9d-4a39-4cc1-08dad2e2beb9
+X-MS-Office365-Filtering-Correlation-Id: fe167261-f51d-428f-90d6-08dad2e2bf62
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tY9HgM4JCPOR1N0nXWt1WR+XJ+PA4tZzXQvhve+S1FqGf7mTSINE3B6hxaDRRuB5b25bRHudw0HgCufNihtTj5A+i9usJ2kbXFmHshj/PkCSpqeKdm2Tf5RXm5ADgnA8TE2lXFXqnH8z2zzeY+Ikthrmr6hz/g3RiBFbOmfW3SY50r4Hmin48VRLRsupll08bz04ByE3BGrjmsJWsELAapVzH/L3uNSNAn6DYPiPjyemJ8BU2IZaxmyYa2Niq0rWTy5CBIbIFR4zYgeDsn0IheifNq8QaWLD3i36zFj3+5UNwoY7nbHCIiaSH9MPmG7TR+HzFlhrXIPsGd7L6jEYxAGVnipWhq1EIfyWPDHxiqC8Si1X9bt/T+gEVmxqTZtJFScCLuPwuYDnrEDHxPbQaPnS0ZPwjw495ZFUrCefZu3452grrNjmduQXl5DZNyDr1Y3sI8feV0kqnNEqJh8FlxKJn5ykKxTTpVJEJ+zYkMMVn95WqKBkq+vT7/I9r6mr8yra26OPH5h2cDtrq/t4g7g9xrlYEvf61u71AeaQbfq3mY4RcRaPQkvjwQWrX61RA+a52cBCNGxm+/bgqRc8VSRvNUajlSlubnYtGciHGN6g+nlfacgZPHejHDXKpDTN84SPX1FQOd16X7PlwsTN+L60IRlYctstNIE2coiAyBiB6o6C22PgRJ9EoMzb9vFO
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB4544.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39840400004)(346002)(136003)(396003)(376002)(366004)(451199015)(52116002)(478600001)(66556008)(36756003)(6486002)(26005)(38100700002)(38350700002)(6666004)(6506007)(66476007)(41300700001)(8676002)(66946007)(86362001)(4326008)(316002)(44832011)(4744005)(54906003)(7416002)(5660300002)(8936002)(6512007)(2616005)(186003)(1076003)(107886003)(2906002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 0eMo8f0RJ2lZ/v0gSxOheu+dkmhmTIsjRcQdWipvIFYM6EzQH2sjZDYiL/GXtVgnI2cEr6hEADVEabi1L4sK+fuIOdST3hMGGdW0WLEkpwqOWO/j1NIHFQmL7OKconXgSDbd32i/9fkT5G7NMjZGOe/MPWqxLnigFaad/rXqa33Llb4ZjoBncdh5xITSU++VbixSft6y6ZtTj0qlV9dcE1lK0RWCB3tYKZ1h9UZYBsXb/JJn7ncQVV46Lgq79HugbyQPy4g2KdxQ4C0RJYL6SriBYBTJP9jg2YoACT5937himSLL96dDVjPQ35DENQ03ayCLF1GTbxSJdKG7r/ZsDlA4i7VYWhCIIkQcIEAbrJ1jzSsyRVvKGIML/iMQB0rrbcOIjD4b2XqfpMfhHSCbj6SwaXoJjo9NjD2hyt1KNs8/VL3In9ASkP+139shT1k8elvo2ISHhl44atdll+1biPjtEguHoA5/nXFEKrMYm5PlDkGWLUDMa2ZykwqcMpNOFcB0SY3rOR/wrBrePuGugppETDlvu8IjBLzw/IMjX/SSWmD4mXiCxLSHy69cgYWOUcNFGiNRYpgBN6Y5iRtIx6WhSnkaiZBqN3ock6ZBpyZVe8BZmvjJ94Ai2E6Eylg88GrpOcQzcaEvjswcAXDJnsqrLII5QPNExICuCX5PzXUWbW4mVbhHP535Cxhmkr4s9aIju4yY1bdUjfGOX1oKmG11Q33Fq+ZbF7TSrNkzjnx1z3d5P3vHrX2MWoxvSCkB
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB4544.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39840400004)(346002)(136003)(396003)(376002)(366004)(451199015)(52116002)(478600001)(66556008)(36756003)(6486002)(26005)(38100700002)(38350700002)(6666004)(6506007)(66476007)(41300700001)(8676002)(66946007)(86362001)(4326008)(316002)(44832011)(54906003)(7416002)(5660300002)(8936002)(6512007)(2616005)(966005)(186003)(1076003)(2906002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gez6u7kgTqk4Vy8cAJ36oieZNWiyqFHw2LLKNmsg/RS73nXkzlGVUrGSRMnm?=
- =?us-ascii?Q?FNc2QViwv14SrxzCVeYsoDIJSxjHMx5h1yaSzV/NsMk3OLHROnA8hja1b9wP?=
- =?us-ascii?Q?DQ+Y9cnYnEG55sTBfUCT0U1JJTsmTElrz+dQFQsE8kO6Cm2yh2FVxF9GuLxC?=
- =?us-ascii?Q?6aLQBW3TdntOPIvoHj5xj4j7kgVoKhJGdOk+hOdRfEH3oYWZXSdlxzeDF78j?=
- =?us-ascii?Q?lGG+49vvOv/iYKoQX8Sc4Sjkp54sxyLhjpGDplJuOUylaPBhIJ4/xBt+YaXg?=
- =?us-ascii?Q?qsIK9tH3dyvUesWiGqJM/nOgq/PGqbwWXuZIxC0qV/hNgoPvAGdAdmuWwltK?=
- =?us-ascii?Q?vIZgqjGlQPONPT6NeJsCqaIK9FFzGxbxWUeAtzylBKU5ON/xfZ/pBAxQ8Hgh?=
- =?us-ascii?Q?kA5GB1uCDiFj4Ht9P4fOZ+LLgp1ikfKKE/Pcwvyt0xcTNOrTzDHeD6RETU1w?=
- =?us-ascii?Q?pfucBWn4fRKo4bmdHOJvsoeejGdc4FB6qUB0tKxKpDHXSyTHeLVNQbWPThKg?=
- =?us-ascii?Q?b9QU/sJ3UT3Y+rI3HF9Dm3eXQ9IZu9n91/1bkhzhgxbz5aAYYl5TdC/gEIoe?=
- =?us-ascii?Q?i8gJATHzgVL6Bqp/Li9e/bUblrNfaD+nUsbc+jys5iUQ/WvKrHmRlsF5PtcW?=
- =?us-ascii?Q?PNAa5bIdjxs9QI6K/tBiSdwPvrlMwaQ3sy0+YYBkJRFNN/8b9NAjO5LET4gm?=
- =?us-ascii?Q?AdsbNSbEnPIZ8QWzjz4raHskDds709bEqMGy39DKZVg8eTGiGjRfuJ72i0XO?=
- =?us-ascii?Q?gE3Ff3LD7L0jolO8dBxlWImPRB7aXGwomuLeyHqka61r9qp6FTnlPNA9WYs8?=
- =?us-ascii?Q?Tl+OUgoQ4FToU+NmxunqJAIhWqQ0AYn9cdilP/8TpDIw8A4DLyt9afLgnJOO?=
- =?us-ascii?Q?OqzbFQ9lHaRV41SwVBJIepmo14Q3T0NKb0YojQn2OOr3ihqBAYx1W96UjgfJ?=
- =?us-ascii?Q?PzoeIpFivLswrp76QbImjDB1CN4TQPQasJsQevL5K9m8/ocxWMmB55MAGeR6?=
- =?us-ascii?Q?O4sOOKiKjYYtrHqYEUG/YJNIOWMKPFoT6nFjfiWaFPhbOmnS9UGi7ys9LuK3?=
- =?us-ascii?Q?qedGMN1/igRD8cRRLUP33NpxAOCWTgo+MkWQxHCu0s9VjvKc0N1Yr3wZ01NW?=
- =?us-ascii?Q?/lPy8IEMq9BfBb2lhQnb9B7yQt3WGPq9yBMy/a9PqWvXECqRX5jHhE31wnAq?=
- =?us-ascii?Q?jNl6muhCknhQbIjcS8s7+3bYe4LUMbxVgMdPUk1gXA5I2ieqauMC/ko/XSxy?=
- =?us-ascii?Q?DL43FGBxIchgiGOYLUqXMXM7UWDCbT7gZkoBpUOFKGlzv+KgWzPSMwz4jHPr?=
- =?us-ascii?Q?nrW/YhJg2vLxmh+hksnlpEGkXoZekLMjS/cbScqd2ZXzs0ggKwcP+xwO8SWh?=
- =?us-ascii?Q?WUBcPySt15SiX6r+vUHqBbksRgibzFke4oJE/N9LVTMO5MSj8+lDLTtZ6mmm?=
- =?us-ascii?Q?PPO82AIeql1GuM3ZLV5RXg/+bros5BDz72RBuI9xW1HsxGjb35MbX0LX/cW3?=
- =?us-ascii?Q?9pwHZnrSvK/JRrz+i2t9Fr4spEyfwYHBf7b+bwVseIYiGSyJyE2taCKANDpD?=
- =?us-ascii?Q?yLf7++smdg+F0LUGYRcInFdDv4km8rjiGlS3hJiFempFPmcYknhT3YraHLw8?=
- =?us-ascii?Q?tQ=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VGFtNU90VTZqZXFlRk9XbXd5cW1oVklVcUZkSk5OaE9tNytUbDdMdlY1Q0dy?=
+ =?utf-8?B?WnpuLzV4c2EwUjk0S3BQcy9ZNzBTb1NmNmRzei82aTVncWhWUlpTNDdaZ2xp?=
+ =?utf-8?B?SzZhaDJWd1NOaVNqYnV2czZrRUNwNFVGTDFxUm1vRWtaUTNtTUpzZW9lS2pC?=
+ =?utf-8?B?azlrY1RQMzREOTBOT2pKZzRJenB6WlE0dEw1OWtRRXErZllEVFlrVEFKZXRx?=
+ =?utf-8?B?OVFNQmpxdWZFdkJHbnNyYUZoSkZma1RRTC8wbnhTL2JpM05KLzczNHJhMGZY?=
+ =?utf-8?B?NDlFODlOOTA0M2J6cHExcnYva1hkeS9yT0NaUm5qcWl1YWxCUVE0ZU1GVjdY?=
+ =?utf-8?B?QjFraW9NRG45YmN2VXY1dlBGbjVZTHdRSlR2UnBXVUxXdCtwc0tGekt1Y1F4?=
+ =?utf-8?B?WThRR0c1dmdQL3FFVk42emQ3NUZvajRMaGpwKytsRUtLZk5sbXh4dW9SdXlM?=
+ =?utf-8?B?Mmd4Tk5hUVBtY2hiTWF0U0R0L0ZUaUJuTHp1T05aV01TZ3BKcVBOL2NYN1NF?=
+ =?utf-8?B?R2xqdDBHUXIzR1JkZTBNVkxkMWQxN1Nmemg1elR6cXh0czBCV3VFcjlFSTVI?=
+ =?utf-8?B?a2hmUHEyUUx3bkxmNTdFSFNQWFB0Y0QzMHNjdW5HQzlJaFZPd3lqMk8rWndX?=
+ =?utf-8?B?Q212ZDZOWnJBNktvNzRKRTZWQlgzd3R1amtUZkFuSE9zWkFaMGFVMi9BOFg3?=
+ =?utf-8?B?VGdYYWpZUzJnbFpaOVBtYWx3MGVLUmlEbEFNVGQ1OW9RRVJjUzc0RzFENFRm?=
+ =?utf-8?B?WXAxL2RqSkF3WDJlbTNHSnVSRHJMM2o4SjAxMkxnVGFuaWtrL09uY013UjUx?=
+ =?utf-8?B?VUZBTjZ5UTlsaWo2NjJ3cGNPaHNFaDJJK3JzYWpSZnE0M3lEMlE0b0tIUUM3?=
+ =?utf-8?B?OVQ3VjN2aUpPWittendLa0F5TzZTK0cwcUhza3BpOWpBdGtBU0UvWkM4UENX?=
+ =?utf-8?B?b216ZTYzMmlxU0wyU2xLU01LMVNOZ0pEZzh1aHNCYXFubDNobVhxMEVMeWdj?=
+ =?utf-8?B?SndkZUNFUmlkOUlKTjFLbFdqdEtJQVdjdEdPcWZkVWZyYnpuTjNLSWZ6aWE2?=
+ =?utf-8?B?eXByODhrN3YvK2Q2MWd1Zkx3bVdURlZhVHRVNW5hZ0RwcU5QSERZNUNhZnN2?=
+ =?utf-8?B?OHZVZkt6cWM2ZW4yVGpGOVFweFFPa3drYURkRURpdnIyNTFFdWMwMmszZWF2?=
+ =?utf-8?B?c3hPTnE1dGs0WmtDMGNCR3NCTXBZM29LNmhieG5La1dyRXRlcFVSMFRlaWUy?=
+ =?utf-8?B?bVRHMkdkck9HVGRVWmdxMVUvdWF1UCttd2NNVmlySEQrNXd2ZmI1NFE1dTBq?=
+ =?utf-8?B?czNWR0djUkJlZEtkNEFwUGdZaGJTbnhrcUozUDcwb3ZSQTZmT04rSkU4dnVi?=
+ =?utf-8?B?b1J3ajQ5QzlKaDd1cmJVTHJHdmFpR3VjbVhac0VQMFJqWGR3S2dlOU13UFln?=
+ =?utf-8?B?VGdPUnpCbmg3bE4yVHorRHZSbUxIeVQrbWE2N3p5N0VKRGJMTzBwZm80VCs5?=
+ =?utf-8?B?YTR2WnhqU3NDTit6LzkvLzVoZW1yVTVCZGpuUDRGRHpaTmRJWkM2YWZJT3RF?=
+ =?utf-8?B?WTFCSzVvY1JBTjJtd2VhVTNjZkptakk3bDNpZXlSVkJhRUw0WlFGRDJWSDlh?=
+ =?utf-8?B?ODhFMVVkMk1zNHFYbUx2ejJ6VWtFVnFEelJCb0R0UHVBUjVnRTRqeU04RjE5?=
+ =?utf-8?B?MGg0TFpqaVVPQ2c2bGxZcDRLZGdFSjgyc0tYTnhIY1JQOHRFR1FiYW83SWVP?=
+ =?utf-8?B?YUFMd2dhL0k0Mjd4TEd2NW93ZkpCVUFqOUdjUm9xM2hla2c5azA3a3gvdXQr?=
+ =?utf-8?B?dVdMR1pGMTIveUFRN1hvbGY3cEFoV3NnTjNERGpWWUtWUno5cklRWS9SN0xj?=
+ =?utf-8?B?SFNMVmdxcC82N2FLWGJEYURnU0paR3MrQjFDTkpqU2NUakozYmJ1MkM1ajVh?=
+ =?utf-8?B?Zmxaa0lieC9rQmVtQ0hnbWdvR3BDK3h2V1lrRERsaFM2c3l3ZzU4MDNNZGZr?=
+ =?utf-8?B?NXE3SWdCdmdKcUtvSHg0K253VndHYzBscDlmclFJZlUxT3RJOVBUaVI3QkFq?=
+ =?utf-8?B?YXFqUms1Qm51YTRBeS9yUGsyOU5VcERaRC8vS0pZTGZ4bUJwbHVWNUVxNFdo?=
+ =?utf-8?B?K09LZzNpdFNoMHRkMXJhQkRidlVTR01lQk9rNzZOZHp6NGdBOTZhUmIvM3F0?=
+ =?utf-8?B?Znc9PQ==?=
 X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37d13749-aa9d-4a39-4cc1-08dad2e2beb9
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe167261-f51d-428f-90d6-08dad2e2bf62
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR08MB4544.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 14:54:13.3884
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 14:54:14.2789
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hM0nUcQpI7z/Tl/h7Lwmw6tCWfLX5ngCx9I51CRP5q9+6yCIpWNJwbWUsH6zYu3mRpJt1BwubkT2HlMDD2BTdE57OShaG7oDvtBSQ4Kk2E4=
+X-MS-Exchange-CrossTenant-UserPrincipalName: k2IcgH9aByAKfbf1EcmcjLuFZRAq00mZzQaLecPi/SG7DRKBP5whPk3BDUVR1frttrmVAhBQn7gzL+U4qvTo3DObXPJ9lgIuk+RcMNZDrTU=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR08MB5977
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -124,37 +134,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add struct for iio type arrays such as IIO_AVAIL_LIST which can be used
-instead of int arrays.
+Add bindings for TI TMAG5273.
 
 Signed-off-by: Gerald Loacker <gerald.loacker@wolfvision.net>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
 Changes in v5:
  - no changes
  
 Changes in v4:
- - Add only struct for IIO_VAL_INT_PLUS_MICRO iio type.
-
- include/linux/iio/iio.h | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/include/linux/iio/iio.h b/include/linux/iio/iio.h
-index f0ec8a5e5a7a..e5101bef50c5 100644
---- a/include/linux/iio/iio.h
-+++ b/include/linux/iio/iio.h
-@@ -381,6 +381,11 @@ s64 iio_get_time_ns(const struct iio_dev *indio_dev);
+ - no changes
  
- #define INDIO_MAX_RAW_ELEMENTS		4
+Changes in v3:
+ - dropped quotes from strings
  
-+struct iio_val_int_plus_micro {
-+	int integer;
-+	int micro;
-+};
+Changes in v2:
+ - Removed nodename
+ - Changed angle-enable to angle-measurement and used strings
+ - Added interrupts
+ - Removed vcc-supply from required properties
+ - Changed i2c-0 to i2c in examples
+
+ .../iio/magnetometer/ti,tmag5273.yaml         | 75 +++++++++++++++++++
+ MAINTAINERS                                   |  6 ++
+ 2 files changed, 81 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/magnetometer/ti,tmag5273.yaml
+
+diff --git a/Documentation/devicetree/bindings/iio/magnetometer/ti,tmag5273.yaml b/Documentation/devicetree/bindings/iio/magnetometer/ti,tmag5273.yaml
+new file mode 100644
+index 000000000000..121d540b7b6e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/magnetometer/ti,tmag5273.yaml
+@@ -0,0 +1,75 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/magnetometer/ti,tmag5273.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- struct iio_trigger; /* forward declaration */
++title: TI TMAG5273 Low-Power Linear 3D Hall-Effect Sensor
++
++maintainers:
++  - Gerald Loacker <gerald.loacker@wolfvision.net>
++
++description:
++  The TI TMAG5273 is a low-power linear 3D Hall-effect sensor. This device
++  integrates three independent Hall-effect sensors in the X, Y, and Z axes.
++  The device has an integrated temperature sensor available. The TMAG5273
++  can be configured through the I2C interface to enable any combination of
++  magnetic axes and temperature measurements. An integrated angle calculation
++  engine (CORDIC) provides full 360° angular position information for both
++  on-axis and off-axis angle measurement topologies. The angle calculation is
++  performed using two user-selected magnetic axes.
++
++properties:
++  compatible:
++    const: ti,tmag5273
++
++  reg:
++    maxItems: 1
++
++  "#io-channel-cells":
++    const: 1
++
++  ti,angle-measurement:
++    $ref: /schemas/types.yaml#/definitions/string
++    description:
++      Enables angle measurement in the selected plane.
++      If not specified, "x-y" will be anables as default.
++    enum:
++      - off
++      - x-y
++      - y-z
++      - x-z
++
++  vcc-supply:
++    description:
++      A regulator providing 1.7 V to 3.6 V supply voltage on the VCC pin,
++      typically 3.3 V.
++
++  interrupts:
++    description:
++      The low active interrupt can be configured to be fixed width or latched.
++      Interrupt events can be configured to be generated from magnetic
++      thresholds or when a conversion is completed.
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        magnetometer@35 {
++            compatible = "ti,tmag5273";
++            reg = <0x35>;
++            #io-channel-cells = <1>;
++            ti,angle-measurement = "x-z";
++            vcc-supply = <&vcc3v3>;
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cf0f18502372..ea7acec52f8b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20613,6 +20613,12 @@ L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+ S:	Odd Fixes
+ F:	sound/soc/codecs/tas571x*
  
- /**
++TI TMAG5273 MAGNETOMETER DRIVER
++M:	Gerald Loacker <gerald.loacker@wolfvision.net>
++L:	linux-iio@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/iio/magnetometer/ti,tmag5273.yaml
++
+ TI TRF7970A NFC DRIVER
+ M:	Mark Greer <mgreer@animalcreek.com>
+ L:	linux-wireless@vger.kernel.org
 -- 
 2.37.2
 
