@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2782E63D142
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:00:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71CA863D14B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234835AbiK3JAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 04:00:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
+        id S235144AbiK3JAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 04:00:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234005AbiK3JAD (ORCPT
+        with ESMTP id S235266AbiK3JAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 04:00:03 -0500
+        Wed, 30 Nov 2022 04:00:18 -0500
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C77383F045;
-        Wed, 30 Nov 2022 01:00:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8530C421B9;
+        Wed, 30 Nov 2022 01:00:15 -0800 (PST)
 Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 30 Nov 2022 18:00:01 +0900
+  by mx.socionext.com with ESMTP; 30 Nov 2022 18:00:14 +0900
 Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 31C81205D901;
-        Wed, 30 Nov 2022 18:00:01 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 30 Nov 2022 18:00:01 +0900
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 951C8205D901;
+        Wed, 30 Nov 2022 18:00:14 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 30 Nov 2022 18:00:14 +0900
 Received: from [10.212.156.209] (unknown [10.212.156.209])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 7CCDFA855B;
-        Wed, 30 Nov 2022 18:00:00 +0900 (JST)
-Message-ID: <efa90f10-db67-bb9f-03fd-e99695a5bdf5@socionext.com>
-Date:   Wed, 30 Nov 2022 17:59:59 +0900
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 44F7AA855B;
+        Wed, 30 Nov 2022 18:00:14 +0900 (JST)
+Message-ID: <8739afc1-47c9-3950-e449-ff424820bec9@socionext.com>
+Date:   Wed, 30 Nov 2022 18:00:13 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 2/8] dt-bindings: soc: socionext: Add UniPhier SoC-glue
- logic
+Subject: Re: [PATCH 3/8] dt-bindings: soc: socionext: Add UniPhier peripheral
+ block
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -38,10 +38,10 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20221129103509.9958-1-hayashi.kunihiko@socionext.com>
- <20221129103509.9958-3-hayashi.kunihiko@socionext.com>
- <4e90944a-1200-4619-f977-590fe2919017@linaro.org>
+ <20221129103509.9958-4-hayashi.kunihiko@socionext.com>
+ <b910e717-86a6-6123-e8a3-9fdf0618fca2@linaro.org>
 From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <4e90944a-1200-4619-f977-590fe2919017@linaro.org>
+In-Reply-To: <b910e717-86a6-6123-e8a3-9fdf0618fca2@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -54,84 +54,65 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Krzysztof,
 
-On 2022/11/29 23:43, Krzysztof Kozlowski wrote:
+On 2022/11/29 23:46, Krzysztof Kozlowski wrote:
 > On 29/11/2022 11:35, Kunihiko Hayashi wrote:
->> Add devicetree binding schema for the SoC-glue logic implemented on
+>> Add devicetree binding schema for the peripheral block implemented on
 >> Socionext Uniphier SoCs.
 >>
->> This SoC-glue logic is a set of miscellaneous function registers
->> handling signals for specific devices outside system components,
->> and also has multiple functions such as I/O pinmux, usb-phy, debug,
->> clock-mux for a specific SoC, and so on.
+>> Peripheral block implemented on Socionext UniPhier SoCs is an integrated
+>> component of the peripherals including UART, I2C/FI2C, and SCSSI.
+>>
+>> Peripheral block has some function logics to control the component.
 >>
 >> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 >> ---
->>   .../socionext,uniphier-soc-glue.yaml          | 94 +++++++++++++++++++
->>   1 file changed, 94 insertions(+)
+>>   .../socionext,uniphier-perictrl.yaml          | 67 +++++++++++++++++++
+>>   1 file changed, 67 insertions(+)
 >>   create mode 100644
->> Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml
+>> Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-perictrl.yaml
 >>
 >> diff --git
->> a/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml
->> b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml
+>> a/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-perictrl.yaml
+>> b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-perictrl.yaml
 >> new file mode 100644
->> index 000000000000..3f571e3e1339
+>> index 000000000000..080b6ab3ea1a
 >> --- /dev/null
 >> +++
->> b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml
->> @@ -0,0 +1,94 @@
+>> b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-perictrl.yaml
+>> @@ -0,0 +1,67 @@
 >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 >> +%YAML 1.2
 >> +---
 >> +$id:
->> http://devicetree.org/schemas/soc/socionext/socionext,uniphier-soc-glue.yaml#
+>> http://devicetree.org/schemas/soc/socionext/socionext,uniphier-perictrl.yaml#
 >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 >> +
->> +title: Socionext UniPhier SoC-glue logic
+>> +title: Socionext UniPhier peripheral block controller
 >> +
 >> +maintainers:
 >> +  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 >> +
 >> +description: |+
->> +  SoC-glue logic implemented on Socionext UniPhier SoCs is a collection
->> of
->> +  miscellaneous function registers handling signals outside system
->> components.
+>> +  Peripheral block implemented on Socionext UniPhier SoCs is an
+>> integrated
+>> +  component of the peripherals including UART, I2C/FI2C, and SCSSI.
+>> +  Peripheral block controller is a logic to control the component.
 >> +
 >> +properties:
 >> +  compatible:
 >> +    items:
 >> +      - enum:
->> +          - socionext,uniphier-ld4-soc-glue
->> +          - socionext,uniphier-pro4-soc-glue
->> +          - socionext,uniphier-pro5-soc-glue
->> +          - socionext,uniphier-pxs2-soc-glue
->> +          - socionext,uniphier-ld6b-soc-glue
->> +          - socionext,uniphier-sld8-soc-glue
->> +          - socionext,uniphier-ld11-soc-glue
->> +          - socionext,uniphier-ld20-soc-glue
->> +          - socionext,uniphier-pxs3-soc-glue
->> +          - socionext,uniphier-nx1-soc-glue
->> +          - socionext,uniphier-soc-glue
-> 
-> This one looks generic - why having it next to specific ones?
-
-SoC-glue has the same register set, but different implementations
-for each SoC.
-I thought of defining the same register set as a common specs,
-but each compatibles are sufficient. I'll remove it.
-
-> Same question for your previous patch - socionext,uniphier-sysctrl.
-> 
-> And similarly to previous patch, do you expect child nodes everywhere?
-
-In case of this SoC-glue logic, all SoCs has pinctrl, however,
-only SoCs with USB2 host has usb-controller (phy-hub).
-And only legacy SoCs implement clock-controller (clk-mux) here.
-
-Should child nodes that exist only in a specific "compatible" be defined
-conditionally?
-
+>> +          - socionext,uniphier-ld4-perictrl
+>> +          - socionext,uniphier-pro4-perictrl
+>> +          - socionext,uniphier-pro5-perictrl
+>> +          - socionext,uniphier-pxs2-perictrl
+>> +          - socionext,uniphier-ld6b-perictrl
+>> +          - socionext,uniphier-sld8-perictrl
+>> +          - socionext,uniphier-ld11-perictrl
+>> +          - socionext,uniphier-ld20-perictrl
+>> +          - socionext,uniphier-pxs3-perictrl
+>> +          - socionext,uniphier-nx1-perictrl
+>> +          - socionext,uniphier-perictrl
 >> +      - const: simple-mfd
 >> +      - const: syscon
 >> +
@@ -139,15 +120,36 @@ conditionally?
 >> +    maxItems: 1
 >> +
 >> +patternProperties:
->> +  "^pinctrl(@[0-9a-f]+)?$":
->> +    $ref: /schemas/pinctrl/socionext,uniphier-pinctrl.yaml#
->> +
->> +  "^usb-controller(@[0-9a-f]+)?$":
->> +    $ref: /schemas/phy/socionext,uniphier-usb2-phy.yaml#
->> +
 >> +  "^clock-controller(@[0-9a-f]+)?$":
 >> +    $ref: /schemas/clock/socionext,uniphier-clock.yaml#
 >> +
+>> +  "^reset-controller(@[0-9a-f]+)?$":
+>> +    $ref: /schemas/reset/socionext,uniphier-reset.yaml#
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    syscon@59820000 {
+>> +        compatible = "socionext,uniphier-ld20-perictrl",
+>> +                     "simple-mfd", "syscon";
+>> +        reg = <0x59820000 0x200>;
+>> +
+>> +        clock-controller {
+> 
+> None of your children in examples and in DTS have unit addresses.
+> However you explicitly mentioned them in the patternProperties. Do you
+> expect adding unit addresses?
+
+Currently, children's registers are partially mixed and it's hard
+to specify the unit address.
+
+The address pattern was added as option for the future, however,
+not needed for the current implementation. I'll remove them in next.
 
 Thank you,
 
