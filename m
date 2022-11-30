@@ -2,164 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5703163D868
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:42:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC1B63D86E
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:44:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiK3OmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 09:42:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40932 "EHLO
+        id S229642AbiK3Ooi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 09:44:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiK3Ol5 (ORCPT
+        with ESMTP id S229528AbiK3Oog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 09:41:57 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32E42FC3B;
-        Wed, 30 Nov 2022 06:41:54 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NMhZK5W8Gz9xGWM;
-        Wed, 30 Nov 2022 22:35:21 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAXS_eTa4djRKmqAA--.46591S2;
-        Wed, 30 Nov 2022 15:41:34 +0100 (CET)
-Message-ID: <859f70a2801cffa3cb42ae0d43f5753bb01a7eac.camel@huaweicloud.com>
-Subject: Re: [PATCH] ima: Make a copy of sig and digest in
- asymmetric_verify()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        rusty@rustcorp.com.au, axboe@kernel.dk
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Date:   Wed, 30 Nov 2022 15:41:20 +0100
-In-Reply-To: <f8f95d37211bac6ce4322a715740d2b2ae20db84.camel@huaweicloud.com>
-References: <20221104122023.1750333-1-roberto.sassu@huaweicloud.com>
-         <9ef25f1b8621dab8b3cd4373bf6ce1633daae70e.camel@linux.ibm.com>
-         <a676b387d23f9ca630418ece20a6761a9437ce76.camel@huaweicloud.com>
-         <c6c448c2acc07caf840046067322f3e1110cedff.camel@linux.ibm.com>
-         <f8f95d37211bac6ce4322a715740d2b2ae20db84.camel@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 30 Nov 2022 09:44:36 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5D118B15
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 06:44:35 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so2148496pjs.4
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 06:44:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZYuSJquVwIjmwCCxFA89hvpczZS6iAqYsFgIeQbQyk4=;
+        b=P6upJZHw3kEQqixVBF1l9xDXgWhHnFvJpaIkF91K7oFHU3IHlsrI87+u0LNjxkVsPD
+         lt8jjxM8uscBVyemK5Pp5TDhtcX2z3kVNe3CxuynX+0DzHSYdqsWjWvXakgGcvQJPgdS
+         hW5xC3C1C+wXWnVTWpfaynTevi5nLzjQOvD8kt0UIxki0elwTYOA1wL1XT1bM6RKZr0L
+         tl0fP1lje1l2Htl/DjdqBpX79JiLdJqro7onW3CHpR0rSrSbXPzPyRNrGl4HxJQoZszJ
+         wMnrdffqzR7yMeUGxyyrbZARMamR1qWAEeTPOl+aC2qiK+HT+86KWviq4tLncED6X/uq
+         Si5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZYuSJquVwIjmwCCxFA89hvpczZS6iAqYsFgIeQbQyk4=;
+        b=6cgh8250wybm4sG6ojgdN3BaZffFS5ddDuHMZTTGArQxMPneGtGm457FbN4rg6JPlT
+         3Wn4kmA6n2UeMi1orZ3520iaJLxOCd8sotTqfOsbIUO17dMqpAzgrhbRLOahStpAXgSD
+         K2lIdgtHKhwm+oOeXvcrNBoqmrnjONX0pkCDgkEUNpynD8u1Yscp1r7pVd3xuyXTBrsj
+         OAqhpky6IwdEGEFtV5hcyx3Zyi8MDJ4DvjNbWJJAQx05SerQ8DThEPwTfFSU+3MJxyqY
+         NlHbhBt1a1oNqkgLdyRie6XqSedxYt7tS876hEumCB6i7izIobe44ikqrLR6VGYB3j73
+         h9iw==
+X-Gm-Message-State: ANoB5pl1mpQTvdB0n0Dn7t10I/TNOVueqzoZLZKFGkte34ZBodsx5AXK
+        WV8u7Fg+U8Rvar2ej9afK7Ze62rFVSaRbA86gBTz5g==
+X-Google-Smtp-Source: AA0mqf4Fjnax4NQ1M1G8Yb/5mHMz2XBgnPQYbujS17h4jc8RF/kNSGd8x2Ve0ssQGzTrweZfOPpQBV5va67gO3iTNM4=
+X-Received: by 2002:a17:902:d68b:b0:188:cca8:df29 with SMTP id
+ v11-20020a170902d68b00b00188cca8df29mr49431583ply.148.1669819475327; Wed, 30
+ Nov 2022 06:44:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAXS_eTa4djRKmqAA--.46591S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCr17ZF4UZw1xWw4UGF43trb_yoWrJFy3pF
-        48K3WDKr4Dtr1xKF4Iyws8C34rKr4rKFW7W34kCw1rZr1qqr1xZr4kJF47WFyDWryxAF4U
-        tFWftr9rZrn8A3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBF1jj4YbEwAAs2
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221130134920.2109-1-thunder.leizhen@huawei.com>
+In-Reply-To: <20221130134920.2109-1-thunder.leizhen@huawei.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 30 Nov 2022 15:43:59 +0100
+Message-ID: <CAPDyKFq+poiVobaaCAYx_AD9Z6M_+r89AE6pViPFZMzVSZc92A@mail.gmail.com>
+Subject: Re: [PATCH v2] mmc: core: Normalize the error handling branch in sd_read_ext_regs()
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-11-23 at 14:49 +0100, Roberto Sassu wrote:
-> On Wed, 2022-11-23 at 08:40 -0500, Mimi Zohar wrote:
-> > On Wed, 2022-11-23 at 13:56 +0100, Roberto Sassu wrote:
-> > > On Tue, 2022-11-22 at 14:39 -0500, Mimi Zohar wrote:
-> > > > Hi Roberto,
-> > > > 
-> > > > On Fri, 2022-11-04 at 13:20 +0100, Roberto Sassu wrote:
-> > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > 
-> > > > > Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> > > > > mapping") requires that both the signature and the digest resides in the
-> > > > > linear mapping area.
-> > > > > 
-> > > > > However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> > > > > stack support"), made it possible to move the stack in the vmalloc area,
-> > > > > which could make the requirement of the first commit not satisfied anymore.
-> > > > > 
-> > > > > If CONFIG_SG=y and CONFIG_VMAP_STACK=y, the following BUG() is triggered:
-> > > > 
-> > > > ^CONFIG_DEBUG_SG
-> > > > 
-> > > > > [  467.077359] kernel BUG at include/linux/scatterlist.h:163!
-> > > > > [  467.077939] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-> > > > > 
-> > > > > [...]
-> > > > > 
-> > > > > [  467.095225] Call Trace:
-> > > > > [  467.096088]  <TASK>
-> > > > > [  467.096928]  ? rcu_read_lock_held_common+0xe/0x50
-> > > > > [  467.097569]  ? rcu_read_lock_sched_held+0x13/0x70
-> > > > > [  467.098123]  ? trace_hardirqs_on+0x2c/0xd0
-> > > > > [  467.098647]  ? public_key_verify_signature+0x470/0x470
-> > > > > [  467.099237]  asymmetric_verify+0x14c/0x300
-> > > > > [  467.099869]  evm_verify_hmac+0x245/0x360
-> > > > > [  467.100391]  evm_inode_setattr+0x43/0x190
-> > > > > 
-> > > > > The failure happens only for the digest, as the pointer comes from the
-> > > > > stack, and not for the signature, which instead was allocated by
-> > > > > vfs_getxattr_alloc().
-> > > > 
-> > > > Only after enabling CONFIG_DEBUG_SG does EVM fail.
-> > > > 
-> > > > > Fix this by making a copy of both in asymmetric_verify(), so that the
-> > > > > linear mapping requirement is always satisfied, regardless of the caller.
-> > > > 
-> > > > As only EVM is affected, it would make more sense to limit the change
-> > > > to EVM.
-> > > 
-> > > I found another occurrence:
-> > > 
-> > > static int xattr_verify(enum ima_hooks func, struct integrity_iint_cache *iint,
-> > > 			struct evm_ima_xattr_data *xattr_value, int xattr_len,
-> > > 			enum integrity_status *status, const char **cause)
-> > > {
-> > > 
-> > > [...]
-> > > 
-> > > 		rc = integrity_digsig_verify(INTEGRITY_KEYRING_IMA,
-> > > 					     (const char *)xattr_value,
-> > > 					     xattr_len, hash.digest,
-> > > 					     hash.hdr.length);
-> > > 
-> > > Should I do two patches?
-> > 
-> > I'm just not getting it.  Why did you enable CONFIG_DEBUG_SIG?  Were
-> > you testing random kernel configs?  Are you actually seeing signature
-> > verifications errors without it enabled?  Or is it causing other
-> > problems?  Is the "BUG_ON" still needed?
-> 
-> When I test patches, I tend to enable more debugging options.
-> 
-> To be honest, I didn't check if there is any issue without enabling
-> CONFIG_DEBUG_SG. I thought that if there is a linear mapping
-> requirement, that should be satisfied regardless of whether the
-> debugging option is enabled or not.
-> 
-> + Rusty, Jens for explanations.
+On Wed, 30 Nov 2022 at 14:49, Zhen Lei <thunder.leizhen@huawei.com> wrote:
+>
+> 1. Use pr_err() to output the error message.
+> 2. Add the description of why success 0 is returned in case
+>    "non-supported SD ext reg layout".
+>
+> Fixes: c784f92769ae ("mmc: core: Read the SD function extension registers for power management")
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 
-Trying to answer the question, with the help of an old discussion:
+Applied for next, thanks!
 
-https://groups.google.com/g/linux.kernel/c/dpIoiY_qSGc
+Kind regards
+Uffe
 
-sg_set_buf() calls virt_to_page() to get the page to start from. But if
-the buffer spans in two pages, that would not work in the vmalloc area,
-since there is no guarantee that the next page is adjiacent.
 
-For small areas, much smaller than the page size, it is unlikely that
-the situation above would happen. So, integrity_digsig_verify() will
-likely succeeed. Although it is possible that it fails if there are
-data in the next page.
-
-Roberto
-
+> ---
+>  drivers/mmc/core/sd.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/mmc/core/sd.c b/drivers/mmc/core/sd.c
+> index 3662bf5320ce56d..93ee53f74427c38 100644
+> --- a/drivers/mmc/core/sd.c
+> +++ b/drivers/mmc/core/sd.c
+> @@ -1259,7 +1259,7 @@ static int sd_read_ext_regs(struct mmc_card *card)
+>          */
+>         err = sd_read_ext_reg(card, 0, 0, 0, 512, gen_info_buf);
+>         if (err) {
+> -               pr_warn("%s: error %d reading general info of SD ext reg\n",
+> +               pr_err("%s: error %d reading general info of SD ext reg\n",
+>                         mmc_hostname(card->host), err);
+>                 goto out;
+>         }
+> @@ -1273,7 +1273,12 @@ static int sd_read_ext_regs(struct mmc_card *card)
+>         /* Number of extensions to be find. */
+>         num_ext = gen_info_buf[4];
+>
+> -       /* We support revision 0, but limit it to 512 bytes for simplicity. */
+> +       /*
+> +        * We only support revision 0, and limit it to 512 bytes for simplicity.
+> +        * In other cases, success 0 is returned, because the card remains
+> +        * functional and all but the new features from the SD function
+> +        * extensions registers can still be used.
+> +        */
+>         if (rev != 0 || len > 512) {
+>                 pr_warn("%s: non-supported SD ext reg layout\n",
+>                         mmc_hostname(card->host));
+> @@ -1288,7 +1293,7 @@ static int sd_read_ext_regs(struct mmc_card *card)
+>         for (i = 0; i < num_ext; i++) {
+>                 err = sd_parse_ext_reg(card, gen_info_buf, &next_ext_addr);
+>                 if (err) {
+> -                       pr_warn("%s: error %d parsing SD ext reg\n",
+> +                       pr_err("%s: error %d parsing SD ext reg\n",
+>                                 mmc_hostname(card->host), err);
+>                         goto out;
+>                 }
+> --
+> 2.25.1
+>
