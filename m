@@ -2,183 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F11D63CD05
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 02:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D015B63CD08
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 02:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbiK3Btm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 20:49:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
+        id S232052AbiK3BuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 20:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiK3Btk (ORCPT
+        with ESMTP id S229448AbiK3BuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 20:49:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BE56C729;
-        Tue, 29 Nov 2022 17:49:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 647D161991;
-        Wed, 30 Nov 2022 01:49:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70F41C433C1;
-        Wed, 30 Nov 2022 01:49:38 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="eOO5ZNUB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1669772977;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aIRgI6kciaHBf4ZlMFOBJL8gb12Fku9oBg3Z0YWKqkE=;
-        b=eOO5ZNUBmiO6jT2Ctjzwzgjnz/wFquHjS8EK+KadkNU271k0Vflu9wEv6pAiZTR/1DmWmt
-        S9+LhN3ic1i28OE+udodYPJybo+547VA/UCTv5RTBYakclhEYE3k+/yIpiKAgtd3++oeG8
-        nb+80y2W0TI2wZfBTFs/Vx3E4pVaA5A=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6df184a9 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 30 Nov 2022 01:49:36 +0000 (UTC)
-Received: by mail-vk1-f180.google.com with SMTP id n191so2932373vkf.2;
-        Tue, 29 Nov 2022 17:49:36 -0800 (PST)
-X-Gm-Message-State: ANoB5pncuesRptxEWsXePAgNUKA4mjJz2bJXbypFiYtzPR+aoxAAZYzl
-        U3fMAAco1AN/piNLxzkfPPRdHDFiq69n8UoGpuE=
-X-Google-Smtp-Source: AA0mqf66W/xcXtQdoAptFqPtF1wHQXnsUvnHp/kQjOjpUGwMeXm8SA7gdDZVPxsNQFNwaCYa1oZNUSxEAAaQH+v4EVY=
-X-Received: by 2002:a1f:2ac9:0:b0:3bc:94ab:92f8 with SMTP id
- q192-20020a1f2ac9000000b003bc94ab92f8mr22579402vkq.37.1669772975193; Tue, 29
- Nov 2022 17:49:35 -0800 (PST)
+        Tue, 29 Nov 2022 20:50:15 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C776C729;
+        Tue, 29 Nov 2022 17:50:11 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NMMbK5lcCz4f3k6L;
+        Wed, 30 Nov 2022 09:50:05 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+        by APP2 (Coremail) with SMTP id Syh0CgAXerXMtoZjR757BQ--.34895S2;
+        Wed, 30 Nov 2022 09:50:08 +0800 (CST)
+Subject: Re: [net-next] bpf: avoid hashtab deadlock with try_lock
+To:     Hao Luo <haoluo@google.com>
+Cc:     Waiman Long <longman@redhat.com>,
+        Tonghao Zhang <xiangxia.m.yue@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
+        "houtao1@huawei.com" <houtao1@huawei.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+References: <41eda0ea-0ed4-1ffb-5520-06fda08e5d38@huawei.com>
+ <CAMDZJNVSv3Msxw=5PRiXyO8bxNsA-4KyxU8BMCVyHxH-3iuq2Q@mail.gmail.com>
+ <fdb3b69c-a29c-2d5b-a122-9d98ea387fda@huawei.com>
+ <CAMDZJNWTry2eF_n41a13tKFFSSLFyp3BVKakOOWhSDApdp0f=w@mail.gmail.com>
+ <CA+khW7jgsyFgBqU7hCzZiSSANE7f=A+M-0XbcKApz6Nr-ZnZDg@mail.gmail.com>
+ <07a7491e-f391-a9b2-047e-cab5f23decc5@huawei.com>
+ <CAMDZJNUTaiXMe460P7a7NfK1_bbaahpvi3Q9X85o=G7v9x-w=g@mail.gmail.com>
+ <59fc54b7-c276-2918-6741-804634337881@huaweicloud.com>
+ <541aa740-dcf3-35f5-9f9b-e411978eaa06@redhat.com>
+ <Y4ZABpDSs4/uRutC@Boquns-Mac-mini.local>
+ <Y4ZCKaQFqDY3aLTy@Boquns-Mac-mini.local>
+ <CA+khW7hkQRFcC1QgGxEK_NeaVvCe3Hbe_mZ-_UkQKaBaqnOLEQ@mail.gmail.com>
+From:   Hou Tao <houtao@huaweicloud.com>
+Message-ID: <23b5de45-1a11-b5c9-d0d3-4dbca0b7661e@huaweicloud.com>
+Date:   Wed, 30 Nov 2022 09:50:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20221129160811.563011-1-Jason@zx2c4.com> <20221129182751.610558-1-Jason@zx2c4.com>
- <20221130014514.6494-1-hdanton@sina.com>
-In-Reply-To: <20221130014514.6494-1-hdanton@sina.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 30 Nov 2022 02:49:24 +0100
-X-Gmail-Original-Message-ID: <CAHmME9pMmbpgUWWJb5q_uxR9_HP0NWeoxd1AUYL7Fvji09x=vQ@mail.gmail.com>
-Message-ID: <CAHmME9pMmbpgUWWJb5q_uxR9_HP0NWeoxd1AUYL7Fvji09x=vQ@mail.gmail.com>
-Subject: Re: [PATCH v3] random: spread out jitter callback to different CPUs
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CA+khW7hkQRFcC1QgGxEK_NeaVvCe3Hbe_mZ-_UkQKaBaqnOLEQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID: Syh0CgAXerXMtoZjR757BQ--.34895S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFW8ZF47ZF4Dtr4rKr1xKrg_yoW8WF1DpF
+        W2g343KF4kZr1UZ3WvvF18tw4rAw12ka1jkrW5Xr1vvr45W343ZFW8K3y8ZFyjqr4fJrs0
+        vrsFva48CFZ0vaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
+        uYvjxUo0eHDUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hillf,
+Hi Hao,
 
-On Wed, Nov 30, 2022 at 2:45 AM Hillf Danton <hdanton@sina.com> wrote:
+On 11/30/2022 3:36 AM, Hao Luo wrote:
+> On Tue, Nov 29, 2022 at 9:32 AM Boqun Feng <boqun.feng@gmail.com> wrote:
+>> Just to be clear, I meant to refactor htab_lock_bucket() into a try
+>> lock pattern. Also after a second thought, the below suggestion doesn't
+>> work. I think the proper way is to make htab_lock_bucket() as a
+>> raw_spin_trylock_irqsave().
+>>
+>> Regards,
+>> Boqun
+>>
+> The potential deadlock happens when the lock is contended from the
+> same cpu. When the lock is contended from a remote cpu, we would like
+> the remote cpu to spin and wait, instead of giving up immediately. As
+> this gives better throughput. So replacing the current
+> raw_spin_lock_irqsave() with trylock sacrifices this performance gain.
 >
-> On 29 Nov 2022 19:27:52 +0100 Jason A. Donenfeld <Jason@zx2c4.com>
-> > Rather than merely hoping that the callback gets called on another CPU,
-> > arrange for that to actually happen, by round robining which CPU the
-> > timer fires on. This way, on multiprocessor machines, we exacerbate
-> > jitter by touching the same memory from multiple different cores.
-> >
-> > It's necessary to call [try_to_]del_timer_sync() before calling
-> > add_timer_on(), so that the final call to del_timer_sync() at the end o=
-f
-> > the function actually succeeds at making sure no handlers are running.
-> >
-> > Cc: Sultan Alsawaf <sultan@kerneltoast.com>
-> > Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> > Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > ---
-> > Changes v2->v3:
-> > - Thomas convinced me try_to_del_timer_sync() was fine.
-> >
-> >  drivers/char/random.c | 36 +++++++++++++++++++++++++++---------
-> >  1 file changed, 27 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/drivers/char/random.c b/drivers/char/random.c
-> > index 7b71cea6a6ab..4cb1d606a492 100644
-> > --- a/drivers/char/random.c
-> > +++ b/drivers/char/random.c
-> > @@ -1232,7 +1232,8 @@ void __cold rand_initialize_disk(struct gendisk *=
-disk)
-> >  struct entropy_timer_state {
-> >       unsigned long entropy;
-> >       struct timer_list timer;
-> > -     unsigned int samples, samples_per_bit;
-> > +     atomic_t samples;
-> > +     unsigned int samples_per_bit;
-> >  };
-> >
-> >  /*
-> > @@ -1250,10 +1251,8 @@ static void __cold entropy_timer(struct timer_li=
-st *timer)
-> >  {
-> >       struct entropy_timer_state *state =3D container_of(timer, struct =
-entropy_timer_state, timer);
-> >
-> > -     if (++state->samples =3D=3D state->samples_per_bit) {
-> > +     if (atomic_inc_return(&state->samples) % state->samples_per_bit =
-=3D=3D 0)
-> >               credit_init_bits(1);
-> > -             state->samples =3D 0;
-> > -     }
-> >  }
-> >
-> >  /*
-> > @@ -1263,9 +1262,10 @@ static void __cold entropy_timer(struct timer_li=
-st *timer)
-> >  static void __cold try_to_generate_entropy(void)
-> >  {
-> >       enum { NUM_TRIAL_SAMPLES =3D 8192, MAX_SAMPLES_PER_BIT =3D HZ / 1=
-5 };
-> > -     struct entropy_timer_state stack;
-> > +     struct entropy_timer_state stack =3D { 0 };
-> >       unsigned int i, num_different =3D 0;
-> >       unsigned long last =3D random_get_entropy();
-> > +     int cpu =3D -1;
-> >
-> >       for (i =3D 0; i < NUM_TRIAL_SAMPLES - 1; ++i) {
-> >               stack.entropy =3D random_get_entropy();
-> > @@ -1277,19 +1277,37 @@ static void __cold try_to_generate_entropy(void=
-)
-> >       if (stack.samples_per_bit > MAX_SAMPLES_PER_BIT)
-> >               return;
-> >
-> > -     stack.samples =3D 0;
-> >       timer_setup_on_stack(&stack.timer, entropy_timer, 0);
-> >       while (!crng_ready() && !signal_pending(current)) {
-> > -             if (!timer_pending(&stack.timer))
-> > -                     mod_timer(&stack.timer, jiffies);
-> > +             /*
-> > +              * Check !timer_pending() and then ensure that any previo=
-us callback has finished
-> > +              * executing by checking try_to_del_timer_sync(), before =
-queueing the next one.
-> > +              */
-> > +             if (!timer_pending(&stack.timer) && try_to_del_timer_sync=
-(&stack.timer) >=3D 0) {
+> I suspect the source of the problem is the 'hash' that we used in
+> htab_lock_bucket(). The 'hash' is derived from the 'key', I wonder
+> whether we should use a hash derived from 'bucket' rather than from
+> 'key'. For example, from the memory address of the 'bucket'. Because,
+> different keys may fall into the same bucket, but yield different
+> hashes. If the same bucket can never have two different 'hashes' here,
+> the map_locked check should behave as intended. Also because
+> ->map_locked is per-cpu, execution flows from two different cpus can
+> both pass.
+The warning from lockdep is due to the reason the bucket lock A is used in a
+no-NMI context firstly, then the same bucke lock is used a NMI context, so
+lockdep deduces that may be a dead-lock. I have already tried to use the same
+map_locked for keys with the same bucket, the dead-lock is gone, but still got
+lockdep warning.
 >
-> If CPU RR is moved to the timer callback, timer game like this one that h=
-urts
-> brain can be avoided.
+> Hao
+> .
 
-There's a comment in the code from Linus about this:
-
-* Note that we don't re-arm the timer in the timer itself - we are happy to=
- be
-* scheduled away, since that just makes the load more complex, but we do no=
-t
-* want the timer to keep ticking unless the entropy loop is running.
-
-> What sense made by trying to delete a non-pending timer?
-
-If the timer is no longer pending, but has not completed executing its
-callback, and add_timer_on() is called, subsequent calls to
-del_timer_sync() will stop the second add_timer_on(), but the first
-one that has not completed executing its callback will not be touched.
-Take a look at this example: https://=D7=90.cc/xBdEiIKO/c
-
-Jason
