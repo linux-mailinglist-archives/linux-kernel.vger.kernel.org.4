@@ -2,99 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9754763CD01
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 02:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F11D63CD05
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 02:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231962AbiK3Bri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 20:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
+        id S231994AbiK3Btm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 20:49:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiK3Brg (ORCPT
+        with ESMTP id S229448AbiK3Btk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 20:47:36 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5904813B;
-        Tue, 29 Nov 2022 17:47:31 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-13bd2aea61bso19433311fac.0;
-        Tue, 29 Nov 2022 17:47:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jHLuEwDd4ephlkChL9nCW8YQ7VT3fy4zl63QtukC6uk=;
-        b=mszqok5e+P0HO8KMquZAwj2ulqGdn79hCsFcF6DehjjW2LARu8qilsWv3XsVH69EOG
-         B9E5tH1teWPEFpT/vbZlByIBSIV2ET24W1YgOHMJ3rkfEj2AaI7cw3X2d1h+yoeP6grJ
-         Gycis4bjMmnnxhJcEs9FqNSVKZqIA0fXPpsDaASEqc8GrahoqbdmpIklGpKJWbNfVcp5
-         SqgASUiIeX/svV0O5X0Mq+oV9nXPokWgVkPYjcnrWvQ9TJA2tREyxbhS6WfGaNrgyih8
-         DxT4kxu4/NRZNbrXi01FQdq1hmdGpvKXlLGEZXh0xIoc74o2d2H+bve/hv2KkhVHeBsr
-         BnHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jHLuEwDd4ephlkChL9nCW8YQ7VT3fy4zl63QtukC6uk=;
-        b=atVFeS/gCcwZQsfMay8mIuNWjFSXvGS/gtPMPgBklvh4Sf9Cig62khS4QHsGYLh4lO
-         Il1ZmMefxO0mw41TkARj884GqYokYBixuzwFgW8F9HHr9YnfJqIvNVxfz/i7YJLSBZrD
-         VAkgadSEXyc89sR0AeMNP0G3VXsGrvA8BPwkWnXfUy3w1VgBF7oeSMY2oi97OmCz+LuB
-         j+ClYbNmWguiR/W+yfkfXsBvWTujnOYMnWAJCTn8n5Ru3WBWF2Cb8jTKa/y5fjs2cfGI
-         rDDrQIyJlIoX+Y73kLU+dpb4NtgBsEGhhyh+Yc8/PQpJMygHO8zxCRyk8gQBgwq28jf0
-         X8QQ==
-X-Gm-Message-State: ANoB5pnjqtQw9iGMBDhmbYVTwoVAl+9Jmg+nUVFUIEg53o8nndFCh+sV
-        ivadBiTlwZUBPD/PuAYFW+U=
-X-Google-Smtp-Source: AA0mqf4tcHIJ6VIdAdcykahix+4U0RnE4zsbd6pkZt/jPJIJ4Onv1aFMW8XZzzYhRZ7J+lJAz8V0Gw==
-X-Received: by 2002:a05:6870:5a5:b0:13a:f95a:2cca with SMTP id m37-20020a05687005a500b0013af95a2ccamr34859654oap.212.1669772850608;
-        Tue, 29 Nov 2022 17:47:30 -0800 (PST)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id z25-20020a056870d69900b00141e56210b2sm222965oap.57.2022.11.29.17.47.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 17:47:30 -0800 (PST)
-Date:   Tue, 29 Nov 2022 17:47:28 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Tariq Toukan <ttoukan.linux@gmail.com>
-Cc:     Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Barry Song <baohua@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        haniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] cpumask: improve on cpumask_local_spread()
- locality
-Message-ID: <Y4a2MBVEYEY+alO8@yury-laptop>
-References: <20221112190946.728270-1-yury.norov@gmail.com>
- <xhsmh7czwyvtj.mognet@vschneid.remote.csb>
- <Y3PXw8Hqn+RCMg2J@yury-laptop>
- <xhsmho7t5ydke.mognet@vschneid.remote.csb>
- <665b6081-be55-de9a-1f7f-70a143df329d@gmail.com>
+        Tue, 29 Nov 2022 20:49:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BE56C729;
+        Tue, 29 Nov 2022 17:49:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 647D161991;
+        Wed, 30 Nov 2022 01:49:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70F41C433C1;
+        Wed, 30 Nov 2022 01:49:38 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="eOO5ZNUB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669772977;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aIRgI6kciaHBf4ZlMFOBJL8gb12Fku9oBg3Z0YWKqkE=;
+        b=eOO5ZNUBmiO6jT2Ctjzwzgjnz/wFquHjS8EK+KadkNU271k0Vflu9wEv6pAiZTR/1DmWmt
+        S9+LhN3ic1i28OE+udodYPJybo+547VA/UCTv5RTBYakclhEYE3k+/yIpiKAgtd3++oeG8
+        nb+80y2W0TI2wZfBTFs/Vx3E4pVaA5A=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6df184a9 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 30 Nov 2022 01:49:36 +0000 (UTC)
+Received: by mail-vk1-f180.google.com with SMTP id n191so2932373vkf.2;
+        Tue, 29 Nov 2022 17:49:36 -0800 (PST)
+X-Gm-Message-State: ANoB5pncuesRptxEWsXePAgNUKA4mjJz2bJXbypFiYtzPR+aoxAAZYzl
+        U3fMAAco1AN/piNLxzkfPPRdHDFiq69n8UoGpuE=
+X-Google-Smtp-Source: AA0mqf66W/xcXtQdoAptFqPtF1wHQXnsUvnHp/kQjOjpUGwMeXm8SA7gdDZVPxsNQFNwaCYa1oZNUSxEAAaQH+v4EVY=
+X-Received: by 2002:a1f:2ac9:0:b0:3bc:94ab:92f8 with SMTP id
+ q192-20020a1f2ac9000000b003bc94ab92f8mr22579402vkq.37.1669772975193; Tue, 29
+ Nov 2022 17:49:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <665b6081-be55-de9a-1f7f-70a143df329d@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221129160811.563011-1-Jason@zx2c4.com> <20221129182751.610558-1-Jason@zx2c4.com>
+ <20221130014514.6494-1-hdanton@sina.com>
+In-Reply-To: <20221130014514.6494-1-hdanton@sina.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 30 Nov 2022 02:49:24 +0100
+X-Gmail-Original-Message-ID: <CAHmME9pMmbpgUWWJb5q_uxR9_HP0NWeoxd1AUYL7Fvji09x=vQ@mail.gmail.com>
+Message-ID: <CAHmME9pMmbpgUWWJb5q_uxR9_HP0NWeoxd1AUYL7Fvji09x=vQ@mail.gmail.com>
+Subject: Re: [PATCH v3] random: spread out jitter callback to different CPUs
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,48 +71,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 08:39:24AM +0200, Tariq Toukan wrote:
-> 
-> 
-> On 11/17/2022 2:23 PM, Valentin Schneider wrote:
-> > On 15/11/22 10:32, Yury Norov wrote:
-> > > On Tue, Nov 15, 2022 at 05:24:56PM +0000, Valentin Schneider wrote:
-> > > > 
-> > > > Is this meant as a replacement for [1]?
-> > > 
-> > > No. Your series adds an iterator, and in my experience the code that
-> > > uses iterators of that sort is almost always better and easier to
-> > > understand than cpumask_nth() or cpumask_next()-like users.
-> > > 
-> > > My series has the only advantage that it allows keep existing codebase
-> > > untouched.
-> > > 
-> > 
-> > Right
-> > 
-> > > > I like that this is changing an existing interface so that all current
-> > > > users directly benefit from the change. Now, about half of the users of
-> > > > cpumask_local_spread() use it in a loop with incremental @i parameter,
-> > > > which makes the repeated bsearch a bit of a shame, but then I'm tempted to
-> > > > say the first point makes it worth it.
-> > > > 
-> > > > [1]: https://lore.kernel.org/all/20221028164959.1367250-1-vschneid@redhat.com/
-> > > 
-> > > In terms of very common case of sequential invocation of local_spread()
-> > > for cpus from 0 to nr_cpu_ids, the complexity of my approach is n * log n,
-> > > and your approach is amortized O(n), which is better. Not a big deal _now_,
-> > > as you mentioned in the other email. But we never know how things will
-> > > evolve, right?
-> > > 
-> > > So, I would take both and maybe in comment to cpumask_local_spread()
-> > > mention that there's a better alternative for those who call the
-> > > function for all CPUs incrementally.
-> > > 
-> > 
-> > Ack, sounds good.
-> > 
-> 
-> Good.
-> Is a respin needed, to add the comment mentioned above?
+Hi Hillf,
 
-If you think it's worth the effort.
+On Wed, Nov 30, 2022 at 2:45 AM Hillf Danton <hdanton@sina.com> wrote:
+>
+> On 29 Nov 2022 19:27:52 +0100 Jason A. Donenfeld <Jason@zx2c4.com>
+> > Rather than merely hoping that the callback gets called on another CPU,
+> > arrange for that to actually happen, by round robining which CPU the
+> > timer fires on. This way, on multiprocessor machines, we exacerbate
+> > jitter by touching the same memory from multiple different cores.
+> >
+> > It's necessary to call [try_to_]del_timer_sync() before calling
+> > add_timer_on(), so that the final call to del_timer_sync() at the end o=
+f
+> > the function actually succeeds at making sure no handlers are running.
+> >
+> > Cc: Sultan Alsawaf <sultan@kerneltoast.com>
+> > Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> > Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > ---
+> > Changes v2->v3:
+> > - Thomas convinced me try_to_del_timer_sync() was fine.
+> >
+> >  drivers/char/random.c | 36 +++++++++++++++++++++++++++---------
+> >  1 file changed, 27 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/drivers/char/random.c b/drivers/char/random.c
+> > index 7b71cea6a6ab..4cb1d606a492 100644
+> > --- a/drivers/char/random.c
+> > +++ b/drivers/char/random.c
+> > @@ -1232,7 +1232,8 @@ void __cold rand_initialize_disk(struct gendisk *=
+disk)
+> >  struct entropy_timer_state {
+> >       unsigned long entropy;
+> >       struct timer_list timer;
+> > -     unsigned int samples, samples_per_bit;
+> > +     atomic_t samples;
+> > +     unsigned int samples_per_bit;
+> >  };
+> >
+> >  /*
+> > @@ -1250,10 +1251,8 @@ static void __cold entropy_timer(struct timer_li=
+st *timer)
+> >  {
+> >       struct entropy_timer_state *state =3D container_of(timer, struct =
+entropy_timer_state, timer);
+> >
+> > -     if (++state->samples =3D=3D state->samples_per_bit) {
+> > +     if (atomic_inc_return(&state->samples) % state->samples_per_bit =
+=3D=3D 0)
+> >               credit_init_bits(1);
+> > -             state->samples =3D 0;
+> > -     }
+> >  }
+> >
+> >  /*
+> > @@ -1263,9 +1262,10 @@ static void __cold entropy_timer(struct timer_li=
+st *timer)
+> >  static void __cold try_to_generate_entropy(void)
+> >  {
+> >       enum { NUM_TRIAL_SAMPLES =3D 8192, MAX_SAMPLES_PER_BIT =3D HZ / 1=
+5 };
+> > -     struct entropy_timer_state stack;
+> > +     struct entropy_timer_state stack =3D { 0 };
+> >       unsigned int i, num_different =3D 0;
+> >       unsigned long last =3D random_get_entropy();
+> > +     int cpu =3D -1;
+> >
+> >       for (i =3D 0; i < NUM_TRIAL_SAMPLES - 1; ++i) {
+> >               stack.entropy =3D random_get_entropy();
+> > @@ -1277,19 +1277,37 @@ static void __cold try_to_generate_entropy(void=
+)
+> >       if (stack.samples_per_bit > MAX_SAMPLES_PER_BIT)
+> >               return;
+> >
+> > -     stack.samples =3D 0;
+> >       timer_setup_on_stack(&stack.timer, entropy_timer, 0);
+> >       while (!crng_ready() && !signal_pending(current)) {
+> > -             if (!timer_pending(&stack.timer))
+> > -                     mod_timer(&stack.timer, jiffies);
+> > +             /*
+> > +              * Check !timer_pending() and then ensure that any previo=
+us callback has finished
+> > +              * executing by checking try_to_del_timer_sync(), before =
+queueing the next one.
+> > +              */
+> > +             if (!timer_pending(&stack.timer) && try_to_del_timer_sync=
+(&stack.timer) >=3D 0) {
+>
+> If CPU RR is moved to the timer callback, timer game like this one that h=
+urts
+> brain can be avoided.
+
+There's a comment in the code from Linus about this:
+
+* Note that we don't re-arm the timer in the timer itself - we are happy to=
+ be
+* scheduled away, since that just makes the load more complex, but we do no=
+t
+* want the timer to keep ticking unless the entropy loop is running.
+
+> What sense made by trying to delete a non-pending timer?
+
+If the timer is no longer pending, but has not completed executing its
+callback, and add_timer_on() is called, subsequent calls to
+del_timer_sync() will stop the second add_timer_on(), but the first
+one that has not completed executing its callback will not be touched.
+Take a look at this example: https://=D7=90.cc/xBdEiIKO/c
+
+Jason
