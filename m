@@ -2,75 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6728563CD1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 03:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D372563CD26
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 03:08:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232185AbiK3CDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 21:03:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S229926AbiK3CIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 21:08:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbiK3CDh (ORCPT
+        with ESMTP id S229448AbiK3CIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 21:03:37 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE7027928
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 18:03:35 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id p16-20020a254210000000b006f8cd26bfcfso3897435yba.13
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 18:03:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qySU/YYSJyV1Gig5PuzcugPI3DQny2PGxjqX/sS0z2A=;
-        b=a7ok51aioMeHNiJSu7WtcVreWg/hIHdE7BTzM7xqt0k47iaIVEw0p+PKilUz+Z5Tsl
-         2bQOfpVf6meh/wYFWCctnSFxSpCbqFFPHBt5Nx0JBytQZ0/IliRi6rBDoMjhvyJd7AhH
-         ztB6iXeQE6BMroMQu8TBfxxXA2Ppm6c6oqSaNqTXvTK7OFI0mKSXpd38JrYmZBxE0Fct
-         EHaaFE7e+qLy5rV6dHmXgMmqwzhxz5EJdyUk4lQL8I6UEpKrA0X0yTgSHiZiWUr/rorG
-         O94Fpmf4kbvmxVvBMTIu7yKpC7llbZOk/E1EWf8UhfpN5UlttHcJCrkpJLwc8P352EeK
-         IYcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qySU/YYSJyV1Gig5PuzcugPI3DQny2PGxjqX/sS0z2A=;
-        b=IzxHc7VgDcdm5aR2bui2UMCUT8zGyEIxa0LLhdMpr40XkNM6Pr/SeSNfhGch/1yKRU
-         Br7+xoCFCLUZjw9UrGC6eiwviQ7UzbdaNVOb10018gtDgSA3lBYxktRWU+PsM+tm+eWY
-         3EnOZJzAV4bSNnAo0u1T9ZXHoomD46HZlULfJIiXuu5+000G3EoR0Euea2PdeMkazmSb
-         dIK4WKDWlZKaODqPluNu1JnYZBXgpvxggvK6lmHmsuCPYQwIreZSlTYpf+T0VsFvG74h
-         S82Su2Bylc8ShmlVf89li8DeHSx8hlyZyWIMatgQa6L+WkqpqcA9eq7M1HWp7vh/tkr6
-         BY+Q==
-X-Gm-Message-State: ANoB5pmLQCrRdbgO9HINWpRuodaJd9E6aGerJ50DMr38FDNbadBoKeYL
-        +SyETXgSjyCvA5rNeezoPWTC8aQqAjTh+Z3/nQ==
-X-Google-Smtp-Source: AA0mqf7g8lJGoWb8KEPiq3MhQbh+oBKm+lFB3ObIBN3lGaF8mBPfoAWa/O48jVf8luC/UX/oIap+IknPhLZDdG+NAg==
-X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2d4:203:5ef5:d4df:2c34:14d1])
- (user=almasrymina job=sendgmr) by 2002:a25:ba92:0:b0:6d3:66bb:786b with SMTP
- id s18-20020a25ba92000000b006d366bb786bmr58770981ybg.459.1669773814553; Tue,
- 29 Nov 2022 18:03:34 -0800 (PST)
-Date:   Tue, 29 Nov 2022 18:03:27 -0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221130020328.1009347-1-almasrymina@google.com>
-Subject: [RFC PATCH v2] mm: Add nodes= arg to memory.reclaim
-From:   Mina Almasry <almasrymina@google.com>
-To:     Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
-        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mina Almasry <almasrymina@google.com>, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        Tue, 29 Nov 2022 21:08:16 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9715B4B760;
+        Tue, 29 Nov 2022 18:08:15 -0800 (PST)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NMMzV32r5z15Mn9;
+        Wed, 30 Nov 2022 10:07:34 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 30 Nov 2022 10:08:13 +0800
+Message-ID: <3cd4e5d1-4837-a569-18b4-72fcaabf103d@huawei.com>
+Date:   Wed, 30 Nov 2022 10:08:13 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 0/2] ext4: fix a infinite loop in do_writepages after
+ online resizing
+Content-Language: en-US
+To:     Theodore Ts'o <tytso@mit.edu>, <linux-ext4@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <enwlinux@gmail.com>,
+        <jack@suse.cz>, <lczerner@redhat.com>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>, <yebin10@huawei.com>,
+        <ritesh.list@gmail.com>, <adilger.kernel@dilger.ca>
+References: <20220817132701.3015912-1-libaokun1@huawei.com>
+ <166975630697.2135297.7495422853696969304.b4-ty@mit.edu>
+From:   Baokun Li <libaokun1@huawei.com>
+In-Reply-To: <166975630697.2135297.7495422853696969304.b4-ty@mit.edu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,269 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The nodes= arg instructs the kernel to only scan the given nodes for
-proactive reclaim. For example use cases, consider a 2 tier memory system:
+On 2022/11/30 5:12, Theodore Ts'o wrote:
+> On Wed, 17 Aug 2022 21:26:59 +0800, Baokun Li wrote:
+>> We got a issue: the ext4 writeback process was stuck in do_writepages and
+>> do_writepages kept retrying. However, '-ENOMEM' is returned each time, even
+>> if there is still free memory on the current machine.
+>>
+>> We find that the direct cause of this issue is that the bg_inode_table_hi
+>> in the group descriptor is written to an incorrect value, which causes the
+>> inode block found through the inode table to exceed the end_ block。Then,
+>> sb_getblk always returns null, __ext4_get_inode_loc returns `-ENOMEM`,
+>> and do_writepages keeps retrying.
+>>
+>> [...]
+> Applied, thanks!
+>
+> [1/2] ext4: fix GDT corruption after online resizing with bigalloc enable and blocksize is 1024
+>        commit: 496fb12f8e236f303de6bc73a0334dd50c4eb64a
+> [2/2] ext4: add inode table check in __ext4_get_inode_loc to aovid possible infinite loop
+>        commit: bfb0625e8e86f8797264b1c7d10e146afe243d23
+>
+> Best regards,
 
-nodes 0,1 -> top tier
-nodes 2,3 -> second tier
+Hi Theodore,
 
-$ echo "1m nodes=0" > memory.reclaim
+Thank you very much for applying this patch set!
 
-This instructs the kernel to attempt to reclaim 1m memory from node 0.
-Since node 0 is a top tier node, demotion will be attempted first. This
-is useful to direct proactive reclaim to specific nodes that are under
-pressure.
+But I thought this patch set was discarded because there was no 
+"Reviewed-by".
+And a few days ago, I came up with a better solution to the problem 
+fixed by PATCH 1/2.
+The new solution is called "ext4: fix corruption when online resizing a 
+1K bigalloc fs", which
+is in another patch set  ("[PATCH v3 0/3] ext4: fix some bugs in online 
+resize") that fixes
+some online resize problems. This patch set has been reviewed, and I 
+would appreciate it if
+you could revert PATCH 1/2 and apply the patch set containing the new 
+solution.
 
-$ echo "1m nodes=2,3" > memory.reclaim
+Sorry for wasting your time without stating that a new solution is 
+available after the old patch.
 
-This instructs the kernel to attempt to reclaim 1m memory in the second tier,
-since this tier of memory has no demotion targets the memory will be
-reclaimed.
-
-$ echo "1m nodes=0,1" > memory.reclaim
-
-Instructs the kernel to reclaim memory from the top tier nodes, which can
-be desirable according to the userspace policy if there is pressure on
-the top tiers. Since these nodes have demotion targets, the kernel will
-attempt demotion first.
-
-Since commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
-reclaim""), the proactive reclaim interface memory.reclaim does both
-reclaim and demotion. Reclaim and demotion incur different latency costs
-to the jobs in the cgroup. Demoted memory would still be addressable
-by the userspace at a higher latency, but reclaimed memory would need to
-incur a pagefault.
-
-The 'nodes' arg is useful to allow the userspace to control demotion
-and reclaim independently according to its policy: if the memory.reclaim
-is called on a node with demotion targets, it will attempt demotion first;
-if it is called on a node without demotion targets, it will only attempt
-reclaim.
-
-Signed-off-by: Mina Almasry <almasrymina@google.com>
----
- Documentation/admin-guide/cgroup-v2.rst | 15 +++---
- include/linux/swap.h                    |  3 +-
- mm/memcontrol.c                         | 67 ++++++++++++++++++++-----
- mm/vmscan.c                             |  4 +-
- 4 files changed, 68 insertions(+), 21 deletions(-)
-
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 74cec76be9f2..ac5fcbcd5ae6 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -1245,17 +1245,13 @@ PAGE_SIZE multiple when read back.
- 	This is a simple interface to trigger memory reclaim in the
- 	target cgroup.
-
--	This file accepts a single key, the number of bytes to reclaim.
--	No nested keys are currently supported.
-+	This file accepts a string which contains the number of bytes to
-+	reclaim.
-
- 	Example::
-
- 	  echo "1G" > memory.reclaim
-
--	The interface can be later extended with nested keys to
--	configure the reclaim behavior. For example, specify the
--	type of memory to reclaim from (anon, file, ..).
--
- 	Please note that the kernel can over or under reclaim from
- 	the target cgroup. If less bytes are reclaimed than the
- 	specified amount, -EAGAIN is returned.
-@@ -1267,6 +1263,13 @@ PAGE_SIZE multiple when read back.
- 	This means that the networking layer will not adapt based on
- 	reclaim induced by memory.reclaim.
-
-+	This file also allows the user to specify the nodes to reclaim from,
-+	via the 'nodes=' key, example::
-+
-+	  echo "1G nodes=0,1" > memory.reclaim
-+
-+	The above instructs the kernel to reclaim memory from nodes 0,1.
-+
-   memory.peak
- 	A read-only single value file which exists on non-root
- 	cgroups.
-diff --git a/include/linux/swap.h b/include/linux/swap.h
-index b61e2007d156..f542c114dffd 100644
---- a/include/linux/swap.h
-+++ b/include/linux/swap.h
-@@ -419,7 +419,8 @@ extern unsigned long try_to_free_pages(struct zonelist *zonelist, int order,
- extern unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
- 						  unsigned long nr_pages,
- 						  gfp_t gfp_mask,
--						  unsigned int reclaim_options);
-+						  unsigned int reclaim_options,
-+						  nodemask_t nodemask);
- extern unsigned long mem_cgroup_shrink_node(struct mem_cgroup *mem,
- 						gfp_t gfp_mask, bool noswap,
- 						pg_data_t *pgdat,
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 23750cec0036..a0d7850173a9 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -63,6 +63,7 @@
- #include <linux/resume_user_mode.h>
- #include <linux/psi.h>
- #include <linux/seq_buf.h>
-+#include <linux/parser.h>
- #include "internal.h"
- #include <net/sock.h>
- #include <net/ip.h>
-@@ -2392,7 +2393,8 @@ static unsigned long reclaim_high(struct mem_cgroup *memcg,
- 		psi_memstall_enter(&pflags);
- 		nr_reclaimed += try_to_free_mem_cgroup_pages(memcg, nr_pages,
- 							gfp_mask,
--							MEMCG_RECLAIM_MAY_SWAP);
-+							MEMCG_RECLAIM_MAY_SWAP,
-+							NODE_MASK_ALL);
- 		psi_memstall_leave(&pflags);
- 	} while ((memcg = parent_mem_cgroup(memcg)) &&
- 		 !mem_cgroup_is_root(memcg));
-@@ -2683,7 +2685,8 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
-
- 	psi_memstall_enter(&pflags);
- 	nr_reclaimed = try_to_free_mem_cgroup_pages(mem_over_limit, nr_pages,
--						    gfp_mask, reclaim_options);
-+						    gfp_mask, reclaim_options,
-+						    NODE_MASK_ALL);
- 	psi_memstall_leave(&pflags);
-
- 	if (mem_cgroup_margin(mem_over_limit) >= nr_pages)
-@@ -3503,7 +3506,8 @@ static int mem_cgroup_resize_max(struct mem_cgroup *memcg,
- 		}
-
- 		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
--					memsw ? 0 : MEMCG_RECLAIM_MAY_SWAP)) {
-+					memsw ? 0 : MEMCG_RECLAIM_MAY_SWAP,
-+					NODE_MASK_ALL)) {
- 			ret = -EBUSY;
- 			break;
- 		}
-@@ -3614,7 +3618,8 @@ static int mem_cgroup_force_empty(struct mem_cgroup *memcg)
- 			return -EINTR;
-
- 		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
--						  MEMCG_RECLAIM_MAY_SWAP))
-+						  MEMCG_RECLAIM_MAY_SWAP,
-+						  NODE_MASK_ALL))
- 			nr_retries--;
- 	}
-
-@@ -6407,7 +6412,8 @@ static ssize_t memory_high_write(struct kernfs_open_file *of,
- 		}
-
- 		reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages - high,
--					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP);
-+					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP,
-+					NODE_MASK_ALL);
-
- 		if (!reclaimed && !nr_retries--)
- 			break;
-@@ -6456,7 +6462,8 @@ static ssize_t memory_max_write(struct kernfs_open_file *of,
-
- 		if (nr_reclaims) {
- 			if (!try_to_free_mem_cgroup_pages(memcg, nr_pages - max,
--					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP))
-+					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP,
-+					NODE_MASK_ALL))
- 				nr_reclaims--;
- 			continue;
- 		}
-@@ -6579,21 +6586,54 @@ static ssize_t memory_oom_group_write(struct kernfs_open_file *of,
- 	return nbytes;
- }
-
-+enum {
-+	MEMORY_RECLAIM_NODES = 0,
-+	MEMORY_RECLAIM_NULL,
-+};
-+
-+static const match_table_t if_tokens = {
-+	{ MEMORY_RECLAIM_NODES, "nodes=%s" },
-+	{ MEMORY_RECLAIM_NULL, NULL },
-+};
-+
- static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
- 			      size_t nbytes, loff_t off)
- {
- 	struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
- 	unsigned int nr_retries = MAX_RECLAIM_RETRIES;
- 	unsigned long nr_to_reclaim, nr_reclaimed = 0;
--	unsigned int reclaim_options;
--	int err;
-+	unsigned int reclaim_options = MEMCG_RECLAIM_MAY_SWAP |
-+				       MEMCG_RECLAIM_PROACTIVE;
-+	char *old_buf, *start;
-+	substring_t args[MAX_OPT_ARGS];
-+	int token;
-+	char value[256];
-+	nodemask_t nodemask = NODE_MASK_ALL;
-
- 	buf = strstrip(buf);
--	err = page_counter_memparse(buf, "", &nr_to_reclaim);
--	if (err)
--		return err;
-
--	reclaim_options	= MEMCG_RECLAIM_MAY_SWAP | MEMCG_RECLAIM_PROACTIVE;
-+	old_buf = buf;
-+	nr_to_reclaim = memparse(buf, &buf) / PAGE_SIZE;
-+	if (buf == old_buf)
-+		return -EINVAL;
-+
-+	buf = strstrip(buf);
-+
-+	while ((start = strsep(&buf, " ")) != NULL) {
-+		if (!strlen(start))
-+			continue;
-+		token = match_token(start, if_tokens, args);
-+		match_strlcpy(value, args, sizeof(value));
-+		switch (token) {
-+		case MEMORY_RECLAIM_NODES:
-+			if (nodelist_parse(value, nodemask) < 0)
-+				return -EINVAL;
-+			break;
-+		default:
-+			return -EINVAL;
-+		}
-+	}
-+
- 	while (nr_reclaimed < nr_to_reclaim) {
- 		unsigned long reclaimed;
-
-@@ -6610,7 +6650,8 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
-
- 		reclaimed = try_to_free_mem_cgroup_pages(memcg,
- 						nr_to_reclaim - nr_reclaimed,
--						GFP_KERNEL, reclaim_options);
-+						GFP_KERNEL, reclaim_options,
-+						nodemask);
-
- 		if (!reclaimed && !nr_retries--)
- 			return -EAGAIN;
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 7b8e8e43806b..23fc5b523764 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -6735,7 +6735,8 @@ unsigned long mem_cgroup_shrink_node(struct mem_cgroup *memcg,
- unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
- 					   unsigned long nr_pages,
- 					   gfp_t gfp_mask,
--					   unsigned int reclaim_options)
-+					   unsigned int reclaim_options,
-+					   nodemask_t nodemask)
- {
- 	unsigned long nr_reclaimed;
- 	unsigned int noreclaim_flag;
-@@ -6750,6 +6751,7 @@ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
- 		.may_unmap = 1,
- 		.may_swap = !!(reclaim_options & MEMCG_RECLAIM_MAY_SWAP),
- 		.proactive = !!(reclaim_options & MEMCG_RECLAIM_PROACTIVE),
-+		.nodemask = &nodemask,
- 	};
- 	/*
- 	 * Traverse the ZONELIST_FALLBACK zonelist of the current node to put
---
-2.38.1.584.g0f3c55d4c2-goog
+Thanks again!
+-- 
+With Best Regards,
+Baokun Li
