@@ -2,128 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2628763E564
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4985063E56A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbiK3XZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 18:25:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
+        id S229767AbiK3X0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:26:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbiK3XZV (ORCPT
+        with ESMTP id S229740AbiK3X0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 18:25:21 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD2DBD893
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:17:07 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id db10-20020a0568306b0a00b0066d43e80118so12246220otb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:17:07 -0800 (PST)
+        Wed, 30 Nov 2022 18:26:14 -0500
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE10212;
+        Wed, 30 Nov 2022 15:17:32 -0800 (PST)
+Received: by mail-pj1-f48.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so3474094pje.5;
+        Wed, 30 Nov 2022 15:17:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HInS/N+iYT5Xyv/3OtkTBTcUMud6010V70HXD5PLrgQ=;
-        b=UoueS2pcPxayLxQFXEIfTPHDfYTQ5o6kSdnvOHBEZNmSr0iPL47pGi3D5VEsq4ZZWK
-         NXpkr2RVsUvlg2ueuKu//R0ddEFwoNKwUI8JocQc/BjhTxilDcWD2QOmZbXikPVjP1Gc
-         O0TejO0856WRouyOsoV2XWLCP+fzOhZubAwFU=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JHPYnqkf2NRISNr9s2sdmwDxCB7+PKLiB+fahjpgjKA=;
+        b=Gwnn1Tg36v0C9UFyL+lfSUR9DkSygRbLxrb0z2WIrXYkRzlGM3QFGEFI4uA2JlgMui
+         NMpWWekWX17ucbs9h107b3sRwm4dqz9UIKTEQR5srBdTr28vW2aJ1E5T4F991BKPovLZ
+         BniOrKueHLHlvG2UtMzzMuFdYAPZ6eh9F4N1CXVpjGzD+CgEfi/JkoBqsVurT0q5agiL
+         i3cyFj0I13BqOb6HwZHFbvzAN1u1IfLRBpmEAHPGR9CKl/M1JNZs5R+5b3Maj0wvipiR
+         c+cdy7zCrkCgdsaNtGA9jOzcvs9DHwOit1X/ax0rgrbsfHihXYFtUo6m0HovfcBb0hGa
+         E2aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HInS/N+iYT5Xyv/3OtkTBTcUMud6010V70HXD5PLrgQ=;
-        b=7loSHIu3M901Eamauoo1ZNiZ3VcMmq3tAu+2RHdocAEKPl4ZRvP4PAWIfnufnUI7qs
-         GMPwv0t8qJxjjAWFwWXQd3xJuRxqBPjzLjIL3CC+/9jyRj5quk6UN2xL3a5udbmqHHCk
-         SZHQHz0ffgcLlP0D/AGRn3NVDm7IV+i5IuCy03qkoUhLVXKl56JHQHkUT/BI42QJ0fGJ
-         qtITc5QCCSjHlzRTjiKzssTNWtLK9z9bb85lsNs7Uav5JWFBjmTbglemG1lgMICfzC4P
-         bQ995w+D+6WcfeBrt/6kmx7j400fGzSAq++VVkschLxzdOMKvdZXfUNrA+MdH+vYInIc
-         8tUA==
-X-Gm-Message-State: ANoB5pkDOaWGa7X3pDLXxH+nPv1WKpjJmmnVTInl+Xc9MoKtvuf4t8VD
-        8Pc9Y18vvlCtbWv/cPEOjPLQYjL2AOm5Utgh9ZdiNQ==
-X-Google-Smtp-Source: AA0mqf4PNohW9IoqD0HMyO5sUTIU8Ax9vPiAxn89y1QKO6rMLaUTbF9NDjCpCqbB3gn4d7O6p1M8/iZkYZUpu08wCRI=
-X-Received: by 2002:a05:6830:1f4a:b0:661:b04c:41d9 with SMTP id
- u10-20020a0568301f4a00b00661b04c41d9mr22511809oth.92.1669850168015; Wed, 30
- Nov 2022 15:16:08 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JHPYnqkf2NRISNr9s2sdmwDxCB7+PKLiB+fahjpgjKA=;
+        b=3azB3gp6GFCSGRqMfyuwL6PCiG97WIcZ29b6QmJ8XgSC5qjBzGjTarMu5Ray4t1q6E
+         EpUqPQ3doTTBMfrIScllQqpdKZ11GuKeUz/VK0s3G2WVsBMWJnQ5yMVIFIAsGCYk+vlV
+         RRTNOiOKiEwXPPEiLNxpbhAfaTZBcORugsC3Rn6WOCL2EvQg+XJ71EmIkyMrmpFmC5uA
+         ga9EEE7XGr+L98XRF72FPp0Ed4rQBu9j2OtskSFn7N1Qev9VOiEHNNRRdPyrYcE6eKkY
+         Eyf10pymkqSW1pcwbncw73KOpLiBVu8knoF5u2HBB6spuBLXWmzKniIOmvzFhMPo3Ex4
+         n9OQ==
+X-Gm-Message-State: ANoB5pkhn6aFUiBIiXSbGxzpN9CFoP0Qkbc0MchmUrVkylfcxFeuWo7L
+        9Quo7vwX0NMNK6VMbGEKncOvSbADWng=
+X-Google-Smtp-Source: AA0mqf4hOUlc1LUnq7PCe3mgcQJ4Gx4HpQumuFCEp6biAMVWm1P3NUpo9JWayWHSlGl6ufDrh2SjXA==
+X-Received: by 2002:a17:902:7d93:b0:186:9cf4:e53b with SMTP id a19-20020a1709027d9300b001869cf4e53bmr48580264plm.50.1669850160375;
+        Wed, 30 Nov 2022 15:16:00 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:360e:7e9f:b234:c094])
+        by smtp.gmail.com with ESMTPSA id n12-20020a170903110c00b00186a6b63525sm2035082plh.120.2022.11.30.15.15.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 15:15:59 -0800 (PST)
+Date:   Wed, 30 Nov 2022 15:15:56 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Vincent Knecht <vincent.knecht@mailoo.org>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        w.david0@protonmail.com, stephan@gerhold.net,
+        phone-devel@vger.kernel.org
+Subject: Re: [PATCH RESEND] Input: msg2638 - only read linux,keycodes array
+ if necessary
+Message-ID: <Y4fkLL6nvq6655MW@google.com>
+References: <20221130210202.2069213-1-vincent.knecht@mailoo.org>
 MIME-Version: 1.0
-References: <20221130181316.GA1012431@paulmck-ThinkPad-P17-Gen-1>
- <20221130181325.1012760-14-paulmck@kernel.org> <CAEXW_YS1nfsV_ohXDaB1i2em=+0KP1DofktS24oGFa4wPAbiiw@mail.gmail.com>
- <639433.1669835344@warthog.procyon.org.uk> <CAEXW_YSd3dyxHxnU1EuER+xyBGGatONzPovphFX5K9seSbkdkg@mail.gmail.com>
- <658624.1669849522@warthog.procyon.org.uk>
-In-Reply-To: <658624.1669849522@warthog.procyon.org.uk>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Wed, 30 Nov 2022 23:15:51 +0000
-Message-ID: <CAEXW_YSKdkxYNompUK1orGcAHfqCjWg-twiASdBM9i2Sv=9Kuw@mail.gmail.com>
-Subject: Re: [PATCH rcu 14/16] rxrpc: Use call_rcu_hurry() instead of call_rcu()
-To:     David Howells <dhowells@redhat.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        rostedt@goodmis.org, Marc Dionne <marc.dionne@auristor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221130210202.2069213-1-vincent.knecht@mailoo.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 11:05 PM David Howells <dhowells@redhat.com> wrote:
->
-> Joel Fernandes <joel@joelfernandes.org> wrote:
->
-> > > Note that this conflicts with my patch:
-> > >
-> > >         rxrpc: Don't hold a ref for connection workqueue
-> > >         https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?h=rxrpc-next&id=450b00011290660127c2d76f5c5ed264126eb229
-> > >
-> > > which should render it unnecessary.  It's a little ahead of yours in the
-> > > net-next queue, if that means anything.
-> >
-> > Could you clarify why it is unnecessary?
->
-> Rather than tearing down parts of the connection it only logs a trace line,
-> frees the memory and decrements the counter on the namespace.  This it used to
-> account that all the pieces of memory allocated in that namespace are gone
-> before the namespace is removed to check for leaks.  The RCU cleanup used to
-> use some other stuff (such as the peer hash) in the rxrpc_net struct but no
-> longer will after the patches I submitted.
->
-> > After your patch, you are still doing a wake up in your call_rcu() callback:
-> >
-> > - ASSERTCMP(refcount_read(&conn->ref), ==, 0);
-> > + if (atomic_dec_and_test(&rxnet->nr_conns))
-> > +    wake_up_var(&rxnet->nr_conns);
-> > +}
-> >
-> > Are you saying the code can now tolerate delays? What if the RCU
-> > callback is invoked after arbitrarily long delays making the sleeping
-> > process to wait?
->
-> True.  But that now only holds up the destruction of a net namespace and the
-> removal of the rxrpc module.
->
-> > If you agree, you can convert the call_rcu() to call_rcu_hurry() in
-> > your patch itself. Would you be willing to do that? If not, that's
-> > totally OK and I can send a patch later once yours is in (after
-> > further testing).
->
-> I can add it to part 4 (see my rxrpc-ringless-5 branch) if it is necessary.
+On Wed, Nov 30, 2022 at 10:01:59PM +0100, Vincent Knecht wrote:
+> The linux,keycodes property is optional.
+> Fix the driver not probing when it's not specified.
+> 
+> Fixes: c18ef50346f2 ("Input: msg2638 - add support for msg2138 key events")
+> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
 
-Ok sounds good, on module removal the rcu_barrier() will flush out
-pending callbacks so that should not be an issue.
+Applied, thank you.
 
-Based on your message, I think we can drop this patch then. Since Paul
-is already dropping it, no other action is needed.
-
-(I just realized my patch was not fixing a test failure, like the
-other net ones did, but rather we found the issue by static analysis
--- i.e. programmatically auditing all callbacks in the kernel doing
-wake ups).
-
-thanks,
- - Joel
+-- 
+Dmitry
