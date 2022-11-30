@@ -2,108 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EACEA63DC44
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 18:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87C163DC3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 18:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiK3RoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 12:44:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
+        id S229635AbiK3RnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 12:43:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiK3RoI (ORCPT
+        with ESMTP id S229445AbiK3RnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 12:44:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DAA45A06
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 09:43:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669830188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=voK5XLV56Q9FI5eyVszeBGUsLnZ4M62G6sR/KUxS2MY=;
-        b=G+w8sI4cVrcBaR1WhD13eqcRZ3Fyd0LDd9BiYWVXdBKguGG00u2j0sd//ZCEN43T5XnUeA
-        ilVpDMcE2e+996LbjZPPHSXgfUrBUGUG7lm/7M4IkKlSCeXqdPqX9gyNebH1bhvvzTaglu
-        5YQddmTdVewnMaf8ezCyDOemYiZGo6w=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-573-EyUi-REFMla6CcfttnjSHg-1; Wed, 30 Nov 2022 12:43:07 -0500
-X-MC-Unique: EyUi-REFMla6CcfttnjSHg-1
-Received: by mail-qv1-f71.google.com with SMTP id 71-20020a0c804d000000b004b2fb260447so27254643qva.10
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 09:43:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=voK5XLV56Q9FI5eyVszeBGUsLnZ4M62G6sR/KUxS2MY=;
-        b=v0HQQs0xqn1++GoClpn8xC2y33a5U+4E6aVIe7w1accKnW64kg90FBIHWRWHDlEoL1
-         qpd8klr3QAsyncNMWRMoiaTSguRN+3wfuBM0tAHQgJq8UbS9TJtc6yR6x8CmQvsNDoxW
-         ePN8eBsuUrJz9yT9dh1Q89fbMRMDSO4UnVjwf+WyxNMQAqWUQbzp8ZkN8wgjCNaj/SJV
-         d95eZNLd5Bmp3QGtCR64k3ggaesDD5kMa06Ek03+FUkI1UDIXjEdVJP6VHzNLcxJPDfE
-         aFQ9vfV4l8XKZE37JTueNz8nLiVScfK/R/jXi4YVS3ddbSvjtXf0cKEqGOeI0IqdbjO9
-         KGHQ==
-X-Gm-Message-State: ANoB5pnD6L+1oYhr0YOqAge3ia9bPHz7jgQpQJUhZRSsPdj8gDUMDk8f
-        d+9Ox/kDdpQlmbUlUCO1w2Dz9LySOnbuEXTfGu+ytCNP6/piL0txi7835Ta+aF4L7YQs8BJlU4m
-        Au0028Ozh6389U3ADhgTJ+iw2
-X-Received: by 2002:ac8:1416:0:b0:3a5:6822:1a42 with SMTP id k22-20020ac81416000000b003a568221a42mr44920276qtj.174.1669830186982;
-        Wed, 30 Nov 2022 09:43:06 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6WAPHf8bd6gCmpsnoP2kOmMN0tOtqukSeMA0xoipZdye6rc5uujfvMb4ufBL+lhjVaLVVJug==
-X-Received: by 2002:ac8:1416:0:b0:3a5:6822:1a42 with SMTP id k22-20020ac81416000000b003a568221a42mr44920254qtj.174.1669830186742;
-        Wed, 30 Nov 2022 09:43:06 -0800 (PST)
-Received: from x1.redhat.com (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id s18-20020a05620a29d200b006fba0a389a4sm1666087qkp.88.2022.11.30.09.43.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 09:43:06 -0800 (PST)
-From:   Brian Masney <bmasney@redhat.com>
-To:     irusskikh@marvell.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cth451@gmail.com
-Subject: [PATCH] net: atlantic: fix check for invalid ethernet addresses
-Date:   Wed, 30 Nov 2022 12:42:59 -0500
-Message-Id: <20221130174259.1591567-1-bmasney@redhat.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 30 Nov 2022 12:43:12 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A914B75A;
+        Wed, 30 Nov 2022 09:43:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669830191; x=1701366191;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=B3wDv3vpOG1kZHQ2h29A6+y3D/5UJp4mktosEpyu5cc=;
+  b=nHjr/IPxrWc8SUZtgsZUP2PLGcaPYcmp9cJPIjqXm2OxfwO+LoPOCRSq
+   SFmDrEbYSMG8JaWXUNEvw1nkal/vv9e216PL7H4C2auQ6eZ8luycY08c8
+   PYiRJewy5XmpZl6nmrJRUjqHN7GPIqB0xbpG9SvE1y6V0bCs4KPQFsjHG
+   69DyL6aA9AkwJyPTkXUC3Ecqtkde4H67r23DAOCFitBRkNLZzBoz9FLKK
+   ouOm++JCw5yATeuLJUsUWY3JxiOp8alJ97eNhKaL9W5BUhWhynoMFz5TH
+   uP6bAD+/HCJI1XhWikagrbw9WGBmrZA5N9ASuyLJh4eU+huG4dfwwWEXW
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="313089050"
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="313089050"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 09:43:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="768915535"
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="768915535"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 30 Nov 2022 09:43:07 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p0R6v-002NTX-1s;
+        Wed, 30 Nov 2022 19:43:05 +0200
+Date:   Wed, 30 Nov 2022 19:43:05 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Gerald Loacker <gerald.loacker@wolfvision.net>
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jakob Hauser <jahau@rocketmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Subject: Re: [PATCH v5 3/3] iio: magnetometer: add ti tmag5273 driver
+Message-ID: <Y4eWKdJXOR7hJTF3@smile.fi.intel.com>
+References: <20221130145356.1129901-1-gerald.loacker@wolfvision.net>
+ <20221130145356.1129901-4-gerald.loacker@wolfvision.net>
+ <Y4d3NZkCdALLkwU7@smile.fi.intel.com>
+ <ef3ec278-d9dd-4318-5b8a-d0ed363fbaab@wolfvision.net>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ef3ec278-d9dd-4318-5b8a-d0ed363fbaab@wolfvision.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Qualcomm sa8540p automotive development board (QDrive3) has an
-Aquantia NIC wired over PCIe. The ethernet MAC address assigned to
-all of the boards in our lab is 00:17:b6:00:00:00. The existing
-check in aq_nic_is_valid_ether_addr() only checks for leading zeros
-in the MAC address. Let's update the check to also check for trailing
-zeros in the MAC address so that a random MAC address is assigned
-in this case.
+On Wed, Nov 30, 2022 at 05:32:10PM +0100, Gerald Loacker wrote:
+> Am 30.11.2022 um 16:31 schrieb Andy Shevchenko:
+> > On Wed, Nov 30, 2022 at 03:53:56PM +0100, Gerald Loacker wrote:
 
-Signed-off-by: Brian Masney <bmasney@redhat.com>
----
- drivers/net/ethernet/aquantia/atlantic/aq_nic.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+...
 
-diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_nic.c b/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
-index 06508eebb585..c9c850bbc805 100644
---- a/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
-@@ -293,7 +293,8 @@ static bool aq_nic_is_valid_ether_addr(const u8 *addr)
- 	/* Some engineering samples of Aquantia NICs are provisioned with a
- 	 * partially populated MAC, which is still invalid.
- 	 */
--	return !(addr[0] == 0 && addr[1] == 0 && addr[2] == 0);
-+	return !(addr[0] == 0 && addr[1] == 0 && addr[2] == 0) &&
-+		!(addr[3] == 0 && addr[4] == 0 && addr[5] == 0);
- }
- 
- int aq_nic_ndev_register(struct aq_nic_s *self)
+> >> +	switch (data->devid) {
+> >> +	case TMAG5273_MANUFACTURER_ID:
+> >> +		/*
+> >> +		 * The device name matches the orderable part number. 'x' stands
+> >> +		 * for A, B, C or D devices, which have different I2C addresses.
+> >> +		 * Versions 1 or 2 (0 and 3 is reserved) stands for different
+> >> +		 * magnetic strengths.
+> >> +		 */
+> >> +		snprintf(data->name, sizeof(data->name), "tmag5273x%1u", data->version);
+> >> +		if (data->version < 1 || data->version > 2)
+> >> +			dev_warn(data->dev, "Unsupported device %s\n", data->name);
+> >> +		return 0;
+> >> +	default:
+> > 
+> >> +		dev_warn(data->dev, "Unknown device ID 0x%x\n", data->devid);
+> >> +		return 0;
+> > 
+> > And we still continue?! Wouldn't be a problem if that ID drastically changed in
+> > terms of programming model and may actually be broken by a wrong sequence?
+> 
+> It was suggested by Jonathan to just print a warning instead of
+> returning with -ENODEV. Reason was "Often manufacturers spin new
+> versions of chips that are compatible enough that we give them a
+> fallback compatible in device tree.". For me this makes sense.
+
+Ah, I see. Maybe adding a comment summarizing above?
+
+> >> +	}
+
 -- 
-2.38.1
+With Best Regards,
+Andy Shevchenko
+
 
