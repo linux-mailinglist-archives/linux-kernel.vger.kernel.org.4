@@ -2,131 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781F763CCC6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 02:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9B863CCD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 02:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiK3BTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 20:19:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
+        id S231502AbiK3B24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 20:28:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiK3BTA (ORCPT
+        with ESMTP id S229565AbiK3B2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 20:19:00 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D2D205CF;
-        Tue, 29 Nov 2022 17:19:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669771140; x=1701307140;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=sgLb3+hHrnxviwnVp4ajKcqE767kfjliDdxs3bjc7KU=;
-  b=J2QLe1s/AYYZEVVrxkXP2Szqsca660cXRYKV08WoLVQ90se222FGkrq6
-   Jxb7oZ/boiMWWJ59BTC6/JIUbaf1PplyTDXx7IAJCczM/KjpQ4NI2sAOC
-   EWZPJ99lH6aS4idAqHHEzusWyokvvnsGyUdQ07WS8NT67/FOUx3mkybj1
-   4T2PVO5fgRxugYx6OeEcNvlBERqa2kHWYudQe/G3I4lrAQ8rVHpDnrB6h
-   NR/lmING3r0oLgcgtfgI20E4SVpr+cb4QKZ4odIbUszlckVpA8GUfxBh+
-   cdyFpwoqPIt5a8FnTSJiRelvwZL9DWU9OwDc9B00QadZv/xx2YnrfhrPS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="298642889"
-X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="298642889"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 17:18:59 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="786271290"
-X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="786271290"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 17:18:57 -0800
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] rcu-tasks: Make rude RCU-Tasks work well with CPU hotplug
-Date:   Wed, 30 Nov 2022 09:24:45 +0800
-Message-Id: <20221130012445.1863104-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 29 Nov 2022 20:28:49 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A73F5F46;
+        Tue, 29 Nov 2022 17:28:48 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id EA4765C0095;
+        Tue, 29 Nov 2022 20:28:44 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 29 Nov 2022 20:28:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1669771724; x=1669858124; bh=N3
+        PhtsYK5SSpRrnjY3chFLqAm0o6zorAXR4hySwwKpU=; b=rdL3sbh9Z+Gu6G6+xq
+        Uk8Jrg76SkC24pupDzOkg3w4h7iV0y3m98HRrliySxdtKfeFfmxhWeLLlMtQKaxt
+        VvjiRqUcgUj3od4l5HVR0VxkSFRJ/q7aebkYjm7SFmgZN4uJwYeLZOCVtXOxhmbg
+        LbsnN+TjJUNU/vOoLIJffxVd52VydTHtv98F3kLMClETo/dITSLPQuh7GISrKCmv
+        2SqmSv+YwP5vvNLHgTlR90GylsTLb1sPA5ttHZilIbnGBCu5xSndoYtLEfBPDtQh
+        ia2Sfp4s9SblGeOfjTvVtirAYPamyzdWYRzJ8OWTncg7SSMEMAYH0WJUguQRElBP
+        nNbw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669771724; x=1669858124; bh=N3PhtsYK5SSpRrnjY3chFLqAm0o6
+        zorAXR4hySwwKpU=; b=Nelvuy4D1HjsnimfhXJhbyrSXUjm5UPHrBdOi2vwjEc7
+        3b2nQFrE5iQmzzVOLlYIbJjQ6lsZjZn5F9XGBLXIzrorV1iAVYMfyLRxg3y9wuzh
+        LNj+RpiFLctbQ73AzV7R1jDH7tvh72AJJQ2aKsxfIPDjJiR5HH/JwYWB5NjpTwrN
+        3ZkO56oGzAg/Ef+J2KZzyE/xErAqJsBwYTMtR+vnnGpwwHRnKZpvI6VzLa9ePBn7
+        auVy7ubpmlnvWN5ARgNDgDJLb9TQ6RCYVdJEqdHaujVFwlv11YLep2JanRAbbeAR
+        11NyWs7pxBAl6JOjtBVa8VvFnPkNkwaNwhv8/DO++Q==
+X-ME-Sender: <xms:y7GGY5-UwwseLUpT0vPpA9efaGHXoQtmgslY4RZZ_i5PqGSaMR6LJA>
+    <xme:y7GGY9s9V-Yay_jEmlDd9q6YLL-qYfrzIGOSGcFwYUVSAs_EJbz4_10h5hrlhGmbJ
+    IVmEq86rbakl3nXs5E>
+X-ME-Received: <xmr:y7GGY3Bw_FuuNYJXrA1HnDc8MeSyy03cCD4RWuIkrkCuF73R5h8XXWpqK236XC8cXOxn7w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtddvgdefgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
+    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
+    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
+    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:y7GGY9frowOXW7U99Y7r4wSpkGie6Mu5rf_tPriDGfDSsUF5pEF7VQ>
+    <xmx:y7GGY-NYJuvy2LyOMwRjnH6pXJwxk3L9nP8pREDcLBGQlg7HSGiHSA>
+    <xmx:y7GGY_lmWt_7Tg29nDaXIUZzCBHnph8KgsJnDqZqOiLMn9Og3MV4JQ>
+    <xmx:zLGGY63X34_fvabCJB7CldtJXLPLO-uC6Rz7ZEiQou11zj9g-we4wg>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 29 Nov 2022 20:28:43 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 73174103BF4; Wed, 30 Nov 2022 04:28:40 +0300 (+03)
+Date:   Wed, 30 Nov 2022 04:28:40 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCHv7 08/14] x86/mm: Reserve unaccepted memory bitmap
+Message-ID: <20221130012840.sf4rvddzc4ev7bj5@box.shutemov.name>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-9-kirill.shutemov@linux.intel.com>
+ <Yt+uwhfA57WBrozb@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yt+uwhfA57WBrozb@zn.tnic>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, invoke rcu_tasks_rude_wait_gp() to wait one rude
-RCU-tasks grace period, if __num_online_cpus == 1, will return
-directly, indicates the end of the rude RCU-task grace period.
-suppose the system has two cpus, consider the following scenario:
+On Tue, Jul 26, 2022 at 11:07:14AM +0200, Borislav Petkov wrote:
+> On Tue, Jun 14, 2022 at 03:02:25PM +0300, Kirill A. Shutemov wrote:
+> > diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
+> > index f267205f2d5a..22d1fe48dcba 100644
+> > --- a/arch/x86/kernel/e820.c
+> > +++ b/arch/x86/kernel/e820.c
+> > @@ -1316,6 +1316,16 @@ void __init e820__memblock_setup(void)
+> >  	int i;
+> >  	u64 end;
+> >  
+> > +	/* Mark unaccepted memory bitmap reserved */
+> > +	if (boot_params.unaccepted_memory) {
+> > +		unsigned long size;
+> > +
+> > +		/* One bit per 2MB */
+> > +		size = DIV_ROUND_UP(e820__end_of_ram_pfn() * PAGE_SIZE,
+> > +				    PMD_SIZE * BITS_PER_BYTE);
+> > +		memblock_reserve(boot_params.unaccepted_memory, size);
+> > +	}
+> > +
+> 
+> Hmm, I don't like how this is dropped right in the middle of a unrelated
+> function.
+> 
+> You're adding arch/x86/mm/unaccepted_memory.c later. Why don't you put
+> that chunk in a function there which is called by early_reserve_memory()
+> which does exactly what you want - reserve memory early, before memblock
+> allocations?
 
-        CPU0                                   CPU1 (going offline)
-                                          migration/1 task:
-                                      cpu_stopper_thread
-                                       -> take_cpu_down
-                                          -> _cpu_disable
-                                           (dec __num_online_cpus)
-                                          ->cpuhp_invoke_callback
-                                                preempt_disable
-                                                access old_data0
-           task1
- del old_data0                                  .....
- synchronize_rcu_tasks_rude()
- task1 schedule out
- ....
- task2 schedule in
- rcu_tasks_rude_wait_gp()
-     ->__num_online_cpus == 1
-       ->return
- ....
- task1 schedule in
- ->free old_data0
-                                                preempt_enable
+early_reserve_memory() specifically called before e820__memory_setup()
+(see comment in setup_arch()), so we don't have e820_table finalized and
+we need it to get correct RAM size from e820__end_of_ram_pfn().
 
-when CPU1 dec __num_online_cpus and __num_online_cpus is equal one,
-the CPU1 has not finished offline, stop_machine task(migration/1)
-still running on CPU1, maybe still accessing 'old_data0', but the
-'old_data0' has freed on CPU0.
+I guess we can hide the chunk in a function in unaccepted_memory.c and
+call it from here, but it would require #ifdeffery in a header file as the
+.c is only compiled for CONFIG_UNACCEPTED_MEMORY=y.
 
-In order to prevent the above scenario from happening, this commit
-remove check for __num_online_cpus == 0 and add handling of calling
-synchronize_rcu_tasks_generic() during early boot(when the
-rcu_scheduler_active variable is RCU_SCHEDULER_INACTIVE, the scheduler
-not yet initialized and only one boot-CPU online).
+Looks like an overkill to me, no?
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/tasks.h | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index 4dda8e6e5707..e4f7d08bde64 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -560,8 +560,9 @@ static int __noreturn rcu_tasks_kthread(void *arg)
- static void synchronize_rcu_tasks_generic(struct rcu_tasks *rtp)
- {
- 	/* Complain if the scheduler has not started.  */
--	WARN_ONCE(rcu_scheduler_active == RCU_SCHEDULER_INACTIVE,
--			 "synchronize_rcu_tasks called too soon");
-+	if (WARN_ONCE(rcu_scheduler_active == RCU_SCHEDULER_INACTIVE,
-+			"synchronize_rcu_tasks called too soon"))
-+		return;
- 
- 	// If the grace-period kthread is running, use it.
- 	if (READ_ONCE(rtp->kthread_ptr)) {
-@@ -1064,9 +1065,6 @@ static void rcu_tasks_be_rude(struct work_struct *work)
- // Wait for one rude RCU-tasks grace period.
- static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
- {
--	if (num_online_cpus() <= 1)
--		return;	// Fastpath for only one CPU.
--
- 	rtp->n_ipis += cpumask_weight(cpu_online_mask);
- 	schedule_on_each_cpu(rcu_tasks_be_rude);
- }
 -- 
-2.25.1
-
+  Kiryl Shutsemau / Kirill A. Shutemov
