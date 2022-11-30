@@ -2,223 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C247F63DA45
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94EEB63DA47
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiK3QLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 11:11:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
+        id S230157AbiK3QMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 11:12:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbiK3QLY (ORCPT
+        with ESMTP id S230007AbiK3QMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 11:11:24 -0500
-Received: from DM4PR02CU001-vft-obe.outbound.protection.outlook.com (mail-centralusazon11022025.outbound.protection.outlook.com [52.101.63.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C064884DD2;
-        Wed, 30 Nov 2022 08:11:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EmT2+6066PNkDbpVEBvcFntRZGQqv4v1Caodr6q6ez9dSYaXuRC9oDG6hkn1Fk9DLN06F27vwBHkmU/Uv22NzQi6I2bCbWka3E8rL3EgWbdmhKlfPWW4g/h3nAQR0iZKLLQFYW1vNSTQAynF3YEI9XVblHht1uHx7Mv+LQn7wAH8O/F25bU2HIf/WBghRjtxg2e7QzPld/TyxYg0rmTlwODmzF9SQHwGVjO7YRjUHuIcm0WZgDJnPDwSS2/44pKXWtl2g3ONmbmk/erl8PP7T9ZX6w2kuWBL3ljjsy2Am4At7hxLkT0AUgd43hC2/TUJ4cKzB70BfbLuO3CzTFFMzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G2un+YaYUrYcPyG/w1JniPYtm1LjFzWwURIaJT4UpIY=;
- b=VYhNY8MApF7sbrpSC+iSZNXhDpEHg3lDK2aoYkUfRyANoGswRHC5IpCuKwWgd5J6YRyHOIyhfLlx211v1vnA/X6bPVVkxcIK54lMMlX0y2v3bE4a5jH8YnlHYJlNXtV8xIa7Cmd4f9gjyiLFuhqtC5GmbQZkITVl0h+1nv5WtIRlkkex7kEBDmNG/xly+KmGt4oPnxikTSrvHN63HN8Q7q6X1wlJdhu5g8sLKxJTuRQQeZHKfuqq5vOmhhhc+K+Dv6uV58sLBOnJlRk07KjnfcDAmR6w+Fl8TjF3H4W0+ZFV1k5v40C+bHsnR/o7GgzIGRo9+qeszkS+FCMD07hPCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G2un+YaYUrYcPyG/w1JniPYtm1LjFzWwURIaJT4UpIY=;
- b=i6Q2Zc/gkyPSP1ZeWnPreEwzh9t7hVk8LglNUYaNGt2TvKEzHe3XY/yPv/IDnKoBzTIwo+vScajeYFE0XhSUn4AtfXB29f1iPXbTrRHpocuFRvvoTfMa8QV5xUhGazMBdd6lMRWYad8AowLcYZmem1V1OGC5I1PjBwSSg4gwPhY=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by MN0PR21MB3171.namprd21.prod.outlook.com (2603:10b6:208:37b::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5901.4; Wed, 30 Nov
- 2022 16:11:18 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::1e50:78ec:6954:d6dd]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::1e50:78ec:6954:d6dd%6]) with mapi id 15.20.5880.008; Wed, 30 Nov 2022
- 16:11:18 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: RE: [Patch v3 07/14] x86/hyperv: Change vTOM handling to use standard
- coco mechanisms
-Thread-Topic: [Patch v3 07/14] x86/hyperv: Change vTOM handling to use
- standard coco mechanisms
-Thread-Index: AQHY+es2O4adbWIH8UyWtCwRyUnUyq5JgOOAgAHDpcCAAEhFgIAAJ7oQgAjDHRCAACLagIAAALfwgAANigCAAAHQEIAAKJ+AgABUTmCAAIE5AIAAb5XAgAApEACAAXbTMA==
-Date:   Wed, 30 Nov 2022 16:11:18 +0000
-Message-ID: <BYAPR21MB168891CB2831C9BAF829EADBD7159@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <BYAPR21MB16886FF8B35F51964A515CD5D70C9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <BYAPR21MB1688AF2F106CDC14E4F97DB4D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y4Ti4UTBRGmbi0hD@zn.tnic>
- <BYAPR21MB1688466C7766148C6B3B4684D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y4Tu1tx6E1CfnrJi@zn.tnic>
- <BYAPR21MB1688BCC5DF4636DBF4DEA525D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y4USb2niHHicZLCY@zn.tnic>
- <BYAPR21MB16886FF5A63334994476B6ADD7129@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y4XFjqEATqOgEnR6@zn.tnic>
- <BYAPR21MB1688D73FBBF41B6E21265DA3D7129@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y4ZFmktxPlEjyoeR@zn.tnic>
-In-Reply-To: <Y4ZFmktxPlEjyoeR@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=4d8ac474-9661-4173-b112-bd1a32d94ebd;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-30T16:08:38Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|MN0PR21MB3171:EE_
-x-ms-office365-filtering-correlation-id: f1bed3aa-93cf-45bd-a5d8-08dad2ed839d
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ngeZelr/5IkfH3kbtD83LLGdjGhe6u8LN0PWeKcLW3CenXuBvJ1dFkWfgU6lPQ8IhZz8MZMRBEtEkReD4W0T7F7Gp267ra80qEaqSs4K8K/oNkIka7WlLVLJMpSJV3eONhz2ZHWLV99ee73X3xIAqZD2uBUiSaQ9lLpR+22DN0WHHtHmFi6QBWU8/W35+tVWl93koszy6MhoxDWE0zYOuugaLzELSx3tALyTqHUU92p/MHNRQ9BIjl5jiLv2KCpX3DiVtGc8jk3viMWlY9QpUFEWY329Rv76bxybMCPHU716QnVU+5tE+tpdN6rIqD04Copp4mOFQFj9V2wmXD7NkWU6NGJ7vX2HdrPzaqKr4JLAVXSuESiso9ptq5mrjR0qihNBb5AQ0irg7LDDDBdkQ04/P8DPrv4bSrlVlAj6e9TD3WW8BZQ7RFULAQFZwhNVwBjjqFFXwp38LNJe7Yvupe+AzMrkrgAR03OSnw87R7GK15L4tV+KTKQUK9tpgYERWc9IaugwfNjrGnEWRrqGH+E/4q07GLkguydcoB6P8qKZ0ibx/9v5psGBXJDEvJj5iv+Uv4coFSgtJuH2T1B7EP/k6KUhI1i52x6uZhGhA13tX7FAVRU8Mep1jf3sq44AXxtLigDdTyE5tVMnyOnjXNduKPjMsmdRm/LaI8IiruHL64DBYCklr4fAnW2zmUa390mfi/yX0GLAlkE1R5mzp/1Rci8Sx7s5nDph+4wgq+WsTQhhHZ6DJ7O+nT5wLn1v
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(136003)(366004)(376002)(396003)(451199015)(38100700002)(33656002)(122000001)(55016003)(54906003)(86362001)(38070700005)(82960400001)(82950400001)(9686003)(26005)(6916009)(316002)(71200400001)(478600001)(10290500003)(6506007)(7696005)(8676002)(2906002)(5660300002)(7406005)(7416002)(4326008)(66476007)(76116006)(64756008)(66556008)(52536014)(66446008)(66946007)(41300700001)(186003)(8990500004)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?iEJNhDpofC0yQuSb2BF4BqEyFjf2dQX62VSPsMfpYCmomyHQZDCWSKnjyaOG?=
- =?us-ascii?Q?zsa3TYCh/ji35tiearDnXgxfCdMrHQVB5xTKGSe8fgG+uDKQFiujtoQYDuhl?=
- =?us-ascii?Q?v6GHM0l1nsysQ34HUdRk8q9QXnWkfR30m/nW1iuFWjwD+GHusHcwzMgu0JWb?=
- =?us-ascii?Q?ki8EeU5vae/xUxtQQVbEjmrWxT/+T4M57YMUSh5oDUGHg6RcJ2ESl80JlUlk?=
- =?us-ascii?Q?uS8/EHK7LGobrLJqDeTg/7C9hxt5C084maYic/dMeBVHZj7JuCBzZbdSuliR?=
- =?us-ascii?Q?fsAD1oBhU2OMYE2hVXha6gn4125NI3n3um6474q3XVAIhG0ZgWvdRef/X2ct?=
- =?us-ascii?Q?x1El+fkl/VVEBO0UPjn99w+eQ4NpL3fZtkQML7IL0tg+2ChiTRo2By+ILOF2?=
- =?us-ascii?Q?GrhGf35326Pi4YHZ2szXhiSfnmo4BJ7dJKJaJl+JfOc4/BCRyUdQyAUTq2Ot?=
- =?us-ascii?Q?Z6E9JyuxXPPJiPnwKBkHrLS7vM2auBK1QDHdawGDW7kp6P/Tfqtq6oY8pd59?=
- =?us-ascii?Q?hOyhseOJ/EFvy6QV6qlJsow0h1WP6/zjwvbBJJAlyWWzdv7csAX/6/1x6IDq?=
- =?us-ascii?Q?VVJ/t8RBr/xefvZ25tQfIugNpE4TJHysEzSM8H1m72ZGXP2f1hl0Xovc3fX1?=
- =?us-ascii?Q?bnCrnu7ng+6mJ2hwdiAINPvduXAESrXYzKIrcP2hPCYa35cbMwNkwtJ0avfz?=
- =?us-ascii?Q?m7rUef1worYQpxeIBsx7XNSV2Z/dSLl0PJvV1e9VYYCh0O4OWu2e0HaxEF15?=
- =?us-ascii?Q?zViDV9dAHxwiccRJuy8pVurtS4tK6P9a8GheZqBam3nb4D0jZDQb66HmVOXy?=
- =?us-ascii?Q?JKoSXGHoO5YbF9RR7EINR1ibFNuz6ADDy6mrgcMyUaE7nEq/p/fOtgzpsd2w?=
- =?us-ascii?Q?Mtm12kjuJLmRniAjl5a4j+CnZQhksuARdknV6FzSLwi/9u3CPgB6zYLDkSsS?=
- =?us-ascii?Q?F7R++0dNcojkUeTe8E5nkE5ArCdz70La5SMq6ayfg8qSodTUzcLHanv/sjhB?=
- =?us-ascii?Q?ioO7DUSCaxon24Mz/UgT7SgQWZS0qFdk5q6CZJnBmZR2qNSi2OIrxkB0asSq?=
- =?us-ascii?Q?uPsu9d1FBd6w9wBJNS0AJrG3PIjLfhcRDgBhcoJfaARzaF7iQr+x6E85viIb?=
- =?us-ascii?Q?fVXKrovf5poMdgPjJTSRAKwDv87MM1nftjd+VCgnoTt27Wk6Eiq80yfoGUSh?=
- =?us-ascii?Q?ijblIYW7SohBX60Q1La85Obdbrmo7iDRSO8uZtGisE9J3zPN4Yt5O51jdsCM?=
- =?us-ascii?Q?iN//i2f7rHGsBGYkQ5wjp15PI/kcVSdXBZ+Oqosco8Wyv13DRCxKPAGiniCK?=
- =?us-ascii?Q?zXw6W+jmIKP4JE6ISSOJsq82i035vHdueomrXcmibLEo5I2uVey2v7euJCKe?=
- =?us-ascii?Q?wP2UQeZzFSVj/Uy64yvV/1pD10siPcExB77HxHOXQA8jaK6KXOqbid+yckus?=
- =?us-ascii?Q?1C/53Nu2FKfUxa6skTFhnD1JpwdI+3SRgA+yFNlO814Vwuz/mRdon6VVcRiP?=
- =?us-ascii?Q?RDogE5RWiWdBvTqsygsLOiXqIVSi9CNyz4QiYLfeUa1j/cg+yhcT6Sa98kFG?=
- =?us-ascii?Q?BWYKqPdOAa3Rtg4PgMEGZovu51BdQ/jKXgJb2p84cW/aIk9SN7fN84YbGl+y?=
- =?us-ascii?Q?cQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 30 Nov 2022 11:12:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B0181DB0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:11:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669824701;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j7/K8W5xLJ1MTcPVoq3LKtEdS3w02DLD54QmBsm/5yg=;
+        b=hp4gjfgKOmn9grXrNoMZzeK0wtevlLkUqWHrE2NRWpocuE+MC+7dvGtjun1g0Ym5XJ9gdE
+        c5ONIFVfuzLPA7E9BL04+NDib+47gYWZyE7Iw8nLMX2VbCamZHGQLqrZkxH/VRiikVJcBD
+        Cja6aM2vXkjaaRdD1LAC1hozHSvuJEY=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-479-RHuh2XiHMUW7tW4NSA2DfQ-1; Wed, 30 Nov 2022 11:11:39 -0500
+X-MC-Unique: RHuh2XiHMUW7tW4NSA2DfQ-1
+Received: by mail-wm1-f69.google.com with SMTP id c126-20020a1c3584000000b003cfffcf7c1aso1190445wma.0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:11:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j7/K8W5xLJ1MTcPVoq3LKtEdS3w02DLD54QmBsm/5yg=;
+        b=JfeLIx0SqKPSsu3Ap+HlMy54p65qtFQTVKQwx9ucegJ5gUJ1sIyGfBnbbXxvzC7hXw
+         coJDdGHCQzO6lI4sKETEwoxa/ERIgkQp0v9Io1pzRJXi53cjAVKL82TGt6u8j58WmIKn
+         U4D7HHtM4nVwEF+NeyCL6qh8ZpB5gYvxbmd+MrJyuqjsjePJwBb/BBcSHNm1nrC+n4cw
+         UmV1Jvff3r6zyWfRtKju+6joROhGPenCWRceLUUgwkvKDfL/kAHuzUYgTybFErbV4o3I
+         spw/zO/8Blcy/No5lQc4Px+r7jzKqmVaOaTf+Zx9GVQHvlryHnugd7eJxCTV1S/mVAE/
+         8XXw==
+X-Gm-Message-State: ANoB5pnnG8oUCeK5RBj/Ta7jSrCJ65M7sMWIo4ofQRqYgADnIfsmxOAf
+        9vwMzyN5A52txCDuhSN7K/GApZIreB+kpCVdcNSpmKS8lJ50hD40YJ4vC9dMTN2jyn8gpVJWRT/
+        4UBFo60CTDXXHeLx6/LQxusni
+X-Received: by 2002:adf:dc0f:0:b0:241:e7b4:e10 with SMTP id t15-20020adfdc0f000000b00241e7b40e10mr23921881wri.423.1669824698738;
+        Wed, 30 Nov 2022 08:11:38 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6XAHkXOyJKQ1Ux+KmxILsOrz8YtOr2Gmx1Av8naJIpA55ErjahSokbrqKoTyoo8rZQzT00xA==
+X-Received: by 2002:adf:dc0f:0:b0:241:e7b4:e10 with SMTP id t15-20020adfdc0f000000b00241e7b40e10mr23921868wri.423.1669824698428;
+        Wed, 30 Nov 2022 08:11:38 -0800 (PST)
+Received: from ?IPV6:2003:cb:c703:7600:a8ea:29ce:7ee3:dd41? (p200300cbc7037600a8ea29ce7ee3dd41.dip0.t-ipconnect.de. [2003:cb:c703:7600:a8ea:29ce:7ee3:dd41])
+        by smtp.gmail.com with ESMTPSA id t1-20020a5d49c1000000b00241e4bff85asm1858952wrs.100.2022.11.30.08.11.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 08:11:37 -0800 (PST)
+Message-ID: <b4bad424-9ae3-41e2-d844-6fa63f44be62@redhat.com>
+Date:   Wed, 30 Nov 2022 17:11:36 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1bed3aa-93cf-45bd-a5d8-08dad2ed839d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2022 16:11:18.3182
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uvGkZMQGOXQCeDBYEmXaDXbFf5hF2i90uYC/Fvp+DQd82jK/jukELL3AfibWX0njzXa69S0W/eXDNcts0wXnjO+BCrw+defhiO8J9yViFbs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR21MB3171
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 03/10] mm/hugetlb: Document huge_pte_offset usage
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        James Houghton <jthoughton@google.com>,
+        Jann Horn <jannh@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+References: <20221129193526.3588187-1-peterx@redhat.com>
+ <20221129193526.3588187-4-peterx@redhat.com>
+ <afce1bdf-6b5f-3393-cafa-81148277773d@redhat.com> <Y4eAJuZRG0CLP7PW@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Y4eAJuZRG0CLP7PW@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@alien8.de> Sent: Tuesday, November 29, 2022 9:47 =
-AM
->=20
-> On Tue, Nov 29, 2022 at 03:49:06PM +0000, Michael Kelley (LINUX) wrote:
-> > But it turns out that AMD really has two fairly different schemes:
-> > the C-bit scheme and the vTOM scheme.
->=20
-> Except it doesn't:
->=20
-> "In the VMSA of an SNP-active guest, the VIRTUAL_TOM field designates
-> a 2MB aligned guest physical address called the virtual top of memory.
-> When bit 1 (vTOM) of SEV_FEATURES is set in the VMSA of an SNP-active
-> VM, the VIRTUAL_TOM..."
->=20
-> So SEV_FEATURES[1] is vTOM and it is part of SNP.
->=20
-> Why do you keep harping on this being something else is beyond me...
->=20
-> I already pointed you to the patch which adds this along with the other
-> SEV_FEATURES.
->=20
-> > The details of these two AMD schemes are pretty different. vTOM is
-> > *not* just a minor option on the C-bit scheme. It's an either/or -- a
-> > guest VM is either doing the C-bit scheme or the vTOM scheme, not some
-> > combination. Linux code in coco/core.c could choose to treat C-bit and
-> > vTOM as two sub-schemes under CC_VENDOR_AMD, but that makes the code a
-> > bit messy because we end up with "if" statements to figure out whether
-> > to do things the C-bit way or the vTOM way.
->=20
-> Are you saying that that:
->=20
-> 	if (cc_vendor =3D=3D CC_VENDOR_AMD &&
-> 	    sev_features & MSR_AMD64_SNP_VTOM_ENABLED)
->=20
-> is messy? Why?
->=20
-> We will have to support vTOM sooner or later.
->=20
-> > Or we could model the two AMD schemes as two different vendors,
-> > which is what I'm suggesting.  Doing so recognizes that the two schemes
-> > are fairly disjoint, and it makes the code cleaner.
->=20
-> How is that any different from the above check?
->=20
-> You *need* some sort of a check to differentiate between the two anyway.
->=20
+On 30.11.22 17:09, Peter Xu wrote:
+> On Wed, Nov 30, 2022 at 11:24:34AM +0100, David Hildenbrand wrote:
+>> On 29.11.22 20:35, Peter Xu wrote:
+>>> huge_pte_offset() is potentially a pgtable walker, looking up pte_t* for a
+>>> hugetlb address.
+>>>
+>>> Normally, it's always safe to walk a generic pgtable as long as we're with
+>>> the mmap lock held for either read or write, because that guarantees the
+>>> pgtable pages will always be valid during the process.
+>>>
+>>> But it's not true for hugetlbfs, especially shared: hugetlbfs can have its
+>>> pgtable freed by pmd unsharing, it means that even with mmap lock held for
+>>> current mm, the PMD pgtable page can still go away from under us if pmd
+>>> unsharing is possible during the walk.
+>>>
+>>> So we have two ways to make it safe even for a shared mapping:
+>>>
+>>>     (1) If we're with the hugetlb vma lock held for either read/write, it's
+>>>         okay because pmd unshare cannot happen at all.
+>>>
+>>>     (2) If we're with the i_mmap_rwsem lock held for either read/write, it's
+>>>         okay because even if pmd unshare can happen, the pgtable page cannot
+>>>         be freed from under us.
+>>>
+>>> Document it.
+>>>
+>>> Signed-off-by: Peter Xu <peterx@redhat.com>
+>>> ---
+>>>    include/linux/hugetlb.h | 32 ++++++++++++++++++++++++++++++++
+>>>    1 file changed, 32 insertions(+)
+>>>
+>>> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+>>> index 551834cd5299..81efd9b9baa2 100644
+>>> --- a/include/linux/hugetlb.h
+>>> +++ b/include/linux/hugetlb.h
+>>> @@ -192,6 +192,38 @@ extern struct list_head huge_boot_pages;
+>>>    pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
+>>>    			unsigned long addr, unsigned long sz);
+>>> +/*
+>>> + * huge_pte_offset(): Walk the hugetlb pgtable until the last level PTE.
+>>> + * Returns the pte_t* if found, or NULL if the address is not mapped.
+>>> + *
+>>> + * Since this function will walk all the pgtable pages (including not only
+>>> + * high-level pgtable page, but also PUD entry that can be unshared
+>>> + * concurrently for VM_SHARED), the caller of this function should be
+>>> + * responsible of its thread safety.  One can follow this rule:
+>>> + *
+>>> + *  (1) For private mappings: pmd unsharing is not possible, so it'll
+>>> + *      always be safe if we're with the mmap sem for either read or write.
+>>> + *      This is normally always the case, IOW we don't need to do anything
+>>> + *      special.
+>>
+>> Maybe worth mentioning that hugetlb_vma_lock_read() and friends already
+>> optimize for private mappings, to not take the VMA lock if not required.
+> 
+> Yes we can.  I assume this is not super urgent so I'll hold a while to see
+> whether there's anything else that needs amending for the documents.
+> 
+> Btw, even with hugetlb_vma_lock_read() checking SHARED for a private only
+> code path it's still better to not take the lock at all, because that still
+> contains a function jump which will be unnecesary.
 
-Alright.  Enough conceptual debate.  I'll do a v4 of the patch series with
-the AMD C-bit and vTOM schemes folder under CC_VENDOR_AMD and
-we can see if there's any further feedback.  I should have that v4 out late=
-r
-today or tomorrow.
+IMHO it makes coding a lot more consistent and less error-prone when not 
+care about whether to the the lock or not (as an optimization) and just 
+having this handled "automatically".
 
-Michael
+Optimizing a jump out would rather smell like a micro-optimization.
+
+-- 
+Thanks,
+
+David / dhildenb
+
