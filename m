@@ -2,108 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD9A63CFFF
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2920863D004
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:01:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232882AbiK3IAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 03:00:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
+        id S234295AbiK3IBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 03:01:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbiK3IAJ (ORCPT
+        with ESMTP id S231826AbiK3IBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 03:00:09 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7702E9EE
+        Wed, 30 Nov 2022 03:01:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F843204E
         for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 00:00:08 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id e189so11830551iof.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 00:00:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4kCRKqO2mkH/fqLy77WABljMo3p7d3wXwbsA6OHP5js=;
-        b=DjY91hKS2Q3XDMivXHzl+hoHSYC9VQykBomQkUOEmrk08Jo/FeJYn3aZzmZrRkoPNA
-         53IuVAtjYtZ7r9ANBabvof9LDOdOwpT11hMAgQLDWDxrENJJWhb918tBmlam70VkOgWV
-         z17NtM5DhXW3mx6Rdpc4kKZfBvSiX4kic07301CRXnWlh3sn87OXP/appT/y1ZZcZu1Q
-         8VbNNhRQROE7sUlPRqkNBBCfWsH1+y7mP/zW3/leiIJDxEC5pb211DbNydf9WcJU3Bi3
-         Zg/TFkCU5KE+tTmwvTOsfVMhRv6wqFpz5lwP/CT1Az9QmyOEp+7YW4/mvfcWCrdWWfRG
-         d2/Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669795208;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j2a8xmX2uqZ7NUsrGlJ+pz4pKlQs3R+YDShsHCw2aB8=;
+        b=jNNQa17HSX18/sywOQlGceO1Y9wMXW1SB3lmYzNJEaqxd7B0s520ZeJ5dbohNpB8Pv0V03
+        eNJda6lskbGtSFLw6kFqP8gKM2kA0BugO48CT8lSX1EU8Th/QklEECtkVsxjET+/dInoAG
+        c3o/V8gXr+oWhqZ0QCYtFwcqZGBWy78=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-21-kA-JIoGgPeix3xfLWJ6khQ-1; Wed, 30 Nov 2022 03:00:06 -0500
+X-MC-Unique: kA-JIoGgPeix3xfLWJ6khQ-1
+Received: by mail-wr1-f70.google.com with SMTP id k7-20020adfc707000000b002416f2e9ad5so3310660wrg.6
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 00:00:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4kCRKqO2mkH/fqLy77WABljMo3p7d3wXwbsA6OHP5js=;
-        b=6OrJDrpjAGU9MezcmPqGey1fetDmyjyu3A8M06Yfo1Qzh2F/Q0UN5zV90ZseGyjheu
-         uKG+WdxHsyPts1vjnYP4rzdj7H6jwEAuW+/OQRU/yjgP6IpKfRno8/lTz0OdAG1rBUSL
-         sqGd6g4fwWJYkZrpyXjmWuQUr98NjojO0UxMMjZP6GAp/cp3lKHW6pWSdkRmIkZLXBiS
-         cBS0HdRQJ6zdJmoBr5g5rlZMZmEikguNkRSUy/upH70JdmRHaNrM1roShr6TkX3g/Cm6
-         GcMsmAN3FGddkJtWainHe7zBjcnOu4sFDJdSBpyZpzVG/kARpwGn+ZYgwwGb8EEWV0Ls
-         5vug==
-X-Gm-Message-State: ANoB5plMUJFUhtsFEKV7TtvE7x6ouZMMlLUanCutTO0W61RgAKOuCXL/
-        wgLB+u2gERmPbSC2WNGxHaAIBWvCBLp82Q+nNk2g/Ja4N5c=
-X-Google-Smtp-Source: AA0mqf7rIi2N8kYOep15xbmtfJEO4EIZVYYxTDj5W26IsKAWsrubQU7D6jMMeV5e1piXpB3EzKKie3CD/vArLc1hKDI=
-X-Received: by 2002:a02:942a:0:b0:373:d769:bc14 with SMTP id
- a39-20020a02942a000000b00373d769bc14mr20408615jai.264.1669795207651; Wed, 30
- Nov 2022 00:00:07 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j2a8xmX2uqZ7NUsrGlJ+pz4pKlQs3R+YDShsHCw2aB8=;
+        b=HPL/ntqGD8fk7w/hvZO+BjkjfBeDJgtLkf/og47x9HhFQgpNoOXOOPYBZg6FhtODTA
+         CS7noLIo7Pqpv5ZgvIZBHtRRDVq7KmW18zh1Dw6MAJRk1pirH6a4QODI81QXS9vHF0KJ
+         JWCef7iUGTmSKzLWGOcUtxRzwZ1FZWg6rkU7h7ZnGwpad9aTfppTkSkMTSa/kta+Pmfj
+         pHW1krk4AnHk6iN7Izo/BiRWOc+Cv5pi0O9LN64cdBye1Q8JvbNHQARG0v+J9+G9AIvh
+         dKDteMc0xz6a9B3G7q+cIMUE/U6Nr4Rj5XPl9MilTj4IHZPvAgh1NuunfxLPbbBVNwOT
+         MGfw==
+X-Gm-Message-State: ANoB5pm9XisLpDFDn4++ZBBiZjb0sTHjAyCry2MU0iHj+KIDOAZH7GBo
+        bFRXjdzr2QngB/T2mh++A4hOwbRVzH4iM0LYmNnD6yc01WAQQnt3ulLujGNNm7v/HLk0ob6UaCO
+        QOQxHBBb8wsiQ5Dq2HoH4yciA
+X-Received: by 2002:a05:600c:24e:b0:3c5:f9f1:f956 with SMTP id 14-20020a05600c024e00b003c5f9f1f956mr30842043wmj.50.1669795205274;
+        Wed, 30 Nov 2022 00:00:05 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5Ey5+o85KLpwLVMTdnP29Su8T24kkvZHNDgYMdluRgMtIMgcoctfGdxRoxGf1Zvfd2hRrQBg==
+X-Received: by 2002:a05:600c:24e:b0:3c5:f9f1:f956 with SMTP id 14-20020a05600c024e00b003c5f9f1f956mr30842007wmj.50.1669795205007;
+        Wed, 30 Nov 2022 00:00:05 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id c124-20020a1c3582000000b003cf894dbc4fsm1046855wma.25.2022.11.30.00.00.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 00:00:04 -0800 (PST)
+Message-ID: <ebe02c21-7770-0415-096e-76a839bad154@redhat.com>
+Date:   Wed, 30 Nov 2022 09:00:03 +0100
 MIME-Version: 1.0
-References: <20221026064300.78869-1-jiahao.os@bytedance.com>
- <20221026064300.78869-3-jiahao.os@bytedance.com> <20221114121517.vwg4rr5xb3nvwpjy@techsingularity.net>
- <7ca91933-2e49-1813-bb30-363c540e5139@bytedance.com>
-In-Reply-To: <7ca91933-2e49-1813-bb30-363c540e5139@bytedance.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 30 Nov 2022 08:59:56 +0100
-Message-ID: <CAKfTPtAYuck69ph62PODHKr+4Zx-Fqq3OW99RCzOPnW7LJwQ3Q@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v2 2/2] sched/core: Adjusting the order of
- scanning CPU
-To:     Hao Jia <jiahao.os@bytedance.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
-        mingo@kernel.org, juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org,
-        Mel Gorman <mgorman@techsingularity.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 01/17] drm/tests: helpers: Move the helper header to
+ include/drm
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-media@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
+References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
+ <20221123-rpi-kunit-tests-v2-1-efe5ed518b63@cerno.tech>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v2-1-efe5ed518b63@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Nov 2022 at 07:35, Hao Jia <jiahao.os@bytedance.com> wrote:
->
->
->
-> On 2022/11/14 Mel Gorman wrote:
-> > On Wed, Oct 26, 2022 at 02:43:00PM +0800, Hao Jia wrote:
-> >> When select_idle_capacity() starts scanning for an idle CPU, it starts
-> >> with target CPU that has already been checked in select_idle_sibling()=
-.
-> >> So we start checking from the next CPU and try the target CPU at the e=
-nd.
-> >> Similarly for task_numa_assign(), we have just checked numa_migrate_on
-> >> of dst_cpu, so start from the next CPU. This also works for
-> >> steal_cookie_task(), the first scan must fail and start directly
-> >> from the next one.
-> >>
-> >> Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
-> >
-> > Test results in general look ok so
-> >
-> > Acked-by: Mel Gorman <mgorman@techsingularity.net>
+On 11/28/22 15:53, Maxime Ripard wrote:
+> We'll need to use those helpers from drivers too, so let's move it to a
+> more visible location.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>  drivers/gpu/drm/tests/drm_client_modeset_test.c            | 3 +--
+>  drivers/gpu/drm/tests/drm_kunit_helpers.c                  | 3 +--
+>  drivers/gpu/drm/tests/drm_modes_test.c                     | 3 +--
+>  drivers/gpu/drm/tests/drm_probe_helper_test.c              | 3 +--
+>  {drivers/gpu/drm/tests => include/drm}/drm_kunit_helpers.h | 0
+>  5 files changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/tests/drm_client_modeset_test.c b/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> index 52929536a158..ed2f62e92fea 100644
+> --- a/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> +++ b/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> @@ -8,12 +8,11 @@
+>  #include <drm/drm_connector.h>
+>  #include <drm/drm_edid.h>
+>  #include <drm/drm_drv.h>
+> +#include <drm/drm_kunit_helpers.h>
 
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+I wonder if now that this header was moved outside of the tests directory,
+if we should add stub functions in the header file that are just defined
+but do nothing if CONFIG_DRM_KUNIT_TEST isn't enabled. So that including
+it in drivers will be a no-op.
 
-> >
->
-> Hi, Peter
-> These two patches have been Acked-by Mel Gorman.
-> If you have time, please review these two patches.
->
-> Thanks=EF=BC=8C
-> Hao
+Or do you plan to conditionally include this header file in drivers? So
+that is only included when CONFIG_DRM_KUNIT_TEST is enabled?
+
+Another thing that wondered is if we want a different namespace for this
+header, i.e: <drm/testing/drm_kunit_helpers.h>, to make it clear that is
+not part of the DRM API but just for testing helpers.
+
+But these are open questions really, and they can be done as follow-up:
+
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
