@@ -2,301 +2,517 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E4563CC7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 01:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C842A63CC8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 01:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbiK3A1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 19:27:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
+        id S229497AbiK3Agv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 19:36:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiK3A1I (ORCPT
+        with ESMTP id S229615AbiK3Agr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 19:27:08 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4232BB0D;
-        Tue, 29 Nov 2022 16:27:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669768027; x=1701304027;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=iLzgun4NeQFU9eN4Te5MLTAfAq9iM+D79phmoPc3gVI=;
-  b=Kiy8KhteDTvpEecEJ+Ga8m8RNMKAQEHoEyuphzQT5/ir4scmK9JVkXBE
-   DJiGwprA4VE2Nj0Ok3MKqH82thZ+UYFGLNa9arK0625Yf8LXdvtksYWx5
-   OczraXJXyR1PMb8q5Rg9eGHoGp9VXO5OeM6ZHGxknmALSKjjhYxfNN8yK
-   ji5koWGPNMaZviY4tvukGor2mbcxwzHci2x5uvO8J8Twqaw6yLCb4v82n
-   Sje2FmUCcIv1VbjNn6hthPTePxd9gBXIw6mqXVoJgzEtj8HvcO2Qm+2Br
-   4I87vAqVDNVL5M/s6oZSvQ30BQuD77zyE7plCfUGC35ZI/NUXTIakX0d4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="298633247"
-X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="298633247"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 16:27:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="750099068"
-X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="750099068"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga002.fm.intel.com with ESMTP; 29 Nov 2022 16:26:41 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 29 Nov 2022 16:26:40 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 29 Nov 2022 16:26:40 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 29 Nov 2022 16:26:40 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.105)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 29 Nov 2022 16:26:40 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fgnsVzixoqFA00i4b37tYGRJ4TqgVnVxAwVnrKSvAdTSABfpFQsQfbJ0TGa6pryfx+5neTepmbeY481W+cEIWcEUv8iRVUWsH560tY/+Z3toMOF64FbSRwmWQ8X+dpcfs0Zcx62HdnInIAgr0G+oXZ1Ls3EVpBut3EKCKHq1L1W2tlcsykbONbnwi6ZkQLJwXeLnfilWoTk+5rhsI6cEaqNr7iF0yRDR+QXV45dg3kZzgkW0Pmj6Ulsg1gfTOzApTd2Uj9gOkEPSD0YuoyzFYQBUkZ5IqIehi5DTXE9+GK39PW3Y5sL+36cHAGEoZUq4VuLkZrbqw5k9VBwW7jFSIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iLzgun4NeQFU9eN4Te5MLTAfAq9iM+D79phmoPc3gVI=;
- b=jQMw81T5L31noOnQ6NXRfg+fSvugyhRaLd58Pef3hEJB7SQ/+FDv8X/rpGhCpqh1j8+eCkA4jvdk90+8Y10+faIiA2Et5iek5huF5yIHcegn+TL+3mwP/XEZEY9kdE4Rn4qfROLBeMww6Qhwfr3/Xw3h/HhyBVjR9Z9ktMv7HLZkC1Q566VMt81BvK1Rjr3oiuUiDzFkB5U3atH6jCUfI84fvJciSMdy1ayYvGepZPd6II0BCvMZpo1CE2TpL8xjc4yrS87Sp9Oo79lJum2mDxLJwZ3qH6RvZtaKG37rjpIEIWLhDDOX7E90dtKC5rnjkLnioPm6YeXDkUUTTjMr8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH0PR11MB5880.namprd11.prod.outlook.com (2603:10b6:510:143::14)
- by DS0PR11MB6327.namprd11.prod.outlook.com (2603:10b6:8:d1::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.21; Wed, 30 Nov
- 2022 00:26:37 +0000
-Received: from PH0PR11MB5880.namprd11.prod.outlook.com
- ([fe80::8f92:b03a:1de2:e315]) by PH0PR11MB5880.namprd11.prod.outlook.com
- ([fe80::8f92:b03a:1de2:e315%4]) with mapi id 15.20.5857.023; Wed, 30 Nov 2022
- 00:26:37 +0000
-From:   "Zhang, Qiang1" <qiang1.zhang@intel.com>
-To:     "paulmck@kernel.org" <paulmck@kernel.org>
-CC:     Joel Fernandes <joel@joelfernandes.org>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] rcu-tasks: Make rude RCU-Tasks work well with CPU
- hotplug
-Thread-Topic: [PATCH v2] rcu-tasks: Make rude RCU-Tasks work well with CPU
- hotplug
-Thread-Index: AQHZAzXSKOjuTzu2RUKeoTlESXbs8q5VFkkAgAAryDCAACcSgIAAA3vQgACYiwCAAJi6wA==
-Date:   Wed, 30 Nov 2022 00:26:37 +0000
-Message-ID: <PH0PR11MB5880AF19BD36D2B9DF3E88A2DA159@PH0PR11MB5880.namprd11.prod.outlook.com>
-References: <PH0PR11MB588001E6982A9DC32F93FD7ADA129@PH0PR11MB5880.namprd11.prod.outlook.com>
- <24EC376D-B542-4E3C-BC10-3E81F2F2F49C@joelfernandes.org>
- <PH0PR11MB58801BEDCA0F6600F01486FEDA129@PH0PR11MB5880.namprd11.prod.outlook.com>
- <20221129151810.GY4001@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20221129151810.GY4001@paulmck-ThinkPad-P17-Gen-1>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR11MB5880:EE_|DS0PR11MB6327:EE_
-x-ms-office365-filtering-correlation-id: 04603916-cd66-4506-fece-08dad2698b3c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tNIZhhYr1NfIyyEItgIj+05FaXc96fOAa3dYk667Z/oSL/3xyqV1rtRzTSBIFml/RyuGMpO0WNa9gTWyyWn/NnpPkESJhvPyN/7R2iN1iWgV9Z/tTx0Ml0qlaXR6GkLBq0Q9eEZFMOO90y4bEnB5mZbrmoBCzwKwfREpbncAUYuoNRT7EILotddk9L3Q9EH3rsu96yf3H0U97M3TSpxa7rnfUZyqivuHjysJtIsqS3c2xbkVrtiKvHa6p56H5lwxpjSk+yS54/pAEdQMdZEfH5XAy56mLVrcQil3uZRhLdaHw0wa7T+WQkdJXgDIcBbeAzW7RqYvB3FI6WfI5t3auO+5WljY3WQ1nA9WyMmuZ4a+ac7/L4R+thiykhcBmfNNu/hTbZj3hgbRTeAeymPU4hqtNhx0omimUv0sBy3hMHhu8FW10scXEKakRJ4eMr4Y7NMcBhA5S/vxXe0POK1GwNvAOGeuFB+OaJaclSUGLDxutKvd7NkURkRXQcV9wqnWg9SsAhmv4PzF2EuE5XxAB0p/YnRN1U3Tnd1OX1TwWcmolRCvYZgTsni1IE6kbp+kKTgrOg8tnFK1jpJLOh4q//crFHH9NR39kw+eKx+wy2WJ6aMj3EZpt7/l3OW6t8S8E0U9fYYFSJ+Wy2G+1/0+2B5WqXXEPO9pB3HTe2sgvtIAFw6JEHE79NiJ9Os4oZsN681YYpq2jVFtxIFn3/JSNQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5880.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(396003)(39860400002)(346002)(376002)(136003)(451199015)(71200400001)(55016003)(38070700005)(6506007)(33656002)(86362001)(9686003)(54906003)(7696005)(8936002)(478600001)(6916009)(2906002)(66476007)(53546011)(52536014)(82960400001)(5660300002)(64756008)(41300700001)(4326008)(316002)(66946007)(76116006)(8676002)(66556008)(186003)(38100700002)(122000001)(26005)(66446008)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Zmd3TXJUVDhYNU4vaDlRN0xETUZsaUcwb2xTcHJRMUQ5c2RRaHRya2ZXQVNj?=
- =?utf-8?B?UVZRUGdFcXZqY2U0OW1FUy9jUDgzY2xRMjlHTVVKbmtDK3JkbEtLbGVneUFL?=
- =?utf-8?B?VDhqRlVpV3p3RnFiK1J1bHU2ZVZFSE56MWMzRmVuTzVqWHlPbHNtMS96QVl4?=
- =?utf-8?B?SmpRaGRXWFNRcWhHL0ZkTlA0d05ZNWVPYW8xM3VMSTYrWmFnbStOcUo4Ylo2?=
- =?utf-8?B?WXNXS0Y3SEJucktMdG5HK0x4Yk1qOTErSFhVTWthUVJ4eDJUN3hPQWQ2dkRG?=
- =?utf-8?B?NUVHT3R3ZGVwY2tVR01hbk4xUVhsK2QyVjNTRVIvaE1Ha0RULzBlZjRmY0FQ?=
- =?utf-8?B?cmpVbjMrcm5PTS82eWtRSjVnSDhBSEM3bnIreE9LUXRSRGJhUUJoZUlIRExZ?=
- =?utf-8?B?aVFFMXhCUVh1UDhoVW11cHNZOFFlbzRQaW1neFBDdFA0QkFjbGhDU0tlRm9H?=
- =?utf-8?B?WUNlV3RLNEhXT3ZvL1dxWmRLaEhaSkhqQ2VyS1NWVzd3RFFwN2RWVG9WSVVN?=
- =?utf-8?B?SXp0RUdHVzFrdTFzaVFpOUVia1FNTGRrb05SMlBvZ0ttbDFCVzIwMlRrRnor?=
- =?utf-8?B?ZVFXNHBCTHBmVnZ4a2U4aTljRlkrNkdDYWlMeWc1Ym5jV2ZLeTg1d0lmZ1Nw?=
- =?utf-8?B?WGY0NGpaTjhqeVpBeXB5N0V4cHZJMFlscUtkU2k5azhHeUJYbTYwZjJiRmdz?=
- =?utf-8?B?Q1JaRHpkOFY1ZDl2WUhtMmJMaXF5QjNSNm9UWlk5RlhHZm5ja2dxWnFXT1c0?=
- =?utf-8?B?bzA3a21EYndESmgrYUJWY2Uyald6L2V0ZGl3R3RjbHIxVU9zY2ZPRFN4cHNC?=
- =?utf-8?B?Zk9EbWV2bjMyQ0NqeGNvOTd1SXNOY3lkQVREYWNFU3ZRVTE5aktsTXNOaEpx?=
- =?utf-8?B?aWQzL3hIMnJaUlp4emljZEQ3aEllQ25UM216QXBieUlYaUxOUlpNdGYxc3V6?=
- =?utf-8?B?Z043VnhyZzVKY2JNbWlPYTBXRklwdEwxbEhlVVdhME9TdkNVT3JEbTRpc05N?=
- =?utf-8?B?TXpjUlhWVzVib3RnOUd5NjF4d3NCU1VkSnIrTHM5Q04yajZhUEgyUXc2cytn?=
- =?utf-8?B?SXVQN201NGdXUjE1bVpzK0g4elRlbFlUMm54bTVXQ0pSTWJ3elVnUGlUR3h1?=
- =?utf-8?B?QVpmaG5JWXZjQTJYbmUwaFZDS1dZdTQ3eWpuTUxBNlpSc0VXb3orbjJZR0Y5?=
- =?utf-8?B?Mzdybkx0bjltRmFOd0VFR1ptb0dwNnk4ZzlkbGhPem83TGRiV3ZQNmZiNHIy?=
- =?utf-8?B?M2pWUzY1QVYzU095eml6TXl1VytsOW1nT1RsOGVLQ3RUcG5LZXBaenRUeWpi?=
- =?utf-8?B?NVphdzhYS2VSSU1maGxEZEcwOTFoeGowVWVDRG1ya2ZJclFNSXB4Z3FOeHZj?=
- =?utf-8?B?NXlyOWlnN0h0MGtUelBKYVp0dmV2Qi9YWHJRaHE3Slk2b25zK29NTVVzb1A1?=
- =?utf-8?B?Y0g2ejhrRVp4c2p6QUJWVU5zcVc3NFRlMXE3d3dTMmZ5TEw2UkJUSFo5Rkd4?=
- =?utf-8?B?VE1yR2ZudUFlZW81NkdIUmsxdmxMenpDN3N6d090Ym0rcTZ0N2sxS0FkWmRT?=
- =?utf-8?B?c1R5TFZZNzFTQXdaVlB1d2lBb1hyT2VZWTc2dCtjcnFjcWR0d2VtYlRCT25i?=
- =?utf-8?B?aEJLN3l1VWFRVkh3YjhUelVFU0p0enh0eDdpWkJKVHNJT1pZUm9RMzdSTWNK?=
- =?utf-8?B?U1d6MVROTEpINC9ONEhzU2NXNHV4YjE2bDB5ZUY2WitManRqVEMvUDM5VTJH?=
- =?utf-8?B?YzZ4UnI3VnNRQ2tQWkZ0Q0pWek9LejAxY293L085TE5LbTE4bGFZVGg5TmNu?=
- =?utf-8?B?UzMwcnU2NHhVL2lLTy9FWml1cFl6RzhrenNaUkF2eDN0TFZDSXYwbHVSb0Js?=
- =?utf-8?B?dFJZa0tDcTZKQ3pybEZmNlZnbHpPVnR1dFZ3L0xxU2ZzZ3ZhUktoZDJDcWpn?=
- =?utf-8?B?SEM4M1ZadWNEdmZRZU52eWNldDIybXZJeEtMN0dLd2JrRnlsbno0cVRnRGJ1?=
- =?utf-8?B?cUpxRWlPM3JmbFZjdHZ1cXZHNnMvcWRSS1dWWHJ5SHFDd1FQTGNaR21oQ0ha?=
- =?utf-8?B?WXl1a3JrSUNyTFFxOUFsNGVrYzN1RE9VY1VWeWZGT01COXRnSWJSUE9KdDll?=
- =?utf-8?Q?wGkmIVErvPlklY4PEbWblt+6w?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 29 Nov 2022 19:36:47 -0500
+X-Greylist: delayed 396 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 29 Nov 2022 16:36:45 PST
+Received: from novek.ru (unknown [213.148.174.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3350A58017;
+        Tue, 29 Nov 2022 16:36:44 -0800 (PST)
+Received: from [192.168.0.18] (unknown [37.228.234.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by novek.ru (Postfix) with ESMTPSA id 9D698500593;
+        Wed, 30 Nov 2022 03:25:09 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 novek.ru 9D698500593
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=novek.ru; s=mail;
+        t=1669767915; bh=948bNcSFnSb74XJ1WT4FhW6XFmmq/SdjMPP27hH5fIc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DxLveMIo8Nghs86ePs4/ZJF01/FEcpOn+Vtt9EZkjTrDONcf1R7EzcWkN4OI8V/fD
+         vVYDSgaEzK+wNDH5RzXsiTpetpbSBGhwRr4aUd3P/KnbAbKyDXt/Tf0SvhaNwkXcj6
+         wiAvJdtYfoB8g/RccgULezz/2hfhBZ09oToN2PVc=
+Message-ID: <e840dde5-0d43-6045-4d3a-9b1146d2a6b7@novek.ru>
+Date:   Wed, 30 Nov 2022 00:29:26 +0000
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5880.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04603916-cd66-4506-fece-08dad2698b3c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2022 00:26:37.5463
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OYJHkUiSHMjMD2PHETwC+iX6kFR7f3gbRCyLmdzZjzkSuNK3zyncg9kG4P1NELFeWdRhSCiKqtst5RMn7rHaAQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6327
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next v5 1/4] net: devlink: let the core report the
+ driver name instead of the drivers
+Content-Language: en-US
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Jiri Pirko <jiri@nvidia.com>, netdev@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Arnaud Ebalard <arno@natisbad.org>,
+        Srujana Challa <schalla@marvell.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Dimitris Michailidis <dmichail@fungible.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Linu Cherian <lcherian@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Jerin Jacob <jerinj@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Shannon Nelson <snelson@pensando.io>, drivers@pensando.io,
+        Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Vadim Fedorenko <vadfed@fb.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Vadim Pasternak <vadimp@mellanox.com>,
+        Shalom Toledo <shalomt@mellanox.com>,
+        linux-crypto@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-rdma@vger.kernel.org, oss-drivers@corigine.com,
+        Jiri Pirko <jiri@mellanox.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hao Chen <chenhao288@hisilicon.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Shijith Thotton <sthotton@marvell.com>
+References: <20221129000550.3833570-1-mailhol.vincent@wanadoo.fr>
+ <20221129000550.3833570-2-mailhol.vincent@wanadoo.fr>
+From:   Vadim Fedorenko <vfedorenko@novek.ru>
+In-Reply-To: <20221129000550.3833570-2-mailhol.vincent@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCBOb3YgMjksIDIwMjIgYXQgMDY6MjU6MDRBTSArMDAwMCwgWmhhbmcsIFFpYW5nMSB3
-cm90ZToNCj4gPiBPbiBOb3YgMjgsIDIwMjIsIGF0IDExOjU0IFBNLCBaaGFuZywgUWlhbmcxIDxx
-aWFuZzEuemhhbmdAaW50ZWwuY29tPiB3cm90ZToNCj4gPiANCj4gPiDvu79PbiBNb24sIE5vdiAy
-OCwgMjAyMiBhdCAxMDozNDoyOFBNICswODAwLCBacWlhbmcgd3JvdGU6DQo+ID4+IEN1cnJlbnRs
-eSwgaW52b2tlIHJjdV90YXNrc19ydWRlX3dhaXRfZ3AoKSB0byB3YWl0IG9uZSBydWRlDQo+ID4+
-IFJDVS10YXNrcyBncmFjZSBwZXJpb2QsIGlmIF9fbnVtX29ubGluZV9jcHVzID09IDEsIHdpbGwg
-cmV0dXJuDQo+ID4+IGRpcmVjdGx5LCBpbmRpY2F0ZXMgdGhlIGVuZCBvZiB0aGUgcnVkZSBSQ1Ut
-dGFzayBncmFjZSBwZXJpb2QuDQo+ID4+IHN1cHBvc2UgdGhlIHN5c3RlbSBoYXMgdHdvIGNwdXMs
-IGNvbnNpZGVyIHRoZSBmb2xsb3dpbmcgc2NlbmFyaW86DQo+ID4+IA0KPiA+PiAgICBDUFUwICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBDUFUxIChnb2luZyBvZmZsaW5lKQ0KPiA+
-PiAgICAgICAgICAgICAgICAgICAgICAgICAgbWlncmF0aW9uLzEgdGFzazoNCj4gPj4gICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNwdV9zdG9wcGVyX3RocmVhZA0KPiA+PiAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC0+IHRha2VfY3B1X2Rvd24NCj4g
-Pj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAtPiBfY3B1X2Rpc2Fi
-bGUNCj4gPj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKGRlYyBfX251bV9vbmxpbmVf
-Y3B1cykNCj4gPj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAtPmNw
-dWhwX2ludm9rZV9jYWxsYmFjaw0KPiA+PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIHByZWVtcHRfZGlzYWJsZQ0KPiA+PiAgICAgICAgICAgICAgICAgICAg
-ICAgIGFjY2VzcyBvbGRfZGF0YTANCj4gPj4gICAgICAgICAgIHRhc2sxDQo+ID4+IGRlbCBvbGRf
-ZGF0YTAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLi4uLi4NCj4gPj4gc3luY2hy
-b25pemVfcmN1X3Rhc2tzX3J1ZGUoKQ0KPiA+PiB0YXNrMSBzY2hlZHVsZSBvdXQNCj4gPj4gLi4u
-Lg0KPiA+PiB0YXNrMiBzY2hlZHVsZSBpbg0KPiA+PiByY3VfdGFza3NfcnVkZV93YWl0X2dwKCkN
-Cj4gPj4gICAgIC0+X19udW1fb25saW5lX2NwdXMgPT0gMQ0KPiA+PiAgICAgICAtPnJldHVybg0K
-PiA+PiAuLi4uDQo+ID4+IHRhc2sxIHNjaGVkdWxlIGluDQo+ID4+IC0+ZnJlZSBvbGRfZGF0YTAN
-Cj4gPj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwcmVl
-bXB0X2VuYWJsZQ0KPiA+PiANCj4gPj4gd2hlbiBDUFUxIGRlYyBfX251bV9vbmxpbmVfY3B1cyBh
-bmQgX19udW1fb25saW5lX2NwdXMgaXMgZXF1YWwgb25lLA0KPiA+PiB0aGUgQ1BVMSBoYXMgbm90
-IGZpbmlzaGVkIG9mZmxpbmUsIHN0b3BfbWFjaGluZSB0YXNrKG1pZ3JhdGlvbi8xKQ0KPiA+PiBz
-dGlsbCBydW5uaW5nIG9uIENQVTEsIG1heWJlIHN0aWxsIGFjY2Vzc2luZyAnb2xkX2RhdGEwJywg
-YnV0IHRoZQ0KPiA+PiAnb2xkX2RhdGEwJyBoYXMgZnJlZWQgb24gQ1BVMC4NCj4gPj4gDQo+ID4+
-IFRoaXMgY29tbWl0IGFkZCBjcHVzX3JlYWRfbG9jay91bmxvY2soKSBwcm90ZWN0aW9uIGJlZm9y
-ZSBhY2Nlc3NpbmcNCj4gPj4gX19udW1fb25saW5lX2NwdXMgdmFyaWFibGVzLCB0byBlbnN1cmUg
-dGhhdCB0aGUgQ1BVIGluIHRoZSBvZmZsaW5lDQo+ID4+IHByb2Nlc3MgaGFzIGJlZW4gY29tcGxl
-dGVkIG9mZmxpbmUuDQo+ID4+IA0KPiA+PiBTaWduZWQtb2ZmLWJ5OiBacWlhbmcgPHFpYW5nMS56
-aGFuZ0BpbnRlbC5jb20+DQo+ID4+IA0KPiA+PiBGaXJzdCwgZ29vZCBleWVzIGFuZCBnb29kIGNh
-dGNoISEhDQo+ID4+IA0KPiA+PiBUaGUgcHVycG9zZSBvZiB0aGF0IGNoZWNrIGZvciBudW1fb25s
-aW5lX2NwdXMoKSBpcyBub3QgcGVyZm9ybWFuY2UNCj4gPj4gb24gc2luZ2xlLUNQVSBzeXN0ZW1z
-LCBidXQgcmF0aGVyIGNvcnJlY3Qgb3BlcmF0aW9uIGR1cmluZyBlYXJseSBib290Lg0KPiA+PiBT
-byBhIHNpbXBsZXIgd2F5IHRvIG1ha2UgdGhhdCB3b3JrIGlzIHRvIGNoZWNrIGZvciBSQ1VfU0NI
-RURVTEVSX1JVTk5JTkcsDQo+ID4+IGZvciBleGFtcGxlLCBhcyBmb2xsb3dzOg0KPiA+PiANCj4g
-Pj4gICAgaWYgKHJjdV9zY2hlZHVsZXJfYWN0aXZlICE9IFJDVV9TQ0hFRFVMRVJfUlVOTklORyAm
-Jg0KPiA+PiAgICAgICAgbnVtX29ubGluZV9jcHVzKCkgPD0gMSkNCj4gPj4gICAgICAgIHJldHVy
-bjsgICAgLy8gRWFybHkgYm9vdCBmYXN0cGF0aCBmb3Igb25seSBvbmUgQ1BVLg0KPiA+IA0KPiA+
-IEhpIFBhdWwNCj4gPiANCj4gPiBEdXJpbmcgc3lzdGVtIHN0YXJ0dXAsIGJlY2F1c2UgdGhlIFJD
-VV9TQ0hFRFVMRVJfUlVOTklORyBpcyBzZXQgYWZ0ZXIgc3RhcnRpbmcgb3RoZXIgQ1BVcywgDQo+
-ID4gDQo+ID4gICAgICAgICAgICAgIENQVTAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIENQVTEgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA0KPiA+
-IA0KPiA+IGlmIChyY3Vfc2NoZWR1bGVyX2FjdGl2ZSAhPSAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIA0KPiA+ICAgIFJDVV9TQ0hFRFVMRVJfUlVOTklORyAmJg0KPiA+ICAgICAg
-ICAgICBfX251bV9vbmxpbmVfY3B1cyAgPT0gMSkgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIA0KPiA+ICAgIHJldHVybjsgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaW5jICBf
-X251bV9vbmxpbmVfY3B1cw0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIChfX251bV9v
-bmxpbmVfY3B1cyA9PSAyKQ0KPiA+IA0KPiA+IENQVTAgZGlkbid0IG5vdGljZSB0aGUgdXBkYXRl
-IG9mIHRoZSBfX251bV9vbmxpbmVfY3B1cyB2YXJpYWJsZSBieSBDUFUxIGluIHRpbWUNCj4gPiBD
-YW4gd2UgbW92ZSByY3Vfc2V0X3J1bnRpbWVfbW9kZSgpIGJlZm9yZSBzbXBfaW5pdCgpDQo+ID4g
-YW55IHRob3VnaHRzPw0KPiA+DQo+ID5JcyBhbnlvbmUgZXhwZWN0ZWQgdG8gZG8gcmN1LXRhc2tz
-IG9wZXJhdGlvbiBiZWZvcmUgdGhlIHNjaGVkdWxlciBpcyBydW5uaW5nPyANCj4gDQo+IE5vdCBz
-dXJlIGlmIHN1Y2ggYSBzY2VuYXJpbyBleGlzdHMuDQo+IA0KPiA+VHlwaWNhbGx5IHRoaXMgcmVx
-dWlyZXMgdGhlIHRhc2tzIHRvIGNvbnRleHQgc3dpdGNoIHdoaWNoIGlzIGEgc2NoZWR1bGVyIG9w
-ZXJhdGlvbi4NCj4gPg0KPiA+SWYgdGhlIHNjaGVkdWxlciBpcyBub3QgeWV0IHJ1bm5pbmcsIHRo
-ZW4gSSBkb27igJl0IHRoaW5rIG1pc3NpbmcgYW4gdXBkYXRlIHRoZSBfX251bV9vbmxpbmVfY3B1
-cyBtYXR0ZXJzIHNpbmNlIG5vIG9uZSBkb2VzIGEgdGFza3MtUkNVIHN5bmNocm9uaXplLg0KPiAN
-Cj4gSGkgSm9lbA0KPiANCj4gQWZ0ZXIgdGhlIGtlcm5lbF9pbml0IHRhc2sgcnVucywgYmVmb3Jl
-IGNhbGxpbmcgc21wX2luaXQoKSB0byBzdGFydGluZyBvdGhlciBDUFVzLCANCj4gdGhlIHNjaGVk
-dWxlciBoYXZlbiBiZWVuIGluaXRpYWxpemF0aW9uLCB0YXNrIGNvbnRleHQgc3dpdGNoaW5nIGNh
-biBvY2N1ci4NCj4NCj5Hb29kIGNhdGNoLCB0aGFuayB5b3UgYm90aC4gIEZvciBzb21lIHJlYXNv
-biwgSSB3YXMgdGhpbmtpbmcgdGhhdCB0aGUNCj5hZGRpdGlvbmFsIENQVXMgZGlkIG5vdCBjb21l
-IG9ubGluZSB1bnRpbCBsYXRlci4NCj4NCj5TbyBob3cgYWJvdXQgdGhpcz8NCj4NCj4JaWYgKHJj
-dV9zY2hlZHVsZXJfYWN0aXZlID09IFJDVV9TQ0hFRFVMRVJfSU5BQ1RJVkUpDQo+CQlyZXR1cm47
-ICAgIC8vIEVhcmx5IGJvb3QgZmFzdHBhdGguDQoNCklmIHVzZSBSQ1VfU0NIRURVTEVSX0lOQUNU
-SVZFIHRvIGNoZWNrLCBDYW4gd2UgbWFrZSB0aGUgZm9sbG93aW5nIGNoYW5nZXM/DQoNCi0tLSBh
-L2tlcm5lbC9yY3UvdGFza3MuaA0KKysrIGIva2VybmVsL3JjdS90YXNrcy5oDQpAQCAtNTYyLDgg
-KzU2Miw4IEBAIHN0YXRpYyBpbnQgX19ub3JldHVybiByY3VfdGFza3Nfa3RocmVhZCh2b2lkICph
-cmcpDQogc3RhdGljIHZvaWQgc3luY2hyb25pemVfcmN1X3Rhc2tzX2dlbmVyaWMoc3RydWN0IHJj
-dV90YXNrcyAqcnRwKQ0KIHsNCiAgICAgICAgLyogQ29tcGxhaW4gaWYgdGhlIHNjaGVkdWxlciBo
-YXMgbm90IHN0YXJ0ZWQuICAqLw0KLSAgICAgICBXQVJOX09OQ0UocmN1X3NjaGVkdWxlcl9hY3Rp
-dmUgPT0gUkNVX1NDSEVEVUxFUl9JTkFDVElWRSwNCi0gICAgICAgICAgICAgICAgICAgICAgICAi
-c3luY2hyb25pemVfcmN1X3Rhc2tzIGNhbGxlZCB0b28gc29vbiIpOw0KKyAgICAgICBpZihXQVJO
-X09OQ0UocmN1X3NjaGVkdWxlcl9hY3RpdmUgPT0gUkNVX1NDSEVEVUxFUl9JTkFDVElWRSkpDQor
-ICAgICAgICAgICAgICAgcmV0dXJuOw0KDQogICAgICAgIC8vIElmIHRoZSBncmFjZS1wZXJpb2Qg
-a3RocmVhZCBpcyBydW5uaW5nLCB1c2UgaXQuDQogICAgICAgIGlmIChSRUFEX09OQ0UocnRwLT5r
-dGhyZWFkX3B0cikpIHsNCkBAIC0xMDY2LDkgKzEwNjYsNiBAQCBzdGF0aWMgdm9pZCByY3VfdGFz
-a3NfYmVfcnVkZShzdHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmspDQogLy8gV2FpdCBmb3Igb25lIHJ1
-ZGUgUkNVLXRhc2tzIGdyYWNlIHBlcmlvZC4NCiBzdGF0aWMgdm9pZCByY3VfdGFza3NfcnVkZV93
-YWl0X2dwKHN0cnVjdCByY3VfdGFza3MgKnJ0cCkNCiB7DQotICAgICAgIGlmIChudW1fb25saW5l
-X2NwdXMoKSA8PSAxKQ0KLSAgICAgICAgICAgICAgIHJldHVybjsgLy8gRmFzdHBhdGggZm9yIG9u
-bHkgb25lIENQVS4NCi0NCiAgICAgICAgcnRwLT5uX2lwaXMgKz0gY3B1bWFza193ZWlnaHQoY3B1
-X29ubGluZV9tYXNrKTsNCiAgICAgICAgc2NoZWR1bGVfb25fZWFjaF9jcHUocmN1X3Rhc2tzX2Jl
-X3J1ZGUpOw0KIH0NCg0KVGhhbmtzDQpacWlhbmcNCg0KPg0KPklmIHRoaXMgY29uZGl0aW9uIGlz
-IHRydWUsIHRoZXJlIGlzIG9ubHkgb25lIENQVSBhbmQgbm8gc2NoZWR1bGVyLA0KPnRodXMgbm8g
-cHJlZW1wdGlvbi4NCj4NCj4JCQkJCQlUaGFueCwgUGF1bA0KDQo+IFRoYW5rcw0KPiBacWlhbmcN
-Cj4gDQo+ID4NCj4gPk9yIGRpZCBJIG1pc3Mgc29tZXRoaW5nPw0KPiA+DQo+ID5UaGFua3MuDQo+
-ID4NCj4gPg0KPiA+DQo+ID4gDQo+ID4gVGhhbmtzDQo+ID4gWnFpYW5nDQo+ID4gDQo+ID4+IA0K
-PiA+PiBUaGlzIHdvcmtzIGJlY2F1c2UgcmN1X3NjaGVkdWxlcl9hY3RpdmUgaXMgc2V0IHRvIFJD
-VV9TQ0hFRFVMRVJfUlVOTklORw0KPiA+PiBsb25nIGJlZm9yZSBpdCBpcyBwb3NzaWJsZSB0byBv
-ZmZsaW5lIENQVXMuDQo+ID4+IA0KPiA+PiBZZXMsIHNjaGVkdWxlX29uX2VhY2hfY3B1KCkgZG9l
-cyBkbyBjcHVzX3JlYWRfbG9jaygpLCBhZ2FpbiwgZ29vZCBleWVzLA0KPiA+PiBhbmQgaXQgYWxz
-byB1bm5lY2Vzc2FyaWx5IGRvZXMgdGhlIHNjaGVkdWxlX3dvcmtfb24oKSB0aGUgY3VycmVudCBD
-UFUsDQo+ID4+IGJ1dCB0aGUgY29kZSBjYWxsaW5nIHN5bmNocm9uaXplX3JjdV90YXNrc19ydWRl
-KCkgaXMgb24gaGlnaC1vdmVyaGVhZA0KPiA+PiBjb2RlIHBhdGhzLCBzbyB0aGlzIG92ZXJoZWFk
-IGlzIGRvd24gaW4gdGhlIG5vaXNlLg0KPiA+PiANCj4gPj4gVW50aWwgZnVydGhlciBub3RpY2Us
-IGFueXdheS4NCj4gPj4gDQo+ID4+IFNvIHNpbXBsaWNpdHkgaXMgbXVjaCBtb3JlIGltcG9ydGFu
-dCB0aGFuIHBlcmZvcm1hbmNlIGluIHRoaXMgY29kZS4NCj4gPj4gU28ganVzdCBhZGRpbmcgdGhl
-IGNoZWNrIGZvciBSQ1VfU0NIRURVTEVSX1JVTk5JTkcgc2hvdWxkIGZpeCB0aGlzLA0KPiA+PiB1
-bmxlc3MgSSBhbSBtaXNzaW5nIHNvbWV0aGluZyAoYWx3YXlzIHBvc3NpYmxlISkuDQo+ID4+IA0K
-PiA+PiAgICAgICAgICAgICAgICAgICAgICAgICAgICBUaGFueCwgUGF1bA0KPiA+PiANCj4gPj4g
-LS0tDQo+ID4+IGtlcm5lbC9yY3UvdGFza3MuaCB8IDIwICsrKysrKysrKysrKysrKysrKy0tDQo+
-ID4+IDEgZmlsZSBjaGFuZ2VkLCAxOCBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KPiA+
-PiANCj4gPj4gZGlmZiAtLWdpdCBhL2tlcm5lbC9yY3UvdGFza3MuaCBiL2tlcm5lbC9yY3UvdGFz
-a3MuaA0KPiA+PiBpbmRleCA0YTk5MTMxMWJlOWIuLjA4ZTcyYzY0NjJkOCAxMDA2NDQNCj4gPj4g
-LS0tIGEva2VybmVsL3JjdS90YXNrcy5oDQo+ID4+ICsrKyBiL2tlcm5lbC9yY3UvdGFza3MuaA0K
-PiA+PiBAQCAtMTAzMywxNCArMTAzMywzMCBAQCBzdGF0aWMgdm9pZCByY3VfdGFza3NfYmVfcnVk
-ZShzdHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmspDQo+ID4+IHsNCj4gPj4gfQ0KPiA+PiANCj4gPj4g
-K3N0YXRpYyBERUZJTkVfUEVSX0NQVShzdHJ1Y3Qgd29ya19zdHJ1Y3QsIHJ1ZGVfd29yayk7DQo+
-ID4+ICsNCj4gPj4gLy8gV2FpdCBmb3Igb25lIHJ1ZGUgUkNVLXRhc2tzIGdyYWNlIHBlcmlvZC4N
-Cj4gPj4gc3RhdGljIHZvaWQgcmN1X3Rhc2tzX3J1ZGVfd2FpdF9ncChzdHJ1Y3QgcmN1X3Rhc2tz
-ICpydHApDQo+ID4+IHsNCj4gPj4gKyAgICBpbnQgY3B1Ow0KPiA+PiArICAgIHN0cnVjdCB3b3Jr
-X3N0cnVjdCAqd29yazsNCj4gPj4gKw0KPiA+PiArICAgIGNwdXNfcmVhZF9sb2NrKCk7DQo+ID4+
-ICAgIGlmIChudW1fb25saW5lX2NwdXMoKSA8PSAxKQ0KPiA+PiAtICAgICAgICByZXR1cm47ICAg
-IC8vIEZhc3RwYXRoIGZvciBvbmx5IG9uZSBDUFUuDQo+ID4+ICsgICAgICAgIGdvdG8gZW5kOy8v
-IEZhc3RwYXRoIGZvciBvbmx5IG9uZSBDUFUuDQo+ID4+IA0KPiA+PiAgICBydHAtPm5faXBpcyAr
-PSBjcHVtYXNrX3dlaWdodChjcHVfb25saW5lX21hc2spOw0KPiA+PiAtICAgIHNjaGVkdWxlX29u
-X2VhY2hfY3B1KHJjdV90YXNrc19iZV9ydWRlKTsNCj4gPj4gKyAgICBmb3JfZWFjaF9vbmxpbmVf
-Y3B1KGNwdSkgew0KPiA+PiArICAgICAgICB3b3JrID0gcGVyX2NwdV9wdHIoJnJ1ZGVfd29yaywg
-Y3B1KTsNCj4gPj4gKyAgICAgICAgSU5JVF9XT1JLKHdvcmssIHJjdV90YXNrc19iZV9ydWRlKTsN
-Cj4gPj4gKyAgICAgICAgc2NoZWR1bGVfd29ya19vbihjcHUsIHdvcmspOw0KPiA+PiArICAgIH0N
-Cj4gPj4gKw0KPiA+PiArICAgIGZvcl9lYWNoX29ubGluZV9jcHUoY3B1KQ0KPiA+PiArICAgICAg
-ICBmbHVzaF93b3JrKHBlcl9jcHVfcHRyKCZydWRlX3dvcmssIGNwdSkpOw0KPiA+PiArDQo+ID4+
-ICtlbmQ6DQo+ID4+ICsgICAgY3B1c19yZWFkX3VubG9jaygpOw0KPiA+PiB9DQo+ID4+IA0KPiA+
-PiB2b2lkIGNhbGxfcmN1X3Rhc2tzX3J1ZGUoc3RydWN0IHJjdV9oZWFkICpyaHAsIHJjdV9jYWxs
-YmFja190IGZ1bmMpOw0KPiA+PiAtLSANCj4gPj4gMi4yNS4xDQo+ID4+IA0K
+On 29.11.2022 00:05, Vincent Mailhol wrote:
+> The driver name is available in device_driver::name. Right now,
+> drivers still have to report this piece of information themselves in
+> their devlink_ops::info_get callback function.
+> 
+> In order to factorize code, make devlink_nl_info_fill() add the driver
+> name attribute.
+> 
+> nla_put() does not check if an attribute already exists and
+> unconditionally reserves new space [1]. To avoid attribute
+> duplication, clean-up all the drivers which are currently reporting
+> the driver name in their callback.
+> 
+> [1] __nla_put from lib/nlattr.c
+> Link: https://elixir.bootlin.com/linux/v6.0/source/lib/nlattr.c#L993
+> 
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> Tested-by: Ido Schimmel <idosch@nvidia.com> # mlxsw
+
+For ptp_ocp driver:
+Acked-by: Vadim Fedorenko <vadfed@fb.com>
+
+> ---
+>   .../crypto/marvell/octeontx2/otx2_cpt_devlink.c |  4 ----
+>   drivers/net/dsa/hirschmann/hellcreek.c          |  5 -----
+>   drivers/net/dsa/mv88e6xxx/devlink.c             |  5 -----
+>   drivers/net/dsa/sja1105/sja1105_devlink.c       | 12 +++---------
+>   .../net/ethernet/broadcom/bnxt/bnxt_devlink.c   |  4 ----
+>   .../freescale/dpaa2/dpaa2-eth-devlink.c         | 11 +----------
+>   .../ethernet/fungible/funeth/funeth_devlink.c   |  2 +-
+>   .../hisilicon/hns3/hns3pf/hclge_devlink.c       |  5 -----
+>   .../hisilicon/hns3/hns3vf/hclgevf_devlink.c     |  5 -----
+>   drivers/net/ethernet/intel/ice/ice_devlink.c    |  6 ------
+>   .../ethernet/marvell/octeontx2/af/rvu_devlink.c |  2 +-
+>   .../marvell/octeontx2/nic/otx2_devlink.c        |  9 +--------
+>   .../marvell/prestera/prestera_devlink.c         |  5 -----
+>   .../net/ethernet/mellanox/mlx5/core/devlink.c   |  4 ----
+>   drivers/net/ethernet/mellanox/mlxsw/core.c      |  5 -----
+>   .../net/ethernet/netronome/nfp/nfp_devlink.c    |  4 ----
+>   .../net/ethernet/pensando/ionic/ionic_devlink.c |  4 ----
+>   drivers/net/ethernet/qlogic/qed/qed_devlink.c   |  4 ----
+>   drivers/net/netdevsim/dev.c                     |  3 ---
+>   drivers/ptp/ptp_ocp.c                           |  4 ----
+>   net/core/devlink.c                              | 17 +++++++++++++++++
+>   21 files changed, 24 insertions(+), 96 deletions(-)
+> 
+> diff --git a/drivers/crypto/marvell/octeontx2/otx2_cpt_devlink.c b/drivers/crypto/marvell/octeontx2/otx2_cpt_devlink.c
+> index 7503f6b18ac5..a2aba0b0d68a 100644
+> --- a/drivers/crypto/marvell/octeontx2/otx2_cpt_devlink.c
+> +++ b/drivers/crypto/marvell/octeontx2/otx2_cpt_devlink.c
+> @@ -76,10 +76,6 @@ static int otx2_cpt_devlink_info_get(struct devlink *dl,
+>   	struct otx2_cptpf_dev *cptpf = cpt_dl->cptpf;
+>   	int err;
+>   
+> -	err = devlink_info_driver_name_put(req, "rvu_cptpf");
+> -	if (err)
+> -		return err;
+> -
+>   	err = otx2_cpt_dl_info_firmware_version_put(req, cptpf->eng_grps.grp,
+>   						    "fw.ae", OTX2_CPT_AE_TYPES);
+>   	if (err)
+> diff --git a/drivers/net/dsa/hirschmann/hellcreek.c b/drivers/net/dsa/hirschmann/hellcreek.c
+> index 951f7935c872..595a548bb0a8 100644
+> --- a/drivers/net/dsa/hirschmann/hellcreek.c
+> +++ b/drivers/net/dsa/hirschmann/hellcreek.c
+> @@ -1176,11 +1176,6 @@ static int hellcreek_devlink_info_get(struct dsa_switch *ds,
+>   				      struct netlink_ext_ack *extack)
+>   {
+>   	struct hellcreek *hellcreek = ds->priv;
+> -	int ret;
+> -
+> -	ret = devlink_info_driver_name_put(req, "hellcreek");
+> -	if (ret)
+> -		return ret;
+>   
+>   	return devlink_info_version_fixed_put(req,
+>   					      DEVLINK_INFO_VERSION_GENERIC_ASIC_ID,
+> diff --git a/drivers/net/dsa/mv88e6xxx/devlink.c b/drivers/net/dsa/mv88e6xxx/devlink.c
+> index 1266eabee086..a08dab75e0c0 100644
+> --- a/drivers/net/dsa/mv88e6xxx/devlink.c
+> +++ b/drivers/net/dsa/mv88e6xxx/devlink.c
+> @@ -821,11 +821,6 @@ int mv88e6xxx_devlink_info_get(struct dsa_switch *ds,
+>   			       struct netlink_ext_ack *extack)
+>   {
+>   	struct mv88e6xxx_chip *chip = ds->priv;
+> -	int err;
+> -
+> -	err = devlink_info_driver_name_put(req, "mv88e6xxx");
+> -	if (err)
+> -		return err;
+>   
+>   	return devlink_info_version_fixed_put(req,
+>   					      DEVLINK_INFO_VERSION_GENERIC_ASIC_ID,
+> diff --git a/drivers/net/dsa/sja1105/sja1105_devlink.c b/drivers/net/dsa/sja1105/sja1105_devlink.c
+> index 10c6fea1227f..da532614f34a 100644
+> --- a/drivers/net/dsa/sja1105/sja1105_devlink.c
+> +++ b/drivers/net/dsa/sja1105/sja1105_devlink.c
+> @@ -120,16 +120,10 @@ int sja1105_devlink_info_get(struct dsa_switch *ds,
+>   			     struct netlink_ext_ack *extack)
+>   {
+>   	struct sja1105_private *priv = ds->priv;
+> -	int rc;
+> -
+> -	rc = devlink_info_driver_name_put(req, "sja1105");
+> -	if (rc)
+> -		return rc;
+>   
+> -	rc = devlink_info_version_fixed_put(req,
+> -					    DEVLINK_INFO_VERSION_GENERIC_ASIC_ID,
+> -					    priv->info->name);
+> -	return rc;
+> +	return devlink_info_version_fixed_put(req,
+> +					      DEVLINK_INFO_VERSION_GENERIC_ASIC_ID,
+> +					      priv->info->name);
+>   }
+>   
+>   int sja1105_devlink_setup(struct dsa_switch *ds)
+> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c
+> index 8a6f788f6294..26913dc816d3 100644
+> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c
+> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c
+> @@ -892,10 +892,6 @@ static int bnxt_dl_info_get(struct devlink *dl, struct devlink_info_req *req,
+>   	u32 ver = 0;
+>   	int rc;
+>   
+> -	rc = devlink_info_driver_name_put(req, DRV_MODULE_NAME);
+> -	if (rc)
+> -		return rc;
+> -
+>   	if (BNXT_PF(bp) && (bp->flags & BNXT_FLAG_DSN_VALID)) {
+>   		sprintf(buf, "%02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X",
+>   			bp->dsn[7], bp->dsn[6], bp->dsn[5], bp->dsn[4],
+> diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth-devlink.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth-devlink.c
+> index 5c6dd3029e2f..76f808d38066 100644
+> --- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth-devlink.c
+> +++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth-devlink.c
+> @@ -37,18 +37,9 @@ static int dpaa2_eth_dl_info_get(struct devlink *devlink,
+>   	struct dpaa2_eth_devlink_priv *dl_priv = devlink_priv(devlink);
+>   	struct dpaa2_eth_priv *priv = dl_priv->dpaa2_priv;
+>   	char buf[10];
+> -	int err;
+> -
+> -	err = devlink_info_driver_name_put(req, KBUILD_MODNAME);
+> -	if (err)
+> -		return err;
+>   
+>   	scnprintf(buf, 10, "%d.%d", priv->dpni_ver_major, priv->dpni_ver_minor);
+> -	err = devlink_info_version_running_put(req, "dpni", buf);
+> -	if (err)
+> -		return err;
+> -
+> -	return 0;
+> +	return devlink_info_version_running_put(req, "dpni", buf);
+>   }
+>   
+>   static struct dpaa2_eth_trap_item *
+> diff --git a/drivers/net/ethernet/fungible/funeth/funeth_devlink.c b/drivers/net/ethernet/fungible/funeth/funeth_devlink.c
+> index d50c222948b4..6668375edff6 100644
+> --- a/drivers/net/ethernet/fungible/funeth/funeth_devlink.c
+> +++ b/drivers/net/ethernet/fungible/funeth/funeth_devlink.c
+> @@ -6,7 +6,7 @@
+>   static int fun_dl_info_get(struct devlink *dl, struct devlink_info_req *req,
+>   			   struct netlink_ext_ack *extack)
+>   {
+> -	return devlink_info_driver_name_put(req, KBUILD_MODNAME);
+> +	return 0;
+>   }
+>   
+>   static const struct devlink_ops fun_dl_ops = {
+> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c
+> index 4c441e6a5082..3d3b69605423 100644
+> --- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c
+> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c
+> @@ -13,11 +13,6 @@ static int hclge_devlink_info_get(struct devlink *devlink,
+>   	struct hclge_devlink_priv *priv = devlink_priv(devlink);
+>   	char version_str[HCLGE_DEVLINK_FW_STRING_LEN];
+>   	struct hclge_dev *hdev = priv->hdev;
+> -	int ret;
+> -
+> -	ret = devlink_info_driver_name_put(req, KBUILD_MODNAME);
+> -	if (ret)
+> -		return ret;
+>   
+>   	snprintf(version_str, sizeof(version_str), "%lu.%lu.%lu.%lu",
+>   		 hnae3_get_field(hdev->fw_version, HNAE3_FW_VERSION_BYTE3_MASK,
+> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_devlink.c b/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_devlink.c
+> index fdc19868b818..a6c3c5e8f0ab 100644
+> --- a/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_devlink.c
+> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_devlink.c
+> @@ -13,11 +13,6 @@ static int hclgevf_devlink_info_get(struct devlink *devlink,
+>   	struct hclgevf_devlink_priv *priv = devlink_priv(devlink);
+>   	char version_str[HCLGEVF_DEVLINK_FW_STRING_LEN];
+>   	struct hclgevf_dev *hdev = priv->hdev;
+> -	int ret;
+> -
+> -	ret = devlink_info_driver_name_put(req, KBUILD_MODNAME);
+> -	if (ret)
+> -		return ret;
+>   
+>   	snprintf(version_str, sizeof(version_str), "%lu.%lu.%lu.%lu",
+>   		 hnae3_get_field(hdev->fw_version, HNAE3_FW_VERSION_BYTE3_MASK,
+> diff --git a/drivers/net/ethernet/intel/ice/ice_devlink.c b/drivers/net/ethernet/intel/ice/ice_devlink.c
+> index 1d638216484d..ba74977e75dc 100644
+> --- a/drivers/net/ethernet/intel/ice/ice_devlink.c
+> +++ b/drivers/net/ethernet/intel/ice/ice_devlink.c
+> @@ -311,12 +311,6 @@ static int ice_devlink_info_get(struct devlink *devlink,
+>   		}
+>   	}
+>   
+> -	err = devlink_info_driver_name_put(req, KBUILD_MODNAME);
+> -	if (err) {
+> -		NL_SET_ERR_MSG_MOD(extack, "Unable to set driver name");
+> -		goto out_free_ctx;
+> -	}
+> -
+>   	ice_info_get_dsn(pf, ctx);
+>   
+>   	err = devlink_info_serial_number_put(req, ctx->buf);
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_devlink.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_devlink.c
+> index 88dee589cb21..f15439d26d21 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_devlink.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_devlink.c
+> @@ -1550,7 +1550,7 @@ static int rvu_devlink_eswitch_mode_set(struct devlink *devlink, u16 mode,
+>   static int rvu_devlink_info_get(struct devlink *devlink, struct devlink_info_req *req,
+>   				struct netlink_ext_ack *extack)
+>   {
+> -	return devlink_info_driver_name_put(req, DRV_NAME);
+> +	return 0;
+>   }
+>   
+>   static const struct devlink_ops rvu_devlink_ops = {
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_devlink.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_devlink.c
+> index 777a27047c8e..5cc6416cf1a6 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_devlink.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_devlink.c
+> @@ -77,18 +77,11 @@ static const struct devlink_param otx2_dl_params[] = {
+>   			     otx2_dl_mcam_count_validate),
+>   };
+>   
+> -/* Devlink OPs */
+>   static int otx2_devlink_info_get(struct devlink *devlink,
+>   				 struct devlink_info_req *req,
+>   				 struct netlink_ext_ack *extack)
+>   {
+> -	struct otx2_devlink *otx2_dl = devlink_priv(devlink);
+> -	struct otx2_nic *pfvf = otx2_dl->pfvf;
+> -
+> -	if (is_otx2_vf(pfvf->pcifunc))
+> -		return devlink_info_driver_name_put(req, "rvu_nicvf");
+> -
+> -	return devlink_info_driver_name_put(req, "rvu_nicpf");
+> +	return 0;
+>   }
+>   
+>   static const struct devlink_ops otx2_devlink_ops = {
+> diff --git a/drivers/net/ethernet/marvell/prestera/prestera_devlink.c b/drivers/net/ethernet/marvell/prestera/prestera_devlink.c
+> index 84ad05c9f12d..2a4c9df4eb79 100644
+> --- a/drivers/net/ethernet/marvell/prestera/prestera_devlink.c
+> +++ b/drivers/net/ethernet/marvell/prestera/prestera_devlink.c
+> @@ -355,11 +355,6 @@ static int prestera_dl_info_get(struct devlink *dl,
+>   {
+>   	struct prestera_switch *sw = devlink_priv(dl);
+>   	char buf[16];
+> -	int err;
+> -
+> -	err = devlink_info_driver_name_put(req, PRESTERA_DRV_NAME);
+> -	if (err)
+> -		return err;
+>   
+>   	snprintf(buf, sizeof(buf), "%d.%d.%d",
+>   		 sw->dev->fw_rev.maj,
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/devlink.c b/drivers/net/ethernet/mellanox/mlx5/core/devlink.c
+> index cc2ae427dcb0..751bc4a9edcf 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/devlink.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/devlink.c
+> @@ -46,10 +46,6 @@ mlx5_devlink_info_get(struct devlink *devlink, struct devlink_info_req *req,
+>   	u32 running_fw, stored_fw;
+>   	int err;
+>   
+> -	err = devlink_info_driver_name_put(req, KBUILD_MODNAME);
+> -	if (err)
+> -		return err;
+> -
+>   	err = devlink_info_version_fixed_put(req, "fw.psid", dev->board_id);
+>   	if (err)
+>   		return err;
+> diff --git a/drivers/net/ethernet/mellanox/mlxsw/core.c b/drivers/net/ethernet/mellanox/mlxsw/core.c
+> index a83f6bc30072..a0a06e2eff82 100644
+> --- a/drivers/net/ethernet/mellanox/mlxsw/core.c
+> +++ b/drivers/net/ethernet/mellanox/mlxsw/core.c
+> @@ -1459,11 +1459,6 @@ mlxsw_devlink_info_get(struct devlink *devlink, struct devlink_info_req *req,
+>   	char buf[32];
+>   	int err;
+>   
+> -	err = devlink_info_driver_name_put(req,
+> -					   mlxsw_core->bus_info->device_kind);
+> -	if (err)
+> -		return err;
+> -
+>   	mlxsw_reg_mgir_pack(mgir_pl);
+>   	err = mlxsw_reg_query(mlxsw_core, MLXSW_REG(mgir), mgir_pl);
+>   	if (err)
+> diff --git a/drivers/net/ethernet/netronome/nfp/nfp_devlink.c b/drivers/net/ethernet/netronome/nfp/nfp_devlink.c
+> index 8bfd48d50ef0..4c601ff09cd3 100644
+> --- a/drivers/net/ethernet/netronome/nfp/nfp_devlink.c
+> +++ b/drivers/net/ethernet/netronome/nfp/nfp_devlink.c
+> @@ -239,10 +239,6 @@ nfp_devlink_info_get(struct devlink *devlink, struct devlink_info_req *req,
+>   	char *buf = NULL;
+>   	int err;
+>   
+> -	err = devlink_info_driver_name_put(req, "nfp");
+> -	if (err)
+> -		return err;
+> -
+>   	vendor = nfp_hwinfo_lookup(pf->hwinfo, "assembly.vendor");
+>   	part = nfp_hwinfo_lookup(pf->hwinfo, "assembly.partno");
+>   	sn = nfp_hwinfo_lookup(pf->hwinfo, "assembly.serial");
+> diff --git a/drivers/net/ethernet/pensando/ionic/ionic_devlink.c b/drivers/net/ethernet/pensando/ionic/ionic_devlink.c
+> index 567f778433e2..e6ff757895ab 100644
+> --- a/drivers/net/ethernet/pensando/ionic/ionic_devlink.c
+> +++ b/drivers/net/ethernet/pensando/ionic/ionic_devlink.c
+> @@ -26,10 +26,6 @@ static int ionic_dl_info_get(struct devlink *dl, struct devlink_info_req *req,
+>   	char buf[16];
+>   	int err = 0;
+>   
+> -	err = devlink_info_driver_name_put(req, IONIC_DRV_NAME);
+> -	if (err)
+> -		return err;
+> -
+>   	err = devlink_info_version_running_put(req,
+>   					       DEVLINK_INFO_VERSION_GENERIC_FW,
+>   					       idev->dev_info.fw_version);
+> diff --git a/drivers/net/ethernet/qlogic/qed/qed_devlink.c b/drivers/net/ethernet/qlogic/qed/qed_devlink.c
+> index 6bb4e165b592..922c47797af6 100644
+> --- a/drivers/net/ethernet/qlogic/qed/qed_devlink.c
+> +++ b/drivers/net/ethernet/qlogic/qed/qed_devlink.c
+> @@ -162,10 +162,6 @@ static int qed_devlink_info_get(struct devlink *devlink,
+>   
+>   	dev_info = &cdev->common_dev_info;
+>   
+> -	err = devlink_info_driver_name_put(req, KBUILD_MODNAME);
+> -	if (err)
+> -		return err;
+> -
+>   	memcpy(buf, cdev->hwfns[0].hw_info.part_num, sizeof(cdev->hwfns[0].hw_info.part_num));
+>   	buf[sizeof(cdev->hwfns[0].hw_info.part_num)] = 0;
+>   
+> diff --git a/drivers/net/netdevsim/dev.c b/drivers/net/netdevsim/dev.c
+> index e14686594a71..b962fc8e1397 100644
+> --- a/drivers/net/netdevsim/dev.c
+> +++ b/drivers/net/netdevsim/dev.c
+> @@ -994,9 +994,6 @@ static int nsim_dev_info_get(struct devlink *devlink,
+>   {
+>   	int err;
+>   
+> -	err = devlink_info_driver_name_put(req, DRV_NAME);
+> -	if (err)
+> -		return err;
+>   	err = devlink_info_version_stored_put_ext(req, "fw.mgmt", "10.20.30",
+>   						  DEVLINK_INFO_VERSION_TYPE_COMPONENT);
+>   	if (err)
+> diff --git a/drivers/ptp/ptp_ocp.c b/drivers/ptp/ptp_ocp.c
+> index 154d58cbd9ce..4bbaccd543ad 100644
+> --- a/drivers/ptp/ptp_ocp.c
+> +++ b/drivers/ptp/ptp_ocp.c
+> @@ -1647,10 +1647,6 @@ ptp_ocp_devlink_info_get(struct devlink *devlink, struct devlink_info_req *req,
+>   	char buf[32];
+>   	int err;
+>   
+> -	err = devlink_info_driver_name_put(req, KBUILD_MODNAME);
+> -	if (err)
+> -		return err;
+> -
+>   	fw_image = bp->fw_loader ? "loader" : "fw";
+>   	sprintf(buf, "%d.%d", bp->fw_tag, bp->fw_version);
+>   	err = devlink_info_version_running_put(req, fw_image, buf);
+> diff --git a/net/core/devlink.c b/net/core/devlink.c
+> index cea154ddce7a..6478135d9ba1 100644
+> --- a/net/core/devlink.c
+> +++ b/net/core/devlink.c
+> @@ -6749,11 +6749,24 @@ int devlink_info_version_running_put_ext(struct devlink_info_req *req,
+>   }
+>   EXPORT_SYMBOL_GPL(devlink_info_version_running_put_ext);
+>   
+> +static int devlink_nl_driver_info_get(struct device_driver *drv,
+> +				      struct devlink_info_req *req)
+> +{
+> +	if (!drv)
+> +		return 0;
+> +
+> +	if (drv->name[0])
+> +		return devlink_info_driver_name_put(req, drv->name);
+> +
+> +	return 0;
+> +}
+> +
+>   static int
+>   devlink_nl_info_fill(struct sk_buff *msg, struct devlink *devlink,
+>   		     enum devlink_command cmd, u32 portid,
+>   		     u32 seq, int flags, struct netlink_ext_ack *extack)
+>   {
+> +	struct device *dev = devlink_to_dev(devlink);
+>   	struct devlink_info_req req = {};
+>   	void *hdr;
+>   	int err;
+> @@ -6771,6 +6784,10 @@ devlink_nl_info_fill(struct sk_buff *msg, struct devlink *devlink,
+>   	if (err)
+>   		goto err_cancel_msg;
+>   
+> +	err = devlink_nl_driver_info_get(dev->driver, &req);
+> +	if (err)
+> +		goto err_cancel_msg;
+> +
+>   	genlmsg_end(msg, hdr);
+>   	return 0;
+>   
+
