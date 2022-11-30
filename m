@@ -2,204 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A3E63DD89
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FB063DDAB
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiK3S2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:28:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
+        id S229718AbiK3S3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:29:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiK3S2K (ORCPT
+        with ESMTP id S229907AbiK3S3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:28:10 -0500
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1C431227;
-        Wed, 30 Nov 2022 10:28:08 -0800 (PST)
-Received: by mail-qv1-f41.google.com with SMTP id q10so12544151qvt.10;
-        Wed, 30 Nov 2022 10:28:08 -0800 (PST)
+        Wed, 30 Nov 2022 13:29:22 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2302A8BD33
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:29:21 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id y16so8762985wrm.2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:29:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jrtc27.com; s=gmail.jrtc27.user;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I/mhURiSnctmudftnFtdoz6/q2M4E0iTIngIl1pzogU=;
+        b=EXkGs8WY3WnjbsfHyJzvRucfFYBCKLg2OoAAZnOb/QPwRH+3S4V5sgJNGwMMKQ3nT9
+         2Xb0YGfoWg8veu7GPIpZ0GgkLWVbqZ3fJ4/YQSHytBk3p1ctC993cy3PKZil2/yVVUTE
+         cId59KXf8H6siK7W2A00aylbLGNYI+MHnOxsu2GjMYrFio9S+YHO87jgpUBSDofME/+W
+         4Jl0H0EnSKxnDzGQs3a5WhNe7L3vjXj9Uw/xvOR6prOCoMB5ePFP+H9FzyEA2Fw86LfT
+         nn33xq8pXc/UotbEvk9rwn673hiz0rGlVWl6rMmgFCuvlo0vH7ggJQulg587nx2obfos
+         lj8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W0EPxSHKLwUkp9GfQcmrWQus4zn97Y8+iM+7ar1o1NI=;
-        b=U+6kGX4z8NqRonIy2fnNn4BaS7V0xm1vLc+EayXtFUu+s7+ZVUfyUjNV1AgP/kyjEs
-         AOtbmxAFeSEEXaewNBgFLMu/3hEauETt9YIEMozW26/sJvbWydCugzjZGWLZsi2nG/nz
-         dXIOlg3Wn51ANv5TrPC0Ax2jc1SaEU9DDNZeNwEUfhtNjttVekeERqSwavTJh0pM+GeB
-         0z02V44gUmVtw1IXDabElOj4I+436haiyw0Tw7muHRricmZ9S+0B6yCR0bZf4Xbxj2Cb
-         81fmTJpL5mwksruRH8cY+mgEnwEetgtgQe/w9DnBiXc8O4qdY87uavhx07hp2fFQjgMm
-         4hrw==
-X-Gm-Message-State: ANoB5pkdlehrQ4BlaN7xxMpriK2Ts51yOX3e/Egv57Utm+yZ2lGu6JSZ
-        MUmJBkTyBatkRN0hbzWVhjyVY0cdt+9fUojylS0=
-X-Google-Smtp-Source: AA0mqf7iKJsG2tfIdtRsRPZ/mBT5XS9NuLsM3E/fHiwUqiTx7KAS29G5ozAABSA8UNm8u7h+1Kp535NolvbJK/4hzjI=
-X-Received: by 2002:a0c:c589:0:b0:4b1:a9ac:21de with SMTP id
- a9-20020a0cc589000000b004b1a9ac21demr39706799qvj.119.1669832887399; Wed, 30
- Nov 2022 10:28:07 -0800 (PST)
-MIME-Version: 1.0
-References: <20221127141742.1644023-1-qyousef@layalina.io> <20221127141742.1644023-4-qyousef@layalina.io>
-In-Reply-To: <20221127141742.1644023-4-qyousef@layalina.io>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Nov 2022 19:27:52 +0100
-Message-ID: <CAJZ5v0iew=_pTq-v-2EdZN==8QY3donu9YUBtRYWdL18KBxs4Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
- capacity inversion
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
-        Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I/mhURiSnctmudftnFtdoz6/q2M4E0iTIngIl1pzogU=;
+        b=R0x1E9DuTIpwo4Lxp/+6kesDH5CwZ2nFpIxsGccwK05KaoLjth/FEecg6Xj4fTSgGE
+         BbjSATv35Gno9LCw/wl6djvAPuCkKP8AzahG5loWsDBuED5voKVvr4Mi/21RjNxu8X09
+         /cRrYx8iE0ftiY6+H36NwCjSKTP0mV/wf2we6WiWzo1IiPQOuFXei8rohnXDn5V+3IJQ
+         TzMQQPyHtgApOTINOjd9Vnqai9ZLVTnLVGnsTc9YMcrf54db6LsxJxSNZetAY9blkQ59
+         wkr9/d6aWOZHWe6Yx4oU972waVkgtZbI1QVYQbW5s83DVxLJjl6Y9Y2opfvDrTtJu5w3
+         plUg==
+X-Gm-Message-State: ANoB5pks/ABLSmxwzrpuaM4bmjVMwa4ZTp45MfpqhgpH0WtyNFT/yPeH
+        lc/k265ktSAt5OBiwZerWPrK4V9z/2Z07fnu
+X-Google-Smtp-Source: AA0mqf5dX/d2F14h/RN8hhwb9Smb/cMdcFa+bUh//IbKL245pVd2GTk7zTR9//+D8GoEll5KQTO2jA==
+X-Received: by 2002:a5d:414b:0:b0:242:b59:c3c6 with SMTP id c11-20020a5d414b000000b002420b59c3c6mr14720594wrq.91.1669832959724;
+        Wed, 30 Nov 2022 10:29:19 -0800 (PST)
+Received: from smtpclient.apple (global-5-141.n-2.net.cam.ac.uk. [131.111.5.141])
+        by smtp.gmail.com with ESMTPSA id 16-20020a05600c22d000b003b497138093sm2691867wmg.47.2022.11.30.10.29.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 30 Nov 2022 10:29:19 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH v2 1/2] dt-bindings: riscv: fix underscore requirement for
+ addtional standard extensions
+From:   Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <20221130180422.1642652-2-conor@kernel.org>
+Date:   Wed, 30 Nov 2022 18:29:18 +0000
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Guo Ren <guoren@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E52B0E0B-F27B-43C8-85DA-4C7AC0C52369@jrtc27.com>
+References: <20221130180422.1642652-1-conor@kernel.org>
+ <20221130180422.1642652-2-conor@kernel.org>
+To:     Conor Dooley <conor@kernel.org>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 27, 2022 at 3:18 PM Qais Yousef <qyousef@layalina.io> wrote:
->
-> We used performance domains to traverse the list of domains that share
-> the same cpufreq policy to detect when this domain is severely impacted
-> by thermal pressure to cause it to be lower than another domain in the
-> system - capacity inversion.
->
-> Since performance domains are only available for when energy model or
-> schedutil are present, this makes the detection mechanism unavailable
-> for Capacity Aware Scheduling (CAS).
->
-> Since we only care about traversing the capacity_orig() of any cpu
-> within that domain; export for_each_active_policy() to traverse the
-> cpufreq policies instead of performance domains.
->
-> Introduce a new for_each_active_policy_safe() to protect against races
-> with deletion. Races against additions are fine since we can't
-> eliminate the race without having to do heavy handed locking which is
-> unacceptable in this path. The policy should be visible in the next
-> tick if we missed it.
->
-> Fixes: 44c7b80bffc3 ("sched/fair: Detect capacity inversion")
-> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+On 30 Nov 2022, at 18:04, Conor Dooley <conor@kernel.org> wrote:
+>=20
+> From: Conor Dooley <conor.dooley@microchip.com>
+>=20
+> The RISC-V ISA Manual allows for the first Additional Standard
+> Extension having no leading underscore. Only if there are multiple
+> Additional Standard Extensions is it needed to have an underscore.
+>=20
+> The dt-binding does not validate that a multi-letter extension is
+> canonically ordered, as that'd need an even worse regex than is here,
+> but it should not fail validation for valid ISA strings.
+>=20
+> Allow the first Z multi-letter extension to appear immediately prior
+> after the single-letter extensions.
+>=20
+> Link: =
+https://github.com/riscv/riscv-isa-manual/releases/tag/riscv-unpriv-pdf-fr=
+om-asciidoc-15112022 # Chapter 29.5
+> Fixes: 299824e68bd0 ("dt-bindings: riscv: add new riscv,isa strings =
+for emulators")
+> Acked-by: Guo Ren <guoren@kernel.org>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
->
-> Rafael, Viresh, I hope it's okay to export these macros in the public header.
-> And that my usage is okay; I'm not sure if I missed important locking rules.
->
->
->  drivers/cpufreq/cpufreq.c | 12 +-----------
->  include/linux/cpufreq.h   | 26 ++++++++++++++++++++++++++
->  kernel/sched/fair.c       | 13 +++++--------
->  3 files changed, 32 insertions(+), 19 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 69b3d61852ac..b11e7c545fc1 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -31,17 +31,7 @@
->  #include <linux/units.h>
->  #include <trace/events/power.h>
->
-> -static LIST_HEAD(cpufreq_policy_list);
-> -
-> -/* Macros to iterate over CPU policies */
-> -#define for_each_suitable_policy(__policy, __active)                    \
-> -       list_for_each_entry(__policy, &cpufreq_policy_list, policy_list) \
-> -               if ((__active) == !policy_is_inactive(__policy))
-> -
-> -#define for_each_active_policy(__policy)               \
-> -       for_each_suitable_policy(__policy, true)
-> -#define for_each_inactive_policy(__policy)             \
-> -       for_each_suitable_policy(__policy, false)
-> +LIST_HEAD(cpufreq_policy_list);
->
->  /* Iterate over governors */
->  static LIST_HEAD(cpufreq_governor_list);
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index d5595d57f4e5..c3c79d4ad821 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -780,6 +780,32 @@ static inline void dev_pm_opp_free_cpufreq_table(struct device *dev,
->                         continue;                                               \
->                 else
->
-> +#ifdef CONFIG_CPU_FREQ
-> +extern struct list_head cpufreq_policy_list;
-> +
-> +/* Macros to iterate over CPU policies */
-> +#define for_each_suitable_policy(__policy, __active)                    \
-> +       list_for_each_entry(__policy, &cpufreq_policy_list, policy_list) \
-> +               if ((__active) == !policy_is_inactive(__policy))
-> +
-> +#define for_each_suitable_policy_safe(__policy, __n, __active)                    \
-> +       list_for_each_entry_safe(__policy, __n, &cpufreq_policy_list, policy_list) \
-> +               if ((__active) == !policy_is_inactive(__policy))
-> +#else
-> +#define for_each_suitable_policy(__policy, __active)           while (0)
-> +#define for_each_suitable_policy_safe(__policy, __n, __active) while (0)
-> +#endif
-> +
-> +#define for_each_active_policy(__policy)               \
-> +       for_each_suitable_policy(__policy, true)
-> +#define for_each_inactive_policy(__policy)             \
-> +       for_each_suitable_policy(__policy, false)
-> +
-> +#define for_each_active_policy_safe(__policy, __n)             \
-> +       for_each_suitable_policy_safe(__policy, __n, true)
-> +#define for_each_inactive_policy_safe(__policy, __n)           \
-> +       for_each_suitable_policy_safe(__policy, __n, false)
-> +
->
->  int cpufreq_frequency_table_cpuinfo(struct cpufreq_policy *policy,
->                                     struct cpufreq_frequency_table *table);
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 7c0dd57e562a..4bbbca85134b 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -8856,23 +8856,20 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
->          *   * Thermal pressure will impact all cpus in this perf domain
->          *     equally.
->          */
-> -       if (sched_energy_enabled()) {
-> +       if (static_branch_unlikely(&sched_asym_cpucapacity)) {
->                 unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
-> -               struct perf_domain *pd = rcu_dereference(rq->rd->pd);
-> +               struct cpufreq_policy *policy, __maybe_unused *policy_n;
->
->                 rq->cpu_capacity_inverted = 0;
->
-> -               SCHED_WARN_ON(!rcu_read_lock_held());
-> -
-> -               for (; pd; pd = pd->next) {
-> -                       struct cpumask *pd_span = perf_domain_span(pd);
-> +               for_each_active_policy_safe(policy, policy_n) {
+> Documentation/devicetree/bindings/riscv/cpus.yaml | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml =
+b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> index 90a7cabf58fe..e80c967a4fa4 100644
+> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> @@ -80,7 +80,7 @@ properties:
+>       insensitive, letters in the riscv,isa string must be all
+>       lowercase to simplify parsing.
+>     $ref: "/schemas/types.yaml#/definitions/string"
+> -    pattern: ^rv(?:64|32)imaf?d?q?c?b?v?k?h?(?:_[hsxz](?:[a-z])+)*$
+> +    pattern: =
+^rv(?:64|32)imaf?d?q?c?b?v?k?h?(?:z(?:[a-z])+)?(?:_[hsxz](?:[a-z])+)*$
 
-1. Is the "safe" part sufficient for protection against concurrent
-deletion and freeing of list entries?  cpufreq driver removal can do
-that AFAICS.
-2. For a casual reader of this code it may not be clear why cpufreq
-policies matter here.
+Isn=E2=80=99t it any multi-letter extension, i.e, this should be [hsxz] =
+again?
 
->                         unsigned long pd_cap_orig, pd_cap;
->
->                         /* We can't be inverted against our own pd */
-> -                       if (cpumask_test_cpu(cpu_of(rq), pd_span))
-> +                       if (cpumask_test_cpu(cpu_of(rq), policy->cpus))
->                                 continue;
->
-> -                       cpu = cpumask_any(pd_span);
-> +                       cpu = cpumask_any(policy->cpus);
->                         pd_cap_orig = arch_scale_cpu_capacity(cpu);
->
->                         if (capacity_orig < pd_cap_orig)
-> --
-> 2.25.1
->
+It certainly used to be at least; we use rv64gcxcheri...
+
+Jess
+
