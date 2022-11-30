@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3693963E0E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:43:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D49D63E0F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiK3TnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 14:43:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53646 "EHLO
+        id S229807AbiK3ToX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 14:44:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiK3TnR (ORCPT
+        with ESMTP id S229769AbiK3Tn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 14:43:17 -0500
+        Wed, 30 Nov 2022 14:43:58 -0500
 Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE3226132;
-        Wed, 30 Nov 2022 11:43:15 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id jl24so229863plb.8;
-        Wed, 30 Nov 2022 11:43:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACF497036;
+        Wed, 30 Nov 2022 11:43:46 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id jl24so231308plb.8;
+        Wed, 30 Nov 2022 11:43:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pUBcXV7nQy/1r0o6E64fUR2RwhClmxU+dP9giO6hLmY=;
-        b=fBZVpztZLS4scqkNd2KK5kBSJaDFwKbZkCD7lBloMLPUm1TxERP3E6+Awn4UyBRiws
-         RrFEP2bcgV6oWYpuTKP35X1NhRHLIYuBvf0xnaG3Ta1so5bYMBsei779ZlT8fR38icqX
-         FmHpKdrR40GVytaMY/oF09SOnM/LTlZ2UoPLI8AdPREHGPMtmLVvAP2+QXWOx2pmwjrT
-         nO+pRilq6WETWtwL3w78XpSiy8noae+/SPNfJiiFpGXlPALaPVuLB9hV4gKs6uv+5uuI
-         8UiAqE7kZlf8C1yGFtWc+r4Hox3xWYsLg2j4KLUtiLPDj48BtDEc9mvupGhQAUDLIvFa
-         Jf9g==
+        bh=4l2DcvUQCzeMiHwNRaOIRYz18pb8Nk29Wkn+R8wEW5k=;
+        b=i/i/jt8iAGXMRriP8xCj6maFrHzwSpMBsKZVf6rgU3SYA00gIaZX/ele+xaG/FZuIl
+         gIxD3fI1T68WBPelwtCcgIgZ4Kf+c+6iyAYUxiDi2+M9D1p59C/ywPsLIpuWJU7eMQxf
+         4kWn0pWGD+gKCHHCXCqA79dMiPaftl20sgR1hJoCjZ8QZx/Pk8dpcnwgfgBOvv0OktBb
+         i7u4ZBFEfhk7YxRk+KIAFO/2QiclwERjFQbLq2QzZ/b20Bqwv1M352GuCodE5U9QvToW
+         okrhRWttNEHN6FM95IKfSt8lh9WFVKKeCJ3ZGA/CRUnMNG+PqihEvSS2gV9obmbHZlcC
+         PE9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pUBcXV7nQy/1r0o6E64fUR2RwhClmxU+dP9giO6hLmY=;
-        b=hLYsEEpxIZ+WutNQ2ZeRQq947vbAWXXwpbUzMknHVTaLr8n5C3b2xHmnn3QGz8ZbYb
-         lTvmsPbC7p0KujgfP6HuXmSJhwVm7unpTn4Q0OhRHrYaHM48/b59FmTeE8a54RWV4MM+
-         0wwbHadNPBHfo4QoOE3RcDS0xB+ajpgbLzhnvZQtGsvD91xtj+PH6IqCGpM4bTA7+dEG
-         umZBYS5mlrH9OR0sGo2trA5TujElvO057vw/7QK3x/BZNwDOmmA14yufD1nA8NH+uMnD
-         4k/X99jV76I9PQhzjmJijO80AGOCib+cCWiT9dMI8EzEYAJLOmIRE4Qpk+8hWSiA54Nh
-         0nIg==
-X-Gm-Message-State: ANoB5pmImhYYqmAKWx9HcarR91NvgDwHqUWwNGFXyFo6tEel5lh0N7xq
-        8X95KKRuZKM9pQJmypVpIvM=
-X-Google-Smtp-Source: AA0mqf4JI4PebfL031B6uLFeBwXnDd5rO16aayoO4CIzpe3CmYLTGEM3ar1kjES6c5bygXsrxdM2tw==
-X-Received: by 2002:a17:902:8548:b0:186:8398:350 with SMTP id d8-20020a170902854800b0018683980350mr43130061plo.6.1669837395109;
-        Wed, 30 Nov 2022 11:43:15 -0800 (PST)
+        bh=4l2DcvUQCzeMiHwNRaOIRYz18pb8Nk29Wkn+R8wEW5k=;
+        b=ik/NEhV2ha4OPFOr9TI2Y+bPuJgbUQFYtuQK8NlPH5JENanbY5DF9nPpgwunwQN5iV
+         B+R/AgOE0Tv/QNBevY5ldOXk4Vb6V/nfdM0grewTlNVSH4FB7815SORI199iPT+gCWak
+         HWW30D+ZoZFUxmdGuaXEfqIH0D3vm4HtITTpQoCr6r94QhuMKkAzFWVpy1GIfd9dcQfB
+         Qa4vV9wJETJtiv+a2+Lf5RjZpwSfbKhOvfmag1JXM7qlH+65GIEsm9EnU4cbEiIztODt
+         +8JyBXSEKSzdEMcZbs9vu9QrygCFXRauXhXrG77vN6+nz1A5Dmqb7lsH/wvT2BsSZiRN
+         ykrw==
+X-Gm-Message-State: ANoB5pnGrHaEF3clWKStt45pI2KT3aREgS0vna1ZdLZ10pk0xbaGyehU
+        eVuVn2GutkzTWkkvKsE1hak=
+X-Google-Smtp-Source: AA0mqf7EmnKIHMkE2Ak7r9WcCipVMPY60uFMXYLh/Imw2ExO2xUH6i6GYyyvHEKFisYKhpXnDOq2EA==
+X-Received: by 2002:a17:90a:1d5:b0:219:55d5:f30e with SMTP id 21-20020a17090a01d500b0021955d5f30emr8474826pjd.107.1669837426215;
+        Wed, 30 Nov 2022 11:43:46 -0800 (PST)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id k1-20020a170902c40100b00188fc33e96dsm1870452plk.198.2022.11.30.11.43.14
+        by smtp.gmail.com with ESMTPSA id k1-20020a170902c40100b001869ba04c83sm1862427plk.245.2022.11.30.11.43.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 11:43:14 -0800 (PST)
+        Wed, 30 Nov 2022 11:43:45 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 30 Nov 2022 09:43:13 -1000
+Date:   Wed, 30 Nov 2022 09:43:44 -1000
 From:   Tejun Heo <tj@kernel.org>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
         kernel-team@meta.com, rostedt@goodmis.org,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH rcu 13/16] workqueue: Make queue_rcu_work() use
- call_rcu_hurry()
-Message-ID: <Y4eyUZwY2pY78NR7@slm.duckdns.org>
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Dennis Zhou <dennis@kernel.org>,
+        Christoph Lameter <cl@linux.com>, linux-mm@kvack.org
+Subject: Re: [PATCH rcu 12/16] percpu-refcount: Use call_rcu_hurry() for
+ atomic switch
+Message-ID: <Y4eycHpdYz7aoq10@slm.duckdns.org>
 References: <20221130181316.GA1012431@paulmck-ThinkPad-P17-Gen-1>
- <20221130181325.1012760-13-paulmck@kernel.org>
+ <20221130181325.1012760-12-paulmck@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221130181325.1012760-13-paulmck@kernel.org>
+In-Reply-To: <20221130181325.1012760-12-paulmck@kernel.org>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -78,13 +78,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 10:13:22AM -0800, Paul E. McKenney wrote:
-> From: Uladzislau Rezki <urezki@gmail.com>
+On Wed, Nov 30, 2022 at 10:13:21AM -0800, Paul E. McKenney wrote:
+> From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
 > 
 > Earlier commits in this series allow battery-powered systems to build
 > their kernels with the default-disabled CONFIG_RCU_LAZY=y Kconfig option.
-> This Kconfig option causes call_rcu() to delay its callbacks in order
-> to batch them.  This means that a given RCU grace period covers more
+> This Kconfig option causes call_rcu() to delay its callbacks in order to
+> batch callbacks.  This means that a given RCU grace period covers more
 > callbacks, thus reducing the number of grace periods, in turn reducing
 > the amount of energy consumed, which increases battery lifetime which
 > can be a very good thing.  This is not a subtle effect: In some important
@@ -118,20 +118,24 @@ On Wed, Nov 30, 2022 at 10:13:22AM -0800, Paul E. McKenney wrote:
 > to call_rcu() being lazy with call_rcu_hurry() for the few places
 > where laziness is inappropriate.
 > 
-> And another call_rcu() instance that cannot be lazy is the one
-> in queue_rcu_work(), given that callers to queue_rcu_work() are
-> not necessarily OK with long delays.
+> And another call_rcu() instance that cannot be lazy is the one on the
+> percpu refcounter's "per-CPU to atomic switch" code path, which
+> uses RCU when switching to atomic mode.  The enqueued callback
+> wakes up waiters waiting in the percpu_ref_switch_waitq.  Allowing
+> this callback to be lazy would result in unacceptable slowdowns for
+> users of per-CPU refcounts, such as blk_pre_runtime_suspend().
 > 
-> Therefore, make queue_rcu_work() use call_rcu_hurry() in order to revert
-> to the old behavior.
+> Therefore, make __percpu_ref_switch_to_atomic() use call_rcu_hurry()
+> in order to revert to the old behavior.
 > 
 > [ paulmck: Apply s/call_rcu_flush/call_rcu_hurry/ feedback from Tejun Heo. ]
 > 
-> Signed-off-by: Uladzislau Rezki <urezki@gmail.com>
 > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Cc: Tejun Heo <tj@kernel.org>
-> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
 > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Dennis Zhou <dennis@kernel.org>
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Christoph Lameter <cl@linux.com>
+> Cc: <linux-mm@kvack.org>
 
 Acked-by: Tejun Heo <tj@kernel.org>
 
