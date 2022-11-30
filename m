@@ -2,159 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB9663E1D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB29763E1EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:28:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiK3UYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 15:24:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
+        id S229684AbiK3U2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 15:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiK3UYU (ORCPT
+        with ESMTP id S229541AbiK3U2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:24:20 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382A12AFA
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 12:24:10 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id z17so13078755pff.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 12:24:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IwIJM8t3rDu4EdnqkCy1u4N3uOvpgT7lYcnoQOxoBxE=;
-        b=K93k2mvjpeJmh7SUsLe6tYcwRq+hH6itdOWtDK/qup3vkBSoXOAabgZOUyQOF6nNlZ
-         iF9fzK6JZK8196XZ/rLoxF1OhHJpv0yw9gUW1g1484ZWcMJS7LJRu6+n2DGqfVg/JADG
-         dqYopca9+Nd/tpLzPlDmBA3WmifFAMlwuriRY9rUJ5j7Mc1P2vFHxocNdGJxZqzKnq57
-         v/c/aoT3oHrY8TzoHtDAOy/OUomBsJ/JIUnr52noH6rS+iDuddG8BXSGa7siRmXaVEOz
-         kcUotKwSUv09OMzLP5Vrov9bH2nMrtpfZtQ/PJVAQmVeKVVLODI0SP9G/aEK19XmgRRQ
-         /j5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IwIJM8t3rDu4EdnqkCy1u4N3uOvpgT7lYcnoQOxoBxE=;
-        b=yaah+2yrm+KqkI77onTI0YaO5x60YntYzxR+ZZYe3CKEEnwTSSEm6rUXuDAJ4wBch1
-         3l5M3y7x7I55gQ3oQhJEIRRKgDr8LdrqLR6cxu3B5J3SchG217fXwuAnis8jB5zi+wha
-         nBFJcsBCDZt8W6krwKt7yPKdqJ0uainJYVyowjUEJyJ8jG3r1GLM6cOvfhj55VWQnheV
-         b/PnVrw5PBALDGk/PZwFOg8MV+D8UDG1WcdDV3MpXS6d/woECmBUkxU5JwzQdgN20vU/
-         7BdbfqRe2+uHoGUVMdGcWa4lDvE0/WNsGMAtQu7X6pV/HKtC24dBGZV+I1T32l8/htNb
-         XMag==
-X-Gm-Message-State: ANoB5pllJAx0NYuyz4T+eKKAmvu177Z5gtTI0Hked0s+HVUTXeLaMYlY
-        xVBUtQ+1T6onqb7g+Sw8yATZ7Q==
-X-Google-Smtp-Source: AA0mqf7tSFcxtMxKDfiy+UvOsM0wZq+I6jJp/XfbS2vu+XRn8HfqshC0r1AVmiaoBTapt2hLTUT4+g==
-X-Received: by 2002:a63:5c23:0:b0:46f:b6e1:1966 with SMTP id q35-20020a635c23000000b0046fb6e11966mr46862935pgb.625.1669839849429;
-        Wed, 30 Nov 2022 12:24:09 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id o17-20020a170902d4d100b00186cf82717fsm1917646plg.165.2022.11.30.12.24.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 12:24:08 -0800 (PST)
-Date:   Wed, 30 Nov 2022 12:24:08 -0800 (PST)
-X-Google-Original-Date: Wed, 30 Nov 2022 12:23:48 PST (-0800)
-Subject:     Re: [PATCH v2 12/12] riscv: defconfig: Enable the Allwinner D1 platform and drivers
-In-Reply-To: <BBF52D3D-B8D3-4895-B316-33555E22C56B@kernel.org>
-CC:     ajones@ventanamicro.com, heiko@sntech.de, samuel@sholland.org,
-        wens@csie.org, jernej.skrabec@gmail.com,
-        linux-sunxi@lists.linux.dev, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, jszhang@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        andre.przywara@arm.com, aou@eecs.berkeley.edu,
-        apatel@ventanamicro.com, Atish Patra <atishp@rivosinc.com>,
-        christianshewitt@gmail.com,
-        Conor Dooley <conor.dooley@microchip.com>, guoren@kernel.org,
-        heinrich.schuchardt@canonical.com, linus.walleij@linaro.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        stano.jakubek@gmail.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor Dooley <conor@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
-Message-ID: <mhng-f034544d-5b0a-47c5-8e45-3dbcefc0aaaa@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 15:28:33 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75614A05B;
+        Wed, 30 Nov 2022 12:28:32 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AUCs0e9018690;
+        Wed, 30 Nov 2022 20:28:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
+ bh=7S4T/d7o/o3m7oWFT/7SEWHru8hmIy5SxOT8QbpPUxE=;
+ b=UDmRATgk0DXvADAkXnui6N1XTQORWUGFNS0gCUGlU7+4pgWmvotN5xtfWT7M3IvoFX+G
+ yNPCsDsLm+eSqUVhXF/nky3ujeHpe9QLgIfZb4FjkuqYzytHzofyBtRMuzXHpei9Vpu9
+ d4MaVb4gX4EFA9an0DlXVuOSUmAZSy/ZoAhftpyGRf8Xm0yy9onGAT9plM0LQvseRsQD
+ q6v9dZsmi/QzP3p3PQC03+gPu3LDMah7O3Qc4bTAuPS1nFG+L+Nv6PnugY3A9DvNDyU+
+ 2pEOM37CV9zhqKticq4t1Zj4X6RZPTacbjpx8EKbc02SB1L4Xpgu3dBD88++G5mbfasF Hw== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m5n1rw1tt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Nov 2022 20:28:10 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AUKS9Zs029678
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Nov 2022 20:28:10 GMT
+Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 30 Nov 2022 12:28:09 -0800
+From:   Asutosh Das <quic_asutoshd@quicinc.com>
+To:     <quic_cang@quicinc.com>, <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>
+CC:     <quic_nguyenb@quicinc.com>, <quic_xiaosenh@quicinc.com>,
+        <stanley.chu@mediatek.com>, <eddie.huang@mediatek.com>,
+        <daejun7.park@samsung.com>, <bvanassche@acm.org>,
+        <avri.altman@wdc.com>, <mani@kernel.org>, <beanhuo@micron.com>,
+        Asutosh Das <quic_asutoshd@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH v8 01/16] ufs: core: Optimize duplicate code to read extended feature
+Date:   Wed, 30 Nov 2022 12:27:42 -0800
+Message-ID: <c166e46a1fff4662f7b3677dcbf0b814eaa98ae0.1669839847.git.quic_asutoshd@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <cover.1669839847.git.quic_asutoshd@quicinc.com>
+References: <cover.1669839847.git.quic_asutoshd@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Z5kwM0iEVXrSzspFZ5YUCTlfkZVqaekK
+X-Proofpoint-ORIG-GUID: Z5kwM0iEVXrSzspFZ5YUCTlfkZVqaekK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-30_04,2022-11-30_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 mlxlogscore=999 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 spamscore=0 adultscore=0
+ clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211300143
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Nov 2022 22:54:18 PST (-0800), Conor Dooley wrote:
->
->
-> On 29 November 2022 06:49:25 GMT, Andrew Jones <ajones@ventanamicro.com> wrote:
->>On Mon, Nov 28, 2022 at 09:17:38PM +0000, Conor Dooley wrote:
->>> On 28/11/2022 21:11, Heiko Stübner wrote:
->>> > Am Samstag, 26. November 2022, 17:40:11 CET schrieb Conor Dooley:
->>> >> On Fri, Nov 25, 2022 at 05:46:56PM -0600, Samuel Holland wrote:
->>> >>> Now that several D1-based boards are supported, enable the platform in
->>> >>> our defconfig. Build in the drivers which are necessary to boot, such as
->>> >>> the pinctrl, MMC, RTC (which provides critical clocks), SPI (for flash),
->>> >>> and watchdog (which may be left enabled by the bootloader).
->>> >>
->>> >> All of that looks good.
->>> >>
->>> >>> Other common
->>> >>> onboard peripherals are enabled as modules.
->>> >>
->>> >> This I am not sure about though. I'll leave that to Palmer since I'm
->>> >> pretty sure it was him that said it, but I thought the plan was only
->>> >> turning on stuff required to boot to a console & things that are
->>> >> generally useful rather than enabling modules for everyone's "random"
->>> >> drivers. Palmer?
->>> > 
->>> > Isn't the defconfig meant as a starting point to get working systems
->>> > with minimal config effort? At least that was always the way to go on arm
->>> > so far :-) .
->>> > 
->>> > So having boot-required drivers built-in with the rest enabled as modules
->>> > for supported boards will allow people to boot theirs without headaches.
->>> > 
->>> > Disabling unneeded drivers if you're starved for storage space in a special
->>> > project is always easier than hunting down all the drivers to enable for a
->>> > specific board. 
->>> 
->>> I wouldn't mind being able to turn on all the PolarFire SoC stuff and
->>> yeah, that would be the way that arm64 does it. But I do recall hearing
->>> that I should not turn stuff on this way, when I initially tried to
->>> turn stuff on via selects, got a nack and asked if I could do this instead.
->>> 
->>> But it may be that I misremember, which is why I appealed to the Higher
->>> Powers for clarification :)
->>
->>FWIW, I don't worry too much about modules in defconfig because I always
->>immediately apply a 'LSMOD=$PWD/L localmodconfig' to it, where the L
->>file is an lsmod output which only includes modules I need.
->
-> idk, defconfig to me is not about you or I, it's about A Developer that gets an SBC or a devkit and their experience.
-> Or alternatively, someone's CI ;)
-> I'd like to put everything in, but I recall that being shot down, that's all.
+The code to parse the extended feature is duplicated twice
+in the ufs core. Replace the duplicated code with a
+function.
 
-The whole "who is defconfig for" discussion always ends up kind of 
-vague, but IIUC it's generally aimed at kernel hackers as opposed to end 
-users -- so it's not meant to be a disto config, that's why we have 
-things like the debug options turned on.  I tend to think of it as a "if 
-a patch submitter is going to test only one config, then what do I want 
-in it?" and let that determine what goes in defconfig.
+Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+---
+ drivers/ufs/core/ufshcd.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-IMO having defconfig contain the drivers necessary to boot every common 
-dev board as =y, and having =m for anything else on those boards also 
-seem reasonable.  That will make the transition from vendor/distro 
-kernels to upstream a bit smoother, which is always good.  I guess 
-there's some slight build time and image size issues, but aside from 
-some very small systems that shouldn't be too bad for kernel developers 
--- and if we really end up with another popular system with 6MiB of RAM 
-we can just stick another tiny defconfig in there for it.
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 2dbe249..6ea22b5 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -215,6 +215,17 @@ ufs_get_desired_pm_lvl_for_dev_link_state(enum ufs_dev_pwr_mode dev_state,
+ 	return UFS_PM_LVL_0;
+ }
+ 
++static unsigned int ufs_get_ext_ufs_feature(struct ufs_hba *hba,
++					    const u8 *desc_buf)
++{
++	if (hba->desc_size[QUERY_DESC_IDN_DEVICE] <
++	    DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP + 4)
++		return 0;
++
++	return get_unaligned_be32(desc_buf +
++				  DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
++}
++
+ static const struct ufs_dev_quirk ufs_fixups[] = {
+ 	/* UFS cards deviations table */
+ 	{ .wmanufacturerid = UFS_VENDOR_MICRON,
+@@ -7608,13 +7619,7 @@ static void ufshcd_wb_probe(struct ufs_hba *hba, const u8 *desc_buf)
+ 	     (hba->dev_quirks & UFS_DEVICE_QUIRK_SUPPORT_EXTENDED_FEATURES)))
+ 		goto wb_disabled;
+ 
+-	if (hba->desc_size[QUERY_DESC_IDN_DEVICE] <
+-	    DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP + 4)
+-		goto wb_disabled;
+-
+-	ext_ufs_feature = get_unaligned_be32(desc_buf +
+-					DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
+-
++	ext_ufs_feature = ufs_get_ext_ufs_feature(hba, desc_buf);
+ 	if (!(ext_ufs_feature & UFS_DEV_WRITE_BOOSTER_SUP))
+ 		goto wb_disabled;
+ 
+@@ -7668,7 +7673,7 @@ static void ufshcd_temp_notif_probe(struct ufs_hba *hba, const u8 *desc_buf)
+ 	if (!(hba->caps & UFSHCD_CAP_TEMP_NOTIF) || dev_info->wspecversion < 0x300)
+ 		return;
+ 
+-	ext_ufs_feature = get_unaligned_be32(desc_buf + DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
++	ext_ufs_feature = ufs_get_ext_ufs_feature(hba, desc_buf);
+ 
+ 	if (ext_ufs_feature & UFS_DEV_LOW_TEMP_NOTIF)
+ 		mask |= MASK_EE_TOO_LOW_TEMP;
+-- 
+2.7.4
 
-I actually don't use modules when doing kernel development because I 
-find it easier to track things when they're packed into a single binary, 
-but I don't think it's necessary to steer everyone that way.
-
-Adding some of the Arm folks here, in case they have thoughts.  The best 
-bet is probably to try and do something similar, though my worry is that 
-the answer is something like "target standard platforms" and we don't 
-have any.
