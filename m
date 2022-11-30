@@ -2,115 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C9063CFB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 08:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 382BE63CFB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 08:27:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233966AbiK3H13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 02:27:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46620 "EHLO
+        id S234016AbiK3H1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 02:27:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbiK3H11 (ORCPT
+        with ESMTP id S233224AbiK3H1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 02:27:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D401D5B85E;
-        Tue, 29 Nov 2022 23:27:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E66861A46;
-        Wed, 30 Nov 2022 07:27:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1246EC433C1;
-        Wed, 30 Nov 2022 07:27:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669793245;
-        bh=xtnl6/qLF/jI+9/d7SK6ChMqoUOlvdXtqutDbCp/vmM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jIrjOPhKPpnf0sy5B4xqOHfAQtuMvOctotxQwttqHRoIQsVbyk0NM0ElhkdFWTWmX
-         3kM1SyL5jE3/yyVvx1cjBY2tYhnXInqzGN9DqZKR9dBRLO0l/ushhcdJ1b6advbiy9
-         fXtQrewCH4b0dl1kdQCx5R3fD5HYuFO1kxX3n2a4=
-Date:   Wed, 30 Nov 2022 08:27:22 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
-Cc:     linux-kernel@vger.kernel.org, will@kernel.org, axboe@kernel.dk,
-        robh+dt@kernel.org, mb@lightnvm.io, ckeepax@opensource.cirrus.com,
-        arnd@arndb.d, mst@redhat.com, javier@javigon.com,
-        mikelley@microsoft.com, jasowang@redhat.com,
-        sunilmut@microsoft.com, bjorn.andersson@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        ashish.deshpande@nxp.com, rvmanjumce@gmail.com
-Subject: Re: [EXT] Re: [PATCH v5 2/2] misc: nxp-sr1xx: UWB driver support for
- sr1xx series chip
-Message-ID: <Y4cF2pX4Lohefm4f@kroah.com>
-References: <20220914142944.576482-1-manjunatha.venkatesh@nxp.com>
- <20220914142944.576482-3-manjunatha.venkatesh@nxp.com>
- <YyHq9OOKBLP2GEcc@kroah.com>
- <5d1485d4-08d4-1e26-f597-b5fa6cc65ce6@nxp.com>
+        Wed, 30 Nov 2022 02:27:49 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE492637;
+        Tue, 29 Nov 2022 23:27:48 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id A410132004CE;
+        Wed, 30 Nov 2022 02:27:46 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 30 Nov 2022 02:27:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669793266; x=
+        1669879666; bh=SNR+K9Qu74FASN1Mi74Byj9LreGIZut1vVkeNJJoQek=; b=u
+        QkfV6j4htHuZQb+mEVJ4HguVyyqz3zCgrFJClDQvILgHflXCjPooSSJncNXtEsNv
+        FKS3qM0GiQMwNA0cJSqz8kUW5yPdI/p6bBUeCqfxPrGlc37EgjIQyzTT7zUN4NOg
+        6rwRI166if01eyUmQjhWIN8Ff5MRLGus3z33BStkzMp4IfSkngHugY03uq5lbbAP
+        tf8im/iLmXVz6bDnOJo0xpINCkdtlFFZoawdgxFCBwPromXpNL2iBcqCAexqcvTw
+        bYTsZVt01xIXRCI4JVTzukgjTztTl6Zr+5eTFTQrlgfIfBxkFQLbAqobv+bKRKEg
+        C/CTgKYgz5nyBo+fpIEnA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669793266; x=
+        1669879666; bh=SNR+K9Qu74FASN1Mi74Byj9LreGIZut1vVkeNJJoQek=; b=L
+        CTWXzkG9y5jYl81O9mw/6WFOD4RGDa6upJFwqq5GH2OctRKDVnnrxVdAio16cvPC
+        pfKOz2bBNQkZW9lp5zQUiArWLK2lxaNvcxKA+N15MoZu59F9lh8IBHHBZqAM+9Zn
+        uMx6gv8aiS6h6w7iOBAd1hbX/CoNCwbT0M9QCxBQALOP02gU/9n+ahmZsZKhoXb5
+        RLvFINtCuTfSH5URMVyddJvQ65MSIKIb+myqNe2SNPuiQExXiWcDsYxoaoR3zFEB
+        3cUReQ8YEfJlegP4r0IkSbjMZ2w3uK2O9C9XtFvXDeYxyjL7uS+Mz+4tKN1NrGQQ
+        hJyohAUgkO1QDcHRfynKA==
+X-ME-Sender: <xms:8QWHYyJjO7zY-b4m1rHqTWPubgZiF_OqTshoA3--Y66VbanmG-UMjg>
+    <xme:8QWHY6Ldp6erM07LfqwVKYCQWetsX89E49gYR2mEANwMHb4f2wbpp0mC1NpiGMIhJ
+    ZSSkdIQoEz4k_6pCw>
+X-ME-Received: <xmr:8QWHYytCUfj6ZDlBuA3tl1k4rpG5EKvdW4oS0vb31jDDQJHA0cgEl60BwPh9_MSMuCBkZ-_cE5wf7K0EFUeQsn0gbcYYtDogMgASvQ5wx-nj1EntoLx7ZD1j5Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtddvgddutdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeekjeelleefiedthfdtgfekgeehudefudeugeffvdfhudekleel
+    fedtteejhedutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:8QWHY3Y6k0qlKAbL5adX-eZINdEC-5Q_AeSHe6jdjkMj-ovvrGm8Zg>
+    <xmx:8QWHY5asQXx5dNpDIEoShx5Cy3tu1IsSGgvjctcFnwisZHNJV-hl5Q>
+    <xmx:8QWHYzDcM5gYk9-Wuk6W6WkQj5smWxV02aZvsDp_dgKli464oOwliA>
+    <xmx:8gWHY9TbKbvvp68qC2h43SFEBlF7_qXivEzDpQRxKKpYsUjQegwHuw>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 30 Nov 2022 02:27:45 -0500 (EST)
+Message-ID: <fb3e59ee-2cfc-e7a6-041c-d94fa426fb2a@sholland.org>
+Date:   Wed, 30 Nov 2022 01:27:44 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5d1485d4-08d4-1e26-f597-b5fa6cc65ce6@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 8/9] MAINTAINERS: riscv: add entry for Bouffalolab SoC
+Content-Language: en-US
+To:     Jisheng Zhang <jszhang@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+References: <20221127132448.4034-1-jszhang@kernel.org>
+ <20221127132448.4034-9-jszhang@kernel.org>
+From:   Samuel Holland <samuel@sholland.org>
+In-Reply-To: <20221127132448.4034-9-jszhang@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 09:10:08AM +0530, Manjunatha Venkatesh wrote:
+On 11/27/22 07:24, Jisheng Zhang wrote:
+> Add Jisheng Zhang as Bouffalolab SoC maintainer.
 > 
-> On 9/14/2022 8:23 PM, Greg KH wrote:
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  MAINTAINERS | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 00ff4a2949b8..a6b04249853c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17729,6 +17729,15 @@ F:	arch/riscv/
+>  N:	riscv
+>  K:	riscv
+>  
+> +RISC-V BOUFFALOLAB SOC SUPPORT
+> +M:	Jisheng Zhang <jszhang@kernel.org>
+> +L:	linux-riscv@lists.infradead.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+> +F:	Documentation/devicetree/bindings/serial/bouffalolab,uart.yaml
 
-Note, originally you all were "rushed" to get this accepted, and now
-this took 2 1/2 months to respond back to a code review?  Something is
-wrong here, when responding so late, almost all context is lost :(
+I don't think you need to add YAML bindings here, because
+get_maintainers.pl will find the maintainers listed inside the files.
 
-> > Caution: EXT Email
-> > 
-> > On Wed, Sep 14, 2022 at 07:59:44PM +0530, Manjunatha Venkatesh wrote:
-> > > +++ b/drivers/misc/nxp-sr1xx.c
-> > > @@ -0,0 +1,794 @@
-> > > +// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-> > Please no.  If you really want to dual-license your Linux kernel code,
-> > that's fine, but I will insist that you get a signed-off-by from your
-> > corporate lawyer so that I know that they agree with this and are
-> > willing to handle all of the complex issues that this entails as it will
-> > require work on their side over time.
-> > 
-> > If that's not worth bothering your lawyers over, please just stick with
-> > GPL as the only license.
-> Dual-license is signed-off by NXP corporate lawyer.
+Regards,
+Samuel
 
-We need a signed-off-by on the patch itself.
+> +F:	arch/riscv/boot/dts/bouffalolab/
+> +F:	drivers/tty/serial/bflb_uart.c
+> +
+>  RISC-V MICROCHIP FPGA SUPPORT
+>  M:	Conor Dooley <conor.dooley@microchip.com>
+>  M:	Daire McNamara <daire.mcnamara@microchip.com>
 
-> Though, we would like to understand what complex issues which require
-> work over the time?
-
-I am not a lawyer and can not advise you of this, please work with yours
-to set into place the requirements you will have to keep this working
-properly.  Note, it is not trivial, and will require work on your end.
-
-I will push back again, and ask "Why?"  Why do you want this dual
-licensed?  What is driving that requirement and what will having it
-licensed like this enable you to do that having it just under GPL-2.0
-will not?
-
-> > > +#define SR1XX_SET_PWR _IOW(SR1XX_MAGIC, 0x01, long)
-> > > +#define SR1XX_SET_FWD _IOW(SR1XX_MAGIC, 0x02, long)
-> > You can't stick ioctl command definitions in a .c file that userspace
-> > never sees.  How are your userspace tools supposed to know what the
-> > ioctl is and how it is defined?
-> We will move ioctl command definitions into user space header file as part
-> of our next patch submission.
-> > How was this ever tested and where is your userspace code that interacts
-> > with this code?
-> We will share the corresponding user space code soon,meanwhile can you
-> please suggest how to share this user space code?
-
-You all have ways of posting code publicly :)
-
-thanks,
-
-greg k-h
