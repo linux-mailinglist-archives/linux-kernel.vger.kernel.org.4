@@ -2,149 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BB963CCD5
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 02:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B23563CCD9
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 02:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiK3B3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 20:29:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
+        id S229786AbiK3BcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 20:32:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbiK3B3A (ORCPT
+        with ESMTP id S229448AbiK3BcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 20:29:00 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACE15F46;
-        Tue, 29 Nov 2022 17:28:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669771735; x=1701307735;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FiqAFQXIvz60hbT0xq79nRbGcPgH1YTtz35ZXjIbxDA=;
-  b=mCaoWbEZpnUM4dRevpzpb7M1p9aCtDu3QlnCGwTcuyqdC9qp+iwSZVRY
-   UqB2+bMOuB1BQa7mMh8BaF8nmEaOmuIB1m+6of7nIHH1fXYRPk0PMBMxp
-   TzVk5AN4Geq6ibfmWT/LDvACzwzAJQTI9uBT2GlM+Ty8CKQs/BaHU+uur
-   OsBV/zifJDA/R5QABx/aw6lQpr4iIzSipGrug9Oa1KZ0LLiXKa8uOYYSg
-   YWPF07lVX0Wa9LSp7dOKV4aWunRZQalCATT37eZz64LH1BdoyeNrP4pbj
-   rQR0pRFMNHZ8Z3ADgp6VCJ3sZZvCY5RN3tgYVlWAqt8Y28+6lLovJXriv
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="377434702"
-X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="377434702"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 17:28:54 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="768645885"
-X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="768645885"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.210.199]) ([10.254.210.199])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 17:28:49 -0800
-Message-ID: <ca0d8de0-a881-0ccb-75fb-2530428f2c3e@linux.intel.com>
-Date:   Wed, 30 Nov 2022 09:28:47 +0800
+        Tue, 29 Nov 2022 20:32:02 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DDA5FA6
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 17:32:00 -0800 (PST)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NMM9g3Sshz15Msq;
+        Wed, 30 Nov 2022 09:31:19 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 30 Nov 2022 09:31:58 +0800
+Received: from [10.174.177.229] (10.174.177.229) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 30 Nov 2022 09:31:57 +0800
+Message-ID: <2e132246-96be-a281-78f4-8310f75a0ed8@huawei.com>
+Date:   Wed, 30 Nov 2022 09:31:56 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Cc:     baolu.lu@linux.intel.com, Niklas Schnelle <schnelle@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-Subject: Re: [PATCH v2 4/7] iommu: Let iommu.strict override
- ops->def_domain_type
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>
-References: <20221116171656.4128212-1-schnelle@linux.ibm.com>
- <20221116171656.4128212-5-schnelle@linux.ibm.com>
- <33eea9bd-e101-4836-19e8-d4b191b78b00@linux.intel.com>
- <9163440eb6a47fe02730638bbdf72fda5ee5ad2c.camel@linux.ibm.com>
- <Y4S3z6IpeDHmdUs/@nvidia.com>
- <52fe7769ca5b66523c2c93c7d46ebc17dc144aca.camel@linux.ibm.com>
- <Y4TjWOXYD+DK+d/B@nvidia.com> <6c4c3a3e-1d8d-7994-3c03-388ef63dddb3@arm.com>
- <Y4ZCVgLO9AHatwXe@nvidia.com> <eb30ad63-92d4-2af4-22e7-d82cdf08565e@arm.com>
- <Y4Zm53o1ovdIAqr/@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <Y4Zm53o1ovdIAqr/@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+ Thunderbird/102.4.1
+Subject: =?UTF-8?B?UmU6IOOAkEJVR+OAkU5VTEwgcG9pbnRlciBkZXJlZmVyZW5jZSBhdCBf?=
+ =?UTF-8?Q?=5flookup=5fswap=5fcgroup?=
+To:     "Huang, Ying" <ying.huang@intel.com>
+CC:     <linux-kernel@vger.kernel.org>, <hannes@cmpxchg.org>,
+        <linux-mm@kvack.org>, <mhocko@kernel.org>,
+        <roman.gushchin@linux.dev>, <shakeelb@google.com>,
+        "Wangkefeng (OS Kernel Lab)" <wangkefeng.wang@huawei.com>,
+        chenwandun <chenwandun@huawei.com>, <songmuchun@bytedance.com>,
+        <gregkh@linuxfoundation.org>
+References: <25f28e73-5fc6-6e7f-3d41-a5970537fb8b@huawei.com>
+ <87fse3homz.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   xialonglong <xialonglong1@huawei.com>
+In-Reply-To: <87fse3homz.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.229]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/30 4:09, Jason Gunthorpe wrote:
-> On Tue, Nov 29, 2022 at 06:41:22PM +0000, Robin Murphy wrote:
->> On 2022-11-29 17:33, Jason Gunthorpe wrote:
->>> On Mon, Nov 28, 2022 at 09:01:43PM +0000, Robin Murphy wrote:
->>>
->>>> I'm hardly an advocate for trying to save users from themselves, but I
->>>> honestly can't see any justifiable reason for not having sysfs respect
->>>> iommu_get_def_domain_type().
->>>
->>> We really need to rename this value if it is not actually just an
->>> advisory "default" but a functional requirement ..
+Thank you very much for your reply  :)
+Inspired by your reply，we successfully reproduced the bug.
+
+The test steps:
+1.swapon  /dev/zram0
+2.add some memory pressure by stress-ng
+3.calling swapoff /dev/zram0 in the do_swap_page function (this changed 
+the source code)
+4.bug occured in the same place.
+
+After testing, this patch solves the bug.
+Finally, there is a small question. Why linux5.10 revert this patch 
+(2799e77529c2)?
+
+We found that to fix this bug, the following patches may be required:
+efa33fc7f6e mm/shmem: fix shmem_swapin() race with swapoff
+5c046235a826 mm/swap: remove confusing checking for non_swap_entry() in 
+swap_ra_info()
+2799e77529c2 swap: fix do_swap_page() race with swapoff
+63d8620ecf93 mm/swapfile: use percpu_ref to serialize against concurrent 
+swapoff
+seem like all this patchset is needed except commit 5c046235a826 
+("mm/swap: remove confusing checking for non_swap_entry() in 
+swap_ra_info()")
+
+Best Regards,
+Xia, longlong
+
+在 2022/11/28 9:08, Huang, Ying 写道:
+> Hi,
+>
+> xialonglong <xialonglong1@huawei.com> writes:
+>
+>> A panic occur in the linux 5.10we meet it only onceit seems that
+>> there is no special changes between 5.10 and upsteam about swap_cgroup.
 >>
->> It represents a required default domain type. As in, the type for the
->> device's default domain. Not the default type for a domain. It's the
->> iommu_def_domain_type variable that holds the *default* default domain type
->> ;)
-> 
-> I find the name "default domain" incredibly confusing at this point in
-> time.
-> 
-> I would like to call that the "dma-api domain" - its primary purpose
-> is to be the domain that the DMA API uses to operate the IOMMU, there
-> is little "default" about it. This meshes better with our apis talking
-> about ownership and so forth.
-> 
-> So, if the op was called
->    get_dma_api_domain_type()
-> 
-> It is pretty clear that it is the exact type of domain that should be
-> created to support the DMA API, which is what I think you have been
-> describing it is supposed to do?
-> 
-> And with Lu's series we have the set_platform_dma() (Lu perhaps you
-> should call this set_platform_dma_api() to re-enforce it is about the
-> DMA API, not some nebulous DMA thing)
-
-Sure thing. It's more specific.
-
-> 
-> Which is basically the other way to configure the DMA API for
-> operation.
-> 
-> And encapsulating more of the logic to setup and manage the DMA API's
-> domain into dma-iommu.c would also be helpful to understanding.
-> 
->> Which reminds me I should finish that patch undoing my terrible
->> ops->default_domain_ops idea, not least because they are misleadingly
->> unrelated to default domains...
-> 
-> :)
-> 
->>> It is close to being clear, once we get the last touches of dma-iommu
->>> stuff out of the drivers it should be quite clear
+>> The test is based on QEMU with 64GB memory, one 2GB zram device as
+>> swap area.
+>> The test steps:
+>> 1.swapoff -a
+>> 2.add some memory pressure by stress-ng
+>> 3.while (2 minutes) {
+>>   swapoff /dev/zram0
+>>   swapon /dev/zram0
+>>   sleep 3
+>> }
+>> 4. swapon -a
 >>
->> Cool, some upheaval of .domain_alloc is next on my hitlist anyway, so that
->> might be a good excuse to upheave it a bit more and streamline the type
->> stuff along the way.
-> 
-> Yes, I think so. I want to tidy things a bit so adding this "user
-> space" domain concept is a little nicer
-> 
-> Jason
-> 
-
---
-Best regards,
-baolu
+>> Preliminary analysis showed that the swap entry point to a swap area
+>> which have already been swapoff, and no other obvious clues, still
+>> trying to reproduce it.
+> We have a patch as follows to fix a similar issue,
+>
+> 2799e77529c2a25492a4395db93996e3dacd762d
+> Author:     Miaohe Lin <linmiaohe@huawei.com>
+> AuthorDate: Mon Jun 28 19:36:50 2021 -0700
+> Commit:     Linus Torvalds <torvalds@linux-foundation.org>
+> CommitDate: Tue Jun 29 10:53:49 2021 -0700
+>
+> swap: fix do_swap_page() race with swapoff
+>
+> When I was investigating the swap code, I found the below possible race
+> window:
+>
+> CPU 1                                   	CPU 2
+> -----                                   	-----
+> do_swap_page
+>    if (data_race(si->flags & SWP_SYNCHRONOUS_IO)
+>    swap_readpage
+>      if (data_race(sis->flags & SWP_FS_OPS)) {
+>                                          	swapoff
+> 					  	  ..
+> 					  	  p->swap_file = NULL;
+> 					  	  ..
+>      struct file *swap_file = sis->swap_file;
+>      struct address_space *mapping = swap_file->f_mapping;[oops!]
+>
+> Note that for the pages that are swapped in through swap cache, this isn't
+> an issue. Because the page is locked, and the swap entry will be marked
+> with SWAP_HAS_CACHE, so swapoff() can not proceed until the page has been
+> unlocked.
+>
+> Fix this race by using get/put_swap_device() to guard against concurrent
+> swapoff.
+>
+> Can you check whether that can fix your issue?
+>
+> Best Regards,
+> Huang, Ying
+>
+>> Any known issue about this feature, or any advise will be appreciated.
+>>
+>> Here are the panic log,
+>>
+>> Unable to handle kernel NULL pointer dereference at virtual address
+>> 0000000000000740
+>> Mem abort info:
+>> ESR = 0x96000004
+>> EC = 0x25: DABT (current EL), IL = 32 bits SET = 0, FnV = 0 EA = 0,
+>> S1PTW = 0 Data abort info:
+>> ISV = 0, ISS = 0x00000004
+>> CM = 0, WnR = 0
+>> user pgtable: 4k pages, 48-bit VAs, pgdp=000000010ae6e000
+>> pgd=0000000000000000, p4d=0000000000000000 Internal error: Oops:
+>> 96000004 [#1] SMP Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0
+>> 02/06/2015
+>> pstate: 00000005 (nzcv daif -PAN -UAO -TCO BTYPE=--)
+>> pc : lookup_swap_cgroup_id+0x38/0x50
+>> lr : mem_cgroup_charge+0x9c/0x424
+>> sp : ffff800102f63bc0
+>> x29: ffff800102f63bc0 x28: ffff0000d0d64d00
+>> x27: 0000000000000000 x26: 0000000000000007
+>> x25: ffff0000018c86a8 x24: ffff0000018c8640
+>> x23: 0000000000000cc0 x22: 0000000000000001
+>> x21: 0000000000000001 x20: ffff800102f63d28
+>> x19: fffffe000373cb40 x18: 0000000000000000
+>> x17: 0000000000000000 x16: ffff8001004715a4
+>> x15: 00000000ffffffff x14: 0000000000003000
+>> x13: 00000000ffffffff x12: 0000000000000040
+>> x11: ffff0000c0403478 x10: ffff0000c040347a
+>> x9 : ffff8001003e957c x8 : 000000000009dddd
+>> x7 : 0000000000000600 x6 : 00000000000000e8
+>> x5 : 0000020000200000 x4 : ffff000000000000
+>> x3 : ffff800101f4c030 x2 : 0000000000000000
+>> x1 : 00000000000001e4 x0 : 0000000000000000
+>>
+>> Call trace:
+>> lookup_swap_cgroup_id+0x38/0x50
+>> do_swap_page+0xa64/0xc04
+>> handle_pte_fault+0x1c8/0x214
+>> __handle_mm_fault+0x1b0/0x380
+>> handle_mm_fault+0xf4/0x284
+>> do_page_fault+0x188/0x474
+>> do_translation_fault+0xb8/0xe4
+>> do_mem_abort+0x48/0xb0
+>> el0_da+0x44/0x80
+>> el0_sync_handler+0x88/0xb4
+>> el0_sync+0x160/0x180
+>>
+>> <lookup_swap_cgroup_id>:?????? mov?? x9, x30
+>> <lookup_swap_cgroup_id+0x4>:???? nop
+>> <lookup_swap_cgroup_id+0x8>:????
+>> lsr?? x2, x0, #58 SWP_TYPE_SHIFT == 58? x2 =
+>> swp_type
+>> <lookup_swap_cgroup_id+0xc>:????
+>> adrp? x1, 0xffff800101f4c000
+>> <memcg_sockets_enabled_key+0x8>
+>> <lookup_swap_cgroup_id+0x10>:???
+>> add?? x3, x1, #0x30????
+>> x3 == swap_cgroup_ctrl
+>> <lookup_swap_cgroup_id+0x14>:??? ubfx? x6, x0, #11, #47
+>> <lookup_swap_cgroup_id+0x18>:??? add?? x2, x2, x2, lsl #1
+>> <lookup_swap_cgroup_id+0x1c>:??? ubfiz? x1, x0, #1, #11
+>> <lookup_swap_cgroup_id+0x20>:???
+>> mov?? x5,
+>> #0x200000?????????
+>> // #2097152
+>> <lookup_swap_cgroup_id+0x24>:???
+>> mov?? x4,
+>> #0xffff000000000000???? //
+>> #-281474976710656
+>> <lookup_swap_cgroup_id+0x28>:??? movk? x5, #0x200, lsl #32
+>> <lookup_swap_cgroup_id+0x2c>:??? hint? #0x19
+>> <lookup_swap_cgroup_id+0x30>:???
+>> ldr?? x0, [x3,x2,lsl #3] x3=ffff800101f4c030, x0 = 0
+>> <lookup_swap_cgroup_id+0x34>:??? hint? #0x1d
+>> <lookup_swap_cgroup_id+0x38>:???
+>> ldr?? x0, [x0,x6,lsl #3] x0 = 0 + 0xe8 * 8 == 0x740
+>> <lookup_swap_cgroup_id+0x3c>:??? add?? x0, x0, x5
+>> <lookup_swap_cgroup_id+0x40>:??? lsr?? x0, x0, #6
+>> <lookup_swap_cgroup_id+0x44>:??? add?? x0, x1, x0, lsl #12
+>> <lookup_swap_cgroup_id+0x48>:??? ldrh? w0, [x0,x4]
+>> <lookup_swap_cgroup_id+0x4c>:??? ret
