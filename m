@@ -2,139 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118FA63E10A
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 461F163E108
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:51:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiK3Tvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 14:51:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
+        id S229693AbiK3Tvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 14:51:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiK3Tvs (ORCPT
+        with ESMTP id S229520AbiK3Tvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 14:51:48 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED9186588;
-        Wed, 30 Nov 2022 11:51:47 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id d18so6949126pls.4;
-        Wed, 30 Nov 2022 11:51:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rm61ltPf4IuMIek7hP38S0fd3od46k0u59OV/A4SUFE=;
-        b=YPf0G8XJ72iHOC7HvWB7gUt6vwg2o+gvktb7yvputiaCaIey4xljHaDirr04vtz4nk
-         w/kbuvDTJlraxX6CW7xM9IpLSWKiU+jd42zuI2twiV5dt9AmqgLE6nBiYTQC5hd0p3Mj
-         NyYaNrTXkAuB+v42dOmyRgt+w4kMdLN6aoI9F/BTqbP8PT/xmvdRoWXbOc5I++Uv2qiH
-         bQm7t259LLSxycIL8fRvm/FVyC/PbHbVLu9Bo/8LtDp7/hoei2igJRiHDSanP23h4WDG
-         1eHs83TWLRWjHjRaDb0H9uimCzZvnGIH89l7KHvu+kE0mGYqSbNJ27+VKISbjBQrWg78
-         rXAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rm61ltPf4IuMIek7hP38S0fd3od46k0u59OV/A4SUFE=;
-        b=jEa168algQajv+s7aFiPxt40RBDgL3RpYWs2RR8B5zwoMmVrlzWkVxq7uSQHENkNsC
-         sC5W5OV2y4oe+9zdIooAWY2EKk0N+LwbsNLSMk+zCe7zXHHHfAJ0LTrbs3F6OwIr6nRv
-         YX+DOQwXLteULAvwrejN1ze2eazzgoskwKztNIPK0u32pl9fMcuKqsX0P/uYCF8kOFGi
-         xSH3N8sYovRPOLTp4RQwJz/z9mdJZQtW29QDQvqMiF+4GsditJ8aBc4KX+e7JLo9kgDl
-         /6NxZSMT/fuc+M06oOR8u07FxRr+rAUCtQYSbXXYVbvW3HyBqTkvUBpVefGtmSdgLmhN
-         O0vw==
-X-Gm-Message-State: ANoB5pn9HXsMYu9NsOQxZX3ovheH/SbeQHmDUPFL8deoHtxlkgzpg0R6
-        4JmPq7D2sWMOI0Syah/i2g/odiXCpwgJTOarcuA=
-X-Google-Smtp-Source: AA0mqf446LWZq/SOD5Gg304JaLNU8xF7uR55IfibkGOcKLkjM/1PSNgGbWfF8JiqPIvtLyB43VrzvncGd5yIJWHo9fE=
-X-Received: by 2002:a17:90a:5298:b0:217:e054:9ac8 with SMTP id
- w24-20020a17090a529800b00217e0549ac8mr73320400pjh.246.1669837906527; Wed, 30
- Nov 2022 11:51:46 -0800 (PST)
+        Wed, 30 Nov 2022 14:51:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A3F54375
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:51:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DBED0B81CCB
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 19:51:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B34AC433C1;
+        Wed, 30 Nov 2022 19:51:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669837900;
+        bh=eVJxCX1hitoCz8nMnVCg3lBI8n/IRY2ZPNrxXcZYbRI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e7ZyAppvH1F9kqzz+cNRBVu3zAedvzQ2Te7ll8xdjpNlQvh1sC0CvwdfstuXqDLX2
+         JY5AaT8mOb1Pr8iFZZ5CH6KKNCVqKSRDIjUcSTDJLIMWrKXDMGJJ830sOhH5EYpmKJ
+         IANwcrJfX28nx9GgRAiLwpey/TcLqFw+XvpHdT6zZs8HPA6P/KUKdEtQljOnbNJQ14
+         c6ZNqqq89SQHPLmELsPg6R8LIe7T4UyAx7QM1USw1gl9IMBSuWph4pLHV9fOY754ch
+         rtXKopiA3Q7bJNZ0dCJCYltJYhHWKNGpaWY7pDQnGsn3PuYEi4HB3McX8dKRGVR8Xy
+         6R7Vwf5Wy5+RQ==
+Date:   Wed, 30 Nov 2022 19:51:39 +0000
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Sultan Alsawaf <sultan@kerneltoast.com>
+Subject: Re: [PATCH] random: align entropy_timer_state to cache line
+Message-ID: <Y4e0SwkUYANw1at7@gmail.com>
+References: <20221130020815.283814-1-Jason@zx2c4.com>
+ <Y4biVHVPhVyVJ6Fc@sol.localdomain>
+ <Y4cqpwwbNBKhdidq@zx2c4.com>
+ <Y4en9fSll1vSY4Bt@gmail.com>
+ <CAHmME9p63Cpi4273OMFB=8F3+CfEfMUxZ4vV=xjWqxQ=frr34Q@mail.gmail.com>
 MIME-Version: 1.0
-References: <4c341c5609ed09ad6d52f937eeec28d142ff1f46.1669489329.git.andreyknvl@google.com>
- <CANpmjNODh5mjyPDGpkLyj1MZWHr1eimRSDpX=WYFQRG_sn5JRA@mail.gmail.com>
-In-Reply-To: <CANpmjNODh5mjyPDGpkLyj1MZWHr1eimRSDpX=WYFQRG_sn5JRA@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Wed, 30 Nov 2022 20:51:35 +0100
-Message-ID: <CA+fCnZeuSVKLy7g9mAiV=2J5eTU6XisFA_byMSqKsopKr7EaQg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] kasan: allow sampling page_alloc allocations for HW_TAGS
-To:     Marco Elver <elver@google.com>
-Cc:     andrey.konovalov@linux.dev,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>,
-        Jann Horn <jannh@google.com>,
-        Mark Brand <markbrand@google.com>, netdev@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHmME9p63Cpi4273OMFB=8F3+CfEfMUxZ4vV=xjWqxQ=frr34Q@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-.On Tue, Nov 29, 2022 at 12:30 PM Marco Elver <elver@google.com> wrote:
->
-> On Sat, 26 Nov 2022 at 20:12, <andrey.konovalov@linux.dev> wrote:
+On Wed, Nov 30, 2022 at 08:31:33PM +0100, Jason A. Donenfeld wrote:
+> On Wed, Nov 30, 2022 at 7:59 PM Eric Biggers <ebiggers@kernel.org> wrote:
 > >
-> > From: Andrey Konovalov <andreyknvl@google.com>
+> > On Wed, Nov 30, 2022 at 11:04:23AM +0100, Jason A. Donenfeld wrote:
+> > > > > diff --git a/drivers/char/random.c b/drivers/char/random.c
+> > > > > index 67558b95d531..2494e08c76d8 100644
+> > > > > --- a/drivers/char/random.c
+> > > > > +++ b/drivers/char/random.c
+> > > > > @@ -1262,7 +1262,7 @@ static void __cold entropy_timer(struct timer_list *timer)
+> > > > >  static void __cold try_to_generate_entropy(void)
+> > > > >  {
+> > > > >   enum { NUM_TRIAL_SAMPLES = 8192, MAX_SAMPLES_PER_BIT = HZ / 15 };
+> > > > > - struct entropy_timer_state stack;
+> > > > > + struct entropy_timer_state stack ____cacheline_aligned;
+> > > >
+> > > > Several years ago, there was a whole thing about how __attribute__((aligned)) to
+> > > > more than 8 bytes doesn't actually work on stack variables in the kernel on x86,
+> > > > because the kernel only keeps the stack 8-byte aligned but gcc assumes it is
+> > > > 16-byte aligned.  See
+> > > > https://lore.kernel.org/linux-crypto/20170110143340.GA3787@gondor.apana.org.au/T/#t
+> > > >
+> > > > IIRC, nothing was done about it at the time.
+> > > >
+> > > > Has that been resolved in the intervening years?
+> > >
+> > > Maybe things are different for ____cacheline_aligned, which is 64 bytes.
+> > > Reading that thread, it looks like it was a case of trying to align the
+> > > stack to 16 bytes, but gcc assumed 16 bytes already while the kernel
+> > > only gave it 8. So gcc didn't think it needed to emit any code to align
+> > > it. Here, though, it's 64, and gcc certainly isn't assuming 64-byte
+> > > stack alignment.
+> > >
+> > > Looking at the codegen, gcc appears to doing `rsp = (rsp & ~63) - 64`,
+> > > which appears correct.
 > >
-> > Add a new boot parameter called kasan.page_alloc.sample, which makes
-> > Hardware Tag-Based KASAN tag only every Nth page_alloc allocation for
-> > allocations marked with __GFP_KASAN_SAMPLE.
->
-> This is new - why was it decided that this is a better design?
+> > Well, if gcc thinks the stack is already 16-byte aligned, then it would be
+> > perfectly within its rights to do 'rsp = (rsp & ~47) - 64', right?  You probably
+> > don't want to be relying on an implementation detail of gcc codegen...
+> 
+> The really pathological one would be ~48, which would just clear those
+> two extra bits. I can't imagine gcc or clang ever deciding to do that.
+> But I guess they could?
+> 
+> What would you recommend here? kmalloc'ing it instead? Keeping things
+> as is with ____cacheline_aligned, since this has always been broken,
+> and it's not the end of the world? Something else?
 
-Sampling all page_alloc allocations (with the suggested frequency of 1
-out of 10) effectively means that KASAN/MTE is no longer mitigation
-for page_alloc corruptions. The idea here was to only apply sampling
-to selected allocations, so that all others are still checked
-deterministically.
+Well, other places in the kernel do the alignment manually:
 
-However, it's hard to say whether this is critical from the security
-perspective. Most exploits today corrupt slab objects, not page_alloc.
+	u8 __stack[sizeof(struct entropy_timer_state) + SMP_CACHE_BYTES - 1];
+	struct entropy_timer_state *stack = (void *)PTR_ALIGN(__stack, SMP_CACHE_BYTES);
 
-> This means we have to go around introducing the GFP_KASAN_SAMPLE flag
-> everywhere where we think it might cause a performance degradation.
->
-> This depends on accurate benchmarks. Yet, not everyone's usecases will
-> be the same. I fear we might end up with marking nearly all frequent
-> and large page-alloc allocations with GFP_KASAN_SAMPLE.
->
-> Is it somehow possible to make the sampling decision more automatic?
->
-> E.g. kasan.page_alloc.sample_order -> only sample page-alloc
-> allocations with order greater or equal to sample_order.
+It's silly, but I'm not aware of a better option.
 
-Hm, perhaps this could be a good middle ground between sampling all
-allocations and sprinkling GFP_KASAN_SAMPLE.
-
-Looking at the networking code, most multi-page data allocations are
-done with the order of 3 (either via PAGE_ALLOC_COSTLY_ORDER or
-SKB_FRAG_PAGE_ORDER). So this would be the required minimum value for
-kasan.page_alloc.sample_order to alleviate the performance impact for
-the networking workloads.
-
-I measured the number of allocations for each order from 0 to 8 during
-boot in my test build:
-
-7299 867 318 206 86 8 7 5 2
-
-So sampling with kasan.page_alloc.sample_order=3 would affect only ~7%
-of page_alloc allocations that happen normally, which is not bad. (Of
-course, if an attacker can control the size of the allocation, they
-can increase the order to enable sampling.)
-
-I'll do some more testing and either send a v3 with this approach or
-get back to this discussion.
-
-Thanks for the suggestion!
+- Eric
