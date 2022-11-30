@@ -2,157 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65C463D876
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:46:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDFD963D87B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbiK3Oqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 09:46:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44134 "EHLO
+        id S229609AbiK3OsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 09:48:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiK3Oqc (ORCPT
+        with ESMTP id S229565AbiK3OsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 09:46:32 -0500
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4937F2FC08;
-        Wed, 30 Nov 2022 06:46:29 -0800 (PST)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-13bd19c3b68so21210167fac.7;
-        Wed, 30 Nov 2022 06:46:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wz2Zju85pk6RM8ay+t4ZZMp7vPi+1UtgJxv5v1iOFoQ=;
-        b=hKswxqL0mQZMN7I40fIMLw92nRBqkmnIO8lk/f7t3UHfjWA0CSR56InG13myRTq6gI
-         XcbUImbCKlN0QAu1qUMvvjRFsTQw2A+zqR2+ySOUEgdz9D1QkCT6yS0ljMAPoWkRcPDo
-         5lb2ZXKZrqw0VrryvVVjuzA8zYs/BjSyHuRm/1Y3tQQXgD98O6jLqVZAmYQQAJzmLkOo
-         mw3gm5otainEAHoQ6Q2RMRRlkGqabvRgcoa7F8jUbW1w5o4WdhsJyUplnmYE2VbUrjHC
-         qdhoONhNdrKE4Wg8s2n/PUnYkiMZo9wcAtBzMXDX/GAzm3FDrG8VoAvArkFTao9DYGGE
-         M3BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wz2Zju85pk6RM8ay+t4ZZMp7vPi+1UtgJxv5v1iOFoQ=;
-        b=H6V034Kdz60zZgSl2F6N0MCcVRW1TpwefbrTvkJJWscNTZFAASqXZfRT2ihi4fZ6Zf
-         LiU7bBDCN90UKi8Mds0WW1fjFAhyKMbleRb7MlPmF2Q8EjtpysJIqedl2jzMHElcD55p
-         xCEzDsWNyd2yJ7eVFHUbM0L2eXL8uwnPCup+ErBu3MQii+snxBXOiJ69HVBv9M26wKtj
-         LsYeYBKQLtq3ARmfCBVl5hh5G0QrCv3+sNWj3EJvxre64WKFzeybRRlh7bhOH3/J0KHe
-         ECbJC1iIxTVMTfYRcnjvhcDEPkmfDd0/P/vNRRmGFLEliUalFwyAN/Wk7rADMv299yKF
-         GrNA==
-X-Gm-Message-State: ANoB5pn5gaxtTfukdMiLoYtV7MtGDGuM2NLY6l3tstEs6KUKPIQhEPVN
-        WvdpifAic3JlFucEE5sGEvs=
-X-Google-Smtp-Source: AA0mqf4ixzUkoSU6MRES0SwcX528RMcs4hO6mghmHVHKToufdig484nOzJOgbmgVYuQYYFa2c3yTLQ==
-X-Received: by 2002:a05:6870:2408:b0:132:1a61:8ed9 with SMTP id n8-20020a056870240800b001321a618ed9mr24354219oap.105.1669819588532;
-        Wed, 30 Nov 2022 06:46:28 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h17-20020a056870171100b00136c20b1c59sm1216568oae.43.2022.11.30.06.46.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 06:46:28 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 30 Nov 2022 06:46:26 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-Subject: Re: [PATCH v8 1/4] dt-bindings: hwmon: fan: Add Common Fan Properties
-Message-ID: <20221130144626.GA2647609@roeck-us.net>
-References: <20221129161134.2672474-1-Naresh.Solanki@9elements.com>
- <20221129161134.2672474-2-Naresh.Solanki@9elements.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221129161134.2672474-2-Naresh.Solanki@9elements.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 09:48:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CF520366
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 06:48:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78217B81B8F
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 14:47:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3557EC433D6;
+        Wed, 30 Nov 2022 14:47:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669819678;
+        bh=BW3glwJdAgcquisZ858SN49s35yyYqpIA+9FpdjY5iM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ALxY+CFYvAbplLO+Hx/N4O3NpzbvaySvk0nfAT4kVUupPtk8eiIJEPauPSRiKSQYQ
+         jaEuk3EQLF7HMDsTLopSF/oBX0cD0uebGk6BERbAQRvCQBVyuguvV0yeCzr9KfHjYs
+         h6ZIWPf+1uJ6M5GpIRIHtPCODP2CxLD4vg0xAucrg0jwvJKz/SUOxsyllejrWpHkE0
+         Lw1/lk8/UqU2nETjhIp7rghqczNwpgCxVw2uOWK8+ps5NivouB7uph1TlyA7hD+9MZ
+         rPO59hBKCZYd8624e85H14YKrtM3oU/BQPxLKWRc416Vv+xzLGoreojgr2Gxmf68qu
+         4M81D54/BGyfw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p0ONP-009bnX-Qd;
+        Wed, 30 Nov 2022 14:47:56 +0000
+Date:   Wed, 30 Nov 2022 14:47:55 +0000
+Message-ID: <86cz94mrc4.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v13 3/7] genirq: Add mechanism to multiplex a single HW IPI
+In-Reply-To: <20221129142449.886518-4-apatel@ventanamicro.com>
+References: <20221129142449.886518-1-apatel@ventanamicro.com>
+        <20221129142449.886518-4-apatel@ventanamicro.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 05:11:31PM +0100, Naresh Solanki wrote:
-> Add common fan properties bindings to a schema.
+On Tue, 29 Nov 2022 14:24:45 +0000,
+Anup Patel <apatel@ventanamicro.com> wrote:
 > 
-> Bindings for fan controllers can reference the common schema for the
-> fan
+> All RISC-V platforms have a single HW IPI provided by the INTC local
+> interrupt controller. The HW method to trigger INTC IPI can be through
+> external irqchip (e.g. RISC-V AIA), through platform specific device
+> (e.g. SiFive CLINT timer), or through firmware (e.g. SBI IPI call).
 > 
-> child nodes:
+> To support multiple IPIs on RISC-V, we add a generic IPI multiplexing
+> mechanism which help us create multiple virtual IPIs using a single
+> HW IPI. This generic IPI multiplexing is inspired from the Apple AIC
+> irqchip driver and it is shared by various RISC-V irqchip drivers.
 > 
->   patternProperties:
->     "^fan@[0-2]":
->       type: object
->       $ref: fan-common.yaml#
-> 
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 > ---
->  .../devicetree/bindings/hwmon/fan-common.yaml | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> new file mode 100644
-> index 000000000000..330fb1552821
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> @@ -0,0 +1,48 @@
-> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Common Fan Properties
-> +
-> +maintainers:
-> +  - Naresh Solanki <naresh.solanki@9elements.com>
-> +
-> +properties:
-> +  max-rpm:
-> +    description:
-> +      Max RPM supported by fan.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  min-rpm:
-> +    description:
-> +      Min RPM supported by fan.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  pulses-per-revolution:
-> +    description:
-> +      The number of pulse from fan sensor per revolution.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  target-rpm:
-> +    description:
-> +      Target RPM the fan should be configured during driver probe.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  pwms:
-> +    maxItems: 1
-> +    description:
-> +      PWM signal for the fan
-> +
-> +  label:
-> +    description:
-> +      Optional fan label
-> +
-> +  fan-supply:
-> +    description:
-> +      Power supply for fan.
-> +
+>  include/linux/irq.h  |   3 +
+>  kernel/irq/Kconfig   |   5 ++
+>  kernel/irq/Makefile  |   1 +
+>  kernel/irq/ipi-mux.c | 193 +++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 202 insertions(+)
+>  create mode 100644 kernel/irq/ipi-mux.c
 
-I still don't see fan mode (DC or PWM). I understand that you don't care,
-but from my perspective it must be addressed in generic fan properties,
-especially to ensure agreement on how 'pwms' is handled on a system where
-the fan mode is configurable, and how to select the fan speed on systems
-supporting DC fans.
+[...]
 
-Guenter
+This is finally starting to look acceptable. My only changes are:
+
+diff --git a/kernel/irq/ipi-mux.c b/kernel/irq/ipi-mux.c
+index 626c564233e9..1a6ba19b736c 100644
+--- a/kernel/irq/ipi-mux.c
++++ b/kernel/irq/ipi-mux.c
+@@ -69,6 +69,12 @@ static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
+ 		 */
+ 		smp_mb__after_atomic();
+ 
++		/*
++		 * The flag writes must complete before the physical IPI is
++		 * issued to another CPU. This is implied by the control
++		 * dependency on the result of atomic_read() below, which is
++		 * itself already ordered after the vIPI flag write.
++		 */
+ 		if (!(pending & ibit) && (atomic_read(&icpu->enable) & ibit))
+ 			ipi_mux_send(cpu);
+ 	}
+@@ -160,7 +166,7 @@ int ipi_mux_create(unsigned int nr_ipi, void (*mux_send)(unsigned int cpu))
+ 		goto fail_free_cpu;
+ 	}
+ 
+-	domain = irq_domain_create_simple(fwnode, nr_ipi, 0,
++	domain = irq_domain_create_linear(fwnode, nr_ipi,
+ 					  &ipi_mux_domain_ops, NULL);
+ 	if (!domain) {
+ 		pr_err("unable to add IPI Mux domain\n");
+
+The first hunk preserve an important piece of information about how
+delicate the ordering is, while the second only allocates the irqdesc
+structures as needed, not upfront.
+
+I'll shortly go over the rest of the irqchip code and can apply the
+above myself if there is nothing more to fix.
+
+I've also converted the AIC driver over to this[1], and nothing broke
+so far...
+
+	M.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/ipi-mux
+
+-- 
+Without deviation from the norm, progress is not possible.
