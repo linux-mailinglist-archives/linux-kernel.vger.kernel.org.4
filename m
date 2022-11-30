@@ -2,156 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC2663CC34
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 01:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C5863CC36
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 01:07:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiK3AHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 19:07:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
+        id S230053AbiK3AHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 19:07:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiK3AH2 (ORCPT
+        with ESMTP id S230024AbiK3AHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 19:07:28 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03057044E;
-        Tue, 29 Nov 2022 16:07:26 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id d3so19156525ljl.1;
-        Tue, 29 Nov 2022 16:07:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GVsAs2Za73d6UJPfTz0MZvUiul0X6sklp6MH+CmRL3k=;
-        b=EL47aYSQjawJcsLLj/QAQ8+YXvjf23CGJROzwdIE7wtldJvsKi46kOiNH8Nl+U7j0h
-         ObfsQI3tr5WATq7qgHwTyBxwj7PrSiOaR02VxnCwSgrUpzSkC3nu+3xCtxPmOe0Nphk6
-         Mn9IyRHFXOE8Ibc+ru3BYcGdiccptw+GhjdbJx9Nr45UIjV7V7pAW9dD9cgK+8JlAmIe
-         1XAbJmKZngaT2SEmNzkp0ukKd97UYj4fGz5Q3r+pQqBsu60DmrdKKxYPM6hSNMi7mqWx
-         KbpVERYTp6984IPccQ7mkqg137Bd/28MVaBxB+ZHzbSgINt2Hk07QNRFTFESs4Df6tHR
-         UutQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GVsAs2Za73d6UJPfTz0MZvUiul0X6sklp6MH+CmRL3k=;
-        b=FCIaIG3ZGXPK3sb2qT3dtlYa1ubtWPYEQsggbmz+pXH4u/41BAflY21hSjsi/kbO81
-         66au/cNN13Rr9wvE6f2/tSdyQWOIqwXzkJubEkiK71OInZrkJDzpbnNnaXH+XDr42gfi
-         QpeOb4iXJwOqUL5/u2oZHTNAQD+kn0UpOM39FowTgOwC3qUjv+3GeLVlvADzpX67yenn
-         F0FTGgPUauGkF0OO6Oh31/73LTC5Lpf6nzj4jNezQL+uT7KcZFzFgefL5Y00mNyvWpJG
-         XYSnJ7IVvsBwIYaSLwRNTnDdmTAKiv7cXRcmRuIqX4msPZ5DR3wI45HSlcIvyRGrDZ1V
-         YSig==
-X-Gm-Message-State: ANoB5pll4BWNSefYxLzddvceyKtRw3ZIIetnNr4HUSzViekq8j4B5Y7b
-        FgHIU1BfOaZyRWbplXJpKw8=
-X-Google-Smtp-Source: AA0mqf5dURaix8FQhVVoV1kopruBMKkRVWorfEJEfcfyVRXaS6vpE74eyht6je/iu8eJ0ZOiJU6fPw==
-X-Received: by 2002:a2e:be08:0:b0:277:857:87ab with SMTP id z8-20020a2ebe08000000b00277085787abmr12402330ljq.442.1669766845080;
-        Tue, 29 Nov 2022 16:07:25 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id 11-20020a05651c128b00b0026fc8855c20sm1706704ljc.19.2022.11.29.16.07.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 16:07:24 -0800 (PST)
-Date:   Wed, 30 Nov 2022 03:07:22 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        caihuoqing <caihuoqing@baidu.com>, Vinod Koul <vkoul@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 17/20] PCI: dwc: Introduce generic resources getter
-Message-ID: <20221130000722.xfh3q22mo2huhipk@mobilestation>
-References: <20221127011005.cjzcd6slb6ezy7ix@mobilestation>
- <20221129183543.GA729294@bhelgaas>
+        Tue, 29 Nov 2022 19:07:44 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E06210CC
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 16:07:40 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669766858;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5SiIziV2QvgfgWy4Sra39N19zHYZdg3yjH/6YkkoY70=;
+        b=dR14Xtp6esMbAQrAii7xeIiVEfSQm0RDd3HVtwIR9PCOFih5+eCi/J2GnGG0lKPGyIv8lD
+        u1Dw6ZoweVqLEVR5cIDaKtXJFjCx9aSEeCFjh0+FlF6w0N4RFZBqfIgU/V+l/5/Q2rHp3d
+        AV8emDpu1AS4x2tBEMvsOZvRtxplISqLl3pmisswtnYzwjYrU69IORthfb0wBpLAUTBbvb
+        hSjQTzhpuK2q3SQU5udlonxNETZW4SrgReUgcZQnxpUe8GOH+8umBolLPAWWuRLq3GWCm5
+        KE50KgE61neLmUcwcS0NYHjsnaYR2sqiQBV1hlTqW0l+bdlj3b9oVxGsWYA6ow==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669766858;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5SiIziV2QvgfgWy4Sra39N19zHYZdg3yjH/6YkkoY70=;
+        b=ZGTtwUuaLjW/reabBaeefnObjYXel7/uzUNHvxXzyRakUVdAeLKNX1mhnM9h3IWuvm3tPg
+        PEe+iAVvZJqrbtCA==
+To:     Jann Horn <jannh@google.com>
+Cc:     Andrei Vagin <avagin@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] time/namespace: Forbid timens page faults under
+ kthread_use_mm()
+In-Reply-To: <CAG48ez3UBb3Aq7+AFSmRj5a9czmew5b0PEdhWQ9qvQdeejnJZg@mail.gmail.com>
+References: <20221129191839.2471308-1-jannh@google.com>
+ <20221129191839.2471308-2-jannh@google.com> <87fse1v4rf.ffs@tglx>
+ <CAG48ez3UBb3Aq7+AFSmRj5a9czmew5b0PEdhWQ9qvQdeejnJZg@mail.gmail.com>
+Date:   Wed, 30 Nov 2022 01:07:37 +0100
+Message-ID: <87y1rttid2.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221129183543.GA729294@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 12:35:43PM -0600, Bjorn Helgaas wrote:
-> On Sun, Nov 27, 2022 at 04:10:05AM +0300, Serge Semin wrote:
-> > On Wed, Nov 23, 2022 at 01:44:36PM -0600, Bjorn Helgaas wrote:
-> > > On Sun, Nov 13, 2022 at 10:12:58PM +0300, Serge Semin wrote:
-> 
-> > > Thanks for these new generic interfaces in the DWC core!  And thanks
-> > > for the changes in this patch to take advantage of them in the
-> > > pcie-designware drivers.
-> > > 
-> > > Do you plan similar changes to other drivers to take advantage of
-> > > these DWC-generic data and interfaces?  If you add generic things to
-> > > the DWC core but only take advantage of them in your driver, I don't
-> > > think they are really usefully generic.
-> > 
-> > Could you be more specific what generic things you are referring to? I
-> > am asking because the only part of the changes which is used in my
-> > low-level driver only is introduced in another patch of this series.
-> 
-> I asked because three of your patches mention "generic" things, but I
-> didn't see any changes to drivers except pcie-designware:
-> 
+On Tue, Nov 29 2022 at 23:28, Jann Horn wrote:
+> On Tue, Nov 29, 2022 at 10:18 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>> But the way more interesting question is:
+>>
+>> >  struct page *find_timens_vvar_page(struct vm_area_struct *vma)
+>> >  {
+>> > +     /*
+>> > +      * We can't handle faults where current's timens does not match the
+>> > +      * timens associated with the mm_struct. This can happen if a page fault
+>> > +      * occurs in a kthread that is using kthread_use_mm().
+>> > +      */
+>>
+>> How does a kthread, which obvioulsy did kthread_use_mm(), end up trying to
+>> fault in the time namespace vvar page?
+>
+> By doing copy_from_user()? That's what kthread_use_mm() is for, right?
+> If you look through the users of kthread_use_mm(), most of them use it
+> to be able to use the normal usercopy functions. See the users in usb
+> gadget code, and the VFIO code, and the AMD GPU code. And if you're
+> doing usercopy on userspace addresses, then you can basically always
+> hit a vvar page - even if you had somehow checked beforehand what the
+> address points to, userspace could have moved a vvar region in that
+> spot in the meantime.
+>
+> That said, I haven't actually tried it. But I don't think there's
+> anything in the page fault handling path that distinguishes between
+> copy_from_user() faults in kthread context and other userspace faults
+> in a relevant way?
 
->   PCI: dwc: Introduce generic platform clocks and reset
+True.
 
-This patch introduces a method to request a generic platform clocks
-and resets by their names. As I already said these names are defined
-by the DT-bindings, which are platform-specific. That's why the most
-of the currently available drivers can't be converted to using it.
-Instead the new drivers are supposed to be encouraged to use the
-generic names (in accordance with the generic DW PCIe DT-schema) and
-the resources request interface (based on the generic DT-bindings) if
-it suits their design.
+>> It neither answers the obvious question why this is a problem of the
+>> time namespace vvar page and not a general issue versus a kthread, which
+>> borrowed a user mm, ending up in vdso_fault() in the first place?
+>
+> Is it a problem if a kthread ends up in the other parts of
+> vdso_fault() or vvar_fault()? From what I can tell, nothing in there
+> except for the timens stuff is going to care whether it's hit from a
+> userspace fault or from a kthread.
+>
+> Though, looking at it again now, I guess the `sym_offset ==
+> image->sym_vvar_page` path is also going to misbehave, so I guess we
+> could try to instead make the vdso/vvar fault handlers bail out in
+> kthread context for all the architectures, since we're only going to
+> hit that if userspace is deliberately doing something bad...
 
-Anyway I honestly tried to come up with an even more generic
-interface, which could be used by all the low-level drivers. But due
-to too much variations of the resource names and their sometimes too
-complex utilization in the drivers any solution looked too complex.
-After all of thoughts I decided to keep things simpler.
+Deliberately or stupdily, does not matter. But squashing the problem
+right at the entry point is definitely the better than making it a
+special case of timens.
 
->   PCI: dwc: Introduce generic resources getter
+>> None of those VDSO (user space) addresses are subject to be faulted in
+>> by anything else than the associated user space task(s).
+>
+> Are you saying that it's not possible or that it doesn't happen when
+> userspace is well-behaved?
 
-This patch defines a generic resource getter for the DW PCIe host and
-end-point drivers. That's why it's called generic. 
+My subconcious self told me that a kthread won't do that unless it's
+buggered which makes the vdso fault path the least of our problems, but
+thinking more about it: You are right, that there are ways that the
+kthread ends up with a vdso page address.... Bah!
 
->   PCI: dwc: Introduce generic controller capabilities interface
+Still my point stands that this is not a timens VDSO issue, but an issue
+of: kthread tries to fault in a VDSO page of whatever nature.
 
-This patch introduces an interface to set the device-specific
-capabilities. Since these capabilities can be marked as available by
-both the core driver (at least two of them already defined within this
-patchset) and low-level platform drivers the interface is called
-as generic.
+Thanks,
 
-> 
-> I hoped that we would be able to use these to remove some code from
-> existing drivers, but if they only improve maintainability of future
-> drivers, that's useful, too.
+        tglx
 
-Removing some code is possible for instance from the pcie-visconti.c
-driver by using the new generic clocks and resets request interface.
-I've scheduled to create a small patchset which would do that after
-the rest of my patches pass the review process.
 
--Serge(y)
-
-> 
-> Bjorn
