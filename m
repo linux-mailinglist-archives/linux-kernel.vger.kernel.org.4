@@ -2,261 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A50C63CDE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 04:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 475AC63CDE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 04:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbiK3DgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 22:36:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
+        id S232860AbiK3Dhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 22:37:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiK3DgB (ORCPT
+        with ESMTP id S232827AbiK3Dh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 22:36:01 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3500E73416;
-        Tue, 29 Nov 2022 19:36:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669779360; x=1701315360;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GZSxJkGgD4LF6xp690xtWUxvjYvqUHVb1du6FHsC7bo=;
-  b=IAd8tJTKmJJv2QftvTTcUPHGwe5gQN9CzyGEJx9iFOWW61s91hci123s
-   Jr3rMbUgbJRc0x0bHCpujNr7Mh8LsuxyAMly7rsVPqDqR6NAYzjyyUYif
-   M5kifXaSGMIxzWle320EeMPJWEpVRWDKaF2l3zoeF8ETFDYp56sUORtRC
-   v9+XHrouhoRAaW8bpZ+bdlLffJ+3D85nt9r3EM1tFxX+ZzoAsRQoMuAfE
-   aR8eItVUbUvw4NldgNJXvawrEHPfM0NQJfUXRwvTqMDQKVAwH6w/qUFnd
-   pkFlYoUd0b3SkXeY26eGN28VlQnbPhyPsZ2to9fQPp6wNJ6mE7TaTSvGO
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="295658383"
-X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
-   d="scan'208";a="295658383"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 19:35:59 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="594513331"
-X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
-   d="scan'208";a="594513331"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.249.171.33]) ([10.249.171.33])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 19:35:54 -0800
-Message-ID: <a537b97b-0bdc-5bcc-9ce7-470f8fc1245b@linux.intel.com>
-Date:   Wed, 30 Nov 2022 11:35:51 +0800
+        Tue, 29 Nov 2022 22:37:28 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A276D73BBF;
+        Tue, 29 Nov 2022 19:37:25 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NMPz41THGz4f3mS4;
+        Wed, 30 Nov 2022 11:37:20 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.67.175.61])
+        by APP2 (Coremail) with SMTP id Syh0CgBHXrnyz4ZjLguABQ--.10963S2;
+        Wed, 30 Nov 2022 11:37:22 +0800 (CST)
+From:   Pu Lehui <pulehui@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Pu Lehui <pulehui@huawei.com>,
+        Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf] riscv, bpf: Emit fixed-length imm64 for BPF_PSEUDO_FUNC
+Date:   Wed, 30 Nov 2022 11:38:06 +0800
+Message-Id: <20221130033806.2967822-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v7 17/20] x86/virt/tdx: Configure global KeyID on all
- packages
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
-        dave.hansen@intel.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
-        ying.huang@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, tony.luck@intel.com, peterz@infradead.org,
-        ak@linux.intel.com, isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-References: <cover.1668988357.git.kai.huang@intel.com>
- <8d8285cc5efa6302cf42a3fe2c9153d1a9dbcdac.1668988357.git.kai.huang@intel.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <8d8285cc5efa6302cf42a3fe2c9153d1a9dbcdac.1668988357.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: Syh0CgBHXrnyz4ZjLguABQ--.10963S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFy5AFyxuryDur4UCF1DAwb_yoW8tFy5pr
+        WUKr4fCFZ2qr1S9rnxtr1rXr15CF40qFsIgry3Way5Ga12qrsF93WDKw4Yka98ZFy8Gr15
+        XFyUKF9xua4Dt3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        fUF0eHDUUUU
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Pu Lehui <pulehui@huawei.com>
 
-On 11/21/2022 8:26 AM, Kai Huang wrote:
-> After the array of TDMRs and the global KeyID are configured to the TDX
-> module, use TDH.SYS.KEY.CONFIG to configure the key of the global KeyID
-> on all packages.
->
-> TDH.SYS.KEY.CONFIG must be done on one (any) cpu for each package.  And
-> it cannot run concurrently on different CPUs.  Implement a helper to
-> run SEAMCALL on one cpu for each package one by one, and use it to
-> configure the global KeyID on all packages.
->
-> Intel hardware doesn't guarantee cache coherency across different
-> KeyIDs.  The kernel needs to flush PAMT's dirty cachelines (associated
-> with KeyID 0) before the TDX module uses the global KeyID to access the
-> PAMT.  Following the TDX module specification, flush cache before
-> configuring the global KeyID on all packages.
->
-> Given the PAMT size can be large (~1/256th of system RAM), just use
-> WBINVD on all CPUs to flush.
->
-> Note if any TDH.SYS.KEY.CONFIG fails, the TDX module may already have
-> used the global KeyID to write any PAMT.  Therefore, need to use WBINVD
-> to flush cache before freeing the PAMTs back to the kernel.  Note using
-> MOVDIR64B (which changes the page's associated KeyID from the old TDX
-> private KeyID back to KeyID 0, which is used by the kernel)
+For BPF_PSEUDO_FUNC instruction, verifier will refill imm with
+correct addresses of bpf_calls and then run last pass of JIT.
+Since the emit_imm of RV64 is variable-length, which will emit
+appropriate length instructions accorroding to the imm, it may
+broke ctx->offset, and lead to unpredictable problem, such as
+inaccurate jump. So let's fix it with fixed-length imm64 insns.
 
-It seems not accurate to say MOVDIR64B changes the page's associated KeyID.
-It just uses the current KeyID for memory operations.
+Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ arch/riscv/net/bpf_jit_comp64.c | 31 ++++++++++++++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
 
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index eb99df41fa33..f984d5fa014b 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -139,6 +139,30 @@ static bool in_auipc_jalr_range(s64 val)
+ 		val < ((1L << 31) - (1L << 11));
+ }
+ 
++/* Emit fixed-length instructions for 32-bit imm */
++static void emit_fixed_imm32(u8 rd, s32 val, struct rv_jit_context *ctx)
++{
++	s32 upper = (val + (1U << 11)) >> 12;
++	s32 lower = ((val & 0xfff) << 20) >> 20;
++
++	emit(rv_lui(rd, upper), ctx);
++	emit(rv_addi(rd, rd, lower), ctx);
++}
++
++/* Emit fixed-length instructions for 64-bit imm */
++static void emit_fixed_imm64(u8 rd, s64 val, struct rv_jit_context *ctx)
++{
++	/* Compensation for sign-extension of rv_addi */
++	s32 imm_hi = (val + (1U << 31)) >> 32;
++	s32 imm_lo = val;
++
++	emit_fixed_imm32(rd, imm_hi, ctx);
++	emit_fixed_imm32(RV_REG_T1, imm_lo, ctx);
++	emit(rv_slli(rd, rd, 32), ctx);
++	emit(rv_add(rd, rd, RV_REG_T1), ctx);
++}
++
++/* Emit variable-length instructions for 32-bit and 64-bit imm */
+ static void emit_imm(u8 rd, s64 val, struct rv_jit_context *ctx)
+ {
+ 	/* Note that the immediate from the add is sign-extended,
+@@ -1053,7 +1077,12 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 		u64 imm64;
+ 
+ 		imm64 = (u64)insn1.imm << 32 | (u32)imm;
+-		emit_imm(rd, imm64, ctx);
++		if (bpf_pseudo_func(insn))
++			/* fixed-length insns for extra jit pass */
++			emit_fixed_imm64(rd, imm64, ctx);
++		else
++			emit_imm(rd, imm64, ctx);
++
+ 		return 1;
+ 	}
+ 
+-- 
+2.25.1
 
-> to clear
-> PMATs isn't needed, as the KeyID 0 doesn't support integrity check.
-
-For integrity check, is KeyID 0 special or it just has the same behavior 
-as non-zero shared KeyID (if any)?
-
-By saying "KeyID 0 doesn't support integrity check", is it because of  
-the implementation of this patch set or hardware behavior?
-
-According to Architecure Specification 1.0 of TDX Module (344425-004US), 
-shared KeyID could also enable integrity check.
-
-
->
-> Reviewed-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> ---
->
-> v6 -> v7:
->   - Improved changelong and comment to explain why MOVDIR64B isn't used
->     when returning PAMTs back to the kernel.
->
-> ---
->   arch/x86/virt/vmx/tdx/tdx.c | 89 ++++++++++++++++++++++++++++++++++++-
->   arch/x86/virt/vmx/tdx/tdx.h |  1 +
->   2 files changed, 88 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index 3a032930e58a..99d1be5941a7 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -224,6 +224,46 @@ static void seamcall_on_each_cpu(struct seamcall_ctx *sc)
->   	on_each_cpu(seamcall_smp_call_function, sc, true);
->   }
->   
-> +/*
-> + * Call one SEAMCALL on one (any) cpu for each physical package in
-> + * serialized way.  Return immediately in case of any error if
-> + * SEAMCALL fails on any cpu.
-> + *
-> + * Note for serialized calls 'struct seamcall_ctx::err' doesn't have
-> + * to be atomic, but for simplicity just reuse it instead of adding
-> + * a new one.
-> + */
-> +static int seamcall_on_each_package_serialized(struct seamcall_ctx *sc)
-> +{
-> +	cpumask_var_t packages;
-> +	int cpu, ret = 0;
-> +
-> +	if (!zalloc_cpumask_var(&packages, GFP_KERNEL))
-> +		return -ENOMEM;
-> +
-> +	for_each_online_cpu(cpu) {
-> +		if (cpumask_test_and_set_cpu(topology_physical_package_id(cpu),
-> +					packages))
-> +			continue;
-> +
-> +		ret = smp_call_function_single(cpu, seamcall_smp_call_function,
-> +				sc, true);
-> +		if (ret)
-> +			break;
-> +
-> +		/*
-> +		 * Doesn't have to use atomic_read(), but it doesn't
-> +		 * hurt either.
-> +		 */
-> +		ret = atomic_read(&sc->err);
-> +		if (ret)
-> +			break;
-> +	}
-> +
-> +	free_cpumask_var(packages);
-> +	return ret;
-> +}
-> +
->   static int tdx_module_init_cpus(void)
->   {
->   	struct seamcall_ctx sc = { .fn = TDH_SYS_LP_INIT };
-> @@ -1010,6 +1050,22 @@ static int config_tdx_module(struct tdmr_info *tdmr_array, int tdmr_num,
->   	return ret;
->   }
->   
-> +static int config_global_keyid(void)
-> +{
-> +	struct seamcall_ctx sc = { .fn = TDH_SYS_KEY_CONFIG };
-> +
-> +	/*
-> +	 * Configure the key of the global KeyID on all packages by
-> +	 * calling TDH.SYS.KEY.CONFIG on all packages in a serialized
-> +	 * way as it cannot run concurrently on different CPUs.
-> +	 *
-> +	 * TDH.SYS.KEY.CONFIG may fail with entropy error (which is
-> +	 * a recoverable error).  Assume this is exceedingly rare and
-> +	 * just return error if encountered instead of retrying.
-> +	 */
-> +	return seamcall_on_each_package_serialized(&sc);
-> +}
-> +
->   /*
->    * Detect and initialize the TDX module.
->    *
-> @@ -1098,15 +1154,44 @@ static int init_tdx_module(void)
->   	if (ret)
->   		goto out_free_pamts;
->   
-> +	/*
-> +	 * Hardware doesn't guarantee cache coherency across different
-> +	 * KeyIDs.  The kernel needs to flush PAMT's dirty cachelines
-> +	 * (associated with KeyID 0) before the TDX module can use the
-> +	 * global KeyID to access the PAMT.  Given PAMTs are potentially
-> +	 * large (~1/256th of system RAM), just use WBINVD on all cpus
-> +	 * to flush the cache.
-> +	 *
-> +	 * Follow the TDX spec to flush cache before configuring the
-> +	 * global KeyID on all packages.
-> +	 */
-> +	wbinvd_on_all_cpus();
-> +
-> +	/* Config the key of global KeyID on all packages */
-> +	ret = config_global_keyid();
-> +	if (ret)
-> +		goto out_free_pamts;
-> +
->   	/*
->   	 * Return -EINVAL until all steps of TDX module initialization
->   	 * process are done.
->   	 */
->   	ret = -EINVAL;
->   out_free_pamts:
-> -	if (ret)
-> +	if (ret) {
-> +		/*
-> +		 * Part of PAMT may already have been initialized by
-> +		 * TDX module.  Flush cache before returning PAMT back
-> +		 * to the kernel.
-> +		 *
-> +		 * Note there's no need to do MOVDIR64B (which changes
-> +		 * the page's associated KeyID from the old TDX private
-> +		 * KeyID back to KeyID 0, which is used by the kernel),
-> +		 * as KeyID 0 doesn't support integrity check.
-> +		 */
-> +		wbinvd_on_all_cpus();
->   		tdmrs_free_pamt_all(tdmr_array, tdmr_num);
-> -	else
-> +	} else
->   		pr_info("%lu pages allocated for PAMT.\n",
->   				tdmrs_count_pamt_pages(tdmr_array, tdmr_num));
->   out_free_tdmrs:
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
-> index c26bab2555ca..768d097412ab 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.h
-> +++ b/arch/x86/virt/vmx/tdx/tdx.h
-> @@ -15,6 +15,7 @@
->   /*
->    * TDX module SEAMCALL leaf functions
->    */
-> +#define TDH_SYS_KEY_CONFIG	31
->   #define TDH_SYS_INFO		32
->   #define TDH_SYS_INIT		33
->   #define TDH_SYS_LP_INIT		35
