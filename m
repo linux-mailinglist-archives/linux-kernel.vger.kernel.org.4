@@ -2,253 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617F863E278
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1789563E279
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:06:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiK3VGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 16:06:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
+        id S229736AbiK3VG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 16:06:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiK3VGR (ORCPT
+        with ESMTP id S229468AbiK3VGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 16:06:17 -0500
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5917E8567C
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:06:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=fGeB69K7vNARYHE0In4LF63NiK5
-        kwstZrsX34GY+rdk=; b=kAdoHXP80t5vkovt2TGBxsygkqzEDU1YkLJaaum+lJc
-        oh99WCCdtWLlr8kWyNrFy8lMIKe0+tMKDI/xnmY+uYb1YdMygwdrYBFR0cCPwmwM
-        eaK+RlPgO7k6iXawtGHJ3ZVVJlTaA7d1yeNlplrpz9RkZoQUN9lLOdHsQ2PYsVXQ
-        =
-Received: (qmail 200442 invoked from network); 30 Nov 2022 22:06:11 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 30 Nov 2022 22:06:11 +0100
-X-UD-Smtp-Session: l3s3148p1@Ejdlebbu/OYgAQnoAHGJAMsVZOhAgWYe
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] clocksource/drivers/sh_cmt: access registers according to spec
-Date:   Wed, 30 Nov 2022 22:06:09 +0100
-Message-Id: <20221130210609.7718-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 30 Nov 2022 16:06:24 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E011862D7
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:06:23 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id 124so1941447pfy.0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:06:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1MVQAFtG5yXdmZSDQong4TWmdBnZ3CFxDrsEWW+IpWM=;
+        b=U1h73Rz1N6fqj70eL7F6NuJsWcAnYsslfpPd6XulGFo97ZJBoukLpp7EkzkkPAQJ5B
+         FmZKyY4n1Nrnur8VjpKG4Rm6z+Q1Fb+wzqvA4ga7JvOlKMOiLG86LTYU1wBR2gCR6xea
+         g2RbrSkXff3zSPHaE+4ur5s9DiLYZaQGjpkkwKJnmSPYZgtS65EAr9CckDn83wNuZZET
+         1y8w/rrMXgB2J5Bhf3vLBwTgNtcxWCS7HBaEj2c5e+Tg7liuZIiHC6QC2/ccwNc+xAds
+         fOLTXTav/Du4jtHAd7z70ZqFlQcf/Mu4vZV4L060W/uafu98Qg+zaqOW3wZUnr4ozsLs
+         yk2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1MVQAFtG5yXdmZSDQong4TWmdBnZ3CFxDrsEWW+IpWM=;
+        b=NCueL2JQj24X9w1JA8YDzOI3y1SJcrEwMdakwf+trSICR0qIVXVnTVLqTPSe+cqW9d
+         8U0R/y6rnqZgy5WeIidd8h5IyQ9vT5Jl9IqXyo3a01yBbHrfeHj4mS0EEdcIJwhiu20c
+         wpoXqo2CYOu8LmdLjEIU9OBvPNtDwlznSXyyQAC0hr+IIKMApOGMj2zXmQC/1Sevm0Y3
+         DdHbIJHT4qAc8yAwfHrLAJy5KdhUmWVoX31i/lDKZh+5yFWTqOKIrAoHCUGIDwJGnje2
+         GVNid4g9caegJOJwZt7YzIfy3+Z1soukil9ZUKc1VWkBe6ztJ0Y/6XcQD18AD+faNWTx
+         G8DQ==
+X-Gm-Message-State: ANoB5pn2YVKcF1O655BAZzw6Vc7TXoZFe1Im5h+XWBDeFbPx8kPmARWF
+        +FgXblq5LbevweHpadlfCko=
+X-Google-Smtp-Source: AA0mqf7G4C9ZYREcVLtDsr5h6tP7fBJziJcl9w4YmOTtaPYsjtBVRF+t130Adlukl4M1ItgW4kmlYg==
+X-Received: by 2002:aa7:88ca:0:b0:576:1216:c12d with SMTP id k10-20020aa788ca000000b005761216c12dmr884827pff.84.1669842382404;
+        Wed, 30 Nov 2022 13:06:22 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id i190-20020a6287c7000000b0056c704abca7sm1772354pfe.220.2022.11.30.13.06.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 13:06:22 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 30 Nov 2022 11:06:20 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v6 3/4] workqueue: Convert the idle_timer to a timer +
+ work_struct
+Message-ID: <Y4fFzBrjZiOQO9Te@slm.duckdns.org>
+References: <20221128183109.446754-1-vschneid@redhat.com>
+ <20221128183109.446754-4-vschneid@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221128183109.446754-4-vschneid@redhat.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Documentation for most CMTs say that we need to wait two input clocks
-before changes propagate to the timer. This is especially relevant when
-we stop the timer to change further settings. Implement the delays
-according to the spec. To avoid unnecessary delays in atomic mode, we
-also check if the to-be-written value actually differs. CMCNT is a bit
-special because testing showed that we need to wait 3 cycles instead.
-AFAIU, this is also true for all CMTs. Also, the WRFLAG needs to be
-checked before writing. This fixes "cannot clear CMCNT" messages which
-occur often on R-Car Gen4 SoCs, but only very rarely on older SoCs for
-some reason.
+On Mon, Nov 28, 2022 at 06:31:08PM +0000, Valentin Schneider wrote:
+> @@ -1806,7 +1808,9 @@ static void worker_enter_idle(struct worker *worker)
+>  	/* idle_list is LIFO */
+>  	list_add(&worker->entry, &pool->idle_list);
+>  
+> -	if (too_many_workers(pool) && !timer_pending(&pool->idle_timer))
+> +	if (too_many_workers(pool) &&
+> +	    !timer_pending(&pool->idle_timer) &&
+> +	    !work_pending(&pool->idle_cull_work))
 
-Fixes: 81b3b2711072 ("clocksource: sh_cmt: Add support for multiple channels per device")
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+Just checking the timer should be enough here, I think.
 
-Changes since RFC v2:
-* use DIV_ROUND_UP also for caluclating cmcnt_delay
-* remove a FIXME comment
+>  		mod_timer(&pool->idle_timer, jiffies + IDLE_WORKER_TIMEOUT);
+>  
+>  	/* Sanity check nr_running. */
+> @@ -2019,17 +2023,56 @@ static void destroy_worker(struct worker *worker)
+>  	wake_up_process(worker->task);
+>  }
+>  
+> +/*
+> + * idle_worker_timeout - check if some idle workers can now be deleted.
 
-There were no further comments, so I dropped the RFC status and send
-this as a regular patch. Here again the introduction from RFC v1:
+Might as well turn it into a proper function comment starting w/ "/**" and
+with argument list.
 
-With this patch, I can run the 'clocksource-switch' test (from the Linux
-selftests) without any warnings printed on the Spider S4 and the Ebisu
-E3 board. Both printed the warnings before, the Spider immediately, the
-Ebisu rarely but still. The price for this correctness is that the tests
-run much longer due to the udelays in atomic mode. However, I consider
-the massive switching a corner case. Usually, one switches rarely so the
-extra delay is worth the correctness IMHO.
+> + *
+> + * The timer is armed in worker_enter_idle(). Note that it isn't disarmed in
+> + * worker_leave_idle(), as a worker flicking between idle and active while its
+> + * pool is at the too_many_workers() tipping point would cause too much timer
+> + * housekeeping overhead. Since IDLE_WORKER_TIMEOUT is long enough, we just let
+> + * it expire and re-evaluate things from there.
+> + */
+>  static void idle_worker_timeout(struct timer_list *t)
+>  {
+>  	struct worker_pool *pool = from_timer(pool, t, idle_timer);
+> +	bool do_cull = false;
+> +
+> +	if (work_pending(&pool->idle_cull_work))
+> +		return;
+>  
+>  	raw_spin_lock_irq(&pool->lock);
+>  
+> -	while (too_many_workers(pool)) {
+> +	if (too_many_workers(pool)) {
+>  		struct worker *worker;
+>  		unsigned long expires;
+>  
+>  		/* idle_list is kept in LIFO order, check the last one */
+> +		worker = list_entry(pool->idle_list.prev, struct worker, entry);
+> +		expires = worker->last_active + IDLE_WORKER_TIMEOUT;
+> +		do_cull = !time_before(jiffies, expires);
+> +
+> +		if (!do_cull)
+> +			mod_timer(&pool->idle_timer, expires);
+> +	}
+> +	raw_spin_unlock_irq(&pool->lock);
+> +
+> +	if (do_cull)
+> +		queue_work(system_unbound_wq, &pool->idle_cull_work);
+> +}
+> +
+> +/*
+> + * idle_cull_fn - cull workers that have been idle for too long.
+> + */
 
-Happy hacking,
+Please turn it into a full function comment or drop the wings (ie. make it
+an one-liner).
 
-   Wolfram
+> +static void idle_cull_fn(struct work_struct *work)
+> +{
+> +	struct worker_pool *pool = container_of(work, struct worker_pool, idle_cull_work);
+> +
+> +	raw_spin_lock_irq(&pool->lock);
+> +
+> +	while (too_many_workers(pool)) {
+> +		struct worker *worker;
+> +		unsigned long expires;
+> +
 
+Other than that, looks great to me.
 
- drivers/clocksource/sh_cmt.c | 88 ++++++++++++++++++++++--------------
- 1 file changed, 55 insertions(+), 33 deletions(-)
+Thanks.
 
-diff --git a/drivers/clocksource/sh_cmt.c b/drivers/clocksource/sh_cmt.c
-index 64dcb082d4cf..7b952aa52c0b 100644
---- a/drivers/clocksource/sh_cmt.c
-+++ b/drivers/clocksource/sh_cmt.c
-@@ -13,6 +13,7 @@
- #include <linux/init.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
-+#include <linux/iopoll.h>
- #include <linux/ioport.h>
- #include <linux/irq.h>
- #include <linux/module.h>
-@@ -116,6 +117,7 @@ struct sh_cmt_device {
- 	void __iomem *mapbase;
- 	struct clk *clk;
- 	unsigned long rate;
-+	unsigned int reg_delay;
- 
- 	raw_spinlock_t lock; /* Protect the shared start/stop register */
- 
-@@ -247,10 +249,17 @@ static inline u32 sh_cmt_read_cmstr(struct sh_cmt_channel *ch)
- 
- static inline void sh_cmt_write_cmstr(struct sh_cmt_channel *ch, u32 value)
- {
--	if (ch->iostart)
--		ch->cmt->info->write_control(ch->iostart, 0, value);
--	else
--		ch->cmt->info->write_control(ch->cmt->mapbase, 0, value);
-+	u32 old_value = sh_cmt_read_cmstr(ch);
-+
-+	if (value != old_value) {
-+		if (ch->iostart) {
-+			ch->cmt->info->write_control(ch->iostart, 0, value);
-+			udelay(ch->cmt->reg_delay);
-+		} else {
-+			ch->cmt->info->write_control(ch->cmt->mapbase, 0, value);
-+			udelay(ch->cmt->reg_delay);
-+		}
-+	}
- }
- 
- static inline u32 sh_cmt_read_cmcsr(struct sh_cmt_channel *ch)
-@@ -260,7 +269,12 @@ static inline u32 sh_cmt_read_cmcsr(struct sh_cmt_channel *ch)
- 
- static inline void sh_cmt_write_cmcsr(struct sh_cmt_channel *ch, u32 value)
- {
--	ch->cmt->info->write_control(ch->ioctrl, CMCSR, value);
-+	u32 old_value = sh_cmt_read_cmcsr(ch);
-+
-+	if (value != old_value) {
-+		ch->cmt->info->write_control(ch->ioctrl, CMCSR, value);
-+		udelay(ch->cmt->reg_delay);
-+	}
- }
- 
- static inline u32 sh_cmt_read_cmcnt(struct sh_cmt_channel *ch)
-@@ -268,14 +282,33 @@ static inline u32 sh_cmt_read_cmcnt(struct sh_cmt_channel *ch)
- 	return ch->cmt->info->read_count(ch->ioctrl, CMCNT);
- }
- 
--static inline void sh_cmt_write_cmcnt(struct sh_cmt_channel *ch, u32 value)
-+static inline int sh_cmt_write_cmcnt(struct sh_cmt_channel *ch, u32 value)
- {
-+	/* Tests showed that we need to wait 3 clocks here */
-+	unsigned int cmcnt_delay = DIV_ROUND_UP(3 * ch->cmt->reg_delay, 2);
-+	u32 reg;
-+
-+	if (ch->cmt->info->model > SH_CMT_16BIT) {
-+		int ret = read_poll_timeout_atomic(sh_cmt_read_cmcsr, reg,
-+						   !(reg & SH_CMT32_CMCSR_WRFLG),
-+						   1, cmcnt_delay, false, ch);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
- 	ch->cmt->info->write_count(ch->ioctrl, CMCNT, value);
-+	udelay(cmcnt_delay);
-+	return 0;
- }
- 
- static inline void sh_cmt_write_cmcor(struct sh_cmt_channel *ch, u32 value)
- {
--	ch->cmt->info->write_count(ch->ioctrl, CMCOR, value);
-+	u32 old_value = ch->cmt->info->read_count(ch->ioctrl, CMCOR);
-+
-+	if (value != old_value) {
-+		ch->cmt->info->write_count(ch->ioctrl, CMCOR, value);
-+		udelay(ch->cmt->reg_delay);
-+	}
- }
- 
- static u32 sh_cmt_get_counter(struct sh_cmt_channel *ch, u32 *has_wrapped)
-@@ -319,7 +352,7 @@ static void sh_cmt_start_stop_ch(struct sh_cmt_channel *ch, int start)
- 
- static int sh_cmt_enable(struct sh_cmt_channel *ch)
- {
--	int k, ret;
-+	int ret;
- 
- 	dev_pm_syscore_device(&ch->cmt->pdev->dev, true);
- 
-@@ -347,26 +380,9 @@ static int sh_cmt_enable(struct sh_cmt_channel *ch)
- 	}
- 
- 	sh_cmt_write_cmcor(ch, 0xffffffff);
--	sh_cmt_write_cmcnt(ch, 0);
--
--	/*
--	 * According to the sh73a0 user's manual, as CMCNT can be operated
--	 * only by the RCLK (Pseudo 32 kHz), there's one restriction on
--	 * modifying CMCNT register; two RCLK cycles are necessary before
--	 * this register is either read or any modification of the value
--	 * it holds is reflected in the LSI's actual operation.
--	 *
--	 * While at it, we're supposed to clear out the CMCNT as of this
--	 * moment, so make sure it's processed properly here.  This will
--	 * take RCLKx2 at maximum.
--	 */
--	for (k = 0; k < 100; k++) {
--		if (!sh_cmt_read_cmcnt(ch))
--			break;
--		udelay(1);
--	}
-+	ret = sh_cmt_write_cmcnt(ch, 0);
- 
--	if (sh_cmt_read_cmcnt(ch)) {
-+	if (ret || sh_cmt_read_cmcnt(ch)) {
- 		dev_err(&ch->cmt->pdev->dev, "ch%u: cannot clear CMCNT\n",
- 			ch->index);
- 		ret = -ETIMEDOUT;
-@@ -995,8 +1011,8 @@ MODULE_DEVICE_TABLE(of, sh_cmt_of_table);
- 
- static int sh_cmt_setup(struct sh_cmt_device *cmt, struct platform_device *pdev)
- {
--	unsigned int mask;
--	unsigned int i;
-+	unsigned int mask, i;
-+	unsigned long rate;
- 	int ret;
- 
- 	cmt->pdev = pdev;
-@@ -1032,10 +1048,16 @@ static int sh_cmt_setup(struct sh_cmt_device *cmt, struct platform_device *pdev)
- 	if (ret < 0)
- 		goto err_clk_unprepare;
- 
--	if (cmt->info->width == 16)
--		cmt->rate = clk_get_rate(cmt->clk) / 512;
--	else
--		cmt->rate = clk_get_rate(cmt->clk) / 8;
-+	rate = clk_get_rate(cmt->clk);
-+	if (!rate) {
-+		ret = -EINVAL;
-+		goto err_clk_disable;
-+	}
-+
-+	/* We shall wait 2 input clks after register writes */
-+	if (cmt->info->model >= SH_CMT_48BIT)
-+		cmt->reg_delay = DIV_ROUND_UP(2UL * USEC_PER_SEC, rate);
-+	cmt->rate = rate / (cmt->info->width == 16 ? 512 : 8);
- 
- 	/* Map the memory resource(s). */
- 	ret = sh_cmt_map_memory(cmt);
 -- 
-2.35.1
-
+tejun
