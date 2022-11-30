@@ -2,145 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B022863E3CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE0D63E3D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiK3W5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 17:57:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
+        id S229701AbiK3W50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 17:57:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiK3W5M (ORCPT
+        with ESMTP id S229712AbiK3W5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 17:57:12 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B97192A0A;
-        Wed, 30 Nov 2022 14:57:09 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 30 Nov 2022 17:57:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC36792A0A;
+        Wed, 30 Nov 2022 14:57:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMvjD3ktTz4xGM;
-        Thu,  1 Dec 2022 09:57:04 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669849025;
-        bh=lH3ZdNsbzBDqZQvPGPjYU5CgMs8PuJgaZZ7rFv3jwkY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dPhWv0FYg+1/xZLFLgSXaQDwgo7cEg9x/dRCSwEVx7gVbMk2Cpwx36VExiqtLvz+N
-         l6Ncul0o4h0Ekk9S0/Qnne+YlEy4b+sG+chOKvsJ8y95cRg6RFfBLhnD2u7cE00vFC
-         KChZxC+sbFwRBwAsm9bYhUBxRBwI7W58jkthMUz7tTwkGGrByD1VCOlrxKztTxsD6G
-         QvcNU+qKTizVa8Xbk5h8RWRaUbdiCX7SI1WbW0QYCry00F2CrMXfU5h9KNJxVOF0Pb
-         WfFfdf+i7i26kw+67Ru2ZjPeny7h43IVV0czp82qnDqnO8Vp/JPyaoJ+kHdVGCogX7
-         HWAIwX2rsrfjg==
-Date:   Thu, 1 Dec 2022 09:57:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@redhat.com>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Matt Roper <matthew.d.roper@intel.com>
-Subject: linux-next: manual merge of the drm tree with Linus' tree
-Message-ID: <20221201095700.7325e73a@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64E4161E36;
+        Wed, 30 Nov 2022 22:57:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7BB9C433C1;
+        Wed, 30 Nov 2022 22:57:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669849041;
+        bh=pybQYKi2gR0IlbnVuLeDx89kUYolz4gTT5Rd9aKijSI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bZkPwGIbaM8iGj5LhDqvrwo985+pfYojiKg05qNp3H3XmjAI1tyYdQGTgYaLlYmAl
+         371OvfRJ0itE5oFguAUTc/0x3b9vzWrSD2c9otXF/isS9n/dB1M+eo+10shBliDh5t
+         5P+u2kMCSeXkiCebeThs7tLYcmeJ3N1SOVkesNQclP1iGtgRHIwRBCFtKA44dQRFWx
+         VsQcSjH2PE7lCSkkIT2Jvg8qBpVQuNdPOqohyTHdy+UFrnU7YR0HkrgUlHDwWNFrnR
+         /90zev+LSTn5LuRBL8i2g+pox+i6iayu7Oo1dgUrZjaTjhxAYMjMObOCu5MGgEg2Kx
+         FvsJKRceafadw==
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] clk fixes for v6.1-rc7
+Date:   Wed, 30 Nov 2022 14:57:20 -0800
+Message-Id: <20221130225720.1615026-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oxECwUXRyVqokrbyUg1Ffx.";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/oxECwUXRyVqokrbyUg1Ffx.
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The following changes since commit ffa20aa581cf5377fc397b0d0ff9d67ea823629b:
 
-Hi all,
+  clk: qcom: Update the force mem core bit for GPU clocks (2022-10-27 17:23:29 -0700)
 
-Today's linux-next merge of the drm tree got a conflict in:
+are available in the Git repository at:
 
-  drivers/gpu/drm/i915/gt/intel_gt.c
+  https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
 
-between commit:
+for you to fetch changes up to f6abcc21d94393801937aed808b8f055ffec8579:
 
-  04aa64375f48 ("drm/i915: fix TLB invalidation for Gen12 video and compute=
- engines")
+  clk: qcom: gcc-sc8280xp: add cxo as parent for three ufs ref clks (2022-11-22 18:27:07 -0800)
 
-from Linus' tree and commit:
+----------------------------------------------------------------
+A set of clk driver fixes that resolve issues for various SoCs. Most of
+these are incorrect clk data, like bad parent descriptions. When the clk
+tree is improperly described things don't work, like USB and UFS
+controllers, because clk frequencies are wonky. Here are the extra
+details:
 
-  46c507f03a46 ("drm/i915/gt: Always use MCR functions on multicast registe=
-rs")
+ - Fix the parent of UFS reference clks on Qualcomm SC8280XP so that UFS
+   works properly.
+ - Fix the clk ID for USB on AT91 RM9200 so the USB driver continues to
+   probe.
+ - Stop using of_device_get_match_data() on the wrong device for a
+   Samsung Exynos driver so it gets the proper clk data.
+ - Fix ExynosAutov9 binding.
+ - Fix the parent of the div4 clk on Exynos7885.
+ - Stop calling runtime PM APIs from the Qualcomm GDSC driver directly
+   as it leads to a lockdep splat and is just plain wrong because it
+   violates runtime PM semantics by calling runtime PM APIs when the
+   device has been runtime PM disabled.
 
-from the drm tree.
+----------------------------------------------------------------
+David Virag (1):
+      clk: samsung: exynos7885: Correct "div4" clock parents
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Inbaraj E (1):
+      dt-bindings: clock: exynosautov9: fix reference to CMU_FSYS1
 
---=20
-Cheers,
-Stephen Rothwell
+Marek Szyprowski (1):
+      clk: samsung: Revert "clk: samsung: exynos-clkout: Use of_device_get_match_data()"
 
-diff --cc drivers/gpu/drm/i915/gt/intel_gt.c
-index 7caa3412a244,0325f071046c..000000000000
---- a/drivers/gpu/drm/i915/gt/intel_gt.c
-+++ b/drivers/gpu/drm/i915/gt/intel_gt.c
-@@@ -1018,16 -1103,17 +1108,22 @@@ static void mmio_invalidate_full(struc
-  		if (!intel_engine_pm_is_awake(engine))
-  			continue;
- =20
-- 		rb =3D get_reg_and_bit(engine, regs =3D=3D gen8_regs, regs, num);
-- 		if (!i915_mmio_reg_offset(rb.reg))
-- 			continue;
--=20
-- 		if (GRAPHICS_VER(i915) =3D=3D 12 && (engine->class =3D=3D VIDEO_DECODE_=
-CLASS ||
-- 		    engine->class =3D=3D VIDEO_ENHANCEMENT_CLASS ||
-- 		    engine->class =3D=3D COMPUTE_CLASS))
-- 			rb.bit =3D _MASKED_BIT_ENABLE(rb.bit);
--=20
-- 		intel_uncore_write_fw(uncore, rb.reg, rb.bit);
-+ 		if (GRAPHICS_VER_FULL(i915) >=3D IP_VER(12, 50)) {
-+ 			intel_gt_mcr_multicast_write_fw(gt,
-+ 							xehp_regs[engine->class],
-+ 							BIT(engine->instance));
-+ 		} else {
-+ 			rb =3D get_reg_and_bit(engine, regs =3D=3D gen8_regs, regs, num);
-+ 			if (!i915_mmio_reg_offset(rb.reg))
-+ 				continue;
-+=20
-++			if (GRAPHICS_VER(i915) =3D=3D 12 && (engine->class =3D=3D VIDEO_DECODE=
-_CLASS ||
-++			    engine->class =3D=3D VIDEO_ENHANCEMENT_CLASS ||
-++			    engine->class =3D=3D COMPUTE_CLASS))
-++				rb.bit =3D _MASKED_BIT_ENABLE(rb.bit);
-++
-+ 			intel_uncore_write_fw(uncore, rb.reg, rb.bit);
-+ 		}
-  		awake |=3D engine->mask;
-  	}
- =20
+Michael Grzeschik (1):
+      ARM: at91: rm9200: fix usb device clock id
 
---Sig_/oxECwUXRyVqokrbyUg1Ffx.
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Shazad Hussain (1):
+      clk: qcom: gcc-sc8280xp: add cxo as parent for three ufs ref clks
 
------BEGIN PGP SIGNATURE-----
+Stephen Boyd (3):
+      clk: qcom: gdsc: Remove direct runtime PM calls
+      Merge tag 'samsung-clk-6.2' of https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into clk-fixes
+      Merge tag 'clk-microchip-fixes-6.1' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into clk-fixes
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOH37wACgkQAVBC80lX
-0GzfMwf/Qepx3h9aOZxYgOEt7rWD7j5qK0RXF6BWoM3cH7eFzzP5/+fFuLrXB2ma
-ZVZVrSZYw3hUps2CuxGuPGGvlfl+p+PWT3r8RQYOeYeh1a9r2eFPIghL8k9PALz8
-Qw0StT3jlOwiq4YiUNgKQL54SCG2AxLKZTRuzZ7rig1RWFASuOk6gCdMJZlcygjf
-pA7WdCwXtJl+7dw9Qx5rJtdYXktuEiFeFz7Ne+Jw1bFjocKFOirlUsBuDfmOOcfn
-bK2L1o8zU7WfJAKUXyfkVvgJniEkb1E0cV7O5ZmMdowXPV1b2AnD7mRZZVoDgqHO
-L8tmtAccPuBye0y+9nrd8WUdcJG/ww==
-=+Eex
------END PGP SIGNATURE-----
+ .../bindings/clock/samsung,exynosautov9-clock.yaml |  2 +-
+ arch/arm/boot/dts/at91rm9200.dtsi                  |  2 +-
+ drivers/clk/at91/at91rm9200.c                      |  2 +-
+ drivers/clk/qcom/gcc-sc8280xp.c                    |  6 +++
+ drivers/clk/qcom/gdsc.c                            | 61 +++-------------------
+ drivers/clk/qcom/gdsc.h                            |  2 -
+ drivers/clk/samsung/clk-exynos-clkout.c            |  6 ++-
+ drivers/clk/samsung/clk-exynos7885.c               |  4 +-
+ 8 files changed, 21 insertions(+), 64 deletions(-)
 
---Sig_/oxECwUXRyVqokrbyUg1Ffx.--
+-- 
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
