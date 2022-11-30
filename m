@@ -2,98 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B19AA63DCC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1596163DCC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:12:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbiK3SMM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 30 Nov 2022 13:12:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
+        id S229746AbiK3SMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:12:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiK3SMK (ORCPT
+        with ESMTP id S229709AbiK3SMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:12:10 -0500
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CFD84DD8;
-        Wed, 30 Nov 2022 10:12:09 -0800 (PST)
-Received: by mail-qv1-f49.google.com with SMTP id u10so6936800qvp.4;
-        Wed, 30 Nov 2022 10:12:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A3Y+CLKsmq/zvpZ9sIIrYnKxsjyLVOCHxaKyu/MIB2Y=;
-        b=f1YOfcdonv8tB3vlRGBdrZJhKfv+AE0IZwE+HDJJI2uWmDCjDmOl5IfNoI7/7A5ulp
-         pS0LnRPIzwtj3rXdviqiN35+kOOJXMIlJsTOH86hY0SqEqQklQ9gyji8YrnUh/jSaaPp
-         DNOSM2jqRgTd9hYLYENLhUXol41OCPQk8Ox552QEe4gvZqULzdWEROll5/MKYW6t89Ft
-         DGLXPpBiPhSi8BcYUc2ubgfiNfkEPgU1BNGi4Jgspihl998j3cBiSpIjSjP/Hd8GCPcp
-         06ukalabh3nMCtoYzx2nnoYSLOJyrJoE+aUSkJbNOe0ew92muk3+Fft+BErqcryM0Zfl
-         tY2w==
-X-Gm-Message-State: ANoB5pl6IoLLzftIFU7ipI6XJpKTp4BALhtfqzjkAZA8Zs7WpLOeMmXT
-        sN/RuzjMrT6YXTJhQeJoEUGIhLu5zw0ssA==
-X-Google-Smtp-Source: AA0mqf5JbxYzXrQmTqfhbWbuWoVvfemRiSmRQnnYA7TaDzjJYTcUgq6Jl6SJpTz11WtjP0PzzdRscA==
-X-Received: by 2002:a05:6214:448c:b0:4c6:b1c5:9111 with SMTP id on12-20020a056214448c00b004c6b1c59111mr42036207qvb.18.1669831928454;
-        Wed, 30 Nov 2022 10:12:08 -0800 (PST)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id s18-20020a05620a29d200b006f9ddaaf01esm1710055qkp.102.2022.11.30.10.12.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 10:12:07 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id v206so5898662ybv.7;
-        Wed, 30 Nov 2022 10:12:06 -0800 (PST)
-X-Received: by 2002:a25:7a02:0:b0:6f7:952d:b145 with SMTP id
- v2-20020a257a02000000b006f7952db145mr12544760ybc.604.1669831926518; Wed, 30
- Nov 2022 10:12:06 -0800 (PST)
+        Wed, 30 Nov 2022 13:12:35 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FADC79
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:12:32 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 1E59C1F37C;
+        Wed, 30 Nov 2022 18:12:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669831951; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zlPQLAGlmwY4o7JcXhwU2s+c287QM312H56RNlPzmj0=;
+        b=hZFtK5YBVVvSh8SP9G3Khp+j+fBLRiAB3Th627uROetC/rhRSvvbIl5UlSZoxPqG6il/ya
+        /Nu8ftgObh8FFL3MSKvNoKX0efnnpKKzVu1lYSXBaicHFDzrS1Ta9tML2VuYPEkI5/feE5
+        MuB1uIkikpTCCyktZCWkmk4IK+Twd3w=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C74FA2C14F;
+        Wed, 30 Nov 2022 18:12:30 +0000 (UTC)
+Date:   Wed, 30 Nov 2022 19:12:27 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     kernel test robot <yujie.liu@intel.com>
+Cc:     John Ogness <john.ogness@linutronix.de>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, Thomas Gleixner <tglx@linutronix.de>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [linux-next:master] [printk] 8fc5f5fc7f:
+ WARNING:at_kernel/printk/printk.c:#console_flush_all
+Message-ID: <Y4edCzx75AY9b0xS@alley>
+References: <202211302326.2915f85f-yujie.liu@intel.com>
 MIME-Version: 1.0
-References: <20221129102225.3598044-1-j.neuschaefer@gmx.net> <20221129102225.3598044-3-j.neuschaefer@gmx.net>
-In-Reply-To: <20221129102225.3598044-3-j.neuschaefer@gmx.net>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 30 Nov 2022 19:11:55 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU+d3tW1kVN6011m9JDuW53aGedKOUVt33yCOmhs9Oong@mail.gmail.com>
-Message-ID: <CAMuHMdU+d3tW1kVN6011m9JDuW53aGedKOUVt33yCOmhs9Oong@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] spi: dt-bindings: nuvoton,wpcm450-fiu: Fix warning
- in example (missing reg property)
-To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, openbmc@lists.ozlabs.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202211302326.2915f85f-yujie.liu@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 11:27 AM Jonathan Neuschäfer
-<j.neuschaefer@gmx.net> wrote:
-> Add missing "reg = <0>;" property to the flash@0 node in the example.
->
-> Fixes: dd71cd4dd6c9b ("spi: Add Nuvoton WPCM450 Flash Interface Unit (FIU) bindings")
-> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->
-> v2:
-> - depersonalize commit message
-> - Add Krzysztof's R-b
+On Thu 2022-12-01 00:57:06, kernel test robot wrote:
+> Greeting,
+> 
+> FYI, we noticed WARNING:at_kernel/printk/printk.c:#console_flush_all due to commit (built with clang-14):
+> 
+> commit: 8fc5f5fc7f52a733fcc8b3939d172b9248e63871 ("printk: introduce console_list_lock")
+> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
+> 
+> in testcase: boot
+> 
+> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+> 
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> 
+> 
+> [    0.000000][    T0] ------------[ cut here ]------------
+> [ 0.000000][ T0] WARNING: CPU: 0 PID: 0 at kernel/printk/printk.c:116 console_flush_all (printk.c:?) 
 
-Thanks, this fixes "make dt_binding_check" for me, so
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+When I checked out the commit 8fc5f5fc7f52a733fcc8b3939d172b9248e63871
+("printk: introduce console_list_lock") then
+kernel/printk/printk.c:116 is:
 
-Gr{oetje,eeting}s,
+114	 void lockdep_assert_console_list_lock_held(void)
+115	{
+116		lockdep_assert_held(&console_mutex);
+117	}
+118	EXPORT_SYMBOL(lockdep_assert_console_list_lock_held);
 
-                        Geert
+It is used in
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+#define for_each_console(con)						\
+	lockdep_assert_console_list_lock_held();			\
+	hlist_for_each_entry(con, &console_list, node)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+that is used in
+
+static bool console_flush_all(bool do_cond_resched, u64 *next_seq, bool *handover)
+{
+[...]
+		for_each_console(con) {
+
+that is called without console_list_lock().
+
+Hmm, we could not take console_list_lock() here. It would violate lock
+ordering. console_flush_all() is called under console_lock(). And
+console_list_lock() is taken outside of console_lock() in register_console().
+
+Fortunately, we do not have to do it. for_each_console() is still safe
+under console_lock() at this stage. And later patches will switch
+it to for_each_console_srcu() that will not require
+console_list_lock().
+
+So, the solution is to remove the assert in for_each_console() in
+the commit 8fc5f5fc7f52a733fcc8b3939d172b9248e63871 ("printk:
+introduce console_list_lock").
+
+We need to add the assert later when removing the console_lock()
+synchronization of @console_list in register_console().
+
+Best Regards,
+Petr
