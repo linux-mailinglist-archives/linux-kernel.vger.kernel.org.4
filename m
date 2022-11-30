@@ -2,119 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD3E63DAE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 846D863DAE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbiK3Qla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 11:41:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
+        id S230351AbiK3QmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 11:42:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiK3Ql2 (ORCPT
+        with ESMTP id S230215AbiK3Qlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 11:41:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B80880F6;
-        Wed, 30 Nov 2022 08:41:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 19735B81BC6;
-        Wed, 30 Nov 2022 16:41:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62CD6C433D6;
-        Wed, 30 Nov 2022 16:41:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669826483;
-        bh=yQuWI4MA6bwmVUUGK3RMPsD7clpwM/nL4h1BMZ9rZP8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gyJLWfaKHPO/6CjmBIWsojaCjIog/l9SJT+5V9J1BUGCuIfKGtxXtCH16FSeNhdf/
-         pZZGyjKy5FrsyflRUO3W/ZaEkHZ0js4EK7MlyAEmyG8fBoxAPEFLUmR3l6RGilwub0
-         e8yUT/1kYxIlGKis4pNXzdQvVwoRoTH73sGPcaXg=
-Date:   Wed, 30 Nov 2022 17:41:21 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ulrich Hecht <uli@fpond.eu>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Zheyu Ma <zheyuma97@gmail.com>,
-        Letu Ren <fantasquex@gmail.com>, Helge Deller <deller@gmx.de>,
-        Sasha Levin <sashal@kernel.org>,
-        "pavel@denx.de" <pavel@denx.de>
-Subject: Re: [PATCH 4.9 01/42] fbdev: fb_pm2fb: Avoid potential divide by
- zero error
-Message-ID: <Y4eHsZ+/68RH8hFe@kroah.com>
-References: <20220913140342.228397194@linuxfoundation.org>
- <20220913140342.308723271@linuxfoundation.org>
- <970394644.1257305.1669185279738@webmail.strato.com>
+        Wed, 30 Nov 2022 11:41:55 -0500
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DFF880F8;
+        Wed, 30 Nov 2022 08:41:54 -0800 (PST)
+Received: by mail-qk1-f177.google.com with SMTP id d8so12671523qki.13;
+        Wed, 30 Nov 2022 08:41:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lpxFM3mDElOJp68yFjINxCWO/tvZWQI70qNzsqToQOg=;
+        b=gRPDsLGKEzNyaiuobPyUOKq96O2NkP17ghRUxl9cN2aKyoX7ACcaIgANtJ922WLVaD
+         gR5qJez7c2yP1urV5kqWJJZ8XsZWVWThd730b3b7wmkXeB1Pnx+8N2zMqWo4znQ174wD
+         zy6tYw30uhEyj07nZdZhHVnKee+hYOCEgD1O8hSk8BKbrx/1A0jWzdwjdPgIq3m4IL4a
+         zXyaEfXbn1pdX4ztWwvbHTKQZpAwRfm4lBkj9ERNdRjXm6epFf5WSFK4SpznR1PuVD1p
+         qD6RDBG+ZHodOm1pJbJU8YBqCZisJvL2zNbFDapkLzlMyG2qVrvYt7Aq+2YAaqkUU7qB
+         Js2g==
+X-Gm-Message-State: ANoB5pkkdiHJQoX68aZ5fPRm/D/qCPAGt2ZCpE4e6HNqjL8Ls3NIumbq
+        4HC2YoYGeoZftuydGPTbnNGoL7H/rTJwyA==
+X-Google-Smtp-Source: AA0mqf43lMMb+KZfOFFWCbAWNQxV45SzGLFEl/b3Su8PbTVpfrl6zrRx53KHPLJrp4D4yJ9xqP9E3g==
+X-Received: by 2002:ae9:e110:0:b0:6e0:2272:22ff with SMTP id g16-20020ae9e110000000b006e0227222ffmr37609223qkm.448.1669826513219;
+        Wed, 30 Nov 2022 08:41:53 -0800 (PST)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id h13-20020a05620a244d00b006fba44843a5sm1548757qkn.52.2022.11.30.08.41.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 08:41:52 -0800 (PST)
+Received: by mail-yb1-f173.google.com with SMTP id 189so21629647ybe.8;
+        Wed, 30 Nov 2022 08:41:52 -0800 (PST)
+X-Received: by 2002:a25:7204:0:b0:6f0:9ff5:1151 with SMTP id
+ n4-20020a257204000000b006f09ff51151mr33358504ybc.543.1669826512202; Wed, 30
+ Nov 2022 08:41:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <970394644.1257305.1669185279738@webmail.strato.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <a14e9ec0af23eb349372fdcdb534d83652b5a449.1669826117.git.michal.simek@amd.com>
+In-Reply-To: <a14e9ec0af23eb349372fdcdb534d83652b5a449.1669826117.git.michal.simek@amd.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 30 Nov 2022 17:41:41 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVcJc-5aqy1u6=DYrb4fPiLSJw26Gw2m6gegOqnTwCQQA@mail.gmail.com>
+Message-ID: <CAMuHMdVcJc-5aqy1u6=DYrb4fPiLSJw26Gw2m6gegOqnTwCQQA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: zynqmp: Rename overlay source files from .dts to .dtso
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com, frank.rowand@sony.com,
+        geert+renesas@glider.be, afd@ti.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 07:34:39AM +0100, Ulrich Hecht wrote:
-> 
-> > On 09/13/2022 4:07 PM CEST Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > 
-> >  
-> > From: Letu Ren <fantasquex@gmail.com>
-> > 
-> > commit 19f953e7435644b81332dd632ba1b2d80b1e37af upstream.
-> > 
-> > In `do_fb_ioctl()` of fbmem.c, if cmd is FBIOPUT_VSCREENINFO, var will be
-> > copied from user, then go through `fb_set_var()` and
-> > `info->fbops->fb_check_var()` which could may be `pm2fb_check_var()`.
-> > Along the path, `var->pixclock` won't be modified. This function checks
-> > whether reciprocal of `var->pixclock` is too high. If `var->pixclock` is
-> > zero, there will be a divide by zero error. So, it is necessary to check
-> > whether denominator is zero to avoid crash. As this bug is found by
-> > Syzkaller, logs are listed below.
-> > 
-> > divide error in pm2fb_check_var
-> > Call Trace:
-> >  <TASK>
-> >  fb_set_var+0x367/0xeb0 drivers/video/fbdev/core/fbmem.c:1015
-> >  do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1110
-> >  fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1189
-> > 
-> > Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-> > Signed-off-by: Letu Ren <fantasquex@gmail.com>
-> > Signed-off-by: Helge Deller <deller@gmx.de>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Signed-off-by: Sasha Levin <sashal@kernel.org>
-> > ---
-> >  drivers/video/fbdev/pm2fb.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/drivers/video/fbdev/pm2fb.c b/drivers/video/fbdev/pm2fb.c
-> > index 9b32b9fc44a5c..50b569d047b10 100644
-> > --- a/drivers/video/fbdev/pm2fb.c
-> > +++ b/drivers/video/fbdev/pm2fb.c
-> > @@ -619,6 +619,11 @@ static int pm2fb_check_var(struct fb_var_screeninfo *var, struct fb_info *info)
-> >  		return -EINVAL;
-> >  	}
-> >  
-> > +	if (!var->pixclock) {
-> > +		DPRINTK("pixclock is zero\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> >  	if (PICOS2KHZ(var->pixclock) > PM2_MAX_PIXCLOCK) {
-> >  		DPRINTK("pixclock too high (%ldKHz)\n",
-> >  			PICOS2KHZ(var->pixclock));
-> > -- 
-> > 2.35.1
-> 
-> This is a duplicate, the same patch has already been applied in 4.9.327 (0f1174f4972ea9fad6becf8881d71adca8e9ca91), so the above snippet of code is now in there twice.
-> 
-> Doesn't make a difference in functionality in this case, I just happened to notice it when reviewing backports from 4.9 for the CIP 4.4-stable tree.
+On Wed, Nov 30, 2022 at 5:35 PM Michal Simek <michal.simek@amd.com> wrote:
+> Based on commit e87cacadebaf ("of: overlay: rename overlay source files
+> from .dts to .dtso") and also Kbuild changes done by commit 363547d2191c
+> ("kbuild: Allow DTB overlays to built from .dtso named source files") and
+> commit 941214a512d8 ("kbuild: Allow DTB overlays to built into .dtbo.S
+> files") DT overlay source files should be renamed to .dtso.
+>
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
 
-Good catch, want to send a revert for this to fix it up?
+Someone forgot to CC you on
+https://lore.kernel.org/all/20221024173434.32518-7-afd@ti.com
 
-thanks,
+Gr{oetje,eeting}s,
 
-greg k-h
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
