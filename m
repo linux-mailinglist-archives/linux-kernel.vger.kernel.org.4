@@ -2,137 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D09763D4BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A69863D4BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231965AbiK3LiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:38:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
+        id S233296AbiK3Lih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiK3LiS (ORCPT
+        with ESMTP id S232155AbiK3Lie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:38:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93682C676;
-        Wed, 30 Nov 2022 03:38:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A52CDB81AF2;
-        Wed, 30 Nov 2022 11:38:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0CE6C433C1;
-        Wed, 30 Nov 2022 11:38:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669808294;
-        bh=5bEYlFEyZKCYZEyNNJPRBWYDQP0ERj+j46soRPrLxVs=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=dYTi4FNxDiF0nqG0Fg2vbGzAGx/ebqcpdavkWjmErzAeMgb6Dl9RLE1jKWnI1fHGg
-         Cvbxb6NbVUL239BT6qpgAZ1vIcICYUW2GKqpKsXiTVSvZWoB+toUy+MwLym5aVTWk7
-         wFzDKjGt3rx/ZyVO/PlyPAhztE5YQ924dKxm2qz0RcvJN4CwXbwsSiYNFKoHcbUbhJ
-         WXhetBwYCHdC+DdQH6qPtQ+FWgqhwscNcwT2TTo7O3nXoynM8kbTz4+q3rQtOrum4A
-         coTd+zd4EXZC1Oi9jPc2ymUD3vWrIywn44pX9bnzUl3fGwGzmWTr2jMlLDhc6LHpi/
-         f+Z4r4BZuJlVQ==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Pu Lehui <pulehui@huawei.com>,
-        Pu Lehui <pulehui@huaweicloud.com>
-Subject: Re: [PATCH bpf] riscv, bpf: Emit fixed-length imm64 for
- BPF_PSEUDO_FUNC
-In-Reply-To: <20221130033806.2967822-1-pulehui@huaweicloud.com>
-References: <20221130033806.2967822-1-pulehui@huaweicloud.com>
-Date:   Wed, 30 Nov 2022 12:38:11 +0100
-Message-ID: <87h6yg1xlo.fsf@all.your.base.are.belong.to.us>
+        Wed, 30 Nov 2022 06:38:34 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945D12ED60;
+        Wed, 30 Nov 2022 03:38:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669808313; x=1701344313;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TaijO37vvQN0R1RRGRvAfk8K4dWGe7fGsOg1uROklL0=;
+  b=XasCGH4sAU5DPGcVmEyW0C6XUfhkjj4MA/YGvxwhDPI8YlmHtS0s45cH
+   +v8S5Ldyk2BgyH2hkRfoFJ1MzC0lRH1pcm7iVJvrdezIB5/NAscWEmtZ3
+   k8KPJAyt8PnhroSyfFvuBLvxbbFb9IUvmaCPmwSE49ydLFa9L+Z03WegC
+   FsJR5ASdHQVH83A5X78KEWWv6sSndD8MOMJlIol4gEPx9Vwcce+Om//Cn
+   M+gFtH9QODUTfHaOaI1B1Y3jgMzUGFDMD28uCRc1i7KCPM/uKmDVBQCqH
+   ugLSYz+/S15YFBpwIJSM1H2UJi9IiJgeKjD9LRsXxNWjQo3FcHX1sTdUs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="317223174"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="317223174"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 03:38:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="594634197"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="594634197"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 30 Nov 2022 03:38:30 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p0LQ4-002EqP-0q;
+        Wed, 30 Nov 2022 13:38:28 +0200
+Date:   Wed, 30 Nov 2022 13:38:27 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [resend, PATCH net-next v1 2/2] net: thunderbolt: Use separate
+ header data type for the Rx
+Message-ID: <Y4dAs4SMb+ZHtJuC@smile.fi.intel.com>
+References: <20221129161359.75792-1-andriy.shevchenko@linux.intel.com>
+ <20221129161359.75792-2-andriy.shevchenko@linux.intel.com>
+ <Y4cKSJI/TSQVMMJr@black.fi.intel.com>
+ <Y4c1mtUlJfcxUQSi@smile.fi.intel.com>
+ <Y4c6B/mj+g2BCwy9@black.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4c6B/mj+g2BCwy9@black.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pu Lehui <pulehui@huaweicloud.com> writes:
+On Wed, Nov 30, 2022 at 01:09:59PM +0200, Mika Westerberg wrote:
+> On Wed, Nov 30, 2022 at 12:51:06PM +0200, Andy Shevchenko wrote:
+> > On Wed, Nov 30, 2022 at 09:46:16AM +0200, Mika Westerberg wrote:
+> > > On Tue, Nov 29, 2022 at 06:13:59PM +0200, Andy Shevchenko wrote:
+> > > > The same data type structure is used for bitwise operations and
+> > > > regular ones. It makes sparse unhappy, for example:
+> > > > 
+> > > >   .../thunderbolt.c:718:23: warning: cast to restricted __le32
+> > > > 
+> > > >   .../thunderbolt.c:953:23: warning: incorrect type in initializer (different base types)
+> > > >   .../thunderbolt.c:953:23:    expected restricted __wsum [usertype] wsum
+> > > >   .../thunderbolt.c:953:23:    got restricted __be32 [usertype]
+> > > > 
+> > > > Split the header to bitwise one and specific for Rx to make sparse
+> > > > happy. Assure the layout by involving static_assert() against size
+> > > > and offsets of the member of the structures.
+> > 
+> > > I would much rather keep the humans reading this happy than add 20+
+> > > lines just to silence a tool. Unless this of course is some kind of a
+> > > real bug.
+> > 
+> > Actually, changing types to bitwise ones reduces the sparse noise
+> > (I will double check this) without reducing readability.
+> > Would it be accepted?
+> 
+> Sure if it makes it more readable and does not add too many lines :)
 
-> From: Pu Lehui <pulehui@huawei.com>
->
-> For BPF_PSEUDO_FUNC instruction, verifier will refill imm with
-> correct addresses of bpf_calls and then run last pass of JIT.
-> Since the emit_imm of RV64 is variable-length, which will emit
-> appropriate length instructions accorroding to the imm, it may
-> broke ctx->offset, and lead to unpredictable problem, such as
-> inaccurate jump. So let's fix it with fixed-length imm64 insns.
+It replaces types u* by __le*, that's it: -4 +4 LoCs.
 
-Ah, nice one! So, the the invariant doesn't hold (the image grow in the
-last pass).
-
-> Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
-
-This is odd? This can't be the right Fixes-tag...
-
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> ---
->  arch/riscv/net/bpf_jit_comp64.c | 31 ++++++++++++++++++++++++++++++-
->  1 file changed, 30 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
-p64.c
-> index eb99df41fa33..f984d5fa014b 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
-> @@ -139,6 +139,30 @@ static bool in_auipc_jalr_range(s64 val)
->  		val < ((1L << 31) - (1L << 11));
->  }
->=20=20
-> +/* Emit fixed-length instructions for 32-bit imm */
-> +static void emit_fixed_imm32(u8 rd, s32 val, struct rv_jit_context *ctx)
-> +{
-> +	s32 upper =3D (val + (1U << 11)) >> 12;
-> +	s32 lower =3D ((val & 0xfff) << 20) >> 20;
-> +
-> +	emit(rv_lui(rd, upper), ctx);
-> +	emit(rv_addi(rd, rd, lower), ctx);
-> +}
-> +
-> +/* Emit fixed-length instructions for 64-bit imm */
-> +static void emit_fixed_imm64(u8 rd, s64 val, struct rv_jit_context *ctx)
-> +{
-> +	/* Compensation for sign-extension of rv_addi */
-> +	s32 imm_hi =3D (val + (1U << 31)) >> 32;
-> +	s32 imm_lo =3D val;
-> +
-> +	emit_fixed_imm32(rd, imm_hi, ctx);
-> +	emit_fixed_imm32(RV_REG_T1, imm_lo, ctx);
-> +	emit(rv_slli(rd, rd, 32), ctx);
-> +	emit(rv_add(rd, rd, RV_REG_T1), ctx);
-> +}
-
-Hmm, will this really be fixed? We can end up with compressed
-instructions, which can then be a non-compressed in the last pass, and
-we have the same problem?
-
-The range of valid address for RV64 (sv39 to sv57) are
-0xffffffff00000000 to 0xffffffffffffffff, so I think we can do better
-than 6 insn, no? My gut feeling (I need to tinker a bit) is that 4
-should be sufficient.
-
-Note that worst case for a imm64 load are 8 instructions, but this is
-not the general case.
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-Bj=C3=B6rn
