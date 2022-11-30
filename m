@@ -2,108 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7D263CF26
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 07:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 621F863CF29
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 07:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233999AbiK3GRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 01:17:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
+        id S234031AbiK3GTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 01:19:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiK3GQ6 (ORCPT
+        with ESMTP id S230147AbiK3GTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 01:16:58 -0500
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063CF2CE33;
-        Tue, 29 Nov 2022 22:16:56 -0800 (PST)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 1764DC009; Wed, 30 Nov 2022 07:17:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1669789024; bh=W9hCW6luP/6v5RJwLkkF/k888Scy0g/o6MDl4j/XRHU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qbYXVSsGvtKHAF7eNjlThPzJCsV8p735MPlXRJxCrDzXkaEkqurTssSmVozhKGvWg
-         f7WWnMHDKFrdEYdBIoL2e5MSqer6hIQQD5RaD+kfE6ahIN9JsdZ7vbVLY6fQeT+WjB
-         10BDRsOZYe9din+p6Yx/8dbMXf6zBQUudzj2GizYU1ODww1cR8mY7HHXG3FAFtnfAg
-         7/uu/MPtt4TtIbHaK62jxyhf0xTqPmyctdWSNafYU2T4Z8Z6zLDrao8BGWS8Z2nU3i
-         9kkrPSZF9ME3Q5nAuu/oW0636DvGsWx1utx8CoNgXfTEgZe1MFQVLjvnxc/Ko50ah8
-         o7EtZhTSR6ELA==
+        Wed, 30 Nov 2022 01:19:06 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1654530F70;
+        Tue, 29 Nov 2022 22:19:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669789146; x=1701325146;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JYrA/k2tWWAw2kY6vd9Z+khRGZifgFIqAi4dqbTa+b4=;
+  b=S9lMMyQJAWPPmCLl6bnGhtqPB9wQVNm6IKyWsOpPsGfC011gtx2tHsqL
+   YWd0BmlHboVfPAJ/4/jBIQl2pCBpGUfgN2JE4mAdsQH453Gf2ichSqRNI
+   WSgHYdsW1TqqoFzYMqAGiWnsxVvWCcXMIm32x22tg+wIdDH2z+xJxWh9i
+   0xGB52LJfBEzJuY+8poy6XMQGTCpL+v+eSOSYZuocoVA8oSXEuRK2H/Xz
+   Z3a7c4gVDsDBRyQtVdSJPlMIATE22Ec3DQ6OdiOFB7Z1yHe9qslnDwfg6
+   hnigJBUpIUVWt3d3oVfYU3DczV9/taof2YhLPq1QQx8TfzYuRavGMf7c8
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="314008937"
+X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
+   d="scan'208";a="314008937"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 22:19:01 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="646209844"
+X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
+   d="scan'208";a="646209844"
+Received: from tuomaspe-mobl.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.53.75])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 22:18:59 -0800
+Message-ID: <6099c99e-f0a7-2be3-52bf-a99b5a3596c7@intel.com>
+Date:   Wed, 30 Nov 2022 08:18:56 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.5.0
+Subject: Re: [PATCH 1/1] mmc: sdhci: Fixed too many logs being printed during
+ tuning
+Content-Language: en-US
+To:     Wenchao Chen <wenchao.chen666@gmail.com>
+Cc:     ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, megoo.tang@gmail.com,
+        lzx.stg@gmail.com
+References: <20221111084214.14822-1-wenchao.chen666@gmail.com>
+ <20221111084214.14822-2-wenchao.chen666@gmail.com>
+ <59fc95ec-c0db-4011-eca3-3d101f0bc908@intel.com>
+ <CA+Da2qwdtUdCcv+HhNArGoriVtOmx+GGML4Avkk5QSdm8+XXTQ@mail.gmail.com>
+ <8433ae30-2633-1f32-ef11-2168c9cfea80@intel.com>
+ <CA+Da2qwBmApEZ6ejGBTjftsytkeNZbHZ-0oQDWa5TD8Qp3CYHA@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CA+Da2qwBmApEZ6ejGBTjftsytkeNZbHZ-0oQDWa5TD8Qp3CYHA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id B9D6BC009;
-        Wed, 30 Nov 2022 07:16:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1669789008; bh=W9hCW6luP/6v5RJwLkkF/k888Scy0g/o6MDl4j/XRHU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BYFRPQXzBgX7gJTqn47e4RxS/7ps97i2zn3eVZuaHgaKv2hDkmzps3FlohwTNURPd
-         71YfW1/fCri2W7mzIphgRoxP+AXz1VfbvcEMmCoRmgZRZVEo2PuUopH9hkqk1A+K2g
-         ggwUkEBKG2I0UF4cm7ziFvO8ULQJdWdbOBi9nwzrSnFsKYkCmPbI+9cYMjzonE/OJh
-         Zk6tjZMWmgbn6zcedPOwCi/kWIffm/JSk1OF5sXivUZYREfQr+JSPaFP0PYraf6pwE
-         Icw/YK9dhvyzzUI7EWbdl5aP2GyqmlcMVK3zlir1r8o2BTTKcj4Mk8NYhTshSNuRYm
-         GctMFTzkWI/hw==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 074f5648;
-        Wed, 30 Nov 2022 06:16:32 +0000 (UTC)
-Date:   Wed, 30 Nov 2022 15:16:17 +0900
-From:   asmadeus@codewreck.org
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     ericvh@gmail.com, lucho@ionkov.net, linux_oss@crudebyte.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, v9fs-developer@lists.sourceforge.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+8f1060e2aaf8ca55220b@syzkaller.appspotmail.com
-Subject: Re: [PATCH] 9p: fix crash when transaction killed
-Message-ID: <Y4b1MQaEsPRK+3lF@codewreck.org>
-References: <20221129162251.90790-1-schspa@gmail.com>
- <Y4aJzjlkkt5VKy0G@codewreck.org>
- <m2r0xli1mq.fsf@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <m2r0xli1mq.fsf@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(fixed Christophe's address, hopefully that will do for good...)
-
-Schspa Shi wrote on Wed, Nov 30, 2022 at 10:22:44AM +0800:
-> > I'm happy to believe we have a race somewhere (even if no sane server
-> > would produce it), but right now I don't see it looking at the code.. :/
+On 21/11/22 05:11, Wenchao Chen wrote:
+> On Fri, Nov 18, 2022 at 11:57 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> On 18/11/22 11:25, Wenchao Chen wrote:
+>>> On Thu, Nov 17, 2022 at 12:00 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>>
+>>>> On 11/11/22 10:42, Wenchao Chen wrote:
+>>>>> From: Wenchao Chen <wenchao.chen@unisoc.com>
+>>>>>
+>>>>> During the HS200 tuning process, too many tuning errors are printed in
+>>>>> the log.
+>>>>>
+>>>>> Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
+>>>>> ---
+>>>>>  drivers/mmc/host/sdhci.c | 4 ++++
+>>>>>  1 file changed, 4 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+>>>>> index fef03de85b99..a503b54305eb 100644
+>>>>> --- a/drivers/mmc/host/sdhci.c
+>>>>> +++ b/drivers/mmc/host/sdhci.c
+>>>>> @@ -3401,6 +3401,10 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
+>>>>>               if (host->pending_reset)
+>>>>>                       return;
+>>>>>
+>>>>> +             command = SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND));
+>>>>> +             if (command == MMC_SEND_TUNING_BLOCK || command == MMC_SEND_TUNING_BLOCK_HS200)
+>>>>> +                     return;
+>>>>
+>>>> Normally we wouldn't get here even if a request got an error because
+>>>> then we either reset the data circuit which should stop further
+>>>> interrupts, or set host->pending_reset.
+>>>>
+>>>> Can you elaborate on what is going wrong?
+>>>>
+>>> Hi  adrian
+>>> 1. In the process of tuning, not all tuning values are good, some
+>>> tuning values may cause errors, and these errors print too many logs.
+>>>     Of course, we reset the cmdline or dataline on error.
+>>> 2. use host->pending_reset = true
+>>> static void __sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq)
+>>> {
+>>> ...
+>>> if (sdhci_needs_reset(host, mrq))
+>>> host->pending_reset = true;
+>>> ...
+>>> }
+>>>
+>>> But intmask = 0x00200000
+>>> static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
+>>> {
+>>> ...
+>>> if (!host->data) {
+>>> struct mmc_command *data_cmd = host->data_cmd;
+>>>
+>>> if (data_cmd && (data_cmd->flags & MMC_RSP_BUSY)) {
+>>> if (intmask & SDHCI_INT_DATA_TIMEOUT) { //#define
+>>> SDHCI_INT_DATA_TIMEOUT 0x00100000
+>>> host->data_cmd = NULL;
+>>> data_cmd->error = -ETIMEDOUT;
+>>> sdhci_err_stats_inc(host, CMD_TIMEOUT);
+>>> __sdhci_finish_mrq(host, data_cmd->mrq);//<=
+>>> return;
+>>> }
+>>> if (intmask & SDHCI_INT_DATA_END) {    //#define  SDHCI_INT_DATA_END 0x00000002
+>>>
+>>> host->data_cmd = NULL;
+>>> /*
+>>> * Some cards handle busy-end interrupt
+>>> * before the command completed, so make
+>>> * sure we do things in the proper order.
+>>> */
+>>> if (host->cmd == data_cmd)
+>>> return;
+>>>
+>>> __sdhci_finish_mrq(host, data_cmd->mrq);//<=
+>>> return;
+>>> }
+>>> }
+>>> ...
+>>> if (host->pending_reset)
+>>> return;
+>>>
+>>> pr_err("%s: Got data interrupt 0x%08x even though no data operation
+>>> was in progress.\n",
+>>>        mmc_hostname(host->mmc), (unsigned)intmask);
+>>> sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
+>>> sdhci_dumpregs(host);
+>>>
+>>> return;
+>>> }
+>>> ...
+>>> }
+>>
+>> Not really following that I'm sorry.
+>>
+>> Are you saying you get a data interrupt after he data circuit is reset?
+>>
 > 
-> And I think there is a race too. because the syzbot report about 9p fs
-> memory corruption multi times.
+> No. During the tuning process, sdhci_data_irq does not skip printing
+> because the interrupt state is 0x00200000 (DATA CRC ERROR).
 
-Yes, no point in denying that :)
+Sorry I am still confused.  Which driver is this?  I was assuming
+you were using mmc_send_tuning() because the only interrupt enabled
+for regular SDHCI tuning is SDHCI_INT_DATA_AVAIL (0x00000020).
 
-> As for the problem, the p9_tag_lookup only takes the rcu_read_lock when
-> accessing the IDR, why it doesn't take the p9_client->lock? Maybe the
-> root cause is that a lock is missing here.
+So are you saying you are getting status 0x00200000 even though the
+mask is 0x00000020 ?
 
-It shouldn't need to, but happy to try adding it.
-For the logic:
- - idr_find is RCU-safe (trusting the comment above it)
- - reqs are alloced in a kmem_cache created with SLAB_TYPESAFE_BY_RCU.
- This means that if we get a req from idr_find, even if it has just been
- freed, it either is still in the state it was freed at (hence refcount
- 0, we ignore it) or is another req coming from the same cache (if
- refcount isn't zero, we can check its tag)
- The refcount itself is an atomic operation so doesn't require lock.
- ... And in the off chance I hadn't considered that we're already
- dealing with a new request with the same tag here, we'll be updating
- its status so another receive for it shouldn't use it?...
+> 
+>>>
+>>>>> +
+>>>>>               pr_err("%s: Got data interrupt 0x%08x even though no data operation was in progress.\n",
+>>>>>                      mmc_hostname(host->mmc), (unsigned)intmask);
+>>>>>               sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
+>>>>
+>>
 
-I don't think adding the client lock helps with anything here, but it'll
-certainly simplify this logic as we then are guaranteed not to get
-obsolete results from idr_find.
-
-Unfortunately adding a lock will slow things down regardless of
-correctness, so it might just make the race much harder to hit without
-fixing it and we might not notice that, so it'd be good to understand
-the race.
-
--- 
-Dominique
