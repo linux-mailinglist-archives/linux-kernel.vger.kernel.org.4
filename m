@@ -2,109 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA4763DCA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B82363DCA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:06:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbiK3SFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:05:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
+        id S229676AbiK3SGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:06:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiK3SFE (ORCPT
+        with ESMTP id S229844AbiK3SFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:05:04 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FE976140;
-        Wed, 30 Nov 2022 10:05:02 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id bx10so16340036wrb.0;
-        Wed, 30 Nov 2022 10:05:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=F49cJsb8CUa65X+Gm6KdTwzZDDVKxz1Zo3pe8gGcwv0=;
-        b=EG/PnpDlTgJTJJO34GwsXSOqeEZlDZIRWWDQ1jtUTMA9gU2YnGm7LazarhIrEpOaoU
-         lM5OEwXW5+A/XpjTXfRQYyc2Wyj+Ls1YDXawTztM9GSBmWjz2zgbcGjhsmKv+Ut5Fvzt
-         8Rq9e4k6OX9YYED8w4BUGeG09Z/ju8GxxTnjj1DH2Ocj6XTTjDwM67c1A1xHUVfK+q5k
-         O6cpHmAlcGIbLJ2Zp6KL4giw8KMl9wx2agrP/bFRfV9rhoupeNBpOm5yja4ViYDDILcF
-         YiG6kFP9b/hAAaVnOYAl4O019zw9Zx2w4KerXeFwkeAfgTkxcrjTqm0ZkFGCMKEBlaDn
-         UaKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F49cJsb8CUa65X+Gm6KdTwzZDDVKxz1Zo3pe8gGcwv0=;
-        b=s+ZNWYEBhZ43KhAapjQAneA4k+DxbLQTfE/OrESQh4qsOB4jZ92S4Urgidia2OhKv3
-         Ej/h9xkoO9O+4q3RDA0sZMd9lEI4adJ0MZQDdzbR5YS1xrKGwOE+0AgurldkEHKH99vi
-         1/o27En7E5kX1ig1B5CcbnWvGKCMGcMUDKGG375yngTL6UeVYIK5aGRRqlfFd8ncxf/P
-         ju8yNhZoTjAPDGex5IZWICc5npd6R2AfARHGNsir7YvGSShSHQxaiOF8d3hnNQC02/Do
-         Zv8pz2sExak77PU2TeXZq3xJ8uJ5Lo6olGundAFRSUHjIc1Td7huRGYNkaL2XAiSdgNG
-         e2ew==
-X-Gm-Message-State: ANoB5pl8lp0+tKwJW3FuTOsk55A8kQF7VfeENNb18z229kI2+SUBN2B1
-        6pGnw03GNhqGMLEPFVc9Qj8=
-X-Google-Smtp-Source: AA0mqf5VT4u0wrpfLqYzOzziyDfaAq3+pawLVdT7IrkzMOfkGciPAx18ye557gAcuH0T5nW8eaj8Hg==
-X-Received: by 2002:adf:fb4c:0:b0:236:5270:735e with SMTP id c12-20020adffb4c000000b002365270735emr27400470wrs.659.1669831501168;
-        Wed, 30 Nov 2022 10:05:01 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id g13-20020a05600c310d00b003a2f2bb72d5sm7943267wmo.45.2022.11.30.10.04.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 10:05:00 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] media: dvb-usb: m920x: make read-only arrays static const
-Date:   Wed, 30 Nov 2022 18:04:58 +0000
-Message-Id: <20221130180458.1580847-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 30 Nov 2022 13:05:43 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA3A74CC4;
+        Wed, 30 Nov 2022 10:05:40 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 0914324E023;
+        Thu,  1 Dec 2022 02:05:39 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 1 Dec
+ 2022 02:05:38 +0800
+Received: from [192.168.0.42] (183.27.96.20) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 1 Dec
+ 2022 02:05:37 +0800
+Message-ID: <e954511b-e74a-2c3a-95ec-d33c938b146f@starfivetech.com>
+Date:   Thu, 1 Dec 2022 02:05:37 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 09/14] dt-bindings: clock: Add StarFive JH7110 system
+ clock and reset generator
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20221118010627.70576-1-hal.feng@starfivetech.com>
+ <20221118010627.70576-10-hal.feng@starfivetech.com>
+ <1d62f95f-0edc-afd4-abb4-37fadc0b6a47@linaro.org>
+ <72b3d10e-5a8e-ed42-6808-f53773913422@starfivetech.com>
+ <768c2add-4c1f-0b36-5709-dbcdd560f504@starfivetech.com>
+ <1fb1474b-ec13-e83a-973e-bd9e9a86cb44@linaro.org>
+ <98d1bac7-8af5-f481-59b2-d58ca4c228ee@starfivetech.com>
+ <9183bac6-121e-0027-a88b-d77d5c9a077e@linaro.org>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <9183bac6-121e-0027-a88b-d77d5c9a077e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.96.20]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't populate the arrays on the stack, instead make them static
-const. Also makes the object code smaller.
+On Wed, 30 Nov 2022 16:19:06 +0100, Krzysztof Kozlowski wrote:
+> On 30/11/2022 16:12, Hal Feng wrote:
+>> On Wed, 30 Nov 2022 12:48:30 +0100, Krzysztof Kozlowski wrote:
+>>> On 30/11/2022 10:47, Hal Feng wrote:
+>>>> On Fri, 25 Nov 2022 14:41:12 +0800, Hal Feng wrote:
+>>>>> On Mon, 21 Nov 2022 09:47:08 +0100, Krzysztof Kozlowski wrote:
+>>>>>> On 18/11/2022 02:06, Hal Feng wrote:
+>>>>>>> From: Emil Renner Berthing <kernel@esmil.dk>
+>>>>>>>
+>>>>>>> Add bindings for the system clock and reset generator (SYSCRG) on the
+>>>>>>> JH7110 RISC-V SoC by StarFive Ltd.
+>>>>>>>
+>>>>>>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+>>>>>>> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+>>>>>>
+>>>>>> Binding headers are coming with the file bringing bindings for the
+>>>>>> device, so you need to squash patches.
+>>>>>
+>>>>> As we discussed in patch 7, could I merge patch 7, 8, 9, 10 and add the
+>>>>> following files in one commit?
+>>>>>
+>>>>> include/dt-bindings/clock/starfive,jh7110-crg.h
+>>>>> include/dt-bindings/reset/starfive,jh7110-crg.h
+>>>>> Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
+>>>>> Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
+>>>>
+>>>> Hi, Krzysztof,
+>>>>
+>>>> Could you please give me some suggestions?
+>>>
+>>> You can keep aon and sys split. First add one of them with their own
+>>> headers. Then add second with their own defines.
+>> 
+>> You mean split patch 7 and patch 8 into sys part and aon part
+>> respectively? There are totally five regions (sys/aon/stg/isp/vout)
+>> for clocks and resets in JH7110. If we do that, there will be 5
+>> headers for JH7110 in either clock or reset directory finally. Is
+>> that OK if there are too many headers for just one SoC?
+> 
+> 
+> Sorry, I lost the track of what patches you have. The comment was -
+> bindings include both the doc and headers. You want to split some, some
+> merge, sorry, no clue. I did not propose splitting headers...
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/media/usb/dvb-usb/m920x.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+It's ok. The problem was that the header
 
-diff --git a/drivers/media/usb/dvb-usb/m920x.c b/drivers/media/usb/dvb-usb/m920x.c
-index 548199cd86f6..fea5bcf72a31 100644
---- a/drivers/media/usb/dvb-usb/m920x.c
-+++ b/drivers/media/usb/dvb-usb/m920x.c
-@@ -485,14 +485,14 @@ static int m920x_identify_state(struct usb_device *udev,
- static int m920x_mt352_demod_init(struct dvb_frontend *fe)
- {
- 	int ret;
--	u8 config[] = { CONFIG, 0x3d };
--	u8 clock[] = { CLOCK_CTL, 0x30 };
--	u8 reset[] = { RESET, 0x80 };
--	u8 adc_ctl[] = { ADC_CTL_1, 0x40 };
--	u8 agc[] = { AGC_TARGET, 0x1c, 0x20 };
--	u8 sec_agc[] = { 0x69, 0x00, 0xff, 0xff, 0x40, 0xff, 0x00, 0x40, 0x40 };
--	u8 unk1[] = { 0x93, 0x1a };
--	u8 unk2[] = { 0xb5, 0x7a };
-+	static const u8 config[] = { CONFIG, 0x3d };
-+	static const u8 clock[] = { CLOCK_CTL, 0x30 };
-+	static const u8 reset[] = { RESET, 0x80 };
-+	static const u8 adc_ctl[] = { ADC_CTL_1, 0x40 };
-+	static const u8 agc[] = { AGC_TARGET, 0x1c, 0x20 };
-+	static const u8 sec_agc[] = { 0x69, 0x00, 0xff, 0xff, 0x40, 0xff, 0x00, 0x40, 0x40 };
-+	static const u8 unk1[] = { 0x93, 0x1a };
-+	static const u8 unk2[] = { 0xb5, 0x7a };
- 
- 	deb("Demod init!\n");
- 
--- 
-2.38.1
+include/dt-bindings/clock/starfive,jh7110-crg.h
 
+was used in both
+
+Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
+
+and
+
+Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml.
+
+The same for include/dt-bindings/reset/starfive,jh7110-crg.h.
+So should I add these four files in one patch?
+
+Best regards,
+Hal
