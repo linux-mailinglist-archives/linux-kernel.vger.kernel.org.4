@@ -2,180 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E3963D1D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6239863D1DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbiK3J3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 04:29:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59014 "EHLO
+        id S233585AbiK3J30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 04:29:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233218AbiK3J26 (ORCPT
+        with ESMTP id S233469AbiK3J3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 04:28:58 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935DB37230
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:28:57 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id q186so18109519oia.9
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:28:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WE/wpoe8wyBxBHKakNxetZ2YMP80E+8QwJz69OkRN0U=;
-        b=HssRzSbrSQyJoGkd5nNJrJ47K/btKlVQCYR/JLZLF5KIJAHzuAFLQQulvXQ4yzcMML
-         RrpMnm+4A9MDUAKE0oXnobLNLWbTtEvFsVmIJ0v5lxi9qZTEfHm/fAI8/UT84yQRvGZw
-         Eh7/pGBPNd0L/L1gvNLk6jKMuimN2iRDfvqcfGzEzzGpPZvI5fDsztgpBvqAok44s+Id
-         CN5Ndrf2IEJGp63AMdUdtMqMNCkZFwRykKeHYY5GvQyqUNOBWsxs+XDrWrpDFqP9HRNU
-         MlntVSVUW9HCUATiv8MGJOS/s+/xGZcQIaFIEFegGqsG44jPgeoNJXsSMPk9Gy+3LRzu
-         yUcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WE/wpoe8wyBxBHKakNxetZ2YMP80E+8QwJz69OkRN0U=;
-        b=kyEqBZsWqtSANTWCsUNl4PyTA11W878o2IWPok/cmfdI7ZcW+xGHtTMiSq5K+Csgme
-         5CHjQYrXlD4LxMPBjCceX2vP8O/E16sK3OYs0JSjvM+R61FQKIYNsGFkWwLNk3tKgq/l
-         AcSDKgLuk9kJajr49k5SQIw0C/NfLly2p+u45whEoYVLjiHVC6hX4NIHthfMLnQKbJVu
-         WKE3KF4NN46yxMaR3Y25/SWdIfK7OVu0w8r1JaeIrBPqrEfIKiV5u4Lqh32y9cexSYr8
-         sQqUbqiMQiQxkOuUUdz9NuicLgHOz60PTPNMD1QDs/RRjUZdAmOJMjgn8KZ7q0nEQKUg
-         LaNw==
-X-Gm-Message-State: ANoB5pnDGDhuAWko2VU93DRtw9FpTZdPKQAE1wVwUt5Nhqo5lS/KWn7n
-        4jZ7vDMZBfrr7T+wnPQcitza7h0dZp4pqhCYPO/YDQ==
-X-Google-Smtp-Source: AA0mqf4DiGy4FVHY1mnnDBa34cgVhJ/HgpD1QUBSqmURBcBBYIt34SlIStjXcaonS7eB+apS4mqD3mh3Y+jEI7qkx24=
-X-Received: by 2002:a05:6808:1115:b0:359:cb71:328b with SMTP id
- e21-20020a056808111500b00359cb71328bmr28507259oih.282.1669800536644; Wed, 30
- Nov 2022 01:28:56 -0800 (PST)
+        Wed, 30 Nov 2022 04:29:18 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD1B37230;
+        Wed, 30 Nov 2022 01:29:13 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NMYj84WRzzJp4N;
+        Wed, 30 Nov 2022 17:25:48 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 30 Nov 2022 17:29:12 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 30 Nov 2022 17:29:11 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>, <linux-mmc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH] mmc: core: Fix error return code in sd_read_ext_regs()
+Date:   Wed, 30 Nov 2022 17:28:47 +0800
+Message-ID: <20221130092847.2092-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-References: <00000000000055882e05ed9445a2@google.com> <a700b13.191985.1848090ad97.Coremail.linma@zju.edu.cn>
-In-Reply-To: <a700b13.191985.1848090ad97.Coremail.linma@zju.edu.cn>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 30 Nov 2022 10:28:45 +0100
-Message-ID: <CACT4Y+bj=xVbT+s6VmsiK12frTuPZCOf-hS+tZkuH_dSNKsb-w@mail.gmail.com>
-Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference in nci_cmd_timer
-To:     Lin Ma <linma@zju.edu.cn>,
-        =?UTF-8?B?6ams6bqf?= <kylin.formalin@gmail.com>
-Cc:     syzbot <syzbot+10257d01dd285b15170a@syzkaller.appspotmail.com>,
-        krzysztof.kozlowski@linaro.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Nov 2022 at 14:11, Lin Ma <linma@zju.edu.cn> wrote:
->
-> > Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in nci_cmd_timer
-> >
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    9500fc6e9e60 Merge branch 'for-next/core' into for-kernelci
-> > git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=16cbf7a5880000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=b25c9f218686dd5e
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=10257d01dd285b15170a
-> > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> > userspace arch: arm64
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1354dce9880000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10880a95880000
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/1363e60652f7/disk-9500fc6e.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/fcc4da811bb6/vmlinux-9500fc6e.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/0b554298f1fa/Image-9500fc6e.gz.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+10257d01dd285b15170a@syzkaller.appspotmail.com
-> >
-> > Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-> > Mem abort info:
-> >   ESR = 0x0000000096000004
-> >   EC = 0x25: DABT (current EL), IL = 32 bits
-> >   SET = 0, FnV = 0
-> >   EA = 0, S1PTW = 0
-> >   FSC = 0x04: level 0 translation fault
-> > Data abort info:
-> >   ISV = 0, ISS = 0x00000004
-> >   CM = 0, WnR = 0
-> > user pgtable: 4k pages, 48-bit VAs, pgdp=000000010c75b000
-> > [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
-> > Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-> > Modules linked in:
-> > CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-> > pstate: 004000c5 (nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > pc : __queue_work+0x3c4/0x8b4
-> > lr : __queue_work+0x3c4/0x8b4 kernel/workqueue.c:1458
-> > sp : ffff800008003d60
-> > x29: ffff800008003d60 x28: 0000000000000000 x27: ffff80000d3a9000
-> > x26: ffff80000d3ad050 x25: ffff80000d2fe008 x24: ffff80000db54000
-> > x23: 0000000000000000 x22: 0000000000000023 x21: ffff0000c7a95400
-> > x20: 0000000000000008 x19: ffff0000cd0d20f8 x18: ffff80000db78158
-> > x17: ffff80000ddda198 x16: ffff80000dc18158 x15: ffff80000d3cbc80
-> > x14: 0000000000000000 x13: 00000000ffffffff x12: ffff80000d3cbc80
-> > x11: ff8080000c07dfe4 x10: 0000000000000000 x9 : ffff80000c07dfe4
-> > x8 : ffff80000d3cbc80 x7 : ffff80000813bae8 x6 : 0000000000000000
-> > x5 : 0000000000000080 x4 : 0000000000000000 x3 : 0000000000000002
-> > x2 : 0000000000000008 x1 : 0000000000000000 x0 : ffff0000c0014c00
-> > Call trace:
-> >  __queue_work+0x3c4/0x8b4 kernel/workqueue.c:1458
-> >  queue_work_on+0xb0/0x15c kernel/workqueue.c:1545
-> >  queue_work include/linux/workqueue.h:503 [inline]
-> >  nci_cmd_timer+0x30/0x40 net/nfc/nci/core.c:615
-> >  call_timer_fn+0x90/0x144 kernel/time/timer.c:1474
-> >  expire_timers kernel/time/timer.c:1519 [inline]
-> >  __run_timers+0x280/0x374 kernel/time/timer.c:1790
-> >  run_timer_softirq+0x34/0x5c kernel/time/timer.c:1803
-> >  _stext+0x168/0x37c
-> >  ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
-> >  call_on_irq_stack+0x2c/0x54 arch/arm64/kernel/entry.S:892
-> >  do_softirq_own_stack+0x20/0x2c arch/arm64/kernel/irq.c:84
-> >  invoke_softirq+0x70/0xbc kernel/softirq.c:452
-> >  __irq_exit_rcu+0xf0/0x140 kernel/softirq.c:650
-> >  irq_exit_rcu+0x10/0x40 kernel/softirq.c:662
-> >  __el1_irq arch/arm64/kernel/entry-common.c:472 [inline]
-> >  el1_interrupt+0x38/0x68 arch/arm64/kernel/entry-common.c:486
-> >  el1h_64_irq_handler+0x18/0x24 arch/arm64/kernel/entry-common.c:491
-> >  el1h_64_irq+0x64/0x68 arch/arm64/kernel/entry.S:580
-> >  arch_local_irq_enable+0xc/0x18 arch/arm64/include/asm/irqflags.h:35
-> >  default_idle_call+0x48/0xb8 kernel/sched/idle.c:109
-> >  cpuidle_idle_call kernel/sched/idle.c:191 [inline]
-> >  do_idle+0x110/0x2d4 kernel/sched/idle.c:303
-> >  cpu_startup_entry+0x24/0x28 kernel/sched/idle.c:400
-> >  kernel_init+0x0/0x290 init/main.c:729
-> >  start_kernel+0x0/0x620 init/main.c:890
-> >  start_kernel+0x450/0x620 init/main.c:1145
-> >  __primary_switched+0xb4/0xbc arch/arm64/kernel/head.S:471
-> > Code: 94001384 aa0003f7 aa1303e0 9400144a (f94002f8)
-> > ---[ end trace 0000000000000000 ]---
-> > ----------------
-> > Code disassembly (best guess):
-> >    0: 94001384        bl      0x4e10
-> >    4: aa0003f7        mov     x23, x0
-> >    8: aa1303e0        mov     x0, x19
-> >    c: 9400144a        bl      0x5134
-> > * 10: f94002f8        ldr     x24, [x23] <-- trapping instruction
-> >
-> >
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > syzbot can test patches for this issue, for details see:
-> > https://goo.gl/tpsmEJ#testing-patches
->
-> #syz test: https://github.com/f0rm2l1n/linux-fix.git master
+Fix to return a negative error code from the error handling
+case instead of 0, as done elsewhere in this function.
 
-#syz dup: WARNING in nci_send_cmd
+Fixes: c784f92769ae ("mmc: core: Read the SD function extension registers for power management")
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ drivers/mmc/core/sd.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/mmc/core/sd.c b/drivers/mmc/core/sd.c
+index 3662bf5320ce56d..7b64f76f0179ca8 100644
+--- a/drivers/mmc/core/sd.c
++++ b/drivers/mmc/core/sd.c
+@@ -1277,6 +1277,7 @@ static int sd_read_ext_regs(struct mmc_card *card)
+ 	if (rev != 0 || len > 512) {
+ 		pr_warn("%s: non-supported SD ext reg layout\n",
+ 			mmc_hostname(card->host));
++		err = -EOPNOTSUPP;
+ 		goto out;
+ 	}
+ 
+-- 
+2.25.1
+
