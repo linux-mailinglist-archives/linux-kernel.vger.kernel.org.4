@@ -2,81 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D23E63E56F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2010F63E573
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiK3X3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 18:29:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S229972AbiK3X3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:29:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiK3X24 (ORCPT
+        with ESMTP id S229934AbiK3X3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 18:28:56 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A28CA957A
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:19:27 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id i131so23521138ybc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:19:27 -0800 (PST)
+        Wed, 30 Nov 2022 18:29:24 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE388AB033
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:19:45 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id j16-20020a170902da9000b001893d5da3acso19314654plx.23
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:19:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=a1CvzEDs24QW86WHYCJO7ldmgZffPCDkhf+BewAnOM8=;
-        b=AlEZeIvgPBlg/GfJx3mG29SiBWRv7VIS/2hc+XrXCtCh+r8GoBIH9+a5eX0iIjzhZO
-         O87KHkPzejAUJBhQtHeGUeFrthQWjcFYy/3cmVrf9NjPxbRELzc8H7fgYKNgosox5sqX
-         M3/F1fTkt1R7gLR1tPSp2Tcurw5brT6yzQ1CgR59+Qk7ccfgtoJET45gMUQZPhCaQBH8
-         T93fNOqzbt3hjrRrDpWUKWo08dtrJqF9nVwneM/KSa5+dqRWDK7120PEGsthwKV2WYLg
-         +X2W5Ygldc0dxwyF2LH6zc2wSF3WP2CBBH6D5RcpfRz3Ydjh2kxZfO2oW1kDe+KHhhC+
-         kjRQ==
+        h=to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=psZEL5ww/2k9YPeWOOCAXsjMZnFtn9I23/0F0XLJjGo=;
+        b=dcy27hQ1oZRdKqdf1nM0wAFdLBtZ+drOiDMvLMXuisGs4TsbPgCOMhdNsxgnH+NAXa
+         xJa7WfFmbXvg0DT4bOOA6DYjE61uFM+DWtDr7XuRSqoCsH2YSode9+4ARKmqmfRsdbZj
+         61FypBgVkQW/bxWqJqcHRWFxEofW+q5RKTf+LsRW5Ib8iQJnJVpmdB/+ht5pM037QwUW
+         jcf4AP0OBxWho7Sydm5lO7OdSmqh5BVT7NLQoe6oVA3EanKY5ZKsBw0CgI2YwoCgJJ24
+         Mu7s6zKTqMeKRdlB9Mq5AVUv9GRWJL59HwwjrOLXkuDbCUUi9nzKk/eBFADdwvyRCnEc
+         h8ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a1CvzEDs24QW86WHYCJO7ldmgZffPCDkhf+BewAnOM8=;
-        b=hkaBZ0LhR5EYOcb6nbXvvQHG4uOEkfj4i/wQoNUrypaD+cblrh0K60agub1YEGXoAy
-         TCdFAIol4KEz9cUoJGBQiBqTyCK109v9CCaIDjPluXQnDnhqQVj5DwOWAa80SGHnIRdD
-         0WP8pETc/JwkhxwwtFH6lzMAs6zpodwE2KG9/RcRHPA4srnzvexRK35E5aa7hmPpGY0T
-         8Ju/wMl7552zni9cUZFFPmB5zUkIA5ksqN0EHc76xpjaPa4UuUtHH6wbY1lTjf5z8E/P
-         O2pqGt97C8NiWuk66qkGGcG4pY7hnXO/OopBjdESDNrOOzHQ5IBfM1uJhJn65t1z79Rl
-         u25g==
-X-Gm-Message-State: ANoB5pmm3XJwVOiZBnuYvdfDlceQyBqQmX5ATbk2GtnzfljVVtIvvBoT
-        hlCvkYL5prNBTWTVu+pAmzLrzuB7fCS5hdNMP/4Kjw==
-X-Google-Smtp-Source: AA0mqf76NMMyoniYOh90z5CA0a5taAqe2MmVdbR3KHFfgjw/3MArj6SFyCuV7tbeAC+RCwIuSBZHqZb3zdR2DCa608k=
-X-Received: by 2002:a25:ac8:0:b0:6fa:678a:7623 with SMTP id
- 191-20020a250ac8000000b006fa678a7623mr4513898ybk.577.1669850333794; Wed, 30
- Nov 2022 15:18:53 -0800 (PST)
-MIME-Version: 1.0
-References: <20221021163703.3218176-1-jthoughton@google.com>
- <20221021163703.3218176-26-jthoughton@google.com> <Y4fL1SjtFif4/REe@x1n>
-In-Reply-To: <Y4fL1SjtFif4/REe@x1n>
-From:   James Houghton <jthoughton@google.com>
-Date:   Wed, 30 Nov 2022 18:18:43 -0500
-Message-ID: <CADrL8HV6CLTZM9Pw_UQGbBDFikmOFhr1kbk3Y3QgQc5QdX8fgg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 25/47] hugetlb: add HGM support for copy_hugetlb_page_range
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+        h=to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=psZEL5ww/2k9YPeWOOCAXsjMZnFtn9I23/0F0XLJjGo=;
+        b=Ikasfhr8X27JN0byGSovJMGZtSqWXBWwNZGtwz05+P9J2oNwYxEQwud0xuugjuV/oQ
+         EXLr/SLdEJ7LJZiM9JYXZHR9dI1JSdVQRb1zalIjst/MHNuvoUb5+/JBAYTLUQX4H7Is
+         M0zWJfwItqorMAEgbLPo4IRtpQLNIkjnlAl7O37MvHaBGnjMo40ZbWdffga4EzgI87HD
+         lcA+Jqd29ZhXe2AYMs6pbf+zI4rAfmS0G88+J88AXqZ59m+gkybTt8o1tyfy/2pWQ0Uy
+         SO057VX5E2Zn9gm54AP5wPtuyca7JQwR6SAXt3N//8hj0fe/rBupJY7lU+Q9/XJ2nwZ1
+         Kqjw==
+X-Gm-Message-State: ANoB5pmf1yw0sw/0ZtEhvB9oMWKfd8NSSbUbjcVfPNMjdcRx7pZc23CJ
+        C40nFjsw3JZyQ86DVrw6JCRwJhj9D+7LgA==
+X-Google-Smtp-Source: AA0mqf77VInAyRbXo2x8Y6PwP2A7ZiPUqHPx2P2ELAIIUt9HJqsLDFpW7960UiOr2s39ATpVGmYoW6xoI030WA==
+X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
+ (user=wonchung job=sendgmr) by 2002:a17:90b:3c52:b0:219:2b64:cc0e with SMTP
+ id pm18-20020a17090b3c5200b002192b64cc0emr20856888pjb.161.1669850379424; Wed,
+ 30 Nov 2022 15:19:39 -0800 (PST)
+Date:   Wed, 30 Nov 2022 23:19:36 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+Message-ID: <20221130231936.1666390-1-wonchung@google.com>
+Subject: [PATCH] platform/chrome: Create new USB driver for RGB keyboard in
+ ChromeOS devices
+From:   Won Chung <wonchung@google.com>
+To:     wonchung@google.com, Benson Leung <bleung@chromium.org>,
+        linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,35 +66,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 4:32 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Fri, Oct 21, 2022 at 04:36:41PM +0000, James Houghton wrote:
-> > This allows fork() to work with high-granularity mappings. The page
-> > table structure is copied such that partially mapped regions will remain
-> > partially mapped in the same way for the new process.
-> >
-> > A page's reference count is incremented for *each* portion of it that is
-> > mapped in the page table. For example, if you have a PMD-mapped 1G page,
-> > the reference count and mapcount will be incremented by 512.
-> >
-> > Signed-off-by: James Houghton <jthoughton@google.com>
->
-> I have a feeling that this path is not triggered.  See:
->
-> bcd51a3c679d ("hugetlb: lazy page table copies in fork()", 2022-07-17)
->
-> It might be helpful to have it when exploring private mapping support of
-> hgm on page poison in the future.  But the thing is if we want this to be
-> accepted we still need a way to test it. I just don't see how to test this
-> without the private support being there..
+Without any driver bound to RGB keyboard, it may not be suspended
+properly, preventing USB xHCI to be suspended and causing power drain.
+Create new USB driver for RGB keyboard so that it can be suspended
+properly.
 
-We can trigger this behavior by registering the VMA with
-uffd-writeprotect. I didn't include any self-tests for this though;
-I'll make sure to actually test this path in v1.
+Signed-off-by: Won Chung <wonchung@google.com>
+---
+ drivers/platform/chrome/Kconfig             |  8 ++++
+ drivers/platform/chrome/Makefile            |  1 +
+ drivers/platform/chrome/cros_rgb_keyboard.c | 44 +++++++++++++++++++++
+ 3 files changed, 53 insertions(+)
+ create mode 100644 drivers/platform/chrome/cros_rgb_keyboard.c
 
-- James
+diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
+index c45fb376d653..a7c36df99432 100644
+--- a/drivers/platform/chrome/Kconfig
++++ b/drivers/platform/chrome/Kconfig
+@@ -265,6 +265,14 @@ config CHROMEOS_PRIVACY_SCREEN
+ 	  this should probably always be built into the kernel to avoid or
+ 	  minimize drm probe deferral.
+ 
++config CROS_RGB_KEYBOARD
++	tristate "ChromeOS RGB keyboard"
++	depends on USB
++	help
++	  This driver supports RGB keyboard in some ChromeOS devices. This shall be
++	  enabled if RGB keyboard is present, otherwise it may not be suspended
++	  properly.
++
+ source "drivers/platform/chrome/wilco_ec/Kconfig"
+ 
+ # Kunit test cases
+diff --git a/drivers/platform/chrome/Makefile b/drivers/platform/chrome/Makefile
+index f7e74a845afc..e4ffa17c57fc 100644
+--- a/drivers/platform/chrome/Makefile
++++ b/drivers/platform/chrome/Makefile
+@@ -28,6 +28,7 @@ obj-$(CONFIG_CROS_EC_SENSORHUB)		+= cros-ec-sensorhub.o
+ obj-$(CONFIG_CROS_EC_SYSFS)		+= cros_ec_sysfs.o
+ obj-$(CONFIG_CROS_USBPD_LOGGER)		+= cros_usbpd_logger.o
+ obj-$(CONFIG_CROS_USBPD_NOTIFY)		+= cros_usbpd_notify.o
++obj-$(CONFIG_CROS_RGB_KEYBOARD)		+= cros_rgb_keyboard.o
+ 
+ obj-$(CONFIG_WILCO_EC)			+= wilco_ec/
+ 
+diff --git a/drivers/platform/chrome/cros_rgb_keyboard.c b/drivers/platform/chrome/cros_rgb_keyboard.c
+new file mode 100644
+index 000000000000..1d53fc832d76
+--- /dev/null
++++ b/drivers/platform/chrome/cros_rgb_keyboard.c
+@@ -0,0 +1,44 @@
++// SPDX-License-Identifier: GPL-2.0
++// RGB keyboard driver for ChromeOS
++//
++// Copyright (C) 2022 Google, Inc.
++
++#include <linux/module.h>
++#include <linux/usb.h>
++
++#define DRV_NAME "cros-rgb-keyboard"
++
++/* vendor ID */
++#define ID_GOOGLE 0x18d1
++/* product ID */
++#define ID_PRISM 0x5022
++
++static const struct usb_device_id cros_rgb_keyboard_table[] = {
++	{USB_DEVICE(ID_GOOGLE, ID_PRISM)},
++	{} // terminating null entry
++};
++
++static int cros_rgb_keyboard_probe(struct usb_interface *interface, const struct usb_device_id *id)
++{
++	struct usb_device *udev = interface_to_usbdev(interface);
++
++	usb_enable_autosuspend(udev);
++	return 0;
++}
++
++static void cros_rgb_keyboard_disconnect(struct usb_interface *interface)
++{
++}
++
++/* usb specific object needed to register this driver with the usb subsystem */
++static struct usb_driver cros_rgb_keyboard_driver = {
++	.name = DRV_NAME,
++	.id_table = cros_rgb_keyboard_table,
++	.probe = cros_rgb_keyboard_probe,
++	.disconnect = cros_rgb_keyboard_disconnect,
++};
++
++module_usb_driver(cros_rgb_keyboard_driver);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("ChromeOS RGB keyboard driver");
+-- 
+2.39.0.rc0.267.gcb52ba06e7-goog
 
->
-> --
-> Peter Xu
->
