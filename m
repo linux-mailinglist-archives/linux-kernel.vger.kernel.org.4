@@ -2,75 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5A163D3EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A90D63D3EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:06:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233449AbiK3LF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:05:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
+        id S233723AbiK3LGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:06:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiK3LFz (ORCPT
+        with ESMTP id S230004AbiK3LGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:05:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F712BB08;
-        Wed, 30 Nov 2022 03:05:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 30 Nov 2022 06:06:15 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1541B2C120
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:06:14 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C63361B20;
-        Wed, 30 Nov 2022 11:05:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD870C433D6;
-        Wed, 30 Nov 2022 11:05:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669806353;
-        bh=4Ub3C/+d/jdwoZ0TGuzEde0ZhlBroS9yrWnH1uEfPnI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ktfygm9w35Zx1Js1cyZE91al/U1Wvpd1MojuGyQS7c1q4BPT/UwOIznui3YAwZrZT
-         ZmO/xCJFK6B3pCXliFTHDLxGz60pwsi5wEdcL0sZrdBmoSM+QWUwblfonM+xKmaKWJ
-         QZIrW4+lsNbjIffoXRmLDsAXrYf3fV9AMJAtmKN6KBuh4VW0OYeegrLMFpxM8QxwPD
-         IEAZMwGi+wTTg5Xl4lQCDa3wDm9zT54uZKvxZV0eYmOEOnLAOig/puHSv02Xu8N23x
-         M13lDADuGbgYkyxUyhUi8072juDpMIKEVPq+brzOKmcTURkn2w3BBIEXS8j8lTZVrz
-         UvhqkPehJVhxw==
-Date:   Wed, 30 Nov 2022 06:05:52 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.15 23/31] block: make blk_set_default_limits()
- private
-Message-ID: <Y4c5EJohWPv99e+K@sashalap>
-References: <20221123124234.265396-1-sashal@kernel.org>
- <20221123124234.265396-23-sashal@kernel.org>
- <27f3a493-4684-7eee-b3af-fa1c70b492e0@kernel.dk>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EC84F6602B30;
+        Wed, 30 Nov 2022 11:06:11 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669806372;
+        bh=Vjz1D7fPn+LzVWFAgAbnGfbzxs0NBWSFhZrWPMUaMg4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hzb39mNuGctzT/7k70YPp1QxYuB+wbssfrnCGJrdEACeyOXdM7cr0I6i+M4tpCkhu
+         3wpsWoiq2PBwE4XqBX6eM9kkrvZwY/FWTogxWcShwDX7TPwPw9LCkHbahD9V60p+4H
+         nUKw7F8JLfz8jSdqtxVOgfYHjVxOv090WgVtrl1cqYEDx4aGFYUCiKeNyIzbirR6o9
+         KKH/ovphqjoPyng3IQRPm+SwMW8qLqDfDsFIWlMMf62LSf1YCK4U/IQulKE2u8AQsU
+         7m3KVhrNO4/7kdmmbLMoBkd+LlHVmrhdAnyU8+gcqBhiHUqWkHK5cB1/2149/tTn00
+         1cgJwO13MMoSg==
+Message-ID: <90661309-5947-38f2-e4c7-67066658f448@collabora.com>
+Date:   Wed, 30 Nov 2022 12:06:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <27f3a493-4684-7eee-b3af-fa1c70b492e0@kernel.dk>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] ASoC: SOF: mediatek: add shutdown callback
+Content-Language: en-US
+To:     Ricardo Ribalda <ribalda@chromium.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        sound-open-firmware@alsa-project.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org
+References: <20221127-mtk-snd-v1-0-b7886faa612b@chromium.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221127-mtk-snd-v1-0-b7886faa612b@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 06:44:02AM -0700, Jens Axboe wrote:
->On 11/23/22 5:42 AM, Sasha Levin wrote:
->> From: Keith Busch <kbusch@kernel.org>
->>
->> [ Upstream commit b3228254bb6e91e57f920227f72a1a7d81925d81 ]
->>
->> There are no external users of this function.
->
->Please drop the 5.15 and earlier backports of this series, it's
->not needed.
+Il 27/11/22 21:04, Ricardo Ribalda ha scritto:
+> If we do not shutdown the peripheral properly at shutdown, the whole system
+> crashes after kexec() on the first io access.
+> 
+> Let's implement the appropriate callback.
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-Will do, thanks!
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
--- 
-Thanks,
-Sasha
