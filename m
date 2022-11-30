@@ -2,123 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C580463D557
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AC363D56A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234119AbiK3MQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 07:16:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
+        id S234328AbiK3MUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 07:20:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiK3MQj (ORCPT
+        with ESMTP id S229580AbiK3MUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 07:16:39 -0500
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AC62B600;
-        Wed, 30 Nov 2022 04:16:38 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id B84EDF5D85;
-        Wed, 30 Nov 2022 04:16:07 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Nl2cF25mKZO5; Wed, 30 Nov 2022 04:16:06 -0800 (PST)
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1669810566; bh=XfQt2gqNGwqTBmezWa2hrCNNLvlXxzmo4l3Y1L8uyqY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HZu8T6F6Wbj9H8NlWoGXQ2Znl+AA/k3uR+zDLGnWC4pwM9k15ignOq3mfPUoZh2f7
-         Z1AnTIp09I203/ELknoEAAjrBGDLKjavWU9J8ED0pbKow44NklS8xwQuSd8w30fmWa
-         mhUZgyRJi7R7YJAEJflIEYzsLP7of46CM8eOJXs4NFKulJJEYvmm1rnExI92Av/WTt
-         XhCp1nZrHLAv6R6iC5leDKw/KxAYdUi44n5R6MJz0mC/xRV2NKL6Z+kig2Y3iRfM2x
-         flENVdK4aQnzAx+FXGZayZPVJzXacRzYDt/CJv4NEkZ5LyZur2kVNq0F6bo+yNf/K/
-         cPyveGWxpy3TA==
-To:     johan@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, phone-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-Subject: [RFC v1] hack: suspend: usb: option: add reset_resume callback
-Date:   Wed, 30 Nov 2022 13:15:52 +0100
-Message-Id: <20221130121552.1560379-1-martin.kepplinger@puri.sm>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 07:20:37 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334F46DCC8;
+        Wed, 30 Nov 2022 04:20:36 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AUC7qJo018648;
+        Wed, 30 Nov 2022 12:20:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=6CaDG6FQs1F5uP2IQ8HSQQ6culH2xnBd8bcJ5NL6wnI=;
+ b=SfuAYpqUzniYI5MZYvECqfa5kzPy5zykFFoU+/h6vBPxd1Ia/7Fpzs4OQwNxyybOwFUO
+ A3yXy9wsLZYx2WoJ+oQzohAOyOa64scLSUTZ8dvZW4JuqneD+jbAkclTaE7J4eH2NnnK
+ LADKsnCFDhMP2RviMZ04jzFy+/jYLxd1OkD5WhbU5hqs7Tc07i0bH1Gj03cDChsv5W46
+ OyBZRVZ8T3+DqUHjqFNK70crGRVlWRr5D3tzu3kuOl+9Iwx4fMsTb4pwtPh1c+6WhHom
+ Tr8rPsPqmQ+x3u0SbMbqze+DmoS69+QjVqUZy+nNDiFXLwfs3BwksyeoSY7Zg/nugazX rw== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m66w4g0xn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Nov 2022 12:20:32 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2AUCKSG5031895;
+        Wed, 30 Nov 2022 12:20:28 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3m3bvknc4e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 30 Nov 2022 12:20:28 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AUCHAn6028553;
+        Wed, 30 Nov 2022 12:20:28 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 2AUCKRdY031886;
+        Wed, 30 Nov 2022 12:20:28 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id 1C0D03F58; Wed, 30 Nov 2022 17:50:27 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, linux-arm-msm@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org, quic_vtanuku@quicinc.com,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: [PATCH] dmaengine: qcom: gpi: Set link_rx bit on GO TRE for rx operation
+Date:   Wed, 30 Nov 2022 17:50:24 +0530
+Message-Id: <1669810824-32094-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: saoNPNDqXdfrcCNlnDl2Qz1j6VK4Ea9y
+X-Proofpoint-ORIG-GUID: saoNPNDqXdfrcCNlnDl2Qz1j6VK4Ea9y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-30_04,2022-11-30_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ malwarescore=0 mlxlogscore=848 mlxscore=0 spamscore=0 priorityscore=1501
+ adultscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211300087
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently to be the same as resume(). This will just avoid re-enumeration
-of the modem device on every system resume.
+As per GSI spec, link_rx bit is to be set on GO TRE on tx
+channel whenever there is going to be a DMA TRE on rx
+channel. This is currently set for duplex operation only.
 
-This exists only because the usb core will re-enumerate *any* device
-whos' driver doesn't have reset_resume() implemented. A call trace:
+Set the bit for rx operation as well.
 
-Jun 23 11:15:43 pureos kernel:  usb_serial_disconnect+0x58/0x180 [usbserial]
-Jun 23 11:15:43 pureos kernel:  usb_unbind_interface+0x84/0x290 [usbcore]
-Jun 23 11:15:43 pureos kernel:  device_remove+0x78/0x90
-Jun 23 11:15:43 pureos kernel:  device_release_driver_internal+0x1e4/0x250
-Jun 23 11:15:43 pureos kernel:  device_release_driver+0x24/0x30
-Jun 23 11:15:43 pureos kernel:  usb_forced_unbind_intf+0xac/0xd4 [usbcore]
-Jun 23 11:15:43 pureos kernel:  unbind_marked_interfaces.isra.0+0x5c/0x80 [usbcore]
-Jun 23 11:15:43 pureos kernel:  usb_resume+0x78/0x8c [usbcore]
-Jun 23 11:15:43 pureos kernel:  usb_dev_resume+0x20/0x30 [usbcore]
-Jun 23 11:15:43 pureos kernel:  dpm_run_callback+0x60/0x1f0
-Jun 23 11:15:43 pureos kernel:  device_resume+0x9c/0x1f4
-
-where usb_resume_inteface() sets needs_binding here
-https://elixir.bootlin.com/linux/latest/source/drivers/usb/core/driver.c#L1353
-because of no reset_resume() implementation.
-
-This hack is even suggested in some modems' application notes as can
-be found in discussion here
-https://invent.kde.org/teams/plasma-mobile/issues/-/issues/3#note_218386
-
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
 ---
- drivers/usb/serial/option.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/dma/qcom/gpi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index dee79c7d82d5..58526bf8684d 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -46,6 +46,7 @@ static int  option_probe(struct usb_serial *serial,
- static int option_attach(struct usb_serial *serial);
- static void option_release(struct usb_serial *serial);
- static void option_instat_callback(struct urb *urb);
-+static int option_reset_resume(struct usb_serial *serial);
- 
- /* Vendor and product IDs */
- #define OPTION_VENDOR_ID			0x0AF0
-@@ -2227,6 +2228,7 @@ static struct usb_serial_driver option_1port_device = {
- #ifdef CONFIG_PM
- 	.suspend           = usb_wwan_suspend,
- 	.resume            = usb_wwan_resume,
-+	.reset_resume      = option_reset_resume,
- #endif
- };
- 
-@@ -2373,6 +2375,18 @@ static void option_instat_callback(struct urb *urb)
- 	}
- }
- 
-+static int option_reset_resume(struct usb_serial *serial)
-+{
-+	/*
-+	 * We simply call resume() because this implementation only
-+	 * exists because the USB core will un- and rebind any driver
-+	 * during system resume that does *not* have a reset_resume()
-+	 * implementation; see usb_resume_interface() in core/driver.c
-+	 * We want to avoid that unconditional removal/addition.
-+	 */
-+	return usb_wwan_resume(serial);
-+}
-+
- MODULE_AUTHOR(DRIVER_AUTHOR);
- MODULE_DESCRIPTION(DRIVER_DESC);
- MODULE_LICENSE("GPL v2");
+diff --git a/drivers/dma/qcom/gpi.c b/drivers/dma/qcom/gpi.c
+index 061add8..59a36cb 100644
+--- a/drivers/dma/qcom/gpi.c
++++ b/drivers/dma/qcom/gpi.c
+@@ -1756,6 +1756,7 @@ static int gpi_create_spi_tre(struct gchan *chan, struct gpi_desc *desc,
+ 		tre->dword[3] = u32_encode_bits(TRE_TYPE_GO, TRE_FLAGS_TYPE);
+ 		if (spi->cmd == SPI_RX) {
+ 			tre->dword[3] |= u32_encode_bits(1, TRE_FLAGS_IEOB);
++			tre->dword[3] |= u32_encode_bits(1, TRE_FLAGS_LINK);
+ 		} else if (spi->cmd == SPI_TX) {
+ 			tre->dword[3] |= u32_encode_bits(1, TRE_FLAGS_CHAIN);
+ 		} else { /* SPI_DUPLEX */
 -- 
-2.30.2
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
 
