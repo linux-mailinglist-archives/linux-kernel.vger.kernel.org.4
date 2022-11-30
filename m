@@ -2,172 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9910163CF0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 07:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F5C63CF0F
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 07:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233703AbiK3GAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 01:00:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
+        id S233278AbiK3GAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 01:00:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiK3F74 (ORCPT
+        with ESMTP id S230033AbiK3GAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 00:59:56 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02151CF2;
-        Tue, 29 Nov 2022 21:59:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669787996; x=1701323996;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Hr16P7nRjVnfFwu/lPEt7DCHYLRR1JsJUqh+prbOZzY=;
-  b=NcHg1ABK5Hus6huSQulIxDJ8bOjGwnuQ58GNn/Ekhrlur5leyh+aYOIZ
-   mLWVXm49m+VNO0nX/cmUookBc9NyufI9UP6ETMKA4xZSEfq5qfE/9/KIO
-   cYsDabKfO/maWBAnLJZMJFVWWHOFvMmlKEKtaKn2GrF3QBYjWHKwAlbPi
-   Zyw7lXqM8vYHvyxuITEEgLYMdFQwJL0h6RJga9X9ajvyBP7iFD+7wVhhT
-   QZXj5vCdI3vvCjlH/cU8ldhRYxiorFNvkeNHTwKhGfiI5T7t1O1lpOedb
-   eh8euFpbf7qOr9r5pb1SQ2AOFTKgdA+qPBG1TWCcBYYp47pieQvgYe8EW
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="298682362"
-X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
-   d="scan'208";a="298682362"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 21:59:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="889159080"
-X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
-   d="scan'208";a="889159080"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga006.fm.intel.com with ESMTP; 29 Nov 2022 21:59:30 -0800
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 29 Nov 2022 21:59:30 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 29 Nov 2022 21:59:30 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 29 Nov 2022 21:59:30 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=inwMDpkRRAYSmkE/4VIOnKeS/uu6tbHLmaI8YJTehNFeo/IDXGan6nZS8n/HtTo9toBkxaKLty8S74Q/ttUXiwAshl/Tn5H2bWLFziEzn7L+8kmsb9BMRH4XvS0ICh/SDB80MCbBQf3p3QboRz3ZRXRUe2+UYmwTLvq0LTDINc+TCv9nW+yZQek4ymRUY7K+BKoUjq7tU/ub7D3+TPQbJnDvVUpC7NCANwfwO2aGYFxRpkixKhqfUhQgP1dkuHm+uP+oDm9W7DKJdm0CqhKYr3RFC4ZUTYp/o+R19OoZFwTdvE754uX6mAyLGOMs9+90B+MQC7D5GbKyxXMX4a4sfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+cWrpm5x2s0sptRoOC2ue8WZ74WdaVf/bMGfAeP5yOw=;
- b=ON/N8C89Hg4VhOUPhg8mBUWn/Ui0NwpdSJzT8FBlDiQDC/+O5x3G4Q2KqnDZ/Gy2SIt2gSlLBrWHds7lWhVUTxHrEelRhmR7iQwv0c164zIg1cQmo+wPDzkOePUqf7a71ayO+hhnU7SQXmyqVaQIjk28rcs7NedXU6aTedKpojTUrD5Gj2emCE0+2isRABMxmxP5OIfQ4QEVDE6sL7PUbC9N+Gc6uUEQeR4SMIDdHbmZZJFZYb+Ue9mN6DFAvzj7wekBSW19VxxOc38bP6dfDXHk8c+L2PpAy0e9GJG6BjHjCGtUqLV3L/AN/2bWuXrcPGzocKwX5ZKejrrZV2Gx8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from CY4PR11MB1320.namprd11.prod.outlook.com (2603:10b6:903:2b::21)
- by PH7PR11MB6769.namprd11.prod.outlook.com (2603:10b6:510:1af::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Wed, 30 Nov
- 2022 05:59:28 +0000
-Received: from CY4PR11MB1320.namprd11.prod.outlook.com
- ([fe80::7c2b:3507:c308:2437]) by CY4PR11MB1320.namprd11.prod.outlook.com
- ([fe80::7c2b:3507:c308:2437%11]) with mapi id 15.20.5857.023; Wed, 30 Nov
- 2022 05:59:28 +0000
-From:   "Zhou, Jie2X" <jie2x.zhou@intel.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "shuah@kernel.org" <shuah@kernel.org>,
-        "Weight, Russell H" <russell.h.weight@intel.com>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "Zhang, Tianfei" <tianfei.zhang@intel.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Li, Philip" <philip.li@intel.com>
-Subject: Re: fw_fallback.sh test failed in Debian 11
-Thread-Topic: fw_fallback.sh test failed in Debian 11
-Thread-Index: AQHZA5lIOHIFr50OcUq4S5sLOYsQua5VjYWAgAFsaHw=
-Date:   Wed, 30 Nov 2022 05:59:28 +0000
-Message-ID: <CY4PR11MB132092589F9270FB559B01D8C5159@CY4PR11MB1320.namprd11.prod.outlook.com>
-References: <CY4PR11MB1320DAA7D7972E738EDA754EC5129@CY4PR11MB1320.namprd11.prod.outlook.com>
- <Y4W+/TfM4F9TdSnZ@kroah.com>
-In-Reply-To: <Y4W+/TfM4F9TdSnZ@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CY4PR11MB1320:EE_|PH7PR11MB6769:EE_
-x-ms-office365-filtering-correlation-id: bbd84e0d-77b9-4212-c529-08dad2980aaf
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sGtZ167wjLSRi9XffC29mxmAt/2L9E/iQ1cGc152OfCfrb0Xuirq0w/FnQ95lkJgC0TW4Nx9Xqun7/QaCNyaIgjcdVyaHjLTLiOEsJNO6K0f81J0XUDe39w/Fon6eTmJoeGLqkqhVKljf6eojIk3UEJ9NcU2+0aVeqKHuhVp0tf1bCljlbuQqGph9au/SrW33Ae+uXXZdhTvS3CVxos5JzeUVDR4GA7M3Ti6XXFe7WfGIxhr1Vqswdwn9L+uXVhE6nZzrSwAEVnkHnn3wVRVhDslCM3uuFOxrp4UlwVp9Ky61EARpGWDtDUNBYz6lyXmUfLqnaNwqTjVyWZzCV36e2yU55jM6yO87abWKN1MGdmuQuPypZxNfNT5yowjNYK8q4sbStVCM8F7bR7Hi+fEikV//Mgsz/117N/ybOzAofvZ7YuhD3Yi6P8qWk0VATfHDSzT38DE1KmUO1Ny3nk4Sk5OPuuii8uxBpJnx2NG8y7pytpGBJQOvT0SMvnsQ9eP+/DKKV9MMNTAl3ZHFZLwMLbEMit8vGXxzSbBnyZKv+8XoHrfwhjyTj9R1CaSqwmOmlXlIpdb+0rxUdMe46kPw8KVstVyWVK97AQQ0Q7uwCySBus3HLYl+AFA2Ps4oZR0NvF5NxHJy+ivkEN0ks40eSMP0baqivw6HtJMFEgU8WWPyjfJXmlqA1X9GT3w3ZnXA1ankzDH2j5Gu9Wv7/qZWg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(396003)(376002)(366004)(39860400002)(346002)(451199015)(2906002)(316002)(66946007)(52536014)(8936002)(186003)(83380400001)(64756008)(122000001)(33656002)(86362001)(5660300002)(38100700002)(41300700001)(66446008)(55016003)(38070700005)(8676002)(4744005)(107886003)(82960400001)(66556008)(66476007)(6916009)(54906003)(6506007)(4326008)(478600001)(9686003)(76116006)(26005)(7696005)(91956017)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?sZmDxJk7ecjD7j31vj6j9qUJAnRhKTCg3jXbCBk0g8b5e3NX2dwMZDXqFW?=
- =?iso-8859-1?Q?fQ4ohC+8cZtmjNvOlaePjueTdME/V/f2L4BhF3AnbfxWqBZOAMf+MHDUUB?=
- =?iso-8859-1?Q?sLqOE4dBxw3DKNu+OH+8XyZVG3eoa+S7FHq1HaGJSHMjivuGWYAEWBH3LL?=
- =?iso-8859-1?Q?VpnXFoDrtqxILqEdtj1zNvzkZmoPApLnS82EFizildprmqghx+JS11/+mV?=
- =?iso-8859-1?Q?HOfEoEM7mX5Y+m3jEeeCzBLWrL2xL/AiNdSMsWMD4kD9G+JME0Viyv5eWu?=
- =?iso-8859-1?Q?8jPDGuleOKAAX8N2CisOipn6CZa6xamhSdZvnMF0MghOVpZK9EJp1xg8mC?=
- =?iso-8859-1?Q?fg7CHghEZLN1hoZA07KwhVs708nUBlZG5tr5fbqKnoZ9GyE16CKngIKROD?=
- =?iso-8859-1?Q?7APezLX/R2YciMvHLdqzSF/GZdtE52aFIJSCGS/mma75hYfKgqGD9MgRTo?=
- =?iso-8859-1?Q?vP6rN7EsZwv2RAoCC44wrd/vTFRtk4yHLnqrdwM5f2w8Fbo+tZ70+xq+Wn?=
- =?iso-8859-1?Q?lWYwgC3rlYsj/tr9Ck0ocQgqLPiMH8rcOrQQ7yGhVB/l1MfEjkSipdbHLu?=
- =?iso-8859-1?Q?p/fti3yCXVWsVQ18yeRYO6Rt2A3loYRP6osIARMaVbLAKV1CNePW0ATRhE?=
- =?iso-8859-1?Q?xKGPTUPwrMsME2BsqKxCL0RnHAN4qR3vrAKL7+dBi6Ys12wtVIS+DaunIy?=
- =?iso-8859-1?Q?IXSmlBnUSvyQtqFUCbV6T3mOt4wgNU71lIKVNA8bg2Qb0R4kor25mnYLZX?=
- =?iso-8859-1?Q?3KSoPmgdPwR8/h7Z2aIoUmt32MR28ThvRt0cRXq+KNeocvUU+4zX3PpRyK?=
- =?iso-8859-1?Q?JlMOFvRNq4Ib0jU4SLARwM2l975BCznWGh0gT5ChVjmV4GL9Qw6k+eFdh3?=
- =?iso-8859-1?Q?dVnGOz5GQoGmiXy1XEKXFqXqaKg8sSIsUzmgjbwuFEAq2fnl5sifbPozhP?=
- =?iso-8859-1?Q?B+Iek2NPE7OlPGWWaf3H8vTiJSHG+IzPm9gmehVST0P0T/96mwW2feEXAn?=
- =?iso-8859-1?Q?nZjyNeAflWWQEuixU9I4OjnclTKp09SVtlcdaULZ/00OeA7iu27a9sQYgK?=
- =?iso-8859-1?Q?auPCFMX6VtE72CDLA5CAtuR49AqeuWnLSPeOXK30RHrIUuHHgLVSdJn+PM?=
- =?iso-8859-1?Q?XACI1Jn2nGuMIDesymxSIJRFUdLWixSGzIOwnxhddZJFvHtnO0AxxI+OZO?=
- =?iso-8859-1?Q?NeqnkzBYm/m1tBU67v/4ViNacl8Dcv9qcKnq++6pmcuXSWZ5g55zlSANbz?=
- =?iso-8859-1?Q?JylUE6RaVq4dOvjljQxeKBBxq2SZXFImwk3dh45AX+dQoT0Zov9kxdzmWr?=
- =?iso-8859-1?Q?aTtqCqkpdoPCZk4E7grTgWI3Sgu4mfmGJnZaXSZVnxuHJzVCPXOTJaWcwg?=
- =?iso-8859-1?Q?9p4QMgc7leE4tdxkysAYHI9/eXufefYC5nMRYgyLesZFIbD0x2eOKLhNBP?=
- =?iso-8859-1?Q?F2yYeHFnDN7HjFgf5JL36oubF8IDD64ZxPX3ONqsluDEjWY2g4gpIGs8b9?=
- =?iso-8859-1?Q?Jyev74/eV9yl70uUFNMSSN/avN4otnm3CuiNermi16laRwQNnhg97f7jG2?=
- =?iso-8859-1?Q?Ddiv4gmzIC0YSYEJiPAh/KMYkJg14OtaG5gCCNPBSgZjUts4t9smEaUbn8?=
- =?iso-8859-1?Q?o6T6T0T0OFYnDsFcL58/yMX4cwUNUOo5k0?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 30 Nov 2022 01:00:13 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7795B1408C;
+        Tue, 29 Nov 2022 22:00:09 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AU5xkF1081064;
+        Tue, 29 Nov 2022 23:59:46 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1669787986;
+        bh=78rsLXykjczu6kP5J3eoU0JCxXRmcnETH8Wn4USwCPs=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=shlqltwAusJ80dlMn6ozaJgacCsfvHbOfppFHnSPyu7Xlg/9w+IZtqSvdfapizO3w
+         ZxGa89EgNKCu79qQDUVsJOe3v+yUMFj1bZWCY46KXYZWOU9i6OcZ+rK5yF9qKGNIOY
+         hp+u+CoAdx+2oGa/XxtL696rOss5u24AUozOb4jY=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AU5xk6A008147
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 29 Nov 2022 23:59:46 -0600
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 29
+ Nov 2022 23:59:45 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 29 Nov 2022 23:59:45 -0600
+Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AU5xfef030346;
+        Tue, 29 Nov 2022 23:59:42 -0600
+Message-ID: <56cc4929-5c15-0345-4d7c-2dbc5d40fbee@ti.com>
+Date:   Wed, 30 Nov 2022 11:29:40 +0530
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1320.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbd84e0d-77b9-4212-c529-08dad2980aaf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2022 05:59:28.2031
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: RE09GUURGSfyZDS2zBgu0IKCSEzrffkKrx5dSGae4MrAi/9JDpiNwn5yIcWO/+XiqWunIhWbrnWeT69GrURcqA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6769
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <linux@armlinux.org.uk>, <pabeni@redhat.com>, <rogerq@kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
+        <spatton@ti.com>, Pavan Chebbi <pavan.chebbi@broadcom.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH net] net: ethernet: ti: am65-cpsw: Fix RGMII configuration
+ at SPEED_10
+Content-Language: en-US
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+References: <20221129050639.111142-1-s-vadapalli@ti.com>
+ <CALs4sv29ZdyK-k0d9_FrRPd_v_6GrC_NU_dYnU5rLWmYxVM2Zg@mail.gmail.com>
+ <20221129164619.mq3b4y4cxj2vvl24@skbuf>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20221129164619.mq3b4y4cxj2vvl24@skbuf>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi,=0A=
-=0A=
->Are you sure you have the proper kernel code loaded with the test=0A=
->firmware code that creates this sysfs file?  Without that, this test=0A=
->will not work.=0A=
-=0A=
-I checked following config options, and they all enabled.=0A=
-=0A=
-tools/testing/selftests/firmware/config=0A=
-CONFIG_TEST_FIRMWARE=3Dy=0A=
-CONFIG_FW_LOADER=3Dy=0A=
-CONFIG_FW_LOADER_USER_HELPER=3Dy=0A=
-CONFIG_IKCONFIG=3Dy=0A=
-CONFIG_IKCONFIG_PROC=3Dy=0A=
-CONFIG_FW_UPLOAD=3Dy=0A=
-=0A=
-best regards,=
+Hello,
+
+On 29/11/22 22:16, Vladimir Oltean wrote:
+> On Tue, Nov 29, 2022 at 11:16:42AM +0530, Pavan Chebbi wrote:
+>> Looks like this patch should be directed to net-next?
+> 
+> Do you know more about what CPSW_SL_CTL_EXT_EN does, exactly? I'm not
+> able to assess the impact of the bug being fixed. What doesn't work?
+> Maybe Siddharth could put more focus on that.
+
+The CPSW_SL_CTL_EXT_EN bit is used to control in-band mode v/s forced
+mode of operation. Setting the bit selects in-band mode while clearing
+it selects forced mode. Thus, if the bit isn't set for certain variants
+of RGMII mode, then those variants of RGMII mode will not work in
+in-band mode of operation.
+
+Please refer to the patch at [1] which corresponds to the commit being
+fixed. That patch intended to convert the existing driver to utilize the
+PHYLINK framework. In that process, the following line:
+if (phy->speed == 10 && phy_interface_is_rgmii(phy))
+was removed from the am65_cpsw_nuss_adjust_link() function and added in
+the am65_cpsw_nuss_mac_link_up() function in the same patch as:
+if (speed == SPEED_10 && interface == PHY_INTERFACE_MODE_RGMII)
+instead of:
+if (speed == SPEED_10 && phy_interface_mode_is_rgmii(interface))
+
+Due to the above, the already existing support for in-band mode of
+operation for all RGMII mode variants was accidentally changed to
+support for in-band mode of operation for just the
+PHY_INTERFACE_MODE_RGMII variant.
+
+[1]
+https://patchwork.kernel.org/project/netdevbpf/patch/20220309075944.32166-1-s-vadapalli@ti.com/
+
+Regards,
+Siddharth.
