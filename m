@@ -2,92 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E34963E26B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EBC663E275
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiK3VC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 16:02:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
+        id S229661AbiK3VFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 16:05:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiK3VCZ (ORCPT
+        with ESMTP id S229538AbiK3VFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 16:02:25 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC5E837ED;
-        Wed, 30 Nov 2022 13:02:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
-        t=1669842142; bh=gVzGEYVjD0h5I9/deBEqHQ2NmlqOqDxgiAHZGpIxWVs=;
-        h=X-EA-Auth:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
-         MIME-Version:Content-Transfer-Encoding;
-        b=es000FQP0pFBzLOxjLEKQGFCpMCpBPeA1m8bPE18E83gRC2rDVCcsTRpkNX/xykqy
-         u0R9Vc2d/fURgLSQ0jHuSA1ipydXQ0/ncba3Q/ujjaE77zXYQPOtwst4p9e5FPsK1c
-         C8p3kqoYxW+pOAxHsvr2W9YMRnYlNwofscc6Z9eQ=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via proxy.mailoo.org [213.182.55.207]
-        Wed, 30 Nov 2022 22:02:22 +0100 (CET)
-X-EA-Auth: npvI2yDxuBEDTjMfik9gmG6DPGyCOW1KAjRF/d2wxd+dCF6U1o7QEM8BkGz24Rpc5tGn+OzxDalVUMg9V87xLqHwwKFl14OZrfqD0Fr253Y=
-From:   Vincent Knecht <vincent.knecht@mailoo.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     w.david0@protonmail.com, stephan@gerhold.net,
-        phone-devel@vger.kernel.org
-Subject: [PATCH RESEND] Input: msg2638 - only read linux,keycodes array if necessary
-Date:   Wed, 30 Nov 2022 22:01:59 +0100
-Message-Id: <20221130210202.2069213-1-vincent.knecht@mailoo.org>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 16:05:45 -0500
+X-Greylist: delayed 1800 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Nov 2022 13:05:43 PST
+Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EDF285676;
+        Wed, 30 Nov 2022 13:05:43 -0800 (PST)
+Received: from wind.enjellic.com (localhost [127.0.0.1])
+        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 2AUKMMDE013659;
+        Wed, 30 Nov 2022 14:22:22 -0600
+Received: (from greg@localhost)
+        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 2AUKMKYG013658;
+        Wed, 30 Nov 2022 14:22:20 -0600
+Date:   Wed, 30 Nov 2022 14:22:20 -0600
+From:   "Dr. Greg" <greg@enjellic.com>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Evan Green <evgreen@chromium.org>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        linux-pm@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>, casey@schaufler-ca.com
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to kernel-only use
+Message-ID: <20221130202220.GA13122@wind.enjellic.com>
+Reply-To: "Dr. Greg" <greg@enjellic.com>
+References: <20221111231636.3748636-1-evgreen@chromium.org> <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid> <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com> <Y4ORZT2t/KhL5jfn@kernel.org> <53e3d7f9cc50e1fe9cf67e7889c6b5498580e5d9.camel@linux.ibm.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <53e3d7f9cc50e1fe9cf67e7889c6b5498580e5d9.camel@linux.ibm.com>
+User-Agent: Mutt/1.4i
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Wed, 30 Nov 2022 14:22:22 -0600 (CST)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The linux,keycodes property is optional.
-Fix the driver not probing when it's not specified.
+On Sun, Nov 27, 2022 at 11:41:26AM -0500, James Bottomley wrote:
 
-Fixes: c18ef50346f2 ("Input: msg2638 - add support for msg2138 key events")
-Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
----
-Resending because of mailing issue,
-ie. not appearing on mailing lists.
----
- drivers/input/touchscreen/msg2638.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+Good afternoon, I hope the week is going well for everyone.
 
-diff --git a/drivers/input/touchscreen/msg2638.c b/drivers/input/touchscreen/msg2638.c
-index 51b1c0e8a761..4c0816b09d33 100644
---- a/drivers/input/touchscreen/msg2638.c
-+++ b/drivers/input/touchscreen/msg2638.c
-@@ -412,13 +412,15 @@ static int msg2638_ts_probe(struct i2c_client *client)
- 		msg2638->num_keycodes = ARRAY_SIZE(msg2638->keycodes);
- 	}
- 
--	error = device_property_read_u32_array(dev, "linux,keycodes",
--					       msg2638->keycodes,
--					       msg2638->num_keycodes);
--	if (error) {
--		dev_err(dev, "Unable to read linux,keycodes values: %d\n",
--			error);
--		return error;
-+	if (msg2638->num_keycodes > 0) {
-+		error = device_property_read_u32_array(dev, "linux,keycodes",
-+						       msg2638->keycodes,
-+						       msg2638->num_keycodes);
-+		if (error) {
-+			dev_err(dev, "Unable to read linux,keycodes values: %d\n",
-+				error);
-+			return error;
-+		}
- 	}
- 
- 	error = devm_request_threaded_irq(dev, client->irq,
--- 
-2.38.1
+> On Sun, 2022-11-27 at 18:33 +0200, Jarkko Sakkinen wrote:
+> > On Mon, Nov 14, 2022 at 12:11:20PM -0500, James Bottomley wrote:
+> > > On Fri, 2022-11-11 at 15:16 -0800, Evan Green wrote:
+> > > > Introduce a new Kconfig, TCG_TPM_RESTRICT_PCR, which if enabled
+> > > > restricts usermode's ability to extend or reset PCR 23.
+> > > 
+> > > Could I re ask the question here that I asked of Matthew's patch
+> > > set:
+> > > 
+> > > https://lore.kernel.org/all/b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com/
+> > > 
+> > > Which was could we use an NVRAM index in the TPM instead of a PCR???
+> > > The reason for asking was that PCRs are rather precious and might
+> > > get more so now that Lennart has some grand scheme for using more
+> > > of them in his unified boot project.?? Matthew promised to play with
+> > > the idea but never got back to the patch set to say whether he
+> > > investigated this or not.
+> > 
+> > Even for PCR case it would be better to have it configurable through
+> > kernel command-line, including a disabled state, which would the
+> > default.
+> > 
+> > This would be backwards compatible, and if designed properly, could
+> > more easily extended for NV index later on.
+> 
+> Um how?  The observation is in the above referenced email is that PCR23
+> is reserved in the TCG literature for application usage.  If any
+> application is actually using PCR23 based on that spec then revoking
+> access to user space will cause it to break.  This is an ABI change
+> which is not backwards compatible.  You can call it a distro problem if
+> it's command line configurable, but the default would be what most
+> distros take, so it's rather throwing them under the bus if there is an
+> application using it.
+> 
+> Of course, if no application is actually using PCR23, then it's
+> probably OK to use it in the kernel and make it invisible to user
+> space, but no evidence about this has actually been presented.
 
+If there isn't, there will be in in the next week or so, if we can
+stay on schedule.  Otherwise, I fear that Casey Schaufler, who I
+believe is holding his breath, may turn irretrievably blue.... :-)
 
+The Trust Orchestration System, Quixote, that we are releasing for
+Linux uses PCR23 to generate an attestation of the functional state
+value for an internally modeled security domain.
 
+TSEM, the LSM based kernel component in all of this, supports the
+ability to implement multiple 'domains', nee namespaces, each of which
+can have a security modeling function attached to it.  Each internally
+modeled domain has to have the ability to independently attest the
+functional value of the security model implemented for the
+domain/namespace.
+
+We have found, and I believe others will find that, particularly the
+resettable registers, are too precious to be constrained from general
+usage.  We actually just finished lifting the PCR23 extension
+functionality out of the TSEM driver and into userspace because having
+it in the kernel was too constraining.
+
+With respect to making the behavior a command-line option.  We've
+slogged through 2+ years of conversations with sizable players who
+have indicated that if the 'distys' don't implement something, it
+isn't a relevant Linux technology, so a command-line option poses a
+barrier to innovation.
+
+> James
+
+Have a good day.
+
+As always,
+Dr. Greg
+
+The Quixote Project - Flailing at the Travails of Cybersecurity
