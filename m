@@ -2,190 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B0163D164
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8F663D168
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbiK3JH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 04:07:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40284 "EHLO
+        id S230356AbiK3JIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 04:08:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiK3JHX (ORCPT
+        with ESMTP id S230260AbiK3JIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 04:07:23 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B811D48431
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:07:22 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id d128so20712684ybf.10
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:07:22 -0800 (PST)
+        Wed, 30 Nov 2022 04:08:16 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9FB317D2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:08:15 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id h10so3433578ljk.11
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:08:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jJSr80xd14hM4bQ3tRuzX8E5Pgbji3RMWt3595HPw/M=;
-        b=ZSOHFZhP0BNRp1bYpzYsOZCbn7yjIhSPeKFz/exhlVafB40IHkpKTZUxSoCunbKD5G
-         jwPVJJMER2gJU0ZpoPKPmU2xMpunpkEbi0jcUonyQWFQAb0lgQYMgy9wfFWCvIk9dO8+
-         XD6Gq4efZBd2IOKSmiXVt1CvJBhe91Sym3iVjHGTeZ4JmTKtH/Hcp3pIwTwu3OoNtiRI
-         r4yUcM53ork5jlYSTREDUBm44J7OOe+XeT0jdgRlG+hTAJplcgouYCPUmhh+u0qNVxH4
-         JIWn4aMFOjXduCjlm/SiN30OLwgLE/bSpnZTij5BRH8veCmtK58DEcpg4o/qgyNckbEm
-         x1qQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bik6TT2i9Vj5K+t2eRzxUcLiyFVx0MQXz0h6XwsVogM=;
+        b=mPmMPUZxuC7l/Tcc+dBgioqnRaRa0D0FoqaQOYbwN8D3+FCZ3IUnDD7bwzz7fYnTvk
+         3yl53k+4nj+2z5v/UckpqtYIuxeMH2K1EUbin2EN55rHMJSG4RcWyYjZ3HjWdJyXAax6
+         eQsG5XFz3aBdRKOLQ9SXoJnmcytpOp+M9yaFDbkSv5J6ommalxFqSVBR9bqos31KC6av
+         XiA+sy4Wgae/zF/dLx7rMo+CionAk+pTQkdAF5HU4g15Stpvuq44dhbDeIe9aAi2CqHE
+         iEpesI6VZcENQfWmXptocflcjfB50mJtMJ3G8iJA9iRGlFOd3W5/KcGNBmdGbf8YcXFL
+         gnag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jJSr80xd14hM4bQ3tRuzX8E5Pgbji3RMWt3595HPw/M=;
-        b=DPR4apHW0g9M+v+OjtAWe1yroIFMbCcorLyeknoZTHNR31Q9sSZ2iw9vQRJUKjwmTx
-         /uyL9u/jvqg5FfRHB+dqCk54TF5CBGFzHsFZLm6H37hzlpbg/hA43frs62xxPIf2AChP
-         rshkI+Ko3O0PskzIBKXVITm1uCvMBg/mbyrmuN8DsIMe5hleBuuub+Nyf+2rO9/TH4AR
-         l8pxKf2nRRsKYXLQL+Q4rJW5tc/qkcAWN9nMT/dxLnpNCNaTbBROjdNNYBsGRllC/Tnh
-         oU1iLx3AFlnWlIkVx4TMO5/kxsk9FOEWSI8875Yr0TcDDinZ++0PDROpt/ZoK3czt+EX
-         WLrA==
-X-Gm-Message-State: ANoB5pkml38E3W9ULxvq05XCPQPnpwscck9njrYmGx+xRDBbgaSkMMdg
-        +v6xmFx8ru0qp6OJc3t+TQvYLfzGnt5ecpyIOfz2LQ==
-X-Google-Smtp-Source: AA0mqf4u7IvscwvjWc6mp50qyMHqXDemV28o+bInv4IsCPPw0ZzMuci0LUCfr6h2SM1KaNPafp3I7FviAPMR5nEmlz4=
-X-Received: by 2002:a25:918a:0:b0:6f7:9c34:67a7 with SMTP id
- w10-20020a25918a000000b006f79c3467a7mr10896480ybl.16.1669799241764; Wed, 30
- Nov 2022 01:07:21 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bik6TT2i9Vj5K+t2eRzxUcLiyFVx0MQXz0h6XwsVogM=;
+        b=ZqzR/VKx8mhbYxDHJqvEXOdzjMwXdG5yPp6i5gsCzIH1RwFK45gtjZwoafN9D2cPPg
+         jAIN8R5lvzyR7vFfilnfaxBQWU3Ws+qJnZgH4Ogwv5/tMlJXs8CYYM1E1zWaD30T6tOe
+         vIeypZfc4iQT0hd5UCFVdrAE6XnsEbfPW/vacbVyOHb3XjwGabcfUFVrOrxJhQWhf1u5
+         0BbEEwLZxzUehllDFQu2WR80Hn9gwIZJbAE/tRYfFeKEgwY5Rv+2JjvPTUnbhgdYXYJP
+         kWJYhvhC5j9r1sbyvDpiNrKhq9TyU3VUtWsbYGQFL3R9NwqHZj2nuFz/VjVm5wGF9ZzD
+         touw==
+X-Gm-Message-State: ANoB5pnZDdoW3j5/+D/7YdLZkI3XVnirwwmk80Ks+S+/YGoYSV0Xd0QM
+        iy1ax06c+qf+ePTT/tukNUfQwQ==
+X-Google-Smtp-Source: AA0mqf6NCA6yu+P9dbo+rNNBrMl51Mjly+oRbmjw0M3xfZDbotMi0I3GxWkQgayN0qBz2BQ5RpkEiw==
+X-Received: by 2002:a05:651c:10a1:b0:279:8211:d8fa with SMTP id k1-20020a05651c10a100b002798211d8famr9472031ljn.448.1669799293648;
+        Wed, 30 Nov 2022 01:08:13 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id t15-20020a056512208f00b004b4ec76016esm176696lfr.113.2022.11.30.01.08.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 01:08:12 -0800 (PST)
+Message-ID: <7b3f97f9-34af-413c-aaad-9108b4f36c51@linaro.org>
+Date:   Wed, 30 Nov 2022 10:08:11 +0100
 MIME-Version: 1.0
-References: <20221130085451.3390992-1-feng.tang@intel.com>
-In-Reply-To: <20221130085451.3390992-1-feng.tang@intel.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 30 Nov 2022 10:06:45 +0100
-Message-ID: <CANpmjNM_sKe0D64y+hsX0gYa8d9aCRVMBZjCvgjKcHPeYsjjBQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] mm/slub, kunit: add SLAB_SKIP_KFENCE flag for
- cache creation
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oliver Glitta <glittao@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 2/3] dt-bindings: leds: add dt schema for
+ worldsemi,ws2812b-spi
+Content-Language: en-US
+To:     Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221129140955.137361-1-gch981213@gmail.com>
+ <20221129140955.137361-3-gch981213@gmail.com>
+ <98b72494-3188-76d5-2e24-9dc127a8b31a@linaro.org>
+ <CAJsYDVJknDWKMW1tH0M=85tJOPG-HngxhhMzvJpk5qn_Q9mzAg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAJsYDVJknDWKMW1tH0M=85tJOPG-HngxhhMzvJpk5qn_Q9mzAg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Nov 2022 at 09:57, Feng Tang <feng.tang@intel.com> wrote:
->
-> When kfence is enabled, the buffer allocated from the test case
-> could be from a kfence pool, and the operation could be also
-> caught and reported by kfence first, causing the case to fail.
->
-> With default kfence setting, this is very difficult to be triggered.
-> By changing CONFIG_KFENCE_NUM_OBJECTS from 255 to 16383, and
-> CONFIG_KFENCE_SAMPLE_INTERVAL from 100 to 5, the allocation from
-> kfence did hit 7 times in different slub_kunit cases out of 900
-> times of boot test.
->
-> To avoid this, initially we tried is_kfence_address() to check this
-> and repeated allocation till finding a non-kfence address. Vlastimil
-> Babka suggested SLAB_SKIP_KFENCE flag could be used to achieve this,
-> and better add a wrapper function for simplifying cache creation.
->
-> Signed-off-by: Feng Tang <feng.tang@intel.com>
+On 30/11/2022 09:36, Chuanhong Guo wrote:
+> Hi!
+> 
+> On Wed, Nov 30, 2022 at 12:54 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>> +description: |
+>>> +  WorldSemi WS2812B is a individually addressable LED chip that can be chained
+>>> +  together and controlled individually using a single wire.
+>>> +  This driver simulates the protocol used by this LED chip with SPI bus.
+>>
+>> Drop references to Linux driver, unless important for the binding.
+> 
+> I think the SPI part is important. (I'll explain it below.) What about:
+> 
+> This binding describes a chain of WS2812B LEDs connected to the SPI MOSI pin.
+> 
+> instead?
 
-Reviewed-by: Marco Elver <elver@google.com>
+OK
 
-> ---
-> Changelog:
->
->   since v2:
->     * Don't make SKIP_KFENCE an allowd flag for cache creation, and
->       solve a bug of failed cache creation issue (Marco Elver)
->     * Add a wrapper cache creation function to simplify code
->      including SKIP_KFENCE handling (Vlastimil Babka)
->
->  lib/slub_kunit.c | 35 +++++++++++++++++++++++++----------
->  1 file changed, 25 insertions(+), 10 deletions(-)
->
-> diff --git a/lib/slub_kunit.c b/lib/slub_kunit.c
-> index 7a0564d7cb7a..5b0c8e7eb6dc 100644
-> --- a/lib/slub_kunit.c
-> +++ b/lib/slub_kunit.c
-> @@ -9,10 +9,25 @@
->  static struct kunit_resource resource;
->  static int slab_errors;
->
-> +/*
-> + * Wrapper function for kmem_cache_create(), which reduces 2 parameters:
-> + * 'align' and 'ctor', and sets SLAB_SKIP_KFENCE flag to avoid getting an
-> + * object from kfence pool, where the operation could be caught by both
-> + * our test and kfence sanity check.
-> + */
-> +static struct kmem_cache *test_kmem_cache_create(const char *name,
-> +                               unsigned int size, slab_flags_t flags)
-> +{
-> +       struct kmem_cache *s = kmem_cache_create(name, size, 0,
-> +                                       (flags | SLAB_NO_USER_FLAGS), NULL);
-> +       s->flags |= SLAB_SKIP_KFENCE;
-> +       return s;
-> +}
-> +
->  static void test_clobber_zone(struct kunit *test)
->  {
-> -       struct kmem_cache *s = kmem_cache_create("TestSlub_RZ_alloc", 64, 0,
-> -                               SLAB_RED_ZONE|SLAB_NO_USER_FLAGS, NULL);
-> +       struct kmem_cache *s = test_kmem_cache_create("TestSlub_RZ_alloc", 64,
-> +                                                       SLAB_RED_ZONE);
->         u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
->
->         kasan_disable_current();
-> @@ -29,8 +44,8 @@ static void test_clobber_zone(struct kunit *test)
->  #ifndef CONFIG_KASAN
->  static void test_next_pointer(struct kunit *test)
->  {
-> -       struct kmem_cache *s = kmem_cache_create("TestSlub_next_ptr_free", 64, 0,
-> -                               SLAB_POISON|SLAB_NO_USER_FLAGS, NULL);
-> +       struct kmem_cache *s = test_kmem_cache_create("TestSlub_next_ptr_free",
-> +                                                       64, SLAB_POISON);
->         u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
->         unsigned long tmp;
->         unsigned long *ptr_addr;
-> @@ -74,8 +89,8 @@ static void test_next_pointer(struct kunit *test)
->
->  static void test_first_word(struct kunit *test)
->  {
-> -       struct kmem_cache *s = kmem_cache_create("TestSlub_1th_word_free", 64, 0,
-> -                               SLAB_POISON|SLAB_NO_USER_FLAGS, NULL);
-> +       struct kmem_cache *s = test_kmem_cache_create("TestSlub_1th_word_free",
-> +                                                       64, SLAB_POISON);
->         u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
->
->         kmem_cache_free(s, p);
-> @@ -89,8 +104,8 @@ static void test_first_word(struct kunit *test)
->
->  static void test_clobber_50th_byte(struct kunit *test)
->  {
-> -       struct kmem_cache *s = kmem_cache_create("TestSlub_50th_word_free", 64, 0,
-> -                               SLAB_POISON|SLAB_NO_USER_FLAGS, NULL);
-> +       struct kmem_cache *s = test_kmem_cache_create("TestSlub_50th_word_free",
-> +                                                       64, SLAB_POISON);
->         u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
->
->         kmem_cache_free(s, p);
-> @@ -105,8 +120,8 @@ static void test_clobber_50th_byte(struct kunit *test)
->
->  static void test_clobber_redzone_free(struct kunit *test)
->  {
-> -       struct kmem_cache *s = kmem_cache_create("TestSlub_RZ_free", 64, 0,
-> -                               SLAB_RED_ZONE|SLAB_NO_USER_FLAGS, NULL);
-> +       struct kmem_cache *s = test_kmem_cache_create("TestSlub_RZ_free", 64,
-> +                                                       SLAB_RED_ZONE);
->         u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
->
->         kasan_disable_current();
-> --
-> 2.34.1
->
+> 
+>>> +  Typical setups includes connecting the data pin of the LED chain to MOSI as
+>>> +  the only device or using CS and MOSI with a tri-state voltage-level shifter
+>>> +  for the data pin.
+>>> +  The SPI frequency needs to be 2.105MHz~2.85MHz for the timing to be correct
+>>> +  and the controller needs to send all the bytes continuously.
+>>> +
+>>> +allOf:
+>>> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: worldsemi,ws2812b-spi
+>>
+>> Drop "-spi". Compatibles are not supposed to include bus information.
+>> The same for file name.
+> 
+> WS2812B isn't a SPI chip. It's controlled with only a single wire and
+> can be driven
+> using anything that can produce a long and a short pulse meeting its timing
+> requirement.
+> This driver uses a SPI bus to send the pulses, but it can also be
+> controlled with
+> I2S and the PIO pins on a Raspberry Pi Pico.
+> This spi suffix is to distinguish it from other possible
+> implementations if someone
+> else submits a support with a different peripheral.
+
+And that's exactly what I said - the compatibles should not include bus
+information. The bus information comes from... the bus!
+
+> 
+>>
+>>> +
+>>> +  reg:
+>>> +    description: The chip-select line on the SPI bus
+>>
+>> Drop description, it's obvious.
+> 
+> OK.
+> 
+>>
+>>> +    maxItems: 1
+>>> +
+>>> +  spi-max-frequency:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    description:
+>>> +      Maximum SPI clocking speed of the device in Hz.
+>>
+>> No need for ref and description. It comes from spi-peripheral-props.
+> 
+> OK.
+> 
+>>
+>>> +    minimum: 2105000
+>>> +    maximum: 2850000
+>>> +
+>>> +  "#address-cells":
+>>> +    const: 1
+>>> +
+>>> +  "#size-cells":
+>>> +    const: 0
+>>> +
+>>> +patternProperties:
+>>> +  "^multi-led(@[0-9a-f])?$":
+>>
+>> Why unit address is optional?
+> 
+> It isn't. I copy-pasted it from led-class-multicolor.yaml and
+> didn't check the exact regex.
+> I'll fix it in the next version.
+
+Make it required and matching your case.
+
+> 
+>>
+>>> +    type: object
+>>> +    $ref: leds-class-multicolor.yaml#
+>>
+>>     unevaluatedProperties: false
+> 
+> OK.
+> 
+>>> +
+>>> +    properties:
+>>> +      color-index:
+>>> +        description: |
+>>> +          A 3-item array specifying color of each components in this LED. It
+>>> +          should be one of the LED_COLOR_ID_* prefixed definitions from the
+>>> +          header include/dt-bindings/leds/common.h. Defaults to
+>>> +          <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>
+>>> +          if unspecified.
+>>> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+>>> +        minItems: 3
+>>
+>> Drop minItems.... but see comment below:
+>>
+>>> +        maxItems: 3
+>>
+>> Why this is different than other multi-color LEDs? I would expect here
+>> children with common.yaml.
+> 
+> WS2812B is a single LED package with 3 diodes and a microcontroller.
+> Each LED package has 3 colors. The original chip comes with GRB
+> color while there are some clones with RGB arrangement instead.
+> The LED chain can be really long so I'd like to simplify the binding
+> by using a single property to override the only variable, color, here.
+
+OK, that makes sense.
+
+> 
+>>
+>>> +
+>>> +      default-intensity:
+>>> +        description: |
+>>> +          An array of 3 integer specifying the default intensity of each color
+>>> +          components in this LED. <255 255 255> if unspecified.
+>>> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+>>> +        minItems: 3
+>>
+>> Drop minItems.... but:
+>>
+>>> +        maxItems: 3
+>>> +        items:
+>>> +          minimum: 0
+>>> +          maximum: 255
+>>
+>> default: 255
+>>
+>> What controls the intensity? Don't you have PWM there?
+> 
+> The LED takes 3-byte brightness value of each color. This property is used to
+> specify the default multi_intensity field for the multi-color LED. The final
+> brightness value is calculated with led_mc_calc_color_components like this:
+> 
+> mcled_cdev->subled_info[i].brightness = brightness *
+> mcled_cdev->subled_info[i].intensity / led_cdev->max_brightness;
+> 
+> The LED chip takes exactly 8 bits for the brightness (max_brightness = 255
+> which can't be changed.), so according to the formula above the maximum
+> intensity should be 255.
+
+So this is brightness of each color... why insisting on calling it
+differently?
+
+Best regards,
+Krzysztof
+
