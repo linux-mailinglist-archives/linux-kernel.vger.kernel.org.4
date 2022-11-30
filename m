@@ -2,110 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE9C63D152
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6A863D254
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiK3JBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 04:01:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35040 "EHLO
+        id S233925AbiK3JqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 04:46:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233823AbiK3JBD (ORCPT
+        with ESMTP id S233414AbiK3JqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 04:01:03 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066C145EC2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:01:02 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id c140so20688412ybf.11
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:01:01 -0800 (PST)
+        Wed, 30 Nov 2022 04:46:02 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9186A1D337;
+        Wed, 30 Nov 2022 01:46:01 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id d3so11149694plr.10;
+        Wed, 30 Nov 2022 01:46:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cbVbgsH3XRTQv4786z5ER1yQeEoNdKbadkVm9l1r2WM=;
-        b=jpfGnLgK/1cG6bBQcrKLMuOQiKzdWPOvTlsnIw4uqyLKQB3Y35J6A+P9dz0cdrlcqL
-         HZhqFeQZeMvQvtxffy0pO4SFOOtTnfGiHz1pI4HXacAFsoCyixjxNkZeTRAkvwOWNt8H
-         0oFPHx+yka4PGucML2TC7WFhenIczYDCYPuKrGShpC2xUii2XIkDcdTbN6tX7QI7hU6d
-         Z3jHz5Ke9gOYxM1shAuaNoHaGfnqgBrSo0Lc/qVPlibA/20nT3U+BgiwxJlNmeAO0Y1x
-         fZyiy16VZspf44UMuMkocJp6vfI/JNBdV1uvZzKxBJXgccR5LLuX1gMY3az9/Lp36mzj
-         jdCQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=+w/tU+ayhTwkehfOK8SHtMU808QnEhUkne08i443iwo=;
+        b=GPiGiD4M+pymUFT990D5jqPZdlbcZSruG5C354xy/PsGPCT3F6u/R/Dz2aVF7yIAnW
+         czJFIxQzc1HdNjo66a9ChzO6vFKiaXy6Fbb7qqHZEsPJtGbDmwZWpN8K3w5Jstwm878s
+         d4WZW1cr2lzKsiA8WK324+hGyXSogk56VD06B8nLIxIDu8iK28uYExiYS9b0/04Sy7HU
+         vaAVlLNCEj2LL8xAug1LgidmEWOhMuRWrDOzXuHJHraTUcXIjv2Ke72ytlb9Jn8YmZsd
+         5vnS/CxQ+jFG5ohQu4+3Ms1zE1PEoqW1rwSsw+rO6tgkJYOH87b2+2hDYJakqmEogbzO
+         rqPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cbVbgsH3XRTQv4786z5ER1yQeEoNdKbadkVm9l1r2WM=;
-        b=PgTVr4QxkYH+EUhZEp458EiArt8azdIW1CgSqRXgeOHwOPcLdUMj2EqCNzWP4ke7Id
-         yP0BT1Q4LnNWRlAEg47gWQwmpM2fx5mEARzE7aq2mbwteTTYxLHby97M74Vp+H6x0K1e
-         epQ+J5g9gAqc6CrHKel3t1ZSaI6px4l+UGS/tdTJ1WlM1RAUdlMq0naOOr7y12cCW5ul
-         KvyQXxlOXX67TAKGljAV6mlKVZE3Wpmk9uEtM9vkzBq8u6ZJB271je/WoEBwWN9GHOsJ
-         IG5i4Cg0xUAeyj8h2TYu4jtORsCJr10T17mOdKY8nCu9PinW2kjIvUeedCJRVm5AMCdc
-         M4qg==
-X-Gm-Message-State: ANoB5pmkbvj/5zsWi5Zj0dx6K91aSMdIGVcAqOLB0ku8Sa5kGVVRlJJx
-        9VrvORRMqpZ7gKsVen8fJhHT2MA/YIXzRGp+/CjnnVYQJjaTGw==
-X-Google-Smtp-Source: AA0mqf5nvJFCwC+Bm8UuGEcbvyqnBNs8xlBIAHq6KVDu3vmowiOFuVe2nCDzI5eQr+k/J/6u/NaNpmdNaQvvxoaXX/I=
-X-Received: by 2002:a25:a241:0:b0:6ee:e865:c2e2 with SMTP id
- b59-20020a25a241000000b006eee865c2e2mr36593660ybi.206.1669798861231; Wed, 30
- Nov 2022 01:01:01 -0800 (PST)
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+w/tU+ayhTwkehfOK8SHtMU808QnEhUkne08i443iwo=;
+        b=rlKeUnKd4yT2PhfjBdJBQydOHkuM7mLRgfycVXYkvyjYy0zjoBWTz/DqPCu+v6VG0E
+         kSGnYt1nOMmgDvqfL8SsVlSlL0N6sGQWhTiXdfvQ2/+4Y6oyQUECq7zMwFa+2lD0YmBt
+         Y09FDPGxT2JkZdRY1Y4cXzWQpBSEmtBo4k+NlIFJNlzB7DbtG1dcXlZ3NQoFN5DjEVRU
+         h6wdz5MAGMBrXBCLUsHU9r2E0it3cqamLaBQzCKuTQdGFKbiLBLU8gLTXJGPvpSQpPxB
+         0/EbH2+tRUjSibGvBg1EGK/RVL7BRIZ08ZcyqbQpj1dR+YQdYmu/saIAqefXGZKmEKAI
+         Lwpw==
+X-Gm-Message-State: ANoB5pkuLwmavdY0LkJTeM31ZPnbNjixPRjfWv9gQC1nUZxPRBRZvX4u
+        5yVk0XsTCVMAKoRK5Oj3bUw=
+X-Google-Smtp-Source: AA0mqf7tK9vXUEqI2FDTGVCOJFqDEG4Yorq6ZMneFnQ17ErDPUBAP+TM8MzmjoFH33rAZdYV4XG9fA==
+X-Received: by 2002:a17:90b:3c0a:b0:213:5de3:13e with SMTP id pb10-20020a17090b3c0a00b002135de3013emr70472277pjb.6.1669801560993;
+        Wed, 30 Nov 2022 01:46:00 -0800 (PST)
+Received: from MBP ([39.170.101.209])
+        by smtp.gmail.com with ESMTPSA id 24-20020a631358000000b004393f60db36sm676368pgt.32.2022.11.30.01.45.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 01:46:00 -0800 (PST)
+References: <20221129162251.90790-1-schspa@gmail.com>
+ <Y4aJzjlkkt5VKy0G@codewreck.org> <m2r0xli1mq.fsf@gmail.com>
+ <Y4b1MQaEsPRK+3lF@codewreck.org>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Schspa Shi <schspa@gmail.com>
+To:     asmadeus@codewreck.org
+Cc:     ericvh@gmail.com, lucho@ionkov.net, linux_oss@crudebyte.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, v9fs-developer@lists.sourceforge.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+8f1060e2aaf8ca55220b@syzkaller.appspotmail.com
+Subject: Re: [PATCH] 9p: fix crash when transaction killed
+Date:   Wed, 30 Nov 2022 16:14:32 +0800
+In-reply-to: <Y4b1MQaEsPRK+3lF@codewreck.org>
+Message-ID: <m2o7sowzas.fsf@gmail.com>
 MIME-Version: 1.0
-References: <BYAPR11MB3240F382BD180FF90C7DF0B9E1069@BYAPR11MB3240.namprd11.prod.outlook.com>
- <7de35859-97ab-8e88-f590-d5851b81773b@nvidia.com> <BYAPR11MB32405F4FA22BB47BD03C8F18E10C9@BYAPR11MB3240.namprd11.prod.outlook.com>
- <CACRpkdbY5aU3OTufA0q+N7Pwm0shGgnjScAGR_96oo9XdgBDhQ@mail.gmail.com> <BYAPR11MB3240CE6547117D138B1A112DE1129@BYAPR11MB3240.namprd11.prod.outlook.com>
-In-Reply-To: <BYAPR11MB3240CE6547117D138B1A112DE1129@BYAPR11MB3240.namprd11.prod.outlook.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 30 Nov 2022 10:00:49 +0100
-Message-ID: <CACRpkdbOPbqot+Yf6i_EayPrRn2S+ZTA1FzZ-0OkjXjR5UZvqw@mail.gmail.com>
-Subject: Re: Intel timed i/o driver in HTE
-To:     "N, Pandith" <pandith.n@intel.com>, Johan Hovold <johan@kernel.org>
-Cc:     Dipen Patel <dipenp@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hall, Christopher S" <christopher.s.hall@intel.com>,
-        "Gross, Mark" <mark.gross@intel.com>,
-        "Sangannavar, Mallikarjunappa" 
-        <mallikarjunappa.sangannavar@intel.com>,
-        "D, Lakshmi Sowjanya" <lakshmi.sowjanya.d@intel.com>,
-        "T R, Thejesh Reddy" <thejesh.reddy.t.r@intel.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "timestamp@lists.linux.dev" <timestamp@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 7:10 PM N, Pandith <pandith.n@intel.com> wrote:
 
-> Intel  timed i/o is mainly intended for couple of functionalities.
-> 1. Input event capture with timestamping
+asmadeus@codewreck.org writes:
 
-I understand this part, and it is handled by the HTE subsystem.
+> (fixed Christophe's address, hopefully that will do for good...)
+>
+> Schspa Shi wrote on Wed, Nov 30, 2022 at 10:22:44AM +0800:
+>> > I'm happy to believe we have a race somewhere (even if no sane server
+>> > would produce it), but right now I don't see it looking at the code.. :/
+>> 
+>> And I think there is a race too. because the syzbot report about 9p fs
+>> memory corruption multi times.
+>
+> Yes, no point in denying that :)
+>
+>> As for the problem, the p9_tag_lookup only takes the rcu_read_lock when
+>> accessing the IDR, why it doesn't take the p9_client->lock? Maybe the
+>> root cause is that a lock is missing here.
+>
+> It shouldn't need to, but happy to try adding it.
+> For the logic:
+>  - idr_find is RCU-safe (trusting the comment above it)
+>  - reqs are alloced in a kmem_cache created with SLAB_TYPESAFE_BY_RCU.
+>  This means that if we get a req from idr_find, even if it has just been
+>  freed, it either is still in the state it was freed at (hence refcount
+>  0, we ignore it) or is another req coming from the same cache (if
 
-> 2. Generate single shot or periodic pulse train
-(...)
-> c. Most importantly, precise time synchronization between devices/sub-systems
-> Ex : Share precise time from a GPS receiver to the network or
->        Synchronize processor clock with external signal.
+If the req was newly alloced(It was at a new page), refcount maybe not
+0, there will be problem in this case. It seems we can't relay on this.
 
-So I think this is the actual use case of the output mode. The
-pulse train output by HTE is to share precise time to GPS receivers.
+We need to set the refcount to zero before add it to idr in p9_tag_alloc.
 
-So what about putting that part into drivers/gnss?
-GNSS Global Navigation Satellite Subsystem like GPS etc
+>  refcount isn't zero, we can check its tag)
 
-If this is the only usecase, that is where it should go, along
-with the serial or whatever transport driver is used with the
-GPS. I don't think this is a generic functionality (such as
-GPIO) at all, but rather a very application-specific use case
-which will only be used for GPS time synchronization.
+As for the release case, the next request will have the same tag with
+high probability. It's better to make the tag value to be an increase
+sequence, thus will avoid very much possible req reuse.
 
-If the timed output has other use cases - and I mean HAVE
-other use cases, not COULD HAVE other use cases - then
-we can discuss generalizations. There is no point of designing
-upfront abstractions that never get used.
+>  The refcount itself is an atomic operation so doesn't require lock.
+>  ... And in the off chance I hadn't considered that we're already
+>  dealing with a new request with the same tag here, we'll be updating
+>  its status so another receive for it shouldn't use it?...
+>
+> I don't think adding the client lock helps with anything here, but it'll
+> certainly simplify this logic as we then are guaranteed not to get
+> obsolete results from idr_find.
+>
+> Unfortunately adding a lock will slow things down regardless of
+> correctness, so it might just make the race much harder to hit without
+> fixing it and we might not notice that, so it'd be good to understand
+> the race.
 
-Yours,
-Linus Walleij
+
+-- 
+BRs
+Schspa Shi
