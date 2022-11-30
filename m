@@ -2,290 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4954D63DA40
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C247F63DA45
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:11:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbiK3QK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 11:10:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
+        id S229693AbiK3QLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 11:11:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiK3QKw (ORCPT
+        with ESMTP id S229961AbiK3QLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 11:10:52 -0500
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E96384DD7;
-        Wed, 30 Nov 2022 08:10:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1669824647; x=1701360647;
-  h=message-id:date:mime-version:to:cc:from:subject:
-   content-transfer-encoding;
-  bh=0mlIFYiGzcmnF4ANRP+d5+8eu+s9EbbdJXDr2otTJLw=;
-  b=fSYCNNh0Pu0zGDq7WnmLCeUajlLjuLSKXj6ikATlF65K1dMkmzBUZfW/
-   roGBjmgNVvCnS8WTpY/f3cdo1LVISlAz2Qc3dapXSND/6dXDriXuHDav0
-   qVTmN8YRey1wQYgyAz3Bukj7NrrBiQChdSLgV3pb/RPLstNQ+E5Q1I1Du
-   Y=;
-X-IronPort-AV: E=Sophos;i="5.96,206,1665446400"; 
-   d="scan'208";a="156449488"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-d47337e0.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 16:10:47 +0000
-Received: from EX13MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2a-m6i4x-d47337e0.us-west-2.amazon.com (Postfix) with ESMTPS id 5A0E6610BE;
-        Wed, 30 Nov 2022 16:10:46 +0000 (UTC)
-Received: from EX19D002UWC004.ant.amazon.com (10.13.138.186) by
- EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Wed, 30 Nov 2022 16:10:45 +0000
-Received: from [192.168.21.241] (10.43.162.134) by
- EX19D002UWC004.ant.amazon.com (10.13.138.186) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.20;
- Wed, 30 Nov 2022 16:10:45 +0000
-Message-ID: <9b23e9d4-7c7a-a74f-3a6b-939a4a469c2b@amazon.com>
-Date:   Wed, 30 Nov 2022 08:10:43 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
+        Wed, 30 Nov 2022 11:11:24 -0500
+Received: from DM4PR02CU001-vft-obe.outbound.protection.outlook.com (mail-centralusazon11022025.outbound.protection.outlook.com [52.101.63.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C064884DD2;
+        Wed, 30 Nov 2022 08:11:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EmT2+6066PNkDbpVEBvcFntRZGQqv4v1Caodr6q6ez9dSYaXuRC9oDG6hkn1Fk9DLN06F27vwBHkmU/Uv22NzQi6I2bCbWka3E8rL3EgWbdmhKlfPWW4g/h3nAQR0iZKLLQFYW1vNSTQAynF3YEI9XVblHht1uHx7Mv+LQn7wAH8O/F25bU2HIf/WBghRjtxg2e7QzPld/TyxYg0rmTlwODmzF9SQHwGVjO7YRjUHuIcm0WZgDJnPDwSS2/44pKXWtl2g3ONmbmk/erl8PP7T9ZX6w2kuWBL3ljjsy2Am4At7hxLkT0AUgd43hC2/TUJ4cKzB70BfbLuO3CzTFFMzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G2un+YaYUrYcPyG/w1JniPYtm1LjFzWwURIaJT4UpIY=;
+ b=VYhNY8MApF7sbrpSC+iSZNXhDpEHg3lDK2aoYkUfRyANoGswRHC5IpCuKwWgd5J6YRyHOIyhfLlx211v1vnA/X6bPVVkxcIK54lMMlX0y2v3bE4a5jH8YnlHYJlNXtV8xIa7Cmd4f9gjyiLFuhqtC5GmbQZkITVl0h+1nv5WtIRlkkex7kEBDmNG/xly+KmGt4oPnxikTSrvHN63HN8Q7q6X1wlJdhu5g8sLKxJTuRQQeZHKfuqq5vOmhhhc+K+Dv6uV58sLBOnJlRk07KjnfcDAmR6w+Fl8TjF3H4W0+ZFV1k5v40C+bHsnR/o7GgzIGRo9+qeszkS+FCMD07hPCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G2un+YaYUrYcPyG/w1JniPYtm1LjFzWwURIaJT4UpIY=;
+ b=i6Q2Zc/gkyPSP1ZeWnPreEwzh9t7hVk8LglNUYaNGt2TvKEzHe3XY/yPv/IDnKoBzTIwo+vScajeYFE0XhSUn4AtfXB29f1iPXbTrRHpocuFRvvoTfMa8QV5xUhGazMBdd6lMRWYad8AowLcYZmem1V1OGC5I1PjBwSSg4gwPhY=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by MN0PR21MB3171.namprd21.prod.outlook.com (2603:10b6:208:37b::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5901.4; Wed, 30 Nov
+ 2022 16:11:18 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::1e50:78ec:6954:d6dd]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::1e50:78ec:6954:d6dd%6]) with mapi id 15.20.5880.008; Wed, 30 Nov 2022
+ 16:11:18 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: RE: [Patch v3 07/14] x86/hyperv: Change vTOM handling to use standard
+ coco mechanisms
+Thread-Topic: [Patch v3 07/14] x86/hyperv: Change vTOM handling to use
+ standard coco mechanisms
+Thread-Index: AQHY+es2O4adbWIH8UyWtCwRyUnUyq5JgOOAgAHDpcCAAEhFgIAAJ7oQgAjDHRCAACLagIAAALfwgAANigCAAAHQEIAAKJ+AgABUTmCAAIE5AIAAb5XAgAApEACAAXbTMA==
+Date:   Wed, 30 Nov 2022 16:11:18 +0000
+Message-ID: <BYAPR21MB168891CB2831C9BAF829EADBD7159@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <BYAPR21MB16886FF8B35F51964A515CD5D70C9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <BYAPR21MB1688AF2F106CDC14E4F97DB4D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4Ti4UTBRGmbi0hD@zn.tnic>
+ <BYAPR21MB1688466C7766148C6B3B4684D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4Tu1tx6E1CfnrJi@zn.tnic>
+ <BYAPR21MB1688BCC5DF4636DBF4DEA525D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4USb2niHHicZLCY@zn.tnic>
+ <BYAPR21MB16886FF5A63334994476B6ADD7129@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4XFjqEATqOgEnR6@zn.tnic>
+ <BYAPR21MB1688D73FBBF41B6E21265DA3D7129@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4ZFmktxPlEjyoeR@zn.tnic>
+In-Reply-To: <Y4ZFmktxPlEjyoeR@zn.tnic>
+Accept-Language: en-US
 Content-Language: en-US
-To:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <srinivas.pandruvada@linux.intel.com>, <lenb@kernel.org>
-CC:     <surajjs@amazon.com>
-From:   "Bhatnagar, Rishabh" <risbhat@amazon.com>
-Subject: Using nr_cpus breaks no_turbo setting of pstate driver
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.43.162.134]
-X-ClientProxiedBy: EX13D35UWB004.ant.amazon.com (10.43.161.230) To
- EX19D002UWC004.ant.amazon.com (10.13.138.186)
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=4d8ac474-9661-4173-b112-bd1a32d94ebd;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-30T16:08:38Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|MN0PR21MB3171:EE_
+x-ms-office365-filtering-correlation-id: f1bed3aa-93cf-45bd-a5d8-08dad2ed839d
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ngeZelr/5IkfH3kbtD83LLGdjGhe6u8LN0PWeKcLW3CenXuBvJ1dFkWfgU6lPQ8IhZz8MZMRBEtEkReD4W0T7F7Gp267ra80qEaqSs4K8K/oNkIka7WlLVLJMpSJV3eONhz2ZHWLV99ee73X3xIAqZD2uBUiSaQ9lLpR+22DN0WHHtHmFi6QBWU8/W35+tVWl93koszy6MhoxDWE0zYOuugaLzELSx3tALyTqHUU92p/MHNRQ9BIjl5jiLv2KCpX3DiVtGc8jk3viMWlY9QpUFEWY329Rv76bxybMCPHU716QnVU+5tE+tpdN6rIqD04Copp4mOFQFj9V2wmXD7NkWU6NGJ7vX2HdrPzaqKr4JLAVXSuESiso9ptq5mrjR0qihNBb5AQ0irg7LDDDBdkQ04/P8DPrv4bSrlVlAj6e9TD3WW8BZQ7RFULAQFZwhNVwBjjqFFXwp38LNJe7Yvupe+AzMrkrgAR03OSnw87R7GK15L4tV+KTKQUK9tpgYERWc9IaugwfNjrGnEWRrqGH+E/4q07GLkguydcoB6P8qKZ0ibx/9v5psGBXJDEvJj5iv+Uv4coFSgtJuH2T1B7EP/k6KUhI1i52x6uZhGhA13tX7FAVRU8Mep1jf3sq44AXxtLigDdTyE5tVMnyOnjXNduKPjMsmdRm/LaI8IiruHL64DBYCklr4fAnW2zmUa390mfi/yX0GLAlkE1R5mzp/1Rci8Sx7s5nDph+4wgq+WsTQhhHZ6DJ7O+nT5wLn1v
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(136003)(366004)(376002)(396003)(451199015)(38100700002)(33656002)(122000001)(55016003)(54906003)(86362001)(38070700005)(82960400001)(82950400001)(9686003)(26005)(6916009)(316002)(71200400001)(478600001)(10290500003)(6506007)(7696005)(8676002)(2906002)(5660300002)(7406005)(7416002)(4326008)(66476007)(76116006)(64756008)(66556008)(52536014)(66446008)(66946007)(41300700001)(186003)(8990500004)(8936002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?iEJNhDpofC0yQuSb2BF4BqEyFjf2dQX62VSPsMfpYCmomyHQZDCWSKnjyaOG?=
+ =?us-ascii?Q?zsa3TYCh/ji35tiearDnXgxfCdMrHQVB5xTKGSe8fgG+uDKQFiujtoQYDuhl?=
+ =?us-ascii?Q?v6GHM0l1nsysQ34HUdRk8q9QXnWkfR30m/nW1iuFWjwD+GHusHcwzMgu0JWb?=
+ =?us-ascii?Q?ki8EeU5vae/xUxtQQVbEjmrWxT/+T4M57YMUSh5oDUGHg6RcJ2ESl80JlUlk?=
+ =?us-ascii?Q?uS8/EHK7LGobrLJqDeTg/7C9hxt5C084maYic/dMeBVHZj7JuCBzZbdSuliR?=
+ =?us-ascii?Q?fsAD1oBhU2OMYE2hVXha6gn4125NI3n3um6474q3XVAIhG0ZgWvdRef/X2ct?=
+ =?us-ascii?Q?x1El+fkl/VVEBO0UPjn99w+eQ4NpL3fZtkQML7IL0tg+2ChiTRo2By+ILOF2?=
+ =?us-ascii?Q?GrhGf35326Pi4YHZ2szXhiSfnmo4BJ7dJKJaJl+JfOc4/BCRyUdQyAUTq2Ot?=
+ =?us-ascii?Q?Z6E9JyuxXPPJiPnwKBkHrLS7vM2auBK1QDHdawGDW7kp6P/Tfqtq6oY8pd59?=
+ =?us-ascii?Q?hOyhseOJ/EFvy6QV6qlJsow0h1WP6/zjwvbBJJAlyWWzdv7csAX/6/1x6IDq?=
+ =?us-ascii?Q?VVJ/t8RBr/xefvZ25tQfIugNpE4TJHysEzSM8H1m72ZGXP2f1hl0Xovc3fX1?=
+ =?us-ascii?Q?bnCrnu7ng+6mJ2hwdiAINPvduXAESrXYzKIrcP2hPCYa35cbMwNkwtJ0avfz?=
+ =?us-ascii?Q?m7rUef1worYQpxeIBsx7XNSV2Z/dSLl0PJvV1e9VYYCh0O4OWu2e0HaxEF15?=
+ =?us-ascii?Q?zViDV9dAHxwiccRJuy8pVurtS4tK6P9a8GheZqBam3nb4D0jZDQb66HmVOXy?=
+ =?us-ascii?Q?JKoSXGHoO5YbF9RR7EINR1ibFNuz6ADDy6mrgcMyUaE7nEq/p/fOtgzpsd2w?=
+ =?us-ascii?Q?Mtm12kjuJLmRniAjl5a4j+CnZQhksuARdknV6FzSLwi/9u3CPgB6zYLDkSsS?=
+ =?us-ascii?Q?F7R++0dNcojkUeTe8E5nkE5ArCdz70La5SMq6ayfg8qSodTUzcLHanv/sjhB?=
+ =?us-ascii?Q?ioO7DUSCaxon24Mz/UgT7SgQWZS0qFdk5q6CZJnBmZR2qNSi2OIrxkB0asSq?=
+ =?us-ascii?Q?uPsu9d1FBd6w9wBJNS0AJrG3PIjLfhcRDgBhcoJfaARzaF7iQr+x6E85viIb?=
+ =?us-ascii?Q?fVXKrovf5poMdgPjJTSRAKwDv87MM1nftjd+VCgnoTt27Wk6Eiq80yfoGUSh?=
+ =?us-ascii?Q?ijblIYW7SohBX60Q1La85Obdbrmo7iDRSO8uZtGisE9J3zPN4Yt5O51jdsCM?=
+ =?us-ascii?Q?iN//i2f7rHGsBGYkQ5wjp15PI/kcVSdXBZ+Oqosco8Wyv13DRCxKPAGiniCK?=
+ =?us-ascii?Q?zXw6W+jmIKP4JE6ISSOJsq82i035vHdueomrXcmibLEo5I2uVey2v7euJCKe?=
+ =?us-ascii?Q?wP2UQeZzFSVj/Uy64yvV/1pD10siPcExB77HxHOXQA8jaK6KXOqbid+yckus?=
+ =?us-ascii?Q?1C/53Nu2FKfUxa6skTFhnD1JpwdI+3SRgA+yFNlO814Vwuz/mRdon6VVcRiP?=
+ =?us-ascii?Q?RDogE5RWiWdBvTqsygsLOiXqIVSi9CNyz4QiYLfeUa1j/cg+yhcT6Sa98kFG?=
+ =?us-ascii?Q?BWYKqPdOAa3Rtg4PgMEGZovu51BdQ/jKXgJb2p84cW/aIk9SN7fN84YbGl+y?=
+ =?us-ascii?Q?cQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1bed3aa-93cf-45bd-a5d8-08dad2ed839d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2022 16:11:18.3182
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uvGkZMQGOXQCeDBYEmXaDXbFf5hF2i90uYC/Fvp+DQd82jK/jukELL3AfibWX0njzXa69S0W/eXDNcts0wXnjO+BCrw+defhiO8J9yViFbs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR21MB3171
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Having some issue with my mails failing to deliver. So trying once 
-again after disabling HTML."
+From: Borislav Petkov <bp@alien8.de> Sent: Tuesday, November 29, 2022 9:47 =
+AM
+>=20
+> On Tue, Nov 29, 2022 at 03:49:06PM +0000, Michael Kelley (LINUX) wrote:
+> > But it turns out that AMD really has two fairly different schemes:
+> > the C-bit scheme and the vTOM scheme.
+>=20
+> Except it doesn't:
+>=20
+> "In the VMSA of an SNP-active guest, the VIRTUAL_TOM field designates
+> a 2MB aligned guest physical address called the virtual top of memory.
+> When bit 1 (vTOM) of SEV_FEATURES is set in the VMSA of an SNP-active
+> VM, the VIRTUAL_TOM..."
+>=20
+> So SEV_FEATURES[1] is vTOM and it is part of SNP.
+>=20
+> Why do you keep harping on this being something else is beyond me...
+>=20
+> I already pointed you to the patch which adds this along with the other
+> SEV_FEATURES.
+>=20
+> > The details of these two AMD schemes are pretty different. vTOM is
+> > *not* just a minor option on the C-bit scheme. It's an either/or -- a
+> > guest VM is either doing the C-bit scheme or the vTOM scheme, not some
+> > combination. Linux code in coco/core.c could choose to treat C-bit and
+> > vTOM as two sub-schemes under CC_VENDOR_AMD, but that makes the code a
+> > bit messy because we end up with "if" statements to figure out whether
+> > to do things the C-bit way or the vTOM way.
+>=20
+> Are you saying that that:
+>=20
+> 	if (cc_vendor =3D=3D CC_VENDOR_AMD &&
+> 	    sev_features & MSR_AMD64_SNP_VTOM_ENABLED)
+>=20
+> is messy? Why?
+>=20
+> We will have to support vTOM sooner or later.
+>=20
+> > Or we could model the two AMD schemes as two different vendors,
+> > which is what I'm suggesting.  Doing so recognizes that the two schemes
+> > are fairly disjoint, and it makes the code cleaner.
+>=20
+> How is that any different from the above check?
+>=20
+> You *need* some sort of a check to differentiate between the two anyway.
+>=20
 
+Alright.  Enough conceptual debate.  I'll do a v4 of the patch series with
+the AMD C-bit and vTOM schemes folder under CC_VENDOR_AMD and
+we can see if there's any further feedback.  I should have that v4 out late=
+r
+today or tomorrow.
 
-Hi Srinivas/Len,
-
-
-I have been doing some testing on m5zn.metal AWS instances which 
-provides 48 vcpus and 192GB memory.
-
-Test includes loading all cpus with maximum capacity (using stress) and 
-observing the frequency after enabling and disabling turbo frequencies. 
-Intel_pstate is enabled with hwp.
-
-
-lscpu output for reference:
-
-*# lscpu*
-Architecture:        x86_64
-CPU op-mode(s):      32-bit, 64-bit
-Byte Order:          Little Endian
-CPU(s):              48
-On-line CPU(s) list: 0-47
-Thread(s) per core:  2
-Core(s) per socket:  12
-Socket(s):           2
-NUMA node(s):        2
-Vendor ID:           GenuineIntel
-CPU family:          6
-Model:               85
-Model name:          Intel(R) Xeon(R) Platinum 8252C CPU @ 3.80GHz
-Stepping:            7
-CPU MHz:             3800.000
-CPU max MHz:         4500.0000
-CPU min MHz:         1200.0000
-BogoMIPS:            7600.00
-Virtualization:      VT-x
-L1d cache:           32K
-L1i cache:           32K
-L2 cache:            1024K
-L3 cache:            25344K
-NUMA node0 CPU(s):   0-11,24-35
-NUMA node1 CPU(s):   12-23,36-47
-Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr 
-pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe 
-syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts 
-rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq 
-dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid 
-dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx 
-f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cdp_l3 
-invpcid_single intel_ppin ssbd mba ibrs ibpb stibp ibrs_enhanced 
-tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 
-avx2 smep bmi2 erms invpcid cqm mpx rdt_a avx512f avx512dq rdseed adx 
-smap clflushopt clwb intel_pt avx512cd avx512bw avx512vl xsaveopt xsavec 
-xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm 
-ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req pku ospke 
-avx512_vnni md_clear flush_l1d arch_capabilities
-
-When testing with all cpus online I don't see any issue. CPUs reach 
-turbo frequency when intel_pstate/no_turbo is disabled and stay below 
-turbo frequencies when no_turbo is enabled as expected.
-
-However, issue occurs when I boot with nr_cpus argument specifying less 
-than 48 cpus. e.g. cmdline:
-
-
-*/# cat /proc/cmdline/*/
-/mmio_stale_data=off mds=off tsx=off tsx_async_abort=off 
-intel_idle.max_cstate=0 
-BOOT_IMAGE=/boot/vmlinuz-5.10.154-119.671.amzn2.x86_64 
-root=UUID=d8605abb-d6cd-4a46-a657-b6bd206da2ab ro console=tty0 
-console=ttyS0,115200n8 net.ifnames=0 biosdevname=0 
-nvme_core.io_timeout=4294967295 rd.emergency=poweroff 
-rd.shell=0*nr_cpus=24 intel_idle.max_cstate=1 processor.max_cstate=1*
-
-# echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo
-# turbostat
-
-
-^CPackage       Core CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz IRQ     
-SMI     POLL C1      POLL%   C1%     CPU%c1  CPU%c6  CoreTmp PkgTmp  
-Pkg%pc2 Pkg%pc6 PkgWatt RAMWatt PKG_%   RAM_%
--       -       -       4370    99.76   4381    3800    6374 0       
-0       0       0.00    0.00    0.24    0.00    96 96      0.00    
-0.00    479.79  69.20   0.00    0.00
-0       0       0       4292    99.93   4295    3800    266 0       
-0       0       0.00    0.00    0.07    0.00    88 96      0.00    
-0.00    239.89  33.62   0.00    0.00
-0       2       1       4292    99.92   4295    3800    270 0       
-0       0       0.00    0.00    0.08    0.00    92
-0       4       2       4292    99.92   4295    3800    264 0       
-0       0       0.00    0.00    0.08    0.00    92
-0       8       3       4292    99.93   4295    3800    268 0       
-0       0       0.00    0.00    0.07    0.00    90
-0       9       4       4292    99.93   4295    3800    264 0       
-0       0       0.00    0.00    0.07    0.00    91
-0       10      5       4292    99.92   4295    3800    264 0       
-0       0       0.00    0.00    0.08    0.00    92
-0       11      6       4292    99.92   4295    3800    265 0       
-0       0       0.00    0.00    0.08    0.00    96
-0       17      7       4292    99.93   4295    3800    266 0       
-0       0       0.00    0.00    0.07    0.00    91
-0       19      8       4292    99.93   4295    3800    266 0       
-0       0       0.00    0.00    0.07    0.00    91
-0       25      9       4292    99.92   4295    3800    264 0       
-0       0       0.00    0.00    0.08    0.00    91
-0       26      10      4292    99.92   4295    3800    264 0       
-0       0       0.00    0.00    0.08    0.00    93
-0       27      11      4292    99.92   4295    3800    264 0       
-0       0       0.00    0.00    0.08    0.00    94
-1       1       12      4449    99.61   4466    3800    264 0       
-0       0       0.00    0.00    0.39    0.00    80 88      0.00    
-0.00    239.90  35.58   0.00    0.00
-1       2       13      4448    99.60   4466    3800    264 0       
-0       0       0.00    0.00    0.40    0.00    86
-1       3       14      4449    99.61   4466    3800    267 0       
-0       0       0.00    0.00    0.39    0.00    81
-1       8       15      4449    99.61   4466    3800    264 0       
-0       0       0.00    0.00    0.39    0.00    79
-1       9       16      4448    99.60   4466    3800    264 0       
-0       0       0.00    0.00    0.40    0.00    79
-1       10      17      4449    99.61   4466    3800    264 0       
-0       0       0.00    0.00    0.39    0.00    83
-1       17      18      4448    99.60   4466    3800    264 0       
-0       0       0.00    0.00    0.40    0.00    82
-1       18      19      4449    99.61   4466    3800    281 0       
-0       0       0.00    0.00    0.39    0.00    80
-1       19      20      4449    99.61   4466    3800    264 0       
-0       0       0.00    0.00    0.39    0.00    83
-1       20      21      4448    99.59   4466    3800    264 0       
-0       0       0.00    0.00    0.41    0.00    83
-1       25      22      4448    99.60   4466    3800    264 0       
-0       0       0.00    0.00    0.40    0.00    81
-1       27      23      4448    99.59   4466    3800    265 0       
-0       0       0.00    0.00    0.41    0.00    88
-
-/
-/
-
-As part of the turbostat output I could see that pstate driver is 
-setting the hints correctly in MSR_HWP_REQUEST. But somehow these limits 
-are not being honored by HWP logic.
-
-
-cpu0: MSR_PM_ENABLE: 0x00000001 (HWP)
-cpu0: MSR_HWP_CAPABILITIES: 0x070c262d (high 45 guar 38 eff 12 low 7)
-*cpu0: MSR_HWP_REQUEST: 0x00002626 (min 38 max 38 des 0 epp 0x0 window 
-0x0 pkg 0x0)*
-cpu0: MSR_HWP_REQUEST_PKG: 0x8000ff00 (min 0 max 255 des 0 epp 0x80 
-window 0x0)
-cpu0: MSR_HWP_STATUS: 0x00000004 (No-Guaranteed_Perf_Change, 
-No-Excursion_Min)
-
-I tried the same experiment after disabling hwp by 
-specifying*intel_pstate=no_hwp*in cmdline. In this case the pstate 
-driver seems to be selecting pstates correctly.
-
-^CPackage       Core CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz IRQ     
-SMI     POLL C1      POLL%   C1%     CPU%c1  CPU%c6  CoreTmp PkgTmp  
-Pkg%pc2 Pkg%pc6 PkgWatt RAMWatt PKG_%   RAM_%
--       -       -       3800    100.00  3800    3800    1646 0       
-0       0       0.00    0.00    0.00    0.00    85 85      0.00    
-0.00    328.38  62.14   0.00    0.00
-0       0       0       3800    100.00  3800    3800    66 0       
-0       0       0.00    0.00    0.00    0.00    85 85      0.00    
-0.00    175.42  36.96   0.00    0.00
-0       0       24      3800    100.00  3800    3800    70 0       
-0       0       0.00    0.00    0.00
-0       1       1       3800    100.00  3800    3800    65 0       
-0       0       0.00    0.00    0.00    0.00    82
-0       2       2       3800    100.00  3800    3800    67 0       
-0       0       0.00    0.00    0.00    0.00    84
-0       3       3       3800    100.00  3800    3800    67 0       
-0       0       0.00    0.00    0.00    0.00    83
-0       4       4       3800    100.00  3800    3800    68 0       
-0       0       0.00    0.00    0.00    0.00    85
-0       8       5       3800    100.00  3800    3800    68 0       
-0       0       0.00    0.00    0.00    0.00    83
-0       9       6       3800    100.00  3800    3800    65 0       
-0       0       0.00    0.00    0.00    0.00    85
-0       10      7       3800    100.00  3800    3800    65 0       
-0       0       0.00    0.00    0.00    0.00    82
-0       11      8       3800    100.00  3800    3800    65 0       
-0       0       0.00    0.00    0.00    0.00    84
-0       17      9       3800    100.00  3800    3800    65 0       
-0       0       0.00    0.00    0.00    0.00    83
-0       18      10      3800    100.00  3800    3800    65 0       
-0       0       0.00    0.00    0.00    0.00    83
-0       27      11      3800    100.00  3800    3800    65 0       
-0       0       0.00    0.00    0.00    0.00    85
-1       0       12      3800    100.00  3800    3800    65 0       
-0       0       0.00    0.00    0.00    0.00    66 68      0.00    
-0.00    152.95  25.18   0.00    0.00
-1       2       13      3800    100.00  3800    3800    65 0       
-0       0       0.00    0.00    0.00    0.00    65
-1       4       14      3800    100.00  3800    3800    65 0       
-0       0       0.00    0.00    0.00    0.00    68
-1       8       15      3800    100.00  3800    3800    65 0       
-0       0       0.00    0.00    0.00    0.00    63
-1       9       16      3800    100.00  3800    3800    65 0       
-0       0       0.00    0.00    0.00    0.00    65
-1       10      17      3800    100.00  3800    3800    65 0       
-0       0       0.00    0.00    0.00    0.00    64
-1       17      18      3800    100.00  3800    3800    66 0       
-0       0       0.00    0.00    0.00    0.00    63
-1       18      19      3800    100.00  3800    3800    66 0       
-0       0       0.00    0.00    0.00    0.00    63
-1       19      20      3800    100.00  3800    3800    65 0       
-0       0       0.00    0.00    0.00    0.00    63
-1       20      21      3800    100.00  3800    3800    66 0       
-0       0       0.00    0.00    0.00    0.00    66
-1       25      22      3800    100.00  3800    3800    65 0       
-0       0       0.00    0.00    0.00    0.00    64
-1       27      23      3800    100.00  3800    3800    67 0       
-0       0       0.00    0.00    0.00    0.00    67
-
-[root@ip-172-31-36-94 ec2-user]# cat 
-/sys/devices/system/cpu/intel_pstate/no_turbo
-1
-
-
-Thanks,
-Rishabh
-
+Michael
