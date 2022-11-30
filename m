@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5E963DDE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A9263DE0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbiK3Sba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:31:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
+        id S230246AbiK3SdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:33:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbiK3Sb0 (ORCPT
+        with ESMTP id S230238AbiK3SdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:31:26 -0500
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6CD8DBF2;
-        Wed, 30 Nov 2022 10:31:24 -0800 (PST)
-Received: by mail-wm1-f44.google.com with SMTP id ay27-20020a05600c1e1b00b003d070f4060bso2079182wmb.2;
-        Wed, 30 Nov 2022 10:31:24 -0800 (PST)
+        Wed, 30 Nov 2022 13:33:07 -0500
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DF63C6D5;
+        Wed, 30 Nov 2022 10:33:07 -0800 (PST)
+Received: by mail-wm1-f54.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso2107253wme.5;
+        Wed, 30 Nov 2022 10:33:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Mt9j106G+FOPWfXDN0MyStsR9ZfI3uJQSCfy8yQyoZ4=;
-        b=1g+EroUdJ9UYfQY3wkG3RVhmx6jOrGVnVnxM88KUMNwHRT/AzH3I0LTK+M5AaK7PtX
-         NwDjRA77uLTrJIfrglrKfphTsnfD3v912ETcLo/915EdvZvSd1OEIYk4H8neRxHEM79H
-         Jx1vM+yHjdyBNMwerTYoq/x/ojjLyAh9TxRRISq4kv6OO2W+XiVVrdX5+OC/pi14IeQG
-         37eIRLOkEIPjKd7wa8ruYZuqJicMiCV21/0nqM03abK08lAmfCjM23v/h8cc75RZwxZl
-         c9d/GsL8roo5WpxyyMI7qkcIKafx63Lq6odIjUqfvlkZNZRYq/b82/N4eGHyZZafxpfw
-         K5wA==
-X-Gm-Message-State: ANoB5pn9lisfmGQCQECPiMF1J4XT7Hv31vellvXSy969iisouNMuMOjn
-        mulpke28+VhMye4kg2aDNNK9oZFM3sXHzbZTCLw=
-X-Google-Smtp-Source: AA0mqf6+b7JvI62nbUACAKLNq6Cq7ywMpa9NMITBZo/2JgTBrTEpAWzNu1mek9owvTn8B4TLaY9LAIiZsfVBFDljxEk=
+        bh=ZHFO1Vh9Yf2ESgFYlacjCmy9NCqybWbhGa/1BkXDPeE=;
+        b=yIzvbujaXL6G51fJDK6/WVsdZlckKJWTX9jX1wSDPgA8zGDtAwbMIAtZc/x1yMnx+6
+         hjM+OtArzX++ei/tHfg3y3qzp70Egv6DyetQJKEm2FsVELECNRgdt54oiUWR2V3Mqj2C
+         SzmRAg3JMA2J0zFoJ4qSvGJGdAyD7K4r/owgbn77uatoeCqZ/mnjRC5qIE+C16W2dgZZ
+         LdZb+Bl8WducnEY+HVTAHjgzJCucs6Phpe2dWQ7QAvulhTZ8y5Nc2qY1PKPiNuf7pmxT
+         0Wr/nTprxbrxiosKPPS/uXH+7Cr97Arccp8d7YUM54hZUwvA4u4OaAE6fy/pvQ1uifj3
+         HC0Q==
+X-Gm-Message-State: ANoB5pnWZ8ThmA4HdQIBH6xccTPcprGzhGlAGSbnPjRbZTaKn8ZqUkhm
+        xqeUmYbjWoKwUXxs9VqU6A0tf6ve2sR/ZF9PDdE=
+X-Google-Smtp-Source: AA0mqf4PYg0wYUZF1TQANN+p9hw4ktMUuJ7Yf2TnJaiwLHvTzwZFg/D7M8ucJ3q56QXaMO5f8uj1YcK58NSk4wwj79o=
 X-Received: by 2002:a05:600c:6885:b0:3cf:a80d:59cd with SMTP id
- fn5-20020a05600c688500b003cfa80d59cdmr39435699wmb.5.1669833082922; Wed, 30
- Nov 2022 10:31:22 -0800 (PST)
+ fn5-20020a05600c688500b003cfa80d59cdmr39440561wmb.5.1669833185626; Wed, 30
+ Nov 2022 10:33:05 -0800 (PST)
 MIME-Version: 1.0
-References: <20221130111521.334152-1-james.clark@arm.com> <CAP-5=fXAhs-xgOo9GPH-w5f1QxNBCt5pdzpC5Cr7K+ovPzdgzw@mail.gmail.com>
-In-Reply-To: <CAP-5=fXAhs-xgOo9GPH-w5f1QxNBCt5pdzpC5Cr7K+ovPzdgzw@mail.gmail.com>
+References: <20221130111521.334152-1-james.clark@arm.com> <20221130111521.334152-2-james.clark@arm.com>
+In-Reply-To: <20221130111521.334152-2-james.clark@arm.com>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 30 Nov 2022 10:31:10 -0800
-Message-ID: <CAM9d7cgBvD69=Dy82m7ucXQ85=GaY0P-awkjidA32EDuWAp1RA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] perf tests: Fix "perf stat JSON output linter" test
- for new output
-To:     Ian Rogers <irogers@google.com>
-Cc:     James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, acme@kernel.org,
+Date:   Wed, 30 Nov 2022 10:32:54 -0800
+Message-ID: <CAM9d7cj0Zrv32CgJ7jSjCY=CsOcF40zC2kxE+NSixG4qZDpXqQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] perf stat: Fix invalid output handle
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-perf-users@vger.kernel.org, acme@kernel.org,
         linux-kernel@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -63,46 +61,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Wed, Nov 30, 2022 at 10:19 AM Ian Rogers <irogers@google.com> wrote:
+On Wed, Nov 30, 2022 at 3:15 AM James Clark <james.clark@arm.com> wrote:
 >
-> On Wed, Nov 30, 2022 at 3:15 AM James Clark <james.clark@arm.com> wrote:
-> >
-> > Commit c4b41b83c250 ("perf stat: Rename "aggregate-number" to
-> > "cpu-count" in JSON") renamed a field, so update the tests to reflect
-> > this.
-> >
-> > This fixes the following failure:
-> >
-> >   $ sudo ./perf test "json output" -vvv
-> >    96: perf stat JSON output linter                                    :
-> >   --- start ---
-> >   test child forked, pid 327720
-> >   Checking json output: no args [Success]
-> >   Checking json output: system wide [Success]
-> >   Checking json output: interval [Success]
-> >   Checking json output: event [Success]
-> >   Checking json output: per thread [Success]
-> >   Checking json output: per node Test failed for input:
-> >   ...
-> >   Traceback (most recent call last):
-> >     File "./tools/perf/tests/shell/lib/perf_json_output_lint.py", line 93, in <module>
-> >       check_json_output(expected_items)
-> >     File "./tools/perf/tests/shell/lib/perf_json_output_lint.py", line 78, in check_json_output
-> >       raise RuntimeError(f'Unexpected key: key={key} value={value}')
-> >   RuntimeError: Unexpected key: key=cpu-count value=16
-> >   test child finished with -1
-> >   ---- end ----
-> >   perf stat JSON output linter: FAILED!
-> >
-> > Fixes: c4b41b83c250 ("perf stat: Rename "aggregate-number" to "cpu-count" in JSON")
-> > Signed-off-by: James Clark <james.clark@arm.com>
+> In this context, 'os' is already a pointer so the extra dereference
+> isn't required. This fixes the following test failure on aarch64:
 >
-> Namhyung mentioned reverting change c4b41b83c250, in which case
-> merging this would break the test again. I think the revert is better.
+>   $ ./perf test "json output" -vvv
+>   92: perf stat JSON output linter                                    :
+>   --- start ---
+>   Checking json output: no args Test failed for input:
+>   ...
+>   Fatal error: glibc detected an invalid stdio handle
+>   ---- end ----
+>   perf stat JSON output linter: FAILED!
+>
+> Fixes: e7f4da312259 ("perf stat: Pass struct outstate to printout()")
+> Signed-off-by: James Clark <james.clark@arm.com>
 
-Yep, I will send the revert soon.
+Thanks for fixing this.  I'm not sure how I missed it.. :(
+
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
 Thanks,
 Namhyung
+
+
+> ---
+>  tools/perf/util/stat-display.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+> index 847acdb5dc40..eac5ac3a734c 100644
+> --- a/tools/perf/util/stat-display.c
+> +++ b/tools/perf/util/stat-display.c
+> @@ -741,7 +741,7 @@ static void printout(struct perf_stat_config *config, struct outstate *os,
+>                 perf_stat__print_shadow_stats(config, counter, uval, map_idx,
+>                                               &out, &config->metric_events, &rt_stat);
+>         } else {
+> -               pm(config, &os, /*color=*/NULL, /*format=*/NULL, /*unit=*/"", /*val=*/0);
+> +               pm(config, os, /*color=*/NULL, /*format=*/NULL, /*unit=*/"", /*val=*/0);
+>         }
+>
+>         if (!config->metric_only) {
+> --
+> 2.25.1
+>
