@@ -2,105 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC54663D43F
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7CFD63D43E
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234522AbiK3LTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:19:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
+        id S234264AbiK3LSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:18:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234469AbiK3LSO (ORCPT
+        with ESMTP id S234472AbiK3LSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:18:14 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9483F4AF13;
-        Wed, 30 Nov 2022 03:18:08 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NMc636DJGzqSM5;
-        Wed, 30 Nov 2022 19:14:03 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 30 Nov 2022 19:18:06 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 30 Nov 2022 19:18:06 +0800
-Subject: Re: [PATCH] mmc: core: Fix error return code in sd_read_ext_regs()
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221130092847.2092-1-thunder.leizhen@huawei.com>
- <CAPDyKFphNdR-TorULpbsMtM6MzqsaK_UdSmG9Hin=wunUwJwJQ@mail.gmail.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <d9d44a9c-e61e-2803-731b-cfa5f3d3d46c@huawei.com>
-Date:   Wed, 30 Nov 2022 19:18:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Wed, 30 Nov 2022 06:18:15 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7415D6A0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:18:09 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C2A646602B30;
+        Wed, 30 Nov 2022 11:18:07 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669807088;
+        bh=9JEnVvXe2AQJQov5NPbbhdvIIlOh1SEvzItB2gAZFRY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ktQ4RZvTH0cBoti3WzmZNxvL8tQ+tAlFo9sE+bCLBS0wS1ObWNaeDxhXkmN0Dj+ru
+         rYQxEoESupCn+BsTroZW2kn9jB18up9s2SFnGF68a8vNf5vpr2tXush7xknPUPtPaO
+         Jk8WIJS2y55a/HADTPm/ceZYek2Qa1myeWBPE+LKnUqFsiGNcbstZm28e8L/aC9+kN
+         6qHXXvnX9N4mbazRJs1VLTPnhLBgZ8KxI++m7qOTTyO6FvJRW3QkJdeJ6G53MlH3sk
+         BERczJSRIkMVz+8tpAprDkbJDITSih4/lfsx9Lh8eFNftyx5KvnFluvP3SIrsWFkct
+         KrFqHlnBOxHUQ==
+Message-ID: <d63e9f81-abe7-9017-d62a-6beb3f39fbd0@collabora.com>
+Date:   Wed, 30 Nov 2022 12:18:05 +0100
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFphNdR-TorULpbsMtM6MzqsaK_UdSmG9Hin=wunUwJwJQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] mailbox: mtk-cmdq: Do not request irq until we are ready
 Content-Language: en-US
+To:     Ricardo Ribalda <ribalda@chromium.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221125-mtk-mailbox-v1-0-2e3ee120850c@chromium.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221125-mtk-mailbox-v1-0-2e3ee120850c@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/11/30 18:04, Ulf Hansson wrote:
-> On Wed, 30 Nov 2022 at 10:29, Zhen Lei <thunder.leizhen@huawei.com> wrote:
->>
->> Fix to return a negative error code from the error handling
->> case instead of 0, as done elsewhere in this function.
->>
->> Fixes: c784f92769ae ("mmc: core: Read the SD function extension registers for power management")
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> ---
->>  drivers/mmc/core/sd.c | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/mmc/core/sd.c b/drivers/mmc/core/sd.c
->> index 3662bf5320ce56d..7b64f76f0179ca8 100644
->> --- a/drivers/mmc/core/sd.c
->> +++ b/drivers/mmc/core/sd.c
->> @@ -1277,6 +1277,7 @@ static int sd_read_ext_regs(struct mmc_card *card)
->>         if (rev != 0 || len > 512) {
->>                 pr_warn("%s: non-supported SD ext reg layout\n",
->>                         mmc_hostname(card->host));
->> +               err = -EOPNOTSUPP;
+Il 25/11/22 17:19, Ricardo Ribalda ha scritto:
+> If the system comes from kexec() the peripheral might trigger an IRQ
+> befoe we are ready for it. Triggering a crash due to an access to
+> invalid memory.
 > 
-> The original intent was to not return an error code. Simply, because
-> the card remains functional and all but the new features from the SD
-> function extensions registers can still be used.
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-OK, I got it.
+I agree on this change, but I've already sent a patch that's been reviewed
+by multiple people (hence ready to be picked), on top of which this patch
+will not apply.
 
+Can you please rebase this patch on top of [1]?
+
+Thanks,
+Angelo
+
+[1]: 
+https://patchwork.kernel.org/project/linux-mediatek/patch/20221102100736.37815-1-angelogioacchino.delregno@collabora.com/
+
+> ---
+> To: Jassi Brar <jassisinghbrar@gmail.com>
+> To: Matthias Brugger <matthias.bgg@gmail.com>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-mediatek@lists.infradead.org
+> ---
+>   drivers/mailbox/mtk-cmdq-mailbox.c | 13 +++++++------
+>   1 file changed, 7 insertions(+), 6 deletions(-)
 > 
-> Perhaps, we should update the comment a few lines above to better
-> reflect that this is in-fact what we intend here.
-
-How about also add 'warning' to the output? The other two outputs
-contain the 'error' keyword.
-
 > 
->>                 goto out;
->>         }
->>
+> ---
+> base-commit: 4312098baf37ee17a8350725e6e0d0e8590252d4
+> change-id: 20221125-mtk-mailbox-ba6cbd1d91b6
 > 
-> Kind regards
-> Uffe
-> .
+> Best regards,
+> 
+> diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
+> index 9465f9081515..829f1ef3309f 100644
+> --- a/drivers/mailbox/mtk-cmdq-mailbox.c
+> +++ b/drivers/mailbox/mtk-cmdq-mailbox.c
+> @@ -545,12 +545,6 @@ static int cmdq_probe(struct platform_device *pdev)
+>   	cmdq->control_by_sw = plat_data->control_by_sw;
+>   	cmdq->gce_num = plat_data->gce_num;
+>   	cmdq->irq_mask = GENMASK(cmdq->thread_nr - 1, 0);
+> -	err = devm_request_irq(dev, cmdq->irq, cmdq_irq_handler, IRQF_SHARED,
+> -			       "mtk_cmdq", cmdq);
+> -	if (err < 0) {
+> -		dev_err(dev, "failed to register ISR (%d)\n", err);
+> -		return err;
+> -	}
+>   
+>   	dev_dbg(dev, "cmdq device: addr:0x%p, va:0x%p, irq:%d\n",
+>   		dev, cmdq->base, cmdq->irq);
+> @@ -613,6 +607,13 @@ static int cmdq_probe(struct platform_device *pdev)
+>   
+>   	platform_set_drvdata(pdev, cmdq);
+>   
+> +	err = devm_request_irq(dev, cmdq->irq, cmdq_irq_handler, IRQF_SHARED,
+> +			       "mtk_cmdq", cmdq);
+> +	if (err < 0) {
+> +		dev_err(dev, "failed to register ISR (%d)\n", err);
+> +		return err;
+> +	}
+> +
+>   	WARN_ON(clk_bulk_prepare(cmdq->gce_num, cmdq->clocks));
+>   
+>   	cmdq_init(cmdq);
 > 
 
--- 
-Regards,
-  Zhen Lei
