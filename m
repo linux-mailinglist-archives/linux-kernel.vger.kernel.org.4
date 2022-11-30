@@ -2,144 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D49D63E0F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D6463E0FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbiK3ToX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 14:44:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
+        id S229764AbiK3Tpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 14:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiK3Tn6 (ORCPT
+        with ESMTP id S229786AbiK3TpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 14:43:58 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACF497036;
-        Wed, 30 Nov 2022 11:43:46 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id jl24so231308plb.8;
-        Wed, 30 Nov 2022 11:43:46 -0800 (PST)
+        Wed, 30 Nov 2022 14:45:23 -0500
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE1886583
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:45:17 -0800 (PST)
+Received: by mail-ua1-x936.google.com with SMTP id m5so6572437uah.3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:45:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4l2DcvUQCzeMiHwNRaOIRYz18pb8Nk29Wkn+R8wEW5k=;
-        b=i/i/jt8iAGXMRriP8xCj6maFrHzwSpMBsKZVf6rgU3SYA00gIaZX/ele+xaG/FZuIl
-         gIxD3fI1T68WBPelwtCcgIgZ4Kf+c+6iyAYUxiDi2+M9D1p59C/ywPsLIpuWJU7eMQxf
-         4kWn0pWGD+gKCHHCXCqA79dMiPaftl20sgR1hJoCjZ8QZx/Pk8dpcnwgfgBOvv0OktBb
-         i7u4ZBFEfhk7YxRk+KIAFO/2QiclwERjFQbLq2QzZ/b20Bqwv1M352GuCodE5U9QvToW
-         okrhRWttNEHN6FM95IKfSt8lh9WFVKKeCJ3ZGA/CRUnMNG+PqihEvSS2gV9obmbHZlcC
-         PE9Q==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=d74Ux9XASnvU3YsAvcNYJRwNMvF0Ld8sCW80w/+NTE4=;
+        b=j28NVgl4hCm++QbB7qCOUtkzWy/v59pO1/o+zat2KKRnzaBDA9auy79+yMFyfeHozY
+         O8UmY73hAZaYuSwradcNQVtE4HbpFPjTDxkLSMq2YdoDkO1lcoXgQJTyH2fUudSZJgC5
+         VBP5QabgJfTAUoei4mABHncJJGGGRi7anWkbVLpi0E+yzvQZdpwDlqKaUa4Q92t4IsZD
+         o2C2j/dJoOSZ1dbwUISLxLapwtivpEougXjZlEMs1BWXkT5fhryOWhhCVvL25ogAsvfp
+         ruTQESZWjtyVnOb/ieUzCNZaW6+5QIOKKytt/WwI2PjwBI2ERZzex4Em7IVovUebkd4c
+         7J2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4l2DcvUQCzeMiHwNRaOIRYz18pb8Nk29Wkn+R8wEW5k=;
-        b=ik/NEhV2ha4OPFOr9TI2Y+bPuJgbUQFYtuQK8NlPH5JENanbY5DF9nPpgwunwQN5iV
-         B+R/AgOE0Tv/QNBevY5ldOXk4Vb6V/nfdM0grewTlNVSH4FB7815SORI199iPT+gCWak
-         HWW30D+ZoZFUxmdGuaXEfqIH0D3vm4HtITTpQoCr6r94QhuMKkAzFWVpy1GIfd9dcQfB
-         Qa4vV9wJETJtiv+a2+Lf5RjZpwSfbKhOvfmag1JXM7qlH+65GIEsm9EnU4cbEiIztODt
-         +8JyBXSEKSzdEMcZbs9vu9QrygCFXRauXhXrG77vN6+nz1A5Dmqb7lsH/wvT2BsSZiRN
-         ykrw==
-X-Gm-Message-State: ANoB5pnGrHaEF3clWKStt45pI2KT3aREgS0vna1ZdLZ10pk0xbaGyehU
-        eVuVn2GutkzTWkkvKsE1hak=
-X-Google-Smtp-Source: AA0mqf7EmnKIHMkE2Ak7r9WcCipVMPY60uFMXYLh/Imw2ExO2xUH6i6GYyyvHEKFisYKhpXnDOq2EA==
-X-Received: by 2002:a17:90a:1d5:b0:219:55d5:f30e with SMTP id 21-20020a17090a01d500b0021955d5f30emr8474826pjd.107.1669837426215;
-        Wed, 30 Nov 2022 11:43:46 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id k1-20020a170902c40100b001869ba04c83sm1862427plk.245.2022.11.30.11.43.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 11:43:45 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 30 Nov 2022 09:43:44 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Dennis Zhou <dennis@kernel.org>,
-        Christoph Lameter <cl@linux.com>, linux-mm@kvack.org
-Subject: Re: [PATCH rcu 12/16] percpu-refcount: Use call_rcu_hurry() for
- atomic switch
-Message-ID: <Y4eycHpdYz7aoq10@slm.duckdns.org>
-References: <20221130181316.GA1012431@paulmck-ThinkPad-P17-Gen-1>
- <20221130181325.1012760-12-paulmck@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d74Ux9XASnvU3YsAvcNYJRwNMvF0Ld8sCW80w/+NTE4=;
+        b=vhuLJaiUcvNqhANE0bvi/IlhgywvVb9ahU0ry/i8ty+J9jFi6ksNEthpxurN4E5pLi
+         R8Ilfl1CLe0IDigQv5XbtVOFPtXGUdrvlKx8kyeLm5+awZhu+S+bOSQMJ1talaTXdump
+         lbfTww+sDl327y9PurxeFRQxPB4fjXTx0WYrXeGPIZAeF8ZM5ljg1BIcTplymUru7E59
+         PnJaCvnlWzc/M94WAiljdrvBZJd6Td9Lxj7L0WtgxeErmAqzj2drJ5FmHjaVkQe2mZtz
+         T77jt1NeVVITGnXyU6MK4/ZuTVutHRU9VHVVI5z9TB0IGEHpJa7BSW+/SQYuFot7mNZU
+         AUSg==
+X-Gm-Message-State: ANoB5pkHuwEViW0kQReccTWQA2WibAKeHuNahgl9Ui+e9LzwcVqpvY4T
+        bntfuWUYGxL0zZwrxivCV0moqTz9eFQDJ3SyEtSVnQ==
+X-Google-Smtp-Source: AA0mqf5KD4A8huxx7YUTV1uBRe6MiSEHlskOPgRJdmk6Dpy74DbA4bP6E6IUjfKwIreVf8z7VpdE6ptsp6B7u2VZpQA=
+X-Received: by 2002:ab0:7283:0:b0:414:43e4:b32f with SMTP id
+ w3-20020ab07283000000b0041443e4b32fmr36770854uao.18.1669837516463; Wed, 30
+ Nov 2022 11:45:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130181325.1012760-12-paulmck@kernel.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221130020328.1009347-1-almasrymina@google.com> <7c5e0ca5-0ad1-452d-60b9-50dbb63d2dee@gmail.com>
+In-Reply-To: <7c5e0ca5-0ad1-452d-60b9-50dbb63d2dee@gmail.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Wed, 30 Nov 2022 11:45:05 -0800
+Message-ID: <CAHS8izPdKG0aNbfLK8=oUdsSSZ95i1nCaKs+4s5Kx1vCHMEOWw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2] mm: Add nodes= arg to memory.reclaim
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 10:13:21AM -0800, Paul E. McKenney wrote:
-> From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-> 
-> Earlier commits in this series allow battery-powered systems to build
-> their kernels with the default-disabled CONFIG_RCU_LAZY=y Kconfig option.
-> This Kconfig option causes call_rcu() to delay its callbacks in order to
-> batch callbacks.  This means that a given RCU grace period covers more
-> callbacks, thus reducing the number of grace periods, in turn reducing
-> the amount of energy consumed, which increases battery lifetime which
-> can be a very good thing.  This is not a subtle effect: In some important
-> use cases, the battery lifetime is increased by more than 10%.
-> 
-> This CONFIG_RCU_LAZY=y option is available only for CPUs that offload
-> callbacks, for example, CPUs mentioned in the rcu_nocbs kernel boot
-> parameter passed to kernels built with CONFIG_RCU_NOCB_CPU=y.
-> 
-> Delaying callbacks is normally not a problem because most callbacks do
-> nothing but free memory.  If the system is short on memory, a shrinker
-> will kick all currently queued lazy callbacks out of their laziness,
-> thus freeing their memory in short order.  Similarly, the rcu_barrier()
-> function, which blocks until all currently queued callbacks are invoked,
-> will also kick lazy callbacks, thus enabling rcu_barrier() to complete
-> in a timely manner.
-> 
-> However, there are some cases where laziness is not a good option.
-> For example, synchronize_rcu() invokes call_rcu(), and blocks until
-> the newly queued callback is invoked.  It would not be a good for
-> synchronize_rcu() to block for ten seconds, even on an idle system.
-> Therefore, synchronize_rcu() invokes call_rcu_hurry() instead of
-> call_rcu().  The arrival of a non-lazy call_rcu_hurry() callback on a
-> given CPU kicks any lazy callbacks that might be already queued on that
-> CPU.  After all, if there is going to be a grace period, all callbacks
-> might as well get full benefit from it.
-> 
-> Yes, this could be done the other way around by creating a
-> call_rcu_lazy(), but earlier experience with this approach and
-> feedback at the 2022 Linux Plumbers Conference shifted the approach
-> to call_rcu() being lazy with call_rcu_hurry() for the few places
-> where laziness is inappropriate.
-> 
-> And another call_rcu() instance that cannot be lazy is the one on the
-> percpu refcounter's "per-CPU to atomic switch" code path, which
-> uses RCU when switching to atomic mode.  The enqueued callback
-> wakes up waiters waiting in the percpu_ref_switch_waitq.  Allowing
-> this callback to be lazy would result in unacceptable slowdowns for
-> users of per-CPU refcounts, such as blk_pre_runtime_suspend().
-> 
-> Therefore, make __percpu_ref_switch_to_atomic() use call_rcu_hurry()
-> in order to revert to the old behavior.
-> 
-> [ paulmck: Apply s/call_rcu_flush/call_rcu_hurry/ feedback from Tejun Heo. ]
-> 
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Dennis Zhou <dennis@kernel.org>
-> Cc: Tejun Heo <tj@kernel.org>
-> Cc: Christoph Lameter <cl@linux.com>
-> Cc: <linux-mm@kvack.org>
+On Wed, Nov 30, 2022 at 12:44 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> On 11/30/22 09:03, Mina Almasry wrote:
+> > -     This file accepts a single key, the number of bytes to reclaim.
+> > -     No nested keys are currently supported.
+> > +     This file accepts a string which contains the number of bytes to
+> > +     reclaim.
+> >
+> Amount of memory to reclaim?
+>
 
-Acked-by: Tejun Heo <tj@kernel.org>
+I want to have the word 'byte' in there somewhere to make that clear.
+I guess maybe 'the amount of memory to reclaim in bytes'. Although as
+written it seems more concise.
 
-Thanks.
+> > +     This file also allows the user to specify the nodes to reclaim from,
+> > +     via the 'nodes=' key, example::
+> > +
+>
+> "..., for example"
+>
 
--- 
-tejun
+Will do in the next version. Thanks for taking a look, Bagas.
+
+> > +       echo "1G nodes=0,1" > memory.reclaim
+> > +
+> > +     The above instructs the kernel to reclaim memory from nodes 0,1.
+> > +
+>
+> Thanks.
+>
+> --
+> An old man doll... just what I always wanted! - Clara
+>
