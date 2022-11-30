@@ -2,142 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDFD963D87B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4F463D87D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiK3OsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 09:48:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
+        id S229677AbiK3OsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 09:48:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiK3OsE (ORCPT
+        with ESMTP id S229565AbiK3OsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 09:48:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CF520366
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 06:48:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78217B81B8F
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 14:47:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3557EC433D6;
-        Wed, 30 Nov 2022 14:47:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669819678;
-        bh=BW3glwJdAgcquisZ858SN49s35yyYqpIA+9FpdjY5iM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ALxY+CFYvAbplLO+Hx/N4O3NpzbvaySvk0nfAT4kVUupPtk8eiIJEPauPSRiKSQYQ
-         jaEuk3EQLF7HMDsTLopSF/oBX0cD0uebGk6BERbAQRvCQBVyuguvV0yeCzr9KfHjYs
-         h6ZIWPf+1uJ6M5GpIRIHtPCODP2CxLD4vg0xAucrg0jwvJKz/SUOxsyllejrWpHkE0
-         Lw1/lk8/UqU2nETjhIp7rghqczNwpgCxVw2uOWK8+ps5NivouB7uph1TlyA7hD+9MZ
-         rPO59hBKCZYd8624e85H14YKrtM3oU/BQPxLKWRc416Vv+xzLGoreojgr2Gxmf68qu
-         4M81D54/BGyfw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1p0ONP-009bnX-Qd;
-        Wed, 30 Nov 2022 14:47:56 +0000
-Date:   Wed, 30 Nov 2022 14:47:55 +0000
-Message-ID: <86cz94mrc4.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Wed, 30 Nov 2022 09:48:22 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6691A51C23
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 06:48:20 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669819699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ysb9nF7W7aBl+zloPQlgaS76S2jwLQXf+/wIbHzkL2s=;
+        b=XpIyPYchmWSgiG870br6Rr+E4xnpbB/61RTG50j7xs4sSOWyx8VUdXson8QV6vh2ZpWMuQ
+        BZEMYc/p9N0Q0tSsTonvSPnaHIf2aWBB5+cAcEcuCI6+HVRiinLqDa3IrrDdndyOD+G3Hr
+        Z6sM5rpFOEr9L1YcG11yjaSFORrZLqEwGLoHlqyRhr+IUveLr0N5sYvM5Y719pf4b3Ok7h
+        /C0dDnmTcKDeYwgPwb1KR73iQ95pH4Cdv6XfjSaoTmG1OjrZHqbGh1+cDTjDVfb3R/3BDk
+        A35C9XsX7NZiWCXdNnA1vviL+H365iJtI8VmtbpuPW5Tn7FCd41iyz6Mj6S2zQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669819699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ysb9nF7W7aBl+zloPQlgaS76S2jwLQXf+/wIbHzkL2s=;
+        b=VR3a3G9cPiYAbCKymrWGiegBry122LXuvcA9Z2nHl9QZdvcIn8YIEze+UtGvD+ADar1uDX
+        BDCgBiqqjw00cmCA==
+To:     Samuel Holland <samuel@sholland.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     linux-riscv@lists.infradead.org,
+        Samuel Holland <samuel@sholland.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v13 3/7] genirq: Add mechanism to multiplex a single HW IPI
-In-Reply-To: <20221129142449.886518-4-apatel@ventanamicro.com>
-References: <20221129142449.886518-1-apatel@ventanamicro.com>
-        <20221129142449.886518-4-apatel@ventanamicro.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] genirq: Simplify cond_unmask_eoi_irq()
+In-Reply-To: <20221126234134.32660-2-samuel@sholland.org>
+References: <20221126234134.32660-1-samuel@sholland.org>
+ <20221126234134.32660-2-samuel@sholland.org>
+Date:   Wed, 30 Nov 2022 15:48:18 +0100
+Message-ID: <87edtkts5p.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Nov 2022 14:24:45 +0000,
-Anup Patel <apatel@ventanamicro.com> wrote:
-> 
-> All RISC-V platforms have a single HW IPI provided by the INTC local
-> interrupt controller. The HW method to trigger INTC IPI can be through
-> external irqchip (e.g. RISC-V AIA), through platform specific device
-> (e.g. SiFive CLINT timer), or through firmware (e.g. SBI IPI call).
-> 
-> To support multiple IPIs on RISC-V, we add a generic IPI multiplexing
-> mechanism which help us create multiple virtual IPIs using a single
-> HW IPI. This generic IPI multiplexing is inspired from the Apple AIC
-> irqchip driver and it is shared by various RISC-V irqchip drivers.
-> 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  include/linux/irq.h  |   3 +
->  kernel/irq/Kconfig   |   5 ++
->  kernel/irq/Makefile  |   1 +
->  kernel/irq/ipi-mux.c | 193 +++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 202 insertions(+)
->  create mode 100644 kernel/irq/ipi-mux.c
+Samuel!
 
-[...]
+On Sat, Nov 26 2022 at 17:41, Samuel Holland wrote:
 
-This is finally starting to look acceptable. My only changes are:
+> This function calls .irq_eoi in three places, making the logic hard to
+> follow. Rearrange the function so that .irq_eoi is called only once.
+>
+> The only time .irq_eoi is not called is when all three if checks fail,
+> so return early in that case. threads_oneshot can only be nonzero if
+> IRQS_ONESHOT is set, so the IRQS_ONESHOT check can be omitted there.
+>
+> The IRQS_ONESHOT condition from the first if statement must then be
+> copied to the unmask_irq() condition.
+>
+> Furthermore, if IRQS_ONESHOT is set, mask_irq() must have been called
+> in the parent function, so the irqd_irq_masked() check is redundant.
 
-diff --git a/kernel/irq/ipi-mux.c b/kernel/irq/ipi-mux.c
-index 626c564233e9..1a6ba19b736c 100644
---- a/kernel/irq/ipi-mux.c
-+++ b/kernel/irq/ipi-mux.c
-@@ -69,6 +69,12 @@ static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
- 		 */
- 		smp_mb__after_atomic();
- 
-+		/*
-+		 * The flag writes must complete before the physical IPI is
-+		 * issued to another CPU. This is implied by the control
-+		 * dependency on the result of atomic_read() below, which is
-+		 * itself already ordered after the vIPI flag write.
-+		 */
- 		if (!(pending & ibit) && (atomic_read(&icpu->enable) & ibit))
- 			ipi_mux_send(cpu);
- 	}
-@@ -160,7 +166,7 @@ int ipi_mux_create(unsigned int nr_ipi, void (*mux_send)(unsigned int cpu))
- 		goto fail_free_cpu;
- 	}
- 
--	domain = irq_domain_create_simple(fwnode, nr_ipi, 0,
-+	domain = irq_domain_create_linear(fwnode, nr_ipi,
- 					  &ipi_mux_domain_ops, NULL);
- 	if (!domain) {
- 		pr_err("unable to add IPI Mux domain\n");
+Not really convinced that all this is functionaly equivalent.
 
-The first hunk preserve an important piece of information about how
-delicate the ordering is, while the second only allocates the irqdesc
-structures as needed, not upfront.
+>  static void cond_unmask_eoi_irq(struct irq_desc *desc, struct irq_chip *chip)
+>  {
+> -	if (!(desc->istate & IRQS_ONESHOT)) {
+> -		chip->irq_eoi(&desc->irq_data);
+> +	/*
+> +	 * Do not send an EOI if the thread will do it later in
+> +	 * unmask_threaded_irq().
+> +	 */
+> +	if ((chip->flags & IRQCHIP_EOI_THREADED) && desc->threads_oneshot)
+>  		return;
+> -	}
+> +
+> +	chip->irq_eoi(&desc->irq_data);
 
-I'll shortly go over the rest of the irqchip code and can apply the
-above myself if there is nothing more to fix.
+This now issues EOI when the interrupt is in disabled state, which was
+not done before. That's probably a non-issue, but clearly a undocumented
+change.
 
-I've also converted the AIC driver over to this[1], and nothing broke
-so far...
+> +
+>  	/*
+>  	 * We need to unmask in the following cases:
+>  	 * - Oneshot irq which did not wake the thread (caused by a
+> @@ -669,12 +674,8 @@ static void cond_unmask_eoi_irq(struct irq_desc *desc, struct irq_chip *chip)
+>  	 *   completely).
+>  	 */
+>  	if (!irqd_irq_disabled(&desc->irq_data) &&
+> -	    irqd_irq_masked(&desc->irq_data) && !desc->threads_oneshot) {
+> -		chip->irq_eoi(&desc->irq_data);
+> +	    (desc->istate & IRQS_ONESHOT) && !desc->threads_oneshot)
+>  		unmask_irq(desc);
 
-	M.
+This breaks the mask logic of handle_fasteoi_mask_irq() for an interrupt
+which does not have IRQS_ONESHOT set.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/ipi-mux
+So no, it's not the same and it even breaks stuff.
 
--- 
-Without deviation from the norm, progress is not possible.
+Thanks,
+
+        tglx
