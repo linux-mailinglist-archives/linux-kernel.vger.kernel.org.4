@@ -2,123 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F9163D858
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2489663D85C
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbiK3OiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 09:38:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
+        id S229731AbiK3Oi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 09:38:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiK3OiU (ORCPT
+        with ESMTP id S229588AbiK3Oix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 09:38:20 -0500
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48192D1EE;
-        Wed, 30 Nov 2022 06:38:18 -0800 (PST)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1322d768ba7so21199567fac.5;
-        Wed, 30 Nov 2022 06:38:18 -0800 (PST)
+        Wed, 30 Nov 2022 09:38:53 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7966303D5
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 06:38:51 -0800 (PST)
+Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com [209.85.128.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C54613F176
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 14:38:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1669819126;
+        bh=yJuPcYaDmRotD++RbdlV7xUD6m84JuqaQZoAA3YlHoQ=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=uYBi8y+hPu2Jmt7CR3+2bwYi90EyIRZh3KJDMgemdYzqG7ia5/CcyoCGm4cJiffbr
+         72NplW7cgPgAxAZHWbblKxrZC7ZBIlftTafeIO64j02ykAd5f/dS2hFZX3W0QmNbt7
+         ahFC2Dlxja5y+eHa74OmQjQ+100Sq1uzpHPMfAabAmbYmscGQsWCe4mSafxbTeZPQl
+         JJVJ1HhJ/GRWVOKoskwtqWaGLJY4CvZc7OhdOx/7ctzCwzkHIuBtoFoWlBhkSUBggb
+         IDBxP/JY/GWnDhWRjMJXCQ0EPS6JJIbDNNKFjbZgCggisqxVjO6HEpYcI55q/asyil
+         6lfbyGvznq5PA==
+Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-3b5da1b3130so153324017b3.5
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 06:38:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=43xx9qXCrz3F8S6qKQa/eXVCPWGL75F49yrEq5R54q8=;
-        b=IBhtpIFlLPo21J6/q9llYogJ04glnWB6B1UD02Csreifk9x6ZmQBk+Z6gk1NQwjBKp
-         l2bD3FEK0ccKU4/sCS1huel+/ESHnb2ApfxOYopqWHZKZeqTuzk/kx1OLMZVNf5oSxTk
-         I01/1LSEKjXeVX7M+FIJHMejAfbvdgSqsKV1R0tMyM1a9MXciBf8vN9YalgeqpChvVzN
-         ov7zHy2Bmi5u0+ug4MlxywwCD+W8feuAFssfhlcropuOQ1lGhwSdY2Le/1lubrg0efLT
-         BT6M3PeMZRIVYVrtCyQBeKY02YmkFwxRtLoHpqanywF+17DPL0xIH88hOArcIMt9lX41
-         APAA==
-X-Gm-Message-State: ANoB5plaxnq9UQ2PC1GiQFm7npXgilehkARiEftMQRJ5isw/gklyUkPe
-        iZuY+RFez1Mq21bvUBhdOkjTadVQNQ==
-X-Google-Smtp-Source: AA0mqf79hdNMKYx0txvg9ckRZy0JkGHEHBqBvnJbWTqho7minJHj6ftuvOmsKTTf6XvzSczucPaEfQ==
-X-Received: by 2002:a05:6871:aa:b0:13b:ccc0:b292 with SMTP id u42-20020a05687100aa00b0013bccc0b292mr36788300oaa.258.1669819098028;
-        Wed, 30 Nov 2022 06:38:18 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i6-20020a9d53c6000000b0066cacb8343bsm1005861oth.41.2022.11.30.06.38.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 06:38:17 -0800 (PST)
-Received: (nullmailer pid 2122811 invoked by uid 1000);
-        Wed, 30 Nov 2022 14:38:16 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yJuPcYaDmRotD++RbdlV7xUD6m84JuqaQZoAA3YlHoQ=;
+        b=duYORKqfWDOnP+/zTbhNz+9xogG0+/uA9UM2vnAnGAqhZwx0mQC8PStfQeLTRodHgG
+         C01B8cwVtVCU+FjfmCqx7HrhuXb4pzA+k5g795CHTR1IftEbLnBfnOCJ34nBTaSRja/n
+         rQUGbdxR0NdrY4GqNyjwV3vz90OFBScDgYp4gl1gJQw8Ya8vkdAdWQtn9Es4JCgmu5yw
+         cnt3lcv7INydIgw8c0nOCFStz282Ot089GeTGx+FPiwMbw5VGfe+GLE4nAjRZ8DjzpD7
+         ARK1gYznQj3eedudk49OrypesInF6MI9s0pE5dfYcG9esrl++8ubsaG7AlpglpmJxgT2
+         8SJA==
+X-Gm-Message-State: ANoB5pmekaKsjKXOXvk+bfrj/+s3mxGsR7aXKHLC1038MEox02LM0buQ
+        kFNMiCwZh/2o2wa0j06sbeeaaFiImYr2sEb8YbZAw/c6m7VtcCZUERPMfTWHxod+5H7R09fj5ww
+        Vz/8RaFby+Tk7FA8CqSDDS9VOE4Qi2I6F2QPT8ESUYwWh6VE7uXtKuXkqrQ==
+X-Received: by 2002:a25:d24b:0:b0:6f1:e822:14e8 with SMTP id j72-20020a25d24b000000b006f1e82214e8mr27924560ybg.467.1669819124622;
+        Wed, 30 Nov 2022 06:38:44 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5h/y9Ufc7p86Pb9tYohSEhT0Ol5lHnhilFhXj6V/t+wLileZuNKNQC9L+9a86g1iFspQXp7Tl/67+u+EK8RTE=
+X-Received: by 2002:a25:d24b:0:b0:6f1:e822:14e8 with SMTP id
+ j72-20020a25d24b000000b006f1e82214e8mr27924544ybg.467.1669819124392; Wed, 30
+ Nov 2022 06:38:44 -0800 (PST)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org, Georgi Djakov <djakov@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
+References: <20221118133216.17037-1-walker.chen@starfivetech.com>
+ <20221118133216.17037-5-walker.chen@starfivetech.com> <CAJM55Z9bJqpEGbbx1=EBXhmhigxuHw=ObBdTJ7xy+QY=pTJyoQ@mail.gmail.com>
+ <f794e9fb-7ce0-2649-9839-b9ce36b80d1d@starfivetech.com>
+In-Reply-To: <f794e9fb-7ce0-2649-9839-b9ce36b80d1d@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Wed, 30 Nov 2022 15:38:27 +0100
+Message-ID: <CAJM55Z8=eTY+i+ggLSiUEKwnPrKgOybKJP5sNFwRNpx_t35HUA@mail.gmail.com>
+Subject: Re: [PATCH v1 4/4] riscv: dts: starfive: add power controller node
+To:     Walker Chen <walker.chen@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-In-Reply-To: <20221130132059.3145243-2-abel.vesa@linaro.org>
-References: <20221130132059.3145243-1-abel.vesa@linaro.org>
- <20221130132059.3145243-2-abel.vesa@linaro.org>
-Message-Id: <166981906152.2121820.815257956142894552.robh@kernel.org>
-Subject: Re: [PATCH v4 1/2] dt-bindings: interconnect: Add Qualcomm SM8550
-Date:   Wed, 30 Nov 2022 08:38:16 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 23 Nov 2022 at 03:12, Walker Chen <walker.chen@starfivetech.com> wrote:
+>
+> On 2022/11/19 2:36, Emil Renner Berthing wrote:
+> > On Fri, 18 Nov 2022 at 14:35, Walker Chen <walker.chen@starfivetech.com> wrote:
+> >>
+> >> This adds the power controller node for the Starfive JH7110 SoC.
+> >> The pmu needs to be used by other modules such as ISP, VPU, etc.
+> >>
+> >> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+> >
+> > Hi Walker,
+> >
+> > You called the driver jh71xx which suggests it also applies to the
+> > jh7100. Are you missing a node in the jh7100 device tree?
+>
+> No, there is no power domain controller on the jh7100. Our next generation of chips jh7120 will
+> still use this power management unit, so here this driver name is called jh71xx_pmu.c or changed
+> to jh71xx_power.c , do you think such a name is appropriate ?
+> Your reply will be highly appreciated!
 
-On Wed, 30 Nov 2022 15:20:58 +0200, Abel Vesa wrote:
-> The Qualcomm SM8550 SoC has several bus fabrics that could be
-> controlled and tuned dynamically according to the bandwidth demand.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-> 
-> Changes since v3:
->  * Dropped qcom,sm8550-rpmh.h and qcom,rpmh.h from examples
->  * Added the header for interconnect IDs to the top-level description
->  * Fixed examples indentation
-> 
->  .../interconnect/qcom,sm8550-rpmh.yaml        | 139 +++++++++++++
->  .../interconnect/qcom,sm8550-rpmh.h           | 190 ++++++++++++++++++
->  2 files changed, 329 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
->  create mode 100644 include/dt-bindings/interconnect/qcom,sm8550-rpmh.h
-> 
+I see. In that case jh71xx seems appropriate, thanks.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.example.dts:18:18: fatal error: dt-bindings/clock/qcom,sm8550-gcc.h: No such file or directory
-   18 |         #include <dt-bindings/clock/qcom,sm8550-gcc.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1492: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221130132059.3145243-2-abel.vesa@linaro.org
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+> >
+> >> ---
+> >>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 7 +++++++
+> >>  1 file changed, 7 insertions(+)
+> >>
+> >> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> >> index c22e8f1d2640..fa7b60b82d71 100644
+> >> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> >> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> >> @@ -356,6 +356,13 @@
+> >>                         #gpio-cells = <2>;
+> >>                 };
+> >>
+> >> +               pwrc: power-controller@17030000 {
+> >> +                       compatible = "starfive,jh7110-pmu";
+> >> +                       reg = <0x0 0x17030000 0x0 0x10000>;
+> >> +                       interrupts = <111>;
+> >> +                       #power-domain-cells = <1>;
+> >> +               };
+> >> +
+> >>                 uart0: serial@10000000 {
+> >>                         compatible = "snps,dw-apb-uart";
+> >>                         reg = <0x0 0x10000000 0x0 0x10000>;
+> >> --
+> >> 2.17.1
+> >>
+> >>
+> >> _______________________________________________
+> >> linux-riscv mailing list
+> >> linux-riscv@lists.infradead.org
+> >> http://lists.infradead.org/mailman/listinfo/linux-riscv
+>
