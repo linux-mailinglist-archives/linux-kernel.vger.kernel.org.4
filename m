@@ -2,159 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9656163E3BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9CBC63E3BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiK3Wym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 17:54:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33044 "EHLO
+        id S229615AbiK3W4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 17:56:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiK3Wyk (ORCPT
+        with ESMTP id S229701AbiK3W4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 17:54:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E817E91340
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 14:54:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9DB52B81D12
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 22:54:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E24C1C433C1;
-        Wed, 30 Nov 2022 22:54:35 +0000 (UTC)
-Date:   Wed, 30 Nov 2022 17:54:34 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     John 'Warthog9' Hawley <warthog9@kernel.org>
-Subject: [PATCH] kest.pl: Fix grub2 menu handling for rebooting
-Message-ID: <20221130175434.555ea650@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 30 Nov 2022 17:56:08 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFD192089
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 14:56:06 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id c15so155363pfb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 14:56:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BPYmy5zhAGqq2nGzX5m2iL8cfIBwPQzj7RKxKIpRxts=;
+        b=gngr2dsQxUoxgrfjcMrO2lRS8QgSBYcCmjqKUkHXa2pIJE1qDDFWX03B3gDNOINmp7
+         zeA4aD6INEmF0IE2AVLZcGQxNMVs2pqldh0PgnPCWZJyO52Raxp6OgRUtxD6kWBeIBtz
+         81E3rQ8By9mHV/6uN5+nf6TCeR2trqFx2YHCzCCN5sIT6hoIoAHdoCoLg9sXNKk9Fx+E
+         i8jpY/jt7DuMj0zgtJGT6HMYPdnFr0CqBXHrm7lY4O+qqBmC7SlpGqpsuT4cy0ea787I
+         FuVma0jRK/vmYKViIWuztHsYFqP7xtn5820EvNsJgZudJYDXDk69INUW0wyIDvAt+J01
+         NhVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BPYmy5zhAGqq2nGzX5m2iL8cfIBwPQzj7RKxKIpRxts=;
+        b=srlLkopaC3kgu0UP2VgWmMRPUEn7GSgixh3FE855mRvky+rdBvg7QilgcIVx5O2lgy
+         O4pR+3NleAhzoGpfL17Vf8etWc0PGcqce7+nxrRY8rPxxGnoXaFkUqV29ur6/SOC2lKb
+         OjWVEcSGdodQUJOUdqfTvIyDYWspeJ26urdb5IfHB8F7nZX1mkGdimFLD21+7SYgm52f
+         6BwXriAQQBOcsxNSQ6Oy8tdsFltpTPwZ0q6GyEluBZs6sBkiy/desrWBoXeKTVcU/uyx
+         YS15dmHxvuiT0+3De//RGSkrzEp9y/dHnchu1kczb64KhOornrgCfn6e3Z2a6sLr6wfH
+         UkNA==
+X-Gm-Message-State: ANoB5pmC7Yw0Fe2HBg/MDILPHlDFHHr1QDZKzUsv35BCgIBpPwA+V4+Q
+        7Iz03Z+sLpzpArLkUmjD+5hQlw==
+X-Google-Smtp-Source: AA0mqf4zbMKUGhqOrmt+FcSgRVmsRyWYxSQG/grvBn6WVLMMMxoaPP1N132gmW2vWAldO9VuQS7U3g==
+X-Received: by 2002:a05:6a00:98e:b0:574:6929:e50e with SMTP id u14-20020a056a00098e00b005746929e50emr36690700pfg.67.1669848965552;
+        Wed, 30 Nov 2022 14:56:05 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id p2-20020a1709027ec200b0017da2798025sm1967465plb.295.2022.11.30.14.56.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 14:56:04 -0800 (PST)
+Date:   Wed, 30 Nov 2022 22:56:00 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Subject: Re: [PATCH] KVM: selftests: restore special vmmcall code layout
+ needed by the harness
+Message-ID: <Y4ffgC+HbftkPbaW@google.com>
+References: <20221130181147.9911-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221130181147.9911-1-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt <rostedt@goodmis.org>
+On Wed, Nov 30, 2022, Paolo Bonzini wrote:
+> Commit 8fda37cf3d41 ("KVM: selftests: Stuff RAX/RCX with 'safe' values
+> in vmmcall()/vmcall()", 2022-11-21) broke the svm_nested_soft_inject_test
+> because it placed a "pop rbp" instruction after vmmcall.  While this is
+> correct and mimics what is done in the VMX case, this particular test
+> expects a ud2 instruction right after the vmmcall, so that it can skip
+> over it in the L1 part of the test.
+> 
+> Inline a suitably-modified version of vmmcall() to restore the
+> functionality of the test.
+>
+> Fixes: 8fda37cf3d41 ("KVM: selftests: Stuff RAX/RCX with 'safe' values in vmmcall()/vmcall()"
+> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
 
-grub2 has submenus where to use grub-reboot, it requires:
+We really, really need to save/restore guest GPRs in L1 when handling exits from L2.
 
-  grub-reboot X>Y
+For now,
 
-where X is the main index and Y is the submenu. Thus if you have:
-
-menuentry 'Debian GNU/Linux' --class debian --class gnu-linux ...
-	[...]
-}
-submenu 'Advanced options for Debian GNU/Linux' $menuentry_id_option ...
-        menuentry 'Debian GNU/Linux, with Linux 6.0.0-4-amd64' --class debian --class gnu-linux ...
-                [...]
-        }
-        menuentry 'Debian GNU/Linux, with Linux 6.0.0-4-amd64 (recovery mode)' --class debian --class gnu-linux ...
-		[...]
-        }
-        menuentry 'Debian GNU/Linux, with Linux test' --class debian --class gnu-linux ...
-                [...]
-        }
-
-And wanted to boot to the "Linux test" kernel, you need to run:
-
- # grub-reboot 1>2
-
-As 1 is the second top menu (the submenu) and 2 is the third of the sub
-menu entries.
-
-Have the grub.cfg parsing for grub2 handle such cases.
-
-Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
----
- tools/testing/ktest/ktest.pl | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/ktest/ktest.pl b/tools/testing/ktest/ktest.pl
-index 799cfc4aa12b..590518144167 100755
---- a/tools/testing/ktest/ktest.pl
-+++ b/tools/testing/ktest/ktest.pl
-@@ -1963,7 +1963,7 @@ sub run_scp_mod {
- 
- sub _get_grub_index {
- 
--    my ($command, $target, $skip) = @_;
-+    my ($command, $target, $skip, $submenu) = @_;
- 
-     return if (defined($grub_number) && defined($last_grub_menu) &&
- 	$last_grub_menu eq $grub_menu && defined($last_machine) &&
-@@ -1980,11 +1980,16 @@ sub _get_grub_index {
- 
-     my $found = 0;
- 
-+    my $submenu_number = 0;
-+
-     while (<IN>) {
- 	if (/$target/) {
- 	    $grub_number++;
- 	    $found = 1;
- 	    last;
-+	} elsif (defined($submenu) && /$submenu/) {
-+		$submenu_number++;
-+		$grub_number = -1;
- 	} elsif (/$skip/) {
- 	    $grub_number++;
- 	}
-@@ -1993,6 +1998,9 @@ sub _get_grub_index {
- 
-     dodie "Could not find '$grub_menu' through $command on $machine"
- 	if (!$found);
-+    if ($submenu_number > 0) {
-+	$grub_number = "$submenu_number>$grub_number";
-+    }
-     doprint "$grub_number\n";
-     $last_grub_menu = $grub_menu;
-     $last_machine = $machine;
-@@ -2003,6 +2011,7 @@ sub get_grub_index {
-     my $command;
-     my $target;
-     my $skip;
-+    my $submenu;
-     my $grub_menu_qt;
- 
-     if ($reboot_type !~ /^grub/) {
-@@ -2017,8 +2026,9 @@ sub get_grub_index {
- 	$skip = '^\s*title\s';
-     } elsif ($reboot_type eq "grub2") {
- 	$command = "cat $grub_file";
--	$target = '^menuentry.*' . $grub_menu_qt;
--	$skip = '^menuentry\s|^submenu\s';
-+	$target = '^\s*menuentry.*' . $grub_menu_qt;
-+	$skip = '^\s*menuentry';
-+	$submenu = '^\s*submenu\s';
-     } elsif ($reboot_type eq "grub2bls") {
- 	$command = $grub_bls_get;
- 	$target = '^title=.*' . $grub_menu_qt;
-@@ -2027,7 +2037,7 @@ sub get_grub_index {
- 	return;
-     }
- 
--    _get_grub_index($command, $target, $skip);
-+    _get_grub_index($command, $target, $skip, $submenu);
- }
- 
- sub wait_for_input {
-@@ -2090,7 +2100,7 @@ sub reboot_to {
-     if ($reboot_type eq "grub") {
- 	run_ssh "'(echo \"savedefault --default=$grub_number --once\" | grub --batch)'";
-     } elsif (($reboot_type eq "grub2") or ($reboot_type eq "grub2bls")) {
--	run_ssh "$grub_reboot $grub_number";
-+	run_ssh "$grub_reboot \"'$grub_number'\"";
-     } elsif ($reboot_type eq "syslinux") {
- 	run_ssh "$syslinux --once \\\"$syslinux_label\\\" $syslinux_path";
-     } elsif (defined $reboot_script) {
--- 
-2.35.1
-
+Reviewed-by: Sean Christopherson <seanjc@google.com>
