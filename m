@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7237E63DD06
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC93A63DD0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiK3SVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:21:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
+        id S230342AbiK3SVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:21:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiK3SUn (ORCPT
+        with ESMTP id S230205AbiK3SUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:20:43 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0839C1C13A
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:19:03 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id m14so4526906wrh.7
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:19:02 -0800 (PST)
+        Wed, 30 Nov 2022 13:20:46 -0500
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7338C44B;
+        Wed, 30 Nov 2022 10:19:07 -0800 (PST)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-143ffc8c2b2so3187132fac.2;
+        Wed, 30 Nov 2022 10:19:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fgu8phfMhKqBmtg33wW3nBetrVGXeqIPlKFIzQyzHSE=;
-        b=ox0llSKbUV33fVKayZ94bqh6RIiowGJSjB4lHoLTXWoY2LU97rN03LY2+LpiYKjeL/
-         D9jPWzVdlXrhznZlJ1aWOpRYnPrabNfPcqyIYAp9zGyo0CH14h78qgtV2gTBcHNn5kCZ
-         CmSZEzdZ+qiQ05FA2vQKfm5P+yd0apR2NNeoZwq0u0DzJhBY0QOimZyXOFTZVuNqCB9+
-         LAixtDEorDow7ulWNhzFJLUYMPRPhdahTbclh9FuW6JXo0TfSQA8tnS+N5ogjKSrl9RQ
-         nnD6owBMqyfpv8PdVhlxbp53JfnsO43JK9aJOTJhcj/Gk7mSEgwy4t6xR6AGB2WBcw9g
-         dRMg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cHc8osP6nOL4VANAt9RWDDPr/HPatvzkgz+MmrJXVG0=;
+        b=piCufh4dDMgN9f7ueX290rpWBJGUrZGhWgMGeLELZK7v39FcdPAGKLf0pnIM7LvMz+
+         k9kDftCEf8eG/UMQXMHk3wRfrIgUr2NRVnC/R6fkUfGvuoMUclkkZ2lJmbVYszrIj1PD
+         0qgYUX9Vq9qZMvQYFnKMCXa4/ZslWQGwXEM+IA0vxOFAWwnQel4Cf4WyT7mxWncmaB/f
+         oi9uA37dU/N1HiysUCcnwEwrmGAJkVQsim+8oxZEeOg0/vfKzexS16vpl9hEQia4j+nP
+         IkncHjOx48EgPMiIheA+jsE6Xcq9FGn/K5MgIwmXQfryP3/Ob08lXYQldbrT/kMFsHxW
+         29oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Fgu8phfMhKqBmtg33wW3nBetrVGXeqIPlKFIzQyzHSE=;
-        b=fuUOT4E/yu+NbTcxtBEFDvW/h70XkSHoNO/6yycwoc28cu4aPAH3k5/JfiE5e+fGDU
-         QumwrWh/SRQkfuboiwBOHOEU82gUu8vGoCLpMvCzJzA7p9OUgdyzNrNeUP4ouHoXQfBl
-         +HU1YYJCoNW/q4wzKrUEMpJ6l+jpc7HEOHV0mQ0QwMMM2/Xg0mGn43pgwv1NSnXbLMGr
-         xmXWoR5spf8xr29x/DKshfSQY0cPNz+Z9EkOI3KeOb2jYBQKmIcnO323SDWNiX0Jo+jo
-         OwcxpqvJN+hd+V9kRdldY9sgxVP1EuLtQFT9kLUYNLB4QaEtqCqn9Czkk8Vb9RnpKtkC
-         u+qA==
-X-Gm-Message-State: ANoB5plc7M/IxvIXZsE5V8ADOnlmYwNPp+se1yeQezXtUkkOmcQ6DlZF
-        Sm6q8ZKUN3d2Q1sLaHW2bi51NL9/CkXjFIt92fq2rQ==
-X-Google-Smtp-Source: AA0mqf7q8VTTrzTKldEos1qVFeXlA/uLx7N/l/591H87s4Rq0SRrdvmhSWW92FWA4Hloe92km3yhOweWjeOdf68dmYk=
-X-Received: by 2002:a5d:4a8c:0:b0:242:165e:7a79 with SMTP id
- o12-20020a5d4a8c000000b00242165e7a79mr10250216wrq.343.1669832341136; Wed, 30
- Nov 2022 10:19:01 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cHc8osP6nOL4VANAt9RWDDPr/HPatvzkgz+MmrJXVG0=;
+        b=78hb687lurruzDtk6ikZN6SJoUg60WdMB5g0gYXGdJ+31bHbYv/Jdz+JXeC1tCs/Dv
+         196ldDjDJ4io+QI2mLrWE4kuE7RnkUwP7QVwfb2uQ6+tXUcpA7YZO9/DY84vlukzgzfU
+         //a9vQknUOHKn7mS1ABoH6KN0k6t6WOTZvB2mhjD9BEUeiLhXWKhvdYnuEdyk+70safc
+         XAW2ITQ6up2nszJOSBHBvjMo87D6cBKZxbtw/4KG0emAjWyQH/JjmZsGVINvS+kfAK9a
+         l3YCdxBRTNmFyFIktsG7RsvAKI6LYqj5twIqltDsp9viCkZU9KDFy1VXlQEUtZD86TwZ
+         QjlA==
+X-Gm-Message-State: ANoB5pnx4GzxH4mFuWlej1O8hoUirckWOtzbIpY7poex446jEAN7Ktkk
+        3cy1LzOAv3r4aIvojoSmTvI=
+X-Google-Smtp-Source: AA0mqf5yWODVfTrEp0yAYw9lc9wvPwckTUfPpBTZs1CqM07ZgYyUG1jZo+VSfdIXHFcbqRblv3eMpQ==
+X-Received: by 2002:a05:6870:797:b0:12c:e772:2424 with SMTP id en23-20020a056870079700b0012ce7722424mr27851969oab.176.1669832347047;
+        Wed, 30 Nov 2022 10:19:07 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t26-20020a05683014da00b0066cb9069e0bsm1228177otq.42.2022.11.30.10.19.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 10:19:06 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 30 Nov 2022 10:19:05 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH v3 1/4] hwmon: (pmbus/core): Add status byte to regulator
+ flag map
+Message-ID: <20221130181905.GA2658232@roeck-us.net>
+References: <20221130165833.3478555-1-Naresh.Solanki@9elements.com>
+ <20221130180642.GA2656856@roeck-us.net>
+ <b6f0a393-0715-1541-631d-5b98c0d7b155@9elements.com>
 MIME-Version: 1.0
-References: <20221130111521.334152-1-james.clark@arm.com>
-In-Reply-To: <20221130111521.334152-1-james.clark@arm.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 30 Nov 2022 10:18:49 -0800
-Message-ID: <CAP-5=fXAhs-xgOo9GPH-w5f1QxNBCt5pdzpC5Cr7K+ovPzdgzw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] perf tests: Fix "perf stat JSON output linter" test
- for new output
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-perf-users@vger.kernel.org, acme@kernel.org,
-        namhyung@kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b6f0a393-0715-1541-631d-5b98c0d7b155@9elements.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,61 +80,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 3:15 AM James Clark <james.clark@arm.com> wrote:
->
-> Commit c4b41b83c250 ("perf stat: Rename "aggregate-number" to
-> "cpu-count" in JSON") renamed a field, so update the tests to reflect
-> this.
->
-> This fixes the following failure:
->
->   $ sudo ./perf test "json output" -vvv
->    96: perf stat JSON output linter                                    :
->   --- start ---
->   test child forked, pid 327720
->   Checking json output: no args [Success]
->   Checking json output: system wide [Success]
->   Checking json output: interval [Success]
->   Checking json output: event [Success]
->   Checking json output: per thread [Success]
->   Checking json output: per node Test failed for input:
->   ...
->   Traceback (most recent call last):
->     File "./tools/perf/tests/shell/lib/perf_json_output_lint.py", line 93, in <module>
->       check_json_output(expected_items)
->     File "./tools/perf/tests/shell/lib/perf_json_output_lint.py", line 78, in check_json_output
->       raise RuntimeError(f'Unexpected key: key={key} value={value}')
->   RuntimeError: Unexpected key: key=cpu-count value=16
->   test child finished with -1
->   ---- end ----
->   perf stat JSON output linter: FAILED!
->
-> Fixes: c4b41b83c250 ("perf stat: Rename "aggregate-number" to "cpu-count" in JSON")
-> Signed-off-by: James Clark <james.clark@arm.com>
+On Wed, Nov 30, 2022 at 11:42:32PM +0530, Naresh Solanki wrote:
+> Hi,
+> 
+> On 30-11-2022 11:36 pm, Guenter Roeck wrote:
+> > On Wed, Nov 30, 2022 at 05:58:28PM +0100, Naresh Solanki wrote:
+> > > Add PMBus status byte to regulator flag map.
+> > > 
+> > > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > > 
+> > > ---
+> > > Changes:
+> > > - Remove status input
+> > 
+> > Not really.
+> > 
+> This was about PMBUS_STATUS_INPUT & not STATUS_BYTE
+> > > - Add comment for PMBUS status byte.
+> > > ---
+> > >   drivers/hwmon/pmbus/pmbus_core.c | 20 +++++++++++---------
+> > >   1 file changed, 11 insertions(+), 9 deletions(-)
+> > > 
+> > > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> > > index 95e95783972a..a7b4ae0f1f3b 100644
+> > > --- a/drivers/hwmon/pmbus/pmbus_core.c
+> > > +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> > > @@ -2751,7 +2751,16 @@ struct pmbus_regulator_status_category {
+> > >   };
+> > >   static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
+> > > -	{
+> > > +	{	/* STATUS byte is always present. */
+> > > +		.func = -1,
+> > > +		.reg = PMBUS_STATUS_BYTE,
+> > > +		.bits = (const struct pmbus_regulator_status_assoc[]) {
+> > > +			{ PB_STATUS_IOUT_OC,   REGULATOR_ERROR_OVER_CURRENT },
+> > > +			{ PB_STATUS_VOUT_OV,   REGULATOR_ERROR_REGULATION_OUT },
+> > > +			{ PB_STATUS_VIN_UV,    REGULATOR_ERROR_UNDER_VOLTAGE },
+> > 
+> > Still there.
+> > 
+> STATUS_INPUT remove & STATUS_BYTE retained.
 
-Namhyung mentioned reverting change c4b41b83c250, in which case
-merging this would break the test again. I think the revert is better.
+You added a check for PB_STATUS_VIN_UV which reports an input failure
+which was not reported before. You do so silently without mentioning the
+change in the description. In the change log you claim "Remove status input".
+Yet, the above adds reporting on an input voltage error. Maybe the
+change log was supposed to refer to the input status register, but that
+doesn't mean you can silently add a check for PB_STATUS_VIN_UV.
 
-Thanks,
-Ian
+Guenter
 
-> ---
->  tools/perf/tests/shell/lib/perf_json_output_lint.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/tests/shell/lib/perf_json_output_lint.py b/tools/perf/tests/shell/lib/perf_json_output_lint.py
-> index d90f8d102eb9..9c073e257d33 100644
-> --- a/tools/perf/tests/shell/lib/perf_json_output_lint.py
-> +++ b/tools/perf/tests/shell/lib/perf_json_output_lint.py
-> @@ -54,7 +54,7 @@ def check_json_output(expected_items):
->            raise RuntimeError(f'wrong number of fields. counted {count} expected {expected_items}'
->                               f' in \'{line}\'')
->    checks = {
-> -      'aggregate-number': lambda x: isfloat(x),
-> +      'cpu-count': lambda x: isfloat(x),
->        'core': lambda x: True,
->        'counter-value': lambda x: is_counter_value(x),
->        'cgroup': lambda x: True,
-> --
-> 2.25.1
->
+> > > +			{ },
+> > > +		},
+> > > +	}, {
+> > >   		.func = PMBUS_HAVE_STATUS_VOUT,
+> > >   		.reg = PMBUS_STATUS_VOUT,
+> > >   		.bits = (const struct pmbus_regulator_status_assoc[]) {
+> > > @@ -2768,6 +2777,7 @@ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] =
+> > >   			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
+> > >   			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
+> > >   			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
+> > > +			{ PB_POUT_OP_FAULT,      REGULATOR_ERROR_FAIL },
+> > 
+> > Please document your changes in the description. There are two functional
+> > changes hidden under "Add PMBus status byte to regulator flag map".
+> > That is inappropriate. Those, as I have pointed out, should be separate
+> > patches.
+> My bad. I kept this change in this patch. Will remove this from this patch.
+> > 
+> > Guenter
+> > 
+> > >   			{ },
+> > >   		},
+> > >   	}, {
+> > > @@ -2834,14 +2844,6 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+> > >   		if (status & PB_STATUS_POWER_GOOD_N)
+> > >   			*flags |= REGULATOR_ERROR_REGULATION_OUT;
+> > >   	}
+> > > -	/*
+> > > -	 * Unlike most other status bits, PB_STATUS_{IOUT_OC,VOUT_OV} are
+> > > -	 * defined strictly as fault indicators (not warnings).
+> > > -	 */
+> > > -	if (status & PB_STATUS_IOUT_OC)
+> > > -		*flags |= REGULATOR_ERROR_OVER_CURRENT;
+> > > -	if (status & PB_STATUS_VOUT_OV)
+> > > -		*flags |= REGULATOR_ERROR_REGULATION_OUT;
+> > >   	/*
+> > >   	 * If we haven't discovered any thermal faults or warnings via
+> > > 
+> > > base-commit: 9494c53e1389b120ba461899207ac8a3aab2632c
+> > > -- 
+> > > 2.37.3
+> > > 
+> 
+> Regards,
+> Naresh
