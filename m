@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBB363D645
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA10E63D649
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235029AbiK3NGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 08:06:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47726 "EHLO
+        id S235412AbiK3NJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 08:09:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbiK3NGk (ORCPT
+        with ESMTP id S230415AbiK3NJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 08:06:40 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA03B1F
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 05:06:39 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id f13so26834172lfa.6
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 05:06:39 -0800 (PST)
+        Wed, 30 Nov 2022 08:09:20 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23556C709;
+        Wed, 30 Nov 2022 05:09:18 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id q1so15968437pgl.11;
+        Wed, 30 Nov 2022 05:09:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FzZ3Z8aYPlb4P3DEeMpBt2rK5IaeVa49dnDza8zoCqQ=;
-        b=QT7NMTw42OEcTFgp9+reCPWZi5OFpkaW7RsY3wYtRm/8AdXTKnzhH3X8N+MLahV+/d
-         O2pBrHAUkHWqjYeof9lezMafaphvVx1ylczmMZq7jl2fbiKDN9nWrgwAfwJMbTLWCYw7
-         qEL9c4yFD1dvhisKAYmacnOzDQJl2//B4FcjTrWsUm76P31NaDkXjHwwRkrf+0YMsxZg
-         3ZMPRoqPmdCxdCxVFrLoY9OO1f0UzBZGpjXcHM/ugJN3RTcmYKr/T+/gndXTadgHnExP
-         TLCd9uXJH+y6vkP2HLOpQUYE7veoKbKlt0qCvymKsBHjrLHFN+LkG6J/9DlST5rdxSaD
-         nihQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=h6U6pKxwnhQVoSAmRgs97bjo6brEZhCoz3DBdXGke2Q=;
+        b=KmxDmulFwNTac6Q+zCbGcDrpFOdQrVDF8PNUNp+WReBqzsGE1xVM9k5ojobtdP00tO
+         KnOSxiePV1PqkXSfHda2d9VJQrj+psLYTcMvGIjhs4xLm9J2MksN6/B0j7sPGTO9MYBj
+         8kf/JUN19+BQA7EB/P0v4cEtzp4eBJNekp418K1wWp9DCQkrXDaMp3f526s3JC0Q8/YO
+         eph9WwVU3dD0NUMd8gC5CrMkgAOLvX+uasbw9N3Wm+IQbCtH5nsLPg1isgf4XMSJI2fK
+         hOTwqGDFOQgvL7PiVRabtxPVg+xM9oQVe1JNSSQ4bT/hShfTye/B48FSkCJioSm7Xuib
+         QVhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FzZ3Z8aYPlb4P3DEeMpBt2rK5IaeVa49dnDza8zoCqQ=;
-        b=uGlph5mDH3QAZIUIJlYqZIetMtvxGiE00f7ecZB/pPoYpWA5EgIvXCeA6OVS2VDctD
-         oqLXyBVkW8expEXZ8f3WJgE5rgYzQD4/siYdnFhrrwyYdEanKs/EPK4EmiVzZuy93Ujt
-         3hjLaUXBTEMADeO6rdDEiE/8RSuKoyM43hrzCsOd6msC10GvIA/z3T58bm8A+GS4aSSF
-         MJw93zUl03V+sbM4NgNMBhNQbs+/jlqvcipLdq2k2cHsxeXKXPA9RvElp8foXkY688yu
-         5rjFNt+sstw+ML1Ed54s4O0QRjS0VJHsf3LCXmedr5GjWJQr+QbIXcmpYREfEmhaD6aH
-         a0Ag==
-X-Gm-Message-State: ANoB5pk4Dfk1cKXHHkfRVn6ybhO9T/xjIaQJ9ZtjJdqsXpWNfO2n0xSO
-        2E7GuIcUmf9tP4pf3ggZeEQ=
-X-Google-Smtp-Source: AA0mqf4HSeJYk1H9+qNndNaSZZbHl/fd13IuvaaRFdMvdLDayLEUbLaFVu6HeqYBZde/T2ldmIYkHQ==
-X-Received: by 2002:a05:6512:52d:b0:4a2:7574:b64a with SMTP id o13-20020a056512052d00b004a27574b64amr19951758lfc.336.1669813597235;
-        Wed, 30 Nov 2022 05:06:37 -0800 (PST)
-Received: from pc636 (host-90-235-25-230.mobileonline.telia.com. [90.235.25.230])
-        by smtp.gmail.com with ESMTPSA id v3-20020a05651203a300b004a4754c5db5sm247108lfp.244.2022.11.30.05.06.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 05:06:36 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Wed, 30 Nov 2022 14:06:34 +0100
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org,
-        stephen.s.brennan@oracle.com, urezki@gmail.com, hch@infradead.org
-Subject: Re: [PATCH RFC 3/3] mm/vmalloc.c: allow vread() to read out
- vm_map_ram areas
-Message-ID: <Y4dVWsmEUcjPBeYc@pc636>
-References: <20221109033535.269229-1-bhe@redhat.com>
- <20221109033535.269229-4-bhe@redhat.com>
- <Y3c77o95A9vKQ745@casper.infradead.org>
- <Y32VznHyZrS6vs4E@MiWiFi-R3L-srv>
- <Y34fIzV7UnquyS1r@casper.infradead.org>
- <Y38+4tspZxRJj73p@MiWiFi-R3L-srv>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h6U6pKxwnhQVoSAmRgs97bjo6brEZhCoz3DBdXGke2Q=;
+        b=1B0wcpO7CktBfGUI/2LKmYgoMeKlQXeuZ9N2ldw8mYb4eJC6n47fiz7W7abcu/6rjw
+         /VMHC6JF6g7wH0tDGiUTYDSyaxfGrH80SMxUSlIUBK9F3Z/akXnuG3E7tO3cy/o6FiV7
+         GaFb0/Ycb7I/Akr6QY4G6qVLKCwTpV2A7Qjs1elLqXnhxUV2RwHO4ah/ogSSmCZ1Bhos
+         PwFPWvJ7za2sJzKZllyZALilyzcGFSeNYfT69SL1mgCs4r4xLb9kHcnt2/a7UQgiiA22
+         blp9njdbZ2mzrkSqlIqCZXZ7DuVoirXpRumYzeky6HXixmfkFL4t9libBzrQGmnpVYu4
+         pJxw==
+X-Gm-Message-State: ANoB5pkngEPFnviPeV1ei7xKRua7OdkqPGzIyzI9HmNkn5JgXS59gs/s
+        P5rxAT44qEqn8A7bcmR6KdE=
+X-Google-Smtp-Source: AA0mqf7jil2oLqYE/pjfkA2t4sBYT+buNYBPj+vXowPApj2brdy8weMJGlARFcMZbKJeDEfjT22AHw==
+X-Received: by 2002:a65:6c11:0:b0:477:2bc0:f1b with SMTP id y17-20020a656c11000000b004772bc00f1bmr35640254pgu.566.1669813758143;
+        Wed, 30 Nov 2022 05:09:18 -0800 (PST)
+Received: from MBP.lan (ec2-18-117-95-84.us-east-2.compute.amazonaws.com. [18.117.95.84])
+        by smtp.gmail.com with ESMTPSA id w81-20020a627b54000000b0057255b7c8easm1372539pfc.33.2022.11.30.05.09.08
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 30 Nov 2022 05:09:17 -0800 (PST)
+From:   Schspa Shi <schspa@gmail.com>
+To:     ericvh@gmail.com, lucho@ionkov.net, asmadeus@codewreck.org,
+        linux_oss@crudebyte.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Schspa Shi <schspa@gmail.com>,
+        syzbot+8f1060e2aaf8ca55220b@syzkaller.appspotmail.com
+Subject: [PATCH v2] 9p/fd: set req refcount to zero to avoid uninitialized usage
+Date:   Wed, 30 Nov 2022 21:08:31 +0800
+Message-Id: <20221130130830.97199-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y38+4tspZxRJj73p@MiWiFi-R3L-srv>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -79,173 +72,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 05:52:34PM +0800, Baoquan He wrote:
-> On 11/23/22 at 01:24pm, Matthew Wilcox wrote:
-> > On Wed, Nov 23, 2022 at 11:38:54AM +0800, Baoquan He wrote:
-> > > On 11/18/22 at 08:01am, Matthew Wilcox wrote:
-> > > > On Wed, Nov 09, 2022 at 11:35:34AM +0800, Baoquan He wrote:
-> > > > > Currently, vread() can read out vmalloc areas which is associated with
-> > > > > a vm_struct. While this doesn't work for areas created by vm_map_ram()
-> > > > > interface because it doesn't allocate a vm_struct. Then in vread(),
-> > > > > these areas will be skipped.
-> > > > > 
-> > > > > Here, add a new function vb_vread() to read out areas managed by
-> > > > > vmap_block specifically. Then recognize vm_map_ram areas via vmap->flags
-> > > > > and handle  them respectively.
-> > > > 
-> > > > i don't understand how this deals with the original problem identified,
-> > > > that the vread() can race with an unmap.
-> > > 
-> > > Thanks for checking.
-> > > 
-> > > I wrote a paragraph, then realized I misunderstood your concern. You are
-> > > saying the comment from Uladzislau about my original draft patch, right?
-> > > Paste the link of Uladzislau's reply here in case other people want to
-> > > know the background:
-> > > https://lore.kernel.org/all/Y1uKSmgURNEa3nQu@pc636/T/#u
-> > > 
-> > > When Stephen raised the issue originally, I posted a draft patch as
-> > > below trying to fix it:
-> > > https://lore.kernel.org/all/Y1pHTj2wuhoWmeV3@MiWiFi-R3L-srv/T/#u
-> > > 
-> > > In above draft patch, I tried to differentiate normal vmalloc area and
-> > > vm_map_ram area with the fact that vmalloc area is associated with a
-> > > vm_struct, while vm_map_ram area has ->vm as NULL. And I thought their
-> > > only difference is normal vmalloc area has guard page, so its size need
-> > > consider the guard page; while vm_map_ram area has no guard page, only
-> > > consider its own actual size. Uladzislau's comment reminded me I was
-> > > wrong. And the things we need handle are beyond that.
-> > > 
-> > > Currently there are three kinds of vmalloc areas in kernel:
-> > > 
-> > > 1) normal vmalloc areas, associated with a vm_struct, this is allocated 
-> > > in __get_vm_area_node(). When freeing, it set ->vm to NULL
-> > > firstly, then unmap and free vmap_area, see remove_vm_area().
-> > > 
-> > > 2) areas allocated via vm_map_ram() and size is larger than
-> > > VMAP_MAX_ALLOC. The entire area is not associated with vm_struct, and
-> > > freed at one time in vm_unmap_ram() with unmapping and freeing vmap_area;
-> > > 
-> > > 3) areas allocated via vm_map_ram(), then delegate to vb_alloc() when
-> > > size <= VMAP_MAX_ALLOC. Its vmap_area is allocated at one time with
-> > > VMAP_BLOCK_SIZE big, and split and used later through vb_alloc(), freed
-> > > via vb_free(). When the entire area is dirty, it will be unmapped and
-> > > freed.
-> > > 
-> > > Based on above facts, we need add flags to differentiate the normal
-> > > vmalloc area from the vm_map_ram area, namely area 1) and 2). And we
-> > > also need flags to differentiate the area 2) and 3). Because area 3) are
-> > > pieces of a entire vmap_area, vb_free() will unmap the piece of area and
-> > > set the part dirty, but the entire vmap_area will kept there. So when we
-> > > will read area 3), we need take vb->lock and only read out the still
-> > > mapped part, but not dirty or free part of the vmap_area.
-> > 
-> > I don't think you understand the problem.
-> > 
-> > Task A:			Task B:		Task C:
-> > p = vm_map_ram()
-> > 			vread(p);
-> > 			... preempted ...
-> > vm_unmap_ram(p);
-> > 					q = vm_map_ram();
-> > 			vread continues
-> 
-> 
-> 
-> > 
-> > If C has reused the address space allocated by A, task B is now reading
-> > the memory mapped by task C instead of task A.  If it hasn't, it's now
-> > trying to read from unmapped, and quite possibly freed memory.  Which
-> > might have been allocated by task D.
-> 
-> Hmm, it may not be like that.
-> 
-> Firstly, I would remind that vread() takes vmap_area_lock during the
-> whole reading process. Before this patchset, the vread() and other area
-> manipulation will have below status:
-> 1) __get_vm_area_node() could only finish insert_vmap_area(), then free
-> the vmap_area_lock, then warting;
-> 2) __get_vm_area_node() finishs setup_vmalloc_vm()
->   2.1) doing mapping but not finished;
->   2.2) clear_vm_uninitialized_flag() is called after mapping is done;
-> 3) remove_vm_area() is called to set -> = NULL, then free vmap_area_lock;
-> 
-> Task A:			   Task B:		     Task C:
-> p = __get_vm_area_node()
-> remove_vm_area(p);
-> 			   vread(p);
-> 
-> 			   vread end 
-> 					     q = __get_vm_area_node();
-> 
-> So, as you can see, the checking "if (!va->vm)" in vread() will filter
-> out vmap_area:
-> a) areas if only insert_vmap_area() is called, but ->vm is still NULL; 
-> b) areas if remove_vm_area() is called to clear ->vm to NULL;
-> c) areas created through vm_map_ram() since its ->vm is always NULL;
-> 
-> Means vread() will read out vmap_area:
-> d) areas if setup_vmalloc_vm() is called;
->   1) mapping is done on areas, e.g clear_vm_uninitialized_flag() is
->        called;
->   2) mapping is being handled, just after returning from setup_vmalloc_vm();
-> 
-> 
-> ******* after this patchset applied:
-> 
-> Task A:			Task B:		Task C:
-> p = vm_map_ram()
-> vm_unmap_ram(p);
-> 			vread(p);
->                          vb_vread()
-> 			vread end 
-> 
-> 					q = vm_map_ram();
-> 
-> With this patchset applied, other than normal areas, for the
-> vm_map_ram() areas:
-> 1) In vm_map_ram(), set vmap_area->flags = VMAP_RAM when vmap_area_lock
->    is taken; In vm_unmap_ram(), clear it wiht "va->flags &= ~VMAP_RAM"
->    when vmap_area_lock is taken;
-> 2) If vmap_block, set va->flags = VMAP_RAM|VMAP_BLOCK; And set
->    vmap_block->used_map to track the used region, filter out the dirty
->    and free region;
-> 3) In vb_vread(), we take vb->lock to avoid reading out dirty regions.
-> 
-> Please help point out what is wrong or I missed.
-> 
-One thing is we still can read-out un-mapped pages, i.e. a text instead:
+When the transport layer of fs cancels the request, it is deleted from the
+client side. But the server can send a response with the freed tag.
 
-<snip>
-static void vb_free(unsigned long addr, unsigned long size)
-{
-	unsigned long offset;
-	unsigned int order;
-	struct vmap_block *vb;
+When the new request allocated, we add it to idr, and use the id form idr
+as tag, which will have the same tag with high probability. Then initialize
+the refcount after adding it to idr.
 
-	BUG_ON(offset_in_page(size));
-	BUG_ON(size > PAGE_SIZE*VMAP_MAX_ALLOC);
+If the p9_read_work got a response before the refcount initiated. It will
+use a uninitialized req, which will result in a bad request data struct.
 
-	flush_cache_vunmap(addr, addr + size);
+There is the logs from syzbot.
 
-	order = get_order(size);
-	offset = (addr & (VMAP_BLOCK_SIZE - 1)) >> PAGE_SHIFT;
-	vb = xa_load(&vmap_blocks, addr_to_vb_idx(addr));
+Corrupted memory at 0xffff88807eade00b [ 0xff 0x07 0x00 0x00 0x00 0x00
+0x00 0x00 . . . . . . . . ] (in kfence-#110):
+ p9_fcall_fini net/9p/client.c:248 [inline]
+ p9_req_put net/9p/client.c:396 [inline]
+ p9_req_put+0x208/0x250 net/9p/client.c:390
+ p9_client_walk+0x247/0x540 net/9p/client.c:1165
+ clone_fid fs/9p/fid.h:21 [inline]
+ v9fs_fid_xattr_set+0xe4/0x2b0 fs/9p/xattr.c:118
+ v9fs_xattr_set fs/9p/xattr.c:100 [inline]
+ v9fs_xattr_handler_set+0x6f/0x120 fs/9p/xattr.c:159
+ __vfs_setxattr+0x119/0x180 fs/xattr.c:182
+ __vfs_setxattr_noperm+0x129/0x5f0 fs/xattr.c:216
+ __vfs_setxattr_locked+0x1d3/0x260 fs/xattr.c:277
+ vfs_setxattr+0x143/0x340 fs/xattr.c:309
+ setxattr+0x146/0x160 fs/xattr.c:617
+ path_setxattr+0x197/0x1c0 fs/xattr.c:636
+ __do_sys_setxattr fs/xattr.c:652 [inline]
+ __se_sys_setxattr fs/xattr.c:648 [inline]
+ __ia32_sys_setxattr+0xc0/0x160 fs/xattr.c:648
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
 
-	vunmap_range_noflush(addr, addr + size);
+Below is a similar scenario, the scenario in the syzbot log looks more
+complicated than this one, but this patch seems can fix it.
 
-	if (debug_pagealloc_enabled_static())
-		flush_tlb_kernel_range(addr, addr + size);
+     T21124                   p9_read_work
+======================== second trans =================================
+p9_client_walk
+  p9_client_rpc
+    p9_client_prepare_req
+      p9_tag_alloc
+        req = kmem_cache_alloc(p9_req_cache, GFP_NOFS);
+        tag = idr_alloc
+        << preempted >>
+        req->tc.tag = tag;
+                            /* req->[refcount/tag] == uninitilzed */
+                            m->rreq = p9_tag_lookup(m->client, m->rc.tag);
 
-	spin_lock(&vb->lock);
-...
-<snip>
+        refcount_set(&req->refcount, 2);
+                            << do response/error >>
+                            p9_req_put(m->client, m->rreq);
+                            /* req->refcount == 1 */
 
-or am i missing something? Is it a problem? It might be. Another thing
-it would be good if you upload a new patchset so it is easier to review
-it.
+    /* req->refcount == 1 */
+    << got a bad refcount >>
 
-Thanks!
+To fix it, we can initize the refcount to zero before add to idr.
 
---
-Uladzislau Rezki
+Reported-by: syzbot+8f1060e2aaf8ca55220b@syzkaller.appspotmail.com
+
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+---
+ net/9p/client.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/net/9p/client.c b/net/9p/client.c
+index aaa37b07e30a..a72cb597a8ab 100644
+--- a/net/9p/client.c
++++ b/net/9p/client.c
+@@ -297,6 +297,10 @@ p9_tag_alloc(struct p9_client *c, int8_t type, uint t_size, uint r_size,
+ 	p9pdu_reset(&req->rc);
+ 	req->t_err = 0;
+ 	req->status = REQ_STATUS_ALLOC;
++	/* p9_tag_lookup relies on this refcount to be zero to avoid
++	 * getting a freed request.
++	 */
++	refcount_set(&req->refcount, 0);
+ 	init_waitqueue_head(&req->wq);
+ 	INIT_LIST_HEAD(&req->req_list);
+ 
+-- 
+2.37.3
+
