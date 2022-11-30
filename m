@@ -2,119 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C1863DA6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF21463DA6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:21:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiK3QUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 11:20:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
+        id S230018AbiK3QVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 11:21:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiK3QUV (ORCPT
+        with ESMTP id S229604AbiK3QVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 11:20:21 -0500
-Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4196A2B61A
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:20:19 -0800 (PST)
-Received: by mail-wr1-x449.google.com with SMTP id t12-20020adfa2cc000000b0022adcbb248bso3681515wra.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:20:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=e7aXnerOs81qEvUrhkJcE1R45f2KSaCBn6wkFjPKb+E=;
-        b=m0vwX16TqEB4CoFMpCUL9QVzQnd31EsRH55uiPE7Vvc9IDMC0WfSj/YVs1Q5jjc9SU
-         9J6vMT22Ba0EJbzjviX8PhqKa5B24+Tvg2DTtSW6B+qFw8tXHN7nabGV69R6yDg7xnps
-         FK3lqBa129KX/S7XLocBeMdOMHg6bHdoQNRNwhj3I3sNWXrzS/SyrS0QD+RfLvgqiLkh
-         RvrjWHxrmJcl5SQcsYB2djR1W3qNqltXspeAD1zG3/BRxhLed+NPkAGamLIMX6bw/7ql
-         zK8qIeaQPVQkO74QlJgfANNpKLiZn0UrDvJeKbKe0ccKtyZk3sj3BUhpgI6B2JqRTvmQ
-         8XXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e7aXnerOs81qEvUrhkJcE1R45f2KSaCBn6wkFjPKb+E=;
-        b=BImvvqlT8qK7Orx9ZDniVFbUcG4mWCvdztTgE0BOIiRECzJX6jpyDnkxrqdgLRPtKi
-         4jF04m8tSY9JuPVis/woy4wNE82ZgAtGjG5osgH/BouUu2CaDuiQdNe4kIbXFVattvf9
-         nLHMDj/xtUfsv1ewzMswHNrdWpaSdW3BulWbNv8kgvvsFEXdeuN9uP6Lh6pDFRSpme7+
-         K446M7DXXWgpAtA2xGZFxodbqRzlB+vkdOEsh4XLkrzzfpMmUKpZFkUNcPWl63x5/kBW
-         XtFfyUwm9UFld92UMGSm7rYqxVLWyXjHVfrukWIGqVphxohBtZofwenVjQV2eNyQrw2g
-         MlTA==
-X-Gm-Message-State: ANoB5pnKUy7FtXKg7N9+ADPMoN/uJWEAOPn/BpF45reTcTqT4LfNAMW7
-        jo2EzsXkfrAk0iz9L33/PbAh8c8=
-X-Google-Smtp-Source: AA0mqf41Iqo1Xr4q/u4l0UTpEcPOH4dcv2oiqQGFjNnNGHT8V7/hmhjBp1rBvUhdxCKIQBtV5bUOVnw=
-X-Received: from corndog.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:20e0])
- (user=spm job=sendgmr) by 2002:a05:6000:1108:b0:235:8867:50bf with SMTP id
- z8-20020a056000110800b00235886750bfmr28519161wrw.193.1669825217787; Wed, 30
- Nov 2022 08:20:17 -0800 (PST)
-Date:   Wed, 30 Nov 2022 16:19:46 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221130161946.3254953-1-spm@google.com>
-Subject: [PATCH] KVM: Deal with nested sleeps in kvm_vcpu_block()
-From:   Space Meyer <spm@google.com>
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     pbonzini@redhat.com, kpsingh@kernel.org,
-        Space Meyer <spm@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 11:21:05 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2DC2BB1F;
+        Wed, 30 Nov 2022 08:21:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669825262; x=1701361262;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YyFAqiAvl0ygxC+xDSxcfogAiposJLYMZ9OKZhChSBc=;
+  b=UK1TTq31jB22+C2C4/KIssW8lS0WsU06uVnkglA3jiv1oRNXbVLShcjD
+   I3Xi/LzgdXrUIuvRjfE2GTae8v0ItA6oowjgm/O86oYquaxZzYgRAD4Ai
+   lwvkjBUZuJWMTh9Cx9oFoq30wBNRVlHyPKx460ejUpcngK5sEboAYjGhj
+   NTNPHzz8o9EXxQns0QUYefofhuEIb8hr46gb5xs9loqmNmED/E7qVD63V
+   s2RQX5mF+IXZ5zAim6jUE4DUBOTsNzfJiTOJo1BJKoqzaPN1NKXFpCYqI
+   4vftzAGWAltVEiIcxDsQsFzsEa6DeM3n51wJorVmAq/cxBSkLXfOU3GvO
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="317286365"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="317286365"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 08:21:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="675080332"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="675080332"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 30 Nov 2022 08:20:59 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p0PpR-002LYh-0u;
+        Wed, 30 Nov 2022 18:20:57 +0200
+Date:   Wed, 30 Nov 2022 18:20:57 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>, linux-gpio@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH v1 2/3] Documentation: gpio: Add a section on what to
+ return in ->get() callback
+Message-ID: <Y4eC6W/wstJFLrEr@smile.fi.intel.com>
+References: <20221130155519.20362-1-andriy.shevchenko@linux.intel.com>
+ <20221130155519.20362-2-andriy.shevchenko@linux.intel.com>
+ <8a53e88b-1e74-bf34-62a1-780a1b29bcbc@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8a53e88b-1e74-bf34-62a1-780a1b29bcbc@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously this code assumed nothing would mess with current->state
-between the set_current_state() and schedule(). However the call to
-kvm_vcpu_check_block() in between might end up requiring locks or other
-actions, which would change current->state. A similar pattern was
-described in the "The problem with nested sleeping primitives" LWN
-article[0].
+On Wed, Nov 30, 2022 at 05:12:13PM +0100, Hans de Goede wrote:
+> On 11/30/22 16:55, Andy Shevchenko wrote:
+> > The ->get() callback depending on other settings and hardware support
+> > may return different values, while the line outside the chip is kept
+> > in the same state. Let's discuss that in the documentation.
 
-[0] https://lwn.net/Articles/628628
+...
 
-Signed-off-by: Space Meyer <spm@google.com>
----
- virt/kvm/kvm_main.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> > +Considerations of the ->get() returned value
+> > +--------------------------------------------
+> > +
+> > +Due to different possible electrical configurations and software applications
+> > +the value that ->get() callback returns may vary depending on the other settings.
+> > +This will allow to use pins in the I2C emulation mode or other not so standard
+> > +uses.
+> > +
+> > +The below table gathered the most used cases.
+> > +
+> > +==========  ==========  ===============  =======================
+> > +  Input       Output         State        What value to return?
+> > +==========  ==========  ===============  =======================
+> > + Disabled    Disabled    Hi-Z             input buffer
+> > + Disabled    OS/OD/etc   Single ended     [cached] output buffer
+> 
+> You need to clarify what single-ended means here. You mean a pin
+> which is only capable of output I guess ?  So now way to figure
+> out if another participant in the OS/OD bus has its transistor
+> in the "on" state this pulling the bus high / low agains the bias
+> resistor(s) which determine the state of the bus in rest ?
+> 
+> Or you mean that the bus is uni-directional, even then being
+> able to detect a short-circuit is useful.
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index fab4d37905785..64e10d73f2a92 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -32,6 +32,7 @@
- #include <linux/sched/signal.h>
- #include <linux/sched/mm.h>
- #include <linux/sched/stat.h>
-+#include <linux/wait.h>
- #include <linux/cpumask.h>
- #include <linux/smp.h>
- #include <linux/anon_inodes.h>
-@@ -3426,6 +3427,7 @@ static int kvm_vcpu_check_block(struct kvm_vcpu *vcpu)
-  */
- bool kvm_vcpu_block(struct kvm_vcpu *vcpu)
- {
-+	DEFINE_WAIT_FUNC(vcpu_block_wait, woken_wake_function);
- 	struct rcuwait *wait = kvm_arch_vcpu_get_wait(vcpu);
- 	bool waited = false;
- 
-@@ -3437,13 +3439,11 @@ bool kvm_vcpu_block(struct kvm_vcpu *vcpu)
- 	preempt_enable();
- 
- 	for (;;) {
--		set_current_state(TASK_INTERRUPTIBLE);
--
- 		if (kvm_vcpu_check_block(vcpu) < 0)
- 			break;
- 
- 		waited = true;
--		schedule();
-+		wait_woken(&vcpu_block_wait, TASK_INTERRUPTIBLE, MAX_SCHEDULE_TIMEOUT);
- 	}
- 
- 	preempt_disable();
+It's described in the previous chapter(s).
+
+> > +    x        Push-Pull   Out              [cached] output buffer
+> 
+> Why, most GPIO drivers are protected against short-circuit to
+> GND / Vdd and actually reading the input-buffer here will allow
+> GPIO API consumers to detect such short-circuits if they are
+> interested in this.  This would e.g. be useful to detect
+> mis-wiring on devices like the Raspberry Pi were users often
+> connect extra peripherals through breadboards.
+
+I think it is nonsense from electronics point of view.
+
+> IMHO for pins with an input buffer get() should simply
+> always return the contents of the input buffer. This is what
+> I believe almost all GPIO drivers currently do and also
+> keeps the get() methods KISS.
+
+As you can see, I disagree on this.
+
+> Actually implementing the behavior you suggest here requires
+> the get() method to differentiate between push-pull and
+> other mode. This makes the get() method implementation
+> needlessly complicated and will likely be a source of bugs
+> as people will get this wrong in some cases and people
+> will very likely not test all possible combinations from
+> this big table you are adding here.
+
+People already are getting wrong this and here is no documentation
+on what to do to get it right.
+
+> IHMO the rules for get() should simply be:
+> 
+> 1. Device has an input buffer:
+>    Return input-buffer value for the pin.
+
+I disagree on this. It makes no sense to read real hw wire state when output
+is enabled. If somebody does a short circuit, it's not a Linux issue and
+should be recognized on the PCB side (using oscilloscope, multi-meter, etc).
+
+> 2. Devices does not have an input buffer:
+>    Return last set output-buffer value
+
+> > + Enabled     Disabled    In               input buffer
+> > + Enabled     OS/OD/etc   Bidirectional    input buffer
+> > +==========  ==========  ===============  =======================
+> > +
+> > +The [cached] here is used in a broader sense: either pure software cache, or
+> > +read back value from the GPIO output buffer (not all hardware support that).
+
 -- 
-2.38.1.584.g0f3c55d4c2-goog
+With Best Regards,
+Andy Shevchenko
+
 
