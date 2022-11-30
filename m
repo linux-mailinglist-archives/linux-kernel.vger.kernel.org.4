@@ -2,84 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB0C63D3A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 579C063D3AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbiK3KmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 05:42:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
+        id S231821AbiK3Kmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 05:42:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiK3KmU (ORCPT
+        with ESMTP id S231492AbiK3Kmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 05:42:20 -0500
-Received: from out30-6.freemail.mail.aliyun.com (out30-6.freemail.mail.aliyun.com [115.124.30.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBC62790E;
-        Wed, 30 Nov 2022 02:42:18 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VW36MKZ_1669804935;
-Received: from 30.97.48.61(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VW36MKZ_1669804935)
-          by smtp.aliyun-inc.com;
-          Wed, 30 Nov 2022 18:42:16 +0800
-Message-ID: <9c93dd3e-f80d-7421-05b8-9f692d33d2f2@linux.alibaba.com>
-Date:   Wed, 30 Nov 2022 18:42:20 +0800
+        Wed, 30 Nov 2022 05:42:35 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1269B9D
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:42:32 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id o13so7925194ilc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:42:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SJLkT7UJgdz9DbjtRID1Ehj3joyySjkZxkwxrfsCaVE=;
+        b=hxQWQWHB1MfR6QvYlK0kOcOu8nIcceTFo7sWaaSq0mp2yBsphoiSrRC3li6pHxRXw0
+         Go2QQj8rffhY/e/hLL6gKwwOnT/dz4oxoH/CpDYt+KZMbHF9fcH63EA8mbbx52L/WoND
+         Z4MS5wEaNEU1LngpSFd4WHzk0ucaD+8qgVYX1HqJolFJoM2uYw/qMw+hvqCWmRg11y9f
+         q5lgGS0b8f8saSvo7gAgVNrFCOfuD7FCsblMDi10ey+IJb/wnjn5Ma+wQNxKA8TpTjSY
+         If1dUuzuxZAO0NxZvzVO4lEc1W1aO2aeYiC2wsJtQQtFb8NRYi3pHAFCS/dltFt+w8w8
+         Ah5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SJLkT7UJgdz9DbjtRID1Ehj3joyySjkZxkwxrfsCaVE=;
+        b=s4rxEnt0vpUHcJhlQ/crWaQtDcVcm5raVxFp7y9NrrZlvD3jF0qVm5IuTccgQ6vp+z
+         eO7udFKGozbTaFqWrVljL1CwRfcDb/uBciV9xr1iPBB01soyOv8vklMxq+1ujgacbZHC
+         nqG3tx78XWLYSPYC1BCfjEVTYa02mcmDQ8T5rHNLtouGl3NyOgim/XWDgM3twd/JOIXC
+         QbpXn4N6jyaF87qxUq7vHAdWXc4S+8yXRYVwFIfPkpSksTNfNgBXDvry10tQmcp3oR65
+         iElRrusKkWsY24FAx2j2g6QVHXP6rK0sSnd6HUpw90frlsfLA9Z+OMMXPwxGCQ/gawqU
+         97Og==
+X-Gm-Message-State: ANoB5pmlzh4cIhB/MiJWuynx0tcF6rAxQGorDkrX4e9Hm/jcSW1qyBYZ
+        QzBcqnZgBHP9/aBsD2Y+rKhI3aT0INRICwU6B/JiqA==
+X-Google-Smtp-Source: AA0mqf677IjGVXXt7NQM3NdWCedqdc8aEXe0zNXEuJOT6eTrU0cAzlxaj8EOQWWoRpGMtpu4fxKNqNisQLM8p0MyymI=
+X-Received: by 2002:a92:7c0c:0:b0:302:efa3:6230 with SMTP id
+ x12-20020a927c0c000000b00302efa36230mr13856885ilc.232.1669804951940; Wed, 30
+ Nov 2022 02:42:31 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] mmc: sdhci-sprd: Fix no reset data and command after
- voltage switch
-To:     Wenchao Chen <wenchao.chen@unisoc.com>, adrian.hunter@intel.com,
-        ulf.hansson@linaro.org, orsonzhai@gmail.com, zhang.lyra@gmail.com
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhenxiong.lai@unisoc.com, yuelin.tang@unisoc.com,
-        gengcixi@gmail.com
-References: <20221130080224.12831-1-wenchao.chen@unisoc.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20221130080224.12831-1-wenchao.chen@unisoc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221110195732.1382314-1-wusamuel@google.com> <CAGETcx_aAynvykDSL4aue3zf5Pv7+hELUHQ=MWOzBbyZBPySDA@mail.gmail.com>
+ <880b7332-562c-4934-4e92-493b112568c9@arm.com> <CAG2Kctp_VwryYTYMoqe6EBKFs-FZuNcB94e_MzLgBN9jJ5tpQA@mail.gmail.com>
+ <CAJZ5v0iNjPAAn0-uygpJe0ya_LW7pfF4C8OHd+8EMLg+Ws=02Q@mail.gmail.com> <97af1300-541d-a79c-404c-92886f10b220@arm.com>
+In-Reply-To: <97af1300-541d-a79c-404c-92886f10b220@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 30 Nov 2022 11:42:20 +0100
+Message-ID: <CAKfTPtAPniqQyDzh=Yu8Z9R9+H2PzBKkHT0SJgHZiUOdNdw3Mg@mail.gmail.com>
+Subject: Re: [PATCH v1] Revert "cpufreq: schedutil: Move max CPU capacity to sugov_policy"
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sam Wu <wusamuel@google.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "Isaac J . Manjarres" <isaacmanjarres@google.com>,
+        kernel-team@android.com,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi All
 
+Just for the log and because it took me a while to figure out the root
+cause of the problem: This patch also creates a regression for
+snapdragon845 based systems and probably on any QC chipsets that use a
+LUT to update the OPP table at boot. The behavior is the same as
+described by Sam with a staled value in sugov_policy.max field.
 
-On 11/30/2022 4:02 PM, Wenchao Chen wrote:
-> After switching the voltage, no reset data and command will cause
-> CMD2 timeout.
-> 
-> Fixes: 29ca763fc26f ("mmc: sdhci-sprd: Add pin control support for voltage switch")
-> Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
-> ---
->   drivers/mmc/host/sdhci-sprd.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-sprd.c b/drivers/mmc/host/sdhci-sprd.c
-> index b92a408f138d..464508be8ec8 100644
-> --- a/drivers/mmc/host/sdhci-sprd.c
-> +++ b/drivers/mmc/host/sdhci-sprd.c
-> @@ -470,7 +470,7 @@ static int sdhci_sprd_voltage_switch(struct mmc_host *mmc, struct mmc_ios *ios)
->   	}
->   
->   	if (IS_ERR(sprd_host->pinctrl))
-> -		return 0;
-> +		goto reset;
->   
->   	switch (ios->signal_voltage) {
->   	case MMC_SIGNAL_VOLTAGE_180:
-> @@ -496,6 +496,7 @@ static int sdhci_sprd_voltage_switch(struct mmc_host *mmc, struct mmc_ios *ios)
->   		break;
->   	}
->   
-> +reset:
->   	/* Wait for 300 ~ 500 us for pin state stable */
->   	usleep_range(300, 500);
+Regards,
+Vincent
 
-If no pin state switching, still need stable time? Otherwise looks good 
-to me.
-
->   	sdhci_reset(host, SDHCI_RESET_CMD | SDHCI_RESET_DATA);
+On Tue, 22 Nov 2022 at 09:58, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> Hi Rafael and Sam
+>
+> On 11/21/22 19:18, Rafael J. Wysocki wrote:
+> > On Fri, Nov 18, 2022 at 2:00 AM Sam Wu <wusamuel@google.com> wrote:
+> >>
+> >> On Wed, Nov 16, 2022 at 3:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+> >>> Which mainline kernel version you use in pixel6?
+> >> I am using kernel version 6.1-rc5.
+> >>>
+> >>> Could you elaborate a bit how is it possible?
+> >>> Do you have the sg_policy setup properly (and at right time)?
+> >>> Do you have the cpu capacity from arch_scale_cpu_capacity()
+> >>> set correctly and at the right time during this cpufreq
+> >>> governor setup?
+> >>>
+> >>> IIRC in Android there is a different code for setting up the
+> >>> cpufreq sched governor clones. In mainline we don't have to do
+> >>> those tricks, so this might be the main difference.
+> >> This behavior is seen on the mainline kernel. There isn't any vendor code
+> >> modifying the behavior, and the schedutil governor is being used.
+> >>>
+> >>> Could you trace the value that is read from
+> >>> arch_scale_cpu_capacity() and share it with us?
+> >>> I suspect this value changes in time in your kernel.
+> >> There's an additional CPU capacity normalization step during
+> >> init_cpu_capacity_callback() that does not happen until all the CPUs come
+> >> online. However, the sugov_start() function can be called for a subset of
+> >> CPUs before all the CPUs are brought up and before the normalization of
+> >> the CPU capacity values, so there could be a stale value stored
+> >> in sugov_policy.max field.
+> >
+> > OK, the revert has been applied as 6.1-rc material, thanks!
+>
+> I was on a business trip last week so couldn't check this.
+> Now I'm back and I've checked the booting sequence.
+> Yes, there is some race condition and the mechanism
+> using blocking_notifier_call_chain() in the cpufreq_online()
+> doesn't help while we are registering that schedutil
+> new policy.
+>
+> I will have to go through those mechanisms and check them.
+> I agree, for now the best option is to revert the patch.
+>
+> My apologies for introducing this issues.
+> Thanks Sam for capturing it.
+>
+> Regards,
+> Lukasz
