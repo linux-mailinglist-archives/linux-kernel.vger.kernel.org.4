@@ -2,123 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D93D63DED3
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBAC363DEDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbiK3SlF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 30 Nov 2022 13:41:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
+        id S231185AbiK3Slc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:41:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbiK3Sk7 (ORCPT
+        with ESMTP id S231201AbiK3SlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:40:59 -0500
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869C098949;
-        Wed, 30 Nov 2022 10:40:55 -0800 (PST)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1p0S0E-0003wh-HH; Wed, 30 Nov 2022 19:40:14 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        soc@kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Linus Walle ij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 3/5] arm64: dts: remove label = "cpu" from DSA dt-binding
-Date:   Wed, 30 Nov 2022 19:40:12 +0100
-Message-ID: <5443335.kQq0lBPeGt@diego>
-In-Reply-To: <20221130141040.32447-4-arinc.unal@arinc9.com>
-References: <20221130141040.32447-1-arinc.unal@arinc9.com> <20221130141040.32447-4-arinc.unal@arinc9.com>
+        Wed, 30 Nov 2022 13:41:20 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6117A98947;
+        Wed, 30 Nov 2022 10:41:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1669833667; bh=vgKVPXmvYqutJBkLIGS/n+sdxLzPLkmkKPGB9sgdkpE=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=eLTGK2Crx7cXcz72ruhuZmROWdSjeQL/tU6MqQ2/ltbrLWebl/By1SoGSWw5dDrT6
+         d/HsUWWiDNuYfY1c1Di0y+Rzjkjr0UYdGIpe976fqNeyPOCOQagUoxfom2U7JuL0CR
+         RpYvI0Amu+1GwoFh+MzX6WsDeYZyOt8P0QF7bIi01UbUo3JAv9pnUONlMX1rAVibPs
+         GgFfqBXlveNQXbKhnXJAPmNc0cj5InLXCaVAFv7jmfBMsFhXCbHJZLhjoZslTG/r2u
+         BcHlDEPQV4H42DfqXMdGnEUMBLT3kmENSpxGXrEAq9sgNCxsDLx4z+q97vd17sjQwd
+         NTfpRXDAZfHfg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1N3siG-1orY150AVs-00zl5t; Wed, 30 Nov 2022 19:41:07 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     rafael@kernel.org, hdegoede@redhat.com
+Cc:     lenb@kernel.org, markgross@kernel.org, linux-acpi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ACPI: battery: Call power_supply_changed() when adding hooks
+Date:   Wed, 30 Nov 2022 19:41:01 +0100
+Message-Id: <20221130184101.357899-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:v2Ti+bj8vLJsIA+n83Ulg5oP9sdjSkk1OPNXdaafMgk/8ZrVwh2
+ S+E+4dEVKzZ2jX9/oZGnbbLkLWZJ/vlR7ICG1Z/m2rNXg2Pk1OobQVC5ehL9lQEMd5yXzYi
+ zjLK3LinzUrvF7Paom8nUZFQoytz8Ha9EsJ6hlkmYBUeNSrPRKex4sh0VdwyGzZlW+xAvh7
+ IYKmZkCjfw3rcp+R4uEHw==
+UI-OutboundReport: notjunk:1;M01:P0:ZtWMprlq8Yw=;YMr0KkNagjdwMnP8KTCm2Xs2czT
+ UuA5vfEyiaETVpKK1VOkbVTWB/1UB2VYnJpIK7CtltFRdD8VYIlncGd00d8BqsQMQ88iu/Pvd
+ GzBUdAbQqgqH3hxsX9Id8gLNax4GI08u841WDIyZAGFFJVnrFK6Yj8XKMZOordlFfpoXAUaaJ
+ KGZCeepArsVvld8B8Bi+vMl5TyaYrciA0s3SXFS7hX+9AqQ6c/IZKM4nnMY2AF9AmD7N0hRgW
+ uzp0DkEwbPIEqC/m6IBFjd6cCB8xSINnjvQ7Rw5OZkb426AwqMoe/ib5y/tUHgAkmX60jRdt4
+ aQIJ8UGbdXP2VHu4VDqoRu4iHUwaJri9w42JXXRxxGwhM8ra+Ob2V5HajlvEq5+8jkULDcdYd
+ Mih0DF/HF+xSToPeMuehZcU0+FWRHLGLFUUO1mrtk/sQhB8HL4xZChcTeviBJOi/RutXyi9w1
+ EFQ7R/o422ghOR/qdDlTrnWjC9TfirT3WKKVArcJ+hNDNPs/OVev+oaikM25z69PfBfZp2zbD
+ hgGhnGqR5364AWIFEYJB6rITMgkrcT6gqc9H1fSfrL1qIreCww6KfX3hyPZPlm5VSH/0v0Uu3
+ SKWDq+j3obV/kTAWIvsrONElafTslXU8C2DKLsAhK8Fk3pclrV0WzQnu16JE1YsMAgBopsw29
+ iwhzezMSvIdZE7fFJFye98l7IgmYO22LsoETpw1FAGa88n+SASVVH765wEAY3AtyjoMn0mpOv
+ x1lHm1y0KjlSAi+yfyaka0j6oCNJxlprxn6INmT6XIJSWiZjRKj3pUuzUP1gMGswCNrPP7++H
+ ZTCl3DzXX9TLWP2DQbw0lzr9rKPf4ScZ5K6Yx52phKkpRuTD/H5eEMf/KyUtLc0cUf00weW6U
+ xAzJ8h5y3Jvj9xHHa8OXR1g4vbCqXLUG9JdvZbN8lmoWbuIp24NWuEJ2uQxZ+Qb8ajypW1m1M
+ 7kSVUpUQGDEa/8ATFqUzzGn5CCI=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 30. November 2022, 15:10:38 CET schrieb Arınç ÜNAL:
-> This is not used by the DSA dt-binding, so remove it from all devicetrees.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
+If a battery hook is added to a battery, userspace software
+is not informed that the available properties of the battery
+might have changed. This for example causes upower to react
+slowly if a new battery hook is added during runtime.
 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-> index c282f6e79960..b71162d65d2e 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-> @@ -552,7 +552,6 @@ port@4 {
->  
->  			port@5 {
->  				reg = <5>;
-> -				label = "cpu";
->  				ethernet = <&gmac0>;
->  				phy-mode = "rgmii";
->  
-> 
+Fix this by calling power_supply_changed() if a battery hook
+was successfully added/removed.
 
-Rockchip-part:
-Acked-by: Heiko Stuebner <heiko@sntech.de>
+Tested on a Dell Inspiron 3505.
 
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/acpi/battery.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
+index 9482b0b6eadc..bf99053e5021 100644
+=2D-- a/drivers/acpi/battery.c
++++ b/drivers/acpi/battery.c
+@@ -696,7 +696,8 @@ static void __battery_hook_unregister(struct acpi_batt=
+ery_hook *hook, int lock)
+ 	if (lock)
+ 		mutex_lock(&hook_mutex);
+ 	list_for_each_entry(battery, &acpi_battery_list, list) {
+-		hook->remove_battery(battery->bat, hook);
++		if (!hook->remove_battery(battery->bat, hook))
++			power_supply_changed(battery->bat);
+ 	}
+ 	list_del(&hook->list);
+ 	if (lock)
+@@ -735,6 +736,8 @@ void battery_hook_register(struct acpi_battery_hook *h=
+ook)
+ 			__battery_hook_unregister(hook, 0);
+ 			goto end;
+ 		}
++
++		power_supply_changed(battery->bat);
+ 	}
+ 	pr_info("new extension: %s\n", hook->name);
+ end:
+=2D-
+2.30.2
 
