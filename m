@@ -2,168 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E165F63E437
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EC963E43D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbiK3XFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 18:05:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
+        id S229607AbiK3XGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:06:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiK3XFo (ORCPT
+        with ESMTP id S229586AbiK3XGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 18:05:44 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B6294939
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:05:42 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AB1A41F45B;
-        Wed, 30 Nov 2022 23:05:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1669849541; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x6t/1gH9rWwLg3waldr2UlOAUoUcBLbX/7yAdRnju3k=;
-        b=S4dvT7AAegiHK2rewnwfpJ3fDHpmbEElZFQH7qyk2FtAJdF1owpiBfegGuTLj/mfFcWuSi
-        VSkS4yqWIZCg6WWH+gmBLmGq0RztvMRnCdcxkAdy5JKnqxOwuRHXhXE3Nd2k2SiL3ZqC1i
-        llQVfqJn2CyM2tm4OoHD1F1Z+Bcswcc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1669849541;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x6t/1gH9rWwLg3waldr2UlOAUoUcBLbX/7yAdRnju3k=;
-        b=vQ+jVArFkV0qwv4Kn+exiXdJbzxi+pgL6c3v1SpZkTHCcz06jrKMH957eMeSdjipdHPkLg
-        C+pETNm6uGiP87CQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7274513A70;
-        Wed, 30 Nov 2022 23:05:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id lSwGG8Xhh2MhbgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 30 Nov 2022 23:05:41 +0000
-Message-ID: <b98a61ae-da11-00c0-60a9-30a3c043f761@suse.cz>
-Date:   Thu, 1 Dec 2022 00:05:41 +0100
+        Wed, 30 Nov 2022 18:06:11 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28D397033;
+        Wed, 30 Nov 2022 15:06:07 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id s5so76819edc.12;
+        Wed, 30 Nov 2022 15:06:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UQlapujHjKw7zEIFDE0bIVyHKZ7ZDtpnlk0TFhcybwA=;
+        b=Ysm8TV/wU765nO4TfDrEonAPGjEFGm6E5iiVUYJOpUTVRLXFO3g8PSVucc0QBO77qc
+         RotMShY3b1/V8LPZ+LTzTvOwYtDXl1whxa23u4QnDrou4mw86hzWbB2eCC69gybYw7TW
+         smQ5ZQXFdzRLVJu1tRka0CNIHqBmT/wN6ONRqZOsbUTSP9z0IdRTPONmCLEg8YTZND9D
+         KmvHnVx4MzMB4nGmQMVWwjCW9Tt/5g8kUHJEpPsSx6OdWTbHV0/fS8i0NaJWBnhCCTEJ
+         jppNDTC7lFN5JUGJCU/NNBRqRydvrYiGDi+FAvFuu7z25o5hk8qSlAm27IylwMNvc2k/
+         K9WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UQlapujHjKw7zEIFDE0bIVyHKZ7ZDtpnlk0TFhcybwA=;
+        b=0oF7Pz2wmfcwxj93D4G47KqsMaJxgUTSEmbxJMeNa30l4U30ihwuvMaNvroOCLGBs3
+         pCjillY+bSJN+RHdli34+TUTR9wdQe9i5v2uC9YjPdUFUYORQVwKCEk5hr7b0h18zUB6
+         8gdWzgeMG3jZXKnL99jWgxwobui0AhzYfMaQZ+nQT3bl48USzzqpXClO+n4mJTeGyMlH
+         Kfi1L/ciG7gkLZ853QjxtKYlEFDMvCltajBaNPNLSuQqVDFzWWliuwtt0TTU4X9yjyp6
+         AY2PHtXAyv0Q116O1n5tVicLpqtxsy9DTnDwL2WbjY4vCWZg28uGs+Yj8GwhRBdiI8Bu
+         GAbQ==
+X-Gm-Message-State: ANoB5pnqQXRdiCXUr6jtmc8poYzQ68Qjp3ExJJc0S/da3IlIxESx7eKL
+        HvDW4Ip/WNTqHjw0Y3NNHcuVCQQQcBpcsWw4ql/ePrCl
+X-Google-Smtp-Source: AA0mqf7PtDPrIxDqKatcWfpFTL79ZuvV3WUTnTPNI4tc9Zv92huJfMiwWmwTqHWYV+x88CA6tbxVdC/+182b6AVVNFs=
+X-Received: by 2002:a50:ed90:0:b0:46a:e6e3:b3cf with SMTP id
+ h16-20020a50ed90000000b0046ae6e3b3cfmr21089221edr.333.1669849566068; Wed, 30
+ Nov 2022 15:06:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 2/2] mm/slub, kunit: Add a test case for kmalloc
- redzone check
-To:     Feng Tang <feng.tang@intel.com>, Marco Elver <elver@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oliver Glitta <glittao@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20221130085451.3390992-1-feng.tang@intel.com>
- <20221130085451.3390992-2-feng.tang@intel.com>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221130085451.3390992-2-feng.tang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221124151603.807536-1-benjamin.tissoires@redhat.com> <20221124151603.807536-2-benjamin.tissoires@redhat.com>
+In-Reply-To: <20221124151603.807536-2-benjamin.tissoires@redhat.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 30 Nov 2022 15:05:53 -0800
+Message-ID: <CAEf4Bzaq3QfhzqQK=BqCkzNcoS3A5L-ntJ5vj16uMc=jS4bxkw@mail.gmail.com>
+Subject: Re: [RFC hid v1 01/10] bpftool: generate json output of skeletons
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/30/22 09:54, Feng Tang wrote:
-> kmalloc redzone check for slub has been merged, and it's better to add
-> a kunit case for it, which is inspired by a real-world case as described
-> in commit 120ee599b5bf ("staging: octeon-usb: prevent memory corruption"):
-> 
-> "
->   octeon-hcd will crash the kernel when SLOB is used. This usually happens
->   after the 18-byte control transfer when a device descriptor is read.
->   The DMA engine is always transferring full 32-bit words and if the
->   transfer is shorter, some random garbage appears after the buffer.
->   The problem is not visible with SLUB since it rounds up the allocations
->   to word boundary, and the extra bytes will go undetected.
-> "
-> 
-> To avoid interrupting the normal functioning of kmalloc caches, a
-> kmem_cache mimicing kmalloc cache is created with similar flags, and
-> kmalloc_trace() is used to really test the orig_size and redzone setup.
-> 
-> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
-> Signed-off-by: Feng Tang <feng.tang@intel.com>
+On Thu, Nov 24, 2022 at 7:16 AM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> So we can then build light skeletons with loaders in any language.
+>
+
+It would be useful to include an example generated JSON. Other than
+that the overall idea makes sense. Kind of machine-friendly "BPF
+object schema" to allow automation.
+
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 > ---
-> Changelog:
-> 
->   since v2:
->     * only add SLAB_KMALLOC to SLAB_CACHE_FLAGS and SLAB_FLAGS_PERMITTEDa,
->       and use new wrapper of cache creation(Vlastimil Babka)
-> 
->   since v1:
->     * create a new cache mimicing kmalloc cache, reduce dependency
->       over global slub_debug setting (Vlastimil Babka)
-> 
->  lib/slub_kunit.c | 22 ++++++++++++++++++++++
->  mm/slab.h        |  4 +++-
->  2 files changed, 25 insertions(+), 1 deletion(-)
-> 
-> diff --git a/lib/slub_kunit.c b/lib/slub_kunit.c
-> index 5b0c8e7eb6dc..ff24879e3afe 100644
-> --- a/lib/slub_kunit.c
-> +++ b/lib/slub_kunit.c
-> @@ -135,6 +135,27 @@ static void test_clobber_redzone_free(struct kunit *test)
->  	kmem_cache_destroy(s);
+>  tools/bpf/bpftool/gen.c | 95 +++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 95 insertions(+)
+>
+> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+> index cf8b4e525c88..818a5209b3ac 100644
+> --- a/tools/bpf/bpftool/gen.c
+> +++ b/tools/bpf/bpftool/gen.c
+> @@ -904,6 +904,96 @@ codegen_progs_skeleton(struct bpf_object *obj, size_t prog_cnt, bool populate_li
+>         }
 >  }
->  
-> +static void test_kmalloc_redzone_access(struct kunit *test)
+>
+> +static int gen_json(struct bpf_object *obj, const char *obj_name, size_t file_sz, uint8_t *obj_data)
 > +{
-> +	struct kmem_cache *s = test_kmem_cache_create("TestSlub_RZ_kmalloc", 32,
-> +				SLAB_KMALLOC|SLAB_STORE_USER|SLAB_RED_ZONE);
-> +	u8 *p = kmalloc_trace(s, GFP_KERNEL, 18);
+> +       struct bpf_program *prog;
+> +       struct bpf_map *map;
+> +       char ident[256];
 > +
-> +	kasan_disable_current();
+> +       jsonw_start_object(json_wtr);   /* root object */
 > +
-> +	/* Suppress the -Warray-bounds warning */
-> +	OPTIMIZER_HIDE_VAR(p);
-> +	p[18] = 0xab;
-> +	p[19] = 0xab;
+> +       jsonw_string_field(json_wtr, "name", obj_name);
 > +
-> +	kmem_cache_free(s, p);
-> +	validate_slab_cache(s);
-> +	KUNIT_EXPECT_EQ(test, 2, slab_errors);
-
-With this ordering the expectation was failing as slab_Errors was 0, had to
-fix it up to look more like TestSlub_RZ_alloc:
-
-> +	kasan_enable_current();
-> +	kmem_cache_destroy(s);
+> +       jsonw_bool_field(json_wtr, "use_loader", use_loader);
+> +
+> +       /* print all maps */
+> +       jsonw_name(json_wtr, "maps");
+> +       jsonw_start_array(json_wtr);
+> +       bpf_object__for_each_map(map, obj) {
+> +               if (!get_map_ident(map, ident, sizeof(ident))) {
+> +                       p_err("ignoring unrecognized internal map '%s'...",
+> +                             bpf_map__name(map));
+> +                       continue;
+> +               }
+> +
+> +               jsonw_start_object(json_wtr);   /* map object */
+> +               jsonw_string_field(json_wtr, "ident", ident);
+> +               jsonw_string_field(json_wtr, "name", bpf_map__name(map));
+> +
+> +               /* print mmap data value */
+> +               if (is_internal_mmapable_map(map, ident, sizeof(ident))) {
+> +                       const void *mmap_data = NULL;
+> +                       size_t mmap_size = 0;
+> +
+> +                       mmap_data = bpf_map__initial_value(map, &mmap_size);
+> +
+> +                       jsonw_uint_field(json_wtr, "size", mmap_size);
+> +                       jsonw_uint_field(json_wtr, "mmap_sz", bpf_map_mmap_sz(map));
+> +                       jsonw_name(json_wtr, "data");
+> +                       print_hex_data_json((uint8_t *)mmap_data, mmap_size);
+> +
+> +               }
+> +               jsonw_end_object(json_wtr);     /* map object */
+> +       }
+> +       jsonw_end_array(json_wtr);
+> +
+> +       /* print all progs */
+> +       jsonw_name(json_wtr, "progs");
+> +       jsonw_start_array(json_wtr);
+> +       bpf_object__for_each_program(prog, obj) {
+> +               jsonw_start_object(json_wtr);   /* prog object */
+> +               jsonw_string_field(json_wtr, "name", bpf_program__name(prog));
+> +               jsonw_string_field(json_wtr, "sec", bpf_program__section_name(prog));
+> +               jsonw_end_object(json_wtr);     /* prog object */
+> +       }
+> +       jsonw_end_array(json_wtr);
+> +
+> +       /* print object data */
+> +       if (use_loader) {
+> +               DECLARE_LIBBPF_OPTS(gen_loader_opts, opts);
+> +               int err = 0;
+> +
+> +               err = bpf_object__gen_loader(obj, &opts);
+> +               if (err)
+> +                       return err;
+> +
+> +               err = bpf_object__load(obj);
+> +               if (err) {
+> +                       p_err("failed to load object file");
+> +                       return err;
+> +               }
+> +               /* If there was no error during load then gen_loader_opts
+> +                * are populated with the loader program.
+> +                */
+> +
+> +               jsonw_uint_field(json_wtr, "data_sz", opts.data_sz);
+> +               jsonw_name(json_wtr, "data");
+> +               print_hex_data_json((uint8_t *)opts.data, opts.data_sz);
+> +
+> +               jsonw_uint_field(json_wtr, "insns_sz", opts.insns_sz);
+> +               jsonw_name(json_wtr, "insns");
+> +               print_hex_data_json((uint8_t *)opts.insns, opts.insns_sz);
+> +
+> +       } else {
+> +               jsonw_name(json_wtr, "data");
+> +               print_hex_data_json(obj_data, file_sz);
+> +       }
+> +
+> +       jsonw_end_object(json_wtr);     /* root object */
+> +
+> +       return 0;
 > +}
 > +
-
---- a/lib/slub_kunit.c
-+++ b/lib/slub_kunit.c
-@@ -148,11 +148,11 @@ static void test_kmalloc_redzone_access(struct kunit *test)
-        p[18] = 0xab;
-        p[19] = 0xab;
- 
--       kmem_cache_free(s, p);
-        validate_slab_cache(s);
-        KUNIT_EXPECT_EQ(test, 2, slab_errors);
- 
-        kasan_enable_current();
-+       kmem_cache_free(s, p);
-        kmem_cache_destroy(s);
- }
-
-With that, added both to slab.git branch slab/for-6.2/kmalloc_redzone
-Thanks!
+>  static int do_skeleton(int argc, char **argv)
+>  {
+>         char header_guard[MAX_OBJ_NAME_LEN + sizeof("__SKEL_H__")];
+> @@ -986,6 +1076,11 @@ static int do_skeleton(int argc, char **argv)
+>                 goto out;
+>         }
+>
+> +       if (json_output) {
+> +               err = gen_json(obj, obj_name, file_sz, (uint8_t *)obj_data);
+> +               goto out;
+> +       }
+> +
+>         bpf_object__for_each_map(map, obj) {
+>                 if (!get_map_ident(map, ident, sizeof(ident))) {
+>                         p_err("ignoring unrecognized internal map '%s'...",
+> --
+> 2.38.1
+>
