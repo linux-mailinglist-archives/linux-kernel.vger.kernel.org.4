@@ -2,118 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDF863D4B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D09763D4BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:38:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235159AbiK3LfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:35:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
+        id S231965AbiK3LiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:38:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235155AbiK3Lel (ORCPT
+        with ESMTP id S229974AbiK3LiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:34:41 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52DD7B611
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:34:01 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id b21so16371119plc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:34:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vt+jeUCmbHRpuzK+fZSc4ivofSbJWHqyWABXtLQhRg4=;
-        b=BjtAnrSIXCjAQgYt9mCdERiAKHjXFsA4027zCQv5WiHcFipEGZJT8DlcKZGWL3fcjN
-         JjaAi+8fMb/c4KMtrbB/I7gY0alPQ1pSOmJHKN1akuEE+Rj+C292k7Pabj60vrRHqFru
-         relSyX2cxswGaQ9m+5aT+zMeDrPBm7lgJo3v87fc6Cxczmmg9g/X5UF2SlWLBWj+2LeD
-         AsXKb+cy5BSoxU8PRdsUHEHltlqgaD669pcBAdmRN09rCUi5/S+B47TzE0oBXIoLZeGm
-         muYAcHb9C/GxT+Le4QrANDcE4RkQ4l0W+PF3GT5t5HfpIxUzC3T28X1QNBacK88/rOso
-         k19Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Vt+jeUCmbHRpuzK+fZSc4ivofSbJWHqyWABXtLQhRg4=;
-        b=GWYyEK5yxCHBBXJePDUF5QsNGikGr1tw4C1whNCnRBQSknfsrDWEfaFCTTszQ1EBGf
-         Mm8whJW8VgCf/+aP4XlHpQnF05lmLXLPzCXxjVQfdhRKVvNqyziqGyskUYaci5wAKlHe
-         gP3xScG0QIFh+6HaBVBfYPPJDZve7id8AntWA8Dv4d/a0PLZSWZzFuqCycTpI+tw2WxK
-         2cPyE3fWZvTzZBOOef39dwS76VnrGI/K+UrohXFYCEqrLXD16Vir5gJPnwUl0gO9KGv3
-         4RSwUQHstxLjIe/zXPpdkMuyJe88AqW/tMYmMv+g5rc4SGJYubjr7w/ZP34ZbpWVPR/e
-         gEGw==
-X-Gm-Message-State: ANoB5pmxfKY1OSi+yb0hWwBul6dJyqr1nfe3b2eTaudA3KRJkQp/rH32
-        aYa43bj58RnA2QTt8mAhycwCf/UpbsNIo6euwptYElaUZUs=
-X-Google-Smtp-Source: AA0mqf7p9b5ayCsGlKeXiBkIRIpTQd5EnIRo8eNLpVLk8NlcKvLW8dKFi/08brczBWlXxhqrXrBfcM8cm/JQl+XD79M=
-X-Received: by 2002:a17:90a:ae0f:b0:20d:b124:33b1 with SMTP id
- t15-20020a17090aae0f00b0020db12433b1mr63145200pjq.202.1669808041406; Wed, 30
- Nov 2022 03:34:01 -0800 (PST)
+        Wed, 30 Nov 2022 06:38:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93682C676;
+        Wed, 30 Nov 2022 03:38:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A52CDB81AF2;
+        Wed, 30 Nov 2022 11:38:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0CE6C433C1;
+        Wed, 30 Nov 2022 11:38:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669808294;
+        bh=5bEYlFEyZKCYZEyNNJPRBWYDQP0ERj+j46soRPrLxVs=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=dYTi4FNxDiF0nqG0Fg2vbGzAGx/ebqcpdavkWjmErzAeMgb6Dl9RLE1jKWnI1fHGg
+         Cvbxb6NbVUL239BT6qpgAZ1vIcICYUW2GKqpKsXiTVSvZWoB+toUy+MwLym5aVTWk7
+         wFzDKjGt3rx/ZyVO/PlyPAhztE5YQ924dKxm2qz0RcvJN4CwXbwsSiYNFKoHcbUbhJ
+         WXhetBwYCHdC+DdQH6qPtQ+FWgqhwscNcwT2TTo7O3nXoynM8kbTz4+q3rQtOrum4A
+         coTd+zd4EXZC1Oi9jPc2ymUD3vWrIywn44pX9bnzUl3fGwGzmWTr2jMlLDhc6LHpi/
+         f+Z4r4BZuJlVQ==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Pu Lehui <pulehui@huawei.com>,
+        Pu Lehui <pulehui@huaweicloud.com>
+Subject: Re: [PATCH bpf] riscv, bpf: Emit fixed-length imm64 for
+ BPF_PSEUDO_FUNC
+In-Reply-To: <20221130033806.2967822-1-pulehui@huaweicloud.com>
+References: <20221130033806.2967822-1-pulehui@huaweicloud.com>
+Date:   Wed, 30 Nov 2022 12:38:11 +0100
+Message-ID: <87h6yg1xlo.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-References: <20221130092847.2092-1-thunder.leizhen@huawei.com>
- <CAPDyKFphNdR-TorULpbsMtM6MzqsaK_UdSmG9Hin=wunUwJwJQ@mail.gmail.com> <d9d44a9c-e61e-2803-731b-cfa5f3d3d46c@huawei.com>
-In-Reply-To: <d9d44a9c-e61e-2803-731b-cfa5f3d3d46c@huawei.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 30 Nov 2022 12:33:24 +0100
-Message-ID: <CAPDyKFrbRcEgtwbgBY8bsDW3YTtXJBS0zRhJq-Emf89hDWaUjg@mail.gmail.com>
-Subject: Re: [PATCH] mmc: core: Fix error return code in sd_read_ext_regs()
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Nov 2022 at 12:18, Leizhen (ThunderTown)
-<thunder.leizhen@huawei.com> wrote:
->
->
->
-> On 2022/11/30 18:04, Ulf Hansson wrote:
-> > On Wed, 30 Nov 2022 at 10:29, Zhen Lei <thunder.leizhen@huawei.com> wrote:
-> >>
-> >> Fix to return a negative error code from the error handling
-> >> case instead of 0, as done elsewhere in this function.
-> >>
-> >> Fixes: c784f92769ae ("mmc: core: Read the SD function extension registers for power management")
-> >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> >> ---
-> >>  drivers/mmc/core/sd.c | 1 +
-> >>  1 file changed, 1 insertion(+)
-> >>
-> >> diff --git a/drivers/mmc/core/sd.c b/drivers/mmc/core/sd.c
-> >> index 3662bf5320ce56d..7b64f76f0179ca8 100644
-> >> --- a/drivers/mmc/core/sd.c
-> >> +++ b/drivers/mmc/core/sd.c
-> >> @@ -1277,6 +1277,7 @@ static int sd_read_ext_regs(struct mmc_card *card)
-> >>         if (rev != 0 || len > 512) {
-> >>                 pr_warn("%s: non-supported SD ext reg layout\n",
-> >>                         mmc_hostname(card->host));
-> >> +               err = -EOPNOTSUPP;
-> >
-> > The original intent was to not return an error code. Simply, because
-> > the card remains functional and all but the new features from the SD
-> > function extensions registers can still be used.
->
-> OK, I got it.
->
-> >
-> > Perhaps, we should update the comment a few lines above to better
-> > reflect that this is in-fact what we intend here.
->
-> How about also add 'warning' to the output? The other two outputs
-> contain the 'error' keyword.
+Pu Lehui <pulehui@huaweicloud.com> writes:
 
-There is already a pr_warn(), or is there something you want to add to that?
-
+> From: Pu Lehui <pulehui@huawei.com>
 >
-> >
-> >>                 goto out;
-> >>         }
-> >>
+> For BPF_PSEUDO_FUNC instruction, verifier will refill imm with
+> correct addresses of bpf_calls and then run last pass of JIT.
+> Since the emit_imm of RV64 is variable-length, which will emit
+> appropriate length instructions accorroding to the imm, it may
+> broke ctx->offset, and lead to unpredictable problem, such as
+> inaccurate jump. So let's fix it with fixed-length imm64 insns.
 
-Kind regards
-Uffe
+Ah, nice one! So, the the invariant doesn't hold (the image grow in the
+last pass).
+
+> Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
+
+This is odd? This can't be the right Fixes-tag...
+
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> ---
+>  arch/riscv/net/bpf_jit_comp64.c | 31 ++++++++++++++++++++++++++++++-
+>  1 file changed, 30 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
+p64.c
+> index eb99df41fa33..f984d5fa014b 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -139,6 +139,30 @@ static bool in_auipc_jalr_range(s64 val)
+>  		val < ((1L << 31) - (1L << 11));
+>  }
+>=20=20
+> +/* Emit fixed-length instructions for 32-bit imm */
+> +static void emit_fixed_imm32(u8 rd, s32 val, struct rv_jit_context *ctx)
+> +{
+> +	s32 upper =3D (val + (1U << 11)) >> 12;
+> +	s32 lower =3D ((val & 0xfff) << 20) >> 20;
+> +
+> +	emit(rv_lui(rd, upper), ctx);
+> +	emit(rv_addi(rd, rd, lower), ctx);
+> +}
+> +
+> +/* Emit fixed-length instructions for 64-bit imm */
+> +static void emit_fixed_imm64(u8 rd, s64 val, struct rv_jit_context *ctx)
+> +{
+> +	/* Compensation for sign-extension of rv_addi */
+> +	s32 imm_hi =3D (val + (1U << 31)) >> 32;
+> +	s32 imm_lo =3D val;
+> +
+> +	emit_fixed_imm32(rd, imm_hi, ctx);
+> +	emit_fixed_imm32(RV_REG_T1, imm_lo, ctx);
+> +	emit(rv_slli(rd, rd, 32), ctx);
+> +	emit(rv_add(rd, rd, RV_REG_T1), ctx);
+> +}
+
+Hmm, will this really be fixed? We can end up with compressed
+instructions, which can then be a non-compressed in the last pass, and
+we have the same problem?
+
+The range of valid address for RV64 (sv39 to sv57) are
+0xffffffff00000000 to 0xffffffffffffffff, so I think we can do better
+than 6 insn, no? My gut feeling (I need to tinker a bit) is that 4
+should be sufficient.
+
+Note that worst case for a imm64 load are 8 instructions, but this is
+not the general case.
+
+
+Bj=C3=B6rn
