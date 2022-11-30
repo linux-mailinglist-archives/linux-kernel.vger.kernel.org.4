@@ -2,194 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD47563CF9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 08:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EABF263CFA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 08:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233798AbiK3HQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 02:16:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41264 "EHLO
+        id S233828AbiK3HUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 02:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiK3HP6 (ORCPT
+        with ESMTP id S229648AbiK3HU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 02:15:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3248E5F87A
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 23:15:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A61D1B81A7A
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 07:15:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5406AC433C1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 07:15:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669792554;
-        bh=Cs89uJGCDT7nwbyOANh15I+gIUbN//CQRuDTvx/5B/s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YGRsAZZKkq8nJ9r4ZyoJ7IXCgOjwa+zJqz0RP+yqjmV92EkaAHicMIK2Ck1mLRlbY
-         8qpMVHYKiRB76NFO7lOBLEPz1nB8080xo5rwIJ0Fq/lQ0hrYVU8vDoUHm7qLTaEZKe
-         GEjepvIlwDPugbS2NmUP7HZ0KupOeM6atVtOUIP8knrDLgQKzFWDmhnX4E5RQvmvaY
-         ApldyaNl5tKWQRx6uBu1gP5BxU2mSg+XJPo/F4ouenlpmQmrGpqsT/ExguWpCSeZAC
-         sv6GXQQDAQgMpnMuhIerofLF68n4+cvpSzXDAqUyVqNfxuA5Iv8kn8nyOdxWS2NGbf
-         4BreI6C7WrDzA==
-Received: by mail-ed1-f42.google.com with SMTP id d20so12061277edn.0
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 23:15:54 -0800 (PST)
-X-Gm-Message-State: ANoB5pnICc9VSIkEK+JtRuAV50UZyOFfj68emvSIHP9AN38hjoODMmd5
-        xONJnf+Ei4/cKcDj/0Rg/Vr7tEb9IKwGzg0YlaY=
-X-Google-Smtp-Source: AA0mqf6iO7zEMAHQthAsZZCwb0TfAQtr1pQ+1guep+gxvta8+32QKZjb7/yFncCMFX0iDzZpDpcZ6EuMQkDOmPBIfbo=
-X-Received: by 2002:aa7:c046:0:b0:461:54f0:f7dc with SMTP id
- k6-20020aa7c046000000b0046154f0f7dcmr54737158edo.117.1669792552420; Tue, 29
- Nov 2022 23:15:52 -0800 (PST)
+        Wed, 30 Nov 2022 02:20:28 -0500
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874712A24D;
+        Tue, 29 Nov 2022 23:20:26 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VW1oelD_1669792816;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VW1oelD_1669792816)
+          by smtp.aliyun-inc.com;
+          Wed, 30 Nov 2022 15:20:23 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     mchehab@kernel.org
+Cc:     p.zabel@pengutronix.de, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH v2] media: rzg2l-cru: Fix missing error code in rzg2l_cru_start_streaming_vq()
+Date:   Wed, 30 Nov 2022 15:20:14 +0800
+Message-Id: <20221130072014.95092-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-References: <20221130022442.18358-1-palmer@rivosinc.com>
-In-Reply-To: <20221130022442.18358-1-palmer@rivosinc.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 30 Nov 2022 15:15:40 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ0xuJo6uzB+8SudZOFiZ2_o1sLB=Hn5XuCw6g2tXUtkQ@mail.gmail.com>
-Message-ID: <CAJF2gTQ0xuJo6uzB+8SudZOFiZ2_o1sLB=Hn5XuCw6g2tXUtkQ@mail.gmail.com>
-Subject: Re: [PATCH v4] riscv: fix race when vmap stack overflow
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     jszhang@kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The comment becomes better. Thx.
+Failed to allocate scratch buffer, add the error code '-ENOMEM' to the
+return value 'ret'.
 
-On Wed, Nov 30, 2022 at 10:29 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->
-> From: Jisheng Zhang <jszhang@kernel.org>
->
-> Currently, when detecting vmap stack overflow, riscv firstly switches
-> to the so called shadow stack, then use this shadow stack to call the
-> get_overflow_stack() to get the overflow stack. However, there's
-> a race here if two or more harts use the same shadow stack at the same
-> time.
->
-> To solve this race, we introduce spin_shadow_stack atomic var, which
-> will be swap between its own address and 0 in atomic way, when the
-> var is set, it means the shadow_stack is being used; when the var
-> is cleared, it means the shadow_stack isn't being used.
->
-> Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Suggested-by: Guo Ren <guoren@kernel.org>
-> Reviewed-by: Guo Ren <guoren@kernel.org>
-> Link: https://lore.kernel.org/r/20221030124517.2370-1-jszhang@kernel.org
-> [Palmer: Add AQ to the swap, and also some comments.]
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> ---
-> Sorry to just re-spin this one without any warning, but I'd read patch a
-> few times and every time I'd managed to convice myself there was a much
-> simpler way of doing this.  By the time I'd figured out why that's not
-> the case it seemed faster to just write the comments.
->
-> I've stashed this, right on top of the offending commit, at
-> palmer/riscv-fix_vmap_stack.
->
-> Since v3:
->  - Add AQ to the swap.
->  - Add a bunch of comments.
->
-> Since v2:
->  - use REG_AMOSWAP
->  - add comment to the purpose of smp_store_release()
->
-> Since v1:
->  - use smp_store_release directly
->  - use unsigned int instead of atomic_t
-> ---
->  arch/riscv/include/asm/asm.h |  1 +
->  arch/riscv/kernel/entry.S    | 13 +++++++++++++
->  arch/riscv/kernel/traps.c    | 18 ++++++++++++++++++
->  3 files changed, 32 insertions(+)
->
-> diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
-> index 618d7c5af1a2..e15a1c9f1cf8 100644
-> --- a/arch/riscv/include/asm/asm.h
-> +++ b/arch/riscv/include/asm/asm.h
-> @@ -23,6 +23,7 @@
->  #define REG_L          __REG_SEL(ld, lw)
->  #define REG_S          __REG_SEL(sd, sw)
->  #define REG_SC         __REG_SEL(sc.d, sc.w)
-> +#define REG_AMOSWAP_AQ __REG_SEL(amoswap.d.aq, amoswap.w.aq)
-Below is the reason why I use the relax version here:
-https://lore.kernel.org/all/CAJF2gTRAEX_jQ_w5H05dyafZzHq+P5j05TJ=C+v+OL__GQam4A@mail.gmail.com/T/#u
+drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c:676 rzg2l_cru_start_streaming_vq() warn: missing error code 'ret'.
 
->  #define REG_ASM                __REG_SEL(.dword, .word)
->  #define SZREG          __REG_SEL(8, 4)
->  #define LGREG          __REG_SEL(3, 2)
-> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> index 98f502654edd..5fdb6ba09600 100644
-> --- a/arch/riscv/kernel/entry.S
-> +++ b/arch/riscv/kernel/entry.S
-> @@ -387,6 +387,19 @@ handle_syscall_trace_exit:
->
->  #ifdef CONFIG_VMAP_STACK
->  handle_kernel_stack_overflow:
-> +       /*
-> +        * Takes the psuedo-spinlock for the shadow stack, in case multiple
-> +        * harts are concurrently overflowing their kernel stacks.  We could
-> +        * store any value here, but since we're overflowing the kernel stack
-> +        * already we only have SP to use as a scratch register.  So we just
-> +        * swap in the address of the spinlock, as that's definately non-zero.
-> +        *
-> +        * Pairs with a store_release in handle_bad_stack().
-> +        */
-> +1:     la sp, spin_shadow_stack
-> +       REG_AMOSWAP_AQ sp, sp, (sp)
-> +       bnez sp, 1b
-> +
->         la sp, shadow_stack
->         addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
->
-> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> index bb6a450f0ecc..be54ccea8c47 100644
-> --- a/arch/riscv/kernel/traps.c
-> +++ b/arch/riscv/kernel/traps.c
-> @@ -213,11 +213,29 @@ asmlinkage unsigned long get_overflow_stack(void)
->                 OVERFLOW_STACK_SIZE;
->  }
->
-> +/*
-> + * A pseudo spinlock to protect the shadow stack from being used by multiple
-> + * harts concurrently.  This isn't a real spinlock because the lock side must
-> + * be taken without a valid stack and only a single register, it's only taken
-> + * while in the process of panicing anyway so the performance and error
-> + * checking a proper spinlock gives us doesn't matter.
-> + */
-> +unsigned long spin_shadow_stack;
-> +
->  asmlinkage void handle_bad_stack(struct pt_regs *regs)
->  {
->         unsigned long tsk_stk = (unsigned long)current->stack;
->         unsigned long ovf_stk = (unsigned long)this_cpu_ptr(overflow_stack);
->
-> +       /*
-> +        * We're done with the shadow stack by this point, as we're on the
-> +        * overflow stack.  Tell any other concurrent overflowing harts that
-> +        * they can proceed with panicing by releasing the pseudo-spinlock.
-> +        *
-> +        * This pairs with an amoswap.aq in handle_kernel_stack_overflow.
-> +        */
-> +       smp_store_release(&spin_shadow_stack, 0);
-> +
->         console_verbose();
->
->         pr_emerg("Insufficient stack space to handle exception!\n");
-> --
-> 2.38.1
->
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3275
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+Changes in v2:
+  -Modified the subject line to "media: rzg2l-cru:".
 
+ drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---
-Best Regards
+diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
+index 9533e4069ecd..91b57c7c2e56 100644
+--- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
++++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
+@@ -673,6 +673,7 @@ static int rzg2l_cru_start_streaming_vq(struct vb2_queue *vq, unsigned int count
+ 	if (!cru->scratch) {
+ 		return_unused_buffers(cru, VB2_BUF_STATE_QUEUED);
+ 		dev_err(cru->dev, "Failed to allocate scratch buffer\n");
++		ret = -ENOMEM;
+ 		goto free_image_conv_irq;
+ 	}
+ 
+-- 
+2.20.1.7.g153144c
 
- Guo Ren
