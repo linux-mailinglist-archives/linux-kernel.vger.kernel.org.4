@@ -2,125 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927C663D101
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:45:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D21363D106
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:47:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234115AbiK3Ipq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 03:45:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
+        id S236522AbiK3IrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 03:47:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235784AbiK3IpU (ORCPT
+        with ESMTP id S236290AbiK3IrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 03:45:20 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012133F061
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 00:45:09 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 4614F124D;
-        Wed, 30 Nov 2022 09:45:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1669797907;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dUiquKgXaXWZX/knROtvM3ke86lnOfB8epY4uKc9fSo=;
-        b=kcA9YG/PY3aaR974uQrPVIQm2RuWkqhocmwaI0R2r4WgVXebIJ+el9mfHRwootzMo1m1Rm
-        jkmTzK37heS+OmCQFGUBQMT5GC0oUNO/Xpr2c3HC9qznLD/0/jHFqWKX2mh300kLgprKjI
-        4+tFDlX8xSMD9qvei46L0cP+/DDN3M9nUmtueWJ0Zxr2vv3Wm2mTpoT8EaymCTNn/74/6p
-        wcZ2kCv6UWQnJJ/il/HKMPV1ip4Gv0GhIc7AX69FyooyCS+572NBszXSWqPFj59yr8QvLQ
-        +5c75MqlQJVXbqrFhmo1CCVchkclyXArYOHzi+eFt9cQQypL6vGg4Q9EzOdYyw==
+        Wed, 30 Nov 2022 03:47:01 -0500
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5312AC64;
+        Wed, 30 Nov 2022 00:47:00 -0800 (PST)
+Received: by mail-qv1-f48.google.com with SMTP id u10so5903963qvp.4;
+        Wed, 30 Nov 2022 00:47:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yJL7tkk/7tNU8e/+vm4nPHM5D33dVrunJX89jUIX5MU=;
+        b=VQ4lsS5BSC2dUU143JFqN7qKJgeNeL5Nc6Z+pa5IQmntUViFxyNXZiFfXG4z4Fr2bE
+         8EA9B+rt1Ox7Nz/ouGYsy7lnvHHZk0TVsc5oS5fT9KURmN7Y0IeF/BP5IkyphqM4Q5uL
+         MdMM0xFGCYnC2tgF+7TrMBKf53wZaLgcGetDyDdzmcOgBVvdpB8A5yqtPnjzdvhVbY8L
+         EqHI5mtrrByYf4lYmFT0ZMrwUnzMiQiKIvtxKxsLUJpn+lTocQkDGySWze9IRB2aCS/9
+         Rdkb+QKS6sHB2JhmLdGKULHs6JLlbJbFuKPkkbDjeJU4dIj8L2BdO6oE0WUWBy4Znlxz
+         AOPA==
+X-Gm-Message-State: ANoB5pkw8lY+y4lEIk/9k4+jH1avLuf1tV1gRppkxAnYrwies4Ee4Ywp
+        rPln5KQTYiUE12/X+sqhTgpfZcZ6YeeY9Q==
+X-Google-Smtp-Source: AA0mqf7f1Ji4Wyx3yDLonjjC0Vt/qm8wICINlLWUYYcnMTbfLe8/rtJkLKE/c+9LSqBZ3fnmWWQk6g==
+X-Received: by 2002:a0c:814d:0:b0:4c6:e530:2c6b with SMTP id 71-20020a0c814d000000b004c6e5302c6bmr24469687qvc.15.1669798019303;
+        Wed, 30 Nov 2022 00:46:59 -0800 (PST)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id de3-20020a05620a370300b006e99290e83fsm648467qkb.107.2022.11.30.00.46.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 00:46:59 -0800 (PST)
+Received: by mail-yb1-f176.google.com with SMTP id c140so20649734ybf.11;
+        Wed, 30 Nov 2022 00:46:58 -0800 (PST)
+X-Received: by 2002:a25:7204:0:b0:6f0:9ff5:1151 with SMTP id
+ n4-20020a257204000000b006f09ff51151mr31642088ybc.543.1669798018596; Wed, 30
+ Nov 2022 00:46:58 -0800 (PST)
 MIME-Version: 1.0
-Date:   Wed, 30 Nov 2022 09:45:07 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-Cc:     greg.malysa@timesys.com,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mtd: spi-nor: issi: Add in support for IS25LX256 chip,
- operating in 1S-1S-8S mode.
-In-Reply-To: <20221128172455.159787-1-nathan.morrison@timesys.com>
-References: <20221128172455.159787-1-nathan.morrison@timesys.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <2acae3be377a5d8c3df66f860d944dbb@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221124003351.7792-1-hayashi.kunihiko@socionext.com>
+ <20221124003351.7792-3-hayashi.kunihiko@socionext.com> <CAMuHMdVH+amC83uMBpsCebaHd2EWp1EO59JNcgRTncbNGNNRsQ@mail.gmail.com>
+ <6c423f87-1187-b2d6-8b70-c8cd709f3ea0@socionext.com>
+In-Reply-To: <6c423f87-1187-b2d6-8b70-c8cd709f3ea0@socionext.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 30 Nov 2022 09:46:47 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWa06ND-Tud1_bYTYAVbmo1qMnU3i0bETZo6FVehvLZhg@mail.gmail.com>
+Message-ID: <CAMuHMdWa06ND-Tud1_bYTYAVbmo1qMnU3i0bETZo6FVehvLZhg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] spi: Add Socionext F_OSPI SPI flash controller driver
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-11-28 18:24, schrieb Nathan Barrett-Morrison:
-> Adds the is25lx256 entry to the nor_parts table along with the 
-> additional
-> fixup logic to operate in 1S-1S-8S mode while programming.
-> 
-> Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-> ---
->  drivers/mtd/spi-nor/issi.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/drivers/mtd/spi-nor/issi.c b/drivers/mtd/spi-nor/issi.c
-> index 89a66a19d754..e9b32b726bf3 100644
-> --- a/drivers/mtd/spi-nor/issi.c
-> +++ b/drivers/mtd/spi-nor/issi.c
-> @@ -29,6 +29,21 @@ static const struct spi_nor_fixups is25lp256_fixups 
-> = {
->  	.post_bfpt = is25lp256_post_bfpt_fixups,
->  };
-> 
-> +static void is25lx256_post_sfdp_fixup(struct spi_nor *nor)
-> +{
-> +	/* Fixup page program command to 1S-1S-8S */
-> +	nor->params->hwcaps.mask |= SNOR_HWCAPS_PP_1_1_8;
-> +	spi_nor_set_pp_settings(&nor->params->page_programs[SNOR_CMD_PP_1_1_8],
-> +				SPINOR_OP_PP_1_1_8, SNOR_PROTO_1_1_8);
+Hi Hayashi-san,
 
-Does this flash have SFDP data? If possible, this should be
-derived from that. Could you dump the SFDP table and
-post it here [1].
+On Wed, Nov 30, 2022 at 1:47 AM Kunihiko Hayashi
+<hayashi.kunihiko@socionext.com> wrote:
+> On 2022/11/30 1:49, Geert Uytterhoeven wrote:
+> > On Thu, Nov 24, 2022 at 1:36 AM Kunihiko Hayashi
+> > <hayashi.kunihiko@socionext.com> wrote:
+> >> Introduce Socionext F_OSPI controller driver. This controller is used to
+> >> communicate with slave devices such as SPI Flash memories. It supports
+> >> 4 slave devices and up to 8-bit wide bus, but supports master mode only.
+> >>
+> >> This driver uses spi-mem framework for SPI flash memory access, and
+> >> can only operate indirect access mode and single data rate mode.
+> >>
+> >> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 
-> +
-> +	/* Disable quad_enable */
-> +	nor->params->quad_enable = NULL;
+> >> --- a/drivers/spi/Kconfig
+> >> +++ b/drivers/spi/Kconfig
+> >> @@ -906,6 +906,15 @@ config SPI_SLAVE_MT27XX
+> >>            say Y or M here.If you are not sure, say N.
+> >>            SPI slave drivers for Mediatek MT27XX series ARM SoCs.
+> >>
+> >> +config SPI_SN_F_OSPI
+> >> +       tristate "Socionext F_OSPI SPI flash controller"
+> >> +       depends on OF && HAS_IOMEM
+> >> +       depends on SPI_MEM
+> >
+> > On which systems is this hardware block found?
+> > Perhaps this should depend on ARCH_UNIPHIER || COMPILE_TEST?
+>
+> This IP doesn't depend on ARCH_UNIPHIER, so I expect that it can be widely
+> applied not only to ARCH_UNIPHIER.
 
-why?
+OK.
 
-> +}
-> +
-> +static struct spi_nor_fixups is25lx256_fixups = {
-> +	.post_sfdp = is25lx256_post_sfdp_fixup,
-> +};
-> +
->  static void pm25lv_nor_late_init(struct spi_nor *nor)
->  {
->  	struct spi_nor_erase_map *map = &nor->params->erase_map;
-> @@ -74,6 +89,10 @@ static const struct flash_info issi_nor_parts[] = {
->  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
->  		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
->  		.fixups = &is25lp256_fixups },
-> +	{ "is25lx256",  INFO(0x9d5a19, 0, 128 * 1024, 256)
-> +		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_OCTAL_READ)
-> +		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
-> +		.fixups = &is25lx256_fixups },
-> 
->  	/* PMC */
->  	{ "pm25lv512",   INFO(0,        0, 32 * 1024,    2)
+> If COMPILE_TEST is required, the dependency is like SPI_CADENCE_XSPI:
+>          depends on (OF || COMPILE_TEST) && HAS_IOMEM
 
--michael
+While this is not a hard requirement, it would be nice to have.
 
-[1] 
-https://lore.kernel.org/linux-mtd/4304e19f3399a0a6e856119d01ccabe0@walle.cc/
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
