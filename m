@@ -2,81 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A90D63D3EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C3E63D3EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233723AbiK3LGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:06:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
+        id S232664AbiK3LGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:06:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiK3LGP (ORCPT
+        with ESMTP id S230148AbiK3LGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:06:15 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1541B2C120
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:06:14 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 30 Nov 2022 06:06:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A02A2BB0C;
+        Wed, 30 Nov 2022 03:06:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EC84F6602B30;
-        Wed, 30 Nov 2022 11:06:11 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669806372;
-        bh=Vjz1D7fPn+LzVWFAgAbnGfbzxs0NBWSFhZrWPMUaMg4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hzb39mNuGctzT/7k70YPp1QxYuB+wbssfrnCGJrdEACeyOXdM7cr0I6i+M4tpCkhu
-         3wpsWoiq2PBwE4XqBX6eM9kkrvZwY/FWTogxWcShwDX7TPwPw9LCkHbahD9V60p+4H
-         nUKw7F8JLfz8jSdqtxVOgfYHjVxOv090WgVtrl1cqYEDx4aGFYUCiKeNyIzbirR6o9
-         KKH/ovphqjoPyng3IQRPm+SwMW8qLqDfDsFIWlMMf62LSf1YCK4U/IQulKE2u8AQsU
-         7m3KVhrNO4/7kdmmbLMoBkd+LlHVmrhdAnyU8+gcqBhiHUqWkHK5cB1/2149/tTn00
-         1cgJwO13MMoSg==
-Message-ID: <90661309-5947-38f2-e4c7-67066658f448@collabora.com>
-Date:   Wed, 30 Nov 2022 12:06:09 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29B6361AFA;
+        Wed, 30 Nov 2022 11:06:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46DF5C433D6;
+        Wed, 30 Nov 2022 11:06:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669806378;
+        bh=jujPM3njpPJca9XyPNWIYHk/sCCLKUbMoZq4AAx7fTM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a50kGSlgXYNoRl+R156zaFySm/onNpTsabkLsIaGm28rQNBsLSelMN2MjTcXLUs9a
+         9K6zBT0qgiElSmoCe65gTQzq/w9jfWBeg3ss1JRP+Mocqm5wCZjd6B7GMi0U8b9i3K
+         KahJppYSkZNjoC+sD3H/KJuUD1MG5ufy5fGEhJvgQ+5nle3N7QV1wmKlv6lCho/YNM
+         m56LY4wAK1RycTVxzmqOmTPJ20COzGgUbxM02ziAHFL9Eh2JV/j62WiRJeowimd4z5
+         WMehrPenc7WTyYWnzd+jw9VxuaLx6ve7V2nnbIWozDa7h/FM4X25Hu3VBs/tyQB9ru
+         xlNBiPducPVXg==
+Date:   Wed, 30 Nov 2022 06:06:17 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Mike Snitzer <snitzer@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, agk@redhat.com,
+        dm-devel@redhat.com
+Subject: Re: [PATCH AUTOSEL 5.15 25/31] dm-log-writes: set dma_alignment
+ limit in io_hints
+Message-ID: <Y4c5KSErgaBY/cwW@sashalap>
+References: <20221123124234.265396-1-sashal@kernel.org>
+ <20221123124234.265396-25-sashal@kernel.org>
+ <Y342hZgFQdLfTfdx@kbusch-mbp.dhcp.thefacebook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] ASoC: SOF: mediatek: add shutdown callback
-Content-Language: en-US
-To:     Ricardo Ribalda <ribalda@chromium.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        sound-open-firmware@alsa-project.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-References: <20221127-mtk-snd-v1-0-b7886faa612b@chromium.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221127-mtk-snd-v1-0-b7886faa612b@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Y342hZgFQdLfTfdx@kbusch-mbp.dhcp.thefacebook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 27/11/22 21:04, Ricardo Ribalda ha scritto:
-> If we do not shutdown the peripheral properly at shutdown, the whole system
-> crashes after kexec() on the first io access.
-> 
-> Let's implement the appropriate callback.
-> 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+On Wed, Nov 23, 2022 at 08:04:37AM -0700, Keith Busch wrote:
+>On Wed, Nov 23, 2022 at 07:42:26AM -0500, Sasha Levin wrote:
+>> From: Keith Busch <kbusch@kernel.org>
+>>
+>> [ Upstream commit 50a893359cd2643ee1afc96eedc9e7084cab49fa ]
+>>
+>> This device mapper needs bio vectors to be sized and memory aligned to
+>> the logical block size. Set the minimum required queue limit
+>> accordingly.
+>
+>Probably harmless, but these dm dma_alignment patches are not needed
+>prior to 6.0.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+I'll drop them on all <6.0 kernels, thanks!
 
+-- 
+Thanks,
+Sasha
