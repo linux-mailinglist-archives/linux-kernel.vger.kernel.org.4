@@ -2,140 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 700C563E266
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3726763E269
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:02:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiK3U70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 15:59:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37078 "EHLO
+        id S229736AbiK3VCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 16:02:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiK3U7Y (ORCPT
+        with ESMTP id S229461AbiK3VCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:59:24 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B451B8324A;
-        Wed, 30 Nov 2022 12:59:23 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id o1so13419402pfp.12;
-        Wed, 30 Nov 2022 12:59:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KIYpJVsaC2x+XnAlDSlXu4uym9M5TWj5fDbLd+7AM/E=;
-        b=L3xnIn1wpdKuckgw3HI3r9z5iKC3uwdevPZfrmuw/b1jbfj8jdJZOVswk68vmHn21o
-         GQIMOdSuBk3OSFNfE5YkGrKQYmOAJXxjZ/OOmypnCTW2dKtMhIwfS6REwkk1yvNj/S44
-         J4LLD7cKy1OuyHR0nUgcwYERHY3LZ2sylZS9yV13BTl52i043eQ5AlmWFMaOVx5tO2kv
-         BNcNqw1cIrppabgEjw6zABGeSWTQrfcTf82haH3t3cfS3MRe2qXlDHgp5Unhd3YgnDhR
-         NtaZm7+cfOR/kyaayPzmtzqAGGYUauQcJxb2ozki3p6nIkj0vzpTRSq4i2r6NgotGDR3
-         5oKg==
+        Wed, 30 Nov 2022 16:02:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3618324A
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:01:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669842069;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L42rLHtFBFKGLDIxtx1wN/+Aa4flR65WbTjaBq4HhSM=;
+        b=etDjANrOPvhVjIdeDE2GnJozHf412ibQuH0TFdAvSew3/0q/wP9Dxof7hHDlhY76gRY1Hy
+        XZWRi8e0ZFayRUCwbNBg4iNttEAG4xO9tGHYXfECBSLPA1VjnMoZTboXTDyqdrVRC+yLjG
+        2NQPjFC/6qWZzv/zwHEJlXp/Cf4k2D4=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-446-NUVBCnCDODyc84hwMXHvmw-1; Wed, 30 Nov 2022 16:01:07 -0500
+X-MC-Unique: NUVBCnCDODyc84hwMXHvmw-1
+Received: by mail-qv1-f72.google.com with SMTP id nn2-20020a056214358200b004bb7bc3dfdcso28752055qvb.23
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:01:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KIYpJVsaC2x+XnAlDSlXu4uym9M5TWj5fDbLd+7AM/E=;
-        b=7dAGkNExRstk9kxSWkyCjhwPpxTJpeUaNgCxfhWkbtQnD3DK1QhR9ZCxvfOHs18R4Q
-         wLQgISfoYRDt9QYJ/qrWotvyIL6AjwkOGJ6b1Qgw7mARvu7bWLevwX5gQHhQEN+IpJjn
-         czZ1TUzEjyPYLJI4Yb+MuvDHcFcw6h6gAI562R01MKjpncSDRaRIaJnMfQKfUmQLM1eQ
-         np9lL+rGyaL6UoiZnOB0TauqbmFi3eSHnrBY0u9+p8Lf2v5Gr5Tf4xw/9iijoOFIblqA
-         +r1BB257sMTQh/K8m+Rg6/+ZTK27xeT0Q5gOAiD4EJtoz8iuMSpbQls5UjJbX8F5V+LS
-         Nvnw==
-X-Gm-Message-State: ANoB5pmfCZ6uUoHzRRhV+WA9aJNQK/n3n10hhWFwD05cZnY8sB2oaxO6
-        8A7RvaI9ya+JAN4o9klih4s=
-X-Google-Smtp-Source: AA0mqf5+J4DKBqBObKdexlPW8CExyoc0kHyqKk012PaCUZhFrzwVOtdFTWaRHwPNBinKeaYoXXiLAA==
-X-Received: by 2002:a63:134e:0:b0:46e:f011:9563 with SMTP id 14-20020a63134e000000b0046ef0119563mr57561779pgt.451.1669841962972;
-        Wed, 30 Nov 2022 12:59:22 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id t15-20020a170902e84f00b00188c9c11559sm1985774plg.1.2022.11.30.12.59.22
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L42rLHtFBFKGLDIxtx1wN/+Aa4flR65WbTjaBq4HhSM=;
+        b=40tny7ZdcOcf4WuZogyPSW258Kw917uZZPPpfvqYUj3brVpSkCdt6+yAQLnFodSBHe
+         8LCNHDSaSzBqRLsWNd3wb54a6NzbzonFP4ZQi61EQ5w7nvwBsJq0Y3O5aWUzG2wuXsQR
+         ca5qTd9TRiRHpi8U2FISO2eGq5YToDgQHr7GZbdW9jzW6IM2QQeyVwllstGpXqc32EqI
+         lXs1/1mdHF4B0YLo8buv2u+NV7CJNVy3tZTv5qlofCqO2vxcUIQJxTE5JRH9XFQgUy6z
+         g+mSILwRwJAZuBlyNar8p3M4jqbeGRUgdtRlKfBtzrnS2YI5BcXm23klAwy6QS7pGVYL
+         5m9Q==
+X-Gm-Message-State: ANoB5plmCVxXJmpNG80czs/LzRC4rN/LIiGT5l6PGPqN8kUmwBLE9bsc
+        /ScTTXPMgm87MvVxSvSBbFRURJd/TR2s89mbmUWhuuWhNV4NrtRvnC9pUa6oCEyHtChHc1ZZu4H
+        gxDc8uw5PsWYjfsLtforsmNHP
+X-Received: by 2002:a0c:fec3:0:b0:4c6:86be:a0c9 with SMTP id z3-20020a0cfec3000000b004c686bea0c9mr40024928qvs.123.1669842066639;
+        Wed, 30 Nov 2022 13:01:06 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf435WW7e+SRD2a0Ot/LRXewNLZWrlzaivBqjQjmp+Pm1l2nPA3XXu2BOI2f917QosYBdaVtmw==
+X-Received: by 2002:a0c:fec3:0:b0:4c6:86be:a0c9 with SMTP id z3-20020a0cfec3000000b004c686bea0c9mr40024868qvs.123.1669842066197;
+        Wed, 30 Nov 2022 13:01:06 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id u19-20020a05620a0c5300b006fa84082b6dsm1858982qki.128.2022.11.30.13.01.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 12:59:22 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 30 Nov 2022 10:59:21 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Li Nan <linan122@huawei.com>
-Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com
-Subject: Re: [PATCH -next v2 9/9] blk-iocost: fix walk_list corruption
-Message-ID: <Y4fEKZy4rTE5rG/5@slm.duckdns.org>
-References: <20221130132156.2836184-1-linan122@huawei.com>
- <20221130132156.2836184-10-linan122@huawei.com>
+        Wed, 30 Nov 2022 13:01:05 -0800 (PST)
+Date:   Wed, 30 Nov 2022 16:01:04 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 06/47] hugetlb: extend vma lock for shared vmas
+Message-ID: <Y4fEkLkbYr7qfPQA@x1n>
+References: <20221021163703.3218176-1-jthoughton@google.com>
+ <20221021163703.3218176-7-jthoughton@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221130132156.2836184-10-linan122@huawei.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221021163703.3218176-7-jthoughton@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 09:21:56PM +0800, Li Nan wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
+On Fri, Oct 21, 2022 at 04:36:22PM +0000, James Houghton wrote:
+> This allows us to add more data into the shared structure, which we will
+> use to store whether or not HGM is enabled for this VMA or not, as HGM
+> is only available for shared mappings.
 > 
-> Our test report a problem:
+> It may be better to include HGM as a VMA flag instead of extending the
+> VMA lock structure.
 > 
-> ------------[ cut here ]------------
-> list_del corruption. next->prev should be ffff888127e0c4b0, but was ffff888127e090b0
-> WARNING: CPU: 2 PID: 3117789 at lib/list_debug.c:62 __list_del_entry_valid+0x119/0x130
-> RIP: 0010:__list_del_entry_valid+0x119/0x130
-> RIP: 0010:__list_del_entry_valid+0x119/0x130
-> Call Trace:
->  <IRQ>
->  iocg_flush_stat.isra.0+0x11e/0x230
->  ? ioc_rqos_done+0x230/0x230
->  ? ioc_now+0x14f/0x180
->  ioc_timer_fn+0x569/0x1640
-> 
-> We haven't reporduced it yet, but we think this is due to parent iocg is
-> freed before child iocg, and then in ioc_timer_fn, walk_list is
-> corrupted.
-> 
-> 1) Remove child cgroup can concurrent with remove parent cgroup, and
-> ioc_pd_free for parent iocg can be called before child iocg. This can be
-> fixed by moving the handle of walk_list to ioc_pd_offline, since that
-> offline from child is ensured to be called before parent.
-
-Which you already did in a previous patch, right?
-
-> 2) ioc_pd_free can be triggered from both removing device and removing
-> cgroup, this patch fix the problem by deleting timer before deactivating
-> policy, so that free parent iocg first in this case won't matter.
-
-Okay, so, yeah, css's pin parents but blkg's don't. I think the right thing
-to do here is making sure that a child blkg pins its parent (and eventually
-ioc).
-
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> Signed-off-by: Li Nan <linan122@huawei.com>
+> Signed-off-by: James Houghton <jthoughton@google.com>
 > ---
->  block/blk-iocost.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  include/linux/hugetlb.h |  4 +++
+>  mm/hugetlb.c            | 65 +++++++++++++++++++++--------------------
+>  2 files changed, 37 insertions(+), 32 deletions(-)
 > 
-> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-> index 710cf63a1643..d2b873908f88 100644
-> --- a/block/blk-iocost.c
-> +++ b/block/blk-iocost.c
-> @@ -2813,13 +2813,14 @@ static void ioc_rqos_exit(struct rq_qos *rqos)
->  {
->  	struct ioc *ioc = rqos_to_ioc(rqos);
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index a899bc76d677..534958499ac4 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -121,6 +121,10 @@ struct hugetlb_vma_lock {
+>  	struct vm_area_struct *vma;
+>  };
 >  
-> +	del_timer_sync(&ioc->timer);
-> +
->  	blkcg_deactivate_policy(rqos->q, &blkcg_policy_iocost);
->  
->  	spin_lock_irq(&ioc->lock);
->  	ioc->running = IOC_STOP;
->  	spin_unlock_irq(&ioc->lock);
->  
-> -	del_timer_sync(&ioc->timer);
+> +struct hugetlb_shared_vma_data {
+> +	struct hugetlb_vma_lock vma_lock;
+> +};
 
-I don't about this workaround. Let's fix properly?
+How about add a comment above hugetlb_vma_lock showing how it should be
+used correctly?  We lacked documents on the lock for pmd sharing
+protections, now if to reuse the same lock for HGM pgtables I think some
+doc will definitely help.
+
+To summarize, I think so far it means:
+
+  - Read lock needed when one wants to stablize VM_SHARED pgtables (covers
+    both pmd shared pgtables or hgm low-level pgtables)
+
+  - Write lock needed when one wants to release VM_SHARED pgtable pages
+    (covers both pmd unshare or releasing hgm low-level pgtables)
+
+Or something like that.
 
 -- 
-tejun
+Peter Xu
+
