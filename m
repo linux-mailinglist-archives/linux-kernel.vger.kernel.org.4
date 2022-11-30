@@ -2,97 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F5163CC3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 01:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 232A763CC45
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 01:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiK3AIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 19:08:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
+        id S229843AbiK3AJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 19:09:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiK3AI3 (ORCPT
+        with ESMTP id S229566AbiK3AIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 19:08:29 -0500
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E22C1B9C5;
-        Tue, 29 Nov 2022 16:08:28 -0800 (PST)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-12c8312131fso19167121fac.4;
-        Tue, 29 Nov 2022 16:08:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LGfJ7Toh6jQkrsNnaaKUduCGwv/HpQ7JNgqq7fZFKTE=;
-        b=YbjToL2KmnH68b2JvM6oRuj7bCOxhuY9/znTcJN1Bf9pncdQbg9RAVTrGOYd41LMl2
-         c+NcYXvjZktEf2behxuBX3j4K4DHXcZm1CuVu4xN93iB2xpDed5JsPBne86rw+rXQ+T9
-         wo/64dsNJDLqbbidlbHqtdWhQ682KV5XkCiM/zSfY9u5mQ5pJRoQ7nOW6ffGPGD7Ntm3
-         iKkyxYeFc0WzL8+yObM7WbwnN/WFZbb75PwqU/y1uFI7qM8RLO490vvgMdXdUye0YS+C
-         BBcylfXcDvLESN/vAmBxCjgNrh8uBwiAFPSVQtjaAtHyJrvjb5Ec0zuyL1rmOCRnYLZJ
-         LT9A==
-X-Gm-Message-State: ANoB5pnUI9hZU7lRdH0anaSf9jGy8RSovLJbdCSVMRBPSJz2TFo0kJ9X
-        hLleTDck0JWmGbqe04WjWP4d7NFQVA==
-X-Google-Smtp-Source: AA0mqf6hfM+mKoQSH1zv0mFlC74mN+8YTtsD67PrauceBqul3vBBjEef7hQGLnE0QehHtlJTIRA0Tw==
-X-Received: by 2002:a05:6870:d90c:b0:13b:c4f5:6900 with SMTP id gq12-20020a056870d90c00b0013bc4f56900mr23363081oab.93.1669766907656;
-        Tue, 29 Nov 2022 16:08:27 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k2-20020a056870148200b00132741e966asm73146oab.51.2022.11.29.16.08.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 16:08:27 -0800 (PST)
-Received: (nullmailer pid 554386 invoked by uid 1000);
-        Wed, 30 Nov 2022 00:08:26 -0000
-Date:   Tue, 29 Nov 2022 18:08:26 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-kernel@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        devicetree@vger.kernel.org
-Subject: Re: [RESEND PATCH v11 1/2] dt-bindings: mfd: Add MAX5970 and MAX5978
-Message-ID: <166976687726.552364.17379342841980861555.robh@kernel.org>
-References: <20221124110210.3905092-1-Naresh.Solanki@9elements.com>
- <20221124110210.3905092-2-Naresh.Solanki@9elements.com>
+        Tue, 29 Nov 2022 19:08:54 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B9B10EC;
+        Tue, 29 Nov 2022 16:08:53 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATNtRlv027019;
+        Wed, 30 Nov 2022 00:08:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=cMfhvGu8gnk240Ky57fJE8zipaaLCQWGyZdEWoo56WU=;
+ b=lfmFeiUjHSU4VnPokT92OegpYJ6LxL5N0EN5aC3qhilhYJdIbvM4TVMZ7fRjYcAMD41C
+ Ym1d9uPCj0Y6FmUykJJrJ7lSmmHxmIw7qq5QrvzV9hvfSFGYJrCghhVyORIeKIDNTBCM
+ yyNHUfD3eZOoHqcc8hyb1/oCYpaTTPOYNN6u13N1bwLo+P/o/Ul/8mHeDJWtIr1P3eCs
+ SJZM2XubrFQNJqGV20l5uHz27Su9LVmmJ0Xhy25oj+O3Oqsi2DfAyGThBT+vBf5dAebK
+ +xcMqMaPOcxQBr9rLdOJpvLwhE7PpU9qaeH6OpD9HJOBzVGLsM+kLATqBTp1ctUzzfnq Kg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m5bnh2rnr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Nov 2022 00:08:46 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AU08iqK011654
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Nov 2022 00:08:44 GMT
+Received: from [10.110.20.134] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 29 Nov
+ 2022 16:08:43 -0800
+Message-ID: <0bd08349-d6ec-bec4-e1bd-6f98d1af5968@quicinc.com>
+Date:   Tue, 29 Nov 2022 16:08:35 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221124110210.3905092-2-Naresh.Solanki@9elements.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v3 2/2] drm/msm/dp: add support of max dp link rate
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <agross@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1668725369-6331-1-git-send-email-quic_khsieh@quicinc.com>
+ <1668725369-6331-3-git-send-email-quic_khsieh@quicinc.com>
+ <8d75f389-9698-891f-5eff-2b76ddecad2b@linaro.org>
+Content-Language: en-US
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <8d75f389-9698-891f-5eff-2b76ddecad2b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: OqjB7sBk9zUjl1Yj4zduLECGR8_MPi2d
+X-Proofpoint-GUID: OqjB7sBk9zUjl1Yj4zduLECGR8_MPi2d
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-29_13,2022-11-29_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=999
+ suspectscore=0 malwarescore=0 bulkscore=0 impostorscore=0 mlxscore=0
+ spamscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211290145
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Nov 2022 12:02:08 +0100, Naresh Solanki wrote:
-> From: Marcello Sylvester Bauer <sylv@sylv.io>
-> 
-> The MAX597x is a hot swap controller with configurable fault protection.
-> It also has 10bit ADC for current & voltage measurements.
-> 
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> Co-developed-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Co-developed-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ---
->  .../bindings/mfd/maxim,max5970.yaml           | 151 ++++++++++++++++++
->  1 file changed, 151 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
-> 
+
+On 11/18/2022 3:04 AM, Dmitry Baryshkov wrote:
+> On 18/11/2022 01:49, Kuogee Hsieh wrote:
+>> dp_out endpoint contains both data-lanes and link-frequencies 
+>> properties.
+>> This patch parser dp_out endpoint properties and acquire dp_max_lanes 
+>> and
+>> dp_max_link_rate from respective property. Finally, comparing them 
+>> against
+>> both data lane and link rate read back from sink to ensure both data 
+>> lane
+>> and link rate are supported by platform.
+>> In the case there is no data-lanes or link-frequencies property 
+>> defined at
+>> dp_out endpoint, the default value are 4 data lanes with 5.4 Ghz link 
+>> rate.
+>>
+>> Changes in v2:
+>> -- add max link rate from dtsi
+>>
+>> Changes in v3:
+>> -- parser max_data_lanes and max_dp_link_rate from dp_out endpoint
+>>
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sc7280.dtsi |  1 +
+>
+> Should not be a part of this patch.
+>
+>>   drivers/gpu/drm/msm/dp/dp_display.c  | 4 ++++
+>>   drivers/gpu/drm/msm/dp/dp_panel.c    |  7 ++++---
+>>   drivers/gpu/drm/msm/dp/dp_panel.h    |  1 +
+>>   drivers/gpu/drm/msm/dp/dp_parser.c   | 30 
+>> ++++++++++++++++++++++--------
+>>   drivers/gpu/drm/msm/dp/dp_parser.h   |  2 ++
+>>   6 files changed, 34 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi 
+>> b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> index 4afe53b..d456e76 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> @@ -3897,6 +3897,7 @@
+>>                           reg = <0>;
+>>                           dp_in: endpoint {
+>>                               remote-endpoint = <&dpu_intf0_out>;
+>> +                            data-lanes = <0 1 2 3>;
+>>                           };
+>>                       };
+>>                   };
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c 
+>> b/drivers/gpu/drm/msm/dp/dp_display.c
+>> index 29c9845..4fe2092 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>> @@ -390,6 +390,10 @@ static int dp_display_process_hpd_high(struct 
+>> dp_display_private *dp)
+>>       struct edid *edid;
+>>         dp->panel->max_dp_lanes = dp->parser->max_dp_lanes;
+>> +    dp->panel->max_dp_link_rate = dp->parser->max_dp_link_rate;
+>> +
+>> +    drm_dbg_dp(dp->drm_dev, "max_lanes=%d max_link_rate=%d\n",
+>> +        dp->panel->max_dp_lanes, dp->panel->max_dp_link_rate);
+>>         rc = dp_panel_read_sink_caps(dp->panel, 
+>> dp->dp_display.connector);
+>>       if (rc)
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c 
+>> b/drivers/gpu/drm/msm/dp/dp_panel.c
+>> index 5149ceb..933fa9c 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_panel.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_panel.c
+>> @@ -75,12 +75,13 @@ static int dp_panel_read_dpcd(struct dp_panel 
+>> *dp_panel)
+>>       link_info->rate = 
+>> drm_dp_bw_code_to_link_rate(dpcd[DP_MAX_LINK_RATE]);
+>>       link_info->num_lanes = dpcd[DP_MAX_LANE_COUNT] & 
+>> DP_MAX_LANE_COUNT_MASK;
+>>   +    /* Limit data lanes from data-lanes of endpoint properity of 
+>> dtsi */
+>>       if (link_info->num_lanes > dp_panel->max_dp_lanes)
+>>           link_info->num_lanes = dp_panel->max_dp_lanes;
+>>   -    /* Limit support upto HBR2 until HBR3 support is added */
+>> -    if (link_info->rate >= 
+>> (drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4)))
+>> -        link_info->rate = drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4);
+>> +    /* Limit link rate from link-frequencies of endpoint properity 
+>> of dtsi */
+>> +    if (link_info->rate > dp_panel->max_dp_link_rate)
+>> +        link_info->rate = dp_panel->max_dp_link_rate;
+>>         drm_dbg_dp(panel->drm_dev, "version: %d.%d\n", major, minor);
+>>       drm_dbg_dp(panel->drm_dev, "link_rate=%d\n", link_info->rate);
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.h 
+>> b/drivers/gpu/drm/msm/dp/dp_panel.h
+>> index d861197a..f04d021 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_panel.h
+>> +++ b/drivers/gpu/drm/msm/dp/dp_panel.h
+>> @@ -50,6 +50,7 @@ struct dp_panel {
+>>         u32 vic;
+>>       u32 max_dp_lanes;
+>> +    u32 max_dp_link_rate;
+>>         u32 max_bw_code;
+>>   };
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.c 
+>> b/drivers/gpu/drm/msm/dp/dp_parser.c
+>> index dd73221..667981e 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_parser.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_parser.c
+>> @@ -94,16 +94,30 @@ static int dp_parser_ctrl_res(struct dp_parser 
+>> *parser)
+>>   static int dp_parser_misc(struct dp_parser *parser)
+>>   {
+>>       struct device_node *of_node = parser->pdev->dev.of_node;
+>> -    int len;
+>> -
+>> -    len = drm_of_get_data_lanes_count(of_node, 1, DP_MAX_NUM_DP_LANES);
+>> -    if (len < 0) {
+>> -        DRM_WARN("Invalid property \"data-lanes\", default max DP 
+>> lanes = %d\n",
+>> -             DP_MAX_NUM_DP_LANES);
+>> -        len = DP_MAX_NUM_DP_LANES;
+>> +    struct device_node *endpoint;
+>> +    int cnt;
+>> +    u32 frequence = 0;
+>> +
+>> +    endpoint = of_graph_get_endpoint_by_regs(of_node, 1, 0);
+>> +
+>> +    if (endpoint) {
+>> +        cnt = of_property_count_u32_elems(endpoint, "data-lanes");
+>> +        if (cnt < 0)
+>> +            parser->max_dp_lanes = DP_MAX_NUM_DP_LANES; /* 4 lanes */
+>> +        else
+>> +            parser->max_dp_lanes = cnt;
+>
+> This should be a separate patch. And now what, 
+> drm_of_get_data_lanes_count() can be used here too. Why are you 
+> dropping the generic function for the sake of your custom implementatoin.
+drm_of_get_data_lanes_count() expect the parent node of endpoint.
+
+It will locate endpoint first and call of_property_count_u32_elems() to 
+retrieve count of elements and there is no similar function for 
+link-frequencies.
+
+To get link-frequencies we have to locate endpoint already. so why not 
+use same endpoint for both data-lanes and link-frequencies.
+
+So that consistent way are used  to retrieve both data-lanes and 
+link-frequencies.
 
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
-
-If a tag was not added on purpose, please state why and what changed.
-
-Missing tags:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
+>
+>> +
+>> +        cnt = of_property_count_u32_elems(endpoint, 
+>> "link-frequencies");
+>> +        if (cnt < 0) {
+>> +            parser->max_dp_link_rate = DP_LINK_FREQUENCY_HBR2; /* 
+>> 54000 khz */
+>> +        } else {
+>> +            of_property_read_u32_array(endpoint, "link-frequencies", 
+>> &frequence, 1);
+>
+> link-frequencies is u64 array.
+>
+>> +            parser->max_dp_link_rate = frequence;
+>> +        }
+>>       }
+>>   -    parser->max_dp_lanes = len;
+>> +    pr_err("%s: kuogee, lane=%d frequency=%d\n", __func__, 
+>> parser->max_dp_lanes, parser->max_dp_link_rate);
+>> +
+>
+> Leftover?
+>
+>>       return 0;
+>>   }
+>>   diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h 
+>> b/drivers/gpu/drm/msm/dp/dp_parser.h
+>> index 866c1a8..76ddb751 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_parser.h
+>> +++ b/drivers/gpu/drm/msm/dp/dp_parser.h
+>> @@ -15,6 +15,7 @@
+>>   #define DP_LABEL "MDSS DP DISPLAY"
+>>   #define DP_MAX_PIXEL_CLK_KHZ    675000
+>>   #define DP_MAX_NUM_DP_LANES    4
+>> +#define DP_LINK_FREQUENCY_HBR2    540000
+>>     enum dp_pm_type {
+>>       DP_CORE_PM,
+>> @@ -119,6 +120,7 @@ struct dp_parser {
+>>       struct dp_io io;
+>>       struct dp_display_data disp_data;
+>>       u32 max_dp_lanes;
+>> +    u32 max_dp_link_rate;
+>>       struct drm_bridge *next_bridge;
+>>         int (*parse)(struct dp_parser *parser);
+>
