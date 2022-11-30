@@ -2,65 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B53A63DB42
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B4963DB3D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:58:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiK3Q7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 11:59:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
+        id S229773AbiK3Q61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 11:58:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbiK3Q6E (ORCPT
+        with ESMTP id S230165AbiK3Q5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 11:58:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7747920B4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:56:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669827397;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e+gEyqHAYcukbUT7EiIRiNqkNampnQzNPJX4nGRXEqo=;
-        b=JCjXNLihgqhXYcylpq7l6/7P2aBk2XCoLvjb/7gcdgLJsMjKLuOmDd3225Ewyw3FPjUtl0
-        bzPAO9k8uTn5Ff3xJkl8RdL0BSpR3CDWfpqbbr9IciWQpX/e16RSgTv7rWC6RBB2j6Vike
-        RNoxfEey+yx+3ZIdtbh8iksuQ/WzIDY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-124-IDoIzPOSMx2_wBGt6iXhwA-1; Wed, 30 Nov 2022 11:56:32 -0500
-X-MC-Unique: IDoIzPOSMx2_wBGt6iXhwA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A234C29DD99B;
-        Wed, 30 Nov 2022 16:56:31 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.36])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C85A62024CBE;
-        Wed, 30 Nov 2022 16:56:30 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH net-next 15/35] rxrpc: Don't hold a ref for call timer or
- workqueue
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, dhowells@redhat.com,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Wed, 30 Nov 2022 16:56:28 +0000
-Message-ID: <166982738804.621383.17391941989068713587.stgit@warthog.procyon.org.uk>
-In-Reply-To: <166982725699.621383.2358362793992993374.stgit@warthog.procyon.org.uk>
-References: <166982725699.621383.2358362793992993374.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Wed, 30 Nov 2022 11:57:13 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84F76920B5;
+        Wed, 30 Nov 2022 08:56:36 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E4BE1D6E;
+        Wed, 30 Nov 2022 08:56:42 -0800 (PST)
+Received: from [10.57.7.90] (unknown [10.57.7.90])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 57EEE3F73B;
+        Wed, 30 Nov 2022 08:56:34 -0800 (PST)
+Message-ID: <c67383c7-acb5-1f1e-50be-9ac09ccc8ced@arm.com>
+Date:   Wed, 30 Nov 2022 16:56:32 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH V5 6/7] arm64/perf: Add BRBE driver
+Content-Language: en-US
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
+        catalin.marinas@arm.com
+References: <20221107062514.2851047-1-anshuman.khandual@arm.com>
+ <20221107062514.2851047-7-anshuman.khandual@arm.com>
+ <25658a70-0b37-966d-e46c-f86be2a76a8e@arm.com>
+ <54d532cc-089c-0c6c-6bf4-be840bc27826@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <54d532cc-089c-0c6c-6bf4-be840bc27826@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,359 +54,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, rxrpc gives the call timer a ref on the call when it starts it
-and this is passed along to the workqueue by the timer expiration function.
-The problem comes when queue_work() fails (ie. the work item is already
-queued): the timer routine must put the ref - but this may cause the
-cleanup code to run.
-
-This has the unfortunate effect that the cleanup code may then be run in
-softirq context - which means that any spinlocks it might need to touch
-have to be guarded to disable softirqs (ie. they need a "_bh" suffix).
-
-Fix this by:
-
- (1) Don't give a ref to the timer.
-
- (2) Making the expiration function not do anything if the refcount is 0.
-     Note that this is more of an optimisation.
-
- (3) Make sure that the cleanup routine waits for timer to complete.
-
-However, this has a consequence that timer cannot give a ref to the work
-item.  Therefore the following fixes are also necessary:
-
- (4) Don't give a ref to the work item.
-
- (5) Make the work item return asap if it sees the ref count is 0.
-
- (6) Make sure that the cleanup routine waits for the work item to
-     complete.
-
-Unfortunately, neither the timer nor the work item can simply get around
-the problem by just using refcount_inc_not_zero() as the waits would still
-have to be done, and there would still be the possibility of having to put
-the ref in the expiration function.
-
-Note the call work item is going to go away with the work being transferred
-to the I/O thread, so the wait in (6) will become obsolete.
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
----
-
- include/trace/events/rxrpc.h |    6 --
- net/rxrpc/ar-internal.h      |    6 +-
- net/rxrpc/call_event.c       |   11 ++--
- net/rxrpc/call_object.c      |  111 ++++++++++++++++--------------------------
- net/rxrpc/txbuf.c            |    2 +
- 5 files changed, 52 insertions(+), 84 deletions(-)
-
-diff --git a/include/trace/events/rxrpc.h b/include/trace/events/rxrpc.h
-index 5a2292baffc8..4538de0079a5 100644
---- a/include/trace/events/rxrpc.h
-+++ b/include/trace/events/rxrpc.h
-@@ -155,11 +155,9 @@
- 	EM(rxrpc_call_get_release_sock,		"GET rel-sock") \
- 	EM(rxrpc_call_get_sendmsg,		"GET sendmsg ") \
- 	EM(rxrpc_call_get_send_ack,		"GET send-ack") \
--	EM(rxrpc_call_get_timer,		"GET timer   ") \
- 	EM(rxrpc_call_get_userid,		"GET user-id ") \
- 	EM(rxrpc_call_new_client,		"NEW client  ") \
- 	EM(rxrpc_call_new_prealloc_service,	"NEW prealloc") \
--	EM(rxrpc_call_put_already_queued,	"PUT alreadyq") \
- 	EM(rxrpc_call_put_discard_prealloc,	"PUT disc-pre") \
- 	EM(rxrpc_call_put_input,		"PUT input   ") \
- 	EM(rxrpc_call_put_kernel,		"PUT kernel  ") \
-@@ -168,11 +166,8 @@
- 	EM(rxrpc_call_put_release_sock_tba,	"PUT rls-sk-a") \
- 	EM(rxrpc_call_put_send_ack,		"PUT send-ack") \
- 	EM(rxrpc_call_put_sendmsg,		"PUT sendmsg ") \
--	EM(rxrpc_call_put_timer,		"PUT timer   ") \
--	EM(rxrpc_call_put_timer_already,	"PUT timer-al") \
- 	EM(rxrpc_call_put_unnotify,		"PUT unnotify") \
- 	EM(rxrpc_call_put_userid_exists,	"PUT u-exists") \
--	EM(rxrpc_call_put_work,			"PUT work    ") \
- 	EM(rxrpc_call_queue_abort,		"QUE abort   ") \
- 	EM(rxrpc_call_queue_requeue,		"QUE requeue ") \
- 	EM(rxrpc_call_queue_resend,		"QUE resend  ") \
-@@ -368,6 +363,7 @@
- 	EM(rxrpc_txbuf_put_rotated,		"PUT ROTATED")	\
- 	EM(rxrpc_txbuf_put_send_aborted,	"PUT SEND-X ")	\
- 	EM(rxrpc_txbuf_put_trans,		"PUT TRANS  ")	\
-+	EM(rxrpc_txbuf_see_out_of_step,		"OUT-OF-STEP")	\
- 	EM(rxrpc_txbuf_see_send_more,		"SEE SEND+  ")	\
- 	E_(rxrpc_txbuf_see_unacked,		"SEE UNACKED")
- 
-diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
-index c588c0e81f63..03523a864c11 100644
---- a/net/rxrpc/ar-internal.h
-+++ b/net/rxrpc/ar-internal.h
-@@ -598,6 +598,7 @@ struct rxrpc_call {
- 	u32			next_req_timo;	/* Timeout for next Rx request packet (jif) */
- 	struct timer_list	timer;		/* Combined event timer */
- 	struct work_struct	processor;	/* Event processor */
-+	struct work_struct	destroyer;	/* In-process-context destroyer */
- 	rxrpc_notify_rx_t	notify_rx;	/* kernel service Rx notification function */
- 	struct list_head	link;		/* link in master call list */
- 	struct list_head	chan_wait_link;	/* Link in conn->bundle->waiting_calls */
-@@ -827,8 +828,6 @@ void rxrpc_reduce_call_timer(struct rxrpc_call *call,
- 			     unsigned long now,
- 			     enum rxrpc_timer_trace why);
- 
--void rxrpc_delete_call_timer(struct rxrpc_call *call);
--
- /*
-  * call_object.c
-  */
-@@ -847,8 +846,7 @@ void rxrpc_incoming_call(struct rxrpc_sock *, struct rxrpc_call *,
- 			 struct sk_buff *);
- void rxrpc_release_call(struct rxrpc_sock *, struct rxrpc_call *);
- void rxrpc_release_calls_on_socket(struct rxrpc_sock *);
--bool __rxrpc_queue_call(struct rxrpc_call *, enum rxrpc_call_trace);
--bool rxrpc_queue_call(struct rxrpc_call *, enum rxrpc_call_trace);
-+void rxrpc_queue_call(struct rxrpc_call *, enum rxrpc_call_trace);
- void rxrpc_see_call(struct rxrpc_call *, enum rxrpc_call_trace);
- bool rxrpc_try_get_call(struct rxrpc_call *, enum rxrpc_call_trace);
- void rxrpc_get_call(struct rxrpc_call *, enum rxrpc_call_trace);
-diff --git a/net/rxrpc/call_event.c b/net/rxrpc/call_event.c
-index 29ca02e53c47..049b92b1c040 100644
---- a/net/rxrpc/call_event.c
-+++ b/net/rxrpc/call_event.c
-@@ -323,8 +323,8 @@ void rxrpc_process_call(struct work_struct *work)
- 		rxrpc_shrink_call_tx_buffer(call);
- 
- 	if (call->state == RXRPC_CALL_COMPLETE) {
--		rxrpc_delete_call_timer(call);
--		goto out_put;
-+		del_timer_sync(&call->timer);
-+		goto out;
- 	}
- 
- 	/* Work out if any timeouts tripped */
-@@ -432,16 +432,15 @@ void rxrpc_process_call(struct work_struct *work)
- 	rxrpc_reduce_call_timer(call, next, now, rxrpc_timer_restart);
- 
- 	/* other events may have been raised since we started checking */
--	if (call->events && call->state < RXRPC_CALL_COMPLETE)
-+	if (call->events)
- 		goto requeue;
- 
--out_put:
--	rxrpc_put_call(call, rxrpc_call_put_work);
- out:
- 	_leave("");
- 	return;
- 
- requeue:
--	__rxrpc_queue_call(call, rxrpc_call_queue_requeue);
-+	if (call->state < RXRPC_CALL_COMPLETE)
-+		rxrpc_queue_call(call, rxrpc_call_queue_requeue);
- 	goto out;
- }
-diff --git a/net/rxrpc/call_object.c b/net/rxrpc/call_object.c
-index 815209673115..9cd7e0190ef4 100644
---- a/net/rxrpc/call_object.c
-+++ b/net/rxrpc/call_object.c
-@@ -53,9 +53,7 @@ static void rxrpc_call_timer_expired(struct timer_list *t)
- 
- 	if (call->state < RXRPC_CALL_COMPLETE) {
- 		trace_rxrpc_timer_expired(call, jiffies);
--		__rxrpc_queue_call(call, rxrpc_call_queue_timer);
--	} else {
--		rxrpc_put_call(call, rxrpc_call_put_already_queued);
-+		rxrpc_queue_call(call, rxrpc_call_queue_timer);
- 	}
- }
- 
-@@ -64,21 +62,14 @@ void rxrpc_reduce_call_timer(struct rxrpc_call *call,
- 			     unsigned long now,
- 			     enum rxrpc_timer_trace why)
- {
--	if (rxrpc_try_get_call(call, rxrpc_call_get_timer)) {
--		trace_rxrpc_timer(call, why, now);
--		if (timer_reduce(&call->timer, expire_at))
--			rxrpc_put_call(call, rxrpc_call_put_timer_already);
--	}
--}
--
--void rxrpc_delete_call_timer(struct rxrpc_call *call)
--{
--	if (del_timer_sync(&call->timer))
--		rxrpc_put_call(call, rxrpc_call_put_timer);
-+	trace_rxrpc_timer(call, why, now);
-+	timer_reduce(&call->timer, expire_at);
- }
- 
- static struct lock_class_key rxrpc_call_user_mutex_lock_class_key;
- 
-+static void rxrpc_destroy_call(struct work_struct *);
-+
- /*
-  * find an extant server call
-  * - called in process context with IRQs enabled
-@@ -139,7 +130,8 @@ struct rxrpc_call *rxrpc_alloc_call(struct rxrpc_sock *rx, gfp_t gfp,
- 				  &rxrpc_call_user_mutex_lock_class_key);
- 
- 	timer_setup(&call->timer, rxrpc_call_timer_expired, 0);
--	INIT_WORK(&call->processor, &rxrpc_process_call);
-+	INIT_WORK(&call->processor, rxrpc_process_call);
-+	INIT_WORK(&call->destroyer, rxrpc_destroy_call);
- 	INIT_LIST_HEAD(&call->link);
- 	INIT_LIST_HEAD(&call->chan_wait_link);
- 	INIT_LIST_HEAD(&call->accept_link);
-@@ -423,34 +415,12 @@ void rxrpc_incoming_call(struct rxrpc_sock *rx,
- }
- 
- /*
-- * Queue a call's work processor, getting a ref to pass to the work queue.
-+ * Queue a call's work processor.
-  */
--bool rxrpc_queue_call(struct rxrpc_call *call, enum rxrpc_call_trace why)
-+void rxrpc_queue_call(struct rxrpc_call *call, enum rxrpc_call_trace why)
- {
--	int n;
--
--	if (!__refcount_inc_not_zero(&call->ref, &n))
--		return false;
- 	if (rxrpc_queue_work(&call->processor))
--		trace_rxrpc_call(call->debug_id, n + 1, 0, why);
--	else
--		rxrpc_put_call(call, rxrpc_call_put_already_queued);
--	return true;
--}
--
--/*
-- * Queue a call's work processor, passing the callers ref to the work queue.
-- */
--bool __rxrpc_queue_call(struct rxrpc_call *call, enum rxrpc_call_trace why)
--{
--	int n = refcount_read(&call->ref);
--
--	ASSERTCMP(n, >=, 1);
--	if (rxrpc_queue_work(&call->processor))
--		trace_rxrpc_call(call->debug_id, n, 0, why);
--	else
--		rxrpc_put_call(call, rxrpc_call_put_already_queued);
--	return true;
-+		trace_rxrpc_call(call->debug_id, refcount_read(&call->ref), 0, why);
- }
- 
- /*
-@@ -514,7 +484,7 @@ void rxrpc_release_call(struct rxrpc_sock *rx, struct rxrpc_call *call)
- 		BUG();
- 
- 	rxrpc_put_call_slot(call);
--	rxrpc_delete_call_timer(call);
-+	del_timer_sync(&call->timer);
- 
- 	/* Make sure we don't get any more notifications */
- 	write_lock_bh(&rx->recvmsg_lock);
-@@ -612,36 +582,41 @@ void rxrpc_put_call(struct rxrpc_call *call, enum rxrpc_call_trace why)
- }
- 
- /*
-- * Final call destruction - but must be done in process context.
-+ * Free up the call under RCU.
-  */
--static void rxrpc_destroy_call(struct work_struct *work)
-+static void rxrpc_rcu_free_call(struct rcu_head *rcu)
- {
--	struct rxrpc_call *call = container_of(work, struct rxrpc_call, processor);
--	struct rxrpc_net *rxnet = call->rxnet;
--
--	rxrpc_delete_call_timer(call);
-+	struct rxrpc_call *call = container_of(rcu, struct rxrpc_call, rcu);
-+	struct rxrpc_net *rxnet = READ_ONCE(call->rxnet);
- 
--	rxrpc_put_connection(call->conn, rxrpc_conn_put_call);
--	rxrpc_put_peer(call->peer, rxrpc_peer_put_call);
- 	kmem_cache_free(rxrpc_call_jar, call);
- 	if (atomic_dec_and_test(&rxnet->nr_calls))
- 		wake_up_var(&rxnet->nr_calls);
- }
- 
- /*
-- * Final call destruction under RCU.
-+ * Final call destruction - but must be done in process context.
-  */
--static void rxrpc_rcu_destroy_call(struct rcu_head *rcu)
-+static void rxrpc_destroy_call(struct work_struct *work)
- {
--	struct rxrpc_call *call = container_of(rcu, struct rxrpc_call, rcu);
-+	struct rxrpc_call *call = container_of(work, struct rxrpc_call, destroyer);
-+	struct rxrpc_txbuf *txb;
- 
--	if (in_softirq()) {
--		INIT_WORK(&call->processor, rxrpc_destroy_call);
--		if (!rxrpc_queue_work(&call->processor))
--			BUG();
--	} else {
--		rxrpc_destroy_call(&call->processor);
-+	del_timer_sync(&call->timer);
-+	cancel_work_sync(&call->processor); /* The processor may restart the timer */
-+	del_timer_sync(&call->timer);
-+
-+	rxrpc_cleanup_ring(call);
-+	while ((txb = list_first_entry_or_null(&call->tx_buffer,
-+					       struct rxrpc_txbuf, call_link))) {
-+		list_del(&txb->call_link);
-+		rxrpc_put_txbuf(txb, rxrpc_txbuf_put_cleaned);
- 	}
-+	rxrpc_put_txbuf(call->tx_pending, rxrpc_txbuf_put_cleaned);
-+	rxrpc_free_skb(call->acks_soft_tbl, rxrpc_skb_put_ack);
-+	rxrpc_put_connection(call->conn, rxrpc_conn_put_call);
-+	rxrpc_put_peer(call->peer, rxrpc_peer_put_call);
-+	call_rcu(&call->rcu, rxrpc_rcu_free_call);
- }
- 
- /*
-@@ -649,23 +624,21 @@ static void rxrpc_rcu_destroy_call(struct rcu_head *rcu)
-  */
- void rxrpc_cleanup_call(struct rxrpc_call *call)
- {
--	struct rxrpc_txbuf *txb;
--
- 	memset(&call->sock_node, 0xcd, sizeof(call->sock_node));
- 
- 	ASSERTCMP(call->state, ==, RXRPC_CALL_COMPLETE);
- 	ASSERT(test_bit(RXRPC_CALL_RELEASED, &call->flags));
- 
--	rxrpc_cleanup_ring(call);
--	while ((txb = list_first_entry_or_null(&call->tx_buffer,
--					       struct rxrpc_txbuf, call_link))) {
--		list_del(&txb->call_link);
--		rxrpc_put_txbuf(txb, rxrpc_txbuf_put_cleaned);
--	}
--	rxrpc_put_txbuf(call->tx_pending, rxrpc_txbuf_put_cleaned);
--	rxrpc_free_skb(call->acks_soft_tbl, rxrpc_skb_put_ack);
-+	del_timer_sync(&call->timer);
-+	cancel_work(&call->processor);
- 
--	call_rcu(&call->rcu, rxrpc_rcu_destroy_call);
-+	if (in_softirq() || work_busy(&call->processor))
-+		/* Can't use the rxrpc workqueue as we need to cancel/flush
-+		 * something that may be running/waiting there.
-+		 */
-+		schedule_work(&call->destroyer);
-+	else
-+		rxrpc_destroy_call(&call->destroyer);
- }
- 
- /*
-diff --git a/net/rxrpc/txbuf.c b/net/rxrpc/txbuf.c
-index 96bfee89927b..f93dc666a3a0 100644
---- a/net/rxrpc/txbuf.c
-+++ b/net/rxrpc/txbuf.c
-@@ -120,6 +120,8 @@ void rxrpc_shrink_call_tx_buffer(struct rxrpc_call *call)
- 		if (before(hard_ack, txb->seq))
- 			break;
- 
-+		if (txb->seq != call->tx_bottom + 1)
-+			rxrpc_see_txbuf(txb, rxrpc_txbuf_see_out_of_step);
- 		ASSERTCMP(txb->seq, ==, call->tx_bottom + 1);
- 		call->tx_bottom++;
- 		list_del_rcu(&txb->call_link);
 
 
+On 30/11/2022 04:49, Anshuman Khandual wrote:
+> 
+> 
+> On 11/29/22 21:23, James Clark wrote:
+>>
+>>
+>> On 07/11/2022 06:25, Anshuman Khandual wrote:
+>>> This adds a BRBE driver which implements all the required helper functions
+>>> for struct arm_pmu. Following functions are defined by this driver which
+>>> will configure, enable, capture, reset and disable BRBE buffer HW as and
+>>> when requested via perf branch stack sampling framework.
+>>
+>> Hi Anshuman,
+>>
+>> I've got a rough version of an updated test for branch stacks here [1].
+>> A couple of interesting things that I've noticed running it:
+>>
+>> First one is that sometimes I get (null) for the branch type. Debugging
+>> in GDB shows me that the type is actually type == PERF_BR_EXTEND_ABI &&
+>> new_type == 11. I can't see how this is possible looking at the driver
+> 
+> Hmm, that is strange.
+> 
+> brbe_fetch_perf_type() evaluates captured brbinf and extracts BRBE branch
+> type and later maps into perf branch types. All new perf branch types are
+> contained inside [PERF_BR_NEW_FAULT_ALGN = 0 .. PERF_BR_NEW_ARCH_5 = 7].
+> Hence wondering how '11' can be a new_type value after PERF_BR_EXTEND_ABI
+> switch.
+
+I got to the bottom of the issue and posted the fix here [2]. A new
+entry was added to the branch records somewhere around the time new_type
+was added and it wasn't added to Perf so the records weren't being
+interpreted properly.
+
+> 
+>> code. I think I saw this on a previous version of the patchset too but
+>> didn't mention it because I thought it wasn't significant, but now I see
+>> that something strange is going on. An interesting pattern is that they
+>> are always after ERET samples and go from userspace to kernel:
+> 
+> Unless it can be ascertained that wrong values are getting passed into the
+> perf ring buffer via cpuc->branches->brbe_entries[idx].[type | new_type],
+> the problem might be with perf report parsing the branch records ?
+> 
+> There are valid new branch types such as ARM64_DEBUG_DATA reported after
+> ERET records as well. I guess the only way to figure out the problem here
+> is to track the errant branch record from cpuc->branches->brbe_entries to
+> all the way upto perf report processing.
+> 
+>>
+>> 41992866945460 0x6e8 [0x360]: PERF_RECORD_SAMPLE(IP, 0x1): 501/501:
+>> 0xffff800008010118 period: 1229 addr: 0
+>> ... branch stack: nr:34
+>> .. 007a9988 -> 00000000 0 cycles  P   9fbfbfbf IRQ
+>> .. 00000000 -> 007a9988 0 cycles  P   9fbfbfbf ERET
+>> .. 007a9988 -> 00000000 0 cycles  P   9fbfbfbf (null)
+>> .. 00747668 -> 007a9988 0 cycles  P   9fbfbfbf CALL
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00747664 -> 00747660 0 cycles  P   9fbfbfbf COND
+>> .. 00000000 -> 00747658 0 cycles  P   9fbfbfbf ERET
+>> .. 00747658 -> 00000000 0 cycles  P   9fbfbfbf ARM64_DEBUG_DATA
+>> .. 00000000 -> 00747650 0 cycles  P   9fbfbfbf ERET
+>> .. 00747650 -> 00000000 0 cycles  P   9fbfbfbf ARM64_DEBUG_DATA
+>> .. 00747624 -> 00747634 0 cycles  P   9fbfbfbf COND
+>> .. 00000000 -> 007475f4 0 cycles  P   9fbfbfbf ERET
+>> .. 007475f4 -> 00000000 0 cycles  P   9fbfbfbf ARM64_DEBUG_DATA
+>> .. 00000000 -> 007475e8 0 cycles  P   9fbfbfbf ERET
+>> .. 007475e8 -> 00000000 0 cycles  P   9fbfbfbf (null)
+>> .. 004005ac -> 007475e8 0 cycles  P   9fbfbfbf CALL
+>> .. 00000000 -> 00400564 0 cycles  P   9fbfbfbf ERET
+>> .. 00400564 -> 00000000 0 cycles  P   9fbfbfbf (null)
+>> .. 00000000 -> 00400564 0 cycles  P   9fbfbfbf ERET
+>>  .. thread: perf:501
+>>  ...... dso: [kernel.kallsyms]
+>>
+>> The second one is that sometimes I get kernel addresses and RET branches
+>> even if the option is any_call,u. The pattern here is that it's the last
+>> non empty branch stack of a run, so maybe there is some disable path
+>> where the filters aren't configured properly:
+> 
+> The latest code (not posted), disables TRBE completely while reading the
+> branch records during PMU interrupt. Could you please apply those changes
+> as well, or rather just use the branch instead.
+> 
+> https://gitlab.arm.com/linux-arm/linux-anshuman/-/commit/ab17879711f0e61c280ed52400ccde172b67e04a
+> 
+
+I don't think I've seen it on that version, but I need to run it a bit
+more to be sure.
+
+> 
+>>
+>>
+>> [1]:
+>> https://gitlab.arm.com/linux-arm/linux-jc/-/commit/7260b7bef06ac161eac88d05266e8c5c303d9881
+
+[2]:
+https://lore.kernel.org/linux-perf-users/20221130165158.517385-1-james.clark@arm.com/T/#u
