@@ -2,115 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C5F63D762
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 317E563D76A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbiK3N7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 08:59:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
+        id S229512AbiK3ODA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 09:03:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiK3N7S (ORCPT
+        with ESMTP id S229449AbiK3OCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 08:59:18 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B58B29815;
-        Wed, 30 Nov 2022 05:59:17 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 283651F8D4;
-        Wed, 30 Nov 2022 13:59:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669816756; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BmWydEyxVCtO1F3KxVGX1dvHBxkV4Dnqpc/owJqFkOE=;
-        b=fzTGWCena/BFQ2Eq38B1LD+fqh7nkLAlqycR5BkW4pQjnxHB/In1wZAF2Dt4lioNX0URY2
-        JqTNokmchp/RHmF8o1DQsGN4f84+GHA+Oa+LQL2nvAU2ABh+3b2n7zCTY0Z7mI/7rmyKQO
-        QOniOTv1QYfiaAvRq/1kEIGZ2Ke0agk=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B8F0E2C152;
-        Wed, 30 Nov 2022 13:59:15 +0000 (UTC)
-Date:   Wed, 30 Nov 2022 14:59:15 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Joe Perches <joe@perches.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH v2 1/3] printk: introduce new macros pr_<level>_cont()
-Message-ID: <Y4dhs1G3mcX/YraJ@alley>
-References: <20221125190948.2062-1-linux@weissschuh.net>
- <20221125190948.2062-2-linux@weissschuh.net>
- <1fb146231e1810b4c9923f384afa166e07e7f253.camel@perches.com>
- <cf45b62e-6248-42f3-807f-5df0954437e0@t-8ch.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        Wed, 30 Nov 2022 09:02:55 -0500
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2040.outbound.protection.outlook.com [40.107.8.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEF4192A7;
+        Wed, 30 Nov 2022 06:02:49 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eCC90ScobnqVj8B2UdEMwGHDbPerjPZW2EKz/267qoBvpjJ1jNwH3vi4O1CW0BdZd/4/NZ05zwcMzIn7457UbXY1dKak2CXcX4oeQ9OZ1kqhmTBDMrnE8HMYacBnFN7Vle0iX1ScZhEG1Y9zz7tP2uDvpBH2P/6mewwZP4bZ4SmOuuqFOBaITu8Q91NLwI7eBZY4JS/t6fvM7iEGvAloCG5VwmanBwtdFtwH7vFecZ9O4pqYzFKuFUl2lAnYVFT038dzO2lY5atniXPJUchQR17iBmt6i0bVYuV4lpG9U1uGTMG2A9+CjuTbQD5eGPHpzHWq5UN02kXurcqlwh6i5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=D1sCCXDsdj9s1Xwo6nXOZ9JgXum0ndoJTAwzspwTmh4=;
+ b=h4Hf28OO1+lSWhHBDHgCtDzPeD1jskasfrXQ8j+Ku1jUMFB7djTJJV6XydRFOpexAM1zfUFFZ6n1+hatblfEGWU0KI5kHDwlgdZxd0zSSrGyY/hMPRhFhOQH8pb+Dsw/4Y6IYIIlW38hqQYfS3zBolhsXFrEI66Pxcg89CPf4oftT+LDsq/nVSNUpJsIaFKNRi860bQL7CpQBIrHLf/Cmg3lexF4gJqMz64A3Gt7h1lHjmddg4M4ifRfw5DsaiIWKCv45Amv8wlUl1jAPt/MwQhll+yc7lno0JrzUYuyoZJniPhpk1yprVVw9c2I+I8V+HEhOIgL+i/3NBhjigDYzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=D1sCCXDsdj9s1Xwo6nXOZ9JgXum0ndoJTAwzspwTmh4=;
+ b=IEmO2WcmPYeoBhWhXZusV02TLt8P7EvbqCN7FTqD8At8pmLvZ+8mnWzCbSHGNTenBSSFXHOR0fQu48Gj9mdyVwO2SP4Hv6yR/3vtRK2HlCgKuSybYLBgGOHZoY6jVqal1Afic/x1rQinKpwzZrcn7qcoR0Wl3lDkfkpU2AOniuA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
+ by AS2PR08MB8695.eurprd08.prod.outlook.com (2603:10a6:20b:55e::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Wed, 30 Nov
+ 2022 14:02:45 +0000
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::3643:6226:28c:e637]) by DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::3643:6226:28c:e637%2]) with mapi id 15.20.5880.008; Wed, 30 Nov 2022
+ 14:02:45 +0000
+From:   Michael Riesch <michael.riesch@wolfvision.net>
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sandy Huang <hjc@rock-chips.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sascha Hauer <sha@pengutronix.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Subject: [PATCH 0/5] drm/rockchip: vop2: add support for the rgb output block
+Date:   Wed, 30 Nov 2022 15:02:12 +0100
+Message-Id: <20221130140217.3196414-1-michael.riesch@wolfvision.net>
+X-Mailer: git-send-email 2.30.2
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <cf45b62e-6248-42f3-807f-5df0954437e0@t-8ch.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: ZR0P278CA0182.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:44::15) To DU0PR08MB9155.eurprd08.prod.outlook.com
+ (2603:10a6:10:416::5)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|AS2PR08MB8695:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4be4e0ef-cef9-4b89-0888-08dad2db8e71
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /vM5owyOipouPsNpSzABKAPj7TVEGGNfGYGKwOela2gNcogoVvGzKciEl9xiWgeUdTHqTEfcQCE6iKPqXjRUNnQdf5ndK8gBYVsNjc1lFRdcXQTIuxtHW7SzOMqXD4pS5+m9B/HyAq3wNURkt/JCl4+yFyTKZAvUVXFTSkf5g+8MLmQAm/b1e/nPpU03CoiW0PdvtCsgBHZRY2nWIHGtj08me0SD+plgte6bM+KoaA8FJzsLptmp7NlN7V9x6Wf4Y3vFRNB7L7tk8LHRyKgAurS/1mFc3di7PMFRXDsVcbdEtYydtypmFpAYpPgG54YHcPH32DJ2tLD8pKtSHXzSWkpboNln4CB1vEUGOZbAk/HnJlHorK4NbKRX3q82QkQ+XNEwIazzxN2uQdFqRcc80KP699d/FhnobAiy6iwLS/WFlrWhjKrcBJ9V0iz7rGx1y0po0I8Oi+/mpOdTmcInXq8xAUnIgTR5QV9K13N2GzNyTs1QQ2GNOGjXb7qixtMt2+JDdSS29ofqh1dLBKttm1CtBaZQp6QMedpF5hYP45YbD5WjEUzqKtfyvB+EMzyqPOQsjwpFvG/EE/EOn3U9xenqfmk/j5ijP3bOdntIEczt/UHzvtNsUwD8z/KG2+7dI8rFtZcFu0NVaHLozEqz6g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(136003)(396003)(376002)(39850400004)(451199015)(38100700002)(6486002)(54906003)(478600001)(316002)(8936002)(2906002)(41300700001)(83380400001)(1076003)(2616005)(86362001)(6512007)(107886003)(6666004)(36756003)(52116002)(6506007)(66556008)(7416002)(186003)(8676002)(66476007)(44832011)(5660300002)(66946007)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1kwsskI7IYUxB+p3Lf3xt1IrvunIQgHTf7wEIKGuEwAFb4EK/iuhtP4Zbqez?=
+ =?us-ascii?Q?OYnCvutzwIG7Pj6qfSkudN1R2vatB97VJDxDBT9VttU7MWM88PnfdCjek+L9?=
+ =?us-ascii?Q?+NbetyklqyA4J4uLLmzUelXNOUcYeskEAhJxUxu5h5iezkh5DLPb1x8YRJrO?=
+ =?us-ascii?Q?tTgZWMmUy2ZxuwgQRaJE/tjcJG9KHcET/w8HxRdPWQLYYuf/zXwTfGxmGH3J?=
+ =?us-ascii?Q?urkxoxPZXwAlyURb+DOgmRvlCiBhez3Gq9p/Qeo2EDFzxafmBVUfL1Z78+Qo?=
+ =?us-ascii?Q?hL9toeQVgtzCfUhVgLcM5GVvyaPYlRJiAALhm1IBImnpJNftsFr19JpbobUq?=
+ =?us-ascii?Q?tZXmzVhaYr2jhyi/jfiuAoOaI1OXWTTYTH0dcj2nLPkSnkEBCzFcvkac8jmB?=
+ =?us-ascii?Q?DP6bqJ6tLGEsadJN77vPDEhxORAqZ6134yRGKKd3xq3yxeW9yhbw6skZ0UKX?=
+ =?us-ascii?Q?OTC4V6fikmiUOWEVsF5Oh1qj/EAx4pIr0goSMCVmDiDksePO4l8ar7TEiEyE?=
+ =?us-ascii?Q?WBt2raKsFzMNcWykieJMpB1kENbj+rkqUO86NweK3npftmdyNQO+ftfbvidI?=
+ =?us-ascii?Q?SguDobRHUDhKsjbF5xmnp4CmnFZ36UaoPSWq7Jx91+tc1e+5/4CS8TtHGIcY?=
+ =?us-ascii?Q?dTkWjXJpCxwCRjtx8o12N6Lj6GYLBXqW/5Y3xdnU3bqzvv1p39uk4wgALzEx?=
+ =?us-ascii?Q?cp5fosn22TRKoERPVu6O4FficBrpKiG+l1wmfTuPMg5rYzZnq891tIKuwdQn?=
+ =?us-ascii?Q?/+FSWR4nVrkqEO8El2BuCqZicEozq6kru2juATopLf80b0o+pzG7EdJCrsH/?=
+ =?us-ascii?Q?g7VK/8W60drNcPTnrONUjOijGKqIuZo+YqrOI3qPdn/jf+GR8GJE4ONM4gI3?=
+ =?us-ascii?Q?XW8WDXtI/jRsOqO3KA0wN+bNuHrnp+EZL38XdFGs2U7HICZHXdw1BXalCN2K?=
+ =?us-ascii?Q?2k9VPCAhFez4tfliCS74JHacyt2QbEy7ARj03AppC2CsVmb3qZZMIXohHyyc?=
+ =?us-ascii?Q?yofrlHgdippXucKOlFTZjc9me3q1epMoum2lDcVbrKSBHaEjXlZBFFvzxWKB?=
+ =?us-ascii?Q?ZoHeIw/hSOb2fWZNFyE5UQxFYzAgKKrqfzw+dUXWy+iim0PLqDrcJI8m8ULJ?=
+ =?us-ascii?Q?jmwqYlWCUGRyuNjF3LZpENN37qKn+K5FVMq2qCo4SPO5NuGHHqSkwVxrF5F1?=
+ =?us-ascii?Q?dYHgWWKyaJJhDrHKphQtamrKOzAPLSksKfjDGOkGvaQnIYMPThPusIEfZQUa?=
+ =?us-ascii?Q?nVR3R7cYCQLPd5vsEBfsu3iHZOSVnFalW47gMPkQsnXrE+acnIYjOYUJFiCe?=
+ =?us-ascii?Q?9VCUI8msxVrt2tQo+moWkWapo987d6ZG/4yZ1QPNtprR1R+viKy6HiF+v6lO?=
+ =?us-ascii?Q?h1+KK0fP67PmxyO9Jx7oHt8EBRpmoKJp3A1LlbR/cQfW9ScZCVGOBXZVXLbW?=
+ =?us-ascii?Q?G/jT9R6ICDTO8CiqQvn7lPEtY5H+YB1SmxHIJrqEh9IW+8Vf+aqtyMSEAlyZ?=
+ =?us-ascii?Q?ugw1+M9vzKWnv4rtfNXF4Cgj613w1bf+lDX+cxJyZdxRbU/LHRGoqAt4EDTm?=
+ =?us-ascii?Q?GbUKLzd4xlsDGpgTxAcwsI5UOISgQnMLmyTAHiIQ2BzqTubrzDL+H7TNKdE2?=
+ =?us-ascii?Q?HZ8dhHCDczAvZ/JYiFsV6xwoliPM2O4p/oEZ1uhBL3u4IT342NNG8Wt57Tc5?=
+ =?us-ascii?Q?V6IlTw=3D=3D?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4be4e0ef-cef9-4b89-0888-08dad2db8e71
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 14:02:45.6570
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zNEwS2Xxc9dZfqP/iFIjAb6UdkP1KVun4kZm6MMAjsFTxlFpNuPi8EuJkhUGiWVStoy/P7/XMUM1KUjpEHAA0JlNuz65hD1VMy3cr6aytDU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB8695
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-11-25 21:33:40, Thomas Weißschuh wrote:
-> On 2022-11-25 12:18-0800, Joe Perches wrote:
-> > On Fri, 2022-11-25 at 20:09 +0100, Thomas Weißschuh wrote:
-> >> These macros emit continuation messages with explicit levels.
-> >> In case the continuation is logged separately from the original message
-> >> it will retain its level instead of falling back to KERN_DEFAULT.
-> >> 
-> >> This remedies the issue that logs filtered by level contain stray
-> >> continuation messages without context.
-> >> 
-> >> --- a/include/linux/printk.h
-> >> +++ b/include/linux/printk.h
-> >> @@ -701,6 +703,27 @@ do {									\
-> >>  	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-> >>  #endif
-> >>  
-> >> +/*
-> >> + * Print a continuation message with level. In case the continuation is split
-> >> + * from the main message it preserves the level.
-> >> + */
-> >> +
-> >> +#define pr_emerg_cont(fmt, ...)					\
-> >> +	printk(KERN_EMERG KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> > 
-> > Aren't this rather backwards?
-> > KERN_CONT KERN_<LEVEL> seems to make more sense to me.
-> 
-> If nobody else disagrees I'll do this for v3.
+Hi all,
 
-I slightly prefer the way how it is now. IMHO, it makes it easier
-to check the related levels in /sys/kernel/debug/printk/index/vmlinux [*]:
+This series adds support for the RGB output block that can be found in the
+Rockchip Video Output Processor (VOP) 2.
 
-<6> kernel/power/process.c:227 thaw_kernel_threads "Restarting kernel threads ... "
-<6,c> kernel/power/process.c:218 thaw_processes "done.\n"
-<6> kernel/power/process.c:197 thaw_processes "Restarting tasks ... "
-<6,c> kernel/power/process.c:176 freeze_kernel_threads "\n"
-<6,c> kernel/power/process.c:174 freeze_kernel_threads "done."
-<6> kernel/power/process.c:169 freeze_kernel_threads "Freezing remaining freezable tasks ... "
-<6,c> kernel/power/process.c:140 freeze_processes "\n"
-<6,c> kernel/power/process.c:138 freeze_processes "done."
-<6> kernel/power/process.c:133 freeze_processes "Freezing user space processes ... "
-<6,c> kernel/power/process.c:105 try_to_freeze_tasks "(elapsed %d.%03d seconds) "
+Patches 1-2 prepare the RGB part, which has been used only with the VOP(1)
+so far.
 
-That said, I do not want to fight over it. It is hidden behind the
-API. The only really visible place is the printk index.
+Patch 3 is a cleanup patch and aims to make the creation and destruction of
+the CRTCs and planes more readable.
 
-[*] The index is available only when CONFIG_PRINTK_INDEX is enabled.
+Patch 4 activates the support for the RGB output block in the VOP2 driver.
 
-Best Regards,
-Petr
+Patch 5 adds pinctrls for the 16-bit and 18-bit RGB data lines.
+
+Tested on a custom board featuring the RK3568 SoC with a 18-bit RGB
+display.
+
+Looking forward to your comments!
+
+Best regards,
+Michael
+
+Michael Riesch (5):
+  drm/rockchip: rgb: embed drm_encoder into rockchip_encoder
+  drm/rockchip: rgb: add video_port parameter to init function
+  drm/rockchip: vop2: use symmetric function pair
+    vop2_{create,destroy}_crtcs
+  drm/rockchip: vop2: add support for the rgb output block
+  arm64: dts: rockchip: add pinctrls for 16-bit/18-bit rgb interface to
+    rk356x
+
+ .../boot/dts/rockchip/rk3568-pinctrl.dtsi     | 94 +++++++++++++++++++
+ drivers/gpu/drm/rockchip/rockchip_drm_vop.c   |  2 +-
+ drivers/gpu/drm/rockchip/rockchip_drm_vop2.c  | 50 +++++++---
+ drivers/gpu/drm/rockchip/rockchip_rgb.c       | 21 +++--
+ drivers/gpu/drm/rockchip/rockchip_rgb.h       |  6 +-
+ 5 files changed, 147 insertions(+), 26 deletions(-)
+
+
+base-commit: b7b275e60bcd5f89771e865a8239325f86d9927d
+-- 
+2.30.2
+
