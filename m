@@ -2,117 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3BF163DAB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF9B63DAB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbiK3Qdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 11:33:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
+        id S230298AbiK3QeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 11:34:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiK3Qdf (ORCPT
+        with ESMTP id S230294AbiK3Qd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 11:33:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED8C47305
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:33:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B28B61CEB
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 16:33:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A2C4C433C1;
-        Wed, 30 Nov 2022 16:33:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669826014;
-        bh=TQ6qATmc/otJtA0VqU70mnSV4wvcClBKzc9pRAZtJ+s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tEVjGneHEHGXkpFHTA7UitS9yvUvQ5tA7QTHh6RqWbyM2Sn787ewxDcTS4ncBbN/K
-         uR3ottDSbP6Pqt9i8+2OYfAs3MeXToyy6/hX5uM1SfBczLhGhZzkf1gULB4NP7XIKg
-         EqvuSaZAHwH7+6/xeT6kWSv1Yl9G0VMGdVi+fpao=
-Date:   Wed, 30 Nov 2022 17:33:31 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Carlos Llamas <cmllamas@google.com>
-Cc:     stable@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, Zi Fan Tan <zifantan@google.com>,
-        Todd Kjos <tkjos@google.com>
-Subject: Re: [PATCH 5.10 0/6] binder: backports for data leak and UAF
-Message-ID: <Y4eF23W4f6apsA47@kroah.com>
-References: <20221130035805.1823970-1-cmllamas@google.com>
- <Y4dPrxKjnUOtvwIc@kroah.com>
- <Y4eBC2Og8VZOSrK8@google.com>
+        Wed, 30 Nov 2022 11:33:59 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033767BFAF;
+        Wed, 30 Nov 2022 08:33:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669826037; x=1701362037;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=O38EYA6G9ifarvTxg5lwmhwEvLFlfmF4WwTHCfk3YwE=;
+  b=bB8i5s6xRlfuukHiBsZc9kOeq9eRvspMfvdXOcVvcJCG7kStVGYKSgL7
+   RhC2TofTaYh/4fU+uhiUoEYE7qKbFNWaOWgyRoNplgqNIXVRLYevs6loy
+   JoWLPKM+cP5DbsjSGZcC0uN963cX7i8h0otm+qKn2/bUPoNfcSaMd4zk1
+   crt1iHotiGsYrvy5wrJKZS26u1+YAwXofBx+IQU/Fpd68WPVBqgIrD4rT
+   iz1oIelxpTCDcZ9+ZyxvLeHDgNLVXx7qOrDTJqv8vcMMRl68KzvH/+j0z
+   dkbqlJ674ckKukZdTgVsLUmulpowA4Vx0lXtfklFitcJ5tq01yu2gDhMP
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="401718257"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="401718257"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 08:33:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="621943245"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="621943245"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga006.jf.intel.com with ESMTP; 30 Nov 2022 08:33:56 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 30 Nov 2022 08:33:56 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 30 Nov 2022 08:33:56 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 30 Nov 2022 08:33:56 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.109)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 30 Nov 2022 08:33:55 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=klqe6To5Cwq/lGHIrpZtn0PT4JXnw8cjIYiENwJ1jM65g1zr6sRqlwKMaOaErNXl4ceg2ObdrSQjnFF/3KXNNKkrwTCg/Ihaq7k3Ne5SES7hLXo1ZioPZbHIPGHr8FSYEBvP/8M4VogFKfDm1fx6CRvTd6LmWkBEqgOA0VdJtDsVfPO238/oQv8mX5KREfWyFwoxNWj6OnRAs/btDBgrhT9pyd1ikmFlw9fAZObhmsNZhnIGJ2qdh+eG0VoofPbDCD5Akv7SWvB77ne33CHigf21kb3tr4VY0vtC1VEDkHPAAaFSTECGrSwP4a7EU8zNS9+I+6I1A6r8o1B4Vaup3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2BKBTBcwPpJmTaja9H3N5ePa71y4z6U5ux7D+e+kC3Y=;
+ b=irGj2t+EawyMAAmbO+uRVr/tTHmhDOIpAO04VU8usGtkdrFEqP7gs7h5f7lCZdBFLM6TQJIQNvqynscCcsrIro3Shl5uiCe7yA/CwuCOSLYwCNBrLrNQx2JtOuM/Ew3RYXL2hQufMCRyUlrxAuEHzxpzPVnLqna3rotWnOtZcqWtAel5yUBLJNTg0BYy42kR1/ESUB04j2o7r7kehpsF9dAkuLQm0Cmqy4oPyZXTQ41exgow9k3JwjMCwe3oVKF+Y/SGTCWgJrW8uTQbLWDcrJc1076+pE0TqV8FfTo1d3nbdDQt/+jxXPUX570/Rs/K4ChDdSBmtkXGAxOWt1tUeA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
+ by CY8PR11MB7688.namprd11.prod.outlook.com (2603:10b6:930:75::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Wed, 30 Nov
+ 2022 16:33:53 +0000
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::b518:90b6:52bd:bef9]) by CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::b518:90b6:52bd:bef9%12]) with mapi id 15.20.5857.023; Wed, 30 Nov
+ 2022 16:33:53 +0000
+Message-ID: <ce549bc3-7e54-b1d3-7ec5-4cde66bd468f@intel.com>
+Date:   Wed, 30 Nov 2022 08:33:51 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.5.0
+Subject: Re: [PATCH v4 4/5] selftests/resctrl: Cleanup properly when an error
+ occurs in CAT test
+Content-Language: en-US
+To:     "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Shuah Khan" <skhan@linuxfoundation.org>
+References: <20221117010541.1014481-1-tan.shaopeng@jp.fujitsu.com>
+ <20221117010541.1014481-5-tan.shaopeng@jp.fujitsu.com>
+ <af1b4e59-2b4b-ddbb-2218-0e2808b718a3@intel.com>
+ <TYAPR01MB6330CDB2C59C58EE77B912538B0F9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+ <ba5a9ef2-b4ca-5c90-cc03-2296586455a6@intel.com>
+ <TYAPR01MB63300F91A0755310E78D98308B159@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <TYAPR01MB63300F91A0755310E78D98308B159@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0025.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c0::30) To CY4PR11MB1862.namprd11.prod.outlook.com
+ (2603:10b6:903:124::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4eBC2Og8VZOSrK8@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|CY8PR11MB7688:EE_
+X-MS-Office365-Filtering-Correlation-Id: a760945c-8353-42d1-89c5-08dad2f0ab61
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KRtDSPY1U9yJkHD71hfKJuwbYPEh2eXVOhVKuXD0bJr7/0a9lQAhVivV12yRR3JUZAZYgaQI5xyUg6D2dDhc6Pj6xB/J0t6GGQeJwknmoh5QMy3FwCsIvXuhXp+tpnJmQWZGgN9h8+8/WWIC7Rj7NUurKSEAcPwos/ipD6Bn5fVqV6WkVhLcCKg7BDO0IemKuoUGj4q7zszagzjqcggOMkwVHQ62780phpDutAnze90DegiyBNUak83Z32u1MQWaYqaol6feYOQCqd0yR2SRKNHAQ+2PuFg6OYqmwm7HMMRwmw2M8b1208Db1MJX+uC6P/P6x1rlrB8+Pb9K6BIMryVTIEX18Jv39EZOj617yjE6oezPmpRSjzWtFvLyEyrUcNo7MCAitt1SMvn9+YQ+oUiRSzfYsRx62aJ5z3iXlPmRz7OYNRHF9pTGOkR/a47qHQ3chOJQXFgNrWql345CBa6iU+kBenGokC/wVphEZiq8SRFXjC/ydrx9066gbDpkytPyKHG2KwyKauIi5qeh/zFXwvLuXw/DO2VJg1/YAhLpA4cVX7ZAE2RzxIcQ02WANnwTcXmaWXbC3xr9/i38d0gTEfX9j0/dwUGxsxtA7YZuPALhdPXVohHaVJl3WPeTvenT/KCCKQ1WtXxjjezBRwgoa/BXPNcC0iwZXtzSnOPn0yDTh8iWgPsxfWfaOkjAbzR++rpj5mAauAQp/jpHJ2UEXzSnb8NsQucPofal4rs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(346002)(39860400002)(376002)(396003)(136003)(451199015)(5660300002)(8936002)(44832011)(8676002)(66476007)(4326008)(66946007)(66556008)(2906002)(38100700002)(41300700001)(31686004)(6486002)(54906003)(478600001)(110136005)(316002)(26005)(2616005)(36756003)(6512007)(6506007)(186003)(53546011)(4744005)(82960400001)(86362001)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SGNLOEZuQzBqS3BTR0hlbFdOQ1gvdkwzU2tMTFl1a2NMUG42c3ZkK0o1Rkw2?=
+ =?utf-8?B?QTVheXBMTHFPckRJMUZDc01ndHd6cHY3QllLT2t6K0tJeGlyc01UL2ZEcGVi?=
+ =?utf-8?B?c2IyRERUVjJXY1lCOXhJQzNxblRxS2Z2Uld5LzA5ci95U3NGYWZIM1JDdVZQ?=
+ =?utf-8?B?cTVyRkNLVHRLS1dUdVVreG1tMDc3bnltY2IwUzJDcE1paW8wZzV1UW9zTzha?=
+ =?utf-8?B?clNtUUpnSUp2UnFGVUVtcXVrRUVRTGMrUi90YkRMdUU3VVZoRUxuV2U4M0xP?=
+ =?utf-8?B?SUxpZElzQmg5WDJLNFM4elBZNE8vK1g3VlRKL2xPa2x5eTFiSzQvVmRxYVpU?=
+ =?utf-8?B?azIxSE9aQkNtRFkwWXovWFQ1Nmk5cFEvS25vN3czV21tRFRnOTA5bmdraC9Z?=
+ =?utf-8?B?VEd2QkFIa1ZUUkEzbHJGbU16Qjg4eWhkRHZCWW1KUmJFVUhXMDluVGRmTnRq?=
+ =?utf-8?B?a0VGUmhkd3UwTG1pT1J6cDB5a3RJL1NtVmxIY3hxVEJFbU5FWHVIZ3cwMHIv?=
+ =?utf-8?B?SFhQOHpseGFTQ3lvN0pLM1hRNVNJdDBROWlhbExHOFlaVlJFUTJOTk5TMTYz?=
+ =?utf-8?B?d1oyM0pyb0VtZ2prOUViWVhZUTZZS0hOM0lsbUlkdjhKOHhnOE5VM1d6c215?=
+ =?utf-8?B?WEc5MEc2TzJKQ1BNM2c0K29XYVo3Y3YyWVc2bGFQUklVRU1uY2RSaEtmS3hv?=
+ =?utf-8?B?TWhXS3FuUFpLQzlicFR6UEE5enJpZTFmU1FJV3JiK25xNy8wYTRYNGpVaHlN?=
+ =?utf-8?B?OERBQmhXb0tQcW50elRKMHUrMnNxOEFEQ1VWQTVkRGwwQXRPQVdod0diM3Bs?=
+ =?utf-8?B?dE5CTEFzSVZxRTUrZW8xbWhELzM1TlVZM2dTcjVyOExNS3dTN2I1aE45Y1pG?=
+ =?utf-8?B?c2FGQmNWa2xDQjduSXQvUDZObFFoQXpjWE5QV2hiY0w0YjN3Qm12UXVweFBT?=
+ =?utf-8?B?OUYvNDM1V1M1LzBJWHk0amFVOUVUMEZwTm9UMUQ1UVNOaDhkL1NJdHEvdUg2?=
+ =?utf-8?B?emJ4V3NHSFY1TGExczkxQ2RwaGFFS2ZzRlpqOTRiSXhybWl5akg2d2x2ODNv?=
+ =?utf-8?B?bVhKaHVBdFhaVmcva0NSQnF3NnBlY2x1OENJMFEzN0xCd2ljeHlxU2c0NHRm?=
+ =?utf-8?B?RXdrQ0FvcThUNEVXWGg3UUVXTzhIZGZ6eWRkTDFnOTl0N052d2xFc09FdzNV?=
+ =?utf-8?B?UTdWdTJjZDhwVnhYTStyVlJDSnFHa2QzdGN6by9hZ1ZsaERnalBqK2hnMndX?=
+ =?utf-8?B?ZTdaRGt2eUlBRmJCYTVVY0Q4RzFpVndNajNKYlloU3FyRkFQcW9BOGI0OXVu?=
+ =?utf-8?B?blo5Wndwa0ZSNyt6TXI0d3FZQlA3Wlk3NlVOMDExYnJRQXFQeG5vRUNpNGJo?=
+ =?utf-8?B?eCtKOWUydFNwS2YyNUJVcEtPRWRGMDZpUGZ3aHVpSVNZMVpzb0ZjMGdoTXlz?=
+ =?utf-8?B?N2pZT0N1Uis3MEFpMFpCb2FTSmVSYyt4SzVjRk41Z2xQVWJ5V2Vsa1lvVGNB?=
+ =?utf-8?B?NjYyQzlneUtTbGtnK28rYWNPb1NjanNDdHFXU3lBOW1yTVdQWENlcWVwaDZC?=
+ =?utf-8?B?a0JSOUNQZzd1M0xiYUlpK3ZSNlNIRjdiTFFsazQ4V1lmQllndEJVaW5MS3dr?=
+ =?utf-8?B?ZW83M0cvdld3ckJOOHJNNElXZjN5OURNQU0wYVRuaHpTUnRLVnZjdW9QMkRF?=
+ =?utf-8?B?TUNEK3FzWW9GRFBEUHowUEZzbCtTRFlPSmpjK2xjTFhMOExHcWI1cllqQXRq?=
+ =?utf-8?B?ZmMyOTlYby9YRVJ6SVBIVDJWb0x2RVQ4TnpFWmJzZHVhaUpPMmhWZlF3UmZ6?=
+ =?utf-8?B?S3FkU1k5QlJrS2J1Nm9mOEVJL2pkUDlUZjArT0E4T0VJRUxpNXk0czlRR1Bp?=
+ =?utf-8?B?NHBFZXM0b1hIaWt3THdBRXdKUnlrOGcrV3JQZ3l0WEZCRkU3anRKaGl5eFh3?=
+ =?utf-8?B?eXhIc1RxWGRZbjExQ0lVQzQ4dEN2ODhlUWxCOHBaNURBRjRkYktyeENYWWg5?=
+ =?utf-8?B?Y3AvcjZtc1ViUk1pKzhoMVF2alFFQjNiRkJ1L01aMTEvc3Y1T29BUzhsNjBX?=
+ =?utf-8?B?TE9QTFJhbkFTYjNJRHBJenM1YlhiMDJLMFc1SkRqT1g2VnFESGZoTXRJK2J4?=
+ =?utf-8?B?SGlNWmx2WWQrUE5Qdk9GVWJVSExZRVJEREtiTy9WZ3VTT2tCWUFuazVEakFT?=
+ =?utf-8?B?SGc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a760945c-8353-42d1-89c5-08dad2f0ab61
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 16:33:53.7657
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8f6MlLO49Ybry+vKUYDmIlRet9b6D8BYPtMhWE+e7i0YaoHsWW6YLJ+EjQwcYqM3xCI3ZcLUu6HvaI5m2wH35nkp0awSkIMeWglpTqLcTXA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7688
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 04:12:59PM +0000, Carlos Llamas wrote:
-> On Wed, Nov 30, 2022 at 01:42:23PM +0100, Greg Kroah-Hartman wrote:
-> > On Wed, Nov 30, 2022 at 03:57:59AM +0000, Carlos Llamas wrote:
-> > > This series of backports consists of 3 main patches from Todd submitted
-> > > upstream in [1]. The intention is to avoid untranslated data from the
-> > > senders to be visible to the target processes. More details of this
-> > > issue can be found in the same thread.
-> > > 
-> > > Furthermore, Todd's patches also fix a use-after-free issue introduced
-> > > by commit 32e9f56a96d8 ("binder: don't detect sender/target during
-> > > buffer cleanup"). In which invalid userspace input causes unprocessed
-> > > objects to be incorrectly released. Any subsequent references to these
-> > > objects will trigger a UAF as noted by the following KASAN trace:
-> > > 
-> > >  [  244.748468] ==================================================================
-> > >  [  244.750486] BUG: KASAN: use-after-free in binder_ioctl+0xb88/0x32e0
-> > >  [  244.751276] Read of size 8 at addr ffff67b1865bea58 by task poc/593
-> > >  [  244.752074] 
-> > >  [  244.752725] CPU: 0 PID: 593 Comm: poc Not tainted 5.10.156 #1
-> > >  [  244.753683] Hardware name: linux,dummy-virt (DT)
-> > >  [  244.754717] Call trace:
-> > >  [  244.755216]  dump_backtrace+0x0/0x2a0
-> > >  [  244.755836]  show_stack+0x18/0x2c
-> > >  [  244.756306]  dump_stack+0xf8/0x164
-> > >  [  244.756807]  print_address_description.constprop.0+0x9c/0x538
-> > >  [  244.757590]  kasan_report+0x120/0x200
-> > >  [  244.758236]  __asan_load8+0xa0/0xc4
-> > >  [  244.758756]  binder_ioctl+0xb88/0x32e0
-> > >  [  244.759283]  __arm64_sys_ioctl+0xd4/0x120
-> > >  [  244.759677]  el0_svc_common.constprop.0+0xac/0x270
-> > >  [  244.760184]  do_el0_svc+0x38/0xa0
-> > >  [  244.760540]  el0_svc+0x1c/0x2c
-> > >  [  244.760898]  el0_sync_handler+0xe8/0x114
-> > >  [  244.761419]  el0_sync+0x180/0x1c0
-> > > 
-> > > This second issue along with the reference to the commit fixing it was
-> > > first reported by Zi Fan.
-> > > 
-> > > The other 3 commits included in this series are simply upstream fixes
-> > > for the main patches.
-> > > 
-> > > I've tested this series applied to 5.10 and 5.4 which fixes the issues
-> > > above as expected. So please pick these up for 5.10 and 5.4 stable.
-> > > 
-> > > [1] https://lore.kernel.org/all/20211130185152.437403-1-tkjos@google.com/
-> > > 
-> > > Thanks,
-> > > Carlos Llamas
-> > > 
-> > > Cc: Zi Fan Tan <zifantan@google.com>
-> > > Cc: Todd Kjos <tkjos@google.com>
-> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org> 
-> > 
-> > All now queued up, thanks.
-> > 
-> > greg k-h
+Hi Shaopeng,
+
+On 11/30/2022 12:32 AM, Shaopeng Tan (Fujitsu) wrote:
+ 
+> Removing ctrl_handler() is only part of the fix in the next version(v5).
+> All fixes as follows.
 > 
-> Thanks Greg. Could you also take this series for 5.4? I've also tested
-> the fixes for that release.
+> --- a/tools/testing/selftests/resctrl/cat_test.c
+> +++ b/tools/testing/selftests/resctrl/cat_test.c
+> @@ -98,12 +98,17 @@ void cat_test_cleanup(void)
+>         remove(RESULT_FILE_NAME2);
+>  }
+> 
+> +static void ctrlc_handler_child(int signum, siginfo_t *info, void *ptr)
+> +{
+> +       exit(EXIT_SUCCESS);
+> +}
+> +
 
-Sure, all now queued up there too.
+Could you please elaborate why this is necessary?
 
-greg k-h
+Reinette
