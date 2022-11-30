@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDDFF63E512
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 936DA63E515
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiK3XPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 18:15:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
+        id S230162AbiK3XPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:15:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiK3XOK (ORCPT
+        with ESMTP id S230133AbiK3XOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 18:14:10 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16797A1A04
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:11:02 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id on5-20020a17090b1d0500b0021821a07953so3792730pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:11:02 -0800 (PST)
+        Wed, 30 Nov 2022 18:14:44 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C06499F06
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:11:07 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id a24-20020a056a001d1800b00575cd7524a2so199253pfx.5
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:11:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=sHcyHjJ8KuW26EmyMG2GCKXDxJlY2ojJURA0kcfw/9k=;
-        b=VFFqhuPme1m1eQU16n2iG/J4RAGy2zrHzndrwcDa2UqPCuhmGJAJUoqWiUJ0hBawNj
-         h+1PCcwEa7TWtGKSi7eE+1ph58rOUBv3xDHOkx/n95w6cUeiQfhXEh79gM7EIyUtnO0y
-         ioN8O+FtRJeTVR0iP2uSqqMMZ5ce7bBX8TmoSKstA2185sSr20JSkv0QaUPbyNWz1HPN
-         V+igGOZxxi1EiiIK8zOP02RlczC9ypmTY7mqbv223oTCKi8YwUrElYdikisBH1Zh971w
-         Fr2k5IgU2gcv415RYRumMziSQSo+TFWu1mQkGuJbocDRmVfBg+o1I6JFksOzDsAHNWBN
-         gCrw==
+        bh=D3FaB2LQWUdh9329yK1/LRRjE6BHL9vT84hTzCwYUZY=;
+        b=F0Uv7HJ3uLD6my3CPg9c/FvAdlevE5UrgwJ52oKbdKk+h5pZQ52R0A1ujwUbyda5be
+         kT7hr3m17CSHrE1wqdrO8WnhFVLHbQUmFj/AHeRDhIbeEgLy25Z35oiEJSUghp9d7Mvw
+         EMvHrrXXLjdbC6nrvYYBKHYtONVA9nuR5/1rOJ5nX9vtMt4pH3KARms+yyAenpIRQ0wN
+         Qvd43wOl6PzaVLPZ767z3WS2EvSh9lILv6Vuzj5BuNFPpqzBEscwlX2yFLGnewIU1D/n
+         AS6gWh9JiHPdRq6xbA0faOzZWTQx8VU6OdYrvQhQzjtuYmnftngmGkjXlabZhl5EzkQE
+         VogA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sHcyHjJ8KuW26EmyMG2GCKXDxJlY2ojJURA0kcfw/9k=;
-        b=WjS7P8org5GvJ5I1IZ2m4wFY+JZidWBWpvKVOQwzuwDihKrDOGFjx4YdXrCBApw+Yr
-         4RaNLqcocKzx5uo0TJQWQCoCH7mw/lBoinARU+/7YGZtun6LqzqZRLAFdo3Sklz99m0p
-         CCeb+P8o+MvMt44/XSNSIU2PXlxIdVBT5oxWRRipn+z/U2/fPq0B4E3gJsZBbJofQTRU
-         mNeb1/yTQIkML7G5LUDzZaFPXPGvVDMYRSlJcaTBxLjHWayc2tbmiJvCgRN/KgJq2c4p
-         KkhzB6rDG7CV6gQ1BBUD/Ktgtw25bJ229wF1zWq2tQLPTGOKtpb3MECzMSWeXV100Jg4
-         hCzg==
-X-Gm-Message-State: ANoB5pnWw5D0gBzLlJKnzLt4SIYQvnuafdTwGqJXRx+c3QW16891lPpA
-        nbiVMKA+BjvEz03sXYCvmmkTpvCtX6E=
-X-Google-Smtp-Source: AA0mqf6iPCX6KyjCp3cF1IRt5Mv13lZJWlEm0jsHehxUqphsE1Cogz37ZNgUSTWxB9XNJiT56sIeMfxkVVA=
+        bh=D3FaB2LQWUdh9329yK1/LRRjE6BHL9vT84hTzCwYUZY=;
+        b=JHU7o9uCA/L06scj6wbn4Ko8NQU8MVGfGnx4+vRx5DBXV8ZXYAW/8jRHZKc3L+B5v/
+         mK9znqGn7++Bv+tom9QG+ZPqcCsmaVk6b4HQRet3HZYASzgN5RIEij5hLV2tKbFvIFJb
+         oblQdyA4nWcaeZxcwJuGYMhEnauzbCAtGCODtSWWkiTS1xr5HMogv1ALOMPPK0hqOGLt
+         ulfjwu0D2BJvmfZdoSikvlqHAcQt8CrV2616+zIyP+8YjZNNxr4O5biszq5SxO8Je3Z2
+         D0HU2ifHlISoxZuJSzT+IC+xZz6qK/mKxSl1YAq4dLLGeTHFVhqROdFBGxMvEKjQ2TUQ
+         r4CA==
+X-Gm-Message-State: ANoB5pnny5G1Oaau067uWqR6ALWYiSoivR82lms/72r6CQfZrLHYJoG7
+        Ptfb0zC7EwAZgL6Lx/ECdSVT9D+DYhc=
+X-Google-Smtp-Source: AA0mqf6dzizXuyPBFdbqHp5eNQJR39tQ8HwhM4MMFjuS8vZtDz9I3IquPQQoAu2jtVBkbtAudijruyIdWeQ=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a65:63d8:0:b0:477:172b:c350 with SMTP id
- n24-20020a6563d8000000b00477172bc350mr40707643pgv.313.1669849838234; Wed, 30
- Nov 2022 15:10:38 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:902:ec04:b0:189:894c:6b58 with SMTP id
+ l4-20020a170902ec0400b00189894c6b58mr18422710pld.172.1669849840042; Wed, 30
+ Nov 2022 15:10:40 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 30 Nov 2022 23:09:19 +0000
+Date:   Wed, 30 Nov 2022 23:09:20 +0000
 In-Reply-To: <20221130230934.1014142-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20221130230934.1014142-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221130230934.1014142-36-seanjc@google.com>
-Subject: [PATCH v2 35/50] KVM: VMX: Use current CPU's info to perform
- "disabled by BIOS?" checks
+Message-ID: <20221130230934.1014142-37-seanjc@google.com>
+Subject: [PATCH v2 36/50] KVM: x86: Do VMX/SVM support checks directly in
+ vendor code
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -102,40 +102,221 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use this_cpu_has() instead of boot_cpu_has() to perform the effective
-"disabled by BIOS?" checks for VMX.  This will allow consolidating code
-between vmx_disabled_by_bios() and vmx_check_processor_compat().
+Do basic VMX/SVM support checks directly in vendor code instead of
+implementing them via kvm_x86_ops hooks.  Beyond the superficial benefit
+of providing common messages, which isn't even clearly a net positive
+since vendor code can provide more precise/detailed messages, there's
+zero advantage to bouncing through common x86 code.
 
-Checking the boot CPU isn't a strict requirement as any divergence in VMX
-enabling between the boot CPU and other CPUs will result in KVM refusing
-to load thanks to the aforementioned vmx_check_processor_compat().
+Consolidating the checks will also simplify performing the checks
+across all CPUs (in a future patch).
 
-Furthermore, using the boot CPU was an unintentional change introduced by
-commit a4d0b2fdbcf7 ("KVM: VMX: Use VMX feature flag to query BIOS
-enabling").  Prior to using the feature flags, KVM checked the raw MSR
-value from the current CPU.
-
-Reported-by: Kai Huang <kai.huang@intel.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/vmx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/kvm_host.h |  2 --
+ arch/x86/kvm/svm/svm.c          | 38 +++++++++++++++------------------
+ arch/x86/kvm/vmx/vmx.c          | 37 +++++++++++++++++---------------
+ arch/x86/kvm/x86.c              | 11 ----------
+ 4 files changed, 37 insertions(+), 51 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index e859d2b7daa4..3f7d9f88b314 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -2492,8 +2492,8 @@ static __init int cpu_has_kvm_support(void)
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 04a9ae66fb8d..d79aedf70908 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1729,8 +1729,6 @@ struct kvm_x86_nested_ops {
+ };
  
- static __init int vmx_disabled_by_bios(void)
- {
--	return !boot_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ||
--	       !boot_cpu_has(X86_FEATURE_VMX);
-+	return !this_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ||
-+	       !this_cpu_has(X86_FEATURE_VMX);
+ struct kvm_x86_init_ops {
+-	int (*cpu_has_kvm_support)(void);
+-	int (*disabled_by_bios)(void);
+ 	int (*check_processor_compatibility)(void);
+ 	int (*hardware_setup)(void);
+ 	unsigned int (*handle_intel_pt_intr)(void);
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index ab53da3fbcd1..49ccef9fae81 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -519,21 +519,28 @@ static void svm_init_osvw(struct kvm_vcpu *vcpu)
+ 		vcpu->arch.osvw.status |= 1;
  }
  
+-static int has_svm(void)
++static bool kvm_is_svm_supported(void)
+ {
+ 	const char *msg;
++	u64 vm_cr;
+ 
+ 	if (!cpu_has_svm(&msg)) {
+-		printk(KERN_INFO "has_svm: %s\n", msg);
+-		return 0;
++		pr_err("SVM not supported, %s\n", msg);
++		return false;
+ 	}
+ 
+ 	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)) {
+ 		pr_info("KVM is unsupported when running as an SEV guest\n");
+-		return 0;
++		return false;
+ 	}
+ 
+-	return 1;
++	rdmsrl(MSR_VM_CR, vm_cr);
++	if (vm_cr & (1 << SVM_VM_CR_SVM_DISABLE)) {
++		pr_err("SVM disabled (by BIOS) in MSR_VM_CR\n");
++		return false;
++	}
++
++	return true;
+ }
+ 
+ void __svm_write_tsc_multiplier(u64 multiplier)
+@@ -572,10 +579,9 @@ static int svm_hardware_enable(void)
+ 	if (efer & EFER_SVME)
+ 		return -EBUSY;
+ 
+-	if (!has_svm()) {
+-		pr_err("%s: err EOPNOTSUPP on %d\n", __func__, me);
++	if (!kvm_is_svm_supported())
+ 		return -EINVAL;
+-	}
++
+ 	sd = per_cpu_ptr(&svm_data, me);
+ 	sd->asid_generation = 1;
+ 	sd->max_asid = cpuid_ebx(SVM_CPUID_FUNC) - 1;
+@@ -4070,17 +4076,6 @@ static void svm_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa,
+ 	vmcb_mark_dirty(svm->vmcb, VMCB_CR);
+ }
+ 
+-static int is_disabled(void)
+-{
+-	u64 vm_cr;
+-
+-	rdmsrl(MSR_VM_CR, vm_cr);
+-	if (vm_cr & (1 << SVM_VM_CR_SVM_DISABLE))
+-		return 1;
+-
+-	return 0;
+-}
+-
+ static void
+ svm_patch_hypercall(struct kvm_vcpu *vcpu, unsigned char *hypercall)
+ {
+@@ -5080,8 +5075,6 @@ static __init int svm_hardware_setup(void)
+ 
+ 
+ static struct kvm_x86_init_ops svm_init_ops __initdata = {
+-	.cpu_has_kvm_support = has_svm,
+-	.disabled_by_bios = is_disabled,
+ 	.hardware_setup = svm_hardware_setup,
+ 	.check_processor_compatibility = svm_check_processor_compat,
+ 
+@@ -5095,6 +5088,9 @@ static int __init svm_init(void)
+ 
+ 	__unused_size_checks();
+ 
++	if (!kvm_is_svm_supported())
++		return -EOPNOTSUPP;
++
+ 	r = kvm_x86_vendor_init(&svm_init_ops);
+ 	if (r)
+ 		return r;
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 3f7d9f88b314..23b64bf4bfcf 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -2485,17 +2485,6 @@ static void vmx_cache_reg(struct kvm_vcpu *vcpu, enum kvm_reg reg)
+ 	}
+ }
+ 
+-static __init int cpu_has_kvm_support(void)
+-{
+-	return cpu_has_vmx();
+-}
+-
+-static __init int vmx_disabled_by_bios(void)
+-{
+-	return !this_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ||
+-	       !this_cpu_has(X86_FEATURE_VMX);
+-}
+-
  static int kvm_cpu_vmxon(u64 vmxon_pointer)
+ {
+ 	u64 msr;
+@@ -7479,16 +7468,29 @@ static int vmx_vm_init(struct kvm *kvm)
+ 	return 0;
+ }
+ 
++static bool __init kvm_is_vmx_supported(void)
++{
++	if (!cpu_has_vmx()) {
++		pr_err("CPU doesn't support VMX\n");
++		return false;
++	}
++
++	if (!this_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ||
++	    !this_cpu_has(X86_FEATURE_VMX)) {
++		pr_err("VMX not enabled (by BIOS) in MSR_IA32_FEAT_CTL\n");
++		return false;
++	}
++
++	return true;
++}
++
+ static int __init vmx_check_processor_compat(void)
+ {
+ 	struct vmcs_config vmcs_conf;
+ 	struct vmx_capability vmx_cap;
+ 
+-	if (!this_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ||
+-	    !this_cpu_has(X86_FEATURE_VMX)) {
+-		pr_err("VMX is disabled on CPU %d\n", smp_processor_id());
++	if (!kvm_is_vmx_supported())
+ 		return -EIO;
+-	}
+ 
+ 	if (setup_vmcs_config(&vmcs_conf, &vmx_cap) < 0)
+ 		return -EIO;
+@@ -8499,8 +8501,6 @@ static __init int hardware_setup(void)
+ }
+ 
+ static struct kvm_x86_init_ops vmx_init_ops __initdata = {
+-	.cpu_has_kvm_support = cpu_has_kvm_support,
+-	.disabled_by_bios = vmx_disabled_by_bios,
+ 	.check_processor_compatibility = vmx_check_processor_compat,
+ 	.hardware_setup = hardware_setup,
+ 	.handle_intel_pt_intr = NULL,
+@@ -8543,6 +8543,9 @@ static int __init vmx_init(void)
+ {
+ 	int r, cpu;
+ 
++	if (!kvm_is_vmx_supported())
++		return -EOPNOTSUPP;
++
+ 	/*
+ 	 * Note, hv_init_evmcs() touches only VMX knobs, i.e. there's nothing
+ 	 * to unwind if a later step fails.
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 3d5455e08191..5551f3552f08 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -9315,17 +9315,6 @@ static int __kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
+ 		return -EEXIST;
+ 	}
+ 
+-	if (!ops->cpu_has_kvm_support()) {
+-		pr_err_ratelimited("no hardware support for '%s'\n",
+-				   ops->runtime_ops->name);
+-		return -EOPNOTSUPP;
+-	}
+-	if (ops->disabled_by_bios()) {
+-		pr_err_ratelimited("support for '%s' disabled by bios\n",
+-				   ops->runtime_ops->name);
+-		return -EOPNOTSUPP;
+-	}
+-
+ 	/*
+ 	 * KVM explicitly assumes that the guest has an FPU and
+ 	 * FXSAVE/FXRSTOR. For example, the KVM_GET_FPU explicitly casts the
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
