@@ -2,124 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BBD63D8A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55ACA63D89E
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiK3O6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 09:58:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52834 "EHLO
+        id S229601AbiK3O6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 09:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiK3O6n (ORCPT
+        with ESMTP id S229445AbiK3O6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 09:58:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83E917054
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 06:57:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669820237;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=N6u+3XG/IMxarSx5aTpA9vTKE6ky1leeXmNmLaEP+NA=;
-        b=FMkFdlOPHXkk7RnOxSn6cSYK0SdLMakwS2DaifBEg+sTCWyPO+JzvAGWUxcYtAQxDD2dO0
-        KynItKnmodqMqZ880I/lToA08LJDWGRSmiauLRY2R8Ac1bUzlkY0GrkhNlGw45u7zVwPeM
-        130/BBV1G4XLnevKZZCm7hZ86yxXW7E=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-86-CnNKd7jpOxWOSd_uRvV6jg-1; Wed, 30 Nov 2022 09:57:15 -0500
-X-MC-Unique: CnNKd7jpOxWOSd_uRvV6jg-1
-Received: by mail-pf1-f200.google.com with SMTP id b13-20020a056a000a8d00b0057348c50123so14460015pfl.18
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 06:57:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N6u+3XG/IMxarSx5aTpA9vTKE6ky1leeXmNmLaEP+NA=;
-        b=DU6SVDQ4ZkssvO9YdZApYC45I/238zCcupzQcLRwMazppsN4buSpDuUe1eSyzZ5XTa
-         gqjwerSoIRck8zR23orcL+rphPEmHd/qhkXNdMbX3ysDODsH4WgjfNpSg3K4tStWJ14h
-         zot6LD60TpTnAKp+gpyOFXIyquS3bEjaWwXCji9MLgw3/n0gZOgrmA6oBch41HkIJNnA
-         TeSOS+RFl54O084buuFnODnhPfgJTCfVV7Bm9SkFu60CRMEpZVSyH7Sk5BUh6mOQRWE9
-         KVhOJekMTORyseKev0jWUDptEau3hOXka3/PzSOwcxxKlA4GSBEa1+G8Bdz4kiFOqCk1
-         ZDZA==
-X-Gm-Message-State: ANoB5pncha7vkHDvhXR95RgT3GQRlH6Tf7dujmbYSTB1VS511QZxKfm1
-        EqYpMcShSWpHbz/QVbUZBGcjKJY5Xk04Iyezop/XaYVn5Ggi+J/UWPAV15Dg79zSkk2M68v03yI
-        zW7U0cD/hhxYVgWEa3ES81jMp
-X-Received: by 2002:a63:165d:0:b0:473:f7cd:6603 with SMTP id 29-20020a63165d000000b00473f7cd6603mr37042533pgw.336.1669820234232;
-        Wed, 30 Nov 2022 06:57:14 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7V5/uVZ6WdKV+gGJoNyoymh+C7/c+wVew1dN51CbEENsyVhB08Hf+fc9wbP23e81z/ykc0ng==
-X-Received: by 2002:a63:165d:0:b0:473:f7cd:6603 with SMTP id 29-20020a63165d000000b00473f7cd6603mr37042464pgw.336.1669820233305;
-        Wed, 30 Nov 2022 06:57:13 -0800 (PST)
-Received: from ryzen.. ([240d:1a:c0d:9f00:fc9c:8ee9:e32c:2d9])
-        by smtp.gmail.com with ESMTPSA id v124-20020a626182000000b00574e4fe6118sm1488600pfb.162.2022.11.30.06.57.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 06:57:12 -0800 (PST)
-From:   Shigeru Yoshida <syoshida@redhat.com>
-To:     almaz.alexandrovich@paragon-software.com
-Cc:     ntfs3@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Shigeru Yoshida <syoshida@redhat.com>
-Subject: [PATCH] fs/ntfs3: Fix slab-out-of-bounds in ntfs_trim_fs()
-Date:   Wed, 30 Nov 2022 23:57:05 +0900
-Message-Id: <20221130145705.488351-1-syoshida@redhat.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 30 Nov 2022 09:58:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D514303F7;
+        Wed, 30 Nov 2022 06:58:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6AB561C32;
+        Wed, 30 Nov 2022 14:58:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2419C433C1;
+        Wed, 30 Nov 2022 14:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669820284;
+        bh=8qCtikAAK5ewVDLbkyFaVd5mw/YPRA/xoHRbnUNco6E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CAcY2kH/2zAdyjKKueldIyXfICaXuvzKuZRPy8r/7GZORaNctWvPrXkMgUd6A4mnS
+         BGSgQzoPAEGQ2oCF+2hfDMoTdt8qzacuM2hbyIpTMMtyT5KwuS2w0980IDO623J1Sk
+         49NslQa6HisN1wtnMZTUCjgCxf0FWj8IbcjyPwn3ZryNvdRSq2Odt4HKwMHUsgJz4L
+         TIVlw/gGceQjkGI5UOrCfIA/bFYeU0fusdJwhY8Ll9YShXiWs6T53wv9jnAVfbwm6L
+         MECg8lqtDQMpFdP2I97DWGusxQguZAMa1RAuqhZdAX/Y0vFu4jVqD7q1cjjLQs2Xd6
+         uq7MugyilxkkA==
+Date:   Wed, 30 Nov 2022 14:57:59 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     "A. Sverdlin" <alexander.sverdlin@siemens.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH] spi: spidev: mask SPI_CS_HIGH in SPI_IOC_RD_MODE
+Message-ID: <Y4dvdzVQZDEt09+p@sirena.org.uk>
+References: <20221130143948.426640-1-alexander.sverdlin@siemens.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dzZ2XdGmVBkCOrh6"
+Content-Disposition: inline
+In-Reply-To: <20221130143948.426640-1-alexander.sverdlin@siemens.com>
+X-Cookie: Jesus is my POSTMASTER GENERAL ...
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ntfs_trim_fs() should loop with wnd->nwnd, not wnd->nbits.  KASAN
-detects this as an out-of-bounds access like below:
 
-==================================================================
-BUG: KASAN: slab-out-of-bounds in ntfs_trim_fs (fs/ntfs3/bitmap.c:1434)
-Read of size 2 at addr ffff8881745b4f02 by task repro/19678
+--dzZ2XdGmVBkCOrh6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-2.fc37 04/01/2014
-Call Trace:
- <TASK>
-dump_stack_lvl (lib/dump_stack.c:107 (discriminator 4))
-print_report (mm/kasan/report.c:285 mm/kasan/report.c:395)
-? __virt_addr_valid (arch/x86/mm/physaddr.c:66)
-? __phys_addr (arch/x86/mm/physaddr.c:32 (discriminator 4))
-? ntfs_trim_fs (fs/ntfs3/bitmap.c:1434)
-? ntfs_trim_fs (fs/ntfs3/bitmap.c:1434)
-kasan_report (mm/kasan/report.c:162 mm/kasan/report.c:497)
-? ntfs_trim_fs (fs/ntfs3/bitmap.c:1434)
-ntfs_trim_fs (fs/ntfs3/bitmap.c:1434)
-ntfs_ioctl (fs/ntfs3/file.c:41 fs/ntfs3/file.c:57)
-? ntfs_fiemap (fs/ntfs3/file.c:51)
-? bpf_lsm_file_ioctl (./include/linux/lsm_hook_defs.h:165)
-? ntfs_fiemap (fs/ntfs3/file.c:51)
-__x64_sys_ioctl (fs/ioctl.c:52 fs/ioctl.c:870 fs/ioctl.c:856 fs/ioctl.c:856)
-do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
-entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
+On Wed, Nov 30, 2022 at 03:39:48PM +0100, A. Sverdlin wrote:
 
-Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
----
- fs/ntfs3/bitmap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>  	/* read requests */
+>  	case SPI_IOC_RD_MODE:
+> -		retval = put_user(spi->mode & SPI_MODE_MASK,
+> -					(__u8 __user *)arg);
+> +		tmp = spi->mode;
+> +
+> +		{
+> +			struct spi_controller *ctlr = spi->controller;
+> +
+> +			if (ctlr->use_gpio_descriptors && ctlr->cs_gpiods &&
+> +			    ctlr->cs_gpiods[spi->chip_select])
+> +				tmp &= ~SPI_CS_HIGH;
+> +		}
+> +
+> +		retval = put_user(tmp & SPI_MODE_MASK, (__u8 __user *)arg);
+>  		break;
+>  	case SPI_IOC_RD_MODE32:
+>  		retval = put_user(spi->mode & SPI_MODE_MASK,
 
-diff --git a/fs/ntfs3/bitmap.c b/fs/ntfs3/bitmap.c
-index e92bbd754365..1930640be31a 100644
---- a/fs/ntfs3/bitmap.c
-+++ b/fs/ntfs3/bitmap.c
-@@ -1424,7 +1424,7 @@ int ntfs_trim_fs(struct ntfs_sb_info *sbi, struct fstrim_range *range)
- 
- 	down_read_nested(&wnd->rw_lock, BITMAP_MUTEX_CLUSTERS);
- 
--	for (; iw < wnd->nbits; iw++, wbit = 0) {
-+	for (; iw < wnd->nwnd; iw++, wbit = 0) {
- 		CLST lcn_wnd = iw * wbits;
- 		struct buffer_head *bh;
- 
--- 
-2.38.1
+What about SPI_IOC_RD_MODE_32?  On the write path the code is shared...
 
+--dzZ2XdGmVBkCOrh6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOHb3YACgkQJNaLcl1U
+h9CQJgf/daoxEQABFU5PoGFf/jNfQvZzeIJqAAztUAaw61V0mVzndC36v23iuL3V
+Fj1dBlPh1oZ/e+rDgTS6kJVdYhsnQK0z8hCDSHvBcFclBWfmT1SnMehlN0913sQ7
+GU1m/2xnDv8OVis3SY6SYpK4lcRgM6Dn97JO1JtMu9PXCg56bTfSSE/WGnZSahtN
+BOGXweozbj3VWmq/IIUWa1stWGMPsfU+3Rtg5dIXOUU52knv2Q7rTnX1u50x0RgA
+7ND0EqaR8EL7MlPl85SRRQ1BKbbOF1RZWAwLtGqwYnfzldZLoDjZPdZ6BG5I/yVQ
+h5JIsT4eVW0JMEsu8jhk9R6w84KwMg==
+=XgeV
+-----END PGP SIGNATURE-----
+
+--dzZ2XdGmVBkCOrh6--
