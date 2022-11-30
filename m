@@ -2,179 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC57E63CE43
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 05:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D5463CE5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 05:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232627AbiK3ENi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 23:13:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
+        id S233135AbiK3Ee2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 23:34:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232726AbiK3ENO (ORCPT
+        with ESMTP id S232911AbiK3EeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 23:13:14 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F087925C65;
-        Tue, 29 Nov 2022 20:13:10 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NMQmK21chz4f3l2X;
-        Wed, 30 Nov 2022 12:13:05 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-        by APP1 (Coremail) with SMTP id cCh0CgC3rKtO2IZjCJ9DBQ--.5500S2;
-        Wed, 30 Nov 2022 12:13:06 +0800 (CST)
-Subject: Re: [net-next] bpf: avoid hashtab deadlock with try_lock
-To:     Tonghao Zhang <xiangxia.m.yue@gmail.com>
-Cc:     Hao Luo <haoluo@google.com>, Waiman Long <longman@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "houtao1@huawei.com" <houtao1@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-References: <41eda0ea-0ed4-1ffb-5520-06fda08e5d38@huawei.com>
- <CAMDZJNVSv3Msxw=5PRiXyO8bxNsA-4KyxU8BMCVyHxH-3iuq2Q@mail.gmail.com>
- <fdb3b69c-a29c-2d5b-a122-9d98ea387fda@huawei.com>
- <CAMDZJNWTry2eF_n41a13tKFFSSLFyp3BVKakOOWhSDApdp0f=w@mail.gmail.com>
- <CA+khW7jgsyFgBqU7hCzZiSSANE7f=A+M-0XbcKApz6Nr-ZnZDg@mail.gmail.com>
- <07a7491e-f391-a9b2-047e-cab5f23decc5@huawei.com>
- <CAMDZJNUTaiXMe460P7a7NfK1_bbaahpvi3Q9X85o=G7v9x-w=g@mail.gmail.com>
- <59fc54b7-c276-2918-6741-804634337881@huaweicloud.com>
- <541aa740-dcf3-35f5-9f9b-e411978eaa06@redhat.com>
- <Y4ZABpDSs4/uRutC@Boquns-Mac-mini.local>
- <Y4ZCKaQFqDY3aLTy@Boquns-Mac-mini.local>
- <CA+khW7hkQRFcC1QgGxEK_NeaVvCe3Hbe_mZ-_UkQKaBaqnOLEQ@mail.gmail.com>
- <23b5de45-1a11-b5c9-d0d3-4dbca0b7661e@huaweicloud.com>
- <CAMDZJNWtyanKtXtAxYGwvJ0LTgYLf=5iYFm63pbvvJLPE8oHSQ@mail.gmail.com>
-From:   Hou Tao <houtao@huaweicloud.com>
-Message-ID: <8d424223-1da6-60bf-dd2c-cd2fe6d263fe@huaweicloud.com>
-Date:   Wed, 30 Nov 2022 12:13:02 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 29 Nov 2022 23:34:25 -0500
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CECF1C93B
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 20:34:21 -0800 (PST)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20221130043416epoutp02dfcfcba78631a490b198cb02fb21f70c~sQqlWvw0d0375203752epoutp02E
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 04:34:16 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20221130043416epoutp02dfcfcba78631a490b198cb02fb21f70c~sQqlWvw0d0375203752epoutp02E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1669782856;
+        bh=6dycdhzUsMa+NwKSFxTpqIW56UX7qOqZbM2o30JBaAo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=B2mkw7hmOgOKNi5qM3ajmon8+znUzQUbjCUqvObGIst1qWHBsfrerTU3ERk3IhelD
+         PzARufRZkEkx2K5HW1haHIuG2i7V/dHlens8ImPHlHmVebIUFeaON1Rzmuimo4c5fR
+         vCWQX05r+FUVACzEXSJJrkPQ20Kc5jcblkkgj9Kc=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20221130043416epcas5p1e5e92913164855ae029853bde2aa43bf~sQqks9l2A0431904319epcas5p1z;
+        Wed, 30 Nov 2022 04:34:16 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.176]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4NMRDk588bz4x9Pt; Wed, 30 Nov
+        2022 04:34:14 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        DB.F9.39477.64DD6836; Wed, 30 Nov 2022 13:34:14 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20221130042624epcas5p169a43c3b0e5b05a7fa47d925e9a5e186~sQjtMrVtX0044000440epcas5p1v;
+        Wed, 30 Nov 2022 04:26:24 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20221130042624epsmtrp252aff7ff1f7dafdc419c2be4e1fa122a~sQjtLavM-1890818908epsmtrp2j;
+        Wed, 30 Nov 2022 04:26:24 +0000 (GMT)
+X-AuditID: b6c32a4a-007ff70000019a35-a5-6386dd46c561
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F7.50.18644.07BD6836; Wed, 30 Nov 2022 13:26:24 +0900 (KST)
+Received: from test-zns (unknown [107.110.206.5]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20221130042614epsmtip27f06f8882f26839742901009824ead68~sQjkL-WMh1919419194epsmtip25;
+        Wed, 30 Nov 2022 04:26:14 +0000 (GMT)
+Date:   Wed, 30 Nov 2022 09:44:50 +0530
+From:   Nitesh Shetty <nj.shetty@samsung.com>
+To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
+Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "agk@redhat.com" <agk@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "sagi@grimberg.me" <sagi@grimberg.me>,
+        "anuj20.g@samsung.com" <anuj20.g@samsung.com>,
+        "joshi.k@samsung.com" <joshi.k@samsung.com>,
+        "p.raghav@samsung.com" <p.raghav@samsung.com>,
+        "naohiro.aota@wdc.com" <naohiro.aota@wdc.com>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "snitzer@kernel.org" <snitzer@kernel.org>,
+        "kbusch@kernel.org" <kbusch@kernel.org>,
+        "jth@kernel.org" <jth@kernel.org>,
+        "nitheshshetty@gmail.com" <nitheshshetty@gmail.com>,
+        "james.smart@broadcom.com" <james.smart@broadcom.com>,
+        "gost.dev@samsung.com" <gost.dev@samsung.com>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "hch@lst.de" <hch@lst.de>,
+        "shinichiro.kawasaki@wdc.com" <shinichiro.kawasaki@wdc.com>
+Subject: Re: [PATCH v5 00/10] Implement copy offload support
+Message-ID: <20221130041450.GA17533@test-zns>
 MIME-Version: 1.0
-In-Reply-To: <CAMDZJNWtyanKtXtAxYGwvJ0LTgYLf=5iYFm63pbvvJLPE8oHSQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-CM-TRANSID: cCh0CgC3rKtO2IZjCJ9DBQ--.5500S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF48Aw18KrW7Jr4fKFW3Wrg_yoW5KrW3pF
-        W7WF9xKF4kZF1Uuan2va18tr4aywnF9r4jkrZ8Jw10vF98Xry3ZFWIgw4I9Fy0qrn3ArsI
-        vr47Zay8CFn0vFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UZ18PUUUUU=
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+In-Reply-To: <a7b0b049-7517-bc68-26ac-b896aaf5342e@nvidia.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xTdxTHvfe2txc24PLSH6izK1umaCtlBX8wQBYNuT7HnNscicFabqAB
+        2qaPOd0fIlLNMIgQJKMDh4N1iAwGZYxngTreYFUEBgawUoGNCkPYyGTIWloW//ucx/d3fuec
+        HALzyGb5EmKJkpZLhEkc3JlRc2fHdm7U6CVRwEMLE1Z0t2Mw9doKBm+PZuJwrnWCCZf7jBhs
+        mv2GCYdb6lB463YbChtuzqOwbfUZDk2LIwyYbRhEYNPITtjY1MWA/fX5OPxW+5QFszp0TFhr
+        voDAhe/TWLB8Zo4B9ZoDsHNkMzSudDAjN1Ga8T6cqtOMsijjWCWD6u9TUVWlX+GUrvg81TCc
+        glMZF2etCepxJjWnH8Cpq9WlCLVQ9QZ1ueUKSlWZn6HRrjGJYQm0MI6Ws2mJSBonlsSHcw59
+        FLsvNig4gM/lh8A9HLZEmEyHc/YfjuZGiZOs7XPYnwuTVFZXtFCh4OyOCJNLVUqanSBVKMM5
+        tCwuSSaQ8RTCZIVKEs+T0MpQfkBAYJA18VRiwsRQG1Nm8PyiQR2RgvS7pSNOBCAFoFfbz0hH
+        nAkPsgEBd58amXbjOQJuVLay7MYCAqaMFsa6xFJrcWTVI6D113TMbkwioL931RohCAb5Nngw
+        t92GOLkT9KwSNq0XyQMDI7+tPYqRYwS43vOAZQt4kmFAd/9n3MYuJBdUDHdidnYHXXlma2EW
+        4URGgBeHbV5v0g+01HSgtmcAqXMCpsafHH/bDxb1k4idPcEfHdUsO/uChdkm3M5nwK2cEtwu
+        TkOAZkjjEOwF6u7MtboYmQAu6s0O8VZwvbsctftdQcayGbX7XUDtjXX2A2UVhY4CPmBw6YKD
+        KWApm3PMV4OCruksxjVkm+aV3jSv1LPzLlDY8BzXWGeHkZvBDy8JO+4AFfW7CxFmKeJDyxTJ
+        8bQiSBYooc/8v2+RNLkKWTsO/4O1iOnxnzwDghKIAQEExvFymT+mFnm4xAnPnqPl0li5KolW
+        GJAg66qyMF9vkdR6XRJlLF8QEiAIDg4WhLwbzOdscin62l/kQcYLlXQiTcto+boOJZx8U9BP
+        0cxHZZXpqd4fyrbxPis2bcx79MGJ03divCLedFdlHPpyQ3jBkGVgqS5bv/JvgaEv9eiP0zUH
+        DKNnQbbxraixqeWjliLtTde/LlWrx8LmWU8SLXRbb8nHMc0+ke5FT6R/637/JL+m6cWUkrt1
+        cPK84bXidx7u1ea+bjo+sOXIQbEs0M1TfckzzXnGLX5XebOJY7bc71oU1NNFx+HJ0Ms9eat7
+        NKx933UyQycitbINmrZzgr6JY+0bl7neS+Yctm5LV+Pw6Xs+Xr/wxSXkyEnscQF/lfXyPb/4
+        f7QlOfrSqCOneqd5JfPNvlcUrkx2bv5Qrr5zNKP9hDN4v31m/N5drriew1AkCPn+mFwh/A+E
+        mpVZpQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrEIsWRmVeSWpSXmKPExsWy7bCSvG7B7bZkg8mHOC3WnzrGbNE04S+z
+        xeq7/WwW7w8+ZrX4ffY8s8Xed7NZLW4e2MlksXL1USaL3Qs/Mlkc/f+WzeLhl1ssFpMOXWO0
+        2HtL22LP3pMsFpd3zWGzmL/sKbvFxOObWS12PGlktPi8tIXdYt3r9ywW+2Z5Wpy4JW1x/u9x
+        Vgdxj1n3z7J57Jx1l93j/L2NLB6Xz5Z6bFrVyeaxeUm9x+6bDWwevc3vgApa77N6vN93lc2j
+        b8sqRo/Pm+Q82g90M3lsevKWKYAvissmJTUnsyy1SN8ugSvj/KxXzAVNghX39v9laWBcw9vF
+        yMkhIWAi8WbHG9YuRi4OIYEdjBIXbn5mgkhISiz7e4QZwhaWWPnvOTtE0RNGia/nvjB2MXJw
+        sAioSlx6rwFisgloS5z+zwFSLiKgJ3H11g2wcmaBFxwSiz49B5sjLGAjsfniVjYQm1dAV2L9
+        zRNgcSGBWUwSy7t8IeKCEidnPmEBsZkFtCRu/HvJBDKfWUBaYvk/oPnsHJwCdhK/fEAKRAWU
+        JQ5sO840gVFwFpLeWUh6ZyH0LmBkXsUomVpQnJueW2xYYJSXWq5XnJhbXJqXrpecn7uJERzt
+        Wlo7GPes+qB3iJGJg/EQowQHs5II78eg1mQh3pTEyqrUovz4otKc1OJDjNIcLErivBe6TsYL
+        CaQnlqRmp6YWpBbBZJk4OKUamJqefXm8YUKr1ZXjrZIc1vt/xL2e5LCVc8PBpEORC3bG8yku
+        1KyXvDrrCvOskszXs38b/XM7fu36ik+m2T/0+mRTOBaG382btK/VNztaaLFc+98dN1YuyFNY
+        /dvq5jT5qKXKlZcZpUL7e++pWZkv7v5XOVWJQc6ldMezxt6Wpc4iwZMfCFpuXHhwZ9iMl7Lz
+        K+e4nT+4xsfCcnf1VPGv9WyCBqzLhQvz9od43Oz+ej5udT7bzvqJ/iWbTPz1E3z3bb8ylcOx
+        9vnvvT6Pn0a472bMM7p3asXTN9dvdb1eYNBxN5f75vXrvbuLC4S4HDe23PNMuRZVvnJesH7Q
+        216HuddPW9xsKtG3e9maqnxnvooSS3FGoqEWc1FxIgDjKZW2ZQMAAA==
+X-CMS-MailID: 20221130042624epcas5p169a43c3b0e5b05a7fa47d925e9a5e186
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----G62UEJgdyo2JOumF_Do4Y7B7G39M5PuLVzFwfXKQiOy3iUJg=_80049_"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-CMS-RootMailID: 20221123061010epcas5p21cef9d23e4362b01f2b19d1117e1cdf5
+References: <CGME20221123061010epcas5p21cef9d23e4362b01f2b19d1117e1cdf5@epcas5p2.samsung.com>
+        <20221123055827.26996-1-nj.shetty@samsung.com>
+        <cd772b6c-90ae-f2d1-b71c-5d43f10891bf@nvidia.com>
+        <20221129121634.GB16802@test-zns>
+        <a7b0b049-7517-bc68-26ac-b896aaf5342e@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+------G62UEJgdyo2JOumF_Do4Y7B7G39M5PuLVzFwfXKQiOy3iUJg=_80049_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-On 11/30/2022 10:47 AM, Tonghao Zhang wrote:
-> On Wed, Nov 30, 2022 at 9:50 AM Hou Tao <houtao@huaweicloud.com> wrote:
->> Hi Hao,
->>
->> On 11/30/2022 3:36 AM, Hao Luo wrote:
->>> On Tue, Nov 29, 2022 at 9:32 AM Boqun Feng <boqun.feng@gmail.com> wrote:
->>>> Just to be clear, I meant to refactor htab_lock_bucket() into a try
->>>> lock pattern. Also after a second thought, the below suggestion doesn't
->>>> work. I think the proper way is to make htab_lock_bucket() as a
->>>> raw_spin_trylock_irqsave().
->>>>
->>>> Regards,
->>>> Boqun
->>>>
->>> The potential deadlock happens when the lock is contended from the
->>> same cpu. When the lock is contended from a remote cpu, we would like
->>> the remote cpu to spin and wait, instead of giving up immediately. As
->>> this gives better throughput. So replacing the current
->>> raw_spin_lock_irqsave() with trylock sacrifices this performance gain.
->>>
->>> I suspect the source of the problem is the 'hash' that we used in
->>> htab_lock_bucket(). The 'hash' is derived from the 'key', I wonder
->>> whether we should use a hash derived from 'bucket' rather than from
->>> 'key'. For example, from the memory address of the 'bucket'. Because,
->>> different keys may fall into the same bucket, but yield different
->>> hashes. If the same bucket can never have two different 'hashes' here,
->>> the map_locked check should behave as intended. Also because
->>> ->map_locked is per-cpu, execution flows from two different cpus can
->>> both pass.
->> The warning from lockdep is due to the reason the bucket lock A is used in a
->> no-NMI context firstly, then the same bucke lock is used a NMI context, so
-> Yes, I tested lockdep too, we can't use the lock in NMI(but only
-> try_lock work fine) context if we use them no-NMI context. otherwise
-> the lockdep prints the warning.
-> * for the dead-lock case: we can use the
-> 1. hash & min(HASHTAB_MAP_LOCK_MASK, htab->n_buckets -1)
-> 2. or hash bucket address.
-Use the computed hash will be better than hash bucket address, because the hash
-buckets are allocated sequentially.
->
-> * for lockdep warning, we should use in_nmi check with map_locked.
->
-> BTW, the patch doesn't work, so we can remove the lock_key
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c50eb518e262fa06bd334e6eec172eaf5d7a5bd9
->
-> static inline int htab_lock_bucket(const struct bpf_htab *htab,
->                                    struct bucket *b, u32 hash,
->                                    unsigned long *pflags)
-> {
->         unsigned long flags;
->
->         hash = hash & min(HASHTAB_MAP_LOCK_MASK, htab->n_buckets -1);
->
->         preempt_disable();
->         if (unlikely(__this_cpu_inc_return(*(htab->map_locked[hash])) != 1)) {
->                 __this_cpu_dec(*(htab->map_locked[hash]));
->                 preempt_enable();
->                 return -EBUSY;
->         }
->
->         if (in_nmi()) {
->                 if (!raw_spin_trylock_irqsave(&b->raw_lock, flags))
->                         return -EBUSY;
-The only purpose of trylock here is to make lockdep happy and it may lead to
-unnecessary -EBUSY error for htab operations in NMI context. I still prefer add
-a virtual lock-class for map_locked to fix the lockdep warning. So could you use
-separated patches to fix the potential dead-lock and the lockdep warning ? It
-will be better you can also add a bpf selftests for deadlock problem as said before.
-
-Thanks,
-Tao
->         } else {
->                 raw_spin_lock_irqsave(&b->raw_lock, flags);
->         }
->
->         *pflags = flags;
->         return 0;
-> }
->
->
->> lockdep deduces that may be a dead-lock. I have already tried to use the same
->> map_locked for keys with the same bucket, the dead-lock is gone, but still got
->> lockdep warning.
->>> Hao
->>> .
+On Wed, Nov 30, 2022 at 12:05:00AM +0000, Chaitanya Kulkarni wrote:
+> On 11/29/22 04:16, Nitesh Shetty wrote:
+> > On Wed, Nov 23, 2022 at 10:56:23PM +0000, Chaitanya Kulkarni wrote:
+> >> (+ Shinichiro)
+> >>
+> >> On 11/22/22 21:58, Nitesh Shetty wrote:
+> >>> The patch series covers the points discussed in November 2021 virtual
+> >>> call [LSF/MM/BFP TOPIC] Storage: Copy Offload [0].
+> >>> We have covered the initial agreed requirements in this patchset and
+> >>> further additional features suggested by community.
+> >>> Patchset borrows Mikulas's token based approach for 2 bdev
+> >>> implementation.
+> >>>
+> >>> This is on top of our previous patchset v4[1].
+> >>
+> >> Now that series is converging, since patch-series touches
+> >> drivers and key components in the block layer you need accompany
+> >> the patch-series with the blktests to cover the corner cases in the
+> >> drivers which supports this operations, as I mentioned this in the
+> >> call last year....
+> >>
+> >> If you need any help with that feel free to send an email to linux-block
+> >> and CC me or Shinichiro (added in CC )...
+> >>
+> >> -ck
+> >>
+> > 
+> > Yes any help would be appreciated. I am not familiar with blktest
+> > development/testing cycle. Do we need add blktests along with patch
+> > series or do we need to add after patch series gets merged(to be merged)?
+> > 
+> > Thanks
+> > Nitesh
+> > 
+> > 
+> 
+> we have many testcases you can refer to as an example.
+> Your cover-letter mentions that you have tested this code, just move
+> all the testcases to the blktests.
+> 
+> More importantly for a feature like this you should be providing
+> outstanding testcases in your github tree when you post the
+> series, it should cover critical parts of the block layer and
+> drivers in question.
+> 
+> The objective here is to have blktests updated when the code
+> is upstream so all the distros can test the code from
+> upstream blktest repo. You can refer to what we have done it
+> for NVMeOF in-band authentication (Thanks to Hannes and Sagi
+> in linux-nvme email-archives.
+> 
+> -ck
 >
 
+Sure, next version will update blktest.
+
+Thank you,
+Nitesh
+
+------G62UEJgdyo2JOumF_Do4Y7B7G39M5PuLVzFwfXKQiOy3iUJg=_80049_
+Content-Type: text/plain; charset="utf-8"
+
+
+------G62UEJgdyo2JOumF_Do4Y7B7G39M5PuLVzFwfXKQiOy3iUJg=_80049_--
