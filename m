@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951C063D22C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1083463D231
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235222AbiK3JjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 04:39:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42042 "EHLO
+        id S234532AbiK3JjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 04:39:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234825AbiK3Jhv (ORCPT
+        with ESMTP id S235116AbiK3JiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 04:37:51 -0500
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DA82DC6;
-        Wed, 30 Nov 2022 01:36:00 -0800 (PST)
-Received: by mail-ej1-f48.google.com with SMTP id b2so23610849eja.7;
-        Wed, 30 Nov 2022 01:36:00 -0800 (PST)
+        Wed, 30 Nov 2022 04:38:20 -0500
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E08BE16;
+        Wed, 30 Nov 2022 01:37:40 -0800 (PST)
+Received: by mail-ed1-f44.google.com with SMTP id b8so23209991edf.11;
+        Wed, 30 Nov 2022 01:37:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1gHQW8SyXSe6rKcgrvLGPWcV+UXXK+imKI75/1Y5r28=;
-        b=EOqOoQtzpP+4xsZNr+UNZrB2+8PCQB8bLCzlHwE0ZrENCY0CTOeL+2UMsgtpMUabGf
-         Vy+bzc4CoYMAI+b3109IKrVFFQ5xqoQtdGDMIvouGJhJtqq0FUpmtW20Vvoeg0jZHIcM
-         bgTBY6sE2EHM9zkqP6g/d3RksiYjni+m3S83+CNJe6fKnpxYd61+QiTJ2tirPixz2mQK
-         yOM6Oq2q7VUMBB34CN5ZHnZb2Bl8DJdIDCLKx/gBvJGnECpxXbL6b/UAeGhhZg0vQjqh
-         DkLacJ3wtfZQI6NbQPL5gFAj5QuB9RRPN9Z2ZFyRJfv4uw+Pl6CWQay7CxyCkuiK42Pw
-         qOHw==
-X-Gm-Message-State: ANoB5pmEwTpyGJgy3fgJI7EAwoosg1HZ9evvdmLajPHnPPpcBu/YWRny
-        cYkvqsHH2UlJscn/Lz+YD197PnU3yVI=
-X-Google-Smtp-Source: AA0mqf6pI5+t84xJmE6eWdCj4L2XxRU9nrk+O7PsWaUl00TOuMmh+3xBifqZoNoB0N8zFADx/4Cg7w==
-X-Received: by 2002:a17:906:1e55:b0:7ad:a0cb:f79e with SMTP id i21-20020a1709061e5500b007ada0cbf79emr33730590ejj.458.1669800958794;
-        Wed, 30 Nov 2022 01:35:58 -0800 (PST)
+        bh=8txsqYzOtikQ3QaXooOdL0rWxlI4WoMcJ9dMdxjlc34=;
+        b=7ZCCqNVSneXdbHkjAp4CsZ+lZTRRdYdXHW4bZ+UwHz3REcf7I/a8pBBEs7VTe5Z+hU
+         AFDGd9z1guEA5DCKPjazaVKmXhjDHuWJlXA0YYkT1v3Q/q4eyDaYTi4qsssudYUEXTEd
+         skiXFPwzIZVrS9Q9H1x9eUiML2ISQ2wQhwnaA8uJHT9Qk+E8NmngvBaScmLVn5ZIuWqG
+         +PBUWiEWMcHvw2c3t3EtCjvV7pBqVqskRpes3eycXvKaC/tw1rvaKSdZfllryn4bhYtL
+         gGLrh0WK6OJuhXgO902FOZLKLoM2iSTBrm0KDaFnlOzIAJPVS69W1byOEPYnZFTvJF/7
+         6vQQ==
+X-Gm-Message-State: ANoB5pmK3uXQpZ6iUZ75W5zisbrkjn3fPaFeI47IyzDXePaLcnWOUBiU
+        RDhQkA3pUYJLF087t/CfSy4=
+X-Google-Smtp-Source: AA0mqf7Tiax9Np3qBwe098NPc6lmOwV81ou5iaihHaCbKsNigXw7NiBzNqUrh8Y/yYdg+pkrP3h30A==
+X-Received: by 2002:a05:6402:5290:b0:461:af68:9bcd with SMTP id en16-20020a056402529000b00461af689bcdmr38837516edb.67.1669801058451;
+        Wed, 30 Nov 2022 01:37:38 -0800 (PST)
 Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id d18-20020a05640208d200b0046150ee13besm411706edz.65.2022.11.30.01.35.57
+        by smtp.gmail.com with ESMTPSA id 18-20020a170906211200b007b29eb8a4dbsm452553ejt.13.2022.11.30.01.37.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 01:35:58 -0800 (PST)
-Message-ID: <a149f187-5928-9d8e-8aa7-91bb4138921e@kernel.org>
-Date:   Wed, 30 Nov 2022 10:35:56 +0100
+        Wed, 30 Nov 2022 01:37:37 -0800 (PST)
+Message-ID: <22332676-9d3a-1e21-aa70-e9c367b19bd9@kernel.org>
+Date:   Wed, 30 Nov 2022 10:37:36 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
-Subject: Re: [PATCH v4 08/13] tty: serial: qcom-geni-serial: refactor
- qcom_geni_serial_handle_tx()
+Subject: Re: [PATCH v4 11/13] tty: serial: qcom-geni-serial: stop operations
+ in progress at shutdown
 Content-Language: en-US
 To:     Bartosz Golaszewski <brgl@bgdev.pl>,
         Andy Gross <agross@kernel.org>,
@@ -56,11 +56,12 @@ To:     Bartosz Golaszewski <brgl@bgdev.pl>,
         =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-serial@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
 References: <20221129110012.224685-1-brgl@bgdev.pl>
- <20221129110012.224685-9-brgl@bgdev.pl>
+ <20221129110012.224685-12-brgl@bgdev.pl>
 From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20221129110012.224685-9-brgl@bgdev.pl>
+In-Reply-To: <20221129110012.224685-12-brgl@bgdev.pl>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
@@ -76,54 +77,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 29. 11. 22, 12:00, Bartosz Golaszewski wrote:
 > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> qcom_geni_serial_handle_tx() is pretty big, let's move the code that
-> handles the actual writing of data to a separate function which makes
-> sense in preparation for introducing a dma variant of handle_tx().
-
-I think you should split this patch into two. One to extract the code 
-^^^. And one to clean it up:
-
-> Let's also shuffle the code a bit, drop unneeded variables and use
-> uart_xmit_advance() instead of handling tail->xmit manually.
-
-As it is, it's hard to follow what is being changed.
-
-
-...
-> @@ -704,19 +704,41 @@ static void qcom_geni_serial_start_rx(struct uart_port *uport)
->   	writel(irq_en, uport->membase + SE_GENI_M_IRQ_EN);
->   }
+> We don't stop transmissions in progress at shutdown. This is fine with
+> FIFO SE mode but with DMA it causes trouble so fix it now.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/tty/serial/qcom_geni_serial.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> index fe15fc0e1345..c0270eec2a66 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -864,6 +864,9 @@ static void get_tx_fifo_size(struct qcom_geni_serial_port *port)
 >   
-> +static void qcom_geni_serial_send_chunk_fifo(struct uart_port *uport,
-> +					     unsigned int chunk)
-> +{
-> +	struct qcom_geni_serial_port *port = to_dev_port(uport);
-> +	struct circ_buf *xmit = &uport->state->xmit;
-> +	unsigned int tx_bytes, remaining = chunk;
-> +	u8 buf[BYTES_PER_FIFO_WORD];
-> +	int c;
+>   static void qcom_geni_serial_shutdown(struct uart_port *uport)
+>   {
+> +	qcom_geni_serial_stop_tx(uport);
+> +	qcom_geni_serial_stop_rx(uport);
+> +
+>   	disable_irq(uport->irq);
 
-c can/should be uint too.
-
-> +
-> +	while (remaining) {
-> +		memset(buf, 0, sizeof(buf));
-> +		tx_bytes = min(remaining, BYTES_PER_FIFO_WORD);
-> +
-> +		for (c = 0; c < tx_bytes ; c++) {
-> +			buf[c] = xmit->buf[xmit->tail];
-> +			uart_xmit_advance(uport, 1);
-> +		}
-> +
-> +		iowrite32_rep(uport->membase + SE_GENI_TX_FIFOn, buf, 1);
-> +
-> +		remaining -= tx_bytes;
-> +		port->tx_remaining -= tx_bytes;
-> +	}
-> +}
+I'm just asking without actually looking into the code: cannot the 
+interrupt reschedule/restart the above?
 
 thanks,
--- 
 -- 
 js
 suse labs
