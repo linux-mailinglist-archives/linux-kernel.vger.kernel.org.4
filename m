@@ -2,75 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C85C863D3E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3567063D3E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233763AbiK3LA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:00:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
+        id S229588AbiK3LCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:02:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiK3LAX (ORCPT
+        with ESMTP id S233449AbiK3LCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:00:23 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11202748D6
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:00:22 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 35FC36602B30;
-        Wed, 30 Nov 2022 11:00:21 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669806021;
-        bh=u9Hf8fb2wkuZTn14GmxwJyRB86szK4ksntM7PiVG0SY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HRvIXJ1/iWohl8AyG5Zl/CkNVTrdyazzQ8aBH2BDVYoLG8sc1lTF8H/bVqxUtwB4R
-         nZQVd9bQosAo2rgf4J2uyAX9iSzGwFwj0R5Bs11GlXijpbKnFi/NR/SNXLN4FZH4wi
-         WHreNcd95chi4SzQv5H3tO+RB+fThoYR6PAUfdAy2sw8XRWLZC/qBBdYiJj6D9TCfw
-         RzBjgpHsMiIPsSaO/JDKwq3wmKKWS6OsK61wjvpvJw9XSJAtKVvRrPpQ1z2J0tA3Al
-         +7cuBycU5FNNQlv5OUqYOhJfx0iX6awXthFgF6xgwSf6qnPuca2/C9AzS3oZXXgvpW
-         oGxUK8RXsJndQ==
-Message-ID: <d683a2e7-b886-9bf6-27df-d8c67cedbbdd@collabora.com>
-Date:   Wed, 30 Nov 2022 12:00:18 +0100
+        Wed, 30 Nov 2022 06:02:00 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689CE240A9
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:01:59 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p0Kqc-0006WK-76; Wed, 30 Nov 2022 12:01:50 +0100
+Received: from pengutronix.de (unknown [IPv6:2a0a:edc0:0:701:38ad:958d:3def:4382])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 7752412DD7C;
+        Wed, 30 Nov 2022 11:01:47 +0000 (UTC)
+Date:   Wed, 30 Nov 2022 12:01:46 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     ye.xingchen@zte.com.cn
+Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chi.minghao@zte.com.cn
+Subject: Re: [PATCH] can: c_can: use devm_platform_get_and_ioremap_resource()
+Message-ID: <20221130110146.seyu6e37ynpqjzyr@pengutronix.de>
+References: <202211111443005202576@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] soc: mediatek: mtk-svs: Enable the IRQ later
-Content-Language: en-US
-To:     Ricardo Ribalda <ribalda@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20221127-mtk-svs-v1-0-7a5819595838@chromium.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221127-mtk-svs-v1-0-7a5819595838@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qgpjgmca727svylu"
+Content-Disposition: inline
+In-Reply-To: <202211111443005202576@zte.com.cn>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 27/11/22 21:22, Ricardo Ribalda ha scritto:
-> If the system does not come from reset (like when is booted via
-> kexec()), the peripheral might triger an IRQ before the data structures
-> are initialised.
-> 
-> Fixes:
-> 
-> [    0.227710] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000f08
-> [    0.227913] Call trace:
-> [    0.227918]  svs_isr+0x8c/0x538
-> 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+--qgpjgmca727svylu
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On 11.11.2022 14:43:00, ye.xingchen@zte.com.cn wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+>=20
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 
+Added to linux-can-next.
+
+Thanks,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--qgpjgmca727svylu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOHOBcACgkQrX5LkNig
+013gXQf9H84qEBUKbv92KTcKZspx2AHMMxw21HBVtC7ahAp3FXEtkgsHgSchUYAy
+QBXYjHa/qMKPBxg73YvK1laDF80w10hAQaXxqhS1OiuLo4AMMYUqqMP9Uk/zsAoq
+6q4inCgLnaH6BfTAfCHezfjbN3K7c+Ze++TEssW9do5d+UHXOVByZv6XtkvW9Hvh
+cEOizyF6BJWCQ0j8rq1XWmV2rMZiQ/bus5ik6hj/wrVYdKwGTgozk4gM2FA/MCAH
+Reb2vJkZnY3j86Q9nsAaDhOIgdurnYWg9vWxoYdenSU+ng0ffEsCXeXLywCuQOnr
+duzZpXD8SIL2MTroTSk4Yk9ShQ6pLw==
+=HSD9
+-----END PGP SIGNATURE-----
+
+--qgpjgmca727svylu--
