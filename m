@@ -2,127 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7925163D60C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF6F63D610
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235114AbiK3MzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 07:55:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
+        id S235105AbiK3M41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 07:56:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232322AbiK3MzP (ORCPT
+        with ESMTP id S232445AbiK3M4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 07:55:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9113F2A73E;
-        Wed, 30 Nov 2022 04:55:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26AD261B2F;
-        Wed, 30 Nov 2022 12:55:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 671D9C433B5;
-        Wed, 30 Nov 2022 12:55:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669812913;
-        bh=caKgaaIV0oXMwRYscFbFUjaVc2wY6Y6lLAE0QR29CR4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KrQKNeBqB9TdkZXpD4zXCNJ059Bhfn4Ojq39TYC1dhPtSM6nJZTLfeXAzgntMRqbe
-         7RFlEyXNeO0lfslP+QAcZcE8h1mv6n+p0l8E3x7oS8U7Re1lncgtPEhLJtKI69mYTj
-         5RH3RhxNGYHLoTgJ1QlfF3njkdoyyfnSDFDezH2WhlkwZoPtDSxPHjQYJab8+Di7y7
-         hw2JhjfLGBm9Dqdv9tFXr0hipf2oYhNFv+YSLnJv+JaOEfLlQBjv9UlrCVu15wbDz9
-         tTpIK9b2EiNO6PB3sARRvkUpAx7jg6fQL1XH1eyzl5T+bBNEWh+hZIH4VmSWPw4MFL
-         xs9LeWtRIpG8g==
-From:   Georgi Djakov <djakov@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        djakov@kernel.org
-Subject: [GIT PULL] interconnect changes for 6.2
-Date:   Wed, 30 Nov 2022 14:55:08 +0200
-Message-Id: <20221130125508.4349-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.29.0
+        Wed, 30 Nov 2022 07:56:23 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417AC4AF1E;
+        Wed, 30 Nov 2022 04:56:22 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id f13so26787487lfa.6;
+        Wed, 30 Nov 2022 04:56:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4n4Rmn2+hL+sb6SthagDvmYUmd9v80kaLiVhP5QVD3s=;
+        b=hM2C/JJipHE0NssqshaieloPzbqX2890mUlJ93k/KB7RbHCP9Eoe2x60we3Icoe0Vw
+         akTJgj85AlCEVJAp9R9lBae24DOQQg1I31SGIYxtqAg8y1U0O0j0yXCZP+7K+Owumthf
+         X1GODKixGcox2f8NCUzC5n8ewnp8bOBGzEFu8Zhwwy1nmZ0ZgL3ENFNZhlhbwdbWTCQ5
+         oN0L9JXiSVF09ub4e1wfK1M7RCu6xYpdBKBLGvERUubhYnSRO+AMqcxB9Bh3ctc6Onmu
+         l5BPBNelx9jGHLa9FF8KdFFt1d0+/blNlTXy1V2vcMhdQ7ZDY0M1kxX4WCko5TF1HExn
+         TdVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4n4Rmn2+hL+sb6SthagDvmYUmd9v80kaLiVhP5QVD3s=;
+        b=19SYepF2d3l3knvTQdw6ma3FPMMP1m4J+036KbVS5E14YLbNIb4ke9A5rDfTiDs/Gp
+         PSkvnV4ikTP7idZQHzoPjq50rp7yZjFnLrmd94w8uh4HcqD0YA2NoX9YHMAhfqeJ8Dh9
+         auj3fPKKlab3NKWFkGd6DXzjvhXdKv3WqXXQEIyhxRSOmw0yPCm2nYPWfk33m5wfuWFI
+         2xjA8FI1w8xu2yao83+mE85ZJXxB3YClk1/M2uxT7L4mD2chZDcb+hoh3Ms9vm0PFNhn
+         rk2ngHOE7y1mA4OQ4QUpnS5bh4zH/625HUwP3njbgQmgj5TFBEz+H3uSSOxM4yBx1CgB
+         qVMg==
+X-Gm-Message-State: ANoB5pkuJ3FNQpLWZQLcHYlCTkIRm6XQYCqETmx/ALdeXieF0qbiI9Ac
+        AD/Sn0U6GMMpWTIobSK4lG4=
+X-Google-Smtp-Source: AA0mqf6AtLceB37mD91TwgSsjTW1So+gjiWnxbsmWjercUyyO8pkkaoWj6LbCijX3kDE7ZX+hccRyQ==
+X-Received: by 2002:ac2:4d4f:0:b0:4ae:2436:818c with SMTP id 15-20020ac24d4f000000b004ae2436818cmr19365933lfp.346.1669812980354;
+        Wed, 30 Nov 2022 04:56:20 -0800 (PST)
+Received: from pc636 (host-90-235-25-230.mobileonline.telia.com. [90.235.25.230])
+        by smtp.gmail.com with ESMTPSA id g5-20020a2eb5c5000000b0027781448499sm125715ljn.85.2022.11.30.04.56.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 04:56:20 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Wed, 30 Nov 2022 13:56:17 +0100
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH v2 3/4] rcu/kvfree: Move need_offload_krc() out of
+ krcp->lock
+Message-ID: <Y4dS8X+Ir7egYBTD@pc636>
+References: <20221129155822.538434-1-urezki@gmail.com>
+ <20221129155822.538434-4-urezki@gmail.com>
+ <20221129233833.GA154809@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221129233833.GA154809@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
+On Tue, Nov 29, 2022 at 03:38:33PM -0800, Paul E. McKenney wrote:
+> On Tue, Nov 29, 2022 at 04:58:21PM +0100, Uladzislau Rezki (Sony) wrote:
+> > Currently a need_offload_krc() function requires the krcp->lock
+> > to be held because krcp->head can not be checked concurrently.
+> > 
+> > Fix it by updating the krcp->head using WRITE_ONCE() macro so
+> > it becomes lock-free and safe for readers to see a valid data
+> > without any locking.
+> 
+> Don't we also need to use READ_ONCE() for the code loading this krcp->head
+> pointer?  Or do the remaining plain C-language accesses somehow avoid
+> running concurrently with those new WRITE_ONCE() invocations?
+>
+It can be concurrent. I was thinking about it. For some reason i decided
+to keep readers as a "regular" ones for loading the krcp->head.
 
-This is the pull request with interconnect changes for the 6.2-rc1 merge
-window. It contains a new driver and misc fixes. The details are in the
-signed tag.
+In this case it might take time for readers to see an updated value
+as a worst case scenario.
 
-All patches have been in linux-next during the last two weeks. Please pull
-into char-misc-next when possible.
+So i need to update it or upload one more patch on top of v2. Should
+i upload a new patch?
 
-Thanks,
-Georgi
+Thanks!
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.2-rc1
-
-for you to fetch changes up to 26e90ec7a8403fc8f7a4507098d7d262e9c2d302:
-
-  Merge branch 'icc-sc8280xp-l3' into icc-next (2022-11-17 17:44:14 +0200)
-
-----------------------------------------------------------------
-interconnect changes for 6.2
-
-These are the interconnect changes for the 6.2-rc1 merge window consisting
-of new drivers to enable both L3 and DDR scaling on sc8280xp platforms.
-There are also a few miscellaneous fixes.
-
-New osm-l3 driver:
-- interconnect: qcom: osm-l3: Use platform-independent node ids
-- interconnect: qcom: osm-l3: Squash common descriptors
-- interconnect: qcom: osm-l3: Add per-core EPSS L3 support
-- interconnect: qcom: osm-l3: Simplify osm_l3_set()
-- dt-bindings: interconnect: Add sm8350, sc8280xp and generic OSM L3 compatibles
-- dt-bindings: interconnect: qcom,msm8998-bwmon: Add sc8280xp bwmon instances
-
-Fixes:
- - interconnect: qcom: icc-rpm: Remove redundant dev_err call
- - interconnect: qcom: sc7180: fix dropped const of qcom_icc_bcm
- - interconnect: qcom: sc7180: drop double space
- - interconnect: qcom: sc8180x: constify pointer to qcom_icc_node
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-Bjorn Andersson (6):
-      interconnect: qcom: osm-l3: Use platform-independent node ids
-      interconnect: qcom: osm-l3: Squash common descriptors
-      interconnect: qcom: osm-l3: Add per-core EPSS L3 support
-      interconnect: qcom: osm-l3: Simplify osm_l3_set()
-      dt-bindings: interconnect: Add sm8350, sc8280xp and generic OSM L3 compatibles
-      dt-bindings: interconnect: qcom,msm8998-bwmon: Add sc8280xp bwmon instances
-
-Georgi Djakov (1):
-      Merge branch 'icc-sc8280xp-l3' into icc-next
-
-Krzysztof Kozlowski (4):
-      dt-bindings: interconnect: qcom,msm8998-bwmon: Correct SC7280 CPU compatible
-      interconnect: qcom: sc7180: fix dropped const of qcom_icc_bcm
-      interconnect: qcom: sc7180: drop double space
-      interconnect: qcom: sc8180x: constify pointer to qcom_icc_node
-
-Shang XiaoJing (1):
-      interconnect: qcom: icc-rpm: Remove redundant dev_err call
-
- .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml    |   7 +-
- Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml |  24 +-
- drivers/interconnect/qcom/icc-rpm.c                             |   5 +-
- drivers/interconnect/qcom/osm-l3.c                              | 126 ++------
- drivers/interconnect/qcom/sc7180.c                              |   4 +-
- drivers/interconnect/qcom/sc8180x.c                             |   2 +-
- 6 files changed, 61 insertions(+), 107 deletions(-)
+--
+Uladzislau Rezki
