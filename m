@@ -2,106 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EEF63E1B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:18:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C0E463E1BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiK3USA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 15:18:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56172 "EHLO
+        id S230109AbiK3UUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 15:20:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiK3URQ (ORCPT
+        with ESMTP id S229999AbiK3UTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:17:16 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE84934E0;
-        Wed, 30 Nov 2022 12:13:24 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so3457830pjb.0;
-        Wed, 30 Nov 2022 12:13:24 -0800 (PST)
+        Wed, 30 Nov 2022 15:19:41 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE889AE0A;
+        Wed, 30 Nov 2022 12:15:05 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id y17so9911127plp.3;
+        Wed, 30 Nov 2022 12:15:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nKOpOs+nm7ZzH9JjlfBkovi5sBxujs0tny+wQJDoQrg=;
-        b=p05GXhfJD1Dz4nT+H9iQPs6s28q4PBydoI0JM6DXF2VvA9h10HLcCM5+kJ80Ksij0C
-         8omDXH7ZIzEgQwP4BThhIHpDeNe2GdHuJAuyErQ6pGtpsrf9FXp3zD02gMIFzKCPHNXm
-         FI2QXOmx9Or2SMHPufLnrE57RkPYjPfetzQvyxvSKXURywO58EyfGEzezvx8ZzB4EgrZ
-         7DYEvHUVjXCzGGhclaKVBpndVnbZltwtBbR4OVGYo7MHNKLxT5/4Fk3bzNqhXrtEiIBF
-         blB9vnP990lxbMJLNNtSBfR57HV+TtU7SjmxAI0Mx3z4kXvbnb0xNzQsZ3othOb/cU8k
-         ghJA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v3g9mSSTzBVgbdJrFv6g4zSJhT5rvOWrA1mwwXQAvko=;
+        b=NnQ1jmB4WIykg8PlJ1nvAeT8NodTppKpNNw5V8wAg7twFnjXER3jxgeXtinbAZOipL
+         Iqdoqym1NEW5yg+yI0NB++i7g+Ou5mxRqZTTx5p240lN0z8rX8wBQvxQDyqvpxPTDeuw
+         Ene8U600qy0MCvtjXul4oa6mbz9hf6l8preNi0VRD89TBvgVjTw++amZqBpCErV9IjyV
+         BDepgmdUBmzgZ5/aXjRpn0G6Dm91zxoZM905O13+vTAQRIeKoB1SotMtiijyP+0Pyf4J
+         XZLhtjtxiaMVzNzu9kONvMLvjaMfr1x1+S3DoJQGLBW6ObOPOo4wToh+mJ5tsGwsiEFN
+         KNnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nKOpOs+nm7ZzH9JjlfBkovi5sBxujs0tny+wQJDoQrg=;
-        b=V2kH/0U0neBDxv+tamuNmTofJckcX2vM/DQOWjmu6pgoSSSFyzWqR3/aFp0y7mcRqI
-         VcZ2UJLesL4zkUCaUgAW9L1SowW2drM0nWWFGs+sBUHO9TFeos9ON59weOTRwNpoW54C
-         HRHdhig++cseKHKUN55MRADXzNFX1LNNQ5Bi5S030ZZEDVbQkUxGvfBx5hWSoRkg7JWj
-         +2lXSfx8xqBi+xV+qVP4XvThOharmwKvTg4Bta039yLYDmsIEDo1WM0V7uFM54/nJ51D
-         iZnqZ3EvGaZZzGBWPiSIvORLjOL/NV/73+m2JgaSh3TXw6MbqIGP6F9R5lCgT6xDG1j2
-         PS8Q==
-X-Gm-Message-State: ANoB5pkN2wVHoNSaU8lODclmsh+Tab/z7fblvYPrCYHphUZOBmtOwUWQ
-        Zz/iKXCC6Oxs/dfno1LBJ2Q=
-X-Google-Smtp-Source: AA0mqf7ZcYjKFLIMP2LqvtdUyjalnj4NmE4TYogKrlRqJyYddNSDk3DauBBh5BDD9Jd5kKqnEAUmOA==
-X-Received: by 2002:a17:902:a9c6:b0:188:52df:769e with SMTP id b6-20020a170902a9c600b0018852df769emr43061154plr.30.1669839203509;
-        Wed, 30 Nov 2022 12:13:23 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id nn7-20020a17090b38c700b001df264610c4sm3050895pjb.0.2022.11.30.12.13.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 12:13:22 -0800 (PST)
-Message-ID: <607a25cb-a121-1bb5-4203-e9e526f49fc8@gmail.com>
-Date:   Wed, 30 Nov 2022 12:13:17 -0800
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v3g9mSSTzBVgbdJrFv6g4zSJhT5rvOWrA1mwwXQAvko=;
+        b=XL8ekpE+vZwMi0xRFb2QUngXVq9stYogTAk331Z84ANSY4/LNjlcznnxylsekwxfUN
+         xJNC2PoF+7mbBp4nCVAej6OiLZNsBEXNbxr5dBAPyG7P/2qYjnG0xkKV2RlPocFNzKEv
+         k85aaEX8edeFvtG9hyNGEmo0gSKzibtkvSBChZWjRaTlo2Dd7PqrMrzdEGq23lW9PrrY
+         p4KEzbXUrQWlU9VJczuxHBJtp5MjIQdo2kQQkmPccll06+RJU5iWVMjfwBFCeC2kjvnJ
+         I1J7Us8mwIhuAdx7jEUEqoApmCdys176UaQXSar3k33EaQRJP/u08+YqFOJfwDNFK0QF
+         AxNA==
+X-Gm-Message-State: ANoB5pkb4NNuTZ7ZdpnBO7VoFlhi6kGrRtzCStgNn9R8mDcdhdFVH9AL
+        taOiTNrY8veVVifh0pns4sM=
+X-Google-Smtp-Source: AA0mqf5ILLiP9R2J70Q4DdVVynBfjsnp+zqUAZTOymIlj/n2V4miUJjCeHPvOoVyi9n/fusmR6vcgg==
+X-Received: by 2002:a17:902:c946:b0:186:99e3:c079 with SMTP id i6-20020a170902c94600b0018699e3c079mr43689857pla.149.1669839305049;
+        Wed, 30 Nov 2022 12:15:05 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id j5-20020a170903024500b00186ac812ab0sm1931331plh.83.2022.11.30.12.15.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 12:15:04 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 30 Nov 2022 10:15:03 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Li Nan <linan122@huawei.com>
+Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com
+Subject: Re: [PATCH -next v2 3/9] blk-iocost: don't allow to configure bio
+ based device
+Message-ID: <Y4e5x37B2Mh+Bfko@slm.duckdns.org>
+References: <20221130132156.2836184-1-linan122@huawei.com>
+ <20221130132156.2836184-4-linan122@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.10 000/162] 5.10.157-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221130180528.466039523@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221130180528.466039523@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221130132156.2836184-4-linan122@huawei.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/30/22 10:21, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.157 release.
-> There are 162 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, Nov 30, 2022 at 09:21:50PM +0800, Li Nan wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
 > 
-> Responses should be made by Fri, 02 Dec 2022 18:05:05 +0000.
-> Anything received after that time might be too late.
+> iocost is based on rq_qos, which can only work for request based device,
+> thus it doesn't make sense to configure iocost for bio based device.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.157-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Li Nan <linan122@huawei.com>
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+Acked-by: Tejun Heo <tj@kernel.org>
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Thanks.
+
 -- 
-Florian
-
+tejun
