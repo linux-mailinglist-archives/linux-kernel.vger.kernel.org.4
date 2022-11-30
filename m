@@ -2,156 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A85C63D419
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF5063D41A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233973AbiK3LM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:12:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
+        id S233054AbiK3LOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:14:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233820AbiK3LMt (ORCPT
+        with ESMTP id S229805AbiK3LOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:12:49 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2047.outbound.protection.outlook.com [40.107.7.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865DD23159;
-        Wed, 30 Nov 2022 03:12:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CfNqcpo4O+0r5PXVr64ASeGvHjyFLzdM0Y8GxuwS66kR7s9WMUPO3+RH0iAH3WRAoR9/gdb/U6YTBfIVUzgEl1RRsJpOdYdMfO82tMar0BnM8aBRTBIaJgOh4OmGYUJFz4lZSiItsPgRJkFggbhY23okcNSJ/PRdlpQE6pmC3n8f+bYDlQgAfJF3gBp6pbw6d1yPq2nN0CfkvmO6neVxXdVVMzDj38MP22RpZLbu2p9izYRrxRf+BB9PJtYmCXq3gUcBz3ePjiRANZTv6+sM76j89ZWkxD3kui0ryU9YnV+Ims1gbGbxdH1MeefMIC68Rox/33uFVOIV0WU5FDN+ZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=keFPfRXhz652HAqSXUZZ6yOs8zHEl/+iFNN9xix71EQ=;
- b=djyosSewk9ksmE2tyQeiKTO2StJq/JbqpiFytx7eSayc3ppGa+gyBmEpR/NSMZDGKykER8W8T3Ey9qMRzlDU1M3ui1Mw8OD1J+CEAQkN7o31bbT3jf7/FRqPYM4uif/kxpNGWE4YI5tQUfhXKK0LG6uyNc8TpjonilgcnmDEBToo1ouqih1pIrkdGYUkp2vRrxVkgqCiOz6+h/bhUjKS5AXB8wFFLCxXwMXXXsv1F/WvfJF09VbUtKKEFxbK1GUUx2fdkZ7QzUeu/QY709bmAzBBr/fo3qkFBCC+4OPyNfYWldMQAV/1LQnjzByxRvF4O2nVSRbUaJfwZPalGWvZAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=keFPfRXhz652HAqSXUZZ6yOs8zHEl/+iFNN9xix71EQ=;
- b=iF/gFgWoC3UCdfihLQI9r0P50RpAf0HJIGSpI9diXHzpg8aZit9KHMRA1JW2QVs4tlBtsl8RqkVEivMdXZnsN5vthw+PzSHXa8kQv2evnJMJQ92NQLTNHXdq/ScSIZF/Y6dHjMQ8uhXEYYDVNw9kreETTd6jz/bRRXi3RGAUnv8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from HE1PR0402MB2939.eurprd04.prod.outlook.com (2603:10a6:3:db::18)
- by VI1PR04MB6783.eurprd04.prod.outlook.com (2603:10a6:803:130::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.20; Wed, 30 Nov
- 2022 11:12:45 +0000
-Received: from HE1PR0402MB2939.eurprd04.prod.outlook.com
- ([fe80::7682:a2e6:b891:2f4d]) by HE1PR0402MB2939.eurprd04.prod.outlook.com
- ([fe80::7682:a2e6:b891:2f4d%10]) with mapi id 15.20.5857.023; Wed, 30 Nov
- 2022 11:12:45 +0000
-From:   Clark Wang <xiaoning.wang@nxp.com>
-To:     linux@armlinux.org.uk, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, mcoquelin.stm32@gmail.com, andrew@lunn.ch,
-        hkallweit1@gmail.com
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] net: stmmac: synchronize status with phylink via flag during suspend/resume
-Date:   Wed, 30 Nov 2022 19:11:48 +0800
-Message-Id: <20221130111148.1064475-3-xiaoning.wang@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221130111148.1064475-1-xiaoning.wang@nxp.com>
-References: <20221130111148.1064475-1-xiaoning.wang@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0020.apcprd02.prod.outlook.com
- (2603:1096:4:1f4::9) To HE1PR0402MB2939.eurprd04.prod.outlook.com
- (2603:10a6:3:db::18)
+        Wed, 30 Nov 2022 06:14:33 -0500
+Received: from mail.fris.de (mail.fris.de [116.203.77.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F40D220E4
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:14:31 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CCC1ABFACA;
+        Wed, 30 Nov 2022 12:14:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
+        t=1669806866; h=from:subject:date:message-id:to:cc:mime-version:
+         content-transfer-encoding; bh=FRxluBfEJkiA18fBYeNlbUEW1rTsCtHz9h13qEpVFw8=;
+        b=LlhH723wWOsj558CVqc1B1IyaUxWewa/m5COH65zmc1/H2A+JMNguwLJ4kbTWpXRmnTi1M
+        e+DpF3svrke1qdoBxwBuCe3iWK5abguQ4e86htmrA5TJHwm5y4XV7IEFZRMFJvQFFsnUXD
+        ZKRb8c9qyKIN+iUiKLoJnL+qk4g87tDVkGylRSU12Kvv1aKymZVR1KVlwglXdqwMiSnzll
+        /i1YlO/g1IJV3bxBiOnKTL9jXf3XavA6elWUE0cE3XlNUCXQXG1a+Bum0QH3HEUYwC3eo7
+        LPQUMFjsYzTFdIcL3saXoSTBgcVmPIJliebB4jB5c2tVcctmTcUal/uxgLCzfQ==
+From:   Frieder Schrempf <frieder@fris.de>
+To:     devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Heiko Thiery <heiko.thiery@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: [PATCH] arm64: dts: imx8mm-kontron: Add RTC aliases
+Date:   Wed, 30 Nov 2022 12:13:49 +0100
+Message-Id: <20221130111357.585560-1-frieder@fris.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HE1PR0402MB2939:EE_|VI1PR04MB6783:EE_
-X-MS-Office365-Filtering-Correlation-Id: d66d1edd-d4ef-4123-94aa-08dad2c3ce32
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AsmGA6ROotjjhSMzuqFg5tabDXx6W2j9bZub3nbk7s4fhrjR6x5ykA459tix3WiKFZQOkTkTtoaprphsq3fSvVJUaFE0K0WkJ+8Wrf4AtKqMqKLM3r50mAi12QvuBj4WbjYQaRvyiw7RHySzQwJ2RcgOL7MARMNhBjunVDVlb524+Bn5wa9vEjWXy0OmTPBx/PccMcLYpTEfoun6DVnu5Z6hZWi0ISgCI3vIXy/w2ha+AkvvY2rtQZBsTcvjWlupcwPQXQFJ4LK9XXKnSNuu4o+Jg7qoxhUjzvcS2Yrps1KtSd/4l+3eQLXj0snShAYpz7sLvgS/9usLNeIRXQtWcVpAnsQ4qjhmP4zoBqjaPNVqJtu6OdeGar/NYKq5Lu3nDaACoU2OHv0PF5kmmBpE13LVGpstQx9yz0shIKbTHbQs4s+jpHDVzSswiqC43DIw7fUG5SjpJ+c/X47QYDShHfDM1oiFKFbWNb7HP3v8f3U2FJS7zjnwsmKb/3rZ2bxN/TdGJp5uZ4I+5UJlCCbsCDZhR7U/+mhIQkr9jxMTGMX3rdw3NrQ9k46GYkKaG4yZ/BP694BTMgWWADw0BTT3mozZ7XZPllkjFo6mwPFDR+65sBf0KcqVexmNbzOe8p0AmiY/3gGLguuoxGya7VVTtHQN44L/leHvMKyMa2n1KdZ3uy10ew/13opQg4h+GMB3RyrZJADDwsM4tBpd3/jPOg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0402MB2939.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(39860400002)(366004)(451199015)(36756003)(921005)(41300700001)(7416002)(2906002)(38350700002)(15650500001)(478600001)(38100700002)(86362001)(83380400001)(66556008)(8676002)(6486002)(316002)(2616005)(66946007)(66476007)(8936002)(5660300002)(26005)(186003)(1076003)(52116002)(6512007)(4326008)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8hlefEeRjjOrrPxl3Fy0lXn+440W37x8iEKjwR6TQJ8S9ipa4tmfSTMA/JRP?=
- =?us-ascii?Q?UdIo4E44XA6rSj3z2mcAonJNp2y72zeqfs57KRo9BUlo8VRWrW15YmPjoCFH?=
- =?us-ascii?Q?72ZivFETZJ72GBiztuBArlKoGFR/ZPe8Il6u4UoX8yitL2YZitBJRghT9l0k?=
- =?us-ascii?Q?HAbS/GcWxnn02iyfaKy7edVved6ubIqC3G7ZOTccuN/ijMgRrpPnF5qRrW8z?=
- =?us-ascii?Q?w5F2pmKj3zRB/TPTJC4KRnVhYzTxLNTxI1bFqRumrXP8TzZ/xtlRhcCJKAvR?=
- =?us-ascii?Q?zy7POkvrWWEQZVfGPb0oprwTvvyJXQYKuIOSv5aF2AIqz5d8FV+MFjncnhak?=
- =?us-ascii?Q?jHfsg85hYa4JSqqVWj74+eTXJ7nAJBA2HeZkaDKHEp6EArX9DFSszGxAFKNe?=
- =?us-ascii?Q?8xEV1lbkl18jgfizQ3WUpKLToeItZRPvSqIO8CeJMaPcuJXB6MMMm33386jt?=
- =?us-ascii?Q?RsG1nxunADG8XJ+GpUEPS1PilFa31TmETGSKwMv05+JR9e9K2fT0Wkprs3j9?=
- =?us-ascii?Q?MfSjOxz7RDMD+A2wigTIHnZ8pH7MDOJ8UbuTIZPVgzK8coOsrz6YgbxJu8X5?=
- =?us-ascii?Q?EH/vObmlvRWzIaJ4iHSQVQv0a82MGzlFZDfq8KJ2+UiKoAasLoCojnvkNBfB?=
- =?us-ascii?Q?EU7rjsz2XA4Lbg7mnhFMUb7TbjZ/ecQ3/ToeuYpQnVilb4IeNMP57lFnzign?=
- =?us-ascii?Q?NUfC2K4p8SSnzMkRhMUmsgTzR/IIC5/gdE9fnXFjwt+MjUnSWZ/tmK3Iig5M?=
- =?us-ascii?Q?1c1M+N0nEfpw9uJo4MQfcAVsLAZRpXavVM6rltiIGG4JPQB72g7iNtdbSeNC?=
- =?us-ascii?Q?PgT/xcGJJbZX5dxCzM3/S9D+ebsNtvrE9XApXsiYjV3+5QZEEIDwnLwL+1Lh?=
- =?us-ascii?Q?DzP5SRAHXm3K3XxbAn3SfeUyp8x+6Wi7K3oFJfwnMKFL8zmOY7c67XQW/bLx?=
- =?us-ascii?Q?s1uhMCCDIka2UDFlvoI+0yJlNwKP205tg3+6zGUIsJTuTb8rElThVA1KMwfE?=
- =?us-ascii?Q?6ErAQ6IGFkmnE+Of3Cdf3DEC8XVrBRzujE/bHrDYVwznhUUpjCM9xjON9rxl?=
- =?us-ascii?Q?Sg5IzblCL6CmWsAkTqqwYpGrGtM+vFnTmW59AXINF4ovT98VGLtkM+ltbSMY?=
- =?us-ascii?Q?Yxy480ZXzXf/A2rrqujS6patxNKjbsbKR5FQ+bpNjKvUxWPcs5yLurHAEN62?=
- =?us-ascii?Q?r7FAeWbUk4MXisIYUqDDrfRsn/Gja1JS6RnWS2SgPakpmckW9n8A58uFQzTL?=
- =?us-ascii?Q?lbL0vQu4oku2jdbiuwqKb8/CqlA1+wRfN8L5PC6QaefZWmyHNhqvJovTrk3+?=
- =?us-ascii?Q?LsQZX4x46SJCHy7r1DKpW1Rqqz/RS6hgHTeKKyxRm2whBhLHoMul1Gsb6uz6?=
- =?us-ascii?Q?LXQpPd2I/moWTFp8bcal+rghmlWfUEoidebWVSz7VVPYBtnzmASXdtbXeswH?=
- =?us-ascii?Q?C/ADsOVlVsOf1mEAC3rxYOkbgqQKNSJb6VffXVIlgTtrBf67gB78/MuXTfLn?=
- =?us-ascii?Q?LJw6BF7JEmbngxdavfvV6AuWYz9KPHkCQezDW43lKV6a247DQ5B0QN4YPjir?=
- =?us-ascii?Q?Z4xLirXb3Ri/qj6Lp2ln3i9ZNopjddqtIAIYllS6?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d66d1edd-d4ef-4123-94aa-08dad2c3ce32
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0402MB2939.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 11:12:45.0129
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: B4m9Ztt3IXY+hZ4t/+GCW7FJwl0lII70o9zwkhUcoqtXrA7Lv09cYM/C0rhaEcLdOKrl1fcvT8WlMXrdfnvJZQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6783
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some platforms, mac cannot work after resumed from the suspend with WoL
-enabled.
+From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-We found the stmmac_hw_setup() when system resumes will called after the
-stmmac_mac_link_up(). So the correct values set in stmmac_mac_link_up()
-are overwritten by stmmac_core_init() in phylink_resolve().
+Add aliases for the RTCs on the board and on the SoC. This ensures that
+the primary RTC is always the one on the board that has a buffered supply
+and maximum accuracy.
 
-So use the flag added in phylink to keep phylink_resolve() is executed
-after the stmmac_hw_setup().
-
-Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
+Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts     | 4 +++-
+ arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi | 7 ++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 18c7ca29da2c..4f89061cc537 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7432,6 +7432,7 @@ int stmmac_suspend(struct device *dev)
- 			phylink_speed_down(priv->phylink, false);
- 		phylink_suspend(priv->phylink, false);
- 	}
-+	phylink_clear_mac_ready(priv->phylink);
- 	rtnl_unlock();
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts b/arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts
+index a079322a3793..dcec57c20399 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts
+@@ -13,6 +13,8 @@ / {
  
- 	if (priv->dma_cap.fpesel) {
-@@ -7545,6 +7546,7 @@ int stmmac_resume(struct device *dev)
- 	stmmac_clear_descriptors(priv, &priv->dma_conf);
+ 	aliases {
+ 		ethernet1 = &usbnet;
++		rtc0 = &rx8900;
++		rtc1 = &snvs_rtc;
+ 	};
  
- 	stmmac_hw_setup(ndev, false);
-+	phylink_set_mac_ready(priv->phylink);
- 	stmmac_init_coalesce(priv);
- 	stmmac_set_rx_mode(ndev);
+ 	/* fixed crystal dedicated to mcp2515 */
+@@ -136,7 +138,7 @@ &i2c4 {
+ 	pinctrl-0 = <&pinctrl_i2c4>;
+ 	status = "okay";
  
+-	rtc@32 {
++	rx8900: rtc@32 {
+ 		compatible = "epson,rx8900";
+ 		reg = <0x32>;
+ 	};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
+index 8d10f5b41297..695da2fa7c42 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
+@@ -10,6 +10,11 @@ / {
+ 	model = "Kontron OSM-S i.MX8MM (N802X SOM)";
+ 	compatible = "kontron,imx8mm-osm-s", "fsl,imx8mm";
+ 
++	aliases {
++		rtc0 = &rv3028;
++		rtc1 = &snvs_rtc;
++	};
++
+ 	memory@40000000 {
+ 		device_type = "memory";
+ 		/*
+@@ -200,7 +205,7 @@ reg_nvcc_sd: LDO5 {
+ 		};
+ 	};
+ 
+-	rtc@52 {
++	rv3028: rtc@52 {
+ 		compatible = "microcrystal,rv3028";
+ 		reg = <0x52>;
+ 		pinctrl-names = "default";
 -- 
-2.34.1
+2.38.1
 
