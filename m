@@ -2,111 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F2963D960
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:24:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3722663D964
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiK3PYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 10:24:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
+        id S229909AbiK3PYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 10:24:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiK3PYU (ORCPT
+        with ESMTP id S229617AbiK3PYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 10:24:20 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9551769F1;
-        Wed, 30 Nov 2022 07:24:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669821858; x=1701357858;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=oti4OnCEJPQwwRBrgmf0ykISS2XQFxLXOCWscviFvv8=;
-  b=GyMUdYR6FVBH+jEaAd2qXzGsmcjIKBaT4cZu30K111zEFnTb94t4gHIf
-   N2DpJZ81l/BBJX4RI/0rpRhmTmg/MB1PCU7+8ak7NI/iY+GyuDLAkZpjm
-   0Cg/uI3jOI1ci/dHnPrJJ2V5YWeiguPb12A0Qsm6q+NDFXiPr6d6qtFZG
-   v8HBnaHr8RavFQvW5BzaJWqb62pW2YVS/1DNaTksdQuUZcaSs/A42s5Rx
-   gB9iID2AouTYWWUzdzNN3//4DCwn4jGNjNfe2m9N00H83dlcNtKl99JSS
-   ufQyTJ1fh69fkKnUa5RvDOzxfyQWoBUZBuxih7vJ4Hm4S0bnrUXYdALcG
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="342343336"
-X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
-   d="scan'208";a="342343336"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 07:23:53 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="733020433"
-X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
-   d="scan'208";a="733020433"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.53.75])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 07:23:50 -0800
-Message-ID: <6e259e6d-3821-0f2c-f308-5f5eb6550b6d@intel.com>
-Date:   Wed, 30 Nov 2022 17:23:45 +0200
+        Wed, 30 Nov 2022 10:24:54 -0500
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E0152171;
+        Wed, 30 Nov 2022 07:24:53 -0800 (PST)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-12c8312131fso21388675fac.4;
+        Wed, 30 Nov 2022 07:24:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SlACntbArX7b3kCKVV+bhldppIYRKiicqjQCNfxe6xc=;
+        b=zGju+DtcOnFTymcJpaMVe1NlsOjmOph//wD8t4ojCPXD+dU+KoWGccCvH0Ab7HIwUv
+         V/qfC+rJx17dZbr3J3dlOmB2J7is9v3zPlnqXqedcRi1zD5FqJYNMqG70/YARGHaduKL
+         TJ8izN1olUt5Ih/wGi/FxTbVpogAtRgFU/G1Vt+BwSh6DbL+W7RPw/c6bi2ng48mh28/
+         nJbarGp+/EeJr8uiXL6pRw81weR3zo74K0uOVvb2Q2nBJvooDOnhd40NnHp7YOlZ89nK
+         6yNMmK/T64sa1h3bXMS1XOh4LlN7IkhPXx999ZH/M47GvUwaK83fAzc7AAGWHzxmUBrw
+         HfYg==
+X-Gm-Message-State: ANoB5pndzeBmBMeaE/Fe5ROBpxoShVd0r436UvALE6fX1LONde7w2ycc
+        HxcGwCSu9tR6qLLnAgFWWg==
+X-Google-Smtp-Source: AA0mqf5x+OdF/baS7qLHAVmukK6f4ncA4i+9mLv9a6t8OILL4W5A/PqjSnmH4cu4Ow0KVyie+oLneA==
+X-Received: by 2002:a05:6870:f592:b0:144:543:c801 with SMTP id eh18-20020a056870f59200b001440543c801mr1399989oab.201.1669821892698;
+        Wed, 30 Nov 2022 07:24:52 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r127-20020aca4485000000b0034d9042758fsm727106oia.24.2022.11.30.07.24.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 07:24:52 -0800 (PST)
+Received: (nullmailer pid 2194178 invoked by uid 1000);
+        Wed, 30 Nov 2022 15:24:51 -0000
+Date:   Wed, 30 Nov 2022 09:24:51 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Walker Chen <walker.chen@starfivetech.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/4] dt-bindings: power: Add starfive,jh71xx-power
+ bindings
+Message-ID: <20221130152451.GA2192004-robh@kernel.org>
+References: <20221118133216.17037-1-walker.chen@starfivetech.com>
+ <20221118133216.17037-3-walker.chen@starfivetech.com>
+ <99302e53-c0c9-cfe8-4e6a-c70e8428d9c3@linaro.org>
+ <f21b0aa9-2ac8-ae28-755a-d530171f930a@starfivetech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.0
-Subject: Re: [PATCH V2] mmc: sdhci-sprd: Fix no reset data and command after
- voltage switch
-Content-Language: en-US
-To:     Wenchao Chen <wenchao.chen@unisoc.com>, ulf.hansson@linaro.org,
-        orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
-        zhang.lyra@gmail.com
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhenxiong.lai@unisoc.com, yuelin.tang@unisoc.com,
-        gengcixi@gmail.com
-References: <20221130121328.25553-1-wenchao.chen@unisoc.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20221130121328.25553-1-wenchao.chen@unisoc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f21b0aa9-2ac8-ae28-755a-d530171f930a@starfivetech.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/11/22 14:13, Wenchao Chen wrote:
-> After switching the voltage, no reset data and command will cause
-> CMD2 timeout.
+On Tue, Nov 22, 2022 at 09:22:03PM +0800, Walker Chen wrote:
+> On 2022/11/21 18:13, Krzysztof Kozlowski wrote:
+> > On 18/11/2022 14:32, Walker Chen wrote:
+> >> Add bindings for the power domain controller on the StarFive JH71XX SoC.
+> >> 
+> > 
+> > Subject: drop second, redundant "bindings".
 > 
-> Fixes: 29ca763fc26f ("mmc: sdhci-sprd: Add pin control support for voltage switch")
-> Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
-
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-
-> ---
-> Changelog:
+> Will fix.
 > 
-> v1 -> v2:
-> There is no need to wait for the state of the pin to stabilize.
-> ---
->  drivers/mmc/host/sdhci-sprd.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> >> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+> >> ---
+> >>  .../bindings/power/starfive,jh71xx-power.yaml | 46 +++++++++++++++++++
+> > 
+> > 1st patch should be squashed here. Headers are part of bindings file.
 > 
-> diff --git a/drivers/mmc/host/sdhci-sprd.c b/drivers/mmc/host/sdhci-sprd.c
-> index b92a408f138d..bec3f9e3cd3f 100644
-> --- a/drivers/mmc/host/sdhci-sprd.c
-> +++ b/drivers/mmc/host/sdhci-sprd.c
-> @@ -470,7 +470,7 @@ static int sdhci_sprd_voltage_switch(struct mmc_host *mmc, struct mmc_ios *ios)
->  	}
->  
->  	if (IS_ERR(sprd_host->pinctrl))
-> -		return 0;
-> +		goto reset;
->  
->  	switch (ios->signal_voltage) {
->  	case MMC_SIGNAL_VOLTAGE_180:
-> @@ -498,6 +498,8 @@ static int sdhci_sprd_voltage_switch(struct mmc_host *mmc, struct mmc_ios *ios)
->  
->  	/* Wait for 300 ~ 500 us for pin state stable */
->  	usleep_range(300, 500);
-> +
-> +reset:
->  	sdhci_reset(host, SDHCI_RESET_CMD | SDHCI_RESET_DATA);
->  
->  	return 0;
+> Will be done in the next version of patch.
+> 
+> > 
+> >>  1 file changed, 46 insertions(+)
+> >>  create mode 100644 Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml
+> >> 
+> >> diff --git a/Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml b/Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml
+> >> new file mode 100644
+> >> index 000000000000..2537303b4829
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml
+> > 
+> > Filename like compatible.
+> 
+> As mentioned in the previous email, the compatible in the driver should be changed to "starfive,jh7110-power".
 
+Is the h/w block called 'power' or 'pmu'? Call it what the h/w is 
+called.
+
+Rob
