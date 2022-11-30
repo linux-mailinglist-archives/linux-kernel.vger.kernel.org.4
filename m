@@ -2,95 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A6363D04E
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E807263D051
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233991AbiK3IUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 03:20:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
+        id S234539AbiK3IVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 03:21:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234664AbiK3ITz (ORCPT
+        with ESMTP id S234441AbiK3IVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 03:19:55 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC13855CA0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 00:19:53 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Bx2+ooEodjt08CAA--.5342S3;
-        Wed, 30 Nov 2022 16:19:52 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxPuIjEodj6GEiAA--.20038S7;
-        Wed, 30 Nov 2022 16:19:52 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 5/5] samples/kprobes: Add LoongArch support
-Date:   Wed, 30 Nov 2022 16:19:36 +0800
-Message-Id: <1669796376-4608-6-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1669796376-4608-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1669796376-4608-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8DxPuIjEodj6GEiAA--.20038S7
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWrZw4rWrW5CF1fJw1xZFWDJwb_yoW8JF1fpF
-        n0y3W5t3yFyw13WFW3Jayvgry0yryjkay8u3ykC34Yya429ry5AF1rKayjyw4kur90qF43
-        tr1FvryUGF1xZrJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b28YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jOdb8UUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 03:21:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1797855CA0;
+        Wed, 30 Nov 2022 00:21:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A97EAB8199D;
+        Wed, 30 Nov 2022 08:21:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D5D6C433D6;
+        Wed, 30 Nov 2022 08:21:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669796492;
+        bh=YVwFW8ukFc+IWgIXWj/9MV56uKwQlCK2O51RttnjsSU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XYccEQE2rG2H1YWBiPcP0nHSASIeJGHz3yVc3OT1lb/hZxxmiK7Z0783XIRtx+rLK
+         uqJ8E7Cu8+fNMFdCHqiFJfLLywmxTSC9sdTLxA1y9tFrrSHu7IIgWOSBxL3A/QFEXs
+         3VBkhbGnWuxNeyyLsJ4aga7pANlntiFNWyx/JhSs1YKTYWt0EozKM4h4ClP7Pz9udz
+         7lffzkqLx2NjLkqB7TQkJ3bXVvk7iYqEzKnKgqV+nja7GQZOrGjqXP0f8OwJU4L+Hv
+         EKIwgmYu8ngvdlKj1HvhnEWBgU6GY/B2w5SsgOc8fL2CdmgDpOfPnsx/9oIcSMSd72
+         S0EhDDZ31eF2A==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p0ILR-009X1T-Rc;
+        Wed, 30 Nov 2022 08:21:30 +0000
+Date:   Wed, 30 Nov 2022 08:21:17 +0000
+Message-ID: <87pmd4ua2q.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Ricardo Koller <ricarkol@google.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] KVM: arm64: Don't serialize if the access flag isn't set
+In-Reply-To: <Y4awiKLuKORZmU2z@google.com>
+References: <20221129191946.1735662-1-oliver.upton@linux.dev>
+        <20221129191946.1735662-3-oliver.upton@linux.dev>
+        <Y4Zw/J3srTsZ57P7@google.com>
+        <Y4Z2aWVEnluy+d3+@google.com>
+        <Y4awiKLuKORZmU2z@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: ricarkol@google.com, oliver.upton@linux.dev, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add LoongArch specific info in handler_pre() and handler_post().
+On Wed, 30 Nov 2022 01:23:20 +0000,
+Ricardo Koller <ricarkol@google.com> wrote:
+> 
+> On Tue, Nov 29, 2022 at 09:15:21PM +0000, Oliver Upton wrote:
+> > Hi Ricardo,
+> > 
+> > Thanks for having a look.
+> > 
+> > On Tue, Nov 29, 2022 at 12:52:12PM -0800, Ricardo Koller wrote:
+> > > On Tue, Nov 29, 2022 at 07:19:44PM +0000, Oliver Upton wrote:
+> > 
+> > [...]
+> > 
+> > > > +	ret = stage2_update_leaf_attrs(pgt, addr, 1, KVM_PTE_LEAF_ATTR_LO_S2_AF, 0,
+> > > > +				       &pte, NULL, 0);
+> > > > +	if (!ret)
+> > > > +		dsb(ishst);
+> > > 
+> > > At the moment, the only reason for stage2_update_leaf_attrs() to not
+> > > update the PTE is if it's not valid:
+> > > 
+> > > 	if (!kvm_pte_valid(pte))
+> > > 			return 0;
+> > > 
+> > > I guess you could check that as well:
+> > > 
+> > > +	if (!ret || kvm_pte_valid(pte))
+> > > +		dsb(ishst);
+> > 
+> > Thanks for catching this.
+> > 
+> > Instead of pivoting on the returned PTE value, how about we return
+> > -EAGAIN from the early return in stage2_attr_walker()? It would better
+> > match the pattern used elsewhere in the pgtable code.
+> 
+> That works, although I would use another return code (e.g., EINVAL)? as
+> that's not exactly a "try again" type of error.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- samples/kprobes/kprobe_example.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+EINVAL usually is an indication of something that went horribly wrong.
 
-diff --git a/samples/kprobes/kprobe_example.c b/samples/kprobes/kprobe_example.c
-index fd346f5..ef44c61 100644
---- a/samples/kprobes/kprobe_example.c
-+++ b/samples/kprobes/kprobe_example.c
-@@ -55,6 +55,10 @@ static int __kprobes handler_pre(struct kprobe *p, struct pt_regs *regs)
- 	pr_info("<%s> p->addr, 0x%p, ip = 0x%lx, flags = 0x%lx\n",
- 		p->symbol_name, p->addr, regs->psw.addr, regs->flags);
- #endif
-+#ifdef CONFIG_LOONGARCH
-+	pr_info("<%s> p->addr = 0x%p, era = 0x%lx, estat = 0x%lx\n",
-+		p->symbol_name, p->addr, regs->csr_era, regs->csr_estat);
-+#endif
- 
- 	/* A dump_stack() here will give a stack backtrace */
- 	return 0;
-@@ -92,6 +96,10 @@ static void __kprobes handler_post(struct kprobe *p, struct pt_regs *regs,
- 	pr_info("<%s> p->addr, 0x%p, flags = 0x%lx\n",
- 		p->symbol_name, p->addr, regs->flags);
- #endif
-+#ifdef CONFIG_LOONGARCH
-+	pr_info("<%s> p->addr = 0x%p, estat = 0x%lx\n",
-+		p->symbol_name, p->addr, regs->csr_estat);
-+#endif
- }
- 
- static int __init kprobe_init(void)
+But is that really a failure mode? Here, failing to update the PTE
+should not be considered a failure, but just a benign race: access
+fault being taken on a CPU and the page being evicted on another (not
+unlikely, as the page was marked old before).
+
+And if I'm correct above, this is definitely a "try again" situation:
+you probably won't take the same type of fault the second time though.
+
+Thanks,
+
+	M.
+
 -- 
-2.1.0
-
+Without deviation from the norm, progress is not possible.
