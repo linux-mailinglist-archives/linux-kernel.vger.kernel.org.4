@@ -2,78 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FB563E05E
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290CB63E061
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbiK3S6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:58:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
+        id S230071AbiK3S6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:58:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbiK3S6C (ORCPT
+        with ESMTP id S230199AbiK3S6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:58:02 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5A94A5A2;
-        Wed, 30 Nov 2022 10:57:58 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id 82so9458484pgc.0;
-        Wed, 30 Nov 2022 10:57:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HARMmg9a8K/b5vAg5+2jWHn5nGF+ldiYt0bz7xqmdnE=;
-        b=WGTJiF3yAhGqZTID6d08gJEXQ4pOpw/F8IW70Fk4DX3/XKK4GX6O6O5z6sEg6z3ZxA
-         nKoCubP1Y5g7MDxpafjnlDV+EId4HA5w7daSh2YvcN6HdV0obI9+UFlyKjmkKYqFR72y
-         gMWy1dzzql8GfeFzdH/WmENL31+zec2xHdtXcCkYXTjR8m3n4QiPg3PrzBzgOcwPIHS6
-         AaR7qidp6vLsXCgkZT4up/CQ2btS/YTKnCNO3QAxE+f6yYpnKWixbNMgPaXlio5w8zOX
-         hxUDE2u3oizkjBG0c3nPpcxfw2PyzrMLfX65HIkSY8twjcXL4M+p+vy8Z5yNr+rm4yNn
-         JTgA==
+        Wed, 30 Nov 2022 13:58:16 -0500
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FD69D810;
+        Wed, 30 Nov 2022 10:58:08 -0800 (PST)
+Received: by mail-qv1-f52.google.com with SMTP id s14so837193qvo.11;
+        Wed, 30 Nov 2022 10:58:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HARMmg9a8K/b5vAg5+2jWHn5nGF+ldiYt0bz7xqmdnE=;
-        b=qxgeTRD4kqFhqcCAYiK5nZTLG09+JX8DxDIex1JvgbVZTzcf3EBKgEaVzTOWfq8h4D
-         NsdfoqJ3Jxrn2+LP03ljDUlMEQVWls3lzGbJ76S8vxcmEbVMIIz41acfgEtvOhQ5kwfT
-         9eLW/+OCQ1i+D0ZlHYNKNADaSr5cq99kIbl/bbVwix88jgzDoppVx4GrCxN+8cobZMwN
-         ujounUfO0wtjY6Xr3pgnBqEZbHsW7YOz717n3EOy3ogHub8TAiNfYOWabhnwwuKR08z3
-         /XRXgijgjtpVcicSiRx1UFZMCQNiHm8LuZx6KracT+f+rp6VmWSu+tWmSVMZzKMVrwYw
-         W3EQ==
-X-Gm-Message-State: ANoB5pnTaMuLH63HbNuWao7cpnuF2Uyy8OBWU8VgWxDzyxa/6Wf2/AF/
-        YjNZ+XrEweP0zQjc95bpGFY=
-X-Google-Smtp-Source: AA0mqf6ofi5Ziug2zS6ibi211SCEqrDs35lHLQWBZK6VgQEsxw0C1v/30PItrefwpLD/4ByygYUD8w==
-X-Received: by 2002:a63:f506:0:b0:470:14fa:a294 with SMTP id w6-20020a63f506000000b0047014faa294mr37579508pgh.361.1669834678336;
-        Wed, 30 Nov 2022 10:57:58 -0800 (PST)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id q14-20020aa7842e000000b00575cc2f74ffsm1735664pfn.35.2022.11.30.10.57.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 10:57:57 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@chromium.org>, stable@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Eric Anholt <eric@anholt.net>,
-        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 2/2] drm/shmem-helper: Avoid vm_open error paths
-Date:   Wed, 30 Nov 2022 10:57:48 -0800
-Message-Id: <20221130185748.357410-3-robdclark@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221130185748.357410-1-robdclark@gmail.com>
-References: <20221130185748.357410-1-robdclark@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NV+aRXYKE3DBJkVT9Hd67uMEpdGk6soKLvDOrRjSNtA=;
+        b=w4RcxxKftt4X0fjNm1LtCCzIouoJuiFvvtWEAidXDB1FWV63JtNxl/fa9Zkm7A4EpD
+         R4jBWHuRs4dxmzzCbBiTeqKzHcecpKTUGh4ikKC0rYtbB7GEltLWUZLlbD6dF2hQIA5E
+         qXM0LzeFIAfyi+jwp6YutV9YoPT6d2L6Fika/aNqWoQnLuhnfsi0iHb4xrqRvr0e+WPq
+         UlMjF745nyPwEuUz3aHljRZf60C4M3mrEcrUiMxUGIbvsP19q6VjmYmxHG7JvU2Wwq3s
+         KRECC6iS9iLHu/q1w1UPZ+V0SmDC6jIRsFknTStQ+Tu+bighz4lY6KiM0GhdWSNhnCEo
+         5+PA==
+X-Gm-Message-State: ANoB5pnMhM6HC124U5od+fMbwmacBUwQfKpc5eDQ5e+Ft80D7EkFKXCs
+        H4xxaSCY95dIBI39HFq8a8rbMPck9H43mGwvyd2tY78H
+X-Google-Smtp-Source: AA0mqf6JIen0xJ+raeq9RHWsftljVBvuBEfkR0LnNkUAF/LU5cSSc7sUepqo5TOLYZwnlMqJAXGMlMdNc3ZKRmn74o8=
+X-Received: by 2002:a0c:c582:0:b0:4af:b750:b569 with SMTP id
+ a2-20020a0cc582000000b004afb750b569mr41510179qvj.83.1669834687400; Wed, 30
+ Nov 2022 10:58:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221121153540.10494-1-ggherdovich@suse.cz>
+In-Reply-To: <20221121153540.10494-1-ggherdovich@suse.cz>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 30 Nov 2022 19:57:56 +0100
+Message-ID: <CAJZ5v0iFe-jeVw_VfqG+xgxN_VVWXHEx9r4S_dGERWsWDNPxPA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Add Sapphire Rapids support in
+ no-HWP mode
+To:     Giovanni Gherdovich <ggherdovich@suse.cz>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,52 +60,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Mon, Nov 21, 2022 at 4:35 PM Giovanni Gherdovich <ggherdovich@suse.cz> wrote:
+>
+> Users may disable HWP in firmware, in which case intel_pstate wouldn't load
+> unless the CPU model is explicitly supported.
+>
+> See also the following past commits:
+>
+> commit d8de7a44e11f ("cpufreq: intel_pstate: Add Skylake servers support")
+> commit 706c5328851d ("cpufreq: intel_pstate: Add Cometlake support in
+> no-HWP mode")
+> commit fbdc21e9b038 ("cpufreq: intel_pstate: Add Icelake servers support in
+> no-HWP mode")
+> commit 71bb5c82aaae ("cpufreq: intel_pstate: Add Tigerlake support in
+> no-HWP mode")
+>
+> Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
+> ---
+>  drivers/cpufreq/intel_pstate.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index 6ff73c30769f..181cd6b045ff 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -2378,6 +2378,7 @@ static const struct x86_cpu_id intel_pstate_cpu_ids[] = {
+>         X86_MATCH(COMETLAKE,            core_funcs),
+>         X86_MATCH(ICELAKE_X,            core_funcs),
+>         X86_MATCH(TIGERLAKE,            core_funcs),
+> +       X86_MATCH(SAPPHIRERAPIDS_X,     core_funcs),
+>         {}
+>  };
+>  MODULE_DEVICE_TABLE(x86cpu, intel_pstate_cpu_ids);
+> --
 
-vm_open() is not allowed to fail.  Fortunately we are guaranteed that
-the pages are already pinned, thanks to the initial mmap which is now
-being cloned into a forked process, and only need to increment the
-refcnt.  So just increment it directly.  Previously if a signal was
-delivered at the wrong time to the forking process, the
-mutex_lock_interruptible() could fail resulting in the pages_use_count
-not being incremented.
-
-Fixes: 2194a63a818d ("drm: Add library for shmem backed GEM objects")
-Cc: stable@vger.kernel.org
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
----
- drivers/gpu/drm/drm_gem_shmem_helper.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-index 3b7b71391a4c..b602cd72a120 100644
---- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-+++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-@@ -571,12 +571,20 @@ static void drm_gem_shmem_vm_open(struct vm_area_struct *vma)
- {
- 	struct drm_gem_object *obj = vma->vm_private_data;
- 	struct drm_gem_shmem_object *shmem = to_drm_gem_shmem_obj(obj);
--	int ret;
- 
- 	WARN_ON(shmem->base.import_attach);
- 
--	ret = drm_gem_shmem_get_pages(shmem);
--	WARN_ON_ONCE(ret != 0);
-+	mutex_lock(&shmem->pages_lock);
-+
-+	/*
-+	 * We should have already pinned the pages when the buffer was first
-+	 * mmap'd, vm_open() just grabs an additional reference for the new
-+	 * mm the vma is getting copied into (ie. on fork()).
-+	 */
-+	if (!WARN_ON_ONCE(!shmem->pages_use_count))
-+		shmem->pages_use_count++;
-+
-+	mutex_unlock(&shmem->pages_lock);
- 
- 	drm_gem_vm_open(vma);
- }
--- 
-2.38.1
-
+Applied as 6.2 material, thanks!
