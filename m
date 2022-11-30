@@ -2,131 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3D463D55D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3A363D549
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233212AbiK3MSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 07:18:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
+        id S233691AbiK3ML7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 07:11:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbiK3MSG (ORCPT
+        with ESMTP id S234304AbiK3MLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 07:18:06 -0500
-X-Greylist: delayed 322 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Nov 2022 04:18:03 PST
-Received: from mx3.securetransport.de (mx3.securetransport.de [IPv6:2a01:4f8:c0c:92be::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43F7F192B8;
-        Wed, 30 Nov 2022 04:18:03 -0800 (PST)
-Received: from mail.dh-electronics.com (unknown [77.24.89.57])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx3.securetransport.de (Postfix) with ESMTPSA id 246875DE3E;
-        Wed, 30 Nov 2022 13:12:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1669810329;
-        bh=mbWc09qzvq+TsmeKSXKlW9F4y+FGW/fHcrpI/xzbG2Y=;
-        h=From:To:CC:Subject:Date:From;
-        b=JkTHmZoQ/3vbGL8WmJeJQtbUNTpFIKpMNr6l1TdVUljcYPT177Qc8j3KfjTOKCMwl
-         Ly3WQwI6o9aZivrktgLec2wQQhm8ib0IySiOmRUixssjNIlEfCDPriESRFKPS573q3
-         ob23A87GwMvAYqsEEM3sMxk4eE/M2bSugjdNkIjb2/BnWSfDzFA6YPT2CzixXhUutz
-         Rqy9NhYsKcyug1b/REq4Eh9hy2Tn1k5t1LJZ74wSkhuiX36lO0BOfwq1C8KpKl2Bq+
-         m+0F9/R69I5SJdiAihKF7tX/bk0n0kXEG9oc5J+fzjDOMYwIjlaaMO+NGalLg5pwiO
-         PO2GXQXUor5iw==
-Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
- DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.20; Wed, 30 Nov 2022 13:11:50 +0100
-Received: from localhost.localdomain (172.16.51.2) by
- DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.20 via Frontend Transport; Wed, 30 Nov 2022 13:11:50 +0100
-From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Marek Vasut <marex@denx.de>, <kernel@dh-electronics.com>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH V3] dt-bindings: mmc: Remove comment on wakeup-source property
-Date:   Wed, 30 Nov 2022 13:10:33 +0100
-Message-ID: <20221130121033.7270-1-cniedermaier@dh-electronics.com>
-X-Mailer: git-send-email 2.11.0
-X-klartext: yes
+        Wed, 30 Nov 2022 07:11:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9AE659A
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 04:11:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669810260;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JLncHdVrMP1EudMSSacsorevfwqLrlPkbPFNVQA5FPk=;
+        b=UI7XwDZdZlzuaUHlo/SnVbsUtGOBI11DBs5LiAMxmmfbVvEmWrKemZDuZD5lDm9Sh7x1s0
+        Fg/MIo7nIQ6vWMeBGmbaUipp162AtnK9lXJSxrW+O2wxtOqnOdOS30TQhVzR/H3/yfvdjj
+        qERl054WuD2DBDSvwXNNdyzK88LcI68=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-160-VEtRH1-LPgGGVSj3Ue3xiQ-1; Wed, 30 Nov 2022 07:10:57 -0500
+X-MC-Unique: VEtRH1-LPgGGVSj3Ue3xiQ-1
+Received: by mail-wm1-f71.google.com with SMTP id v125-20020a1cac83000000b003cfa148576dso9318415wme.3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 04:10:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JLncHdVrMP1EudMSSacsorevfwqLrlPkbPFNVQA5FPk=;
+        b=T8ffcqi/zfdZjsm/6RV5osXY8sniZbumotUtiKwzVkdGSxfa9NfUB1aCKlTHFr28TN
+         iWohcz80qBZmfacfEKX/AP7cy/uHZNx1SCd6NtSZx4gd50QOHPPoWDPWbT1Vgx0Z1+2w
+         J2Qicj8gqfWGDICO4sNeC+UTYgo54egEsxehcwdkYwJPgRnyCkB4lZyFqvx33tr1vjM+
+         Qw8uBmtUY0xgw8xefGCFuYfarJoEORUHVqEb2gl1tNCNBPmrJdxzVM1PB8vaQxzh9r+o
+         FdAywu97WwrtHivYhHyo3ms5q/5GSGWQdkPOi5qucciee0fMgkI37cexNBAHtzKNgR2D
+         LCnQ==
+X-Gm-Message-State: ANoB5pkv2GTgyTgTO/pyBn4kYsQbzIdFuosmyyH5wV7QzBtsSDjuiG02
+        xqvtnoknky9mWxKe60iRagBw8SPSbfTR/C6OYZspKNGJ0PTLoHxOVwNBTpilD3Eu2+JQSlB6r5E
+        KSEKcScwn2owPW1Yz3k0G4UcY
+X-Received: by 2002:a5d:474c:0:b0:234:d495:d3ae with SMTP id o12-20020a5d474c000000b00234d495d3aemr30307653wrs.448.1669810256305;
+        Wed, 30 Nov 2022 04:10:56 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf74BLLQ1At6UCd4iIjnzcIzzhSngJgGHxYIR3mTFg6CZ/2Ub34DFXsL4CgFfFL0gFOXEJHNAQ==
+X-Received: by 2002:a5d:474c:0:b0:234:d495:d3ae with SMTP id o12-20020a5d474c000000b00234d495d3aemr30307611wrs.448.1669810255931;
+        Wed, 30 Nov 2022 04:10:55 -0800 (PST)
+Received: from ?IPV6:2003:cb:c703:7600:a8ea:29ce:7ee3:dd41? (p200300cbc7037600a8ea29ce7ee3dd41.dip0.t-ipconnect.de. [2003:cb:c703:7600:a8ea:29ce:7ee3:dd41])
+        by smtp.gmail.com with ESMTPSA id c124-20020a1c3582000000b003cf894dbc4fsm1810146wma.25.2022.11.30.04.10.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 04:10:55 -0800 (PST)
+Message-ID: <d7f7b120-b62d-dc2e-ad7a-f7957d3456e3@redhat.com>
+Date:   Wed, 30 Nov 2022 13:10:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v6 0/3] Implement IOCTL to get and/or the clear info about
+ PTEs
+Content-Language: en-US
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Zach O'Keefe <zokeefe@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        "open list : KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>
+References: <20221109102303.851281-1-usama.anjum@collabora.com>
+ <9c167d01-ef09-ec4e-b4a1-2fff62bf01fe@redhat.com>
+ <6fdce544-8d4f-8b3c-9208-735769a9e624@collabora.com>
+ <a90ee936-67a9-340d-bf2c-2f331617b0da@redhat.com>
+ <254130e7-7fb1-6cf1-e8fa-5bc2d4450431@collabora.com>
+ <bfcae708-db21-04b4-0bbe-712badd03071@redhat.com>
+ <3d069746-d440-f1a6-1b64-5ee196c2fc21@collabora.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <3d069746-d440-f1a6-1b64-5ee196c2fc21@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current comment on wakeup-source is a little confusing because
-the word deprecated can be interpreted at first glance to mean that
-wakeup-source is deprecated. Also mentioning the obsolete property
-confuses more than it helps. Therefore, the comment should be removed
-completely because the enable-sdio-wakeup property is not used in
-any current DTs. Also remove enable-sdio-wakeup reference in
-wakeup-source.txt
+On 30.11.22 12:42, Muhammad Usama Anjum wrote:
+> On 11/21/22 8:55 PM, David Hildenbrand wrote:
+>> On 21.11.22 16:00, Muhammad Usama Anjum wrote:
+>>> Hello,
+>>>
+>>> Thank you for replying.
+>>>
+>>> On 11/14/22 8:46 PM, David Hildenbrand wrote:
+>>>>> The soft-dirtiness is stored in the PTE. VMA is marked dirty to store the
+>>>>> dirtiness for reused regions. Clearing the soft-dirty status of whole
+>>>>> process is straight forward. When we want to clear/monitor the
+>>>>> soft-dirtiness of a part of the virtual memory, there is a lot of internal
+>>>>> noise. We don't want the non-dirty pages to become dirty because of how
+>>>>> the
+>>>>> soft-dirty feature has been working. Soft-dirty feature wasn't being used
+>>>>> the way we want to use now. While monitoring a part of memory, it is not
+>>>>> acceptable to get non-dirty pages as dirty. Non-dirty pages become dirty
+>>>>> when the two VMAs are merged without considering if they both are dirty or
+>>>>> not (34228d473efe). To monitor changes over the memory, sometimes VMAs are
+>>>>> split to clear the soft-dirty bit in the VMA flags. But sometimes kernel
+>>>>> decide to merge them backup. It is so waste of resources.
+>>>>
+>>>> Maybe you'd want a per-process option to not merge if the VM_SOFTDIRTY
+>>>> property differs. But that might be just one alternative for handling this
+>>>> case.
+>>>>
+>>>>>
+>>>>> To keep things consistent, the default behavior of the IOCTL is to output
+>>>>> even the extra non-dirty pages as dirty from the kernel noise. A optional
+>>>>> PAGEMAP_NO_REUSED_REGIONS flag is added for those use cases which aren't
+>>>>> tolerant of extra non-dirty pages. This flag can be considered as
+>>>>> something
+>>>>> which is by-passing the already present buggy implementation in the
+>>>>> kernel.
+>>>>> It is not buggy per say as the issue can be solved if we don't allow the
+>>>>> two VMA which have different soft-dirty bits to get merged. But we are
+>>>>> allowing that so that the total number of VMAs doesn't increase. This was
+>>>>> acceptable at the time, but now with the use case of monitoring a part of
+>>>>> memory for soft-dirty doesn't want this merging. So either we need to
+>>>>> revert 34228d473efe and PAGEMAP_NO_REUSED_REGIONS flag will not be needed
+>>>>> or we should allow PAGEMAP_NO_REUSED_REGIONS or similar mechanism to
+>>>>> ignore
+>>>>> the extra dirty pages which aren't dirty in reality.
+>>>>>
+>>>>> When PAGEMAP_NO_REUSED_REGIONS flag is used, only the PTEs are checked to
+>>>>> find if the pages are dirty. So re-used regions cannot be detected. This
+>>>>> has the only side-effect of not checking the VMAs. So this is
+>>>>> limitation of
+>>>>> using this flag which should be acceptable in the current state of code.
+>>>>> This limitation is okay for the users as they can clear the soft-dirty bit
+>>>>> of the VMA before starting to monitor a range of memory for
+>>>>> soft-dirtiness.
+>>>>>
+>>>>>
+>>>>>> Please separate that part out from the other changes; I am still not
+>>>>>> convinced that we want this and what the semantical implications are.
+>>>>>>
+>>>>>> Let's take a look at an example: can_change_pte_writable()
+>>>>>>
+>>>>>>        /* Do we need write faults for softdirty tracking? */
+>>>>>>        if (vma_soft_dirty_enabled(vma) && !pte_soft_dirty(pte))
+>>>>>>            return false;
+>>>>>>
+>>>>>> We care about PTE softdirty tracking, if it is enabled for the VMA.
+>>>>>> Tracking is enabled if: vma_soft_dirty_enabled()
+>>>>>>
+>>>>>>        /*
+>>>>>>         * Soft-dirty is kind of special: its tracking is enabled when
+>>>>>>         * the vma flags not set.
+>>>>>>         */
+>>>>>>        return !(vma->vm_flags & VM_SOFTDIRTY);
+>>>>>>
+>>>>>> Consequently, if VM_SOFTDIRTY is set, we are not considering the
+>>>>>> soft_dirty
+>>>>>> PTE bits accordingly.
+>>>>> Sorry, I'm unable to completely grasp the meaning of the example. We have
+>>>>> followed clear_refs_write() to write the soft-dirty bit clearing code in
+>>>>> the current patch. Dirtiness of the VMA and the PTE may be set
+>>>>> independently. Newer allocated memory has dirty bit set in the VMA. When
+>>>>> something is written the memory, the soft dirty bit is set in the PTEs as
+>>>>> well regardless if the soft dirty bit is set in the VMA or not.
+>>>>>
+>>>>
+>>>> Let me try to find a simple explanation:
+>>>>
+>>>> After clearing a SOFTDIRTY PTE flag inside an area with VM_SOFTDIRTY set,
+>>>> there are ways that PTE could get written to and it could become dirty,
+>>>> without the PTE becoming softdirty.
+>>>>
+>>>> Essentially, inside a VMA with VM_SOFTDIRTY set, the PTE softdirty values
+>>>> might be stale: there might be entries that are softdirty even though the
+>>>> PTE is *not* marked softdirty.
+>>> Can someone please share the example to reproduce this? In all of my
+>>> testing, even if I ignore VM_SOFTDIRTY and only base my decision of
+>>> soft-dirtiness on individual pages, it always passes.
+>>
+>> Quick reproducer (the first and easiest one that triggered :) )
+>> attached.
+>>
+>> With no kernel changes, it works as expected.
+>>
+>> # ./softdirty_mprotect
+>>
+>>
+>> With the following kernel change to simulate what you propose it fails:
+>>
+>> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+>> index d22687d2e81e..f2c682bf7f64 100644
+>> --- a/fs/proc/task_mmu.c
+>> +++ b/fs/proc/task_mmu.c
+>> @@ -1457,8 +1457,8 @@ static pagemap_entry_t pte_to_pagemap_entry(struct
+>> pagemapread *pm,
+>>                  flags |= PM_FILE;
+>>          if (page && !migration && page_mapcount(page) == 1)
+>>                  flags |= PM_MMAP_EXCLUSIVE;
+>> -       if (vma->vm_flags & VM_SOFTDIRTY)
+>> -               flags |= PM_SOFT_DIRTY;
+>> +       //if (vma->vm_flags & VM_SOFTDIRTY)
+>> +       //      flags |= PM_SOFT_DIRTY;
+>>   
+>>          return make_pme(frame, flags);
+>>   }
+>>
+>>
+>> # ./softdirty_mprotect
+>> Page #1 should be softdirty
+>>
+> Thank you so much for sharing the issue and reproducer.
+> 
+> After remapping the second part of the memory and m-protecting +
+> m-unprotecting the whole memory, the PTE of the first half of the memory
+> doesn't get marked as soft dirty even after writing multiple times to it.
+> Even if soft-dirtiness is cleared on the whole process, the PTE of the
+> first half memory doesn't get dirty. This seems like more of a bug in
+> mprotect. The mprotect should not mess up with the soft-dirty flag in the PTEs.
+> 
+> I'm debugging this. I hope to find the issue soon. Soft-dirty tracking in
+> PTEs should be working correctly irrespective of the VM_SOFTDIRTY is set or
+> not on the VMA.
 
-Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
----
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Marek Vasut <marex@denx.de>
-Cc: kernel@dh-electronics.com
-Cc: linux-mmc@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-To: linux-kernel@vger.kernel.org
----
-V2: - Instead of changing the comment, remove it
-V3: - Remove also reference in power/wakeup-source.txt
----
- Documentation/devicetree/bindings/mmc/mmc-controller.yaml |  1 -
- Documentation/devicetree/bindings/power/wakeup-source.txt | 13 ++++++-------
- 2 files changed, 6 insertions(+), 8 deletions(-)
+No, it's not a bug and these are not the VM_SOFTDIRTY semantics -- just 
+because you think they should be like this. As people explained, 
+VM_SOFTDIRTY implies *until now* that any PTE is consideres softdirty. 
+And there are other scenarios that can similarly trigger something like 
+that, besides mprotect().
 
-diff --git a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
-index 802e3ca8be4d..e82c00368088 100644
---- a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
-+++ b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
-@@ -293,7 +293,6 @@ properties:
-     description:
-       SDIO only. Preserves card power during a suspend/resume cycle.
- 
--  # Deprecated: enable-sdio-wakeup
-   wakeup-source:
-     $ref: /schemas/types.yaml#/definitions/flag
-     description:
-diff --git a/Documentation/devicetree/bindings/power/wakeup-source.txt b/Documentation/devicetree/bindings/power/wakeup-source.txt
-index cfd74659fbed..697333a56d5e 100644
---- a/Documentation/devicetree/bindings/power/wakeup-source.txt
-+++ b/Documentation/devicetree/bindings/power/wakeup-source.txt
-@@ -17,15 +17,14 @@ interrupt.
- List of legacy properties and respective binding document
- ---------------------------------------------------------
- 
--1. "enable-sdio-wakeup"		Documentation/devicetree/bindings/mmc/mmc.txt
--2. "gpio-key,wakeup"		Documentation/devicetree/bindings/input/gpio-keys{,-polled}.txt
--3. "has-tpo"			Documentation/devicetree/bindings/rtc/rtc-opal.txt
--4. "linux,wakeup"		Documentation/devicetree/bindings/input/gpio-matrix-keypad.txt
-+1. "gpio-key,wakeup"		Documentation/devicetree/bindings/input/gpio-keys{,-polled}.txt
-+2. "has-tpo"			Documentation/devicetree/bindings/rtc/rtc-opal.txt
-+3. "linux,wakeup"		Documentation/devicetree/bindings/input/gpio-matrix-keypad.txt
- 				Documentation/devicetree/bindings/mfd/tc3589x.txt
- 				Documentation/devicetree/bindings/input/touchscreen/ads7846.txt
--5. "linux,keypad-wakeup"	Documentation/devicetree/bindings/input/qcom,pm8xxx-keypad.txt
--6. "linux,input-wakeup"		Documentation/devicetree/bindings/input/samsung-keypad.txt
--7. "nvidia,wakeup-source"	Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
-+4. "linux,keypad-wakeup"	Documentation/devicetree/bindings/input/qcom,pm8xxx-keypad.txt
-+5. "linux,input-wakeup"		Documentation/devicetree/bindings/input/samsung-keypad.txt
-+6. "nvidia,wakeup-source"	Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
- 
- Examples
- --------
+Sorry if I sound annoyed, but please
+
+1) factor out that from your patch set for now
+2) find a way to handle this cleanly, for example, not merging VMAs that
+    differ in VM_SOFTDIRTY
+
 -- 
-2.11.0
+Thanks,
+
+David / dhildenb
 
