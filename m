@@ -2,169 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03EA063DAE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E4263DADF
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:40:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbiK3QlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 11:41:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
+        id S230162AbiK3Qkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 11:40:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiK3Qkz (ORCPT
+        with ESMTP id S229634AbiK3Qkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 11:40:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A357B4EC38
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:39:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669826394;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FibScgnLZTZQVJwSPq/5rFupjljThtgCjtutjs0/d8U=;
-        b=e/p1mFqUPLhUr7CPYo4W4ZM/I2dMlsCUoiEnVc50azQg+EVy5hWGA+fMBWMAUtpu2djWWv
-        vbny2HxKaM+pkHezGuTWgIiJnlD8Yr9e/CQnLKrqqrhqGv4Hsbz4MEUMRRxyfs3YDwA9JP
-        t79dkWPPCtjLSDsSZ4kx8FKFOAelhXw=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-613-Gv9LkrGeNHSmQV8l15I9_w-1; Wed, 30 Nov 2022 11:39:53 -0500
-X-MC-Unique: Gv9LkrGeNHSmQV8l15I9_w-1
-Received: by mail-wm1-f69.google.com with SMTP id u9-20020a05600c00c900b003cfb12839d6so817161wmm.5
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:39:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FibScgnLZTZQVJwSPq/5rFupjljThtgCjtutjs0/d8U=;
-        b=UtJ1ZzLQQdtD2UPtGPfWr6rx/NbwjrWglhZd/8O/hjNdYDdLhST45nrCZeWMgAgL7v
-         r9deghdDGSD9CFE4Qdj+x1mUxK4158trWqB7+SqifZU3E4653zqWqI4f+soRBGfdH4wg
-         Jui4MQT7SlK4GqpRDsPADsseeSYGw0mKnmvYyb8VWow7FDAXUDvBPr5ZUVJ5I6w65FH+
-         FEYhDNRWrz7fCNuCjXWu6IROyvCGCirYVE2kCpOIfqkBWi+4fMf0X5sRBFSnaxFV/rZa
-         T+ljhej4VDBE8ciiMpl2v94cT+KP74Ate6YUxb3gxZb1ytZuS3iqgLfkAEheZ7Lpw9Eb
-         zPbg==
-X-Gm-Message-State: ANoB5pnRisc5gv4c0mHlGo+boqgMuYTUEIEkJ51Jcqj0uCA1k3GN9OvO
-        cEtHoz5y0N2Z+VbMlSnYqr/ByT/roqNSvfTFN1HIOOJ2ROvgb353v3OUnnRKtPiBmG/1neBqTyi
-        M47qcxbs+n0y/3uK5z/x/Phta
-X-Received: by 2002:a05:600c:3495:b0:3cf:ae53:918f with SMTP id a21-20020a05600c349500b003cfae53918fmr34347032wmq.131.1669826391943;
-        Wed, 30 Nov 2022 08:39:51 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4IzXvotDDH3ARJouInxJxra3FD5+ga8g8sHGirbSriZuhOGHjtFxK+lAN+vFsR8EswaedPnA==
-X-Received: by 2002:a05:600c:3495:b0:3cf:ae53:918f with SMTP id a21-20020a05600c349500b003cfae53918fmr34347013wmq.131.1669826391634;
-        Wed, 30 Nov 2022 08:39:51 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:7600:a8ea:29ce:7ee3:dd41? (p200300cbc7037600a8ea29ce7ee3dd41.dip0.t-ipconnect.de. [2003:cb:c703:7600:a8ea:29ce:7ee3:dd41])
-        by smtp.gmail.com with ESMTPSA id u11-20020a5d6acb000000b00241c4bd6c09sm2060024wrw.33.2022.11.30.08.39.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 08:39:51 -0800 (PST)
-Message-ID: <8290e578-9eaa-5859-6309-e62634b66fb5@redhat.com>
-Date:   Wed, 30 Nov 2022 17:39:50 +0100
+        Wed, 30 Nov 2022 11:40:39 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6735880E1;
+        Wed, 30 Nov 2022 08:40:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669826437; x=1701362437;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=4+g79nFYY6iK6ImrytVqTcigOJq46ntStIZVTAF5yRw=;
+  b=KxqWpkpg7CdTGatKptk1Lo41vmKFbXOjklA15XdFsQ14zrK9yu0EKXa1
+   qtRKFIXLbLVdZVJK3EgVTUmiJ0gLdBnnKcM+VpBbQYhO2WSMaGX/BrTX+
+   sha1oeBtHUmRY8ThCs4bc/mcbtmtC9sb+eVJfBzFBsTlEOeN9HWopuzFg
+   Ho70IwivwtiolqqRkH1d7aL20By3mpve/Ad3SjM/q/kuBJ46v3lSmqOZZ
+   xe0JQzVhjrk6dgtoPaYNiTzLaUMltkKZcMmRARKkJIkuYAGZ7Wk45DhgC
+   2KJcsGM6oXcO6MC3QeRZqCgG9pRyjOx/nBai88JfSXgTZQXC5fxtEg9NO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="313069202"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="313069202"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 08:40:37 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="786529735"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="786529735"
+Received: from nboddu-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.252.130.207])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 08:40:36 -0800
+Message-ID: <2b3c7457d34f05ab42c7577bbda10033147d5f4b.camel@linux.intel.com>
+Subject: Re: Using nr_cpus breaks no_turbo setting of pstate driver
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Bhatnagar, Rishabh" <risbhat@amazon.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lenb@kernel.org
+Cc:     surajjs@amazon.com
+Date:   Wed, 30 Nov 2022 08:40:35 -0800
+In-Reply-To: <9b23e9d4-7c7a-a74f-3a6b-939a4a469c2b@amazon.com>
+References: <9b23e9d4-7c7a-a74f-3a6b-939a4a469c2b@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 09/10] mm/hugetlb: Make page_vma_mapped_walk() safe to pmd
- unshare
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        James Houghton <jthoughton@google.com>,
-        Jann Horn <jannh@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-References: <20221129193526.3588187-1-peterx@redhat.com>
- <20221129193526.3588187-10-peterx@redhat.com>
- <65a3a912-3534-6718-2c55-e0d4b5246f1e@redhat.com> <Y4eFq4ZyQ2xHaISy@x1n>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Y4eFq4ZyQ2xHaISy@x1n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.11.22 17:32, Peter Xu wrote:
-> On Wed, Nov 30, 2022 at 05:18:45PM +0100, David Hildenbrand wrote:
->> On 29.11.22 20:35, Peter Xu wrote:
->>> Since page_vma_mapped_walk() walks the pgtable, it needs the vma lock
->>> to make sure the pgtable page will not be freed concurrently.
->>>
->>> Signed-off-by: Peter Xu <peterx@redhat.com>
->>> ---
->>>    include/linux/rmap.h | 4 ++++
->>>    mm/page_vma_mapped.c | 5 ++++-
->>>    2 files changed, 8 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
->>> index bd3504d11b15..a50d18bb86aa 100644
->>> --- a/include/linux/rmap.h
->>> +++ b/include/linux/rmap.h
->>> @@ -13,6 +13,7 @@
->>>    #include <linux/highmem.h>
->>>    #include <linux/pagemap.h>
->>>    #include <linux/memremap.h>
->>> +#include <linux/hugetlb.h>
->>>    /*
->>>     * The anon_vma heads a list of private "related" vmas, to scan if
->>> @@ -408,6 +409,9 @@ static inline void page_vma_mapped_walk_done(struct page_vma_mapped_walk *pvmw)
->>>    		pte_unmap(pvmw->pte);
->>>    	if (pvmw->ptl)
->>>    		spin_unlock(pvmw->ptl);
->>> +	/* This needs to be after unlock of the spinlock */
->>> +	if (is_vm_hugetlb_page(pvmw->vma))
->>> +		hugetlb_vma_unlock_read(pvmw->vma);
->>>    }
->>>    bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw);
->>> diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
->>> index 93e13fc17d3c..f94ec78b54ff 100644
->>> --- a/mm/page_vma_mapped.c
->>> +++ b/mm/page_vma_mapped.c
->>> @@ -169,10 +169,13 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
->>>    		if (pvmw->pte)
->>>    			return not_found(pvmw);
->>> +		hugetlb_vma_lock_read(vma);
->>>    		/* when pud is not present, pte will be NULL */
->>>    		pvmw->pte = huge_pte_offset(mm, pvmw->address, size);
->>> -		if (!pvmw->pte)
->>> +		if (!pvmw->pte) {
->>> +			hugetlb_vma_unlock_read(vma);
->>>    			return false;
->>> +		}
->>>    		pvmw->ptl = huge_pte_lock(hstate, mm, pvmw->pte);
->>>    		if (!check_pte(pvmw))
->>
->> Looking at code like  mm/damon/paddr.c:__damon_pa_mkold() and reading the
->> doc of page_vma_mapped_walk(), this might be broken.
->>
->> Can't we get page_vma_mapped_walk() called multiple times?
-> 
-> Yes it normally can, but not for hugetlbfs?  Feel free to check:
-> 
-> 	if (unlikely(is_vm_hugetlb_page(vma))) {
->                  ...
-> 		/* The only possible mapping was handled on last iteration */
-> 		if (pvmw->pte)
-> 			return not_found(pvmw);
->          }
+Hi Rishabh,
 
-Ah, I see, thanks.
-
-Acked-by: David Hildenbrand <david@redhat.com>
+I think this is because of request of SMT and the the following CPUID
+flag is set to false.
+# cpuid -1 -l 6 | grep ignoring
+ignoring idle logical processor HWP req = false
 
 
--- 
+The way CPUs are numbered, the SMT starts at number 24. So, nr_cpus=24
+didn't bring up any SMT for driver to control.
+The default power up MSR_HWP_REQ.max is 0xFF, this will also play role
+in resolving the max frequency. Here driver is disabling turbo by
+controlling MSR_HWP_REQ.max.
+
+If you want to disable turbo here with reduced nr_cpus, you can set bit
+38 of MSR 0x1a0 using msr tools.
+
 Thanks,
+Srinivas
 
-David / dhildenb
+
+On Wed, 2022-11-30 at 08:10 -0800, Bhatnagar, Rishabh wrote:
+> "Having some issue with my mails failing to deliver. So trying once 
+> again after disabling HTML."
+> 
+> 
+> Hi Srinivas/Len,
+> 
+> 
+> I have been doing some testing on m5zn.metal AWS instances which 
+> provides 48 vcpus and 192GB memory.
+> 
+> Test includes loading all cpus with maximum capacity (using stress)
+> and 
+> observing the frequency after enabling and disabling turbo
+> frequencies. 
+> Intel_pstate is enabled with hwp.
+> 
+> 
+> lscpu output for reference:
+> 
+> *# lscpu*
+> Architecture:        x86_64
+> CPU op-mode(s):      32-bit, 64-bit
+> Byte Order:          Little Endian
+> CPU(s):              48
+> On-line CPU(s) list: 0-47
+> Thread(s) per core:  2
+> Core(s) per socket:  12
+> Socket(s):           2
+> NUMA node(s):        2
+> Vendor ID:           GenuineIntel
+> CPU family:          6
+> Model:               85
+> Model name:          Intel(R) Xeon(R) Platinum 8252C CPU @ 3.80GHz
+> Stepping:            7
+> CPU MHz:             3800.000
+> CPU max MHz:         4500.0000
+> CPU min MHz:         1200.0000
+> BogoMIPS:            7600.00
+> Virtualization:      VT-x
+> L1d cache:           32K
+> L1i cache:           32K
+> L2 cache:            1024K
+> L3 cache:            25344K
+> NUMA node0 CPU(s):   0-11,24-35
+> NUMA node1 CPU(s):   12-23,36-47
+> Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr
+> pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm
+> pbe 
+> syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts 
+> rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq 
+> dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm
+> pcid 
+> dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave
+> avx 
+> f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cdp_l3 
+> invpcid_single intel_ppin ssbd mba ibrs ibpb stibp ibrs_enhanced 
+> tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1
+> avx2 smep bmi2 erms invpcid cqm mpx rdt_a avx512f avx512dq rdseed adx
+> smap clflushopt clwb intel_pt avx512cd avx512bw avx512vl xsaveopt
+> xsavec 
+> xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local
+> dtherm 
+> ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req pku ospke 
+> avx512_vnni md_clear flush_l1d arch_capabilities
+> 
+> When testing with all cpus online I don't see any issue. CPUs reach 
+> turbo frequency when intel_pstate/no_turbo is disabled and stay below
+> turbo frequencies when no_turbo is enabled as expected.
+> 
+> However, issue occurs when I boot with nr_cpus argument specifying
+> less 
+> than 48 cpus. e.g. cmdline:
+> 
+> 
+> */# cat /proc/cmdline/*/
+> /mmio_stale_data=off mds=off tsx=off tsx_async_abort=off 
+> intel_idle.max_cstate=0 
+> BOOT_IMAGE=/boot/vmlinuz-5.10.154-119.671.amzn2.x86_64 
+> root=UUID=d8605abb-d6cd-4a46-a657-b6bd206da2ab ro console=tty0 
+> console=ttyS0,115200n8 net.ifnames=0 biosdevname=0 
+> nvme_core.io_timeout=4294967295 rd.emergency=poweroff 
+> rd.shell=0*nr_cpus=24 intel_idle.max_cstate=1 processor.max_cstate=1*
+> 
+> # echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo
+> # turbostat
+> 
+> 
+> ^CPackage       Core CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz IRQ     
+> SMI     POLL C1      POLL%   C1%     CPU%c1  CPU%c6  CoreTmp PkgTmp  
+> Pkg%pc2 Pkg%pc6 PkgWatt RAMWatt PKG_%   RAM_%
+> -       -       -       4370    99.76   4381    3800    6374 0       
+> 0       0       0.00    0.00    0.24    0.00    96 96      0.00    
+> 0.00    479.79  69.20   0.00    0.00
+> 0       0       0       4292    99.93   4295    3800    266 0       
+> 0       0       0.00    0.00    0.07    0.00    88 96      0.00    
+> 0.00    239.89  33.62   0.00    0.00
+> 0       2       1       4292    99.92   4295    3800    270 0       
+> 0       0       0.00    0.00    0.08    0.00    92
+> 0       4       2       4292    99.92   4295    3800    264 0       
+> 0       0       0.00    0.00    0.08    0.00    92
+> 0       8       3       4292    99.93   4295    3800    268 0       
+> 0       0       0.00    0.00    0.07    0.00    90
+> 0       9       4       4292    99.93   4295    3800    264 0       
+> 0       0       0.00    0.00    0.07    0.00    91
+> 0       10      5       4292    99.92   4295    3800    264 0       
+> 0       0       0.00    0.00    0.08    0.00    92
+> 0       11      6       4292    99.92   4295    3800    265 0       
+> 0       0       0.00    0.00    0.08    0.00    96
+> 0       17      7       4292    99.93   4295    3800    266 0       
+> 0       0       0.00    0.00    0.07    0.00    91
+> 0       19      8       4292    99.93   4295    3800    266 0       
+> 0       0       0.00    0.00    0.07    0.00    91
+> 0       25      9       4292    99.92   4295    3800    264 0       
+> 0       0       0.00    0.00    0.08    0.00    91
+> 0       26      10      4292    99.92   4295    3800    264 0       
+> 0       0       0.00    0.00    0.08    0.00    93
+> 0       27      11      4292    99.92   4295    3800    264 0       
+> 0       0       0.00    0.00    0.08    0.00    94
+> 1       1       12      4449    99.61   4466    3800    264 0       
+> 0       0       0.00    0.00    0.39    0.00    80 88      0.00    
+> 0.00    239.90  35.58   0.00    0.00
+> 1       2       13      4448    99.60   4466    3800    264 0       
+> 0       0       0.00    0.00    0.40    0.00    86
+> 1       3       14      4449    99.61   4466    3800    267 0       
+> 0       0       0.00    0.00    0.39    0.00    81
+> 1       8       15      4449    99.61   4466    3800    264 0       
+> 0       0       0.00    0.00    0.39    0.00    79
+> 1       9       16      4448    99.60   4466    3800    264 0       
+> 0       0       0.00    0.00    0.40    0.00    79
+> 1       10      17      4449    99.61   4466    3800    264 0       
+> 0       0       0.00    0.00    0.39    0.00    83
+> 1       17      18      4448    99.60   4466    3800    264 0       
+> 0       0       0.00    0.00    0.40    0.00    82
+> 1       18      19      4449    99.61   4466    3800    281 0       
+> 0       0       0.00    0.00    0.39    0.00    80
+> 1       19      20      4449    99.61   4466    3800    264 0       
+> 0       0       0.00    0.00    0.39    0.00    83
+> 1       20      21      4448    99.59   4466    3800    264 0       
+> 0       0       0.00    0.00    0.41    0.00    83
+> 1       25      22      4448    99.60   4466    3800    264 0       
+> 0       0       0.00    0.00    0.40    0.00    81
+> 1       27      23      4448    99.59   4466    3800    265 0       
+> 0       0       0.00    0.00    0.41    0.00    88
+> 
+> /
+> /
+> 
+> As part of the turbostat output I could see that pstate driver is 
+> setting the hints correctly in MSR_HWP_REQUEST. But somehow these
+> limits 
+> are not being honored by HWP logic.
+> 
+> 
+> cpu0: MSR_PM_ENABLE: 0x00000001 (HWP)
+> cpu0: MSR_HWP_CAPABILITIES: 0x070c262d (high 45 guar 38 eff 12 low 7)
+> *cpu0: MSR_HWP_REQUEST: 0x00002626 (min 38 max 38 des 0 epp 0x0
+> window 
+> 0x0 pkg 0x0)*
+> cpu0: MSR_HWP_REQUEST_PKG: 0x8000ff00 (min 0 max 255 des 0 epp 0x80 
+> window 0x0)
+> cpu0: MSR_HWP_STATUS: 0x00000004 (No-Guaranteed_Perf_Change, 
+> No-Excursion_Min)
+> 
+> I tried the same experiment after disabling hwp by 
+> specifying*intel_pstate=no_hwp*in cmdline. In this case the pstate 
+> driver seems to be selecting pstates correctly.
+> 
+> ^CPackage       Core CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz IRQ     
+> SMI     POLL C1      POLL%   C1%     CPU%c1  CPU%c6  CoreTmp PkgTmp  
+> Pkg%pc2 Pkg%pc6 PkgWatt RAMWatt PKG_%   RAM_%
+> -       -       -       3800    100.00  3800    3800    1646 0       
+> 0       0       0.00    0.00    0.00    0.00    85 85      0.00    
+> 0.00    328.38  62.14   0.00    0.00
+> 0       0       0       3800    100.00  3800    3800    66 0       
+> 0       0       0.00    0.00    0.00    0.00    85 85      0.00    
+> 0.00    175.42  36.96   0.00    0.00
+> 0       0       24      3800    100.00  3800    3800    70 0       
+> 0       0       0.00    0.00    0.00
+> 0       1       1       3800    100.00  3800    3800    65 0       
+> 0       0       0.00    0.00    0.00    0.00    82
+> 0       2       2       3800    100.00  3800    3800    67 0       
+> 0       0       0.00    0.00    0.00    0.00    84
+> 0       3       3       3800    100.00  3800    3800    67 0       
+> 0       0       0.00    0.00    0.00    0.00    83
+> 0       4       4       3800    100.00  3800    3800    68 0       
+> 0       0       0.00    0.00    0.00    0.00    85
+> 0       8       5       3800    100.00  3800    3800    68 0       
+> 0       0       0.00    0.00    0.00    0.00    83
+> 0       9       6       3800    100.00  3800    3800    65 0       
+> 0       0       0.00    0.00    0.00    0.00    85
+> 0       10      7       3800    100.00  3800    3800    65 0       
+> 0       0       0.00    0.00    0.00    0.00    82
+> 0       11      8       3800    100.00  3800    3800    65 0       
+> 0       0       0.00    0.00    0.00    0.00    84
+> 0       17      9       3800    100.00  3800    3800    65 0       
+> 0       0       0.00    0.00    0.00    0.00    83
+> 0       18      10      3800    100.00  3800    3800    65 0       
+> 0       0       0.00    0.00    0.00    0.00    83
+> 0       27      11      3800    100.00  3800    3800    65 0       
+> 0       0       0.00    0.00    0.00    0.00    85
+> 1       0       12      3800    100.00  3800    3800    65 0       
+> 0       0       0.00    0.00    0.00    0.00    66 68      0.00    
+> 0.00    152.95  25.18   0.00    0.00
+> 1       2       13      3800    100.00  3800    3800    65 0       
+> 0       0       0.00    0.00    0.00    0.00    65
+> 1       4       14      3800    100.00  3800    3800    65 0       
+> 0       0       0.00    0.00    0.00    0.00    68
+> 1       8       15      3800    100.00  3800    3800    65 0       
+> 0       0       0.00    0.00    0.00    0.00    63
+> 1       9       16      3800    100.00  3800    3800    65 0       
+> 0       0       0.00    0.00    0.00    0.00    65
+> 1       10      17      3800    100.00  3800    3800    65 0       
+> 0       0       0.00    0.00    0.00    0.00    64
+> 1       17      18      3800    100.00  3800    3800    66 0       
+> 0       0       0.00    0.00    0.00    0.00    63
+> 1       18      19      3800    100.00  3800    3800    66 0       
+> 0       0       0.00    0.00    0.00    0.00    63
+> 1       19      20      3800    100.00  3800    3800    65 0       
+> 0       0       0.00    0.00    0.00    0.00    63
+> 1       20      21      3800    100.00  3800    3800    66 0       
+> 0       0       0.00    0.00    0.00    0.00    66
+> 1       25      22      3800    100.00  3800    3800    65 0       
+> 0       0       0.00    0.00    0.00    0.00    64
+> 1       27      23      3800    100.00  3800    3800    67 0       
+> 0       0       0.00    0.00    0.00    0.00    67
+> 
+> [root@ip-172-31-36-94 ec2-user]# cat 
+> /sys/devices/system/cpu/intel_pstate/no_turbo
+> 1
+> 
+> 
+> Thanks,
+> Rishabh
+> 
 
