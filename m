@@ -2,196 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5EE63CE77
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 05:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E26763CE7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 05:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232842AbiK3Es6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Nov 2022 23:48:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
+        id S232827AbiK3Eww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Nov 2022 23:52:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbiK3Esj (ORCPT
+        with ESMTP id S229579AbiK3Ewo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Nov 2022 23:48:39 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D4E6DFEF;
-        Tue, 29 Nov 2022 20:48:38 -0800 (PST)
+        Tue, 29 Nov 2022 23:52:44 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B45262DA
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 20:52:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669783718; x=1701319718;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=Xyr/qowOocFfcRuILMMTFJt5aqM2A4ZusM2gCevNmjs=;
-  b=VLk42AUDkshwaT+PPgQckCs5GiXSZzH/t1haTYoZGkugNBJKzT58wkdM
-   1q7ed27gJpuvyZhks8RKU9QvGI/TrNTBUIeKtZGYyGqtOctKYHroY7N//
-   smSmokgd5fzxC90r9brmFbja9p4+kXjQV3vyNrgVVWF8LoStLBhcR9KUr
-   GQOhM47oLfz+1jPVhutIAGubMLG7BQrGro0a3uxQ75sf6snr5Ookxa7yj
-   B70YOt4evRfuKm0DvitEci8Dc9ulKMB6k08KuvMu6rG3eQql392Kq1Hlz
-   4EmSVWIIZ1fHgkcKgHtWI6WTVFiyL5YfuTgJYAePZThP+ixY2weNOsFwb
-   Q==;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669783961; x=1701319961;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=3749ax9ppohGjGjFp7a1GCRqgWIp71oDYMvi23ItfcU=;
+  b=KojO4/4dSxJEI89lTcCXakoesIKtCr1U3GSaml0CCTfj+D06JilNsYTr
+   2agxbx/srObjvylMdW5XgP4kNEM+ipYuf2axKOUO1/KvzsmOPIhB8vSJm
+   EejfDVHG5gx2zIkkl1gAO5cTuZc2+B6/YjxvWRoPC6BOimRru8ZdNXheC
+   B9JEtfwVr/tLDfVro5A6Zoe6paPge9z7EK+WBC5QhjyKIpFPRnB+ccbNe
+   FJthqdaZYsq6g2hK0y4NFpvS/zYeNWMc0emhV8pKfr09o/zp2tVU/EHad
+   PfIhm0I7ItTV35YbgM5XFGwKyO6nQ2AYolg+sigZj1+fhIiHYmx9xWvy+
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="317155210"
 X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
-   d="scan'208";a="125741887"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Nov 2022 21:48:38 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+   d="scan'208";a="317155210"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 20:52:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="621740730"
+X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
+   d="scan'208";a="621740730"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga006.jf.intel.com with ESMTP; 29 Nov 2022 20:52:38 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 29 Nov 2022 21:48:37 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 29 Nov 2022 21:48:37 -0700
+ 15.1.2507.16; Tue, 29 Nov 2022 20:52:38 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 29 Nov 2022 20:52:37 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 29 Nov 2022 20:52:37 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 29 Nov 2022 20:52:37 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kuNnqkq+gn5a6mdsx0Hq0ShUFf+TqClk2bkjA0a8sIVorCE1q9unjURSciuzrKsm58oo657fmWbnqqET58wIuzFjd2mFbd8VhB/aBpNIgf4NoChNK11pw8kZltzrNn+sQKM8Pnc1EugsfNpnMrcp27wsP7+7DQpTOq3EmadI/AlQr1Xh0P1jya+39Iu1BNUIAgwa/E8PXVTvQt8+0QeQmORdRxvFWdAtn65ko3mWo+zvFJizeCxkqKVbhHj6lP/fDOmOeTqVBpW552ficS/HjWv6rqQNh400faZcJybwlGrxK9Wg8H32XrpoSYel6MHPF2kILfY4IcGOj+p8PC1Udg==
+ b=JQkAYQit21V6/5Fk4SE9JhYE1Iq960uXshR8dzDGk/x1yHtCFedjyQsfSiaa1Hv580NOuKsjlKzHooMe6qHX03AXjtVTd3h+uGsAejq7F9p3IWLB3rPmMYuwb5A5kSdW+RlLKB0phi0WKRH7XRVn91lVomnUxeOrAtx4XesFPOr9YQ2I7W93a7IBX1BnznOQ0LqoWoM1/bfmmdtxf58PSRLPsHB0oft/Lzjc2HBEd8TGoaz6TunsDt3R9TMtiUgn+znLug0Yq4vb8B2WP8w9eOFs5IOpdbOKKMGnJ+IrumWnnRkK/UCJg8i7juW+0j8FLhSP9YUaWLDBP8ONpAt/Bw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Xyr/qowOocFfcRuILMMTFJt5aqM2A4ZusM2gCevNmjs=;
- b=l6BN7HfGpXmrJe9959EKClqcmhYs1tuJScWHcW3oU3LvybMeCtXbmKvXeN8cp/dS+hmPhDbMq8ChaW+Zsj8j6UUyZXM4pEHSglzngBwGHHH9eskB2t02Ss2GVDBHMB0geIT9l+IrYMgUSTgHpDgdgXvM/McnecbUMhh5SbA7F5EFl0sOA3d0xDmeApBOIEAEmLLmgR/rFh3YLjoaoxz4xRi9nUDT5qtGdTCdWrnsvEhPEddpgToIpK12Dh3AHjFvNU6STx4Wxx+stRDWZcNMY/uUW5I+Z1Jy8c+6lAxh5y7eeZuZuePiYUHOmoYzWw5s/uqvKXCmncHd9l9IrwtHHA==
+ bh=HNnoR/uPHIy4YVAPn4R7G4uKae6bRpWCnu/bWXnaxB4=;
+ b=EHjbMaHm0Fbadj51Czxh5eLGKGQu9Tfz/gsBv4+F4EFMRQ9C6otMqLc6vWZb/nvClAK3QUWMhZ+jfHANFMOCnPqXCqdYbdflifeNNhTXsYEIbl672g22cGHaQGDglN5LnX6goIuLSBce0POwOncgW3TbMReeZBVRlyvPe7LOpeyXyVCA5bmSZSKx3ZBOey4ZR3zKFdXbHH8uVce+aVEQ+Cts55du+mL4A8WIHEwV3Xyq1BTTBLiBIDBh06NigZUBcdAfSaXcSqnJ2cA6xQ4vxwe4T3BU//HUPN98m2Ei4cyBgV6fgzZMBiuFehzXf4pRfjGPbt8XCFFnuNjjQAg2eA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Xyr/qowOocFfcRuILMMTFJt5aqM2A4ZusM2gCevNmjs=;
- b=H/zH3z2fEddYarRXWfuZFwFBkH285TJhg6v+PHYkyL1VXfglTdIlWicYFOYnmc9uokxulacmz1OqYX+4OuwBr3/RXF2DHFIR2COsrZYj6yyFNWMF6yvyYx5vKdv/J6YooAN0mSCZDI1bgW6eAIoL/3U3Mp7e7/BFvhe9wibfjus=
-Received: from DM5PR11MB0076.namprd11.prod.outlook.com (2603:10b6:4:6b::28) by
- PH0PR11MB4774.namprd11.prod.outlook.com (2603:10b6:510:40::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5857.23; Wed, 30 Nov 2022 04:48:35 +0000
-Received: from DM5PR11MB0076.namprd11.prod.outlook.com
- ([fe80::9b7a:7604:7a30:1953]) by DM5PR11MB0076.namprd11.prod.outlook.com
- ([fe80::9b7a:7604:7a30:1953%7]) with mapi id 15.20.5857.023; Wed, 30 Nov 2022
- 04:48:35 +0000
-From:   <Arun.Ramadoss@microchip.com>
-To:     <pavan.chebbi@broadcom.com>
-CC:     <andrew@lunn.ch>, <linux-kernel@vger.kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <vivien.didelot@gmail.com>,
-        <olteanv@gmail.com>, <linux@armlinux.org.uk>, <ceggers@arri.de>,
-        <Tristram.Ha@microchip.com>, <f.fainelli@gmail.com>,
-        <kuba@kernel.org>, <edumazet@google.com>, <pabeni@redhat.com>,
-        <richardcochran@gmail.com>, <netdev@vger.kernel.org>,
-        <Woojung.Huh@microchip.com>, <davem@davemloft.net>
-Subject: Re: [Patch net-next v1 11/12] net: dsa: microchip: ptp: add periodic
- output signal
-Thread-Topic: [Patch net-next v1 11/12] net: dsa: microchip: ptp: add periodic
- output signal
-Thread-Index: AQHZAxUMvqen7Moqn0qCt6IBoETj6K5VmgCAgAARrgCAATwoAA==
-Date:   Wed, 30 Nov 2022 04:48:35 +0000
-Message-ID: <a8d13528857151652f39ce840567fad8650139e7.camel@microchip.com>
-References: <20221128103227.23171-1-arun.ramadoss@microchip.com>
-         <20221128103227.23171-12-arun.ramadoss@microchip.com>
-         <CALs4sv1hZRRdLGCRMLZxi2GjJ2NHYu2o9j5oNf3+BpTZKpdS8g@mail.gmail.com>
-         <CALs4sv2+ureQ8JttKZf0-re40fd5PzfHREnJ709DGwotsySMsw@mail.gmail.com>
-In-Reply-To: <CALs4sv2+ureQ8JttKZf0-re40fd5PzfHREnJ709DGwotsySMsw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM5PR11MB0076:EE_|PH0PR11MB4774:EE_
-x-ms-office365-filtering-correlation-id: 7f6081a3-81af-4424-d697-08dad28e23ba
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: k5WJSvRJC9y167gCF4D6DozFcHp/FUdhL36UTuRgs5IVOhsLRCOWrj9iOG+LH9sMhGDKRkTPouKGMTezp/p/BHDZx/HxQsYC3dBDji8IfpVxRVnHeN5ux9+wZTkhiFYxBj+r+j6206OLGc+92CrFWENg/8IW98OyrokZUaA1ukvQ5Nwd3xauhX1dFno6ZWpGuFAsKuIbbY51S1Au8G7KU8deADrf+uXDAcyMZPOXc4iHs8sSOBoYHntVO1wb+olGMmJMvypTUlpM6XIaILFHDEdtW6rGfVqUJ0KrOp7E957a1GnirbcfuUyetQPSGWl+bE1NNQRVu90MxlwgL5IPwF4sY64NGCI76b6pee2+Hhvy9pr664xOIVOV0ae5ANsUvbuqCFUnCaiAViaoModxteOffrjkcVFI3X+EoZGNsalj4jZ30RzllagkZzfYdSPBICI52OziEIvStQPfDmE/lENL3KBhzpiTg9HoMmZN+eoPwYdFQyXbincPkAj6NfJbn1MWD23ychIGM+tQm9XrF++l4oxb1zIk+eRRpqqNQ4vhsTiuMoA54vob2MFNKIBz5i0zLV8OSXlQ7RxaP2M7hxFcQfA1r4XKfBoOYCbPJjlB6WX3CvPy9ga8q/6r8iotmLPaWvYMK1ZuRTdDhjGK053xnFJzRuoEpywmg9LfOde+jQZXnOnsSCePAm7PxMpTStxd7BWkJfmASC1jIdFiaBxi7Sw0mBJw+25jTbZp2Ks=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB0076.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(346002)(376002)(136003)(396003)(366004)(451199015)(5660300002)(7416002)(6916009)(54906003)(2616005)(26005)(6512007)(41300700001)(66946007)(91956017)(76116006)(66556008)(4326008)(8676002)(64756008)(66446008)(66476007)(122000001)(36756003)(38100700002)(8936002)(2906002)(38070700005)(4001150100001)(186003)(71200400001)(86362001)(316002)(6506007)(6486002)(53546011)(83380400001)(478600001)(99106002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UUg1eUFuVTlpZ2QwK3d3NDZkdDlQb2FzaUM2YjBFaTcxK1ZJSWREUlMzTk1l?=
- =?utf-8?B?MWlsZlA1RXhIbG9NMmFSVTlIOGJzdnZOckI4dWRsLytIMUxlTk5NK1VyMUtY?=
- =?utf-8?B?elBIMHJoSU9ZYnhGV3hScE5UQ2Z2ZVJnRlVaN1o5aERBRUZsNDJNN2g4UXdD?=
- =?utf-8?B?dnlHbTFHMldGQklTSmxZUDRpV09zc1hPZWh0KzhqQnRwZUh0TG1hWkdrZTV6?=
- =?utf-8?B?Tm1tSVQ4Y29tMHNwRm1pL2EyQ0w0WUtqWTdFR2ZXWVlqTmtSaFFKYlFIRzll?=
- =?utf-8?B?M21Dbm9FZUhFaDQ2dWNKaUo1TWhmc01Oa3hHeDBkREUveDdHV012R0F3a05i?=
- =?utf-8?B?aEp3bHhrUVR2NFJ3SXA4RWJZVklXdlhzc3JuZnlCeGtqdGZmdktGQVZkYkZI?=
- =?utf-8?B?MGR3RFdnemtzQXloVmRvZVB6amVJT29jTENPUDg4UGgwRU1GUGlNRUt0QVZ2?=
- =?utf-8?B?NDhxSmNsVVJlU0d3TlFLK0FXRGJuNytMNk92NjBrekNMS0g0L0J2cHl0YnFw?=
- =?utf-8?B?TWRDeUlkUkxYUHJmV1hwQ1AybVRXbllQTGx3a2xpNE05RmU0OHdUVUNPcndm?=
- =?utf-8?B?ZCs3eHIxM1lWdC84QzZ3RTRTME14OExLaFJuMXM0K25UbVZ2SmYyWlZCNGpp?=
- =?utf-8?B?T0FEZm0yei82TTlBOUJSMHhjRXcvWFkzdXA1K2h5SndMM04rNS93Y2orWXIv?=
- =?utf-8?B?YWNsN2duNzIzY2V4cXVuYmFiSTFKUTBmT1NTdDZOVHl6MlYrdURSV0lublVV?=
- =?utf-8?B?WWdFZGM3MjBsSXdZVHNaekwwOVhlQS9yM3NldjBVTFQ0b0l0NGRkbXpHMXZM?=
- =?utf-8?B?N0MzeGhxUG1yRWdYb09zcVBsOTNSRFBhc2IyYm9UcFNQNXlXUWxwcm5saDQ4?=
- =?utf-8?B?NjBzZ0ovWDl3NWpCTEFVS1IxMmpNM0FsU3F3UXJnY1FoaHNKQXFxTmU1NHQv?=
- =?utf-8?B?cXV3VGJ1RDdXUkJIZ3VNV0IrT01yRzRqcHl2S1BtTytNOGVIVnY0cStaeGdQ?=
- =?utf-8?B?K0xUQmU3TWcwdjVNTm5laTJld3R5NGtOYy9GZEg2Rk8yUHF3YXBNYWdNODZ2?=
- =?utf-8?B?ems5UVdRenB6WHA5TVRyK1gzK2hPQlIzendEcVF1Wnd0aCt5Nms4TVNwNXJE?=
- =?utf-8?B?RU9uL2tRY3VNbGxMNDdtOXVHdExoZ0RCc28zbFcvUzJyZ1FTM2R0OU5YYXJq?=
- =?utf-8?B?ck95NmhONjZiNzlEaVNBVnVZSzBuazNSc1EyVEsvSHRQbzEwSGFEakVNVS80?=
- =?utf-8?B?TU1zd3NQWWxGUWJLNmtjMlNqVTUyUmVUK2IrNDFvZTU2UmpzZHVzUlg4Qkp1?=
- =?utf-8?B?Qm8wUVZWbml3ZGFrZThWbjdnSmhmUU9iY0c1RTR3S1hYOFZEZDRYSmxvbVB2?=
- =?utf-8?B?QmgxRUlJazV5U2pSLzVpT0UyWWs4YjJXN0pzVkdZdy9VWnJ2NWJqM3VpNEE3?=
- =?utf-8?B?TUpuRldlMWVOV29ia0VrZ2hReUVxYnR4QkRJZWhhcmxNZFUvTDVCSUpuRjFW?=
- =?utf-8?B?V0F1WVFSdkUza0N3ZG0vMHc1OXFHL3V6UVRBQXRCMmZxUEhtUE5PTCtGc3Yr?=
- =?utf-8?B?QVpyV0NDU3FXKzIxV2RYalg3SU1jemJSekovYnBCdjdFN2JZcVN6a2FUNld1?=
- =?utf-8?B?dXZkN0I4akxUajJrNTgxUS9hbGF1bWQzVXVYNk5aVW5YVi9XYW52dUFVRG51?=
- =?utf-8?B?cnFUMlZYMm4zT3ArdkY4YzJwbDhuVUNub0lMUVdZM3FNbXJ4U3ZGeUlwY1NK?=
- =?utf-8?B?cTdKbURkd2lYYi9YU1JIWmY3TEkvZ1hzUlhQbWZPZmZBN1NKZlhCU0d4U0NU?=
- =?utf-8?B?RFp3dFlYNkRHUHRtak1MN2tDek56MFNjb1RodjRDelhNNXRBTU0rN2lrZm1V?=
- =?utf-8?B?QUhWVm55Z3FZcXgzRERnM255ZEFQUHlxVlZva1BQS2ZxODFJWTUrRW1rQXg3?=
- =?utf-8?B?bUNlUGRQQ2svYWF4R3ZiUmhDTXRMRERUNTI3MDd3MUs2WEdnWGp0QmZmTHg4?=
- =?utf-8?B?eldjMUgzb1RDZ3B4RXJoV2FjdzdLSGhZam1Lblg1WHIwZGZoQWpxUEJRdGVh?=
- =?utf-8?B?V2R5M1k0TFJyYkNSTElNeXYxeGRUNHkxenVUNk9wNjhZUE0vdlBtcng1Tzh0?=
- =?utf-8?B?M0JqNUdzZ3lhTUZaSFp6c20rYm1qcGkwelcwOWtnMFFlREdidHEyQmVybVQ3?=
- =?utf-8?Q?PBEsQIieVVvn0S+9/X/Bd0s=3D?=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+ by IA1PR11MB6121.namprd11.prod.outlook.com (2603:10b6:208:3ef::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Wed, 30 Nov
+ 2022 04:52:31 +0000
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::1564:b428:df98:96eb]) by MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::1564:b428:df98:96eb%6]) with mapi id 15.20.5857.023; Wed, 30 Nov 2022
+ 04:52:31 +0000
+Date:   Wed, 30 Nov 2022 12:49:24 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        <linux-kernel@vger.kernel.org>, <john.stultz@linaro.org>,
+        <sboyd@kernel.org>, <corbet@lwn.net>, <Mark.Rutland@arm.com>,
+        <maz@kernel.org>, <kernel-team@meta.com>, <neeraju@codeaurora.org>,
+        <ak@linux.intel.com>, <zhengjun.xing@intel.com>,
+        Chris Mason <clm@meta.com>, John Stultz <jstultz@google.com>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH clocksource 1/3] clocksource: Reject bogus watchdog
+ clocksource measurements
+Message-ID: <Y4bg1H/HLRLfucNO@feng-clx>
+References: <Y3rMc2VbgVLHN9db@feng-clx>
+ <20221121181449.GA3774542@paulmck-ThinkPad-P17-Gen-1>
+ <Y3zxB6r1kin8pSH1@feng-clx>
+ <20221122220712.GP4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y32HFE+BaATh9+l/@feng-clx>
+ <20221123212348.GI4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y4QZzzk+FdGj4AXm@feng-clx>
+ <20221129192915.GD4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y4az+FT5YjpAWjZc@feng-clx>
+ <20221130041206.GK4001@paulmck-ThinkPad-P17-Gen-1>
 Content-Type: text/plain; charset="utf-8"
-Content-ID: <0EFFE1D35C679E49B99DDF66BDED52DC@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221130041206.GK4001@paulmck-ThinkPad-P17-Gen-1>
+X-ClientProxiedBy: SI1PR02CA0020.apcprd02.prod.outlook.com
+ (2603:1096:4:1f4::9) To MN0PR11MB6304.namprd11.prod.outlook.com
+ (2603:10b6:208:3c0::7)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6304:EE_|IA1PR11MB6121:EE_
+X-MS-Office365-Filtering-Correlation-Id: e1614405-e969-4b07-646c-08dad28eafba
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: c7dOEwvyIALBefshXQrs8bRkSMybBgXrEc+wOrbK7pACMpGKnVClgqoVnu/buFWH5HLgIoNonWtFWvSMGSIeHP0SnxudZV8iXmzoevK3uHkd2qDJfvM0hINY7FjnClo7dWfPHPCZ4Ch2p7J1T62XJ4fsgfrjhs/f5L5BFruIzBSrdzsrOdUg0NnUI3Zm2lqPJBweuV2PfAjIaK3Fwr7kn7owJCW6ThzudAT+jU624UMm68gR3rjrSnWnQbHGj+lZCIfLN7uT0biu7OiBtzvZc+fdPSFqwKUi/e+LIjyfyFMt8OyoQmRzm1aXorOPPsY3a0rKaoCWx4c3wyuI84IsnSz396LVM2YkqcL6uEd4O0ZTs0XqwHOch1K9ze+ENrOEYJxF5Sbh3YiKFMrdL3xXpO4U7ElX5JItiYwij0Sv/TwtnxTc9YeFERO1LXmZY2FMWkSEmV0GXTi4i8L8HSFNAlJFdbEfrwxk3XPwHa6sI27mvrXvOxCFSiaffm5OHc3QAgzt15UXeRtr5cIXV7smCM/D1QeNBR3KPJJCdtYIk5a6hu5BrvYCk7NUg6RwnoJPHsKXhL3i92fRaJdBeiKKD3O+H39VpuyUC8w/8BPutdYadMAlMgrKdbPSQso3kYtu25/qis6qiwwypApIPrdi29319BiGvYRzaKKSvBrfOZg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(346002)(366004)(39860400002)(136003)(376002)(451199015)(83380400001)(2906002)(6486002)(966005)(41300700001)(33716001)(186003)(478600001)(6666004)(26005)(86362001)(6506007)(82960400001)(38100700002)(7416002)(44832011)(8676002)(4326008)(8936002)(54906003)(6916009)(9686003)(6512007)(5660300002)(66556008)(316002)(66476007)(66946007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VzdPUlQ0cXAyNHhheXhBL3duWWcvYzliVVViWm55TDdQM2pHdmdLUEVYUEJh?=
+ =?utf-8?B?blpxQXEwTGIyTFFlMzM1QVhMRDZLeVBONVJrNmxIZ215WWNNYXN4eTFSSUg2?=
+ =?utf-8?B?QjBjMVU3VWFLQ3NQdklHK0FnL2VJMnV1TG5lcElkbkZIeXMyNFovZjNNM0Nq?=
+ =?utf-8?B?QmtIcWdVbmhPakxRYk9aSHRHTk85TjlyVC9XcDd4NURlbUFQY2dhcDZXSTFW?=
+ =?utf-8?B?WkpMRHFMdjNkbWpHVlVLNnFpZjZTY3JWWXVZS3U2ZGFKdmF6ek9oc0h1RGhk?=
+ =?utf-8?B?R09jeHNiRXdodkJEUCtscDBYREVFT1RTT3N6OFZZYi9nSitLY2YyUkdUTS9U?=
+ =?utf-8?B?YW9zRGc3UjFPdk4xQ2VvMmlkRlpxekhxaVJLUzdpQmVwalZsdEZ4YjNLcU96?=
+ =?utf-8?B?WkZKZnk5cVVnL3FsY0N3a2d2RTlTTi9UOXMrM3p0ZXg4cStSTWdqdlpOU2ZS?=
+ =?utf-8?B?a1F4cWpJSlh5VnFqZXB1bFNmWDRaT1NvcGVBTzFQd0lDcFpZUjJWUmVCdmVE?=
+ =?utf-8?B?UjZmN0FZWFVMYXJOaVV5MTJQMURSbzJ6ditkek1tYm82WHRzOW1nd2pDN0VC?=
+ =?utf-8?B?ZFdaQktkUEhmZUtzUnQ0YUJ4NTFsNG9NczJJU2hMTUxmVHhyeHBzQU9MODZO?=
+ =?utf-8?B?N3dHS0Q0aXRUUDFFdm5wVUlDZ2k2SnpYRk5KbEdZL2k4SzRwWDZEa1RRNmV6?=
+ =?utf-8?B?QWgzVFN6LzQ0VTNPdnhXSnd0alVsVFY3S091Y3M3amZnb3JDTkNzYVMwa3hJ?=
+ =?utf-8?B?OUg2b0Eybys5WXJMODJIQ1o5NHgwWEludmU1UDRJcWswa0U5N3M2QS9hcG9U?=
+ =?utf-8?B?Z1ZuU0pOMy9qWXljckc1MmlZOTNDZFQrbFg5VWJtTnJDVHBuN2F2cUw3RElW?=
+ =?utf-8?B?VzVRVDVGbG1xM2o5ZHJWekFZYWJkTG1rYVQyZlhsZVo0Q0E5eE1OQ0VkRThF?=
+ =?utf-8?B?bWtDckZLcFg1aU5FWlNldVpDTThTcnhESlptMGlZeml1QjZ6bmZNVHpWZlNW?=
+ =?utf-8?B?TUlLZEVWWDcwUi9kc0I1VGxBTEhqYXlucmQvTFE4T1dBb0lja2ttTDk0OHZk?=
+ =?utf-8?B?VXhnRC9WckZEYndMdVpFdXVnNjlueVpHbXVoVzEwSC9vWEpJMFFkeVJVS3R5?=
+ =?utf-8?B?aVQ3S2l3cjBsNDNldHR6d3NoZVBDMUg5c2tnUEtJbzVHK0pzYVA3M2E1UDIz?=
+ =?utf-8?B?VVZ3cHc4V2tuV2dIaWI1cWxZNmZOU2FWRnM5OUgvS3JzRFRkZnBEamUyaDFD?=
+ =?utf-8?B?Q1ZBWnlUTmNIaGNXdndsZXZRTVQxWDd4SUV4VjI5TEU5SDZQWmFGNWkzWGMw?=
+ =?utf-8?B?YXp5SVJNYWMxUlVQdnR6a2FLbW9jUmhSNU45ZUY2TFB3Q1JYK3NxWTFqSzFq?=
+ =?utf-8?B?RkZUZW1zYWNRVVZuV3M3alNxNExrUS8vN3lRL3FXYXlCeGxnaDJ6V2FMVFBB?=
+ =?utf-8?B?T0NlMHhzOXBZUExoRkQ1NGZlNllWQndlWloyRjNUTlFoRC9saUROZlhQakNz?=
+ =?utf-8?B?eDVFMWJ6MnBmaW5qanp2RFBMRk1RaDgxUzRNbEJkUjVzOG02MjJQbU5pazlC?=
+ =?utf-8?B?aFN2N1UyY0w3bHVEQU5PdXo1WVkvdWd4bGVtdERkRk5zeFhBQjZkNitMdkJD?=
+ =?utf-8?B?a3MxVmpILzdIN0hLQkVLbThUMFo4MXkzMnA5Rjd6M0F6SklHajVCazQwMWZi?=
+ =?utf-8?B?bVczVVp6ck1kZlZoUnBaTGdLY1RhWUVtUDB3WS8xbGZDbytkQWxhcGh5RXZT?=
+ =?utf-8?B?SmJpaEltZ2Zkb1IvRzRjMjJEU01GU0FKaFdmdU02MDc3NE9LL2RzMEdNUS9q?=
+ =?utf-8?B?N200Y0xkWVFqckhtUWRYemd3dTY1RSs5VVNReDNsVnhKa3RZWjkwc3FTRi8x?=
+ =?utf-8?B?Ym1nWkVZc09MbVdkRGpaaVFVUHVJbkFlRFU4TEZ0Z1hncHcrT3hmRUUwYTB6?=
+ =?utf-8?B?cDc0RG4rRzU2d1U5cU9KYTR6WWV3cnRJY3Y1V2NOelRoMmxxTldpZUVYQ1lE?=
+ =?utf-8?B?MmJ3UkoyUlA2cUxJNmtDZktVY1Y5K1BvbW00QWpwQS9ibWg2d0JhcDZUWGFT?=
+ =?utf-8?B?MVpjeTRCOEk0V2cxenc1YlJZc2k0azhKRHBuZU02Skl4UTdBS290T0ZPdXlM?=
+ =?utf-8?Q?9BrynK5C9Rcv5tIuFrnnA1kQR?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: e1614405-e969-4b07-646c-08dad28eafba
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB0076.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f6081a3-81af-4424-d697-08dad28e23ba
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2022 04:48:35.2357
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 04:52:31.4573
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: T1B1EqzRDWMGEUoLGAScdAZYbiVnHQFjAgoTpmCHdFY+aRcafmIMQ7eEvR/kg4noRq8TfWxLFqh/sBam2e+3ZJUZ6/MnZxGvl7+b+ErHoZU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4774
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tJrqEeXMxZk5dNFUWZCtErSbcM2pcS6DnBp8bRqga6aMa0vldxUmUnmuysZVU/zfTViCUL8bvEn1NbnUo6j5Rg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6121
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIyLTExLTI5IGF0IDE1OjI3ICswNTMwLCBQYXZhbiBDaGViYmkgd3JvdGU6DQo+
-IE9uIFR1ZSwgTm92IDI5LCAyMDIyIGF0IDI6MjMgUE0gUGF2YW4gQ2hlYmJpIDwNCj4gcGF2YW4u
-Y2hlYmJpQGJyb2FkY29tLmNvbT4gd3JvdGU6DQo+ID4gDQo+ID4gT24gTW9uLCBOb3YgMjgsIDIw
-MjIgYXQgNDowNSBQTSBBcnVuIFJhbWFkb3NzDQo+ID4gPGFydW4ucmFtYWRvc3NAbWljcm9jaGlw
-LmNvbT4gd3JvdGU6DQo+ID4gDQo+ID4gPiArc3RhdGljIGludCBrc3pfcHRwX2VuYWJsZShzdHJ1
-Y3QgcHRwX2Nsb2NrX2luZm8gKnB0cCwNCj4gPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAg
-c3RydWN0IHB0cF9jbG9ja19yZXF1ZXN0ICpyZXEsIGludCBvbikNCj4gPiA+ICt7DQo+ID4gPiAr
-ICAgICAgIHN0cnVjdCBrc3pfcHRwX2RhdGEgKnB0cF9kYXRhID0gcHRwX2NhcHNfdG9fZGF0YShw
-dHApOw0KPiA+ID4gKyAgICAgICBzdHJ1Y3Qga3N6X2RldmljZSAqZGV2ID0gcHRwX2RhdGFfdG9f
-a3N6X2RldihwdHBfZGF0YSk7DQo+ID4gPiArICAgICAgIHN0cnVjdCBwdHBfcGVyb3V0X3JlcXVl
-c3QgKnJlcXVlc3QgPSAmcmVxLT5wZXJvdXQ7DQo+ID4gPiArICAgICAgIGludCByZXQ7DQo+ID4g
-PiArDQo+ID4gPiArICAgICAgIHN3aXRjaCAocmVxLT50eXBlKSB7DQo+ID4gPiArICAgICAgIGNh
-c2UgUFRQX0NMS19SRVFfUEVST1VUOg0KPiA+ID4gKyAgICAgICAgICAgICAgIGlmIChyZXF1ZXN0
-LT5pbmRleCA+IHB0cC0+bl9wZXJfb3V0KQ0KPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
-cmV0dXJuIC1FSU5WQUw7DQo+ID4gDQo+ID4gU2hvdWxkIGJlIC1FT1BOT1RTVVBQID8gSSBzZWUg
-c29tZSBvdGhlciBwbGFjZXMgd2hlcmUgLUVPUE5PVFNVUFANCj4gPiBpcw0KPiA+IG1vcmUgYXBw
-cm9wcmlhdGUuDQo+ID4gDQo+ID4gPiArDQo+ID4gPiArICAgICAgICAgICAgICAgbXV0ZXhfbG9j
-aygmcHRwX2RhdGEtPmxvY2spOw0KPiA+ID4gKyAgICAgICAgICAgICAgIHJldCA9IGtzel9wdHBf
-ZW5hYmxlX3Blcm91dChkZXYsIHJlcXVlc3QsIG9uKTsNCj4gPiA+ICsgICAgICAgICAgICAgICBt
-dXRleF91bmxvY2soJnB0cF9kYXRhLT5sb2NrKTsNCj4gPiA+ICsgICAgICAgICAgICAgICBicmVh
-azsNCj4gPiA+ICsgICAgICAgZGVmYXVsdDoNCj4gPiA+ICsgICAgICAgICAgICAgICByZXR1cm4g
-LUVJTlZBTDsNCj4gDQo+IE9LIEkgcmVhbGx5IG1lYW50IGhlcmUuDQoNCk9rLiBJIHdpbGwgdXBk
-YXRlIC1FSU5WQUwgdG8gLUVPUE5PVFNVUFAuDQoNCj4gDQo+ID4gPiArICAgICAgIH0NCj4gPiA+
-ICsNCj4gPiA+ICsgICAgICAgcmV0dXJuIHJldDsNCj4gPiA+ICt9DQo+ID4gPiArDQo+ID4gPiAg
-LyogIEZ1bmN0aW9uIGlzIHBvaW50ZXIgdG8gdGhlIGRvX2F1eF93b3JrIGluIHRoZSBwdHBfY2xv
-Y2sNCj4gPiA+IGNhcGFiaWxpdHkgKi8NCj4gPiA+ICBzdGF0aWMgbG9uZyBrc3pfcHRwX2RvX2F1
-eF93b3JrKHN0cnVjdCBwdHBfY2xvY2tfaW5mbyAqcHRwKQ0KPiA+ID4gIHsNCj4gPiA+IEBAIC01
-MDgsNiArODIzLDggQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBwdHBfY2xvY2tfaW5mbw0KPiA+ID4g
-a3N6X3B0cF9jYXBzID0gew0KPiA+ID4gICAgICAgICAuYWRqZmluZSAgICAgICAgPSBrc3pfcHRw
-X2FkamZpbmUsDQo+ID4gPiAgICAgICAgIC5hZGp0aW1lICAgICAgICA9IGtzel9wdHBfYWRqdGlt
-ZSwNCj4gPiA+ICAgICAgICAgLmRvX2F1eF93b3JrICAgID0ga3N6X3B0cF9kb19hdXhfd29yaywN
-Cj4gPiA+ICsgICAgICAgLmVuYWJsZSAgICAgICAgID0ga3N6X3B0cF9lbmFibGUsDQo+ID4gPiAr
-ICAgICAgIC5uX3Blcl9vdXQgICAgICA9IDMsDQo+ID4gPiAgfTsNCj4gPiA+IA0K
+On Tue, Nov 29, 2022 at 08:12:06PM -0800, Paul E. McKenney wrote:
+> On Wed, Nov 30, 2022 at 09:38:00AM +0800, Feng Tang wrote:
+> > On Tue, Nov 29, 2022 at 11:29:15AM -0800, Paul E. McKenney wrote:
+> > [...]
+> > > > > > IIUC, this will make TSC to watchdog HPET every 500 ms. We have got
+> > > > > > report that the 500ms watchdog timer had big impact on some parallel
+> > > > > > workload on big servers, that was another factor for us to seek
+> > > > > > stopping the timer.
+> > > > > 
+> > > > > Another approach would be to slow it down.  Given the tighter bounds
+> > > > > on skew, it could be done every (say) 10 seconds while allowing
+> > > > > 2 milliseconds skew instead of the current 100 microseconds.
+> > > > 
+> > > > Yes, this can reduce the OS noise much. One problem is if we make it
+> > > > a general interface, there is some clocksource whose warp time is
+> > > > less than 10 seconds, like ACPI PM_TIMER (3-4 seconds), and I don't
+> > > > know if other ARCHs have similar cases.
+> > > 
+> > > Maybe a simpler approach is for systems with such high sensitivity to
+> > > OS noise to simply disable the clocksource watchdog.  ;-)
+> > 
+> > That's what the reported did, test with and without "tsc=reliable"
+> > parameter :)
+> > 
+> > And AFAIK, many customers with big server farms hate to add more
+> > cmdline parameters when we suggested so.
+> 
+> It can be surprisingly hard.  It is sometimes easier to patch the kernel
+> to change the default. 
+
+Indeed, sometimes we were askd to provide patch than cmdline parameters :)
+
+> Part of the problem is getting the right set
+> of command-line parameters associated with the right versions of the
+> kernel in the not-uncommon case where different portions of the server
+> farm are running different versions of the kernel.
+> 
+> > > > > > Is this about the concern of possible TSC frequency calibration
+> > > > > > issue, as the 40 ms per second drift between HPET and TSC? With 
+> > > > > > b50db7095fe0 backported, we also have another patch to force TSC
+> > > > > > calibration for those platforms which get the TSC freq directly
+> > > > > > from CPUID or MSR and don't have such info in dmesg:
+> > > > > >  "tsc: Refined TSC clocksource calibration: 2693.509 MHz" 
+> > > > > > 
+> > > > > > https://lore.kernel.org/lkml/20220509144110.9242-1-feng.tang@intel.com/
+> > > > > > 
+> > > > > > We did met tsc calibration issue due to some firmware issue, and
+> > > > > > this can help to catch it. You can try it if you think it's relevant.
+> > > > > 
+> > > > > I am giving this a go, thank you!
+> > > > 
+> > > > Thanks for spending time testing it!
+> > > 
+> > > And here are the results from setting tsc_force_recalibrate to 1:
+> > > 
+> > > $ dmesg | grep -E 'calibrat|clocksource'
+> > > [    5.272939] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1910969940391419 ns
+> > > [   16.830644] clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 76450417870 ns
+> > > [   17.938020] clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x36a8d32ce31, max_idle_ns: 881590731004 ns
+> > > [   24.548583] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275000 ns
+> > > [   49.762432] clocksource: Switched to clocksource tsc-early
+> > > [   50.076769] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+> > > [   55.615946] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x36a8d32ce31, max_idle_ns: 881590731004 ns
+> > > [   55.640270] clocksource: Switched to clocksource tsc
+> > > [   56.694371] tsc: Warning: TSC freq calibrated by CPUID/MSR differs from what is calibrated by HW timer, please check with vendor!!
+> > > [   56.724550] tsc: Previous calibrated TSC freq:        1896.000 MHz
+> > > [   56.737646] tsc: TSC freq recalibrated by [HPET]:     1975.000 MHz
+> > 
+> > Looks like there is really something wrong here. I assume the first
+> > number '1896 MHz' is got from CPUID(0x15)'s math calculation.
+> 
+> How about this from earlier in that same console?
+> 
+> [    0.000000] efi: EFI v2.80 by American Megatrends
+> [    0.000000] efi: ACPI=0x6f569000 ACPI 2.0=0x6f569014 TPMFinalLog=0x6f56b000 SMBIOS=0x753e1000 SMBIOS 3.0=0x753e0000 MEMATTR=0x62176018 ESRT=0x64bd1018 TPMEventLog=0x58737018
+> [    0.000000] [Firmware Bug]: TPM Final Events table missing or invalid
+> [    0.000000] SMBIOS 3.5.0 present.
+> [    0.000000] DMI: Quanta Grand Teton 1F0TUBZ0007/Grand Teton MB, BIOS F0T_1A15 08/25/2022
+> [    0.000000] tsc: Detected 1900.000 MHz processor
+> [    0.000000] tsc: Detected 1896.000 MHz TSC
+
+I'm still not sure, but it's likely from CPUID(0x15). I met cases
+that even severs of same generations get their tsc frequence from
+different sources.
+
+I locally have debug patch to check it:
+
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index cafacb2e58cc..82ddb4b0529a 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -654,8 +654,11 @@ unsigned long native_calibrate_tsc(void)
+ 	 * frequency and is the most accurate one so far we have. This
+ 	 * is considered a known frequency.
+ 	 */
+-	if (crystal_khz != 0)
++	if (crystal_khz != 0) {
++		printk("tsc: using CPUID[0x15] crystal_khz= %d kHz ebx=%d eax=%d\n",
++		crystal_khz, ebx_numerator, eax_denominator);
+ 		setup_force_cpu_cap(X86_FEATURE_TSC_KNOWN_FREQ);
++	}
+ 
+ 	/*
+ 	 * Some Intel SoCs like Skylake and Kabylake don't report the crystal
+@@ -668,6 +671,7 @@ unsigned long native_calibrate_tsc(void)
+ 		cpuid(0x16, &eax_base_mhz, &ebx, &ecx, &edx);
+ 		crystal_khz = eax_base_mhz * 1000 *
+ 			eax_denominator / ebx_numerator;
++		printk("tsc: using CPUID[0x16] base_khz=%d kHz\n", crystal_khz);
+ 	}
+ 
+ 	if (crystal_khz == 0)
+
+This remind me that maybe we can add a line in dmesg telling people
+which exact soure that the TSC frequency comes from (CPUID, MSR or
+calibration from HW timers like HPET/PM_TIMER).
+
+> > I thinks 2 more things could be try:
+> > 
+> > * add "nohpet" to the cmdline, so the tsc_force_recalibrate should use
+> >   ACPI PM_TIMER to do the calibration, say a third-party check.
+> 
+> OK, getting things teed up for TSC recalibration and nohpet.
+> 
+> > * If the system don't have auto-adjusted time setting like NTP, I
+> >   guess the system time will have obvious drift comparing to a normal
+> >   clock or a mobile phone time, as the deviation is about 4%, which
+> >   is 2.4 minutes per hour.
+> 
+> No ntpd, but there is a chronyd.
+> 
+> I will let you know what happens with HPET disabled and TSC recalibration
+> enabled.
+
+Thanks!
+
+- Feng
+
+> 							Thanx, Paul
