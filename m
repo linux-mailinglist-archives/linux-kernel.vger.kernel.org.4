@@ -2,175 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C6C63E063
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:59:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CBD63E064
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiK3S66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:58:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
+        id S230136AbiK3S7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:59:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiK3S6v (ORCPT
+        with ESMTP id S229840AbiK3S7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:58:51 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9738630B
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:58:50 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id h11so21360757wrw.13
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:58:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=87ENfYXIDebjZ9OJXAGQbQFZb77jhLjiCr56B3zGCYY=;
-        b=awR/NO0ZrJmArjac1OjpJ/hysKu0BXmmhK8kas2lLXQ+lsZruBp/T+e8hBth93qQrB
-         d7rk8OH4vXzbf56ZmY4FgdUQ2SHYRoh2mNK64pFP3pqZf9WZtrdKJFyeU8Ku4xTNrJ3E
-         flLan7iV9TCIELgZkoDeTCLcslMoavpnvel7apsXmboEtZ/maaQMY3yPlmhrPcfPKZ8N
-         a1uJ518MPpe+qGw7dfbOQD7WaRRgoNFax++FUY5/7vH4VykzKmLN/EG6T7kGN9RnuT53
-         3+EYKu30lgSfSFDH238akOIpU//OgoPq3P/KWU27lenRibpXgP84HvhlT/Lhyk/e4cjW
-         Nz0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=87ENfYXIDebjZ9OJXAGQbQFZb77jhLjiCr56B3zGCYY=;
-        b=T+IbpA77W5K0VzZNhJzzIsliWGXrTk9sPMPUEScI3q3tKBBdIblEoFR1thzkMdzJ4B
-         C0M+QbEi5/GMuqvLUq1+sP8g2rKR4qyYFASyJpER0mKw3ASX+fXresoX73FtWaLwqO4f
-         pWHP9zFv2ip8azNQXfOFWJejvHwuFgvDPkr7pnUdO+ZQ979YqE/Ivav4mtWhwUfjOruS
-         yRPVJjP37LoRH4juwJC2y1Y1Y8xunZ1FoHLXFyZlROq/yK7vhb4fVQjmGN7qFpwzo7Qf
-         NsBlF9o/ZkshvTFhP6kJO0tFYN+FOxzCXgqnVzp3qzoPZWLIyZKPFUQHcoFz4y4nzax2
-         epOQ==
-X-Gm-Message-State: ANoB5pknrWg+OeLBSLYNH49A/FOgNtKUlaNVEfdmNZEQBiSzvu4Lvgkp
-        vnl4bO0WO6dpOoqWFjKUECuiMlJP7jKPrlFHTljTvQ==
-X-Google-Smtp-Source: AA0mqf6pNJJwFRwvQ9Nbbx/FXqmlOjbohE6MouQre6Ex1OPGnWlI+tSuTGt1dEi3R3LZe0wMGhbdS/xShyGraTWY2ls=
-X-Received: by 2002:adf:e2c9:0:b0:241:db86:176d with SMTP id
- d9-20020adfe2c9000000b00241db86176dmr28759168wrj.40.1669834729092; Wed, 30
- Nov 2022 10:58:49 -0800 (PST)
+        Wed, 30 Nov 2022 13:59:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80BF54446
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:59:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43EC261D41
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 18:59:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DCF1C433C1;
+        Wed, 30 Nov 2022 18:59:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669834742;
+        bh=3TD1S3j9pGxF2WpgRYYO4Ir4fNQvcwgiHdn38dgmJmo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IBKlEJWVE64uTEoiocu6EdVYn+nHHv5GLr/eSq1E0BoTx2zhNrMxlde8mWA4/CEE9
+         tSkXF4g6jdhw3GJh2aEwaTzQzTlQBVZkZb9WPeubQ44OxfQYDsgQG6AdvfKxAD4/Ay
+         t5g1gME4rzxlwwXNpg9eUkgiSNExMfgLL0zpdsAp1WhwkQxNM0GJ7b2mQB1HeOiQiB
+         qe5lmQ189cKLjBmn0uHie/PziNW8xfQ5zgMfKVaCmOsbxUrR/xLJqH9QmfJifCkqF8
+         eSATxDTOTsS0+8/Nyf7VyIspTP2LL0WF95CXRoWvoc1Oyq1amPo/X1cLDcMI7GWaKx
+         q26s2gbTrTxUA==
+Date:   Wed, 30 Nov 2022 18:59:01 +0000
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Sultan Alsawaf <sultan@kerneltoast.com>
+Subject: Re: [PATCH] random: align entropy_timer_state to cache line
+Message-ID: <Y4en9fSll1vSY4Bt@gmail.com>
+References: <20221130020815.283814-1-Jason@zx2c4.com>
+ <Y4biVHVPhVyVJ6Fc@sol.localdomain>
+ <Y4cqpwwbNBKhdidq@zx2c4.com>
 MIME-Version: 1.0
-References: <1668411720-3581-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1669310088-13482-1-git-send-email-renyu.zj@linux.alibaba.com> <1669310088-13482-6-git-send-email-renyu.zj@linux.alibaba.com>
-In-Reply-To: <1669310088-13482-6-git-send-email-renyu.zj@linux.alibaba.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 30 Nov 2022 10:58:37 -0800
-Message-ID: <CAP-5=fV0WSTK=MT6K2nqsqYT6xCTg7Pv_rXahHFeRhV0ZHCiEQ@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] perf vendor events arm64: Add PE utilization
- metrics for neoverse-n2
-To:     Jing Zhang <renyu.zj@linux.alibaba.com>
-Cc:     John Garry <john.g.garry@oracle.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4cqpwwbNBKhdidq@zx2c4.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 9:15 AM Jing Zhang <renyu.zj@linux.alibaba.com> wrote:
->
-> Add PE utilization related metrics.
->
-> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
-> ---
->  .../arch/arm64/arm/neoverse-n2/metrics.json        | 45 ++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
->
-> diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
-> index 23c7d62..7b54819 100644
-> --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
-> +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
-> @@ -189,5 +189,50 @@
->          "MetricGroup": "Branch",
->          "MetricName": "branch_miss_pred_rate",
->          "ScaleUnit": "100%"
-> +    },
-> +    {
-> +        "MetricExpr": "instructions / CPU_CYCLES",
-> +        "PublicDescription": "The average number of instructions executed for each cycle.",
-> +        "BriefDescription": "Instructions per cycle",
-> +        "MetricGroup": "PEutilization",
-> +        "MetricName": "ipc"
-> +    },
+On Wed, Nov 30, 2022 at 11:04:23AM +0100, Jason A. Donenfeld wrote:
+> > > diff --git a/drivers/char/random.c b/drivers/char/random.c
+> > > index 67558b95d531..2494e08c76d8 100644
+> > > --- a/drivers/char/random.c
+> > > +++ b/drivers/char/random.c
+> > > @@ -1262,7 +1262,7 @@ static void __cold entropy_timer(struct timer_list *timer)
+> > >  static void __cold try_to_generate_entropy(void)
+> > >  {
+> > >  	enum { NUM_TRIAL_SAMPLES = 8192, MAX_SAMPLES_PER_BIT = HZ / 15 };
+> > > -	struct entropy_timer_state stack;
+> > > +	struct entropy_timer_state stack ____cacheline_aligned;
+> > 
+> > Several years ago, there was a whole thing about how __attribute__((aligned)) to
+> > more than 8 bytes doesn't actually work on stack variables in the kernel on x86,
+> > because the kernel only keeps the stack 8-byte aligned but gcc assumes it is
+> > 16-byte aligned.  See
+> > https://lore.kernel.org/linux-crypto/20170110143340.GA3787@gondor.apana.org.au/T/#t
+> > 
+> > IIRC, nothing was done about it at the time.
+> > 
+> > Has that been resolved in the intervening years?
+> 
+> Maybe things are different for ____cacheline_aligned, which is 64 bytes.
+> Reading that thread, it looks like it was a case of trying to align the
+> stack to 16 bytes, but gcc assumed 16 bytes already while the kernel
+> only gave it 8. So gcc didn't think it needed to emit any code to align
+> it. Here, though, it's 64, and gcc certainly isn't assuming 64-byte
+> stack alignment.
+> 
+> Looking at the codegen, gcc appears to doing `rsp = (rsp & ~63) - 64`,
+> which appears correct.
 
-A related useful metric is percentage of peak, so if the peak IPC is 8
-(usually a constant related to the number of functional units) then
-you can just compute the ratio of IPC with this.
+Well, if gcc thinks the stack is already 16-byte aligned, then it would be
+perfectly within its rights to do 'rsp = (rsp & ~47) - 64', right?  You probably
+don't want to be relying on an implementation detail of gcc codegen...
 
-> +    {
-> +        "MetricExpr": "INST_RETIRED / CPU_CYCLES",
-> +        "PublicDescription": "Architecturally executed Instructions Per Cycle (IPC)",
-> +        "BriefDescription": "Architecturally executed Instructions Per Cycle (IPC)",
-
-
-The duplicated descriptions are unnecessary. Drop the public one for
-consistency with what we do for Intel:
-https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py#L299
-
-> +        "MetricGroup": "PEutilization",
-> +        "MetricName": "retired_ipc"
-> +    },
-> +    {
-> +        "MetricExpr": "INST_SPEC / CPU_CYCLES",
-> +        "PublicDescription": "Speculatively executed Instructions Per Cycle (IPC)",
-> +        "BriefDescription": "Speculatively executed Instructions Per Cycle (IPC)",
-> +        "MetricGroup": "PEutilization",
-> +        "MetricName": "spec_ipc"
-> +    },
-> +    {
-> +        "MetricExpr": "OP_RETIRED / OP_SPEC",
-> +        "PublicDescription": "Fraction of operations retired",
-> +        "BriefDescription": "Fraction of operations retired",
-
-Would instructions be clearer than operations here?
-
-> +        "MetricGroup": "PEutilization",
-> +        "MetricName": "retired_rate",
-> +        "ScaleUnit": "100%"
-> +    },
-> +    {
-> +        "MetricExpr": "1 - OP_RETIRED / OP_SPEC",
-
-Should OP_RETIRED be greater than OP_SPEC? In which case won't this
-metric be negative?
-
-> +        "PublicDescription": "Fraction of operations wasted",
-> +        "BriefDescription": "Fraction of operations wasted",
-> +        "MetricGroup": "PEutilization",
-> +        "MetricName": "wasted_rate",
-> +        "ScaleUnit": "100%"
-> +    },
-> +    {
-> +        "MetricExpr": "OP_RETIRED / OP_SPEC * (1 - (STALL_SLOT - CPU_CYCLES) / (CPU_CYCLES * 5))",
-> +        "PublicDescription": "Utilization of CPU",
-> +        "BriefDescription": "Utilization of CPU",
-
-Some more detail in the description would be useful.
-
-> +        "MetricGroup": "PEutilization",
-> +        "MetricName": "cpu_utilization",
-> +        "ScaleUnit": "100%"
->      }
->  ]
-> --
-> 1.8.3.1
->
+- Eric
