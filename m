@@ -2,82 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D8E63D011
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2EF563D016
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234355AbiK3ICL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 03:02:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
+        id S234390AbiK3IDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 03:03:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234406AbiK3ICB (ORCPT
+        with ESMTP id S234336AbiK3IDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 03:02:01 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4E142F7A
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 00:01:58 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NMWrP1Z55z4xyCY;
-        Wed, 30 Nov 2022 16:01:57 +0800 (CST)
-Received: from szxlzmapp01.zte.com.cn ([10.5.231.85])
-        by mse-fl1.zte.com.cn with SMTP id 2AU81dm3026906;
-        Wed, 30 Nov 2022 16:01:39 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp02[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Wed, 30 Nov 2022 16:01:41 +0800 (CST)
-Date:   Wed, 30 Nov 2022 16:01:41 +0800 (CST)
-X-Zmail-TransId: 2b0463870de5ffffffffa0535c37
-X-Mailer: Zmail v1.0
-Message-ID: <202211301601416229001@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <pmladek@suse.com>
-Cc:     <senozhatsky@chromium.org>, <rostedt@goodmis.org>,
-        <john.ogness@linutronix.de>, <linux-kernel@vger.kernel.org>,
-        <xu.panda@zte.com.cn>, <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHByaW50azogdXNlIHN0cnNjcHkoKSB0byBpbnN0ZWFkIG9mIHN0cmxjcHkoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2AU81dm3026906
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 63870DF5.000 by FangMail milter!
-X-FangMail-Envelope: 1669795317/4NMWrP1Z55z4xyCY/63870DF5.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63870DF5.000/4NMWrP1Z55z4xyCY
+        Wed, 30 Nov 2022 03:03:45 -0500
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE2652895;
+        Wed, 30 Nov 2022 00:03:38 -0800 (PST)
+Received: from SHSend.spreadtrum.com (shmbx05.spreadtrum.com [10.29.1.56])
+        by SHSQR01.spreadtrum.com with ESMTPS id 2AU82hee061268
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
+        Wed, 30 Nov 2022 16:02:44 +0800 (CST)
+        (envelope-from Wenchao.Chen@unisoc.com)
+Received: from xm13705pcu.spreadtrum.com (10.13.3.189) by
+ shmbx05.spreadtrum.com (10.29.1.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Wed, 30 Nov 2022 16:02:40 +0800
+From:   Wenchao Chen <wenchao.chen@unisoc.com>
+To:     <adrian.hunter@intel.com>, <ulf.hansson@linaro.org>,
+        <orsonzhai@gmail.com>, <baolin.wang@linux.alibaba.com>,
+        <zhang.lyra@gmail.com>
+CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <zhenxiong.lai@unisoc.com>, <yuelin.tang@unisoc.com>,
+        <gengcixi@gmail.com>
+Subject: [PATCH] mmc: sdhci-sprd: Fix no reset data and command after voltage switch
+Date:   Wed, 30 Nov 2022 16:02:24 +0800
+Message-ID: <20221130080224.12831-1-wenchao.chen@unisoc.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.13.3.189]
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
+ shmbx05.spreadtrum.com (10.29.1.56)
+X-MAIL: SHSQR01.spreadtrum.com 2AU82hee061268
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+After switching the voltage, no reset data and command will cause
+CMD2 timeout.
 
-The implementation of strscpy() is more robust and safer.
-That's now the recommended way to copy NUL terminated strings.
-
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com>
+Fixes: 29ca763fc26f ("mmc: sdhci-sprd: Add pin control support for voltage switch")
+Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
 ---
- kernel/printk/printk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mmc/host/sdhci-sprd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 9ec101766471..7decf1e9c486 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -2480,7 +2480,7 @@ static int __add_preferred_console(char *name, int idx, char *options,
- 		return -E2BIG;
- 	if (!brl_options)
- 		preferred_console = i;
--	strlcpy(c->name, name, sizeof(c->name));
-+	strscpy(c->name, name, sizeof(c->name));
- 	c->options = options;
- 	set_user_specified(c, user_specified);
- 	braille_set_options(c, brl_options);
+diff --git a/drivers/mmc/host/sdhci-sprd.c b/drivers/mmc/host/sdhci-sprd.c
+index b92a408f138d..464508be8ec8 100644
+--- a/drivers/mmc/host/sdhci-sprd.c
++++ b/drivers/mmc/host/sdhci-sprd.c
+@@ -470,7 +470,7 @@ static int sdhci_sprd_voltage_switch(struct mmc_host *mmc, struct mmc_ios *ios)
+ 	}
+ 
+ 	if (IS_ERR(sprd_host->pinctrl))
+-		return 0;
++		goto reset;
+ 
+ 	switch (ios->signal_voltage) {
+ 	case MMC_SIGNAL_VOLTAGE_180:
+@@ -496,6 +496,7 @@ static int sdhci_sprd_voltage_switch(struct mmc_host *mmc, struct mmc_ios *ios)
+ 		break;
+ 	}
+ 
++reset:
+ 	/* Wait for 300 ~ 500 us for pin state stable */
+ 	usleep_range(300, 500);
+ 	sdhci_reset(host, SDHCI_RESET_CMD | SDHCI_RESET_DATA);
 -- 
-2.15.2
+2.17.1
+
