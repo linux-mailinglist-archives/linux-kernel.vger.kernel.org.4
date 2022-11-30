@@ -2,282 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E7163DA7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F4363DA86
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:25:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbiK3QYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 11:24:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
+        id S230185AbiK3QZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 11:25:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiK3QYQ (ORCPT
+        with ESMTP id S229652AbiK3QZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 11:24:16 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7932061B98
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:24:14 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id n1so16793845ljg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 08:24:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YbCew0BFNIRSFlp+k5uoeLKizvWgiWnblmCvWuyFg8Y=;
-        b=ZxxkADj2eOo60vb97SjWhIokVfM6y1vjfalXar5jCWgqqLAOvG67JKzvYA+B0SIaLk
-         CcmFI+Azi/SIwuQrHWYyHp2B7SIXToWyurBYoeSlzRMUO9LUZnl/XD8+B55hNYwO4scI
-         H1CcRZ/a7U2u9QLi7NHc2IessDPYoc/O6I+Cg8ZN40qlo7jgsNfubf9badzn2e0YBq/L
-         0XwTF4vAGFd52R+HgxS+SCx8+3PFDfFmC2SgKJ+VI/ZT4FscHF0eRUYeIMPukHiACCnR
-         SXAOys/bSJFRdIbII2ZSQNXWZw0IaNyeV6HZtdyM1OA35HY0lImuJIUg0MtohfkLUlKC
-         knRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YbCew0BFNIRSFlp+k5uoeLKizvWgiWnblmCvWuyFg8Y=;
-        b=qPTkrSwb2um2axoPmN6RLNZPeJNarFU/1G7VevTXrxkrpgfMjC31MaG/Xc8R9RrNsQ
-         FQ/4YkN6Vf1cmwtfVxnIvTp1szU9VJuCKy9e+5opsptL/z50dVX/ZmLUxF5m7R3Rm+Y/
-         UG2vB03oEkHOzQTgoPILyXnuyhPwSB2it9BMm+SovM+yeGaPWEBEtgtfYhg4+YEyt6xM
-         DK3ZiAF9Tdn1dtuQ3Jqy5PFW/okkyZW45NAvRJQB30DSgBrdZLNHe3fh48tASO8cOv1v
-         s2mLKZOhA5G07F4gUWh7ShUpAav45sCbVdYx4YweWIANvTphh6sXoLwwOBlwh7L6pmp7
-         y29g==
-X-Gm-Message-State: ANoB5pldpQhPcuuW7nck41sPTSX0wDiqrtvg7fS9HbUQR2lmVL7qYgJJ
-        rroH50LST7Viyf6BXKYhdRYOjg==
-X-Google-Smtp-Source: AA0mqf6C9iAEBZCoC56tNEM8JYTBJNnzYIkVMPp0xkGO/BTkobxq0of+g47UTD6XPcOGAOwbMW9PWg==
-X-Received: by 2002:a05:651c:1a10:b0:277:5059:82c9 with SMTP id by16-20020a05651c1a1000b00277505982c9mr15621509ljb.218.1669825452692;
-        Wed, 30 Nov 2022 08:24:12 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id s8-20020a056512214800b004b4823f02b0sm306594lfr.152.2022.11.30.08.24.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 08:24:12 -0800 (PST)
-Message-ID: <9412f6ff-1fd7-31b5-56a7-12bda174f7f6@linaro.org>
-Date:   Wed, 30 Nov 2022 17:24:11 +0100
+        Wed, 30 Nov 2022 11:25:27 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590CE4EC28;
+        Wed, 30 Nov 2022 08:25:22 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NMks86yx3z9v7RF;
+        Thu,  1 Dec 2022 00:18:20 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwAHpXHVg4djmfirAA--.3567S2;
+        Wed, 30 Nov 2022 17:25:02 +0100 (CET)
+Message-ID: <e678d661515a191cb1bbfc41d9378e7cb538ef53.camel@huaweicloud.com>
+Subject: Re: [PATCH] ima: Make a copy of sig and digest in
+ asymmetric_verify()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        rusty@rustcorp.com.au, axboe@kernel.dk
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Date:   Wed, 30 Nov 2022 17:24:51 +0100
+In-Reply-To: <1658d421c391d0609680b89ca0573fab1ca5e091.camel@linux.ibm.com>
+References: <20221104122023.1750333-1-roberto.sassu@huaweicloud.com>
+         <9ef25f1b8621dab8b3cd4373bf6ce1633daae70e.camel@linux.ibm.com>
+         <a676b387d23f9ca630418ece20a6761a9437ce76.camel@huaweicloud.com>
+         <c6c448c2acc07caf840046067322f3e1110cedff.camel@linux.ibm.com>
+         <f8f95d37211bac6ce4322a715740d2b2ae20db84.camel@huaweicloud.com>
+         <859f70a2801cffa3cb42ae0d43f5753bb01a7eac.camel@huaweicloud.com>
+         <1658d421c391d0609680b89ca0573fab1ca5e091.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 1/8] dt-bindings: power: supply: Add DT schema for
- Qualcomm SMBCHG
-Content-Language: en-US
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Alejandro Tafalla <atafalla@dnyon.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220808073459.396278-1-y.oudjana@protonmail.com>
- <20220808073459.396278-2-y.oudjana@protonmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220808073459.396278-2-y.oudjana@protonmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: LxC2BwAHpXHVg4djmfirAA--.3567S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuF45GrW5Kw15KFW8KFyxAFb_yoWrCF1fpF
+        48K3WUKr4DJr1IkF4Iywn8C345Kr4rKrWUX34kJw18Zryqqr1xAr48JF1UWFyDWr1xAF1U
+        tFWftFy7Zrn8A3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAMBF1jj4IemAABs+
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/08/2022 09:34, Yassine Oudjana wrote:
-> From: Yassine Oudjana <y.oudjana@protonmail.com>
+On Wed, 2022-11-30 at 11:22 -0500, Mimi Zohar wrote:
+> On Wed, 2022-11-30 at 15:41 +0100, Roberto Sassu wrote:
+> > On Wed, 2022-11-23 at 14:49 +0100, Roberto Sassu wrote:
+> > > On Wed, 2022-11-23 at 08:40 -0500, Mimi Zohar wrote:
+> > > > On Wed, 2022-11-23 at 13:56 +0100, Roberto Sassu wrote:
+> > > > > On Tue, 2022-11-22 at 14:39 -0500, Mimi Zohar wrote:
+> > > > > > Hi Roberto,
+> > > > > > 
+> > > > > > On Fri, 2022-11-04 at 13:20 +0100, Roberto Sassu wrote:
+> > > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > > > 
+> > > > > > > Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
+> > > > > > > mapping") requires that both the signature and the digest resides in the
+> > > > > > > linear mapping area.
+> > > > > > > 
+> > > > > > > However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
+> > > > > > > stack support"), made it possible to move the stack in the vmalloc area,
+> > > > > > > which could make the requirement of the first commit not satisfied anymore.
+> > > > > > > 
+> > > > > > > If CONFIG_SG=y and CONFIG_VMAP_STACK=y, the following BUG() is triggered:
+> > > > > > 
+> > > > > > ^CONFIG_DEBUG_SG
+> > > > > > 
+> > > > > > > [  467.077359] kernel BUG at include/linux/scatterlist.h:163!
+> > > > > > > [  467.077939] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+> > > > > > > 
+> > > > > > > [...]
+> > > > > > > 
+> > > > > > > [  467.095225] Call Trace:
+> > > > > > > [  467.096088]  <TASK>
+> > > > > > > [  467.096928]  ? rcu_read_lock_held_common+0xe/0x50
+> > > > > > > [  467.097569]  ? rcu_read_lock_sched_held+0x13/0x70
+> > > > > > > [  467.098123]  ? trace_hardirqs_on+0x2c/0xd0
+> > > > > > > [  467.098647]  ? public_key_verify_signature+0x470/0x470
+> > > > > > > [  467.099237]  asymmetric_verify+0x14c/0x300
+> > > > > > > [  467.099869]  evm_verify_hmac+0x245/0x360
+> > > > > > > [  467.100391]  evm_inode_setattr+0x43/0x190
+> > > > > > > 
+> > > > > > > The failure happens only for the digest, as the pointer comes from the
+> > > > > > > stack, and not for the signature, which instead was allocated by
+> > > > > > > vfs_getxattr_alloc().
+> > > > > > 
+> > > > > > Only after enabling CONFIG_DEBUG_SG does EVM fail.
+> > > > > > 
+> > > > > > > Fix this by making a copy of both in asymmetric_verify(), so that the
+> > > > > > > linear mapping requirement is always satisfied, regardless of the caller.
+> > > > > > 
+> > > > > > As only EVM is affected, it would make more sense to limit the change
+> > > > > > to EVM.
+> > > > > 
+> > > > > I found another occurrence:
+> > > > > 
+> > > > > static int xattr_verify(enum ima_hooks func, struct integrity_iint_cache *iint,
+> > > > > 			struct evm_ima_xattr_data *xattr_value, int xattr_len,
+> > > > > 			enum integrity_status *status, const char **cause)
+> > > > > {
+> > > > > 
+> > > > > [...]
+> > > > > 
+> > > > > 		rc = integrity_digsig_verify(INTEGRITY_KEYRING_IMA,
+> > > > > 					     (const char *)xattr_value,
+> > > > > 					     xattr_len, hash.digest,
+> > > > > 					     hash.hdr.length);
+> > > > > 
+> > > > > Should I do two patches?
+> > > > 
+> > > > I'm just not getting it.  Why did you enable CONFIG_DEBUG_SIG?  Were
+> > > > you testing random kernel configs?  Are you actually seeing signature
+> > > > verifications errors without it enabled?  Or is it causing other
+> > > > problems?  Is the "BUG_ON" still needed?
+> > > 
+> > > When I test patches, I tend to enable more debugging options.
+> > > 
+> > > To be honest, I didn't check if there is any issue without enabling
+> > > CONFIG_DEBUG_SG. I thought that if there is a linear mapping
+> > > requirement, that should be satisfied regardless of whether the
+> > > debugging option is enabled or not.
+> > > 
+> > > + Rusty, Jens for explanations.
+> > 
+> > Trying to answer the question, with the help of an old discussion:
+> > 
+> > https://groups.google.com/g/linux.kernel/c/dpIoiY_qSGc
+> > 
+> > sg_set_buf() calls virt_to_page() to get the page to start from. But if
+> > the buffer spans in two pages, that would not work in the vmalloc area,
+> > since there is no guarantee that the next page is adjiacent.
+> > 
+> > For small areas, much smaller than the page size, it is unlikely that
+> > the situation above would happen. So, integrity_digsig_verify() will
+> > likely succeeed. Although it is possible that it fails if there are
+> > data in the next page.
 > 
+> Thanks, Roberto.  Confirmed that as the patch description indicates,
+> without CONFIG_VMAP_STACK configured and with CONFIG_DEBUG_SG enabled
+> there isn't a bug.  Does it make sense to limit this change to just
+> CONFIG_VMAP_STACK?
 
+Yes, I agree.
 
-> +      See Documentation/devicetree/bindings/power/supply/battery.yaml
-> +
-> +  interrupts:
-> +    items:
-> +      - description: Charger error
-> +      - description: Charger inhibited
-> +      - description: Charger precharge safety timer timeout
-> +      - description: Charger charge safety timer timeout
-> +      - description: Charger pre to fast charging switch threshold reached
-> +      - description: Charger recharge threshold reached
-> +      - description: Charger taper threshold reached
-
-After discussing with Dmitry, it's current design of the PMIC (parent
-device) so it's fine. We would need to make bigger refactoring of
-drivers and bindings to change it to match other typical MFD PMICs. In
-current state it's the only way to express device interrupts.
-
-Two more comments below.
-
-> +      - description: Charger charge termination threshold reached
-> +      - description: Battery hot
-> +      - description: Battery warm
-> +      - description: Battery cold
-> +      - description: Battery cool
-> +      - description: Battery overvoltage
-> +      - description: Battery low
-> +      - description: Battery missing
-> +      - description: Battery thermistor missing # unconfirmed
-> +      - description: USB input undervolt
-> +      - description: USB input overvolt
-> +      - description: USB input source detected
-> +      - description: OTG regulator failure
-> +      - description: OTG regulator overcurrent
-> +      - description: Automatic input current limiting done
-> +      - description: USB ID pin changed
-> +      - description: DC input undervolt
-> +      - description: DC input overvolt
-> +      - description: Power OK
-> +      - description: Temperature shutdown
-> +      - description: Watchdog timeout
-> +      - description: Flash failure
-> +      - description: OTST2 # unknown
-> +      - description: OTST3 # unknown
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: chg-error
-> +      - const: chg-inhibit
-> +      - const: chg-prechg-sft
-> +      - const: chg-complete-chg-sft
-> +      - const: chg-p2f-thr
-> +      - const: chg-rechg-thr
-> +      - const: chg-taper-thr
-> +      - const: chg-tcc-thr
-> +      - const: batt-hot
-> +      - const: batt-warm
-> +      - const: batt-cold
-> +      - const: batt-cool
-> +      - const: batt-ov
-> +      - const: batt-low
-> +      - const: batt-missing
-> +      - const: batt-term-missing
-> +      - const: usbin-uv
-> +      - const: usbin-ov
-> +      - const: usbin-src-det
-> +      - const: otg-fail
-> +      - const: otg-oc
-> +      - const: aicl-done
-> +      - const: usbid-change
-> +      - const: dcin-uv
-> +      - const: dcin-ov
-> +      - const: power-ok
-> +      - const: temp-shutdown
-> +      - const: wdog-timeout
-> +      - const: flash-fail
-> +      - const: otst2
-> +      - const: otst3
-> +
-> +  otg-vbus:
-> +    type: object
-
-I think I did not comment about this one - this looks like regulator.yaml.
-
-> +
-> +    description:
-> +      OTG regulator subnode.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - monitored-battery
-> +  - interrupts
-> +  - interrupt-names
-> +  - otg-vbus
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    battery: battery {
-> +        compatible = "simple-battery";
-> +
-> +        charge-full-design-microamp-hours = <4070000>;
-> +        charge-term-current-microamp = <100000>;
-> +        voltage-min-design-microvolt = <3400000>;
-> +        voltage-max-design-microvolt = <4400000>;
-> +    };
-> +
-> +    pmic {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        charger@1000 {
-> +            compatible = "qcom,pmi8996-smbchg";
-> +            reg = <0x1000>;
-> +
-> +            interrupts = <0x2 0x10 0x0 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x10 0x1 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x10 0x2 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x10 0x3 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x10 0x4 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x10 0x5 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x10 0x6 IRQ_TYPE_EDGE_RISING>,
-> +                         <0x2 0x10 0x7 IRQ_TYPE_EDGE_RISING>,
-> +                         <0x2 0x12 0x0 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x12 0x1 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x12 0x2 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x12 0x3 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x12 0x4 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x12 0x5 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x12 0x6 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x12 0x7 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x13 0x0 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x13 0x1 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x13 0x2 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x13 0x3 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x13 0x4 IRQ_TYPE_EDGE_RISING>,
-> +                         <0x2 0x13 0x5 IRQ_TYPE_EDGE_RISING>,
-> +                         <0x2 0x13 0x6 IRQ_TYPE_EDGE_FALLING>,
-> +                         <0x2 0x14 0x0 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x14 0x1 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x16 0x0 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x16 0x1 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x16 0x2 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x16 0x3 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x16 0x4 IRQ_TYPE_EDGE_BOTH>,
-> +                         <0x2 0x16 0x5 IRQ_TYPE_EDGE_BOTH>;
-> +            interrupt-names = "chg-error",
-> +                              "chg-inhibit",
-> +                              "chg-prechg-sft",
-> +                              "chg-complete-chg-sft",
-> +                              "chg-p2f-thr",
-> +                              "chg-rechg-thr",
-> +                              "chg-taper-thr",
-> +                              "chg-tcc-thr",
-> +                              "batt-hot",
-> +                              "batt-warm",
-> +                              "batt-cold",
-> +                              "batt-cool",
-> +                              "batt-ov",
-> +                              "batt-low",
-> +                              "batt-missing",
-> +                              "batt-term-missing",
-> +                              "usbin-uv",
-> +                              "usbin-ov",
-> +                              "usbin-src-det",
-> +                              "otg-fail",
-> +                              "otg-oc",
-> +                              "aicl-done",
-> +                              "usbid-change",
-> +                              "dcin-uv",
-> +                              "dcin-ov",
-> +                              "power-ok",
-> +                              "temp-shutdown",
-> +                              "wdog-timeout",
-> +                              "flash-fail",
-> +                              "otst2",
-> +                              "otst3";
-> +
-> +            monitored-battery = <&battery>;
-> +
-> +            otg-vbus { };
-
-Why empty?
-
-Best regards,
-Krzysztof
+Roberto
 
