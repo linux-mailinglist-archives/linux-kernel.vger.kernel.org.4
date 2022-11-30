@@ -2,164 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DAE63D9D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3776B63D9CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiK3PsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 10:48:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41496 "EHLO
+        id S229737AbiK3Prr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 10:47:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbiK3Pr6 (ORCPT
+        with ESMTP id S230021AbiK3Prn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 10:47:58 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BBF275EA
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 07:47:47 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id b8so24571690edf.11
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 07:47:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/fLIsVAH72GYN4wSnEbMTMIto1VdntwqvQJh4XKX1N8=;
-        b=RLfl+m/7E/E0w+XzZDQvyhYuzJclHPZLb/xSf+gTZ1X7y2BNXGynHFx0l2nbPf2//u
-         QVuR8KoO0bXq/0ozfPU06OZ1ONR6QEfqUq2KJ24AvftES2ghu4Sqfn2ST/mcihAn89Nw
-         DoGH5G8fkqo6dsa7Pf7WSY5UXM7UtHAfjZSvY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/fLIsVAH72GYN4wSnEbMTMIto1VdntwqvQJh4XKX1N8=;
-        b=fPghldJak9amZSqymKVcOf2eFY62Frzuz9zw8R3sf989XOQYuxbeHe8gNq4DQ8SWMF
-         qtpS9zKeY1DxPQqqqn0HZ6A4jdMCJBkxMLqEfBZYG4sYakHvcSQk5RkHSnQHGZdPpeBX
-         NYLWPiYsjCf5l50M8GZSRQNO0cVXyf0+vKdLLsGf467viUJu3cS/HttLxw/Lj3z/qR3i
-         +JdrAegR9MOBY3/eMAf9iFCVI9WwTK+ccjcN/x8gSh3lB53Rj6jhuTNrGd48+U89SmbR
-         ew1/gxNjGtU0aL0vaTRmGJmIRvODnG2rTBe79hU7SD3p3kpoAFQyhhiB76/gNL4ixCxR
-         SywQ==
-X-Gm-Message-State: ANoB5pmnF+oBSRqHsJnhNILYMGaBojygLnd4tTYMCAX5PXNQ3Qc84+OS
-        LPgvdP7qztFHbcimrfMVC3JQlg==
-X-Google-Smtp-Source: AA0mqf4IYiD9H16IuGz/np51rmxmX2exbBKAoU9sx6CGbOo8xnMm+kZ7DVDgJ9emxgRoPNGt2ivddw==
-X-Received: by 2002:a05:6402:1f85:b0:462:2410:9720 with SMTP id c5-20020a0564021f8500b0046224109720mr12193484edc.84.1669823266173;
-        Wed, 30 Nov 2022 07:47:46 -0800 (PST)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:5b33:e3f2:6a0b:dcdd])
-        by smtp.gmail.com with ESMTPSA id j9-20020a17090623e900b007bf24b8f80csm775075ejg.63.2022.11.30.07.47.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 07:47:45 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 30 Nov 2022 16:47:16 +0100
-Subject: [PATCH v6 2/2] ASoC: SOF: Fix deadlock when shutdown a frozen userspace
+        Wed, 30 Nov 2022 10:47:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FCE218A9;
+        Wed, 30 Nov 2022 07:47:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4318361CB8;
+        Wed, 30 Nov 2022 15:47:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A2A2C433B5;
+        Wed, 30 Nov 2022 15:47:40 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="UqxFpbdn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669823258;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yCvHaRii9cD4H3afW0NVdKImLG5V7TKp6UQQ6QaFAP0=;
+        b=UqxFpbdngIYp7S50DffZRTSpWKUc8TFn/RU22xIYQn5/yh1I33YVDUXx7UpBVCrrZsfeaw
+        Ieg0ROjlLNiwM85ozKoL4VGvIa5UAh8lNz4797T6nV6oC1wCUPbtTC74X1KUtHlVNavJTG
+        lWafvnIMGdAzWshrB/68hAyjbMV0ILI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4a7f5e6b (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 30 Nov 2022 15:47:38 +0000 (UTC)
+Received: by mail-vs1-f51.google.com with SMTP id i11so16642472vsr.7;
+        Wed, 30 Nov 2022 07:47:38 -0800 (PST)
+X-Gm-Message-State: ANoB5pmOPRVNZsfJ5nfL6hfkhEO2YAh3B3LgSvErId/11MNY5Yh9toBD
+        ISW+XPIwSLmELHukRisVMjJfMibGtY4SbZclqDA=
+X-Google-Smtp-Source: AA0mqf7z8aJcDmOZHX+ltTpu51goy5ghJZ6Jw1XfAaZPtaySHZYPyWXbzggLHIoKUOp9BreX2663lRUEide944axUnE=
+X-Received: by 2002:a05:6102:30bc:b0:3b0:93af:fc3f with SMTP id
+ y28-20020a05610230bc00b003b093affc3fmr10408031vsd.55.1669823256925; Wed, 30
+ Nov 2022 07:47:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221127-snd-freeze-v6-2-3e90553f64a5@chromium.org>
-References: <20221127-snd-freeze-v6-0-3e90553f64a5@chromium.org>
-In-Reply-To: <20221127-snd-freeze-v6-0-3e90553f64a5@chromium.org>
-To:     Chromeos Kdump <chromeos-kdump@google.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        kexec@lists.infradead.org, sound-open-firmware@alsa-project.org
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2174; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=z1BRJ78WvLmPHnisXXoQjw9rs0LQQZ8YHVqPdLBDGn8=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjh3scbdrJzfpRqMNqZtaSFQjjhLnKBxlJMQeOOkOM
- m5234GiJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4d7HAAKCRDRN9E+zzrEiN/ID/
- 9+jG5ZH/OSbpevz4Xx7ZmZUrjhaPMR5rVP35OfUsqfj/ADrCAhJC2vlwQpcs2lie7FAUKfb1BM4VWQ
- 7EozfqEAJPYlbN6HiKf8Xidp9z8sW4/g/0gSEQ60cMBSEnM8UlVrqt2eFXi4ARZeoUzjr58IEXMjVu
- Rr37vapYJMliIJKpJ8oI3Bn8vwDFjC1hLjhEb5ZgTCIESl+/ZZb+jfCIlS2qytNrH4zjpoX5Hk8QZR
- GiiHXMQVXR/ynfZbB8tJI7mn024lZ/0OWniech+uJArvwaJxOM5zt5kxzweiQ9QH/L6IwPwzhfSYJV
- i2rmkKdEI1PYKK1MbUH0ep2XRYWO/B8w8MHBLK6JsqA8fSwJ+5YRMAnN96rHs7hUD6+J8P7rPrkkO0
- cIpHzcnsBkm8JJTTLEkkQI8gzeNzRjjW8yNlqoFnQnR7wi+wgcKAGzESkwWWysMGq7kvLU7+Q6Bwn6
- T9c+1s/pVqGANlQ4BuVOKgO1pgLNzRqfef1yz7c53cJ+VBHCGYGOZDIc29r/tH+Cep1mpSbhJSA2vj
- IGcfgZhuOGIhR9dctOZ/M8+g2BC5LwhhncH5hK6xPdecknFPpzElV3oXw8U8w9FLa/Bhgje6cPjGmS
- Phput94//O2tfEsQ92F9dOxUP5sj5cBNz6LJljSdByoRowt/YVTcfvnHkNkw==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221129210639.42233-1-Jason@zx2c4.com> <20221129210639.42233-4-Jason@zx2c4.com>
+ <878rjs7mcx.fsf@oldenburg.str.redhat.com> <Y4dt1dLZMmogRlKa@zx2c4.com>
+ <Y4dvz4d0dpFzJZ9L@zx2c4.com> <16ec2a7a-c469-4732-aeca-e74a9fb88d3e@app.fastmail.com>
+ <CAHmME9rpdCGLQzfsNkX=mLHfWeEWi4TyrOf_2rP_9hsyX9v6ow@mail.gmail.com> <574ad32d-566e-4c18-a645-1470fc081ede@app.fastmail.com>
+In-Reply-To: <574ad32d-566e-4c18-a645-1470fc081ede@app.fastmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 30 Nov 2022 16:47:25 +0100
+X-Gmail-Original-Message-ID: <CAHmME9oGffi539nEAJkOjC-2yAR+0Ra+wQw5oG6Y6+CRr5e62g@mail.gmail.com>
+Message-ID: <CAHmME9oGffi539nEAJkOjC-2yAR+0Ra+wQw5oG6Y6+CRr5e62g@mail.gmail.com>
+Subject: Re: [PATCH v10 3/4] random: introduce generic vDSO getrandom() implementation
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Florian Weimer <fweimer@redhat.com>, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Thomas Gleixner <tglx@linutronix.de>,
+        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
+        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        "Carlos O'Donell" <carlos@redhat.com>,
+        Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During kexec(), the userspace is frozen. Therefore we cannot wait for it
-to complete.
+Hi Arnd,
 
-Avoid running snd_sof_machine_unregister during shutdown.
+On Wed, Nov 30, 2022 at 4:29 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > I think it does address the issue. CONFIG_64BIT is a .config setting,
+> > not a compiler-derived setting. So a 64-bit kernel will get a u64 in
+> > kernel mode, and then it will get a u64 for the 64-bit vdso usermode
+> > compile, and finally it will get a u64 for the 32-bit vdso usermode
+> > compile. So in all three cases, the size is the same.
+>
+> I see what you mean now. However this means your vdso32 copies
+> are different between 32-bit and 64-bit kernels. If you need to
+> access one of the fields from assembler, it even ends up
+> different at source level, which adds a bit of complexity.
+>
+> Making the interface configuration-independent makes it obvious
+> to the reader that none of these problems can happen.
 
-This fixes:
+Except ideally, these are word-sized accesses (where only compat code
+has to suffer I suppose).
 
-[   84.943749] Freezing user space processes ... (elapsed 0.111 seconds) done.
-[  246.784446] INFO: task kexec-lite:5123 blocked for more than 122 seconds.
-[  246.819035] Call Trace:
-[  246.821782]  <TASK>
-[  246.824186]  __schedule+0x5f9/0x1263
-[  246.828231]  schedule+0x87/0xc5
-[  246.831779]  snd_card_disconnect_sync+0xb5/0x127
-...
-[  246.889249]  snd_sof_device_shutdown+0xb4/0x150
-[  246.899317]  pci_device_shutdown+0x37/0x61
-[  246.903990]  device_shutdown+0x14c/0x1d6
-[  246.908391]  kernel_kexec+0x45/0xb9
+> >> > struct vdso_rng_data {
+> >> >       vdso_kernel_ulong       generation;
+> >> >       bool                    is_ready;
+> >> > };
+> >>
+> >> There is another problem with this: you have implicit padding
+> >> in the structure because the two members have different size
+> >> and alignment requirements. The easiest fix is to make them
+> >> both u64, or you could have a u32 is_ready and an explit u32
+> >> for the padding.
+> >
+> > There's padding at the end of the structure, yes. But both
+> > `generation` and `is_ready` will be at the same offset. If the
+> > structure grows, then sure, that'll have to be taken into account. But
+> > that's not a problem because this is a private implementation detail
+> > between the vdso code and the kernel.
+>
+> I was not concerned about incompatibility here, but rather about
+> possibly leaking kernel data to the vdso page.
 
-And:
+The vvar page starts out zeroed, no?
 
-[  246.893222] INFO: task kexec-lite:4891 blocked for more than 122 seconds.
-[  246.927709] Call Trace:
-[  246.930461]  <TASK>
-[  246.932819]  __schedule+0x5f9/0x1263
-[  246.936855]  ? fsnotify_grab_connector+0x5c/0x70
-[  246.942045]  schedule+0x87/0xc5
-[  246.945567]  schedule_timeout+0x49/0xf3
-[  246.949877]  wait_for_completion+0x86/0xe8
-[  246.954463]  snd_card_free+0x68/0x89
-...
-[  247.001080]  platform_device_unregister+0x12/0x35
-
-Cc: stable@vger.kernel.org
-Fixes: 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- sound/soc/sof/core.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/sound/soc/sof/core.c b/sound/soc/sof/core.c
-index 3e6141d03770..4301f347bb90 100644
---- a/sound/soc/sof/core.c
-+++ b/sound/soc/sof/core.c
-@@ -9,6 +9,7 @@
- //
- 
- #include <linux/firmware.h>
-+#include <linux/kexec.h>
- #include <linux/module.h>
- #include <sound/soc.h>
- #include <sound/sof.h>
-@@ -484,7 +485,8 @@ int snd_sof_device_shutdown(struct device *dev)
- 	 * make sure clients and machine driver(s) are unregistered to force
- 	 * all userspace devices to be closed prior to the DSP shutdown sequence
- 	 */
--	sof_unregister_clients(sdev);
-+	if (!kexec_with_frozen_processes())
-+		sof_unregister_clients(sdev);
- 
- 	snd_sof_machine_unregister(sdev, pdata);
- 
-
--- 
-2.38.1.584.g0f3c55d4c2-goog-b4-0.11.0-dev-696ae
+Jason
