@@ -2,170 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C341E63DCF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6C263DCFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:19:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiK3SSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:18:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        id S229630AbiK3ST3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:19:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiK3SS2 (ORCPT
+        with ESMTP id S230214AbiK3STM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:18:28 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79E48B18D
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:15:46 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id p24so13760547plw.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:15:46 -0800 (PST)
+        Wed, 30 Nov 2022 13:19:12 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3DC8D645
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:16:22 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id c129so19691113oia.0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:16:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b8+YUW8IoQswmuMtdhdkn+d1eF5AcajDOuojCzbgsEU=;
-        b=G0j6AHMPujpDINPRxOUW9PTmd2uWuBAU22bXh38+amwbsgPA+NYSlTus8ZthZiQaM2
-         19AlGyLHN/JdYzafNIZ0LaAzgslQA4Dr41+oNXqaELVmz9YlYJ6Jgl0X+vrr8FlNCx6a
-         QOhr+kHg/duBzAxXOtks3nhwmSYn222ZvBdpgyfRYp19Y9DdScn7EsmNxOLVbMeRnkkO
-         Goi4ngxrd1dZaKh7zA4WgpviUL73qpFZgGdKgSCpSQC12mXuAGgCs+HFXLKFUpc4j/HK
-         F8xyNwwtFCP7VtwEI7fphg0Dunvca+w3f43avdP8MNl/BKX1x3ea5/yAQBuEWyf/lMUg
-         q20g==
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BZx3c6pdH3tvbbV8hd9d5C+kOw6FjAWMt/tV6RWix8Y=;
+        b=oBDpW4gxowQLjwbJ4RHVMMkexMHrXMKjhTZQiyPABVqPYrQ7s01TUq7w7ZZQI5r4Kc
+         xu0yJ8r8HcgO+Nip5velLlgN0y+gGXA0vL+fjBPBfHGMF/OM2vvp/pnSvvU4WT0/+MIh
+         M71zdaOSYzXBAjKLzTCXd0oAQ3DD1ySOkIDek=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b8+YUW8IoQswmuMtdhdkn+d1eF5AcajDOuojCzbgsEU=;
-        b=F8qH0Kit+3GQ4Ko8m44pGqRGqB7U6HYXQQMgE5VsbdMcbwJRr0pzWEAOP92LDdb5Xz
-         mwFSZTE1NzAZw3UTxlbcdXZi5XIRD7Ar51XHy6RK9keytPV0WB9ZbiDHW0LlI1W83Dma
-         MPACXgsg0nbea+OKEB+xxPviDn71UL19Kl1hy/ZzBexALWE6M5nEhoPHMEhiXqlugbFO
-         frgdRADe8mkvIJOt8WOdlaFo7HrRqB54jHzpoqnK3Lgl5rqCx1X5S6R32+GFethhLv5c
-         7hTN6b7VFuA7y/Ke27FqP4KQrKRixc/szoPrJqBFfxvtJYt2+3gv2FIjjDk17jZgod9v
-         CL1Q==
-X-Gm-Message-State: ANoB5pmuo7bdfzgzd2g5Bww8DmP4ybhNf8nK+kO4krfLHfwT+iZjw5e+
-        jxyU9h5xqKNNm2P9hSERgYJZgg==
-X-Google-Smtp-Source: AA0mqf48TjmAXu+jpc3e/rI7CPXhjzNwcdUtxnM6qB/duICSa9sL2vxBQH126jRYczO2eK2oQNKu/g==
-X-Received: by 2002:a17:902:e0cd:b0:189:b0a3:cf49 with SMTP id e13-20020a170902e0cd00b00189b0a3cf49mr410437pla.77.1669832146091;
-        Wed, 30 Nov 2022 10:15:46 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id d8-20020a170902cec800b001867fb4056asm1791268plg.32.2022.11.30.10.15.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 10:15:45 -0800 (PST)
-Message-ID: <e05aec1c-d305-1281-91c2-1d3e1f3ae912@9elements.com>
-Date:   Wed, 30 Nov 2022 23:45:42 +0530
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BZx3c6pdH3tvbbV8hd9d5C+kOw6FjAWMt/tV6RWix8Y=;
+        b=hxYHgFG+TzCTzkf3kBTtV4osdGe8Fz2tit9kQc8qa2VSzDtGDwOEH+DNFIKni+Ij0L
+         07Wyg95qIDDcbmxR9vfKAegdpnuMgk6Bd3Voq/0VFBPjf9MOaba0Nyj9NhWSGx7tQ+P8
+         A9wdhWjT8GxQ9E6H4VKCBBJKGBi50Z8+4LeYvWGY9yIQiRzT6/KlsUzzC+QO9QIA537i
+         VQVdBmlWAshoWfTGlAQIWUN+0q+bcuqXCt5mKt08JQHzYW1e0UVAzR/84RvFi4Ca/vqq
+         MoJOsurhgpEH1leyvAodJF4sNnWLmGMA3kaaczH55Tg/iVqcjysUMoXxtNkZ5r4b3Ghz
+         WacQ==
+X-Gm-Message-State: ANoB5plzH+WrC8uMG9HXyBC6g9XwDSqlChhnzFGYQiamNA5jBQlws+v8
+        KDli0c9vxONFO9+HfPUQJ+nMXErhovU29Y1+E0Jhvw==
+X-Google-Smtp-Source: AA0mqf6ktv4Mbw61Q5evf5XgM9SEqSo3B9f7VRAeR5VeuVYN1GfdLs+BjPg/oU+Mvra8qnf8D7T0V+5TYSr+T+2Sxns=
+X-Received: by 2002:a05:6808:1a09:b0:354:4a36:aa32 with SMTP id
+ bk9-20020a0568081a0900b003544a36aa32mr32435098oib.15.1669832181662; Wed, 30
+ Nov 2022 10:16:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 1/4] hwmon: (pmbus/core): Update regulator flag map
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-References: <20221130165833.3478555-1-Naresh.Solanki@9elements.com>
- <20221130165833.3478555-2-Naresh.Solanki@9elements.com>
- <20221130180910.GB2656856@roeck-us.net>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <20221130180910.GB2656856@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221130181316.GA1012431@paulmck-ThinkPad-P17-Gen-1> <20221130181325.1012760-14-paulmck@kernel.org>
+In-Reply-To: <20221130181325.1012760-14-paulmck@kernel.org>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Wed, 30 Nov 2022 18:16:11 +0000
+Message-ID: <CAEXW_YS1nfsV_ohXDaB1i2em=+0KP1DofktS24oGFa4wPAbiiw@mail.gmail.com>
+Subject: Re: [PATCH rcu 14/16] rxrpc: Use call_rcu_hurry() instead of call_rcu()
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, rostedt@goodmis.org,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Eric,
 
-On 30-11-2022 11:39 pm, Guenter Roeck wrote:
-> On Wed, Nov 30, 2022 at 05:58:29PM +0100, Naresh Solanki wrote:
->> Add regulator flag map for PMBUS status byte & status input.
->>
-> 
-> Now you lost me. Two 1/4 patches with overlapping and different
-> content ???
-> 
-This patch wasn't suppose to be. will check what went wrong & avoid 
-these overlap in future.
-> Guenter
-> 
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ---
->>   drivers/hwmon/pmbus/pmbus_core.c | 30 ++++++++++++++++++++++--------
->>   1 file changed, 22 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
->> index 95e95783972a..f5caceaaef2a 100644
->> --- a/drivers/hwmon/pmbus/pmbus_core.c
->> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->> @@ -2752,6 +2752,15 @@ struct pmbus_regulator_status_category {
->>   
->>   static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
->>   	{
->> +		.func = -1,
->> +		.reg = PMBUS_STATUS_BYTE,
->> +		.bits = (const struct pmbus_regulator_status_assoc[]) {
->> +			{ PB_STATUS_IOUT_OC,   REGULATOR_ERROR_OVER_CURRENT },
->> +			{ PB_STATUS_VOUT_OV,   REGULATOR_ERROR_REGULATION_OUT },
->> +			{ PB_STATUS_VIN_UV,    REGULATOR_ERROR_UNDER_VOLTAGE },
->> +			{ },
->> +		},
->> +	}, {
->>   		.func = PMBUS_HAVE_STATUS_VOUT,
->>   		.reg = PMBUS_STATUS_VOUT,
->>   		.bits = (const struct pmbus_regulator_status_assoc[]) {
->> @@ -2768,6 +2777,7 @@ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] =
->>   			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
->>   			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
->>   			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
->> +			{ PB_POUT_OP_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
->>   			{ },
->>   		},
->>   	}, {
->> @@ -2778,6 +2788,18 @@ static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] =
->>   			{ PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
->>   			{ },
->>   		},
->> +	}, {
->> +		.func = PMBUS_HAVE_STATUS_INPUT,
->> +		.reg = PMBUS_STATUS_INPUT,
->> +		.bits = (const struct pmbus_regulator_status_assoc[]) {
->> +			{ PB_IIN_OC_FAULT,       REGULATOR_ERROR_OVER_CURRENT },
->> +			{ PB_IIN_OC_WARNING,     REGULATOR_ERROR_OVER_CURRENT_WARN },
->> +			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
->> +			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
->> +			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
->> +			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_OVER_VOLTAGE_WARN },
->> +			{ },
->> +		},
->>   	},
->>   };
->>   
->> @@ -2834,14 +2856,6 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->>   		if (status & PB_STATUS_POWER_GOOD_N)
->>   			*flags |= REGULATOR_ERROR_REGULATION_OUT;
->>   	}
->> -	/*
->> -	 * Unlike most other status bits, PB_STATUS_{IOUT_OC,VOUT_OV} are
->> -	 * defined strictly as fault indicators (not warnings).
->> -	 */
->> -	if (status & PB_STATUS_IOUT_OC)
->> -		*flags |= REGULATOR_ERROR_OVER_CURRENT;
->> -	if (status & PB_STATUS_VOUT_OV)
->> -		*flags |= REGULATOR_ERROR_REGULATION_OUT;
->>   
->>   	/*
->>   	 * If we haven't discovered any thermal faults or warnings via
->>
->> base-commit: 9494c53e1389b120ba461899207ac8a3aab2632c
->> -- 
->> 2.37.3
->>
+Could you give your ACK for this patch?
 
-Regards,
-Naresh
+The networking testing passed on ChromeOS and it has been in -next for
+some time so has gotten testing there. The CONFIG option is default
+disabled.
+
+Thanks a lot,
+
+- Joel
+
+On Wed, Nov 30, 2022 at 6:13 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+>
+> Earlier commits in this series allow battery-powered systems to build
+> their kernels with the default-disabled CONFIG_RCU_LAZY=y Kconfig option.
+> This Kconfig option causes call_rcu() to delay its callbacks in order
+> to batch them.  This means that a given RCU grace period covers more
+> callbacks, thus reducing the number of grace periods, in turn reducing
+> the amount of energy consumed, which increases battery lifetime which
+> can be a very good thing.  This is not a subtle effect: In some important
+> use cases, the battery lifetime is increased by more than 10%.
+>
+> This CONFIG_RCU_LAZY=y option is available only for CPUs that offload
+> callbacks, for example, CPUs mentioned in the rcu_nocbs kernel boot
+> parameter passed to kernels built with CONFIG_RCU_NOCB_CPU=y.
+>
+> Delaying callbacks is normally not a problem because most callbacks do
+> nothing but free memory.  If the system is short on memory, a shrinker
+> will kick all currently queued lazy callbacks out of their laziness,
+> thus freeing their memory in short order.  Similarly, the rcu_barrier()
+> function, which blocks until all currently queued callbacks are invoked,
+> will also kick lazy callbacks, thus enabling rcu_barrier() to complete
+> in a timely manner.
+>
+> However, there are some cases where laziness is not a good option.
+> For example, synchronize_rcu() invokes call_rcu(), and blocks until
+> the newly queued callback is invoked.  It would not be a good for
+> synchronize_rcu() to block for ten seconds, even on an idle system.
+> Therefore, synchronize_rcu() invokes call_rcu_hurry() instead of
+> call_rcu().  The arrival of a non-lazy call_rcu_hurry() callback on a
+> given CPU kicks any lazy callbacks that might be already queued on that
+> CPU.  After all, if there is going to be a grace period, all callbacks
+> might as well get full benefit from it.
+>
+> Yes, this could be done the other way around by creating a
+> call_rcu_lazy(), but earlier experience with this approach and
+> feedback at the 2022 Linux Plumbers Conference shifted the approach
+> to call_rcu() being lazy with call_rcu_hurry() for the few places
+> where laziness is inappropriate.
+>
+> And another call_rcu() instance that cannot be lazy is the one
+> in rxrpc_kill_connection(), which sometimes does a wakeup
+> that should not be unduly delayed.
+>
+> Therefore, make rxrpc_kill_connection() use call_rcu_hurry() in order
+> to revert to the old behavior.
+>
+> [ paulmck: Apply s/call_rcu_flush/call_rcu_hurry/ feedback from Tejun Heo. ]
+>
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Marc Dionne <marc.dionne@auristor.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: <linux-afs@lists.infradead.org>
+> Cc: <netdev@vger.kernel.org>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> ---
+>  net/rxrpc/conn_object.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/rxrpc/conn_object.c b/net/rxrpc/conn_object.c
+> index 22089e37e97f0..9c5fae9ca106c 100644
+> --- a/net/rxrpc/conn_object.c
+> +++ b/net/rxrpc/conn_object.c
+> @@ -253,7 +253,7 @@ void rxrpc_kill_connection(struct rxrpc_connection *conn)
+>          * must carry a ref on the connection to prevent us getting here whilst
+>          * it is queued or running.
+>          */
+> -       call_rcu(&conn->rcu, rxrpc_destroy_connection);
+> +       call_rcu_hurry(&conn->rcu, rxrpc_destroy_connection);
+>  }
+>
+>  /*
+> --
+> 2.31.1.189.g2e36527f23
+>
