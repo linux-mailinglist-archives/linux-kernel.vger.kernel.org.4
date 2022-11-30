@@ -2,146 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF1863D5B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A772E63D5AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbiK3Mge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 07:36:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
+        id S234895AbiK3Mf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 07:35:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233620AbiK3Mg1 (ORCPT
+        with ESMTP id S229921AbiK3Mfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 07:36:27 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CDC7B611
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 04:36:21 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id d3so11547027plr.10
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 04:36:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bhnxxzbyBgwXVydGu+B/mgXlMp0Dw1k8g2zoQkfcNo8=;
-        b=UGvBUrFjhu1KjtfNjzoVBn01HzbaTvtlgXOW9oOqaXkePKbAcwu+MkDoRe50kZ4Lrk
-         Jjbxunl94UjNrbpRpL7Vv4hcVezpmU0GVsWDrKxhESgzoNupU3Q5rJUh3qzsJUyWH9GS
-         bfSpdaLUDPUtn7uE0btukBLIaJ4jqXG7fITLwjdxtUJnPKnirXwGPA2b7ob5KFzCOs0w
-         t9931Z0EsgOza0JO+P20+RoNsFw8pGR3YszKGTSxYcQPKIiKbVvvvI+MPfG2jx/6KTKL
-         rJ79Lv+2XOamQ4uFaCuvvHCkWB8tcgDL+5AjknLzwbV85b0Djcwa/2AnJhB4Mw+0lW5B
-         mqDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bhnxxzbyBgwXVydGu+B/mgXlMp0Dw1k8g2zoQkfcNo8=;
-        b=l2tbtqJ3K5f4gTNAT0DMTR9pEQf+M9T/7Rv+qeynopzrMBTb2CQ5YLkirXsnm3Tz3X
-         kjYk8KH/pYMVNlqMrEYXu2GqJowF2mpyR8DvYPlcgDXQkw1ATqFowDe6ibJ3BqcOmqcl
-         L972WJccfugeuHoieEyebL8zDCEip5IhF4N2TqnKTOeSpxxWboTQ/btmd7cqRK8buWG5
-         VinobH86tQGMpZs17v08Ztx/UPvJPi00W5ebw99VeE4S7I/R20xd0UaZQOtE+wybOgsv
-         e0jEcr9kuW4l1OiiGU2SeUZgfkdHgXgOYrHrt3KTA7runIESKnJn1x2K0KEUd+3mVi9o
-         XB+A==
-X-Gm-Message-State: ANoB5pnWy9eNzg5s63BHU2+8Hg9iOUI3QIpNw54eznFtGH7CuHrqZpGT
-        3C+TKD28zwpZqTzVtbxB8HVnaFUwX7r1BK684bbAeA==
-X-Google-Smtp-Source: AA0mqf72LaJuo+xldVLoMSH5G22UPFDHa+Am3dOjn7c81G8pnPOX5X+pJ9fUEf8ltsSZSFWEDl7tgIcAn+JXKHzqzFI=
-X-Received: by 2002:a17:902:ee55:b0:189:69cf:9ea0 with SMTP id
- 21-20020a170902ee5500b0018969cf9ea0mr24961183plo.37.1669811780504; Wed, 30
- Nov 2022 04:36:20 -0800 (PST)
+        Wed, 30 Nov 2022 07:35:52 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67DD286D5;
+        Wed, 30 Nov 2022 04:35:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669811751; x=1701347751;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Y6YImtjFUGnItblf4QVHZN5K6aqgx8h21CJrsd1H+SE=;
+  b=XEm+d+JBtoD9rSObnK5zcCOs24FkXFzLd87CFkftSQWyyaD+tydv7dNf
+   ypd/28Dwwye5A3QMDMc5l4SUZqEFURbdLhZyv04+lWHtkZrJTZNO9BwIt
+   gEA84+sXG8fDyv1dF74B+j0gk9C9Nxj6WaTebUz0awYABjBmXIT3j+GNg
+   xtmsCSjFC5YqhbQan80VWbRCiHfXmIhnj9xbNETvRPhgA1ezy/WcyBoZX
+   h9kVPIrjtFEZ8EM7yOszy5LuGmJtLyKtMON07b3VwP6xpGFLQG5LtSS+l
+   6h43fv+X0ZWwz9jLsZ1lfICuVqO8ZHODNabn8SIt1+lXznySoQ4sA2Sna
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="315412993"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="315412993"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 04:35:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="621868377"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="621868377"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 30 Nov 2022 04:35:48 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id E31F010E; Wed, 30 Nov 2022 14:36:14 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH net-next v3 1/2] net: thunderbolt: Switch from __maybe_unused to pm_sleep_ptr() etc
+Date:   Wed, 30 Nov 2022 14:36:12 +0200
+Message-Id: <20221130123613.20829-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20221130121033.7270-1-cniedermaier@dh-electronics.com>
-In-Reply-To: <20221130121033.7270-1-cniedermaier@dh-electronics.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 30 Nov 2022 13:35:44 +0100
-Message-ID: <CAPDyKFpTT1=d=2LnynBywyRTfC7uM8GVGHkPYA0xgFhROhoPyg@mail.gmail.com>
-Subject: Re: [PATCH V3] dt-bindings: mmc: Remove comment on wakeup-source property
-To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marek Vasut <marex@denx.de>, kernel@dh-electronics.com,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Nov 2022 at 13:12, Christoph Niedermaier
-<cniedermaier@dh-electronics.com> wrote:
->
-> The current comment on wakeup-source is a little confusing because
-> the word deprecated can be interpreted at first glance to mean that
-> wakeup-source is deprecated. Also mentioning the obsolete property
-> confuses more than it helps. Therefore, the comment should be removed
-> completely because the enable-sdio-wakeup property is not used in
-> any current DTs. Also remove enable-sdio-wakeup reference in
-> wakeup-source.txt
->
-> Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Letting the compiler remove these functions when the kernel is built
+without CONFIG_PM_SLEEP support is simpler and less heavier for builds
+than the use of __maybe_unused attributes.
 
-Applied for next, thanks!
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+v3: sent proper patch
+v2: added tag (Mika)
+ drivers/net/thunderbolt.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-Kind regards
-Uffe
+diff --git a/drivers/net/thunderbolt.c b/drivers/net/thunderbolt.c
+index b20cd370b7f2..c73d419f1456 100644
+--- a/drivers/net/thunderbolt.c
++++ b/drivers/net/thunderbolt.c
+@@ -1319,7 +1319,7 @@ static void tbnet_shutdown(struct tb_service *svc)
+ 	tbnet_tear_down(tb_service_get_drvdata(svc), true);
+ }
+ 
+-static int __maybe_unused tbnet_suspend(struct device *dev)
++static int tbnet_suspend(struct device *dev)
+ {
+ 	struct tb_service *svc = tb_to_service(dev);
+ 	struct tbnet *net = tb_service_get_drvdata(svc);
+@@ -1334,7 +1334,7 @@ static int __maybe_unused tbnet_suspend(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int __maybe_unused tbnet_resume(struct device *dev)
++static int tbnet_resume(struct device *dev)
+ {
+ 	struct tb_service *svc = tb_to_service(dev);
+ 	struct tbnet *net = tb_service_get_drvdata(svc);
+@@ -1350,9 +1350,7 @@ static int __maybe_unused tbnet_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-static const struct dev_pm_ops tbnet_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(tbnet_suspend, tbnet_resume)
+-};
++static DEFINE_SIMPLE_DEV_PM_OPS(tbnet_pm_ops, tbnet_suspend, tbnet_resume);
+ 
+ static const struct tb_service_id tbnet_ids[] = {
+ 	{ TB_SERVICE("network", 1) },
+@@ -1364,7 +1362,7 @@ static struct tb_service_driver tbnet_driver = {
+ 	.driver = {
+ 		.owner = THIS_MODULE,
+ 		.name = "thunderbolt-net",
+-		.pm = &tbnet_pm_ops,
++		.pm = pm_sleep_ptr(&tbnet_pm_ops),
+ 	},
+ 	.probe = tbnet_probe,
+ 	.remove = tbnet_remove,
+-- 
+2.35.1
 
-> ---
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Marek Vasut <marex@denx.de>
-> Cc: kernel@dh-electronics.com
-> Cc: linux-mmc@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> To: linux-kernel@vger.kernel.org
-> ---
-> V2: - Instead of changing the comment, remove it
-> V3: - Remove also reference in power/wakeup-source.txt
-> ---
->  Documentation/devicetree/bindings/mmc/mmc-controller.yaml |  1 -
->  Documentation/devicetree/bindings/power/wakeup-source.txt | 13 ++++++-------
->  2 files changed, 6 insertions(+), 8 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
-> index 802e3ca8be4d..e82c00368088 100644
-> --- a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
-> @@ -293,7 +293,6 @@ properties:
->      description:
->        SDIO only. Preserves card power during a suspend/resume cycle.
->
-> -  # Deprecated: enable-sdio-wakeup
->    wakeup-source:
->      $ref: /schemas/types.yaml#/definitions/flag
->      description:
-> diff --git a/Documentation/devicetree/bindings/power/wakeup-source.txt b/Documentation/devicetree/bindings/power/wakeup-source.txt
-> index cfd74659fbed..697333a56d5e 100644
-> --- a/Documentation/devicetree/bindings/power/wakeup-source.txt
-> +++ b/Documentation/devicetree/bindings/power/wakeup-source.txt
-> @@ -17,15 +17,14 @@ interrupt.
->  List of legacy properties and respective binding document
->  ---------------------------------------------------------
->
-> -1. "enable-sdio-wakeup"                Documentation/devicetree/bindings/mmc/mmc.txt
-> -2. "gpio-key,wakeup"           Documentation/devicetree/bindings/input/gpio-keys{,-polled}.txt
-> -3. "has-tpo"                   Documentation/devicetree/bindings/rtc/rtc-opal.txt
-> -4. "linux,wakeup"              Documentation/devicetree/bindings/input/gpio-matrix-keypad.txt
-> +1. "gpio-key,wakeup"           Documentation/devicetree/bindings/input/gpio-keys{,-polled}.txt
-> +2. "has-tpo"                   Documentation/devicetree/bindings/rtc/rtc-opal.txt
-> +3. "linux,wakeup"              Documentation/devicetree/bindings/input/gpio-matrix-keypad.txt
->                                 Documentation/devicetree/bindings/mfd/tc3589x.txt
->                                 Documentation/devicetree/bindings/input/touchscreen/ads7846.txt
-> -5. "linux,keypad-wakeup"       Documentation/devicetree/bindings/input/qcom,pm8xxx-keypad.txt
-> -6. "linux,input-wakeup"                Documentation/devicetree/bindings/input/samsung-keypad.txt
-> -7. "nvidia,wakeup-source"      Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
-> +4. "linux,keypad-wakeup"       Documentation/devicetree/bindings/input/qcom,pm8xxx-keypad.txt
-> +5. "linux,input-wakeup"                Documentation/devicetree/bindings/input/samsung-keypad.txt
-> +6. "nvidia,wakeup-source"      Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
->
->  Examples
->  --------
-> --
-> 2.11.0
->
