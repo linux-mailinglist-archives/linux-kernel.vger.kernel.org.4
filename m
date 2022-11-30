@@ -2,66 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A280263E0A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E1763E0B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 20:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiK3TVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 14:21:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
+        id S229670AbiK3TY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 14:24:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiK3TVR (ORCPT
+        with ESMTP id S229708AbiK3TYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 14:21:17 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52775837C0;
-        Wed, 30 Nov 2022 11:21:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1669836074; bh=e1SzejAshlwmjIJTPtgfJldWkml6WCbTZ/fi+IT8JiQ=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=ha8J8zvp5EzUrEBvjCO1JLCkl6kNoPZE+zSPrjZtlMbG0cEtsYk/XrVw7elSWHZgk
-         WipyhPZWlLQlJtJ5olNcDzeM1kj9mGEfQuMYGFIB/VkznquovIHcSs64e3y6AxdS5z
-         cBqhd1ukKsmasnyoy7EaRRx7NrnFUUXsWIi2RcTriW91bWYjiQAIfK6vYbFDKtoEM2
-         6eAhipHfRK7ue+IF9bWFPoCu83XO1TR+A3gXxwLgBgdtRDePa9iK0AroHC2poksse0
-         2r4MQgJppevm24rosx63k9nQtvsOoGSIl89ULlBLzXq6XdTXweRIb5KVKtrOtWxhEn
-         ImOPhjOU/T5Iw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.100.20] ([46.142.33.165]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N33Ib-1osN0R2Y1t-013Jsn; Wed, 30
- Nov 2022 20:21:14 +0100
-Message-ID: <e286ff2b-9072-a009-209a-4008f47bab94@gmx.de>
-Date:   Wed, 30 Nov 2022 20:21:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 6.0 000/289] 6.0.11-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:uujxpXT/r1Ufq3N8wp6bXOTl5r58zuIDWBpWxPWr92iDX5SYIBD
- XUA+0f9EGCc3reHcYiZ5rrKGSDygmAkNBTT8XHlIegDOBD5peX65m5M7xRGZwKNh/NfjTuQ
- CFCazrX2pQGztvBJRpYeplNLpyv6+/oggVfrF+BryeCdpV7TIwzLz1KITR/JysRNKc6EgZu
- 84oxAQX//zWPY0EEKB4uQ==
-UI-OutboundReport: notjunk:1;M01:P0:aAUpxFf6uGY=;08R5yohcpZlw5Am8n2GLKeTubVt
- uWWB4eXH++8FQqPjFziYYrWCW/md8MM+/PBwxUXtOQ9qpPGGt5APQRN4v2gpnFNjlxAffo3Ua
- b/xWMGQZbfdXHz18A4NIG3vfjfRQNqmM09b5N6i4sVSIfaVl4QkmLQ7cV3A/0sDQ/L5Z4Y4c2
- mK9CZ8HmdzvxNtLdONdiR7FQWkbgeiUXty5/Y+xy5QXLwQbsz0YbCOiQY40f9nvU5x3ujIAKj
- fSSQ9uwNZiOHd8pEfWEFpvVMCDBaQhZl3STybrM30+o4H1p/sqT9HhnASc3FA/dk7HKvDSFUY
- qZXE/O6EtEc+zTlhvnO8eo2zf4aGwdbDoNMXhk/4o/sK/ehOqiSGwBBN2bpE2MTu4aFAPGQtf
- 5+kVEC7hjs5uRqCs7dkte+d4O5dM7LR5rmYqSY3p9mWmzom0sXqOYFTYpbQjhYcAvwFTb6h+4
- MZdNKT/Mt4Wjn+LXqONzJlOVwfPbRaVLrEh3zqG7JPdvHZ4aSQgI+Jh2DREaw9+oNm1Q0v1YJ
- COW0gwhpKwpBjJDm9i2Vk//d4JQ+Si+CHQ84znm1eLixxFf0726k7iEJPx98XUP3V4wPuSgtJ
- 9qLSnK1cfxDhV2QhzVKjyAScNIljJ2+vw+nxcoDAAEITpyvKxdmFcj6IVaPp8jpxRVKH4IadQ
- h074eWhMRUKN6Et90zxZmnZyH0pvJSEctCgoD0koBpxBXKct9Q2UQ6Mv/b0nAERHWwA1q5h9T
- 42cdSKeN/DBZAzf2TsnO/xZ/5tN2gyVwhw6LsRb97TgcWrITIvCS9mTR/F+nT2cT1lpvNwdqP
- 2Y/5kunXF0nYcStl5ownFrL5vDAUhK+RPSTCYpO+B8RvlW7qwcUSTXYYEg+2BRsY5IFLPVmzf
- Pz0VaqxyBnSvk6s7r6R3uIaDYlhahS1pGmGGYX0kygVsmj8hrWqWsWm8cASAz4gRZ6fMl7GLN
- wA95kiu1Q1aLMg2fY9B81IDwVh0=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 30 Nov 2022 14:24:03 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B571855A8C
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:24:02 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id m204so19875689oib.6
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 11:24:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+wo+rpyosrQ5mo9ZKXiEdshfV8pblh1Ox95hEXjzopc=;
+        b=lN5NZq66xcfgJmWvkkoUluI350bdxZR00+FKoZxMShq9efk+8Ito/DmHVUAqiIZSj/
+         HLC5ZS3q8yiIl6OMYtzoomsmFwxjrbaYBHRambc5r56FFvdEvwmVL22/c89sELLl7Wsv
+         dr8jdIMx2/ogKPh0XRRh+VnQwgcBU8+5sSLa4EevsSBWM13Us0E0pyloCjrTAFVx1SOO
+         PnL5OqbegXw5uerTa2r93gI7++ZPnIoahH+NJnzmhXo3rFgNzEvFiAHA2PC2OU8d/yn0
+         2enDE7G8oj+M8KXNxMRTk5w0UqWrHT5jIqpAGNlKjiww0N9TSA2GYrW8QRgGY7YB6n0+
+         KCDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+wo+rpyosrQ5mo9ZKXiEdshfV8pblh1Ox95hEXjzopc=;
+        b=5MmRfKKJ8j/BQ9NeP5jsS6w2kLwKzJtVFel6Gjb2UntD3mNomT/XnsFHGYapF8vJTe
+         fofa/7Xy7W+QDoQRlNULITETH2asrh86me7SEiAhUvtQntPix/wBea6BoQqSMMyFUAi2
+         9wvT1CUVeZYWpN9BAip11wpsOdvPeZWSsa5JOBfi5v/9n8NGl6mCvjdL8nLtg15ZW4oG
+         N1vf3o+zxnVqMiL6+YEUva+JoxhK9x5Bu/dJIGh/pRaAckr10+DfDOksZmVBjK4uE69F
+         5cvZmldhIxqUQurTQqjX3ivvAR5dsqDiYBPN2/mOCWo49PgoRfSj4kvmygBOp34JNKXc
+         ixQw==
+X-Gm-Message-State: ANoB5plHNf2sPxeiHfuDfXJgv9I22yH5zgokJzsJpExRJJswQY1qt+Sy
+        jSUOwkEL3NlltFAWIZiHBKIdpA==
+X-Google-Smtp-Source: AA0mqf758Pu+ja29ReuXlHGUpRKc/XuI+oOE7XGxbaP8x37MIQDpqzC4Mn9T29U26LQ54g7cXZLuTg==
+X-Received: by 2002:a05:6808:10d6:b0:354:9397:4cc4 with SMTP id s22-20020a05680810d600b0035493974cc4mr21155160ois.147.1669836241968;
+        Wed, 30 Nov 2022 11:24:01 -0800 (PST)
+Received: from smtpclient.apple (172-125-78-211.lightspeed.sntcca.sbcglobal.net. [172.125.78.211])
+        by smtp.gmail.com with ESMTPSA id c39-20020a9d27aa000000b00661b019accbsm1283915otb.3.2022.11.30.11.23.59
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 30 Nov 2022 11:24:00 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH] hfs: Fix OOB Read in __hfs_brec_find
+From:   Viacheslav Dubeyko <slava@dubeyko.com>
+In-Reply-To: <20221130065959.2168236-1-zhangpeng362@huawei.com>
+Date:   Wed, 30 Nov 2022 11:23:56 -0800
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, sunnanyong@huawei.com,
+        wangkefeng.wang@huawei.com,
+        syzbot+e836ff7133ac02be825f@syzkaller.appspotmail.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <AF1D5323-061B-4B7E-83E4-90BF1275DB30@dubeyko.com>
+References: <20221130065959.2168236-1-zhangpeng362@huawei.com>
+To:     Peng Zhang <zhangpeng362@huawei.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,14 +80,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
 
-6.0.11-rc1
 
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 37)
+> On Nov 29, 2022, at 10:59 PM, Peng Zhang <zhangpeng362@huawei.com> =
+wrote:
+>=20
+> From: ZhangPeng <zhangpeng362@huawei.com>
+>=20
+> Syzbot reported a OOB read bug:
+>=20
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> BUG: KASAN: slab-out-of-bounds in hfs_strcmp+0x117/0x190
+> fs/hfs/string.c:84
+> Read of size 1 at addr ffff88807eb62c4e by task kworker/u4:1/11
+> CPU: 1 PID: 11 Comm: kworker/u4:1 Not tainted
+> 6.1.0-rc6-syzkaller-00308-g644e9524388a #0
+> Workqueue: writeback wb_workfn (flush-7:0)
+> Call Trace:
+> <TASK>
+> __dump_stack lib/dump_stack.c:88 [inline]
+> dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+> print_address_description+0x74/0x340 mm/kasan/report.c:284
+> print_report+0x107/0x1f0 mm/kasan/report.c:395
+> kasan_report+0xcd/0x100 mm/kasan/report.c:495
+> hfs_strcmp+0x117/0x190 fs/hfs/string.c:84
+> __hfs_brec_find+0x213/0x5c0 fs/hfs/bfind.c:75
+> hfs_brec_find+0x276/0x520 fs/hfs/bfind.c:138
+> hfs_write_inode+0x34c/0xb40 fs/hfs/inode.c:462
+> write_inode fs/fs-writeback.c:1440 [inline]
+>=20
+> If the input inode of hfs_write_inode() is incorrect:
+> struct inode
+>  struct hfs_inode_info
+>    struct hfs_cat_key
+>      struct hfs_name
+>        u8 len # len is greater than HFS_NAMELEN(31) which is the
+> maximum length of an HFS filename
+>=20
+> OOB read occurred:
+> hfs_write_inode()
+>  hfs_brec_find()
+>    __hfs_brec_find()
+>      hfs_cat_keycmp()
+>        hfs_strcmp() # OOB read occurred due to len is too large
+>=20
+> Fix this by adding a Check on len in hfs_write_inode() before calling
+> hfs_brec_find().
+>=20
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Reported-by: syzbot+e836ff7133ac02be825f@syzkaller.appspotmail.com
+> Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+> ---
+> fs/hfs/inode.c | 2 ++
+> 1 file changed, 2 insertions(+)
+>=20
+> diff --git a/fs/hfs/inode.c b/fs/hfs/inode.c
+> index c4526f16355d..a0746be3c1de 100644
+> --- a/fs/hfs/inode.c
+> +++ b/fs/hfs/inode.c
+> @@ -458,6 +458,8 @@ int hfs_write_inode(struct inode *inode, struct =
+writeback_control *wbc)
+> 		/* panic? */
+> 		return -EIO;
+>=20
+> +	if (HFS_I(main_inode)->cat_key.CName.len > HFS_NAMELEN)
+> +		return -EIO;
 
-Thanks
+If I understood correctly, we have corrupted struct hfs_cat_key =
+instance. But what is the initial place
+of this corruption? What function could introduce such corruption? =
+Maybe, it needs to find a place(s)
+where we can add some additional check and potentially exclude the =
+incorrect input into
+hfs_write_inode()?
 
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
+I think it is not only place where it makes sense to check the =
+correctness of struct hfs_cat_key
+instance. Could we introduce a special function that check struct =
+hfs_cat_key on corrupted
+state and to use this function to check the state of the key in =
+functions that operates by
+keys?
+
+Thanks,
+Slava.=20
+
+> 	fd.search_key->cat =3D HFS_I(main_inode)->cat_key;
+> 	if (hfs_brec_find(&fd))
+> 		/* panic? */
+> --=20
+> 2.25.1
+>=20
 
