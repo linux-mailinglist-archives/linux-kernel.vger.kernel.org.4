@@ -2,106 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8123763D5C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BF263D5D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233498AbiK3Mmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 07:42:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
+        id S234543AbiK3Mno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 07:43:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233918AbiK3Mmg (ORCPT
+        with ESMTP id S234222AbiK3Mng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 07:42:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CFB2BD8
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 04:42:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3979B81A7C
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 12:42:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E29D3C433C1;
-        Wed, 30 Nov 2022 12:42:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669812152;
-        bh=GRjGS5i/zixu/d/rdcqZ1QlptYxr8aRxr16aqJBrgSo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M6VNy9M/8qVMjEaOzq0nbrSDjKyYFaa1YPhUg7z7kP7supC/LHoQY8t4kv7zL0Qli
-         3Me6o1t/v0bAkBodB07aoJnWQDlZXTRlSDUcI5C7lcpOGYGkOP1CiNWH6Iho7PQtkm
-         LywRW0iIlHTLsWcnhWO06Tq+k4YATnhjVHOGtQoY=
-Date:   Wed, 30 Nov 2022 13:42:23 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Carlos Llamas <cmllamas@google.com>
-Cc:     stable@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, Zi Fan Tan <zifantan@google.com>,
-        Todd Kjos <tkjos@google.com>
-Subject: Re: [PATCH 5.10 0/6] binder: backports for data leak and UAF
-Message-ID: <Y4dPrxKjnUOtvwIc@kroah.com>
-References: <20221130035805.1823970-1-cmllamas@google.com>
+        Wed, 30 Nov 2022 07:43:36 -0500
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42532C664;
+        Wed, 30 Nov 2022 04:43:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=/BlcjrhlqFewCWUJrrIEfdV+ZSjxYvhgiyJGvIdAx+w=; b=bpjDeNkppxzTtMyTUxjxhx0xQh
+        EWKf76ISQ7SoDJ0EOpicgmCOEREw5IHvO653wvxSVqfCsoyjv87MzjvGiTej4MQfOCmLx1x3kdnuD
+        OumJcs7i/XH0vslJ9seiobfgQmmHnCK80GE1XM13w6PHTOmzqI18HEQo2O2wRYzoCJ1R51gBjjrtl
+        Dif7dAIxl5BhbmmOqr7Lpc94+2gOP3MmEGUJ6d72tJsbnqKAzKIiZ9eaaoYjVV37cS8fNW42C8r+v
+        NcEfnn9durihatI+ZxjmdDFlJ0b4HsxQQlmQZHoQ9ludbQJObFoch5RwjKdXg8ASlfns1m1S39a2c
+        Ltmf1QMp7P6atn6OJG8lOC69LNVMlHnEeHhI+Orfdri134X4fa11hX/FHDVJodMk3vG4dYAVE5XnO
+        uMvvXabkcdpip95UufW4LqU1l4tzLXEcR67N62bBWKkXAKU6/wpO846Do6CMRRd+He13JAjXo9O1f
+        t1xU5+fXophHji8FycSiBTiIL71wTwQR/rzyIngTffoGUf436lNQGK+zvQTpTDJ6IVJleV8PhPa0J
+        UQ9FANkrfNtSxzxk3yFASZaGpvD+1HxXNfAgGc8U3RE1rrj3bQVIwYfq6r4xqpzEWBBj2H5iCVeDu
+        SeE7oIWwV8uowKRZB/GoE9zkf/CnLhgGMb2X/DaKI=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Schspa Shi <schspa@gmail.com>, asmadeus@codewreck.org
+Cc:     ericvh@gmail.com, lucho@ionkov.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+8f1060e2aaf8ca55220b@syzkaller.appspotmail.com
+Subject: Re: [PATCH] 9p: fix crash when transaction killed
+Date:   Wed, 30 Nov 2022 13:43:20 +0100
+Message-ID: <2356667.R3SNuAaExM@silver>
+In-Reply-To: <Y4c5N/SAuszTLiEA@codewreck.org>
+References: <20221129162251.90790-1-schspa@gmail.com> <m2o7sowzas.fsf@gmail.com>
+ <Y4c5N/SAuszTLiEA@codewreck.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130035805.1823970-1-cmllamas@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 03:57:59AM +0000, Carlos Llamas wrote:
-> This series of backports consists of 3 main patches from Todd submitted
-> upstream in [1]. The intention is to avoid untranslated data from the
-> senders to be visible to the target processes. More details of this
-> issue can be found in the same thread.
+On Wednesday, November 30, 2022 12:06:31 PM CET asmadeus@codewreck.org wrote:
+> Schspa Shi wrote on Wed, Nov 30, 2022 at 04:14:32PM +0800:
+> > >  - reqs are alloced in a kmem_cache created with SLAB_TYPESAFE_BY_RCU.
+> > >  This means that if we get a req from idr_find, even if it has just been
+> > >  freed, it either is still in the state it was freed at (hence refcount
+> > >  0, we ignore it) or is another req coming from the same cache (if
+> > 
+> > If the req was newly alloced(It was at a new page), refcount maybe not
+> > 0, there will be problem in this case. It seems we can't relay on this.
+> > 
+> > We need to set the refcount to zero before add it to idr in p9_tag_alloc.
 > 
-> Furthermore, Todd's patches also fix a use-after-free issue introduced
-> by commit 32e9f56a96d8 ("binder: don't detect sender/target during
-> buffer cleanup"). In which invalid userspace input causes unprocessed
-> objects to be incorrectly released. Any subsequent references to these
-> objects will trigger a UAF as noted by the following KASAN trace:
+> Hmm, if it's reused then it's zero by definition, but if it's a new
+> allocation (uninitialized) then anything goes; that lookup could find
+> and increase it before the refcount_set, and we'd have an off by one
+> leading to use after free. Good catch!
 > 
->  [  244.748468] ==================================================================
->  [  244.750486] BUG: KASAN: use-after-free in binder_ioctl+0xb88/0x32e0
->  [  244.751276] Read of size 8 at addr ffff67b1865bea58 by task poc/593
->  [  244.752074] 
->  [  244.752725] CPU: 0 PID: 593 Comm: poc Not tainted 5.10.156 #1
->  [  244.753683] Hardware name: linux,dummy-virt (DT)
->  [  244.754717] Call trace:
->  [  244.755216]  dump_backtrace+0x0/0x2a0
->  [  244.755836]  show_stack+0x18/0x2c
->  [  244.756306]  dump_stack+0xf8/0x164
->  [  244.756807]  print_address_description.constprop.0+0x9c/0x538
->  [  244.757590]  kasan_report+0x120/0x200
->  [  244.758236]  __asan_load8+0xa0/0xc4
->  [  244.758756]  binder_ioctl+0xb88/0x32e0
->  [  244.759283]  __arm64_sys_ioctl+0xd4/0x120
->  [  244.759677]  el0_svc_common.constprop.0+0xac/0x270
->  [  244.760184]  do_el0_svc+0x38/0xa0
->  [  244.760540]  el0_svc+0x1c/0x2c
->  [  244.760898]  el0_sync_handler+0xe8/0x114
->  [  244.761419]  el0_sync+0x180/0x1c0
+> Initializing it to zero will lead to the client busy-looping until after
+> the refcount is properly set, which should work.
+> Setting refcount early might have us use an re-used req before the tag
+> has been changed so that one cannot move.
 > 
-> This second issue along with the reference to the commit fixing it was
-> first reported by Zi Fan.
+> Could you test with just that changed if syzbot still reproduces this
+> bug? (perhaps add a comment if you send this)
 > 
-> The other 3 commits included in this series are simply upstream fixes
-> for the main patches.
+> ------
+> diff --git a/net/9p/client.c b/net/9p/client.c
+> index aaa37b07e30a..aa64724f6a69 100644
+> --- a/net/9p/client.c
+> +++ b/net/9p/client.c
+> @@ -297,6 +297,7 @@ p9_tag_alloc(struct p9_client *c, int8_t type, uint t_size, uint r_size,
+>  	p9pdu_reset(&req->rc);
+>  	req->t_err = 0;
+>  	req->status = REQ_STATUS_ALLOC;
+> +	refcount_set(&req->refcount, 0);
+>  	init_waitqueue_head(&req->wq);
+>  	INIT_LIST_HEAD(&req->req_list);
 > 
-> I've tested this series applied to 5.10 and 5.4 which fixes the issues
-> above as expected. So please pick these up for 5.10 and 5.4 stable.
+> ----- 
 > 
-> [1] https://lore.kernel.org/all/20211130185152.437403-1-tkjos@google.com/
+> > >  refcount isn't zero, we can check its tag)
+> > 
+> > As for the release case, the next request will have the same tag with
+> > high probability. It's better to make the tag value to be an increase
+> > sequence, thus will avoid very much possible req reuse.
 > 
-> Thanks,
-> Carlos Llamas
-> 
-> Cc: Zi Fan Tan <zifantan@google.com>
-> Cc: Todd Kjos <tkjos@google.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org> 
+> I'd love to be able to do this, but it would break some servers that
+> assume tags are small (e.g. using it as an index for a tag array)
+> ... I thought nfs-ganesha was doing this but they properly put in in
+> buckets, so that's one less server to worry about, but I wouldn't put
+> it past some simple servers to do that; having a way to lookup a given
+> tag for flush is an implementation requirement.
 
-All now queued up, thanks.
+I really think it's time to emit tag number sequentially. If it turns out that
+it's a server that is broken, we could then simply ignore replies with old/
+unknown tag number. It would also help a lot when debugging 9p issues in
+general when you know tag numbers are not re-used (in near future).
 
-greg k-h
+A 9p server must not make any assumptions how tag numbers are generated by
+client, whether dense or sparse, or whatever. If it does then server is
+broken, which is much easier to fix than synchronization issues we have to
+deal with like this one.
+
+> That shouldn't be a problem though as that will just lead to either fail
+> the guard check after lookup (m->rreq->status != REQ_STATUS_SENT) or be
+> processed as a normal reply if it's already been sent by the other
+> thread at this point.
+> OTOH, that m->rreq->status isn't protected by m->req_lock in trans_fd,
+> and that is probably another bug...
+
+
+
