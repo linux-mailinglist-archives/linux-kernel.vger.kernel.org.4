@@ -2,179 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D006563D7E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C8E63D7F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 15:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiK3OPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 09:15:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49778 "EHLO
+        id S229613AbiK3OSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 09:18:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiK3OOt (ORCPT
+        with ESMTP id S229457AbiK3OSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 09:14:49 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F3D7CA8D;
-        Wed, 30 Nov 2022 06:14:37 -0800 (PST)
-Date:   Wed, 30 Nov 2022 14:14:33 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669817675;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FVO6zWidXe6Zg/00vyTjYgijpJdIvLIKWg8mwZB6WUk=;
-        b=jJr6lvwE5HoKZQ3iwBpA72pDmyP3fzGq2uChpeVtnJAA5sKmEMfDjGtob0EtNYY3QS4Zqj
-        AtxedjVzosKK/C2+SpoDtjTCPNpSikL8up/sO0Fm8akKVJwuAkoerP6jDhg+ptRp7PU9ES
-        Ios+SgGVeyeJk3dCxIebZymao7qahpmU6uftk4FTmwqBBaJJWHRlhCzbW308olJh2lqXRQ
-        nt3iHiS3KzfS6JFED+0AXQ5t5JQyVpirGrUQU6d2J8pm8s8G0cPaxlFNWUvLn6EisGS8Xo
-        Qk44zO3fPoh0wVVF1iPII3gKQBh7y8qipbpZ/K7u6sYPEjG57kZK3AyC9QJA6Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669817675;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FVO6zWidXe6Zg/00vyTjYgijpJdIvLIKWg8mwZB6WUk=;
-        b=v3r7yglRuFcMRjgVjbNVSQOPNp4epMuUebQWMxga/8zZwizx0ggqZczYEF2t/1n84TdpU/
-        y7BJL+KlQBLGmtAA==
-From:   "tip-bot2 for Yang Yingliang" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] genirq/irqdesc: Don't try to remove non-existing sysfs files
-Cc:     Yang Yingliang <yangyingliang@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <20221128151612.1786122-1-yangyingliang@huawei.com>
-References: <20221128151612.1786122-1-yangyingliang@huawei.com>
-MIME-Version: 1.0
-Message-ID: <166981767350.4906.13064198854331518868.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+        Wed, 30 Nov 2022 09:18:14 -0500
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2066.outbound.protection.outlook.com [40.107.212.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B094E416;
+        Wed, 30 Nov 2022 06:18:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HYsZor0vN+WP9zPT/madVkdUA5wrwFGNZ2Il6azGHdKhNbXt0aRh17l9oZIYi3wK+D2f9bDvHqZ8D1XAm9/4zLPV/Fxx+ZqFEWLXEondhayl7lPN78qXoOFIXY4C7YM33GoIcfUqqnL2feQtrRu+yCIbWiQnj7pmaGEkJBI0fgTDBGtn7PwKTSmEDMnyd2gSf6pQhkq75Jn+vXwlDTE/jzJq6DNomsJhlxp+iBgTdO8hmFW4lWX4FFzQ3FxaXPXVAY+v9CZJ1LNZF2CyUM1ci6yRF7as8+hBew5HfIEzIJSAtgD/PrQqRynailtjqncAKthDc95lMiX9p1xH7pIhMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9L9a/DwtVzcbI0SZs6p+1FcLGpm2jwidEaZ2TiS/gI8=;
+ b=Yw8PRGcpsCqD9OSRbKeq8C9dZWT9WBqZR5AFkq36bIV/avjXJflnPhXJTyq/HyFQgr4ByurdWF6AYpwMnwRdFp7LI2odl0PJM8iEni2Wa2CFeGUZC63tNAiOX+r9BMxH6nghMpOuV4etubGy3UKm+TrGphjngRD4VeQgoUOpbeg7EikkZJ2osgBdLYl56NwLGVwWeP+lUGgzljoj/aOeEifUycD+w/Q3PSzNh9Zl1GhHDr6bm4Yqq2u9Izd1+1JZeVMh7vUosyDHAed+LXjryvBSDouP6fZaKy18HD+xmNKNDmtyvjoIRSSGJwdwAgzSUrlEzcdiCs6fJlA7W+OqyQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9L9a/DwtVzcbI0SZs6p+1FcLGpm2jwidEaZ2TiS/gI8=;
+ b=4wg9fxYT8o87i102NuixqDqNpTF5FYRvrvjoYoA6yB/VEt1Xit5wkQWkfToLzA5lSG8z0g3C99MzYKNGfaoqQ1OgARRy9racgdWwp6Y8hw0jian/hmqdgi4TrQdRLtR9rK/XZsbd011v+9zJQ8Gr5bD/xcIfSDCUibMYhvapHF4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17)
+ by CY5PR12MB6574.namprd12.prod.outlook.com (2603:10b6:930:42::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Wed, 30 Nov
+ 2022 14:18:09 +0000
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::9eca:d454:d407:7ba2]) by BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::9eca:d454:d407:7ba2%3]) with mapi id 15.20.5857.023; Wed, 30 Nov 2022
+ 14:18:09 +0000
+Message-ID: <363d5190-3346-de1f-fe8a-85603b0eed11@amd.com>
+Date:   Wed, 30 Nov 2022 08:18:07 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] docs: Integrate rustdoc-generated output to Rust docs
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>, ojeda@kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bilbao@vt.edu
+References: <20221128201932.168313-1-carlos.bilbao@amd.com>
+ <87h6yi67mz.fsf@meer.lwn.net>
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+In-Reply-To: <87h6yi67mz.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: CH0PR04CA0068.namprd04.prod.outlook.com
+ (2603:10b6:610:74::13) To BL1PR12MB5874.namprd12.prod.outlook.com
+ (2603:10b6:208:396::17)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5874:EE_|CY5PR12MB6574:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6913cb1f-eddb-406e-f3c5-08dad2ddb507
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vJwiREONxDd+5VndM0T6NpySZ6YNtz/HDSRAcfuew8bjR4BAfBy17D2R5maNgSbTEih3yEUdSo5lk0O2GHlNBdNIJ9KcS2KXw9p/jiRL1XPxNfYuJ3qvWpDEUM/nsFtk0N5ph9qbLoYL4yf2e48Ulv6yQ5+WwJdAkRfxQoPTvlAV+piy/9jDU6z4lrYSPifqS/gFDn05ntDiuPPOYDYQh34hbkW5cmY1g+GD9ybkJh5putJpPfT7D216JjfBda6BbKfOutliFw6EtQ6PqWhQ1K5fZJ5GaAf8tpg0G05VMnfJYJEbqHB+dwCFegx8JlgnU7aX2bdHgnA5eL81+6iBbwn2RXbx0ipzYhto24VrhhkxR+DaufQUo5e5IFdiFP+fiqNKg35o8LcNK2p+jVo7P2LyuFuG6WSGfhPZsWtYbk9q865ZCVDcVieWMW5IzKRdTpOdwYagDQCx3dO0Ezvh+w6dCc3LQfQl6kQ1wZ4gFKMBCVWXhY83OAEhiBCURCyfotMmCpQhD/XbLliTyJ39adOg3LwMXsHRweFbVsFneRby8qKUmZXp+E6PP5XXQG9WLCcJJwU2vk5Bdr2TECU2Er9g0Ytm+G84bE7/cDTCcbF8dEvrtiaCKkuJaf52S/fFP479TJa9YI8K88vUyMOXKrzY9ex3zOEsH5ajl4UUrnfOfRgHtA0Iywo9SkSH2lKvfDVu+vxFGswXFITiVRG/fTVa1BNhLLaHbIFOdTilWFY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5874.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(136003)(39860400002)(366004)(376002)(451199015)(83380400001)(31696002)(86362001)(38100700002)(4326008)(66556008)(66946007)(66476007)(8676002)(8936002)(2906002)(5660300002)(6512007)(44832011)(186003)(6506007)(2616005)(41300700001)(6486002)(53546011)(478600001)(26005)(316002)(31686004)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QVJTTWRoOUROemgvUXBXeW51aitYeWxqWUp2MlJ0MXdUMUtHdWRWTEp0Wmsy?=
+ =?utf-8?B?bDVnWHYwdWoremFCdXgyZFYyakJ2MzVZTUMxSFJid0N2SnI4MVJwMngvQTRn?=
+ =?utf-8?B?dUFHdHRCZFRDb0Rlek1HelpCWHZBWkN0RU5aVEI4Z1lCdm96UEZieW8rbmtQ?=
+ =?utf-8?B?bzN5QVVmVkM0UVhlSzRNTVFOL3BpR0VRaGtwUlRpc3VGTm9TVlN2aExGTXRC?=
+ =?utf-8?B?MzVmMmF3QTF5RUl5dllsOXB3SEFOa09nZ2dCUUxnaDdxbE0vK3lPelRpNDEr?=
+ =?utf-8?B?N3lxYWZJcU5mUzVBT3NPTW8rYkw1NlhQMHI4bnFhNUdzMlRsb0hNb2VpNC83?=
+ =?utf-8?B?aG5ZMFR4dWlpV2d6SFV3OGZYOU9Wckh4N1UvWngwQThzbHc2RXU0eXhJaGx2?=
+ =?utf-8?B?bjNWV3ZSWHR5S05qUm05M2x5WVNmOXMvd2J5VWRlYXYrMzhUTXNLYWwzak5i?=
+ =?utf-8?B?MkRyQXhYcDRhUmdhbDZQQTdZVUVxSzhoc2RIbTdBdU5mclpHMU5SeDJKdFZn?=
+ =?utf-8?B?eWNvRG8zWFZKTlErTzNoaDhmajdqVzRMR2VtcTZWSUZNa0FSWGVhdXJrakM3?=
+ =?utf-8?B?VmFseFhKQ1ExRzFCRklLenFzclU1eTFzc2U3VDh5VlRWbTMyWW5QYXJHSXdQ?=
+ =?utf-8?B?c0wySU9TK3lCdnRuK1hKSG9zdmlTYytYaHVIU3pBbnRURG5zOVVLaWRTQmFX?=
+ =?utf-8?B?K1ZwY3l4QWJKMGlnV05BYnBmMzZ1aUV2ZjF4QlMyNUhEZWRmU2VJVVVCSkVy?=
+ =?utf-8?B?RHBReFZrYXNMN204RlZ2am9BRGVHL0RuRUhOYnJXNnBqSkNOaklsc0JDeit3?=
+ =?utf-8?B?cVAxQWpINmNzWGw2YWt3RjhkUXlROWQ4WmMrZVFGZmMyOU01ZUtIMEZOK2Vx?=
+ =?utf-8?B?TXhnUFJIdi9yblhQMXUyajBYODFWVEVOMllxSUU2UGovVTg0M2cvOVFVbWRV?=
+ =?utf-8?B?a0ZrUFlIczdIa2FnNU96WC8rZXFENzJIekZOVnVWcVdRMktLUjQ3ZEptdzdY?=
+ =?utf-8?B?SU4vai96RXVhK3hIdUtwcUU3STBNUkcycUZRUUE4UklRYjY2NERWakRKZHZl?=
+ =?utf-8?B?TzB4Uk5ONnRYcCtNcW9JUUdINWNDYzVralN6UFcxUitNSU1mVmhRUVZ5YTd0?=
+ =?utf-8?B?VnFTS3lVTEhPcnhTbC9CMDRDbXVURXI3VWJoaEttSGREeUFZenFpVzhNZ1VP?=
+ =?utf-8?B?eDBlQTVPRnBRTTRWeXdYaVJreTQxeFBiT1lYTzEybzZoaEtLcXlRamdhRGc1?=
+ =?utf-8?B?WUxoTnc1bWlpaTFRQURsL2c1Z29jM0NPM3BNOVRRcHM0QjEwQ2MzSjR4RW92?=
+ =?utf-8?B?di8vV3p4VFp0aUVZa3JTVVowaG5RNzZlTmV4Qkp4SGdvdUF5dWl0N0NEUXJV?=
+ =?utf-8?B?VVdhNGN0cGJTOWd3K3VndjRFSmF6SXFLb3h3cnd1S21YODhPV2RiSXJtcnM0?=
+ =?utf-8?B?Zk9KR3JjZ2tITVI4azJWVUZiOVNWaGpaUFJEZXN6ZWRFVjRNdkwzTVlpSzMr?=
+ =?utf-8?B?aG0xQkgxYTBMcTkvVU5ObHdhWCtuYTVlZjYxTzhZbFNnRTNTci8yZVRPM2RW?=
+ =?utf-8?B?RkE3SXlSbHEzUEsreU5paWV1WDd4cVpWZ2dZejAvMDlha09qSWN2UG51SjB2?=
+ =?utf-8?B?YmFhOC9pNU94eHBBSytLWTVFZFBBZjBrMUlCTDF1WTFzRHZKQ2dubGVhSGp2?=
+ =?utf-8?B?YUdpTklmNi9Wb2VKTC9DSC8rM1JvR0Z2aDlBd1ljTnNPdkxQekhVUUJLU0h5?=
+ =?utf-8?B?YjlpTGhpd0p0K2cxRjdCOG5jTEEwVHpZY2dPRlJMWW41MUNKWFNNMGYwaUpR?=
+ =?utf-8?B?NG0wTk8zR2hxQmNVejM0MitEaU5OV1lwTXN1TExwTGd1VUxKVjFFN1VnUkJT?=
+ =?utf-8?B?QndEeFpKN0daODlQZ3c3dkQrL0NiK2tpaHhuaDk3SmpQTncxSFZQTk1LdkJG?=
+ =?utf-8?B?Y3JVS2ZnMEdSN2tOeGw0QUY1eUV2c3RsSWFVTnY0RjVHdDlDdXFoZnMzSFpy?=
+ =?utf-8?B?OGZxZW5IQ0duUWNmTWJJUmsvQ3hvZTZ0WEpKWm9TaUdxZ1ZQQUNvZ29mdWtZ?=
+ =?utf-8?B?emVOeTc2bW1rRFdGZkJGQkhoVUdEeUt1b1RjOHRVdHk2eDJJdTRsemRWdU14?=
+ =?utf-8?Q?/znWqEsfAmzYtLkm/TKd7jYOY?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6913cb1f-eddb-406e-f3c5-08dad2ddb507
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5874.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 14:18:09.5023
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XrqLjwPQ2vNigqK/omV1fKUL+EFmf0IzgYvbKf4woIxuijyi/isYnKBBJMHiMSQtYR3f+LxjSctWwOFd33zFXQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6574
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/core branch of tip:
+On 11/28/22 16:23, Jonathan Corbet wrote:
 
-Commit-ID:     9049e1ca41983ab773d7ea244bee86d7835ec9f5
-Gitweb:        https://git.kernel.org/tip/9049e1ca41983ab773d7ea244bee86d7835ec9f5
-Author:        Yang Yingliang <yangyingliang@huawei.com>
-AuthorDate:    Mon, 28 Nov 2022 23:16:12 +08:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Wed, 30 Nov 2022 14:52:11 +01:00
+> Carlos Bilbao <carlos.bilbao@amd.com> writes:
+>
+>> Include HTML output generated from rustdoc into the Linux kernel
+>> documentation on Rust. Add Makefile target `make htmlrust` to combine
+>> make htmldocs and the generation of Rust documentation.
+>>
+>> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+>> ---
+>>   Documentation/Makefile         | 11 +++++++++++
+>>   Documentation/rust/index.rst   |  1 +
+>>   Documentation/rust/rustdoc.rst | 10 ++++++++++
+>>   Makefile                       |  2 +-
+>>   4 files changed, 23 insertions(+), 1 deletion(-)
+>>   create mode 100644 Documentation/rust/rustdoc.rst
+> Thanks for doing this.  I do have a number of comments; please let me
+> know if you think I'm missing something somewhere.
+>
+>> diff --git a/Documentation/Makefile b/Documentation/Makefile
+>> index 64d44c1ecad3..02ed01fa3499 100644
+>> --- a/Documentation/Makefile
+>> +++ b/Documentation/Makefile
+>> @@ -95,6 +95,17 @@ htmldocs:
+>>   	@$(srctree)/scripts/sphinx-pre-install --version-check
+>>   	@+$(foreach var,$(SPHINXDIRS),$(call loop_cmd,sphinx,html,$(var),,$(var)))
+>>   
+>> +ifdef CONFIG_RUST
+>> +htmlrust:
+>> +	@make rustavailable
+>> +	@make LLVM=1 rustdoc
+>> +	@cp -r rust/doc/* Documentation/output/
+>> +	@make htmldocs
+>> +else
+>> +htmlrust:
+>> +	@echo "Error: CONFIG_RUST must be defined (see .config)"
+>> +endif
+> First, if at all possible, the Rust documentation should just be built
+> along with the rest; no need for a separate make command.  We don't have
+> separate build commands for any other subsystem's docs, and Rust should
+> be a first-class citizen here too.
+>
+> Second, I'm not a big fan of that "cp" command, for a couple of reasons:
+>
+> - It dumps a bunch of stuff into the main output directory, which risks
+>    overwriting something someday.  It seems like
+>    Documentation/output/html/rust might be a better place.
+>
+> - Rather than copying, I'd suggest changing the rustdoc command that
+>    generates that output to just put it in the place where it should be.
+>    Preferably it should work properly when people use separate build
+>    trees as well.
+>
+> It would also be nice to set up proper dependencies so that the Rust
+> docs are only regenerated if something has changed.
+>
+> Does this all make sense?  Sorry to come back with all this stuff...I
+> really do want to see this happen.
 
-genirq/irqdesc: Don't try to remove non-existing sysfs files
 
-Fault injection tests trigger warnings like this:
+Thanks for your feedback, Jon and Miguel. Looks like you both agree on two
+things: htmldocs should be the place to generate the extra Rust
+documentation, and this should be done by making rustdoc use the proper
+path directly (rather than by moving those contents). I will send a new
+patch instead of v2, since it will be a whole other thing.
 
-  kernfs: can not remove 'chip_name', no directory
-  WARNING: CPU: 0 PID: 253 at fs/kernfs/dir.c:1616 kernfs_remove_by_name_ns+0xce/0xe0
-  RIP: 0010:kernfs_remove_by_name_ns+0xce/0xe0
-  Call Trace:
-   <TASK>
-   remove_files.isra.1+0x3f/0xb0
-   sysfs_remove_group+0x68/0xe0
-   sysfs_remove_groups+0x41/0x70
-   __kobject_del+0x45/0xc0
-   kobject_del+0x29/0x40
-   free_desc+0x42/0x70
-   irq_free_descs+0x5e/0x90
 
-The reason is that the interrupt descriptor sysfs handling does not roll
-back on a failing kobject_add() during allocation. If the descriptor is
-freed later on, kobject_del() is invoked with a not added kobject resulting
-in the above warnings.
+>
+> Thanks,
+>
+> jon
 
-A proper rollback in case of a kobject_add() failure would be the straight
-forward solution. But this is not possible due to the way how interrupt
-descriptor sysfs handling works.
 
-Interrupt descriptors are allocated before sysfs becomes available. So the
-sysfs files for the early allocated descriptors are added later in the boot
-process. At this point there can be nothing useful done about a failing
-kobject_add(). For consistency the interrupt descriptor allocation always
-treats kobject_add() failures as non-critical and just emits a warning.
+Thanks,
 
-To solve this problem, keep track in the interrupt descriptor whether
-kobject_add() was successful or not and make the invocation of
-kobject_del() conditional on that.
+Carlos
 
-[ tglx: Massage changelog, comments and use a state bit. ]
-
-Fixes: ecb3f394c5db ("genirq: Expose interrupt information through sysfs")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Link: https://lore.kernel.org/r/20221128151612.1786122-1-yangyingliang@huawei.com
----
- kernel/irq/internals.h |  2 ++
- kernel/irq/irqdesc.c   | 15 +++++++++------
- 2 files changed, 11 insertions(+), 6 deletions(-)
-
-diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
-index f09c603..5fdc0b5 100644
---- a/kernel/irq/internals.h
-+++ b/kernel/irq/internals.h
-@@ -52,6 +52,7 @@ enum {
-  * IRQS_PENDING			- irq is pending and replayed later
-  * IRQS_SUSPENDED		- irq is suspended
-  * IRQS_NMI			- irq line is used to deliver NMIs
-+ * IRQS_SYSFS			- descriptor has been added to sysfs
-  */
- enum {
- 	IRQS_AUTODETECT		= 0x00000001,
-@@ -64,6 +65,7 @@ enum {
- 	IRQS_SUSPENDED		= 0x00000800,
- 	IRQS_TIMINGS		= 0x00001000,
- 	IRQS_NMI		= 0x00002000,
-+	IRQS_SYSFS		= 0x00004000,
- };
- 
- #include "debug.h"
-diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
-index a91f900..fd09962 100644
---- a/kernel/irq/irqdesc.c
-+++ b/kernel/irq/irqdesc.c
-@@ -288,22 +288,25 @@ static void irq_sysfs_add(int irq, struct irq_desc *desc)
- 	if (irq_kobj_base) {
- 		/*
- 		 * Continue even in case of failure as this is nothing
--		 * crucial.
-+		 * crucial and failures in the late irq_sysfs_init()
-+		 * cannot be rolled back.
- 		 */
- 		if (kobject_add(&desc->kobj, irq_kobj_base, "%d", irq))
- 			pr_warn("Failed to add kobject for irq %d\n", irq);
-+		else
-+			desc->istate |= IRQS_SYSFS;
- 	}
- }
- 
- static void irq_sysfs_del(struct irq_desc *desc)
- {
- 	/*
--	 * If irq_sysfs_init() has not yet been invoked (early boot), then
--	 * irq_kobj_base is NULL and the descriptor was never added.
--	 * kobject_del() complains about a object with no parent, so make
--	 * it conditional.
-+	 * Only invoke kobject_del() when kobject_add() was successfully
-+	 * invoked for the descriptor. This covers both early boot, where
-+	 * sysfs is not initialized yet, and the case of a failed
-+	 * kobject_add() invocation.
- 	 */
--	if (irq_kobj_base)
-+	if (desc->istate & IRQS_SYSFS)
- 		kobject_del(&desc->kobj);
- }
- 
