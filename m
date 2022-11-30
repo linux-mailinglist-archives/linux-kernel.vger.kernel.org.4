@@ -2,102 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE6563E5DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B1963E5E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiK3XzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 18:55:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
+        id S229631AbiK3X6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiK3XzS (ORCPT
+        with ESMTP id S229608AbiK3X6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 18:55:18 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A9526D8;
-        Wed, 30 Nov 2022 15:55:16 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMx0954xdz4xN1;
-        Thu,  1 Dec 2022 10:55:05 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669852505;
-        bh=wjSyXhJqjg3XQ6u/nMMOLaIbGfciTKIS2WdgtnLluEg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=HcYBuLDZfKCTinnWmwHbhVmLjj6syPBxQSqEA/WWzt2p86ZhW0AQCExANsfooVU0t
-         8JZ8aKAC8lmfPgie/YEBmOeiifQaH4RrW7JzkisnmZQfcbUypGswf5lEYIOBuDr6AC
-         mTRX+oVJF/RZdLMDWlic+wZR4tDoGGjqOe5OsbYUO5k9HVhJ4FhwG2ailQlGKuziRk
-         xlZVL7JSRl8fB84lPOwB/sWLM2C5zDn1ItvsKg+a0FtrZ/0ja1GGbkipKISKuk25xh
-         JN0Zdv9QVeI51qYJjQR4b/y1uw4LRBc+CCOq5xbrS0n2m0KWw5ZICeq5/8/a2R9DTE
-         FhqrxGZrsbEbw==
-Date:   Thu, 1 Dec 2022 10:55:04 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the rcu tree with the printk tree
-Message-ID: <20221201105504.71c318f0@canb.auug.org.au>
+        Wed, 30 Nov 2022 18:58:16 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503C14A9E2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:58:15 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id h10so59530ljk.11
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:58:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jO8nXDV58mXkso9ZU1/d1ihgDXy7YP60Vhf2BkvzF7w=;
+        b=XxxJfDWdCxAhpELeMOamNXvu9KcKqStzqg/qwaA1hN8IvqgHqv6LfFB1ANWrVfkZU+
+         bRFhHHnHGqc/bD99ukBp2WxIa87RaF4EWP38sIjoZu9ZbU0ZM8ld4q46YYTW8jZ6PDWz
+         9oUwMicFBQ5/bm1DREbqHZonoxek7/iGwjI2AwV7aNT0RmC6QIgbypD1lZINNG5LToY8
+         EfrHZNlPVmawBXC5txAtMzRBFcQzntYSRrcdR68Bxg6AXMDYUEUff9Ya2GuL/0HA8ftc
+         UPwWLI55uGjeuJCsb4t2B5g56ztxZHsuXz9gEJFpbeEYRE++k6RLSFEfI7iwSEZgXjzv
+         qXCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jO8nXDV58mXkso9ZU1/d1ihgDXy7YP60Vhf2BkvzF7w=;
+        b=0ZoxKrvWGXaGPnJyqcIdDMD72Z1hAVTPDqsE5oHPaBpTxq3NTdd/dL37UGZKe/tXQd
+         Q64gIex8L6j/YC0AZYPaYJ1X33nOI+PzyejaVmdcRRgeY41SASfNaOPcxZJyesMUSBuB
+         ev4liEskbz+4H7JD0caAbESZl3QTnliZSX6PQnuJRptgxb1VJbO9b6cq2v4eVl2T25PN
+         6jHD5ldyWeOI24ISf+Op7KsYWVksn75x06kV3m7QaV8MiBp7C0IkICCWl5HcKZXxalnH
+         NQSnHTLFF7vdoJIZTttwM3p2hLijqK5c8sNkAhE0FFFjHO3uekiEFuduQR71suwhd6/Z
+         wc+A==
+X-Gm-Message-State: ANoB5pnfPcAmBCzXxfEw6/y18PEg1qJ3AEMGz/l3RWL3JotEE3nA3TSA
+        jKHk1PXm+5Zq9gTrgOHGTTNHVQ==
+X-Google-Smtp-Source: AA0mqf4CRsX1JYhgTQ1nD8I3uKIXrcY4b5xxYBCLdMzNHNgsIkpPn1zxR/eMXR0GKObqz2JgnTgh0Q==
+X-Received: by 2002:a2e:a375:0:b0:277:7c00:e130 with SMTP id i21-20020a2ea375000000b002777c00e130mr13190727ljn.268.1669852693637;
+        Wed, 30 Nov 2022 15:58:13 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id f33-20020a0565123b2100b00494643db68fsm423005lfv.81.2022.11.30.15.58.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 15:58:13 -0800 (PST)
+Message-ID: <50405292-d6c1-d9ee-20fe-46f4feee6d9c@linaro.org>
+Date:   Thu, 1 Dec 2022 01:58:12 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ny5NuynQG_ROh8XH/p3vud8";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v6 2/4] drm/msm/dp: parser data-lanes as property of
+ dp_out endpoint
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, bjorn.andersson@linaro.org
+Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1669852310-22360-1-git-send-email-quic_khsieh@quicinc.com>
+ <1669852310-22360-3-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1669852310-22360-3-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ny5NuynQG_ROh8XH/p3vud8
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 01/12/2022 01:51, Kuogee Hsieh wrote:
+> Add capability to parser data-lanes as property of dp_out endpoint.
+> Also retain the original capability to parser data-lanes as property
+> of mdss_dp node to handle legacy case.
+> 
+> Changes in v6:
+> -- first patch after split parser patch into two
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/dp/dp_parser.c | 30 +++++++++++++++++++++++-------
+>   1 file changed, 23 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.c b/drivers/gpu/drm/msm/dp/dp_parser.c
+> index dd73221..b06ff60 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_parser.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_parser.c
+> @@ -94,16 +94,32 @@ static int dp_parser_ctrl_res(struct dp_parser *parser)
+>   static int dp_parser_misc(struct dp_parser *parser)
+>   {
+>   	struct device_node *of_node = parser->pdev->dev.of_node;
+> -	int len;
+> +	struct device_node *endpoint;
+> +	int cnt;
+> +
+> +	/*
+> +	 * legacy code, data-lanes is the property of mdss_dp node
+> +	 */
+> +	cnt = drm_of_get_data_lanes_count(of_node, 1, DP_MAX_NUM_DP_LANES);
+> +	if (cnt > 0) {
+> +		parser->max_dp_lanes = cnt;
+> +		return 0;
+> +	}
+>   
+> -	len = drm_of_get_data_lanes_count(of_node, 1, DP_MAX_NUM_DP_LANES);
+> -	if (len < 0) {
+> -		DRM_WARN("Invalid property \"data-lanes\", default max DP lanes = %d\n",
+> -			 DP_MAX_NUM_DP_LANES);
+> -		len = DP_MAX_NUM_DP_LANES;
+> +	/*
+> +	 * data-lanes is the property of dp_out endpoint
+> +	 */
+> +	endpoint = of_graph_get_endpoint_by_regs(of_node, 1, 0); /* port@1 */
+> +	if (endpoint) {
+> +		cnt = of_property_count_u32_elems(endpoint, "data-lanes");
 
-Hi all,
+drm_of_get_data_lanes_count(), or better drm_of_get_data_lanes_count_ep().
 
-Today's linux-next merge of the rcu tree got a conflict in:
+Also please check new property first, then check the legacy one.
 
-  kernel/rcu/update.c
+So it would be:
 
-between commit:
+cnt = drm_of_get_data_lanes_count_ep();
+if (cnt < 0)
+     cnt = drm_of_get_data_lanes_count();
+if (cnt < 0) {
+     DRM_WARN(...);
+     cnt = DP_MAX_NUM_DP_LANES;
+}
 
-  64e838679e14 ("rcu: Make SRCU mandatory")
 
-from the printk tree and commit:
+> +		if (cnt < 0)
+> +			parser->max_dp_lanes = DP_MAX_NUM_DP_LANES; /* 4 lanes */
+> +		else
+> +			parser->max_dp_lanes = cnt;
+> +	} else {
+> +		parser->max_dp_lanes = DP_MAX_NUM_DP_LANES; /* 4 lanes */
+>   	}
+>   
+> -	parser->max_dp_lanes = len;
+>   	return 0;
+>   }
+>   
 
-  0cd7e350abc4 ("rcu: Make SRCU mandatory")
+-- 
+With best wishes
+Dmitry
 
-from the rcu tree.
-
-I fixed it up (I just used the latter - it kept the WARN_ON_ONCE) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
-Maybe you could share a (non rebasing) topic branch?
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ny5NuynQG_ROh8XH/p3vud8
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOH7VgACgkQAVBC80lX
-0Gy70Af/c7c+pBTLywaOBuHlGPKhfQ6NB3rWMMFTnLUwcQYMLR9OjdZO/PUDLhIE
-IrGqRsP+Q8902n1qAxJ8P1LmmoerRKXPKLaA7zH+Py/N8oNROofecQNcDV69riBY
-yrTlGX7+mpw1a0VK6fiUQb3YJLd6msfzlS3AkoxAFBCZufdCFcJ95RpSqiF40ZSG
-XFMW2cTlcvz9wh7znqLIW0tLI/uE8LHAJL3aufPkuwuMEZG4k0cfnCXy6T1rCAGa
-+y896PqSLGmXIUSnLN6TIPtKBpgrqeCclx5kR1kg2B71PBkKdvLtAIW5HN2AtIN4
-LLAEnkAfmzzJoqRueMssSN1i/HO0xA==
-=JFLZ
------END PGP SIGNATURE-----
-
---Sig_/ny5NuynQG_ROh8XH/p3vud8--
