@@ -2,89 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B92B63D2EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD6663D2D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235731AbiK3KMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 05:12:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40754 "EHLO
+        id S235500AbiK3KKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 05:10:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235596AbiK3KMB (ORCPT
+        with ESMTP id S229816AbiK3KKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 05:12:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9FF419B8
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:10:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669803058;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NAPWN76bkmlkit0jp4yV1GQFH8+HLa/sfheRK684iiA=;
-        b=M/fmJ/I0q/aZ6FGKkQxk5C4NyKP2Vpu7Y97ZmMtZK9JD2N3tjPRvNPXiwecYE1YN7TNkDu
-        NKy19zUGK51Wd9mYaFaNqhXUIcTr0FOZgEH4KmlFHghzK9VcoHfGuHP1oztI14eNimyGoi
-        Jx2mZX076IPhQ+gTfJbr1KznHPz7pkE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-659--dUu3qT7Mw2hrcemaTcW8g-1; Wed, 30 Nov 2022 05:10:52 -0500
-X-MC-Unique: -dUu3qT7Mw2hrcemaTcW8g-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B31DB101A52A;
-        Wed, 30 Nov 2022 10:10:51 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.195.154])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A39B840E9790;
-        Wed, 30 Nov 2022 10:10:39 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        Jon Hunter <jonathanh@nvidia.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH 2/2] selftests: hid: ensures we have the proper requirements in config
-Date:   Wed, 30 Nov 2022 11:10:21 +0100
-Message-Id: <20221130101021.1868764-3-benjamin.tissoires@redhat.com>
-In-Reply-To: <20221130101021.1868764-1-benjamin.tissoires@redhat.com>
-References: <20221130101021.1868764-1-benjamin.tissoires@redhat.com>
-MIME-Version: 1.0
+        Wed, 30 Nov 2022 05:10:42 -0500
+Received: from esa3.hc3370-68.iphmx.com (esa3.hc3370-68.iphmx.com [216.71.145.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE71F31347
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:10:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1669803041;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=UH4or9v6W4G1BQ9Ha9K2Tded3QFAg1mp3HDjiohAk/I=;
+  b=CTlc+zvfemJNq2f4+JYizFjHnIXMPzF1Gz3MEhAZycLPG5SQRlX0L3p1
+   bJ2iNKzhmOIciy5JvTfazn39iIpEY1dq30CPcUMzJxUslf1LZddlTCEQg
+   Hagoa3KXsddyWwbmImqN4jV2syz1KIOJrQ5nxUSHocb1a/Dr3blVH++PJ
+   8=;
+X-IronPort-RemoteIP: 104.47.58.169
+X-IronPort-MID: 85844826
+X-IronPort-Reputation: None
+X-IronPort-Listener: OutboundMail
+X-IronPort-SenderGroup: RELAY_O365
+X-IronPort-MailFlowPolicy: $RELAYED
+IronPort-Data: A9a23:PzltvqM0wtnI1k/vrR3el8FynXyQoLVcMsEvi/4bfWQNrUok3z1Vy
+ mdOC22Caa7cazehKN9/atm/9h4BuZ+AmIcwHAto+SlhQUwRpJueD7x1DKtS0wC6dZSfER09v
+ 63yTvGacajYm1eF/k/F3oDJ9CU6jufQA+KmU4YoAwgpLSd8UiAtlBl/rOAwh49skLCRDhiE/
+ Nj/uKUzAnf8s9JPGj9SuvzrRC9H5qyo4mpB5QRmP5ingXeF/5UrJMNHTU2OByOQrrl8RoaSW
+ +vFxbelyWLVlz9F5gSNy+uTnuUiG9Y+DCDW4pZkc/HKbitq/0Te5p0TJvsEAXq7vh3S9zxHJ
+ HehgrTrIeshFvWkdO3wyHC0GQkmVUFN0OevzXRSLaV/ZqAJGpfh66wGMa04AWEX0uYqBEVVx
+ aFGEmBTcD+BtfOb5e6eVcA506zPLOGzVG8ekldJ6GiASNwAEdXESaiM4sJE1jAtgMwIBezZe
+ 8cSdTtoalLHfgFLPVAUTpk5mY9EhFGmK2Ee9A3T+PpxujaCpOBy+OGF3N79YNuFSN8Thk+Fj
+ mnH4374ElcRM9n3JT+toi/82rOfx32TtIQ6E7aq9KNXgH+v9jZKNg8SDVC+naeIlRvrMz5YA
+ wlOksY0loAw/kG2Stj2XzWjvWWJ+BUbXrJ4F+w89RHIyafO5QudLnYLQyQHa9E8ssIyAzsw2
+ Tehj97vQDBirrCRYXac7auP6yO/PzAPKm0PbjNCShEKi/Hsuow8jRLnStdlDb67icDzFTjsw
+ jeM6i8kiN07j88R1r6/9FrWqzGhvJ7ESkgy/Aq/dmCq9ARif6a+epelr1Pc6J5oJoGDT0LHu
+ 2MYgc+A9+MfJZaXnSeJTaMGG7TBz/GBNzP0hV9/GJxn8Tmxk1amfIZf5xlzIFtkdMYZERfiY
+ FXSohx5/5hOJz6xaqsxZJi+Y+wuzK79Bcz9XbXYY8RmZplqaBTB+zNqbESLmWf3nyAEirojM
+ J2WdcKtC3cyCql9yjeyAeAH3tcWKjsWwGrSQdXxyUSh2L/HPXqNE+5bYR2Jc/wz676CrEPN6
+ dFDOsCWyhJZFurjfi3Q9o1VJlcPRZQmOa3LRwVsXrbrCmJb9KsJUpc9HZtJl1RZoplo
+IronPort-HdrOrdr: A9a23:JXa0zK8mLkkVg0jRR8huk+D1I+orL9Y04lQ7vn2ZESYlC/Bw5P
+ rEoB1773XJYVMqNU3I9urwXZVoLUmzyXcx2/h2AV7AZniahILLFvAH0WKK+VSJd0LDH6xmpM
+ BdmsNFaOEYeGIK7/oSlzPIcOrIruPnzEniv5an854kd3AQV0hP1XYCNjqm
+X-IronPort-AV: E=Sophos;i="5.96,206,1665460800"; 
+   d="scan'208";a="85844826"
+Received: from mail-bn8nam11lp2169.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.169])
+  by ob1.hc3370-68.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Nov 2022 05:10:39 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CZSxt/gR2W64BWQZ5+oqJDk0093zuxW+2EKC8/QLcNfPWHu/dyU3dIe2D8cjYiZEmLwOzl/fq6SWEfbTkUtuI6mzAWUsIdym2RSmw30SWfcdyCBSVNPxY7ozbVxQrH3EJrUuXB0l/UZQku70IF2UUDeq75zi0P375wyjNxNnCF3yDw7T2FqDyx/W5CHUiMnsxlMSiGjGeyDlqp8HUzTD2k85AeZXuN1HvxSfmE5ctUQIz8U/fd1pp00Yuq1ZFHmOM6LK9qMheSRgCW+4ibdlMLg8NXWLdZxnazDIgnkDkckhaIGGBzSxfP08gY1h6Y3zrnPRMdiyCa1KG3qYSiUNfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DTzxxCZ+Kq9uX93zQZa8I0RFtDAt2genjXSVBUCq8JI=;
+ b=jW14PKRD+ei8o+EnK+KZ8NJ61DMQedOBQl6RMMV5aeiYgPFhnWIrmldy4Svk6o3gVCV86yZrstAwBd1VhZIJLDEE0iIhh+BxPuLtKpL+Mo6pV6q2TugLDanQHZvX1JM9uZWFzWjjO5wiq82MIGUqTvOrO34muTwMKkX4rvNbQS18xYk0fsWKDImHQKargVJegNa6r8RWjm4HsyOzV2x0Gvdh5dcpva0faCUYUfpU0sBR7USm/wiCo8nsNyLV3IR0BbW/Lr/tjs1HDfDwrJRN73w+aCVGkq8/21W9qmnK+9I4Ne08ZmT4gWvtC7dn0UE/VOI268bTaX5BuVOa4pLOjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
+ dkim=pass header.d=citrix.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DTzxxCZ+Kq9uX93zQZa8I0RFtDAt2genjXSVBUCq8JI=;
+ b=Q2yUYqW5+SrMrgen2TCJu2hiqqgb54ILAY5gwnz82mE6vslKuhhr3kB2WTNPTgUD0oCJ1Il/pqsgePvQBmxhhhJGxaLWHZi3loxxcMij+bz2sd8BThjEvE9tGY3eG6rCixW71t/nJFAWeBjvhu+gdZ/XUZmaCIKZ2ZHMsGAoLVQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=citrix.com;
+Received: from SJ0PR03MB6360.namprd03.prod.outlook.com (2603:10b6:a03:395::11)
+ by BY5PR03MB4917.namprd03.prod.outlook.com (2603:10b6:a03:1e9::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Wed, 30 Nov
+ 2022 10:10:37 +0000
+Received: from SJ0PR03MB6360.namprd03.prod.outlook.com
+ ([fe80::740b:4e0a:7de4:5ab1]) by SJ0PR03MB6360.namprd03.prod.outlook.com
+ ([fe80::740b:4e0a:7de4:5ab1%9]) with mapi id 15.20.5857.023; Wed, 30 Nov 2022
+ 10:10:37 +0000
+Date:   Wed, 30 Nov 2022 11:10:32 +0100
+From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+To:     Jan Beulich <jbeulich@suse.com>
+Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Olof Johansson <olof@lixom.net>, Ingo Molnar <mingo@elte.hu>,
+        Chris Wright <chrisw@sous-sol.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Stefano Stabellini <sstabellini@kernel.org>
+Subject: Re: [PATCH] hvc/xen: prevent concurrent accesses to the shared ring
+Message-ID: <Y4csGBQ6NXBC7vIO@Air-de-Roger>
+References: <20221129120107.2942-1-roger.pau@citrix.com>
+ <alpine.DEB.2.22.394.2211291351160.4039@ubuntu-linux-20-04-desktop>
+ <Y4chryL2YvfhgQmk@Air-de-Roger>
+ <8d8f8c11-6ca5-5770-989c-704f76436cc4@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <8d8f8c11-6ca5-5770-989c-704f76436cc4@suse.com>
+X-ClientProxiedBy: LO4P123CA0684.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:351::17) To SJ0PR03MB6360.namprd03.prod.outlook.com
+ (2603:10b6:a03:395::11)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ0PR03MB6360:EE_|BY5PR03MB4917:EE_
+X-MS-Office365-Filtering-Correlation-Id: 218b030f-6491-4270-4bd4-08dad2bb2035
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iZII7XY7lkWei01KyrpuVq55aGJ9PG2UK+JdyIfHANucu7yM9RM5Xq2llq2ezsRVTerZkrELJ+TKTff90SYqEZlz321mrzrIUcFP7mZT6gFEvELfmYHP5elGzNLhOwstHFy45um8Z/XaLI6wMqsTv2+WwTSKvwsYKas8BMxUoEKGN7wuq5MjgFs/8ZqJLt+BNQqy0Sd8xHl9K5zCPvTZg0AFh59+YBXq7lNAhWvoL18UIFopI0iWW6bbpJdYFXSQSaqDn2lRUhjoENTi/qGyMScd1qZl63tfdQrZZqI3V+07jgJPhjwYnHFK/HJKijMMZ3kQLD0rbgUXDwTu5acEgypbPgeIaN/d6XZa5h2oqlwlpqoLoHgL+NaP2nMjBnp6sqbNsqoUsTjW9RoCEeGN3OvvwvHUCcQPG4RyXX8GXLe6HrMN+/Xoradi64VQY5Oyeh0SPWaPytLfhpq4iJcxb4xg7CF93+beEIKw4d7V2OQv8CVed7hU7AOsFaF/zMuKywXwMfifX8P42b1KzKaRf/qN6ImxtWzC1bSqpbPsDAWw89RNqIP0pPvZleEK/oefQ+vhUePxMW0VI5tHeBTtGQaXeH+MIKPdFhlXULnSU/S1Up6TGwxWOtuZz9hTh4nbtdznL8krzTuYf02XkGxd0w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR03MB6360.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(136003)(39860400002)(346002)(376002)(396003)(366004)(451199015)(7416002)(5660300002)(33716001)(186003)(8936002)(54906003)(6916009)(26005)(6512007)(316002)(9686003)(41300700001)(66946007)(8676002)(66476007)(4326008)(85182001)(82960400001)(66556008)(38100700002)(2906002)(86362001)(83380400001)(478600001)(6506007)(6486002)(6666004)(53546011);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SHFZODFtY0tLcTliNDV6MFM4SkpvbkR0dVNSbXY2TmdTVHYvT3lRcVRvSWhW?=
+ =?utf-8?B?UkkvakpTbGpPdGpRb2JpZVdIbVVxdkdTVjRtZVlCZHRRcGlyK1Jka0xMcE1a?=
+ =?utf-8?B?dkpkcnJQckVvWHFUZFZTTDFscCtFR2p0alpRcnJoSW1Qd2JGeENocjRTSXdo?=
+ =?utf-8?B?dVN0N0VFRVliNDBzeEdvZmRIQmhSQnZRcHIzWkE1MytlZmxacUprTmFYRzBG?=
+ =?utf-8?B?ZERXWDRLSGNUa0NDMGV1SnRwSk8zc2xYUDVBUDhoMXFXZWRNNTBPZTlCLzc5?=
+ =?utf-8?B?ZnRJZzRIZG1ZVTJvd0NVb0tSRzBQOVdsWWViNUpnSGdyNEFaZC9BMkV2YlRN?=
+ =?utf-8?B?aHNDeVhvUWFCT0hlanM5QXpFRjBFamppeVllanhDNUlXWHIxNXZaK1M0OTNh?=
+ =?utf-8?B?MnJtTmZyYmpmem0yd1FaOEpQU1VoWGdVRC9DOHlRUExpeHcxY0h0UnNRd2x1?=
+ =?utf-8?B?NFBsZVRHZFh6eDBCdjFZL0kzSFZoMWNLQ1E1a1ZvRFJLd05sN1BMSVpYSEJZ?=
+ =?utf-8?B?Q2s5VUZuUW45Q1loeVVxK0hiQmdTeW5MbklaOXBKbVU5eGI5ZVZoUS9rRWVO?=
+ =?utf-8?B?L3dxN3RLMndGaG41bWRjSElxN0wxSFVDUnNQVUxaVFd6VXZYSlRnbjJBa0VZ?=
+ =?utf-8?B?bklxdnJMZ3o0L3ZqN2toY3pVZUFNc0JpR1lxRzF4SUw0bUFCWmZDR0dicmRi?=
+ =?utf-8?B?YUpNVlo4d0dScVlUd09mN1NpdmRyZTZ3YXp6MWFKc3RDcnZ3QzM0NitRVEpk?=
+ =?utf-8?B?MnB1RjRYOTEzbDJDSHo2blhkTEFYZ1hxRkNuaVdXU05pWEFpMEhEdjdtSHZ3?=
+ =?utf-8?B?dDZiQTVuYU9SUUUwaXZSNCtHd0VnZC9QY2VhTTkwN1MvaWI0R0E5bVFRSVJX?=
+ =?utf-8?B?cm9TT1dhczIyR0ZpTTRqV29NRURJTTdSWHpkQXRiTEE4MURMcm5laXYyY0Ix?=
+ =?utf-8?B?dGEwTkpKK3R0T0RqUWRkcU9udzA5Q0FoTlF4L3NWZjY3M0xYYStjYUxEZkV4?=
+ =?utf-8?B?a2IyTXB0TEluVWhXUTVMOUxBM0FsbFV0dG1CeGRPV2xiMzhscnZuMk84UDV3?=
+ =?utf-8?B?RjVzMm0zdmNYVE93UDd3all3Y1YxaUpPOU11ZkYwY1ZtWDd0TUxPZVJ4c3Jz?=
+ =?utf-8?B?Z3JyR1J0eXUwbTR1MTRoNFhaQmFzY21kdlpUM0RZeFQ3T3VmUllkbzRUUit4?=
+ =?utf-8?B?eHZpK3AzV29Vc3Z1K0RnNnhsL2UxQTgwbVlLSmxPMTYvalFkTlFwUlR5YjN5?=
+ =?utf-8?B?N1VwTUJkMXVLdVVuTmhjbWhweVBEYUpBVHpnZ3pNb1hYdG1MeHNyb0xPL21I?=
+ =?utf-8?B?cnU2ZWtWZHhseFRaazVKWDdlYW9nTTFSSEc2RXR1dzJzT3JHeWg5K1l2Nnh1?=
+ =?utf-8?B?WDVWZmdUd3VxMUg0d0tXRzcyaTBoTkJEZW5ER2xyQzlRSzNNTnhIeVk1U2Vp?=
+ =?utf-8?B?MjJmTm90TmkxQXpqeVlXWVpISkUvR3EwNnYvYVFweFROQWxVeFJWSTIyd29N?=
+ =?utf-8?B?M0swMnl2bThCZ0Rkakdzb0UwTGVRYnk2VFZXY3ptRUJzbHFDbzFhRWZZQVBL?=
+ =?utf-8?B?UG51aEt3cUFSYnVkd1VHSmNXT0lHbVhHT0FMdkVGY2JXQjVlWi9GL3hLcUc5?=
+ =?utf-8?B?dkxLY2d0Qnc2cHlqdk93bzFIcU8wcjE3TlZueDg3S1ZteWZqeVBHc3gyeER0?=
+ =?utf-8?B?NHlFNnZmbXVZbFZLOFB4dkRNVkV4NzJLYWF4MXBGQ210Z0JVbDBUN3VsUEpp?=
+ =?utf-8?B?cncvM09hc1k0U21SNkM0QjN3bGdBUzM4cFFHWkFsYXdzdTI2eld2NmRwWFpy?=
+ =?utf-8?B?YTBsdlFlU2E1WGVDSzNEVnpDZ29DQVc1ZjJ3dlV2UVBSSW1vRTcrc3BaUnJM?=
+ =?utf-8?B?ejlaOXZKYnFYc2YzVndlWFV5cDdyVkhoaXV5a1dadTFSeHJKNGR1em91UTFX?=
+ =?utf-8?B?QXJGN0hVRXo0S2RUcDgxVzNNQ3dEbUxBWkc4VHVXOW1Cb1NqSmozemRCeDJW?=
+ =?utf-8?B?eVNsSk44VzZrSkJzdXFzdTdsQUhMdXRGMjVacU1RVGhIbk1uRDN0Z05HdWFn?=
+ =?utf-8?B?NkIwNEZlSUNiKzVOTGplK0VRUjNVa1lyK3ludjFZcWhxRVBEdXlwajdmTm1O?=
+ =?utf-8?Q?OQVPfUEDmO9aY/jVEfIwTk677?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?RGt1VjNVTFdyQ3o3a05vK1RkY29RMWNqbEdReCtWcjlHWGphVllLck11SnA3?=
+ =?utf-8?B?bTdwYWhCSmxSNFhFOTdXK0FlUnVaeUFVa0Y2WE05NWRGUHhZdDZyZDFDeUN5?=
+ =?utf-8?B?R2dDUlhxVE1SUjJWTkt3QVNqNDhRSkxjSDJPV2pWQ09aMUlFUXFxSFdBbXNV?=
+ =?utf-8?B?T3ZOS09uUTR4Y0xwMThudEJaRzRsVkhnd2lEUW5GSm5yemhvTC8zUkQ4enhK?=
+ =?utf-8?B?bEZYb1dsRC9TQ1NWQnVQdlVZR2IyVXQ1R0luUmxqeU9SUDBDTmtDR3YwWjcz?=
+ =?utf-8?B?bDhYZVJHYVgrMEtJRld2UGx5bEc3QStTNi9oUTFZZ1YvMWE0MDlWTkplaFpp?=
+ =?utf-8?B?amlyd1lrV1NoVmN3SWo0REpVNHpPeHFrWFgyYVBkdlU2bUhkMkw2MHpZVlpX?=
+ =?utf-8?B?MVFKTjZrWDRvUDF0QkdjQkdaOFdkSHhWcVN3RVN5Rm1VYmdHZG45YlR1UnZD?=
+ =?utf-8?B?VTNYZUk4UUlPRnNzTXBQU0Y0WXZhcFFkZG83S21KWU5WVWlDWlVNVVY2RHRN?=
+ =?utf-8?B?WFo0NFNsbUM5ZXBCcWxhTTFHYjh3M3lvNUZVZlAvOEhrZ1k2cGdEWXk3RUhx?=
+ =?utf-8?B?cjhjN0pDL0VxM1FIdFpRVTVjaVZ5RzY0a1ErRTV6dTdDU0xPRTR2MWwrbXBo?=
+ =?utf-8?B?eXUyT29KV211cW5IVm5kV0NyZi9jY2VEMTN4WEdGK1M2NXA0OUJNWC85b3or?=
+ =?utf-8?B?K3ZyK2ZUeUVRZGdNNmZLejRVbnVRQzBERG9ZRUM2ZHFtbGxzNE9qNFlsY0ZI?=
+ =?utf-8?B?dXFUVFpualVxd2gyRGUzS2cxT20ydDJvOWJOTzN3ZlBOR0RiaG03QitSSm9h?=
+ =?utf-8?B?bi9iVEwrbEdnMi9MbHR1OG9RTUpqNnlCZk9hejgwRE9wVUwvV2h1Z1ljS2tG?=
+ =?utf-8?B?b1NOaFhnTjU5VU5YbmNLRkwwaGZCWFlnbkRrbHpxOWRDOG5RWGtDM3c4Qjh4?=
+ =?utf-8?B?ZTFwTGlHdUZkNi9GUGhYWWdLa2luaUU3TktlbVd3RnN6T3g4RWEvVmhQYXl1?=
+ =?utf-8?B?UGNJcVF4NFBaS3UraSt0UlBNRVlpQWlVdVVrRFhXNTBLeFhwd2tpTlNJc2Y1?=
+ =?utf-8?B?dnpnM21tcVl1MUJuS3Y5aWw2VEpFYXpZSk9JM1duV1VvNDVqRE8weWRCV1cw?=
+ =?utf-8?B?Q0VYbkJFUkZkMkMzQmhyMWV3MVd4cXB4SzFERUNOSWpjSlp3Nys3Qy9qUGVw?=
+ =?utf-8?B?aU9qdlJYdkV4TnBKOFVGcFFIdXhLKzVVWDdibmhTUjI0eFhrd3NNcytWcWZZ?=
+ =?utf-8?B?ZjF2R1BaMXhRSUxVWTdnbXAycjVGcy9zRUZ6UEhvc3l4a3RkMDZ6UUErcG1X?=
+ =?utf-8?B?R0hTQ2tBbFhXQXRiUDlQSEE2MlcwaHFUaXFNditZWWJDMVczcHBkY3BLT2FV?=
+ =?utf-8?B?cXhNV3lDQUkvZWtVOGRQb1M3N1Y1cmt4WTByOEo5WC9pVUtKeU9wMWNRNzNJ?=
+ =?utf-8?B?cjFXZE9rRVNOU1BxRzZLbjY4VmFkWXJ3ODYzZG5DTlJUa1grajIzMXhSaTVZ?=
+ =?utf-8?B?dFMzZ1pSUStMc1paaW04dENHWDRML3dKOEZYRGFYUUtLU0kxN0tqL0R4SEJY?=
+ =?utf-8?B?bkNqZz09?=
+X-OriginatorOrg: citrix.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 218b030f-6491-4270-4bd4-08dad2bb2035
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR03MB6360.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 10:10:36.9771
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sO3aWRPMgiNDbxJtskb1SrKt8m1sNGkLCbh5TPw8NK8W86RlbpbuTenmfz6nl69jlekO797Q8dWapuEUn90Vdg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR03MB4917
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-They are implicit right now but might get defaulted to N in the future,
-so force them in the config so we don't get any surprises.
+On Wed, Nov 30, 2022 at 10:34:41AM +0100, Jan Beulich wrote:
+> On 30.11.2022 10:26, Roger Pau Monné wrote:
+> > On Tue, Nov 29, 2022 at 02:12:10PM -0800, Stefano Stabellini wrote:
+> >> On Tue, 29 Nov 2022, Roger Pau Monne wrote:
+> >>> The hvc machinery registers both a console and a tty device based on
+> >>> the hv ops provided by the specific implementation.  Those two
+> >>> interfaces however have different locks, and there's no single locks
+> >>> that's shared between the tty and the console implementations, hence
+> >>> the driver needs to protect itself against concurrent accesses.
+> >>> Otherwise concurrent calls using the split interfaces are likely to
+> >>> corrupt the ring indexes, leaving the console unusable.
+> >>>
+> >>> Introduce a lock to xencons_info to serialize accesses to the shared
+> >>> ring.  This is only required when using the shared memory console,
+> >>> concurrent accesses to the hypercall based console implementation are
+> >>> not an issue.
+> >>>
+> >>> Note the conditional logic in domU_read_console() is slightly modified
+> >>> so the notify_daemon() call can be done outside of the locked region:
+> >>> it's an hypercall and there's no need for it to be done with the lock
+> >>> held.
+> >>>
+> >>> Fixes: b536b4b96230 ('xen: use the hvc console infrastructure for Xen console')
+> >>> Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
+> >>> ---
+> >>> While the write handler (domU_write_console()) is used by both the
+> >>> console and the tty ops, that's not the case for the read side
+> >>> (domU_read_console()).  It's not obvious to me whether we could get
+> >>> concurrent poll calls from the poll_get_char tty hook, hence stay on
+> >>> the safe side also serialize read accesses in domU_read_console().
+> >>
+> >> I think domU_read_console doesn't need it. struct hv_ops and struct
+> >> console are both already locked although independently locked.
+> >>
+> >> I think we shouldn't add an unrequired lock there.
+> > 
+> > Not all accesses are done using the tty lock.  There's a path using
+> > tty_find_polling_driver() in kgdboc.c that directly calls into the
+> > ->poll_get_char() hook without any locks apparently taken.
+> 
+> Simply by the name of the file I'm inclined to say that debugger code
+> not respecting locks may be kind of intentional (but would then need
+> to be accompanied by certain other precautions there).
 
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
----
- tools/testing/selftests/hid/config | 2 ++
- 1 file changed, 2 insertions(+)
+I'm also confused because hvc_poll() which calls get_chars() does so
+while holding an hvc lock, while hvc_poll_get_char() calls get_chars()
+without holding any lock.  The call to get_chars() being done with a
+lock held in hvc_poll() might just be a side-effect of the lock
+being hold to keep consistency in the hvc_struct struct.
 
-diff --git a/tools/testing/selftests/hid/config b/tools/testing/selftests/hid/config
-index d4130489c1b1..e3595b4a3708 100644
---- a/tools/testing/selftests/hid/config
-+++ b/tools/testing/selftests/hid/config
-@@ -11,8 +11,10 @@ CONFIG_BPF_SYSCALL=y
- CONFIG_BPF=y
- CONFIG_CGROUP_BPF=y
- CONFIG_DEBUG_INFO_BTF=y
-+CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS=y
- CONFIG_FPROBE=y
- CONFIG_FTRACE_SYSCALLS=y
-+CONFIG_FUNCTION_ERROR_INJECTION=y
- CONFIG_FUNCTION_TRACER=y
- CONFIG_HIDRAW=y
- CONFIG_HID=y
--- 
-2.38.1
+I also wonder whether new users of tty_find_polling_driver() and
+->poll_get_char() could start appearing and assuming that the
+underlying implementation would already take the necessary locks for
+consistency.  Just looking at hvc_vio.c it does take a lock in
+its get_chars() implementation to serialize accesses to the buffer.
 
+Thanks, Roger.
