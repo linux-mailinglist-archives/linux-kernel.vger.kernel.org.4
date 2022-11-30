@@ -2,191 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E340763E38B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B204563E391
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:39:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiK3WiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 17:38:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49048 "EHLO
+        id S229705AbiK3Wjr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 30 Nov 2022 17:39:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiK3Wh7 (ORCPT
+        with ESMTP id S229688AbiK3Wjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 17:37:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EC643848;
-        Wed, 30 Nov 2022 14:37:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0A1C61E0F;
-        Wed, 30 Nov 2022 22:37:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57F59C433D6;
-        Wed, 30 Nov 2022 22:37:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669847878;
-        bh=wBJggPu6LEiCX32dXU3wBuz4z4f1m5wgizBQVClgrRs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sdfn9F8Y5LEqFHHvrUouhm7+w7eSEiFZ9qjZWrfNiVQtQD///hEuuxYZYQsc1hbA0
-         2XX1vOYwmtw/z6cK5q7L6gM2xrzM4+RkCr3Yfljj+JJPxFtHVZXl01IJzy1CLRsnfC
-         lSfM0zUG3rdwU6ZRrkEElKs4vOvf9ZLpdPHs3oG2ZucB7EaXxOhpDcE5JsxIMqudyn
-         BpUQWM1xP2K/XbjyKfgmmbsxV7xOjf7GY7QO+1J2LuFRG6YuOOc3EU5ILfvxZWa3Hr
-         ibsdMVYTuuckkvJVNMWzbBwTPnAUFskagqWh+aiZYH/foPZNCERQUEzHlmDOvun6oF
-         4amgxs2OjihSA==
-Date:   Wed, 30 Nov 2022 15:37:55 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Nicolas Schier <nicolas@fjasle.eu>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Vincent Donnefort <vdonnefort@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH 1/2] padata: Do not mark padata_mt_helper() as __init
-Message-ID: <Y4fbQ2POgXFrsHhF@dev-arch.thelio-3990X>
-References: <20221129190123.872394-1-nathan@kernel.org>
- <20221129190123.872394-2-nathan@kernel.org>
- <CAK7LNATMtRu00GYwJW_VvTSTcY6eqnx=4EEj8PFC5adrnHunSw@mail.gmail.com>
+        Wed, 30 Nov 2022 17:39:45 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEBE8E592
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 14:39:43 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-50-6YXDDUj9OhOl-PdOYMK1rg-1; Wed, 30 Nov 2022 22:39:39 +0000
+X-MC-Unique: 6YXDDUj9OhOl-PdOYMK1rg-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 30 Nov
+ 2022 22:39:38 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Wed, 30 Nov 2022 22:39:38 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Thomas Gleixner' <tglx@linutronix.de>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>
+CC:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        "Florian Weimer" <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: RE: [PATCH v10 1/4] random: add vgetrandom_alloc() syscall
+Thread-Topic: [PATCH v10 1/4] random: add vgetrandom_alloc() syscall
+Thread-Index: AQHZBD5MKfvjUBqLyk+xAMt8s9EHVq5YDxQQ
+Date:   Wed, 30 Nov 2022 22:39:38 +0000
+Message-ID: <310b91f650424d338e56794b8861a088@AcuMS.aculab.com>
+References: <20221129210639.42233-1-Jason@zx2c4.com>
+ <20221129210639.42233-2-Jason@zx2c4.com> <87cz95v2q2.ffs@tglx>
+In-Reply-To: <87cz95v2q2.ffs@tglx>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNATMtRu00GYwJW_VvTSTcY6eqnx=4EEj8PFC5adrnHunSw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 07:20:47AM +0900, Masahiro Yamada wrote:
-> On Wed, Nov 30, 2022 at 4:02 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > When building arm64 allmodconfig + ThinLTO with clang and a proposed
-> > modpost update to account for -ffuncton-sections, the following warning
-> > appears:
+From: Thomas Gleixner
+> Sent: 29 November 2022 22:02
 > 
+> Jason!
 > 
+> On Tue, Nov 29 2022 at 22:06, Jason A. Donenfeld wrote:
+> > +
+> > +/********************************************************************
+> > + *
+> > + * vDSO support helpers.
+> > + *
+> > + * The actual vDSO function is defined over in lib/vdso/getrandom.c,
+> > + * but this section contains the kernel-mode helpers to support that.
+> > + *
+> > + ********************************************************************/
+> > +
+> > +#ifdef CONFIG_VGETRANDOM_ALLOC_SYSCALL
+> > +/**
+> > + * vgetrandom_alloc - allocate opaque states for use with vDSO getrandom().
+> > + *
+> > + * @num: on input, a pointer to a suggested hint of how many states to
+> > + * allocate, and on output the number of states actually allocated.
+> > + *
+> > + * @size_per_each: the size of each state allocated, so that the caller can
+> > + * split up the returned allocation into individual states.
+> > + *
+> > + * @flags: currently always zero.
 > 
-> How to enable -ffuncton-sections for ARCH=arm64 ?
-> (in other words, how to set CONFIG_LD_DEAD_CODE_DATA_ELIMINATION ?)
+> NIT!
+> 
+> I personally prefer and ask for it in stuff I maintain:
+> 
+>  * @num:		On input, a pointer to a suggested hint of how many states to
+>  *			allocate, and on output the number of states actually allocated.
+>  *
+>  * @size_per_each: 	The size of each state allocated, so that the caller can
+>  * 			split up the returned allocation into individual states.
+>  *
+>  * @flags: 		Currently always zero.
+> 
+> But your turf :)
+> 
+> > + *
+> > + * The getrandom() vDSO function in userspace requires an opaque state, which
+> > + * this function allocates by mapping a certain number of special pages into
+> > + * the calling process. It takes a hint as to the number of opaque states
+> > + * desired, and provides the caller with the number of opaque states actually
+> > + * allocated, the size of each one in bytes, and the address of the first
+> > + * state.
+> 
+> make W=1 rightfully complains about:
+> 
+> > +
+> 
+> drivers/char/random.c:182: warning: bad line:
+> 
+> > + * Returns a pointer to the first state in the allocation.
+> 
+> I have serious doubts that this statement is correct.
+> 
+> Think about this comment and documentation as a boiler plate for the
+> mandatory man page for a new syscall (hint...)
+> 
+> > + *
+> > + */
+> 
+> and W=1 also complains rightfully here:
+> 
+> > +SYSCALL_DEFINE3(vgetrandom_alloc, unsigned int __user *, num,
+> > +		unsigned int __user *, size_per_each, unsigned int, flags)
+> 
+> drivers/char/random.c:188: warning: expecting prototype for vgetrandom_alloc(). Prototype was for
+> sys_vgetrandom_alloc() instead
+> 
+> > +{
+> > diff --git a/include/vdso/getrandom.h b/include/vdso/getrandom.h
+> > new file mode 100644
+> > index 000000000000..5f04c8bf4bd4
+> > --- /dev/null
+> > +++ b/include/vdso/getrandom.h
+> > @@ -0,0 +1,24 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+> > + */
+> > +
+> > +#ifndef _VDSO_GETRANDOM_H
+> > +#define _VDSO_GETRANDOM_H
+> > +
+> > +#include <crypto/chacha.h>
+> > +
+> > +struct vgetrandom_state {
+> > +	union {
+> > +		struct {
+> > +			u8 batch[CHACHA_BLOCK_SIZE * 3 / 2];
+> > +			u32 key[CHACHA_KEY_SIZE / sizeof(u32)];
+> > +		};
+> > +		u8 batch_key[CHACHA_BLOCK_SIZE * 2];
+> > +	};
+> > +	unsigned long generation;
+> > +	u8 pos;
+> > +	bool in_use;
+> > +};
+> 
+> Again, please make this properly tabular:
+> 
+> struct vgetrandom_state {
+> 	union {
+> 		struct {
+> 			u8	batch[CHACHA_BLOCK_SIZE * 3 / 2];
+> 			u32	key[CHACHA_KEY_SIZE / sizeof(u32)];
+> 		};
+> 		u8	batch_key[CHACHA_BLOCK_SIZE * 2];
+> 	};
+> 	unsigned long	generation;
+> 	u8		pos;
+> 	bool		in_use;
+> };
+> 
+> Plus some kernel doc which explains what this is about.
 
-clang LTO implies -fdata-sections and -ffunction-sections.
+That structure looks horrid - especially for something shared
+between entities.
+The 'unsigned long' should be either u32 or u64.
+There is 'hidden' padding at the end.
+If 'pos' is an index into something (longer name would be
+better) then there is no reason to squeeze the value into
+1 byte - it doesn't save anything and might make things bigger.
 
-$ cat foo.c
-int foo(void)
-{
-        return 0;
-}
+(I think Jason might have blocked my emails, he doesn't like
+critisicism/feedback.)
 
-$ cat bar.c
-extern int foo(void);
+	David
 
-int bar(void)
-{
-        return foo();
-}
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-$ clang -c -o foo.{o,c}
-$ clang -c -o bar.{o,c}
-$ ld.lld -r -o foobar {foo,bar}.o
-$ llvm-readelf -s foobar
-
-Symbol table '.symtab' contains 9 entries:
-   Num:    Value          Size Type    Bind   Vis       Ndx Name
-     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   UND
-     1: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS foo.c
-     2: 0000000000000000     0 SECTION LOCAL  DEFAULT     1 .text
-     3: 0000000000000000     0 SECTION LOCAL  DEFAULT     3 .eh_frame
-     4: 0000000000000000     0 SECTION LOCAL  DEFAULT     5 .llvm_addrsig
-     5: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS bar.c
-     6: 0000000000000000     0 SECTION LOCAL  DEFAULT     2 .comment
-     7: 0000000000000000     8 FUNC    GLOBAL DEFAULT     1 foo
-     8: 0000000000000010    11 FUNC    GLOBAL DEFAULT     1 bar
-
-$ clang -flto -c -o foo.{o,c}
-$ clang -flto -c -o bar.{o,c}
-$ ld.lld -r -o foobar {foo,bar}.o
-$ llvm-readelf -s foobar
-
-Symbol table '.symtab' contains 10 entries:
-   Num:    Value          Size Type    Bind   Vis       Ndx Name
-     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   UND
-     1: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS ld-temp.o
-     2: 0000000000000000     0 SECTION LOCAL  DEFAULT     1 .text
-     3: 0000000000000000     0 SECTION LOCAL  DEFAULT     2 .text.foo
-     4: 0000000000000000     0 SECTION LOCAL  DEFAULT     3 .text.bar
-     5: 0000000000000000     0 SECTION LOCAL  DEFAULT     6 .eh_frame
-     6: 0000000000000000     0 SECTION LOCAL  DEFAULT     8 .llvm_addrsig
-     7: 0000000000000000     0 SECTION LOCAL  DEFAULT     5 .comment
-     8: 0000000000000000     8 FUNC    GLOBAL DEFAULT     2 foo
-     9: 0000000000000000    13 FUNC    GLOBAL DEFAULT     3 bar
-
-> In upstream, it is only possible for mips and powerpc.
-> 
-> ./arch/mips/Kconfig:82: select HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-> ./arch/powerpc/Kconfig:237: select HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-> 
-> 
-> 
-> Is there another proposal to add it for arm64,
-> or is this about a downstream kernel?
-> 
-> 
-> 
-> 
-> 
-> >
-> >   WARNING: modpost: vmlinux.o: section mismatch in reference: padata_work_init (section: .text.padata_work_init) -> padata_mt_helper (section: .init.text)
-> >   WARNING: modpost: vmlinux.o: section mismatch in reference: padata_work_init (section: .text.padata_work_init) -> padata_mt_helper (section: .init.text)
-> >
-> > In both cases, an __init function calls padata_work_init(), which is not
-> > marked __init, with padata_mt_helper(), another __init function, as a
-> > work function argument.
-> >
-> > padata_work_init() is called from non-init paths, otherwise it could be
-> > marked __init to resolve the warning. Instead, remove __init from
-> > padata_mt_helper() to resolve the warning.
-> >
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> > Cc: Steffen Klassert <steffen.klassert@secunet.com>
-> > Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
-> > Cc: linux-crypto@vger.kernel.org
-> > ---
-> >  kernel/padata.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/kernel/padata.c b/kernel/padata.c
-> > index e5819bb8bd1d..c2271d7e446d 100644
-> > --- a/kernel/padata.c
-> > +++ b/kernel/padata.c
-> > @@ -45,7 +45,7 @@ struct padata_mt_job_state {
-> >  };
-> >
-> >  static void padata_free_pd(struct parallel_data *pd);
-> > -static void __init padata_mt_helper(struct work_struct *work);
-> > +static void padata_mt_helper(struct work_struct *work);
-> >
-> >  static int padata_index_to_cpu(struct parallel_data *pd, int cpu_index)
-> >  {
-> > @@ -425,7 +425,7 @@ static int padata_setup_cpumasks(struct padata_instance *pinst)
-> >         return err;
-> >  }
-> >
-> > -static void __init padata_mt_helper(struct work_struct *w)
-> > +static void padata_mt_helper(struct work_struct *w)
-> >  {
-> >         struct padata_work *pw = container_of(w, struct padata_work, pw_work);
-> >         struct padata_mt_job_state *ps = pw->pw_data;
-> > --
-> > 2.38.1
-> >
-> 
-> 
-> -- 
-> Best Regards
-> Masahiro Yamada
