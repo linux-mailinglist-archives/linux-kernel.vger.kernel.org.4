@@ -2,76 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B4F63CFF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 08:53:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D195763D02D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 09:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234240AbiK3Hxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 02:53:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
+        id S233470AbiK3INj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 30 Nov 2022 03:13:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234221AbiK3Hxg (ORCPT
+        with ESMTP id S233552AbiK3INg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 02:53:36 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDB513E3C;
-        Tue, 29 Nov 2022 23:53:34 -0800 (PST)
-Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NMWdw2Ht0zRpfP;
-        Wed, 30 Nov 2022 15:52:52 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- kwepemi500014.china.huawei.com (7.221.188.232) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 30 Nov 2022 15:53:31 +0800
-From:   Qiheng Lin <linqiheng@huawei.com>
-To:     <mchehab@kernel.org>, <matthias.bgg@gmail.com>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Qiheng Lin <linqiheng@huawei.com>
-Subject: [PATCH] media: platform: mtk-mdp3: Fix return value check in mdp_probe()
-Date:   Wed, 30 Nov 2022 16:13:12 +0800
-Message-ID: <20221130081312.35523-1-linqiheng@huawei.com>
-X-Mailer: git-send-email 2.32.0
+        Wed, 30 Nov 2022 03:13:36 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E564FFB8
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 00:13:36 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1p0IDe-0008Il-7F; Wed, 30 Nov 2022 09:13:26 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1p0IDb-000671-Bb; Wed, 30 Nov 2022 09:13:23 +0100
+Date:   Wed, 30 Nov 2022 09:13:23 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Ping-Ke Shih <pkshih@realtek.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Neo Jou <neojou@gmail.com>,
+        Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Alexander Hochbaum <alex@appudo.com>,
+        Da Xue <da@libre.computer>, Bernie Huang <phhuang@realtek.com>,
+        Viktor Petrenko <g0000ga@gmail.com>,
+        neo_jou <neo_jou@realtek.com>
+Subject: Re: [PATCH v4 07/11] wifi: rtw88: Add common USB chip support
+Message-ID: <20221130081323.GE29728@pengutronix.de>
+References: <20221129100754.2753237-1-s.hauer@pengutronix.de>
+ <20221129100754.2753237-8-s.hauer@pengutronix.de>
+ <4eee82341ef84d4aa063edeb6f23a70d@realtek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500014.china.huawei.com (7.221.188.232)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <4eee82341ef84d4aa063edeb6f23a70d@realtek.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case of error, the function mtk_mutex_get()
-returns ERR_PTR() and never returns NULL. The NULL test in the
-return value check should be replaced with IS_ERR().
+On Wed, Nov 30, 2022 at 01:40:36AM +0000, Ping-Ke Shih wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Sascha Hauer <s.hauer@pengutronix.de>
+> > Sent: Tuesday, November 29, 2022 6:08 PM
+> > To: linux-wireless@vger.kernel.org
+> > Cc: Neo Jou <neojou@gmail.com>; Hans Ulli Kroll <linux@ulli-kroll.de>; Ping-Ke Shih <pkshih@realtek.com>;
+> > Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; netdev@vger.kernel.org;
+> > linux-kernel@vger.kernel.org; Martin Blumenstingl <martin.blumenstingl@googlemail.com>;
+> > kernel@pengutronix.de; Johannes Berg <johannes@sipsolutions.net>; Alexander Hochbaum <alex@appudo.com>;
+> > Da Xue <da@libre.computer>; Bernie Huang <phhuang@realtek.com>; Viktor Petrenko <g0000ga@gmail.com>;
+> > Sascha Hauer <s.hauer@pengutronix.de>; neo_jou <neo_jou@realtek.com>
+> > Subject: [PATCH v4 07/11] wifi: rtw88: Add common USB chip support
+> > 
+> > Add the common bits and pieces to add USB support to the RTW88 driver.
+> > This is based on https://github.com/ulli-kroll/rtw88-usb.git which
+> > itself is first written by Neo Jou.
+> > 
+> > Signed-off-by: neo_jou <neo_jou@realtek.com>
+> > Signed-off-by: Hans Ulli Kroll <linux@ulli-kroll.de>
+> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> > ---
+> 
+> > +static void rtw_usb_write_port_tx_complete(struct urb *urb)
+> > +{
+> > +	struct rtw_usb_txcb *txcb = urb->context;
+> > +	struct rtw_dev *rtwdev = txcb->rtwdev;
+> > +	struct ieee80211_hw *hw = rtwdev->hw;
+> > +	int max_iter = RTW_USB_MAX_XMITBUF_SZ;
+> > +
+> > +	while (true) {
+> > +		struct sk_buff *skb = skb_dequeue(&txcb->tx_ack_queue);
+> > +		struct ieee80211_tx_info *info;
+> > +		struct rtw_usb_tx_data *tx_data;
+> > +
+> > +		if (!skb)
+> > +			break;
+> > +
+> > +		if (!--max_iter) {
+> 
+> Don't you need to free 'skb'? or you should not dequeue skb in this situation?
 
-Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 driver")
-Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
----
- drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+My first reaction here was to call skb_queue_purge(), but that is
+implemented as:
 
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-index c413e59d4286..7a2d992dd842 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-@@ -207,8 +207,8 @@ static int mdp_probe(struct platform_device *pdev)
- 	}
- 	for (i = 0; i < MDP_PIPE_MAX; i++) {
- 		mdp->mdp_mutex[i] = mtk_mutex_get(&mm_pdev->dev);
--		if (!mdp->mdp_mutex[i]) {
--			ret = -ENODEV;
-+		if (IS_ERR(mdp->mdp_mutex[i])) {
-+			ret = PTR_ERR(mdp->mdp_mutex[i]);
- 			goto err_return;
- 		}
- 	}
+	while ((skb = skb_dequeue(list)) != NULL)
+		kfree_skb(skb);
+
+So basically it brings us into the same endless loop we are trying to
+break out here.
+
+If it was me I would just remove this check. *txcb is allocated once
+in rtw_usb_tx_agg_skb(), &txcb->tx_ack_queue is added the number of skbs
+that fit into RTW_USB_MAX_XMITBUF_SZ and here we dequeue these skbs
+again. No other code even has the pointer to add skbs to this queue
+concurrently.
+
+Sascha
+
+
 -- 
-2.32.0
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
