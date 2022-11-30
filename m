@@ -2,191 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621F863CF29
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 07:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CED6763CF2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 07:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234031AbiK3GTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 01:19:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        id S233843AbiK3GVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 01:21:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiK3GTG (ORCPT
+        with ESMTP id S230147AbiK3GVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 01:19:06 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1654530F70;
-        Tue, 29 Nov 2022 22:19:06 -0800 (PST)
+        Wed, 30 Nov 2022 01:21:02 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79D331350
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 22:21:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669789146; x=1701325146;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JYrA/k2tWWAw2kY6vd9Z+khRGZifgFIqAi4dqbTa+b4=;
-  b=S9lMMyQJAWPPmCLl6bnGhtqPB9wQVNm6IKyWsOpPsGfC011gtx2tHsqL
-   YWd0BmlHboVfPAJ/4/jBIQl2pCBpGUfgN2JE4mAdsQH453Gf2ichSqRNI
-   WSgHYdsW1TqqoFzYMqAGiWnsxVvWCcXMIm32x22tg+wIdDH2z+xJxWh9i
-   0xGB52LJfBEzJuY+8poy6XMQGTCpL+v+eSOSYZuocoVA8oSXEuRK2H/Xz
-   Z3a7c4gVDsDBRyQtVdSJPlMIATE22Ec3DQ6OdiOFB7Z1yHe9qslnDwfg6
-   hnigJBUpIUVWt3d3oVfYU3DczV9/taof2YhLPq1QQx8TfzYuRavGMf7c8
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="314008937"
+  t=1669789261; x=1701325261;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LUeWxWmjVm3akRt4cUHVyVlUrmIQ4Wukv83FFYOHGpc=;
+  b=MFPhx8IG24hor37RqanKoc2lKguaVk8IFTEBTC5zcrCpJpGl23MNaiS9
+   sCQMWk+I+XW+CmH6PdmgvNEr0bfiH3QHfh9jjrc5wYhd/A/7GUjKC/gjm
+   o8n4U+WuAuJOsb3LJfZZFDdwHiCzKqWYJeNUhFDzEv7Gm2jTfmAj20Rh4
+   7eQW6Y/u3ssTeP+u8zfqaxnAyTN09aKo2d+oFnJJwYIWQhnSnap4jbXMr
+   fmDwXGxAACAMAnp/p+U35JUliWLhdn4quTkXbkGsm2gj7pCYiqawSJ9uX
+   kIidKPF9F6FSbivhbxFkP4DJORdW1bEALIw95shdo8cCmZT2LGXibUy3m
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="302922977"
 X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
-   d="scan'208";a="314008937"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 22:19:01 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="646209844"
+   d="scan'208";a="302922977"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 22:21:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="637878338"
 X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
-   d="scan'208";a="646209844"
-Received: from tuomaspe-mobl.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.53.75])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 22:18:59 -0800
-Message-ID: <6099c99e-f0a7-2be3-52bf-a99b5a3596c7@intel.com>
-Date:   Wed, 30 Nov 2022 08:18:56 +0200
+   d="scan'208";a="637878338"
+Received: from otc-nc-03.jf.intel.com (HELO jacob-builder.jf.intel.com) ([10.54.39.110])
+  by orsmga007.jf.intel.com with ESMTP; 29 Nov 2022 22:21:00 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        "Lu Baolu" <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     "Robin Murphy" <robin.murphy@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Yuzhang Luo <yuzhang.luo@intel.com>
+Subject: [PATCH v3] iommu/vt-d: Add a fix for devices need extra dtlb flush
+Date:   Tue, 29 Nov 2022 22:24:49 -0800
+Message-Id: <20221130062449.1360063-1-jacob.jun.pan@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.0
-Subject: Re: [PATCH 1/1] mmc: sdhci: Fixed too many logs being printed during
- tuning
-Content-Language: en-US
-To:     Wenchao Chen <wenchao.chen666@gmail.com>
-Cc:     ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, megoo.tang@gmail.com,
-        lzx.stg@gmail.com
-References: <20221111084214.14822-1-wenchao.chen666@gmail.com>
- <20221111084214.14822-2-wenchao.chen666@gmail.com>
- <59fc95ec-c0db-4011-eca3-3d101f0bc908@intel.com>
- <CA+Da2qwdtUdCcv+HhNArGoriVtOmx+GGML4Avkk5QSdm8+XXTQ@mail.gmail.com>
- <8433ae30-2633-1f32-ef11-2168c9cfea80@intel.com>
- <CA+Da2qwBmApEZ6ejGBTjftsytkeNZbHZ-0oQDWa5TD8Qp3CYHA@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CA+Da2qwBmApEZ6ejGBTjftsytkeNZbHZ-0oQDWa5TD8Qp3CYHA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/11/22 05:11, Wenchao Chen wrote:
-> On Fri, Nov 18, 2022 at 11:57 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
->>
->> On 18/11/22 11:25, Wenchao Chen wrote:
->>> On Thu, Nov 17, 2022 at 12:00 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->>>>
->>>> On 11/11/22 10:42, Wenchao Chen wrote:
->>>>> From: Wenchao Chen <wenchao.chen@unisoc.com>
->>>>>
->>>>> During the HS200 tuning process, too many tuning errors are printed in
->>>>> the log.
->>>>>
->>>>> Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
->>>>> ---
->>>>>  drivers/mmc/host/sdhci.c | 4 ++++
->>>>>  1 file changed, 4 insertions(+)
->>>>>
->>>>> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
->>>>> index fef03de85b99..a503b54305eb 100644
->>>>> --- a/drivers/mmc/host/sdhci.c
->>>>> +++ b/drivers/mmc/host/sdhci.c
->>>>> @@ -3401,6 +3401,10 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
->>>>>               if (host->pending_reset)
->>>>>                       return;
->>>>>
->>>>> +             command = SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND));
->>>>> +             if (command == MMC_SEND_TUNING_BLOCK || command == MMC_SEND_TUNING_BLOCK_HS200)
->>>>> +                     return;
->>>>
->>>> Normally we wouldn't get here even if a request got an error because
->>>> then we either reset the data circuit which should stop further
->>>> interrupts, or set host->pending_reset.
->>>>
->>>> Can you elaborate on what is going wrong?
->>>>
->>> Hi  adrian
->>> 1. In the process of tuning, not all tuning values are good, some
->>> tuning values may cause errors, and these errors print too many logs.
->>>     Of course, we reset the cmdline or dataline on error.
->>> 2. use host->pending_reset = true
->>> static void __sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq)
->>> {
->>> ...
->>> if (sdhci_needs_reset(host, mrq))
->>> host->pending_reset = true;
->>> ...
->>> }
->>>
->>> But intmask = 0x00200000
->>> static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
->>> {
->>> ...
->>> if (!host->data) {
->>> struct mmc_command *data_cmd = host->data_cmd;
->>>
->>> if (data_cmd && (data_cmd->flags & MMC_RSP_BUSY)) {
->>> if (intmask & SDHCI_INT_DATA_TIMEOUT) { //#define
->>> SDHCI_INT_DATA_TIMEOUT 0x00100000
->>> host->data_cmd = NULL;
->>> data_cmd->error = -ETIMEDOUT;
->>> sdhci_err_stats_inc(host, CMD_TIMEOUT);
->>> __sdhci_finish_mrq(host, data_cmd->mrq);//<=
->>> return;
->>> }
->>> if (intmask & SDHCI_INT_DATA_END) {    //#define  SDHCI_INT_DATA_END 0x00000002
->>>
->>> host->data_cmd = NULL;
->>> /*
->>> * Some cards handle busy-end interrupt
->>> * before the command completed, so make
->>> * sure we do things in the proper order.
->>> */
->>> if (host->cmd == data_cmd)
->>> return;
->>>
->>> __sdhci_finish_mrq(host, data_cmd->mrq);//<=
->>> return;
->>> }
->>> }
->>> ...
->>> if (host->pending_reset)
->>> return;
->>>
->>> pr_err("%s: Got data interrupt 0x%08x even though no data operation
->>> was in progress.\n",
->>>        mmc_hostname(host->mmc), (unsigned)intmask);
->>> sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
->>> sdhci_dumpregs(host);
->>>
->>> return;
->>> }
->>> ...
->>> }
->>
->> Not really following that I'm sorry.
->>
->> Are you saying you get a data interrupt after he data circuit is reset?
->>
-> 
-> No. During the tuning process, sdhci_data_irq does not skip printing
-> because the interrupt state is 0x00200000 (DATA CRC ERROR).
+QAT devices on Intel Sapphire Rapids and Emerald Rapids have a defect in
+address translation service (ATS). These devices may inadvertently issue
+ATS invalidation completion before posted writes initiated with
+translated address that utilized translations matching the invalidation
+address range, violating the invalidation completion ordering.
 
-Sorry I am still confused.  Which driver is this?  I was assuming
-you were using mmc_send_tuning() because the only interrupt enabled
-for regular SDHCI tuning is SDHCI_INT_DATA_AVAIL (0x00000020).
+This patch adds an extra device TLB invalidation for the affected devices,
+it is needed to ensure no more posted writes with translated address
+following the invalidation completion. Therefore, the ordering is
+preserved and data-corruption is prevented.
 
-So are you saying you are getting status 0x00200000 even though the
-mask is 0x00000020 ?
+Device TLBs are invalidated under the following six conditions:
+1. Device driver does DMA API unmap IOVA
+2. Device driver unbind a PASID from a process, sva_unbind_device()
+3. PASID is torn down, after PASID cache is flushed. e.g. process
+exit_mmap() due to crash
+4. Under SVA usage, called by mmu_notifier.invalidate_range() where
+VM has to free pages that were unmapped
+5. userspace driver unmaps a DMA buffer
+6. Cache invalidation in vSVA usage (upcoming)
 
-> 
->>>
->>>>> +
->>>>>               pr_err("%s: Got data interrupt 0x%08x even though no data operation was in progress.\n",
->>>>>                      mmc_hostname(host->mmc), (unsigned)intmask);
->>>>>               sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
->>>>
->>
+For #1 and #2, device drivers are responsible for stopping DMA traffic
+before unmap/unbind. For #3, iommu driver gets mmu_notifier to
+invalidate TLB the same way as normal user unmap which will do an extra
+invalidation. The dTLB invalidation after PASID cache flush does not
+need an extra invalidation.
+
+Therefore, we only need to deal with #4 and #5 in this patch. #1 is also
+covered by this patch due to common code path with #5.
+
+Tested-by: Yuzhang Luo <yuzhang.luo@intel.com>
+Reviewed-by: Ashok Raj <ashok.raj@intel.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+---
+v3
+- renamed quirk function
+- add more comments to explain risky_device() check
+v2
+- removed risky_device() check based on the review by Robin, added comments
+  to explain the exemption.
+- reworked commit message based on the review from Ashok
+---
+ drivers/iommu/intel/iommu.c | 67 +++++++++++++++++++++++++++++++++++--
+ drivers/iommu/intel/iommu.h |  3 ++
+ drivers/iommu/intel/svm.c   |  5 ++-
+ 3 files changed, 72 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 996a8b5ee5ee..d8759f445aff 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -1396,6 +1396,23 @@ static void domain_update_iotlb(struct dmar_domain *domain)
+ 	spin_unlock_irqrestore(&domain->lock, flags);
+ }
+ 
++/*
++ * Impacted QAT device IDs ranging from 0x4940 to 0x4943.
++ * This quirk is exempted from risky_device() check because it applies only
++ * to the built-in QAT devices and it doesn't grant additional privileges.
++ */
++#define BUGGY_QAT_DEVID_MASK 0x494c
++static bool dev_needs_extra_dtlb_flush(struct pci_dev *pdev)
++{
++	if (pdev->vendor != PCI_VENDOR_ID_INTEL)
++		return false;
++
++	if ((pdev->device & 0xfffc) != BUGGY_QAT_DEVID_MASK)
++		return false;
++
++	return true;
++}
++
+ static void iommu_enable_pci_caps(struct device_domain_info *info)
+ {
+ 	struct pci_dev *pdev;
+@@ -1478,6 +1495,7 @@ static void __iommu_flush_dev_iotlb(struct device_domain_info *info,
+ 	qdep = info->ats_qdep;
+ 	qi_flush_dev_iotlb(info->iommu, sid, info->pfsid,
+ 			   qdep, addr, mask);
++	quirk_extra_dev_tlb_flush(info, addr, mask, PASID_RID2PASID, qdep);
+ }
+ 
+ static void iommu_flush_dev_iotlb(struct dmar_domain *domain,
+@@ -4490,9 +4508,10 @@ static struct iommu_device *intel_iommu_probe_device(struct device *dev)
+ 	if (dev_is_pci(dev)) {
+ 		if (ecap_dev_iotlb_support(iommu->ecap) &&
+ 		    pci_ats_supported(pdev) &&
+-		    dmar_ats_supported(pdev, iommu))
++		    dmar_ats_supported(pdev, iommu)) {
+ 			info->ats_supported = 1;
+-
++			info->dtlb_extra_inval = dev_needs_extra_dtlb_flush(pdev);
++		}
+ 		if (sm_supported(iommu)) {
+ 			if (pasid_supported(iommu)) {
+ 				int features = pci_pasid_features(pdev);
+@@ -4931,3 +4950,47 @@ static void __init check_tylersburg_isoch(void)
+ 	pr_warn("Recommended TLB entries for ISOCH unit is 16; your BIOS set %d\n",
+ 	       vtisochctrl);
+ }
++
++/*
++ * Here we deal with a device TLB defect where device may inadvertently issue ATS
++ * invalidation completion before posted writes initiated with translated address
++ * that utilized translations matching the invalidation address range, violating
++ * the invalidation completion ordering.
++ * Therefore, any use cases that cannot guarantee DMA is stopped before unmap is
++ * vulnerable to this defect. In other words, any dTLB invalidation initiated not
++ * under the control of the trusted/privileged host device driver must use this
++ * quirk.
++ * Device TLBs are invalidated under the following six conditions:
++ * 1. Device driver does DMA API unmap IOVA
++ * 2. Device driver unbind a PASID from a process, sva_unbind_device()
++ * 3. PASID is torn down, after PASID cache is flushed. e.g. process
++ *    exit_mmap() due to crash
++ * 4. Under SVA usage, called by mmu_notifier.invalidate_range() where
++ *    VM has to free pages that were unmapped
++ * 5. Userspace driver unmaps a DMA buffer
++ * 6. Cache invalidation in vSVA usage (upcoming)
++ *
++ * For #1 and #2, device drivers are responsible for stopping DMA traffic
++ * before unmap/unbind. For #3, iommu driver gets mmu_notifier to
++ * invalidate TLB the same way as normal user unmap which will use this quirk.
++ * The dTLB invalidation after PASID cache flush does not need this quirk.
++ *
++ * As a reminder, #6 will *NEED* this quirk as we enable nested translation.
++ */
++void quirk_extra_dev_tlb_flush(struct device_domain_info *info, unsigned long address,
++		   unsigned long mask, u32 pasid, u16 qdep)
++{
++	u16 sid;
++
++	if (likely(!info->dtlb_extra_inval))
++		return;
++
++	sid = PCI_DEVID(info->bus, info->devfn);
++	if (pasid == PASID_RID2PASID) {
++		qi_flush_dev_iotlb(info->iommu, sid, info->pfsid,
++				   qdep, address, mask);
++	} else {
++		qi_flush_dev_iotlb_pasid(info->iommu, sid, info->pfsid,
++					 pasid, qdep, address, mask);
++	}
++}
+diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+index 92023dff9513..36297e17d815 100644
+--- a/drivers/iommu/intel/iommu.h
++++ b/drivers/iommu/intel/iommu.h
+@@ -623,6 +623,7 @@ struct device_domain_info {
+ 	u8 pri_enabled:1;
+ 	u8 ats_supported:1;
+ 	u8 ats_enabled:1;
++	u8 dtlb_extra_inval:1;	/* Quirk for devices need extra flush */
+ 	u8 ats_qdep;
+ 	struct device *dev; /* it's NULL for PCIe-to-PCI bridge */
+ 	struct intel_iommu *iommu; /* IOMMU used by this device */
+@@ -728,6 +729,8 @@ void qi_flush_piotlb(struct intel_iommu *iommu, u16 did, u32 pasid, u64 addr,
+ void qi_flush_dev_iotlb_pasid(struct intel_iommu *iommu, u16 sid, u16 pfsid,
+ 			      u32 pasid, u16 qdep, u64 addr,
+ 			      unsigned int size_order);
++void quirk_extra_dev_tlb_flush(struct device_domain_info *info, unsigned long address,
++		   unsigned long pages, u32 pasid, u16 qdep);
+ void qi_flush_pasid_cache(struct intel_iommu *iommu, u16 did, u64 granu,
+ 			  u32 pasid);
+ 
+diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
+index 7d08eb034f2d..fe615c53479c 100644
+--- a/drivers/iommu/intel/svm.c
++++ b/drivers/iommu/intel/svm.c
+@@ -184,10 +184,13 @@ static void __flush_svm_range_dev(struct intel_svm *svm,
+ 		return;
+ 
+ 	qi_flush_piotlb(sdev->iommu, sdev->did, svm->pasid, address, pages, ih);
+-	if (info->ats_enabled)
++	if (info->ats_enabled) {
+ 		qi_flush_dev_iotlb_pasid(sdev->iommu, sdev->sid, info->pfsid,
+ 					 svm->pasid, sdev->qdep, address,
+ 					 order_base_2(pages));
++		quirk_extra_dev_tlb_flush(info, address, order_base_2(pages),
++					  svm->pasid, sdev->qdep);
++	}
+ }
+ 
+ static void intel_flush_svm_range_dev(struct intel_svm *svm,
+-- 
+2.25.1
 
