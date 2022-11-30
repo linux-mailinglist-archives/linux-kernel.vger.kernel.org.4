@@ -2,117 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF5063D41A
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B2363D41E
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233054AbiK3LOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:14:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38602 "EHLO
+        id S233998AbiK3LPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbiK3LOd (ORCPT
+        with ESMTP id S229978AbiK3LPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:14:33 -0500
-Received: from mail.fris.de (mail.fris.de [116.203.77.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F40D220E4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:14:31 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CCC1ABFACA;
-        Wed, 30 Nov 2022 12:14:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
-        t=1669806866; h=from:subject:date:message-id:to:cc:mime-version:
-         content-transfer-encoding; bh=FRxluBfEJkiA18fBYeNlbUEW1rTsCtHz9h13qEpVFw8=;
-        b=LlhH723wWOsj558CVqc1B1IyaUxWewa/m5COH65zmc1/H2A+JMNguwLJ4kbTWpXRmnTi1M
-        e+DpF3svrke1qdoBxwBuCe3iWK5abguQ4e86htmrA5TJHwm5y4XV7IEFZRMFJvQFFsnUXD
-        ZKRb8c9qyKIN+iUiKLoJnL+qk4g87tDVkGylRSU12Kvv1aKymZVR1KVlwglXdqwMiSnzll
-        /i1YlO/g1IJV3bxBiOnKTL9jXf3XavA6elWUE0cE3XlNUCXQXG1a+Bum0QH3HEUYwC3eo7
-        LPQUMFjsYzTFdIcL3saXoSTBgcVmPIJliebB4jB5c2tVcctmTcUal/uxgLCzfQ==
-From:   Frieder Schrempf <frieder@fris.de>
-To:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Heiko Thiery <heiko.thiery@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: [PATCH] arm64: dts: imx8mm-kontron: Add RTC aliases
-Date:   Wed, 30 Nov 2022 12:13:49 +0100
-Message-Id: <20221130111357.585560-1-frieder@fris.de>
+        Wed, 30 Nov 2022 06:15:35 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DE728E14;
+        Wed, 30 Nov 2022 03:15:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669806932; x=1701342932;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=h8e+dDcveIhXtv4l23Jh2CJfpqVLFmQPAuoBcBH7Hyk=;
+  b=tFwxku4b3ckw94Obe6IOGzG0ixxBoiGXkGEVNBSN6JhfSEIVr83ikMQv
+   xlVe0N5xREFbja6KY/4uNiHCd2QUZeN8sDMdgf1tbHgummOEvRr0XF5Xb
+   hnF3DBNHsp90X1G094SKYMAQKEt6FbLCjhbreJLR9K0Lc4s7kPwQ7LkCn
+   1/vVIkTAzVmwJSQRSgbBl4wAdh4kasQXbMdhbgFCQo1CFKxSOxIhXURMP
+   wXl0rl10wXtWW9fE+IpnSgK47v7zRSxGfRlXkBjb7/x5V/RmFQIQwnsIO
+   tGSLV5SGjJGgrqb5k8/mGSRgV2efcNG+L2OFRLtFwgdhrHqaEK/mNfl+9
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="189334692"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Nov 2022 04:15:31 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 30 Nov 2022 04:15:30 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Wed, 30 Nov 2022 04:15:29 -0700
+Date:   Wed, 30 Nov 2022 11:15:10 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+CC:     Conor Dooley <conor@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v12 1/2] pwm: add microchip soft ip corePWM driver
+Message-ID: <Y4c7PpgzAi+HPrET@wendy>
+References: <20221110093512.333881-1-conor.dooley@microchip.com>
+ <20221110093512.333881-2-conor.dooley@microchip.com>
+ <20221117164950.cssukd63fywzuwua@pengutronix.de>
+ <Y3Zxkt3OSPQc46Q2@spud>
+ <20221117210433.n5j7upqqksld42mu@pengutronix.de>
+ <Y3avobkvYK3ydKTS@spud>
+ <Y3uZY5mt/ZIWk3sS@wendy>
+ <Y4coL74qQX80TNaT@wendy>
+ <20221130103755.lhil2jaw3oufr2sf@pengutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221130103755.lhil2jaw3oufr2sf@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frieder Schrempf <frieder.schrempf@kontron.de>
+On Wed, Nov 30, 2022 at 11:37:55AM +0100, Uwe Kleine-König wrote:
+> Hello Conor,
 
-Add aliases for the RTCs on the board and on the SoC. This ensures that
-the primary RTC is always the one on the board that has a buffered supply
-and maximum accuracy.
+> > > get_state() returns void though, is it valid behaviour to wait for the
+> > > timeout there?
+> 
+> There was an approach to change that, see
+> https://lore.kernel.org/linux-pwm/20220916151506.298488-1-u.kleine-koenig@pengutronix.de
+> 
+> I need to send a v2.
 
-Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
----
- arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts     | 4 +++-
- arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi | 7 ++++++-
- 2 files changed, 9 insertions(+), 2 deletions(-)
+Ahh, yeah. That looks like a better idea. I'd much rather be able to
+return an actual error.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts b/arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts
-index a079322a3793..dcec57c20399 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts
-@@ -13,6 +13,8 @@ / {
- 
- 	aliases {
- 		ethernet1 = &usbnet;
-+		rtc0 = &rx8900;
-+		rtc1 = &snvs_rtc;
- 	};
- 
- 	/* fixed crystal dedicated to mcp2515 */
-@@ -136,7 +138,7 @@ &i2c4 {
- 	pinctrl-0 = <&pinctrl_i2c4>;
- 	status = "okay";
- 
--	rtc@32 {
-+	rx8900: rtc@32 {
- 		compatible = "epson,rx8900";
- 		reg = <0x32>;
- 	};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
-index 8d10f5b41297..695da2fa7c42 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
-@@ -10,6 +10,11 @@ / {
- 	model = "Kontron OSM-S i.MX8MM (N802X SOM)";
- 	compatible = "kontron,imx8mm-osm-s", "fsl,imx8mm";
- 
-+	aliases {
-+		rtc0 = &rv3028;
-+		rtc1 = &snvs_rtc;
-+	};
-+
- 	memory@40000000 {
- 		device_type = "memory";
- 		/*
-@@ -200,7 +205,7 @@ reg_nvcc_sd: LDO5 {
- 		};
- 	};
- 
--	rtc@52 {
-+	rv3028: rtc@52 {
- 		compatible = "microcrystal,rv3028";
- 		reg = <0x52>;
- 		pinctrl-names = "default";
--- 
-2.38.1
+> > > I had a check in the core code and found some places where the call in
+> > > looks like:
+> > > 	struct pwm_state s1, s2; 
+> > > 	chip->ops->get_state(chip, pwm, &s1);
+> > > In this case, exiting early would leave us with a completely wrong
+> > > idead of the state, if it was to time out.
+> > > 
+> > > Either way, it seems like either way we would be misleading the caller
+> > > of get_state() - perhaps the way around that is to do the wait & then
+> > > just carry on with get_state()?
+> > > In that scenario, you'd get the new settings where possible and the old ones
+> > > otherwise.
+> > > Returning if the timeout is hit would give you the new settings where possible
+> > > & otherwise you'd get whatever was passed to get_state().
+> > > I'm not really sure which of those two situations would be preferred?
+> 
+> Hmm, .get_state should not return the old state. We really want
+> .get_state to return an error code. Maybe postpone that question until
+> we have that?
+
+If get_state() can return an error, there's no need for the question I
+think. I'd rather return what's in the shadow registers *and* on the bus
+or an error than an inconsistent state.
+
+I'll send a v(N+1) based on the non-void get_state() at some point
+soon-ish.
+
+> > Apologies for bumping this, I was wondering if any thoughts on the
+> > above? I'm not sure which is the lesser evil here (or if I have
+> > misunderstood something).
+> 
+> That's fine. I'm sorry to be not more responsive. This development cycle
+> is somehow crazy and there are so many open mails in my inbox ... :-\
+
+Oh nw about that at all. I feel bad pinging stuff since I know everyone
+is busy.
+
+Thanks,
+Conor.
 
