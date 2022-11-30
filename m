@@ -2,157 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9B563D1EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62ABF63D20D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 10:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233659AbiK3Jbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 04:31:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
+        id S234476AbiK3Jdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 04:33:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233735AbiK3Jb1 (ORCPT
+        with ESMTP id S233846AbiK3JdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 04:31:27 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13025288E;
-        Wed, 30 Nov 2022 01:31:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669800684; x=1701336684;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=TT7L0XdLW/CWHw8vL3+dJ2O7O5cRfmle+DCm8jMTmD8=;
-  b=f0k47oxoBrCh6uFSYeK8mkD8QjPOfc3TKoky3w440qpdi0DT/1kZwn8E
-   4rcuZNxxQ8UquilGxUYCk9h1hEoFJVitwz3gL1GkshNstWfDD5jGeeJXE
-   /ZGIlGXkrxHxTyH8KskVytfUykOGbQmt6pEkZNjvI46ioGGu9uBRgrv1C
-   DCaOTazvJUHwWRkFwOyPrl0hFj5aop276drJ/Iramjp7TJVm8HdqRP3sp
-   3RMz3a+iEY9mzvM5FXpG5ljDMjn1HyMRSdmnvQShIzqgaEKSMx7+KiENr
-   bkYnmWhag2OuQ8GbFZxcxv4JBlZqiPRh0g9YNupUCP31AUFHeYuZiX3pu
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,205,1665471600"; 
-   d="scan'208";a="191112877"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Nov 2022 02:31:23 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 30 Nov 2022 02:31:22 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Wed, 30 Nov 2022 02:31:22 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=merHmsyJMmXo49T4QHLIZgsIEIbhxDCL6u46jBlZKtlOI9RyElxLva4Zt+H4+a5aFBwJSJlawANEnzp+7ZA5P1ReUGJD9a/EeNJOnnHxrIl3PyUDqpC6sHkOxNdN4DfFRUyhJtt6T66assrYfJQNgBFYLCm5dSdzeZ/4qEhiWymcy39BqyLqOKNloF0cU/KQ5+XWprRMoj2hatb/KDr1MER4fXDHAoLY9Edcyi9kefq7ZsnameeacakadFfwBvIsXu//a8JKJNhCIYr9s9xWrn2hHAPODCBZfRnqU4CEsIHFINPI9H35Fa3ary6ShNSkPNvpg+qsAfYfeUI0onoTkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TT7L0XdLW/CWHw8vL3+dJ2O7O5cRfmle+DCm8jMTmD8=;
- b=S3GS/8ID3k+k0PSBPp09rp9mQV6V2H2XoNylxGty+DYC+LpLcCP9RKkvcbIXzIaGB4s1Omf1iBi/09K2QbkP1+DCDSYMD/URx4G9mz1RBe811qKd/MVsiFe3SknYo5DfGHCkWJ45YfTcpSsL4L/BvkE4Y8NqdFyyqe9vdtDIgktiOk1wuJIQmvzEorbSWtGIFjRcucN3zKOGWKJalKqZLMd2PS8yPpr9VJAtvsJDrdjQmKikg41whNoJcIetkON95wzRxj/gGMQKHnD3xo4ONkVjVcJ/5V2kCXLS2T6KEL5eHWj0L9vRnMtkFnYb3bh+UUquUHa9VzZhlEPOdqgU0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Wed, 30 Nov 2022 04:33:17 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCC972098
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:32:26 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-142faa7a207so20237468fac.13
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 01:32:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TT7L0XdLW/CWHw8vL3+dJ2O7O5cRfmle+DCm8jMTmD8=;
- b=uvX173mT2syeEL3+Yknk3GE8qtnwKR/jJkFepjKiwjWZ5PBy24KvaihK7rB9Z1lgWnFhBYfG3hSs16xoc8t376XLi2pmpbab0FlgRCg0qnjORMBvChsLBY+4zSM882Vkhn49zgq8KAYTFg+r4jOuG7xWhIEhAixMw+znG41RwiU=
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
- by PH0PR11MB4871.namprd11.prod.outlook.com (2603:10b6:510:30::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Wed, 30 Nov
- 2022 09:31:20 +0000
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::f79d:bb4a:e2a1:7bb6]) by CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::f79d:bb4a:e2a1:7bb6%5]) with mapi id 15.20.5857.023; Wed, 30 Nov 2022
- 09:31:20 +0000
-From:   <Conor.Dooley@microchip.com>
-To:     <jiajie.ho@starfivetech.com>
-CC:     <robh+dt@kernel.org>, <herbert@gondor.apana.org.au>,
-        <linux-crypto@vger.kernel.org>, <kernel@esmil.dk>,
-        <davem@davemloft.net>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH 6/6] riscv: dts: starfive: Add crypto and DMA node for
- VisionFive 2
-Thread-Topic: [PATCH 6/6] riscv: dts: starfive: Add crypto and DMA node for
- VisionFive 2
-Thread-Index: AQHZBIAP/gm/rABRl0G/ucRICubdnq5XM+2A
-Date:   Wed, 30 Nov 2022 09:31:20 +0000
-Message-ID: <1673ef8b-179e-3b03-b3f8-8d347c70d8c3@microchip.com>
-References: <20221130055214.2416888-1-jiajie.ho@starfivetech.com>
- <20221130055214.2416888-7-jiajie.ho@starfivetech.com>
-In-Reply-To: <20221130055214.2416888-7-jiajie.ho@starfivetech.com>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CO1PR11MB5154:EE_|PH0PR11MB4871:EE_
-x-ms-office365-filtering-correlation-id: 03a06994-bf0b-4fe7-1f5e-08dad2b5a3be
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2L2CNPL+Ud/Ic/u/IsbM2bxapwHoo6eeJukFsvtGpjo2/QKwTnQ6ZF1WL/G6Xnn+pdXmGccYXFH5Z/BjMWnDkA/pEvhN5dzHvYW4pYtOgACcylcU3D6CxorCHWUqr7PVWs3nsrEGp0YihcEucHvPL/AEcSlKGiaUrDjw/TJo8chIoCtRx7w0X7vy4pTNfg8kfCMeEUc1UV7a0/TB5b4OeHEVMC0Z/qMJaJbHKm0DCfQXyUomLEaBIVhNemA5ANH02d1b8VAT49582UV3njjiBjXsiHYAKz3loJBDPv5agcHBYVssiTC+kGhNnjQY4UzaypSCH8YnbnhMm3QD7zw3XQjxF6kfSejbI+ozgmkKd1zRIonRV+zKlCbgWp367uwSmH8ak97+wlc3V3Ml2Ziz/WLVHwADmnKsmGb9LEvGf/5m9VzawysKN1rRC+Ojdy1DWu4d/UhE7lFdXqLj3pcuEpnfYXHYkY4wd6J1N9SpvyUf/lqpBLSuaFL/CMqFmr17ZjnFYVOsfekY98aSX+4kgLLOj9qh9oZlJzi7wxwtEF9ZsHkll0srMkyZcwBp1SPLwvYa9ZnmV0bE+Xl8p1B3fCXHrbqgEs6slU5F7iXMzEt8wsMmFA5I4pd0Fg0bNSV0+JC6fwUcid69pd8BPwAPjrV8qWk9Noc7FDsxhvIitLXNDwT38kl9XchopcJvv0MlP0X7aSYC0Ww6B37uvnLyd3Fq1u+BvWiufqzFQpF1/47vhG5/MXhW7HHTluUUlFRp3lCAu3fcFmP8yy1XAIaTMxbGBqDGnnOKsGI/R4F3HKA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(376002)(136003)(346002)(396003)(366004)(451199015)(2616005)(186003)(31686004)(316002)(86362001)(478600001)(6916009)(54906003)(38070700005)(31696002)(36756003)(83380400001)(38100700002)(26005)(6512007)(122000001)(6506007)(53546011)(6486002)(2906002)(66946007)(966005)(91956017)(66446008)(8936002)(4326008)(41300700001)(66476007)(71200400001)(5660300002)(8676002)(76116006)(7416002)(66556008)(64756008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TmE3d2xrMFJKVnA2RmxKN2ViNGs5SGk1RkUyWmc2S2R0aWV6cXNyNlgxWm9D?=
- =?utf-8?B?U2RJNU5xam5TL29jWlZITGZldDBpUjlpNG1pZGdLVldkRkN5c01iNUp0Mjcw?=
- =?utf-8?B?QWdwT2Z6eUw4cndpcVUyK0VxRnM3T2ZqUW5JWnFSOFVGQTNjeXlQS2NyY3Az?=
- =?utf-8?B?bVowN2ZpUTArd1BZRzByWi91NTYwWWx0NnkreEY0elVidnVmaUg5MEY2S01T?=
- =?utf-8?B?eSswUlpRaW1IM01zL1BQSXBBejRhNkVoYVkzRVkyTURaQm5NR0Z2cDM4a3Vv?=
- =?utf-8?B?UncwbXRZbHc3UjlEcitLMVlsWkJWWjZZZmJpS3JlN09wcmM1M1pubXh6dVVG?=
- =?utf-8?B?dDVTMnJWTEppZGh3dmVBNE92MkdGdUF0cVlKNXg0WGsxRXhmLzdnZjY1Skdn?=
- =?utf-8?B?R3ZqeWpubUhJaFlhUFJqWERGMkg4emhzaHFjcVczTWpoMklHQXZBZG16V2gv?=
- =?utf-8?B?K1JSVmdNUmNYbitQV0d2V2NlNEc5Y0pQcE1QVTJ2S09vOVFwVHFVMDNGMGx3?=
- =?utf-8?B?aEN6akRsWFVML3BMV3Y1cWMwS2pOQnY1SGVaZitlWkREd0JTQTU0bk94ejhE?=
- =?utf-8?B?Qi9sbU4zMWUxbE9PRnVNWEZzcWlBNlFkWkNxbS9uL3FzNThIaGVNeW9QNzRy?=
- =?utf-8?B?RlFKKzhwSmFrdXRMblJCbElHRUR2NkxoYm9obENkck9ZV1ErWTQvSmMrdmNE?=
- =?utf-8?B?MHpGSVJob0hieHZIeGQvOE1tVG1oSkUxZk0rbTMySTFOOW0xRHVIOGloOU96?=
- =?utf-8?B?cXpabzVvS0o4VEE2elcwUzVIQ0lkcHUwZzd2VkVLM1F2ZDBxQTdPbDROTmJw?=
- =?utf-8?B?QTVyeitnaEovaVorcmVKTVd6azhPZFNuL0lmRllCN3hGbURVMzNPRUlrc2NK?=
- =?utf-8?B?Nnl6VHVzQUhuWlJLZjBpZU5ibTA3YjM2eU4xaDBKSnBLbUtLcmxNNDZ3T0hn?=
- =?utf-8?B?V3ZabEU0OVgxWHNnQnlGNzJqeGhHaWRlR0V3L3RsbjFZSCtPRzM4OGtUVENs?=
- =?utf-8?B?RVZ5d3EzOC92RzRwdWJ6bk03R1hDR044OVAvMzBxUkJIWDQ5WDAwTktFcVZM?=
- =?utf-8?B?UHZyWmV4YXRoZE1IQkEvamZZSiticE5SQS9zRnFJWi85Vm5USHE3UWJ5MUFT?=
- =?utf-8?B?QVpkakNYN1JwMnZJZXU3N1phVFJ2aDdScGNJeWY2RkJMaWNxOE9Gcys0L1J6?=
- =?utf-8?B?bHoxQ1hSRDNKNlVHMCtpdDF1WXlFaStRODdjYXBpME1IRGQ5OXk0NDBsWUVE?=
- =?utf-8?B?R1oxN0h2dytTZWRkUHFVQ2ZWK3hTbVdod3ZGOE1ZYW4wSXljRnUwang5eFpo?=
- =?utf-8?B?L2xzMFlJRzNiSUNkYnZiU3FvbWtXb2dKc0RSU2V1eXp5QzdSd012MTJJa3lt?=
- =?utf-8?B?NjgyRjA0Z1hpcHdGZElmTzdCTHcvQ3FSdDZwc2ltcXdma24vdlluVkUrOEVK?=
- =?utf-8?B?QXlDQnM1KzBLV3Vhdk9XTGZQbi9aWHl6ZEJiN2FZYld6NlVwaDExVmdFaFEv?=
- =?utf-8?B?MmxPeHF0L05ReUFSOS9wU2k5b2puWU03ZkpCZjRkeEU4YlNUS09GRWZBdytJ?=
- =?utf-8?B?MG44TjRLd0loK1JnOWovSE9STkdTOUZpb0ltcEp1MDEzMFVsZnlxWEx4L1l2?=
- =?utf-8?B?L3NjZzc4RHlrRld4NElPTU5tUXV2ZUlnV2ZsS2duZmZUZVM4MHpteVJTUmtS?=
- =?utf-8?B?TGRweVgzVjlIU1VZZjQwY3loQmt6UlNkOWMxalBKclZGWGhHNTJ1bWVVVi8z?=
- =?utf-8?B?WVdIaVZlMWdac2EwT1V3cTM3MWgwdDNxb3JTNlFBbEtUY2tSckh4MkFiNnFS?=
- =?utf-8?B?cTBOeWRiY2QvSzc0cmhveEE4SUhMc0Fkcm9qQjRXVmpKcUhDdTJHbytLOWpM?=
- =?utf-8?B?Tk1Mc3ExblNaNmFrYlk1emRmV1A0amQ2ZDRzNjl4WmU3NUJCb3hmeGU3QURZ?=
- =?utf-8?B?M0tIUTBMdW90bm50MGtUaTk3V1hydlMyZkpNaVRLQnE5a1FrcExxT0tQekc2?=
- =?utf-8?B?SVJTTUJWSEdzMW1VU3JCbFJXU3NNVEFvRWJoMUkrWXR2N0czNGs1QmU3Vk1U?=
- =?utf-8?B?VVVrWVRxekJ3S1NIOC82TGRSWUFYd1BMK1F4empFNGkrRU04MU5XTFdUTFpk?=
- =?utf-8?Q?L9KKQ2uY0i0u+RnsFlBPGyaU6?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DE7758849522CB4A9EB55FE9724A61D6@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nmp/KXSWp7j/op7rlj+32saQZGYoAszbSHX9jQ3Ehj4=;
+        b=NIK6BO/R+llQL/gldiQMtwfKTmOU7KJ4vyiAKg1zESF7S1YjqfZi+EJTfTbjc6oJhb
+         auKWhVr5AbnOeWDhyX5/Gt0Ro1ky0OuD5Mo30iOvhG6Zz1BZUIUXSs13xucfD8+mlnei
+         mZAq2igF4uP4X6ZEiutxj2zcW8dXM4v3Qn58EKMNBnetOI+GVfGDjET6KTcgT+MfK2hS
+         M7zzOeJOI+UQs5w93k0IeoPo0Xuhun/Tx0BhsPYAOOuLup3+mdQ7/5jRAv6kbKE14TTf
+         lUhe1wqKw8QyNtwxsabgOekRy6d9YDjSBajrXGJ/CcHnjG/r//DYbn06L4rU5LPUcZ7T
+         DsMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Nmp/KXSWp7j/op7rlj+32saQZGYoAszbSHX9jQ3Ehj4=;
+        b=BrMFStgu/sNgRYHbftRbmB3cEjuhH2s7UExf9JGuLc/dqATLRiq1cMSe40akA2j+Fl
+         E5poj3VheKMUpLRkZdBTAMqj74MIc0XfbXsdjyJIWOo87bWbVzIBLlxGZAHcD/rfZQHC
+         be6m5QhGebm+xEsrzgh1FgJDJXaRHpUmqGMQSO5WrDIUYNWINjyxBKSV668bTNor4moA
+         75Qnf8TL2OWd6BHZJLp5m3lw+IEt2KHt86h6wr0Tkq8CqSeknb69P3IGAgoF6z/w0EGl
+         fklAUTvbqqVc04jFsE1Bw82YnuVutunYFOg84ynJqttyq9CCn064EE6byFBI8rP8eK3E
+         u1Ug==
+X-Gm-Message-State: ANoB5pmv9XuMqjlGD0oiygo2QKA+wemxWFV4u4ygZlfaIz27uFldlVss
+        8UtSgGTo43z5NCf614uCcrwTgCXgluC2APkcvwGpcA==
+X-Google-Smtp-Source: AA0mqf7AB6sBWSMI+8Ehf8sccDG+HagnJt5P39Z6LikaoYVGS3f19+SeEcRUvP+EXYmaXlOcavz7RwnDhKwOdLC7de4=
+X-Received: by 2002:a05:6871:4609:b0:143:955d:ed7 with SMTP id
+ nf9-20020a056871460900b00143955d0ed7mr10432917oab.233.1669800745480; Wed, 30
+ Nov 2022 01:32:25 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03a06994-bf0b-4fe7-1f5e-08dad2b5a3be
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2022 09:31:20.3781
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: X7lRInTD3avPiXQ2oRXf422TdoaW/Fs+LH/Ejd5jVKLEJ0Db1Vb+ADqSO2tiBEEmUhskMByC9a7Kk1QAuG0bo41M/hZ2zKVoJP1OQvF4f6k=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4871
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <000000000000790da005ee3175a8@google.com> <26b9771db88198ff982476e3e24f411277cd213b.camel@sipsolutions.net>
+ <0ee688ac-5c34-1592-23d3-fe100cadc570@linaro.org> <CACT4Y+bxoaskRKAwFGLh7zVNKY7TszJNhLyAo4MrKaWSzyA8wg@mail.gmail.com>
+ <1a6abe2b-c382-a283-74a0-5869d2ba102e@linaro.org>
+In-Reply-To: <1a6abe2b-c382-a283-74a0-5869d2ba102e@linaro.org>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 30 Nov 2022 10:32:14 +0100
+Message-ID: <CACT4Y+bB+FvP1QFUadF=ExMjxPKs4GPYGzbU7hpKya+jUwLKaQ@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in rfkill_blocked
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        =?UTF-8?B?6ams6bqf?= <kylin.formalin@gmail.com>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        syzbot <syzbot+0299462c067009827b2a@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -160,77 +73,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGV5IEppYSBKaWUgSG8sDQoNCk9uIDMwLzExLzIwMjIgMDU6NTIsIEppYSBKaWUgSG8gd3JvdGU6
-DQo+IFtZb3UgZG9uJ3Qgb2Z0ZW4gZ2V0IGVtYWlsIGZyb20gamlhamllLmhvQHN0YXJmaXZldGVj
-aC5jb20uIExlYXJuIHdoeSB0aGlzIGlzIGltcG9ydGFudCBhdCBodHRwczovL2FrYS5tcy9MZWFy
-bkFib3V0U2VuZGVySWRlbnRpZmljYXRpb24gXQ0KPiANCj4gRVhURVJOQUwgRU1BSUw6IERvIG5v
-dCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25vdyB0aGUgY29u
-dGVudCBpcyBzYWZlDQo+IA0KPiBBZGRpbmcgU3RhckZpdmUgY3J5cHRvIElQIGFuZCBETUEgY29u
-dHJvbGxlciBub2RlDQo+IHRvIFZpc2lvbkZpdmUgMiBTb0MuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5
-OiBKaWEgSmllIEhvIDxqaWFqaWUuaG9Ac3RhcmZpdmV0ZWNoLmNvbT4NCj4gU2lnbmVkLW9mZi1i
-eTogSHVhbiBGZW5nIDxodWFuLmZlbmdAc3RhcmZpdmV0ZWNoLmNvbT4NCg0KT3V0IG9mIGN1cmlv
-c2l0eSwgd2hhdCB3YXMgSHVhbiBGZW5nJ3MgY29udHJpYnV0aW9uIHRvIHRoaXMgcGF0Y2g/DQpE
-aWQgdGhleSBjby1kZXZlbG9wIGl0LCBvciBpcyB0aGVyZSBzb21lIG90aGVyIHJlYXNvbj8NCg0K
-PiAtLS0NCj4gICAuLi4vamg3MTEwLXN0YXJmaXZlLXZpc2lvbmZpdmUtdjIuZHRzICAgICAgICAg
-fCAgOCArKysrKw0KPiAgIGFyY2gvcmlzY3YvYm9vdC9kdHMvc3RhcmZpdmUvamg3MTEwLmR0c2kg
-ICAgICB8IDM2ICsrKysrKysrKysrKysrKysrKysNCg0KSSBmaWd1cmUgRW1pbCB3aWxsIGxpa2Vs
-eSBzZWUgYW55d2F5LCBidXQgd2hlbmV2ZXIgeW91IGdldCBhY3R1YWwNCnJldmlldyBjb21tZW50
-cyBhbmQgc2VuZCBhIHYyIC0gcGxlYXNlIGRvbid0IGRyb3AgcGVvcGxlIHRoYXQNCmdldF9tYWlu
-dGFpbmVyLnBsIHRlbGxzIHlvdSBhcmUgcmVzcG9uc2libGUgZm9yIHRoZSBjb2RlIGluDQpxdWVz
-dGlvbi4NCg0KPiAgIDIgZmlsZXMgY2hhbmdlZCwgNDQgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlm
-ZiAtLWdpdCBhL2FyY2gvcmlzY3YvYm9vdC9kdHMvc3RhcmZpdmUvamg3MTEwLXN0YXJmaXZlLXZp
-c2lvbmZpdmUtdjIuZHRzIGIvYXJjaC9yaXNjdi9ib290L2R0cy9zdGFyZml2ZS9qaDcxMTAtc3Rh
-cmZpdmUtdmlzaW9uZml2ZS12Mi5kdHMNCj4gaW5kZXggNDUwZTkyMDIzNmE1Li5kYTJhYTRkNTk3
-ZjMgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvcmlzY3YvYm9vdC9kdHMvc3RhcmZpdmUvamg3MTEwLXN0
-YXJmaXZlLXZpc2lvbmZpdmUtdjIuZHRzDQo+ICsrKyBiL2FyY2gvcmlzY3YvYm9vdC9kdHMvc3Rh
-cmZpdmUvamg3MTEwLXN0YXJmaXZlLXZpc2lvbmZpdmUtdjIuZHRzDQo+IEBAIC0xMTUsMyArMTE1
-LDExIEBAICZ0ZG1fZXh0IHsNCj4gICAmbWNsa19leHQgew0KPiAgICAgICAgICBjbG9jay1mcmVx
-dWVuY3kgPSA8NDkxNTIwMDA+Ow0KPiAgIH07DQo+ICsNCj4gKyZzZWNfZG1hIHsNCj4gKyAgICAg
-ICBzdGF0dXMgPSAib2theSI7DQo+ICt9Ow0KPiArDQo+ICsmY3J5cHRvIHsNCj4gKyAgICAgICBz
-dGF0dXMgPSAib2theSI7DQo+ICt9Ow0KDQpJbiB3aGF0IHNjZW5hcmlvIHdvdWxkIHlvdSBub3Qg
-d2FudCB0byBoYXZlIHRoZXNlIGVuYWJsZWQ/DQoNClRoYW5rcywNCkNvbm9yLg0KDQo+IGRpZmYg
-LS1naXQgYS9hcmNoL3Jpc2N2L2Jvb3QvZHRzL3N0YXJmaXZlL2poNzExMC5kdHNpIGIvYXJjaC9y
-aXNjdi9ib290L2R0cy9zdGFyZml2ZS9qaDcxMTAuZHRzaQ0KPiBpbmRleCA0YWMxNTlkNzlkNjYu
-Ljc0NWE1NjUwODgyYyAxMDA2NDQNCj4gLS0tIGEvYXJjaC9yaXNjdi9ib290L2R0cy9zdGFyZml2
-ZS9qaDcxMTAuZHRzaQ0KPiArKysgYi9hcmNoL3Jpc2N2L2Jvb3QvZHRzL3N0YXJmaXZlL2poNzEx
-MC5kdHNpDQo+IEBAIC00NTUsNSArNDU1LDQxIEBAIHVhcnQ1OiBzZXJpYWxAMTIwMjAwMDAgew0K
-PiAgICAgICAgICAgICAgICAgICAgICAgICAgcmVnLXNoaWZ0ID0gPDI+Ow0KPiAgICAgICAgICAg
-ICAgICAgICAgICAgICAgc3RhdHVzID0gImRpc2FibGVkIjsNCj4gICAgICAgICAgICAgICAgICB9
-Ow0KPiArDQo+ICsgICAgICAgICAgICAgICBzZWNfZG1hOiBzZWNfZG1hQDE2MDA4MDAwIHsNCj4g
-KyAgICAgICAgICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJhcm0scGwwODAiLCAiYXJtLHBy
-aW1lY2VsbCI7DQo+ICsgICAgICAgICAgICAgICAgICAgICAgIGFybSxwcmltZWNlbGwtcGVyaXBo
-aWQgPSA8MHgwMDA0MTA4MD47DQo+ICsgICAgICAgICAgICAgICAgICAgICAgIHJlZyA9IDwweDAg
-MHgxNjAwODAwMCAweDAgMHg0MDAwPjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgcmVnLW5h
-bWVzID0gInNlY19kbWEiOw0KPiArICAgICAgICAgICAgICAgICAgICAgICBpbnRlcnJ1cHRzID0g
-PDI5PjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgY2xvY2tzID0gPCZzdGdjcmcgSkg3MTEw
-X1NUR0NMS19TRUNfSENMSz4sDQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwm
-c3RnY3JnIEpINzExMF9TVEdDTEtfU0VDX01JU0NBSEI+Ow0KPiArICAgICAgICAgICAgICAgICAg
-ICAgICBjbG9jay1uYW1lcyA9ICJzZWNfaGNsayIsImFwYl9wY2xrIjsNCj4gKyAgICAgICAgICAg
-ICAgICAgICAgICAgcmVzZXRzID0gPCZzdGdjcmcgSkg3MTEwX1NUR1JTVF9TRUNfVE9QX0hSRVNF
-VE4+Ow0KPiArICAgICAgICAgICAgICAgICAgICAgICByZXNldC1uYW1lcyA9ICJzZWNfaHJlIjsN
-Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgbGxpLWJ1cy1pbnRlcmZhY2UtYWhiMTsNCj4gKyAg
-ICAgICAgICAgICAgICAgICAgICAgbWVtLWJ1cy1pbnRlcmZhY2UtYWhiMTsNCj4gKyAgICAgICAg
-ICAgICAgICAgICAgICAgbWVtY3B5LWJ1cnN0LXNpemUgPSA8MjU2PjsNCj4gKyAgICAgICAgICAg
-ICAgICAgICAgICAgbWVtY3B5LWJ1cy13aWR0aCA9IDwzMj47DQo+ICsgICAgICAgICAgICAgICAg
-ICAgICAgICNkbWEtY2VsbHMgPSA8Mj47DQo+ICsgICAgICAgICAgICAgICAgICAgICAgIHN0YXR1
-cyA9ICJkaXNhYmxlZCI7DQo+ICsgICAgICAgICAgICAgICB9Ow0KPiArDQo+ICsgICAgICAgICAg
-ICAgICBjcnlwdG86IGNyeXB0b0AxNjAwMDAwMCB7DQo+ICsgICAgICAgICAgICAgICAgICAgICAg
-IGNvbXBhdGlibGUgPSAic3RhcmZpdmUsamg3MTEwLWNyeXB0byI7DQo+ICsgICAgICAgICAgICAg
-ICAgICAgICAgIHJlZyA9IDwweDAgMHgxNjAwMDAwMCAweDAgMHg0MDAwPjsNCj4gKyAgICAgICAg
-ICAgICAgICAgICAgICAgcmVnLW5hbWVzID0gInNlY3JlZyI7DQo+ICsgICAgICAgICAgICAgICAg
-ICAgICAgIGNsb2NrcyA9IDwmc3RnY3JnIEpINzExMF9TVEdDTEtfU0VDX0hDTEs+LA0KPiArICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8JnN0Z2NyZyBKSDcxMTBfU1RHQ0xLX1NFQ19N
-SVNDQUhCPjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgY2xvY2stbmFtZXMgPSAic2VjX2hj
-bGsiLCJzZWNfYWhiIjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgcmVzZXRzID0gPCZzdGdj
-cmcgSkg3MTEwX1NUR1JTVF9TRUNfVE9QX0hSRVNFVE4+Ow0KPiArICAgICAgICAgICAgICAgICAg
-ICAgICByZXNldC1uYW1lcyA9ICJzZWNfaHJlIjsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAg
-ZW5hYmxlLXNpZGUtY2hhbm5lbC1taXRpZ2F0aW9uOw0KPiArICAgICAgICAgICAgICAgICAgICAg
-ICBlbmFibGUtZG1hOw0KPiArICAgICAgICAgICAgICAgICAgICAgICBkbWFzID0gPCZzZWNfZG1h
-IDEgMj4sDQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8JnNlY19kbWEgMCAyPjsN
-Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgZG1hLW5hbWVzID0gInNlY19tIiwic2VjX3AiOw0K
-PiArICAgICAgICAgICAgICAgICAgICAgICBzdGF0dXMgPSAiZGlzYWJsZWQiOw0KPiArICAgICAg
-ICAgICAgICAgfTsNCj4gICAgICAgICAgfTsNCj4gICB9Ow0KPiAtLQ0KPiAyLjI1LjENCj4gDQo+
-IA0KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXw0KPiBs
-aW51eC1yaXNjdiBtYWlsaW5nIGxpc3QNCj4gbGludXgtcmlzY3ZAbGlzdHMuaW5mcmFkZWFkLm9y
-Zw0KPiBodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xpbnV4LXJp
-c2N2DQoNCg==
+On Mon, 28 Nov 2022 at 11:15, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 28/11/2022 11:07, Dmitry Vyukov wrote:
+> > On Sun, 27 Nov 2022 at 20:59, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 25/11/2022 10:09, Johannes Berg wrote:
+> >>> Looks like an NFC issue to me, Krzysztof?
+> >>>
+> >>> I mean, rfkill got allocated by nfc_register_device(), freed by
+> >>> nfc_unregister_device(), and then used by nfc_dev_up(). Seems like the
+> >>> last bit shouldn't be possible after nfc_unregister_device()?
+> >>>
+> >>> johannes
+> >>>
+> >>> On Wed, 2022-11-23 at 22:24 -0800, syzbot wrote:
+> >>>> Hello,
+> >>>>
+> >>>> syzbot found the following issue on:
+> >>>>
+> >>>> HEAD commit:    0966d385830d riscv: Fix auipc+jalr relocation range checks
+> >>>> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+> >>>> console output: https://syzkaller.appspot.com/x/log.txt?x=11196d0d880000
+> >>>> kernel config:  https://syzkaller.appspot.com/x/.config?x=6295d67591064921
+> >>>> dashboard link: https://syzkaller.appspot.com/bug?extid=0299462c067009827b2a
+> >>>> compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> >>>> userspace arch: riscv64
+> >>>>
+> >>>> Unfortunately, I don't have any reproducer for this issue yet.
+> >>>>
+> >>>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> >>>> Reported-by: syzbot+0299462c067009827b2a@syzkaller.appspotmail.com
+> >>>>
+> >>>> ==================================================================
+> >>>> BUG: KASAN: use-after-free in __lock_acquire+0x8ee/0x333e kernel/locking/lockdep.c:4897
+> >>>> Read of size 8 at addr ffffaf8024249018 by task syz-executor.0/7946
+> >>>>
+> >>>> CPU: 0 PID: 7946 Comm: syz-executor.0 Not tainted 5.17.0-rc1-syzkaller-00002-g0966d385830d #0
+> >>>> Hardware name: riscv-virtio,qemu (DT)
+> >>>> Call Trace:
+> >>>> [<ffffffff8000a228>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:113
+> >>>> [<ffffffff831668cc>] show_stack+0x34/0x40 arch/riscv/kernel/stacktrace.c:119
+> >>>> [<ffffffff831756ba>] __dump_stack lib/dump_stack.c:88 [inline]
+> >>>> [<ffffffff831756ba>] dump_stack_lvl+0xe4/0x150 lib/dump_stack.c:106
+> >>>> [<ffffffff8047479e>] print_address_description.constprop.0+0x2a/0x330 mm/kasan/report.c:255
+> >>>> [<ffffffff80474d4c>] __kasan_report mm/kasan/report.c:442 [inline]
+> >>>> [<ffffffff80474d4c>] kasan_report+0x184/0x1e0 mm/kasan/report.c:459
+> >>>> [<ffffffff80475b20>] check_region_inline mm/kasan/generic.c:183 [inline]
+> >>>> [<ffffffff80475b20>] __asan_load8+0x6e/0x96 mm/kasan/generic.c:256
+> >>>> [<ffffffff80112b70>] __lock_acquire+0x8ee/0x333e kernel/locking/lockdep.c:4897
+> >>>> [<ffffffff80116582>] lock_acquire.part.0+0x1d0/0x424 kernel/locking/lockdep.c:5639
+> >>>> [<ffffffff8011682a>] lock_acquire+0x54/0x6a kernel/locking/lockdep.c:5612
+> >>>> [<ffffffff831afa2c>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+> >>>> [<ffffffff831afa2c>] _raw_spin_lock_irqsave+0x3e/0x62 kernel/locking/spinlock.c:162
+> >>>> [<ffffffff83034f0a>] rfkill_blocked+0x22/0x62 net/rfkill/core.c:941
+> >>>> [<ffffffff830b8862>] nfc_dev_up+0x8e/0x26c net/nfc/core.c:102
+> >>>> [<ffffffff830bb742>] nfc_genl_dev_up+0x5e/0x8a net/nfc/netlink.c:770
+> >>>> [<ffffffff8296f9ae>] genl_family_rcv_msg_doit+0x19a/0x23c net/netlink/genetlink.c:731
+> >>>> [<ffffffff82970420>] genl_family_rcv_msg net/netlink/genetlink.c:775 [inline]
+> >>>> [<ffffffff82970420>] genl_rcv_msg+0x236/0x3ba net/netlink/genetlink.c:792
+> >>>> [<ffffffff8296ded2>] netlink_rcv_skb+0xf8/0x2be net/netlink/af_netlink.c:2494
+> >>>> [<ffffffff8296ecb2>] genl_rcv+0x36/0x4c net/netlink/genetlink.c:803
+> >>>> [<ffffffff8296cbcc>] netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
+> >>>> [<ffffffff8296cbcc>] netlink_unicast+0x40e/0x5fe net/netlink/af_netlink.c:1343
+> >>>> [<ffffffff8296d29c>] netlink_sendmsg+0x4e0/0x994 net/netlink/af_netlink.c:1919
+> >>>> [<ffffffff826d264e>] sock_sendmsg_nosec net/socket.c:705 [inline]
+> >>>> [<ffffffff826d264e>] sock_sendmsg+0xa0/0xc4 net/socket.c:725
+> >>>> [<ffffffff826d4dd4>] ____sys_sendmsg+0x46e/0x484 net/socket.c:2413
+> >>>> [<ffffffff826d8bca>] ___sys_sendmsg+0x16c/0x1f6 net/socket.c:2467
+> >>>> [<ffffffff826d8e78>] __sys_sendmsg+0xba/0x150 net/socket.c:2496
+> >>>> [<ffffffff826d8f3a>] __do_sys_sendmsg net/socket.c:2505 [inline]
+> >>>> [<ffffffff826d8f3a>] sys_sendmsg+0x2c/0x3a net/socket.c:2503
+> >>>> [<ffffffff80005716>] ret_from_syscall+0x0/0x2
+> >>>>
+> >>>> Allocated by task 7946:
+> >>>>  stack_trace_save+0xa6/0xd8 kernel/stacktrace.c:122
+> >>>>  kasan_save_stack+0x2c/0x58 mm/kasan/common.c:38
+> >>>>  kasan_set_track mm/kasan/common.c:45 [inline]
+> >>>>  set_alloc_info mm/kasan/common.c:436 [inline]
+> >>>>  ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+> >>>>  ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+> >>>>  __kasan_kmalloc+0x80/0xb2 mm/kasan/common.c:524
+> >>>>  kasan_kmalloc include/linux/kasan.h:270 [inline]
+> >>>>  __kmalloc+0x190/0x318 mm/slub.c:4424
+> >>>>  kmalloc include/linux/slab.h:586 [inline]
+> >>>>  kzalloc include/linux/slab.h:715 [inline]
+> >>>>  rfkill_alloc+0x96/0x1aa net/rfkill/core.c:983
+> >>>>  nfc_register_device+0xe4/0x29e net/nfc/core.c:1129
+> >>>>  nci_register_device+0x538/0x612 net/nfc/nci/core.c:1252
+> >>>>  virtual_ncidev_open+0x82/0x12c drivers/nfc/virtual_ncidev.c:143
+> >>>>  misc_open+0x272/0x2c8 drivers/char/misc.c:141
+> >>>>  chrdev_open+0x1d4/0x478 fs/char_dev.c:414
+> >>>>  do_dentry_open+0x2a4/0x7d4 fs/open.c:824
+> >>>>  vfs_open+0x52/0x5e fs/open.c:959
+> >>>>  do_open fs/namei.c:3476 [inline]
+> >>>>  path_openat+0x12b6/0x189e fs/namei.c:3609
+> >>>>  do_filp_open+0x10e/0x22a fs/namei.c:3636
+> >>>>  do_sys_openat2+0x174/0x31e fs/open.c:1214
+> >>>>  do_sys_open fs/open.c:1230 [inline]
+> >>>>  __do_sys_openat fs/open.c:1246 [inline]
+> >>>>  sys_openat+0xdc/0x164 fs/open.c:1241
+> >>>>  ret_from_syscall+0x0/0x2
+> >>>>
+> >>>> Freed by task 7944:
+> >>>>  stack_trace_save+0xa6/0xd8 kernel/stacktrace.c:122
+> >>>>  kasan_save_stack+0x2c/0x58 mm/kasan/common.c:38
+> >>>>  kasan_set_track+0x1a/0x26 mm/kasan/common.c:45
+> >>>>  kasan_set_free_info+0x1e/0x3a mm/kasan/generic.c:370
+> >>>>  ____kasan_slab_free mm/kasan/common.c:366 [inline]
+> >>>>  ____kasan_slab_free+0x15e/0x180 mm/kasan/common.c:328
+> >>>>  __kasan_slab_free+0x10/0x18 mm/kasan/common.c:374
+> >>>>  kasan_slab_free include/linux/kasan.h:236 [inline]
+> >>>>  slab_free_hook mm/slub.c:1728 [inline]
+> >>>>  slab_free_freelist_hook+0x8e/0x1cc mm/slub.c:1754
+> >>>>  slab_free mm/slub.c:3509 [inline]
+> >>>>  kfree+0xe0/0x3e4 mm/slub.c:4562
+> >>>>  rfkill_release+0x20/0x2a net/rfkill/core.c:831
+> >>>>  device_release+0x66/0x148 drivers/base/core.c:2229
+> >>>>  kobject_cleanup lib/kobject.c:705 [inline]
+> >>>>  kobject_release lib/kobject.c:736 [inline]
+> >>>>  kref_put include/linux/kref.h:65 [inline]
+> >>>>  kobject_put+0x1bc/0x38e lib/kobject.c:753
+> >>>>  put_device+0x28/0x3a drivers/base/core.c:3512
+> >>>>  rfkill_destroy+0x2a/0x3c net/rfkill/core.c:1142
+> >>>>  nfc_unregister_device+0xac/0x232 net/nfc/core.c:1167
+> >>>>  nci_unregister_device+0x168/0x182 net/nfc/nci/core.c:1298
+> >>>>  virtual_ncidev_close+0x9c/0xbc drivers/nfc/virtual_ncidev.c:163
+> >>
+> >> There were several issues found recently in virtual NCI driver, so this
+> >> might be one of them. There is no reproducer, though...
+> >
+> >
+> > Hi Krzysztof,
+> >
+> > Do you think it's related specifically to the virtual driver?
+>
+> Both, although maybe not this particular issue. There were like five
+> separate reports last few days...
+>
+> >
+> > I would assume it's a bug in the NCI core itself related to dynamic
+> > device destructions. This should affect e.g. USB devices as well.
+>
+> Earlier this year there was a bigger fix for unregister path in NFC -
+> see commits:
+> da5c0f119203 (nfc_unregister_device+nfc_fw_download
+> ef27324e2c (nci_unregister_device+nci_cmd_work)
+> 1b0e81416 (rfkill related)
+> and these pointed out inherent issues in locking/synchronization of NFC
+> core modules. I don't think we fixed all of the core issues, rather only
+> what was reported, so some specific scenarios.
+>
+> > It's an issue only in the virtual driver. It means that the virtual
+> > driver uses the NCI core incorrectly, not the way all real drivers use
+> > it. If so the question is: what is the difference? We need to fix it.
+> > It's not useful to have unrealistic test drivers -- we both get false
+> > positives and don't get true positives.
+> >
+> > I think the issue may be localized from the KASAN report itself w/o a
+> > reproducer.
+> > Is there proper synchronization between
+> > nfc_unregister_device/rfkill_destroy and nfc_dev_up/rfkill_blocked?
+> > Something that prevents rfkill_blocked to be called after
+> > rfkill_destroy? If not, then that's the issue.
+>
+> Mentioned 1b0e81416a tried to do this and that time I had impression fix
+> is correct. However it seems it is not... (or not enough)
+>
+> Best regards,
+> Krzysztof
+
+
+#syz dup: WARNING in nci_send_cmd
