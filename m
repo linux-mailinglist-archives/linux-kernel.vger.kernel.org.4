@@ -2,160 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A6263E2A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5015163E2AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 22:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiK3V0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 16:26:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
+        id S229597AbiK3V1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 16:27:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiK3V0u (ORCPT
+        with ESMTP id S229503AbiK3V1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 16:26:50 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED118DBD6
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:26:49 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id 4so18005750pli.0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 13:26:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6saT+q5ezDQ177rT53B59Pf17d135h+Oe9v073LR0cQ=;
-        b=TYLgl4SDIlOgIM1p5/s3P0/xE+k81DJUqppgCSnPchv8RIojqA/1XCiDCoxM93+n3i
-         jYMlN9hLJMl30itHOyj8vzuPMhYxr4q/6FakXZFxsenGV25bvMIV3cmimYgHYOPhoiBJ
-         DoM8sM3D6JrzbfwFyjn9nIBo3Bg3QK9iavMGI=
+        Wed, 30 Nov 2022 16:27:08 -0500
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2DF91341;
+        Wed, 30 Nov 2022 13:27:03 -0800 (PST)
+Received: by mail-oi1-f181.google.com with SMTP id v82so3390oib.4;
+        Wed, 30 Nov 2022 13:27:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6saT+q5ezDQ177rT53B59Pf17d135h+Oe9v073LR0cQ=;
-        b=lDUpKhkErKaNUCQF2wAZILVfxSNgd2x2uDqmr/8D1/VBWDsupsfmziEtO+/wZhK2MA
-         yf7W2LmMXgy1RsPLTpO/a0BUIK3eJY+xkI/k9yV+VlZflBFyqsZFCJ5bgCMTbL2jwR5d
-         W7OkSKTNXz9z3+Jd5jGh+LS5zIIc0BvdhEFuVNKk+9Iyb3xQGUA8UzB1DiXN072S2UgC
-         TxR5dQHnhhz+tVagQLcNYzUJSCWpO/Q55r9KMSGpxDme32+0txETgj41AuquqI2VByAf
-         M+1zRdoRhMxYHUlqwKpCfQuedvxSNWmfXEyKOxOX6BGe9lxiZz/cG0mieTGgWpGmpVRW
-         2GdA==
-X-Gm-Message-State: ANoB5pnP6Cu/9Dq/u5o85BKSUkd4fo9ALn39s/qPKgPnYb4C2IHrWaej
-        bJ0mHtuhBPksNVVT0aWlLFhjhw==
-X-Google-Smtp-Source: AA0mqf6LUlZ3xGSjUHJvfh7bTIQnzkZsoyONol/ka/ZULyta/NTEd7BwDqAVAkl+pmc9nDZTUyOrsw==
-X-Received: by 2002:a17:90b:3c45:b0:20a:db08:8a8a with SMTP id pm5-20020a17090b3c4500b0020adb088a8amr72164973pjb.141.1669843608744;
-        Wed, 30 Nov 2022 13:26:48 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m8-20020a1709026bc800b001897e2fd65dsm1965267plt.9.2022.11.30.13.26.47
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZZS3nW5gwB+kDtxcZdvYj1mJRKMxTby7eEaeoKFfJH4=;
+        b=BbjEQdlXyn2La8RxmHJYGWt+zsVqU0itYBZbcfTfpx78GivhaRujA3MsG+QRwyv44/
+         lShOqWEBxEWl+Z1kO+A9HKQEcmZ359m7bCb52bzNtIzDdapWWYtrWOpsxB1e8AouTHfj
+         +kH79JZAxYmG7ed9pFPuejV/LoyU8PwSkPCu+gelnddIzRvDr05WShCiH1X0YUQVHmsz
+         JmnOV/uxWQqWIqvtrKtBgmmBQa6QB3gCAWlrAlZJn3+f4s+0vAEcsYzwMYL7nlwBSMvq
+         Lel0eBYKzFxnePCbHPeWODeZg2Nn7GGCtCOU+8UwmWIxsRCsfGk3u3MeyycXx0/d9CXV
+         FxPw==
+X-Gm-Message-State: ANoB5plxJIUaEIaBNoXbMHvnOhX7SzHhKzPpl/FlXCLUOJGtzI1Z8HBM
+        IqOJJd6hzZd25/kUQjqpYA==
+X-Google-Smtp-Source: AA0mqf5tD0y5NhxvmX/AZYkg5jWWDK8WrmeuZUTlYcxWlbrxtcuiS53IcZQ68Lca+OMW7sML6Qsptg==
+X-Received: by 2002:a05:6808:2206:b0:345:d571:88c8 with SMTP id bd6-20020a056808220600b00345d57188c8mr30790197oib.133.1669843622495;
+        Wed, 30 Nov 2022 13:27:02 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o25-20020a4ad159000000b0049f8801ed22sm1132433oor.30.2022.11.30.13.27.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 13:26:48 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     Kees Cook <keescook@chromium.org>, Kalle Valo <kvalo@kernel.org>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] wifi: ieee80211: Do not open-code qos address offsets
-Date:   Wed, 30 Nov 2022 13:26:45 -0800
-Message-Id: <20221130212641.never.627-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 30 Nov 2022 13:27:02 -0800 (PST)
+Received: (nullmailer pid 2955889 invoked by uid 1000);
+        Wed, 30 Nov 2022 21:27:01 -0000
+Date:   Wed, 30 Nov 2022 15:27:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>,
+        vkoul@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lars@metafoo.de, adrianml@alumnos.upm.es,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        michal.simek@amd.com, radhey.shyam.pandey@amd.com,
+        anirudha.sarangi@amd.com, harini.katakam@amd.com, git@amd.com
+Subject: Re: [PATCH V2 1/6] dt-bindings: dmaengine: xilinx_dma:Add
+ xlnx,axistream-connected property
+Message-ID: <20221130212701.GA2951108-robh@kernel.org>
+References: <20221124102745.2620370-1-sarath.babu.naidu.gaddam@amd.com>
+ <20221124102745.2620370-2-sarath.babu.naidu.gaddam@amd.com>
+ <b3e80e53-16df-f6b5-bf1e-6f13ae93973e@linaro.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3438; h=from:subject:message-id; bh=qZxXxI21JC4mN+ljaOuKqxqbLwAquUPCxUGbmUAdtlE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjh8qVfqRVaiLZwrWKZBsTnGkWYgjdX4AEocT03P5E +egjltSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY4fKlQAKCRCJcvTf3G3AJnGbD/ 9eLN44SC31Sfm16KmOEF+mtK8blu718iQGEZTvgbxx0w2aSj4UFjBWqJ1BEKMex8I87jo5WHNo922P ESqDuHRWT/xFXiHBP86/C93S5/ko/+1stUjOkZBJq0+/qR/eN78gpLx6Eo7xMzFB8DYT1EnSHDNwo/ ifPp2uYIaiAICdjVry3ZXELwzqZ70+xmsJuTzLxh+0V/d0ADGwSabRzjm34oD9QB+yxrLZeJrUCFS9 CtKMwLXVXBfQc7SBR47izPMtJlTr5TO1vqNXNjBl4DWDAjwLXUH1H5gyj5Lb0+icPqES1oYhtSo1kK kZzF5vEAMTwBVJx3dzDEmbxecHx8eJhgqHy22hsbHy1OfYr1GhINi5ItTltq0NjKCTotCyWhQATIB4 esln3aWsvU4q3zbvA6f22XnTtMUb1mAAJc/0fAQru5YjqI4eMc+TKIYtxx4FBpeEBBM4IPLd0d+U1y UW52ozdZHEITFf5/tVPObbZAZFTCNI3ISBYQvNXJYNoNbcVrPq2FeGLP+nN78afpxmxb9Qeat7YuRd inBgAjjtIjUE1gfsXLkoI0GT5ST2nll+8GX4DiPSkJ4G3wT/G8M0o2qpM5bfPbNi64tqYFdJA3FZT+ 4rJdCpRqYHSCOIbVvv7VqkxiV+ZVI4da0EKftcFprsutzwC5dG7Sv/CGygdA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b3e80e53-16df-f6b5-bf1e-6f13ae93973e@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with -Wstringop-overflow, GCC's KASAN implementation does
-not correctly perform bounds checking within some complex structures
-when faced with literal offsets, and can get very confused. For example,
-this warning is seen due to literal offsets into sturct ieee80211_hdr
-that may or may not be large enough:
+On Sat, Nov 26, 2022 at 03:32:23PM +0100, Krzysztof Kozlowski wrote:
+> On 24/11/2022 11:27, Sarath Babu Naidu Gaddam wrote:
+> > From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+> > 
+> > Add an optional AXI DMA property 'xlnx,axistream-connected'. This
+> > can be specified to indicate that DMA is connected to a streaming IP
+> > in the hardware design and dma driver needs to do some additional
+> > handling i.e pass metadata and perform streaming IP specific
+> > configuration.
+> > 
+> > Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+> > Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+> > ---
+> > Changes in V2:
+> > 1) Moved xlnx,axistream-connected optional property to under AXI DMA.
+> > 2) Removed Acked-by: Rob Herring.
+> > ---
+> 
+> You already add two properties here. Convert to DT schema and then add.
 
-drivers/net/wireless/intel/iwlwifi/mvm/rxmq.c: In function 'iwl_mvm_rx_mpdu_mq':
-drivers/net/wireless/intel/iwlwifi/mvm/rxmq.c:2022:29: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
- 2022 |                         *qc &= ~IEEE80211_QOS_CTL_A_MSDU_PRESENT;
-In file included from drivers/net/wireless/intel/iwlwifi/mvm/fw-api.h:32,
-                 from drivers/net/wireless/intel/iwlwifi/mvm/sta.h:15,
-                 from drivers/net/wireless/intel/iwlwifi/mvm/mvm.h:27,
-                 from drivers/net/wireless/intel/iwlwifi/mvm/rxmq.c:10:
-drivers/net/wireless/intel/iwlwifi/mvm/../fw/api/rx.h:559:16: note: at offset [78, 166] into destination object 'mpdu_len' of size 2
-  559 |         __le16 mpdu_len;
-      |                ^~~~~~~~
+That would be better, but I did ack it before. Though that was a year 
+and half ago...
 
-Refactor ieee80211_get_qos_ctl() to avoid using literal offsets,
-requiring the creation of the actual structure that is described in the
-comments. Explicitly choose the desired offset, making the code more
-human-readable too. This is one of the last remaining warning to fix
-before enabling -Wstringop-overflow globally.
-
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97490
-Link: https://github.com/KSPP/linux/issues/181
-Cc: Johannes Berg <johannes@sipsolutions.net>
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: Gregory Greenman <gregory.greenman@intel.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: linux-wireless@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/linux/ieee80211.h | 28 ++++++++++++++++++++++------
- 1 file changed, 22 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/ieee80211.h b/include/linux/ieee80211.h
-index 6252f02f38b7..80d6308dea06 100644
---- a/include/linux/ieee80211.h
-+++ b/include/linux/ieee80211.h
-@@ -338,6 +338,17 @@ struct ieee80211_qos_hdr {
- 	__le16 qos_ctrl;
- } __packed __aligned(2);
- 
-+struct ieee80211_qos_hdr_4addr {
-+	__le16 frame_control;
-+	__le16 duration_id;
-+	u8 addr1[ETH_ALEN];
-+	u8 addr2[ETH_ALEN];
-+	u8 addr3[ETH_ALEN];
-+	__le16 seq_ctrl;
-+	u8 addr4[ETH_ALEN];
-+	__le16 qos_ctrl;
-+} __packed __aligned(2);
-+
- struct ieee80211_trigger {
- 	__le16 frame_control;
- 	__le16 duration;
-@@ -4060,16 +4071,21 @@ struct ieee80211_he_6ghz_capa {
-  * @hdr: the frame
-  *
-  * The qos ctrl bytes come after the frame_control, duration, seq_num
-- * and 3 or 4 addresses of length ETH_ALEN.
-- * 3 addr: 2 + 2 + 2 + 3*6 = 24
-- * 4 addr: 2 + 2 + 2 + 4*6 = 30
-+ * and 3 or 4 addresses of length ETH_ALEN. Checks frame_control to choose
-+ * between struct ieee80211_qos_hdr_4addr and struct ieee80211_qos_hdr.
-  */
- static inline u8 *ieee80211_get_qos_ctl(struct ieee80211_hdr *hdr)
- {
--	if (ieee80211_has_a4(hdr->frame_control))
--		return (u8 *)hdr + 30;
-+	union {
-+		struct ieee80211_qos_hdr	addr3;
-+		struct ieee80211_qos_hdr_4addr	addr4;
-+	} *qos;
-+
-+	qos = (void *)hdr;
-+	if (ieee80211_has_a4(qos->addr3.frame_control))
-+		return (u8 *)&qos->addr4.qos_ctrl;
- 	else
--		return (u8 *)hdr + 24;
-+		return (u8 *)&qos->addr3.qos_ctrl;
- }
- 
- /**
--- 
-2.34.1
-
+Rob
