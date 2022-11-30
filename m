@@ -2,63 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029F963DD02
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7287863DD05
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:20:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbiK3SUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:20:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49140 "EHLO
+        id S230113AbiK3SUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:20:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiK3STa (ORCPT
+        with ESMTP id S230270AbiK3SU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:19:30 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401828DBF2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:17:10 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id g51-20020a9d12b6000000b0066dbea0d203so11749594otg.6
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:17:10 -0800 (PST)
+        Wed, 30 Nov 2022 13:20:29 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A99689AEC
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:18:42 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-142306beb9aso21964961fac.11
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:18:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GBXzxdXg5bUAJZPgixzV2JSkMT4QNamcZtjJqxGqukE=;
-        b=fg7+/lcS2nkQfkY0N86X1M19BkSqKl1vYg7sG7AL8ukRjAlvjhPwur37ZYAsB4bv17
-         Vw1BUczBwS8GXipFTUVDtXXlnJyZIWyk6impQU4sSBLBSbzIbP7eL8L4dr16x+XcFz1i
-         y37jFI6zl9h4GxP5S3QqejwV/047FoquCuQF0=
+        bh=N3+c1ZdCSilgW+SSx6tvWsc7wbKwFqHqee+YfZqL2GM=;
+        b=mAWZXY/A192EartorULkeCHGOmKFBQ73IUk+1E5UsC+TbeEtcZo/nYCqGt84k2RRAt
+         zHS6sfnkOJHEqJXYTjpJagy4bzYkIpARSy7LwK1dD3fQ0Nt8UysOk9UrG7yvo7g2oBAt
+         hEVGa+ziCxfutgcHURBeubf6PGRO8786ArcHw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GBXzxdXg5bUAJZPgixzV2JSkMT4QNamcZtjJqxGqukE=;
-        b=UTTK9NtBrrxtI9/ohU6nw7KmvmKvgbggF7e6hSx/EbZ24umfSw5zSgtJF78U95m9m2
-         0iHbP4m3I46v/qPWP/SkAH04c2QnelXI1+8zndqajbZYR7zs1oeJPjbhvS0eg8ZIhVQQ
-         Bm1Dq7cWFfUOThY8DzarOGePKj8NYdScBcT5EYbi+38vAk40jJ86W0XTDfWnq7BHR3B/
-         Fs7xLIfNB1aCXgTffJ/stmQI21CyUtsXNNP4qABUTDHvML1Ojyhp9Q2IjfbWruDlEBrM
-         k0rQhvc/yD73asX8mK52ExeF53/MchTWZ63MgXzEIRbcNfYXGQiaYl6Zh3SbbkRuwGvl
-         iJOg==
-X-Gm-Message-State: ANoB5pngwPoZtXPXdzE36N6RITgLFqZ/r672CUVvy+tEIuMbg5DQayTh
-        6ZWpi4vUfix9mzMVnbOC3Q9aJ5qnqwZmaJHSMF54AbX+ZKWMfuCY
-X-Google-Smtp-Source: AA0mqf78m7kFwguAA8Bp87iPgt1Q+8TWBOGjTiq6kFcLR2+AahX4iSmvXhYJv3RbVn883yEJJntmi9xn+DJBaIyA5m8=
-X-Received: by 2002:a05:6830:d03:b0:66d:3e45:8e5a with SMTP id
- bu3-20020a0568300d0300b0066d3e458e5amr20987786otb.177.1669832229511; Wed, 30
- Nov 2022 10:17:09 -0800 (PST)
+        bh=N3+c1ZdCSilgW+SSx6tvWsc7wbKwFqHqee+YfZqL2GM=;
+        b=s7bN4L5HRBDxTihE9XCB3u0GCsoXWH0uDtA5mHKPtbgPAYMTw6u2gmhmzvZQAql9Bk
+         tkJ9aezNmsN75w6BGHBXLmCKnJXjmaSd7Cz+qMUshj5DGkalyUiNuVFGDvdRUgSEAIsL
+         NTEUgBgQ0QPT9t5jyGrxFm79XY9ZjLVjfKK9wc6aE8lhXsM5wR6FHUgpOFqQW05fMdU+
+         YfdXZgZYE376VhA4K9zqQumy9qf/nPQa3AZN8eEoyGhMbDtfc+ZoaB3wSlLiKdT+fvog
+         kZWR2cNS5dJVLE/rinwqtW9BoS7H9+uynj5S2RJ0a2VSZwiOl+8hxWa8ITh259M9+tqF
+         KIlw==
+X-Gm-Message-State: ANoB5plOGEGqQk6zIHPtD/j+lz9x8Duy1v+9sjrwrbDoewXavMEBjSbM
+        P1KgRuOheIMBd8X68ixfToHWZ6rZnFjp3Ygoy/6LTg==
+X-Google-Smtp-Source: AA0mqf6ZZIpTDZ0KvdCBVoNn5gchzeQC2bhZoT/xlZWxEXVoPE7NXWJbjZNKarLlQlS31ASGH5wfRwuMpfridO5YjbQ=
+X-Received: by 2002:a05:6870:bacb:b0:13a:dd16:9b83 with SMTP id
+ js11-20020a056870bacb00b0013add169b83mr37605798oab.15.1669832321389; Wed, 30
+ Nov 2022 10:18:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20221130181316.GA1012431@paulmck-ThinkPad-P17-Gen-1> <20221130181325.1012760-15-paulmck@kernel.org>
-In-Reply-To: <20221130181325.1012760-15-paulmck@kernel.org>
+References: <20221130181316.GA1012431@paulmck-ThinkPad-P17-Gen-1> <20221130181325.1012760-13-paulmck@kernel.org>
+In-Reply-To: <20221130181325.1012760-13-paulmck@kernel.org>
 From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Wed, 30 Nov 2022 18:16:58 +0000
-Message-ID: <CAEXW_YQci19yD5wr2jyYi4wdNZ_CrZuGJ==jF9MObOzWg7f=_Q@mail.gmail.com>
-Subject: Re: [PATCH rcu 15/16] net: Use call_rcu_hurry() for dst_release()
+Date:   Wed, 30 Nov 2022 18:18:30 +0000
+Message-ID: <CAEXW_YRV8tDyTtEVDhO3_DvnAp10HFr3vkcAnCecGqQYtKNP3Q@mail.gmail.com>
+Subject: Re: [PATCH rcu 13/16] workqueue: Make queue_rcu_work() use call_rcu_hurry()
 To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
         kernel-team@meta.com, rostedt@goodmis.org,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+        Uladzislau Rezki <urezki@gmail.com>, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -69,31 +65,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+Hi Tejun,
 
-Could you give your ACK for this patch for this one as well? This is
-the other networking one.
-
-The networking testing passed on ChromeOS and it has been in -next for
-some time so has gotten testing there. The CONFIG option is default
-disabled.
+The API is renamed to call_rcu_hurry() as you and Paul discussed, to
+avoid conflicts with the word flush. Could you give your ACK for this
+patch, for workqueue?
 
 Thanks a lot,
 
 - Joel
 
-On Wed, Nov 30, 2022 at 6:14 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+On Wed, Nov 30, 2022 at 6:13 PM Paul E. McKenney <paulmck@kernel.org> wrote:
 >
-> From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+> From: Uladzislau Rezki <urezki@gmail.com>
 >
-> In a networking test on ChromeOS, kernels built with the new
-> CONFIG_RCU_LAZY=y Kconfig option fail a networking test in the teardown
-> phase.
->
-> This failure may be reproduced as follows: ip netns del <name>
->
-> The CONFIG_RCU_LAZY=y Kconfig option was introduced by earlier commits
-> in this series for the benefit of certain battery-powered systems.
+> Earlier commits in this series allow battery-powered systems to build
+> their kernels with the default-disabled CONFIG_RCU_LAZY=y Kconfig option.
 > This Kconfig option causes call_rcu() to delay its callbacks in order
 > to batch them.  This means that a given RCU grace period covers more
 > callbacks, thus reducing the number of grace periods, in turn reducing
@@ -129,41 +116,37 @@ On Wed, Nov 30, 2022 at 6:14 PM Paul E. McKenney <paulmck@kernel.org> wrote:
 > to call_rcu() being lazy with call_rcu_hurry() for the few places
 > where laziness is inappropriate.
 >
-> Returning to the test failure, use of ftrace showed that this failure
-> cause caused by the aadded delays due to this new lazy behavior of
-> call_rcu() in kernels built with CONFIG_RCU_LAZY=y.
+> And another call_rcu() instance that cannot be lazy is the one
+> in queue_rcu_work(), given that callers to queue_rcu_work() are
+> not necessarily OK with long delays.
 >
-> Therefore, make dst_release() use call_rcu_hurry() in order to revert
-> to the old test-failure-free behavior.
+> Therefore, make queue_rcu_work() use call_rcu_hurry() in order to revert
+> to the old behavior.
 >
 > [ paulmck: Apply s/call_rcu_flush/call_rcu_hurry/ feedback from Tejun Heo. ]
 >
+> Signed-off-by: Uladzislau Rezki <urezki@gmail.com>
 > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Cc: David Ahern <dsahern@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: <netdev@vger.kernel.org>
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
 > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 > ---
->  net/core/dst.c | 2 +-
+>  kernel/workqueue.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/net/core/dst.c b/net/core/dst.c
-> index bc9c9be4e0801..a4e738d321ba2 100644
-> --- a/net/core/dst.c
-> +++ b/net/core/dst.c
-> @@ -174,7 +174,7 @@ void dst_release(struct dst_entry *dst)
->                         net_warn_ratelimited("%s: dst:%p refcnt:%d\n",
->                                              __func__, dst, newrefcnt);
->                 if (!newrefcnt)
-> -                       call_rcu(&dst->rcu_head, dst_destroy_rcu);
-> +                       call_rcu_hurry(&dst->rcu_head, dst_destroy_rcu);
+> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> index 7cd5f5e7e0a1b..07895deca2711 100644
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
+> @@ -1771,7 +1771,7 @@ bool queue_rcu_work(struct workqueue_struct *wq, struct rcu_work *rwork)
+>
+>         if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
+>                 rwork->wq = wq;
+> -               call_rcu(&rwork->rcu, rcu_work_rcufn);
+> +               call_rcu_hurry(&rwork->rcu, rcu_work_rcufn);
+>                 return true;
 >         }
->  }
->  EXPORT_SYMBOL(dst_release);
+>
 > --
 > 2.31.1.189.g2e36527f23
 >
