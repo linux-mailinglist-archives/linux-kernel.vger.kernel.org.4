@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14BC563DE28
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:34:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7843E63DE3B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbiK3SeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:34:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
+        id S230410AbiK3SfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:35:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiK3SeF (ORCPT
+        with ESMTP id S230242AbiK3Seu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:34:05 -0500
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEDE24BF9;
-        Wed, 30 Nov 2022 10:34:03 -0800 (PST)
-Received: by mail-qt1-f182.google.com with SMTP id jr1so3609318qtb.7;
-        Wed, 30 Nov 2022 10:34:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HSephSpMMLyS6GN7D/yNJ77wfgPj8H/yF2e6L0lmOsc=;
-        b=OHnZ2LOaj4D6fl61/+Rlfit1bTzNY1WXnBkJ7f6jmax27yDYmUS8gFyLaNem4oNaeR
-         HGGf0MZypqZ1qQWAHWzwnskPuLttf5BsIVa/mKweuwkt/lSTW3zn1fcGYwrimuY8uQnW
-         BNOQPsD6DO1bIs46w6nJksvRaEaGVikwyvLTy5js6nzXRwtODJzH0tR0nR/m9WlC3/l2
-         6+InOtYWRqavLF8gyWxSvK0KLfZqJjv7iqs0KAEE+oFFX3kvhy3zrAKLrI9OjHW3Xf5g
-         Cl1G/uQvBUt1jVl8rIPVEBEmj453umqjGCfR7CdBUPK0y7S/vZ1uSzFGSjp4zEP3Jix1
-         zHYA==
-X-Gm-Message-State: ANoB5pmHOBKQQpDX+7BNpRlnQnQuo/x06YoLNHgrojvgXKFX5Zn/f5wD
-        ou6wFEK8OR7+eejCBvmGwJ+BAJhBjX18l+/Vfo4=
-X-Google-Smtp-Source: AA0mqf4jqExznIzftIUudzBQv83qor16LP4gntamj8CEAmg2OtwLcqcuiwLxBpbfLMQYpJH2mnWCxgRGwH44i5cPT1I=
-X-Received: by 2002:ac8:73c4:0:b0:3a5:a53d:a102 with SMTP id
- v4-20020ac873c4000000b003a5a53da102mr58446428qtp.153.1669833242643; Wed, 30
- Nov 2022 10:34:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20221107105657.19002-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20221107105657.19002-1-lukas.bulwahn@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Nov 2022 19:33:51 +0100
-Message-ID: <CAJZ5v0jFO=6WLNZUe4vqUXxxWuhZuaq1Sifk7+094YFXUWp2wA@mail.gmail.com>
-Subject: Re: [PATCH] notifier: repair slips in kernel-doc comments
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Wed, 30 Nov 2022 13:34:50 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D717B93A74;
+        Wed, 30 Nov 2022 10:34:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1669833268; bh=NscgIAZRMqN8AzDfYglDMPfWX6oPBec9DPODcgSPEzQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=YilvTdd6MPnBoZF1okZsAnOdDtlZ2xDxGftIohAFdYSH7ZJdr31o1/ZvOiNYzmnCr
+         kuWHUmeXrLXvggi0Jxwg1G4MyALqhS8dhk/JaPxXfNxMpjePwg6eqZFo2KZx56tLcX
+         IP7QsHsj0uCNOv/3+6IMmQnCHCAECJh/tW67ZkS8ujxo5y46gVP80lH6GUCafumfRx
+         zG7qcjtChipGbVgnAcFmv+yyxxCdDClZwedkDmjTRF2On8MMHGblcldzgOrNl29ew3
+         4aMh2pAjJG6nDPiWYkfDZM8x5Ur1bLTEih7fWcQ0yGRF59P5NvgbBfhIVkgZUof/1V
+         tSj6vntAhDYiw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1Md6R1-1oQHwt3PsZ-00aGDa; Wed, 30 Nov 2022 19:34:28 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Subject: [PATCH] hwmon: (dell-smm) Move error message to make probing silent
+Date:   Wed, 30 Nov 2022 19:34:18 +0100
+Message-Id: <20221130183418.357246-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:cl7FFu4dmz8bgye6pz2NXjuVh20/evlO5cStb+/Bwa9oYVDqVrM
+ YXQuPG8DU+ayKe3fj2vQDzWCf8CKbGDGbW4FIonkW/H1FE766zTehnPllk4FAfm5rtLGxn+
+ Od8j+Qh9unanFH8fAYcZqxF1eArEt3TAkI4EJu/bceTqeqwMXHsyQRB8EeeaOjySKSJSUkN
+ OateN8j4KxN2xLU4zk9Rg==
+UI-OutboundReport: notjunk:1;M01:P0:cQXm5xf/vnQ=;JyxUz5l+6szKd3ShbnveZk/XmFc
+ CAEWQBO0MUS8AsBaRSXVa87uSC3k+W+y7VrStbbDUDpVmWq1syWlVnhknDt116r32RWg5Idb6
+ FBfmffYC6zNyE6iFnNXatcpI5OXTvuma7lROgRbBHIILC9cz1eWNZSEjDlafKAv6tTR6EAay/
+ 5CEQhUkTZlsdsLHlgTUGFmeXs6lj04ROKpS6VPJizPa+m6FZMzxwcEs0R6dQK+O3++W51eP6Q
+ Ix/A+9J5TGpUe/8lhhYOlD7NVsqllsS85xQBhoWTjjMg6LoMBPQYO7sUbfFWv4K0pkELK6jeJ
+ tdf1OqoSwGBm5bRwfX+Erh+FCKJXmS8Qr2R8kn29O+llDWvlmW7x6VqLEqbWtnmZH40Tr8w/t
+ K9P3nrxvOPejWCYboZUZrxQ0eYUrDY47k7j5iqio8pbXCYL8+/kHWrnSYShg0j+QkTggcFuvq
+ zIX0+9+SPXF8VYwHTu1URbbv7ymfEbaNv/NlHwLyu+F6Cvg7MRqjP/D74N3nRh2xBlD1JPMZJ
+ Le/UZ5Yq4Rt+a1IJQlRUs7Et2OHvaLPsQG3PR8vSWx61OAcuC9qFt9kDDLV/wqdgMfImsBc/l
+ gZlSNJyK3zr34/dNLAGQe7KOqvNLjYEV/cIigCQiUFiQLDVnihrvBnQ0G5GeJu+gXii0fdWQH
+ GpYTorNQKJ1EFHHEGBxWoCY3eO0BIROJ4Zvze5UVDvan3hg/na2dyvK3v23kLs2q2lucPiFGE
+ X1W6gjxk9p7eFWolIIXM9skveoor0sfGXTPtYfa02IA636XTdgnivmIfv/VMjwBKq4uRzYmA+
+ NGjNwJh4Q8tmPDc/n8D41oW+p23aXPa5aFayWtaJYHS0RLlek53fSyn/xj7CVedT8EJLrTUIi
+ ii/mFigVyCPFKXJdDNCdF2hiFUdJhnPNoeXjyGCfskhYNKS0lf+OKpe5Jy717rCohOkhluEJW
+ QJk3pKbFv0AtkZEiz0BwBVjUDCk=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 11:57 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
->
-> Invoking ./scripts/kernel-doc -none kernel/notifier.c warns:
->
->   kernel/notifier.c:71: warning: Excess function parameter 'returns' description in 'notifier_call_chain'
->   kernel/notifier.c:119: warning: Function parameter or member 'v' not described in 'notifier_call_chain_robust'
->
-> These two warning are easy to fix, as they are just due to some minor slips
-> that makes the comment not follow kernel-doc's syntactic expectation.
->
-> Fix those minor slips in kernel-doc comments for make W=1 happiness.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> Rafael, please pick this minor non-urgent patch for your pm tree. Thanks.
+If dell-smm-hwmon loads on unsupported hardware like the
+Dell XPS 17 9710, an error message is printed.
+This might confuse users, as drivers are expected to be
+silent if no supported hardware is found.
+Reorder the error message so its only printed when the
+driver is loaded with the "force" option being set.
+Also reword the error message slightly.
 
-Applied as 6.2 material, but I'm kind of wondering why you decided to
-send this to me.
+Tested on a Dell Inspiron 3505.
 
->
->  kernel/notifier.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/notifier.c b/kernel/notifier.c
-> index 0d5bd62c480e..ab75637fd904 100644
-> --- a/kernel/notifier.c
-> +++ b/kernel/notifier.c
-> @@ -62,7 +62,7 @@ static int notifier_chain_unregister(struct notifier_block **nl,
->   *                     value of this parameter is -1.
->   *     @nr_calls:      Records the number of notifications sent. Don't care
->   *                     value of this field is NULL.
-> - *     @returns:       notifier_call_chain returns the value returned by the
-> + *     Return:         notifier_call_chain returns the value returned by the
->   *                     last notifier function called.
->   */
->  static int notifier_call_chain(struct notifier_block **nl,
-> @@ -105,13 +105,13 @@ NOKPROBE_SYMBOL(notifier_call_chain);
->   * @val_up:    Value passed unmodified to the notifier function
->   * @val_down:  Value passed unmodified to the notifier function when recovering
->   *              from an error on @val_up
-> - * @v          Pointer passed unmodified to the notifier function
-> + * @v:         Pointer passed unmodified to the notifier function
->   *
->   * NOTE:       It is important the @nl chain doesn't change between the two
->   *             invocations of notifier_call_chain() such that we visit the
->   *             exact same notifier callbacks; this rules out any RCU usage.
->   *
-> - * Returns:    the return value of the @val_up call.
-> + * Return:     the return value of the @val_up call.
->   */
->  static int notifier_call_chain_robust(struct notifier_block **nl,
->                                      unsigned long val_up, unsigned long val_down,
-> --
-> 2.17.1
->
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/dell-smm-hwmon.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index 1572b5416015..7ac778aedc68 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1447,9 +1447,10 @@ static int __init i8k_init(void)
+ 	 */
+ 	if (i8k_get_dell_signature(I8K_SMM_GET_DELL_SIG1) &&
+ 	    i8k_get_dell_signature(I8K_SMM_GET_DELL_SIG2)) {
+-		pr_err("unable to get SMM Dell signature\n");
+ 		if (!force)
+ 			return -ENODEV;
++
++		pr_err("Unable to get Dell SMM signature\n");
+ 	}
+
+ 	dell_smm_device =3D platform_create_bundle(&dell_smm_driver, dell_smm_pr=
+obe, NULL, 0, NULL,
+=2D-
+2.30.2
+
