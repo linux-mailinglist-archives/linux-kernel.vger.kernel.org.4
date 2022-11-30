@@ -2,127 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0091963DAF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:49:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBD863DAFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 17:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbiK3Qta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 11:49:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
+        id S230338AbiK3Quu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 11:50:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiK3Qt1 (ORCPT
+        with ESMTP id S229591AbiK3Qus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 11:49:27 -0500
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2062.outbound.protection.outlook.com [40.107.102.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D5C26541;
-        Wed, 30 Nov 2022 08:49:26 -0800 (PST)
+        Wed, 30 Nov 2022 11:50:48 -0500
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2079.outbound.protection.outlook.com [40.107.212.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E016F31DE8;
+        Wed, 30 Nov 2022 08:50:47 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NBLmQKz7TH0eeYv/cr9firVFx7lwVUd088DsntW0bj25CaqNGqGmX/0c/3zPRr+mQw2fdBVQIeaaIYHbpuu+zX7YEU+Uv5rQs4U7wUz/vCUsl5Y8GGlZAJro9w4+eWSystTY0N+RD6U/cEQTdyuCPrbpr/4l1LkMpat/45CEC9+MM5ZQEl1mu8TNB8lSMx9qUuLmLplIc/ksyi4I/eMKY1kKZzo964EkFjYjtet0gof69oVTpOsMy2qNrw01IPGJ7pn5MfgFa6l9BnHvvHjf2I/+DEA0jQxezT2ctUBZ/Ex4mlrhLD4EzxSeJ5r689ixsONQgQvhi+LYy655Tbb15w==
+ b=BPF+ARlNn6y1/l/21gCTLajeMHxEZcYgTUW0NfA/amScYWXagwz8JQebQedN9kznBYsWkUzvjWK/+CHljSCKA9kKYpdGulu/ZhUKNCr/BJmlHtoXeJ3e1iQKuQsNcS1lnO7MoQ7o7lk4Zg39UHjo9HPZS4JlXQqlW/YZg/3Xt75e7m/9qdvfgMVZm/R54nrGV5yN87uDEwMtRYFCFh//EIAYdZHyM6OgYM5gaKES4iDiUGgBcDYHabX4lhyeoENYrPKX4slq+Gftf7W37exWx3D6L4U/FKP4OEULexyEaFUSe6XL64Npt381zl427XbD2mmb+evdj2teD8skvbWMhg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G3rIJH+VISFKpKVgwu04SYI1Z9pp9VKzC1h5GCjd6SM=;
- b=iMkAinOFo8Ff2T2r+N+zhnpYAmAMJVDrPqa7mNc2NlwbOjbE7+3CnqVKfOPseMTauEwOkPk6ElhzHTw52lwT35IfUDDN+4ICOvaRtKLMvd8imnX3k3Y7GAR2jof4Rqay8w1QD+YCciyTIKM4K53oMcRhFsA++LXzXkgqEjcM53XULd/xsJWvzOlxyU9LQV4xgWh7b6xXyrdnaK5APm7qEjzPYwgIoJ3b1+5dCDk0j+9kfzKeFx/pGVMqkBJ9UheGhaIiYJuWNHUsx9b2ZxxWbvmwGp47xu0bsrmvKb06KVGbuNDWljKPtR10xKRgcqkCYc1fd88twWd6zZWr1SJt2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synaptics.com; dmarc=pass action=none
- header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
+ bh=oaR0D5Lmu182qUMH+wrzGWdkXiMs1XNcVXEUDeHzwPY=;
+ b=GI1HOCT4yKgoEvb7lUXsosTlo3UyBY20EMpWiM2QXBewY+3V8gWEViz3G4ZB2Zr4NSRUXP+Nsna7igacnSXuZYRjE9lteX/1+0oYrk7EDBLFBcVmoKk7lhId4I+gEUMu6A//k+IrNOdCO/us0GRBPphOWZHHjb/RA4cIvhWHsMByI6TOJwUn6HPzRdbYUhDc58oFrLSbTkxGdjXTNK+Pclmse/gSpOewPN7bLg+uw6RXk12fhzejqrkxB8EjJhoR/PnKhSC4ciKu1VL2zt/etSAzfJ3GkEP/JKIpXqGodSbaJDtd9Ls13/geo+4bIs6rgWSdmHETwzKg7RVdzVXU/g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=ti.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G3rIJH+VISFKpKVgwu04SYI1Z9pp9VKzC1h5GCjd6SM=;
- b=SJ1mcmYmfoUvFfBzaCdbA48GBLtX3ROZGDFXIg6T8KUD8vgDUQc/6nTj0UrnoXwzuu4Gr3dwQkddKXWa5l7f0zVqAu2qF97xVJaEC3vJwiJOMsnZ0Dadj+LrdCA+5qsi9i5ZzZD+wplS2acoz+3uQiAD+RDoNb3FbauGeK3Wm90=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synaptics.com;
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
- by SJ0PR03MB6343.namprd03.prod.outlook.com (2603:10b6:a03:399::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Wed, 30 Nov
- 2022 16:49:23 +0000
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::a132:66d9:ed0f:e5c1]) by DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::a132:66d9:ed0f:e5c1%5]) with mapi id 15.20.5857.023; Wed, 30 Nov 2022
- 16:49:23 +0000
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Randy Li <ranl@synaptics.com>
-Subject: Re: [PATCH v5 1/2] drm/fourcc: Add Synaptics VideoSmart tiled modifiers
-Date:   Thu, 1 Dec 2022 00:49:16 +0800
-Message-Id: <0D62976C-77E2-4748-AA90-C50D5E2CA48C@synaptics.com>
-References: <Y4c+5f3qZd6Epd1C@phenom.ffwll.local>
-Cc:     Hsia-Jun Li <randy.li@synaptics.com>,
-        dri-devel@lists.freedesktop.org, nicolas@ndufresne.ca,
-        sakari.ailus@linux.intel.com, airlied@linux.ie, ayaka@soulik.info,
-        linux-kernel@vger.kernel.org, tfiga@chromium.org,
-        helen.koike@collabora.com, linux-media@vger.kernel.org,
-        ezequiel@vanguardiasur.com.ar, tzimmermann@suse.de,
-        ribalda@chromium.org, sebastian.hesselbarth@gmail.com,
-        mchehab@kernel.org, linux-arm-kernel@lists.infradead.org,
-        laurent.pinchart@ideasonboard.com
-In-Reply-To: <Y4c+5f3qZd6Epd1C@phenom.ffwll.local>
-To:     Daniel Vetter <daniel@ffwll.ch>
-X-Mailer: iPad Mail (18D61)
-X-ClientProxiedBy: BYAPR11CA0077.namprd11.prod.outlook.com
- (2603:10b6:a03:f4::18) To DM6PR03MB5196.namprd03.prod.outlook.com
- (2603:10b6:5:24a::19)
+ bh=oaR0D5Lmu182qUMH+wrzGWdkXiMs1XNcVXEUDeHzwPY=;
+ b=aT9Ry58c8M2p0KkKxs/TdW2P2NjMzjU4kTKIovjMZ27TNwmT8AAsu60/WtCBpLu8BghA1nyBp5XMH3Ld2eqziaeiB1WQt34B71PZr9fOKlsbSSPKh9eAEWPT7p9vhSgmmD0eRAHG+u83fgYlvxa378ei0pw0AvK03QbTnfnDQRU=
+Received: from DM6PR03CA0075.namprd03.prod.outlook.com (2603:10b6:5:333::8) by
+ DS7PR12MB8347.namprd12.prod.outlook.com (2603:10b6:8:e5::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5880.6; Wed, 30 Nov 2022 16:50:45 +0000
+Received: from DS1PEPF0000E64C.namprd02.prod.outlook.com
+ (2603:10b6:5:333:cafe::8b) by DM6PR03CA0075.outlook.office365.com
+ (2603:10b6:5:333::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23 via Frontend
+ Transport; Wed, 30 Nov 2022 16:50:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS1PEPF0000E64C.mail.protection.outlook.com (10.167.18.42) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5857.17 via Frontend Transport; Wed, 30 Nov 2022 16:50:45 +0000
+Received: from [10.254.241.50] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 30 Nov
+ 2022 10:50:39 -0600
+Message-ID: <74ac528d-fbc7-9fbe-d44b-23f5579d54a1@amd.com>
+Date:   Wed, 30 Nov 2022 17:50:37 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 6/7] arm64: dts: xilinx: Rename DTB overlay source
+ files from .dts to .dtso
+Content-Language: en-US
+To:     Andrew Davis <afd@ti.com>, Shawn Guo <shawnguo@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Frank Rowand <frowand.list@gmail.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221024173434.32518-1-afd@ti.com>
+ <20221024173434.32518-7-afd@ti.com>
+From:   Michal Simek <michal.simek@amd.com>
+In-Reply-To: <20221024173434.32518-7-afd@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR03MB5196:EE_|SJ0PR03MB6343:EE_
-X-MS-Office365-Filtering-Correlation-Id: 69a61328-e22b-4c3c-18e5-08dad2f2d56d
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E64C:EE_|DS7PR12MB8347:EE_
+X-MS-Office365-Filtering-Correlation-Id: 753e2e19-27c4-4c4d-7c5b-08dad2f306b6
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4V33pVodBJPerAZtVpWnKdRhIGTPkWp3q+5LRjnWXUKXsZYekjkjtc4wmhd63XJfA3h4NbQu7YvQIIrYw82TKpdBbtObVUPHd6cQIVV5EmNWPvHgaZSusZaelJri5xnn2/4FAa8z3QgCvBkDon84EIEcBvMKnGADhxqivJUxbYbrbcLzVJM4OaixnLQBlpbewzxx5S1cljIawX3OC12Icm3sXb93gJlMaueZnH/krH73AzyzappVIA/is1jqNlM1XsiN7U9n5NhatDk5eqZlP89kwDcVL8dE7mPclzksVXECPja55Y9dLsr7jH+5kxlP03F6yEzUK1ffr3feoGHgjwyVtMrtbYzUJFjDNWU8UpA3noAPLIvg/8vc5lTkmfu3GOiauHGHCFCvMsqBQb3/PtILGgHm5E1OfSzsTOCTWo31wdRWOTvMeJnLHiutjPk7nFGqSM2jF6l54sk1DaQRKN22HUpyL8CesAKW/V6/jMDPZJ9BzXolIUptLAuqJPHmerrAGqB6CwTD4ucawyAljkcXB7lF42UFmH0vbKseWivDD42oSzgWQ3YPHdsx1YlW0wTDNNQCGxcEXt6z/uPTWrHTF3JX8iRvnvzfIceo38Lw3WQVIBly5kfW+LDSPrJYjx1aekFp0wQrLFf7cdrTrCYwheloNZGyY5jfYgDgdHZO1aDZPK5kahPzvsr/ccFzluJkJ8w8JS0SLQTFaGPbv+p7WwuqXhqw4gjLc+7yiMBeQrQtV1JRei3lzUnIfbbp
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(366004)(39860400002)(396003)(376002)(136003)(451199015)(4326008)(8676002)(41300700001)(5660300002)(7416002)(8936002)(66946007)(2906002)(66556008)(66476007)(6486002)(966005)(6506007)(26005)(6666004)(6512007)(478600001)(2616005)(186003)(52116002)(53546011)(36756003)(316002)(6916009)(33656002)(38100700002)(38350700002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TEtwcmQzTnRBQXRsdnB4RGNOcW0rNERuNnlvdXNzLzlzWldKbUh1WlVZeUY1?=
- =?utf-8?B?WDV2UGdnQ1VUdUJQYjlSVTZWaGRrdzNoQklMRFRMZmIxQmx3dDFxaWlWTVZy?=
- =?utf-8?B?eTVVSHlJWXc3RUJOU1BDWTFOak5JWG9YOHJPMEVPZGpXZXBGZm5jTktnRWlD?=
- =?utf-8?B?N3g3cnhEK2pZbVZvM1VPa2k3cVZJcEVROFc2bHVYY3I1dUt2YnJzR1VnOVUr?=
- =?utf-8?B?QmtlcGRvSjRoTG16RlIwd3dOS2dmblpCVlExRGtFSUpTQ2xuM3VIYnlJeGNj?=
- =?utf-8?B?bkhkQmVHRlVoYWV1VEVnOGJHSEg1OXpvYzlhSHozRVNQRzlNK0ZjNzBkMUND?=
- =?utf-8?B?d2Y0bCtUNUh5QWZuVG5PQnhKUTdMVmxCK3liRlVDTkIrWDZqRWlmVk82VWxP?=
- =?utf-8?B?ZTFSVyt3MmgzOGVLN1pMQUsrcWlkQUlyeHZJTU1lc2wxalh0N3JJOUYyUFZY?=
- =?utf-8?B?OFVVWnl3ZjdDM3V6YlpjNExkUU40aldKSHhJWGkxemhzSnhQeSs3WDJPVnY1?=
- =?utf-8?B?bEwvTTBxYWdlWFE4Z0xrTjd5SEFtajNkRFBHNHJBeHl5QU1pZ3VOZzFlY1Ir?=
- =?utf-8?B?ZklHT2krT0JRSmZnYXNaL0JjcFVHZU1VTTh5eGJNWHp3WTAzaFNzamZCT3lC?=
- =?utf-8?B?YWFHclBrdzUzWlY4T1YyQzRNck9vb3ZkYlYrWXg0NEZsVGlkbzMrNk5yaW10?=
- =?utf-8?B?S0NqVy9ZeWJGUVZJS01PbHJsT1hZanJxLzA4dUNpUllRNkt6bU1YV0tjcFZT?=
- =?utf-8?B?RFJldTZJSkFnM0hOZnlQYUdvanM3RU9rcWVCdE1HNDJ1UGhjOWRqY1hheXZR?=
- =?utf-8?B?MmJ6TDYrMGtlYStKTzluaGlIdXdwSmZ0MU14RTk1R29ZVTlHbzVBR1lJNDVM?=
- =?utf-8?B?TFJ6M0xYMzhsTGVjWUVVTE1MYmFpbXcxbG93R0lKUFFXbzd0OFR1WmJCVnRX?=
- =?utf-8?B?SEtrd1JaTmZOT1JZaDNRK2Rvc3FhOXlmRE13OXcydFFrc2h0Qm04YUJhRTQ4?=
- =?utf-8?B?emVKVUc0THlsYlFrdUpyeThOVHAvWTUrNjN6eEp3MFZqeUIzRWMvZEJ1anlq?=
- =?utf-8?B?WjBmVXdISm1tckZlS0NmeEtjSVNyNHFSWnBYTVQyaEFxUmV3TU1HeHIwc1dB?=
- =?utf-8?B?UUdjd0RyUTBzMDNBUWVrVXdjQzhxdG1RZm81TCtONURIZlMrUzVhZHFqYy9R?=
- =?utf-8?B?Z0Y3MXg1S0pNNkJPeGhzT0VLWUQrSUlwS2YyeE9iZ1JZZUJxZHNlQWllcGJD?=
- =?utf-8?B?T0I2bTFkcDAyOERBM0JJUkdzSjdzbFpSeTg4TWFMeStiejJrTEJUdWl0V0VV?=
- =?utf-8?B?Tjg1STRPeVpwRUxCSmNsV2M1c2JwT2UweWtmQnFna2Z2cFJsbXBTRnQxMURr?=
- =?utf-8?B?TEQvTFRHY0U0WHkwbXpjTFgyV3VwWWFwZFNnWjU1Y01EVDIwY1A5ZmVPTzdC?=
- =?utf-8?B?bGZhT0ZKMXRiV21zNEFzVlZIUThzNjZRaWNvS2lVN2JtTmJHQ1gzS1RPWnow?=
- =?utf-8?B?eUZraldIKyt4T3N3TzlheGdkNEw3S3hwaTN4Y0FoNjhiL1BuVCtzZlRRNEZz?=
- =?utf-8?B?alRrOWhOWXRxOUZZYXIzVUxKOTdBSVJNeXBsZ21WQUNkcFJheURDZkRyUlpJ?=
- =?utf-8?B?R0pVblJKMG1WOGdNUWlSUERMSzg5MzIvQzYyYWNNY2wyNWhOUTFkdWlZZ1Aw?=
- =?utf-8?B?TXB4UFFTemc4OE1vMG5FQzNvUGN2Z3p1dTB3OHFaSUhUbVU5THIrZFJ2cElF?=
- =?utf-8?B?dWtlY2gxeFpiRStzeHlZR0RTbGsweGNwWkNQUHgyb2dzYkFRbDVQbzVGbk5y?=
- =?utf-8?B?NnZQMTd1QlNNNnhaTk0rSCtqNnRXMW9tVlk2eXBYQVpmWmlXK3FYWmh6OHVJ?=
- =?utf-8?B?ZFBWUWpjVG9aTTBDb3V5RFhmK0tFemtuekNxcVZYUVIrcGdmblR5a21VMVV1?=
- =?utf-8?B?R0MxQmxaTjdrakdSV1ovVEdlTTJ2akRFREpVMUFUbjYxYkZRMHlwcXFoeWx4?=
- =?utf-8?B?QllYOTRsTDZFYnVhSG91cEZrMXhZaDJMaWJjTzhneDBYbG1VMUhsazFXbzdQ?=
- =?utf-8?B?R1hZcjIwMW41M0hvS2s2TWhCbkNhQXRhK3dnT0hDY240RDZxZkIyeWlvbTYr?=
- =?utf-8?Q?nPNOB2AX6oNUjotoNDzYhcmI6?=
-X-OriginatorOrg: synaptics.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69a61328-e22b-4c3c-18e5-08dad2f2d56d
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 16:49:23.2693
+X-Microsoft-Antispam-Message-Info: m5Vtz2XfTdzyzRvPd9gVSXwpY0YDSkHCFRN56NfWmBI0UJE50Yfny+8UGTK4k2xjsgwIBtEvuSbDvKtM7uSbUVhMgSNntlsRLGGQGd23MjtBKTIbzFEGyBJYOg0qZsszNeTaI8OBKMLZq8eqG6BeogH45+QtGGxo2yThc6FJfEHTfPOuR54r4lLx3BNDDVS9H5VwZWareVW2y9x8FY76Rfll2a0nXqxNwQIYQarkTIoZKrWm0hD2Ypuyy/jsnh81iRCyd8nKKfayFsGhwddQZOvi9Y3ZtsIyAbMU9eFiOr86ZGqpy25IDvSUnEnWG8B3SAfG5xfyaD2Z3jvncleIjKVAqQzsO3fblYRzoPvKBJxMxOtcVGMDzwbadXVHhxaeSYjw2l2YdstI7+Kf21SXV6sxsQ20jRT5t9dQDDF0Fz1OcNtnbOIQSh/xZuzmV50VcKwzqscn1RdHyUTBYJouWSycaLiTZTyiPgkUjSoK9Gph6gChAMvRDqnZIUfJtVY0C7b4nPMs7+p/vd5p61CbKXzUKpi8Pe7B7DQzrb40CsP9ApbDn9tSYWSoigFuCqLFujCRexKLJXzlWWxDzT3Fqc589ocXvcxtJVb1tXPYKnceNfxwe3ql0ukAQkRj7MoPYhc9FU76mNrzAJUJM5pb5S2SgxjuWCqY9DxBhU33pOxrTXOc0uRYjhisf1GFCDi6kwXsp6Vm8iHsJ73CgNeiVc0aE+RVvRpl5dn1ZDJ/bZsAk5Y3chJtr4my1SlMEmRvZ8NEVpIO9s2YU6RZb7OYXpJZpuFGCDwgS2Zab0rZsfs4iX5Lm6W2f2subdrKOQZF
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(39860400002)(376002)(136003)(451199015)(46966006)(40470700004)(36840700001)(2906002)(110136005)(44832011)(31686004)(70586007)(8936002)(16576012)(5660300002)(41300700001)(7416002)(70206006)(8676002)(316002)(54906003)(4326008)(82310400005)(36756003)(53546011)(921005)(81166007)(82740400003)(356005)(40480700001)(47076005)(336012)(426003)(16526019)(478600001)(2616005)(26005)(31696002)(186003)(36860700001)(86362001)(40460700003)(83380400001)(142923001)(43740500002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2022 16:50:45.7073
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Emkj7PGFsa3Lts83BADhtXjbVd+qqg+aIkBQ0CJ3LmvGkMA/M1vikyGohh+WXYm+F8zLddDw6rlBsphADY2jiw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR03MB6343
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 753e2e19-27c4-4c4d-7c5b-08dad2f306b6
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E64C.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8347
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -131,155 +117,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-Sent from my iPad
+On 10/24/22 19:34, Andrew Davis wrote:
+> DTB Overlays (.dtbo) can now be built from source files with the
+> extension (.dtso). This makes it clear what is the content of the files
+> and differentiates them from base DTB source files.
+> 
+> Convert the DTB overlay source files in the arm64/xilinx directory.
+> 
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>   .../{zynqmp-sck-kv-g-revA.dts => zynqmp-sck-kv-g-revA.dtso}       | 0
+>   .../{zynqmp-sck-kv-g-revB.dts => zynqmp-sck-kv-g-revB.dtso}       | 0
+>   2 files changed, 0 insertions(+), 0 deletions(-)
+>   rename arch/arm64/boot/dts/xilinx/{zynqmp-sck-kv-g-revA.dts => zynqmp-sck-kv-g-revA.dtso} (100%)
+>   rename arch/arm64/boot/dts/xilinx/{zynqmp-sck-kv-g-revB.dts => zynqmp-sck-kv-g-revB.dtso} (100%)
+> 
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso
+> similarity index 100%
+> rename from arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dts
+> rename to arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dts b/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso
+> similarity index 100%
+> rename from arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dts
+> rename to arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso
 
-> On Nov 30, 2022, at 7:30 PM, Daniel Vetter <daniel@ffwll.ch> wrote:
->=20
-> =EF=BB=BFCAUTION: Email originated externally, do not click links or open=
- attachments unless you recognize the sender and know the content is safe.
->=20
->=20
->> On Wed, Nov 30, 2022 at 05:21:48PM +0800, Hsia-Jun Li wrote:
->> From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
->>=20
->> Those modifiers only record the parameters would effort pixel
->> layout or memory layout. Whether physical memory page mapping
->> is used is not a part of format.
->>=20
->> Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
->> ---
->> include/uapi/drm/drm_fourcc.h | 76 +++++++++++++++++++++++++++++++++++
->> 1 file changed, 76 insertions(+)
->>=20
->> diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc=
-.h
->> index bc056f2d537d..e0905f573f43 100644
->> --- a/include/uapi/drm/drm_fourcc.h
->> +++ b/include/uapi/drm/drm_fourcc.h
->> @@ -407,6 +407,7 @@ extern "C" {
->> #define DRM_FORMAT_MOD_VENDOR_ARM     0x08
->> #define DRM_FORMAT_MOD_VENDOR_ALLWINNER 0x09
->> #define DRM_FORMAT_MOD_VENDOR_AMLOGIC 0x0a
->> +#define DRM_FORMAT_MOD_VENDOR_SYNAPTICS 0x0b
->>=20
->> /* add more to the end as needed */
->>=20
->> @@ -1507,6 +1508,81 @@ drm_fourcc_canonicalize_nvidia_format_mod(__u64 m=
-odifier)
->> #define AMD_FMT_MOD_CLEAR(field) \
->>      (~((__u64)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHIFT=
-))
->>=20
->> +/*
->> + * Synaptics VideoSmart modifiers
->> + *
->> + * Tiles could be arranged in Groups of Tiles (GOTs), it is a small til=
-e
->> + * within a tile. GOT size and layout varies based on platform and
->> + * performance concern.
->> + *
->> + * Besides, an 8 length 4 bytes arrary (32 bytes) would be need to stor=
-e
->> + * some compression parameters for a compression metadata plane.
->> + *
->> + * Further information can be found in
->> + * Documentation/gpu/synaptics.rst
->> + *
->> + *       Macro
->> + * Bits  Param Description
->> + * ----  ----- --------------------------------------------------------=
----------
->> + *
->> + *  7:0  f     Scan direction description.
->> + *
->> + *               0 =3D Invalid
->> + *               1 =3D V4, the scan would always start from vertical fo=
-r 4 pixel
->> + *                   then move back to the start pixel of the next hori=
-zontal
->> + *                   direction.
->> + *               2 =3D Reserved for future use.
->> + *
->> + * 15:8  m     The times of pattern repeat in the right angle direction=
- from
->> + *             the first scan direction.
->> + *
->> + * 19:16 p     The padding bits after the whole scan, could be zero.
->> + *
->> + * 20:20 g     GOT packing flag.
->> + *
->> + * 23:21 -     Reserved for future use.  Must be zero.
->=20
-> Can you pls fold all the future use reservations into the top end?
-You see we could put more related flag in each of reserved area.
-Here is for the group of tiles flag.
-Bit 35 to 32 could be used for describing the dimension of the group of til=
-es.
-> Also I
-> think it'd be good to at least reserve maybe the top 8 bits or so for a
-> synaptics specific format indicator, so that it's easier to extend this i=
-n
-> the future ...
-I think the  bit 56 to 63 are used for storing the vendor id. That is why I=
- didn=E2=80=99t include them below. Or you mean the bit 7 to 0?
-Do yo
-> -Daniel
->=20
->=20
->> + *
->> + * 27:24 h     log2(horizontal) of pixels, in GOTs.
->> + *
->> + * 31:28 v     log2(vertical) of pixels, in GOTs.
->> + *
->> + * 35:32 -     Reserved for future use.  Must be zero.
->> + *
->> + * 36:36 c     Compression flag.
->> + *
->> + * 55:37 -     Reserved for future use.  Must be zero.
->> + *
->> + */
->> +
->> +#define DRM_FORMAT_MOD_SYNA_V4_TILED         fourcc_mod_code(SYNAPTICS,=
- 1)
->> +
->> +#define DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(f, m, p, g, h, v, c) \
->> +     fourcc_mod_code(SYNAPTICS, ((__u64)((f) & 0xff) | \
->> +                              ((__u64)((m) & 0xff) << 8) | \
->> +                              ((__u64)((p) & 0xf) << 16) | \
->> +                              ((__u64)((g) & 0x1) << 20) | \
->> +                              ((__u64)((h) & 0xf) << 24) | \
->> +                              ((__u64)((v) & 0xf) << 28) | \
->> +                              ((__u64)((c) & 0x1) << 36)))
->> +
->> +#define DRM_FORMAT_MOD_SYNA_V4H1 \
->> +     DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 0, 0, 0, 0)
->> +
->> +#define DRM_FORMAT_MOD_SYNA_V4H3P8 \
->> +     DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 0, 0, 0, 0)
->> +
->> +#define DRM_FORMAT_MOD_SYNA_V4H1_64L4_COMPRESSED \
->> +     DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 1, 6, 2, 1)
->> +
->> +#define DRM_FORMAT_MOD_SYNA_V4H3P8_64L4_COMPRESSED \
->> +     DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 1, 6, 2, 1)
->> +
->> +#define DRM_FORMAT_MOD_SYNA_V4H1_128L128_COMPRESSED \
->> +     DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 1, 7, 7, 1)
->> +
->> +#define DRM_FORMAT_MOD_SYNA_V4H3P8_128L128_COMPRESSED \
->> +     DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 1, 7, 7, 1)
->> +
->> #if defined(__cplusplus)
->> }
->> #endif
->> --
->> 2.37.3
->>=20
->=20
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> https://urldefense.proofpoint.com/v2/url?u=3Dhttp-3A__blog.ffwll.ch&d=3DD=
-wIBAg&c=3D7dfBJ8cXbWjhc0BhImu8wVIoUFmBzj1s88r8EGyM0UY&r=3DP4xb2_7biqBxD4LGG=
-PrSV6j-jf3C3xlR7PXU-mLTeZE&m=3Dd1mgHWc-ItDXK9dSnz0WGYs9xoXTTk9LqbifMtn2LOxm=
-aHHsc4ieCoE78BFkHI1i&s=3D8ptqPzTUwb3X3fBSyQA6nVAA6DchubUUsMRgmLIp1lY&e=3D
+Applied.
+M
