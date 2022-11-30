@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D8E63E4C1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF0863E4C4
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 00:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiK3XMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 18:12:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47588 "EHLO
+        id S229863AbiK3XM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 18:12:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiK3XLC (ORCPT
+        with ESMTP id S229875AbiK3XLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 18:11:02 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7786199F6B
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:10:10 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id u9-20020a170902e80900b0018939ccbeedso19237139plg.20
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:10:10 -0800 (PST)
+        Wed, 30 Nov 2022 18:11:07 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6244975D3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:10:16 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id g13-20020a056a000b8d00b0056e28b15757so210131pfj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 15:10:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=MJave+Z+CqVOQlKYNh+9u1XLbNgTtvhVtL4XdeBXq3U=;
-        b=ZO3Ftedng5ZXtAj1HLjLejIkXeEuGF++TCmzhSGUO/jffRhjc4H+xBEcj7yIeqEdat
-         0U3Y+Ads6LzFvxNp27Uo8B2HMacUCZIv0pSE92rlIHxzWTi7f9KsRULC+bwhGX87ZVPR
-         vnMRqpKsuzzrvEbFNarvM7whj/3tQRNLMCHwuLgw98CUXaVYGXJOn+GNNpcbHsAkPmeN
-         tXU852Btu7ns0KpVR55ygwmLkYJEnvUvyvy5iEVsL5b//kXV7FWMRdutGQwiv7w9+h2Y
-         WeYcLiKtjVQOAjeb0ZzTx4wnLQ7dUbOEoRqTrEQ9fS/dnvpncahogy2siy31VVqOiND3
-         XFqA==
+        bh=di4GPfaF6WKRfgW0XqJub+upfuRM26VzAsGaqEV4LGw=;
+        b=Zp0X+tvqlodbVDmXJAlHsgiG3eKVrrt9FqJ/G91Ka+FyaPGocW43mHdutS/PZpQE36
+         Iieu9/BWXmUBsCNeoXw2w6AGd8PrG42NkgB6lU08wcdcc8UwAyPwoD57C6YJX6W8d8L6
+         zT+J1YBLZIf8EiLqUI0I1OI8MzvM21Wx5gQBxNbTBtyOAXzto+GobOper+U00pyFgXJf
+         UdMZA+TjdcslZ9rB8fGS/EHatJp3upDo3FA+0llGAcT+1sttGOmsewFGvBZuTST5TDKg
+         atyPT5DCNi18z7jSv+tnMdXu5HV1aXplTTP+Szmkxtce4LN+raVvUsuQA85wOwn+8uqH
+         psnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MJave+Z+CqVOQlKYNh+9u1XLbNgTtvhVtL4XdeBXq3U=;
-        b=ztaKJntSxGgfdL5a/2nKUj4+nAzF0I2DvNfNMqb0NWbinU/Xk77AXXu9bdevARKo52
-         1OLbrA5PdHg3C6wsjmPAuFmDw4eNOq0hSaBv/aTT9T4PWp7DFTCXl0GIdYRR0C9xpkcU
-         ATeMcns3mq8yV9ObyRhHfSx1KgsZ32+jEWyhPgdErncq3Dz1rc9tr9bX4L3La6nv+Nsw
-         1uYgdC4oFSVvm9oqeLYJ4Is4Dy2Nr4Bcl00qbSHHJ4xz6iTDenXuOFckWqgyoOYNOyw/
-         6WJKoAEuDiQ4kilPrKRs2rUfYkLQBL1nYgsyCNuQpM501+g480eJ9/VRjM9FZwZwBGZD
-         iU2A==
-X-Gm-Message-State: ANoB5pmG75vrBoljJv1SnMHju+Isl1e77DmJnC/1Gvu63hvEYjF3VYE2
-        sm73iFjwRyfdD1hts8OTg5tdWqa3Rdg=
-X-Google-Smtp-Source: AA0mqf5OF5+sS7pzLlgqnJtqaKfzLdsx3EOQi2ZpWetSPzJEZYu9zjdDHGwAbdG5EGES6Cvu/KbnbnXMVFE=
+        bh=di4GPfaF6WKRfgW0XqJub+upfuRM26VzAsGaqEV4LGw=;
+        b=RgaHx0F/Q5dBO+MZCht06PIB0a0XkuvOVbwkT/TWreM86S2kkY1djotWL7FIxlJ7ZT
+         oIShqhVt2WkdX3U1dR+cpzVj1Q4Qod9kDOfmVSuUr6ixuox2ko91/jY353JCHZQgCkKg
+         XRLrGLmMAgyYNHOnJGBRvvg1kEYf1PV12cDsdxjj5Gap/O/FXTFoDSDW4O7pIg2aLsaV
+         AOpvtzNrauspJ7y3oWv8pmVuFr6a8e2BZtyTQnn0d3C3rNCj1m3xV75G1z+242M77/+S
+         7PT7q44SPok9mfCdSEffRQ7qfiQy/g5ajoErkbOJPwrSOx65OcmE0txgd1l8PugwEFyV
+         mOKw==
+X-Gm-Message-State: ANoB5pnpbEj5NEkF9FVEZJP9Q+JdCSQSr/odHVfqCqh5qEIBndAu9+bF
+        ssy0WmSEAVyFbon3A7lKSQ3yn0zQ4FI=
+X-Google-Smtp-Source: AA0mqf4OklfcBkfFMEfVjeAO6z8Tg9xRFY+PEerZY3OMpeOrjrDiJtxtxuLC1x65bjbuGkZn4Pd66WRIuco=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:aa7:8090:0:b0:575:4e92:189e with SMTP id
- v16-20020aa78090000000b005754e92189emr14689428pff.59.1669849799328; Wed, 30
- Nov 2022 15:09:59 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:1409:b0:56b:e1d8:e7a1 with SMTP id
+ l9-20020a056a00140900b0056be1d8e7a1mr44197245pfu.28.1669849801157; Wed, 30
+ Nov 2022 15:10:01 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 30 Nov 2022 23:08:57 +0000
+Date:   Wed, 30 Nov 2022 23:08:58 +0000
 In-Reply-To: <20221130230934.1014142-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20221130230934.1014142-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221130230934.1014142-14-seanjc@google.com>
-Subject: [PATCH v2 13/50] KVM: x86: Move guts of kvm_arch_init() to standalone helper
+Message-ID: <20221130230934.1014142-15-seanjc@google.com>
+Subject: [PATCH v2 14/50] KVM: VMX: Do _all_ initialization before exposing
+ /dev/kvm to userspace
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -101,173 +102,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the guts of kvm_arch_init() to a new helper, kvm_x86_vendor_init(),
-so that VMX can do _all_ arch and vendor initialization before calling
-kvm_init().  Calling kvm_init() must be the _very_ last step during init,
-as kvm_init() exposes /dev/kvm to userspace, i.e. allows creating VMs.
+Call kvm_init() only after _all_ setup is complete, as kvm_init() exposes
+/dev/kvm to userspace and thus allows userspace to create VMs (and call
+other ioctls).  E.g. KVM will encounter a NULL pointer when attempting to
+add a vCPU to the per-CPU loaded_vmcss_on_cpu list if userspace is able to
+create a VM before vmx_init() configures said list.
 
-No functional change intended.
+ BUG: kernel NULL pointer dereference, address: 0000000000000008
+ #PF: supervisor write access in kernel mode
+ #PF: error_code(0x0002) - not-present page
+ PGD 0 P4D 0
+ Oops: 0002 [#1] SMP
+ CPU: 6 PID: 1143 Comm: stable Not tainted 6.0.0-rc7+ #988
+ Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+ RIP: 0010:vmx_vcpu_load_vmcs+0x68/0x230 [kvm_intel]
+  <TASK>
+  vmx_vcpu_load+0x16/0x60 [kvm_intel]
+  kvm_arch_vcpu_load+0x32/0x1f0 [kvm]
+  vcpu_load+0x2f/0x40 [kvm]
+  kvm_arch_vcpu_create+0x231/0x310 [kvm]
+  kvm_vm_ioctl+0x79f/0xe10 [kvm]
+  ? handle_mm_fault+0xb1/0x220
+  __x64_sys_ioctl+0x80/0xb0
+  do_syscall_64+0x2b/0x50
+  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+ RIP: 0033:0x7f5a6b05743b
+  </TASK>
+ Modules linked in: vhost_net vhost vhost_iotlb tap kvm_intel(+) kvm irqbypass
 
+Cc: stable@vger.kernel.org
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/include/asm/kvm_host.h |  3 +++
- arch/x86/kvm/svm/svm.c          | 23 +++++++++++++++++++++--
- arch/x86/kvm/vmx/vmx.c          | 21 +++++++++++++++------
- arch/x86/kvm/x86.c              | 15 +++++++++++++--
- 4 files changed, 52 insertions(+), 10 deletions(-)
+ arch/x86/kvm/vmx/vmx.c | 34 +++++++++++++++++++++-------------
+ 1 file changed, 21 insertions(+), 13 deletions(-)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 70af7240a1d5..04a9ae66fb8d 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1758,6 +1758,9 @@ extern struct kvm_x86_ops kvm_x86_ops;
- #define KVM_X86_OP_OPTIONAL_RET0 KVM_X86_OP
- #include <asm/kvm-x86-ops.h>
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 8e81cd94407d..76185a7a7ded 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -8521,19 +8521,23 @@ static void vmx_cleanup_l1d_flush(void)
+ 	l1tf_vmx_mitigation = VMENTER_L1D_FLUSH_AUTO;
+ }
  
-+int kvm_x86_vendor_init(struct kvm_x86_init_ops *ops);
-+void kvm_x86_vendor_exit(void);
-+
- #define __KVM_HAVE_ARCH_VM_ALLOC
- static inline struct kvm *kvm_arch_alloc_vm(void)
+-static void vmx_exit(void)
++static void __vmx_exit(void)
  {
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 91352d692845..19e81a99c58f 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -5091,15 +5091,34 @@ static struct kvm_x86_init_ops svm_init_ops __initdata = {
- 
- static int __init svm_init(void)
- {
-+	int r;
++	allow_smaller_maxphyaddr = false;
 +
- 	__unused_size_checks();
+ #ifdef CONFIG_KEXEC_CORE
+ 	RCU_INIT_POINTER(crash_vmclear_loaded_vmcss, NULL);
+ 	synchronize_rcu();
+ #endif
+-
+-	kvm_exit();
+-	kvm_x86_vendor_exit();
+-
+ 	vmx_cleanup_l1d_flush();
++}
  
--	return kvm_init(&svm_init_ops, sizeof(struct vcpu_svm),
--			__alignof__(struct vcpu_svm), THIS_MODULE);
-+	r = kvm_x86_vendor_init(&svm_init_ops);
-+	if (r)
-+		return r;
+-	allow_smaller_maxphyaddr = false;
++static void vmx_exit(void)
++{
++	kvm_exit();
++	kvm_x86_vendor_exit();
 +
++	__vmx_exit();
+ }
+ module_exit(vmx_exit);
+ 
+@@ -8551,11 +8555,6 @@ static int __init vmx_init(void)
+ 	if (r)
+ 		return r;
+ 
+-	r = kvm_init(&vmx_init_ops, sizeof(struct vcpu_vmx),
+-		     __alignof__(struct vcpu_vmx), THIS_MODULE);
+-	if (r)
+-		goto err_kvm_init;
+-
+ 	/*
+ 	 * Must be called after common x86 init so enable_ept is properly set
+ 	 * up. Hand the parameter mitigation value in which was stored in
+@@ -8589,11 +8588,20 @@ static int __init vmx_init(void)
+ 	if (!enable_ept)
+ 		allow_smaller_maxphyaddr = true;
+ 
 +	/*
 +	 * Common KVM initialization _must_ come last, after this, /dev/kvm is
 +	 * exposed to userspace!
 +	 */
-+	r = kvm_init(&svm_init_ops, sizeof(struct vcpu_svm),
-+		     __alignof__(struct vcpu_svm), THIS_MODULE);
++	r = kvm_init(&vmx_init_ops, sizeof(struct vcpu_vmx),
++		     __alignof__(struct vcpu_vmx), THIS_MODULE);
 +	if (r)
 +		goto err_kvm_init;
 +
-+	return 0;
-+
-+err_kvm_init:
-+	kvm_x86_vendor_exit();
-+	return r;
- }
- 
- static void __exit svm_exit(void)
- {
- 	kvm_exit();
-+	kvm_x86_vendor_exit();
- }
- 
- module_init(svm_init)
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index b8bf95b9710d..8e81cd94407d 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -8529,6 +8529,7 @@ static void vmx_exit(void)
- #endif
- 
- 	kvm_exit();
-+	kvm_x86_vendor_exit();
- 
- 	vmx_cleanup_l1d_flush();
- 
-@@ -8546,23 +8547,25 @@ static int __init vmx_init(void)
- 	 */
- 	hv_init_evmcs();
- 
-+	r = kvm_x86_vendor_init(&vmx_init_ops);
-+	if (r)
-+		return r;
-+
- 	r = kvm_init(&vmx_init_ops, sizeof(struct vcpu_vmx),
- 		     __alignof__(struct vcpu_vmx), THIS_MODULE);
- 	if (r)
--		return r;
-+		goto err_kvm_init;
- 
- 	/*
--	 * Must be called after kvm_init() so enable_ept is properly set
-+	 * Must be called after common x86 init so enable_ept is properly set
- 	 * up. Hand the parameter mitigation value in which was stored in
- 	 * the pre module init parser. If no parameter was given, it will
- 	 * contain 'auto' which will be turned into the default 'cond'
- 	 * mitigation mode.
- 	 */
- 	r = vmx_setup_l1d_flush(vmentry_l1d_flush_param);
--	if (r) {
--		vmx_exit();
--		return r;
--	}
-+	if (r)
-+		goto err_l1d_flush;
- 
- 	vmx_setup_fb_clear_ctrl();
- 
-@@ -8587,5 +8590,11 @@ static int __init vmx_init(void)
- 		allow_smaller_maxphyaddr = true;
- 
  	return 0;
-+
+ 
+-err_l1d_flush:
+-	vmx_exit();
+ err_kvm_init:
++	__vmx_exit();
 +err_l1d_flush:
-+	vmx_exit();
-+err_kvm_init:
-+	kvm_x86_vendor_exit();
-+	return r;
- }
- module_init(vmx_init);
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 915d57c3b41d..b33932fca36e 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -9278,7 +9278,16 @@ static inline void kvm_ops_update(struct kvm_x86_init_ops *ops)
- 
- int kvm_arch_init(void *opaque)
- {
--	struct kvm_x86_init_ops *ops = opaque;
-+	return 0;
-+}
-+
-+void kvm_arch_exit(void)
-+{
-+
-+}
-+
-+int kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
-+{
- 	u64 host_pat;
- 	int r;
- 
-@@ -9410,8 +9419,9 @@ int kvm_arch_init(void *opaque)
- 	kmem_cache_destroy(x86_emulator_cache);
+ 	kvm_x86_vendor_exit();
  	return r;
  }
-+EXPORT_SYMBOL_GPL(kvm_x86_vendor_init);
- 
--void kvm_arch_exit(void)
-+void kvm_x86_vendor_exit(void)
- {
- 	kvm_unregister_perf_callbacks();
- 
-@@ -9440,6 +9450,7 @@ void kvm_arch_exit(void)
- 	WARN_ON(static_branch_unlikely(&kvm_xen_enabled.key));
- #endif
- }
-+EXPORT_SYMBOL_GPL(kvm_x86_vendor_exit);
- 
- static int __kvm_emulate_halt(struct kvm_vcpu *vcpu, int state, int reason)
- {
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
