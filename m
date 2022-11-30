@@ -2,145 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5861F63E35D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3458C63E362
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiK3WXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 17:23:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
+        id S229690AbiK3WYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 17:24:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiK3WXm (ORCPT
+        with ESMTP id S229461AbiK3WYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 17:23:42 -0500
-Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41425133B;
-        Wed, 30 Nov 2022 14:23:41 -0800 (PST)
-Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-04.nifty.com with ESMTP id 2AUMLqOd026581;
-        Thu, 1 Dec 2022 07:21:52 +0900
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 2AUMLOOd009632;
-        Thu, 1 Dec 2022 07:21:24 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2AUMLOOd009632
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1669846885;
-        bh=k5TnRkjFmB+0wMVTITyaBsYH4EkERxs/m8UlcytiUqA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=wezRxcPL57rNZmvQDUfqHkvrnpWW6KcJuM5zkvY4DWlVXSwmILOWeW7EnKHIcGxzC
-         Agu37VlemU6SjxxPDu2gzZkCd6+lmu4SGVFvnj/6TuP1qTJ6Ixxx1LWcc1BuEYdaDS
-         AWh6/yLOw1gJak/wKaB4+oSl7NWcw14iYftsWMV0Q2gsBJRHKZkFPu0EophkAljJux
-         mINa+xUJRAZT9gqXFGcF3C61zUb4LCrL7l53DdX6btf1Y1sslZci2kZUBNkhRxNurc
-         1dAItGSzvagxjhaNwL+7czO78HV9CtUYzRXVUIKQ4xOX7Zp1+hNUplWXoin6hsBYvQ
-         hAnxvKLakmEVA==
-X-Nifty-SrcIP: [209.85.167.181]
-Received: by mail-oi1-f181.google.com with SMTP id e205so107913oif.11;
-        Wed, 30 Nov 2022 14:21:24 -0800 (PST)
-X-Gm-Message-State: ANoB5pmfhMnS5kaptKTFtrTkWpHb3y8hVikpXz0fOpkll9gFD56Z/q0P
-        v992ooR41laL9M+wMNBfSSFfOtvtQsIKhenqEBI=
-X-Google-Smtp-Source: AA0mqf6or5JAcRyjvHHEkc7ygsMt2uCHycUgQSriEZZOcXQJpheBCozq7ScqXqGnuUQJLwC7n8y7iHcjChYlkCgNDz8=
-X-Received: by 2002:aca:1c06:0:b0:354:28ae:23b3 with SMTP id
- c6-20020aca1c06000000b0035428ae23b3mr21855293oic.287.1669846883543; Wed, 30
- Nov 2022 14:21:23 -0800 (PST)
-MIME-Version: 1.0
-References: <20221129190123.872394-1-nathan@kernel.org> <20221129190123.872394-2-nathan@kernel.org>
-In-Reply-To: <20221129190123.872394-2-nathan@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 1 Dec 2022 07:20:47 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATMtRu00GYwJW_VvTSTcY6eqnx=4EEj8PFC5adrnHunSw@mail.gmail.com>
-Message-ID: <CAK7LNATMtRu00GYwJW_VvTSTcY6eqnx=4EEj8PFC5adrnHunSw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] padata: Do not mark padata_mt_helper() as __init
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Nicolas Schier <nicolas@fjasle.eu>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Vincent Donnefort <vdonnefort@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        linux-crypto@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 17:24:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272A64FFBB;
+        Wed, 30 Nov 2022 14:24:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96DFC61E11;
+        Wed, 30 Nov 2022 22:24:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C26AC433D6;
+        Wed, 30 Nov 2022 22:24:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1669847067;
+        bh=GObiuqWePXvleVN+hRN2W6TyciF+HakME2P3Lh61n28=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YAhbHJpYikQUx0jNOf+ItowlR2w21iqvGsxoJvyc3gVS/fyS7GsRYyVC5aHcGMwxW
+         dqefHsBBpntp00i/4r6pJ6oZ3BPgxPgUbp+zvSU2tyL5JAOZHBzkvJfcjpFONibaSV
+         vtPIAfMwt6bIwxefV+7aK10fUV23UobOvgs0sgSE=
+Date:   Wed, 30 Nov 2022 14:24:25 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Ives van Hoorne <ives@codesandbox.io>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Alistair Popple <apopple@nvidia.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] mm/migrate: Fix read-only page got writable when
+ recover pte
+Message-Id: <20221130142425.6a7fdfa3e5954f3c305a77ee@linux-foundation.org>
+In-Reply-To: <5ddf1310-b49f-6e66-a22a-6de361602558@redhat.com>
+References: <20221114000447.1681003-1-peterx@redhat.com>
+        <20221114000447.1681003-2-peterx@redhat.com>
+        <5ddf1310-b49f-6e66-a22a-6de361602558@redhat.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 4:02 AM Nathan Chancellor <nathan@kernel.org> wrote:
+On Tue, 15 Nov 2022 19:17:43 +0100 David Hildenbrand <david@redhat.com> wrote:
+
+> On 14.11.22 01:04, Peter Xu wrote:
+> > Ives van Hoorne from codesandbox.io reported an issue regarding possible
+> > data loss of uffd-wp when applied to memfds on heavily loaded systems.  The
+> > symptom is some read page got data mismatch from the snapshot child VMs.
+> > 
+> > Here I can also reproduce with a Rust reproducer that was provided by Ives
+> > that keeps taking snapshot of a 256MB VM, on a 32G system when I initiate
+> > 80 instances I can trigger the issues in ten minutes.
+> > 
+> > It turns out that we got some pages write-through even if uffd-wp is
+> > applied to the pte.
+> > 
+> > The problem is, when removing migration entries, we didn't really worry
+> > about write bit as long as we know it's not a write migration entry.  That
+> > may not be true, for some memory types (e.g. writable shmem) mk_pte can
+> > return a pte with write bit set, then to recover the migration entry to its
+> > original state we need to explicit wr-protect the pte or it'll has the
+> > write bit set if it's a read migration entry.  For uffd it can cause
+> > write-through.
+> > 
+> > The relevant code on uffd was introduced in the anon support, which is
+> > commit f45ec5ff16a7 ("userfaultfd: wp: support swap and page migration",
+> > 2020-04-07).  However anon shouldn't suffer from this problem because anon
+> > should already have the write bit cleared always, so that may not be a
+> > proper Fixes target, while I'm adding the Fixes to be uffd shmem support.
+> > 
 >
-> When building arm64 allmodconfig + ThinLTO with clang and a proposed
-> modpost update to account for -ffuncton-sections, the following warning
-> appears:
-
-
-
-How to enable -ffuncton-sections for ARCH=arm64 ?
-(in other words, how to set CONFIG_LD_DEAD_CODE_DATA_ELIMINATION ?)
-
-In upstream, it is only possible for mips and powerpc.
-
-./arch/mips/Kconfig:82: select HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-./arch/powerpc/Kconfig:237: select HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-
-
-
-Is there another proposal to add it for arm64,
-or is this about a downstream kernel?
-
-
-
-
-
+> ...
 >
->   WARNING: modpost: vmlinux.o: section mismatch in reference: padata_work_init (section: .text.padata_work_init) -> padata_mt_helper (section: .init.text)
->   WARNING: modpost: vmlinux.o: section mismatch in reference: padata_work_init (section: .text.padata_work_init) -> padata_mt_helper (section: .init.text)
->
-> In both cases, an __init function calls padata_work_init(), which is not
-> marked __init, with padata_mt_helper(), another __init function, as a
-> work function argument.
->
-> padata_work_init() is called from non-init paths, otherwise it could be
-> marked __init to resolve the warning. Instead, remove __init from
-> padata_mt_helper() to resolve the warning.
->
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> Cc: Steffen Klassert <steffen.klassert@secunet.com>
-> Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
-> Cc: linux-crypto@vger.kernel.org
-> ---
->  kernel/padata.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/padata.c b/kernel/padata.c
-> index e5819bb8bd1d..c2271d7e446d 100644
-> --- a/kernel/padata.c
-> +++ b/kernel/padata.c
-> @@ -45,7 +45,7 @@ struct padata_mt_job_state {
->  };
->
->  static void padata_free_pd(struct parallel_data *pd);
-> -static void __init padata_mt_helper(struct work_struct *work);
-> +static void padata_mt_helper(struct work_struct *work);
->
->  static int padata_index_to_cpu(struct parallel_data *pd, int cpu_index)
->  {
-> @@ -425,7 +425,7 @@ static int padata_setup_cpumasks(struct padata_instance *pinst)
->         return err;
->  }
->
-> -static void __init padata_mt_helper(struct work_struct *w)
-> +static void padata_mt_helper(struct work_struct *w)
->  {
->         struct padata_work *pw = container_of(w, struct padata_work, pw_work);
->         struct padata_mt_job_state *ps = pw->pw_data;
-> --
-> 2.38.1
->
+> > --- a/mm/migrate.c
+> > +++ b/mm/migrate.c
+> > @@ -213,8 +213,14 @@ static bool remove_migration_pte(struct folio *folio,
+> >   			pte = pte_mkdirty(pte);
+> >   		if (is_writable_migration_entry(entry))
+> >   			pte = maybe_mkwrite(pte, vma);
+> > -		else if (pte_swp_uffd_wp(*pvmw.pte))
+> > +		else
+> > +			/* NOTE: mk_pte can have write bit set */
+> > +			pte = pte_wrprotect(pte);
+> > +
+> > +		if (pte_swp_uffd_wp(*pvmw.pte)) {
+> > +			WARN_ON_ONCE(pte_write(pte));
 
+Will this warnnig trigger in the scenario you and Ives have discovered?
 
--- 
-Best Regards
-Masahiro Yamada
+> >   			pte = pte_mkuffd_wp(pte);
+> > +		}
+> >   
+> >   		if (folio_test_anon(folio) && !is_readable_migration_entry(entry))
+> >   			rmap_flags |= RMAP_EXCLUSIVE;
+> 
+> As raised, I don't agree to this generic non-uffd-wp change without 
+> further, clear justification.
+
+Pater, can you please work this further?
+
+> I won't nack it, but I won't ack it either.
+
+I wouldn't mind seeing a little code comment which explains why we're
+doing this.
