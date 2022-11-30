@@ -2,107 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D2863CF11
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 07:01:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F4363CF14
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 07:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233858AbiK3GBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 01:01:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
+        id S233893AbiK3GFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 01:05:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiK3GBo (ORCPT
+        with ESMTP id S230033AbiK3GFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 01:01:44 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6219FDB
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 22:01:43 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id j4so25397070lfk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 22:01:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Dd2bPOSx73YkfI4ietT0CtlJFPAPYcl5w03w++siR3I=;
-        b=VueP3BV9DWQDNRdZ4CP4P+VNS3R/j4lV1uV1cXsTBW0u75pHBOhRYGDAUdYvUErmti
-         624irIm4wqDMaReKRB30EvyBJ7amP4v+zfVwv2hJUhQyNoe0UAZcezmo2pnlQF6Xrpjh
-         yHfvEx6D1DhBe6VCGE43YjmmeA3fyhA58EgzHePnSXxtFGhySFuXaheY0gqwf1leNssp
-         YKzzaiR/iVoDS8dyWYp/GGWo6hPAsEsTL9CEXKpkfyfwWcFyvSWVxbos+mMe0ELBlrtr
-         BCSxVxIiVT2+ZnQZ3g6aeNXUnk52IIb+bqRn9MbaK0C5Ol58dW3S5HKSmQdCRNC4NppZ
-         OF3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Dd2bPOSx73YkfI4ietT0CtlJFPAPYcl5w03w++siR3I=;
-        b=oWaCer7EGlorqOINv5OynkPrdC7EPjPNMnuEVfAosjuZuULSVrbMqc9+G2/oX4qUZz
-         XEKXxIWZ3C2cUYrYDGBX/HXsq+Ui66aLPDqceLCzXcfpT99B2TaElhbYRDS5vmp6Fu34
-         XHXmYg5g1y7DA+szUCL+JMcLHefEnq6PDDK9jqden/yIDOLb9d7eOuOF3Pxa4rX+MBee
-         d8j924yh3eI8YwfpAOoLKUJ5W9H4ShVCnFWZahilZszb4piUSw3wEqsrK+Jvr7SKzWLN
-         kwOFUitWL/N/1LM10+8R5+/dvRNEkWOqx425u+6laMTKPwjar0rv0H74HiepyIkj/ZLV
-         2qBA==
-X-Gm-Message-State: ANoB5pkBLA53EZ5QHoBMeaaFkDt7oN4tloV7/wQcVKPgV6pGRXcplBHT
-        dx3vq+Fjv1sdnougGDM33wwrd59ubwsxB4BAX6o=
-X-Google-Smtp-Source: AA0mqf7q7VYdGDYdxOCSlaJ6L0t8HZDI4fhO1M/d/muCK7Hva5Fqezbch6yxwkGj/aDj8LfChdO+7NneUt+SPFcXc28=
-X-Received: by 2002:a05:6512:22cf:b0:499:fa38:3da4 with SMTP id
- g15-20020a05651222cf00b00499fa383da4mr19306949lfu.12.1669788101168; Tue, 29
- Nov 2022 22:01:41 -0800 (PST)
+        Wed, 30 Nov 2022 01:05:00 -0500
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6823837218
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Nov 2022 22:04:59 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VW1iHGt_1669788295;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VW1iHGt_1669788295)
+          by smtp.aliyun-inc.com;
+          Wed, 30 Nov 2022 14:04:56 +0800
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v2] erofs: enable large folios for iomap mode
+Date:   Wed, 30 Nov 2022 14:04:55 +0800
+Message-Id: <20221130060455.44532-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-From:   Yun Levi <ppbuk5246@gmail.com>
-Date:   Wed, 30 Nov 2022 15:01:29 +0900
-Message-ID: <CAM7-yPSL2ewn9kjaR01vq8V410G+F1taJzAqVuvNOJOkbX7URw@mail.gmail.com>
-Subject: [Question] Should we reuse target when damon's operation changed?
-To:     SeongJae Park <sj@kernel.org>
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello SJ.
+Enable large folios for iomap mode.  Then the readahead routine will
+pass down large folios containing multiple pages.
 
-While I try to use damon, I have some questions whether it is correct
-to reuse damon_target structure when damon's operation is changed.
+Let's enable this for non-compressed format for now, until the
+compression part supports large folios later.
 
-At first, one user set up damon like below.
-    echo 1 > /sys/kernel/mm/damon/admin/kdamonds/nr_kdamonds
-    echo 1 > /sys/kernel/mm/damon/admin/kdamonds/0/contexts/nr_contexts
-    echo 1 > /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/nr_targets
-    echo 1 > /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/pid_target
-    echo 1 > /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/regions/nr_regions
-    echo 0 > /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/regions/nr_regions/0/start
-    echo 16384 >
-/sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/regions/nr_regions/0/end
+When large folios supported, the iomap routine will allocate iomap_page
+for each large folio and thus we need iomap_release_folio() and
+iomap_invalidate_folio() to free iomap_page when these folios get
+recalimed or invalidated.
 
-    echo vaddr >  /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/operation
-    echo on >  /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/state
+Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+---
+v2:
+- add calling for iomap_release_folio() and iomap_invalidate_folio() to
+  support large folios
 
-And some time pass, user change the operation as "paddr" like below:
-    echo paddr >  /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/operation
-    echo commit >  /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/state
+v1: https://lore.kernel.org/all/20221110074023.8059-1-jefflexu@linux.alibaba.com/
+---
+ fs/erofs/data.c  | 2 ++
+ fs/erofs/inode.c | 2 ++
+ 2 files changed, 4 insertions(+)
 
-In that situation, the damon_target is reused and the region isn't changed,
-former region information which damon_region has -- nr_accesse,
-last_nr_accesss, last_sample addr is kept.
-
-But, former accessed information is based on vaddr and changed
-accessed information should be based on paddr and it seems the wrong
-information to new applied operation.
-
-IIUC, it makes some confusion to kdamond when it merges or splits
-regions based on above information.
-
-So, Is it much better to remove the target and region information when
-the operation is changed? or should we check whether it's possible to
-reuse former access information between former and new operation?
-
-Thanks.
-
+diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+index fe8ac0e163f7..c9526c627dda 100644
+--- a/fs/erofs/data.c
++++ b/fs/erofs/data.c
+@@ -403,6 +403,8 @@ const struct address_space_operations erofs_raw_access_aops = {
+ 	.readahead = erofs_readahead,
+ 	.bmap = erofs_bmap,
+ 	.direct_IO = noop_direct_IO,
++	.release_folio = iomap_release_folio,
++	.invalidate_folio = iomap_invalidate_folio,
+ };
+ 
+ #ifdef CONFIG_FS_DAX
+diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
+index ad2a82f2eb4c..e457b8a59ee7 100644
+--- a/fs/erofs/inode.c
++++ b/fs/erofs/inode.c
+@@ -295,6 +295,8 @@ static int erofs_fill_inode(struct inode *inode)
+ 		goto out_unlock;
+ 	}
+ 	inode->i_mapping->a_ops = &erofs_raw_access_aops;
++	if (!erofs_is_fscache_mode(inode->i_sb))
++		mapping_set_large_folios(inode->i_mapping);
+ #ifdef CONFIG_EROFS_FS_ONDEMAND
+ 	if (erofs_is_fscache_mode(inode->i_sb))
+ 		inode->i_mapping->a_ops = &erofs_fscache_access_aops;
 -- 
-Best regards,
-Levi
+2.19.1.6.gb485710b
+
