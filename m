@@ -2,109 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF7363D8C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:06:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9E163D8CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 16:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiK3PGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 10:06:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
+        id S229563AbiK3PHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 10:07:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiK3PGl (ORCPT
+        with ESMTP id S229593AbiK3PHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 10:06:41 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F453AC2D
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 07:06:38 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id g12so27422668lfh.3
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 07:06:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mD5gyl5+b2VI0JIPzsNKHhXJF/y5xF11ltR47Z8/CH8=;
-        b=oSHSzMOkqi2ULxDEknrTYbZeynICh+gdMFA21eNeCDsPvbrobTAF2Y4OodCGyb18jZ
-         IWMtFH/cUN+PWmzaUjxmHz6VDRWV+FUJX0XgsRis5qc/rmZVgiUZPdfnz9FkBAcix+gO
-         SoIB0VU/tk5lt0Lwrn6TWFZTOJ6wNeY7XQvm2JHZGza7GP/QG5+UHpJ5KaWySoZ9amtl
-         0895/ArT79dRg3NfgylLSNqg51XzcODqoUj7fAKFF/hj9Kxf76w3rrAYNRUh0AMbOmv0
-         Kk4aztg2U2MPRpv44Jqvl3rjFuUlso/qdpKnQwhgmZLjM76KMSb14jjiB0T579LRP++r
-         b/NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mD5gyl5+b2VI0JIPzsNKHhXJF/y5xF11ltR47Z8/CH8=;
-        b=Vc/+BCkRsxi1Pj93tUfhTBrWU0KX/oelABaVCCJiUU/hHbjvF4dqf+dAArsuEBwJrm
-         GdX6GTGxzvKEa4tYgWWRSF+EavDzOUG8WwG0s6YSyfjXW0i7c/raxaKrGRs5tMu5lPU/
-         iEmrdSHjDzrJFDpfacAtNTh02BsEaHe0YWqj6LmlPxg8oqQ7T67sdNh2Ldhb7PPxW2xw
-         k6Dh5avLQtDguaeRE+ywkBsGYG0UzdfkA8Tw154M/PJeoXHMS9fZvwRBDjZDD60Cxfgq
-         x/kLlksAMY8XnYkSYqMjv99YJmGNxXwJOsrOGpFJXVIh6GTfq8BEyI/ZGDjQSLLcPXER
-         chMg==
-X-Gm-Message-State: ANoB5pkB3UPmr+Fn8qdPnJNXMGmt36Qpp1Ed/ao/Hx6e8acELqvdr48H
-        hbt3yUAGfzwqFJr54huNZGtGMQ==
-X-Google-Smtp-Source: AA0mqf4nL3MLFe+IlKOkDsmG5VgRiyNMxuwWch2f0SyPSpggGsXRm0nzcU+d/xz6z4J09NdlJKJMYg==
-X-Received: by 2002:a05:6512:401f:b0:4b4:b78a:ad8a with SMTP id br31-20020a056512401f00b004b4b78aad8amr19178620lfb.249.1669820797086;
-        Wed, 30 Nov 2022 07:06:37 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id s18-20020ac24652000000b004b0a1e77cb2sm286567lfo.137.2022.11.30.07.06.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 07:06:36 -0800 (PST)
-Message-ID: <53a48f27-9eb9-ee9b-9dca-1911ea6e54a2@linaro.org>
-Date:   Wed, 30 Nov 2022 16:06:35 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: mmc: xenon: Add compatible string for
- AC5 SoC
-Content-Language: en-US
-To:     Vadym Kochan <vadym.kochan@plvision.eu>,
-        Hu Ziji <huziji@marvell.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Elad Nachman <enachman@marvell.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-References: <20221130133747.3777340-1-vadym.kochan@plvision.eu>
- <20221130133747.3777340-2-vadym.kochan@plvision.eu>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221130133747.3777340-2-vadym.kochan@plvision.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 10:07:51 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECAD13F58;
+        Wed, 30 Nov 2022 07:07:49 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 211863200918;
+        Wed, 30 Nov 2022 10:07:48 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 30 Nov 2022 10:07:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1669820867; x=1669907267; bh=EYBohq7Wmj
+        /uFHqGx3hCuQfFGuTEIDd6kMXNccH+gNw=; b=GDUdx+GjmEKduBDSilj+n1NSbq
+        Ic269td72thVocWg+G4micCeNOnsNyYyY4jbe32JM9KaxP3/HY715S6euRzl+OHM
+        vvP+p/DD8NJa2LIAXh9AAqgR9FWQsGlcFQ/cYyQ65Ew2hLxpbng8K+KpuGfucXDX
+        KYCEjcOfukOVqfYxVtv+4UPg+4twU4BFjYlHZ1+4uTUodumLkwFmsUexfCE4NQ/E
+        8rCZg7ulhiE6NT5uT7tuB8XRHYGJjApwLHWVw6nU2UZP4CcoKKH6ap82W4pSnHzR
+        ndwDTRKc3SljqM6y98atShVleNRl8pjLcwXHwnriopbaLH/Qw3SX0EKfR2qA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669820867; x=1669907267; bh=EYBohq7Wmj/uFHqGx3hCuQfFGuTE
+        IDd6kMXNccH+gNw=; b=A1flL476eQAuzf8UkuooY5DxSucqSeE95cwMSYX0kTEg
+        SzBwA2GK6ljdkdkwdorqSBZtoZ2TP4Zdo/4dGYiZkqZVuQeV5+DlSKCHwYl3UYA2
+        56HApMp86ss11am5cqJ2xITBAz/pM4yqD1Bi8T21G9zU6FLRdHN2kITMFTNw1ncL
+        kFchvmlT5D4pSQy4AVip1T4rQ7s1qiAwc5n2XQoHgcyq6+XzMGlXWjJXTLhmrQHo
+        civsyuYklJ2Fth64UNKk7p1Q16WPCoA2ranGOgnKFi3KtITN3jxWxlmOWxrE7zBG
+        ZAVExXIaQz0zXNQ1nMBytulZyJQiZhYXQ26NLP5QUg==
+X-ME-Sender: <xms:w3GHYznk0rDeI1d3_ezT3PuosqDm49PneBdXT7kqegg27GA51_7w-w>
+    <xme:w3GHY21-WN0M0ktSvUrnlV2_wKd8qizoZelh2yxP9qmePucvABqGheZkdfvEvdqdc
+    BxehDAhSyM81eSd-4k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtdefgdejudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:w3GHY5oaIMr9yh-DhE4M2HRagQXXaT6UehFnyz82n8LaUjkTttz3ag>
+    <xmx:w3GHY7kbbT5sWTMIBbYCisB4q1n_KNaDONStIdU-MfpP0daRw_bc2A>
+    <xmx:w3GHYx3ILNR7cN8vF6Dd1-qzbIOiZVGR88yyoUuw0rwwmuP2FsR1Uw>
+    <xmx:w3GHY7yc1MCRzilAJXIF86WaJFSx6qgQaNZ2LVRjC2Os-_6jbbvjEQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 5A85BB60086; Wed, 30 Nov 2022 10:07:47 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <16ec2a7a-c469-4732-aeca-e74a9fb88d3e@app.fastmail.com>
+In-Reply-To: <Y4dvz4d0dpFzJZ9L@zx2c4.com>
+References: <20221129210639.42233-1-Jason@zx2c4.com>
+ <20221129210639.42233-4-Jason@zx2c4.com>
+ <878rjs7mcx.fsf@oldenburg.str.redhat.com> <Y4dt1dLZMmogRlKa@zx2c4.com>
+ <Y4dvz4d0dpFzJZ9L@zx2c4.com>
+Date:   Wed, 30 Nov 2022 16:07:27 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        "Florian Weimer" <fweimer@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
+        x86@kernel.org, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Adhemerval Zanella Netto" <adhemerval.zanella@linaro.org>,
+        "Carlos O'Donell" <carlos@redhat.com>,
+        "Christian Brauner" <brauner@kernel.org>
+Subject: Re: [PATCH v10 3/4] random: introduce generic vDSO getrandom() implementation
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/11/2022 14:37, Vadym Kochan wrote:
-> AC5 SoC has Xenon SDHCI IP, but with a limitation of maximum
-> 2G DMA address range.
+On Wed, Nov 30, 2022, at 15:59, Jason A. Donenfeld wrote:
+> On Wed, Nov 30, 2022 at 03:51:01PM +0100, Jason A. Donenfeld wrote:
+>> On Wed, Nov 30, 2022 at 11:44:30AM +0100, Florian Weimer wrote:
+>> > 
+>> >  * vdso_data will be accessed by 64 bit and compat code at the same time
+>> >  * so we should be careful before modifying this structure.
+>> > 
+>> > So the ABI must be same for 32-bit and 64-bit mode, and long isn't.
+
+> I'll do something like this:
+>
 > 
-> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> ---
->  Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
-> index 3ee758886558..e1178a49f264 100644
-> --- a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
-> @@ -25,6 +25,7 @@ properties:
->        - enum:
->            - marvell,armada-cp110-sdhci
->            - marvell,armada-ap806-sdhci
-> +          - marvell,ac5-sdhci
+> +#ifdef CONFIG_64BIT
+> +typedef u64 vdso_kernel_ulong;
+> +#else
+> +typedef u32 vdso_kernel_ulong;
+> +#endif
 
-Don't drop entries at the end, it's easy to create conflicts which is
-also easy to avoid by putting them in alphabetical order.
+This does not address the ABI concern: to allow 32-bit and 64-bit
+tasks to share the same data page, it has to be the same width on
+both, either u32 or 64, but not depending on a configuration
+option.
 
-Best regards,
-Krzysztof
+> struct vdso_rng_data {
+>	vdso_kernel_ulong	generation;
+>	bool			is_ready;
+> };
 
+There is another problem with this: you have implicit padding
+in the structure because the two members have different size
+and alignment requirements. The easiest fix is to make them
+both u64, or you could have a u32 is_ready and an explit u32
+for the padding.
+
+      Arnd
