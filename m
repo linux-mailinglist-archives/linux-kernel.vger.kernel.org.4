@@ -2,130 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5733F63D4B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDF863D4B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 12:35:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232226AbiK3Let (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 06:34:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
+        id S235159AbiK3LfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 06:35:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235308AbiK3Ldq (ORCPT
+        with ESMTP id S235155AbiK3Lel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 06:33:46 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC6A4B9BC;
-        Wed, 30 Nov 2022 03:33:15 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id x6so6363079lji.10;
-        Wed, 30 Nov 2022 03:33:15 -0800 (PST)
+        Wed, 30 Nov 2022 06:34:41 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52DD7B611
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:34:01 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id b21so16371119plc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 03:34:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bbgF/8QJth7Q6iZLlIiOpcOOnk+o4nClIAC+d8Lf9z0=;
-        b=cgrBYVcGGaOmhs4NUM2DMBzEteSqsnNo+s1OWAu0xrFfR8SfGHhoYWl6cON5bJQf5H
-         kBXo+HTMLYJlc0NNqyXTeNHVsKFqrN9RnSJvYMAt9wsTzoHjoBDz54HyrId55uPzhcey
-         WrkHDI90HmJoIfjTMzlxSFuMRM+ZEK+h+tp2CXCTYTjqjx+4Ho1p2q1qT5Xh0Pe1NIpw
-         kh3Ph4481EH6HJsaTRzldrzwYx9ab3Q4uT9o4p32qRaA2tLn+Hf0w3FMTq1prgn3d5jp
-         NtxVXq9wW/MEdgV2FWkhhU7TsMvsvlWqvebJsqA+xk8HaXGX4H+zuKYU5RX6czhqRUDe
-         TW5g==
+        bh=Vt+jeUCmbHRpuzK+fZSc4ivofSbJWHqyWABXtLQhRg4=;
+        b=BjtAnrSIXCjAQgYt9mCdERiAKHjXFsA4027zCQv5WiHcFipEGZJT8DlcKZGWL3fcjN
+         JjaAi+8fMb/c4KMtrbB/I7gY0alPQ1pSOmJHKN1akuEE+Rj+C292k7Pabj60vrRHqFru
+         relSyX2cxswGaQ9m+5aT+zMeDrPBm7lgJo3v87fc6Cxczmmg9g/X5UF2SlWLBWj+2LeD
+         AsXKb+cy5BSoxU8PRdsUHEHltlqgaD669pcBAdmRN09rCUi5/S+B47TzE0oBXIoLZeGm
+         muYAcHb9C/GxT+Le4QrANDcE4RkQ4l0W+PF3GT5t5HfpIxUzC3T28X1QNBacK88/rOso
+         k19Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bbgF/8QJth7Q6iZLlIiOpcOOnk+o4nClIAC+d8Lf9z0=;
-        b=NbDaJ4bhCdEyY92Rmg+X9V7pKl7RshHcGab+wiKVGu4QAM6+8t5Ejncj2PcQUpV6KY
-         gFU0yhV+uHOa/LQX1pW0KAXocC6+tvlvT2VCcdBjpHmcZrC0e4qho97BEG5UDGObbfj4
-         rinfUQSX6E7C8Sj8Me4T6C9PtIfpIAYbYpTij27qtaykZC+qqN5jQphgJgZ7MHYlhvEa
-         Y95m25M0T5qgstUdiXaVKX+mhg6+26VezlBXkryXaWn+KJ9fqgY8b+pGJ628o38ENu0c
-         M21vERilU3VlmEqEGrGtFCRfMmwdNoqwA9bZstG5EOcrlgXKs+T5KUrqe4CuBazffj7w
-         jeAg==
-X-Gm-Message-State: ANoB5pnyPrsN30UH5B9l3CRgAsLD+RGXmMmIh7QtXReycuchoadhUUx2
-        CCI7dpjJL3yVp1rHKHupyx+3qdNOumkIyflToXc=
-X-Google-Smtp-Source: AA0mqf4DNgrzSTa3qDkcM1vR3wsA4xbwLoMawo/HYfBGJ5539OEYNPmp+YyAmqJIJYo2LXuFpOGWdNGqzEgPvVjR9QQ=
-X-Received: by 2002:a2e:3815:0:b0:279:8c75:b1a8 with SMTP id
- f21-20020a2e3815000000b002798c75b1a8mr8432976lja.140.1669807993775; Wed, 30
- Nov 2022 03:33:13 -0800 (PST)
+        bh=Vt+jeUCmbHRpuzK+fZSc4ivofSbJWHqyWABXtLQhRg4=;
+        b=GWYyEK5yxCHBBXJePDUF5QsNGikGr1tw4C1whNCnRBQSknfsrDWEfaFCTTszQ1EBGf
+         Mm8whJW8VgCf/+aP4XlHpQnF05lmLXLPzCXxjVQfdhRKVvNqyziqGyskUYaci5wAKlHe
+         gP3xScG0QIFh+6HaBVBfYPPJDZve7id8AntWA8Dv4d/a0PLZSWZzFuqCycTpI+tw2WxK
+         2cPyE3fWZvTzZBOOef39dwS76VnrGI/K+UrohXFYCEqrLXD16Vir5gJPnwUl0gO9KGv3
+         4RSwUQHstxLjIe/zXPpdkMuyJe88AqW/tMYmMv+g5rc4SGJYubjr7w/ZP34ZbpWVPR/e
+         gEGw==
+X-Gm-Message-State: ANoB5pmxfKY1OSi+yb0hWwBul6dJyqr1nfe3b2eTaudA3KRJkQp/rH32
+        aYa43bj58RnA2QTt8mAhycwCf/UpbsNIo6euwptYElaUZUs=
+X-Google-Smtp-Source: AA0mqf7p9b5ayCsGlKeXiBkIRIpTQd5EnIRo8eNLpVLk8NlcKvLW8dKFi/08brczBWlXxhqrXrBfcM8cm/JQl+XD79M=
+X-Received: by 2002:a17:90a:ae0f:b0:20d:b124:33b1 with SMTP id
+ t15-20020a17090aae0f00b0020db12433b1mr63145200pjq.202.1669808041406; Wed, 30
+ Nov 2022 03:34:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20221130070158.44221-1-chengkaitao@didiglobal.com> <fd28321c-5f00-ba94-daed-2b8da2292c1f@gmail.com>
-In-Reply-To: <fd28321c-5f00-ba94-daed-2b8da2292c1f@gmail.com>
-From:   Tao pilgrim <pilgrimtao@gmail.com>
-Date:   Wed, 30 Nov 2022 19:33:01 +0800
-Message-ID: <CAAWJmAYPUK+1GBS0R460pDvDKrLr9zs_X2LT2yQTP_85kND5Ew@mail.gmail.com>
-Subject: Re: [PATCH] mm: memcontrol: protect the memory in cgroup from being
- oom killed
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        corbet@lwn.net, mhocko@kernel.org, roman.gushchin@linux.dev,
-        shakeelb@google.com, akpm@linux-foundation.org,
-        songmuchun@bytedance.com, cgel.zte@gmail.com,
-        ran.xiaokai@zte.com.cn, viro@zeniv.linux.org.uk,
-        zhengqi.arch@bytedance.com, ebiederm@xmission.com,
-        Liam.Howlett@oracle.com, chengzhihao1@huawei.com,
-        haolee.swjtu@gmail.com, yuzhao@google.com, willy@infradead.org,
-        vasily.averin@linux.dev, vbabka@suse.cz, surenb@google.com,
-        sfr@canb.auug.org.au, mcgrof@kernel.org, sujiaxun@uniontech.com,
-        feng.tang@intel.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        chengkaitao@didiglobal.com
+References: <20221130092847.2092-1-thunder.leizhen@huawei.com>
+ <CAPDyKFphNdR-TorULpbsMtM6MzqsaK_UdSmG9Hin=wunUwJwJQ@mail.gmail.com> <d9d44a9c-e61e-2803-731b-cfa5f3d3d46c@huawei.com>
+In-Reply-To: <d9d44a9c-e61e-2803-731b-cfa5f3d3d46c@huawei.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 30 Nov 2022 12:33:24 +0100
+Message-ID: <CAPDyKFrbRcEgtwbgBY8bsDW3YTtXJBS0zRhJq-Emf89hDWaUjg@mail.gmail.com>
+Subject: Re: [PATCH] mmc: core: Fix error return code in sd_read_ext_regs()
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 4:41 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+On Wed, 30 Nov 2022 at 12:18, Leizhen (ThunderTown)
+<thunder.leizhen@huawei.com> wrote:
 >
-> On 11/30/22 14:01, chengkaitao wrote:
-> > From: chengkaitao <pilgrimtao@gmail.com>
+>
+>
+> On 2022/11/30 18:04, Ulf Hansson wrote:
+> > On Wed, 30 Nov 2022 at 10:29, Zhen Lei <thunder.leizhen@huawei.com> wrote:
+> >>
+> >> Fix to return a negative error code from the error handling
+> >> case instead of 0, as done elsewhere in this function.
+> >>
+> >> Fixes: c784f92769ae ("mmc: core: Read the SD function extension registers for power management")
+> >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> >> ---
+> >>  drivers/mmc/core/sd.c | 1 +
+> >>  1 file changed, 1 insertion(+)
+> >>
+> >> diff --git a/drivers/mmc/core/sd.c b/drivers/mmc/core/sd.c
+> >> index 3662bf5320ce56d..7b64f76f0179ca8 100644
+> >> --- a/drivers/mmc/core/sd.c
+> >> +++ b/drivers/mmc/core/sd.c
+> >> @@ -1277,6 +1277,7 @@ static int sd_read_ext_regs(struct mmc_card *card)
+> >>         if (rev != 0 || len > 512) {
+> >>                 pr_warn("%s: non-supported SD ext reg layout\n",
+> >>                         mmc_hostname(card->host));
+> >> +               err = -EOPNOTSUPP;
 > >
+> > The original intent was to not return an error code. Simply, because
+> > the card remains functional and all but the new features from the SD
+> > function extensions registers can still be used.
 >
-> Yikes! Another patch from ZTE guys.
+> OK, I got it.
 >
-> I'm suspicious to patches sent from them due to bad reputation with
-> kernel development community. First, they sent all patches via
-> cgel.zte@gmail.com (listed in Cc) but Greg can't sure these are really
-> sent from them ([1] & [2]). Then they tried to workaround by sending
-> from their personal Gmail accounts, again with same response from him
-> [3]. And finally they sent spoofed emails (as he pointed out in [4]) -
-> they pretend to send from ZTE domain but actually sent from their
-> different domain (see raw message and look for X-Google-Original-From:
-> header.
+> >
+> > Perhaps, we should update the comment a few lines above to better
+> > reflect that this is in-fact what we intend here.
+>
+> How about also add 'warning' to the output? The other two outputs
+> contain the 'error' keyword.
 
-Hi Bagas Sanjaya,
-
-I'm not an employee of ZTE, just an ordinary developer. I really don't know
-all the details about community and ZTE, The reason why I cc cgel.zte@gmail.com
-is because the output of the script <get_maintainer.pl> has the
-address <cgel.zte@gmail.com>.
-
-If there is any error in the format of the email, I will try my best
-to correct it.
+There is already a pr_warn(), or is there something you want to add to that?
 
 >
-> I was about to review documentation part of this patch, but due to
-> concerns above, I have to write this reply instead. So I'm not going
-> to review, sorry for inconvenience.
->
-> PS: Adding Greg to Cc: list.
->
-> [1]: https://lore.kernel.org/lkml/Yw94xsOp6gvdS0UF@kroah.com/
-> [2]: https://lore.kernel.org/lkml/Yylv5hbSBejJ58nt@kroah.com/
-> [3]: https://lore.kernel.org/lkml/Y1EVnZS9BalesrC1@kroah.com/
-> [4]: https://lore.kernel.org/lkml/Y3NrBvIV7lH2GrWz@kroah.com/
->
-> --
-> An old man doll... just what I always wanted! - Clara
->
+> >
+> >>                 goto out;
+> >>         }
+> >>
 
-
--- 
-Yours,
-Kaitao Cheng
+Kind regards
+Uffe
