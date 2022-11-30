@@ -2,123 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0003E63E009
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:53:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B01763E031
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:54:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbiK3SxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:53:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
+        id S231563AbiK3Syg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:54:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbiK3Sw5 (ORCPT
+        with ESMTP id S231557AbiK3Syc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:52:57 -0500
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518CF1B7B4;
-        Wed, 30 Nov 2022 10:52:48 -0800 (PST)
-Received: by mail-wm1-f46.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so2158805wmb.2;
-        Wed, 30 Nov 2022 10:52:48 -0800 (PST)
+        Wed, 30 Nov 2022 13:54:32 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE1063D73
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:54:24 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id mh8-20020a17090b4ac800b0021348e084a0so3175557pjb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:54:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=kT7qAueBeGRnOJjj9r+kURoSnmaGiK5XiYcd6AOaEjs=;
+        b=KBjf0M5mFzj8Y8FdDNyMasuByqyi/Ln81ZfaaVTpRJq/hZs/smb8OyyKtMCLJL0OwX
+         QgXO+vSHteLh44HdAGy/i8wLHg/HRv4y2qoiHTYyOcjNr1EWKAw5Owvbx/5bHNUo9zTy
+         JtGMBflHJwIcXi8DBAJA0E93yEw9GlcUC0rymXaPPJ4NyaFOvepzaDwCzySIngnZCgRO
+         CpD+41c5Zbj053rMiRV7gpj/XYK6XEVps/+LFqpFQx+/KXcXWgkUuw45RBru0eZP2DYS
+         zPkKYOSLVcqjT+oBa879XNwgfc/kvDsBu7qyH4MQmUMmWIquX7bBLYLZ4eA8H17U0i86
+         14dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=37mvhHvnN9tIEk/mahtS0ysu6GiJkb+pcUB5MovB1AQ=;
-        b=aX+vm/hKec+Nn+3/ZFoZSBxAuQUl5qcRiZL2bP9Sdp8aSVnJz8+mrDGweN3nEN1LNc
-         7f9qqrFy+0ICOOSd28jCm4uocYWOIoJaEysGnHFuXJ2Im4woMln1nyM/Xs0w7Wp6Woou
-         ecmQq5ylHB5gK75Zf8tHhS50Vq3rhobiyCVqO5Pr6mW2senpKoDMaLqBVq1VF6DZzU4K
-         zS4eX2KYEzDYctr87+hNKn0zb2adpYWItxxP5kJUurqgvjCYwAQQ+cDkDAGN+WrUC81z
-         gkHfya3nQDHCJpfsKeLgYJ7F7ehYZ7bkR5u8ZQvpB0xOIJ8MdyXod8uYBv8qcLXWZDqR
-         R90A==
-X-Gm-Message-State: ANoB5pnitUjBredYQh9JGDG+5yhijMiDxD2YM93fefV23rf9//GXmasK
-        YOFp5EyJ9eJVcqV3QQESYEEnB8OtJ7tFNOcoqYoljAJm
-X-Google-Smtp-Source: AA0mqf6rzAiBNwGFzyYND35PgFg4ZA7Q1B5uIplVux3+ixP2BzDBLEbBYgU3y2ZfZ6ML9ZC0pldHMRthLYx13hrfiQQ=
-X-Received: by 2002:a05:600c:5012:b0:3cf:486f:2700 with SMTP id
- n18-20020a05600c501200b003cf486f2700mr37490744wmr.83.1669834367131; Wed, 30
- Nov 2022 10:52:47 -0800 (PST)
-MIME-Version: 1.0
-References: <20221130062935.2219247-1-irogers@google.com> <20221130062935.2219247-3-irogers@google.com>
-In-Reply-To: <20221130062935.2219247-3-irogers@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 30 Nov 2022 10:52:35 -0800
-Message-ID: <CAM9d7cg1pmkMTFEoK7tNxQTmux7obr7KPr-5SPNDrB=S5Xp=vw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] perf util: Add host_is_bigendian to util.h
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kT7qAueBeGRnOJjj9r+kURoSnmaGiK5XiYcd6AOaEjs=;
+        b=W1c/LONRrangIEEnFiVjehUJE+L3P4iWx0qSffTRqcKa93e/egEEMsiFlRaCZ9RnkO
+         SR18FIgvwySEvBtYDxTPKf7Fp/tciNEHaksqE+b+jr1xPPh0ToJitdGJSVHqvE88rhcd
+         SEZLfP4wFJpKC8xPLxY77mscbACdsRgi6D4iqiFRcDlqrcmSXek46+d7ISWo23YRX+gD
+         3ImS8AFoV4haLBWLjiXwB9C3RzqqKFgeCiMoTl3vxAn3Hsj+9EA6yzNaW0lCMkbnGlhq
+         90mEhlMFVa1Q84bKpPzvFlknaRGUo1uuzamI4eIRqXqeA7rflSpfR3NPbMlVkBeRMCgp
+         281A==
+X-Gm-Message-State: ANoB5pl3PoXSsy42if2SRtJs2lcQkqsUPZqAANLK3mj8dU94niRaQ5lo
+        KcQYIvG0cMDpDaUaKXFRsWS8jkb00gaHCA==
+X-Google-Smtp-Source: AA0mqf50N2ZHnlyNInYxdEtvcPvTFPBU6JBGmcFP8plOK9ArHUIGpYashXWgYG8PnoEilV1v+VFLWksRuxHpAw==
+X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
+ (user=dlatypov job=sendgmr) by 2002:a17:90a:43a4:b0:219:1d0a:34a6 with SMTP
+ id r33-20020a17090a43a400b002191d0a34a6mr2435533pjg.1.1669834463839; Wed, 30
+ Nov 2022 10:54:23 -0800 (PST)
+Date:   Wed, 30 Nov 2022 10:54:19 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221130185419.2552673-1-dlatypov@google.com>
+Subject: [PATCH] kunit: tool: make parser preserve whitespace when printing
+ test log
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 10:30 PM Ian Rogers <irogers@google.com> wrote:
->
-> Avoid libtraceevent dependency for tep_is_bigendian or trace-event.h
-> dependency for bigendian. Add a new host_is_bigendian to util.h, using
-> the compiler defined __BYTE_ORDER__ when available.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
+Currently, kunit_parser.py is stripping all leading whitespace to make
+parsing easier. But this means we can't accurately show kernel output
+for failing tests or when the kernel crashes.
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+Embarassingly, this affects even KUnit's own output, e.g.
+[13:40:46] Expected 2 + 1 == 2, but
+[13:40:46] 2 + 1 == 3 (0x3)
+[13:40:46] not ok 1 example_simple_test
+[13:40:46] [FAILED] example_simple_test
 
-A nit below...
+After this change, here's what the output in context would look like
+[13:40:46] =================== example (4 subtests) ===================
+[13:40:46] # example_simple_test: initializing
+[13:40:46] # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
+[13:40:46] Expected 2 + 1 == 2, but
+[13:40:46]     2 + 1 == 3 (0x3)
+[13:40:46] [FAILED] example_simple_test
+[13:40:46] [SKIPPED] example_skip_test
+[13:40:46] [SKIPPED] example_mark_skipped_test
+[13:40:46] [PASSED] example_all_expect_macros_test
+[13:40:46]     # example: initializing suite
+[13:40:46] # example: pass:1 fail:1 skip:2 total:4
+[13:40:46] # Totals: pass:1 fail:1 skip:2 total:4
+[13:40:46] ===================== [FAILED] example =====================
 
-> ---
-[SNIP]
-> diff --git a/tools/perf/util/util.h b/tools/perf/util/util.h
-> index 63cdab0e5314..87d418cb6792 100644
-> --- a/tools/perf/util/util.h
-> +++ b/tools/perf/util/util.h
-> @@ -94,4 +94,23 @@ int do_realloc_array_as_needed(void **arr, size_t *arr_sz, size_t x,
->                 0;                                              \
->         })
->
-> +static inline bool host_is_bigendian(void)
-> +{
-> +#ifdef __BYTE_ORDER__
-> +#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-> +       return false;
-> +#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-> +       return true;
-> +#else
-> +#error "Unrecognized __BYTE_ORDER__"
-> +#endif
-> +#else
+This example shows one minor cosmetic defect this approach has.
+The test counts lines prevent us from dedenting the suite-level output.
+But at the same time, any form of non-KUnit output would do the same
+unless it happened to be indented as well.
 
-It'd be nice if we could have a comment at least there's a nested
-ifdef condition.  Like below?
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ tools/testing/kunit/kunit.py           |  2 +-
+ tools/testing/kunit/kunit_parser.py    | 27 +++++++++++++-------------
+ tools/testing/kunit/kunit_tool_test.py |  2 ++
+ 3 files changed, 16 insertions(+), 15 deletions(-)
 
-#else  /* !__BYTE_ORDER__ */
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index e7b6549712d6..43fbe96318fe 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -202,7 +202,7 @@ def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input
+ 		if request.raw_output == 'all':
+ 			pass
+ 		elif request.raw_output == 'kunit':
+-			output = kunit_parser.extract_tap_lines(output, lstrip=False)
++			output = kunit_parser.extract_tap_lines(output)
+ 		for line in output:
+ 			print(line.rstrip())
+ 		parse_time = time.time() - parse_start
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 99b8f058db40..a225799f6b1b 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -13,6 +13,7 @@ from __future__ import annotations
+ from dataclasses import dataclass
+ import re
+ import sys
++import textwrap
+ 
+ from enum import Enum, auto
+ from typing import Iterable, Iterator, List, Optional, Tuple
+@@ -208,12 +209,12 @@ class LineStream:
+ 
+ # Parsing helper methods:
+ 
+-KTAP_START = re.compile(r'KTAP version ([0-9]+)$')
+-TAP_START = re.compile(r'TAP version ([0-9]+)$')
+-KTAP_END = re.compile('(List of all partitions:|'
++KTAP_START = re.compile(r'\s*KTAP version ([0-9]+)$')
++TAP_START = re.compile(r'\s*TAP version ([0-9]+)$')
++KTAP_END = re.compile(r'\s*(List of all partitions:|'
+ 	'Kernel panic - not syncing: VFS:|reboot: System halted)')
+ 
+-def extract_tap_lines(kernel_output: Iterable[str], lstrip=True) -> LineStream:
++def extract_tap_lines(kernel_output: Iterable[str]) -> LineStream:
+ 	"""Extracts KTAP lines from the kernel output."""
+ 	def isolate_ktap_output(kernel_output: Iterable[str]) \
+ 			-> Iterator[Tuple[int, str]]:
+@@ -239,11 +240,8 @@ def extract_tap_lines(kernel_output: Iterable[str], lstrip=True) -> LineStream:
+ 				# stop extracting KTAP lines
+ 				break
+ 			elif started:
+-				# remove the prefix and optionally any leading
+-				# whitespace. Our parsing logic relies on this.
++				# remove the prefix, if any.
+ 				line = line[prefix_len:]
+-				if lstrip:
+-					line = line.lstrip()
+ 				yield line_num, line
+ 	return LineStream(lines=isolate_ktap_output(kernel_output))
+ 
+@@ -298,7 +296,7 @@ def parse_ktap_header(lines: LineStream, test: Test) -> bool:
+ 	lines.pop()
+ 	return True
+ 
+-TEST_HEADER = re.compile(r'^# Subtest: (.*)$')
++TEST_HEADER = re.compile(r'^\s*# Subtest: (.*)$')
+ 
+ def parse_test_header(lines: LineStream, test: Test) -> bool:
+ 	"""
+@@ -322,7 +320,7 @@ def parse_test_header(lines: LineStream, test: Test) -> bool:
+ 	lines.pop()
+ 	return True
+ 
+-TEST_PLAN = re.compile(r'1\.\.([0-9]+)')
++TEST_PLAN = re.compile(r'^\s*1\.\.([0-9]+)')
+ 
+ def parse_test_plan(lines: LineStream, test: Test) -> bool:
+ 	"""
+@@ -350,9 +348,9 @@ def parse_test_plan(lines: LineStream, test: Test) -> bool:
+ 	lines.pop()
+ 	return True
+ 
+-TEST_RESULT = re.compile(r'^(ok|not ok) ([0-9]+) (- )?([^#]*)( # .*)?$')
++TEST_RESULT = re.compile(r'^\s*(ok|not ok) ([0-9]+) (- )?([^#]*)( # .*)?$')
+ 
+-TEST_RESULT_SKIP = re.compile(r'^(ok|not ok) ([0-9]+) (- )?(.*) # SKIP(.*)$')
++TEST_RESULT_SKIP = re.compile(r'^\s*(ok|not ok) ([0-9]+) (- )?(.*) # SKIP(.*)$')
+ 
+ def peek_test_name_match(lines: LineStream, test: Test) -> bool:
+ 	"""
+@@ -511,8 +509,9 @@ def print_test_header(test: Test) -> None:
+ 
+ def print_log(log: Iterable[str]) -> None:
+ 	"""Prints all strings in saved log for test in yellow."""
+-	for m in log:
+-		stdout.print_with_timestamp(stdout.yellow(m))
++	formatted = textwrap.dedent('\n'.join(log))
++	for line in formatted.splitlines():
++		stdout.print_with_timestamp(stdout.yellow(line))
+ 
+ def format_test_result(test: Test) -> str:
+ 	"""
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 1ef921ac4331..0c2190514103 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -336,12 +336,14 @@ class KUnitParserTest(unittest.TestCase):
+ 		KTAP version 1
+ 		1..1
+ 		  Test output.
++		    Indented more.
+ 		not ok 1 test1
+ 		"""
+ 		result = kunit_parser.parse_run_tests(output.splitlines())
+ 		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
+ 
+ 		self.print_mock.assert_any_call(StrContains('Test output.'))
++		self.print_mock.assert_any_call(StrContains('  Indented more.'))
+ 		self.noPrintCallContains('not ok 1 test1')
+ 
+ def line_stream_from_strs(strs: Iterable[str]) -> kunit_parser.LineStream:
 
-Thanks,
-Namhyung
+base-commit: 0f08f3e2a0186dfb8e33cb46105228eb18448a0e
+-- 
+2.38.1.584.g0f3c55d4c2-goog
 
-
-> +       unsigned char str[] = { 0x1, 0x2, 0x3, 0x4, 0x0, 0x0, 0x0, 0x0};
-> +       unsigned int *ptr;
-> +
-> +       ptr = (unsigned int *)(void *)str;
-> +       return *ptr == 0x01020304;
-> +#endif
-> +}
-> +
->  #endif /* __PERF_UTIL_H */
-> --
-> 2.38.1.584.g0f3c55d4c2-goog
->
