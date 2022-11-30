@@ -2,57 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 290CB63E061
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:58:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C6C63E063
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 19:59:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiK3S6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 13:58:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
+        id S229609AbiK3S66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 13:58:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbiK3S6Q (ORCPT
+        with ESMTP id S229628AbiK3S6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 13:58:16 -0500
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FD69D810;
-        Wed, 30 Nov 2022 10:58:08 -0800 (PST)
-Received: by mail-qv1-f52.google.com with SMTP id s14so837193qvo.11;
-        Wed, 30 Nov 2022 10:58:08 -0800 (PST)
+        Wed, 30 Nov 2022 13:58:51 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9738630B
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:58:50 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id h11so21360757wrw.13
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 10:58:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=87ENfYXIDebjZ9OJXAGQbQFZb77jhLjiCr56B3zGCYY=;
+        b=awR/NO0ZrJmArjac1OjpJ/hysKu0BXmmhK8kas2lLXQ+lsZruBp/T+e8hBth93qQrB
+         d7rk8OH4vXzbf56ZmY4FgdUQ2SHYRoh2mNK64pFP3pqZf9WZtrdKJFyeU8Ku4xTNrJ3E
+         flLan7iV9TCIELgZkoDeTCLcslMoavpnvel7apsXmboEtZ/maaQMY3yPlmhrPcfPKZ8N
+         a1uJ518MPpe+qGw7dfbOQD7WaRRgoNFax++FUY5/7vH4VykzKmLN/EG6T7kGN9RnuT53
+         3+EYKu30lgSfSFDH238akOIpU//OgoPq3P/KWU27lenRibpXgP84HvhlT/Lhyk/e4cjW
+         Nz0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NV+aRXYKE3DBJkVT9Hd67uMEpdGk6soKLvDOrRjSNtA=;
-        b=w4RcxxKftt4X0fjNm1LtCCzIouoJuiFvvtWEAidXDB1FWV63JtNxl/fa9Zkm7A4EpD
-         R4jBWHuRs4dxmzzCbBiTeqKzHcecpKTUGh4ikKC0rYtbB7GEltLWUZLlbD6dF2hQIA5E
-         qXM0LzeFIAfyi+jwp6YutV9YoPT6d2L6Fika/aNqWoQnLuhnfsi0iHb4xrqRvr0e+WPq
-         UlMjF745nyPwEuUz3aHljRZf60C4M3mrEcrUiMxUGIbvsP19q6VjmYmxHG7JvU2Wwq3s
-         KRECC6iS9iLHu/q1w1UPZ+V0SmDC6jIRsFknTStQ+Tu+bighz4lY6KiM0GhdWSNhnCEo
-         5+PA==
-X-Gm-Message-State: ANoB5pnMhM6HC124U5od+fMbwmacBUwQfKpc5eDQ5e+Ft80D7EkFKXCs
-        H4xxaSCY95dIBI39HFq8a8rbMPck9H43mGwvyd2tY78H
-X-Google-Smtp-Source: AA0mqf6JIen0xJ+raeq9RHWsftljVBvuBEfkR0LnNkUAF/LU5cSSc7sUepqo5TOLYZwnlMqJAXGMlMdNc3ZKRmn74o8=
-X-Received: by 2002:a0c:c582:0:b0:4af:b750:b569 with SMTP id
- a2-20020a0cc582000000b004afb750b569mr41510179qvj.83.1669834687400; Wed, 30
- Nov 2022 10:58:07 -0800 (PST)
+        bh=87ENfYXIDebjZ9OJXAGQbQFZb77jhLjiCr56B3zGCYY=;
+        b=T+IbpA77W5K0VzZNhJzzIsliWGXrTk9sPMPUEScI3q3tKBBdIblEoFR1thzkMdzJ4B
+         C0M+QbEi5/GMuqvLUq1+sP8g2rKR4qyYFASyJpER0mKw3ASX+fXresoX73FtWaLwqO4f
+         pWHP9zFv2ip8azNQXfOFWJejvHwuFgvDPkr7pnUdO+ZQ979YqE/Ivav4mtWhwUfjOruS
+         yRPVJjP37LoRH4juwJC2y1Y1Y8xunZ1FoHLXFyZlROq/yK7vhb4fVQjmGN7qFpwzo7Qf
+         NsBlF9o/ZkshvTFhP6kJO0tFYN+FOxzCXgqnVzp3qzoPZWLIyZKPFUQHcoFz4y4nzax2
+         epOQ==
+X-Gm-Message-State: ANoB5pknrWg+OeLBSLYNH49A/FOgNtKUlaNVEfdmNZEQBiSzvu4Lvgkp
+        vnl4bO0WO6dpOoqWFjKUECuiMlJP7jKPrlFHTljTvQ==
+X-Google-Smtp-Source: AA0mqf6pNJJwFRwvQ9Nbbx/FXqmlOjbohE6MouQre6Ex1OPGnWlI+tSuTGt1dEi3R3LZe0wMGhbdS/xShyGraTWY2ls=
+X-Received: by 2002:adf:e2c9:0:b0:241:db86:176d with SMTP id
+ d9-20020adfe2c9000000b00241db86176dmr28759168wrj.40.1669834729092; Wed, 30
+ Nov 2022 10:58:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20221121153540.10494-1-ggherdovich@suse.cz>
-In-Reply-To: <20221121153540.10494-1-ggherdovich@suse.cz>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Nov 2022 19:57:56 +0100
-Message-ID: <CAJZ5v0iFe-jeVw_VfqG+xgxN_VVWXHEx9r4S_dGERWsWDNPxPA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Add Sapphire Rapids support in
- no-HWP mode
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <1668411720-3581-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1669310088-13482-1-git-send-email-renyu.zj@linux.alibaba.com> <1669310088-13482-6-git-send-email-renyu.zj@linux.alibaba.com>
+In-Reply-To: <1669310088-13482-6-git-send-email-renyu.zj@linux.alibaba.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 30 Nov 2022 10:58:37 -0800
+Message-ID: <CAP-5=fV0WSTK=MT6K2nqsqYT6xCTg7Pv_rXahHFeRhV0ZHCiEQ@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] perf vendor events arm64: Add PE utilization
+ metrics for neoverse-n2
+To:     Jing Zhang <renyu.zj@linux.alibaba.com>
+Cc:     John Garry <john.g.garry@oracle.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,38 +86,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 4:35 PM Giovanni Gherdovich <ggherdovich@suse.cz> wrote:
+On Thu, Nov 24, 2022 at 9:15 AM Jing Zhang <renyu.zj@linux.alibaba.com> wrote:
 >
-> Users may disable HWP in firmware, in which case intel_pstate wouldn't load
-> unless the CPU model is explicitly supported.
+> Add PE utilization related metrics.
 >
-> See also the following past commits:
->
-> commit d8de7a44e11f ("cpufreq: intel_pstate: Add Skylake servers support")
-> commit 706c5328851d ("cpufreq: intel_pstate: Add Cometlake support in
-> no-HWP mode")
-> commit fbdc21e9b038 ("cpufreq: intel_pstate: Add Icelake servers support in
-> no-HWP mode")
-> commit 71bb5c82aaae ("cpufreq: intel_pstate: Add Tigerlake support in
-> no-HWP mode")
->
-> Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
+> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
 > ---
->  drivers/cpufreq/intel_pstate.c | 1 +
->  1 file changed, 1 insertion(+)
+>  .../arch/arm64/arm/neoverse-n2/metrics.json        | 45 ++++++++++++++++++++++
+>  1 file changed, 45 insertions(+)
 >
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 6ff73c30769f..181cd6b045ff 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -2378,6 +2378,7 @@ static const struct x86_cpu_id intel_pstate_cpu_ids[] = {
->         X86_MATCH(COMETLAKE,            core_funcs),
->         X86_MATCH(ICELAKE_X,            core_funcs),
->         X86_MATCH(TIGERLAKE,            core_funcs),
-> +       X86_MATCH(SAPPHIRERAPIDS_X,     core_funcs),
->         {}
->  };
->  MODULE_DEVICE_TABLE(x86cpu, intel_pstate_cpu_ids);
-> --
+> diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+> index 23c7d62..7b54819 100644
+> --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+> +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+> @@ -189,5 +189,50 @@
+>          "MetricGroup": "Branch",
+>          "MetricName": "branch_miss_pred_rate",
+>          "ScaleUnit": "100%"
+> +    },
+> +    {
+> +        "MetricExpr": "instructions / CPU_CYCLES",
+> +        "PublicDescription": "The average number of instructions executed for each cycle.",
+> +        "BriefDescription": "Instructions per cycle",
+> +        "MetricGroup": "PEutilization",
+> +        "MetricName": "ipc"
+> +    },
 
-Applied as 6.2 material, thanks!
+A related useful metric is percentage of peak, so if the peak IPC is 8
+(usually a constant related to the number of functional units) then
+you can just compute the ratio of IPC with this.
+
+> +    {
+> +        "MetricExpr": "INST_RETIRED / CPU_CYCLES",
+> +        "PublicDescription": "Architecturally executed Instructions Per Cycle (IPC)",
+> +        "BriefDescription": "Architecturally executed Instructions Per Cycle (IPC)",
+
+
+The duplicated descriptions are unnecessary. Drop the public one for
+consistency with what we do for Intel:
+https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py#L299
+
+> +        "MetricGroup": "PEutilization",
+> +        "MetricName": "retired_ipc"
+> +    },
+> +    {
+> +        "MetricExpr": "INST_SPEC / CPU_CYCLES",
+> +        "PublicDescription": "Speculatively executed Instructions Per Cycle (IPC)",
+> +        "BriefDescription": "Speculatively executed Instructions Per Cycle (IPC)",
+> +        "MetricGroup": "PEutilization",
+> +        "MetricName": "spec_ipc"
+> +    },
+> +    {
+> +        "MetricExpr": "OP_RETIRED / OP_SPEC",
+> +        "PublicDescription": "Fraction of operations retired",
+> +        "BriefDescription": "Fraction of operations retired",
+
+Would instructions be clearer than operations here?
+
+> +        "MetricGroup": "PEutilization",
+> +        "MetricName": "retired_rate",
+> +        "ScaleUnit": "100%"
+> +    },
+> +    {
+> +        "MetricExpr": "1 - OP_RETIRED / OP_SPEC",
+
+Should OP_RETIRED be greater than OP_SPEC? In which case won't this
+metric be negative?
+
+> +        "PublicDescription": "Fraction of operations wasted",
+> +        "BriefDescription": "Fraction of operations wasted",
+> +        "MetricGroup": "PEutilization",
+> +        "MetricName": "wasted_rate",
+> +        "ScaleUnit": "100%"
+> +    },
+> +    {
+> +        "MetricExpr": "OP_RETIRED / OP_SPEC * (1 - (STALL_SLOT - CPU_CYCLES) / (CPU_CYCLES * 5))",
+> +        "PublicDescription": "Utilization of CPU",
+> +        "BriefDescription": "Utilization of CPU",
+
+Some more detail in the description would be useful.
+
+> +        "MetricGroup": "PEutilization",
+> +        "MetricName": "cpu_utilization",
+> +        "ScaleUnit": "100%"
+>      }
+>  ]
+> --
+> 1.8.3.1
+>
