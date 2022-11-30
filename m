@@ -2,123 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0313663D717
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:47:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9FCB63D725
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 14:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbiK3Nrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 08:47:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
+        id S230222AbiK3NtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 08:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiK3Nrk (ORCPT
+        with ESMTP id S230011AbiK3NtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 08:47:40 -0500
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8EC1101;
-        Wed, 30 Nov 2022 05:47:38 -0800 (PST)
-Received: by mail-oi1-f176.google.com with SMTP id t62so18728498oib.12;
-        Wed, 30 Nov 2022 05:47:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gak/3RKX7XYoG4HonhN+fE0X+MnSoJz/FUAaVKDSypw=;
-        b=DspuHJva8xCGOWNNyGrBt0tCvHOecmGce6tIWDMb68DIfgDd1V1xvRz7zm1LGakFub
-         DDRNevXn8ONh4yJRyk1JzuLjuTmdPkQHmxcmhbS1ZnGfn8p9pr9uQXcM1AUPEtRzGgYB
-         MisZiDnZcE4WTgn509ba5IjrMdgYHIxrf16PJRI7Degxk2f61PwHcP0RY/zPPRf72BpF
-         b2nS2opap0tD5k/fDjPhYB1Y+V40ub0hKcl6fMCPhND8ToJfKWwcSHvuCRraUxDpJ05+
-         Olj1YNTJsSBtSrz5HaV1rvoXTaz42LrxLYezFdYbU9OkWKh0W9UI9rTwFR/wJDmgqiAI
-         7iLQ==
-X-Gm-Message-State: ANoB5pn+VHPaw/wtRke9MA/Et0qnnOugW8r2Xn/EBhCZEMkP8/ptQWY5
-        IlZt4OauO7P/db3cOgjXjw==
-X-Google-Smtp-Source: AA0mqf6fMAoP/58oEsz3Wca9wUM11OobHl3sPwSCVzO8EB7MwtdlW8G2g9IbykGNOR0G2UCElHT3mw==
-X-Received: by 2002:aca:1004:0:b0:350:d543:7554 with SMTP id 4-20020aca1004000000b00350d5437554mr31513963oiq.251.1669816057469;
-        Wed, 30 Nov 2022 05:47:37 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id cv31-20020a056870c69f00b00143cfb377b4sm1214314oab.6.2022.11.30.05.47.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 05:47:36 -0800 (PST)
-Received: (nullmailer pid 1848613 invoked by uid 1000);
-        Wed, 30 Nov 2022 13:47:34 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Wed, 30 Nov 2022 08:49:11 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DE3218BB;
+        Wed, 30 Nov 2022 05:49:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669816150; x=1701352150;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=EyJFPG6PhV/AwdfzlcYIAHQ0QmtsikwhVNregiJywak=;
+  b=W6k2S1Pgs1JtmKpFI2qJvzwzACxulY1RmXNqcm0O432WGIjGJiTwpTCm
+   3qoKfHEdNRtiMMRQGecDTwMUvH5V5W5iamVmmwMwr5G2QW2J5g/hTe+0N
+   My3LmaUn2/a0sLhNO0/KiyjXGYcshaYI4HMjDXdpvvXkl8sSMo2Ko9nAX
+   q5v8u4IOJti8jGo8qwRy+7l9HT/P721xThXq5cVJVoA/9pAIetyt80oz3
+   1GK+tcFM/n+QzSsKWh5he2UFdDVsnF2Veob2/hksuqbUpAX5yoHpozUrg
+   lk806IluZOfM2L4iUMP/H9+h//MOf/EAr/B6YXLDCC0yfvFQ3WQUyl1sQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="298769783"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="298769783"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 05:48:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="676825898"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="676825898"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 30 Nov 2022 05:48:12 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 89D29179; Wed, 30 Nov 2022 15:48:39 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>
+Subject: [PATCH v5 1/4] i915: Move list_count() to list.h as list_count_nodes() for broader use
+Date:   Wed, 30 Nov 2022 15:48:35 +0200
+Message-Id: <20221130134838.23805-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     linux-remoteproc@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>
-In-Reply-To: <20221114-narmstrong-sm8550-upstream-remoteproc-v2-2-12bc22255474@linaro.org>
-References: <20221114-narmstrong-sm8550-upstream-remoteproc-v2-0-12bc22255474@linaro.org>
- <20221114-narmstrong-sm8550-upstream-remoteproc-v2-2-12bc22255474@linaro.org>
-Message-Id: <166981596760.1846592.11317546499813728073.robh@kernel.org>
-Subject: Re: [PATCH v2 2/5] dt-bindings: remoteproc: qcom: adsp: document
- sm8550 adsp, cdsp & mpss compatible
-Date:   Wed, 30 Nov 2022 07:47:34 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Some of the existing users, and definitely will be new ones, want to
+count existing nodes in the list. Provide a generic API for that by
+moving code from i915 to list.h.
 
-On Wed, 30 Nov 2022 11:29:46 +0100, Neil Armstrong wrote:
-> This documents the compatible for the component used to boot the
-> aDSP, cDSP and MPSS on the SM8550 SoC.
-> 
-> The SM8550 boot process on SM8550 now requires a secondary "Devicetree"
-> firmware to be passed along the main Firmware, and the cDSP a new power
-> domain named "NSP".
-> 
-> A third memory domain for the DSM memory zone is also needed for the MPSS
-> PAS bindings.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../bindings/remoteproc/qcom,sm8550-pas.yaml       | 195 +++++++++++++++++++++
->  1 file changed, 195 insertions(+)
-> 
+Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
+Acked-by: Jani Nikula <jani.nikula@intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v5: added tag (Lucas), renamed API to list_count_nodes() (LKP)
+v4: fixed prototype when converting to static inline
+v3: added tag (Jani), changed to be static inline (Mike)
+v2: dropped the duplicate code in i915 (LKP)
+ drivers/gpu/drm/i915/gt/intel_engine_cs.c | 15 ++-------------
+ include/linux/list.h                      | 15 +++++++++++++++
+ 2 files changed, 17 insertions(+), 13 deletions(-)
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/remoteproc/qcom,sm8550-pas.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/remoteproc/qcom,pas-common.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/remoteproc/qcom,sm8550-pas.example.dtb: remoteproc@30000000: False schema does not allow {'compatible': ['qcom,sm8550-adsp-pas'], 'reg': [[805306368, 256]], 'clocks': [[4294967295, 0]], 'clock-names': ['xo'], 'interrupts-extended': [[4294967295, 6, 1], [4294967295, 0, 1], [4294967295, 1, 1], [4294967295, 2, 1], [4294967295, 3, 1]], 'interrupt-names': ['wdog', 'fatal', 'ready', 'handover', 'stop-ack'], 'memory-region': [[4294967295], [4294967295]], 'firmware-name': ['qcom/sm8550/adsp.mbn', 'qcom/sm8550/adsp_dtb.mbn'], 'power-domains': [[4294967295], [4294967295]], 'power-domain-names': ['lcx', 'lmx'], 'qcom,qmp': [[4294967295]], 'qcom,smem-states': [[4294967295, 0]], 'qcom,smem-state-names': ['stop'], 'glink-edge': {'interrupts-extended': [[4294967295, 3, 0, 1]], 'mboxes': [[4294967295, 3, 0]], 'label': ['lpass'], 'qcom,remote-pid': [[2]]}, '$nodename': ['remoteproc@30000000']}
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/remoteproc/qcom,sm8550-pas.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/remoteproc/qcom,sm8550-pas.example.dtb: remoteproc@30000000: Unevaluated properties are not allowed ('glink-edge', 'qcom,smem-state-names', 'qcom,smem-states' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/remoteproc/qcom,sm8550-pas.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221114-narmstrong-sm8550-upstream-remoteproc-v2-2-12bc22255474@linaro.org
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+diff --git a/drivers/gpu/drm/i915/gt/intel_engine_cs.c b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
+index 1f7188129cd1..370164363b0d 100644
+--- a/drivers/gpu/drm/i915/gt/intel_engine_cs.c
++++ b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
+@@ -2004,17 +2004,6 @@ static void print_request_ring(struct drm_printer *m, struct i915_request *rq)
+ 	}
+ }
+ 
+-static unsigned long list_count(struct list_head *list)
+-{
+-	struct list_head *pos;
+-	unsigned long count = 0;
+-
+-	list_for_each(pos, list)
+-		count++;
+-
+-	return count;
+-}
+-
+ static unsigned long read_ul(void *p, size_t x)
+ {
+ 	return *(unsigned long *)(p + x);
+@@ -2189,8 +2178,8 @@ void intel_engine_dump(struct intel_engine_cs *engine,
+ 	spin_lock_irqsave(&engine->sched_engine->lock, flags);
+ 	engine_dump_active_requests(engine, m);
+ 
+-	drm_printf(m, "\tOn hold?: %lu\n",
+-		   list_count(&engine->sched_engine->hold));
++	drm_printf(m, "\tOn hold?: %zu\n",
++		   list_count_nodes(&engine->sched_engine->hold));
+ 	spin_unlock_irqrestore(&engine->sched_engine->lock, flags);
+ 
+ 	drm_printf(m, "\tMMIO base:  0x%08x\n", engine->mmio_base);
+diff --git a/include/linux/list.h b/include/linux/list.h
+index 61762054b4be..f10344dbad4d 100644
+--- a/include/linux/list.h
++++ b/include/linux/list.h
+@@ -655,6 +655,21 @@ static inline void list_splice_tail_init(struct list_head *list,
+ 	     !list_is_head(pos, (head)); \
+ 	     pos = n, n = pos->prev)
+ 
++/**
++ * list_count_nodes - count nodes in the list
++ * @head:	the head for your list.
++ */
++static inline size_t list_count_nodes(struct list_head *head)
++{
++	struct list_head *pos;
++	size_t count = 0;
++
++	list_for_each(pos, head)
++		count++;
++
++	return count;
++}
++
+ /**
+  * list_entry_is_head - test if the entry points to the head of the list
+  * @pos:	the type * to cursor
+-- 
+2.35.1
 
