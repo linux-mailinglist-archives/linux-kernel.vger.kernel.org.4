@@ -2,107 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B91963E1A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E0063E128
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:09:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbiK3UNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 15:13:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
+        id S229811AbiK3UJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 15:09:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbiK3UNH (ORCPT
+        with ESMTP id S229535AbiK3UJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:13:07 -0500
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7965C8E582;
-        Wed, 30 Nov 2022 12:10:58 -0800 (PST)
-Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AUI1xUl032448;
-        Wed, 30 Nov 2022 20:10:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=pps0720;
- bh=v31ouJT0ILYVdxe0FWYT1Kx8gBsYEyTHydbZJSCDLwM=;
- b=jr6Dak9rNz4Ba0J9Poor5wJkeUCWBRUzPSHXicOQlkm4BsOv5IY+cDnxSjnCou/oRe28
- DqIdWGGEXZW82sAJg3uO4O7t3j9dja+/L3kyZ76XeWH2QuSVA3gA4frwABmwlJ7JjgAu
- xgGctr+DGQNU0gKBqJRC2UFdmxUXbq2PEQP3AbJoopogcvferqWlfsPilGWBp3CBJ/Ed
- +4iDVzgzHDKF5IUBy76/NjOVUqDHTGt5ih18mBCZnQzO/fccr9cHjWvjgvCWMm+KdF8i
- rS7q7jkSUkue3UCgn3CF1xF1M6gyM5R33isVrpe2u24Rm4WbBdBoeGa2S+JLzJSOgwP0 7Q== 
-Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3m693gjt9c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Nov 2022 20:10:21 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 30 Nov 2022 15:09:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767C1578F8;
+        Wed, 30 Nov 2022 12:09:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 7257F2FCEC;
-        Wed, 30 Nov 2022 20:10:20 +0000 (UTC)
-Received: from hpe.com (unknown [16.231.227.36])
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id D3EF9809E67;
-        Wed, 30 Nov 2022 20:10:19 +0000 (UTC)
-From:   nick.hawkins@hpe.com
-To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com,
-        nick.hawkins@hpe.com, corbet@lwn.net, linux@armlinux.org.uk,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 6/6] MAINTAINERS: add gxp fan controller and documents
-Date:   Wed, 30 Nov 2022 14:08:46 -0600
-Message-Id: <20221130200846.4226-7-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221130200846.4226-1-nick.hawkins@hpe.com>
-References: <20221130200846.4226-1-nick.hawkins@hpe.com>
-X-Proofpoint-GUID: 63SNkKx4N2rWQxXs5Vl2FYkrk4t0EJPv
-X-Proofpoint-ORIG-GUID: 63SNkKx4N2rWQxXs5Vl2FYkrk4t0EJPv
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-30_04,2022-11-30_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- malwarescore=0 suspectscore=0 adultscore=0 bulkscore=0 clxscore=1015
- impostorscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211300142
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BF0061DAE;
+        Wed, 30 Nov 2022 20:09:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E10C433C1;
+        Wed, 30 Nov 2022 20:09:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669838981;
+        bh=mMfylySxLnXAU3Y/Ax0ptN/yAL+W24Pd1ZjoQYO0TNY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OVOWegpHTQu7HgDi5T28oMfUtZ6xEOjyqsSvUcSgGZD2WwrM7aI9E32riHaGk+p40
+         fg2Ofgr8mrpTViZHf6X68TDuNWNSJpTXSrfqNkgpXVbby/UpzyZu95q29s4i7mT9LI
+         J9e7G1IY7EuCKw4BpXVQl6OjTSdnPhbVq/JoHyBtxoGdQfWiFRX6RBwP1yjaO2DlFW
+         JlXmVy+OlE3i2+6EqL5SsiHGBHVz00303Z0e8hEPuz28Yy7xpEy0LwqGN328UMwXxp
+         Eej0roYZh93xzOp1vToPsURhX9EZDYMw0bfrOQ342qn4+je4UG/eZMkI11UqWMrBZc
+         GzLqpbfjuzdmg==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     SeongJae Park <sj@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v2 00/11]  implement DAMOS filtering for anon pages and
+Date:   Wed, 30 Nov 2022 20:09:26 +0000
+Message-Id: <20221130200937.118005-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
+Changes from RFC v1
+(https://lore.kernel.org/damon/20221124212114.136863-1-sj@kernel.org/)
+- sysfs: Clean up filters directory from scheme directory cleanup path
+- sysfs: Link newly created filter to the scheme
+- sysfs: Ignore removed memcg when checking path
+- sysfs: Guard 'struct mem_cgroup' access with CONFIG_MEMCG
+  (kernel test robot)
 
-Add the gxp-fan-ctrl.c and gxp-fan-ctrl.rst in hwmon
-driver/documentation.
+----
 
-Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
----
- MAINTAINERS | 3 +++
- 1 file changed, 3 insertions(+)
+DAMOS let users do system operations in a data access pattern oriented
+way.  The data access pattern, which is extracted by DAMON, is somewhat
+accurate more than what user space could know in many cases.  However,
+in some situation, users could know something more than the kernel about
+the pattern or some special requirements for some types of memory or
+processes.  For example, some users would have slow swap devices and
+knows latency-ciritical processes and therefore want to use DAMON-based
+proactive reclamation (DAMON_RECLAIM) for only non-anonymous pages of
+non-latency-critical processes.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1daadaa4d48b..00b52be102d6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2216,13 +2216,16 @@ ARM/HPE GXP ARCHITECTURE
- M:	Jean-Marie Verdun <verdun@hpe.com>
- M:	Nick Hawkins <nick.hawkins@hpe.com>
- S:	Maintained
-+F:	Documentation/hwmon/gxp-fan-ctrl.rst
- F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
-+F:	Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
- F:	Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
- F:	Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
- F:	arch/arm/boot/dts/hpe-bmc*
- F:	arch/arm/boot/dts/hpe-gxp*
- F:	arch/arm/mach-hpe/
- F:	drivers/clocksource/timer-gxp.c
-+F:	drivers/hwmon/gxp-fan-ctrl.c
- F:	drivers/spi/spi-gxp.c
- F:	drivers/watchdog/gxp-wdt.c
- 
+For such restriction, users could exclude the memory regions from the
+initial monitoring regions and use non-dynamic monitoring regions update
+monitoring operations set including fvaddr and paddr.  They could also
+adjust the DAMOS target access pattern.  For dynamically changing memory
+layout and access pattern, those would be not enough.
+
+To help the case, add an interface, namely DAMOS filters, which can be
+used to avoid the DAMOS actions be applied to specific types of memory,
+to DAMON kernel API (damon.h).  At the moment, it supports filtering
+anonymous pages and/or specific memory cgroups in or out for each DAMOS
+scheme.
+
+This patchset adds the support for all DAMOS actions that 'paddr'
+monitoring operations set supports ('pageout', 'lru_prio', and
+'lru_deprio'), and the functionality is exposed via DAMON kernel API
+(damon.h) the DAMON sysfs interface (/sys/kernel/mm/damon/admins/), and
+DAMON_RECLAIM module parameters.
+
+Patches Sequence
+----------------
+
+First patch implements DAMOS filter interface to DAMON kernel API.
+Second patch makes the physical address space monitoring operations set
+to support the filters from all supporting DAMOS actions.  Third patch
+adds anonymous pages filter support to DAMON_RECLAIM, and the fourth
+patch documents the DAMON_RECLAIM's new feature.  Fifth to seventh
+patches implement DAMON sysfs files for support of the filters, and
+eighth patch connects the file to use DAMOS filters feature.  Ninth
+patch adds simple self test cases for DAMOS filters of the sysfs
+interface.  Finally, following two patches (tenth and eleventh) document
+the new features and interfaces.
+
+SeongJae Park (11):
+  mm/damon/core: implement damos filter
+  mm/damon/paddr: support DAMOS filters
+  mm/damon/reclaim: add a parameter called skip_anon for avoiding
+    anonymous pages reclamation
+  Docs/admin-guide/damon/reclaim: document 'skip_anon' parameter
+  mm/damon/sysfs-schemes: implement filters directory
+  mm/damon/sysfs-schemes: implement filter directory
+  mm/damon/sysfs-schemes: connect filter directory and filters directory
+  mm/damon/sysfs-schemes: implement scheme filters
+  selftests/damon/sysfs: test filters directory
+  Docs/admin-guide/mm/damon/usage: document DAMOS filters of sysfs
+  Docs/ABI/damon: document scheme filters files
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |  29 ++
+ .../admin-guide/mm/damon/reclaim.rst          |   9 +
+ Documentation/admin-guide/mm/damon/usage.rst  |  48 ++-
+ include/linux/damon.h                         |  51 +++
+ mm/damon/core.c                               |  39 ++
+ mm/damon/paddr.c                              |  71 +++-
+ mm/damon/reclaim.c                            |  19 +
+ mm/damon/sysfs-schemes.c                      | 370 +++++++++++++++++-
+ tools/testing/selftests/damon/sysfs.sh        |  29 ++
+ 9 files changed, 652 insertions(+), 13 deletions(-)
+
 -- 
-2.17.1
+2.25.1
 
