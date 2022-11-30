@@ -2,88 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A72D463D54E
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C580463D557
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 13:16:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234422AbiK3MPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 07:15:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33164 "EHLO
+        id S234119AbiK3MQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 07:16:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiK3MPa (ORCPT
+        with ESMTP id S229468AbiK3MQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 07:15:30 -0500
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35752B600;
-        Wed, 30 Nov 2022 04:15:27 -0800 (PST)
-Received: from SHSend.spreadtrum.com (shmbx05.spreadtrum.com [10.29.1.56])
-        by SHSQR01.spreadtrum.com with ESMTPS id 2AUCDen7047066
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Wed, 30 Nov 2022 20:13:40 +0800 (CST)
-        (envelope-from Wenchao.Chen@unisoc.com)
-Received: from xm13705pcu.spreadtrum.com (10.13.3.189) by
- shmbx05.spreadtrum.com (10.29.1.56) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Wed, 30 Nov 2022 20:13:38 +0800
-From:   Wenchao Chen <wenchao.chen@unisoc.com>
-To:     <adrian.hunter@intel.com>, <ulf.hansson@linaro.org>,
-        <orsonzhai@gmail.com>, <baolin.wang@linux.alibaba.com>,
-        <zhang.lyra@gmail.com>
-CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zhenxiong.lai@unisoc.com>, <yuelin.tang@unisoc.com>,
-        <gengcixi@gmail.com>
-Subject: [PATCH V2] mmc: sdhci-sprd: Fix no reset data and command after voltage switch
-Date:   Wed, 30 Nov 2022 20:13:28 +0800
-Message-ID: <20221130121328.25553-1-wenchao.chen@unisoc.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 30 Nov 2022 07:16:39 -0500
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AC62B600;
+        Wed, 30 Nov 2022 04:16:38 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id B84EDF5D85;
+        Wed, 30 Nov 2022 04:16:07 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Nl2cF25mKZO5; Wed, 30 Nov 2022 04:16:06 -0800 (PST)
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1669810566; bh=XfQt2gqNGwqTBmezWa2hrCNNLvlXxzmo4l3Y1L8uyqY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HZu8T6F6Wbj9H8NlWoGXQ2Znl+AA/k3uR+zDLGnWC4pwM9k15ignOq3mfPUoZh2f7
+         Z1AnTIp09I203/ELknoEAAjrBGDLKjavWU9J8ED0pbKow44NklS8xwQuSd8w30fmWa
+         mhUZgyRJi7R7YJAEJflIEYzsLP7of46CM8eOJXs4NFKulJJEYvmm1rnExI92Av/WTt
+         XhCp1nZrHLAv6R6iC5leDKw/KxAYdUi44n5R6MJz0mC/xRV2NKL6Z+kig2Y3iRfM2x
+         flENVdK4aQnzAx+FXGZayZPVJzXacRzYDt/CJv4NEkZ5LyZur2kVNq0F6bo+yNf/K/
+         cPyveGWxpy3TA==
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, phone-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Subject: [RFC v1] hack: suspend: usb: option: add reset_resume callback
+Date:   Wed, 30 Nov 2022 13:15:52 +0100
+Message-Id: <20221130121552.1560379-1-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.13.3.189]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- shmbx05.spreadtrum.com (10.29.1.56)
-X-MAIL: SHSQR01.spreadtrum.com 2AUCDen7047066
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After switching the voltage, no reset data and command will cause
-CMD2 timeout.
+Currently to be the same as resume(). This will just avoid re-enumeration
+of the modem device on every system resume.
 
-Fixes: 29ca763fc26f ("mmc: sdhci-sprd: Add pin control support for voltage switch")
-Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
+This exists only because the usb core will re-enumerate *any* device
+whos' driver doesn't have reset_resume() implemented. A call trace:
+
+Jun 23 11:15:43 pureos kernel:  usb_serial_disconnect+0x58/0x180 [usbserial]
+Jun 23 11:15:43 pureos kernel:  usb_unbind_interface+0x84/0x290 [usbcore]
+Jun 23 11:15:43 pureos kernel:  device_remove+0x78/0x90
+Jun 23 11:15:43 pureos kernel:  device_release_driver_internal+0x1e4/0x250
+Jun 23 11:15:43 pureos kernel:  device_release_driver+0x24/0x30
+Jun 23 11:15:43 pureos kernel:  usb_forced_unbind_intf+0xac/0xd4 [usbcore]
+Jun 23 11:15:43 pureos kernel:  unbind_marked_interfaces.isra.0+0x5c/0x80 [usbcore]
+Jun 23 11:15:43 pureos kernel:  usb_resume+0x78/0x8c [usbcore]
+Jun 23 11:15:43 pureos kernel:  usb_dev_resume+0x20/0x30 [usbcore]
+Jun 23 11:15:43 pureos kernel:  dpm_run_callback+0x60/0x1f0
+Jun 23 11:15:43 pureos kernel:  device_resume+0x9c/0x1f4
+
+where usb_resume_inteface() sets needs_binding here
+https://elixir.bootlin.com/linux/latest/source/drivers/usb/core/driver.c#L1353
+because of no reset_resume() implementation.
+
+This hack is even suggested in some modems' application notes as can
+be found in discussion here
+https://invent.kde.org/teams/plasma-mobile/issues/-/issues/3#note_218386
+
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 ---
-Changelog:
+ drivers/usb/serial/option.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-v1 -> v2:
-There is no need to wait for the state of the pin to stabilize.
----
- drivers/mmc/host/sdhci-sprd.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/mmc/host/sdhci-sprd.c b/drivers/mmc/host/sdhci-sprd.c
-index b92a408f138d..bec3f9e3cd3f 100644
---- a/drivers/mmc/host/sdhci-sprd.c
-+++ b/drivers/mmc/host/sdhci-sprd.c
-@@ -470,7 +470,7 @@ static int sdhci_sprd_voltage_switch(struct mmc_host *mmc, struct mmc_ios *ios)
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index dee79c7d82d5..58526bf8684d 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -46,6 +46,7 @@ static int  option_probe(struct usb_serial *serial,
+ static int option_attach(struct usb_serial *serial);
+ static void option_release(struct usb_serial *serial);
+ static void option_instat_callback(struct urb *urb);
++static int option_reset_resume(struct usb_serial *serial);
+ 
+ /* Vendor and product IDs */
+ #define OPTION_VENDOR_ID			0x0AF0
+@@ -2227,6 +2228,7 @@ static struct usb_serial_driver option_1port_device = {
+ #ifdef CONFIG_PM
+ 	.suspend           = usb_wwan_suspend,
+ 	.resume            = usb_wwan_resume,
++	.reset_resume      = option_reset_resume,
+ #endif
+ };
+ 
+@@ -2373,6 +2375,18 @@ static void option_instat_callback(struct urb *urb)
  	}
+ }
  
- 	if (IS_ERR(sprd_host->pinctrl))
--		return 0;
-+		goto reset;
- 
- 	switch (ios->signal_voltage) {
- 	case MMC_SIGNAL_VOLTAGE_180:
-@@ -498,6 +498,8 @@ static int sdhci_sprd_voltage_switch(struct mmc_host *mmc, struct mmc_ios *ios)
- 
- 	/* Wait for 300 ~ 500 us for pin state stable */
- 	usleep_range(300, 500);
++static int option_reset_resume(struct usb_serial *serial)
++{
++	/*
++	 * We simply call resume() because this implementation only
++	 * exists because the USB core will un- and rebind any driver
++	 * during system resume that does *not* have a reset_resume()
++	 * implementation; see usb_resume_interface() in core/driver.c
++	 * We want to avoid that unconditional removal/addition.
++	 */
++	return usb_wwan_resume(serial);
++}
 +
-+reset:
- 	sdhci_reset(host, SDHCI_RESET_CMD | SDHCI_RESET_DATA);
- 
- 	return 0;
+ MODULE_AUTHOR(DRIVER_AUTHOR);
+ MODULE_DESCRIPTION(DRIVER_DESC);
+ MODULE_LICENSE("GPL v2");
 -- 
-2.17.1
+2.30.2
 
