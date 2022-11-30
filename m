@@ -2,206 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E57563E32D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1306C63E32F
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 23:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbiK3WKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 17:10:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
+        id S229772AbiK3WKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 17:10:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbiK3WJ7 (ORCPT
+        with ESMTP id S229878AbiK3WKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 17:09:59 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E9C950C6;
-        Wed, 30 Nov 2022 14:09:29 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 62so17318996pgb.13;
-        Wed, 30 Nov 2022 14:09:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qxW+Li1mM9gHdSWlfqtls8nKzLIjof0cqidN7UoYqU0=;
-        b=NWc6uop42OgKejMGQT3EspBEhZcXTQ7FK2Noq6/8b7yTj8CkSfYcgDd9JLohuT3TXU
-         CufaXDg3re4A0xGQl3j4VQnEnl6wZwSfRCiit5a9CNBZAeAqDiPBf+oXkoyI8Jhg5iUW
-         QD9L+FQp4OQpqJne8x1P2I0qJKqHIWnnioLvfWA2v+q+lAp4Fu0Z4uQYJbSAvzbtOTNS
-         K6NLHWSQ2NdM6w8ZtL+eFG8vfDWE0gpgEyb3pZoa5mS2tFNPFExyD9qjLXY2tLeU613y
-         84oat5moY8gtj6B1UwqUN1618Z78Fp5nG7AAFQsWXYOT61cIjFdWdDfcxUtfmn1Q9tR2
-         mChA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qxW+Li1mM9gHdSWlfqtls8nKzLIjof0cqidN7UoYqU0=;
-        b=mlRn19SmM63ToNwsK6w9qsLbHE2wOAPUrGQ4m4iLE3PwMcKuGshxsyAXRMZzJUIure
-         i7M5/H8wTeP00BXNiz1I2xW7cZKwiW/h/nrbfmWd/GO9oBqHMx873zXgHnbBIfH890/F
-         1gqpywmm9agFY9qT5AroJn64CG6BdabjuUmebkbiCFfHnbfDaTGYHUk6mGdR0Htgocl5
-         KMh/WA60jplWzPo1L6BrrJL7sdxgZCfvm91Unw8P63T+anQCrLf8N0uf6ffeSB5JmYuc
-         ShJVE6+WU7nfnmDsYRdaAt7UB35t7OTeiePE4+8L7q2MUKNeRyZVkSNkJnsG+Dp6s3j1
-         1nxg==
-X-Gm-Message-State: ANoB5pky2F3vDTINhATlDJrWqH6NejEv/U4NQW+p4G43GnEloPz51Fiy
-        1LzeYgnGv3pzCfy/vcyqClM=
-X-Google-Smtp-Source: AA0mqf4648UMmpoO9PtdiVemjuakWav4glyova4uprhT1ZE3Ds6qWETpDNOKqPHgGVtyQOFasTfbjg==
-X-Received: by 2002:a63:ea15:0:b0:457:7285:fd2d with SMTP id c21-20020a63ea15000000b004577285fd2dmr39169565pgi.580.1669846168893;
-        Wed, 30 Nov 2022 14:09:28 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id d77-20020a621d50000000b00575fea99db9sm839064pfd.27.2022.11.30.14.09.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 14:09:28 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 30 Nov 2022 12:09:27 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Kemeng Shi <shikemeng@huawei.com>
-Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 05/10] blk-throttle: simpfy low limit reached check in
- throtl_tg_can_upgrade
-Message-ID: <Y4fUl4TqytaVr+AO@slm.duckdns.org>
-References: <20221129030147.27400-1-shikemeng@huawei.com>
- <20221129030147.27400-6-shikemeng@huawei.com>
+        Wed, 30 Nov 2022 17:10:11 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AD7975CC
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 14:09:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669846189; x=1701382189;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ml3wv57xZNwgwF7hGo3K4/qvXtTdZjCodPVJomOlOoo=;
+  b=AU+90+kIaFzXsams66uqmnlmZkSSM/i/otn1oVl9jGiDKr81h30UhCS9
+   nnpV5AE2qlODotr5xiL/R+8YKJwI3BggJj1Dw8pSRr71HYvXS1yDhZeNM
+   vBfzIULwjil9zOXilRaepnsi5X1z5vn0fSBRCmp7vHcc1maUb/VG1sbJH
+   78AFgeRqhAg5GUslHikywy55otnySGEZ2gdeZr1xBwVYNq4iwqUqd11PE
+   LrW4v0Xn0hxoPMitj+O26+xnBrStrt3gSzGge+Tai96qF2oSN+QuwJ5jW
+   CKP7jyeTpVp/o0JP18vwgrKPPgPWz60tjVl90rD4O3fyaoFCfECtDINuW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="298895212"
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="298895212"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 14:09:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="675191160"
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="675191160"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 30 Nov 2022 14:09:47 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p0VH1-000Bnc-0P;
+        Wed, 30 Nov 2022 22:09:47 +0000
+Date:   Thu, 01 Dec 2022 06:09:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:perf/urgent] BUILD SUCCESS
+ 517e6a301f34613bff24a8e35b5455884f2d83d8
+Message-ID: <6387d4a8.Xrkf76S9i6aY0p4X%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221129030147.27400-6-shikemeng@huawei.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 11:01:42AM +0800, Kemeng Shi wrote:
-> Commit c79892c557616 ("blk-throttle: add upgrade logic for LIMIT_LOW
-> state") added upgrade logic for low limit and methioned that
-> 1. "To determine if a cgroup exceeds its limitation, we check if the cgroup
-> has pending request. Since cgroup is throttled according to the limit,
-> pending request means the cgroup reaches the limit."
-> 2. "If a cgroup has limit set for both read and write, we consider the
-> combination of them for upgrade. The reason is read IO and write IO can
-> interfere with each other. If we do the upgrade based in one direction IO,
-> the other direction IO could be severly harmed."
-> Besides, we also determine that cgroup reaches low limit if low limit is 0,
-> see comment in throtl_tg_can_upgrade.
-> 
-> Collect the information above, the desgin of upgrade check is as following:
-> 1.The low limit is reached if limit is zero or io is already queued.
-> 2.Cgroup will pass upgrade check if low limits of READ and WRITE are both
-> reached.
-> 
-> Simpfy the check code described above to removce repeat check and improve
-> readability. There is no functional change.
-> 
-> Detail equivalence proof is as following:
-> All replaced conditions to return true are as following:
-> condition 1
-> (!read_limit && !write_limit)
-> condition 2
-> read_limit && sq->nr_queued[READ] && (!write_limit || sq->nr_queued[WRITE])
-> condition 3
-> write_limit && sq->nr_queued[WRITE] && (!read_limit || sq->nr_queued[READ])
-> 
-> Transferring condition 2 as following:
-> read_limit && sq->nr_queued[READ] && (!write_limit || sq->nr_queued[WRITE])
-> is equivalent to
-> (read_limit && sq->nr_queued[READ]) &&
-> (!write_limit || (write_limit && sq->nr_queued[WRITE]))
-> is equivalent to
-> condition 2.1
-> (read_limit && sq->nr_queued[READ] && !write_limit) ||
-> condition 2.2
-> (read_limit && sq->nr_queued[READ] &&
-> (write_limit && sq->nr_queued[WRITE]))
-> 
-> Transferring condition 3 as following:
-> write_limit && sq->nr_queued[WRITE] && (!read_limit || sq->nr_queued[READ])
-> is equivalent to
-> (write_limit && sq->nr_queued[WRITE]) &&
-> (!read_limit || (read_limit && sq->nr_queued[READ]))
-> is equivalent to
-> condition 3.1
-> ((write_limit && sq->nr_queued[WRITE]) && !read_limit) ||
-> condition 3.2
-> ((write_limit && sq->nr_queued[WRITE]) &&
-> (read_limit && sq->nr_queued[READ]))
-> 
-> Condition 3.2 is the same as condition 2.2, so all conditions we get to
-> return are as following:
-> (!read_limit && !write_limit) (1)
-> (!read_limit && (write_limit && sq->nr_queued[WRITE])) (3.1)
-> ((read_limit && sq->nr_queued[READ]) && !write_limit) (2.1)
-> ((write_limit && sq->nr_queued[WRITE]) &&
-> (read_limit && sq->nr_queued[READ])) (2.2)
-> 
-> As we can extract conditions "(a1 || a2) && (b1 || b2)" to:
-> a1 && b1
-> a1 && b2
-> a2 && b1
-> ab && b2
-> 
-> Considering that:
-> a1 = !read_limit
-> a2 = read_limit && sq->nr_queued[READ]
-> b1 = !write_limit
-> b2 = write_limit && sq->nr_queued[WRITE]
-> 
-> We can pack replaced conditions to
-> (!read_limint || (read_limit && sq->nr_queued[READ])) &&
-> (!write_limit || (write_limit && sq->nr_queued[WRITE])
-> which is equivalent to
-> (!read_limint || sq->nr_queued[READ]) &&
-             ^
-             typo
-> (!write_limit || sq->nr_queued[WRITE])
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/urgent
+branch HEAD: 517e6a301f34613bff24a8e35b5455884f2d83d8  perf: Fix perf_pending_task() UaF
 
-Can you indent the whole thing a bit so that it's more readable?
+elapsed time: 724m
 
-> -static bool throtl_tg_can_upgrade(struct throtl_grp *tg)
-> +static bool throtl_tg_reach_low_limit(struct throtl_grp *tg, int rw)
->  {
->  	struct throtl_service_queue *sq = &tg->service_queue;
-> -	bool read_limit, write_limit;
-> +	bool limit = tg->bps[rw][LIMIT_LOW] || tg->iops[rw][LIMIT_LOW];
->  
->  	/*
-> -	 * if cgroup reaches low limit (if low limit is 0, the cgroup always
-> -	 * reaches), it's ok to upgrade to next limit
-> +	 * if low limit is zero, low limit is always reached.
-> +	 * if low limit is non-zero, we can check if there is any request
-> +	 * is queued to determine if low limit is reached as we throttle
-> +	 * request according to limit.
->  	 */
-> -	read_limit = tg->bps[READ][LIMIT_LOW] || tg->iops[READ][LIMIT_LOW];
-> -	write_limit = tg->bps[WRITE][LIMIT_LOW] || tg->iops[WRITE][LIMIT_LOW];
-> -	if (!read_limit && !write_limit)
-> -		return true;
-> -	if (read_limit && sq->nr_queued[READ] &&
-> -	    (!write_limit || sq->nr_queued[WRITE]))
-> -		return true;
-> -	if (write_limit && sq->nr_queued[WRITE] &&
-> -	    (!read_limit || sq->nr_queued[READ]))
-> +	return !limit || sq->nr_queued[rw];
-> +}
-> +
-> +static bool throtl_tg_can_upgrade(struct throtl_grp *tg)
-> +{
-> +	/*
-> +	 * cgroup reaches low limit when low limit of READ and WRITE are
-> +	 * both reached, it's ok to upgrade to next limit if cgroup reaches
-> +	 * low limit
-> +	 */
-> +	if (throtl_tg_reach_low_limit(tg, READ) &&
-> +	    throtl_tg_reach_low_limit(tg, WRITE))
+configs tested: 84
+configs skipped: 2
 
-Can you please name it throtl_low_limit_reached()? Other than that,
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Acked-by: Tejun Heo <tj@kernel.org>
+gcc tested configs:
+arc                                 defconfig
+alpha                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+s390                                defconfig
+s390                             allmodconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+s390                             allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+ia64                             allmodconfig
+arc                  randconfig-r043-20221128
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                            allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+x86_64               randconfig-a001-20221128
+x86_64               randconfig-a003-20221128
+x86_64               randconfig-a004-20221128
+arm                       omap2plus_defconfig
+powerpc                      ep88xc_defconfig
+sparc64                          alldefconfig
+x86_64               randconfig-a002-20221128
+x86_64               randconfig-a005-20221128
+x86_64               randconfig-a006-20221128
+i386                 randconfig-a001-20221128
+i386                 randconfig-a005-20221128
+i386                 randconfig-a006-20221128
+i386                 randconfig-a004-20221128
+i386                 randconfig-a003-20221128
+i386                 randconfig-a002-20221128
+sh                           se7722_defconfig
+sh                          polaris_defconfig
+sh                           se7705_defconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+arm                        trizeps4_defconfig
+m68k                          atari_defconfig
+sh                             shx3_defconfig
+mips                 decstation_r4k_defconfig
+ia64                            zx1_defconfig
+sh                        edosk7705_defconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
 
-Thanks.
+clang tested configs:
+hexagon              randconfig-r045-20221128
+hexagon              randconfig-r041-20221128
+riscv                randconfig-r042-20221128
+s390                 randconfig-r044-20221128
+x86_64               randconfig-a012-20221128
+x86_64               randconfig-a014-20221128
+x86_64               randconfig-a011-20221128
+x86_64               randconfig-a015-20221128
+x86_64               randconfig-a013-20221128
+x86_64               randconfig-a016-20221128
+i386                 randconfig-a014-20221128
+i386                 randconfig-a011-20221128
+i386                 randconfig-a013-20221128
+i386                 randconfig-a016-20221128
+i386                 randconfig-a012-20221128
+i386                 randconfig-a015-20221128
+x86_64               randconfig-k001-20221128
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
 
 -- 
-tejun
+0-DAY CI Kernel Test Service
+https://01.org/lkp
