@@ -2,74 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F112663D2AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4622963D2B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 11:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235258AbiK3KCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 05:02:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
+        id S235302AbiK3KCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 05:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235262AbiK3KCJ (ORCPT
+        with ESMTP id S235099AbiK3KCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 05:02:09 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12CF30F66
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:02:08 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id z4so26262249wrr.3
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 02:02:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Th+G2QFbGAX06mg1aIwvVRiXrgkLj2KZ0HoeEj27hRA=;
-        b=pw41DPeJAsKcNYldAFTg24MhaGfwshAzcYKiZbqZqJmdSwOuXMkLjoCdXUhwZkG5RT
-         CPIs04hKIwm4hwfVp2K5mZB6gAUt1db/G/CY3Lf2r+iZc7dZIwdMjr5b5hTBO7EZ315x
-         qqEugUkQGaDIiVPCfRcLpG84VeTCWVjGrsFEb/yspNupI1for3jqwZypBVXTj3PAKUL4
-         QL/xRlT/I2Dt5qMY5q9HWtS6tFq6jzUaTu7P8egkufx1BvaJWDiU6t6+ZPwA0s3OzDWX
-         U5Zgk1liqUPGWrmVPa4EERuePj6EkIrFYoTfN+FPwLQ1R+ZbdDjTqghm6LN55QhCiXuD
-         U2FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Th+G2QFbGAX06mg1aIwvVRiXrgkLj2KZ0HoeEj27hRA=;
-        b=1DZCGAnRD+AnfwkEsVacwjjwLZ+FPwhP9Xm2r8WhrpnknijO79yDUJameLojHEdplr
-         pOWRmKqsVF7saeBWgbJpIEoTMu6CR/NVI5sBKO80xoqFMyFJHgM8gmgeYY2cL+mJPi3F
-         mzy91vWHLzzbvBVUrnYVRDkGqGv3qiPuxOmCz84KKdykhn7mINBoMkwatLWWsOxqr2Bl
-         qpEdWGYmmYWAhTYseuaDIlVXky6LN1CL23I+7zBnBStmCCVSUxC5znpBX45IjrYsqJYt
-         zyAbcOml/17YEReh7u9DUgb1u5DBsM/eTVq0/W/H5GcKmLnL1kDTKH4AQWWZJC7tAkCh
-         z5Ww==
-X-Gm-Message-State: ANoB5plSVHUumQDY0cBdmxQR4XPFlyYcN++3qVwm5tFy1TVF+XTIsMhO
-        q09I4a8TSG+agikUQoRkfF2E089R+MM3gRVYHm8=
-X-Google-Smtp-Source: AA0mqf5eIe/vjT0QZnqyNgfDckx1jHTDcz1VOke7EieK+U+dsXVwDwPF5xjMmYE78CfE/bYMNTupKbBBuyDB3IyMzJ0=
-X-Received: by 2002:a5d:4a85:0:b0:242:2d83:3333 with SMTP id
- o5-20020a5d4a85000000b002422d833333mr957970wrq.584.1669802527305; Wed, 30 Nov
- 2022 02:02:07 -0800 (PST)
+        Wed, 30 Nov 2022 05:02:51 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED5F1009;
+        Wed, 30 Nov 2022 02:02:46 -0800 (PST)
+Date:   Wed, 30 Nov 2022 10:02:43 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669802565;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=VHa/C1sCb9t0gkcdPzHNek3kN6cA/XbDouIGUpO2Jh0=;
+        b=wDBcog33gzS4nuVQ2SXAoVBzqKGSpln78xCKHSNL7QXSzDPb3++aQRK5SuXG5DWSVhDH5T
+        g4WdDZRf5byf4dpyDUp9BAP0vqB2H7J+BMhpGsQhSmGyEI/w3rwV0w0WDmzttH2AdpA2wX
+        wbxufUOZah+OO+1Sw3BQ/6A/7twavcJV4vnF8kJh4dtTqoFmy64jXgDzo6lbK+Jj7rNvl1
+        q4UZRjH2qv2CaeRMJ4lx1xSUKQV3vuiPDJPpTNswfCexZKhcVUGsdC4H3u8TbpxN5plwVD
+        H0cauGLq5nuWVHgREqg4ekWUoTWI7QiGDGybPDGNz1ju5IXjAcSeUcFxGaeNHA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669802565;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=VHa/C1sCb9t0gkcdPzHNek3kN6cA/XbDouIGUpO2Jh0=;
+        b=1Z8dlZojWtiexjhvYkR/+tCeG5WyFxk7nTbUJObfWkBkQRjVtyUESyonCGNNhufUlN2BxG
+        Adt3FSPK7UI42ICw==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/urgent] perf: Fix perf_pending_task() UaF
+Cc:     syzbot+9228d6098455bb209ec8@syzkaller.appspotmail.com,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Received: by 2002:a05:6000:1366:0:0:0:0 with HTTP; Wed, 30 Nov 2022 02:02:06
- -0800 (PST)
-From:   David Alex <davidalexman56@gmail.com>
-Date:   Wed, 30 Nov 2022 02:02:06 -0800
-Message-ID: <CABYJXBZ-m52cseS7F2cSZ3zsm0NbWNxw0xyso-YOqMRx1R1VJw@mail.gmail.com>
-Subject: Re: I donate this money to you
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_MONEY,XFER_LOTSA_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Message-ID: <166980256366.4906.11174941629243947427.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello my name is David Alex I am sick ischemic heart disease I read
-about you on a website. I have a few days to live I want to send you
-my money I know you will need it $5,000,000 I do not have a wife or
-children I lost my wife 4 years ago..I want you to take this money and
-use it well and also help orphan children.. If you accept my offer
-please reply me now.
-May the lord bless you as you do this
+The following commit has been merged into the perf/urgent branch of tip:
+
+Commit-ID:     517e6a301f34613bff24a8e35b5455884f2d83d8
+Gitweb:        https://git.kernel.org/tip/517e6a301f34613bff24a8e35b5455884f2d83d8
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Thu, 24 Nov 2022 12:49:12 +01:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Tue, 29 Nov 2022 17:42:49 +01:00
+
+perf: Fix perf_pending_task() UaF
+
+Per syzbot it is possible for perf_pending_task() to run after the
+event is free()'d. There are two related but distinct cases:
+
+ - the task_work was already queued before destroying the event;
+ - destroying the event itself queues the task_work.
+
+The first cannot be solved using task_work_cancel() since
+perf_release() itself might be called from a task_work (____fput),
+which means the current->task_works list is already empty and
+task_work_cancel() won't be able to find the perf_pending_task()
+entry.
+
+The simplest alternative is extending the perf_event lifetime to cover
+the task_work.
+
+The second is just silly, queueing a task_work while you know the
+event is going away makes no sense and is easily avoided by
+re-arranging how the event is marked STATE_DEAD and ensuring it goes
+through STATE_OFF on the way down.
+
+Reported-by: syzbot+9228d6098455bb209ec8@syzkaller.appspotmail.com
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Marco Elver <elver@google.com>
+---
+ kernel/events/core.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 9d15d2d..ad82479 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -2291,6 +2291,7 @@ event_sched_out(struct perf_event *event,
+ 		    !event->pending_work) {
+ 			event->pending_work = 1;
+ 			dec = false;
++			WARN_ON_ONCE(!atomic_long_inc_not_zero(&event->refcount));
+ 			task_work_add(current, &event->pending_task, TWA_RESUME);
+ 		}
+ 		if (dec)
+@@ -2336,6 +2337,7 @@ group_sched_out(struct perf_event *group_event,
+ 
+ #define DETACH_GROUP	0x01UL
+ #define DETACH_CHILD	0x02UL
++#define DETACH_DEAD	0x04UL
+ 
+ /*
+  * Cross CPU call to remove a performance event
+@@ -2356,12 +2358,20 @@ __perf_remove_from_context(struct perf_event *event,
+ 		update_cgrp_time_from_cpuctx(cpuctx, false);
+ 	}
+ 
++	/*
++	 * Ensure event_sched_out() switches to OFF, at the very least
++	 * this avoids raising perf_pending_task() at this time.
++	 */
++	if (flags & DETACH_DEAD)
++		event->pending_disable = 1;
+ 	event_sched_out(event, cpuctx, ctx);
+ 	if (flags & DETACH_GROUP)
+ 		perf_group_detach(event);
+ 	if (flags & DETACH_CHILD)
+ 		perf_child_detach(event);
+ 	list_del_event(event, ctx);
++	if (flags & DETACH_DEAD)
++		event->state = PERF_EVENT_STATE_DEAD;
+ 
+ 	if (!ctx->nr_events && ctx->is_active) {
+ 		if (ctx == &cpuctx->ctx)
+@@ -5121,9 +5131,7 @@ int perf_event_release_kernel(struct perf_event *event)
+ 
+ 	ctx = perf_event_ctx_lock(event);
+ 	WARN_ON_ONCE(ctx->parent_ctx);
+-	perf_remove_from_context(event, DETACH_GROUP);
+ 
+-	raw_spin_lock_irq(&ctx->lock);
+ 	/*
+ 	 * Mark this event as STATE_DEAD, there is no external reference to it
+ 	 * anymore.
+@@ -5135,8 +5143,7 @@ int perf_event_release_kernel(struct perf_event *event)
+ 	 * Thus this guarantees that we will in fact observe and kill _ALL_
+ 	 * child events.
+ 	 */
+-	event->state = PERF_EVENT_STATE_DEAD;
+-	raw_spin_unlock_irq(&ctx->lock);
++	perf_remove_from_context(event, DETACH_GROUP|DETACH_DEAD);
+ 
+ 	perf_event_ctx_unlock(event, ctx);
+ 
+@@ -6577,6 +6584,8 @@ static void perf_pending_task(struct callback_head *head)
+ 	if (rctx >= 0)
+ 		perf_swevent_put_recursion_context(rctx);
+ 	preempt_enable_notrace();
++
++	put_event(event);
+ }
+ 
+ #ifdef CONFIG_GUEST_PERF_EVENTS
