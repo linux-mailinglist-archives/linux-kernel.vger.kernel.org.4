@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B0B63E1B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71EEF63E1B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Nov 2022 21:18:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiK3USD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 15:18:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
+        id S229758AbiK3USA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 15:18:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbiK3URU (ORCPT
+        with ESMTP id S230315AbiK3URQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 15:17:20 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF67189328
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 12:13:24 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id w15so15736322wrl.9
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 12:13:24 -0800 (PST)
+        Wed, 30 Nov 2022 15:17:16 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE84934E0;
+        Wed, 30 Nov 2022 12:13:24 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so3457830pjb.0;
+        Wed, 30 Nov 2022 12:13:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2AAz1p3amdjSsxmPSJU+uGZAdAbSjyxAbikHqGyzpmk=;
-        b=nCNaAYb3XzkERXQkz2iPfkCS79RviSzmXslWPza+frd/CWKfVpYgJwneIY7uYo0TJE
-         kTbxjGHIjrWKsDkbC77zJRHJIZY8KNuLnUwx/6LFHKUJ0Rj35SAew4DrxVajLXWcYNoW
-         5+VTUZzEfuSwVKPFQK4L3hTKlZtN51Lpl0yL7hQ80XRYqz0ZZUMpdy+61UlN2IBdNAD+
-         kje/YBR6vT4oA5Pw74sFZBmbBKnW8QtQtP4ngiGm3HefZOjiJ0OTB/tKpK6i943h0XvF
-         SqljAkss+WFcGjsgETKJIo3dhnHpqwyKWI2GcEMp0dJSvYtIIePuC5E68lx1PbHNWYpQ
-         qfGg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nKOpOs+nm7ZzH9JjlfBkovi5sBxujs0tny+wQJDoQrg=;
+        b=p05GXhfJD1Dz4nT+H9iQPs6s28q4PBydoI0JM6DXF2VvA9h10HLcCM5+kJ80Ksij0C
+         8omDXH7ZIzEgQwP4BThhIHpDeNe2GdHuJAuyErQ6pGtpsrf9FXp3zD02gMIFzKCPHNXm
+         FI2QXOmx9Or2SMHPufLnrE57RkPYjPfetzQvyxvSKXURywO58EyfGEzezvx8ZzB4EgrZ
+         7DYEvHUVjXCzGGhclaKVBpndVnbZltwtBbR4OVGYo7MHNKLxT5/4Fk3bzNqhXrtEiIBF
+         blB9vnP990lxbMJLNNtSBfR57HV+TtU7SjmxAI0Mx3z4kXvbnb0xNzQsZ3othOb/cU8k
+         ghJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2AAz1p3amdjSsxmPSJU+uGZAdAbSjyxAbikHqGyzpmk=;
-        b=KqZlDccJr5QWAFb6VFjKvFgOdmexi5sjI5gUgLHWf3Dw00shpViu5c+0HDqBr2wyAC
-         DPh2fpDMRSvq9unTK0DifG7WpKk2pTvsVZyOxfma0Ev2UO4HkpJ6gjZmM0DHbpLJGyot
-         1HdkfxrG/EMnRbDmPvqSGTPwEkSc9LYnYKZaAP1Cg+lEdpQAj5GGHAjx5YGeDZPyVP2t
-         BEUB8olmphHoYqXd9QkUnZrrAxXsquL9k3OkkveY/rOGPi5ztrQwtpJwfQWcY9EQdnIQ
-         stegHRNbPVieZQ2X97rf8Xshfydiz6UKZLjmFj1gI0FZFYjbytWqTov3ocOy0jcf+w3k
-         wFaw==
-X-Gm-Message-State: ANoB5pmhu5KfdQe2yRUTSwMV7uB8+fCUdqllwMAIZfzC0+JeIOGBlvTW
-        A7IU1/lvTIkop4hJrmd/igeodpeJNBDkgXb8wIreQQ==
-X-Google-Smtp-Source: AA0mqf61KLGmp/Qm9g4FE973BvCOpu9OqNPOjOG4J5nE13JCMq7A8rvlH6yRlbfRF5bTYaCm/bglFAEjkAec+P1WlEc=
-X-Received: by 2002:adf:e64f:0:b0:241:e2f1:8b44 with SMTP id
- b15-20020adfe64f000000b00241e2f18b44mr25818541wrn.300.1669839202034; Wed, 30
- Nov 2022 12:13:22 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nKOpOs+nm7ZzH9JjlfBkovi5sBxujs0tny+wQJDoQrg=;
+        b=V2kH/0U0neBDxv+tamuNmTofJckcX2vM/DQOWjmu6pgoSSSFyzWqR3/aFp0y7mcRqI
+         VcZ2UJLesL4zkUCaUgAW9L1SowW2drM0nWWFGs+sBUHO9TFeos9ON59weOTRwNpoW54C
+         HRHdhig++cseKHKUN55MRADXzNFX1LNNQ5Bi5S030ZZEDVbQkUxGvfBx5hWSoRkg7JWj
+         +2lXSfx8xqBi+xV+qVP4XvThOharmwKvTg4Bta039yLYDmsIEDo1WM0V7uFM54/nJ51D
+         iZnqZ3EvGaZZzGBWPiSIvORLjOL/NV/73+m2JgaSh3TXw6MbqIGP6F9R5lCgT6xDG1j2
+         PS8Q==
+X-Gm-Message-State: ANoB5pkN2wVHoNSaU8lODclmsh+Tab/z7fblvYPrCYHphUZOBmtOwUWQ
+        Zz/iKXCC6Oxs/dfno1LBJ2Q=
+X-Google-Smtp-Source: AA0mqf7ZcYjKFLIMP2LqvtdUyjalnj4NmE4TYogKrlRqJyYddNSDk3DauBBh5BDD9Jd5kKqnEAUmOA==
+X-Received: by 2002:a17:902:a9c6:b0:188:52df:769e with SMTP id b6-20020a170902a9c600b0018852df769emr43061154plr.30.1669839203509;
+        Wed, 30 Nov 2022 12:13:23 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id nn7-20020a17090b38c700b001df264610c4sm3050895pjb.0.2022.11.30.12.13.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 12:13:22 -0800 (PST)
+Message-ID: <607a25cb-a121-1bb5-4203-e9e526f49fc8@gmail.com>
+Date:   Wed, 30 Nov 2022 12:13:17 -0800
 MIME-Version: 1.0
-References: <20221130062935.2219247-1-irogers@google.com> <20221130062935.2219247-4-irogers@google.com>
- <CAM9d7chrsLHoGe=RcU2e5hRL22j=813j3uuEHDOPZrkpWqnSsw@mail.gmail.com>
-In-Reply-To: <CAM9d7chrsLHoGe=RcU2e5hRL22j=813j3uuEHDOPZrkpWqnSsw@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 30 Nov 2022 12:13:10 -0800
-Message-ID: <CAP-5=fWZVHN5tDG+eKRr7v_RXKYA_uUgY-dFH_g3Yc3mFgkXbA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] perf build: Use libtraceevent from the system
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5.10 000/162] 5.10.157-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221130180528.466039523@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221130180528.466039523@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,46 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 11:05 AM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> On Tue, Nov 29, 2022 at 10:30 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > Remove the LIBTRACEEVENT_DYNAMIC and LIBTRACEFS_DYNAMIC. If
-> > libtraceevent isn't installed or NO_LIBTRACEEVENT=1 is passed to the
-> > build, don't compile in libtraceevent and libtracefs support. This
-> > also disables CONFIG_TRACE that controls "perf
-> > trace". CONFIG_TRACEEVENT is used to control enablement in
-> > Build/Makefiles, HAVE_LIBTRACEEVENT is used in C code. Without
-> > HAVE_LIBTRACEEVENT tracepoints are disabled and as such the commands
-> > kmem, kwork, lock, sched and timechart are removed. The majority of
-> > commands continue to work including "perf test".
->
-> Maybe we can have a different approach.  I guess the trace data
-> access is isolated then we can make dummy interfaces when there's
-> no libtraceevent.  This way we don't need to touch every command
-> and let it fail when it's asked.
+On 11/30/22 10:21, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.157 release.
+> There are 162 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 02 Dec 2022 18:05:05 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.157-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Sounds like a worthwhile refactor that can land on top of this change.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-> The motivation is that we should be able to run the sub-commands
-> as much as possible.  In fact, we could run 'record' part only on the
-> target machine and pass the data to the host for analysis with a
-> full-fledged perf.  Also some commands like 'perf lock contention'
-> can run with or without libtraceevent (using BPF only).
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-The issue here is that perf lock contention will use evsel__new_tp and
-internally that uses libtraceevent. As such it is removed without
-HAVE_LIBTRACEEVENT. Without the evsel there's not much perf lock
-contention can do, so rather than litter the code with
-HAVE_LIBTRACEEVENT and for it to be broken, I made the choice just to
-remove it from the no libtraceevent build for now.
-
-I think it is worth pursuing these patches in the shape they are in so
-that we can land the removal of tools/lib/traceevent and ensure the
-migration away from an out-of-date version of that library.
-
-Thanks,
-Ian
-
-> Thanks,
-> Namhyung
