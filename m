@@ -2,113 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896C563F401
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5144F63F400
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:33:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbiLAPdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 10:33:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
+        id S231858AbiLAPdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 10:33:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231945AbiLAPdG (ORCPT
+        with ESMTP id S231939AbiLAPcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 10:33:06 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0487CB4B3
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 07:32:38 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id B0E705C00CA;
-        Thu,  1 Dec 2022 10:32:31 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 01 Dec 2022 10:32:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1669908751; x=1669995151; bh=E1pjq6O5l0
-        LrJHsoPp1Hm/5Wa9enGEBiTS8IWQ9GNz8=; b=NGKuVY6eVGwWjvXOXGStrxfp54
-        fljeCKBGF0nx5HRr4YboNKLR8CUE7j22HggHj9URX01B1t+BFXR9I/8DSizvkdap
-        3J1X60lisIpB/4zLwqnesr3O6TMi2mr3aak89tK3hcViRyl4hZ1TK/ZtZ2pTJz/m
-        3U0QGGJr5NwCd9YfrqhBouw00Ew1CJvEnLnavGZ6859MQ37PDqyTi8qer9mdwmrH
-        xtUNQ3vXBUb3wnsHcy0FGSGJ96Fx8lbvvc//j4PQcmasZQs/K5Ac6y/2o93NMNo8
-        VbBQQmXCmyXYia08ukAMJrLdKa93rLAjzexE54NhOB/DooLQWMP6D/+9tfEg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669908751; x=1669995151; bh=E1pjq6O5l0LrJHsoPp1Hm/5Wa9en
-        GEBiTS8IWQ9GNz8=; b=GaMtkm81HxoUj8OM+tezRhg6USQKf42ynHLj6lRHlFZU
-        YTztYc8T638ny/cVIiSW1SGBMHYB+MPNAHd1UTp+rgTOsKa9V2q0fVWeLwDZ1Nd6
-        +kMwIdfJGdiU3RnbQuepGHi5KDVy6MTH8mVuJSh7nybjlx7xFxZeQuaUACh+YN2s
-        RAeX4eEo89TQsJkJFxHKnJePEe6kk/Bi29IkVuVJj8EmCEi0czT8cJVJWkIW4s7P
-        OUBFjTtmRFFEqGLz7ewOe41z/1x9b0knp21Co0qmR/UIETtXdv+mHH3P2HhRkHpb
-        o9ab3j14vzmDzmDe9Tw6z20ELj0o/xPb+/bSmYTHAw==
-X-ME-Sender: <xms:D8mIY6OGl6HYqKyxbfZ2HR3BMMI3n_awcd5N1oxPSrKPK2OtiZuydQ>
-    <xme:D8mIY4_htLC9eidpeVKNNtIjENbP4yMD0EOMGtfpJEe7zsCt_R-2P9YUiOGE-9EOP
-    U3aoNylDJtRYMSk3CE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtdehgdejkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:D8mIYxTc3qgtHWC5BsZRuRyDwjzHdF8MbXR95LXhQXnD3zKVP4sKRA>
-    <xmx:D8mIY6sY8Z-AIMkmh9hycza_WuN5rvjcaHytnprvv7iBZp2T2U7sIg>
-    <xmx:D8mIYyfnuPkS0DOvyelu4vy2FsETIs6X6qMYD0wangK4C0tBwW3cEQ>
-    <xmx:D8mIY2FudD3uyw9oJk9WsEB14EMN0xAM2740_pWc8oTuWJpGsWPrFw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 08ED4B60086; Thu,  1 Dec 2022 10:32:30 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <f5b0c1a5-58ea-4ac4-bea0-aa887d42d04a@app.fastmail.com>
-In-Reply-To: <202211301556064978448@zte.com.cn>
-References: <202211301556064978448@zte.com.cn>
-Date:   Thu, 01 Dec 2022 16:31:55 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     zhang.songyi@zte.com.cn
-Cc:     "Robert Jarzmik" <robert.jarzmik@free.fr>,
-        "Lubomir Rintel" <lkundrak@v3.sk>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH linux-next] pxa: Remove dev_err() after platform_get_irq()
+        Thu, 1 Dec 2022 10:32:51 -0500
+Received: from mail1.bemta34.messagelabs.com (mail1.bemta34.messagelabs.com [195.245.231.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA45AD30E;
+        Thu,  1 Dec 2022 07:32:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1669908743; i=@fujitsu.com;
+        bh=JjMcfKen5VZCgTZ82chMW2jTyW7XOSibUTqR+JCgv6E=;
+        h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=RUKtTmHuTEqxhORxqkwyhyJH2t9DyTHqFubIJs+pazRlp56cjiNgd56xVmRTxwVhE
+         gdqdiLJQHmUVC1U8z7FJ1R/5yFI/yU47QxpRyNaAZ/nG2iGoCqJnud4oCoQSHuFmDv
+         lX9MHnx9gBRsafox45bfhtT17L3Z4Pgta2m0gdl3ulYVj2TEqv6tm9m9kvc8dZGuEw
+         Atz4jdgrTF18DTXMxuam6hfCOOXaguwMzdeHlyd09bncA8Nyo/bA46fAcFMknqBezi
+         iYrn0diIJuODCMM757vFRVZtNuoNwEdvRU65T0/4FiGPzEkxoHG36lb9UHjwTTG7uE
+         dS0z0a79ry4LA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupileJIrShJLcpLzFFi42Kxs+HYrMt+siP
+  ZYM5MKYs569ewWUyfeoHRYsuxe4wWl5/wWezZe5LF4vKuOWwWu/7sYLdY+eMPqwOHx6lFEh6L
+  97xk8ti0qpPN48SM3yweLzbPZPT4vEkugC2KNTMvKb8igTVj6tJTzAU72SsWvNvG1sA4i62Lk
+  YtDSGAjo8T0I6+YIZwlTBIfbtxkhXD2MEpcW30KyOHkYBPQkbiw4C+QzcEhIlAtcWspG0iYWS
+  BD4viVP8wgtrCAj8TyM8vZQWwWARWJPbcugcV5BVwlJr2fAWZLCChITHn4HszmBIq//LsRrF5
+  IwEXievNBqHpBiZMzn7BAzJeQOPjiBTPIWgkBJYmZ3fEQYyokZs1qY4Kw1SSuntvEPIFRcBaS
+  7llIuhcwMq1iNCtOLSpLLdI1NNBLKspMzyjJTczM0Uus0k3USy3VLU8tLtE10kssL9ZLLS7WK
+  67MTc5J0ctLLdnECIyWlGKVvh2Mb5f90TvEKMnBpCTKq72vI1mILyk/pTIjsTgjvqg0J7X4EK
+  MMB4eSBG/KHqCcYFFqempFWmYOMHJh0hIcPEoivHzHgNK8xQWJucWZ6RCpU4y6HGsbDuxlFmL
+  Jy89LlRLnDTwOVCQAUpRRmgc3ApZELjHKSgnzMjIwMAjxFKQW5WaWoMq/YhTnYFQS5t22DWgK
+  T2ZeCdymV0BHMAEdESnWBnJESSJCSqqBKWaj8/t58aVf9tZ1VN7fe34+u+XZo++0f2yb+Pxi1
+  u6ee6LCzVU98kHt4UyNeo37P5qbSvYcZmv80PbuQ9gWUcMLP0Ibz+8tOq3x8PSDXttfy15ov6
+  vjXWr9WYrj8O17TGksW3bpekddnvzU7FIzi870Xzs22myedGV5kO2faL4Xu40Wlk/K3PJr4r5
+  7k7bdqr2eLqHNE9EpvorNXf/JbO3HEWsrS3+f46/Y13Xxq8PnlQLXGF/VX3bTnMb3ceZ/7onF
+  m2W+aD1WVIiZ8k0pw/+ApK5eSHB0zAQFTy6R1zZHpoosyPjAzP2Vf23OtPVn/ASWmmpIveHN1
+  jk35c0K8bsqp66pnnx8VeJ+anKa4iwlluKMREMt5qLiRACtlAd/nQMAAA==
+X-Env-Sender: ruansy.fnst@fujitsu.com
+X-Msg-Ref: server-6.tower-548.messagelabs.com!1669908743!72999!1
+X-Originating-IP: [62.60.8.179]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.101.1; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 24259 invoked from network); 1 Dec 2022 15:32:23 -0000
+Received: from unknown (HELO n03ukasimr04.n03.fujitsu.local) (62.60.8.179)
+  by server-6.tower-548.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 1 Dec 2022 15:32:23 -0000
+Received: from n03ukasimr04.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr04.n03.fujitsu.local (Postfix) with ESMTP id 1EF7315A;
+        Thu,  1 Dec 2022 15:32:23 +0000 (GMT)
+Received: from R01UKEXCASM126.r01.fujitsu.local (R01UKEXCASM126 [10.183.43.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by n03ukasimr04.n03.fujitsu.local (Postfix) with ESMTPS id 1233E153;
+        Thu,  1 Dec 2022 15:32:23 +0000 (GMT)
+Received: from localhost.localdomain (10.167.225.141) by
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.42; Thu, 1 Dec 2022 15:32:19 +0000
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>
+CC:     <djwong@kernel.org>, <david@fromorbit.com>,
+        <dan.j.williams@intel.com>, <akpm@linux-foundation.org>
+Subject: [PATCH v2 6/8] xfs: use dax ops for zero and truncate in fsdax mode
+Date:   Thu, 1 Dec 2022 15:32:10 +0000
+Message-ID: <1669908730-131-1-git-send-email-ruansy.fnst@fujitsu.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1669908538-55-1-git-send-email-ruansy.fnst@fujitsu.com>
+References: <1669908538-55-1-git-send-email-ruansy.fnst@fujitsu.com>
+MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.167.225.141]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022, at 08:56, zhang.songyi@zte.com.cn wrote:
-> From: zhang songyi <zhang.songyi@zte.com.cn>
->
-> There is no need to call the dev_err() function directly to print a
-> custom message when handling an error from either the platform_get_irq()
-> or platform_get_irq_byname() functions as both are going to display an
-> appropriate error message in case of a failure.
->
-> /drivers/soc/pxa/ssp.c:150:2-9: line 150 is redundant because
-> platform_get_irq() already prints an error
->
-> Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
-> ---
->  drivers/soc/pxa/ssp.c | 1 -
->  1 file changed, 1 deletion(-)
+Zero and truncate on a dax file may execute CoW.  So use dax ops which
+contains end work for CoW.
 
-I tried to apply the patch, but it appears to be whitespace damaged
-and does not apply, probably something wrong with your email client.
+Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+---
+ fs/xfs/xfs_iomap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Can you make sure you are following the steps in 
-Documentation/translations/zh_CN/process/email-clients.rst and
-resend the patch, with Lubomir's Reviewed-by added in?
+diff --git a/fs/xfs/xfs_iomap.c b/fs/xfs/xfs_iomap.c
+index 881de99766ca..d9401d0300ad 100644
+--- a/fs/xfs/xfs_iomap.c
++++ b/fs/xfs/xfs_iomap.c
+@@ -1370,7 +1370,7 @@ xfs_zero_range(
+ 
+ 	if (IS_DAX(inode))
+ 		return dax_zero_range(inode, pos, len, did_zero,
+-				      &xfs_direct_write_iomap_ops);
++				      &xfs_dax_write_iomap_ops);
+ 	return iomap_zero_range(inode, pos, len, did_zero,
+ 				&xfs_buffered_write_iomap_ops);
+ }
+@@ -1385,7 +1385,7 @@ xfs_truncate_page(
+ 
+ 	if (IS_DAX(inode))
+ 		return dax_truncate_page(inode, pos, did_zero,
+-					&xfs_direct_write_iomap_ops);
++					&xfs_dax_write_iomap_ops);
+ 	return iomap_truncate_page(inode, pos, did_zero,
+ 				   &xfs_buffered_write_iomap_ops);
+ }
+-- 
+2.38.1
 
-Usually the process it for platform maintainers to pick up patches,
-but this time please send it directly to soc@kernel.org (since
-there is already maintainer ack) and I'll pick it up from there.
-
-Thanks,
-
-       Arnd
