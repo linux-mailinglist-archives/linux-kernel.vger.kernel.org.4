@@ -2,45 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FF363F194
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:27:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A8B63F1F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbiLAN11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:27:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
+        id S231614AbiLANrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:47:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbiLAN1Y (ORCPT
+        with ESMTP id S229521AbiLANrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:27:24 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85F2A9E8B;
-        Thu,  1 Dec 2022 05:27:22 -0800 (PST)
-Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NNH0Z4wRZz15N4J;
-        Thu,  1 Dec 2022 21:26:38 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- kwepemi500014.china.huawei.com (7.221.188.232) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Dec 2022 21:27:19 +0800
-From:   Qiheng Lin <linqiheng@huawei.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-CC:     <lars.povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
-        <daniel.machon@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Qiheng Lin <linqiheng@huawei.com>
-Subject: [PATCH] net: microchip: sparx5: Fix missing destroy_workqueue of mact_queue
-Date:   Thu, 1 Dec 2022 21:47:17 +0800
-Message-ID: <20221201134717.25750-1-linqiheng@huawei.com>
-X-Mailer: git-send-email 2.32.0
+        Thu, 1 Dec 2022 08:47:43 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED85DFDD;
+        Thu,  1 Dec 2022 05:47:39 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NNHSk1jxsz4f3jHR;
+        Thu,  1 Dec 2022 21:47:34 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP2 (Coremail) with SMTP id Syh0CgB3jrl4sIhjHtzRBQ--.20446S3;
+        Thu, 01 Dec 2022 21:47:36 +0800 (CST)
+Subject: Re: [PATCH -next v2 2/9] blk-iocost: improve hanlder of match_u64()
+To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Li Nan <linan122@huawei.com>, josef@toxicpanda.com,
+        axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20221130132156.2836184-1-linan122@huawei.com>
+ <20221130132156.2836184-3-linan122@huawei.com>
+ <Y4e90zFnhhq764lP@slm.duckdns.org>
+ <7e4f1cea-2691-9b81-35f6-0dd236149f56@huaweicloud.com>
+ <Y4h9MEd3q4LXDGQq@slm.duckdns.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <46bd7f33-6f24-a7a0-6359-3dc9aad98e6f@huaweicloud.com>
+Date:   Thu, 1 Dec 2022 21:47:35 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500014.china.huawei.com (7.221.188.232)
+In-Reply-To: <Y4h9MEd3q4LXDGQq@slm.duckdns.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgB3jrl4sIhjHtzRBQ--.20446S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7WFW5GF1UCFW7ZrW7Ary7Wrg_yoW8Wr4DpF
+        W3tas7Ar18Cr1Sk3W2y3y7XayYyr4xJr1YvFy5K348Zr1a9rW2yr17tw1Y93WUA397Kr1j
+        qF4YvasxXw1DZa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1U
+        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
+        VFxhVjvjDU0xZFpf9x0JUZa9-UUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,37 +68,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mchp_sparx5_probe() won't destroy workqueue created by
-create_singlethread_workqueue() in sparx5_start() when later
-inits failed. Add destroy_workqueue in the cleanup_ports case,
-also add it in mchp_sparx5_remove()
+Hi,
 
-Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
----
- drivers/net/ethernet/microchip/sparx5/sparx5_main.c | 3 +++
- 1 file changed, 3 insertions(+)
+在 2022/12/01 18:08, Tejun Heo 写道:
+> On Thu, Dec 01, 2022 at 10:15:53AM +0800, Yu Kuai wrote:
+>> Hi,
+>>
+>> 在 2022/12/01 4:32, Tejun Heo 写道:
+>>> On Wed, Nov 30, 2022 at 09:21:49PM +0800, Li Nan wrote:
+>>>> From: Yu Kuai <yukuai3@huawei.com>
+>>>>
+>>>> 1) There are one place that return value of match_u64() is not checked.
+>>>> 2) If match_u64() failed, return value is set to -EINVAL despite that
+>>>>      there are other possible errnos.
+>>>
+>>> Ditto. Does this matter?
+>>>
+>>
+>> It's not a big deal, but I think at least return value of match_u64()
+>> should be checked, we don't want to continue with invalid input, right?
+> 
+> Yeah, sure.
+> 
+>> By the way, match_u64() can return -ERANGE, which can provide more
+>> specific error messge to user.
+> 
+> I'm really not convinced going over 64bit range would be all that difficult
+> to spot whether the error code is -EINVAL or -ERANGE. There isn't anything
+> wrong with returning -ERANGE but the fact that that particular function
+> returns an error code doesn't necessarily mean that it *must* be forwarded.
+> 
+> Imagine that we used sscanf(buf, "%llu", &value) to parse the number
+> instead. We'd only know whether the parsing would have succeeded or not and
+> would probably return -EINVAL on failure and the behavior would be just
+> fine. This does not matter *at all*.
+> 
+> So, idk, I'm not necessarily against it but changing -EINVAL to -ERANGE is
+> pure churn. Nothing material is being improved by that change.
 
-diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_main.c b/drivers/net/ethernet/microchip/sparx5/sparx5_main.c
-index eeac04b84638..b6bbb3c9bd7a 100644
---- a/drivers/net/ethernet/microchip/sparx5/sparx5_main.c
-+++ b/drivers/net/ethernet/microchip/sparx5/sparx5_main.c
-@@ -887,6 +887,8 @@ static int mchp_sparx5_probe(struct platform_device *pdev)
- 
- cleanup_ports:
- 	sparx5_cleanup_ports(sparx5);
-+	if (sparx5->mact_queue)
-+		destroy_workqueue(sparx5->mact_queue);
- cleanup_config:
- 	kfree(configs);
- cleanup_pnode:
-@@ -911,6 +913,7 @@ static int mchp_sparx5_remove(struct platform_device *pdev)
- 	sparx5_cleanup_ports(sparx5);
- 	/* Unregister netdevs */
- 	sparx5_unregister_notifier_blocks(sparx5);
-+	destroy_workqueue(sparx5->mact_queue);
- 
- 	return 0;
- }
--- 
-2.32.0
+Thanks for the review and explanation, I'll just keep the addition of
+return value  checking of the former 2 patches.
+
+Thanks,
+Kuai
 
