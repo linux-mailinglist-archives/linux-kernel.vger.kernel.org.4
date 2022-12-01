@@ -2,170 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B44F763E855
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 04:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D52DC63E859
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 04:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiLADak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 22:30:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
+        id S229773AbiLADcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 22:32:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiLADaj (ORCPT
+        with ESMTP id S229515AbiLADcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 22:30:39 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC0F5BD69;
-        Wed, 30 Nov 2022 19:30:38 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NN1mr3BP4z4xyCG;
-        Thu,  1 Dec 2022 11:30:36 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2B13UUSP049820;
-        Thu, 1 Dec 2022 11:30:30 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 1 Dec 2022 11:30:31 +0800 (CST)
-Date:   Thu, 1 Dec 2022 11:30:31 +0800 (CST)
-X-Zmail-TransId: 2af963881fd7ffffffffa9070c69
-X-Mailer: Zmail v1.0
-Message-ID: <202212011130317080061@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <jdelvare@suse.com>
-Cc:     <linux@roeck-us.net>, <guillaume.ligneul@gmail.com>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBod21vbjogdXNlIHN5c2ZzX2VtaXQoKSB0byBpbnN0ZWFkIG9mIHNjbnByaW50Zigp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2B13UUSP049820
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 63881FDC.001 by FangMail milter!
-X-FangMail-Envelope: 1669865436/4NN1mr3BP4z4xyCG/63881FDC.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63881FDC.001/4NN1mr3BP4z4xyCG
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 30 Nov 2022 22:32:07 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC05B5BD69;
+        Wed, 30 Nov 2022 19:32:06 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B12ioum019070;
+        Thu, 1 Dec 2022 03:31:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=BfBVfHL55y4El2LYn+90PYn4HEvJdNfd0rEfXcfans8=;
+ b=d2Bx1PlwMWwhIAG7DwvtHLc+p62MU1u4nuXX640KzeoPIyJMZ0woHtPpOvpbXdSJe0Gb
+ D/+iJRbIottkcTyumxQzMMz/9JQhOeZzMvoFf5irAjau1JM3wWTAoOnw6KBWfFHUJ1Tw
+ lkdE6ND7gGj+NcN0i0cut1H6Gy3zg7UAV7lt6+1P3Y3f9eMa8/wrLnBpbKrXw1V/JOee
+ P2XT1zrCHpopTYrGMIbaiP3ApAqoWiTdvYWGW2LxvmPdPjAefFYj6bZ1il3+OTPpnvf9
+ k1QNNnt8IMNOgUOJrKq68GK/EvirkF67QOup/gplEpNyQ/0lPsQ1CcaBw5tZWv6osD/D jw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m6k3yg67t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Dec 2022 03:31:34 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B13VXGY004783
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Dec 2022 03:31:33 GMT
+Received: from [10.216.5.116] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 30 Nov
+ 2022 19:31:26 -0800
+Message-ID: <24f8252f-b843-4a48-0a98-addf1f56cab5@quicinc.com>
+Date:   Thu, 1 Dec 2022 09:01:23 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] ASoC: qcom: lpass-sc7180: Add maybe_unused tag for system
+ PM ops
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <robh+dt@kernel.org>, <quic_plai@quicinc.com>,
+        <bgoswami@quicinc.com>, <perex@perex.cz>, <tiwai@suse.com>,
+        <srinivas.kandagatla@linaro.org>, <quic_rohkumar@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>
+References: <1669726428-3140-1-git-send-email-quic_srivasam@quicinc.com>
+ <Y4eN4utrDnEnKu/8@google.com> <Y4eP2yFKsmxzyX/4@sirena.org.uk>
+ <Y4eU7ra4w3Fm+wLM@google.com> <Y4erFaRfGXbSJLMm@sirena.org.uk>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <Y4erFaRfGXbSJLMm@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: PgCB5VPgXqdJlAIFZEeTFpcNsyD3VJyQ
+X-Proofpoint-ORIG-GUID: PgCB5VPgXqdJlAIFZEeTFpcNsyD3VJyQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-01_02,2022-11-30_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
+ clxscore=1015 priorityscore=1501 malwarescore=0 spamscore=0 mlxscore=0
+ lowpriorityscore=0 impostorscore=0 mlxlogscore=703 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212010020
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Replace the open-code with sysfs_emit() to simplify the code.
-
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/hwmon/ds1621.c |  2 +-
- drivers/hwmon/lm73.c   |  6 +++---
- drivers/hwmon/sht3x.c  | 12 ++++++------
- 3 files changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/hwmon/ds1621.c b/drivers/hwmon/ds1621.c
-index 0886abf6ebab..e803d6393b9e 100644
---- a/drivers/hwmon/ds1621.c
-+++ b/drivers/hwmon/ds1621.c
-@@ -269,7 +269,7 @@ static ssize_t update_interval_show(struct device *dev,
- 				    struct device_attribute *da, char *buf)
- {
- 	struct ds1621_data *data = dev_get_drvdata(dev);
--	return scnprintf(buf, PAGE_SIZE, "%hu\n", data->update_interval);
-+	return sysfs_emit(buf, "%hu\n", data->update_interval);
- }
-
- static ssize_t update_interval_store(struct device *dev,
-diff --git a/drivers/hwmon/lm73.c b/drivers/hwmon/lm73.c
-index 1346b3b3f463..b6433ae2d75c 100644
---- a/drivers/hwmon/lm73.c
-+++ b/drivers/hwmon/lm73.c
-@@ -92,7 +92,7 @@ static ssize_t temp_show(struct device *dev, struct device_attribute *da,
- 	/* use integer division instead of equivalent right shift to
- 	   guarantee arithmetic shift and preserve the sign */
- 	temp = (((s16) err) * 250) / 32;
--	return scnprintf(buf, PAGE_SIZE, "%d\n", temp);
-+	return sysfs_emit(buf, "%d\n", temp);
- }
-
- static ssize_t convrate_store(struct device *dev, struct device_attribute *da,
-@@ -137,7 +137,7 @@ static ssize_t convrate_show(struct device *dev, struct device_attribute *da,
- 	int res;
-
- 	res = (data->ctrl & LM73_CTRL_RES_MASK) >> LM73_CTRL_RES_SHIFT;
--	return scnprintf(buf, PAGE_SIZE, "%hu\n", lm73_convrates[res]);
-+	return sysfs_emit(buf, "%hu\n", lm73_convrates[res]);
- }
-
- static ssize_t maxmin_alarm_show(struct device *dev,
-@@ -154,7 +154,7 @@ static ssize_t maxmin_alarm_show(struct device *dev,
- 	data->ctrl = ctrl;
- 	mutex_unlock(&data->lock);
-
--	return scnprintf(buf, PAGE_SIZE, "%d\n", (ctrl >> attr->index) & 1);
-+	return sysfs_emit(buf, "%d\n", (ctrl >> attr->index) & 1);
-
- abort:
- 	mutex_unlock(&data->lock);
-diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-index 3f279aa1cee5..8305e44d9ab2 100644
---- a/drivers/hwmon/sht3x.c
-+++ b/drivers/hwmon/sht3x.c
-@@ -320,7 +320,7 @@ static ssize_t temp1_limit_show(struct device *dev,
- 	u8 index = to_sensor_dev_attr(attr)->index;
- 	int temperature_limit = data->temperature_limits[index];
-
--	return scnprintf(buf, PAGE_SIZE, "%d\n", temperature_limit);
-+	return sysfs_emit(buf, "%d\n", temperature_limit);
- }
-
- static ssize_t humidity1_limit_show(struct device *dev,
-@@ -331,7 +331,7 @@ static ssize_t humidity1_limit_show(struct device *dev,
- 	u8 index = to_sensor_dev_attr(attr)->index;
- 	u32 humidity_limit = data->humidity_limits[index];
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n", humidity_limit);
-+	return sysfs_emit(buf, "%u\n", humidity_limit);
- }
-
- /*
-@@ -483,7 +483,7 @@ static ssize_t temp1_alarm_show(struct device *dev,
- 	if (ret)
- 		return ret;
-
--	return scnprintf(buf, PAGE_SIZE, "%d\n", !!(buffer[0] & 0x04));
-+	return sysfs_emit(buf, "%d\n", !!(buffer[0] & 0x04));
- }
-
- static ssize_t humidity1_alarm_show(struct device *dev,
-@@ -498,7 +498,7 @@ static ssize_t humidity1_alarm_show(struct device *dev,
- 	if (ret)
- 		return ret;
-
--	return scnprintf(buf, PAGE_SIZE, "%d\n", !!(buffer[0] & 0x08));
-+	return sysfs_emit(buf, "%d\n", !!(buffer[0] & 0x08));
- }
-
- static ssize_t heater_enable_show(struct device *dev,
-@@ -513,7 +513,7 @@ static ssize_t heater_enable_show(struct device *dev,
- 	if (ret)
- 		return ret;
-
--	return scnprintf(buf, PAGE_SIZE, "%d\n", !!(buffer[0] & 0x20));
-+	return sysfs_emit(buf, "%d\n", !!(buffer[0] & 0x20));
- }
-
- static ssize_t heater_enable_store(struct device *dev,
-@@ -550,7 +550,7 @@ static ssize_t update_interval_show(struct device *dev,
- {
- 	struct sht3x_data *data = dev_get_drvdata(dev);
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n",
-+	return sysfs_emit(buf, "%u\n",
- 			 mode_to_update_interval[data->mode]);
- }
-
--- 
-2.25.1
+On 12/1/2022 12:42 AM, Mark Brown wrote:
+> On Wed, Nov 30, 2022 at 05:37:50PM +0000, Matthias Kaehlcke wrote:
+>
+>> The tag of the applied patch is incorrect too, which is actually what I noticed:
+>>
+>> Fixes: a3a96e93cc88 ("ASoC: qcom: lpass-sc7280: Add system suspend/resume PM ops")
+>>
+>> This patch is for sc7180, so it should be:
+>>
+>> Fixes: 2d68148f8f85 ("ASoC: qcom: lpass-sc7180: Add system suspend/resume PM ops")
+Actually with the fix already posted v2.
+> Oh, well.  It's just a fixes tag for something that has only been in
+> -next, it doesn't really matter that much.
+Okay. Sorry for Inconvenience.
