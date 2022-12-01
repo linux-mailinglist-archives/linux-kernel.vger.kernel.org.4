@@ -2,147 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC4663F5A8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6857763F5AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiLAQtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:49:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
+        id S229696AbiLAQuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:50:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbiLAQtH (ORCPT
+        with ESMTP id S229475AbiLAQuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:49:07 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D81B5D95
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:49:05 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id td2so5600817ejc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 08:49:05 -0800 (PST)
+        Thu, 1 Dec 2022 11:50:09 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2079.outbound.protection.outlook.com [40.107.237.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B74113F98;
+        Thu,  1 Dec 2022 08:50:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZMhyG3ic2Cs1szrLHJGlaahqzxTOVo2fNCIC/VsNxI7Hl2u302Ib6F8BaRrayhs/0L3SAGpJOspMf8i6atxpq93S8AjnhVBNERRhYMZYPN4Xq/7kFzohCE8vJ1RofwW72R+pLwTBb51xStWSIaJyg4PJPnrsPYVUWVuVzZN78wyzS2MMV48CATAFdRZJdW0FnXrdw/XA6MupKWSCFIZP+rO/ikejMsz6lP6nqptFQIYmyjF9DaqE3v/9s+LOzM3j4dezILyNLRQsDjXcdFOnsQ2ZYL1CIhsSDNG6r0YxG8wQE7iKk21wrOodAswa+hjcw9sPCrWhrAENTFnAPJhNtQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BRW06KFw6Iv1/iKi4Gng4acL2n/Zr58HGd67yhCrzEs=;
+ b=TVpvnOtmu7xP+JgK+EiSQ2hSkOvfvz9P5GCxFYaTGCVPF9N/5YrxFOnDXAY5govTXu2LZ7hV2Swu/iuqe37VS6jp1sQhCNsl4YBaOVkaebfbnhVzcX8+YR3AIR4IpVDIlD6WPNnN8KWRYX1DjZJGrdNAqEGkx1i0ac0yv3kjllsMToEempLCPOhspNV5DuWR+aYKRr0gQgCUp2quv0F/RMBMhc/cVeWu/957ao0vWDesE/JfXEkUhSMYbx0Aood0jggBRqc4EFefAt4zPjoRHe78yE/vYh/ReKoMX9ktkIxapujVe+f813YzbMLMM4rguQpkpEcaigywlyWczYQf6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=labundy.com; dmarc=pass action=none header.from=labundy.com;
+ dkim=pass header.d=labundy.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qairkvFMBk38ixno7FXK1yC32lvL5RMbFL4tU3mHNiU=;
-        b=E6+O5sFnlzcfx6vCEWapoW1Pm6SStOFR//uju9VpmHL/c12Gkl0B9mbseX4dybeaws
-         IMPy4v+09Q7C/6/6aSrE35hUPpOzdiLIaZXMxKejpeuwdY0G0XqPHWdyjPyUJy8QdpgE
-         D4DpT7VHfure02QmLJ/U74k1DYN2DlArLESACzF4Y2UocJUxtr0gxAIPv+EZtMVGPtiR
-         sMkEcMF3pD5BNS/FW/uOvR/h+M2bpskrxIGTBtdyQ+T3gWJxGg20+eACCzEErhraAhei
-         YHYAtqNB5Lkh1EGk79Bkve5DRXkMfmt316bV6cr+yCYRcL1LGwAx9O3LpKATtXmjZgsd
-         Pbqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qairkvFMBk38ixno7FXK1yC32lvL5RMbFL4tU3mHNiU=;
-        b=CmSsZITzWf4gEQQcLGQY/dZRBcMnRz0aatlQxpkqYjjiflod0ZZhkHuzjP8ZVer7k6
-         qEMOBZsbk+3Zsn/ptvYEgZDA4349dHOhPpxopoaou/DbMFP0TMQZiexFpb4Kkqmy/1+v
-         2q0Ag9n6eMCiXPyU/Uz/Fe2lrP3pWGQ3dR9+ydlrHDAMSVwsaM9bvbKNNuvRt3/HA9xw
-         yGzYKpri/A14bz/RDp2O4F8r6v7LaiTHqE5CEeKo8XhBhB2OWy+IhKdmFvZBIYo4tkQD
-         cA5xnNhw8xvkDI57hvIByUesaeIkeePvCFCHtkHGVzy5S5F3WMewKoTt569M3CrSfQkm
-         nRFw==
-X-Gm-Message-State: ANoB5pk24sepbVnJFKN4nS4p5yW8mfDb1jmcSKr6dQ7EThUb/0k3dWfp
-        Ak/Grx7E1dq1Mh2+khcc5axN72Y9KYcaTQ==
-X-Google-Smtp-Source: AA0mqf5gFoJAiraBGIPuIXjQYFHjMFmI/vY7Nq2QR8kIuoZe+8iX0nA0VxsHUEAPSYZ8zx3HJVxSzQ==
-X-Received: by 2002:a17:906:27d8:b0:7bd:6264:a022 with SMTP id k24-20020a17090627d800b007bd6264a022mr24292090ejc.693.1669913344077;
-        Thu, 01 Dec 2022 08:49:04 -0800 (PST)
-Received: from blmsp ([2001:4091:a245:805c:9cf4:fdb8:bb61:5f4e])
-        by smtp.gmail.com with ESMTPSA id n9-20020aa7c449000000b004588ef795easm1935430edr.34.2022.12.01.08.49.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 08:49:03 -0800 (PST)
-Date:   Thu, 1 Dec 2022 17:49:02 +0100
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/15] can: m_can: Wakeup net queue once tx was issued
-Message-ID: <20221201164902.ipd3ctrtne47jtmv@blmsp>
-References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-3-msp@baylibre.com>
- <20221130172100.ef4xn6j6kzrymdyn@pengutronix.de>
- <20221201084302.oodh22xgvwsjmoc3@blmsp>
- <20221201091605.jgd7dlswcbxapdy3@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+ d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BRW06KFw6Iv1/iKi4Gng4acL2n/Zr58HGd67yhCrzEs=;
+ b=hp7/QcW6fIWt+4VHiQ5MIF+Tr5B/RYaVGrsu2GcNg5dClxCXDx8E2EdcCR6Ca4amkyjPSnEx68EEKT1A24XtgdMXsWFB6V1vNOsS1nAB+B9EI6tKUNDvQf8Jmy5mJYevfAX9cMEWs00IyYPrbP6M1fsIv0OQ2QDJiBGIDGzQhVM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=labundy.com;
+Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
+ (2603:10b6:803:43::21) by PH7PR08MB8279.namprd08.prod.outlook.com
+ (2603:10b6:510:15e::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Thu, 1 Dec
+ 2022 16:50:04 +0000
+Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
+ ([fe80::ea42:ebaf:dd18:6a4c]) by SN4PR0801MB3774.namprd08.prod.outlook.com
+ ([fe80::ea42:ebaf:dd18:6a4c%4]) with mapi id 15.20.5813.019; Thu, 1 Dec 2022
+ 16:50:04 +0000
+Date:   Thu, 1 Dec 2022 10:50:01 -0600
+From:   Jeff LaBundy <jeff@labundy.com>
+To:     ye.xingchen@zte.com.cn
+Cc:     dmitry.torokhov@gmail.com, colin.i.king@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Input: misc: use sysfs_emit() to instead of scnprintf()
+Message-ID: <Y4jbOX4ePJz7vbu1@nixie71>
+References: <202212011548387254492@zte.com.cn>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221201091605.jgd7dlswcbxapdy3@pengutronix.de>
+In-Reply-To: <202212011548387254492@zte.com.cn>
+X-ClientProxiedBy: DS7PR03CA0282.namprd03.prod.outlook.com
+ (2603:10b6:5:3ad::17) To SN4PR0801MB3774.namprd08.prod.outlook.com
+ (2603:10b6:803:43::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN4PR0801MB3774:EE_|PH7PR08MB8279:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6c5fca01-2008-4368-3330-08dad3bc185b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: r+sisvWzJmkGTxJ0Vy/j//jF7QdLAUxkSzACaD1Om6QSdq11pp9c4y/rVqnOsW2aCK535F1ahpnSeNY3UdF6PZZ5oLW/442sZoNXiUY7XrSdxQvJfyGqoNsm9vXNoLUI94ygVU/phKByU4EDpRpUUxhxq2d4qnrMFD1rc0+UaOmJYEO/sac8GZfb5iloJs+k7LG/V8P8UNG3y6GFKWIvK8pd5rrj3OJ2d6CepQP7AlD2GDoZkaVBUeBI5DVPmUIw1txUixG70D+Ftk5dc5M6JtWkquW5SE6Cyi/EE7shRBLrhYdH4xv2fgGZEetOFsWiAflEEFTtti3//pIjCPnytc8W31aQuk9wQ81GFiAhh9oFwLu0B059LIRDvpT/Eqznzj8DZ6CnFZ1m4c8Rua1Ohs54JCwikOtc4AiQtenjrSdEkeke7y6RRsWF/1dVlzCy7LBcoN5oHewJQ1pV6TKWe7cROfI1ujMBY8tJmFZ94SFruOr/01OnEHBMz63AXpJd/OzZhARDhkBU4cr8S614C4mu4L2Hqf03KJwMce28atsDxyx/8pt140KRGEokH6oDhWKQYg0DCt9rMefmoz9a4KJTNr7d9/qRKfnVveXGEgo+CDCxSkjWmt2Q+LuC7bERGl8A5y/v1DKqwD00Lcy/DRtjY3vu0Axm7nhIqLptT6Q=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0801MB3774.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(136003)(376002)(366004)(39830400003)(396003)(451199015)(41300700001)(186003)(66946007)(8676002)(6512007)(6916009)(66556008)(26005)(316002)(9686003)(66476007)(4326008)(83380400001)(5660300002)(86362001)(38100700002)(33716001)(2906002)(8936002)(966005)(6486002)(6666004)(6506007)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?a5SxbkVtsLK4fxj56ixMAFc8jUW6e3FyhwigO6N0nsY3XY+KRkKWd53DGrzR?=
+ =?us-ascii?Q?qe3DeQesz9iBHfSUtvWhfcbfri+pdztRripabh9OaRgkGtDHqcLnCAPx5lPv?=
+ =?us-ascii?Q?oe+P9mmxBeX1vmWgk7ehIljil4q1HC5KRh66+mjeSrbbRR5P8ap5KFJsqyK4?=
+ =?us-ascii?Q?E+U3sxnlpVAJH+W10jMpZpm0r2NuhmNty6YJRuq0xRoHK1XkvSAphiIpkRg1?=
+ =?us-ascii?Q?KJmadaKEkBWv/bdlJQ9W54+g+PZqkVv/ELd/oGjgCgaUXkXp/cRMt43DBXgX?=
+ =?us-ascii?Q?YD17PyhEVDbNLCt9URhtffAaMr1H3pTLRCu777FhfPEAOrGLVIdj7j2M66WK?=
+ =?us-ascii?Q?TPwRzVgERR/sO90lobYxr/fCmPnVz5vUIgU31x1017Em9EKmRHEYxbruQQpx?=
+ =?us-ascii?Q?5yRyZJ2FeBWUD6dDEYpxoLL1XYdWyjQI2HGMBzxIA+SC8FKHN7GhGXeyb0lM?=
+ =?us-ascii?Q?Aeq0IKFPzqoooWU9kD/QV9iE0XGe415CRVi+KvHwbcvt6ercScEZyMgAlC1K?=
+ =?us-ascii?Q?ytCYH9WiPDGQX2JSuQxkPcVWSB+OyFE6O171BSYbT3nXxujo8wQAgxX0/onS?=
+ =?us-ascii?Q?kwp8wCS6Xl0kNgWS6AChRtF7jTBzPpApNa6PrIS0RHFBG3NvNIWSi+Tjx6fO?=
+ =?us-ascii?Q?kw5lZTZ5+7sKBDOVIYGnF2uJK5uad1esptv2fD90IyOSx22KlNinaG3AwJE4?=
+ =?us-ascii?Q?ORwsNIT6r6pQlI4Yl+RkgPy/gJ25STc8KNUk8Hm4v2BLs8OLcMW+wXb8VyxU?=
+ =?us-ascii?Q?NX1MFhBEUxDUECsl1zApb85ASoHMz4p9domV4pWFDJlRzu3fYC4I5RIZhpWU?=
+ =?us-ascii?Q?qls1TYT5ZlcTH36pYl1yW43v4k9eOmM3k/mc9KTLkFS/yWYUHzCRawnpTuQJ?=
+ =?us-ascii?Q?bmUEyEvt/LweL0aeYabTzeIBYuCH7Z7gHDClt5+QTF+1/7FdD8i8FZsQ8oPI?=
+ =?us-ascii?Q?tujVmQsxXVRq8a9VFyN/BtLg7EQ1M4///R3p4iZQZxgBbtQ1xZr2xVbP95u3?=
+ =?us-ascii?Q?suqJSHE+0sGfBcQQr7eKrkkdwr6pXUOWnAh+XpVXv7cpmxpPECK+hu+oA8ma?=
+ =?us-ascii?Q?KT8UutwV/16cWXJnrbL+0nCyC3p4HtMUcu9wknrRuglJ2TLK31pwKsDEqcyR?=
+ =?us-ascii?Q?vqJGRW5hX+Qsh3t9CAO6QqUJ+NbfNGEYS1n8tAgdA9RdGdJd54pFDcJ3fnPE?=
+ =?us-ascii?Q?nGfFeaFT+T5/OY15hSbcQgcm39zy1Ld3ds7TJy+RRfAJmSEaffpG2Yvky5Hz?=
+ =?us-ascii?Q?za9u5h3q4hp426hXUqhdfLTjKCrF7Pv5cH9TEJmUEnxwv8sMsky8YJTOt+C9?=
+ =?us-ascii?Q?vVzD5VvqgcTu9xw84acZFRnOhQ9Bmd2T+yLIs591YrmuS+v/zOWJ7TDVGJX0?=
+ =?us-ascii?Q?wDN54BkddmOsBaBQUanMb9t0c9O22hPiSQx60U/Ola5BHeTtTX09NbPSOl9h?=
+ =?us-ascii?Q?MXhIIrTwyOy9cnydHuLoIkXkcrvFjqKXEPof7klVzT2qlDjeF5NB1mZDv6qA?=
+ =?us-ascii?Q?0/pkj6PN19fNCXXck/etcvzlSLNp5+wtOzu8obBXyp54qcJ5nQiT8x56+9Ky?=
+ =?us-ascii?Q?h+kG+BK1MlmyN1k0J5EzXb2kP2GClnZOBGMJbTjw?=
+X-OriginatorOrg: labundy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c5fca01-2008-4368-3330-08dad3bc185b
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR0801MB3774.namprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2022 16:50:04.4163
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZAFqjcale80HG2Z2JQHqNDFu0nuaAV915x3Xb1yshjZEawSDXBaEu3VlgrZR+tCO47cn/XKOuS0amvW5/Ti2HQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR08MB8279
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+Hi Ye,
 
-On Thu, Dec 01, 2022 at 10:16:05AM +0100, Marc Kleine-Budde wrote:
-> On 01.12.2022 09:43:02, Markus Schneider-Pargmann wrote:
-> > Hi Marc,
-> > 
-> > On Wed, Nov 30, 2022 at 06:21:00PM +0100, Marc Kleine-Budde wrote:
-> > > On 16.11.2022 21:52:55, Markus Schneider-Pargmann wrote:
-> > > > Currently the driver waits to wakeup the queue until the interrupt for
-> > > > the transmit event is received and acknowledged. If we want to use the
-> > > > hardware FIFO, this is too late.
-> > > > 
-> > > > Instead release the queue as soon as the transmit was transferred into
-> > > > the hardware FIFO. We are then ready for the next transmit to be
-> > > > transferred.
-> > > 
-> > > If you want to really speed up the TX path, remove the worker and use
-> > > the spi_async() API from the xmit callback, see mcp251xfd_start_xmit().
-> > 
-> > Good idea. I will check how regmap's async_write works and if it is
-> > suitable to do the job. I don't want to drop the regmap usage for this
-> > right now.
+On Thu, Dec 01, 2022 at 03:48:38PM +0800, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
 > 
-> IIRC regmap async write still uses mutexes, but sleeping is not allowed
-> in the xmit handler. The mcp251xfd driver does the endianness conversion
-> (and the optional CRC) manually for the TX path.
-
-I just saw, you can force regmap to use spinlocks as well. But it uses
-the same operation for sync operations as well.
-
+> Replace the open-code with sysfs_emit() to simplify the code.
 > 
-> Sending directly from the xmit handler basically eliminates the queuing
-> between the network stack and the worker. Getting rid of the worker
-> makes life easier and it's faster anyways.
-
-The current implementation of the driver doesn't really queue anything
-between the network stack and the worker. It is a queue of size 1 ;).
-
-To be honest I would rather focus on the other things than on getting
-rid of the worker completely as this can be done in a separate patch
-later as well. Yes I agree it would be nice to get rid of the worker but
-it is also probably not a major bottleneck for the performance and in
-its current state it works. If I have time left at the end I will be
-more than happy to do that. But for the moment I would just keep the
-worker as it is. Is that OK for you?
-
-Thanks,
-Markus
-
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> ---
+>  drivers/input/misc/ims-pcu.c | 10 +++++-----
+>  drivers/input/misc/iqs269a.c | 18 +++++++++---------
+>  2 files changed, 14 insertions(+), 14 deletions(-)
 > 
-> > > Extra bonus if you implement xmit_more() and transfer more than 1 skb
-> > > per SPI transfer.
-> > 
-> > That's on my todo list, but I am not sure I will get to it soonish.
+> diff --git a/drivers/input/misc/ims-pcu.c b/drivers/input/misc/ims-pcu.c
+> index b2f1292e27ef..6e8cc28debd9 100644
+> --- a/drivers/input/misc/ims-pcu.c
+> +++ b/drivers/input/misc/ims-pcu.c
+> @@ -1050,7 +1050,7 @@ static ssize_t ims_pcu_attribute_show(struct device *dev,
+>  			container_of(dattr, struct ims_pcu_attribute, dattr);
+>  	char *field = (char *)pcu + attr->field_offset;
 > 
-> I haven't implemented this for the mcp251xfd, yet, but I have some
-> proof-of-concept code somewhere. However, the mcp251xfd driver already
-> implemented byte queue limits: 0084e298acfe ("can: mcp251xfd: add BQL
-> support").
+> -	return scnprintf(buf, PAGE_SIZE, "%.*s\n", attr->field_length, field);
+> +	return sysfs_emit(buf, "%.*s\n", attr->field_length, field);
+>  }
 > 
-> regards,
-> Marc
+>  static ssize_t ims_pcu_attribute_store(struct device *dev,
+> @@ -1206,7 +1206,7 @@ ims_pcu_update_firmware_status_show(struct device *dev,
+>  	struct usb_interface *intf = to_usb_interface(dev);
+>  	struct ims_pcu *pcu = usb_get_intfdata(intf);
 > 
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", pcu->update_firmware_status);
+> +	return sysfs_emit(buf, "%d\n", pcu->update_firmware_status);
+>  }
+> 
+>  static DEVICE_ATTR(update_firmware_status, S_IRUGO,
+> @@ -1309,7 +1309,7 @@ static ssize_t ims_pcu_ofn_reg_data_show(struct device *dev,
+>  	if (error)
+>  		return error;
+> 
+> -	return scnprintf(buf, PAGE_SIZE, "%x\n", data);
+> +	return sysfs_emit(buf, "%x\n", data);
+>  }
+> 
+>  static ssize_t ims_pcu_ofn_reg_data_store(struct device *dev,
+> @@ -1344,7 +1344,7 @@ static ssize_t ims_pcu_ofn_reg_addr_show(struct device *dev,
+>  	int error;
+> 
+>  	mutex_lock(&pcu->cmd_mutex);
+> -	error = scnprintf(buf, PAGE_SIZE, "%x\n", pcu->ofn_reg_addr);
+> +	error = sysfs_emit(buf, "%x\n", pcu->ofn_reg_addr);
+>  	mutex_unlock(&pcu->cmd_mutex);
+> 
+>  	return error;
+> @@ -1397,7 +1397,7 @@ static ssize_t ims_pcu_ofn_bit_show(struct device *dev,
+>  	if (error)
+>  		return error;
+> 
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", !!(data & (1 << attr->nr)));
+> +	return sysfs_emit(buf, "%d\n", !!(data & (1 << attr->nr)));
+>  }
+> 
+>  static ssize_t ims_pcu_ofn_bit_store(struct device *dev,
+> diff --git a/drivers/input/misc/iqs269a.c b/drivers/input/misc/iqs269a.c
+> index a348247d3d38..e4d5cea51f39 100644
+> --- a/drivers/input/misc/iqs269a.c
+> +++ b/drivers/input/misc/iqs269a.c
+> @@ -1332,7 +1332,7 @@ static ssize_t counts_show(struct device *dev,
+>  	if (error)
+>  		return error;
+> 
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", le16_to_cpu(counts));
+> +	return sysfs_emit(buf, "%u\n", le16_to_cpu(counts));
+>  }
+> 
+>  static ssize_t hall_bin_show(struct device *dev,
+> @@ -1369,7 +1369,7 @@ static ssize_t hall_bin_show(struct device *dev,
+>  		return -EINVAL;
+>  	}
+> 
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
+> +	return sysfs_emit(buf, "%u\n", val);
+>  }
+> 
+>  static ssize_t hall_enable_show(struct device *dev,
+> @@ -1377,7 +1377,7 @@ static ssize_t hall_enable_show(struct device *dev,
+>  {
+>  	struct iqs269_private *iqs269 = dev_get_drvdata(dev);
+> 
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", iqs269->hall_enable);
+> +	return sysfs_emit(buf, "%u\n", iqs269->hall_enable);
+>  }
+> 
+>  static ssize_t hall_enable_store(struct device *dev,
+> @@ -1407,7 +1407,7 @@ static ssize_t ch_number_show(struct device *dev,
+>  {
+>  	struct iqs269_private *iqs269 = dev_get_drvdata(dev);
+> 
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", iqs269->ch_num);
+> +	return sysfs_emit(buf, "%u\n", iqs269->ch_num);
+>  }
+> 
+>  static ssize_t ch_number_store(struct device *dev,
+> @@ -1435,7 +1435,7 @@ static ssize_t rx_enable_show(struct device *dev,
+>  {
+>  	struct iqs269_private *iqs269 = dev_get_drvdata(dev);
+> 
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n",
+> +	return sysfs_emit(buf, "%u\n",
+>  			 iqs269->ch_reg[iqs269->ch_num].rx_enable);
+
+Please refer to my earlier comment with regard to vertical alignment.
+
+>  }
+> 
+> @@ -1475,7 +1475,7 @@ static ssize_t ati_mode_show(struct device *dev,
+>  	if (error)
+>  		return error;
+> 
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
+> +	return sysfs_emit(buf, "%u\n", val);
+>  }
+> 
+>  static ssize_t ati_mode_store(struct device *dev,
+> @@ -1508,7 +1508,7 @@ static ssize_t ati_base_show(struct device *dev,
+>  	if (error)
+>  		return error;
+> 
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
+> +	return sysfs_emit(buf, "%u\n", val);
+>  }
+> 
+>  static ssize_t ati_base_store(struct device *dev,
+> @@ -1541,7 +1541,7 @@ static ssize_t ati_target_show(struct device *dev,
+>  	if (error)
+>  		return error;
+> 
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
+> +	return sysfs_emit(buf, "%u\n", val);
+>  }
+> 
+>  static ssize_t ati_target_store(struct device *dev,
+> @@ -1568,7 +1568,7 @@ static ssize_t ati_trigger_show(struct device *dev,
+>  {
+>  	struct iqs269_private *iqs269 = dev_get_drvdata(dev);
+> 
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", iqs269->ati_current);
+> +	return sysfs_emit(buf, "%u\n", iqs269->ati_current);
+
+This patch creates a merge conflict with another one I have out for
+review [1], so one of us will need to rework.
+
+My hope is that I can go first, because mine is a bug fix and hence
+higher priority.
+
+>  }
+> 
+>  static ssize_t ati_trigger_store(struct device *dev,
 > -- 
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+> 2.25.1
 
+[1] https://patchwork.kernel.org/patch/13058161/
 
+Kind regards,
+Jeff LaBundy
