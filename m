@@ -2,118 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1179063F51F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7B363F4F7
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231354AbiLAQU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:20:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
+        id S231801AbiLAQO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:14:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiLAQUZ (ORCPT
+        with ESMTP id S229630AbiLAQOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:20:25 -0500
-X-Greylist: delayed 330 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Dec 2022 08:20:22 PST
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60BB38B0;
-        Thu,  1 Dec 2022 08:20:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1669911291;
-        bh=xWuRyqyu5ThwW4USd8HSm16KKk649E+OungraJjQRjg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NSK/XALUzDZV9HF4QJ7KjH/+zkac7+IsX61Dd/IMmcIt68w7C52sJmjViHc9kB2mO
-         tw0WXunPfMI3AKNulaz+ux4tHJ7G4/Av1ZOQHg5smOOflCiHZRXAeHZwlh8D7U3jTM
-         DJ4TQQzwSc5Q8u8KKWHiGMFA4fueDOK0TAu2EG9ru3t8oq92mhZVE7MuyhGfcVHh6M
-         hQ68jBZ06sYaASgG7zRzRXtMetuyFIgiIYEHUt53PckVvCtjpG6tfKnT4Et2p9rlpi
-         LYG7aQJfV3RRkDGVX05m27oEBSw4aBybgzeH98wu3bHrnvDkG2h4J5VoUgZM6+Dl//
-         D2MBAq8Rt3NTg==
-Received: from laptop-mjeanson.internal.efficios.com (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NNLkg0Lk0zYy0;
-        Thu,  1 Dec 2022 11:14:51 -0500 (EST)
-From:   Michael Jeanson <mjeanson@efficios.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Michael Jeanson <mjeanson@efficios.com>, stable@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michal Suchanek <msuchanek@suse.de>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH] powerpc/ftrace: fix syscall tracing on PPC64_ELF_ABI_V1
-Date:   Thu,  1 Dec 2022 11:14:42 -0500
-Message-Id: <20221201161442.2127231-1-mjeanson@efficios.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 1 Dec 2022 11:14:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC6B54443;
+        Thu,  1 Dec 2022 08:14:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EAC3062056;
+        Thu,  1 Dec 2022 16:14:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A5C5C433C1;
+        Thu,  1 Dec 2022 16:14:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669911293;
+        bh=RA+oYTRjg5pJois2KzjtgaU2E3HhxewyaArdgu/qh4I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tHG04wr1uG6lJKID3geDq5590EAVNGQa5BbtUYJ3uN2I/iu+Mm6ylnKRwH28/G7YX
+         QfuGBwTCyl1vBS8bZD7EXBvSujfrEKzMD8DRtEuRsIjY6gE07nhs2S0gkbjIiS2gmz
+         Y6Ged32jEWtITYeUAwZWHyF/0AFgc0no/Ac9cNIgeJmKg7uYJG7cMLgacWAEtui60B
+         W6MGnz/A8+XZKQ3zwWLrchrv8AtkHdF325qqXiLjtIyU2SCa+qwPgm3Oy3iqtEXiZ/
+         m8e57TxoG7P41iCRCwgjy/d47Le65e31WloOgK2Wj2R+wkBD/7echONk/PHVKk9jd+
+         7lKpQcltG6ZJg==
+Date:   Thu, 1 Dec 2022 08:14:52 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        david@fromorbit.com, dan.j.williams@intel.com,
+        akpm@linux-foundation.org
+Subject: Re: [PATCH v2 1/8] fsdax: introduce page->share for fsdax in reflink
+ mode
+Message-ID: <Y4jS/F7VH3zKdsBi@magnolia>
+References: <1669908538-55-1-git-send-email-ruansy.fnst@fujitsu.com>
+ <1669908538-55-2-git-send-email-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1669908538-55-2-git-send-email-ruansy.fnst@fujitsu.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In v5.7 the powerpc syscall entry/exit logic was rewritten in C, on
-PPC64_ELF_ABI_V1 this resulted in the symbols in the syscall table
-changing from their dot prefixed variant to the non-prefixed ones.
+On Thu, Dec 01, 2022 at 03:28:51PM +0000, Shiyang Ruan wrote:
+> fsdax page is used not only when CoW, but also mapread. To make the it
+> easily understood, use 'share' to indicate that the dax page is shared
+> by more than one extent.  And add helper functions to use it.
+> 
+> Also, the flag needs to be renamed to PAGE_MAPPING_DAX_SHARED.
+> 
+> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> ---
+>  fs/dax.c                   | 38 ++++++++++++++++++++++----------------
+>  include/linux/mm_types.h   |  5 ++++-
+>  include/linux/page-flags.h |  2 +-
+>  3 files changed, 27 insertions(+), 18 deletions(-)
+> 
+> diff --git a/fs/dax.c b/fs/dax.c
+> index 1c6867810cbd..85b81963ea31 100644
+> --- a/fs/dax.c
+> +++ b/fs/dax.c
+> @@ -334,35 +334,41 @@ static unsigned long dax_end_pfn(void *entry)
+>  	for (pfn = dax_to_pfn(entry); \
+>  			pfn < dax_end_pfn(entry); pfn++)
+>  
+> -static inline bool dax_mapping_is_cow(struct address_space *mapping)
+> +static inline bool dax_mapping_is_shared(struct page *page)
 
-Since ftrace prefixes a dot to the syscall names when matching them to
-build its syscall event list, this resulted in no syscall events being
-available.
+dax_page_is_shared?
 
-Remove the PPC64_ELF_ABI_V1 specific version of
-arch_syscall_match_sym_name to have the same behavior across all powerpc
-variants.
+>  {
+> -	return (unsigned long)mapping == PAGE_MAPPING_DAX_COW;
+> +	return (unsigned long)page->mapping == PAGE_MAPPING_DAX_SHARED;
+>  }
+>  
+>  /*
+> - * Set the page->mapping with FS_DAX_MAPPING_COW flag, increase the refcount.
+> + * Set the page->mapping with PAGE_MAPPING_DAX_SHARED flag, increase the
+> + * refcount.
+>   */
+> -static inline void dax_mapping_set_cow(struct page *page)
+> +static inline void dax_mapping_set_shared(struct page *page)
 
-Fixes: 68b34588e202 ("powerpc/64/sycall: Implement syscall entry/exit logic in C")
-Cc: stable@vger.kernel.org # v5.7+
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Michal Suchanek <msuchanek@suse.de>
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- arch/powerpc/include/asm/ftrace.h | 12 ------------
- 1 file changed, 12 deletions(-)
+It's odd that a function of a struct page still has 'mapping' in the
+name.
 
-diff --git a/arch/powerpc/include/asm/ftrace.h b/arch/powerpc/include/asm/ftrace.h
-index 3cee7115441b..e3d1f377bc5b 100644
---- a/arch/powerpc/include/asm/ftrace.h
-+++ b/arch/powerpc/include/asm/ftrace.h
-@@ -64,17 +64,6 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
-  * those.
-  */
- #define ARCH_HAS_SYSCALL_MATCH_SYM_NAME
--#ifdef CONFIG_PPC64_ELF_ABI_V1
--static inline bool arch_syscall_match_sym_name(const char *sym, const char *name)
--{
--	/* We need to skip past the initial dot, and the __se_sys alias */
--	return !strcmp(sym + 1, name) ||
--		(!strncmp(sym, ".__se_sys", 9) && !strcmp(sym + 6, name)) ||
--		(!strncmp(sym, ".ppc_", 5) && !strcmp(sym + 5, name + 4)) ||
--		(!strncmp(sym, ".ppc32_", 7) && !strcmp(sym + 7, name + 4)) ||
--		(!strncmp(sym, ".ppc64_", 7) && !strcmp(sym + 7, name + 4));
--}
--#else
- static inline bool arch_syscall_match_sym_name(const char *sym, const char *name)
- {
- 	return !strcmp(sym, name) ||
-@@ -83,7 +72,6 @@ static inline bool arch_syscall_match_sym_name(const char *sym, const char *name
- 		(!strncmp(sym, "ppc32_", 6) && !strcmp(sym + 6, name + 4)) ||
- 		(!strncmp(sym, "ppc64_", 6) && !strcmp(sym + 6, name + 4));
- }
--#endif /* CONFIG_PPC64_ELF_ABI_V1 */
- #endif /* CONFIG_FTRACE_SYSCALLS */
- 
- #if defined(CONFIG_PPC64) && defined(CONFIG_FUNCTION_TRACER)
--- 
-2.34.1
+dax_page_increase_shared?
 
+or perhaps simply
+
+dax_page_bump_sharing and dax_page_drop_sharing?
+
+Otherwise this mechanical change looks pretty straightforward.
+
+--D
+
+>  {
+> -	if ((uintptr_t)page->mapping != PAGE_MAPPING_DAX_COW) {
+> +	if ((uintptr_t)page->mapping != PAGE_MAPPING_DAX_SHARED) {
+>  		/*
+>  		 * Reset the index if the page was already mapped
+>  		 * regularly before.
+>  		 */
+>  		if (page->mapping)
+> -			page->index = 1;
+> -		page->mapping = (void *)PAGE_MAPPING_DAX_COW;
+> +			page->share = 1;
+> +		page->mapping = (void *)PAGE_MAPPING_DAX_SHARED;
+>  	}
+> -	page->index++;
+> +	page->share++;
+> +}
+> +
+> +static inline unsigned long dax_mapping_decrease_shared(struct page *page)
+> +{
+> +	return --page->share;
+>  }
+>  
+>  /*
+> - * When it is called in dax_insert_entry(), the cow flag will indicate that
+> + * When it is called in dax_insert_entry(), the shared flag will indicate that
+>   * whether this entry is shared by multiple files.  If so, set the page->mapping
+> - * FS_DAX_MAPPING_COW, and use page->index as refcount.
+> + * PAGE_MAPPING_DAX_SHARED, and use page->share as refcount.
+>   */
+>  static void dax_associate_entry(void *entry, struct address_space *mapping,
+> -		struct vm_area_struct *vma, unsigned long address, bool cow)
+> +		struct vm_area_struct *vma, unsigned long address, bool shared)
+>  {
+>  	unsigned long size = dax_entry_size(entry), pfn, index;
+>  	int i = 0;
+> @@ -374,8 +380,8 @@ static void dax_associate_entry(void *entry, struct address_space *mapping,
+>  	for_each_mapped_pfn(entry, pfn) {
+>  		struct page *page = pfn_to_page(pfn);
+>  
+> -		if (cow) {
+> -			dax_mapping_set_cow(page);
+> +		if (shared) {
+> +			dax_mapping_set_shared(page);
+>  		} else {
+>  			WARN_ON_ONCE(page->mapping);
+>  			page->mapping = mapping;
+> @@ -396,9 +402,9 @@ static void dax_disassociate_entry(void *entry, struct address_space *mapping,
+>  		struct page *page = pfn_to_page(pfn);
+>  
+>  		WARN_ON_ONCE(trunc && page_ref_count(page) > 1);
+> -		if (dax_mapping_is_cow(page->mapping)) {
+> -			/* keep the CoW flag if this page is still shared */
+> -			if (page->index-- > 0)
+> +		if (dax_mapping_is_shared(page)) {
+> +			/* keep the shared flag if this page is still shared */
+> +			if (dax_mapping_decrease_shared(page) > 0)
+>  				continue;
+>  		} else
+>  			WARN_ON_ONCE(page->mapping && page->mapping != mapping);
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index 500e536796ca..f46cac3657ad 100644
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -103,7 +103,10 @@ struct page {
+>  			};
+>  			/* See page-flags.h for PAGE_MAPPING_FLAGS */
+>  			struct address_space *mapping;
+> -			pgoff_t index;		/* Our offset within mapping. */
+> +			union {
+> +				pgoff_t index;		/* Our offset within mapping. */
+> +				unsigned long share;	/* share count for fsdax */
+> +			};
+>  			/**
+>  			 * @private: Mapping-private opaque data.
+>  			 * Usually used for buffer_heads if PagePrivate.
+> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> index 0b0ae5084e60..c8a3aa02278d 100644
+> --- a/include/linux/page-flags.h
+> +++ b/include/linux/page-flags.h
+> @@ -641,7 +641,7 @@ PAGEFLAG_FALSE(VmemmapSelfHosted, vmemmap_self_hosted)
+>   * Different with flags above, this flag is used only for fsdax mode.  It
+>   * indicates that this page->mapping is now under reflink case.
+>   */
+> -#define PAGE_MAPPING_DAX_COW	0x1
+> +#define PAGE_MAPPING_DAX_SHARED	0x1
+>  
+>  static __always_inline bool folio_mapping_flags(struct folio *folio)
+>  {
+> -- 
+> 2.38.1
+> 
