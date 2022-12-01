@@ -2,68 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E9063F820
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0447963F824
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:26:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiLATZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 14:25:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
+        id S229924AbiLAT0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 14:26:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiLATZc (ORCPT
+        with ESMTP id S229708AbiLAT0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 14:25:32 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E34C5E32
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:25:31 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id 13so2385833ybf.4
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 11:25:31 -0800 (PST)
+        Thu, 1 Dec 2022 14:26:52 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74564BE6B6
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:26:51 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3ceb4c331faso25673857b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 11:26:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NQoeb0KaA6tBmStXDhUp2Jzj7YSOKmV4N1ezYR1ylC0=;
-        b=QeERqtXOAtsPgIvidT8jMSYIXHRseZnTuXJVybh/79J7qNsQn5H/3UWmmA/1LThXQ2
-         WDSmM3WuDWtb5LwOhaem6Asdnabvn8FqSLpYsJQPRQkrwY3g6/HlsmU1wWTiAhSdt3oa
-         cz4sQDBt+cADd2ElYTF50MUdWkX50sWJDCYtC1nlTwJV1HKC+BmRH36VcV3rAMgq3dRC
-         6GomxwZnHTlZwcFvLgt/7Ll6A37SiuRMbkzR04VACbABY2xTvvNikWX4ZuoCjMZAfm1u
-         IAgkKvTyc5D+qVR18PcQIiaLB49ml0vWiSbR9ZvNimEQdB3/wq+OaoaPdozXr7q7J11g
-         iXbg==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=To2+IGODACfnwpoIhBKQmVc3cqLwsoSI0sFi4wzSM/E=;
+        b=cVvowtY9KFRmZF7PH4+F1K/Shm+oki/xR+2GSZqQWfdCij57G18sh4Q3wsLyD7vryQ
+         UD2OTKDBwavXQ1NaIhhGzF+ZgNiGZEAvaBFxq+jlWImzwsZ4jFpg+JSsvFL73t40cHlC
+         cgmhGJEL0MSyv9ymPRgJeoD2Ib//Pg4LqhThq9AyoGMzOR9VWnzXPYzqJDLYAD/XhRmR
+         3i3iK7rgzY08A4jYM+xtgrPdoi4dAtpBEsY0GuxhBzXZVFQ30EIjfsryvNzL3ax/JXEk
+         KYBakWKOz4NbtIa7ny0p150Kb33uWc9VybGu6bmaFOsU/H1ofJWvPQQ0wozx1LjBkMxo
+         BhaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NQoeb0KaA6tBmStXDhUp2Jzj7YSOKmV4N1ezYR1ylC0=;
-        b=i8v6Xf9HDo7adpc4vMAWl4fYTol1cZvFiYbepjIQXk3byloctbSkEHI+TFRm3WcuL7
-         G4pCSs/K1Y3EUeno8QS/xZydEsAEl1oEw3XkooL7pUlf7WG9vA6oY1Ll4YJGvKrOQ8ZU
-         jDHD/HUS3kLPPH+BiCackqVDeocNlHxSYtizazk9J6hNo4+6kvNqi57EOh/7X4kGNDmi
-         jyAoEOJo+CBJ+FLm9qDcrpf3N9h9WJRhA2IUv2N1zoFJgW074GtVzrxz+x6+wFPRkfU/
-         qHDPFa9KzFXV1J3dZyD/wdC2OwQfHMaQg0uOBxjQR2IOt/W50LcBxWN1AhKHPJ+Tt0yn
-         tWnA==
-X-Gm-Message-State: ANoB5pmFvnyEGGu7vhdVFwqAmICJwfLNFRNqvhB3+LVS3CXXbJ2oqt5K
-        j6rgn9CiFfRYr1EHwbi9n3AO/eNuSbmKy+xe8YOPKQ==
-X-Google-Smtp-Source: AA0mqf4FirlLNrAAQOf54JhkjC7QUPVZI8xTLsWtKiqihKjMUiFPu6xzC2dZ1JE2QmK/rhX9QzEXeIUd85Tcjw9iDR4=
-X-Received: by 2002:a25:d88:0:b0:6f0:9db5:63e7 with SMTP id
- 130-20020a250d88000000b006f09db563e7mr36460310ybn.387.1669922730336; Thu, 01
- Dec 2022 11:25:30 -0800 (PST)
-MIME-Version: 1.0
-References: <1669817512-4560-1-git-send-email-george.kennedy@oracle.com> <CALs4sv2ZfT1SAYY0oOYhrBBCjsG_th5g=QtSsbKJnPbW8faQ+w@mail.gmail.com>
-In-Reply-To: <CALs4sv2ZfT1SAYY0oOYhrBBCjsG_th5g=QtSsbKJnPbW8faQ+w@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 1 Dec 2022 20:25:18 +0100
-Message-ID: <CANn89iL9obgd==tdp9DgdxXk78UvzF6D4J1OeihB1kx9_U4oZw@mail.gmail.com>
-Subject: Re: [PATCH] net: check for dev pointer being NULL in
- dev_hard_header() to avoid GPF
-To:     Pavan Chebbi <pavan.chebbi@broadcom.com>
-Cc:     George Kennedy <george.kennedy@oracle.com>, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        harshit.m.mogalapalli@oracle.com
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=To2+IGODACfnwpoIhBKQmVc3cqLwsoSI0sFi4wzSM/E=;
+        b=hTVgEvy9KjLC2Vs4PGYLIy22pVQhq+N1EXWFZEkr227Ckq/XvnyBVXoMuhbg29EQFu
+         9kn6DI6DuMKmHbSKxrCRxqPEuwF6VRLhFVD/P3SY0vGH8D8Ov5QkN+zxoOL+MTM0OjV2
+         2i0l+e4TTExNvqfLASndMN2y1T9mS6NVJnGEkSd4YszHVjSD6SPuUqr12Y0IGMBjg5i7
+         YzFsjUWa25kfKDW6awKKyecarrD4sh83DGSto6jFOCHn7W+U2OP0vkLRggP6Adkv/zQk
+         XnIZcUFFr0ptDaWcDWc3xZ/lrwO2VMJ3s6BYJrRah08rRofBxLkk2CAL4jXr7Ts2tTdn
+         MMQw==
+X-Gm-Message-State: ANoB5pkPuMtk6Gi2RYly6S+0QAjqw9lKjH21NqP4TZf8fvTRX9t/BXS3
+        T0dWoSKr/fSDn4nS1j026yo1XYfe2Pt/UNDnU89H
+X-Google-Smtp-Source: AA0mqf5WBu/X5ruc3+IYERRFvBbHREqwfJ9bQdjXNgwUDJIsolUh8a0CfxBAUAbg5SZni/y/11N4MVKJtnkt1wDyNwxm
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2d4:203:3f93:cb91:7d11:def])
+ (user=axelrasmussen job=sendgmr) by 2002:a25:838c:0:b0:6f8:e7ca:f0ab with
+ SMTP id t12-20020a25838c000000b006f8e7caf0abmr14229160ybk.315.1669922810753;
+ Thu, 01 Dec 2022 11:26:50 -0800 (PST)
+Date:   Thu,  1 Dec 2022 11:26:44 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+Message-ID: <20221201192644.1941049-1-axelrasmussen@google.com>
+Subject: [PATCH] mm: multi-gen LRU: fix LRU size accounting on folio removal
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Steven Barrett <steven@liquorix.net>,
+        Yu Zhao <yuzhao@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Arnd Bergmann <arnd@arndb.de>, Peter Xu <peterx@redhat.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Hugh Dickins <hughd@google.com>,
+        Brian Geffon <bgeffon@google.com>,
+        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>
+Cc:     linux-kernel@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,87 +76,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 1, 2022 at 2:16 PM Pavan Chebbi <pavan.chebbi@broadcom.com> wrote:
->
-> On Wed, Nov 30, 2022 at 7:43 PM George Kennedy
-> <george.kennedy@oracle.com> wrote:
-> >
-> > The dev pointer can be NULL in dev_hard_header(). Add check for dev being
-> > NULL in dev_hard_header() to avoid GPF.
-> >
-> > general protection fault, probably for non-canonical address
-> >     0xdffffc0000000046: 0000 [#1] PREEMPT SMP KASAN NOPTI
-> > KASAN: null-ptr-deref in range [0x0000000000000230-0x0000000000000237]
-> > CPU: 1 PID: 45 Comm: kworker/1:1 Not tainted 6.1.0-rc7+ #2
-> > Hardware name: Red Hat KVM, BIOS 1.15.0-2.module+el8.6.0+20659+3dcf7c70
-> > Workqueue: mld mld_ifc_work
-> > RIP: 0010:macvlan_hard_header (./include/linux/netdevice.h:3057
-> >     (discriminator 4) drivers/net/macvlan.c:594 (discriminator 4))
-> > RSP: 0018:ffff888103d377d0 EFLAGS: 00010212
-> > RAX: dffffc0000000000 RBX: ffff88801cf1a000 RCX: 0000000000000000
-> > RDX: 0000000000000046 RSI: 0000000000000000 RDI: 0000000000000230
-> > RBP: ffff88801e8ef328 R08: 0000000000000000 R09: 0000000000000060
-> > R10: 0000000000000000 R11: 0000000000000000 R12: ffff88801f0497c0
-> > R13: 0000000000000000 R14: ffff888045187c98 R15: 0000000000000060
-> > FS:  0000000000000000(0000) GS:ffff888106c80000(0000)
-> >     knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007fbf3f1c1840 CR3: 0000000014e36000 CR4: 00000000000006e0
-> > Call Trace:
-> >  <TASK>
-> > neigh_connected_output (./include/linux/netdevice.h:3060
-> >     net/core/neighbour.c:1595)
-> > ip6_finish_output2 (./include/net/neighbour.h:546
-> >     net/ipv6/ip6_output.c:134)
-> > ip6_finish_output (net/ipv6/ip6_output.c:195 net/ipv6/ip6_output.c:206)
-> > ip6_output (./include/linux/netfilter.h:291 net/ipv6/ip6_output.c:227)
-> > NF_HOOK.constprop.0 (./include/net/dst.h:445
-> >     ./include/linux/netfilter.h:302)
-> > mld_sendpack (net/ipv6/mcast.c:1824)
-> > mld_send_cr (net/ipv6/mcast.c:2122)
-> > mld_ifc_work (net/ipv6/mcast.c:2655)
-> > process_one_work (kernel/workqueue.c:2294)
-> > worker_thread (./include/linux/list.h:292 kernel/workqueue.c:2437)
-> > kthread (kernel/kthread.c:376)
-> > ret_from_fork (arch/x86/entry/entry_64.S:312)
-> >  </TASK>
-> > Modules linked in:
-> > Dumping ftrace buffer:
-> >    (ftrace buffer empty)
-> > ---[ end trace 0000000000000000 ]---
-> >
-> > Fixes: 0c4e85813d0a ("[NET]: Wrap netdevice hardware header creation.")
-> > Reported-by: syzkaller <syzkaller@googlegroups.com>
-> > Signed-off-by: George Kennedy <george.kennedy@oracle.com>
-> > ---
-> >  include/linux/netdevice.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> > index eddf8ee270e7..9b25a6301fa5 100644
-> > --- a/include/linux/netdevice.h
-> > +++ b/include/linux/netdevice.h
-> > @@ -3054,7 +3054,7 @@ static inline int dev_hard_header(struct sk_buff *skb, struct net_device *dev,
-> >                                   const void *daddr, const void *saddr,
-> >                                   unsigned int len)
-> >  {
-> > -       if (!dev->header_ops || !dev->header_ops->create)
-> > +       if (!dev || !dev->header_ops || !dev->header_ops->create)
+When removing a folio from MGLRU, we want to update the LRU size
+accordingly based on the generation it belonged to previously -
+lru_gen_update_size() does this.
 
-Do  you have a repro ?
+The bug here is, set_mask_bits effectively clears the generation bits.
+Ignoring the complexity set_mask_bits is meant to handle, the code being
+changed here is in effect:
 
-This patch will not prevent a crash later I think.
+    flags = !reclaiming && lru_gen_is_active(lruvec, gen) ? BIT(PG_active) : 0;
+    flags = *folio->flags = (*folio->flags & ~LRU_GEN_MASK) | flags;
+    gen = ((flags & LRU_GEN_MASK) >> LRU_GEN_PGOFF) - 1;
 
-Please fix the root cause, thanks !
+In other words, the bug is we clear all of the `LGU_GEN_MASK` bits, and
+then we recalculate `gen` - but of course after clearing the bits
+`flags & LRU_GEN_MASK` is always zero, and so now `gen` is always -1.
 
-> >                 return 0;
->
-> net_device being NULL during eth header construction? seems like a
-> more serious issue?
-> If it indeed is a genuine scenario I think a better description is needed...
->
-> >
-> >         return dev->header_ops->create(skb, dev, type, daddr, saddr, len);
-> > --
-> > 2.31.1
-> >
+So we effectively always call:
+
+    lru_gen_update_size(lruvec, folio, -1, -1);
+
+This leads `lru_gen_update_size` to incorrectly conclude that we're
+**adding**, not removing, a folio. We take this path:
+
+    /* addition */
+    if (old_gen < 0) {
+        /* always false, new_gen is -1 too */
+        if (lru_gen_is_active(lruvec, new_gen))
+            /* ... */
+	__update_lru_size(lruvec, lru, zone, delta);
+	return;
+    }
+
+In other words, when removing, we incorrectly *add* the delta to the
+inactive LRU instead of subtracting.
+
+The fix is simple. We already have the generation number the folio
+belonged to: we set `int gen = folio_lru_gen(folio);` at the top of
+`lru_gen_del_folio`. So, just delete the line incorrectly recalculating
+the generation number.
+
+Fixes: ec1c86b25f4b ("mm: multi-gen LRU: groundwork")
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ include/linux/mm_inline.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
+index e8ed225d8f7c..5bba6e0b0840 100644
+--- a/include/linux/mm_inline.h
++++ b/include/linux/mm_inline.h
+@@ -277,7 +277,6 @@ static inline bool lru_gen_del_folio(struct lruvec *lruvec, struct folio *folio,
+ 	/* for folio_migrate_flags() */
+ 	flags = !reclaiming && lru_gen_is_active(lruvec, gen) ? BIT(PG_active) : 0;
+ 	flags = set_mask_bits(&folio->flags, LRU_GEN_MASK, flags);
+-	gen = ((flags & LRU_GEN_MASK) >> LRU_GEN_PGOFF) - 1;
+ 
+ 	lru_gen_update_size(lruvec, folio, gen, -1);
+ 	list_del(&folio->lru);
+-- 
+2.39.0.rc0.267.gcb52ba06e7-goog
+
