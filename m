@@ -2,183 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF35063F134
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4116563F138
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:08:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiLANHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:07:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
+        id S230500AbiLANIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:08:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiLANHC (ORCPT
+        with ESMTP id S229717AbiLANIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:07:02 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23366589;
-        Thu,  1 Dec 2022 05:06:53 -0800 (PST)
-Received: from frapeml500001.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NNGV90wjpz687L9;
-        Thu,  1 Dec 2022 21:03:45 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- frapeml500001.china.huawei.com (7.182.85.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Dec 2022 14:06:51 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 1 Dec
- 2022 13:06:50 +0000
-Date:   Thu, 1 Dec 2022 13:06:50 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alison Schofield <alison.schofield@intel.com>,
-        "Vishal Verma" <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH V2 02/11] cxl/mem: Implement Get Event Records command
-Message-ID: <20221201130650.00007f3d@Huawei.com>
-In-Reply-To: <20221201002719.2596558-3-ira.weiny@intel.com>
-References: <20221201002719.2596558-1-ira.weiny@intel.com>
-        <20221201002719.2596558-3-ira.weiny@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 1 Dec 2022 08:08:32 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDD845A0C;
+        Thu,  1 Dec 2022 05:08:28 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C27961FD81;
+        Thu,  1 Dec 2022 13:08:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669900106; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=K/3E4rKV56hZO1ZYVzKhSOwwyXDyBi7M71us9jjagdo=;
+        b=ZC25gQgYpHLJv3sUQUpw833y1NbAm84Kj96hRcqLaxWPqonFdDKoAEQwY8o+h5Urr4f/94
+        sYhbrouqe8Sz2mT73RyW2KuWQ0ZQZVfQyN3N+lHgNLROGt3f2Q2frfuTwFrG8knt0CulCG
+        XireW5USxtH4hjxIvL59nH4fLlaqq3M=
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id A9BA313503;
+        Thu,  1 Dec 2022 13:08:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id uwI1KUqniGPoBQAAGKfGzw
+        (envelope-from <mhocko@suse.com>); Thu, 01 Dec 2022 13:08:26 +0000
+Date:   Thu, 1 Dec 2022 14:08:26 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     =?utf-8?B?56iL5Z6y5rab?= Chengkaitao Cheng 
+        <chengkaitao@didiglobal.com>
+Cc:     Tao pilgrim <pilgrimtao@gmail.com>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "cgel.zte@gmail.com" <cgel.zte@gmail.com>,
+        "ran.xiaokai@zte.com.cn" <ran.xiaokai@zte.com.cn>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
+        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
+        "yuzhao@google.com" <yuzhao@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "surenb@google.com" <surenb@google.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "sujiaxun@uniontech.com" <sujiaxun@uniontech.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] mm: memcontrol: protect the memory in cgroup from being
+ oom killed
+Message-ID: <Y4inSsNpmomzRt8J@dhcp22.suse.cz>
+References: <Y4hqlzNeZ6Osu0pI@dhcp22.suse.cz>
+ <C2CC36C1-29AE-4B65-A18A-19A745652182@didiglobal.com>
+ <Y4ihyRqQzyFFLqh6@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y4ihyRqQzyFFLqh6@dhcp22.suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Nov 2022 16:27:10 -0800
-ira.weiny@intel.com wrote:
-
-> From: Ira Weiny <ira.weiny@intel.com>
+On Thu 01-12-22 13:44:58, Michal Hocko wrote:
+> On Thu 01-12-22 10:52:35, 程垲涛 Chengkaitao Cheng wrote:
+> > At 2022-12-01 16:49:27, "Michal Hocko" <mhocko@suse.com> wrote:
+[...]
+> > >Why cannot you simply discount the protection from all processes
+> > >equally? I do not follow why the task_usage has to play any role in
+> > >that.
+> > 
+> > If all processes are protected equally, the oom protection of cgroup is 
+> > meaningless. For example, if there are more processes in the cgroup, 
+> > the cgroup can protect more mems, it is unfair to cgroups with fewer 
+> > processes. So we need to keep the total amount of memory that all 
+> > processes in the cgroup need to protect consistent with the value of 
+> > eoom.protect.
 > 
-> CXL devices have multiple event logs which can be queried for CXL event
-> records.  Devices are required to support the storage of at least one
-> event record in each event log type.
-> 
-> Devices track event log overflow by incrementing a counter and tracking
-> the time of the first and last overflow event seen.
-> 
-> Software queries events via the Get Event Record mailbox command; CXL
-> rev 3.0 section 8.2.9.2.2.
-> 
-> Issue the Get Event Record mailbox command on driver load.  Trace each
-> record found with a generic record trace.  Trace any overflow
-> conditions.
-> 
-> The device can return up to 1MB worth of event records per query.
-> Allocate a shared large buffer to handle the max number of records based
-> on the mailbox payload size.
-> 
-> This patch traces a raw event record only and leaves the specific event
-> record types to subsequent patches.
-> 
-> Macros are created to use for tracing the common CXL Event header
-> fields.
-> 
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> You are mixing two different concepts together I am afraid. The per
+> memcg protection should protect the cgroup (i.e. all processes in that
+> cgroup) while you want it to be also process aware. This results in a
+> very unclear runtime behavior when a process from a more protected memcg
+> is selected based on its individual memory usage.
 
-Hi Ira,
-
-Looks good to me.  A few trivial suggestions inline. Either way,
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-
-> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> index 16176b9278b4..70b681027a3d 100644
-> --- a/drivers/cxl/core/mbox.c
-> +++ b/drivers/cxl/core/mbox.c
-> @@ -7,6 +7,9 @@
-
-...
-
-> +
-> +static void cxl_mem_free_event_buffer(void *data)
-> +{
-> +	struct cxl_dev_state *cxlds = data;
-> +
-> +	kvfree(cxlds->event_buf);
-
-Trivial, but why not just pass in the event_buf?
-
-> +}
-> +
-> +/*
-> + * There is a single buffer for reading event logs from the mailbox.  All logs
-> + * share this buffer protected by the cxlds->event_buf_lock.
-> + */
-> +static struct cxl_get_event_payload *alloc_event_buf(struct cxl_dev_state *cxlds)
-> +{
-> +	struct cxl_get_event_payload *buf;
-> +
-> +	dev_dbg(cxlds->dev, "Allocating event buffer size %zu\n",
-> +		cxlds->payload_size);
-> +
-> +	buf = kvmalloc(cxlds->payload_size, GFP_KERNEL);
-
-huh. I assumed there would be a devm_kvmalloc() but apparently not..  Ah well
-- whilst it might makes sense to add one, let's not tie that up with this series.
-
-> +	if (buf && devm_add_action_or_reset(cxlds->dev,
-> +			cxl_mem_free_event_buffer, cxlds))
-> +		return NULL;
-
-Trivial, but I'd go for a more wordy but more conventional pattern of
-	if (!buf)
-		return NULL;
-
-	if (devm_add_action_or_reset())
-		return NULL
-	
-	return buff;
-	
-> +	return buf;
-> +}
-> +
-
-...
-
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index cd35f43fedd4..55d57f5a64bc 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -4,6 +4,7 @@
->  #define __CXL_MEM_H__
->  #include <uapi/linux/cxl_mem.h>
->  #include <linux/cdev.h>
-> +#include <linux/uuid.h>
->  #include "cxl.h"
->  
->  /* CXL 2.0 8.2.8.5.1.1 Memory Device Status Register */
-> @@ -250,12 +251,16 @@ struct cxl_dev_state {
->  
->  	bool msi_enabled;
->  
-> +	struct cxl_get_event_payload *event_buf;
-Whilst it is obvious (and document at point of allocation),
-I think one of the static checkers still warns that all locks must
-have comments.  Probably easier to add one now than wait for the
-inevitable warning report.
-
-> +	struct mutex event_buf_lock;
-> +
->  	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
->  };
->  
-
-
+Let me be more specific here. Although it is primarily processes which
+are the primary source of memcg charges the memory accounted for the oom
+badness purposes is not really comparable to the overal memcg charged
+memory. Kernel memory, non-mapped memory all that can generate rather
+interesting cornercases.
+-- 
+Michal Hocko
+SUSE Labs
