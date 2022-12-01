@@ -2,124 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5144F63F400
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:33:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6DF63F405
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231858AbiLAPdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 10:33:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
+        id S232007AbiLAPdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 10:33:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231939AbiLAPcv (ORCPT
+        with ESMTP id S231985AbiLAPdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 10:32:51 -0500
-Received: from mail1.bemta34.messagelabs.com (mail1.bemta34.messagelabs.com [195.245.231.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA45AD30E;
-        Thu,  1 Dec 2022 07:32:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-        s=170520fj; t=1669908743; i=@fujitsu.com;
-        bh=JjMcfKen5VZCgTZ82chMW2jTyW7XOSibUTqR+JCgv6E=;
-        h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=RUKtTmHuTEqxhORxqkwyhyJH2t9DyTHqFubIJs+pazRlp56cjiNgd56xVmRTxwVhE
-         gdqdiLJQHmUVC1U8z7FJ1R/5yFI/yU47QxpRyNaAZ/nG2iGoCqJnud4oCoQSHuFmDv
-         lX9MHnx9gBRsafox45bfhtT17L3Z4Pgta2m0gdl3ulYVj2TEqv6tm9m9kvc8dZGuEw
-         Atz4jdgrTF18DTXMxuam6hfCOOXaguwMzdeHlyd09bncA8Nyo/bA46fAcFMknqBezi
-         iYrn0diIJuODCMM757vFRVZtNuoNwEdvRU65T0/4FiGPzEkxoHG36lb9UHjwTTG7uE
-         dS0z0a79ry4LA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupileJIrShJLcpLzFFi42Kxs+HYrMt+siP
-  ZYM5MKYs569ewWUyfeoHRYsuxe4wWl5/wWezZe5LF4vKuOWwWu/7sYLdY+eMPqwOHx6lFEh6L
-  97xk8ti0qpPN48SM3yweLzbPZPT4vEkugC2KNTMvKb8igTVj6tJTzAU72SsWvNvG1sA4i62Lk
-  YtDSGAjo8T0I6+YIZwlTBIfbtxkhXD2MEpcW30KyOHkYBPQkbiw4C+QzcEhIlAtcWspG0iYWS
-  BD4viVP8wgtrCAj8TyM8vZQWwWARWJPbcugcV5BVwlJr2fAWZLCChITHn4HszmBIq//LsRrF5
-  IwEXievNBqHpBiZMzn7BAzJeQOPjiBTPIWgkBJYmZ3fEQYyokZs1qY4Kw1SSuntvEPIFRcBaS
-  7llIuhcwMq1iNCtOLSpLLdI1NNBLKspMzyjJTczM0Uus0k3USy3VLU8tLtE10kssL9ZLLS7WK
-  67MTc5J0ctLLdnECIyWlGKVvh2Mb5f90TvEKMnBpCTKq72vI1mILyk/pTIjsTgjvqg0J7X4EK
-  MMB4eSBG/KHqCcYFFqempFWmYOMHJh0hIcPEoivHzHgNK8xQWJucWZ6RCpU4y6HGsbDuxlFmL
-  Jy89LlRLnDTwOVCQAUpRRmgc3ApZELjHKSgnzMjIwMAjxFKQW5WaWoMq/YhTnYFQS5t22DWgK
-  T2ZeCdymV0BHMAEdESnWBnJESSJCSqqBKWaj8/t58aVf9tZ1VN7fe34+u+XZo++0f2yb+Pxi1
-  u6ee6LCzVU98kHt4UyNeo37P5qbSvYcZmv80PbuQ9gWUcMLP0Ibz+8tOq3x8PSDXttfy15ov6
-  vjXWr9WYrj8O17TGksW3bpekddnvzU7FIzi870Xzs22myedGV5kO2faL4Xu40Wlk/K3PJr4r5
-  7k7bdqr2eLqHNE9EpvorNXf/JbO3HEWsrS3+f46/Y13Xxq8PnlQLXGF/VX3bTnMb3ceZ/7onF
-  m2W+aD1WVIiZ8k0pw/+ApK5eSHB0zAQFTy6R1zZHpoosyPjAzP2Vf23OtPVn/ASWmmpIveHN1
-  jk35c0K8bsqp66pnnx8VeJ+anKa4iwlluKMREMt5qLiRACtlAd/nQMAAA==
-X-Env-Sender: ruansy.fnst@fujitsu.com
-X-Msg-Ref: server-6.tower-548.messagelabs.com!1669908743!72999!1
-X-Originating-IP: [62.60.8.179]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.101.1; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 24259 invoked from network); 1 Dec 2022 15:32:23 -0000
-Received: from unknown (HELO n03ukasimr04.n03.fujitsu.local) (62.60.8.179)
-  by server-6.tower-548.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 1 Dec 2022 15:32:23 -0000
-Received: from n03ukasimr04.n03.fujitsu.local (localhost [127.0.0.1])
-        by n03ukasimr04.n03.fujitsu.local (Postfix) with ESMTP id 1EF7315A;
-        Thu,  1 Dec 2022 15:32:23 +0000 (GMT)
-Received: from R01UKEXCASM126.r01.fujitsu.local (R01UKEXCASM126 [10.183.43.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by n03ukasimr04.n03.fujitsu.local (Postfix) with ESMTPS id 1233E153;
-        Thu,  1 Dec 2022 15:32:23 +0000 (GMT)
-Received: from localhost.localdomain (10.167.225.141) by
- R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
- (TLS) id 15.0.1497.42; Thu, 1 Dec 2022 15:32:19 +0000
-From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
-        <nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>
-CC:     <djwong@kernel.org>, <david@fromorbit.com>,
-        <dan.j.williams@intel.com>, <akpm@linux-foundation.org>
-Subject: [PATCH v2 6/8] xfs: use dax ops for zero and truncate in fsdax mode
-Date:   Thu, 1 Dec 2022 15:32:10 +0000
-Message-ID: <1669908730-131-1-git-send-email-ruansy.fnst@fujitsu.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1669908538-55-1-git-send-email-ruansy.fnst@fujitsu.com>
-References: <1669908538-55-1-git-send-email-ruansy.fnst@fujitsu.com>
+        Thu, 1 Dec 2022 10:33:21 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079C7AD313
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 07:32:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669908776; x=1701444776;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=e6rKMYNAxAVjzEDMj6AS1zIL13gxukBlCVJFqeflE1g=;
+  b=ZqlHrJ4iEd5LNXee0FcpKu9k0Yva1Pl2KJ6mzoOy9UCE8yy8US22cPU2
+   7Km+u/fYspB45sEo+sR7s7pgs9egG9hnSlN716SskbZpnDBUkC7lMj+LH
+   49uQIFAZg+LZyMXyiQVi96swmIRPL6ofqA4tr4qpykAqtjPmXbsO19/aQ
+   +Z0ncmy8bo6WfSlJ56YMSs4Vta1Ir5ancpuptpjhtuhyQVKEI/pMo/ut9
+   qdehE6jbRY/UIuSGknQEOqcmYDzx6Bt6pp8SHxbnCoL53hP9wd6XvcX/9
+   cJsXVTBSdpXDMaOpxYhXiN27MZkv5RfHlb7hnHAZQeyS57kqSSJ5+vBHw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="314411069"
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="314411069"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 07:32:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="644681426"
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="644681426"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 01 Dec 2022 07:32:31 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p0lY7-000CgF-0a;
+        Thu, 01 Dec 2022 15:32:31 +0000
+Date:   Thu, 01 Dec 2022 23:32:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:irq/core] BUILD SUCCESS
+ 9049e1ca41983ab773d7ea244bee86d7835ec9f5
+Message-ID: <6388c8fa.4ctCJdel5+WUxHjQ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.167.225.141]
-X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
- R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero and truncate on a dax file may execute CoW.  So use dax ops which
-contains end work for CoW.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
+branch HEAD: 9049e1ca41983ab773d7ea244bee86d7835ec9f5  genirq/irqdesc: Don't try to remove non-existing sysfs files
 
-Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
----
- fs/xfs/xfs_iomap.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+elapsed time: 1504m
 
-diff --git a/fs/xfs/xfs_iomap.c b/fs/xfs/xfs_iomap.c
-index 881de99766ca..d9401d0300ad 100644
---- a/fs/xfs/xfs_iomap.c
-+++ b/fs/xfs/xfs_iomap.c
-@@ -1370,7 +1370,7 @@ xfs_zero_range(
- 
- 	if (IS_DAX(inode))
- 		return dax_zero_range(inode, pos, len, did_zero,
--				      &xfs_direct_write_iomap_ops);
-+				      &xfs_dax_write_iomap_ops);
- 	return iomap_zero_range(inode, pos, len, did_zero,
- 				&xfs_buffered_write_iomap_ops);
- }
-@@ -1385,7 +1385,7 @@ xfs_truncate_page(
- 
- 	if (IS_DAX(inode))
- 		return dax_truncate_page(inode, pos, did_zero,
--					&xfs_direct_write_iomap_ops);
-+					&xfs_dax_write_iomap_ops);
- 	return iomap_truncate_page(inode, pos, did_zero,
- 				   &xfs_buffered_write_iomap_ops);
- }
+configs tested: 70
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allyesconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+x86_64                           rhel-8.3-syz
+alpha                            allyesconfig
+mips                             allyesconfig
+x86_64                         rhel-8.3-kunit
+powerpc                          allmodconfig
+x86_64                           rhel-8.3-kvm
+m68k                             allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+arc                  randconfig-r043-20221128
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                 randconfig-a002-20221128
+i386                 randconfig-a003-20221128
+i386                 randconfig-a001-20221128
+i386                 randconfig-a004-20221128
+i386                 randconfig-a005-20221128
+i386                 randconfig-a006-20221128
+i386                                defconfig
+i386                             allyesconfig
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+arc                  randconfig-r043-20221201
+riscv                randconfig-r042-20221201
+s390                 randconfig-r044-20221201
+ia64                             allmodconfig
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+
+clang tested configs:
+hexagon              randconfig-r045-20221128
+riscv                randconfig-r042-20221128
+hexagon              randconfig-r041-20221128
+s390                 randconfig-r044-20221128
+x86_64               randconfig-a013-20221128
+x86_64               randconfig-a012-20221128
+x86_64               randconfig-a014-20221128
+x86_64               randconfig-a011-20221128
+x86_64               randconfig-a015-20221128
+x86_64               randconfig-a016-20221128
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                 randconfig-a012-20221128
+i386                 randconfig-a015-20221128
+i386                 randconfig-a011-20221128
+i386                 randconfig-a013-20221128
+i386                 randconfig-a014-20221128
+i386                 randconfig-a016-20221128
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+
 -- 
-2.38.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
