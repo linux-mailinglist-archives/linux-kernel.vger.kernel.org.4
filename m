@@ -2,84 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F387F63ED67
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA2F63ED69
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:16:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiLAKO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:14:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
+        id S229823AbiLAKQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiLAKOs (ORCPT
+        with ESMTP id S229597AbiLAKQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:14:48 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1445A934DB;
-        Thu,  1 Dec 2022 02:14:41 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p0gaU-0007Pe-IB; Thu, 01 Dec 2022 11:14:38 +0100
-Message-ID: <14722778-dda0-cb9f-8647-892493d94a5c@leemhuis.info>
-Date:   Thu, 1 Dec 2022 11:14:38 +0100
+        Thu, 1 Dec 2022 05:16:38 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7599077C
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:16:36 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E331A1FD63;
+        Thu,  1 Dec 2022 10:16:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669889794; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4jR5csyqPRlj0sE4agPtfCNXgK7gme6BxDCQeVvGkkg=;
+        b=Arxdm3h4gzmt1gTKhaLwG4RIVX3FDKwQeQEzMM1qMA3TQ+STnD9rulwoPW6U9A5FNAFzWO
+        96knByfeGJDSX1ItF82uOYf7fdEfB0EDg3IGKcmbBKsKuEF9MOZ8CP6Mx7uPIUrxUyUuJ0
+        bUvVIteBr9k3tk2DH2jFG+tdoXzSQ8k=
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id D36DA13503;
+        Thu,  1 Dec 2022 10:16:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id bwbIMgJ/iGMbJwAAGKfGzw
+        (envelope-from <mhocko@suse.com>); Thu, 01 Dec 2022 10:16:34 +0000
+Date:   Thu, 1 Dec 2022 11:16:34 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     kernel test robot <yujie.liu@intel.com>
+Cc:     Shakeel Butt <shakeelb@google.com>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, Andrew Morton <akpm@linux-foundation.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [linus:master] [memcg] 1813e51eec:
+ kernel-selftests.cgroup.test_kmem.test_kmem_memcg_deletion.fail
+Message-ID: <Y4h/AsTy97na/t5D@dhcp22.suse.cz>
+References: <202212010958.c1053bd3-yujie.liu@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Luca Coelho <luciano.coelho@intel.com>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>, Dave <chiluk@ubuntu.com>
-Subject: =?UTF-8?Q?=5bregression=5d_Bug=c2=a0216753_-_6e_6_ghz_bands_are_dis?=
- =?UTF-8?Q?abled_since_5=2e16_on_intel_ax211?=
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669889681;2c4e8b72;
-X-HE-SMSGID: 1p0gaU-0007Pe-IB
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202212010958.c1053bd3-yujie.liu@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
-
-Luca, I noticed a regression report in bugzilla where I'd like your
-advice on. To quote https://bugzilla.kernel.org/show_bug.cgi?id=216753
-
-> It looks like the self-managed regulatory information is causing the 6ghz band to be disabled on my AX211 (in the US).  
-> iw reg get shows no 6ghz bands (output at the bottom).
+On Thu 01-12-22 16:05:44, kernel test robot wrote:
+> Greeting,
 > 
-> $ sudo iw phy0 channel 
-> ...
-> Band 4:
-> 	* 5955 MHz [1] (disabled)
-> 	* 5975 MHz [5] (disabled)
-> 	* 5995 MHz [9] (disabled)
->         ....(continues with all disabled 
->         * 7115 MHz [233] (disabled)
-> ...
+> FYI, we noticed kernel-selftests.cgroup.test_kmem.test_kmem_memcg_deletion.fail due to commit (built with gcc-11):
 > 
-> I was able to narrow this down to having been introduced during the 5.16 development window, as 5.15.79 linux-stable kernel works and the 5.16.12 does 
-> not (earlier builds of 5.16 kernel fail to boot on my machine for some reason). 
+> commit: 1813e51eece0ad6f4aacaeb738e7cced46feb470 ("memcg: increase MEMCG_CHARGE_BATCH to 64")
+> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
 > 
-> I found https://community.frame.work/t/kernel-5-16-6ghz-disabled-ax210/15675/5
-> and they imply that this regression was introduced by 
-> 698b166ed3464e1604a0e6a3e23cc1b529a5adc1
-> I haven't independently verified this commit as the definitive issue.
+> [test failed on linux-next/master 700e0cd3a5ce6a2cb90d9a2aab729b52f092a7d6]
+> 
+> in testcase: kernel-selftests
+> version: kernel-selftests-x86_64-2ed09c3b-1_20221128
+> with following parameters:
+> 
+> 	group: cgroup
+> 
+> test-description: The kernel contains a set of "self tests" under the tools/testing/selftests/ directory. These are intended to be small unit tests to exercise individual code paths in the kernel.
+> test-url: https://www.kernel.org/doc/Documentation/kselftest.txt
+> 
+> on test machine: 128 threads 2 sockets Intel(R) Xeon(R) Platinum 8358 CPU @ 2.60GHz (Ice Lake) with 128G memory
+> 
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> 
+> 
+> # memory.current = 40161280
+> # slab + anon + file + kernel_stack = 14478624
+> # slab = 13453184
+> # anon = 0
+> # file = 0
+> # kernel_stack = 0
+> # pagetables = 0
+> # percpu = 1025440
+> # sock = 0
+> # not ok 2 test_kmem_memcg_deletion  <--
+> # ok 3 test_kmem_proc_kpagecgroup
+> # ok 4 test_kmem_kernel_stacks
+> # ok 5 test_kmem_dead_cgroups
+> # ok 6 test_percpu_basic
+> not ok 2 selftests: cgroup: test_kmem # exit=1
 
-You authored 698b166ed346 ("iwlwifi: mvm: read 6E enablement flags from
-DSM and pass to FW"). As it is a regressions is ideally should be dealt
-with. But this area in tricky due to the legal implications. Hence I
-wonder: is there anything we can do about this, or is this simply a case
-where we have to bite the bullet and live with this regression?
+IIUC we need this
+diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
+index 22b31ebb3513..1d073e28254b 100644
+--- a/tools/testing/selftests/cgroup/test_kmem.c
++++ b/tools/testing/selftests/cgroup/test_kmem.c
+@@ -24,7 +24,7 @@
+  * the maximum discrepancy between charge and vmstat entries is number
+  * of cpus multiplied by 32 pages.
+  */
+-#define MAX_VMSTAT_ERROR (4096 * 32 * get_nprocs())
++#define MAX_VMSTAT_ERROR (4096 * 64 * get_nprocs())
+ 
+ 
+ static int alloc_dcache(const char *cgroup, void *arg)
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+But honestly, I am rather dubious of tests like this one. Does it really
+give us any useful testing coverage?
+-- 
+Michal Hocko
+SUSE Labs
