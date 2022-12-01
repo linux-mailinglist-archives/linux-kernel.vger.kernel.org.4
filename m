@@ -2,118 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2106663E726
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 02:38:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A652063E727
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 02:38:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiLABi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 20:38:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
+        id S229844AbiLABiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 20:38:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiLABi0 (ORCPT
+        with ESMTP id S229613AbiLABir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 20:38:26 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F9C99537
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 17:38:23 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NMzHK3LWxz4xyCG;
-        Thu,  1 Dec 2022 09:38:21 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2B11cDZZ011140;
-        Thu, 1 Dec 2022 09:38:13 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 1 Dec 2022 09:38:14 +0800 (CST)
-Date:   Thu, 1 Dec 2022 09:38:14 +0800 (CST)
-X-Zmail-TransId: 2af96388058618668466
-X-Mailer: Zmail v1.0
-Message-ID: <202212010938142826551@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <sergey.semin@baikalelectronics.ru>
-Cc:     <arnd@arndb.de>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBidXM6IHVzZSBzeXNmc19lbWl0KCkgdG8gaW5zdGVhZCBvZiBzY25wcmludGYoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2B11cDZZ011140
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 6388058D.000 by FangMail milter!
-X-FangMail-Envelope: 1669858701/4NMzHK3LWxz4xyCG/6388058D.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6388058D.000/4NMzHK3LWxz4xyCG
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 30 Nov 2022 20:38:47 -0500
+Received: from pv50p00im-zteg10011501.me.com (pv50p00im-zteg10011501.me.com [17.58.6.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA879953B
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 17:38:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zzy040330.moe;
+        s=sig1; t=1669858726;
+        bh=FYXfjZRM6Alu8j0iBNJfkxXx1o2E05N1SoEyiLJM9G4=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=Dx5+ozzifgYltsJMSUtEb1ehj1NbPP0lYQHZyp/APT3q6ExeqM/hge08r7ZBjWO83
+         iCr01kWWWsZ7v42dPnGlp09uazS1tdkBtBCX38pHgEHNVk1fgBmXXS6+5QSVRgL3MF
+         5vM3HTupKPT4byciWPywa/XgVG9XE5oep+QpDsg2N4IHbaGzl8QBC3mzRoy3k4Uk1L
+         FTTK52RejEokwSI6pfmbtGZP2/wowNiZZjeIQbC6YVdBIQHz6eXq+Kef/KzQhLixxC
+         j/xN0MdhbSGz3KWCww/Mr+vsL3WggyWdQEg1K1dj4U8IQWsdX4y4pSpUJlIlb5Inma
+         TGO1gekyupYYQ==
+Received: from [10.8.0.2] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+        by pv50p00im-zteg10011501.me.com (Postfix) with ESMTPSA id 49E312E007B;
+        Thu,  1 Dec 2022 01:38:43 +0000 (UTC)
+Message-ID: <6ce2e648-9c12-56a1-9118-e1e18c7ecd7d@zzy040330.moe>
+Date:   Thu, 1 Dec 2022 09:38:40 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+Content-Language: en-GB
+To:     Ping-Ke Shih <pkshih@realtek.com>,
+        "Jes.Sorensen@gmail.com" <Jes.Sorensen@gmail.com>
+Cc:     "kvalo@kernel.org" <kvalo@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221130140849.153705-1-JunASAKA@zzy040330.moe>
+ <663e6d79c34f44998a937fe9fbd228e9@realtek.com>
+From:   Jun ASAKA <JunASAKA@zzy040330.moe>
+In-Reply-To: <663e6d79c34f44998a937fe9fbd228e9@realtek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: HIk-QxeqAB7rSSlbznkbuHQsx_yj5pJc
+X-Proofpoint-ORIG-GUID: HIk-QxeqAB7rSSlbznkbuHQsx_yj5pJc
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.517,18.0.572,17.11.64.514.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-06-21=5F01:2022-06-21=5F01,2020-02-14=5F11,2022-02-23?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
+ malwarescore=0 suspectscore=0 bulkscore=0 spamscore=0 mlxlogscore=999
+ mlxscore=0 clxscore=1030 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2212010007
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On 01/12/2022 8:54 am, Ping-Ke Shih wrote:
 
-Replace the open-code with sysfs_emit() to simplify the code.
+>
+>> -----Original Message-----
+>> From: JunASAKA <JunASAKA@zzy040330.moe>
+>> Sent: Wednesday, November 30, 2022 10:09 PM
+>> To: Jes.Sorensen@gmail.com
+>> Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
+>> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; JunASAKA
+>> <JunASAKA@zzy040330.moe>
+>> Subject: [PATCH] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+>>
+>> Fixing "Path A RX IQK failed" and "Path B RX IQK failed"
+>> issues for rtl8192eu chips by replacing the arguments with
+>> the ones in the updated official driver.
+> I think it would be better if you can point out which version you use, and
+> people will not modify them back to old version suddenly.
+>
+>> Signed-off-by: JunASAKA <JunASAKA@zzy040330.moe>
+>> ---
+>>   .../realtek/rtl8xxxu/rtl8xxxu_8192e.c         | 76 +++++++++++++------
+>>   1 file changed, 54 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>> b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>> index b06508d0cd..82346500f2 100644
+>> --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>> +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+> [...]
+>
+>> @@ -891,22 +907,28 @@ static int rtl8192eu_iqk_path_b(struct rtl8xxxu_priv *priv)
+>>
+>>   	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+>>   	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_DF, 0x00180);
+>> -	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+>>
+>> -	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+>> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
+>> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x20000);
+>> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
+>> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0x07f77);
+>> +
+>>   	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+>>
+>> +	// rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+>> +	// rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+>> +
+> I think this is a test code of vendor driver. No need them here.
+>
+>
+>>   	/* Path B IQK setting */
+>>   	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_A, 0x38008c1c);
+>>   	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_A, 0x38008c1c);
+>>   	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x18008c1c);
+>>   	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
+>>
+>> -	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x821403e2);
+>> +	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x82140303);
+>>   	rtl8xxxu_write32(priv, REG_RX_IQK_PI_B, 0x68160000);
+>>
+>>   	/* LO calibration setting */
+>> -	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x00492911);
+>> +	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x00462911);
+>>
+>>   	/* One shot, path A LOK & IQK */
+>>   	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xfa000000);
+> [...]
+>
+> I have compared your patch with internal code, and they are the same.
+> But, I don't have a test.
+>
+> Ping-Ke
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/bus/bt1-apb.c | 6 +++---
- drivers/bus/bt1-axi.c | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+I changed those arguments into the ones here: 
+https://github.com/Mange/rtl8192eu-linux-driver which works fine with my 
+rtl8192eu wifi dongle. But forgive my ignorant that I don't have enough 
+experience on wifi drivers, I just compared those two drivers and 
+figured that those codes fixing my IQK failures.
 
-diff --git a/drivers/bus/bt1-apb.c b/drivers/bus/bt1-apb.c
-index 63b1b4a76671..bcf10f1d6dc1 100644
---- a/drivers/bus/bt1-apb.c
-+++ b/drivers/bus/bt1-apb.c
-@@ -265,7 +265,7 @@ static ssize_t count_show(struct device *dev, struct device_attribute *attr,
- {
- 	struct bt1_apb *apb = dev_get_drvdata(dev);
+I tested it on my PC (fedora 37 with kernel v6.1.0-rc7) with my 
+rtl8192eu device and it works well.
 
--	return scnprintf(buf, PAGE_SIZE, "%d\n", atomic_read(&apb->count));
-+	return sysfs_emit(buf, "%d\n", atomic_read(&apb->count));
- }
- static DEVICE_ATTR_RO(count);
 
-@@ -283,7 +283,7 @@ static ssize_t timeout_show(struct device *dev, struct device_attribute *attr,
+Jun ASAKA.
 
- 	timeout = bt1_apb_n_to_timeout_us(apb, n);
 
--	return scnprintf(buf, PAGE_SIZE, "%lu\n", timeout);
-+	return sysfs_emit(buf, "%lu\n", timeout);
- }
-
- static ssize_t timeout_store(struct device *dev,
-@@ -310,7 +310,7 @@ static DEVICE_ATTR_RW(timeout);
- static ssize_t inject_error_show(struct device *dev,
- 				 struct device_attribute *attr, char *buf)
- {
--	return scnprintf(buf, PAGE_SIZE, "Error injection: nodev irq\n");
-+	return sysfs_emit(buf, "Error injection: nodev irq\n");
- }
-
- static ssize_t inject_error_store(struct device *dev,
-diff --git a/drivers/bus/bt1-axi.c b/drivers/bus/bt1-axi.c
-index 70e49a6e5374..04c14821bb3c 100644
---- a/drivers/bus/bt1-axi.c
-+++ b/drivers/bus/bt1-axi.c
-@@ -197,14 +197,14 @@ static ssize_t count_show(struct device *dev,
- {
- 	struct bt1_axi *axi = dev_get_drvdata(dev);
-
--	return scnprintf(buf, PAGE_SIZE, "%d\n", atomic_read(&axi->count));
-+	return sysfs_emit(buf, "%d\n", atomic_read(&axi->count));
- }
- static DEVICE_ATTR_RO(count);
-
- static ssize_t inject_error_show(struct device *dev,
- 				 struct device_attribute *attr, char *buf)
- {
--	return scnprintf(buf, PAGE_SIZE, "Error injection: bus unaligned\n");
-+	return sysfs_emit(buf, "Error injection: bus unaligned\n");
- }
-
- static ssize_t inject_error_store(struct device *dev,
--- 
-2.25.1
