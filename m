@@ -2,135 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 333A663F61C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 18:25:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA6763F61F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 18:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiLARZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 12:25:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43924 "EHLO
+        id S229822AbiLAR0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 12:26:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiLARZ3 (ORCPT
+        with ESMTP id S229551AbiLAR0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 12:25:29 -0500
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109A525C65;
-        Thu,  1 Dec 2022 09:25:29 -0800 (PST)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-143ffc8c2b2so2936453fac.2;
-        Thu, 01 Dec 2022 09:25:29 -0800 (PST)
+        Thu, 1 Dec 2022 12:26:15 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546FA27170
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 09:26:13 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id t17so2468158pjo.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 09:26:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=o4SL2qQtVNDajwN9ygYSjpW78VenkkkZuoHCF2FKV6M=;
-        b=KylwmePAilaWNd40ryK6VQeiIE9BXRlJ4iPgzRzp7xChDfebK32ZQCj0EWZ0YUymUf
-         QWdAA7Ykv0m6QBKgtj1a8eydzlnMfdRzpWkJcN0k5Tf++xbJOOb1PCXPvkBMtLoZ1Wgd
-         eE7voof6QUKwsjr0LybzNzJ3YNc1OE9mkLz7CdVfHC/iMKLltRRVvgPu6M1KL9g3oEeI
-         SRPySUTkZQoiP+p5Gq/JsizL3ifnHGoKMkKYYUFUNVDdjbxYhTad2jnvgv6/vNdXtOIV
-         9qS2aK2kF1zC/SJQkdUrmPiQ5+0pXiR9ungnJpty2PoATqkxg9f3776cgGaKgZbxTXKv
-         2gcw==
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=02CF0TJYI4L7g3srrazD4xH+/OuBD9klT/4Hk2gtU0U=;
+        b=txApKc3gtDcQMm+FVBYm+D0Mo1n4TL0Vapxd3lQf0wekHKp4QFL/juRdq0ivkrC709
+         rVw0C5ACxYCPAbySn7V5JKA+NV3okQWkwPGbENM2SJwgdMTeyObxCCwgwUOOx0BC7oWz
+         +h7qGkFumy1Mw737V/jWWIQ0z6+NFFhlD5owjCq/feMugXvEoCHJax5uCjFKdA88ptVQ
+         C2bNboHdjpx/p+BBKcMcghLfjGguL5CJ+usVgzk6pHX7s0eXXjYbXywS0/ciUiAkhj6B
+         w4jY4IdmFe2vSaYLG2oj5UHN9K1ZzirLTvOs3K1gjqpLYDePd8bzLoi1/rndXhowE6SL
+         zdPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o4SL2qQtVNDajwN9ygYSjpW78VenkkkZuoHCF2FKV6M=;
-        b=tA49DHLd6GeweD3PNnqQZjRBTdeWY8y/jVFJpXE+kLjJarc8Hgcwq20le6bzkJt0lm
-         YBaw24nsyiPNB88ftjbI2nsshhLj3yfqfucy7qpTDI+nWUVQUILWryQiQKqQbFGMVdPL
-         Z3Zt8WGD4rvtcNYghnl21wGI70Gsgr3y3oRKssv52KtZL+qIL9jaERV5hhyIiUUHbgz7
-         YxIh9xH+TerDZvSZFFQp7nM4g8dThYDBkI5loZ0gLEzNL99BUXlI7/s0hQ1ii6n2UKY5
-         Je9mmUotIb0tu346zvANAIfJtbNuyfVbFfOWKP9ujIcKLlcxWAnvuWkTrsRDW1rP+C/3
-         jwDw==
-X-Gm-Message-State: ANoB5plWs5B2gCksnkb+mPgMQggp9hip8QMQzW1sFCOm1qvyfYTKtrhi
-        y0pDeGTPfYzXtsNP4OEy8ExCxYiN+EM=
-X-Google-Smtp-Source: AA0mqf7xlmd6CKHc12w3hACcxP3J/URytYcUGpV39hcAzjBPlBXu3XzHg4EnB37+8PQCP6QD1bVDdA==
-X-Received: by 2002:a05:6870:9a18:b0:142:efc1:1394 with SMTP id fo24-20020a0568709a1800b00142efc11394mr26395149oab.11.1669915528295;
-        Thu, 01 Dec 2022 09:25:28 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o13-20020a056870524d00b00130e66a7644sm2954746oai.25.2022.12.01.09.25.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 09:25:27 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v6.1-rc8
-Date:   Thu,  1 Dec 2022 09:25:26 -0800
-Message-Id: <20221201172526.2290129-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.36.2
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=02CF0TJYI4L7g3srrazD4xH+/OuBD9klT/4Hk2gtU0U=;
+        b=3DjTelRXUK6J7G8BdLYy2kuY++gH9i8BvGALW9MKwhMyZhWnJBQn13Vc1lBwdVqi2+
+         qEGHAH16db5u4TDz2BA4sWzsw55q7EkB1+ZO+SlaF4Mp08heo6X8UgTieel+ymOZ18Hl
+         T2M1+P8NDr26ZSZylHh7pZigxDvibsWvv7yGbG88Kalgs0/AamscPdqAyiM0SMaY9dbs
+         lfEHnluny8h2+iuDPv3Dr2eh6MuuqThSHiCF8MQ2z1qp40LBc967o5clXthRJLFQfpGP
+         cVWVbQmQmMgyNZggwhb6bf9iXqiRh/DSJhsx1ihZ0DVu9wTbjYkAQkWg2QiGzPEEUEgQ
+         gDLA==
+X-Gm-Message-State: ANoB5pmPYGZu3+afUI1F2ZtPIh8BHh6zux6JLO/r+3/U9gl8wZElQQJY
+        8RBChyJqeBCODezoc6e24QjUFA==
+X-Google-Smtp-Source: AA0mqf4SMFdu/n4a1aFlo3szQD2bjOfheoqlSHE9xuODUTMXDUAclzarx3ixXW8iNFKhgeVWojv9Lg==
+X-Received: by 2002:a17:902:d650:b0:189:f86:ecb with SMTP id y16-20020a170902d65000b001890f860ecbmr58839022plh.45.1669915572825;
+        Thu, 01 Dec 2022 09:26:12 -0800 (PST)
+Received: from ?IPV6:2400:4050:c360:8200:8ae8:3c4:c0da:7419? ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id n11-20020a170902e54b00b00178aaf6247bsm3965798plf.21.2022.12.01.09.26.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 09:26:12 -0800 (PST)
+Message-ID: <50499ee9-33fe-4f5d-9d0a-76ceef038333@daynix.com>
+Date:   Fri, 2 Dec 2022 02:26:08 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 0/3] KVM: arm64: Handle CCSIDR associativity mismatches
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>
+References: <20221201104914.28944-1-akihiko.odaki@daynix.com>
+ <867czbmlh1.wl-maz@kernel.org>
+Content-Language: en-US
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+In-Reply-To: <867czbmlh1.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 2022/12/01 20:06, Marc Zyngier wrote:
+> On Thu, 01 Dec 2022 10:49:11 +0000,
+> Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+> 
+> Thanks for looking into this.
+> 
+>> M2 MacBook Air has mismatched CCSIDR associativity bits, which makes the
+>> bits a KVM vCPU sees inconsistent when migrating.
+> 
+> Can you describe the actual discrepancy? Is that an issue between the
+> two core types? In which case, nothing says that these two cluster
+> should have the same cache topology.
 
-Please pull hwmon fixes for Linux v6.1-rc8 from signed tag:
+Yes, the processor has big.LITTLE configuration.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.1-rc8
+On the processor, the valid CSSELR values are 0 (L1D), 1 (L1I), 3 (L2D). 
+For each CSSELR values, each cluster has:
+- 0x700FE03A, 0x203FE01A, 0x70FFE07B
+- 0x701FE03A, 0x203FE02A, 0x73FFE07B
 
-Thanks,
-Guenter
-------
+> 
+>> It also makes QEMU fail restoring the vCPU registers because QEMU saves
+>> and restores all of the registers including CCSIDRs, and if the vCPU
+>> migrated among physical CPUs between saving and restoring, it tries to
+>> restore CCSIDR values that mismatch with the current physical CPU, which
+>> causes EFAULT.
+> 
+> Well, QEMU will have plenty of other problems, starting with MIDRs,
+> which always reflect the physical one. In general, KVM isn't well
+> geared for VMs spanning multiple CPU types. It is improving, but there
+> is a long way to go.
 
-The following changes since commit 094226ad94f471a9f19e8f8e7140a09c2625abaa:
+On M2 MacBook Air, I have seen no other difference in standard ID 
+registers and CCSIDRs are exceptions. Perhaps Apple designed this way so 
+that macOS's Hypervisor can freely migrate vCPU, but I can't assure that 
+without more analysis. This is still enough to migrate vCPU running 
+Linux at least.
 
-  Linux 6.1-rc5 (2022-11-13 13:12:55 -0800)
+> 
+>> Trap CCSIDRs if there are CCSIDR value msimatches, and override the
+>> associativity bits when handling the trap.
+> 
+> TBH, I'd rather we stop reporting this stuff altogether.
+> 
+> There is nothing a correctly written arm64 guest should do with any of
+> this (this is only useful for set/way CMOs, which non-secure SW should
+> never issue). It would be a lot better to expose a virtual topology
+> (one set, one way, one level). It would also save us from the CCSIDRX
+> silliness.
+> 
+> The only complexity would be to still accept different topologies from
+> userspace so that we can restore a VM saved before this virtual
+> topology.
 
-are available in the Git repository at:
+Another (minor) concern is that trapping relevant registers may cost too 
+much. Currently KVM traps CSSELR and CCSIDR accesses with HCR_TID2, but 
+HCR_TID2 also affects CTR_EL0. Although I'm not sure if the register is 
+referred frequently, Arm introduced FEAT_EVT to trap CSSELR and CSSIDR 
+but not CTR_EL0 so there may be some case where trapping CTR_EL0 is not 
+tolerated. Perhaps Arm worried that a userspace application may read 
+CTR_EL0 frequently.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.1-rc8
+If you think the concern on VM restoration you mentioned and the 
+trapping overhead is tolerable, I'll write a new, much smaller patch 
+accordingly.
 
-for you to fetch changes up to 9bdc112be727cf1ba65be79541147f960c3349d8:
+Regards,
+Akihiko Odaki
 
-  hwmon: (asus-ec-sensors) Add checks for devm_kcalloc (2022-12-01 09:20:55 -0800)
-
-----------------------------------------------------------------
-hwmon fixes for v6.1-rc8
-
-- Fix refcount leak and NULL pointer access in coretemp driver
-
-- Fix UAF in ibmpex driver
-
-- Add missing pci_disable_device() to i5500_temp driver
-
-- Fix calculation in ina3221 driver
-
-- Fix temperature scaling in ltc2947 driver
-
-- Check result of devm_kcalloc call in asus-ec-sensors driver
-
-----------------------------------------------------------------
-Derek Nguyen (1):
-      hwmon: (ltc2947) fix temperature scaling
-
-Gaosheng Cui (1):
-      hwmon: (ibmpex) Fix possible UAF when ibmpex_register_bmc() fails
-
-Ninad Malwade (1):
-      hwmon: (ina3221) Fix shunt sum critical calculation
-
-Phil Auld (1):
-      hwmon: (coretemp) Check for null before removing sysfs attrs
-
-Yang Yingliang (2):
-      hwmon: (i5500_temp) fix missing pci_disable_device()
-      hwmon: (coretemp) fix pci device refcount leak in nv1a_ram_new()
-
-Yuan Can (1):
-      hwmon: (asus-ec-sensors) Add checks for devm_kcalloc
-
- drivers/hwmon/asus-ec-sensors.c | 2 ++
- drivers/hwmon/coretemp.c        | 9 ++++++++-
- drivers/hwmon/i5500_temp.c      | 2 +-
- drivers/hwmon/ibmpex.c          | 1 +
- drivers/hwmon/ina3221.c         | 4 ++--
- drivers/hwmon/ltc2947-core.c    | 2 +-
- 6 files changed, 15 insertions(+), 5 deletions(-)
+> 
+> Do you mind having a look at this?
+> 
+> Thanks,
+> 
+> 	M.
+> 
