@@ -2,78 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBE663F481
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B3463F48B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:54:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbiLAPwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 10:52:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
+        id S232019AbiLAPyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 10:54:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231468AbiLAPv5 (ORCPT
+        with ESMTP id S230129AbiLAPyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 10:51:57 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF62A6CD8
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 07:51:55 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id fp23so988907qtb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 07:51:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QZICexc8xsGDU62se8MLzCQs14y/akiq818luXMxAoY=;
-        b=nLdF3MgZ41GcFh+AMHGP6e37c5gGALVjl1T7QxmWOXvPoDybB4EyOcncA+v8e1aQ3y
-         kF43faFVT5i2ogbHi8Xh9fRkjxddevBI+Xa801fZJ6sogb5BSFkZJynRCMCnm5Hcln+z
-         h6ULkbiQ8wFSdz2qqMnvaApw9XIUQJO5Lce4eaS39G3bbtx350i2m055PGe4Y/Q8k7Xk
-         UGBqPrjAwCr73TCtjw2ewuQuCFGRRNKnBzkRxQrFdjLXxArH9Scphip7TWKAeFVRTA7S
-         NukPVM39vrjE/Z0SjdhAePvS10HX5K8//ggATbKtCj25ubtQYITvpperZj74K9mcTju9
-         lu+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QZICexc8xsGDU62se8MLzCQs14y/akiq818luXMxAoY=;
-        b=Nu4SG8h4untOjLoIf9DYA8SSSuw31vk3Z6X0D/VKLGOiQeZlBs03XMpE6rn4dS82MX
-         hYU3UChH51GmlLsJSSJvPH7Rllh8JttqMW7uFQvQ7aUIa/Ry1J7OqFLDUqMM+PZbKo90
-         k6UYT9o5aKzwgpuzJhTa6kE3MKRgtz7zozGmvvLgb4YYXzMtUufQYLl9sxtKJyTLK5XY
-         Ten06eGyS1MZayE8AU6R+fxv3mpMPCMcESTZTubEkoaVVHikoON7iKk0OCxYLhetWcCZ
-         eSfBVAI7DAuYVu9ix9cS7nWvORDUUCDJPe+LHSwkYFRza0EOTgbKuvkFpNxjEqu2Iw/f
-         wkxg==
-X-Gm-Message-State: ANoB5plrvmUTdiRw4eZf1jOIrvqEVUxSmlzUhiOLL7eq5ESUep1QU2of
-        MSkImI4d7ak4gRtBIyf33PNitA==
-X-Google-Smtp-Source: AA0mqf6dEkhBqcRQnXdcdHj5BwV21Ho7Twrv7AZM0ULHipx4751l1/9u0cMtl5iGzi6eNruqBR97aw==
-X-Received: by 2002:ac8:7eed:0:b0:3a5:40ab:5952 with SMTP id r13-20020ac87eed000000b003a540ab5952mr42915558qtc.254.1669909915024;
-        Thu, 01 Dec 2022 07:51:55 -0800 (PST)
-Received: from localhost (2603-7000-0c01-2716-3663-3884-f85a-44bb.res6.spectrum.com. [2603:7000:c01:2716:3663:3884:f85a:44bb])
-        by smtp.gmail.com with ESMTPSA id y6-20020a05620a25c600b006b9c9b7db8bsm3767587qko.82.2022.12.01.07.51.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 07:51:54 -0800 (PST)
-Date:   Thu, 1 Dec 2022 10:52:31 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: remove lock_page_memcg() from rmap
-Message-ID: <Y4jNvzpX4g42afvP@cmpxchg.org>
-References: <20221123181838.1373440-1-hannes@cmpxchg.org>
- <16dd09c-bb6c-6058-2b3-7559b5aefe9@google.com>
- <Y4TpCJ+5uCvWE6co@cmpxchg.org>
- <Y4ZYsrXLBFDIxuoO@cmpxchg.org>
- <3659bbe0-ccf2-7feb-5465-b287593aa421@google.com>
- <CALvZod7_FjO-CjzHUpQTsCTm4-68a1eKi_qY=4XdF+g7yMLd4Q@mail.gmail.com>
- <e0918c92-90cd-e3ed-f4e6-92d02062c252@google.com>
- <Y4fZbFNVckh1g4WO@cmpxchg.org>
- <33f2f836-98a0-b593-1d43-b289d645db5@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <33f2f836-98a0-b593-1d43-b289d645db5@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Thu, 1 Dec 2022 10:54:20 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF46A8976
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 07:54:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3887FCE1D15
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 15:54:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4364EC433D6;
+        Thu,  1 Dec 2022 15:54:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669910055;
+        bh=KgUzMsnJxl5S84ksRk/ivCiFuctafV1QIdNmjNmeVz4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qeIACNxujix93s88GjoojcGg/BMy8NUgGxzPiEEICMPCDMLNuvsMxf9qqv4JwINkG
+         jb83En2iCUhf12QEEQ2qK76W0W+OPMfXggHkGQA8WDdGTWOaMPTiCuJO+JOyDpBmSg
+         DZviX3YW84bYt9WV9j2pJpgDSTvJIfSNDF8lUdVjvj99c083qYRC5a2N21I1y0JZZs
+         FxwqSlKHVl8XZ7vqNcn9gZg9uAl+fN6EwMHm4iUV3XtsCEOMJqD9wn6J/AlT9dEOLb
+         bMvedttQVHoYC7mcmPIeFo3Ofk+cHCgekZ3VSQGcSdpUEdD8+AJ6+dUGhzCSau+Vhs
+         owlYrezZUOhoQ==
+Date:   Fri, 2 Dec 2022 00:54:11 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sandeepa Prabhu <sandeepa.s.prabhu@gmail.com>
+Subject: Re: [PATCH 1/3] arm64: Prohibit probing on arch_stack_walk()
+Message-Id: <20221202005411.49ee4e946e6c790bf482dbd9@kernel.org>
+In-Reply-To: <Y4i+hBAPyOIelFL1@FVFF77S0Q05N>
+References: <166990553243.253128.13594802750635478633.stgit@devnote3>
+        <166990554210.253128.7378208454827328942.stgit@devnote3>
+        <Y4i+hBAPyOIelFL1@FVFF77S0Q05N>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,124 +61,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 04:13:23PM -0800, Hugh Dickins wrote:
-> On Wed, 30 Nov 2022, Johannes Weiner wrote:
+On Thu, 1 Dec 2022 14:47:32 +0000
+Mark Rutland <mark.rutland@arm.com> wrote:
+
+> Hi Masami,
+> 
+> On Thu, Dec 01, 2022 at 11:39:02PM +0900, Masami Hiramatsu (Google) wrote:
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > > 
-> > Hm, I think the below should work for swap pages. Do you see anything
-> > obviously wrong with it, or scenarios I haven't considered?
+> > Make arch_stack_walk() as NOKPROBE_SYMBOL and make other inline functions
+> > called from arch_stack_walk() as nokprobe_inline so that user does not
+> > put probe on it, because this function can be used from return_address()
+> > which is already NOKPROBE_SYMBOL.
+> 
+> I think it would make sense to make this noinstr rather than NOKPROBES, since
+> it's also used in the bowels of ftrace, and any instrumentation is liable to
+> lead to some mutual recursion.
+
+Yeah, OK. So use noinstr instead of notrace.
+
+> 
+> > Without this, if the kernel built with CONFIG_LOCKDEP=y, just probing
+> > arch_stack_walk() via <tracefs>/kprobe_events will crash the kernel on
+> > arm64.
 > > 
+> >  # echo p arch_stack_walk >> ${TRACEFS}/kprobe_events
+> >  # echo 1 > ${TRACEFS}/events/kprobes/enable
+> >   kprobes: Failed to recover from reentered kprobes.
+> >   kprobes: Dump kprobe:
+> >   .symbol_name = arch_stack_walk, .offset = 0, .addr = arch_stack_walk+0x0/0x1c0
+> >   ------------[ cut here ]------------
+> >   kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
+> >   kprobes: Failed to recover from reentered kprobes.
+> >   kprobes: Dump kprobe:
+> >   .symbol_name = arch_stack_walk, .offset = 0, .addr = arch_stack_walk+0x0/0x1c0
+> >   ------------[ cut here ]------------
+> >   kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
+> >   PREEMPT SMP
+> >   Modules linked in:
+> >   CPU: 0 PID: 17 Comm: migration/0 Tainted: G                 N 6.1.0-rc5+ #6
+> >   Hardware name: linux,dummy-virt (DT)
+> >   Stopper: 0x0 <- 0x0
+> >   pstate: 600003c5 (nZCv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> >   pc : kprobe_breakpoint_handler+0x178/0x17c
+> >   lr : kprobe_breakpoint_handler+0x178/0x17c
+> >   sp : ffff8000080d3090
+> >   x29: ffff8000080d3090 x28: ffff0df5845798c0 x27: ffffc4f59057a774
+> >   x26: ffff0df5ffbba770 x25: ffff0df58f420f18 x24: ffff49006f641000
+> >   x23: ffffc4f590579768 x22: ffff0df58f420f18 x21: ffff8000080d31c0
+> >   x20: ffffc4f590579768 x19: ffffc4f590579770 x18: 0000000000000006
+> >   x17: 5f6b636174735f68 x16: 637261203d207264 x15: 64612e202c30203d
+> >   x14: 2074657366666f2e x13: 30633178302f3078 x12: 302b6b6c61775f6b
+> >   x11: 636174735f686372 x10: ffffc4f590dc5bd8 x9 : ffffc4f58eb31958
+> >   x8 : 00000000ffffefff x7 : ffffc4f590dc5bd8 x6 : 80000000fffff000
+> >   x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
+> >   x2 : 0000000000000000 x1 : ffff0df5845798c0 x0 : 0000000000000064
+> >   Call trace:
+> >   kprobes: Failed to recover from reentered kprobes.
+> >   kprobes: Dump kprobe:
+> >   .symbol_name = arch_stack_walk, .offset = 0, .addr = arch_stack_walk+0x0/0x1c0
+> >   ------------[ cut here ]------------
+> >   kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
+> > 
+> > Fixes: 39ef362d2d45 ("arm64: Make return_address() use arch_stack_walk()")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > ---
+> >  arch/arm64/kernel/stacktrace.c |    7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> > index 634279b3b03d..b0e913f944b4 100644
+> > --- a/arch/arm64/kernel/stacktrace.c
+> > +++ b/arch/arm64/kernel/stacktrace.c
+> > @@ -23,7 +23,7 @@
+> >   *
+> >   * The regs must be on a stack currently owned by the calling task.
+> >   */
+> > -static inline void unwind_init_from_regs(struct unwind_state *state,
+> > +static nokprobe_inline void unwind_init_from_regs(struct unwind_state *state,
+> >  					 struct pt_regs *regs)
+> >  {
+> >  	unwind_init_common(state, current);
+> > @@ -40,7 +40,7 @@ static inline void unwind_init_from_regs(struct unwind_state *state,
+> >   *
+> >   * The function which invokes this must be noinline.
+> >   */
+> > -static __always_inline void unwind_init_from_caller(struct unwind_state *state)
+> > +static nokprobe_inline void unwind_init_from_caller(struct unwind_state *state)
 > 
-> I think you're overcomplicating it, with the __swap_count(ent) business,
-> and consequent unnecessarily detailed comments on the serialization.
+> This code must be __always_inline to get the correct caller context, so making
+> this nokprobe_inline breaks a CONFIG_KPROBES=n build of the kernel.
+
+Oops, indeed.
+
 > 
-> Page/folio lock prevents a !page_mapped(page) becoming a page_mapped(page),
-> whether it's in swap cache or in file cache; it does not stop the sharing
-> count going further up, or down even to 0, but we just don't need to worry
-> about that sharing count - the MC_TARGET_PAGE case does not reject pages
-> with mapcount > 1, so why complicate the swap or file case in that way?
+> This also shouldn't be necessary; nokprobe_inline *is* __always_inline when
+> CONFIG_KPROBES=y.
 > 
-> (Yes, it can be argued that all such sharing should be rejected; but we
-> didn't come here to argue improvements to memcg charge moving semantics:
-> just to minimize its effect on rmap, before it is fully deprecated.)
+> As above, I'd prefer that we mark these helpers as __always_inline and mark the
+> main entry point as noinstr.
+
+OK.
+
+Thank you,
+
 > 
-> Or am I missing the point of why you add that complication?
-
-No, it just seemed odd to move shared swap *unless* it's partially
-faulted. But you're right, it's probably not worth the hassle. I'll
-cut this down to the page_mapped() check.
-
-The struggle of writing code for Schroedinger's User...
-
-> > @@ -5637,6 +5645,46 @@ static struct page *mc_handle_swap_pte(struct vm_area_struct *vma,
+> Thanks,
+> Mark.
 > 
-> Don't forget to trylock the page in the device_private case before this.
-
-Yep, thanks!
-
-> >          * we call find_get_page() with swapper_space directly.
-> >          */
-> >         page = find_get_page(swap_address_space(ent), swp_offset(ent));
-> > +
-> > +       /*
-> > +        * Don't move shared charges. This isn't just for saner move
-> > +        * semantics, it also ensures that page_mapped() is stable for
-> > +        * the accounting in mem_cgroup_mapcount().
-> 
-> mem_cgroup_mapcount()??
-
-mem_cgroup_move_account() of course! Will fix.
-
-> > +        * We have to serialize against the following paths: fork
-> > +        * (which may copy a page map or a swap pte), fault (which may
-> > +        * change a swap pte into a page map), unmap (which may cause
-> > +        * a page map or a swap pte to disappear), and reclaim (which
-> > +        * may change a page map into a swap pte).
-> > +        *
-> > +        * - Without swapcache, we only want to move the charge if
-> > +        *   there are no other swap ptes. With the pte lock, the
-> > +        *   swapcount is stable against all of the above scenarios
-> > +        *   when it's 1 (our pte), which is the case we care about.
-> > +        *
-> > +        * - When there is a page in swapcache, we only want to move
-> > +        *   charges when neither the page nor the swap entry are
-> > +        *   mapped elsewhere. The pte lock prevents our pte from
-> > +        *   being forked or unmapped. The page lock will stop faults
-> > +        *   against, and reclaim of, the swapcache page. So if the
-> > +        *   page isn't mapped, and the swap count is 1 (our pte), the
-> > +        *   test results are stable and the charge is exclusive.
-
-... and edit this down accordingly.
-
-> > +        */
-> > +       if (!page && __swap_count(ent) != 1)
-> > +               return NULL;
-> > +
-> > +       if (page) {
-> > +               if (!trylock_page(page)) {
-> > +                       put_page(page);
-> > +                       return NULL;
-> > +               }
-> > +               if (page_mapped(page) || __swap_count(ent) != 1) {
-> > +                       unlock_page(page);
-> > +                       put_page(page);
-> > +                       return NULL;
-> > +               }
-> > +       }
-> > +
-> >         entry->val = ent.val;
+> >  {
+> >  	unwind_init_common(state, current);
 > >  
-> >         return page;
-> 
-> Looks right, without the __swap_count() additions and swap count comments.
-> 
-> And similar code in mc_handle_file_pte() - or are you saying that only
-> swap should be handled this way?  I would disagree.
+> > @@ -58,7 +58,7 @@ static __always_inline void unwind_init_from_caller(struct unwind_state *state)
+> >   * duration of the unwind, or the unwind will be bogus. It is never valid to
+> >   * call this for the current task.
+> >   */
+> > -static inline void unwind_init_from_task(struct unwind_state *state,
+> > +static nokprobe_inline void unwind_init_from_task(struct unwind_state *state,
+> >  					 struct task_struct *task)
+> >  {
+> >  	unwind_init_common(state, task);
+> > @@ -218,3 +218,4 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+> >  
+> >  	unwind(&state, consume_entry, cookie);
+> >  }
+> > +NOKPROBE_SYMBOL(arch_stack_walk);
+> > 
 
-Right, same rules apply there. I only pasted the swap one to make sure
-we get aligned on the basic strategy.
 
-> And matching trylock in mc_handle_present_pte() (and get_mctgt_type_thp()),
-> instead of in mem_cgroup_move_account().
-
-Yes.
-
-> I haven't checked to see where the page then needs to be unlocked,
-> probably some new places.
-
-Yes, the callers of get_mctgt_type*() need to unlock (if target is
-passed and the page is returned). It looks straight-forward, they
-already have to do put_page().
-
-> And I don't know what will be best for the preliminary precharge pass:
-> doesn't really want the page lock at all, but it may be unnecessary
-> complication to avoid taking it then unlocking it in that pass.
-
-We could make it conditional on target, which precharge doesn't pass,
-but I agree it's likely not worth optimizing that code at this point.
-
-Thanks for taking a look, Hugh, that's excellent input.
-
-I'll finish this patch, rebase the rmap patch on it, and add a new one
-to issue a deprecation warning in mem_cgroup_move_charge_write().
-
-Johannes
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
