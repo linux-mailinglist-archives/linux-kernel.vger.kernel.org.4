@@ -2,124 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1104D63FAF5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:51:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C979263FAFA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbiLAWv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 17:51:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
+        id S230394AbiLAWxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 17:53:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiLAWu4 (ORCPT
+        with ESMTP id S231490AbiLAWw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 17:50:56 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AB8CA783
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 14:50:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669935009; x=1701471009;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UeIy8pAdmrZ3lUzO5VL6SSZX6v4M9UmNVytJ9UmGaPM=;
-  b=YlguOzN7yotgQRHkqfL2w3G704+5m9S2qAH5SfNh+P7K+L+TJI9ikvyX
-   s0l8uiRtpyxV9UmmyGj0t/5m4snp36J819SMuWC5fQS7m8/vJhqyGLZPd
-   Hb5RgKXnNJEUFio/aWjOHTUTkB6aksKRWDDwdxhivIC3WSyAj9hd3B6uP
-   NIua1V6SBHcAoClGlcWRzHtbMmd4oHQCB/IlHtSXFPpnpFQHI87bOMm1U
-   aHmFyH1D9eEpwi/Ni606Cn8DF8C+2cH0w7Sz55qldDIQKBzTPzgTnSvBC
-   IGEv/TN1pWIL/y9HzT/0zN8hWy2GwE4xVJEZFEJ5/CU44dwVMzRb60m5G
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="377974544"
-X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="377974544"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 14:50:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="819222654"
-X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="819222654"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 01 Dec 2022 14:50:07 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p0sNZ-0036pP-1N;
-        Fri, 02 Dec 2022 00:50:05 +0200
-Date:   Fri, 2 Dec 2022 00:50:05 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH 1/4] container_of: add container_of_const() that
- preserves const-ness of the pointer
-Message-ID: <Y4kvne/Vv+H5pjzW@smile.fi.intel.com>
-References: <20221201193057.1195255-1-gregkh@linuxfoundation.org>
+        Thu, 1 Dec 2022 17:52:58 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39BD11A27
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 14:52:48 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id 62so2892806pgb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 14:52:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=u+GlEJaTRGydAzKEA1KTMHQ/xuICP4OQMpko1BA8XIg=;
+        b=XPVXtTyHEysZOnnWvGQAaaVfsqyZR2ETSAYTP61Rdu8YxUZucOqj52A3xq1SGO+u0h
+         ELLq+skCWfHle+15JIkPWxJErRpzj9WCSL1S4A6QewOFwiK+eN/WfiZFZ/5CUUHo5VQ4
+         XRrFPAeV0J8wk9aCtu+ECfIFe7phYNlBFQz/JhuiUv8uRBe56t2AGDShjACnuDLqDxqy
+         theaR0MNEA9WHGOVFbRmpRvrx0Hef33eevnPp4+LQCoMk1o653IQ37eIx1Q4mN/+lBuc
+         r6jKawOWfgaQvW65kCH667JQ/pARSgdAg1c7lU9dGcxhGb5cs86w3X9p7vBJk8/+KsYi
+         6Y5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u+GlEJaTRGydAzKEA1KTMHQ/xuICP4OQMpko1BA8XIg=;
+        b=2csG/egZIRLObc8DlYKkGdkYjdkof5Q5LG7iyJqIO5nhtUN1QWRNg+1UZ9HzLzaBs7
+         NlheQyi92EmeWXar6RcPdSKvbCH/OkzvYU0i2/LYt4x3hQN86egKTcMJh++n6+k9Fk8E
+         et1vs7HGLO2qCJd5BZOOzXmH0KJ1DM8qxV0rVmnMqKf5TqjzxmKYvTB/BO9q+tIIkbvT
+         2qd9EycFWzUt9ocSUyy9dilnSnRuFJ7x5RgDup6SLuxn+n5amfXt9zYXxC7zXCBzt2Hk
+         4yJ+I9U0upiEVDvP+7nefsT8fU2CevzxotdoRfHZBaK6kXisieswtq8Li7uXVUYrNvEa
+         GkRQ==
+X-Gm-Message-State: ANoB5plrTPKZRTWjbgU7QwNM4sIQZT3w36rxzlr9ggwcMr0lb03n0oX7
+        EYxmFcunXxR91Ra/uQUlLk1SXeybI2TFERI0qTwz4Q==
+X-Google-Smtp-Source: AA0mqf4/Rdlo9twsxywVaqCZLl1ql+AO14cGIHtfU9aOaBMox3gTH/JTcrnCLroC46cSvuayrVe2q2uGMrykuuA0Rh4=
+X-Received: by 2002:a63:4087:0:b0:477:15c8:ff67 with SMTP id
+ n129-20020a634087000000b0047715c8ff67mr46291956pga.275.1669935168163; Thu, 01
+ Dec 2022 14:52:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221201193057.1195255-1-gregkh@linuxfoundation.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221130231936.1666390-1-wonchung@google.com> <CACeCKad16bs_f6bLthTAoEL28tPvf1S10WDeM7ugeaS9g7R25w@mail.gmail.com>
+ <CANLzEksD=dKgPuCUD74b3YQKCApbZKO_t7Q=tyNKONvAOQ89hw@mail.gmail.com> <CACeCKad7RGVPGdrd9WNpRhn3n99R5TG9zFJpCrMj7CDLK18rMA@mail.gmail.com>
+In-Reply-To: <CACeCKad7RGVPGdrd9WNpRhn3n99R5TG9zFJpCrMj7CDLK18rMA@mail.gmail.com>
+From:   Won Chung <wonchung@google.com>
+Date:   Thu, 1 Dec 2022 14:52:36 -0800
+Message-ID: <CAOvb9ygJ9afqLaeJRuCK+zFMH2vxjA4JGXAu2qZUvqqyUzhnmQ@mail.gmail.com>
+Subject: Re: [PATCH] platform/chrome: Create new USB driver for RGB keyboard
+ in ChromeOS devices
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     Benson Leung <bleung@chromium.org>, linux-kernel@vger.kernel.org,
+        chrome-platform@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 08:30:54PM +0100, Greg Kroah-Hartman wrote:
-> container_of does not preserve the const-ness of a pointer that is
-> passed into it, which can cause C code that passes in a const pointer to
-> get a pointer back that is not const and then scribble all over the data
-> in it.  To prevent this, container_of_const() will preserve the const
-> status of the pointer passed into it using the newly available _Generic()
-> method.
-> 
-> Co-developed-by: Jason Gunthorpe <jgg@ziepe.ca>
+On Thu, Dec 1, 2022 at 1:36 PM Prashant Malani <pmalani@chromium.org> wrote:
+>
+> Hey Benson,
+>
+> On Thu, Dec 1, 2022 at 1:00 PM Benson Leung <bleung@chromium.org> wrote:
+> >
+> > Hi Prashant,
+> >
+> >
+> > On Thu, Dec 1, 2022 at 12:10 PM Prashant Malani <pmalani@chromium.org> wrote:
+> > >
+> > > Hi Won,
+> > >
+> > > On Wed, Nov 30, 2022 at 3:19 PM Won Chung <wonchung@google.com> wrote:
+> > > >
+> > > > Without any driver bound to RGB keyboard, it may not be suspended
+> > > > properly, preventing USB xHCI to be suspended and causing power drain.
+> > > > Create new USB driver for RGB keyboard so that it can be suspended
+> > > > properly.
+> > >
+> > > This seems like overkill. Can't you set this from USB's sysfs nodes
+> > > like power/control [1] ?
+> > >
+> > > [1] https://www.kernel.org/doc/html/latest/driver-api/usb/power-management.html#the-user-interface-for-dynamic-pm
+> > >
+> > >
+> > > Best regards,
+> > >
+> > > -Prashant
+> >
+> > We're seeing some behavior where a bound driver is needed in order for
+> > this USB device to properly enter suspend state. Just manipulating the
+> > power/control and other sysfs nodes for this usb device when there's
+> > no driver in the kernel doesn't seem to affect the device's ability to
+> > drop into a usb low power state.
+>
+> That seems like an issue with the device then, which should be debugged
+> from the device side and/or its interaction with the USB subsystem.
+>
 
-I believe this tag requires SoB of the co-develper.
-The code looks good to me, thanks!
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Hi Prashant,
 
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  include/linux/container_of.h | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/include/linux/container_of.h b/include/linux/container_of.h
-> index 2008e9f4058c..3c290e865151 100644
-> --- a/include/linux/container_of.h
-> +++ b/include/linux/container_of.h
-> @@ -22,4 +22,18 @@
->  		      "pointer type mismatch in container_of()");	\
->  	((type *)(__mptr - offsetof(type, member))); })
->  
-> +/**
-> + * container_of_const - cast a member of a structure out to the containing
-> + *			structure and preserve the const-ness of the pointer
-> + * @ptr_type:		the type of the pointer @ptr
-> + * @ptr:		the pointer to the member
-> + * @member_type:	the type of the container struct this is embedded in.
-> + * @member:		the name of the member within the struct.
-> + */
-> +#define container_of_const(ptr_type, ptr, member_type, member)		\
-> +	_Generic(ptr,							\
-> +		const ptr_type *: ((const member_type *)container_of(ptr, member_type, member)),\
-> +		ptr_type *: ((member_type *)container_of(ptr, member_type, member))	\
-> +	)
-> +
->  #endif	/* _LINUX_CONTAINER_OF_H */
-> -- 
-> 2.38.1
-> 
+As Benson mentioned, I can check on my test Vell device that changing
+power/control does not suspend the device.
+Should it be controllable even without a driver bound?
 
--- 
-With Best Regards,
-Andy Shevchenko
+The RGB keyboard seems to be able to enter sleep with a suspend signal.
+Fyi, here are the related bugs for more context: b/242087721 and b/249173368
 
+Thank you,
+Won
 
+> >
+> > Also, I synced with Won about this offline, but the primary concern is
+> > not this prism usb device runtime suspending, it's actually it's
+> > ability to enter suspend state during system suspend. Right now, this
+> > internal usb device is keeping the whole system from entering lower
+> > S0iX states because it's not sleeping. This driver patch doesn't
+> > address that yet, but I'd like Won to dig down and see if he can get
+> > it suspending at suspend time too.
+>
+> Auto-suspend / dynamic PM should take care of that FWIU (but I may be mistaken).
