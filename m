@@ -2,350 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A3963F31D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3002D63F324
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbiLAOtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 09:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60518 "EHLO
+        id S231274AbiLAOuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 09:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiLAOtR (ORCPT
+        with ESMTP id S229728AbiLAOui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 09:49:17 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B337CAB033;
-        Thu,  1 Dec 2022 06:49:15 -0800 (PST)
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D60F51F896;
-        Thu,  1 Dec 2022 14:49:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669906153; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dd9BUaTXE6j4+vzi40ih8oFoObulnm4Q4kCMQiHn+lw=;
-        b=CO3pI57IjBHMWPHpcREHsoXcv4WM2js/ae4G2ZCn5aJsvVWxfMJZzGE55vP+gkvVjmX92U
-        SlS42h1BQgpNHHEwpgk4jH8z1Sypc4vhyaYK1/12bhVuKRe2o/e8ZdkWVXYhphUnb8MJN1
-        ipySaGjBsJlfIv0+V3FAJEJlzhy/38g=
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id C56C713503;
-        Thu,  1 Dec 2022 14:49:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id iNREL+m+iGMhPgAAGKfGzw
-        (envelope-from <mhocko@suse.com>); Thu, 01 Dec 2022 14:49:13 +0000
-Date:   Thu, 1 Dec 2022 15:49:13 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
-        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [RFC PATCH v2] mm: Add nodes= arg to memory.reclaim
-Message-ID: <Y4i+6bjLGy/GF7uM@dhcp22.suse.cz>
-References: <20221130020328.1009347-1-almasrymina@google.com>
+        Thu, 1 Dec 2022 09:50:38 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97FCAC6D7
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 06:50:36 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id bf14-20020a056602368e00b006ce86e80414so1746347iob.7
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 06:50:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7OqqbGGfV7CnIAjWLX7v/xkTtEv375dPjP0bZcvVyAc=;
+        b=U+AIPsvyjvPkI4Rg0QzLmjLa5juiQhPaq1KCqBouI3F2oVV70a2dCvcX1+sGJDzZD1
+         qMuhuVip3fJVf1UbVVbNYbY6tpJhbGnX90qN6p5Hp70fE9Qn+Bc7YKFdKARGATmSaEPP
+         C7FtWLfhfBWCQFLAeoFvNJ+VYdilqtIaoGvDXNa2BCFV8LVDAcRVluFLwE4HrXqp9bNF
+         e8144TsfweJ6rX5Kj2xLqFPni2/th36Rg4aZmfne2m39Yx+O14JMO1Mqet/dj3lLTKHH
+         Q7Ac5X92J7g2Swucof/CfET1P1aIgUeLSsn65biY9NMI22jJCPZxxZr2eYMHsiXge71T
+         mRUw==
+X-Gm-Message-State: ANoB5pnB1+9uc/LnlvPk+6UwoHFDDsUT+p1g3XjUN7VLFxFPQ7F+YDTL
+        vzGk9LrZmkwUymcgTFXyaEbnZYDd2wS4Sc3ltvDGDM/vT4Vm
+X-Google-Smtp-Source: AA0mqf6EWFfuPHoRflZazvz1RaxPt5YTGx/PmgBNF03Y2SbGPpXoI7i65XRqM0+FCaIGjuQT5DPp771jmIMxnsC5bXO+FYJSOLOh
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130020328.1009347-1-almasrymina@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1189:b0:302:fa94:c735 with SMTP id
+ y9-20020a056e02118900b00302fa94c735mr14905106ili.57.1669906236117; Thu, 01
+ Dec 2022 06:50:36 -0800 (PST)
+Date:   Thu, 01 Dec 2022 06:50:36 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000031adb05eec5581a@google.com>
+Subject: [syzbot] memory leak in napi_skb_cache_get
+From:   syzbot <syzbot+a1fab9d8e5da048ac8a1@syzkaller.appspotmail.com>
+To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
+        jasowang@redhat.com, john.fastabend@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,LONGWORDS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 29-11-22 18:03:27, Mina Almasry wrote:
-> The nodes= arg instructs the kernel to only scan the given nodes for
-> proactive reclaim. For example use cases, consider a 2 tier memory system:
-> 
-> nodes 0,1 -> top tier
-> nodes 2,3 -> second tier
-> 
-> $ echo "1m nodes=0" > memory.reclaim
-> 
-> This instructs the kernel to attempt to reclaim 1m memory from node 0.
-> Since node 0 is a top tier node, demotion will be attempted first. This
-> is useful to direct proactive reclaim to specific nodes that are under
-> pressure.
-> 
-> $ echo "1m nodes=2,3" > memory.reclaim
-> 
-> This instructs the kernel to attempt to reclaim 1m memory in the second tier,
-> since this tier of memory has no demotion targets the memory will be
-> reclaimed.
-> 
-> $ echo "1m nodes=0,1" > memory.reclaim
-> 
-> Instructs the kernel to reclaim memory from the top tier nodes, which can
-> be desirable according to the userspace policy if there is pressure on
-> the top tiers. Since these nodes have demotion targets, the kernel will
-> attempt demotion first.
-> 
-> Since commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
-> reclaim""), the proactive reclaim interface memory.reclaim does both
-> reclaim and demotion. Reclaim and demotion incur different latency costs
-> to the jobs in the cgroup. Demoted memory would still be addressable
-> by the userspace at a higher latency, but reclaimed memory would need to
-> incur a pagefault.
-> 
-> The 'nodes' arg is useful to allow the userspace to control demotion
-> and reclaim independently according to its policy: if the memory.reclaim
-> is called on a node with demotion targets, it will attempt demotion first;
-> if it is called on a node without demotion targets, it will only attempt
-> reclaim.
-> 
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
+Hello,
 
-Thanks for making this per node rather than tier based. This is a more
-generic interface.
+syzbot found the following issue on:
 
-Acked-by: Michal Hocko <mhocko@suse.com>
+HEAD commit:    64c3dd0b98f5 Merge tag 'xfs-6.1-fixes-4' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1761a066880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7da85296f1024c6a
+dashboard link: https://syzkaller.appspot.com/bug?extid=a1fab9d8e5da048ac8a1
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13ac3e61880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17b2040a880000
 
-Thanks!
-> ---
->  Documentation/admin-guide/cgroup-v2.rst | 15 +++---
->  include/linux/swap.h                    |  3 +-
->  mm/memcontrol.c                         | 67 ++++++++++++++++++++-----
->  mm/vmscan.c                             |  4 +-
->  4 files changed, 68 insertions(+), 21 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> index 74cec76be9f2..ac5fcbcd5ae6 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -1245,17 +1245,13 @@ PAGE_SIZE multiple when read back.
->  	This is a simple interface to trigger memory reclaim in the
->  	target cgroup.
-> 
-> -	This file accepts a single key, the number of bytes to reclaim.
-> -	No nested keys are currently supported.
-> +	This file accepts a string which contains the number of bytes to
-> +	reclaim.
-> 
->  	Example::
-> 
->  	  echo "1G" > memory.reclaim
-> 
-> -	The interface can be later extended with nested keys to
-> -	configure the reclaim behavior. For example, specify the
-> -	type of memory to reclaim from (anon, file, ..).
-> -
->  	Please note that the kernel can over or under reclaim from
->  	the target cgroup. If less bytes are reclaimed than the
->  	specified amount, -EAGAIN is returned.
-> @@ -1267,6 +1263,13 @@ PAGE_SIZE multiple when read back.
->  	This means that the networking layer will not adapt based on
->  	reclaim induced by memory.reclaim.
-> 
-> +	This file also allows the user to specify the nodes to reclaim from,
-> +	via the 'nodes=' key, example::
-> +
-> +	  echo "1G nodes=0,1" > memory.reclaim
-> +
-> +	The above instructs the kernel to reclaim memory from nodes 0,1.
-> +
->    memory.peak
->  	A read-only single value file which exists on non-root
->  	cgroups.
-> diff --git a/include/linux/swap.h b/include/linux/swap.h
-> index b61e2007d156..f542c114dffd 100644
-> --- a/include/linux/swap.h
-> +++ b/include/linux/swap.h
-> @@ -419,7 +419,8 @@ extern unsigned long try_to_free_pages(struct zonelist *zonelist, int order,
->  extern unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
->  						  unsigned long nr_pages,
->  						  gfp_t gfp_mask,
-> -						  unsigned int reclaim_options);
-> +						  unsigned int reclaim_options,
-> +						  nodemask_t nodemask);
->  extern unsigned long mem_cgroup_shrink_node(struct mem_cgroup *mem,
->  						gfp_t gfp_mask, bool noswap,
->  						pg_data_t *pgdat,
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 23750cec0036..a0d7850173a9 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -63,6 +63,7 @@
->  #include <linux/resume_user_mode.h>
->  #include <linux/psi.h>
->  #include <linux/seq_buf.h>
-> +#include <linux/parser.h>
->  #include "internal.h"
->  #include <net/sock.h>
->  #include <net/ip.h>
-> @@ -2392,7 +2393,8 @@ static unsigned long reclaim_high(struct mem_cgroup *memcg,
->  		psi_memstall_enter(&pflags);
->  		nr_reclaimed += try_to_free_mem_cgroup_pages(memcg, nr_pages,
->  							gfp_mask,
-> -							MEMCG_RECLAIM_MAY_SWAP);
-> +							MEMCG_RECLAIM_MAY_SWAP,
-> +							NODE_MASK_ALL);
->  		psi_memstall_leave(&pflags);
->  	} while ((memcg = parent_mem_cgroup(memcg)) &&
->  		 !mem_cgroup_is_root(memcg));
-> @@ -2683,7 +2685,8 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
-> 
->  	psi_memstall_enter(&pflags);
->  	nr_reclaimed = try_to_free_mem_cgroup_pages(mem_over_limit, nr_pages,
-> -						    gfp_mask, reclaim_options);
-> +						    gfp_mask, reclaim_options,
-> +						    NODE_MASK_ALL);
->  	psi_memstall_leave(&pflags);
-> 
->  	if (mem_cgroup_margin(mem_over_limit) >= nr_pages)
-> @@ -3503,7 +3506,8 @@ static int mem_cgroup_resize_max(struct mem_cgroup *memcg,
->  		}
-> 
->  		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
-> -					memsw ? 0 : MEMCG_RECLAIM_MAY_SWAP)) {
-> +					memsw ? 0 : MEMCG_RECLAIM_MAY_SWAP,
-> +					NODE_MASK_ALL)) {
->  			ret = -EBUSY;
->  			break;
->  		}
-> @@ -3614,7 +3618,8 @@ static int mem_cgroup_force_empty(struct mem_cgroup *memcg)
->  			return -EINTR;
-> 
->  		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
-> -						  MEMCG_RECLAIM_MAY_SWAP))
-> +						  MEMCG_RECLAIM_MAY_SWAP,
-> +						  NODE_MASK_ALL))
->  			nr_retries--;
->  	}
-> 
-> @@ -6407,7 +6412,8 @@ static ssize_t memory_high_write(struct kernfs_open_file *of,
->  		}
-> 
->  		reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages - high,
-> -					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP);
-> +					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP,
-> +					NODE_MASK_ALL);
-> 
->  		if (!reclaimed && !nr_retries--)
->  			break;
-> @@ -6456,7 +6462,8 @@ static ssize_t memory_max_write(struct kernfs_open_file *of,
-> 
->  		if (nr_reclaims) {
->  			if (!try_to_free_mem_cgroup_pages(memcg, nr_pages - max,
-> -					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP))
-> +					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP,
-> +					NODE_MASK_ALL))
->  				nr_reclaims--;
->  			continue;
->  		}
-> @@ -6579,21 +6586,54 @@ static ssize_t memory_oom_group_write(struct kernfs_open_file *of,
->  	return nbytes;
->  }
-> 
-> +enum {
-> +	MEMORY_RECLAIM_NODES = 0,
-> +	MEMORY_RECLAIM_NULL,
-> +};
-> +
-> +static const match_table_t if_tokens = {
-> +	{ MEMORY_RECLAIM_NODES, "nodes=%s" },
-> +	{ MEMORY_RECLAIM_NULL, NULL },
-> +};
-> +
->  static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
->  			      size_t nbytes, loff_t off)
->  {
->  	struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
->  	unsigned int nr_retries = MAX_RECLAIM_RETRIES;
->  	unsigned long nr_to_reclaim, nr_reclaimed = 0;
-> -	unsigned int reclaim_options;
-> -	int err;
-> +	unsigned int reclaim_options = MEMCG_RECLAIM_MAY_SWAP |
-> +				       MEMCG_RECLAIM_PROACTIVE;
-> +	char *old_buf, *start;
-> +	substring_t args[MAX_OPT_ARGS];
-> +	int token;
-> +	char value[256];
-> +	nodemask_t nodemask = NODE_MASK_ALL;
-> 
->  	buf = strstrip(buf);
-> -	err = page_counter_memparse(buf, "", &nr_to_reclaim);
-> -	if (err)
-> -		return err;
-> 
-> -	reclaim_options	= MEMCG_RECLAIM_MAY_SWAP | MEMCG_RECLAIM_PROACTIVE;
-> +	old_buf = buf;
-> +	nr_to_reclaim = memparse(buf, &buf) / PAGE_SIZE;
-> +	if (buf == old_buf)
-> +		return -EINVAL;
-> +
-> +	buf = strstrip(buf);
-> +
-> +	while ((start = strsep(&buf, " ")) != NULL) {
-> +		if (!strlen(start))
-> +			continue;
-> +		token = match_token(start, if_tokens, args);
-> +		match_strlcpy(value, args, sizeof(value));
-> +		switch (token) {
-> +		case MEMORY_RECLAIM_NODES:
-> +			if (nodelist_parse(value, nodemask) < 0)
-> +				return -EINVAL;
-> +			break;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
->  	while (nr_reclaimed < nr_to_reclaim) {
->  		unsigned long reclaimed;
-> 
-> @@ -6610,7 +6650,8 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
-> 
->  		reclaimed = try_to_free_mem_cgroup_pages(memcg,
->  						nr_to_reclaim - nr_reclaimed,
-> -						GFP_KERNEL, reclaim_options);
-> +						GFP_KERNEL, reclaim_options,
-> +						nodemask);
-> 
->  		if (!reclaimed && !nr_retries--)
->  			return -EAGAIN;
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 7b8e8e43806b..23fc5b523764 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -6735,7 +6735,8 @@ unsigned long mem_cgroup_shrink_node(struct mem_cgroup *memcg,
->  unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
->  					   unsigned long nr_pages,
->  					   gfp_t gfp_mask,
-> -					   unsigned int reclaim_options)
-> +					   unsigned int reclaim_options,
-> +					   nodemask_t nodemask)
->  {
->  	unsigned long nr_reclaimed;
->  	unsigned int noreclaim_flag;
-> @@ -6750,6 +6751,7 @@ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
->  		.may_unmap = 1,
->  		.may_swap = !!(reclaim_options & MEMCG_RECLAIM_MAY_SWAP),
->  		.proactive = !!(reclaim_options & MEMCG_RECLAIM_PROACTIVE),
-> +		.nodemask = &nodemask,
->  	};
->  	/*
->  	 * Traverse the ZONELIST_FALLBACK zonelist of the current node to put
-> --
-> 2.38.1.584.g0f3c55d4c2-goog
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ebc55fa5a058/disk-64c3dd0b.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/312317fcea89/vmlinux-64c3dd0b.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b5a79a1512f2/bzImage-64c3dd0b.xz
 
--- 
-Michal Hocko
-SUSE Labs
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a1fab9d8e5da048ac8a1@syzkaller.appspotmail.com
+
+executing program
+executing program
+executing program
+executing program
+executing program
+BUG: memory leak
+unreferenced object 0xffff88810ef20400 (size 240):
+  comm "softirq", pid 0, jiffies 4294950045 (age 43.240s)
+  hex dump (first 32 bytes):
+    e0 04 1d 0c 81 88 ff ff e0 04 1d 0c 81 88 ff ff  ................
+    00 c0 2b 0b 81 88 ff ff 00 00 00 00 00 00 00 00  ..+.............
+  backtrace:
+    [<ffffffff838525db>] napi_skb_cache_get+0x6b/0x90 net/core/skbuff.c:258
+    [<ffffffff83852615>] __napi_build_skb+0x15/0x50 net/core/skbuff.c:387
+    [<ffffffff838529e9>] __napi_alloc_skb+0x129/0x260 net/core/skbuff.c:691
+    [<ffffffff82a1e9df>] napi_alloc_skb include/linux/skbuff.h:3212 [inline]
+    [<ffffffff82a1e9df>] page_to_skb+0x11f/0x770 drivers/net/virtio_net.c:499
+    [<ffffffff82a21dee>] receive_mergeable drivers/net/virtio_net.c:1122 [inline]
+    [<ffffffff82a21dee>] receive_buf+0x6ae/0x2d70 drivers/net/virtio_net.c:1261
+    [<ffffffff82a246fe>] virtnet_receive drivers/net/virtio_net.c:1556 [inline]
+    [<ffffffff82a246fe>] virtnet_poll+0x24e/0x6f0 drivers/net/virtio_net.c:1674
+    [<ffffffff8388909d>] __napi_poll+0x3d/0x290 net/core/dev.c:6498
+    [<ffffffff838898cc>] napi_poll net/core/dev.c:6565 [inline]
+    [<ffffffff838898cc>] net_rx_action+0x3ac/0x490 net/core/dev.c:6676
+    [<ffffffff84a000eb>] __do_softirq+0xeb/0x2ef kernel/softirq.c:571
+    [<ffffffff8124c9b6>] invoke_softirq kernel/softirq.c:445 [inline]
+    [<ffffffff8124c9b6>] __irq_exit_rcu+0xc6/0x110 kernel/softirq.c:650
+    [<ffffffff84609b08>] common_interrupt+0xb8/0xd0 arch/x86/kernel/irq.c:240
+    [<ffffffff84800c22>] asm_common_interrupt+0x22/0x40 arch/x86/include/asm/idtentry.h:640
+    [<ffffffff84622dc9>] native_safe_halt arch/x86/include/asm/irqflags.h:51 [inline]
+    [<ffffffff84622dc9>] arch_safe_halt arch/x86/include/asm/irqflags.h:89 [inline]
+    [<ffffffff84622dc9>] acpi_safe_halt drivers/acpi/processor_idle.c:112 [inline]
+    [<ffffffff84622dc9>] acpi_idle_do_entry+0xc9/0xe0 drivers/acpi/processor_idle.c:572
+    [<ffffffff846232e0>] acpi_idle_enter+0x150/0x230 drivers/acpi/processor_idle.c:709
+    [<ffffffff83432934>] cpuidle_enter_state+0xc4/0x740 drivers/cpuidle/cpuidle.c:239
+    [<ffffffff83433009>] cpuidle_enter+0x29/0x40 drivers/cpuidle/cpuidle.c:356
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
