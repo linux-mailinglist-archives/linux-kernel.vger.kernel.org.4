@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD8D63EEDB
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2618B63EEDC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbiLALGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:06:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44446 "EHLO
+        id S231316AbiLALGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:06:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiLALE6 (ORCPT
+        with ESMTP id S231250AbiLALFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:04:58 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6EA2EF73
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:04:45 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id gu23so3284081ejb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:04:45 -0800 (PST)
+        Thu, 1 Dec 2022 06:05:01 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE72A9CF1
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:04:48 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id ml11so3311017ejb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:04:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linbit-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=V0WAfE8hdL0tzZKi1T6BWiR0fFBWp0nrSqUr8ssQ6oc=;
-        b=34Ouz4yrei+9t69KvvxT9OE4cIyQ0P4LIkEfr03kYZs2igX3ARO1y3LZOtgcke7jAg
-         p17+JZlm+xNEUt9puEqlYbUrb/kE5rFxzGYYF0c0nbDvc9jh7yoPYxI3KWIHCxs6NwTl
-         qkFK9KgMjral0QhhlOLb0DeUBTUeeGD9OTJsbbh0zTsgBpZNeOM9KTEs7jucUaffFeL1
-         UdLrlpwQQfkaqFp4Nfl4X4bGKNw4HJ4nQawmHsOTMwgjJ2VBYr9KQ3bjw3/Z3tGmhPFJ
-         JD6yZ9qfkU5XjZJrCClSZ+jMq3dlcWl5iYyJZwx7Z5gF7qGRhASbqX/0d7rQ9iqYfPpA
-         d5HA==
+        bh=Bmn8SwUWjK/nwkWTJ4vDBmaAziTFxNsLJCIgj2fSc8E=;
+        b=Gf0HHtQJ2drnv8Kn2EzmbSBl4ExUFt6SPp6QGrTYzIC0ZBhP5a6EWuWNmKENJJDtfe
+         YXmdznPgomOhN7CDe8CABrymHDwdsl8/bb/GoKCgQRWcXt//DmUv2Dhwuk5LYFqN/EEW
+         vcWWnxOWSiP4Wk9Pi9rcfqFjsmEjnvG+U4w9vYDXhiVuMUhDm4aOkKZDIXKPQheeU+Hp
+         j/TcfypiwWsSYzAMSe+PalW1PNhQ4SnYIDyeTw5QZmUDvBHF9wE5LpImgUmTvxIu2wrQ
+         hrW2XcqWJigEI0/dQYB7ku0xjWNEeORxMI4LHxJfxQNyGpbYj7eNAm2rNVzIl1jivRKI
+         7RZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=V0WAfE8hdL0tzZKi1T6BWiR0fFBWp0nrSqUr8ssQ6oc=;
-        b=hlbC3lUASOnTdCh+n3svb1WgA50n+TATFr9e9MMSS04Rd5Xdse5u8vLycbiWpcygV9
-         FeKToxtJGWwDtfNUTLsKFp8MVZ6THagMWvz6YNDCLY0zJvpqyjmR2I1N8ZIoV9Lqjd1R
-         rQHzqnB+y53uYVYkIpP7BFNmj50L95+0zZn3pTfvnniRNTfBI50vjV1y5gKBvpsBvFD5
-         jT2c+MvFubWpCC1N+M1cD9eRDFueTiooZqkAylSt7EBhyaymuLkN7ADcgOnqHAQGDsDB
-         Gz2UzUUPe+qUFINADW1J1Rv/sfBriPjtmaWfzLbgewM7afv+2LsGmR6t7tca+txBWLcT
-         N8TQ==
-X-Gm-Message-State: ANoB5pm/WlKtFFE47X4lokNGQ+QAV8zgmKIgkPxym+gU3whDXZR1x6BP
-        8/LC+8eXtP+KgsSZHJ05ku7MdybUWv3EVIqj
-X-Google-Smtp-Source: AA0mqf5mqXKOCdSBu5pZd2wcPPL+fX/DdvJaIOZuRS03+iY5zLivXponH87Swwbh61ZqTbU4+gXaJQ==
-X-Received: by 2002:a17:906:bb06:b0:7ba:708f:2a03 with SMTP id jz6-20020a170906bb0600b007ba708f2a03mr32707279ejb.167.1669892684054;
-        Thu, 01 Dec 2022 03:04:44 -0800 (PST)
+        bh=Bmn8SwUWjK/nwkWTJ4vDBmaAziTFxNsLJCIgj2fSc8E=;
+        b=A7BjtOamKO9fCC8HfLGLgnNmVacffYSQkIDrwU93Q+QfUwTk8CE41hHBapU0dIHlAf
+         CGgN4sgDgTDJX52la/ssy5nQ6vWF7D4FuKP0iP18J+UExryqAIfOF7hchd+bp91KK5qX
+         WUD6bPDSbZMFk0k6Na8JUF9qOkro6WmB2Ekhk4tee6CyO7uJKZL0hIBh7okH0LooheSn
+         wCPW6v9TSsZGv5yw102jckBusLq/LwVoDuuQDvpiwciT5R1WlGymM7keah4hTpMRo/es
+         KCR/JYZGT6GFih1rH3R8lh9FpP124SKvSD7j5wk+pPqeXaWChMNK3czqRkGmGpJsLTT5
+         2whA==
+X-Gm-Message-State: ANoB5pkd+coTrhBv0tH40ozsT3vG5kVeetV4to5XbQFIg5yAVUfDsgxi
+        xC7IwwXTfFdZfXG9S1tYAuX8NQ==
+X-Google-Smtp-Source: AA0mqf6AlAariJ15ySSeIh1H1T+YEu/OdiVoYr/hy+NM72prqCa4Q7ixiHhOc6uyS7ph8uI++7y6nA==
+X-Received: by 2002:a17:906:e0d2:b0:7ad:b45c:dbe1 with SMTP id gl18-20020a170906e0d200b007adb45cdbe1mr56404780ejb.726.1669892687188;
+        Thu, 01 Dec 2022 03:04:47 -0800 (PST)
 Received: from localhost.localdomain (h082218028181.host.wavenet.at. [82.218.28.181])
-        by smtp.gmail.com with ESMTPSA id f26-20020a056402161a00b00463a83ce063sm1576424edv.96.2022.12.01.03.04.43
+        by smtp.gmail.com with ESMTPSA id f26-20020a056402161a00b00463a83ce063sm1576424edv.96.2022.12.01.03.04.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 03:04:43 -0800 (PST)
+        Thu, 01 Dec 2022 03:04:46 -0800 (PST)
 From:   =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
         <christoph.boehmwalder@linbit.com>
 To:     Jens Axboe <axboe@kernel.dk>
@@ -59,9 +59,9 @@ Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
         linux-block@vger.kernel.org,
         =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
         <christoph.boehmwalder@linbit.com>
-Subject: [PATCH 3/5] drbd: introduce dynamic debug
-Date:   Thu,  1 Dec 2022 12:03:48 +0100
-Message-Id: <20221201110349.1282687-4-christoph.boehmwalder@linbit.com>
+Subject: [PATCH 4/5] drbd: introduce drbd_ratelimit()
+Date:   Thu,  1 Dec 2022 12:03:49 +0100
+Message-Id: <20221201110349.1282687-5-christoph.boehmwalder@linbit.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221201110349.1282687-1-christoph.boehmwalder@linbit.com>
 References: <20221201110349.1282687-1-christoph.boehmwalder@linbit.com>
@@ -69,193 +69,236 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Incorporate as many out-of-tree changes as possible without changing the
-genl API.
+Use call site specific ratelimit instead of one single static global.
+Also ratelimit ASSERTION messages generated by expect().
 
-Over the years, we restructured this several times, and also changed the
-log format.
-
-One breaking change is that DRBD 9 gained "implicit options", like a
-connection name. This cannot be replayed here without changing the API,
-so save it for later.
-
-Originally-from: Andreas Gruenbacher <agruen@linbit.com>
-Originally-from: Philipp Reisner <philipp.reisner@linbit.com>
 Originally-from: Lars Ellenberg <lars.ellenberg@linbit.com>
 Signed-off-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
 ---
- drivers/block/drbd/drbd_polymorph_printk.h | 133 +++++++++++++++------
- 1 file changed, 97 insertions(+), 36 deletions(-)
+ drivers/block/drbd/drbd_actlog.c           |  2 +-
+ drivers/block/drbd/drbd_bitmap.c           |  6 +++---
+ drivers/block/drbd/drbd_int.h              |  2 +-
+ drivers/block/drbd/drbd_main.c             |  2 +-
+ drivers/block/drbd/drbd_polymorph_printk.h | 10 +++++++++-
+ drivers/block/drbd/drbd_receiver.c         |  4 ++--
+ drivers/block/drbd/drbd_req.c              |  6 +++---
+ drivers/block/drbd/drbd_worker.c           | 12 ++++++------
+ 8 files changed, 26 insertions(+), 18 deletions(-)
 
+diff --git a/drivers/block/drbd/drbd_actlog.c b/drivers/block/drbd/drbd_actlog.c
+index 5db147f3c02d..87d93012289f 100644
+--- a/drivers/block/drbd/drbd_actlog.c
++++ b/drivers/block/drbd/drbd_actlog.c
+@@ -1143,7 +1143,7 @@ void drbd_rs_complete_io(struct drbd_device *device, sector_t sector)
+ 	bm_ext = e ? lc_entry(e, struct bm_extent, lce) : NULL;
+ 	if (!bm_ext) {
+ 		spin_unlock_irqrestore(&device->al_lock, flags);
+-		if (__ratelimit(&drbd_ratelimit_state))
++		if (drbd_ratelimit())
+ 			drbd_err(device, "drbd_rs_complete_io() called, but extent not found\n");
+ 		return;
+ 	}
+diff --git a/drivers/block/drbd/drbd_bitmap.c b/drivers/block/drbd/drbd_bitmap.c
+index b90a5c1003fc..8e6534a90e12 100644
+--- a/drivers/block/drbd/drbd_bitmap.c
++++ b/drivers/block/drbd/drbd_bitmap.c
+@@ -113,7 +113,7 @@ struct drbd_bitmap {
+ static void __bm_print_lock_info(struct drbd_device *device, const char *func)
+ {
+ 	struct drbd_bitmap *b = device->bitmap;
+-	if (!__ratelimit(&drbd_ratelimit_state))
++	if (!drbd_ratelimit())
+ 		return;
+ 	drbd_err(device, "FIXME %s[%d] in %s, bitmap locked for '%s' by %s[%d]\n",
+ 		 current->comm, task_pid_nr(current),
+@@ -952,7 +952,7 @@ static void drbd_bm_endio(struct bio *bio)
+ 		bm_set_page_io_err(b->bm_pages[idx]);
+ 		/* Not identical to on disk version of it.
+ 		 * Is BM_PAGE_IO_ERROR enough? */
+-		if (__ratelimit(&drbd_ratelimit_state))
++		if (drbd_ratelimit())
+ 			drbd_err(device, "IO ERROR %d on bitmap page idx %u\n",
+ 					bio->bi_status, idx);
+ 	} else {
+@@ -1013,7 +1013,7 @@ static void bm_page_io_async(struct drbd_bm_aio_ctx *ctx, int page_nr) __must_ho
+ 		else
+ 			len = PAGE_SIZE;
+ 	} else {
+-		if (__ratelimit(&drbd_ratelimit_state)) {
++		if (drbd_ratelimit()) {
+ 			drbd_err(device, "Invalid offset during on-disk bitmap access: "
+ 				 "page idx %u, sector %llu\n", page_nr, on_disk_sector);
+ 		}
+diff --git a/drivers/block/drbd/drbd_int.h b/drivers/block/drbd/drbd_int.h
+index 1734a7f8a096..ae713338aa46 100644
+--- a/drivers/block/drbd/drbd_int.h
++++ b/drivers/block/drbd/drbd_int.h
+@@ -1658,7 +1658,7 @@ static inline void __drbd_chk_io_error_(struct drbd_device *device,
+ 	switch (ep) {
+ 	case EP_PASS_ON: /* FIXME would this be better named "Ignore"? */
+ 		if (df == DRBD_READ_ERROR || df == DRBD_WRITE_ERROR) {
+-			if (__ratelimit(&drbd_ratelimit_state))
++			if (drbd_ratelimit())
+ 				drbd_err(device, "Local IO failed in %s.\n", where);
+ 			if (device->state.disk > D_INCONSISTENT)
+ 				_drbd_set_state(_NS(device, disk, D_INCONSISTENT), CS_HARD, NULL);
+diff --git a/drivers/block/drbd/drbd_main.c b/drivers/block/drbd/drbd_main.c
+index e02db1dccab1..acfbba3c0f21 100644
+--- a/drivers/block/drbd/drbd_main.c
++++ b/drivers/block/drbd/drbd_main.c
+@@ -3767,7 +3767,7 @@ _drbd_insert_fault(struct drbd_device *device, unsigned int type)
+ 	if (ret) {
+ 		drbd_fault_count++;
+ 
+-		if (__ratelimit(&drbd_ratelimit_state))
++		if (drbd_ratelimit())
+ 			drbd_warn(device, "***Simulating %s failure\n",
+ 				_drbd_fault_str(type));
+ 	}
 diff --git a/drivers/block/drbd/drbd_polymorph_printk.h b/drivers/block/drbd/drbd_polymorph_printk.h
-index 13cc1b311e16..46cda9dd9af8 100644
+index 46cda9dd9af8..914f2a3c0e2e 100644
 --- a/drivers/block/drbd/drbd_polymorph_printk.h
 +++ b/drivers/block/drbd/drbd_polymorph_printk.h
-@@ -2,52 +2,113 @@
- #ifndef DRBD_POLYMORPH_PRINTK_H
- #define DRBD_POLYMORPH_PRINTK_H
+@@ -110,6 +110,14 @@ void drbd_dyn_dbg_with_wrong_object_type(void);
+ 	drbd_printk(KERN_INFO, device, fmt, ## args)
  
--#define __drbd_printk_device(level, device, fmt, args...) \
--	dev_printk(level, disk_to_dev((device)->vdisk), fmt, ## args)
--#define __drbd_printk_peer_device(level, peer_device, fmt, args...) \
--	dev_printk(level, disk_to_dev((peer_device)->device->vdisk), fmt, ## args)
--#define __drbd_printk_resource(level, resource, fmt, args...) \
--	printk(level "drbd %s: " fmt, (resource)->name, ## args)
--#define __drbd_printk_connection(level, connection, fmt, args...) \
--	printk(level "drbd %s: " fmt, (connection)->resource->name, ## args)
-+#if !defined(CONFIG_DYNAMIC_DEBUG)
-+#undef DEFINE_DYNAMIC_DEBUG_METADATA
-+#undef __dynamic_pr_debug
-+#undef DYNAMIC_DEBUG_BRANCH
-+#define DEFINE_DYNAMIC_DEBUG_METADATA(D, F) const char *D = F; ((void)D)
-+#define __dynamic_pr_debug(D, F, args...) do { (void)(D); if (0) printk(F, ## args); } while (0)
-+#define DYNAMIC_DEBUG_BRANCH(D) false
-+#endif
-+
-+
-+#define __drbd_printk_drbd_device_prep(device)			\
-+	const struct drbd_device *__d = (device);		\
-+	const struct drbd_resource *__r = __d->resource
-+#define __drbd_printk_drbd_device_fmt(fmt)	"drbd %s/%u drbd%u: " fmt
-+#define __drbd_printk_drbd_device_args()	__r->name, __d->vnr, __d->minor
-+#define __drbd_printk_drbd_device_unprep()
-+
-+#define __drbd_printk_drbd_peer_device_prep(peer_device)	\
-+	const struct drbd_device *__d;				\
-+	const struct drbd_resource *__r;			\
-+	__d = (peer_device)->device;				\
-+	__r = __d->resource
-+#define __drbd_printk_drbd_peer_device_fmt(fmt) \
-+	"drbd %s/%u drbd%u: " fmt
-+#define __drbd_printk_drbd_peer_device_args() \
-+	__r->name, __d->vnr, __d->minor
-+#define __drbd_printk_drbd_peer_device_unprep()
-+
-+#define __drbd_printk_drbd_resource_prep(resource) \
-+	const struct drbd_resource *__r = resource
-+#define __drbd_printk_drbd_resource_fmt(fmt) "drbd %s: " fmt
-+#define __drbd_printk_drbd_resource_args()	__r->name
-+#define __drbd_printk_drbd_resource_unprep(resource)
-+
-+#define __drbd_printk_drbd_connection_prep(connection)		\
-+	const struct drbd_connection *__c = (connection);	\
-+	const struct drbd_resource *__r = __c->resource
-+#define __drbd_printk_drbd_connection_fmt(fmt)			\
-+	"drbd %s: " fmt
-+#define __drbd_printk_drbd_connection_args()			\
-+	__r->name
-+#define __drbd_printk_drbd_connection_unprep()
  
- void drbd_printk_with_wrong_object_type(void);
-+void drbd_dyn_dbg_with_wrong_object_type(void);
- 
--#define __drbd_printk_if_same_type(obj, type, func, level, fmt, args...) \
--	(__builtin_types_compatible_p(typeof(obj), type) || \
--	 __builtin_types_compatible_p(typeof(obj), const type)), \
--	func(level, (const type)(obj), fmt, ## args)
-+#define __drbd_printk_choose_cond(obj, struct_name) \
-+	(__builtin_types_compatible_p(typeof(obj), struct struct_name *) || \
-+	 __builtin_types_compatible_p(typeof(obj), const struct struct_name *))
-+#define __drbd_printk_if_same_type(obj, struct_name, level, fmt, args...) \
-+	__drbd_printk_choose_cond(obj, struct_name), \
-+({ \
-+	__drbd_printk_ ## struct_name ## _prep((const struct struct_name *)(obj)); \
-+	printk(level __drbd_printk_ ## struct_name ## _fmt(fmt), \
-+		__drbd_printk_ ## struct_name ## _args(), ## args); \
-+	__drbd_printk_ ## struct_name ## _unprep(); \
-+})
- 
- #define drbd_printk(level, obj, fmt, args...) \
- 	__builtin_choose_expr( \
--	  __drbd_printk_if_same_type(obj, struct drbd_device *, \
--			     __drbd_printk_device, level, fmt, ## args), \
-+	  __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
- 	  __builtin_choose_expr( \
--	    __drbd_printk_if_same_type(obj, struct drbd_resource *, \
--			       __drbd_printk_resource, level, fmt, ## args), \
-+	    __drbd_printk_if_same_type(obj, drbd_resource, level, fmt, ## args), \
- 	    __builtin_choose_expr( \
--	      __drbd_printk_if_same_type(obj, struct drbd_connection *, \
--				 __drbd_printk_connection, level, fmt, ## args), \
-+	      __drbd_printk_if_same_type(obj, drbd_connection, level, fmt, ## args), \
- 	      __builtin_choose_expr( \
--		__drbd_printk_if_same_type(obj, struct drbd_peer_device *, \
--				 __drbd_printk_peer_device, level, fmt, ## args), \
-+		__drbd_printk_if_same_type(obj, drbd_peer_device, level, fmt, ## args), \
- 		drbd_printk_with_wrong_object_type()))))
- 
--#define drbd_dbg(obj, fmt, args...) \
--	drbd_printk(KERN_DEBUG, obj, fmt, ## args)
--#define drbd_alert(obj, fmt, args...) \
--	drbd_printk(KERN_ALERT, obj, fmt, ## args)
--#define drbd_err(obj, fmt, args...) \
--	drbd_printk(KERN_ERR, obj, fmt, ## args)
--#define drbd_warn(obj, fmt, args...) \
--	drbd_printk(KERN_WARNING, obj, fmt, ## args)
--#define drbd_info(obj, fmt, args...) \
--	drbd_printk(KERN_INFO, obj, fmt, ## args)
--#define drbd_emerg(obj, fmt, args...) \
--	drbd_printk(KERN_EMERG, obj, fmt, ## args)
--
--#define dynamic_drbd_dbg(device, fmt, args...) \
--	dynamic_dev_dbg(disk_to_dev(device->vdisk), fmt, ## args)
-+#define __drbd_dyn_dbg_if_same_type(obj, struct_name, fmt, args...) \
-+	__drbd_printk_choose_cond(obj, struct_name), \
-+({ \
-+	DEFINE_DYNAMIC_DEBUG_METADATA(descriptor, fmt);		\
-+	if (DYNAMIC_DEBUG_BRANCH(descriptor)) {			\
-+		__drbd_printk_ ## struct_name ## _prep((const struct struct_name *)(obj)); \
-+		__dynamic_pr_debug(&descriptor, __drbd_printk_ ## struct_name ## _fmt(fmt), \
-+			__drbd_printk_ ## struct_name ## _args(), ## args); \
-+		__drbd_printk_ ## struct_name ## _unprep();	\
-+	}							\
++#define drbd_ratelimit() \
++({						\
++	static DEFINE_RATELIMIT_STATE(_rs,	\
++		DEFAULT_RATELIMIT_INTERVAL,	\
++		DEFAULT_RATELIMIT_BURST);	\
++	__ratelimit(&_rs);			\
 +})
 +
-+#define dynamic_drbd_dbg(obj, fmt, args...) \
-+	__builtin_choose_expr( \
-+	  __drbd_dyn_dbg_if_same_type(obj, drbd_device, fmt, ## args), \
-+	  __builtin_choose_expr( \
-+	    __drbd_dyn_dbg_if_same_type(obj, drbd_resource, fmt, ## args), \
-+	    __builtin_choose_expr( \
-+	      __drbd_dyn_dbg_if_same_type(obj, drbd_connection, fmt, ## args), \
-+	      __builtin_choose_expr( \
-+		__drbd_dyn_dbg_if_same_type(obj, drbd_peer_device, fmt, ## args), \
-+		drbd_dyn_dbg_with_wrong_object_type()))))
-+
-+#define drbd_emerg(device, fmt, args...) \
-+	drbd_printk(KERN_EMERG, device, fmt, ## args)
-+#define drbd_alert(device, fmt, args...) \
-+	drbd_printk(KERN_ALERT, device, fmt, ## args)
-+#define drbd_crit(device, fmt, args...) \
-+	drbd_printk(KERN_CRIT, device, fmt, ## args)
-+#define drbd_err(device, fmt, args...) \
-+	drbd_printk(KERN_ERR, device, fmt, ## args)
-+#define drbd_warn(device, fmt, args...) \
-+	drbd_printk(KERN_WARNING, device, fmt, ## args)
-+#define drbd_notice(device, fmt, args...) \
-+	drbd_printk(KERN_NOTICE, device, fmt, ## args)
-+#define drbd_info(device, fmt, args...) \
-+	drbd_printk(KERN_INFO, device, fmt, ## args)
-+
- 
  #define D_ASSERT(x, exp)							\
  	do {									\
-@@ -65,7 +126,7 @@ void drbd_printk_with_wrong_object_type(void);
+ 		if (!(exp))							\
+@@ -124,7 +132,7 @@ void drbd_dyn_dbg_with_wrong_object_type(void);
+  */
+ #define expect(exp) ({								\
  		bool _bool = (exp);						\
- 		if (!_bool)							\
+-		if (!_bool)							\
++		if (!_bool && drbd_ratelimit())					\
  			drbd_err(device, "ASSERTION %s FAILED in %s\n",		\
--			        #exp, __func__);				\
-+				#exp, __func__);				\
+ 				#exp, __func__);				\
  		_bool;								\
- 		})
+diff --git a/drivers/block/drbd/drbd_receiver.c b/drivers/block/drbd/drbd_receiver.c
+index e045fb55f3bf..afbe0df3ff75 100644
+--- a/drivers/block/drbd/drbd_receiver.c
++++ b/drivers/block/drbd/drbd_receiver.c
+@@ -2165,7 +2165,7 @@ static int receive_RSDataReply(struct drbd_connection *connection, struct packet
+ 		 * or in drbd_peer_request_endio. */
+ 		err = recv_resync_read(peer_device, sector, pi);
+ 	} else {
+-		if (__ratelimit(&drbd_ratelimit_state))
++		if (drbd_ratelimit())
+ 			drbd_err(device, "Can not write resync data to local disk.\n");
+ 
+ 		err = drbd_drain_block(peer_device, pi->size);
+@@ -2846,7 +2846,7 @@ static int receive_DataRequest(struct drbd_connection *connection, struct packet
+ 		default:
+ 			BUG();
+ 		}
+-		if (verb && __ratelimit(&drbd_ratelimit_state))
++		if (verb && drbd_ratelimit())
+ 			drbd_err(device, "Can not satisfy peer's read request, "
+ 			    "no local data.\n");
+ 
+diff --git a/drivers/block/drbd/drbd_req.c b/drivers/block/drbd/drbd_req.c
+index ced15557197a..eb14ec8ec04c 100644
+--- a/drivers/block/drbd/drbd_req.c
++++ b/drivers/block/drbd/drbd_req.c
+@@ -144,7 +144,7 @@ void drbd_req_destroy(struct kref *kref)
+ 			if (get_ldev_if_state(device, D_FAILED)) {
+ 				drbd_al_complete_io(device, &req->i);
+ 				put_ldev(device);
+-			} else if (__ratelimit(&drbd_ratelimit_state)) {
++			} else if (drbd_ratelimit()) {
+ 				drbd_warn(device, "Should have called drbd_al_complete_io(, %llu, %u), "
+ 					 "but my Disk seems to have failed :(\n",
+ 					 (unsigned long long) req->i.sector, req->i.size);
+@@ -518,7 +518,7 @@ static void mod_rq_state(struct drbd_request *req, struct bio_and_error *m,
+ 
+ static void drbd_report_io_error(struct drbd_device *device, struct drbd_request *req)
+ {
+-	if (!__ratelimit(&drbd_ratelimit_state))
++	if (!drbd_ratelimit())
+ 		return;
+ 
+ 	drbd_warn(device, "local %s IO error sector %llu+%u on %pg\n",
+@@ -1402,7 +1402,7 @@ static void drbd_send_and_submit(struct drbd_device *device, struct drbd_request
+ 		submit_private_bio = true;
+ 	} else if (no_remote) {
+ nodata:
+-		if (__ratelimit(&drbd_ratelimit_state))
++		if (drbd_ratelimit())
+ 			drbd_err(device, "IO ERROR: neither local nor remote data, sector %llu+%u\n",
+ 					(unsigned long long)req->i.sector, req->i.size >> 9);
+ 		/* A write may have been queued for send_oos, however.
+diff --git a/drivers/block/drbd/drbd_worker.c b/drivers/block/drbd/drbd_worker.c
+index 3df033bfccf8..f46738040d6b 100644
+--- a/drivers/block/drbd/drbd_worker.c
++++ b/drivers/block/drbd/drbd_worker.c
+@@ -176,7 +176,7 @@ void drbd_peer_request_endio(struct bio *bio)
+ 	bool is_discard = bio_op(bio) == REQ_OP_WRITE_ZEROES ||
+ 			  bio_op(bio) == REQ_OP_DISCARD;
+ 
+-	if (bio->bi_status && __ratelimit(&drbd_ratelimit_state))
++	if (bio->bi_status && drbd_ratelimit())
+ 		drbd_warn(device, "%s: error=%d s=%llus\n",
+ 				is_write ? (is_discard ? "discard" : "write")
+ 					: "read", bio->bi_status,
+@@ -240,7 +240,7 @@ void drbd_request_endio(struct bio *bio)
+ 	 * though we still will complain noisily about it.
+ 	 */
+ 	if (unlikely(req->rq_state & RQ_LOCAL_ABORTED)) {
+-		if (__ratelimit(&drbd_ratelimit_state))
++		if (drbd_ratelimit())
+ 			drbd_emerg(device, "delayed completion of aborted local request; disk-timeout may be too aggressive\n");
+ 
+ 		if (!bio->bi_status)
+@@ -1062,7 +1062,7 @@ int w_e_end_data_req(struct drbd_work *w, int cancel)
+ 	if (likely((peer_req->flags & EE_WAS_ERROR) == 0)) {
+ 		err = drbd_send_block(peer_device, P_DATA_REPLY, peer_req);
+ 	} else {
+-		if (__ratelimit(&drbd_ratelimit_state))
++		if (drbd_ratelimit())
+ 			drbd_err(device, "Sending NegDReply. sector=%llus.\n",
+ 			    (unsigned long long)peer_req->i.sector);
+ 
+@@ -1135,13 +1135,13 @@ int w_e_end_rsdata_req(struct drbd_work *w, int cancel)
+ 			else
+ 				err = drbd_send_block(peer_device, P_RS_DATA_REPLY, peer_req);
+ 		} else {
+-			if (__ratelimit(&drbd_ratelimit_state))
++			if (drbd_ratelimit())
+ 				drbd_err(device, "Not sending RSDataReply, "
+ 				    "partner DISKLESS!\n");
+ 			err = 0;
+ 		}
+ 	} else {
+-		if (__ratelimit(&drbd_ratelimit_state))
++		if (drbd_ratelimit())
+ 			drbd_err(device, "Sending NegRSDReply. sector %llus.\n",
+ 			    (unsigned long long)peer_req->i.sector);
+ 
+@@ -1212,7 +1212,7 @@ int w_e_end_csum_rs_req(struct drbd_work *w, int cancel)
+ 		}
+ 	} else {
+ 		err = drbd_send_ack(peer_device, P_NEG_RS_DREPLY, peer_req);
+-		if (__ratelimit(&drbd_ratelimit_state))
++		if (drbd_ratelimit())
+ 			drbd_err(device, "Sending NegDReply. I guess it gets messy.\n");
+ 	}
  
 -- 
 2.38.1
