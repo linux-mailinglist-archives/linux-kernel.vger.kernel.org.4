@@ -2,277 +2,391 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2958863ECAA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2997563ECB5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbiLAJkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:40:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
+        id S230224AbiLAJnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:43:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiLAJkK (ORCPT
+        with ESMTP id S230258AbiLAJmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:40:10 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2B94E439
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:40:09 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id d128so1290980ybf.10
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 01:40:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9QLD+5uuDceL+/+s+viqs5DLeTzi4AwuSjjugeFiRVs=;
-        b=ew98FRJGl8Kye3oV4cy7cci/JIlR4voaOzySnrmhSRElPwmOFo18U+emBFHDlVoVd/
-         m+haqAEmiACZX4GxNr87JSxt83lZu6e7/WdFnnivdQ44CCMqGQrM1wgMPlZIDUzOuUWR
-         HdoLDRQoYXH4nS1Xgst4DDILZZVfSWkwQNcxf4RfndJXqOAlDBSAwUysWSvjyi03T/iu
-         TWDCIfYUegwBXZA+Pwz+9PhRX+Ryzd76ySAAf+dgNS0cgvRlMv1mmuauIQmeA4m1DJW0
-         6e1Z+VvepJgECeZNuK5APEtYFSV6qL8a0NL6tzdh4Q7z4/P7qwHjHzxozNiRy/CCnqUY
-         0EAw==
+        Thu, 1 Dec 2022 04:42:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AF24A9EF
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:41:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669887711;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d/lP/MUpumH1puWMFQWuZ/iuRBdPRSaGxJGkZdBzweg=;
+        b=FFcbmNxBrnHZiBmE7luD/QpZnKbmO0/BcVajJfgDsQvbofKEO3cBfNhYeMnO0445RasRog
+        Q27NJF5Ld4W+FcohVKSvo01U6BEvT3X6pHbUdgmBptPpzWv0MUxEjRNAIP87bCQQlQSQbB
+        nVGvDpI2QwA4BPqzN90+OPCCkFN7L5k=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-65-OmvWflQgNK2BOQwBQS4MSQ-1; Thu, 01 Dec 2022 04:41:43 -0500
+X-MC-Unique: OmvWflQgNK2BOQwBQS4MSQ-1
+Received: by mail-wr1-f71.google.com with SMTP id o10-20020adfa10a000000b00241f603af8dso239606wro.11
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 01:41:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9QLD+5uuDceL+/+s+viqs5DLeTzi4AwuSjjugeFiRVs=;
-        b=qaW5LB9W+fTNgatY/AiTcwj8W2NHyk3teh/EWEksLNm2FZikqRzepo6aikCKTmNhyU
-         shFYlhR7eU6JxIBJAksqv3uPkL2AiFg0WpzNJIAW3auQSWx/Q9PJJ5Om3843Zo5qGyJF
-         hoQf0r6POq9t3JQJyBAfWuhZ+9MyTdwgS8yvYUDmRjJwm5MvCcnWZZ+8t1xaldPoZ3Jq
-         FQmrc1W50OlbM16Uu9xoG7CjfCAPkpuLDExxC1/4D+EFqucsS38JROwlolcfQq7Wxx8Z
-         x9PD6ZV/RCfaCIrkyzBGHZTRMb+gIeAue9D8um098xe2gJQfjkyh93WH4SDsOWMrDpzm
-         IPuw==
-X-Gm-Message-State: ANoB5plkz2UCdEhE+6fduQnecBN7tKMwrABpIwpUeNxlQu1oJIWy9WNP
-        AnN3fIy9WqHBo1Eouso0EpCUziyH91nrHROitDDvxg==
-X-Google-Smtp-Source: AA0mqf4y7uu6OFUBayaBPcm0odN3ehbidXaGBhxwJLqfpZMWR2zjFpYIUGcAj+EDjJWev9ifXx2KhBXZHmYdFSgW2Vk=
-X-Received: by 2002:a25:ed05:0:b0:6c4:8a9:e4d2 with SMTP id
- k5-20020a25ed05000000b006c408a9e4d2mr63398586ybh.164.1669887608496; Thu, 01
- Dec 2022 01:40:08 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d/lP/MUpumH1puWMFQWuZ/iuRBdPRSaGxJGkZdBzweg=;
+        b=S7aBHIUvKb8HLoF/0uOm8KYWwyQDGFunrZIBGVhDspwCUJ+vswappBkVoIflBfl7b2
+         GtnxqQ6G3r9zOAyBuKgtALkw6ElaAcRw4codhnOy2DdLPgyEEZ9+eB38TQig1PUQ36CE
+         p0QAm23MoqCXOtuSPvr4MhGS4wFbyRWkMlTjjZYqoOEIx56Sqb7hf6CYZFEysDzSB48g
+         +QORtaDHNVBN1yZd3rM2CdkAOM5Am9P7xzN5pHfMUo03lKItjBAlpv2WnbByLkqhDYZD
+         +pFviQLH560TkmhBonW0vD2YZaExfrM2tDtbWvNBYu+OG2sVfyr+vB8yeu1KYKRRqxgu
+         TETA==
+X-Gm-Message-State: ANoB5pm90eJlzFBCiYmrya1vg2egSy7L4Qsx6CIh1dc3TcEQtwgPS+yY
+        mqNIU2uU1a5X4iK6EcibWdTJRPQvet9pHXi86FNbZJpvG3eV4EI77BHPNxFwWuPNR7r1RwXu55p
+        LES7wceXVlOQ6D6qr1rukcFxN
+X-Received: by 2002:a1c:f617:0:b0:3cf:e0ef:1f69 with SMTP id w23-20020a1cf617000000b003cfe0ef1f69mr34437817wmc.163.1669887701733;
+        Thu, 01 Dec 2022 01:41:41 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6kI3TJlPqj596F8g6taBAnv03vejDjuPchx/hnOpqbtf/e5VhTFtctzxfc29O9sqpjJLLbvw==
+X-Received: by 2002:a1c:f617:0:b0:3cf:e0ef:1f69 with SMTP id w23-20020a1cf617000000b003cfe0ef1f69mr34437799wmc.163.1669887701525;
+        Thu, 01 Dec 2022 01:41:41 -0800 (PST)
+Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
+        by smtp.gmail.com with ESMTPSA id l12-20020a5d668c000000b00235da296623sm4266712wru.31.2022.12.01.01.41.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 01:41:40 -0800 (PST)
+Date:   Thu, 1 Dec 2022 10:41:22 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        Bobby Eshleman <bobby.eshleman@gmail.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v2 4/6] test/vsock: rework message bounds test
+Message-ID: <20221201094122.7gcyjfsf7kng4f7q@sgarzare-redhat>
+References: <9d96f6c6-1d4f-8197-b3bc-8957124c8933@sberdevices.ru>
+ <eb898b5f-72d7-47d3-82e7-75e3c7879744@sberdevices.ru>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 1 Dec 2022 15:09:57 +0530
-Message-ID: <CA+G9fYuNirzmuQvYpH6gYiAr_fqh9g-+RP83FW3oLbty9iKbyw@mail.gmail.com>
-Subject: stable-rc-5.10: arm64: allmodconfig: (.hyp.text+0x1a4c): undefined
- reference to `__kvm_nvhe_memset'
-To:     linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <eb898b5f-72d7-47d3-82e7-75e3c7879744@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[please ignore if it is already reported]
+On Fri, Nov 25, 2022 at 05:10:35PM +0000, Arseniy Krasnov wrote:
+>This updates message bound test making it more complex. Instead of
+>sending 1 bytes messages with one MSG_EOR bit, it sends messages of
+>random length(one half of messages are smaller than page size, second
+>half are bigger) with random number of MSG_EOR bits set. Receiver
+>also don't know total number of messages.
+>
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> tools/testing/vsock/control.c    |  28 +++++++
+> tools/testing/vsock/control.h    |   2 +
+> tools/testing/vsock/util.c       |  13 ++++
+> tools/testing/vsock/util.h       |   1 +
+> tools/testing/vsock/vsock_test.c | 124 +++++++++++++++++++++++++++----
+> 5 files changed, 155 insertions(+), 13 deletions(-)
+>
+>diff --git a/tools/testing/vsock/control.c b/tools/testing/vsock/control.c
+>index 4874872fc5a3..d2deb4b15b94 100644
+>--- a/tools/testing/vsock/control.c
+>+++ b/tools/testing/vsock/control.c
+>@@ -141,6 +141,34 @@ void control_writeln(const char *str)
+> 	timeout_end();
+> }
+>
+>+void control_writeulong(unsigned long value)
+>+{
+>+	char str[32];
+>+
+>+	if (snprintf(str, sizeof(str), "%lu", value) >= sizeof(str)) {
+>+		perror("snprintf");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	control_writeln(str);
+>+}
+>+
+>+unsigned long control_readulong(void)
+>+{
+>+	unsigned long value;
+>+	char *str;
+>+
+>+	str = control_readln();
+>+
+>+	if (!str)
+>+		exit(EXIT_FAILURE);
+>+
+>+	value = strtoul(str, NULL, 10);
+>+	free(str);
+>+
+>+	return value;
+>+}
+>+
+> /* Return the next line from the control socket (without the trailing newline).
+>  *
+>  * The program terminates if a timeout occurs.
+>diff --git a/tools/testing/vsock/control.h b/tools/testing/vsock/control.h
+>index 51814b4f9ac1..c1f77fdb2c7a 100644
+>--- a/tools/testing/vsock/control.h
+>+++ b/tools/testing/vsock/control.h
+>@@ -9,7 +9,9 @@ void control_init(const char *control_host, const char *control_port,
+> void control_cleanup(void);
+> void control_writeln(const char *str);
+> char *control_readln(void);
+>+unsigned long control_readulong(void);
+> void control_expectln(const char *str);
+> bool control_cmpln(char *line, const char *str, bool fail);
+>+void control_writeulong(unsigned long value);
+>
+> #endif /* CONTROL_H */
+>diff --git a/tools/testing/vsock/util.c b/tools/testing/vsock/util.c
+>index 2acbb7703c6a..01b636d3039a 100644
+>--- a/tools/testing/vsock/util.c
+>+++ b/tools/testing/vsock/util.c
+>@@ -395,3 +395,16 @@ void skip_test(struct test_case *test_cases, size_t test_cases_len,
+>
+> 	test_cases[test_id].skip = true;
+> }
+>+
+>+unsigned long hash_djb2(const void *data, size_t len)
+>+{
+>+	unsigned long hash = 5381;
+>+	int i = 0;
+>+
+>+	while (i < len) {
+>+		hash = ((hash << 5) + hash) + ((unsigned char *)data)[i];
+>+		i++;
+>+	}
+>+
+>+	return hash;
+>+}
+>diff --git a/tools/testing/vsock/util.h b/tools/testing/vsock/util.h
+>index a3375ad2fb7f..fb99208a95ea 100644
+>--- a/tools/testing/vsock/util.h
+>+++ b/tools/testing/vsock/util.h
+>@@ -49,4 +49,5 @@ void run_tests(const struct test_case *test_cases,
+> void list_tests(const struct test_case *test_cases);
+> void skip_test(struct test_case *test_cases, size_t test_cases_len,
+> 	       const char *test_id_str);
+>+unsigned long hash_djb2(const void *data, size_t len);
+> #endif /* UTIL_H */
+>diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
+>index bb6d691cb30d..12ef0cca6f93 100644
+>--- a/tools/testing/vsock/vsock_test.c
+>+++ b/tools/testing/vsock/vsock_test.c
+>@@ -284,10 +284,14 @@ static void test_stream_msg_peek_server(const struct test_opts *opts)
+> 	close(fd);
+> }
+>
+>-#define MESSAGES_CNT 7
+>-#define MSG_EOR_IDX (MESSAGES_CNT / 2)
+>+#define SOCK_BUF_SIZE (2 * 1024 * 1024)
+>+#define MAX_MSG_SIZE (32 * 1024)
+>+
+> static void test_seqpacket_msg_bounds_client(const struct test_opts *opts)
+> {
+>+	unsigned long curr_hash;
+>+	int page_size;
+>+	int msg_count;
+> 	int fd;
+>
+> 	fd = vsock_seqpacket_connect(opts->peer_cid, 1234);
+>@@ -296,18 +300,78 @@ static void test_seqpacket_msg_bounds_client(const struct test_opts *opts)
+> 		exit(EXIT_FAILURE);
+> 	}
+>
+>-	/* Send several messages, one with MSG_EOR flag */
+>-	for (int i = 0; i < MESSAGES_CNT; i++)
+>-		send_byte(fd, 1, (i == MSG_EOR_IDX) ? MSG_EOR : 0);
+>+	/* Wait, until receiver sets buffer size. */
+>+	control_expectln("SRVREADY");
+>+
+>+	curr_hash = 0;
+>+	page_size = getpagesize();
+>+	msg_count = SOCK_BUF_SIZE / MAX_MSG_SIZE;
+>+
+>+	for (int i = 0; i < msg_count; i++) {
+>+		ssize_t send_size;
+>+		size_t buf_size;
+>+		int flags;
+>+		void *buf;
+>+
+>+		/* Use "small" buffers and "big" buffers. */
+>+		if (i & 1)
+>+			buf_size = page_size +
+>+					(rand() % (MAX_MSG_SIZE - page_size));
+>+		else
+>+			buf_size = 1 + (rand() % page_size);
+>+
+>+		buf = malloc(buf_size);
+>+
+>+		if (!buf) {
+>+			perror("malloc");
+>+			exit(EXIT_FAILURE);
+>+		}
+>+
+>+		/* Set at least one MSG_EOR + some random. */
+>+		if (i == (msg_count / 2) || (rand() & 1)) {
+>+			flags = MSG_EOR;
+>+			curr_hash++;
+>+		} else {
+>+			flags = 0;
+>+		}
+>+
+>+		send_size = send(fd, buf, buf_size, flags);
+>+
+>+		if (send_size < 0) {
+>+			perror("send");
+>+			exit(EXIT_FAILURE);
+>+		}
+>+
+>+		if (send_size != buf_size) {
+>+			fprintf(stderr, "Invalid send size\n");
+>+			exit(EXIT_FAILURE);
+>+		}
+>+
+>+		/*
+>+		 * Hash sum is computed at both client and server in
+>+		 * the same way: H = hash(H + 'message length'). Idea
+>+		 * is simple: such hash "accumulates" length and order
+>+		 * of every sent/received message. After data exchange,
+>+		 * both sums are compared using control socket, and if
+>+		 * message bounds wasn't broken - two values must be
+>+		 * equal.
+>+		 */
+>+		curr_hash += send_size;
 
-The stable-rc 5.10 arm64 allmodconfig builds failed with gcc-12.
-List of build warnings and errors with gcc-12 are listed below.
+Sorry, I thought about it now, but instead of hashing the size, couldn't 
+we just fill the buffer with a pattern (maybe random?) and hash the 
+content?
 
-aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
-aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
-aarch64-linux-gnu-ld: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.o: in function
-`__kvm_nvhe___kvm_tlb_flush_vmid_ipa':
-(.hyp.text+0x1a4c): undefined reference to `__kvm_nvhe_memset'
+That way we see both that the bounds were met and that the content was 
+transferred correctly.
 
-steps to reproduce:
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-# tuxmake --runtime podman --target-arch arm64 --toolchain gcc-12
---kconfig allmodconfig CROSS_COMPILE_COMPAT=arm-linux-gnueabihf-
+What do you think?
 
-build log:
----------
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build
-CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- ARCH=arm64
-CROSS_COMPILE=aarch64-linux-gnu- 'CC=sccache aarch64-linux-gnu-gcc'
-'HOSTCC=sccache gcc' allmodconfig
+The rest LGTM!
 
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build
-CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- ARCH=arm64
-CROSS_COMPILE=aarch64-linux-gnu- 'CC=sccache aarch64-linux-gnu-gcc'
-'HOSTCC=sccache gcc'
-/builds/linux/drivers/acpi/acpica/utdebug.c: In function
-'acpi_ut_init_stack_ptr_trace':
-/builds/linux/drivers/acpi/acpica/utdebug.c:40:38: warning: storing
-the address of local variable 'current_sp' in
-'acpi_gbl_entry_stack_pointer' [-Wdangling-pointer=]
-   40 |         acpi_gbl_entry_stack_pointer = &current_sp;
-      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-/builds/linux/drivers/acpi/acpica/utdebug.c:38:19: note: 'current_sp'
-declared here
-   38 |         acpi_size current_sp;
-      |                   ^~~~~~~~~~
-In file included from /builds/linux/include/acpi/acpi.h:31,
-                 from /builds/linux/drivers/acpi/acpica/utdebug.c:12:
-/builds/linux/drivers/acpi/acpica/acglobal.h:196:26: note:
-'acpi_gbl_entry_stack_pointer' declared here
-  196 | ACPI_GLOBAL(acpi_size *, acpi_gbl_entry_stack_pointer);
-      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/builds/linux/include/acpi/acpixf.h:45:21: note: in definition of
-macro 'ACPI_GLOBAL'
-   45 |         extern type name
-      |                     ^~~~
-/builds/linux/fs/xfs/libxfs/xfs_attr_remote.c: In function
-'__xfs_attr3_rmt_read_verify':
-/builds/linux/fs/xfs/libxfs/xfs_attr_remote.c:140:35: warning: storing
-the address of local variable '__here' in '*failaddr'
-[-Wdangling-pointer=]
-  140 |                         *failaddr = __this_address;
-In file included from /builds/linux/fs/xfs/xfs.h:22,
-                 from /builds/linux/fs/xfs/libxfs/xfs_attr_remote.c:7:
-/builds/linux/fs/xfs/xfs_linux.h:133:46: note: '__here' declared here
-  133 | #define __this_address  ({ __label__ __here; __here:
-barrier(); &&__here; })
-      |                                              ^~~~~~
-/builds/linux/fs/xfs/libxfs/xfs_attr_remote.c:140:37: note: in
-expansion of macro '__this_address'
-  140 |                         *failaddr = __this_address;
-      |                                     ^~~~~~~~~~~~~~
-/builds/linux/fs/xfs/xfs_linux.h:133:46: note: 'failaddr' declared here
-  133 | #define __this_address  ({ __label__ __here; __here:
-barrier(); &&__here; })
-      |                                              ^~~~~~
-/builds/linux/fs/xfs/libxfs/xfs_attr_remote.c:140:37: note: in
-expansion of macro '__this_address'
-  140 |                         *failaddr = __this_address;
-      |                                     ^~~~~~~~~~~~~~
-/builds/linux/drivers/acpi/thermal.c: In function 'acpi_thermal_resume':
-/builds/linux/drivers/acpi/thermal.c:1123:21: warning: the comparison
-will always evaluate as 'true' for the address of 'active' will never
-be NULL [-Waddress]
- 1123 |                 if (!(&tz->trips.active[i]))
-      |                     ^
-/builds/linux/drivers/acpi/thermal.c:154:36: note: 'active' declared here
-  154 |         struct acpi_thermal_active active[ACPI_THERMAL_MAX_ACTIVE];
-      |                                    ^~~~~~
-In file included from /builds/linux/include/linux/preempt.h:11,
-                 from /builds/linux/include/linux/percpu.h:6,
-                 from /builds/linux/include/linux/context_tracking_state.h:5,
-                 from /builds/linux/include/linux/hardirq.h:5,
-                 from /builds/linux/include/linux/interrupt.h:11,
-                 from /builds/linux/drivers/scsi/lpfc/lpfc_bsg.c:23:
-In function '__list_add',
-    inlined from 'list_add_tail' at /builds/linux/include/linux/list.h:100:2,
-    inlined from 'diag_cmd_data_free.isra' at
-/builds/linux/drivers/scsi/lpfc/lpfc_bsg.c:891:2:
-/builds/linux/include/linux/list.h:70:20: warning: storing the address
-of local variable 'head' in '*&mlist_1(D)->dma.list.prev'
-[-Wdangling-pointer=]
-   70 |         next->prev = new;
-      |         ~~~~~~~~~~~^~~~~
-/builds/linux/drivers/scsi/lpfc/lpfc_bsg.c: In function
-'diag_cmd_data_free.isra':
-/builds/linux/drivers/scsi/lpfc/lpfc_bsg.c:883:26: note: 'head' declared here
-  883 |         struct list_head head, *curr, *next;
-      |                          ^~~~
-/builds/linux/drivers/scsi/lpfc/lpfc_bsg.c:883:26: note: 'mlist' declared here
-In file included from /builds/linux/include/linux/smp.h:12,
-                 from /builds/linux/arch/arm64/include/asm/arch_timer.h:18,
-                 from /builds/linux/arch/arm64/include/asm/timex.h:8,
-                 from /builds/linux/include/linux/timex.h:67,
-                 from /builds/linux/include/linux/time32.h:13,
-                 from /builds/linux/include/linux/time.h:73,
-                 from /builds/linux/include/linux/skbuff.h:15,
-                 from /builds/linux/include/linux/if_ether.h:19,
-                 from /builds/linux/include/linux/etherdevice.h:20,
-                 from /builds/linux/drivers/net/wireless/ath/ath6kl/core.h:21,
-                 from
-/builds/linux/drivers/net/wireless/ath/ath6kl/htc_mbox.c:18:
-In function '__list_add',
-    inlined from 'list_add' at /builds/linux/include/linux/list.h:86:2,
-    inlined from 'ath6kl_htc_mbox_tx' at
-/builds/linux/drivers/net/wireless/ath/ath6kl/htc_mbox.c:1142:3:
-/builds/linux/include/linux/list.h:72:19: warning: storing the address
-of local variable 'queue' in '*&packet_15(D)->list.prev'
-[-Wdangling-pointer=]
-   72 |         new->prev = prev;
-      |         ~~~~~~~~~~^~~~~~
-/builds/linux/drivers/net/wireless/ath/ath6kl/htc_mbox.c: In function
-'ath6kl_htc_mbox_tx':
-/builds/linux/drivers/net/wireless/ath/ath6kl/htc_mbox.c:1125:26:
-note: 'queue' declared here
- 1125 |         struct list_head queue;
-      |                          ^~~~~
-/builds/linux/drivers/net/wireless/ath/ath6kl/htc_mbox.c:1125:26:
-note: 'packet' declared here
-In function '__list_add',
-    inlined from 'list_add_tail' at /builds/linux/include/linux/list.h:100:2,
-    inlined from 'htc_tx_comp_handler' at
-/builds/linux/drivers/net/wireless/ath/ath6kl/htc_mbox.c:462:2:
-/builds/linux/include/linux/list.h:72:19: warning: storing the address
-of local variable 'container' in '*&packet_5(D)->list.prev'
-[-Wdangling-pointer=]
-   72 |         new->prev = prev;
-      |         ~~~~~~~~~~^~~~~~
-/builds/linux/drivers/net/wireless/ath/ath6kl/htc_mbox.c: In function
-'htc_tx_comp_handler':
-/builds/linux/drivers/net/wireless/ath/ath6kl/htc_mbox.c:455:26: note:
-'container' declared here
-  455 |         struct list_head container;
-      |                          ^~~~~~~~~
-/builds/linux/drivers/net/wireless/ath/ath6kl/htc_mbox.c:455:26: note:
-'packet' declared here
-/builds/linux/drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c: In
-function 'rtl92d_phy_reload_iqk_setting':
-/builds/linux/drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c:2389:39:
-warning: the comparison will always evaluate as 'true' for the address
-of 'value' will never be NULL [-Waddress]
- 2389 |                              value[0] != NULL)
-      |                                       ^~
-In file included from
-/builds/linux/drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c:4:
-/builds/linux/drivers/net/wireless/realtek/rtlwifi/rtl8192de/../wifi.h:1293:14:
-note: 'value' declared here
- 1293 |         long value[1][IQK_MATRIX_REG_NUM];
-      |              ^~~~~
-/builds/linux/drivers/net/ethernet/sun/cassini.c: In function 'cas_init_rx_dma':
-/builds/linux/drivers/net/ethernet/sun/cassini.c:1328:29: warning:
-comparison between two arrays [-Warray-compare]
- 1328 |         if (CAS_HP_FIRMWARE == cas_prog_null)
-      |                             ^~
-/builds/linux/drivers/net/ethernet/sun/cassini.c:1328:29: note: use
-'&cas_prog_workaroundtab[0] == &cas_prog_null[0]' to compare the
-addresses
-/builds/linux/drivers/net/ethernet/sun/cassini.c: In function 'cas_reset':
-/builds/linux/drivers/net/ethernet/sun/cassini.c:3796:34: warning:
-comparison between two arrays [-Warray-compare]
- 3796 |             (CAS_HP_ALT_FIRMWARE == cas_prog_null)) {
-      |                                  ^~
-/builds/linux/drivers/net/ethernet/sun/cassini.c:3796:34: note: use
-'&cas_prog_null[0] == &cas_prog_null[0]' to compare the addresses
-aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
-aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
-aarch64-linux-gnu-ld: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.o: in function
-`__kvm_nvhe___kvm_tlb_flush_vmid_ipa':
-(.hyp.text+0x1a4c): undefined reference to `__kvm_nvhe_memset'
-aarch64-linux-gnu-ld: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.o: in function
-`__kvm_nvhe___kvm_tlb_flush_vmid':
-(.hyp.text+0x1b20): undefined reference to `__kvm_nvhe_memset'
-aarch64-linux-gnu-ld: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.o: in function
-`__kvm_nvhe___kvm_flush_cpu_context':
-(.hyp.text+0x1b80): undefined reference to `__kvm_nvhe_memset'
-make[1]: *** [/builds/linux/Makefile:1194: vmlinux] Error 1
+Stefano
 
-Build link,
-  - https://builds.tuxbuild.com/2IHivEkKmuryHjt6Xv8xUn9RLy5/
+>+		curr_hash = hash_djb2(&curr_hash, sizeof(curr_hash));
+>+	}
+>
+> 	control_writeln("SENDDONE");
+>+	control_writeulong(curr_hash);
+> 	close(fd);
+> }
+>
+> static void test_seqpacket_msg_bounds_server(const struct test_opts *opts)
+> {
+>+	unsigned long sock_buf_size;
+>+	unsigned long remote_hash;
+>+	unsigned long curr_hash;
+> 	int fd;
+>-	char buf[16];
+>+	char buf[MAX_MSG_SIZE];
+> 	struct msghdr msg = {0};
+> 	struct iovec iov = {0};
+>
+>@@ -317,25 +381,58 @@ static void test_seqpacket_msg_bounds_server(const struct test_opts *opts)
+> 		exit(EXIT_FAILURE);
+> 	}
+>
+>+	sock_buf_size = SOCK_BUF_SIZE;
+>+
+>+	if (setsockopt(fd, AF_VSOCK, SO_VM_SOCKETS_BUFFER_MAX_SIZE,
+>+		       &sock_buf_size, sizeof(sock_buf_size))) {
+>+		perror("getsockopt");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	if (setsockopt(fd, AF_VSOCK, SO_VM_SOCKETS_BUFFER_SIZE,
+>+		       &sock_buf_size, sizeof(sock_buf_size))) {
+>+		perror("getsockopt");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	/* Ready to receive data. */
+>+	control_writeln("SRVREADY");
+>+	/* Wait, until peer sends whole data. */
+> 	control_expectln("SENDDONE");
+> 	iov.iov_base = buf;
+> 	iov.iov_len = sizeof(buf);
+> 	msg.msg_iov = &iov;
+> 	msg.msg_iovlen = 1;
+>
+>-	for (int i = 0; i < MESSAGES_CNT; i++) {
+>-		if (recvmsg(fd, &msg, 0) != 1) {
+>-			perror("message bound violated");
+>-			exit(EXIT_FAILURE);
+>-		}
+>+	curr_hash = 0;
+>
+>-		if ((i == MSG_EOR_IDX) ^ !!(msg.msg_flags & MSG_EOR)) {
+>-			perror("MSG_EOR");
+>+	while (1) {
+>+		ssize_t recv_size;
+>+
+>+		recv_size = recvmsg(fd, &msg, 0);
+>+
+>+		if (!recv_size)
+>+			break;
+>+
+>+		if (recv_size < 0) {
+>+			perror("recvmsg");
+> 			exit(EXIT_FAILURE);
+> 		}
+>+
+>+		if (msg.msg_flags & MSG_EOR)
+>+			curr_hash++;
+>+
+>+		curr_hash += recv_size;
+>+		curr_hash = hash_djb2(&curr_hash, sizeof(curr_hash));
+> 	}
+>
+> 	close(fd);
+>+	remote_hash = control_readulong();
+>+
+>+	if (curr_hash != remote_hash) {
+>+		fprintf(stderr, "Message bounds broken\n");
+>+		exit(EXIT_FAILURE);
+>+	}
+> }
+>
+> #define MESSAGE_TRUNC_SZ 32
+>@@ -837,6 +934,7 @@ int main(int argc, char **argv)
+> 		.peer_cid = VMADDR_CID_ANY,
+> 	};
+>
+>+	srand(time(NULL));
+> 	init_signals();
+>
+> 	for (;;) {
+>-- 
+>2.25.1
 
-Build comparison link,
-  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y-sanity/build/v5.10.155-312-g97b8f00e4c81/testrun/13335963/suite/build/test/gcc-12-allmodconfig/history/
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
