@@ -2,536 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E1363F5BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:54:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A8263F5C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiLAQyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:54:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45272 "EHLO
+        id S229739AbiLAQ40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:56:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiLAQys (ORCPT
+        with ESMTP id S229481AbiLAQ4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:54:48 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF99DA13DB;
-        Thu,  1 Dec 2022 08:54:45 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sendonly@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id A9D2241F98;
-        Thu,  1 Dec 2022 16:54:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1669913683; bh=nogEBZiP4Pq9k70q1r1Sq2fpcE7vD0XmA4xsz0zgPB8=;
-        h=From:To:Cc:Subject:Date;
-        b=m+HqsX80i/hTevzBoiCOp1gnSN6JMGTjAy33KWRmPgUkZtUE4CVEfiL3fZoCXgFwN
-         8ovO7Qrf9XfefvDsvhKf39k+GF9xbl+eKQkbXQd0QMRL8bQpgoI7wfc+Qd022HKOCi
-         53YAsr3uDXHHGZsd4H0ExEUvyDJcGxGGrZmoA+FfWP5LSZtrvBai/2E9qZgqOA+QdH
-         uCt0hIwGZN3IchgomdMasygBVCaG9SW++4Cw+gtbkRwGrJhU/3ppgVkI7NIm5ywBo7
-         hA1VI0nLaLEu1r6I2hk7ux7OIrY13q9ng+YjqG5G1Tnm2G9xvlhYilvxyorZsXHVly
-         mgjLDH/fS4KYg==
-From:   Hector Martin <marcan@marcan.st>
-To:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Cc:     Mark Kettenis <kettenis@openbsd.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>
-Subject: [PATCH] arm64: dts: apple: Add CPU topology & cpufreq nodes for t600x
-Date:   Fri,  2 Dec 2022 01:53:45 +0900
-Message-Id: <20221201165344.32505-1-marcan@marcan.st>
-X-Mailer: git-send-email 2.35.1
+        Thu, 1 Dec 2022 11:56:24 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27D6A13DB
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:56:18 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B18g9ee020005;
+        Thu, 1 Dec 2022 10:56:09 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=d+Oa9nDhGcm5y4BLMBlA2ieLmPpImKRoxVHj17jQNJc=;
+ b=llJVeNF0JPCFg3Jw8sFU011Ln+SxdVP3Za+IIHd/hplNjZWgqcuMZJCoVTTDLDOeEsU5
+ LenCr7WpZ8ybH0tDLdc11PuVTIEqqSaZA55h/1ES+SzO6ilan9nxEzESfdsdSI94Ia4d
+ 0IBt4FSPiAbkDJm/w3gaE7eenRidUKSDFqzc+IUVG2qro1clND9Q5lvhAJXSPtGsm2WV
+ cRGRKKb/QDs7mPqcSIFowMg94J47gBzOUAUt6uV3SOXj6bxf0cQIrq9PMyTGjefRoCZF
+ d3tiHP3upwa2lNl1bXXrB26bEtk5gbcNt+6A+0VcFCz4ydWu7Gx7AHyAILjnuR5nuxOZ tw== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3m6k75rsyd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Dec 2022 10:56:09 -0600
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Thu, 1 Dec
+ 2022 10:55:40 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
+ Transport; Thu, 1 Dec 2022 10:55:40 -0600
+Received: from [198.90.251.111] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.111])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 61121B10;
+        Thu,  1 Dec 2022 16:55:40 +0000 (UTC)
+Message-ID: <4e6cdce8-60b3-1bf5-604d-5dbe95ef3ec4@opensource.cirrus.com>
+Date:   Thu, 1 Dec 2022 16:55:40 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] soundwire: bus_type: Avoid lockdep assert in
+ sdw_drv_probe()
+Content-Language: en-US
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
+        <sanyog.r.kale@intel.com>
+CC:     <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221121162453.1834170-1-rf@opensource.cirrus.com>
+ <2d207a51-d415-726b-3bc1-8788df2f06fd@linux.intel.com>
+ <ea8c3ce8-b625-d70a-07f9-4470aec2cb17@opensource.cirrus.com>
+ <0984eae3-438c-b382-6681-cddcc37dd47a@linux.intel.com>
+ <34319214-5641-a99c-aea1-4c604a18c7eb@opensource.cirrus.com>
+In-Reply-To: <34319214-5641-a99c-aea1-4c604a18c7eb@opensource.cirrus.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: pKXVAoiCgQ86CyGRKj4S9OKyKsUWL93R
+X-Proofpoint-GUID: pKXVAoiCgQ86CyGRKj4S9OKyKsUWL93R
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missing CPU topology/capacity information and the cpufreq nodes,
-so we can have CPU frequency scaling and the scheduler has the
-information it needs to make the correct decisions.
+On 01/12/2022 14:32, Richard Fitzgerald wrote:
+> On 29/11/2022 15:44, Pierre-Louis Bossart wrote:
+>>
+>>
+>>>>> Don't hold sdw_dev_lock while calling the peripheral driver
+>>>>> probe() and remove() callbacks.
+>>>>>
+>>>>> Holding sdw_dev_lock around the probe() and remove() calls
+>>>>> causes a theoretical mutex inversion which lockdep will
+>>>>> assert on. The peripheral driver probe will probably register
+>>>>> a soundcard, which will take ALSA and ASoC locks. During
+>>>>
+>>>> It's extremely unlikely that a peripheral driver would register a sound
+>>>> card, this is what machine drivers do.
+>>>>
+>>>> Which leads me to the question: is this a real problem?
+>>>>
+>>>
+>>> Yes, try turning on lockdep checking and you will get an assert.
+>>> During probe the existing code takes sdw_dev_lock and then calls the
+>>> codec driver probe, so you will get a mutex sequence like:
+>>>
+>>> sdw_dev_lock -> controls_rw_sem -> pcm_mutex
+>>>
+>>> but in normal operation the ALSA/ASoC code will take its mutexes first
+>>> and call runtime_resume which then takes the sdw_dev_lock, so you get
+>>>
+>>> pcm_mutex -> sdw_dev_lock
+>>>
+>>> and lockdep will assert on that opposite ordering.
+>>> The full assert is at the end of this email.
+>>
+>> Humm, you lost me with the reference to runtime_resume. I don't fully
+>> understand how it's possible to invoke pm_runtime during probe.
+>> pm_runtime should only enabled during the codec update_status() which
+>> can only be done once the probe completes.
+>>
+>> I am fine with the changes that you are suggesting, the introduction of
+>> the sdw_dev_lock was probably too conservative and it'd be fine to only
+>> protect what is required.
+>>
+>> However we do have lockdep enabled
+>>
+> 
+> I wonder whether this is because the Cirrus devices use full DP prepare,
+> so there will be a DP prepare interrupt during the attempt to prepare
+> the dailink. The lockdep assert was when sdw_update_slave_status() tried
+> to take sdw_dev_lock.
+> 
+> If the Realtek codecs only use Soundwire interrupts for jack detect you
+> probably won't see a sdw_dev_lock inside a pcm_mutex.
 
-As with t8103, boost states are commented out pending PSCI/etc support
-for deep sleep states.
+Ok, I think I understand this now.
+lockdep tries to prove locking correctness without requiring that a bad
+lock order actually happened. This makes sense, because some deadlocks
+might be extremely difficult to reproduce and lockdep wouldn't help much
+if you had to reproduce it to get an assert.
 
-Signed-off-by: Hector Martin <marcan@marcan.st>
----
- arch/arm64/boot/dts/apple/t6002.dtsi        |  72 +++++++-
- arch/arm64/boot/dts/apple/t600x-common.dtsi | 186 ++++++++++++++++++++
- arch/arm64/boot/dts/apple/t600x-dieX.dtsi   |  18 ++
- 3 files changed, 275 insertions(+), 1 deletion(-)
+There's a lot of detail in Documentation/locking/lockdep-design.rst, but
+in summary it is looking for a relationship between three locks that is
+theoretically incompatible. So if it sees:
+a) L1->L2
+b) L2->L3
+c) L3->L1
+this will assert because the relationship of L1 and L2 on L3 is opposite
+to the relationship of L1 to L2. IOW lockdep is assuming the possibility
+of L2->L3->L1. You could look at that another way and say that lockdep
+is telling you that even though you didn't intend L2->L3->L1 could ever 
+happen there is a risk lurking in the code.
 
-diff --git a/arch/arm64/boot/dts/apple/t6002.dtsi b/arch/arm64/boot/dts/apple/t6002.dtsi
-index 731d61fbb05f..15da2c7eb1fe 100644
---- a/arch/arm64/boot/dts/apple/t6002.dtsi
-+++ b/arch/arm64/boot/dts/apple/t6002.dtsi
-@@ -23,6 +23,47 @@ / {
- 	#size-cells = <2>;
- 
- 	cpus {
-+		cpu-map {
-+			cluster3 {
-+				core0 {
-+					cpu = <&cpu_e10>;
-+				};
-+				core1 {
-+					cpu = <&cpu_e11>;
-+				};
-+			};
-+
-+			cluster4 {
-+				core0 {
-+					cpu = <&cpu_p20>;
-+				};
-+				core1 {
-+					cpu = <&cpu_p21>;
-+				};
-+				core2 {
-+					cpu = <&cpu_p22>;
-+				};
-+				core3 {
-+					cpu = <&cpu_p23>;
-+				};
-+			};
-+
-+			cluster5 {
-+				core0 {
-+					cpu = <&cpu_p30>;
-+				};
-+				core1 {
-+					cpu = <&cpu_p31>;
-+				};
-+				core2 {
-+					cpu = <&cpu_p32>;
-+				};
-+				core3 {
-+					cpu = <&cpu_p33>;
-+				};
-+			};
-+		};
-+
- 		cpu_e10: cpu@800 {
- 			compatible = "apple,icestorm";
- 			device_type = "cpu";
-@@ -32,6 +73,9 @@ cpu_e10: cpu@800 {
- 			next-level-cache = <&l2_cache_3>;
- 			i-cache-size = <0x20000>;
- 			d-cache-size = <0x10000>;
-+			operating-points-v2 = <&icestorm_opp>;
-+			capacity-dmips-mhz = <714>;
-+			performance-domains = <&cpufreq_e_die1>;
- 		};
- 
- 		cpu_e11: cpu@801 {
-@@ -43,6 +87,9 @@ cpu_e11: cpu@801 {
- 			next-level-cache = <&l2_cache_3>;
- 			i-cache-size = <0x20000>;
- 			d-cache-size = <0x10000>;
-+			operating-points-v2 = <&icestorm_opp>;
-+			capacity-dmips-mhz = <714>;
-+			performance-domains = <&cpufreq_e_die1>;
- 		};
- 
- 		cpu_p20: cpu@10900 {
-@@ -54,6 +101,9 @@ cpu_p20: cpu@10900 {
- 			next-level-cache = <&l2_cache_4>;
- 			i-cache-size = <0x30000>;
- 			d-cache-size = <0x20000>;
-+			operating-points-v2 = <&firestorm_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p0_die1>;
- 		};
- 
- 		cpu_p21: cpu@10901 {
-@@ -65,6 +115,9 @@ cpu_p21: cpu@10901 {
- 			next-level-cache = <&l2_cache_4>;
- 			i-cache-size = <0x30000>;
- 			d-cache-size = <0x20000>;
-+			operating-points-v2 = <&firestorm_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p0_die1>;
- 		};
- 
- 		cpu_p22: cpu@10902 {
-@@ -76,6 +129,9 @@ cpu_p22: cpu@10902 {
- 			next-level-cache = <&l2_cache_4>;
- 			i-cache-size = <0x30000>;
- 			d-cache-size = <0x20000>;
-+			operating-points-v2 = <&firestorm_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p0_die1>;
- 		};
- 
- 		cpu_p23: cpu@10903 {
-@@ -87,6 +143,9 @@ cpu_p23: cpu@10903 {
- 			next-level-cache = <&l2_cache_4>;
- 			i-cache-size = <0x30000>;
- 			d-cache-size = <0x20000>;
-+			operating-points-v2 = <&firestorm_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p0_die1>;
- 		};
- 
- 		cpu_p30: cpu@10a00 {
-@@ -98,6 +157,9 @@ cpu_p30: cpu@10a00 {
- 			next-level-cache = <&l2_cache_5>;
- 			i-cache-size = <0x30000>;
- 			d-cache-size = <0x20000>;
-+			operating-points-v2 = <&firestorm_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p1_die1>;
- 		};
- 
- 		cpu_p31: cpu@10a01 {
-@@ -109,6 +171,9 @@ cpu_p31: cpu@10a01 {
- 			next-level-cache = <&l2_cache_5>;
- 			i-cache-size = <0x30000>;
- 			d-cache-size = <0x20000>;
-+			operating-points-v2 = <&firestorm_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p1_die1>;
- 		};
- 
- 		cpu_p32: cpu@10a02 {
-@@ -120,6 +185,9 @@ cpu_p32: cpu@10a02 {
- 			next-level-cache = <&l2_cache_5>;
- 			i-cache-size = <0x30000>;
- 			d-cache-size = <0x20000>;
-+			operating-points-v2 = <&firestorm_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p1_die1>;
- 		};
- 
- 		cpu_p33: cpu@10a03 {
-@@ -131,6 +199,9 @@ cpu_p33: cpu@10a03 {
- 			next-level-cache = <&l2_cache_5>;
- 			i-cache-size = <0x30000>;
- 			d-cache-size = <0x20000>;
-+			operating-points-v2 = <&firestorm_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p1_die1>;
- 		};
- 
- 		l2_cache_3: l2-cache-3 {
-@@ -206,7 +277,6 @@ &die1 {
- #undef DIE
- #undef DIE_NO
- 
--
- &aic {
- 	affinities {
- 		e-core-pmu-affinity {
-diff --git a/arch/arm64/boot/dts/apple/t600x-common.dtsi b/arch/arm64/boot/dts/apple/t600x-common.dtsi
-index e2568d914719..fa8ead699363 100644
---- a/arch/arm64/boot/dts/apple/t600x-common.dtsi
-+++ b/arch/arm64/boot/dts/apple/t600x-common.dtsi
-@@ -15,6 +15,47 @@ cpus {
- 		#address-cells = <2>;
- 		#size-cells = <0>;
- 
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpu_e00>;
-+				};
-+				core1 {
-+					cpu = <&cpu_e01>;
-+				};
-+			};
-+
-+			cluster1 {
-+				core0 {
-+					cpu = <&cpu_p00>;
-+				};
-+				core1 {
-+					cpu = <&cpu_p01>;
-+				};
-+				core2 {
-+					cpu = <&cpu_p02>;
-+				};
-+				core3 {
-+					cpu = <&cpu_p03>;
-+				};
-+			};
-+
-+			cluster2 {
-+				core0 {
-+					cpu = <&cpu_p10>;
-+				};
-+				core1 {
-+					cpu = <&cpu_p11>;
-+				};
-+				core2 {
-+					cpu = <&cpu_p12>;
-+				};
-+				core3 {
-+					cpu = <&cpu_p13>;
-+				};
-+			};
-+		};
-+
- 		cpu_e00: cpu@0 {
- 			compatible = "apple,icestorm";
- 			device_type = "cpu";
-@@ -24,6 +65,9 @@ cpu_e00: cpu@0 {
- 			next-level-cache = <&l2_cache_0>;
- 			i-cache-size = <0x20000>;
- 			d-cache-size = <0x10000>;
-+			operating-points-v2 = <&icestorm_opp>;
-+			capacity-dmips-mhz = <714>;
-+			performance-domains = <&cpufreq_e>;
- 		};
- 
- 		cpu_e01: cpu@1 {
-@@ -35,6 +79,9 @@ cpu_e01: cpu@1 {
- 			next-level-cache = <&l2_cache_0>;
- 			i-cache-size = <0x20000>;
- 			d-cache-size = <0x10000>;
-+			operating-points-v2 = <&icestorm_opp>;
-+			capacity-dmips-mhz = <714>;
-+			performance-domains = <&cpufreq_e>;
- 		};
- 
- 		cpu_p00: cpu@10100 {
-@@ -46,6 +93,9 @@ cpu_p00: cpu@10100 {
- 			next-level-cache = <&l2_cache_1>;
- 			i-cache-size = <0x30000>;
- 			d-cache-size = <0x20000>;
-+			operating-points-v2 = <&firestorm_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p0>;
- 		};
- 
- 		cpu_p01: cpu@10101 {
-@@ -57,6 +107,9 @@ cpu_p01: cpu@10101 {
- 			next-level-cache = <&l2_cache_1>;
- 			i-cache-size = <0x30000>;
- 			d-cache-size = <0x20000>;
-+			operating-points-v2 = <&firestorm_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p0>;
- 		};
- 
- 		cpu_p02: cpu@10102 {
-@@ -68,6 +121,9 @@ cpu_p02: cpu@10102 {
- 			next-level-cache = <&l2_cache_1>;
- 			i-cache-size = <0x30000>;
- 			d-cache-size = <0x20000>;
-+			operating-points-v2 = <&firestorm_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p0>;
- 		};
- 
- 		cpu_p03: cpu@10103 {
-@@ -79,6 +135,9 @@ cpu_p03: cpu@10103 {
- 			next-level-cache = <&l2_cache_1>;
- 			i-cache-size = <0x30000>;
- 			d-cache-size = <0x20000>;
-+			operating-points-v2 = <&firestorm_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p0>;
- 		};
- 
- 		cpu_p10: cpu@10200 {
-@@ -90,6 +149,9 @@ cpu_p10: cpu@10200 {
- 			next-level-cache = <&l2_cache_2>;
- 			i-cache-size = <0x30000>;
- 			d-cache-size = <0x20000>;
-+			operating-points-v2 = <&firestorm_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p1>;
- 		};
- 
- 		cpu_p11: cpu@10201 {
-@@ -101,6 +163,9 @@ cpu_p11: cpu@10201 {
- 			next-level-cache = <&l2_cache_2>;
- 			i-cache-size = <0x30000>;
- 			d-cache-size = <0x20000>;
-+			operating-points-v2 = <&firestorm_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p1>;
- 		};
- 
- 		cpu_p12: cpu@10202 {
-@@ -112,6 +177,9 @@ cpu_p12: cpu@10202 {
- 			next-level-cache = <&l2_cache_2>;
- 			i-cache-size = <0x30000>;
- 			d-cache-size = <0x20000>;
-+			operating-points-v2 = <&firestorm_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p1>;
- 		};
- 
- 		cpu_p13: cpu@10203 {
-@@ -123,6 +191,9 @@ cpu_p13: cpu@10203 {
- 			next-level-cache = <&l2_cache_2>;
- 			i-cache-size = <0x30000>;
- 			d-cache-size = <0x20000>;
-+			operating-points-v2 = <&firestorm_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p1>;
- 		};
- 
- 		l2_cache_0: l2-cache-0 {
-@@ -147,6 +218,121 @@ l2_cache_2: l2-cache-2 {
- 		};
- 	};
- 
-+	icestorm_opp: opp-table-0 {
-+		compatible = "operating-points-v2";
-+
-+		opp01 {
-+			opp-hz = /bits/ 64 <600000000>;
-+			opp-level = <1>;
-+			clock-latency-ns = <7500>;
-+		};
-+		opp02 {
-+			opp-hz = /bits/ 64 <972000000>;
-+			opp-level = <2>;
-+			clock-latency-ns = <23000>;
-+		};
-+		opp03 {
-+			opp-hz = /bits/ 64 <1332000000>;
-+			opp-level = <3>;
-+			clock-latency-ns = <29000>;
-+		};
-+		opp04 {
-+			opp-hz = /bits/ 64 <1704000000>;
-+			opp-level = <4>;
-+			clock-latency-ns = <40000>;
-+		};
-+		opp05 {
-+			opp-hz = /bits/ 64 <2064000000>;
-+			opp-level = <5>;
-+			clock-latency-ns = <50000>;
-+		};
-+	};
-+
-+	firestorm_opp: opp-table-1 {
-+		compatible = "operating-points-v2";
-+
-+		opp01 {
-+			opp-hz = /bits/ 64 <600000000>;
-+			opp-level = <1>;
-+			clock-latency-ns = <8000>;
-+		};
-+		opp02 {
-+			opp-hz = /bits/ 64 <828000000>;
-+			opp-level = <2>;
-+			clock-latency-ns = <18000>;
-+		};
-+		opp03 {
-+			opp-hz = /bits/ 64 <1056000000>;
-+			opp-level = <3>;
-+			clock-latency-ns = <19000>;
-+		};
-+		opp04 {
-+			opp-hz = /bits/ 64 <1296000000>;
-+			opp-level = <4>;
-+			clock-latency-ns = <23000>;
-+		};
-+		opp05 {
-+			opp-hz = /bits/ 64 <1524000000>;
-+			opp-level = <5>;
-+			clock-latency-ns = <24000>;
-+		};
-+		opp06 {
-+			opp-hz = /bits/ 64 <1752000000>;
-+			opp-level = <6>;
-+			clock-latency-ns = <28000>;
-+		};
-+		opp07 {
-+			opp-hz = /bits/ 64 <1980000000>;
-+			opp-level = <7>;
-+			clock-latency-ns = <31000>;
-+		};
-+		opp08 {
-+			opp-hz = /bits/ 64 <2208000000>;
-+			opp-level = <8>;
-+			clock-latency-ns = <45000>;
-+		};
-+		opp09 {
-+			opp-hz = /bits/ 64 <2448000000>;
-+			opp-level = <9>;
-+			clock-latency-ns = <49000>;
-+		};
-+		opp10 {
-+			opp-hz = /bits/ 64 <2676000000>;
-+			opp-level = <10>;
-+			clock-latency-ns = <53000>;
-+		};
-+		opp11 {
-+			opp-hz = /bits/ 64 <2904000000>;
-+			opp-level = <11>;
-+			clock-latency-ns = <56000>;
-+		};
-+		opp12 {
-+			opp-hz = /bits/ 64 <3036000000>;
-+			opp-level = <12>;
-+			clock-latency-ns = <56000>;
-+		};
-+		/* Not available until CPU deep sleep is implemented
-+		opp13 {
-+			opp-hz = /bits/ 64 <3132000000>;
-+			opp-level = <13>;
-+			clock-latency-ns = <56000>;
-+			turbo-mode;
-+		};
-+		opp14 {
-+			opp-hz = /bits/ 64 <3168000000>;
-+			opp-level = <14>;
-+			clock-latency-ns = <56000>;
-+			turbo-mode;
-+		};
-+		opp15 {
-+			opp-hz = /bits/ 64 <3228000000>;
-+			opp-level = <15>;
-+			clock-latency-ns = <56000>;
-+			turbo-mode;
-+		};
-+		*/
-+	};
-+
- 	pmu-e {
- 		compatible = "apple,icestorm-pmu";
- 		interrupt-parent = <&aic>;
-diff --git a/arch/arm64/boot/dts/apple/t600x-dieX.dtsi b/arch/arm64/boot/dts/apple/t600x-dieX.dtsi
-index 0a437b68e86c..a32ff0c9d7b0 100644
---- a/arch/arm64/boot/dts/apple/t600x-dieX.dtsi
-+++ b/arch/arm64/boot/dts/apple/t600x-dieX.dtsi
-@@ -6,6 +6,24 @@
-  * Copyright The Asahi Linux Contributors
-  */
- 
-+	DIE_NODE(cpufreq_e): cpufreq@210e20000 {
-+		compatible = "apple,t6000-cluster-cpufreq", "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
-+		reg = <0x2 0x10e20000 0 0x1000>;
-+		#performance-domain-cells = <0>;
-+	};
-+
-+	DIE_NODE(cpufreq_p0): cpufreq@211e20000 {
-+		compatible = "apple,t6000-cluster-cpufreq", "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
-+		reg = <0x2 0x11e20000 0 0x1000>;
-+		#performance-domain-cells = <0>;
-+	};
-+
-+	DIE_NODE(cpufreq_p1): cpufreq@212e20000 {
-+		compatible = "apple,t6000-cluster-cpufreq", "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
-+		reg = <0x2 0x12e20000 0 0x1000>;
-+		#performance-domain-cells = <0>;
-+	};
-+
- 	DIE_NODE(pmgr): power-management@28e080000 {
- 		compatible = "apple,t6000-pmgr", "apple,pmgr", "syscon", "simple-mfd";
- 		#address-cells = <1>;
--- 
-2.35.1
+What we've seen is three normal call chains that give these orderings:
 
+a) pcm_mutex -> sdw_dev_lock (when starting up a playback)
+b) controls_rwsem -> pcm_mutex (a write to a DAPM MUX control
+      re-evaluates DAPM power states of the DPCM links)
+c) sdw_dev_lock -> controls_rwsem (when snd_soc_register_component()
+      adds ALSA controls)
+
+controls_rwsem is the "L3" here, the lock that has a relationship to two
+other locks that is incompatible to those two locks' relationship to
+each other in (a).
+
+The theoretical case sdw_dev_lock->controls_rwsem->pcm_mutex should be
+impossible, but it's always nicer to fix the problem that try to make
+it a special case "safe to ignore".
+
+The only places sdw_dev_lock can be taken before the ALSA/ASoC locks is
+during probe() and remove(). At other times it would only be taken as a
+result of an ALSA/ASoC activity so the ALSA/ASoC locks would be taken
+first.
