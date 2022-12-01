@@ -2,128 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3698263F1A9
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 683D863F1AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiLANap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:30:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
+        id S231510AbiLANar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:30:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbiLANai (ORCPT
+        with ESMTP id S231544AbiLANao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:30:38 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABABAB006;
-        Thu,  1 Dec 2022 05:30:36 -0800 (PST)
-Received: from frapeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NNH1X1gN1z682sK;
-        Thu,  1 Dec 2022 21:27:28 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- frapeml500005.china.huawei.com (7.182.85.13) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Dec 2022 14:30:34 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 1 Dec
- 2022 13:30:34 +0000
-Date:   Thu, 1 Dec 2022 13:30:33 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        "Vishal Verma" <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH V2 04/11] cxl/mem: Clear events on driver load
-Message-ID: <20221201133033.0000090f@Huawei.com>
-In-Reply-To: <20221201002719.2596558-5-ira.weiny@intel.com>
-References: <20221201002719.2596558-1-ira.weiny@intel.com>
-        <20221201002719.2596558-5-ira.weiny@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 1 Dec 2022 08:30:44 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2D5BF931
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:30:40 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id a7so1854712ljq.12
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 05:30:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2ILQpLAASTEQxVAHqS2HsUvzwY9XLxYCyDgjgQHgPzU=;
+        b=eR9ALniAmj8Rr/MZ8fMkaouXFUfjlssAT56toegyYHVQ1TDZRoXOsvAdt5rJhV+V9U
+         8gZwDPU2a7V0Me0ZTWbWhqSV3vgyOTU3cbwup5/rBKe40wn9jaLCmMo1kHbM9/y6DR/2
+         OorzZRlGG0knCysTjLO7Y/fWYAFQmGBAbr3xARhqMO+syBiRvEtrH1MD8LhW7vVWCg1k
+         IDVPqKmd5i0S3Eo3tR6KkPEImCHtz8Yz33jN8evalkvM82qvdp3OrgviLG2cGDvsda7r
+         quhZmXkDLIp/ioY9PxAC668LfCcTG6iE3XsFyo2p4c9G1S6xKyiQWWO7LPW0gAXebrbK
+         IS8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2ILQpLAASTEQxVAHqS2HsUvzwY9XLxYCyDgjgQHgPzU=;
+        b=1exxLcpRUZgX8I31VBmUrH9olhfdVjf7u/kuw5zL/eFpEA7BUAxNXzxXyHD/XwzIl7
+         fsDTy+yHLNYb4qpD26FrNss+WQiTR/4YGVpITKjSxUNzVJiGwZuxQpnLGiv6mRmPaIgD
+         t+7Fr0WCQPUBTM+buq3ZrBkee+Zip/xBD983ZZQlQj3YCEY3Qu6jdv6A0fOGCVWOZ5ct
+         3MvUgE0bzxwwPVAfRZz4zP2A88n5TUMrVC+bNMhxXud+nloGoiHNvyBrDAKRPEkakzW5
+         F0C8WNAeyAU+6EZQVbu7HVTDOkahmBnjCKPKDGkYwy96odsYno1M75OGvakQHcWQ4SSv
+         XBgw==
+X-Gm-Message-State: ANoB5pnL4+GQKLIfCsAl+YGfSREZBseQUpzOX2e7O6DxIjTIHbiNa+bd
+        uvLSm5eUjxAsHf90Ix/P5X/1ww==
+X-Google-Smtp-Source: AA0mqf5OkeTE/cp5ki879BHyFVVAPe8JGTwak2eUMlj2ILnqi8fBN5AEyJqIAguB2W9cicz1mZD4tw==
+X-Received: by 2002:a2e:828d:0:b0:276:ffbf:2ee2 with SMTP id y13-20020a2e828d000000b00276ffbf2ee2mr19981993ljg.505.1669901439104;
+        Thu, 01 Dec 2022 05:30:39 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id p1-20020ac24ec1000000b004991437990esm657494lfr.11.2022.12.01.05.30.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 05:30:38 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: serial: qcom,msm-uart: Convert to DT schema
+Date:   Thu,  1 Dec 2022 14:30:36 +0100
+Message-Id: <20221201133036.45288-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Nov 2022 16:27:12 -0800
-ira.weiny@intel.com wrote:
+Convert the Qualcomm MSM SoC UART (non-DMA) bindings to DT schema.
 
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> The information contained in the events prior to the driver loading can
-> be queried at any time through other mailbox commands.
-> 
-> Ensure a clean slate of events by reading and clearing the events.  The
-> events are sent to the trace buffer but it is not anticipated to have
-> anyone listening to it at driver load time.
-> 
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/serial/qcom,msm-uart.txt         | 25 ---------
+ .../bindings/serial/qcom,msm-uart.yaml        | 56 +++++++++++++++++++
+ 2 files changed, 56 insertions(+), 25 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uart.txt
+ create mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uart.yaml
 
-Probably not worth addressing but there is a corner case where this might fail
-if some broken software already messed with reading out the events.
-
-Imagine it read the first mailbox sized chunk, but didn't clear them...
-
-If that happens, then we'd end up seeing the whole list, but in non
-temporal order and hence trying to clear them out of order with predictable
-fails.
-
-Maybe this is the category of things we 'fix' if we ever hear of it actually
-happening.
-
-So with that caveat called out so I can say 'I told you so' :), fine to keep my tag on this.
-
-Thanks,
-
-Jonathan
-
-
-> ---
->  drivers/cxl/pci.c            | 2 ++
->  tools/testing/cxl/test/mem.c | 2 ++
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index 8f86f85d89c7..11e95a95195a 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -521,6 +521,8 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	if (IS_ERR(cxlmd))
->  		return PTR_ERR(cxlmd);
->  
-> +	cxl_mem_get_event_records(cxlds);
-> +
->  	if (resource_size(&cxlds->pmem_res) && IS_ENABLED(CONFIG_CXL_PMEM))
->  		rc = devm_cxl_add_nvdimm(&pdev->dev, cxlmd);
->  
-> diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
-> index aa2df3a15051..e2f5445d24ff 100644
-> --- a/tools/testing/cxl/test/mem.c
-> +++ b/tools/testing/cxl/test/mem.c
-> @@ -285,6 +285,8 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
->  	if (IS_ERR(cxlmd))
->  		return PTR_ERR(cxlmd);
->  
-> +	cxl_mem_get_event_records(cxlds);
-> +
->  	if (resource_size(&cxlds->pmem_res) && IS_ENABLED(CONFIG_CXL_PMEM))
->  		rc = devm_cxl_add_nvdimm(dev, cxlmd);
->  
+diff --git a/Documentation/devicetree/bindings/serial/qcom,msm-uart.txt b/Documentation/devicetree/bindings/serial/qcom,msm-uart.txt
+deleted file mode 100644
+index ce8c90161959..000000000000
+--- a/Documentation/devicetree/bindings/serial/qcom,msm-uart.txt
++++ /dev/null
+@@ -1,25 +0,0 @@
+-* MSM Serial UART
+-
+-The MSM serial UART hardware is designed for low-speed use cases where a
+-dma-engine isn't needed. From a software perspective it's mostly compatible
+-with the MSM serial UARTDM except that it only supports reading and writing one
+-character at a time.
+-
+-Required properties:
+-- compatible: Should contain "qcom,msm-uart"
+-- reg: Should contain UART register location and length.
+-- interrupts: Should contain UART interrupt.
+-- clocks: Should contain the core clock.
+-- clock-names: Should be "core".
+-
+-Example:
+-
+-A uart device at 0xa9c00000 with interrupt 11.
+-
+-serial@a9c00000 {
+-	compatible = "qcom,msm-uart";
+-	reg = <0xa9c00000 0x1000>;
+-	interrupts = <11>;
+-	clocks = <&uart_cxc>;
+-	clock-names = "core";
+-};
+diff --git a/Documentation/devicetree/bindings/serial/qcom,msm-uart.yaml b/Documentation/devicetree/bindings/serial/qcom,msm-uart.yaml
+new file mode 100644
+index 000000000000..a052aaef21f4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/serial/qcom,msm-uart.yaml
+@@ -0,0 +1,56 @@
++# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/serial/qcom,msm-uart.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm MSM SoC Serial UART
++
++maintainers:
++  - Bjorn Andersson <andersson@kernel.org>
++  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
++
++description:
++  The MSM serial UART hardware is designed for low-speed use cases where a
++  dma-engine isn't needed. From a software perspective it's mostly compatible
++  with the MSM serial UARTDM except that it only supports reading and writing
++  one character at a time.
++
++properties:
++  compatible:
++    const: qcom,msm-uart
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: core
++
++  interrupts:
++    maxItems: 1
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - clock-names
++  - clocks
++  - interrupts
++  - reg
++
++unevaluatedProperties: false
++
++allOf:
++  - $ref: /schemas/serial/serial.yaml#
++
++examples:
++  - |
++    serial@a9c00000 {
++        compatible = "qcom,msm-uart";
++        reg = <0xa9c00000 0x1000>;
++        interrupts = <11>;
++        clocks = <&uart_cxc>;
++        clock-names = "core";
++    };
+-- 
+2.34.1
 
