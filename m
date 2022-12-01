@@ -2,130 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3745363F2B8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D015263F2C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiLAOXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 09:23:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
+        id S231378AbiLAOZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 09:25:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231924AbiLAOXB (ORCPT
+        with ESMTP id S229630AbiLAOZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 09:23:01 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AA42FA5C;
-        Thu,  1 Dec 2022 06:22:57 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id c1so2720853lfi.7;
-        Thu, 01 Dec 2022 06:22:57 -0800 (PST)
+        Thu, 1 Dec 2022 09:25:24 -0500
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070F21F2DE
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 06:25:20 -0800 (PST)
+X-KPN-MessageId: e0c39b2a-7183-11ed-be70-005056aba152
+Received: from smtp.kpnmail.nl (unknown [10.31.155.40])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id e0c39b2a-7183-11ed-be70-005056aba152;
+        Thu, 01 Dec 2022 15:24:34 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nRvzQRHmIfpCS7wU0FBvw2pwnDRrKBpC2VMX4T8FuMQ=;
-        b=glkvHACbXdIMkvWcRDLEgpDmtm5dySDXry66W8yZbqm9xPBcfjer9gmxAYkp2rP3x+
-         KH33IO/wFg/y0vprvSwycUSRjs1g/GxGpxCk/H3xY9/OwCq0D3W4Or3Xy7G036KjSH5z
-         pAm951cmeapgjtZuMzOMn51IkkLnQhz1UNdWklZm9UhEg2LzIkhPqrHFN+NTsBwTf4tS
-         xYP6lz+5e8WTSShfwTRqpnsa2PBjF/a713MXhk4nq70tHnsx0HpQbm+cYbmdpLe0cbaF
-         tZ1bhLAqlle7YqdIme9c/s76R1WNZqPCNT0/m3sO9U0lTZTvxZmIPXUkrRHgGNG93+tZ
-         ZbBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nRvzQRHmIfpCS7wU0FBvw2pwnDRrKBpC2VMX4T8FuMQ=;
-        b=bB43Vi6qwwIlof7ocTG5wZu5eLWDvlLET3au/9mrpHDqkhFTDY/QA6xz7CYrKw6ked
-         zx+Ayg2nbBIL0DrbRKRQ1NZDCfp9gnnAoIPHmQmVLEuGJMKdx9qtGn1yFWLJdjz3T9zd
-         nhwls6il8n5TfKXzOspmVe6EdUHkj6QQVwLhABf0oT9f28AWieIToMCL9tcOBhChRSJg
-         k/00mRzT7o9z1O5L9NdesJoHlixeqPdGn5iv9uIyugjqYAV/xEyvLaA33skk8h90+efY
-         G2FdMK6nshImr+/jSNOWO3I3oVl6lw+qR0vDujMBqxSyfqAAGpCgmu53v0XW/4pvHg3F
-         Hmrg==
-X-Gm-Message-State: ANoB5plMRz1UwowW+6nNElxuQyNrskhNiN2lwzITF8B0HxG+0xbdpxEP
-        jkIxH8crU8YZYNSjQquRj+c=
-X-Google-Smtp-Source: AA0mqf7yghnQdIU/jzPDqVl2Lk3losfW6ljH7NX2kalFPUP6CTeA9QJBgw+y8n+skFGRalE2ABv8Jg==
-X-Received: by 2002:a05:6512:3a82:b0:4b5:42fd:c26e with SMTP id q2-20020a0565123a8200b004b542fdc26emr1091703lfu.52.1669904576127;
-        Thu, 01 Dec 2022 06:22:56 -0800 (PST)
-Received: from [192.168.50.20] (077222238151.warszawa.vectranet.pl. [77.222.238.151])
-        by smtp.gmail.com with ESMTPSA id c25-20020a2ebf19000000b0026ddaf38b0fsm399396ljr.96.2022.12.01.06.22.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 06:22:55 -0800 (PST)
-Message-ID: <abe0cc82-2fb8-2e29-e7b9-90fe6ae4d203@gmail.com>
-Date:   Thu, 1 Dec 2022 15:22:54 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH] Prevent buffer overflow in UVC Gadget setup handler
-To:     Dan Scally <dan.scally@ideasonboard.com>,
-        laurent.pinchart@ideasonboard.com
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221201122141.8739-1-szymon.heidrich@gmail.com>
- <780379d9-2331-cd7a-126d-cdaa8aec023d@ideasonboard.com>
-Content-Language: en-US
-From:   Szymon Heidrich <szymon.heidrich@gmail.com>
-In-Reply-To: <780379d9-2331-cd7a-126d-cdaa8aec023d@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=xs4all.nl; s=xs4all01;
+        h=subject:to:from:message-id:date;
+        bh=x0Smebnf5TxeVaY4P4m+XdlW9/dcq0V22p+rTifwwpw=;
+        b=I0N9XZo8BorG3+28MFugns+vBm3M22ZxS+DbR6q4zPkBdvTQqaq4W+Wyxthl8WFcLTRyfz4umc607
+         hfTH6is+uFBiuJZRtTjHJrbemSlq6+gYBDYK4oXNjZR2Pm9S1fagp73u76j94DtAWZ24XH1qv5Ac1q
+         h1Y0KS+cimpY6wdTzHiqaGexM2d5KfExZA0GCFqwTttwopFc0/CeK2KupjhMYlNfIcd3x78eVTGEAp
+         Otqm6UgqkiCJozlkNDxJMBPa/G0ZhVI/l9yRSvzNKC9JqrnpEdp8rPmSdp+BjlaQQXBEpWTC2rqUHJ
+         Vvi46lxNDUVY0v/G8ELF7lINDMbc9YA==
+X-KPN-MID: 33|RnuDBWKoOaDHr5WOt8Abx6wgvvKHloXXr/SyvV/YdX1xlF5I7zXryvYbX0wY/zH
+ F/Q86XAbgi0dPpZVMSonWmSswAM6R5dkT7Ze6TorLOAY=
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|RiFza7j0OV5VYQ8PaJpConECk/cNuWv9/x3CVtZKOYihro0cSycjhcjCiGm7gXn
+ hHi8j/Lc5ltPh3Dj19B8hgA==
+X-Originating-IP: 80.61.163.207
+Received: from bloch.sibelius.xs4all.nl (80-61-163-207.fixed.kpn.net [80.61.163.207])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id f96e0c46-7183-11ed-9ebc-005056ab7584;
+        Thu, 01 Dec 2022 15:25:16 +0100 (CET)
+Date:   Thu, 01 Dec 2022 15:25:15 +0100
+Message-Id: <877czb42wk.fsf@bloch.sibelius.xs4all.nl>
+From:   Mark Kettenis <mark.kettenis@xs4all.nl>
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        alyssa@rosenzweig.io, sven@svenpeter.dev, marcan@marcan.st,
+        akihiko.odaki@daynix.com
+In-Reply-To: <20221201103651.27807-1-akihiko.odaki@daynix.com> (message from
+        Akihiko Odaki on Thu, 1 Dec 2022 19:36:51 +0900)
+Subject: Re: [PATCH] arch: arm64: dts: apple: Remove stdout-path
+References: <20221201103651.27807-1-akihiko.odaki@daynix.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/2022 14:49, Dan Scally wrote:
-> Hello - thanks for the patch
+> From: Akihiko Odaki <akihiko.odaki@daynix.com>
+> Date: Thu,  1 Dec 2022 19:36:51 +0900
 > 
-> On 01/12/2022 12:21, Szymon Heidrich wrote:
->> Setup function uvc_function_setup
+> u-boot overrides stdout-path so that it points to /chosen/framebuffer
+> with some condition.
+> > arm: apple: Point stdout-path to framebuffer when keyboard present
+> >
+> > Unless you have a spare Apple Silicon machine, getting access to
+> > the serial port on Apple Silicon machines requires special
+> > hardware. Given that most machines come with a built-in screen
+> > the framebuffer is likely to be the most convenient output device
+> > for most users. While U-Boot will output to both serial and
+> > framebuffer, OSes might not. Therefore set stdout-path to point
+> > at /chosen/framebuffer when a keyboard is connected to the machine.
+> https://github.com/AsahiLinux/u-boot/commit/a609353e82fd757b7635d18ed6a0828fff657d59
 > 
+> Perhaps it made sense to specify serial0 as stdout-path when the
+> framebuffer and keyboard support was inmature, but today it is
+> preferrable to use /chosen/framebuffer instead of serial0 for the
+> console in the most cases as the u-boot change states.
 > 
-> You've written uvc_function_setup here, but the code changes uvc_function_ep0_complete.
+> Remove stdout-path to allow the kernel to choose the appropriate
+> console. For Linux, it will be VT, which will be eventually backed by
+> the framebuffer, if it is enabled. Otherwise, it will fall back to the
+> serial.
 
-Yes, this was intentional as uvc_function_setup prevents handling of control
-transfer requests with wLength grater than UVC_MAX_REQUEST_SIZE.
-The uvc_function_ep0_complete function handles data phase thus was modified.
+U-Boot still relies on serial being the default.  It will not touch
+stdout-out when running under the m1n1 hypervisor for example.  The
+m1n1 hypervisor emulates the serial port hardware and developers rely
+on this quite heavily.  Also, U-boot will only switch to the
+framebuffer if a keyboard is connected.  This is currently disabled in
+the builds for Asahi Linux because the type-A USB ports are not
+supported yet in U-Boot.  But the plan is to fix that eventually.
 
-> 
->>   permits control transfer
->> requests with up to 64 bytes of payload (UVC_MAX_REQUEST_SIZE),
->> data stage handler for OUT transfer uses memcpy to copy req->actual
->> bytes to uvc_event->data.data array of size 60. This may result
->> in an overflow of 4 bytes.
->>
->> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-> 
-> 
-> Good catch
-> 
->> ---
->>   drivers/usb/gadget/function/f_uvc.c | 5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
->> index 6e196e061..69c5eb3a3 100644
->> --- a/drivers/usb/gadget/function/f_uvc.c
->> +++ b/drivers/usb/gadget/function/f_uvc.c
->> @@ -216,8 +216,9 @@ uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
->>             memset(&v4l2_event, 0, sizeof(v4l2_event));
->>           v4l2_event.type = UVC_EVENT_DATA;
->> -        uvc_event->data.length = req->actual;
->> -        memcpy(&uvc_event->data.data, req->buf, req->actual);
->> +        uvc_event->data.length = (req->actual > sizeof(uvc_event->data.data) ?
->> +            sizeof(uvc_event->data.data) : req->actual);
-> 
-> 
-> There's a clamp() macro in f_uvc.c, can we use that?
-> 
->> +        memcpy(&uvc_event->data.data, req->buf, uvc_event->data.length);
->>           v4l2_event_queue(&uvc->vdev, &v4l2_event);
->>       }
->>   }
+So as far as I am concerted NAK.
 
-If it is more appropriate I will use min_t(unsigned int, req->actual, sizeof(uvc_event->data.data)).
-
+> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> ---
+>  arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi | 2 --
+>  arch/arm64/boot/dts/apple/t600x-j375.dtsi      | 2 --
+>  arch/arm64/boot/dts/apple/t8103-jxxx.dtsi      | 2 --
+>  arch/arm64/boot/dts/apple/t8112-jxxx.dtsi      | 2 --
+>  4 files changed, 8 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi b/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
+> index 5547f5e7ac5a..14b6bf234f82 100644
+> --- a/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
+> +++ b/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
+> @@ -30,8 +30,6 @@ chosen {
+>  		#size-cells = <2>;
+>  		ranges;
+>  
+> -		stdout-path = "serial0";
+> -
+>  		framebuffer0: framebuffer@0 {
+>  			compatible = "apple,simple-framebuffer", "simple-framebuffer";
+>  			reg = <0 0 0 0>; /* To be filled by loader */
+> diff --git a/arch/arm64/boot/dts/apple/t600x-j375.dtsi b/arch/arm64/boot/dts/apple/t600x-j375.dtsi
+> index 7c207b1df949..22e96b436bf2 100644
+> --- a/arch/arm64/boot/dts/apple/t600x-j375.dtsi
+> +++ b/arch/arm64/boot/dts/apple/t600x-j375.dtsi
+> @@ -28,8 +28,6 @@ chosen {
+>  		#size-cells = <2>;
+>  		ranges;
+>  
+> -		stdout-path = "serial0";
+> -
+>  		framebuffer0: framebuffer@0 {
+>  			compatible = "apple,simple-framebuffer", "simple-framebuffer";
+>  			reg = <0 0 0 0>; /* To be filled by loader */
+> diff --git a/arch/arm64/boot/dts/apple/t8103-jxxx.dtsi b/arch/arm64/boot/dts/apple/t8103-jxxx.dtsi
+> index 3c5da0e5a41d..d2483f618d44 100644
+> --- a/arch/arm64/boot/dts/apple/t8103-jxxx.dtsi
+> +++ b/arch/arm64/boot/dts/apple/t8103-jxxx.dtsi
+> @@ -27,8 +27,6 @@ chosen {
+>  		#size-cells = <2>;
+>  		ranges;
+>  
+> -		stdout-path = "serial0";
+> -
+>  		framebuffer0: framebuffer@0 {
+>  			compatible = "apple,simple-framebuffer", "simple-framebuffer";
+>  			reg = <0 0 0 0>; /* To be filled by loader */
+> diff --git a/arch/arm64/boot/dts/apple/t8112-jxxx.dtsi b/arch/arm64/boot/dts/apple/t8112-jxxx.dtsi
+> index b6b815d93c3e..af4153dcb55d 100644
+> --- a/arch/arm64/boot/dts/apple/t8112-jxxx.dtsi
+> +++ b/arch/arm64/boot/dts/apple/t8112-jxxx.dtsi
+> @@ -22,8 +22,6 @@ chosen {
+>  		#size-cells = <2>;
+>  		ranges;
+>  
+> -		stdout-path = "serial0";
+> -
+>  		framebuffer0: framebuffer@0 {
+>  			compatible = "apple,simple-framebuffer", "simple-framebuffer";
+>  			reg = <0 0 0 0>; /* To be filled by loader */
+> -- 
+> 2.38.1
+> 
+> 
+> 
