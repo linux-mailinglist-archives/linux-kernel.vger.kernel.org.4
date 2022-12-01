@@ -2,73 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D20063E99B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 07:10:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B9663E9A1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 07:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiLAGKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 01:10:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49742 "EHLO
+        id S229757AbiLAGK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 01:10:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiLAGKM (ORCPT
+        with ESMTP id S229754AbiLAGKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 01:10:12 -0500
+        Thu, 1 Dec 2022 01:10:20 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37812A13DB;
-        Wed, 30 Nov 2022 22:10:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B01A1A26;
+        Wed, 30 Nov 2022 22:10:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA523B81DA0;
-        Thu,  1 Dec 2022 06:10:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41B56C433C1;
-        Thu,  1 Dec 2022 06:10:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC49BB81DA0;
+        Thu,  1 Dec 2022 06:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4876AC43141;
+        Thu,  1 Dec 2022 06:10:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669875008;
-        bh=ANjxj1GkQAM5iMVlPzJq877T+O++2CEqXrG0/qDJhD0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=onp3GAH2AMjoUOpo0h2+gftRv9t084Dw41n1Nhb2CDWI5UiZMCT3sBWz6/S4Gl2Go
-         8w1+WbhcwPLPWHMap3kcRloL6aO4ihkF17RBy1GoUG1+WhA3HO7XEOfDmFnab98tC2
-         Z1xT9nDy6nP4cSfFN/8HwwwwhT7coJtb3OHTL1/17ohuu8Wo1TH+QEgmWcWi1J1Mhm
-         U81YWsW4PL+efiWWqJpmzJXbqGoIOPwYxBAw4odgTlDa4Hpluhh3qfkh2YQfCm2WuO
-         z1WUA2Ior5JcEq4k4LdjTtl2nHzZAFPkQI+EjnLEUAcfXLEVdETbcOEf/dOvJdm60J
-         3AhwnAqV+ynqA==
-Date:   Wed, 30 Nov 2022 22:10:07 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     wangchuanlei <wangchuanlei@inspur.com>
-Cc:     <echaudro@redhat.com>, <alexandr.lobakin@intel.com>,
-        <pabeni@redhat.com>, <pshelar@ovn.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <wangpeihui@inspur.com>,
-        <netdev@vger.kernel.org>, <dev@openvswitch.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] [PATCH v6 net-next] net: openvswitch: Add support to
- count upcall packets
-Message-ID: <20221130221007.293d7dfd@kernel.org>
-In-Reply-To: <20221130091559.1120493-1-wangchuanlei@inspur.com>
-References: <20221130091559.1120493-1-wangchuanlei@inspur.com>
+        s=k20201202; t=1669875017;
+        bh=hozUH6T6PH3Y6/hM/gJcrV49l5jrvVEfOsr88QDqV4A=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=NMlv2kIdOXXpsxwO6wWMg0z/dfV3LoKJzOMbEvoBJjUIP3ajugPonUv1iXUVq1Za3
+         JHmzOGYQTDkKOcrjgfC12ngt1+qLyDtjSP9+0VEMYEiHzWXEl5Rb7AIWp4vYfSv+Vv
+         lquFGjUBrqCB4h5U06a5UbC3rzJZFVLWf8hTmZdokwK1l1rF/aIpPjoNGLtBFnXY37
+         AaDqGt2RZBdG2tx5Wbg+OH1ik76+BN7jbL40VS8YW7u7l5JT8KBBRQlfyRVhj68bQy
+         4sp5pIdNM5Vrsq20UR1LJu/3iCQ0J2YOi0WcmJzXrscYxQ4yeOaCWxejmyI0MumfM+
+         Z0uiwAXegZgJQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2B4F0E29F38;
+        Thu,  1 Dec 2022 06:10:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v6 0/3] net: devlink: return the driver name in
+ devlink_nl_info_fill
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166987501717.18933.6140637869420910519.git-patchwork-notify@kernel.org>
+Date:   Thu, 01 Dec 2022 06:10:17 +0000
+References: <20221129095140.3913303-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20221129095140.3913303-1-mailhol.vincent@wanadoo.fr>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     jiri@nvidia.com, netdev@vger.kernel.org, kuba@kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        linux-kernel@vger.kernel.org, bbrezillon@kernel.org,
+        arno@natisbad.org, schalla@marvell.com, kurt@linutronix.de,
+        andrew@lunn.ch, f.fainelli@gmail.com, olteanv@gmail.com,
+        michael.chan@broadcom.com, ioana.ciornei@nxp.com,
+        dmichail@fungible.com, yisen.zhuang@huawei.com,
+        salil.mehta@huawei.com, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, sgoutham@marvell.com,
+        lcherian@marvell.com, gakula@marvell.com, jerinj@marvell.com,
+        hkelam@marvell.com, sbhatta@marvell.com, tchornyi@marvell.com,
+        saeedm@nvidia.com, leon@kernel.org, idosch@nvidia.com,
+        petrm@nvidia.com, simon.horman@corigine.com, snelson@pensando.io,
+        drivers@pensando.io, aelior@marvell.com, manishc@marvell.com,
+        jonathan.lemon@gmail.com, vadfed@fb.com, richardcochran@gmail.com,
+        vadimp@mellanox.com, shalomt@mellanox.com,
+        linux-crypto@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-rdma@vger.kernel.org, oss-drivers@corigine.com,
+        jiri@mellanox.com, herbert@gondor.apana.org.au,
+        chenhao288@hisilicon.com, huangguangbin2@huawei.com,
+        chi.minghao@zte.com.cn, sthotton@marvell.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Nov 2022 04:15:59 -0500 wangchuanlei wrote:
-> +/**
-> + *	ovs_vport_get_upcall_stats - retrieve upcall stats
-> + *
-> + * @vport: vport from which to retrieve the stats
-> + * @ovs_vport_upcall_stats: location to store stats
+Hello:
 
-s/ovs_vport_upcall_//
+This series was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-> + *
-> + * Retrieves upcall stats for the given device.
-> + *
-> + * Must be called with ovs_mutex or rcu_read_lock.
-> + */
-> +void ovs_vport_get_upcall_stats(struct vport *vport, struct ovs_vport_upcall_stats *stats)
+On Tue, 29 Nov 2022 18:51:37 +0900 you wrote:
+> The driver name is available in device_driver::name. Right now,
+> drivers still have to report this piece of information themselves in
+> their devlink_ops::info_get callback function.
+> 
+> The goal of this series is to have the devlink core to report this
+> information instead of the drivers.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v6,1/3] net: devlink: let the core report the driver name instead of the drivers
+    https://git.kernel.org/netdev/net-next/c/226bf9805506
+  - [net-next,v6,2/3] net: devlink: make the devlink_ops::info_get() callback optional
+    https://git.kernel.org/netdev/net-next/c/c5cd7c86847c
+  - [net-next,v6,3/3] net: devlink: clean-up empty devlink_ops::info_get()
+    https://git.kernel.org/netdev/net-next/c/cf4590b91db4
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
