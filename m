@@ -2,65 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3005B63FC26
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F67663FC38
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:45:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231402AbiLAXkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 18:40:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46558 "EHLO
+        id S231901AbiLAXpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 18:45:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiLAXkS (ORCPT
+        with ESMTP id S231308AbiLAXpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 18:40:18 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73010BA60C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 15:40:17 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id b21so3124844plc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 15:40:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AAv77N6M1ad575eATsaipJQHekJzZgvIAL6CCfja80Y=;
-        b=XAJgagpn8Mo2qr0iSaJyOYBHUJ5c3EZ6SbOiDxcJCJjs/sspz1uEugU1nu++AwclgH
-         bkHKguWddR16rAljbUZoVMNJHa2JMRPf2jjRo8shtSWIKnTujldpei3RstDzPqjnnmwX
-         XHhyuo2t8ApxkDYeBaqmgiWx7ibq+G0rVchfs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AAv77N6M1ad575eATsaipJQHekJzZgvIAL6CCfja80Y=;
-        b=QwlUloxn1ZboRzfOj3wxTfwmZulSWy9/Aoe+h+t8VgmWtf5LwtH+lkjAZdkAC7l2ul
-         E0pQ82QCSRPAMXafYwX0Ca3edTyApTJ1YAjQU3T6ONF6mdWO4K7tfCcSCdd9ICTkMH1C
-         HXwuLCbCDBdCAQ0yB4fU+85pXIPpCj/PhHj5XbiSuAQIEOl6KyGWIDXflnfEt8NhAEYU
-         JnbsOaLjg1szWV7FkwlvJ7WQUR+Qn8yIODpq8w8mGzM6r4ZrK9LRUVZZCGG85JISYUru
-         ORCLPAZjsurGDeGflq83OrSi8kOE0xEvxCKTWP8+3UIsZmmGBHBzlYdB9SJgVvgz37Xi
-         ngVw==
-X-Gm-Message-State: ANoB5pl/zD9Tok8WudZGPH8QENzJAXWTOi8Rt4cjvNIheg1s7LvGxNJw
-        +15XNE+MnJUpAsxDxRAxUas90A==
-X-Google-Smtp-Source: AA0mqf7H8u6SqmQzqaKRyvvexzZWM71JK7q5856jplWnSJkCQTbv8tN8YPIHSM5neZ77dX2y8mLtXA==
-X-Received: by 2002:a17:90a:aa12:b0:219:5a10:30b9 with SMTP id k18-20020a17090aaa1200b002195a1030b9mr14049526pjq.73.1669938016956;
-        Thu, 01 Dec 2022 15:40:16 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c1-20020a17090a674100b002191a64b5d5sm5392788pjm.18.2022.12.01.15.40.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 15:40:16 -0800 (PST)
-Date:   Thu, 1 Dec 2022 15:40:15 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     "haifeng.xu" <haifeng.xu@shopee.com>
-Cc:     brauner@kernel.org, ebiederm@xmission.com, oleg@redhat.com,
-        tglx@linutronix.de, peterz@infradead.org, elver@google.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] signal: Initialize the info in ksignal
-Message-ID: <202212011537.371DD6639@keescook>
-References: <20221128065606.19570-1-haifeng.xu@shopee.com>
+        Thu, 1 Dec 2022 18:45:06 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96F7BE6AE;
+        Thu,  1 Dec 2022 15:45:04 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 589FC84225;
+        Fri,  2 Dec 2022 00:45:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1669938302;
+        bh=tVAl2PUlhRY2y4+Skseue/tW4aAWv4TLrxfM05T5iMw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SXrfF3zm+8KNwwJqNthoMBvIJSRyAakH1WIH34/TPREIWZnazEI1c7qqH8QgI3fC3
+         C0Bde4vtUUOCxo0cZRIq9yFBrLXqp69olbZE1DwffNLa5hB1U66N2f4lxfFbHj/Aut
+         WZjUKD+8/Lq9JmoQC1h+mqxeVI2+BGDzey7EHvwSusOOKYDl3sAaoaUotaUC/39BoU
+         NjER95d29KOx5ICkGBfHwb4XWCk3k/d3OxTWNuLR80vawknQ4OGlM0GdASCy6XcYgY
+         dESBVnpiKSe/19hcfnpdS+iW6aSEBHHoDW16qHlDyhxvELI+revZU40zDILVN58YgQ
+         Q5pCevsko/LKw==
+Message-ID: <4043d693-7739-4709-8551-9f476031db70@denx.de>
+Date:   Fri, 2 Dec 2022 00:41:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221128065606.19570-1-haifeng.xu@shopee.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] dt-bindings: leds: Mark label property as deprecated
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        kernel@dh-electronics.com, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20221122111124.6828-1-cniedermaier@dh-electronics.com>
+ <Y3y/S5COG7VPbsqL@duo.ucw.cz> <3f4c89a3-8955-ce41-ac2a-cee9b0ed5210@denx.de>
+ <20221130191905.GA2631320-robh@kernel.org>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20221130191905.GA2631320-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,39 +64,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 06:56:06AM +0000, haifeng.xu wrote:
-> When handing the SIGNAL_GROUP_EXIT flag, the info in ksignal isn't cleared.
-> However, the info acquired by dequeue_synchronous_signal/dequeue_signal is
-> initialized and can be safely used. Fortunately, the fatal signal process
-> just uses the si_signo and doesn't use any other member. Even so, the
-> initialization before use is more safer.
-
-Yeah, this patch seems correct -- get_signal() is usually called with
-an uninitialized stack variable, and normally goes through dequeue_*
-helpers which do a copy. The fatal path doesn't.
-
--Kees
-
-> Signed-off-by: haifeng.xu <haifeng.xu@shopee.com>
-> ---
->  kernel/signal.c | 1 +
->  1 file changed, 1 insertion(+)
+On 11/30/22 20:19, Rob Herring wrote:
+> On Fri, Nov 25, 2022 at 10:26:30PM +0100, Marek Vasut wrote:
+>> On 11/22/22 13:23, Pavel Machek wrote:
+>>> Hi!
+>>
+>> Hi,
+>>
+>>>> Mark the label property as deprecated as it is mentioned
+>>>> in the description.
+>>>
+>>> Lets do it the other way around. Functions (etc) don't really provide
+>>> good enough description of LED, and label is still needed.
+>>
+>> Can you please provide a clear explanation which property or approach is the
+>> correct one for new DTs ?
+>>
+>> So far, the documentation states that "label" is deprecated, and users
+>> should replace it with "function" and "color".
 > 
-> diff --git a/kernel/signal.c b/kernel/signal.c
-> index d140672185a4..b9b0c8c620e7 100644
-> --- a/kernel/signal.c
-> +++ b/kernel/signal.c
-> @@ -2693,6 +2693,7 @@ bool get_signal(struct ksignal *ksig)
->  		/* Has this task already been marked for death? */
->  		if ((signal->flags & SIGNAL_GROUP_EXIT) ||
->  		     signal->group_exec_task) {
-> +			clear_siginfo(&ksig->info);
->  			ksig->info.si_signo = signr = SIGKILL;
->  			sigdelset(&current->pending.signal, SIGKILL);
->  			trace_signal_deliver(SIGKILL, SEND_SIG_NOINFO,
-> -- 
-> 2.25.1
-> 
+> 'function' is what activity/operation the LED is associated with. It is
+> a fixed set of strings which s/w may use. It is a replacement for
+> 'linux,default-trigger'.
 
--- 
-Kees Cook
+Isn't this 'function' more of a standardized replacement for 'label' ?
+
+$ git grep LED_FUNCTION_ include/
+...
+include/dt-bindings/leds/common.h:#define LED_FUNCTION_PLAYER5 "player-5"
+include/dt-bindings/leds/common.h:#define LED_FUNCTION_ACTIVITY "activity"
+include/dt-bindings/leds/common.h:#define LED_FUNCTION_ALARM "alarm"
+include/dt-bindings/leds/common.h:#define LED_FUNCTION_BACKLIGHT "backlight"
+include/dt-bindings/leds/common.h:#define LED_FUNCTION_BLUETOOTH "bluetooth"
+include/dt-bindings/leds/common.h:#define LED_FUNCTION_BOOT "boot"
+...
+
+Seems to me that ^ is closer to a "standardized" form of 'label' .
+
+The LED subsystem does not infer any behavior of those LEDs based on 
+their 'function' property as far as I can tell, at least not in the way 
+'linux,default-trigger' behaves.
+
+> 'label' is what is printed next to the LED for a human to read. 'label'
+> can be anything and the OS shouldn't care what it is.
+
+This part I understand. What is not clear to me is, why is 'label' being 
+un-deprecated.
+
+We newly have 'function', 'function-enumerator' and 'color' DT 
+properties for LEDs, which seem to be standardized forms of describing 
+what the LED is used for, which LED it is (if there are multiple), and 
+color of that LED. This was previously described in the 'label' 
+property, usually in free form of e.g. "beaglebone:green:usr2" .
+
+> They serve 2 different purposes.
+
+[...]
