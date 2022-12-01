@@ -2,100 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F9363F702
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A41F363F710
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiLASA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 13:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
+        id S231211AbiLASCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 13:02:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiLASA4 (ORCPT
+        with ESMTP id S230419AbiLASBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 13:00:56 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D828B2771
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 10:00:55 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id s16so1082455iln.4
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 10:00:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mLmQ9FuLQV/3WYg6WIyM6UQ5+aTXTDiwF3md5aMgLKE=;
-        b=warFrrLffutg4BA21c3UlAQ+DI9pvBMP2jZvjocySvHdk0YnKonKWoTMV1r5Fkgfqk
-         t6fYtIgN4kzMEV7T/AAxi4rXxSY4U60Ym7uO81kbq/zV1jWwnrMBWKCzivHDFYrU54u+
-         TEKvyJuZFXInC8FSQKOzsdCMiA4cEwZKPtzp7baKTowghYvbUYfHX4ZyTe3AQNcFhRPY
-         RseGYVRgPIePpH2nPJPYhJ5OGVNNbx2Z6Z+AVBbhRMRXUZsEUTfXI9cIyao+1jknzPJO
-         ufPH+Vd/AqVV4O1MmICq/ZflguQP3LirFPeiEDmWCyOccvGo21L1IvetyAaSYGGupot9
-         Izfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mLmQ9FuLQV/3WYg6WIyM6UQ5+aTXTDiwF3md5aMgLKE=;
-        b=UR1AUpEZIUfpWnFDiVqbuYDSaFchjz4M3CWjx6zJ1QN36dWeNmA61ANusiLXQ1rK/t
-         +tFb8ihtB0RwuSsszaz1eLRYy42Kv9z/q4bMPE467vvplCxIdfkZWAlxJn8YHZe22JtB
-         hk3tD+aUk9GuOGM3EeaesVwWQVfx+6LRszrBpzCbGIvX56QeHIgNAK/FEUdE+RC6VaEB
-         vlWWtZmYPkTdRvx5CLh3SuKNbnZut1sjuPuUb32cS2Xfk9Bqri9aAs9bqRvuWxowDWOa
-         X/PFJPNhiU+SbVBOjioa+33SJjvXGd4OBH2Mv2akkJI/Lfg+w7HUuorL5Ab35UK5fQwq
-         nYuw==
-X-Gm-Message-State: ANoB5pkRQZ0vx42ZxPLgBTP6NJka3WKGon3+CWqdCBNXKdNHZH/S7Rca
-        9OtDg7iwcELkrLl3t2Vz/HudAw==
-X-Google-Smtp-Source: AA0mqf7pMLfmPCOnWsEzbt4qZ5dRqmAd5e/FC+k4b+Dpqd1z7c4CXwBLHthxHIR7+AhkTxHUfFwsPA==
-X-Received: by 2002:a92:a30b:0:b0:302:555a:f761 with SMTP id a11-20020a92a30b000000b00302555af761mr21047770ili.323.1669917654401;
-        Thu, 01 Dec 2022 10:00:54 -0800 (PST)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id l66-20020a6b3e45000000b006dfbf3fe79dsm1831823ioa.32.2022.12.01.10.00.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 10:00:53 -0800 (PST)
-Message-ID: <8d195905-a93f-d342-abb0-dd0e0f5a5764@kernel.dk>
-Date:   Thu, 1 Dec 2022 11:00:52 -0700
+        Thu, 1 Dec 2022 13:01:43 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DB3B7DF6
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 10:01:24 -0800 (PST)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1p0ns8-0002aO-Av; Thu, 01 Dec 2022 19:01:20 +0100
+Message-ID: <948b6cb80a07f71b97fa950a6d15fa3b7db98754.camel@pengutronix.de>
+Subject: Re: [PATCH v5 5/7] drm/etnaviv: Add nn_core_count to chip feature
+ struct
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     italonicola@collabora.com,
+        "moderated list:DRM DRIVERS FOR VIVANTE GPU IP" 
+        <etnaviv@lists.freedesktop.org>,
+        "open list:DRM DRIVERS FOR VIVANTE GPU IP" 
+        <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        David Airlie <airlied@gmail.com>
+Date:   Thu, 01 Dec 2022 19:01:18 +0100
+In-Reply-To: <20221201103026.53234-6-tomeu.vizoso@collabora.com>
+References: <20221201103026.53234-1-tomeu.vizoso@collabora.com>
+         <20221201103026.53234-6-tomeu.vizoso@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 6/6] eventpoll: add support for min-wait
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Soheil Hassas Yeganeh <soheil@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Willem de Bruijn <willemb@google.com>,
-        Shakeel Butt <shakeelb@google.com>
-References: <20221030220203.31210-1-axboe@kernel.dk>
- <20221030220203.31210-7-axboe@kernel.dk> <Y2rUsi5yrhDZYpf/@google.com>
- <4764dcbf-c735-bbe2-b60e-b64c789ffbe6@kernel.dk>
-In-Reply-To: <4764dcbf-c735-bbe2-b60e-b64c789ffbe6@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>> @@ -1845,6 +1891,18 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
->>>  		ewq.timed_out = true;
->>>  	}
->>>  
->>> +	/*
->>> +	 * If min_wait is set for this epoll instance, note the min_wait
->>> +	 * time. Ensure the lowest bit is set in ewq.min_wait_ts, that's
->>> +	 * the state bit for whether or not min_wait is enabled.
->>> +	 */
->>> +	if (ep->min_wait_ts) {
->>
->> Can we limit this block to "ewq.timed_out && ep->min_wait_ts"?
->> AFAICT, the code we run here is completely wasted if timeout is 0.
+Am Donnerstag, dem 01.12.2022 um 11:30 +0100 schrieb Tomeu Vizoso:
+> We will use these for differentiating between GPUs and NPUs, as the
+> downstream driver does.
 > 
-> Yep certainly, I can gate it on both of those conditions.
-Looking at this for a respin, I think it should be gated on
-!ewq.timed_out? timed_out == true is the path that it's wasted on
-anyway.
+Thanks, patches 5-7 applied to my etnaviv/next branch.
 
--- 
-Jens Axboe
+Regards,
+Lucas
+
+> Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
+> ---
+>  drivers/gpu/drm/etnaviv/etnaviv_gpu.h  | 3 +++
+>  drivers/gpu/drm/etnaviv/etnaviv_hwdb.c | 4 ++++
+>  2 files changed, 7 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
+> index 85eddd492774..c8f3ad2031ce 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
+> @@ -50,6 +50,9 @@ struct etnaviv_chip_identity {
+>  	/* Number of shader cores. */
+>  	u32 shader_core_count;
+>  
+> +	/* Number of Neural Network cores. */
+> +	u32 nn_core_count;
+> +
+>  	/* Size of the vertex cache. */
+>  	u32 vertex_cache_size;
+>  
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_hwdb.c b/drivers/gpu/drm/etnaviv/etnaviv_hwdb.c
+> index f2fc645c7956..44df273a5aae 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_hwdb.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_hwdb.c
+> @@ -16,6 +16,7 @@ static const struct etnaviv_chip_identity etnaviv_chip_identities[] = {
+>  		.register_max = 64,
+>  		.thread_count = 128,
+>  		.shader_core_count = 1,
+> +		.nn_core_count = 0,
+>  		.vertex_cache_size = 8,
+>  		.vertex_output_buffer_size = 1024,
+>  		.pixel_pipes = 1,
+> @@ -47,6 +48,7 @@ static const struct etnaviv_chip_identity etnaviv_chip_identities[] = {
+>  		.register_max = 64,
+>  		.thread_count = 512,
+>  		.shader_core_count = 2,
+> +		.nn_core_count = 0,
+>  		.vertex_cache_size = 16,
+>  		.vertex_output_buffer_size = 1024,
+>  		.pixel_pipes = 1,
+> @@ -78,6 +80,7 @@ static const struct etnaviv_chip_identity etnaviv_chip_identities[] = {
+>  		.register_max = 64,
+>  		.thread_count = 512,
+>  		.shader_core_count = 2,
+> +		.nn_core_count = 0,
+>  		.vertex_cache_size = 16,
+>  		.vertex_output_buffer_size = 1024,
+>  		.pixel_pipes = 1,
+> @@ -109,6 +112,7 @@ static const struct etnaviv_chip_identity etnaviv_chip_identities[] = {
+>  		.register_max = 64,
+>  		.thread_count = 1024,
+>  		.shader_core_count = 4,
+> +		.nn_core_count = 0,
+>  		.vertex_cache_size = 16,
+>  		.vertex_output_buffer_size = 1024,
+>  		.pixel_pipes = 2,
+
 
