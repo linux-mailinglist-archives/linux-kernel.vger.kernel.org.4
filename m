@@ -2,170 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39CF63F054
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D3863F05A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbiLAMUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 07:20:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60578 "EHLO
+        id S230471AbiLAMVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 07:21:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbiLAMUr (ORCPT
+        with ESMTP id S230525AbiLAMVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 07:20:47 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7377AC18C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 04:20:44 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id o10-20020a056e02102a00b003006328df7bso1781500ilj.17
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 04:20:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wMT1KljzfUd/pV0qhTXXgm88SnIIs2YbbL99g3bYbhg=;
-        b=ZdPZA6vODlgidm/GweDNLe/SrxryVrPUm/Jh+8kAOmp1REI/k3W+olxR2+gSDwhq2t
-         WBQ7pvTjOVKxWEINAi/ztMPgrnyZ8xAcVwvcjDbFBD6Y+oeRmBaoI0Vw7/Eghw3ytnQC
-         ME+NNNZZZJp44/pNypqAC4J+6NMHZmCr+HcnS4Va7Nl3RmcOIPWrfSr0PTRx3j56Y7HY
-         4yYayQF2cS0ZEMDZbeAx1ENOy4Q4IBYOq0LZN4lDYBynDpP2njHxJvNEMojuHoxGH2ZQ
-         WjsPMcACbYxZMYzd7ZJAxsdwVGTKtK+oIhW7xNomLhe3ckf5PumhFBeqeBw5ONcdoq3D
-         WiRg==
-X-Gm-Message-State: ANoB5pnuC9gB+fgNbaM+DIbFs1+bEQcZRTnYA7iyD7gdsq+B2+dUoLzn
-        7By/UcPfIgRBUesV2WdFEIiL2AFSD6RdIOPo0Jk6Q5huq3+Q
-X-Google-Smtp-Source: AA0mqf46vKUcLWoQ78pEiRV1qjCJa+7ueoHfG2lW86B9dVYjaaM3J76BJY6Bn6TzkFcBhYwSV3n2HpoJl1QwVdy9iEjIvcxG4jth
+        Thu, 1 Dec 2022 07:21:25 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FACDAB029;
+        Thu,  1 Dec 2022 04:21:23 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B1ANOfC006098;
+        Thu, 1 Dec 2022 12:21:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=o35YdJaFszQepz90vSPHt6PmoQ0SOBopmc9imxmtMi4=;
+ b=QGD6d4tSFCEEPU7eOuvRDB85ZYZTtpthi1LrnlP9fhsaqDcMSgCarEGrs+FH1mUDP25c
+ WKXWp6mnjfEgy0toM1SS2GON2lKQ+zFGLZHmf6cvG5Qec2fXKbvPhR1g8mEYP8BQHlSq
+ 4CllCTsiQWrZeQ9chG8dB2LAO3ABX8NFhwGgr8b8FlauZsN25z4udiJJmKLqcECZfIA3
+ JMNsooZrpHcwyl6dkp2FZnNBSatq/e/7/UBoHc7NOOmWD3VMl0ODv3WGvGPiFeFJrWu+
+ lyT4ERMLamNLVgn5xjwltu4KJbW1eySagiukxL09I9IGOmEqvrD4LP/E+ia43adxNiES Qw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m6k3qs9nb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Dec 2022 12:21:09 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B1CL8rB021799
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Dec 2022 12:21:08 GMT
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 1 Dec 2022 04:21:02 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>,
+        <krzysztof.kozlowski@linaro.org>, <mathieu.poirier@linaro.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH] remoteproc: elf_loader: Update resource table name check
+Date:   Thu, 1 Dec 2022 17:50:48 +0530
+Message-ID: <1669897248-23052-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-Received: by 2002:a5d:980d:0:b0:6a0:ee21:53fb with SMTP id
- a13-20020a5d980d000000b006a0ee2153fbmr22229567iol.190.1669897244240; Thu, 01
- Dec 2022 04:20:44 -0800 (PST)
-Date:   Thu, 01 Dec 2022 04:20:44 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000e082305eec34072@google.com>
-Subject: [syzbot] kernel BUG in set_state_bits
-From:   syzbot <syzbot+b9d2e54d2301324657ed@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 92nkJW-q8lJX3ix6rnVlv9-0RirJcWu6
+X-Proofpoint-ORIG-GUID: 92nkJW-q8lJX3ix6rnVlv9-0RirJcWu6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-01_04,2022-12-01_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 bulkscore=0 suspectscore=0 lowpriorityscore=0 mlxscore=0
+ adultscore=0 spamscore=0 priorityscore=1501 clxscore=1011 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212010088
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Update resource table name check with sub string search instead of
+complete string search.
+In general Qualcomm binary contains, section header name
+(e.g. .resource_table), amended with extra string to differentiate
+with other sections.
+So far Android adsp binaries are being authenticated using TZ,
+hence this mismatch hasn't created any problem.
+In recent developments, ADSP binary is being used in Chrome based
+platforms, which doesn't have TZ path, hence resource table is
+required for memory sandboxing.
 
-syzbot found the following issue on:
-
-HEAD commit:    04aa64375f48 drm/i915: fix TLB invalidation for Gen12 vide..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10eaf7fd880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cc4b2e0a8e8a8366
-dashboard link: https://syzkaller.appspot.com/bug?extid=b9d2e54d2301324657ed
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/eb15d8caa706/disk-04aa6437.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/34b02819c252/vmlinux-04aa6437.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/fce6b0f68514/bzImage-04aa6437.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b9d2e54d2301324657ed@syzkaller.appspotmail.com
-
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fd13eafe168 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
-RAX: ffffffffffffffda RBX: 00007fd13dfabf80 RCX: 00007fd13de8c0d9
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000005
-RBP: 00007fd13eafe1d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000280404 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007fff8d69463f R14: 00007fd13eafe300 R15: 0000000000022000
- </TASK>
-------------[ cut here ]------------
-kernel BUG at fs/btrfs/extent-io-tree.c:381!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 21793 Comm: syz-executor.2 Not tainted 6.1.0-rc7-syzkaller-00102-g04aa64375f48 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:set_state_bits.isra.0+0x17b/0x1c0 fs/btrfs/extent-io-tree.c:381
-Code: 38 d0 7c 04 84 d2 75 31 44 8b 73 7c e8 fe df fb fd 44 89 e0 44 09 f0 89 43 7c 5b 5d 41 5c 41 5d 41 5e 41 5f c3 e8 e5 df fb fd <0f> 0b 4c 89 ef e8 7b b2 48 fe e9 e6 fe ff ff 4c 89 ef e8 6e b2 48
-RSP: 0018:ffffc9000bb77a90 EFLAGS: 00010246
-RAX: 0000000000040000 RBX: ffff88801917c240 RCX: ffffc900043b3000
-RDX: 0000000000040000 RSI: ffffffff8384393b RDI: 0000000000000005
-RBP: 00000000fffffff4 R08: 0000000000000005 R09: 0000000000000000
-R10: 00000000fffffff4 R11: 0000000000000000 R12: 0000000000001000
-R13: ffff88801917c2bc R14: 0000000000280fff R15: 0000000000000000
-FS:  00007fd13eafe700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b30a31000 CR3: 000000007c091000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- __set_extent_bit+0x79d/0x1430 fs/btrfs/extent-io-tree.c:1019
- set_record_extent_bits+0x5e/0x70 fs/btrfs/extent-io-tree.c:1601
- qgroup_reserve_data+0x239/0xbc0 fs/btrfs/qgroup.c:3739
- btrfs_qgroup_reserve_data+0x2f/0xd0 fs/btrfs/qgroup.c:3782
- btrfs_fallocate+0x7fd/0x27c0 fs/btrfs/file.c:3451
- vfs_fallocate+0x48b/0xe00 fs/open.c:323
- ksys_fallocate fs/open.c:346 [inline]
- __do_sys_fallocate fs/open.c:354 [inline]
- __se_sys_fallocate fs/open.c:352 [inline]
- __x64_sys_fallocate+0xd3/0x140 fs/open.c:352
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fd13de8c0d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fd13eafe168 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
-RAX: ffffffffffffffda RBX: 00007fd13dfabf80 RCX: 00007fd13de8c0d9
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000005
-RBP: 00007fd13eafe1d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000280404 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007fff8d69463f R14: 00007fd13eafe300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:set_state_bits.isra.0+0x17b/0x1c0 fs/btrfs/extent-io-tree.c:381
-Code: 38 d0 7c 04 84 d2 75 31 44 8b 73 7c e8 fe df fb fd 44 89 e0 44 09 f0 89 43 7c 5b 5d 41 5c 41 5d 41 5e 41 5f c3 e8 e5 df fb fd <0f> 0b 4c 89 ef e8 7b b2 48 fe e9 e6 fe ff ff 4c 89 ef e8 6e b2 48
-RSP: 0018:ffffc9000bb77a90 EFLAGS: 00010246
-RAX: 0000000000040000 RBX: ffff88801917c240 RCX: ffffc900043b3000
-RDX: 0000000000040000 RSI: ffffffff8384393b RDI: 0000000000000005
-RBP: 00000000fffffff4 R08: 0000000000000005 R09: 0000000000000000
-R10: 00000000fffffff4 R11: 0000000000000000 R12: 0000000000001000
-R13: ffff88801917c2bc R14: 0000000000280fff R15: 0000000000000000
-FS:  00007fd13eafe700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b30a31000 CR3: 000000007c091000 CR4: 0000000000350ef0
-----------------
-Code disassembly (best guess):
-   0:	28 00                	sub    %al,(%rax)
-   2:	00 00                	add    %al,(%rax)
-   4:	75 05                	jne    0xb
-   6:	48 83 c4 28          	add    $0x28,%rsp
-   a:	c3                   	retq
-   b:	e8 f1 19 00 00       	callq  0x1a01
-  10:	90                   	nop
-  11:	48 89 f8             	mov    %rdi,%rax
-  14:	48 89 f7             	mov    %rsi,%rdi
-  17:	48 89 d6             	mov    %rdx,%rsi
-  1a:	48 89 ca             	mov    %rcx,%rdx
-  1d:	4d 89 c2             	mov    %r8,%r10
-  20:	4d 89 c8             	mov    %r9,%r8
-  23:	4c 8b 4c 24 08       	mov    0x8(%rsp),%r9
-  28:	0f 05                	syscall
-* 2a:	48 3d 01 f0 ff ff    	cmp    $0xfffffffffffff001,%rax <-- trapping instruction
-  30:	73 01                	jae    0x33
-  32:	c3                   	retq
-  33:	48 c7 c1 b8 ff ff ff 	mov    $0xffffffffffffffb8,%rcx
-  3a:	f7 d8                	neg    %eax
-  3c:	64 89 01             	mov    %eax,%fs:(%rcx)
-  3f:	48                   	rex.W
-
-
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/remoteproc/remoteproc_elf_loader.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
+index 5a412d7..0feb120 100644
+--- a/drivers/remoteproc/remoteproc_elf_loader.c
++++ b/drivers/remoteproc/remoteproc_elf_loader.c
+@@ -272,7 +272,7 @@ find_table(struct device *dev, const struct firmware *fw)
+ 		u64 offset = elf_shdr_get_sh_offset(class, shdr);
+ 		u32 name = elf_shdr_get_sh_name(class, shdr);
+ 
+-		if (strcmp(name_table + name, ".resource_table"))
++		if (!strstr(name_table + name, ".resource_table"))
+ 			continue;
+ 
+ 		table = (struct resource_table *)(elf_data + offset);
+-- 
+2.7.4
+
