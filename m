@@ -2,237 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D0A63F1EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A151C63F1EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:44:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbiLANoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:44:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
+        id S231596AbiLANoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:44:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231598AbiLANn7 (ORCPT
+        with ESMTP id S231261AbiLANoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:43:59 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39AC8BF92A;
-        Thu,  1 Dec 2022 05:43:56 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2B1DhmvJ044178;
-        Thu, 1 Dec 2022 07:43:48 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1669902228;
-        bh=wQU2wCefajvXNpsJPjUOfFnnZIcYY26KeStzZSXqUaA=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=qOCp3MObKXkhUKo2H1FWzFrrHvYomuqF08gMRJXMWYNGc3JlvwZuQySKMgzJJ75Qp
-         QP23jfTtTE/cPRc66XnZgtcEVVrPHqyz6FY+D+BnBwcn0quNvGscoJwDr6prhvnPmU
-         nQEfyx2cactpAumrMAg8jjF82O0FcsxV9pARanyA=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2B1Dhm9D049402
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 1 Dec 2022 07:43:48 -0600
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 1
- Dec 2022 07:43:48 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 1 Dec 2022 07:43:47 -0600
-Received: from [10.250.235.35] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2B1DhgE9092395;
-        Thu, 1 Dec 2022 07:43:43 -0600
-Message-ID: <15846a05-acb7-126e-eb4f-4057c77ce696@ti.com>
-Date:   Thu, 1 Dec 2022 19:13:42 +0530
+        Thu, 1 Dec 2022 08:44:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6991D1021;
+        Thu,  1 Dec 2022 05:44:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07F5962010;
+        Thu,  1 Dec 2022 13:44:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B47B5C433D7;
+        Thu,  1 Dec 2022 13:44:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669902292;
+        bh=5sRFITPs44j4r5KcAiIfITkBuIoIWOP6e18wJXIjo7A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=owJLq6bFIEy6vvDGINrSVr4BkcjrKupAsXEu+OWJWk1BBf1NIvmKqC877C+C9KSMZ
+         BnuTVrkkiS7VROWbnvi49Eoucv6qk7Nr7JPi9HCLBbL8YENNfCQ/qSjcXLZI9q4S1Z
+         GabyMTN5qpO4y90HaWX3zFM1Fzau0WVUMJh72ey6z7WV99cnnxfBK/bVqa1/xpHY9l
+         bkPrCwWfKtjtgsQw7W07iaxZg+u9C+0xJjg/DuY4VERPPPUXO2UqnRbS+qWOjNAnua
+         daPVmPW9TzkmyN+hbx2czrcT7VoH/m7iRGqZy7Qp+m8fG4ZXlp8Oh6gec30bjCY07E
+         vb6H4oPjbVn5Q==
+Date:   Thu, 1 Dec 2022 13:44:46 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Wenjie Li <wenjieli@qti.qualcomm.com>,
+        David Wang =?utf-8?B?546L5qCH?= <wangbiao3@xiaomi.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH-tip] sched: Fix use-after-free bug in dup_user_cpus_ptr()
+Message-ID: <20221201134445.GC28489@willie-the-truck>
+References: <20221128014441.1264867-1-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [EXTERNAL] Re: [PATCH v10 3/6] remoteproc: pru: Add enum for PRU
- Core Indentifiers.
-Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>,
-        MD Danish Anwar <danishanwar@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Suman Anna <s-anna@ti.com>, "Andrew F . Davis" <afd@ti.com>,
-        <nm@ti.com>, <vigneshr@ti.com>, <srk@ti.com>,
-        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20221201110500.4017889-1-danishanwar@ti.com>
- <20221201110500.4017889-4-danishanwar@ti.com>
- <a32f817e-6b61-7666-94f9-cf11f1f2e0a8@kernel.org>
-From:   Md Danish Anwar <a0501179@ti.com>
-In-Reply-To: <a32f817e-6b61-7666-94f9-cf11f1f2e0a8@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221128014441.1264867-1-longman@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger,
-
-On 01/12/22 5:28 pm, Roger Quadros wrote:
-> Danish,
+On Sun, Nov 27, 2022 at 08:44:41PM -0500, Waiman Long wrote:
+> Since commit 07ec77a1d4e8 ("sched: Allow task CPU affinity to be
+> restricted on asymmetric systems"), the setting and clearing of
+> user_cpus_ptr are done under pi_lock for arm64 architecture. However,
+> dup_user_cpus_ptr() accesses user_cpus_ptr without any lock
+> protection. When racing with the clearing of user_cpus_ptr in
+> __set_cpus_allowed_ptr_locked(), it can lead to user-after-free and
+> double-free in arm64 kernel.
 > 
-> On 01/12/2022 13:04, MD Danish Anwar wrote:
->> Introducing enum pruss_pru_id for PRU Core Identifiers.
->> PRUSS_PRU0 indicates PRU Core 0.
->> PRUSS_PRU1 indicates PRU Core 1.
->> PRUSS_NUM_PRUS indicates the total number of PRU Cores.
->>
->> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
->> ---
->>   drivers/remoteproc/pru_rproc.c | 16 ++++++++++++----
->>   include/linux/pruss.h          | 19 +++++++++++++++++--
->>   2 files changed, 29 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
->> index b4498a505108..7d4ed39b3772 100644
->> --- a/drivers/remoteproc/pru_rproc.c
->> +++ b/drivers/remoteproc/pru_rproc.c
->> @@ -186,6 +186,7 @@ static struct rproc *__pru_rproc_get(struct device_node *np, int index)
->>    * pru_rproc_get() - get the PRU rproc instance from a device node
->>    * @np: the user/client device node
->>    * @index: index to use for the ti,prus property
->> + * @pru_id: optional pointer to return the PRU remoteproc processor id
->>    *
->>    * This function looks through a client device node's "ti,prus" property at
->>    * index @index and returns the rproc handle for a valid PRU remote processor if
->> @@ -193,13 +194,17 @@ static struct rproc *__pru_rproc_get(struct device_node *np, int index)
->>    * time. Caller must call pru_rproc_put() when done with using the rproc, not
->>    * required if the function returns a failure.
->>    *
->> + * When optional @pru_id pointer is passed the PRU remoteproc processor id is
->> + * returned.
->> + *
->>    * Return: rproc handle on success, and an ERR_PTR on failure using one
->>    * of the following error values
->>    *    -ENODEV if device is not found
->>    *    -EBUSY if PRU is already acquired by anyone
->>    *    -EPROBE_DEFER is PRU device is not probed yet
->>    */
->> -struct rproc *pru_rproc_get(struct device_node *np, int index)
->> +struct rproc *pru_rproc_get(struct device_node *np, int index,
->> +			    enum pruss_pru_id *pru_id)
+> Commit 8f9ea86fdf99 ("sched: Always preserve the user requested
+> cpumask") fixes this problem as user_cpus_ptr, once set, will never
+> be cleared in a task's lifetime. However, this bug was re-introduced
+> in commit 851a723e45d1 ("sched: Always clear user_cpus_ptr in
+> do_set_cpus_allowed()") which allows the clearing of user_cpus_ptr in
+> do_set_cpus_allowed(). This time, it will affect all arches.
 > 
-> You just introduced pru_rproc_get() in the previous patch and are
-> now updating it here.
+> Fix this bug by always clearing the user_cpus_ptr of the newly
+> cloned/forked task before the copying process starts and check the
+> user_cpus_ptr state of the source task under pi_lock.
 > 
-
-That's because there is dependency between these two patches. The enum 
-pruss_pru_id is declared inside linux/pruss.h file which is introduced 
-in pru_rproc_get() patch. But pru_rproc_get() and pru_rproc_put() APIs 
-use the enum as function argument. So I decided to keep pru_rproc_get() 
-patch as second patch of this series(as it introduces <linux/pruss.h> 
-where eventually the enum will be introduced).
-
-Then I kept the enum introduction patch as third patch of the series and 
-with this patch I modified pru_rproc_get() API by adding pru_id field in 
-the function argument.
-
-> Instead, what you need to do is, first introduce enum pruss_pru_id
-> and make any changes to code using hardcoded values for PRU ID.
-> This patch will have to introduce <linux/pruss.h> as it doesn't exist yet.
-
-This also came to my mind. But I thought introduction of enum 
-pruss_pru_id patch should just introduce the enum and modify APIs which 
-uses the enum accordingly. I wanted to keep the introduction of 
-<linux/pruss.h> file with the pru_rproc_get() patch as it was. That's 
-why I kept pru_rproc_get() patch ahead of enum patch.
-
-> Hopefully this clears the chicken/egg situation.
+> Note to stable, this patch won't be applicable to stable releases.
+> Just copy the new dup_user_cpus_ptr() function over.
 > 
-> Then introduce pru_rproc_get() patch with the final desired arguments.
-> 
->>   {
->>   	struct rproc *rproc;
->>   	struct pru_rproc *pru;
->> @@ -226,6 +231,9 @@ struct rproc *pru_rproc_get(struct device_node *np, int index)
->>   
->>   	mutex_unlock(&pru->lock);
->>   
->> +	if (pru_id)
->> +		*pru_id = pru->id;
->> +
->>   	return rproc;
->>   
->>   err_no_rproc_handle:
->> @@ -556,7 +564,7 @@ static void *pru_d_da_to_va(struct pru_rproc *pru, u32 da, size_t len)
->>   	dram0 = pruss->mem_regions[PRUSS_MEM_DRAM0];
->>   	dram1 = pruss->mem_regions[PRUSS_MEM_DRAM1];
->>   	/* PRU1 has its local RAM addresses reversed */
->> -	if (pru->id == 1)
->> +	if (pru->id == PRUSS_PRU1)
->>   		swap(dram0, dram1);
->>   	shrd_ram = pruss->mem_regions[PRUSS_MEM_SHRD_RAM2];
->>   
->> @@ -865,14 +873,14 @@ static int pru_rproc_set_id(struct pru_rproc *pru)
->>   	case RTU0_IRAM_ADDR_MASK:
->>   		fallthrough;
->>   	case PRU0_IRAM_ADDR_MASK:
->> -		pru->id = 0;
->> +		pru->id = PRUSS_PRU0;
->>   		break;
->>   	case TX_PRU1_IRAM_ADDR_MASK:
->>   		fallthrough;
->>   	case RTU1_IRAM_ADDR_MASK:
->>   		fallthrough;
->>   	case PRU1_IRAM_ADDR_MASK:
->> -		pru->id = 1;
->> +		pru->id = PRUSS_PRU1;
->>   		break;
->>   	default:
->>   		ret = -EINVAL;
->> diff --git a/include/linux/pruss.h b/include/linux/pruss.h
->> index 5c5d14b1249d..efe89c586b4b 100644
->> --- a/include/linux/pruss.h
->> +++ b/include/linux/pruss.h
->> @@ -14,17 +14,32 @@
->>   
->>   #define PRU_RPROC_DRVNAME "pru-rproc"
->>   
->> +/**
->> + * enum pruss_pru_id - PRU core identifiers
->> + * @PRUSS_PRU0: PRU Core 0.
->> + * @PRUSS_PRU1: PRU Core 1.
->> + * @PRUSS_NUM_PRUS: Total number of PRU Cores available.
->> + *
->> + */
->> +
->> +enum pruss_pru_id {
->> +	PRUSS_PRU0 = 0,
->> +	PRUSS_PRU1,
->> +	PRUSS_NUM_PRUS,
->> +};
->> +
->>   struct device_node;
->>   
->>   #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
->>   
->> -struct rproc *pru_rproc_get(struct device_node *np, int index);
->> +struct rproc *pru_rproc_get(struct device_node *np, int index,
->> +			    enum pruss_pru_id *pru_id);
->>   void pru_rproc_put(struct rproc *rproc);
->>   
->>   #else
->>   
->>   static inline struct rproc *
->> -pru_rproc_get(struct device_node *np, int index)
->> +pru_rproc_get(struct device_node *np, int index, enum pruss_pru_id *pru_id)
->>   {
->>   	return ERR_PTR(-EOPNOTSUPP);
->>   }
-> 
-> --
-> cheers,
-> -roger
+> Fixes: 07ec77a1d4e8 ("sched: Allow task CPU affinity to be restricted on asymmetric systems")
+> Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
+> CC: stable@vger.kernel.org
+> Reported-by: David Wang 王标 <wangbiao3@xiaomi.com>
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/sched/core.c | 32 ++++++++++++++++++++++++++++----
+>  1 file changed, 28 insertions(+), 4 deletions(-)
 
-Thanks,
-Danish.
+As per my comments on the previous version of this patch:
+
+https://lore.kernel.org/lkml/20221201133602.GB28489@willie-the-truck/T/#t
+
+I think there are other issues to fix when racing affinity changes with
+fork() too.
+
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 8df51b08bb38..f2b75faaf71a 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -2624,19 +2624,43 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
+>  int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
+>  		      int node)
+>  {
+> +	cpumask_t *user_mask;
+>  	unsigned long flags;
+>  
+> +	/*
+> +	 * Always clear dst->user_cpus_ptr first as their user_cpus_ptr's
+> +	 * may differ by now due to racing.
+> +	 */
+> +	dst->user_cpus_ptr = NULL;
+> +
+> +	/*
+> +	 * This check is racy and losing the race is a valid situation.
+> +	 * It is not worth the extra overhead of taking the pi_lock on
+> +	 * every fork/clone.
+> +	 */
+>  	if (!src->user_cpus_ptr)
+>  		return 0;
+
+data_race() ?
+
+>  
+> -	dst->user_cpus_ptr = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
+> -	if (!dst->user_cpus_ptr)
+> +	user_mask = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
+> +	if (!user_mask)
+>  		return -ENOMEM;
+>  
+> -	/* Use pi_lock to protect content of user_cpus_ptr */
+> +	/*
+> +	 * Use pi_lock to protect content of user_cpus_ptr
+> +	 *
+> +	 * Though unlikely, user_cpus_ptr can be reset to NULL by a concurrent
+> +	 * do_set_cpus_allowed().
+> +	 */
+>  	raw_spin_lock_irqsave(&src->pi_lock, flags);
+> -	cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
+> +	if (src->user_cpus_ptr) {
+> +		swap(dst->user_cpus_ptr, user_mask);
+
+Isn't 'dst->user_cpus_ptr' always NULL here? Why do we need the swap()
+instead of just assigning the thing directly?
+
+Will
