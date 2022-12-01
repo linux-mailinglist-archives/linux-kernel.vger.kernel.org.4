@@ -2,44 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5329263F349
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:02:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3DD63F34C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:03:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbiLAPCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 10:02:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
+        id S231258AbiLAPDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 10:03:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbiLAPCI (ORCPT
+        with ESMTP id S231573AbiLAPDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 10:02:08 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E42513F5A;
-        Thu,  1 Dec 2022 07:02:07 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p0l4d-0006Mh-Ox; Thu, 01 Dec 2022 16:02:03 +0100
-Message-ID: <ac2e553f-fa8b-8b08-aba9-e04529adad34@leemhuis.info>
-Date:   Thu, 1 Dec 2022 16:02:03 +0100
+        Thu, 1 Dec 2022 10:03:07 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FC22338A;
+        Thu,  1 Dec 2022 07:03:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1669906984; bh=d6cWltTKPKKcoYFeo2jR5Iogto95UiAMwN3hCqMCW5U=;
+        h=X-UI-Sender-Class:Date:From:Subject:To:Cc;
+        b=PZRhTnJs1qJhr7+es3FpknuPXhTYudGYKiIgHTcqsMkpOPMMfqwtwpgP5w4gDfxjg
+         hwEkZuUPLhq/YItUZmRFPKDtb4sFU4mDV+l9Dj6jbq4KwuEuIiBI292WPfLCdK7nKD
+         uNcZBcRKrEtv4UMjOlBeV1E8UvRbXY+Krmuv07ikRxiCuj0dWtI+5XM4xRm5FEcSIK
+         HADTya31CSk7dr1lXANOz9I5tSSFAhadoN7IiXlPT4jb7plkXsS6o+P6lRLGfUDYqV
+         cXFaRgoLH6v1OFqdF4Ylup09XcdQ5/T5MSTUCvgRmxHpNo8S9G5N0xmi9b9VDHB2q3
+         wzeb5B/CAb7Gw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.100.20] ([46.142.33.165]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MoO6C-1ocU1A0AEi-00omjE; Thu, 01
+ Dec 2022 16:03:04 +0100
+Message-ID: <8468add6-b48c-983f-a4e8-2ae7cee70e91@gmx.de>
+Date:   Thu, 1 Dec 2022 16:03:03 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] hwmon/coretemp: Simplify platform device antics
-Content-Language: en-US, de-DE
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     fenghua.yu@intel.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, janusz.krzysztofik@linux.intel.com,
-        lucas.demarchi@intel.com, Guenter Roeck <linux@roeck-us.net>
-References: <898dbb76a54aae6ca58ceefcab9ab18beeee2fff.1668096928.git.robin.murphy@arm.com>
- <20221111213753.GA1059841@roeck-us.net>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <20221111213753.GA1059841@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.5.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+Subject: Re: [PATCH 6.0 000/280] 6.0.11-rc2 review
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE, en-GB
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669906927;4713558b;
-X-HE-SMSGID: 1p0l4d-0006Mh-Ox
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Provags-ID: V03:K1:R7Ip48eIWl2md0vfPIe0qQSzprtqz3pqbd4KKISzjKWvmvs2aeC
+ nnMDSGrYSTMNBAQ1AhRG8HlFisXUzkTQz37fmdRsBwsUrYLLRelZ+DvNQaSn8La6dNTA93r
+ 1rSlPBF0xqjWRo4x2vm1Ar0SS16kNTeIYj7gSKXLpfuvrLObRg4zUuy0r+e5CAyia8WcwU3
+ pvVVMe+e6bIsW3hTsyC3w==
+UI-OutboundReport: notjunk:1;M01:P0:Q6EapbfGjb4=;k58pp8fdnEzJVVC8RmVZ48v2ViW
+ cgysPibnHZR5otqFmWqrpDU5VKzYYOkNQhjtWMo2OdV5C6zgdT3ZqYdZthUBplpYc10eWadt8
+ cykyBrwMycXv9LERqEkqP8N+2ugUbbgWcum3OzqCpY1JZgeXbuLt8ewQd2jUmegi6SYHV+7uj
+ m6fq21juC6SIrMdFWPXisLP2qFXHXGwIW1ak730Lf8JDuhIGR65evd8D+aPxP8s+IWiJ1FMPN
+ PfwVz9DEcps7CNVSdJSwrjCimvqKSzjYxpZJEpuVWD7GvvnztIeo1QEr+Ul4OyLfXN8i7oP5X
+ fgcR8cpEtDEa8hezS300Hr6Fr1nu8YYAEaKx0xibPqH/NewJq0VI0dwcOCHY1/1otjIFYCpfn
+ ulzX2I9M++Ktl3GaAv0zAaopOgxr8L1h0ciJB6+eyxx9Ia/kju2NJhJ+g9lcG4jHEmxGzIgXN
+ urWTBk+tZ/oa+hVAAJzBDfrn7+Mh1hJxrLeldfbyP04kibezGFafDDeo3g6YLtgAqfhvim8QX
+ oB2MWzbKiUNqj4Li9FmkH3tNEV2ldnLwEDRljtqHGsOlrmFaDXFypMy6QejOJM7k2vdiy2Fy7
+ 6bJYbM9Kp4kWOvlf1r6chpjOR8Nq7/Fw4m85kICB3RcuTO68u7wOTuYnpF31TGa5AA5TAdCwI
+ X2Hsh6EyiK3YBk/mWfNVg1dCl8xQmbVlX7WMWufoLLQOabhytOGJaO3hyYr1dUXSfgdUxoDPO
+ l7oCN1GJ0Nu9RJuNC1nFeXvHkuhLdZzY5WTWlW6Sbc3CMuZFQeSJej3hYqmaHHtmRgLVWSkOd
+ H2/vI4WO4ln6E14C7t47zT8/UDyPlncBirghja6PqvTB1RGB1M5ImPQAYYqtg54yi3vZUIyC/
+ Z7fQ1tQY/RGj5tUjuqDQqFoS8asyYgYcKHWyQIo6z7VXmeK2txr1ccwFAB35n4m0NGZ44uVao
+ jFaHiYcNM32f9voOktR1NIenx88=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,36 +69,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker. I wondered what
-happened to this regression fix, as things looks stalled from here --
-but maybe I'm missing something.
+Hi Greg
 
-On 11.11.22 22:37, Guenter Roeck wrote:
-> On Thu, Nov 10, 2022 at 04:20:25PM +0000, Robin Murphy wrote:
->> Coretemp's vestigial platform driver is odd. All the real work is done
->> globally by the initcall and CPU hotplug notifiers, while the "driver"
->> effectively just wraps an allocation and the registration of the hwmon
->> interface in a long-winded round-trip through the driver core. The whole
->> logic of dynamically creating and destroying platform devices to bring
->> the interfaces up and down is fatally flawed right away, since it
->> notifier from a platform bus notifier.
-> [...]
->> I haven't been able to fully test hotplug since I only have a
->> single-socket Intel system to hand.
-> Someone with access to hardware will have to validate this.
+6.0.11-rc2
 
-That afaics has happened.
+compiles, boots and runs here on x86_64
+(Intel i5-11400, Fedora 37)
 
-> For both subject and description, please avoid terms like "antics",
-> "odd", or "questionable". Please describe the problem in neutral terms.
+Thanks
 
-Robin, did you take care of that?
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
-
-#regzbot ignore-activity
