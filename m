@@ -2,101 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4618263F9BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:22:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE05C63F9C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:25:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbiLAVWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 16:22:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
+        id S230086AbiLAVZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 16:25:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiLAVWm (ORCPT
+        with ESMTP id S229571AbiLAVZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 16:22:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414552316F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:22:40 -0800 (PST)
+        Thu, 1 Dec 2022 16:25:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BDFC1BF6
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:25:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C09FB62129
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 21:22:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B9BAC433D6;
-        Thu,  1 Dec 2022 21:22:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1669929759;
-        bh=GIsKWp+Z1ekqEUas+5otTGGZ0St38k31vgjqrcnxpmE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ezNAOPx5mJeTaeYSxoCj90/+zMNm6SMoJqzDe1achx9NeQ5aiExRrBPoGbifDVlkO
-         pQADvDcok3kxJbGNmwPaggm1laXkxugF8AaKOyZpf1E6q/Ti7UvtcO91u82++JyrtI
-         A++mK2NytQbcbxl8sYa0kzZc58Fl3r2xKlSKPtXA=
-Date:   Thu, 1 Dec 2022 13:22:37 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Rik van Riel <riel@surriel.com>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Yang Shi <shy828301@gmail.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        kernel test robot <yujie.liu@intel.com>, lkp@lists.01.org,
-        lkp@intel.com, Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        feng.tang@intel.com, zhengjun.xing@linux.intel.com,
-        fengwei.yin@intel.com, Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [mm] f35b5d7d67: will-it-scale.per_process_ops -95.5%
- regression
-Message-Id: <20221201132237.c55c4bd07ba44463b146882e@linux-foundation.org>
-In-Reply-To: <07adee081a70c2b4b44d9bf93a0ad3142e091086.camel@surriel.com>
-References: <202210181535.7144dd15-yujie.liu@intel.com>
-        <87edv4r2ip.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <Y1DNQaoPWxE+rGce@dev-arch.thelio-3990X>
-        <871qr3nkw2.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <366045a27a96e01d0526d63fd78d4f3c5d1f530b.camel@surriel.com>
-        <Y1GCYXGtEVZbcv/5@dev-arch.thelio-3990X>
-        <Y4RX+JZLddDHrLuQ@dev-arch.thelio-3990X>
-        <e919e5a3-1118-043e-8bbd-5ee35f2ab411@leemhuis.info>
-        <07adee081a70c2b4b44d9bf93a0ad3142e091086.camel@surriel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21CF96212D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 21:25:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7401C433D6;
+        Thu,  1 Dec 2022 21:25:27 +0000 (UTC)
+Date:   Thu, 1 Dec 2022 16:25:26 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Chris Mason <clm@meta.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [RFC PATCH] panic: Add new taint flag for fault injection
+Message-ID: <20221201162526.2fdfd65d@gandalf.local.home>
+In-Reply-To: <78b7a67f-8c5b-6b2e-7fb5-01c47d75c104@meta.com>
+References: <20221201234121.8925fdf83115747ac4ac116a@kernel.org>
+        <166991263326.311919.16890937584677289681.stgit@devnote3>
+        <202212010838.B0B109DA@keescook>
+        <20221201114848.13a87aca@gandalf.local.home>
+        <202212010852.6D4B542@keescook>
+        <20221201141426.08411b29@gandalf.local.home>
+        <78b7a67f-8c5b-6b2e-7fb5-01c47d75c104@meta.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 01 Dec 2022 15:29:41 -0500 Rik van Riel <riel@surriel.com> wrote:
+On Thu, 1 Dec 2022 16:00:03 -0500
+Chris Mason <clm@meta.com> wrote:
 
-> On Thu, 2022-12-01 at 19:33 +0100, Thorsten Leemhuis wrote:
-> > Hi, this is your Linux kernel regression tracker.
+> On 12/1/22 2:14 PM, Steven Rostedt wrote:
+> > On Thu, 1 Dec 2022 08:53:02 -0800
+> > Kees Cook <keescook@chromium.org> wrote:
+> >   
+> >>> Have you not been reading this thread?    
+> >>
+> >> I skimmed it -- trying to catch up from turkey week. If this was already
+> >> covered, then please ignore me. It just wasn't obvious from the commit
+> >> log why it was included.  
 > > 
-> > On 28.11.22 07:40, Nathan Chancellor wrote:
-> > > Hi Rik,
+> > That's a better request :-)
 > > 
-> > I wonder what we should do about below performance regression. Is
-> > reverting the culprit now and reapplying it later together with a fix
-> > a
-> > viable option? Or was anything done/is anybody doing something
-> > already
-> > to address the problem and I just missed it?
+> > That is, please add why this is needed for BPF (and also include a Link:
+> > tag to this thread).  
 > 
-> The changeset in question speeds up kernel compiles with
-> GCC, as well as the runtime speed of other programs, due
-> to being able to use THPs more. However, it slows down kernel
-> compiles with clang, due to ... something clang does.
+> Sorry, I'm completely failing to parse.  Is this directed at Kees or
+> Benjamin?  I'm also not sure what the this is in "why this is needed for
+> BPF"?
 > 
-> I have not figured out what that something is yet.
-> 
-> I don't know if I have the wrong version of clang here,
-> but I have not seen any smoking gun at all when tracing
-> clang system calls. I see predominantly small mmap and
-> unmap calls, and nothing that even triggers 2MB alignment.
 
-2.8% speedup for gcc is nice.  Massive slowdown in the malloc banchmark
-and in LLVM/clang is very bad - we don't know what other userspace will
-be so affected.
+It was directed towards Kees. I don't even know who "Benjamin" is. I don't
+see a "Benjamin" in the Cc list.
 
-So I think we revert until this is fully understood.
+And "this" is for:
 
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -2137,6 +2137,8 @@ int perf_event_attach_bpf_prog(struct perf_event *event,
+ 		goto unlock;
+ 
+ 	/* set the new array to event->tp_event and set event->prog */
++	if (prog->kprobe_override)
++		add_taint(TAINT_FAULT_INJECTED, LOCKDEP_NOW_UNRELIABLE);
+ 	event->prog = prog;
+ 	event->bpf_cookie = bpf_cookie;
+ 	rcu_assign_pointer(event->tp_event->prog_array, new_array);
 
+-- Steve
