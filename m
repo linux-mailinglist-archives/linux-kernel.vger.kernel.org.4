@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2618B63EEDC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A65463EEE0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbiLALGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:06:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
+        id S231258AbiLALGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:06:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbiLALFB (ORCPT
+        with ESMTP id S230508AbiLALFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:05:01 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE72A9CF1
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:04:48 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id ml11so3311017ejb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:04:48 -0800 (PST)
+        Thu, 1 Dec 2022 06:05:16 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77874AB034
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:04:51 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id fy37so3271482ejc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:04:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linbit-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Bmn8SwUWjK/nwkWTJ4vDBmaAziTFxNsLJCIgj2fSc8E=;
-        b=Gf0HHtQJ2drnv8Kn2EzmbSBl4ExUFt6SPp6QGrTYzIC0ZBhP5a6EWuWNmKENJJDtfe
-         YXmdznPgomOhN7CDe8CABrymHDwdsl8/bb/GoKCgQRWcXt//DmUv2Dhwuk5LYFqN/EEW
-         vcWWnxOWSiP4Wk9Pi9rcfqFjsmEjnvG+U4w9vYDXhiVuMUhDm4aOkKZDIXKPQheeU+Hp
-         j/TcfypiwWsSYzAMSe+PalW1PNhQ4SnYIDyeTw5QZmUDvBHF9wE5LpImgUmTvxIu2wrQ
-         hrW2XcqWJigEI0/dQYB7ku0xjWNEeORxMI4LHxJfxQNyGpbYj7eNAm2rNVzIl1jivRKI
-         7RZQ==
+        bh=/EOxMb4n3Nlc6JLzIY5AGW7V4duQBm1d7NMmCc8Ck6Q=;
+        b=MHMm5sy+h50MFhCatkC/kV8M2e9GBLmPDXSH68rgSAQMfBYnHIXpLgIcCisqpjaW+1
+         1ndMj77GHmEkGhCmCvzyjJP83uIu4tn0aPzmrYExtQc3E9zJK4NRgJTiPFMm3Xw0hR8i
+         odJr+bm4Wu5iId/S9+ctbOnVU2pQ+lxQEKw1fn1XASUfj7Gw9DJW5Ph2veIRiuLiH6Zx
+         nnp82C8skX2XK4ktA8lWJA9niJiFfgm735B9RTuhQd0BBoffMtJDgdKBZFH3ThbVWOR7
+         UkNv6oI9DaGmckzSMQ8pp1gSymS1WfxymJvo7PiED6vbXvDqrK8KiGHBkb5Du82xz6ds
+         Gppg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Bmn8SwUWjK/nwkWTJ4vDBmaAziTFxNsLJCIgj2fSc8E=;
-        b=A7BjtOamKO9fCC8HfLGLgnNmVacffYSQkIDrwU93Q+QfUwTk8CE41hHBapU0dIHlAf
-         CGgN4sgDgTDJX52la/ssy5nQ6vWF7D4FuKP0iP18J+UExryqAIfOF7hchd+bp91KK5qX
-         WUD6bPDSbZMFk0k6Na8JUF9qOkro6WmB2Ekhk4tee6CyO7uJKZL0hIBh7okH0LooheSn
-         wCPW6v9TSsZGv5yw102jckBusLq/LwVoDuuQDvpiwciT5R1WlGymM7keah4hTpMRo/es
-         KCR/JYZGT6GFih1rH3R8lh9FpP124SKvSD7j5wk+pPqeXaWChMNK3czqRkGmGpJsLTT5
-         2whA==
-X-Gm-Message-State: ANoB5pkd+coTrhBv0tH40ozsT3vG5kVeetV4to5XbQFIg5yAVUfDsgxi
-        xC7IwwXTfFdZfXG9S1tYAuX8NQ==
-X-Google-Smtp-Source: AA0mqf6AlAariJ15ySSeIh1H1T+YEu/OdiVoYr/hy+NM72prqCa4Q7ixiHhOc6uyS7ph8uI++7y6nA==
-X-Received: by 2002:a17:906:e0d2:b0:7ad:b45c:dbe1 with SMTP id gl18-20020a170906e0d200b007adb45cdbe1mr56404780ejb.726.1669892687188;
-        Thu, 01 Dec 2022 03:04:47 -0800 (PST)
+        bh=/EOxMb4n3Nlc6JLzIY5AGW7V4duQBm1d7NMmCc8Ck6Q=;
+        b=zNIlvPg1YlWkCYagVKnkbuW54Za6oi8e7RW4cf9E4e+P+ZzN1sBb0WiSF0+GaG6veW
+         dn2TQWLKgVchrVlyGUODAqnBWgvt/2HP75Clzg6Gg/9lkxQTadTyva0iDGrZ7l4FT2xY
+         ubuXbHNBfXSHhKXABgJZRwJDxkf2fusXguDibb2j1G8L7Q5LxVbbuD0dyJxLpmom9I5x
+         0pqMDmWLxxHKfAg5lDtmfrevn5dmcDphtNhMQ5Zf3OawIffmCMKxsz0P2rdpNAL1Aaoe
+         6ZaXnWhaxCrQomW8fPu5V/jvrJu/K+QsFqTKs1/feLHNPZmLlvVX9aiPqEfMqeIPGYYb
+         HZWA==
+X-Gm-Message-State: ANoB5plh7YST28Mly9A4qJSoDcd9tP82wxly6jaxiHzi0Iv++H1emAeJ
+        vQomCEDx4G3c2x97uv9FutIOV0+UbIc+YA==
+X-Google-Smtp-Source: AA0mqf677w+mpEmA29mz/vtbB1zpY4D0M29lW0jCdFFcxzJPskOMC9Cw+qJHY+rlo2l4d5ArZ2XAgw==
+X-Received: by 2002:a17:907:8b13:b0:781:541:6599 with SMTP id sz19-20020a1709078b1300b0078105416599mr43234197ejc.45.1669892690004;
+        Thu, 01 Dec 2022 03:04:50 -0800 (PST)
 Received: from localhost.localdomain (h082218028181.host.wavenet.at. [82.218.28.181])
-        by smtp.gmail.com with ESMTPSA id f26-20020a056402161a00b00463a83ce063sm1576424edv.96.2022.12.01.03.04.46
+        by smtp.gmail.com with ESMTPSA id f26-20020a056402161a00b00463a83ce063sm1576424edv.96.2022.12.01.03.04.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 03:04:46 -0800 (PST)
+        Thu, 01 Dec 2022 03:04:49 -0800 (PST)
 From:   =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
         <christoph.boehmwalder@linbit.com>
 To:     Jens Axboe <axboe@kernel.dk>
@@ -59,9 +59,9 @@ Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
         linux-block@vger.kernel.org,
         =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
         <christoph.boehmwalder@linbit.com>
-Subject: [PATCH 4/5] drbd: introduce drbd_ratelimit()
-Date:   Thu,  1 Dec 2022 12:03:49 +0100
-Message-Id: <20221201110349.1282687-5-christoph.boehmwalder@linbit.com>
+Subject: [PATCH 5/5] drbd: add context parameter to expect() macro
+Date:   Thu,  1 Dec 2022 12:03:50 +0100
+Message-Id: <20221201110349.1282687-6-christoph.boehmwalder@linbit.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221201110349.1282687-1-christoph.boehmwalder@linbit.com>
 References: <20221201110349.1282687-1-christoph.boehmwalder@linbit.com>
@@ -77,229 +77,310 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use call site specific ratelimit instead of one single static global.
-Also ratelimit ASSERTION messages generated by expect().
-
-Originally-from: Lars Ellenberg <lars.ellenberg@linbit.com>
+Originally-from: Andreas Gruenbacher <agruen@linbit.com>
 Signed-off-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
 ---
- drivers/block/drbd/drbd_actlog.c           |  2 +-
- drivers/block/drbd/drbd_bitmap.c           |  6 +++---
- drivers/block/drbd/drbd_int.h              |  2 +-
- drivers/block/drbd/drbd_main.c             |  2 +-
- drivers/block/drbd/drbd_polymorph_printk.h | 10 +++++++++-
- drivers/block/drbd/drbd_receiver.c         |  4 ++--
- drivers/block/drbd/drbd_req.c              |  6 +++---
- drivers/block/drbd/drbd_worker.c           | 12 ++++++------
- 8 files changed, 26 insertions(+), 18 deletions(-)
+ drivers/block/drbd/drbd_actlog.c           |  4 +-
+ drivers/block/drbd/drbd_bitmap.c           | 54 +++++++++++-----------
+ drivers/block/drbd/drbd_main.c             |  8 ++--
+ drivers/block/drbd/drbd_nl.c               |  2 +-
+ drivers/block/drbd/drbd_polymorph_printk.h |  4 +-
+ drivers/block/drbd/drbd_receiver.c         | 12 ++---
+ 6 files changed, 42 insertions(+), 42 deletions(-)
 
 diff --git a/drivers/block/drbd/drbd_actlog.c b/drivers/block/drbd/drbd_actlog.c
-index 5db147f3c02d..87d93012289f 100644
+index 87d93012289f..429255876800 100644
 --- a/drivers/block/drbd/drbd_actlog.c
 +++ b/drivers/block/drbd/drbd_actlog.c
-@@ -1143,7 +1143,7 @@ void drbd_rs_complete_io(struct drbd_device *device, sector_t sector)
- 	bm_ext = e ? lc_entry(e, struct bm_extent, lce) : NULL;
- 	if (!bm_ext) {
- 		spin_unlock_irqrestore(&device->al_lock, flags);
--		if (__ratelimit(&drbd_ratelimit_state))
-+		if (drbd_ratelimit())
- 			drbd_err(device, "drbd_rs_complete_io() called, but extent not found\n");
- 		return;
- 	}
+@@ -868,9 +868,9 @@ int __drbd_change_sync(struct drbd_device *device, sector_t sector, int size,
+ 	nr_sectors = get_capacity(device->vdisk);
+ 	esector = sector + (size >> 9) - 1;
+ 
+-	if (!expect(sector < nr_sectors))
++	if (!expect(device, sector < nr_sectors))
+ 		goto out;
+-	if (!expect(esector < nr_sectors))
++	if (!expect(device, esector < nr_sectors))
+ 		esector = nr_sectors - 1;
+ 
+ 	lbnr = BM_SECT_TO_BIT(nr_sectors-1);
 diff --git a/drivers/block/drbd/drbd_bitmap.c b/drivers/block/drbd/drbd_bitmap.c
-index b90a5c1003fc..8e6534a90e12 100644
+index 8e6534a90e12..289876ffbc31 100644
 --- a/drivers/block/drbd/drbd_bitmap.c
 +++ b/drivers/block/drbd/drbd_bitmap.c
-@@ -113,7 +113,7 @@ struct drbd_bitmap {
- static void __bm_print_lock_info(struct drbd_device *device, const char *func)
+@@ -448,7 +448,7 @@ int drbd_bm_init(struct drbd_device *device)
+ 
+ sector_t drbd_bm_capacity(struct drbd_device *device)
+ {
+-	if (!expect(device->bitmap))
++	if (!expect(device, device->bitmap))
+ 		return 0;
+ 	return device->bitmap->bm_dev_capacity;
+ }
+@@ -457,7 +457,7 @@ sector_t drbd_bm_capacity(struct drbd_device *device)
+  */
+ void drbd_bm_cleanup(struct drbd_device *device)
+ {
+-	if (!expect(device->bitmap))
++	if (!expect(device, device->bitmap))
+ 		return;
+ 	bm_free_pages(device->bitmap->bm_pages, device->bitmap->bm_number_of_pages);
+ 	bm_vk_free(device->bitmap->bm_pages);
+@@ -636,7 +636,7 @@ int drbd_bm_resize(struct drbd_device *device, sector_t capacity, int set_new_bi
+ 	int err = 0;
+ 	bool growing;
+ 
+-	if (!expect(b))
++	if (!expect(device, b))
+ 		return -ENOMEM;
+ 
+ 	drbd_bm_lock(device, "resize", BM_LOCKED_MASK);
+@@ -757,9 +757,9 @@ unsigned long _drbd_bm_total_weight(struct drbd_device *device)
+ 	unsigned long s;
+ 	unsigned long flags;
+ 
+-	if (!expect(b))
++	if (!expect(device, b))
+ 		return 0;
+-	if (!expect(b->bm_pages))
++	if (!expect(device, b->bm_pages))
+ 		return 0;
+ 
+ 	spin_lock_irqsave(&b->bm_lock, flags);
+@@ -783,9 +783,9 @@ unsigned long drbd_bm_total_weight(struct drbd_device *device)
+ size_t drbd_bm_words(struct drbd_device *device)
  {
  	struct drbd_bitmap *b = device->bitmap;
--	if (!__ratelimit(&drbd_ratelimit_state))
-+	if (!drbd_ratelimit())
+-	if (!expect(b))
++	if (!expect(device, b))
+ 		return 0;
+-	if (!expect(b->bm_pages))
++	if (!expect(device, b->bm_pages))
+ 		return 0;
+ 
+ 	return b->bm_words;
+@@ -794,7 +794,7 @@ size_t drbd_bm_words(struct drbd_device *device)
+ unsigned long drbd_bm_bits(struct drbd_device *device)
+ {
+ 	struct drbd_bitmap *b = device->bitmap;
+-	if (!expect(b))
++	if (!expect(device, b))
+ 		return 0;
+ 
+ 	return b->bm_bits;
+@@ -816,9 +816,9 @@ void drbd_bm_merge_lel(struct drbd_device *device, size_t offset, size_t number,
+ 
+ 	end = offset + number;
+ 
+-	if (!expect(b))
++	if (!expect(device, b))
  		return;
- 	drbd_err(device, "FIXME %s[%d] in %s, bitmap locked for '%s' by %s[%d]\n",
- 		 current->comm, task_pid_nr(current),
-@@ -952,7 +952,7 @@ static void drbd_bm_endio(struct bio *bio)
- 		bm_set_page_io_err(b->bm_pages[idx]);
- 		/* Not identical to on disk version of it.
- 		 * Is BM_PAGE_IO_ERROR enough? */
--		if (__ratelimit(&drbd_ratelimit_state))
-+		if (drbd_ratelimit())
- 			drbd_err(device, "IO ERROR %d on bitmap page idx %u\n",
- 					bio->bi_status, idx);
- 	} else {
-@@ -1013,7 +1013,7 @@ static void bm_page_io_async(struct drbd_bm_aio_ctx *ctx, int page_nr) __must_ho
- 		else
- 			len = PAGE_SIZE;
- 	} else {
--		if (__ratelimit(&drbd_ratelimit_state)) {
-+		if (drbd_ratelimit()) {
- 			drbd_err(device, "Invalid offset during on-disk bitmap access: "
- 				 "page idx %u, sector %llu\n", page_nr, on_disk_sector);
+-	if (!expect(b->bm_pages))
++	if (!expect(device, b->bm_pages))
+ 		return;
+ 	if (number == 0)
+ 		return;
+@@ -863,9 +863,9 @@ void drbd_bm_get_lel(struct drbd_device *device, size_t offset, size_t number,
+ 
+ 	end = offset + number;
+ 
+-	if (!expect(b))
++	if (!expect(device, b))
+ 		return;
+-	if (!expect(b->bm_pages))
++	if (!expect(device, b->bm_pages))
+ 		return;
+ 
+ 	spin_lock_irq(&b->bm_lock);
+@@ -894,9 +894,9 @@ void drbd_bm_get_lel(struct drbd_device *device, size_t offset, size_t number,
+ void drbd_bm_set_all(struct drbd_device *device)
+ {
+ 	struct drbd_bitmap *b = device->bitmap;
+-	if (!expect(b))
++	if (!expect(device, b))
+ 		return;
+-	if (!expect(b->bm_pages))
++	if (!expect(device, b->bm_pages))
+ 		return;
+ 
+ 	spin_lock_irq(&b->bm_lock);
+@@ -910,9 +910,9 @@ void drbd_bm_set_all(struct drbd_device *device)
+ void drbd_bm_clear_all(struct drbd_device *device)
+ {
+ 	struct drbd_bitmap *b = device->bitmap;
+-	if (!expect(b))
++	if (!expect(device, b))
+ 		return;
+-	if (!expect(b->bm_pages))
++	if (!expect(device, b->bm_pages))
+ 		return;
+ 
+ 	spin_lock_irq(&b->bm_lock);
+@@ -1332,9 +1332,9 @@ static unsigned long bm_find_next(struct drbd_device *device,
+ 	struct drbd_bitmap *b = device->bitmap;
+ 	unsigned long i = DRBD_END_OF_BITMAP;
+ 
+-	if (!expect(b))
++	if (!expect(device, b))
+ 		return i;
+-	if (!expect(b->bm_pages))
++	if (!expect(device, b->bm_pages))
+ 		return i;
+ 
+ 	spin_lock_irq(&b->bm_lock);
+@@ -1436,9 +1436,9 @@ static int bm_change_bits_to(struct drbd_device *device, const unsigned long s,
+ 	struct drbd_bitmap *b = device->bitmap;
+ 	int c = 0;
+ 
+-	if (!expect(b))
++	if (!expect(device, b))
+ 		return 1;
+-	if (!expect(b->bm_pages))
++	if (!expect(device, b->bm_pages))
+ 		return 0;
+ 
+ 	spin_lock_irqsave(&b->bm_lock, flags);
+@@ -1582,9 +1582,9 @@ int drbd_bm_test_bit(struct drbd_device *device, const unsigned long bitnr)
+ 	unsigned long *p_addr;
+ 	int i;
+ 
+-	if (!expect(b))
++	if (!expect(device, b))
+ 		return 0;
+-	if (!expect(b->bm_pages))
++	if (!expect(device, b->bm_pages))
+ 		return 0;
+ 
+ 	spin_lock_irqsave(&b->bm_lock, flags);
+@@ -1619,9 +1619,9 @@ int drbd_bm_count_bits(struct drbd_device *device, const unsigned long s, const
+ 	 * robust in case we screwed up elsewhere, in that case pretend there
+ 	 * was one dirty bit in the requested area, so we won't try to do a
+ 	 * local read there (no bitmap probably implies no disk) */
+-	if (!expect(b))
++	if (!expect(device, b))
+ 		return 1;
+-	if (!expect(b->bm_pages))
++	if (!expect(device, b->bm_pages))
+ 		return 1;
+ 
+ 	spin_lock_irqsave(&b->bm_lock, flags);
+@@ -1635,7 +1635,7 @@ int drbd_bm_count_bits(struct drbd_device *device, const unsigned long s, const
+ 				bm_unmap(p_addr);
+ 			p_addr = bm_map_pidx(b, idx);
  		}
-diff --git a/drivers/block/drbd/drbd_int.h b/drivers/block/drbd/drbd_int.h
-index 1734a7f8a096..ae713338aa46 100644
---- a/drivers/block/drbd/drbd_int.h
-+++ b/drivers/block/drbd/drbd_int.h
-@@ -1658,7 +1658,7 @@ static inline void __drbd_chk_io_error_(struct drbd_device *device,
- 	switch (ep) {
- 	case EP_PASS_ON: /* FIXME would this be better named "Ignore"? */
- 		if (df == DRBD_READ_ERROR || df == DRBD_WRITE_ERROR) {
--			if (__ratelimit(&drbd_ratelimit_state))
-+			if (drbd_ratelimit())
- 				drbd_err(device, "Local IO failed in %s.\n", where);
- 			if (device->state.disk > D_INCONSISTENT)
- 				_drbd_set_state(_NS(device, disk, D_INCONSISTENT), CS_HARD, NULL);
+-		if (expect(bitnr < b->bm_bits))
++		if (expect(device, bitnr < b->bm_bits))
+ 			c += (0 != test_bit_le(bitnr - (page_nr << (PAGE_SHIFT+3)), p_addr));
+ 		else
+ 			drbd_err(device, "bitnr=%lu bm_bits=%lu\n", bitnr, b->bm_bits);
+@@ -1668,9 +1668,9 @@ int drbd_bm_e_weight(struct drbd_device *device, unsigned long enr)
+ 	unsigned long flags;
+ 	unsigned long *p_addr, *bm;
+ 
+-	if (!expect(b))
++	if (!expect(device, b))
+ 		return 0;
+-	if (!expect(b->bm_pages))
++	if (!expect(device, b->bm_pages))
+ 		return 0;
+ 
+ 	spin_lock_irqsave(&b->bm_lock, flags);
 diff --git a/drivers/block/drbd/drbd_main.c b/drivers/block/drbd/drbd_main.c
-index e02db1dccab1..acfbba3c0f21 100644
+index acfbba3c0f21..7213ffd69a16 100644
 --- a/drivers/block/drbd/drbd_main.c
 +++ b/drivers/block/drbd/drbd_main.c
-@@ -3767,7 +3767,7 @@ _drbd_insert_fault(struct drbd_device *device, unsigned int type)
- 	if (ret) {
- 		drbd_fault_count++;
+@@ -1259,7 +1259,7 @@ static int _drbd_send_bitmap(struct drbd_device *device)
+ 	struct bm_xfer_ctx c;
+ 	int err;
  
--		if (__ratelimit(&drbd_ratelimit_state))
-+		if (drbd_ratelimit())
- 			drbd_warn(device, "***Simulating %s failure\n",
- 				_drbd_fault_str(type));
+-	if (!expect(device->bitmap))
++	if (!expect(device, device->bitmap))
+ 		return false;
+ 
+ 	if (get_ldev(device)) {
+@@ -2250,9 +2250,9 @@ static void do_retry(struct work_struct *ws)
+ 		bool expected;
+ 
+ 		expected =
+-			expect(atomic_read(&req->completion_ref) == 0) &&
+-			expect(req->rq_state & RQ_POSTPONED) &&
+-			expect((req->rq_state & RQ_LOCAL_PENDING) == 0 ||
++			expect(device, atomic_read(&req->completion_ref) == 0) &&
++			expect(device, req->rq_state & RQ_POSTPONED) &&
++			expect(device, (req->rq_state & RQ_LOCAL_PENDING) == 0 ||
+ 				(req->rq_state & RQ_LOCAL_ABORTED) != 0);
+ 
+ 		if (!expected)
+diff --git a/drivers/block/drbd/drbd_nl.c b/drivers/block/drbd/drbd_nl.c
+index cb55b28fba78..60757ac31701 100644
+--- a/drivers/block/drbd/drbd_nl.c
++++ b/drivers/block/drbd/drbd_nl.c
+@@ -1543,7 +1543,7 @@ int drbd_adm_disk_opts(struct sk_buff *skb, struct genl_info *info)
+ 		goto fail_unlock;
  	}
+ 
+-	if (!expect(new_disk_conf->resync_rate >= 1))
++	if (!expect(device, new_disk_conf->resync_rate >= 1))
+ 		new_disk_conf->resync_rate = 1;
+ 
+ 	sanitize_disk_conf(device, new_disk_conf, device->ldev);
 diff --git a/drivers/block/drbd/drbd_polymorph_printk.h b/drivers/block/drbd/drbd_polymorph_printk.h
-index 46cda9dd9af8..914f2a3c0e2e 100644
+index 914f2a3c0e2e..8e0082d139ba 100644
 --- a/drivers/block/drbd/drbd_polymorph_printk.h
 +++ b/drivers/block/drbd/drbd_polymorph_printk.h
-@@ -110,6 +110,14 @@ void drbd_dyn_dbg_with_wrong_object_type(void);
- 	drbd_printk(KERN_INFO, device, fmt, ## args)
- 
- 
-+#define drbd_ratelimit() \
-+({						\
-+	static DEFINE_RATELIMIT_STATE(_rs,	\
-+		DEFAULT_RATELIMIT_INTERVAL,	\
-+		DEFAULT_RATELIMIT_BURST);	\
-+	__ratelimit(&_rs);			\
-+})
-+
- #define D_ASSERT(x, exp)							\
- 	do {									\
- 		if (!(exp))							\
-@@ -124,7 +132,7 @@ void drbd_dyn_dbg_with_wrong_object_type(void);
+@@ -130,10 +130,10 @@ void drbd_dyn_dbg_with_wrong_object_type(void);
+  *
+  * Unlike the assert macro, this macro returns a boolean result.
   */
- #define expect(exp) ({								\
+-#define expect(exp) ({								\
++#define expect(x, exp) ({							\
  		bool _bool = (exp);						\
--		if (!_bool)							\
-+		if (!_bool && drbd_ratelimit())					\
- 			drbd_err(device, "ASSERTION %s FAILED in %s\n",		\
+ 		if (!_bool && drbd_ratelimit())					\
+-			drbd_err(device, "ASSERTION %s FAILED in %s\n",		\
++			drbd_err(x, "ASSERTION %s FAILED in %s\n",		\
  				#exp, __func__);				\
  		_bool;								\
+ 		})
 diff --git a/drivers/block/drbd/drbd_receiver.c b/drivers/block/drbd/drbd_receiver.c
-index e045fb55f3bf..afbe0df3ff75 100644
+index afbe0df3ff75..24d0a2262982 100644
 --- a/drivers/block/drbd/drbd_receiver.c
 +++ b/drivers/block/drbd/drbd_receiver.c
-@@ -2165,7 +2165,7 @@ static int receive_RSDataReply(struct drbd_connection *connection, struct packet
- 		 * or in drbd_peer_request_endio. */
- 		err = recv_resync_read(peer_device, sector, pi);
- 	} else {
--		if (__ratelimit(&drbd_ratelimit_state))
-+		if (drbd_ratelimit())
- 			drbd_err(device, "Can not write resync data to local disk.\n");
- 
- 		err = drbd_drain_block(peer_device, pi->size);
-@@ -2846,7 +2846,7 @@ static int receive_DataRequest(struct drbd_connection *connection, struct packet
- 		default:
- 			BUG();
- 		}
--		if (verb && __ratelimit(&drbd_ratelimit_state))
-+		if (verb && drbd_ratelimit())
- 			drbd_err(device, "Can not satisfy peer's read request, "
- 			    "no local data.\n");
- 
-diff --git a/drivers/block/drbd/drbd_req.c b/drivers/block/drbd/drbd_req.c
-index ced15557197a..eb14ec8ec04c 100644
---- a/drivers/block/drbd/drbd_req.c
-+++ b/drivers/block/drbd/drbd_req.c
-@@ -144,7 +144,7 @@ void drbd_req_destroy(struct kref *kref)
- 			if (get_ldev_if_state(device, D_FAILED)) {
- 				drbd_al_complete_io(device, &req->i);
- 				put_ldev(device);
--			} else if (__ratelimit(&drbd_ratelimit_state)) {
-+			} else if (drbd_ratelimit()) {
- 				drbd_warn(device, "Should have called drbd_al_complete_io(, %llu, %u), "
- 					 "but my Disk seems to have failed :(\n",
- 					 (unsigned long long) req->i.sector, req->i.size);
-@@ -518,7 +518,7 @@ static void mod_rq_state(struct drbd_request *req, struct bio_and_error *m,
- 
- static void drbd_report_io_error(struct drbd_device *device, struct drbd_request *req)
- {
--	if (!__ratelimit(&drbd_ratelimit_state))
-+	if (!drbd_ratelimit())
- 		return;
- 
- 	drbd_warn(device, "local %s IO error sector %llu+%u on %pg\n",
-@@ -1402,7 +1402,7 @@ static void drbd_send_and_submit(struct drbd_device *device, struct drbd_request
- 		submit_private_bio = true;
- 	} else if (no_remote) {
- nodata:
--		if (__ratelimit(&drbd_ratelimit_state))
-+		if (drbd_ratelimit())
- 			drbd_err(device, "IO ERROR: neither local nor remote data, sector %llu+%u\n",
- 					(unsigned long long)req->i.sector, req->i.size >> 9);
- 		/* A write may have been queued for send_oos, however.
-diff --git a/drivers/block/drbd/drbd_worker.c b/drivers/block/drbd/drbd_worker.c
-index 3df033bfccf8..f46738040d6b 100644
---- a/drivers/block/drbd/drbd_worker.c
-+++ b/drivers/block/drbd/drbd_worker.c
-@@ -176,7 +176,7 @@ void drbd_peer_request_endio(struct bio *bio)
- 	bool is_discard = bio_op(bio) == REQ_OP_WRITE_ZEROES ||
- 			  bio_op(bio) == REQ_OP_DISCARD;
- 
--	if (bio->bi_status && __ratelimit(&drbd_ratelimit_state))
-+	if (bio->bi_status && drbd_ratelimit())
- 		drbd_warn(device, "%s: error=%d s=%llus\n",
- 				is_write ? (is_discard ? "discard" : "write")
- 					: "read", bio->bi_status,
-@@ -240,7 +240,7 @@ void drbd_request_endio(struct bio *bio)
- 	 * though we still will complain noisily about it.
- 	 */
- 	if (unlikely(req->rq_state & RQ_LOCAL_ABORTED)) {
--		if (__ratelimit(&drbd_ratelimit_state))
-+		if (drbd_ratelimit())
- 			drbd_emerg(device, "delayed completion of aborted local request; disk-timeout may be too aggressive\n");
- 
- 		if (!bio->bi_status)
-@@ -1062,7 +1062,7 @@ int w_e_end_data_req(struct drbd_work *w, int cancel)
- 	if (likely((peer_req->flags & EE_WAS_ERROR) == 0)) {
- 		err = drbd_send_block(peer_device, P_DATA_REPLY, peer_req);
- 	} else {
--		if (__ratelimit(&drbd_ratelimit_state))
-+		if (drbd_ratelimit())
- 			drbd_err(device, "Sending NegDReply. sector=%llus.\n",
- 			    (unsigned long long)peer_req->i.sector);
- 
-@@ -1135,13 +1135,13 @@ int w_e_end_rsdata_req(struct drbd_work *w, int cancel)
- 			else
- 				err = drbd_send_block(peer_device, P_RS_DATA_REPLY, peer_req);
- 		} else {
--			if (__ratelimit(&drbd_ratelimit_state))
-+			if (drbd_ratelimit())
- 				drbd_err(device, "Not sending RSDataReply, "
- 				    "partner DISKLESS!\n");
- 			err = 0;
- 		}
- 	} else {
--		if (__ratelimit(&drbd_ratelimit_state))
-+		if (drbd_ratelimit())
- 			drbd_err(device, "Sending NegRSDReply. sector %llus.\n",
- 			    (unsigned long long)peer_req->i.sector);
- 
-@@ -1212,7 +1212,7 @@ int w_e_end_csum_rs_req(struct drbd_work *w, int cancel)
- 		}
- 	} else {
- 		err = drbd_send_ack(peer_device, P_NEG_RS_DREPLY, peer_req);
--		if (__ratelimit(&drbd_ratelimit_state))
-+		if (drbd_ratelimit())
- 			drbd_err(device, "Sending NegDReply. I guess it gets messy.\n");
+@@ -413,7 +413,7 @@ void __drbd_free_peer_req(struct drbd_device *device, struct drbd_peer_request *
+ 	drbd_free_pages(device, peer_req->pages, is_net);
+ 	D_ASSERT(device, atomic_read(&peer_req->pending_bios) == 0);
+ 	D_ASSERT(device, drbd_interval_empty(&peer_req->i));
+-	if (!expect(!(peer_req->flags & EE_CALL_AL_COMPLETE_IO))) {
++	if (!expect(device, !(peer_req->flags & EE_CALL_AL_COMPLETE_IO))) {
+ 		peer_req->flags &= ~EE_CALL_AL_COMPLETE_IO;
+ 		drbd_al_complete_io(device, &peer_req->i);
+ 	}
+@@ -1873,21 +1873,21 @@ read_in_block(struct drbd_peer_device *peer_device, u64 id, sector_t sector,
+ 	/* assume request_size == data_size, but special case trim. */
+ 	ds = data_size;
+ 	if (trim) {
+-		if (!expect(data_size == 0))
++		if (!expect(peer_device, data_size == 0))
+ 			return NULL;
+ 		ds = be32_to_cpu(trim->size);
+ 	} else if (zeroes) {
+-		if (!expect(data_size == 0))
++		if (!expect(peer_device, data_size == 0))
+ 			return NULL;
+ 		ds = be32_to_cpu(zeroes->size);
  	}
  
+-	if (!expect(IS_ALIGNED(ds, 512)))
++	if (!expect(peer_device, IS_ALIGNED(ds, 512)))
+ 		return NULL;
+ 	if (trim || zeroes) {
+-		if (!expect(ds <= (DRBD_MAX_BBIO_SECTORS << 9)))
++		if (!expect(peer_device, ds <= (DRBD_MAX_BBIO_SECTORS << 9)))
+ 			return NULL;
+-	} else if (!expect(ds <= DRBD_MAX_BIO_SIZE))
++	} else if (!expect(peer_device, ds <= DRBD_MAX_BIO_SIZE))
+ 		return NULL;
+ 
+ 	/* even though we trust out peer,
 -- 
 2.38.1
 
