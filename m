@@ -2,129 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A43663F9CE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:28:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 368FF63F9C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbiLAV2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 16:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
+        id S230484AbiLAV1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 16:27:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbiLAV2B (ORCPT
+        with ESMTP id S229706AbiLAV1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 16:28:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D7976141;
-        Thu,  1 Dec 2022 13:28:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3450CB82025;
-        Thu,  1 Dec 2022 21:27:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A85AEC433D6;
-        Thu,  1 Dec 2022 21:27:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669930078;
-        bh=+DN+P/rKB/9tSIZAc6i0bxDS167JyMagYuQTQ8imLrI=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=uQMJuusUn8CNI4pztWvsbyTXchDju2WKgZTz3saR/BgX9smZeCwvibPrzs9Tdto6H
-         VA9B1hA7g7ZOhjYryGYTX7Z2fNYZCFaLNU5zyko1KC8a/DqKJyohuKBs4elBA7l+CK
-         1msdZtU5vSC8+oDl5fYLVFDw3+MmkcaWIyfn7oMfr7b/CWLZNb4x2FdMn8tJJ6Qb8q
-         OFWEsb4OpyFYQmjxyY7bi7RwZSQS1lZqFMFDjlfh23gGwxCP14wpbjORohXqKNMpdJ
-         mpKWX/+eyf8VB0Yv5i8qVoz0YIm4tzoNwis/YhJQieorteKMRctFM6mX1T8jiMv2Wl
-         FqJZjXvPVfNEg==
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 8A80727C0054;
-        Thu,  1 Dec 2022 16:27:55 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 01 Dec 2022 16:27:55 -0500
-X-ME-Sender: <xms:WhyJY56bY9F_MYFxv7DaioKPBJHJxAo0Fv98h9FAnoD_QfY89srmBA>
-    <xme:WhyJY25S12Ycs-orXZS5gVWcTnneBahCIouBH5bKrpPz_0xCSU7M-VYtRlImKMbjM
-    6dJs_nLem9NhUmhlzU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtdehgdduhedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusehkvghrnhgvlhdrohhrgheqnecuggftrf
-    grthhtvghrnhepvdeviefgtedugeevieelvdfgveeuvdfgteegfeeiieejjeffgeeghedu
-    gedtveehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghrnhguodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduvdekhedujedt
-    vdegqddvkeejtddtvdeigedqrghrnhgupeepkhgvrhhnvghlrdhorhhgsegrrhhnuggsrd
-    guvg
-X-ME-Proxy: <xmx:WhyJYwdFhZYwNTJEhjA3iEa-0lKweK4UrtEn7GUmniukcOgyJrrWpA>
-    <xmx:WhyJYyIaGsyihW68Uz2LeO1u-ncg-PKppdRDl1e0bZlBmqR6C3NA2w>
-    <xmx:WhyJY9JwMyoeO3Z661IObk96bEKAtdmHD6O9TT3p157Vql2qf5o4iw>
-    <xmx:WxyJY6FVIpHTCYek0JcdB1j1xlCUc9smfmHtm_cu792257_b04rcIA>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id E3357B60086; Thu,  1 Dec 2022 16:27:54 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <c88afa91-72a9-4905-a710-90655f97831d@app.fastmail.com>
-In-Reply-To: <7e5f86c0-04b3-aa68-565a-7b86f1e1553d@infradead.org>
-References: <20221201204310.142039-1-arnd@kernel.org>
- <7e5f86c0-04b3-aa68-565a-7b86f1e1553d@infradead.org>
-Date:   Thu, 01 Dec 2022 22:27:34 +0100
-From:   "Arnd Bergmann" <arnd@kernel.org>
-To:     "Randy Dunlap" <rdunlap@infradead.org>,
-        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>
-Cc:     linux-kernel@vger.kernel.org, "Arnd Bergmann" <arnd@arndb.de>,
-        "Luis Machado" <luis.machado@arm.com>, linux-ide@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] ata: ahci: fix enum constants for gcc-13
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 1 Dec 2022 16:27:40 -0500
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B0A11458;
+        Thu,  1 Dec 2022 13:27:38 -0800 (PST)
+Received: by mail-oi1-f173.google.com with SMTP id c129so3499220oia.0;
+        Thu, 01 Dec 2022 13:27:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dj0X/cgIRdzA9X8MaAiSgQ8IQIvJqEsW1E/SH7uOhAc=;
+        b=8NnssgGDimV249OpBqoU/S6CXd695qoEUjUbIl6dCX5WZq9hTJoaSDrQX5jYsv/m+c
+         dVanzHjU1r3iNd4oQYiOj9zKwBGz22ZWC+s/IGCxdpQo5Vo5Pvs+IBMVTScd0Nn5e0vB
+         afwqdb6lvB/hrDLa7oYjBHTCAQ8RfSX2vJbt4b5PZHeLrhhIEpokeEsYbojslI/cHimB
+         NXnDn/hS9pcbH58xEWCv9r5/hFLPeg+T8Al1l4CStWs3R+NIMjCn6jMVoI1w4znebrp5
+         kngaTMl9Jm8g6pAdKpZGXdY4W56BF9cUvY/kmUOPtH9209dXAB9xWVkwR83GIMbktLFJ
+         /Hlw==
+X-Gm-Message-State: ANoB5pk+5YBYhUTHJFEHB4fmlk8cOa2IUXBond22RQeLm3Wr2phPI1mf
+        lSVzqYi/R1ah7JnNg2XU+Q==
+X-Google-Smtp-Source: AA0mqf4cecGy5n8P7THiVs09tNFE2eEpF6icE6MFbjl/YV7Fo/7CpjcTb7Q1w6k01nE5ZiA/uqXmdg==
+X-Received: by 2002:a05:6808:1a18:b0:35b:dac6:cc84 with SMTP id bk24-20020a0568081a1800b0035bdac6cc84mr3780814oib.116.1669930057593;
+        Thu, 01 Dec 2022 13:27:37 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ca19-20020a056830611300b00661a3f4113bsm2598515otb.64.2022.12.01.13.27.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 13:27:36 -0800 (PST)
+Received: (nullmailer pid 1472667 invoked by uid 1000);
+        Thu, 01 Dec 2022 21:27:35 -0000
+Date:   Thu, 1 Dec 2022 15:27:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sonal Santan <sonal.santan@amd.com>
+Cc:     Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        frowand.list@gmail.com, helgaas@kernel.org,
+        clement.leger@bootlin.com, max.zhen@amd.com, larry.liu@amd.com,
+        brian.xu@amd.com, stefano.stabellini@xilinx.com, trix@redhat.com
+Subject: Re: [RESEND PATCH RFC V4 0/3] Generate device tree node for pci
+ devices
+Message-ID: <20221201212735.GC1225112-robh@kernel.org>
+References: <1669048984-56394-1-git-send-email-lizhi.hou@amd.com>
+ <9d21aa8f-6581-a4bf-644a-6e273373afc4@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9d21aa8f-6581-a4bf-644a-6e273373afc4@amd.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 1, 2022, at 21:48, Randy Dunlap wrote:
-> On 12/1/22 12:43, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> gcc-13 slightly changes the type of constant expressions that are deifined
->
->                                                                     defined
+On Wed, Nov 30, 2022 at 09:50:56PM -0800, Sonal Santan wrote:
+> On 11/21/22 08:43, Lizhi Hou wrote:
+> > This patch series introduces OF overlay support for PCI devices which
+> > primarily addresses two use cases. First, it provides a data driven method
+> > to describe hardware peripherals that are present in a PCI endpoint and
+> > hence can be accessed by the PCI host. Second, it allows reuse of a OF
+> > compatible driver -- often used in SoC platforms -- in a PCI host based
+> > system.
+> > 
+> > There are 2 series devices rely on this patch:
+> > 
+> >   1) Xilinx Alveo Accelerator cards (FPGA based device)
+> >   2) Microchip LAN9662 Ethernet Controller
+> > 
+> >      Please see: https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
+> > 
+> > Normally, the PCI core discovers PCI devices and their BARs using the
+> > PCI enumeration process. However, the process does not provide a way to
+> > discover the hardware peripherals that are present in a PCI device, and
+> > which can be accessed through the PCI BARs. Also, the enumeration process
+> > does not provide a way to associate MSI-X vectors of a PCI device with the
+> > hardware peripherals that are present in the device. PCI device drivers
+> > often use header files to describe the hardware peripherals and their
+> > resources as there is no standard data driven way to do so. This patch
+> > series proposes to use flattened device tree blob to describe the
+> > peripherals in a data driven way. Based on previous discussion, using
+> > device tree overlay is the best way to unflatten the blob and populate
+> > platform devices. To use device tree overlay, there are three obvious
+> > problems that need to be resolved.
+> > 
+> > First, we need to create a base tree for non-DT system such as x86_64. A
+> > patch series has been submitted for this:
+> > https://lore.kernel.org/lkml/20220624034327.2542112-1-frowand.list@gmail.com/
+> > https://lore.kernel.org/lkml/20220216050056.311496-1-lizhi.hou@xilinx.com/
+> > 
+> > Second, a device tree node corresponding to the PCI endpoint is required
+> > for overlaying the flattened device tree blob for that PCI endpoint.
+> > Because PCI is a self-discoverable bus, a device tree node is usually not
+> > created for PCI devices. This series adds support to generate a device
+> > tree node for a PCI device which advertises itself using PCI quirks
+> > infrastructure.
+> > 
+> > Third, we need to generate device tree nodes for PCI bridges since a child
+> > PCI endpoint may choose to have a device tree node created.
+> > 
+> > This patch series is made up of three patches.
+> > 
+> > The first patch is adding OF interface to create or destroy OF node
+> > dynamically.
+> > 
+> > The second patch introduces a kernel option, CONFIG_DYNAMIC_PCI_OF_NODEX.
+> > When the option is turned on, the kernel will generate device tree nodes
+> > for all PCI bridges unconditionally. The patch also shows how to use the
+> > PCI quirks infrastructure, DECLARE_PCI_FIXUP_FINAL to generate a device
+> > tree node for a device. Specifically, the patch generates a device tree
+> > node for Xilinx Alveo U50 PCIe accelerator device. The generated device
+> > tree nodes do not have any property.
+> > 
+> > The third patch adds basic properties ('reg', 'compatible' and
+> > 'device_type') to the dynamically generated device tree nodes. More
+> > properties can be added in the future.
+> > 
+> > Here is the example of device tree nodes generated within the ARM64 QEMU.
+> > # lspci -t    
+> > -[0000:00]-+-00.0
+> >            +-01.0-[01]--
+> >            +-01.1-[02]----00.0
+> >            +-01.2-[03]----00.0
+> >            +-01.3-[04]----00.0
+> >            +-01.4-[05]----00.0
+> >            +-01.5-[06]--
+> >            +-01.6-[07]--
+> >            +-01.7-[08]--
+> >            +-02.0-[09-0b]----00.0-[0a-0b]----00.0-[0b]--+-00.0
+> >            |                                            \-00.1
+> >            +-02.1-[0c]--
+> >            \-03.0-[0d-0e]----00.0-[0e]----01.0
+> > 
+> > # tree /sys/firmware/devicetree/base/pcie\@10000000
+> > /sys/firmware/devicetree/base/pcie@10000000
+> > |-- #address-cells
+> > |-- #interrupt-cells
+> > |-- #size-cells
+> > |-- bus-range
+> > |-- compatible
+> > |-- device_type
+> > |-- dma-coherent
+> > |-- interrupt-map
+> > |-- interrupt-map-mask
+> > |-- linux,pci-domain
+> > |-- msi-parent
+> > |-- name
+> > |-- pci@1,0
+> > |   |-- #address_cells
+> > |   |-- #size_cells
+> > |   |-- compatible
+> > |   |-- device_type
+> > |   |-- ranges
+> > |   `-- reg
+> > |-- pci@1,1
+> > |   |-- #address_cells
+> > |   |-- #size_cells
+> > |   |-- compatible
+> > |   |-- device_type
+> > |   |-- ranges
+> > |   `-- reg
+> > |-- pci@1,2
+> > |   |-- #address_cells
+> > |   |-- #size_cells
+> > |   |-- compatible
+> > |   |-- device_type
+> > |   |-- ranges
+> > |   `-- reg
+> > |-- pci@1,3
+> > |   |-- #address_cells
+> > |   |-- #size_cells
+> > |   |-- compatible
+> > |   |-- device_type
+> > |   |-- ranges
+> > |   `-- reg
+> > |-- pci@1,4
+> > |   |-- #address_cells
+> > |   |-- #size_cells
+> > |   |-- compatible
+> > |   |-- device_type
+> > |   |-- ranges
+> > |   `-- reg
+> > |-- pci@1,5
+> > |   |-- #address_cells
+> > |   |-- #size_cells
+> > |   |-- compatible
+> > |   |-- device_type
+> > |   |-- ranges
+> > |   `-- reg
+> > |-- pci@1,6
+> > |   |-- #address_cells
+> > |   |-- #size_cells
+> > |   |-- compatible
+> > |   |-- device_type
+> > |   |-- ranges
+> > |   `-- reg
+> > |-- pci@1,7
+> > |   |-- #address_cells
+> > |   |-- #size_cells
+> > |   |-- compatible
+> > |   |-- device_type
+> > |   |-- ranges
+> > |   `-- reg
+> > |-- pci@2,0
+> > |   |-- #address_cells
+> > |   |-- #size_cells
+> > |   |-- compatible
+> > |   |-- device_type
+> > |   |-- pci@0,0
+> > |   |   |-- #address_cells
+> > |   |   |-- #size_cells
+> > |   |   |-- compatible
+> > |   |   |-- device_type
+> > |   |   |-- pci@0,0
+> > |   |   |   |-- #address_cells
+> > |   |   |   |-- #size_cells
+> > |   |   |   |-- compatible
+> > |   |   |   |-- dev@0,0
+> > |   |   |   |   |-- compatible
+> > |   |   |   |   `-- reg
+> > |   |   |   |-- dev@0,1
+> > |   |   |   |   |-- compatible
+> > |   |   |   |   `-- reg
+> > |   |   |   |-- device_type
+> > |   |   |   |-- ranges
+> > |   |   |   `-- reg
+> > |   |   |-- ranges
+> > |   |   `-- reg
+> > |   |-- ranges
+> > |   `-- reg
+> > |-- pci@2,1
+> > |   |-- #address_cells
+> > |   |-- #size_cells
+> > |   |-- compatible
+> > |   |-- device_type
+> > |   |-- ranges
+> > |   `-- reg
+> > |-- pci@3,0
+> > |   |-- #address_cells
+> > |   |-- #size_cells
+> > |   |-- compatible
+> > |   |-- device_type
+> > |   |-- pci@0,0
+> > |   |   |-- #address_cells
+> > |   |   |-- #size_cells
+> > |   |   |-- compatible
+> > |   |   |-- device_type
+> > |   |   |-- ranges
+> > |   |   `-- reg
+> > |   |-- ranges
+> > |   `-- reg
+> > |-- ranges
+> > `-- reg
+> > 
+> > Changes since RFC v3:
+> > - Split the Xilinx Alveo U50 PCI quirk to a separate patch
+> > - Minor changes in commit description and code comment
+> > 
+> > Changes since RFC v2:
+> > - Merged patch 3 with patch 2
+> > - Added OF interfaces of_changeset_add_prop_* and use them to create
+> >   properties.
+> > - Added '#address-cells', '#size-cells' and 'ranges' properties.
+> > 
+> > Changes since RFC v1:
+> > - Added one patch to create basic properties.
+> > - To move DT related code out of PCI subsystem, replaced of_node_alloc()
+> >   with of_create_node()/of_destroy_node()
+> > 
+> > Lizhi Hou (3):
+> >   of: dynamic: Add interfaces for creating device node dynamically
+> >   PCI: Create device tree node for selected devices
+> >   PCI: Add PCI quirks to generate device tree node for Xilinx Alveo U50
+> > 
+> >  drivers/of/dynamic.c        | 187 ++++++++++++++++++++++++++
+> >  drivers/pci/Kconfig         |  12 ++
+> >  drivers/pci/Makefile        |   1 +
+> >  drivers/pci/bus.c           |   2 +
+> >  drivers/pci/msi/irqdomain.c |   6 +-
+> >  drivers/pci/of.c            |  71 ++++++++++
+> >  drivers/pci/of_property.c   | 256 ++++++++++++++++++++++++++++++++++++
+> >  drivers/pci/pci-driver.c    |   3 +-
+> >  drivers/pci/pci.h           |  19 +++
+> >  drivers/pci/quirks.c        |  11 ++
+> >  drivers/pci/remove.c        |   1 +
+> >  include/linux/of.h          |  24 ++++
+> >  12 files changed, 590 insertions(+), 3 deletions(-)
+> >  create mode 100644 drivers/pci/of_property.c
+> > 
+> Hello,
+> 
+> This RFC patch set has been patiently waiting for attention. If there
+> are no additional comments can it move forward?
 
-fixed
+Note that "RFC" means "here's my patches I don't think are ready to be 
+merged". That should have a list of issues/todo.
 
->> ---
->>  drivers/ata/ahci.h | 234 ++++++++++++++++++++++-----------------------
->>  1 file changed, 117 insertions(+), 117 deletions(-)
->
-> What #include <linux/bits.h> ?
-> or is it just done indirectly?
+I'm not getting a good sense that possible issues are being thought 
+about here. If I'm supposed to do that, then you'll just have to wait.
 
-Good point. It survived a build test, and it's one of the headers that
-is almost always included from somewhere, but you are correct that
-there should be an explicit include here as well.
-
-I also found that PORT_CMD_ICC_MASK is still a negative number
-that needs to be changed:
-
-@@ -178,10 +178,10 @@ enum {
-        PORT_CMD_SPIN_UP        = BIT(1),  /* Spin up device */
-        PORT_CMD_START          = BIT(0),  /* Enable port DMA engine */
- 
--       PORT_CMD_ICC_MASK       = (0xf << 28), /* i/f ICC state mask */
--       PORT_CMD_ICC_ACTIVE     = (0x1 << 28), /* Put i/f in active state */
--       PORT_CMD_ICC_PARTIAL    = (0x2 << 28), /* Put i/f in partial state */
--       PORT_CMD_ICC_SLUMBER    = (0x6 << 28), /* Put i/f in slumber state */
-+       PORT_CMD_ICC_MASK       = (0xfu << 28), /* i/f ICC state mask */
-+       PORT_CMD_ICC_ACTIVE     = (0x1u << 28), /* Put i/f in active state */
-+       PORT_CMD_ICC_PARTIAL    = (0x2u << 28), /* Put i/f in partial state */
-+       PORT_CMD_ICC_SLUMBER    = (0x6u << 28), /* Put i/f in slumber state */
- 
-        /* PORT_CMD capabilities mask */
-        PORT_CMD_CAP            = PORT_CMD_HPCP | PORT_CMD_MPSP |
-
-
-I've addressed all three issues now, will send a v2 after Luis is
-able to validate that this fixes the problem.
-
-    Arnd
+Rob
