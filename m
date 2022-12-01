@@ -2,285 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D98563ECAF
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A413563ECBC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbiLAJmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:42:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
+        id S229512AbiLAJoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:44:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiLAJmO (ORCPT
+        with ESMTP id S230204AbiLAJoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:42:14 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7FD54471;
-        Thu,  1 Dec 2022 01:42:13 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DA94D66025DF;
-        Thu,  1 Dec 2022 09:42:10 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669887731;
-        bh=VdGBaS0XWeFJmcCrunXO7sc+tv9eoriihu4qmG553GA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NSZBzHBUHkeY2OuO+h2pNjHg/Ubz8w5zyptGtmmW3HASRCOA42oynDVSQVo17MNCD
-         q2iF4uFpLXRhPRW8FTQLVr5VkrdMzGnXuXswiZFFsnqcF+1SX2Ctiu9AsphaJJ7eDy
-         QSR52YDp3Hvy55/9AAI/lIviHHxrFoX9xSGYbsyUbIvvJgIElR9E4A/xAhPem2w1Hn
-         LGqEwhkb+AMaJmfEHXbwfvUTJe0rIC6At1+MSgkM5DrB0fYCKZKjxjMdshAAhVYJ7Q
-         zLq1djNofBb3WKjH7DaUaBivb50xgjZg7lydi3X2SLo5jSYC9R0NMubNuiDlHyM6n6
-         5foWAcXBfpV5A==
-Message-ID: <6c8343c4-a8ed-1a4c-a518-1c49a9d6b056@collabora.com>
-Date:   Thu, 1 Dec 2022 10:42:08 +0100
+        Thu, 1 Dec 2022 04:44:11 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830C98DBDA
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:44:03 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id x66so1372254pfx.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 01:44:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0mg5gF5Bc8jYhcH7zz7tLGXFeH5/FEWq/MS0hfM5LXE=;
+        b=vFi/RDoTTAN0UIF3zWyyp8VvrLHeJL8VWsQ2cYgvqzCiICTpkJ95gSt3suEHnIkeDr
+         SL8QRzHbt6jVBgrMnuD86/aQYEYco5/+vnLI0bHb9CIBlTh5dEs09CcsC/IeNa8qM9c6
+         dQK8dqz2QfEk6YA594WR/BrVGd4ZBZ0zvQWv6Dh8cQw0W7HiU0XHOLHzHaR9YTkTygBE
+         YAZQZig3OjPRaDkbC/6nQYrcI0chnV3Cn4jKwLkHW18NBOs9UMpgnMAIw0FTu/4UQ9du
+         WAr6GIxNuz1U93QoA198DWneDGlWpEtqS4Aj5cPRpKFliz4Ac2brcy1BevP4Nqssy4nD
+         ZKeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0mg5gF5Bc8jYhcH7zz7tLGXFeH5/FEWq/MS0hfM5LXE=;
+        b=04hbu8F6d8Jy894O7QFLYUJkgxj2eWC1b2SusVNWkj14WioOi456aFbeaYTJ1xLJvw
+         Xr0U53cIgnDAX48xZtsIg6xIYSN/M4eDWd+awJLXVYyuBhgJ5hE/k20Fxbyu93HScvYB
+         bHxLRgH6BOdMW+CIKKupV+bTOQ+zfSNvyonhnhHhgWa75ir38Gy7ZW19mgTVbTBSjhiJ
+         F6T5C1dAQAFypx4MemaLtXBhAQQvKEI5HFbZWU576pDfBAE51b3jYbL6x9fpRVTLizi4
+         m9fHc1WyLGiQ4+Ol4bGNn8MT8c4wzKLB0bt9giXo4sNfhl/3J6UpYdCNeENwc9GV2U0A
+         ujKg==
+X-Gm-Message-State: ANoB5pkK9k6BjZbrNP+qK/zwvnr+dq2TYWlAC6X3hZAPR3wz47zMkawm
+        vJW0Y0YlLFMcU1DsYnfNZrCUnvUYaPj5v86m
+X-Google-Smtp-Source: AA0mqf6slQpb9xPr0WH3wGhYCbp2Gfc6+Cpbn3pDDlI0O/ecnNX2Wh2sasXFp8o9w0V136i7Qu9H9w==
+X-Received: by 2002:aa7:81d8:0:b0:561:c694:80b with SMTP id c24-20020aa781d8000000b00561c694080bmr46928664pfn.47.1669887842856;
+        Thu, 01 Dec 2022 01:44:02 -0800 (PST)
+Received: from alarm.flets-east.jp ([2400:4050:c360:8200:7b99:f7c3:d084:f1e2])
+        by smtp.gmail.com with ESMTPSA id u11-20020a170902e80b00b0018996404dd5sm3152297plg.109.2022.12.01.01.44.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 01:44:02 -0800 (PST)
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yan Vugenfirer <yan@daynix.com>,
+        Yuri Benditovich <yuri.benditovich@daynix.com>,
+        Akihiko Odaki <akihiko.odaki@daynix.com>
+Subject: [PATCH net v3] igbvf: Regard vf reset nack as success
+Date:   Thu,  1 Dec 2022 18:43:35 +0900
+Message-Id: <20221201094335.60940-1-akihiko.odaki@daynix.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 03/12] ASoC: mediatek: mt8188: support audsys clock
-Content-Language: en-US
-To:     =?UTF-8?B?VHJldm9yIFd1ICjlkLPmlofoia8p?= <Trevor.Wu@mediatek.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "broonie@kernel.org" <broonie@kernel.org>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20221021082719.18325-1-trevor.wu@mediatek.com>
- <20221021082719.18325-4-trevor.wu@mediatek.com>
- <de66f0e3-7694-7315-c896-9211259a1a17@collabora.com>
- <776557c0fda5a538549ee0d4f4b7f482b0d69934.camel@mediatek.com>
- <473d67ed-198f-82c6-9f32-5827c1f8c852@collabora.com>
- <500f80b1ac84101af482bdfcb46671d523d51068.camel@mediatek.com>
- <360a5f27-8abc-938c-04c7-13ea65b5a89f@collabora.com>
- <7dfdb4866ccf7356c2a8beb0359e5b62df4f245f.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <7dfdb4866ccf7356c2a8beb0359e5b62df4f245f.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 01/12/22 09:43, Trevor Wu (吳文良) ha scritto:
-> On Wed, 2022-10-26 at 10:18 +0200, AngeloGioacchino Del Regno wrote:
->> Il 26/10/22 06:10, Trevor Wu (吳文良) ha scritto:
->>> On Tue, 2022-10-25 at 12:18 +0200, AngeloGioacchino Del Regno
->>> wrote:
->>>> Il 21/10/22 11:58, Trevor Wu (吳文良) ha scritto:
->>>>> On Fri, 2022-10-21 at 10:41 +0200, AngeloGioacchino Del Regno
->>>>> wrote:
->>>>>> Il 21/10/22 10:27, Trevor Wu ha scritto:
->>>>>>> Add mt8188 audio cg clock control. Audio clock gates are
->>>>>>> registered
->>>>>>> to CCF
->>>>>>> for reference count and clock parent management.
->>>>>>>
->>>>>>> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
->>>>>>> ---
->>>>>>>      sound/soc/mediatek/mt8188/mt8188-audsys-clk.c | 206
->>>>>>> ++++++++++++++++++
->>>>>>>      sound/soc/mediatek/mt8188/mt8188-audsys-clk.h |  15 ++
->>>>>>>      .../soc/mediatek/mt8188/mt8188-audsys-clkid.h |  83
->>>>>>> +++++++
->>>>>>>      3 files changed, 304 insertions(+)
->>>>>>>      create mode 100644 sound/soc/mediatek/mt8188/mt8188-
->>>>>>> audsys-
->>>>>>> clk.c
->>>>>>>      create mode 100644 sound/soc/mediatek/mt8188/mt8188-
->>>>>>> audsys-
->>>>>>> clk.h
->>>>>>>      create mode 100644 sound/soc/mediatek/mt8188/mt8188-
->>>>>>> audsys-
->>>>>>> clkid.h
->>>>>>>
->>>>>>> diff --git a/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
->>>>>>> b/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
->>>>>>> new file mode 100644
->>>>>>> index 000000000000..1f294231d4c2
->>>>>>> --- /dev/null
->>>>>>> +++ b/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
->>>>>>> @@ -0,0 +1,206 @@
->>>>>>> +// SPDX-License-Identifier: GPL-2.0
->>>>>>> +/*
->>>>>>> + * mt8188-audsys-clk.c  --  MediaTek 8188 audsys clock
->>>>>>> control
->>>>>>> + *
->>>>>>> + * Copyright (c) 2022 MediaTek Inc.
->>>>>>> + * Author: Chun-Chia Chiu <chun-chia.chiu@mediatek.com>
->>>>>>> + */
->>>>>>> +
->>>>>>> +#include <linux/clk.h>
->>>>>>> +#include <linux/clk-provider.h>
->>>>>>> +#include <linux/clkdev.h>
->>>>>>> +#include "mt8188-afe-common.h"
->>>>>>> +#include "mt8188-audsys-clk.h"
->>>>>>> +#include "mt8188-audsys-clkid.h"
->>>>>>> +#include "mt8188-reg.h"
->>>>>>> +
->>>>>>> +struct afe_gate {
->>>>>>> +	int id;
->>>>>>> +	const char *name;
->>>>>>> +	const char *parent_name;
->>>>>>> +	int reg;
->>>>>>> +	u8 bit;
->>>>>>> +	const struct clk_ops *ops;
->>>>>>> +	unsigned long flags;
->>>>>>> +	u8 cg_flags;
->>>>>>> +};
->>>>>>> +
->>>>>>> +#define GATE_AFE_FLAGS(_id, _name, _parent, _reg, _bit,
->>>>>>> _flags,
->>>>>>> _cgflags) {\
->>>>>>> +		.id = _id,					
->>>>>>> \
->>>>>>> +		.name = _name,					
->>>>>>> \
->>>>>>> +		.parent_name = _parent,				
->>>>>>> \
->>>>>>> +		.reg = _reg,					
->>>>>>> \
->>>>>>> +		.bit = _bit,					
->>>>>>> \
->>>>>>> +		.flags = _flags,				
->>>>>>> \
->>>>>>> +		.cg_flags = _cgflags,				
->>>>>>> \
->>>>>>> +	}
->>>>>>> +
->>>>>>> +#define GATE_AFE(_id, _name, _parent, _reg, _bit)		
->>>>>>> \
->>>>>>> +	GATE_AFE_FLAGS(_id, _name, _parent, _reg, _bit,		
->>>>>>> \
->>>>>>> +		       CLK_SET_RATE_PARENT | CLK_IGNORE_UNUSED,
->>>>>>> CLK_GATE_SET_TO_DISABLE)
->>>>>>
->>>>>> Can you please explain what's the reason for
->>>>>> CLK_IGNORE_UNUSED
->>>>>> here?
->>>>>> Maybe we can solve some issue that you're facing in a cleaner
->>>>>> way.
->>>>>>
->>>>>> Regards,
->>>>>> Angelo
->>>>>
->>>>> Hi Angelo,
->>>>>
->>>>> Because clk_disable_unused() calls clk_core_is_enabled(),
->>>>> register
->>>>> access happens in is_enabled() ops.
->>>>> At the moment, the power for register access is not enabled, so
->>>>> the
->>>>> register read results in CPU hang.
->>>>>
->>>>> That's why I added CLK_IGNORE_UNUSED here, but it can't resolve
->>>>> all
->>>>> issues. Actually, we met same problem when "cat
->>>>> /sys/kernel/debug/clk/clk_summary" is used. We are still
->>>>> suffering
->>>>> the
->>>>> problem.
->>>>>
->>>>> I'm not sure if I can implement clk ops by myself, and exclude
->>>>> the
->>>>> registration of is_enabled() ops.
->>>>>
->>>>
->>>> Is the power for register access enabled with a power domain?
->>>>
->>>> Check drivers/clk/clk.c, grep for core->rpm_enabled.
->>>>
->>>> If you enable runtime PM before registering the clocks, and you
->>>> register them
->>>> with the right struct device, the clock API will enable power for
->>>> you
->>>> before
->>>> trying to read the clock enable status.
->>>>
->>>> Regards,
->>>> Angelo
->>>>
->>>
->>> Hi Angelo,
->>>
->>> I tried the way in MT8195, but it caused circular lock problem.
->>>
->>> Because mtcmos depends on some clocks, clk_bulk_prepare_enable is
->>> also
->>> used in scpsys_power_on()[1].
->>> If the clock also depends on the power domain, this results in the
->>> circular lock problem.
->>> That's why I don't bind the power domain with these clocks.
->>>
->>
->> This is not supposed to happen... can you please give me a (MT8195)
->> patch to
->> reproduce the issue that you're seeing?
->>
->> I would like to investigate that to check if I can come up with a
->> good solution.
->>
->> Thanks,
->> Angelo
-> 
-> 
-> Hi Angelo,
-> 
-> Sorry for replying late.
-> The original implementation about clock depending on power domain was a
-> cusotomized request, and it's not based on upstream code base. So I
-> can't apply the implementation directly. I tried to implement the
-> suggested solution in upstream code, but I can't reproduce the problem
-> successfully.
-> 
-> At the same time, we reviewed the difference between MT8195 and MT8188.
-> It's found that ADSP_INFRA should be kept ON to resolve the register
-> r/w access limitation in MT8188, so we can match the hardware design in
-> MT8195.
-> 
-> After discussing internally, we decided in favour of ADSP_INFRA
-> soloution. Althought the lock problem can't be seen, the new lock
-> relationship(prepare_lock -> genpd lock) is actually created.
-> 
-> In conclusion, ADSP_INFRA will be kept always on and I will remove
-> CLK_IGNORE_UNUSED flag in V3.
-> 
+vf reset nack actually represents the reset operation itself is
+performed but no address is assigned. Therefore, e1000_reset_hw_vf
+should fill the "perm_addr" with the zero address and return success on
+such an occasion. This prevents its callers in netdev.c from saying PF
+still resetting, and instead allows them to correctly report that no
+address is assigned.
 
-As far as the power consumption increase is ignorable (so, power consumption
-is very little more), that's a good decision and I support that.
+Fixes: 6ddbc4cf1f4d ("igb: Indicate failure on vf reset for empty mac address")
+Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+---
+V2 -> V3: Added Fixes: tag
 
-Regards,
-Angelo
+ drivers/net/ethernet/intel/igbvf/vf.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-> Thanks,
-> Trevor
-> 
->>
->>> [1]
->>>
-> https://urldefense.com/v3/__https://elixir.bootlin.com/linux/v6.1-rc2/source/drivers/soc/mediatek/mtk-pm-domains.c__;!!CTRNKA9wMg0ARbw!yVFCD-B4VZOxDXTGgDtpB0mJbVoY9tHODeICxthAC33lXMq6LRVTGS-4V-Dj129_cA$
->>>   
->>>
->>> Thanks,
->>> Trevor
->>>
->>>
->>
->>
->>
-
+diff --git a/drivers/net/ethernet/intel/igbvf/vf.c b/drivers/net/ethernet/intel/igbvf/vf.c
+index b8ba3f94c363..2691ae2a8002 100644
+--- a/drivers/net/ethernet/intel/igbvf/vf.c
++++ b/drivers/net/ethernet/intel/igbvf/vf.c
+@@ -1,6 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright(c) 2009 - 2018 Intel Corporation. */
+ 
++#include <linux/etherdevice.h>
++
+ #include "vf.h"
+ 
+ static s32 e1000_check_for_link_vf(struct e1000_hw *hw);
+@@ -131,11 +133,18 @@ static s32 e1000_reset_hw_vf(struct e1000_hw *hw)
+ 		/* set our "perm_addr" based on info provided by PF */
+ 		ret_val = mbx->ops.read_posted(hw, msgbuf, 3);
+ 		if (!ret_val) {
+-			if (msgbuf[0] == (E1000_VF_RESET |
+-					  E1000_VT_MSGTYPE_ACK))
++			switch (msgbuf[0]) {
++			case E1000_VF_RESET | E1000_VT_MSGTYPE_ACK:
+ 				memcpy(hw->mac.perm_addr, addr, ETH_ALEN);
+-			else
++				break;
++
++			case E1000_VF_RESET | E1000_VT_MSGTYPE_NACK:
++				eth_zero_addr(hw->mac.perm_addr);
++				break;
++
++			default:
+ 				ret_val = -E1000_ERR_MAC_INIT;
++			}
+ 		}
+ 	}
+ 
+-- 
+2.38.1
 
