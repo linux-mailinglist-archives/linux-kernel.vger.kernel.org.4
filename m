@@ -2,226 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 797E263F6F5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 18:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C62DB63F6F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiLAR6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 12:58:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
+        id S229953AbiLASAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 13:00:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiLAR6p (ORCPT
+        with ESMTP id S229515AbiLASAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 12:58:45 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E60EB2747;
-        Thu,  1 Dec 2022 09:58:43 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B1HpZw8012737;
-        Thu, 1 Dec 2022 17:58:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=5sZbgbdKGqHM5UqUh6KNFXUP2DY0iB04RWuZc8h+u2Y=;
- b=qhb4HcAlFA9xozlO84cLFiHWHdZ64kRKkHlgqFVCasUGL44hKk/u13/6ynFT+3MZsQVz
- eyxZ01B8hlfHVeE9D6nDDz75zqLM4ITccEkft80Xp+5tw2QEL9FzkGX0V7oFQwkq21/J
- S6ZCO3ZJ8yIY5PDCdUA0415YWRq40V89vbGO/YhEAgv50bqsvXoW9E8Aca1d5SYfibf8
- OKFBCP+OZIXkwLFA1ngynO+uoKRErX3rtaWrb0cv/ewD38K/Y83xg8fOtB1AbZofBjjH
- Az0u4jhVDDUtuNDYxMMqTcMkwBAmotVbQi7uY722+h+xwM3Dro4tAy+G4ZQPCIE4AjhV Ug== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m711s03nc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Dec 2022 17:58:40 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2B1Hptj8013602;
-        Thu, 1 Dec 2022 17:58:40 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m711s03mk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Dec 2022 17:58:39 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2B1Hnuov032727;
-        Thu, 1 Dec 2022 17:58:37 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03fra.de.ibm.com with ESMTP id 3m3ae8wmtg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Dec 2022 17:58:37 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B1Hq1R123003514
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 1 Dec 2022 17:52:01 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EBD2C4C044;
-        Thu,  1 Dec 2022 17:58:33 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 39B8B4C040;
-        Thu,  1 Dec 2022 17:58:33 +0000 (GMT)
-Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.179.10.216])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  1 Dec 2022 17:58:33 +0000 (GMT)
-Message-ID: <6a387a2a174572fd2db01451b2832c5fdc60bcf1.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 4/9] KVM: s390: selftest: memop: Replace macros by
- functions
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-Date:   Thu, 01 Dec 2022 18:58:32 +0100
-In-Reply-To: <20221201172813.027bcd13@p-imbrenda>
-References: <20221117221758.66326-1-scgl@linux.ibm.com>
-         <20221117221758.66326-5-scgl@linux.ibm.com>
-         <20221201172813.027bcd13@p-imbrenda>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.1 (3.46.1-1.fc37) 
+        Thu, 1 Dec 2022 13:00:34 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9367FB274B
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 10:00:32 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id y17so2373416plp.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 10:00:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y3l6W+4wCOmk5H2E5YROhRyJHHJ2tANXndiSfYTNLKA=;
+        b=LPbxOfrTB9fyfIBLwI9GmIvloOZLwzc5XO84esfl6QNOQpq/PxRAl5rm+Ti+T4Q37d
+         lCWp0inv5wIvqXwglrX83PfpZ3Q0ervr4AYgeL+m50dwe1upazuVZ3UZNSOlMqAd8B6a
+         YGPZ13wOq1yWRIEtEACOhp6H5Pl/6toNQPbGKRqIBqAfyk3cIPBW9tMcAmZH+UTd24+a
+         pkgAGzBKLl+cYt2y0/0DdCj8uHx4sY7xGALTKdDIHFKzVWhn61BRBGwIVZ5atvJGHQO6
+         rSyUjMgbHcmt/ryyQnEmWAqXWOBallk8rs2b9fyQ/qQ34uOkW32no9fiikFXVx7nX37l
+         Sy+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y3l6W+4wCOmk5H2E5YROhRyJHHJ2tANXndiSfYTNLKA=;
+        b=rEXOYhH2uEhlDB4Kn9NI9dtHFoDj84wpqVBp0AUD6FOxv9t1GTRDEvt4ENhZD07hTH
+         OyaoSCL3f8sIqiIC8qUD/CjOQhKShKxrU1OvtV6k2RKcyLoSZTE7dgrWZQ9USqpQToeL
+         MIfkIVMtCuLRSojUiYThbUXTPY+/QKuyClGbhFL5mnyHf5y2Vv6eumKZ7l7Q6c8cM5z+
+         Op0fAUO0TpgvkCZaYj7CTbJJ6Kjv93/GSbXmOgYur5p1KBK1mObeMUUKuHHJeSrwAmdq
+         Rvttin1yR/qnkqNsEJwiM15lRaaRrqOw+sUpxBTaH4mDa92ySRmlkULoMDvVMfw4qxP8
+         myfA==
+X-Gm-Message-State: ANoB5pmVrrHMaPoyPWLL3FfJHu4xC8huuYqho16nzQOI7IqC84IyTFYW
+        5qoX19sxtyena6NG4pdOL2dptCnyBy+qAVQzfeqwvw==
+X-Google-Smtp-Source: AA0mqf6y+U57HPHVdgjCnjJZA/z4cEc+sR5khbPriXkILN5I/gE93IstCZWbONlRJ/Bn8v5oma0tfOOfXJtAqtxlqDU=
+X-Received: by 2002:a17:90a:df0e:b0:20b:22fb:2ef with SMTP id
+ gp14-20020a17090adf0e00b0020b22fb02efmr78225062pjb.158.1669917631940; Thu, 01
+ Dec 2022 10:00:31 -0800 (PST)
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ptHe_V3NTGaxit2MBxKwqLiuMQZXY5U0
-X-Proofpoint-GUID: yLlJAqRcfMRU511D3Q1gfWvLqm3ekpbO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-01_12,2022-12-01_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- malwarescore=0 bulkscore=0 impostorscore=0 mlxscore=0 adultscore=0
- lowpriorityscore=0 phishscore=0 priorityscore=1501 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212010132
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221201130135.1115380-1-apatel@ventanamicro.com>
+ <20221201130135.1115380-4-apatel@ventanamicro.com> <87v8mvqbvq.ffs@tglx>
+In-Reply-To: <87v8mvqbvq.ffs@tglx>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Thu, 1 Dec 2022 23:30:20 +0530
+Message-ID: <CAK9=C2WN57hHUz=3SDruyWPdAobn+QP8uGwugjPAobeFG7dBkw@mail.gmail.com>
+Subject: Re: [PATCH v14 3/8] genirq: Add mechanism to multiplex a single HW IPI
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-12-01 at 17:28 +0100, Claudio Imbrenda wrote:
-> On Thu, 17 Nov 2022 23:17:53 +0100
-> Janis Schoetterl-Glausch <scgl@linux.ibm.com> wrote:
->=20
-> > Replace the DEFAULT_* test helpers by functions, as they don't
-> > need the exta flexibility.
-> >=20
-> > Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> > ---
-> >  tools/testing/selftests/kvm/s390x/memop.c | 82 +++++++++++------------
-> >  1 file changed, 39 insertions(+), 43 deletions(-)
-> >=20
-> > diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/=
-selftests/kvm/s390x/memop.c
-> > index 69869c7e2ab1..286185a59238 100644
-> > --- a/tools/testing/selftests/kvm/s390x/memop.c
-> > +++ b/tools/testing/selftests/kvm/s390x/memop.c
-> > @@ -48,6 +48,8 @@ struct mop_desc {
-> >  	uint8_t key;
-> >  };
-> > =20
-> > +const uint8_t NO_KEY =3D 0xff;
+On Thu, Dec 1, 2022 at 10:50 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> On Thu, Dec 01 2022 at 18:31, Anup Patel wrote:
+> > All RISC-V platforms have a single HW IPI provided by the INTC local
+> > interrupt controller. The HW method to trigger INTC IPI can be through
+> > external irqchip (e.g. RISC-V AIA), through platform specific device
+> > (e.g. SiFive CLINT timer), or through firmware (e.g. SBI IPI call).
+> >
+> > To support multiple IPIs on RISC-V, we add a generic IPI multiplexing
+>
+> s/we//
+
+Okay, I will update.
+
+>
+> > mechanism which help us create multiple virtual IPIs using a single
+> > HW IPI. This generic IPI multiplexing is inspired from the Apple AIC
+>
+> s/from/by/
+
+Okay, I will update.
+
+>
+> > irqchip driver and it is shared by various RISC-V irqchip drivers.
+>
+> Sure, but now we have two copies of this. One in the Apple AIC and one
+> here. The obvious thing to do is:
+>
+>    1) Provide generic infrastructure
+>
+>    2) Convert AIC to use it
+
+Mark Z already has a converted version of AIC driver.
+https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/ipi-mux
+
+>
+>    3) Add RISCV users
+
+The PATCH4 of this series converts the two existing
+RISC-V users (SBI IPI and CLINT).
+
+We also have a RISC-V AIA series (posted recently) which
+uses the IPI muxing added by this series.
+
+>
+> No?
+>
+> > +static void ipi_mux_mask(struct irq_data *d)
+> > +{
+> > +     struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
 > > +
-> >  static struct kvm_s390_mem_op ksmo_from_desc(const struct mop_desc *de=
-sc)
-> >  {
-> >  	struct kvm_s390_mem_op ksmo =3D {
-> > @@ -85,7 +87,7 @@ static struct kvm_s390_mem_op ksmo_from_desc(const st=
-ruct mop_desc *desc)
-> >  		ksmo.flags |=3D KVM_S390_MEMOP_F_INJECT_EXCEPTION;
-> >  	if (desc->_set_flags)
-> >  		ksmo.flags =3D desc->set_flags;
-> > -	if (desc->f_key) {
-> > +	if (desc->f_key && desc->key !=3D NO_KEY) {
->=20
-> is this change going to affect the behaviour?
-> if so, please document it in the patch description
-
-No, previously the absence of a key in the vararg would denote there not be=
-ing a key,
-now that a function is used there is an explicit no key argument, which is =
-checked
-here to see if we use key checking or not
->=20
-> >  		ksmo.flags |=3D KVM_S390_MEMOP_F_SKEY_PROTECTION;
-> >  		ksmo.key =3D desc->key;
-> >  	}
-> > @@ -268,34 +270,28 @@ static void prepare_mem12(void)
-> >  #define ASSERT_MEM_EQ(p1, p2, size) \
-> >  	TEST_ASSERT(!memcmp(p1, p2, size), "Memory contents do not match!")
-> > =20
-> > -#define DEFAULT_WRITE_READ(copy_cpu, mop_cpu, mop_target_p, size, ...)=
-		\
-> > -({										\
-> > -	struct test_info __copy_cpu =3D (copy_cpu), __mop_cpu =3D (mop_cpu);	=
-\
-> > -	enum mop_target __target =3D (mop_target_p);				\
-> > -	uint32_t __size =3D (size);						\
-> > -										\
-> > -	prepare_mem12();							\
-> > -	CHECK_N_DO(MOP, __mop_cpu, __target, WRITE, mem1, __size,		\
-> > -			GADDR_V(mem1), ##__VA_ARGS__);				\
-> > -	HOST_SYNC(__copy_cpu, STAGE_COPIED);					\
-> > -	CHECK_N_DO(MOP, __mop_cpu, __target, READ, mem2, __size,		\
-> > -			GADDR_V(mem2), ##__VA_ARGS__);				\
-> > -	ASSERT_MEM_EQ(mem1, mem2, __size);					\
-> > -})
-> > +static void default_write_read(struct test_info copy_cpu, struct test_=
-info mop_cpu,
-> > +			       enum mop_target mop_target, uint32_t size, uint8_t key)
-> > +{
-> > +	prepare_mem12();
-> > +	CHECK_N_DO(MOP, mop_cpu, mop_target, WRITE, mem1, size,
-> > +		   GADDR_V(mem1), KEY(key));
-> > +	HOST_SYNC(copy_cpu, STAGE_COPIED);
-> > +	CHECK_N_DO(MOP, mop_cpu, mop_target, READ, mem2, size,
-> > +		   GADDR_V(mem2), KEY(key));
-> > +	ASSERT_MEM_EQ(mem1, mem2, size);
+> > +     atomic_andnot(BIT(irqd_to_hwirq(d)), &icpu->enable);
 > > +}
-> > =20
-> > -#define DEFAULT_READ(copy_cpu, mop_cpu, mop_target_p, size, ...)		\
-> > -({										\
-> > -	struct test_info __copy_cpu =3D (copy_cpu), __mop_cpu =3D (mop_cpu);	=
-\
-> > -	enum mop_target __target =3D (mop_target_p);				\
-> > -	uint32_t __size =3D (size);						\
-> > -										\
-> > -	prepare_mem12();							\
-> > -	CHECK_N_DO(MOP, __mop_cpu, __target, WRITE, mem1, __size,		\
-> > -			GADDR_V(mem1));						\
-> > -	HOST_SYNC(__copy_cpu, STAGE_COPIED);					\
-> > -	CHECK_N_DO(MOP, __mop_cpu, __target, READ, mem2, __size, ##__VA_ARGS_=
-_);\
-> > -	ASSERT_MEM_EQ(mem1, mem2, __size);					\
-> > -})
-> > +static void default_read(struct test_info copy_cpu, struct test_info m=
-op_cpu,
-> > +			 enum mop_target mop_target, uint32_t size, uint8_t key)
+> > +
+> > +static void ipi_mux_unmask(struct irq_data *d)
 > > +{
-> > +	prepare_mem12();
-> > +	CHECK_N_DO(MOP, mop_cpu, mop_target, WRITE, mem1, size, GADDR_V(mem1)=
-);
-> > +	HOST_SYNC(copy_cpu, STAGE_COPIED);
-> > +	CHECK_N_DO(MOP, mop_cpu, mop_target, READ, mem2, size,
-> > +		   GADDR_V(mem2), KEY(key));
-> > +	ASSERT_MEM_EQ(mem1, mem2, size);
-> > +}
-> > =20
-> >  static void guest_copy(void)
-> >  {
-> > @@ -310,7 +306,7 @@ static void test_copy(void)
-> > =20
-> >  	HOST_SYNC(t.vcpu, STAGE_INITED);
-> > =20
-> > -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, t.size);
-> > +	default_write_read(t.vcpu, t.vcpu, LOGICAL, t.size, NO_KEY);
-> > =20
-> >  	kvm_vm_free(t.kvm_vm);
-> >  }
+> > +     u32 ibit = BIT(irqd_to_hwirq(d));
+> > +     struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
+>
+> The AIC code got the variable ordering correct ...
+>
+> https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#variable-declarations
 
-[...]
+Okay, I will update.
+
+>
+> > +     atomic_or(ibit, &icpu->enable);
+> > +
+> > +     /*
+> > +      * The atomic_or() above must complete before the atomic_read()
+> > +      * below to avoid racing ipi_mux_send_mask().
+> > +      */
+> > +     smp_mb__after_atomic();
+> > +
+> > +     /* If a pending IPI was unmasked, raise a parent IPI immediately. */
+> > +     if (atomic_read(&icpu->bits) & ibit)
+> > +             ipi_mux_send(smp_processor_id());
+> > +}
+> > +
+> > +static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
+> > +{
+> > +     u32 ibit = BIT(irqd_to_hwirq(d));
+> > +     struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
+> > +     unsigned long pending;
+> > +     int cpu;
+> > +
+> > +     for_each_cpu(cpu, mask) {
+> > +             icpu = per_cpu_ptr(ipi_mux_pcpu, cpu);
+> > +             pending = atomic_fetch_or_release(ibit, &icpu->bits);
+> > +
+> > +             /*
+> > +              * The atomic_fetch_or_release() above must complete
+> > +              * before the atomic_read() below to avoid racing with
+> > +              * ipi_mux_unmask().
+> > +              */
+> > +             smp_mb__after_atomic();
+> > +
+> > +             /*
+> > +              * The flag writes must complete before the physical IPI is
+> > +              * issued to another CPU. This is implied by the control
+> > +              * dependency on the result of atomic_read() below, which is
+> > +              * itself already ordered after the vIPI flag write.
+> > +              */
+> > +             if (!(pending & ibit) && (atomic_read(&icpu->enable) & ibit))
+> > +                     ipi_mux_send(cpu);
+> > +     }
+> > +}
+> > +
+> > +static const struct irq_chip ipi_mux_chip = {
+> > +     .name           = "IPI Mux",
+> > +     .irq_mask       = ipi_mux_mask,
+> > +     .irq_unmask     = ipi_mux_unmask,
+> > +     .ipi_send_mask  = ipi_mux_send_mask,
+> > +};
+> > +
+> > +static int ipi_mux_domain_alloc(struct irq_domain *d, unsigned int virq,
+> > +                             unsigned int nr_irqs, void *arg)
+> > +{
+> > +     int i;
+> > +
+> > +     for (i = 0; i < nr_irqs; i++) {
+> > +             irq_set_percpu_devid(virq + i);
+> > +             irq_domain_set_info(d, virq + i, i, &ipi_mux_chip, NULL,
+> > +                                 handle_percpu_devid_irq, NULL, NULL);
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static const struct irq_domain_ops ipi_mux_domain_ops = {
+> > +     .alloc          = ipi_mux_domain_alloc,
+> > +     .free           = irq_domain_free_irqs_top,
+> > +};
+> > +
+> > +/**
+> > + * ipi_mux_process - Process multiplexed virtual IPIs
+> > + */
+> > +void ipi_mux_process(void)
+> > +{
+> > +     struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
+> > +     irq_hw_number_t hwirq;
+> > +     unsigned long ipis;
+> > +     unsigned int en;
+> > +
+> > +     /*
+> > +      * Reading enable mask does not need to be ordered as long as
+> > +      * this function called from interrupt handler because only
+> > +      * the CPU itself can change it's own enable mask.
+> > +      */
+> > +     en = atomic_read(&icpu->enable);
+> > +
+> > +     /*
+> > +      * Clear the IPIs we are about to handle. This pairs with the
+> > +      * atomic_fetch_or_release() in ipi_mux_send_mask().
+>
+> The comments in the AIC code where you copied from are definitely
+> better...
+>
+> Thanks,
+>
+>         tglx
+
+Regards,
+Anup
