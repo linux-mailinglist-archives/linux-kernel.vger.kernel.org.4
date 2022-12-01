@@ -2,102 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39DED63F842
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA98B63F845
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbiLATbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 14:31:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53584 "EHLO
+        id S230515AbiLATbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 14:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbiLATae (ORCPT
+        with ESMTP id S230422AbiLATai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 14:30:34 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D86C8D2D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:30:21 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id h16so2208028qtu.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 11:30:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8qZZ/bmZwEI9aDSPcyDyAicp7ItEQHVjMS3j20zf9fQ=;
-        b=aLynhYNyioy+NfHU2wZDQeTHz+lUZ8ovDqQOsYmMrvKUArjXnpnIGeVFpkjV+GMIrF
-         z7kQV8oVgUb5/y4/fYUBu9KgERLHJyOPBDzfFVX3GSLCIyT0B9++txvs8jEtstB9R5nI
-         714uIkH7csYI/PaSVEqz2yFf2CSRfTG4dhZvA2hlZEmvEe7MHGpvMR1LZ/oZs02tJ4Sw
-         zztIViIYrrMentHreQwZgasrF28zBZ/Mx3+yKT1UdX7d6WMvhf2cH7v2R7iuAfJHq8Mp
-         U7xTPPsII92xfyyyBw9EyuEjjpiow2qQzq4Pr1LPGb4xB9Fb0I1u4ZC1zKQXi13RTug8
-         hdcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8qZZ/bmZwEI9aDSPcyDyAicp7ItEQHVjMS3j20zf9fQ=;
-        b=KhpjNdJ+V2qjx3ycILTsAcY2UxxGcLSKB3weEWMUyzKW1so7mNkpALWKPmcG2hhJ0Y
-         GcGn6UyFd4r/qqlJ+vfX91c2Yp2Hk/bLY2ejmR2AO1/qaEhNWo+RS9VnSTaM4z5HkwZG
-         oAhRWnHzR4HwJUNX64axZe90XdoQUB5mx3O/KaDXLWQ9UXnbWV+lkN8n+rRhYYfOzcJd
-         AD9cexLKrUbUYACgDkgiszgZrFg5RCtFPuVaJE/Kr827KKsMOaH7vL9XzwZoZ9XzNXv4
-         bcMezol4wLKa/6ORHpaCYV9GAcYUCNJSGif4U2Rgn51+6cN94PNXhhc0foohgH8XQIAi
-         m9hg==
-X-Gm-Message-State: ANoB5pn9PihPH9GAS0eJuza+41fzQyYRkPYRjMn5Qq3u0HsGHvX5Ev04
-        G+bIBciKPuJzjTtya6305Zog1Q==
-X-Google-Smtp-Source: AA0mqf5At6RxhQv7SNejD5cYSTYbLIgr8s1qOciJA/0hX80qzNespQZ+0by4P8hyG8anjnTanPYC0g==
-X-Received: by 2002:a05:622a:40cb:b0:3a5:7e65:ddeb with SMTP id ch11-20020a05622a40cb00b003a57e65ddebmr44639337qtb.424.1669923020093;
-        Thu, 01 Dec 2022 11:30:20 -0800 (PST)
-Received: from nathan-ideapad.. (d-75-76-18-234.oh.cpe.breezeline.net. [75.76.18.234])
-        by smtp.gmail.com with ESMTPSA id h19-20020ac85153000000b003a6328ee7acsm2977748qtn.87.2022.12.01.11.30.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 11:30:19 -0800 (PST)
-From:   Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-Cc:     nathan.morrison@timesys.com, greg.malysa@timesys.com,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org (open list:SPI NOR SUBSYSTEM),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 3/3] mtd: spi-nor: Add support for IS25LX256 operating in 1S-1S-8S octal read mode
-Date:   Thu,  1 Dec 2022 14:30:06 -0500
-Message-Id: <20221201193007.261690-4-nathan.morrison@timesys.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221201193007.261690-1-nathan.morrison@timesys.com>
-References: <20221201193007.261690-1-nathan.morrison@timesys.com>
+        Thu, 1 Dec 2022 14:30:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0B1CA15F;
+        Thu,  1 Dec 2022 11:30:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA27BB82008;
+        Thu,  1 Dec 2022 19:30:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97982C433C1;
+        Thu,  1 Dec 2022 19:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669923021;
+        bh=0RxRzmDFLKwQUSgOIo6SuPkpbO4W72b1VHA4ZTgHkqc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ky2zh/RynzTEWtmlLZ/FHid1Dc0FH/RMY9FbFYHg35MAt2n3x+hASDaKqs0Mdqca2
+         6Jq6vyKb0SSIk0XYUf0YBuFb4SsFS+geQCDU29CkHxtL+Zh1Ht7ueAYPB0jbpnuVwU
+         9m8bpO/+SQL/qJ5hoAlSHPHaRgf0UgiUbf2Q8ewt2tRKhk/2NR3I+pbgeUjg5efupC
+         7or94wbkXOf/FQ+utb7pR2kUSY5V6Qn5Al9EttMPjKkhs2Q1O3DOAEug0zrKH5sjAN
+         5nmr13FJTgwJXsiwqTL8xcH7bu3pv39GJo+iw+/xvM3fIg0YlcQXYzGe4KwEByGcoD
+         KBg0Ab6Upl0+A==
+Date:   Thu, 1 Dec 2022 19:30:16 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Yanhong Wang <yanhong.wang@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+Subject: Re: [PATCH v1 7/7] riscv: dts: starfive: visionfive-v2: Add phy
+ delay_chain configuration
+Message-ID: <Y4kAyAhBseNmmDo8@spud>
+References: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
+ <20221201090242.2381-8-yanhong.wang@starfivetech.com>
+ <Y4jpDvXo/uj9ygLR@spud>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4jpDvXo/uj9ygLR@spud>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds the IS25LX256 chip into the ISSI flash_info parts table
+On Thu, Dec 01, 2022 at 05:49:08PM +0000, Conor Dooley wrote:
+> On Thu, Dec 01, 2022 at 05:02:42PM +0800, Yanhong Wang wrote:
+> > riscv: dts: starfive: visionfive-v2: Add phy delay_chain configuration
+> > 
+> > Add phy delay_chain configuration to support motorcomm phy driver for
+> > StarFive VisionFive 2 board.
 
-Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
----
- drivers/mtd/spi-nor/issi.c | 2 ++
- 1 file changed, 2 insertions(+)
+nit: please re-word this commit next time around to actually say what
+you're doing here. I didn't notice it initially, but this patch is doing
+a lot more than adding `delay_chain` configuration. To my dwmac unaware
+brain, there's nothing hits for that term outside of the changelog :(
 
-diff --git a/drivers/mtd/spi-nor/issi.c b/drivers/mtd/spi-nor/issi.c
-index 89a66a19d754..f00f1e621d84 100644
---- a/drivers/mtd/spi-nor/issi.c
-+++ b/drivers/mtd/spi-nor/issi.c
-@@ -74,6 +74,8 @@ static const struct flash_info issi_nor_parts[] = {
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
- 		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
- 		.fixups = &is25lp256_fixups },
-+	{ "is25lx256", INFO(0x9d5a19, 0, 128 * 1024, 256)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_4B_OPCODES | SPI_NOR_OCTAL_READ) },
- 
- 	/* PMC */
- 	{ "pm25lv512",   INFO(0,        0, 32 * 1024,    2)
--- 
-2.30.2
+Thanks,
+Conor.
 
+> > 
+> > Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+> > ---
+> >  .../jh7110-starfive-visionfive-v2.dts         | 46 +++++++++++++++++++
+> >  1 file changed, 46 insertions(+)
+> > 
+> > diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+> > index c8946cf3a268..2868ef4c74ef 100644
+> > --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+> > +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+> > @@ -15,6 +15,8 @@
+> >  
+> >  	aliases {
+> >  		serial0 = &uart0;
+> > +		ethernet0=&gmac0;
+> > +		ethernet1=&gmac1;
+> 
+> Please match the whitespace usage of the existing entry.
+> 
+> >  	};
+> >  
+> >  	chosen {
+> > @@ -114,3 +116,47 @@
+> >  	pinctrl-0 = <&uart0_pins>;
+> >  	status = "okay";
+> >  };
+> > +
+> > +&gmac0 {
+> > +	status = "okay";
+> > +	#address-cells = <1>;
+> > +	#size-cells = <0>;
+> > +	phy-handle = <&phy0>;
+> > +	status = "okay";
+> > +	mdio0 {
+> 
+> A line of whitespace before the child nodes too please :)
+> 
+> > +		#address-cells = <1>;
+> > +		#size-cells = <0>;
+> > +		compatible = "snps,dwmac-mdio";
+> > +		phy0: ethernet-phy@0 {
+> > +			reg = <0>;
+> > +			rxc_dly_en = <1>;
+> > +			tx_delay_sel_fe = <5>;
+> > +			tx_delay_sel = <0xa>;
+> > +			tx_inverted_10 = <0x1>;
+> > +			tx_inverted_100 = <0x1>;
+> > +			tx_inverted_1000 = <0x1>;
+> > +		};
+> > +	};
+> > +};
+> > +
+> > +&gmac1 {
+> > +	status = "okay";
+> > +	#address-cells = <1>;
+> > +	#size-cells = <0>;
+> > +	phy-handle = <&phy1>;
+> > +	status = "okay";
+> > +	mdio1 {
+> > +		#address-cells = <1>;
+> > +		#size-cells = <0>;
+> > +		compatible = "snps,dwmac-mdio";
+> > +		phy1: ethernet-phy@1 {
+> > +			reg = <1>;
+> > +			tx_delay_sel_fe = <5>;
+> > +			tx_delay_sel = <0>;
+> > +			rxc_dly_en = <0>;
+> > +			tx_inverted_10 = <0x1>;
+> > +			tx_inverted_100 = <0x1>;
+> > +			tx_inverted_1000 = <0x0>;
+> > +		};
+> > +	};
+> > +};
+> > -- 
+> > 2.17.1
+> > 
