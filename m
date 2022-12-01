@@ -2,95 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E6A63F2B6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:23:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3745363F2B8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbiLAOXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 09:23:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
+        id S230457AbiLAOXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 09:23:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbiLAOW5 (ORCPT
+        with ESMTP id S231924AbiLAOXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 09:22:57 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE853FB92
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 06:22:55 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id h10so2029526ljk.11
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 06:22:55 -0800 (PST)
+        Thu, 1 Dec 2022 09:23:01 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AA42FA5C;
+        Thu,  1 Dec 2022 06:22:57 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id c1so2720853lfi.7;
+        Thu, 01 Dec 2022 06:22:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=9iFsZv3cbflfd0iXr72+f/UJOaMLz+n6AvbilmWkaus=;
-        b=oE0R9fLlWkCZdU453zYYSxl7EKUMe6JQBTfFM9my8L4XCzyVSDBzQnOpHCDLQ1+qgD
-         lynpKkp9rPS9ay7uN/HKG0M8cF32Z46bLAivqIYIo8+tdJO8/Qte10BgNf8g3U2eSmQe
-         I3WOlRgs8+/wJrVffqRrrLL0J5uZjEXYvt0kBdFo3GLlaqnymnGG+UfUJ2T+NlcTQxU4
-         sBjlgikOz9pBI94pX8gGplLo9i5aExkD1BMj60WmRiexuG+o+9GeFdf4Ak7iWaIht+WE
-         eoaGooK6xUrLKfcxxAmn//RbMSt5hwv9mOE+PArOoHamq6XV0W1ck16fmU37x6XfRb7D
-         RgAw==
+        bh=nRvzQRHmIfpCS7wU0FBvw2pwnDRrKBpC2VMX4T8FuMQ=;
+        b=glkvHACbXdIMkvWcRDLEgpDmtm5dySDXry66W8yZbqm9xPBcfjer9gmxAYkp2rP3x+
+         KH33IO/wFg/y0vprvSwycUSRjs1g/GxGpxCk/H3xY9/OwCq0D3W4Or3Xy7G036KjSH5z
+         pAm951cmeapgjtZuMzOMn51IkkLnQhz1UNdWklZm9UhEg2LzIkhPqrHFN+NTsBwTf4tS
+         xYP6lz+5e8WTSShfwTRqpnsa2PBjF/a713MXhk4nq70tHnsx0HpQbm+cYbmdpLe0cbaF
+         tZ1bhLAqlle7YqdIme9c/s76R1WNZqPCNT0/m3sO9U0lTZTvxZmIPXUkrRHgGNG93+tZ
+         ZbBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9iFsZv3cbflfd0iXr72+f/UJOaMLz+n6AvbilmWkaus=;
-        b=1Ldbq8YMBbKxwjkShDUkNii/rwxfoWMeiWLbgJT17DP7ZC7ujuqvkdDwCCr6JFx/0O
-         VNTw7zfBas7+RJOKpgN5qKYNDIupGlsxp05/2d0XZFEpzhrj3Sv4xtPf5BcnuybTtjJs
-         sCa/uqlRPU9Ztep1kxSxmTIqiD7eusayrql3+zeiy7N6DV0ONx393iEtYtU5r2sMrFiP
-         APNvzrvwuso3yEBq77QwIQqsnS9SKwPD0mbMcG8lN2WBmRy1dwUvqDV06HgoUfGoEpkM
-         mlB3xD8TezacxxOeDIuaENuUtgKdjqvsw6GhYjwGZL0UVaZcq1y7GySm99EHVDJqkFI+
-         HXqA==
-X-Gm-Message-State: ANoB5pm1XfsSMZ2mYBoN+ROxKSCPZH/SryYeu4oR9jH8FpHGv0tmbN6q
-        dke/xazb/O4zkXGocnfiqw/QxQ==
-X-Google-Smtp-Source: AA0mqf7xD/Jkb+lgOKtkI8jWh7RztAlQeTezKB2+l3CoXG9Hfjruc0/pjkMibi3HSXx0SNOrEZhGag==
-X-Received: by 2002:a05:651c:54b:b0:276:d9a6:dc00 with SMTP id q11-20020a05651c054b00b00276d9a6dc00mr22490570ljp.379.1669904573898;
-        Thu, 01 Dec 2022 06:22:53 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c17-20020ac25f71000000b0049311968ca4sm658343lfc.261.2022.12.01.06.22.51
+        bh=nRvzQRHmIfpCS7wU0FBvw2pwnDRrKBpC2VMX4T8FuMQ=;
+        b=bB43Vi6qwwIlof7ocTG5wZu5eLWDvlLET3au/9mrpHDqkhFTDY/QA6xz7CYrKw6ked
+         zx+Ayg2nbBIL0DrbRKRQ1NZDCfp9gnnAoIPHmQmVLEuGJMKdx9qtGn1yFWLJdjz3T9zd
+         nhwls6il8n5TfKXzOspmVe6EdUHkj6QQVwLhABf0oT9f28AWieIToMCL9tcOBhChRSJg
+         k/00mRzT7o9z1O5L9NdesJoHlixeqPdGn5iv9uIyugjqYAV/xEyvLaA33skk8h90+efY
+         G2FdMK6nshImr+/jSNOWO3I3oVl6lw+qR0vDujMBqxSyfqAAGpCgmu53v0XW/4pvHg3F
+         Hmrg==
+X-Gm-Message-State: ANoB5plMRz1UwowW+6nNElxuQyNrskhNiN2lwzITF8B0HxG+0xbdpxEP
+        jkIxH8crU8YZYNSjQquRj+c=
+X-Google-Smtp-Source: AA0mqf7yghnQdIU/jzPDqVl2Lk3losfW6ljH7NX2kalFPUP6CTeA9QJBgw+y8n+skFGRalE2ABv8Jg==
+X-Received: by 2002:a05:6512:3a82:b0:4b5:42fd:c26e with SMTP id q2-20020a0565123a8200b004b542fdc26emr1091703lfu.52.1669904576127;
+        Thu, 01 Dec 2022 06:22:56 -0800 (PST)
+Received: from [192.168.50.20] (077222238151.warszawa.vectranet.pl. [77.222.238.151])
+        by smtp.gmail.com with ESMTPSA id c25-20020a2ebf19000000b0026ddaf38b0fsm399396ljr.96.2022.12.01.06.22.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 06:22:52 -0800 (PST)
-Message-ID: <26384fb5-4fb1-d629-8153-5577d75c5492@linaro.org>
-Date:   Thu, 1 Dec 2022 15:22:51 +0100
+        Thu, 01 Dec 2022 06:22:55 -0800 (PST)
+Message-ID: <abe0cc82-2fb8-2e29-e7b9-90fe6ae4d203@gmail.com>
+Date:   Thu, 1 Dec 2022 15:22:54 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 3/4] dt-bindings: arm: qcom,ids: Add SoC IDs for SM6115 /
- SM4250 and variants
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.1
+Subject: Re: [PATCH] Prevent buffer overflow in UVC Gadget setup handler
+To:     Dan Scally <dan.scally@ideasonboard.com>,
+        laurent.pinchart@ideasonboard.com
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221201122141.8739-1-szymon.heidrich@gmail.com>
+ <780379d9-2331-cd7a-126d-cdaa8aec023d@ideasonboard.com>
 Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        a39.skl@gmail.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20221201141619.2462705-1-bhupesh.sharma@linaro.org>
- <20221201141619.2462705-4-bhupesh.sharma@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221201141619.2462705-4-bhupesh.sharma@linaro.org>
+From:   Szymon Heidrich <szymon.heidrich@gmail.com>
+In-Reply-To: <780379d9-2331-cd7a-126d-cdaa8aec023d@ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/2022 15:16, Bhupesh Sharma wrote:
-> Add SoC IDs for Qualcomm SM6115 / SM4250 and variants.
+On 01/12/2022 14:49, Dan Scally wrote:
+> Hello - thanks for the patch
 > 
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> On 01/12/2022 12:21, Szymon Heidrich wrote:
+>> Setup function uvc_function_setup
+> 
+> 
+> You've written uvc_function_setup here, but the code changes uvc_function_ep0_complete.
 
+Yes, this was intentional as uvc_function_setup prevents handling of control
+transfer requests with wLength grater than UVC_MAX_REQUEST_SIZE.
+The uvc_function_ep0_complete function handles data phase thus was modified.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+>>   permits control transfer
+>> requests with up to 64 bytes of payload (UVC_MAX_REQUEST_SIZE),
+>> data stage handler for OUT transfer uses memcpy to copy req->actual
+>> bytes to uvc_event->data.data array of size 60. This may result
+>> in an overflow of 4 bytes.
+>>
+>> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+> 
+> 
+> Good catch
+> 
+>> ---
+>>   drivers/usb/gadget/function/f_uvc.c | 5 +++--
+>>   1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+>> index 6e196e061..69c5eb3a3 100644
+>> --- a/drivers/usb/gadget/function/f_uvc.c
+>> +++ b/drivers/usb/gadget/function/f_uvc.c
+>> @@ -216,8 +216,9 @@ uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
+>>             memset(&v4l2_event, 0, sizeof(v4l2_event));
+>>           v4l2_event.type = UVC_EVENT_DATA;
+>> -        uvc_event->data.length = req->actual;
+>> -        memcpy(&uvc_event->data.data, req->buf, req->actual);
+>> +        uvc_event->data.length = (req->actual > sizeof(uvc_event->data.data) ?
+>> +            sizeof(uvc_event->data.data) : req->actual);
+> 
+> 
+> There's a clamp() macro in f_uvc.c, can we use that?
+> 
+>> +        memcpy(&uvc_event->data.data, req->buf, uvc_event->data.length);
+>>           v4l2_event_queue(&uvc->vdev, &v4l2_event);
+>>       }
+>>   }
 
-Best regards,
-Krzysztof
+If it is more appropriate I will use min_t(unsigned int, req->actual, sizeof(uvc_event->data.data)).
 
