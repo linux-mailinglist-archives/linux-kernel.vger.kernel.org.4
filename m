@@ -2,79 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8795263E6B6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EDA63E6B7
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiLAAw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 19:52:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
+        id S229778AbiLAAxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 19:53:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiLAAw0 (ORCPT
+        with ESMTP id S229614AbiLAAw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 19:52:26 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CFC7B4F9;
-        Wed, 30 Nov 2022 16:52:25 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id bj12so542747ejb.13;
-        Wed, 30 Nov 2022 16:52:25 -0800 (PST)
+        Wed, 30 Nov 2022 19:52:59 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AA610BE;
+        Wed, 30 Nov 2022 16:52:58 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id ud5so623032ejc.4;
+        Wed, 30 Nov 2022 16:52:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EcYtG8fJSEFaCTYWXfq8R84dSZ3VnLHvz4JUlumXUv0=;
-        b=JmfG+COHj9Da/GW0CY8kh7AJfSJyMm9+YNe16nEaUflGBG6szpdDdtghgAIiqIxHtq
-         R7u81kK2IxZyx0MmKk2Dy3kunXIwYV4HlgjYGhOqa6za8zpbMwZ3fteFGHcfAmAD5CbI
-         g1OV7jCWgVse0lMZF1RSqZf3E20f1mo5mg4gqeZf8b6gL3jqwyuA4A4fe7k0E2tK/QDA
-         tdOJLRZfkXO+PCWZ5wlaO61EBzzPw4PvEaD/0/53fAUuVxi4Y8smSCK7jKN5/nLqhDGm
-         S/oH1QtsjA53QdtF8+yloWmnBLr8L3xo8nEZErqUZiflzgOz2DzsdE8zPgUW1YKRwJro
-         giaA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZPAL+qEpybMK4gfRSDNZ/UBJjmcxXUSe2Ph04k04WIQ=;
+        b=i1dlhWy9+GVO4JnGeCB/BanMnidxHyipiPNGdCbKOW2Z/6pPYBAwWnt6rez2QStMd7
+         iq5hlwhdnJI/2XQwvRCszjjAFj8P5+uMTusnDR0fhwMFWtvIZih22zuvcQpAJhGlRiQX
+         xPEzADssos1w8P3mPwZQPhvSj5PMVi6ei5u3ZIBOLLlNr/w8lD42/pk7vZWi/TnPODjb
+         +GBnOB+kl3P0F6iuwMF2SjnhvBTVM913XdJQP8kEESqGy5GNYhAiV1ypcJG95BKSenQi
+         2sl5kzaOup0naBUaf3E3Q1TqRrjFH3eQ4hInaDEFL42DfibSaRsYzjMzWXk6y7ek6Wwd
+         lHSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EcYtG8fJSEFaCTYWXfq8R84dSZ3VnLHvz4JUlumXUv0=;
-        b=RMT0L8pEG5vksa24zi5eGTWyfY83MHY7Lz5ZcCpnPJOHSKEEPjfEQghNMxSkmMP4xg
-         lHay6xW0GPs/TVga/NBRW97DL7r3UTuo5aGPezKCSpOUPccYUmnR+Wy8dn0Ty+O9eO5L
-         xzYAqb4bIWqmq7lhJMQQqvFnw6DJntCvir/X8M64DMtZSyDcdvZxk5onvP2Dade+89se
-         S4kPrsOV75IYEAwfmTnvcCf3QY7hrWVCTyCLJ1EJb9770WQG1gycWS9Rg1ie4LRB4IFV
-         ICd+nNZK8PYEKFBFZqrnPUhrZwXctFZgxAm2FOc4SsxgIylmOvpbY0bsLKGBFD+DTZ7L
-         003g==
-X-Gm-Message-State: ANoB5pkp2SHbC1HMO52cbvfZ6wLtUJJMnSCy14f8ajX458sdDMqO5dSt
-        i2XK1byiMKGcZjzJw8Avjec4diTIknyFHi8seto=
-X-Google-Smtp-Source: AA0mqf6dDvYisUlUN1Gsr07MRUCfV4BhoiCvKwdt+tl2x5lYg06ZyMUT9ehXEzASQCkZ66ZQYbfL6pluykPBul1Ep5k=
-X-Received: by 2002:a17:906:414c:b0:7a9:ecc1:2bd2 with SMTP id
- l12-20020a170906414c00b007a9ecc12bd2mr42513746ejk.545.1669855943871; Wed, 30
- Nov 2022 16:52:23 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZPAL+qEpybMK4gfRSDNZ/UBJjmcxXUSe2Ph04k04WIQ=;
+        b=IbSLszFqzcO9rxPItPg2XJt7E/frVokxTVzPhQxYW/soyLkAAxOQbO9DWc4214cp/6
+         4b0P0zD4Wm4/JfdFYeVcP0H/cplT5j98EDqBH/aEOU3UnxNXyfdYNTrlrFawbnyed2Zp
+         DXY2j1R0c3OkeRCVcF/zPuxNEbMloKcX4mhOObBlqOpv474Eqiopax7UvcFRVHcEg38j
+         nChGwEhDusGfPbeI9mYKvX6BWxrUbuXOcgS28tUZ0Gi770wxUGsXD22pv7siEjp640ru
+         E0zjPifo6U34tHT4KbKlLnm1CKlFI4U/8SJfAei5BpZL4nbD6x0LSB4POsIaDKl+mHW5
+         aEdA==
+X-Gm-Message-State: ANoB5pkFkHakJYXs0IHTaPAG3PE8OwI+kpdqdaZr5/G6Ty4KxiuP/0VQ
+        p+HgZ7nenrr7/ffrouwHuzU=
+X-Google-Smtp-Source: AA0mqf7mNFLsTDtQkPZEhfPSuoiCvjyoSviXSHqAwhU5aUgTWTYVQB49I+T9PMyjIDMT/u9TxtoIkw==
+X-Received: by 2002:a17:906:3e13:b0:78d:502c:aeb5 with SMTP id k19-20020a1709063e1300b0078d502caeb5mr38614715eji.88.1669855976965;
+        Wed, 30 Nov 2022 16:52:56 -0800 (PST)
+Received: from skbuf ([188.26.184.222])
+        by smtp.gmail.com with ESMTPSA id p23-20020aa7d317000000b00461cdda400esm1179973edq.4.2022.11.30.16.52.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 16:52:56 -0800 (PST)
+Date:   Thu, 1 Dec 2022 02:52:54 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux@armlinux.org.uk,
+        Tristram.Ha@microchip.com, richardcochran@gmail.com,
+        ceggers@arri.de
+Subject: Re: [Patch net-next v1 03/12] net: dsa: microchip: ptp: add 4 bytes
+ in tail tag when ptp enabled
+Message-ID: <20221201005254.lcwwtscmdu6scnpv@skbuf>
+References: <20221128103227.23171-1-arun.ramadoss@microchip.com>
+ <20221128103227.23171-1-arun.ramadoss@microchip.com>
+ <20221128103227.23171-4-arun.ramadoss@microchip.com>
+ <20221128103227.23171-4-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-References: <20221129134217.52767-1-changbin.du@gmail.com> <20221129134217.52767-3-changbin.du@gmail.com>
-In-Reply-To: <20221129134217.52767-3-changbin.du@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 30 Nov 2022 16:52:11 -0800
-Message-ID: <CAEf4BzZPZeeGJTZC3NSm+Km4RZirGrwr8d8dXepLmBLTiUn8Hg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] bpf: makefiles: do not generate empty vmlinux.h
-To:     Changbin Du <changbin.du@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221128103227.23171-4-arun.ramadoss@microchip.com>
+ <20221128103227.23171-4-arun.ramadoss@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -85,60 +81,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 5:42 AM Changbin Du <changbin.du@gmail.com> wrote:
->
-> Remove the empty vmlinux.h if bpftool failed to dump btf info.
-> The emptry vmlinux.h can hide real error when reading output
+On Mon, Nov 28, 2022 at 04:02:18PM +0530, Arun Ramadoss wrote:
+> If PTP is enabled in the hardware, then 4 bytes are added in the tail
+> tag. When PTP is enabled and 4 bytes are not added then messages are
+> corrupted.
 
-typo: empty
+Comment in the code please. Also, please spell it out explicitly that
+the tail tag size changes for all TX packets, PTP or not, if PTP
+timestamping is enabled. Your phrasing can be unclear and the reader may
+think that only PTP packets require a larger tail tag.
 
-> of make.
->
-> This is done by adding .DELETE_ON_ERROR special target in related
-> makefiles.
->
-> Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> 
+> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
 > ---
->  tools/bpf/bpftool/Makefile           | 3 +++
->  tools/perf/Makefile.perf             | 2 ++
->  tools/testing/selftests/bpf/Makefile | 3 +++
->  3 files changed, 8 insertions(+)
->
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index 4a95c017ad4c..f6b1e65085db 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
-> @@ -265,3 +265,6 @@ FORCE:
->  .PHONY: all FORCE bootstrap clean install-bin install uninstall
->  .PHONY: doc doc-clean doc-install doc-uninstall
->  .DEFAULT_GOAL := all
-> +
-> +# Delete partially updated (corrupted) files on error
-> +.DELETE_ON_ERROR:
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index a432e59afc42..265254fc641a 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -1149,3 +1149,5 @@ FORCE:
->  .PHONY: libtraceevent_plugins archheaders
->
->  endif # force_fixdep
-> +
-> +.DELETE_ON_ERROR:
+> diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
+> index cd20f39a565f..4c5b35a7883c 100644
+> --- a/drivers/net/dsa/microchip/ksz_common.h
+> +++ b/drivers/net/dsa/microchip/ksz_common.h
+> @@ -105,7 +105,6 @@ struct ksz_port {
+>  	u8 num;
+>  #if IS_ENABLED(CONFIG_NET_DSA_MICROCHIP_KSZ_PTP)
+>  	u8 hwts_tx_en;
+> -	bool hwts_rx_en;
 
-please split out perf changes, they should go through perf tree
+>  #endif
+>  };
+>  
+> diff --git a/drivers/net/dsa/microchip/ksz_ptp.c b/drivers/net/dsa/microchip/ksz_ptp.c
+> index a41418c6adf6..184aa57a8489 100644
+> --- a/drivers/net/dsa/microchip/ksz_ptp.c
+> +++ b/drivers/net/dsa/microchip/ksz_ptp.c
+> @@ -54,7 +66,7 @@ int ksz_hwtstamp_get(struct dsa_switch *ds, int port, struct ifreq *ifr)
+>  
+>  	config.tx_type = dev->ports[port].hwts_tx_en;
+>  
+> -	if (dev->ports[port].hwts_rx_en)
+> +	if (tagger_data->hwtstamp_get_state(ds))
 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index e6cf21fad69f..f41c4b011221 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -617,3 +617,6 @@ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)      \
->                                liburandom_read.so)
->
->  .PHONY: docs docs-clean
+Let's be clear, hwtstamp_get_state() deals with TX timestamping, and
+config.rx_filter deals with RX timestamping. Don't mix the two.
+Using custom programs like testptp, you can enable RX timestamping but
+not TX timestamping, or the other way around. You don't want the driver
+to get confused.
+
+>  		config.rx_filter = HWTSTAMP_FILTER_ALL;
+
+Can the switch provide RX timestamps for all kinds of Ethernet packets,
+not just PTP? If not, then report just what it can timestamp.
+
+>  	else
+>  		config.rx_filter = HWTSTAMP_FILTER_NONE;
+>  int ksz_hwtstamp_set(struct dsa_switch *ds, int port, struct ifreq *ifr)
+> diff --git a/net/dsa/tag_ksz.c b/net/dsa/tag_ksz.c
+> index 0f6ae143afc9..828af38f0598 100644
+> --- a/net/dsa/tag_ksz.c
+> +++ b/net/dsa/tag_ksz.c
+> @@ -4,6 +4,7 @@
+>   * Copyright (c) 2017 Microchip Technology
+>   */
+>  
+> +#include <linux/dsa/ksz_common.h>
+>  #include <linux/etherdevice.h>
+>  #include <linux/list.h>
+>  #include <net/dsa.h>
+> @@ -16,9 +17,66 @@
+>  #define LAN937X_NAME "lan937x"
+>  
+>  /* Typically only one byte is used for tail tag. */
+> +#define KSZ_PTP_TAG_LEN			4
+>  #define KSZ_EGRESS_TAG_LEN		1
+>  #define KSZ_INGRESS_TAG_LEN		1
+>  
+> +#define KSZ_HWTS_EN  0
 > +
-> +# Delete partially updated (corrupted) files on error
-> +.DELETE_ON_ERROR:
-> --
-> 2.37.2
->
+> +struct ksz_tagger_private {
+> +	struct ksz_tagger_data data; /* Must be first */
+> +	unsigned long state;
+> +};
+> +
+> +static struct ksz_tagger_private *
+> +ksz_tagger_private(struct dsa_switch *ds)
+> +{
+> +	return ds->tagger_data;
+> +}
+> +
+> +static bool ksz_hwtstamp_get_state(struct dsa_switch *ds)
+> +{
+> +	struct ksz_tagger_private *priv = ksz_tagger_private(ds);
+> +
+> +	return test_bit(KSZ_HWTS_EN, &priv->state);
+> +}
+
+As discussed, I don't really think there exists a case for hwtstamp_get_state().
+Don't abuse the tagger-owned storage.
+
+> +
+> +static void ksz_hwtstamp_set_state(struct dsa_switch *ds, bool on)
+> +{
+> +	struct ksz_tagger_private *priv = ksz_tagger_private(ds);
+> +
+> +	if (on)
+> +		set_bit(KSZ_HWTS_EN, &priv->state);
+> +	else
+> +		clear_bit(KSZ_HWTS_EN, &priv->state);
+> +}
+> +
+> +static void ksz_disconnect(struct dsa_switch *ds)
+> +{
+> +	struct ksz_tagger_private *priv = ds->tagger_data;
+> +
+> +	kfree(priv);
+> +	ds->tagger_data = NULL;
+> +}
+> +
+> +static int ksz_connect(struct dsa_switch *ds)
+> +{
+> +	struct ksz_tagger_data *tagger_data;
+> +	struct ksz_tagger_private *priv;
+> +
+> +	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	/* Export functions for switch driver use */
+> +	tagger_data = &priv->data;
+> +	tagger_data->hwtstamp_get_state = ksz_hwtstamp_get_state;
+> +	tagger_data->hwtstamp_set_state = ksz_hwtstamp_set_state;
+> +	ds->tagger_data = priv;
+> +
+> +	return 0;
+> +}
+> +
+>  static struct sk_buff *ksz_common_rcv(struct sk_buff *skb,
+>  				      struct net_device *dev,
+>  				      unsigned int port, unsigned int len)
+> @@ -91,10 +149,11 @@ DSA_TAG_DRIVER(ksz8795_netdev_ops);
+>  MODULE_ALIAS_DSA_TAG_DRIVER(DSA_TAG_PROTO_KSZ8795, KSZ8795_NAME);
+>  
+>  /*
+> - * For Ingress (Host -> KSZ9477), 2 bytes are added before FCS.
+> + * For Ingress (Host -> KSZ9477), 2/6 bytes are added before FCS.
+>   * ---------------------------------------------------------------------------
+> - * DA(6bytes)|SA(6bytes)|....|Data(nbytes)|tag0(1byte)|tag1(1byte)|FCS(4bytes)
+> + * DA(6bytes)|SA(6bytes)|....|Data(nbytes)|ts(4bytes)|tag0(1byte)|tag1(1byte)|FCS(4bytes)
+>   * ---------------------------------------------------------------------------
+> + * ts   : time stamp (Present only if PTP is enabled in the Hardware)
+>   * tag0 : Prioritization (not used now)
+>   * tag1 : each bit represents port (eg, 0x01=port1, 0x02=port2, 0x10=port5)
+>   *
+> @@ -113,6 +172,19 @@ MODULE_ALIAS_DSA_TAG_DRIVER(DSA_TAG_PROTO_KSZ8795, KSZ8795_NAME);
+>  #define KSZ9477_TAIL_TAG_OVERRIDE	BIT(9)
+>  #define KSZ9477_TAIL_TAG_LOOKUP		BIT(10)
+>  
+> +/* Time stamp tag is only inserted if PTP is enabled in hardware. */
+
+Stronger. Time stamp tag *needs* to be inserted if PTP is enabled in hardware.
+Regardless of whether this is a PTP frame or not.
+
+I think you don't think this is confusing. But it is confusing.
+2 years from now, when this patch gets submitted again for being merged,
+I don't want to ask the same questions again.
+
+> +static void ksz_xmit_timestamp(struct dsa_port *dp, struct sk_buff *skb)
+> +{
+> +	struct ksz_tagger_private *priv;
+> +
+> +	priv = ksz_tagger_private(dp->ds);
+> +
+> +	if (!test_bit(KSZ_HWTS_EN, &priv->state))
+> +		return;
+> +
+> +	put_unaligned_be32(0, skb_put(skb, KSZ_PTP_TAG_LEN));
+> +}
