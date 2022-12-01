@@ -2,449 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B7663EB2E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8E763EB3D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiLAIdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 03:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36792 "EHLO
+        id S229640AbiLAIgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 03:36:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiLAIdo (ORCPT
+        with ESMTP id S229475AbiLAIgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 03:33:44 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1058B2F397
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 00:33:42 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id m19so617990wms.5
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 00:33:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dGHLdrfikbIhGkbnvkPbvUDqh01wzTEgLpwxK3fX9Is=;
-        b=nxEBdEEKYgflSa6fkMEKXV0eg/BsoSZsOlnL75TYjo7gIbEZhsf7QwplEU+8xbjE2a
-         jq0xpBvdwu8lZJPk+rnPiXU54TDpVkkCa7kkdzAGGWmpWFKryamvc2AKFGGFG4RW5Ejz
-         yEvNbG3s5UQ7KSNUSv5qI46L398ZCz7VsIGKLx7IMGUltgUCnS+Knm8yK335z4Oz76K8
-         mT8NlikwJ4J41yVh5H79iODUfxJnObS8xoU0fVbm4E3mgrNOSwIF53NButkhIFKjqmG9
-         zwhN2MqfbVmmpoluegxfsBAf+2o3Yw6zXl1EvmYiUYRS+SsbcSUSe1UFnTUoGhBUXcOO
-         C0sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dGHLdrfikbIhGkbnvkPbvUDqh01wzTEgLpwxK3fX9Is=;
-        b=YrcGNL3paRTXRTqz3ZatljXGygOTZCw1zWIsIZVEw64jHi1OEqhD60/1b5mRyaK9vH
-         AG3z8l0PBdKyBwJrEX7c3BFOmppoiIIpVPodlUcVPrHZlcZHMURujXO/SfyUcTDr5jdK
-         EMybjdodbMeZ9oeh2rMyX1Y8AHouXh4DU64XgoYNTBYB8RWrHFphsvK1avYnE0ob7VkE
-         oHdOB8JDvIge1nF/c9kL2VwsZ9+8Ev8RkwjwtUcu3Jlwdg6405fL7jujmkxYx+0s37VI
-         XJ7pL8TkzFcNR2ZoMJ6NJ1cPR3RkezaClGlYXsAlfypw+qvz30GS2JCqF7zotOFkDrVK
-         z69g==
-X-Gm-Message-State: ANoB5plMIKYtiD5o8FCOq0iD3d65IiL3g6ZMrTU7AiqRlYRceehzoHYM
-        oygN/WdaCm5cKkyBkwCZW4u72Q==
-X-Google-Smtp-Source: AA0mqf5qK06ITnHHG5gXWzAFH3j02AQhGddIM2O0KNlsp8ByR+e4AqXRhrPnvNp2bKAQI1sm4bWpdA==
-X-Received: by 2002:a05:600c:5388:b0:3cf:37b1:e581 with SMTP id hg8-20020a05600c538800b003cf37b1e581mr45939070wmb.96.1669883620557;
-        Thu, 01 Dec 2022 00:33:40 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:26bb:b860:c227:f05d])
-        by smtp.gmail.com with ESMTPSA id p15-20020a05600c358f00b003c6b874a0dfsm6132349wmq.14.2022.12.01.00.33.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 00:33:40 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v5 2/2] gpiolib: protect the GPIO device against being dropped while in use by user-space
-Date:   Thu,  1 Dec 2022 09:33:35 +0100
-Message-Id: <20221201083335.819190-3-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221201083335.819190-1-brgl@bgdev.pl>
-References: <20221201083335.819190-1-brgl@bgdev.pl>
+        Thu, 1 Dec 2022 03:36:31 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8456D949
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 00:36:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669883791; x=1701419791;
+  h=message-id:date:mime-version:cc:from:to:references:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=ASObx3YU40ta1bnwquNX450TvnchyRNCWB+x90kDyHQ=;
+  b=dMPo2G1PWVee5gdsegeXHuSF6h8KKzWvKsiWqfzHYucDFjFjYwwU17OF
+   8Zr/47fAz/SjkQhO1WjiULpoHbaEIYnTVAGTG90xlkCvwJR6+LKWZyVo6
+   yVisTXSrLst7mm622njt2R6JC53eEICrSeKonqhSRdVLDMcHoNYaUuO2z
+   KRoXv3egLbS+uJ3CcHUiSFZwEzRhwx4Mdv+wJOhfumOWsmUbgJsoq2yyU
+   SxRNbrWsdHyFmpR/g0I3tCrGFuOg/jdZwkOB3ew1XvZicrdUuxQmRWX1y
+   e+HLl+iaEavn0GiD6uSeEPDHaEP0RmGv0GArVT3I2mTtYqODU8vFMVSUI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="298994280"
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="298994280"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 00:36:30 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="889645029"
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="889645029"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.214.50]) ([10.254.214.50])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 00:36:27 -0800
+Message-ID: <edbcfb02-0c20-5444-b2fa-34189faa923d@linux.intel.com>
+Date:   Thu, 1 Dec 2022 16:36:26 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+To:     Joerg Roedel <joro@8bytes.org>
+References: <20221201040127.1962750-1-baolu.lu@linux.intel.com>
+ <20221201040127.1962750-2-baolu.lu@linux.intel.com>
+Subject: Re: [PATCH 1/4] iommu/vt-d: Add a fix for devices need extra dtlb
+ flush
+In-Reply-To: <20221201040127.1962750-2-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 2022/12/1 12:01, Lu Baolu wrote:
+> From: Jacob Pan<jacob.jun.pan@linux.intel.com>
+> 
+> QAT devices on Intel Sapphire Rapids and Emerald Rapids have a defect in
+> address translation service (ATS). These devices may inadvertently issue
+> ATS invalidation completion before posted writes initiated with
+> translated address that utilized translations matching the invalidation
+> address range, violating the invalidation completion ordering.
+> 
+> This patch adds an extra device TLB invalidation for the affected devices,
+> it is needed to ensure no more posted writes with translated address
+> following the invalidation completion. Therefore, the ordering is
+> preserved and data-corruption is prevented.
+> 
+> Device TLBs are invalidated under the following six conditions:
+> 1. Device driver does DMA API unmap IOVA
+> 2. Device driver unbind a PASID from a process, sva_unbind_device()
+> 3. PASID is torn down, after PASID cache is flushed. e.g. process
+> exit_mmap() due to crash
+> 4. Under SVA usage, called by mmu_notifier.invalidate_range() where
+> VM has to free pages that were unmapped
+> 5. userspace driver unmaps a DMA buffer
+> 6. Cache invalidation in vSVA usage (upcoming)
+> 
+> For #1 and #2, device drivers are responsible for stopping DMA traffic
+> before unmap/unbind. For #3, iommu driver gets mmu_notifier to
+> invalidate TLB the same way as normal user unmap which will do an extra
+> invalidation. The dTLB invalidation after PASID cache flush does not
+> need an extra invalidation.
+> 
+> Therefore, we only need to deal with #4 and #5 in this patch. #1 is also
+> covered by this patch due to common code path with #5.
+> 
+> Tested-by: Yuzhang Luo<yuzhang.luo@intel.com>
+> Reviewed-by: Ashok Raj<ashok.raj@intel.com>
+> Reviewed-by: Kevin Tian<kevin.tian@intel.com>
 
-While any of the GPIO cdev syscalls is in progress, the kernel can call
-gpiochip_remove() (for instance, when a USB GPIO expander is disconnected)
-which will set gdev->chip to NULL after which any subsequent access will
-cause a crash.
+This missed cc stable tag.
 
-To avoid that: use an RW-semaphore in which the syscalls take it for
-reading (so that we don't needlessly prohibit the user-space from calling
-syscalls simultaneously) while gpiochip_remove() takes it for writing so
-that it can only happen once all syscalls return.
+Cc: stable@vger.kernel.org # v5.15+
 
-Fixes: d7c51b47ac11 ("gpio: userspace ABI for reading/writing GPIO lines")
-Fixes: 3c0d9c635ae2 ("gpiolib: cdev: support GPIO_V2_GET_LINE_IOCTL and GPIO_V2_LINE_GET_VALUES_IOCTL")
-Fixes: aad955842d1c ("gpiolib: cdev: support GPIO_V2_GET_LINEINFO_IOCTL and GPIO_V2_GET_LINEINFO_WATCH_IOCTL")
-Fixes: a54756cb24ea ("gpiolib: cdev: support GPIO_V2_LINE_SET_CONFIG_IOCTL")
-Fixes: 7b8e00d98168 ("gpiolib: cdev: support GPIO_V2_LINE_SET_VALUES_IOCTL")
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Reviewed-by: Kent Gibson <warthog618@gmail.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/gpio/gpiolib-cdev.c | 166 +++++++++++++++++++++++++++++++-----
- drivers/gpio/gpiolib.c      |   4 +
- drivers/gpio/gpiolib.h      |   5 ++
- 3 files changed, 153 insertions(+), 22 deletions(-)
+Sorry for the inconvenience.
 
-diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-index 911d91668903..18c5e70ee7de 100644
---- a/drivers/gpio/gpiolib-cdev.c
-+++ b/drivers/gpio/gpiolib-cdev.c
-@@ -84,6 +84,53 @@ struct linehandle_state {
- 	GPIOHANDLE_REQUEST_OPEN_DRAIN | \
- 	GPIOHANDLE_REQUEST_OPEN_SOURCE)
- 
-+typedef __poll_t (*poll_fn)(struct file *, struct poll_table_struct *);
-+typedef long (*ioctl_fn)(struct file *, unsigned int, unsigned long);
-+typedef ssize_t (*read_fn)(struct file *, char __user *,
-+			   size_t count, loff_t *);
-+
-+static __poll_t call_poll_locked(struct file *file,
-+				 struct poll_table_struct *wait,
-+				 struct gpio_device *gdev, poll_fn func)
-+{
-+	__poll_t ret;
-+
-+	if (!down_read_trylock(&gdev->sem))
-+		return 0;
-+	ret = func(file, wait);
-+	up_read(&gdev->sem);
-+
-+	return ret;
-+}
-+
-+static long call_ioctl_locked(struct file *file, unsigned int cmd,
-+			      unsigned long arg, struct gpio_device *gdev,
-+			      ioctl_fn func)
-+{
-+	long ret;
-+
-+	if (!down_read_trylock(&gdev->sem))
-+		return -ENODEV;
-+	ret = func(file, cmd, arg);
-+	up_read(&gdev->sem);
-+
-+	return ret;
-+}
-+
-+static ssize_t call_read_locked(struct file *file, char __user *buf,
-+				size_t count, loff_t *f_ps,
-+				struct gpio_device *gdev, read_fn func)
-+{
-+	ssize_t ret;
-+
-+	if (!down_read_trylock(&gdev->sem))
-+		return -ENODEV;
-+	ret = func(file, buf, count, f_ps);
-+	up_read(&gdev->sem);
-+
-+	return ret;
-+}
-+
- static int linehandle_validate_flags(u32 flags)
- {
- 	/* Return an error if an unknown flag is set */
-@@ -191,8 +238,8 @@ static long linehandle_set_config(struct linehandle_state *lh,
- 	return 0;
- }
- 
--static long linehandle_ioctl(struct file *file, unsigned int cmd,
--			     unsigned long arg)
-+static long linehandle_ioctl_unlocked(struct file *file, unsigned int cmd,
-+				      unsigned long arg)
- {
- 	struct linehandle_state *lh = file->private_data;
- 	void __user *ip = (void __user *)arg;
-@@ -250,6 +297,15 @@ static long linehandle_ioctl(struct file *file, unsigned int cmd,
- 	}
- }
- 
-+static long linehandle_ioctl(struct file *file, unsigned int cmd,
-+			     unsigned long arg)
-+{
-+	struct linehandle_state *lh = file->private_data;
-+
-+	return call_ioctl_locked(file, cmd, arg, lh->gdev,
-+				 linehandle_ioctl_unlocked);
-+}
-+
- #ifdef CONFIG_COMPAT
- static long linehandle_ioctl_compat(struct file *file, unsigned int cmd,
- 				    unsigned long arg)
-@@ -1381,8 +1437,8 @@ static long linereq_set_config(struct linereq *lr, void __user *ip)
- 	return ret;
- }
- 
--static long linereq_ioctl(struct file *file, unsigned int cmd,
--			  unsigned long arg)
-+static long linereq_ioctl_unlocked(struct file *file, unsigned int cmd,
-+				   unsigned long arg)
- {
- 	struct linereq *lr = file->private_data;
- 	void __user *ip = (void __user *)arg;
-@@ -1402,6 +1458,15 @@ static long linereq_ioctl(struct file *file, unsigned int cmd,
- 	}
- }
- 
-+static long linereq_ioctl(struct file *file, unsigned int cmd,
-+			  unsigned long arg)
-+{
-+	struct linereq *lr = file->private_data;
-+
-+	return call_ioctl_locked(file, cmd, arg, lr->gdev,
-+				 linereq_ioctl_unlocked);
-+}
-+
- #ifdef CONFIG_COMPAT
- static long linereq_ioctl_compat(struct file *file, unsigned int cmd,
- 				 unsigned long arg)
-@@ -1410,8 +1475,8 @@ static long linereq_ioctl_compat(struct file *file, unsigned int cmd,
- }
- #endif
- 
--static __poll_t linereq_poll(struct file *file,
--			    struct poll_table_struct *wait)
-+static __poll_t linereq_poll_unlocked(struct file *file,
-+				      struct poll_table_struct *wait)
- {
- 	struct linereq *lr = file->private_data;
- 	__poll_t events = 0;
-@@ -1428,10 +1493,16 @@ static __poll_t linereq_poll(struct file *file,
- 	return events;
- }
- 
--static ssize_t linereq_read(struct file *file,
--			    char __user *buf,
--			    size_t count,
--			    loff_t *f_ps)
-+static __poll_t linereq_poll(struct file *file,
-+			     struct poll_table_struct *wait)
-+{
-+	struct linereq *lr = file->private_data;
-+
-+	return call_poll_locked(file, wait, lr->gdev, linereq_poll_unlocked);
-+}
-+
-+static ssize_t linereq_read_unlocked(struct file *file, char __user *buf,
-+				     size_t count, loff_t *f_ps)
- {
- 	struct linereq *lr = file->private_data;
- 	struct gpio_v2_line_event le;
-@@ -1485,6 +1556,15 @@ static ssize_t linereq_read(struct file *file,
- 	return bytes_read;
- }
- 
-+static ssize_t linereq_read(struct file *file, char __user *buf,
-+			    size_t count, loff_t *f_ps)
-+{
-+	struct linereq *lr = file->private_data;
-+
-+	return call_read_locked(file, buf, count, f_ps, lr->gdev,
-+				linereq_read_unlocked);
-+}
-+
- static void linereq_free(struct linereq *lr)
- {
- 	unsigned int i;
-@@ -1722,8 +1802,8 @@ struct lineevent_state {
- 	(GPIOEVENT_REQUEST_RISING_EDGE | \
- 	GPIOEVENT_REQUEST_FALLING_EDGE)
- 
--static __poll_t lineevent_poll(struct file *file,
--			       struct poll_table_struct *wait)
-+static __poll_t lineevent_poll_unlocked(struct file *file,
-+					struct poll_table_struct *wait)
- {
- 	struct lineevent_state *le = file->private_data;
- 	__poll_t events = 0;
-@@ -1739,15 +1819,21 @@ static __poll_t lineevent_poll(struct file *file,
- 	return events;
- }
- 
-+static __poll_t lineevent_poll(struct file *file,
-+			       struct poll_table_struct *wait)
-+{
-+	struct lineevent_state *le = file->private_data;
-+
-+	return call_poll_locked(file, wait, le->gdev, lineevent_poll_unlocked);
-+}
-+
- struct compat_gpioeevent_data {
- 	compat_u64	timestamp;
- 	u32		id;
- };
- 
--static ssize_t lineevent_read(struct file *file,
--			      char __user *buf,
--			      size_t count,
--			      loff_t *f_ps)
-+static ssize_t lineevent_read_unlocked(struct file *file, char __user *buf,
-+				       size_t count, loff_t *f_ps)
- {
- 	struct lineevent_state *le = file->private_data;
- 	struct gpioevent_data ge;
-@@ -1815,6 +1901,15 @@ static ssize_t lineevent_read(struct file *file,
- 	return bytes_read;
- }
- 
-+static ssize_t lineevent_read(struct file *file, char __user *buf,
-+			      size_t count, loff_t *f_ps)
-+{
-+	struct lineevent_state *le = file->private_data;
-+
-+	return call_read_locked(file, buf, count, f_ps, le->gdev,
-+				lineevent_read_unlocked);
-+}
-+
- static void lineevent_free(struct lineevent_state *le)
- {
- 	if (le->irq)
-@@ -1832,8 +1927,8 @@ static int lineevent_release(struct inode *inode, struct file *file)
- 	return 0;
- }
- 
--static long lineevent_ioctl(struct file *file, unsigned int cmd,
--			    unsigned long arg)
-+static long lineevent_ioctl_unlocked(struct file *file, unsigned int cmd,
-+				     unsigned long arg)
- {
- 	struct lineevent_state *le = file->private_data;
- 	void __user *ip = (void __user *)arg;
-@@ -1864,6 +1959,15 @@ static long lineevent_ioctl(struct file *file, unsigned int cmd,
- 	return -EINVAL;
- }
- 
-+static long lineevent_ioctl(struct file *file, unsigned int cmd,
-+			    unsigned long arg)
-+{
-+	struct lineevent_state *le = file->private_data;
-+
-+	return call_ioctl_locked(file, cmd, arg, le->gdev,
-+				 lineevent_ioctl_unlocked);
-+}
-+
- #ifdef CONFIG_COMPAT
- static long lineevent_ioctl_compat(struct file *file, unsigned int cmd,
- 				   unsigned long arg)
-@@ -2422,8 +2526,8 @@ static int lineinfo_changed_notify(struct notifier_block *nb,
- 	return NOTIFY_OK;
- }
- 
--static __poll_t lineinfo_watch_poll(struct file *file,
--				    struct poll_table_struct *pollt)
-+static __poll_t lineinfo_watch_poll_unlocked(struct file *file,
-+					     struct poll_table_struct *pollt)
- {
- 	struct gpio_chardev_data *cdev = file->private_data;
- 	__poll_t events = 0;
-@@ -2440,8 +2544,17 @@ static __poll_t lineinfo_watch_poll(struct file *file,
- 	return events;
- }
- 
--static ssize_t lineinfo_watch_read(struct file *file, char __user *buf,
--				   size_t count, loff_t *off)
-+static __poll_t lineinfo_watch_poll(struct file *file,
-+				    struct poll_table_struct *pollt)
-+{
-+	struct gpio_chardev_data *cdev = file->private_data;
-+
-+	return call_poll_locked(file, pollt, cdev->gdev,
-+				lineinfo_watch_poll_unlocked);
-+}
-+
-+static ssize_t lineinfo_watch_read_unlocked(struct file *file, char __user *buf,
-+					    size_t count, loff_t *off)
- {
- 	struct gpio_chardev_data *cdev = file->private_data;
- 	struct gpio_v2_line_info_changed event;
-@@ -2519,6 +2632,15 @@ static ssize_t lineinfo_watch_read(struct file *file, char __user *buf,
- 	return bytes_read;
- }
- 
-+static ssize_t lineinfo_watch_read(struct file *file, char __user *buf,
-+				   size_t count, loff_t *off)
-+{
-+	struct gpio_chardev_data *cdev = file->private_data;
-+
-+	return call_read_locked(file, buf, count, off, cdev->gdev,
-+				lineinfo_watch_read_unlocked);
-+}
-+
- /**
-  * gpio_chrdev_open() - open the chardev for ioctl operations
-  * @inode: inode for this chardev
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 4756ea08894f..e0e73bd756ca 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -731,6 +731,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 	spin_unlock_irqrestore(&gpio_lock, flags);
- 
- 	BLOCKING_INIT_NOTIFIER_HEAD(&gdev->notifier);
-+	init_rwsem(&gdev->sem);
- 
- #ifdef CONFIG_PINCTRL
- 	INIT_LIST_HEAD(&gdev->pin_ranges);
-@@ -865,6 +866,8 @@ void gpiochip_remove(struct gpio_chip *gc)
- 	unsigned long	flags;
- 	unsigned int	i;
- 
-+	down_write(&gdev->sem);
-+
- 	/* FIXME: should the legacy sysfs handling be moved to gpio_device? */
- 	gpiochip_sysfs_unregister(gdev);
- 	gpiochip_free_hogs(gc);
-@@ -899,6 +902,7 @@ void gpiochip_remove(struct gpio_chip *gc)
- 	 * gone.
- 	 */
- 	gcdev_unregister(gdev);
-+	up_write(&gdev->sem);
- 	put_device(&gdev->dev);
- }
- EXPORT_SYMBOL_GPL(gpiochip_remove);
-diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
-index d900ecdbac46..9ad68a0adf4a 100644
---- a/drivers/gpio/gpiolib.h
-+++ b/drivers/gpio/gpiolib.h
-@@ -15,6 +15,7 @@
- #include <linux/device.h>
- #include <linux/module.h>
- #include <linux/cdev.h>
-+#include <linux/rwsem.h>
- 
- #define GPIOCHIP_NAME	"gpiochip"
- 
-@@ -39,6 +40,9 @@
-  * @list: links gpio_device:s together for traversal
-  * @notifier: used to notify subscribers about lines being requested, released
-  *            or reconfigured
-+ * @sem: protects the structure from a NULL-pointer dereference of @chip by
-+ *       user-space operations when the device gets unregistered during
-+ *       a hot-unplug event
-  * @pin_ranges: range of pins served by the GPIO driver
-  *
-  * This state container holds most of the runtime variable data
-@@ -60,6 +64,7 @@ struct gpio_device {
- 	void			*data;
- 	struct list_head        list;
- 	struct blocking_notifier_head notifier;
-+	struct rw_semaphore	sem;
- 
- #ifdef CONFIG_PINCTRL
- 	/*
--- 
-2.37.2
+> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
+> Link:https://lore.kernel.org/r/20221130062449.1360063-1-jacob.jun.pan@linux.intel.com
+> Signed-off-by: Lu Baolu<baolu.lu@linux.intel.com>
+> ---
+>   drivers/iommu/intel/iommu.h |  4 +++
+>   drivers/iommu/intel/iommu.c | 69 +++++++++++++++++++++++++++++++++++--
+>   drivers/iommu/intel/svm.c   |  5 ++-
+>   3 files changed, 75 insertions(+), 3 deletions(-)
 
+Best regards,
+baolu
