@@ -2,47 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2464863EF86
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:33:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9962863EF8B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbiLALdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:33:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
+        id S230503AbiLALeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:34:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbiLALdB (ORCPT
+        with ESMTP id S229734AbiLALeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:33:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E132252C;
-        Thu,  1 Dec 2022 03:32:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A04DBB81EED;
-        Thu,  1 Dec 2022 11:32:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 061CEC433C1;
-        Thu,  1 Dec 2022 11:32:54 +0000 (UTC)
-Message-ID: <20badb75-65c7-719e-ab93-28e6b5e97f22@xs4all.nl>
-Date:   Thu, 1 Dec 2022 12:32:53 +0100
+        Thu, 1 Dec 2022 06:34:10 -0500
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB7E22BF1;
+        Thu,  1 Dec 2022 03:33:10 -0800 (PST)
+Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Thu, 1 Dec
+ 2022 19:33:07 +0800
+Message-ID: <2699616d-0d68-3bee-00f5-79e58dd5627b@amlogic.com>
+Date:   Thu, 1 Dec 2022 19:33:07 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: Question for an accepted patch: use of DMA-BUF based videobuf2
- capture buffer with no-HW-cache-coherent HW
+Subject: Re: [PATCH V5 1/4] clk: meson: S4: add support for Amlogic S4 SoC PLL
+ clock driver and bindings
+To:     <neil.armstrong@linaro.org>, Jerome Brunet <jbrunet@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <kelvin.zhang@amlogic.com>
+References: <20221123021346.18136-1-yu.tu@amlogic.com>
+ <20221123021346.18136-2-yu.tu@amlogic.com>
+ <f03f331a-5666-298e-a1a2-bdb9bab11a48@linaro.org>
+ <92b570ea-3ddc-8e91-5a7a-ed601bb7c02c@amlogic.com>
+ <eb56ed39-cfaa-3368-a2c0-0a4e89440e40@linaro.org>
+ <5b7176b4-d7a2-c67f-31c6-e842e0870836@linaro.org>
+ <1jfse72wqk.fsf@starbuckisacylon.baylibre.com>
+ <a6cf1b3f-259d-44b7-8a9a-2a0cd29c714b@amlogic.com>
+ <1jedtnp7db.fsf@starbuckisacylon.baylibre.com>
+ <29f06ea8-3795-46a4-fcd2-3f0d4c313ae7@amlogic.com>
+ <60c8352f-81c6-72b2-6340-1d866c259937@linaro.org>
 Content-Language: en-US
-To:     yuji2.ishikawa@toshiba.co.jp, posciak@chromium.org,
-        paul.kocialkowski@bootlin.com, mchehab+samsung@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tomasz Figa <tfiga@chromium.org>
-References: <TYAPR01MB6201561D2644EE783BA8B196922E9@TYAPR01MB6201.jpnprd01.prod.outlook.com>
- <b645f983-447b-7b4b-6dd6-d5f10da08e96@xs4all.nl>
- <TYAPR01MB62019A8DD1215F41F0FE663C92309@TYAPR01MB6201.jpnprd01.prod.outlook.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <TYAPR01MB62019A8DD1215F41F0FE663C92309@TYAPR01MB6201.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <60c8352f-81c6-72b2-6340-1d866c259937@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+X-Originating-IP: [10.18.29.47]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,164 +66,302 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yuji,
 
-On 26/10/2022 11:16, yuji2.ishikawa@toshiba.co.jp wrote:
-> Hi Hans,
+
+On 2022/12/1 16:36, neil.armstrong@linaro.org wrote:
+> [ EXTERNAL EMAIL ]
 > 
->> -----Original Message-----
->> From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
->> Sent: Monday, October 24, 2022 4:49 PM
->> To: ishikawa yuji(石川 悠司 ○ＲＤＣ□ＡＩＴＣ○ＥＡ開)
->> <yuji2.ishikawa@toshiba.co.jp>; posciak@chromium.org;
->> paul.kocialkowski@bootlin.com; mchehab+samsung@kernel.org;
->> linux-media@vger.kernel.org; linux-kernel@vger.kernel.org
->> Subject: Re: Question for an accepted patch: use of DMA-BUF based videobuf2
->> capture buffer with no-HW-cache-coherent HW
+> On 28/11/2022 14:30, Yu Tu wrote:
+>> Hi Jerome ,
 >>
->> Hi Yuji,
+>> On 2022/11/28 20:33, Jerome Brunet wrote:
+>>> [ EXTERNAL EMAIL ]
+>>>
+>>>
+>>> On Mon 28 Nov 2022 at 15:39, Yu Tu <yu.tu@amlogic.com> wrote:
+>>>
+>>>> Hi Jerome,
+>>>>     Thank you for your reply.
+>>>>
+>>>> On 2022/11/25 17:23, Jerome Brunet wrote:
+>>>>> [ EXTERNAL EMAIL ]
+>>>>> On Wed 23 Nov 2022 at 14:53, Krzysztof Kozlowski
+>>>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>>
+>>>>>> On 23/11/2022 14:23, Neil Armstrong wrote:
+>>>>>>> Hi,
+>>>>>>>
+>>>>>>> On 23/11/2022 12:16, Yu Tu wrote:
+>>>>>>>> Hi Krzysztof,
+>>>>>>>>        Thank you for your reply.
+>>>>>>>>
+>>>>>>>> On 2022/11/23 18:08, Krzysztof Kozlowski wrote:
+>>>>>>>>> [ EXTERNAL EMAIL ]
+>>>>>>>>>
+>>>>>>>>> On 23/11/2022 03:13, Yu Tu wrote:
+>>>>>>>>>> Add the S4 PLL clock controller found and bindings in the s4 
+>>>>>>>>>> SoC family.
+>>>>>>>>>>
+>>>>>>>>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>>>>>>>>>> ---
+>>>>>>>>>>     .../bindings/clock/amlogic,s4-pll-clkc.yaml   |  51 +
+>>>>>>>>>
+>>>>>>>>> This is v5 and still bindings are here? Bindings are always 
+>>>>>>>>> separate
+>>>>>>>>> patches. Use subject prefixes matching the subsystem (git log 
+>>>>>>>>> --oneline
+>>>>>>>>> -- ...).
+>>>>>>>>>
+>>>>>>>>> And this was split, wasn't it? What happened here?!?
+>>>>>>>>
+>>>>>>>> Put bindings and clock driver patch together from Jerome. Maybe 
+>>>>>>>> you can read this chat history.
+>>>>>>>> https://lore.kernel.or/all/1jy1v6z14n.fsf@starbuckisacylon.baylibre.com/
+>>>>>>>
+>>>>>>> Jerome was asking you to send 2 patchsets, one with :
+>>>>>>> - bindings in separate patches
+>>>>>>> - drivers in separate patches
+>>>>>>> and a second with DT changes.
+>>>>> Indeed, this is what was asked. It is aligned with Krzysztof's 
+>>>>> request.
+>>>>
+>>>> According to your discussion, I still should send patches in the 
+>>>> previous
+>>>> way in series. But I'm going to change it like you suggested.
+>>>> I don't know, am I getting it right?
+>>>
+>>> 3 people tried to explain this already and we all told you the same 
+>>> thing.
+>>>
+>>> * 1 patchset per maintainer: clk and dt
+>>> * bindings must be dedicated patches - never mixed with driver code.
+>>>
+>>> I strongly suggest that you take some time to (re)read:
+>>> * https://docs.kernel.org/process/submitting-patches.html
+>>> * https://docs.kernel.org/devicetree/bindings/submitting-patches.html
+>>>
+>>> If still unclear, please take some time to look at the kernel mailing
+>>> list archive and see how others have done the same things.
+>>>
+>>> Thx.
 >>
->> On 10/24/22 06:02, yuji2.ishikawa@toshiba.co.jp wrote:
->>> Hi,
->>>
->>> I'm porting a V4L2 capture driver from 4.19.y to 5.10.y [1].
->>>
->>> When I test the ported driver, I sometimes find a corruption on a captured
->> image.
->>>
->>> Because the corruption is exactly aligned with cacheline, I started
->> investigation from map/unmap of DMA-BUF.
->>>
->>>
->>>
->>> The capture driver uses DMA-BUF for videobuf2.
->>>
->>> The capture hardware does not have HW-mantained cache coherency with
->> CPU, that is, explicit map/unmap is essential on QBUF/DQBUF.
->>>
->>> After some hours of struggle, I found a patch removing cache synchronizations
->> on QBUF/DQBUF.
->>>
->>>
->>>
->>> https://patchwork.kernel.org/project/linux-media/patch/20190124095156.
->>> 21898-1-paul.kocialkowski@bootlin.com/
->>> <https://patchwork.kernel.org/project/linux-media/patch/20190124095156
->>> .21898-1-paul.kocialkowski@bootlin.com/>
->>>
->>>
->>>
->>> When I removed this patch from my 5.10.y working-tree, the driver
->>> yielded images without any defects.v
->>>
->>>
->>>
->>> ***************
->>>
->>> Sorry for a mention to a patch released 4 years ago.
->>>
->>> The patch removes map/unmap on QBUF/DQBUF to improve the
->> performance of V4L2 decoder device, by reusing previously decoded frames.
->>>
->>> However, there seems no cares nor compensations for modifying lifecycle of
->> DMA-BUF, especially on video capture devices.
+>> I'll change it as you suggest.But I still don't understand what you 
+>> suggested in V3.
 >>
->> I'm not entirely sure what you mean exactly.
+>> I remember discussing it with you at V3.
+>> https://lore.kernel.or/all/1jy1v6z14n.fsf@starbuckisacylon.baylibre.com/
 >>
-> My concern is consistency between ioctls and the state transition of capture buffers.
-> Generally, streaming I/O (DMA-BUF importing) buffers are handled following by userland.
+>> ">>>> Also it would be nice to split this in two series.
+>>  >>>> Bindings and drivers in one, arm64 dt in the other. These 
+>> changes goes
+>>  >>>> in through different trees.
+>>  >>> At present, Bindings, DTS and drivers are three series. Do you 
+>> mean to put
+>>  >>> Bindings and drivers together? If so, checkpatch.pl will report a 
+>> warning.
+>>  >> Yes because patches are not in yet so there is a good reason to 
+>> ignore
+>>  >> the warning. Warning will never show up on the actual tree if the
+>>  >> patches are correctly ordered.
+>>  >
+>>  > I think Binding, DTS and drivers use three series and you said two 
+>> series
+>>  > is not a big problem. Three series are recommended for 
+>> checkpatch.pl, I
+>>  > think it should be easy for that to separate and merge。
+>>
+>> No - There is only 2 series. 1 for the bindings and clock drivers and
+>> one for the DT once things are in"
 > 
-> Ioctl(VIDIOC_QBUF) -> /* DMA transfer from HW*/ -> ioctl(VIDIOC_DQBUF) -> /* access from CPU */ -> ioctl(VIDIOC_QBUF) -> ...
+> Please send the following emails:
 > 
-> Therefore, expected semantics is that a buffer is owned by HW after QBUF, and owned by CPU after DQBUF.
-> In practice, ioctl(QBUF) kicks vb2_dc_map_dma_buf() and ioctl(DQBUF) kicks vb2_dc_unmap_dma_buf() before applying the patch.
-> This implementation keeps consistency in terms of cache coherency as cache-clean is done in vb2_dc_map_dma_buf().
+> * First patchset
 > 
-> By applying the patch, ioctl(DQBUF) does not kick unmap_dma() anymore. The similar for ioctl(QBUF).
-> Therefore, in practice, a buffer is not owned by CPU just after ioctl(DQBUF).
-> To keep compatibility of buffer operations, there should be delayed map_dma()/unmap_dma() call just before DMA-transfer/CPU-access.
-> However, no one referred to such function in the v4l2 framework in the examination of the patch.
-> Also, there is no advice for individual video device drivers; such that adding map_dma()/unmap_dma() explicitly.
-
-The cache syncing is supposed to happen in __vb2_buf_mem_finish() where the
-'finish' memop is called.
-
-But for DMABUF it notes that:
-
-        /*
-         * DMA exporter should take care of cache syncs, so we can avoid
-         * explicit ->prepare()/->finish() syncs. For other ->memory types
-         * we always need ->prepare() or/and ->finish() cache sync.
-         */
-
-And here https://docs.kernel.org/driver-api/dma-buf.html I read that userspace
-must call DMA_BUF_IOCTL_SYNC to ensure the caches are synced before using the
-buffer.
-
-Are you calling DMA_BUF_IOCTL_SYNC?
-
-I suspect that vb2_dc_unmap_dma_buf() caused a cache sync, so you never noticed
-issues.
-
-Regards,
-
-	Hans
-
+> [PATCH V6 0/3] clk: meson: Add S4 SoC PLL and Peripheral clock controller
+>      [PATCH v6 1/3] dt-bindings: clock: document Amlogic S4 SoC PLL & 
+> peripheral clock controller
+>      [PATCH v6 2/3] clk: meson: add support for Amlogic S4 SoC PLL
+>      [PATCH v6 3/3] clk: meson: add support for Amlogic S4 SoC 
+> peripheral clock controller
 > 
->>>
->>>
->>>
->>> Would you tell me some idea on this patch:
->>>
->>> * Do well-implemented capture drivers work well even if this patch is applied?
->>
->> Yes, dmabuf is used extensively and I have not had any reports of issues.
+> 1) will contain only .yaml and dt-bindings include
+> 2) will only have drivers/clk/meson changes
+> 3) will only have drivers/clk/meson changes
 > 
-> Many architectures can avoid this problem.
-> A problem statistically occurs, only if a video capture HW does not have HW-maintained cache coherency with CPU.
-> Does this patch consider such case?
+> * Second patchset:
 > 
->>>
->>> * How should a video capture driver call V4L2/videobuf2 APIs, especially
->> when the hardware does not support cache coherency?
->>
->> It should all be handled correctly by the core frameworks.
->>
->> I think you need to debug more inside videobuf2-core.c. Some printk's that show
->> the dmabuf fd when the buffer is mapped and when it is unmapped + the length
->> it is mapping should hopefully help a bit.
+> [PATCH v1 0/2] arm64: dts: meson: Add S4 SoC PLL and Peripheral clock nodes
+>      [PATCH v1 1/2] arm64: dts: meson: add S4 Soc PLL clock controller node
+>      [PATCH v1 2/2] arm64: dts: meson: add S4 Soc Peripheral clock 
+> controller node
 > 
-> I added printk and dump_stack() to several functions.
-> The patched function __prepare_dmabuf() is called every ioctl(QBUF).
-> Function vb2_dc_map_dmabuf() is called only for the 1st call of ioctl(QBUF) for a buffer instance.
-> After that, vb2_dc_map_dmabuf() was never called, as the patch intended.
+> 1) is the patch 3 of v5 patchset
+> 2) is the patch 4 of v5 patchset
 > 
-> Regards,
-> 	Yuji
+> And in the second cover letter, explain those patches comes from the 
+> previous V5 patchset
+> and add a link to the V6 "drivers + bindings" patchset as a dependency.
 > 
->>
->> Regards,
->>
->> 	Hans
+> Neil
+
+Hi Neil,
+	Thank you very much for your detailed explanation.
+
 >>
 >>>
+>>>>
+>>>>>
+>>>>>>>
+>>>>>>> Then when the bindings + clocks patches are merged, a pull 
+>>>>>>> request of the bindings
+>>>>>>> can be done to me so I can merge it with DT.
+>>>>>>>
+>>>>>>>>
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>>>     MAINTAINERS                                   |   1 +
+>>>>>>>>>>     drivers/clk/meson/Kconfig                     |  13 +
+>>>>>>>>>>     drivers/clk/meson/Makefile                    |   1 +
+>>>>>>>>>>     drivers/clk/meson/s4-pll.c                    | 875 
+>>>>>>>>>> ++++++++++++++++++
+>>>>>>>>>>     drivers/clk/meson/s4-pll.h                    |  88 ++
+>>>>>>>>>>     .../dt-bindings/clock/amlogic,s4-pll-clkc.h   |  30 +
+>>>>>>>>>>     7 files changed, 1059 insertions(+)
+>>>>>>>>>>     create mode 100644 
+>>>>>>>>>> Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
+>>>>>>>>>>     create mode 100644 drivers/clk/meson/s4-pll.c
+>>>>>>>>>>     create mode 100644 drivers/clk/meson/s4-pll.h
+>>>>>>>>>>     create mode 100644 
+>>>>>>>>>> include/dt-bindings/clock/amlogic,s4-pll-clkc.h
+>>>>>>>>>>
+>>>>>>>>>> diff --git 
+>>>>>>>>>> a/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
+>>>>>>>>>> new file mode 100644
+>>>>>>>>>> index 000000000000..fd517e8ef14f
+>>>>>>>>>> --- /dev/null
+>>>>>>>>>> +++ 
+>>>>>>>>>> b/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
+>>>>>>>>>> @@ -0,0 +1,51 @@
+>>>>>>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>>>>>>>> +%YAML 1.2
+>>>>>>>>>> +---
+>>>>>>>>>> +$id: 
+>>>>>>>>>> http://devicetree.org/schemas/clock/amlogic,s4-pll-clkc.yaml#
+>>>>>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>>>>>>> +
+>>>>>>>>>> +title: Amlogic Meson S serials PLL Clock Controller
+>>>>>>>>>> +
+>>>>>>>>>> +maintainers:
+>>>>>>>>>> +  - Neil Armstrong <narmstrong@baylibre.com>
+>>>>>>>>>> +  - Jerome Brunet <jbrunet@baylibre.com>
+>>>>>>>>>> +  - Yu Tu <yu.hu@amlogic.com>
+>>>>>>>>>> +
+>>>>>>>>> One blank line.
+>>>>>>>>
+>>>>>>>>     I will delete this, on next version patch.
+>>>>>>>>
+>>>>>>>>>
+>>>>>>>>>> +
+>>>>>>>>>> +properties:
+>>>>>>>>>> +  compatible:
+>>>>>>>>>> +    const: amlogic,s4-pll-clkc
+>>>>>>>>>> +
+>>>>>>>>>> +  reg:
+>>>>>>>>>> +    maxItems: 1
+>>>>>>>>>> +
+>>>>>>>>>> +  clocks:
+>>>>>>>>>> +    maxItems: 1
+>>>>>>>>>> +
+>>>>>>>>>> +  clock-names:
+>>>>>>>>>> +    items:
+>>>>>>>>>> +      - const: xtal
+>>>>>>>>>> +
+>>>>>>>>>> +  "#clock-cells":
+>>>>>>>>>> +    const: 1
+>>>>>>>>>> +
+>>>>>>>>>> +required:
+>>>>>>>>>> +  - compatible
+>>>>>>>>>> +  - reg
+>>>>>>>>>> +  - clocks
+>>>>>>>>>> +  - clock-names
+>>>>>>>>>> +  - "#clock-cells"
+>>>>>>>>>> +
+>>>>>>>>>> +additionalProperties: false
+>>>>>>>>>> +
+>>>>>>>>>> +examples:
+>>>>>>>>>> +  - |
+>>>>>>>>>> +    clkc_pll: clock-controller@fe008000 {
+>>>>>>>>>> +      compatible = "amlogic,s4-pll-clkc";
+>>>>>>>>>> +      reg = <0xfe008000 0x1e8>;
+>>>>>>>>>> +      clocks = <&xtal>;
+>>>>>>>>>> +      clock-names = "xtal";
+>>>>>>>>>> +      #clock-cells = <1>;
+>>>>>>>>>> +    };
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>>> +#endif /* __MESON_S4_PLL_H__ */
+>>>>>>>>>> diff --git a/include/dt-bindings/clock/amlogic,s4-pll-clkc.h 
+>>>>>>>>>> b/include/dt-bindings/clock/amlogic,s4-pll-clkc.h
+>>>>>>>>>> new file mode 100644
+>>>>>>>>>> index 000000000000..345f87023886
+>>>>>>>>>> --- /dev/null
+>>>>>>>>>> +++ b/include/dt-bindings/clock/amlogic,s4-pll-clkc.h
+>>>>>>>>>
+>>>>>>>>> This belongs to bindings patch, not driver.
+>>>>>>>>>
+>>>>>>>>>> @@ -0,0 +1,30 @@
+>>>>>>>>>> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+>>>>>>>>>> +/*
+>>>>>>>>>> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
+>>>>>>>>>> + * Author: Yu Tu <yu.tu@amlogic.com>
+>>>>>>>>>> + */
+>>>>>>>>>> +
+>>>>>>>>>> +#ifndef _DT_BINDINGS_CLOCK_AMLOGIC_S4_PLL_CLKC_H
+>>>>>>>>>> +#define _DT_BINDINGS_CLOCK_AMLOGIC_S4_PLL_CLKC_H
+>>>>>>>>>> +
+>>>>>>>>>> +/*
+>>>>>>>>>> + * CLKID index values
+>>>>>>>>>> + */
+>>>>>>>>>> +
+>>>>>>>>>> +#define CLKID_FIXED_PLL            1
+>>>>>>>>>> +#define CLKID_FCLK_DIV2            3
+>>>>>>>>>
+>>>>>>>>> Indexes start from 0 and are incremented by 1. Not by 2.
+>>>>>>>>>
+>>>>>>>>> NAK.
+>>>>>>>>
+>>>>>>>> I remember Jerome discussing this with you.You can look at this 
+>>>>>>>> submission history.
+>>>>>>>> https://lore.kernel.org/all/c088e01c-0714-82be-8347-6140daf56640@linaro.org/
+>>>>>>>
+>>>>>>> Historically we did that by only exposing part of the numbers, 
+>>>>>>> controlling which
+>>>>>>> clocks were part of the bindings.
+>>>>>>>
+>>>>>>> But it seems this doesn't make sens anymore, maybe it would be 
+>>>>>>> time to put all the
+>>>>>>> clock ids in the bindings for this new SoC and break with the 
+>>>>>>> previous strategy.
+>>>>> Krzysztof and I agreed there is nothing wrong with the current
+>>>>> approach, I believe.
+>>>>> It does not prevent someone from using an un-exposed clock, sure, or
+>>>>> exposing it in the future if necessary.
+>>>>> However, I think it clearly shows that an un-exposed element is not
+>>>>> expected to be used by an external consumers. It should be enough to
+>>>>> trigger a discussion if this expectation is wrong.
+>>>>>
+>>>>>>
+>>>>>> So the outcome of the previous discussion was somewhere later in that
+>>>>>> thread:
+>>>>>>
+>>>>>>> It is just a choice to not expose some IDs.
+>>>>>>> It is not tied to the implementation at all.
+>>>>>>> I think we actually follow the rules and the idea behind it.
+>>>>>>
+>>>>>>
+>>>>>> Best regards,
+>>>>>> Krzysztof
+>>>>> .
 >>>
->>>
->>> ***************
->>>
->>> [1] FYI: the capture driver is not on mainline yet; the candidate is,
->>>
->>> https://lore.kernel.org/all/20220810132822.32534-1-yuji2.ishikawa@tosh
->>> iba.co.jp/
->>> <https://lore.kernel.org/all/20220810132822.32534-1-yuji2.ishikawa@tos
->>> hiba.co.jp/>
->>>
->>>
->>>
->>>
->>>
->>> Regards,
->>>
->>>               Yuji Ishikawa
->>>
-
+>>> .
+> 
