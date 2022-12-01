@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C2E63FB0F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF03963FB83
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:01:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231673AbiLAW5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 17:57:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
+        id S231901AbiLAXBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 18:01:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231636AbiLAW5h (ORCPT
+        with ESMTP id S231879AbiLAXBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 17:57:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42ACFC7240;
-        Thu,  1 Dec 2022 14:57:30 -0800 (PST)
+        Thu, 1 Dec 2022 18:01:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB55CA790;
+        Thu,  1 Dec 2022 14:59:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8719262169;
-        Thu,  1 Dec 2022 22:57:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E94AC433C1;
-        Thu,  1 Dec 2022 22:57:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1F9F62184;
+        Thu,  1 Dec 2022 22:59:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3905C433C1;
+        Thu,  1 Dec 2022 22:59:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669935450;
-        bh=TBfuELpSzb+mNB+KGhsJR1KS+PLQ2psvSjnArr0l67U=;
+        s=k20201202; t=1669935570;
+        bh=0Q6h0ed5CVC0QVvSPzxIJurFaXRKPTP5j60mgVA2BAY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qTxVOKu12kBYKDZa/QZJxEWsTveLDaAK2keHquTWLXJyk+85s9/sm/SSbYFjDDWpi
-         xUxavKGimMWhzyRtUxJlv3GMRrcRUVFpEoO7uVMqhneExCCGM9e5kM9WsMT891ryjN
-         MMpD2Be8s3pqjQPUX0vq40pbDrTBfSt/Z9/x8OFkr7Yz+2B+DfJli4T1PPRaMnAt3d
-         Dfs2jAswQabKi3v3bRgqB5/aj0Br1Dm+Yb6iWNpr2JEwJtgbZCl4VcFlozz8tSRXov
-         I3uiQP1MHBPlSHJ3tTxuq0IwAckjcbj/dIBLu3Ewzr/fwN1crH6wlSb5HT41/KRbOK
-         nKxtIEx1yqpYg==
-Date:   Thu, 1 Dec 2022 22:57:24 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_msavaliy@quicinc.com,
-        mka@chromium.org, swboyd@chromium.org, quic_vtanuku@quicinc.com,
-        vkoul@kernel.org
-Subject: Re: [V3] spi: spi-geni-qcom: Add support for SE DMA mode
-Message-ID: <Y4kxVP97C66oi0Bi@sirena.org.uk>
-References: <1669713814-28876-1-git-send-email-quic_vnivarth@quicinc.com>
- <CAD=FV=WW-YttMn2+_6MdKwVDQO2stHjiisSdX8vFoOFBMnsjRA@mail.gmail.com>
+        b=G5t7LFCAsO6+7Nc2MF2sOWx0hRAQbXveSDBDxcedeYZLxIR2Us7at/BKWGJPLr+Yz
+         X7G16giKDBHIsDDS1gk7vtHlNMXUeT0OfhPX8OQEE8OfI7r26I2/Wa/dIxNQsxXAVT
+         QMA31GvOF/FEaSCVN06VudDHyW6iked+oDVC23zpj/6bW/Z+5XQutM4WJfOZUqTFev
+         ZuVVdNTKK2j/WXnoWBArJrI55TqYzXZ0+4qhl7r1fYm9foxf+SlUtcf4tYdHj5Nz2M
+         2tVO+bPGi2ECMeTQ1emZzh3rypAKmmr99jwxoaUsGIlBZSi/xgFSEZoGN+JK/ZhGD9
+         HWp3X0zPL7ztQ==
+Date:   Thu, 1 Dec 2022 23:59:27 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] mfd/i2c/extcon: Add Lenovo Yoga Tab 3 support to
+ cht-wc PMIC code
+Message-ID: <Y4kxz+fzsLduXaUa@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221127182257.104410-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MCfNU2/ldKjB0tuT"
+        protocol="application/pgp-signature"; boundary="QhIvpwkjd+QgQrxo"
 Content-Disposition: inline
-In-Reply-To: <CAD=FV=WW-YttMn2+_6MdKwVDQO2stHjiisSdX8vFoOFBMnsjRA@mail.gmail.com>
-X-Cookie: Leveraging always beats prototyping.
+In-Reply-To: <20221127182257.104410-1-hdegoede@redhat.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,40 +64,35 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---MCfNU2/ldKjB0tuT
+--QhIvpwkjd+QgQrxo
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Dec 01, 2022 at 02:40:32PM -0800, Doug Anderson wrote:
-> On Tue, Nov 29, 2022 at 1:23 AM Vijaya Krishna Nivarthi
-> >
-> > +       if (mas->cur_xfer_mode == GENI_SE_DMA) {
-> > +               if (m_cmd & SPI_RX_ONLY) {
-> > +                       ret =  geni_se_rx_dma_prep(se, xfer->rx_buf,
-> > +                               xfer->len, &xfer->rx_dma);
 
-> In response to v1 I asked if it's really OK to use "xfer->rx_dma" for
-> your purposes since it's supposed to be managed by the SPI framework.
+> Wolfgang and MyungJoo or Chanwoo, can you please give your Ack for merging
+> these through the MFD tree?
 
-> It still makes me nervous to use it, even though it seems to work.
-> Since we're using it in an undocumented way, I'd be nervous that the
-> SPI framework might change what it's doing and break us in the future.
+"Wolfram", please. Will do!
 
-I'm a bit nervous too - why exactly are we doing the open coding here?
 
---MCfNU2/ldKjB0tuT
+--QhIvpwkjd+QgQrxo
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOJMVMACgkQJNaLcl1U
-h9Dtkwf/dQzK7cnApqI9SmkAIOQ5X0plaNHltBhmjGmnnGvfP9HGSZ7IJ8JfPn+/
-KNsxtOLIdjGqCwYdxT9bt5E+UbJ2yjdiObxXRyTHbAWm0K80x3J1FmizLtUUjkpV
-7pHystlQj4LEOdAcLGygnHPYGLsyipEvsLnykheTgAm048f5aDneB4DDF14jlYPA
-3Y1RXKpDJwCZUpOBHHj0oex4PBl1h1z9iqGQA/e9YRStRJWCNWgZHMdvRZ+bAORA
-/vuYYUM4BGpJJQc0nnl5zRHTXGnTo8hxM1tytIMWE2Iu5WtjV9rze3AknVFOiudS
-3O5lWJN1Rv8dLrqlpXuWwl7dEGQyJw==
-=XeYp
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmOJMc8ACgkQFA3kzBSg
+KbZT6A//fuwlkXcd1rehMWzzLR2KF3PCFbtYxyUGxa5fT73AZ+XpzpMZu/4RfODC
+p+7DkdG/kHkK9HitcgihsdBBy58lM/zswzipM6ta3uhQam+KbQsu9tLC/YjsJCnO
+EJrrTLjNnwZ4iqBfM00x5o4E/oorLatHw2fI5ZduPgdovP5CPuQBrbi210itbQQY
+ZulyBPmzaTIxdxQEI6JenRT8Nu/WWQTowakLVfR6MMOfJROg7lKbZKTLsTKZscBE
++Ui+gknakfU6/d4NrTW3MiTwF6x9bYnHxStuM0Yii5O/dUSJMZ7G+tnabeh5DPY6
+SnvPB8qiNK8nIYQFHGIBgLdSPLgvjOJLEB06ew1z/+EoM2qFMZoF41n6zoRUqKm1
+GWTizoYLQ/ObIEyNX5VQ2WOC56uMvY9dq8x1o4Ox099nqm3y7DZ/3xC1SVVhOOcl
+Y67HXdNN94zaROB2HetkocDPDXb1ri9k1J7WzrPLd9xvExSnOPqwD4QT/RE/lElF
+HyDsER7+OjCHnP5dKV5wy3jJgiSUY7vDbpgk88UHnyDJpN1pzcapHMkcAnAwHVdQ
+1Ej2pUsxz53/1Mx+40drrt2+AadVPiOqR0l59b97VMLXX7DNJazdU6Du4F8d8y+6
+shqcb5Tsc1XReWNy8PURYtYwsros2SGMCkO7akSb2IF9Gkdy2VM=
+=UQbT
 -----END PGP SIGNATURE-----
 
---MCfNU2/ldKjB0tuT--
+--QhIvpwkjd+QgQrxo--
