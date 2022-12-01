@@ -2,136 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D497563FC43
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:46:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CE363FC48
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:48:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbiLAXqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 18:46:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
+        id S231520AbiLAXsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 18:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiLAXqc (ORCPT
+        with ESMTP id S229744AbiLAXsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 18:46:32 -0500
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5957BEC47;
-        Thu,  1 Dec 2022 15:46:31 -0800 (PST)
-Received: by mail-ot1-f50.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so1978731otl.10;
-        Thu, 01 Dec 2022 15:46:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kku18D3Y88MWUX/tUqbmMS28F2KQx7nmZY37oV7FZwE=;
-        b=W1IegVZt38qqnwHKTR0xhxFoWcKQpO1C+tjfEOdmXbVWQHpbGDJk3K+5Dp6F5XHsyO
-         JI6GNIPpiCd8/F5yf12YcULwt6VoVBaa3htjGvE5ZeqrqF2p1X8H/ivAmlixMPwVy/jX
-         WZbBIsKxukDePs9RFBR8G+KTG40285peDSfk3SOyYj/QwGsWGS/fB+id+HUqHaJspzWk
-         mELGF7WiLTgne0scKSjPZ+R0BtOeanKLAABR0tiZSCZCv7TKntmdm0JslgxuJbcDvQv/
-         X7tc6iK5TDljZlFhb5fCArgkZ4OBIOnhHOO3qlZabMN6nbTmJv25iHhFmWGmCtGObr7K
-         vWeg==
-X-Gm-Message-State: ANoB5pkcown+20I8exZ6psaZ1Cr1X4pg6pzJ50UAvz+RhJXVAvMSPjrs
-        2arjxQ82MA76VENUSuDyzA==
-X-Google-Smtp-Source: AA0mqf5ZGQasomoBdeMHUbWi+cUm7mHzdtQUSRq09o1u9VxkbZV92Lxt3/8ZuyZgJD7FgCKGDpaDTA==
-X-Received: by 2002:a05:6830:1e63:b0:661:9030:6480 with SMTP id m3-20020a0568301e6300b0066190306480mr24758975otr.147.1669938390899;
-        Thu, 01 Dec 2022 15:46:30 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y2-20020a4ae702000000b0049427725e62sm2292185oou.19.2022.12.01.15.46.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 15:46:30 -0800 (PST)
-Received: (nullmailer pid 1704103 invoked by uid 1000);
-        Thu, 01 Dec 2022 23:46:28 -0000
-Date:   Thu, 1 Dec 2022 17:46:28 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-mediatek@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-sunxi@lists.linux.dev,
-        Hans Ulli Kroll <ulli.kroll@googlemail.com>, soc@kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, netdev@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        ", Andrew Lunn" <andrew@lunn.ch>, linux-arm-msm@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
-        Stefan Agner <stefan@agner.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/5] dt-bindings: net: qca,ar71xx: remove label = "cpu"
- from examples
-Message-ID: <166993831623.1702506.4546645219900752750.robh@kernel.org>
-References: <20221130141040.32447-1-arinc.unal@arinc9.com>
- <20221130141040.32447-2-arinc.unal@arinc9.com>
+        Thu, 1 Dec 2022 18:48:53 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C9BC5104
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 15:48:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669938531; x=1701474531;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Nyg4hsbkli7lbMbs7eHltsrooNKF8KJdlLwAc+dZy5A=;
+  b=kqfzEbvM220vPyz8J+NG7Cut4P6C121Hkd6Y+nn5IYMfFpLfdc78FxGX
+   OAKqFuSdDIVL9PuQ9q3Y/B8AZzIUNYtZ6iyxcCY4a05b0HtbOuMRnUjFF
+   8ylgQFeu7Miiq/e1WhMPDpcc/n+RjWVamJTyY8CnjqCFWPsdPlEiRVzpC
+   AKrY65MTJGLDwn3yxFpUYtglVscIPkE2jDvTuh5gMs9iev9xILScYBd7P
+   gDKTQuIUPQJqb4fhJ360KWKvzTbIiMpKZc3p+kiKn6Ib9wUhDYDygY19n
+   Hm4NztV7O0YbnC6eAmWBSR08MAKh3KUV1RVO+qGVF8E7Aqu09fj1jkulP
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="402106629"
+X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
+   d="scan'208";a="402106629"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 15:48:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="889933631"
+X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
+   d="scan'208";a="889933631"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 01 Dec 2022 15:48:47 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p0tIM-000D1v-1p;
+        Thu, 01 Dec 2022 23:48:46 +0000
+Date:   Fri, 02 Dec 2022 07:48:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:smp/core] BUILD SUCCESS
+ f4576ee2315f1ad5f147a356c6e5c223462fd599
+Message-ID: <63893d36.C2EaX64vpF4idDFH%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221130141040.32447-2-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git smp/core
+branch HEAD: f4576ee2315f1ad5f147a356c6e5c223462fd599  cpuhp: Set cpuhp target for boot cpu
 
-On Wed, 30 Nov 2022 17:10:36 +0300, Arınç ÜNAL wrote:
-> This is not used by the DSA dt-binding, so remove it from the examples.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  Documentation/devicetree/bindings/net/qca,ar71xx.yaml | 1 -
->  1 file changed, 1 deletion(-)
-> 
+elapsed time: 728m
 
-Acked-by: Rob Herring <robh@kernel.org>
+configs tested: 44
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+powerpc                           allnoconfig
+arc                                 defconfig
+alpha                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+s390                             allmodconfig
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-syz
+s390                                defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+x86_64                           allyesconfig
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+sh                               allmodconfig
+s390                             allyesconfig
+ia64                             allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+m68k                             allyesconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+x86_64                            allnoconfig
+riscv                randconfig-r042-20221201
+arc                  randconfig-r043-20221201
+s390                 randconfig-r044-20221201
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+
+clang tested configs:
+hexagon              randconfig-r041-20221201
+hexagon              randconfig-r045-20221201
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
