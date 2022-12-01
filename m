@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E5563FB25
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA8A63FB26
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231795AbiLAW6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 17:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
+        id S231804AbiLAW6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 17:58:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231644AbiLAW5k (ORCPT
+        with ESMTP id S231671AbiLAW5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Dec 2022 17:57:40 -0500
 Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99B7A444;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8164A1B7;
         Thu,  1 Dec 2022 14:57:38 -0800 (PST)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 1B0C85FD0E;
-        Fri,  2 Dec 2022 01:57:32 +0300 (MSK)
+        by mx.sberdevices.ru (Postfix) with ESMTP id 266CF5FD10;
+        Fri,  2 Dec 2022 01:57:33 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1669935452;
-        bh=XU1bxoWrykCIxVdFR9T9KlwOWfuXOxPytqzRPXwAy18=;
+        s=mail; t=1669935453;
+        bh=nLy/4b8i+xMemeS4hoDjkYNxHQBeN/nSL76OykbPHmM=;
         h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=ryfu3zlINlnEg5WtnhdYY0DhdKbMmieEI0hBQdTdjkPCeBQGMTCQbRzdCw+AZu06m
-         QDiDgyC5NOf7a3jWRg1ENQGdvZIWexoDUcWWhqt0FeqRfEUTlgBHSGTKJDkhDLbitn
-         b/ud1RDW3kZ13VMn1UxArrRtr/uQz/F7X5QvkaWn5bryeOPrrQh01iCBKDid4ul+l8
-         D4m6mT7WfYLYQ6vKaHOcGhHsJ0hPYZPdciLqQID7aBCpKC3wIBTUZGm82Ldp72ZQll
-         xUVvBSvU3PDpZy6H44F/6Ay51Xq9aIin49Xh08FSJ331eJDqR1ALInjZt84MGePpna
-         QlTzsFFVq4D6g==
+        b=RXK5VNxFeGUkUgpr/1p32w/BEOuGguD/Jkj6QIAutFore0z29ROYG48QCdgVHTy3w
+         GEiFA97xM/JMM9uiq1wA7mE+Six3c4IftH8cuKhO4if13/7XEHS9sC/PVsIsb1zjNC
+         0XVDuoKap+rzv/FTrHVvbmtr8Ihkraxk+bCficfezNsu3xDZMiNLKMmQjH/qN74PRw
+         jknvsLUqSr0+W8UK1y/CwV32Pi03UchJ/BjjZpH6MrYSMdt49dNtG1Oxww6PnttyCW
+         N8La6v4MrpzzpXRlYgt08hvCCyaUmvpNYWxmGE/4chbVSlvkgPlzhsRDAxoj0vEDXB
+         ysORhjsnCjFsg==
 Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
         by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri,  2 Dec 2022 01:57:32 +0300 (MSK)
+        Fri,  2 Dec 2022 01:57:33 +0300 (MSK)
 From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
 To:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
         <mturquette@baylibre.com>, <sboyd@kernel.org>,
@@ -42,9 +42,9 @@ CC:     <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Subject: [PATCH v8 05/11] clk: meson: pll: export meson_clk_pll_wait_lock symbol
-Date:   Fri, 2 Dec 2022 01:56:57 +0300
-Message-ID: <20221201225703.6507-6-ddrokosov@sberdevices.ru>
+Subject: [PATCH v8 06/11] clk: meson: introduce a1-clkc common driver for all A1 clock controllers
+Date:   Fri, 2 Dec 2022 01:56:58 +0300
+Message-ID: <20221201225703.6507-7-ddrokosov@sberdevices.ru>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
 References: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
@@ -70,52 +70,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modern meson PLL IPs are a little bit different from early known PLLs.
-The main difference is located in the init/enable/disable sequences; the
-rate logic is the same. So drivers for the new PLLs can be inherited
-from the clk-pll driver and redefine init/enable/disable routines only.
-For that purpose we need to have meson_clk_pll_wait_lock() in the export
-symbols list, because each lock operation should be ended with wait
-cycles.
+Generally, A1 SoC has four clock controllers on the board: PLL,
+Peripherals, CPU, and Audio. The audio clock controller is different
+from others, but the rest are very similar from a functional and regmap
+point of view. So a it's good idea to generalize some routines for all
+of them. Exactly, meson-a1-clkc driver contains the common probe() flow.
 
 Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 ---
- drivers/clk/meson/clk-pll.c | 3 ++-
- drivers/clk/meson/clk-pll.h | 2 ++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ drivers/clk/meson/Kconfig         |  4 ++
+ drivers/clk/meson/Makefile        |  1 +
+ drivers/clk/meson/meson-a1-clkc.c | 63 +++++++++++++++++++++++++++++++
+ drivers/clk/meson/meson-a1-clkc.h | 25 ++++++++++++
+ 4 files changed, 93 insertions(+)
+ create mode 100644 drivers/clk/meson/meson-a1-clkc.c
+ create mode 100644 drivers/clk/meson/meson-a1-clkc.h
 
-diff --git a/drivers/clk/meson/clk-pll.c b/drivers/clk/meson/clk-pll.c
-index 9e55617bc3b4..81c810d57a48 100644
---- a/drivers/clk/meson/clk-pll.c
-+++ b/drivers/clk/meson/clk-pll.c
-@@ -273,7 +273,7 @@ static int meson_clk_pll_determine_rate(struct clk_hw *hw,
- 	return 0;
- }
+diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
+index bd44ba47200e..1c885541c3a9 100644
+--- a/drivers/clk/meson/Kconfig
++++ b/drivers/clk/meson/Kconfig
+@@ -43,6 +43,10 @@ config COMMON_CLK_MESON_CPU_DYNDIV
+ 	tristate
+ 	select COMMON_CLK_MESON_REGMAP
  
--static int meson_clk_pll_wait_lock(struct clk_hw *hw)
-+int meson_clk_pll_wait_lock(struct clk_hw *hw)
- {
- 	struct clk_regmap *clk = to_clk_regmap(hw);
- 	struct meson_clk_pll_data *pll = meson_clk_pll_data(clk);
-@@ -289,6 +289,7 @@ static int meson_clk_pll_wait_lock(struct clk_hw *hw)
- 
- 	return -ETIMEDOUT;
- }
-+EXPORT_SYMBOL_GPL(meson_clk_pll_wait_lock);
- 
- static int meson_clk_pll_init(struct clk_hw *hw)
- {
-diff --git a/drivers/clk/meson/clk-pll.h b/drivers/clk/meson/clk-pll.h
-index 367efd0f6410..85fec18c4b8a 100644
---- a/drivers/clk/meson/clk-pll.h
-+++ b/drivers/clk/meson/clk-pll.h
-@@ -47,4 +47,6 @@ extern const struct clk_ops meson_clk_pll_ro_ops;
- extern const struct clk_ops meson_clk_pll_ops;
- extern const struct clk_ops meson_clk_pcie_pll_ops;
- 
-+int meson_clk_pll_wait_lock(struct clk_hw *hw);
++config COMMON_CLK_MESON_A1_CLKC
++	tristate
++	select COMMON_CLK_MESON_REGMAP
 +
- #endif /* __MESON_CLK_PLL_H */
+ config COMMON_CLK_MESON8B
+ 	bool "Meson8 SoC Clock controller support"
+ 	depends on ARM
+diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
+index 0e6f293c05d4..15136d861a65 100644
+--- a/drivers/clk/meson/Makefile
++++ b/drivers/clk/meson/Makefile
+@@ -11,6 +11,7 @@ obj-$(CONFIG_COMMON_CLK_MESON_PLL) += clk-pll.o
+ obj-$(CONFIG_COMMON_CLK_MESON_REGMAP) += clk-regmap.o
+ obj-$(CONFIG_COMMON_CLK_MESON_SCLK_DIV) += sclk-div.o
+ obj-$(CONFIG_COMMON_CLK_MESON_VID_PLL_DIV) += vid-pll-div.o
++obj-$(CONFIG_COMMON_CLK_MESON_A1_CLKC) += meson-a1-clkc.o
+ 
+ # Amlogic Clock controllers
+ 
+diff --git a/drivers/clk/meson/meson-a1-clkc.c b/drivers/clk/meson/meson-a1-clkc.c
+new file mode 100644
+index 000000000000..2fe320a0e16e
+--- /dev/null
++++ b/drivers/clk/meson/meson-a1-clkc.c
+@@ -0,0 +1,63 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Amlogic Meson-A1 Clock Controller Driver
++ *
++ * Copyright (c) 2022, SberDevices. All Rights Reserved.
++ * Author: Dmitry Rokosov <ddrokosov@sberdevices.ru>
++ */
++
++#include <linux/of_device.h>
++#include "meson-a1-clkc.h"
++
++static struct regmap_config clkc_regmap_config = {
++	.reg_bits   = 32,
++	.val_bits   = 32,
++	.reg_stride = 4,
++};
++
++int meson_a1_clkc_probe(struct platform_device *pdev)
++{
++	struct meson_a1_clkc_data *clkc;
++	struct device *dev = &pdev->dev;
++	struct resource *res;
++	void __iomem *base;
++	struct regmap *map;
++	int clkid, i, err;
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res)
++		return dev_err_probe(dev, -ENXIO, "can't get IO resource\n");
++
++	base = devm_ioremap_resource(dev, res);
++	if (IS_ERR(base))
++		return dev_err_probe(dev, PTR_ERR(base),
++				     "can't ioremap resource %pr\n", res);
++
++	map = devm_regmap_init_mmio(dev, base, &clkc_regmap_config);
++	if (IS_ERR(map))
++		return dev_err_probe(dev, PTR_ERR(map),
++				     "can't init regmap mmio region\n");
++
++	clkc = (struct meson_a1_clkc_data *)of_device_get_match_data(dev);
++	if (!clkc)
++		return dev_err_probe(dev, -ENODEV,
++				     "can't get A1 clkc driver data\n");
++
++	/* Populate regmap for the regmap backed clocks */
++	for (i = 0; i < clkc->num_regs; i++)
++		clkc->regs[i]->map = map;
++
++	for (clkid = 0; clkid < clkc->hw->num; clkid++) {
++		err = devm_clk_hw_register(dev, clkc->hw->hws[clkid]);
++		if (err)
++			return dev_err_probe(dev, err,
++					     "clock registration failed\n");
++	}
++
++	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
++					   (void *)clkc->hw);
++}
++EXPORT_SYMBOL_GPL(meson_a1_clkc_probe);
++
++MODULE_AUTHOR("Dmitry Rokosov <ddrokosov@sberdevices.ru>");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/clk/meson/meson-a1-clkc.h b/drivers/clk/meson/meson-a1-clkc.h
+new file mode 100644
+index 000000000000..503eca0f6cb5
+--- /dev/null
++++ b/drivers/clk/meson/meson-a1-clkc.h
+@@ -0,0 +1,25 @@
++/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
++/*
++ * Amlogic Meson-A1 Clock Controller driver
++ *
++ * Copyright (c) 2022, SberDevices. All Rights Reserved.
++ * Author: Dmitry Rokosov <ddrokosov@sberdevices.ru>
++ */
++
++#ifndef __MESON_A1_CLKC_H__
++#define __MESON_A1_CLKC_H__
++
++#include <linux/clk-provider.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++
++#include "clk-regmap.h"
++
++struct meson_a1_clkc_data {
++	const struct clk_hw_onecell_data *hw;
++	struct clk_regmap *const *regs;
++	size_t num_regs;
++};
++
++int meson_a1_clkc_probe(struct platform_device *pdev);
++#endif
 -- 
 2.36.0
 
