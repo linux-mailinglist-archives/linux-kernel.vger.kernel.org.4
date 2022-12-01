@@ -2,79 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A8563FBB5
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF9863FBAF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:10:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbiLAXLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 18:11:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
+        id S231349AbiLAXKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 18:10:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231771AbiLAXKn (ORCPT
+        with ESMTP id S231295AbiLAXKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 18:10:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3FFBF652
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 15:09:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669936140;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BtaH/R2U9H/FSCFeNcuszPREFemDGP9fQpdb/KT1ZL4=;
-        b=iS9QIA0NoHrNEmxnkrx8RMEYZRasgwABiPvgRDiDN73fYYitKyOjm6DJKxF/3d9CxvjkTS
-        MwR+C1qBhZf880BnPr9N7jssCD7MnrJQrKrZ2wxB7Lck3ZFKD3q/h5yJ6AkFC4MU4YFuD6
-        +/9DHtFzKN0TDQstf7rzDPdBOno7S6A=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-423-aCRiw6XANKmbDPazvPw0OA-1; Thu, 01 Dec 2022 18:08:58 -0500
-X-MC-Unique: aCRiw6XANKmbDPazvPw0OA-1
-Received: by mail-oo1-f72.google.com with SMTP id x13-20020a4a9b8d000000b0049eeca57fbcso1013661ooj.9
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 15:08:58 -0800 (PST)
+        Thu, 1 Dec 2022 18:10:22 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE51FC3FF1
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 15:09:35 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id h16so3009843qtu.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 15:09:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8r55NhVr723cwq0xc0lLRrnya0twXWY3CzmxTQ/dZkI=;
+        b=dLEd/+ZmyTUCV4O9y9TMSltJmihMtv9UXsNn0xX/Q968beeCQDCwHJi5pPHXVTR78O
+         7qeKTHd/S19uxhBD+8OH4MNNWg8+UR/rfukSPVBb4KHSTm/7gX/u5vhXETibNpCSOrwp
+         xZ25CEfHMqwJkdU2iKMXAEIduAAyNECuDJY2CQkWK2gIVU105XWuXU2Bbq7tg4wN/7td
+         /5QuwrSerATX7eI1xdLjGI4GireFJdMa/ovBXLHaS+uPHDuvsWLknxj/FCxDfdUVY5Rr
+         vkRASZNdaPLrGg6PYBQE4GKTk8agTtdgxKkzdauMId1H1aWDduJIlV7XAZc5aQgMCKOk
+         oIdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BtaH/R2U9H/FSCFeNcuszPREFemDGP9fQpdb/KT1ZL4=;
-        b=C7V9O9wlS0ZqGt5l1oU5k61g3qz+TqX111q0IY4MrIOUPwJ0HzKG0PwS5RZxd6idEB
-         OzrDijTG2v/haSVNMXFirLa38/vtbZ//96XrexXIOlt3qEOxJxY1TSn1821A4BnGLWhd
-         9oVw9InlHNpk1wlrT76z6kMtq0sF9+3QTol/4CFmwPdQ9tLe4IE2fjKTR6lGtThubGFt
-         GqdlBmjcD9kgtGgnlcKgfIlX0Lg01VKjvENHVSSzHo02xmQA37AhNOOSloZAw6Q90cX6
-         muhoVfpBcfbf3R1oL1Ka6FOoF5oPihGgqV9hMjjV+2xa5Pc8Y9kbelsrfd5CF5pBATNX
-         nP/g==
-X-Gm-Message-State: ANoB5plyQ50sTonTbwyW+QEiWAWvjCUSy563eQiJYJitj5Dj+ALMneZe
-        8oT8SXizSrJzqEnWQKKC3rBtT84mccSK0jA2f1qQKmK8x6JjeCs+/NZQ9fCYo4uqiUCxPXwnImZ
-        QaRLld3QE9zmkyJ/mf2ISVbOk
-X-Received: by 2002:a9d:5e0f:0:b0:662:2458:3ef7 with SMTP id d15-20020a9d5e0f000000b0066224583ef7mr34467970oti.150.1669936138147;
-        Thu, 01 Dec 2022 15:08:58 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4FWPZZankvHjzPShxqKODxxCGji+P/F1OE5U+lA5qQYWnteysMV+IlrH+/g7Gxh0abel9IMg==
-X-Received: by 2002:a9d:5e0f:0:b0:662:2458:3ef7 with SMTP id d15-20020a9d5e0f000000b0066224583ef7mr34467958oti.150.1669936137925;
-        Thu, 01 Dec 2022 15:08:57 -0800 (PST)
-Received: from halaney-x13s.redhat.com ([2600:1700:1ff0:d0e0::41])
-        by smtp.gmail.com with ESMTPSA id y22-20020a4ade16000000b0049fb2a96de4sm2320393oot.0.2022.12.01.15.08.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 15:08:57 -0800 (PST)
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     andersson@kernel.org
-Cc:     agross@kernel.org, konrad.dybcio@linaro.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, p.zabel@pengutronix.de,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manivannan.sadhasivam@linaro.org,
-        Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH 4/4] scsi: ufs: ufs-qcom: Use dev_err() where possible
-Date:   Thu,  1 Dec 2022 17:08:10 -0600
-Message-Id: <20221201230810.1019834-5-ahalaney@redhat.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221201230810.1019834-1-ahalaney@redhat.com>
-References: <20221201230810.1019834-1-ahalaney@redhat.com>
-MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        bh=8r55NhVr723cwq0xc0lLRrnya0twXWY3CzmxTQ/dZkI=;
+        b=Pb77dswEhFxEYREcjXlW33ElryV1AJX7BJpvl5L+DCZe9/9iVo0hzsb52b2e7SKEpn
+         n/Pg3CFM3m3tpRrT0IFptC+ZDg6gBnAo4EzqArnenFNxhd/Dpfi7eW0GwaTQGqM5+4ay
+         Q4j/YQlio/PDjZ6RRbqCJmBuU/CnMK4OZcJtm6V35zwb7w+mb42uAKuM1uaCabFk8gRr
+         EIEHTMAfLefOgU2sSNE28IGDj1P7lza0TozE7dstVShTeFtxc3WYLGyh+zMUY5MO6/r7
+         cVpwdNsDwRLnTpPz1MyQtAkjYiznClIPF+yJJ8tXjaS9dnV5/v74C5xtRoVGLDUpc1AR
+         kgSw==
+X-Gm-Message-State: ANoB5plIxgIh3fCdHYS/Rq12VOki4nL/9wpR/nL31g7Efo/ishZBi22Y
+        +SLrDZapOY+hjWTxgFyQaAQE/A==
+X-Google-Smtp-Source: AA0mqf51axYhjkuyzk2AapRyYK9AGpKHMB+EfDiTiwEmH3b8i9FdDC6v9AeUlfPtkn/xwisHR+FMlA==
+X-Received: by 2002:ac8:6897:0:b0:3a6:964c:c638 with SMTP id m23-20020ac86897000000b003a6964cc638mr2355191qtq.52.1669936174809;
+        Thu, 01 Dec 2022 15:09:34 -0800 (PST)
+Received: from smtpclient.apple (172-125-78-211.lightspeed.sntcca.sbcglobal.net. [172.125.78.211])
+        by smtp.gmail.com with ESMTPSA id r12-20020a05620a298c00b006e16dcf99c8sm4384142qkp.71.2022.12.01.15.09.31
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 01 Dec 2022 15:09:34 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH] hfs: Fix OOB Write in hfs_asc2mac
+From:   Viacheslav Dubeyko <slava@dubeyko.com>
+In-Reply-To: <2ca8a20b-047d-bae1-5a01-0892be4d7e7d@huawei.com>
+Date:   Thu, 1 Dec 2022 15:09:22 -0800
+Cc:     zippel@linux-m68k.org, akpm@osdl.org,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, sunnanyong@huawei.com,
+        wangkefeng.wang@huawei.com,
+        syzbot+dc3b1cf9111ab5fe98e7@syzkaller.appspotmail.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <7E14DFDD-CA11-46A7-8140-C4A0F9AD069D@dubeyko.com>
+References: <20221126043612.853428-1-zhangpeng362@huawei.com>
+ <9F97B7A6-9E20-4D70-BA79-8301D80DF9DB@dubeyko.com>
+ <8e298cc0-27b9-a61a-48cc-64a9186048c8@huawei.com>
+ <481BF13E-8CEA-48B4-A29B-0BDE4CAABAF9@dubeyko.com>
+ <2ca8a20b-047d-bae1-5a01-0892be4d7e7d@huawei.com>
+To:     "zhangpeng (AS)" <zhangpeng362@huawei.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,44 +80,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dev_err() statements are better to use than pr_err(), so switch to
-those.
 
-In a similar vein, the check on the dev_req_params pointer here is
-not needed, the two places this function is called never pass in a
-NULL pointer, so instead of using dev_err() there just remove it.
 
-Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
----
- drivers/ufs/host/ufs-qcom.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+> On Nov 30, 2022, at 5:53 PM, zhangpeng (AS) <zhangpeng362@huawei.com> =
+wrote:
+>=20
+>=20
+> On 2022/11/30 3:08, Viacheslav Dubeyko wrote:
+>>> On Nov 28, 2022, at 6:23 PM, zhangpeng (AS) =
+<zhangpeng362@huawei.com> wrote:
+>>>=20
+>>> On 2022/11/29 3:29, Viacheslav Dubeyko wrote:
+>>>>> On Nov 25, 2022, at 8:36 PM, Peng Zhang <zhangpeng362@huawei.com> =
+wrote:
+>>>>>=20
+>>>>> From: ZhangPeng <zhangpeng362@huawei.com>
+>>>>>=20
+>>>>> Syzbot reported a OOB Write bug:
+>>>>>=20
+>>>>> loop0: detected capacity change from 0 to 64
+>>>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>>>> BUG: KASAN: slab-out-of-bounds in hfs_asc2mac+0x467/0x9a0
+>>>>> fs/hfs/trans.c:133
+>>>>> Write of size 1 at addr ffff88801848314e by task =
+syz-executor391/3632
+>>>>>=20
+>>>>> Call Trace:
+>>>>> <TASK>
+>>>>> __dump_stack lib/dump_stack.c:88 [inline]
+>>>>> dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+>>>>> print_address_description+0x74/0x340 mm/kasan/report.c:284
+>>>>> print_report+0x107/0x1f0 mm/kasan/report.c:395
+>>>>> kasan_report+0xcd/0x100 mm/kasan/report.c:495
+>>>>> hfs_asc2mac+0x467/0x9a0 fs/hfs/trans.c:133
+>>>>> hfs_cat_build_key+0x92/0x170 fs/hfs/catalog.c:28
+>>>>> hfs_lookup+0x1ab/0x2c0 fs/hfs/dir.c:31
+>>>>> lookup_open fs/namei.c:3391 [inline]
+>>>>> open_last_lookups fs/namei.c:3481 [inline]
+>>>>> path_openat+0x10e6/0x2df0 fs/namei.c:3710
+>>>>> do_filp_open+0x264/0x4f0 fs/namei.c:3740
+>>>>>=20
+>>>>> If in->len is much larger than HFS_NAMELEN(31) which is the =
+maximum
+>>>>> length of an HFS filename, a OOB Write could occur in =
+hfs_asc2mac(). In
+>>>>> that case, when the dst reaches the boundary, the srclen is still
+>>>>> greater than 0, which causes a OOB Write.
+>>>>> Fix this by adding a Check on dstlen before Writing to dst =
+address.
+>>>>>=20
+>>>>> Fixes: 328b92278650 ("[PATCH] hfs: NLS support")
+>>>>> Reported-by: syzbot+dc3b1cf9111ab5fe98e7@syzkaller.appspotmail.com
+>>>>> Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+>>>>> ---
+>>>>> fs/hfs/trans.c | 2 ++
+>>>>> 1 file changed, 2 insertions(+)
+>>>>>=20
+>>>>> diff --git a/fs/hfs/trans.c b/fs/hfs/trans.c
+>>>>> index 39f5e343bf4d..886158db07b3 100644
+>>>>> --- a/fs/hfs/trans.c
+>>>>> +++ b/fs/hfs/trans.c
+>>>>> @@ -130,6 +130,8 @@ void hfs_asc2mac(struct super_block *sb, =
+struct hfs_name *out, const struct qstr
+>>>>> 				dst +=3D size;
+>>>>> 				dstlen -=3D size;
+>>>>> 			} else {
+>>>>> +				if (dstlen =3D=3D 0)
+>>>>> +					goto out;
+>>>> Maybe, it makes sense to use dstlen instead of srclen in while()?
+>>>>=20
+>>>> We have now:
+>>>>=20
+>>>> while (srclen > 0) {
+>>>>    <skipped>
+>>>> } else {
+>>>>    <skipped>
+>>>> }
+>>>>=20
+>>>> We can use instead:
+>>>>=20
+>>>> while (dstlen > 0) {
+>>>>    <skipped>
+>>>> } else {
+>>>>    <skipped>
+>>>> }
+>>>>=20
+>>>> Will it fix the issue?
+>>>>=20
+>>>> Thanks,
+>>>> Slava.
+>>> Thank you for your help.
+>>>=20
+>>> After testing, it fix the issue.
+>>> Would it be better to add dstlen > 0 instead of replacing srclen > 0 =
+with dstlen > 0?
+>>> Because there may be dstlen > 0 and srclen <=3D 0.
+>>>=20
+>>> we can use:
+>>>=20
+>>> while (srclen > 0 && dstlen > 0) {
+>>>   <skipped>
+>>> } else {
+>>>   <skipped>
+>>> }
+>>>=20
+>> Looks good to me.
+>=20
+> Can I put you down as a Reviewed-by or Suggested-by?
 
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index b1fcff1fad0c..4350c44a6fc7 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -680,12 +680,6 @@ static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
- 	struct ufs_dev_params ufs_qcom_cap;
- 	int ret = 0;
- 
--	if (!dev_req_params) {
--		pr_err("%s: incoming dev_req_params is NULL\n", __func__);
--		ret = -EINVAL;
--		goto out;
--	}
--
- 	switch (status) {
- 	case PRE_CHANGE:
- 		ufshcd_init_pwr_dev_param(&ufs_qcom_cap);
-@@ -709,7 +703,7 @@ static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
- 					       dev_max_params,
- 					       dev_req_params);
- 		if (ret) {
--			pr_err("%s: failed to determine capabilities\n",
-+			dev_err(hba->dev, "%s: failed to determine capabilities\n",
- 					__func__);
- 			goto out;
- 		}
--- 
-2.38.1
+Sure. I hope to see the second version of the patch.
+
+Reviewed-by: Viacheslav Dubeyko <slava@dubeyko.com>
+
+Thanks,
+Slava.
+
+>=20
+> Thanks,
+> Zhang Peng
+>=20
+>> Thanks,
+>> Slava.
+>>=20
+>>> Thanks,
+>>> Zhang Peng
+>>>=20
+>>>>> 				*dst++ =3D ch > 0xff ? '?' : ch;
+>>>>> 				dstlen--;
+>>>>> 			}
+>>>>> --=20
+>>>>> 2.25.1
 
