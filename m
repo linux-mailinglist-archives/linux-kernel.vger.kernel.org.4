@@ -2,166 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2AF63F1FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B967963F205
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbiLANtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:49:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
+        id S230394AbiLANuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:50:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiLANtD (ORCPT
+        with ESMTP id S229481AbiLANuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:49:03 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C82E1DA5E
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:49:02 -0800 (PST)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B15l1vB016609;
-        Thu, 1 Dec 2022 07:48:50 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=O24ewM62YnyTshopgCFYg5eq7HQMvKb/cYKJclNcynE=;
- b=iH+D/pvM3F2HsdV3sbPIDmZMdTQM3pFHKpJq7eZLee9i/u69NRVObv1KHnylpXDx7ZW/
- a5L/fxVSe+Y+kfarQfLMGjWxx9iBQS5Ecn2cV7K56rtxnXRJW+gZVGMkupk/uhGNYsLa
- Y/uT/3a8xeao+GGcs2AcKo5xUUKE19Csjn+SE3s8JxYCLevaOqeqcuvATznVKDyhTfge
- Qdy3VYF+3Ww7kS5JxfbIjCZi2OZ1eALVSI9F8xk7xed3OoCyz9bmBKDEwvOCmMGoIlgK
- xci/82cGnKqQXRrPWNynyJLv6+A/ijbd9xAb3cyJs/3fKXH6VwlYbzKDDHf8H1i9Zves WQ== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3m6k75rhqm-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Dec 2022 07:48:50 -0600
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Thu, 1 Dec
- 2022 07:48:46 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
- Transport; Thu, 1 Dec 2022 07:48:46 -0600
-Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.111])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0BCC4B38;
-        Thu,  1 Dec 2022 13:48:46 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <vkoul@kernel.org>, <pierre-louis.bossart@linux.intel.com>
-CC:     <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH 3/3] soundwire: cadence: Drain the RX FIFO after an IO timeout
-Date:   Thu, 1 Dec 2022 13:48:45 +0000
-Message-ID: <20221201134845.4055907-4-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221201134845.4055907-1-rf@opensource.cirrus.com>
-References: <20221201134845.4055907-1-rf@opensource.cirrus.com>
+        Thu, 1 Dec 2022 08:50:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9788E31F8E
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:49:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669902546;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KGkTjaGqlhCrqVn247dB2WearCq0La6BjquyK9aBtH8=;
+        b=R1huVt7VHGpv/8SPeMQj/QODLcjEh6uf7cCDdLMakmHWmnzuHrIW0uQ5eTf+9PToh/bjv0
+        9VtlRutexE4+3BFOKp2xOD1eojvGjNWrFaT/FVfQLEc6dusIgHKPkvuLsFS0XZNfGB42I+
+        kpuZrjwk/gT5nYFHiEJleIVxHZwOjbQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-231-WCbJKulwMcuUesWW5CN5MA-1; Thu, 01 Dec 2022 08:49:00 -0500
+X-MC-Unique: WCbJKulwMcuUesWW5CN5MA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 84645101E14D;
+        Thu,  1 Dec 2022 13:49:00 +0000 (UTC)
+Received: from starship (unknown [10.35.206.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A306111E3EC;
+        Thu,  1 Dec 2022 13:48:59 +0000 (UTC)
+Message-ID: <3e0678e3ce57f3972945d2523ca66b9bc1d1e720.camel@redhat.com>
+Subject: Re: [PATCH] KVM: selftests: restore special vmmcall code layout
+ needed by the harness
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Date:   Thu, 01 Dec 2022 15:48:58 +0200
+In-Reply-To: <87r0xjh3qk.fsf@ovpn-194-141.brq.redhat.com>
+References: <20221130181147.9911-1-pbonzini@redhat.com>
+         <Y4ffgC+HbftkPbaW@google.com> <87r0xjh3qk.fsf@ovpn-194-141.brq.redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 0xpdTaddmfdlDdsnGRcbsX2iSErxeRUZ
-X-Proofpoint-GUID: 0xpdTaddmfdlDdsnGRcbsX2iSErxeRUZ
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If wait_for_completion_timeout() times-out in _cdns_xfer_msg() it
-is possible that something could have been written to the RX FIFO.
-In this case, we should drain the RX FIFO so that anything in it
-doesn't carry over and mess up the next transfer.
+On Thu, 2022-12-01 at 10:28 +0100, Vitaly Kuznetsov wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> 
+> > On Wed, Nov 30, 2022, Paolo Bonzini wrote:
+> > > Commit 8fda37cf3d41 ("KVM: selftests: Stuff RAX/RCX with 'safe' values
+> > > in vmmcall()/vmcall()", 2022-11-21) broke the svm_nested_soft_inject_test
+> > > because it placed a "pop rbp" instruction after vmmcall.  While this is
+> > > correct and mimics what is done in the VMX case, this particular test
+> > > expects a ud2 instruction right after the vmmcall, so that it can skip
+> > > over it in the L1 part of the test.
+> > > 
+> > > Inline a suitably-modified version of vmmcall() to restore the
+> > > functionality of the test.
+> > > 
+> > > Fixes: 8fda37cf3d41 ("KVM: selftests: Stuff RAX/RCX with 'safe' values in vmmcall()/vmcall()"
+> > > Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+> > > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> > > ---
+> > 
+> > We really, really need to save/restore guest GPRs in L1 when handling exits from L2.
+> 
+> +1, the amount of stuff we do to workaround the shortcoming (and time
+> we waste debugging) is getting ridiculously high. 
+> 
+> > For now,
+> > 
+> > Reviewed-by: Sean Christopherson <seanjc@google.com>
+> > 
+> 
+> Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> 
 
-Obviously, if we got to this state something went wrong, and we
-don't really know the state of everything. The cleanup in this
-situation cannot be bullet-proof but we should attempt to avoid
-breaking future transaction, if only to reduce the amount of
-error noise when debugging the failure from a kernel log.
+I didn't notice this fix and also found this issue.
 
-Note that this patch only implements the draining for blocking
-(non-deferred) transfers. The deferred API doesn't have any proper
-handling of error conditions and would need some re-design before
-implementing cleanup. That is a task for a separate patch...
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
----
- drivers/soundwire/cadence_master.c | 48 ++++++++++++++++--------------
- 1 file changed, 26 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/soundwire/cadence_master.c b/drivers/soundwire/cadence_master.c
-index 95c84d9f0775..6bffecf3d61a 100644
---- a/drivers/soundwire/cadence_master.c
-+++ b/drivers/soundwire/cadence_master.c
-@@ -555,6 +555,28 @@ cdns_fill_msg_resp(struct sdw_cdns *cdns,
- 	return SDW_CMD_OK;
- }
- 
-+static void cdns_read_response(struct sdw_cdns *cdns)
-+{
-+	u32 num_resp, cmd_base;
-+	int i;
-+
-+	BUILD_BUG_ON(ARRAY_SIZE(cdns->response_buf) < CDNS_MCP_CMD_LEN);
-+
-+	num_resp = cdns_readl(cdns, CDNS_MCP_FIFOSTAT);
-+	num_resp &= CDNS_MCP_RX_FIFO_AVAIL;
-+	if (num_resp > ARRAY_SIZE(cdns->response_buf)) {
-+		dev_warn(cdns->dev, "RX AVAIL %d too long\n", num_resp);
-+		num_resp = CDNS_MCP_CMD_LEN;
-+	}
-+
-+	cmd_base = CDNS_MCP_CMD_BASE;
-+
-+	for (i = 0; i < num_resp; i++) {
-+		cdns->response_buf[i] = cdns_readl(cdns, cmd_base);
-+		cmd_base += CDNS_MCP_CMD_WORD_LEN;
-+	}
-+}
-+
- static enum sdw_command_response
- _cdns_xfer_msg(struct sdw_cdns *cdns, struct sdw_msg *msg, int cmd,
- 	       int offset, int count, bool defer)
-@@ -596,6 +618,10 @@ _cdns_xfer_msg(struct sdw_cdns *cdns, struct sdw_msg *msg, int cmd,
- 		dev_err(cdns->dev, "IO transfer timed out, cmd %d device %d addr %x len %d\n",
- 			cmd, msg->dev_num, msg->addr, msg->len);
- 		msg->len = 0;
-+
-+		/* Drain anything in the RX_FIFO */
-+		cdns_read_response(cdns);
-+
- 		return SDW_CMD_TIMEOUT;
- 	}
- 
-@@ -769,28 +795,6 @@ EXPORT_SYMBOL(cdns_read_ping_status);
-  * IRQ handling
-  */
- 
--static void cdns_read_response(struct sdw_cdns *cdns)
--{
--	u32 num_resp, cmd_base;
--	int i;
--
--	BUILD_BUG_ON(ARRAY_SIZE(cdns->response_buf) < CDNS_MCP_CMD_LEN);
--
--	num_resp = cdns_readl(cdns, CDNS_MCP_FIFOSTAT);
--	num_resp &= CDNS_MCP_RX_FIFO_AVAIL;
--	if (num_resp > ARRAY_SIZE(cdns->response_buf)) {
--		dev_warn(cdns->dev, "RX AVAIL %d too long\n", num_resp);
--		num_resp = CDNS_MCP_CMD_LEN;
--	}
--
--	cmd_base = CDNS_MCP_CMD_BASE;
--
--	for (i = 0; i < num_resp; i++) {
--		cdns->response_buf[i] = cdns_readl(cdns, cmd_base);
--		cmd_base += CDNS_MCP_CMD_WORD_LEN;
--	}
--}
--
- static int cdns_update_slave_status(struct sdw_cdns *cdns,
- 				    u64 slave_intstat)
- {
--- 
-2.30.2
+Best regards,
+	Maxim Levitsky
 
