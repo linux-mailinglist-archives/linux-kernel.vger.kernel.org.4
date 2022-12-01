@@ -2,96 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BEC263F103
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D9E63F105
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiLAM70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 07:59:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
+        id S230054AbiLAM7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 07:59:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiLAM7P (ORCPT
+        with ESMTP id S231127AbiLAM7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 07:59:15 -0500
-Received: from us.icdsoft.com (us.icdsoft.com [192.252.146.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584E6BB7E5
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 04:59:00 -0800 (PST)
-Received: (qmail 13748 invoked by uid 1001); 1 Dec 2022 12:58:59 -0000
-Received: from unknown (HELO ?94.155.37.249?) (famzah@icdsoft.com@94.155.37.249)
-  by 192.252.159.165 with ESMTPA; 1 Dec 2022 12:58:59 -0000
-Message-ID: <212daa8e-8f48-30d9-cfc8-ee5c2025f02c@icdsoft.com>
-Date:   Thu, 1 Dec 2022 14:58:38 +0200
+        Thu, 1 Dec 2022 07:59:32 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A59F98032
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 04:59:31 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id m19so1101358wms.5
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 04:59:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZWWI630ihqLttfdEKhQ55bkwJEf504KdujInZX4vcy0=;
+        b=c6bPPJatoxgbm4GGHfRqT0JxF3g6j4evHvR3GTLmsxKeDzPyVSG+JEFEt4f05JFon6
+         17lp4A+opTdAb+3KfIg46WOEAJ4L9Z8WoWC1JUb3lQ0Npbejvg9B77JJ6EmxiAFn7KYw
+         VzYNK/Q3UAIl5t6XdIvgIJWQX24H51L/x4UTCJJQHsxMs2rll2lweDWIOHICfpxHfGLU
+         E+wQQVsAi80Il5tIZy9FHMMU065s2Atjm41Ho5r5nBi0QIiwLoEzFIcnF3K6yxR/NuDH
+         I3Ym1T4SFBWl3CcwLxiTAcIrcocW7PqO4voPsKeDo8ofr9SK5WkwmL+YKwpzYspuWhTX
+         WXjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZWWI630ihqLttfdEKhQ55bkwJEf504KdujInZX4vcy0=;
+        b=3QXk5/IVP8lb0s78wOTJJtS7ePy41TuXY8htij3tYUkJteL5ovSbAvTXYgg9iCMLC9
+         lIs2PXZysxLMPs7dZ6Zq7RPaBfdIGEMuSW8T4VKTY2JAHalcxNg9/t+JMFdKLIHuq+0E
+         4xEGF5UmSt5PQxR5ghFKqFhX+5B6jGX96E99aQ5MJqAETenJxKEBGnNDWdGtufpMwH4W
+         cPl/ls5GgmZPjBgvEmXo2QfIfwyBw0arQ7OYeThp8l+DpY4mrcgHCwCRpCPvQeNGPyal
+         edob+YW7Y2Y6LzIBkArDBc9Fm532kRLfKwyNDm+DHTQBcLoJBeStkAAvi/10/1J2YtAL
+         Yhvg==
+X-Gm-Message-State: ANoB5pnwb8jwkUaKcnodRJW39FT+a+/lwLTqQVxdEz97Nz+v1OBRdH5P
+        eAZct3ibRO5i2z4jdamARDAs3Q==
+X-Google-Smtp-Source: AA0mqf6mjFDpIkayW0hDci+6B0JNcHncRAH+QrvkrMR+7v7MnxiZCr0t/brztLSEpwkoFVb6j+NckA==
+X-Received: by 2002:a7b:c008:0:b0:3cf:a85d:2ab2 with SMTP id c8-20020a7bc008000000b003cfa85d2ab2mr38181487wmb.43.1669899569901;
+        Thu, 01 Dec 2022 04:59:29 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:26bb:b860:c227:f05d])
+        by smtp.gmail.com with ESMTPSA id v14-20020a05600c444e00b003a1980d55c4sm9564753wmn.47.2022.12.01.04.59.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 04:59:29 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v6 0/2] gpiolib: don't allow user-space to crash the kernel with hot-unplugs
+Date:   Thu,  1 Dec 2022 13:59:26 +0100
+Message-Id: <20221201125928.3031325-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [tip: x86/fpu] x86/fpu/xstate: Define new functions for clearing
- fpregs and xstates
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     linux-tip-commits@vger.kernel.org,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, x86 <x86@kernel.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-References: <20200512145444.15483-6-yu-cheng.yu@intel.com>
- <158964181793.17951.15480349640697746223.tip-bot2@tip-bot2>
- <CALCETrXfLbsrBX42Y094YLWTG=pqkrf+aSCLruCGzqnZ0Y=P-Q@mail.gmail.com>
- <10a553a5-699f-6921-705e-9afa1a8e42de@intel.com>
- <87y2c28zir.ffs@nanos.tec.linutronix.de>
- <ff5ad474-6d32-8bf8-e297-ed71a967d27c@icdsoft.com>
- <31b30c00-9de9-2881-53c3-b08804571d6c@intel.com>
-From:   Ivan Zahariev <famzah@icdsoft.com>
-In-Reply-To: <31b30c00-9de9-2881-53c3-b08804571d6c@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-On 29.11.2022 г. 20:16, Dave Hansen wrote:
+This is (hopefully) the final iteration of the changes that aim at fixing
+the situation in which the user-space can provoke a NULL-pointer derefence
+in the kernel when a GPIO device that's in use by user-space is removed.
 
-> On 11/29/22 03:19, Ivan Zahariev wrote:
->> Can you please take a look into this bug which syzbot tracked to a
->> commit of yours (b860eb8dce5906b14e3a7f3c771e0b3d6ef61b94). Even since
->> we switched from kernel 4.14 to 5.15 we are experiencing often random
->> segmentation faults with the following error in "dmesg":
-> Which kernel are you running, exactly?  There is a fix for the commit
-> that you identified:
->
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=484cea4f362e
-> but it should have been in 5.15.
+v5 -> v6:
+- signal an error in poll callbacks instead of returning 0 which would make
+  the user-space assume a timeout occurred (which could lead to user-space
+  spinning a timeout loop forever)
 
-We are running 5.15.75 (LTS) but the problem started when we upgraded 
-from 5.15.31 to 5.15.59 and is present ever since. I erroneously said 
-that it's present into every 5.15.
+v4 -> v5:
+- try to acquire the semaphore for reading and bail out of syscall callbacks
+  immediately in case of lock contention
 
-I didn't do my homework well and blamed the commit by Yu-cheng Yu. But 
-this commit never landed into 5.15, nor the fix commit that you 
-referred. There are no functions fpu__clear_all(), 
-copy_init_fpstate_to_fpregs(), copy_user_to_xstate() anywhere in the 
-sources of 5.15.75 or 5.15.31, so the 5.15 kernel is running with a 
-different FPU implementation.
+v3 -> v4:
+- use function typedefs to make code cleaner
+- add a blank line after down_write()
 
-Additionally, I tested the reproducer on older 5.15 kernels and on the 
-super-stable 4.14.256. They all emit the same "dmesg" error, so the 
-reproducer is not reliable to detect our problem.
+v2 -> v3:
+- drop the helper variable in patch 1/2 as we won't be using it in 2/2
+- refactor patch 2/2 to use locking wrappers around the syscall callbacks
 
-I am sorry for wasting your time.
+v1 -> v2:
+- add missing gdev->chip checks in patch 1/2
+- add a second patch that protects the structures that can be accessed
+  by user-space calls against concurrent removal
 
-> Is there a chance you could test current mainline and see if the issue
-> is still there?
+Bartosz Golaszewski (2):
+  gpiolib: cdev: fix NULL-pointer dereferences
+  gpiolib: protect the GPIO device against being dropped while in use by
+    user-space
 
-That's our only option, it seems. Thank you.
+ drivers/gpio/gpiolib-cdev.c | 193 ++++++++++++++++++++++++++++++++----
+ drivers/gpio/gpiolib.c      |   4 +
+ drivers/gpio/gpiolib.h      |   5 +
+ 3 files changed, 180 insertions(+), 22 deletions(-)
 
-Best regards.
---Ivan
+-- 
+2.37.2
+
