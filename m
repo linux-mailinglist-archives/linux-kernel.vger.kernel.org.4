@@ -2,271 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B8063EBC2
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DFC63EBDC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbiLAJA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:00:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
+        id S230006AbiLAJCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:02:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiLAJAp (ORCPT
+        with ESMTP id S229779AbiLAJCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:00:45 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE90D135
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:00:44 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id n20so2690384ejh.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 01:00:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ihgFOMdbOj72daezQcXUxkrleoQgY2o2vWjYoNLQrxo=;
-        b=WEn7KylKZ7zOCZ7kz0YK9BJUhJceDWRAd6TeWOttd6ho+BoBcgt6B8K3nSOFBoQU1k
-         VP2I1AqD5n35oTsGh61JVYiPhNdSw/hX8K5wB2rcCas5YHc/FQUzBgOPDiBZIgXrX1pQ
-         jVlULJrmXWQ7UVrsrF0q27KZz3gZQszzA6+NbWA+20mxkj/NRvIIVEt7/Q6tUUUd+uAK
-         mJdXkMyFtMwZGMmrWevkTdg6Ni18EOVANpfZi8rlWc/SqrwYF8ilnarQJfcHaZvH1jQX
-         /31QmI4BlI4huT42L5YJaOW+MlD17jeHkDQGEzjigou/GWwYmXp53wRQVrimBb5kCG+s
-         jwMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ihgFOMdbOj72daezQcXUxkrleoQgY2o2vWjYoNLQrxo=;
-        b=1xVL6pEH3R1ZnBmxWyb+D1WFxen2R/hhoF8F40oG5upDJgsE1Cu+3O1B8hlWDnARfD
-         7mN6wCfi8UczhB/tWy4MWd/YQ2P1UiRteHn6EDnqE/qOxddzQRVubfvOZGDCTaLmrfJF
-         J01W/m0vSrzf6NjhuW/yyCyn9iLhAaQ99EXHMjIJ/RJS6iO3zPcZtER3KU6V/p491taI
-         mVRsFbUK1Wo4KeQTh4wdmoaTEzIIgYa8F83a4lpHrTazxPWhlK3oac6kogTrYoFZSRdW
-         UzfwgSKh7wy0gKAWO41/49HYMZSQjpWY/irlDJ1kbiG7lwfTBz3zNn3UYEgoZdrv7Ch1
-         i8eQ==
-X-Gm-Message-State: ANoB5pnoxElZdu+bHzxzAkR/KEpU03hBU+maYonVu7kCjAPxxA9qtlCC
-        ZbgERJg6dMfmUga70fGUul/17Q==
-X-Google-Smtp-Source: AA0mqf6VsVxo9yHx2NQ5hoTS0qSyTGPy2mzsKgZHE37tmVF1xwqq2Rmgt8+NTNp8AqyN1dKZVRGjog==
-X-Received: by 2002:a17:906:3982:b0:7ad:8bc6:46e7 with SMTP id h2-20020a170906398200b007ad8bc646e7mr48710eje.28.1669885243022;
-        Thu, 01 Dec 2022 01:00:43 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id b18-20020aa7d492000000b004615e1bbaf4sm1474587edr.87.2022.12.01.01.00.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 01:00:42 -0800 (PST)
-Date:   Thu, 1 Dec 2022 10:00:41 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        aou@eecs.berkeley.edu, corbet@lwn.net, guoren@kernel.org,
-        heiko@sntech.de, paul.walmsley@sifive.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] RISC-V: resort all extensions in consistent orders
-Message-ID: <20221201090041.525op4sateq5wq4y@kamzik>
-References: <20221130234125.2722364-1-conor@kernel.org>
- <20221130234125.2722364-3-conor@kernel.org>
+        Thu, 1 Dec 2022 04:02:08 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF1E47336;
+        Thu,  1 Dec 2022 01:02:05 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 6D70224E255;
+        Thu,  1 Dec 2022 17:01:58 +0800 (CST)
+Received: from EXMBX064.cuchost.com (172.16.6.64) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 1 Dec
+ 2022 17:01:58 +0800
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX064.cuchost.com
+ (172.16.6.64) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 1 Dec
+ 2022 17:01:57 +0800
+Received: from EXMBX068.cuchost.com ([fe80::c4da:cbc4:bb39:ca7e]) by
+ EXMBX068.cuchost.com ([fe80::c4da:cbc4:bb39:ca7e%16]) with mapi id
+ 15.00.1497.044; Thu, 1 Dec 2022 17:01:58 +0800
+From:   JiaJie Ho <jiajie.ho@starfivetech.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: RE: [PATCH 5/6] dt-bindings: crypto: Add bindings for Starfive crypto
+ driver
+Thread-Topic: [PATCH 5/6] dt-bindings: crypto: Add bindings for Starfive
+ crypto driver
+Thread-Index: AQHZBH/2P5dLP9b8iUC7OZp9LCFzsa5W7gcAgAHFddA=
+Date:   Thu, 1 Dec 2022 09:01:58 +0000
+Message-ID: <aa388c8c99b74436ad556aeb47a5c60a@EXMBX068.cuchost.com>
+References: <20221130055214.2416888-1-jiajie.ho@starfivetech.com>
+ <20221130055214.2416888-6-jiajie.ho@starfivetech.com>
+ <8a8f502e-e0ed-d638-0b56-74edcbca2134@linaro.org>
+In-Reply-To: <8a8f502e-e0ed-d638-0b56-74edcbca2134@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [202.188.176.82]
+x-yovoleruleagent: yovoleflag
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130234125.2722364-3-conor@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 11:41:25PM +0000, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Ordering between each and every list of extensions is wildly
-> inconsistent. Per discussion on the lists pick the following policy:
-> 
-> - The array defining order in /proc/cpuinfo follows a narrow
->   interpretation of the ISA specifications, described in a comment
->   immediately presiding it.
-> 
-> - All other lists of extensions are sorted alphabetically.
-> 
-> This will hopefully allow for easier review & future additions, and
-> reduce conflicts between patchsets as the number of extensions grows.
-> 
-> Link: https://lore.kernel.org/all/20221129144742.2935581-2-conor.dooley@microchip.com/
-> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> I could not decide between adding an alphabetical comment to each
-> alphabetical site or not. I did it anyway. Scream if you hate it!
-> 
-> I also moved a static branch thingy in this version, but that should not
-> matter, right? riightt?
-
-riiighttt. And it goes away with [1] anyway.
-
-[1] https://lore.kernel.org/all/20221006070818.3616-1-jszhang@kernel.org/
-
-> ---
->  arch/riscv/include/asm/hwcap.h | 12 +++++++-----
->  arch/riscv/kernel/cpu.c        |  4 ++--
->  arch/riscv/kernel/cpufeature.c |  6 ++++--
->  3 files changed, 13 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> index b22525290073..ce522aad641a 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -51,14 +51,15 @@ extern unsigned long elf_hwcap;
->   * RISCV_ISA_EXT_MAX. 0-25 range is reserved for single letter
->   * extensions while all the multi-letter extensions should define the next
->   * available logical extension id.
-> + * Entries are sorted alphabetically.
->   */
->  enum riscv_isa_ext_id {
->  	RISCV_ISA_EXT_SSCOFPMF = RISCV_ISA_EXT_BASE,
-> +	RISCV_ISA_EXT_SSTC,
-> +	RISCV_ISA_EXT_SVINVAL,
->  	RISCV_ISA_EXT_SVPBMT,
->  	RISCV_ISA_EXT_ZICBOM,
->  	RISCV_ISA_EXT_ZIHINTPAUSE,
-> -	RISCV_ISA_EXT_SSTC,
-> -	RISCV_ISA_EXT_SVINVAL,
->  	RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
->  };
-
-Unrelated to this patch, but every time I look at this enum I want to post
-the diff below, but I haven't bothered, because this enum also goes away
-with [1].
-
-@@ -59,8 +59,9 @@ enum riscv_isa_ext_id {
-        RISCV_ISA_EXT_ZIHINTPAUSE,
-        RISCV_ISA_EXT_SSTC,
-        RISCV_ISA_EXT_SVINVAL,
--       RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
-+       RISCV_ISA_EXT_ID_MAX
- };
-+static_assert(RISCV_ISA_EXT_ID_MAX <= RISCV_ISA_EXT_MAX);
-
- /*
-  * This enum represents the logical ID for each RISC-V ISA extension static
-
->  
-> @@ -66,11 +67,12 @@ enum riscv_isa_ext_id {
->   * This enum represents the logical ID for each RISC-V ISA extension static
->   * keys. We can use static key to optimize code path if some ISA extensions
->   * are available.
-> + * Entries are sorted alphabetically.
->   */
->  enum riscv_isa_ext_key {
->  	RISCV_ISA_EXT_KEY_FPU,		/* For 'F' and 'D' */
-> -	RISCV_ISA_EXT_KEY_ZIHINTPAUSE,
->  	RISCV_ISA_EXT_KEY_SVINVAL,
-> +	RISCV_ISA_EXT_KEY_ZIHINTPAUSE,
->  	RISCV_ISA_EXT_KEY_MAX,
->  };
->  
-> @@ -90,10 +92,10 @@ static __always_inline int riscv_isa_ext2key(int num)
->  		return RISCV_ISA_EXT_KEY_FPU;
-
-And every time I look at this switch I want to delete the return line above...
-
->  	case RISCV_ISA_EXT_d:
->  		return RISCV_ISA_EXT_KEY_FPU;
-> -	case RISCV_ISA_EXT_ZIHINTPAUSE:
-> -		return RISCV_ISA_EXT_KEY_ZIHINTPAUSE;
->  	case RISCV_ISA_EXT_SVINVAL:
->  		return RISCV_ISA_EXT_KEY_SVINVAL;
-> +	case RISCV_ISA_EXT_ZIHINTPAUSE:
-> +		return RISCV_ISA_EXT_KEY_ZIHINTPAUSE;
->  	default:
->  		return -EINVAL;
->  	}
-> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> index 68b2bd0cc3bc..686d41b14206 100644
-> --- a/arch/riscv/kernel/cpu.c
-> +++ b/arch/riscv/kernel/cpu.c
-> @@ -161,12 +161,12 @@ device_initcall(riscv_cpuinfo_init);
->   * New entries to this struct should follow the ordering rules described above.
->   */
->  static struct riscv_isa_ext_data isa_ext_arr[] = {
-> +	__RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
-> +	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
->  	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
->  	__RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
->  	__RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
->  	__RISCV_ISA_EXT_DATA(svpbmt, RISCV_ISA_EXT_SVPBMT),
-> -	__RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
-> -	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
->  	__RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
->  };
-
-Technically we should have leave these in the wrong order if we want to be
-strict about the ISA string published to userspace, but I'm in favor of
-changing this array as necessary and hoping we teach userspace to use
-flexible parsers. Actually, IMO, we shouldn't teach userspace to parse
-this at all. We should instead create sysfs nodes:
-
- .../isa/zicbom
- .../isa/zihintpause
- .../isa/sscofpmf
-
-and teach userspace to list .../isa/ to learn about extensions. That would
-also allow us to publish extension version numbers which we are not
-current doing with the proc isa string.
-
- .../isa/zicbom/major
- .../isa/zicbom/minor
-
-and we could add other properties if necessary too, e.g.
-
- .../isa/zicbom/block_size
-
->  
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 694267d1fe81..8a76a6ce70cf 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -199,12 +199,13 @@ void __init riscv_fill_hwcap(void)
->  				this_hwcap |= isa2hwcap[(unsigned char)(*ext)];
->  				set_bit(*ext - 'a', this_isa);
->  			} else {
-> +				/* sorted alphabetically */
->  				SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
-> +				SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SSTC);
-> +				SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_SVINVAL);
->  				SET_ISA_EXT_MAP("svpbmt", RISCV_ISA_EXT_SVPBMT);
->  				SET_ISA_EXT_MAP("zicbom", RISCV_ISA_EXT_ZICBOM);
->  				SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
-> -				SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SSTC);
-> -				SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_SVINVAL);
->  			}
->  #undef SET_ISA_EXT_MAP
->  		}
-> @@ -284,6 +285,7 @@ static bool __init_or_module cpufeature_probe_zicbom(unsigned int stage)
->   * This code may also be executed before kernel relocation, so we cannot use
->   * addresses generated by the address-of operator as they won't be valid in
->   * this context.
-> + * Tests, unless otherwise required, are to be added in alphabetical order.
->   */
->  static u32 __init_or_module cpufeature_probe(unsigned int stage)
->  {
-> -- 
-> 2.38.1
-> 
-
-I realize that I have a suggested-by tag in the commit message, but I
-don't really have a strong opinion on how we order extensions where the
-order doesn't matter. A consistent policy of alphabetical or always at
-the bottom both work for me. I personally prefer alphabetical when
-reading the lists, but I realize we'll eventually merge stuff out of
-order and then that'll generate some churn to reorder (but hopefully not
-too frequently).
-
-My biggest concern is how much we need to care about the order of the
-string in proc and whether or not we're allowed to fix its order like
-we're doing with this patch. I hope we can, and I vote we do.
-
-Anyway, none of my comments apply directly to this patch, so
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS3J6eXN6dG9mIEtvemxv
+d3NraSA8a3J6eXN6dG9mLmtvemxvd3NraUBsaW5hcm8ub3JnPg0KPiBTZW50OiBXZWRuZXNkYXks
+IE5vdmVtYmVyIDMwLCAyMDIyIDk6MjEgUE0NCj4gVG86IEppYUppZSBIbyA8amlhamllLmhvQHN0
+YXJmaXZldGVjaC5jb20+OyBIZXJiZXJ0IFh1DQo+IDxoZXJiZXJ0QGdvbmRvci5hcGFuYS5vcmcu
+YXU+OyBEYXZpZCBTIC4gTWlsbGVyIDxkYXZlbUBkYXZlbWxvZnQubmV0PjsNCj4gUm9iIEhlcnJp
+bmcgPHJvYmgrZHRAa2VybmVsLm9yZz47IEtyenlzenRvZiBLb3psb3dza2kNCj4gPGtyenlzenRv
+Zi5rb3psb3dza2krZHRAbGluYXJvLm9yZz4NCj4gQ2M6IGxpbnV4LWNyeXB0b0B2Z2VyLmtlcm5l
+bC5vcmc7IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnOyBsaW51eC0NCj4ga2VybmVsQHZnZXIu
+a2VybmVsLm9yZzsgbGludXgtcmlzY3ZAbGlzdHMuaW5mcmFkZWFkLm9yZw0KPiBTdWJqZWN0OiBS
+ZTogW1BBVENIIDUvNl0gZHQtYmluZGluZ3M6IGNyeXB0bzogQWRkIGJpbmRpbmdzIGZvciBTdGFy
+Zml2ZSBjcnlwdG8NCj4gZHJpdmVyDQo+IA0KPiBPbiAzMC8xMS8yMDIyIDA2OjUyLCBKaWEgSmll
+IEhvIHdyb3RlOg0KPiA+IEFkZCBkb2N1bWVudGF0aW9uIHRvIGRlc2NyaWJlIFN0YXJmaXZlIGNy
+eXB0byBkcml2ZXIgYmluZGluZ3MuDQo+IA0KPiBQbGVhc2Ugd3JhcCBjb21taXQgbWVzc2FnZSBh
+Y2NvcmRpbmcgdG8gTGludXggY29kaW5nIHN0eWxlIC8gc3VibWlzc2lvbg0KPiBwcm9jZXNzOg0K
+PiBodHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51eC92NS4xOC0NCj4gcmM0L3NvdXJjZS9E
+b2N1bWVudGF0aW9uL3Byb2Nlc3Mvc3VibWl0dGluZy1wYXRjaGVzLnJzdCNMNTg2DQo+IA0KPiAN
+Cj4gU3ViamVjdDogZHJvcCBzZWNvbmQsIHJlZHVuZGFudCAiYmluZGluZ3MiLg0KPiANCj4gDQoN
+CkknbGwgZml4IHRoZSBjb21taXQgdGl0bGUgYW5kIG1lc3NhZ2UgaW4gdGhlIG5leHQgdmVyc2lv
+bi4NCg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogSmlhIEppZSBIbyA8amlhamllLmhvQHN0YXJm
+aXZldGVjaC5jb20+DQo+ID4gU2lnbmVkLW9mZi1ieTogSHVhbiBGZW5nIDxodWFuLmZlbmdAc3Rh
+cmZpdmV0ZWNoLmNvbT4NCj4gPiAtLS0NCj4gPiAgLi4uL2JpbmRpbmdzL2NyeXB0by9zdGFyZml2
+ZS1jcnlwdG8ueWFtbCAgICAgIHwgMTA5ICsrKysrKysrKysrKysrKysrKw0KPiA+ICAxIGZpbGUg
+Y2hhbmdlZCwgMTA5IGluc2VydGlvbnMoKykNCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0DQo+ID4g
+RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2NyeXB0by9zdGFyZml2ZS1jcnlwdG8u
+eWFtbA0KPiA+DQo+ID4gZGlmZiAtLWdpdA0KPiA+IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVl
+L2JpbmRpbmdzL2NyeXB0by9zdGFyZml2ZS1jcnlwdG8ueWFtbA0KPiA+IGIvRG9jdW1lbnRhdGlv
+bi9kZXZpY2V0cmVlL2JpbmRpbmdzL2NyeXB0by9zdGFyZml2ZS1jcnlwdG8ueWFtbA0KPiA+IG5l
+dyBmaWxlIG1vZGUgMTAwNjQ0DQo+ID4gaW5kZXggMDAwMDAwMDAwMDAwLi42Yjg1MmY3NzRjMzIN
+Cj4gPiAtLS0gL2Rldi9udWxsDQo+ID4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
+bmRpbmdzL2NyeXB0by9zdGFyZml2ZS1jcnlwdG8ueWFtbA0KPiANCj4gRmlsZW5hbWUgYmFzZWQg
+b24gY29tcGF0aWJsZSwgc28gc3RhcmZpdmUsamg3MTEwLWNyeXB0by55YW1sDQo+IA0KDQpXaWxs
+IHVwZGF0ZSBmaWxlbmFtZS4NCg0KPiA+IEBAIC0wLDAgKzEsMTA5IEBADQo+ID4gKyMgU1BEWC1M
+aWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4wLW9ubHkgT1IgQlNELTItQ2xhdXNlKSAlWUFNTCAx
+LjINCj4gPiArLS0tDQo+ID4gKyRpZDogaHR0cDovL2RldmljZXRyZWUub3JnL3NjaGVtYXMvY3J5
+cHRvL3N0YXJmaXZlLWNyeXB0by55YW1sIw0KPiA+ICskc2NoZW1hOiBodHRwOi8vZGV2aWNldHJl
+ZS5vcmcvbWV0YS1zY2hlbWFzL2NvcmUueWFtbCMNCj4gPiArDQo+ID4gK3RpdGxlOiBTdGFyRml2
+ZSBDcnlwdG8gQ29udHJvbGxlciBEZXZpY2UgVHJlZSBCaW5kaW5ncw0KPiANCj4gRHJvcCAiRGV2
+aWNlIFRyZWUgQmluZGluZ3MiDQo+IA0KDQpXaWxsIHVwZGF0ZSB0aXRsZS4NCg0KPiA+ICsNCj4g
+PiArbWFpbnRhaW5lcnM6DQo+ID4gKyAgLSBKaWEgSmllIEhvIDxqaWFqaWUuaG9Ac3RhcmZpdmV0
+ZWNoLmNvbT4NCj4gPiArICAtIFdpbGxpYW0gUWl1IDx3aWxsaWFtLnFpdUBzdGFyZml2ZXRlY2gu
+Y29tPg0KPiA+ICsNCj4gPiArcHJvcGVydGllczoNCj4gPiArICBjb21wYXRpYmxlOg0KPiA+ICsg
+ICAgY29uc3Q6IHN0YXJmaXZlLGpoNzExMC1jcnlwdG8NCj4gPiArDQo+ID4gKyAgcmVnOg0KPiA+
+ICsgICAgbWF4SXRlbXM6IDENCj4gPiArDQo+ID4gKyAgcmVnLW5hbWVzOg0KPiA+ICsgICAgaXRl
+bXM6DQo+ID4gKyAgICAgIC0gY29uc3Q6IHNlY3JlZw0KPiANCj4gV2h5IGRvIHlvdSBuZWVkIHJl
+Zy1uYW1lcyBmb3Igb25lIGVudHJ5Pw0KPiANCg0KV2lsbCByZW1vdmUgbmVlZCBvZiByZWctbmFt
+ZXMgYW5kIHVwZGF0ZSBwcm9iZSBmdW5jdGlvbiBhY2NvcmRpbmdseS4NCg0KPiA+ICsNCj4gPiAr
+ICBjbG9ja3M6DQo+ID4gKyAgICBpdGVtczoNCj4gPiArICAgICAgLSBkZXNjcmlwdGlvbjogSGFy
+ZHdhcmUgcmVmZXJlbmNlIGNsb2NrDQo+ID4gKyAgICAgIC0gZGVzY3JpcHRpb246IEFIQiByZWZl
+cmVuY2UgY2xvY2sNCj4gPiArDQo+ID4gKyAgY2xvY2stbmFtZXM6DQo+ID4gKyAgICBpdGVtczoN
+Cj4gPiArICAgICAgLSBjb25zdDogc2VjX2hjbGsNCj4gPiArICAgICAgLSBjb25zdDogc2VjX2Fo
+Yg0KPiANCj4gc2VjIHNlZW1zIHJlZHVuZGFudCwgc28ganVzdCAiYWhiIi4gVGhlIGZpcnN0IGNs
+b2NrIHRoZW4gImhjbGsiIG9yICJyZWYiPw0KPiANCg0KV2lsbCBmaXggaW4gbmV4dCB2ZXJzaW9u
+Lg0KDQo+ID4gKw0KPiA+ICsgIGludGVycnVwdHM6DQo+ID4gKyAgICBpdGVtczoNCj4gPiArICAg
+ICAgLSBkZXNjcmlwdGlvbjogSW50ZXJydXB0IHBpbiBmb3IgYWxnbyBjb21wbGV0aW9uDQo+ID4g
+KyAgICAgIC0gZGVzY3JpcHRpb246IEludGVycnVwdCBwaW4gZm9yIERNQSB0cmFuc2ZlciBjb21w
+bGV0aW9uDQo+ID4gKw0KPiA+ICsgIGludGVycnVwdC1uYW1lczoNCj4gPiArICAgIGl0ZW1zOg0K
+PiA+ICsgICAgICAtIGNvbnN0OiBzZWNpcnENCj4gPiArICAgICAgLSBjb25zdDogZG1haXJxDQo+
+IA0KPiBEcm9wICJpcnEiIGZyb20gYm90aC4NCj4gDQoNCldpbGwgZml4Lg0KDQo+ID4gKw0KPiA+
+ICsgIHJlc2V0czoNCj4gPiArICAgIGl0ZW1zOg0KPiA+ICsgICAgICAtIGRlc2NyaXB0aW9uOiBT
+VEcgZG9tYWluIHJlc2V0IGxpbmUNCj4gPiArDQo+ID4gKyAgcmVzZXQtbmFtZXM6DQo+ID4gKyAg
+ICBpdGVtczoNCj4gPiArICAgICAgLSBjb25zdDogc2VjX2hyZQ0KPiANCj4gRHJvcCAic2VjIi4g
+V2h5IGRvIHlvdSBuZWVkIHRoZSBuYW1lcyBmb3Igb25lIGVudHJ5Pw0KPiANCg0KV2lsbCByZW1v
+dmUgbmFtZXMuDQoNCj4gPiArDQo+ID4gKyAgZW5hYmxlLXNpZGUtY2hhbm5lbC1taXRpZ2F0aW9u
+Og0KPiA+ICsgICAgZGVzY3JpcHRpb246IEVuYWJsZSBzaWRlLWNoYW5uZWwtbWl0aWdhdGlvbiBm
+ZWF0dXJlIGZvciBBRVMgbW9kdWxlLg0KPiA+ICsgICAgICAgIEVuYWJsaW5nIHRoaXMgZmVhdHVy
+ZSB3aWxsIGFmZmVjdCB0aGUgc3BlZWQgcGVyZm9ybWFuY2Ugb2YNCj4gPiArICAgICAgICBjcnlw
+dG8gZW5naW5lLg0KPiA+ICsgICAgdHlwZTogYm9vbGVhbg0KPiANCj4gV2h5IGV4YWN0bHkgdGhp
+cyBpcyBhIGhhcmR3YXJlIChEVCkgcHJvcGVydHksIG5vdCBydW50aW1lPw0KPiANCg0KVGhpcyBp
+cyBhIGhhcmR3YXJlIHNldHRpbmcgcHJvdmlkZWQgaW4gU3RhckZpdmUgY3J5cHRvIGVuZ2luZSBv
+bmx5Lg0KVGhlIGNyeXB0byBBUEkgZG9lc24ndCBjb250cm9sIHRoaXMgc2V0dGluZyBkdXJpbmcg
+cnVudGltZSBhbmQgbGVhdmluZyB0aGlzIGFsd2F5cyBvbiB3aWxsIGltcGFjdCBzcGVlZCBwZXJm
+b3JtYW5jZS4NClNvLCBJIGFkZGVkIHRoaXMgcHJvcGVydHkgdG8gYWxsb3cgdXNlciB0byBjb250
+cm9sIHRoaXMgaW4gZHRiLg0KDQo+ID4gKw0KPiA+ICsgIGVuYWJsZS1kbWE6DQo+ID4gKyAgICBk
+ZXNjcmlwdGlvbjogRW5hYmxlIGRhdGEgdHJhbnNmZXIgdXNpbmcgZGVkaWNhdGVkIERNQSBjb250
+cm9sbGVyLg0KPiA+ICsgICAgdHlwZTogYm9vbGVhbg0KPiANCj4gVXN1YWxseSB0aGUgcHJlc2Vu
+Y2Ugb2YgZG1hcyBpbmRpY2F0ZXMgd2hldGhlciB0byB1c2Ugb3Igbm90IHRvIHVzZSBETUEuDQo+
+IERvIHlvdSBleHBlY3QgYSBjYXNlIHdoZXJlIERNQSBjaGFubmVscyBhcmUgcHJvdmlkZWQgYnkg
+eW91IGRvbid0IHdhbnQNCj4gRE1BPyBFeHBsYWluIHN1Y2ggY2FzZSBhbmQgZGVzY3JpYmUgd2h5
+IGl0IGlzIGEgaGFyZHdhcmUvc3lzdGVtIGludGVncmF0aW9uDQo+IHByb3BlcnR5Lg0KPiANCg0K
+SSdsbCByZW1vdmUgdGhpcyBwcm9wZXJ0eSBhcyBETUEgaXMgYWx3YXlzIGVuYWJsZWQuDQoNCj4g
+PiArDQo+ID4gKyAgZG1hczoNCj4gPiArICAgIGl0ZW1zOg0KPiA+ICsgICAgICAtIGRlc2NyaXB0
+aW9uOiBUWCBETUEgY2hhbm5lbA0KPiA+ICsgICAgICAtIGRlc2NyaXB0aW9uOiBSWCBETUEgY2hh
+bm5lbA0KPiA+ICsNCj4gPiArICBkbWEtbmFtZXM6DQo+ID4gKyAgICBpdGVtczoNCj4gPiArICAg
+ICAgLSBjb25zdDogc2VjX20NCj4gDQo+IHR4DQo+IA0KDQpXaWxsIGZpeC4NCg0KPiA+ICsgICAg
+ICAtIGNvbnN0OiBzZWNfcA0KPiANCj4gcngNCj4gDQoNCldpbGwgZml4Lg0KDQo+ID4gKw0KPiA+
+ICtyZXF1aXJlZDoNCj4gPiArICAtIGNvbXBhdGlibGUNCj4gPiArICAtIHJlZw0KPiA+ICsgIC0g
+cmVnLW5hbWVzDQo+ID4gKyAgLSBjbG9ja3MNCj4gPiArICAtIGNsb2NrLW5hbWVzDQo+ID4gKyAg
+LSByZXNldHMNCj4gPiArICAtIHJlc2V0LW5hbWVzDQo+ID4gKw0KPiA+ICthZGRpdGlvbmFsUHJv
+cGVydGllczogZmFsc2UNCj4gPiArDQo+ID4gK2V4YW1wbGVzOg0KPiA+ICsgIC0gfA0KPiA+ICsg
+ICAgI2luY2x1ZGUgPGR0LWJpbmRpbmdzL2Nsb2NrL3N0YXJmaXZlLWpoNzExMC5oPg0KPiA+ICsg
+ICAgI2luY2x1ZGUgPGR0LWJpbmRpbmdzL3Jlc2V0L3N0YXJmaXZlLWpoNzExMC5oPg0KPiA+ICsN
+Cj4gPiArICAgIHNvYyB7DQo+ID4gKyAgICAgICAgICAgICNhZGRyZXNzLWNlbGxzID0gPDI+Ow0K
+PiA+ICsgICAgICAgICAgICAjc2l6ZS1jZWxscyA9IDwyPjsNCj4gDQo+IFVzZSA0IHNwYWNlcyBm
+b3IgZXhhbXBsZSBpbmRlbnRhdGlvbi4NCg0KSSdsbCBmaXggdGhlIGluZGVudGF0aW9uLg0KDQpU
+aGFuayB5b3UgZm9yIHRha2luZyB0aW1lIHRvIHJldmlldyBhbmQgcHJvdmlkZSBoZWxwZnVsIGNv
+bW1lbnRzIGZvciB0aGlzIHBhdGNoLg0KDQpCZXN0IHJlZ2FyZHMsDQpKaWEgSmllDQo=
