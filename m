@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2276263EBE8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BD163EC80
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiLAJCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:02:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
+        id S230139AbiLAJaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:30:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbiLAJCJ (ORCPT
+        with ESMTP id S229979AbiLAJ3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:02:09 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFA748775;
-        Thu,  1 Dec 2022 01:02:08 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        Thu, 1 Dec 2022 04:29:54 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0744FF86;
+        Thu,  1 Dec 2022 01:29:48 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 0EF8B24E0B4;
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id E527F24E257;
         Thu,  1 Dec 2022 17:02:07 +0800 (CST)
-Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 1 Dec
- 2022 17:02:06 +0800
+Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 1 Dec
+ 2022 17:02:08 +0800
 Received: from wyh-VirtualBox.starfivetech.com (171.223.208.138) by
  EXMBX173.cuchost.com (172.16.6.93) with Microsoft SMTP Server (TLS) id
- 15.0.1497.42; Thu, 1 Dec 2022 17:02:05 +0800
+ 15.0.1497.42; Thu, 1 Dec 2022 17:02:06 +0800
 From:   Yanhong Wang <yanhong.wang@starfivetech.com>
 To:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
@@ -41,9 +41,9 @@ CC:     "David S . Miller" <davem@davemloft.net>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Peter Geis <pgwipeout@gmail.com>,
         Yanhong Wang <yanhong.wang@starfivetech.com>
-Subject: [PATCH v1 4/7] net: phy: motorcomm: Add YT8531 phy support
-Date:   Thu, 1 Dec 2022 17:02:39 +0800
-Message-ID: <20221201090242.2381-5-yanhong.wang@starfivetech.com>
+Subject: [PATCH v1 5/7] net: stmmac: Add StarFive dwmac supoort
+Date:   Thu, 1 Dec 2022 17:02:40 +0800
+Message-ID: <20221201090242.2381-6-yanhong.wang@starfivetech.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
 References: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
@@ -53,284 +53,224 @@ X-Originating-IP: [171.223.208.138]
 X-ClientProxiedBy: EXCAS065.cuchost.com (172.16.6.25) To EXMBX173.cuchost.com
  (172.16.6.93)
 X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds basic support for the Motorcomm YT8531
-Gigabit Ethernet PHY.
+This adds StarFive dwmac driver support on the StarFive JH7110 SoCs.
 
 Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
 ---
- drivers/net/phy/Kconfig     |   3 +-
- drivers/net/phy/motorcomm.c | 185 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 187 insertions(+), 1 deletion(-)
+ MAINTAINERS                                   |   1 +
+ drivers/net/ethernet/stmicro/stmmac/Kconfig   |  11 ++
+ drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+ .../stmicro/stmmac/dwmac-starfive-plat.c      | 147 ++++++++++++++++++
+ 4 files changed, 160 insertions(+)
+ create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c
 
-diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-index c57a0262fb64..86399254d9ff 100644
---- a/drivers/net/phy/Kconfig
-+++ b/drivers/net/phy/Kconfig
-@@ -258,9 +258,10 @@ config MICROSEMI_PHY
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7eaaec8d3b96..36cb00cf860b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19610,6 +19610,7 @@ STARFIVE DWMAC GLUE LAYER
+ M:	Yanhong Wang <yanhong.wang@starfivetech.com>
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/net/starfive,dwmac-plat.yaml
++F:	drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c
  
- config MOTORCOMM_PHY
- 	tristate "Motorcomm PHYs"
+ STARFIVE PINCTRL DRIVER
+ M:	Emil Renner Berthing <kernel@esmil.dk>
+diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+index 31ff35174034..1e29cd3770b9 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
++++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+@@ -235,6 +235,17 @@ config DWMAC_INTEL_PLAT
+ 	  the stmmac device driver. This driver is used for the Intel Keem Bay
+ 	  SoC.
+ 
++config DWMAC_STARFIVE_PLAT
++	tristate "StarFive dwmac support"
++	depends on OF && COMMON_CLK
++	depends on STMMAC_ETH
 +	default SOC_STARFIVE
- 	help
- 	  Enables support for Motorcomm network PHYs.
--	  Currently supports the YT8511 gigabit PHY.
-+	  Currently supports the YT8511 and YT8531 gigabit PHYs.
- 
- config NATIONAL_PHY
- 	tristate "National Semiconductor PHYs"
-diff --git a/drivers/net/phy/motorcomm.c b/drivers/net/phy/motorcomm.c
-index 7e6ac2c5e27e..7f3e22879399 100644
---- a/drivers/net/phy/motorcomm.c
-+++ b/drivers/net/phy/motorcomm.c
-@@ -3,13 +3,17 @@
-  * Driver for Motorcomm PHYs
-  *
-  * Author: Peter Geis <pgwipeout@gmail.com>
++	help
++	  Support for ethernet controllers on StarFive RISC-V SoCs
++
++	  This selects the StarFive platform specific glue layer support for
++	  the stmmac device driver. This driver is used for StarFive RISC-V SoCs.
++
+ config DWMAC_VISCONTI
+ 	tristate "Toshiba Visconti DWMAC support"
+ 	default ARCH_VISCONTI
+diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
+index d4e12e9ace4f..a63ab0ab5071 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/Makefile
++++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
+@@ -31,6 +31,7 @@ obj-$(CONFIG_DWMAC_DWC_QOS_ETH)	+= dwmac-dwc-qos-eth.o
+ obj-$(CONFIG_DWMAC_INTEL_PLAT)	+= dwmac-intel-plat.o
+ obj-$(CONFIG_DWMAC_GENERIC)	+= dwmac-generic.o
+ obj-$(CONFIG_DWMAC_IMX8)	+= dwmac-imx.o
++obj-$(CONFIG_DWMAC_STARFIVE_PLAT)	+= dwmac-starfive-plat.o
+ obj-$(CONFIG_DWMAC_VISCONTI)	+= dwmac-visconti.o
+ stmmac-platform-objs:= stmmac_platform.o
+ dwmac-altr-socfpga-objs := altr_tse_pcs.o dwmac-socfpga.o
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c
+new file mode 100644
+index 000000000000..8fbf584d4e19
+--- /dev/null
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c
+@@ -0,0 +1,147 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * StarFive DWMAC platform driver
 + *
-  */
- 
-+#include <linux/bitops.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/of.h>
- #include <linux/phy.h>
- 
- #define PHY_ID_YT8511		0x0000010a
-+#define PHY_ID_YT8531		0x4f51e91b
- 
- #define YT8511_PAGE_SELECT	0x1e
- #define YT8511_PAGE		0x1f
-@@ -17,6 +21,10 @@
- #define YT8511_EXT_DELAY_DRIVE	0x0d
- #define YT8511_EXT_SLEEP_CTRL	0x27
- 
-+#define YTPHY_EXT_SMI_SDS_PHY		0xa000
-+#define YTPHY_EXT_CHIP_CONFIG		0xa001
-+#define YTPHY_EXT_RGMII_CONFIG1	0xa003
++ * Copyright(C) 2022 StarFive Technology Co., Ltd.
++ *
++ */
 +
- /* 2b00 25m from pll
-  * 2b01 25m from xtl *default*
-  * 2b10 62.m from pll
-@@ -38,6 +46,34 @@
- #define YT8511_DELAY_FE_TX_EN	(0xf << 12)
- #define YT8511_DELAY_FE_TX_DIS	(0x2 << 12)
- 
-+struct ytphy_reg_field {
-+	char *name;
-+	u32 mask;
-+	u8	dflt;	/* Default value */
++#include <linux/of_device.h>
++#include "stmmac_platform.h"
++
++struct starfive_dwmac {
++	struct device *dev;
++	struct clk *clk_tx;
++	struct clk *clk_gtx;
++	struct clk *clk_gtxc;
 +};
 +
-+struct ytphy_priv_t {
-+	u32 tx_inverted_1000;
-+	u32 tx_inverted_100;
-+	u32 tx_inverted_10;
-+};
-+
-+static const struct ytphy_reg_field ytphy_rxtxd_grp[] = {
-+	{ "rx_delay_sel", GENMASK(13, 10), 0x0 },
-+	{ "tx_delay_sel_fe", GENMASK(7, 4), 0xf },
-+	{ "tx_delay_sel", GENMASK(3, 0), 0x1 }
-+};
-+
-+static const struct ytphy_reg_field ytphy_txinver_grp[] = {
-+	{ "tx_inverted_1000", BIT(14), 0x0 },
-+	{ "tx_inverted_100", BIT(14), 0x0 },
-+	{ "tx_inverted_10", BIT(14), 0x0 }
-+};
-+
-+static const struct ytphy_reg_field ytphy_rxden_grp[] = {
-+	{ "rxc_dly_en", BIT(8), 0x1 }
-+};
-+
- static int yt8511_read_page(struct phy_device *phydev)
- {
- 	return __phy_read(phydev, YT8511_PAGE_SELECT);
-@@ -48,6 +84,33 @@ static int yt8511_write_page(struct phy_device *phydev, int page)
- 	return __phy_write(phydev, YT8511_PAGE_SELECT, page);
- };
- 
-+static int ytphy_read_ext(struct phy_device *phydev, u32 regnum)
++static void starfive_eth_fix_mac_speed(void *priv, unsigned int speed)
 +{
-+	int ret;
-+	int val;
++	struct starfive_dwmac *dwmac = priv;
++	unsigned long rate;
++	int err;
 +
-+	ret = __phy_write(phydev, YT8511_PAGE_SELECT, regnum);
-+	if (ret < 0)
-+		return ret;
-+
-+	val = __phy_read(phydev, YT8511_PAGE);
-+
-+	return val;
-+}
-+
-+static int ytphy_write_ext(struct phy_device *phydev, u32 regnum, u16 val)
-+{
-+	int ret;
-+
-+	ret = __phy_write(phydev, YT8511_PAGE_SELECT, regnum);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = __phy_write(phydev, YT8511_PAGE, val);
-+
-+	return ret;
-+}
-+
- static int yt8511_config_init(struct phy_device *phydev)
- {
- 	int oldpage, ret = 0;
-@@ -111,6 +174,116 @@ static int yt8511_config_init(struct phy_device *phydev)
- 	return phy_restore_page(phydev, oldpage, ret);
- }
- 
-+static int ytphy_config_init(struct phy_device *phydev)
-+{
-+	struct device_node *of_node;
-+	u32 val;
-+	u32 mask;
-+	u32 cfg;
-+	int ret;
-+	int i = 0;
-+
-+	of_node = phydev->mdio.dev.of_node;
-+	if (of_node) {
-+		ret = of_property_read_u32(of_node, ytphy_rxden_grp[0].name, &cfg);
-+		if (!ret) {
-+			mask = ytphy_rxden_grp[0].mask;
-+			val = ytphy_read_ext(phydev, YTPHY_EXT_CHIP_CONFIG);
-+
-+			/* check the cfg overflow or not */
-+			cfg = cfg > mask >> (ffs(mask) - 1) ? mask : cfg;
-+
-+			val &= ~mask;
-+			val |= FIELD_PREP(mask, cfg);
-+			ytphy_write_ext(phydev, YTPHY_EXT_CHIP_CONFIG, val);
-+		}
-+
-+		val = ytphy_read_ext(phydev, YTPHY_EXT_RGMII_CONFIG1);
-+		for (i = 0; i < ARRAY_SIZE(ytphy_rxtxd_grp); i++) {
-+			ret = of_property_read_u32(of_node, ytphy_rxtxd_grp[i].name, &cfg);
-+			if (!ret) {
-+				mask = ytphy_rxtxd_grp[i].mask;
-+
-+				/* check the cfg overflow or not */
-+				cfg = cfg > mask >> (ffs(mask) - 1) ? mask : cfg;
-+
-+				val &= ~mask;
-+				val |= cfg << (ffs(mask) - 1);
-+			}
-+		}
-+		return ytphy_write_ext(phydev, YTPHY_EXT_RGMII_CONFIG1, val);
-+	}
-+
-+	phydev_err(phydev, "Get of node fail\n");
-+
-+	return -EINVAL;
-+}
-+
-+static void ytphy_link_change_notify(struct phy_device *phydev)
-+{
-+	u32 val;
-+	struct ytphy_priv_t *ytphy_priv = phydev->priv;
-+
-+	if (phydev->speed < 0)
-+		return;
-+
-+	val = ytphy_read_ext(phydev, YTPHY_EXT_RGMII_CONFIG1);
-+	switch (phydev->speed) {
++	switch (speed) {
 +	case SPEED_1000:
-+		val  &= ~ytphy_txinver_grp[0].mask;
-+		val |= FIELD_PREP(ytphy_txinver_grp[0].mask,
-+				ytphy_priv->tx_inverted_1000);
++		rate = 125000000;
 +		break;
-+
 +	case SPEED_100:
-+		val  &= ~ytphy_txinver_grp[1].mask;
-+		val |= FIELD_PREP(ytphy_txinver_grp[1].mask,
-+				ytphy_priv->tx_inverted_100);
++		rate = 25000000;
 +		break;
-+
 +	case SPEED_10:
-+		val  &= ~ytphy_txinver_grp[2].mask;
-+		val |= FIELD_PREP(ytphy_txinver_grp[2].mask,
-+				ytphy_priv->tx_inverted_10);
++		rate = 2500000;
 +		break;
-+
 +	default:
-+		break;
++		dev_err(dwmac->dev, "invalid speed %u\n", speed);
++		return;
 +	}
 +
-+	ytphy_write_ext(phydev, YTPHY_EXT_RGMII_CONFIG1, val);
++	err = clk_set_rate(dwmac->clk_gtx, rate);
++	if (err)
++		dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
 +}
 +
-+static int yt8531_probe(struct phy_device *phydev)
++static void dwmac_starfive_clk_disable(void *clk)
 +{
-+	struct ytphy_priv_t *priv;
-+	const struct device_node *of_node;
-+	u32 val;
-+	int ret;
++	clk_disable_unprepare(clk);
++}
 +
-+	priv = devm_kzalloc(&phydev->mdio.dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
++static int starfive_eth_plat_probe(struct platform_device *pdev)
++{
++	struct plat_stmmacenet_data *plat_dat;
++	struct stmmac_resources stmmac_res;
++	struct starfive_dwmac *dwmac;
++	int err;
++
++	err = stmmac_get_platform_resources(pdev, &stmmac_res);
++	if (err)
++		return err;
++
++	plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
++	if (IS_ERR(plat_dat)) {
++		dev_err(&pdev->dev, "dt configuration failed\n");
++		return PTR_ERR(plat_dat);
++	}
++
++	dwmac = devm_kzalloc(&pdev->dev, sizeof(*dwmac), GFP_KERNEL);
++	if (!dwmac)
 +		return -ENOMEM;
 +
-+	of_node = phydev->mdio.dev.of_node;
-+	if (of_node) {
-+		ret = of_property_read_u32(of_node, ytphy_txinver_grp[0].name, &val);
-+		if (!ret)
-+			priv->tx_inverted_1000 = val;
++	dwmac->clk_tx = devm_clk_get(&pdev->dev, "tx");
++	if (IS_ERR(dwmac->clk_tx))
++		return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_tx),
++						"error getting tx clock\n");
 +
-+		ret = of_property_read_u32(of_node, ytphy_txinver_grp[1].name, &val);
-+		if (!ret)
-+			priv->tx_inverted_100 = val;
++	err = devm_add_action(&pdev->dev, dwmac_starfive_clk_disable,
++			      dwmac->clk_tx);
++	if (err)
++		return err;
 +
-+		ret = of_property_read_u32(of_node, ytphy_txinver_grp[2].name, &val);
-+		if (!ret)
-+			priv->tx_inverted_10 = val;
++	err = clk_prepare_enable(dwmac->clk_tx);
++	if (err)
++		return dev_err_probe(&pdev->dev, err, "error enabling tx clock\n");
++
++	dwmac->clk_gtx = devm_clk_get(&pdev->dev, "gtx");
++	if (IS_ERR(dwmac->clk_gtx))
++		return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_gtx),
++						"error getting gtx clock\n");
++
++	err = devm_add_action(&pdev->dev, dwmac_starfive_clk_disable,
++			      dwmac->clk_gtx);
++	if (err)
++		return err;
++
++	err = clk_prepare_enable(dwmac->clk_gtx);
++	if (err)
++		return dev_err_probe(&pdev->dev, err, "error enabling gtx clock\n");
++
++	dwmac->clk_gtxc = devm_clk_get(&pdev->dev, "gtxc");
++	if (IS_ERR(dwmac->clk_gtxc))
++		return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_gtxc),
++						"error getting gtxc clock\n");
++
++	err = devm_add_action(&pdev->dev, dwmac_starfive_clk_disable,
++			      dwmac->clk_gtxc);
++	if (err)
++		return err;
++
++	err = clk_prepare_enable(dwmac->clk_gtxc);
++	if (err)
++		return dev_err_probe(&pdev->dev, err, "error enabling gtxc clock\n");
++
++	dwmac->dev = &pdev->dev;
++	plat_dat->fix_mac_speed = starfive_eth_fix_mac_speed;
++	plat_dat->init = NULL;
++	plat_dat->bsp_priv = dwmac;
++	plat_dat->dma_cfg->dche = true;
++
++	err = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
++	if (err) {
++		stmmac_remove_config_dt(pdev, plat_dat);
++		return err;
 +	}
-+	phydev->priv = priv;
 +
 +	return 0;
 +}
 +
- static struct phy_driver motorcomm_phy_drvs[] = {
- 	{
- 		PHY_ID_MATCH_EXACT(PHY_ID_YT8511),
-@@ -120,6 +293,17 @@ static struct phy_driver motorcomm_phy_drvs[] = {
- 		.resume		= genphy_resume,
- 		.read_page	= yt8511_read_page,
- 		.write_page	= yt8511_write_page,
-+	}, {
-+		PHY_ID_MATCH_EXACT(PHY_ID_YT8531),
-+		.name		= "YT8531 Gigabit Ethernet",
-+		.probe		= yt8531_probe,
-+		.config_init	= ytphy_config_init,
-+		.read_status	= genphy_read_status,
-+		.suspend	= genphy_suspend,
-+		.resume		= genphy_resume,
-+		.read_page	= yt8511_read_page,
-+		.write_page	= yt8511_write_page,
-+		.link_change_notify = ytphy_link_change_notify,
- 	},
- };
- 
-@@ -131,6 +315,7 @@ MODULE_LICENSE("GPL");
- 
- static const struct mdio_device_id __maybe_unused motorcomm_tbl[] = {
- 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8511) },
-+	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8531) },
- 	{ /* sentinal */ }
- };
- 
++static const struct of_device_id starfive_eth_plat_match[] = {
++	{.compatible = "starfive,dwmac"},
++	{ }
++};
++
++static struct platform_driver starfive_eth_plat_driver = {
++	.probe  = starfive_eth_plat_probe,
++	.remove = stmmac_pltfr_remove,
++	.driver = {
++		.name = "starfive-eth-plat",
++		.pm = &stmmac_pltfr_pm_ops,
++		.of_match_table = starfive_eth_plat_match,
++	},
++};
++
++module_platform_driver(starfive_eth_plat_driver);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("StarFive DWMAC platform driver");
++MODULE_AUTHOR("Yanhong Wang <yanhong.wang@starfivetech.com>");
 -- 
 2.17.1
 
