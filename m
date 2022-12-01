@@ -2,210 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE79163F468
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:44:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A73D863F463
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:44:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231829AbiLAPoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 10:44:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbiLAPoD (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231258AbiLAPoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 1 Dec 2022 10:44:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530842C66C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 07:43:07 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229629AbiLAPoB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 1 Dec 2022 10:44:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77309EBC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 07:43:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669909386;
+        s=mimecast20190719; t=1669909385;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1PA8FyCR3/gunJx7DkyWDmKgZ7n6tougFbaW1vOf1yk=;
-        b=NWTd2HwqGipQSsCWpNs7tN4cccx7vnVt65ET/nGK/9Kh2kVA3f8ZOS5JfhJJJa1jKnYhqc
-        cZ6ccNGjL07hYex1T6jTTYq5G3IJBaOZD08/x2mJVNdKyEKofISzKbSJlq4FySfIydVrKh
-        JjSYk+/ggcQx2QKKhgNHiJO08LJDvEA=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=uICPaEENN8EB00poBiDynBWP9unBSRZ6Eo0ZeloiILw=;
+        b=bZPqbKpXkw8CORJxhKbwJjDJvs67eWWzMvCIb/sHoBy8T2ipaFS4WJ6h7fROZj/4Ka0vQe
+        L0HUUUnXt0ZKPKvwRR1kll1kXDTEpeNDK9ysVxX9NUl6bn9JoBjEpJWQ2OKZqPkzAAStUX
+        A3xCjozhkLshFICkhtvfnQ17Ine/NvI=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-357-MyKaNbwkNnOsjGvtS0NIvQ-1; Thu, 01 Dec 2022 10:43:05 -0500
-X-MC-Unique: MyKaNbwkNnOsjGvtS0NIvQ-1
-Received: by mail-wr1-f72.google.com with SMTP id d8-20020adf9b88000000b0024207f09827so534103wrc.20
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 07:43:05 -0800 (PST)
+ us-mta-194-l_YDKHfWOTykhx4zFagU6w-1; Thu, 01 Dec 2022 10:43:03 -0500
+X-MC-Unique: l_YDKHfWOTykhx4zFagU6w-1
+Received: by mail-wr1-f71.google.com with SMTP id o10-20020adfa10a000000b00241f603af8dso536756wro.11
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 07:43:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1PA8FyCR3/gunJx7DkyWDmKgZ7n6tougFbaW1vOf1yk=;
-        b=PB8B96Ia1xDk+Cev+yxiTY8TYvFDGon7j8MNm9gmluAJ92IgZXKh5/3rOL6qJYXYno
-         EYBRkpKLUCOfHK9K1En+ztU1BI/fWZd0Tqt9cjEhZwAMmpQmCBJlNYs3yjAVGybEbN7v
-         S1aIwrAkLG3SJk01i39R+HDRjaAY2GauyaJU01Jm2k0cDUWsQFAJ2Ia0uwLhJy38IBQt
-         StubpffD8MaVbzFn+naDtysHeY1oSj3Lxu3ugTb7u3p3LasOWUrjdR4Bey2DM2GWlBN5
-         IJybj12o/OZviUk88c1I6k9ulY8VT+6e4npUWldQtn1dFMxBw9izsB0rrp5cnhvMhaVn
-         Jjzw==
-X-Gm-Message-State: ANoB5pkZxp2w2auAoSkO9ZDNJOlFQb8fqLDovqszrMwZ/H21WaEGEOSq
-        7mSq7boHf2I5jZ5QhTYGVNZskxI8n9zXcpNIcWsHhpQgqHbLZfYIEn/4XTwEXyFkeWoyzGll6Wy
-        o/tefzOiQqn9orL/U6+z3qtpn
-X-Received: by 2002:a05:6000:124d:b0:242:10a:6667 with SMTP id j13-20020a056000124d00b00242010a6667mr23538788wrx.39.1669909381684;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uICPaEENN8EB00poBiDynBWP9unBSRZ6Eo0ZeloiILw=;
+        b=XDFqBmo971+1As/jYkrwaCiKO/i+npACF8t4iNEdkKyjdMSzGTHknnuuf7BoQaGhHq
+         K8o5NfReNGSbGfPPL0+om+UpWMvPOCP3T3/Hns4+yMX6exCqwZ5kSIoWYVWahWSabZhP
+         IHXjFuue+EV8T+zkm2st7tFcaiU1BxhYVMAinUC5uaVpnfm7dofgmi0K73kvEw9X2rcR
+         z3ZEfZL7jg5bcS8bZ0lGzhIUynzzG70U6MIG68XNqdEbI/2MvGv+1F594U7OeOw7TQ6Y
+         CJzcgjje0drXOtAPzmSTKwIIBXMVUGtAgDDnQ54S+Ma3Oc8zOQdAX/ZbnbeE3hrUo6Gf
+         G+uw==
+X-Gm-Message-State: ANoB5pnGDRrRaiCVUtVbdXpiALz8wrn+KSjpiIhytH9YQwwK0wqgyxTh
+        S4CcvcNrZ0/RWJO53YWl5nZ7KRN0qz3MsrdrvpZCKuqA6F3x8XqyujSytvq1+WPAkZJLkkb1Ld4
+        WpHcrbsHNwG8k+kdJYYSu1Iw6
+X-Received: by 2002:adf:ecd2:0:b0:236:6fd9:9efa with SMTP id s18-20020adfecd2000000b002366fd99efamr39370646wro.101.1669909382062;
+        Thu, 01 Dec 2022 07:43:02 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4imAxqHpsHzf4lwMnv25YvuYKadYTHsioCJaPqnZlFtnFG20xMn8tkXOhL/ZrHUpQYnEbeIQ==
+X-Received: by 2002:adf:ecd2:0:b0:236:6fd9:9efa with SMTP id s18-20020adfecd2000000b002366fd99efamr39370625wro.101.1669909381800;
         Thu, 01 Dec 2022 07:43:01 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5TCeDPeTaqSt4aUGafmCL2GAkina7IU0KvdH18HPecW20emnXyEvE8tc6bqGA+pHGslUBJ3Q==
-X-Received: by 2002:a05:6000:124d:b0:242:10a:6667 with SMTP id j13-20020a056000124d00b00242010a6667mr23538465wrx.39.1669909374676;
-        Thu, 01 Dec 2022 07:42:54 -0800 (PST)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id u11-20020a5d6acb000000b00241c4bd6c09sm4777074wrw.33.2022.12.01.07.42.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 07:42:53 -0800 (PST)
-Message-ID: <a215fe2f-ef9b-1a15-f1c2-2f0bb5d5f490@redhat.com>
-Date:   Thu, 1 Dec 2022 16:42:52 +0100
+Received: from ovpn-194-141.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id bg28-20020a05600c3c9c00b003cfa3a12660sm9307122wmb.1.2022.12.01.07.42.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 07:43:00 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yuan Yao <yuan.yao@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paul Durrant <paul@xen.org>
+Subject: Re: [PATCH v2 10/50] KVM: VMX: Reset eVMCS controls in VP assist
+ page during hardware disabling
+In-Reply-To: <20221130230934.1014142-11-seanjc@google.com>
+References: <20221130230934.1014142-1-seanjc@google.com>
+ <20221130230934.1014142-11-seanjc@google.com>
+Date:   Thu, 01 Dec 2022 16:42:58 +0100
+Message-ID: <87h6yff7ul.fsf@ovpn-194-141.brq.redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 1/2] mm/migrate: Fix read-only page got writable when
- recover pte
-To:     Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Ives van Hoorne <ives@codesandbox.io>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Alistair Popple <apopple@nvidia.com>, stable@vger.kernel.org
-References: <20221114000447.1681003-1-peterx@redhat.com>
- <20221114000447.1681003-2-peterx@redhat.com>
- <5ddf1310-b49f-6e66-a22a-6de361602558@redhat.com>
- <20221130142425.6a7fdfa3e5954f3c305a77ee@linux-foundation.org>
- <Y4jIHureiOd8XjDX@x1n>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Y4jIHureiOd8XjDX@x1n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.12.22 16:28, Peter Xu wrote:
-> Hi, Andrew,
-> 
-> On Wed, Nov 30, 2022 at 02:24:25PM -0800, Andrew Morton wrote:
->> On Tue, 15 Nov 2022 19:17:43 +0100 David Hildenbrand <david@redhat.com> wrote:
->>
->>> On 14.11.22 01:04, Peter Xu wrote:
->>>> Ives van Hoorne from codesandbox.io reported an issue regarding possible
->>>> data loss of uffd-wp when applied to memfds on heavily loaded systems.  The
->>>> symptom is some read page got data mismatch from the snapshot child VMs.
->>>>
->>>> Here I can also reproduce with a Rust reproducer that was provided by Ives
->>>> that keeps taking snapshot of a 256MB VM, on a 32G system when I initiate
->>>> 80 instances I can trigger the issues in ten minutes.
->>>>
->>>> It turns out that we got some pages write-through even if uffd-wp is
->>>> applied to the pte.
->>>>
->>>> The problem is, when removing migration entries, we didn't really worry
->>>> about write bit as long as we know it's not a write migration entry.  That
->>>> may not be true, for some memory types (e.g. writable shmem) mk_pte can
->>>> return a pte with write bit set, then to recover the migration entry to its
->>>> original state we need to explicit wr-protect the pte or it'll has the
->>>> write bit set if it's a read migration entry.  For uffd it can cause
->>>> write-through.
->>>>
->>>> The relevant code on uffd was introduced in the anon support, which is
->>>> commit f45ec5ff16a7 ("userfaultfd: wp: support swap and page migration",
->>>> 2020-04-07).  However anon shouldn't suffer from this problem because anon
->>>> should already have the write bit cleared always, so that may not be a
->>>> proper Fixes target, while I'm adding the Fixes to be uffd shmem support.
->>>>
->>>
->>> ...
->>>
->>>> --- a/mm/migrate.c
->>>> +++ b/mm/migrate.c
->>>> @@ -213,8 +213,14 @@ static bool remove_migration_pte(struct folio *folio,
->>>>    			pte = pte_mkdirty(pte);
->>>>    		if (is_writable_migration_entry(entry))
->>>>    			pte = maybe_mkwrite(pte, vma);
->>>> -		else if (pte_swp_uffd_wp(*pvmw.pte))
->>>> +		else
->>>> +			/* NOTE: mk_pte can have write bit set */
->>>> +			pte = pte_wrprotect(pte);
->>>> +
->>>> +		if (pte_swp_uffd_wp(*pvmw.pte)) {
->>>> +			WARN_ON_ONCE(pte_write(pte));
->>
->> Will this warnnig trigger in the scenario you and Ives have discovered?
-> 
-> If without the above newly added wr-protect, yes.  This is the case where
-> we found we got write bit set even if uffd-wp bit is also set, hence allows
-> the write to go through even if marked protected.
-> 
->>
->>>>    			pte = pte_mkuffd_wp(pte);
->>>> +		}
->>>>    
->>>>    		if (folio_test_anon(folio) && !is_readable_migration_entry(entry))
->>>>    			rmap_flags |= RMAP_EXCLUSIVE;
->>>
->>> As raised, I don't agree to this generic non-uffd-wp change without
->>> further, clear justification.
->>
->> Pater, can you please work this further?
-> 
-> I didn't reply here because I have already replied with the question in
-> previous version with a few attempts.  Quotting myself:
-> 
-> https://lore.kernel.org/all/Y3KgYeMTdTM0FN5W@x1n/
-> 
->          The thing is recovering the pte into its original form is the
->          safest approach to me, so I think we need justification on why it's
->          always safe to set the write bit.
-> 
-> I've also got another longer email trying to explain why I think it's the
-> other way round to be justfied, rather than justifying removal of the write
-> bit for a read migration entry, here:
-> 
+Sean Christopherson <seanjc@google.com> writes:
 
-And I disagree for this patch that is supposed to fix this hunk:
+> Reset the eVMCS controls in the per-CPU VP assist page during hardware
+> disabling instead of waiting until kvm-intel's module exit.  The controls
+> are activated if and only if KVM creates a VM, i.e. don't need to be
+> reset if hardware is never enabled.
+>
+> Doing the reset during hardware disabling will naturally fix a potential
+> NULL pointer deref bug once KVM disables CPU hotplug while enabling and
+> disabling hardware (which is necessary to fix a variety of bugs).  If the
+> kernel is running as the root partition, the VP assist page is unmapped
+> during CPU hot unplug, and so KVM's clearing of the eVMCS controls needs
+> to occur with CPU hot(un)plug disabled, otherwise KVM could attempt to
+> write to a CPU's VP assist page after it's unmapped.
+>
+> Reported-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/vmx/vmx.c | 50 +++++++++++++++++++++++++-----------------
+>  1 file changed, 30 insertions(+), 20 deletions(-)
+>
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index cea8c07f5229..d85d175dca70 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -551,6 +551,33 @@ static int hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu)
+>  	return 0;
+>  }
+>  
+> +static void hv_reset_evmcs(void)
+> +{
+> +	struct hv_vp_assist_page *vp_ap;
+> +
+> +	if (!static_branch_unlikely(&enable_evmcs))
+> +		return;
+> +
+> +	/*
+> +	 * KVM should enable eVMCS if and only if all CPUs have a VP assist
+> +	 * page, and should reject CPU onlining if eVMCS is enabled the CPU
+> +	 * doesn't have a VP assist page allocated.
+> +	 */
+> +	vp_ap = hv_get_vp_assist_page(smp_processor_id());
+> +	if (WARN_ON_ONCE(!vp_ap))
+> +		return;
+> +
 
+In case my understanding is correct, this may actually get triggered
+for Hyper-V root partition: vmx_hardware_disable() gets called from
+kvm_dying_cpu() which has its own CPUHP_AP_KVM_STARTING stage. VP page
+unmapping happens in hv_cpu_die() which uses generic CPUHP_AP_ONLINE_DYN
+(happens first on CPU oflining AFAIR). I believe we need to introduce a
+new CPUHP_AP_HYPERV_STARTING stage and put it before
+CPUHP_AP_KVM_STARTING so it happens after it upon offlining.
 
-@@ -243,11 +243,15 @@ static bool remove_migration_pte(struct page *page, struct vm_area_struct *vma,
-                 entry = pte_to_swp_entry(*pvmw.pte);
-                 if (is_write_migration_entry(entry))
-                         pte = maybe_mkwrite(pte, vma);
-+               else if (pte_swp_uffd_wp(*pvmw.pte))
-+                       pte = pte_mkuffd_wp(pte);
-  
-                 if (unlikely(is_zone_device_page(new))) {
-                         if (is_device_private_page(new)) {
-                                 entry = make_device_private_entry(new, pte_write(pte));
-                                 pte = swp_entry_to_pte(entry);
-+                               if (pte_swp_uffd_wp(*pvmw.pte))
-+                                       pte = pte_mkuffd_wp(pte);
-                         }
-                 }
-  
+The issue is likely theoretical as Hyper-V root partition is a very
+special case, I'm not sure whether KVM is used there and whether CPU
+offlining is possible. In any case, WARN_ON_ONCE() is much better than
+NULL pointer dereference we have now :-)
 
-There is really nothing to justify the other way around here.
-If it's broken fix it independently and properly backport it independenty.
+> +	/*
+> +	 * Reset everything to support using non-enlightened VMCS access later
+> +	 * (e.g. when we reload the module with enlightened_vmcs=0)
+> +	 */
+> +	vp_ap->nested_control.features.directhypercall = 0;
+> +	vp_ap->current_nested_vmcs = 0;
+> +	vp_ap->enlighten_vmentry = 0;
+> +}
+> +
+> +#else /* IS_ENABLED(CONFIG_HYPERV) */
+> +static void hv_reset_evmcs(void) {}
+>  #endif /* IS_ENABLED(CONFIG_HYPERV) */
+>  
+>  /*
+> @@ -2496,6 +2523,8 @@ static void vmx_hardware_disable(void)
+>  	if (cpu_vmxoff())
+>  		kvm_spurious_fault();
+>  
+> +	hv_reset_evmcs();
+> +
+>  	intel_pt_handle_vmx(0);
+>  }
+>  
+> @@ -8462,27 +8491,8 @@ static void vmx_exit(void)
+>  	kvm_exit();
+>  
+>  #if IS_ENABLED(CONFIG_HYPERV)
+> -	if (static_branch_unlikely(&enable_evmcs)) {
+> -		int cpu;
+> -		struct hv_vp_assist_page *vp_ap;
+> -		/*
+> -		 * Reset everything to support using non-enlightened VMCS
+> -		 * access later (e.g. when we reload the module with
+> -		 * enlightened_vmcs=0)
+> -		 */
+> -		for_each_online_cpu(cpu) {
+> -			vp_ap =	hv_get_vp_assist_page(cpu);
+> -
+> -			if (!vp_ap)
+> -				continue;
+> -
+> -			vp_ap->nested_control.features.directhypercall = 0;
+> -			vp_ap->current_nested_vmcs = 0;
+> -			vp_ap->enlighten_vmentry = 0;
+> -		}
+> -
+> +	if (static_branch_unlikely(&enable_evmcs))
+>  		static_branch_disable(&enable_evmcs);
+> -	}
+>  #endif
+>  	vmx_cleanup_l1d_flush();
 
-But we don't know about any such broken case.
-
-I have no energy to spare to argue further ;)
-
-
+Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
 -- 
-Thanks,
-
-David / dhildenb
+Vitaly
 
