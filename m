@@ -2,113 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E6563F9D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1967363F9CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbiLAV3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 16:29:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
+        id S229773AbiLAV3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 16:29:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbiLAV2b (ORCPT
+        with ESMTP id S231393AbiLAV2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 16:28:31 -0500
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2056.outbound.protection.outlook.com [40.107.21.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FA4AD314
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:28:22 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j7KDeaMkXGPs1lqXoL432ZKuI/lwjdYHQT50eDDjC3cKURTi3Wr9qD7lf+zcfb5n3ufQ+tn2LzCbWKX+N+kesX8caTlcq/Pb3ejql+j60bWq/L6RKPquJWOoKIzFImQNhoRpq5A7dwxoSRkL2b0HVZvmnuiNplN+Hk2Xzgx9pN1fQ3UqYYAo2GlUib1J/KEj3L3tn7axEJulBiAv6Q/G3yhDe1cWYj0uriFTjf4u6TpG/yg5sFwnAm+ORQl5SPLyJC0DKZdZCZYjZwfFlTUUTNVDxsoL0j77DqHVTfElgAjf5FOGqLEpWm+2Cb+5D995/ywSQNk+hHljWB/RFYrxFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HksBDMgcloWtuciTMBvCJiopBlkVDGTvUNtWz2g2ui0=;
- b=lwRHlA6VJuwClUy7RbKv0orJbmWaMCzdi4u168D9z7Z2ZQySX99a9ZMrevreT1FCUVQ26TfHn7xxEB7ofAPbQHfg1Qqu+DGkFrQmXaWCoXpp2R2V+07DcJvbO+7QGGP1qVLXMFWMhvPKtuH8Kl8UUN3w99k2xp6YzAjRjNm4p2L4TB8lCVbb4YrJ/wClfm2TUU+0yyxluy71/SJnMS8rj/KbBEEvOppLzWR6KEp6eh3UAHpk02+gQKpOWxlwikq0Zt5JHoI6seFS6Gjq4bWgzc/mh1rO+yWJLG/kaLg5qvQGV0C5pg56jEeDkKbTDfQeHMeLXIoRQkASP7x8tM57gw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HksBDMgcloWtuciTMBvCJiopBlkVDGTvUNtWz2g2ui0=;
- b=WImPuGsYRZbIUfg16qzkYyFNlFa+gQeNQkLVUXyWHgFPazArZjojJ39vOHv1TWpT1VmHYY3pFz8H+zsifFG0z+DxlFfmM5UJdTarrV/FenWg3BIGXWVvY62CiGxBbQdWfzFT+r6HjQFABr/dFWHNYQ0nAbrSRY443qLeHTG/HZFc38Nzqc1vhz/onSMz9R/JPx98BMMg4g6sbz581QkYdO7Qun1r4bzObgtwlvvvsCPbMvGxJ9RgYspVXsf2/XHxzXw0J5m4VlZkkMC0Q9aACrj9sVo0d/xOH/Dw90oyYfHEp5HfPSEnoFOrlrU1VgfuO9hXoggSAvLzkp30tFecSA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
- by AM9PR03MB6819.eurprd03.prod.outlook.com (2603:10a6:20b:2d9::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Thu, 1 Dec
- 2022 21:28:19 +0000
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::2b95:1fe4:5d8f:22fb]) by DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::2b95:1fe4:5d8f:22fb%8]) with mapi id 15.20.5857.023; Thu, 1 Dec 2022
- 21:28:19 +0000
-From:   Sean Anderson <sean.anderson@seco.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: [PATCH] irqchip/ls-extirq: Fix endianness detection
-Date:   Thu,  1 Dec 2022 16:28:07 -0500
-Message-Id: <20221201212807.616191-1-sean.anderson@seco.com>
-X-Mailer: git-send-email 2.35.1.1320.gc452695387.dirty
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MN2PR05CA0041.namprd05.prod.outlook.com
- (2603:10b6:208:236::10) To DB9PR03MB8847.eurprd03.prod.outlook.com
- (2603:10a6:10:3dd::13)
+        Thu, 1 Dec 2022 16:28:30 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8FE3ABA2E;
+        Thu,  1 Dec 2022 13:28:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669930101; x=1701466101;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CZihDRocHMOT+JYXZESRl5AwDmyjKtqc0Mx+Iop7JLg=;
+  b=noIDimK1Jy6soxQDzHhzuGc4u8Be88EqLP+Dws9m4CFeHwYRnMJVqkdu
+   WB1eJ5Mnu181W0/bNOoawol6u7+ncf7ulk/njxQ/TueWrHUbAu06+vdWm
+   JW7yZm1Z+ij3mngUwH57uAcTP2gzh2bgqV18CGSa5Hx/sGzBBlhn6X8Yi
+   Z8Eq8aasDzWy0D/YnSEU4jHiOStKJzewDA44/aNDzvkm6rA2LTe2RIuv/
+   9kdvJByU5eaPajMWOQGYhVzow3UJnuGoFYDCEalLK6Zr56QlURSkADUFf
+   9145rlrXvOO42WVyXtQM+zzxxB5rl0EDu2rDubPj6gYCmXCG+0kCEOetG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="313442035"
+X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
+   d="scan'208";a="313442035"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 13:28:21 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="595223011"
+X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
+   d="scan'208";a="595223011"
+Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.66.184]) ([10.212.66.184])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 13:28:20 -0800
+Message-ID: <18ae6119-1265-11d1-9f0b-996239644a40@intel.com>
+Date:   Thu, 1 Dec 2022 14:28:19 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|AM9PR03MB6819:EE_
-X-MS-Office365-Filtering-Correlation-Id: cfbaa5d9-2ea9-4772-9775-08dad3e2f677
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Iqi36ehODGi3O1lZ5ZYVEyYSXy48R2nnzxjdmmDiO/bJYWSK1v+QYt1ruVZUMmcBozXKxdiEygWqSxeAA4ddZ8XeTdGT4qaopWiBhILPEwZFBeSN6oKFGpqaLLo+zFt0cxH7ysK/a5GP56es+zy9JHNIsGOsr5Eb16TDO0PV9lTsDwGeEqLkZGKG2mjmjYm+4TdIqWnNlfyXci4abpMIkO3G/Gx6lv4ijHnlCfVPnwSr4pMeCWwjhrwJ+8ORSGoz5uLV1B2/dHyQ0i79hu2ehevs0UQkeTlyPeHRMsjVdWaNrKGqpM/mdhAzAV6LMu2SvjZURgYoDT0qkMWrRWdmSAHtKyidtaHdkNKgmKBFYAVqs2i+DY8lpje2/EsyK2uiWwYS2g75ucnfDrhjGqMpFp7rXRY9n3h/6d5uHXWPfo9uWwgeERuNinbGrfXcxKlu5FCtbkYVt+DN4ermy71gLIa9btmHVmwxnX8g/h5H72N28/EjBIa69RIvQosm6cJOxindNj4mDiKVlFy4FGyaGv8WbqZp8GSIE0EZ4l7IQ7y/moW84v739BmvZrEFw+YjpRIiyFcHv3SO1N9qRX9bBR1xK66Sl96oKrxlKOZizgn7uqxLwBZ8zvgELhLUF8AIO/A6AcfqcrYl5ehEvwfTzOLeejFWT/mlA2orkFS3EaDzjtQXCdox8MnX9i4HaEHo
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(39850400004)(396003)(346002)(366004)(376002)(451199015)(6666004)(2906002)(36756003)(2616005)(107886003)(86362001)(52116002)(6486002)(478600001)(26005)(316002)(6506007)(44832011)(4744005)(66556008)(5660300002)(4326008)(41300700001)(8676002)(110136005)(54906003)(66476007)(66946007)(8936002)(38350700002)(38100700002)(6512007)(186003)(83380400001)(1076003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?V+8hUfHFJOPxvmE+g1FDePhgIjA0qiLi8szT/cOV22vOaoUC+1lGOf6CPSZx?=
- =?us-ascii?Q?Sf+X3OYTU7WhCx8Bbzj1a5Nr2KFcEk9AYt1NrKa02Zy1+gr4J+a88uIWCTxk?=
- =?us-ascii?Q?G27E7mJOpsrjcG/hTs0T2nP1YVlGahQXAbCEK2u3J+EcFLvg7Hujg9ppmwRO?=
- =?us-ascii?Q?L/AH4+eKeccedp62ITQZwQotuGdNwBpv3FHe3ngS80+dNpBB2HBhHAMyDA1p?=
- =?us-ascii?Q?oSV+5XDdk9cHr9nzBYzdPaRuKtcs1Ei2HBfQ3aes554tH0mrbvGCrED6zzMB?=
- =?us-ascii?Q?PGFfjINBnezNf5p57FSNB59MZH4wSRuLz26XmimbvUUbL/jfObzuDm3L1IFf?=
- =?us-ascii?Q?DZ/c+sIwZAg93cR33uFq3zWd7C7V9BMKwE8hhcAWvMtA1zODNqlHAij7NE79?=
- =?us-ascii?Q?LjXvt1dW83JpMEZZpNcpfFvLKyAqZtU76bZG/f9XFpZz2J0lQydj62DPdhtc?=
- =?us-ascii?Q?6ebcBXtyA0kZKCoYQuWrud8N31KpBnP2810ZWb+xsHq5a4aoP56/QHmZDlvK?=
- =?us-ascii?Q?uuvJz9IlErB1w8f44Qq7NLaZ8Tq/CG7Tkyv+UlHjklsHWw0iZKFaLxNQegxb?=
- =?us-ascii?Q?j8sDjazzWagClvLnjm43SPfp+MccCbDCtuaN/JB9oabo1WB2opMMeECYWYW6?=
- =?us-ascii?Q?xznE2NKUXFiSzwU9jxMEbEJ1CykmTu4golcSuFHCdlKdca5mlVISk6TGDzkC?=
- =?us-ascii?Q?n8Os51HyiDrnPjg5eNukeJAyp3TNHYVqByr1pJrovEMPmok+AjhXDwGGH7Ko?=
- =?us-ascii?Q?bOJwYEQI4ySDlegUWu2iZu9w8E5caIZ9Fg5W8EQvJlwvlIXCmFecPU78z/6D?=
- =?us-ascii?Q?r+12YUTu2exBU30xV6jK9Z4DJ05j4MT6NCxf5fyBn2aGPMfDiO7qJPVIuDoj?=
- =?us-ascii?Q?2oW6rCjKr/fYLu7KFsSzWxt+MZS/HARmbJgO3PxQsHiNHsfWiK9sV874+iS4?=
- =?us-ascii?Q?hQLCJ8JD6qyOCpZ5hgztZjZBlASWpst3cOPSDWvE0nYy0W3GBZQuTfcTc3KJ?=
- =?us-ascii?Q?uIH+cXBCi7Wt4h3B5tivleMp/mvSBhgpQzP1zPYtzwdptYev4eAPnGDiMP/L?=
- =?us-ascii?Q?uz4XXgG7iFIqbYTyKWuih5sUL9YrNAdJUUeK3Aqd1qxKT5Ugj8aJlPymF8zT?=
- =?us-ascii?Q?vwtwtcIxukV354JzAHOTPbrBa0M+8vAHO4WsOs/FC8jzAuGsjya5Xtt3PvJJ?=
- =?us-ascii?Q?607F//+bKp+N596zKW/4wdWrWelPHfvdvK3RLnYN9tr29PAyynHM5UDql8Fq?=
- =?us-ascii?Q?8mqzs6AKL8+dMb877nJTF+HiCqU5ZD4CwdId2GvbPtMHnDB49cHamJtxD9AI?=
- =?us-ascii?Q?PAb2skHPSi6vaHdJW7+UN7gHwEDz2tAvb7xXrUS5dAO6pZS4HEDDhblKuTK/?=
- =?us-ascii?Q?62LC6t2J78vfhySFswmUmPBHP+i1CYiaQkm94aQJJLkG2CHf6FmzcBv5qgFA?=
- =?us-ascii?Q?hF4OSR0chWR+X76j5TLtTYBRChXgO9Yw+dVUS1szxT3ZFCaYW3QMq2LOxjNa?=
- =?us-ascii?Q?xlaSY1/3ZfeWa6C97ZFcZLjcXqwJA2QuRqgfbAiuuM11GEPy0QRRldAZiSfy?=
- =?us-ascii?Q?EAUwI8jXavLZhmUvw9yQjaCIEtFvWMkGsW2SY0f0+Dd6rPvgh9oC5288AQx/?=
- =?us-ascii?Q?KA=3D=3D?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cfbaa5d9-2ea9-4772-9775-08dad3e2f677
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR03MB8847.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2022 21:28:19.3082
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Wgm9EN12mCR1x1auwMVrW1VdiHukTzOERZFnIqsH0nHURoMwyKExk80jNR665H7tJRaQvVQI3272oQ0H2y99nA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR03MB6819
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.5.0
+Subject: Re: [PATCH V2 11/11] cxl/test: Simulate event log overflow
+Content-Language: en-US
+To:     ira.weiny@intel.com, Dan Williams <dan.j.williams@intel.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org
+References: <20221201002719.2596558-1-ira.weiny@intel.com>
+ <20221201002719.2596558-12-ira.weiny@intel.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20221201002719.2596558-12-ira.weiny@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,29 +69,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-parent is the interrupt parent, not the parent of node. Use
-node->parent. This fixes endianness detection on big-endian platforms.
 
-Fixes: 1b00adce8afd ("irqchip/ls-extirq: Fix invalid wait context by avoiding to use regmap")
-Signed-off-by: Sean Anderson <sean.anderson@seco.com>
----
 
- drivers/irqchip/irq-ls-extirq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 11/30/2022 5:27 PM, ira.weiny@intel.com wrote:
+> From: Ira Weiny <ira.weiny@intel.com>
+> 
+> Log overflow is marked by a separate trace message.
+> 
+> Simulate a log with lots of messages and flag overflow until it is
+> drained a bit.
+> 
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-diff --git a/drivers/irqchip/irq-ls-extirq.c b/drivers/irqchip/irq-ls-extirq.c
-index d8d48b1f7c29..139f26b0a6ef 100644
---- a/drivers/irqchip/irq-ls-extirq.c
-+++ b/drivers/irqchip/irq-ls-extirq.c
-@@ -203,7 +203,7 @@ ls_extirq_of_init(struct device_node *node, struct device_node *parent)
- 	if (ret)
- 		goto err_parse_map;
- 
--	priv->big_endian = of_device_is_big_endian(parent);
-+	priv->big_endian = of_device_is_big_endian(node->parent);
- 	priv->is_ls1021a_or_ls1043a = of_device_is_compatible(node, "fsl,ls1021a-extirq") ||
- 				      of_device_is_compatible(node, "fsl,ls1043a-extirq");
- 	raw_spin_lock_init(&priv->lock);
--- 
-2.35.1.1320.gc452695387.dirty
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 
+> 
+> ---
+> Changes from RFC
+> 	Adjust for new struct changes
+> ---
+>   tools/testing/cxl/test/events.c | 49 ++++++++++++++++++++++++++++++++-
+>   1 file changed, 48 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/cxl/test/events.c b/tools/testing/cxl/test/events.c
+> index 0bcc485e07da..ceabefb526c2 100644
+> --- a/tools/testing/cxl/test/events.c
+> +++ b/tools/testing/cxl/test/events.c
+> @@ -15,6 +15,8 @@ struct mock_event_log {
+>   	u16 clear_idx;
+>   	u16 cur_idx;
+>   	u16 nr_events;
+> +	u16 nr_overflow;
+> +	u16 overflow_reset;
+>   	struct cxl_event_record_raw *events[CXL_TEST_EVENT_CNT_MAX];
+>   };
+>   
+> @@ -45,6 +47,7 @@ void reset_event_log(struct mock_event_log *log)
+>   {
+>   	log->cur_idx = 0;
+>   	log->clear_idx = 0;
+> +	log->nr_overflow = log->overflow_reset;
+>   }
+>   
+>   /* Handle can never be 0 use 1 based indexing for handle */
+> @@ -76,8 +79,12 @@ static void event_store_add_event(struct mock_event_store *mes,
+>   		return;
+>   
+>   	log = &mes->mock_logs[log_type];
+> -	if (WARN_ON(log->nr_events >= CXL_TEST_EVENT_CNT_MAX))
+> +
+> +	if ((log->nr_events + 1) > CXL_TEST_EVENT_CNT_MAX) {
+> +		log->nr_overflow++;
+> +		log->overflow_reset = log->nr_overflow;
+>   		return;
+> +	}
+>   
+>   	log->events[log->nr_events] = event;
+>   	log->nr_events++;
+> @@ -87,6 +94,7 @@ int mock_get_event(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
+>   {
+>   	struct cxl_get_event_payload *pl;
+>   	struct mock_event_log *log;
+> +	u16 nr_overflow;
+>   	u8 log_type;
+>   	int i;
+>   
+> @@ -118,6 +126,21 @@ int mock_get_event(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
+>   	if (!log_empty(log))
+>   		pl->flags |= CXL_GET_EVENT_FLAG_MORE_RECORDS;
+>   
+> +	if (log->nr_overflow) {
+> +		u64 ns;
+> +
+> +		pl->flags |= CXL_GET_EVENT_FLAG_OVERFLOW;
+> +		pl->overflow_err_count = cpu_to_le16(nr_overflow);
+> +		ns = ktime_get_real_ns();
+> +		ns -= 5000000000; /* 5s ago */
+> +		pl->first_overflow_timestamp = cpu_to_le64(ns);
+> +		ns = ktime_get_real_ns();
+> +		ns -= 1000000000; /* 1s ago */
+> +		pl->last_overflow_timestamp = cpu_to_le64(ns);
+> +
+> +		log->nr_overflow = 0;
+> +	}
+> +
+>   	return 0;
+>   }
+>   EXPORT_SYMBOL_GPL(mock_get_event);
+> @@ -297,6 +320,30 @@ u32 cxl_mock_add_event_logs(struct cxl_dev_state *cxlds)
+>   			      (struct cxl_event_record_raw *)&mem_module);
+>   	mes->ev_status |= CXLDEV_EVENT_STATUS_INFO;
+>   
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &maint_needed);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL,
+> +			      (struct cxl_event_record_raw *)&dram);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL,
+> +			      (struct cxl_event_record_raw *)&gen_media);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL,
+> +			      (struct cxl_event_record_raw *)&mem_module);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL,
+> +			      (struct cxl_event_record_raw *)&dram);
+> +	/* Overflow this log */
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
+> +	mes->ev_status |= CXLDEV_EVENT_STATUS_FAIL;
+> +
+>   	event_store_add_event(mes, CXL_EVENT_TYPE_FATAL, &hardware_replace);
+>   	event_store_add_event(mes, CXL_EVENT_TYPE_FATAL,
+>   			      (struct cxl_event_record_raw *)&dram);
