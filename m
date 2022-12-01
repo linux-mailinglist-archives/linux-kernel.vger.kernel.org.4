@@ -2,98 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B07D63F5A3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:48:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF7863F5A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiLAQsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:48:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
+        id S229839AbiLAQtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:49:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiLAQsK (ORCPT
+        with ESMTP id S229854AbiLAQs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:48:10 -0500
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E83DB2749
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:48:07 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-13bd19c3b68so2778398fac.7
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 08:48:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0KbdoDEh91rw5IA0oIsvOgRB+4YOafY3auigAzlBBag=;
-        b=EPKhZXBMmm+34M/64/xV6xZhG1xerm6CGLwtaXkeLtWtvyX4Sy34w1/6qhuA/VHkWP
-         erNVVD7FNH5nVwQWwgAaZo/yWktEnLq4byDjsHYTLXKEeqYRBPqZwEpbEQayuA0QaW9T
-         71tpa5Wvugjjjx9WGptYLDh48ffcFalHTyoDQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0KbdoDEh91rw5IA0oIsvOgRB+4YOafY3auigAzlBBag=;
-        b=ja+AYVX2jYApL2jsKKZxotKnLxk/Ny2EqngqPe/aHYBb3V6pXwanlD22DETc1LhBbl
-         l8sOm5JwCrLq6MCoVF4dM9UtyxtmQzay0a9VJeHO1Oz9YaoZpeNFPthp2DV+OFr16jBc
-         ViR6hjfGHXXaXPB3WEN1JcE4XLvfUE74ZiPj2aKA4uFpDRA0Wus+0nmlqaTdm80jyLO7
-         RzXgewTu6DzlBKZX4VK+wdWfFtkhxmpXdi6uMB8EgQAE09jpiVBwXOxYnl4eY/PA+cmL
-         3p9VU5a8ePY2DSKa8GYPBPwJGhM+EsKSt1iUtyo3zAmpu8Lpld16AuGk1cz/OlNUREiG
-         so2w==
-X-Gm-Message-State: ANoB5pmPlxzzfKrMCfvHQOOd34GoT4BhuCmaWpFhu7hsC3a/WyK//pI9
-        36Ev54qsa0tz1VhXZZTRTkncow==
-X-Google-Smtp-Source: AA0mqf4/fo9us4v8SKKvRbiImh/8ffy6lzShfRTPXNemoNig9f5abIkulCSItNfCwIzXRSrqETSytg==
-X-Received: by 2002:a05:6870:41c2:b0:13c:12cf:174a with SMTP id z2-20020a05687041c200b0013c12cf174amr27094701oac.197.1669913286025;
-        Thu, 01 Dec 2022 08:48:06 -0800 (PST)
-Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id h9-20020a4a9409000000b0049f9731ae1esm1923473ooi.41.2022.12.01.08.48.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 08:48:05 -0800 (PST)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Thu, 1 Dec 2022 10:48:04 -0600
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.0 000/289] 6.0.11-rc1 review
-Message-ID: <Y4jaxBOj1p6Dw+xX@fedora64.linuxtx.org>
-References: <20221130180544.105550592@linuxfoundation.org>
+        Thu, 1 Dec 2022 11:48:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134411DDCB
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:48:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD1F1B81F96
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 16:48:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF7F8C433C1;
+        Thu,  1 Dec 2022 16:48:50 +0000 (UTC)
+Date:   Thu, 1 Dec 2022 11:48:48 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Chris Mason <clm@meta.com>
+Subject: Re: [RFC PATCH] panic: Add new taint flag for fault injection
+Message-ID: <20221201114848.13a87aca@gandalf.local.home>
+In-Reply-To: <202212010838.B0B109DA@keescook>
+References: <20221201234121.8925fdf83115747ac4ac116a@kernel.org>
+        <166991263326.311919.16890937584677289681.stgit@devnote3>
+        <202212010838.B0B109DA@keescook>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130180544.105550592@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 07:19:45PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.11 release.
-> There are 289 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 02 Dec 2022 18:05:05 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.11-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Thu, 1 Dec 2022 08:39:28 -0800
+Kees Cook <keescook@chromium.org> wrote:
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+> On Fri, Dec 02, 2022 at 01:37:13AM +0900, Masami Hiramatsu (Google) wrote:
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Since the function error injection framework in the fault injection
+> > subsystem can change the function code flow forcibly, it may cause
+> > unexpected behavior (but that is the purpose of this feature).
+> > To identify this in the kernel oops message, add a new taint flag
+> > for this, and set it if it is (and similar things in BPF) used.  
+> 
+> Why is hooking through BPF considered to be "fault injection" here?
+> 
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+Have you not been reading this thread?
+
+-- Steve
