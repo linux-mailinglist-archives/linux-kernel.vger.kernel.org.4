@@ -2,127 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7045363EBFB
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:07:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67BC463EBFD
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:07:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbiLAJHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:07:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40912 "EHLO
+        id S230038AbiLAJHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:07:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiLAJHL (ORCPT
+        with ESMTP id S230004AbiLAJHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:07:11 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29AF4DF7D;
-        Thu,  1 Dec 2022 01:07:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669885629; x=1701421629;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=3LFOvef9mHe/uLUNJV3kfSw98lBKxTyDZwvxR5zCcZI=;
-  b=XdIGggRbMkpzRD/EXzp+54i7Dbob/TirST4j4sH4ASIpJNnLEPGsW6Gi
-   xfLDMStgmeVTmu6KlHqRgBq+/+0ZYEAeooLnlh9jkAM62GVz9bhxWBKJe
-   u1k1P+D1TMA2qwsUnkLeTR2C6mI+UW1Sc1UfY/j6mhmU6z4OH80nn1CEh
-   2R18Wo6wDO8RbL1MhBwmoKG6tvLG3pjx5Esnb7JYoSbELYh5Hwzeivcm5
-   0n7R0ZWk6/VduT3Fd4iVXb+iYU3hFLWWr+E4rGGOeXH2h854Mynfpiae5
-   +IQxKVbzEx9nP2rANPC0WGasf2KzlqjLedIupUNcEEPUKncFy/EEMlWY6
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="377797266"
-X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
-   d="scan'208";a="377797266"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 01:07:01 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="889653371"
-X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
-   d="scan'208";a="889653371"
-Received: from akoroglu-mobl.ger.corp.intel.com ([10.251.212.165])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 01:06:56 -0800
-Date:   Thu, 1 Dec 2022 11:06:53 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        macro@orcam.me.uk, jay.dolan@accesio.com, cang1@live.co.uk,
-        u.kleine-koenig@pengutronix.de, wander@redhat.com,
-        etremblay@distech-controls.com, jk@ozlabs.org,
-        biju.das.jz@bp.renesas.com, geert+renesas@glider.be,
-        phil.edworthy@renesas.com, Lukas Wunner <lukas@wunner.de>,
-        UNGLinuxDriver@microchip.com, colin.i.king@gmail.com,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Subject: Re: [PATCH v6 tty-next 1/4] serial: 8250_pci: Add serial8250_pci_setup_port
- definition in 8250_pcilib.c
-In-Reply-To: <20221201045146.1055913-2-kumaravel.thiagarajan@microchip.com>
-Message-ID: <1189f5af-aaac-f4c8-b928-cda183e7f90@linux.intel.com>
-References: <20221201045146.1055913-1-kumaravel.thiagarajan@microchip.com> <20221201045146.1055913-2-kumaravel.thiagarajan@microchip.com>
+        Thu, 1 Dec 2022 04:07:35 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E763EB99;
+        Thu,  1 Dec 2022 01:07:32 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 053B06602B84;
+        Thu,  1 Dec 2022 09:07:30 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669885651;
+        bh=8jHjmSVTbJv8cbYTXsHL50wkv2nBgikOZ1z0ILT8YM0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Z4JeI8M/qnmFg2yXh5HVGszAWAtnij7NwUGovyCw1VDdq8aJFaU/BOAgypQoa4QuG
+         zmxc1FKTKI4uJH7RQ9TibRk1ssye11o17QFXQKwdqFoopg2wdbvyKx3QXqndaIef/L
+         hGna4xjprrkUiRqy/czXncySOVxq52/npCTKiiz7vjiwJ7gc9eM2XMvbaAQFym49oK
+         vbvFi81vJUlY1M/l/xZMl7luMFM2v/D+6iQ9nyZ62+qXGGlyc7w5vJTkhqXXZEoGS5
+         QusJN0MzKb6ib1LAhZyQ5w3jUrv19hdmnydvz6gpaX/87pFI01+JBuufV9PNP7ZkTH
+         nd/iPGPb0L4Tw==
+Message-ID: <ba14a46f-477f-70af-761d-696fe8a4f41c@collabora.com>
+Date:   Thu, 1 Dec 2022 10:07:28 +0100
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1285920352-1669885620=:1757"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] arm64: dts: mt8192: Add adsp power domain controller
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>
+References: <20221201073328.1559-1-allen-kh.cheng@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221201073328.1559-1-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1285920352-1669885620=:1757
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Thu, 1 Dec 2022, Kumaravel Thiagarajan wrote:
-
-> Move implementation of setup_port API to serial8250_pci_setup_port
+Il 01/12/22 08:33, Allen-KH Cheng ha scritto:
+> Add adsp power domain controller node for mt8192 SoC.
 > 
-> Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-> Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-> Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 > ---
-> Changes in v6:
-> - Made this patch first patch of the patch series
-> 
-> Changes in v5:
-> - This is the new patch added in v5 version of this patchset
-> - Moved implementation of setup_port from 8250_pci.c to 8250_pcilib.c
-> 
+> Ref: https://lore.kernel.org/all/2ec80bd8-dfef-d2e6-eb41-6e6088043e33@collabora.com/
+>      [Allen-KH Cheng <allen-kh.cheng@mediatek.com>]
 > ---
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 8 ++++++++
+>   include/dt-bindings/power/mt8192-power.h | 1 +
+>   2 files changed, 9 insertions(+)
+> 
 
-> diff --git a/drivers/tty/serial/8250/8250_pcilib.h b/drivers/tty/serial/8250/8250_pcilib.h
-> new file mode 100644
-> index 000000000000..41ef01d5c3c5
-> --- /dev/null
-> +++ b/drivers/tty/serial/8250/8250_pcilib.h
-> @@ -0,0 +1,9 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * 8250 PCI library header file.
-> + *
-> + * Copyright (C) 2001 Russell King, All Rights Reserved.
-> + */
+Allen, thanks for this one, but it's incomplete...
 
-You shouldn't depend on .c file having things included for you. So 
-please add these:
+First of all, you must add the power domain on the driver itself, specifically,
+in drivers/soc/mediatek/mt8192-pm-domains.h - otherwise this change will have no
+effect!
 
-#include "8250.h"
+...Then, as Chen-Yu said, you should also add the power domain to the scp_adsp
+clock node as that's solving the lockup issue...
 
-struct pci_dev;
+.......and last, but not least: we need a Fixes tag to backport this fix, here
+and on the commit that adds the missing power domain in the driver.
 
-Other than that,
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Thanks,
+Angelo
 
-
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> index 424fc89cc6f7..e71afba871fc 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> @@ -514,6 +514,14 @@
+>   						};
+>   					};
+>   				};
 > +
-> +int serial8250_pci_setup_port(struct pci_dev *dev, struct uart_8250_port *port, u8 bar,
-> +		   unsigned int offset, int regshift);
+> +				power-domain@MT8192_POWER_DOMAIN_ADSP {
+> +					reg = <MT8192_POWER_DOMAIN_ADSP>;
+> +					clocks = <&topckgen CLK_TOP_ADSP_SEL>;
+> +					clock-names = "adsp";
+> +					mediatek,infracfg = <&infracfg>;
+> +					#power-domain-cells = <0>;
+> +				};
+>   			};
+>   		};
+>   
+> diff --git a/include/dt-bindings/power/mt8192-power.h b/include/dt-bindings/power/mt8192-power.h
+> index 4eaa53d7270a..63e81cd0d06d 100644
+> --- a/include/dt-bindings/power/mt8192-power.h
+> +++ b/include/dt-bindings/power/mt8192-power.h
+> @@ -28,5 +28,6 @@
+>   #define MT8192_POWER_DOMAIN_CAM_RAWA	18
+>   #define MT8192_POWER_DOMAIN_CAM_RAWB	19
+>   #define MT8192_POWER_DOMAIN_CAM_RAWC	20
+> +#define MT8192_POWER_DOMAIN_ADSP	21
+>   
+>   #endif /* _DT_BINDINGS_POWER_MT8192_POWER_H */
+> 
 
-
--- 
- i.
-
---8323329-1285920352-1669885620=:1757--
