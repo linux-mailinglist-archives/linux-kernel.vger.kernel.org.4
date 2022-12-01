@@ -2,528 +2,370 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2244063F4E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 091F363F4E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:12:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbiLAQLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:11:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
+        id S231761AbiLAQM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:12:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbiLAQLg (ORCPT
+        with ESMTP id S229853AbiLAQM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:11:36 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757D01D0C6
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:11:35 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id d18so1331394iof.6
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 08:11:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=inzivm27SCylpHE3mdrsUzHnrQvCjs9XqELfmKMNSqg=;
-        b=ZH3nussDZBloyhyswTUZKc3WIK579yUflQZLE7Blt//2wIbsALtWbTWf3LWv6tEFlT
-         eAfXjVaiBtSaLDil8g26XcF0kzglBMMmeljjb98OZ4+pLXtjqfwkhOr8lS7q9LYoNg+y
-         70dyJ0VqLDlBVHZna08J+7iAX+QUQsdVQp6lI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=inzivm27SCylpHE3mdrsUzHnrQvCjs9XqELfmKMNSqg=;
-        b=MKdhOHiOtu/wRRy3L0jhhqaISFF4Zx65tqG8ZnhVg+k4FiAz5YuV4Rgc73yvSY01RV
-         /yM8Q1LYfE4CVOx10lh28nzRg0luBahbPUCno5HqUo2Ix2DAqBj0wJUvBsvHZDDY09LS
-         zwcVndmiRTklg5lhcDJUTLBYq1WIXVRNS1sPBdRc0SjGQILcExreRdrP9CgeR/x20Kv3
-         tybIehev5FhwHPaCyLSiSLXUERR0LK2PvRElyN0sIwBXRFmjEBATKNVPWsBkAF61jyZ0
-         Nrc+6KotGGCYY/JBXGj8nB1P+wJB/HI+NKHR5wlYFT4bantmNOAgdxHjNMPE58cALr4d
-         fUKg==
-X-Gm-Message-State: ANoB5pn/FuuxiBhUBPQTQsviro72U9ceOmjokjdqqcqvQfGzsgWcsgku
-        IG0Xdqg5Q7L/ZFiONcwdBB3ERg==
-X-Google-Smtp-Source: AA0mqf5iXMLewu9mvYMvuPXFnGd9NPq2WRWgNLXzqBO/5gCkL6XHCaq5l6n5LsQPKoFh1pNVPK4zqA==
-X-Received: by 2002:a05:6602:737:b0:6a1:e2c5:5d70 with SMTP id g23-20020a056602073700b006a1e2c55d70mr22168132iox.60.1669911094728;
-        Thu, 01 Dec 2022 08:11:34 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id n8-20020a056e0208e800b00302e6d16055sm1623534ilt.73.2022.12.01.08.11.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 08:11:33 -0800 (PST)
-From:   Matthias Kaehlcke <mka@chromium.org>
-X-Google-Original-From: Matthias Kaehlcke <mka@google.com>
-Date:   Thu, 1 Dec 2022 16:11:33 +0000
-To:     Owen Yang <ecs.taipeikernel@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moragues <moragues@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Abner Yen <abner.yen@ecs.com.tw>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Gavin Lee <gavin.lee@ecs.com.tw>, Harvey <hunge@google.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v12 2/2] arm64: dts: qcom: sc7280: Add DT for
- sc7280-herobrine-zombie
-Message-ID: <Y4jSNaqzek4mBitr@google.com>
-References: <20221201121235.v12.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
- <20221201121235.v12.2.I80aa32497bfd67bc8a372c1418ccc443ccf193e4@changeid>
+        Thu, 1 Dec 2022 11:12:27 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2054.outbound.protection.outlook.com [40.107.93.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32C4E06
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:12:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cwZ2zMzF1nUdkI+DF+YVsbVyYJKYVOuSbGIXz/bh6TGoZroAqbyrFeyoOMJQvQj5hoH8QNphT9pKSmJAOLnLXLMOCSnTILxymM85RLhuQylFZ6DpxkX2zOosljFJkpvdHZv3FNEdWF2Ok8lwV42P5TKY457qzkGP5ogJZl/w4wty7Dg6DMMgKAzHgNVVphnMj1heqr8kC/p7rJtLrz9YBM+i58smXfjqpYKhaq6Cb9nHZsfqihP6jN3JsfkJ7UdvHJ3fpKiC3zdmhvU5IEYwqxt7eIv2ey97eM6SyldDdn8BUpvqJYBaPtb+Btg4G9qjkAOuyphKPfOrZpsGyBFmIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Im/GABGCWNQolzsPGit5fXE2XpR8dTqI61EI3rheDUU=;
+ b=lnLBenCwV5ygo+lN9efxnqesbrKq+AHIiP5pChZd7jXZUmjurUezGTd246FGqjxuqurhaEHufUR6G3k4ldIyCP1ydCKVlT3KRN7sh/RAt+m6Gvkwe8HqzrJNpAp/cXJsb3JRKTLFbCGy8U1nXzC+BXL1WO+3v5WBvGs9XCzlPcvpiy7hTcOZYknEN2AJKDdMxgKw5Rdi9XeBxCC7MCkM8iXVKFCZHli3NTuUkavKoYgsPjcH31MDaxrVF9HCYU76WfxK5VbPeQa99ObJ9WTq+4l7qizXAtvGoF0f7ecvieiZ07qWe3ygYW+br/ngR20Ul/SZz7Jrfl96zULjzPGiGw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Im/GABGCWNQolzsPGit5fXE2XpR8dTqI61EI3rheDUU=;
+ b=41Kly0U+YYe1AAsIVMysIX5Xgy2lpMms7rqJIUbUOFa9aTrmP4k4XZDW7FxIkNM3PpkT0NG+4gvXZy1NWbewqy853+2fRQPWoYyA3JvPm7YA7ZDwtOPKpXHjVbGA6W7AXwns7ZjmQkFWzA7pOf0fmv/HIxXsxILI3rzYslJ7oYg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5311.namprd12.prod.outlook.com (2603:10b6:5:39f::7) by
+ SA1PR12MB7224.namprd12.prod.outlook.com (2603:10b6:806:2bb::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Thu, 1 Dec
+ 2022 16:12:22 +0000
+Received: from DM4PR12MB5311.namprd12.prod.outlook.com
+ ([fe80::1e6c:6695:7097:c0c]) by DM4PR12MB5311.namprd12.prod.outlook.com
+ ([fe80::1e6c:6695:7097:c0c%6]) with mapi id 15.20.5880.008; Thu, 1 Dec 2022
+ 16:12:22 +0000
+Message-ID: <a221ee69-0afd-ea36-1ca1-c5540da0091b@amd.com>
+Date:   Thu, 1 Dec 2022 11:12:16 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2] drm/amd/display: add FB_DAMAGE_CLIPS support
+Content-Language: en-US
+To:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        amd-gfx@lists.freedesktop.org
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Roman Li <roman.li@amd.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Yifan Zhang <yifan1.zhang@amd.com>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>,
+        =?UTF-8?Q?Joaqu=c3=adn_Ignacio_Aramend=c3=ada?= 
+        <samsagax@gmail.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221118215137.384884-1-hamza.mahfooz@amd.com>
+From:   Leo Li <sunpeng.li@amd.com>
+In-Reply-To: <20221118215137.384884-1-hamza.mahfooz@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BLAPR03CA0040.namprd03.prod.outlook.com
+ (2603:10b6:208:32d::15) To DM4PR12MB5311.namprd12.prod.outlook.com
+ (2603:10b6:5:39f::7)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221201121235.v12.2.I80aa32497bfd67bc8a372c1418ccc443ccf193e4@changeid>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5311:EE_|SA1PR12MB7224:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0084f37d-47d0-4152-0834-08dad3b6d2c9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: alFxGGxytkJvwLOl4L0RJUggtufTdNqHil/gjQ8I4II+DPmBEOv1OEcKcCfEkwUhedF4clCBp5YIx0sfYKDT6pX8ok5Z5ctm7cd5oirgVUDPOapHLrwu/tMqv01vH4aFstYFdoXptm1Ni4SaD7WkIuM1NinGyYyUMXiM27+FWTsODHWSJi6yWVRf3ijjd13IthcgrrSdFHU6eMIToTDPk+fdhhtAyVZQBQjFVJDGsTC91Tfabj99mvSVd1vpvJjk2iJbbhNSAeZnJdMJxT1kIfbvt9iXPKC8tuXOEE/KW640+ngcVdJmj6cssPeokfiLzRz4U9evrFF1oKA1Q4kmx7oy4LXFZJmSrA4axVWQfP/CZnfeylEjUDcNsBnJwPN+EiDNFemOBv+uvqxbkiI9v/rxhiu4Nj3Jpj2qQhnKKKDQL9l6zGFYsXtG7bsaHNHhNmz1vxOFsrQJfw8OHoSRubbEZHG6SZRe/wWirZo3GS9HT7ERP1Gc30PUcC9nMnT4+OWRk2dpJ5Sc/fmkiDnnS9wxQczzQCbk/843a5LJbRgABv5jGwLIMB+misKqjg27G6OOX+1CmMDPgY/4dyoUYz3gBsEmSarflmxrgRkcWQ85qOLRSOqkAwfkp9I7w3WN8Uc3dP9dVDPElRe3EO6Ij+sFuLYTMWqO4Mw9SK6PjLW8hZA2NILrbVbJvLyV9xKOfVgHE1BtIV9rljydVoekpJ5015/2lWr9p604UvtkoLA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5311.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(396003)(346002)(39860400002)(376002)(451199015)(6666004)(2906002)(36756003)(2616005)(86362001)(31696002)(6486002)(478600001)(26005)(316002)(6506007)(66556008)(5660300002)(41300700001)(4326008)(8676002)(8936002)(66476007)(54906003)(66946007)(38100700002)(6512007)(186003)(53546011)(83380400001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NnhHa253dzJYN0phN1R4M2lEUDlWSnM0VDdxanZZN2xkTkZ2RXBTLzBrV1hm?=
+ =?utf-8?B?bDYzMWpXRWJKRVpxV3poMVJMeHR5NlBWMWNjK3VSU2xhYjJBR1M4aTBVOWt0?=
+ =?utf-8?B?UzBuT2FTV01FUXFMeVY1ajJnaFlLUkMwRmh3d3Brb1A5dTlDOWRhK1FlcUU3?=
+ =?utf-8?B?SnZnOUU3dUNmS1hBTkFTdnlqcHQwbkFCNjJ3YnFvMkNLSXIrY1ZJcE12Ylc1?=
+ =?utf-8?B?d01Ec1BCMUlIWnVQR2pUZ2o3MVkwOUdSanFic1ptQ2FMbVJheVVNZVpicWFv?=
+ =?utf-8?B?Y3k1OTF1dWFNbWZCcUZwbUNjNUZCTkt0bVVCU3hqQjRTeUZBRDU2anFBVWJv?=
+ =?utf-8?B?d1hXT2V5V0RJZUMzNVVWcmRPVGZ0NkJodFBUOFFIR2s1U0YyazBoeHFabXVq?=
+ =?utf-8?B?eUNFYndacUVSSHJTYXZSY3lLOTB4c1E1eFQ3VEZneWNhaSt6Zy9WOEphZ09x?=
+ =?utf-8?B?eEhrUVJHQmJqNG1LREl6RnRiNnlEQXdVbERvNlQ0dFhHaE8rZmtJNHBEWVE3?=
+ =?utf-8?B?T25sblFyb2ZRVkgwTVhHamtxMGkwRUx4ZzJ1VTRvNFZ2dFc2UkRudXZ6Rkw3?=
+ =?utf-8?B?Mm1IbXpDUU9SamNRM0F4clMwOGhHcWZrdmtBcmF0dVhrRU9rcTUyZHVNRlFP?=
+ =?utf-8?B?V2tHeWNHMmNqNTNuQVJudkgyT3J3dVZLVXBybXQ1bFhiRWNlb3AzSXhpWE14?=
+ =?utf-8?B?WHcyUlBYNTVYSVVnenZoVzhCN0JKeUxJM2VrL0JYREo5eFdqdm5DN1g1NkVY?=
+ =?utf-8?B?Z0VlZE9UU2R1SkkyRzdXZlJaVGh6dDhPdTZyTHc3bFNXWlJGQkF3Mk1Tcmhh?=
+ =?utf-8?B?cDNKR0tCdHdXK21ubFpLa3dLdUp0bzQvSDBEakJ5OHJWcEFoU2ZYNEFwZStH?=
+ =?utf-8?B?Vkl1MmM0cWpKcGU3dlkwTFM4ZCtmU3VCeWhhVnk3VnBCUCtMUGp2WlUzTXd2?=
+ =?utf-8?B?OGxLVHN6eDE5clZpWXc5ZTY0c1RsS3U0YVU2cm5mZnFKYWRtMC8xWEZoOG9k?=
+ =?utf-8?B?SnhPRjF4alQ2aHorUzJicERCakxDeFNFZm0rbHhZRnROWUc1ZjVmcGIyS3Q0?=
+ =?utf-8?B?R3pvVnE5MGs0cDZISi82TmRhbitEdkMrMjQ5dVN5Zit4YzYyZGpEV3lhR2pJ?=
+ =?utf-8?B?Z2xxQnBPMFVkRmFVTjd1NVdPQ0xmajdZOVFweWFUMG5SV1kzOTJDdFNzWXpz?=
+ =?utf-8?B?YmlwWUlFUFlsdWduY0daMEZBTWtUOEREZFZLVkM3dkkzN0F3c0xlb2FYMXZn?=
+ =?utf-8?B?cUw1UlJiNUlLdExmZG1GbEVhMWdXU0FSTm1YRmpKMnRtanA4ckhhajhndm9I?=
+ =?utf-8?B?dW9pZno5clFaa3hPK1ZSRVZIa0FjbkNNMDhtV0NyTEQxdURiYVVSOTFTeCtM?=
+ =?utf-8?B?THFlSFhRU2xwTVdxblg0STVDdFRwdVVoOVlvYno2Y2lXci8veXRmSkJ5Wm9K?=
+ =?utf-8?B?ejZ4RmxXamNWUmg3SWhXTkJuMWxCUDZseGNUWEhtbXFadGFkRXJmMUIvUk5t?=
+ =?utf-8?B?eFB3YXo3UzhLdjJiTXdjSjArT1g4K1MyUkZRRzJ1b0NmUWNNOFNoSzRNY3A1?=
+ =?utf-8?B?NU9OaGNvYjBxQldXanF5dTRuSnpISjNGL05oTFBqa1NSR3dVQkdmOE9IT1Nr?=
+ =?utf-8?B?ckVEeFdxM3hNNXZ6SXdONXhPTENDSnE0ZElMelU1VUYrV0U2UGVkTmUvUUR1?=
+ =?utf-8?B?MFh0RldlSEYvaXpkTmNVelo1WkJ4dXRDdnAxYnp2Q3VWVVd4N2FQK09iMjlh?=
+ =?utf-8?B?MUNQdUtqNDNFRUFkeDIzSkRKSzMyZVkzNVk0dUdnVXNLMkw4T3MwZnNoUkFQ?=
+ =?utf-8?B?eWNOMG9uUGxIQ2FrVTV1bFd5N1hYSEdFTWVkbWs2RzJaa0ZNSTJwTklVN2Vz?=
+ =?utf-8?B?TmxLaEZrWnZPd1dKbHRVNUlOckthN1dDZC9FRWtJTk50dnBxcjRjTms0c3Nh?=
+ =?utf-8?B?L2h6SGQ4SERYNkg4MDhsZ0tlY1VoWjI1VytuOGJiQVhhNSt6TXdyeFhqZUJn?=
+ =?utf-8?B?a2s3ZFhLWml0TGRxU0NnM1p5US9BMGJhckV3UzNuS2NlODdKRi9nWmhtcHJF?=
+ =?utf-8?B?REVrU05QVmdoSjVLNk9lTzZtWTVReWlOMG9OWlFqRUNiYzZvVFhUU1FlZ09s?=
+ =?utf-8?Q?LfWNGxC3ukpkCMTFmRQDSBdwe?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0084f37d-47d0-4152-0834-08dad3b6d2c9
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5311.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2022 16:12:22.3552
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jJ64BNkyAMCzaE7kD1oegvmDgLiI/reO0bUqYq+xdCwimC1SuyHtZWwTXb0yHwlE
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7224
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 12:13:04PM +0800, Owen Yang wrote:
-> Add DT for sc7280-herobrine-zombie
+
+
+On 11/18/22 16:51, Hamza Mahfooz wrote:
+> Currently, userspace doesn't have a way to communicate selective updates
+> to displays. So, enable support for FB_DAMAGE_CLIPS for DCN ASICs newer
+> than DCN301, convert DRM damage clips to dc dirty rectangles and fill
+> them into dirty_rects in fill_dc_dirty_rects().
 > 
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
+> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+
+Thanks for the patch, it LGTM.
+
+Reviewed-by: Leo Li <sunpeng.li@amd.com>
+
+It would be good to add an IGT case to cover combinations of MPO & 
+damage clip commits. Perhaps something that covers the usecase of moving 
+a MPO video, while desktop UI updates. We'd expect the SU region to 
+cover both the MPO plane + UI damage clips, or fallback to FFU.
+
+Thanks,
+Leo
 > ---
+> v2: fallback to FFU if we run into too many dirty rectangles, consider
+>      dirty rectangles in non MPO case and always add a dirty rectangle
+>      for the new plane if there are bb changes in the MPO case.
+> ---
+>   .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 130 +++++++++++-------
+>   .../amd/display/amdgpu_dm/amdgpu_dm_plane.c   |   4 +
+>   2 files changed, 88 insertions(+), 46 deletions(-)
 > 
-> Changes in v12:
-> - Add "Reviewed-by" tag from Douglas.
-> 
-> Changes in v11:
-> - Add comment "/* Set the PWM period to 200 microseconds (5kHz duty cycle) */" before "pwms = <&pm8350c_pwm 3 200000>;" in "sc7280-herobrine-zombie.dtsi", as requested by Douglas.
-
-It seems you intended to do this, but you didn't. There is no comment in the
-backlight node.
-
-nit: There is not need to spell out the comment and the exact location in
-the change log, just saying "added a comment for the adjustment of the PWM
-period to the backlight node" would be enough/preferable. The comment can be
-found in the diff below.
-
-> 
-> Changes in v10:
-> - Remove wrong "Tested-by" tag in this patch, I misunderstood the "tested-by" tag usage, as requested by Krzysztof.
-> - Remove patch 1 changes log in v8 log since it doesn't belongs to here, as requested by Krzysztof.
-> - Fixed history log list.
-> 
-> Changes in v9:
-> - Fixed version number (v7 and v8 were erroneously posted as v6).
-> 
-> Changes in v8:
-> - None.
-> 
-> Changes in v7:
-> - Add "Tested-by" in commit log.
-> 
-> Changes in v6:
-> - Set the PWM period to 200 microseconds (5kHz duty cycle) to our display panel spec, and move to right place, as requested by Douglas and Matthias.
-> - Drop post-power-on-delay-ms = <100>, as requested by Douglas.
-> - Remove one of the lines after the line with "MOS_BLE_UART_RX" for matching amount of GPIO (174), as requested by Douglas.
-> 
-> Changes in v5:
-> - Overwrite pm8350c_pwm_backlight setting in sc7280-herobrine-zombie.dtsi for chrome zombie.
-> 
-> Changes in v4:
-> - Dropping the redundant 'DT binding for' as requested by Krzysztof.
-> - Adding an empty line here before "/dts-v1/;" in "sc7280-herobrine-zombie-lte.dts", "sc7280-herobrine-zombie.dts" as requested by Matthias.
-> - Deleteing "/dts-v1/;" in "sc7280-herobrine-zombie.dtsi" as requested by Matthias.
-> 
-> Changes in v3:
-> - Droping changing file path in description. v3. as requested by Matthias.
-> 
-> Changes in v2:
-> - Changing Patch order, binding patch first and dt file second, as requested by Douglas.
-> - Adding "arm64: dts: qcom: sc7280:" in dt patch ${SUBJECT}, as requested by Douglas.
-> - Adding "dt-bindings: arm: qcom:" in bind patch ${SUBJECT}, as requested by Douglas.
-> - Adding '#include "sc7280-herobrine-wifi-sku.dtsi"' in sc7280-herobrine-zombie.dts, as requested by Douglas.
-> - Adding "(newest rev)" for zombie entry description in qcom.yaml, as requested by Douglas.
-> - Adding "post-power-on-delay-ms = <100>;" for trackpad in "sc7280-herobrine-zombie.dtsi".
-> - Changing "vcc-supply" to "vdd-supply" for trackpad in "sc7280-herobrine-zombie.dtsi", as requested by Douglas.
-> 
->  arch/arm64/boot/dts/qcom/Makefile             |   2 +
->  .../dts/qcom/sc7280-herobrine-zombie-lte.dts  |  16 +
->  .../boot/dts/qcom/sc7280-herobrine-zombie.dts |  16 +
->  .../dts/qcom/sc7280-herobrine-zombie.dtsi     | 311 ++++++++++++++++++
->  4 files changed, 345 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index afe496a93f94..7b0644a39062 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -114,6 +114,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-herobrine-r1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r0.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r1-lte.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-zombie.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-zombie-lte.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp2.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts
-> new file mode 100644
-> index 000000000000..c9fe64529555
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts
-> @@ -0,0 +1,16 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Google Zombie board device tree source
-> + *
-> + * Copyright 2022 Google LLC.
-> + */
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index 4eb8201a2608..7af94a2c6237 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -4842,6 +4842,35 @@ static int fill_dc_plane_attributes(struct amdgpu_device *adev,
+>   	return 0;
+>   }
+>   
+> +static inline void fill_dc_dirty_rect(struct drm_plane *plane,
+> +				      struct rect *dirty_rect, int32_t x,
+> +				      int32_t y, int32_t width, int32_t height,
+> +				      int *i, bool ffu)
+> +{
+> +	if (*i > DC_MAX_DIRTY_RECTS)
+> +		return;
 > +
-> +/dts-v1/;
+> +	if (*i == DC_MAX_DIRTY_RECTS)
+> +		goto out;
 > +
-> +#include "sc7280-herobrine-zombie.dtsi"
-> +#include "sc7280-herobrine-lte-sku.dtsi"
+> +	dirty_rect->x = x;
+> +	dirty_rect->y = y;
+> +	dirty_rect->width = width;
+> +	dirty_rect->height = height;
 > +
-> +/ {
-> +	model = "Google Zombie with LTE";
-> +	compatible = "google,zombie-sku512", "qcom,sc7280";
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts
-> new file mode 100644
-> index 000000000000..0246c12b2f40
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts
-> @@ -0,0 +1,16 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Google Zombie board device tree source
-> + *
-> + * Copyright 2022 Google LLC.
-> + */
+> +	if (ffu)
+> +		drm_dbg(plane->dev,
+> +			"[PLANE:%d] PSR FFU dirty rect size (%d, %d)\n",
+> +			plane->base.id, width, height);
+> +	else
+> +		drm_dbg(plane->dev,
+> +			"[PLANE:%d] PSR SU dirty rect at (%d, %d) size (%d, %d)",
+> +			plane->base.id, x, y, width, height);
 > +
-> +/dts-v1/;
+> +out:
+> +	(*i)++;
+> +}
 > +
-> +#include "sc7280-herobrine-zombie.dtsi"
-> +#include "sc7280-herobrine-wifi-sku.dtsi"
+>   /**
+>    * fill_dc_dirty_rects() - Fill DC dirty regions for PSR selective updates
+>    *
+> @@ -4862,10 +4891,6 @@ static int fill_dc_plane_attributes(struct amdgpu_device *adev,
+>    * addition, certain use cases - such as cursor and multi-plane overlay (MPO) -
+>    * implicitly provide damage clips without any client support via the plane
+>    * bounds.
+> - *
+> - * Today, amdgpu_dm only supports the MPO and cursor usecase.
+> - *
+> - * TODO: Also enable for FB_DAMAGE_CLIPS
+>    */
+>   static void fill_dc_dirty_rects(struct drm_plane *plane,
+>   				struct drm_plane_state *old_plane_state,
+> @@ -4876,12 +4901,11 @@ static void fill_dc_dirty_rects(struct drm_plane *plane,
+>   	struct dm_crtc_state *dm_crtc_state = to_dm_crtc_state(crtc_state);
+>   	struct rect *dirty_rects = flip_addrs->dirty_rects;
+>   	uint32_t num_clips;
+> +	struct drm_mode_rect *clips;
+>   	bool bb_changed;
+>   	bool fb_changed;
+>   	uint32_t i = 0;
+>   
+> -	flip_addrs->dirty_rect_count = 0;
+> -
+>   	/*
+>   	 * Cursor plane has it's own dirty rect update interface. See
+>   	 * dcn10_dmub_update_cursor_data and dmub_cmd_update_cursor_info_data
+> @@ -4889,20 +4913,20 @@ static void fill_dc_dirty_rects(struct drm_plane *plane,
+>   	if (plane->type == DRM_PLANE_TYPE_CURSOR)
+>   		return;
+>   
+> -	/*
+> -	 * Today, we only consider MPO use-case for PSR SU. If MPO not
+> -	 * requested, and there is a plane update, do FFU.
+> -	 */
+> +	num_clips = drm_plane_get_damage_clips_count(new_plane_state);
+> +	clips = drm_plane_get_damage_clips(new_plane_state);
 > +
-> +/ {
-> +	model = "Google Zombie";
-> +	compatible = "google,zombie", "qcom,sc7280";
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
-> new file mode 100644
-> index 000000000000..21ac55fd63aa
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
-> @@ -0,0 +1,311 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Google Zombie board device tree source
-> + *
-> + * Copyright 2022 Google LLC.
-> + */
+>   	if (!dm_crtc_state->mpo_requested) {
+> -		dirty_rects[0].x = 0;
+> -		dirty_rects[0].y = 0;
+> -		dirty_rects[0].width = dm_crtc_state->base.mode.crtc_hdisplay;
+> -		dirty_rects[0].height = dm_crtc_state->base.mode.crtc_vdisplay;
+> -		flip_addrs->dirty_rect_count = 1;
+> -		DRM_DEBUG_DRIVER("[PLANE:%d] PSR FFU dirty rect size (%d, %d)\n",
+> -				 new_plane_state->plane->base.id,
+> -				 dm_crtc_state->base.mode.crtc_hdisplay,
+> -				 dm_crtc_state->base.mode.crtc_vdisplay);
+> +		if (!num_clips || num_clips > DC_MAX_DIRTY_RECTS)
+> +			goto ffu;
 > +
-> +#include "sc7280-herobrine.dtsi"
-> +#include "sc7280-herobrine-audio-rt5682.dtsi"
+> +		for (; flip_addrs->dirty_rect_count < num_clips; clips++)
+> +			fill_dc_dirty_rect(new_plane_state->plane,
+> +					   &dirty_rects[i], clips->x1,
+> +					   clips->y1, clips->x2 - clips->x1,
+> +					   clips->y2 - clips->y1,
+> +					   &flip_addrs->dirty_rect_count,
+> +					   false);
+>   		return;
+>   	}
+>   
+> @@ -4913,7 +4937,6 @@ static void fill_dc_dirty_rects(struct drm_plane *plane,
+>   	 * If plane is moved or resized, also add old bounding box to dirty
+>   	 * rects.
+>   	 */
+> -	num_clips = drm_plane_get_damage_clips_count(new_plane_state);
+>   	fb_changed = old_plane_state->fb->base.id !=
+>   		     new_plane_state->fb->base.id;
+>   	bb_changed = (old_plane_state->crtc_x != new_plane_state->crtc_x ||
+> @@ -4921,36 +4944,51 @@ static void fill_dc_dirty_rects(struct drm_plane *plane,
+>   		      old_plane_state->crtc_w != new_plane_state->crtc_w ||
+>   		      old_plane_state->crtc_h != new_plane_state->crtc_h);
+>   
+> -	DRM_DEBUG_DRIVER("[PLANE:%d] PSR bb_changed:%d fb_changed:%d num_clips:%d\n",
+> -			 new_plane_state->plane->base.id,
+> -			 bb_changed, fb_changed, num_clips);
+> -
+> -	if (num_clips || fb_changed || bb_changed) {
+> -		dirty_rects[i].x = new_plane_state->crtc_x;
+> -		dirty_rects[i].y = new_plane_state->crtc_y;
+> -		dirty_rects[i].width = new_plane_state->crtc_w;
+> -		dirty_rects[i].height = new_plane_state->crtc_h;
+> -		DRM_DEBUG_DRIVER("[PLANE:%d] PSR SU dirty rect at (%d, %d) size (%d, %d)\n",
+> -				 new_plane_state->plane->base.id,
+> -				 dirty_rects[i].x, dirty_rects[i].y,
+> -				 dirty_rects[i].width, dirty_rects[i].height);
+> -		i += 1;
+> -	}
+> +	drm_dbg(plane->dev,
+> +		"[PLANE:%d] PSR bb_changed:%d fb_changed:%d num_clips:%d\n",
+> +		new_plane_state->plane->base.id,
+> +		bb_changed, fb_changed, num_clips);
+>   
+> -	/* Add old plane bounding-box if plane is moved or resized */
+>   	if (bb_changed) {
+> -		dirty_rects[i].x = old_plane_state->crtc_x;
+> -		dirty_rects[i].y = old_plane_state->crtc_y;
+> -		dirty_rects[i].width = old_plane_state->crtc_w;
+> -		dirty_rects[i].height = old_plane_state->crtc_h;
+> -		DRM_DEBUG_DRIVER("[PLANE:%d] PSR SU dirty rect at (%d, %d) size (%d, %d)\n",
+> -				old_plane_state->plane->base.id,
+> -				dirty_rects[i].x, dirty_rects[i].y,
+> -				dirty_rects[i].width, dirty_rects[i].height);
+> -		i += 1;
+> -	}
+> +		fill_dc_dirty_rect(new_plane_state->plane, &dirty_rects[i],
+> +				   new_plane_state->crtc_x,
+> +				   new_plane_state->crtc_y,
+> +				   new_plane_state->crtc_w,
+> +				   new_plane_state->crtc_h, &i, false);
 > +
-> +/*
-> + * ADDITIONS TO FIXED REGULATORS DEFINED IN PARENT DEVICE TREE FILES
-> + *
-> + * Sort order matches the order in the parent files (parents before children).
-> + */
+> +		/* Add old plane bounding-box if plane is moved or resized */
+> +		fill_dc_dirty_rect(new_plane_state->plane, &dirty_rects[i],
+> +				   old_plane_state->crtc_x,
+> +				   old_plane_state->crtc_y,
+> +				   old_plane_state->crtc_w,
+> +				   old_plane_state->crtc_h, &i, false);
+> +	}
 > +
-> +&pp3300_codec {
-> +	status = "okay";
-> +};
+> +	if (num_clips) {
+> +		for (; i < num_clips; clips++)
+> +			fill_dc_dirty_rect(new_plane_state->plane,
+> +					   &dirty_rects[i], clips->x1,
+> +					   clips->y1, clips->x2 - clips->x1,
+> +					   clips->y2 - clips->y1, &i, false);
+> +	} else if (fb_changed && !bb_changed) {
+> +		fill_dc_dirty_rect(new_plane_state->plane, &dirty_rects[i],
+> +				   new_plane_state->crtc_x,
+> +				   new_plane_state->crtc_y,
+> +				   new_plane_state->crtc_w,
+> +				   new_plane_state->crtc_h, &i, false);
+> +	}
 > +
-> +/* ADDITIONS TO NODES DEFINED IN PARENT DEVICE TREE FILES */
+> +	if (i > DC_MAX_DIRTY_RECTS)
+> +		goto ffu;
+>   
+>   	flip_addrs->dirty_rect_count = i;
+> +	return;
 > +
-> +ap_tp_i2c: &i2c0 {
-> +	clock-frequency = <400000>;
-> +	status = "okay";
+> +ffu:
+> +	fill_dc_dirty_rect(new_plane_state->plane, &dirty_rects[0], 0, 0,
+> +			   dm_crtc_state->base.mode.crtc_hdisplay,
+> +			   dm_crtc_state->base.mode.crtc_vdisplay,
+> +			   &flip_addrs->dirty_rect_count, true);
+>   }
+>   
+>   static void update_stream_scaling_settings(const struct drm_display_mode *mode,
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
+> index e6854f7270a6..3c50b3ff7954 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
+> @@ -1600,6 +1600,10 @@ int amdgpu_dm_plane_init(struct amdgpu_display_manager *dm,
+>   		drm_plane_create_rotation_property(plane, DRM_MODE_ROTATE_0,
+>   						   supported_rotations);
+>   
+> +	if (dm->adev->ip_versions[DCE_HWIP][0] > IP_VERSION(3, 0, 1) &&
+> +	    plane->type != DRM_PLANE_TYPE_CURSOR)
+> +		drm_plane_enable_fb_damage_clips(plane);
 > +
-> +	trackpad: trackpad@15 {
-> +		compatible = "hid-over-i2c";
-> +		reg = <0x15>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&tp_int_odl>;
-> +
-> +		interrupt-parent = <&tlmm>;
-> +		interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
-> +
-> +		hid-descr-addr = <0x01>;
-> +		vdd-supply = <&pp3300_z1>;
-> +
-> +		wakeup-source;
-> +	};
-> +};
-> +
-> +&ap_sar_sensor_i2c {
-> +	status = "okay";
-> +};
-> +
-> +&ap_sar_sensor0 {
-> +	status = "okay";
-> +};
-> +
-> +&ap_sar_sensor1 {
-> +	status = "okay";
-> +};
-> +
-> +&mdss_edp {
-> +	status = "okay";
-> +};
-> +
-> +&mdss_edp_phy {
-> +	status = "okay";
-> +};
-> +
-> +/* For nvme */
-> +&pcie1 {
-> +	status = "okay";
-> +};
-> +
-> +/* For nvme */
-> +&pcie1_phy {
-> +	status = "okay";
-> +};
-> +
-> +&pm8350c_pwm_backlight{
-> +	pwms = <&pm8350c_pwm 3 200000>;
-> +};
-> +
-> +&pwmleds {
-> +	status = "okay";
-> +};
-> +
-> +/* For eMMC */
-> +&sdhc_1 {
-> +	status = "okay";
-> +};
-> +
-> +/* PINCTRL - ADDITIONS TO NODES IN PARENT DEVICE TREE FILES */
-> +
-> +&ts_rst_conn {
-> +	bias-disable;
-> +};
-> +
-> +/* PINCTRL - BOARD-SPECIFIC */
-> +
-> +/*
-> + * Methodology for gpio-line-names:
-> + * - If a pin goes to herobrine board and is named it gets that name.
-> + * - If a pin goes to herobrine board and is not named, it gets no name.
-> + * - If a pin is totally internal to Qcard then it gets Qcard name.
-> + * - If a pin is not hooked up on Qcard, it gets no name.
-> + */
-> +
-> +&pm8350c_gpios {
-> +	gpio-line-names = "FLASH_STROBE_1",		/* 1 */
-> +			  "AP_SUSPEND",
-> +			  "PM8008_1_RST_N",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "PMIC_EDP_BL_EN",
-> +			  "PMIC_EDP_BL_PWM",
-> +			  "";
-> +};
-> +
-> +&tlmm {
-> +	gpio-line-names = "AP_TP_I2C_SDA",		/* 0 */
-> +			  "AP_TP_I2C_SCL",
-> +			  "SSD_RST_L",
-> +			  "PE_WAKE_ODL",
-> +			  "AP_SAR_SDA",
-> +			  "AP_SAR_SCL",
-> +			  "PRB_SC_GPIO_6",
-> +			  "TP_INT_ODL",
-> +			  "HP_I2C_SDA",
-> +			  "HP_I2C_SCL",
-> +
-> +			  "GNSS_L1_EN",			/* 10 */
-> +			  "GNSS_L5_EN",
-> +			  "SPI_AP_MOSI",
-> +			  "SPI_AP_MISO",
-> +			  "SPI_AP_CLK",
-> +			  "SPI_AP_CS0_L",
-> +			  /*
-> +			   * AP_FLASH_WP is crossystem ABI. Schematics
-> +			   * call it BIOS_FLASH_WP_OD.
-> +			   */
-> +			  "AP_FLASH_WP",
-> +			  "",
-> +			  "AP_EC_INT_L",
-> +			  "",
-> +
-> +			  "UF_CAM_RST_L",		/* 20 */
-> +			  "WF_CAM_RST_L",
-> +			  "UART_AP_TX_DBG_RX",
-> +			  "UART_DBG_TX_AP_RX",
-> +			  "",
-> +			  "PM8008_IRQ_1",
-> +			  "HOST2WLAN_SOL",
-> +			  "WLAN2HOST_SOL",
-> +			  "MOS_BT_UART_CTS",
-> +			  "MOS_BT_UART_RFR",
-> +
-> +			  "MOS_BT_UART_TX",		/* 30 */
-> +			  "MOS_BT_UART_RX",
-> +			  "PRB_SC_GPIO_32",
-> +			  "HUB_RST_L",
-> +			  "",
-> +			  "",
-> +			  "AP_SPI_FP_MISO",
-> +			  "AP_SPI_FP_MOSI",
-> +			  "AP_SPI_FP_CLK",
-> +			  "AP_SPI_FP_CS_L",
-> +
-> +			  "AP_EC_SPI_MISO",		/* 40 */
-> +			  "AP_EC_SPI_MOSI",
-> +			  "AP_EC_SPI_CLK",
-> +			  "AP_EC_SPI_CS_L",
-> +			  "LCM_RST_L",
-> +			  "EARLY_EUD_N",
-> +			  "",
-> +			  "DP_HOT_PLUG_DET",
-> +			  "IO_BRD_MLB_ID0",
-> +			  "IO_BRD_MLB_ID1",
-> +
-> +			  "IO_BRD_MLB_ID2",		/* 50 */
-> +			  "SSD_EN",
-> +			  "TS_I2C_SDA_CONN",
-> +			  "TS_I2C_CLK_CONN",
-> +			  "TS_RST_CONN",
-> +			  "TS_INT_CONN",
-> +			  "AP_I2C_TPM_SDA",
-> +			  "AP_I2C_TPM_SCL",
-> +			  "PRB_SC_GPIO_58",
-> +			  "PRB_SC_GPIO_59",
-> +
-> +			  "EDP_HOT_PLUG_DET_N",		/* 60 */
-> +			  "FP_TO_AP_IRQ_L",
-> +			  "",
-> +			  "AMP_EN",
-> +			  "CAM0_MCLK_GPIO_64",
-> +			  "CAM1_MCLK_GPIO_65",
-> +			  "WF_CAM_MCLK",
-> +			  "PRB_SC_GPIO_67",
-> +			  "FPMCU_BOOT0",
-> +			  "UF_CAM_SDA",
-> +
-> +			  "UF_CAM_SCL",			/* 70 */
-> +			  "",
-> +			  "",
-> +			  "WF_CAM_SDA",
-> +			  "WF_CAM_SCL",
-> +			  "",
-> +			  "",
-> +			  "EN_FP_RAILS",
-> +			  "FP_RST_L",
-> +			  "PCIE1_CLKREQ_ODL",
-> +
-> +			  "EN_PP3300_DX_EDP",		/* 80 */
-> +			  "US_EURO_HS_SEL",
-> +			  "FORCED_USB_BOOT",
-> +			  "WCD_RESET_N",
-> +			  "MOS_WLAN_EN",
-> +			  "MOS_BT_EN",
-> +			  "MOS_SW_CTRL",
-> +			  "MOS_PCIE0_RST",
-> +			  "MOS_PCIE0_CLKREQ_N",
-> +			  "MOS_PCIE0_WAKE_N",
-> +
-> +			  "MOS_LAA_AS_EN",		/* 90 */
-> +			  "SD_CD_ODL",
-> +			  "",
-> +			  "",
-> +			  "MOS_BT_WLAN_SLIMBUS_CLK",
-> +			  "MOS_BT_WLAN_SLIMBUS_DAT0",
-> +			  "HP_MCLK",
-> +			  "HP_BCLK",
-> +			  "HP_DOUT",
-> +			  "HP_DIN",
-> +
-> +			  "HP_LRCLK",			/* 100 */
-> +			  "HP_IRQ",
-> +			  "",
-> +			  "",
-> +			  "GSC_AP_INT_ODL",
-> +			  "EN_PP3300_CODEC",
-> +			  "AMP_BCLK",
-> +			  "AMP_DIN",
-> +			  "AMP_LRCLK",
-> +			  "UIM1_DATA_GPIO_109",
-> +
-> +			  "UIM1_CLK_GPIO_110",		/* 110 */
-> +			  "UIM1_RESET_GPIO_111",
-> +			  "PRB_SC_GPIO_112",
-> +			  "UIM0_DATA",
-> +			  "UIM0_CLK",
-> +			  "UIM0_RST",
-> +			  "UIM0_PRESENT_ODL",
-> +			  "SDM_RFFE0_CLK",
-> +			  "SDM_RFFE0_DATA",
-> +			  "WF_CAM_EN",
-> +
-> +			  "FASTBOOT_SEL_0",		/* 120 */
-> +			  "SC_GPIO_121",
-> +			  "FASTBOOT_SEL_1",
-> +			  "SC_GPIO_123",
-> +			  "FASTBOOT_SEL_2",
-> +			  "SM_RFFE4_CLK_GRFC_8",
-> +			  "SM_RFFE4_DATA_GRFC_9",
-> +			  "WLAN_COEX_UART1_RX",
-> +			  "WLAN_COEX_UART1_TX",
-> +			  "PRB_SC_GPIO_129",
-> +
-> +			  "LCM_ID0",			/* 130 */
-> +			  "LCM_ID1",
-> +			  "",
-> +			  "SDR_QLINK_REQ",
-> +			  "SDR_QLINK_EN",
-> +			  "QLINK0_WMSS_RESET_N",
-> +			  "SMR526_QLINK1_REQ",
-> +			  "SMR526_QLINK1_EN",
-> +			  "SMR526_QLINK1_WMSS_RESET_N",
-> +			  "PRB_SC_GPIO_139",
-> +
-> +			  "SAR1_IRQ_ODL",		/* 140 */
-> +			  "SAR0_IRQ_ODL",
-> +			  "PRB_SC_GPIO_142",
-> +			  "",
-> +			  "WCD_SWR_TX_CLK",
-> +			  "WCD_SWR_TX_DATA0",
-> +			  "WCD_SWR_TX_DATA1",
-> +			  "WCD_SWR_RX_CLK",
-> +			  "WCD_SWR_RX_DATA0",
-> +			  "WCD_SWR_RX_DATA1",
-> +
-> +			  "DMIC01_CLK",			/* 150 */
-> +			  "DMIC01_DATA",
-> +			  "DMIC23_CLK",
-> +			  "DMIC23_DATA",
-> +			  "",
-> +			  "",
-> +			  "EC_IN_RW_ODL",
-> +			  "HUB_EN",
-> +			  "WCD_SWR_TX_DATA2",
-> +			  "",
-> +
-> +			  "",				/* 160 */
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +			  "",
-> +
-> +			  "",				/* 170 */
-> +			  "MOS_BLE_UART_TX",
-> +			  "MOS_BLE_UART_RX",
-> +			  "",
-> +			  "";
-> +};
-> -- 
-> 2.17.1
-> 
+>   	drm_plane_helper_add(plane, &dm_plane_helper_funcs);
+>   
+>   #ifdef CONFIG_DRM_AMD_DC_HDR
