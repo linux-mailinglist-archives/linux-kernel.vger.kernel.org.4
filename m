@@ -2,155 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4336663EFC8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96BC963EFD1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbiLALot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:44:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
+        id S231147AbiLALpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:45:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbiLALoo (ORCPT
+        with ESMTP id S231191AbiLALpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:44:44 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9531D8EE55;
-        Thu,  1 Dec 2022 03:44:42 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 576155FD07;
-        Thu,  1 Dec 2022 14:44:40 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1669895080;
-        bh=IxSYjwO5aSMC7AY86M6AC1LSHBEzm9nhigoUH6Db07I=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=hri5ISsUybQVBssfRimqI5W45dX0ssrw6j6seTm8emlsUnnTpkF4Cyd3kTZvjt1oU
-         Ucd1nJQCy4rYO8NxNVyhZ2eBAqrpzalZ1Gltvuo33Pmtvo9Nr/LCxzf6Cvw4MBm7hI
-         3jly1Ydx/01Mz5n8mW2gMgmPOboPqbRBzM+Rn7nstok0Sm7kSDj+Tx4/CnBhOaQ8Nx
-         O9QASLq9kQkvRi7Y9eLYkGh1ggXJgPXU9P9QueRX6gnCJExvfpwmZ5jggHNriUt8KG
-         nL5hurL343MuZttps/+br1rBpeZAzbxRVyxbRpY0CtAqmhCDLOJAMBw59GHWaFdUKc
-         RMZ8aN9P0lN8w==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu,  1 Dec 2022 14:44:39 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>,
-        "Bobby Eshleman" <bobby.eshleman@bytedance.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v2 5/6] test/vsock: add big message test
-Thread-Topic: [RFC PATCH v2 5/6] test/vsock: add big message test
-Thread-Index: AQHZAPEvcSVoxBim/0CJACwJhEWdy65YnyyAgAAg6AA=
-Date:   Thu, 1 Dec 2022 11:44:39 +0000
-Message-ID: <2694faa5-c460-857d-6ca9-a6328530ff23@sberdevices.ru>
-References: <9d96f6c6-1d4f-8197-b3bc-8957124c8933@sberdevices.ru>
- <2634ad7f-b462-5c69-8aa1-2f200a6beb20@sberdevices.ru>
- <20221201094541.gj7zthelbeqhsp63@sgarzare-redhat>
-In-Reply-To: <20221201094541.gj7zthelbeqhsp63@sgarzare-redhat>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <253B24191838FB4C99A56A39A2F7161D@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Thu, 1 Dec 2022 06:45:09 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750ACA0579
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:45:07 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id 128so1262439vsz.12
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:45:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qE/q8OTGX/vukPXHLJF5f0ZobL7IbidYs5xkC1/4Glo=;
+        b=EzvNjsK/64biWBOqAzlM7ZmFo/qswGF8E2psYeSj0xdD6287yOJeqmtxtWiDCeeRne
+         HLae+HG1stNZu59moUdMxeVYOQDp9sfWFNA6V3VypSXCAVupelhw74Ch1etHO5XDWI0m
+         ybBlh0c2Z/irb2/MSL4MDBPlinBeHrffEoJ60=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qE/q8OTGX/vukPXHLJF5f0ZobL7IbidYs5xkC1/4Glo=;
+        b=6CNjBzd2uXBXxzpykE19RF8z1v8T/5elGcgpUsIU1wUur1/zz5FCqobSKJmV1jJTtn
+         jnM30P7oSMzF/dW6yqxbB4nRbtk3YpsaBfPC80C+lmdVmbitGSGDMQn4Rk+byQIN8Psx
+         UVg/s1eI84McSd4KX58p05uJxehgro0uq0RscvW9DHhG2S0n5nBC4jdZKmu3tWCpO4me
+         ZbKoMgW0B9+Lit4yyXul0KY4rLajmED5JERh5U2KVMAfi50rouzpFzsG8kC6qcWg+RaP
+         HuBdICNBfVLyu+KoQnLh71wrCRfSLRN/wlQWpcmMf40dw4lkz3wYjxAs3WURFUF/om49
+         KO1Q==
+X-Gm-Message-State: ANoB5ple/l8VoSVu4XoBv6n1BuQA/t+TQ5+o9fL67TGGsreTxqpX5FDZ
+        /hjG3qcDe0uyiVVWMJ3d80cQ6AhlcKgEBr/GDGHBYw==
+X-Google-Smtp-Source: AA0mqf4u5I2OZaSiq21veOJJ1DavEQccozE6Z/lEVW/v7HrTmm4H19hg9RZ5yAmVKH9lnRtk1UUPSAMKL03w0XsTCgg=
+X-Received: by 2002:a67:c98e:0:b0:3ad:3d65:22b with SMTP id
+ y14-20020a67c98e000000b003ad3d65022bmr28646035vsk.65.1669895106580; Thu, 01
+ Dec 2022 03:45:06 -0800 (PST)
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/12/01 00:48:00 #20630840
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221107072243.15748-1-nancy.lin@mediatek.com> <20221107072243.15748-6-nancy.lin@mediatek.com>
+In-Reply-To: <20221107072243.15748-6-nancy.lin@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 1 Dec 2022 19:44:55 +0800
+Message-ID: <CAGXv+5Hj-H6Q3N+j2tEntd9M=9p0o7TxWYn_4aawhqFUbX7+PQ@mail.gmail.com>
+Subject: Re: [PATCH v28 05/11] soc: mediatek: refine code to use
+ mtk_mmsys_update_bits API
+To:     "Nancy.Lin" <nancy.lin@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, linux@roeck-us.net,
+        nfraprado@collabora.com, devicetree@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        David Airlie <airlied@linux.ie>,
+        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+        singo.chang@mediatek.com, llvm@lists.linux.dev,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMDEuMTIuMjAyMiAxMjo0NSwgU3RlZmFubyBHYXJ6YXJlbGxhIHdyb3RlOg0KPiBPbiBGcmks
-IE5vdiAyNSwgMjAyMiBhdCAwNToxMzowNlBNICswMDAwLCBBcnNlbml5IEtyYXNub3Ygd3JvdGU6
-DQo+PiBUaGlzIGFkZHMgdGVzdCBmb3Igc2VuZGluZyBtZXNzYWdlLCBiaWdnZXIgdGhhbiBwZWVy
-J3MgYnVmZmVyIHNpemUuDQo+PiBGb3IgU09DS19TRVFQQUNLRVQgc29ja2V0IGl0IG11c3QgZmFp
-bCwgYXMgdGhpcyB0eXBlIG9mIHNvY2tldCBoYXMNCj4+IG1lc3NhZ2Ugc2l6ZSBsaW1pdC4NCj4+
-DQo+PiBTaWduZWQtb2ZmLWJ5OiBBcnNlbml5IEtyYXNub3YgPEFWS3Jhc25vdkBzYmVyZGV2aWNl
-cy5ydT4NCj4+IC0tLQ0KPj4gdG9vbHMvdGVzdGluZy92c29jay92c29ja190ZXN0LmMgfCA2OSAr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPj4gMSBmaWxlIGNoYW5nZWQsIDY5IGlu
-c2VydGlvbnMoKykNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy92c29jay92c29j
-a190ZXN0LmMgYi90b29scy90ZXN0aW5nL3Zzb2NrL3Zzb2NrX3Rlc3QuYw0KPj4gaW5kZXggMTJl
-ZjBjY2E2ZjkzLi5hOGU0MzQyNGZiMzIgMTAwNjQ0DQo+PiAtLS0gYS90b29scy90ZXN0aW5nL3Zz
-b2NrL3Zzb2NrX3Rlc3QuYw0KPj4gKysrIGIvdG9vbHMvdGVzdGluZy92c29jay92c29ja190ZXN0
-LmMNCj4+IEBAIC01NjksNiArNTY5LDcwIEBAIHN0YXRpYyB2b2lkIHRlc3Rfc2VxcGFja2V0X3Rp
-bWVvdXRfc2VydmVyKGNvbnN0IHN0cnVjdCB0ZXN0X29wdHMgKm9wdHMpDQo+PiDCoMKgwqDCoGNs
-b3NlKGZkKTsNCj4+IH0NCj4+DQo+PiArc3RhdGljIHZvaWQgdGVzdF9zZXFwYWNrZXRfYmlnbXNn
-X2NsaWVudChjb25zdCBzdHJ1Y3QgdGVzdF9vcHRzICpvcHRzKQ0KPj4gK3sNCj4+ICvCoMKgwqAg
-dW5zaWduZWQgbG9uZyBzb2NrX2J1Zl9zaXplOw0KPj4gK8KgwqDCoCBzc2l6ZV90IHNlbmRfc2l6
-ZTsNCj4+ICvCoMKgwqAgc29ja2xlbl90IGxlbjsNCj4+ICvCoMKgwqAgdm9pZCAqZGF0YTsNCj4+
-ICvCoMKgwqAgaW50IGZkOw0KPj4gKw0KPj4gK8KgwqDCoCBsZW4gPSBzaXplb2Yoc29ja19idWZf
-c2l6ZSk7DQo+PiArDQo+PiArwqDCoMKgIGZkID0gdnNvY2tfc2VxcGFja2V0X2Nvbm5lY3Qob3B0
-cy0+cGVlcl9jaWQsIDEyMzQpOw0KPj4gK8KgwqDCoCBpZiAoZmQgPCAwKSB7DQo+PiArwqDCoMKg
-wqDCoMKgwqAgcGVycm9yKCJjb25uZWN0Iik7DQo+PiArwqDCoMKgwqDCoMKgwqAgZXhpdChFWElU
-X0ZBSUxVUkUpOw0KPj4gK8KgwqDCoCB9DQo+PiArDQo+PiArwqDCoMKgIGlmIChnZXRzb2Nrb3B0
-KGZkLCBBRl9WU09DSywgU09fVk1fU09DS0VUU19CVUZGRVJfU0laRSwNCj4+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgICZzb2NrX2J1Zl9zaXplLCAmbGVuKSkgew0KPj4gK8KgwqDCoMKg
-wqDCoMKgIHBlcnJvcigiZ2V0c29ja29wdCIpOw0KPj4gK8KgwqDCoMKgwqDCoMKgIGV4aXQoRVhJ
-VF9GQUlMVVJFKTsNCj4+ICvCoMKgwqAgfQ0KPj4gKw0KPj4gK8KgwqDCoCBzb2NrX2J1Zl9zaXpl
-Kys7DQo+PiArDQo+PiArwqDCoMKgIGRhdGEgPSBtYWxsb2Moc29ja19idWZfc2l6ZSk7DQo+PiAr
-wqDCoMKgIGlmICghZGF0YSkgew0KPj4gK8KgwqDCoMKgwqDCoMKgIHBlcnJvcigibWFsbG9jIik7
-DQo+PiArwqDCoMKgwqDCoMKgwqAgZXhpdChFWElUX0ZBSUxVUkUpOw0KPj4gK8KgwqDCoCB9DQo+
-PiArDQo+PiArwqDCoMKgIHNlbmRfc2l6ZSA9IHNlbmQoZmQsIGRhdGEsIHNvY2tfYnVmX3NpemUs
-IDApOw0KPj4gK8KgwqDCoCBpZiAoc2VuZF9zaXplICE9IC0xKSB7DQo+PiArwqDCoMKgwqDCoMKg
-wqAgZnByaW50ZihzdGRlcnIsICJleHBlY3RlZCAnc2VuZCgyKScgZmFpbHVyZSwgZ290ICV6aVxu
-IiwNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbmRfc2l6ZSk7DQo+PiArwqDCoMKgwqDC
-oMKgwqAgZXhpdChFWElUX0ZBSUxVUkUpOw0KPj4gK8KgwqDCoCB9DQo+PiArDQo+PiArwqDCoMKg
-IGlmIChlcnJubyAhPSBFTVNHU0laRSkgew0KPj4gK8KgwqDCoMKgwqDCoMKgIGZwcmludGYoc3Rk
-ZXJyLCAiZXhwZWN0ZWQgRU1TR1NJWkUgaW4gJ2Vycm5vJywgZ290ICVpXG4iLA0KPj4gK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgZXJybm8pOw0KPj4gK8KgwqDCoMKgwqDCoMKgIGV4aXQoRVhJVF9G
-QUlMVVJFKTsNCj4+ICvCoMKgwqAgfQ0KPiANCj4gV2Ugc2hvdWxkIG1ha2Ugc3VyZSB0aGF0IHRo
-aXMgaXMgdHJ1ZSBmb3IgYWxsIHRyYW5zcG9ydHMsIGJ1dCBzaW5jZSBub3cgb25seSB2aXJ0aW8t
-dnNvY2sgc3VwcG9ydHMgaXQsIHdlIHNob3VsZCBiZSBva2F5Lg0KSG0sIGluIGdlbmVyYWw6IEkn
-dmUgdGVzdGVkIHRoaXMgdGVzdCBzdWl0ZSBmb3Igdm1jaSBtYXkgYmUgc2V2ZXJhbCBtb250aHMg
-YWdvLCBhbmQgZm91bmQsIHRoYXQgc29tZSB0ZXN0cw0KZGlkbid0IHdvcmsuIEknbSB0aGlua2lu
-ZyBhYm91dCByZXdvcmtpbmcgdGhpcyB0ZXN0IHN1aXRlIGEgbGl0dGxlIGJpdDogZWFjaCB0cmFu
-c3BvcnQgbXVzdCBoYXZlIG93biBzZXQgb2YNCnRlc3RzIGZvciBmZWF0dXJlcyB0aGF0IGl0IHN1
-cHBvcnRzLiBJIGhhZCBmZWVsaW5nLCB0aGF0IGFsbCB0aGVzZSB0ZXN0cyBhcmUgcnVuIG9ubHkg
-d2l0aCB2aXJ0aW8gdHJhbnNwb3J0IDopDQpCZWNhdXNlIGZvciBleGFtcGxlIFNFUVBBQ0tFVCBt
-b2RlIGlzIHN1cG9ydGVkIG9ubHkgZm9yIHZpcnRpby4NCg0KVGhhbmtzDQo+IA0KPj4gKw0KPj4g
-K8KgwqDCoCBjb250cm9sX3dyaXRlbG4oIkNMSVNFTlQiKTsNCj4+ICsNCj4+ICvCoMKgwqAgZnJl
-ZShkYXRhKTsNCj4+ICvCoMKgwqAgY2xvc2UoZmQpOw0KPj4gK30NCj4+ICsNCj4+ICtzdGF0aWMg
-dm9pZCB0ZXN0X3NlcXBhY2tldF9iaWdtc2dfc2VydmVyKGNvbnN0IHN0cnVjdCB0ZXN0X29wdHMg
-Km9wdHMpDQo+PiArew0KPj4gK8KgwqDCoCBpbnQgZmQ7DQo+PiArDQo+PiArwqDCoMKgIGZkID0g
-dnNvY2tfc2VxcGFja2V0X2FjY2VwdChWTUFERFJfQ0lEX0FOWSwgMTIzNCwgTlVMTCk7DQo+PiAr
-wqDCoMKgIGlmIChmZCA8IDApIHsNCj4+ICvCoMKgwqDCoMKgwqDCoCBwZXJyb3IoImFjY2VwdCIp
-Ow0KPj4gK8KgwqDCoMKgwqDCoMKgIGV4aXQoRVhJVF9GQUlMVVJFKTsNCj4+ICvCoMKgwqAgfQ0K
-Pj4gKw0KPj4gK8KgwqDCoCBjb250cm9sX2V4cGVjdGxuKCJDTElTRU5UIik7DQo+PiArDQo+PiAr
-wqDCoMKgIGNsb3NlKGZkKTsNCj4+ICt9DQo+PiArDQo+PiAjZGVmaW5lIEJVRl9QQVRURVJOXzEg
-J2EnDQo+PiAjZGVmaW5lIEJVRl9QQVRURVJOXzIgJ2InDQo+Pg0KPj4gQEAgLTg1MSw2ICs5MTUs
-MTEgQEAgc3RhdGljIHN0cnVjdCB0ZXN0X2Nhc2UgdGVzdF9jYXNlc1tdID0gew0KPj4gwqDCoMKg
-wqDCoMKgwqAgLnJ1bl9jbGllbnQgPSB0ZXN0X3N0cmVhbV9wb2xsX3Jjdmxvd2F0X2NsaWVudCwN
-Cj4+IMKgwqDCoMKgwqDCoMKgIC5ydW5fc2VydmVyID0gdGVzdF9zdHJlYW1fcG9sbF9yY3Zsb3dh
-dF9zZXJ2ZXIsDQo+PiDCoMKgwqDCoH0sDQo+PiArwqDCoMKgIHsNCj4+ICvCoMKgwqDCoMKgwqDC
-oCAubmFtZSA9ICJTT0NLX1NFUVBBQ0tFVCBiaWcgbWVzc2FnZSIsDQo+PiArwqDCoMKgwqDCoMKg
-wqAgLnJ1bl9jbGllbnQgPSB0ZXN0X3NlcXBhY2tldF9iaWdtc2dfY2xpZW50LA0KPj4gK8KgwqDC
-oMKgwqDCoMKgIC5ydW5fc2VydmVyID0gdGVzdF9zZXFwYWNrZXRfYmlnbXNnX3NlcnZlciwNCj4+
-ICvCoMKgwqAgfSwNCj4+IMKgwqDCoMKge30sDQo+PiB9Ow0KPj4NCj4+IC0twqANCj4+IDIuMjUu
-MQ0KPiANCj4gTEdUTSENCj4gDQo+IFJldmlld2VkLWJ5OiBTdGVmYW5vIEdhcnphcmVsbGEgPHNn
-YXJ6YXJlQHJlZGhhdC5jb20+DQo+IA0KDQo=
+On Mon, Nov 7, 2022 at 3:23 PM Nancy.Lin <nancy.lin@mediatek.com> wrote:
+>
+> Simplify code for update  mmsys reg.
+>
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabor=
+a.com>
+> Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+>  drivers/soc/mediatek/mtk-mmsys.c | 45 ++++++++++++--------------------
+>  1 file changed, 16 insertions(+), 29 deletions(-)
+>
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-=
+mmsys.c
+> index 9a327eb5d9d7..73c8bd27e6ae 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+
+[...]
+
+> @@ -124,27 +129,14 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+>  {
+>         struct mtk_mmsys *mmsys =3D dev_get_drvdata(dev);
+>         const struct mtk_mmsys_routes *routes =3D mmsys->data->routes;
+> -       u32 reg;
+>         int i;
+>
+>         for (i =3D 0; i < mmsys->data->num_routes; i++)
+> -               if (cur =3D=3D routes[i].from_comp && next =3D=3D routes[=
+i].to_comp) {
+> -                       reg =3D readl_relaxed(mmsys->regs + routes[i].add=
+r);
+> -                       reg &=3D ~routes[i].mask;
+> -                       writel_relaxed(reg, mmsys->regs + routes[i].addr)=
+;
+> -               }
+> +               if (cur =3D=3D routes[i].from_comp && next =3D=3D routes[=
+i].to_comp)
+> +                       mtk_mmsys_update_bits(mmsys, routes[i].addr, rout=
+es[i].mask, 0);
+>  }
+>  EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_disconnect);
+>
+> -static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u=
+32 mask, u32 val)
+> -{
+> -       u32 tmp;
+> -
+> -       tmp =3D readl_relaxed(mmsys->regs + offset);
+> -       tmp =3D (tmp & ~mask) | val;
+> -       writel_relaxed(tmp, mmsys->regs + offset);
+> -}
+> -
+>  void mtk_mmsys_ddp_dpi_fmt_config(struct device *dev, u32 val)
+>  {
+>         if (val)
+
+This hunk now doesn't apply due to
+
+    soc: mediatek: Add all settings to mtk_mmsys_ddp_dpi_fmt_config func
+
+touching mtk_mmsys_ddp_dpi_fmt_config() as well. It's trivial to resolve
+though.
+
+ChenYu
