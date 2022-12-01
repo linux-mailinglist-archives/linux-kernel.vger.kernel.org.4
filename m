@@ -2,169 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1F563F74B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB6763F753
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:15:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiLASOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 13:14:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36772 "EHLO
+        id S230367AbiLASPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 13:15:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbiLASNk (ORCPT
+        with ESMTP id S230419AbiLASPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 13:13:40 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826F3102F;
-        Thu,  1 Dec 2022 10:12:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669918358; x=1701454358;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=g3LETkMvljpgtFuP9WvXK5r2qx9VhVWBZqHXCfq9CI4=;
-  b=ZZ8Uc4xHljNQUHIg9AdH6VMzCN87CGu+1vIfhu3BL2bGQbrkVXvGVmV4
-   myf7PuV4ZPQ07yd3mzcAOioWv0oWuBrOqbc177OhAsPLdK8+v22EpSBAe
-   6ci8c2IcK32R02RPlpSlO6BQyScG+pqgsYmtDPCxREYkBd9rp+d9M9CUt
-   O+iZfEqkxVCG+52ymidfo/fxQy4xfCNXJ7cS3iuvwWCtgUPSr2GhSEgx7
-   udJud05ig8ScBG9BoJWXhcZ2jSvaRA4D7S5AKtiHLK4WlA1pH7WnP3r8a
-   X1rLgVYUsOyqsMDqeAwEZ1+IIIEdX8C9PQ4phzmdqbuZ/hyp4AFUcda/T
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="377919961"
-X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="377919961"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 10:12:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="644737398"
-X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="644737398"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga002.jf.intel.com with ESMTP; 01 Dec 2022 10:12:35 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 1 Dec 2022 10:12:35 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 1 Dec 2022 10:12:35 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 1 Dec 2022 10:12:35 -0800
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.43) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 1 Dec 2022 10:12:34 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fcd0TIXobYQb9oGJOplUSeuYKmqXYJrtm+bUiU3jPGrM0spML6wQ6aovQnwC2rG8clcCkhX4wxmNKdMKXoqlKNV6Z6MGe18zxzUT7Qo2UdfKcZ99cI+2RBh4k+Wbl7qeWxpYb4hEK6gQB0CeN/SohrolBzpltTdmD4nu/7G2N5KWgBBAoxNN/gQh8SqQ809yvYYRnSU+6Ip64IqEIo2aQHQnUwARhUCUCT0M+nsRuJBxRPWpzI+Twy/qb45WWCVN47vjDtjggqijyoqNrmaRqCwOcVnAp2ZdDRLzWaRpTj28wOGByXbXxqL4+ZFNZjfLtZ82IWNECI+zbXp3V2m6Sw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FCUNcQu17shUUkzfG9+VAxhSosQcoIwb6MFZO/QQebA=;
- b=HkYFOtZubaFGK6qr9sRwra2WKWb3PcNHxqqSvZ8VgOEMb7pIxIP7nrjwOhnDJ6A4GhBh7xRK0xvB2Xl/nIEMqBeaNGV6Rngtro55GQxlOeg87N7p6GJEr1S9fRCduxG9HnGktNem4WtZRoXW/6TsrIQiLQLsBI2/4SNQF9MTW43tcmqoUpCfICsBlWGEc3u6DK49DgfHb0LyImWbc6Shu3BiNmXX3FbVegVl1onwGUiVfT/XOCYt20pIXXxg9SNlwaz7Bqpssceuxua+2qKXiXsXsPG61Z2vGBupf/6ZzGoh7bl+iI4NdIK0zCX/csuD6HLpSZHf8x8rJiNKkzh+Pw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM5PR11MB1867.namprd11.prod.outlook.com (2603:10b6:3:10c::13)
- by BL3PR11MB6433.namprd11.prod.outlook.com (2603:10b6:208:3b9::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Thu, 1 Dec
- 2022 18:12:33 +0000
-Received: from DM5PR11MB1867.namprd11.prod.outlook.com
- ([fe80::d60b:8480:204c:b5d2]) by DM5PR11MB1867.namprd11.prod.outlook.com
- ([fe80::d60b:8480:204c:b5d2%3]) with mapi id 15.20.5857.023; Thu, 1 Dec 2022
- 18:12:33 +0000
-Message-ID: <9801fa7f-5971-1f5f-1b63-0d672c32fcf1@intel.com>
-Date:   Thu, 1 Dec 2022 10:12:29 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.0
-Subject: Re: [PATCH v4 4/5] selftests/resctrl: Cleanup properly when an error
- occurs in CAT test
-Content-Language: en-US
-To:     "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Shuah Khan" <skhan@linuxfoundation.org>
-References: <20221117010541.1014481-1-tan.shaopeng@jp.fujitsu.com>
- <20221117010541.1014481-5-tan.shaopeng@jp.fujitsu.com>
- <af1b4e59-2b4b-ddbb-2218-0e2808b718a3@intel.com>
- <TYAPR01MB6330CDB2C59C58EE77B912538B0F9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
- <ba5a9ef2-b4ca-5c90-cc03-2296586455a6@intel.com>
- <TYAPR01MB63300F91A0755310E78D98308B159@TYAPR01MB6330.jpnprd01.prod.outlook.com>
- <ce549bc3-7e54-b1d3-7ec5-4cde66bd468f@intel.com>
- <TYAPR01MB6330FFB9E5BA7CCDC652EE3F8B149@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <TYAPR01MB6330FFB9E5BA7CCDC652EE3F8B149@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0106.namprd13.prod.outlook.com
- (2603:10b6:a03:2c5::21) To DM5PR11MB1867.namprd11.prod.outlook.com
- (2603:10b6:3:10c::13)
+        Thu, 1 Dec 2022 13:15:04 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B8927DEE
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 10:14:48 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id b21so2397348plc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 10:14:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X43xqnPiq5dr9tw591LfiEvuJ2eqpqCPwnmZ4Y7/g4k=;
+        b=kTH0cj1P2/Nr0PfxOLMYxCDgv/sJwGP92gNKwq+6fNh/sq25reJdZ0pZa/LfKXyOmb
+         FqaFCf44jwH5aR8+zkxuHKhNRiQH8V/VEoo9hGBFlIQvmSeFDsa5jWxmZYHA9IyzKahp
+         HVCVqZCqIflbIWAy5qq8MaQEajJWeT+2t8Q+d8/tUeQDbYJ809cxT824Tr8O23WIuA5L
+         ucXkayH+fe3+9q1qQegIOXrrf+eBubQiLaBnsnuXk4XbAVli6+/yrnKplEaE9tgoJNPY
+         8INWs9dz+2yob6MLVGpeQ6pLWfBodO2UdJIK0I7kZhYvEBh329oS0XDx4zGAIU/Zdwcx
+         4gPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X43xqnPiq5dr9tw591LfiEvuJ2eqpqCPwnmZ4Y7/g4k=;
+        b=2dDsrgYNzEw7X7dO9WEzB1U/0tKN+xFX21EL8MhyI2F9B5NdYJjlJdicGnH8RYspvQ
+         n0zaxahF3plv1RXM7Pwyc0FPUcnqEsuE1Jk7g2W5SC9MlAySecyiCKO3AIpxD+L5e3TW
+         njELVRuOqNR/kcz3HTAwQm/ACSiztAIVMCtR5iDgiutajgL8olGBUS4fp+Q+jz4thrb9
+         FkS02F9Pux3ISvfS/aQ+Dl1rnK88BmUip4AxXyMMMfmSLeBQaMYkYg5HTc1Hr/t+Sopx
+         tETNXx7O3zLMeJgoiL8ljD+padoFJzqZ2cKVjuHYtzrW+l8LOwUFRIUa4WFYhaizMW9X
+         MwEA==
+X-Gm-Message-State: ANoB5pmxTxlQhHpOXsZ6lGbpI0KEx2OBrFWwEGNMuVLQjx4U8H7hwtHR
+        rL9TUSYpC6wTyvJLSoH/jMB5MW1vDPujQeed9lk=
+X-Google-Smtp-Source: AA0mqf5pzNckXKDhCCs7kClE1dIF+4idwpgQ6iNFY0XRS2nEiuGk6KyP0NpCI/xkKRwR1JmV4lNOhKDBv3f30MexSFY=
+X-Received: by 2002:a17:90a:d38a:b0:218:a7e6:60df with SMTP id
+ q10-20020a17090ad38a00b00218a7e660dfmr57938997pju.38.1669918487752; Thu, 01
+ Dec 2022 10:14:47 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR11MB1867:EE_|BL3PR11MB6433:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0fdf7e76-f437-4c3b-cf04-08dad3c79d5b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KUSSgT2zEsIMmMxS2kZz8t5Fk8ch4WpZJm/6A0OTgcqtdSHe8MC6JtqIS6Exgd9TWbTdB0jkbc3zWg9XfnZgv/TKGlXy2EEiH2DIdZGzd2Sz+ykrPPs16igEEJxVhQjjfu6b6KjONi936BLDoiaWKjTH+uW3fljwn2YpYI9k+P1RpsgCSdBOUCP2EhkT+RUT33HribXBgqppTBjhBGC3z+WmrOFBB7N2JVT7bwiN6pwtlsoO+jzExfQxsWVZunuL5u5CguI+ZM9jIXvZ8YloaiqMg92IzvESUyVj8tvZXTtTmVocxFm2+ucd5jKViUlx2cLo6lLr4Pq07RZjKHCvYS/L6dCn23P+zIPxM5yDGvuI51Hz5R5qoLM3tJv44Nhpx0bW8SGgTSCaL/cIuRKf52uMbeKGmbih4LuiSR4EhmDOF6vvgHq3lgEUS+34Ysw/5+2yTCwMU5ie8Eug0/JEJBYTOtXQLmNJTFRqQvHriFtVhAroom3Q9Qw/jAo/SohDtiCOogXWJb8Rh8SpuJSd3B2VFceP5V6HuD09DaZuD9Z995J1QbjabBOuV3sGznU5rgzlq3usYrVzCz49/YXwNiNqQTLQ/nMWSj7c6uLEYA3CLQylh0zxA+A9MOP/Bx4jPKPvl13jYXnmz5wvDtcYgPwPfCG8ydEYpXlte8OSjDVQRjt5Jmh6A7nGXbHPuhBv+welNM/6/ug+l2BkFZfyN9na4fSJ0A5oZt35HZfPQog=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1867.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(346002)(376002)(39860400002)(396003)(451199015)(5660300002)(44832011)(66476007)(8676002)(4326008)(31686004)(41300700001)(66556008)(8936002)(6486002)(110136005)(54906003)(36756003)(478600001)(66899015)(316002)(2906002)(31696002)(6512007)(2616005)(6506007)(86362001)(66946007)(186003)(6666004)(53546011)(83380400001)(26005)(82960400001)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NGhPaEMvYURnQ3BEaDRjcWE4d2EwamwvTnNEeitZMFlUL3pON3dwWGpBSmYy?=
- =?utf-8?B?dVhqMjZuZlU1MERLTkRFSW84V09lTEtVYlhmbXFqSGRSVHJFa2wzc3NRVVAv?=
- =?utf-8?B?bG0yR3RkNFlCQzFrQll1MG9vL2hUcmdvRWNFVmN2dUJLNTBIUndlM2ttUjFH?=
- =?utf-8?B?UWZRdmF4dGQySHNQejgzWUJER3VTYWVmWUM3QWE3QXlZM2l2V1Bvd0dPVkhU?=
- =?utf-8?B?ei9ESFZyT0FyNU1WVkJ3ek9ScGhZdDVlS2Y0K2h2dWQzbG85M0J4VW5zdlND?=
- =?utf-8?B?Q3ZHUDFZRS8ydm1zUnhCMzRrWGx4eHI1Ri95NlpLSGR2dG04RHhjZXZIWGRz?=
- =?utf-8?B?REx2UjdHd2d1Ymt2T1pMQWdLbWxDeXU0YytXc1ZHaHQrK05UZGRXTHo1RHMv?=
- =?utf-8?B?WnVGZXRLM050amViYnBtUVRiUFlBQUlwTjlEdzVLeFV0dzVGanlWZGRlaGxO?=
- =?utf-8?B?K1ZxbWxKaU02bEtDTDVMVXVOVDUwWG1TZzZWeVVNaEdMdU5KR1JoMjcvaDl2?=
- =?utf-8?B?NXhwOUkrd2ZQNWh2R1RmczRnL0RvcTl4RUdpYWtzOTBxdWlBbXZ6YnczYU92?=
- =?utf-8?B?R0oxdEdUZjZ4QVFyWnJHTnk2STJNNGgrOVpoWUVJOGlZYnovMUV3N3Jlam1P?=
- =?utf-8?B?MTRCcnkwU0ZmbUQxTU1XYmg1RGFWeVUrdTM2MXovcTNyUmQzTlFDeTZtaS9s?=
- =?utf-8?B?RkhIUlJnTXhlalJsd3AxVGYzRWpVZW5qak5HQSszVnR5RmhkNnVIWkJ5R1FJ?=
- =?utf-8?B?aWdidGJVUmd5bEIzZ3Nmc215bkYyZEQ1R2VabFY5V0ovUkRRKzdKT2hTalNN?=
- =?utf-8?B?dE44SjI3T0kxeExBWEtEUE9qRW5MU0xWbkxndHRUWUNCN0t2OGxBamlGcGRY?=
- =?utf-8?B?Y3lVd0xJODBTcmZLOWlzMXZwdlpGUDNRRjQrSGZvU3VjMmpJV2lIMHpBaldj?=
- =?utf-8?B?MkgxcG05cFIzZnhMcnk2aVdIM0tFZTlwRXNnUHpWMFRQTTZwRXJ2ZmJaY3Yx?=
- =?utf-8?B?VXlSamQxL3ZEby9BdE9HdmQrQ1d3ZHJVcW9iY3ZNL3dEL3M3SnNqUk9YbmE1?=
- =?utf-8?B?Mnc0QUVzaDNMN2R2THVZQ2pkWTBzMjVXU3BRWHNqOEhadjFMYnhOckw3VitO?=
- =?utf-8?B?SjdZY0hPeWlSSm9PQXRvOVpIN2FmRnl5Y004UFlUaG9sZUEwcVdkZGw0dDRk?=
- =?utf-8?B?bkh6QkNkc01oZE1uL2lCS1FpeDh6aHFQQzFpaHdqR1VDQVVsRmoyemlrUEtR?=
- =?utf-8?B?TWNtV1NPUTI3NjQvMktVczBYazZSNmJqajFQcktHaXR3YUhDTVA5MGJmNENP?=
- =?utf-8?B?Qjg0ZGNNb251Zlg5NmRSeHd0RDhmbnJUaVV4S2Y4elkzM2Z1WmR6NEMvWXd0?=
- =?utf-8?B?TWd4V3ltTnlaclJ2YXEweVRETjA4U2I5WGszWEJNUm9ZSU5GSGd0NkZwWEZy?=
- =?utf-8?B?RGdoRzUyNkJoQUt3SkFUU2l1VUh1ZWV6OVVMT3hrWWk1SnBVQkM3TUZzWUxl?=
- =?utf-8?B?WkVpdUNFaDA1Q3dIY0Z2akloR044elFRSXZWbGkvVzJaUWEzalhZZVV4NDY1?=
- =?utf-8?B?ZFNJS0pJcXhaU0VRRzVSdk94UTV0bmcrMDNudU5UTEtvc1BCbjZJOUh2K3g5?=
- =?utf-8?B?eHU0Qk1uS0xsamR4a0xhM2xacUZnRUZobVlGN3liVGVpVEtDdHpndS81dkM0?=
- =?utf-8?B?dkxZSmpRODUrYVRqUkZhNm1TTzFRdmh1bllLaU1aaG9pek5pQnJqRktDVzJw?=
- =?utf-8?B?TGlOTENLV21mblQ1dG1iL2VuUHN5dVlENW5uWlprM2Z5enZXVXp6L3plMzdB?=
- =?utf-8?B?T0Q1cHJtaERtbUxUTlZsMy9WUk5VaFBsRXZSdUR4Wm5QMHQ1cktPZEozVjJp?=
- =?utf-8?B?Q0oxb2pXVzQ2MmptY0dGR1BjTFpBUFNFWWgwVWlEbnhBMkR0cEtzYi9RT29V?=
- =?utf-8?B?K2VGaEhHTUpleWJMNDZ0Wklzek9tc3N1NTA1bU8xNkJXTytlclh4M0V3NTFt?=
- =?utf-8?B?eEhiRmE1N0x6OHQ0c2RYYmduSU1zdGJ1Rk5EVi9EWU9uclhxVXB3YTQ2blJJ?=
- =?utf-8?B?ZFBsbmNpZkNxRVVrM1Z6ZmhhNHFjZDg5djU0NHB5MGdWc2c2YllLVlN1T2tu?=
- =?utf-8?B?aTFNMUNSWWdoa1pFYlNtU2IydUpMbldXUy96MTh4amhQcDUzUTRlRzQ1dkdS?=
- =?utf-8?B?V1E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0fdf7e76-f437-4c3b-cf04-08dad3c79d5b
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1867.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2022 18:12:32.9587
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: u3myWc77wMBafDyOIwFyAVXQE20dXCh/LQeZtcLLsnE/OzyzEuwazxfhdWRQXFFL0w6cHJA9PDqCIoAq8qRG1klKaFU4+8HVdqHasJtoeXs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR11MB6433
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <0efeec33-8030-df1e-b055-2e0748fab4e0@redhat.com> <CAHbLzkpW6zg_bY5MZ4FFyw6TKC1MyBk7RsxB2LCHC7X9Ek439g@mail.gmail.com>
+In-Reply-To: <CAHbLzkpW6zg_bY5MZ4FFyw6TKC1MyBk7RsxB2LCHC7X9Ek439g@mail.gmail.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 1 Dec 2022 10:14:35 -0800
+Message-ID: <CAHbLzkp095z5vSLYAiD4Fy_W0=1zXk3uY1k0hYOA7Tq2y9=bZQ@mail.gmail.com>
+Subject: Re: kernel BUG at include/linux/swapops.h:497!
+To:     David Hildenbrand <david@redhat.com>
+Cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -172,60 +70,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shaopeng,
+On Thu, Dec 1, 2022 at 9:48 AM Yang Shi <shy828301@gmail.com> wrote:
+>
+> On Thu, Dec 1, 2022 at 8:58 AM David Hildenbrand <david@redhat.com> wrote=
+:
+> >
+> > Hi,
+> >
+> > running COW tests (in mm-unstable) on x86-pae with 8GiB, I am able to t=
+rigger the
+> > following BUG on latest upstream:
+> >
+> > root@debian:/mnt/scratch/linux/tools/testing/selftests/vm# ./cow
+> > # [INFO] detected THP size: 2048 KiB
+> > # [INFO] detected hugetlb size: 2048 KiB
+> > # [INFO] huge zeropage is enabled
+> > TAP version 13
+> > 1..147
+> > # [INFO] Anonymous memory tests in private mappings
+> > # [RUN] Basic COW after fork() ... with base page
+> > ok 1 No leak from parent into child
+> > # [RUN] Basic COW after fork() ... with swapped out base page
+> > ok 2 No leak from parent into child
+> > # [RUN] Basic COW after fork() ... with THP
+> > ok 3 No leak from parent into child
+> > # [RUN] Basic COW after fork() ... with swapped-out THP
+> > Segmentation fault
+> >
+> >
+> > [  879.314600] kernel BUG at include/linux/swapops.h:497!
+> > [  879.314615] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+> > [  879.314624] CPU: 7 PID: 746 Comm: cow Tainted: G            E      6=
+.1.0-rc7+ #5
+> > [  879.314631] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), B=
+IOS 1.16.0-1.fc36 04/01/2014
+> > [  879.314634] EIP: pagemap_pmd_range+0x644/0x650
+> > [  879.314645] Code: 00 00 00 00 66 90 89 ce b9 00 f0 ff ff e9 ff fb ff=
+ ff 89 d8 31 db e8 1b c2 52 00 e9 23 fb ff ff e8 51 80 56 00 e9 b6 fe ff ff=
+ <0f> 0b bf 00 f0 ff ff e9 38 fa ff ff 3e 8d 74 26 00 55 89 e5 57 31
+> > [  879.314651] EAX: ee2bd000 EBX: 00000002 ECX: ee2bd000 EDX: 00000000
+> > [  879.314656] ESI: f54b9ed4 EDI: 0001f400 EBP: f54b9db4 ESP: f54b9d68
+> > [  879.314660] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 000=
+10246
+> > [  879.314670] CR0: 80050033 CR2: b7a00000 CR3: 357452a0 CR4: 00350ef0
+> > [  879.314675] Call Trace:
+> > [  879.314681]  ? madvise_free_pte_range+0x720/0x720
+> > [  879.314689]  ? smaps_pte_range+0x4b0/0x4b0
+> > [  879.314694]  walk_pgd_range+0x325/0x720
+> > [  879.314701]  ? mt_find+0x1d6/0x3a0
+> > [  879.314710]  __walk_page_range+0x164/0x170
+> > [  879.314716]  walk_page_range+0xf9/0x170
+> > [  879.314720]  ? __kmem_cache_alloc_node+0x2a8/0x340
+> > [  879.314729]  pagemap_read+0x124/0x280
+> > [  879.314738]  ? default_llseek+0xf1/0x160
+> > [  879.314747]  ? smaps_account+0x1d0/0x1d0
+> > [  879.314754]  vfs_read+0x90/0x290
+> > [  879.314760]  ? do_madvise.part.0+0x24b/0x390
+> > [  879.314765]  ? debug_smp_processor_id+0x12/0x20
+> > [  879.314773]  ksys_pread64+0x58/0x90
+> > [  879.314778]  __ia32_sys_ia32_pread64+0x1b/0x20
+> > [  879.314787]  __do_fast_syscall_32+0x4c/0xc0
+> > [  879.314796]  do_fast_syscall_32+0x29/0x60
+> > [  879.314803]  do_SYSENTER_32+0x15/0x20
+> > [  879.314809]  entry_SYSENTER_32+0x98/0xf1
+> > [  879.314815] EIP: 0xb7f36559
+> > [  879.314820] Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10=
+ 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80=
+ <5d> 5a 59 c3 90 90 90 90 8d 76 00 58 b8 77 00 00 00 cd 80 90 8d 76
+> > [  879.314825] EAX: ffffffda EBX: 00000003 ECX: bff00a50 EDX: 00000008
+> > [  879.314829] ESI: 005bd000 EDI: 00000000 EBP: b7f1c000 ESP: bff00a00
+> > [  879.314833] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 000=
+00246
+> > [  879.314840] Modules linked in: intel_rapl_msr(E) intel_rapl_common(E=
+) intel_pmc_core(E) kvm_intel(E) kvm(E) irqbypass(E) aesni_intel(E) libaes(=
+E) crypto_simd(E) cryptd(E) rfkill(E) snd_pcm(E) snd_timer(E) joydev(E) snd=
+(E) soundcore(E) sg(E) evdev(E) pcspkr(E) serio_raw(E) qemu_fw_cfg(E) parpo=
+rt_pc(E) ppdev(E) lp(E) parport(E) fuse(E) configfs(E) ip_tables(E) x_table=
+s(E) autofs4(E) ext4(E) crc32c_generic(E) crc16(E) mbcache(E) jbd2(E) sd_mo=
+d(E) t10_pi(E) crc64_rocksoft(E) crc64(E) crc_t10dif(E) sr_mod(E) crct10dif=
+_generic(E) cdrom(E) crct10dif_common(E) bochs(E) drm_vram_helper(E) drm_tt=
+m_helper(E) ttm(E) drm_kms_helper(E) ata_generic(E) ata_piix(E) crc32_pclmu=
+l(E) libata(E) crc32c_intel(E) drm(E) e1000(E) scsi_mod(E) psmouse(E) i2c_p=
+iix4(E) scsi_common(E) floppy(E) button(E)
+> > [  879.314936] ---[ end trace 0000000000000000 ]---
+> > [  879.314940] EIP: pagemap_pmd_range+0x644/0x650
+> > [  879.314944] Code: 00 00 00 00 66 90 89 ce b9 00 f0 ff ff e9 ff fb ff=
+ ff 89 d8 31 db e8 1b c2 52 00 e9 23 fb ff ff e8 51 80 56 00 e9 b6 fe ff ff=
+ <0f> 0b bf 00 f0 ff ff e9 38 fa ff ff 3e 8d 74 26 00 55 89 e5 57 31
+> > [  879.314949] EAX: ee2bd000 EBX: 00000002 ECX: ee2bd000 EDX: 00000000
+> > [  879.314953] ESI: f54b9ed4 EDI: 0001f400 EBP: f54b9db4 ESP: f54b9d68
+> > [  879.314957] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 000=
+10246
+> > [  879.314961] CR0: 80050033 CR2: b7a00000 CR3: 357452a0 CR4: 00350ef0
+> >
+> >
+> > Reading /proc/self/pagemap in THP test case seems to trigger the
+> >    BUG_ON(is_migration_entry(entry) && !PageLocked(p));
+> > in pfn_swap_entry_to_page().
+> >
+> > I did not have time to cherry pick (slow machine) or look into details.
+> > And I don't remember seeing that BUG 64bit yet during my tests.
+> >
+> > Having a migration entry in the swap testcase is kind-of weird. But may=
+be it's
+> > related to THP splitting (which would, however, also be weird). I'd hav=
+e expected
+> > a swap entry ... hopefully our swap type doesn't get corrupted.
+>
+> I'm on a slow machine too... anyway some hints off the top of my head.
+>
+> First of all, I don't think we will see a real swap PMD entry since
+> even though THP swap is supported the transhuge PMD is split by
+> try_to_unmap() if I remember correctly. So we should just be able to
+> see a regular PMD, a transhuge PMD, a migration PMD or a PROT_NONE PMD
+> (if autonuma is on).
+>
+> Secondly, THP splitting doesn't convert transhuge PMD to migration PMD
+> either, it just splits transhuge PMD then converts every single PTEs
+> to migration PTEs.
+>
+> Thirdly, before pfn_swap_entry_to_page() is called, it does check
+> whether the swap PMD is migration PMD or not, if it is not a VM_BUG is
+> triggered.
+>
+> So it seems like a migration PMD is fine. The problem seems like the
+> page is not locked when doing migration IIUC.
 
-On 12/1/2022 12:20 AM, Shaopeng Tan (Fujitsu) wrote:
-> Hi Reinette,
-> 
->> On 11/30/2022 12:32 AM, Shaopeng Tan (Fujitsu) wrote:
->>
->>> Removing ctrl_handler() is only part of the fix in the next version(v5).
->>> All fixes as follows.
->>>
->>> --- a/tools/testing/selftests/resctrl/cat_test.c
->>> +++ b/tools/testing/selftests/resctrl/cat_test.c
->>> @@ -98,12 +98,17 @@ void cat_test_cleanup(void)
->>>         remove(RESULT_FILE_NAME2);
->>>  }
->>>
->>> +static void ctrlc_handler_child(int signum, siginfo_t *info, void
->>> +*ptr) {
->>> +       exit(EXIT_SUCCESS);
->>> +}
->>> +
->>
->> Could you please elaborate why this is necessary?
-> 
-> If enter "ctrl-c" when running "resctrl_tests -t cat",
-> SIGINT will be sent to all processes (parent&child).
-> 
-> At this time, the child process receives a SIGINT signal, but does not take any action.
-> In this case the parent process may not call ctrlc_handler() as expected.
+A quick look at the migration code, I don't see the page is unlocked
+if I don't miss something. So it may be helpful to dump the page.
 
-Apologies, but I am not able to follow. My understanding is that the
-ideal in working an failing case is for the parent to kill the child.
-Could you please elaborate why the ctrlc_handler() may not be called?
-
-> Therefore, ctrlc_handler_child() is necessary.
-> 
-> It may be better to ignore the signal, then code can be simple as follows.
-> ----
->         if (bm_pid == 0) {
->                 param.mask = l_mask_1;
->                 strcpy(param.ctrlgrp, "c1");
->                 strcpy(param.mongrp, "m1");
->                 param.span = cache_size * n / count_of_bits;
->                 strcpy(param.filename, RESULT_FILE_NAME1);
->                 param.num_of_runs = 0;
->                 param.cpu_no = sibling_cpu_no;
->                 /* Ignore the signal,and wait to be cleaned up by the parent process */
->                 sigfillset(&sigact.sa_mask);
->                 sigact.sa_handler = SIG_IGN;
->                 //sigact.sa_sigaction = ctrlc_handler_child;  //delete
->                 if (sigaction(SIGINT, &sigact, NULL) ||
->                     sigaction(SIGTERM, &sigact, NULL) ||
->                     sigaction(SIGHUP, &sigact, NULL))
->                         perror("# sigaction");
->         } else {
-
-Reinette
+>
+> >
+> >
+> > Something slightly realted was reported for -next a couple of months ag=
+o:
+> >
+> > https://lore.kernel.org/all/11765.1657004484@turing-police/
+> >
+> >
+> > --
+> > Thanks,
+> >
+> > David / dhildenb
+> >
