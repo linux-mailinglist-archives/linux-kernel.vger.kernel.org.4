@@ -2,110 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED86563E9B7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 07:14:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C69BB63E9C4
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 07:15:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbiLAGOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 01:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
+        id S229631AbiLAGPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 01:15:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiLAGOk (ORCPT
+        with ESMTP id S229612AbiLAGPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 01:14:40 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395A6A85F3
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 22:14:36 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1p0cpU-0005yr-J8; Thu, 01 Dec 2022 07:13:52 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1p0cpS-0002De-7V; Thu, 01 Dec 2022 07:13:50 +0100
-Date:   Thu, 1 Dec 2022 07:13:50 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        soc@kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 4/5] mips: dts: remove label = "cpu" from DSA dt-binding
-Message-ID: <20221201061350.GE19642@pengutronix.de>
-References: <20221130141040.32447-1-arinc.unal@arinc9.com>
- <20221130141040.32447-5-arinc.unal@arinc9.com>
+        Thu, 1 Dec 2022 01:15:47 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F0DA9CE7
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 22:15:43 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id i131so751645ybc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 22:15:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=I3cbFWF/3wbRJ/LJGSbr3S2YLSTVjERFCva7QGH+gmg=;
+        b=TQXq8UL4QgqOzU99DZ2FZnR8wuYuOhizw+MMZjtpJkUFGvg9P5i/lw/RWwqrdLoDKQ
+         UnpYETf8awGpkGv3IpRi451RomQ6opklMdUuCi/w2gZGRvoMjNeIrHS4ZTPjma5Cv/Ud
+         loNtoud4t9r43vBYNniWgJcERDfHHrHCNMnplIvKD71BxqW7j1JsRNYzUaMxlrgy1NHn
+         6xdNTQN8tz+KfNNFtAnd4cswjrjr9nbNCsv8wa5thCsyCu4zRmoJ3wvA83cBbsAM1nN7
+         IfS70kBNMfXBwfegiGQRDlLftR0WgGHsIJ9aky32vwQM38kMW3gkXoC+vm0tjq4uMYNc
+         2iBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I3cbFWF/3wbRJ/LJGSbr3S2YLSTVjERFCva7QGH+gmg=;
+        b=2FaXyxC7EBRd6cX+El0EqKnuAcUtQ4NpQeaBJ9UKgQ6VypzOI75nocEcKWnQkd7kHs
+         Xd0lSTIWqs6lUkcBZ3oXwqgioY0wvFi7dGJWdmSeyJ9Du3McoOL/8IOjJsdVNLSt3Swr
+         OBCh+xGoGnhQVIS8cPaOgkP+dEjnFi+UXOHMbLilaSi7JgBDK/eylfs5JNAGsJbIqZow
+         AEi54vKbCETSWutv4NPD4P18wm1xKETnlt4jOnEgazSAzgpj/NyWvvBwgmIZvvxPCJhH
+         CQ4NmCmG30DiFhu8ErEVSVFtynx8SDEeABLJ1giOB2jopwHOXhB3AcPXpNWV++3HswVX
+         QtAw==
+X-Gm-Message-State: ANoB5pmZiDPPsB+VcimiD7kDTXHQOOuFcsTfBQ/NNWJ4S300TDxh4HaE
+        1Rbz0WHq0tAi+Gal/F2CE8XfA5s9TEDrCfOGih3UtA==
+X-Google-Smtp-Source: AA0mqf7zJuf0zF7c61VSlJ8GyK0GRHrMzey325llrDfz6s9oorcd45Ffb/X5KxtaaeBMvB8BWCuyuS+GNpbuCSSGhE4=
+X-Received: by 2002:a25:bd0f:0:b0:6f3:c5b:de5c with SMTP id
+ f15-20020a25bd0f000000b006f30c5bde5cmr28331948ybk.20.1669875342792; Wed, 30
+ Nov 2022 22:15:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221130141040.32447-5-arinc.unal@arinc9.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20221130180544.105550592@linuxfoundation.org>
+In-Reply-To: <20221130180544.105550592@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 1 Dec 2022 11:44:53 +0530
+Message-ID: <CA+G9fYuJVxhKbeN9OGCr2_zyfa1k3j4DS1gAoTW0P89Eyz2FHg@mail.gmail.com>
+Subject: Re: [PATCH 6.0 000/289] 6.0.11-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -114,34 +75,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 05:10:39PM +0300, Arınç ÜNAL wrote:
-> This is not used by the DSA dt-binding, so remove it from all devicetrees.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  arch/mips/boot/dts/qca/ar9331.dtsi    | 1 -
->  arch/mips/boot/dts/ralink/mt7621.dtsi | 1 -
->  2 files changed, 2 deletions(-)
-> 
-> diff --git a/arch/mips/boot/dts/qca/ar9331.dtsi b/arch/mips/boot/dts/qca/ar9331.dtsi
-> index c4102b280b47..768ac0f869b1 100644
-> --- a/arch/mips/boot/dts/qca/ar9331.dtsi
-> +++ b/arch/mips/boot/dts/qca/ar9331.dtsi
-> @@ -176,7 +176,6 @@ ports {
->  
->  						switch_port0: port@0 {
->  							reg = <0x0>;
-> -							label = "cpu";
->  							ethernet = <&eth1>;
->  
->  							phy-mode = "gmii";
+On Thu, 1 Dec 2022 at 00:13, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.0.11 release.
+> There are 289 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 02 Dec 2022 18:05:05 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.11-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Results from Linaro's test farm.
+Regressions found on x86_64:
 
-Thx! 
+    - build-clang-15-allmodconfig-x86_64
+    - build-clang-nightly-allmodconfig-x86_64
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+    bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)
+    [ Upstream commit c86df29d11dfba27c0a1f5039cd6fe387fbf4239 ]
+
+Causing the following build warnings / errors with clang-15 allmodconfig
+on x86_64,
+
+Build error:
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
+ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu-
+'HOSTCC=sccache clang' 'CC=sccache clang'
+kernel/bpf/dispatcher.c:126:33: error: pointer type mismatch ('void *'
+and 'unsigned int (*)(const void *, const struct bpf_insn *,
+bpf_func_t)' (aka 'unsigned int (*)(const void *, const struct
+bpf_insn *, unsigned int (*)(const void *, const struct bpf_insn
+*))')) [-Werror,-Wpointer-type-mismatch]
+        __BPF_DISPATCHER_UPDATE(d, new ?: &bpf_dispatcher_nop_func);
+                                   ~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/bpf.h:938:54: note: expanded from macro '__BPF_DISPATCHER_UPDATE'
+        __static_call_update((_d)->sc_key, (_d)->sc_tramp, (_new))
+                                                            ^~~~
+1 error generated.
+
+Build logs:
+  - https://builds.tuxbuild.com/2IHYTj6JN108YShWQ8K8Fd0HyVW/
+
+--
+Linaro LKFT
+https://lkft.linaro.org
